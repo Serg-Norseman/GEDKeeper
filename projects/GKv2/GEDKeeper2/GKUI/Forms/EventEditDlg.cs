@@ -23,7 +23,6 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -442,17 +441,16 @@ namespace GKUI.Forms
 
         private void EditEventDate1_DragDrop(object sender, DragEventArgs e)
         {
-            try
-            {
-                if (e.Data.GetDataPresent(typeof(string)))
-                {
-                    string txt = e.Data.GetData(typeof(string)) as string;
-                    string[] dt = ((MaskedTextBox)sender).Text.Split('.');
-                    ((MaskedTextBox)sender).Text = dt[0] + "." + dt[1] + "." + txt;
+            try {
+                IDataObject data = e.Data;
+                if (data.GetDataPresent(typeof(string))) {
+                    string txt = data.GetData(typeof(string)) as string;
+
+                    MaskedTextBox txtBox = ((MaskedTextBox)sender);
+                    string[] dt = txtBox.Text.Split('/');
+                    txtBox.Text = dt[0] + "/" + dt[1] + "/" + txt.PadLeft(4, '_');
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("EventEditDlg.DragDrop(): " + ex.Message);
             }
         }

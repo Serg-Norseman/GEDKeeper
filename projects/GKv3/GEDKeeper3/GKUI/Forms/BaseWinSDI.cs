@@ -645,7 +645,7 @@ namespace GKUI.Forms
             miFileProperties.Text = LangMan.LS(LSID.LSID_MIFileProperties) + @"...";
             miExport.Text = LangMan.LS(LSID.LSID_MIExport);
             miExportToFamilyBook.Text = LangMan.LS(LSID.LSID_MIExportToFamilyBook);
-            miExportToTreesAlbum.Text = LangMan.LS(LSID.LSID_MIExportToTreesAlbum);
+            miExportToTreesAlbum.Text = LangMan.LS(LSID.LSID_TreesAlbum);
             miExportToExcelFile.Text = LangMan.LS(LSID.LSID_MIExportToExcelFile);
             miExit.Text = LangMan.LS(LSID.LSID_MIExit);
 

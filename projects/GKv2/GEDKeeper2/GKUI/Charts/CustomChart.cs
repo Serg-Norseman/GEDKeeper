@@ -62,8 +62,7 @@ namespace GKUI.Charts
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (fNavman != null) fNavman.Dispose();
             }
             base.Dispose(disposing);
