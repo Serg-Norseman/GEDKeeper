@@ -142,6 +142,48 @@ namespace GKUI
             return new GfxPathHandler(new GraphicsPath());
         }
 
+        public IGfxPath CreateCirclePath(float x, float y, float width, float height)
+        {
+            var path = new GraphicsPath();
+            var result = new GfxCirclePathHandler(path);
+
+            result.X = x;
+            result.Y = y;
+            result.Width = width;
+            result.Height = height;
+
+            path.StartFigure();
+            path.AddEllipse(x, y, width, height);
+            path.CloseFigure();
+
+            return result;
+        }
+
+        public IGfxPath CreateCircleSegmentPath(float inRad, float extRad, float wedgeAngle, float ang1, float ang2)
+        {
+            var path = new GraphicsPath();
+            var result = new GfxCircleSegmentPathHandler(path);
+
+            result.InRad = inRad;
+            result.ExtRad = extRad;
+            result.WedgeAngle = wedgeAngle;
+            result.Ang1 = ang1;
+            result.Ang2 = ang2;
+
+            UIHelper.CreateCircleSegment(path, 0, 0, inRad, extRad, wedgeAngle, ang1, ang2);
+
+            return result;
+        }
+
+        /*public IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
+            float ang1, float ang2)
+        {
+            var result = new GfxCircleSegmentPathHandler(new GraphicsPath());
+
+
+            return result;
+        }*/
+
         public IFont CreateFont(string fontName, float size, bool bold)
         {
             FontStyle style = (!bold) ? FontStyle.Regular : FontStyle.Bold;

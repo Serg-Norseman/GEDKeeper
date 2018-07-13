@@ -28,7 +28,6 @@ using System.IO;
 using System.Text;
 
 using BSLib;
-using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKUI.Components;
@@ -212,36 +211,69 @@ namespace GKUI.Charts
             }
         }
 
-        public override void CreateCircleSegment(IGfxPath path,
-                                                 float inRad, float extRad, float wedgeAngle,
-                                                 float ang1, float ang2)
-        {
-            CreateCircleSegment(path, 0, 0, inRad, extRad, wedgeAngle, ang1, ang2);
-        }
-
-        public override void CreateCircleSegment(IGfxPath path, int ctX, int ctY,
-                                                 float inRad, float extRad, float wedgeAngle,
-                                                 float ang1, float ang2)
-        {
-            GraphicsPath sdPath = ((GfxPathHandler)path).Handle;
-
-            UIHelper.CreateCircleSegment(sdPath, ctX, ctY, inRad, extRad, wedgeAngle, ang1, ang2);
-        }
-
         public override void FillPath(IBrush brush, IGfxPath path)
         {
             Brush sdBrush = ((BrushHandler)brush).Handle;
             GraphicsPath sdPath = ((GfxPathHandler)path).Handle;
-
             fCanvas.FillPath(sdBrush, sdPath);
+
+            if (fSVGGfx != null) {
+                if (path is IGfxCirclePath) {
+                    var circlePath = path as IGfxCirclePath;
+                    fSVGGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, null /*pen*/, brush);
+                } else if (path is IGfxCircleSegmentPath) {
+                    var segmPath = path as IGfxCircleSegmentPath;
+                    fSVGGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, null /*pen*/, brush);
+                } else {
+                    
+                }
+            }
         }
 
         public override void DrawPath(IPen pen, IGfxPath path)
         {
             Pen sdPen = ((PenHandler)pen).Handle;
             GraphicsPath sdPath = ((GfxPathHandler)path).Handle;
-
             fCanvas.DrawPath(sdPen, sdPath);
+
+            if (fSVGGfx != null) {
+                if (path is IGfxCirclePath) {
+                    var circlePath = path as IGfxCirclePath;
+                    fSVGGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, pen, null /*brush*/);
+                } else if (path is IGfxCircleSegmentPath) {
+                    var segmPath = path as IGfxCircleSegmentPath;
+                    fSVGGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, null /*brush*/);
+                } else {
+                    
+                }
+            }
+        }
+
+        public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
+        {
+            GraphicsPath sdPath = ((GfxPathHandler)path).Handle;
+
+            if (brush != null) {
+                Brush sdBrush = ((BrushHandler)brush).Handle;
+                fCanvas.FillPath(sdBrush, sdPath);
+            }
+
+            if (pen != null) {
+                Pen sdPen = ((PenHandler)pen).Handle;
+                fCanvas.DrawPath(sdPen, sdPath);
+            }
+
+            if (fSVGGfx != null) {
+                if (path is IGfxCirclePath) {
+                    var circlePath = path as IGfxCirclePath;
+                    fSVGGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, pen, brush);
+                } else if (path is IGfxCircleSegmentPath) {
+                    var segmPath = path as IGfxCircleSegmentPath;
+                    fSVGGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, brush);
+                } else {
+                    
+                }
+            }
         }
 
         public override void DrawCircle(IPen pen, IBrush brush, float x, float y,

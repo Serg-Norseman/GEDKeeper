@@ -46,11 +46,37 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface IGfxPath : IDisposable
     {
+        // TODO: candidates for deletion
         void AddEllipse(float x, float y, float width, float height);
         void CloseFigure();
         void StartFigure();
 
         ExtRectF GetBounds();
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IGfxCirclePath : IGfxPath
+    {
+        float X { get; set; }
+        float Y { get; set; }
+        float Width { get; set; }
+        float Height { get; set; }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IGfxCircleSegmentPath : IGfxPath
+    {
+        float InRad { get; set; }
+        float ExtRad { get; set; }
+        float WedgeAngle { get; set; }
+        float Ang1 { get; set; }
+        float Ang2 { get; set; }
     }
 
 

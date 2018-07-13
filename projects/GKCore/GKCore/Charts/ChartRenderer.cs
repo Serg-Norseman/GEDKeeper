@@ -128,20 +128,14 @@ namespace GKCore.Charts
         public abstract void FillPath(IBrush brush, IGfxPath path);
 
         public abstract void DrawPath(IPen pen, IGfxPath path);
+        public abstract void DrawPath(IPen pen, IBrush brush, IGfxPath path);
 
+        // TODO: candidates for deletion
         public abstract void DrawCircle(IPen pen, IBrush brush, float x, float y,
                                         float width, float height);
-
         public abstract void DrawCircleSegment(IPen pen, IBrush brush, int ctX, int ctY,
                                                float inRad, float extRad,
                                                float startAngle, float wedgeAngle);
-
-        public abstract void CreateCircleSegment(IGfxPath path,
-                                                 float inRad, float extRad, float wedgeAngle,
-                                                 float ang1, float ang2);
-        public abstract void CreateCircleSegment(IGfxPath path, int ctX, int ctY,
-                                                 float inRad, float extRad, float wedgeAngle,
-                                                 float ang1, float ang2);
 
         public abstract IPen CreatePen(IColor color, float width);
 

@@ -215,20 +215,6 @@ namespace GKCore.Export
             }
         }
 
-        public override void CreateCircleSegment(IGfxPath path,
-                                                 float inRad, float extRad, float wedgeAngle,
-                                                 float ang1, float ang2)
-        {
-            
-        }
-
-        public override void CreateCircleSegment(IGfxPath path, int ctX, int ctY,
-                                                 float inRad, float extRad, float wedgeAngle,
-                                                 float ang1, float ang2)
-        {
-            
-        }
-
         public override void FillPath(IBrush brush, IGfxPath path)
         {
             
@@ -237,6 +223,11 @@ namespace GKCore.Export
         public override void DrawPath(IPen pen, IGfxPath path)
         {
             
+        }
+
+        public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
+        {
+            // dummy
         }
 
         public override void DrawCircle(IPen pen, IBrush brush, float x, float y,

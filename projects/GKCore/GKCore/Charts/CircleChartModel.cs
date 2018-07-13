@@ -465,8 +465,6 @@ namespace GKCore.Charts
                                    float rad, float inRad, float extRad,
                                    float startAngle, float wedgeAngle)
         {
-            IGfxPath path = segment.Path;
-
             segment.StartAngle = startAngle;
             segment.WedgeAngle = wedgeAngle;
             segment.Rad = rad;
@@ -474,27 +472,15 @@ namespace GKCore.Charts
             segment.ExtRad = extRad;
 
             if (wedgeAngle == 360.0f) {
-                path.StartFigure();
-                path.AddEllipse(-extRad, -extRad, extRad * 2.0f, extRad * 2.0f);
-                path.CloseFigure();
+                segment.Path = AppHost.GfxProvider.CreateCirclePath(-extRad, -extRad, extRad * 2.0f, extRad * 2.0f);
             } else {
-                fRenderer.CreateCircleSegment(path, inRad, extRad, wedgeAngle, startAngle, startAngle + wedgeAngle);
+                segment.Path = AppHost.GfxProvider.CreateCircleSegmentPath(inRad, extRad, wedgeAngle, startAngle, startAngle + wedgeAngle);
             }
         }
 
         private void DrawSegment(CircleSegment segment, IPen pen, IBrush brush)
         {
-            if (fRenderer.IsSVG) {
-                if (segment.WedgeAngle == 360.0f) {
-                    fRenderer.DrawCircle(pen, brush, -segment.ExtRad, -segment.ExtRad, segment.ExtRad * 2, segment.ExtRad * 2);
-                } else {
-                    fRenderer.DrawCircleSegment(pen, brush, 0, 0, segment.IntRad, segment.ExtRad, segment.StartAngle, segment.WedgeAngle);
-                }
-            } else {
-                IGfxPath path = segment.Path;
-                fRenderer.FillPath(brush, path);
-                fRenderer.DrawPath(pen, path);
-            }
+            fRenderer.DrawPath(pen, brush, segment.Path);
             DrawPersonName(segment);
         }
 

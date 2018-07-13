@@ -34,7 +34,13 @@ namespace GKCore.Interfaces
         IFont CreateFont(string fontName, float size, bool bold);
         IImage CreateImage(Stream stream);
         IImage CreateImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea);
+
         IGfxPath CreatePath();
+        IGfxPath CreateCirclePath(float x, float y, float width, float height);
+        IGfxPath CreateCircleSegmentPath(float inRad, float extRad, float wedgeAngle, float ang1, float ang2);
+        /*IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
+                                     float ang1, float ang2);*/
+
         IPen CreatePen(IColor color, float width);
         IBrush CreateSolidBrush(IColor color);
 

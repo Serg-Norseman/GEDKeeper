@@ -33,39 +33,46 @@ namespace GKUI.Charts
     /// </summary>
     public sealed class SVGRenderer : ChartRenderer
     {
+        private string fSVGFileName;
         private SvgGraphics fSVGGfx;
         private TextWriter fSVGWriter;
+        private int fSVGWidth, fSVGHeight;
         private float fTranslucent;
 
         public override bool IsSVG { get { return true; } }
 
-        public SVGRenderer() : base()
+        public SVGRenderer(string svgFileName, int width, int height) : base()
         {
+            fSVGFileName = svgFileName;
+            fSVGWidth = width;
+            fSVGHeight = height;
         }
 
         public override void BeginDrawing()
         {
+            fSVGWriter = new StreamWriter(new FileStream(fSVGFileName, FileMode.Create), Encoding.UTF8);
+            fSVGGfx = new SvgGraphics(fSVGWriter, ExtRectF.CreateBounds(0, 0, fSVGWidth, fSVGHeight));
+            fSVGGfx.BeginDrawing();
         }
 
         public override void EndDrawing()
         {
+            if (fSVGWriter != null) {
+                fSVGGfx.EndDrawing();
+                fSVGGfx = null;
+
+                fSVGWriter.Flush();
+                fSVGWriter.Close();
+                fSVGWriter = null;
+            }
         }
 
         public override void SetSVGMode(bool active, string svgFileName, int width, int height)
         {
             if (active) {
-                fSVGWriter = new StreamWriter(new FileStream(svgFileName, FileMode.Create), Encoding.UTF8);
-                fSVGGfx = new SvgGraphics(fSVGWriter, ExtRectF.CreateBounds(0, 0, width, height));
-                fSVGGfx.BeginDrawing();
+                BeginDrawing();
             } else {
-                if (fSVGWriter != null) {
-                    fSVGGfx.EndDrawing();
-                    fSVGGfx = null;
-
-                    fSVGWriter.Flush();
-                    fSVGWriter.Close();
-                    fSVGWriter = null;
-                }
+                EndDrawing();
             }
         }
 
@@ -155,26 +162,17 @@ namespace GKUI.Charts
             }
         }
 
-        public override void CreateCircleSegment(IGfxPath path,
-                                                 float inRad, float extRad, float wedgeAngle,
-                                                 float ang1, float ang2)
-        {
-            // dummy
-        }
-
-        public override void CreateCircleSegment(IGfxPath path, int ctX, int ctY,
-                                                 float inRad, float extRad, float wedgeAngle,
-                                                 float ang1, float ang2)
-        {
-            // dummy
-        }
-
         public override void FillPath(IBrush brush, IGfxPath path)
         {
             // dummy
         }
 
         public override void DrawPath(IPen pen, IGfxPath path)
+        {
+            // dummy
+        }
+
+        public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
         {
             // dummy
         }

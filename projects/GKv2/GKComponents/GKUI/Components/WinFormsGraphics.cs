@@ -95,7 +95,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GfxPathHandler: TypeHandler<GraphicsPath>, IGfxPath
+    public class GfxPathHandler: TypeHandler<GraphicsPath>, IGfxPath
     {
         public GfxPathHandler(GraphicsPath handle) : base(handle)
         {
@@ -128,6 +128,39 @@ namespace GKUI.Components
         {
             RectangleF rect = Handle.GetBounds();
             return ExtRectF.CreateBounds(rect.Left, rect.Top, rect.Width, rect.Height);
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class GfxCirclePathHandler: GfxPathHandler, IGfxCirclePath
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Width { get; set; }
+        public float Height { get; set; }
+
+        public GfxCirclePathHandler(GraphicsPath handle) : base(handle)
+        {
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class GfxCircleSegmentPathHandler: GfxPathHandler, IGfxCircleSegmentPath
+    {
+        public float InRad { get; set; }
+        public float ExtRad { get; set; }
+        public float WedgeAngle { get; set; }
+        public float Ang1 { get; set; }
+        public float Ang2 { get; set; }
+
+        public GfxCircleSegmentPathHandler(GraphicsPath handle) : base(handle)
+        {
         }
     }
 
