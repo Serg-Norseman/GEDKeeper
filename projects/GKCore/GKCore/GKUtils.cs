@@ -948,16 +948,14 @@ namespace GKCore
         {
             int result = 0;
 
-            if (iRec != null)
-            {
+            if (iRec != null) {
                 int val = (int)iRec.ExtData;
 
-                if (val < 0)
-                {
+                if (val < 0) {
                     val = 1;
-                    if (iRec.ChildToFamilyLinks.Count > 0)
-                    {
-                        GEDCOMFamilyRecord family = iRec.ChildToFamilyLinks[0].Family;
+
+                    GEDCOMFamilyRecord family = iRec.GetParentsFamily();
+                    if (family != null) {
                         GEDCOMIndividualRecord anc;
 
                         anc = family.GetHusband();

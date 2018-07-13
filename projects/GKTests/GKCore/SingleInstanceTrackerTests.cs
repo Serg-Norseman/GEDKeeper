@@ -26,15 +26,30 @@ namespace GKCore.SingleInstance
     [TestFixture]
     public class SingleInstanceTrackerTests
     {
-        #if !__MonoCS__
         private class SingleInstanceEnforcerMock: ISingleInstanceEnforcer
         {
             public void OnMessageReceived(MessageEventArgs e) { }
             public void OnNewInstanceCreated(EventArgs e) { }
         }
 
+        private static ISingleInstanceEnforcer GetSingleInstanceEnforcer()
+        {
+            return new SingleInstanceEnforcerMock();
+        }
+
         [Test]
-        public void Test_IpcFake()
+        public void Test_IpcMessage()
+        {
+            var ipcMsg = new IpcMessage();
+            Assert.IsNotNull(ipcMsg);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { ipcMsg.Serialize(null); });
+
+            Assert.Throws(typeof(ArgumentNullException), () => { IpcMessage.Deserialize(null); });
+        }
+
+        [Test]
+        public void Test_IpcParamEx()
         {
             var ipcParam = new IpcParamEx();
             Assert.IsNotNull(ipcParam);
@@ -48,9 +63,52 @@ namespace GKCore.SingleInstance
         }
 
         [Test]
+        public void Test_IpcFake()
+        {
+            IpcFake.StartServer(GetSingleInstanceEnforcer());
+
+            Assert.AreEqual(true, IpcFake.CreateMutex("test", true));
+            IpcFake.RefreshMutexes();
+
+            Assert.AreEqual(false, IpcFake.CreateMutex("test", true));
+            IpcFake.RefreshMutexes();
+
+            Assert.Throws(typeof(ArgumentNullException), () => { IpcFake.SendMessage(null); });
+
+            IpcFake.SendMessage(IpcFake.CmdSendArgs, new string[] { "testArgX" });
+
+            IpcFake.StopServer();
+            IpcFake.ReleaseAllMutexes();
+        }
+
+        [Test]
+        public void Test_IpcFake_SafeSerialize()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { IpcFake.SafeSerialize(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { IpcFake.SafeDeserialize(null); });
+
+            string[] args = new string[] { "testA", "testB" };
+            string temp = IpcFake.SafeSerialize(args);
+            string[] res = IpcFake.SafeDeserialize(temp);
+            Assert.AreEqual(args[0], res[0]);
+            Assert.AreEqual(args[1], res[1]);
+        }
+
+        [Test]
+        public void Test_MessageEventArgs()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { new MessageEventArgs(null); });
+
+            var args = new MessageEventArgs("test");
+            Assert.IsNotNull(args);
+        }
+
+        [Test]
         public void Test_Common()
         {
             //Assert.Throws(typeof(ArgumentNullException), () => { new SingleInstanceProxy(null); });
+
+            Assert.Throws(typeof(ArgumentNullException), () => { new SingleInstanceTracker(null, null); });
 
             string[] args = new string[1];
 
@@ -63,11 +121,5 @@ namespace GKCore.SingleInstance
                 }
             }
         }
-
-        private static ISingleInstanceEnforcer GetSingleInstanceEnforcer()
-        {
-            return new SingleInstanceEnforcerMock();
-        }
-        #endif
     }
 }

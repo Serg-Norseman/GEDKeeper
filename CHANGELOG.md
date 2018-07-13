@@ -1,4 +1,8 @@
 
+## ??.??.2018 [v2.14.0]
+- Restored the work of the maps module
+- Implemented portable mode of the program.
+
 ## 14.07.2018 [v2.13.2]
 - Fixed the bug of reading standard GEDCOM notes.
 

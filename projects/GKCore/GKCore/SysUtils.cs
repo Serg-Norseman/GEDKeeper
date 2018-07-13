@@ -20,11 +20,16 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Text;
 
 namespace GKCore
 {
+    #if !__MonoCS__
+    using GKCore.MapiMail;
+    #endif
+
     public enum DesktopType
     {
         None = 0,
@@ -55,6 +60,38 @@ namespace GKCore
         public static bool IsNetworkAvailable()
         {
             return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+        }
+
+        public static void SendMail(string address, string subject, string body, string attach)
+        {
+            if (!File.Exists(attach)) return;
+
+            try
+            {
+                #if __MonoCS__
+
+                const string mailto = "'{0}' --subject '{1}' --body '{2}' --attach {3}";
+                string args = string.Format(mailto, address, subject, body, attach);
+
+                var proc = new System.Diagnostics.Process();
+                proc.EnableRaisingEvents = false;
+                proc.StartInfo.FileName = "xdg-email";
+                proc.StartInfo.Arguments = args;
+                proc.Start();
+
+                #else
+
+                MapiMailMessage message = new MapiMailMessage(subject, body);
+                message.Recipients.Add(address);
+                message.Files.Add(attach);
+                message.ShowDialog();
+
+                #endif
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("SysUtils.SendMail(): " + ex.Message);
+            }
         }
 
         #endregion

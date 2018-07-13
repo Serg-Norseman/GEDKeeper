@@ -66,6 +66,7 @@ namespace GKUI.Components
             acbBack.Text = LangMan.LS(LSID.LSID_BackColor);
             acbLine.Text = LangMan.LS(LSID.LSID_LinesColor);
             chkHideEmptySegments.Text = LangMan.LS(LSID.LSID_HideEmptySegments);
+            chkArcText.Text = LangMan.LS(LSID.LSID_ArcText);
         }
 
         public void AcceptChanges()
@@ -85,6 +86,7 @@ namespace GKUI.Components
             fOptions.BrushColor[10] = UIHelper.ConvertColor(acbLine.BackColor);
 
             fOptions.HideEmptySegments = chkHideEmptySegments.Checked;
+            fOptions.ArcText = chkArcText.Checked;
             //fOptions.Apply();
         }
 
@@ -106,6 +108,7 @@ namespace GKUI.Components
             acbLine.BackColor = UIHelper.ConvertColor(fOptions.BrushColor[10]);
 
             chkHideEmptySegments.Checked = fOptions.HideEmptySegments;
+            chkArcText.Checked = fOptions.ArcText;
         }
 
         /*private void PanDefFont_Click(object sender, EventArgs e)

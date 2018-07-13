@@ -164,7 +164,6 @@
     <Compile Include="GKCore\Charts\SvgGraphics.cs" />
     <Compile Include="GKCore\Charts\SVGRenderer.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
-    <Compile Include="GKCore\Geocoding\OSMGeocoder.cs" />
     <Compile Include="GKCore\GKResourceManager.cs" />
     <Compile Include="GKCore\ImportUtils.cs" />
     <Compile Include="GKCore\Interfaces\IBaseContext.cs" />
@@ -189,6 +188,7 @@
     <Compile Include="GKCore\Interfaces\IOptions.cs" />
     <Compile Include="GKCore\Interfaces\IOptionsControl.cs" />
     <Compile Include="GKCore\Interfaces\IGraphicsProvider.cs" />
+    <Compile Include="GKCore\Interfaces\IOptionsSection.cs" />
     <Compile Include="GKCore\Interfaces\IPlugin.cs" />
     <Compile Include="GKCore\Interfaces\IPrintable.cs" />
     <Compile Include="GKCore\Interfaces\IProgressController.cs" />
@@ -200,7 +200,13 @@
     <Compile Include="GKCore\Interfaces\IWorkWindow.cs" />
     <Compile Include="GKCore\IocContainer.cs" />
     <Compile Include="GKCore\Logger.cs" />
+    <Compile Include="GKCore\Maps\GeoPoint.cs" />
+    <Compile Include="GKCore\Maps\GoogleGeocoder.cs" />
+    <Compile Include="GKCore\Maps\IGeocoder.cs" />
+    <Compile Include="GKCore\Maps\OSMGeocoder.cs" />
+    <Compile Include="GKCore\Maps\YandexGeocoder.cs" />
     <Compile Include="GKCore\Plugins\OrdinaryPlugin.cs" />
+    <Compile Include="GKCore\SingleInstance\MapiMailMessage.cs" />
     <Compile Include="GKCore\SysUtils.cs" />
     <Compile Include="GKCore\Types\DateFormat.cs" />
     <Compile Include="GKCore\Types\FileBackup.cs" />
@@ -248,16 +254,11 @@
     <Compile Include="GKCore\Export\Exporter.cs" />
     <Compile Include="GKCore\Export\FamilyBookExporter.cs" />
     <Compile Include="GKCore\Export\HTMLWriter.cs" />
-    <Compile Include="GKCore\Export\PDFExporter.cs" />
     <Compile Include="GKCore\Export\PDFWriter.cs" />
     <Compile Include="GKCore\Export\PedigreeExporter.cs" />
     <Compile Include="GKCore\Export\RTFWriter.cs" />
-    <Compile Include="GKCore\Export\TreeChartPDFRenderer.cs" />
+    <Compile Include="GKCore\Export\PDFRenderer.cs" />
     <Compile Include="GKCore\Export\TreesAlbumExporter.cs" />
-    <Compile Include="GKCore\Geocoding\GeoPoint.cs" />
-    <Compile Include="GKCore\Geocoding\GoogleGeocoder.cs" />
-    <Compile Include="GKCore\Geocoding\IGeocoder.cs" />
-    <Compile Include="GKCore\Geocoding\YandexGeocoder.cs" />
     <Compile Include="GKCore\GKData.cs" />
     <Compile Include="GKCore\GKUtils.cs" />
     <Compile Include="GKCore\Holidays.cs" />

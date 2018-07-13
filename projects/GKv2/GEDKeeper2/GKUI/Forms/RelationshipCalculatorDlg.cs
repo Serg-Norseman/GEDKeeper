@@ -93,7 +93,7 @@ namespace GKUI.Forms
             if (fRec1 != null && fRec2 != null) {
                 txtResult.Text = "???";
 
-                using (KinshipsGraph kinsGraph = TreeTools.SearchKinshipsGraph(fBase.Context, fRec1)) {
+                using (KinshipsGraph kinsGraph = KinshipsGraph.SearchGraph(fBase.Context, fRec1)) {
                     if (kinsGraph.IsEmpty()) {
                         txtResult.Text = "Empty graph.";
                         return;

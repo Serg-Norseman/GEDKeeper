@@ -43,6 +43,7 @@ namespace GEDKeeper3.Wpf
             //Style.Add<ButtonHandler>("icons", h => h.Widget.Image.);
 
             EtoFormsAppHost.ConfigureBootstrap(false);
+            AppHost.CheckPortable(args);
             Logger.LogInit(EtoFormsAppHost.GetLogFilename());
             LogSysInfo();
 

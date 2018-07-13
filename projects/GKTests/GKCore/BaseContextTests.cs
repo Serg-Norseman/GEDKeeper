@@ -21,10 +21,11 @@
 using System;
 using System.IO;
 using System.Reflection;
-
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Cultures;
+using GKCore.Operations;
 using GKCore.Types;
 using GKTests;
 using GKUI;
@@ -160,7 +161,7 @@ namespace GKCore
         {
             BaseContext context = TestStubs.CreateContext();
             TestStubs.FillContext(context);
-            Assert.AreEqual(15, context.Tree.RecordsCount);
+            Assert.AreEqual(17, context.Tree.RecordsCount);
 
             context.Clear();
             Assert.AreEqual(0, context.Tree.RecordsCount);
@@ -205,9 +206,179 @@ namespace GKCore
         }
 
         [Test]
+        public void Test_Culture()
+        {
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.German;
+            Assert.IsInstanceOf(typeof(GermanCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Polish;
+            Assert.IsInstanceOf(typeof(PolishCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Swedish;
+            Assert.IsInstanceOf(typeof(SwedishCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Icelandic;
+            Assert.IsInstanceOf(typeof(IcelandCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Russian;
+            Assert.IsInstanceOf(typeof(RussianCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Ukrainian;
+            Assert.IsInstanceOf(typeof(RussianCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Armenian;
+            Assert.IsInstanceOf(typeof(ArmenianCulture), fContext.Culture);
+            Assert.IsTrue(fContext.Culture.HasPatronymic());
+            Assert.IsTrue(fContext.Culture.HasSurname());
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Turkish;
+            Assert.IsInstanceOf(typeof(TurkishCulture), fContext.Culture);
+            Assert.IsFalse(fContext.Culture.HasPatronymic());
+            Assert.IsTrue(fContext.Culture.HasSurname());
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.French;
+            Assert.IsInstanceOf(typeof(FrenchCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Italian;
+            Assert.IsInstanceOf(typeof(ItalianCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Cantonese;
+            Assert.IsInstanceOf(typeof(ChineseCulture), fContext.Culture);
+
+            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Mandrin;
+            Assert.IsInstanceOf(typeof(ChineseCulture), fContext.Culture);
+            Assert.IsFalse(fContext.Culture.HasPatronymic());
+            Assert.IsTrue(fContext.Culture.HasSurname());
+        }
+
+        [Test]
         public void Test_X1()
         {
             
+        }
+
+        private void TransactionEventHandler(object sender, TransactionType type)
+        {
+        }
+
+        private class InvalidOperation : CustomOperation
+        {
+            public InvalidOperation(UndoManager manager) : base(manager) { }
+            public override bool Redo() { return false; }
+            public override void Undo() {}
+        }
+
+        [Test]
+        public void Test_UndoManager()
+        {
+            using (UndoManager undoman = new UndoManager()) {
+                Assert.IsNotNull(undoman);
+
+                Assert.IsFalse(undoman.CanUndo());
+                Assert.IsFalse(undoman.CanRedo());
+
+                undoman.Clear();
+
+                Assert.IsFalse(undoman.DoOperation(null));
+
+                undoman.Undo();
+                undoman.Redo();
+                undoman.Commit();
+                undoman.Rollback();
+
+                Assert.IsFalse(undoman.DoOperation(new InvalidOperation(undoman)));
+            }
+        }
+
+        [Test]
+        public void Test_UndoRedo()
+        {
+            Assert.AreEqual(fContext.Tree, fContext.Undoman.Tree);
+
+            fContext.Undoman.OnTransaction += TransactionEventHandler;
+
+            fContext.Undoman.Clear();
+
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            Assert.IsNotNull(iRec);
+
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                              fContext.Undoman.DoOrdinaryOperation(
+                                  OperationType.otIndividualBookmarkChange, null, true); });
+
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                              fContext.Undoman.DoOrdinaryOperation(
+                                  OperationType.otIndividualBookmarkChange, iRec, null); });
+
+            iRec.Bookmark = false;
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualBookmarkChange, iRec, true);
+            Assert.IsTrue(iRec.Bookmark);
+            Assert.IsTrue(fContext.Undoman.CanUndo());
+            fContext.Undoman.Undo();
+            Assert.IsFalse(iRec.Bookmark);
+            Assert.IsFalse(fContext.Undoman.CanUndo());
+
+            iRec.Patriarch = false;
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualPatriarchChange, iRec, true);
+            Assert.IsTrue(iRec.Patriarch);
+            Assert.IsTrue(fContext.Undoman.CanUndo());
+            fContext.Undoman.Undo();
+            Assert.IsFalse(iRec.Patriarch);
+            Assert.IsFalse(fContext.Undoman.CanUndo());
+
+            iRec.Sex = GEDCOMSex.svUndetermined;
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, iRec, GEDCOMSex.svMale);
+            Assert.AreEqual(GEDCOMSex.svMale, iRec.Sex);
+            Assert.IsTrue(fContext.Undoman.CanUndo());
+            fContext.Undoman.Undo();
+            Assert.AreEqual(GEDCOMSex.svUndetermined, iRec.Sex);
+            Assert.IsFalse(fContext.Undoman.CanUndo());
+
+            Assert.IsTrue(fContext.Undoman.CanRedo());
+            fContext.Undoman.Redo();
+            Assert.AreEqual(GEDCOMSex.svMale, iRec.Sex);
+            Assert.IsTrue(fContext.Undoman.CanUndo());
+
+            fContext.Undoman.Clear();
+
+            iRec.Bookmark = false;
+            iRec.Patriarch = false;
+            iRec.Sex = GEDCOMSex.svUndetermined;
+
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualBookmarkChange, iRec, true);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualPatriarchChange, iRec, true);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, iRec, GEDCOMSex.svMale);
+            fContext.Undoman.Commit();
+            Assert.IsTrue(iRec.Bookmark);
+            Assert.IsTrue(iRec.Patriarch);
+            Assert.AreEqual(GEDCOMSex.svMale, iRec.Sex);
+            Assert.IsTrue(fContext.Undoman.CanUndo());
+            fContext.Undoman.Undo();
+            Assert.IsFalse(iRec.Bookmark);
+            Assert.IsFalse(iRec.Patriarch);
+            Assert.AreEqual(GEDCOMSex.svUndetermined, iRec.Sex);
+            Assert.IsFalse(fContext.Undoman.CanUndo());
+
+
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualBookmarkChange, iRec, true);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualPatriarchChange, iRec, true);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, iRec, GEDCOMSex.svMale);
+            fContext.Undoman.Rollback();
+            Assert.IsFalse(iRec.Bookmark);
+            Assert.IsFalse(iRec.Patriarch);
+            Assert.AreEqual(GEDCOMSex.svUndetermined, iRec.Sex);
+            Assert.IsFalse(fContext.Undoman.CanUndo());
+
+            fContext.Undoman.OnTransaction -= TransactionEventHandler;
+
+
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                              fContext.Undoman.DoIndividualNameChange(null, "", "", ""); });
+            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetNameString(iRec, true, false));
+            fContext.Undoman.DoIndividualNameChange(iRec, "Petrov", "Alex", "Ivanovich");
+            Assert.AreEqual("Petrov Alex Ivanovich", GKUtils.GetNameString(iRec, true, false));
+            fContext.Undoman.Rollback();
+            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetNameString(iRec, true, false));
         }
     }
 }

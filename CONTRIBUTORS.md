@@ -60,6 +60,12 @@ ExpCalculator
     (C) 2011 by Serg V. Zhdanovskih  (fork to C#)
 
 
+GMap.NET
+    Licensed under "FLAT EARTH LICENSE"
+    (C) radioman
+    https://github.com/radioman/greatmaps
+
+
 IniFiles
     Licensed under The Code Project Open License (CPOL).
     (C) 2007 Gajatko

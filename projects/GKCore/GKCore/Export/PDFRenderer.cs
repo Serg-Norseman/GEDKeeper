@@ -35,7 +35,7 @@ namespace GKCore.Export
     /// <summary>
     /// 
     /// </summary>
-    public sealed class TreeChartPDFRenderer : ChartRenderer
+    public sealed class PDFRenderer : ChartRenderer
     {
         private PdfContentByte fCanvas;
         private readonly float fPageHeight;
@@ -43,7 +43,7 @@ namespace GKCore.Export
 
         public override bool IsSVG { get { return false; } }
 
-        public TreeChartPDFRenderer(float pageWidth, float pageHeight) : base()
+        public PDFRenderer(float pageWidth, float pageHeight) : base()
         {
             fPageHeight = pageHeight;
             fPageWidth = pageWidth;

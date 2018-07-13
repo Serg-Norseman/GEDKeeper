@@ -19,9 +19,11 @@
  */
 
 using System;
+using System.Reflection;
 using GKCore.Interfaces;
 using GKCore.Plugins;
 using GKCore.Types;
+using GKUI;
 using NUnit.Framework;
 
 namespace GKCore
@@ -29,17 +31,59 @@ namespace GKCore
     [TestFixture]
     public class PluginTests
     {
+        private class TestPlugin : OrdinaryPlugin, IPlugin
+        {
+            public override string DisplayName { get { return "TestPlugin"; } }
+            public override ILangMan LangMan { get { return null; } }
+            public override IImage Icon { get { return null; } }
+            public override PluginCategory Category { get { return PluginCategory.Common; } }
+
+            public override void Execute()
+            {
+            }
+        }
+
         [TestFixtureSetUp]
         public void SetUp()
         {
+            WinFormsAppHost.ConfigureBootstrap(false);
+        }
+
+        [Test]
+        public void Test_OrdinaryPlugin()
+        {
+            var plugin = new TestPlugin();
+            Assert.AreEqual(PluginCategory.Common, plugin.Category);
+            Assert.AreEqual(null, plugin.Icon);
+            Assert.AreEqual(null, plugin.LangMan);
+            Assert.AreEqual("TestPlugin", plugin.DisplayName);
+
+            plugin.Startup(null);
+            Assert.AreEqual(null, plugin.Host);
+
+            plugin.OnHostClosing(null);
+            plugin.OnHostActivate();
+            plugin.OnHostDeactivate();
+            plugin.OnLanguageChange();
+
+            plugin.Shutdown();
+        }
+
+        [Test]
+        public void Test_HostClosingEventArgs()
+        {
+            var args = new HostClosingEventArgs();
+            Assert.AreEqual(false, args.Cancel);
         }
 
         [Test]
         public void Test_GetPluginInfo()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { PluginInfo.GetPluginInfo(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                PluginInfo.GetPluginInfo(null);
+            });
 
-            var plugin = new PluginTest();
+            var plugin = new TestPlugin();
             Assert.IsNotNull(plugin);
 
             var pluginInfo = PluginInfo.GetPluginInfo(plugin);
@@ -49,25 +93,23 @@ namespace GKCore
             Assert.AreEqual("1.0.0.0", pluginInfo.Version);
         }
 
-        private class PluginTest : OrdinaryPlugin, IPlugin
-        {
-            public override string DisplayName { get { return "PluginTest"; } }
-            public override ILangMan LangMan { get { return null; } }
-            public override IImage Icon { get { return null; } }
-            public override PluginCategory Category { get { return PluginCategory.Common; } }
-
-            public override void Execute() { }
-        }
-
         [Test]
         public void Test_PluginsMan()
         {
             var pluginsMan = new PluginsMan();
             Assert.IsNotNull(pluginsMan);
 
-            Assert.AreEqual(0, pluginsMan.Count);
+            string path = null;
+            pluginsMan.Load(null, path);
 
-            pluginsMan.Load(null, null);
+            Assembly asm = null;
+            pluginsMan.Load(null, asm);
+
+            Assert.AreEqual(0, pluginsMan.Count);
+            pluginsMan.Load(AppHost.Instance, GetType().Assembly);
+            Assert.AreEqual(1, pluginsMan.Count);
+            Assert.IsNotNull(pluginsMan[0]);
+
             pluginsMan.Unload();
             pluginsMan.OnLanguageChange();
             pluginsMan.NotifyRecord(null, null, RecordAction.raAdd);

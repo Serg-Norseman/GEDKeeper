@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
-using GKCore.Geocoding;
 using GKCore.Maps;
 using NUnit.Framework;
 

@@ -24,7 +24,6 @@ using System.Globalization;
 
 using BSLib;
 using GKCommon.GEDCOM;
-using GKCore.Geocoding;
 using GKCore.UIContracts;
 
 namespace GKCore.Maps
@@ -63,8 +62,7 @@ namespace GKCore.Maps
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 PlaceRefs.Dispose();
             }
             base.Dispose(disposing);
@@ -99,17 +97,14 @@ namespace GKCore.Maps
         public static void CopyPoints(IMapBrowser browser, ExtList<GeoPoint> gmapPoints, bool byPerson)
         {
             browser.BeginUpdate();
-            try
-            {
+            try {
                 browser.ClearPoints();
 
                 int num = gmapPoints.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GeoPoint pt = gmapPoints[i];
                     string stHint = pt.Hint;
-                    if (byPerson)
-                    {
+                    if (byPerson) {
                         stHint = stHint + " [" + pt.Date.ToString() + "]";
                     }
 
@@ -117,9 +112,7 @@ namespace GKCore.Maps
                 }
 
                 browser.ZoomToBounds();
-            }
-            finally
-            {
+            } finally {
                 browser.EndUpdate();
             }
         }
@@ -135,18 +128,14 @@ namespace GKCore.Maps
             result.MinLat = pt.Latitude;
             result.MaxLat = pt.Latitude;
 
-            if (mapPoints.Count == 1)
-            {
+            if (mapPoints.Count == 1) {
                 result.MinLon = (result.MinLon - 20.0);
                 result.MaxLon = (result.MaxLon + 20.0);
                 result.MinLat = (result.MinLat - 20.0);
                 result.MaxLat = (result.MaxLat + 20.0);
-            }
-            else
-            {
+            } else {
                 int num = mapPoints.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     pt = mapPoints[i];
 
                     if (result.MinLon > pt.Longitude) result.MinLon = pt.Longitude;

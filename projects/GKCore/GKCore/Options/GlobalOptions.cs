@@ -555,11 +555,12 @@ namespace GKCore.Options
 
         public void LoadFromFile(string fileName)
         {
-            try
-            {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException("fileName");
+
+            try {
                 IniFile ini = new IniFile(fileName);
-                try
-                {
+                try {
                     LoadFromFile(ini);
                 } finally {
                     ini.Dispose();
@@ -677,15 +678,15 @@ namespace GKCore.Options
 
         public void SaveToFile(string fileName)
         {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException("fileName");
+
             try {
                 IniFile ini = new IniFile(fileName);
 
-                try
-                {
+                try {
                     SaveToFile(ini);
-                }
-                finally
-                {
+                } finally {
                     ini.Dispose();
                 }
             } catch (Exception ex) {

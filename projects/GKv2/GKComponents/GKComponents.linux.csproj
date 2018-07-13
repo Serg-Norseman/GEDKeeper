@@ -56,6 +56,12 @@
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="GMap.NET.Core">
+      <HintPath>..\..\libs\linux\GMap.NET.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="GMap.NET.WindowsForms">
+      <HintPath>..\..\libs\linux\GMap.NET.WindowsForms.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\..\libs\NLog.dll</HintPath>
     </Reference>
@@ -79,6 +85,9 @@
     </Compile>
     <Compile Include="GKUI\Components\GKComboItem.cs" />
     <Compile Include="GKUI\Components\GKListView.cs" />
+    <Compile Include="GKUI\Components\GKMapBrowser.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\GKMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>

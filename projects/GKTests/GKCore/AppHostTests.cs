@@ -19,21 +19,35 @@
  */
 
 using System;
+using GKUI;
+using NUnit.Framework;
 
-namespace GKCore.Geocoding
+namespace GKCore
 {
-    public sealed class GeoPoint
+    [TestFixture]
+    public class AppHostTests
     {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public string Hint { get; set; }
-        public DateTime Date { get; set; }
-
-        public GeoPoint(double latitude, double longitude, string hint)
+        [TestFixtureSetUp]
+        public void SetUp()
         {
-            Latitude = latitude;
-            Longitude = longitude;
-            Hint = hint;
+            WinFormsAppHost.ConfigureBootstrap(false);
+        }
+
+        [Test]
+        public void Test_AppHost()
+        {
+            Assert.IsNotNullOrEmpty(AppHost.GetAppPath());
+            Assert.IsNotNullOrEmpty(AppHost.GetLogFilename());
+
+            Assert.IsNotNullOrEmpty(AppHost.Instance.GetAppDataPath());
+
+            Assert.Throws(typeof(ArgumentNullException), () => { AppHost.Instance.LoadBase(null, null); });
+
+            AppHost.Instance.SetArgs(new string[] { "" });
+
+            Assert.IsNotNull(AppHost.PathReplacer);
+            Assert.IsNotNull(AppHost.NamesTable);
+            Assert.IsNotNull(AppHost.Plugins);
         }
     }
 }

@@ -23,7 +23,6 @@ using System.Collections.Generic;
 
 using BSLib;
 using BSLib.SmartGraph;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -283,5 +282,68 @@ namespace GKCore.Kinships
             }
             return result;
         }
+
+        #region Search graph
+
+        public static KinshipsGraph SearchGraph(IBaseContext context, GEDCOMIndividualRecord iRec)
+        {
+            if (iRec == null)
+                throw new ArgumentNullException("iRec");
+
+            KinshipsGraph graph = new KinshipsGraph(context);
+
+            SearchKGInt(null, iRec, graph, RelationKind.rkUndefined, RelationKind.rkUndefined);
+
+            return graph;
+        }
+
+        private static void SearchKGInt(Vertex prevNode, GEDCOMIndividualRecord iRec,
+                                        KinshipsGraph graph, RelationKind relation, RelationKind inverseRelation)
+        {
+            if (iRec == null) return;
+
+            Vertex currNode = graph.FindVertex(iRec.XRef);
+            if (currNode != null) {
+                if (prevNode != null) {
+                    graph.AddRelation(prevNode, currNode, relation, inverseRelation);
+                }
+
+                return;
+            } else {
+                currNode = graph.AddIndividual(iRec);
+
+                if (prevNode != null) {
+                    graph.AddRelation(prevNode, currNode, relation, inverseRelation);
+                }
+            }
+
+            if (iRec.ChildToFamilyLinks.Count > 0) {
+                GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
+                if (fam != null) {
+                    GEDCOMIndividualRecord father, mother;
+                    father = fam.GetHusband();
+                    mother = fam.GetWife();
+
+                    SearchKGInt(currNode, father, graph, RelationKind.rkParent, RelationKind.rkChild);
+                    SearchKGInt(currNode, mother, graph, RelationKind.rkParent, RelationKind.rkChild);
+                }
+            }
+
+            int num = iRec.SpouseToFamilyLinks.Count;
+            for (int i = 0; i < num; i++) {
+                GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                GEDCOMIndividualRecord spouse = ((iRec.Sex == GEDCOMSex.svMale) ? family.GetWife() : family.GetHusband());
+
+                SearchKGInt(currNode, spouse, graph, RelationKind.rkSpouse, RelationKind.rkSpouse);
+
+                int num2 = family.Children.Count;
+                for (int j = 0; j < num2; j++) {
+                    GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)family.Children[j].Value;
+                    SearchKGInt(currNode, child, graph, RelationKind.rkChild, RelationKind.rkParent);
+                }
+            }
+        }
+
+        #endregion
     }
 }

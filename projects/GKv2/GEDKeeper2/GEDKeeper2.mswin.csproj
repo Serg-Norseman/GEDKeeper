@@ -110,7 +110,6 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Externals\MapiMailMessage.cs" />
     <Compile Include="GKProgram.cs" />
     <Compile Include="GKUI\Charts\CircleChart.cs">
       <SubType>Component</SubType>
@@ -138,9 +137,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GKUI\Components\GKSheetList.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Components\GKMapBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\NativeMethods.cs" />
@@ -437,6 +433,8 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <EmbeddedResource Include="Resources\sym_female.png" />
+    <EmbeddedResource Include="Resources\sym_male.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -469,6 +467,9 @@
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

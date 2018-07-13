@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-using GKCommon;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -52,6 +51,25 @@ namespace GKCore.Plugins
             fPlugins = new List<IPlugin>();
         }
 
+        public void Load(IHost host, Assembly asm)
+        {
+            if (host == null || asm == null) {
+                return;
+            }
+
+            Type pluginType = typeof(IPlugin);
+
+            Type[] types = asm.GetTypes();
+            foreach (Type type in types) {
+                if (type.IsInterface || type.IsAbstract) continue;
+                if (type.GetInterface(pluginType.FullName) == null) continue;
+
+                IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                plugin.Startup(host);
+                fPlugins.Add(plugin);
+            }
+        }
+
         public void Load(IHost host, string path)
         {
             if (!Directory.Exists(path)) return;
@@ -59,33 +77,17 @@ namespace GKCore.Plugins
             try {
                 AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = path;
 
-                Type pluginType = typeof(IPlugin);
                 string[] pluginFiles = Directory.GetFiles(path, "*.dll");
-
                 foreach (string pfn in pluginFiles) {
                     try {
-                        Assembly asm;
+                        AssemblyName assemblyName = AssemblyName.GetAssemblyName(pfn);
+                        Assembly asm = Assembly.Load(assemblyName);
 
-                        try {
-                            AssemblyName assemblyName = AssemblyName.GetAssemblyName(pfn);
-                            asm = Assembly.Load(assemblyName);
-                        } catch {
-                            asm = null;
-                            // block exceptions for bad or non-dotnet assemblies
-                        }
-
-                        if (asm == null) continue;
-
-                        Type[] types = asm.GetTypes();
-                        foreach (Type type in types) {
-                            if (type.IsInterface || type.IsAbstract) continue;
-                            if (type.GetInterface(pluginType.FullName) == null) continue;
-
-                            IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-                            plugin.Startup(host);
-                            fPlugins.Add(plugin);
+                        if (asm != null) {
+                            Load(host, asm);
                         }
                     } catch (Exception ex) {
+                        // block exceptions for bad or non-dotnet assemblies
                         Logger.LogWrite("PluginsMan.Load.1(" + pfn + "): " + ex.Message);
                     }
                 }

@@ -21,7 +21,6 @@
 using System;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
@@ -58,8 +57,7 @@ namespace GKCore.Export
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (fWriter != null) fWriter.Dispose();
             }
             base.Dispose(disposing);

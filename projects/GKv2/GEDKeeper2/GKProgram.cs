@@ -71,6 +71,7 @@ namespace GKUI
         private static void Main(string[] args)
         {
             WinFormsAppHost.ConfigureBootstrap(false);
+            AppHost.CheckPortable(args);
             Logger.LogInit(WinFormsAppHost.GetLogFilename());
             LogSysInfo();
 

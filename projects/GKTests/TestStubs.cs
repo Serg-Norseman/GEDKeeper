@@ -42,7 +42,7 @@ namespace GKTests
             GEDCOMCustomEvent evt = context.CreateEventEx(null, "BIRT", "xxxxx", "xxxxx");
             Assert.IsNull(evt);
 
-            // first individual
+            // first individual (I1)
             GEDCOMIndividualRecord iRec = context.CreatePersonEx("Ivan", "Ivanovich", "Ivanov", GEDCOMSex.svMale, true);
             Assert.IsNotNull(iRec);
 
@@ -54,16 +54,16 @@ namespace GKTests
             GEDCOMCustomEvent evtd = context.CreateEventEx(iRec, "DEAT", "28 DEC 2010", "Ivanovo");
             Assert.IsNotNull(evtd);
 
-            // second individual, wife
+            // second individual, wife (I2)
             GEDCOMIndividualRecord iRec2 = context.CreatePersonEx("Maria", "Petrovna", "Ivanova", GEDCOMSex.svFemale, true);
             evt = iRec2.FindEvent("BIRT");
             Assert.IsNotNull(evt);
-            evt.Date.ParseString("17 MAR 1990");
+            evt.Date.ParseString("17 MAR 1991");
             evt.Place.StringValue = "Ivanovo";
 
             iRec.AddAssociation("spouse", iRec2);
 
-            // third individual, child
+            // third individual, child (I3)
             GEDCOMIndividualRecord iRec3 = context.CreatePersonEx("Anna", "Ivanovna", "Ivanova", GEDCOMSex.svFemale, true);
             evt = iRec3.FindEvent("BIRT");
             Assert.IsNotNull(evt);
@@ -79,7 +79,7 @@ namespace GKTests
 
             context.CreateEventEx(famRec, "MARR", "01 JAN 2000", "unknown");
 
-            // individual outside the family
+            // individual outside the family (I4)
             GEDCOMIndividualRecord iRec4 = context.CreatePersonEx("Alex", "", "Petrov", GEDCOMSex.svMale, true);
             evt = iRec4.FindEvent("BIRT");
             Assert.IsNotNull(evt);
@@ -89,9 +89,21 @@ namespace GKTests
             evt = context.CreateEventEx(iRec4, "RESI", "12 FEB", "Far Forest");
             Assert.IsNotNull(evt);
 
-            // fifth
+            // fifth (I5)
             GEDCOMIndividualRecord iRec5 = context.CreatePersonEx("Anna", "", "Jones", GEDCOMSex.svFemale, false);
             Assert.IsNotNull(iRec5);
+
+            // sixth (I6)
+            GEDCOMIndividualRecord iRec6 = context.CreatePersonEx("Mary", "", "Jones", GEDCOMSex.svFemale, false);
+            Assert.IsNotNull(iRec6);
+            evt = context.CreateEventEx(iRec6, "BIRT", "12 FEB 1650", "Far Forest");
+
+            GEDCOMFamilyRecord famRec2 = context.Tree.CreateFamily();
+            Assert.IsNotNull(famRec2);
+            famRec2.AddSpouse(iRec3);
+            //famRec2.AddSpouse(iRec4);
+            famRec2.AddChild(iRec5);
+            famRec2.AddChild(iRec6);
 
             // group for tests
             GEDCOMGroupRecord groupRec = context.Tree.CreateGroup();

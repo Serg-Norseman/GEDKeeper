@@ -207,21 +207,17 @@ namespace GKCore.Export
                 fWriter.AddParagraph(LangMan.LS(LSID.LSID_LifeExpectancy) + ": " + st, fTextFont);
             }
 
-            GEDCOMIndividualRecord father, mother;
             GEDCOMFamilyRecord fam = person.IRec.GetParentsFamily();
-            if (fam == null) {
-                father = null;
-                mother = null;
-            } else {
-                father = fam.GetHusband();
-                mother = fam.GetWife();
-            }
+            if (fam != null) {
+                GEDCOMIndividualRecord father = fam.GetHusband();
+                if (father != null) {
+                    fWriter.AddParagraphLink(LangMan.LS(LSID.LSID_Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", fTextFont, idLink(father), fLinkFont);
+                }
 
-            if (father != null) {
-                fWriter.AddParagraphLink(LangMan.LS(LSID.LSID_Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", fTextFont, idLink(father), fLinkFont);
-            }
-            if (mother != null) {
-                fWriter.AddParagraphLink(LangMan.LS(LSID.LSID_Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", fTextFont, idLink(mother), fLinkFont);
+                GEDCOMIndividualRecord mother = fam.GetWife();
+                if (mother != null) {
+                    fWriter.AddParagraphLink(LangMan.LS(LSID.LSID_Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", fTextFont, idLink(mother), fLinkFont);
+                }
             }
 
             ExtList<PedigreeEvent> evList = new ExtList<PedigreeEvent>(true);

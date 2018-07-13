@@ -85,13 +85,19 @@
     <Compile Include="GKComponents\ImageBoxTests.cs" />
     <Compile Include="GKComponents\ImageViewTests.cs" />
     <Compile Include="GKComponents\TreeChartBoxTests.cs" />
+    <Compile Include="GKCore\AppHostTests.cs" />
     <Compile Include="GKCore\BaseContextTests.cs" />
     <Compile Include="GKCore\BBTextParserTests.cs" />
     <Compile Include="GKCore\CoreTests.cs" />
+    <Compile Include="GKCore\CulturesTests.cs" />
+    <Compile Include="GKCore\ExportersTests.cs" />
     <Compile Include="GKCore\GKUtilsTests.cs" />
     <Compile Include="GKCore\HolidaysTests.cs" />
     <Compile Include="GKCore\ImportUtilsTests.cs" />
     <Compile Include="GKCore\IocContainerTests.cs" />
+    <Compile Include="GKCore\KinshipsTests.cs" />
+    <Compile Include="GKCore\ListsTests.cs" />
+    <Compile Include="GKCore\OptionsTests.cs" />
     <Compile Include="GKCore\PathReplacerTests.cs" />
     <Compile Include="GKCore\PlacesLoaderTests.cs" />
     <Compile Include="GKCore\PluginTests.cs" />
@@ -168,6 +174,7 @@
     <EmbeddedResource Include="Resources\shaytan_plant.jpg" />
     <EmbeddedResource Include="Resources\TGC55CLF.GED" />
     <EmbeddedResource Include="Resources\test_stdgedcom_notes.ged" />
+    <EmbeddedResource Include="Resources\test_ansel.ged" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

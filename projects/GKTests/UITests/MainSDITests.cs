@@ -154,6 +154,7 @@ namespace GKUI.Forms
             GenerateFamilyBook_Tests("Stage 22");
             GenerateExcel_Tests("Stage 23");
             GeneratePedigree_Tests("Stage 24");
+            //GenerateTreesAlbum_Tests("Stage 25"); // FIXME: fatal loop
 
 
             // Stage 25: call to CircleChartWin (required the base, selected person)
@@ -458,6 +459,17 @@ namespace GKUI.Forms
         private void GenerateFamilyBook_Handler(string name, IntPtr hWnd, Form form)
         {
             PrepareFileSave("test2.pdf", hWnd);
+        }
+
+        private void GenerateTreesAlbum_Tests(string stage)
+        {
+            ModalFormHandler = GenerateTreesAlbum_Handler;
+            ClickToolStripMenuItem("miExportToTreesAlbum", fMainWin);
+        }
+
+        private void GenerateTreesAlbum_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test3.pdf", hWnd);
         }
 
         #endregion

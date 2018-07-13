@@ -19,6 +19,7 @@
  */
 
 using BSLib;
+using GKCore.Charts;
 using GKCore.Interfaces;
 
 namespace GKCore.Export
@@ -49,6 +50,16 @@ namespace GKCore.Export
         {
             fAlbumPage = albumPage;
             fMargins = new ExtMargins(20);
+        }
+
+        public virtual ChartRenderer GetPageRenderer()
+        {
+            return null;
+        }
+
+        public virtual ExtRectF GetPageSize()
+        {
+            return ExtRectF.CreateEmpty();
         }
 
         public virtual void SetAlbumPage(bool value)

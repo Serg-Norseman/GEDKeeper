@@ -22,7 +22,7 @@
         private System.Windows.Forms.TextBox txtSurname;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.ComboBox cmbPatronymic;
-        public System.Windows.Forms.ComboBox cmbSex;
+        public GKUI.Components.GKComboBox cmbSex;
         private System.Windows.Forms.CheckBox chkPatriarch;
         private System.Windows.Forms.TabPage pageUserRefs;
         private System.Windows.Forms.Panel panCtlParents;
@@ -81,7 +81,7 @@
             this.txtSurname = new System.Windows.Forms.TextBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.cmbPatronymic = new System.Windows.Forms.ComboBox();
-            this.cmbSex = new System.Windows.Forms.ComboBox();
+            this.cmbSex = new GKUI.Components.GKComboBox();
             this.chkPatriarch = new System.Windows.Forms.CheckBox();
             this.panCtlParents = new System.Windows.Forms.Panel();
             this.txtMother = new System.Windows.Forms.TextBox();

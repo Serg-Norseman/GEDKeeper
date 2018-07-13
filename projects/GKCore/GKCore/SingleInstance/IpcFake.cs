@@ -27,8 +27,6 @@ using System.Text;
 using System.Threading;
 using System.Xml.Serialization;
 
-using GKCommon;
-
 namespace GKCore.SingleInstance
 {
     public enum AppMessage
@@ -63,28 +61,23 @@ namespace GKCore.SingleInstance
         public AppMessage Message;
         public int LParam;
 
-        public static void Serialize(BinaryWriter bw, IpcMessage msg)
+        public void Serialize(BinaryWriter bw)
         {
-            if ((bw == null) || (msg == null)) {
-                Debug.Assert(false);
-                return;
-            }
+            if (bw == null)
+                throw new ArgumentNullException("bw");
 
-            bw.Write(msg.ID);
-            bw.Write(msg.Time);
-            bw.Write((int)msg.Message);
-            bw.Write(msg.LParam);
+            bw.Write(ID);
+            bw.Write(Time);
+            bw.Write((int)Message);
+            bw.Write(LParam);
         }
 
         public static IpcMessage Deserialize(BinaryReader br)
         {
-            if (br == null) {
-                Debug.Assert(false);
-                return null;
-            }
+            if (br == null)
+                throw new ArgumentNullException("br");
 
             IpcMessage msg = new IpcMessage();
-
             msg.ID = br.ReadInt64();
             msg.Time = br.ReadInt64();
             msg.Message = (AppMessage)br.ReadInt32();
@@ -127,25 +120,22 @@ namespace GKCore.SingleInstance
             fEnforcer = enforcer;
             EnsurePaths();
 
-            try
-            {
+            try {
                 fFileWatcher = new FileSystemWatcher(GetIpcPath(), fMsgFileName);
                 fFileWatcher.IncludeSubdirectories = false;
                 fFileWatcher.NotifyFilter = (NotifyFilters.CreationTime | NotifyFilters.LastWrite);
                 fFileWatcher.Created += OnFileEvents;
                 fFileWatcher.Changed += OnFileEvents;
                 fFileWatcher.EnableRaisingEvents = true;
-            }
-            catch (Exception ex) // Access denied
-            {
+            } catch (Exception ex) {
+                // Access denied
                 Logger.LogWrite("IpcFake.StartServer(): " + ex.Message);
             }
         }
 
         public static void StopServer()
         {
-            if (fFileWatcher != null)
-            {
+            if (fFileWatcher != null) {
                 fFileWatcher.EnableRaisingEvents = false;
                 fFileWatcher.Changed -= OnFileEvents;
                 fFileWatcher.Created -= OnFileEvents;
@@ -153,6 +143,223 @@ namespace GKCore.SingleInstance
                 fFileWatcher = null;
             }
         }
+
+        public static void Send(AppMessage msg, int lParam, bool bWaitWithTimeout)
+        {
+            try {
+                EnsurePaths();
+
+                IpcMessage ipcMsg = new IpcMessage();
+                ipcMsg.ID = 0;
+                ipcMsg.Time = DateTime.UtcNow.ToBinary();
+                ipcMsg.Message = msg;
+                ipcMsg.LParam = lParam;
+
+                // Send just to others, not to own
+                fProcessedMsgs.Add(ipcMsg);
+
+                for (int r = 0; r < IpcComRetryCount; ++r) {
+                    try {
+                        List<IpcMessage> list = ReadMessagesPriv();
+                        CleanOldMessages(list);
+                        list.Add(ipcMsg);
+
+                        byte[] pbPlain;
+                        using (MemoryStream ms = new MemoryStream()) {
+                            using (BinaryWriter bw = new BinaryWriter(ms)) {
+                                bw.Write(IpcFileSig);
+                                bw.Write((uint)list.Count);
+
+                                for (int j = 0; j < list.Count; ++j) list[j].Serialize(bw);
+
+                                pbPlain = ms.ToArray();
+                            }
+                        }
+
+                        using (FileStream fsWrite = new FileStream(fMsgFilePath, FileMode.Create, FileAccess.Write, FileShare.None)) {
+                            fsWrite.Write(pbPlain, 0, pbPlain.Length);
+                        }
+
+                        break;
+                    } catch (Exception ex) {
+                        Logger.LogWrite("IpcFake.Send.2(): " + ex.Message);
+                    }
+
+                    Thread.Sleep(IpcComRetryDelay);
+                }
+
+                CleanOldMessages(fProcessedMsgs);
+            } catch (Exception ex) {
+                Logger.LogWrite("IpcFake.Send(): " + ex.Message);
+            }
+        }
+
+        public static void SendMessage(string cmd, string[] args)
+        {
+            IpcParamEx ipcMsg = new IpcParamEx(cmd, IpcFake.SafeSerialize(args));
+            IpcFake.SendMessage(ipcMsg);
+        }
+
+        public static void SendMessage(IpcParamEx ipcMsg)
+        {
+            if (ipcMsg == null)
+                throw new ArgumentNullException("ipcMsg");
+
+            try {
+                Random rnd = new Random();
+                int nId = rnd.Next() & 0x7FFFFFFF;
+
+                if (!WriteIpcInfoFile(nId, ipcMsg)) return;
+
+                Send(AppMessage.IpcByFile, nId, true);
+
+                string strIpcFile = GetIpcFilePath(nId);
+                for (int r = 0; r < 50; ++r) {
+                    try {
+                        if (!File.Exists(strIpcFile)) break;
+                    } catch (Exception) {
+                    }
+
+                    Thread.Sleep(20);
+                }
+
+                RemoveIpcInfoFile(nId);
+            } catch (Exception ex) {
+                Logger.LogWrite("IpcFake.SendMessage(): " + ex.Message);
+            }
+        }
+
+        public static string SafeSerialize(string[] args)
+        {
+            if (args == null)
+                throw new ArgumentNullException("args");
+
+            string result = null;
+
+            using (MemoryStream ms = new MemoryStream()) {
+                XmlSerializer xml = new XmlSerializer(typeof(string[]));
+                xml.Serialize(ms, args);
+                result = Convert.ToBase64String(ms.ToArray(), Base64FormattingOptions.None);
+            }
+
+            return result;
+        }
+
+        public static string[] SafeDeserialize(string str)
+        {
+            if (str == null)
+                throw new ArgumentNullException("str");
+
+            try {
+                byte[] pb = Convert.FromBase64String(str);
+
+                using (MemoryStream ms = new MemoryStream(pb, false)) {
+                    XmlSerializer xml = new XmlSerializer(typeof(string[]));
+
+                    return (string[])xml.Deserialize(ms);
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("IpcFake.SafeDeserialize(): " + ex.Message);
+                return null;
+            }
+        }
+
+        public static string GetMutexFileName(string strName)
+        {
+            string strDir = GetIpcPath();
+            return (strDir + IpcMsgFilePreID + GetUserID() + "-MTX-" + strName + ".tmp");
+        }
+
+        public static bool CreateMutex(string strName, bool bInitiallyOwned)
+        {
+            string mtxFileName = IpcFake.GetMutexFileName(strName);
+
+            try {
+                if (File.Exists(mtxFileName)) {
+                    byte[] pbEnc = File.ReadAllBytes(mtxFileName);
+
+                    if (pbEnc.Length == 12) {
+                        long lTime = BitConverter.ToInt64(pbEnc, 0);
+                        DateTime dt = DateTime.FromBinary(lTime);
+
+                        if ((DateTime.UtcNow - dt).TotalSeconds < GmpMutexValidSecs) {
+                            int pid = BitConverter.ToInt32(pbEnc, 8);
+                            try {
+                                Process.GetProcessById(pid); // Throws if process is not running
+                                return false; // Actively owned by other process
+                            } catch (Exception) {
+                            }
+                        }
+
+                        // Release the old mutex since process is not running
+                        ReleaseMutex(strName);
+                    } else {
+                        Debug.Assert(false);
+                    }
+                }
+            } catch (Exception) {
+                Debug.Assert(false);
+            }
+
+            try {
+                WriteMutexFilePriv(mtxFileName);
+            } catch (Exception) {
+                Debug.Assert(false);
+            }
+
+            fMutexes.Add(new KeyValuePair<string, string>(strName, mtxFileName));
+            return true;
+        }
+
+        public static bool ReleaseMutex(string strName)
+        {
+            for (int i = 0; i < fMutexes.Count; ++i) {
+                if (fMutexes[i].Key.Equals(strName, StringComparison.OrdinalIgnoreCase)) {
+                    string mtx = fMutexes[i].Value;
+
+                    for (int r = 0; r < 12; ++r) {
+                        try {
+                            if (File.Exists(mtx)) {
+                                File.Delete(mtx);
+                            }
+                            break;
+                        } catch (Exception) {
+                        }
+
+                        Thread.Sleep(10);
+                    }
+
+                    fMutexes.RemoveAt(i);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static void ReleaseAllMutexes()
+        {
+            for (int i = fMutexes.Count - 1; i >= 0; --i)
+                ReleaseMutex(fMutexes[i].Key);
+        }
+
+        public static void RefreshMutexes()
+        {
+            int iTicksDiff = (Environment.TickCount - fLastRefresh);
+            if (iTicksDiff >= GmpMutexRefreshMs) {
+                fLastRefresh = Environment.TickCount;
+
+                for (int i = 0; i < fMutexes.Count; ++i) {
+                    try {
+                        string mtx = fMutexes[i].Value;
+                        WriteMutexFilePriv(mtx);
+                    } catch (Exception) {
+                        Debug.Assert(false);
+                    }
+                }
+            }
+        }
+
+        #region Private methods
 
         private static string GetUserID()
         {
@@ -168,64 +375,6 @@ namespace GKCore.SingleInstance
             if (strShort.Length > 8) strShort = strShort.Substring(0, 8);
 
             return strShort;
-        }
-
-        public static void Send(AppMessage msg, int lParam, bool bWaitWithTimeout)
-        {
-            try
-            {
-                EnsurePaths();
-
-                IpcMessage ipcMsg = new IpcMessage();
-                ipcMsg.ID = 0;
-                ipcMsg.Time = DateTime.UtcNow.ToBinary();
-                ipcMsg.Message = msg;
-                ipcMsg.LParam = lParam;
-
-                // Send just to others, not to own
-                fProcessedMsgs.Add(ipcMsg);
-
-                for (int r = 0; r < IpcComRetryCount; ++r)
-                {
-                    try
-                    {
-                        List<IpcMessage> l = ReadMessagesPriv();
-                        CleanOldMessages(l);
-                        l.Add(ipcMsg);
-
-                        byte[] pbPlain;
-                        using (MemoryStream ms = new MemoryStream()) {
-                            using (BinaryWriter bw = new BinaryWriter(ms)) {
-                                bw.Write(IpcFileSig);
-                                bw.Write((uint)l.Count);
-
-                                for (int j = 0; j < l.Count; ++j)
-                                    IpcMessage.Serialize(bw, l[j]);
-
-                                pbPlain = ms.ToArray();
-                            }
-                        }
-
-                        using (FileStream fsWrite = new FileStream(fMsgFilePath, FileMode.Create, FileAccess.Write, FileShare.None)) {
-                            fsWrite.Write(pbPlain, 0, pbPlain.Length);
-                        }
-
-                        break;
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogWrite("IpcFake.Send.2(): " + ex.Message);
-                    }
-
-                    Thread.Sleep(IpcComRetryDelay);
-                }
-
-                CleanOldMessages(fProcessedMsgs);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("IpcFake.Send(): " + ex.Message);
-            }
         }
 
         private static void OnFileEvents(object sender, FileSystemEventArgs e)
@@ -256,11 +405,9 @@ namespace GKCore.SingleInstance
             List<IpcMessage> l = ReadMessagesPriv();
             CleanOldMessages(l);
 
-            foreach (IpcMessage msg in l)
-            {
+            foreach (IpcMessage msg in l) {
                 bool bProcessed = false;
-                foreach (IpcMessage ipcMsg in fProcessedMsgs)
-                {
+                foreach (IpcMessage ipcMsg in fProcessedMsgs) {
                     if (ipcMsg.ID == msg.ID) {
                         bProcessed = true;
                         break;
@@ -277,24 +424,18 @@ namespace GKCore.SingleInstance
 
         private static void ProcessMessage(IpcMessage msg)
         {
-            try
-            {
+            try {
                 if (fEnforcer == null) return;
 
-                if (msg.Message == AppMessage.RestoreWindow)
-                {
+                if (msg.Message == AppMessage.RestoreWindow) {
                     MessageEventArgs eArgs = new MessageEventArgs("restore");
                     fEnforcer.OnMessageReceived(eArgs);
-                }
-                else if (msg.Message == AppMessage.IpcByFile)
-                {
+                } else if (msg.Message == AppMessage.IpcByFile) {
                     IpcParamEx ipcMsg = LoadIpcInfoFile(msg.LParam);
-                    if (ipcMsg != null && ipcMsg.Message == CmdSendArgs)
-                    {
+                    if (ipcMsg != null && ipcMsg.Message == CmdSendArgs) {
                         string[] vArgs = SafeDeserialize(ipcMsg.Params);
 
-                        if (vArgs != null)
-                        {
+                        if (vArgs != null) {
                             MessageEventArgs eArgs = new MessageEventArgs(vArgs);
                             fEnforcer.OnMessageReceived(eArgs);
                         }
@@ -307,8 +448,8 @@ namespace GKCore.SingleInstance
 
         private static List<IpcMessage> ReadMessagesPriv()
         {
-            List<IpcMessage> l = new List<IpcMessage>();
-            if (!File.Exists(fMsgFilePath)) return l;
+            List<IpcMessage> list = new List<IpcMessage>();
+            if (!File.Exists(fMsgFilePath)) return list;
 
             byte[] pbEnc = File.ReadAllBytes(fMsgFilePath);
 
@@ -317,28 +458,25 @@ namespace GKCore.SingleInstance
                     ulong uSig = br.ReadUInt64();
                     if (uSig != IpcFileSig) {
                         Debug.Assert(false);
-                        return l;
+                        return list;
                     }
 
                     uint uMessages = br.ReadUInt32();
                     for (uint u = 0; u < uMessages; ++u)
-                        l.Add(IpcMessage.Deserialize(br));
-
+                        list.Add(IpcMessage.Deserialize(br));
                 }
             }
 
-            return l;
+            return list;
         }
 
-        private static void CleanOldMessages(List<IpcMessage> l)
+        private static void CleanOldMessages(IList<IpcMessage> list)
         {
             DateTime dtNow = DateTime.UtcNow;
-            for (int i = l.Count - 1; i >= 0; --i)
-            {
-                DateTime dtEvent = DateTime.FromBinary(l[i].Time);
+            for (int i = list.Count - 1; i >= 0; --i) {
+                DateTime dtEvent = DateTime.FromBinary(list[i].Time);
 
-                if ((dtNow - dtEvent).TotalSeconds > IpcMsgValidSecs)
-                    l.RemoveAt(i);
+                if ((dtNow - dtEvent).TotalSeconds > IpcMsgValidSecs) list.RemoveAt(i);
             }
         }
 
@@ -346,12 +484,6 @@ namespace GKCore.SingleInstance
         {
             string strPath = AppHost.GetAppDataPathStatic();
             return strPath;
-        }
-
-        public static string GetMutexPath(string strName)
-        {
-            string strDir = GetIpcPath();
-            return (strDir + IpcMsgFilePreID + GetUserID() + "-MTX-" + strName + ".tmp");
         }
 
         private static void EnsurePaths()
@@ -362,86 +494,12 @@ namespace GKCore.SingleInstance
             fMsgFilePath = GetIpcPath() + fMsgFileName;
         }
 
-        public static string SafeSerialize(string[] args)
-        {
-            if (args == null)
-                throw new ArgumentNullException("args");
-
-            string result = null;
-
-            using (MemoryStream ms = new MemoryStream()) {
-                XmlSerializer xml = new XmlSerializer(typeof(string[]));
-                xml.Serialize(ms, args);
-                result = Convert.ToBase64String(ms.ToArray(), Base64FormattingOptions.None);
-            }
-
-            return result;
-        }
-
-        public static string[] SafeDeserialize(string str)
-        {
-            if (str == null)
-                throw new ArgumentNullException("str");
-
-            try
-            {
-                byte[] pb = Convert.FromBase64String(str);
-
-                using (MemoryStream ms = new MemoryStream(pb, false)) {
-                    XmlSerializer xml = new XmlSerializer(typeof(string[]));
-
-                    return (string[])xml.Deserialize(ms);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("IpcFake.SafeDeserialize(): " + ex.Message);
-                return null;
-            }
-        }
-
-        public static void SendGlobalMessage(IpcParamEx ipcMsg)
-        {
-            if (ipcMsg == null)
-                throw new ArgumentNullException("ipcMsg");
-
-            try
-            {
-                Random rnd = new Random();
-                int nId = rnd.Next() & 0x7FFFFFFF;
-
-                if (!WriteIpcInfoFile(nId, ipcMsg)) return;
-
-                Send(AppMessage.IpcByFile, nId, true);
-
-                string strIpcFile = GetIpcFilePath(nId);
-                for (int r = 0; r < 50; ++r)
-                {
-                    try {
-                        if (!File.Exists(strIpcFile)) break;
-                    }
-                    catch (Exception) { }
-
-                    Thread.Sleep(20);
-                }
-
-                RemoveIpcInfoFile(nId);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("IpcFake.SendGlobalMessage(): " + ex.Message);
-            }
-        }
-
         private static string GetIpcFilePath(int nId)
         {
-            try
-            {
+            try {
                 string filePath = GetIpcPath() + IpcMsgFilePreID + nId.ToString() + ".tmp";
                 return filePath;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("IpcFake.GetIpcFilePath(): " + ex.Message);
                 return null;
             }
@@ -452,19 +510,15 @@ namespace GKCore.SingleInstance
             string strPath = GetIpcFilePath(nId);
             if (string.IsNullOrEmpty(strPath)) return false;
 
-            try
-            {
+            try {
                 XmlSerializer xml = new XmlSerializer(typeof(IpcParamEx));
 
-                using (var fs = new FileStream(strPath, FileMode.Create, FileAccess.Write, FileShare.None))
-                {
+                using (var fs = new FileStream(strPath, FileMode.Create, FileAccess.Write, FileShare.None)) {
                     xml.Serialize(fs, ipcMsg);
                 }
 
                 return true;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("IpcFake.WriteIpcInfoFile(): " + ex.Message);
             }
 
@@ -476,12 +530,9 @@ namespace GKCore.SingleInstance
             string strPath = GetIpcFilePath(nId);
             if (string.IsNullOrEmpty(strPath)) return;
 
-            try
-            {
+            try {
                 if (File.Exists(strPath)) File.Delete(strPath);
-            }
-            catch (Exception)
-            {
+            } catch (Exception) {
                 Debug.Assert(false);
             }
         }
@@ -492,73 +543,19 @@ namespace GKCore.SingleInstance
             if (string.IsNullOrEmpty(strPath)) return null;
 
             IpcParamEx ipcParam = null;
-            try
-            {
+            try {
                 XmlSerializer xml = new XmlSerializer(typeof(IpcParamEx));
 
-                using (var fs = new FileStream(strPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
+                using (var fs = new FileStream(strPath, FileMode.Open, FileAccess.Read, FileShare.Read)) {
                     ipcParam = (IpcParamEx)xml.Deserialize(fs);
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("IpcFake.LoadIpcInfoFile(): " + ex.Message);
             }
 
             RemoveIpcInfoFile(nId);
 
             return ipcParam;
-        }
-
-
-        public static bool CreateMutex(string strName, bool bInitiallyOwned)
-        {
-            string strPath = IpcFake.GetMutexPath(strName);
-            try
-            {
-                if (File.Exists(strPath))
-                {
-                    byte[] pbEnc = File.ReadAllBytes(strPath);
-
-                    if (pbEnc.Length == 12)
-                    {
-                        long lTime = BitConverter.ToInt64(pbEnc, 0);
-                        DateTime dt = DateTime.FromBinary(lTime);
-
-                        if ((DateTime.UtcNow - dt).TotalSeconds < GmpMutexValidSecs)
-                        {
-                            int pid = BitConverter.ToInt32(pbEnc, 8);
-                            try
-                            {
-                                Process.GetProcessById(pid); // Throws if process is not running
-                                return false; // Actively owned by other process
-                            }
-                            catch (Exception) { }
-                        }
-
-                        // Release the old mutex since process is not running
-                        ReleaseMutex(strName);
-                    }
-                    else
-                    {
-                        Debug.Assert(false);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                Debug.Assert(false);
-            }
-
-            try {
-                WriteMutexFilePriv(strPath);
-            } catch (Exception) {
-                Debug.Assert(false);
-            }
-
-            fMutexes.Add(new KeyValuePair<string, string>(strName, strPath));
-            return true;
         }
 
         private static void WriteMutexFilePriv(string strPath)
@@ -569,62 +566,6 @@ namespace GKCore.SingleInstance
             File.WriteAllBytes(strPath, pb);
         }
 
-        public static bool ReleaseMutex(string strName)
-        {
-            for (int i = 0; i < fMutexes.Count; ++i)
-            {
-                if (fMutexes[i].Key.Equals(strName, StringComparison.OrdinalIgnoreCase))
-                {
-                    string mtx = fMutexes[i].Value;
-
-                    for (int r = 0; r < 12; ++r)
-                    {
-                        try
-                        {
-                            if (!File.Exists(mtx)) break;
-
-                            File.Delete(mtx);
-                            break;
-                        }
-                        catch (Exception) { }
-
-                        Thread.Sleep(10);
-                    }
-
-                    fMutexes.RemoveAt(i);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public static void ReleaseAllMutexes()
-        {
-            for (int i = fMutexes.Count - 1; i >= 0; --i)
-                ReleaseMutex(fMutexes[i].Key);
-        }
-
-        public static void RefreshMutexes()
-        {
-            int iTicksDiff = (Environment.TickCount - fLastRefresh);
-            if (iTicksDiff >= GmpMutexRefreshMs)
-            {
-                fLastRefresh = Environment.TickCount;
-
-                for (int i = 0; i < fMutexes.Count; ++i)
-                {
-                    try
-                    {
-                        string mtx = fMutexes[i].Value;
-                        WriteMutexFilePriv(mtx);
-                    }
-                    catch (Exception)
-                    {
-                        Debug.Assert(false);
-                    }
-                }
-            }
-        }
+        #endregion
     }
 }

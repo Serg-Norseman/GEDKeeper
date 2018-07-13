@@ -12,17 +12,15 @@ using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Ipc;
 using System.Threading;
+using BSLib;
 
 namespace GKCore.SingleInstance
 {
-    using GKCommon;
-
     /// <summary>
     /// Represents an object used to check for a previous instance of an application, and sending messages to it.
     /// </summary>
-    public class SingleInstanceTracker : IDisposable
+    public class SingleInstanceTracker : BaseObject
     {
-        private bool fDisposed;
         private readonly bool fIsFirstInstance;
         private readonly SingleInstanceProxy fProxy;
 
@@ -36,13 +34,7 @@ namespace GKCore.SingleInstance
         /// </summary>
         public bool IsFirstInstance
         {
-            get
-            {
-                if (fDisposed)
-                    throw new ObjectDisposedException("The SingleInstanceTracker object has already been disposed.");
-
-                return fIsFirstInstance;
-            }
+            get { return fIsFirstInstance; }
         }
 
         /// <summary>
@@ -50,13 +42,7 @@ namespace GKCore.SingleInstance
         /// </summary>
         public ISingleInstanceEnforcer Enforcer
         {
-            get
-            {
-                if (fDisposed)
-                    throw new ObjectDisposedException("The SingleInstanceTracker object has already been disposed.");
-
-                return fProxy.Enforcer;
-            }
+            get { return fProxy.Enforcer; }
         }
 
         /// <summary>
@@ -147,58 +133,33 @@ namespace GKCore.SingleInstance
         }
 
         /// <summary>
-        /// Releases all unmanaged resources used by the object.
-        /// </summary>
-        ~SingleInstanceTracker()
-        {
-            Dispose(false);
-        }
-
-        /// <summary>
         /// Releases all unmanaged resources used by the object, and potentially releases managed resources.
         /// </summary>
         /// <param name="disposing">true to dispose of managed resources; otherwise false.</param>
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
-            if (!fDisposed)
-            {
-                if (disposing)
-                {
-                    #if IPC_SUPPORTS
+            if (disposing) {
+                #if IPC_SUPPORTS
 
-                    if (fSingleInstanceMutex != null)
-                    {
-                        fSingleInstanceMutex.Close();
-                        fSingleInstanceMutex = null;
-                    }
-
-                    if (fIpcChannel != null)
-                    {
-                        ChannelServices.UnregisterChannel(fIpcChannel);
-                        fIpcChannel = null;
-                    }
-
-                    #else
-
-                    IpcFake.StopServer();
-                    IpcFake.ReleaseAllMutexes();
-
-                    #endif
+                if (fSingleInstanceMutex != null) {
+                    fSingleInstanceMutex.Close();
+                    fSingleInstanceMutex = null;
                 }
 
-                fDisposed = true;
+                if (fIpcChannel != null) {
+                    ChannelServices.UnregisterChannel(fIpcChannel);
+                    fIpcChannel = null;
+                }
+
+                #else
+
+                IpcFake.StopServer();
+                IpcFake.ReleaseAllMutexes();
+
+                #endif
             }
+            base.Dispose(disposing);
         }
-
-        /// <summary>
-        /// Releases all resources used by the object.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
 
         /// <summary>
         /// Sends a message to the first instance of the application.
@@ -208,40 +169,27 @@ namespace GKCore.SingleInstance
         /// <exception cref="SingleInstancing.SingleInstancingException">The SingleInstanceInteractor has failed to send the message to the first application instance. The first instance might have terminated.</exception>
         public void SendMessageToFirstInstance(object message)
         {
-            if (fDisposed)
-                throw new ObjectDisposedException("The SingleInstanceTracker object has already been disposed.");
-
             #if IPC_SUPPORTS
 
             if (fIpcChannel == null)
                 throw new InvalidOperationException("The object was constructed with the SingleInstanceTracker(string name) constructor overload, or with the SingleInstanceTracker(string name, SingleInstanceEnforcerRetriever enforcerRetriever) constructor overload, with enforcerRetriever set to null, thus you cannot send messages to the first instance.");
 
-            try
-            {
+            try {
                 fProxy.Enforcer.OnMessageReceived(new MessageEventArgs(message));
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 throw new SingleInstancingException("Failed to send message to the first instance of the application. The first instance might have terminated.", ex);
             }
 
             #else
 
-            try
-            {
+            try {
                 string[] args = message as string[];
-                if (args.Length == 0 || string.IsNullOrEmpty(args[0]))
-                {
+                if (args.Length == 0 || string.IsNullOrEmpty(args[0])) {
                     IpcFake.Send(AppMessage.RestoreWindow, 0, false);
+                } else {
+                    IpcFake.SendMessage(IpcFake.CmdSendArgs, args);
                 }
-                else
-                {
-                    IpcParamEx ipcMsg = new IpcParamEx(IpcFake.CmdSendArgs, IpcFake.SafeSerialize(args));
-                    IpcFake.SendGlobalMessage(ipcMsg);
-                }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("SingleInstanceTracker.SendMessageToFirstInstance.2(): " + ex.Message);
             }
 

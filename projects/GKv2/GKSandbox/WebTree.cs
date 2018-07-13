@@ -23,7 +23,7 @@ using System.IO;
 using BSLib;
 using GKCommon.GEDCOM;
 
-namespace GKCore
+namespace GKCommon.GKCore
 {
     public class WebTree
     {
