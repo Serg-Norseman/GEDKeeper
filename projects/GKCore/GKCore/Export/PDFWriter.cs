@@ -106,7 +106,7 @@ namespace GKCore.Export
 
         public override ExtRectF GetPageSize()
         {
-            return ExtRectF.Create(fDocument.Left, fDocument.Top, fDocument.Right, fDocument.Bottom);
+            return ExtRectF.Create(fDocument.Left, fDocument.Bottom, fDocument.Right, fDocument.Top);
         }
 
         public override void BeginWrite()
