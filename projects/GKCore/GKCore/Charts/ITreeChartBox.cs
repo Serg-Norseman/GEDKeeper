@@ -39,7 +39,8 @@ namespace GKCore.Charts
         maExpand,
         maDrag,
         maProperties,
-        maHighlight
+        maHighlight,
+        maPersonExpand
     }
 
     public enum MouseEvent

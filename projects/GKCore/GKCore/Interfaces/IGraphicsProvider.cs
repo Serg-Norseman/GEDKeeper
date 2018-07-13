@@ -44,7 +44,8 @@ namespace GKCore.Interfaces
         IPen CreatePen(IColor color, float width);
         IBrush CreateSolidBrush(IColor color);
 
-        IImage GetResourceImage(string resName, bool makeTransp);
+        IImage GetResourceImage(string resName, bool makeTransp); // old, remove
+        IImage LoadResourceImage(string resName, bool makeTransp); // v2
         IImage LoadImage(string fileName);
         void SaveImage(IImage image, string fileName);
     }

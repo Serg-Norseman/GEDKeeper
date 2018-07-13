@@ -573,11 +573,11 @@ namespace GKUI.Charts
             SetImageSize(imageSize, noRedraw);
         }
 
-        public void ToggleCollapse()
+        public void ToggleCollapse(TreeChartPerson person)
         {
             try {
-                if (fSelected != null) {
-                    fModel.ToggleCollapse(fSelected);
+                if (person != null) {
+                    fModel.ToggleCollapse(person);
 
                     SaveSelection();
                     RecalcChart(false);
@@ -586,6 +586,11 @@ namespace GKUI.Charts
             } catch (Exception ex) {
                 Logger.LogWrite("TreeChartBox.ToggleCollapse(): " + ex.Message);
             }
+        }
+
+        public void ToggleCollapse()
+        {
+            ToggleCollapse(fSelected);
         }
 
         #endregion
@@ -725,6 +730,13 @@ namespace GKUI.Charts
                     result = MouseAction.maExpand;
                     break;
                 }
+
+                expRt = TreeChartModel.GetPersonExpandRect(persRt);
+                if ((e.Buttons == MouseButtons.Primary && mouseEvent == MouseEvent.meUp) && expRt.Contains(aX, aY)) {
+                    person = p;
+                    result = MouseAction.maPersonExpand;
+                    break;
+                }
             }
 
             if (result == MouseAction.maNone && person == null) {
@@ -851,6 +863,10 @@ namespace GKUI.Charts
                         case MouseAction.maExpand:
                             DoRootChanged(mPers);
                             GenChart(mPers.Rec, TreeChartKind.ckBoth, true);
+                            break;
+
+                        case MouseAction.maPersonExpand:
+                            ToggleCollapse(mPers);
                             break;
                     }
                     break;

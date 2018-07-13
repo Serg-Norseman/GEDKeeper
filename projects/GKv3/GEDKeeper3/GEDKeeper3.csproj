@@ -309,6 +309,7 @@
     <EmbeddedResource Include="Resources\btn_export.gif" />
     <EmbeddedResource Include="Resources\btn_exit.gif" />
     <EmbeddedResource Include="Resources\btn_search.gif" />
+    <EmbeddedResource Include="Resources\btn_expand2.gif" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj">

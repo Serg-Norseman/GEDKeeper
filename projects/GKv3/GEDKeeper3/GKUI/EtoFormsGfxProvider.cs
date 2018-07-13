@@ -136,6 +136,17 @@ namespace GKUI
             return new ImageHandler(img);
         }
 
+        // TODO: Temp version, on future
+        public IImage LoadResourceImage(string resName, bool makeTransp)
+        {
+            Bitmap img = Bitmap.FromResource("Resources." + resName);
+
+            if (makeTransp) {
+            }
+
+            return new ImageHandler(img);
+        }
+
         public IGfxPath CreatePath()
         {
             return new GfxPathHandler(new GraphicsPath());

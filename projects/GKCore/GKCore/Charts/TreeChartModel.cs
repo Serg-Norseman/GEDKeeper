@@ -79,6 +79,7 @@ namespace GKCore.Charts
         private IFont fDrawFont;
         private int[] fEdges;
         private IImage fExpPic;
+        private IImage fPersExpPic;
         private KinshipsGraph fGraph;
         private bool fHasMediaFail;
         private TreeChartPerson fHighlightedPerson;
@@ -264,6 +265,19 @@ namespace GKCore.Charts
             }
         }
 
+        private static IImage PrepareImage2(string name, bool makeTransp)
+        {
+            if (name == null) return null;
+
+            try {
+                var result = AppHost.GfxProvider.LoadResourceImage(name, makeTransp);
+                return result;
+            } catch (Exception ex) {
+                Logger.LogWrite("TreeChartModel.PrepareImage2(): " + ex.Message);
+                return null;
+            }
+        }
+
         private void InitSigns()
         {
             try {
@@ -281,6 +295,7 @@ namespace GKCore.Charts
 
                 fSignsPic = signsPic;
                 fExpPic = PrepareImage("btn_expand.gif", true);
+                fPersExpPic = PrepareImage2("btn_expand2.gif", true);
             } catch (Exception ex) {
                 Logger.LogWrite("TreeChartModel.InitSigns(): " + ex.Message);
             }
@@ -303,6 +318,7 @@ namespace GKCore.Charts
             fDrawFont = sourceModel.fDrawFont;
             //fEdges = sourceModel.fEdges;
             fExpPic = sourceModel.fExpPic;
+            fPersExpPic = sourceModel.fPersExpPic;
             //fGraph = sourceModel.fGraph;
             //fHasMediaFail = sourceModel.fHasMediaFail;
             //fHighlightedPerson = sourceModel.fHighlightedPerson;
@@ -1256,6 +1272,13 @@ namespace GKCore.Charts
             return expRt;
         }
 
+        public static ExtRect GetPersonExpandRect(ExtRect personRect)
+        {
+            int x = personRect.Left + (personRect.GetWidth() - 16) / 2;
+            ExtRect expRt = ExtRect.Create(x, personRect.Top - 18, x + 16 - 1, personRect.Top - 2);
+            return expRt;
+        }
+
         private bool IsPersonVisible(ExtRect pnRect)
         {
             return fVisibleArea.IntersectsWith(pnRect);
@@ -1383,6 +1406,11 @@ namespace GKCore.Charts
                     if (person.CanExpand) {
                         ExtRect expRt = GetExpanderRect(brt);
                         fRenderer.DrawImage(fExpPic, expRt.Left, expRt.Top);
+                    }
+
+                    if (person.IsCollapsed) {
+                        ExtRect expRt = GetPersonExpandRect(brt);
+                        fRenderer.DrawImage(fPersExpPic, expRt.Left, expRt.Top);
                     }
 
                     // draw CI only for existing individuals

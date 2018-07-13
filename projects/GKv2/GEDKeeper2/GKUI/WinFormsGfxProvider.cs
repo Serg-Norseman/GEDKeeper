@@ -120,9 +120,28 @@ namespace GKUI
             }
         }
 
+        // TODO: Remove
         public IImage GetResourceImage(string resName, bool makeTransp)
         {
             Bitmap img = (Bitmap)GKResources.ResourceManager.GetObject(resName, GKResources.Culture);
+
+            if (makeTransp) {
+                img = (Bitmap)img.Clone();
+
+                #if __MonoCS__
+                img.MakeTransparent(); // FIXME: don't work
+                #else
+                img.MakeTransparent(img.GetPixel(0, 0));
+                #endif
+            }
+
+            return new ImageHandler(img);
+        }
+
+        // TODO: New version, on future
+        public IImage LoadResourceImage(string resName, bool makeTransp)
+        {
+            Bitmap img = (Bitmap)UIHelper.LoadBitmapFromResource(this.GetType(), "Resources." + resName);
 
             if (makeTransp) {
                 img = (Bitmap)img.Clone();

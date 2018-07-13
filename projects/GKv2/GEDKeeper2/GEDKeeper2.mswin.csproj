@@ -435,6 +435,7 @@
     <None Include="app.manifest" />
     <EmbeddedResource Include="Resources\sym_female.png" />
     <EmbeddedResource Include="Resources\sym_male.png" />
+    <EmbeddedResource Include="Resources\btn_expand2.gif" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
