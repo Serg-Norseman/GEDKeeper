@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3FE73179-8814-4297-871D-7CE6B9626D93}</ProjectGuid>
+    <ProjectGuid>{18E423A1-619C-4ED7-96BE-1BD71EACFCAE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GKDataQualityPlugin</RootNamespace>
-    <AssemblyName>GKDataQualityPlugin</AssemblyName>
+    <RootNamespace>GKNavigatorPlugin</RootNamespace>
+    <AssemblyName>GKNavigatorPlugin</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
     <NoWin32Manifest>False</NoWin32Manifest>
@@ -27,13 +27,13 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <OutputPath>..\..\..\plugins\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>False</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\..\..\plugins\</OutputPath>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <OutputPath>..\..\..\plugins\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>True</Optimize>
   </PropertyGroup>
@@ -52,37 +52,40 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GKDataQualityPlugin.cs" />
-    <Compile Include="DataQualityWidget.cs" />
-    <Compile Include="DataQualityWidget.Designer.cs">
-      <DependentUpon>DataQualityWidget.cs</DependentUpon>
+    <Compile Include="NavigatorData.cs" />
+    <Compile Include="NavigatorWidget.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Spectrum.cs" />
-    <Compile Include="DQViewer.cs" />
-    <Compile Include="TreeMap\MapItem.cs" />
-    <Compile Include="TreeMap\MapRect.cs" />
-    <Compile Include="TreeMap\TreemapModel.cs" />
+    <Compile Include="NavigatorWidget.Designer.cs">
+      <DependentUpon>NavigatorWidget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKNavigatorPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GKComponents\GKComponents.mswin.csproj">
+    <EmbeddedResource Include="NavigatorWidget.resx">
+      <DependentUpon>NavigatorWidget.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
       <Name>GKComponents</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\GKCore\GKCore.mswin.csproj">
-      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
+    <ProjectReference Include="..\..\GKCore\GKCore.csproj">
+      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKDataQualityPlugin.rus">
+    <None Include="GKNavigatorPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKDataQualityPlugin.enu">
+    <None Include="GKNavigatorPlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TreeMap" />
+    <None Include="GKNavigatorPlugin.ukr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

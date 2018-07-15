@@ -18,6 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if __MonoCS__
+#define NLUA
+#endif
+
 using System;
 using System.Data;
 using System.IO;
@@ -25,7 +29,6 @@ using System.Reflection;
 using System.Text;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -33,10 +36,7 @@ using GKCore.UIContracts;
 
 namespace GKCore
 {
-    #if !__MonoCS__
-    #endif
-
-    #if LUA_DLL
+    #if !NLUA
     using LuaInterface;
     #else
     using NLua;

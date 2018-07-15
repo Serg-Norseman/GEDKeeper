@@ -2,16 +2,14 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <RootNamespace>GKImageViewerPlugin</RootNamespace>
-    <DebugType>Full</DebugType>
-    <WarningLevel>4</WarningLevel>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FFE7826E-C352-46F3-AAC9-67FCCD9F6987}</ProjectGuid>
+    <ProjectGuid>{0EB24CA5-824B-4507-9C6E-BBBF5DB8BE57}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>GKImageViewerPlugin</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>GKWordsCloudPlugin</RootNamespace>
+    <AssemblyName>GKWordsCloudPlugin</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
     <NoWin32Manifest>False</NoWin32Manifest>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
@@ -22,6 +20,8 @@
     <DelaySign>False</DelaySign>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <TargetFrameworkProfile />
+    <DebugType>Full</DebugType>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
@@ -32,14 +32,14 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <OutputPath>..\..\..\plugins\</OutputPath>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <OutputPath>..\..\..\plugins\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
+    <Optimize>True</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <RegisterForComInterop>False</RegisterForComInterop>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
@@ -52,51 +52,51 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GKImageViewerPlugin.cs" />
-    <Compile Include="ImageViewerWin.cs">
+    <Compile Include="GKWordsCloudPlugin.cs" />
+    <Compile Include="WordsCloudWidget.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ImageViewerWin.Designer.cs">
-      <DependentUpon>ImageViewerWin.cs</DependentUpon>
+    <Compile Include="WordsCloudWidget.Designer.cs">
+      <DependentUpon>WordsCloudWidget.cs</DependentUpon>
     </Compile>
-    <Compile Include="IVPResource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>IVPResource.resx</DependentUpon>
-    </Compile>
+    <Compile Include="WordCloud\CloudModel.cs" />
+    <Compile Include="WordCloud\CloudViewer.cs" />
+    <Compile Include="WordCloud\GdiRenderer.cs" />
+    <Compile Include="WordCloud\QuadTree.cs" />
+    <Compile Include="WordCloud\QuadTreeNode.cs" />
+    <Compile Include="WordCloud\Word.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ImageViewerWin.resx">
-      <DependentUpon>ImageViewerWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="IVPResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>IVPResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GKComponents\GKComponents.linux.csproj">
+    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
-      <Name>GKComponents.linux</Name>
+      <Name>GKComponents</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\GKCore\GKCore.linux.csproj">
+    <ProjectReference Include="..\..\GKCore\GKCore.csproj">
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
-      <Name>GKCore.linux</Name>
+      <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKImageViewerPlugin.enu">
+    <None Include="GKWordsCloudPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKImageViewerPlugin.pol">
+    <None Include="GKWordsCloudPlugin.pol">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKImageViewerPlugin.rus">
+    <None Include="GKWordsCloudPlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKImageViewerPlugin.ukr">
+    <None Include="GKWordsCloudPlugin.ukr">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WordsCloudWidget.resx">
+      <DependentUpon>WordsCloudWidget.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="WordCloud" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

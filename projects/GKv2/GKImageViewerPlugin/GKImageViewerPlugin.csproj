@@ -2,14 +2,16 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <RootNamespace>GKImageViewerPlugin</RootNamespace>
+    <DebugType>Full</DebugType>
+    <WarningLevel>4</WarningLevel>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BD2B94CA-5913-415B-9428-ED3C6D270602}</ProjectGuid>
+    <ProjectGuid>{FFE7826E-C352-46F3-AAC9-67FCCD9F6987}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GKSamplePlugin</RootNamespace>
-    <AssemblyName>GKSamplePlugin</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <AssemblyName>GKImageViewerPlugin</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
     <NoWin32Manifest>False</NoWin32Manifest>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
@@ -20,8 +22,6 @@
     <DelaySign>False</DelaySign>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <TargetFrameworkProfile />
-    <DebugType>Full</DebugType>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
@@ -31,8 +31,8 @@
     <Optimize>False</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>..\..\..\plugins\</OutputPath>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\plugins\</OutputPath>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>True</Optimize>
@@ -44,29 +44,59 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BSLib">
+      <HintPath>..\..\libs\BSLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PluginForm.cs">
+    <Compile Include="GKImageViewerPlugin.cs" />
+    <Compile Include="ImageViewerWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PluginForm.Designer.cs">
-      <DependentUpon>PluginForm.cs</DependentUpon>
+    <Compile Include="ImageViewerWin.Designer.cs">
+      <DependentUpon>ImageViewerWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKSamplePlugin.cs" />
+    <Compile Include="IVPResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IVPResource.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PluginForm.resx">
-      <DependentUpon>PluginForm.cs</DependentUpon>
+    <EmbeddedResource Include="ImageViewerWin.resx">
+      <DependentUpon>ImageViewerWin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IVPResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>IVPResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GKCore\GKCore.linux.csproj">
-      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
-      <Name>GKCore.linux</Name>
+    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
+      <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
+      <Name>GKComponents</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\GKCore\GKCore.csproj">
+      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
+      <Name>GKCore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GKImageViewerPlugin.enu">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKImageViewerPlugin.pol">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKImageViewerPlugin.rus">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKImageViewerPlugin.ukr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>WinExe</OutputType>
     <AssemblyName>GEDKeeper2</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkProfile />
     <SignAssembly>False</SignAssembly>
@@ -435,6 +435,7 @@
     <None Include="app.manifest" />
     <EmbeddedResource Include="Resources\sym_female.png" />
     <EmbeddedResource Include="Resources\sym_male.png" />
+    <EmbeddedResource Include="Resources\btn_expand2.gif" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -459,13 +460,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GKComponents\GKComponents.linux.csproj">
+    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
-      <Name>GKComponents.linux</Name>
+      <Name>GKComponents</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\GKCore\GKCore.linux.csproj">
+    <ProjectReference Include="..\..\GKCore\GKCore.csproj">
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
-      <Name>GKCore.linux</Name>
+      <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

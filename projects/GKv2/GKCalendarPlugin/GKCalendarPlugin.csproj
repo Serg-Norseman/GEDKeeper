@@ -4,11 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4A523280-2DEA-43C6-BE11-48BDFF283751}</ProjectGuid>
+    <ProjectGuid>{091DFD9D-5599-4EEA-A616-A55FC12E9613}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GKLifePlugin</RootNamespace>
-    <AssemblyName>GKLifePlugin</AssemblyName>
+    <AssemblyName>GKCalendarPlugin</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
     <NoWin32Manifest>False</NoWin32Manifest>
@@ -32,8 +31,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <OutputPath>..\..\..\plugins\</OutputPath>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <OutputPath>..\..\..\plugins\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>True</Optimize>
   </PropertyGroup>
@@ -52,48 +51,41 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConwayLife\LifeConsts.cs" />
-    <Compile Include="ConwayLife\LifeForm.cs" />
-    <Compile Include="ConwayLife\LifeForm.Designer.cs">
-      <DependentUpon>LifeForm.cs</DependentUpon>
+    <Compile Include="GKCalendarPlugin.cs" />
+    <Compile Include="CalendarWidget.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConwayLife\LifeGrid.cs" />
-    <Compile Include="ConwayLife\LifeHistory.cs" />
-    <Compile Include="ConwayLife\LifeOptions.cs" />
-    <Compile Include="ConwayLife\LifeRules.cs" />
-    <Compile Include="ConwayLife\LifeViewer.cs" />
-    <Compile Include="ConwayLife\OptionsForm.cs" />
-    <Compile Include="ConwayLife\OptionsForm.Designer.cs">
-      <DependentUpon>OptionsForm.cs</DependentUpon>
+    <Compile Include="CalendarWidget.Designer.cs">
+      <DependentUpon>CalendarWidget.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKLifePlugin.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKLifePlugin.enu">
+    <None Include="GKCalendarPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKLifePlugin.pol">
+    <None Include="GKCalendarPlugin.pol">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKLifePlugin.rus">
+    <None Include="GKCalendarPlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKLifePlugin.ukr">
+    <None Include="GKCalendarPlugin.ukr">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <EmbeddedResource Include="Resources\icon_time.gif" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GKCore\GKCore.mswin.csproj">
+    <ProjectReference Include="..\..\GKCore\GKCore.csproj">
       <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKComponents\GKComponents.mswin.csproj">
+    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
       <Project>{ef9864c5-4dec-46e8-bc11-a2e5bb9bb9d4}</Project>
       <Name>GKComponents</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ConwayLife" />
+    <Folder Include="Resources" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

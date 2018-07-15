@@ -49,18 +49,34 @@
   <PropertyGroup Condition="'$(MonoCS)'=='true'">
     <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
   </PropertyGroup>
+  <ItemGroup Condition="!$(DefineConstants.Contains(';__MonoCS__'))">
+    <Reference Include="GMap.NET.Core">
+      <HintPath>..\..\libs\mswin\GMap.NET.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="GMap.NET.WindowsForms">
+      <HintPath>..\..\libs\mswin\GMap.NET.WindowsForms.dll</HintPath>
+    </Reference>
+    <Reference Include="nVLC">
+      <HintPath>..\..\libs\mswin\nVLC.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="$(DefineConstants.Contains(';__MonoCS__'))">
+    <Reference Include="GMap.NET.Core">
+      <HintPath>..\..\libs\linux\GMap.NET.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="GMap.NET.WindowsForms">
+      <HintPath>..\..\libs\linux\GMap.NET.WindowsForms.dll</HintPath>
+    </Reference>
+    <Reference Include="nVLC">
+      <HintPath>..\..\libs\linux\nVLC.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="ArborGVT">
       <HintPath>..\..\libs\ArborGVT.dll</HintPath>
     </Reference>
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
-    </Reference>
-    <Reference Include="GMap.NET.Core">
-      <HintPath>..\..\libs\mswin\GMap.NET.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="GMap.NET.WindowsForms">
-      <HintPath>..\..\libs\mswin\GMap.NET.WindowsForms.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>..\..\libs\NLog.dll</HintPath>
@@ -70,11 +86,6 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="ZedGraph">
       <HintPath>..\..\libs\ZedGraph.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="nVLC">
-      <HintPath>..\..\libs\mswin\nVLC.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -116,7 +127,7 @@
     <Compile Include="GKUI\Components\ZGraphControl.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GKCore\GKCore.mswin.csproj">
+    <ProjectReference Include="..\..\GKCore\GKCore.csproj">
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>

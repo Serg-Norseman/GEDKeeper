@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{66B64B00-C457-404E-AA2B-90F18127E394}</ProjectGuid>
+    <ProjectGuid>{3FE73179-8814-4297-871D-7CE6B9626D93}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GKFlowInputPlugin</RootNamespace>
-    <AssemblyName>GKFlowInputPlugin</AssemblyName>
+    <RootNamespace>GKDataQualityPlugin</RootNamespace>
+    <AssemblyName>GKDataQualityPlugin</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
     <NoWin32Manifest>False</NoWin32Manifest>
@@ -52,38 +52,37 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GKFlowInputPlugin.cs" />
-    <Compile Include="FlowInputDlg.cs">
-      <SubType>Form</SubType>
+    <Compile Include="GKDataQualityPlugin.cs" />
+    <Compile Include="DataQualityWidget.cs" />
+    <Compile Include="DataQualityWidget.Designer.cs">
+      <DependentUpon>DataQualityWidget.cs</DependentUpon>
     </Compile>
-    <Compile Include="FlowInputDlg.Designer.cs">
-      <DependentUpon>FlowInputDlg.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Spectrum.cs" />
+    <Compile Include="DQViewer.cs" />
+    <Compile Include="TreeMap\MapItem.cs" />
+    <Compile Include="TreeMap\MapRect.cs" />
+    <Compile Include="TreeMap\TreemapModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FlowInputDlg.resx">
-      <DependentUpon>FlowInputDlg.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\GKCore\GKCore.mswin.csproj">
+    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
+      <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
+      <Name>GKComponents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GKCore\GKCore.csproj">
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKFlowInputPlugin.enu">
+    <None Include="GKDataQualityPlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKFlowInputPlugin.pol">
+    <None Include="GKDataQualityPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKFlowInputPlugin.rus">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKFlowInputPlugin.ukr">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TreeMap" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

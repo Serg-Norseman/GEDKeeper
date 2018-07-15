@@ -4,10 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{782E9338-ECA7-4095-9157-6CA003801F05}</ProjectGuid>
+    <ProjectGuid>{66B64B00-C457-404E-AA2B-90F18127E394}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>GKCalculatorPlugin</AssemblyName>
+    <RootNamespace>GKFlowInputPlugin</RootNamespace>
+    <AssemblyName>GKFlowInputPlugin</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
     <NoWin32Manifest>False</NoWin32Manifest>
@@ -51,41 +52,38 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GKCalculatorPlugin.cs" />
-    <Compile Include="CalcWidget.cs">
+    <Compile Include="GKFlowInputPlugin.cs" />
+    <Compile Include="FlowInputDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CalcWidget.Designer.cs">
-      <DependentUpon>CalcWidget.cs</DependentUpon>
+    <Compile Include="FlowInputDlg.Designer.cs">
+      <DependentUpon>FlowInputDlg.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKCalculatorPlugin.enu">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKCalculatorPlugin.pol">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKCalculatorPlugin.rus">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKCalculatorPlugin.ukr">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <EmbeddedResource Include="Resources\icon_calc.gif" />
+    <EmbeddedResource Include="FlowInputDlg.resx">
+      <DependentUpon>FlowInputDlg.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GKCore\GKCore.mswin.csproj">
-      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
+    <ProjectReference Include="..\..\GKCore\GKCore.csproj">
+      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKComponents\GKComponents.mswin.csproj">
-      <Project>{ef9864c5-4dec-46e8-bc11-a2e5bb9bb9d4}</Project>
-      <Name>GKComponents</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources" />
+    <None Include="GKFlowInputPlugin.enu">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKFlowInputPlugin.pol">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKFlowInputPlugin.rus">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKFlowInputPlugin.ukr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{182AFE98-D3A5-471A-B9D9-C1C53DD72829}</ProjectGuid>
+    <ProjectGuid>{782E9338-ECA7-4095-9157-6CA003801F05}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>GKNamesBookPlugin</AssemblyName>
+    <AssemblyName>GKCalculatorPlugin</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
     <NoWin32Manifest>False</NoWin32Manifest>
@@ -31,8 +31,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <OutputPath>..\..\..\plugins\</OutputPath>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <OutputPath>..\..\..\plugins\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>True</Optimize>
   </PropertyGroup>
@@ -51,36 +51,41 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GKNamesBookPlugin.cs" />
-    <Compile Include="NamesBookWidget.cs">
+    <Compile Include="GKCalculatorPlugin.cs" />
+    <Compile Include="CalcWidget.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NamesBookWidget.Designer.cs">
-      <DependentUpon>NamesBookWidget.cs</DependentUpon>
+    <Compile Include="CalcWidget.Designer.cs">
+      <DependentUpon>CalcWidget.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKNamesBookPlugin.enu">
+    <None Include="GKCalculatorPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKNamesBookPlugin.pol">
+    <None Include="GKCalculatorPlugin.pol">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKNamesBookPlugin.rus">
+    <None Include="GKCalculatorPlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKNamesBookPlugin.ukr">
+    <None Include="GKCalculatorPlugin.ukr">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <EmbeddedResource Include="Resources\bk_names.txt" />
-    <EmbeddedResource Include="Resources\bk_names_cf.txt" />
-    <EmbeddedResource Include="Resources\bk_names_cm.txt" />
+    <EmbeddedResource Include="Resources\icon_calc.gif" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GKCore\GKCore.mswin.csproj">
+    <ProjectReference Include="..\..\GKCore\GKCore.csproj">
       <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
+      <Project>{ef9864c5-4dec-46e8-bc11-a2e5bb9bb9d4}</Project>
+      <Name>GKComponents</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

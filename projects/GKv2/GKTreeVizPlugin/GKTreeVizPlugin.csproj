@@ -112,11 +112,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GKCore\GKCore.mswin.csproj">
+    <ProjectReference Include="..\..\GKCore\GKCore.csproj">
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKComponents\GKComponents.mswin.csproj">
+    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
       <Project>{ef9864c5-4dec-46e8-bc11-a2e5bb9bb9d4}</Project>
       <Name>GKComponents</Name>
     </ProjectReference>

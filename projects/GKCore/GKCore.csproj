@@ -25,7 +25,7 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <StartAction>Project</StartAction>
-    <DefineConstants>DEBUG;TRACE;LUA_DLL;NET35</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>bin\</OutputPath>
@@ -34,7 +34,7 @@
     <Optimize>True</Optimize>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <DefineConstants>TRACE;LUA_DLL;NET35</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <BaseAddress>4194304</BaseAddress>
@@ -43,15 +43,44 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(CIMode)'=='true'">
+  <PropertyGroup Condition=" '$(Framework)' == 'NET20' ">
+    <DefineConstants>NET20</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Framework)' == 'NET35' ">
+    <DefineConstants>NET35</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Framework)' == 'NET40' ">
+    <DefineConstants>NET40</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Framework)' == 'NET45' ">
+    <DefineConstants>NET45</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(CIMode)' == 'true' ">
     <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(MonoCS)'=='true'">
+  <PropertyGroup Condition=" '$(MonoCS)' == 'true' ">
     <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(MonoCS)'=='false'">
+  <PropertyGroup Condition=" '$(MonoCS)' == 'false' ">
     <DefineConstants>$(DefineConstants);LUA_DLL</DefineConstants>
   </PropertyGroup>
+  <ItemGroup Condition="!$(DefineConstants.Contains(';__MonoCS__'))">
+    <Reference Include="LuaInterface">
+      <HintPath>..\libs\mswin\LuaInterface.dll</HintPath>
+    </Reference>
+    <None Include="..\libs\mswin\lua51.dll">
+      <Link>lua51.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup Condition="$(DefineConstants.Contains(';__MonoCS__'))">
+    <Reference Include="KopiLua">
+      <HintPath>..\libs\linux\KopiLua.dll</HintPath>
+    </Reference>
+    <Reference Include="NLua">
+      <HintPath>..\libs\linux\NLua.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
@@ -79,15 +108,6 @@
     <Reference Include="YamlSerializer">
       <HintPath>..\libs\YamlSerializer.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="LuaInterface">
-      <HintPath>..\libs\mswin\LuaInterface.dll</HintPath>
-    </Reference>
-    <None Include="..\libs\mswin\lua51.dll">
-      <Link>lua51.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />

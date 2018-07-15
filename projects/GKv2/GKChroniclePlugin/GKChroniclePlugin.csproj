@@ -3,12 +3,12 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{859C2F5B-FBF1-4D3B-8442-CF8E44E8B74B}</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1423A6AE-E85A-4E76-91CA-704A1C59F7DC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GKPedigreeImporterPlugin</RootNamespace>
-    <AssemblyName>GKPedigreeImporterPlugin</AssemblyName>
+    <RootNamespace>GKChroniclePlugin</RootNamespace>
+    <AssemblyName>GKChroniclePlugin</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
     <NoWin32Manifest>False</NoWin32Manifest>
@@ -19,7 +19,6 @@
     <SignAssembly>False</SignAssembly>
     <DelaySign>False</DelaySign>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
     <TargetFrameworkProfile />
     <DebugType>Full</DebugType>
     <WarningLevel>4</WarningLevel>
@@ -27,45 +26,16 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <StartAction>Project</StartAction>
     <OutputPath>..\..\..\plugins\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>False</Optimize>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DebugSymbols>true</DebugSymbols>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>..\..\gk2rules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
-    <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>x86</PlatformTarget>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>..\..\..\plugins\</OutputPath>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <OutputPath>..\..\..\plugins\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>True</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <DebugSymbols>true</DebugSymbols>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>..\..\gk2rules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
-    <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>x64</PlatformTarget>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <BaseAddress>4194304</BaseAddress>
@@ -73,16 +43,6 @@
     <RegisterForComInterop>False</RegisterForComInterop>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(CIMode)'=='true'">
-    <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(MonoCS)'=='true'">
-    <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup Condition=" !$(DefineConstants.Contains(';CI_MODE')) And !$(DefineConstants.Contains(';__MonoCS__')) ">
-    <Reference Include="Microsoft.Office.Interop.Excel" />
-    <Reference Include="Microsoft.Office.Interop.Word" />
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
@@ -92,43 +52,42 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PedigreeImporterDlg.cs">
+    <Compile Include="GKChroniclePlugin.cs" />
+    <Compile Include="ChronicleWidget.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PedigreeImporterDlg.Designer.cs">
-      <DependentUpon>PedigreeImporterDlg.cs</DependentUpon>
+    <Compile Include="ChronicleWidget.Designer.cs">
+      <DependentUpon>ChronicleWidget.cs</DependentUpon>
     </Compile>
-    <Compile Include="Importer.cs" />
-    <Compile Include="GKPedigreeImporterPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PedigreeImporterDlg.resx">
-      <DependentUpon>PedigreeImporterDlg.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GKComponents\GKComponents.mswin.csproj">
+    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
       <Name>GKComponents</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\GKCore\GKCore.mswin.csproj">
+    <ProjectReference Include="..\..\GKCore\GKCore.csproj">
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKPedigreeImporterPlugin.enu">
+    <None Include="GKChroniclePlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKPedigreeImporterPlugin.pol">
+    <None Include="GKChroniclePlugin.pol">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKPedigreeImporterPlugin.rus">
+    <None Include="GKChroniclePlugin.rus">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKPedigreeImporterPlugin.ukr">
+    <None Include="GKChroniclePlugin.ukr">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ChronicleWidget.resx">
+      <DependentUpon>ChronicleWidget.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

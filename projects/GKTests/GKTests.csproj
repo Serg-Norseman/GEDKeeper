@@ -39,6 +39,11 @@
   <PropertyGroup Condition="'$(MonoCS)'=='true'">
     <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
   </PropertyGroup>
+  <ItemGroup Condition="!$(DefineConstants.Contains(';__MonoCS__'))">
+    <Reference Include="NUnitForms">
+      <HintPath>NUnitForms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="ArborGVT">
       <HintPath>..\libs\ArborGVT.dll</HintPath>
@@ -151,17 +156,17 @@
     <Compile Include="UITests\UserRefEditDlgTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GKv2\GEDKeeper2\GEDKeeper2.linux.csproj">
+    <ProjectReference Include="..\GKv2\GEDKeeper2\GEDKeeper2.csproj">
       <Project>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</Project>
-      <Name>GEDKeeper2.linux</Name>
+      <Name>GEDKeeper2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKv2\GKComponents\GKComponents.linux.csproj">
+    <ProjectReference Include="..\GKv2\GKComponents\GKComponents.csproj">
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
-      <Name>GKComponents.linux</Name>
+      <Name>GKComponents</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKCore\GKCore.linux.csproj">
+    <ProjectReference Include="..\GKCore\GKCore.csproj">
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
-      <Name>GKCore.linux</Name>
+      <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

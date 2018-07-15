@@ -91,7 +91,7 @@ namespace GKHistoryDataPlugin
             }
         }
 
-        public bool Shutdown()
+        public override bool Shutdown()
         {
             bool result = true;
             try {
