@@ -34,13 +34,25 @@ namespace GKTests
         public static void ClickButton(string name, Form form)
         {
             var tsBtn = new ButtonTester(name, form);
-            tsBtn.FireEvent("Click");
+            if (tsBtn.Count > 1) {
+                // FIXME: Find out why sometimes the search returns
+                // two components where there is only one (MediaViewerWinTests)
+                tsBtn[0].FireEvent("Click");
+            } else {
+                tsBtn.FireEvent("Click");
+            }
         }
 
         public static void ClickButton(string name, string form)
         {
             var tsBtn = new ButtonTester(name, form);
-            tsBtn.Click();
+            if (tsBtn.Count > 1) {
+                // FIXME: Find out why sometimes the search returns
+                // two components where there is only one (MediaViewerWinTests)
+                tsBtn[0].FireEvent("Click");
+            } else {
+                tsBtn.FireEvent("Click");
+            }
         }
 
         public static void ClickToolStripButton(string name, Form form)

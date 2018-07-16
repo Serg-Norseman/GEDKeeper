@@ -21,6 +21,7 @@
 #if !__MonoCS__
 
 using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using GKCommon;
@@ -83,6 +84,39 @@ namespace GKUI.Forms
             ClickToolStripButton("btnZoomIn", fDialog);
             ClickToolStripButton("btnZoomOut", fDialog);
             ClickToolStripButton("btnSizeToFit", fDialog);
+
+            KeyDownForm(fDialog.Name, Keys.Escape);
+        }
+
+        [Test]
+        public void Test_Video()
+        {
+            string targetName = TestStubs.GetTempFilePath("test_video.3gp");
+
+            Assembly assembly = typeof(CoreTests).Assembly;
+            Stream vidstm = assembly.GetManifestResourceStream("GKTests.Resources.test_video.3gp");
+
+            GKUtils.CopyFile(vidstm, new FileInfo(targetName), null);
+            Assert.IsTrue(File.Exists(targetName));
+
+            GEDCOMMultimediaRecord mmRecV = fBase.Context.Tree.CreateMultimedia();
+            mmRecV.AddTag("FILE", "", null);
+            var fileRefV = mmRecV.FileReferences[0];
+            fileRefV.Title = "File Title 2";
+            fileRefV.LinkFile(targetName);
+            fileRefV.MediaType = GEDCOMMediaType.mtVideo;
+            fileRefV.MultimediaFormat = GEDCOMMultimediaFormat.mfMKV;
+
+            fDialog.FileRef = fileRefV;
+            Assert.AreEqual(fileRefV, fDialog.FileRef);
+
+            fDialog.SetViewMedia(targetName);
+            fDialog.Refresh();
+
+            ClickButton("btnPlay", fDialog);
+            ClickButton("btnPause", fDialog);
+            ClickButton("btnMute", fDialog);
+            ClickButton("btnStop", fDialog);
 
             KeyDownForm(fDialog.Name, Keys.Escape);
         }

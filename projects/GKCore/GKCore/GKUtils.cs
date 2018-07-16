@@ -1299,21 +1299,28 @@ namespace GKCore
 
         public static void CopyFile(FileInfo source, FileInfo target, IProgressController progressController)
         {
+            using (var sourceStm = source.OpenRead()) {
+                CopyFile(sourceStm, target, progressController);
+            }
+        }
+
+        public static void CopyFile(Stream sourceStm, FileInfo target, IProgressController progressController)
+        {
             const int bufferSize = 1024 * 1024; // 1MB
             byte[] buffer = new byte[bufferSize];
             int progress = 0, reportedProgress = 0, read = 0;
-            long len = source.Length;
+            long len = sourceStm.Length;
             float flen = len;
 
-            using (var sourceStm = source.OpenRead())
-                using (var targetStm = target.OpenWrite())
-            {
+            using (var targetStm = target.OpenWrite()) {
                 targetStm.SetLength(sourceStm.Length);
-                for (long size = 0; size < len; size += read)
-                {
-                    if ((progress = ((int)((size / flen) * 100))) != reportedProgress) {
-                        reportedProgress = progress;
-                        progressController.ProgressStep(reportedProgress);
+                for (long size = 0; size < len; size += read) {
+                    if (progressController != null) {
+                        progress = (int)((size / flen) * 100);
+                        if (progress != reportedProgress) {
+                            reportedProgress = progress;
+                            progressController.ProgressStep(reportedProgress);
+                        }
                     }
 
                     read = sourceStm.Read(buffer, 0, bufferSize);
