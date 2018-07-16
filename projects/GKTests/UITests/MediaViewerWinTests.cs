@@ -88,6 +88,7 @@ namespace GKUI.Forms
             KeyDownForm(fDialog.Name, Keys.Escape);
         }
 
+        #if !CI_MODE
         [Test]
         public void Test_Video()
         {
@@ -120,6 +121,7 @@ namespace GKUI.Forms
 
             KeyDownForm(fDialog.Name, Keys.Escape);
         }
+        #endif
     }
 }
 
