@@ -60,6 +60,9 @@ namespace GKCore.Options
         public bool InvertedTree;
         public bool MarriagesDates;
 
+        public bool ShowPlaces;
+        public bool HideUnknownSpouses;
+
         public DeepMode DeepMode;
 
         public IColor MaleColor;
@@ -96,6 +99,9 @@ namespace GKCore.Options
             DeepMode = DeepMode.None;
             InvertedTree = false;
             MarriagesDates = false;
+
+            ShowPlaces = false;
+            HideUnknownSpouses = false;
 
             MaleColor = ChartRenderer.GetColor(MALE_COLOR);
             FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);
@@ -141,6 +147,9 @@ namespace GKCore.Options
             DefFontStyle = srcOptions.DefFontStyle;
             InvertedTree = srcOptions.InvertedTree;
             MarriagesDates = srcOptions.MarriagesDates;
+
+            ShowPlaces = srcOptions.ShowPlaces;
+            HideUnknownSpouses = srcOptions.HideUnknownSpouses;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -169,6 +178,9 @@ namespace GKCore.Options
             //DeepMode = (DeepMode)iniFile.ReadInteger("Chart", "DeepMode", 0);
             InvertedTree = iniFile.ReadBool("Chart", "InvertedTree", false);
             MarriagesDates = iniFile.ReadBool("Chart", "MarriagesDates", false);
+
+            ShowPlaces = iniFile.ReadBool("Chart", "ShowPlaces", false);
+            HideUnknownSpouses = iniFile.ReadBool("Chart", "HideUnknownSpouses", false);
 
             MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
             FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", FEMALE_COLOR));
@@ -208,6 +220,9 @@ namespace GKCore.Options
             //iniFile.WriteInteger("Chart", "DeepMode", (int)DeepMode);
             iniFile.WriteBool("Chart", "InvertedTree", InvertedTree);
             iniFile.WriteBool("Chart", "MarriagesDates", MarriagesDates);
+
+            iniFile.WriteBool("Chart", "ShowPlaces", ShowPlaces);
+            iniFile.WriteBool("Chart", "HideUnknownSpouses", HideUnknownSpouses);
 
             iniFile.WriteInteger("Chart", "MaleColor", MaleColor.ToArgb());
             iniFile.WriteInteger("Chart", "FemaleColor", FemaleColor.ToArgb());

@@ -556,16 +556,23 @@ namespace GKCore.Charts
             try
             {
                 TreeChartPerson result = null;
-                if (person != null && (!fOptions.ChildlessExclude || level <= 1 || person.SpouseToFamilyLinks.Count != 0 || !fBase.Context.IsChildless(person)))
+                if (person == null) return result;
+
+                int spousesNum = person.SpouseToFamilyLinks.Count;
+
+                // if the person have more than one families - to hide unknown spouses it is impossible
+                bool skipUnkSpouses = fOptions.HideUnknownSpouses && spousesNum < 2;
+
+                bool skipChildless = fOptions.ChildlessExclude && fBase.Context.IsChildless(person);
+
+                if (!skipChildless || level <= 1 || spousesNum != 0)
                 {
                     if (!CheckDescendantFilter(person, level))
                         return null;
 
-                    TreeChartPerson res = AddDescPerson(parent, person, false, level);
-                    result = res;
+                    result = AddDescPerson(parent, person, false, level);
 
-                    int num = person.SpouseToFamilyLinks.Count;
-                    for (int i = 0; i < num; i++)
+                    for (int i = 0; i < spousesNum; i++)
                     {
                         GEDCOMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
 
@@ -585,37 +592,56 @@ namespace GKCore.Charts
                         TreeChartPerson mt = null;
                         PersonFlag descFlag = PersonFlag.pfDescByFather;
                         bool invalidSpouse = false;
+                        bool skipUnk = false;
 
                         switch (person.Sex) {
                             case GEDCOMSex.svFemale:
                                 {
                                     GEDCOMIndividualRecord sp = family.GetHusband();
-                                    resParent = AddDescPerson(null, sp, true, level);
-                                    resParent.Sex = GEDCOMSex.svMale;
+                                    skipUnk = skipUnkSpouses && (sp == null);
 
-                                    ft = resParent;
-                                    ft.IsDup = isDup;
+                                    if (!skipUnk) {
+                                        resParent = AddDescPerson(null, sp, true, level);
+                                        resParent.Sex = GEDCOMSex.svMale;
 
-                                    mt = res;
-                                    mt.IsDup = isDup;
+                                        ft = resParent;
+                                        ft.IsDup = isDup;
 
-                                    descFlag = PersonFlag.pfDescByFather;
+                                        mt = result;
+                                        mt.IsDup = isDup;
+
+                                        descFlag = PersonFlag.pfDescByFather;
+                                    } else {
+                                        resParent = null;
+                                        mt = result;
+                                        mt.IsDup = isDup;
+                                        descFlag = PersonFlag.pfDescByMother;
+                                    }
                                     break;
                                 }
 
                             case GEDCOMSex.svMale:
                                 {
                                     GEDCOMIndividualRecord sp = family.GetWife();
-                                    resParent = AddDescPerson(null, sp, true, level);
-                                    resParent.Sex = GEDCOMSex.svFemale;
+                                    skipUnk = skipUnkSpouses && (sp == null);
 
-                                    ft = res;
-                                    ft.IsDup = isDup;
+                                    if (!skipUnk) {
+                                        resParent = AddDescPerson(null, sp, true, level);
+                                        resParent.Sex = GEDCOMSex.svFemale;
 
-                                    mt = resParent;
-                                    mt.IsDup = isDup;
+                                        ft = result;
+                                        ft.IsDup = isDup;
 
-                                    descFlag = PersonFlag.pfDescByMother;
+                                        mt = resParent;
+                                        mt.IsDup = isDup;
+
+                                        descFlag = PersonFlag.pfDescByMother;
+                                    } else {
+                                        resParent = null;
+                                        ft = result;
+                                        ft.IsDup = isDup;
+                                        descFlag = PersonFlag.pfDescByFather;
+                                    }
                                     break;
                                 }
 
@@ -631,11 +657,11 @@ namespace GKCore.Charts
 
                         if (resParent != null) {
                             if (fOptions.Kinship) {
-                                fGraph.AddRelation(res.Node, resParent.Node, RelationKind.rkSpouse, RelationKind.rkSpouse);
+                                fGraph.AddRelation(result.Node, resParent.Node, RelationKind.rkSpouse, RelationKind.rkSpouse);
                             }
 
-                            res.AddSpouse(resParent);
-                            resParent.BaseSpouse = res;
+                            result.AddSpouse(resParent);
+                            resParent.BaseSpouse = result;
                             resParent.BaseFamily = family;
 
                             if (resParent.Rec != null) {
@@ -655,7 +681,7 @@ namespace GKCore.Charts
                                 }
                             }
                         } else {
-                            resParent = res;
+                            resParent = result;
                         }
 
                         if ((fDepthLimit <= -1 || level != fDepthLimit) && (!isDup))
@@ -679,16 +705,24 @@ namespace GKCore.Charts
                                 child.Father = ft;
                                 child.Mother = mt;
                                 child.SetFlag(descFlag);
-                                if (fOptions.Kinship)
-                                {
-                                    fGraph.AddRelation(child.Node, ft.Node, RelationKind.rkParent, RelationKind.rkChild);
-                                    fGraph.AddRelation(child.Node, mt.Node, RelationKind.rkParent, RelationKind.rkChild);
+
+                                if (fOptions.Kinship) {
+                                    if (ft != null) {
+                                        fGraph.AddRelation(child.Node, ft.Node, RelationKind.rkParent, RelationKind.rkChild);
+                                    }
+                                    if (mt != null) {
+                                        fGraph.AddRelation(child.Node, mt.Node, RelationKind.rkParent, RelationKind.rkChild);
+                                    }
                                 }
                             }
                         } else {
                             if (family.Children.Count > 0) {
-                                ft.SetFlag(PersonFlag.pfHasInvDesc);
-                                mt.SetFlag(PersonFlag.pfHasInvDesc);
+                                if (ft != null) {
+                                    ft.SetFlag(PersonFlag.pfHasInvDesc);
+                                }
+                                if (mt != null) {
+                                    mt.SetFlag(PersonFlag.pfHasInvDesc);
+                                }
                             }
                         }
                     }

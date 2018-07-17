@@ -314,6 +314,33 @@ namespace GKCore.Charts
                     fBirthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, false);
                     fDeathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, false);
 
+                    if (options.ShowPlaces && options.DiffLines) {
+                        string birthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false);
+                        if (!string.IsNullOrEmpty(birthPlace)) {
+                            if (!string.IsNullOrEmpty(fBirthDate)) {
+                                fBirthDate += ", ";
+                            }
+                            fBirthDate += birthPlace;
+                        }
+
+                        string deathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false);
+                        if (!string.IsNullOrEmpty(deathPlace)) {
+                            if (!string.IsNullOrEmpty(fDeathDate)) {
+                                fDeathDate += ", ";
+                            }
+                            fDeathDate += deathPlace;
+                        }
+                    }
+
+                    if (options.DiffLines) {
+                        if (!string.IsNullOrEmpty(fBirthDate)) {
+                            fBirthDate = ImportUtils.STD_BIRTH_SIGN + " " + fBirthDate;
+                        }
+                        if (!string.IsNullOrEmpty(fDeathDate)) {
+                            fDeathDate = ImportUtils.STD_DEATH_SIGN + " " + fDeathDate;
+                        }
+                    }
+
                     if (options.SignsVisible) {
                         EnumSet<SpecialUserRef> signs = EnumSet<SpecialUserRef>.Create();
 

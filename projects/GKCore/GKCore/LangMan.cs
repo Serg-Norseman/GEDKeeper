@@ -820,10 +820,10 @@ namespace GKCore
         /* 762 */ LSID_AutoCheckUpdates,
         /* 763 */ LSID_ArcText,
         /* 764 */ LSID_TreesAlbum,
+        /* 765 */ LSID_ShowPlaces,
+        /* 766 */ LSID_HideUnknownSpouses,
 
-        /* 765 */ // reserved begin
-        /* 766 */
-        /* 767 */
+        /* 767 */ // reserved begin
         /* 768 */
         /* 769 */
         /* 770 */
@@ -1644,10 +1644,10 @@ namespace GKCore
             /* 762 */ "Automatically check for updates",
             /* 763 */ "Arc text",
             /* 764 */ "Album of Trees",
+            /* 765 */ "Show places",
+            /* 766 */ "Hide unknown spouses",
 
-            /* 765 */ "", // reserved begin
-            /* 766 */ "",
-            /* 767 */ "",
+            /* 767 */ "", // reserved begin
             /* 768 */ "",
             /* 769 */ "",
             /* 770 */ "",

@@ -1,5 +1,6 @@
 
 ## ??.??.2018 [v2.14.0]
+- Added options for tree charts: hide unknown spouses and show birth and death places.
 - Restored the work of the maps module
 - Implemented portable mode of the program.
 
