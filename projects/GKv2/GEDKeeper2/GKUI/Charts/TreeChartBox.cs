@@ -55,7 +55,6 @@ namespace GKUI.Charts
         private int fMouseX;
         private int fMouseY;
         private TreeChartOptions fOptions;
-        private ChartRenderer fRenderer;
         private TreeChartPerson fSelected;
         private GEDCOMIndividualRecord fSaveSelection;
         private Timer fTimer;
@@ -69,8 +68,6 @@ namespace GKUI.Charts
         #endregion
 
         #region Public properties
-
-        protected override ChartRenderer Renderer { get { return fRenderer; } }
 
         public event PersonModifyEventHandler PersonModify
         {
@@ -206,8 +203,7 @@ namespace GKUI.Charts
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fTween.Dispose();
                 fModel.Dispose();
 
@@ -462,7 +458,7 @@ namespace GKUI.Charts
             Graphics gfx = null;
             if (fRenderer is TreeChartGfxRenderer) {
                 gfx = CreateGraphics();
-                fRenderer.SetTarget(gfx, false);
+                fRenderer.SetTarget(gfx);
             }
 
             try {
@@ -561,8 +557,7 @@ namespace GKUI.Charts
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            Graphics gfx = e.Graphics;
-            fRenderer.SetTarget(gfx, false);
+            fRenderer.SetTarget(e.Graphics);
 
             InternalDraw(ChartDrawMode.dmInteractive, BackgroundMode.bmAny);
 
@@ -878,18 +873,11 @@ namespace GKUI.Charts
             return fModel.ImageSize;
         }
 
-        public override void RenderStaticImage(Graphics gfx, RenderTarget target)
+        public override void RenderImage(RenderTarget target, bool forciblyCentered = false)
         {
             BackgroundMode bgMode = (target == RenderTarget.Printer) ? BackgroundMode.bmImage : BackgroundMode.bmAny;
-
-            fRenderer.SetTarget(gfx, false);
-            RenderStatic(bgMode);
-        }
-
-        public void RenderStatic(BackgroundMode background, bool centered = false)
-        {
-            ChartDrawMode drawMode = (!centered) ? ChartDrawMode.dmStatic : ChartDrawMode.dmStaticCentered;
-            InternalDraw(drawMode, background);
+            ChartDrawMode drawMode = (!forciblyCentered) ? ChartDrawMode.dmStatic : ChartDrawMode.dmStaticCentered;
+            InternalDraw(drawMode, bgMode);
         }
 
         #endregion

@@ -76,18 +76,13 @@ namespace GKCore.Charts
             }
         }
 
-        public override void SetTarget(object target, bool antiAlias)
+        public override void SetTarget(object target)
         {
             /*Graphics gfx = target as Graphics;
             if (gfx == null)
                 throw new ArgumentException(@"Argument's type mismatch", "target");
 
-            fCanvas = gfx;
-
-            if (antiAlias) {
-                fCanvas.TextRenderingHint = TextRenderingHint.AntiAlias;
-                fCanvas.SmoothingMode = SmoothingMode.AntiAlias;
-            }*/
+            fCanvas = gfx;*/
         }
 
         public override void DrawImage(IImage image, float x, float y,

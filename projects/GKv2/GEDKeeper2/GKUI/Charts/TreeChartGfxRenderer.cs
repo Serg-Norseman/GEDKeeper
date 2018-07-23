@@ -70,7 +70,7 @@ namespace GKUI.Charts
             }
         }
 
-        public override void SetTarget(object target, bool antiAlias)
+        public override void SetTarget(object target)
         {
             Graphics gfx = target as Graphics;
             if (gfx == null)
@@ -78,15 +78,12 @@ namespace GKUI.Charts
 
             fCanvas = gfx;
 
-            if (antiAlias) {
-                fCanvas.TextRenderingHint = TextRenderingHint.AntiAlias;
-                fCanvas.SmoothingMode = SmoothingMode.AntiAlias;
+            fCanvas.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            fCanvas.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            fCanvas.CompositingQuality = CompositingQuality.HighQuality;
 
-                fCanvas.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                fCanvas.SmoothingMode = SmoothingMode.HighQuality;
-                fCanvas.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                fCanvas.CompositingQuality = CompositingQuality.HighQuality;
-            }
+            fCanvas.SmoothingMode = SmoothingMode.HighQuality;
+            //fCanvas.TextRenderingHint = TextRenderingHint.AntiAlias;
         }
 
         public override void DrawImage(IImage image, float x, float y,

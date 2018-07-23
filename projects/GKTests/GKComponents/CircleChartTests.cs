@@ -72,6 +72,7 @@ namespace GKUI.Charts
             Assert.AreEqual(fBase, fCircleChart.Base);
 
             Assert.IsNotNull(fCircleChart.Model);
+            var offset = fCircleChart.Model.GetOffsets();
 
             Assert.IsNotNull(fCircleChart.Options);
 

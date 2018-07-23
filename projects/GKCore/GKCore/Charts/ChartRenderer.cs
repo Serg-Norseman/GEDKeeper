@@ -102,7 +102,7 @@ namespace GKCore.Charts
             return AppHost.GfxProvider.CreateColor(r, g, b);
         }
 
-        public abstract void SetTarget(object target, bool antiAlias);
+        public abstract void SetTarget(object target);
 
         public void DrawImage(IImage image, float x, float y)
         {

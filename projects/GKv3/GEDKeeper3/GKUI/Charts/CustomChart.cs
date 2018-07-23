@@ -33,11 +33,11 @@ namespace GKUI.Charts
     public abstract class CustomChart : CustomPanel, IPrintable
     {
         private readonly NavigationStack<GEDCOMRecord> fNavman;
+        protected ChartRenderer fRenderer;
 
 
         public event EventHandler NavRefresh;
 
-        protected abstract ChartRenderer Renderer { get; }
 
         protected CustomChart() : base()
         {
@@ -120,7 +120,7 @@ namespace GKUI.Charts
         #region Print and snaphots support
 
         public abstract ExtSize GetImageSize();
-        public abstract void RenderStaticImage(Graphics gfx, RenderTarget target);
+        public abstract void RenderImage(RenderTarget target, bool forciblyCentered = false);
 
         public bool IsLandscape()
         {
@@ -144,7 +144,8 @@ namespace GKUI.Charts
 
             var image = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
             using (Graphics gfx = new Graphics(image)) {
-                RenderStaticImage(gfx, RenderTarget.Printer);
+                fRenderer.SetTarget(gfx);
+                RenderImage(RenderTarget.Printer);
             }
 
             return new ImageHandler(image);
@@ -160,13 +161,14 @@ namespace GKUI.Charts
 
             if (ext == ".svg") {
                 try {
-                    Renderer.SetSVGMode(true, fileName, imageSize.Width, imageSize.Height);
+                    fRenderer.SetSVGMode(true, fileName, imageSize.Width, imageSize.Height);
 
                     using (var gfx = CreateGraphics()) {
-                        RenderStaticImage(gfx, RenderTarget.SVG);
+                        fRenderer.SetTarget(gfx);
+                        RenderImage(RenderTarget.SVG);
                     }
                 } finally {
-                    Renderer.SetSVGMode(false, "", 0, 0);
+                    fRenderer.SetSVGMode(false, "", 0, 0);
                 }
 
                 return;
@@ -201,7 +203,8 @@ namespace GKUI.Charts
                 try {
                     //using (Graphics gfx = Graphics.FromImage(pic)) {
                     using (Graphics gfx = new Graphics(pic)) {
-                        RenderStaticImage(gfx, RenderTarget.RasterFile);
+                        fRenderer.SetTarget(gfx);
+                        RenderImage(RenderTarget.RasterFile);
                     }
 
                     ((Bitmap)pic).Save(fileName, imFmt);

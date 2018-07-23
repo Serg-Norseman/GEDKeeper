@@ -100,7 +100,7 @@ namespace GKCore.Export
             float pageWidth = itPS.Width;
 
             var renderer = new PDFRenderer(pageWidth, pageHeight);
-            renderer.SetTarget(fPdfWriter.DirectContent, false);
+            renderer.SetTarget(fPdfWriter.DirectContent);
             return renderer;
         }
 

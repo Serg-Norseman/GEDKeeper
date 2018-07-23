@@ -64,14 +64,14 @@ namespace GKUI.Charts
             }
         }
 
-        public override void SetTarget(object target, bool antiAlias)
+        public override void SetTarget(object target)
         {
             Graphics gfx = target as Graphics;
             if (gfx == null)
                 throw new ArgumentException(@"Argument's type mismatch", "target");
 
             fCanvas = gfx;
-            fCanvas.AntiAlias = antiAlias;
+            fCanvas.AntiAlias = true;
         }
 
         public override void DrawImage(IImage image, float x, float y,

@@ -29,7 +29,6 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKUI.Components;
 
 namespace GKUI.Charts
 {
@@ -51,7 +50,6 @@ namespace GKUI.Charts
 
         private readonly IContainer fComponents;
         private readonly CircleChartModel fModel;
-        private readonly ChartRenderer fRenderer;
         private readonly ToolTip fToolTip;
 
         private CircleChartType fChartType;
@@ -64,8 +62,6 @@ namespace GKUI.Charts
         private MouseCaptured fMouseCaptured;
         private int fMouseCaptureX;
         private int fMouseCaptureY;
-
-        protected override ChartRenderer Renderer { get { return fRenderer; } }
 
 
         public IBaseWindow Base
@@ -258,45 +254,6 @@ namespace GKUI.Charts
             return result;
         }
 
-        /// <summary>
-        /// Renders this chart on the specified target and the context
-        /// associated with the target.
-        /// </summary>
-        /// <param name="context">GDI+ rendering context.</param>
-        /// <param name="target">Rendering target.</param>
-        private void Render(Graphics context, RenderTarget target)
-        {
-            PointF center = GetCenter(target);
-
-            fModel.Renderer.SetTarget(context, true);
-
-            var backColor = fModel.Options.BrushColor[9];
-            if (target == RenderTarget.Screen) {
-                fRenderer.DrawRectangle(null, backColor, 0, 0, Width, Height);
-            } else if (target != RenderTarget.Printer) {
-                fRenderer.DrawRectangle(null, backColor, 0, 0, fModel.ImageWidth, fModel.ImageHeight);
-            }
-
-            fModel.Renderer.ResetTransform();
-            fModel.Renderer.TranslateTransform(center.X, center.Y);
-
-            if (target == RenderTarget.Screen) {
-                fModel.Renderer.ScaleTransform(fZoom, fZoom);
-            } else {
-                fModel.Renderer.ScaleTransform(1, 1);
-            }
-
-            switch (fChartType) {
-                case CircleChartType.Ancestors:
-                    fModel.DrawAncestors();
-                    break;
-
-                case CircleChartType.Descendants:
-                    fModel.DrawDescendants();
-                    break;
-            }
-        }
-
         #region Protected inherited methods
 
         protected override void SetNavObject(object obj)
@@ -315,7 +272,8 @@ namespace GKUI.Charts
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            Render(e.Graphics, RenderTarget.Screen);
+            fRenderer.SetTarget(e.Graphics);
+            RenderImage(RenderTarget.Screen);
 
             base.OnPaint(e);
         }
@@ -478,9 +436,41 @@ namespace GKUI.Charts
             return new ExtSize((int)(fModel.ImageWidth * fZoom), (int)(fModel.ImageHeight * fZoom));
         }
 
-        public override void RenderStaticImage(Graphics gfx, RenderTarget target)
+        /// <summary>
+        /// Renders this chart on the specified target and the context
+        /// associated with the target.
+        /// </summary>
+        /// <param name="target">Rendering target.</param>
+        /// <param name="forciblyCentered"></param>
+        public override void RenderImage(RenderTarget target, bool forciblyCentered = false)
         {
-            Render(gfx, target);
+            PointF center = GetCenter(target);
+
+            var backColor = fModel.Options.BrushColor[9];
+            if (target == RenderTarget.Screen) {
+                fRenderer.DrawRectangle(null, backColor, 0, 0, Width, Height);
+            } else if (target != RenderTarget.Printer) {
+                fRenderer.DrawRectangle(null, backColor, 0, 0, fModel.ImageWidth, fModel.ImageHeight);
+            }
+
+            fRenderer.ResetTransform();
+            fRenderer.TranslateTransform(center.X, center.Y);
+
+            if (target == RenderTarget.Screen) {
+                fRenderer.ScaleTransform(fZoom, fZoom);
+            } else {
+                fRenderer.ScaleTransform(1, 1);
+            }
+
+            switch (fChartType) {
+                case CircleChartType.Ancestors:
+                    fModel.DrawAncestors();
+                    break;
+
+                case CircleChartType.Descendants:
+                    fModel.DrawDescendants();
+                    break;
+            }
         }
     }
 }

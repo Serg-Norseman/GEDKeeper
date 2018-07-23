@@ -141,7 +141,7 @@ namespace GKCore.Export
             // TODO: bad scale logic
             scaleFactor = (scaleFactor > 1.0f) ? 1.0f : scaleFactor;
             treeBox.SetScale(scaleFactor);
-            treeBox.RenderStatic(BackgroundMode.bmNone, true);
+            treeBox.RenderImage(RenderTarget.Printer, true);
 
             // TODO: improve the logic of extracting transitions to other branches
             // not covered by the primary search for patriarchs

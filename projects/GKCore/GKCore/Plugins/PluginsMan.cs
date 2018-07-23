@@ -86,9 +86,8 @@ namespace GKCore.Plugins
                         if (asm != null) {
                             Load(host, asm);
                         }
-                    } catch (Exception ex) {
+                    } catch {
                         // block exceptions for bad or non-dotnet assemblies
-                        Logger.LogWrite("PluginsMan.Load.1(" + pfn + "): " + ex.Message);
                     }
                 }
             } catch (Exception ex) {

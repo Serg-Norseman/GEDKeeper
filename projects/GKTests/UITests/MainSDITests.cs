@@ -37,6 +37,7 @@ using GKCore.Types;
 using GKTests;
 using GKTests.ControlTesters;
 using GKUI;
+using GKUI.Charts;
 using GKUI.Components;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;
@@ -390,13 +391,19 @@ namespace GKUI.Forms
             ClickToolStripMenuItem("miSearch", fMainWin);
 
             var searchPanel = new FormTester("QuickSearchDlg");
+            Form frm = searchPanel.Properties;
+
             // handlers for empty text
-            ClickButton("btnPrev", searchPanel.Properties);
-            ClickButton("btnNext", searchPanel.Properties);
+            ClickButton("btnPrev", frm);
+            ClickButton("btnNext", frm);
             // enter text
-            var txtSearchPattern = new TextBoxTester("txtSearchPattern", searchPanel.Properties);
+            var txtSearchPattern = new TextBoxTester("txtSearchPattern", frm);
             txtSearchPattern.Enter("John");
             // handlers for entered text? - msgbox processing
+
+            KeyDownForm(frm.Name, Keys.Enter);
+            KeyDownForm(frm.Name, Keys.Enter | Keys.Shift);
+            KeyDownForm(frm.Name, Keys.Escape);
         }
 
         #region Exports tests
@@ -791,6 +798,9 @@ namespace GKUI.Forms
 
                             ModalFormHandler = SaveFile_Cancel_Handler;
                             ClickButton("btnSave", form);
+
+                            ModalFormHandler = SaveFile_GED_Handler;
+                            ClickButton("btnSave", form);
                         }
                         break;
 
@@ -827,6 +837,11 @@ namespace GKUI.Forms
             }
 
             form.Close();
+        }
+
+        private void SaveFile_GED_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.ged", hWnd);
         }
 
         #endregion
@@ -1578,6 +1593,9 @@ namespace GKUI.Forms
             ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.Left));
             ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.Back));
             ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.Right));
+            ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.D0 | Keys.Control));
+            ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.Up));
+            ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.Down));
 
             ctl.FireEvent("DoubleClick", new EventArgs());
             ctl.Properties.Refresh();
@@ -1588,6 +1606,16 @@ namespace GKUI.Forms
             ccWin.QuickSearch();
             ccWin.SelectByRec(null);
             ccWin.SetFilter();
+
+            ModalFormHandler = SaveSnapshotJPG_Handler;
+            ClickToolStripButton("tbImageSave", ccWin);
+
+            // FIXME exception!
+            //ModalFormHandler = SaveSnapshotEMF_Handler;
+            //ClickToolStripButton("tbImageSave", ccWin);
+
+            ModalFormHandler = SaveSnapshotSVG_Handler;
+            ClickToolStripButton("tbImageSave", ccWin);
 
             KeyDownForm(frm.Name, Keys.Escape);
             frm.Dispose();
@@ -1658,6 +1686,9 @@ namespace GKUI.Forms
             ctl.FireEvent("DoubleClick", new EventArgs());
 
             //ctl.FireEvent("MouseUp", new MouseEventArgs(MouseButtons.Right, 1, 0, 0, 0));
+            
+            var tbox = ctl.Properties as TreeChartBox;
+            Assert.IsNotNull(tbox);
 
             // handlers tests
             //ClickToolStripMenuItem("miEdit", tcWin);
@@ -1673,7 +1704,14 @@ namespace GKUI.Forms
             //ClickToolStripMenuItem("miFillImage", tcWin);
             //ClickToolStripMenuItem("miRebuildTree", tcWin);
 
-            ModalFormHandler = SaveSnapshot_Handler;
+            ModalFormHandler = SaveSnapshotJPG_Handler;
+            ClickToolStripButton("tbImageSave", tcWin);
+
+            // FIXME exception!
+            //ModalFormHandler = SaveSnapshotEMF_Handler;
+            //ClickToolStripButton("tbImageSave", tcWin);
+
+            ModalFormHandler = SaveSnapshotSVG_Handler;
             ClickToolStripButton("tbImageSave", tcWin);
 
             //ModalFormHandler = PrintPreviewDialog_Handler;
@@ -1691,9 +1729,19 @@ namespace GKUI.Forms
             frm.Dispose();
         }
 
-        private void SaveSnapshot_Handler(string name, IntPtr hWnd, Form form)
+        private void SaveSnapshotJPG_Handler(string name, IntPtr hWnd, Form form)
         {
             PrepareFileSave("test.jpg", hWnd);
+        }
+
+        private void SaveSnapshotEMF_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.emf", hWnd);
+        }
+
+        private void SaveSnapshotSVG_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.svg", hWnd);
         }
 
         private static void PrintDialog_Handler(string name, IntPtr ptr, Form form)

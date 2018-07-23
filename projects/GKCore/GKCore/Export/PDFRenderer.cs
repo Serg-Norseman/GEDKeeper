@@ -49,7 +49,7 @@ namespace GKCore.Export
             fPageWidth = pageWidth;
         }
 
-        public override void SetTarget(object target, bool antiAlias)
+        public override void SetTarget(object target)
         {
             PdfContentByte gfx = target as PdfContentByte;
             if (gfx == null)
