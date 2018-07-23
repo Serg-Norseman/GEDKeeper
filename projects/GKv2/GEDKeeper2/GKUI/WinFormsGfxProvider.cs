@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -120,28 +120,9 @@ namespace GKUI
             }
         }
 
-        // TODO: Remove
-        public IImage GetResourceImage(string resName, bool makeTransp)
-        {
-            Bitmap img = (Bitmap)GKResources.ResourceManager.GetObject(resName, GKResources.Culture);
-
-            if (makeTransp) {
-                img = (Bitmap)img.Clone();
-
-                #if __MonoCS__
-                img.MakeTransparent(); // FIXME: don't work
-                #else
-                img.MakeTransparent(img.GetPixel(0, 0));
-                #endif
-            }
-
-            return new ImageHandler(img);
-        }
-
-        // TODO: New version, on future
         public IImage LoadResourceImage(string resName, bool makeTransp)
         {
-            Bitmap img = (Bitmap)UIHelper.LoadBitmapFromResource(this.GetType(), "Resources." + resName);
+            Bitmap img = (Bitmap)UIHelper.LoadResourceImage("Resources." + resName);
 
             if (makeTransp) {
                 img = (Bitmap)img.Clone();
@@ -194,14 +175,22 @@ namespace GKUI
             return result;
         }
 
-        /*public IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
+        public IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
             float ang1, float ang2)
         {
-            var result = new GfxCircleSegmentPathHandler(new GraphicsPath());
+            var path = new GraphicsPath();
+            var result = new GfxCircleSegmentPathHandler(path);
 
+            result.InRad = inRad;
+            result.ExtRad = extRad;
+            result.WedgeAngle = wedgeAngle;
+            result.Ang1 = ang1;
+            result.Ang2 = ang2;
+
+            UIHelper.CreateCircleSegment(path, ctX, ctY, inRad, extRad, wedgeAngle, ang1, ang2);
 
             return result;
-        }*/
+        }
 
         public IFont CreateFont(string fontName, float size, bool bold)
         {
@@ -226,6 +215,12 @@ namespace GKUI
         public IColor CreateColor(int r, int g, int b)
         {
             Color color = Color.FromArgb(r, g, b);
+            return new ColorHandler(color);
+        }
+
+        public IColor CreateColor(int a, int r, int g, int b)
+        {
+            Color color = Color.FromArgb(a, r, g, b);
             return new ColorHandler(color);
         }
 

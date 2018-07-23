@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -53,11 +53,11 @@ namespace GKUI.Components
         {
             InitializeComponent();
 
-            this.btnMute.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_volume_mute.png");
-            this.btnPause.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_pause.png");
-            this.btnPlay.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_play.png");
-            this.btnStop.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_stop.png");
-            this.pnlVideo.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.pnl_video.png");
+            this.btnMute.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_volume_mute.png");
+            this.btnPause.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_pause.png");
+            this.btnPlay.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_play.png");
+            this.btnStop.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_stop.png");
+            this.pnlVideo.BackgroundImage = UIHelper.LoadResourceImage("Resources.pnl_video.png");
 
             fFactory = new MediaPlayerFactory(FIND_LIBVLC);
             fPlayer = fFactory.CreatePlayer<IDiskPlayer>();
@@ -169,16 +169,16 @@ namespace GKUI.Components
             fPlayer.Volume = trkVolume.Value;
 
             if (100 >= fPlayer.Volume && fPlayer.Volume > 50) {
-                btnMute.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_volume_max.png");
+                btnMute.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_volume_max.png");
             }
             if (50 >= fPlayer.Volume && fPlayer.Volume > 5) {
-                btnMute.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_volume_middle.png");
+                btnMute.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_volume_middle.png");
             }
             if (5 >= fPlayer.Volume && fPlayer.Volume > 0) {
-                btnMute.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_volume_min.png");
+                btnMute.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_volume_min.png");
             }
             if (fPlayer.Volume == 0) {
-                btnMute.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_volume_mute.png");
+                btnMute.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_volume_mute.png");
             }
         }
 
@@ -202,7 +202,7 @@ namespace GKUI.Components
             fPlayer.ToggleMute();
 
             if (fPlayer.Mute) {
-                btnMute.BackgroundImage = UIHelper.LoadBitmapFromResource("Resources.btn_volume_mute.png");
+                btnMute.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_volume_mute.png");
             } else {
                 trkVolume_Scroll(sender, e);
             }
@@ -223,9 +223,12 @@ namespace GKUI.Components
 
             public static void Execute(Action action)
             {
-                // TODO: to rework this part, because there is a critical error
-                // when closing window during playback
-                fSync.BeginInvoke(action, null);
+                try {
+                    // TODO: to rework this part, because there is a critical error
+                    // when closing window during playback
+                    fSync.BeginInvoke(action, null);
+                } catch {
+                }
             }
         }
 

@@ -112,6 +112,11 @@ namespace GKCore.Export
             fCanvas.AddImage(img, width, 0, 0, height, x, y);
         }
 
+        public override void DrawImage(IImage image, ExtRect destinationRect, ExtRect sourceRect)
+        {
+            // dont implemented yet
+        }
+
         public override int GetTextHeight(IFont font)
         {
             BaseFont baseFont = GetBaseFont(font);

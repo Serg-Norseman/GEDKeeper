@@ -25,7 +25,6 @@ using System.Net;
 using System.Reflection;
 
 using BSLib;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Maps;

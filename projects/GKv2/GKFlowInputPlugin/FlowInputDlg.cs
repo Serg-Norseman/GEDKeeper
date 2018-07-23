@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -72,7 +72,7 @@ namespace GKFlowInputPlugin
         {
             InitializeComponent();
 
-            //this.btnClose.Image = GKResources.iBtnCancel;
+            //this.btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fPlugin = plugin;
             fLangMan = plugin.LangMan;

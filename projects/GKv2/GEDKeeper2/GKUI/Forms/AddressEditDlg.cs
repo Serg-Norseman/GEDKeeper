@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Lists;
@@ -181,8 +180,8 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            btnAccept.Image = GKResources.iBtnAccept;
-            btnCancel.Image = GKResources.iBtnCancel;
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fPhonesList = new GKSheetList(pagePhones);
             fPhonesList.SetControlName("fPhonesList"); // for purpose of tests

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -84,22 +84,22 @@ namespace GKUI.Forms
             InitializeComponent();
 
             Icon = GKResources.GK2_Icon;
-            tbFileNew.Image = GKResources.iCreateNew;
-            tbFileLoad.Image = GKResources.iLoad;
-            tbFileSave.Image = GKResources.iSave;
-            tbRecordAdd.Image = GKResources.iRecNew;
-            tbRecordEdit.Image = GKResources.iRecEdit;
-            tbRecordDelete.Image = GKResources.iRecDelete;
-            tbFilter.Image = GKResources.iFilter;
-            tbTreeAncestors.Image = GKResources.iTreeAncestry;
-            tbTreeDescendants.Image = GKResources.iTreeDescendants;
-            tbTreeBoth.Image = GKResources.iTreeBoth;
-            tbPedigree.Image = GKResources.iScroll;
-            tbStats.Image = GKResources.iTable;
-            tbPrev.Image = GKResources.iLeft1;
-            tbNext.Image = GKResources.iRight1;
-            tbDocPreview.Image = GKResources.iPreview;
-            tbDocPrint.Image = GKResources.iPrint;
+            tbFileNew.Image = UIHelper.LoadResourceImage("Resources.btn_create_new.gif");
+            tbFileLoad.Image = UIHelper.LoadResourceImage("Resources.btn_load.gif");
+            tbFileSave.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");
+            tbRecordAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            tbRecordEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
+            tbRecordDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            tbFilter.Image = UIHelper.LoadResourceImage("Resources.btn_filter.gif");
+            tbTreeAncestors.Image = UIHelper.LoadResourceImage("Resources.btn_tree_ancestry.gif");
+            tbTreeDescendants.Image = UIHelper.LoadResourceImage("Resources.btn_tree_descendants.gif");
+            tbTreeBoth.Image = UIHelper.LoadResourceImage("Resources.btn_tree_both.gif");
+            tbPedigree.Image = UIHelper.LoadResourceImage("Resources.btn_scroll.gif");
+            tbStats.Image = UIHelper.LoadResourceImage("Resources.btn_table.gif");
+            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
+            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
+            tbDocPreview.Image = UIHelper.LoadResourceImage("Resources.btn_preview.gif");
+            tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
 
             tbDocPrint.Visible = false;
             tbDocPreview.Visible = false;
@@ -1058,13 +1058,13 @@ namespace GKUI.Forms
             switch (fContext.ShieldState)
             {
                 case ShieldState.None:
-                    pic = (Bitmap)GKResources.iRGShieldNone.Clone();
+                    pic = (Bitmap)UIHelper.LoadResourceImage("Resources.rg_shield_none.gif");
                     break;
                 case ShieldState.Middle:
-                    pic = (Bitmap)GKResources.iRGShieldMid.Clone();
+                    pic = (Bitmap)UIHelper.LoadResourceImage("Resources.rg_shield_mid.gif");
                     break;
                 case ShieldState.Maximum:
-                    pic = (Bitmap)GKResources.iRGShieldMax.Clone();
+                    pic = (Bitmap)UIHelper.LoadResourceImage("Resources.rg_shield_max.gif");
                     break;
             }
 

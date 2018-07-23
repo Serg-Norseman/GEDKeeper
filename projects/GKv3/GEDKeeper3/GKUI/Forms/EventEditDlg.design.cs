@@ -68,13 +68,13 @@ namespace GKUI.Forms
             btnPlaceAdd.Enabled = false;
             btnPlaceAdd.Size = new Size(26, 26);
             btnPlaceAdd.Click += btnPlaceAdd_Click;
-            btnPlaceAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
+            btnPlaceAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
 
             btnPlaceDelete = new Button();
             btnPlaceDelete.Enabled = false;
             btnPlaceDelete.Size = new Size(26, 26);
             btnPlaceDelete.Click += btnPlaceDelete_Click;
-            btnPlaceDelete.Image = Bitmap.FromResource("Resources.btn_rec_delete.gif");
+            btnPlaceDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
 
             cmbEventType = new ComboBox();
             cmbEventType.ReadOnly = true;
@@ -175,14 +175,14 @@ namespace GKUI.Forms
             btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
             btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
             btnCancel.Click += btnCancel_Click;
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             btnAddress = new Button();
             btnAddress.Size = new Size(130, 26);

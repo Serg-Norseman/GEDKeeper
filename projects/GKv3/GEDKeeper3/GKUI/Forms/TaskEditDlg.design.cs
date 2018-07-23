@@ -41,7 +41,7 @@ namespace GKUI.Forms
             btnGoalSelect = new Button();
             btnGoalSelect.Size = new Size(26, 26);
             btnGoalSelect.Click += btnGoalSelect_Click;
-            btnGoalSelect.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
+            btnGoalSelect.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
 
             txtPriority = new ComboBox();
             txtPriority.ReadOnly = true;
@@ -93,14 +93,14 @@ namespace GKUI.Forms
             btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
             btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
             btnCancel.Click += btnCancel_Click;
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             Content = new DefTableLayout {
                 Rows = {

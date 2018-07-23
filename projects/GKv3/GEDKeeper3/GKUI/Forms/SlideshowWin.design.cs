@@ -1,5 +1,4 @@
-﻿using Eto.Drawing;
-using Eto.Forms;
+﻿using Eto.Forms;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -17,15 +16,15 @@ namespace GKUI.Forms
 
             tbStart = new ButtonToolItem();
             tbStart.Click += tsbStart_Click;
-            tbStart.Image = Bitmap.FromResource("Resources.btn_start.gif");
+            tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
 
             tbPrev = new ButtonToolItem();
             tbPrev.Click += tsbPrev_Click;
-            tbPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
+            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
 
             tbNext = new ButtonToolItem();
             tbNext.Click += tsbNext_Click;
-            tbNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
+            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
             toolStrip1 = new ToolBar();
             toolStrip1.Items.AddRange(new ToolItem[] {

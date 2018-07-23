@@ -78,7 +78,18 @@ namespace GKUI.Charts
                                        float width, float height)
         {
             var sdImage = ((ImageHandler)image).Handle;
+
             fCanvas.DrawImage(sdImage, x, y, width, height);
+        }
+
+        public override void DrawImage(IImage image, ExtRect destinationRect,
+            ExtRect sourceRect)
+        {
+            var sdImage = ((ImageHandler)image).Handle;
+
+            Rectangle destRect = UIHelper.Rt2Rt(destinationRect);
+            Rectangle sourRect = UIHelper.Rt2Rt(sourceRect);
+            fCanvas.DrawImage(sdImage, sourRect, destRect);
         }
 
         public override int GetTextHeight(IFont font)

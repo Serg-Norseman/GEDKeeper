@@ -117,9 +117,6 @@
     <Compile Include="GKUI\Charts\CustomChart.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Charts\TCGenerationsControl.cs" />
-    <Compile Include="GKUI\Charts\TCPersonControl.cs" />
-    <Compile Include="GKUI\Charts\TCScaleControl.cs" />
     <Compile Include="GKUI\Charts\TreeChartGfxRenderer.cs" />
     <Compile Include="GKUI\Components\ACOptionsControl.cs">
       <SubType>UserControl</SubType>
@@ -433,9 +430,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="app.manifest" />
-    <EmbeddedResource Include="Resources\sym_female.png" />
-    <EmbeddedResource Include="Resources\sym_male.png" />
-    <EmbeddedResource Include="Resources\btn_expand2.gif" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GKComponents\GKComponents.csproj">
@@ -446,9 +440,6 @@
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

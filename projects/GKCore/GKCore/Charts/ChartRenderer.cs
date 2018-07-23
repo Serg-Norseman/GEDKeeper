@@ -111,6 +111,8 @@ namespace GKCore.Charts
 
         public abstract void DrawImage(IImage image, float x, float y,
                                        float width, float height);
+        public abstract void DrawImage(IImage image, ExtRect destinationRect,
+                                       ExtRect sourceRect);
 
         public abstract int GetTextHeight(IFont font);
         public abstract int GetTextWidth(string text, IFont font);

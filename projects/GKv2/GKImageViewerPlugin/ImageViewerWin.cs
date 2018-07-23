@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,7 +24,6 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -44,8 +43,7 @@ namespace GKImageViewerPlugin
         {
             InitializeComponent();
 
-            GKResourceManager resMgr = new GKResourceManager("IVPResource", typeof(ImageViewerWin).Assembly);
-            tbFileLoad.Image = (Bitmap)resMgr.GetObjectEx("iLoad");
+            tbFileLoad.Image = UIHelper.LoadResourceImage("Resources.btn_load.gif");
 
             fPlugin = plugin;
 

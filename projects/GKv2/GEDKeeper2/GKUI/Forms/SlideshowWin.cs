@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -46,9 +46,9 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            tbStart.Image = GKResources.iStart;
-            tbPrev.Image = GKResources.iLeft1;
-            tbNext.Image = GKResources.iRight1;
+            tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
+            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
+            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
             SuspendLayout();
             fImageCtl = new ImageBox();
@@ -135,11 +135,11 @@ namespace GKUI.Forms
         {
             if (tbStart.Text == LangMan.LS(LSID.LSID_Start)) {
                 tbStart.Text = LangMan.LS(LSID.LSID_Stop);
-                tbStart.Image = GKResources.iStop;
+                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_stop.gif");
                 timer1.Enabled = true;
             } else {
                 tbStart.Text = LangMan.LS(LSID.LSID_Start);
-                tbStart.Image = GKResources.iStart;
+                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
                 timer1.Enabled = false;
             }
         }

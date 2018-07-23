@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,7 @@
 
 using System;
 using BSLib;
-using Eto.Drawing;
 using Eto.Forms;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
@@ -235,8 +233,8 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fBase = baseWin;
             fPersonsList = new GKSheetList(Panel2);

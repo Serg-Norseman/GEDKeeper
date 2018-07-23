@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -94,17 +94,17 @@ namespace GKUI.Components
 
             btnSizeToFit = new Button();
             btnSizeToFit.Size = new Size(28, 28);
-            btnSizeToFit.Image = Bitmap.FromResource("Resources.btn_size_to_fit.png");
+            btnSizeToFit.Image = UIHelper.LoadResourceImage("Resources.btn_size_to_fit.png");
             btnSizeToFit.Click += btnSizeToFit_Click;
 
             btnZoomIn = new Button();
             btnZoomIn.Size = new Size(28, 28);
-            btnZoomIn.Image = Bitmap.FromResource("Resources.btn_zoom_in.png");
+            btnZoomIn.Image = UIHelper.LoadResourceImage("Resources.btn_zoom_in.png");
             btnZoomIn.Click += btnZoomIn_Click;
 
             btnZoomOut = new Button();
             btnZoomOut.Size = new Size(28, 28);
-            btnZoomOut.Image = Bitmap.FromResource("Resources.btn_zoom_out.png");
+            btnZoomOut.Image = UIHelper.LoadResourceImage("Resources.btn_zoom_out.png");
             btnZoomOut.Click += btnZoomOut_Click;
 
             cbZoomLevels = new ComboBox();

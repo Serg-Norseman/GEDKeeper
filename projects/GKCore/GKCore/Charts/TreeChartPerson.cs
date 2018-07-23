@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using BSLib;
 using BSLib.SmartGraph;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
@@ -370,7 +369,7 @@ namespace GKCore.Charts
 
                             if (fPortrait == null && options.DefaultPortraits) {
                                 string resName = (fSex == GEDCOMSex.svFemale) ? "pi_female_140.png" : "pi_male_140.png";
-                                fPortrait = AppHost.GfxProvider.GetResourceImage(resName, false);
+                                fPortrait = AppHost.GfxProvider.LoadResourceImage(resName, false);
                             }
                         }
                         catch (MediaFileNotFoundException)

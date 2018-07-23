@@ -1,5 +1,4 @@
-﻿using Eto.Drawing;
-using Eto.Forms;
+﻿using Eto.Forms;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -20,29 +19,29 @@ namespace GKUI.Forms
 
             tbImageSave = new ButtonToolItem();
             tbImageSave.Click += tbImageSave_Click;
-            tbImageSave.Image = Bitmap.FromResource("Resources.btn_save_image.gif");
+            tbImageSave.Image = UIHelper.LoadResourceImage("Resources.btn_save_image.gif");
 
             tbPrev = new ButtonToolItem();
             tbPrev.Enabled = false;
             tbPrev.Click += ToolBar1_ButtonClick;
-            tbPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
+            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
 
             tbNext = new ButtonToolItem();
             tbNext.Enabled = false;
             tbNext.Click += ToolBar1_ButtonClick;
-            tbNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
+            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
             tbDocPreview = new ButtonToolItem();
             tbDocPreview.Click += tbDocPreview_Click;
-            tbDocPreview.Image = Bitmap.FromResource("Resources.btn_preview.gif");
+            tbDocPreview.Image = UIHelper.LoadResourceImage("Resources.btn_preview.gif");
 
             tbDocPrint = new ButtonToolItem();
             tbDocPrint.Click += tbDocPrint_Click;
-            tbDocPrint.Image = Bitmap.FromResource("Resources.btn_print.gif");
+            tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
 
             tbOptions = new ButtonToolItem();
             tbOptions.Click += tbOptions_Click;
-            tbOptions.Image = Bitmap.FromResource("Resources.btn_tools.gif");
+            tbOptions.Image = UIHelper.LoadResourceImage("Resources.btn_tools.gif");
 
             ToolBar1 = new ToolBar();
             ToolBar1.TextAlign = ToolBarTextAlign.Right;

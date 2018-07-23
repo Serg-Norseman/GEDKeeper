@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,9 +24,9 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -160,10 +160,10 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            tbNewScript.Image = GKResources.iCreateNew;
-            tbLoadScript.Image = GKResources.iLoad;
-            tbSaveScript.Image = GKResources.iSave;
-            tbRun.Image = GKResources.iStart;
+            tbNewScript.Image = UIHelper.LoadResourceImage("Resources.btn_create_new.gif");
+            tbLoadScript.Image = UIHelper.LoadResourceImage("Resources.btn_load.gif");
+            tbSaveScript.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");
+            tbRun.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
 
             fBase = baseWin;
 

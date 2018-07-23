@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,14 +19,12 @@
  */
 
 using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-
 using BSLib;
 using GKCore;
-using GKUI.Components;
+using GKCore.Charts;
+using GKCore.Interfaces;
 
-namespace GKUI.Charts
+namespace GKCore.Charts
 {
     /// <summary>
     /// 
@@ -43,8 +41,8 @@ namespace GKUI.Charts
 
         private int fThumbPos = 9; /* Counts from zero to 9. */
 
-        private static readonly Color BLANK_COLOR = Color.FromArgb(191, 191, 191);
-        private static readonly Color SELECT_COLOR = Color.FromArgb(128, 128, 128);
+        private IColor BLANK_COLOR;
+        private IColor SELECT_COLOR;
 
         public override string Tip
         {
@@ -64,8 +62,10 @@ namespace GKUI.Charts
             get { return fDestRect.Width; }
         }
 
-        public TCGenerationsControl(TreeChartBox chart) : base(chart)
+        public TCGenerationsControl(ITreeChartBox chart) : base(chart)
         {
+            BLANK_COLOR = AppHost.GfxProvider.CreateColor(191, 191, 191);
+            SELECT_COLOR = AppHost.GfxProvider.CreateColor(128, 128, 128);
         }
 
         public override void UpdateState()
@@ -85,19 +85,14 @@ namespace GKUI.Charts
             int height = Math.Min(cr.GetHeight() - (PADDING_Y << 1), RADIUS);
             int width = (int)GetChordLength(height, (float)(SEGMENT_ANGLE * (Math.PI / 180.0f)));
 
-            fDestRect = new Rectangle(cr.Left + PADDING_X,
-                                      Math.Max(PADDING_Y, (cr.GetHeight() - height) >> 1),
+            fDestRect = ExtRect.CreateBounds(cr.Left + PADDING_X,
+                                      cr.Top + Math.Max(PADDING_Y, (cr.GetHeight() - height) >> 1),
                                       width, height);
         }
 
-        public override void Draw(Graphics gfx)
+        public override void Draw(ChartRenderer gfx)
         {
             if (gfx == null) return;
-
-            gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            gfx.SmoothingMode = SmoothingMode.HighQuality;
-            gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            gfx.CompositingQuality = CompositingQuality.HighQuality;
 
             int intervalHeight = 2;
             int segmentHeight = ((fDestRect.Height - (9 /* intervals */ * intervalHeight)) / 10);
@@ -110,11 +105,10 @@ namespace GKUI.Charts
             for (int i = 0; i <= 9; i++) {
                 int extRad = inRad + segmentHeight;
 
-                Color color = (i <= fThumbPos) ? SELECT_COLOR : BLANK_COLOR;
+                IColor color = (i <= fThumbPos) ? SELECT_COLOR : BLANK_COLOR;
 
-                using (var brush = new SolidBrush(color)) {
-                    using (var path = new GraphicsPath()) {
-                        UIHelper.CreateCircleSegment(path, ctX, ctY, inRad, extRad, SEGMENT_ANGLE, ang1, ang2);
+                using (var brush = AppHost.GfxProvider.CreateSolidBrush(color)) {
+                    using (var path = AppHost.GfxProvider.CreateCircleSegmentPath(ctX, ctY, inRad, extRad, SEGMENT_ANGLE, ang1, ang2)) {
                         gfx.FillPath(brush, path);
                     }
                 }
@@ -128,11 +122,11 @@ namespace GKUI.Charts
             fMouseCaptured = (GetDRect(fThumbPos).Contains(x, y) && !fMouseCaptured);
         }
 
-        private Rectangle GetDRect(int stepIndex)
+        private ExtRect GetDRect(int stepIndex)
         {
             int step = fDestRect.Height / D_COUNT;
             int thumbTop = fDestRect.Top + stepIndex * step;
-            return new Rectangle(fDestRect.Left, thumbTop, fDestRect.Width, step);
+            return ExtRect.CreateBounds(fDestRect.Left, thumbTop, fDestRect.Width, step);
         }
 
         public override void MouseMove(int x, int y)
@@ -140,7 +134,7 @@ namespace GKUI.Charts
             if (!fMouseCaptured) return;
 
             for (int i = 0; D_COUNT >= i; ++i) {
-                Rectangle r = GetDRect(i);
+                ExtRect r = GetDRect(i);
                 if ((r.Top <= y) && (r.Bottom > y)) {
                     if (i != fThumbPos) {
                         fThumbPos = i;

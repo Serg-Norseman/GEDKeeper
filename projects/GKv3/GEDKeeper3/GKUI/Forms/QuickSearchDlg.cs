@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -59,12 +59,12 @@ namespace GKUI.Forms
             btnPrev = new Button();
             btnPrev.Size = new Size(26, 26);
             btnPrev.Click += FindPrev_Click;
-            btnPrev.Image = Bitmap.FromResource("Resources.btn_left.gif");
+            btnPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
 
             btnNext = new Button();
             btnNext.Size = new Size(26, 26);
             btnNext.Click += FindNext_Click;
-            btnNext.Image = Bitmap.FromResource("Resources.btn_right.gif");
+            btnNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
             Content = TableLayout.Horizontal(10, new TableCell(txtSearchPattern, true), btnPrev, btnNext);
 

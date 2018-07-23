@@ -31,7 +31,7 @@ namespace GKUI.Forms
             btnSourceAdd = new Button();
             btnSourceAdd.Size = new Size(26, 26);
             btnSourceAdd.Click += btnSourceAdd_Click;
-            btnSourceAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
+            btnSourceAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
 
             lblCertainty = new Label();
             lblCertainty.Text = "lblCertainty";
@@ -49,14 +49,14 @@ namespace GKUI.Forms
             btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
             btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
             btnCancel.Click += CancelClickHandler;
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             var panelData = new TableLayout {
                 Spacing = new Size(10, 10),

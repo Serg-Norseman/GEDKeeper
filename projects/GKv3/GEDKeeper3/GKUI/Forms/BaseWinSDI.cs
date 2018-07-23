@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -1015,13 +1015,13 @@ namespace GKUI.Forms
             switch (fContext.ShieldState)
             {
                 case ShieldState.None:
-                    img = Bitmap.FromResource("Resources.rg_shield_none.gif").Clone();
+                    img = UIHelper.LoadResourceImage("Resources.rg_shield_none.gif");
                     break;
                 case ShieldState.Middle:
-                    img = Bitmap.FromResource("Resources.rg_shield_mid.gif").Clone();
+                    img = UIHelper.LoadResourceImage("Resources.rg_shield_mid.gif");
                     break;
                 case ShieldState.Maximum:
-                    img = Bitmap.FromResource("Resources.rg_shield_max.gif").Clone();
+                    img = UIHelper.LoadResourceImage("Resources.rg_shield_max.gif");
                     break;
             }
 

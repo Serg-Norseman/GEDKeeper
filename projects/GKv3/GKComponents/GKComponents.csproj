@@ -96,9 +96,6 @@
     <Compile Include="GKUI\Components\ZGraphControl.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <None Include="packages.config" />
-    <EmbeddedResource Include="Resources\btn_size_to_fit.png" />
-    <EmbeddedResource Include="Resources\btn_zoom_in.png" />
-    <EmbeddedResource Include="Resources\btn_zoom_out.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

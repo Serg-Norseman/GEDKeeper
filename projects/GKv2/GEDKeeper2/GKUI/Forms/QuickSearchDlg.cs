@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -65,7 +66,7 @@ namespace GKUI.Forms
             btnPrev.Height = 24;
             btnPrev.Width = 24;
             btnPrev.Click += FindPrev_Click;
-            btnPrev.Image = GKResources.iLeft1;
+            btnPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
             btnPrev.Name = "btnPrev";
 
             btnNext.Location = new System.Drawing.Point(156+27, 3);
@@ -73,7 +74,7 @@ namespace GKUI.Forms
             btnNext.Height = 24;
             btnNext.Width = 24;
             btnNext.Click += FindNext_Click;
-            btnNext.Image = GKResources.iRight1;
+            btnNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
             btnNext.Name = "btnNext";
 
             AutoScaleBaseSize = new System.Drawing.Size(5, 14);

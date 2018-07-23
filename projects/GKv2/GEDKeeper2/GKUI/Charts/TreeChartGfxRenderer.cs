@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -81,6 +81,11 @@ namespace GKUI.Charts
             if (antiAlias) {
                 fCanvas.TextRenderingHint = TextRenderingHint.AntiAlias;
                 fCanvas.SmoothingMode = SmoothingMode.AntiAlias;
+
+                fCanvas.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                fCanvas.SmoothingMode = SmoothingMode.HighQuality;
+                fCanvas.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                fCanvas.CompositingQuality = CompositingQuality.HighQuality;
             }
         }
 
@@ -98,6 +103,15 @@ namespace GKUI.Charts
                 var destRect = new Rectangle((int)x, (int)y, (int)width, (int)height);
                 fCanvas.DrawImage(sdImage, destRect, 0, 0, sdImage.Width, sdImage.Height, GraphicsUnit.Pixel, attributes);
             }
+        }
+
+        public override void DrawImage(IImage image, ExtRect destinationRect, ExtRect sourceRect)
+        {
+            var sdImage = ((ImageHandler)image).Handle;
+
+            Rectangle destRect = UIHelper.Rt2Rt(destinationRect);
+            Rectangle sourRect = UIHelper.Rt2Rt(sourceRect);
+            fCanvas.DrawImage(sdImage, destRect, sourRect, GraphicsUnit.Pixel);
         }
 
         public override int GetTextHeight(IFont font)

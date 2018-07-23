@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <RootNamespace>GKImageViewerPlugin</RootNamespace>
     <DebugType>Full</DebugType>
     <WarningLevel>4</WarningLevel>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -59,19 +58,10 @@
     <Compile Include="ImageViewerWin.Designer.cs">
       <DependentUpon>ImageViewerWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="IVPResource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>IVPResource.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ImageViewerWin.resx">
       <DependentUpon>ImageViewerWin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="IVPResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>IVPResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

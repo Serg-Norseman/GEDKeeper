@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,7 +24,6 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
@@ -32,6 +31,7 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKUI.Charts;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -66,17 +66,16 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            tbImageSave.Image = GKResources.iSaveImage;
-            tbDocPreview.Image = GKResources.iPreview;
-            tbDocPrint.Image = GKResources.iPrint;
+            tbModes.Image = UIHelper.LoadResourceImage("Resources.btn_tools.gif");
+            tbFilter.Image = UIHelper.LoadResourceImage("Resources.btn_filter.gif");
+            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
+            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
+            tbImageSave.Image = UIHelper.LoadResourceImage("Resources.btn_save_image.gif");
 
+            tbDocPreview.Image = UIHelper.LoadResourceImage("Resources.btn_preview.gif");
+            tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
             tbDocPrint.Visible = true;
             tbDocPreview.Visible = true;
-
-            tbModes.Image = GKResources.iTools;
-            tbFilter.Image = GKResources.iFilter;
-            tbPrev.Image = GKResources.iLeft1;
-            tbNext.Image = GKResources.iRight1;
 
             miModeBoth.Tag = TreeChartKind.ckBoth;
             miModeAncestors.Tag = TreeChartKind.ckAncestors;

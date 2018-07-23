@@ -31,19 +31,19 @@ namespace GKUI.Components
             //
 
             btnPause = new Button();
-            btnPause.Image = Bitmap.FromResource("Resources.btnPause");
+            btnPause.Image = UIHelper.LoadResourceImage("Resources.btnPause");
             btnPause.ImagePosition = ButtonImagePosition.Overlay;
             btnPause.Size = new Size(40, 40);
             btnPause.Click += btnPause_Click;
 
             btnPlay = new Button();
-            btnPlay.Image = Bitmap.FromResource("Resources.btnPlay");
+            btnPlay.Image = UIHelper.LoadResourceImage("Resources.btnPlay");
             btnPlay.ImagePosition = ButtonImagePosition.Overlay;
             btnPlay.Size = new Size(40, 40);
             btnPlay.Click += btnPlay_Click;
 
             btnStop = new Button();
-            btnStop.Image = Bitmap.FromResource("Resources.btnStop");
+            btnStop.Image = UIHelper.LoadResourceImage("Resources.btnStop");
             btnStop.ImagePosition = ButtonImagePosition.Overlay;
             btnStop.Size = new Size(40, 40);
             btnStop.Click += btnStop_Click;
@@ -51,7 +51,7 @@ namespace GKUI.Components
             //
 
             btnMute = new Button();
-            btnMute.Image = Bitmap.FromResource("Resources.btnVolumeMute.gif");
+            btnMute.Image = UIHelper.LoadResourceImage("Resources.btnVolumeMute.gif");
             btnMute.ImagePosition = ButtonImagePosition.Overlay;
             btnMute.Size = new Size(40, 40);
             btnMute.Click += btnMute_Click;

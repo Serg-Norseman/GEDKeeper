@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -257,23 +257,10 @@ namespace GKCore.Charts
             if (name == null) return null;
 
             try {
-                var result = AppHost.GfxProvider.GetResourceImage(name, makeTransp);
-                return result;
-            } catch (Exception ex) {
-                Logger.LogWrite("TreeChartModel.PrepareImage(): " + ex.Message);
-                return null;
-            }
-        }
-
-        private static IImage PrepareImage2(string name, bool makeTransp)
-        {
-            if (name == null) return null;
-
-            try {
                 var result = AppHost.GfxProvider.LoadResourceImage(name, makeTransp);
                 return result;
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartModel.PrepareImage2(): " + ex.Message);
+                Logger.LogWrite("TreeChartModel.PrepareImage(): " + ex.Message);
                 return null;
             }
         }
@@ -282,7 +269,6 @@ namespace GKCore.Charts
         {
             try {
                 var signsPic = new IImage[9];
-
                 signsPic[0] = PrepareImage("tg_george_cross.gif", true);
                 signsPic[1] = PrepareImage("tg_soldier.gif", true);
                 signsPic[2] = PrepareImage("tg_soldier_fall.gif", true);
@@ -295,7 +281,7 @@ namespace GKCore.Charts
 
                 fSignsPic = signsPic;
                 fExpPic = PrepareImage("btn_expand.gif", true);
-                fPersExpPic = PrepareImage2("btn_expand2.gif", true);
+                fPersExpPic = PrepareImage("btn_expand2.gif", true);
             } catch (Exception ex) {
                 Logger.LogWrite("TreeChartModel.InitSigns(): " + ex.Message);
             }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,7 +27,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Kinships;
-using GKCore.Tools;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -47,7 +47,7 @@ namespace GKUI.Forms
 
             fBase = baseWin;
 
-            btnClose.Image = GKResources.iBtnCancel;
+            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             // SetLang()
             Text = LangMan.LS(LSID.LSID_RelationshipCalculator);

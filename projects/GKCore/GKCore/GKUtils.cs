@@ -1329,6 +1329,17 @@ namespace GKCore
             }
         }
 
+        public static Stream LoadResourceStream(string resName)
+        {
+            return LoadResourceStream(typeof(GKUtils), resName);
+        }
+
+        public static Stream LoadResourceStream(Type baseType, string resName)
+        {
+            Assembly assembly = baseType.Assembly;
+            return assembly.GetManifestResourceStream(resName);
+        }
+
         #endregion
 
         #region Show information summary

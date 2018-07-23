@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,6 +30,7 @@ namespace GKCore.Interfaces
     {
         IColor CreateColor(int argb);
         IColor CreateColor(int r, int g, int b);
+        IColor CreateColor(int a, int r, int g, int b);
         IColor CreateColor(string signature);
         IFont CreateFont(string fontName, float size, bool bold);
         IImage CreateImage(Stream stream);
@@ -38,14 +39,13 @@ namespace GKCore.Interfaces
         IGfxPath CreatePath();
         IGfxPath CreateCirclePath(float x, float y, float width, float height);
         IGfxPath CreateCircleSegmentPath(float inRad, float extRad, float wedgeAngle, float ang1, float ang2);
-        /*IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
-                                     float ang1, float ang2);*/
+        IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
+                                     float ang1, float ang2);
 
         IPen CreatePen(IColor color, float width);
         IBrush CreateSolidBrush(IColor color);
 
-        IImage GetResourceImage(string resName, bool makeTransp); // old, remove
-        IImage LoadResourceImage(string resName, bool makeTransp); // v2
+        IImage LoadResourceImage(string resName, bool makeTransp);
         IImage LoadImage(string fileName);
         void SaveImage(IImage image, string fileName);
     }

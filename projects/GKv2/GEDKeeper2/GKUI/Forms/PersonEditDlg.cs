@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -340,11 +340,11 @@ namespace GKUI.Forms
 
                 switch (curSex) {
                     case GEDCOMSex.svMale:
-                        img = GKResources.pi_male_140_png;
+                        img = UIHelper.LoadResourceImage("Resources.pi_male_140.png");
                         break;
 
                     case GEDCOMSex.svFemale:
-                        img = GKResources.pi_female_140_png;
+                        img = UIHelper.LoadResourceImage("Resources.pi_female_140.png");
                         break;
 
                     default:
@@ -624,20 +624,20 @@ namespace GKUI.Forms
             txtName.TextChanged += Names_TextChanged;
             cmbPatronymic.TextChanged += Names_TextChanged;
 
-            btnAccept.Image = GKResources.iBtnAccept;
-            btnCancel.Image = GKResources.iBtnCancel;
-            btnPortraitAdd.Image = GKResources.iRecNew;
-            btnPortraitDelete.Image = GKResources.iRecDelete;
-            btnParentsAdd.Image = GKResources.iRecNew;
-            btnParentsEdit.Image = GKResources.iRecEdit;
-            btnParentsDelete.Image = GKResources.iRecDelete;
-            btnFatherAdd.Image = GKResources.iRecNew;
-            btnFatherDelete.Image = GKResources.iRecEdit;
-            btnFatherSel.Image = GKResources.iRecDelete;
-            btnMotherAdd.Image = GKResources.iRecNew;
-            btnMotherDelete.Image = GKResources.iRecEdit;
-            btnMotherSel.Image = GKResources.iRecDelete;
-            btnNameCopy.Image = GKResources.iCopy;
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            btnPortraitAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnPortraitDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnParentsAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
+            btnParentsDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
+            btnFatherSel.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
+            btnMotherSel.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnNameCopy.Image = UIHelper.LoadResourceImage("Resources.btn_copy.gif");
 
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
@@ -653,10 +653,10 @@ namespace GKUI.Forms
                 #if SEX_SYMBOLS
                 switch (sx) {
                     case GEDCOMSex.svMale:
-                        image = UIHelper.LoadBitmapFromResource(this.GetType(), "Resources.sym_male.png");
+                        image = UIHelper.LoadResourceImage("Resources.sym_male.png");
                         break;
                     case GEDCOMSex.svFemale:
-                        image = UIHelper.LoadBitmapFromResource(this.GetType(), "Resources.sym_female.png");
+                        image = UIHelper.LoadResourceImage("Resources.sym_female.png");
                         break;
                 }
                 #endif
@@ -695,17 +695,17 @@ namespace GKUI.Forms
             fUserRefList = new GKSheetList(pageUserRefs);
             fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
-            btnPortraitAdd.Image = GKResources.iRecNew;
-            btnPortraitDelete.Image = GKResources.iRecDelete;
-            btnFatherAdd.Image = GKResources.iRecNew;
-            btnFatherDelete.Image = GKResources.iRecDelete;
-            btnFatherSel.Image = GKResources.iToMan;
-            btnMotherAdd.Image = GKResources.iRecNew;
-            btnMotherDelete.Image = GKResources.iRecDelete;
-            btnMotherSel.Image = GKResources.iToMan;
-            btnParentsAdd.Image = GKResources.iRecNew;
-            btnParentsEdit.Image = GKResources.iRecEdit;
-            btnParentsDelete.Image = GKResources.iRecDelete;
+            btnPortraitAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnPortraitDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnFatherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
+            btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnMotherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
+            btnParentsAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
+            btnParentsDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
 
             imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
 

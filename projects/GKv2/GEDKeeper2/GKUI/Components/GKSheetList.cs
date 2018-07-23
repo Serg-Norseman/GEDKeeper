@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -114,35 +114,35 @@ namespace GKUI.Components
                 throw new ArgumentNullException("owner");
 
             fBtnMoveDown = new ToolStripButton();
-            fBtnMoveDown.Image = GKResources.iDown;
+            fBtnMoveDown.Image = UIHelper.LoadResourceImage("Resources.btn_down.gif");
             fBtnMoveDown.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveDown);
             fBtnMoveDown.Click += ItemMoveDown;
 
             fBtnMoveUp = new ToolStripButton();
-            fBtnMoveUp.Image = GKResources.iUp;
+            fBtnMoveUp.Image = UIHelper.LoadResourceImage("Resources.btn_up.gif");
             fBtnMoveUp.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveUp);
             fBtnMoveUp.Click += ItemMoveUp;
 
             fBtnLinkJump = new ToolStripButton();
-            fBtnLinkJump.Image = GKResources.iToMan;
+            fBtnLinkJump.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
             fBtnLinkJump.ToolTipText = LangMan.LS(LSID.LSID_RecordGoto);
             fBtnLinkJump.Click += ItemJump;
 
             fBtnDelete = new ToolStripButton();
             fBtnDelete.Name = "btnDelete";
-            fBtnDelete.Image = GKResources.iRecDelete;
+            fBtnDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
             fBtnDelete.ToolTipText = LangMan.LS(LSID.LSID_MIRecordDelete);
             fBtnDelete.Click += ItemDelete;
 
             fBtnEdit = new ToolStripButton();
             fBtnEdit.Name = "btnEdit";
-            fBtnEdit.Image = GKResources.iRecEdit;
+            fBtnEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
             fBtnEdit.ToolTipText = LangMan.LS(LSID.LSID_MIRecordEdit);
             fBtnEdit.Click += ItemEdit;
 
             fBtnAdd = new ToolStripButton();
             fBtnAdd.Name = "btnAdd";
-            fBtnAdd.Image = GKResources.iRecNew;
+            fBtnAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
             fBtnAdd.ToolTipText = LangMan.LS(LSID.LSID_MIRecordAdd);
             fBtnAdd.Click += ItemAdd;
 

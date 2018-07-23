@@ -35,7 +35,7 @@ namespace GKUI.Forms
 
             tbExcelExport = new Button(); //ButtonToolItem();
             tbExcelExport.Click += tbExcelExport_Click;
-            tbExcelExport.Image = Bitmap.FromResource("Resources.btn_excel.gif");
+            tbExcelExport.Image = UIHelper.LoadResourceImage("Resources.btn_excel.gif");
             tbExcelExport.Size = new Size(26, 26);
 
             //cmStatTypes = ContextMenu();

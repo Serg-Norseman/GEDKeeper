@@ -26,7 +26,7 @@ using BSLib;
 using GKCore.Charts;
 using GKCore.Interfaces;
 
-namespace GKUI.Charts
+namespace GKCore.Charts
 {
     /// <summary>
     /// 
@@ -92,6 +92,11 @@ namespace GKUI.Charts
 
         public override void DrawImage(IImage image, float x, float y,
                                        float width, float height)
+        {
+            // dont implemented yet
+        }
+
+        public override void DrawImage(IImage image, ExtRect destinationRect, ExtRect sourceRect)
         {
             // dont implemented yet
         }

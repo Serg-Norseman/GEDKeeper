@@ -132,22 +132,5 @@
       <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\btn_close.png" />
-    <EmbeddedResource Include="Resources\btn_pause.png" />
-    <EmbeddedResource Include="Resources\btn_play.png" />
-    <EmbeddedResource Include="Resources\btn_size_to_fit.png" />
-    <EmbeddedResource Include="Resources\btn_stop.png" />
-    <EmbeddedResource Include="Resources\btn_volume_max.png" />
-    <EmbeddedResource Include="Resources\btn_volume_middle.png" />
-    <EmbeddedResource Include="Resources\btn_volume_min.png" />
-    <EmbeddedResource Include="Resources\btn_volume_mute.png" />
-    <EmbeddedResource Include="Resources\btn_zoom_in.png" />
-    <EmbeddedResource Include="Resources\btn_zoom_out.png" />
-    <EmbeddedResource Include="Resources\pnl_video.png" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

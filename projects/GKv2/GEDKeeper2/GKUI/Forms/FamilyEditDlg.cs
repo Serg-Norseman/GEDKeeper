@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -120,14 +119,14 @@ namespace GKUI.Forms
             fSourcesList = new GKSheetList(pageSources);
             fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
 
-            btnAccept.Image = GKResources.iBtnAccept;
-            btnCancel.Image = GKResources.iBtnCancel;
-            btnHusbandAdd.Image = GKResources.iRecNew;
-            btnHusbandDelete.Image = GKResources.iRecDelete;
-            btnHusbandSel.Image = GKResources.iToMan;
-            btnWifeAdd.Image = GKResources.iRecNew;
-            btnWifeDelete.Image = GKResources.iRecDelete;
-            btnWifeSel.Image = GKResources.iToMan;
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            btnHusbandAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnHusbandDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnHusbandSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
+            btnWifeAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnWifeDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnWifeSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);

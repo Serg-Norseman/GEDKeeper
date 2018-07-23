@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -95,37 +95,37 @@ namespace GKUI.Components
                 throw new ArgumentNullException("owner");
 
             fBtnMoveDown = new Button();
-            fBtnMoveDown.Image = Bitmap.FromResource("Resources.btn_down.gif");
+            fBtnMoveDown.Image = UIHelper.LoadResourceImage("Resources.btn_down.gif");
             fBtnMoveDown.Size = new Size(26, 26);
             fBtnMoveDown.ToolTip = LangMan.LS(LSID.LSID_RecordMoveDown);
             fBtnMoveDown.Click += ItemMoveDown;
 
             fBtnMoveUp = new Button();
-            fBtnMoveUp.Image = Bitmap.FromResource("Resources.btn_up.gif");
+            fBtnMoveUp.Image = UIHelper.LoadResourceImage("Resources.btn_up.gif");
             fBtnMoveUp.Size = new Size(26, 26);
             fBtnMoveUp.ToolTip = LangMan.LS(LSID.LSID_RecordMoveUp);
             fBtnMoveUp.Click += ItemMoveUp;
 
             fBtnLinkJump = new Button();
-            fBtnLinkJump.Image = Bitmap.FromResource("Resources.btn_jump.gif");
+            fBtnLinkJump.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
             fBtnLinkJump.Size = new Size(26, 26);
             fBtnLinkJump.ToolTip = LangMan.LS(LSID.LSID_RecordGoto);
             fBtnLinkJump.Click += ItemJump;
 
             fBtnDelete = new Button();
-            fBtnDelete.Image = Bitmap.FromResource("Resources.btn_rec_delete.gif");
+            fBtnDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
             fBtnDelete.Size = new Size(26, 26);
             fBtnDelete.ToolTip = LangMan.LS(LSID.LSID_MIRecordDelete);
             fBtnDelete.Click += ItemDelete;
 
             fBtnEdit = new Button();
-            fBtnEdit.Image = Bitmap.FromResource("Resources.btn_rec_edit.gif");
+            fBtnEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
             fBtnEdit.Size = new Size(26, 26);
             fBtnEdit.ToolTip = LangMan.LS(LSID.LSID_MIRecordEdit);
             fBtnEdit.Click += ItemEdit;
 
             fBtnAdd = new Button();
-            fBtnAdd.Image = Bitmap.FromResource("Resources.btn_rec_new.gif");
+            fBtnAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
             fBtnAdd.Size = new Size(26, 26);
             fBtnAdd.ToolTip = LangMan.LS(LSID.LSID_MIRecordAdd);
             fBtnAdd.Click += ItemAdd;

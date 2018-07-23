@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using BSLib;
 using GKCore;
 using GKCore.UIContracts;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -38,8 +39,8 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            Image1.Image = GKResources.iTipsLight;
-            btnClose.Image = GKResources.iBtnCancel;
+            Image1.Image = UIHelper.LoadResourceImage("Resources.image_tips_light.png");
+            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fTips = new StringList();
 

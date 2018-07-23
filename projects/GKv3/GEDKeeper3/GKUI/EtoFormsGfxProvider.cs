@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,6 @@ using System;
 using System.IO;
 using BSLib;
 using Eto.Drawing;
-using GKCommon;
 using GKCore.Interfaces;
 using GKUI.Components;
 
@@ -119,7 +118,7 @@ namespace GKUI
 
         public IImage GetResourceImage(string resName, bool makeTransp)
         {
-            Bitmap img = Bitmap.FromResource("Resources." + resName);
+            Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
 
             if (makeTransp) {
                 // only for 24, 32 bit images
@@ -139,7 +138,7 @@ namespace GKUI
         // TODO: Temp version, on future
         public IImage LoadResourceImage(string resName, bool makeTransp)
         {
-            Bitmap img = Bitmap.FromResource("Resources." + resName);
+            Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
 
             if (makeTransp) {
             }
@@ -185,14 +184,22 @@ namespace GKUI
             return result;
         }
 
-        /*public IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
+        public IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
             float ang1, float ang2)
         {
-            var result = new GfxCircleSegmentPathHandler(new GraphicsPath());
+            var path = new GraphicsPath();
+            var result = new GfxCircleSegmentPathHandler(path);
 
+            result.InRad = inRad;
+            result.ExtRad = extRad;
+            result.WedgeAngle = wedgeAngle;
+            result.Ang1 = ang1;
+            result.Ang2 = ang2;
+
+            UIHelper.CreateCircleSegment(path, ctX, ctY, inRad, extRad, wedgeAngle, ang1, ang2);
 
             return result;
-        }*/
+        }
 
         public IFont CreateFont(string fontName, float size, bool bold)
         {
@@ -217,6 +224,12 @@ namespace GKUI
         public IColor CreateColor(int r, int g, int b)
         {
             Color color = Color.FromArgb(r, g, b);
+            return new ColorHandler(color);
+        }
+
+        public IColor CreateColor(int a, int r, int g, int b)
+        {
+            Color color = Color.FromArgb(r, g, b, a);
             return new ColorHandler(color);
         }
 

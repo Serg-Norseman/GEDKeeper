@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -38,133 +38,8 @@ namespace GKUI.Charts
     /// <summary>
     /// 
     /// </summary>
-    public abstract class ITreeControl : BaseObject
-    {
-        protected readonly ITreeChartBox fChart;
-
-        protected Rectangle fDestRect;
-        protected bool fMouseCaptured;
-        protected bool fVisible;
-
-        public bool MouseCaptured
-        {
-            get { return fMouseCaptured; }
-        }
-
-        public bool Visible
-        {
-            get {
-                return fVisible;
-            }
-            set {
-                if (fVisible != value) {
-                    fVisible = value;
-                    fChart.Invalidate();
-                }
-            }
-        }
-
-        public abstract string Tip { get; }
-        public abstract int Height { get; }
-        public abstract int Width { get; }
-
-        public abstract void UpdateState();
-        public abstract void UpdateView();
-        public abstract void Draw(Graphics gfx);
-        public abstract void MouseDown(int x, int y);
-        public abstract void MouseMove(int x, int y);
-        public abstract void MouseUp(int x, int y);
-
-        protected ITreeControl(ITreeChartBox chart)
-        {
-            fChart = chart;
-        }
-
-        public virtual bool Contains(int x, int y)
-        {
-            return fDestRect.Contains(x, y);
-        }
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
     public class TreeChartBox : CustomChart, ITreeChartBox
     {
-        #region Subtypes
-
-        public sealed class TreeControlsList<T> : List<T>, IDisposable where T : ITreeControl
-        {
-            public void Draw(Graphics gfx)
-            {
-                if (gfx == null) return;
-
-                for (int i = 0; i < Count; i++) {
-                    T ctl = this[i];
-                    if (ctl.Visible) ctl.Draw(gfx);
-                }
-            }
-
-            public void UpdateState()
-            {
-                for (int i = 0; i < Count; i++) {
-                    this[i].UpdateState();
-                }
-            }
-
-            public void UpdateView()
-            {
-                for (int i = 0; i < Count; i++) {
-                    this[i].UpdateView();
-                }
-            }
-
-            public ITreeControl Contains(int x, int y)
-            {
-                for (int i = 0; i < Count; i++) {
-                    ITreeControl ctl = this[i];
-                    if (ctl.Contains(x, y)) return ctl;
-                }
-
-                return null;
-            }
-
-            public void MouseDown(int x, int y)
-            {
-                for (int i = 0; i < Count; i++) {
-                    T ctl = this[i];
-                    if (ctl.Visible) ctl.MouseDown(x, y);
-                }
-            }
-
-            public void MouseMove(int x, int y, bool defaultChartMode)
-            {
-                for (int i = 0; i < Count; i++) {
-                    T ctl = this[i];
-                    if (ctl.Visible) ctl.MouseMove(x, y);
-                }
-            }
-
-            public void MouseUp(int x, int y)
-            {
-                for (int i = 0; i < Count; i++) {
-                    T ctl = this[i];
-                    if (ctl.Visible) ctl.MouseUp(x, y);
-                }
-            }
-
-            public void Dispose()
-            {
-                for (int i = 0; i < Count; i++) {
-                    this[i].Dispose();
-                }
-                Clear();
-            }
-        }
-
-        #endregion
-
         #region Private fields
 
         private readonly TreeChartModel fModel;
@@ -670,7 +545,7 @@ namespace GKUI.Charts
             InternalDraw(ChartDrawMode.dmInteractive, BackgroundMode.bmAny);
 
             // interactive controls
-            fTreeControls.Draw(gfx);
+            fTreeControls.Draw(fRenderer);
 
             base.OnPaint(e);
         }
@@ -787,6 +662,7 @@ namespace GKUI.Charts
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            //Point ctPt = new Point((int)e.Location.X, (int)e.Location.Y);
             Point scrPt = GetScrollRelativeLocation(e.Location);
 
             switch (fMode) {

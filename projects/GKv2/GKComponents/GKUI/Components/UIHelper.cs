@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,11 +21,11 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Reflection;
 using System.Windows.Forms;
 
 using BSLib;
 using GKCommon.GEDCOM;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.UIContracts;
@@ -268,15 +268,14 @@ namespace GKUI.Components
             return Color.FromArgb(GfxHelper.Lighter(rgb, fraction));
         }
 
-        public static Bitmap LoadBitmapFromResource(string resName)
+        public static Bitmap LoadResourceImage(string resName)
         {
-            return LoadBitmapFromResource(typeof(UIHelper), resName);
+            return new Bitmap(GKUtils.LoadResourceStream(resName));
         }
 
-        public static Bitmap LoadBitmapFromResource(Type baseType, string resName)
+        public static Bitmap LoadResourceImage(Type baseType, string resName)
         {
-            Assembly assembly = baseType.Assembly;
-            return new Bitmap(assembly.GetManifestResourceStream(resName));
+            return new Bitmap(GKUtils.LoadResourceStream(baseType, resName));
         }
     }
 }

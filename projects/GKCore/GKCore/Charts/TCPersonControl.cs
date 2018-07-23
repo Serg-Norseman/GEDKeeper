@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,19 +19,19 @@
  */
 
 using BSLib;
-using Eto.Drawing;
+using GKCore;
 using GKCore.Charts;
-using GKUI.Components;
+using GKCore.Interfaces;
 
-namespace GKUI.Charts
+namespace GKCore.Charts
 {
     /// <summary>
     /// 
     /// </summary>
     public sealed class TCPersonControl : ITreeControl
     {
-        private readonly Pen fCtlPen;
-        private readonly Brush fCtlBrush;
+        private readonly IPen fCtlPen;
+        private readonly IBrush fCtlBrush;
 
         private TreeChartPerson fPerson;
 
@@ -54,16 +54,20 @@ namespace GKUI.Charts
 
         #endregion
 
-        public TCPersonControl(TreeChartBox chart) : base(chart)
+        public TCPersonControl(ITreeChartBox chart) : base(chart)
         {
-            fCtlPen = new Pen(Colors.Black, 2.0f);
-            fCtlBrush = new SolidBrush(Color.FromArgb(128, 128, 128, 128));
+            var gfxProv = AppHost.GfxProvider;
+            fCtlPen = gfxProv.CreatePen(gfxProv.CreateColor(ChartRenderer.Black), 2.0f);
+            fCtlBrush = gfxProv.CreateSolidBrush(gfxProv.CreateColor(128, 128, 128, 128));
         }
 
         protected override void Dispose(bool disposing)
         {
-            fCtlPen.Dispose();
-            fCtlBrush.Dispose();
+            if (disposing) {
+                fCtlPen.Dispose();
+                fCtlBrush.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         public void SetPerson(TreeChartPerson person)
@@ -73,12 +77,8 @@ namespace GKUI.Charts
 
             ExtPoint offsets = fChart.GetOffsets();
             ExtRect rt = fPerson.Rect.GetOffset(offsets.X, offsets.Y);
-            Rectangle rect = UIHelper.Rt2Rt(rt);
-
-            rect.X = rect.Right;
-            rect.Width = 40;
-
-            fDestRect = rect;
+            rt = ExtRect.CreateBounds(rt.Right, rt.Top, 40, rt.Height);
+            fDestRect = rt;
         }
 
         public override void UpdateState()
@@ -89,25 +89,12 @@ namespace GKUI.Charts
         {
         }
 
-        public override void Draw(Graphics gfx)
+        public override void Draw(ChartRenderer gfx)
         {
             if (gfx == null) return;
 
-            /*ExtRect rt = fPerson.Rect;
-            rt = rt.GetOffset(fChart.fSPX, fChart.fSPY);
-            Rectangle rect = rt.ToRectangle();
-            
-            //rect.Top = rect.Top;
-            //rect.Bottom = rect.Bottom;
-            rect.X = rect.Right;
-            rect.Width = 40;*/
-            
-            gfx.AntiAlias = true;
-            gfx.ImageInterpolation = ImageInterpolation.High;
-            gfx.PixelOffsetMode = PixelOffsetMode.Half;
-            
-            gfx.FillRectangle(fCtlBrush, fDestRect);
-            gfx.DrawRectangle(fCtlPen, fDestRect);
+            //gfx.FillRectangle(fCtlBrush, fDestRect);
+            //gfx.DrawRectangle(fCtlPen, fDestRect);
         }
 
         public override void MouseDown(int x, int y)

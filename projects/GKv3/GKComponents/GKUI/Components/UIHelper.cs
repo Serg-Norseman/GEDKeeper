@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,6 @@ using System;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 
@@ -283,56 +282,24 @@ namespace GKUI.Components
 
         public static Color Darker(Color color, float fraction)
         {
-            float factor = (1.0f - fraction);
-
             int rgb = color.ToArgb();
-            int red = (rgb >> 16) & 0xFF;
-            int green = (rgb >> 8) & 0xFF;
-            int blue = (rgb >> 0) & 0xFF;
-            int alpha = (rgb >> 24) & 0xFF;
-
-            red = (int) (red * factor);
-            green = (int) (green * factor);
-            blue = (int) (blue * factor);
-
-            red = (red < 0) ? 0 : red;
-            green = (green < 0) ? 0 : green;
-            blue = (blue < 0) ? 0 : blue;
-
-            return Color.FromArgb(red, green, blue, alpha);
+            return Color.FromArgb(GfxHelper.Darker(rgb, fraction));
         }
 
         public static Color Lighter(Color color, float fraction)
         {
-            float factor = (1.0f + fraction);
-
             int rgb = color.ToArgb();
-            int red = (rgb >> 16) & 0xFF;
-            int green = (rgb >> 8) & 0xFF;
-            int blue = (rgb >> 0) & 0xFF;
-            int alpha = (rgb >> 24) & 0xFF;
+            return Color.FromArgb(GfxHelper.Lighter(rgb, fraction));
+        }
 
-            red = (int) (red * factor);
-            green = (int) (green * factor);
-            blue = (int) (blue * factor);
+        public static Bitmap LoadResourceImage(string resName)
+        {
+            return new Bitmap(GKUtils.LoadResourceStream(resName));
+        }
 
-            if (red < 0) {
-                red = 0;
-            } else if (red > 255) {
-                red = 255;
-            }
-            if (green < 0) {
-                green = 0;
-            } else if (green > 255) {
-                green = 255;
-            }
-            if (blue < 0) {
-                blue = 0;
-            } else if (blue > 255) {
-                blue = 255;
-            }
-
-            return Color.FromArgb(red, green, blue, alpha);
+        public static Bitmap LoadResourceImage(Type baseType, string resName)
+        {
+            return new Bitmap(GKUtils.LoadResourceStream(baseType, resName));
         }
 
         public static void SetControlFont(Control ctl, Font font)

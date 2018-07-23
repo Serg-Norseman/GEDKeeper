@@ -21,19 +21,19 @@ namespace GKUI.Forms
 
             tbNewScript = new ButtonToolItem();
             tbNewScript.Click += tbNewScript_Click;
-            tbNewScript.Image = Bitmap.FromResource("Resources.btn_create_new.gif");
+            tbNewScript.Image = UIHelper.LoadResourceImage("Resources.btn_create_new.gif");
 
             tbLoadScript = new ButtonToolItem();
             tbLoadScript.Click += tbLoadScript_Click;
-            tbLoadScript.Image = Bitmap.FromResource("Resources.btn_load.gif");
+            tbLoadScript.Image = UIHelper.LoadResourceImage("Resources.btn_load.gif");
 
             tbSaveScript = new ButtonToolItem();
             tbSaveScript.Click += tbSaveScript_Click;
-            tbSaveScript.Image = Bitmap.FromResource("Resources.btn_save.gif");
+            tbSaveScript.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");
 
             tbRun = new ButtonToolItem();
             tbRun.Click += tbRun_Click;
-            tbRun.Image = Bitmap.FromResource("Resources.btn_start.gif");
+            tbRun.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
 
             ToolBar1 = new ToolBar();
             ToolBar1.TextAlign = ToolBarTextAlign.Right;

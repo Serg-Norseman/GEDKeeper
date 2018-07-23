@@ -116,19 +116,19 @@ namespace GKUI.Components
                                          new ToolStripSeparator()});
 
             btnSizeToFit.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            btnSizeToFit.Image = UIHelper.LoadBitmapFromResource("Resources.btn_size_to_fit.png");
+            btnSizeToFit.Image = UIHelper.LoadResourceImage("Resources.btn_size_to_fit.png");
             btnSizeToFit.ImageTransparentColor = Color.Magenta;
             btnSizeToFit.Name = "btnSizeToFit";
             btnSizeToFit.Click += btnSizeToFit_Click;
 
             btnZoomIn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            btnZoomIn.Image = UIHelper.LoadBitmapFromResource("Resources.btn_zoom_in.png");
+            btnZoomIn.Image = UIHelper.LoadResourceImage("Resources.btn_zoom_in.png");
             btnZoomIn.ImageTransparentColor = Color.Magenta;
             btnZoomIn.Name = "btnZoomIn";
             btnZoomIn.Click += btnZoomIn_Click;
 
             btnZoomOut.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            btnZoomOut.Image = UIHelper.LoadBitmapFromResource("Resources.btn_zoom_out.png");
+            btnZoomOut.Image = UIHelper.LoadResourceImage("Resources.btn_zoom_out.png");
             btnZoomOut.ImageTransparentColor = Color.Magenta;
             btnZoomOut.Name = "btnZoomOut";
             btnZoomOut.Click += btnZoomOut_Click;

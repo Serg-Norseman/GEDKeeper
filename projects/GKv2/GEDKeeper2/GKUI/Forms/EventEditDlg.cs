@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -55,10 +55,10 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            btnAccept.Image = GKResources.iBtnAccept;
-            btnCancel.Image = GKResources.iBtnCancel;
-            btnPlaceAdd.Image = GKResources.iRecNew;
-            btnPlaceDelete.Image = GKResources.iRecDelete;
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            btnPlaceAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnPlaceDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
 
             int num = GKData.DateKinds.Length;
             for (int i = 0; i < num; i++)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -194,14 +194,14 @@ namespace GKUI.Components
             btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
-            btnAccept.Image = Bitmap.FromResource("Resources.btn_accept.gif");
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
             btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
             btnCancel.Click += btnCancel_Click;
-            btnCancel.Image = Bitmap.FromResource("Resources.btn_cancel.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             Content = new DefTableLayout {
                 Rows = {
