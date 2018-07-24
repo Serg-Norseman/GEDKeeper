@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Resources;
 
 #if !NETSTANDARD && !NET461
 
@@ -10,7 +9,5 @@ using System.Resources;
 [assembly: AssemblyCopyright("Copyright © 2014-2018 Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("3.0.0.0")]
 [assembly: AssemblyCulture("")]
-[assembly: CLSCompliant(true)]
-[assembly: NeutralResourcesLanguage("en")]
 
 #endif

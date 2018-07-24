@@ -20,9 +20,6 @@
 
 using System;
 using System.Reflection;
-using System.Resources;
-using System.Runtime.InteropServices;
-
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
@@ -33,9 +30,6 @@ using GKCore.Plugins;
 [assembly: AssemblyCopyright("Copyright © 2015 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
-[assembly: CLSCompliant(true)]
-[assembly: ComVisible(false)]
-[assembly: NeutralResourcesLanguage("en")]
 
 namespace GKImageViewerPlugin
 {

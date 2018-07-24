@@ -156,6 +156,14 @@ namespace GKCore
             listManager.UpdateItem(listItem, grpRec);
 
             //
+            var colVal = listManager.GetColumnInternalValue(0);
+            Assert.IsNotNull(colVal);
+
+            var data = listManager.GetItemData(grpRec);
+            Assert.IsNotNull(data);
+            Assert.IsTrue(data.Length > 0);
+
+            //
             IListFilter filter = listManager.Filter;
             IListColumns listColumns = listManager.ListColumns;
 

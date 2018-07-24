@@ -20,8 +20,6 @@
 
 using System;
 using System.Reflection;
-using System.Runtime.InteropServices;
-
 using ConwayLife;
 using GKCore;
 using GKCore.Interfaces;
@@ -33,8 +31,6 @@ using GKCore.Plugins;
 [assembly: AssemblyCopyright("Copyright © 2009-2015 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
-[assembly: CLSCompliant(true)]
-[assembly: ComVisible(false)]
 
 namespace GKLifePlugin
 {

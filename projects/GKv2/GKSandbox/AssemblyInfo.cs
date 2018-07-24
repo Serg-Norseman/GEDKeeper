@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Resources;
 
 [assembly: AssemblyTitle("GKSandbox")]
 [assembly: AssemblyDescription("")]
@@ -8,5 +7,3 @@ using System.Resources;
 [assembly: AssemblyCopyright("Copyright © 2016-2018 Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
-[assembly: CLSCompliant(true)]
-[assembly: NeutralResourcesLanguage("en")]

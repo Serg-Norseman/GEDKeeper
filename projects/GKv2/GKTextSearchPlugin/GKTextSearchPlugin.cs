@@ -20,10 +20,7 @@
 
 using System;
 using System.Reflection;
-using System.Runtime.InteropServices;
-
 using BSLib;
-using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -34,11 +31,11 @@ using GKCore.Types;
 [assembly: AssemblyCopyright("Copyright © 2014 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
-[assembly: CLSCompliant(true)]
-[assembly: ComVisible(false)]
 
 namespace GKTextSearchPlugin
 {
+    using GKCommon.GEDCOM;
+
     public enum TLS
     {
         LSID_PluginTitle,

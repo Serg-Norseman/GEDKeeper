@@ -413,19 +413,10 @@
     <Compile Include="GKUI\Forms\UserRefEditDlg.Designer.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\GKResources.Designer.cs">
-      <DependentUpon>GKResources.resx</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\Charts\TreeChartBox.cs" />
     <Compile Include="GKUI\WinFormsAppHost.cs" />
     <Compile Include="GKUI\WinFormsGfxProvider.cs" />
     <Compile Include="GKUI\WinFormsStdDialogs.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GKUI\GKResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>GKResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

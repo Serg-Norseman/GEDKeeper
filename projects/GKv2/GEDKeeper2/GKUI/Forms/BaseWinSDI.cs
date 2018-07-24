@@ -83,7 +83,7 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            Icon = GKResources.GK2_Icon;
+            Icon = new Icon(GKUtils.LoadResourceStream("Resources.icon_gedkeeper.ico"));
             tbFileNew.Image = UIHelper.LoadResourceImage("Resources.btn_create_new.gif");
             tbFileLoad.Image = UIHelper.LoadResourceImage("Resources.btn_load.gif");
             tbFileSave.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");

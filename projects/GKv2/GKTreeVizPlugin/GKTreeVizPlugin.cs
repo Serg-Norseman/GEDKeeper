@@ -20,9 +20,7 @@
 
 using System;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
@@ -33,8 +31,6 @@ using GKCore.Plugins;
 [assembly: AssemblyCopyright("Copyright © 2014 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
-[assembly: CLSCompliant(true)]
-[assembly: ComVisible(false)]
 
 namespace GKTreeVizPlugin
 {

@@ -20,12 +20,9 @@
 
 using System;
 using System.Reflection;
-using System.Resources;
-using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Threading;
 using System.Windows.Forms;
-
 using GKCore;
 using GKCore.SingleInstance;
 
@@ -38,9 +35,6 @@ using GKCore.SingleInstance;
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]
-[assembly: CLSCompliant(true)]
-[assembly: ComVisible(false)]
-[assembly: NeutralResourcesLanguage("en")]
 
 namespace GKUI
 {

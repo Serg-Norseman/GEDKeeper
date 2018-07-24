@@ -20,9 +20,6 @@
 
 using System;
 using System.Reflection;
-using System.Resources;
-using System.Runtime.InteropServices;
-
 using GKCore;
 using GKCore.Interfaces;
 
@@ -32,9 +29,6 @@ using GKCore.Interfaces;
 [assembly: AssemblyCopyright("Copyright © 2014,2016 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.2.0.0")]
 [assembly: AssemblyCulture("")]
-[assembly: CLSCompliant(true)]
-[assembly: ComVisible(false)]
-[assembly: NeutralResourcesLanguage("en")]
 
 namespace GKPedigreeImporterPlugin
 {
