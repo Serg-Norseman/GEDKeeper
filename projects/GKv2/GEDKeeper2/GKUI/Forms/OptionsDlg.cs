@@ -155,6 +155,13 @@ namespace GKUI.Forms
             chkDefaultPortraits.Checked = fOptions.ChartOptions.DefaultPortraits;
             chkInvertedTree.Checked = fOptions.ChartOptions.InvertedTree;
             chkMarriagesDates.Checked = fOptions.ChartOptions.MarriagesDates;
+            chkShowPlaces.Checked = fOptions.ChartOptions.ShowPlaces;
+            chkHideUnknownSpouses.Checked = fOptions.ChartOptions.HideUnknownSpouses;
+
+            numMargins.Value = fOptions.ChartOptions.Margins;
+            numBranchDist.Value = fOptions.ChartOptions.BranchDistance;
+            numGenDist.Value = fOptions.ChartOptions.LevelDistance;
+            numSpouseDist.Value = fOptions.ChartOptions.SpouseDistance;
 
             lblMaleColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.MaleColor);
             lblFemaleColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.FemaleColor);
@@ -362,6 +369,13 @@ namespace GKUI.Forms
             fOptions.ChartOptions.DefaultPortraits = chkDefaultPortraits.Checked;
             fOptions.ChartOptions.InvertedTree = chkInvertedTree.Checked;
             fOptions.ChartOptions.MarriagesDates = chkMarriagesDates.Checked;
+            fOptions.ChartOptions.ShowPlaces = chkShowPlaces.Checked;
+            fOptions.ChartOptions.HideUnknownSpouses = chkHideUnknownSpouses.Checked;
+
+            fOptions.ChartOptions.Margins = (int)numMargins.Value;
+            fOptions.ChartOptions.BranchDistance = (int)numBranchDist.Value;
+            fOptions.ChartOptions.LevelDistance = (int)numGenDist.Value;
+            fOptions.ChartOptions.SpouseDistance = (int)numSpouseDist.Value;
 
             fOptions.ChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackColor);
             fOptions.ChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackColor);
@@ -555,6 +569,8 @@ namespace GKUI.Forms
             pagePlugins.Text = LangMan.LS(LSID.LSID_Plugins);
             chkShowDatesCalendar.Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);
             chkShowDatesSigns.Text = LangMan.LS(LSID.LSID_ShowDatesSigns);
+            chkShowPlaces.Text = LangMan.LS(LSID.LSID_ShowPlaces);
+            chkHideUnknownSpouses.Text = LangMan.LS(LSID.LSID_HideUnknownSpouses);
 
             grpFileBackup.Text = LangMan.LS(LSID.LSID_FileBackup);
             radFBNone.Text = LangMan.LS(LSID.LSID_Not);
@@ -581,6 +597,12 @@ namespace GKUI.Forms
             pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
             chkAllowMediaDirectRefs.Text = LangMan.LS(LSID.LSID_AllowMediaDirectReferences);
             chkAutoCheckUpdates.Text = LangMan.LS(LSID.LSID_AutoCheckUpdates);
+
+            grpSpacings.Text = LangMan.LS(LSID.LSID_Spacings);
+            lblMargins.Text = LangMan.LS(LSID.LSID_Margins);
+            lblBranchDist.Text = LangMan.LS(LSID.LSID_BranchDist);
+            lblGenDist.Text = LangMan.LS(LSID.LSID_GenDist);
+            lblSpouseDist.Text = LangMan.LS(LSID.LSID_SpouseDist);
         }
     }
 }

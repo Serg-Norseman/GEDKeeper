@@ -59,7 +59,6 @@ namespace GKCore.Options
         public bool TraceSelected;
         public bool InvertedTree;
         public bool MarriagesDates;
-
         public bool ShowPlaces;
         public bool HideUnknownSpouses;
 
@@ -75,6 +74,11 @@ namespace GKCore.Options
         public int DefFontSize;
         public IColor DefFontColor;
         public ExtFontStyle DefFontStyle;
+
+        public int BranchDistance;
+        public int LevelDistance;
+        public int Margins;
+        public int SpouseDistance;
 
         public TreeChartOptions()
         {
@@ -99,7 +103,6 @@ namespace GKCore.Options
             DeepMode = DeepMode.None;
             InvertedTree = false;
             MarriagesDates = false;
-
             ShowPlaces = false;
             HideUnknownSpouses = false;
 
@@ -113,6 +116,11 @@ namespace GKCore.Options
             DefFontSize = 8;
             DefFontColor = ChartRenderer.GetColor(ChartRenderer.Black);
             DefFontStyle = ExtFontStyle.None;
+
+            BranchDistance = TreeChartModel.DEF_BRANCH_DISTANCE;
+            LevelDistance = TreeChartModel.DEF_LEVEL_DISTANCE;
+            Margins = TreeChartModel.DEF_MARGINS;
+            SpouseDistance = TreeChartModel.DEF_SPOUSE_DISTANCE;
         }
 
         public void Assign(IOptions source)
@@ -147,9 +155,13 @@ namespace GKCore.Options
             DefFontStyle = srcOptions.DefFontStyle;
             InvertedTree = srcOptions.InvertedTree;
             MarriagesDates = srcOptions.MarriagesDates;
-
             ShowPlaces = srcOptions.ShowPlaces;
             HideUnknownSpouses = srcOptions.HideUnknownSpouses;
+
+            BranchDistance = srcOptions.BranchDistance;
+            LevelDistance = srcOptions.LevelDistance;
+            Margins = srcOptions.Margins;
+            SpouseDistance = srcOptions.SpouseDistance;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -178,7 +190,6 @@ namespace GKCore.Options
             //DeepMode = (DeepMode)iniFile.ReadInteger("Chart", "DeepMode", 0);
             InvertedTree = iniFile.ReadBool("Chart", "InvertedTree", false);
             MarriagesDates = iniFile.ReadBool("Chart", "MarriagesDates", false);
-
             ShowPlaces = iniFile.ReadBool("Chart", "ShowPlaces", false);
             HideUnknownSpouses = iniFile.ReadBool("Chart", "HideUnknownSpouses", false);
 
@@ -192,6 +203,11 @@ namespace GKCore.Options
             DefFontSize = iniFile.ReadInteger("Chart", "FontSize", 8);
             DefFontColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FontColor", ChartRenderer.Black));
             DefFontStyle = (ExtFontStyle)iniFile.ReadInteger("Chart", "FontStyle", 0);
+
+            BranchDistance = iniFile.ReadInteger("Chart", "BranchDistance", TreeChartModel.DEF_BRANCH_DISTANCE);
+            LevelDistance = iniFile.ReadInteger("Chart", "LevelDistance", TreeChartModel.DEF_LEVEL_DISTANCE);
+            Margins = iniFile.ReadInteger("Chart", "Margins", TreeChartModel.DEF_MARGINS);
+            SpouseDistance = iniFile.ReadInteger("Chart", "SpouseDistance", TreeChartModel.DEF_SPOUSE_DISTANCE);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -220,7 +236,6 @@ namespace GKCore.Options
             //iniFile.WriteInteger("Chart", "DeepMode", (int)DeepMode);
             iniFile.WriteBool("Chart", "InvertedTree", InvertedTree);
             iniFile.WriteBool("Chart", "MarriagesDates", MarriagesDates);
-
             iniFile.WriteBool("Chart", "ShowPlaces", ShowPlaces);
             iniFile.WriteBool("Chart", "HideUnknownSpouses", HideUnknownSpouses);
 
@@ -234,6 +249,11 @@ namespace GKCore.Options
             iniFile.WriteInteger("Chart", "FontSize", DefFontSize);
             iniFile.WriteInteger("Chart", "FontColor", DefFontColor.ToArgb());
             iniFile.WriteInteger("Chart", "FontStyle", (byte)DefFontStyle);
+
+            iniFile.WriteInteger("Chart", "BranchDistance", BranchDistance);
+            iniFile.WriteInteger("Chart", "LevelDistance", LevelDistance);
+            iniFile.WriteInteger("Chart", "Margins", Margins);
+            iniFile.WriteInteger("Chart", "SpouseDistance", SpouseDistance);
         }
     }
 }

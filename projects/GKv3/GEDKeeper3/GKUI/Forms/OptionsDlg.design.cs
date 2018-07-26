@@ -112,6 +112,17 @@ namespace GKUI.Forms
         private CheckBox chkMarriagesDates;
         private ComboBox cmbGeocoder;
         private Label lblGeocoder;
+        private CheckBox chkShowPlaces;
+        private CheckBox chkHideUnknownSpouses;
+        private GroupBox grpSpacings;
+        private Label lblSpouseDist;
+        private Label lblGenDist;
+        private Label lblBranchDist;
+        private Label lblMargins;
+        private NumericUpDown numSpouseDist;
+        private NumericUpDown numGenDist;
+        private NumericUpDown numBranchDist;
+        private NumericUpDown numMargins;
 
         private void InitializeComponent()
         {
@@ -351,12 +362,18 @@ namespace GKUI.Forms
             chkMarriagesDates = new CheckBox();
             chkMarriagesDates.Text = "chkMarriagesDates";
 
+            chkShowPlaces = new CheckBox();
+            chkShowPlaces.Text = "chkShowPlaces";
+
+            chkHideUnknownSpouses = new CheckBox();
+            chkHideUnknownSpouses.Text = "chkHideUnknownSpouses";
+
             grpTreePersons = new GroupBox();
             grpTreePersons.Text = "grpTreePersons";
             grpTreePersons.Content = new VDefStackLayout {
                 Items = { chkSurname, chkName, chkPatronymic, chkDiffLines, chkBirthDate, chkDeathDate, chkOnlyYears,
                     chkMarriagesDates, chkKinship, chkSignsVisible, chkTreeDecorative, chkPortraitsVisible, chkDefaultPortraits,
-                    chkChildlessExclude, chkInvertedTree }
+                    chkChildlessExclude, chkInvertedTree, chkShowPlaces, chkHideUnknownSpouses }
             };
 
             //
@@ -459,10 +476,71 @@ namespace GKUI.Forms
 
             //
 
+            lblMargins = new Label();
+            lblMargins.Text = "lblMargins";
+
+            numMargins = new NumericUpDown();
+            numMargins.MaxValue = 120;
+            numMargins.MinValue = 1;
+            numMargins.Width = 60;
+            numMargins.Value = 1;
+
+            lblBranchDist = new Label();
+            lblBranchDist.Text = "lblBranchDist";
+
+            numBranchDist = new NumericUpDown();
+            numBranchDist.MaxValue = 120;
+            numBranchDist.MinValue = 1;
+            numBranchDist.Width = 60;
+            numBranchDist.Value = 1;
+
+            lblGenDist = new Label();
+            lblGenDist.Text = "lblGenDist";
+
+            numGenDist = new NumericUpDown();
+            numGenDist.MaxValue = 120;
+            numGenDist.MinValue = 1;
+            numGenDist.Width = 60;
+            numGenDist.Value = 1;
+
+            lblSpouseDist = new Label();
+            lblSpouseDist.Text = "lblSpouseDist";
+
+            numSpouseDist = new NumericUpDown();
+            numSpouseDist.MaxValue = 120;
+            numSpouseDist.MinValue = 1;
+            numSpouseDist.Width = 60;
+            numSpouseDist.Value = 1;
+
+            grpSpacings = new GroupBox();
+            grpSpacings.Text = "grpSpacings";
+            grpSpacings.Content = new DefTableLayout {
+                Rows = {
+                    new TableRow {
+                        Cells = { lblMargins, numMargins }
+                    },
+                    new TableRow {
+                        Cells = { lblBranchDist, numBranchDist }
+                    },
+                    new TableRow {
+                        Cells = { lblGenDist, numGenDist }
+                    },
+                    new TableRow {
+                        Cells = { lblSpouseDist, numSpouseDist }
+                    },
+                    null
+                }
+            };
+
+            //
+
             pageTreeChart = new TabPage();
             pageTreeChart.Text = "pageTreeChart";
             pageTreeChart.Content = new HDefStackLayout {
-                Items = { grpTreePersons, grpTreeDecor }
+                Items = {
+                    grpTreePersons,
+                    new VDefStackLayout { Items = { grpTreeDecor, grpSpacings } }
+                }
             };
 
             //

@@ -822,13 +822,13 @@ namespace GKCore
         /* 764 */ LSID_TreesAlbum,
         /* 765 */ LSID_ShowPlaces,
         /* 766 */ LSID_HideUnknownSpouses,
+        /* 767 */ LSID_Spacings,
+        /* 768 */ LSID_Margins,
+        /* 769 */ LSID_BranchDist,
+        /* 770 */ LSID_GenDist,
+        /* 771 */ LSID_SpouseDist,
 
-        /* 767 */ // reserved begin
-        /* 768 */
-        /* 769 */
-        /* 770 */
-        /* 771 */
-        /* 772 */
+        /* 772 */ // reserved begin
         /* 773 */
         /* 774 */
         /* 775 */
@@ -1646,13 +1646,13 @@ namespace GKCore
             /* 764 */ "Album of Trees",
             /* 765 */ "Show places",
             /* 766 */ "Hide unknown spouses",
+            /* 767 */ "Spacings",
+            /* 768 */ "Margins",
+            /* 769 */ "Branch distance",
+            /* 770 */ "Generation distance",
+            /* 771 */ "Spouse distance",
 
-            /* 767 */ "", // reserved begin
-            /* 768 */ "",
-            /* 769 */ "",
-            /* 770 */ "",
-            /* 771 */ "",
-            /* 772 */ "",
+            /* 772 */ "", // reserved begin
             /* 773 */ "",
             /* 774 */ "",
             /* 775 */ "",

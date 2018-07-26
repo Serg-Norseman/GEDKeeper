@@ -804,11 +804,11 @@ namespace GKCore.Charts
 
         private void Predef()
         {
-            fBranchDistance = (int)Math.Round(DEF_BRANCH_DISTANCE * fScale);
-            fLevelDistance = (int)Math.Round(DEF_LEVEL_DISTANCE * fScale);
-            fMargins = (int)Math.Round(DEF_MARGINS * fScale);
+            fBranchDistance = (int)Math.Round(fOptions.BranchDistance * fScale);
+            fLevelDistance = (int)Math.Round(fOptions.LevelDistance * fScale);
+            fMargins = (int)Math.Round(fOptions.Margins * fScale);
             fNodePadding = (int)(DEF_PERSON_NODE_PADDING * fScale);
-            fSpouseDistance = (int)Math.Round(DEF_SPOUSE_DISTANCE * fScale);
+            fSpouseDistance = (int)Math.Round(fOptions.SpouseDistance * fScale);
         }
 
         public void RecalcChart(bool noRedraw = false)
