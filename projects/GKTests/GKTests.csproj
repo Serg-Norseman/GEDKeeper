@@ -183,5 +183,8 @@
     <EmbeddedResource Include="Resources\test_ansel.ged" />
     <EmbeddedResource Include="Resources\test_video.3gp" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\test_ftb6_ansi%28win1251%29.ged" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

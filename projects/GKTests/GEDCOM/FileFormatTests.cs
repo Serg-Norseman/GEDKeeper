@@ -47,6 +47,23 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
+        public void Test_FTB6_ANSI_Win1251()
+        {
+            using (BaseContext ctx = new BaseContext(null)) {
+                Assembly assembly = typeof(CoreTests).Assembly;
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ftb6_ansi(win1251).ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+
+                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                    Assert.IsNotNull(iRec1);
+
+                    Assert.AreEqual("Иван Васильевич Петров", iRec1.GetPrimaryFullName());
+                }
+            }
+        }
+
+        [Test]
         public void Test_StdGEDCOM_Notes()
         {
             using (BaseContext ctx = new BaseContext(null)) {

@@ -96,7 +96,8 @@ namespace GKCommon.GEDCOM
                 new GEDCOMAppFormat("AGES", "Ages!", -1),
                 new GEDCOMAppFormat("PAF", "Personal Ancestral File", -1),
                 new GEDCOMAppFormat("AHN", "Ahnenblatt", -1),
-                new GEDCOMAppFormat("├σφσαδεπΦ", "Genealogy (Rus, old)", 1251) // signature in CP437
+                new GEDCOMAppFormat("├σφσαδεπΦ", "Genealogy (Rus, old)", 1251), // signature in CP437
+                new GEDCOMAppFormat("MYHERITAGE", "MyHeritage Family Tree Builder", -1),
             };
         }
 
@@ -169,7 +170,11 @@ namespace GKCommon.GEDCOM
                                 int sourceCodepage = ConvertHelper.ParseInt(cpVers, DEF_CODEPAGE);
                                 SetEncoding(Encoding.GetEncoding(sourceCodepage));
                             } else {
-                                SetEncoding(Encoding.GetEncoding(DEF_CODEPAGE));
+                                if (fTree.Header.Language.Value == GEDCOMLanguageID.Russian) {
+                                    SetEncoding(Encoding.GetEncoding(1251));
+                                } else {
+                                    SetEncoding(Encoding.GetEncoding(DEF_CODEPAGE));
+                                }
                             }
                         }
                     }

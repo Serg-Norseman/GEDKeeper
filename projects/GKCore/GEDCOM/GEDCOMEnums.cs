@@ -50,8 +50,9 @@ namespace GKCommon.GEDCOM
         gf_PAF,
         gf_Ahnenblatt,
         gf_Genealogy_RusOld,
+        gf_FTB,
 
-        gf_Last = gf_Genealogy_RusOld
+        gf_Last = gf_FTB
     }
 
     public enum GEDCOMCharacterSet
