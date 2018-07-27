@@ -63,6 +63,7 @@ namespace GKUI.Forms
             fCircleChart.Name = "fCircleChart";
             fCircleChart.Dock = DockStyle.Fill;
             fCircleChart.NavRefresh += CircleChartWin_NavRefresh;
+            fCircleChart.ZoomChanged += CircleChartWin_NavRefresh;
             fCircleChart.RootChanged += CircleChartWin_RootChanged;
             fCircleChart.RootPerson = startPerson;
             fCircleChart.Options.Assign(GlobalOptions.Instance.AncestorsCircleOptions);
@@ -77,27 +78,14 @@ namespace GKUI.Forms
             return fCircleChart;
         }
 
-        private void UpdateNavControls()
-        {
-            try
-            {
-                tbPrev.Enabled = NavCanBackward();
-                tbNext.Enabled = NavCanForward();
-            } catch (Exception ex) {
-                Logger.LogWrite("CircleChartWin.UpdateNavControls(): " + ex.Message);
-            }
-        }
-
         private void CircleChartWin_NavRefresh(object sender, EventArgs e)
         {
-            AppHost.Instance.UpdateControls(false);
-            UpdateNavControls();
+            GenChart();
         }
 
         private void CircleChartWin_RootChanged(object sender, GEDCOMIndividualRecord person)
         {
-            AppHost.Instance.UpdateControls(false);
-            UpdateNavControls();
+            GenChart();
         }
 
         private void CircleChartWin_KeyDown(object sender, KeyEventArgs e)
@@ -118,7 +106,7 @@ namespace GKUI.Forms
         {
             base.OnLoad(e);
             fCircleChart.Select();
-            AppHost.Instance.UpdateControls(false);
+            GenChart();
         }
 
         // TODO: update localization and GKv3
@@ -162,19 +150,30 @@ namespace GKUI.Forms
 
         public void GenChart()
         {
-            AppHost.Instance.UpdateControls(false);
+            UpdateControls();
         }
 
         #endregion
 
         #region IWorkWindow implementation
 
-        public string GetStatusString()
+        public void UpdateControls()
         {
-            return string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fCircleChart.Model.IndividualsCount.ToString());
+            try {
+                StatusLines[0] = string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fCircleChart.Model.IndividualsCount);
+                var imageSize = fCircleChart.GetImageSize();
+                StatusLines[1] = string.Format(LangMan.LS(LSID.LSID_ImageSize), imageSize.Width, imageSize.Height);
+
+                tbPrev.Enabled = NavCanBackward();
+                tbNext.Enabled = NavCanForward();
+
+                AppHost.Instance.UpdateControls(false, true);
+            } catch (Exception ex) {
+                Logger.LogWrite("CircleChartWin.UpdateControls(): " + ex.Message);
+            }
         }
 
-        public void UpdateView()
+        public void UpdateSettings()
         {
             fCircleChart.Options.Assign(GlobalOptions.Instance.AncestorsCircleOptions);
             fCircleChart.Changed();

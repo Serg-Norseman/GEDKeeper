@@ -598,14 +598,13 @@ namespace GKCore
             }
         }
 
-        // FIXME: rework this
-        public void UpdateControls(bool forceDeactivate)
+        public void UpdateControls(bool forceDeactivate, bool blockDependent = false)
         {
             int num = fRunningForms.Count;
             for (int i = 0; i < num; i++) {
                 IBaseWindow baseWin = fRunningForms[i] as IBaseWindow;
                 if (baseWin != null) {
-                    baseWin.UpdateControls(forceDeactivate);
+                    baseWin.UpdateControls(forceDeactivate, blockDependent);
                 }
             }
         }

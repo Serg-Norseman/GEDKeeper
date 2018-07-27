@@ -77,6 +77,7 @@ namespace GKUI.Forms
             fTreeBox.PersonProperties += ImageTree_PersonProperties;
             fTreeBox.Options = GlobalOptions.Instance.ChartOptions;
             fTreeBox.NavRefresh += ImageTree_NavRefresh;
+            fTreeBox.ZoomChanged += ImageTree_NavRefresh;
             Content = fTreeBox;
 
             SetLang();
@@ -97,10 +98,16 @@ namespace GKUI.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
             }
             base.Dispose(disposing);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            fTreeBox.Focus();
+            UpdateControls();
         }
 
         protected override IPrintable GetPrintable()
@@ -198,12 +205,6 @@ namespace GKUI.Forms
             }
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            fTreeBox.Focus();
-        }
-
         private void tbImageSave_Click(object sender, EventArgs e)
         {
             string filters = LangMan.LS(LSID.LSID_TreeImagesFilter) + "|SVG files (*.svg)|*.svg";
@@ -233,29 +234,15 @@ namespace GKUI.Forms
 
         private void ImageTree_RootChanged(object sender, TreeChartPerson person)
         {
-            if (person == null || person.Rec == null) return;
-
-            fPerson = person.Rec;
-
-            AppHost.Instance.UpdateControls(false);
-            UpdateNavControls();
-        }
-
-        private void UpdateNavControls()
-        {
-            try
-            {
-                tbPrev.Enabled = NavCanBackward();
-                tbNext.Enabled = NavCanForward();
-            } catch (Exception ex) {
-                Logger.LogWrite("TreeChartWin.UpdateNavControls(): " + ex.Message);
+            if (person != null && person.Rec != null) {
+                fPerson = person.Rec;
+                UpdateControls();
             }
         }
 
         private void ImageTree_NavRefresh(object sender, EventArgs e)
         {
-            AppHost.Instance.UpdateControls(false);
-            UpdateNavControls();
+            UpdateControls();
         }
 
         private void ImageTree_PersonModify(object sender, PersonModifyEventArgs eArgs)
@@ -558,8 +545,7 @@ namespace GKUI.Forms
 
         public void GenChart()
         {
-            try
-            {
+            try {
                 if (fPerson == null) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
                 } else {
@@ -567,11 +553,9 @@ namespace GKUI.Forms
 
                     fTreeBox.GenChart(fPerson, fChartKind, true);
 
-                    AppHost.Instance.UpdateControls(false);
+                    UpdateControls();
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeChartWin.GenChart(): " + ex.Message);
             }
         }
@@ -579,7 +563,7 @@ namespace GKUI.Forms
         #endregion
 
         #region ILocalization implementation
-        
+
         public void SetLang()
         {
             tbGens.Text = LangMan.LS(LSID.LSID_Generations);
@@ -613,15 +597,26 @@ namespace GKUI.Forms
         }
 
         #endregion
-        
+
         #region IWorkWindow implementation
 
-        public string GetStatusString()
+        public void UpdateControls()
         {
-            return string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fTreeBox.IndividualsCount.ToString());
+            try {
+                StatusLines[0] = string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fTreeBox.IndividualsCount);
+                var imageSize = fTreeBox.GetImageSize();
+                StatusLines[1] = string.Format(LangMan.LS(LSID.LSID_ImageSize), imageSize.Width, imageSize.Height);
+
+                tbPrev.Enabled = NavCanBackward();
+                tbNext.Enabled = NavCanForward();
+
+                AppHost.Instance.UpdateControls(false, true);
+            } catch (Exception ex) {
+                Logger.LogWrite("TreeChartWin.UpdateControls(): " + ex.Message);
+            }
         }
 
-        public void UpdateView()
+        public void UpdateSettings()
         {
             GenChart();
         }

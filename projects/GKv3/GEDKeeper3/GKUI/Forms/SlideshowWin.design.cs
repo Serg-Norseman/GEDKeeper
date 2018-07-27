@@ -38,6 +38,7 @@ namespace GKUI.Forms
             Title = "SlideshowWin";
             Load += SlideshowWin_Load;
             KeyDown += SlideshowWin_KeyDown;
+            WindowState = Eto.Forms.WindowState.Maximized;
 
             UIHelper.SetPredefProperties(this, 790, 570, true, true);
             ResumeLayout();

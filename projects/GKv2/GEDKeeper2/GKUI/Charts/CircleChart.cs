@@ -47,6 +47,7 @@ namespace GKUI.Charts
         private const float ZOOM_HIGH_LIMIT = 1000.0f;
 
         private static readonly object EventRootChanged;
+        private static readonly object EventZoomChanged;
 
         private readonly IContainer fComponents;
         private readonly CircleChartModel fModel;
@@ -106,6 +107,8 @@ namespace GKUI.Charts
                 ExtSize boundary = GetImageSize();
                 AdjustViewport(boundary, true);
                 Invalidate();
+
+                DoZoomChanged();
             }
         }
 
@@ -113,6 +116,12 @@ namespace GKUI.Charts
         {
             add { Events.AddHandler(EventRootChanged, value); }
             remove { Events.RemoveHandler(EventRootChanged, value); }
+        }
+
+        public event EventHandler ZoomChanged
+        {
+            add { Events.AddHandler(EventZoomChanged, value); }
+            remove { Events.RemoveHandler(EventZoomChanged, value); }
         }
 
         public GEDCOMIndividualRecord RootPerson
@@ -136,6 +145,7 @@ namespace GKUI.Charts
         static CircleChart()
         {
             EventRootChanged = new object();
+            EventZoomChanged = new object();
         }
 
         public CircleChart()
@@ -193,6 +203,13 @@ namespace GKUI.Charts
             var eventHandler = (ARootChangedEventHandler)Events[EventRootChanged];
             if (eventHandler != null)
                 eventHandler(this, person);
+        }
+
+        private void DoZoomChanged()
+        {
+            var eventHandler = (EventHandler)Events[EventZoomChanged];
+            if (eventHandler != null)
+                eventHandler(this, new EventArgs());
         }
 
         /// <summary>

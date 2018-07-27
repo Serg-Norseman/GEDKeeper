@@ -31,8 +31,8 @@ namespace GKTests.Mocks
 {
     internal class WorkWindowMock : IWorkWindow
     {
-        public string GetStatusString() { return ""; }
-        public void UpdateView() {}
+        public void UpdateControls() {}
+        public void UpdateSettings() {}
         public bool NavCanBackward() { return false; }
         public bool NavCanForward() { return false; }
         public void NavNext() {}
@@ -105,7 +105,7 @@ namespace GKTests.Mocks
         public void RefreshLists(bool columnsChanged) { }
         public void RefreshRecordsView(GEDCOMRecordType recType) { }
         public void ShowRecordsTab(GEDCOMRecordType recType) { }
-        public void UpdateControls(bool forceDeactivate) { }
+        public void UpdateControls(bool forceDeactivate, bool blockDependent = false) { }
 
         public void AddRecord() { }
         public void DeleteRecord() { }
@@ -147,7 +147,7 @@ namespace GKTests.Mocks
         public ILangMan CreateLangMan(object sender) { return null; }
         public void LoadLanguage(int langCode) {}
         public void UpdateNavControls() {}
-        public void UpdateControls(bool forceDeactivate) {}
+        public void UpdateControls(bool forceDeactivate, bool blockDependent = false) {}
         public void ShowHelpTopic(string topic) {}
         public void EnableWindow(IWidgetForm form, bool value) {}
         public void Restore() {}

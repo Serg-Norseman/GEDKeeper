@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
@@ -32,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class SlideshowWin : Form, IWorkWindow
+    public partial class SlideshowWin : StatusForm, IWorkWindow
     {
         private readonly IBaseWindow fBase;
         private readonly List<GEDCOMFileReferenceWithTitle> fFileRefs;
@@ -46,19 +47,16 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            SuspendLayout();
+            //SuspendLayout();
             fImageCtl = new GKUI.Components.ImageBox();
-            Content = fImageCtl;
-            ResumeLayout();
-
             fImageCtl.BackgroundColor = SystemColors.ControlBackground; //ControlDark;
             fImageCtl.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             fImageCtl.ImageBorderColor = Colors.AliceBlue;
             fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
+            Content = fImageCtl;
+            //ResumeLayout();
 
             fTimer = AppHost.Instance.CreateTimer(1000, Timer1Tick);
-
-            WindowState = Eto.Forms.WindowState.Maximized;
 
             SetLang();
 
@@ -71,21 +69,27 @@ namespace GKUI.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (fTimer != null) fTimer.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        private void SlideshowWin_Load(object sender, System.EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
+            fImageCtl.Focus();
+
             if (fFileRefs.Count > 0) {
                 fCurrentIndex = 0;
                 SetFileRef();
             } else {
                 UpdateControls();
             }
+        }
+
+        private void SlideshowWin_Load(object sender, System.EventArgs e)
+        {
         }
 
         private void SlideshowWin_KeyDown(object sender, KeyEventArgs e)
@@ -159,15 +163,6 @@ namespace GKUI.Forms
             SetFileRef();
         }
 
-        private void UpdateControls()
-        {
-            tbStart.Enabled = (fFileRefs.Count > 0);
-            tbPrev.Enabled = (fCurrentIndex > 0);
-            tbNext.Enabled = (fCurrentIndex < fFileRefs.Count - 1);
-
-            AppHost.Instance.UpdateControls(false);
-        }
-
         private void Timer1Tick(object sender, System.EventArgs e)
         {
             if (fCurrentIndex < fFileRefs.Count - 1) {
@@ -181,12 +176,20 @@ namespace GKUI.Forms
 
         #region IWorkWindow implementation
 
-        public string GetStatusString()
+        public void UpdateControls()
         {
-            return string.Format("{0} / {1} [{2}]", fCurrentIndex + 1, fFileRefs.Count, fCurrentText);
+            // FIXME: in Eto-implementation, this line is invisible! why?!
+            StatusLines[0] = string.Format("{0} / {1} [{2}]", fCurrentIndex + 1, fFileRefs.Count, fCurrentText);
+            StatusLines[1] = "-";
+
+            tbStart.Enabled = (fFileRefs.Count > 0);
+            tbPrev.Enabled = (fCurrentIndex > 0);
+            tbNext.Enabled = (fCurrentIndex < fFileRefs.Count - 1);
+
+            AppHost.Instance.UpdateControls(false, true);
         }
 
-        public void UpdateView()
+        public void UpdateSettings()
         {
             // dummy
         }

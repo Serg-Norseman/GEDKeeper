@@ -112,7 +112,7 @@ namespace GKUI.Forms
 
             // Stage 2.4: fill context for sample data
             TestStubs.FillContext(fCurBase.Context);
-            fCurBase.UpdateView();
+            fCurBase.UpdateSettings();
 
             // Stage 2.5: select first individual record in base
             fCurBase.SelectRecordByXRef("I1");
@@ -1573,7 +1573,7 @@ namespace GKUI.Forms
 
             CircleChartWin ccWin = frm as CircleChartWin;
             Assert.AreEqual(fCurBase, ccWin.Base);
-            ccWin.UpdateView();
+            ccWin.UpdateSettings();
 
             Assert.IsFalse(ccWin.AllowFilter());
             Assert.IsFalse(ccWin.AllowQuickSearch());
@@ -1628,7 +1628,7 @@ namespace GKUI.Forms
             TreeChartWin tcWin = frm as TreeChartWin;
             Assert.AreEqual(fCurBase, tcWin.Base);
             Assert.AreEqual(kind, tcWin.ChartKind);
-            tcWin.UpdateView();
+            tcWin.UpdateSettings();
 
             Assert.IsTrue(tcWin.AllowFilter());
             Assert.IsTrue(tcWin.AllowQuickSearch());
@@ -1783,7 +1783,7 @@ namespace GKUI.Forms
             slidesWin.SetFilter();
 
             slidesWin.SelectByRec(null);
-            slidesWin.UpdateView();
+            slidesWin.UpdateSettings();
 
             Assert.AreEqual(false, slidesWin.AllowQuickSearch());
             slidesWin.QuickSearch();

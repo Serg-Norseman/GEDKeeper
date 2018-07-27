@@ -29,12 +29,12 @@ namespace GKCore.Interfaces
 
     public interface IWorkWindow : IWindow
     {
-        string GetStatusString();
+        void UpdateControls();
 
         /// <summary>
         /// Is called after changing the settings of the user interface.
         /// </summary>
-        void UpdateView();
+        void UpdateSettings();
 
         bool NavCanBackward();
         bool NavCanForward();

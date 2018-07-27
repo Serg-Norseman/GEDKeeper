@@ -101,10 +101,14 @@ namespace GKUI.Charts
                 ExtSize boundary = GetImageSize();
                 SetImageSize(boundary, true);
                 Invalidate();
+
+                DoZoomChanged();
             }
         }
 
         public event ARootChangedEventHandler RootChanged;
+
+        public event EventHandler ZoomChanged;
 
         public GEDCOMIndividualRecord RootPerson
         {
@@ -170,6 +174,13 @@ namespace GKUI.Charts
             var eventHandler = (ARootChangedEventHandler)RootChanged;
             if (eventHandler != null)
                 eventHandler(this, person);
+        }
+
+        private void DoZoomChanged()
+        {
+            var eventHandler = (EventHandler)ZoomChanged;
+            if (eventHandler != null)
+                eventHandler(this, new EventArgs());
         }
 
         /// <summary>

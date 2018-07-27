@@ -68,6 +68,8 @@ namespace GKUI.Charts
 
         public event EventHandler PersonProperties;
 
+        public event EventHandler ZoomChanged;
+
 
         public IBaseWindow Base
         {
@@ -219,6 +221,8 @@ namespace GKUI.Charts
             }
 
             fTreeControls.UpdateState();
+
+            DoZoomChanged();
         }
 
         public void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
@@ -488,6 +492,13 @@ namespace GKUI.Charts
             var eventHandler = (/*Mouse*/ EventHandler)PersonProperties;
             if (eventHandler != null)
                 eventHandler(this, eArgs);
+        }
+
+        private void DoZoomChanged()
+        {
+            var eventHandler = (EventHandler)ZoomChanged;
+            if (eventHandler != null)
+                eventHandler(this, new EventArgs());
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

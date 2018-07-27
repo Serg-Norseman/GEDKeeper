@@ -21,7 +21,6 @@
 //define DEBUG_IMAGE
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -64,6 +63,7 @@ namespace GKUI.Charts
         private static readonly object EventPersonModify;
         private static readonly object EventRootChanged;
         private static readonly object EventPersonProperties;
+        private static readonly object EventZoomChanged;
 
         #endregion
 
@@ -85,6 +85,12 @@ namespace GKUI.Charts
         {
             add { Events.AddHandler(EventPersonProperties, value); }
             remove { Events.RemoveHandler(EventPersonProperties, value); }
+        }
+
+        public event EventHandler ZoomChanged
+        {
+            add { Events.AddHandler(EventZoomChanged, value); }
+            remove { Events.RemoveHandler(EventZoomChanged, value); }
         }
 
         public IBaseWindow Base
@@ -169,6 +175,7 @@ namespace GKUI.Charts
             EventPersonModify = new object();
             EventRootChanged = new object();
             EventPersonProperties = new object();
+            EventZoomChanged = new object();
         }
 
         public TreeChartBox()
@@ -256,6 +263,8 @@ namespace GKUI.Charts
             }
 
             fTreeControls.UpdateState();
+
+            DoZoomChanged();
         }
 
         public void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
@@ -516,6 +525,13 @@ namespace GKUI.Charts
             var eventHandler = (MouseEventHandler)Events[EventPersonProperties];
             if (eventHandler != null)
                 eventHandler(this, eArgs);
+        }
+
+        private void DoZoomChanged()
+        {
+            var eventHandler = (EventHandler)Events[EventZoomChanged];
+            if (eventHandler != null)
+                eventHandler(this, new EventArgs());
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

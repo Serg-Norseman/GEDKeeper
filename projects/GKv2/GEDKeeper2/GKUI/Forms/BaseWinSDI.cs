@@ -175,7 +175,7 @@ namespace GKUI.Forms
         {
             try
             {
-                ((IWorkWindow)this).UpdateView();
+                ((IWorkWindow)this).UpdateSettings();
 
                 UpdatePluginsItems();
                 UpdateMRU();
@@ -772,25 +772,22 @@ namespace GKUI.Forms
         #endregion
 
         #region IWorkWindow implementation
-        
-        string IWorkWindow.GetStatusString()
-        {
-            string res = "";
 
+        void IWorkWindow.UpdateControls()
+        {
+            string statusLine = "";
             GEDCOMRecordType recType = GetSelectedRecordType();
             GKListView rView = GetRecordsViewByType(recType);
-
-            if (rView != null)
-            {
+            if (rView != null) {
                 var listMan = rView.ListMan;
-                res = LangMan.LS(LSID.LSID_SBRecords) + ": " + listMan.TotalCount.ToString();
-                res = res + ", " + LangMan.LS(LSID.LSID_SBFiltered) + ": " + listMan.FilteredCount.ToString();
+                statusLine = LangMan.LS(LSID.LSID_SBRecords) + ": " + listMan.TotalCount.ToString();
+                statusLine = statusLine + ", " + LangMan.LS(LSID.LSID_SBFiltered) + ": " + listMan.FilteredCount.ToString();
             }
 
-            return res;
+            StatusBar.Panels[0].Text = statusLine;
         }
 
-        void IWorkWindow.UpdateView()
+        void IWorkWindow.UpdateSettings()
         {
             UpdateListsSettings();
             RefreshLists(true);
@@ -799,17 +796,13 @@ namespace GKUI.Forms
         void IWorkWindow.NavNext()
         {
             fNavman.BeginNav();
-            try
-            {
+            try {
                 GEDCOMRecord rec = fNavman.Next() as GEDCOMRecord;
-                if (rec != null)
-                {
+                if (rec != null) {
                     SelectRecordByXRef(rec.XRef);
                     AppHost.Instance.UpdateControls(false);
                 }
-            }
-            finally
-            {
+            } finally {
                 fNavman.EndNav();
             }
         }
@@ -817,17 +810,13 @@ namespace GKUI.Forms
         void IWorkWindow.NavPrev()
         {
             fNavman.BeginNav();
-            try
-            {
+            try {
                 GEDCOMRecord rec = fNavman.Back() as GEDCOMRecord;
-                if (rec != null)
-                {
+                if (rec != null) {
                     SelectRecordByXRef(rec.XRef);
                     AppHost.Instance.UpdateControls(false);
                 }
-            }
-            finally
-            {
+            } finally {
                 fNavman.EndNav();
             }
         }
@@ -1125,7 +1114,7 @@ namespace GKUI.Forms
             }
         }
 
-        public void UpdateControls(bool forceDeactivate)
+        public void UpdateControls(bool forceDeactivate, bool blockDependent = false)
         {
             try
             {
@@ -1180,13 +1169,11 @@ namespace GKUI.Forms
                 miPedigree_dAboville.Enabled = indivEn;
                 miPedigree_Konovalov.Enabled = indivEn;
 
-                if (workWin != null) {
-                    StatusBar.Panels[0].Text = workWin.GetStatusString();
-                }
-
                 UpdateNavControls();
 
-                StatusBar.Invalidate();
+                if (workWin != null && !blockDependent) {
+                    workWin.UpdateControls();
+                }
             } catch (Exception ex) {
                 Logger.LogWrite("BaseWinSDI.UpdateControls(): " + ex.Message);
             }

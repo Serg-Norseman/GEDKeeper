@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using System.Resources;
+﻿using System.Reflection;
 
 [assembly: AssemblyTitle("GKComponents")]
 [assembly: AssemblyDescription("")]
@@ -8,5 +6,3 @@ using System.Resources;
 [assembly: AssemblyCopyright("Copyright © 2014-2017 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.3.0.0")]
 [assembly: AssemblyCulture("")]
-[assembly: CLSCompliant(true)]
-[assembly: NeutralResourcesLanguage("en")]

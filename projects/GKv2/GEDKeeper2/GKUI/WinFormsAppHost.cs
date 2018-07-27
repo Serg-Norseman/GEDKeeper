@@ -149,7 +149,7 @@ namespace GKUI
 
             foreach (IWindow win in fRunningForms) {
                 if (win is IWorkWindow) {
-                    (win as IWorkWindow).UpdateView();
+                    (win as IWorkWindow).UpdateSettings();
                 }
             }
         }

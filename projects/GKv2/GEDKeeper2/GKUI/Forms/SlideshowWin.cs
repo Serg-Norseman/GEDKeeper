@@ -33,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class SlideshowWin : Form, IWorkWindow
+    public partial class SlideshowWin : StatusForm, IWorkWindow
     {
         private readonly IBaseWindow fBase;
         private readonly List<GEDCOMFileReferenceWithTitle> fFileRefs;
@@ -156,15 +156,6 @@ namespace GKUI.Forms
             SetFileRef();
         }
 
-        private void UpdateControls()
-        {
-            tbStart.Enabled = (fFileRefs.Count > 0);
-            tbPrev.Enabled = (fCurrentIndex > 0);
-            tbNext.Enabled = (fCurrentIndex < fFileRefs.Count - 1);
-
-            AppHost.Instance.UpdateControls(false);
-        }
-
         private void Timer1Tick(object sender, System.EventArgs e)
         {
             if (fCurrentIndex < fFileRefs.Count - 1) {
@@ -178,12 +169,18 @@ namespace GKUI.Forms
 
         #region IWorkWindow implementation
 
-        public string GetStatusString()
+        public void UpdateControls()
         {
-            return string.Format("{0} / {1} [{2}]", fCurrentIndex + 1, fFileRefs.Count, fCurrentText);
+            StatusLines[0] = string.Format("{0} / {1} [{2}]", fCurrentIndex + 1, fFileRefs.Count, fCurrentText);
+
+            tbStart.Enabled = (fFileRefs.Count > 0);
+            tbPrev.Enabled = (fCurrentIndex > 0);
+            tbNext.Enabled = (fCurrentIndex < fFileRefs.Count - 1);
+
+            AppHost.Instance.UpdateControls(false, true);
         }
 
-        public void UpdateView()
+        public void UpdateSettings()
         {
             // dummy
         }

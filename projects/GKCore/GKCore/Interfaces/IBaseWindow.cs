@@ -52,7 +52,7 @@ namespace GKCore.Interfaces
         void ShowRecordsTab(GEDCOMRecordType recType);
         void SelectRecordByXRef(string xref);
         void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal);
-        void UpdateControls(bool forceDeactivate);
+        void UpdateControls(bool forceDeactivate, bool blockDependent = false);
 
         void AddRecord();
         void DeleteRecord();

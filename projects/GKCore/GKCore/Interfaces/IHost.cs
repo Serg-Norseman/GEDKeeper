@@ -58,7 +58,7 @@ namespace GKCore.Interfaces
         void ShowWindow(IWindow window);
 
         ILangMan CreateLangMan(object sender);
-        void UpdateControls(bool forceDeactivate);
+        void UpdateControls(bool forceDeactivate, bool blockDependent = false);
         void ShowHelpTopic(string topic);
     }
 }

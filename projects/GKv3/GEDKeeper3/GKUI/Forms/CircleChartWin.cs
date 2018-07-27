@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using Eto.Forms;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
@@ -33,8 +32,8 @@ namespace GKUI.Forms
 {
     public partial class CircleChartWin : PrintableForm, IChartWindow
     {
-        private readonly CircleChart fCircleChart;
         private readonly IBaseWindow fBaseWin;
+        private readonly CircleChart fCircleChart;
 
         public IBaseWindow Base
         {
@@ -51,6 +50,7 @@ namespace GKUI.Forms
             fCircleChart.Base = fBaseWin;
             fCircleChart.ChartType = type;
             fCircleChart.NavRefresh += CircleChartWin_NavRefresh;
+            fCircleChart.ZoomChanged += CircleChartWin_NavRefresh;
             fCircleChart.RootChanged += CircleChartWin_RootChanged;
             fCircleChart.RootPerson = startPerson;
             fCircleChart.Options.Assign(GlobalOptions.Instance.AncestorsCircleOptions);
@@ -61,11 +61,17 @@ namespace GKUI.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fCircleChart.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            fCircleChart.Focus();
+            UpdateControls();
         }
 
         protected override IPrintable GetPrintable()
@@ -73,27 +79,14 @@ namespace GKUI.Forms
             return fCircleChart;
         }
 
-        private void UpdateNavControls()
-        {
-            try
-            {
-                tbPrev.Enabled = NavCanBackward();
-                tbNext.Enabled = NavCanForward();
-            } catch (Exception ex) {
-                Logger.LogWrite("CircleChartWin.UpdateNavControls(): " + ex.Message);
-            }
-        }
-
         private void CircleChartWin_NavRefresh(object sender, EventArgs e)
         {
-            AppHost.Instance.UpdateControls(false);
-            UpdateNavControls();
+            GenChart();
         }
 
         private void CircleChartWin_RootChanged(object sender, GEDCOMIndividualRecord person)
         {
-            AppHost.Instance.UpdateControls(false);
-            UpdateNavControls();
+            GenChart();
         }
 
         private void CircleChartWin_KeyDown(object sender, KeyEventArgs e)
@@ -108,14 +101,6 @@ namespace GKUI.Forms
             } else if (sender == tbNext) {
                 NavNext();
             }
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            //fCircleChart.Select();
-            fCircleChart.Focus();
-            AppHost.Instance.UpdateControls(false);
         }
 
         private void tbImageSave_Click(object sender, EventArgs e)
@@ -169,19 +154,30 @@ namespace GKUI.Forms
 
         public void GenChart()
         {
-            AppHost.Instance.UpdateControls(false);
+            UpdateControls();
         }
 
         #endregion
 
         #region IWorkWindow implementation
 
-        public string GetStatusString()
+        public void UpdateControls()
         {
-            return string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fCircleChart.Model.IndividualsCount.ToString());
+            try {
+                StatusLines[0] = string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fCircleChart.Model.IndividualsCount);
+                var imageSize = fCircleChart.GetImageSize();
+                StatusLines[1] = string.Format(LangMan.LS(LSID.LSID_ImageSize), imageSize.Width, imageSize.Height);
+
+                tbPrev.Enabled = NavCanBackward();
+                tbNext.Enabled = NavCanForward();
+
+                AppHost.Instance.UpdateControls(false, true);
+            } catch (Exception ex) {
+                Logger.LogWrite("CircleChartWin.UpdateControls(): " + ex.Message);
+            }
         }
 
-        public void UpdateView()
+        public void UpdateSettings()
         {
             fCircleChart.Options.Assign(GlobalOptions.Instance.AncestorsCircleOptions);
             fCircleChart.Changed();

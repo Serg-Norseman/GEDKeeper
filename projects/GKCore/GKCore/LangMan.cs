@@ -827,9 +827,9 @@ namespace GKCore
         /* 769 */ LSID_BranchDist,
         /* 770 */ LSID_GenDist,
         /* 771 */ LSID_SpouseDist,
+        /* 772 */ LSID_ImageSize,
 
-        /* 772 */ // reserved begin
-        /* 773 */
+        /* 773 */ // reserved begin
         /* 774 */
         /* 775 */
         /* 776 */
@@ -1651,9 +1651,9 @@ namespace GKCore
             /* 769 */ "Branch distance",
             /* 770 */ "Generation distance",
             /* 771 */ "Spouse distance",
+            /* 772 */ "Image size: {0} x {1} px",
 
-            /* 772 */ "", // reserved begin
-            /* 773 */ "",
+            /* 773 */ "", // reserved begin
             /* 774 */ "",
             /* 775 */ "",
             /* 776 */ "",
