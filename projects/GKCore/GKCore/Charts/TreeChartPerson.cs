@@ -483,13 +483,8 @@ namespace GKCore.Charts
                 fFlags.Exclude(PersonFlag.pfHasInvDesc);
             }
 
-            if (fFlags.Contains(PersonFlag.pfHasInvAnc)) {
-                CanExpand = true;
-            }
-
-            if (fFlags.Contains(PersonFlag.pfHasInvDesc)) {
-                CanExpand = true;
-            }
+            CanExpand |= fFlags.Contains(PersonFlag.pfHasInvAnc);
+            CanExpand |= fFlags.Contains(PersonFlag.pfHasInvDesc);
         }
 
         public void CalcBounds(int lines, ChartRenderer renderer)

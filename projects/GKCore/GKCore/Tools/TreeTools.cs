@@ -25,7 +25,6 @@ using BSLib;
 using BSLib.SmartGraph;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Kinships;
 using GKCore.Types;
 using GKCore.UIContracts;
 
@@ -38,7 +37,7 @@ namespace GKCore.Tools
     {
         #region Patriarchs Search
 
-        private static bool PL_SearchAnc(GEDCOMIndividualRecord descendant, GEDCOMIndividualRecord searchRec, bool onlyMaleLine)
+        public static bool PL_SearchAnc(GEDCOMIndividualRecord descendant, GEDCOMIndividualRecord searchRec, bool onlyMaleLine)
         {
             if (descendant == null) return false;
 

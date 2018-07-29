@@ -36,8 +36,13 @@ namespace GKCore.Export
 {
     public class PDFWriter : CustomWriter
     {
-        private sealed class FontHandler: TypeHandler<it.Font>, IFont
+        internal sealed class FontHandler: TypeHandler<it.Font>, IFont
         {
+            public BaseFont BaseFont
+            {
+                get { return Handle.BaseFont; }
+            }
+
             public string FontFamilyName
             {
                 get { return string.Empty; } // dummy
@@ -50,7 +55,7 @@ namespace GKCore.Export
 
             public float Size
             {
-                get { return 0; } // dummy
+                get { return 0; } // Handle.Size
             }
 
             public FontHandler(it.Font handle) : base(handle)
@@ -320,7 +325,7 @@ namespace GKCore.Export
         }
 
         // FIXME: add to other writers?
-        public void addLineSeparator()
+        public void AddLineSeparator()
         {
             var line1 = new it.pdf.draw.LineSeparator(0.0f, 100.0f, BaseColor.BLACK, Element.ALIGN_LEFT, 1);
             fDocument.Add(new Chunk(line1));

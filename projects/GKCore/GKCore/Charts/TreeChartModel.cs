@@ -419,8 +419,8 @@ namespace GKCore.Charts
                 if (aPerson != null)
                 {
                     result = CreatePerson(aPerson, generation);
-
                     result.SetFlag(PersonFlag.pfAncWalk);
+
                     if (aChild != null) {
                         result.AddChild(aChild);
                     }
@@ -1648,26 +1648,6 @@ namespace GKCore.Charts
                 if (descCount > 2048) {
                     AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_DescendantsNumberIsInvalid), descCount.ToString()));
                     result = false;
-                }
-            }
-
-            return result;
-        }
-
-        public IList<GEDCOMIndividualRecord> GetTails()
-        {
-            var result = new List<GEDCOMIndividualRecord>();
-
-            for (int i = 0; i < fPersons.Count; i++) {
-                TreeChartPerson person = fPersons[i];
-                GEDCOMIndividualRecord iRec = person.Rec;
-                if (iRec == null) continue;
-
-                if (person.HasFlag(PersonFlag.pfHasInvAnc)) {
-                    //result.Add(iRec);
-                }
-
-                if (person.HasFlag(PersonFlag.pfHasInvDesc)) {
                 }
             }
 

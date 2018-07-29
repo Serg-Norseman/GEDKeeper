@@ -120,6 +120,16 @@ namespace GKCore.Charts
 
         public abstract void DrawString(string text, IFont font, IBrush brush, float x, float y);
 
+        public virtual void DrawAnchor(string text, string anchor, IFont font, IBrush brush, float x, float y)
+        {
+            // Not applicable for most areas except exports
+        }
+
+        public virtual void DrawHyperlink(string text, string anchor, IFont font, IBrush brush, float x, float y)
+        {
+            // Not applicable for most areas except exports
+        }
+
         public abstract void DrawLine(IPen pen, float x1, float y1, float x2, float y2);
 
         public abstract void DrawRectangle(IPen pen, IColor fillColor, float x, float y,

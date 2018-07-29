@@ -86,6 +86,11 @@ namespace GKUI.Forms
             }
         }
 
+        private void SlideshowWin_Closed(object sender, FormClosedEventArgs e)
+        {
+            SetTimer(false);
+        }
+
         private void SlideshowWin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape) Close();
@@ -131,16 +136,25 @@ namespace GKUI.Forms
             UpdateControls();
         }
 
-        private void tsbStart_Click(object sender, System.EventArgs e)
+        private void SetTimer(bool active)
         {
-            if (tbStart.Text == LangMan.LS(LSID.LSID_Start)) {
+            if (active) {
                 tbStart.Text = LangMan.LS(LSID.LSID_Stop);
                 tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_stop.gif");
-                timer1.Enabled = true;
             } else {
                 tbStart.Text = LangMan.LS(LSID.LSID_Start);
                 tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
-                timer1.Enabled = false;
+            }
+
+            timer1.Enabled = active;
+        }
+
+        private void tsbStart_Click(object sender, System.EventArgs e)
+        {
+            if (tbStart.Text == LangMan.LS(LSID.LSID_Start)) {
+                SetTimer(true);
+            } else {
+                SetTimer(false);
             }
         }
 

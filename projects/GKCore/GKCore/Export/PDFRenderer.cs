@@ -62,6 +62,10 @@ namespace GKCore.Export
 
         private static BaseFont GetBaseFont(IFont font)
         {
+            if (font is PDFWriter.FontHandler) {
+                return ((PDFWriter.FontHandler)font).BaseFont;
+            }
+
             string name = Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\" + font.FontFamilyName + ".ttf");
             BaseFont baseFont = BaseFont.CreateFont(name, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             return baseFont;
@@ -140,7 +144,9 @@ namespace GKCore.Export
 
         public override void DrawString(string text, IFont font, IBrush brush, float x, float y)
         {
-            SetFillColor(brush.Color);
+            if (brush != null) {
+                SetFillColor(brush.Color);
+            }
 
             int h = GetTextHeight(font);
             x = CheckVal(x, false);
@@ -156,6 +162,50 @@ namespace GKCore.Export
             } finally {
                 fCanvas.EndText();
             }
+        }
+
+        public override void DrawAnchor(string text, string anchor, IFont font, IBrush brush, float x, float y)
+        {
+            if (brush != null) {
+                SetFillColor(brush.Color);
+            }
+
+            int h = GetTextHeight(font);
+            int w = GetTextWidth(text, font);
+
+            // FIXME: temp hack
+            if (h == 0) h = 28;
+            if (w == 0) w = 208;
+
+            x = CheckVal(x, false);
+            y = CheckVal(y, true, h);
+
+            var ct = new ColumnText(fCanvas);
+            ct.SetSimpleColumn(x, y, x + w, y + h);
+            ct.AddElement(new Chunk(text, ((PDFWriter.FontHandler)font).Handle).SetLocalDestination(anchor));
+            ct.Go();
+        }
+
+        public override void DrawHyperlink(string text, string anchor, IFont font, IBrush brush, float x, float y)
+        {
+            if (brush != null) {
+                SetFillColor(brush.Color);
+            }
+
+            int h = GetTextHeight(font);
+            int w = GetTextWidth(text, font);
+
+            // FIXME: temp hack
+            if (h == 0) h = 28;
+            if (w == 0) w = 208;
+
+            x = CheckVal(x, false);
+            y = CheckVal(y, true, h);
+
+            var ct = new ColumnText(fCanvas);
+            ct.SetSimpleColumn(x, y, x + w, y + h);
+            ct.AddElement(new Chunk(text, ((PDFWriter.FontHandler)font).Handle).SetLocalGoto(anchor));
+            ct.Go();
         }
 
         public override void DrawLine(IPen pen, float x1, float y1, float x2, float y2)
