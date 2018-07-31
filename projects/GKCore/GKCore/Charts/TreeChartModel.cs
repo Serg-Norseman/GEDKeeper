@@ -589,6 +589,7 @@ namespace GKCore.Charts
                                     if (!skipUnk) {
                                         resParent = AddDescPerson(null, sp, true, level);
                                         resParent.Sex = GEDCOMSex.svMale;
+                                        resParent.SetFlag(PersonFlag.pfSpouse);
 
                                         ft = resParent;
                                         ft.IsDup = isDup;
@@ -614,6 +615,7 @@ namespace GKCore.Charts
                                     if (!skipUnk) {
                                         resParent = AddDescPerson(null, sp, true, level);
                                         resParent.Sex = GEDCOMSex.svFemale;
+                                        resParent.SetFlag(PersonFlag.pfSpouse);
 
                                         ft = result;
                                         ft.IsDup = isDup;

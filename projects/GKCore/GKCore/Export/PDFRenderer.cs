@@ -124,17 +124,13 @@ namespace GKCore.Export
         public override int GetTextHeight(IFont font)
         {
             BaseFont baseFont = GetBaseFont(font);
-            float ascent = baseFont.GetAscentPoint(STR_HEIGHT_SAMPLE, font.Size);
-            float descent = baseFont.GetDescentPoint(STR_HEIGHT_SAMPLE, font.Size);
-            float height = (ascent - descent) * 1.33f; // Line spacing
-            return (int)(height);
+            return PDFWriter.FontHandler.GetTextHeight(baseFont, font.Size);
         }
 
         public override int GetTextWidth(string text, IFont font)
         {
             BaseFont baseFont = GetBaseFont(font);
-            float width = baseFont.GetWidthPoint(text, font.Size);
-            return (int)(width);
+            return PDFWriter.FontHandler.GetTextWidth(text, baseFont, font.Size);
         }
 
         public override ExtSizeF GetTextSize(string text, IFont font)
@@ -174,8 +170,8 @@ namespace GKCore.Export
             int w = GetTextWidth(text, font);
 
             // FIXME: temp hack
-            if (h == 0) h = 28;
-            if (w == 0) w = 208;
+            h *= 2;
+            w *= 4;
 
             x = CheckVal(x, false);
             y = CheckVal(y, true, h);
@@ -196,8 +192,8 @@ namespace GKCore.Export
             int w = GetTextWidth(text, font);
 
             // FIXME: temp hack
-            if (h == 0) h = 28;
-            if (w == 0) w = 208;
+            h *= 2;
+            w *= 4;
 
             x = CheckVal(x, false);
             y = CheckVal(y, true, h);
@@ -282,17 +278,14 @@ namespace GKCore.Export
 
         public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
         {
-            // dummy
         }
 
-        public override void DrawCircle(IPen pen, IBrush brush, float x, float y,
-                                        float width, float height)
+        public override void DrawCircle(IPen pen, IBrush brush, float x, float y, float width, float height)
         {
         }
 
         public override void DrawCircleSegment(IPen pen, IBrush brush, int ctX, int ctY,
-                                               float inRad, float extRad,
-                                               float startAngle, float wedgeAngle)
+                                               float inRad, float extRad, float startAngle, float wedgeAngle)
         {
         }
 

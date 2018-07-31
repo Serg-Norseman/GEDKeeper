@@ -71,7 +71,7 @@ namespace GKCore.Charts
 
         // Example of string to measurement the height, where there are chars
         // with the ascent and descent of elements.
-        protected const string STR_HEIGHT_SAMPLE = "AZqtypdfghjl|[]";
+        protected internal const string STR_HEIGHT_SAMPLE = "AZqtypdfghjl|[]";
 
         public abstract bool IsSVG { get; }
 

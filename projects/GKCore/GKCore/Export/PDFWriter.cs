@@ -45,7 +45,7 @@ namespace GKCore.Export
 
             public string FontFamilyName
             {
-                get { return string.Empty; } // dummy
+                get { return Handle.Familyname; }
             }
 
             public string Name
@@ -55,11 +55,40 @@ namespace GKCore.Export
 
             public float Size
             {
-                get { return 0; } // Handle.Size
+                get { return Handle.Size; }
             }
 
             public FontHandler(it.Font handle) : base(handle)
             {
+            }
+
+            public static int GetTextHeight(BaseFont baseFont, float fontSize)
+            {
+                float ascent = baseFont.GetAscentPoint(ChartRenderer.STR_HEIGHT_SAMPLE, fontSize);
+                float descent = baseFont.GetDescentPoint(ChartRenderer.STR_HEIGHT_SAMPLE, fontSize);
+                float height = (ascent - descent) * 1.33f; // Line spacing
+                return (int)(height);
+            }
+
+            public static int GetTextWidth(string text, BaseFont baseFont, float fontSize)
+            {
+                float width = baseFont.GetWidthPoint(text, fontSize);
+                return (int)(width);
+            }
+
+            public int GetTextHeight()
+            {
+                return GetTextHeight(Handle.BaseFont, Handle.Size);
+            }
+
+            public int GetTextWidth(string text)
+            {
+                return GetTextWidth(text, Handle.BaseFont, Handle.Size);
+            }
+
+            public ExtSizeF GetTextSize(string text)
+            {
+                return new ExtSizeF(GetTextWidth(text), GetTextHeight());
             }
         }
 

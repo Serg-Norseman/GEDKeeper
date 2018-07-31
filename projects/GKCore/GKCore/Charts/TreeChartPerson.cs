@@ -43,7 +43,7 @@ namespace GKCore.Charts
 
     public enum PersonFlag
     {
-        pfDivorced, pfIsDead, pfSelected, pfIsDup,
+        pfDivorced, pfIsDead, pfSelected, pfIsDup, pfSpouse,
         pfDescByFather, pfDescByMother, // descending flags
         pfAncWalk, pfDescWalk, // walk flags
         pfHasInvAnc, pfHasInvDesc // invisible flags

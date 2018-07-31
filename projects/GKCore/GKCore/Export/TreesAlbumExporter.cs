@@ -34,19 +34,17 @@ namespace GKCore.Export
     {
         private readonly List<IndiObj> fIndiQueue;
         private ExtList<PatriarchObj> fPatList;
+        private ExtRectF fPageSize;
+        private StringList fProcessed;
         private ChartRenderer fRenderer;
-        private IFont fTitleFont;
-
-        //private IFont fChapFont;
-        //private IFont fSubchapFont;
         private IFont fLinkFont;
         private IFont fTextFont;
-        //private IFont fBoldFont;
-        //private IFont fSymFont;
+        private IFont fTitleFont;
 
         public TreesAlbumExporter(IBaseWindow baseWin) : base(baseWin, true)
         {
             fIndiQueue = new List<IndiObj>();
+            fProcessed = new StringList();
             fTitle = LangMan.LS(LSID.LSID_TreesAlbum);
         }
 
@@ -56,13 +54,9 @@ namespace GKCore.Export
                 IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
                 IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
 
-                fTitleFont = fWriter.CreateFont("", 30f, true, false, clrBlack);
-                //fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
-                //fSubchapFont = fWriter.CreateFont("", 14f, true, false, clrBlack);
                 fLinkFont = fWriter.CreateFont("", 8f, false, true, clrBlue);
                 fTextFont = fWriter.CreateFont("", 8f, false, false, clrBlack);
-                //fBoldFont = fWriter.CreateFont("", 8f, true, false, clrBlack);
-                //fSymFont = fWriter.CreateFont("", 12f, true, false, clrBlack);
+                fTitleFont = fWriter.CreateFont("", 30f, true, false, clrBlack);
 
                 fWriter.EnablePageNumbers();
 
@@ -72,10 +66,10 @@ namespace GKCore.Export
                     return;
                 }
 
-                var pageSize = fWriter.GetPageSize();
-                float pageHeight = pageSize.GetHeight();
-                float pageWidth = pageSize.GetWidth();
-                float halfpage = (pageHeight - (fTitleFont.Size * 4)) / 2f;
+                fPageSize = fWriter.GetPageSize();
+                float pageHeight = fPageSize.GetHeight();
+                float pageWidth = fPageSize.GetWidth();
+                float halfpage = (pageHeight - (((PDFWriter.FontHandler)fTitleFont).GetTextHeight())) / 2f;
                 fWriter.NewLine(0.0f, halfpage);
                 fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taCenter);
 
@@ -96,17 +90,18 @@ namespace GKCore.Export
 
                 fPatList = PatriarchsMan.GetPatriarchsList(fBase.Context, 2, false);
                 fPatList.QuickSort(PatriarchsCompare);
+                GKUtils.InitExtCounts(fBase.Context.Tree, 0);
 
                 int num = fPatList.Count;
                 for (int i = 0; i < num; i++) {
                     var patriarch = fPatList[i].IRec;
 
                     fIndiQueue.Clear();
-                    fIndiQueue.Add(new IndiObj(fPatList[i].IRec, TreeChartKind.ckDescendants));
+                    fIndiQueue.Add(new IndiObj(patriarch, TreeChartKind.ckDescendants));
 
                     for (int q = 0; q < fIndiQueue.Count; q++) {
                         fWriter.NewPage();
-                        TryRenderTreeSlice(treeBox, pageSize, q, patriarch);
+                        TryRenderTreeSlice(treeBox, q, patriarch);
                     }
                 }
             } catch (Exception ex) {
@@ -135,10 +130,10 @@ namespace GKCore.Export
             Break
         }
 
-        private void TryRenderTreeSlice(ITreeChartBox treeBox, ExtRectF ps, int index,
-                                        GEDCOMIndividualRecord currentPatriarch)
+        private void TryRenderTreeSlice(ITreeChartBox treeBox, int index, GEDCOMIndividualRecord currentPatriarch)
         {
             IndiObj indi = fIndiQueue[index];
+            fProcessed.Add(indi.IRec.XRef);
 
             int depthLimit = 3;
             float scaleFactor = 1.0f;
@@ -152,7 +147,7 @@ namespace GKCore.Export
                 tries += 1;
 
                 ExtSize imageSize = treeBox.GetImageSize();
-                var sf = GfxHelper.ZoomToFit(imageSize.Width, imageSize.Height, ps.GetWidth(), ps.GetHeight());
+                var sf = GfxHelper.ZoomToFit(imageSize.Width, imageSize.Height, fPageSize.GetWidth(), fPageSize.GetHeight());
 
                 if (sf < 1.0f) {
                     // need to reduce image's size
@@ -204,35 +199,54 @@ namespace GKCore.Export
                 GEDCOMIndividualRecord indiRec = person.Rec;
                 if (indiRec == null) continue;
 
+                int iNum = (int)indiRec.ExtData;
+
                 var offset = treeBox.Model.GetOffsets();
                 int ix = offset.X + person.Rect.Left;
                 int iy = offset.Y + person.Rect.Top - (int)fTextFont.Size;
-                fRenderer.DrawAnchor(indiRec.XRef, indiRec.XRef, fTextFont, null, ix, iy);
+                string iRef = indiRec.XRef + "#" + iNum;
+                fRenderer.DrawAnchor(iRef, iRef, fTextFont, null, ix, iy);
+
+                iNum += 1;
+                indiRec.ExtData = iNum;
 
                 if (!person.CanExpand) continue;
 
                 ix = offset.X + person.Rect.Left;
                 iy = offset.Y + person.Rect.Bottom;
-                fRenderer.DrawHyperlink(indiRec.XRef, indiRec.XRef, fLinkFont, null, ix, iy);
+                iRef = indiRec.XRef + "#" + iNum;
+                fRenderer.DrawHyperlink(iRef, iRef, fLinkFont, null, ix, iy);
 
-                TreeChartKind treeKind;
-                if (person.HasFlag(PersonFlag.pfHasInvAnc)
-                    && !IsDescendantOfOtherPatriarchs(indiRec, fPatList, currentPatriarch)) {
-                    treeKind = TreeChartKind.ckAncestors;
+                if (person.HasFlag(PersonFlag.pfAncWalk)) {
+
+                    if (person.HasFlag(PersonFlag.pfHasInvAnc) && !IsPatriarchsDescendant(indiRec, currentPatriarch)) {
+                        CheckQueue(indiRec, TreeChartKind.ckAncestors);
+                    }
+
+                } else if (person.HasFlag(PersonFlag.pfDescWalk)) {
+
+                    if (person.HasFlag(PersonFlag.pfSpouse)) {
+                        if (person.HasFlag(PersonFlag.pfHasInvAnc) && !IsPatriarchsDescendant(indiRec, currentPatriarch)) {
+                            CheckQueue(indiRec, TreeChartKind.ckAncestors);
+                        }
+                    } else {
+                        if (person.HasFlag(PersonFlag.pfHasInvDesc) && TreeTools.PL_SearchAnc(indiRec, currentPatriarch, true)) {
+                            CheckQueue(indiRec, TreeChartKind.ckDescendants);
+                        }
+                    }
+
                 }
-                /*else
-                if (person.HasFlag(PersonFlag.pfHasInvDesc)
-                    && TreeTools.PL_SearchAnc(indiRec, currentPatriarch, true)) {
-                    treeKind = TreeChartKind.ckDescendants;
-                }*/
-                else continue;
-
-                fIndiQueue.Add(new IndiObj(indiRec, treeKind));
             }
         }
 
-        private bool IsDescendantOfOtherPatriarchs(GEDCOMIndividualRecord iRec, ExtList<PatriarchObj> patList,
-                                                   GEDCOMIndividualRecord currentPatriarch)
+        private void CheckQueue(GEDCOMIndividualRecord iRec, TreeChartKind treeKind)
+        {
+            if (fProcessed.IndexOf(iRec.XRef) >= 0) return;
+
+            fIndiQueue.Add(new IndiObj(iRec, treeKind));
+        }
+
+        private bool IsPatriarchsDescendant(GEDCOMIndividualRecord iRec, GEDCOMIndividualRecord currentPatriarch)
         {
             bool result = false;
 
