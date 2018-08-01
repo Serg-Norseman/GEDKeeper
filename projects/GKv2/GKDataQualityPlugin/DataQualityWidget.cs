@@ -21,8 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using BSLib.DataViz.TreeMap;
 using GKCommon.GEDCOM;
-using GKCommon.TreeMap;
 using GKCore.Interfaces;
 using GKCore.Tools;
 
@@ -30,7 +30,7 @@ namespace GKDataQualityPlugin
 {
     public partial class DataQualityWidget : Form, ILocalization
     {
-        private DQViewer fDataMap;
+        private TreeMapViewer fDataMap;
         private readonly Plugin fPlugin;
         private IBaseWindow fBase;
 
@@ -39,7 +39,7 @@ namespace GKDataQualityPlugin
             InitializeComponent();
 
             fPlugin = plugin;
-            fDataMap = new DQViewer();
+            fDataMap = new TreeMapViewer();
             fDataMap.Dock = DockStyle.Fill;
             Controls.Add(fDataMap);
 
@@ -48,7 +48,7 @@ namespace GKDataQualityPlugin
 
         private MapItem CreateItem(MapItem parent, string name, double size, float quality)
         {
-            var item = fDataMap.Model.CreateItem(parent, name, size) as MapFile;
+            var item = fDataMap.Model.CreateItem(parent, name, size) as SimpleItem;
 
             double wavelength = Spectrum.ColdWavelength + (Spectrum.WavelengthMaximum - Spectrum.ColdWavelength) * (1.0f - quality);
             item.Color = Spectrum.WavelengthToRGB(wavelength);
