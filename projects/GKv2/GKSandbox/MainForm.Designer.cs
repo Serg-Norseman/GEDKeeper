@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.culturePicker1 = new GKIntl.CulturePicker();
-            this.optionsPicker1 = new GKCommon.Controls.OptionsPicker();
+            this.optionsPicker1 = new BSLib.Controls.OptionsPicker();
             this.SuspendLayout();
             // 
             // culturePicker1
@@ -63,7 +63,7 @@
             this.ResumeLayout(false);
 
         }
-        private GKCommon.Controls.OptionsPicker optionsPicker1;
+        private BSLib.Controls.OptionsPicker optionsPicker1;
         private GKIntl.CulturePicker culturePicker1;
     }
 }

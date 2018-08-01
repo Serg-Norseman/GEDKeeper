@@ -23,7 +23,7 @@ using System.Collections;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
-using GKCommon.Controls;
+using BSLib.Controls;
 using GKSandbox;
 
 namespace GKIntl
