@@ -524,10 +524,9 @@ namespace GKCore.Operations
         private bool ProcessIndividualPortrait(bool redo)
         {
             GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
-            GEDCOMMultimediaLink mmNewLink = fNewVal as GEDCOMMultimediaLink;
-            GEDCOMMultimediaLink mmOldLink = fOldVal as GEDCOMMultimediaLink;
+            GEDCOMMultimediaLink mmLink = fNewVal as GEDCOMMultimediaLink;
 
-            if (iRec == null || mmNewLink == null) {
+            if (iRec == null || mmLink == null) {
                 return false;
             }
 
@@ -536,7 +535,9 @@ namespace GKCore.Operations
             }
 
             if (redo) {
+                mmLink.IsPrimary = true;
             } else {
+                mmLink.IsPrimary = false;
             }
 
             return true;

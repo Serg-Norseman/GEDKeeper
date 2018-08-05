@@ -57,6 +57,7 @@ namespace GKUI.Forms
 
         #region Private fields
 
+        private readonly List<GEDCOMRecord> fChangedRecords;
         private readonly IBaseContext fContext;
         private readonly NavigationStack<GEDCOMRecord> fNavman;
         private readonly TabParts[] fTabParts;
@@ -105,6 +106,8 @@ namespace GKUI.Forms
             tbDocPreview.Visible = false;
 
             AppHost.Instance.LoadWindow(this);
+
+            fChangedRecords = new List<GEDCOMRecord>();
 
             fContext = new BaseContext(this);
             ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
@@ -273,8 +276,9 @@ namespace GKUI.Forms
 
         public GKListView GetRecordsViewByType(GEDCOMRecordType recType)
         {
-            GKListView list = fTabParts[(int)recType].ListView;
-            return list;
+            int rt = (int)recType;
+            TabParts tabPart = (rt < 0 || rt >= fTabParts.Length) ? null : fTabParts[rt];
+            return (tabPart == null) ? null : tabPart.ListView;
         }
 
         /// <summary>
@@ -512,7 +516,7 @@ namespace GKUI.Forms
                 }
             }
 
-            PageRecords_SelectedIndexChanged(null, null);
+            AppHost.Instance.UpdateControls(false);
         }
 
         public void RefreshRecordsView(GEDCOMRecordType recType)
@@ -520,7 +524,35 @@ namespace GKUI.Forms
             GKListView rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 rView.UpdateContents();
-                PageRecords_SelectedIndexChanged(null, null);
+
+                AppHost.Instance.UpdateControls(false);
+            }
+        }
+
+        public void UpdateChangedRecords(GEDCOMRecord select = null)
+        {
+            for (int i = fChangedRecords.Count - 1; i >= 0; i--) {
+                var record = fChangedRecords[i];
+
+                RefreshRecordsView(record.RecordType);
+            }
+
+            if (select != null) {
+                SelectRecordByXRef(select.XRef);
+            }
+        }
+
+        private void CheckChangedRecord(GEDCOMRecord record, bool active)
+        {
+            int idx = fChangedRecords.IndexOf(record);
+            if (active) {
+                if (idx < 0) {
+                    fChangedRecords.Add(record);
+                }
+            } else {
+                if (idx >= 0) {
+                    fChangedRecords.RemoveAt(idx);
+                }
             }
         }
 
@@ -534,10 +566,13 @@ namespace GKUI.Forms
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
                     record.ChangeDate.ChangeDateTime = dtNow;
+                    CheckChangedRecord(record, true);
                     break;
 
                 case RecordAction.raDelete:
                     {
+                        CheckChangedRecord(record, false);
+
                         GKListView rView = GetRecordsViewByType(record.RecordType);
                         if (rView != null) {
                             rView.DeleteRecord(record);
@@ -900,11 +935,12 @@ namespace GKUI.Forms
         {
             GEDCOMRecordType rt = GetSelectedRecordType();
 
-            GEDCOMRecord rec = BaseController.AddRecord(this, rt, null);
-            if (rec != null) {
+            GEDCOMRecord record = BaseController.AddRecord(this, rt, null);
+            if (record != null) {
                 RefreshLists(false);
-                SelectRecordByXRef(rec.XRef);
             }
+
+            UpdateChangedRecords(record);
         }
 
         public void EditRecord()
@@ -912,8 +948,9 @@ namespace GKUI.Forms
             GEDCOMRecord record = GetSelectedRecordEx();
             if (record != null && BaseController.EditRecord(this, record)) {
                 RefreshLists(false);
-                ShowRecordInfo(record);
             }
+
+            UpdateChangedRecords(record);
         }
 
         public void DeleteRecord()

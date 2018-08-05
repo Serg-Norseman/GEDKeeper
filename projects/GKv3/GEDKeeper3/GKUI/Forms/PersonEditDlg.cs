@@ -586,7 +586,7 @@ namespace GKUI.Forms
 
         private void btnPortraitAdd_Click(object sender, EventArgs e)
         {
-            if (BaseController.AddIndividualPortrait(fBase, fPerson)) {
+            if (BaseController.AddIndividualPortrait(fBase, fLocalUndoman, fPerson)) {
                 fMediaList.UpdateSheet();
                 UpdatePortrait(true);
             }
@@ -594,7 +594,7 @@ namespace GKUI.Forms
 
         private void btnPortraitDelete_Click(object sender, EventArgs e)
         {
-            if (BaseController.DeleteIndividualPortrait(fBase, fPerson)) {
+            if (BaseController.DeleteIndividualPortrait(fBase, fLocalUndoman, fPerson)) {
                 UpdatePortrait(true);
             }
         }

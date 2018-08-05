@@ -1030,7 +1030,7 @@ namespace GKCore
             return result;
         }
 
-        public static bool AddIndividualPortrait(IBaseWindow baseWin, GEDCOMIndividualRecord iRec)
+        public static bool AddIndividualPortrait(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMIndividualRecord iRec)
         {
             bool result = false;
 
@@ -1054,16 +1054,20 @@ namespace GKCore
                 result = AppHost.Instance.ShowModalX(selectDlg, false);
             }
 
+            if (result) {
+                result = localUndoman.DoOrdinaryOperation(OperationType.otIndividualPortraitAttach, iRec, mmLink);
+            }
+
             return result;
         }
 
-        public static bool DeleteIndividualPortrait(IBaseWindow baseWin, GEDCOMIndividualRecord iRec)
+        public static bool DeleteIndividualPortrait(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMIndividualRecord iRec)
         {
             GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
-            if (mmLink == null) return false;
-
-            mmLink.IsPrimary = false;
-            return true;
+            if (mmLink != null) {
+                return localUndoman.DoOrdinaryOperation(OperationType.otIndividualPortraitDetach, iRec, mmLink);
+            }
+            return false;
         }
 
         #endregion
