@@ -5,7 +5,7 @@ rem Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
 rem This file is part of "GEDKeeper".
 
 set lstfile=".\listfile.txt"
-set out_fn="gedkeeper_2.13.2_win_portable"
+set out_fn="gedkeeper_2.14.0_win_portable"
 set zip_fn=".\%out_fn%.zip"
 set log_fn=".\%out_fn%.log"
 
