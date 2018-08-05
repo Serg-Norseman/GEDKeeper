@@ -1,7 +1,18 @@
 
-## ??.??.2018 [v2.14.0]
-- Added options for tree charts: hide unknown spouses and show birth and death places.
-- Restored the work of the maps module
+## 10.08.2018 [v2.14.0]
+- Fixed the bug with adding/removing portraits of persons.
+- Returned the status bar to the chart's windows and added 
+information about the size of the image.
+- Fixed bug of loading FTBv6 files with the encoding Win1251 (ANSI + Rus).
+- Improved collapsing tree branches.
+- Fixed several minor bugs and simplified development projects.
+- Finalized and included the generator of the Tree Album.
+- Added the option of circle charts: arc text on/off.
+- Added options for tree charts: margins, intervals between branches and 
+intervals between generations.
+- Added options for tree charts: hide unknown spouses and show birth and 
+death places.
+- Restored the work of the maps module.
 - Implemented portable mode of the program.
 
 ## 14.07.2018 [v2.13.2]
