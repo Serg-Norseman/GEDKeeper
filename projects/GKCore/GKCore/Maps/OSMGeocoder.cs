@@ -31,7 +31,7 @@ namespace GKCore.Maps
 {
     public sealed class OSMGeocoder : IGeocoder
     {
-        private const string REQUEST_URL = "http://nominatim.openstreetmap.org/search.php?q={0}&format=xml";
+        private const string REQUEST_URL = "http://nominatim.openstreetmap.org/search.php?q={0}&format=xml&accept-language={1}";
 
         public OSMGeocoder()
         {
