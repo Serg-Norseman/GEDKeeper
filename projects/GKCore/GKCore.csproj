@@ -226,6 +226,7 @@
     <Compile Include="GKCore\Maps\GoogleGeocoder.cs" />
     <Compile Include="GKCore\Maps\IGeocoder.cs" />
     <Compile Include="GKCore\Maps\OSMGeocoder.cs" />
+    <Compile Include="GKCore\Maps\PlacesCache.cs" />
     <Compile Include="GKCore\Maps\YandexGeocoder.cs" />
     <Compile Include="GKCore\Plugins\OrdinaryPlugin.cs" />
     <Compile Include="GKCore\SingleInstance\MapiMailMessage.cs" />

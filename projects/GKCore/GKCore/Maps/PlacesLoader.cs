@@ -51,7 +51,7 @@ namespace GKCore.Maps
     public class MapPlace : BaseObject
     {
         public string Name;
-        public readonly IList<GeoPoint> Points;
+        public readonly List<GeoPoint> Points;
         public readonly ExtList<PlaceRef> PlaceRefs;
 
         public MapPlace()

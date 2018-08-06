@@ -53,6 +53,11 @@ namespace GKCore.Maps
             List<GeoPoint> geoObjects = new List<GeoPoint>();
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.CreateDefault(new Uri(url));
+
+            //For the future, if necessary
+            //WebHeaderCollection webHeaders = request.Headers;
+            //webHeaders.Add("Accept-Language:???");
+
             request.ContentType = "application/x-www-form-urlencoded";
             request.Proxy = fProxy;
 

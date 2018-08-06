@@ -53,6 +53,7 @@ namespace GKUI.Forms
         {
             try
             {
+                PlacesCache.Instance.Load();
                 IProgressController progress = AppHost.Progress;
 
                 fMapBrowser.InitMap();
@@ -106,6 +107,8 @@ namespace GKUI.Forms
                     //tvPlaces.EndUpdate();
                     //cmbPersons.EndUpdate();
                     tvPlaces.DataStore = fBaseRoot;
+
+                    PlacesCache.Instance.Save();
                 }
             }
             catch (Exception ex)
@@ -289,18 +292,15 @@ namespace GKUI.Forms
                     fBaseRoot.Children.Add(node);
 
                     if (locRec == null) {
-                        AppHost.Instance.RequestGeoCoords(placeName, mapPlace.Points);
-
-                        int num = mapPlace.Points.Count;
-                        for (int i = 0; i < num; i++) {
-                            GeoPoint pt = mapPlace.Points[i];
-                            string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
-                            node.Children.Add(new GKTreeNode(ptTitle, pt));
-                        }
+                        PlacesCache.Instance.GetPlacePoints(placeName, mapPlace.Points);
                     } else {
                         GeoPoint pt = new GeoPoint(locRec.Map.Lati, locRec.Map.Long, placeName);
                         mapPlace.Points.Add(pt);
+                    }
 
+                    int num = mapPlace.Points.Count;
+                    for (int i = 0; i < num; i++) {
+                        GeoPoint pt = mapPlace.Points[i];
                         string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
                         node.Children.Add(new GKTreeNode(ptTitle, pt));
                     }
