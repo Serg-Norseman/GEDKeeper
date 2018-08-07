@@ -31,9 +31,9 @@ namespace GKUI
     /// <summary>
     /// The implementation of the contract for working with WinForms dialogs.
     /// </summary>
-    public sealed class WinFormsStdDialogs : IStdDialogs
+    public sealed class WFStdDialogs : IStdDialogs
     {
-        public WinFormsStdDialogs()
+        public WFStdDialogs()
         {
         }
 

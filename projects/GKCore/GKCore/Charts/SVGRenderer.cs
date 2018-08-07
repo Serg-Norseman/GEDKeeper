@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -37,9 +37,8 @@ namespace GKCore.Charts
         private SvgGraphics fSVGGfx;
         private TextWriter fSVGWriter;
         private int fSVGWidth, fSVGHeight;
+        private object fTarget;
         private float fTranslucent;
-
-        public override bool IsSVG { get { return true; } }
 
         public SVGRenderer(string svgFileName, int width, int height) : base()
         {
@@ -67,26 +66,12 @@ namespace GKCore.Charts
             }
         }
 
-        public override void SetSVGMode(bool active, string svgFileName, int width, int height)
-        {
-            if (active) {
-                BeginDrawing();
-            } else {
-                EndDrawing();
-            }
-        }
-
         public override void SetTarget(object target)
         {
-            /*Graphics gfx = target as Graphics;
-            if (gfx == null)
-                throw new ArgumentException(@"Argument's type mismatch", "target");
-
-            fCanvas = gfx;*/
+            fTarget = target;
         }
 
-        public override void DrawImage(IImage image, float x, float y,
-                                       float width, float height)
+        public override void DrawImage(IImage image, float x, float y, float width, float height)
         {
             // dont implemented yet
         }
@@ -96,21 +81,9 @@ namespace GKCore.Charts
             // dont implemented yet
         }
 
-        public override int GetTextHeight(IFont font)
-        {
-            // dont implemented yet
-            return 0;
-        }
-
-        public override int GetTextWidth(string text, IFont font)
-        {
-            // dont implemented yet
-            return 0;
-        }
-
         public override ExtSizeF GetTextSize(string text, IFont font)
         {
-            return new ExtSizeF(GetTextWidth(text, font), GetTextHeight(font));
+            return AppHost.GfxProvider.GetTextSize(text, font, fTarget);
         }
 
         public override void DrawString(string text, IFont font, IBrush brush, float x, float y)
@@ -164,17 +137,44 @@ namespace GKCore.Charts
 
         public override void FillPath(IBrush brush, IGfxPath path)
         {
-            // dummy
+            if (fSVGGfx != null) {
+                if (path is IGfxCirclePath) {
+                    var circlePath = path as IGfxCirclePath;
+                    fSVGGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, null /*pen*/, brush);
+                } else if (path is IGfxCircleSegmentPath) {
+                    var segmPath = path as IGfxCircleSegmentPath;
+                    fSVGGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, null /*pen*/, brush);
+                } else {
+                }
+            }
         }
 
         public override void DrawPath(IPen pen, IGfxPath path)
         {
-            // dummy
+            if (fSVGGfx != null) {
+                if (path is IGfxCirclePath) {
+                    var circlePath = path as IGfxCirclePath;
+                    fSVGGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, pen, null /*brush*/);
+                } else if (path is IGfxCircleSegmentPath) {
+                    var segmPath = path as IGfxCircleSegmentPath;
+                    fSVGGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, null /*brush*/);
+                } else {
+                }
+            }
         }
 
         public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
         {
-            // dummy
+            if (fSVGGfx != null) {
+                if (path is IGfxCirclePath) {
+                    var circlePath = path as IGfxCirclePath;
+                    fSVGGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, pen, brush);
+                } else if (path is IGfxCircleSegmentPath) {
+                    var segmPath = path as IGfxCircleSegmentPath;
+                    fSVGGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, brush);
+                } else {
+                }
+            }
         }
 
         public override void DrawCircle(IPen pen, IBrush brush, float x, float y,
@@ -190,28 +190,8 @@ namespace GKCore.Charts
                                                float startAngle, float wedgeAngle)
         {
             if (fSVGGfx != null) {
-                fSVGGfx.DrawCircleSegment(ctX, ctY, inRad, extRad,
-                                          startAngle, startAngle + wedgeAngle,
-                                          pen, brush);
+                fSVGGfx.DrawCircleSegment(ctX, ctY, inRad, extRad, startAngle, startAngle + wedgeAngle, pen, brush);
             }
-        }
-
-        public override IPen CreatePen(IColor color, float width)
-        {
-            // dont implemented yet
-            return null;
-        }
-
-        public override IBrush CreateSolidBrush(IColor color)
-        {
-            // dont implemented yet
-            return null;
-        }
-
-        public override IGfxPath CreatePath()
-        {
-            // dont implemented yet
-            return null;
         }
 
         public override void SetTranslucent(float value)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,133 +19,94 @@
  */
 
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Windows.Forms;
-
 using BSLib;
+using Eto.Drawing;
+using Eto.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
-using GKUI.Components;
 
-namespace GKUI.Charts
+namespace GKUI.Components
 {
-    public abstract class CustomChart : ScrollablePanel, IPrintable
+    public abstract class CustomChart : CustomPanel, IPrintable
     {
-        private static readonly object EventNavRefresh;
-
-
         private readonly NavigationStack<GEDCOMRecord> fNavman;
         protected ChartRenderer fRenderer;
 
 
-        public event EventHandler NavRefresh
-        {
-            add { Events.AddHandler(EventNavRefresh, value); }
-            remove { Events.RemoveHandler(EventNavRefresh, value); }
-        }
+        public event EventHandler NavRefresh;
 
-
-        static CustomChart()
-        {
-            EventNavRefresh = new object();
-        }
 
         protected CustomChart() : base()
         {
+            CenteredImage = true;
+
             fNavman = new NavigationStack<GEDCOMRecord>();
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing) {
+            if (disposing)
+            {
                 if (fNavman != null) fNavman.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        protected override bool IsInputKey(Keys keyData)
-        {
-            switch (keyData) {
-                case Keys.Left:
-                case Keys.Right:
-                case Keys.Up:
-                case Keys.Down:
-                case Keys.Back:
-                    return true;
-
-                default:
-                    return base.IsInputKey(keyData);
-            }
-        }
-
         protected override void OnKeyDown(KeyEventArgs e)
         {
             e.Handled = true;
-            switch (e.KeyCode) {
+            switch (e.Key) {
                 case Keys.Left:
-                    HorizontalScroll.Value =
-                        Math.Max(HorizontalScroll.Value - HorizontalScroll.SmallChange, 0);
-                    PerformLayout();
+                    AdjustScroll(-SmallChange, 0);
                     break;
 
                 case Keys.Right:
-                    HorizontalScroll.Value += HorizontalScroll.SmallChange;
-                    PerformLayout();
+                    AdjustScroll(+SmallChange, 0);
                     break;
 
                 case Keys.Up:
-                    VerticalScroll.Value =
-                        Math.Max(VerticalScroll.Value - VerticalScroll.SmallChange, 0);
-                    PerformLayout();
+                    AdjustScroll(0, -SmallChange);
                     break;
 
                 case Keys.Down:
-                    VerticalScroll.Value += VerticalScroll.SmallChange;
-                    PerformLayout();
+                    AdjustScroll(0, +SmallChange);
                     break;
 
                 case Keys.PageUp:
-                    if (Keys.None == ModifierKeys) {
-                        VerticalScroll.Value =
-                            Math.Max(VerticalScroll.Value - VerticalScroll.LargeChange, 0);
-                    } else if (Keys.Shift == ModifierKeys) {
-                        HorizontalScroll.Value =
-                            Math.Max(HorizontalScroll.Value - HorizontalScroll.LargeChange, 0);
+                    if (Keys.None == e.Modifiers) {
+                        AdjustScroll(0, -LargeChange);
+                    } else if (Keys.Shift == e.Modifiers) {
+                        AdjustScroll(-LargeChange, 0);
                     }
-                    PerformLayout();
                     break;
 
                 case Keys.PageDown:
-                    if (Keys.None == ModifierKeys) {
-                        VerticalScroll.Value += VerticalScroll.LargeChange;
-                    } else if (Keys.Shift == ModifierKeys) {
-                        HorizontalScroll.Value += HorizontalScroll.LargeChange;
+                    if (Keys.None == e.Modifiers) {
+                        AdjustScroll(0, +LargeChange);
+                    } else if (Keys.Shift == e.Modifiers) {
+                        AdjustScroll(+LargeChange, 0);
                     }
-                    PerformLayout();
                     break;
 
                 case Keys.Home:
-                    if (Keys.None == ModifierKeys) {
-                        VerticalScroll.Value = 0;
-                    } else if (Keys.Shift == ModifierKeys) {
-                        HorizontalScroll.Value = 0;
+                    if (Keys.None == e.Modifiers) {
+                        AdjustScroll(0, -Viewport.Height);
+                    } else if (Keys.Shift == e.Modifiers) {
+                        AdjustScroll(-Viewport.Width, 0);
                     }
-                    PerformLayout();
                     break;
 
                 case Keys.End:
-                    if (Keys.None == ModifierKeys) {
-                        VerticalScroll.Value = VerticalScroll.Maximum;
-                    } else if (Keys.Shift == ModifierKeys) {
-                        HorizontalScroll.Value = HorizontalScroll.Maximum;
+                    if (Keys.None == e.Modifiers) {
+                        AdjustScroll(0, Viewport.Height);
+                    } else if (Keys.Shift == e.Modifiers) {
+                        AdjustScroll(+Viewport.Width, 0);
                     }
-                    PerformLayout();
                     break;
 
-                case Keys.Back:
+                case Keys.Backspace:
                     NavPrev();
                     break;
 
@@ -155,54 +116,7 @@ namespace GKUI.Charts
             }
         }
 
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            if (MouseButtons.XButton1 == e.Button) {
-                NavPrev();
-            } else if (MouseButtons.XButton2 == e.Button) {
-                NavNext();
-            } else {
-                base.OnMouseUp(e);
-            }
-        }
-
-        protected override void OnMouseWheel(MouseEventArgs e)
-        {
-            if (Keys.None == ModifierKeys) {
-                VerticalScroll.Value = Math.Max(VerticalScroll.Value - e.Delta, 0);
-                PerformLayout();
-            } else if (Keys.Shift == ModifierKeys) {
-                HorizontalScroll.Value = Math.Max(HorizontalScroll.Value - e.Delta, 0);
-                PerformLayout();
-            }
-            else {
-                base.OnMouseWheel(e);
-            }
-        }
-
         #region Print and snaphots support
-
-        protected Rectangle GetImageViewPort()
-        {
-            Rectangle viewPort;
-
-            var imageSize = GetImageSize();
-            if (!imageSize.IsEmpty) {
-                Rectangle clientRect = GetClientRect(true);
-
-                int x = !HScroll ? (clientRect.Width - (imageSize.Width + Padding.Horizontal)) / 2 : 0;
-                int y = !VScroll ? (clientRect.Height - (imageSize.Height + Padding.Vertical)) / 2 : 0;
-
-                int width = Math.Min(imageSize.Width - Math.Abs(AutoScrollPosition.X), clientRect.Width);
-                int height = Math.Min(imageSize.Height - Math.Abs(AutoScrollPosition.Y), clientRect.Height);
-
-                viewPort = new Rectangle(x + clientRect.Left, y + clientRect.Top, width, height);
-            } else {
-                viewPort = Rectangle.Empty;
-            }
-
-            return viewPort;
-        }
 
         public abstract ExtSize GetImageSize();
         public abstract void RenderImage(RenderTarget target, bool forciblyCentered = false);
@@ -218,12 +132,17 @@ namespace GKUI.Charts
             ExtSize imageSize = GetImageSize();
             var frameRect = new Rectangle(0, 0, imageSize.Width, imageSize.Height);
 
-            Image image;
+            /*Image image;
             using (var gfx = CreateGraphics()) {
                 image = new Metafile(gfx.GetHdc(), frameRect, MetafileFrameUnit.Pixel, EmfType.EmfOnly);
             }
-
             using (Graphics gfx = Graphics.FromImage(image)) {
+                RenderStaticImage(gfx, true);
+            }
+             */
+
+            var image = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
+            using (Graphics gfx = new Graphics(image)) {
                 fRenderer.SetTarget(gfx);
                 RenderImage(RenderTarget.Printer);
             }
@@ -240,60 +159,66 @@ namespace GKUI.Charts
             ExtSize imageSize = GetImageSize();
 
             if (ext == ".svg") {
+                var prevRenderer = fRenderer;
+                SetRenderer(new SVGRenderer(fileName, imageSize.Width, imageSize.Height));
+                fRenderer.BeginDrawing();
                 try {
-                    fRenderer.SetSVGMode(true, fileName, imageSize.Width, imageSize.Height);
-
                     using (var gfx = CreateGraphics()) {
                         fRenderer.SetTarget(gfx);
 
-                        fRenderer.BeginDrawing();
                         RenderImage(RenderTarget.SVG);
-                        fRenderer.EndDrawing();
                     }
                 } finally {
-                    fRenderer.SetSVGMode(false, "", 0, 0);
+                    fRenderer.EndDrawing();
+                    SetRenderer(prevRenderer);
                 }
 
                 return;
             }
 
-            if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535)
-            {
+            if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535) {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
-            }
-            else
-            {
+            } else {
                 ImageFormat imFmt = ImageFormat.Png;
-                if (ext == ".bmp") { imFmt = ImageFormat.Bmp; }
-                else
-                    if (ext == ".emf") { imFmt = ImageFormat.Emf; }
-                else
-                    if (ext == ".png") { imFmt = ImageFormat.Png; }
-                else
-                    if (ext == ".gif") { imFmt = ImageFormat.Gif; }
-                else
-                    if (ext == ".jpg") { imFmt = ImageFormat.Jpeg; }
+                if (ext == ".bmp") {
+                    imFmt = ImageFormat.Bitmap;
+                } else if (ext == ".png") {
+                    imFmt = ImageFormat.Png;
+                } else if (ext == ".gif") {
+                    imFmt = ImageFormat.Gif;
+                } else if (ext == ".jpg") {
+                    imFmt = ImageFormat.Jpeg;
+                }
+                /*else
+                    if (ext == ".emf") { imFmt = ImageFormat.Emf; }*/
 
-                Image pic;
+                /*Image pic;
                 if (Equals(imFmt, ImageFormat.Emf)) {
                     using (var gfx = CreateGraphics()) {
                         pic = new Metafile(fileName, gfx.GetHdc());
                     }
                 } else {
                     pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
-                }
+                }*/
 
+                Bitmap pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
                 try {
-                    using (Graphics gfx = Graphics.FromImage(pic)) {
+                    //using (Graphics gfx = Graphics.FromImage(pic)) {
+                    using (Graphics gfx = new Graphics(pic)) {
                         fRenderer.SetTarget(gfx);
                         RenderImage(RenderTarget.RasterFile);
                     }
 
-                    pic.Save(fileName, imFmt);
+                    ((Bitmap)pic).Save(fileName, imFmt);
                 } finally {
                     pic.Dispose();
                 }
             }
+        }
+
+        public virtual void SetRenderer(ChartRenderer renderer)
+        {
+            fRenderer = renderer;
         }
 
         #endregion
@@ -302,10 +227,8 @@ namespace GKUI.Charts
 
         private void DoNavRefresh()
         {
-            var eventHandler = (EventHandler)Events[EventNavRefresh];
-            if (eventHandler == null) return;
-
-            eventHandler(this, null);
+            var eventHandler = (EventHandler)NavRefresh;
+            if (eventHandler != null) eventHandler(this, null);
         }
 
         protected abstract void SetNavObject(object obj);

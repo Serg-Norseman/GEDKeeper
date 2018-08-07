@@ -35,7 +35,6 @@ using GKCore.Types;
 using GKTests;
 using GKTests.ControlTesters;
 using GKUI;
-using GKUI.Charts;
 using GKUI.Components;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;
@@ -58,9 +57,9 @@ namespace GKUI.Forms
         {
             base.Setup();
 
-            WinFormsAppHost.ConfigureBootstrap(false);
+            WFAppHost.ConfigureBootstrap(false);
 
-            var appHost = new WinFormsAppHost();
+            var appHost = new WFAppHost();
             appHost.Init(null, false);
 
             var indiCols = GlobalOptions.Instance.IndividualListColumns;
@@ -77,7 +76,7 @@ namespace GKUI.Forms
             // the database (requires path of files for the archive and storage)
             GlobalOptions.Instance.AllowMediaStoreReferences = true;
 
-            var appHost = (WinFormsAppHost)AppHost.Instance;
+            var appHost = (WFAppHost)AppHost.Instance;
             Assert.IsNotNull(appHost.AppContext);
 
             appHost.BaseClosed(null);

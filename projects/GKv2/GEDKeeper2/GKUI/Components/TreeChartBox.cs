@@ -33,7 +33,7 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKUI.Components;
 
-namespace GKUI.Charts
+namespace GKUI.Components
 {
     /// <summary>
     /// 
@@ -220,9 +220,9 @@ namespace GKUI.Charts
             base.Dispose(disposing);
         }
 
-        public void SetRenderer(ChartRenderer renderer)
+        public override void SetRenderer(ChartRenderer renderer)
         {
-            fRenderer = renderer;
+            base.SetRenderer(renderer);
             fModel.SetRenderer(renderer);
         }
 
@@ -465,7 +465,7 @@ namespace GKUI.Charts
         public void RecalcChart(bool noRedraw = false)
         {
             Graphics gfx = null;
-            if (fRenderer is TreeChartGfxRenderer) {
+            if (fRenderer is WFGfxRenderer) {
                 gfx = CreateGraphics();
                 fRenderer.SetTarget(gfx);
             }
@@ -473,7 +473,7 @@ namespace GKUI.Charts
             try {
                 fModel.RecalcChart(noRedraw);
             } finally {
-                if (fRenderer is TreeChartGfxRenderer && gfx != null) {
+                if (fRenderer is WFGfxRenderer && gfx != null) {
                     gfx.Dispose();
                 }
             }

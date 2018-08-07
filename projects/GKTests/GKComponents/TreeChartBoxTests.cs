@@ -25,10 +25,10 @@ using GKCore.Charts;
 using GKCore.Interfaces;
 using GKTests.Mocks;
 using GKUI;
-using GKUI.Charts;
+using GKUI.Components;
 using NUnit.Framework;
 
-namespace GKUI.Charts
+namespace GKUI.Components
 {
     [TestFixture]
     public class TreeChartBoxTests
@@ -40,7 +40,7 @@ namespace GKUI.Charts
         [TestFixtureSetUp]
         public void Init()
         {
-            WinFormsAppHost.ConfigureBootstrap(false);
+            WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowMock();
 

@@ -48,7 +48,7 @@ namespace GKUI.Forms
         {
             base.Setup();
 
-            WinFormsAppHost.ConfigureBootstrap(false);
+            WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowMock();
             fAddress = new GEDCOMAddress(fBase.Context.Tree, null, "", "");

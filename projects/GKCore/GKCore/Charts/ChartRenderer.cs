@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -73,7 +73,6 @@ namespace GKCore.Charts
         // with the ascent and descent of elements.
         protected internal const string STR_HEIGHT_SAMPLE = "AZqtypdfghjl|[]";
 
-        public abstract bool IsSVG { get; }
 
         protected ChartRenderer()
         {
@@ -87,10 +86,6 @@ namespace GKCore.Charts
         {
         }
 
-        public virtual void SetSVGMode(bool active, string svgFileName, int width, int height)
-        {
-            // dummy
-        }
 
         public static IColor GetColor(int argb)
         {
@@ -101,6 +96,7 @@ namespace GKCore.Charts
         {
             return AppHost.GfxProvider.CreateColor(r, g, b);
         }
+
 
         public abstract void SetTarget(object target);
 
@@ -114,8 +110,16 @@ namespace GKCore.Charts
         public abstract void DrawImage(IImage image, ExtRect destinationRect,
                                        ExtRect sourceRect);
 
-        public abstract int GetTextHeight(IFont font);
-        public abstract int GetTextWidth(string text, IFont font);
+        public int GetTextHeight(IFont font)
+        {
+            return (int)GetTextSize(STR_HEIGHT_SAMPLE, font).Height;
+        }
+
+        public int GetTextWidth(string text, IFont font)
+        {
+            return (int)GetTextSize(text, font).Width;
+        }
+
         public abstract ExtSizeF GetTextSize(string text, IFont font);
 
         public abstract void DrawString(string text, IFont font, IBrush brush, float x, float y);
@@ -149,11 +153,20 @@ namespace GKCore.Charts
                                                float inRad, float extRad,
                                                float startAngle, float wedgeAngle);
 
-        public abstract IPen CreatePen(IColor color, float width);
+        public virtual IPen CreatePen(IColor color, float width)
+        {
+            return AppHost.GfxProvider.CreatePen(color, width);
+        }
 
-        public abstract IBrush CreateSolidBrush(IColor color);
+        public virtual IBrush CreateSolidBrush(IColor color)
+        {
+            return AppHost.GfxProvider.CreateSolidBrush(color);
+        }
 
-        public abstract IGfxPath CreatePath();
+        public virtual IGfxPath CreatePath()
+        {
+            return AppHost.GfxProvider.CreatePath();
+        }
 
         public abstract void SetTranslucent(float value);
 

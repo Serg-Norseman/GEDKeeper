@@ -33,9 +33,9 @@ namespace GKUI
     /// <summary>
     /// 
     /// </summary>
-    public class WinFormsGfxProvider : IGraphicsProvider
+    public class WFGfxProvider : IGraphicsProvider
     {
-        public WinFormsGfxProvider()
+        public WFGfxProvider()
         {
         }
 
@@ -241,6 +241,18 @@ namespace GKUI
             Color sdColor = ((ColorHandler)color).Handle;
 
             return new PenHandler(new Pen(sdColor, width));
+        }
+
+        public ExtSizeF GetTextSize(string text, IFont font, object target)
+        {
+            Graphics gfx = target as Graphics;
+            if (gfx != null && font != null) {
+                Font sdFnt = ((FontHandler)font).Handle;
+                var size = gfx.MeasureString(text, sdFnt);
+                return new ExtSizeF(size.Width, size.Height);
+            } else {
+                return new ExtSizeF();
+            }
         }
     }
 }

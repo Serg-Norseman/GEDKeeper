@@ -32,7 +32,7 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
-            WinFormsAppHost.ConfigureBootstrap(false);
+            WFAppHost.ConfigureBootstrap(false);
         }
 
         [Test]

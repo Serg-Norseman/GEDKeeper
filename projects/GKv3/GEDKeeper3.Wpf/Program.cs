@@ -42,9 +42,9 @@ namespace GEDKeeper3.Wpf
             //Style.Add<ButtonToolItemHandler>("icons", h => h.Widget.Image.);
             //Style.Add<ButtonHandler>("icons", h => h.Widget.Image.);
 
-            EtoFormsAppHost.ConfigureBootstrap(false);
+            EtoAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
-            Logger.LogInit(EtoFormsAppHost.GetLogFilename());
+            Logger.LogInit(EtoAppHost.GetLogFilename());
             LogSysInfo();
 
             var application = new Application(Platforms.Wpf);
@@ -52,7 +52,7 @@ namespace GEDKeeper3.Wpf
             AppHost.InitSettings();
             try
             {
-                var appHost = (EtoFormsAppHost)AppHost.Instance;
+                var appHost = (EtoAppHost)AppHost.Instance;
                 appHost.Init(args, false);
 
                 application.Run();

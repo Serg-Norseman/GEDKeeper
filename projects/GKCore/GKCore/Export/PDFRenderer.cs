@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -40,8 +40,6 @@ namespace GKCore.Export
         private PdfContentByte fCanvas;
         private readonly float fPageHeight;
         private readonly float fPageWidth;
-
-        public override bool IsSVG { get { return false; } }
 
         public PDFRenderer(float pageWidth, float pageHeight) : base()
         {
@@ -121,21 +119,12 @@ namespace GKCore.Export
             // dont implemented yet
         }
 
-        public override int GetTextHeight(IFont font)
-        {
-            BaseFont baseFont = GetBaseFont(font);
-            return PDFWriter.FontHandler.GetTextHeight(baseFont, font.Size);
-        }
-
-        public override int GetTextWidth(string text, IFont font)
-        {
-            BaseFont baseFont = GetBaseFont(font);
-            return PDFWriter.FontHandler.GetTextWidth(text, baseFont, font.Size);
-        }
-
         public override ExtSizeF GetTextSize(string text, IFont font)
         {
-            return new ExtSizeF(GetTextWidth(text, font), GetTextHeight(font));
+            BaseFont baseFont = GetBaseFont(font);
+            var width = PDFWriter.FontHandler.GetTextWidth(text, baseFont, font.Size);
+            var height = PDFWriter.FontHandler.GetTextHeight(baseFont, font.Size);
+            return new ExtSizeF(width, height);
         }
 
         public override void DrawString(string text, IFont font, IBrush brush, float x, float y)
@@ -268,12 +257,10 @@ namespace GKCore.Export
 
         public override void FillPath(IBrush brush, IGfxPath path)
         {
-            
         }
 
         public override void DrawPath(IPen pen, IGfxPath path)
         {
-            
         }
 
         public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
@@ -287,21 +274,6 @@ namespace GKCore.Export
         public override void DrawCircleSegment(IPen pen, IBrush brush, int ctX, int ctY,
                                                float inRad, float extRad, float startAngle, float wedgeAngle)
         {
-        }
-
-        public override IPen CreatePen(IColor color, float width)
-        {
-            return AppHost.GfxProvider.CreatePen(color, width);
-        }
-
-        public override IBrush CreateSolidBrush(IColor color)
-        {
-            return AppHost.GfxProvider.CreateSolidBrush(color);
-        }
-
-        public override IGfxPath CreatePath()
-        {
-            return AppHost.GfxProvider.CreatePath();
         }
 
         public override void ScaleTransform(float sx, float sy)

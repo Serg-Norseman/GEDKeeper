@@ -21,67 +21,64 @@
 using System;
 using System.Globalization;
 using System.Reflection;
-using System.Windows.Forms;
-
+using Eto.Forms;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Options;
 using GKCore.UIContracts;
-using GKUI.Charts;
 using GKUI.Components;
 using GKUI.Forms;
 
 namespace GKUI
 {
-    public sealed class WinFormsAppHost : AppHost
+    /// <summary>
+    /// The main implementation of the platform-specific application's host for
+    /// EtoForms.
+    /// </summary>
+    public sealed class EtoAppHost : AppHost
     {
-        private readonly ApplicationContext fAppContext;
-
-        public ApplicationContext AppContext
+        static EtoAppHost()
         {
-            get { return fAppContext; }
+            SetAppSign("GEDKeeper3e");
         }
 
-        static WinFormsAppHost()
+        public EtoAppHost() : base()
         {
-            SetAppSign("GEDKeeper2");
         }
 
-        public WinFormsAppHost() : base()
+        private void OnApplicationExit(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            fAppContext = new ApplicationContext();
-            Application.ApplicationExit += this.OnApplicationExit;
-        }
-
-        private void OnApplicationExit(object sender, EventArgs e)
-        {
+            //AppHost.Instance.SaveLastBases();
         }
 
         public override void Init(string[] args, bool isMDI)
         {
             base.Init(args, isMDI);
+            Application.Instance.Terminating += OnApplicationExit;
         }
 
-        // FIXME
         public override IWindow GetActiveWindow()
         {
-            Form activeForm = Form.ActiveForm;
+            Window activeWnd = fActiveBase as Window;
 
-            // only for tests!
-            if (activeForm == null && fRunningForms.Count > 0) {
-                activeForm = (Form)fRunningForms[0];
+            if (activeWnd == null) {
+                foreach (var wnd in Application.Instance.Windows) {
+                    if (wnd.HasFocus) {
+                        activeWnd = wnd;
+                        break;
+                    }
+                }
             }
 
-            return (activeForm is IWindow) ? (IWindow)activeForm : null;
+            return (activeWnd is IWindow) ? (IWindow)activeWnd : null;
         }
 
-        // FIXME!
         public override IntPtr GetTopWindowHandle()
         {
             IntPtr mainHandle = IntPtr.Zero;
-
+            // FIXME
             return mainHandle;
         }
 
@@ -90,7 +87,7 @@ namespace GKUI
             base.CloseWindow(window);
 
             if (fRunningForms.Count == 0) {
-                fAppContext.ExitThread();
+                Application.Instance.Quit();
             }
         }
 
@@ -109,18 +106,12 @@ namespace GKUI
             IntPtr mainHandle = GetTopWindowHandle();
 
             if (keepModeless) {
-                foreach (IWindow win in fRunningForms) {
-                    if (win is IBaseWindow) {
-                        IntPtr handle = ((Form)win).Handle;
-
-                        #if !__MonoCS__
-                        NativeMethods.PostMessage(handle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
-                        #endif
-                    }
-                }
+                #if !__MonoCS__
+                //NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
+                #endif
             }
 
-            UIHelper.CenterFormByParent((Form)form, mainHandle);
+            //UIHelper.CenterFormByParent((Form)form, mainHandle);
 
             return base.ShowModalX(form, keepModeless);
         }
@@ -131,7 +122,7 @@ namespace GKUI
 
             if (frm != null) {
                 #if !__MonoCS__
-                NativeMethods.EnableWindow(frm.Handle, value);
+                //NativeMethods.EnableWindow(frm.Handle, value);
                 #endif
             }
         }
@@ -172,26 +163,34 @@ namespace GKUI
 
         public override void SaveWinMRU(IBaseWindow baseWin)
         {
-            if (baseWin != null) {
-                int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
-                if (idx >= 0) {
-                    var frm = baseWin as Form;
-                    MRUFile mf = AppHost.Options.MRUFiles[idx];
-                    mf.WinRect = UIHelper.GetFormRect(frm);
-                    mf.WinState = (WindowState)frm.WindowState;
-                }
+            int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
+            if (idx >= 0) {
+                var frm = baseWin as Form;
+                MRUFile mf = AppHost.Options.MRUFiles[idx];
+                mf.WinRect = UIHelper.GetFormRect(frm);
+                mf.WinState = gkWindowStates[(int)frm.WindowState];
             }
         }
 
+        private static Eto.Forms.WindowState[] efWindowStates = new Eto.Forms.WindowState[] {
+            Eto.Forms.WindowState.Normal,
+            Eto.Forms.WindowState.Minimized,
+            Eto.Forms.WindowState.Maximized
+        };
+
+        private static GKCore.Options.WindowState[] gkWindowStates = new GKCore.Options.WindowState[] {
+            GKCore.Options.WindowState.Normal,
+            GKCore.Options.WindowState.Maximized,
+            GKCore.Options.WindowState.Minimized
+        };
+
         public override void RestoreWinMRU(IBaseWindow baseWin)
         {
-            if (baseWin != null) {
-                int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
-                if (idx >= 0) {
-                    var frm = baseWin as Form;
-                    MRUFile mf = AppHost.Options.MRUFiles[idx];
-                    UIHelper.RestoreFormRect(frm, mf.WinRect, (FormWindowState)mf.WinState);
-                }
+            int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
+            if (idx >= 0) {
+                var frm = baseWin as Form;
+                MRUFile mf = AppHost.Options.MRUFiles[idx];
+                UIHelper.RestoreFormRect(frm, mf.WinRect, efWindowStates[(int)mf.WinState]);
             }
         }
 
@@ -207,44 +206,52 @@ namespace GKUI
             }
         }
 
+        #region UI Timers
+
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
         {
-            var result = new WinUITimer(msInterval, elapsedHandler);
+            var result = new EUITimer(msInterval, elapsedHandler);
             return result;
         }
+
+        #endregion
 
         #region KeyLayout functions
 
         public override int GetKeyLayout()
         {
-            #if __MonoCS__
+            return CultureInfo.CurrentUICulture.KeyboardLayoutId;
+
+            /*#if __MonoCS__
             // There is a bug in Mono: does not work this CurrentInputLanguage
             return CultureInfo.CurrentUICulture.KeyboardLayoutId;
             #else
             InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
             return currentLang.Culture.KeyboardLayoutId;
-            #endif
+            #endif*/
         }
 
         public override void SetKeyLayout(int layout)
         {
             try {
-                CultureInfo cultureInfo = new CultureInfo(layout);
+                CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(layout);
+
+                /*CultureInfo cultureInfo = new CultureInfo(layout);
                 InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
-                InputLanguage.CurrentInputLanguage = currentLang;
+                InputLanguage.CurrentInputLanguage = currentLang;*/
             } catch (Exception ex) {
-                Logger.LogWrite("WinFormsAppHost.SetKeyLayout(): " + ex.Message);
+                Logger.LogWrite("EtoFormsAppHost.SetKeyLayout(): " + ex.Message);
             }
         }
 
         public override string GetDefaultFontName()
         {
             string fontName;
-            #if __MonoCS__
-            fontName = "Noto Sans";
-            #else
-            fontName = "Verdana"; // "Tahoma";
-            #endif
+            if (Application.Instance.Platform.IsGtk) {
+                fontName = "Noto Sans";
+            } else {
+                fontName = "Verdana"; // "Tahoma";
+            }
             return fontName;
         }
 
@@ -266,10 +273,7 @@ namespace GKUI
         /// </summary>
         public static void ConfigureBootstrap(bool mdi)
         {
-            if (mdi)
-                throw new ArgumentException("MDI obsolete");
-
-            var appHost = new WinFormsAppHost();
+            var appHost = new EtoAppHost();
             IContainer container = AppHost.Container;
 
             if (container == null)
@@ -277,12 +281,14 @@ namespace GKUI
 
             container.Reset();
 
-            container.Register<IStdDialogs, WinFormsStdDialogs>(LifeCycle.Singleton);
-            container.Register<IGraphicsProvider, WinFormsGfxProvider>(LifeCycle.Singleton);
+            container.Register<IStdDialogs, EtoStdDialogs>(LifeCycle.Singleton);
+            container.Register<IGraphicsProvider, EtoGfxProvider>(LifeCycle.Singleton);
+            //container.Register<ILogger, LoggerStub>(LifeCycle.Singleton);
             container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
 
             // controls and other
             container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
+            //container.Register<IWizardPages, WizardPages>(LifeCycle.Transient);
 
             // dialogs
             container.Register<IRecordSelectDialog, RecordSelectDlg>(LifeCycle.Transient);
@@ -311,7 +317,13 @@ namespace GKUI
             container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
             container.Register<IPortraitSelectDlg, PortraitSelectDlg>(LifeCycle.Transient);
             container.Register<IDayTipsDlg, DayTipsDlg>(LifeCycle.Transient);
-            container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient);
+
+            if (!mdi) {
+                container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient);
+            } else {
+                //container.Register<IBaseWindow, BaseWin>(LifeCycle.Transient);
+                //container.Register<IMainWindow, MainWin>(LifeCycle.Singleton);
+            }
         }
 
         #endregion

@@ -41,7 +41,7 @@ namespace GKUI.Forms
         {
             base.Setup();
 
-            WinFormsAppHost.ConfigureBootstrap(false);
+            WFAppHost.ConfigureBootstrap(false);
 
             fDialog = new AboutDlg();
             fDialog.Show();

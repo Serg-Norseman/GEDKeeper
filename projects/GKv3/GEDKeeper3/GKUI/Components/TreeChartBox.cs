@@ -21,19 +21,16 @@
 //define DEBUG_IMAGE
 
 using System;
-using System.Collections.Generic;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKUI.Components;
 
-namespace GKUI.Charts
+namespace GKUI.Components
 {
     /// <summary>
     /// 
@@ -183,9 +180,9 @@ namespace GKUI.Charts
             base.Dispose(disposing);
         }
 
-        public void SetRenderer(ChartRenderer renderer)
+        public override void SetRenderer(ChartRenderer renderer)
         {
-            fRenderer = renderer;
+            base.SetRenderer(renderer);
             fModel.SetRenderer(renderer);
         }
 
@@ -432,7 +429,7 @@ namespace GKUI.Charts
         public void RecalcChart(bool noRedraw = false)
         {
             Graphics gfx = null;
-            if (fRenderer is TreeChartGfxRenderer) {
+            if (fRenderer is EtoGfxRenderer) {
                 //gfx = CreateGraphics();
                 //fRenderer.SetTarget(gfx, false);
             }
@@ -440,7 +437,7 @@ namespace GKUI.Charts
             try {
                 fModel.RecalcChart(noRedraw);
             } finally {
-                if (fRenderer is TreeChartGfxRenderer && gfx != null) {
+                if (fRenderer is EtoGfxRenderer && gfx != null) {
                     gfx.Dispose();
                 }
             }

@@ -44,7 +44,7 @@ namespace GKCommon.GEDCOM
         {
             // TempDirtyHack: some functions are references to GlobalOptions (and GfxInit)
             // TODO: replace to mocks
-            WinFormsAppHost.ConfigureBootstrap(false);
+            WFAppHost.ConfigureBootstrap(false);
 
             fContext = TestStubs.CreateContext();
             TestStubs.FillContext(fContext);

@@ -31,9 +31,9 @@ namespace GKUI
     /// The main implementation of the platform-specific graphics provider for
     /// EtoForms.
     /// </summary>
-    public class EtoFormsGfxProvider : IGraphicsProvider
+    public class EtoGfxProvider : IGraphicsProvider
     {
-        public EtoFormsGfxProvider()
+        public EtoGfxProvider()
         {
         }
 
@@ -250,6 +250,18 @@ namespace GKUI
             Color sdColor = ((ColorHandler)color).Handle;
 
             return new PenHandler(new Pen(sdColor, width));
+        }
+
+        public ExtSizeF GetTextSize(string text, IFont font, object target)
+        {
+            //Graphics gfx = target as Graphics;
+            if (/*gfx != null && */font != null) {
+                Font sdFnt = ((FontHandler)font).Handle;
+                var size = sdFnt.MeasureString(text);
+                return new ExtSizeF(size.Width, size.Height);
+            } else {
+                return new ExtSizeF();
+            }
         }
     }
 }

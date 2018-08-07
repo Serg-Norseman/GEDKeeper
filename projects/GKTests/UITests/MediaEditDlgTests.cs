@@ -45,7 +45,7 @@ namespace GKUI.Forms
         {
             base.Setup();
 
-            WinFormsAppHost.ConfigureBootstrap(false);
+            WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowMock();
             fMultimediaRecord = new GEDCOMMultimediaRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");

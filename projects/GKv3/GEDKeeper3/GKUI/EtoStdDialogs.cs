@@ -31,9 +31,9 @@ namespace GKUI
     /// <summary>
     /// The implementation of the contract for working with EtoForms dialogs.
     /// </summary>
-    public sealed class EtoFormsStdDialogs : IStdDialogs
+    public sealed class EtoStdDialogs : IStdDialogs
     {
-        public EtoFormsStdDialogs()
+        public EtoStdDialogs()
         {
         }
 

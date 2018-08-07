@@ -64,9 +64,9 @@ namespace GKUI
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
         private static void Main(string[] args)
         {
-            WinFormsAppHost.ConfigureBootstrap(false);
+            WFAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
-            Logger.LogInit(WinFormsAppHost.GetLogFilename());
+            Logger.LogInit(WFAppHost.GetLogFilename());
             LogSysInfo();
 
             Application.ThreadException += ExExceptionHandler;
@@ -82,7 +82,7 @@ namespace GKUI
                     AppHost.InitSettings();
                     try
                     {
-                        var appHost = (WinFormsAppHost)AppHost.Instance;
+                        var appHost = (WFAppHost)AppHost.Instance;
                         appHost.Init(args, false);
 
                         Application.Run(appHost.AppContext);

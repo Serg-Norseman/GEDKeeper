@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,9 +27,8 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKUI.Components;
 
-namespace GKUI.Charts
+namespace GKUI.Components
 {
     /// <summary>
     /// 
@@ -132,7 +131,7 @@ namespace GKUI.Charts
         {
             CenteredImage = true;
 
-            fRenderer = new TreeChartGfxRenderer();
+            fRenderer = new EtoGfxRenderer();
             fModel = new CircleChartModel();
             fModel.SetRenderer(fRenderer);
             fModel.Options = new AncestorsCircleOptions();
@@ -147,6 +146,12 @@ namespace GKUI.Charts
                 fModel.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public override void SetRenderer(ChartRenderer renderer)
+        {
+            base.SetRenderer(renderer);
+            fModel.SetRenderer(renderer);
         }
 
         public void Changed()

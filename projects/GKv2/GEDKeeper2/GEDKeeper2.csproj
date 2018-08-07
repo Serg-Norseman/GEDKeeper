@@ -111,18 +111,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKProgram.cs" />
-    <Compile Include="GKUI\Charts\CircleChart.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Charts\CustomChart.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Charts\TreeChartGfxRenderer.cs" />
     <Compile Include="GKUI\Components\ACOptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GKUI\Components\ACOptionsControl.Designer.cs">
       <DependentUpon>ACOptionsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Components\CircleChart.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\CustomChart.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\GKMergeControl.cs">
       <SubType>UserControl</SubType>
@@ -140,6 +139,7 @@
     <Compile Include="GKUI\Components\TextBoxEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\Components\TreeChartBox.cs" />
     <Compile Include="GKUI\Forms\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -413,10 +413,10 @@
     <Compile Include="GKUI\Forms\UserRefEditDlg.Designer.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Charts\TreeChartBox.cs" />
-    <Compile Include="GKUI\WinFormsAppHost.cs" />
-    <Compile Include="GKUI\WinFormsGfxProvider.cs" />
-    <Compile Include="GKUI\WinFormsStdDialogs.cs" />
+    <Compile Include="GKUI\WFGfxRenderer.cs" />
+    <Compile Include="GKUI\WFAppHost.cs" />
+    <Compile Include="GKUI\WFGfxProvider.cs" />
+    <Compile Include="GKUI\WFStdDialogs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

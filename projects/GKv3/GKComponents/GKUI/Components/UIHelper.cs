@@ -270,6 +270,51 @@ namespace GKUI.Components
             path.CloseFigure();
         }
 
+        public static GraphicsPath CreateRectangle(float x, float y, float width, float height)
+        {
+            float xw = x + width;
+            float yh = y + height;
+
+            GraphicsPath p = new GraphicsPath();
+            p.StartFigure();
+
+            p.AddLine(x, y, xw, y); // Top Edge
+            p.AddLine(xw, y, xw, yh); // Right Edge
+            p.AddLine(xw, yh, x, yh); // Bottom Edge
+            p.AddLine(x, yh, x, y); // Left Edge
+
+            p.CloseFigure();
+            return p;
+        }
+
+        public static GraphicsPath CreateRoundedRectangle(float x, float y, float width, float height, float radius)
+        {
+            float xw = x + width;
+            float yh = y + height;
+            float xwr = xw - radius;
+            float yhr = yh - radius;
+            float xr = x + radius;
+            float yr = y + radius;
+            float r2 = radius * 2;
+            float xwr2 = xw - r2;
+            float yhr2 = yh - r2;
+
+            GraphicsPath p = new GraphicsPath();
+            p.StartFigure();
+
+            p.AddArc(x, y, r2, r2, 180, 90); // Top Left Corner
+            p.AddLine(xr, y, xwr, y); // Top Edge
+            p.AddArc(xwr2, y, r2, r2, 270, 90); // Top Right Corner
+            p.AddLine(xw, yr, xw, yhr); // Right Edge
+            p.AddArc(xwr2, yhr2, r2, r2, 0, 90); // Bottom Right Corner
+            p.AddLine(xwr, yh, xr, yh); // Bottom Edge
+            p.AddArc(x, yhr2, r2, r2, 90, 90); // Bottom Left Corner
+            p.AddLine(x, yhr, x, yr); // Left Edge
+
+            p.CloseFigure();
+            return p;
+        }
+
         public static IColor ConvertColor(Color color)
         {
             return new ColorHandler(color);

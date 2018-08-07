@@ -48,5 +48,7 @@ namespace GKCore.Interfaces
         IImage LoadResourceImage(string resName, bool makeTransp);
         IImage LoadImage(string fileName);
         void SaveImage(IImage image, string fileName);
+
+        ExtSizeF GetTextSize(string text, IFont font, object target);
     }
 }

@@ -40,6 +40,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKHistoryDataPlugin", "GKv2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKStdReports", "GKv2\GKStdReports\GKStdReports.csproj", "{4D6E49E2-58C4-49C8-8664-C8A89D418927}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCommunicatorPlugin", "GKCommunicator\GKCommunicatorPlugin\GKCommunicatorPlugin.csproj", "{304A9ACA-337E-40BC-AC18-BC3B303CBF6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNetCore", "GKCommunicator\GKNetCore\GKNetCore.csproj", "{FEE68CF6-1D60-4E90-AEF3-6AFA4A8C977D}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper2", "GKv2\GEDKeeper2\GEDKeeper2.csproj", "{19B7D80A-37FD-4E49-9F59-87FA41B677E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTests", "GKTests\GKTests.csproj", "{A8B53A6B-40A6-40BA-A671-03FC911BC37B}"
@@ -49,10 +53,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKComponents", "GKv2\GKComponents\GKComponents.csproj", "{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKSandbox", "GKv2\GKSandbox\GKSandbox.csproj", "{E888F971-3F1A-4E22-BEE6-94AEED4E5D58}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCommunicatorPlugin", "GKCommunicator\GKCommunicatorPlugin\GKCommunicatorPlugin.csproj", "{304A9ACA-337E-40BC-AC18-BC3B303CBF6C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNetCore", "GKCommunicator\GKNetCore\GKNetCore.csproj", "{FEE68CF6-1D60-4E90-AEF3-6AFA4A8C977D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

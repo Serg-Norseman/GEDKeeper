@@ -45,7 +45,7 @@ namespace GKUI.Forms
         {
             base.Setup();
 
-            WinFormsAppHost.ConfigureBootstrap(false);
+            WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowMock();
             fNoteRecord = new GEDCOMNoteRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");

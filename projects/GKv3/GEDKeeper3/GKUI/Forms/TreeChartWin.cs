@@ -23,14 +23,13 @@ using System.Collections.Generic;
 using System.IO;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
-using GKUI.Charts;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -68,7 +67,7 @@ namespace GKUI.Forms
             fBase = baseWin;
             fPerson = startPerson;
 
-            fTreeBox = new TreeChartBox(new TreeChartGfxRenderer());
+            fTreeBox = new TreeChartBox(new EtoGfxRenderer());
             fTreeBox.Base = fBase;
             //fTreeBox.Dock = DockStyle.Fill;
             //fTreeBox.DragOver += ImageTree_DragOver;
