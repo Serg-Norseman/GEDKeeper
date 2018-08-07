@@ -25,7 +25,9 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
+using GKCore.Maps;
 using GKCore.Types;
+using GKCore.UIContracts;
 
 namespace GKTests.Mocks
 {
@@ -186,5 +188,23 @@ namespace GKTests.Mocks
         public override void BeginMulticolumns(int columnCount, float columnSpacing) { }
         public override void EndMulticolumns() { }
         public override void AddImage(IImage image) { }
+    }
+
+    public class MockBrowser : IMapBrowser
+    {
+        public bool ShowPoints { get; set; }
+        public bool ShowLines { get; set; }
+        public ExtList<GeoPoint> MapPoints { get { return null; } }
+
+        public int AddPoint(double latitude, double longitude, string hint) { return -1; }
+        public void ClearPoints() { }
+        public void DeletePoint(int index) { }
+        public void BeginUpdate() { }
+        public void EndUpdate() { }
+        public void InitMap() { }
+        public void RefreshPoints() { }
+        public void SaveSnapshot(string fileName) { }
+        public void SetCenter(double latitude, double longitude, int scale) { }
+        public void ZoomToBounds() { }
     }
 }

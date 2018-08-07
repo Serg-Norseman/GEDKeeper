@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,10 +22,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
@@ -1685,8 +1683,23 @@ namespace GKUI.Forms
             ctl.FireEvent("KeyDown", new KeyEventArgs(Keys.Back));
             ctl.FireEvent("DoubleClick", new EventArgs());
 
-            //ctl.FireEvent("MouseUp", new MouseEventArgs(MouseButtons.Right, 1, 0, 0, 0));
-            
+            Mouse.UseOn(ctl);
+
+            int sx = 10 + 20;
+            int sy = ctl.Properties.Height / 2;
+            Mouse.Hover(sx, sy);
+            Mouse.Press(MouseButtons.Left);
+            Mouse.Hover(sx, sy + 20); // generations control
+            Mouse.Release(MouseButtons.Left);
+
+            sx = ctl.Properties.Width - 10 - 30;
+            Mouse.Hover(sx, sy);
+            Mouse.Press(MouseButtons.Left);
+            Mouse.Hover(sx, sy + 20); // scale control
+            Mouse.Release(MouseButtons.Left);
+
+            //
+
             var tbox = ctl.Properties as TreeChartBox;
             Assert.IsNotNull(tbox);
 

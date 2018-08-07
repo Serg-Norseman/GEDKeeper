@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -56,41 +56,35 @@ namespace GKCore
         {
             if (!File.Exists(fileName)) return;
 
-            try
-            {
+            try {
                 // loading database
                 using (var reader = new StreamReader(fileName)) {
                     string content = reader.ReadToEnd();
                     var rawData = YamlHelper.Deserialize(content, typeof(PathsMappingsList));
                     fPathsMappings = rawData[0] as PathsMappingsList;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("PathReplacer.Load(): " + ex.Message);
             }
         }
 
-        public string TryReplacePath(string path)
+        public string TryReplacePath(string path, bool checkExists = true)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            try
-            {
+            try {
                 for (int i = 0; i < fPathsMappings.PathsMappings.Length; i++) {
                     var pathsMapping = fPathsMappings.PathsMappings[i];
 
                     if (path.StartsWith(pathsMapping.Source)) {
                         string newPath = FileHelper.NormalizeFilename(path.Replace(pathsMapping.Source, pathsMapping.Target));
-                        if (File.Exists(newPath)) {
+                        if (!checkExists || File.Exists(newPath)) {
                             return newPath;
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("PathReplacer.TryReplacePath(): " + ex.Message);
             }
 

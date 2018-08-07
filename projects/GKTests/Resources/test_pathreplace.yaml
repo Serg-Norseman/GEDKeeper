@@ -1,0 +1,7 @@
+---
+PathsMappings:
+  - Source: D:\path1\
+    Target: /home/path11/
+  - Source: /home/path11/
+    Target: D:\path1\
+...

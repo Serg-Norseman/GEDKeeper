@@ -186,5 +186,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\test_ftb6_ansi%28win1251%29.ged" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\test_holidays.yaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\test_pathreplace.yaml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

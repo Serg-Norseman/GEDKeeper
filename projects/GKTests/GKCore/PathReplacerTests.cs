@@ -19,6 +19,7 @@
  */
 
 using System;
+using GKTests;
 using NUnit.Framework;
 
 namespace GKCore
@@ -42,6 +43,15 @@ namespace GKCore
 
             newPath = fPathReplacer.TryReplacePath(@"C:\TEST\x.yyy");
             Assert.IsNullOrEmpty(newPath);
+        }
+
+        [Test]
+        public void Test_Common()
+        {
+            string prFile = TestStubs.PrepareTestFile("test_pathreplace.yaml");
+            fPathReplacer.Load(prFile);
+
+            Assert.AreEqual("/home/path11/x.yyy", fPathReplacer.TryReplacePath(@"D:\path1\x.yyy", false));
         }
     }
 }

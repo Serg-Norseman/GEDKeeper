@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using System.IO;
 using BSLib;
-using GKCommon;
 
 namespace GKCore
 {
@@ -86,17 +85,20 @@ namespace GKCore
 
         public void CollectTips(StringList tipsList)
         {
+            CollectTips(tipsList, DateTime.Now.Date);
+        }
+
+        public void CollectTips(StringList tipsList, DateTime dtx)
+        {
             if (tipsList == null)
                 throw new ArgumentNullException("tipsList");
 
             try {
-                DateTime dtNow = DateTime.Now.Date;
-
                 bool firstTip = true;
                 for (int i = 0; i < fHolidays.Holidays.Length; i++) {
                     var holiday = fHolidays.Holidays[i];
 
-                    int days = DateHelper.DaysBetween(dtNow, holiday.XDate);
+                    int days = DateHelper.DaysBetween(dtx, holiday.XDate);
 
                     if (days >= 0 && days < 3) {
                         string tip;

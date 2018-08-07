@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using BSLib;
 using GKCore.Maps;
+using GKTests.Mocks;
 using NUnit.Framework;
 
 namespace GKCore
@@ -92,6 +93,30 @@ namespace GKCore
         }
 
         [Test]
+        public void Test_AddPoint()
+        {
+            var gmapPoints = new ExtList<GeoPoint>();
+
+            PlacesLoader.AddPoint(gmapPoints, new GeoPoint(0, 0, "test"), new PlaceRef(null));
+            Assert.AreEqual(1, gmapPoints.Count);
+
+            PlacesLoader.AddPoint(gmapPoints, new GeoPoint(0, 0, "test"), new PlaceRef(null));
+            Assert.AreEqual(1, gmapPoints.Count); // duplicate will be excluded
+        }
+
+        [Test]
+        public void Test_CopyPoints()
+        {
+            var mockBrowser = new MockBrowser();
+
+            Assert.Throws(typeof(ArgumentNullException), () => { PlacesLoader.CopyPoints(mockBrowser, null, true); });
+
+            var gmapPoints = new ExtList<GeoPoint>();
+            gmapPoints.Add(new GeoPoint(0, 0, "test"));
+            PlacesLoader.CopyPoints(mockBrowser, gmapPoints, true);
+        }
+
+        [Test]
         public void Test_GetPointsFrame()
         {
             CoordsRect coordsRect = PlacesLoader.GetPointsFrame(null);
@@ -123,6 +148,13 @@ namespace GKCore
         {
             string coord = PlacesLoader.CoordToStr(2.005216);
             Assert.AreEqual("2.005216", coord);
+        }
+
+        [Test]
+        public void Test_PlacesCache_GetPlacePoints()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { PlacesCache.Instance.GetPlacePoints(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { PlacesCache.Instance.GetPlacePoints("test", null); });
         }
     }
 }

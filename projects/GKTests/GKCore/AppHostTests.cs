@@ -45,6 +45,8 @@ namespace GKCore
 
             AppHost.Instance.SetArgs(new string[] { "" });
 
+            AppHost.CheckPortable(new string[] { "" });
+
             Assert.IsNotNull(AppHost.PathReplacer);
             Assert.IsNotNull(AppHost.NamesTable);
             Assert.IsNotNull(AppHost.Plugins);

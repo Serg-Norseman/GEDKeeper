@@ -1,0 +1,8 @@
+﻿---
+Country: Ruritania
+Holidays:
+  - Name: First
+    Date: 01 jan
+  - Name: Second
+    Date: 07 jan
+...

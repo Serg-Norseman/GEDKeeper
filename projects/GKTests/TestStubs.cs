@@ -19,6 +19,7 @@
  */
 
 using System.IO;
+using System.Reflection;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -169,6 +170,21 @@ namespace GKTests
             #endif
 
             if (File.Exists(fileName)) File.Delete(fileName); // for local tests!
+
+            return fileName;
+        }
+
+        public static string PrepareTestFile(string resName)
+        {
+            string fileName = GetTempFilePath(resName);
+
+            Assembly assembly = typeof(CoreTests).Assembly;
+            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources." + resName)) {
+                long size = inStream.Length;
+                byte[] buffer = new byte[size];
+                int res = inStream.Read(buffer, 0, (int)size);
+                File.WriteAllBytes(fileName, buffer);
+            }
 
             return fileName;
         }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -96,6 +96,9 @@ namespace GKCore.Maps
 
         public static void CopyPoints(IMapBrowser browser, ExtList<GeoPoint> gmapPoints, bool byPerson)
         {
+            if (gmapPoints == null)
+                throw new ArgumentNullException("gmapPoints");
+
             browser.BeginUpdate();
             try {
                 browser.ClearPoints();

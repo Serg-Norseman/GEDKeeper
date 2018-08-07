@@ -20,6 +20,7 @@
 
 using System;
 using BSLib;
+using GKTests;
 using NUnit.Framework;
 
 namespace GKCore
@@ -40,8 +41,16 @@ namespace GKCore
         {
             Assert.Throws(typeof(ArgumentNullException), () => { fHolidays.CollectTips(null); });
 
-            StringList tipsList = new StringList();
-            fHolidays.CollectTips(tipsList);
+            using (StringList tipsList = new StringList()) {
+                fHolidays.CollectTips(tipsList);
+                Assert.AreEqual(0, tipsList.Count);
+
+                string holidaysFile = TestStubs.PrepareTestFile("test_holidays.yaml");
+                fHolidays.Load(holidaysFile);
+
+                fHolidays.CollectTips(tipsList, new DateTime(DateTime.Now.Year, 01, 05));
+                Assert.AreEqual(2, tipsList.Count); // one for header, and one with day
+            }
         }
     }
 }
