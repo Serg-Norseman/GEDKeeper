@@ -33,36 +33,37 @@ namespace GKCore.Charts
     /// </summary>
     public sealed class SVGRenderer : ChartRenderer
     {
-        private string fSVGFileName;
-        private SvgGraphics fSVGGfx;
-        private TextWriter fSVGWriter;
-        private int fSVGWidth, fSVGHeight;
+        private readonly string fFileName;
+        private readonly int fHeight, fWidth;
+
+        private SvgGraphics fGfx;
         private object fTarget;
         private float fTranslucent;
+        private TextWriter fWriter;
 
         public SVGRenderer(string svgFileName, int width, int height) : base()
         {
-            fSVGFileName = svgFileName;
-            fSVGWidth = width;
-            fSVGHeight = height;
+            fFileName = svgFileName;
+            fWidth = width;
+            fHeight = height;
         }
 
         public override void BeginDrawing()
         {
-            fSVGWriter = new StreamWriter(new FileStream(fSVGFileName, FileMode.Create), Encoding.UTF8);
-            fSVGGfx = new SvgGraphics(fSVGWriter, ExtRectF.CreateBounds(0, 0, fSVGWidth, fSVGHeight));
-            fSVGGfx.BeginDrawing();
+            fWriter = new StreamWriter(new FileStream(fFileName, FileMode.Create), Encoding.UTF8);
+            fGfx = new SvgGraphics(fWriter, ExtRectF.CreateBounds(0, 0, fWidth, fHeight));
+            fGfx.BeginDrawing();
         }
 
         public override void EndDrawing()
         {
-            if (fSVGWriter != null) {
-                fSVGGfx.EndDrawing();
-                fSVGGfx = null;
+            if (fWriter != null) {
+                fGfx.EndDrawing();
+                fGfx = null;
 
-                fSVGWriter.Flush();
-                fSVGWriter.Close();
-                fSVGWriter = null;
+                fWriter.Flush();
+                fWriter.Close();
+                fWriter = null;
             }
         }
 
@@ -88,33 +89,33 @@ namespace GKCore.Charts
 
         public override void DrawString(string text, IFont font, IBrush brush, float x, float y)
         {
-            if (fSVGGfx != null) {
-                fSVGGfx.SetFont(font);
-                fSVGGfx.SetColor(brush.Color);
-                fSVGGfx.DrawString(text, x, y);
+            if (fGfx != null) {
+                fGfx.SetFont(font);
+                fGfx.SetColor(brush.Color);
+                fGfx.DrawString(text, x, y);
             }
         }
 
         public override void DrawLine(IPen pen, float x1, float y1, float x2, float y2)
         {
-            if (fSVGGfx != null) {
-                fSVGGfx.SetColor(pen.Color);
-                fSVGGfx.DrawLine(x1, y1, x2, y2, pen.Width);
+            if (fGfx != null) {
+                fGfx.SetColor(pen.Color);
+                fGfx.DrawLine(x1, y1, x2, y2, pen.Width);
             }
         }
 
         public override void DrawRectangle(IPen pen, IColor fillColor,
                                            float x, float y, float width, float height)
         {
-            if (fSVGGfx != null) {
+            if (fGfx != null) {
                 if (fillColor != null && !fillColor.IsTransparent()) {
-                    fSVGGfx.SetColor(fillColor);
-                    fSVGGfx.FillRect(x, y, width, height);
+                    fGfx.SetColor(fillColor);
+                    fGfx.FillRect(x, y, width, height);
                 }
 
                 if (pen != null) {
-                    fSVGGfx.SetColor(pen.Color);
-                    fSVGGfx.DrawRect(x, y, width, height, pen.Width);
+                    fGfx.SetColor(pen.Color);
+                    fGfx.DrawRect(x, y, width, height, pen.Width);
                 }
             }
         }
@@ -122,28 +123,28 @@ namespace GKCore.Charts
         public override void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
                                                   float width, float height, float radius)
         {
-            if (fSVGGfx != null) {
+            if (fGfx != null) {
                 if (fillColor != null && !fillColor.IsTransparent()) {
-                    fSVGGfx.SetColor(fillColor);
-                    fSVGGfx.FillRoundedRect(x, y, width, height, radius);
+                    fGfx.SetColor(fillColor);
+                    fGfx.FillRoundedRect(x, y, width, height, radius);
                 }
 
                 if (pen != null) {
-                    fSVGGfx.SetColor(pen.Color);
-                    fSVGGfx.DrawRoundedRect(x, y, width, height, radius, pen.Width);
+                    fGfx.SetColor(pen.Color);
+                    fGfx.DrawRoundedRect(x, y, width, height, radius, pen.Width);
                 }
             }
         }
 
         public override void FillPath(IBrush brush, IGfxPath path)
         {
-            if (fSVGGfx != null) {
+            if (fGfx != null) {
                 if (path is IGfxCirclePath) {
                     var circlePath = path as IGfxCirclePath;
-                    fSVGGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, null /*pen*/, brush);
+                    fGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, null /*pen*/, brush);
                 } else if (path is IGfxCircleSegmentPath) {
                     var segmPath = path as IGfxCircleSegmentPath;
-                    fSVGGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, null /*pen*/, brush);
+                    fGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, null /*pen*/, brush);
                 } else {
                 }
             }
@@ -151,13 +152,13 @@ namespace GKCore.Charts
 
         public override void DrawPath(IPen pen, IGfxPath path)
         {
-            if (fSVGGfx != null) {
+            if (fGfx != null) {
                 if (path is IGfxCirclePath) {
                     var circlePath = path as IGfxCirclePath;
-                    fSVGGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, pen, null /*brush*/);
+                    fGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, pen, null /*brush*/);
                 } else if (path is IGfxCircleSegmentPath) {
                     var segmPath = path as IGfxCircleSegmentPath;
-                    fSVGGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, null /*brush*/);
+                    fGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, null /*brush*/);
                 } else {
                 }
             }
@@ -165,13 +166,13 @@ namespace GKCore.Charts
 
         public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
         {
-            if (fSVGGfx != null) {
+            if (fGfx != null) {
                 if (path is IGfxCirclePath) {
                     var circlePath = path as IGfxCirclePath;
-                    fSVGGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, pen, brush);
+                    fGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, pen, brush);
                 } else if (path is IGfxCircleSegmentPath) {
                     var segmPath = path as IGfxCircleSegmentPath;
-                    fSVGGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, brush);
+                    fGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, brush);
                 } else {
                 }
             }
@@ -180,8 +181,8 @@ namespace GKCore.Charts
         public override void DrawCircle(IPen pen, IBrush brush, float x, float y,
                                         float width, float height)
         {
-            if (fSVGGfx != null) {
-                fSVGGfx.DrawEllipse(x, y, width, height, pen, brush);
+            if (fGfx != null) {
+                fGfx.DrawEllipse(x, y, width, height, pen, brush);
             }
         }
 
@@ -189,8 +190,8 @@ namespace GKCore.Charts
                                                float inRad, float extRad,
                                                float startAngle, float wedgeAngle)
         {
-            if (fSVGGfx != null) {
-                fSVGGfx.DrawCircleSegment(ctX, ctY, inRad, extRad, startAngle, startAngle + wedgeAngle, pen, brush);
+            if (fGfx != null) {
+                fGfx.DrawCircleSegment(ctX, ctY, inRad, extRad, startAngle, startAngle + wedgeAngle, pen, brush);
             }
         }
 
@@ -201,43 +202,43 @@ namespace GKCore.Charts
 
         public override void ScaleTransform(float sx, float sy)
         {
-            if (fSVGGfx != null) {
-                fSVGGfx.Scale(sx, sy);
+            if (fGfx != null) {
+                fGfx.Scale(sx, sy);
             }
         }
 
         public override void TranslateTransform(float dx, float dy)
         {
-            if (fSVGGfx != null) {
-                fSVGGfx.Translate(dx, dy);
+            if (fGfx != null) {
+                fGfx.Translate(dx, dy);
             }
         }
 
         public override void RotateTransform(float angle)
         {
-            if (fSVGGfx != null) {
-                fSVGGfx.Rotate(angle);
+            if (fGfx != null) {
+                fGfx.Rotate(angle);
             }
         }
 
         public override void ResetTransform()
         {
-            if (fSVGGfx != null) {
-                fSVGGfx.ResetState();
+            if (fGfx != null) {
+                fGfx.ResetState();
             }
         }
 
         public override void RestoreTransform()
         {
-            if (fSVGGfx != null) {
-                fSVGGfx.RestoreState();
+            if (fGfx != null) {
+                fGfx.RestoreState();
             }
         }
 
         public override void SaveTransform()
         {
-            if (fSVGGfx != null) {
-                fSVGGfx.SaveState();
+            if (fGfx != null) {
+                fGfx.SaveState();
             }
         }
     }

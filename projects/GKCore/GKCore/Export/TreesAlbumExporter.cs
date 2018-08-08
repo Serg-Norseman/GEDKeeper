@@ -33,13 +33,13 @@ namespace GKCore.Export
     public sealed class TreesAlbumExporter : ReportExporter
     {
         private readonly List<IndiObj> fIndiQueue;
+        private readonly StringList fProcessed;
+
         private ExtList<PatriarchObj> fPatList;
         private ExtRectF fPageSize;
-        private StringList fProcessed;
         private ChartRenderer fRenderer;
         private IFont fLinkFont;
         private IFont fTextFont;
-        private IFont fTitleFont;
 
         public TreesAlbumExporter(IBaseWindow baseWin) : base(baseWin, true)
         {
@@ -56,7 +56,6 @@ namespace GKCore.Export
 
                 fLinkFont = fWriter.CreateFont("", 8f, false, true, clrBlue);
                 fTextFont = fWriter.CreateFont("", 8f, false, false, clrBlack);
-                fTitleFont = fWriter.CreateFont("", 30f, true, false, clrBlack);
 
                 fWriter.EnablePageNumbers();
 
@@ -66,12 +65,13 @@ namespace GKCore.Export
                     return;
                 }
 
+                IFont titleFont = fWriter.CreateFont("", 30f, true, false, clrBlack);
                 fPageSize = fWriter.GetPageSize();
                 float pageHeight = fPageSize.GetHeight();
                 float pageWidth = fPageSize.GetWidth();
-                float halfpage = (pageHeight - (((PDFWriter.FontHandler)fTitleFont).GetTextHeight())) / 2f;
+                float halfpage = (pageHeight - (((PDFWriter.FontHandler)titleFont).GetTextHeight())) / 2f;
                 fWriter.NewLine(0.0f, halfpage);
-                fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taCenter);
+                fWriter.AddParagraph(fTitle, titleFont, TextAlignment.taCenter);
 
                 var chartOptions = new TreeChartOptions();
                 chartOptions.Assign(GlobalOptions.Instance.ChartOptions);

@@ -41,8 +41,8 @@ namespace GKCore.Charts
 
         private int fThumbPos = 9; /* Counts from zero to 9. */
 
-        private IColor BLANK_COLOR;
-        private IColor SELECT_COLOR;
+        private readonly IColor fBlankColor;
+        private readonly IColor fSelectColor;
 
         public override string Tip
         {
@@ -64,8 +64,8 @@ namespace GKCore.Charts
 
         public TCGenerationsControl(ITreeChartBox chart) : base(chart)
         {
-            BLANK_COLOR = AppHost.GfxProvider.CreateColor(191, 191, 191);
-            SELECT_COLOR = AppHost.GfxProvider.CreateColor(128, 128, 128);
+            fBlankColor = AppHost.GfxProvider.CreateColor(191, 191, 191);
+            fSelectColor = AppHost.GfxProvider.CreateColor(128, 128, 128);
         }
 
         public override void UpdateState()
@@ -105,7 +105,7 @@ namespace GKCore.Charts
             for (int i = 0; i <= 9; i++) {
                 int extRad = inRad + segmentHeight;
 
-                IColor color = (i <= fThumbPos) ? SELECT_COLOR : BLANK_COLOR;
+                IColor color = (i <= fThumbPos) ? fSelectColor : fBlankColor;
 
                 using (var brush = AppHost.GfxProvider.CreateSolidBrush(color)) {
                     using (var path = AppHost.GfxProvider.CreateCircleSegmentPath(ctX, ctY, inRad, extRad, SEGMENT_ANGLE, ang1, ang2)) {

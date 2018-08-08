@@ -589,7 +589,7 @@ namespace GKUI.Components
                 fTopOverlay.Markers.Add(fTargetMarker);
 
                 // add start location
-                GeoCoderStatusCode status = GeoCoderStatusCode.Unknow;
+                GeoCoderStatusCode status;
                 PointLatLng? pos = GMapProviders.GoogleMap.GetPoint("Russia, Moscow", out status);
                 if (pos != null && status == GeoCoderStatusCode.G_GEO_SUCCESS) {
                     fTargetMarker.Position = pos.Value;

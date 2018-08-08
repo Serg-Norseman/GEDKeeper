@@ -25,7 +25,7 @@ using System.IO;
 namespace GKCore.Maps
 {
     /// <summary>
-    /// FIXME: Very, very weak and primitive attempt. I need to think more.
+    /// 
     /// </summary>
     public sealed class PlacesCache
     {
