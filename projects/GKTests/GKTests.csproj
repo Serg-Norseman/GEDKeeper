@@ -90,6 +90,7 @@
     <Compile Include="GKComponents\HyperViewTests.cs" />
     <Compile Include="GKComponents\ImageBoxTests.cs" />
     <Compile Include="GKComponents\ImageViewTests.cs" />
+    <Compile Include="GKComponents\SmallComponents.cs" />
     <Compile Include="GKComponents\TreeChartBoxTests.cs" />
     <Compile Include="GKCore\AppHostTests.cs" />
     <Compile Include="GKCore\BaseContextTests.cs" />

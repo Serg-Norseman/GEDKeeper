@@ -168,6 +168,19 @@ namespace GKCore
         }
 
         [Test]
+        public void Test_LoadAndSave()
+        {
+            string sourFile = TestStubs.PrepareTestFile("test1.ged");
+            string destFile = TestStubs.GetTempFilePath("test11.ged");
+
+            using (BaseContext ctx = new BaseContext(null)) {
+                ctx.FileLoad(sourFile);
+                ctx.FileSave(destFile);
+                ctx.CriticalSave();
+            }
+        }
+
+        [Test]
         public void Test_CryptoLoadAndSave()
         {
             using (BaseContext ctx = new BaseContext(null)) {

@@ -28,11 +28,12 @@ using GKTests.Mocks;
 using GKUI;
 using GKUI.Components;
 using NUnit.Framework;
+using NUnit.Extensions.Forms;
 
 namespace GKUI.Components
 {
     [TestFixture]
-    public class CircleChartTests
+    public class CircleChartTests : NUnitFormTest
     {
         private IBaseWindow fBase;
         private Form fForm;
@@ -50,6 +51,7 @@ namespace GKUI.Components
             fForm.Text = "ImageViewTests";
 
             fCircleChart = new CircleChart();
+            fCircleChart.Name = "fCircleChart";
             fCircleChart.Dock = DockStyle.Fill;
 
             fForm.SuspendLayout();
@@ -85,6 +87,13 @@ namespace GKUI.Components
             Assert.AreEqual(1.0f, fCircleChart.Zoom);
 
             fForm.Show();
+
+            var ctl = new ControlTester("fCircleChart", fForm);
+            Keyboard.UseOn(ctl);
+            Keyboard.Click(Key.PAGE_UP);
+            Keyboard.Click(Key.PAGE_DOWN);
+            Keyboard.Click(Key.HOME);
+            Keyboard.Click(Key.END);
 
             fForm.Close();
         }

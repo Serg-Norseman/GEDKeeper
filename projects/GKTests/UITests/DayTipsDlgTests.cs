@@ -54,6 +54,8 @@ namespace GKUI.Forms
         {
             ClickButton("btnNextTip", fDialog);
 
+            Assert.AreEqual(true, fDialog.ShowTipsChecked);
+
             ClickButton("btnClose", fDialog);
         }
 
