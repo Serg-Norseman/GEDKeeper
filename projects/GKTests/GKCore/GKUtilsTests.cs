@@ -154,15 +154,10 @@ namespace GKCore
         public void Test_GetNameParts()
         {
             string surname = "", name = "", patronymic = "";
-            Assert.Throws(typeof(ArgumentNullException), () => {
-                var parts = GKUtils.GetNameParts(null);
-            });
-            Assert.Throws(typeof(ArgumentNullException), () => {
-                GKUtils.SetNameParts(null, surname, name, patronymic);
-            });
-            Assert.Throws(typeof(ArgumentNullException), () => {
-                var parts = GKUtils.GetNameParts(null);
-            });
+            Assert.Throws(typeof(ArgumentNullException), () => { var parts = GKUtils.GetNameParts(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SetNameParts(null, surname, name, patronymic); });
+            Assert.Throws(typeof(ArgumentNullException), () => { var parts = GKUtils.GetNameParts(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNameParts(null, null, true); });
         }
 
         [Test]
@@ -367,6 +362,13 @@ namespace GKCore
             Assert.AreEqual("audio" + sep, GKUtils.GetStoreFolder(MultimediaKind.mkAudio));
             Assert.AreEqual("texts" + sep, GKUtils.GetStoreFolder(MultimediaKind.mkText));
             Assert.AreEqual("video" + sep, GKUtils.GetStoreFolder(MultimediaKind.mkVideo));
+        }
+
+        [Test]
+        public void Test_FileCanBeArchived()
+        {
+            string sourFile = TestStubs.PrepareTestFile("shaytan_plant.jpg");
+            Assert.IsTrue(GKUtils.FileCanBeArchived(sourFile));
         }
 
         [Test]

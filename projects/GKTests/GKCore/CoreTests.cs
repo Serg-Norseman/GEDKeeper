@@ -322,8 +322,9 @@ namespace GKCore
                 sex = namesTable.GetSexByName("Anna");
                 Assert.AreEqual(GEDCOMSex.svFemale, sex);
 
-                namesTable.SaveToFile(TestStubs.GetTempFilePath("names.txt"));
-                namesTable.LoadFromFile(TestStubs.GetTempFilePath("names.txt"));
+                string namesFile = TestStubs.GetTempFilePath("names.txt");
+                namesTable.SaveToFile(namesFile);
+                namesTable.LoadFromFile(namesFile);
             }
         }
 

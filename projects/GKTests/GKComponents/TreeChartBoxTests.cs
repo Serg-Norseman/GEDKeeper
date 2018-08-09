@@ -23,6 +23,7 @@
 using System.Windows.Forms;
 using GKCore.Charts;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKTests.Mocks;
 using GKUI;
 using GKUI.Components;
@@ -70,6 +71,11 @@ namespace GKUI.Components
             fTreeChartBox.Base = fBase;
             Assert.AreEqual(fBase, fTreeChartBox.Base);
 
+            Assert.IsNotNull(fTreeChartBox.Model);
+
+            fTreeChartBox.Options = new TreeChartOptions();
+            Assert.IsNotNull(fTreeChartBox.Options);
+
             Assert.AreEqual(0, fTreeChartBox.IndividualsCount);
 
             Assert.AreEqual(TreeChartKind.ckAncestors, fTreeChartBox.Kind);
@@ -85,9 +91,24 @@ namespace GKUI.Components
             fTreeChartBox.TraceKinships = true;
             Assert.AreEqual(true, fTreeChartBox.TraceKinships);
 
+            fTreeChartBox.Selected = null;
+            Assert.AreEqual(null, fTreeChartBox.Selected);
+
+            fTreeChartBox.DepthLimit = 8;
+            Assert.AreEqual(8, fTreeChartBox.DepthLimit);
+
+            fTreeChartBox.SetScale(1.2f);
+            Assert.AreEqual(1.2f, fTreeChartBox.Scale);
+
             fTreeChartBox.CenterPerson(null); // nothing
 
             fTreeChartBox.RefreshTree(); // nothing
+
+            fTreeChartBox.RebuildKinships(); // nothing
+
+            fTreeChartBox.RecalcChart(); // nothing
+
+            fTreeChartBox.ToggleCollapse(); // nothing
 
             fForm.Show();
 

@@ -138,6 +138,38 @@ namespace GKUI.Components
         }
 
         [Test]
+        public void Test_GKMapBrowser()
+        {
+            using (var form = new Form()) {
+                form.ClientSize = new System.Drawing.Size(383, 221);
+
+                var comp = new GKMapBrowser();
+                comp.Dock = DockStyle.Fill;
+
+                form.SuspendLayout();
+                form.Controls.Add(comp);
+                form.ResumeLayout(false);
+                form.PerformLayout();
+
+                comp.ShowPoints = true;
+                Assert.AreEqual(true, comp.ShowPoints);
+
+                comp.ShowLines = true;
+                Assert.AreEqual(true, comp.ShowLines);
+
+                Assert.IsNotNull(comp.MapPoints);
+
+                comp.BeginUpdate();
+                comp.InitMap();
+                comp.SetCenter(0, 0, 1);
+                comp.EndUpdate(); // -> RefreshPoints()
+
+                form.Show();
+                form.Close();
+            }
+        }
+
+        [Test]
         public void Test_ArborViewer()
         {
             using (var form = new Form()) {

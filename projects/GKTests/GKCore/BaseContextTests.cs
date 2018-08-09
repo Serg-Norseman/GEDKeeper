@@ -91,6 +91,9 @@ namespace GKCore
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             Assert.IsNotNull(iRec);
 
+            fContext.LockRecord(iRec);
+            fContext.UnlockRecord(iRec);
+
             Assert.AreEqual(false, fContext.IsChildless(iRec));
 
             Assert.IsNotNull(fContext.LangsList);
@@ -177,6 +180,45 @@ namespace GKCore
                 ctx.FileLoad(sourFile);
                 ctx.FileSave(destFile);
                 ctx.CriticalSave();
+            }
+        }
+
+        [Test]
+        public void Test_MediaLoadSave()
+        {
+            string sourFile = TestStubs.PrepareTestFile("shaytan_plant.jpg");
+
+            string gedFile = TestStubs.GetTempFilePath("test_mm.ged");
+
+            using (BaseContext ctx = new BaseContext(null)) {
+                Assert.IsTrue(ctx.IsUnknown());
+
+                Assert.AreEqual(false, ctx.MediaSave(null, "", MediaStoreType.mstReference));
+                Assert.AreEqual(null, ctx.LoadMediaImage(null, false));
+                Assert.AreEqual(null, ctx.LoadMediaImage(null, 0, 0, ExtRect.Empty, false));
+                Assert.AreEqual(null, ctx.GetPrimaryBitmap(null, 0, 0, false));
+                Assert.AreEqual(null, ctx.GetPrimaryBitmapUID(null));
+
+                ctx.FileSave(gedFile);
+                Assert.AreEqual(true, ctx.CheckBasePath()); // need path for archive and storage
+
+                var mmRecR = new GEDCOMMultimediaRecord(ctx.Tree, ctx.Tree, "", "");
+                mmRecR.FileReferences.Add(new GEDCOMFileReferenceWithTitle(ctx.Tree, mmRecR, "", ""));
+                Assert.AreEqual(true, ctx.MediaSave(mmRecR.FileReferences[0], sourFile, MediaStoreType.mstReference));
+                Assert.IsNotNull(ctx.LoadMediaImage(mmRecR.FileReferences[0], false));
+                Assert.IsNotNull(ctx.MediaLoad(mmRecR.FileReferences[0]));
+
+                var mmRecA = new GEDCOMMultimediaRecord(ctx.Tree, ctx.Tree, "", "");
+                mmRecA.FileReferences.Add(new GEDCOMFileReferenceWithTitle(ctx.Tree, mmRecA, "", ""));
+                Assert.AreEqual(true, ctx.MediaSave(mmRecA.FileReferences[0], sourFile, MediaStoreType.mstArchive));
+                Assert.IsNotNull(ctx.LoadMediaImage(mmRecA.FileReferences[0], false));
+                Assert.IsNotNull(ctx.MediaLoad(mmRecA.FileReferences[0]));
+
+                var mmRecS = new GEDCOMMultimediaRecord(ctx.Tree, ctx.Tree, "", "");
+                mmRecS.FileReferences.Add(new GEDCOMFileReferenceWithTitle(ctx.Tree, mmRecS, "", ""));
+                Assert.AreEqual(true, ctx.MediaSave(mmRecS.FileReferences[0], sourFile, MediaStoreType.mstStorage));
+                Assert.IsNotNull(ctx.LoadMediaImage(mmRecS.FileReferences[0], false));
+                Assert.IsNotNull(ctx.MediaLoad(mmRecS.FileReferences[0]));
             }
         }
 

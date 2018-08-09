@@ -168,6 +168,10 @@ namespace GKCore
                 Assert.Throws(typeof(ArgumentNullException), () => { globalOptions.SaveToFile(iniFN); });
                 Assert.Throws(typeof(ArgumentNullException), () => { globalOptions.LoadFromFile(iniFN); });
 
+                iniFN = TestStubs.GetTempFilePath("options.ini");
+                globalOptions.SaveToFile(iniFN);
+                globalOptions.LoadFromFile(iniFN);
+
 
                 MRUFile mruFile = new MRUFile();
                 Assert.IsNotNull(mruFile);

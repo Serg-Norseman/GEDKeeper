@@ -59,9 +59,8 @@ namespace GKUI.Components
             public Rectangle Rect;
         }
 
-        private static readonly Brush FRAG_BRUSH = new SolidBrush(Color.Green);
-        private static readonly Brush EMPTY_BRUSH = new SolidBrush(Color.Gray);
-        
+        private readonly Brush fEmptyBrush;
+        private readonly Brush fFragBrush;
         private readonly List<Fragment> fList;
         private readonly ToolTip fToolTip;
         private string fHint;
@@ -77,13 +76,18 @@ namespace GKUI.Components
             fToolTip.InitialDelay = 250;
             fToolTip.ReshowDelay = 50;
             fToolTip.ShowAlways = true;
+
+            fEmptyBrush = new SolidBrush(Color.Gray);
+            fFragBrush = new SolidBrush(Color.Green);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                FRAG_BRUSH.Dispose();
-                EMPTY_BRUSH.Dispose();
+                fFragBrush.Dispose();
+                fEmptyBrush.Dispose();
+
+                fToolTip.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -197,10 +201,10 @@ namespace GKUI.Components
             if (count > 0) {
                 for (int i = 0; i < count; i++) {
                     Fragment frag = fList[i];
-                    DrawRect(gfx, frag.X, frag.Width, FRAG_BRUSH);
+                    DrawRect(gfx, frag.X, frag.Width, fFragBrush);
                 }
             } else {
-                DrawRect(gfx, 0, Width, EMPTY_BRUSH);
+                DrawRect(gfx, 0, Width, fEmptyBrush);
             }
         }
 

@@ -706,8 +706,7 @@ namespace GKCore
 
             targetFn = FileHelper.NormalizeFilename(targetFn);
 
-            using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read, zipCharset))
-            {
+            using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read, zipCharset)) {
                 ZipStorer.ZipFileEntry entry = zip.FindFile(targetFn);
                 if (entry != null) {
                     zip.ExtractStream(entry, toStream);
@@ -724,17 +723,14 @@ namespace GKCore
             string arcFn = GetArcFileName();
             ZipStorer zip = null;
 
-            try
-            {
+            try {
                 if (File.Exists(arcFn)) {
                     zip = ZipStorer.Open(arcFn, FileAccess.ReadWrite, zipCharset);
                 } else {
                     zip = ZipStorer.Create(arcFn, "");
                 }
                 zip.AddFile(ZipStorer.Compression.Deflate, fileName, sfn, null);
-            }
-            finally
-            {
+            } finally {
                 if (zip != null) zip.Dispose();
             }
         }
@@ -742,7 +738,7 @@ namespace GKCore
         private void MoveMediaContainers(string oldFileName, string newFileName)
         {
             // do nothing if file name is not changed
-            if (string.Equals(oldFileName, newFileName)) return;
+            if (string.IsNullOrEmpty(oldFileName) || string.Equals(oldFileName, newFileName)) return;
 
             bool hasArc = File.Exists(GetArcFileName());
             bool hasStg = Directory.Exists(GetStgFolder(false));
@@ -776,8 +772,7 @@ namespace GKCore
             string path = Path.GetDirectoryName(fFileName);
 
             bool result = (!string.IsNullOrEmpty(path));
-            if (!result)
-            {
+            if (!result) {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NewDBFileNeedToSave));
             }
             return result;
@@ -800,15 +795,13 @@ namespace GKCore
             switch (gst) {
                 case MediaStoreType.mstStorage:
                     targetFn = GetStgFolder(false) + targetFn;
-                    if (!File.Exists(targetFn))
-                    {
+                    if (!File.Exists(targetFn)) {
                         if (throwException) {
                             throw new MediaFileNotFoundException(targetFn);
                         }
 
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
-                    }
-                    else {
+                    } else {
                         stream = new FileStream(targetFn, FileMode.Open);
                     }
                     break;
@@ -816,15 +809,13 @@ namespace GKCore
                 case MediaStoreType.mstArchive:
                     stream = new MemoryStream();
                     string arcFile = GetArcFileName();
-                    if (!File.Exists(arcFile))
-                    {
+                    if (!File.Exists(arcFile)) {
                         if (throwException) {
                             throw new MediaFileNotFoundException(arcFile);
                         }
 
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
-                    }
-                    else {
+                    } else {
                         ArcFileLoad(targetFn, stream);
                         stream.Seek(0, SeekOrigin.Begin);
                     }
@@ -843,13 +834,11 @@ namespace GKCore
             string fileName = string.Empty;
             if (fileReference == null) return string.Empty;
 
-            try
-            {
+            try {
                 MediaStore mediaStore = GetStoreType(fileReference);
                 string targetFn = mediaStore.FileName;
 
-                switch (mediaStore.StoreType)
-                {
+                switch (mediaStore.StoreType) {
                     case MediaStoreType.mstStorage:
                         fileName = GetStgFolder(false) + targetFn;
                         break;
@@ -857,16 +846,13 @@ namespace GKCore
                     case MediaStoreType.mstArchive:
                         fileName = GKUtils.GetTempDir() + Path.GetFileName(targetFn);
                         FileStream fs = new FileStream(fileName, FileMode.Create);
-                        try
-                        {
+                        try {
                             if (!File.Exists(GetArcFileName())) {
                                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                             } else {
                                 ArcFileLoad(targetFn, fs);
                             }
-                        }
-                        finally
-                        {
+                        } finally {
                             fs.Close();
                             fs.Dispose();
                         }
@@ -884,9 +870,7 @@ namespace GKCore
                             break;
                         }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.MediaLoad_fn(): " + ex.Message);
                 fileName = "";
             }
@@ -907,8 +891,7 @@ namespace GKCore
 
             storePath = GKUtils.GetStoreFolder(GKUtils.GetMultimediaKind(GEDCOMFileReference.RecognizeFormat(fileName)));
 
-            switch (storeType)
-            {
+            switch (storeType) {
                 case MediaStoreType.mstReference:
                     refPath = fileName;
                     break;
@@ -920,16 +903,13 @@ namespace GKCore
 
                 case MediaStoreType.mstStorage:
                     refPath = GKData.GKStoreTypes[(int)storeType].Sign + storePath + storeFile;
-                    try
-                    {
+                    try {
                         string targetDir = GetStgFolder(true) + storePath;
                         if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
 
                         string targetFn = targetDir + storeFile;
                         CopyFile(fileName, targetFn);
-                    }
-                    catch (IOException)
-                    {
+                    } catch (IOException) {
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExistsInStorage));
                         result = false;
                     }
@@ -971,8 +951,7 @@ namespace GKCore
             if (fileReference == null) return null;
 
             IImage result = null;
-            try
-            {
+            try {
                 Stream stm = MediaLoad(fileReference, throwException);
                 if (stm != null) {
                     try {
@@ -983,13 +962,9 @@ namespace GKCore
                         stm.Dispose();
                     }
                 }
-            }
-            catch (MediaFileNotFoundException)
-            {
+            } catch (MediaFileNotFoundException) {
                 throw;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.LoadMediaImage(): " + ex.Message);
                 result = null;
             }
@@ -1001,8 +976,7 @@ namespace GKCore
             if (fileReference == null) return null;
 
             IImage result = null;
-            try
-            {
+            try {
                 Stream stm = MediaLoad(fileReference, throwException);
                 if (stm != null) {
                     try {
@@ -1013,13 +987,9 @@ namespace GKCore
                         stm.Dispose();
                     }
                 }
-            }
-            catch (MediaFileNotFoundException)
-            {
+            } catch (MediaFileNotFoundException) {
                 throw;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.LoadMediaImage(): " + ex.Message);
                 result = null;
             }
@@ -1031,11 +1001,9 @@ namespace GKCore
             if (iRec == null) return null;
 
             IImage result = null;
-            try
-            {
+            try {
                 GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
-                if (mmLink != null && mmLink.Value != null)
-                {
+                if (mmLink != null && mmLink.Value != null) {
                     ExtRect cutoutArea;
                     if (mmLink.IsPrimaryCutout) {
                         cutoutArea = mmLink.CutoutPosition.Value;
@@ -1046,13 +1014,9 @@ namespace GKCore
                     GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)mmLink.Value;
                     result = LoadMediaImage(mmRec.FileReferences[0], thumbWidth, thumbHeight, cutoutArea, throwException);
                 }
-            }
-            catch (MediaFileNotFoundException)
-            {
+            } catch (MediaFileNotFoundException) {
                 throw;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.GetPrimaryBitmap(): " + ex.Message);
                 result = null;
             }
@@ -1064,13 +1028,10 @@ namespace GKCore
             if (iRec == null) return null;
 
             string result = null;
-            try
-            {
+            try {
                 GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
                 result = (mmLink == null) ? null : mmLink.GetUID();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.GetPrimaryBitmapUID(): " + ex.Message);
                 result = null;
             }
@@ -1185,14 +1146,12 @@ namespace GKCore
         {
             string oldFileName = fFileName;
 
-            switch (GlobalOptions.Instance.FileBackup)
-            {
+            switch (GlobalOptions.Instance.FileBackup) {
                 case FileBackup.fbNone:
                     break;
 
                 case FileBackup.fbOnlyPrev:
-                    if (string.Equals(oldFileName, fileName) && File.Exists(oldFileName))
-                    {
+                    if (string.Equals(oldFileName, fileName) && File.Exists(oldFileName)) {
                         string bakFile = Path.GetFileName(fileName) + ".bak";
                         if (File.Exists(bakFile)) {
                             File.Delete(bakFile);
@@ -1203,8 +1162,7 @@ namespace GKCore
                     break;
 
                 case FileBackup.fbEachRevision:
-                    if (File.Exists(fileName))
-                    {
+                    if (File.Exists(fileName)) {
                         int rev = fTree.Header.FileRevision;
                         string bakPath = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar + "__history" + Path.DirectorySeparatorChar;
                         string bakFile = Path.GetFileName(fileName) + "." + ConvertHelper.AdjustNumber(rev, 3);
