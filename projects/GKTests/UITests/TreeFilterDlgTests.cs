@@ -23,7 +23,7 @@
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKTests;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -45,7 +45,7 @@ namespace GKUI.Forms
         {
             base.Setup();
 
-            fBase = new BaseWindowMock();
+            fBase = new BaseWindowStub();
             fContext = fBase.Context;
             fChartFilter = new ChartFilter();
 

@@ -25,7 +25,7 @@ using GKCore.Export;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using GKUI;
 using NUnit.Framework;
 
@@ -43,8 +43,8 @@ namespace GKCore
 
             LangMan.DefInit();
 
-            fContext = TestStubs.CreateContext();
-            TestStubs.FillContext(fContext);
+            fContext = TestUtils.CreateContext();
+            TestUtils.FillContext(fContext);
         }
 
         [TestFixtureTearDown]
@@ -55,7 +55,7 @@ namespace GKCore
         [Test]
         public void Test_PedigreeExporter()
         {
-            BaseWindowMock baseWin = new BaseWindowMock();
+            BaseWindowStub baseWin = new BaseWindowStub();
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             baseWin.Context.ShieldState = ShieldState.None;
 
@@ -77,27 +77,27 @@ namespace GKCore
                 Assert.AreEqual(PedigreeExporter.PedigreeKind.pkDescend_Konovalov, exporter.Kind);
 
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
-                Assert.IsTrue(exporter.Generate(new MockWriter()));
+                Assert.IsTrue(exporter.Generate(new WriterStub()));
 
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Compact;
-                Assert.IsTrue(exporter.Generate(new MockWriter()));
+                Assert.IsTrue(exporter.Generate(new WriterStub()));
 
 
                 exporter.Kind = PedigreeExporter.PedigreeKind.pkDescend_dAboville;
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
-                Assert.IsTrue(exporter.Generate(new MockWriter()));
+                Assert.IsTrue(exporter.Generate(new WriterStub()));
 
 
                 exporter.Kind = PedigreeExporter.PedigreeKind.pkAscend;
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
-                Assert.IsTrue(exporter.Generate(new MockWriter()));
+                Assert.IsTrue(exporter.Generate(new WriterStub()));
             }
         }
 
         [Test]
         public void Test_ExcelExporter()
         {
-            BaseWindowMock baseWin = new BaseWindowMock();
+            BaseWindowStub baseWin = new BaseWindowStub();
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             baseWin.Context.ShieldState = ShieldState.None;
 
@@ -111,7 +111,7 @@ namespace GKCore
         [Test]
         public void Test_FamilyBookExporter()
         {
-            BaseWindowMock baseWin = new BaseWindowMock();
+            BaseWindowStub baseWin = new BaseWindowStub();
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             baseWin.Context.ShieldState = ShieldState.None;
 
@@ -125,7 +125,7 @@ namespace GKCore
         [Test]
         public void Test_TreesAlbumExporter()
         {
-            BaseWindowMock baseWin = new BaseWindowMock();
+            BaseWindowStub baseWin = new BaseWindowStub();
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             baseWin.Context.ShieldState = ShieldState.None;
 

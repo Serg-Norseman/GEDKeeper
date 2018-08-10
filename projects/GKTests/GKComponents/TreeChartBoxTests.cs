@@ -24,7 +24,7 @@ using System.Windows.Forms;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using GKUI;
 using GKUI.Components;
 using NUnit.Framework;
@@ -43,7 +43,7 @@ namespace GKUI.Components
         {
             WFAppHost.ConfigureBootstrap(false);
 
-            fBase = new BaseWindowMock();
+            fBase = new BaseWindowStub();
 
             fForm = new Form();
             fForm.ClientSize = new System.Drawing.Size(383, 221);

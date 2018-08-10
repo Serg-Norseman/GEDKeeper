@@ -45,7 +45,7 @@ namespace GKCore
                 fHolidays.CollectTips(tipsList);
                 Assert.AreEqual(0, tipsList.Count);
 
-                string holidaysFile = TestStubs.PrepareTestFile("test_holidays.yaml");
+                string holidaysFile = TestUtils.PrepareTestFile("test_holidays.yaml");
                 fHolidays.Load(holidaysFile);
 
                 fHolidays.CollectTips(tipsList, new DateTime(DateTime.Now.Year, 01, 05));

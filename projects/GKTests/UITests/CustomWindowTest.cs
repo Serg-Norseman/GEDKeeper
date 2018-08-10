@@ -112,7 +112,7 @@ namespace GKTests
 
         public static void PrepareFileSave(string fileName, IntPtr hWnd)
         {
-            fileName = TestStubs.GetTempFilePath(fileName);
+            fileName = TestUtils.GetTempFilePath(fileName);
 
             var saveDlg = new SaveFileDialogTester(hWnd);
             saveDlg.SaveFile(fileName);

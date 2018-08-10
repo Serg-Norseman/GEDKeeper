@@ -134,7 +134,7 @@ namespace Externals
 
 
 
-                string fileName = TestStubs.GetTempFilePath("test.gvf");
+                string fileName = TestUtils.GetTempFilePath("test.gvf");
                 string[] options = { "ratio=auto" };
                 var gvw = new GraphvizWriter("testGraph", options);
                 

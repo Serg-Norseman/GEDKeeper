@@ -108,7 +108,7 @@ namespace GKUI.Forms
             Assert.IsNotNull(fCurBase, "Stage 2.3");
 
             // Stage 2.4: fill context for sample data
-            TestStubs.FillContext(fCurBase.Context);
+            TestUtils.FillContext(fCurBase.Context);
             fCurBase.UpdateSettings();
 
             // Stage 2.5: select first individual record in base

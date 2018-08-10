@@ -26,7 +26,7 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -46,7 +46,7 @@ namespace GKUI.Forms
         {
             base.Setup();
 
-            fBase = new BaseWindowMock();
+            fBase = new BaseWindowStub();
 
             fDialog = new StatisticsWin(fBase, new List<GEDCOMRecord>());
             fDialog.Show();

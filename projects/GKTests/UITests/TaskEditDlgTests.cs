@@ -24,7 +24,7 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.ControlTesters;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
@@ -45,7 +45,7 @@ namespace GKUI.Forms
         {
             base.Setup();
 
-            fBase = new BaseWindowMock();
+            fBase = new BaseWindowStub();
             fTaskRecord = new GEDCOMTaskRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
             fDialog = new TaskEditDlg();

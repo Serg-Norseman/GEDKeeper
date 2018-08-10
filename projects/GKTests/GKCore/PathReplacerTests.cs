@@ -48,7 +48,7 @@ namespace GKCore
         [Test]
         public void Test_Common()
         {
-            string prFile = TestStubs.PrepareTestFile("test_pathreplace.yaml");
+            string prFile = TestUtils.PrepareTestFile("test_pathreplace.yaml");
             fPathReplacer.Load(prFile);
 
             Assert.AreEqual("/home/path11/x.yyy", fPathReplacer.TryReplacePath(@"D:\path1\x.yyy", false));

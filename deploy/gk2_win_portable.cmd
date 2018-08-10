@@ -24,6 +24,8 @@ echo "..\BSLib.Linguistics.dll" >> %lstfile%
 echo "..\BSLib.SmartGraph.dll" >> %lstfile%
 echo "..\DotNetRtfWriter.dll" >> %lstfile%
 echo "..\ExcelLibrary.dll" >> %lstfile%
+echo "..\GMap.NET.Core.dll" >> %lstfile%
+echo "..\GMap.NET.WindowsForms.dll" >> %lstfile%
 echo "..\itextsharp.dll" >> %lstfile%
 echo "..\lua51.dll" >> %lstfile%
 echo "..\LuaInterface.dll" >> %lstfile%

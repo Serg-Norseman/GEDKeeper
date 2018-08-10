@@ -23,7 +23,7 @@
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using GKUI.Forms;
 using NUnit.Framework;
 
@@ -43,7 +43,7 @@ namespace GKUI.Forms
         {
             base.Setup();
 
-            fBase = new BaseWindowMock();
+            fBase = new BaseWindowStub();
             fRepositoryRecord = new GEDCOMRepositoryRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
             fDialog = new RepositoryEditDlg();

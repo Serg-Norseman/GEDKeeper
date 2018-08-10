@@ -30,7 +30,7 @@ using GKCore.Lists;
 using GKCore.Stats;
 using GKCore.Types;
 using GKTests;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using GKUI;
 using GKUI.Components;
 using NUnit.Framework;
@@ -49,8 +49,8 @@ namespace GKCore
 
             LangMan.DefInit();
 
-            fContext = TestStubs.CreateContext();
-            TestStubs.FillContext(fContext);
+            fContext = TestUtils.CreateContext();
+            TestUtils.FillContext(fContext);
         }
 
         [TestFixtureTearDown]
@@ -138,7 +138,7 @@ namespace GKCore
 
             Assert.Throws(typeof(ArgumentNullException), () => { new SearchStrategy(null, null); });
 
-            SearchStrategy strat = new SearchStrategy(new WorkWindowMock(), "");
+            SearchStrategy strat = new SearchStrategy(new WorkWindowStub(), "");
             Assert.IsNotNull(strat);
 
             IList<ISearchResult> res = strat.FindAll();
@@ -322,7 +322,7 @@ namespace GKCore
                 sex = namesTable.GetSexByName("Anna");
                 Assert.AreEqual(GEDCOMSex.svFemale, sex);
 
-                string namesFile = TestStubs.GetTempFilePath("names.txt");
+                string namesFile = TestUtils.GetTempFilePath("names.txt");
                 namesTable.SaveToFile(namesFile);
                 namesTable.LoadFromFile(namesFile);
             }

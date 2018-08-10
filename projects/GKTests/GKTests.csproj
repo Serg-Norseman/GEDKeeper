@@ -115,13 +115,13 @@
     <Compile Include="GKCore\TreeToolsTests.cs" />
     <Compile Include="GKCore\ValuesCollectionTests.cs" />
     <Compile Include="GKCore\YamlHelperTests.cs" />
-    <Compile Include="Mocks.cs" />
+    <Compile Include="TestStubs.cs" />
     <Compile Include="ControlTesters\DataGridViewTester.cs" />
     <Compile Include="ControlTesters\GKRecordsViewTester.cs" />
     <Compile Include="ControlTesters\GKSheetListTester.cs" />
     <Compile Include="ControlTesters\MaskedTextBoxTester.cs" />
     <Compile Include="ControlTesters\NumericUpDownTester.cs" />
-    <Compile Include="TestStubs.cs" />
+    <Compile Include="TestUtils.cs" />
     <Compile Include="UITests\AboutDlgTests.cs" />
     <Compile Include="UITests\AddressEditDlgTests.cs" />
     <Compile Include="UITests\AssociationEditDlgTests.cs" />
@@ -183,14 +183,8 @@
     <EmbeddedResource Include="Resources\test_stdgedcom_notes.ged" />
     <EmbeddedResource Include="Resources\test_ansel.ged" />
     <EmbeddedResource Include="Resources\test_video.3gp" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\test_ftb6_ansi%28win1251%29.ged" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\test_holidays.yaml" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\test_pathreplace.yaml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />

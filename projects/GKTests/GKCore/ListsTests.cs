@@ -44,8 +44,8 @@ namespace GKCore
 
             LangMan.DefInit();
 
-            fContext = TestStubs.CreateContext();
-            TestStubs.FillContext(fContext);
+            fContext = TestUtils.CreateContext();
+            TestUtils.FillContext(fContext);
         }
 
         [TestFixtureTearDown]

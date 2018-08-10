@@ -18,175 +18,193 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.IO;
-using System.Reflection;
+using System.Collections.Generic;
+
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Export;
 using GKCore.Interfaces;
-using NUnit.Framework;
+using GKCore.Maps;
+using GKCore.Types;
+using GKCore.UIContracts;
 
-namespace GKTests
+namespace GKTests.Stubs
 {
-    public static class TestStubs
+    internal class WorkWindowStub : IWorkWindow
     {
-        public static BaseContext CreateContext(/*IBaseWindow baseWin = null*/)
+        public void UpdateControls() {}
+        public void UpdateSettings() {}
+        public bool NavCanBackward() { return false; }
+        public bool NavCanForward() { return false; }
+        public void NavNext() {}
+        public void NavPrev() {}
+        public bool AllowQuickSearch() { return false; }
+        public IList<ISearchResult> FindAll(string searchPattern) { return new List<ISearchResult>(); }
+        public void QuickSearch() {}
+        public void SelectByRec(GEDCOMIndividualRecord iRec) {}
+        public bool AllowFilter() { return false; }
+        public void SetFilter() {}
+        public void SetLang() {}
+    }
+
+    internal class ProgressStub : IProgressController
+    {
+        public void ProgressInit(string title, int max) {}
+        public void ProgressDone() {}
+        public void ProgressStep() {}
+        public void ProgressStep(int value) {}
+    }
+
+    internal class BaseWindowStub : WorkWindowStub, IBaseWindow
+    {
+        private static IHost fHost = new HostStub();
+
+        private readonly IBaseContext fContext;
+        private readonly GEDCOMTree fTree;
+
+        public BaseWindowStub()
         {
-            BaseContext context = new BaseContext(/*baseWin*/null);
-            Assert.IsNotNull(context);
-            Assert.IsNotNull(context.Tree);
-            return context;
+            fContext = TestUtils.CreateContext(/*this*/);
+            TestUtils.FillContext(fContext);
+            fTree = fContext.Tree;
         }
 
-        public static void FillContext(IBaseContext context)
+        public BaseWindowStub(IBaseContext context)
         {
-            // a null result if the record is not defined
-            GEDCOMCustomEvent evt = context.CreateEventEx(null, "BIRT", "xxxxx", "xxxxx");
-            Assert.IsNull(evt);
-
-            // first individual (I1)
-            GEDCOMIndividualRecord iRec = context.CreatePersonEx("Ivan", "Ivanovich", "Ivanov", GEDCOMSex.svMale, true);
-            Assert.IsNotNull(iRec);
-
-            evt = iRec.FindEvent("BIRT");
-            Assert.IsNotNull(evt);
-            evt.Date.ParseString("28 DEC 1990");
-            evt.Place.StringValue = "Ivanovo";
-
-            GEDCOMCustomEvent evtd = context.CreateEventEx(iRec, "DEAT", "28 DEC 2010", "Ivanovo");
-            Assert.IsNotNull(evtd);
-
-            // second individual, wife (I2)
-            GEDCOMIndividualRecord iRec2 = context.CreatePersonEx("Maria", "Petrovna", "Ivanova", GEDCOMSex.svFemale, true);
-            evt = iRec2.FindEvent("BIRT");
-            Assert.IsNotNull(evt);
-            evt.Date.ParseString("17 MAR 1991");
-            evt.Place.StringValue = "Ivanovo";
-
-            iRec.AddAssociation("spouse", iRec2);
-
-            // third individual, child (I3)
-            GEDCOMIndividualRecord iRec3 = context.CreatePersonEx("Anna", "Ivanovna", "Ivanova", GEDCOMSex.svFemale, true);
-            evt = iRec3.FindEvent("BIRT");
-            Assert.IsNotNull(evt);
-            evt.Date.ParseString("11 FEB 2010");
-            evt.Place.StringValue = "Ivanovo";
-
-            // their family
-            GEDCOMFamilyRecord famRec = context.Tree.CreateFamily();
-            Assert.IsNotNull(famRec);
-            famRec.AddSpouse(iRec);
-            famRec.AddSpouse(iRec2);
-            famRec.AddChild(iRec3);
-
-            context.CreateEventEx(famRec, "MARR", "01 JAN 2000", "unknown");
-
-            // individual outside the family (I4)
-            GEDCOMIndividualRecord iRec4 = context.CreatePersonEx("Alex", "", "Petrov", GEDCOMSex.svMale, true);
-            evt = iRec4.FindEvent("BIRT");
-            Assert.IsNotNull(evt);
-            evt.Date.ParseString("15 JUN 1989");
-            evt.Place.StringValue = "Far Forest";
-
-            evt = context.CreateEventEx(iRec4, "RESI", "12 FEB", "Far Forest");
-            Assert.IsNotNull(evt);
-
-            // fifth (I5)
-            GEDCOMIndividualRecord iRec5 = context.CreatePersonEx("Anna", "", "Jones", GEDCOMSex.svFemale, false);
-            Assert.IsNotNull(iRec5);
-
-            // sixth (I6)
-            GEDCOMIndividualRecord iRec6 = context.CreatePersonEx("Mary", "", "Jones", GEDCOMSex.svFemale, false);
-            Assert.IsNotNull(iRec6);
-            evt = context.CreateEventEx(iRec6, "BIRT", "12 FEB 1650", "Far Forest");
-
-            GEDCOMFamilyRecord famRec2 = context.Tree.CreateFamily();
-            Assert.IsNotNull(famRec2);
-            famRec2.AddSpouse(iRec3);
-            //famRec2.AddSpouse(iRec4);
-            famRec2.AddChild(iRec5);
-            famRec2.AddChild(iRec6);
-
-            // group for tests
-            GEDCOMGroupRecord groupRec = context.Tree.CreateGroup();
-            groupRec.GroupName = "GroupTest";
-            Assert.IsNotNull(groupRec, "group1 != null");
-            groupRec.AddMember(iRec);
-
-            // location for tests
-            GEDCOMLocationRecord locRec = context.Tree.CreateLocation();
-            locRec.LocationName = "Test Location";
-            locRec.Map.Lati = 5.11111;
-            locRec.Map.Long = 7.99999;
-            Assert.IsNotNull(locRec, "locRec != null");
-
-            // repository for tests
-            GEDCOMRepositoryRecord repoRec = context.Tree.CreateRepository();
-            repoRec.RepositoryName = "Test repository";
-            Assert.IsNotNull(repoRec, "repoRec != null");
-
-            // research for tests
-            GEDCOMResearchRecord resRec = context.Tree.CreateResearch();
-            resRec.ResearchName = "Test research";
-            Assert.IsNotNull(resRec, "resRec != null");
-
-            // source for tests
-            GEDCOMSourceRecord srcRec = context.Tree.CreateSource();
-            srcRec.FiledByEntry = "Test source";
-            Assert.IsNotNull(srcRec, "srcRec != null");
-            iRec.AddSource(srcRec, "p1", 0);
-
-            // note for tests
-            GEDCOMNoteRecord noteRec = context.Tree.CreateNote();
-            noteRec.SetNoteText("Test note");
-            Assert.IsNotNull(noteRec, "noteRec != null");
-            iRec.AddNote(noteRec);
-
-            // task for tests
-            GEDCOMTaskRecord tskRec = context.Tree.CreateTask();
-            tskRec.Goal = "Test task";
-            Assert.IsNotNull(tskRec, "tskRec != null");
-
-            // media for tests
-            GEDCOMMultimediaRecord mediaRec = context.Tree.CreateMultimedia();
-            mediaRec.AddTag("FILE", "", null);
-            GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
-            fileRef.Title = "Test multimedia";
-            fileRef.LinkFile("sample.png");
-            Assert.IsNotNull(mediaRec, "mediaRec != null");
-            iRec.AddMultimedia(mediaRec);
-
-            // communication for tests
-            GEDCOMCommunicationRecord commRec = context.Tree.CreateCommunication();
-            commRec.CommName = "Test communication";
-            Assert.IsNotNull(commRec, "commRec != null");
+            fContext = context;
+            fTree = fContext.Tree;
         }
 
-        public static string GetTempFilePath(string fileName)
-        {
-            #if !__MonoCS__
-            fileName = GKUtils.GetTempDir() + fileName;
-            #else
-            fileName = GKUtils.GetHomePath() + fileName;
-            #endif
+        public new void SetLang() {}
 
-            if (File.Exists(fileName)) File.Delete(fileName); // for local tests!
+        public IHost Host { get { return fHost; } }
+        public IBaseContext Context { get { return fContext; } }
 
-            return fileName;
-        }
+        public bool Modified { get { return false; } set {} }
+        public GEDCOMTree Tree { get { return fTree; } }
+        public ValuesCollection ValuesCollection { get { return null; } }
 
-        public static string PrepareTestFile(string resName)
-        {
-            string fileName = GetTempFilePath(resName);
+        public void Activate() { }
+        public void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone) { }
+        public void ChangeRecord(GEDCOMRecord record) { }
+        public void Close() { }
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources." + resName)) {
-                long size = inStream.Length;
-                byte[] buffer = new byte[size];
-                int res = inStream.Read(buffer, 0, (int)size);
-                File.WriteAllBytes(fileName, buffer);
-            }
+        public bool IsUnknown() { return false; }
+        public void CreateNewFile() { }
+        public void LoadFile(string fileName) { }
+        public void SaveFile(string fileName) { }
+        public void CriticalSave() { }
+        public void SaveFileEx(bool saveAs) { }
+        public void CheckAutosave() { }
 
-            return fileName;
-        }
+        public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType) { return null; }
+        public StringList GetRecordContent(GEDCOMRecord record) { return null; }
+        public string GetRecordName(GEDCOMRecord record, bool signed) { return string.Empty; }
+        public IListManager GetRecordsListManByType(GEDCOMRecordType recType) { return null; }
+        public GEDCOMIndividualRecord GetSelectedPerson() { return null; }
+        public GEDCOMRecordType GetSelectedRecordType() { return GEDCOMRecordType.rtIndividual; }
+        public void RefreshLists(bool columnsChanged) { }
+        public void RefreshRecordsView(GEDCOMRecordType recType) { }
+        public void ShowRecordsTab(GEDCOMRecordType recType) { }
+        public void UpdateControls(bool forceDeactivate, bool blockDependent = false) { }
+
+        public void AddRecord() { }
+        public void DeleteRecord() { }
+        public void EditRecord() { }
+        public void DuplicateRecord() { }
+        public bool RecordIsFiltered(GEDCOMRecord record) { return false; }
+        public void NotifyRecord(GEDCOMRecord record, RecordAction action) { }
+
+        public void SelectRecordByXRef(string xref) { }
+        public void Show() { }
+        public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal) { }
+    }
+
+    public class HostStub : IHost
+    {
+        public INamesTable NamesTable { get { return null; } }
+
+        public IBaseWindow GetCurrentFile(bool extMode = false) { return null; }
+        public IWorkWindow GetWorkWindow() { return null; }
+
+        public string GetUserFilesPath(string filePath) { return string.Empty; }
+        public IBaseWindow CreateBase(string fileName) { return null; }
+        public void LoadBase(IBaseWindow baseWin, string fileName) { }
+        public IBaseWindow FindBase(string fileName) { return null; }
+        public void BaseChanged(IBaseWindow baseWin) {}
+        public void BaseClosed(IBaseWindow baseWin) {}
+        public void BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
+        public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action) {}
+
+        public void ApplyOptions() { }
+        public string GetAppDataPath() { return string.Empty; }
+
+        public bool IsWidgetActive(IWidget widget) { return false; }
+        public void WidgetShow(IWidget widget) {}
+        public void WidgetClose(IWidget widget) {}
+
+        public void ShowWindow(IWindow window) {}
+
+        public ILangMan CreateLangMan(object sender) { return null; }
+        public void LoadLanguage(int langCode) {}
+        public void UpdateNavControls() {}
+        public void UpdateControls(bool forceDeactivate, bool blockDependent = false) {}
+        public void ShowHelpTopic(string topic) {}
+        public void EnableWindow(IWidgetForm form, bool value) {}
+        public void Restore() {}
+
+        public bool ShowModalX(ICommonDialog form, bool keepModeless = false) { return false; }
+
+        public void SetLang() {}
+    }
+
+    public class WriterStub : CustomWriter
+    {
+        public WriterStub() { }
+        public override void BeginWrite() { }
+        public override void EndWrite() { }
+        public override void EnablePageNumbers() { }
+        public override void NewPage() { }
+        public override void NewLine(float spacingBefore = 0.0f, float spacingAfter = 0.0f) { }
+        public override void AddParagraph(string text, IFont font, TextAlignment alignment) { }
+        public override void AddParagraph(string text, IFont font) { }
+        public override void AddParagraphAnchor(string text, IFont font, string anchor) { }
+        public override void AddParagraphLink(string text, IFont font, string link) { }
+        public override void AddParagraphLink(string text, IFont font, string link, IFont linkFont) { }
+        public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color) { return null; }
+        public override void BeginList() { }
+        public override void EndList() { }
+        public override void AddListItem(string text, IFont font) { }
+        public override void AddListItemLink(string text, IFont font, string link, IFont linkFont) { }
+        public override void BeginParagraph(TextAlignment alignment,
+                                            float spacingBefore, float spacingAfter,
+                                            float indent = 0.0f, bool keepTogether = false) { }
+        public override void EndParagraph() { }
+        public override void AddParagraphChunk(string text, IFont font) { }
+        public override void AddParagraphChunkAnchor(string text, IFont font, string anchor) { }
+        public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup = false) { }
+        public override void AddNote(string text, IFont font) { }
+        public override void BeginMulticolumns(int columnCount, float columnSpacing) { }
+        public override void EndMulticolumns() { }
+        public override void AddImage(IImage image) { }
+    }
+
+    public class MapBrowserStub : IMapBrowser
+    {
+        public bool ShowPoints { get; set; }
+        public bool ShowLines { get; set; }
+        public ExtList<GeoPoint> MapPoints { get { return null; } }
+
+        public int AddPoint(double latitude, double longitude, string hint) { return -1; }
+        public void ClearPoints() { }
+        public void DeletePoint(int index) { }
+        public void BeginUpdate() { }
+        public void EndUpdate() { }
+        public void InitMap() { }
+        public void RefreshPoints() { }
+        public void SaveSnapshot(string fileName) { }
+        public void SetCenter(double latitude, double longitude, int scale) { }
+        public void ZoomToBounds() { }
     }
 }

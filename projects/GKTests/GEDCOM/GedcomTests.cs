@@ -46,8 +46,8 @@ namespace GKCommon.GEDCOM
             // TODO: replace to mocks
             WFAppHost.ConfigureBootstrap(false);
 
-            fContext = TestStubs.CreateContext();
-            TestStubs.FillContext(fContext);
+            fContext = TestUtils.CreateContext();
+            TestUtils.FillContext(fContext);
         }
 
         [TestFixtureTearDown]

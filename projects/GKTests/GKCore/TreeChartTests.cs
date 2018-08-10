@@ -27,7 +27,7 @@ using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using GKUI;
 using GKUI.Components;
 using NUnit.Framework;
@@ -44,7 +44,7 @@ namespace GKCore
         {
             WFAppHost.ConfigureBootstrap(false);
 
-            fBase = new BaseWindowMock();
+            fBase = new BaseWindowStub();
         }
 
         [Test]

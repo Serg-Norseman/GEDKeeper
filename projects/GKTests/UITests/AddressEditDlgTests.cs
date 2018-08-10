@@ -26,7 +26,7 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.ControlTesters;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using GKUI;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;
@@ -50,7 +50,7 @@ namespace GKUI.Forms
 
             WFAppHost.ConfigureBootstrap(false);
 
-            fBase = new BaseWindowMock();
+            fBase = new BaseWindowStub();
             fAddress = new GEDCOMAddress(fBase.Context.Tree, null, "", "");
 
             fAddress.AddWebPage("test");

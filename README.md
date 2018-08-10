@@ -48,6 +48,21 @@ Project's main site: [http://en.gedkeeper.net/](http://en.gedkeeper.net/)
 
 Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/forum/#!forum/gedkeeper-en)
 
+### Support
+
+The project is fully free, I do not impose any restrictions on its use. I'm, just like to do useful things. 
+If you have a desire to help, tell friends about the project or donate. Thanks!
+
+### Contributing
+
+All contributions are welcomed. Contributions may close an issue, fix a bug (reported or not reported), add new design blocks, 
+improve the existing code, add new feature, and so on.
+
+### Bugs and feature requests
+
+Have a bug or a feature request? Please first search for existing and closed issues. 
+If your problem or idea is not addressed yet, please open a new issue.
+
 
 ## Russian
 Программа **GEDKeeper** предназначена для ведения личной генеалогической базы данных.
@@ -74,6 +89,21 @@ Google Maps (© Google).
 Основной сайт проекта: [http://ru.gedkeeper.net/](http://ru.gedkeeper.net/)
 
 Группа сообщества: [Google Groups: GEDKeeper (ru)](https://groups.google.com/forum/#!forum/gedkeeper-ru)
+
+### Поддержка
+
+Проект полностью свободен, я не налагаю никаких ограничений на его использование. Я просто люблю делать полезные вещи.
+Если у вас есть желание помочь, расскажите друзьям о проекте или пожертвуйте на его развитие. Благодарю!
+
+### Содействие
+
+Любое участие приветствуются. Вклад в развитие может закрыть проблему, исправить ошибку, добавить новый блок,
+улучшить существующий код, добавить новую функцию и т.д.
+
+### Ошибки и запросы функций
+
+Есть ошибка или запрос новой функции? Сначала найдите существующие и закрытые проблемы.
+Если ваша проблема или идея еще не решены, создайте новую.
 
 
 ## Docs & Help

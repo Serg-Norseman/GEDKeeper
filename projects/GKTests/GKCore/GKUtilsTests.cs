@@ -42,8 +42,8 @@ namespace GKCore
 
             LangMan.DefInit();
 
-            fContext = TestStubs.CreateContext();
-            TestStubs.FillContext(fContext);
+            fContext = TestUtils.CreateContext();
+            TestUtils.FillContext(fContext);
         }
 
         [TestFixtureTearDown]
@@ -367,7 +367,7 @@ namespace GKCore
         [Test]
         public void Test_FileCanBeArchived()
         {
-            string sourFile = TestStubs.PrepareTestFile("shaytan_plant.jpg");
+            string sourFile = TestUtils.PrepareTestFile("shaytan_plant.jpg");
             Assert.IsTrue(GKUtils.FileCanBeArchived(sourFile));
         }
 

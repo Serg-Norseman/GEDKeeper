@@ -30,7 +30,7 @@ using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Tools;
 using GKTests;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using GKUI;
 using NUnit.Framework;
 
@@ -40,7 +40,7 @@ namespace GKCore
     public class TreeToolsTests
     {
         private IBaseWindow fBaseWin;
-        private ProgressMock fProgress;
+        private ProgressStub fProgress;
 
         [TestFixtureSetUp]
         public void SetUp()
@@ -49,10 +49,10 @@ namespace GKCore
 
             LangMan.DefInit();
 
-            fBaseWin = new BaseWindowMock();
+            fBaseWin = new BaseWindowStub();
 
-            AppHost.Container.Register<IProgressController, ProgressMock>(LifeCycle.Singleton, true);
-            fProgress = new ProgressMock();
+            AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
+            fProgress = new ProgressStub();
         }
 
         [TestFixtureTearDown]
@@ -78,7 +78,7 @@ namespace GKCore
             Assembly assembly = typeof(CoreTests).Assembly;
 
             using (var ctx1 = new BaseContext(null)) {
-                IBaseWindow baseWin = new BaseWindowMock(ctx1);
+                IBaseWindow baseWin = new BaseWindowStub(ctx1);
 
                 using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test1.ged")) {
                     var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
@@ -158,7 +158,7 @@ namespace GKCore
         {
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GenPatriarchsGraphviz(null, "", 0, false); });
 
-            string filename = TestStubs.GetTempFilePath("test.gvf");
+            string filename = TestUtils.GetTempFilePath("test.gvf");
             TreeTools.GenPatriarchsGraphviz(fBaseWin, filename, 0, false);
         }
 

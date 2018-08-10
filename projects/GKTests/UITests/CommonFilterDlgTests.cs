@@ -23,7 +23,7 @@
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKTests;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using GKUI.Forms;
 using NUnit.Framework;
 
@@ -44,7 +44,7 @@ namespace GKUI.Forms
         {
             base.Setup();
 
-            fBase = new BaseWindowMock();
+            fBase = new BaseWindowStub();
             fContext = fBase.Context;
             fListMan = new IndividualListMan(fContext);
 

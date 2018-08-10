@@ -45,8 +45,8 @@ namespace GKCore
 
             LangMan.DefInit();
 
-            fContext = TestStubs.CreateContext();
-            TestStubs.FillContext(fContext);
+            fContext = TestUtils.CreateContext();
+            TestUtils.FillContext(fContext);
         }
 
         [TestFixtureTearDown]
@@ -162,8 +162,8 @@ namespace GKCore
         [Test]
         public void Test_Clear()
         {
-            BaseContext context = TestStubs.CreateContext();
-            TestStubs.FillContext(context);
+            BaseContext context = TestUtils.CreateContext();
+            TestUtils.FillContext(context);
             Assert.AreEqual(17, context.Tree.RecordsCount);
 
             context.Clear();
@@ -173,8 +173,8 @@ namespace GKCore
         [Test]
         public void Test_LoadAndSave()
         {
-            string sourFile = TestStubs.PrepareTestFile("test1.ged");
-            string destFile = TestStubs.GetTempFilePath("test11.ged");
+            string sourFile = TestUtils.PrepareTestFile("test1.ged");
+            string destFile = TestUtils.GetTempFilePath("test11.ged");
 
             using (BaseContext ctx = new BaseContext(null)) {
                 ctx.FileLoad(sourFile);
@@ -186,9 +186,9 @@ namespace GKCore
         [Test]
         public void Test_MediaLoadSave()
         {
-            string sourFile = TestStubs.PrepareTestFile("shaytan_plant.jpg");
+            string sourFile = TestUtils.PrepareTestFile("shaytan_plant.jpg");
 
-            string gedFile = TestStubs.GetTempFilePath("test_mm.ged");
+            string gedFile = TestUtils.GetTempFilePath("test_mm.ged");
 
             using (BaseContext ctx = new BaseContext(null)) {
                 Assert.IsTrue(ctx.IsUnknown());
@@ -231,7 +231,7 @@ namespace GKCore
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
 
-                    string tempFileName = TestStubs.GetTempFilePath("test.geds");
+                    string tempFileName = TestUtils.GetTempFilePath("test.geds");
                     ctx.SaveToSecFile(tempFileName, GEDCOMCharacterSet.csASCII, "test");
 
                     using (var ctx2 = new BaseContext(null)) {

@@ -29,7 +29,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKTests;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using GKUI.Forms;
 using NUnit.Framework;
 
@@ -49,7 +49,7 @@ namespace GKUI.Forms
         {
             base.Setup();
 
-            fBase = new BaseWindowMock();
+            fBase = new BaseWindowStub();
 
             GEDCOMMultimediaRecord mmRec = fBase.Context.Tree.CreateMultimedia();
             mmRec.AddTag("FILE", "", null);
@@ -92,7 +92,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_Video()
         {
-            string targetName = TestStubs.GetTempFilePath("test_video.3gp");
+            string targetName = TestUtils.GetTempFilePath("test_video.3gp");
 
             Assembly assembly = typeof(CoreTests).Assembly;
             Stream vidstm = assembly.GetManifestResourceStream("GKTests.Resources.test_video.3gp");

@@ -23,7 +23,7 @@
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using GKUI;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;
@@ -47,7 +47,7 @@ namespace GKUI.Forms
 
             WFAppHost.ConfigureBootstrap(false);
 
-            fBase = new BaseWindowMock();
+            fBase = new BaseWindowStub();
             fNoteRecord = new GEDCOMNoteRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
             fDialog = new NoteEditDlgEx();

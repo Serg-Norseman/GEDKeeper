@@ -23,7 +23,7 @@
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKTests;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using GKUI.Forms;
 using NUnit.Framework;
 
@@ -43,7 +43,7 @@ namespace GKUI.Forms
         {
             base.Setup();
 
-            fBase = new BaseWindowMock();
+            fBase = new BaseWindowStub();
             fNameEntry = new NameEntry();
 
             fDialog = new NameEditDlg();

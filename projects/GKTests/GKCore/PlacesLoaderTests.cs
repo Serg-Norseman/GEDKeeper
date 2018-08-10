@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using BSLib;
 using GKCore.Maps;
-using GKTests.Mocks;
+using GKTests.Stubs;
 using NUnit.Framework;
 
 namespace GKCore
@@ -107,7 +107,7 @@ namespace GKCore
         [Test]
         public void Test_CopyPoints()
         {
-            var mockBrowser = new MockBrowser();
+            var mockBrowser = new MapBrowserStub();
 
             Assert.Throws(typeof(ArgumentNullException), () => { PlacesLoader.CopyPoints(mockBrowser, null, true); });
 
