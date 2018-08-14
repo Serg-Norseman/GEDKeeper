@@ -828,9 +828,9 @@ namespace GKCore
         /* 770 */ LSID_GenDist,
         /* 771 */ LSID_SpouseDist,
         /* 772 */ LSID_ImageSize,
+        /* 773 */ LSID_DetectedDataLoop,
 
-        /* 773 */ // reserved begin
-        /* 774 */
+        /* 774 */ // reserved begin
         /* 775 */
         /* 776 */
         /* 777 */
@@ -1652,9 +1652,9 @@ namespace GKCore
             /* 770 */ "Generation distance",
             /* 771 */ "Spouse distance",
             /* 772 */ "Image size: {0} x {1} px",
+            /* 773 */ "A data loop was detected: {0}",
 
-            /* 773 */ "", // reserved begin
-            /* 774 */ "",
+            /* 774 */ "", // reserved begin
             /* 775 */ "",
             /* 776 */ "",
             /* 777 */ "",

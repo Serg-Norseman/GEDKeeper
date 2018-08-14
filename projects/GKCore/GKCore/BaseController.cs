@@ -18,12 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
 using GKCore.Options;
+using GKCore.Tools;
 using GKCore.Types;
 using GKCore.UIContracts;
 
@@ -1066,6 +1066,20 @@ namespace GKCore
             GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
             if (mmLink != null) {
                 return localUndoman.DoOrdinaryOperation(OperationType.otIndividualPortraitDetach, iRec, mmLink);
+            }
+            return false;
+        }
+
+        #endregion
+
+        #region Aux
+
+        public static bool DetectCycle(GEDCOMIndividualRecord iRec)
+        {
+            string res = TreeTools.DetectCycle(iRec);
+            if (!string.IsNullOrEmpty(res)) {
+                AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_DetectedDataLoop), res));
+                return true;
             }
             return false;
         }

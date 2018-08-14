@@ -649,6 +649,22 @@ namespace GKCore.Tools
             twmNone
         }
 
+        public delegate bool WalkProc(GEDCOMIndividualRecord iRec, TreeWalkMode mode, object extData);
+
+        public static void WalkTree(GEDCOMIndividualRecord iRec, TreeWalkMode mode, WalkProc walkProc, object extData)
+        {
+            if (iRec == null)
+                throw new ArgumentNullException("iRec");
+
+            if (walkProc == null)
+                throw new ArgumentNullException("walkProc");
+
+            if (extData == null)
+                throw new ArgumentNullException("extData");
+
+            WalkTreeInt(iRec, mode, walkProc, extData);
+        }
+
         public static void WalkTree(GEDCOMIndividualRecord iRec, TreeWalkMode mode, List<GEDCOMRecord> walkList)
         {
             if (iRec == null)
@@ -657,14 +673,22 @@ namespace GKCore.Tools
             if (walkList == null)
                 throw new ArgumentNullException("walkList");
 
-            WalkTreeInt(iRec, mode, walkList);
+            WalkTreeInt(iRec, mode, DefaultWalkProc, walkList);
         }
 
-        private static void WalkTreeInt(GEDCOMIndividualRecord iRec, TreeWalkMode mode, List<GEDCOMRecord> walkList)
+        private static bool DefaultWalkProc(GEDCOMIndividualRecord iRec, TreeWalkMode mode, object extData)
         {
-            if (iRec == null || walkList.IndexOf(iRec) >= 0) return;
+            List<GEDCOMRecord> walkList = (List<GEDCOMRecord>)extData;
+            bool resContinue = (iRec != null && !walkList.Contains(iRec));
+            if (resContinue) {
+                walkList.Add(iRec);
+            }
+            return resContinue;
+        }
 
-            walkList.Add(iRec);
+        private static void WalkTreeInt(GEDCOMIndividualRecord iRec, TreeWalkMode mode, WalkProc walkProc, object extData)
+        {
+            if (!walkProc(iRec, mode, extData)) return;
 
             if (mode == TreeWalkMode.twmNone) return;
 
@@ -675,8 +699,8 @@ namespace GKCore.Tools
                     father = family.GetHusband();
                     mother = family.GetWife();
 
-                    WalkTreeInt(father, mode, walkList);
-                    WalkTreeInt(mother, mode, walkList);
+                    WalkTreeInt(father, mode, walkProc, extData);
+                    WalkTreeInt(mother, mode, walkProc, extData);
                 }
             }
 
@@ -688,7 +712,7 @@ namespace GKCore.Tools
                     GEDCOMIndividualRecord spouse = ((iRec.Sex == GEDCOMSex.svMale) ? family.GetWife() : family.GetHusband());
 
                     TreeWalkMode intMode = ((mode == TreeWalkMode.twmAll) ? TreeWalkMode.twmAll : TreeWalkMode.twmNone);
-                    WalkTreeInt(spouse, intMode, walkList);
+                    WalkTreeInt(spouse, intMode, walkProc, extData);
 
                     switch (mode) {
                         case TreeWalkMode.twmAll:
@@ -707,10 +731,80 @@ namespace GKCore.Tools
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++) {
                         GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)family.Children[j].Value;
-                        WalkTreeInt(child, intMode, walkList);
+                        WalkTreeInt(child, intMode, walkProc, extData);
                     }
                 }
             }
+        }
+
+        #endregion
+
+        #region Detect cycles
+
+        private static GEDCOMIndividualRecord DetectCycleAncestors(GEDCOMIndividualRecord iRec, Stack<GEDCOMIndividualRecord> stack)
+        {
+            if (iRec == null) return null;
+
+            if (stack.Contains(iRec)) return iRec;
+
+            stack.Push(iRec);
+
+            GEDCOMFamilyRecord family = iRec.GetParentsFamily();
+            if (family != null) {
+                var res = DetectCycleAncestors(family.GetHusband(), stack);
+                if (res != null) return res;
+
+                res = DetectCycleAncestors(family.GetWife(), stack);
+                if (res != null) return res;
+            }
+
+            stack.Pop();
+            return null;
+        }
+
+        private static GEDCOMIndividualRecord DetectCycleDescendants(GEDCOMIndividualRecord iRec, Stack<GEDCOMIndividualRecord> stack)
+        {
+            if (iRec == null) return null;
+
+            if (stack.Contains(iRec)) return iRec;
+
+            stack.Push(iRec);
+
+            int num = iRec.SpouseToFamilyLinks.Count;
+            for (int i = 0; i < num; i++) {
+                GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+
+                int num2 = family.Children.Count;
+                for (int j = 0; j < num2; j++) {
+                    GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)family.Children[j].Value;
+                    var res = DetectCycleDescendants(child, stack);
+                    if (res != null) return res;
+                }
+            }
+
+            stack.Pop();
+            return null;
+        }
+
+        public static string DetectCycle(GEDCOMIndividualRecord iRec)
+        {
+            var stack = new Stack<GEDCOMIndividualRecord>();
+
+            var hasCycle = DetectCycleAncestors(iRec, stack);
+            if (hasCycle != null) {
+                var lastRec = stack.Pop();
+                return iRec.XRef + " ... " + lastRec.XRef + " -> " + hasCycle.XRef;
+            }
+
+            stack.Clear();
+
+            hasCycle = DetectCycleDescendants(iRec, stack);
+            if (hasCycle != null) {
+                var lastRec = stack.Pop();
+                return iRec.XRef + " ... " + lastRec.XRef + " -> " + hasCycle.XRef;
+            }
+
+            return string.Empty;
         }
 
         #endregion

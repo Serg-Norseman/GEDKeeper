@@ -33,6 +33,7 @@ using GKCore.Charts;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Components;
 
@@ -1423,6 +1424,8 @@ namespace GKUI.Forms
                 return;
             }
 
+            if (BaseController.DetectCycle(selPerson)) return;
+
             using (var p = new PedigreeExporter(this, selPerson)) {
                 p.Options = AppHost.Options;
                 p.Kind = kind;
@@ -1465,6 +1468,8 @@ namespace GKUI.Forms
             var selPerson = GetSelectedPerson();
             if (selPerson == null) return;
 
+            if (BaseController.DetectCycle(selPerson)) return;
+
             if (TreeChartModel.CheckTreeChartSize(fContext.Tree, selPerson, chartKind)) {
                 TreeChartWin fmChart = new TreeChartWin(this, selPerson);
                 fmChart.ChartKind = chartKind;
@@ -1473,22 +1478,25 @@ namespace GKUI.Forms
             }
         }
 
-        private void miAncestorsCircle_Click(object sender, EventArgs e)
+        private void ShowCircleChart(CircleChartType chartKind)
         {
             var selPerson = GetSelectedPerson();
             if (selPerson == null) return;
 
-            CircleChartWin fmChart = new CircleChartWin(this, selPerson, CircleChartType.Ancestors);
+            if (BaseController.DetectCycle(selPerson)) return;
+
+            CircleChartWin fmChart = new CircleChartWin(this, selPerson, chartKind);
             AppHost.Instance.ShowWindow(fmChart);
+        }
+
+        private void miAncestorsCircle_Click(object sender, EventArgs e)
+        {
+            ShowCircleChart(CircleChartType.Ancestors);
         }
 
         private void miDescendantsCircle_Click(object sender, EventArgs e)
         {
-            var selPerson = GetSelectedPerson();
-            if (selPerson == null) return;
-
-            CircleChartWin fmChart = new CircleChartWin(this, selPerson, CircleChartType.Descendants);
-            AppHost.Instance.ShowWindow(fmChart);
+            ShowCircleChart(CircleChartType.Descendants);
         }
 
         private void miLogSend_Click(object sender, EventArgs e)
