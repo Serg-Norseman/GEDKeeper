@@ -210,7 +210,9 @@ namespace GKUI.Components
 
         private void DrawRect(Graphics gfx, int x, int width, Brush lb)
         {
-            gfx.FillRectangle(lb, x, 0, width, Height);
+            if (width > 0) {
+                gfx.FillRectangle(lb, x, 0, width, Height);
+            }
         }
 
         private string HintRequest(int fragmentNumber, int size)

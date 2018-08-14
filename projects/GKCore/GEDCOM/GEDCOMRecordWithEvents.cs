@@ -134,6 +134,22 @@ namespace GKCommon.GEDCOM
 
         private static readonly float[] CA_VALUES = new float[] { 0.25f, 0.5f, 0.75f, 1.0f };
 
+        /// <summary>
+        /// Strange values were found, possibly from other genealogical programs.
+        /// </summary>
+        /// <param name="value">Input value of CertaintyAssessment</param>
+        /// <returns>Checked value</returns>
+        private int CheckCA(int value)
+        {
+            if (value < 0) {
+                value = 0;
+            } else if (value >= CA_VALUES.Length) {
+                value = CA_VALUES.Length - 1;
+            }
+
+            return value;
+        }
+
         public float GetCertaintyAssessment()
         {
             float result = 0;
@@ -147,7 +163,7 @@ namespace GKCommon.GEDCOM
                 for (int k = 0; k < num2; k++) {
                     GEDCOMSourceCitation cit = evt.SourceCitations[k];
 
-                    int ca = cit.CertaintyAssessment;
+                    int ca = CheckCA(cit.CertaintyAssessment);
                     int weight = (ca + 1);
 
                     result += (CA_VALUES[ca] * weight);
@@ -159,7 +175,7 @@ namespace GKCommon.GEDCOM
             for (int i = 0; i < num3; i++) {
                 GEDCOMSourceCitation cit = SourceCitations[i];
 
-                int ca = cit.CertaintyAssessment;
+                int ca = CheckCA(cit.CertaintyAssessment);
                 int weight = (ca + 1);
 
                 result += (CA_VALUES[ca] * weight);
