@@ -79,5 +79,24 @@ namespace GKCommon.GEDCOM
             Assert.AreEqual(1, strList.Count);
             Assert.AreEqual(strings.Text, strList.Text);
         }
+
+        [Test]
+        public void Test_FindTags()
+        {
+            var tag = new GEDCOMTag(null, null, "TEST", "");
+            Assert.IsNotNull(tag);
+
+            tag.AddTag("_SCOPE", "Private", null);
+            tag.AddTag("_SCOPE", "Friends", null);
+            tag.AddTag("_SCOPE", "Research", null);
+
+            var subTags = tag.FindTags("_SCOPE");
+            Assert.AreEqual(3, subTags.Count);
+
+            tag.DeleteTag("_SCOPE");
+
+            subTags = tag.FindTags("_SCOPE");
+            Assert.AreEqual(0, subTags.Count);
+        }
     }
 }

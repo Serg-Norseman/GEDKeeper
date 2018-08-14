@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using BSLib;
@@ -250,8 +251,7 @@ namespace GKCommon.GEDCOM
         public void DeleteTag(string tagName)
         {
             GEDCOMTag tag = FindTag(tagName, 0);
-            while (tag != null)
-            {
+            while (tag != null) {
                 int idx = fTags.IndexOf(tag);
                 fTags.DeleteAt(idx);
 
@@ -268,34 +268,44 @@ namespace GKCommon.GEDCOM
 
             GEDCOMTag tempTag = this;
 
-            while (true)
-            {
+            while (true) {
                 int index = ((S == su) ? startIndex : 0);
 
                 while (index < tempTag.Count && tempTag[index].Name != S) index++;
 
                 if (index >= tempTag.Count) break;
 
-                GEDCOMTag resultTag = tempTag[index];
-                tempTag = resultTag;
+                tempTag = tempTag[index];
 
                 pos = su.IndexOf('\\');
-                if (pos >= 0)
-                {
+                if (pos >= 0) {
                     su = su.Substring(pos + 1);
 
                     pos = su.IndexOf('\\');
                     S = ((pos >= 0) ? su.Substring(0, pos) : su);
-                }
-                else
-                {
+                } else {
                     su = "";
                 }
 
-                if (su == "") return resultTag;
+                if (su == "") return tempTag;
             }
 
             return null;
+        }
+
+        public IList<GEDCOMTag> FindTags(string tagName)
+        {
+            IList<GEDCOMTag> result = new List<GEDCOMTag>();
+
+            GEDCOMTag tag = FindTag(tagName, 0);
+            while (tag != null) {
+                int idx = fTags.IndexOf(tag);
+                result.Add(tag);
+
+                tag = FindTag(tagName, idx + 1);
+            }
+
+            return result;
         }
 
         public GEDCOMTag TagClass(string tagName, TagConstructor tagConstructor)
