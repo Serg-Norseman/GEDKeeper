@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,11 +20,12 @@
 
 using System;
 using Eto.Forms;
-using GKCommon;
+
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
-using GKCore.Options;
-using GKCore.Types;
+using GKCore.Controllers;
+using GKCore.Interfaces;
 using GKCore.UIContracts;
 using GKUI.Components;
 
@@ -35,53 +36,33 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class AssociationEditDlg : EditorDialog, IAssociationEditDlg
     {
-        private GEDCOMAssociation fAssociation;
-        private GEDCOMIndividualRecord fTempInd;
+        private readonly AssociationEditController fController;
 
         public GEDCOMAssociation Association
         {
-            get { return fAssociation; }
-            set {
-                if (fAssociation != value) {
-                    fAssociation = value;
-                    UpdateView();
-                }
-            }
+            get { return fController.Association; }
+            set { fController.Association = value; }
         }
 
-        private void btnAccept_Click(object sender, EventArgs e)
+        string IAssociationEditDlg.RelationText
         {
-            try {
-                string rel = cmbRelation.Text.Trim();
-                if (rel != "" && GlobalOptions.Instance.Relations.IndexOf(rel) < 0) {
-                    GlobalOptions.Instance.Relations.Add(rel);
-                }
-
-                fAssociation.Relation = cmbRelation.Text;
-                fAssociation.Individual = fTempInd;
-
-                DialogResult = DialogResult.Ok;
-            } catch (Exception ex) {
-                Logger.LogWrite("AssociationEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            get { return cmbRelation.Text; }
+            set { cmbRelation.Text = value; }
         }
 
-        private void btnPersonAdd_Click(object sender, EventArgs e)
+        string IAssociationEditDlg.PersonText
         {
-            fTempInd = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-            txtPerson.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, true, false));
+            get { return txtPerson.Text; }
+            set { txtPerson.Text = value; }
         }
 
         public AssociationEditDlg()
         {
             InitializeComponent();
 
-            int num = GlobalOptions.Instance.Relations.Count;
-            for (int i = 0; i < num; i++) {
-                cmbRelation.Items.Add(GlobalOptions.Instance.Relations[i]);
-            }
-            cmbRelation.SortItems();
+            btnPersonAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
@@ -91,13 +72,33 @@ namespace GKUI.Forms
             lblPerson.Text = LangMan.LS(LSID.LSID_Person);
 
             btnPersonAdd.ToolTip = LangMan.LS(LSID.LSID_PersonAttachTip);
+
+            fController = new AssociationEditController(this);
         }
 
-        public override void UpdateView()
+        public override void InitDialog(IBaseWindow baseWin)
         {
-            cmbRelation.Text = fAssociation.Relation;
-            string st = ((fAssociation.Individual == null) ? "" : GKUtils.GetNameString(fAssociation.Individual, true, false));
-            txtPerson.Text = st;
+            base.InitDialog(baseWin);
+            fController.Init(baseWin);
+        }
+
+        void IAssociationEditDlg.SetRelations(StringList relations)
+        {
+            int num = relations.Count;
+            for (int i = 0; i < num; i++) {
+                cmbRelation.Items.Add(relations[i]);
+            }
+            cmbRelation.SortItems();
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+        }
+
+        private void btnPersonAdd_Click(object sender, EventArgs e)
+        {
+            fController.SetPerson();
         }
     }
 }

@@ -89,6 +89,14 @@ namespace GKCore.UIContracts
     }
 
 
+    public interface IDialogController
+    {
+        bool Accept();
+        void Init(IBaseWindow baseWin);
+        void UpdateView();
+    }
+
+
     public interface IAddressEditDlg : ICommonDialog, IBaseEditor
     {
         GEDCOMAddress Address { get; set; }
@@ -97,6 +105,11 @@ namespace GKCore.UIContracts
     public interface IAssociationEditDlg : ICommonDialog, IBaseEditor
     {
         GEDCOMAssociation Association { get; set; }
+
+        string PersonText { get; set; }
+        string RelationText { get; set; }
+
+        void SetRelations(StringList relations);
     }
 
     public interface ICommunicationEditDlg : ICommonDialog, IBaseEditor

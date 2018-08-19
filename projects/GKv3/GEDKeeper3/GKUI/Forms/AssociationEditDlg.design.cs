@@ -27,7 +27,6 @@ namespace GKUI.Forms
             btnPersonAdd = new Button();
             btnPersonAdd.Size = new Size(26, 26);
             btnPersonAdd.Click += btnPersonAdd_Click;
-            btnPersonAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
 
             cmbRelation = new ComboBox();
 
@@ -54,14 +53,12 @@ namespace GKUI.Forms
             btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
             btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
             btnCancel.Click += CancelClickHandler;
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             Content = new DefTableLayout {
                 Rows = {
