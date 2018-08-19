@@ -198,7 +198,6 @@ namespace GKCore
 
                     if (!exists) {
                         if (result) {
-                            //_struct.SourceCitations.Add(cit);
                             result = undoman.DoOrdinaryOperation(OperationType.otRecordSourceCitAdd, (GEDCOMObject)_struct, cit);
                         } else {
                             cit.Dispose();

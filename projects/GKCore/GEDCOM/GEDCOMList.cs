@@ -122,7 +122,7 @@ namespace GKCommon.GEDCOM
         {
             if (!fDisposed) {
                 Clear();
-                //this.fList.Free(); isnot IDisposable
+                fDataList = null;
                 fDisposed = true;
             }
         }

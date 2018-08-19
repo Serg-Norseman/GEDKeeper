@@ -257,7 +257,7 @@ namespace GKCore
         /* 209 */ LSID_PatMale,
         /* 210 */ LSID_NotSelectedPerson,
         /* 211 */ LSID_IsNotDefinedSex,
-        /* 212 */ LSID_IsNotFamilies,
+        /* 212 */ LSID_IsNotFamilies, /* not used */
         /* 213 */ LSID_AncestorsNumberIsInvalid,
         /* 214 */ LSID_DescendantsNumberIsInvalid,
         /* 215 */ LSID_GenerationsVisible,

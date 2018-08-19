@@ -302,12 +302,8 @@ namespace GKCore.Charts
             fDecorativeLinePen = sourceModel.fDecorativeLinePen;
             fDepthLimit = sourceModel.fDepthLimit;
             fDrawFont = sourceModel.fDrawFont;
-            //fEdges = sourceModel.fEdges;
             fExpPic = sourceModel.fExpPic;
             fPersExpPic = sourceModel.fPersExpPic;
-            //fGraph = sourceModel.fGraph;
-            //fHasMediaFail = sourceModel.fHasMediaFail;
-            //fHighlightedPerson = sourceModel.fHighlightedPerson;
             //fKind = sourceModel.fKind;
             //fKinRoot = sourceModel.fKinRoot;
             fLevelDistance = sourceModel.fLevelDistance;
@@ -315,17 +311,12 @@ namespace GKCore.Charts
             fMargins = sourceModel.fMargins;
             fNodePadding = sourceModel.fNodePadding;
             fOptions = sourceModel.fOptions;
-            //fPathDebug = sourceModel.fPathDebug;
             //fRoot = sourceModel.fRoot;
             fScale = sourceModel.fScale;
             fSignsPic = sourceModel.fSignsPic;
             fSolidBlack = sourceModel.fSolidBlack;
             fSpouseDistance = sourceModel.fSpouseDistance;
-            //fSPX = sourceModel.fSPX;
-            //fSPY = sourceModel.fSPY;
             fTree = sourceModel.fTree;
-            //fTreeBounds = sourceModel.fTreeBounds;
-            //fVisibleArea = sourceModel.fVisibleArea;
         }
 
         public void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
@@ -961,7 +952,6 @@ namespace GKCore.Charts
         private int NextGenY(TreeChartPerson person, bool ancestors)
         {
             int sign = (ancestors) ? -1 : +1;
-            //int sign2 = +1;
             int sign2 = (!fOptions.InvertedTree) ? +1 : -1;
             int offset = (fLevelDistance + person.Height) * sign * sign2;
             return person.PtY + offset;

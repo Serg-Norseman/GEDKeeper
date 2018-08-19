@@ -1538,25 +1538,18 @@ namespace GKCore
             return result;
         }
 
-        public GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild,
-                                                 bool canCreate,
+        public GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild, bool canCreate,
                                                  GEDCOMIndividualRecord newParent)
         {
             GEDCOMFamilyRecord result = null;
 
-            if (iChild != null)
-            {
-                if (iChild.ChildToFamilyLinks.Count != 0)
-                {
+            if (iChild != null) {
+                if (iChild.ChildToFamilyLinks.Count != 0) {
                     result = iChild.ChildToFamilyLinks[0].Family;
-                }
-                else
-                {
-                    if (canCreate)
-                    {
+                } else {
+                    if (canCreate) {
                         GEDCOMFamilyRecord fam = GetFamilyBySpouse(newParent);
-                        if (fam == null)
-                        {
+                        if (fam == null) {
                             fam = fTree.CreateFamily();
                         }
                         fam.AddChild(iChild);
@@ -1574,8 +1567,7 @@ namespace GKCore
                 throw new ArgumentNullException(@"spouse");
 
             GEDCOMSex sex = spouse.Sex;
-            if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined)
-            {
+            if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined) {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
                 return null;
             }
@@ -1589,20 +1581,13 @@ namespace GKCore
         {
             GEDCOMIndividualRecord resultChild = null;
 
-            if (parent != null)
-            {
-                if (parent.SpouseToFamilyLinks.Count > 1)
-                {
+            if (parent != null) {
+                if (parent.SpouseToFamilyLinks.Count > 1) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ThisPersonHasSeveralFamilies));
-                }
-                else
-                {
+                } else {
                     GEDCOMFamilyRecord family;
 
-                    if (parent.SpouseToFamilyLinks.Count == 0)
-                    {
-                        //GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotFamilies));
-
+                    if (parent.SpouseToFamilyLinks.Count == 0) {
                         family = AddFamilyForSpouse(parent);
                         if (family == null) {
                             return null;
@@ -1613,8 +1598,7 @@ namespace GKCore
 
                     GEDCOMIndividualRecord child = SelectPerson(family.GetHusband(), TargetMode.tmParent, needSex);
 
-                    if (child != null && family.AddChild(child))
-                    {
+                    if (child != null && family.AddChild(child)) {
                         // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
                         // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
                         AppHost.NamesTable.ImportNames(child);
@@ -1633,8 +1617,7 @@ namespace GKCore
                 throw new ArgumentNullException(@"iRec");
 
             GEDCOMSex needSex;
-            switch (iRec.Sex)
-            {
+            switch (iRec.Sex) {
                 case GEDCOMSex.svMale:
                     needSex = GEDCOMSex.svFemale;
                     break;

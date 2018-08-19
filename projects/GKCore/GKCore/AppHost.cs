@@ -111,8 +111,6 @@ namespace GKCore
             LoadLanguage(AppHost.Options.InterfaceLang);
             SetArgs(args);
             StartupWork();
-
-            //LangMan.SaveDefaultLanguage();
         }
 
         public void StartupWork()
