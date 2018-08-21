@@ -33,7 +33,6 @@ using GKCore.Charts;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Components;
 
@@ -803,6 +802,15 @@ namespace GKUI.Forms
             miContRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
             miContRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
             miRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
+
+            miTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
+            miTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
+            miTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
+            miRecMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
+            miFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
+            miTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
+            miPatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
+            miPlacesManager.Text = LangMan.LS(LSID.LSID_ToolOp_9);
         }
 
         #endregion
@@ -1294,13 +1302,96 @@ namespace GKUI.Forms
             }
         }
 
-        private void miTreeTools_Click(object sender, EventArgs e)
+        private void miTTTreeSplit_Click(object sender, EventArgs e)
         {
             try {
                 fContext.BeginUpdate();
+                using (var dlg = new TTTreeSplitDlg(this)) {
+                    dlg.ShowDialog();
+                }
+            } finally {
+                fContext.EndUpdate();
+            }
+        }
 
-                using (TreeToolsWin fmTreeTools = new TreeToolsWin(this)) {
-                    fmTreeTools.ShowDialog();
+        private void miTTTreeMerge_Click(object sender, EventArgs e)
+        {
+            try {
+                fContext.BeginUpdate();
+                using (var dlg = new TTTreeMergeDlg(this)) {
+                    dlg.ShowDialog();
+                }
+            } finally {
+                fContext.EndUpdate();
+            }
+        }
+
+        private void miTTTreeCompare_Click(object sender, EventArgs e)
+        {
+            try {
+                fContext.BeginUpdate();
+                using (var dlg = new TTTreeCompareDlg(this)) {
+                    dlg.ShowDialog();
+                }
+            } finally {
+                fContext.EndUpdate();
+            }
+        }
+
+        private void miTTTreeCheck_Click(object sender, EventArgs e)
+        {
+            try {
+                fContext.BeginUpdate();
+                using (var dlg = new TTTreeCheckDlg(this)) {
+                    dlg.ShowDialog();
+                }
+            } finally {
+                fContext.EndUpdate();
+            }
+        }
+
+        private void miTTRecMerge_Click(object sender, EventArgs e)
+        {
+            try {
+                fContext.BeginUpdate();
+                using (var dlg = new TTRecMergeDlg(this)) {
+                    dlg.ShowDialog();
+                }
+            } finally {
+                fContext.EndUpdate();
+            }
+        }
+
+        private void miTTPlacesManager_Click(object sender, EventArgs e)
+        {
+            try {
+                fContext.BeginUpdate();
+                using (var dlg = new TTPlacesManagerDlg(this)) {
+                    dlg.ShowDialog();
+                }
+            } finally {
+                fContext.EndUpdate();
+            }
+        }
+
+        private void miTTPatSearch_Click(object sender, EventArgs e)
+        {
+            try {
+                fContext.BeginUpdate();
+                using (var dlg = new TTPatSearchDlg(this)) {
+                    dlg.ShowDialog();
+                }
+            } finally {
+                fContext.EndUpdate();
+            }
+        }
+
+        private void miTTFamilyGroups_Click(object sender, EventArgs e)
+        {
+            try {
+                fContext.BeginUpdate();
+                using (var dlg = new TTFamilyGroupsDlg(this)) {
+                    dlg.ShowDialog();
                 }
             } finally {
                 fContext.EndUpdate();

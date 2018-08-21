@@ -143,8 +143,29 @@ namespace GKUI.Forms
 
 
             // Stage 21: call to TreeToolsWin
-            ModalFormHandler = TreeToolsWin_Handler;
-            ClickToolStripMenuItem("miTreeTools", fMainWin);
+            ModalFormHandler = TreeCompareDlg_Handler;
+            ClickToolStripMenuItem("miTreeCompare", fMainWin);
+
+            ModalFormHandler = TreeMergeDlg_Handler;
+            ClickToolStripMenuItem("miTreeMerge", fMainWin);
+
+            ModalFormHandler = TreeSplitDlg_Handler;
+            ClickToolStripMenuItem("miTreeSplit", fMainWin);
+
+            ModalFormHandler = RecMergeDlg_Handler;
+            ClickToolStripMenuItem("miRecMerge", fMainWin);
+
+            ModalFormHandler = FamilyGroupsDlg_Handler;
+            ClickToolStripMenuItem("miFamilyGroups", fMainWin);
+
+            ModalFormHandler = TreeCheckDlg_Handler;
+            ClickToolStripMenuItem("miTreeCheck", fMainWin);
+
+            ModalFormHandler = PatSearchDlg_Handler;
+            ClickToolStripMenuItem("miPatSearch", fMainWin);
+
+            ModalFormHandler = PlacesManagerDlg_Handler;
+            ClickToolStripMenuItem("miPlacesManager", fMainWin);
 
 
             // Stage 22-24: call to exports
@@ -726,112 +747,127 @@ namespace GKUI.Forms
 
         #region TreeToolsWin handlers
 
-        private void TreeToolsWin_Handler(string name, IntPtr ptr, Form form)
+        private void TreeCompareDlg_Handler(string name, IntPtr ptr, Form form)
         {
             var tabs = new TabControlTester("tabsTools", form);
 
-            for (int i = 0; i < tabs.Properties.TabCount; i++) {
-                tabs.SelectTab(i);
+            var radBtn = new RadioButtonTester("radMatchInternal", form);
+            radBtn.Click();
+            ClickButton("btnMatch", form);
 
-                TreeToolsWin.ToolType tt = (TreeToolsWin.ToolType)i;
+            radBtn = new RadioButtonTester("radAnalysis", form);
+            radBtn.Click();
+            ClickButton("btnMatch", form);
 
-                switch (tt) {
-                    case TreeToolsWin.ToolType.ttRecMerge:
-                        {
-                            var chkBookmarkMerged = new CheckBoxTester("chkBookmarkMerged", form);
-                            chkBookmarkMerged.Properties.Checked = true;
-                            chkBookmarkMerged.Properties.Checked = false;
+            radBtn = new RadioButtonTester("radMathExternal", form);
+            radBtn.Click();
+            ModalFormHandler = OpenFile_Cancel_Handler;
+            ClickButton("btnFileChoose", form);
+            //ClickButton("btnMatch", form);
 
-                            var radPersons = new RadioButtonTester("radPersons", form);
-                            radPersons.Properties.Checked = true;
+            form.Close();
+        }
 
-                            RSD_ItemIndex = 0;
-                            ModalFormHandler = RecordSelectDlg_SelectItem_Handler;
-                            var btnRec1Sel = new ButtonTester("MergeCtl.btnRec1Select", form);
-                            btnRec1Sel.Click();
+        private void TreeMergeDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
 
-                            RSD_ItemIndex = 1;
-                            ModalFormHandler = RecordSelectDlg_SelectItem_Handler;
-                            var btnRec2Sel = new ButtonTester("MergeCtl.btnRec2Select", form);
-                            btnRec2Sel.Click();
+            ModalFormHandler = OpenFile_Cancel_Handler;
+            ClickButton("btnTreeMerge", form);
 
-                            ClickButton("btnAutoSearch", form);
+            form.Close();
+        }
 
-                            ClickButton("btnSkip", form);
-                        }
-                        break;
+        private void TreeSplitDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
 
-                    case TreeToolsWin.ToolType.ttPatSearch:
-                        {
-                            var edMinGens = new NumericUpDownTester("edMinGens", form);
-                            edMinGens.EnterValue(1);
+            ClickButton("btnSelectFamily", form);
 
-                            ClickButton("btnPatSearch", form);
+            ClickButton("btnSelectAncestors", form);
 
-                            ClickButton("btnSetPatriarch", form);
+            ClickButton("btnSelectDescendants", form);
 
-                            ClickButton("btnPatriarchsDiagram", form);
-                            var pvWin = new FormTester("PatriarchsViewerWin");
-                            pvWin.Close();
-                        }
-                        break;
+            ClickButton("btnSelectAll", form);
 
-                    case TreeToolsWin.ToolType.ttTreeMerge:
-                        {
-                            ModalFormHandler = OpenFile_Cancel_Handler;
-                            ClickButton("btnTreeMerge", form);
-                        }
-                        break;
+            ModalFormHandler = SaveFile_Cancel_Handler;
+            ClickButton("btnSave", form);
 
-                    case TreeToolsWin.ToolType.ttTreeSplit:
-                        {
-                            ClickButton("btnSelectFamily", form);
+            ModalFormHandler = SaveFile_GED_Handler;
+            ClickButton("btnSave", form);
 
-                            ClickButton("btnSelectAncestors", form);
+            form.Close();
+        }
 
-                            ClickButton("btnSelectDescendants", form);
+        private void RecMergeDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
 
-                            ClickButton("btnSelectAll", form);
+            var chkBookmarkMerged = new CheckBoxTester("chkBookmarkMerged", form);
+            chkBookmarkMerged.Properties.Checked = true;
+            chkBookmarkMerged.Properties.Checked = false;
 
-                            ModalFormHandler = SaveFile_Cancel_Handler;
-                            ClickButton("btnSave", form);
+            var radPersons = new RadioButtonTester("radPersons", form);
+            radPersons.Properties.Checked = true;
 
-                            ModalFormHandler = SaveFile_GED_Handler;
-                            ClickButton("btnSave", form);
-                        }
-                        break;
+            RSD_ItemIndex = 0;
+            ModalFormHandler = RecordSelectDlg_SelectItem_Handler;
+            var btnRec1Sel = new ButtonTester("MergeCtl.btnRec1Select", form);
+            btnRec1Sel.Click();
 
-                    case TreeToolsWin.ToolType.ttTreeCompare:
-                        {
-                            var radBtn = new RadioButtonTester("radMatchInternal", form);
-                            radBtn.Click();
-                            ClickButton("btnMatch", form);
+            RSD_ItemIndex = 1;
+            ModalFormHandler = RecordSelectDlg_SelectItem_Handler;
+            var btnRec2Sel = new ButtonTester("MergeCtl.btnRec2Select", form);
+            btnRec2Sel.Click();
 
-                            radBtn = new RadioButtonTester("radAnalysis", form);
-                            radBtn.Click();
-                            ClickButton("btnMatch", form);
+            ClickButton("btnAutoSearch", form);
 
-                            radBtn = new RadioButtonTester("radMathExternal", form);
-                            radBtn.Click();
-                            ModalFormHandler = OpenFile_Cancel_Handler;
-                            ClickButton("btnFileChoose", form);
-                            //ClickButton("btnMatch", form);
-                        }
-                        break;
+            ClickButton("btnSkip", form);
 
-                    case TreeToolsWin.ToolType.ttTreeCheck:
-                        {
-                            ClickButton("btnBaseRepair", form);
-                        }
-                        break;
+            form.Close();
+        }
 
-                    case TreeToolsWin.ToolType.ttPlaceManage:
-                        {
-                            ClickButton("btnIntoList", form);
-                        }
-                        break;
-                }
-            }
+        private void FamilyGroupsDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
+
+            ClickButton("btnCheckGroups", form);
+
+            form.Close();
+        }
+
+        private void TreeCheckDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
+
+            ClickButton("btnBaseRepair", form);
+
+            form.Close();
+        }
+
+        private void PatSearchDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
+
+            var edMinGens = new NumericUpDownTester("edMinGens", form);
+            edMinGens.EnterValue(1);
+
+            ClickButton("btnPatSearch", form);
+
+            ClickButton("btnSetPatriarch", form);
+
+            ClickButton("btnPatriarchsDiagram", form);
+            var pvWin = new FormTester("PatriarchsViewerWin");
+            pvWin.Close();
+
+            form.Close();
+        }
+
+        private void PlacesManagerDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
+
+            ClickButton("btnIntoList", form);
 
             form.Close();
         }

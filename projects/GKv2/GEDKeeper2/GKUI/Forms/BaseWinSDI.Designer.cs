@@ -99,6 +99,14 @@
         private System.Windows.Forms.ToolStripMenuItem miContRecordEdit;
         private System.Windows.Forms.ContextMenuStrip contextMenu;
         private System.Windows.Forms.ToolStripMenuItem miContRecordAdd;
+        private System.Windows.Forms.ToolStripMenuItem miTreeCompare;
+        private System.Windows.Forms.ToolStripMenuItem miTreeMerge;
+        private System.Windows.Forms.ToolStripMenuItem miTreeSplit;
+        private System.Windows.Forms.ToolStripMenuItem miRecMerge;
+        private System.Windows.Forms.ToolStripMenuItem miFamilyGroups;
+        private System.Windows.Forms.ToolStripMenuItem miTreeCheck;
+        private System.Windows.Forms.ToolStripMenuItem miPatSearch;
+        private System.Windows.Forms.ToolStripMenuItem miPlacesManager;
 
         private void InitializeComponent()
         {
@@ -199,6 +207,14 @@
             this.miContRecordDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.miRecordDuplicate = new System.Windows.Forms.ToolStripMenuItem();
             this.tabsRecords = new System.Windows.Forms.TabControl();
+            this.miTreeCompare = new System.Windows.Forms.ToolStripMenuItem();
+            this.miTreeMerge = new System.Windows.Forms.ToolStripMenuItem();
+            this.miTreeSplit = new System.Windows.Forms.ToolStripMenuItem();
+            this.miRecMerge = new System.Windows.Forms.ToolStripMenuItem();
+            this.miFamilyGroups = new System.Windows.Forms.ToolStripMenuItem();
+            this.miTreeCheck = new System.Windows.Forms.ToolStripMenuItem();
+            this.miPatSearch = new System.Windows.Forms.ToolStripMenuItem();
+            this.miPlacesManager = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel2)).BeginInit();
             this.ToolBar1.SuspendLayout();
@@ -805,10 +821,74 @@
             // 
             // miTreeTools
             // 
+            this.miTreeTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                                    this.miTreeCompare,
+                                    this.miTreeMerge,
+                                    this.miTreeSplit,
+                                    this.miRecMerge,
+                                    this.miFamilyGroups,
+                                    this.miTreeCheck,
+                                    this.miPatSearch,
+                                    this.miPlacesManager});
             this.miTreeTools.Name = "miTreeTools";
             this.miTreeTools.Size = new System.Drawing.Size(204, 24);
             this.miTreeTools.Text = "miTreeTools";
-            this.miTreeTools.Click += new System.EventHandler(this.miTreeTools_Click);
+            // 
+            // miTreeCompare
+            // 
+            this.miTreeCompare.Name = "miTreeCompare";
+            this.miTreeCompare.Size = new System.Drawing.Size(204, 24);
+            this.miTreeCompare.Text = "miTreeCompare";
+            this.miTreeCompare.Click += new System.EventHandler(this.miTTTreeCompare_Click);
+            // 
+            // miTreeMerge
+            // 
+            this.miTreeMerge.Name = "miTreeMerge";
+            this.miTreeMerge.Size = new System.Drawing.Size(204, 24);
+            this.miTreeMerge.Text = "miTreeMerge";
+            this.miTreeMerge.Click += new System.EventHandler(this.miTTTreeMerge_Click);
+            // 
+            // miTreeSplit
+            // 
+            this.miTreeSplit.Name = "miTreeSplit";
+            this.miTreeSplit.Size = new System.Drawing.Size(204, 24);
+            this.miTreeSplit.Text = "miTreeSplit";
+            this.miTreeSplit.Click += new System.EventHandler(this.miTTTreeSplit_Click);
+            // 
+            // miRecMerge
+            // 
+            this.miRecMerge.Name = "miRecMerge";
+            this.miRecMerge.Size = new System.Drawing.Size(204, 24);
+            this.miRecMerge.Text = "miRecMerge";
+            this.miRecMerge.Click += new System.EventHandler(this.miTTRecMerge_Click);
+            // 
+            // miFamilyGroups
+            // 
+            this.miFamilyGroups.Name = "miFamilyGroups";
+            this.miFamilyGroups.Size = new System.Drawing.Size(204, 24);
+            this.miFamilyGroups.Text = "miFamilyGroups";
+            this.miFamilyGroups.Click += new System.EventHandler(this.miTTFamilyGroups_Click);
+            // 
+            // miTreeCheck
+            // 
+            this.miTreeCheck.Name = "miTreeCheck";
+            this.miTreeCheck.Size = new System.Drawing.Size(204, 24);
+            this.miTreeCheck.Text = "miTreeCheck";
+            this.miTreeCheck.Click += new System.EventHandler(this.miTTTreeCheck_Click);
+            // 
+            // miPatSearch
+            // 
+            this.miPatSearch.Name = "miPatSearch";
+            this.miPatSearch.Size = new System.Drawing.Size(204, 24);
+            this.miPatSearch.Text = "miPatSearch";
+            this.miPatSearch.Click += new System.EventHandler(this.miTTPatSearch_Click);
+            // 
+            // miPlacesManager
+            // 
+            this.miPlacesManager.Name = "miPlacesManager";
+            this.miPlacesManager.Size = new System.Drawing.Size(204, 24);
+            this.miPlacesManager.Text = "miPlacesManager";
+            this.miPlacesManager.Click += new System.EventHandler(this.miTTPlacesManager_Click);
             // 
             // N10
             // 

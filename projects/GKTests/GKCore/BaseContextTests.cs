@@ -25,9 +25,12 @@ using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Cultures;
+using GKCore.Interfaces;
+using GKCore.IoC;
 using GKCore.Operations;
 using GKCore.Types;
 using GKTests;
+using GKTests.Stubs;
 using GKUI;
 using NUnit.Framework;
 
@@ -42,6 +45,7 @@ namespace GKCore
         public void SetUp()
         {
             WFAppHost.ConfigureBootstrap(false);
+            AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
 
             LangMan.DefInit();
 

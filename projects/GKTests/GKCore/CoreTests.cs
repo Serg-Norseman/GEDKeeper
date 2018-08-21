@@ -26,6 +26,7 @@ using System.Text;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.IoC;
 using GKCore.Lists;
 using GKCore.Stats;
 using GKCore.Types;
@@ -46,6 +47,7 @@ namespace GKCore
         public void SetUp()
         {
             WFAppHost.ConfigureBootstrap(false);
+            AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
 
             LangMan.DefInit();
 
