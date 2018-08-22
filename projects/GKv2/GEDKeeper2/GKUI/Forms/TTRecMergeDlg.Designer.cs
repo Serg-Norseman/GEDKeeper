@@ -104,7 +104,6 @@
 		    this.pageMerge.Size = new System.Drawing.Size(957, 463);
 		    this.pageMerge.TabIndex = 0;
 		    this.pageMerge.Text = "pageMerge";
-		    this.pageMerge.Resize += new System.EventHandler(this.SheetMergeResize);
 		    // 
 		    // MergeCtl
 		    // 

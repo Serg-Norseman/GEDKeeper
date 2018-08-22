@@ -8,13 +8,13 @@
 		private System.Windows.Forms.TreeView tvGroups;
 		private System.Windows.Forms.TabPage pageFamilyGroupsOptions;
 		private GKUI.Components.LogChart gkLogChart1;
-		private System.Windows.Forms.Button btnCheckGroups;
+		private System.Windows.Forms.Button btnAnalyseGroups;
 
 		private void InitializeComponent()
 		{
 		    this.tabsTools = new System.Windows.Forms.TabControl();
 		    this.pageFamilyGroups = new System.Windows.Forms.TabPage();
-		    this.btnCheckGroups = new System.Windows.Forms.Button();
+		    this.btnAnalyseGroups = new System.Windows.Forms.Button();
 		    this.gkLogChart1 = new GKUI.Components.LogChart();
 		    this.tvGroups = new System.Windows.Forms.TreeView();
 		    this.pageFamilyGroupsOptions = new System.Windows.Forms.TabPage();
@@ -36,7 +36,7 @@
 		    // 
 		    // pageFamilyGroups
 		    // 
-		    this.pageFamilyGroups.Controls.Add(this.btnCheckGroups);
+		    this.pageFamilyGroups.Controls.Add(this.btnAnalyseGroups);
 		    this.pageFamilyGroups.Controls.Add(this.gkLogChart1);
 		    this.pageFamilyGroups.Controls.Add(this.tvGroups);
 		    this.pageFamilyGroups.Location = new System.Drawing.Point(4, 22);
@@ -46,15 +46,15 @@
 		    this.pageFamilyGroups.TabIndex = 5;
 		    this.pageFamilyGroups.Text = "pageFamilyGroups";
 		    // 
-		    // btnCheckGroups
+		    // btnAnalyseGroups
 		    // 
-		    this.btnCheckGroups.Location = new System.Drawing.Point(691, 372);
-		    this.btnCheckGroups.Margin = new System.Windows.Forms.Padding(2);
-		    this.btnCheckGroups.Name = "btnCheckGroups";
-		    this.btnCheckGroups.Size = new System.Drawing.Size(100, 24);
-		    this.btnCheckGroups.TabIndex = 7;
-		    this.btnCheckGroups.Text = "btnCheckGroups";
-		    this.btnCheckGroups.Click += new System.EventHandler(this.btnCheckGroups_Click);
+		    this.btnAnalyseGroups.Location = new System.Drawing.Point(691, 372);
+		    this.btnAnalyseGroups.Margin = new System.Windows.Forms.Padding(2);
+		    this.btnAnalyseGroups.Name = "btnAnalyseGroups";
+		    this.btnAnalyseGroups.Size = new System.Drawing.Size(100, 24);
+		    this.btnAnalyseGroups.TabIndex = 7;
+		    this.btnAnalyseGroups.Text = "btnAnalyseGroups";
+		    this.btnAnalyseGroups.Click += new System.EventHandler(this.btnAnalyseGroups_Click);
 		    // 
 		    // gkLogChart1
 		    // 

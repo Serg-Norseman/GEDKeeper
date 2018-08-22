@@ -19,7 +19,7 @@
  */
 
 using System;
-using System.Windows.Forms;
+using Eto.Forms;
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -32,7 +32,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTPatSearchDlg : Form
+    public sealed partial class TTPatSearchDlg : Dialog
     {
         private readonly IBaseWindow fBase;
         private readonly GEDCOMTree fTree;
@@ -47,12 +47,13 @@ namespace GKUI.Forms
             fBase = baseWin;
             fTree = fBase.Context.Tree;
 
-            ListPatriarchs = UIHelper.CreateListView(Panel3);
-            ListPatriarchs.DoubleClick += ListPatriarchs_DblClick;
+            ListPatriarchs = new GKListView();
+            ListPatriarchs.MouseDoubleClick += ListPatriarchs_DblClick;
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Patriarch), 400, false);
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Birth), 90, false);
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Descendants), 90, false);
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Generations), 90, false);
+            panPatriarchsContainer.Content = ListPatriarchs;
 
             SetLang();
         }
@@ -66,9 +67,8 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_MITreeTools);
+            Title = LangMan.LS(LSID.LSID_MITreeTools);
             pagePatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
-            pagePatSearchOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             lblMinGenerations.Text = LangMan.LS(LSID.LSID_MinGenerations);
             btnSetPatriarch.Text = LangMan.LS(LSID.LSID_SetPatFlag);
@@ -99,9 +99,9 @@ namespace GKUI.Forms
             ListPatriarchs.BeginUpdate();
             ExtList<PatriarchObj> lst = null;
             try {
-                ListPatriarchs.Items.Clear();
+                ListPatriarchs.ClearItems();
                 lst = PatriarchsMan.GetPatriarchsList(fBase.Context,
-                    decimal.ToInt32(edMinGens.Value), !chkWithoutDates.Checked);
+                                                      (int)edMinGens.Value, !chkWithoutDates.Checked.GetValueOrDefault());
                 lst.QuickSort(PatriarchsCompare);
 
                 int num = lst.Count;
@@ -110,8 +110,9 @@ namespace GKUI.Forms
                     string pSign = ((pObj.IRec.Patriarch) ? "[*] " : "");
 
                     ListPatriarchs.AddItem(pObj.IRec, new object[] { pSign + GKUtils.GetNameString(pObj.IRec, true, false),
-                        pObj.BirthYear, pObj.DescendantsCount, pObj.DescGenerations
-                    });
+                                               pObj.BirthYear,
+                                               pObj.DescendantsCount,
+                                               pObj.DescGenerations });
                 }
             } finally {
                 if (lst != null) lst.Dispose();
@@ -138,7 +139,7 @@ namespace GKUI.Forms
 
         private void btnPatriarchsDiagram_Click(object sender, EventArgs e)
         {
-            PatriarchsViewerWin wnd = new PatriarchsViewerWin(fBase, decimal.ToInt32(edMinGens.Value));
+            PatriarchsViewerWin wnd = new PatriarchsViewerWin(fBase, (int)(edMinGens.Value));
             wnd.Show();
         }
     }

@@ -8,7 +8,7 @@
 		private System.Windows.Forms.Button btnBaseRepair;
 		private System.Windows.Forms.Panel Panel1;
 		private System.Windows.Forms.TabPage pageTreeCheckOptions;
-		private System.Windows.Forms.Button btnBaseCheck;
+		private System.Windows.Forms.Button btnAnalyseBase;
 
 		private void InitializeComponent()
 		{
@@ -18,7 +18,7 @@
 		    this.Panel1 = new System.Windows.Forms.Panel();
 		    this.pageTreeCheckOptions = new System.Windows.Forms.TabPage();
 		    this.btnClose = new System.Windows.Forms.Button();
-		    this.btnBaseCheck = new System.Windows.Forms.Button();
+		    this.btnAnalyseBase = new System.Windows.Forms.Button();
 		    this.tabsTools.SuspendLayout();
 		    this.pageTreeCheck.SuspendLayout();
 		    this.SuspendLayout();
@@ -35,7 +35,7 @@
 		    // 
 		    // pageTreeCheck
 		    // 
-		    this.pageTreeCheck.Controls.Add(this.btnBaseCheck);
+		    this.pageTreeCheck.Controls.Add(this.btnAnalyseBase);
 		    this.pageTreeCheck.Controls.Add(this.btnBaseRepair);
 		    this.pageTreeCheck.Controls.Add(this.Panel1);
 		    this.pageTreeCheck.Location = new System.Drawing.Point(4, 26);
@@ -79,14 +79,14 @@
 		    this.btnClose.Text = "btnClose";
 		    this.btnClose.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 		    // 
-		    // btnBaseCheck
+		    // btnAnalyseBase
 		    // 
-		    this.btnBaseCheck.Location = new System.Drawing.Point(17, 464);
-		    this.btnBaseCheck.Name = "btnBaseCheck";
-		    this.btnBaseCheck.Size = new System.Drawing.Size(203, 30);
-		    this.btnBaseCheck.TabIndex = 0;
-		    this.btnBaseCheck.Text = "btnBaseCheck";
-		    this.btnBaseCheck.Click += new System.EventHandler(this.btnBaseCheck_Click);
+		    this.btnAnalyseBase.Location = new System.Drawing.Point(17, 464);
+		    this.btnAnalyseBase.Name = "btnAnalyseBase";
+		    this.btnAnalyseBase.Size = new System.Drawing.Size(203, 30);
+		    this.btnAnalyseBase.TabIndex = 0;
+		    this.btnAnalyseBase.Text = "btnAnalyseBase";
+		    this.btnAnalyseBase.Click += new System.EventHandler(this.btnAnalyseBase_Click);
 		    // 
 		    // TTTreeCheckDlg
 		    // 

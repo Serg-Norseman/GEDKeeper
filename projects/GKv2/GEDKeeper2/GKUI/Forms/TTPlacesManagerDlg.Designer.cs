@@ -7,7 +7,7 @@
 		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.TabPage pagePlaceManage;
 		private System.Windows.Forms.Panel Panel4;
-		private System.Windows.Forms.Button btnSearch;
+		private System.Windows.Forms.Button btnAnalysePlaces;
 		private System.Windows.Forms.Button btnIntoList;
 
 		private void InitializeComponent()
@@ -16,7 +16,7 @@
 		    this.pagePlaceManage = new System.Windows.Forms.TabPage();
 		    this.Panel4 = new System.Windows.Forms.Panel();
 		    this.btnIntoList = new System.Windows.Forms.Button();
-		    this.btnSearch = new System.Windows.Forms.Button();
+		    this.btnAnalysePlaces = new System.Windows.Forms.Button();
 		    this.pagePlaceManageOptions = new System.Windows.Forms.TabPage();
 		    this.btnClose = new System.Windows.Forms.Button();
 		    this.tabsTools.SuspendLayout();
@@ -38,7 +38,7 @@
 		    // 
 		    this.pagePlaceManage.Controls.Add(this.Panel4);
 		    this.pagePlaceManage.Controls.Add(this.btnIntoList);
-		    this.pagePlaceManage.Controls.Add(this.btnSearch);
+		    this.pagePlaceManage.Controls.Add(this.btnAnalysePlaces);
 		    this.pagePlaceManage.Location = new System.Drawing.Point(4, 22);
 		    this.pagePlaceManage.Margin = new System.Windows.Forms.Padding(2);
 		    this.pagePlaceManage.Name = "pagePlaceManage";
@@ -64,15 +64,15 @@
 		    this.btnIntoList.Text = "btnIntoList";
 		    this.btnIntoList.Click += new System.EventHandler(this.btnIntoList_Click);
 		    // 
-		    // btnSearch
+		    // btnAnalysePlaces
 		    // 
-		    this.btnSearch.Location = new System.Drawing.Point(9, 373);
-		    this.btnSearch.Margin = new System.Windows.Forms.Padding(2);
-		    this.btnSearch.Name = "btnSearch";
-		    this.btnSearch.Size = new System.Drawing.Size(143, 25);
-		    this.btnSearch.TabIndex = 1;
-		    this.btnSearch.Text = "btnSearch";
-		    this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+		    this.btnAnalysePlaces.Location = new System.Drawing.Point(9, 373);
+		    this.btnAnalysePlaces.Margin = new System.Windows.Forms.Padding(2);
+		    this.btnAnalysePlaces.Name = "btnAnalysePlaces";
+		    this.btnAnalysePlaces.Size = new System.Drawing.Size(143, 25);
+		    this.btnAnalysePlaces.TabIndex = 1;
+		    this.btnAnalysePlaces.Text = "btnAnalysePlaces";
+		    this.btnAnalysePlaces.Click += new System.EventHandler(this.btnAnalysePlaces_Click);
 		    // 
 		    // pagePlaceManageOptions
 		    // 

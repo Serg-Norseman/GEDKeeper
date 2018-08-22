@@ -214,9 +214,37 @@
     <Compile Include="GKUI\Forms\TreeFilterDlg.design.cs">
       <DependentUpon>TreeFilterDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\TreeToolsWin.cs" />
-    <Compile Include="GKUI\Forms\TreeToolsWin.design.cs">
-      <DependentUpon>TreeToolsWin.cs</DependentUpon>
+    <Compile Include="GKUI\Forms\TTFamilyGroupsDlg.cs" />
+    <Compile Include="GKUI\Forms\TTFamilyGroupsDlg.design.cs">
+      <DependentUpon>TTFamilyGroupsDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\TTPatSearchDlg.cs" />
+    <Compile Include="GKUI\Forms\TTPatSearchDlg.design.cs">
+      <DependentUpon>TTPatSearchDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\TTPlacesManagerDlg.cs" />
+    <Compile Include="GKUI\Forms\TTPlacesManagerDlg.design.cs">
+      <DependentUpon>TTPlacesManagerDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\TTRecMergeDlg.cs" />
+    <Compile Include="GKUI\Forms\TTRecMergeDlg.design.cs">
+      <DependentUpon>TTRecMergeDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\TTTreeCheckDlg.cs" />
+    <Compile Include="GKUI\Forms\TTTreeCheckDlg.design.cs">
+      <DependentUpon>TTTreeCheckDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\TTTreeCompareDlg.cs" />
+    <Compile Include="GKUI\Forms\TTTreeCompareDlg.design.cs">
+      <DependentUpon>TTTreeCompareDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\TTTreeMergeDlg.cs" />
+    <Compile Include="GKUI\Forms\TTTreeMergeDlg.design.cs">
+      <DependentUpon>TTTreeMergeDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\TTTreeSplitDlg.cs" />
+    <Compile Include="GKUI\Forms\TTTreeSplitDlg.design.cs">
+      <DependentUpon>TTTreeSplitDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Forms\UserRefEditDlg.cs" />
     <Compile Include="GKUI\Forms\UserRefEditDlg.design.cs">

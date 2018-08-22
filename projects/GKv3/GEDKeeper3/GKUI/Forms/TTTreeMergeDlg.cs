@@ -19,8 +19,7 @@
  */
 
 using System;
-using System.Windows.Forms;
-
+using Eto.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -32,7 +31,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTTreeMergeDlg : Form
+    public sealed partial class TTTreeMergeDlg : Dialog
     {
         private readonly IBaseWindow fBase;
         private readonly GEDCOMTree fTree;
@@ -57,9 +56,8 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_MITreeTools);
+            Title = LangMan.LS(LSID.LSID_MITreeTools);
             pageTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
-            pageTreeMergeOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             btnTreeMerge.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
             lblMasterBase.Text = LangMan.LS(LSID.LSID_MasterBase);

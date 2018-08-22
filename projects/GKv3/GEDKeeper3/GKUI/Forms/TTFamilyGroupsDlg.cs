@@ -20,7 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using Eto.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -32,7 +32,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTFamilyGroupsDlg : Form
+    public sealed partial class TTFamilyGroupsDlg : Dialog
     {
         private readonly IBaseWindow fBase;
         private readonly GEDCOMTree fTree;
@@ -44,8 +44,6 @@ namespace GKUI.Forms
 
             fBase = baseWin;
             fTree = fBase.Context.Tree;
-
-            gkLogChart1.OnHintRequest += HintRequestEventHandler;
 
             SetLang();
         }
@@ -59,9 +57,8 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_MITreeTools);
+            Title = LangMan.LS(LSID.LSID_MITreeTools);
             pageFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
-            pageFamilyGroupsOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             btnAnalyseGroups.Text = LangMan.LS(LSID.LSID_Analysis);
         }
@@ -80,7 +77,8 @@ namespace GKUI.Forms
 
             //progress.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), fTree.RecordsCount);
             try {
-                tvGroups.Nodes.Clear();
+                tvGroups.DataStore = null;
+                var rootItem = new TreeItem();
 
                 int num = treeFragments.Count;
                 for (int i = 0; i < num; i++) {
@@ -89,8 +87,9 @@ namespace GKUI.Forms
                     int cnt = groupRecords.Count;
 
                     int groupNum = (i + 1);
-                    TreeNode groupItem = tvGroups.Nodes.Add(
-                        groupNum.ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + cnt.ToString() + ")");
+                    TreeItem groupItem = new TreeItem();
+                    groupItem.Text = groupNum.ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + cnt.ToString() + ")";
+                    rootItem.Children.Add(groupItem);
 
                     for (int j = 0; j < cnt; j++) {
                         var iRec = (GEDCOMIndividualRecord)groupRecords[j];
@@ -99,24 +98,26 @@ namespace GKUI.Forms
                         if (iRec.Patriarch) {
                             pn = "(*) " + pn;
                         }
-                        groupItem.Nodes.Add(new GKTreeNode(pn, iRec));
+                        groupItem.Children.Add(new GKTreeNode(pn, iRec));
                     }
-                    groupItem.ExpandAll();
+                    groupItem.Expanded = true;
 
                     gkLogChart1.AddFragment(cnt);
 
                     //progress.ProgressStep();
-                    Application.DoEvents();
                 }
+
+                tvGroups.DataStore = rootItem;
+                tvGroups.RefreshData();
             } finally {
                 treeFragments.Clear();
                 //progress.ProgressDone();
             }
         }
 
-        private void tvGroups_DoubleClick(object sender, EventArgs e)
+        private void tvGroups_DoubleClick(object sender, MouseEventArgs e)
         {
-            GKTreeNode node = tvGroups.SelectedNode as GKTreeNode;
+            GKTreeNode node = tvGroups.SelectedItem as GKTreeNode;
             if (node == null) return;
             
             GEDCOMIndividualRecord iRec = node.Tag as GEDCOMIndividualRecord;

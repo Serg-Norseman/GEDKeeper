@@ -88,6 +88,14 @@ namespace GKUI.Forms
         private ButtonMenuItem miContRecordEdit;
         private ContextMenu contextMenu;
         private ButtonMenuItem miContRecordAdd;
+        private ButtonMenuItem miTreeCompare;
+        private ButtonMenuItem miTreeMerge;
+        private ButtonMenuItem miTreeSplit;
+        private ButtonMenuItem miRecMerge;
+        private ButtonMenuItem miFamilyGroups;
+        private ButtonMenuItem miTreeCheck;
+        private ButtonMenuItem miPatSearch;
+        private ButtonMenuItem miPlacesManager;
 
         private void InitializeComponent()
         {
@@ -442,9 +450,49 @@ namespace GKUI.Forms
             miScripts.Text = "miScripts";
             miScripts.Click += miScripts_Click;
 
+            miTreeCompare = new ButtonMenuItem();
+            miTreeCompare.Text = "miTreeCompare";
+            miTreeCompare.Click += miTTTreeCompare_Click;
+
+            miTreeMerge = new ButtonMenuItem();
+            miTreeMerge.Text = "miTreeMerge";
+            miTreeMerge.Click += miTTTreeMerge_Click;
+
+            miTreeSplit = new ButtonMenuItem();
+            miTreeSplit.Text = "miTreeSplit";
+            miTreeSplit.Click += miTTTreeSplit_Click;
+
+            miRecMerge = new ButtonMenuItem();
+            miRecMerge.Text = "miRecMerge";
+            miRecMerge.Click += miTTRecMerge_Click;
+
+            miFamilyGroups = new ButtonMenuItem();
+            miFamilyGroups.Text = "miFamilyGroups";
+            miFamilyGroups.Click += miTTFamilyGroups_Click;
+
+            miTreeCheck = new ButtonMenuItem();
+            miTreeCheck.Text = "miTreeCheck";
+            miTreeCheck.Click += miTTTreeCheck_Click;
+
+            miPatSearch = new ButtonMenuItem();
+            miPatSearch.Text = "miPatSearch";
+            miPatSearch.Click += miTTPatSearch_Click;
+
+            miPlacesManager = new ButtonMenuItem();
+            miPlacesManager.Text = "miPlacesManager";
+            miPlacesManager.Click += miTTPlacesManager_Click;
+
             miTreeTools = new ButtonMenuItem();
             miTreeTools.Text = "miTreeTools";
-            miTreeTools.Click += miTreeTools_Click;
+            miTreeTools.Items.AddRange(new MenuItem[] {
+                                          miTreeCompare,
+                                          miTreeMerge,
+                                          miTreeSplit,
+                                          miRecMerge,
+                                          miFamilyGroups,
+                                          miTreeCheck,
+                                          miPatSearch,
+                                          miPlacesManager});
 
             miOptions = new ButtonMenuItem();
             miOptions.Text = "miOptions";

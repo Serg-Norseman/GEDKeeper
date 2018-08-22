@@ -831,7 +831,7 @@ namespace GKUI.Forms
         {
             var tabs = new TabControlTester("tabsTools", form);
 
-            ClickButton("btnCheckGroups", form);
+            ClickButton("btnAnalyseGroups", form);
 
             form.Close();
         }
@@ -840,6 +840,7 @@ namespace GKUI.Forms
         {
             var tabs = new TabControlTester("tabsTools", form);
 
+            ClickButton("btnAnalyseBase", form);
             ClickButton("btnBaseRepair", form);
 
             form.Close();
@@ -867,6 +868,7 @@ namespace GKUI.Forms
         {
             var tabs = new TabControlTester("tabsTools", form);
 
+            ClickButton("btnAnalysePlaces", form);
             ClickButton("btnIntoList", form);
 
             form.Close();

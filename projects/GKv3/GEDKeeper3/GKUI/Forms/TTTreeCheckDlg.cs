@@ -20,8 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-
+using Eto.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -33,7 +32,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTTreeCheckDlg : Form
+    public sealed partial class TTTreeCheckDlg : Dialog
     {
         private readonly IBaseWindow fBase;
         private readonly GEDCOMTree fTree;
@@ -50,12 +49,13 @@ namespace GKUI.Forms
             fTree = fBase.Context.Tree;
             fChecksList = new List<TreeTools.CheckObj>();
 
-            ListChecks = UIHelper.CreateListView(Panel1);
-            ListChecks.CheckBoxes = true;
-            ListChecks.DoubleClick += ListChecks_DblClick;
+            ListChecks = new GKListView();
+            ListChecks.MouseDoubleClick += ListChecks_DblClick;
+            ListChecks.AddCheckedColumn(@"x", 50, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
+            panProblemsContainer.Content = ListChecks;
 
             SetLang();
         }
@@ -70,9 +70,8 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_MITreeTools);
+            Title = LangMan.LS(LSID.LSID_MITreeTools);
             pageTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
-            pageTreeCheckOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             btnAnalyseBase.Text = LangMan.LS(LSID.LSID_Analysis);
             btnBaseRepair.Text = LangMan.LS(LSID.LSID_Repair);
@@ -87,16 +86,15 @@ namespace GKUI.Forms
         {
             TreeTools.CheckBase(fBase, fChecksList);
 
-            ListChecks.Items.Clear();
+            ListChecks.ClearItems();
 
             foreach (TreeTools.CheckObj checkObj in fChecksList) {
-                ListChecks.AddItem(checkObj, new object[] { checkObj.GetRecordName(),
-                    checkObj.Comment,
-                    LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve])
-                });
+                ListChecks.AddItem(checkObj, false, checkObj.GetRecordName(),
+                                   checkObj.Comment,
+                                   LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve]));
             }
 
-            ListChecks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            //ListChecks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         private void btnBaseRepair_Click(object sender, EventArgs e)
@@ -105,10 +103,11 @@ namespace GKUI.Forms
                 int num = ListChecks.Items.Count;
                 for (int i = 0; i < num; i++) {
                     GKListItem item = (GKListItem)ListChecks.Items[i];
-                    if (!item.Checked) continue;
-
-                    TreeTools.CheckObj checkObj = item.Data as TreeTools.CheckObj;
-                    TreeTools.RepairProblem(fBase, checkObj);
+                    bool check = (bool)item.Values[0];
+                    if (check) {
+                        var checkObj = item.Data as TreeTools.CheckObj;
+                        TreeTools.RepairProblem(fBase, checkObj);
+                    }
                 }
             } finally {
                 fBase.RefreshLists(false);

@@ -19,7 +19,7 @@
  */
 
 using System;
-using System.Windows.Forms;
+using Eto.Forms;
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -32,7 +32,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTPlacesManagerDlg : Form
+    public sealed partial class TTPlacesManagerDlg : Dialog
     {
         private readonly IBaseWindow fBase;
         private readonly GEDCOMTree fTree;
@@ -50,10 +50,11 @@ namespace GKUI.Forms
             fPlaces = new StringList();
             fPlaces.Sorted = true;
 
-            ListPlaces = UIHelper.CreateListView(Panel4);
-            ListPlaces.DoubleClick += ListPlaces_DblClick;
+            ListPlaces = new GKListView();
+            ListPlaces.MouseDoubleClick += ListPlaces_DblClick;
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
+            panPlacesContainer.Content = ListPlaces;
 
             SetLang();
         }
@@ -69,9 +70,8 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_MITreeTools);
+            Title = LangMan.LS(LSID.LSID_MITreeTools);
             pagePlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
-            pagePlaceManageOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             btnIntoList.Text = LangMan.LS(LSID.LSID_InsertIntoBook);
             btnAnalysePlaces.Text = LangMan.LS(LSID.LSID_Analysis);
@@ -88,7 +88,7 @@ namespace GKUI.Forms
             try {
                 TreeTools.SearchPlaces(fTree, fPlaces, AppHost.Progress);
 
-                ListPlaces.Items.Clear();
+                ListPlaces.ClearItems();
 
                 int num4 = fPlaces.Count;
                 for (int i = 0; i < num4; i++) {

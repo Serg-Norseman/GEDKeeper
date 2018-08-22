@@ -19,9 +19,8 @@
  */
 
 using System;
-using System.Windows.Forms;
-
 using BSLib;
+using Eto.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -32,7 +31,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTRecMergeDlg : Form
+    public sealed partial class TTRecMergeDlg : Dialog
     {
         private readonly IBaseWindow fBase;
         private readonly GEDCOMTree fTree;
@@ -66,7 +65,7 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_MITreeTools);
+            Title = LangMan.LS(LSID.LSID_MITreeTools);
             pageRecMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             pageMerge.Text = LangMan.LS(LSID.LSID_RecMerge);
@@ -105,23 +104,23 @@ namespace GKUI.Forms
             
             MatchParams mParams;
             //mParams.IndistinctNameMatching = chkIndistinctMatching.Checked;
-            mParams.NamesIndistinctThreshold = (float)decimal.ToDouble(edNameAccuracy.Value) / 100.0f;
-            mParams.DatesCheck = chkBirthYear.Checked;
-            mParams.YearsInaccuracy = decimal.ToInt32(edYearInaccuracy.Value);
+            mParams.NamesIndistinctThreshold = (float)(edNameAccuracy.Value / 100.0f);
+            mParams.DatesCheck = chkBirthYear.Checked.GetValueOrDefault();
+            mParams.YearsInaccuracy = (int)edYearInaccuracy.Value;
             mParams.CheckEventPlaces = false;
 
             bool res = false;
             btnSkip.Enabled = false;
 
             try {
-                ProgressBar1.Minimum = 0;
-                ProgressBar1.Maximum = fTree.RecordsCount;
+                ProgressBar1.MinValue = 0;
+                ProgressBar1.MaxValue = fTree.RecordsCount;
                 ProgressBar1.Value = fRMIndex;
 
                 int recNum = fTree.RecordsCount;
                 for (int i = fRMIndex; i < recNum; i++) {
                     fRMIndex = i;
-                    ProgressBar1.Increment(1);
+                    ProgressBar1.Value += 1;
 
                     GEDCOMRecord iRec = fTree[i];
                     if (iRec.RecordType != fRMMode) continue;
@@ -165,7 +164,7 @@ namespace GKUI.Forms
 
         private void chkBookmarkMerged_CheckedChanged(object sender, EventArgs e)
         {
-            MergeCtl.Bookmark = chkBookmarkMerged.Checked;
+            MergeCtl.Bookmark = chkBookmarkMerged.Checked.GetValueOrDefault();
         }
 
         private void btnSkip_Click(object sender, EventArgs e)

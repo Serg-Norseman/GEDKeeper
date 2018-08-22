@@ -458,13 +458,5 @@
       <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GKUI\Forms\TTFamilyGroupsDlg.resx">
-      <DependentUpon>TTFamilyGroupsDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Forms\TTPlacesManagerDlg.resx">
-      <DependentUpon>TTPlacesManagerDlg.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

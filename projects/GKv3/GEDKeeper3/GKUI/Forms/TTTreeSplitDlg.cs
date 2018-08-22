@@ -21,8 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
-
+using Eto.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -35,7 +34,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTTreeSplitDlg : Form
+    public sealed partial class TTTreeSplitDlg : Dialog
     {
         private readonly IBaseWindow fBase;
         private readonly GEDCOMTree fTree;
@@ -63,9 +62,8 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_MITreeTools);
+            Title = LangMan.LS(LSID.LSID_MITreeTools);
             pageTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
-            pageTreeSplitOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             btnSelectAll.Text = LangMan.LS(LSID.LSID_SelAll);
             btnSelectFamily.Text = LangMan.LS(LSID.LSID_SelFamily);
@@ -77,9 +75,9 @@ namespace GKUI.Forms
 
         private void UpdateSplitLists()
         {
-            ListSelected.BeginUpdate();
+            //ListSelected.BeginUpdate();
             ListSelected.Items.Clear();
-            ListSkipped.BeginUpdate();
+            //ListSkipped.BeginUpdate();
             ListSkipped.Items.Clear();
             try {
                 int cnt = 0;
@@ -98,10 +96,10 @@ namespace GKUI.Forms
                         }
                     }
                 }
-                Text = fSplitList.Count.ToString() + @" / " + cnt.ToString();
+                Title = fSplitList.Count.ToString() + @" / " + cnt.ToString();
             } finally {
-                ListSelected.EndUpdate();
-                ListSkipped.EndUpdate();
+                //ListSelected.EndUpdate();
+                //ListSkipped.EndUpdate();
             }
         }
 

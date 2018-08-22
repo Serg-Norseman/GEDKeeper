@@ -21,8 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
-
+using Eto.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -34,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTTreeCompareDlg : Form
+    public sealed partial class TTTreeCompareDlg : Dialog
     {
         private readonly IBaseWindow fBase;
         private readonly GEDCOMTree fTree;
@@ -59,9 +58,8 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_MITreeTools);
+            Title = LangMan.LS(LSID.LSID_MITreeTools);
             pageTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
-            pageTreeCompareOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             lblFile.Text = LangMan.LS(LSID.LSID_MIFile);
             btnFileChoose.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
