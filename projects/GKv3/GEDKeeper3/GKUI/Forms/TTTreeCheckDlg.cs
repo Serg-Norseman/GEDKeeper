@@ -86,15 +86,20 @@ namespace GKUI.Forms
         {
             TreeTools.CheckBase(fBase, fChecksList);
 
-            ListChecks.ClearItems();
+            ListChecks.BeginUpdate();
+            try {
+                ListChecks.ClearItems();
 
-            foreach (TreeTools.CheckObj checkObj in fChecksList) {
-                ListChecks.AddItem(checkObj, false, checkObj.GetRecordName(),
-                                   checkObj.Comment,
-                                   LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve]));
+                foreach (TreeTools.CheckObj checkObj in fChecksList) {
+                    ListChecks.AddItem(checkObj, false, checkObj.GetRecordName(),
+                                       checkObj.Comment,
+                                       LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve]));
+                }
+
+                //ListChecks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            } finally {
+                ListChecks.EndUpdate();
             }
-
-            //ListChecks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         private void btnBaseRepair_Click(object sender, EventArgs e)
@@ -120,10 +125,10 @@ namespace GKUI.Forms
             GKListItem item = ListChecks.GetSelectedItem();
             if (item == null) return;
 
-            GEDCOMIndividualRecord iRec = ((TreeTools.CheckObj)item.Data).Rec as GEDCOMIndividualRecord;
-            if (iRec == null) return;
+            GEDCOMRecord rec = ((TreeTools.CheckObj)item.Data).Rec;
+            if (rec == null) return;
 
-            fBase.SelectRecordByXRef(iRec.XRef);
+            fBase.SelectRecordByXRef(rec.XRef);
             Close();
         }
     }

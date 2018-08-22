@@ -829,11 +829,11 @@ namespace GKCore
         /* 771 */ LSID_SpouseDist,
         /* 772 */ LSID_ImageSize,
         /* 773 */ LSID_DetectedDataLoop,
+        /* 774 */ LSID_FatherAsChild,
+        /* 775 */ LSID_MotherAsChild,
+        /* 776 */ LSID_DuplicateChildrenInFamily,
 
-        /* 774 */ // reserved begin
-        /* 775 */
-        /* 776 */
-        /* 777 */
+        /* 777 */ // reserved begin
         /* 778 */
         /* 779 */
         /* 780 */
@@ -1653,11 +1653,11 @@ namespace GKCore
             /* 771 */ "Spouse distance",
             /* 772 */ "Image size: {0} x {1} px",
             /* 773 */ "A data loop was detected: {0}",
+            /* 774 */ "Father is listed as a child",
+            /* 775 */ "Mother is listed as a child",
+            /* 776 */ "There are duplicate children in the family",
 
-            /* 774 */ "", // reserved begin
-            /* 775 */ "",
-            /* 776 */ "",
-            /* 777 */ "",
+            /* 777 */ "", // reserved begin
             /* 778 */ "",
             /* 779 */ "",
             /* 780 */ "",

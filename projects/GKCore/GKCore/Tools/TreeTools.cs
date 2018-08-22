@@ -906,7 +906,11 @@ namespace GKCore.Tools
             cdLiveYearsInvalid,
             cdStrangeSpouse,
             cdStrangeParent,
-            cdEmptyFamily
+            cdEmptyFamily,
+            cdFatherAsChild,
+            cdMotherAsChild,
+            cdDuplicateChildren,
+            csDateInvalid,
         }
 
         public enum CheckSolve
@@ -914,7 +918,8 @@ namespace GKCore.Tools
             csSkip,
             csSetIsDead,
             csDefineSex,
-            csRemove
+            csRemove,
+            csEdit,
         }
 
         public sealed class CheckObj
@@ -950,8 +955,37 @@ namespace GKCore.Tools
             }
         }
 
+        private static void CheckRecordWithEvents(GEDCOMRecordWithEvents rec, List<CheckObj> checksList)
+        {
+            var dateZero = new DateTime(0);
+
+            int num = rec.Events.Count;
+            for (int i = 0; i < num; i++) {
+                GEDCOMCustomEvent evt = rec.Events[i];
+
+                bool invalid = false;
+                try {
+                    var dtx = evt.Date.GetDateTime();
+
+                    /*if (dtx == dateZero) {
+                        invalid = true;
+                    }*/
+                } catch {
+                    invalid = true;
+                }
+
+                if (invalid) {
+                    CheckObj checkObj = new CheckObj(rec, CheckDiag.csDateInvalid, CheckSolve.csEdit);
+                    checkObj.Comment = LangMan.LS(LSID.LSID_DateInvalid) + " (" + evt.Date.StringValue + ")";
+                    checksList.Add(checkObj);
+                }
+            }
+        }
+
         private static void CheckIndividualRecord(GEDCOMIndividualRecord iRec, List<CheckObj> checksList)
         {
+            CheckRecordWithEvents(iRec, checksList);
+
             if (iRec.FindEvent("DEAT") == null)
             {
                 int age = GKUtils.GetAge(iRec, -1);
@@ -1003,14 +1037,50 @@ namespace GKCore.Tools
 
         private static void CheckFamilyRecord(GEDCOMFamilyRecord fRec, List<CheckObj> checksList)
         {
+            CheckRecordWithEvents(fRec, checksList);
+
+            GEDCOMRecord husb = fRec.Husband.Value;
+            GEDCOMRecord wife = fRec.Wife.Value;
+
             bool empty = (fRec.Notes.Count == 0 && fRec.SourceCitations.Count == 0 && fRec.MultimediaLinks.Count == 0 && fRec.UserReferences.Count == 0);
             empty = empty && (fRec.Events.Count == 0 && fRec.Children.Count == 0 && fRec.SpouseSealings.Count == 0);
-            empty = empty && (fRec.Husband.Value == null && fRec.Wife.Value == null);
+            empty = empty && (husb == null && wife == null);
 
             if (empty) {
                 CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdEmptyFamily, CheckSolve.csRemove);
                 checkObj.Comment = LangMan.LS(LSID.LSID_EmptyFamily);
                 checksList.Add(checkObj);
+            } else {
+                if (fRec.IndexOfChild(husb) >= 0) {
+                    CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdFatherAsChild, CheckSolve.csRemove);
+                    checkObj.Comment = LangMan.LS(LSID.LSID_FatherAsChild);
+                    checksList.Add(checkObj);
+                }
+
+                if (fRec.IndexOfChild(wife) >= 0) {
+                    CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdMotherAsChild, CheckSolve.csRemove);
+                    checkObj.Comment = LangMan.LS(LSID.LSID_MotherAsChild);
+                    checksList.Add(checkObj);
+                }
+
+                bool hasDup = false;
+                int chNum = fRec.Children.Count;
+                for (int i = 0; i < chNum; i++) {
+                    var child1 = fRec.Children[i].Value;
+                    for (int k = i + 1; k < chNum; k++) {
+                        var child2 = fRec.Children[k].Value;
+                        if (child2 == child1) {
+                            hasDup = true;
+                            break;
+                        }
+                    }
+                    if (hasDup) break;
+                }
+                if (hasDup) {
+                    CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdDuplicateChildren, CheckSolve.csEdit);
+                    checkObj.Comment = LangMan.LS(LSID.LSID_DuplicateChildrenInFamily);
+                    checksList.Add(checkObj);
+                }
             }
         }
 
@@ -1023,11 +1093,8 @@ namespace GKCore.Tools
                 throw new ArgumentNullException("checksList");
 
             IProgressController progress = AppHost.Progress;
-
-            try
-            {
+            try {
                 GEDCOMTree tree = baseWin.Context.Tree;
-
                 progress.ProgressInit(LangMan.LS(LSID.LSID_ToolOp_7), tree.RecordsCount);
                 checksList.Clear();
 
@@ -1047,9 +1114,7 @@ namespace GKCore.Tools
                             break;
                     }
                 }
-            }
-            finally
-            {
+            } finally {
                 progress.ProgressDone();
             }
         }
@@ -1065,8 +1130,7 @@ namespace GKCore.Tools
             GEDCOMTree tree = baseWin.Context.Tree;
             GEDCOMIndividualRecord iRec;
 
-            switch (checkObj.Diag)
-            {
+            switch (checkObj.Diag) {
                 case CheckDiag.cdPersonLonglived:
                     iRec = checkObj.Rec as GEDCOMIndividualRecord;
                     baseWin.Context.CreateEventEx(iRec, "DEAT", "", "");
@@ -1081,6 +1145,32 @@ namespace GKCore.Tools
 
                 case CheckDiag.cdEmptyFamily:
                     tree.DeleteRecord(checkObj.Rec);
+                    break;
+
+                case CheckDiag.cdFatherAsChild:
+                    {
+                        var fRec = ((GEDCOMFamilyRecord)checkObj.Rec);
+                        fRec.DeleteChild(fRec.Husband.Value);
+                    }
+                    break;
+
+                case CheckDiag.cdMotherAsChild:
+                    {
+                        var fRec = ((GEDCOMFamilyRecord)checkObj.Rec);
+                        fRec.DeleteChild(fRec.Wife.Value);
+                    }
+                    break;
+
+                case CheckDiag.cdDuplicateChildren:
+                    if (checkObj.Solve == CheckSolve.csEdit) {
+                        BaseController.EditRecord(baseWin, checkObj.Rec);
+                    }
+                    break;
+
+                case CheckDiag.csDateInvalid:
+                    if (checkObj.Solve == CheckSolve.csEdit) {
+                        BaseController.EditRecord(baseWin, checkObj.Rec);
+                    }
                     break;
             }
         }

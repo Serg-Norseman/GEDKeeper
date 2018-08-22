@@ -115,8 +115,7 @@ namespace GKCommon.GEDCOM
             GEDCOMCustomEvent result = null;
 
             int num = fEvents.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GEDCOMCustomEvent evt = fEvents[i];
 
                 if (evt.Name == eventName) {

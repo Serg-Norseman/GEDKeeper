@@ -74,8 +74,7 @@ namespace GKCommon.GEDCOM
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fChildren.Dispose();
                 fSpouseSealings.Dispose();
             }
@@ -117,20 +116,14 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "HUSB" || tagName == "WIFE")
-            {
+            if (tagName == "HUSB" || tagName == "WIFE") {
                 result = base.AddTag(tagName, tagValue, GEDCOMPointer.Create);
-            }
-            else if (tagName == "CHIL")
-            {
+            } else if (tagName == "CHIL") {
                 result = fChildren.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
-            }
-            else
-            {
+            } else {
                 result = fTagsFactory.CreateTag(Owner, this, tagName, tagValue);
 
-                if (result != null)
-                {
+                if (result != null) {
                     if (result is GEDCOMFamilyEvent) {
                         result = AddEvent(result as GEDCOMFamilyEvent);
                     } else if (result is GEDCOMSpouseSealing) {
@@ -167,8 +160,7 @@ namespace GKCommon.GEDCOM
             // because these are sub-tags and they will be cleared in the call base.Clear()
 
             int num = fChildren.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)fChildren[i].Value;
                 child.DeleteChildToFamilyLink(this);
             }
@@ -184,10 +176,8 @@ namespace GKCommon.GEDCOM
 
         public void DeleteChild(GEDCOMRecord childRec)
         {
-            for (int i = fChildren.Count - 1; i >= 0; i--)
-            {
-                if (fChildren[i].Value == childRec)
-                {
+            for (int i = fChildren.Count - 1; i >= 0; i--) {
+                if (fChildren[i].Value == childRec) {
                     fChildren.DeleteAt(i);
                     break;
                 }
@@ -198,10 +188,8 @@ namespace GKCommon.GEDCOM
         {
             int result = -1;
 
-            for (int i = fChildren.Count - 1; i >= 0; i--)
-            {
-                if (fChildren[i].Value == childRec)
-                {
+            for (int i = fChildren.Count - 1; i >= 0; i--) {
+                if (fChildren[i].Value == childRec) {
                     result = i;
                     break;
                 }
@@ -218,15 +206,13 @@ namespace GKCommon.GEDCOM
 
             base.MoveTo(targetRecord, clearDest);
 
-            while (fChildren.Count > 0)
-            {
+            while (fChildren.Count > 0) {
                 GEDCOMPointer obj = fChildren.Extract(0);
                 obj.ResetParent(targetFamily);
                 targetFamily.Children.Add(obj);
             }
 
-            while (fSpouseSealings.Count > 0)
-            {
+            while (fSpouseSealings.Count > 0) {
                 GEDCOMSpouseSealing obj = fSpouseSealings.Extract(0);
                 obj.ResetParent(targetFamily);
                 targetFamily.SpouseSealings.Add(obj);
@@ -368,8 +354,7 @@ namespace GKCommon.GEDCOM
 
             spouse.DeleteSpouseToFamilyLink(this);
 
-            switch (spouse.Sex)
-            {
+            switch (spouse.Sex) {
                 case GEDCOMSex.svMale:
                     Husband.Value = null;
                     break;

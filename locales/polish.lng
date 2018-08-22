@@ -771,6 +771,10 @@
 770=Pokolenie odległość
 771=Odległość małżonków
 772=Rozmiar obrazu: {0} x {1} px
+773=Wykryto pętlę danych: {0}
+774=Ojciec jest wymieniony jako dziecko
+775=Matka jest wymieniona jako dziecko
+776=W rodzinie są zduplikowane dzieci
 
 801=RI:George Knight
 802=USSR:WWII:Combatant

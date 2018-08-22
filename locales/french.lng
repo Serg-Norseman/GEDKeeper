@@ -771,6 +771,10 @@
 770=Distance des générations
 771=Distance des conjoints
 772=Taille de l'image: {0} x {1} px
+773=Une boucle de données a été détectée: {0}
+774=Le père est listé comme un enfant
+775=La mère est inscrite comme enfant
+776=Il y a des enfants en double dans la famille
 
 801=RI:George Knight
 802=USSR:WWII:Combatant
