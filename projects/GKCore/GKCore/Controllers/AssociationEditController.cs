@@ -20,7 +20,6 @@
 
 using System;
 using GKCommon.GEDCOM;
-using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -30,13 +29,13 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class AssociationEditController : IDialogController
+    public sealed class AssociationEditController : DialogController
     {
         private readonly IAssociationEditDlg fView;
 
         private GEDCOMAssociation fAssociation;
-        private IBaseWindow fBase;
         private GEDCOMIndividualRecord fTempPerson;
+
 
         public GEDCOMAssociation Association
         {
@@ -57,12 +56,7 @@ namespace GKCore.Controllers
             fView.SetRelations(GlobalOptions.Instance.Relations);
         }
 
-        public void Init(IBaseWindow baseWin)
-        {
-            fBase = baseWin;
-        }
-
-        public bool Accept()
+        public override bool Accept()
         {
             try {
                 string rel = fView.RelationText.Trim();
@@ -80,7 +74,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void UpdateView()
+        public override void UpdateView()
         {
             fView.RelationText = fAssociation.Relation;
             fView.PersonText = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, true, false);

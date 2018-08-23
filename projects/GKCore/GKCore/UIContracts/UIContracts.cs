@@ -90,14 +90,6 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface IDialogController
-    {
-        bool Accept();
-        void Init(IBaseWindow baseWin);
-        void UpdateView();
-    }
-
-
     public interface IAddressEditDlg : ICommonDialog, IBaseEditor
     {
         GEDCOMAddress Address { get; set; }

@@ -20,8 +20,6 @@
 
 using System;
 using GKCommon.GEDCOM;
-using GKCore.Interfaces;
-using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
 
@@ -30,12 +28,12 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class AddressEditController : IDialogController
+    public sealed class AddressEditController : DialogController
     {
         private readonly IAddressEditDlg fView;
 
         private GEDCOMAddress fAddress;
-        private IBaseWindow fBase;
+
 
         public GEDCOMAddress Address
         {
@@ -48,17 +46,13 @@ namespace GKCore.Controllers
             }
         }
 
+
         public AddressEditController(IAddressEditDlg view)
         {
             fView = view;
         }
 
-        public void Init(IBaseWindow baseWin)
-        {
-            fBase = baseWin;
-        }
-
-        public bool Accept()
+        public override bool Accept()
         {
             try {
                 fAddress.AddressCountry = fView.CountryText;
@@ -74,7 +68,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void UpdateView()
+        public override void UpdateView()
         {
             fView.CountryText = fAddress.AddressCountry;
             fView.StateText = fAddress.AddressState;

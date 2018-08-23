@@ -20,7 +20,6 @@
 
 using System;
 using GKCommon.GEDCOM;
-using GKCore.Interfaces;
 using GKCore.Types;
 using GKCore.UIContracts;
 
@@ -29,13 +28,13 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class EventEditController : IDialogController
+    public sealed class EventEditController : DialogController
     {
         private readonly IEventEditDlg fView;
 
-        private IBaseWindow fBase;
         private GEDCOMCustomEvent fEvent;
         private GEDCOMLocationRecord fTempLocation;
+
 
         public GEDCOMCustomEvent Event
         {
@@ -48,15 +47,11 @@ namespace GKCore.Controllers
             }
         }
 
+
         public EventEditController(IEventEditDlg view)
         {
             fView = view;
             fTempLocation = null;
-        }
-
-        public void Init(IBaseWindow baseWin)
-        {
-            fBase = baseWin;
         }
 
         private GEDCOMCustomDate AssembleDate()
@@ -120,7 +115,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public bool Accept()
+        public override bool Accept()
         {
             try {
                 fEvent.Place.StringValue = fView.PlaceText;
@@ -161,7 +156,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void UpdateView()
+        public override void UpdateView()
         {
             if (fEvent is GEDCOMFamilyEvent) {
                 fView.SetEventTypes(GKData.FamilyEvents);
