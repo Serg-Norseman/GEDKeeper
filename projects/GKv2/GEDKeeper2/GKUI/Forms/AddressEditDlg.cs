@@ -23,6 +23,8 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
+using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -35,145 +37,91 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class AddressEditDlg : EditorDialog, IAddressEditDlg
     {
-        private GEDCOMAddress fAddress;
+        private readonly AddressEditController fController;
+
         private readonly GKSheetList fPhonesList;
         private readonly GKSheetList fMailsList;
         private readonly GKSheetList fWebsList;
 
         public GEDCOMAddress Address
         {
-            get { return fAddress; }
-            set { SetAddress(value); }
+            get { return fController.Address; }
+            set { fController.Address = value; }
         }
+
+        #region View Interface
+
+        ISheetList IAddressEditDlg.PhonesList
+        {
+            get { return fPhonesList; }
+        }
+
+        ISheetList IAddressEditDlg.MailsList
+        {
+            get { return fMailsList; }
+        }
+
+        ISheetList IAddressEditDlg.WebsList
+        {
+            get { return fWebsList; }
+        }
+
+
+        string IAddressEditDlg.CountryText
+        {
+            get { return txtCountry.Text; }
+            set { txtCountry.Text = value; }
+        }
+
+        string IAddressEditDlg.StateText
+        {
+            get { return txtState.Text; }
+            set { txtState.Text = value; }
+        }
+
+        string IAddressEditDlg.CityText
+        {
+            get { return txtCity.Text; }
+            set { txtCity.Text = value; }
+        }
+
+        string IAddressEditDlg.PostalCodeText
+        {
+            get { return txtPostalCode.Text; }
+            set { txtPostalCode.Text = value; }
+        }
+
+        string IAddressEditDlg.AddressText
+        {
+            get { return txtAddress.Text; }
+            set { txtAddress.Text = value; }
+        }
+
+        #endregion
 
         private void ListModify(object sender, ModifyEventArgs eArgs)
         {
             GEDCOMTag itemTag = eArgs.ItemData as GEDCOMTag;
             if ((eArgs.Action == RecordAction.raEdit || eArgs.Action == RecordAction.raDelete) && (itemTag == null)) return;
 
-            string val;
-            if (sender == fPhonesList)
-            {
-                switch (eArgs.Action) {
-                    case RecordAction.raAdd:
-                        val = "";
-                        if (AppHost.StdDialogs.GetInput(LangMan.LS(LSID.LSID_Telephone), ref val)) {
-                            fAddress.AddPhoneNumber(val);
-                        }
-                        break;
-
-                    case RecordAction.raEdit:
-                        val = itemTag.StringValue;
-                        if (AppHost.StdDialogs.GetInput(LangMan.LS(LSID.LSID_Telephone), ref val)) {
-                            itemTag.StringValue = val;
-                        }
-                        break;
-
-                    case RecordAction.raDelete:
-                        fAddress.PhoneNumbers.Delete(itemTag);
-                        break;
-                }
+            if (sender == fPhonesList) {
+                fController.DoPhonesAction(eArgs.Action, itemTag);
+            } else if (sender == fMailsList) {
+                fController.DoMailsAction(eArgs.Action, itemTag);
+            } else if (sender == fWebsList) {
+                fController.DoWebsAction(eArgs.Action, itemTag);
             }
-            else if (sender == fMailsList)
-            {
-                switch (eArgs.Action) {
-                    case RecordAction.raAdd:
-                        val = "";
-                        if (AppHost.StdDialogs.GetInput(LangMan.LS(LSID.LSID_Mail), ref val)) {
-                            fAddress.AddEmailAddress(val);
-                        }
-                        break;
-
-                    case RecordAction.raEdit:
-                        val = itemTag.StringValue;
-                        if (AppHost.StdDialogs.GetInput(LangMan.LS(LSID.LSID_Mail), ref val)) {
-                            itemTag.StringValue = val;
-                        }
-                        break;
-
-                    case RecordAction.raDelete:
-                        fAddress.EmailAddresses.Delete(itemTag);
-                        break;
-                }
-            }
-            else if (sender == fWebsList)
-            {
-                switch (eArgs.Action) {
-                    case RecordAction.raAdd:
-                        val = "";
-                        if (AppHost.StdDialogs.GetInput(LangMan.LS(LSID.LSID_WebSite), ref val)) {
-                            fAddress.AddWebPage(val);
-                        }
-                        break;
-
-                    case RecordAction.raEdit:
-                        val = itemTag.StringValue;
-                        if (AppHost.StdDialogs.GetInput(LangMan.LS(LSID.LSID_WebSite), ref val)) {
-                            itemTag.StringValue = val;
-                        }
-                        break;
-
-                    case RecordAction.raDelete:
-                        fAddress.WebPages.Delete(itemTag);
-                        break;
-                }
-            }
-
-            UpdateLists();
         }
 
-        private void SetAddress(GEDCOMAddress value)
+        public override void InitDialog(IBaseWindow baseWin)
         {
-            fAddress = value;
-
-            txtCountry.Text = fAddress.AddressCountry;
-            txtState.Text = fAddress.AddressState;
-            txtCity.Text = fAddress.AddressCity;
-            txtPostalCode.Text = fAddress.AddressPostalCode;
-            txtAddress.Text = fAddress.Address.Text.Trim();
-
-            UpdateLists();
-        }
-
-        private void UpdateLists()
-        {
-            fPhonesList.ClearItems();
-            foreach (GEDCOMTag tag in fAddress.PhoneNumbers)
-            {
-                fPhonesList.AddItem(tag, tag.StringValue);
-            }
-
-            fMailsList.ClearItems();
-            foreach (GEDCOMTag tag in fAddress.EmailAddresses)
-            {
-                fMailsList.AddItem(tag, tag.StringValue);
-            }
-
-            fWebsList.ClearItems();
-            foreach (GEDCOMTag tag in fAddress.WebPages)
-            {
-                fWebsList.AddItem(tag, tag.StringValue);
-            }
+            base.InitDialog(baseWin);
+            fController.Init(baseWin);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
-                fAddress.AddressCountry = txtCountry.Text;
-                fAddress.AddressState = txtState.Text;
-                fAddress.AddressCity = txtCity.Text;
-                fAddress.AddressPostalCode = txtPostalCode.Text;
-
-                fAddress.SetAddressText(txtAddress.Text);
-
-                DialogResult = DialogResult.OK;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("AddressEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
 
         public AddressEditDlg()
@@ -211,6 +159,8 @@ namespace GKUI.Forms
             pagePhones.Text = LangMan.LS(LSID.LSID_Telephones);
             pageEmails.Text = LangMan.LS(LSID.LSID_EMails);
             pageWebPages.Text = LangMan.LS(LSID.LSID_WebSites);
+
+            fController = new AddressEditController(this);
         }
     }
 }

@@ -87,13 +87,16 @@ namespace GKCore.Lists
 
     public interface ISheetList
     {
+        ListModel ListModel { get; set; }
+
         void AddColumn(string caption, int width, bool autoSize);
-        IListItem AddItem(object rowData, object[] columnValues);
+        IListItem AddItem(object rowData, params object[] columnValues);
         void BeginUpdate();
         void EndUpdate();
         void ClearColumns();
         void ClearItems();
         void ResizeColumn(int columnIndex);
+        void UpdateSheet();
     }
 
     /// <summary>

@@ -493,5 +493,13 @@ namespace GKUI.Components
         {
             comboBox.Items.Sort((x, y) => string.Compare(x.Text, y.Text, StringComparison.CurrentCulture));
         }
+
+        public static void SetControlEnabled(Control ctl, bool enabled)
+        {
+            if (ctl != null) {
+                ctl.Enabled = enabled;
+                ctl.BackgroundColor = enabled ? SystemColors.WindowBackground : SystemColors.Control;
+            }
+        }
     }
 }

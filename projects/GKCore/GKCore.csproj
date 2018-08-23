@@ -186,7 +186,9 @@
     <Compile Include="GKCore\Charts\TCGenerationsControl.cs" />
     <Compile Include="GKCore\Charts\TCPersonControl.cs" />
     <Compile Include="GKCore\Charts\TCScaleControl.cs" />
+    <Compile Include="GKCore\Controllers\AddressEditController.cs" />
     <Compile Include="GKCore\Controllers\AssociationEditController.cs" />
+    <Compile Include="GKCore\Controllers\EventEditController.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GKCore\ImportUtils.cs" />
     <Compile Include="GKCore\Interfaces\IBaseContext.cs" />

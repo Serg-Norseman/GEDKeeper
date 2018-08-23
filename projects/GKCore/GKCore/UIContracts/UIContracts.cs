@@ -21,6 +21,7 @@
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Maps;
 using GKCore.Types;
 
@@ -100,6 +101,16 @@ namespace GKCore.UIContracts
     public interface IAddressEditDlg : ICommonDialog, IBaseEditor
     {
         GEDCOMAddress Address { get; set; }
+
+        string CountryText { get; set; }
+        string StateText { get; set; }
+        string CityText { get; set; }
+        string PostalCodeText { get; set; }
+        string AddressText { get; set; }
+
+        ISheetList PhonesList { get; }
+        ISheetList MailsList { get; }
+        ISheetList WebsList { get; }
     }
 
     public interface IAssociationEditDlg : ICommonDialog, IBaseEditor
@@ -120,6 +131,37 @@ namespace GKCore.UIContracts
     public interface IEventEditDlg : ICommonDialog, IBaseEditor
     {
         GEDCOMCustomEvent Event { get; set; }
+
+        int EventType { get; set; }
+        int EventDateType { get; set; }
+
+        bool Date1Enabled { get; set; }
+        bool Date2Enabled { get; set; }
+
+        bool Date1BC { get; set; }
+        bool Date2BC { get; set; }
+
+        GEDCOMCalendar Date1Calendar { get; set; }
+        GEDCOMCalendar Date2Calendar { get; set; }
+
+        string Date1Text { get; set; }
+        string Date2Text { get; set; }
+
+        string AttributeText { get; set; }
+        string PlaceText { get; set; }
+        string EventNameText { get; set; }
+        string CauseText { get; set; }
+        string AgencyText { get; set; }
+
+        ISheetList NotesList { get; }
+        ISheetList MediaList { get; }
+        ISheetList SourcesList { get; }
+
+        void SetEventTypes(GKData.EventStruct[] eventTypes);
+        void SetAttributeMode(bool active);
+        void SetLocationMode(bool active);
+        void ChangeEventType();
+        void ChangeDateType();
     }
 
     public interface IFamilyEditDlg : ICommonDialog, IBaseEditor

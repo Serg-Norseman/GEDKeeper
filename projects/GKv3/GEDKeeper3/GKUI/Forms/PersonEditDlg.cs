@@ -649,6 +649,8 @@ namespace GKUI.Forms
             }
 
             fEventsList = new GKSheetList(pageEvents);
+            //fEventsList.Size = new Size(400, 200);
+            //fEventsList.Height = 200;
 
             fSpousesList = new GKSheetList(pageSpouses);
             fSpousesList.OnModify += ModifySpousesSheet;

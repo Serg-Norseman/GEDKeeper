@@ -325,7 +325,8 @@ namespace GKUI.Forms
             tabsPersonData.Pages.Add(pageMultimedia);
             tabsPersonData.Pages.Add(pageSources);
             tabsPersonData.Pages.Add(pageUserRefs);
-            tabsPersonData.Size = new Size(600, 300);
+            //tabsPersonData.Size = new Size(600, 300);
+            //tabsPersonData.Height = 200;
 
             Content = new DefTableLayout {
                 Rows = {

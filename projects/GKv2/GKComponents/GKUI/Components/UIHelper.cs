@@ -322,5 +322,13 @@ namespace GKUI.Components
         {
             return new Bitmap(GKUtils.LoadResourceStream(baseType, resName));
         }
+
+        public static void SetControlEnabled(Control ctl, bool enabled)
+        {
+            if (ctl != null) {
+                ctl.Enabled = enabled;
+                ctl.BackColor = enabled ? SystemColors.Window : SystemColors.Control;
+            }
+        }
     }
 }
