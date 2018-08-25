@@ -20,6 +20,7 @@
 
 using BSLib;
 using GKCommon.GEDCOM;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Maps;
@@ -127,17 +128,16 @@ namespace GKCore.UIContracts
         int EventType { get; set; }
         int EventDateType { get; set; }
 
-        bool Date1Enabled { get; set; }
-        bool Date2Enabled { get; set; }
-
         bool Date1BC { get; set; }
         bool Date2BC { get; set; }
 
         GEDCOMCalendar Date1Calendar { get; set; }
         GEDCOMCalendar Date2Calendar { get; set; }
 
-        string Date1Text { get; set; }
-        string Date2Text { get; set; }
+        //string Date1Text { get; set; }
+        //string Date2Text { get; set; }
+        ITextBoxHandler Date1 { get; }
+        ITextBoxHandler Date2 { get; }
 
         string AttributeText { get; set; }
         string PlaceText { get; set; }

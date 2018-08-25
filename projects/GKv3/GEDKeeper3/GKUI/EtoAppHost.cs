@@ -24,11 +24,13 @@ using System.Reflection;
 using Eto.Forms;
 using GKCore;
 using GKCore.Charts;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Options;
 using GKCore.UIContracts;
 using GKUI.Components;
+using GKUI.Controllers;
 using GKUI.Forms;
 
 namespace GKUI
@@ -324,6 +326,10 @@ namespace GKUI
                 //container.Register<IBaseWindow, BaseWin>(LifeCycle.Transient);
                 //container.Register<IMainWindow, MainWin>(LifeCycle.Singleton);
             }
+
+            ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler));
         }
 
         #endregion

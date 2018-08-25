@@ -61,10 +61,10 @@ namespace GKCore.Controllers
             GEDCOMCalendar cal1 = fView.Date1Calendar;
             GEDCOMCalendar cal2 = fView.Date2Calendar;
 
-            GEDCOMDate gcd1 = GEDCOMDate.CreateByFormattedStr(fView.Date1Text, cal1, true);
+            GEDCOMDate gcd1 = GEDCOMDate.CreateByFormattedStr(fView.Date1.Text, cal1, true);
             if (gcd1 == null) throw new ArgumentNullException("gcd1");
 
-            GEDCOMDate gcd2 = GEDCOMDate.CreateByFormattedStr(fView.Date2Text, cal2, true);
+            GEDCOMDate gcd2 = GEDCOMDate.CreateByFormattedStr(fView.Date2.Text, cal2, true);
             if (gcd2 == null) throw new ArgumentNullException("gcd2");
 
             gcd1.YearBC = fView.Date1BC;
@@ -189,8 +189,8 @@ namespace GKCore.Controllers
                     fView.EventDateType = 3;
                 }
 
-                fView.Date1Text = dtRange.After.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.Date2Text = dtRange.Before.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.Date1.Text = dtRange.After.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.Date2.Text = dtRange.Before.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                 fView.Date1Calendar = dtRange.After.DateCalendar;
                 fView.Date2Calendar = dtRange.Before.DateCalendar;
                 fView.Date1BC = dtRange.After.YearBC;
@@ -206,8 +206,8 @@ namespace GKCore.Controllers
                     fView.EventDateType = 6;
                 }
 
-                fView.Date1Text = dtPeriod.DateFrom.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.Date2Text = dtPeriod.DateTo.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.Date1.Text = dtPeriod.DateFrom.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.Date2.Text = dtPeriod.DateTo.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                 fView.Date1Calendar = dtPeriod.DateFrom.DateCalendar;
                 fView.Date2Calendar = dtPeriod.DateTo.DateCalendar;
                 fView.Date1BC = dtPeriod.DateFrom.YearBC;
@@ -230,12 +230,12 @@ namespace GKCore.Controllers
                         break;
                 }
 
-                fView.Date1Text = (date as GEDCOMDate).GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.Date1.Text = (date as GEDCOMDate).GetDisplayString(DateFormat.dfDD_MM_YYYY);
                 fView.Date1Calendar = (date as GEDCOMDate).DateCalendar;
                 fView.Date1BC = (date as GEDCOMDate).YearBC;
             } else {
                 fView.EventDateType = 0;
-                fView.Date1Text = "";
+                fView.Date1.Text = "";
                 fView.Date1Calendar = GEDCOMCalendar.dcGregorian;
                 fView.Date1BC = false;
             }

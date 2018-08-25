@@ -40,6 +40,7 @@ namespace GKUI.Forms
     public sealed partial class EventEditDlg : EditorDialog, IEventEditDlg
     {
         private readonly EventEditController fController;
+        private readonly ControlsManager fControlsManager;
 
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
@@ -89,26 +90,6 @@ namespace GKUI.Forms
             set { cmbEventDateType.SelectedIndex = value; }
         }
 
-        public bool Date1Enabled
-        {
-            get { return txtEventDate1.Enabled; }
-            set {
-                txtEventDate1.Enabled = value;
-                cmbDate1Calendar.Enabled = value;
-                btnBC1.Enabled = value;
-            }
-        }
-
-        public bool Date2Enabled
-        {
-            get { return txtEventDate2.Enabled; }
-            set {
-                txtEventDate2.Enabled = value;
-                cmbDate2Calendar.Enabled = value;
-                btnBC2.Enabled = value;
-            }
-        }
-
         bool IEventEditDlg.Date1BC
         {
             get { return btnBC1.Checked; }
@@ -133,7 +114,7 @@ namespace GKUI.Forms
             set { SetComboCalendar(cmbDate2Calendar, value); }
         }
 
-        string IEventEditDlg.Date1Text
+        /*string IEventEditDlg.Date1Text
         {
             get { return txtEventDate1.Text; }
             set { txtEventDate1.Text = value; }
@@ -143,6 +124,16 @@ namespace GKUI.Forms
         {
             get { return txtEventDate2.Text; }
             set { txtEventDate2.Text = value; }
+        }*/
+
+        public ITextBoxHandler Date1
+        {
+            get { return fControlsManager.GetControlHandler(txtEventDate1) as ITextBoxHandler; }
+        }
+
+        public ITextBoxHandler Date2
+        {
+            get { return fControlsManager.GetControlHandler(txtEventDate2) as ITextBoxHandler; }
         }
 
         string IEventEditDlg.AttributeText
@@ -226,6 +217,7 @@ namespace GKUI.Forms
             toolTip1.SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
 
             fController = new EventEditController(this);
+            fControlsManager = new ControlsManager();
         }
 
         void IEventEditDlg.SetEventTypes(GKData.EventStruct[] eventTypes)
@@ -407,8 +399,16 @@ namespace GKUI.Forms
             if (idx < 0 || idx >= GKData.DateKinds.Length) return;
 
             byte dates = GKData.DateKinds[idx].Dates;
-            Date1Enabled = BitHelper.IsSetBit(dates, 0);
-            Date2Enabled = BitHelper.IsSetBit(dates, 1);
+            bool vis1 = BitHelper.IsSetBit(dates, 0);
+            bool vis2 = BitHelper.IsSetBit(dates, 1);
+
+            txtEventDate1.Enabled = vis1;
+            cmbDate1Calendar.Enabled = vis1;
+            btnBC1.Enabled = vis1;
+
+            txtEventDate2.Enabled = vis2;
+            cmbDate2Calendar.Enabled = vis2;
+            btnBC2.Enabled = vis2;
         }
 
         private void EditEventDateType_SelectedIndexChanged(object sender, EventArgs e)

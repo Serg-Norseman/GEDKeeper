@@ -35,6 +35,7 @@
     <Compile Include="GKUI\Components\CircleChart.cs" />
     <Compile Include="GKUI\Components\CustomChart.cs" />
     <Compile Include="GKUI\Components\TreeChartBox.cs" />
+    <Compile Include="GKUI\Controllers\ControlHandlers.cs" />
     <Compile Include="GKUI\EtoGfxRenderer.cs" />
     <Compile Include="GKUI\Components\ACOptionsControl.cs" />
     <Compile Include="GKUI\Components\GKInputBox.cs" />

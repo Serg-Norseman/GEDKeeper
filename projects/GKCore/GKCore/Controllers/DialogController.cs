@@ -19,10 +19,73 @@
  */
 
 using System;
+using System.Collections.Generic;
 using GKCore.Interfaces;
 
 namespace GKCore.Controllers
 {
+    public interface IControlHandler
+    {
+    }
+
+    public abstract class ControlHandler<T, TThis> : IControlHandler where TThis : ControlHandler<T, TThis>
+    {
+        protected T fControl;
+
+        public virtual T Control
+        {
+            get { return fControl; }
+        }
+
+        protected ControlHandler(T control)
+        {
+            this.fControl = control;
+        }
+    }
+
+    public interface IComboBoxHandler : IControlHandler
+    {
+        bool Enabled { get; set; }
+        int SelectedIndex { get; set; }
+        string Text { get; set; }
+    }
+
+    public interface ITextBoxHandler : IControlHandler
+    {
+        bool Enabled { get; set; }
+        string Text { get; set; }
+    }
+
+    public sealed class ControlsManager
+    {
+        private static readonly Dictionary<Type, Type> fHandlerTypes = new Dictionary<Type, Type>();
+
+        private readonly Dictionary<object, IControlHandler> fHandlers = new Dictionary<object, IControlHandler>();
+
+        public IControlHandler GetControlHandler(object control)
+        {
+            IControlHandler handler;
+            if (!fHandlers.TryGetValue(control, out handler)) {
+                Type controlType = control.GetType();
+                Type handlerType;
+                if (fHandlerTypes.TryGetValue(controlType, out handlerType)) {
+                    handler = (IControlHandler)Activator.CreateInstance(handlerType, control);
+                } else {
+                    throw new Exception("handler type not found");
+                }
+            }
+            return handler;
+        }
+
+        public static void RegisterHandlerType(Type controlType, Type handlerType)
+        {
+            if (fHandlerTypes.ContainsKey(controlType)) {
+                fHandlerTypes.Remove(controlType);
+            }
+            fHandlerTypes.Add(controlType, handlerType);
+        }
+    }
+
     /// <summary>
     /// 
     /// </summary>

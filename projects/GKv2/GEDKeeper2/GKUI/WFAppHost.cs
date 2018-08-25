@@ -25,11 +25,13 @@ using System.Windows.Forms;
 
 using GKCore;
 using GKCore.Charts;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Options;
 using GKCore.UIContracts;
 using GKUI.Components;
+using GKUI.Controllers;
 using GKUI.Forms;
 
 namespace GKUI
@@ -311,6 +313,10 @@ namespace GKUI
             container.Register<IPortraitSelectDlg, PortraitSelectDlg>(LifeCycle.Transient);
             container.Register<IDayTipsDlg, DayTipsDlg>(LifeCycle.Transient);
             container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient);
+
+            ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler));
         }
 
         #endregion
