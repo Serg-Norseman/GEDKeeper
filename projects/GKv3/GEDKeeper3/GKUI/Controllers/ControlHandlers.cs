@@ -18,11 +18,38 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Eto.Drawing;
 using Eto.Forms;
 using GKCore.Controllers;
+using GKUI.Components;
 
 namespace GKUI.Controllers
 {
+    public sealed class CheckBoxHandler : ControlHandler<CheckBox, CheckBoxHandler>, ICheckBoxHandler
+    {
+        public CheckBoxHandler(CheckBox control) : base(control)
+        {
+        }
+
+        public bool Checked
+        {
+            get { return Control.Checked.GetValueOrDefault(); }
+            set { Control.Checked = value; }
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+    }
+
     public sealed class ComboBoxHandler : ControlHandler<ComboBox, ComboBoxHandler>, IComboBoxHandler
     {
         public ComboBoxHandler(ComboBox control) : base(control)
@@ -32,7 +59,16 @@ namespace GKUI.Controllers
         public bool Enabled
         {
             get { return Control.Enabled; }
-            set { Control.Enabled = value; }
+            set {
+                Control.Enabled = value;
+                //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
+            }
+        }
+
+        public bool ReadOnly
+        {
+            get { return Control.ReadOnly; }
+            set { Control.ReadOnly = value; }
         }
 
         public int SelectedIndex
@@ -41,10 +77,51 @@ namespace GKUI.Controllers
             set { Control.SelectedIndex = value; }
         }
 
+        public object SelectedItem
+        {
+            get { return Control.SelectedValue; }
+            set { Control.SelectedValue = value; }
+        }
+
+        public object SelectedTag
+        {
+            get {
+                return ((GKComboItem)Control.SelectedValue).Tag;
+            }
+            set {
+                var ctl = Control;
+                foreach (object item in ctl.Items) {
+                    GKComboItem comboItem = (GKComboItem)item;
+                    if (comboItem.Tag == value) {
+                        ctl.SelectedValue = item;
+                        return;
+                    }
+                }
+                ctl.SelectedIndex = 0;
+            }
+        }
+
         public string Text
         {
             get { return Control.Text; }
             set { Control.Text = value; }
+        }
+
+        public void Add(object item)
+        {
+            Control.Items.Add((string)item);
+        }
+
+        public void AddRange(object[] items, bool sorted = false)
+        {
+            //Control.Sorted = false;
+            Control.Items.AddRange(GKComboItem.Convert((string[])items));
+            //Control.Sorted = sorted;
+        }
+
+        public void Clear()
+        {
+            Control.Items.Clear();
         }
     }
 
@@ -57,7 +134,10 @@ namespace GKUI.Controllers
         public bool Enabled
         {
             get { return Control.Enabled; }
-            set { Control.Enabled = value; }
+            set {
+                Control.Enabled = value;
+                //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
+            }
         }
 
         public string Text
@@ -76,7 +156,10 @@ namespace GKUI.Controllers
         public bool Enabled
         {
             get { return Control.Enabled; }
-            set { Control.Enabled = value; }
+            set {
+                Control.Enabled = value;
+                //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
+            }
         }
 
         public string Text

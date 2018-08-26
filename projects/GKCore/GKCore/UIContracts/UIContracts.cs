@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -125,35 +125,29 @@ namespace GKCore.UIContracts
     {
         GEDCOMCustomEvent Event { get; set; }
 
-        int EventType { get; set; }
-        int EventDateType { get; set; }
+        IComboBoxHandler EventType { get; }
+        IComboBoxHandler EventDateType { get; }
 
-        bool Date1BC { get; set; }
-        bool Date2BC { get; set; }
+        ICheckBoxHandler Date1BC { get; }
+        ICheckBoxHandler Date2BC { get; }
 
-        GEDCOMCalendar Date1Calendar { get; set; }
-        GEDCOMCalendar Date2Calendar { get; set; }
+        IComboBoxHandler Date1Calendar { get; }
+        IComboBoxHandler Date2Calendar { get; }
 
-        //string Date1Text { get; set; }
-        //string Date2Text { get; set; }
         ITextBoxHandler Date1 { get; }
         ITextBoxHandler Date2 { get; }
 
-        string AttributeText { get; set; }
-        string PlaceText { get; set; }
-        string EventNameText { get; set; }
-        string CauseText { get; set; }
-        string AgencyText { get; set; }
+        IComboBoxHandler Attribute { get; }
+        ITextBoxHandler Place { get; }
+        ITextBoxHandler EventName { get; }
+        ITextBoxHandler Cause { get; }
+        ITextBoxHandler Agency { get; }
 
         ISheetList NotesList { get; }
         ISheetList MediaList { get; }
         ISheetList SourcesList { get; }
 
-        void SetEventTypes(GKData.EventStruct[] eventTypes);
-        void SetAttributeMode(bool active);
         void SetLocationMode(bool active);
-        void ChangeEventType();
-        void ChangeDateType();
     }
 
     public interface IFamilyEditDlg : ICommonDialog, IBaseEditor

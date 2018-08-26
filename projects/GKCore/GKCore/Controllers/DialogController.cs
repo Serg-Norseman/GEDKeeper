@@ -43,11 +43,25 @@ namespace GKCore.Controllers
         }
     }
 
+    public interface ICheckBoxHandler : IControlHandler
+    {
+        bool Checked { get; set; }
+        bool Enabled { get; set; }
+        string Text { get; set; }
+    }
+
     public interface IComboBoxHandler : IControlHandler
     {
         bool Enabled { get; set; }
+        bool ReadOnly { get; set; }
         int SelectedIndex { get; set; }
+        object SelectedItem { get; set; }
+        object SelectedTag { get; set; }
         string Text { get; set; }
+
+        void Add(object item);
+        void AddRange(object[] items, bool sorted = false);
+        void Clear();
     }
 
     public interface ITextBoxHandler : IControlHandler
@@ -62,7 +76,7 @@ namespace GKCore.Controllers
 
         private readonly Dictionary<object, IControlHandler> fHandlers = new Dictionary<object, IControlHandler>();
 
-        public IControlHandler GetControlHandler(object control)
+        public T GetControlHandler<T>(object control) where T : IControlHandler
         {
             IControlHandler handler;
             if (!fHandlers.TryGetValue(control, out handler)) {
@@ -74,7 +88,7 @@ namespace GKCore.Controllers
                     throw new Exception("handler type not found");
                 }
             }
-            return handler;
+            return (T)handler;
         }
 
         public static void RegisterHandlerType(Type controlType, Type handlerType)

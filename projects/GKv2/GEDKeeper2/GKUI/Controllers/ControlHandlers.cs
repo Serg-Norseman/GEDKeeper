@@ -20,9 +20,35 @@
 
 using System.Windows.Forms;
 using GKCore.Controllers;
+using GKUI.Components;
 
 namespace GKUI.Controllers
 {
+    public sealed class CheckBoxHandler : ControlHandler<CheckBox, CheckBoxHandler>, ICheckBoxHandler
+    {
+        public CheckBoxHandler(CheckBox control) : base(control)
+        {
+        }
+
+        public bool Checked
+        {
+            get { return Control.Checked; }
+            set { Control.Checked = value; }
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+    }
+
     public sealed class ComboBoxHandler : ControlHandler<ComboBox, ComboBoxHandler>, IComboBoxHandler
     {
         public ComboBoxHandler(ComboBox control) : base(control)
@@ -35,16 +61,63 @@ namespace GKUI.Controllers
             set { Control.Enabled = value; }
         }
 
+        public bool ReadOnly
+        {
+            get { return (Control.DropDownStyle == ComboBoxStyle.DropDownList); }
+            set { Control.DropDownStyle = (value) ? ComboBoxStyle.DropDownList : ComboBoxStyle.DropDown; }
+        }
+
         public int SelectedIndex
         {
             get { return Control.SelectedIndex; }
             set { Control.SelectedIndex = value; }
         }
 
+        public object SelectedItem
+        {
+            get { return Control.SelectedItem; }
+            set { Control.SelectedItem = value; }
+        }
+
+        public object SelectedTag
+        {
+            get {
+                return ((GKComboItem)Control.SelectedItem).Tag;
+            }
+            set {
+                var ctl = Control;
+                foreach (object item in ctl.Items) {
+                    GKComboItem comboItem = (GKComboItem)item;
+                    if (comboItem.Tag == value) {
+                        ctl.SelectedItem = item;
+                        return;
+                    }
+                }
+                ctl.SelectedIndex = 0;
+            }
+        }
+
         public string Text
         {
             get { return Control.Text; }
             set { Control.Text = value; }
+        }
+
+        public void Add(object item)
+        {
+            Control.Items.Add(item);
+        }
+
+        public void AddRange(object[] items, bool sorted = false)
+        {
+            Control.Sorted = false;
+            Control.Items.AddRange(items);
+            Control.Sorted = sorted;
+        }
+
+        public void Clear()
+        {
+            Control.Items.Clear();
         }
     }
 

@@ -21,14 +21,11 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-
-using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
 
@@ -76,94 +73,69 @@ namespace GKUI.Forms
             get { return fSourcesList; }
         }
 
-
-
-        int IEventEditDlg.EventType
+        IComboBoxHandler IEventEditDlg.EventType
         {
-            get { return cmbEventType.SelectedIndex; }
-            set { cmbEventType.SelectedIndex = value; }
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbEventType); }
         }
 
-        int IEventEditDlg.EventDateType
+        IComboBoxHandler IEventEditDlg.EventDateType
         {
-            get { return cmbEventDateType.SelectedIndex; }
-            set { cmbEventDateType.SelectedIndex = value; }
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbEventDateType); }
         }
 
-        bool IEventEditDlg.Date1BC
+        ICheckBoxHandler IEventEditDlg.Date1BC
         {
-            get { return btnBC1.Checked; }
-            set { btnBC1.Checked = value; }
+            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(btnBC1); }
         }
 
-        bool IEventEditDlg.Date2BC
+        ICheckBoxHandler IEventEditDlg.Date2BC
         {
-            get { return btnBC2.Checked; }
-            set { btnBC2.Checked = value; }
+            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(btnBC2); }
         }
 
-        GEDCOMCalendar IEventEditDlg.Date1Calendar
+        IComboBoxHandler IEventEditDlg.Date1Calendar
         {
-            get { return GetComboCalendar(cmbDate1Calendar); }
-            set { SetComboCalendar(cmbDate1Calendar, value); }
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbDate1Calendar); }
         }
 
-        GEDCOMCalendar IEventEditDlg.Date2Calendar
+        IComboBoxHandler IEventEditDlg.Date2Calendar
         {
-            get { return GetComboCalendar(cmbDate2Calendar); }
-            set { SetComboCalendar(cmbDate2Calendar, value); }
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbDate2Calendar); }
         }
 
-        /*string IEventEditDlg.Date1Text
+        ITextBoxHandler IEventEditDlg.Date1
         {
-            get { return txtEventDate1.Text; }
-            set { txtEventDate1.Text = value; }
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtEventDate1); }
         }
 
-        string IEventEditDlg.Date2Text
+        ITextBoxHandler IEventEditDlg.Date2
         {
-            get { return txtEventDate2.Text; }
-            set { txtEventDate2.Text = value; }
-        }*/
-
-        public ITextBoxHandler Date1
-        {
-            get { return fControlsManager.GetControlHandler(txtEventDate1) as ITextBoxHandler; }
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtEventDate2); }
         }
 
-        public ITextBoxHandler Date2
+        IComboBoxHandler IEventEditDlg.Attribute
         {
-            get { return fControlsManager.GetControlHandler(txtEventDate2) as ITextBoxHandler; }
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(txtAttribute); }
         }
 
-        string IEventEditDlg.AttributeText
+        ITextBoxHandler IEventEditDlg.Place
         {
-            get { return txtAttribute.Text; }
-            set { txtAttribute.Text = value; }
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtEventPlace); }
         }
 
-        string IEventEditDlg.PlaceText
+        ITextBoxHandler IEventEditDlg.EventName
         {
-            get { return txtEventPlace.Text; }
-            set { txtEventPlace.Text = value; }
+            get { return  fControlsManager.GetControlHandler<ITextBoxHandler>(txtEventName); }
         }
 
-        string IEventEditDlg.EventNameText
+        ITextBoxHandler IEventEditDlg.Cause
         {
-            get { return txtEventName.Text; }
-            set { txtEventName.Text = value; }
+            get { return  fControlsManager.GetControlHandler<ITextBoxHandler>(txtEventCause); }
         }
 
-        string IEventEditDlg.CauseText
+        ITextBoxHandler IEventEditDlg.Agency
         {
-            get { return txtEventCause.Text; }
-            set { txtEventCause.Text = value; }
-        }
-
-        string IEventEditDlg.AgencyText
-        {
-            get { return txtEventOrg.Text; }
-            set { txtEventOrg.Text = value; }
+            get { return  fControlsManager.GetControlHandler<ITextBoxHandler>(txtEventOrg); }
         }
 
         #endregion
@@ -218,35 +190,6 @@ namespace GKUI.Forms
 
             fController = new EventEditController(this);
             fControlsManager = new ControlsManager();
-        }
-
-        void IEventEditDlg.SetEventTypes(GKData.EventStruct[] eventTypes)
-        {
-            cmbEventType.Items.Clear();
-            int num = eventTypes.Length;
-            for (int i = 0; i < num; i++) {
-                cmbEventType.Items.Add(LangMan.LS(eventTypes[i].Name));
-            }
-        }
-
-        private static GEDCOMCalendar GetComboCalendar(ComboBox comboBox)
-        {
-            GEDCOMCalendar result = (GEDCOMCalendar)(((GKComboItem)comboBox.SelectedItem).Tag);
-            return result;
-        }
-
-        private static void SetComboCalendar(ComboBox comboBox, GEDCOMCalendar calendar)
-        {
-            foreach (object item in comboBox.Items) {
-                GKComboItem comboItem = (GKComboItem)item;
-
-                if ((GEDCOMCalendar)comboItem.Tag == calendar) {
-                    comboBox.SelectedItem = item;
-                    return;
-                }
-            }
-
-            comboBox.SelectedIndex = 0;
         }
 
         public void SetLocationMode(bool active)
@@ -325,95 +268,14 @@ namespace GKUI.Forms
             }
         }
 
-        public void SetAttributeMode(bool active)
-        {
-            if (active) {
-                txtAttribute.Enabled = true;
-                txtAttribute.BackColor = SystemColors.Window;
-            } else {
-                txtAttribute.Enabled = false;
-                txtAttribute.BackColor = SystemColors.Control;
-                txtAttribute.Text = "";
-            }
-        }
-
-        public void ChangeEventType()
-        {
-            if (fController.Event is GEDCOMFamilyEvent) {
-                SetAttributeMode(false);
-            } else {
-                int idx = cmbEventType.SelectedIndex;
-                if (idx >= 0) {
-                    if (GKData.PersonEvents[idx].Kind == PersonEventKind.ekEvent) {
-                        SetAttributeMode(false);
-                    } else {
-                        SetAttributeMode(true);
-                    }
-                }
-            }
-
-            string evName;
-            int id = cmbEventType.SelectedIndex;
-            if (fController.Event is GEDCOMFamilyEvent) {
-                evName = GKData.FamilyEvents[id].Sign;
-            } else {
-                evName = GKData.PersonEvents[id].Sign;
-            }
-
-            // TODO: It is necessary to provide the registrable list of values for different tag types.
-            string[] vals;
-            bool canbeSorted, userInput;
-
-            if (evName == "_BGRO") {
-                vals = GKData.BloodGroups.Split('|');
-                canbeSorted = false;
-                userInput = false;
-            } else {
-                vals = fBase.Context.ValuesCollection.GetValues(evName);
-                canbeSorted = true;
-                userInput = true;
-            }
-
-            if (vals != null) {
-                string tmp = txtAttribute.Text;
-                txtAttribute.Sorted = false;
-
-                txtAttribute.Items.Clear();
-                txtAttribute.Items.AddRange(vals);
-
-                txtAttribute.Sorted = canbeSorted;
-                txtAttribute.Text = tmp;
-
-                txtAttribute.DropDownStyle = (userInput) ? ComboBoxStyle.DropDown : ComboBoxStyle.DropDownList;
-            }
-        }
-
         private void EditEventType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ChangeEventType();
-        }
-
-        public void ChangeDateType()
-        {
-            int idx = cmbEventDateType.SelectedIndex;
-            if (idx < 0 || idx >= GKData.DateKinds.Length) return;
-
-            byte dates = GKData.DateKinds[idx].Dates;
-            bool vis1 = BitHelper.IsSetBit(dates, 0);
-            bool vis2 = BitHelper.IsSetBit(dates, 1);
-
-            txtEventDate1.Enabled = vis1;
-            cmbDate1Calendar.Enabled = vis1;
-            btnBC1.Enabled = vis1;
-
-            txtEventDate2.Enabled = vis2;
-            cmbDate2Calendar.Enabled = vis2;
-            btnBC2.Enabled = vis2;
+            fController.ChangeEventType();
         }
 
         private void EditEventDateType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ChangeDateType();
+            fController.ChangeDateType();
         }
 
         public override void InitDialog(IBaseWindow baseWin)
