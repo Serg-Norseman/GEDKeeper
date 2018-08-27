@@ -19,6 +19,7 @@
  */
 
 using System.Windows.Forms;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Operations;
 
@@ -30,6 +31,7 @@ namespace GKUI.Forms
     public class EditorDialog : Form, ICommonDialog, IBaseEditor
     {
         protected IBaseWindow fBase;
+        protected readonly ControlsManager fControlsManager;
         protected ChangeTracker fLocalUndoman;
 
         public IBaseWindow Base
@@ -43,6 +45,7 @@ namespace GKUI.Forms
         /// </summary>
         public EditorDialog()
         {
+            fControlsManager = new ControlsManager();
         }
 
         protected void CommitChanges()

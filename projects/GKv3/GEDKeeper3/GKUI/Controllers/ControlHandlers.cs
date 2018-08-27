@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore.Controllers;
@@ -117,6 +118,14 @@ namespace GKUI.Controllers
             //Control.Sorted = false;
             Control.Items.AddRange(GKComboItem.Convert((string[])items));
             //Control.Sorted = sorted;
+        }
+
+        public void AddStrings(StringList strings)
+        {
+            int num = strings.Count;
+            for (int i = 0; i < num; i++) {
+                Control.Items.Add(strings[i]);
+            }
         }
 
         public void Clear()

@@ -37,12 +37,10 @@ namespace GKUI.Forms
     public sealed partial class EventEditDlg : EditorDialog, IEventEditDlg
     {
         private readonly EventEditController fController;
-        private readonly ControlsManager fControlsManager;
 
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fSourcesList;
-
 
         public GEDCOMCustomEvent Event
         {
@@ -189,7 +187,6 @@ namespace GKUI.Forms
             btnPlaceDelete.ToolTip = LangMan.LS(LSID.LSID_PlaceDeleteTip);
 
             fController = new EventEditController(this);
-            fControlsManager = new ControlsManager();
         }
 
         public void SetLocationMode(bool active)

@@ -91,29 +91,31 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface IAddressEditDlg : ICommonDialog, IBaseEditor
+    public interface IView
+    {
+    }
+
+    public interface IAddressEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMAddress Address { get; set; }
 
-        string CountryText { get; set; }
-        string StateText { get; set; }
-        string CityText { get; set; }
-        string PostalCodeText { get; set; }
-        string AddressText { get; set; }
+        ITextBoxHandler Country { get; }
+        ITextBoxHandler State { get; }
+        ITextBoxHandler City { get; }
+        ITextBoxHandler PostalCode { get; }
+        ITextBoxHandler AddressLine { get; }
 
         ISheetList PhonesList { get; }
         ISheetList MailsList { get; }
         ISheetList WebsList { get; }
     }
 
-    public interface IAssociationEditDlg : ICommonDialog, IBaseEditor
+    public interface IAssociationEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMAssociation Association { get; set; }
 
-        string PersonText { get; set; }
-        string RelationText { get; set; }
-
-        void SetRelations(StringList relations);
+        ITextBoxHandler Person { get; }
+        IComboBoxHandler Relation { get; }
     }
 
     public interface ICommunicationEditDlg : ICommonDialog, IBaseEditor
@@ -121,7 +123,7 @@ namespace GKCore.UIContracts
         GEDCOMCommunicationRecord Communication { get; set; }
     }
 
-    public interface IEventEditDlg : ICommonDialog, IBaseEditor
+    public interface IEventEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMCustomEvent Event { get; set; }
 

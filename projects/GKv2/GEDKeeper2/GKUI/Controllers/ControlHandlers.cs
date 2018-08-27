@@ -19,6 +19,7 @@
  */
 
 using System.Windows.Forms;
+using BSLib;
 using GKCore.Controllers;
 using GKUI.Components;
 
@@ -113,6 +114,14 @@ namespace GKUI.Controllers
             Control.Sorted = false;
             Control.Items.AddRange(items);
             Control.Sorted = sorted;
+        }
+
+        public void AddStrings(StringList strings)
+        {
+            int num = strings.Count;
+            for (int i = 0; i < num; i++) {
+                Control.Items.Add(strings[i]);
+            }
         }
 
         public void Clear()

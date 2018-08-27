@@ -44,16 +44,14 @@ namespace GKUI.Forms
             set { fController.Association = value; }
         }
 
-        string IAssociationEditDlg.RelationText
+        IComboBoxHandler IAssociationEditDlg.Relation
         {
-            get { return cmbRelation.Text; }
-            set { cmbRelation.Text = value; }
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRelation); }
         }
 
-        string IAssociationEditDlg.PersonText
+        ITextBoxHandler IAssociationEditDlg.Person
         {
-            get { return txtPerson.Text; }
-            set { txtPerson.Text = value; }
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtPerson); }
         }
 
         public AssociationEditDlg()
@@ -80,14 +78,6 @@ namespace GKUI.Forms
         {
             base.InitDialog(baseWin);
             fController.Init(baseWin);
-        }
-
-        void IAssociationEditDlg.SetRelations(StringList relations)
-        {
-            int num = relations.Count;
-            for (int i = 0; i < num; i++) {
-                cmbRelation.Items.Add(relations[i]);
-            }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

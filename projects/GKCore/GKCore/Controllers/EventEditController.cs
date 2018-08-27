@@ -29,10 +29,8 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class EventEditController : DialogController
+    public sealed class EventEditController : DialogController<IEventEditDlg>
     {
-        private readonly IEventEditDlg fView;
-
         private GEDCOMCustomEvent fEvent;
         private GEDCOMLocationRecord fTempLocation;
 
@@ -49,9 +47,8 @@ namespace GKCore.Controllers
         }
 
 
-        public EventEditController(IEventEditDlg view)
+        public EventEditController(IEventEditDlg view) : base(view)
         {
-            fView = view;
             fTempLocation = null;
         }
 

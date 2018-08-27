@@ -20,7 +20,9 @@
 
 using System;
 using System.Collections.Generic;
+using BSLib;
 using GKCore.Interfaces;
+using GKCore.UIContracts;
 
 namespace GKCore.Controllers
 {
@@ -61,6 +63,7 @@ namespace GKCore.Controllers
 
         void Add(object item);
         void AddRange(object[] items, bool sorted = false);
+        void AddStrings(StringList strings);
         void Clear();
     }
 
@@ -103,10 +106,16 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public abstract class DialogController
+    public abstract class DialogController<T> where T : IView
     {
+        protected readonly T fView;
         protected IBaseWindow fBase;
 
+
+        protected DialogController(T view)
+        {
+            fView = view;
+        }
 
         public abstract bool Accept();
 

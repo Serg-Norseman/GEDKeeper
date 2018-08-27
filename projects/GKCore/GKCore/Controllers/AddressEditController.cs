@@ -28,12 +28,9 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class AddressEditController : DialogController
+    public sealed class AddressEditController : DialogController<IAddressEditDlg>
     {
-        private readonly IAddressEditDlg fView;
-
         private GEDCOMAddress fAddress;
-
 
         public GEDCOMAddress Address
         {
@@ -47,19 +44,18 @@ namespace GKCore.Controllers
         }
 
 
-        public AddressEditController(IAddressEditDlg view)
+        public AddressEditController(IAddressEditDlg view) : base(view)
         {
-            fView = view;
         }
 
         public override bool Accept()
         {
             try {
-                fAddress.AddressCountry = fView.CountryText;
-                fAddress.AddressState = fView.StateText;
-                fAddress.AddressCity = fView.CityText;
-                fAddress.AddressPostalCode = fView.PostalCodeText;
-                fAddress.SetAddressText(fView.AddressText);
+                fAddress.AddressCountry = fView.Country.Text;
+                fAddress.AddressState = fView.State.Text;
+                fAddress.AddressCity = fView.City.Text;
+                fAddress.AddressPostalCode = fView.PostalCode.Text;
+                fAddress.SetAddressText(fView.AddressLine.Text);
 
                 return true;
             } catch (Exception ex) {
@@ -70,11 +66,11 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.CountryText = fAddress.AddressCountry;
-            fView.StateText = fAddress.AddressState;
-            fView.CityText = fAddress.AddressCity;
-            fView.PostalCodeText = fAddress.AddressPostalCode;
-            fView.AddressText = fAddress.Address.Text.Trim();
+            fView.Country.Text = fAddress.AddressCountry;
+            fView.State.Text = fAddress.AddressState;
+            fView.City.Text = fAddress.AddressCity;
+            fView.PostalCode.Text = fAddress.AddressPostalCode;
+            fView.AddressLine.Text = fAddress.Address.Text.Trim();
 
             UpdateLists();
         }

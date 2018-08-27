@@ -29,13 +29,10 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class AssociationEditController : DialogController
+    public sealed class AssociationEditController : DialogController<IAssociationEditDlg>
     {
-        private readonly IAssociationEditDlg fView;
-
         private GEDCOMAssociation fAssociation;
         private GEDCOMIndividualRecord fTempPerson;
-
 
         public GEDCOMAssociation Association
         {
@@ -50,16 +47,15 @@ namespace GKCore.Controllers
         }
 
 
-        public AssociationEditController(IAssociationEditDlg view)
+        public AssociationEditController(IAssociationEditDlg view) : base(view)
         {
-            fView = view;
-            fView.SetRelations(GlobalOptions.Instance.Relations);
+            fView.Relation.AddStrings(GlobalOptions.Instance.Relations);
         }
 
         public override bool Accept()
         {
             try {
-                string rel = fView.RelationText.Trim();
+                string rel = fView.Relation.Text.Trim();
                 if (rel != "" && GlobalOptions.Instance.Relations.IndexOf(rel) < 0) {
                     GlobalOptions.Instance.Relations.Add(rel);
                 }
@@ -76,14 +72,14 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.RelationText = fAssociation.Relation;
-            fView.PersonText = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, true, false);
+            fView.Relation.Text = fAssociation.Relation;
+            fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, true, false);
         }
 
         public void SetPerson()
         {
             fTempPerson = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-            fView.PersonText = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, true, false);
+            fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, true, false);
         }
     }
 }
