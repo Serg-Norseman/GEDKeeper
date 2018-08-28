@@ -29,7 +29,7 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class EventEditController : DialogController<IEventEditDlg>
+    public sealed class EventEditDlgController : DialogController<IEventEditDlg>
     {
         private GEDCOMCustomEvent fEvent;
         private GEDCOMLocationRecord fTempLocation;
@@ -47,7 +47,7 @@ namespace GKCore.Controllers
         }
 
 
-        public EventEditController(IEventEditDlg view) : base(view)
+        public EventEditDlgController(IEventEditDlg view) : base(view)
         {
             fTempLocation = null;
         }

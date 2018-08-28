@@ -36,7 +36,7 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class EventEditDlg : EditorDialog, IEventEditDlg
     {
-        private readonly EventEditController fController;
+        private readonly EventEditDlgController fController;
 
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
@@ -186,7 +186,7 @@ namespace GKUI.Forms
             btnPlaceAdd.ToolTip = LangMan.LS(LSID.LSID_PlaceAddTip);
             btnPlaceDelete.ToolTip = LangMan.LS(LSID.LSID_PlaceDeleteTip);
 
-            fController = new EventEditController(this);
+            fController = new EventEditDlgController(this);
         }
 
         public void SetLocationMode(bool active)

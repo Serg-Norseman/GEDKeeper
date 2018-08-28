@@ -28,7 +28,7 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class AddressEditController : DialogController<IAddressEditDlg>
+    public sealed class AddressEditDlgController : DialogController<IAddressEditDlg>
     {
         private GEDCOMAddress fAddress;
 
@@ -44,7 +44,7 @@ namespace GKCore.Controllers
         }
 
 
-        public AddressEditController(IAddressEditDlg view) : base(view)
+        public AddressEditDlgController(IAddressEditDlg view) : base(view)
         {
         }
 

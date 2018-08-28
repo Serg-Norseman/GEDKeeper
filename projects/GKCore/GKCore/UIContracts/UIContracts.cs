@@ -118,7 +118,7 @@ namespace GKCore.UIContracts
         IComboBoxHandler Relation { get; }
     }
 
-    public interface ICommunicationEditDlg : ICommonDialog, IBaseEditor
+    public interface ICommunicationEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMCommunicationRecord Communication { get; set; }
     }
@@ -152,13 +152,13 @@ namespace GKCore.UIContracts
         void SetLocationMode(bool active);
     }
 
-    public interface IFamilyEditDlg : ICommonDialog, IBaseEditor
+    public interface IFamilyEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMFamilyRecord Family { get; set; }
         void SetTarget(TargetMode targetType, GEDCOMIndividualRecord target);
     }
 
-    public interface IGroupEditDlg : ICommonDialog, IBaseEditor
+    public interface IGroupEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMGroupRecord Group { get; set; }
     }
@@ -173,22 +173,22 @@ namespace GKCore.UIContracts
         int SelectedLanguage { get; set; }
     }
 
-    public interface ILocationEditDlg : ICommonDialog, IBaseEditor
+    public interface ILocationEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMLocationRecord LocationRecord { get; set; }
     }
 
-    public interface IMediaEditDlg : ICommonDialog, IBaseEditor
+    public interface IMediaEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMMultimediaRecord MediaRec { get; set; }
     }
 
-    public interface INameEditDlg : ICommonDialog
+    public interface INameEditDlg : ICommonDialog, IView
     {
         NameEntry IName { get; set; }
     }
 
-    public interface INoteEditDlg : ICommonDialog, IBaseEditor
+    public interface INoteEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMNoteRecord NoteRecord { get; set; }
     }
@@ -198,12 +198,12 @@ namespace GKCore.UIContracts
         GEDCOMNoteRecord NoteRecord { get; set; }
     }
 
-    public interface IPersonalNameEditDlg : ICommonDialog, IBaseEditor
+    public interface IPersonalNameEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMPersonalName PersonalName { get; set; }
     }
 
-    public interface IPersonEditDlg : ICommonDialog, IBaseEditor
+    public interface IPersonEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMIndividualRecord Person { get; set; }
         GEDCOMIndividualRecord Target { get; set; }
@@ -211,12 +211,12 @@ namespace GKCore.UIContracts
         void SetNeedSex(GEDCOMSex needSex);
     }
 
-    public interface IRepositoryEditDlg : ICommonDialog, IBaseEditor
+    public interface IRepositoryEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMRepositoryRecord Repository { get; set; }
     }
 
-    public interface IResearchEditDlg : ICommonDialog, IBaseEditor
+    public interface IResearchEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMResearchRecord Research { get; set; }
     }
@@ -227,27 +227,27 @@ namespace GKCore.UIContracts
         GEDCOMSex Sex { get; set; }
     }
 
-    public interface ISourceCitEditDlg : ICommonDialog, IBaseEditor
+    public interface ISourceCitEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMSourceCitation SourceCitation { get; set; }
     }
 
-    public interface ISourceEditDlg : ICommonDialog, IBaseEditor
+    public interface ISourceEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMSourceRecord SourceRecord { get; set; }
     }
 
-    public interface ITaskEditDlg : ICommonDialog, IBaseEditor
+    public interface ITaskEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMTaskRecord Task { get; set; }
     }
 
-    public interface IUserRefEditDlg : ICommonDialog, IBaseEditor
+    public interface IUserRefEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMUserReference UserRef { get; set; }
     }
 
-    public interface IFilePropertiesDlg : ICommonDialog, IBaseEditor
+    public interface IFilePropertiesDlg : ICommonDialog, IBaseEditor, IView
     {
     }
 
@@ -259,7 +259,7 @@ namespace GKCore.UIContracts
     /// <summary>
     /// 
     /// </summary>
-    public interface IRecordSelectDialog : ICommonDialog, IBaseEditor
+    public interface IRecordSelectDialog : ICommonDialog, IBaseEditor, IView
     {
         string FastFilter { get; set; }
         string Filter { get; set; }
@@ -275,5 +275,33 @@ namespace GKCore.UIContracts
         bool ShowTipsChecked { get; set; }
 
         void Init(string caption, bool showTipsChecked, StringList tips);
+    }
+
+    public interface ITreeFilterDlg : ICommonDialog, IView
+    {
+    }
+
+    public interface ICircleChartWin : IView
+    {
+    }
+
+    public interface ICommonFilterDlg : ICommonDialog, IView
+    {
+    }
+
+    public interface IMapsViewerWin : ICommonDialog, IView
+    {
+    }
+
+    public interface IPersonsFilterDlg : ICommonDialog, IView
+    {
+    }
+
+    public interface IStatisticsWin : ICommonDialog, IView
+    {
+    }
+
+    public interface ITreeChartWin : ICommonDialog, IView
+    {
     }
 }

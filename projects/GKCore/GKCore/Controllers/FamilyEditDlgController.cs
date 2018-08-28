@@ -29,57 +29,38 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class AssociationEditController : DialogController<IAssociationEditDlg>
+    public sealed class FamilyEditDlgController : DialogController<IFamilyEditDlg>
     {
-        private GEDCOMAssociation fAssociation;
-        private GEDCOMIndividualRecord fTempPerson;
+        private GEDCOMFamilyRecord fFamily;
 
-        public GEDCOMAssociation Association
+        public GEDCOMFamilyRecord Family
         {
-            get { return fAssociation; }
+            get { return fFamily; }
             set {
-                if (fAssociation != value) {
-                    fAssociation = value;
-                    fTempPerson = fAssociation.Individual;
+                if (fFamily != value) {
+                    fFamily = value;
                     UpdateView();
                 }
             }
         }
 
 
-        public AssociationEditController(IAssociationEditDlg view) : base(view)
+        public FamilyEditDlgController(IFamilyEditDlg view) : base(view)
         {
-            fView.Relation.AddStrings(GlobalOptions.Instance.Relations);
         }
 
         public override bool Accept()
         {
             try {
-                string rel = fView.Relation.Text.Trim();
-                if (rel != "" && GlobalOptions.Instance.Relations.IndexOf(rel) < 0) {
-                    GlobalOptions.Instance.Relations.Add(rel);
-                }
-
-                fAssociation.Relation = rel;
-                fAssociation.Individual = fTempPerson;
-
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("AssociationEditController.Accept(): " + ex.Message);
+                Logger.LogWrite("FamilyEditDlgController.Accept(): " + ex.Message);
                 return false;
             }
         }
 
         public override void UpdateView()
         {
-            fView.Relation.Text = fAssociation.Relation;
-            fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, true, false);
-        }
-
-        public void SetPerson()
-        {
-            fTempPerson = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-            fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, true, false);
         }
     }
 }

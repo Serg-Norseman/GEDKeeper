@@ -36,7 +36,7 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class AssociationEditDlg : EditorDialog, IAssociationEditDlg
     {
-        private readonly AssociationEditController fController;
+        private readonly AssociationEditDlgController fController;
 
         public GEDCOMAssociation Association
         {
@@ -71,7 +71,7 @@ namespace GKUI.Forms
 
             toolTip1.SetToolTip(btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
 
-            fController = new AssociationEditController(this);
+            fController = new AssociationEditDlgController(this);
         }
 
         public override void InitDialog(IBaseWindow baseWin)

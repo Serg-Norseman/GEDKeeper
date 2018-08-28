@@ -106,22 +106,15 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public abstract class DialogController<T> where T : IView
+    public abstract class FormController<T> where T : IView
     {
         protected readonly T fView;
         protected IBaseWindow fBase;
 
 
-        protected DialogController(T view)
+        protected FormController(T view)
         {
             fView = view;
-        }
-
-        public abstract bool Accept();
-
-        public virtual void Cancel()
-        {
-            // dummy
         }
 
         public virtual void Init(IBaseWindow baseWin)
@@ -130,5 +123,22 @@ namespace GKCore.Controllers
         }
 
         public abstract void UpdateView();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract class DialogController<T> : FormController<T> where T : IView
+    {
+        protected DialogController(T view) : base(view)
+        {
+        }
+
+        public abstract bool Accept();
+
+        public virtual void Cancel()
+        {
+            // dummy
+        }
     }
 }

@@ -37,7 +37,7 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class AddressEditDlg : EditorDialog, IAddressEditDlg
     {
-        private readonly AddressEditController fController;
+        private readonly AddressEditDlgController fController;
 
         private readonly GKSheetList fPhonesList;
         private readonly GKSheetList fMailsList;
@@ -155,7 +155,7 @@ namespace GKUI.Forms
             pageEmails.Text = LangMan.LS(LSID.LSID_EMails);
             pageWebPages.Text = LangMan.LS(LSID.LSID_WebSites);
 
-            fController = new AddressEditController(this);
+            fController = new AddressEditDlgController(this);
         }
     }
 }
