@@ -23,6 +23,7 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
@@ -34,6 +35,8 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class NameEditDlg : Form, INameEditDlg
     {
+        private readonly NameEditDlgController fController;
+
         private NameEntry fNameEntry;
 
         public NameEntry IName
@@ -45,15 +48,12 @@ namespace GKUI.Forms
         private void SetIName(NameEntry value)
         {
             fNameEntry = value;
-            if (fNameEntry == null)
-            {
+            if (fNameEntry == null) {
                 txtName.Text = "";
                 cmbSex.SelectedIndex = 0;
                 txtFPatr.Text = "";
                 txtMPatr.Text = "";
-            }
-            else
-            {
+            } else {
                 txtName.Text = fNameEntry.Name;
                 cmbSex.SelectedIndex = (sbyte)fNameEntry.Sex;
                 txtFPatr.Text = fNameEntry.F_Patronymic;
@@ -63,16 +63,13 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 fNameEntry.Name = txtName.Text;
                 fNameEntry.Sex = (GEDCOMSex)cmbSex.SelectedIndex;
                 fNameEntry.F_Patronymic = txtFPatr.Text;
                 fNameEntry.M_Patronymic = txtMPatr.Text;
                 DialogResult = DialogResult.OK;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("NameEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -80,8 +77,7 @@ namespace GKUI.Forms
 
         private void edName_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == '/')
-            {
+            if (e.KeyChar == '/') {
                 e.Handled = true;
             }
         }
@@ -93,8 +89,7 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svLast; sx++)
-            {
+            for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svLast; sx++) {
                 cmbSex.Items.Add(GKUtils.SexStr(sx));
             }
 
@@ -107,6 +102,8 @@ namespace GKUI.Forms
             grpPatronymics.Text = LangMan.LS(LSID.LSID_Patronymic);
             lblFemale.Text = LangMan.LS(LSID.LSID_PatFemale);
             lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
+
+            fController = new NameEditDlgController(this);
         }
 
         public bool ShowModalX(object owner)

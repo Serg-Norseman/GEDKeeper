@@ -23,6 +23,7 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -33,6 +34,8 @@ namespace GKUI.Forms
 {
     public partial class PersonalNameEditDlg: EditorDialog, IPersonalNameEditDlg
     {
+        private readonly PersonalNameEditDlgController fController;
+
         private GEDCOMPersonalName fPersonalName;
 
         public GEDCOMPersonalName PersonalName
@@ -141,6 +144,14 @@ namespace GKUI.Forms
             }
 
             SetLang();
+
+            fController = new PersonalNameEditDlgController(this);
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+            fController.Init(baseWin);
         }
 
         public void SetLang()

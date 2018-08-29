@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
@@ -42,6 +43,8 @@ namespace GKUI.Forms
     /// </summary>
     public partial class PersonEditDlg : EditorDialog, IPersonEditDlg
     {
+        private readonly PersonEditDlgController fController;
+
         private readonly GKSheetList fEventsList;
         private readonly GKSheetList fSpousesList;
         private readonly GKSheetList fAssociationsList;
@@ -604,8 +607,7 @@ namespace GKUI.Forms
 
         private void edSurname_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == '/')
-            {
+            if (e.KeyChar == '/') {
                 e.Handled = true;
             }
         }
@@ -710,6 +712,8 @@ namespace GKUI.Forms
             imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
 
             SetLang();
+
+            fController = new PersonEditDlgController(this);
         }
 
         public void SetLang()
@@ -757,6 +761,7 @@ namespace GKUI.Forms
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             fEventsList.ListModel = new EventsListModel(fBase, fLocalUndoman, true);
             fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);

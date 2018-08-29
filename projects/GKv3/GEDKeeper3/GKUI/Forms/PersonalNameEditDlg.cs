@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,10 @@
 
 using System;
 using Eto.Forms;
-using GKCommon;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -33,6 +34,8 @@ namespace GKUI.Forms
 {
     public partial class PersonalNameEditDlg: EditorDialog, IPersonalNameEditDlg
     {
+        private readonly PersonalNameEditDlgController fController;
+
         private GEDCOMPersonalName fPersonalName;
 
         public GEDCOMPersonalName PersonalName
@@ -136,6 +139,9 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+
             for (GEDCOMNameType nt = GEDCOMNameType.ntNone; nt <= GEDCOMNameType.ntMarried; nt++) {
                 cmbNameType.Items.Add(LangMan.LS(GKData.NameTypes[(int)nt]));
             }
@@ -146,6 +152,14 @@ namespace GKUI.Forms
             cmbLanguage.SortItems();
 
             SetLang();
+
+            fController = new PersonalNameEditDlgController(this);
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+            fController.Init(baseWin);
         }
 
         public void SetLang()

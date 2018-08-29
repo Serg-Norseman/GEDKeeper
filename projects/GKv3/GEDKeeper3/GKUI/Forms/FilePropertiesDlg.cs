@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,10 @@
 
 using System;
 using Eto.Forms;
-using GKCommon;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -30,11 +31,20 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed partial class FilePropertiesDlg : EditorDialog, IFilePropertiesDlg
     {
+        private readonly FilePropertiesDlgController fController;
+
         public FilePropertiesDlg()
         {
             InitializeComponent();
+
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            btnLangEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
 
             // SetLang()
             Title = LangMan.LS(LSID.LSID_MIFileProperties);
@@ -47,6 +57,8 @@ namespace GKUI.Forms
             pageOther.Text = LangMan.LS(LSID.LSID_Other);
             lvRecordStats.SetColumnCaption(0, LangMan.LS(LSID.LSID_RM_Records));
             lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
+
+            fController = new FilePropertiesDlgController(this);
         }
 
         private void UpdateControls()
@@ -113,6 +125,7 @@ namespace GKUI.Forms
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             UpdateControls();
         }

@@ -23,6 +23,7 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
@@ -37,6 +38,8 @@ namespace GKUI.Forms
     /// </summary>
     public partial class FamilyEditDlg : EditorDialog, IFamilyEditDlg
     {
+        private readonly FamilyEditDlgController fController;
+
         private readonly GKSheetList fChildrenList;
         private readonly GKSheetList fEventsList;
         private readonly GKSheetList fNotesList;
@@ -54,22 +57,18 @@ namespace GKUI.Forms
         private void SetFamily(GEDCOMFamilyRecord value)
         {
             fFamily = value;
-            try
-            {
+            try {
                 fChildrenList.ListModel.DataOwner = fFamily;
                 fEventsList.ListModel.DataOwner = fFamily;
                 fNotesList.ListModel.DataOwner = fFamily;
                 fMediaList.ListModel.DataOwner = fFamily;
                 fSourcesList.ListModel.DataOwner = fFamily;
 
-                if (fFamily == null)
-                {
+                if (fFamily == null) {
                     cmbMarriageStatus.Enabled = false;
                     cmbMarriageStatus.SelectedIndex = 0;
                     cmbRestriction.SelectedIndex = 0;
-                }
-                else
-                {
+                } else {
                     string stat = fFamily.GetTagStringValue("_STAT");
                     int statIdx = GKUtils.GetMarriageStatusIndex(stat);
                     cmbMarriageStatus.Enabled = true;
@@ -78,9 +77,7 @@ namespace GKUI.Forms
                 }
 
                 UpdateControls();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("FamilyEditDlg.SetFamily(): " + ex.Message);
             }
         }
@@ -89,16 +86,23 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            btnHusbandAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnHusbandDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnHusbandSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
+            btnWifeAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnWifeDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnWifeSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
+
             txtHusband.TextChanged += EditSpouse_TextChanged;
             txtWife.TextChanged += EditSpouse_TextChanged;
 
-            for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnLast; res++)
-            {
+            for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnLast; res++) {
                 cmbRestriction.Items.Add(LangMan.LS(GKData.Restrictions[(int)res]));
             }
 
-            for (int i = 0; i < GKData.MarriageStatus.Length; i++)
-            {
+            for (int i = 0; i < GKData.MarriageStatus.Length; i++) {
                 cmbMarriageStatus.Items.Add(LangMan.LS(GKData.MarriageStatus[i].Name));
             }
 
@@ -118,15 +122,6 @@ namespace GKUI.Forms
 
             fSourcesList = new GKSheetList(pageSources);
             fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnHusbandAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnHusbandDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnHusbandSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            btnWifeAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnWifeDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnWifeSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
@@ -148,6 +143,8 @@ namespace GKUI.Forms
             toolTip1.SetToolTip(btnWifeAdd, LangMan.LS(LSID.LSID_WifeAddTip));
             toolTip1.SetToolTip(btnWifeDelete, LangMan.LS(LSID.LSID_WifeDeleteTip));
             toolTip1.SetToolTip(btnWifeSel, LangMan.LS(LSID.LSID_WifeSelTip));
+
+            fController = new FamilyEditDlgController(this);
         }
 
         private void UpdateControls()
@@ -230,13 +227,10 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 AcceptChanges();
                 DialogResult = DialogResult.OK;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("FamilyEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -244,12 +238,9 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 fLocalUndoman.Rollback();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("FamilyEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
@@ -324,7 +315,7 @@ namespace GKUI.Forms
 
         private void FamilyEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
         {
-            if (e.Item is GEDCOMRecord && !fBase.Context.IsAvailableRecord((GEDCOMRecord) e.Item)) {
+            if (e.Item is GEDCOMRecord && !fBase.Context.IsAvailableRecord((GEDCOMRecord)e.Item)) {
                 e.IsAvailable = false;
             } else {
                 e.IsAvailable = true;
@@ -334,6 +325,7 @@ namespace GKUI.Forms
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             fChildrenList.ListModel = new ChildrenListModel(fBase, fLocalUndoman);
             fEventsList.ListModel = new EventsListModel(fBase, fLocalUndoman, false);

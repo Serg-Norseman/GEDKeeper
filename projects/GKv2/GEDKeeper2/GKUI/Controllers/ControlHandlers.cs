@@ -142,6 +142,12 @@ namespace GKUI.Controllers
             set { Control.Enabled = value; }
         }
 
+        public string[] Lines
+        {
+            get { return Control.Lines; }
+            set { Control.Lines = value; }
+        }
+
         public string Text
         {
             get { return Control.Text; }
@@ -159,6 +165,12 @@ namespace GKUI.Controllers
         {
             get { return Control.Enabled; }
             set { Control.Enabled = value; }
+        }
+
+        public string[] Lines
+        {
+            get { return Control.Lines; }
+            set { Control.Lines = value; }
         }
 
         public string Text

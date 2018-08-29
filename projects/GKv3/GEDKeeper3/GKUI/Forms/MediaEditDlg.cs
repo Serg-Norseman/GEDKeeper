@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,11 +19,12 @@
  */
 
 using System;
-using BSLib;
 using Eto.Forms;
-using GKCommon;
+
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
@@ -33,8 +34,13 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed partial class MediaEditDlg : EditorDialog, IMediaEditDlg
     {
+        private readonly MediaEditDlgController fController;
+
         private bool fIsNew;
         private GEDCOMMultimediaRecord fMediaRec;
 
@@ -92,7 +98,7 @@ namespace GKUI.Forms
             } else {
                 MediaStore mediaStore = fBase.Context.GetStoreType(fileRef);
                 RefreshStoreTypes((mediaStore.StoreType == MediaStoreType.mstReference),
-                    (mediaStore.StoreType == MediaStoreType.mstArchive), mediaStore.StoreType);
+                                  (mediaStore.StoreType == MediaStoreType.mstArchive), mediaStore.StoreType);
             }
 
             btnFileSelect.Enabled = fIsNew;
@@ -110,7 +116,6 @@ namespace GKUI.Forms
                 fSourcesList.ListModel.DataOwner = fMediaRec;
 
                 ControlsRefresh();
-                //ActiveControl = txtName;
                 txtName.Focus();
             } catch (Exception ex) {
                 Logger.LogWrite("MediaEditDlg.SetMediaRec(): " + ex.Message);
@@ -140,8 +145,7 @@ namespace GKUI.Forms
         private void btnFileSelect_Click(object sender, EventArgs e)
         {
             string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_AllFilter), 1, "");
-            if (string.IsNullOrEmpty(fileName))
-                return;
+            if (string.IsNullOrEmpty(fileName)) return;
 
             if (GlobalOptions.Instance.RemovableMediaWarning && FileHelper.IsRemovableDrive(fileName)) {
                 if (!AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage))) {
@@ -176,17 +180,17 @@ namespace GKUI.Forms
             if (allowRef) {
                 cmbStoreType.Items.Add(
                     new GKComboItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name),
-                        MediaStoreType.mstReference));
+                                    MediaStoreType.mstReference));
             }
 
             cmbStoreType.Items.Add(
                 new GKComboItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstStorage].Name),
-                    MediaStoreType.mstStorage));
+                                MediaStoreType.mstStorage));
 
             if (allowArc) {
                 cmbStoreType.Items.Add(
                     new GKComboItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name),
-                        MediaStoreType.mstArchive));
+                                    MediaStoreType.mstArchive));
             }
 
             UIHelper.SelectComboItem(cmbStoreType, selectType, true);
@@ -195,6 +199,9 @@ namespace GKUI.Forms
         public MediaEditDlg()
         {
             InitializeComponent();
+
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             for (GEDCOMMediaType mt = GEDCOMMediaType.mtUnknown; mt <= GEDCOMMediaType.mtLast; mt++) {
                 cmbMediaType.Items.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
@@ -215,11 +222,14 @@ namespace GKUI.Forms
             lblStoreType.Text = LangMan.LS(LSID.LSID_StoreType);
             lblFile.Text = LangMan.LS(LSID.LSID_File);
             btnView.Text = LangMan.LS(LSID.LSID_View) + @"...";
+
+            fController = new MediaEditDlgController(this);
         }
 
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
             fSourcesList.ListModel = new SourceCitationsListModel(fBase, fLocalUndoman);

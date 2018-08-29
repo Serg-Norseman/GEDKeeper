@@ -23,6 +23,7 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -35,6 +36,8 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class FilePropertiesDlg : EditorDialog, IFilePropertiesDlg
     {
+        private readonly FilePropertiesDlgController fController;
+
         public FilePropertiesDlg()
         {
             InitializeComponent();
@@ -54,6 +57,8 @@ namespace GKUI.Forms
             pageOther.Text = LangMan.LS(LSID.LSID_Other);
             lvRecordStats.Columns[0].Text = LangMan.LS(LSID.LSID_RM_Records);
             lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
+
+            fController = new FilePropertiesDlgController(this);
         }
 
         private void UpdateControls()
@@ -75,9 +80,8 @@ namespace GKUI.Forms
         {
             int[] stats = fBase.Context.Tree.GetRecordStats();
 
-            lvRecordStats.Items.Clear();
-            for (int i = 1; i < stats.Length; i++)
-            {
+            lvRecordStats.ClearItems();
+            for (int i = 1; i < stats.Length; i++) {
                 ListViewItem item = lvRecordStats.Items.Add(LangMan.LS(GKData.RecordTypes[i]));
                 item.SubItems.Add(stats[i].ToString());
             }
@@ -85,8 +89,7 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 fBase.Context.Tree.Header.Language.ParseString(txtLanguage.Text);
 
                 GEDCOMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
@@ -101,9 +104,7 @@ namespace GKUI.Forms
 
                 fBase.NotifyRecord(submitter, RecordAction.raEdit);
                 DialogResult = DialogResult.OK;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("FilePropertiesDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -124,6 +125,7 @@ namespace GKUI.Forms
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             UpdateControls();
         }

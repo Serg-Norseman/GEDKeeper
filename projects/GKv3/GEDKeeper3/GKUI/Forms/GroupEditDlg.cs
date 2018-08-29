@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,10 @@
 
 using System;
 using Eto.Forms;
-using GKCommon;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
@@ -31,8 +32,13 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed partial class GroupEditDlg : EditorDialog, IGroupEditDlg
     {
+        private readonly GroupEditDlgController fController;
+
         private readonly GKSheetList fMembersList;
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
@@ -61,6 +67,9 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+
             fMembersList = new GKSheetList(pageMembers);
             fMembersList.OnModify += ModifyMembersSheet;
 
@@ -75,6 +84,8 @@ namespace GKUI.Forms
             pageMembers.Text = LangMan.LS(LSID.LSID_Members);
             pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
             pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+
+            fController = new GroupEditDlgController(this);
         }
         
         private void ModifyMembersSheet(object sender, ModifyEventArgs eArgs)
@@ -82,7 +93,7 @@ namespace GKUI.Forms
             GEDCOMIndividualRecord member = eArgs.ItemData as GEDCOMIndividualRecord;
             if (eArgs.Action == RecordAction.raJump && member != null) {
                 AcceptChanges();
-                DialogResult = Eto.Forms.DialogResult.Ok;
+                DialogResult = DialogResult.Ok;
                 fBase.SelectRecordByXRef(member.XRef);
                 Close();
             }
@@ -120,6 +131,7 @@ namespace GKUI.Forms
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             fMembersList.ListModel = new GroupMembersSublistModel(fBase, fLocalUndoman);
             fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,10 +20,12 @@
 
 using System;
 using System.Collections.Generic;
-using BSLib;
 using Eto.Forms;
+
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Maps;
@@ -38,6 +40,8 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class LocationEditDlg : EditorDialog, ILocationEditDlg
     {
+        private readonly LocationEditDlgController fController;
+
         private readonly GKMapBrowser fMapBrowser;
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fNotesList;
@@ -57,6 +61,9 @@ namespace GKUI.Forms
         public LocationEditDlg()
         {
             InitializeComponent();
+
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fMapBrowser = new GKMapBrowser();
             fMapBrowser.InitMap();
@@ -84,7 +91,10 @@ namespace GKUI.Forms
             btnSearch.Text = LangMan.LS(LSID.LSID_Search);
             btnSelect.Text = LangMan.LS(LSID.LSID_SelectCoords);
             btnSelectName.Text = LangMan.LS(LSID.LSID_SelectName);
+
             btnShowOnMap.ToolTip = LangMan.LS(LSID.LSID_ShowOnMapTip);
+
+            fController = new LocationEditDlgController(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -223,6 +233,7 @@ namespace GKUI.Forms
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
             fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);

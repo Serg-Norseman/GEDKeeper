@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,10 @@
 
 using System;
 using Eto.Forms;
-using GKCommon;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
@@ -32,8 +33,13 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class FamilyEditDlg : EditorDialog, IFamilyEditDlg
     {
+        private readonly FamilyEditDlgController fController;
+
         private readonly GKSheetList fChildrenList;
         private readonly GKSheetList fEventsList;
         private readonly GKSheetList fNotesList;
@@ -80,6 +86,15 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            btnHusbandAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnHusbandDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnHusbandSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
+            btnWifeAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnWifeDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnWifeSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
+
             txtHusband.TextChanged += EditSpouse_TextChanged;
             txtWife.TextChanged += EditSpouse_TextChanged;
 
@@ -123,6 +138,8 @@ namespace GKUI.Forms
             btnWifeAdd.ToolTip = LangMan.LS(LSID.LSID_WifeAddTip);
             btnWifeDelete.ToolTip = LangMan.LS(LSID.LSID_WifeDeleteTip);
             btnWifeSel.ToolTip = LangMan.LS(LSID.LSID_WifeSelTip);
+
+            fController = new FamilyEditDlgController(this);
         }
 
         private void UpdateControls()
@@ -227,8 +244,7 @@ namespace GKUI.Forms
         // TODO: rework
         public void SetTarget(TargetMode targetType, GEDCOMIndividualRecord target)
         {
-            if (targetType == TargetMode.tmNone || target == null)
-                return;
+            if (targetType == TargetMode.tmNone || target == null) return;
 
             bool result = false;
             if (targetType == TargetMode.tmFamilySpouse) {
@@ -237,8 +253,7 @@ namespace GKUI.Forms
                 result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, target, fFamily);
             }
 
-            if (result)
-                UpdateControls();
+            if (result) UpdateControls();
         }
 
         private void btnHusbandAddClick(object sender, EventArgs e)
@@ -258,8 +273,7 @@ namespace GKUI.Forms
         private void btnHusbandSelClick(object sender, EventArgs e)
         {
             GEDCOMIndividualRecord spouse = fFamily.GetHusband();
-            if (spouse == null)
-                return;
+            if (spouse == null) return;
 
             AcceptChanges();
             fBase.SelectRecordByXRef(spouse.XRef);
@@ -283,8 +297,7 @@ namespace GKUI.Forms
         private void btnWifeSelClick(object sender, EventArgs e)
         {
             GEDCOMIndividualRecord spouse = fFamily.GetWife();
-            if (spouse == null)
-                return;
+            if (spouse == null) return;
 
             AcceptChanges();
             fBase.SelectRecordByXRef(spouse.XRef);
@@ -308,6 +321,7 @@ namespace GKUI.Forms
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             fChildrenList.ListModel = new ChildrenListModel(fBase, fLocalUndoman);
             fEventsList.ListModel = new EventsListModel(fBase, fLocalUndoman, false);

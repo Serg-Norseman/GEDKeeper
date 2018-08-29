@@ -20,7 +20,6 @@
 
 using System;
 using GKCommon.GEDCOM;
-using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
 
@@ -52,7 +51,16 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                return true;
+                string noteText = fView.Note.Text.Trim();
+                if (!string.IsNullOrEmpty(noteText)) {
+                    fNoteRecord.SetNotesArray(fView.Note.Lines);
+
+                    fBase.NotifyRecord(fNoteRecord, RecordAction.raEdit);
+
+                    return true;
+                } else {
+                    return false;
+                }
             } catch (Exception ex) {
                 Logger.LogWrite("NoteEditDlgController.Accept(): " + ex.Message);
                 return false;
@@ -61,6 +69,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            fView.Note.Text = fNoteRecord.Note.Text.Trim();
         }
     }
 }

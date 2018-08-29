@@ -149,6 +149,12 @@ namespace GKUI.Controllers
             }
         }
 
+        public string[] Lines
+        {
+            get { return UIHelper.Convert(Control.Text); }
+            set { /* TODO! */ }
+        }
+
         public string Text
         {
             get { return Control.Text; }
@@ -169,6 +175,12 @@ namespace GKUI.Controllers
                 Control.Enabled = value;
                 //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
             }
+        }
+
+        public string[] Lines
+        {
+            get { return UIHelper.Convert(Control.Text); }
+            set { /* TODO! */ }
         }
 
         public string Text

@@ -50,35 +50,29 @@ namespace GKUI.Forms
             btnHusbandAdd.Enabled = false;
             btnHusbandAdd.Size = new Size(26, 26);
             btnHusbandAdd.Click += btnHusbandAddClick;
-            btnHusbandAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
 
             btnHusbandDelete = new Button();
             btnHusbandDelete.Enabled = false;
             btnHusbandDelete.Size = new Size(26, 26);
             btnHusbandDelete.Click += btnHusbandDeleteClick;
-            btnHusbandDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
 
             btnHusbandSel = new Button();
             btnHusbandSel.Size = new Size(26, 26);
             btnHusbandSel.Click += btnHusbandSelClick;
-            btnHusbandSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
 
             btnWifeSel = new Button();
             btnWifeSel.Size = new Size(26, 26);
             btnWifeSel.Click += btnWifeSelClick;
-            btnWifeSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
 
             btnWifeDelete = new Button();
             btnWifeDelete.Enabled = false;
             btnWifeDelete.Size = new Size(26, 26);
             btnWifeDelete.Click += btnWifeDeleteClick;
-            btnWifeDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
 
             btnWifeAdd = new Button();
             btnWifeAdd.Enabled = false;
             btnWifeAdd.Size = new Size(26, 26);
             btnWifeAdd.Click += btnWifeAddClick;
-            btnWifeAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
 
             lblStatus = new Label();
             lblStatus.Text = "lblStatus";
@@ -147,14 +141,12 @@ namespace GKUI.Forms
             btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
             btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
             btnCancel.Click += btnCancel_Click;
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             Content = new DefTableLayout {
                 Rows = {

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,18 +21,22 @@
 using System;
 using Eto.Forms;
 
-using GKCommon;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.UIContracts;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class CommonFilterDlg : ModalDialog, ICommonDialog
+    public partial class CommonFilterDlg : ModalDialog, ICommonDialog, ICommonFilterDlg
     {
+        private readonly CommonFilterDlgController fController;
+
         private readonly IBaseWindow fBase;
         private readonly string[] fFields;
         private readonly IListManager fListMan;
@@ -51,17 +55,18 @@ namespace GKUI.Forms
         public CommonFilterDlg()
         {
             InitializeComponent();
+
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
         }
 
-        public CommonFilterDlg(IBaseWindow baseWin, IListManager listMan)
+        public CommonFilterDlg(IBaseWindow baseWin, IListManager listMan) : this()
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
 
             if (listMan == null)
                 throw new ArgumentNullException("listMan");
-
-            InitializeComponent();
 
             fBase = baseWin;
             fListMan = listMan;
@@ -70,8 +75,7 @@ namespace GKUI.Forms
             fFields = new string[listColumns.Count + 1]; // +empty item
             fFields[0] = "";
 
-            for (int idx = 0; idx < listColumns.Count; idx++)
-            {
+            for (int idx = 0; idx < listColumns.Count; idx++) {
                 var cs = listColumns[idx];
                 fFields[idx + 1] = fListMan.GetColumnName(cs.Id);
             }
@@ -80,6 +84,8 @@ namespace GKUI.Forms
 
             InitGrid();
             UpdateGrid();
+
+            fController = new CommonFilterDlgController(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -90,16 +96,20 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
+        public virtual void InitDialog(IBaseWindow baseWin)
+        {
+            //base.InitDialog(baseWin);
+            fController.Init(baseWin);
+        }
+
         #region Private functions
 
         private static ConditionKind GetCondByName(string condName)
         {
             ConditionKind res = ConditionKind.ck_NotEq;
 
-            for (ConditionKind pl = ConditionKind.ck_NotEq; pl <= ConditionKind.ck_NotContains; pl++)
-            {
-                if (GKData.CondSigns[(int)pl] == condName)
-                {
+            for (ConditionKind pl = ConditionKind.ck_NotEq; pl <= ConditionKind.ck_NotContains; pl++) {
+                if (GKData.CondSigns[(int)pl] == condName) {
                     res = pl;
                     break;
                 }
@@ -158,8 +168,7 @@ namespace GKUI.Forms
 
         private void dataGridView1_Scroll(object sender, ScrollEventArgs e)
         {
-            if (fMaskedTextBox.Visible)
-            {
+            if (fMaskedTextBox.Visible) {
                 //DataGridViewCell cell = dataGridView1.CurrentCell;
                 //Rectangle rect = dataGridView1.GetCellDisplayRectangle(cell.ColumnIndex, cell.RowIndex, true);
                 //fMaskedTextBox.Location = rect.Location;
@@ -201,8 +210,7 @@ namespace GKUI.Forms
             /*dataGridView1.Rows.Clear();
 
             int num = fListMan.Filter.Conditions.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 FilterCondition fcond = fListMan.Filter.Conditions[i];
 
                 int r = dataGridView1.Rows.Add();
@@ -223,13 +231,10 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 AcceptChanges();
                 DialogResult = DialogResult.Ok;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("CommonFilterDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -247,8 +252,7 @@ namespace GKUI.Forms
             /*fListMan.Filter.Clear();
 
             int num = dataGridView1.Rows.Count;
-            for (int r = 0; r < num; r++)
-            {
+            for (int r = 0; r < num; r++) {
                 DataGridViewRow row = dataGridView1.Rows[r];
 
                 // ".Value" can be null, so that we should to use direct cast
@@ -283,6 +287,15 @@ namespace GKUI.Forms
         {
             fListMan.Filter.Clear();
             UpdateGrid();
+        }
+
+        public bool ShowModalX(object owner)
+        {
+            return (ShowModal() == DialogResult.Ok);
+        }
+
+        public void UpdateView()
+        {
         }
     }
 }

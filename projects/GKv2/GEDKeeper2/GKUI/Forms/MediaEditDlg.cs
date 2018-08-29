@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
@@ -38,6 +39,8 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class MediaEditDlg : EditorDialog, IMediaEditDlg
     {
+        private readonly MediaEditDlgController fController;
+
         private bool fIsNew;
         private GEDCOMMultimediaRecord fMediaRec;
 
@@ -54,13 +57,11 @@ namespace GKUI.Forms
         {
             GEDCOMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
 
-            if (fIsNew)
-            {
+            if (fIsNew) {
                 GKComboItem item = (GKComboItem)cmbStoreType.SelectedItem;
                 MediaStoreType gst = (MediaStoreType)item.Tag;
 
-                if ((gst == MediaStoreType.mstArchive || gst == MediaStoreType.mstStorage) && !fBase.Context.CheckBasePath())
-                {
+                if ((gst == MediaStoreType.mstArchive || gst == MediaStoreType.mstStorage) && !fBase.Context.CheckBasePath()) {
                     return false;
                 }
 
@@ -110,28 +111,22 @@ namespace GKUI.Forms
         private void SetMediaRec(GEDCOMMultimediaRecord value)
         {
             fMediaRec = value;
-            try
-            {
+            try {
                 fNotesList.ListModel.DataOwner = fMediaRec;
                 fSourcesList.ListModel.DataOwner = fMediaRec;
 
                 ControlsRefresh();
                 ActiveControl = txtName;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("MediaEditDlg.SetMediaRec(): " + ex.Message);
             }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 DialogResult = AcceptChanges() ? DialogResult.OK : DialogResult.None;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("MediaEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -139,12 +134,9 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 RollbackChanges();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("MediaEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
@@ -210,8 +202,7 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            for (GEDCOMMediaType mt = GEDCOMMediaType.mtUnknown; mt <= GEDCOMMediaType.mtLast; mt++)
-            {
+            for (GEDCOMMediaType mt = GEDCOMMediaType.mtUnknown; mt <= GEDCOMMediaType.mtLast; mt++) {
                 cmbMediaType.Items.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
             }
 
@@ -230,11 +221,14 @@ namespace GKUI.Forms
             lblStoreType.Text = LangMan.LS(LSID.LSID_StoreType);
             lblFile.Text = LangMan.LS(LSID.LSID_File);
             btnView.Text = LangMan.LS(LSID.LSID_View) + @"...";
+
+            fController = new MediaEditDlgController(this);
         }
 
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
             fSourcesList.ListModel = new SourceCitationsListModel(fBase, fLocalUndoman);

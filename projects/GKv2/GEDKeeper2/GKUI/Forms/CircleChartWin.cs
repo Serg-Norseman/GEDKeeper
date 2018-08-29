@@ -25,17 +25,20 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKCore.UIContracts;
 using GKUI.Components;
-using GKUI.Forms;
 
 namespace GKUI.Forms
 {
-    public partial class CircleChartWin : PrintableForm, IChartWindow
+    public partial class CircleChartWin : PrintableForm, IChartWindow, ICircleChartWin
     {
-        private readonly CircleChart fCircleChart;
+        private readonly CircleChartWinController fController;
+
         private readonly IBaseWindow fBaseWin;
+        private readonly CircleChart fCircleChart;
 
         public IBaseWindow Base
         {
@@ -70,6 +73,16 @@ namespace GKUI.Forms
             Controls.SetChildIndex(fCircleChart, 0);
 
             SetLang();
+
+            fController = new CircleChartWinController(this);
+            fController.Init(fBaseWin);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            fCircleChart.Select();
+            GenChart();
         }
 
         protected override IPrintable GetPrintable()
@@ -101,13 +114,6 @@ namespace GKUI.Forms
             }
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            fCircleChart.Select();
-            GenChart();
-        }
-
         // TODO: update localization and GKv3
         private void tbImageSave_Click(object sender, EventArgs e)
         {
@@ -126,6 +132,17 @@ namespace GKUI.Forms
         private void tbDocPrint_Click(object sender, EventArgs e)
         {
             DoPrint();
+        }
+
+        private void tbOptions_Click(object sender, EventArgs e)
+        {
+            using (OptionsDlg dlgOptions = new OptionsDlg(AppHost.Instance))
+            {
+                dlgOptions.SetPage(OptionsPage.opAncestorsCircle);
+                if (dlgOptions.ShowDialog() == DialogResult.OK) {
+                    AppHost.Instance.ApplyOptions();
+                }
+            }
         }
 
         #region ILocalization implementation

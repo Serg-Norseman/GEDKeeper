@@ -70,6 +70,7 @@ namespace GKCore.Controllers
     public interface ITextBoxHandler : IControlHandler
     {
         bool Enabled { get; set; }
+        string[] Lines { get; set; }
         string Text { get; set; }
     }
 

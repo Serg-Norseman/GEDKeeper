@@ -15,7 +15,7 @@
 		private System.Windows.Forms.TabControl PageControl1;
 		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
-		private System.Windows.Forms.ListView lvRecordStats;
+		private GKUI.Components.GKListView lvRecordStats;
 
 		private void InitializeComponent()
 		{
@@ -33,7 +33,7 @@
 		    this.txtTel = new System.Windows.Forms.TextBox();
 		    this.txtAddress = new System.Windows.Forms.TextBox();
 		    this.pageOther = new System.Windows.Forms.TabPage();
-		    this.lvRecordStats = new System.Windows.Forms.ListView();
+		    this.lvRecordStats = new GKUI.Components.GKListView();
 		    this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
 		    this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
 		    this.PageControl1.SuspendLayout();

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,8 +25,10 @@ using System.Windows.Forms;
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Maps;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -34,8 +36,10 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class MapsViewerWin : Form, IWindow
+    public sealed partial class MapsViewerWin : Form, IWindow, IMapsViewerWin
     {
+        private readonly MapsViewerWinController fController;
+
         private readonly TreeNode fBaseRoot;
         private readonly GKMapBrowser fMapBrowser;
         private readonly ExtList<GeoPoint> fMapPoints;
@@ -226,6 +230,9 @@ namespace GKUI.Forms
             radTotal_Click(null, null);
 
             SetLang();
+
+            fController = new MapsViewerWinController(this);
+            fController.Init(baseWin);
         }
 
         public void SetLang()

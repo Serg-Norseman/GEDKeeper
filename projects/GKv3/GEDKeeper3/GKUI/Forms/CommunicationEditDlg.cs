@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,10 @@
 
 using System;
 using Eto.Forms;
-using GKCommon;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
@@ -31,8 +32,13 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed partial class CommunicationEditDlg : EditorDialog, ICommunicationEditDlg
     {
+        private readonly CommunicationEditDlgController fController;
+
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
 
@@ -118,6 +124,10 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            btnPersonAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+
             fTempInd = null;
 
             for (GKCommunicationType ct = GKCommunicationType.ctCall; ct <= GKCommunicationType.ctLast; ct++) {
@@ -137,6 +147,7 @@ namespace GKUI.Forms
             lblCorresponder.Text = LangMan.LS(LSID.LSID_Corresponder);
             lblType.Text = LangMan.LS(LSID.LSID_Type);
             lblDate.Text = LangMan.LS(LSID.LSID_Date);
+
             btnPersonAdd.ToolTip = LangMan.LS(LSID.LSID_PersonAttachTip);
 
             txtDir.Items.Clear();
@@ -144,11 +155,14 @@ namespace GKUI.Forms
                 LangMan.LS(LSID.LSID_CD_1),
                 LangMan.LS(LSID.LSID_CD_2)
             }));
+
+            fController = new CommunicationEditDlgController(this);
         }
 
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
             fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);

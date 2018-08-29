@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,11 @@
 
 using System;
 using Eto.Forms;
-using GKCommon;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
+using GKCore.Interfaces;
 using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
@@ -34,48 +36,43 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class NoteEditDlg : EditorDialog, INoteEditDlg
     {
-        private GEDCOMNoteRecord fNoteRecord;
+        private readonly NoteEditDlgController fController;
 
         public GEDCOMNoteRecord NoteRecord
         {
-            get { return fNoteRecord; }
-            set { SetNoteRecord(value); }
+            get { return fController.NoteRecord; }
+            set { fController.NoteRecord = value; }
         }
 
-        private void SetNoteRecord(GEDCOMNoteRecord value)
+        ITextBoxHandler INoteEditDlg.Note
         {
-            fNoteRecord = value;
-            txtNote.Text = fNoteRecord.Note.Text.Trim();
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtNote); }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try {
-                if (txtNote.Text.Length != 0) {
-                    fNoteRecord.SetNotesArray(UIHelper.Convert(txtNote.Text));
-
-                    fBase.NotifyRecord(fNoteRecord, RecordAction.raEdit);
-
-                    DialogResult = DialogResult.Ok;
-                }
-                /*else
-                {
-                    DialogResult = DialogResult.Cancel;
-                }*/
-            } catch (Exception ex) {
-                Logger.LogWrite("NoteEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
         }
 
         public NoteEditDlg()
         {
             InitializeComponent();
 
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             Title = LangMan.LS(LSID.LSID_Note);
+
+            fController = new NoteEditDlgController(this);
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+            fController.Init(baseWin);
         }
     }
 }

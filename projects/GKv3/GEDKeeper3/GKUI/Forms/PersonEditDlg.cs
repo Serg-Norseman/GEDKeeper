@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define SEX_SYMBOLS
+
 using System;
 using Eto.Drawing;
 using Eto.Forms;
@@ -25,6 +27,7 @@ using Eto.Forms;
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Operations;
@@ -40,6 +43,8 @@ namespace GKUI.Forms
     /// </summary>
     public partial class PersonEditDlg : EditorDialog, IPersonEditDlg
     {
+        private readonly PersonEditDlgController fController;
+
         private readonly GKSheetList fEventsList;
         private readonly GKSheetList fSpousesList;
         private readonly GKSheetList fAssociationsList;
@@ -623,6 +628,8 @@ namespace GKUI.Forms
             txtName.TextChanged += Names_TextChanged;
             cmbPatronymic.TextChanged += Names_TextChanged;
 
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
             btnPortraitAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
             btnPortraitDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
             btnParentsAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
@@ -685,6 +692,8 @@ namespace GKUI.Forms
             btnParentsDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
 
             SetLang();
+
+            fController = new PersonEditDlgController(this);
         }
 
         public void SetLang()
@@ -732,6 +741,7 @@ namespace GKUI.Forms
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             fEventsList.ListModel = new EventsListModel(fBase, fLocalUndoman, true);
             fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);

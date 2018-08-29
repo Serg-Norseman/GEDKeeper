@@ -25,6 +25,7 @@ using System.Windows.Forms;
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Maps;
@@ -39,6 +40,8 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class LocationEditDlg : EditorDialog, ILocationEditDlg
     {
+        private readonly LocationEditDlgController fController;
+
         private readonly GKMapBrowser fMapBrowser;
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fNotesList;
@@ -64,8 +67,8 @@ namespace GKUI.Forms
 
             fMapBrowser = new GKMapBrowser();
             fMapBrowser.InitMap();
-            fMapBrowser.Dock = DockStyle.Fill;
             fMapBrowser.ShowLines = false;
+            fMapBrowser.Dock = DockStyle.Fill;
             panMap.Controls.Add(fMapBrowser);
 
             fNotesList = new GKSheetList(pageNotes);
@@ -91,6 +94,8 @@ namespace GKUI.Forms
             btnSelectName.Text = LangMan.LS(LSID.LSID_SelectName);
 
             toolTip1.SetToolTip(btnShowOnMap, LangMan.LS(LSID.LSID_ShowOnMapTip));
+
+            fController = new LocationEditDlgController(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -161,7 +166,7 @@ namespace GKUI.Forms
                 IList<GeoPoint> searchPoints = new List<GeoPoint>();
 
                 AppHost.Instance.RequestGeoCoords(location, searchPoints);
-                ListGeoCoords.Items.Clear();
+                ListGeoCoords.ClearItems();
                 fMapBrowser.ClearPoints();
 
                 int num = searchPoints.Count;
@@ -180,7 +185,7 @@ namespace GKUI.Forms
                     }
                 }
 
-                //this.fMapBrowser.ZoomToBounds();
+                //fMapBrowser.ZoomToBounds();
             } finally {
                 fMapBrowser.EndUpdate();
                 ListGeoCoords.EndUpdate();
@@ -238,6 +243,7 @@ namespace GKUI.Forms
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
             fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);

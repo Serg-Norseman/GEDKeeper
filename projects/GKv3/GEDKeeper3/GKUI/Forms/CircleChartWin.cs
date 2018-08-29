@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,14 +24,18 @@ using Eto.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class CircleChartWin : PrintableForm, IChartWindow
+    public partial class CircleChartWin : PrintableForm, IChartWindow, ICircleChartWin
     {
+        private readonly CircleChartWinController fController;
+
         private readonly IBaseWindow fBaseWin;
         private readonly CircleChart fCircleChart;
 
@@ -57,6 +61,9 @@ namespace GKUI.Forms
             Content = fCircleChart;
 
             SetLang();
+
+            fController = new CircleChartWinController(this);
+            fController.Init(fBaseWin);
         }
 
         protected override void Dispose(bool disposing)

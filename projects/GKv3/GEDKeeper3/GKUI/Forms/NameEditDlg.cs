@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,11 +20,13 @@
 
 using System;
 using Eto.Forms;
-using GKCommon;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Types;
 using GKCore.UIContracts;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -33,6 +35,8 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class NameEditDlg : ModalDialog, INameEditDlg
     {
+        private readonly NameEditDlgController fController;
+
         private NameEntry fNameEntry;
 
         public NameEntry IName
@@ -44,15 +48,12 @@ namespace GKUI.Forms
         private void SetIName(NameEntry value)
         {
             fNameEntry = value;
-            if (fNameEntry == null)
-            {
+            if (fNameEntry == null) {
                 txtName.Text = "";
                 cmbSex.SelectedIndex = 0;
                 txtFPatr.Text = "";
                 txtMPatr.Text = "";
-            }
-            else
-            {
+            } else {
                 txtName.Text = fNameEntry.Name;
                 cmbSex.SelectedIndex = (sbyte)fNameEntry.Sex;
                 txtFPatr.Text = fNameEntry.F_Patronymic;
@@ -62,16 +63,13 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 fNameEntry.Name = txtName.Text;
                 fNameEntry.Sex = (GEDCOMSex)cmbSex.SelectedIndex;
                 fNameEntry.F_Patronymic = txtFPatr.Text;
                 fNameEntry.M_Patronymic = txtMPatr.Text;
                 DialogResult = DialogResult.Ok;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("NameEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -88,8 +86,10 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svLast; sx++)
-            {
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+
+            for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svLast; sx++) {
                 cmbSex.Items.Add(GKUtils.SexStr(sx));
             }
 
@@ -102,6 +102,8 @@ namespace GKUI.Forms
             grpPatronymics.Text = LangMan.LS(LSID.LSID_Patronymic);
             lblFemale.Text = LangMan.LS(LSID.LSID_PatFemale);
             lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
+
+            fController = new NameEditDlgController(this);
         }
     }
 }

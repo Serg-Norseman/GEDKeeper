@@ -191,6 +191,8 @@ namespace GKCore.UIContracts
     public interface INoteEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMNoteRecord NoteRecord { get; set; }
+
+        ITextBoxHandler Note { get; }
     }
 
     public interface INoteEditDlgEx : ICommonDialog, IBaseEditor
@@ -289,7 +291,7 @@ namespace GKCore.UIContracts
     {
     }
 
-    public interface IMapsViewerWin : ICommonDialog, IView
+    public interface IMapsViewerWin : IView
     {
     }
 

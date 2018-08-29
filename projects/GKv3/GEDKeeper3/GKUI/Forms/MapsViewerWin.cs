@@ -20,12 +20,15 @@
 
 using System;
 using System.Collections.Generic;
-using BSLib;
 using Eto.Forms;
+
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Maps;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -33,8 +36,10 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class MapsViewerWin : Form, IWindow
+    public sealed partial class MapsViewerWin : Form, IWindow, IMapsViewerWin
     {
+        private readonly MapsViewerWinController fController;
+
         private readonly GKTreeNode fBaseRoot;
         private readonly GKMapBrowser fMapBrowser;
         private readonly ExtList<GeoPoint> fMapPoints;
@@ -51,8 +56,7 @@ namespace GKUI.Forms
 
         private void PlacesLoad()
         {
-            try
-            {
+            try {
                 PlacesCache.Instance.Load();
 
                 IProgressController progress = AppHost.Progress;
@@ -63,8 +67,7 @@ namespace GKUI.Forms
                 //tvPlaces.BeginUpdate();
                 tvPlaces.DataStore = null;
                 progress.ProgressInit(LangMan.LS(LSID.LSID_LoadingLocations), fTree.RecordsCount);
-                try
-                {
+                try {
                     fPlaces.Clear();
                     cmbPersons.Items.Clear();
                     //cmbPersons.Sorted = false;
@@ -80,8 +83,7 @@ namespace GKUI.Forms
                             int pCnt = 0;
 
                             int num2 = ind.Events.Count;
-                            for (int j = 0; j < num2; j++)
-                            {
+                            for (int j = 0; j < num2; j++) {
                                 GEDCOMCustomEvent ev = ind.Events[j];
                                 if (ev.Place.StringValue != "") {
                                     AddPlace(ev.Place, ev);
@@ -101,9 +103,7 @@ namespace GKUI.Forms
                     cmbPersons.SortItems();
 
                     btnSelectPlaces.Enabled = true;
-                }
-                finally
-                {
+                } finally {
                     progress.ProgressDone();
                     //tvPlaces.EndUpdate();
                     //cmbPersons.EndUpdate();
@@ -111,9 +111,7 @@ namespace GKUI.Forms
 
                     PlacesCache.Instance.Save();
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("MapsViewerWin.PlacesLoad(): " + ex.Message);
             }
         }
@@ -138,8 +136,7 @@ namespace GKUI.Forms
             string filter1 = "Image files|*.jpg";
 
             string fileName = AppHost.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
-            if (!string.IsNullOrEmpty(fileName))
-            {
+            if (!string.IsNullOrEmpty(fileName)) {
                 fMapBrowser.SaveSnapshot(fileName);
             }
         }
@@ -165,25 +162,21 @@ namespace GKUI.Forms
             fMapPoints.Clear();
 
             int num = fPlaces.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 MapPlace place = fPlaces[i];
                 if (place.Points.Count < 1) continue;
 
                 int num2 = place.PlaceRefs.Count;
-                for (int j = 0; j < num2; j++)
-                {
+                for (int j = 0; j < num2; j++) {
                     GEDCOMCustomEvent evt = place.PlaceRefs[j].Event;
 
-                    if ((ind != null && (evt.Parent == ind)) || (condBirth && evt.Name == "BIRT") || (condDeath && evt.Name == "DEAT") || (condResidence && evt.Name == "RESI"))
-                    {
+                    if ((ind != null && (evt.Parent == ind)) || (condBirth && evt.Name == "BIRT") || (condDeath && evt.Name == "DEAT") || (condResidence && evt.Name == "RESI")) {
                         PlacesLoader.AddPoint(fMapPoints, place.Points[0], place.PlaceRefs[j]);
                     }
                 }
             }
 
-            if (ind != null)
-            {
+            if (ind != null) {
                 // sort points by date
                 fMapPoints.QuickSort(MapPointsCompare);
             }
@@ -211,7 +204,6 @@ namespace GKUI.Forms
         {
             AppHost.Instance.ShowWindow(this);
             PlacesLoad();
-            //Activate();
             Focus();
         }
 
@@ -232,6 +224,9 @@ namespace GKUI.Forms
             radTotal.Checked = true;
 
             SetLang();
+
+            fController = new MapsViewerWinController(this);
+            fController.Init(baseWin);
         }
 
         public void SetLang()
@@ -251,8 +246,7 @@ namespace GKUI.Forms
 
         protected override void Dispose(bool Disposing)
         {
-            if (Disposing)
-            {
+            if (Disposing) {
                 fPlaces.Dispose();
                 fMapPoints.Dispose();
             }
@@ -278,7 +272,6 @@ namespace GKUI.Forms
             try
             {
                 GEDCOMLocationRecord locRec = place.Location.Value as GEDCOMLocationRecord;
-
                 string placeName = (locRec != null) ? locRec.LocationName : place.StringValue;
 
                 var node = FindTreeNode(placeName);

@@ -15,7 +15,7 @@
 		private System.Windows.Forms.Label lblLongitude;
 		private System.Windows.Forms.TextBox txtLongitude;
 		private System.Windows.Forms.GroupBox grpSearch;
-		private System.Windows.Forms.ListView ListGeoCoords;
+		private GKUI.Components.GKListView ListGeoCoords;
 		private System.Windows.Forms.Button btnSearch;
 		private System.Windows.Forms.Button btnSelect;
 		private System.Windows.Forms.Button btnSelectName;
@@ -39,7 +39,7 @@
 		    this.txtLatitude = new System.Windows.Forms.TextBox();
 		    this.txtLongitude = new System.Windows.Forms.TextBox();
 		    this.grpSearch = new System.Windows.Forms.GroupBox();
-		    this.ListGeoCoords = new System.Windows.Forms.ListView();
+		    this.ListGeoCoords = new GKUI.Components.GKListView();
 		    this.ColumnHeader1 = new System.Windows.Forms.ColumnHeader();
 		    this.ColumnHeader2 = new System.Windows.Forms.ColumnHeader();
 		    this.ColumnHeader3 = new System.Windows.Forms.ColumnHeader();

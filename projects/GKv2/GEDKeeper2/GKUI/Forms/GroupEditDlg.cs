@@ -23,6 +23,7 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
@@ -36,6 +37,8 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class GroupEditDlg : EditorDialog, IGroupEditDlg
     {
+        private readonly GroupEditDlgController fController;
+
         private readonly GKSheetList fMembersList;
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
@@ -82,6 +85,8 @@ namespace GKUI.Forms
             pageMembers.Text = LangMan.LS(LSID.LSID_Members);
             pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
             pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+
+            fController = new GroupEditDlgController(this);
         }
         
         private void ModifyMembersSheet(object sender, ModifyEventArgs eArgs)
@@ -105,13 +110,10 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 AcceptChanges();
                 DialogResult = DialogResult.OK;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GroupEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -119,12 +121,9 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 RollbackChanges();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GroupEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
@@ -132,6 +131,7 @@ namespace GKUI.Forms
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             fMembersList.ListModel = new GroupMembersSublistModel(fBase, fLocalUndoman);
             fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
