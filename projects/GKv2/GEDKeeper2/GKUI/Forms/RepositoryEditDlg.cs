@@ -23,6 +23,7 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
@@ -36,55 +37,49 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class RepositoryEditDlg : EditorDialog, IRepositoryEditDlg
     {
+        private readonly RepositoryEditDlgController fController;
+
         private readonly GKSheetList fNotesList;
 
-        private GEDCOMRepositoryRecord fRepository;
-        
         public GEDCOMRepositoryRecord Repository
         {
-            get { return fRepository; }
-            set { SetRepository(value); }
+            get { return fController.Repository; }
+            set { fController.Repository = value; }
         }
 
-        private void SetRepository(GEDCOMRepositoryRecord value)
+        #region View Interface
+
+        ISheetList IRepositoryEditDlg.NotesList
         {
-            fRepository = value;
-            txtName.Text = fRepository.RepositoryName;
-
-            fNotesList.ListModel.DataOwner = fRepository;
+            get { return fNotesList; }
         }
+
+        ITextBoxHandler IRepositoryEditDlg.Name
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+        }
+
+        #endregion
 
         private void btnAddress_Click(object sender, EventArgs e)
         {
-            BaseController.ModifyAddress(fBase, fRepository.Address);
+            fController.ModifyAddress();
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
-                fRepository.RepositoryName = txtName.Text;
+            bool res = fController.Accept();
+            if (res) {
                 CommitChanges();
-
-                fBase.NotifyRecord(fRepository, RecordAction.raEdit);
-
-                DialogResult = DialogResult.OK;
             }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("RepositoryEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = res ? DialogResult.OK : DialogResult.None;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 RollbackChanges();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("RepositoryEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
@@ -105,11 +100,15 @@ namespace GKUI.Forms
             lblName.Text = LangMan.LS(LSID.LSID_Title);
             pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
             btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
+
+            txtName.Select();
+            fController = new RepositoryEditDlgController(this);
         }
 
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
         }

@@ -43,7 +43,6 @@
         private System.Windows.Forms.ToolStripSeparator N9;
         private System.ComponentModel.IContainer components;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.ToolStripSeparator tbs2;
         private System.Windows.Forms.ToolStripSeparator tbs1;
         private System.Windows.Forms.ToolStripMenuItem miFatherAdd;
@@ -108,7 +107,6 @@
             this.N3 = new System.Windows.Forms.ToolStripSeparator();
             this.miRebuildTree = new System.Windows.Forms.ToolStripMenuItem();
             this.miRebuildKinships = new System.Windows.Forms.ToolStripMenuItem();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ToolBar1.SuspendLayout();

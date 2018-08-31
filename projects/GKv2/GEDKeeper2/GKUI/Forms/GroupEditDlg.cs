@@ -43,30 +43,40 @@ namespace GKUI.Forms
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
 
-        private GEDCOMGroupRecord fGroup;
-
         public GEDCOMGroupRecord Group
         {
-            get {
-                return fGroup;
-            }
-            set {
-                if (fGroup != value) {
-                    fGroup = value;
-
-                    edName.Text = (fGroup == null) ? "" : fGroup.GroupName;
-
-                    fMembersList.ListModel.DataOwner = fGroup;
-                    fNotesList.ListModel.DataOwner = fGroup;
-                    fMediaList.ListModel.DataOwner = fGroup;
-                }
-            }
+            get { return fController.Group; }
+            set { fController.Group = value; }
         }
+
+        #region View Interface
+
+        ISheetList IGroupEditDlg.NotesList
+        {
+            get { return fNotesList; }
+        }
+
+        ISheetList IGroupEditDlg.MediaList
+        {
+            get { return fMediaList; }
+        }
+
+        ISheetList IGroupEditDlg.MembersList
+        {
+            get { return fMembersList; }
+        }
+
+        ITextBoxHandler IGroupEditDlg.Name
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(edName); }
+        }
+
+        #endregion
 
         public GroupEditDlg()
         {
             InitializeComponent();
-            
+
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
@@ -86,9 +96,10 @@ namespace GKUI.Forms
             pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
             pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
 
+            edName.Select();
             fController = new GroupEditDlgController(this);
         }
-        
+
         private void ModifyMembersSheet(object sender, ModifyEventArgs eArgs)
         {
             GEDCOMIndividualRecord member = eArgs.ItemData as GEDCOMIndividualRecord;
@@ -100,23 +111,19 @@ namespace GKUI.Forms
             }
         }
 
-        private void AcceptChanges()
+        private bool AcceptChanges()
         {
-            CommitChanges();
-
-            fGroup.GroupName = edName.Text;
-            fBase.NotifyRecord(fGroup, RecordAction.raEdit);
+            bool res = fController.Accept();
+            if (res) {
+                CommitChanges();
+            }
+            return res;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try {
-                AcceptChanges();
-                DialogResult = DialogResult.OK;
-            } catch (Exception ex) {
-                Logger.LogWrite("GroupEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            bool res = AcceptChanges();
+            DialogResult = res ? DialogResult.OK : DialogResult.None;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

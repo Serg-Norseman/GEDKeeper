@@ -20,7 +20,6 @@ namespace GKUI.Forms
             btnClose.Size = new Size(130, 26);
             btnClose.Text = "btnClose";
             btnClose.Click += CancelClickHandler;
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
             lblProduct = new Label();
             lblProduct.Font = UIHelper.GetDefaultFont(20.25F, FontStyle.Bold);

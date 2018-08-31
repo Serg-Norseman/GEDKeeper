@@ -165,6 +165,10 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            fView.NotesList.ListModel.DataOwner = fEvent;
+            fView.MediaList.ListModel.DataOwner = fEvent;
+            fView.SourcesList.ListModel.DataOwner = fEvent;
+
             if (fEvent is GEDCOMFamilyEvent) {
                 SetEventTypes(GKData.FamilyEvents);
                 int idx = GKUtils.GetFamilyEventIndex(fEvent.Name);

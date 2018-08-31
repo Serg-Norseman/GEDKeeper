@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,10 @@
 
 using System;
 using Eto.Forms;
-using GKCommon;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
@@ -31,44 +32,47 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed partial class RepositoryEditDlg : EditorDialog, IRepositoryEditDlg
     {
+        private readonly RepositoryEditDlgController fController;
+
         private readonly GKSheetList fNotesList;
 
-        private GEDCOMRepositoryRecord fRepository;
-        
         public GEDCOMRepositoryRecord Repository
         {
-            get { return fRepository; }
-            set { SetRepository(value); }
+            get { return fController.Repository; }
+            set { fController.Repository = value; }
         }
 
-        private void SetRepository(GEDCOMRepositoryRecord value)
+        #region View Interface
+
+        ISheetList IRepositoryEditDlg.NotesList
         {
-            fRepository = value;
-            txtName.Text = fRepository.RepositoryName;
-
-            fNotesList.ListModel.DataOwner = fRepository;
+            get { return fNotesList; }
         }
+
+        ITextBoxHandler IRepositoryEditDlg.Name
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+        }
+
+        #endregion
 
         private void btnAddress_Click(object sender, EventArgs e)
         {
-            BaseController.ModifyAddress(fBase, fRepository.Address);
+            fController.ModifyAddress();
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try {
-                fRepository.RepositoryName = txtName.Text;
+            bool res = fController.Accept();
+            if (res) {
                 CommitChanges();
-
-                fBase.NotifyRecord(fRepository, RecordAction.raEdit);
-
-                DialogResult = DialogResult.Ok;
-            } catch (Exception ex) {
-                Logger.LogWrite("RepositoryEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
             }
+            DialogResult = res ? DialogResult.Ok : DialogResult.None;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -85,6 +89,9 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+
             fNotesList = new GKSheetList(pageNotes);
 
             // SetLang()
@@ -94,11 +101,15 @@ namespace GKUI.Forms
             lblName.Text = LangMan.LS(LSID.LSID_Title);
             pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
             btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
+
+            txtName.Focus();
+            fController = new RepositoryEditDlgController(this);
         }
 
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
             fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
         }

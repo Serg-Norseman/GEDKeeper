@@ -113,11 +113,16 @@ namespace GKUI.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (components != null) components.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            fTreeBox.Select();
         }
 
         protected override IPrintable GetPrintable()
@@ -213,12 +218,6 @@ namespace GKUI.Forms
                     }
                     break;
             }
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            fTreeBox.Select();
         }
 
         // TODO: update localization and GKv3
@@ -488,11 +487,13 @@ namespace GKUI.Forms
 
         private void miFillColor_Click(object sender, EventArgs e)
         {
-            if (colorDialog1.ShowDialog() != DialogResult.OK) return;
+            using (var colorDialog1 = new ColorDialog()) {
+                if (colorDialog1.ShowDialog() != DialogResult.OK) return;
 
-            fTreeBox.BackgroundImage = null;
-            fTreeBox.BackColor = colorDialog1.Color;
-            fTreeBox.Invalidate();
+                fTreeBox.BackgroundImage = null;
+                fTreeBox.BackColor = colorDialog1.Color;
+                fTreeBox.Invalidate();
+            }
         }
 
         private void miFillImage_Click(object sender, EventArgs e)
@@ -517,16 +518,13 @@ namespace GKUI.Forms
 
         private void miRebuildTree_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 TreeChartPerson p = fTreeBox.Selected;
                 if (p == null || p.Rec == null) return;
 
                 fPerson = p.Rec;
                 GenChart();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeChartWin.miRebuildTree_Click(): " + ex.Message);
             }
         }
@@ -571,7 +569,7 @@ namespace GKUI.Forms
         #endregion
 
         #region ILocalization implementation
-        
+
         public void SetLang()
         {
             tbGens.Text = LangMan.LS(LSID.LSID_Generations);
@@ -602,10 +600,12 @@ namespace GKUI.Forms
             tbImageSave.ToolTipText = LangMan.LS(LSID.LSID_ImageSaveTip);
             tbDocPrint.ToolTipText = LangMan.LS(LSID.LSID_DocPrint);
             tbDocPreview.ToolTipText = LangMan.LS(LSID.LSID_DocPreview);
+            tbPrev.ToolTipText = LangMan.LS(LSID.LSID_PrevRec);
+            tbNext.ToolTipText = LangMan.LS(LSID.LSID_NextRec);
         }
 
         #endregion
-        
+
         #region IWorkWindow implementation
 
         public void UpdateControls()
@@ -688,8 +688,7 @@ namespace GKUI.Forms
             using (TreeFilterDlg dlgFilter = new TreeFilterDlg(fBase)) {
                 dlgFilter.Filter = fTreeBox.Model.Filter;
 
-                if (dlgFilter.ShowDialog() == DialogResult.OK)
-                {
+                if (dlgFilter.ShowDialog() == DialogResult.OK) {
                     GenChart();
                 }
             }

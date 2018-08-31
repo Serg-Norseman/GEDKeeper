@@ -52,6 +52,10 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
+                fRepository.RepositoryName = fView.Name.Text;
+
+                fBase.NotifyRecord(fRepository, RecordAction.raEdit);
+
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("RepositoryEditDlgController.Accept(): " + ex.Message);
@@ -61,6 +65,14 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            fView.Name.Text = fRepository.RepositoryName;
+
+            fView.NotesList.ListModel.DataOwner = fRepository;
+        }
+
+        public void ModifyAddress()
+        {
+            BaseController.ModifyAddress(fBase, fRepository.Address);
         }
     }
 }

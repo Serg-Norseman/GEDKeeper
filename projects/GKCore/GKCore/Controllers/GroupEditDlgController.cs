@@ -52,6 +52,10 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
+                fGroup.GroupName = fView.Name.Text;
+
+                fBase.NotifyRecord(fGroup, RecordAction.raEdit);
+
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("GroupEditDlgController.Accept(): " + ex.Message);
@@ -61,6 +65,11 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            fView.Name.Text = (fGroup == null) ? "" : fGroup.GroupName;
+
+            fView.MembersList.ListModel.DataOwner = fGroup;
+            fView.NotesList.ListModel.DataOwner = fGroup;
+            fView.MediaList.ListModel.DataOwner = fGroup;
         }
     }
 }

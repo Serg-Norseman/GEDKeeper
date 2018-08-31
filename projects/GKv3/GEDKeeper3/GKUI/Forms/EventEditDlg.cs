@@ -21,6 +21,7 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
@@ -45,13 +46,7 @@ namespace GKUI.Forms
         public GEDCOMCustomEvent Event
         {
             get { return fController.Event; }
-            set {
-                fNotesList.ListModel.DataOwner = value;
-                fMediaList.ListModel.DataOwner = value;
-                fSourcesList.ListModel.DataOwner = value;
-                fController.Event = value;
-                cmbEventType.Focus();
-            }
+            set { fController.Event = value; }
         }
 
         #region View Interface
@@ -186,6 +181,7 @@ namespace GKUI.Forms
             btnPlaceAdd.ToolTip = LangMan.LS(LSID.LSID_PlaceAddTip);
             btnPlaceDelete.ToolTip = LangMan.LS(LSID.LSID_PlaceDeleteTip);
 
+            cmbEventType.Focus();
             fController = new EventEditDlgController(this);
         }
 

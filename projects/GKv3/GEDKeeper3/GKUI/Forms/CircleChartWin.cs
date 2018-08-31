@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using Eto.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
@@ -47,6 +48,13 @@ namespace GKUI.Forms
         public CircleChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson, CircleChartType type)
         {
             InitializeComponent();
+
+            tbImageSave.Image = UIHelper.LoadResourceImage("Resources.btn_save_image.gif");
+            tbDocPreview.Image = UIHelper.LoadResourceImage("Resources.btn_preview.gif");
+            tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
+            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
+            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
+            tbOptions.Image = UIHelper.LoadResourceImage("Resources.btn_tools.gif");
 
             fBaseWin = baseWin;
 
@@ -110,6 +118,7 @@ namespace GKUI.Forms
             }
         }
 
+        // TODO: update localization and GKv3
         private void tbImageSave_Click(object sender, EventArgs e)
         {
             string filters = LangMan.LS(LSID.LSID_TreeImagesFilter) + "|SVG files (*.svg)|*.svg";
@@ -153,6 +162,8 @@ namespace GKUI.Forms
             tbImageSave.ToolTip = LangMan.LS(LSID.LSID_ImageSaveTip);
             tbDocPrint.ToolTip = LangMan.LS(LSID.LSID_DocPrint);
             tbDocPreview.ToolTip = LangMan.LS(LSID.LSID_DocPreview);
+            tbPrev.ToolTip = LangMan.LS(LSID.LSID_PrevRec);
+            tbNext.ToolTip = LangMan.LS(LSID.LSID_NextRec);
         }
 
         #endregion

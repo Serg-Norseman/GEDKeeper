@@ -32,6 +32,7 @@ namespace GKCore.Controllers
     public sealed class CommunicationEditDlgController : DialogController<ICommunicationEditDlg>
     {
         private GEDCOMCommunicationRecord fCommunication;
+        private GEDCOMIndividualRecord fTempInd;
 
         public GEDCOMCommunicationRecord Communication
         {
@@ -47,11 +48,18 @@ namespace GKCore.Controllers
 
         public CommunicationEditDlgController(ICommunicationEditDlg view) : base(view)
         {
+            fTempInd = null;
         }
 
         public override bool Accept()
         {
             try {
+                fCommunication.CommName = fView.Name.Text;
+                fCommunication.CommunicationType = (GKCommunicationType)fView.CorrType.SelectedIndex;
+                fCommunication.Date.Assign(GEDCOMDate.CreateByFormattedStr(fView.Date.Text, true));
+                fCommunication.SetCorresponder((GKCommunicationDir)fView.Dir.SelectedIndex, fTempInd);
+                fBase.NotifyRecord(fCommunication, RecordAction.raEdit);
+
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("CommunicationEditDlgController.Accept(): " + ex.Message);
@@ -61,6 +69,41 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            try {
+                fView.NotesList.ListModel.DataOwner = fCommunication;
+                fView.MediaList.ListModel.DataOwner = fCommunication;
+
+                if (fCommunication == null) {
+                    fView.Name.Text = "";
+                    fView.CorrType.SelectedIndex = -1;
+                    fView.Date.Text = "";
+                    fView.Dir.SelectedIndex = 0;
+                    fView.Corresponder.Text = "";
+                } else {
+                    fView.Name.Text = fCommunication.CommName;
+                    fView.CorrType.SelectedIndex = (int)fCommunication.CommunicationType;
+                    fView.Date.Text = fCommunication.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+
+                    var corr = fCommunication.GetCorresponder();
+                    fTempInd = corr.Corresponder;
+
+                    if (fTempInd != null) {
+                        fView.Dir.SelectedIndex = (int)corr.CommDir;
+                        fView.Corresponder.Text = GKUtils.GetNameString(fTempInd, true, false);
+                    } else {
+                        fView.Dir.SelectedIndex = 0;
+                        fView.Corresponder.Text = "";
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("CommunicationEditDlgController.SetCommunication(): " + ex.Message);
+            }
+        }
+
+        public void SetPerson()
+        {
+            fTempInd = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+            fView.Corresponder.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, true, false));
         }
     }
 }

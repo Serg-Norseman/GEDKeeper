@@ -26,7 +26,6 @@ using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
 
@@ -42,66 +41,58 @@ namespace GKUI.Forms
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
 
-        private GEDCOMCommunicationRecord fCommunication;
-        private GEDCOMIndividualRecord fTempInd;
-
         public GEDCOMCommunicationRecord Communication
         {
-            get { return fCommunication; }
-            set { SetCommunication(value); }
+            get { return fController.Communication; }
+            set { fController.Communication = value; }
         }
 
-        private void SetCommunication(GEDCOMCommunicationRecord value)
+        #region View Interface
+
+        ISheetList ICommunicationEditDlg.NotesList
         {
-            fCommunication = value;
-            try {
-                if (fCommunication == null) {
-                    txtName.Text = "";
-                    cmbCorrType.SelectedIndex = -1;
-                    txtDate.Text = "";
-                    txtDir.SelectedIndex = 0;
-                    txtCorresponder.Text = "";
-                } else {
-                    txtName.Text = fCommunication.CommName;
-                    cmbCorrType.SelectedIndex = (int)fCommunication.CommunicationType;
-                    txtDate.Text = fCommunication.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-
-                    var corr = fCommunication.GetCorresponder();
-                    fTempInd = corr.Corresponder;
-
-                    if (fTempInd != null) {
-                        txtDir.SelectedIndex = (int)corr.CommDir;
-                        txtCorresponder.Text = GKUtils.GetNameString(fTempInd, true, false);
-                    } else {
-                        txtDir.SelectedIndex = 0;
-                        txtCorresponder.Text = "";
-                    }
-                }
-
-                fNotesList.ListModel.DataOwner = fCommunication;
-                fMediaList.ListModel.DataOwner = fCommunication;
-            } catch (Exception ex) {
-                Logger.LogWrite("CommunicationEditDlg.SetCommunication(): " + ex.Message);
-            }
+            get { return fNotesList; }
         }
+
+        ISheetList ICommunicationEditDlg.MediaList
+        {
+            get { return fMediaList; }
+        }
+
+        ITextBoxHandler ICommunicationEditDlg.Corresponder
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtCorresponder); }
+        }
+
+        IComboBoxHandler ICommunicationEditDlg.CorrType
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbCorrType); }
+        }
+
+        ITextBoxHandler ICommunicationEditDlg.Date
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtDate); }
+        }
+
+        IComboBoxHandler ICommunicationEditDlg.Dir
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(txtDir); }
+        }
+
+        ITextBoxHandler ICommunicationEditDlg.Name
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+        }
+
+        #endregion
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try {
-                fCommunication.CommName = txtName.Text;
-                fCommunication.CommunicationType = (GKCommunicationType)cmbCorrType.SelectedIndex;
-                fCommunication.Date.Assign(GEDCOMDate.CreateByFormattedStr(txtDate.Text, true));
-                fCommunication.SetCorresponder((GKCommunicationDir)txtDir.SelectedIndex, fTempInd);
-
+            bool res = fController.Accept();
+            if (res) {
                 CommitChanges();
-
-                fBase.NotifyRecord(fCommunication, RecordAction.raEdit);
-
-                DialogResult = DialogResult.Ok;
-            } catch (Exception ex) {
-                Logger.LogWrite("CommunicationEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
             }
+            DialogResult = res ? DialogResult.Ok : DialogResult.None;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -116,8 +107,7 @@ namespace GKUI.Forms
 
         private void btnPersonAdd_Click(object sender, EventArgs e)
         {
-            fTempInd = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-            txtCorresponder.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, true, false));
+            fController.SetPerson();
         }
 
         public CommunicationEditDlg()
@@ -127,8 +117,6 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
             btnPersonAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-
-            fTempInd = null;
 
             for (GKCommunicationType ct = GKCommunicationType.ctCall; ct <= GKCommunicationType.ctLast; ct++) {
                 cmbCorrType.Items.Add(LangMan.LS(GKData.CommunicationNames[(int)ct]));
@@ -156,6 +144,7 @@ namespace GKUI.Forms
                 LangMan.LS(LSID.LSID_CD_2)
             }));
 
+            txtName.Focus();
             fController = new CommunicationEditDlgController(this);
         }
 

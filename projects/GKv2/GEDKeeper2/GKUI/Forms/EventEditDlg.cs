@@ -21,6 +21,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
@@ -45,13 +46,7 @@ namespace GKUI.Forms
         public GEDCOMCustomEvent Event
         {
             get { return fController.Event; }
-            set {
-                fNotesList.ListModel.DataOwner = value;
-                fMediaList.ListModel.DataOwner = value;
-                fSourcesList.ListModel.DataOwner = value;
-                fController.Event = value;
-                ActiveControl = cmbEventType;
-            }
+            set { fController.Event = value; }
         }
 
         #region View Interface
@@ -186,6 +181,7 @@ namespace GKUI.Forms
             toolTip1.SetToolTip(btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
             toolTip1.SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
 
+            cmbEventType.Select();
             fController = new EventEditDlgController(this);
         }
 

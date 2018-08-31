@@ -121,6 +121,15 @@ namespace GKCore.UIContracts
     public interface ICommunicationEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMCommunicationRecord Communication { get; set; }
+
+        ITextBoxHandler Corresponder { get; }
+        IComboBoxHandler CorrType { get; }
+        ITextBoxHandler Date { get; }
+        IComboBoxHandler Dir { get; }
+        ITextBoxHandler Name { get; }
+
+        ISheetList NotesList { get; }
+        ISheetList MediaList { get; }
     }
 
     public interface IEventEditDlg : ICommonDialog, IBaseEditor, IView
@@ -161,6 +170,12 @@ namespace GKCore.UIContracts
     public interface IGroupEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMGroupRecord Group { get; set; }
+
+        ITextBoxHandler Name { get; }
+
+        ISheetList NotesList { get; }
+        ISheetList MediaList { get; }
+        ISheetList MembersList { get; }
     }
 
     public interface ILanguageEditDlg : ICommonDialog
@@ -216,6 +231,9 @@ namespace GKCore.UIContracts
     public interface IRepositoryEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMRepositoryRecord Repository { get; set; }
+
+        ISheetList NotesList { get; }
+        ITextBoxHandler Name { get; }
     }
 
     public interface IResearchEditDlg : ICommonDialog, IBaseEditor, IView

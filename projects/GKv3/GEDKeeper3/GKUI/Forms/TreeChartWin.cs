@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using Eto.Drawing;
 using Eto.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
@@ -204,6 +205,7 @@ namespace GKUI.Forms
             }
         }
 
+        // TODO: update localization and GKv3
         private void tbImageSave_Click(object sender, EventArgs e)
         {
             string filters = LangMan.LS(LSID.LSID_TreeImagesFilter) + "|SVG files (*.svg)|*.svg";
@@ -497,16 +499,13 @@ namespace GKUI.Forms
 
         private void miRebuildTree_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 TreeChartPerson p = fTreeBox.Selected;
                 if (p == null || p.Rec == null) return;
 
                 fPerson = p.Rec;
                 GenChart();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeChartWin.miRebuildTree_Click(): " + ex.Message);
             }
         }
@@ -593,6 +592,8 @@ namespace GKUI.Forms
             tbImageSave.ToolTip = LangMan.LS(LSID.LSID_ImageSaveTip);
             tbDocPrint.ToolTip = LangMan.LS(LSID.LSID_DocPrint);
             tbDocPreview.ToolTip = LangMan.LS(LSID.LSID_DocPreview);
+            tbPrev.ToolTip = LangMan.LS(LSID.LSID_PrevRec);
+            tbNext.ToolTip = LangMan.LS(LSID.LSID_NextRec);
         }
 
         #endregion
@@ -677,8 +678,7 @@ namespace GKUI.Forms
             using (TreeFilterDlg dlgFilter = new TreeFilterDlg(fBase)) {
                 dlgFilter.Filter = fTreeBox.Model.Filter;
 
-                if (dlgFilter.ShowModal() == DialogResult.Ok)
-                {
+                if (dlgFilter.ShowModal() == DialogResult.Ok) {
                     GenChart();
                 }
             }

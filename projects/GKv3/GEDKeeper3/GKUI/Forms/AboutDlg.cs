@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,10 @@
 
 using System;
 using Eto.Forms;
-using GKCommon;
+
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -35,8 +36,11 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+
             Title = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
+
             lblProduct.Text = GKData.APP_TITLE_NEW;
             lblVersion.Text = @"Version " + AppHost.Instance.GetAppVersion();
             lblCopyright.Text = AppHost.Instance.GetAppCopyright();

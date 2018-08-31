@@ -62,13 +62,13 @@ namespace GKUI.Forms
             fCircleChart = new CircleChart();
             fCircleChart.Base = fBaseWin;
             fCircleChart.ChartType = type;
-            fCircleChart.Name = "fCircleChart";
-            fCircleChart.Dock = DockStyle.Fill;
             fCircleChart.NavRefresh += CircleChartWin_NavRefresh;
             fCircleChart.ZoomChanged += CircleChartWin_NavRefresh;
             fCircleChart.RootChanged += CircleChartWin_RootChanged;
             fCircleChart.RootPerson = startPerson;
             fCircleChart.Options.Assign(GlobalOptions.Instance.AncestorsCircleOptions);
+            fCircleChart.Name = "fCircleChart";
+            fCircleChart.Dock = DockStyle.Fill;
             Controls.Add(fCircleChart);
             Controls.SetChildIndex(fCircleChart, 0);
 
@@ -158,6 +158,8 @@ namespace GKUI.Forms
             tbImageSave.ToolTipText = LangMan.LS(LSID.LSID_ImageSaveTip);
             tbDocPrint.ToolTipText = LangMan.LS(LSID.LSID_DocPrint);
             tbDocPreview.ToolTipText = LangMan.LS(LSID.LSID_DocPreview);
+            tbPrev.ToolTipText = LangMan.LS(LSID.LSID_PrevRec);
+            tbNext.ToolTipText = LangMan.LS(LSID.LSID_NextRec);
         }
 
         #endregion
