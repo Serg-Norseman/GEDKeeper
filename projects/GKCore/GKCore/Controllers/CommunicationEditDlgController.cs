@@ -49,6 +49,7 @@ namespace GKCore.Controllers
         public CommunicationEditDlgController(ICommunicationEditDlg view) : base(view)
         {
             fTempInd = null;
+            fView.Name.Select();
         }
 
         public override bool Accept()
@@ -58,7 +59,10 @@ namespace GKCore.Controllers
                 fCommunication.CommunicationType = (GKCommunicationType)fView.CorrType.SelectedIndex;
                 fCommunication.Date.Assign(GEDCOMDate.CreateByFormattedStr(fView.Date.Text, true));
                 fCommunication.SetCorresponder((GKCommunicationDir)fView.Dir.SelectedIndex, fTempInd);
+
                 fBase.NotifyRecord(fCommunication, RecordAction.raEdit);
+
+                CommitChanges();
 
                 return true;
             } catch (Exception ex) {

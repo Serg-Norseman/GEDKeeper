@@ -255,11 +255,29 @@ namespace GKCore.UIContracts
     public interface ISourceEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMSourceRecord SourceRecord { get; set; }
+
+        ISheetList NotesList { get; }
+        ISheetList MediaList { get; }
+        ISheetList RepositoriesList { get; }
+
+        ITextBoxHandler ShortTitle { get; }
+        ITextBoxHandler Author { get; }
+        ITextBoxHandler Title { get; }
+        ITextBoxHandler Publication { get; }
+        ITextBoxHandler Text { get; }
     }
 
     public interface ITaskEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMTaskRecord Task { get; set; }
+
+        ISheetList NotesList { get; }
+        IComboBoxHandler Priority { get; }
+        ITextBoxHandler StartDate { get; }
+        ITextBoxHandler StopDate { get; }
+        IComboBoxHandler GoalType { get; }
+        ITextBoxHandler Goal { get; }
+        IButtonHandler GoalSelect { get; }
     }
 
     public interface IUserRefEditDlg : ICommonDialog, IBaseEditor, IView

@@ -26,6 +26,25 @@ using GKUI.Components;
 
 namespace GKUI.Controllers
 {
+    public sealed class ButtonHandler : ControlHandler<Button, ButtonHandler>, IButtonHandler
+    {
+        public ButtonHandler(Button control) : base(control)
+        {
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+    }
+
     public sealed class CheckBoxHandler : ControlHandler<CheckBox, CheckBoxHandler>, ICheckBoxHandler
     {
         public CheckBoxHandler(CheckBox control) : base(control)
@@ -132,6 +151,11 @@ namespace GKUI.Controllers
         {
             Control.Items.Clear();
         }
+
+        public void Select()
+        {
+            Control.Focus();
+        }
     }
 
     public sealed class TextBoxHandler : ControlHandler<TextBox, TextBoxHandler>, ITextBoxHandler
@@ -145,7 +169,7 @@ namespace GKUI.Controllers
             get { return Control.Enabled; }
             set {
                 Control.Enabled = value;
-                //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
+                SetBackColor();
             }
         }
 
@@ -155,10 +179,29 @@ namespace GKUI.Controllers
             set { /* TODO! */ }
         }
 
+        public bool ReadOnly
+        {
+            get { return Control.ReadOnly; }
+            set {
+                Control.ReadOnly = value;
+                SetBackColor();
+            }
+        }
+
         public string Text
         {
             get { return Control.Text; }
             set { Control.Text = value; }
+        }
+
+        public void Select()
+        {
+            Control.Focus();
+        }
+
+        private void SetBackColor()
+        {
+            Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
         }
     }
 
@@ -183,10 +226,21 @@ namespace GKUI.Controllers
             set { /* TODO! */ }
         }
 
+        public bool ReadOnly
+        {
+            get { return Control.ReadOnly; }
+            set { Control.ReadOnly = value; }
+        }
+
         public string Text
         {
             get { return Control.Text; }
             set { Control.Text = value; }
+        }
+
+        public void Select()
+        {
+            Control.Focus();
         }
     }
 }

@@ -181,7 +181,6 @@ namespace GKUI.Forms
             toolTip1.SetToolTip(btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
             toolTip1.SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
 
-            cmbEventType.Select();
             fController = new EventEditDlgController(this);
         }
 
@@ -202,17 +201,13 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            bool res = fController.Accept();
-            if (res) {
-                CommitChanges();
-            }
-            DialogResult = res ? DialogResult.OK : DialogResult.None;
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             try {
-                RollbackChanges();
+                fController.Cancel();
             } catch (Exception ex) {
                 Logger.LogWrite("EventEditDlg.btnCancel_Click(): " + ex.Message);
             }
@@ -276,9 +271,9 @@ namespace GKUI.Forms
             base.InitDialog(baseWin);
             fController.Init(baseWin);
 
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fLocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(fBase, fController.LocalUndoman);
+            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fController.LocalUndoman);
         }
     }
 }

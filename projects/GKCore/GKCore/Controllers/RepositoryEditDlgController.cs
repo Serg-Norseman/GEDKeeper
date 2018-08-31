@@ -20,7 +20,6 @@
 
 using System;
 using GKCommon.GEDCOM;
-using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
 
@@ -47,6 +46,7 @@ namespace GKCore.Controllers
 
         public RepositoryEditDlgController(IRepositoryEditDlg view) : base(view)
         {
+            fView.Name.Select();
         }
 
         public override bool Accept()
@@ -55,6 +55,8 @@ namespace GKCore.Controllers
                 fRepository.RepositoryName = fView.Name.Text;
 
                 fBase.NotifyRecord(fRepository, RecordAction.raEdit);
+
+                CommitChanges();
 
                 return true;
             } catch (Exception ex) {

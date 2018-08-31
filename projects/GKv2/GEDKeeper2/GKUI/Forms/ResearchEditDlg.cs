@@ -23,6 +23,7 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
@@ -36,6 +37,8 @@ namespace GKUI.Forms
     /// </summary>
     public partial class ResearchEditDlg : EditorDialog, IResearchEditDlg
     {
+        private readonly ResearchEditDlgController fController;
+
         private readonly GKSheetList fTasksList;
         private readonly GKSheetList fCommunicationsList;
         private readonly GKSheetList fGroupsList;
@@ -52,19 +55,15 @@ namespace GKUI.Forms
         private void SetResearch(GEDCOMResearchRecord value)
         {
             fResearch = value;
-            try
-            {
-                if (fResearch == null)
-                {
+            try {
+                if (fResearch == null) {
                     txtName.Text = "";
                     cmbPriority.SelectedIndex = -1;
                     cmbStatus.SelectedIndex = -1;
                     txtStartDate.Text = "";
                     txtStopDate.Text = "";
                     nudPercent.Text = @"0";
-                }
-                else
-                {
+                } else {
                     txtName.Text = fResearch.ResearchName;
                     cmbPriority.SelectedIndex = (int)fResearch.Priority;
                     cmbStatus.SelectedIndex = (int)fResearch.Status;
@@ -77,9 +76,7 @@ namespace GKUI.Forms
                 fTasksList.ListModel.DataOwner = fResearch;
                 fCommunicationsList.ListModel.DataOwner = fResearch;
                 fGroupsList.ListModel.DataOwner = fResearch;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("ResearchEditDlg.SetResearch(): " + ex.Message);
             }
         }
@@ -91,13 +88,11 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++)
-            {
+            for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++) {
                 cmbPriority.Items.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
             }
 
-            for (GKResearchStatus rs = GKResearchStatus.rsDefined; rs <= GKResearchStatus.rsWithdrawn; rs++)
-            {
+            for (GKResearchStatus rs = GKResearchStatus.rsDefined; rs <= GKResearchStatus.rsWithdrawn; rs++) {
                 cmbStatus.Items.Add(LangMan.LS(GKData.StatusNames[(int)rs]));
             }
 
@@ -116,6 +111,8 @@ namespace GKUI.Forms
             fNotesList = new GKSheetList(pageNotes);
 
             SetLang();
+
+            fController = new ResearchEditDlgController(this);
         }
 
         public void SetLang()
@@ -174,20 +171,17 @@ namespace GKUI.Forms
             fResearch.StopDate.Assign(GEDCOMDate.CreateByFormattedStr(txtStopDate.Text, true));
             fResearch.Percent = int.Parse(nudPercent.Text);
 
-            CommitChanges();
+            fController.LocalUndoman.Commit();
 
             fBase.NotifyRecord(fResearch, RecordAction.raEdit);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 AcceptChanges();
                 DialogResult = DialogResult.OK;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("ResearchEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -195,12 +189,9 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try
-            {
-                RollbackChanges();
-            }
-            catch (Exception ex)
-            {
+            try {
+                fController.Cancel();
+            } catch (Exception ex) {
                 Logger.LogWrite("ResearchEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
@@ -208,11 +199,12 @@ namespace GKUI.Forms
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
-            fTasksList.ListModel = new ResTasksSublistModel(fBase, fLocalUndoman);
-            fCommunicationsList.ListModel = new ResCommunicationsSublistModel(fBase, fLocalUndoman);
-            fGroupsList.ListModel = new ResGroupsSublistModel(fBase, fLocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
+            fTasksList.ListModel = new ResTasksSublistModel(fBase, fController.LocalUndoman);
+            fCommunicationsList.ListModel = new ResCommunicationsSublistModel(fBase, fController.LocalUndoman);
+            fGroupsList.ListModel = new ResGroupsSublistModel(fBase, fController.LocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
         }
     }
 }

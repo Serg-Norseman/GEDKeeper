@@ -133,7 +133,7 @@ namespace GKUI.Forms
                 fLocationRecord.Map.Lati = ConvertHelper.ParseFloat(txtLatitude.Text, 0.0);
                 fLocationRecord.Map.Long = ConvertHelper.ParseFloat(txtLongitude.Text, 0.0);
 
-                CommitChanges();
+                fController.LocalUndoman.Commit();
 
                 fBase.NotifyRecord(fLocationRecord, RecordAction.raEdit);
 
@@ -147,7 +147,7 @@ namespace GKUI.Forms
         private void btnCancel_Click(object sender, EventArgs e)
         {
             try {
-                RollbackChanges();
+                fController.Cancel();
             } catch (Exception ex) {
                 Logger.LogWrite("LocationEditDlg.btnCancel_Click(): " + ex.Message);
             }
@@ -245,8 +245,8 @@ namespace GKUI.Forms
             base.InitDialog(baseWin);
             fController.Init(baseWin);
 
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(fBase, fController.LocalUndoman);
         }
     }
 }

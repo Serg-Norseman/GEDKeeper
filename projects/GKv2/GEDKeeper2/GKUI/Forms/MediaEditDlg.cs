@@ -77,7 +77,7 @@ namespace GKUI.Forms
 
             ControlsRefresh();
 
-            CommitChanges();
+            fController.LocalUndoman.Commit();
             fBase.NotifyRecord(fMediaRec, RecordAction.raEdit);
 
             return true;
@@ -135,7 +135,7 @@ namespace GKUI.Forms
         private void btnCancel_Click(object sender, EventArgs e)
         {
             try {
-                RollbackChanges();
+                fController.Cancel();
             } catch (Exception ex) {
                 Logger.LogWrite("MediaEditDlg.btnCancel_Click(): " + ex.Message);
             }
@@ -230,8 +230,8 @@ namespace GKUI.Forms
             base.InitDialog(baseWin);
             fController.Init(baseWin);
 
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fLocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
+            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fController.LocalUndoman);
         }
     }
 }

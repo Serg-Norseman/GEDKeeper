@@ -25,6 +25,25 @@ using GKUI.Components;
 
 namespace GKUI.Controllers
 {
+    public sealed class ButtonHandler : ControlHandler<Button, ButtonHandler>, IButtonHandler
+    {
+        public ButtonHandler(Button control) : base(control)
+        {
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+    }
+
     public sealed class CheckBoxHandler : ControlHandler<CheckBox, CheckBoxHandler>, ICheckBoxHandler
     {
         public CheckBoxHandler(CheckBox control) : base(control)
@@ -128,6 +147,11 @@ namespace GKUI.Controllers
         {
             Control.Items.Clear();
         }
+
+        public void Select()
+        {
+            Control.Select();
+        }
     }
 
     public sealed class TextBoxHandler : ControlHandler<TextBox, TextBoxHandler>, ITextBoxHandler
@@ -148,10 +172,21 @@ namespace GKUI.Controllers
             set { Control.Lines = value; }
         }
 
+        public bool ReadOnly
+        {
+            get { return Control.ReadOnly; }
+            set { Control.ReadOnly = value; }
+        }
+
         public string Text
         {
             get { return Control.Text; }
             set { Control.Text = value; }
+        }
+
+        public void Select()
+        {
+            Control.Select();
         }
     }
 
@@ -173,10 +208,21 @@ namespace GKUI.Controllers
             set { Control.Lines = value; }
         }
 
+        public bool ReadOnly
+        {
+            get { return Control.ReadOnly; }
+            set { Control.ReadOnly = value; }
+        }
+
         public string Text
         {
             get { return Control.Text; }
             set { Control.Text = value; }
+        }
+
+        public void Select()
+        {
+            Control.Select();
         }
     }
 }

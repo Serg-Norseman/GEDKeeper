@@ -20,7 +20,6 @@
 
 using System;
 using GKCommon.GEDCOM;
-using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
 
@@ -32,6 +31,7 @@ namespace GKCore.Controllers
     public sealed class TaskEditDlgController : DialogController<ITaskEditDlg>
     {
         private GEDCOMTaskRecord fTask;
+        private GEDCOMRecord fTempRec;
 
         public GEDCOMTaskRecord Task
         {
@@ -47,11 +47,32 @@ namespace GKCore.Controllers
 
         public TaskEditDlgController(ITaskEditDlg view) : base(view)
         {
+            fTempRec = null;
         }
 
         public override bool Accept()
         {
             try {
+                fTask.Priority = (GKResearchPriority)fView.Priority.SelectedIndex;
+                fTask.StartDate.Assign(GEDCOMDate.CreateByFormattedStr(fView.StartDate.Text, true));
+                fTask.StopDate.Assign(GEDCOMDate.CreateByFormattedStr(fView.StopDate.Text, true));
+
+                GKGoalType gt = (GKGoalType)fView.GoalType.SelectedIndex;
+                switch (gt) {
+                    case GKGoalType.gtIndividual:
+                    case GKGoalType.gtFamily:
+                    case GKGoalType.gtSource:
+                        fTask.Goal = GEDCOMUtils.EncloseXRef(fTempRec.XRef);
+                        break;
+                    case GKGoalType.gtOther:
+                        fTask.Goal = fView.Goal.Text;
+                        break;
+                }
+
+                fLocalUndoman.Commit();
+
+                fBase.NotifyRecord(fTask, RecordAction.raEdit);
+
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("TaskEditDlgController.Accept(): " + ex.Message);
@@ -61,6 +82,87 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            if (fTask == null) {
+                fView.Priority.SelectedIndex = -1;
+                fView.StartDate.Text = "";
+                fView.StopDate.Text = "";
+                fView.GoalType.SelectedIndex = 0;
+                fView.Goal.Text = "";
+            } else {
+                fView.Priority.SelectedIndex = (sbyte)fTask.Priority;
+                fView.StartDate.Text = fTask.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.StopDate.Text = fTask.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+
+                var goal = fTask.GetTaskGoal();
+                fTempRec = goal.GoalRec;
+                fView.GoalType.SelectedIndex = (sbyte)goal.GoalType;
+
+                switch (goal.GoalType) {
+                    case GKGoalType.gtIndividual:
+                    case GKGoalType.gtFamily:
+                    case GKGoalType.gtSource:
+                        fView.Goal.Text = GKUtils.GetGoalStr(goal.GoalType, fTempRec);
+                        break;
+
+                    case GKGoalType.gtOther:
+                        fView.Goal.Text = fTask.Goal;
+                        break;
+                }
+            }
+
+            fView.NotesList.ListModel.DataOwner = fTask;
+
+            ChangeGoalType();
+        }
+
+        public void SelectGoal()
+        {
+            GKGoalType gt = (GKGoalType)fView.GoalType.SelectedIndex;
+            switch (gt) {
+                case GKGoalType.gtIndividual:
+                    fTempRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    fView.Goal.Text = GKUtils.GetGoalStr(gt, fTempRec);
+                    break;
+
+                case GKGoalType.gtFamily:
+                    fTempRec = fBase.Context.SelectRecord(GEDCOMRecordType.rtFamily, new object[0]);
+                    fView.Goal.Text = GKUtils.GetGoalStr(gt, fTempRec);
+                    break;
+
+                case GKGoalType.gtSource:
+                    fTempRec = fBase.Context.SelectRecord(GEDCOMRecordType.rtSource, new object[0]);
+                    fView.Goal.Text = GKUtils.GetGoalStr(gt, fTempRec);
+                    break;
+
+                case GKGoalType.gtOther:
+                    break;
+            }
+        }
+
+        public void ChangeGoalType()
+        {
+            GKGoalType gt = (GKGoalType)fView.GoalType.SelectedIndex;
+            switch (gt) {
+                case GKGoalType.gtIndividual:
+                    fView.GoalSelect.Enabled = true;
+                    fView.Goal.ReadOnly = true;
+                    break;
+
+                case GKGoalType.gtFamily:
+                    fView.GoalSelect.Enabled = true;
+                    fView.Goal.ReadOnly = true;
+                    break;
+
+                case GKGoalType.gtSource:
+                    fView.GoalSelect.Enabled = true;
+                    fView.Goal.ReadOnly = true;
+                    break;
+
+                case GKGoalType.gtOther:
+                    fView.GoalSelect.Enabled = false;
+                    fView.Goal.ReadOnly = false;
+                    break;
+            }
         }
     }
 }

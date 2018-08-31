@@ -88,18 +88,13 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            bool res = fController.Accept();
-            if (res) {
-                CommitChanges();
-            }
-            DialogResult = res ? DialogResult.Ok : DialogResult.None;
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             try {
-                RollbackChanges();
-                CancelClickHandler(sender, e);
+                fController.Cancel();
             } catch (Exception ex) {
                 Logger.LogWrite("CommunicationEditDlg.btnCancel_Click(): " + ex.Message);
             }
@@ -144,7 +139,6 @@ namespace GKUI.Forms
                 LangMan.LS(LSID.LSID_CD_2)
             }));
 
-            txtName.Focus();
             fController = new CommunicationEditDlgController(this);
         }
 
@@ -153,8 +147,8 @@ namespace GKUI.Forms
             base.InitDialog(baseWin);
             fController.Init(baseWin);
 
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(fBase, fController.LocalUndoman);
         }
     }
 }

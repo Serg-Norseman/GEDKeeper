@@ -327,6 +327,7 @@ namespace GKUI
                 //container.Register<IMainWindow, MainWin>(LifeCycle.Singleton);
             }
 
+            ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler));

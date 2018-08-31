@@ -20,7 +20,6 @@
 
 using System.Windows.Forms;
 using GKCore.Interfaces;
-using GKCore.Operations;
 
 namespace GKUI.Forms
 {
@@ -30,7 +29,6 @@ namespace GKUI.Forms
     public class EditorDialog : CommonDialog, ICommonDialog, IBaseEditor
     {
         protected IBaseWindow fBase;
-        protected ChangeTracker fLocalUndoman;
 
         public IBaseWindow Base
         {
@@ -45,16 +43,6 @@ namespace GKUI.Forms
         {
         }
 
-        protected void CommitChanges()
-        {
-            fLocalUndoman.Commit();
-        }
-
-        protected void RollbackChanges()
-        {
-            fLocalUndoman.Rollback();
-        }
-
         public virtual void UpdateView()
         {
         }
@@ -62,9 +50,6 @@ namespace GKUI.Forms
         public virtual void InitDialog(IBaseWindow baseWin)
         {
             fBase = baseWin;
-            if (fBase != null) {
-                fLocalUndoman = new ChangeTracker(fBase.Context.Tree);
-            }
         }
 
         public virtual bool ShowModalX(object owner)

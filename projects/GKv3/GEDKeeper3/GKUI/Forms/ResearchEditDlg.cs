@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,10 @@
 
 using System;
 using Eto.Forms;
-using GKCommon;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
@@ -31,8 +32,13 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class ResearchEditDlg : EditorDialog, IResearchEditDlg
     {
+        private readonly ResearchEditDlgController fController;
+
         private readonly GKSheetList fTasksList;
         private readonly GKSheetList fCommunicationsList;
         private readonly GKSheetList fGroupsList;
@@ -99,6 +105,8 @@ namespace GKUI.Forms
             fNotesList = new GKSheetList(pageNotes);
 
             SetLang();
+
+            fController = new ResearchEditDlgController(this);
         }
 
         public void SetLang()
@@ -157,7 +165,7 @@ namespace GKUI.Forms
             fResearch.StopDate.Assign(GEDCOMDate.CreateByFormattedStr(txtStopDate.Text, true));
             fResearch.Percent = (int)nudPercent.Value;
 
-            CommitChanges();
+            fController.LocalUndoman.Commit();
 
             fBase.NotifyRecord(fResearch, RecordAction.raEdit);
         }
@@ -176,7 +184,7 @@ namespace GKUI.Forms
         private void btnCancel_Click(object sender, EventArgs e)
         {
             try {
-                RollbackChanges();
+                fController.Cancel();
                 CancelClickHandler(sender, e);
             } catch (Exception ex) {
                 Logger.LogWrite("ResearchEditDlg.btnCancel_Click(): " + ex.Message);
@@ -186,11 +194,12 @@ namespace GKUI.Forms
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
-            fTasksList.ListModel = new ResTasksSublistModel(fBase, fLocalUndoman);
-            fCommunicationsList.ListModel = new ResCommunicationsSublistModel(fBase, fLocalUndoman);
-            fGroupsList.ListModel = new ResGroupsSublistModel(fBase, fLocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
+            fTasksList.ListModel = new ResTasksSublistModel(fBase, fController.LocalUndoman);
+            fCommunicationsList.ListModel = new ResCommunicationsSublistModel(fBase, fController.LocalUndoman);
+            fGroupsList.ListModel = new ResGroupsSublistModel(fBase, fController.LocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
         }
     }
 }

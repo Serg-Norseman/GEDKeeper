@@ -96,7 +96,6 @@ namespace GKUI.Forms
             pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
             pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
 
-            edName.Select();
             fController = new GroupEditDlgController(this);
         }
 
@@ -104,32 +103,22 @@ namespace GKUI.Forms
         {
             GEDCOMIndividualRecord member = eArgs.ItemData as GEDCOMIndividualRecord;
             if (eArgs.Action == RecordAction.raJump && member != null) {
-                AcceptChanges();
+                fController.Accept();
                 DialogResult = DialogResult.OK;
                 fBase.SelectRecordByXRef(member.XRef);
                 Close();
             }
         }
 
-        private bool AcceptChanges()
-        {
-            bool res = fController.Accept();
-            if (res) {
-                CommitChanges();
-            }
-            return res;
-        }
-
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            bool res = AcceptChanges();
-            DialogResult = res ? DialogResult.OK : DialogResult.None;
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             try {
-                RollbackChanges();
+                fController.Cancel();
             } catch (Exception ex) {
                 Logger.LogWrite("GroupEditDlg.btnCancel_Click(): " + ex.Message);
             }
@@ -140,9 +129,9 @@ namespace GKUI.Forms
             base.InitDialog(baseWin);
             fController.Init(baseWin);
 
-            fMembersList.ListModel = new GroupMembersSublistModel(fBase, fLocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
+            fMembersList.ListModel = new GroupMembersSublistModel(fBase, fController.LocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(fBase, fController.LocalUndoman);
         }
     }
 }

@@ -389,25 +389,21 @@ namespace GKUI.Forms
             fPerson.Bookmark = chkBookmark.Checked.GetValueOrDefault();
             fPerson.Restriction = (GEDCOMRestriction)cmbRestriction.SelectedIndex;
 
-            if (fPerson.ChildToFamilyLinks.Count > 0)
-            {
+            if (fPerson.ChildToFamilyLinks.Count > 0) {
                 fPerson.ChildToFamilyLinks[0].Family.SortChilds();
             }
 
-            fLocalUndoman.Commit();
+            fController.LocalUndoman.Commit();
 
             fBase.NotifyRecord(fPerson, RecordAction.raEdit);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 AcceptChanges();
                 DialogResult = DialogResult.Ok;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("PersonEditDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -415,13 +411,10 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try
-            {
-                fLocalUndoman.Rollback();
+            try {
+                fController.Cancel();
                 CancelClickHandler(sender, e);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("PersonEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
@@ -432,8 +425,8 @@ namespace GKUI.Forms
             // For the sample: we need to have gender's value on time of call AddSpouse (for define husband/wife)
             // And we need to have actual name's value for visible it in FamilyEditDlg
 
-            fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, fPerson, (GEDCOMSex)cmbSex.SelectedIndex);
-            fLocalUndoman.DoIndividualNameChange(fPerson, txtSurname.Text, txtName.Text, cmbPatronymic.Text);
+            fController.LocalUndoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, fPerson, (GEDCOMSex)cmbSex.SelectedIndex);
+            fController.LocalUndoman.DoIndividualNameChange(fPerson, txtSurname.Text, txtName.Text, cmbPatronymic.Text);
         }
 
         private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
@@ -498,14 +491,14 @@ namespace GKUI.Forms
 
         private void btnFatherAdd_Click(object sender, EventArgs e)
         {
-            if (BaseController.AddIndividualFather(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.AddIndividualFather(fBase, fController.LocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }
 
         private void btnFatherDelete_Click(object sender, EventArgs e)
         {
-            if (BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.DeleteIndividualFather(fBase, fController.LocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }
@@ -523,14 +516,14 @@ namespace GKUI.Forms
 
         private void btnMotherAdd_Click(object sender, EventArgs e)
         {
-            if (BaseController.AddIndividualMother(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.AddIndividualMother(fBase, fController.LocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }
 
         private void btnMotherDelete_Click(object sender, EventArgs e)
         {
-            if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.DeleteIndividualMother(fBase, fController.LocalUndoman, fPerson)) {
                 UpdateControls();
             }
         }
@@ -555,7 +548,7 @@ namespace GKUI.Forms
 
             if (family.IndexOfChild(fPerson) < 0)
             {
-                fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, fPerson, family);
+                fController.LocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, fPerson, family);
             }
             UpdateControls();
         }
@@ -578,7 +571,7 @@ namespace GKUI.Forms
             GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
             if (family == null) return;
 
-            fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, fPerson, family);
+            fController.LocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, fPerson, family);
             UpdateControls();
         }
 
@@ -591,7 +584,7 @@ namespace GKUI.Forms
 
         private void btnPortraitAdd_Click(object sender, EventArgs e)
         {
-            if (BaseController.AddIndividualPortrait(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.AddIndividualPortrait(fBase, fController.LocalUndoman, fPerson)) {
                 fMediaList.UpdateSheet();
                 UpdatePortrait(true);
             }
@@ -599,7 +592,7 @@ namespace GKUI.Forms
 
         private void btnPortraitDelete_Click(object sender, EventArgs e)
         {
-            if (BaseController.DeleteIndividualPortrait(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.DeleteIndividualPortrait(fBase, fController.LocalUndoman, fPerson)) {
                 UpdatePortrait(true);
             }
         }
@@ -743,16 +736,16 @@ namespace GKUI.Forms
             base.InitDialog(baseWin);
             fController.Init(baseWin);
 
-            fEventsList.ListModel = new EventsListModel(fBase, fLocalUndoman, true);
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fLocalUndoman);
-            fAssociationsList.ListModel = new AssociationsListModel(fBase, fLocalUndoman);
+            fEventsList.ListModel = new EventsListModel(fBase, fController.LocalUndoman, true);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(fBase, fController.LocalUndoman);
+            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fController.LocalUndoman);
+            fAssociationsList.ListModel = new AssociationsListModel(fBase, fController.LocalUndoman);
 
-            fGroupsList.ListModel = new GroupsSublistModel(fBase, fLocalUndoman);
-            fNamesList.ListModel = new NamesSublistModel(fBase, fLocalUndoman);
-            fSpousesList.ListModel = new SpousesSublistModel(fBase, fLocalUndoman);
-            fUserRefList.ListModel = new URefsSublistModel(fBase, fLocalUndoman);
+            fGroupsList.ListModel = new GroupsSublistModel(fBase, fController.LocalUndoman);
+            fNamesList.ListModel = new NamesSublistModel(fBase, fController.LocalUndoman);
+            fSpousesList.ListModel = new SpousesSublistModel(fBase, fController.LocalUndoman);
+            fUserRefList.ListModel = new URefsSublistModel(fBase, fController.LocalUndoman);
         }
     }
 }

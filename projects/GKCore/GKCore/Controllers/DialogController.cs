@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using BSLib;
 using GKCore.Interfaces;
+using GKCore.Operations;
 using GKCore.UIContracts;
 
 namespace GKCore.Controllers
@@ -45,6 +46,12 @@ namespace GKCore.Controllers
         }
     }
 
+    public interface IButtonHandler : IControlHandler
+    {
+        bool Enabled { get; set; }
+        string Text { get; set; }
+    }
+
     public interface ICheckBoxHandler : IControlHandler
     {
         bool Checked { get; set; }
@@ -65,13 +72,17 @@ namespace GKCore.Controllers
         void AddRange(object[] items, bool sorted = false);
         void AddStrings(StringList strings);
         void Clear();
+        void Select();
     }
 
     public interface ITextBoxHandler : IControlHandler
     {
         bool Enabled { get; set; }
         string[] Lines { get; set; }
+        bool ReadOnly { get; set; }
         string Text { get; set; }
+
+        void Select();
     }
 
     public sealed class ControlsManager
@@ -131,6 +142,13 @@ namespace GKCore.Controllers
     /// </summary>
     public abstract class DialogController<T> : FormController<T> where T : IView
     {
+        protected ChangeTracker fLocalUndoman;
+
+        public ChangeTracker LocalUndoman
+        {
+            get { return fLocalUndoman; }
+        }
+
         protected DialogController(T view) : base(view)
         {
         }
@@ -139,7 +157,25 @@ namespace GKCore.Controllers
 
         public virtual void Cancel()
         {
-            // dummy
+            RollbackChanges();
+        }
+
+        protected void CommitChanges()
+        {
+            fLocalUndoman.Commit();
+        }
+
+        protected void RollbackChanges()
+        {
+            fLocalUndoman.Rollback();
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+            if (fBase != null) {
+                fLocalUndoman = new ChangeTracker(fBase.Context.Tree);
+            }
         }
     }
 }

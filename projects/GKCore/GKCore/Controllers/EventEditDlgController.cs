@@ -50,6 +50,7 @@ namespace GKCore.Controllers
         public EventEditDlgController(IEventEditDlg view) : base(view)
         {
             fTempLocation = null;
+            fView.EventType.Select();
         }
 
         private GEDCOMCustomDate AssembleDate()
@@ -146,6 +147,8 @@ namespace GKCore.Controllers
                         fEvent = attr;
                     }
                 }
+
+                CommitChanges();
 
                 return true;
             } catch (Exception ex) {

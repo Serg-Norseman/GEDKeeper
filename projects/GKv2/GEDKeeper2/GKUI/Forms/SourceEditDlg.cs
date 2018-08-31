@@ -23,6 +23,7 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
@@ -36,34 +37,61 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class SourceEditDlg : EditorDialog, ISourceEditDlg
     {
+        private readonly SourceEditDlgController fController;
+
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fRepositoriesList;
 
-        private GEDCOMSourceRecord fSourceRecord;
-
         public GEDCOMSourceRecord SourceRecord
         {
-            get { return fSourceRecord; }
-            set { SetSourceRecord(value); }
+            get { return fController.SourceRecord; }
+            set { fController.SourceRecord = value; }
         }
 
-        private void SetSourceRecord(GEDCOMSourceRecord value)
+        #region View Interface
+
+        ISheetList ISourceEditDlg.NotesList
         {
-            fSourceRecord = value;
-            
-            txtShortTitle.Text = fSourceRecord.FiledByEntry;
-            txtAuthor.Text = fSourceRecord.Originator.Text.Trim();
-            txtTitle.Text = fSourceRecord.Title.Text.Trim();
-            txtPublication.Text = fSourceRecord.Publication.Text.Trim();
-            txtText.Text = fSourceRecord.Text.Text.Trim();
-
-            fRepositoriesList.ListModel.DataOwner = fSourceRecord;
-            fNotesList.ListModel.DataOwner = fSourceRecord;
-            fMediaList.ListModel.DataOwner = fSourceRecord;
-            
-            ActiveControl = txtShortTitle;
+            get { return fNotesList; }
         }
+
+        ISheetList ISourceEditDlg.MediaList
+        {
+            get { return fMediaList; }
+        }
+
+        ISheetList ISourceEditDlg.RepositoriesList
+        {
+            get { return fRepositoriesList; }
+        }
+
+        ITextBoxHandler ISourceEditDlg.ShortTitle
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtShortTitle); }
+        }
+
+        ITextBoxHandler ISourceEditDlg.Author
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtAuthor); }
+        }
+
+        ITextBoxHandler ISourceEditDlg.Title
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtTitle); }
+        }
+
+        ITextBoxHandler ISourceEditDlg.Publication
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtPublication); }
+        }
+
+        ITextBoxHandler ISourceEditDlg.Text
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtText); }
+        }
+
+        #endregion
 
         public SourceEditDlg()
         {
@@ -92,57 +120,30 @@ namespace GKUI.Forms
             pageRepositories.Text = LangMan.LS(LSID.LSID_RPRepositories);
             pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
             pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+
+            fController = new SourceEditDlgController(this);
         }
 
         private void ModifyReposSheet(object sender, ModifyEventArgs eArgs)
         {
             GEDCOMRepositoryCitation cit = eArgs.ItemData as GEDCOMRepositoryCitation;
             if (eArgs.Action == RecordAction.raJump && cit != null) {
-                AcceptChanges();
+                fController.Accept();
                 fBase.SelectRecordByXRef(cit.Value.XRef);
                 Close();
             }
         }
 
-        private void AcceptChanges()
-        {
-            fSourceRecord.FiledByEntry = txtShortTitle.Text;
-            fSourceRecord.Originator.Clear();
-            fSourceRecord.SetOriginatorArray(txtAuthor.Lines);
-            fSourceRecord.Title.Clear();
-            fSourceRecord.SetTitleArray(txtTitle.Lines);
-            fSourceRecord.Publication.Clear();
-            fSourceRecord.SetPublicationArray(txtPublication.Lines);
-            fSourceRecord.Text.Clear();
-            fSourceRecord.SetTextArray(txtText.Lines);
-
-            CommitChanges();
-
-            fBase.NotifyRecord(fSourceRecord, RecordAction.raEdit);
-        }
-
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
-                AcceptChanges();
-                DialogResult = DialogResult.OK;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("SourceEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try
-            {
-                RollbackChanges();
-            }
-            catch (Exception ex)
-            {
+            try {
+                fController.Cancel();
+            } catch (Exception ex) {
                 Logger.LogWrite("SourceEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
@@ -155,10 +156,11 @@ namespace GKUI.Forms
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
 
-            fRepositoriesList.ListModel = new SourceRepositoriesSublistModel(fBase, fLocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
+            fRepositoriesList.ListModel = new SourceRepositoriesSublistModel(fBase, fController.LocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(fBase, fController.LocalUndoman);
         }
     }
 }

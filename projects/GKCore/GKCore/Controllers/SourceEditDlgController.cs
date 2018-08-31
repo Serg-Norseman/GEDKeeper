@@ -20,7 +20,6 @@
 
 using System;
 using GKCommon.GEDCOM;
-using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
 
@@ -47,11 +46,26 @@ namespace GKCore.Controllers
 
         public SourceEditDlgController(ISourceEditDlg view) : base(view)
         {
+            fView.ShortTitle.Select();
         }
 
         public override bool Accept()
         {
             try {
+                fSourceRecord.FiledByEntry = fView.ShortTitle.Text;
+                fSourceRecord.Originator.Clear();
+                fSourceRecord.SetOriginatorArray(fView.Author.Lines);
+                fSourceRecord.Title.Clear();
+                fSourceRecord.SetTitleArray(fView.Title.Lines);
+                fSourceRecord.Publication.Clear();
+                fSourceRecord.SetPublicationArray(fView.Publication.Lines);
+                fSourceRecord.Text.Clear();
+                fSourceRecord.SetTextArray(fView.Text.Lines);
+
+                fLocalUndoman.Commit();
+
+                fBase.NotifyRecord(fSourceRecord, RecordAction.raEdit);
+
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("SourceEditDlgController.Accept(): " + ex.Message);
@@ -61,6 +75,15 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            fView.ShortTitle.Text = fSourceRecord.FiledByEntry;
+            fView.Author.Text = fSourceRecord.Originator.Text.Trim();
+            fView.Title.Text = fSourceRecord.Title.Text.Trim();
+            fView.Publication.Text = fSourceRecord.Publication.Text.Trim();
+            fView.Text.Text = fSourceRecord.Text.Text.Trim();
+
+            fView.RepositoriesList.ListModel.DataOwner = fSourceRecord;
+            fView.NotesList.ListModel.DataOwner = fSourceRecord;
+            fView.MediaList.ListModel.DataOwner = fSourceRecord;
         }
     }
 }

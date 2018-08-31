@@ -220,7 +220,7 @@ namespace GKUI.Forms
 
             fFamily.SortChilds();
 
-            fLocalUndoman.Commit();
+            fController.LocalUndoman.Commit();
 
             fBase.NotifyRecord(fFamily, RecordAction.raEdit);
         }
@@ -239,7 +239,7 @@ namespace GKUI.Forms
         private void btnCancel_Click(object sender, EventArgs e)
         {
             try {
-                fLocalUndoman.Rollback();
+                fController.Cancel();
             } catch (Exception ex) {
                 Logger.LogWrite("FamilyEditDlg.btnCancel_Click(): " + ex.Message);
             }
@@ -252,9 +252,9 @@ namespace GKUI.Forms
 
             bool result = false;
             if (targetType == TargetMode.tmFamilySpouse) {
-                result = fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, fFamily, target);
+                result = fController.LocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, fFamily, target);
             } else if (targetType == TargetMode.tmFamilyChild) {
-                result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, target, fFamily);
+                result = fController.LocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, target, fFamily);
             }
 
             if (result) UpdateControls();
@@ -262,14 +262,14 @@ namespace GKUI.Forms
 
         private void btnHusbandAddClick(object sender, EventArgs e)
         {
-            if (BaseController.AddFamilyHusband(fBase, fLocalUndoman, fFamily)) {
+            if (BaseController.AddFamilyHusband(fBase, fController.LocalUndoman, fFamily)) {
                 UpdateControls();
             }
         }
 
         private void btnHusbandDeleteClick(object sender, EventArgs e)
         {
-            if (BaseController.DeleteFamilyHusband(fBase, fLocalUndoman, fFamily)) {
+            if (BaseController.DeleteFamilyHusband(fBase, fController.LocalUndoman, fFamily)) {
                 UpdateControls();
             }
         }
@@ -286,14 +286,14 @@ namespace GKUI.Forms
 
         private void btnWifeAddClick(object sender, EventArgs e)
         {
-            if (BaseController.AddFamilyWife(fBase, fLocalUndoman, fFamily)) {
+            if (BaseController.AddFamilyWife(fBase, fController.LocalUndoman, fFamily)) {
                 UpdateControls();
             }
         }
 
         private void btnWifeDeleteClick(object sender, EventArgs e)
         {
-            if (BaseController.DeleteFamilyWife(fBase, fLocalUndoman, fFamily)) {
+            if (BaseController.DeleteFamilyWife(fBase, fController.LocalUndoman, fFamily)) {
                 UpdateControls();
             }
         }
@@ -327,11 +327,11 @@ namespace GKUI.Forms
             base.InitDialog(baseWin);
             fController.Init(baseWin);
 
-            fChildrenList.ListModel = new ChildrenListModel(fBase, fLocalUndoman);
-            fEventsList.ListModel = new EventsListModel(fBase, fLocalUndoman, false);
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fLocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(fBase, fLocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fLocalUndoman);
+            fChildrenList.ListModel = new ChildrenListModel(fBase, fController.LocalUndoman);
+            fEventsList.ListModel = new EventsListModel(fBase, fController.LocalUndoman, false);
+            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(fBase, fController.LocalUndoman);
+            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fController.LocalUndoman);
         }
     }
 }
