@@ -36,7 +36,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class MediaViewerWin : Form, ILocalization
+    public partial class MediaViewerWin : CommonForm, ILocalization
     {
         private readonly IBaseWindow fBase;
         private GEDCOMFileReferenceWithTitle fFileRef;

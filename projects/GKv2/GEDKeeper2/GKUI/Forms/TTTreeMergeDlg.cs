@@ -32,7 +32,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTTreeMergeDlg : Form
+    public sealed partial class TTTreeMergeDlg : CommonDialog
     {
         private readonly IBaseWindow fBase;
         private readonly GEDCOMTree fTree;

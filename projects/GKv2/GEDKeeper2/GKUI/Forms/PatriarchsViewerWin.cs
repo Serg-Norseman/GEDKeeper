@@ -31,7 +31,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class PatriarchsViewerWin : Form
+    public partial class PatriarchsViewerWin : CommonForm
     {
         private readonly IBaseWindow fBase;
         private readonly ToolTip fTip;

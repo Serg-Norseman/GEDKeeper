@@ -32,7 +32,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTPatSearchDlg : Form
+    public sealed partial class TTPatSearchDlg : CommonDialog
     {
         private readonly IBaseWindow fBase;
         private readonly GEDCOMTree fTree;

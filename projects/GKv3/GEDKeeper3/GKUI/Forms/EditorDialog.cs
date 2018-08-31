@@ -27,10 +27,9 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class EditorDialog : ModalDialog, ICommonDialog, IBaseEditor
+    public class EditorDialog : CommonDialog, ICommonDialog, IBaseEditor
     {
         protected IBaseWindow fBase;
-        protected readonly ControlsManager fControlsManager;
         protected ChangeTracker fLocalUndoman;
 
         public IBaseWindow Base
@@ -42,9 +41,8 @@ namespace GKUI.Forms
         /// For the working state of the form designer,
         /// it is essential that existed a simple constructor.
         /// </summary>
-        public EditorDialog()
+        public EditorDialog() : base()
         {
-            fControlsManager = new ControlsManager();
         }
 
         protected void CommitChanges()

@@ -34,7 +34,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class RelationshipCalculatorDlg : Form
+    public sealed partial class RelationshipCalculatorDlg : CommonDialog
     {
         private readonly IBaseWindow fBase;
 

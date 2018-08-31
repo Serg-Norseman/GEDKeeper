@@ -70,6 +70,7 @@
     <Compile Include="GKUI\Forms\CommonFilterDlg.design.cs">
       <DependentUpon>CommonFilterDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\CommonForm.cs" />
     <Compile Include="GKUI\Forms\CommunicationEditDlg.cs" />
     <Compile Include="GKUI\Forms\CommunicationEditDlg.design.cs">
       <DependentUpon>CommunicationEditDlg.cs</DependentUpon>
@@ -119,7 +120,6 @@
     <Compile Include="GKUI\Forms\MediaViewerWin.design.cs">
       <DependentUpon>MediaViewerWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\ModalDialog.cs" />
     <Compile Include="GKUI\Forms\NameEditDlg.cs" />
     <Compile Include="GKUI\Forms\NameEditDlg.design.cs">
       <DependentUpon>NameEditDlg.cs</DependentUpon>
@@ -203,6 +203,7 @@
     <Compile Include="GKUI\Forms\StatisticsWin.design.cs">
       <DependentUpon>StatisticsWin.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\StatusForm.cs" />
     <Compile Include="GKUI\Forms\TaskEditDlg.cs" />
     <Compile Include="GKUI\Forms\TaskEditDlg.design.cs">
       <DependentUpon>TaskEditDlg.cs</DependentUpon>

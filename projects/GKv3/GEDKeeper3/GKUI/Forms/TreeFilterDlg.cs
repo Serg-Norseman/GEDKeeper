@@ -34,7 +34,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TreeFilterDlg : ModalDialog
+    public sealed partial class TreeFilterDlg : CommonDialog
     {
         private readonly IBaseWindow fBase;
         private readonly GKSheetList fPersonsList;

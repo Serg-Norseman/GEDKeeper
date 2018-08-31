@@ -40,7 +40,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class BaseWinSDI : Form, IBaseWindow
+    public sealed partial class BaseWinSDI : CommonForm, IBaseWindow
     {
         private sealed class TabParts
         {

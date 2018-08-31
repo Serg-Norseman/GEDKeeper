@@ -31,7 +31,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class LanguageSelectDlg : Form, ILanguageSelectDlg
+    public partial class LanguageSelectDlg : CommonDialog, ILanguageSelectDlg
     {
         public int SelectedLanguage { get; set; }
 

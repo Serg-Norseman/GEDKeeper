@@ -33,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class OrganizerWin : Form
+    public sealed partial class OrganizerWin : CommonForm
     {
         private readonly IBaseWindow fBase;
         private readonly GKSheetList fAdrList;

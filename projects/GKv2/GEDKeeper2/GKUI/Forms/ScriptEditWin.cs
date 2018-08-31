@@ -33,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class ScriptEditWin : Form, ILocalization
+    public sealed partial class ScriptEditWin : CommonForm, ILocalization
     {
         private readonly IBaseWindow fBase;
 

@@ -29,7 +29,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class AboutDlg : ModalDialog, ICommonDialog
+    public sealed partial class AboutDlg : CommonDialog, ICommonDialog
     {
         public AboutDlg()
         {

@@ -31,7 +31,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class DayTipsDlg : Form, IDayTipsDlg
+    public partial class DayTipsDlg : CommonDialog, IDayTipsDlg
     {
         private readonly StringList fTips;
 

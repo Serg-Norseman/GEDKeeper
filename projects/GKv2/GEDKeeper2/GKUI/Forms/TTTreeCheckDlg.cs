@@ -33,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTTreeCheckDlg : Form
+    public sealed partial class TTTreeCheckDlg : CommonDialog
     {
         private readonly IBaseWindow fBase;
         private readonly GEDCOMTree fTree;

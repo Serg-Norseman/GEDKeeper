@@ -32,7 +32,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTPlacesManagerDlg : Form
+    public sealed partial class TTPlacesManagerDlg : CommonDialog
     {
         private readonly IBaseWindow fBase;
         private readonly GEDCOMTree fTree;

@@ -31,7 +31,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class LanguageEditDlg : Form, ILanguageEditDlg
+    public sealed partial class LanguageEditDlg : CommonDialog, ILanguageEditDlg
     {
         private GEDCOMLanguageID fLanguageID;
 

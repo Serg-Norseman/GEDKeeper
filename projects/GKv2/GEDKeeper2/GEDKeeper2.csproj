@@ -177,6 +177,7 @@
     <Compile Include="GKUI\Forms\CommonFilterDlg.Designer.cs">
       <DependentUpon>CommonFilterDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\CommonForm.cs" />
     <Compile Include="GKUI\Forms\CommunicationEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -378,6 +379,7 @@
     <Compile Include="GKUI\Forms\StatisticsWin.Designer.cs">
       <DependentUpon>StatisticsWin.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\StatusForm.cs" />
     <Compile Include="GKUI\Forms\TaskEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>

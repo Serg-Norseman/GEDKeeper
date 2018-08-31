@@ -33,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class CommonFilterDlg : ModalDialog, ICommonDialog, ICommonFilterDlg
+    public partial class CommonFilterDlg : CommonDialog, ICommonDialog, ICommonFilterDlg
     {
         private readonly CommonFilterDlgController fController;
 

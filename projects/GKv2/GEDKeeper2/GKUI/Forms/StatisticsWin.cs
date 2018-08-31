@@ -35,7 +35,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class StatisticsWin : Form, IWindow
+    public sealed partial class StatisticsWin : CommonForm, IWindow
     {
         private readonly IBaseWindow fBase;
         private readonly List<GEDCOMRecord> fSelectedRecords;

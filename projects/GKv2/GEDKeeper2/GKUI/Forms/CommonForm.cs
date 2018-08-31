@@ -20,37 +20,27 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCore;
-using GKUI.Components;
+using GKCore.Controllers;
 
 namespace GKUI.Forms
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class AboutDlg : CommonDialog
+    public class CommonForm : Form
     {
-        public AboutDlg()
+        protected readonly ControlsManager fControlsManager;
+
+        public CommonForm()
         {
-            InitializeComponent();
-
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-
-            Text = LangMan.LS(LSID.LSID_MIAbout);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-
-            lblProduct.Text = GKData.APP_TITLE;
-            lblVersion.Text = @"Version " + AppHost.Instance.GetAppVersion();
-            lblCopyright.Text = AppHost.Instance.GetAppCopyright();
+            fControlsManager = new ControlsManager();
         }
+    }
 
-        private void LabelMail_Click(object sender, EventArgs e)
-        {
-            Label lbl = sender as Label;
-            if (lbl != null) {
-                GKUtils.LoadExtFile(lbl.Text);
-            }
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CommonDialog : CommonForm
+    {
     }
 }

@@ -34,7 +34,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class OptionsDlg : ModalDialog, ILocalization
+    public sealed partial class OptionsDlg : CommonDialog, ILocalization
     {
         private readonly IHost fHost;
         private GlobalOptions fOptions;

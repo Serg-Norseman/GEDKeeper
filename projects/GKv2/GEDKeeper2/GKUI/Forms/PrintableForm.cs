@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,73 +30,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public class StatusForm : Form
-    {
-        public sealed class StatusLinesEx
-        {
-            private readonly StatusForm fForm;
-
-            public string this[int index]
-            {
-                get { return fForm.GetStatusLine(index); }
-                set { fForm.SetStatusLine(index, value); }
-            }
-
-            internal StatusLinesEx(StatusForm form)
-            {
-                fForm = form;
-            }
-        }
-
-        private readonly StatusBar fStatusBar;
-        private readonly StatusLinesEx fStatusLines;
-
-        public StatusLinesEx StatusLines
-        {
-            get { return fStatusLines; }
-        }
-
-        public StatusForm()
-        {
-            fStatusBar = new StatusBar();
-            fStatusBar.Margin = new Padding(2);
-            fStatusBar.ShowPanels = true;
-            Controls.Add(fStatusBar);
-
-            fStatusLines = new StatusLinesEx(this);
-        }
-
-        protected string GetStatusLine(int index)
-        {
-            if (index < 0 || index >= fStatusBar.Panels.Count) {
-                return string.Empty;
-            } else {
-                return fStatusBar.Panels[index].Text;
-            }
-        }
-
-        protected void SetStatusLine(int index, string value)
-        {
-            StatusBarPanel panel = null;
-            if (index < 0) {
-                return;
-            } else if (index >= fStatusBar.Panels.Count) {
-                while (index >= fStatusBar.Panels.Count) {
-                    panel = new StatusBarPanel();
-                    fStatusBar.Panels.Add(panel);
-                }
-            }
-
-            panel = fStatusBar.Panels[index];
-            panel.Text = value;
-
-            for (int i = 0; i < fStatusBar.Panels.Count; i++) {
-                fStatusBar.Panels[i].AutoSize = StatusBarPanelAutoSize.Contents;
-            }
-            fStatusBar.Panels[fStatusBar.Panels.Count - 1].AutoSize = StatusBarPanelAutoSize.Spring;
-        }
-    }
-
     /// <summary>
     /// Form's class, common for the implementation of the print.
     /// </summary>

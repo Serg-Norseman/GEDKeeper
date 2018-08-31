@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System.Windows.Forms;
-using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Operations;
 
@@ -28,10 +27,9 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class EditorDialog : Form, ICommonDialog, IBaseEditor
+    public class EditorDialog : CommonDialog, ICommonDialog, IBaseEditor
     {
         protected IBaseWindow fBase;
-        protected readonly ControlsManager fControlsManager;
         protected ChangeTracker fLocalUndoman;
 
         public IBaseWindow Base
@@ -43,9 +41,8 @@ namespace GKUI.Forms
         /// For the working state of the form designer,
         /// it is essential that existed a simple constructor.
         /// </summary>
-        public EditorDialog()
+        public EditorDialog() : base()
         {
-            fControlsManager = new ControlsManager();
         }
 
         protected void CommitChanges()

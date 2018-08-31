@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System;
 using Eto.Forms;
+using GKCore.Controllers;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -27,8 +28,23 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class ModalDialog : Dialog<DialogResult>
+    public class CommonForm : Form
     {
+        protected readonly ControlsManager fControlsManager;
+
+        public CommonForm()
+        {
+            fControlsManager = new ControlsManager();
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CommonDialog : Dialog<DialogResult>
+    {
+        protected readonly ControlsManager fControlsManager;
+
         public DialogResult DialogResult
         {
             get { return base.Result; }
@@ -42,12 +58,14 @@ namespace GKUI.Forms
             }
         }
 
-        public ModalDialog()
+        public CommonDialog() : base()
         {
             Maximizable = false;
             Minimizable = false;
             Resizable = false;
             ShowInTaskbar = false;
+
+            fControlsManager = new ControlsManager();
         }
 
         public virtual bool ShowModalX(object owner)

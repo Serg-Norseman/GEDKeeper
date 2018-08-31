@@ -33,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class NameEditDlg : ModalDialog, INameEditDlg
+    public sealed partial class NameEditDlg : CommonDialog, INameEditDlg
     {
         private readonly NameEditDlgController fController;
 

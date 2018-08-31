@@ -34,7 +34,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class CommonFilterDlg : Form, ICommonDialog, IBaseEditor, ICommonFilterDlg
+    public partial class CommonFilterDlg : CommonDialog, ICommonDialog, IBaseEditor, ICommonFilterDlg
     {
         private readonly CommonFilterDlgController fController;
 

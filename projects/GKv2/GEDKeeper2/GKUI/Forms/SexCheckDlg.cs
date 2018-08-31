@@ -30,7 +30,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class SexCheckDlg : Form, ISexCheckDlg
+    public sealed partial class SexCheckDlg : CommonDialog, ISexCheckDlg
     {
         public SexCheckDlg()
         {
