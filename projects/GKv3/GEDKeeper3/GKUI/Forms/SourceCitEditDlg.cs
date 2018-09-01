@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,11 +19,11 @@
  */
 
 using System;
-using BSLib;
 using Eto.Forms;
-using GKCommon;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.UIContracts;
 using GKUI.Components;
@@ -35,47 +35,41 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class SourceCitEditDlg : EditorDialog, ISourceCitEditDlg
     {
-        private readonly StringList fSourcesList;
-
-        private GEDCOMSourceCitation fSourceCitation;
+        private readonly SourceCitEditDlgController fController;
 
         public GEDCOMSourceCitation SourceCitation
         {
-            get { return fSourceCitation; }
-            set { SetSourceCitation(value); }
+            get { return fController.SourceCitation; }
+            set { fController.SourceCitation = value; }
         }
+
+        #region View Interface
+
+        ITextBoxHandler ISourceCitEditDlg.Page
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtPage); }
+        }
+
+        IComboBoxHandler ISourceCitEditDlg.Certainty
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(txtCertainty); }
+        }
+
+        IComboBoxHandler ISourceCitEditDlg.Source
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbSource); }
+        }
+
+        #endregion
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try {
-                int idx = fSourcesList.IndexOf(cmbSource.Text);
-                GEDCOMSourceRecord src = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GEDCOMSourceRecord));
-
-                if (src == null) {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
-                    DialogResult = DialogResult.None;
-                } else {
-                    fSourceCitation.Value = src;
-                    fSourceCitation.Page = txtPage.Text;
-                    fSourceCitation.CertaintyAssessment = txtCertainty.SelectedIndex;
-                    DialogResult = DialogResult.Ok;
-                }
-            } catch (Exception ex) {
-                Logger.LogWrite("SourceCitEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
         }
 
         private void btnSourceAdd_Click(object sender, EventArgs e)
         {
-            object[] anArgs = new object[0];
-            GEDCOMSourceRecord src = fBase.Context.SelectRecord(GEDCOMRecordType.rtSource, anArgs) as GEDCOMSourceRecord;
-            if (src == null)
-                return;
-
-            fBase.Context.GetSourcesList(fSourcesList);
-            RefreshSourcesList("");
-            cmbSource.Text = src.FiledByEntry;
+            fController.AddSource();
         }
 
         private void cbSource_KeyDown(object sender, KeyEventArgs e)
@@ -85,62 +79,21 @@ namespace GKUI.Forms
 
         private void cbSource_KeyUp(object sender, KeyEventArgs e)
         {
-            RefreshSourcesList(cmbSource.Text);
+            fController.RefreshSourcesList(cmbSource.Text);
             //cmbSource.SelectionStart = cmbSource.Text.Length;
-        }
-
-        private void RefreshSourcesList(string filter)
-        {
-            //cmbSource.BeginUpdate();
-            try {
-                cmbSource.Items.Clear();
-
-                string flt = "*" + filter + "*";
-
-                int num = fSourcesList.Count;
-                for (int i = 0; i < num; i++) {
-                    string st = fSourcesList[i];
-
-                    if (filter == "" || GKUtils.MatchesMask(st, flt)) {
-                        cmbSource.Items.Add(new GKComboItem(st, fSourcesList.GetObject(i)));
-                    }
-                }
-
-                cmbSource.SortItems();
-            } finally {
-                //cmbSource.EndUpdate();
-            }
-        }
-
-        private void SetSourceCitation(GEDCOMSourceCitation value)
-        {
-            fSourceCitation = value;
-
-            GEDCOMSourceRecord src = (fSourceCitation.Value as GEDCOMSourceRecord);
-            if (src != null)
-                cmbSource.Text = src.FiledByEntry;
-
-            txtPage.Text = fSourceCitation.Page;
-            txtCertainty.SelectedIndex = fSourceCitation.CertaintyAssessment;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                fSourcesList.Dispose();
-            }
-            base.Dispose(disposing);
         }
 
         public SourceCitEditDlg()
         {
             InitializeComponent();
 
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            btnSourceAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+
             for (int i = 0; i < GKData.CertaintyAssessments.Length; i++) {
                 txtCertainty.Items.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
             }
-
-            fSourcesList = new StringList();
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
@@ -149,15 +102,23 @@ namespace GKUI.Forms
             lblSource.Text = LangMan.LS(LSID.LSID_Source);
             lblPage.Text = LangMan.LS(LSID.LSID_Page);
             lblCertainty.Text = LangMan.LS(LSID.LSID_Certainty);
+
             btnSourceAdd.ToolTip = LangMan.LS(LSID.LSID_SourceAddTip);
+
+            fController = new SourceCitEditDlgController(this);
         }
 
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
+        }
 
-            fBase.Context.GetSourcesList(fSourcesList);
-            RefreshSourcesList("");
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+            }
+            base.Dispose(disposing);
         }
     }
 }

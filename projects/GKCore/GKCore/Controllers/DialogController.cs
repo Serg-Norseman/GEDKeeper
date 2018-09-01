@@ -69,9 +69,12 @@ namespace GKCore.Controllers
         string Text { get; set; }
 
         void Add(object item);
+        void AddItem(string caption, object tag, IImage image = null);
         void AddRange(object[] items, bool sorted = false);
         void AddStrings(StringList strings);
+        void BeginUpdate();
         void Clear();
+        void EndUpdate();
         void Select();
     }
 

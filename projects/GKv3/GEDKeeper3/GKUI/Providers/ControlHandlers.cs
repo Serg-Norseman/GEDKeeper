@@ -22,6 +22,7 @@ using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore.Controllers;
+using GKCore.Interfaces;
 using GKUI.Components;
 
 namespace GKUI.Providers
@@ -132,6 +133,11 @@ namespace GKUI.Providers
             Control.Items.Add((string)item);
         }
 
+        public void AddItem(string caption, object tag, IImage image = null)
+        {
+            Control.Items.Add(new GKComboItem(caption, tag));
+        }
+
         public void AddRange(object[] items, bool sorted = false)
         {
             //Control.Sorted = false;
@@ -147,9 +153,19 @@ namespace GKUI.Providers
             }
         }
 
+        public void BeginUpdate()
+        {
+            //Control.BeginUpdate();
+        }
+
         public void Clear()
         {
             Control.Items.Clear();
+        }
+
+        public void EndUpdate()
+        {
+            //Control.EndUpdate();
         }
 
         public void Select()

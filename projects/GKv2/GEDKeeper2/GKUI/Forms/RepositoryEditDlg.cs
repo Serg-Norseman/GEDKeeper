@@ -26,7 +26,6 @@ using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
 

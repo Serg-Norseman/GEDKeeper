@@ -250,6 +250,10 @@ namespace GKCore.UIContracts
     public interface ISourceCitEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMSourceCitation SourceCitation { get; set; }
+
+        ITextBoxHandler Page { get; }
+        IComboBoxHandler Certainty { get; }
+        IComboBoxHandler Source { get; }
     }
 
     public interface ISourceEditDlg : ICommonDialog, IBaseEditor, IView

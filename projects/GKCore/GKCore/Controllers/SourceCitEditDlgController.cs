@@ -19,9 +19,9 @@
  */
 
 using System;
+using BSLib;
 using GKCommon.GEDCOM;
-using GKCore.Options;
-using GKCore.Types;
+using GKCore.Interfaces;
 using GKCore.UIContracts;
 
 namespace GKCore.Controllers
@@ -32,6 +32,7 @@ namespace GKCore.Controllers
     public sealed class SourceCitEditDlgController : DialogController<ISourceCitEditDlg>
     {
         private GEDCOMSourceCitation fSourceCitation;
+        private readonly StringList fSourcesList;
 
         public GEDCOMSourceCitation SourceCitation
         {
@@ -47,12 +48,26 @@ namespace GKCore.Controllers
 
         public SourceCitEditDlgController(ISourceCitEditDlg view) : base(view)
         {
+            fSourcesList = new StringList();
         }
 
         public override bool Accept()
         {
             try {
-                return true;
+                int idx = fSourcesList.IndexOf(fView.Source.Text);
+                GEDCOMSourceRecord src = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GEDCOMSourceRecord));
+
+                if (src == null) {
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
+
+                    return false;
+                } else {
+                    fSourceCitation.Value = src;
+                    fSourceCitation.Page = fView.Page.Text;
+                    fSourceCitation.CertaintyAssessment = fView.Certainty.SelectedIndex;
+
+                    return true;
+                }
             } catch (Exception ex) {
                 Logger.LogWrite("SourceCitEditDlgController.Accept(): " + ex.Message);
                 return false;
@@ -61,6 +76,51 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            GEDCOMSourceRecord src = (fSourceCitation.Value as GEDCOMSourceRecord);
+            if (src != null) fView.Source.Text = src.FiledByEntry;
+
+            fView.Page.Text = fSourceCitation.Page;
+            fView.Certainty.SelectedIndex = fSourceCitation.CertaintyAssessment;
+        }
+
+        public void AddSource()
+        {
+            object[] anArgs = new object[0];
+            GEDCOMSourceRecord src = fBase.Context.SelectRecord(GEDCOMRecordType.rtSource, anArgs) as GEDCOMSourceRecord;
+            if (src == null) return;
+
+            fBase.Context.GetSourcesList(fSourcesList);
+            RefreshSourcesList("");
+            fView.Source.Text = src.FiledByEntry;
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fBase.Context.GetSourcesList(fSourcesList);
+            RefreshSourcesList("");
+        }
+
+        public void RefreshSourcesList(string filter)
+        {
+            fView.Source.BeginUpdate();
+            try {
+                fView.Source.Clear();
+
+                string flt = "*" + filter + "*";
+
+                int num = fSourcesList.Count;
+                for (int i = 0; i < num; i++) {
+                    string st = fSourcesList[i];
+
+                    if (filter == "" || GKUtils.MatchesMask(st, flt)) {
+                        fView.Source.AddItem(st, fSourcesList.GetObject(i));
+                    }
+                }
+            } finally {
+                fView.Source.EndUpdate();
+            }
         }
     }
 }
