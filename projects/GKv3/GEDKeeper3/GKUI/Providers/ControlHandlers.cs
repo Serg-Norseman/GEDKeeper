@@ -18,12 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Windows.Forms;
 using BSLib;
+using Eto.Drawing;
+using Eto.Forms;
 using GKCore.Controllers;
 using GKUI.Components;
 
-namespace GKUI.Controllers
+namespace GKUI.Providers
 {
     public sealed class ButtonHandler : ControlHandler<Button, ButtonHandler>, IButtonHandler
     {
@@ -52,7 +53,7 @@ namespace GKUI.Controllers
 
         public bool Checked
         {
-            get { return Control.Checked; }
+            get { return Control.Checked.GetValueOrDefault(); }
             set { Control.Checked = value; }
         }
 
@@ -78,13 +79,16 @@ namespace GKUI.Controllers
         public bool Enabled
         {
             get { return Control.Enabled; }
-            set { Control.Enabled = value; }
+            set {
+                Control.Enabled = value;
+                //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
+            }
         }
 
         public bool ReadOnly
         {
-            get { return (Control.DropDownStyle == ComboBoxStyle.DropDownList); }
-            set { Control.DropDownStyle = (value) ? ComboBoxStyle.DropDownList : ComboBoxStyle.DropDown; }
+            get { return Control.ReadOnly; }
+            set { Control.ReadOnly = value; }
         }
 
         public int SelectedIndex
@@ -95,21 +99,21 @@ namespace GKUI.Controllers
 
         public object SelectedItem
         {
-            get { return Control.SelectedItem; }
-            set { Control.SelectedItem = value; }
+            get { return Control.SelectedValue; }
+            set { Control.SelectedValue = value; }
         }
 
         public object SelectedTag
         {
             get {
-                return ((GKComboItem)Control.SelectedItem).Tag;
+                return ((GKComboItem)Control.SelectedValue).Tag;
             }
             set {
                 var ctl = Control;
                 foreach (object item in ctl.Items) {
                     GKComboItem comboItem = (GKComboItem)item;
                     if (comboItem.Tag == value) {
-                        ctl.SelectedItem = item;
+                        ctl.SelectedValue = item;
                         return;
                     }
                 }
@@ -125,14 +129,14 @@ namespace GKUI.Controllers
 
         public void Add(object item)
         {
-            Control.Items.Add(item);
+            Control.Items.Add((string)item);
         }
 
         public void AddRange(object[] items, bool sorted = false)
         {
-            Control.Sorted = false;
-            Control.Items.AddRange(items);
-            Control.Sorted = sorted;
+            //Control.Sorted = false;
+            Control.Items.AddRange(GKComboItem.Convert((string[])items));
+            //Control.Sorted = sorted;
         }
 
         public void AddStrings(StringList strings)
@@ -150,7 +154,7 @@ namespace GKUI.Controllers
 
         public void Select()
         {
-            Control.Select();
+            Control.Focus();
         }
     }
 
@@ -163,19 +167,25 @@ namespace GKUI.Controllers
         public bool Enabled
         {
             get { return Control.Enabled; }
-            set { Control.Enabled = value; }
+            set {
+                Control.Enabled = value;
+                SetBackColor();
+            }
         }
 
         public string[] Lines
         {
-            get { return Control.Lines; }
-            set { Control.Lines = value; }
+            get { return UIHelper.Convert(Control.Text); }
+            set { /* TODO! */ }
         }
 
         public bool ReadOnly
         {
             get { return Control.ReadOnly; }
-            set { Control.ReadOnly = value; }
+            set {
+                Control.ReadOnly = value;
+                SetBackColor();
+            }
         }
 
         public string Text
@@ -186,7 +196,12 @@ namespace GKUI.Controllers
 
         public void Select()
         {
-            Control.Select();
+            Control.Focus();
+        }
+
+        private void SetBackColor()
+        {
+            Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
         }
     }
 
@@ -199,13 +214,16 @@ namespace GKUI.Controllers
         public bool Enabled
         {
             get { return Control.Enabled; }
-            set { Control.Enabled = value; }
+            set {
+                Control.Enabled = value;
+                //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
+            }
         }
 
         public string[] Lines
         {
-            get { return Control.Lines; }
-            set { Control.Lines = value; }
+            get { return UIHelper.Convert(Control.Text); }
+            set { /* TODO! */ }
         }
 
         public bool ReadOnly
@@ -222,7 +240,7 @@ namespace GKUI.Controllers
 
         public void Select()
         {
-            Control.Select();
+            Control.Focus();
         }
     }
 }

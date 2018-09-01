@@ -2,9 +2,8 @@
 using System.Reflection;
 using Eto;
 using Eto.Forms;
-using GKCommon;
 using GKCore;
-using GKUI;
+using GKUI.Providers;
 using Eto.Wpf.Forms.ToolBar;
 using Eto.Wpf.Forms.Controls;
 

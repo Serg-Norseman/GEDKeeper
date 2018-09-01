@@ -30,10 +30,9 @@ using GKCore.IoC;
 using GKCore.Options;
 using GKCore.UIContracts;
 using GKUI.Components;
-using GKUI.Controllers;
 using GKUI.Forms;
 
-namespace GKUI
+namespace GKUI.Providers
 {
     /// <summary>
     /// The main implementation of the platform-specific application's host for

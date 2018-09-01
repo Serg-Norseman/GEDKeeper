@@ -22,6 +22,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKTests;
 using GKUI;
+using GKUI.Providers;
 using NUnit.Framework;
 
 namespace GKCommon.GEDCOM

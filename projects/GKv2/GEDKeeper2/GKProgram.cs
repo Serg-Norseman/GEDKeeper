@@ -25,6 +25,7 @@ using System.Threading;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.SingleInstance;
+using GKUI.Providers;
 
 [assembly: AssemblyTitle("GEDKeeper")]
 [assembly: AssemblyDescription("")]

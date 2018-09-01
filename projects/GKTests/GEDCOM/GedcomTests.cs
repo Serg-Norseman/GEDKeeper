@@ -30,6 +30,7 @@ using GKCore;
 using GKCore.Types;
 using GKTests;
 using GKUI;
+using GKUI.Providers;
 using NUnit.Framework;
 
 namespace GKCommon.GEDCOM

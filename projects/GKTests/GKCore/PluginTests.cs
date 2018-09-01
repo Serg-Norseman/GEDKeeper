@@ -24,6 +24,7 @@ using GKCore.Interfaces;
 using GKCore.Plugins;
 using GKCore.Types;
 using GKUI;
+using GKUI.Providers;
 using NUnit.Framework;
 
 namespace GKCore

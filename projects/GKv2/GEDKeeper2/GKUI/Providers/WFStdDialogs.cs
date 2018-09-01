@@ -26,7 +26,7 @@ using GKCore.Interfaces;
 using GKCore.UIContracts;
 using GKUI.Components;
 
-namespace GKUI
+namespace GKUI.Providers
 {
     /// <summary>
     /// The implementation of the contract for working with WinForms dialogs.

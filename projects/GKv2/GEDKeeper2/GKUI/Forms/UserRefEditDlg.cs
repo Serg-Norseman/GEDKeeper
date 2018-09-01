@@ -23,6 +23,8 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
+using GKCore.Interfaces;
 using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
@@ -34,34 +36,31 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class UserRefEditDlg : EditorDialog, IUserRefEditDlg
     {
-        private GEDCOMUserReference fUserRef;
+        private readonly UserRefEditDlgController fController;
 
         public GEDCOMUserReference UserRef
         {
-            get { return fUserRef; }
-            set { SetUserRef(value); }
+            get { return fController.UserRef; }
+            set { fController.UserRef = value; }
         }
 
-        private void SetUserRef(GEDCOMUserReference value)
+        #region View Interface
+
+        IComboBoxHandler IUserRefEditDlg.Ref
         {
-            fUserRef = value;
-            cmbRef.Text = fUserRef.StringValue;
-            cmbRefType.Text = fUserRef.ReferenceType;
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRef); }
         }
+
+        IComboBoxHandler IUserRefEditDlg.RefType
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRefType); }
+        }
+
+        #endregion
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
-                fUserRef.StringValue = cmbRef.Text;
-                fUserRef.ReferenceType = cmbRefType.Text;
-                DialogResult = DialogResult.OK;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("UserRefEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
 
         public UserRefEditDlg()
@@ -72,8 +71,7 @@ namespace GKUI.Forms
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             cmbRef.Items.Add("");
-            for (SpecialUserRef ur = SpecialUserRef.urRI_StGeorgeCross; ur <= SpecialUserRef.urLast; ur++)
-            {
+            for (SpecialUserRef ur = SpecialUserRef.urRI_StGeorgeCross; ur <= SpecialUserRef.urLast; ur++) {
                 string sur = LangMan.LS(GKData.SpecialUserRefs[(int)ur].Title);
                 cmbRef.Items.Add(sur);
             }
@@ -84,6 +82,14 @@ namespace GKUI.Forms
             Text = LangMan.LS(LSID.LSID_WinUserRefEdit);
             lblReference.Text = LangMan.LS(LSID.LSID_Reference);
             lblRefType.Text = LangMan.LS(LSID.LSID_Type);
+
+            fController = new UserRefEditDlgController(this);
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+            fController.Init(baseWin);
         }
     }
 }

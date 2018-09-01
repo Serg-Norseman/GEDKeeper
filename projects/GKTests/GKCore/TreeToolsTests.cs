@@ -32,6 +32,7 @@ using GKCore.Tools;
 using GKTests;
 using GKTests.Stubs;
 using GKUI;
+using GKUI.Providers;
 using NUnit.Framework;
 
 namespace GKCore

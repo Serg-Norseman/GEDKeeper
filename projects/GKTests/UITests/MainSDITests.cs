@@ -37,6 +37,7 @@ using GKTests.ControlTesters;
 using GKUI;
 using GKUI.Components;
 using GKUI.Forms;
+using GKUI.Providers;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 

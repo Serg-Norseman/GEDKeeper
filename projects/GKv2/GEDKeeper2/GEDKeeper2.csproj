@@ -140,7 +140,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\TreeChartBox.cs" />
-    <Compile Include="GKUI\Controllers\ControlHandlers.cs" />
     <Compile Include="GKUI\Forms\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -442,10 +441,11 @@
     <Compile Include="GKUI\Forms\UserRefEditDlg.Designer.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\WFGfxRenderer.cs" />
-    <Compile Include="GKUI\WFAppHost.cs" />
-    <Compile Include="GKUI\WFGfxProvider.cs" />
-    <Compile Include="GKUI\WFStdDialogs.cs" />
+    <Compile Include="GKUI\Providers\ControlHandlers.cs" />
+    <Compile Include="GKUI\Providers\WFAppHost.cs" />
+    <Compile Include="GKUI\Providers\WFGfxProvider.cs" />
+    <Compile Include="GKUI\Providers\WFGfxRenderer.cs" />
+    <Compile Include="GKUI\Providers\WFStdDialogs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -462,7 +462,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GKUI\Controllers" />
+    <Folder Include="GKUI\Providers" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

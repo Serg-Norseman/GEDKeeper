@@ -31,10 +31,9 @@ using GKCore.IoC;
 using GKCore.Options;
 using GKCore.UIContracts;
 using GKUI.Components;
-using GKUI.Controllers;
 using GKUI.Forms;
 
-namespace GKUI
+namespace GKUI.Providers
 {
     public sealed class WFAppHost : AppHost
     {

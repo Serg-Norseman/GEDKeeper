@@ -283,6 +283,9 @@ namespace GKCore.UIContracts
     public interface IUserRefEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMUserReference UserRef { get; set; }
+
+        IComboBoxHandler Ref { get; }
+        IComboBoxHandler RefType { get; }
     }
 
     public interface IFilePropertiesDlg : ICommonDialog, IBaseEditor, IView

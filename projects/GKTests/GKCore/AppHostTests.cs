@@ -20,6 +20,7 @@
 
 using System;
 using GKUI;
+using GKUI.Providers;
 using NUnit.Framework;
 
 namespace GKCore

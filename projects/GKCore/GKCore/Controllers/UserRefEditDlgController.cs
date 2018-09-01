@@ -20,8 +20,6 @@
 
 using System;
 using GKCommon.GEDCOM;
-using GKCore.Options;
-using GKCore.Types;
 using GKCore.UIContracts;
 
 namespace GKCore.Controllers
@@ -52,6 +50,9 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
+                fUserRef.StringValue = fView.Ref.Text;
+                fUserRef.ReferenceType = fView.RefType.Text;
+
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("UserRefEditDlgController.Accept(): " + ex.Message);
@@ -61,6 +62,8 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            fView.Ref.Text = fUserRef.StringValue;
+            fView.RefType.Text = fUserRef.ReferenceType;
         }
     }
 }
