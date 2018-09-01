@@ -26,6 +26,19 @@ using GKUI.Components;
 
 namespace GKUI.Providers
 {
+    public sealed class LabelHandler : ControlHandler<Label, LabelHandler>, ILabelHandler
+    {
+        public LabelHandler(Label control) : base(control)
+        {
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+    }
+
     public sealed class ButtonHandler : ControlHandler<Button, ButtonHandler>, IButtonHandler
     {
         public ButtonHandler(Button control) : base(control)
@@ -168,6 +181,10 @@ namespace GKUI.Providers
         {
             Control.Select();
         }
+
+        public void SortItems()
+        {
+        }
     }
 
     public sealed class TextBoxHandler : ControlHandler<TextBox, TextBoxHandler>, ITextBoxHandler
@@ -234,6 +251,42 @@ namespace GKUI.Providers
         {
             get { return Control.Text; }
             set { Control.Text = value; }
+        }
+
+        public void Select()
+        {
+            Control.Select();
+        }
+    }
+
+    public sealed class NumericBoxHandler : ControlHandler<NumericUpDown, NumericBoxHandler>, INumericBoxHandler
+    {
+        public NumericBoxHandler(NumericUpDown control) : base(control)
+        {
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public bool ReadOnly
+        {
+            get { return Control.ReadOnly; }
+            set { Control.ReadOnly = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+
+        public int Value
+        {
+            get { return (int)Control.Value; }
+            set { Control.Value = value; }
         }
 
         public void Select()

@@ -46,6 +46,11 @@ namespace GKCore.Controllers
         }
     }
 
+    public interface ILabelHandler : IControlHandler
+    {
+        string Text { get; set; }
+    }
+
     public interface IButtonHandler : IControlHandler
     {
         bool Enabled { get; set; }
@@ -76,6 +81,7 @@ namespace GKCore.Controllers
         void Clear();
         void EndUpdate();
         void Select();
+        void SortItems();
     }
 
     public interface ITextBoxHandler : IControlHandler
@@ -84,6 +90,16 @@ namespace GKCore.Controllers
         string[] Lines { get; set; }
         bool ReadOnly { get; set; }
         string Text { get; set; }
+
+        void Select();
+    }
+
+    public interface INumericBoxHandler : IControlHandler
+    {
+        bool Enabled { get; set; }
+        bool ReadOnly { get; set; }
+        string Text { get; set; }
+        int Value { get; set; }
 
         void Select();
     }

@@ -49,6 +49,16 @@ namespace GKCore.Controllers
         public CommunicationEditDlgController(ICommunicationEditDlg view) : base(view)
         {
             fTempInd = null;
+
+            for (GKCommunicationType ct = GKCommunicationType.ctCall; ct <= GKCommunicationType.ctLast; ct++) {
+                fView.CorrType.Add(LangMan.LS(GKData.CommunicationNames[(int)ct]));
+            }
+
+            fView.Dir.AddRange(new object[] {
+                LangMan.LS(LSID.LSID_CD_1),
+                LangMan.LS(LSID.LSID_CD_2)
+            });
+
             fView.Name.Select();
         }
 

@@ -313,11 +313,13 @@ namespace GKUI.Providers
             container.Register<IDayTipsDlg, DayTipsDlg>(LifeCycle.Transient);
             container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient);
 
+            ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler));
         }
 
         #endregion

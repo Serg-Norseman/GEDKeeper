@@ -20,6 +20,7 @@
 
 using System;
 using GKCommon.GEDCOM;
+using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -44,14 +45,34 @@ namespace GKCore.Controllers
             }
         }
 
-
         public PersonalNameEditDlgController(IPersonalNameEditDlg view) : base(view)
         {
+            for (GEDCOMNameType nt = GEDCOMNameType.ntNone; nt <= GEDCOMNameType.ntMarried; nt++) {
+                fView.NameType.Add(LangMan.LS(GKData.NameTypes[(int)nt]));
+            }
+
+            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageEnum.LastVal; lid++) {
+                fView.Language.AddItem(GEDCOMLanguageEnum.Instance.GetStrValue(lid), lid);
+            }
+            fView.Language.SortItems();
         }
 
         public override bool Accept()
         {
             try {
+                GKUtils.SetNameParts(fPersonalName, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
+
+                GEDCOMPersonalNamePieces pieces = fPersonalName.Pieces;
+                pieces.Nickname = fView.Nickname.Text;
+                pieces.Prefix = fView.NamePrefix.Text;
+                pieces.SurnamePrefix = fView.SurnamePrefix.Text;
+                pieces.Suffix = fView.NameSuffix.Text;
+
+                fPersonalName.NameType = (GEDCOMNameType)fView.NameType.SelectedIndex;
+                fPersonalName.Language.Value = (GEDCOMLanguageID)fView.Language.SelectedTag;
+
+                fBase.Context.CollectNameLangs(fPersonalName);
+
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("PersonalNameEditDlgController.Accept(): " + ex.Message);
@@ -59,8 +80,47 @@ namespace GKCore.Controllers
             }
         }
 
+        private bool IsExtendedWomanSurname()
+        {
+            GEDCOMIndividualRecord iRec = fPersonalName.Parent as GEDCOMIndividualRecord;
+
+            bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
+                (iRec.Sex == GEDCOMSex.svFemale);
+            return result;
+        }
+
         public override void UpdateView()
         {
+            GEDCOMIndividualRecord iRec = fPersonalName.Parent as GEDCOMIndividualRecord;
+
+            var parts = GKUtils.GetNameParts(iRec, fPersonalName);
+
+            fView.Surname.Text = parts.Surname;
+            fView.Name.Text = parts.Name;
+            fView.Patronymic.Text = parts.Patronymic;
+            fView.NameType.SelectedIndex = (sbyte)fPersonalName.NameType;
+
+            fView.NamePrefix.Text = fPersonalName.Pieces.Prefix;
+            fView.Nickname.Text = fPersonalName.Pieces.Nickname;
+            fView.SurnamePrefix.Text = fPersonalName.Pieces.SurnamePrefix;
+            fView.NameSuffix.Text = fPersonalName.Pieces.Suffix;
+
+            fView.MarriedSurname.Text = fPersonalName.Pieces.MarriedName;
+
+            if (!IsExtendedWomanSurname()) {
+                fView.SurnameLabel.Text = LangMan.LS(LSID.LSID_Surname);
+                fView.MarriedSurname.Enabled = false;
+            } else {
+                fView.SurnameLabel.Text = LangMan.LS(LSID.LSID_MaidenSurname);
+                fView.MarriedSurname.Enabled = true;
+            }
+
+            ICulture culture = fBase.Context.Culture;
+            fView.Surname.Enabled = fView.Surname.Enabled && culture.HasSurname();
+            fView.Patronymic.Enabled = fView.Patronymic.Enabled && culture.HasPatronymic();
+
+            GEDCOMLanguageID langID = fPersonalName.Language.Value;
+            fView.Language.Text = GEDCOMLanguageEnum.Instance.GetStrValue(langID);
         }
     }
 }

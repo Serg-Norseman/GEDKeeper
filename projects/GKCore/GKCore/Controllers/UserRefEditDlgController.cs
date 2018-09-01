@@ -20,6 +20,7 @@
 
 using System;
 using GKCommon.GEDCOM;
+using GKCore.Types;
 using GKCore.UIContracts;
 
 namespace GKCore.Controllers
@@ -45,6 +46,11 @@ namespace GKCore.Controllers
 
         public UserRefEditDlgController(IUserRefEditDlg view) : base(view)
         {
+            fView.Ref.Add("");
+            for (SpecialUserRef ur = SpecialUserRef.urRI_StGeorgeCross; ur <= SpecialUserRef.urLast; ur++) {
+                string sur = LangMan.LS(GKData.SpecialUserRefs[(int)ur].Title);
+                fView.Ref.Add(sur);
+            }
         }
 
         public override bool Accept()

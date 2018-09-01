@@ -218,6 +218,18 @@ namespace GKCore.UIContracts
     public interface IPersonalNameEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMPersonalName PersonalName { get; set; }
+
+        ILabelHandler SurnameLabel { get; }
+        ITextBoxHandler Surname { get; }
+        ITextBoxHandler Name { get; }
+        ITextBoxHandler Patronymic { get; }
+        IComboBoxHandler NameType { get; }
+        ITextBoxHandler NamePrefix { get; }
+        ITextBoxHandler Nickname { get; }
+        ITextBoxHandler SurnamePrefix { get; }
+        ITextBoxHandler NameSuffix { get; }
+        ITextBoxHandler MarriedSurname { get; }
+        IComboBoxHandler Language { get; }
     }
 
     public interface IPersonEditDlg : ICommonDialog, IBaseEditor, IView
@@ -239,6 +251,18 @@ namespace GKCore.UIContracts
     public interface IResearchEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMResearchRecord Research { get; set; }
+
+        ISheetList TasksList { get; }
+        ISheetList CommunicationsList { get; }
+        ISheetList GroupsList { get; }
+        ISheetList NotesList { get; }
+
+        ITextBoxHandler Name { get; }
+        IComboBoxHandler Priority { get; }
+        IComboBoxHandler Status { get; }
+        ITextBoxHandler StartDate { get; }
+        ITextBoxHandler StopDate { get; }
+        INumericBoxHandler Percent { get; }
     }
 
     public interface ISexCheckDlg : ICommonDialog

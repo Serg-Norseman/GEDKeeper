@@ -36,6 +36,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class PersonalNameEditDlgTests : CustomWindowTest
     {
+        private GEDCOMIndividualRecord fPerson;
         private GEDCOMPersonalName fPersonalName;
         private IBaseWindow fBase;
         private PersonalNameEditDlg fDialog;
@@ -45,7 +46,8 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fPersonalName = new GEDCOMPersonalName(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fPerson = new GEDCOMIndividualRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fPersonalName = new GEDCOMPersonalName(fBase.Context.Tree, fPerson, "", "");
 
             fDialog = new PersonalNameEditDlg();
             fDialog.InitDialog(fBase);

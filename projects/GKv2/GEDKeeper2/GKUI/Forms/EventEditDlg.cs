@@ -142,22 +142,6 @@ namespace GKUI.Forms
             btnPlaceAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
             btnPlaceDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
 
-            int num = GKData.DateKinds.Length;
-            for (int i = 0; i < num; i++) {
-                cmbEventDateType.Items.Add(LangMan.LS(GKData.DateKinds[i].Name));
-            }
-
-            for (GEDCOMCalendar gc = GEDCOMCalendar.dcGregorian; gc <= GEDCOMCalendar.dcLast; gc++) {
-                GKData.CalendarStruct cdr = GKData.DateCalendars[(int)gc];
-                if (!cdr.HasSupport) continue;
-
-                cmbDate1Calendar.Items.Add(new GKComboItem(LangMan.LS(cdr.Name), gc));
-                cmbDate2Calendar.Items.Add(new GKComboItem(LangMan.LS(cdr.Name), gc));
-            }
-
-            cmbDate1Calendar.SelectedIndex = 0;
-            cmbDate2Calendar.SelectedIndex = 0;
-
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
             fSourcesList = new GKSheetList(pageSources);

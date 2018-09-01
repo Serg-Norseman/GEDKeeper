@@ -47,11 +47,29 @@ namespace GKCore.Controllers
 
         public ResearchEditDlgController(IResearchEditDlg view) : base(view)
         {
+            for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++) {
+                fView.Priority.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
+            }
+
+            for (GKResearchStatus rs = GKResearchStatus.rsDefined; rs <= GKResearchStatus.rsWithdrawn; rs++) {
+                fView.Status.Add(LangMan.LS(GKData.StatusNames[(int)rs]));
+            }
         }
 
         public override bool Accept()
         {
             try {
+                fResearch.ResearchName = fView.Name.Text;
+                fResearch.Priority = (GKResearchPriority)fView.Priority.SelectedIndex;
+                fResearch.Status = (GKResearchStatus)fView.Status.SelectedIndex;
+                fResearch.StartDate.Assign(GEDCOMDate.CreateByFormattedStr(fView.StartDate.Text, true));
+                fResearch.StopDate.Assign(GEDCOMDate.CreateByFormattedStr(fView.StopDate.Text, true));
+                fResearch.Percent = int.Parse(fView.Percent.Text);
+
+                fLocalUndoman.Commit();
+
+                fBase.NotifyRecord(fResearch, RecordAction.raEdit);
+
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("ResearchEditDlgController.Accept(): " + ex.Message);
@@ -61,6 +79,26 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            if (fResearch == null) {
+                fView.Name.Text = "";
+                fView.Priority.SelectedIndex = -1;
+                fView.Status.SelectedIndex = -1;
+                fView.StartDate.Text = "";
+                fView.StopDate.Text = "";
+                fView.Percent.Value = 0;
+            } else {
+                fView.Name.Text = fResearch.ResearchName;
+                fView.Priority.SelectedIndex = (int)fResearch.Priority;
+                fView.Status.SelectedIndex = (int)fResearch.Status;
+                fView.StartDate.Text = fResearch.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.StopDate.Text = fResearch.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.Percent.Value = fResearch.Percent;
+            }
+
+            fView.NotesList.ListModel.DataOwner = fResearch;
+            fView.TasksList.ListModel.DataOwner = fResearch;
+            fView.CommunicationsList.ListModel.DataOwner = fResearch;
+            fView.GroupsList.ListModel.DataOwner = fResearch;
         }
     }
 }

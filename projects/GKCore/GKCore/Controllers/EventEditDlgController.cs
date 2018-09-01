@@ -50,6 +50,23 @@ namespace GKCore.Controllers
         public EventEditDlgController(IEventEditDlg view) : base(view)
         {
             fTempLocation = null;
+
+            int num = GKData.DateKinds.Length;
+            for (int i = 0; i < num; i++) {
+                fView.EventDateType.Add(LangMan.LS(GKData.DateKinds[i].Name));
+            }
+
+            for (GEDCOMCalendar gc = GEDCOMCalendar.dcGregorian; gc <= GEDCOMCalendar.dcLast; gc++) {
+                GKData.CalendarStruct cdr = GKData.DateCalendars[(int)gc];
+                if (!cdr.HasSupport) continue;
+
+                fView.Date1Calendar.AddItem(LangMan.LS(cdr.Name), gc);
+                fView.Date2Calendar.AddItem(LangMan.LS(cdr.Name), gc);
+            }
+
+            fView.Date1Calendar.SelectedIndex = 0;
+            fView.Date2Calendar.SelectedIndex = 0;
+
             fView.EventType.Select();
         }
 

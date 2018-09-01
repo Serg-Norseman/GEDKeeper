@@ -25,8 +25,6 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Options;
-using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
 
@@ -36,24 +34,70 @@ namespace GKUI.Forms
     {
         private readonly PersonalNameEditDlgController fController;
 
-        private GEDCOMPersonalName fPersonalName;
-
         public GEDCOMPersonalName PersonalName
         {
-            get { return fPersonalName; }
-            set { SetPersonalName(value); }
+            get { return fController.PersonalName; }
+            set { fController.PersonalName = value; }
         }
 
+        #region View Interface
 
-        private void SetPersonalName(GEDCOMPersonalName value)
+        ILabelHandler IPersonalNameEditDlg.SurnameLabel
         {
-            fPersonalName = value;
-            try {
-                UpdateControls();
-            } catch (Exception ex) {
-                Logger.LogWrite("PersonalNameEditDlg.SetPersonalName(): " + ex.Message);
-            }
+            get { return fControlsManager.GetControlHandler<ILabelHandler>(lblSurname); }
         }
+
+        ITextBoxHandler IPersonalNameEditDlg.Surname
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtSurname); }
+        }
+
+        ITextBoxHandler IPersonalNameEditDlg.Name
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+        }
+
+        ITextBoxHandler IPersonalNameEditDlg.Patronymic
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtPatronymic); }
+        }
+
+        IComboBoxHandler IPersonalNameEditDlg.NameType
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbNameType); }
+        }
+
+        ITextBoxHandler IPersonalNameEditDlg.NamePrefix
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtNamePrefix); }
+        }
+
+        ITextBoxHandler IPersonalNameEditDlg.Nickname
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtNickname); }
+        }
+
+        ITextBoxHandler IPersonalNameEditDlg.SurnamePrefix
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtSurnamePrefix); }
+        }
+
+        ITextBoxHandler IPersonalNameEditDlg.NameSuffix
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtNameSuffix); }
+        }
+
+        ITextBoxHandler IPersonalNameEditDlg.MarriedSurname
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtMarriedSurname); }
+        }
+
+        IComboBoxHandler IPersonalNameEditDlg.Language
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbLanguage); }
+        }
+
+        #endregion
 
         private void edName_KeyDown(object sender, KeyEventArgs e)
         {
@@ -62,77 +106,9 @@ namespace GKUI.Forms
             }
         }
 
-        private bool IsExtendedWomanSurname()
-        {
-            GEDCOMIndividualRecord iRec = fPersonalName.Parent as GEDCOMIndividualRecord;
-
-            bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
-                (iRec.Sex == GEDCOMSex.svFemale);
-            return result;
-        }
-
-        private void UpdateControls()
-        {
-            GEDCOMIndividualRecord iRec = fPersonalName.Parent as GEDCOMIndividualRecord;
-
-            var parts = GKUtils.GetNameParts(iRec, fPersonalName);
-
-            txtSurname.Text = parts.Surname;
-            txtName.Text = parts.Name;
-            txtPatronymic.Text = parts.Patronymic;
-            cmbNameType.SelectedIndex = (int)fPersonalName.NameType;
-
-            txtNamePrefix.Text = fPersonalName.Pieces.Prefix;
-            txtNickname.Text = fPersonalName.Pieces.Nickname;
-            txtSurnamePrefix.Text = fPersonalName.Pieces.SurnamePrefix;
-            txtNameSuffix.Text = fPersonalName.Pieces.Suffix;
-
-            txtMarriedSurname.Text = fPersonalName.Pieces.MarriedName;
-
-            if (!IsExtendedWomanSurname()) {
-                lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
-                txtMarriedSurname.Enabled = false;
-            } else {
-                lblSurname.Text = LangMan.LS(LSID.LSID_MaidenSurname);
-                txtMarriedSurname.Enabled = true;
-            }
-
-            ICulture culture = fBase.Context.Culture;
-            txtSurname.Enabled = txtSurname.Enabled && culture.HasSurname();
-            txtPatronymic.Enabled = txtPatronymic.Enabled && culture.HasPatronymic();
-
-            GEDCOMLanguageID langID = fPersonalName.Language.Value;
-            cmbLanguage.Text = GEDCOMLanguageEnum.Instance.GetStrValue(langID);
-        }
-
-        private void AcceptChanges()
-        {
-            GKUtils.SetNameParts(fPersonalName, txtSurname.Text, txtName.Text, txtPatronymic.Text);
-
-            GEDCOMPersonalNamePieces pieces = fPersonalName.Pieces;
-            pieces.Nickname = txtNickname.Text;
-            pieces.Prefix = txtNamePrefix.Text;
-            pieces.SurnamePrefix = txtSurnamePrefix.Text;
-            pieces.Suffix = txtNameSuffix.Text;
-
-            fPersonalName.NameType = (GEDCOMNameType)cmbNameType.SelectedIndex;
-
-            var item = (GKComboItem)cmbLanguage.Items[cmbLanguage.SelectedIndex];
-            var langID = (GEDCOMLanguageID)item.Tag;
-            fPersonalName.Language.Value = langID;
-
-            fBase.Context.CollectNameLangs(fPersonalName);
-        }
-
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try {
-                AcceptChanges();
-                DialogResult = DialogResult.Ok;
-            } catch (Exception ex) {
-                Logger.LogWrite("PersonalNameEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
         }
 
         public PersonalNameEditDlg()
@@ -141,15 +117,6 @@ namespace GKUI.Forms
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            for (GEDCOMNameType nt = GEDCOMNameType.ntNone; nt <= GEDCOMNameType.ntMarried; nt++) {
-                cmbNameType.Items.Add(LangMan.LS(GKData.NameTypes[(int)nt]));
-            }
-
-            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageEnum.LastVal; lid++) {
-                cmbLanguage.Items.Add(new GKComboItem(GEDCOMLanguageEnum.Instance.GetStrValue(lid), lid));
-            }
-            cmbLanguage.SortItems();
 
             SetLang();
 

@@ -117,14 +117,6 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++) {
-                txtPriority.Items.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
-            }
-
-            for (GKGoalType gt = GKGoalType.gtIndividual; gt <= GKGoalType.gtOther; gt++) {
-                cmbGoalType.Items.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
-            }
-
             fNotesList = new GKSheetList(pageNotes);
 
             // SetLang()

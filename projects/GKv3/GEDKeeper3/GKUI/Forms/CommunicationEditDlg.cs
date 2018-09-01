@@ -113,10 +113,6 @@ namespace GKUI.Forms
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
             btnPersonAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
 
-            for (GKCommunicationType ct = GKCommunicationType.ctCall; ct <= GKCommunicationType.ctLast; ct++) {
-                cmbCorrType.Items.Add(LangMan.LS(GKData.CommunicationNames[(int)ct]));
-            }
-
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
 
@@ -132,12 +128,6 @@ namespace GKUI.Forms
             lblDate.Text = LangMan.LS(LSID.LSID_Date);
 
             btnPersonAdd.ToolTip = LangMan.LS(LSID.LSID_PersonAttachTip);
-
-            txtDir.Items.Clear();
-            txtDir.Items.AddRange(GKComboItem.Convert(new string[] {
-                LangMan.LS(LSID.LSID_CD_1),
-                LangMan.LS(LSID.LSID_CD_2)
-            }));
 
             fController = new CommunicationEditDlgController(this);
         }

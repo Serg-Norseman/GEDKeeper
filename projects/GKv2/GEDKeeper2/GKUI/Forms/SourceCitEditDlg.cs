@@ -91,10 +91,6 @@ namespace GKUI.Forms
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
             btnSourceAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
 
-            for (int i = 0; i < GKData.CertaintyAssessments.Length; i++) {
-                txtCertainty.Items.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
-            }
-
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);

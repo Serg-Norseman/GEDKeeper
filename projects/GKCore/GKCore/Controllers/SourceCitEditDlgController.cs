@@ -49,6 +49,10 @@ namespace GKCore.Controllers
         public SourceCitEditDlgController(ISourceCitEditDlg view) : base(view)
         {
             fSourcesList = new StringList();
+
+            for (int i = 0; i < GKData.CertaintyAssessments.Length; i++) {
+                fView.Certainty.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
+            }
         }
 
         public override bool Accept()

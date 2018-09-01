@@ -44,42 +44,66 @@ namespace GKUI.Forms
         private readonly GKSheetList fGroupsList;
         private readonly GKSheetList fNotesList;
 
-        private GEDCOMResearchRecord fResearch;
-
         public GEDCOMResearchRecord Research
         {
-            get { return fResearch; }
-            set { SetResearch(value); }
+            get { return fController.Research; }
+            set { fController.Research = value; }
         }
 
-        private void SetResearch(GEDCOMResearchRecord value)
+        #region View Interface
+
+        ISheetList IResearchEditDlg.TasksList
         {
-            fResearch = value;
-            try {
-                if (fResearch == null) {
-                    txtName.Text = "";
-                    cmbPriority.SelectedIndex = -1;
-                    cmbStatus.SelectedIndex = -1;
-                    txtStartDate.Text = "";
-                    txtStopDate.Text = "";
-                    nudPercent.Text = @"0";
-                } else {
-                    txtName.Text = fResearch.ResearchName;
-                    cmbPriority.SelectedIndex = (int)fResearch.Priority;
-                    cmbStatus.SelectedIndex = (int)fResearch.Status;
-                    txtStartDate.Text = fResearch.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                    txtStopDate.Text = fResearch.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                    nudPercent.Text = fResearch.Percent.ToString();
-                }
-
-                fNotesList.ListModel.DataOwner = fResearch;
-                fTasksList.ListModel.DataOwner = fResearch;
-                fCommunicationsList.ListModel.DataOwner = fResearch;
-                fGroupsList.ListModel.DataOwner = fResearch;
-            } catch (Exception ex) {
-                Logger.LogWrite("ResearchEditDlg.SetResearch(): " + ex.Message);
-            }
+            get { return fTasksList; }
         }
+
+        ISheetList IResearchEditDlg.CommunicationsList
+        {
+            get { return fCommunicationsList; }
+        }
+
+        ISheetList IResearchEditDlg.GroupsList
+        {
+            get { return fGroupsList; }
+        }
+
+        ISheetList IResearchEditDlg.NotesList
+        {
+            get { return fNotesList; }
+        }
+
+
+        ITextBoxHandler IResearchEditDlg.Name
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+        }
+
+        IComboBoxHandler IResearchEditDlg.Priority
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbPriority); }
+        }
+
+        IComboBoxHandler IResearchEditDlg.Status
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbStatus); }
+        }
+
+        ITextBoxHandler IResearchEditDlg.StartDate
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtStartDate); }
+        }
+
+        ITextBoxHandler IResearchEditDlg.StopDate
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtStopDate); }
+        }
+
+        INumericBoxHandler IResearchEditDlg.Percent
+        {
+            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(nudPercent); }
+        }
+
+        #endregion
 
         public ResearchEditDlg()
         {
@@ -87,14 +111,6 @@ namespace GKUI.Forms
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++) {
-                cmbPriority.Items.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
-            }
-
-            for (GKResearchStatus rs = GKResearchStatus.rsDefined; rs <= GKResearchStatus.rsWithdrawn; rs++) {
-                cmbStatus.Items.Add(LangMan.LS(GKData.StatusNames[(int)rs]));
-            }
 
             fTasksList = new GKSheetList(pageTasks);
             fTasksList.OnModify += ListTasksModify;
@@ -136,7 +152,7 @@ namespace GKUI.Forms
         {
             GEDCOMTaskRecord task = eArgs.ItemData as GEDCOMTaskRecord;
             if (eArgs.Action == RecordAction.raJump && task != null) {
-                AcceptChanges();
+                fController.Accept();
                 fBase.SelectRecordByXRef(task.XRef);
                 Close();
             }
@@ -146,7 +162,7 @@ namespace GKUI.Forms
         {
             GEDCOMCommunicationRecord comm = eArgs.ItemData as GEDCOMCommunicationRecord;
             if (eArgs.Action == RecordAction.raJump && comm != null) {
-                AcceptChanges();
+                fController.Accept();
                 fBase.SelectRecordByXRef(comm.XRef);
                 Close();
             }
@@ -156,35 +172,15 @@ namespace GKUI.Forms
         {
             GEDCOMGroupRecord group = eArgs.ItemData as GEDCOMGroupRecord;
             if (eArgs.Action == RecordAction.raJump && group != null) {
-                AcceptChanges();
+                fController.Accept();
                 fBase.SelectRecordByXRef(group.XRef);
                 Close();
             }
         }
 
-        private void AcceptChanges()
-        {
-            fResearch.ResearchName = txtName.Text;
-            fResearch.Priority = (GKResearchPriority)cmbPriority.SelectedIndex;
-            fResearch.Status = (GKResearchStatus)cmbStatus.SelectedIndex;
-            fResearch.StartDate.Assign(GEDCOMDate.CreateByFormattedStr(txtStartDate.Text, true));
-            fResearch.StopDate.Assign(GEDCOMDate.CreateByFormattedStr(txtStopDate.Text, true));
-            fResearch.Percent = int.Parse(nudPercent.Text);
-
-            fController.LocalUndoman.Commit();
-
-            fBase.NotifyRecord(fResearch, RecordAction.raEdit);
-        }
-
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try {
-                AcceptChanges();
-                DialogResult = DialogResult.OK;
-            } catch (Exception ex) {
-                Logger.LogWrite("ResearchEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

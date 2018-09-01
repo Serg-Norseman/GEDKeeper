@@ -48,6 +48,14 @@ namespace GKCore.Controllers
         public TaskEditDlgController(ITaskEditDlg view) : base(view)
         {
             fTempRec = null;
+
+            for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++) {
+                fView.Priority.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
+            }
+
+            for (GKGoalType gt = GKGoalType.gtIndividual; gt <= GKGoalType.gtOther; gt++) {
+                fView.GoalType.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
+            }
         }
 
         public override bool Accept()

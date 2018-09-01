@@ -70,12 +70,6 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            cmbRef.Items.Add("");
-            for (SpecialUserRef ur = SpecialUserRef.urRI_StGeorgeCross; ur <= SpecialUserRef.urLast; ur++) {
-                string sur = LangMan.LS(GKData.SpecialUserRefs[(int)ur].Title);
-                cmbRef.Items.Add(sur);
-            }
-
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
