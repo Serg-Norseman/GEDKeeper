@@ -27,9 +27,11 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
 using GKUI.Providers;
 
@@ -38,8 +40,10 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class TreeChartWin : PrintableForm, IChartWindow
+    public partial class TreeChartWin : PrintableForm, IChartWindow, ITreeChartWin
     {
+        private readonly TreeChartWinController fController;
+
         private readonly IBaseWindow fBase;
         private readonly TreeChartBox fTreeBox;
 
@@ -52,6 +56,14 @@ namespace GKUI.Forms
             get { return fBase; }
         }
 
+        #region View Interface
+
+        public string Caption
+        {
+            get { return base.Text; }
+            set { base.Text = value; }
+        }
+
         public TreeChartKind ChartKind
         {
             get { return fChartKind; }
@@ -61,6 +73,12 @@ namespace GKUI.Forms
             }
         }
 
+        ITreeChartBox ITreeChartWin.TreeBox
+        {
+            get { return fTreeBox; }
+        }
+
+        #endregion
 
         public TreeChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson)
         {
@@ -110,6 +128,9 @@ namespace GKUI.Forms
 
             miTraceKinships.Checked = fTreeBox.TraceKinships;
             miTraceKinships.Visible = false;
+
+            fController = new TreeChartWinController(this);
+            fController.Init(baseWin);
         }
 
         protected override void Dispose(bool disposing)
@@ -131,24 +152,6 @@ namespace GKUI.Forms
             return fTreeBox;
         }
 
-        private void UpdateTitle()
-        {
-            switch (fChartKind)
-            {
-                case TreeChartKind.ckAncestors:
-                    Text = LangMan.LS(LSID.LSID_MITreeAncestors);
-                    break;
-                case TreeChartKind.ckDescendants:
-                    Text = LangMan.LS(LSID.LSID_MITreeDescendants);
-                    break;
-                case TreeChartKind.ckBoth:
-                    Text = LangMan.LS(LSID.LSID_MITreeBoth);
-                    break;
-            }
-
-            Text = string.Format("{0} \"{1}\"", Text, Path.GetFileName(fBase.Context.FileName));
-        }
-
         #region Interface handlers
 
         private void ToolBar1_ButtonClick(object sender, EventArgs e)
@@ -160,15 +163,6 @@ namespace GKUI.Forms
             } else if (sender == tbNext) {
                 NavNext();
             }
-        }
-
-        private void UpdateChart()
-        {
-            if (fBase != null) {
-                fBase.RefreshLists(false);
-            }
-
-            fTreeBox.RefreshTree();
         }
 
         private void UpdateModesMenu()
@@ -233,12 +227,9 @@ namespace GKUI.Forms
 
         private void ImageTree_DragOver(object sender, DragEventArgs e)
         {
-            /*if (e.Data.GetDataPresent(typeof(string)))
-			{
+            /*if (e.Data.GetDataPresent(typeof(string))) {
 				e.Effect = DragDropEffects.Move;
-			}
-			else
-			{
+			} else {
 				e.Effect = DragDropEffects.None;
 			}*/
         }
@@ -263,32 +254,7 @@ namespace GKUI.Forms
 
         private void ImageTree_PersonModify(object sender, PersonModifyEventArgs eArgs)
         {
-            TreeChartPerson person = eArgs.Person;
-            if (person == null) return;
-
-            bool modified = false;
-
-            if (person.Rec != null) {
-                GEDCOMIndividualRecord iRec = person.Rec;
-                modified = BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone);
-            } else {
-                // this is "stub" person, only in descendant tree
-                // key properties = BaseSpouse & BaseFamily
-                TreeChartPerson baseSpouse = person.BaseSpouse;
-                GEDCOMFamilyRecord baseFamily = person.BaseFamily;
-
-                if (baseSpouse != null && baseFamily != null) {
-                    GEDCOMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(person.BaseSpouse.Rec);
-
-                    if (iSpouse != null) {
-                        modified = baseFamily.AddSpouse(iSpouse);
-                    }
-                }
-            }
-
-            if (modified) {
-                UpdateChart();
-            }
+            fController.ModifyPerson(eArgs.Person);
         }
 
         private void miGens9_Click(object sender, EventArgs e)
@@ -323,140 +289,42 @@ namespace GKUI.Forms
 
         private void miEdit_Click(object sender, EventArgs e)
         {
-            TreeChartPerson p = fTreeBox.Selected;
-            if (p == null || p.Rec == null) return;
-
-            GEDCOMIndividualRecord iRec = p.Rec;
-            if (BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone))
-            {
-                UpdateChart();
-            }
-        }
-
-        private bool ParentIsRequired(GEDCOMSex needSex)
-        {
-            TreeChartPerson p = fTreeBox.Selected;
-            if (p == null || p.Rec == null) return false;
-
-            bool familyExist = p.Rec.GetParentsFamily() != null;
-            if (!familyExist) return true;
-
-            GEDCOMIndividualRecord mother, father;
-            GEDCOMFamilyRecord fam = p.Rec.GetParentsFamily();
-            if (fam == null) {
-                father = null;
-                mother = null;
-            } else {
-                father = fam.GetHusband();
-                mother = fam.GetWife();
-            }
-
-            bool needParent = (father == null && needSex == GEDCOMSex.svMale) ||
-                (mother == null && needSex == GEDCOMSex.svFemale);
-            return needParent;
-        }
-
-        private void ParentAdd(GEDCOMSex needSex)
-        {
-            TreeChartPerson p = fTreeBox.Selected;
-            if (p == null || p.Rec == null) return;
-
-            bool needParent = false;
-            bool familyExist = p.Rec.GetParentsFamily() != null;
-
-            if (familyExist) {
-                GEDCOMIndividualRecord mother, father;
-                GEDCOMFamilyRecord fam = p.Rec.GetParentsFamily();
-                if (fam == null) {
-                    father = null;
-                    mother = null;
-                } else {
-                    father = fam.GetHusband();
-                    mother = fam.GetWife();
-                }
-
-                needParent = (father == null && needSex == GEDCOMSex.svMale) ||
-                    (mother == null && needSex == GEDCOMSex.svFemale);
-            }
-
-            if (!familyExist || needParent) {
-                GEDCOMIndividualRecord child = p.Rec;
-                GEDCOMFamilyRecord fam = (familyExist) ? p.Rec.GetParentsFamily() : fBase.Context.Tree.CreateFamily();
-                GEDCOMIndividualRecord parent = fBase.Context.SelectPerson(null, TargetMode.tmParent, needSex);
-                if (parent != null) {
-                    fam.AddSpouse(parent);
-                    if (!familyExist)
-                        fam.AddChild(child);
-                    
-                    UpdateChart();
-                }
-            }
+            fController.Edit();
         }
 
         private void miFatherAdd_Click(object sender, EventArgs e)
         {
-            ParentAdd(GEDCOMSex.svMale);
+            fController.AddFather();
         }
 
         private void miMotherAdd_Click(object sender, EventArgs e)
         {
-            ParentAdd(GEDCOMSex.svFemale);
+            fController.AddMother();
         }
 
         private void miSpouseAdd_Click(object sender, EventArgs e)
         {
-            TreeChartPerson p = fTreeBox.Selected;
-            if (p == null || p.Rec == null) return;
-
-            GEDCOMIndividualRecord iRec = p.Rec;
-            GEDCOMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(iRec);
-            if (iSpouse == null) return;
-
-            GEDCOMFamilyRecord fam = fBase.Context.Tree.CreateFamily();
-            fam.AddSpouse(iRec);
-            fam.AddSpouse(iSpouse);
-            UpdateChart();
-        }
-
-        private void InternalChildAdd(GEDCOMSex needSex)
-        {
-            TreeChartPerson p = fTreeBox.Selected;
-            if (p == null || p.Rec == null) return;
-
-            GEDCOMIndividualRecord child = fBase.Context.AddChildForParent(p.Rec, needSex);
-            if (child == null) return;
-
-            UpdateChart();
+            fController.AddSpouse();
         }
 
         private void miSonAdd_Click(object sender, EventArgs e)
         {
-            InternalChildAdd(GEDCOMSex.svMale);
+            fController.AddSon();
         }
 
         private void miDaughterAdd_Click(object sender, EventArgs e)
         {
-            InternalChildAdd(GEDCOMSex.svFemale);
+            fController.AddDaughter();
         }
 
         private void miFamilyAdd_Click(object sender, EventArgs e)
         {
-            TreeChartPerson p = fTreeBox.Selected;
-            if (p == null || p.Rec == null) return;
-
-            GEDCOMFamilyRecord fam = fBase.Context.AddFamilyForSpouse(p.Rec);
-            if (fam == null) return;
-
-            UpdateChart();
+            fController.AddFamily();
         }
 
         private void miDelete_Click(object sender, EventArgs e)
         {
-            TreeChartPerson p = fTreeBox.Selected;
-            if (p == null || p.Rec == null || p == fTreeBox.Model.Root) return;
-
-            BaseController.DeleteRecord(fBase, p.Rec, true);
-            GenChart();
+            fController.Delete();
         }
 
         private void miRebuildKinships_Click(object sender, EventArgs e)
@@ -530,6 +398,29 @@ namespace GKUI.Forms
             }
         }
 
+        private bool ParentIsRequired(GEDCOMSex needSex)
+        {
+            TreeChartPerson p = fTreeBox.Selected;
+            if (p == null || p.Rec == null) return false;
+
+            bool familyExist = p.Rec.GetParentsFamily() != null;
+            if (!familyExist) return true;
+
+            GEDCOMIndividualRecord mother, father;
+            GEDCOMFamilyRecord fam = p.Rec.GetParentsFamily();
+            if (fam == null) {
+                father = null;
+                mother = null;
+            } else {
+                father = fam.GetHusband();
+                mother = fam.GetWife();
+            }
+
+            bool needParent = (father == null && needSex == GEDCOMSex.svMale) ||
+                (mother == null && needSex == GEDCOMSex.svFemale);
+            return needParent;
+        }
+
         private void MenuPerson_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             miFatherAdd.Enabled = ParentIsRequired(GEDCOMSex.svMale);
@@ -546,6 +437,17 @@ namespace GKUI.Forms
             DoPrint();
         }
 
+        private void tbOptions_Click(object sender, EventArgs e)
+        {
+            using (OptionsDlg dlgOptions = new OptionsDlg(AppHost.Instance))
+            {
+                dlgOptions.SetPage(OptionsPage.opTreeChart);
+                if (dlgOptions.ShowDialog() == DialogResult.OK) {
+                    AppHost.Instance.ApplyOptions();
+                }
+            }
+        }
+
         #endregion
 
         #region IChartWindow implementation
@@ -556,7 +458,7 @@ namespace GKUI.Forms
                 if (fPerson == null) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
                 } else {
-                    UpdateTitle();
+                    fController.UpdateTitle();
 
                     fTreeBox.GenChart(fPerson, fChartKind, true);
 
@@ -671,10 +573,9 @@ namespace GKUI.Forms
         public void QuickSearch()
         {
             QuickSearchDlg qsDlg = new QuickSearchDlg(this);
-            
+
             Rectangle client = ClientRectangle;
-            Point pt = PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
-            qsDlg.Location = pt;
+            qsDlg.Location = PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
 
             qsDlg.Show();
         }

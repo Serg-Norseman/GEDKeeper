@@ -61,6 +61,7 @@ namespace GKCore.Charts
         TreeChartModel Model { get; }
         TreeChartOptions Options { get; set; }
         float Scale { get; }
+        TreeChartPerson Selected { get; set; }
         int Width { get; set; }
 
         void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
@@ -68,6 +69,7 @@ namespace GKCore.Charts
         ExtSize GetImageSize();
         ExtPoint GetOffsets();
         void Invalidate();
+        void RefreshTree();
         void RenderImage(RenderTarget target, bool forciblyCentered = false);
         void SetRenderer(ChartRenderer renderer);
         void SetScale(float value);

@@ -20,6 +20,7 @@
 
 using BSLib;
 using GKCommon.GEDCOM;
+using GKCore.Charts;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -370,7 +371,10 @@ namespace GKCore.UIContracts
     {
     }
 
-    public interface ITreeChartWin : ICommonDialog, IView
+    public interface ITreeChartWin : IView
     {
+        string Caption { get; set; }
+        ITreeChartBox TreeBox { get; }
+        TreeChartKind ChartKind { get; set; }
     }
 }

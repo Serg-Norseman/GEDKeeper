@@ -19,7 +19,9 @@
  */
 
 using System;
+using System.IO;
 using GKCommon.GEDCOM;
+using GKCore.Charts;
 using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -38,6 +40,176 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+        }
+
+        public void UpdateTitle()
+        {
+            string kindName = "";
+            switch (fView.ChartKind) {
+                case TreeChartKind.ckAncestors:
+                    kindName = LangMan.LS(LSID.LSID_MITreeAncestors);
+                    break;
+                case TreeChartKind.ckDescendants:
+                    kindName = LangMan.LS(LSID.LSID_MITreeDescendants);
+                    break;
+                case TreeChartKind.ckBoth:
+                    kindName = LangMan.LS(LSID.LSID_MITreeBoth);
+                    break;
+            }
+
+            fView.Caption = string.Format("{0} \"{1}\"", kindName, Path.GetFileName(fBase.Context.FileName));
+        }
+
+        public void UpdateChart()
+        {
+            if (fBase != null) {
+                fBase.RefreshLists(false);
+            }
+
+            fView.TreeBox.RefreshTree();
+        }
+
+        public void AddFamily()
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p == null || p.Rec == null) return;
+
+            GEDCOMFamilyRecord fam = fBase.Context.AddFamilyForSpouse(p.Rec);
+            if (fam == null) return;
+
+            UpdateChart();
+        }
+
+        private void InternalChildAdd(GEDCOMSex needSex)
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p == null || p.Rec == null) return;
+
+            GEDCOMIndividualRecord child = fBase.Context.AddChildForParent(p.Rec, needSex);
+            if (child == null) return;
+
+            UpdateChart();
+        }
+
+        public void AddSon()
+        {
+            InternalChildAdd(GEDCOMSex.svMale);
+        }
+
+        public void AddDaughter()
+        {
+            InternalChildAdd(GEDCOMSex.svFemale);
+        }
+
+        public void AddSpouse()
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p == null || p.Rec == null) return;
+
+            GEDCOMIndividualRecord iRec = p.Rec;
+            GEDCOMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(iRec);
+            if (iSpouse == null) return;
+
+            GEDCOMFamilyRecord fam = fBase.Context.Tree.CreateFamily();
+            fam.AddSpouse(iRec);
+            fam.AddSpouse(iSpouse);
+            UpdateChart();
+        }
+
+        private void ParentAdd(GEDCOMSex needSex)
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p == null || p.Rec == null) return;
+
+            bool needParent = false;
+            bool familyExist = p.Rec.GetParentsFamily() != null;
+
+            if (familyExist) {
+                GEDCOMIndividualRecord mother, father;
+                GEDCOMFamilyRecord fam = p.Rec.GetParentsFamily();
+                if (fam == null) {
+                    father = null;
+                    mother = null;
+                } else {
+                    father = fam.GetHusband();
+                    mother = fam.GetWife();
+                }
+
+                needParent = (father == null && needSex == GEDCOMSex.svMale) ||
+                    (mother == null && needSex == GEDCOMSex.svFemale);
+            }
+
+            if (!familyExist || needParent) {
+                GEDCOMIndividualRecord child = p.Rec;
+                GEDCOMFamilyRecord fam = (familyExist) ? p.Rec.GetParentsFamily() : fBase.Context.Tree.CreateFamily();
+                GEDCOMIndividualRecord parent = fBase.Context.SelectPerson(null, TargetMode.tmParent, needSex);
+                if (parent != null) {
+                    fam.AddSpouse(parent);
+                    if (!familyExist)
+                        fam.AddChild(child);
+                    
+                    UpdateChart();
+                }
+            }
+        }
+
+        public void AddFather()
+        {
+            ParentAdd(GEDCOMSex.svMale);
+        }
+
+        public void AddMother()
+        {
+            ParentAdd(GEDCOMSex.svFemale);
+        }
+
+        public void Edit()
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p == null || p.Rec == null) return;
+
+            GEDCOMIndividualRecord iRec = p.Rec;
+            if (BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone)) {
+                UpdateChart();
+            }
+        }
+
+        public void Delete()
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p == null || p.Rec == null || p == fView.TreeBox.Model.Root) return;
+
+            BaseController.DeleteRecord(fBase, p.Rec, true);
+            UpdateChart();
+        }
+
+        public void ModifyPerson(TreeChartPerson person)
+        {
+            if (person == null) return;
+
+            bool modified = false;
+
+            if (person.Rec != null) {
+                GEDCOMIndividualRecord iRec = person.Rec;
+                modified = BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone);
+            } else {
+                // this is "stub" person, only in descendant tree
+                // key properties = BaseSpouse & BaseFamily
+                TreeChartPerson baseSpouse = person.BaseSpouse;
+                GEDCOMFamilyRecord baseFamily = person.BaseFamily;
+
+                if (baseSpouse != null && baseFamily != null) {
+                    GEDCOMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(person.BaseSpouse.Rec);
+
+                    if (iSpouse != null) {
+                        modified = baseFamily.AddSpouse(iSpouse);
+                    }
+                }
+            }
+
+            if (modified) {
+                UpdateChart();
+            }
         }
     }
 }
