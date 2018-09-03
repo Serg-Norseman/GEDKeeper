@@ -19,14 +19,17 @@
  */
 
 using System;
-using BSLib;
 using Eto.Forms;
+
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -34,8 +37,10 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class PersonsFilterDlg : CommonFilterDlg
+    public partial class PersonsFilterDlg : CommonFilterDlg, IPersonsFilterDlg
     {
+        private readonly PersonsFilterDlgController fController;
+
         private readonly IndividualListMan fListMan;
 
         public PersonsFilterDlg() : base()
@@ -53,16 +58,14 @@ namespace GKUI.Forms
             UpdateSpecific();
 
             tabsFilters.SelectedIndex = 1;
+
+            fController = new PersonsFilterDlgController(this);
+            fController.Init(baseWin);
         }
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
             }
             base.Dispose(disposing);
         }

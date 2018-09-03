@@ -26,8 +26,10 @@ using System.Windows.Forms;
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Stats;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -35,8 +37,10 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class StatisticsWin : CommonForm, IWindow
+    public sealed partial class StatisticsWin : CommonForm, IWindow, IStatisticsWin
     {
+        private readonly StatisticsWinController fController;
+
         private readonly IBaseWindow fBase;
         private readonly List<GEDCOMRecord> fSelectedRecords;
         private readonly ZGraphControl fGraph;
@@ -47,6 +51,7 @@ namespace GKUI.Forms
         private string fChartXTitle;
         private string fChartYTitle;
         private List<StatsItem> fCurrentValues;
+        private StatsMode fCurrentMode;
 
         public StatisticsWin(IBaseWindow baseWin, List<GEDCOMRecord> selectedRecords)
         {
@@ -80,8 +85,12 @@ namespace GKUI.Forms
             fTreeStats = new TreeStats(fBase.Context, fSelectedRecords);
 
             UpdateStatsTypes();
+            fCurrentMode = StatsMode.smAncestors;
 
             SetLang();
+
+            fController = new StatisticsWinController(this);
+            fController.Init(baseWin);
         }
 
         private static string GetPercent(int dividend, int divisor)
@@ -126,16 +135,14 @@ namespace GKUI.Forms
             fListStats.Items.Clear();
 
             List<StatsItem> vals = new List<StatsItem>();
-            try
-            {
+            try {
                 fTreeStats.GetSpecStats(mode, vals);
                 fCurrentValues = vals;
 
                 ListViewItem[] items = new ListViewItem[vals.Count];
 
                 int i = 0;
-                foreach (StatsItem lv in vals)
-                {
+                foreach (StatsItem lv in vals) {
                     ListViewItem item = new ListViewItem(lv.Caption);
 
                     string stVal = lv.GetDisplayString();
@@ -146,9 +153,7 @@ namespace GKUI.Forms
                 }
 
                 fListStats.Items.AddRange(items);
-            }
-            finally
-            {
+            } finally {
                 fListStats.EndUpdate();
             }
 
@@ -170,7 +175,8 @@ namespace GKUI.Forms
                 case StatsMode.smBirthYears:
                 case StatsMode.smBirthTenYears:
                 case StatsMode.smDeathYears:
-                    case StatsMode.smDeathTenYears: {
+                case StatsMode.smDeathTenYears:
+                    {
                         switch (mode) {
                             case StatsMode.smBirthYears:
                             case StatsMode.smDeathYears:
@@ -274,7 +280,8 @@ namespace GKUI.Forms
 
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CalcStats((StatsMode)cbType.SelectedIndex);
+            fCurrentMode = (StatsMode)cbType.SelectedIndex;
+            CalcStats(fCurrentMode);
         }
 
         private void UpdateStatsTypes()
@@ -283,8 +290,7 @@ namespace GKUI.Forms
 
             cbType.BeginUpdate();
             cbType.Items.Clear();
-            for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++)
-            {
+            for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++) {
                 if (sm == StatsMode.smPatronymics && !culture.HasPatronymic()) continue;
 
                 GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];

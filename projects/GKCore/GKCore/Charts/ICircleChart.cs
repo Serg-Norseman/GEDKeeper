@@ -19,32 +19,14 @@
  */
 
 using System;
-using GKCore.UIContracts;
 
-namespace GKCore.Controllers
+namespace GKCore.Charts
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed class CircleChartWinController : FormController<ICircleChartWin>
+    public interface ICircleChart
     {
-
-        public CircleChartWinController(ICircleChartWin view) : base(view)
-        {
-        }
-
-        public override void UpdateView()
-        {
-        }
-
-        // TODO: update localization
-        public void SaveSnapshot()
-        {
-            string filters = LangMan.LS(LSID.LSID_TreeImagesFilter) + "|SVG files (*.svg)|*.svg";
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", filters, 2, "jpg", "");
-            if (!string.IsNullOrEmpty(fileName)) {
-                fView.CircleChart.SaveSnapshot(fileName);
-            }
-        }
+        void SaveSnapshot(string fileName);
     }
 }

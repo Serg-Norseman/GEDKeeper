@@ -36,7 +36,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public sealed class CircleChart : CustomChart
+    public sealed class CircleChart : CustomChart, ICircleChart
     {
         private enum MouseCaptured
         {

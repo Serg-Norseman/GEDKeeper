@@ -19,14 +19,17 @@
  */
 
 using System;
-using BSLib;
 using Eto.Forms;
+
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -34,23 +37,19 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TreeFilterDlg : CommonDialog
+    public sealed partial class TreeFilterDlg : EditorDialog, ITreeFilterDlg
     {
-        private readonly IBaseWindow fBase;
+        private readonly TreeFilterDlgController fController;
+
         private readonly GKSheetList fPersonsList;
 
         private ChartFilter fFilter;
         private string fTemp;
 
-        public IBaseWindow Base
-        {
-            get	{ return fBase; }
-        }
-
         public ChartFilter Filter
         {
-            get	{ return fFilter; }
-            set	{ fFilter = value;	}
+            get { return fFilter; }
+            set { fFilter = value; }
         }
 
         private void ListModify(object sender, ModifyEventArgs eArgs)
@@ -58,8 +57,7 @@ namespace GKUI.Forms
             if (sender == fPersonsList) {
                 GEDCOMIndividualRecord iRec = eArgs.ItemData as GEDCOMIndividualRecord;
 
-                switch (eArgs.Action)
-                {
+                switch (eArgs.Action) {
                     case RecordAction.raAdd:
                         iRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
                         if (iRec != null) {
@@ -103,8 +101,7 @@ namespace GKUI.Forms
                 string[] tmpRefs = fTemp.Split(';');
 
                 int num = tmpRefs.Length;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     string xref = tmpRefs[i];
                     GEDCOMIndividualRecord p = fBase.Context.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
                     if (p != null) fPersonsList.AddItem(p, GKUtils.GetNameString(p, true, false));
@@ -121,20 +118,13 @@ namespace GKUI.Forms
 
         private void rbCutX_CheckedChanged(object sender, EventArgs e)
         {
-            if (rbCutNone.Checked)
-            {
+            if (rbCutNone.Checked) {
                 fFilter.BranchCut = ChartFilter.BranchCutType.None;
-            }
-            else
-            {
-                if (rbCutYears.Checked)
-                {
+            } else {
+                if (rbCutYears.Checked) {
                     fFilter.BranchCut = ChartFilter.BranchCutType.Years;
-                }
-                else
-                {
-                    if (rbCutPersons.Checked)
-                    {
+                } else {
+                    if (rbCutPersons.Checked) {
                         fFilter.BranchCut = ChartFilter.BranchCutType.Persons;
                     }
                 }
@@ -144,21 +134,14 @@ namespace GKUI.Forms
 
         private void AcceptChanges()
         {
-            if (rbCutNone.Checked)
-            {
+            if (rbCutNone.Checked) {
                 fFilter.BranchCut = ChartFilter.BranchCutType.None;
-            }
-            else
-            {
-                if (rbCutYears.Checked)
-                {
+            } else {
+                if (rbCutYears.Checked) {
                     fFilter.BranchCut = ChartFilter.BranchCutType.Years;
                     fFilter.BranchYear = (int)edYear.Value;
-                }
-                else
-                {
-                    if (rbCutPersons.Checked)
-                    {
+                } else {
+                    if (rbCutPersons.Checked) {
                         fFilter.BranchCut = ChartFilter.BranchCutType.Persons;
                         fFilter.BranchPersons = fTemp;
                     }
@@ -166,22 +149,16 @@ namespace GKUI.Forms
             }
 
             int selectedIndex = cmbSource.SelectedIndex;
-            if (selectedIndex >= 0 && selectedIndex < 3)
-            {
+            if (selectedIndex >= 0 && selectedIndex < 3) {
                 fFilter.SourceMode = (FilterGroupMode)cmbSource.SelectedIndex;
                 fFilter.SourceRef = "";
-            }
-            else
-            {
+            } else {
                 GKComboItem item = (GKComboItem)cmbSource.Items[cmbSource.SelectedIndex];
                 GEDCOMRecord rec = item.Tag as GEDCOMRecord;
-                if (rec != null)
-                {
+                if (rec != null) {
                     fFilter.SourceMode = FilterGroupMode.Selected;
                     fFilter.SourceRef = rec.XRef;
-                }
-                else
-                {
+                } else {
                     fFilter.SourceMode = FilterGroupMode.All;
                     fFilter.SourceRef = "";
                 }
@@ -190,13 +167,10 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 AcceptChanges();
                 DialogResult = DialogResult.Ok;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeFilterDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
@@ -252,6 +226,14 @@ namespace GKUI.Forms
             lblYear.Text = LangMan.LS(LSID.LSID_Year);
             rbCutPersons.Text = LangMan.LS(LSID.LSID_BCut_Persons);
             lblRPSources.Text = LangMan.LS(LSID.LSID_RPSources);
+
+            fController = new TreeFilterDlgController(this);
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+            fController.Init(baseWin);
         }
     }
 }

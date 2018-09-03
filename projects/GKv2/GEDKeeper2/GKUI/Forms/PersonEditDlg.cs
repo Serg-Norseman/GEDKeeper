@@ -368,30 +368,35 @@ namespace GKUI.Forms
 
         private void AcceptChanges()
         {
-            GEDCOMPersonalName np = fPerson.PersonalNames[0];
-            GKUtils.SetNameParts(np, txtSurname.Text, txtName.Text, cmbPatronymic.Text);
+            try {
+                GEDCOMPersonalName np = fPerson.PersonalNames[0];
+                GKUtils.SetNameParts(np, txtSurname.Text, txtName.Text, cmbPatronymic.Text);
 
-            GEDCOMPersonalNamePieces pieces = np.Pieces;
-            pieces.Nickname = txtNickname.Text;
-            pieces.Prefix = txtNamePrefix.Text;
-            pieces.SurnamePrefix = txtSurnamePrefix.Text;
-            pieces.Suffix = txtNameSuffix.Text;
-            if (IsExtendedWomanSurname()) {
-                pieces.MarriedName = txtMarriedSurname.Text;
+                GEDCOMPersonalNamePieces pieces = np.Pieces;
+                pieces.Nickname = txtNickname.Text;
+                pieces.Prefix = txtNamePrefix.Text;
+                pieces.SurnamePrefix = txtSurnamePrefix.Text;
+                pieces.Suffix = txtNameSuffix.Text;
+                if (IsExtendedWomanSurname()) {
+                    pieces.MarriedName = txtMarriedSurname.Text;
+                }
+
+                fPerson.Sex = (GEDCOMSex)cmbSex.SelectedIndex;
+                fPerson.Patriarch = chkPatriarch.Checked;
+                fPerson.Bookmark = chkBookmark.Checked;
+                fPerson.Restriction = (GEDCOMRestriction)cmbRestriction.SelectedIndex;
+
+                if (fPerson.ChildToFamilyLinks.Count > 0) {
+                    fPerson.ChildToFamilyLinks[0].Family.SortChilds();
+                }
+
+                fController.LocalUndoman.Commit();
+
+                fBase.NotifyRecord(fPerson, RecordAction.raEdit);
+            } catch (Exception ex) {
+                Logger.LogWrite("PersonEditDlg.AcceptChanges(): " + ex.Message);
+                throw ex;
             }
-
-            fPerson.Sex = (GEDCOMSex)cmbSex.SelectedIndex;
-            fPerson.Patriarch = chkPatriarch.Checked;
-            fPerson.Bookmark = chkBookmark.Checked;
-            fPerson.Restriction = (GEDCOMRestriction)cmbRestriction.SelectedIndex;
-
-            if (fPerson.ChildToFamilyLinks.Count > 0) {
-                fPerson.ChildToFamilyLinks[0].Family.SortChilds();
-            }
-
-            fController.LocalUndoman.Commit();
-
-            fBase.NotifyRecord(fPerson, RecordAction.raEdit);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -444,26 +449,22 @@ namespace GKUI.Forms
         private void ModifySpousesSheet(object sender, ModifyEventArgs eArgs)
         {
             GEDCOMFamilyRecord family = eArgs.ItemData as GEDCOMFamilyRecord;
-            if (eArgs.Action == RecordAction.raJump) {
-                if (family != null && (fPerson.Sex == GEDCOMSex.svMale || fPerson.Sex == GEDCOMSex.svFemale))
-                {
-                    GEDCOMPointer sp = null;
-                    switch (fPerson.Sex) {
-                        case GEDCOMSex.svMale:
-                            sp = family.Wife;
-                            break;
+            if (eArgs.Action == RecordAction.raJump && family != null) {
+                GEDCOMIndividualRecord spouse = null;
+                switch (fPerson.Sex) {
+                    case GEDCOMSex.svMale:
+                        spouse = family.GetWife();
+                        break;
 
-                        case GEDCOMSex.svFemale:
-                            sp = family.Husband;
-                            break;
-                    }
+                    case GEDCOMSex.svFemale:
+                        spouse = family.GetHusband();
+                        break;
+                }
 
-                    if (sp != null) {
-                        GEDCOMIndividualRecord spouse = (GEDCOMIndividualRecord)sp.Value;
-                        AcceptChanges();
-                        fBase.SelectRecordByXRef(spouse.XRef);
-                        Close();
-                    }
+                if (spouse != null) {
+                    AcceptChanges();
+                    fBase.SelectRecordByXRef(spouse.XRef);
+                    Close();
                 }
             }
         }

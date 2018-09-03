@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,14 +23,21 @@ using System.Collections.Generic;
 using Eto.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Stats;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class StatisticsWin : Form, IWindow
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed partial class StatisticsWin : CommonForm, IWindow, IStatisticsWin
     {
+        private readonly StatisticsWinController fController;
+
         private readonly IBaseWindow fBase;
         private readonly List<GEDCOMRecord> fSelectedRecords;
         private readonly ZGraphControl fGraph;
@@ -67,51 +74,9 @@ namespace GKUI.Forms
             fCurrentMode = StatsMode.smAncestors;
 
             SetLang();
-        }
 
-        public void SetLang()
-        {
-            Title = LangMan.LS(LSID.LSID_MIStats);
-            grpSummary.Text = LangMan.LS(LSID.LSID_Summary);
-
-            lvSummary.ClearColumns();
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Parameter), 300);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Total), 100);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_ManSum), 100);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_WomanSum), 100);
-
-            tbExcelExport.ToolTip = LangMan.LS(LSID.LSID_MIExportToExcelFile);
-            UpdateCommonStats();
-
-            int oldIndex = cbType.SelectedIndex;
-            UpdateStatsTypes();
-            cbType.SelectedIndex = oldIndex;
-        }
-
-        private void UpdateStatsTypes()
-        {
-            ICulture culture = fBase.Context.Culture;
-
-            //cmStatTypes.Items.Clear();
-            cbType.Items.Clear();
-            for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++) {
-                if (sm == StatsMode.smPatronymics && !culture.HasPatronymic())
-                    continue;
-
-                GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];
-                /*var menuItem = new MenuItemEx(LangMan.LS(tr.Title));
-                menuItem.Click += miStatType_Click;
-                menuItem.Tag = sm;
-                cmStatTypes.Items.Add(menuItem);*/
-
-                cbType.Items.Add(new GKComboItem(LangMan.LS(tr.Title), sm));
-            }
-        }
-
-        private void cbType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            fCurrentMode = (StatsMode)cbType.SelectedIndex;
-            CalcStats(fCurrentMode);
+            fController = new StatisticsWinController(this);
+            fController.Init(baseWin);
         }
 
         /*private void miStatType_Click(object sender, EventArgs e)
@@ -298,13 +263,56 @@ namespace GKUI.Forms
 
         private void StatisticsWin_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Keys.Escape)
-                Close();
+            if (e.Key == Keys.Escape) Close();
+        }
+
+        private void cbType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fCurrentMode = (StatsMode)cbType.SelectedIndex;
+            CalcStats(fCurrentMode);
+        }
+
+        private void UpdateStatsTypes()
+        {
+            ICulture culture = fBase.Context.Culture;
+
+            //cmStatTypes.Items.Clear();
+            cbType.Items.Clear();
+            for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++) {
+                if (sm == StatsMode.smPatronymics && !culture.HasPatronymic()) continue;
+
+                GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];
+                /*var menuItem = new MenuItemEx(LangMan.LS(tr.Title));
+                menuItem.Click += miStatType_Click;
+                menuItem.Tag = sm;
+                cmStatTypes.Items.Add(menuItem);*/
+
+                cbType.Items.Add(new GKComboItem(LangMan.LS(tr.Title), sm));
+            }
         }
 
         private void StatisticsWin_Load(object sender, EventArgs e)
         {
             UpdateCommonStats();
+        }
+
+        public void SetLang()
+        {
+            Title = LangMan.LS(LSID.LSID_MIStats);
+            grpSummary.Text = LangMan.LS(LSID.LSID_Summary);
+
+            lvSummary.ClearColumns();
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Parameter), 300);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Total), 100);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_ManSum), 100);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_WomanSum), 100);
+
+            tbExcelExport.ToolTip = LangMan.LS(LSID.LSID_MIExportToExcelFile);
+            UpdateCommonStats();
+
+            int oldIndex = cbType.SelectedIndex;
+            UpdateStatsTypes();
+            cbType.SelectedIndex = oldIndex;
         }
 
         private void tbExcelExport_Click(object sender, EventArgs e)

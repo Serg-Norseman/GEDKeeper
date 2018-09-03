@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
@@ -30,7 +29,6 @@ using GKCore.Charts;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
 using GKUI.Providers;
@@ -215,14 +213,9 @@ namespace GKUI.Forms
             }
         }
 
-        // TODO: update localization and GKv3
         private void tbImageSave_Click(object sender, EventArgs e)
         {
-            string filters = LangMan.LS(LSID.LSID_TreeImagesFilter) + "|SVG files (*.svg)|*.svg";
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", filters, 2, "jpg", "");
-            if (!string.IsNullOrEmpty(fileName)) {
-                fTreeBox.SaveSnapshot(fileName);
-            }
+            fController.SaveSnapshot();
         }
 
         private void ImageTree_DragOver(object sender, DragEventArgs e)
@@ -398,33 +391,10 @@ namespace GKUI.Forms
             }
         }
 
-        private bool ParentIsRequired(GEDCOMSex needSex)
-        {
-            TreeChartPerson p = fTreeBox.Selected;
-            if (p == null || p.Rec == null) return false;
-
-            bool familyExist = p.Rec.GetParentsFamily() != null;
-            if (!familyExist) return true;
-
-            GEDCOMIndividualRecord mother, father;
-            GEDCOMFamilyRecord fam = p.Rec.GetParentsFamily();
-            if (fam == null) {
-                father = null;
-                mother = null;
-            } else {
-                father = fam.GetHusband();
-                mother = fam.GetWife();
-            }
-
-            bool needParent = (father == null && needSex == GEDCOMSex.svMale) ||
-                (mother == null && needSex == GEDCOMSex.svFemale);
-            return needParent;
-        }
-
         private void MenuPerson_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            miFatherAdd.Enabled = ParentIsRequired(GEDCOMSex.svMale);
-            miMotherAdd.Enabled = ParentIsRequired(GEDCOMSex.svFemale);
+            miFatherAdd.Enabled = fController.ParentIsRequired(GEDCOMSex.svMale);
+            miMotherAdd.Enabled = fController.ParentIsRequired(GEDCOMSex.svFemale);
         }
 
         private void tbDocPreview_Click(object sender, EventArgs e)

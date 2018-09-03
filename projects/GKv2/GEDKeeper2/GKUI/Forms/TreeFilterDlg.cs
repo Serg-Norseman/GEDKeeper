@@ -25,9 +25,11 @@ using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -35,18 +37,14 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TreeFilterDlg : CommonDialog
+    public sealed partial class TreeFilterDlg : EditorDialog, ITreeFilterDlg
     {
-        private readonly IBaseWindow fBase;
+        private readonly TreeFilterDlgController fController;
+
         private readonly GKSheetList fPersonsList;
 
         private ChartFilter fFilter;
         private string fTemp;
-
-        public IBaseWindow Base
-        {
-            get	{ return fBase; }
-        }
 
         public ChartFilter Filter
         {
@@ -106,8 +104,7 @@ namespace GKUI.Forms
                 for (int i = 0; i < num; i++) {
                     string xref = tmpRefs[i];
                     GEDCOMIndividualRecord p = fBase.Context.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
-                    if (p != null)
-                        fPersonsList.AddItem(p, GKUtils.GetNameString(p, true, false));
+                    if (p != null) fPersonsList.AddItem(p, GKUtils.GetNameString(p, true, false));
                 }
             }
 
@@ -115,8 +112,7 @@ namespace GKUI.Forms
                 cmbSource.SelectedIndex = (sbyte)fFilter.SourceMode;
             } else {
                 GEDCOMSourceRecord srcRec = fBase.Context.Tree.XRefIndex_Find(fFilter.SourceRef) as GEDCOMSourceRecord;
-                if (srcRec != null)
-                    cmbSource.Text = srcRec.FiledByEntry;
+                if (srcRec != null) cmbSource.Text = srcRec.FiledByEntry;
             }
         }
 
@@ -230,6 +226,14 @@ namespace GKUI.Forms
             lblYear.Text = LangMan.LS(LSID.LSID_Year);
             rbCutPersons.Text = LangMan.LS(LSID.LSID_BCut_Persons);
             lblRPSources.Text = LangMan.LS(LSID.LSID_RPSources);
+
+            fController = new TreeFilterDlgController(this);
+        }
+
+        public override void InitDialog(IBaseWindow baseWin)
+        {
+            base.InitDialog(baseWin);
+            fController.Init(baseWin);
         }
     }
 }

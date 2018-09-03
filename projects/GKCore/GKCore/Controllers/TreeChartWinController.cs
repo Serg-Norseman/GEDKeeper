@@ -211,5 +211,38 @@ namespace GKCore.Controllers
                 UpdateChart();
             }
         }
+
+        public bool ParentIsRequired(GEDCOMSex needSex)
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p == null || p.Rec == null) return false;
+
+            bool familyExist = p.Rec.GetParentsFamily() != null;
+            if (!familyExist) return true;
+
+            GEDCOMIndividualRecord mother, father;
+            GEDCOMFamilyRecord fam = p.Rec.GetParentsFamily();
+            if (fam == null) {
+                father = null;
+                mother = null;
+            } else {
+                father = fam.GetHusband();
+                mother = fam.GetWife();
+            }
+
+            bool needParent = (father == null && needSex == GEDCOMSex.svMale) ||
+                (mother == null && needSex == GEDCOMSex.svFemale);
+            return needParent;
+        }
+
+        // TODO: update localization
+        public void SaveSnapshot()
+        {
+            string filters = LangMan.LS(LSID.LSID_TreeImagesFilter) + "|SVG files (*.svg)|*.svg";
+            string fileName = AppHost.StdDialogs.GetSaveFile("", "", filters, 2, "jpg", "");
+            if (!string.IsNullOrEmpty(fileName)) {
+                fView.TreeBox.SaveSnapshot(fileName);
+            }
+        }
     }
 }

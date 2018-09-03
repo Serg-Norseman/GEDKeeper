@@ -24,10 +24,12 @@ using System.Windows.Forms;
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -35,8 +37,10 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class PersonsFilterDlg : CommonFilterDlg
+    public partial class PersonsFilterDlg : CommonFilterDlg, IPersonsFilterDlg
     {
+        private readonly PersonsFilterDlgController fController;
+
         private readonly IndividualListMan fListMan;
 
         public PersonsFilterDlg() : base()
@@ -59,6 +63,9 @@ namespace GKUI.Forms
             #endif
 
             tabsFilters.SelectedIndex = 1;
+
+            fController = new PersonsFilterDlgController(this);
+            fController.Init(baseWin);
         }
 
         public void SetSpecificLang()
@@ -197,6 +204,7 @@ namespace GKUI.Forms
 
         private static void SaveFilter(string flt, StringList filters)
         {
+            flt = flt.Trim();
             if (flt != "" && flt != "*" && filters.IndexOf(flt) < 0) filters.Add(flt);
         }
 
@@ -206,14 +214,9 @@ namespace GKUI.Forms
 
             IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
 
-            string fs = txtName.Text.Trim();
-            SaveFilter(fs, GlobalOptions.Instance.NameFilters);
-
-            fs = cmbResidence.Text.Trim();
-            SaveFilter(fs, GlobalOptions.Instance.ResidenceFilters);
-
-            fs = cmbEventVal.Text.Trim();
-            SaveFilter(fs, GlobalOptions.Instance.EventFilters);
+            SaveFilter(txtName.Text, GlobalOptions.Instance.NameFilters);
+            SaveFilter(cmbResidence.Text, GlobalOptions.Instance.ResidenceFilters);
+            SaveFilter(cmbEventVal.Text, GlobalOptions.Instance.EventFilters);
 
             iFilter.PatriarchOnly = chkOnlyPatriarchs.Checked;
 

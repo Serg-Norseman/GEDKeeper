@@ -45,6 +45,21 @@ namespace GKUI.Forms
             get { return fBaseWin; }
         }
 
+        #region View Interface
+
+        public string Caption
+        {
+            get { return base.Text; }
+            set { base.Text = value; }
+        }
+
+        ICircleChart ICircleChartWin.CircleChart
+        {
+            get { return fCircleChart; }
+        }
+
+        #endregion
+
         public CircleChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson, CircleChartType type)
         {
             InitializeComponent();
@@ -114,14 +129,9 @@ namespace GKUI.Forms
             }
         }
 
-        // TODO: update localization and GKv3
         private void tbImageSave_Click(object sender, EventArgs e)
         {
-            string filters = LangMan.LS(LSID.LSID_TreeImagesFilter) + "|SVG files (*.svg)|*.svg";
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", filters, 2, "jpg", "");
-            if (!string.IsNullOrEmpty(fileName)) {
-                fCircleChart.SaveSnapshot(fileName);
-            }
+            fController.SaveSnapshot();
         }
 
         private void tbDocPreview_Click(object sender, EventArgs e)

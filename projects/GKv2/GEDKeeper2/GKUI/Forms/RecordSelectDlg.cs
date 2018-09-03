@@ -23,6 +23,7 @@ using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
@@ -36,6 +37,8 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
     {
+        private readonly RecordSelectDlgController fController;
+
         private string fFilter;
         private GKListView fListRecords;
         private GEDCOMRecordType fRecType;
@@ -107,6 +110,8 @@ namespace GKUI.Forms
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 
             fTarget = new Target();
+
+            fController = new RecordSelectDlgController(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -120,13 +125,13 @@ namespace GKUI.Forms
         public override void InitDialog(IBaseWindow baseWin)
         {
             base.InitDialog(baseWin);
+            fController.Init(baseWin);
             fFilter = "*";
         }
 
         private void DataRefresh()
         {
-            if (fListRecords != null)
-            {
+            if (fListRecords != null) {
                 fListRecords.Dispose();
                 fListRecords = null;
             }
@@ -156,13 +161,10 @@ namespace GKUI.Forms
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 ResultRecord = fListRecords.GetSelectedData() as GEDCOMRecord;
                 DialogResult = DialogResult.OK;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("RecordSelectDlg.btnSelect_Click(): " + ex.Message);
                 ResultRecord = null;
                 DialogResult = DialogResult.None;
@@ -171,16 +173,13 @@ namespace GKUI.Forms
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 GEDCOMRecord rec = BaseController.AddRecord(fBase, fRecType, fTarget);
                 if (rec != null) {
                     ResultRecord = rec;
                     DialogResult = DialogResult.OK;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("RecordSelectDlg.btnCreate_Click(): " + ex.Message);
                 ResultRecord = null;
                 DialogResult = DialogResult.None;

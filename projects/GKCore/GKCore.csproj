@@ -181,6 +181,7 @@
     <Compile Include="GEDCOM\XRefReplacer.cs" />
     <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
     <Compile Include="GKCore\BBTextParser.cs" />
+    <Compile Include="GKCore\Charts\ICircleChart.cs" />
     <Compile Include="GKCore\Charts\SvgGraphics.cs" />
     <Compile Include="GKCore\Charts\SVGRenderer.cs" />
     <Compile Include="GKCore\Charts\TCGenerationsControl.cs" />

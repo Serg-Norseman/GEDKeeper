@@ -353,6 +353,8 @@ namespace GKCore.UIContracts
 
     public interface ICircleChartWin : IView
     {
+        string Caption { get; set; }
+        ICircleChart CircleChart { get; }
     }
 
     public interface ICommonFilterDlg : ICommonDialog, IView
@@ -367,7 +369,7 @@ namespace GKCore.UIContracts
     {
     }
 
-    public interface IStatisticsWin : ICommonDialog, IView
+    public interface IStatisticsWin : IView
     {
     }
 
