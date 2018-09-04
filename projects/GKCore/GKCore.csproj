@@ -206,6 +206,7 @@
     <Compile Include="GKCore\Controllers\PersonEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\PersonsFilterDlgController.cs" />
     <Compile Include="GKCore\Controllers\RecordSelectDlgController.cs" />
+    <Compile Include="GKCore\Controllers\RelationshipCalculatorDlgController.cs" />
     <Compile Include="GKCore\Controllers\RepositoryEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\ResearchEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\SourceCitEditDlgController.cs" />

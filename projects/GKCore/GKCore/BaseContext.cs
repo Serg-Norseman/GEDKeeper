@@ -1415,25 +1415,23 @@ namespace GKCore
         {
             GEDCOMFamilyRecord result;
 
-            try
-            {
-                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>())
-                {
+            try {
+                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>()) {
                     dlg.InitDialog(fViewer);
 
                     dlg.Target = target;
                     dlg.NeedSex = GEDCOMSex.svNone;
                     dlg.TargetMode = TargetMode.tmFamilyChild;
                     dlg.RecType = GEDCOMRecordType.rtFamily;
+                    dlg.FastFilter = "*";
+
                     if (AppHost.Instance.ShowModalX(dlg, false)) {
                         result = (dlg.ResultRecord as GEDCOMFamilyRecord);
                     } else {
                         result = null;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.SelectFamily(): " + ex.Message);
                 result = null;
             }
@@ -1446,16 +1444,15 @@ namespace GKCore
         {
             GEDCOMIndividualRecord result;
 
-            try
-            {
-                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>())
-                {
+            try {
+                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>()) {
                     dlg.InitDialog(fViewer);
 
                     dlg.Target = target;
                     dlg.NeedSex = needSex;
                     dlg.TargetMode = targetMode;
                     dlg.RecType = GEDCOMRecordType.rtIndividual;
+                    dlg.FastFilter = "*";
 
                     if (AppHost.Instance.ShowModalX(dlg, false)) {
                         result = (dlg.ResultRecord as GEDCOMIndividualRecord);
@@ -1463,9 +1460,7 @@ namespace GKCore
                         result = null;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.SelectPerson(): " + ex.Message);
                 result = null;
             }
@@ -1477,16 +1472,16 @@ namespace GKCore
         {
             GEDCOMRecord result;
 
-            try
-            {
-                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>())
-                {
+            try {
+                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>()) {
                     dlg.InitDialog(fViewer);
 
                     dlg.RecType = mode;
 
                     if (args != null && args.Length > 0) {
                         dlg.FastFilter = (args[0] as string);
+                    } else {
+                        dlg.FastFilter = "*";
                     }
 
                     if (AppHost.Instance.ShowModalX(dlg, false)) {
@@ -1495,9 +1490,7 @@ namespace GKCore
                         result = null;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.SelectRecord(): " + ex.Message);
                 result = null;
             }

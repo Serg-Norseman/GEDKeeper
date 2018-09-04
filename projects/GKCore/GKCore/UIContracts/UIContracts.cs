@@ -165,7 +165,20 @@ namespace GKCore.UIContracts
     public interface IFamilyEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMFamilyRecord Family { get; set; }
+
         void SetTarget(TargetMode targetType, GEDCOMIndividualRecord target);
+        void LockEditor(bool locked);
+        void SetHusband(string value);
+        void SetWife(string value);
+
+        ISheetList NotesList { get; }
+        ISheetList MediaList { get; }
+        ISheetList SourcesList { get; }
+        ISheetList ChildrenList { get; }
+        ISheetList EventsList { get; }
+
+        IComboBoxHandler MarriageStatus { get; }
+        IComboBoxHandler Restriction { get; }
     }
 
     public interface IGroupEditDlg : ICommonDialog, IBaseEditor, IView
@@ -378,5 +391,14 @@ namespace GKCore.UIContracts
         string Caption { get; set; }
         ITreeChartBox TreeBox { get; }
         TreeChartKind ChartKind { get; set; }
+    }
+
+    public interface IRelationshipCalculatorDlg : ICommonDialog, IView
+    {
+        ILabelHandler Label1 { get; }
+        ILabelHandler Label2 { get; }
+        ITextBoxHandler Person1 { get; }
+        ITextBoxHandler Person2 { get; }
+        ITextBoxHandler Result { get; }
     }
 }

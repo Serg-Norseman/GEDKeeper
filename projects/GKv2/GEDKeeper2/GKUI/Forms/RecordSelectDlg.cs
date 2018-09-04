@@ -62,7 +62,7 @@ namespace GKUI.Forms
                     flt = "*" + flt + "*";
                 }
                 fFilter = flt;
-                DataRefresh();
+                UpdateFilter();
             }
         }
 
@@ -71,7 +71,7 @@ namespace GKUI.Forms
             get { return fRecType; }
             set {
                 fRecType = value;
-                DataRefresh();
+                UpdateRecordsView();
             }
         }
 
@@ -129,15 +129,18 @@ namespace GKUI.Forms
             fFilter = "*";
         }
 
-        private void DataRefresh()
+        private void UpdateRecordsView()
         {
             if (fListRecords != null) {
                 fListRecords.Dispose();
                 fListRecords = null;
             }
-
             fListRecords = UIHelper.CreateRecordsView(panList, fBase.Context, fRecType);
             fListRecords.Name = "fListRecords";
+        }
+
+        private void UpdateFilter()
+        {
             fListRecords.ListMan.Filter.Clear();
             fListRecords.ListMan.QuickFilter = fFilter;
 

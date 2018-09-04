@@ -21,7 +21,6 @@ namespace GKUI.Forms
             btnSelect.Size = new Size(130, 26);
             btnSelect.Text = "btnSelect";
             btnSelect.Click += btnSelect_Click;
-            btnSelect.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
             btnCreate = new Button();
             btnCreate.Size = new Size(130, 26);
@@ -33,7 +32,6 @@ namespace GKUI.Forms
             btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
             btnCancel.Click += CancelClickHandler;
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             txtFastFilter = new TextBox();
             txtFastFilter.TextChanged += txtFastFilter_TextChanged;

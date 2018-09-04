@@ -73,13 +73,8 @@ namespace GKUI.Forms
                 txtTel.Text = submitter.Address.PhoneNumbers[0].StringValue;
             }
 
-            UpdateStats();
-        }
-
-        private void UpdateStats()
-        {
+            // update stats
             int[] stats = fBase.Context.Tree.GetRecordStats();
-
             lvRecordStats.ClearItems();
             for (int i = 1; i < stats.Length; i++) {
                 lvRecordStats.AddItem(null, LangMan.LS(GKData.RecordTypes[i]),

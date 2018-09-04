@@ -25,7 +25,6 @@ namespace GKUI.Forms
             btnClose.Size = new Size(130, 26);
             btnClose.Text = "btnClose";
             btnClose.Click += CancelClickHandler;
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             Lab1 = new Label();
             Lab1.Text = "XXX1";

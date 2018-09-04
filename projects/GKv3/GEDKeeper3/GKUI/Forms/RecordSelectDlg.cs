@@ -62,7 +62,7 @@ namespace GKUI.Forms
                     flt = "*" + flt + "*";
                 }
                 fFilter = flt;
-                DataRefresh();
+                UpdateFilter();
             }
         }
 
@@ -71,7 +71,7 @@ namespace GKUI.Forms
             get { return fRecType; }
             set {
                 fRecType = value;
-                DataRefresh();
+                UpdateRecordsView();
             }
         }
 
@@ -100,6 +100,9 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            btnSelect.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+
             // SetLang()
             Title = LangMan.LS(LSID.LSID_WinRecordSelect);
             btnCreate.Text = LangMan.LS(LSID.LSID_DlgAppend);
@@ -126,18 +129,21 @@ namespace GKUI.Forms
             fFilter = "*";
         }
 
-        private void DataRefresh()
+        private void UpdateRecordsView()
         {
             if (fListRecords != null) {
                 fListRecords.ListMan = null;
                 fListRecords.Dispose();
                 fListRecords = null;
             }
-
             fListRecords = new GKListView(ListManager.Create(fBase.Context, fRecType));
+            panList.Content = fListRecords;
+        }
+
+        private void UpdateFilter()
+        {
             fListRecords.ListMan.Filter.Clear();
             fListRecords.ListMan.QuickFilter = fFilter;
-            panList.Content = fListRecords;
 
             if (fRecType == GEDCOMRecordType.rtIndividual) {
                 IndividualListFilter iFilter = (IndividualListFilter)fListRecords.ListMan.Filter;

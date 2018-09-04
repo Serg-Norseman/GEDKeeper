@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,32 +18,57 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define DEBUG_SOLVE
-
 using System;
-using GKCommon.GEDCOM;
+
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Kinships;
-using GKCore.Tools;
+using GKCore.UIContracts;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class RelationshipCalculatorDlg : CommonDialog
+    public sealed partial class RelationshipCalculatorDlg : EditorDialog, IRelationshipCalculatorDlg
     {
-        private readonly IBaseWindow fBase;
+        private readonly RelationshipCalculatorDlgController fController;
 
-        private GEDCOMIndividualRecord fRec1;
-        private GEDCOMIndividualRecord fRec2;
+        #region View Interface
+
+        ILabelHandler IRelationshipCalculatorDlg.Label1
+        {
+            get { return fControlsManager.GetControlHandler<ILabelHandler>(Lab1); }
+        }
+
+        ILabelHandler IRelationshipCalculatorDlg.Label2
+        {
+            get { return fControlsManager.GetControlHandler<ILabelHandler>(Lab2); }
+        }
+
+        ITextBoxHandler IRelationshipCalculatorDlg.Person1
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(Edit1); }
+        }
+
+        ITextBoxHandler IRelationshipCalculatorDlg.Person2
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(Edit2); }
+        }
+
+        ITextBoxHandler IRelationshipCalculatorDlg.Result
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtResult); }
+        }
+
+        #endregion
 
         public RelationshipCalculatorDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
-            fBase = baseWin;
+            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             // SetLang()
             Title = LangMan.LS(LSID.LSID_RelationshipCalculator);
@@ -52,74 +77,21 @@ namespace GKUI.Forms
             btnRec2Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
             lblKinship.Text = LangMan.LS(LSID.LSID_Kinship);
 
-            SetRec1(null);
-            SetRec2(null);
-        }
+            fController = new RelationshipCalculatorDlgController(this);
+            fController.Init(baseWin);
 
-        private void SetRec1(GEDCOMIndividualRecord value)
-        {
-            fRec1 = value;
-            Solve();
-        }
-
-        private void SetRec2(GEDCOMIndividualRecord value)
-        {
-            fRec2 = value;
-            Solve();
-        }
-
-        private void Solve()
-        {
-            if (fRec1 == null) {
-                Lab1.Text = @"XXX1";
-                Edit1.Text = "";
-            } else {
-                Lab1.Text = fRec1.XRef;
-                Edit1.Text = GKUtils.GetNameString(fRec1, true, false);
-            }
-
-            if (fRec2 == null) {
-                Lab2.Text = @"XXX2";
-                Edit2.Text = "";
-            } else {
-                Lab2.Text = fRec2.XRef;
-                Edit2.Text = GKUtils.GetNameString(fRec2, true, false);
-            }
-
-            if (fRec1 != null && fRec2 != null) {
-                txtResult.Text = "???";
-
-                using (KinshipsGraph kinsGraph = KinshipsGraph.SearchGraph(fBase.Context, fRec1)) {
-                    if (kinsGraph.IsEmpty()) {
-                        txtResult.Text = "Empty graph.";
-                        return;
-                    }
-
-                    if (kinsGraph.FindVertex(fRec2.XRef) == null) {
-                        txtResult.Text = "These individuals have no common relatives.";
-                        return;
-                    }
-
-                    kinsGraph.SetTreeRoot(fRec1);
-                    txtResult.Text = kinsGraph.GetRelationship(fRec2, true);
-
-                    #if DEBUG_SOLVE
-                    txtResult.Text += "\r\n" + kinsGraph.IndividualsPath;
-                    #endif
-                }
-            }
+            fController.SetRec1(null);
+            fController.SetRec2(null);
         }
 
         private void btnRec1Select_Click(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord iRec = fBase.Context.SelectRecord(GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord;
-            if (iRec != null) SetRec1(iRec);
+            fController.SelectRec1();
         }
 
         private void btnRec2Select_Click(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord iRec = fBase.Context.SelectRecord(GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord;
-            if (iRec != null) SetRec2(iRec);
+            fController.SelectRec2();
         }
     }
 }
