@@ -98,13 +98,13 @@ namespace GKUI.Forms
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(130, 26);
+            btnAccept.Size = UIHelper.LongButtonSize;
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(130, 26);
+            btnCancel.Size = UIHelper.LongButtonSize;
             btnCancel.Text = "btnCancel";
             btnCancel.Click += CancelClickHandler;
 

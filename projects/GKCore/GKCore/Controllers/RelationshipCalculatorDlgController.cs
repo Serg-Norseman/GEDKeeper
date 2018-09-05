@@ -34,22 +34,9 @@ namespace GKCore.Controllers
     {
         private GEDCOMIndividualRecord fRec1;
         private GEDCOMIndividualRecord fRec2;
+        private string fResult;
 
         public RelationshipCalculatorDlgController(IRelationshipCalculatorDlg view) : base(view)
-        {
-        }
-
-        public override bool Accept()
-        {
-            try {
-                return true;
-            } catch (Exception ex) {
-                Logger.LogWrite("RelationshipCalculatorDlgController.Accept(): " + ex.Message);
-                return false;
-            }
-        }
-
-        public override void UpdateView()
         {
         }
 
@@ -79,6 +66,34 @@ namespace GKCore.Controllers
 
         private void Solve()
         {
+            fResult = "???";
+
+            if (fRec1 != null && fRec2 != null) {
+                using (KinshipsGraph kinsGraph = KinshipsGraph.SearchGraph(fBase.Context, fRec1)) {
+                    if (kinsGraph.IsEmpty()) {
+                        fResult = "Empty graph.";
+                        return;
+                    }
+
+                    if (kinsGraph.FindVertex(fRec2.XRef) == null) {
+                        fResult = "These individuals have no common relatives.";
+                        return;
+                    }
+
+                    kinsGraph.SetTreeRoot(fRec1);
+                    fResult = kinsGraph.GetRelationship(fRec2, true);
+
+                    #if DEBUG_SOLVE
+                    fResult += "\r\n" + kinsGraph.IndividualsPath;
+                    #endif
+                }
+            }
+
+            UpdateView();
+        }
+
+        public override void UpdateView()
+        {
             if (fRec1 == null) {
                 fView.Label1.Text = @"XXX1";
                 fView.Person1.Text = "";
@@ -95,28 +110,7 @@ namespace GKCore.Controllers
                 fView.Person2.Text = GKUtils.GetNameString(fRec2, true, false);
             }
 
-            if (fRec1 != null && fRec2 != null) {
-                fView.Result.Text = "???";
-
-                using (KinshipsGraph kinsGraph = KinshipsGraph.SearchGraph(fBase.Context, fRec1)) {
-                    if (kinsGraph.IsEmpty()) {
-                        fView.Result.Text = "Empty graph.";
-                        return;
-                    }
-
-                    if (kinsGraph.FindVertex(fRec2.XRef) == null) {
-                        fView.Result.Text = "These individuals have no common relatives.";
-                        return;
-                    }
-
-                    kinsGraph.SetTreeRoot(fRec1);
-                    fView.Result.Text = kinsGraph.GetRelationship(fRec2, true);
-
-                    #if DEBUG_SOLVE
-                    txtResult.Text += "\r\n" + kinsGraph.IndividualsPath;
-                    #endif
-                }
-            }
+            fView.Result.Text = fResult;
         }
     }
 }

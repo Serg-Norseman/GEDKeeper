@@ -19,19 +19,19 @@
  */
 
 using System.Collections.Generic;
-using Eto.Drawing;
 using Eto.Forms;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public class GKComboItem : IListItem
+    public class GKComboItem : Eto.Forms.IListItem
     {
         public readonly string Caption;
         public readonly object Tag;
-        public readonly Image Image;
+        public readonly IImage Image;
 
         public string Text
         {
@@ -55,7 +55,7 @@ namespace GKUI.Components
             Tag = tag;
         }
 
-        public GKComboItem(string caption, object tag, Image image)
+        public GKComboItem(string caption, object tag, IImage image)
         {
             Caption = caption;
             Tag = tag;

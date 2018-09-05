@@ -18,8 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define SEX_SYMBOLS
+
 using System;
 using GKCommon.GEDCOM;
+using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -47,6 +50,25 @@ namespace GKCore.Controllers
 
         public PersonEditDlgController(IPersonEditDlg view) : base(view)
         {
+            for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnPrivacy; res++) {
+                fView.RestrictionCombo.Add(LangMan.LS(GKData.Restrictions[(int)res]));
+            }
+
+            for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svUndetermined; sx++) {
+                string name = GKUtils.SexStr(sx);
+                IImage image = null;
+                #if SEX_SYMBOLS
+                switch (sx) {
+                    case GEDCOMSex.svMale:
+                        image = AppHost.GfxProvider.LoadResourceImage("sym_male.png", true);
+                        break;
+                    case GEDCOMSex.svFemale:
+                        image = AppHost.GfxProvider.LoadResourceImage("sym_female.png", true);
+                        break;
+                }
+                #endif
+                fView.SexCombo.AddItem(name, null, image);
+            }
         }
 
         public override bool Accept()

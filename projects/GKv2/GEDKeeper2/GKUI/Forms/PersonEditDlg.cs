@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define SEX_SYMBOLS
-
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -79,12 +77,25 @@ namespace GKUI.Forms
         }
 
 
+        #region View Interface
+
+        IComboBoxHandler IPersonEditDlg.RestrictionCombo
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRestriction); }
+        }
+
+        IComboBoxHandler IPersonEditDlg.SexCombo
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbSex); }
+        }
+
+        #endregion
+
         private void SetPerson(GEDCOMIndividualRecord value)
         {
             fPerson = value;
 
-            try
-            {
+            try {
                 GEDCOMPersonalName np = (fPerson.PersonalNames.Count > 0) ? fPerson.PersonalNames[0] : null;
                 UpdateNameControls(np);
 
@@ -108,9 +119,7 @@ namespace GKUI.Forms
                 fUserRefList.ListModel.DataOwner = fPerson;
 
                 UpdateControls(true);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("PersonEditDlg.SetPerson(): " + ex.Message);
             }
         }
@@ -145,12 +154,10 @@ namespace GKUI.Forms
 
         private void SetTarget(GEDCOMIndividualRecord value)
         {
-            try
-            {
+            try {
                 fTarget = value;
 
-                if (fTarget != null)
-                {
+                if (fTarget != null) {
                     ICulture culture = fBase.Context.Culture;
                     INamesTable namesTable = AppHost.NamesTable;
 
@@ -189,10 +196,8 @@ namespace GKUI.Forms
                             break;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("PersonEditDlg.SetTarget("+fTargetMode.ToString()+"): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.LogWrite("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + "): " + ex.Message);
             }
         }
 
@@ -230,23 +235,19 @@ namespace GKUI.Forms
         {
             bool locked = (cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
 
-            if (fPerson.ChildToFamilyLinks.Count != 0)
-            {
+            if (fPerson.ChildToFamilyLinks.Count != 0) {
                 GEDCOMFamilyRecord family = fPerson.ChildToFamilyLinks[0].Family;
                 btnParentsAdd.Enabled = false;
                 btnParentsEdit.Enabled = true && !locked;
                 btnParentsDelete.Enabled = true && !locked;
 
                 GEDCOMIndividualRecord relPerson = family.GetHusband();
-                if (relPerson != null)
-                {
+                if (relPerson != null) {
                     btnFatherAdd.Enabled = false;
                     btnFatherDelete.Enabled = true && !locked;
                     btnFatherSel.Enabled = true && !locked;
                     txtFather.Text = GKUtils.GetNameString(relPerson, true, false);
-                }
-                else
-                {
+                } else {
                     btnFatherAdd.Enabled = true && !locked;
                     btnFatherDelete.Enabled = false;
                     btnFatherSel.Enabled = false;
@@ -254,23 +255,18 @@ namespace GKUI.Forms
                 }
 
                 relPerson = family.GetWife();
-                if (relPerson != null)
-                {
+                if (relPerson != null) {
                     btnMotherAdd.Enabled = false;
                     btnMotherDelete.Enabled = true && !locked;
                     btnMotherSel.Enabled = true && !locked;
                     txtMother.Text = GKUtils.GetNameString(relPerson, true, false);
-                }
-                else
-                {
+                } else {
                     btnMotherAdd.Enabled = true && !locked;
                     btnMotherDelete.Enabled = false;
                     btnMotherSel.Enabled = false;
                     txtMother.Text = "";
                 }
-            }
-            else
-            {
+            } else {
                 btnParentsAdd.Enabled = true && !locked;
                 btnParentsEdit.Enabled = false;
                 btnParentsDelete.Enabled = false;
@@ -542,8 +538,7 @@ namespace GKUI.Forms
             GEDCOMFamilyRecord family = fBase.Context.SelectFamily(fPerson);
             if (family == null) return;
 
-            if (family.IndexOfChild(fPerson) < 0)
-            {
+            if (family.IndexOfChild(fPerson) < 0) {
                 fController.LocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, fPerson, family);
             }
             UpdateControls();
@@ -554,8 +549,7 @@ namespace GKUI.Forms
             AcceptTempData();
 
             GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
-            if (family != null && BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null))
-            {
+            if (family != null && BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null)) {
                 UpdateControls();
             }
         }
@@ -635,31 +629,6 @@ namespace GKUI.Forms
             btnMotherSel.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
             btnNameCopy.Image = UIHelper.LoadResourceImage("Resources.btn_copy.gif");
 
-            imgPortrait.AddButton(btnPortraitAdd);
-            imgPortrait.AddButton(btnPortraitDelete);
-            for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnPrivacy; res++)
-            {
-                cmbRestriction.Items.Add(LangMan.LS(GKData.Restrictions[(int)res]));
-            }
-
-            for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svUndetermined; sx++)
-            {
-                string name = GKUtils.SexStr(sx);
-                Image image = null;
-                #if SEX_SYMBOLS
-                switch (sx) {
-                    case GEDCOMSex.svMale:
-                        image = UIHelper.LoadResourceImage("Resources.sym_male.png");
-                        break;
-                    case GEDCOMSex.svFemale:
-                        image = UIHelper.LoadResourceImage("Resources.sym_female.png");
-                        break;
-                }
-                #endif
-                var item = new GKComboItem(name, null, image);
-                cmbSex.Items.Add(item);
-            }
-
             fEventsList = new GKSheetList(pageEvents);
             fEventsList.SetControlName("fEventsList"); // for purpose of tests
 
@@ -691,18 +660,8 @@ namespace GKUI.Forms
             fUserRefList = new GKSheetList(pageUserRefs);
             fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
-            btnPortraitAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnPortraitDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnFatherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnMotherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            btnParentsAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            btnParentsDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-
+            imgPortrait.AddButton(btnPortraitAdd);
+            imgPortrait.AddButton(btnPortraitDelete);
             imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
 
             SetLang();

@@ -66,12 +66,12 @@ namespace GKUI.Forms
 
             btnPlaceAdd = new Button();
             btnPlaceAdd.Enabled = false;
-            btnPlaceAdd.Size = new Size(26, 26);
+            btnPlaceAdd.Size = UIHelper.ShortButtonSize;
             btnPlaceAdd.Click += btnPlaceAdd_Click;
 
             btnPlaceDelete = new Button();
             btnPlaceDelete.Enabled = false;
-            btnPlaceDelete.Size = new Size(26, 26);
+            btnPlaceDelete.Size = UIHelper.ShortButtonSize;
             btnPlaceDelete.Click += btnPlaceDelete_Click;
 
             cmbEventType = new ComboBox();
@@ -170,18 +170,18 @@ namespace GKUI.Forms
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(130, 26);
+            btnAccept.Size = UIHelper.LongButtonSize;
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(130, 26);
+            btnCancel.Size = UIHelper.LongButtonSize;
             btnCancel.Text = "btnCancel";
             btnCancel.Click += btnCancel_Click;
 
             btnAddress = new Button();
-            btnAddress.Size = new Size(130, 26);
+            btnAddress.Size = UIHelper.LongButtonSize;
             btnAddress.Text = "btnAddress";
             btnAddress.Click += btnAddress_Click;
 
@@ -199,7 +199,7 @@ namespace GKUI.Forms
             AbortButton = btnCancel;
             Title = "EventEditDlg";
 
-            SetPredefProperties(620, 490);
+            SetPredefProperties(496, 394);
             ResumeLayout();
         }
     }

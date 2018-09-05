@@ -18,8 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Drawing;
-using System.Windows.Forms;
+using Eto.Drawing;
+using Eto.Forms;
 
 namespace GKUI.Components
 {
@@ -30,10 +30,11 @@ namespace GKUI.Components
     {
         public GKComboBox()
         {
-            DrawMode = DrawMode.OwnerDrawFixed;
-            DropDownStyle = ComboBoxStyle.DropDownList;
+            //DrawMode = DrawMode.OwnerDrawFixed;
+            //DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
+        /*
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
             e.DrawBackground();
@@ -47,7 +48,8 @@ namespace GKUI.Components
                 int offset = e.Bounds.Left;
 
                 if (ddItem.Image != null) {
-                    e.Graphics.DrawImage(ddItem.Image, e.Bounds.Left, e.Bounds.Top);
+                    Image img = ((ImageHandler)ddItem.Image).Handle;
+                    e.Graphics.DrawImage(img, e.Bounds.Left, e.Bounds.Top);
                     offset += ddItem.Image.Width;
                 }
 
@@ -59,5 +61,6 @@ namespace GKUI.Components
             }
             base.OnDrawItem(e);
         }
+        */
     }
 }

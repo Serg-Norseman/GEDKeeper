@@ -8,6 +8,7 @@
 *.userprefs
 *.DotSettings.user
 /appdata/
+Eto.xml
 
 gource-gk.cmd
 code_heat.sh

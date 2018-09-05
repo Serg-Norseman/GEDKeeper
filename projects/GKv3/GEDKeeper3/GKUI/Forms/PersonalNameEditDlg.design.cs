@@ -36,70 +36,82 @@ namespace GKUI.Forms
             lblSurname = new Label();
             lblSurname.Text = "lblSurname";
 
+            txtSurname = new TextBox();
+            txtSurname.Size = new Size(180, 22);
+            txtSurname.KeyDown += edName_KeyDown;
+
             lblSurnamePrefix = new Label();
             lblSurnamePrefix.Text = "lblSurnamePrefix";
 
-            txtSurname = new TextBox();
-            txtSurname.Width = 200;
-            txtSurname.KeyDown += edName_KeyDown;
-
             txtSurnamePrefix = new TextBox();
-            txtSurnamePrefix.Width = 200;
+            txtSurnamePrefix.Size = new Size(180, 22);
+            txtSurnamePrefix.KeyDown += edName_KeyDown;
 
             lblMarriedSurname = new Label();
             lblMarriedSurname.Text = "lblMarriedSurname";
 
+            txtMarriedSurname = new TextBox();
+            txtMarriedSurname.Size = new Size(180, 22);
+            txtMarriedSurname.KeyDown += edName_KeyDown;
+
             lblNamePrefix = new Label();
             lblNamePrefix.Text = "lblNamePrefix";
 
-            txtMarriedSurname = new TextBox();
-            txtMarriedSurname.KeyDown += edName_KeyDown;
-
             txtNamePrefix = new TextBox();
+            txtNamePrefix.Size = new Size(180, 22);
+            txtNamePrefix.KeyDown += edName_KeyDown;
 
             lblName = new Label();
             lblName.Text = "lblName";
 
+            txtName = new TextBox();
+            txtName.Size = new Size(180, 22);
+            txtName.KeyDown += edName_KeyDown;
+
             lblNameSuffix = new Label();
             lblNameSuffix.Text = "lblNameSuffix";
 
-            txtName = new TextBox();
-            txtName.KeyDown += edName_KeyDown;
-
             txtNameSuffix = new TextBox();
+            txtNameSuffix.Size = new Size(180, 22);
+            txtNameSuffix.KeyDown += edName_KeyDown;
 
             lblPatronymic = new Label();
             lblPatronymic.Text = "lblPatronymic";
 
+            txtPatronymic = new TextBox();
+            txtPatronymic.Size = new Size(180, 22);
+            txtPatronymic.KeyDown += edName_KeyDown;
+
             lblNickname = new Label();
             lblNickname.Text = "lblNickname";
 
-            txtPatronymic = new TextBox();
-            txtPatronymic.KeyDown += edName_KeyDown;
-
             txtNickname = new TextBox();
+            txtNickname.Size = new Size(180, 22);
+            txtNickname.KeyDown += edName_KeyDown;
 
             lblType = new Label();
             lblType.Text = "lblType";
 
             cmbNameType = new ComboBox();
+            cmbNameType.Size = new Size(180, 22);
             cmbNameType.ReadOnly = true;
 
             lblLanguage = new Label();
             lblLanguage.Text = "lblLanguage";
 
             cmbLanguage = new ComboBox();
+            cmbLanguage.Size = new Size(180, 22);
             cmbLanguage.ReadOnly = true;
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(130, 26);
+            btnAccept.Size = UIHelper.LongButtonSize;
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(130, 26);
+            btnCancel.Size = UIHelper.LongButtonSize;
             btnCancel.Text = "btnCancel";
             btnCancel.Click += CancelClickHandler;
 
@@ -108,41 +120,26 @@ namespace GKUI.Forms
                 Spacing = new Size(10, 10),
                 Rows = {
                     new TableRow {
-                        Cells = { lblSurname, lblSurnamePrefix }
+                        Cells = { new VSDefStackLayout(lblSurname, txtSurname),
+                                  new VSDefStackLayout(lblSurnamePrefix, txtSurnamePrefix) }
                     },
                     new TableRow {
-                        Cells = { txtSurname, txtSurnamePrefix }
+                        Cells = { new VSDefStackLayout(lblMarriedSurname, txtMarriedSurname),
+                                  new VSDefStackLayout(lblNamePrefix, txtNamePrefix) }
                     },
                     new TableRow {
-                        Cells = { lblMarriedSurname, lblNamePrefix }
+                        Cells = { new VSDefStackLayout(lblName, txtName),
+                                  new VSDefStackLayout(lblNameSuffix, txtNameSuffix) }
                     },
                     new TableRow {
-                        Cells = { txtMarriedSurname, txtNamePrefix }
+                        Cells = { new VSDefStackLayout(lblPatronymic, txtPatronymic),
+                                  new VSDefStackLayout(lblNickname, txtNickname) }
                     },
                     new TableRow {
-                        Cells = { lblName, lblNameSuffix }
+                        Cells = { new VSDefStackLayout(lblType, cmbNameType), null }
                     },
                     new TableRow {
-                        Cells = { txtName, txtNameSuffix }
-                    },
-                    new TableRow {
-                        Cells = { lblPatronymic, lblNickname }
-                    },
-                    new TableRow {
-                        Cells = { txtPatronymic, txtNickname }
-                    },
-                    new TableRow {
-                        Cells = { lblType, null }
-                    },
-                    new TableRow {
-                        //ScaleHeight = true,
-                        Cells = { cmbNameType, null }
-                    },
-                    new TableRow {
-                        Cells = { lblLanguage, null }
-                    },
-                    new TableRow {
-                        Cells = { cmbLanguage, null }
+                        Cells = { new VSDefStackLayout(lblLanguage, cmbLanguage), null }
                     },
                     null
                 }

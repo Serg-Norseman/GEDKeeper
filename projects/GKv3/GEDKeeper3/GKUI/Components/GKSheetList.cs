@@ -96,37 +96,37 @@ namespace GKUI.Components
 
             fBtnMoveDown = new Button();
             fBtnMoveDown.Image = UIHelper.LoadResourceImage("Resources.btn_down.gif");
-            fBtnMoveDown.Size = new Size(26, 26);
+            fBtnMoveDown.Size = UIHelper.ShortButtonSize;
             fBtnMoveDown.ToolTip = LangMan.LS(LSID.LSID_RecordMoveDown);
             fBtnMoveDown.Click += ItemMoveDown;
 
             fBtnMoveUp = new Button();
             fBtnMoveUp.Image = UIHelper.LoadResourceImage("Resources.btn_up.gif");
-            fBtnMoveUp.Size = new Size(26, 26);
+            fBtnMoveUp.Size = UIHelper.ShortButtonSize;
             fBtnMoveUp.ToolTip = LangMan.LS(LSID.LSID_RecordMoveUp);
             fBtnMoveUp.Click += ItemMoveUp;
 
             fBtnLinkJump = new Button();
             fBtnLinkJump.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            fBtnLinkJump.Size = new Size(26, 26);
+            fBtnLinkJump.Size = UIHelper.ShortButtonSize;
             fBtnLinkJump.ToolTip = LangMan.LS(LSID.LSID_RecordGoto);
             fBtnLinkJump.Click += ItemJump;
 
             fBtnDelete = new Button();
             fBtnDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            fBtnDelete.Size = new Size(26, 26);
+            fBtnDelete.Size = UIHelper.ShortButtonSize;
             fBtnDelete.ToolTip = LangMan.LS(LSID.LSID_MIRecordDelete);
             fBtnDelete.Click += ItemDelete;
 
             fBtnEdit = new Button();
             fBtnEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            fBtnEdit.Size = new Size(26, 26);
+            fBtnEdit.Size = UIHelper.ShortButtonSize;
             fBtnEdit.ToolTip = LangMan.LS(LSID.LSID_MIRecordEdit);
             fBtnEdit.Click += ItemEdit;
 
             fBtnAdd = new Button();
             fBtnAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            fBtnAdd.Size = new Size(26, 26);
+            fBtnAdd.Size = UIHelper.ShortButtonSize;
             fBtnAdd.ToolTip = LangMan.LS(LSID.LSID_MIRecordAdd);
             fBtnAdd.Click += ItemAdd;
 

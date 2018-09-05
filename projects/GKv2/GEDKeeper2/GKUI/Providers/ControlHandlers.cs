@@ -144,7 +144,7 @@ namespace GKUI.Providers
 
         public void AddItem(string caption, object tag, IImage image = null)
         {
-            Control.Items.Add(new GKComboItem(caption, tag));
+            Control.Items.Add(new GKComboItem(caption, tag, image));
         }
 
         public void AddRange(object[] items, bool sorted = false)

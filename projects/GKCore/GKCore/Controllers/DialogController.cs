@@ -172,7 +172,10 @@ namespace GKCore.Controllers
         {
         }
 
-        public abstract bool Accept();
+        public virtual bool Accept()
+        {
+            return true;
+        }
 
         public virtual void Cancel()
         {

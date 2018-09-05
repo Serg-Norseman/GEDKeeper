@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Drawing;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -29,7 +29,7 @@ namespace GKUI.Components
     {
         public readonly string Caption;
         public readonly object Tag;
-        public readonly Image Image;
+        public readonly IImage Image;
 
         public GKComboItem(string caption)
         {
@@ -42,7 +42,7 @@ namespace GKUI.Components
             Tag = tag;
         }
 
-        public GKComboItem(string caption, object tag, Image image)
+        public GKComboItem(string caption, object tag, IImage image)
         {
             Caption = caption;
             Tag = tag;

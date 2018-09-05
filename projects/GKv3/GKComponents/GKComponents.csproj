@@ -77,6 +77,7 @@
     <Compile Include="GKUI\Components\ArborViewer.cs" />
     <Compile Include="GKUI\Components\CustomPanel.cs" />
     <Compile Include="GKUI\Components\EUITimer.cs" />
+    <Compile Include="GKUI\Components\GKComboBox.cs" />
     <Compile Include="GKUI\Components\GKComboItem.cs" />
     <Compile Include="GKUI\Components\GKListView.cs" />
     <Compile Include="GKUI\Components\GKMenuItem.cs" />

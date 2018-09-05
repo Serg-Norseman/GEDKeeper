@@ -124,7 +124,7 @@
             this.btnAccept.Location = new System.Drawing.Point(502, 529);
             this.btnAccept.Margin = new System.Windows.Forms.Padding(2);
             this.btnAccept.Name = "btnAccept";
-            this.btnAccept.Size = new System.Drawing.Size(91, 24);
+            this.btnAccept.Size = new System.Drawing.Size(90, 24);
             this.btnAccept.TabIndex = 5;
             this.btnAccept.Text = "btnAccept";
             this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -137,7 +137,7 @@
             this.btnCancel.Location = new System.Drawing.Point(600, 529);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(91, 24);
+            this.btnCancel.Size = new System.Drawing.Size(90, 24);
             this.btnCancel.TabIndex = 6;
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -204,10 +204,10 @@
             this.imgPortrait.Image = null;
             this.imgPortrait.Location = new System.Drawing.Point(537, 12);
             this.imgPortrait.Name = "imgPortrait";
+            this.imgPortrait.PixelSpeed = 5;
             this.imgPortrait.Size = new System.Drawing.Size(149, 165);
             this.imgPortrait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Normal;
             this.imgPortrait.SlidePanelHeight = 36;
-            this.imgPortrait.PixelSpeed = 5;
             this.imgPortrait.TabIndex = 22;
             // 
             // lblMarriedSurname
@@ -362,11 +362,12 @@
             // 
             // cmbSex
             // 
+            this.cmbSex.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbSex.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSex.Location = new System.Drawing.Point(360, 108);
             this.cmbSex.Margin = new System.Windows.Forms.Padding(2);
             this.cmbSex.Name = "cmbSex";
-            this.cmbSex.Size = new System.Drawing.Size(154, 21);
+            this.cmbSex.Size = new System.Drawing.Size(154, 22);
             this.cmbSex.TabIndex = 17;
             this.cmbSex.SelectedIndexChanged += new System.EventHandler(this.cbSex_SelectedIndexChanged);
             // 

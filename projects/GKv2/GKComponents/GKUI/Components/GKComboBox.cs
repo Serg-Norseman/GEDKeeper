@@ -47,7 +47,8 @@ namespace GKUI.Components
                 int offset = e.Bounds.Left;
 
                 if (ddItem.Image != null) {
-                    e.Graphics.DrawImage(ddItem.Image, e.Bounds.Left, e.Bounds.Top);
+                    Image img = ((ImageHandler)ddItem.Image).Handle;
+                    e.Graphics.DrawImage(img, e.Bounds.Left, e.Bounds.Top);
                     offset += ddItem.Image.Width;
                 }
 

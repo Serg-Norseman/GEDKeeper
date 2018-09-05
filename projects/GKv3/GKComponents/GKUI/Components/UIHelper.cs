@@ -71,6 +71,17 @@ namespace GKUI.Components
         }
     }
 
+    public class VSDefStackLayout : StackLayout
+    {
+        public VSDefStackLayout(params Control[] items)
+        {
+            Orientation = Orientation.Vertical;
+            Padding = new Padding(0);
+            Spacing = 0;
+            foreach (var item in items) Items.Add(item);
+        }
+    }
+
     public class DefTableLayout : TableLayout
     {
         public DefTableLayout()
@@ -91,6 +102,10 @@ namespace GKUI.Components
     /// </summary>
     public static class UIHelper
     {
+        public static readonly Size ShortButtonSize = new Size(24, 24);
+        public static readonly Size LongButtonSize = new Size(120, 24);
+
+
         public static Rectangle Rt2Rt(ExtRect ert)
         {
             return new Rectangle(ert.Left, ert.Top, ert.GetWidth(), ert.GetHeight());
@@ -376,7 +391,7 @@ namespace GKUI.Components
             }
         }
 
-        public static Font GetDefaultFont(float size = 9.0f, FontStyle style = FontStyle.None)
+        public static Font GetDefaultFont(float size = 8.25f, FontStyle style = FontStyle.None)
         {
             string fontName = AppHost.Instance.GetDefaultFontName();
             return new Font(fontName, size);

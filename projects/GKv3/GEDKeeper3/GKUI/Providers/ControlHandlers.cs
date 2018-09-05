@@ -148,7 +148,7 @@ namespace GKUI.Providers
 
         public void AddItem(string caption, object tag, IImage image = null)
         {
-            Control.Items.Add(new GKComboItem(caption, tag));
+            Control.Items.Add(new GKComboItem(caption, tag, image));
         }
 
         public void AddRange(object[] items, bool sorted = false)
@@ -195,6 +195,53 @@ namespace GKUI.Providers
     public sealed class TextBoxHandler : ControlHandler<TextBox, TextBoxHandler>, ITextBoxHandler
     {
         public TextBoxHandler(TextBox control) : base(control)
+        {
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set {
+                Control.Enabled = value;
+                SetBackColor();
+            }
+        }
+
+        public string[] Lines
+        {
+            get { return UIHelper.Convert(Control.Text); }
+            set { /* TODO! */ }
+        }
+
+        public bool ReadOnly
+        {
+            get { return Control.ReadOnly; }
+            set {
+                Control.ReadOnly = value;
+                SetBackColor();
+            }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+
+        public void Select()
+        {
+            Control.Focus();
+        }
+
+        private void SetBackColor()
+        {
+            Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
+        }
+    }
+
+    public sealed class TextAreaHandler : ControlHandler<TextArea, TextAreaHandler>, ITextBoxHandler
+    {
+        public TextAreaHandler(TextArea control) : base(control)
         {
         }
 

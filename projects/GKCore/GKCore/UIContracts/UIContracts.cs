@@ -252,6 +252,9 @@ namespace GKCore.UIContracts
         GEDCOMIndividualRecord Target { get; set; }
         TargetMode TargetMode { get; set; }
         void SetNeedSex(GEDCOMSex needSex);
+
+        IComboBoxHandler RestrictionCombo { get; }
+        IComboBoxHandler SexCombo { get; }
     }
 
     public interface IRepositoryEditDlg : ICommonDialog, IBaseEditor, IView

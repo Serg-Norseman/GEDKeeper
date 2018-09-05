@@ -91,26 +91,24 @@ namespace GKUI.Forms
             lblNickname.Text = "lblNickname";
 
             txtMarriedSurname = new TextBox();
-            //txtMarriedSurname.Size = new Size(182, 21);
+            txtMarriedSurname.Size = new Size(180, 22);
             txtMarriedSurname.KeyDown += edNameX_KeyDown;
 
             txtSurname = new TextBox();
-            //txtSurname.Size = new Size(182, 21);
-            txtSurname.Width = 200;
+            txtSurname.Size = new Size(180, 22);
             txtSurname.KeyDown += edNameX_KeyDown;
 
             txtName = new TextBox();
-            //txtName.Size = new Size(182, 21);
+            txtName.Size = new Size(180, 22);
             txtName.KeyDown += edNameX_KeyDown;
 
             cmbPatronymic = new ComboBox();
-            //cmbPatronymic.Size = new Size(182, 21);
+            cmbPatronymic.Size = new Size(180, 22);
             cmbPatronymic.KeyDown += edNameX_KeyDown;
 
             cmbSex = new ComboBox();
             cmbSex.ReadOnly = true;
-            //cmbSex.Size = new Size(154, 21);
-            cmbSex.Width = 200;
+            cmbSex.Size = new Size(180, 22);
             cmbSex.SelectedIndexChanged += cbSex_SelectedIndexChanged;
 
             chkPatriarch = new CheckBox();
@@ -120,43 +118,40 @@ namespace GKUI.Forms
             chkBookmark.Text = "chkBookmark";
 
             txtSurnamePrefix = new TextBox();
-            txtSurnamePrefix.Width = 200;
-            //txtSurnamePrefix.Size = new Size(136, 21);
+            txtSurnamePrefix.Size = new Size(180, 22);
+            txtSurnamePrefix.KeyDown += edNameX_KeyDown;
 
             txtNamePrefix = new TextBox();
-            //txtNamePrefix.Size = new Size(136, 21);
+            txtNamePrefix.Size = new Size(180, 22);
+            txtNamePrefix.KeyDown += edNameX_KeyDown;
 
             txtNameSuffix = new TextBox();
-            //txtNameSuffix.Size = new Size(136, 21);
+            txtNameSuffix.Size = new Size(180, 22);
+            txtNameSuffix.KeyDown += edNameX_KeyDown;
 
             txtNickname = new TextBox();
-            //txtNickname.Size = new Size(136, 21);
+            txtNickname.Size = new Size(180, 22);
+            txtNickname.KeyDown += edNameX_KeyDown;
 
             var personLayout = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { lblSurname, lblSurnamePrefix, null }
+                        Cells = { new VSDefStackLayout(lblSurname, txtSurname),
+                                  new VSDefStackLayout(lblSurnamePrefix, txtSurnamePrefix), null }
                     },
                     new TableRow {
-                        Cells = { txtSurname, txtSurnamePrefix, null }
+                        Cells = { new VSDefStackLayout(lblMarriedSurname, txtMarriedSurname),
+                                  new VSDefStackLayout(lblNamePrefix, txtNamePrefix), null }
                     },
                     new TableRow {
-                        Cells = { lblMarriedSurname, lblNamePrefix, null }
+                        Cells = { new VSDefStackLayout(lblName, txtName),
+                                  new VSDefStackLayout(lblNameSuffix, txtNameSuffix),
+                                  new VSDefStackLayout(lblSex, cmbSex) }
                     },
                     new TableRow {
-                        Cells = { txtMarriedSurname, txtNamePrefix, null }
-                    },
-                    new TableRow {
-                        Cells = { lblName, lblNameSuffix, lblSex }
-                    },
-                    new TableRow {
-                        Cells = { txtName, txtNameSuffix, cmbSex }
-                    },
-                    new TableRow {
-                        Cells = { lblPatronymic, lblNickname, null }
-                    },
-                    new TableRow {
-                        Cells = { cmbPatronymic, txtNickname, TableLayout.Horizontal(10, chkBookmark, chkPatriarch) }
+                        Cells = { new VSDefStackLayout(lblPatronymic, cmbPatronymic),
+                                  new VSDefStackLayout(lblNickname, txtNickname),
+                                  TableLayout.Horizontal(10, chkBookmark, chkPatriarch) }
                     }
                 }
             };
@@ -169,11 +164,11 @@ namespace GKUI.Forms
             imgPortrait.PixelSpeed = 5;
 
             btnPortraitAdd = new Button();
-            btnPortraitAdd.Size = new Size(26, 26);
+            btnPortraitAdd.Size = UIHelper.ShortButtonSize;
             btnPortraitAdd.Click += btnPortraitAdd_Click;
 
             btnPortraitDelete = new Button();
-            btnPortraitDelete.Size = new Size(26, 26);
+            btnPortraitDelete.Size = UIHelper.ShortButtonSize;
             btnPortraitDelete.Click += btnPortraitDelete_Click;
 
             var portraitLayout = new DefTableLayout {
@@ -196,48 +191,46 @@ namespace GKUI.Forms
 
             txtFather = new TextBox();
             txtFather.Enabled = false;
-            txtFather.Width = 260;
-            //txtFather.Size = new Size(251, 21);
+            txtFather.Size = new Size(220, 22);
 
             txtMother = new TextBox();
             txtMother.Enabled = false;
-            txtMother.Width = 260;
-            //txtMother.Size = new Size(252, 21);
+            txtMother.Size = new Size(220, 22);
 
             btnParentsAdd = new Button();
-            btnParentsAdd.Size = new Size(26, 26);
+            btnParentsAdd.Size = UIHelper.ShortButtonSize;
             btnParentsAdd.Click += btnParentsAdd_Click;
 
             btnParentsEdit = new Button();
-            btnParentsEdit.Size = new Size(26, 26);
+            btnParentsEdit.Size = UIHelper.ShortButtonSize;
             btnParentsEdit.Click += btnParentsEdit_Click;
 
             btnParentsDelete = new Button();
-            btnParentsDelete.Size = new Size(26, 26);
+            btnParentsDelete.Size = UIHelper.ShortButtonSize;
             btnParentsDelete.Click += btnParentsDelete_Click;
 
             btnFatherAdd = new Button();
-            btnFatherAdd.Size = new Size(26, 26);
+            btnFatherAdd.Size = UIHelper.ShortButtonSize;
             btnFatherAdd.Click += btnFatherAdd_Click;
 
             btnFatherDelete = new Button();
-            btnFatherDelete.Size = new Size(26, 26);
+            btnFatherDelete.Size = UIHelper.ShortButtonSize;
             btnFatherDelete.Click += btnFatherDelete_Click;
 
             btnFatherSel = new Button();
-            btnFatherSel.Size = new Size(26, 26);
+            btnFatherSel.Size = UIHelper.ShortButtonSize;
             btnFatherSel.Click += btnFatherSel_Click;
 
             btnMotherAdd = new Button();
-            btnMotherAdd.Size = new Size(26, 26);
+            btnMotherAdd.Size = UIHelper.ShortButtonSize;
             btnMotherAdd.Click += btnMotherAdd_Click;
 
             btnMotherDelete = new Button();
-            btnMotherDelete.Size = new Size(26, 26);
+            btnMotherDelete.Size = UIHelper.ShortButtonSize;
             btnMotherDelete.Click += btnMotherDelete_Click;
 
             btnMotherSel = new Button();
-            btnMotherSel.Size = new Size(26, 26);
+            btnMotherSel.Size = UIHelper.ShortButtonSize;
             btnMotherSel.Click += btnMotherSel_Click;
 
             var parentsTab = new DefTableLayout(4, 2);
@@ -259,13 +252,13 @@ namespace GKUI.Forms
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(130, 26);
+            btnAccept.Size = UIHelper.LongButtonSize;
             btnAccept.Text = "btnAccept";
             btnAccept.Click += btnAccept_Click;
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(130, 26);
+            btnCancel.Size = UIHelper.LongButtonSize;
             btnCancel.Text = "btnCancel";
             btnCancel.Click += btnCancel_Click;
 
@@ -276,12 +269,11 @@ namespace GKUI.Forms
 
             cmbRestriction = new ComboBox();
             cmbRestriction.ReadOnly = true;
-            cmbRestriction.Width = 200;
-            //cmbRestriction.Size = new Size(163, 21);
+            cmbRestriction.Size = new Size(180, 22);
             cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
 
             btnNameCopy = new Button();
-            btnNameCopy.Size = new Size(26, 26);
+            btnNameCopy.Size = UIHelper.ShortButtonSize;
             btnNameCopy.Click += btnNameCopy_Click;
 
             //
