@@ -88,6 +88,7 @@ namespace GKCore.Lists
     public interface ISheetList
     {
         ListModel ListModel { get; set; }
+        bool ReadOnly { get; set; }
 
         void AddColumn(string caption, int width, bool autoSize);
         IListItem AddItem(object rowData, params object[] columnValues);

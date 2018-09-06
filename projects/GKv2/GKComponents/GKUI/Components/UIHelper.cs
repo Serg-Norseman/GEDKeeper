@@ -330,5 +330,10 @@ namespace GKUI.Components
                 ctl.BackColor = enabled ? SystemColors.Window : SystemColors.Control;
             }
         }
+
+        public static void SetClipboardText(string text)
+        {
+            Clipboard.SetDataObject(text);
+        }
     }
 }

@@ -22,13 +22,14 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using GKCore.UIContracts;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// Image with the pop-up panel.
     /// </summary>
-    public class GKPortrait : UserControl
+    public class GKPortrait : UserControl, IPortraitControl
     {
         private int fPixelSpeed = 5;
         private readonly List<Button> fBtnsList = new List<Button>();

@@ -23,6 +23,7 @@
 using System;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -35,6 +36,7 @@ namespace GKCore.Controllers
     public sealed class PersonEditDlgController : DialogController<IPersonEditDlg>
     {
         private GEDCOMIndividualRecord fPerson;
+        private IImage fPortraitImg;
 
         public GEDCOMIndividualRecord Person
         {
@@ -71,9 +73,41 @@ namespace GKCore.Controllers
             }
         }
 
+        public bool IsExtendedWomanSurname()
+        {
+            bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
+                (fView.SexCombo.SelectedIndex == (sbyte)GEDCOMSex.svFemale);
+            return result;
+        }
+
         public override bool Accept()
         {
             try {
+                GEDCOMPersonalName np = fPerson.PersonalNames[0];
+                GKUtils.SetNameParts(np, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
+
+                GEDCOMPersonalNamePieces pieces = np.Pieces;
+                pieces.Nickname = fView.Nickname.Text;
+                pieces.Prefix = fView.NamePrefix.Text;
+                pieces.SurnamePrefix = fView.SurnamePrefix.Text;
+                pieces.Suffix = fView.NameSuffix.Text;
+                if (IsExtendedWomanSurname()) {
+                    pieces.MarriedName = fView.MarriedSurname.Text;
+                }
+
+                fPerson.Sex = (GEDCOMSex)fView.SexCombo.SelectedIndex;
+                fPerson.Patriarch = fView.Patriarch.Checked;
+                fPerson.Bookmark = fView.Bookmark.Checked;
+                fPerson.Restriction = (GEDCOMRestriction)fView.RestrictionCombo.SelectedIndex;
+
+                if (fPerson.ChildToFamilyLinks.Count > 0) {
+                    fPerson.ChildToFamilyLinks[0].Family.SortChilds();
+                }
+
+                fLocalUndoman.Commit();
+
+                fBase.NotifyRecord(fPerson, RecordAction.raEdit);
+
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("PersonEditDlgController.Accept(): " + ex.Message);
@@ -83,6 +117,256 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            try {
+                GEDCOMPersonalName np = (fPerson.PersonalNames.Count > 0) ? fPerson.PersonalNames[0] : null;
+                UpdateNameControls(np);
+
+                fView.SexCombo.SelectedIndex = (sbyte)fPerson.Sex;
+                fView.Patriarch.Checked = fPerson.Patriarch;
+                fView.Bookmark.Checked = fPerson.Bookmark;
+
+                //cmbRestriction.SelectedIndexChanged -= cbRestriction_SelectedIndexChanged;
+                fView.RestrictionCombo.SelectedIndex = (sbyte)fPerson.Restriction;
+                //cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
+
+                fView.EventsList.ListModel.DataOwner = fPerson;
+                fView.NotesList.ListModel.DataOwner = fPerson;
+                fView.MediaList.ListModel.DataOwner = fPerson;
+                fView.SourcesList.ListModel.DataOwner = fPerson;
+                fView.AssociationsList.ListModel.DataOwner = fPerson;
+
+                fView.GroupsList.ListModel.DataOwner = fPerson;
+                fView.NamesList.ListModel.DataOwner = fPerson;
+                fView.SpousesList.ListModel.DataOwner = fPerson;
+                fView.UserRefList.ListModel.DataOwner = fPerson;
+
+                UpdateControls(true);
+            } catch (Exception ex) {
+                Logger.LogWrite("PersonEditDlgController.UpdateView(): " + ex.Message);
+            }
+        }
+
+        public void UpdateControls(bool totalUpdate = false)
+        {
+            bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+
+            if (fPerson.ChildToFamilyLinks.Count != 0) {
+                GEDCOMFamilyRecord family = fPerson.ChildToFamilyLinks[0].Family;
+                fView.SetParentsAvl(true, locked);
+
+                GEDCOMIndividualRecord relPerson = family.GetHusband();
+                if (relPerson != null) {
+                    fView.SetFatherAvl(true, locked);
+                    fView.Father.Text = GKUtils.GetNameString(relPerson, true, false);
+                } else {
+                    fView.SetFatherAvl(false, locked);
+                    fView.Father.Text = "";
+                }
+
+                relPerson = family.GetWife();
+                if (relPerson != null) {
+                    fView.SetMotherAvl(true, locked);
+                    fView.Mother.Text = GKUtils.GetNameString(relPerson, true, false);
+                } else {
+                    fView.SetMotherAvl(false, locked);
+                    fView.Mother.Text = "";
+                }
+            } else {
+                fView.SetParentsAvl(false, locked);
+                fView.SetFatherAvl(false, locked);
+                fView.SetMotherAvl(false, locked);
+
+                fView.Father.Text = "";
+                fView.Mother.Text = "";
+            }
+
+            if (totalUpdate) {
+                fView.EventsList.UpdateSheet();
+                fView.NotesList.UpdateSheet();
+                fView.MediaList.UpdateSheet();
+                fView.SourcesList.UpdateSheet();
+                fView.AssociationsList.UpdateSheet();
+
+                fView.GroupsList.UpdateSheet();
+                fView.NamesList.UpdateSheet();
+                fView.SpousesList.UpdateSheet();
+                fView.UserRefList.UpdateSheet();
+            }
+
+            UpdatePortrait(totalUpdate);
+
+            // controls lock
+            fView.Name.Enabled = !locked;
+            fView.Patronymic.Enabled = !locked;
+            fView.Surname.Enabled = !locked;
+
+            fView.SexCombo.Enabled = !locked;
+            fView.Patriarch.Enabled = !locked;
+            fView.Bookmark.Enabled = !locked;
+
+            fView.NamePrefix.Enabled = !locked;
+            fView.Nickname.Enabled = !locked;
+            fView.SurnamePrefix.Enabled = !locked;
+            fView.NameSuffix.Enabled = !locked;
+
+            fView.EventsList.ReadOnly = locked;
+            fView.NotesList.ReadOnly = locked;
+            fView.MediaList.ReadOnly = locked;
+            fView.SourcesList.ReadOnly = locked;
+            fView.SpousesList.ReadOnly = locked;
+            fView.AssociationsList.ReadOnly = locked;
+            fView.GroupsList.ReadOnly = locked;
+            fView.UserRefList.ReadOnly = locked;
+
+            ICulture culture = fBase.Context.Culture;
+            fView.Surname.Enabled = fView.Surname.Enabled && culture.HasSurname();
+            fView.Patronymic.Enabled = fView.Patronymic.Enabled && culture.HasPatronymic();
+        }
+
+        public void UpdateNameControls(GEDCOMPersonalName np)
+        {
+            if (np != null) {
+                var parts = GKUtils.GetNameParts(fPerson, np, false);
+
+                fView.Surname.Text = parts.Surname;
+                fView.Name.Text = parts.Name;
+                fView.Patronymic.Text = parts.Patronymic;
+
+                fView.NamePrefix.Text = np.Pieces.Prefix;
+                fView.Nickname.Text = np.Pieces.Nickname;
+                fView.SurnamePrefix.Text = np.Pieces.SurnamePrefix;
+                fView.NameSuffix.Text = np.Pieces.Suffix;
+
+                fView.MarriedSurname.Text = np.Pieces.MarriedName;
+            } else {
+                fView.Surname.Text = "";
+                fView.Name.Text = "";
+                fView.Patronymic.Text = "";
+
+                fView.NamePrefix.Text = "";
+                fView.Nickname.Text = "";
+                fView.SurnamePrefix.Text = "";
+                fView.NameSuffix.Text = "";
+
+                fView.MarriedSurname.Text = "";
+            }
+        }
+
+        public void UpdatePortrait(bool totalUpdate)
+        {
+            if (fPortraitImg == null || totalUpdate) {
+                fPortraitImg = fBase.Context.GetPrimaryBitmap(fPerson, fView.Portrait.Width, fView.Portrait.Height, false);
+            }
+
+            IImage img = fPortraitImg;
+            if (img == null) {
+                // using avatar's image
+                GEDCOMSex curSex = (GEDCOMSex)fView.SexCombo.SelectedIndex;
+
+                switch (curSex) {
+                    case GEDCOMSex.svMale:
+                        img = AppHost.GfxProvider.LoadResourceImage("pi_male_140.png", false);
+                        break;
+
+                    case GEDCOMSex.svFemale:
+                        img = AppHost.GfxProvider.LoadResourceImage("pi_female_140.png", false);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            fView.SetPortrait(img);
+
+            bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+            fView.SetPortraitAvl((fPortraitImg != null), locked);
+        }
+
+        public void AcceptTempData()
+        {
+            // It is very important for some methods
+            // For the sample: we need to have gender's value on time of call AddSpouse (for define husband/wife)
+            // And we need to have actual name's value for visible it in FamilyEditDlg
+
+            fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, fPerson, (GEDCOMSex)fView.SexCombo.SelectedIndex);
+            fLocalUndoman.DoIndividualNameChange(fPerson, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
+        }
+
+        public void AddPortrait()
+        {
+            if (BaseController.AddIndividualPortrait(fBase, fLocalUndoman, fPerson)) {
+                fView.MediaList.UpdateSheet();
+                UpdatePortrait(true);
+            }
+        }
+
+        public void DeletePortrait()
+        {
+            if (BaseController.DeleteIndividualPortrait(fBase, fLocalUndoman, fPerson)) {
+                UpdatePortrait(true);
+            }
+        }
+
+        public void AddParents()
+        {
+            AcceptTempData();
+
+            GEDCOMFamilyRecord family = fBase.Context.SelectFamily(fPerson);
+            if (family == null) return;
+
+            if (family.IndexOfChild(fPerson) < 0) {
+                fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, fPerson, family);
+            }
+            UpdateControls();
+        }
+
+        public void EditParents()
+        {
+            AcceptTempData();
+
+            GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
+            if (family != null && BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null)) {
+                UpdateControls();
+            }
+        }
+
+        public void DeleteParents()
+        {
+            if (!AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery))) return;
+
+            GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
+            if (family == null) return;
+
+            fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, fPerson, family);
+            UpdateControls();
+        }
+
+        public void AddFather()
+        {
+            if (BaseController.AddIndividualFather(fBase, fLocalUndoman, fPerson)) {
+                UpdateControls();
+            }
+        }
+
+        public void DeleteFather()
+        {
+            if (BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fPerson)) {
+                UpdateControls();
+            }
+        }
+
+        public void AddMother()
+        {
+            if (BaseController.AddIndividualMother(fBase, fLocalUndoman, fPerson)) {
+                UpdateControls();
+            }
+        }
+
+        public void DeleteMother()
+        {
+            if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fPerson)) {
+                UpdateControls();
+            }
         }
     }
 }

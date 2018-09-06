@@ -24,13 +24,14 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.UIContracts;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// Image with the pop-up panel.
     /// </summary>
-    public class GKPortrait : Panel
+    public class GKPortrait : Panel, IPortraitControl
     {
         private List<Button> fBtnsList = new List<Button>();
         private ImageBox fImageBox;

@@ -516,5 +516,12 @@ namespace GKUI.Components
                 ctl.BackgroundColor = enabled ? SystemColors.WindowBackground : SystemColors.Control;
             }
         }
+
+        public static void SetClipboardText(string text)
+        {
+            using (var clipboard = new Clipboard()) {
+                clipboard.Text = text;
+            }
+        }
     }
 }

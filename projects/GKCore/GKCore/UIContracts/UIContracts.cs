@@ -71,6 +71,16 @@ namespace GKCore.UIContracts
 
 
     /// <summary>
+    /// 
+    /// </summary>
+    public interface IPortraitControl
+    {
+        int Height { get; set; }
+        int Width { get; set; }
+    }
+
+
+    /// <summary>
     /// The interface of the class for working with WinForms dialogs.
     /// </summary>
     public interface IStdDialogs
@@ -253,8 +263,41 @@ namespace GKCore.UIContracts
         TargetMode TargetMode { get; set; }
         void SetNeedSex(GEDCOMSex needSex);
 
+        ISheetList EventsList { get; }
+        ISheetList SpousesList { get; }
+        ISheetList AssociationsList { get; }
+        ISheetList GroupsList { get; }
+        ISheetList UserRefList { get; }
+        ISheetList NamesList { get; }
+        ISheetList NotesList { get; }
+        ISheetList MediaList { get; }
+        ISheetList SourcesList { get; }
+
+        IPortraitControl Portrait { get; }
+        ITextBoxHandler Father { get; }
+        ITextBoxHandler Mother { get; }
+        ITextBoxHandler Surname { get; }
+        ITextBoxHandler Name { get; }
+        IComboBoxHandler Patronymic { get; }
+        ITextBoxHandler NamePrefix { get; }
+        ITextBoxHandler Nickname { get; }
+        ITextBoxHandler SurnamePrefix { get; }
+        ITextBoxHandler NameSuffix { get; }
+        ITextBoxHandler MarriedSurname { get; }
+
         IComboBoxHandler RestrictionCombo { get; }
         IComboBoxHandler SexCombo { get; }
+
+        ICheckBoxHandler Patriarch { get; }
+        ICheckBoxHandler Bookmark { get; }
+
+        void SetParentsAvl(bool avail, bool locked);
+        void SetFatherAvl(bool avail, bool locked);
+        void SetMotherAvl(bool avail, bool locked);
+        //void UpdatePortrait(bool totalUpdate);
+
+        void SetPortrait(IImage portrait);
+        void SetPortraitAvl(bool avail, bool locked);
     }
 
     public interface IRepositoryEditDlg : ICommonDialog, IBaseEditor, IView
