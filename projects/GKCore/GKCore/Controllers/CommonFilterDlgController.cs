@@ -20,6 +20,8 @@
 
 using System;
 using GKCommon.GEDCOM;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -31,9 +33,53 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class CommonFilterDlgController : DialogController<ICommonFilterDlg>
     {
+        private readonly string[] fFields;
+        private readonly IListManager fListMan;
 
-        public CommonFilterDlgController(ICommonFilterDlg view) : base(view)
+        public string[] Fields
         {
+            get { return fFields; }
+        }
+
+        public CommonFilterDlgController(ICommonFilterDlg view, IListManager listMan) : base(view)
+        {
+            fListMan = listMan;
+
+            ListColumns listColumns = (ListColumns)fListMan.ListColumns;
+            fFields = new string[listColumns.Count + 1]; // +empty item
+            fFields[0] = "";
+
+            for (int idx = 0; idx < listColumns.Count; idx++) {
+                var cs = listColumns[idx];
+                fFields[idx + 1] = fListMan.GetColumnName(cs.Id);
+            }
+        }
+
+        public ConditionKind GetCondByName(string condName)
+        {
+            ConditionKind res = ConditionKind.ck_NotEq;
+
+            for (ConditionKind pl = ConditionKind.ck_NotEq; pl <= ConditionKind.ck_NotContains; pl++) {
+                if (GKData.CondSigns[(int)pl] == condName) {
+                    res = pl;
+                    break;
+                }
+            }
+
+            return res;
+        }
+
+        public int GetFieldColumnId(string fieldName)
+        {
+            int idx = -1;
+            for (int i = 0; i < fFields.Length; i++) {
+                if (fFields[i] == fieldName) {
+                    idx = i - 1; // exclude empty item
+                    break;
+                }
+            }
+
+            return idx;
         }
 
         public override bool Accept()

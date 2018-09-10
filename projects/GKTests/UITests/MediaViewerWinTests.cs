@@ -31,6 +31,7 @@ using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
 using GKUI.Forms;
+using GKUI.Components;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -76,8 +77,9 @@ namespace GKUI.Forms
 
             Assembly assembly = typeof(CoreTests).Assembly;
             Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.jpg"));
+            IImage portableImage = new ImageHandler(img);
 
-            fDialog.SetViewImage(img, fileRef);
+            fDialog.SetViewImage(portableImage, fileRef);
 
             fDialog.Refresh();
 

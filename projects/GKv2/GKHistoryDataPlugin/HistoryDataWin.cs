@@ -124,7 +124,7 @@ namespace GKHistoryDataPlugin
                             CheckLinkColumn(row);
                         }
 
-                        fItems.Add(new LinkItem(lvData.AddItem(null, row.ToArray())));
+                        fItems.Add(new LinkItem((GKListItem)lvData.AddItem(null, row.ToArray())));
                     }
 
                     row = csv.ReadRow();

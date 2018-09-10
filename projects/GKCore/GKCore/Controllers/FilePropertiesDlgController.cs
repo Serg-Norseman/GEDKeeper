@@ -20,7 +20,6 @@
 
 using System;
 using GKCommon.GEDCOM;
-using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
 
@@ -39,6 +38,20 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
+                fBase.Context.Tree.Header.Language.ParseString(fView.Language.Text);
+
+                GEDCOMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
+                submitter.Name.StringValue = fView.Name.Text;
+                submitter.Address.SetAddressArray(fView.Address.Lines);
+
+                if (submitter.Address.PhoneNumbers.Count > 0) {
+                    submitter.Address.PhoneNumbers[0].StringValue = fView.Tel.Text;
+                } else {
+                    submitter.Address.AddPhoneNumber(fView.Tel.Text);
+                }
+
+                fBase.NotifyRecord(submitter, RecordAction.raEdit);
+
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("FilePropertiesDlgController.Accept(): " + ex.Message);
@@ -48,6 +61,22 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            fView.Language.Text = fBase.Context.Tree.Header.Language.StringValue;
+
+            GEDCOMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
+            fView.Name.Text = submitter.Name.FullName;
+            fView.Address.Text = submitter.Address.Address.Text;
+
+            if (submitter.Address.PhoneNumbers.Count > 0) {
+                fView.Tel.Text = submitter.Address.PhoneNumbers[0].StringValue;
+            }
+
+            // update stats
+            int[] stats = fBase.Context.Tree.GetRecordStats();
+            fView.RecordStats.ClearItems();
+            for (int i = 1; i < stats.Length; i++) {
+                fView.RecordStats.AddItem(null, LangMan.LS(GKData.RecordTypes[i]), stats[i].ToString());
+            }
         }
     }
 }

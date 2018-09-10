@@ -200,6 +200,7 @@
     <Compile Include="GKCore\Controllers\LocationEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\MapsViewerWinController.cs" />
     <Compile Include="GKCore\Controllers\MediaEditDlgController.cs" />
+    <Compile Include="GKCore\Controllers\MediaViewerController.cs" />
     <Compile Include="GKCore\Controllers\NameEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\NoteEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\PersonalNameEditDlgController.cs" />

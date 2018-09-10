@@ -19,7 +19,10 @@
  */
 
 using System;
+using System.Collections.Generic;
+using BSLib;
 using GKCommon.GEDCOM;
+using GKCore.Maps;
 using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -47,11 +50,20 @@ namespace GKCore.Controllers
 
         public LocationEditDlgController(ILocationEditDlg view) : base(view)
         {
+            fView.Name.Select();
         }
 
         public override bool Accept()
         {
             try {
+                fLocationRecord.LocationName = fView.Name.Text;
+                fLocationRecord.Map.Lati = ConvertHelper.ParseFloat(fView.Latitude.Text, 0.0);
+                fLocationRecord.Map.Long = ConvertHelper.ParseFloat(fView.Longitude.Text, 0.0);
+
+                fLocalUndoman.Commit();
+
+                fBase.NotifyRecord(fLocationRecord, RecordAction.raEdit);
+
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("LocationEditDlgController.Accept(): " + ex.Message);
@@ -61,6 +73,79 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            fView.Name.Text = fLocationRecord.LocationName;
+            fView.Latitude.Text = PlacesLoader.CoordToStr(fLocationRecord.Map.Lati);
+            fView.Longitude.Text = PlacesLoader.CoordToStr(fLocationRecord.Map.Long);
+
+            fView.NotesList.ListModel.DataOwner = fLocationRecord;
+            fView.MediaList.ListModel.DataOwner = fLocationRecord;
+        }
+
+        public GeoPoint GetSelectedGeoPoint()
+        {
+            return fView.GeoCoordsList.GetSelectedData() as GeoPoint;
+        }
+
+        public void Search()
+        {
+            string location = fView.Name.Text.Trim();
+            if (string.IsNullOrEmpty(location)) {
+                return;
+            }
+
+            fView.GeoCoordsList.BeginUpdate();
+            fView.MapBrowser.BeginUpdate();
+            try {
+                var searchPoints = new List<GeoPoint>();
+
+                AppHost.Instance.RequestGeoCoords(location, searchPoints);
+                fView.GeoCoordsList.ClearItems();
+                fView.MapBrowser.ClearPoints();
+
+                int num = searchPoints.Count;
+                for (int i = 0; i < num; i++) {
+                    GeoPoint pt = searchPoints[i];
+
+                    fView.GeoCoordsList.AddItem(pt, pt.Hint, 
+                        PlacesLoader.CoordToStr(pt.Latitude), PlacesLoader.CoordToStr(pt.Longitude));
+
+                    fView.MapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
+
+                    if (i == 0) {
+                        fView.MapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+                    }
+                }
+
+                //fMapBrowser.ZoomToBounds();
+            } finally {
+                fView.MapBrowser.EndUpdate();
+                fView.GeoCoordsList.EndUpdate();
+            }
+        }
+
+        public void SelectCoords()
+        {
+            GeoPoint pt = GetSelectedGeoPoint();
+            if (pt == null) return;
+
+            fView.Latitude.Text = PlacesLoader.CoordToStr(pt.Latitude);
+            fView.Longitude.Text = PlacesLoader.CoordToStr(pt.Longitude);
+        }
+
+        public void SelectName()
+        {
+            GeoPoint pt = GetSelectedGeoPoint();
+            if (pt == null) return;
+
+            fView.Name.Text = pt.Hint;
+        }
+
+        public void SelectGeoPoint()
+        {
+            GeoPoint pt = GetSelectedGeoPoint();
+            if (pt == null) return;
+
+            fView.MapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
         }
     }
 }

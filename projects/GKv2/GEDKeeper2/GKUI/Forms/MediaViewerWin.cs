@@ -22,13 +22,13 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -36,144 +36,87 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class MediaViewerWin : CommonForm, ILocalization
+    public partial class MediaViewerWin : CommonForm, ILocalization, IMediaViewerWin
     {
-        private readonly IBaseWindow fBase;
-        private GEDCOMFileReferenceWithTitle fFileRef;
+        private readonly MediaViewerController fController;
         private Control fViewer;
 
         public GEDCOMFileReferenceWithTitle FileRef
         {
-            get { return fFileRef; }
-            set { SetFileRef(value); }
+            get { return fController.FileRef; }
+            set { fController.FileRef = value; }
         }
 
-        private void SetFileRef(GEDCOMFileReferenceWithTitle value)
+        #region View Interface
+
+        public string Caption
         {
-            fFileRef = value;
-            Text = fFileRef.Title;
-            Control ctl = null;
+            get { return base.Text; }
+            set { base.Text = value; }
+        }
 
-            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fFileRef.MultimediaFormat);
+        #endregion
 
-            try
-            {
-                switch (mmKind)
-                {
-                    case MultimediaKind.mkImage:
-                        {
-                            IImage img = fBase.Context.LoadMediaImage(fFileRef, false);
-                            if (img != null) {
-                                SetViewImage(((ImageHandler)img).Handle, fFileRef);
-                            }
-                            break;
-                        }
+        public void SetViewText(string text)
+        {
+            try {
+                TextBox txtBox = new TextBox();
+                txtBox.Multiline = true;
+                txtBox.ScrollBars = ScrollBars.Both;
+                txtBox.ReadOnly = true;
+                // FIXME: fix encoding! and test other!!!
+                txtBox.Text = text;
 
-                    case MultimediaKind.mkAudio:
-                    case MultimediaKind.mkVideo:
-                        {
-                            string targetFile = fBase.Context.MediaLoad(fFileRef);
-                            SetViewMedia(targetFile);
-                            break;
-                        }
-
-                    case MultimediaKind.mkText:
-                        {
-                            Stream fs = fBase.Context.MediaLoad(fFileRef, false);
-
-                            switch (fFileRef.MultimediaFormat)
-                            {
-                                case GEDCOMMultimediaFormat.mfTXT:
-                                    {
-                                        TextBox txtBox = new TextBox();
-                                        txtBox.Multiline = true;
-                                        txtBox.ReadOnly = true;
-                                        txtBox.ScrollBars = ScrollBars.Both;
-
-                                        try {
-                                            // FIXME: fix encoding! and test other!!!
-                                            using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251))) {
-                                                txtBox.Text = strd.ReadToEnd();
-                                            }
-                                        } catch (Exception ex) {
-                                            Logger.LogWrite("MediaViewerWin.SetFileRef.1(): " + ex.Message);
-                                        }
-
-                                        ctl = txtBox;
-                                        SetViewControl(ctl);
-                                    }
-                                    break;
-
-                                case GEDCOMMultimediaFormat.mfRTF:
-                                    {
-                                        RichTextBox rtfBox = new RichTextBox();
-                                        rtfBox.ReadOnly = true;
-
-                                        try {
-                                            using (StreamReader strd = new StreamReader(fs)) {
-                                                rtfBox.Text = strd.ReadToEnd();
-                                            }
-                                        } catch (Exception ex) {
-                                            Logger.LogWrite("MediaViewerWin.SetFileRef.2(): " + ex.Message);
-                                        }
-
-                                        ctl = rtfBox;
-                                        SetViewControl(ctl);
-                                    }
-                                    break;
-
-                                case GEDCOMMultimediaFormat.mfHTM:
-                                    {
-                                        var browser = new WebBrowser();
-
-                                        try {
-                                            browser.DocumentStream = fs;
-                                            /*using (StreamReader strd = new StreamReader(fs)) {
-                                                browser.DocumentText = strd.ReadToEnd();
-                                                // didn't work, because didn't defines codepage from page's header (?!)
-                                            }*/
-                                        } catch (Exception ex) {
-                                            Logger.LogWrite("MediaViewerWin.SetFileRef.3(): " + ex.Message);
-                                        }
-
-                                        ctl = browser;
-                                        SetViewControl(ctl);
-                                    }
-                                    break;
-                            }
-                            if (fs != null && !(ctl is WebBrowser)) fs.Dispose();
-                            
-                            break;
-                        }
-                }
+                SetViewControl(txtBox);
+            } catch (Exception ex) {
+                Logger.LogWrite("MediaViewerWin.SetViewText(): " + ex.Message);
             }
-            catch (Exception ex)
-            {
-                if (ctl != null) ctl.Dispose();
+        }
 
-                Logger.LogWrite("MediaViewerWin.SetFileRef(): " + ex.Message);
+        public void SetViewRTF(string text)
+        {
+            try {
+                RichTextBox rtfBox = new RichTextBox();
+                rtfBox.ReadOnly = true;
+                rtfBox.Text = text;
+
+                SetViewControl(rtfBox);
+            } catch (Exception ex) {
+                Logger.LogWrite("MediaViewerWin.SetViewRTF(): " + ex.Message);
+            }
+        }
+
+        public void SetViewHTML(Stream stm)
+        {
+            try {
+                var browser = new WebBrowser();
+                browser.DocumentStream = stm;
+
+                SetViewControl(browser);
+            } catch (Exception ex) {
+                Logger.LogWrite("MediaViewerWin.SetViewHTML(): " + ex.Message);
             }
         }
 
         public void SetViewMedia(string mediaFile)
         {
-            MediaPlayer mediaPlayer = new MediaPlayer();
+            var mediaPlayer = new GKUI.Components.MediaPlayer();
             mediaPlayer.MediaFile = mediaFile;
 
             SetViewControl(mediaPlayer);
         }
 
-        public void SetViewImage(Image img, GEDCOMFileReferenceWithTitle fileRef)
+        public void SetViewImage(IImage img, GEDCOMFileReferenceWithTitle fileRef)
         {
-            ImageView imageCtl = new ImageView();
-            imageCtl.OpenImage(img);
+            var imageCtl = new GKUI.Components.ImageView();
+            imageCtl.OpenImage(((ImageHandler)img).Handle);
 
             ProcessPortraits(imageCtl, fileRef);
 
             SetViewControl(imageCtl);
         }
 
-        private void ProcessPortraits(ImageView imageCtl, GEDCOMFileReferenceWithTitle fileRef)
+        private void ProcessPortraits(GKUI.Components.ImageView imageCtl, GEDCOMFileReferenceWithTitle fileRef)
         {
             var mmRec = fileRef.Parent as GEDCOMMultimediaRecord;
 
@@ -192,6 +135,11 @@ namespace GKUI.Forms
             }
 
             imageCtl.ShowNamedRegionTips = (imageCtl.NamedRegions.Count > 0);
+        }
+
+        public void DisposeViewControl()
+        {
+            if (fViewer != null) fViewer.Dispose();
         }
 
         private void SetViewControl(Control ctl)
@@ -215,8 +163,10 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            fBase = baseWin;
             SetLang();
+
+            fController = new MediaViewerController(this);
+            fController.Init(baseWin);
         }
 
         public void SetLang()

@@ -424,7 +424,7 @@ namespace GKUI.Components
 
                 if (rowData != null) {
                     object[] itemData = fListMan.GetItemData(rowData);
-                    GKListItem newItem = AddItem(rowData, itemData);
+                    GKListItem newItem = (GKListItem)AddItem(rowData, itemData);
                     fListMan.UpdateItemProps(newItem, rowData);
                 }
             }
@@ -598,7 +598,7 @@ namespace GKUI.Components
             fItems.Clear();
         }
 
-        public GKListItem AddItem(object rowData, params object[] columnValues)
+        public GKCore.Interfaces.IListItem AddItem(object rowData, params object[] columnValues)
         {
             var item = new GKListItem(columnValues);
             item.Data = rowData;

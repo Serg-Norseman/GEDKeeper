@@ -663,7 +663,7 @@ namespace GKUI.Components
             Items.Clear();
         }
 
-        public GKListItem AddItem(object rowData, params object[] columnValues)
+        public IListItem AddItem(object rowData, params object[] columnValues)
         {
             var result = new GKListItem(columnValues[0], rowData);
             Items.Add(result);

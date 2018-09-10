@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.IO;
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Charts;
@@ -215,6 +216,14 @@ namespace GKCore.UIContracts
     public interface ILocationEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMLocationRecord LocationRecord { get; set; }
+
+        IMapBrowser MapBrowser { get; }
+        ISheetList MediaList { get; }
+        ISheetList NotesList { get; }
+        IListView GeoCoordsList { get; }
+        ITextBoxHandler Name { get; }
+        ITextBoxHandler Latitude { get; }
+        ITextBoxHandler Longitude { get; }
     }
 
     public interface IMediaEditDlg : ICommonDialog, IBaseEditor, IView
@@ -378,6 +387,12 @@ namespace GKCore.UIContracts
 
     public interface IFilePropertiesDlg : ICommonDialog, IBaseEditor, IView
     {
+        IListView RecordStats { get; }
+
+        ITextBoxHandler Language { get; }
+        ITextBoxHandler Name { get; }
+        ITextBoxHandler Address { get; }
+        ITextBoxHandler Tel { get; }
     }
 
     public interface IPortraitSelectDlg : ICommonDialog, IBaseEditor
@@ -430,6 +445,17 @@ namespace GKCore.UIContracts
 
     public interface IStatisticsWin : IView
     {
+    }
+
+    public interface IMediaViewerWin : IView
+    {
+        string Caption { get; set; }
+        void SetViewImage(IImage img, GEDCOMFileReferenceWithTitle fileRef);
+        void SetViewMedia(string mediaFile);
+        void SetViewText(string text);
+        void SetViewRTF(string text);
+        void SetViewHTML(Stream stm);
+        void DisposeViewControl();
     }
 
     public interface ITreeChartWin : IView

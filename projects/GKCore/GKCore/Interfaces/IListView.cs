@@ -26,5 +26,10 @@ namespace GKCore.Interfaces
     public interface IListView
     {
         void AddColumn(string caption, int width, bool autoSize);
+        IListItem AddItem(object rowData, params object[] columnValues);
+        void BeginUpdate();
+        void ClearItems();
+        void EndUpdate();
+        object GetSelectedData();
     }
 }

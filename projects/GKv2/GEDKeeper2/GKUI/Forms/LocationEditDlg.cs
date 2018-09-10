@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 using BSLib;
@@ -28,8 +27,6 @@ using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Maps;
-using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
 
@@ -46,17 +43,50 @@ namespace GKUI.Forms
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fNotesList;
 
-        private GEDCOMLocationRecord fLocationRecord;
-
         public GEDCOMLocationRecord LocationRecord
         {
-            get {
-                return fLocationRecord;
-            }
-            set {
-                SetLocationRecord(value);
-            }
+            get { return fController.LocationRecord; }
+            set { fController.LocationRecord = value; }
         }
+
+        #region View Interface
+
+        IMapBrowser ILocationEditDlg.MapBrowser
+        {
+            get { return fMapBrowser; }
+        }
+
+        ISheetList ILocationEditDlg.MediaList
+        {
+            get { return fMediaList; }
+        }
+
+        ISheetList ILocationEditDlg.NotesList
+        {
+            get { return fNotesList; }
+        }
+
+        IListView ILocationEditDlg.GeoCoordsList
+        {
+            get { return ListGeoCoords; }
+        }
+
+        ITextBoxHandler ILocationEditDlg.Name
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+        }
+
+        ITextBoxHandler ILocationEditDlg.Latitude
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtLatitude); }
+        }
+
+        ITextBoxHandler ILocationEditDlg.Longitude
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtLongitude); }
+        }
+
+        #endregion
 
         public LocationEditDlg()
         {
@@ -106,19 +136,6 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
-        private void SetLocationRecord(GEDCOMLocationRecord value)
-        {
-            fLocationRecord = value;
-            txtName.Text = fLocationRecord.LocationName;
-            txtLatitude.Text = PlacesLoader.CoordToStr(fLocationRecord.Map.Lati);
-            txtLongitude.Text = PlacesLoader.CoordToStr(fLocationRecord.Map.Long);
-
-            fNotesList.ListModel.DataOwner = fLocationRecord;
-            fMediaList.ListModel.DataOwner = fLocationRecord;
-
-            ActiveControl = txtName;
-        }
-
         private void EditName_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Down && e.Control) {
@@ -128,20 +145,7 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try {
-                fLocationRecord.LocationName = txtName.Text;
-                fLocationRecord.Map.Lati = ConvertHelper.ParseFloat(txtLatitude.Text, 0.0);
-                fLocationRecord.Map.Long = ConvertHelper.ParseFloat(txtLongitude.Text, 0.0);
-
-                fController.LocalUndoman.Commit();
-
-                fBase.NotifyRecord(fLocationRecord, RecordAction.raEdit);
-
-                DialogResult = DialogResult.OK;
-            } catch (Exception ex) {
-                Logger.LogWrite("LocationEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -155,77 +159,22 @@ namespace GKUI.Forms
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            string location = txtName.Text.Trim();
-            if (string.IsNullOrEmpty(location)) {
-                return;
-            }
-
-            ListGeoCoords.BeginUpdate();
-            fMapBrowser.BeginUpdate();
-            try {
-                IList<GeoPoint> searchPoints = new List<GeoPoint>();
-
-                AppHost.Instance.RequestGeoCoords(location, searchPoints);
-                ListGeoCoords.ClearItems();
-                fMapBrowser.ClearPoints();
-
-                int num = searchPoints.Count;
-                for (int i = 0; i < num; i++) {
-                    GeoPoint pt = searchPoints[i];
-
-                    GKListItem item = new GKListItem(pt.Hint, pt);
-                    item.AddSubItem(PlacesLoader.CoordToStr(pt.Latitude));
-                    item.AddSubItem(PlacesLoader.CoordToStr(pt.Longitude));
-                    ListGeoCoords.Items.Add(item);
-
-                    fMapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
-
-                    if (i == 0) {
-                        fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
-                    }
-                }
-
-                //fMapBrowser.ZoomToBounds();
-            } finally {
-                fMapBrowser.EndUpdate();
-                ListGeoCoords.EndUpdate();
-            }
-        }
-
-        private GKListItem GetSelectedGeoItem()
-        {
-            if (ListGeoCoords.SelectedItems.Count <= 0) return null;
-
-            GKListItem item = (GKListItem)ListGeoCoords.SelectedItems[0];
-            return item;
+            fController.Search();
         }
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
-            GKListItem item = GetSelectedGeoItem();
-            if (item == null) return;
-
-            txtLatitude.Text = item.SubItems[1].Text;
-            txtLongitude.Text = item.SubItems[2].Text;
+            fController.SelectCoords();
         }
 
         private void btnSelectName_Click(object sender, EventArgs e)
         {
-            GKListItem item = GetSelectedGeoItem();
-            if (item == null) return;
-
-            txtName.Text = item.Text;
+            fController.SelectName();
         }
 
         private void ListGeoCoords_Click(object sender, EventArgs e)
         {
-            GKListItem item = GetSelectedGeoItem();
-            if (item == null) return;
-
-            GeoPoint pt = item.Data as GeoPoint;
-            if (pt == null) return;
-
-            fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+            fController.SelectGeoPoint();
         }
 
         private void EditName_TextChanged(object sender, EventArgs e)

@@ -24,7 +24,6 @@ using Eto.Forms;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Lists;
 using GKCore.UIContracts;
 using GKUI.Components;
 
@@ -33,12 +32,11 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class CommonFilterDlg : CommonDialog, ICommonDialog, ICommonFilterDlg
+    public partial class CommonFilterDlg : CommonDialog, ICommonDialog, IBaseEditor, ICommonFilterDlg
     {
         private readonly CommonFilterDlgController fController;
 
         private readonly IBaseWindow fBase;
-        private readonly string[] fFields;
         private readonly IListManager fListMan;
         private MaskedTextBox fMaskedTextBox;
 
@@ -70,22 +68,12 @@ namespace GKUI.Forms
 
             fBase = baseWin;
             fListMan = listMan;
-
-            ListColumns listColumns = (ListColumns)fListMan.ListColumns;
-            fFields = new string[listColumns.Count + 1]; // +empty item
-            fFields[0] = "";
-
-            for (int idx = 0; idx < listColumns.Count; idx++) {
-                var cs = listColumns[idx];
-                fFields[idx + 1] = fListMan.GetColumnName(cs.Id);
-            }
+            fController = new CommonFilterDlgController(this, listMan);
 
             SetLang();
 
             InitGrid();
             UpdateGrid();
-
-            fController = new CommonFilterDlgController(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -104,35 +92,6 @@ namespace GKUI.Forms
 
         #region Private functions
 
-        private static ConditionKind GetCondByName(string condName)
-        {
-            ConditionKind res = ConditionKind.ck_NotEq;
-
-            for (ConditionKind pl = ConditionKind.ck_NotEq; pl <= ConditionKind.ck_NotContains; pl++) {
-                if (GKData.CondSigns[(int)pl] == condName) {
-                    res = pl;
-                    break;
-                }
-            }
-
-            return res;
-        }
-
-        private int GetFieldColumnId(string fieldName)
-        {
-            int idx = -1;
-            for (int i = 0; i < fFields.Length; i++)
-            {
-                if (fFields[i] == fieldName)
-                {
-                    idx = i - 1; // exclude empty item
-                    break;
-                }
-            }
-
-            return idx;
-        }
-
         private void InitGrid()
         {
             fMaskedTextBox = new MaskedTextBox();
@@ -142,7 +101,7 @@ namespace GKUI.Forms
 
             dataGridView1.ClearItems();
             dataGridView1.ClearColumns();
-            dataGridView1.AddComboColumn(LangMan.LS(LSID.LSID_Field), 200, false, fFields);
+            dataGridView1.AddComboColumn(LangMan.LS(LSID.LSID_Field), 200, false, fController.Fields);
             dataGridView1.AddComboColumn(LangMan.LS(LSID.LSID_Condition), 150, false, GKData.CondSigns);
             dataGridView1.AddTextColumn(LangMan.LS(LSID.LSID_Value), 300);
 
@@ -157,7 +116,7 @@ namespace GKUI.Forms
 
             string fld = (string)row.Cells[0].Value;
             if (!string.IsNullOrEmpty(fld)) {
-                int colId = GetFieldColumnId(fld);
+                int colId = fController.GetFieldColumnId(fld);
                 DataType dataType = fListMan.GetColumnDataType(colId);
 
                 return (dataType == DataType.dtGEDCOMDate);
@@ -218,7 +177,7 @@ namespace GKUI.Forms
 
                 int condIndex = ((IConvertible)fcond.Condition).ToByte(null);
 
-                row.Cells[0].Value = fFields[fcond.ColumnIndex + 1];
+                row.Cells[0].Value = fController.Fields[fcond.ColumnIndex + 1];
                 row.Cells[1].Value = GKData.CondSigns[condIndex];
                 row.Cells[2].Value = fcond.Value.ToString();
             }
@@ -261,9 +220,9 @@ namespace GKUI.Forms
                 string val = (string)row.Cells[2].Value;
 
                 if (!string.IsNullOrEmpty(fld)) {
-                    int colId = GetFieldColumnId(fld);
+                    int colId = fController.GetFieldColumnId(fld);
                     if (colId != -1) {
-                        ConditionKind cond = GetCondByName(cnd);
+                        ConditionKind cond = fController.GetCondByName(cnd);
                         fListMan.AddCondition((byte)colId, cond, val);
                     }
                 }

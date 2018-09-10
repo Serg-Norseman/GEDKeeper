@@ -111,6 +111,11 @@ namespace GKCore
         private class ListViewMock : IListView
         {
             public void AddColumn(string caption, int width, bool autoSize) {}
+            public IListItem AddItem(object rowData, params object[] columnValues) { return null; }
+            public void BeginUpdate() {}
+            public void ClearItems() {}
+            public void EndUpdate() {}
+            public object GetSelectedData() { return null; }
         }
 
         private bool ExtFilterHandler(GEDCOMRecord record)

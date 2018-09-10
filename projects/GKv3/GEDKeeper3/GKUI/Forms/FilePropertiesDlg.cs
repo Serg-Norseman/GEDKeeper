@@ -25,7 +25,6 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
 
@@ -37,6 +36,35 @@ namespace GKUI.Forms
     public sealed partial class FilePropertiesDlg : EditorDialog, IFilePropertiesDlg
     {
         private readonly FilePropertiesDlgController fController;
+
+        #region View Interface
+
+        IListView IFilePropertiesDlg.RecordStats
+        {
+            get { return lvRecordStats; }
+        }
+
+        ITextBoxHandler IFilePropertiesDlg.Language
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtLanguage); }
+        }
+
+        ITextBoxHandler IFilePropertiesDlg.Name
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+        }
+
+        ITextBoxHandler IFilePropertiesDlg.Address
+        {
+            get { return  fControlsManager.GetControlHandler<ITextBoxHandler>(txtAddress); }
+        }
+
+        ITextBoxHandler IFilePropertiesDlg.Tel
+        {
+            get { return  fControlsManager.GetControlHandler<ITextBoxHandler>(txtTel); }
+        }
+
+        #endregion
 
         public FilePropertiesDlg()
         {
@@ -61,48 +89,9 @@ namespace GKUI.Forms
             fController = new FilePropertiesDlgController(this);
         }
 
-        private void UpdateControls()
-        {
-            txtLanguage.Text = fBase.Context.Tree.Header.Language.StringValue;
-
-            GEDCOMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
-            txtName.Text = submitter.Name.FullName;
-            txtAddress.Text = submitter.Address.Address.Text;
-
-            if (submitter.Address.PhoneNumbers.Count > 0) {
-                txtTel.Text = submitter.Address.PhoneNumbers[0].StringValue;
-            }
-
-            // update stats
-            int[] stats = fBase.Context.Tree.GetRecordStats();
-            lvRecordStats.ClearItems();
-            for (int i = 1; i < stats.Length; i++) {
-                lvRecordStats.AddItem(null, LangMan.LS(GKData.RecordTypes[i]),
-                    stats[i].ToString());
-            }
-        }
-
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try {
-                fBase.Context.Tree.Header.Language.ParseString(txtLanguage.Text);
-
-                GEDCOMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
-                submitter.Name.StringValue = txtName.Text;
-                submitter.Address.SetAddressArray(UIHelper.Convert(txtAddress.Text));
-
-                if (submitter.Address.PhoneNumbers.Count > 0) {
-                    submitter.Address.PhoneNumbers[0].StringValue = txtTel.Text;
-                } else {
-                    submitter.Address.AddPhoneNumber(txtTel.Text);
-                }
-
-                fBase.NotifyRecord(submitter, RecordAction.raEdit);
-                DialogResult = DialogResult.Ok;
-            } catch (Exception ex) {
-                Logger.LogWrite("FilePropertiesDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
         }
 
         private void btnLangEdit_Click(object sender, EventArgs e)
@@ -121,8 +110,7 @@ namespace GKUI.Forms
         {
             base.InitDialog(baseWin);
             fController.Init(baseWin);
-
-            UpdateControls();
+            fController.UpdateView();
         }
     }
 }
