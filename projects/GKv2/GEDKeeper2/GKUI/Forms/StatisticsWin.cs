@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
@@ -41,17 +40,34 @@ namespace GKUI.Forms
     {
         private readonly StatisticsWinController fController;
 
-        private readonly IBaseWindow fBase;
-        private readonly List<GEDCOMRecord> fSelectedRecords;
         private readonly ZGraphControl fGraph;
         private readonly GKListView fListStats;
-        private readonly TreeStats fTreeStats;
 
-        private string fChartTitle;
-        private string fChartXTitle;
-        private string fChartYTitle;
-        private List<StatsItem> fCurrentValues;
         private StatsMode fCurrentMode;
+
+        #region View Interface
+
+        IGraphControl IStatisticsWin.Graph
+        {
+            get { return fGraph; }
+        }
+
+        IListView IStatisticsWin.ListStats
+        {
+            get { return fListStats; }
+        }
+
+        IListView IStatisticsWin.Summary
+        {
+            get { return lvSummary; }
+        }
+
+        IComboBoxHandler IStatisticsWin.StatsType
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cbType); }
+        }
+
+        #endregion
 
         public StatisticsWin(IBaseWindow baseWin, List<GEDCOMRecord> selectedRecords)
         {
@@ -80,197 +96,12 @@ namespace GKUI.Forms
             Panel1.Controls.SetChildIndex(fGraph, 3);
             Panel1.Controls.SetChildIndex(ToolBar1, 4);
 
-            fBase = baseWin;
-            fSelectedRecords = selectedRecords;
-            fTreeStats = new TreeStats(fBase.Context, fSelectedRecords);
+            fController = new StatisticsWinController(this, selectedRecords);
+            fController.Init(baseWin);
 
-            UpdateStatsTypes();
             fCurrentMode = StatsMode.smAncestors;
 
             SetLang();
-
-            fController = new StatisticsWinController(this);
-            fController.Init(baseWin);
-        }
-
-        private static string GetPercent(int dividend, int divisor)
-        {
-            double val = ((divisor == 0) ? 0.0d : (dividend / (double)divisor * 100.0d));
-            return string.Format(" ({0:0.00}%)", val);
-        }
-
-        private void PrepareArray(ChartStyle style, bool excludeUnknowns, List<StatsItem> vals = null)
-        {
-            if (style != ChartStyle.ClusterBar) {
-                vals = new List<StatsItem>();
-
-                int num = fListStats.Items.Count;
-                for (int i = 0; i < num; i++)
-                {
-                    ListViewItem item = fListStats.Items[i];
-
-                    string s = item.Text;
-                    double lab = (s == "?") ? 0.0f : ConvertHelper.ParseFloat(s, 0.0f, true);
-
-                    if (lab != 0.0d || !excludeUnknowns)
-                    {
-                        int val = int.Parse(item.SubItems[1].Text);
-                        vals.Add(new StatsItem(item.Text, val));
-                    }
-                }
-            }
-
-            fGraph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, style, excludeUnknowns, vals);
-        }
-
-        private void CalcStats(StatsMode mode)
-        {
-            fListStats.SortColumn = 0;
-            fListStats.Columns[0].Text = LangMan.LS(GKData.StatsTitles[(int)mode].Cap);
-            fListStats.Columns[1].Text = LangMan.LS(LSID.LSID_Value);
-
-            fListStats.Sorting = SortOrder.None;
-            fListStats.SortColumn = -1;
-            fListStats.BeginUpdate();
-            fListStats.Items.Clear();
-
-            List<StatsItem> vals = new List<StatsItem>();
-            try {
-                fTreeStats.GetSpecStats(mode, vals);
-                fCurrentValues = vals;
-
-                ListViewItem[] items = new ListViewItem[vals.Count];
-
-                int i = 0;
-                foreach (StatsItem lv in vals) {
-                    ListViewItem item = new ListViewItem(lv.Caption);
-
-                    string stVal = lv.GetDisplayString();
-                    item.SubItems.Add(stVal);
-
-                    items[i] = item;
-                    i++;
-                }
-
-                fListStats.Items.AddRange(items);
-            } finally {
-                fListStats.EndUpdate();
-            }
-
-            fChartTitle = LangMan.LS(GKData.StatsTitles[(int)mode].Title);
-
-            switch (mode) {
-                case StatsMode.smAge:
-                    fChartXTitle = LangMan.LS(LSID.LSID_Age);
-                    fChartYTitle = LangMan.LS(LSID.LSID_People);
-                    PrepareArray(ChartStyle.Point, true);
-                    break;
-
-                case StatsMode.smLifeExpectancy:
-                    fChartXTitle = LangMan.LS(LSID.LSID_LifeExpectancy);
-                    fChartYTitle = LangMan.LS(LSID.LSID_People);
-                    PrepareArray(ChartStyle.Point, true);
-                    break;
-
-                case StatsMode.smBirthYears:
-                case StatsMode.smBirthTenYears:
-                case StatsMode.smDeathYears:
-                case StatsMode.smDeathTenYears:
-                    {
-                        switch (mode) {
-                            case StatsMode.smBirthYears:
-                            case StatsMode.smDeathYears:
-                                fChartXTitle = LangMan.LS(LSID.LSID_Years);
-                                break;
-
-                            case StatsMode.smBirthTenYears:
-                            case StatsMode.smDeathTenYears:
-                                fChartXTitle = LangMan.LS(LSID.LSID_Decennial);
-                                break;
-                        }
-
-                        switch (mode) {
-                            case StatsMode.smBirthYears:
-                            case StatsMode.smBirthTenYears:
-                                fChartYTitle = LangMan.LS(LSID.LSID_HowBirthes);
-                                break;
-
-                            case StatsMode.smDeathYears:
-                            case StatsMode.smDeathTenYears:
-                                fChartYTitle = LangMan.LS(LSID.LSID_HowDeads);
-                                break;
-                        }
-
-                        PrepareArray(ChartStyle.Point, true);
-                        break;
-                    }
-
-                case StatsMode.smChildsDistribution:
-                    fChartXTitle = LangMan.LS(LSID.LSID_Childs);
-                    fChartYTitle = LangMan.LS(LSID.LSID_Parents);
-                    PrepareArray(ChartStyle.Bar, true);
-                    break;
-
-                case StatsMode.smCertaintyIndex:
-                    fChartXTitle = LangMan.LS(LSID.LSID_CertaintyIndex);
-                    fChartYTitle = LangMan.LS(LSID.LSID_People);
-                    PrepareArray(ChartStyle.Bar, true);
-                    break;
-
-                case StatsMode.smBirthByMonth:
-                    fChartXTitle = LangMan.LS(LSID.LSID_Month);
-                    fChartYTitle = LangMan.LS(LSID.LSID_People);
-                    PrepareArray(ChartStyle.Bar, true);
-                    break;
-
-                case StatsMode.smDemography:
-                    fChartXTitle = LangMan.LS(LSID.LSID_LifeExpectancy);
-                    fChartYTitle = LangMan.LS(LSID.LSID_People);
-                    PrepareArray(ChartStyle.ClusterBar, true, vals);
-                    break;
-
-                default:
-                    fGraph.Clear();
-                    break;
-            }
-        }
-
-        private void UpdateCommonStats()
-        {
-            CommonStats stats = fTreeStats.GetCommonStats();
-
-            lvSummary.Items.Clear();
-
-            ListViewItem item = lvSummary.Items.Add(LangMan.LS(LSID.LSID_People));
-            item.SubItems.Add(stats.persons.ToString());
-            item.SubItems.Add(stats.persons_m.ToString() + GetPercent(stats.persons_m, stats.persons));
-            item.SubItems.Add(stats.persons_f.ToString() + GetPercent(stats.persons_f, stats.persons));
-
-            item = lvSummary.Items.Add(LangMan.LS(LSID.LSID_Living));
-            item.SubItems.Add(stats.lives.ToString());
-            item.SubItems.Add(stats.lives_m.ToString());
-            item.SubItems.Add(stats.lives_f.ToString());
-
-            item = lvSummary.Items.Add(LangMan.LS(LSID.LSID_Deads));
-            item.SubItems.Add((stats.persons - stats.lives).ToString());
-            item.SubItems.Add((stats.persons_m - stats.lives_m).ToString());
-            item.SubItems.Add((stats.persons_f - stats.lives_f).ToString());
-
-            AddCompositeItem(LSID.LSID_AvgAge, stats.age);
-            AddCompositeItem(LSID.LSID_AvgLife, stats.life);
-            AddCompositeItem(LSID.LSID_AvgChilds, stats.childs);
-            AddCompositeItem(LSID.LSID_AvgBorn, stats.fba);
-            AddCompositeItem(LSID.LSID_AvgMarriagesCount, stats.marr);
-            AddCompositeItem(LSID.LSID_AvgMarriagesAge, stats.mage);
-            AddCompositeItem(LSID.LSID_CertaintyIndex, stats.cIndex);
-        }
-
-        private void AddCompositeItem(LSID name, CompositeItem item)
-        {
-            ListViewItem lvItem = lvSummary.Items.Add(LangMan.LS(name));
-            lvItem.SubItems.Add(string.Format("{0:0.00}", item.CommonVal));
-            lvItem.SubItems.Add(string.Format("{0:0.00}", item.MaleVal));
-            lvItem.SubItems.Add(string.Format("{0:0.00}", item.FemaleVal));
         }
 
         private void StatisticsWin_KeyDown(object sender, KeyEventArgs e)
@@ -281,27 +112,15 @@ namespace GKUI.Forms
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
         {
             fCurrentMode = (StatsMode)cbType.SelectedIndex;
-            CalcStats(fCurrentMode);
-        }
+            fController.CalcStats(fCurrentMode);
 
-        private void UpdateStatsTypes()
-        {
-            ICulture culture = fBase.Context.Culture;
-
-            cbType.BeginUpdate();
-            cbType.Items.Clear();
-            for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++) {
-                if (sm == StatsMode.smPatronymics && !culture.HasPatronymic()) continue;
-
-                GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];
-                cbType.Items.Add(LangMan.LS(tr.Title));
-            }
-            cbType.EndUpdate();
+            fListStats.SortColumn = -1;
+            fListStats.Sorting = SortOrder.None;
         }
 
         private void StatisticsWin_Load(object sender, EventArgs e)
         {
-            UpdateCommonStats();
+            fController.UpdateCommonStats();
         }
 
         public void SetLang()
@@ -315,17 +134,16 @@ namespace GKUI.Forms
             ColumnHeader4.Text = LangMan.LS(LSID.LSID_WomanSum);
 
             tbExcelExport.ToolTipText = LangMan.LS(LSID.LSID_MIExportToExcelFile);
-            UpdateCommonStats();
+            fController.UpdateCommonStats();
 
             int oldIndex = cbType.SelectedIndex;
-            UpdateStatsTypes();
+            fController.UpdateStatsTypes();
             cbType.SelectedIndex = oldIndex;
         }
 
         private void tbExcelExport_Click(object sender, EventArgs e)
         {
-            fTreeStats.WriteStatsReport(cbType.Text, fListStats.Columns[0].Text,
-                                        fListStats.Columns[1].Text, fCurrentValues);
+            fController.ExportToExcel();
         }
     }
 }

@@ -104,6 +104,16 @@ namespace GKCore.Controllers
         void Select();
     }
 
+    public interface ITreeViewHandler : IControlHandler
+    {
+        bool Enabled { get; set; }
+
+        void BeginUpdate();
+        void Clear();
+        void EndUpdate();
+        void Expand(object node);
+    }
+
     public sealed class ControlsManager
     {
         private static readonly Dictionary<Type, Type> fHandlerTypes = new Dictionary<Type, Type>();
@@ -141,6 +151,11 @@ namespace GKCore.Controllers
     {
         protected readonly T fView;
         protected IBaseWindow fBase;
+
+        public IBaseWindow Base
+        {
+            get { return fBase; }
+        }
 
 
         protected FormController(T view)

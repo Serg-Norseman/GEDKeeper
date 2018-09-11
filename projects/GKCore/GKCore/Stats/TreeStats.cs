@@ -333,8 +333,7 @@ namespace GKCore.Stats
             if (values == null)
                 throw new ArgumentNullException("values");
 
-            if (mode < StatsMode.smDescGenerations)
-            {
+            if (mode < StatsMode.smDescGenerations) {
                 GKUtils.InitExtCounts(fTree, -1);
             }
 

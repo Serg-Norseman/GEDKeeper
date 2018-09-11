@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 using BSLib;
@@ -43,76 +42,36 @@ namespace GKUI.Forms
         private readonly TreeNode fBaseRoot;
         private readonly GKMapBrowser fMapBrowser;
         private readonly ExtList<GeoPoint> fMapPoints;
-        private readonly ExtList<MapPlace> fPlaces;
-        private readonly List<GEDCOMRecord> fSelectedPersons;
         private readonly IBaseWindow fBase;
-        private readonly GEDCOMTree fTree;
 
-        private bool IsSelected(GEDCOMRecord iRec)
+        #region View Interface
+
+        IMapBrowser IMapsViewerWin.MapBrowser
         {
-            bool res = (fSelectedPersons == null || (fSelectedPersons.IndexOf(iRec) >= 0));
-            return res;
+            get { return fMapBrowser; }
         }
 
-        private void PlacesLoad()
+        object IMapsViewerWin.TreeRoot
         {
-            try {
-                PlacesCache.Instance.Load();
-
-                IProgressController progress = AppHost.Progress;
-
-                fMapBrowser.InitMap();
-
-                cmbPersons.BeginUpdate();
-                tvPlaces.BeginUpdate();
-                progress.ProgressInit(LangMan.LS(LSID.LSID_LoadingLocations), fTree.RecordsCount);
-                try {
-                    fPlaces.Clear();
-                    cmbPersons.Items.Clear();
-                    cmbPersons.Sorted = false;
-                    cmbPersons.Items.Add(new GKComboItem(LangMan.LS(LSID.LSID_NotSelected), null));
-
-                    int num = fTree.RecordsCount;
-                    for (int i = 0; i < num; i++) {
-                        GEDCOMRecord rec = fTree[i];
-                        bool res = rec is GEDCOMIndividualRecord && IsSelected(rec);
-
-                        if (res) {
-                            GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
-                            int pCnt = 0;
-
-                            int num2 = ind.Events.Count;
-                            for (int j = 0; j < num2; j++) {
-                                GEDCOMCustomEvent ev = ind.Events[j];
-                                if (ev.Place.StringValue != "") {
-                                    AddPlace(ev.Place, ev);
-                                    pCnt++;
-                                }
-                            }
-
-                            if (pCnt > 0) {
-                                cmbPersons.Items.Add(new GKComboItem(GKUtils.GetNameString(ind, true, false) + " [" + pCnt.ToString() + "]", ind));
-                            }
-                        }
-
-                        progress.ProgressStep();
-                    }
-
-                    fBaseRoot.ExpandAll();
-                    cmbPersons.Sorted = true;
-
-                    btnSelectPlaces.Enabled = true;
-                } finally {
-                    progress.ProgressDone();
-                    tvPlaces.EndUpdate();
-                    cmbPersons.EndUpdate();
-
-                    PlacesCache.Instance.Save();
-                }
-            } catch (Exception ex) {
-                Logger.LogWrite("MapsViewerWin.PlacesLoad(): " + ex.Message);
-            }
+            get { return fBaseRoot; }
         }
+
+        IComboBoxHandler IMapsViewerWin.PersonsCombo
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbPersons); }
+        }
+
+        ITreeViewHandler IMapsViewerWin.PlacesTree
+        {
+            get { return fControlsManager.GetControlHandler<ITreeViewHandler>(tvPlaces); }
+        }
+
+        IButtonHandler IMapsViewerWin.SelectPlacesBtn
+        {
+            get { return fControlsManager.GetControlHandler<IButtonHandler>(btnSelectPlaces); }
+        }
+
+        #endregion
 
         private void radTotal_Click(object sender, EventArgs e)
         {
@@ -132,15 +91,9 @@ namespace GKUI.Forms
             if (e.KeyCode == Keys.Escape) Close();
         }
 
-        // TODO: localize?
         private void btnSaveImage_Click(object sender, EventArgs e)
         {
-            string filter1 = "Image files|*.jpg";
-
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
-            if (!string.IsNullOrEmpty(fileName)) {
-                fMapBrowser.SaveSnapshot(fileName);
-            }
+            fController.SaveImage();
         }
 
         private void btnSelectPlaces_Click(object sender, EventArgs e)
@@ -163,9 +116,9 @@ namespace GKUI.Forms
             fMapBrowser.ShowLines = (ind != null && chkLinesVisible.Checked);
             fMapPoints.Clear();
 
-            int num = fPlaces.Count;
+            int num = fController.Places.Count;
             for (int i = 0; i < num; i++) {
-                MapPlace place = fPlaces[i];
+                MapPlace place = fController.Places[i];
                 if (place.Points.Count < 1) continue;
 
                 int num2 = place.PlaceRefs.Count;
@@ -206,7 +159,7 @@ namespace GKUI.Forms
         public void ProcessMap()
         {
             AppHost.Instance.ShowWindow(this);
-            PlacesLoad();
+            fController.LoadPlaces();
             Activate();
         }
 
@@ -219,20 +172,16 @@ namespace GKUI.Forms
             Panel1.Controls.Add(fMapBrowser);
 
             fBase = baseWin;
-            fTree = baseWin.Context.Tree;
-            fSelectedPersons = baseWin.GetContentList(GEDCOMRecordType.rtIndividual);
+            fController = new MapsViewerWinController(this, baseWin.GetContentList(GEDCOMRecordType.rtIndividual));
+            fController.Init(baseWin);
 
             fMapPoints = new ExtList<GeoPoint>(true);
-            fPlaces = new ExtList<MapPlace>(true);
             fBaseRoot = tvPlaces.Nodes.Add(LangMan.LS(LSID.LSID_RPLocations));
 
             radTotal.Checked = true;
             radTotal_Click(null, null);
 
             SetLang();
-
-            fController = new MapsViewerWinController(this);
-            fController.Init(baseWin);
         }
 
         public void SetLang()
@@ -264,10 +213,9 @@ namespace GKUI.Forms
             return null;
         }
 
-        private void AddPlace(GEDCOMPlace place, GEDCOMCustomEvent placeEvent)
+        public void AddPlace(GEDCOMPlace place, GEDCOMCustomEvent placeEvent)
         {
-            try
-            {
+            try {
                 GEDCOMLocationRecord locRec = place.Location.Value as GEDCOMLocationRecord;
                 string placeName = (locRec != null) ? locRec.LocationName : place.StringValue;
 
@@ -277,7 +225,7 @@ namespace GKUI.Forms
                 if (node == null) {
                     mapPlace = new MapPlace();
                     mapPlace.Name = placeName;
-                    fPlaces.Add(mapPlace);
+                    fController.Places.Add(mapPlace);
 
                     node = new GKTreeNode(placeName, mapPlace);
                     fBaseRoot.Nodes.Add(node);
@@ -296,7 +244,7 @@ namespace GKUI.Forms
                         node.Nodes.Add(new GKTreeNode(ptTitle, pt));
                     }
                 } else {
-                    mapPlace = (((GKTreeNode) node).Tag as MapPlace);
+                    mapPlace = (((GKTreeNode)node).Tag as MapPlace);
                 }
 
                 mapPlace.PlaceRefs.Add(new PlaceRef(placeEvent));

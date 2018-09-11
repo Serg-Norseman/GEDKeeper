@@ -24,21 +24,15 @@ using System.Windows.Forms;
 
 using BSLib;
 using GKCore.Stats;
+using GKCore.UIContracts;
 using ZedGraph;
 
 namespace GKUI.Components
 {
-    public enum ChartStyle
-    {
-        Bar,
-        Point,
-        ClusterBar
-    }
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class ZGraphControl : UserControl
+    public sealed class ZGraphControl : UserControl, IGraphControl
     {
         private readonly ZedGraphControl fGraph;
 
@@ -65,35 +59,30 @@ namespace GKUI.Components
         public void PrepareArray(string title, string xAxis, string yAxis, ChartStyle style, bool excludeUnknowns, List<StatsItem> vals)
         {
             GraphPane gPane = fGraph.GraphPane;
-            try
-            {
+            try {
                 gPane.CurveList.Clear();
 
                 gPane.Title.Text = title;
                 gPane.XAxis.Title.Text = xAxis;
                 gPane.YAxis.Title.Text = yAxis;
 
-                if (style != ChartStyle.ClusterBar)
-                {
+                if (style != ChartStyle.ClusterBar) {
                     PointPairList ppList = new PointPairList();
 
                     int num = vals.Count;
-                    for (int i = 0; i < num; i++)
-                    {
+                    for (int i = 0; i < num; i++) {
                         StatsItem item = vals[i];
 
                         string s = item.Caption;
                         double lab = (s == "?") ? 0.0f : ConvertHelper.ParseFloat(s, 0.0f, true);
 
-                        if (lab != 0.0d || !excludeUnknowns)
-                        {
+                        if (lab != 0.0d || !excludeUnknowns) {
                             ppList.Add(lab, item.Value);
                         }
                     }
                     ppList.Sort();
 
-                    switch (style)
-                    {
+                    switch (style) {
                         case ChartStyle.Bar:
                             gPane.AddBar("-", ppList, Color.Green);
                             break;
@@ -102,9 +91,7 @@ namespace GKUI.Components
                             gPane.AddCurve("-", ppList, Color.Green, SymbolType.Diamond).Symbol.Size = 3;
                             break;
                     }
-                }
-                else
-                {
+                } else {
                     gPane.CurveList.Clear();
 
                     int itemscount = vals.Count;
@@ -131,9 +118,7 @@ namespace GKUI.Components
                     // Create TextObj's to provide labels for each bar
                     BarItem.CreateBarLabels(gPane, false, "f0");
                 }
-            }
-            finally
-            {
+            } finally {
                 fGraph.AxisChange();
                 fGraph.Invalidate();
             }

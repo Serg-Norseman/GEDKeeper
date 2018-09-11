@@ -37,6 +37,8 @@ namespace GKCore.Controllers
     {
         private GEDCOMIndividualRecord fPerson;
         private IImage fPortraitImg;
+        private GEDCOMIndividualRecord fTarget;
+        private TargetMode fTargetMode;
 
         public GEDCOMIndividualRecord Person
         {
@@ -47,6 +49,18 @@ namespace GKCore.Controllers
                     UpdateView();
                 }
             }
+        }
+
+        public GEDCOMIndividualRecord Target
+        {
+            get { return fTarget; }
+            set { SetTarget(value); }
+        }
+
+        public TargetMode TargetMode
+        {
+            get { return fTargetMode; }
+            set { fTargetMode = value; }
         }
 
 
@@ -73,11 +87,24 @@ namespace GKCore.Controllers
             }
         }
 
-        public bool IsExtendedWomanSurname()
+        private bool IsExtendedWomanSurname()
         {
             bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
                 (fView.SexCombo.SelectedIndex == (sbyte)GEDCOMSex.svFemale);
             return result;
+        }
+
+        public void ChangeSex()
+        {
+            if (!IsExtendedWomanSurname()) {
+                fView.SurnameLabel.Text = LangMan.LS(LSID.LSID_Surname);
+                fView.MarriedSurname.Enabled = false;
+            } else {
+                fView.SurnameLabel.Text = LangMan.LS(LSID.LSID_MaidenSurname);
+                fView.MarriedSurname.Enabled = true;
+            }
+
+            UpdatePortrait(true);
         }
 
         public override bool Accept()
@@ -280,6 +307,65 @@ namespace GKCore.Controllers
 
             bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
             fView.SetPortraitAvl((fPortraitImg != null), locked);
+        }
+
+        private void SetTarget(GEDCOMIndividualRecord value)
+        {
+            try {
+                fTarget = value;
+
+                if (fTarget != null) {
+                    ICulture culture = fBase.Context.Culture;
+                    INamesTable namesTable = AppHost.NamesTable;
+
+                    var parts = GKUtils.GetNameParts(fTarget);
+                    fView.Surname.Text = parts.Surname;
+                    GEDCOMSex sx = (GEDCOMSex)fView.SexCombo.SelectedIndex;
+
+                    switch (fTargetMode) {
+                        case TargetMode.tmParent:
+                            if (sx == GEDCOMSex.svFemale) {
+                                SetMarriedSurname(parts.Surname);
+                            }
+                            if (culture.HasPatronymic()) {
+                                fView.Patronymic.Add(namesTable.GetPatronymicByName(parts.Name, GEDCOMSex.svMale));
+                                fView.Patronymic.Add(namesTable.GetPatronymicByName(parts.Name, GEDCOMSex.svFemale));
+                                fView.Patronymic.Text = namesTable.GetPatronymicByName(parts.Name, sx);
+                            }
+                            break;
+
+                        case TargetMode.tmChild:
+                            switch (sx) {
+                                case GEDCOMSex.svMale:
+                                    if (culture.HasPatronymic()) {
+                                        fView.Name.Text = namesTable.GetNameByPatronymic(parts.Patronymic);
+                                    }
+                                    break;
+
+                                case GEDCOMSex.svFemale:
+                                    SetMarriedSurname(parts.Surname);
+                                    break;
+                            }
+                            break;
+
+                        case TargetMode.tmWife:
+                            SetMarriedSurname(parts.Surname);
+                            break;
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + "): " + ex.Message);
+            }
+        }
+
+        private void SetMarriedSurname(string husbSurname)
+        {
+            string surname = fBase.Context.Culture.GetMarriedSurname(husbSurname);
+            if (IsExtendedWomanSurname()) {
+                fView.MarriedSurname.Text = surname;
+            } else {
+                fView.Surname.Text = "(" + surname + ")";
+            }
         }
 
         public void AcceptTempData()

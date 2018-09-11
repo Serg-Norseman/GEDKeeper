@@ -203,6 +203,7 @@
     <Compile Include="GKCore\Controllers\MediaViewerController.cs" />
     <Compile Include="GKCore\Controllers\NameEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\NoteEditDlgController.cs" />
+    <Compile Include="GKCore\Controllers\OrganizerController.cs" />
     <Compile Include="GKCore\Controllers\PersonalNameEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\PersonEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\PersonsFilterDlgController.cs" />
@@ -210,6 +211,7 @@
     <Compile Include="GKCore\Controllers\RelationshipCalculatorDlgController.cs" />
     <Compile Include="GKCore\Controllers\RepositoryEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\ResearchEditDlgController.cs" />
+    <Compile Include="GKCore\Controllers\SlideshowController.cs" />
     <Compile Include="GKCore\Controllers\SourceCitEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\SourceEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\StatisticsWinController.cs" />

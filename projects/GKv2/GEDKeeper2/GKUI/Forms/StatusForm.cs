@@ -20,15 +20,16 @@
 
 using System;
 using System.Windows.Forms;
+using GKCore.UIContracts;
 
 namespace GKUI.Forms
 {
     /// <summary>
     /// 
     /// </summary>
-    public class StatusForm : CommonForm
+    public class StatusForm : CommonForm, IStatusForm
     {
-        public sealed class StatusLinesEx
+        public sealed class StatusLinesEx : IStatusLines
         {
             private readonly StatusForm fForm;
 
@@ -47,7 +48,7 @@ namespace GKUI.Forms
         private readonly StatusBar fStatusBar;
         private readonly StatusLinesEx fStatusLines;
 
-        public StatusLinesEx StatusLines
+        public IStatusLines StatusLines
         {
             get { return fStatusLines; }
         }

@@ -22,10 +22,12 @@ using System;
 using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -33,19 +35,20 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class SlideshowWin : StatusForm, IWorkWindow
+    public partial class SlideshowWin : StatusForm, IWorkWindow, ISlideshowWin
     {
-        private readonly IBaseWindow fBase;
-        private readonly List<GEDCOMFileReferenceWithTitle> fFileRefs;
-        private readonly ImageBox fImageCtl;
+        private readonly SlideshowController fController;
 
-        private int fCurrentIndex;
-        private string fCurrentText;
+        private readonly ImageBox fImageCtl;
         private ITimer fTimer;
 
         public SlideshowWin(IBaseWindow baseWin)
         {
             InitializeComponent();
+
+            tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
+            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
+            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
             //SuspendLayout();
             fImageCtl = new GKUI.Components.ImageBox();
@@ -60,11 +63,9 @@ namespace GKUI.Forms
 
             SetLang();
 
-            fBase = baseWin;
-            fFileRefs = new List<GEDCOMFileReferenceWithTitle>();
-            fCurrentIndex = -1;
-
-            LoadList();
+            fController = new SlideshowController(this);
+            fController.Init(baseWin);
+            fController.LoadList();
         }
 
         protected override void Dispose(bool disposing)
@@ -80,12 +81,7 @@ namespace GKUI.Forms
             base.OnLoad(e);
             fImageCtl.Focus();
 
-            if (fFileRefs.Count > 0) {
-                fCurrentIndex = 0;
-                SetFileRef();
-            } else {
-                UpdateControls();
-            }
+            fController.Next();
         }
 
         private void SlideshowWin_Load(object sender, System.EventArgs e)
@@ -97,21 +93,6 @@ namespace GKUI.Forms
             if (e.Key == Keys.Escape) Close();
         }
 
-        private void LoadList()
-        {
-            GEDCOMRecord record;
-            var enumerator = fBase.Context.Tree.GetEnumerator(GEDCOMRecordType.rtMultimedia);
-            while (enumerator.MoveNext(out record)) {
-                GEDCOMMultimediaRecord mediaRec = (GEDCOMMultimediaRecord)record;
-                GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
-
-                MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
-                if (mmKind == MultimediaKind.mkImage) {
-                    fFileRefs.Add(fileRef);
-                }
-            }
-        }
-
         public void SetLang()
         {
             Title = LangMan.LS(LSID.LSID_Slideshow);
@@ -120,22 +101,11 @@ namespace GKUI.Forms
             tbNext.ToolTip = LangMan.LS(LSID.LSID_NextRec);
         }
 
-        private void SetFileRef()
+        public void SetImage(IImage image)
         {
-            if (fCurrentIndex < 0 || fCurrentIndex >= fFileRefs.Count) return;
-
-            // Only images are in the list
-            GEDCOMFileReferenceWithTitle fileRef = fFileRefs[fCurrentIndex];
-
-            fCurrentText = fileRef.Title;
-
-            IImage img = fBase.Context.LoadMediaImage(fileRef, false);
-            if (img != null) {
-                fImageCtl.Image = ((ImageHandler)img).Handle;
-                fImageCtl.ZoomToFit();
-            }
-
-            UpdateControls();
+            Image img = (image == null) ? null : ((ImageHandler)image).Handle;
+            fImageCtl.Image = img;
+            fImageCtl.ZoomToFit();
         }
 
         private void tsbStart_Click(object sender, System.EventArgs e)
@@ -153,38 +123,28 @@ namespace GKUI.Forms
 
         private void tsbPrev_Click(object sender, System.EventArgs e)
         {
-            fCurrentIndex--;
-            SetFileRef();
+            fController.Prev();
         }
 
         private void tsbNext_Click(object sender, System.EventArgs e)
         {
-            fCurrentIndex++;
-            SetFileRef();
+            fController.Next();
         }
 
         private void Timer1Tick(object sender, System.EventArgs e)
         {
-            if (fCurrentIndex < fFileRefs.Count - 1) {
-                fCurrentIndex++;
-            } else {
-                fCurrentIndex = 0;
-            }
-
-            SetFileRef();
+            fController.Next();
         }
 
         #region IWorkWindow implementation
 
         public void UpdateControls()
         {
-            // FIXME: in Eto-implementation, this line is invisible! why?!
-            StatusLines[0] = string.Format("{0} / {1} [{2}]", fCurrentIndex + 1, fFileRefs.Count, fCurrentText);
-            StatusLines[1] = "-";
+            fController.UpdateView();
 
-            tbStart.Enabled = (fFileRefs.Count > 0);
-            tbPrev.Enabled = (fCurrentIndex > 0);
-            tbNext.Enabled = (fCurrentIndex < fFileRefs.Count - 1);
+            tbStart.Enabled = (fController.FileRefs.Count > 0);
+            tbPrev.Enabled = (fController.CurrentIndex > 0);
+            tbNext.Enabled = (fController.CurrentIndex < fController.FileRefs.Count - 1);
 
             AppHost.Instance.UpdateControls(false, true);
         }

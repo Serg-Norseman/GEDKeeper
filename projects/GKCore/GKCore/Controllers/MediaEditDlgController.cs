@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Options;
 using GKCore.Types;
@@ -32,6 +33,7 @@ namespace GKCore.Controllers
     public sealed class MediaEditDlgController : DialogController<IMediaEditDlg>
     {
         private GEDCOMMultimediaRecord fMediaRec;
+        private bool fIsNew;
 
         public GEDCOMMultimediaRecord MediaRec
         {
@@ -47,11 +49,40 @@ namespace GKCore.Controllers
 
         public MediaEditDlgController(IMediaEditDlg view) : base(view)
         {
+            for (GEDCOMMediaType mt = GEDCOMMediaType.mtUnknown; mt <= GEDCOMMediaType.mtLast; mt++) {
+                fView.MediaType.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
+            }
+
+            fView.Name.Select();
         }
 
         public override bool Accept()
         {
             try {
+                GEDCOMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
+
+                if (fIsNew) {
+                    MediaStoreType gst = (MediaStoreType)fView.StoreType.SelectedTag;
+
+                    if ((gst == MediaStoreType.mstArchive || gst == MediaStoreType.mstStorage) && !fBase.Context.CheckBasePath()) {
+                        return false;
+                    }
+
+                    bool result = fBase.Context.MediaSave(fileRef, fView.File.Text, gst);
+
+                    if (!result) {
+                        return false;
+                    }
+                }
+
+                fileRef.MediaType = (GEDCOMMediaType)fView.MediaType.SelectedIndex;
+                fileRef.Title = fView.Name.Text;
+
+                UpdateControls();
+
+                fLocalUndoman.Commit();
+                fBase.NotifyRecord(fMediaRec, RecordAction.raEdit);
+
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("MediaEditDlgController.Accept(): " + ex.Message);
@@ -61,6 +92,82 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            fView.NotesList.ListModel.DataOwner = fMediaRec;
+            fView.SourcesList.ListModel.DataOwner = fMediaRec;
+
+            UpdateControls();
+        }
+
+        private void UpdateControls()
+        {
+            GEDCOMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
+
+            fIsNew = (fileRef.StringValue == "");
+
+            fView.Name.Text = fileRef.Title;
+            fView.MediaType.SelectedIndex = (int)fileRef.MediaType;
+            fView.File.Text = fileRef.StringValue;
+
+            if (fIsNew) {
+                RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, true, MediaStoreType.mstReference);
+            } else {
+                MediaStore mediaStore = fBase.Context.GetStoreType(fileRef);
+                RefreshStoreTypes((mediaStore.StoreType == MediaStoreType.mstReference),
+                                  (mediaStore.StoreType == MediaStoreType.mstArchive), mediaStore.StoreType);
+            }
+
+            fView.FileSelectButton.Enabled = fIsNew;
+            fView.StoreType.Enabled = fIsNew;
+
+            fView.NotesList.UpdateSheet();
+            fView.SourcesList.UpdateSheet();
+        }
+
+        private void RefreshStoreTypes(bool allowRef, bool allowArc, MediaStoreType selectType)
+        {
+            fView.StoreType.Clear();
+
+            if (allowRef) {
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name),
+                    MediaStoreType.mstReference);
+            }
+
+            fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstStorage].Name),
+                MediaStoreType.mstStorage);
+
+            if (allowArc) {
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name),
+                    MediaStoreType.mstArchive);
+            }
+
+            fView.StoreType.SelectedTag = selectType;
+            //UIHelper.SelectComboItem(fView.StoreType, selectType, true);
+        }
+
+        public void SelectFile()
+        {
+            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_AllFilter), 1, "");
+            if (string.IsNullOrEmpty(fileName)) return;
+
+            if (GlobalOptions.Instance.RemovableMediaWarning && FileHelper.IsRemovableDrive(fileName)) {
+                if (!AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage))) {
+                    return;
+                }
+            }
+
+            fView.File.Text = fileName;
+            bool canArc = GKUtils.FileCanBeArchived(fileName);
+            RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, canArc, MediaStoreType.mstReference);
+            fView.StoreType.Enabled = true;
+        }
+
+        public void View()
+        {
+            if (fIsNew) {
+                Accept();
+            }
+
+            fBase.ShowMedia(fMediaRec, true);
         }
     }
 }

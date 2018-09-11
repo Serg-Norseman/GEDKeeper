@@ -116,6 +116,7 @@ namespace GKCore
             public void ClearItems() {}
             public void EndUpdate() {}
             public object GetSelectedData() { return null; }
+            public void SetColumnCaption(int index, string caption) {}
         }
 
         private bool ExtFilterHandler(GEDCOMRecord record)

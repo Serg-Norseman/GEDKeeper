@@ -641,6 +641,11 @@ namespace GKUI.Components
             Columns.Add(caption, width, HorizontalAlignment.Left);
         }
 
+        public void SetColumnCaption(int index, string caption)
+        {
+            Columns[index].Text = caption;
+        }
+
         public void ResizeColumn(int columnIndex)
         {
             try {

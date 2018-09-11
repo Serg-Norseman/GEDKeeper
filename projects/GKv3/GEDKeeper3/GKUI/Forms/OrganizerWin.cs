@@ -19,12 +19,14 @@
  */
 
 using System;
-using BSLib;
 using Eto.Forms;
-using GKCommon.GEDCOM;
+
+using BSLib;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -32,13 +34,39 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class OrganizerWin : Dialog
+    public sealed partial class OrganizerWin : CommonDialog, IOrganizerWin
     {
+        private readonly OrganizerController fController;
+
         private readonly IBaseWindow fBase;
         private readonly GKSheetList fAdrList;
         private readonly GKSheetList fPhonesList;
         private readonly GKSheetList fMailsList;
         private readonly GKSheetList fWebsList;
+
+        #region View Interface
+
+        ISheetList IOrganizerWin.AdrList
+        {
+            get { return fAdrList; }
+        }
+
+        ISheetList IOrganizerWin.PhonesList
+        {
+            get { return fPhonesList; }
+        }
+
+        ISheetList IOrganizerWin.MailsList
+        {
+            get { return fMailsList; }
+        }
+
+        ISheetList IOrganizerWin.WebsList
+        {
+            get { return fWebsList; }
+        }
+
+        #endregion
 
         public OrganizerWin(IBaseWindow baseWin)
         {
@@ -71,74 +99,14 @@ namespace GKUI.Forms
             pageTelephones.Text = LangMan.LS(LSID.LSID_Telephones);
             pageMails.Text = LangMan.LS(LSID.LSID_Mails);
             pageWebs.Text = LangMan.LS(LSID.LSID_Webs);
+
+            fController = new OrganizerController(this);
+            fController.Init(baseWin);
         }
 
         private void OrganizerWin_Load(object sender, EventArgs e)
         {
-            CollectData();
-        }
-
-        private void CollectData()
-        {
-            fAdrList.ClearItems();
-            fPhonesList.ClearItems();
-            fMailsList.ClearItems();
-            fWebsList.ClearItems();
-
-            int num = fBase.Context.Tree.RecordsCount;
-            for (int i = 0; i < num; i++)
-            {
-                GEDCOMRecord rec = fBase.Context.Tree[i];
-                if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
-
-                GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
-                string nm = GKUtils.GetNameString(iRec, true, false);
-
-                foreach (GEDCOMCustomEvent evt in iRec.Events) {
-                    PrepareEvent(nm, evt);
-                }
-            }
-
-            fAdrList.ResizeColumn(0);
-            fAdrList.ResizeColumn(1);
-            fPhonesList.ResizeColumn(0);
-            fPhonesList.ResizeColumn(1);
-            fMailsList.ResizeColumn(0);
-            fMailsList.ResizeColumn(1);
-            fWebsList.ResizeColumn(0);
-            fWebsList.ResizeColumn(1);
-        }
-
-        private static void AddItem(GKSheetList list, string name, string value)
-        {
-            list.AddItem(null, new object[] { name, value });
-        }
-
-        private void PrepareEvent(string iName, GEDCOMCustomEvent ev)
-        {
-            GEDCOMAddress addr = ev.Address;
-            if (addr == null) return;
-
-            string addrStr = addr.Address.Text.Trim();
-            if (addrStr != "") {
-                string city = addr.AddressCity;
-                if (city != "") {
-                    addrStr = city + ", " + addrStr;
-                }
-                AddItem(fAdrList, iName, addrStr);
-            }
-
-            foreach (GEDCOMTag tag in addr.PhoneNumbers) {
-                AddItem(fPhonesList, iName, tag.StringValue);
-            }
-
-            foreach (GEDCOMTag tag in addr.EmailAddresses) {
-                AddItem(fMailsList, iName, tag.StringValue);
-            }
-
-            foreach (GEDCOMTag tag in addr.WebPages) {
-                AddItem(fWebsList, iName, tag.StringValue);
-            }
+            fController.UpdateView();
         }
 
         private void OrganizerWin_KeyDown(object sender, KeyEventArgs e)

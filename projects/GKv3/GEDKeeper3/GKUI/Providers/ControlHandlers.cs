@@ -360,4 +360,37 @@ namespace GKUI.Providers
             //Control.Select();
         }
     }
+
+    public sealed class TreeViewHandler : ControlHandler<TreeView, TreeViewHandler>, ITreeViewHandler
+    {
+        public TreeViewHandler(TreeView control) : base(control)
+        {
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public void BeginUpdate()
+        {
+        }
+
+        public void Clear()
+        {
+        }
+
+        public void EndUpdate()
+        {
+        }
+
+        public void Expand(object node)
+        {
+            GKTreeNode treeNode = node as GKTreeNode;
+            if (treeNode != null) {
+                treeNode.Expanded = true;
+            }
+        }
+    }
 }

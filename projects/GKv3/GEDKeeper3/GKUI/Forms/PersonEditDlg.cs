@@ -28,8 +28,6 @@ using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Operations;
-using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
@@ -53,9 +51,6 @@ namespace GKUI.Forms
         private readonly GKSheetList fUserRefList;
         private readonly GKSheetList fNamesList;
 
-        private GEDCOMIndividualRecord fTarget;
-        private TargetMode fTargetMode;
-
         public GEDCOMIndividualRecord Person
         {
             get { return fController.Person; }
@@ -64,14 +59,14 @@ namespace GKUI.Forms
 
         public GEDCOMIndividualRecord Target
         {
-            get { return fTarget; }
-            set { SetTarget(value); }
+            get { return fController.Target; }
+            set { fController.Target = value; }
         }
 
         public TargetMode TargetMode
         {
-            get { return fTargetMode; }
-            set { fTargetMode = value; }
+            get { return fController.TargetMode; }
+            set { fController.TargetMode = value; }
         }
 
 
@@ -137,6 +132,11 @@ namespace GKUI.Forms
             get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtMother); }
         }
 
+        ILabelHandler IPersonEditDlg.SurnameLabel
+        {
+            get { return fControlsManager.GetControlHandler<ILabelHandler>(lblSurname); }
+        }
+
         ITextBoxHandler IPersonEditDlg.Surname
         {
             get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtSurname); }
@@ -199,76 +199,9 @@ namespace GKUI.Forms
 
         #endregion
 
-        private void SetTarget(GEDCOMIndividualRecord value)
-        {
-            try {
-                fTarget = value;
-
-                if (fTarget != null) {
-                    ICulture culture = fBase.Context.Culture;
-                    INamesTable namesTable = AppHost.NamesTable;
-
-                    var parts = GKUtils.GetNameParts(fTarget);
-                    txtSurname.Text = parts.Surname;
-                    GEDCOMSex sx = (GEDCOMSex)cmbSex.SelectedIndex;
-
-                    switch (fTargetMode) {
-                        case TargetMode.tmParent:
-                            if (sx == GEDCOMSex.svFemale) {
-                                SetMarriedSurname(parts.Surname);
-                            }
-                            if (culture.HasPatronymic()) {
-                                cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(parts.Name, GEDCOMSex.svMale));
-                                cmbPatronymic.Items.Add(namesTable.GetPatronymicByName(parts.Name, GEDCOMSex.svFemale));
-                                cmbPatronymic.Text = namesTable.GetPatronymicByName(parts.Name, sx);
-                            }
-                            break;
-
-                        case TargetMode.tmChild:
-                            switch (sx) {
-                                case GEDCOMSex.svMale:
-                                    if (culture.HasPatronymic()) {
-                                        txtName.Text = namesTable.GetNameByPatronymic(parts.Patronymic);
-                                    }
-                                    break;
-
-                                case GEDCOMSex.svFemale:
-                                    SetMarriedSurname(parts.Surname);
-                                    break;
-                            }
-                            break;
-
-                        case TargetMode.tmWife:
-                            SetMarriedSurname(parts.Surname);
-                            break;
-                    }
-                }
-            } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + "): " + ex.Message);
-            }
-        }
-
-        private void SetMarriedSurname(string husbSurname)
-        {
-            string surname = fBase.Context.Culture.GetMarriedSurname(husbSurname);
-            if (fController.IsExtendedWomanSurname()) {
-                txtMarriedSurname.Text = surname;
-            } else {
-                txtSurname.Text = "(" + surname + ")";
-            }
-        }
-
         private void cbSex_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!fController.IsExtendedWomanSurname()) {
-                lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
-                txtMarriedSurname.Enabled = false;
-            } else {
-                lblSurname.Text = LangMan.LS(LSID.LSID_MaidenSurname);
-                txtMarriedSurname.Enabled = true;
-            }
-
-            fController.UpdatePortrait(true);
+            fController.ChangeSex();
         }
 
         public void SetParentsAvl(bool avail, bool locked)

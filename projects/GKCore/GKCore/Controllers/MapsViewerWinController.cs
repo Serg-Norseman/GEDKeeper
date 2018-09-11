@@ -19,7 +19,11 @@
  */
 
 using System;
+using System.Collections.Generic;
+using BSLib;
 using GKCommon.GEDCOM;
+using GKCore.Interfaces;
+using GKCore.Maps;
 using GKCore.Options;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -31,13 +35,100 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class MapsViewerWinController : FormController<IMapsViewerWin>
     {
+        private readonly List<GEDCOMRecord> fSelectedPersons;
+        private readonly ExtList<MapPlace> fPlaces;
 
-        public MapsViewerWinController(IMapsViewerWin view) : base(view)
+        public ExtList<MapPlace> Places
         {
+            get { return fPlaces; }
+        }
+
+        public MapsViewerWinController(IMapsViewerWin view, List<GEDCOMRecord> selectedPersons) : base(view)
+        {
+            fPlaces = new ExtList<MapPlace>(true);
+            fSelectedPersons = selectedPersons;
         }
 
         public override void UpdateView()
         {
+        }
+
+        private bool IsSelected(GEDCOMRecord iRec)
+        {
+            bool res = (fSelectedPersons == null || (fSelectedPersons.IndexOf(iRec) >= 0));
+            return res;
+        }
+
+        public void LoadPlaces()
+        {
+            try {
+                PlacesCache.Instance.Load();
+
+                IProgressController progress = AppHost.Progress;
+                GEDCOMTree tree = fBase.Context.Tree;
+
+                fView.MapBrowser.InitMap();
+
+                fView.PersonsCombo.BeginUpdate();
+                fView.PlacesTree.BeginUpdate();
+                progress.ProgressInit(LangMan.LS(LSID.LSID_LoadingLocations), tree.RecordsCount);
+                try {
+                    fPlaces.Clear();
+                    fView.PersonsCombo.Clear();
+                    //fView.PersonsCombo.Sorted = false;
+                    fView.PersonsCombo.AddItem(LangMan.LS(LSID.LSID_NotSelected), null);
+
+                    int num = tree.RecordsCount;
+                    for (int i = 0; i < num; i++) {
+                        GEDCOMRecord rec = tree[i];
+                        bool res = rec is GEDCOMIndividualRecord && IsSelected(rec);
+
+                        if (res) {
+                            GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
+                            int pCnt = 0;
+
+                            int num2 = ind.Events.Count;
+                            for (int j = 0; j < num2; j++) {
+                                GEDCOMCustomEvent ev = ind.Events[j];
+                                if (ev.Place.StringValue != "") {
+                                    fView.AddPlace(ev.Place, ev);
+                                    pCnt++;
+                                }
+                            }
+
+                            if (pCnt > 0) {
+                                fView.PersonsCombo.AddItem(GKUtils.GetNameString(ind, true, false) + " [" + pCnt.ToString() + "]", ind);
+                            }
+                        }
+
+                        progress.ProgressStep();
+                    }
+
+                    fView.PlacesTree.Expand(fView.TreeRoot);
+                    fView.PersonsCombo.SortItems();
+
+                    fView.SelectPlacesBtn.Enabled = true;
+                } finally {
+                    progress.ProgressDone();
+                    fView.PlacesTree.EndUpdate();
+                    fView.PersonsCombo.EndUpdate();
+
+                    PlacesCache.Instance.Save();
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("MapsViewerWin.PlacesLoad(): " + ex.Message);
+            }
+        }
+
+        // TODO: localize?
+        public void SaveImage()
+        {
+            string filter1 = "Image files|*.jpg";
+
+            string fileName = AppHost.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
+            if (!string.IsNullOrEmpty(fileName)) {
+                fView.MapBrowser.SaveSnapshot(fileName);
+            }
         }
     }
 }

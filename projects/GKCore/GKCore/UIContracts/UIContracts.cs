@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
 using System.IO;
 using BSLib;
 using GKCommon.GEDCOM;
@@ -26,6 +27,7 @@ using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Maps;
+using GKCore.Stats;
 using GKCore.Types;
 
 namespace GKCore.UIContracts
@@ -78,6 +80,41 @@ namespace GKCore.UIContracts
     {
         int Height { get; set; }
         int Width { get; set; }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IStatusLines
+    {
+        string this[int index] { get; set; }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IStatusForm
+    {
+        IStatusLines StatusLines { get; }
+    }
+
+
+    public enum ChartStyle
+    {
+        Bar,
+        Point,
+        ClusterBar
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IGraphControl
+    {
+        void Clear();
+        void PrepareArray(string title, string xAxis, string yAxis, ChartStyle style, bool excludeUnknowns, List<StatsItem> vals);
     }
 
 
@@ -229,6 +266,15 @@ namespace GKCore.UIContracts
     public interface IMediaEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMMultimediaRecord MediaRec { get; set; }
+
+        ISheetList NotesList { get; }
+        ISheetList SourcesList { get; }
+
+        IComboBoxHandler MediaType { get; }
+        IComboBoxHandler StoreType { get; }
+        ITextBoxHandler Name { get; }
+        ITextBoxHandler File { get; }
+        IButtonHandler FileSelectButton { get; }
     }
 
     public interface INameEditDlg : ICommonDialog, IView
@@ -246,6 +292,14 @@ namespace GKCore.UIContracts
     public interface INoteEditDlgEx : ICommonDialog, IBaseEditor
     {
         GEDCOMNoteRecord NoteRecord { get; set; }
+    }
+
+    public interface IOrganizerWin : IView
+    {
+        ISheetList AdrList { get; }
+        ISheetList PhonesList { get; }
+        ISheetList MailsList { get; }
+        ISheetList WebsList { get; }
     }
 
     public interface IPersonalNameEditDlg : ICommonDialog, IBaseEditor, IView
@@ -294,6 +348,7 @@ namespace GKCore.UIContracts
         ITextBoxHandler NameSuffix { get; }
         ITextBoxHandler MarriedSurname { get; }
 
+        ILabelHandler SurnameLabel { get; }
         IComboBoxHandler RestrictionCombo { get; }
         IComboBoxHandler SexCombo { get; }
 
@@ -437,6 +492,13 @@ namespace GKCore.UIContracts
 
     public interface IMapsViewerWin : IView
     {
+        IMapBrowser MapBrowser { get; }
+        object TreeRoot { get; }
+        IComboBoxHandler PersonsCombo { get; }
+        ITreeViewHandler PlacesTree { get; }
+        IButtonHandler SelectPlacesBtn { get; }
+
+        void AddPlace(GEDCOMPlace place, GEDCOMCustomEvent placeEvent);
     }
 
     public interface IPersonsFilterDlg : ICommonDialog, IView
@@ -445,6 +507,10 @@ namespace GKCore.UIContracts
 
     public interface IStatisticsWin : IView
     {
+        IGraphControl Graph { get; }
+        IListView ListStats { get; }
+        IListView Summary { get; }
+        IComboBoxHandler StatsType { get; }
     }
 
     public interface IMediaViewerWin : IView
@@ -456,6 +522,11 @@ namespace GKCore.UIContracts
         void SetViewRTF(string text);
         void SetViewHTML(Stream stm);
         void DisposeViewControl();
+    }
+
+    public interface ISlideshowWin : IView, IStatusForm
+    {
+        void SetImage(IImage image);
     }
 
     public interface ITreeChartWin : IView

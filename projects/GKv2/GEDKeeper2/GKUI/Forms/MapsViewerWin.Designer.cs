@@ -19,18 +19,13 @@
 		private System.Windows.Forms.RadioButton radSelected;
 		private System.Windows.Forms.CheckBox chkLinesVisible;
 
-		protected override void Dispose(bool Disposing)
+		protected override void Dispose(bool disposing)
 		{
-			if (Disposing)
-			{
-				this.fPlaces.Dispose();
-				this.fMapPoints.Dispose();
-				if (components != null) {
-					components.Dispose();
-				}
-			}
-			base.Dispose(Disposing);
-		}
+            if (disposing) {
+                if (components != null) components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
 		private void InitializeComponent()
 		{

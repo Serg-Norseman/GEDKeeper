@@ -31,5 +31,6 @@ namespace GKCore.Interfaces
         void ClearItems();
         void EndUpdate();
         object GetSelectedData();
+        void SetColumnCaption(int index, string caption);
     }
 }

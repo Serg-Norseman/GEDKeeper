@@ -22,21 +22,15 @@ using System.Collections.Generic;
 using Eto.Forms;
 
 using GKCore.Stats;
+using GKCore.UIContracts;
 //using ZedGraph;
 
 namespace GKUI.Components
 {
-    public enum ChartStyle
-    {
-        Bar,
-        Point,
-        ClusterBar
-    }
-
     /// <summary>
     /// 
     /// </summary>
-    public class ZGraphControl : Panel
+    public class ZGraphControl : Panel, IGraphControl
     {
         public ZGraphControl()
         {

@@ -187,6 +187,110 @@ namespace GKUI.Providers
         }
     }
 
+    public sealed class ToolStripComboBoxHandler : ControlHandler<ToolStripComboBox, ToolStripComboBoxHandler>, IComboBoxHandler
+    {
+        public ToolStripComboBoxHandler(ToolStripComboBox control) : base(control)
+        {
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public bool ReadOnly
+        {
+            get { return (Control.DropDownStyle == ComboBoxStyle.DropDownList); }
+            set { Control.DropDownStyle = (value) ? ComboBoxStyle.DropDownList : ComboBoxStyle.DropDown; }
+        }
+
+        public int SelectedIndex
+        {
+            get { return Control.SelectedIndex; }
+            set { Control.SelectedIndex = value; }
+        }
+
+        public object SelectedItem
+        {
+            get { return Control.SelectedItem; }
+            set { Control.SelectedItem = value; }
+        }
+
+        public object SelectedTag
+        {
+            get {
+                return ((GKComboItem)Control.SelectedItem).Tag;
+            }
+            set {
+                var ctl = Control;
+                foreach (object item in ctl.Items) {
+                    GKComboItem comboItem = (GKComboItem)item;
+                    if (comboItem.Tag == value) {
+                        ctl.SelectedItem = item;
+                        return;
+                    }
+                }
+                ctl.SelectedIndex = 0;
+            }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+
+        public void Add(object item)
+        {
+            Control.Items.Add(item);
+        }
+
+        public void AddItem(string caption, object tag, IImage image = null)
+        {
+            Control.Items.Add(new GKComboItem(caption, tag, image));
+        }
+
+        public void AddRange(object[] items, bool sorted = false)
+        {
+            Control.Sorted = false;
+            Control.Items.AddRange(items);
+            Control.Sorted = sorted;
+        }
+
+        public void AddStrings(StringList strings)
+        {
+            int num = strings.Count;
+            for (int i = 0; i < num; i++) {
+                Control.Items.Add(strings[i]);
+            }
+        }
+
+        public void BeginUpdate()
+        {
+            Control.BeginUpdate();
+        }
+
+        public void Clear()
+        {
+            Control.Items.Clear();
+        }
+
+        public void EndUpdate()
+        {
+            Control.EndUpdate();
+        }
+
+        public void Select()
+        {
+            Control.Select();
+        }
+
+        public void SortItems()
+        {
+        }
+    }
+
     public sealed class TextBoxHandler : ControlHandler<TextBox, TextBoxHandler>, ITextBoxHandler
     {
         public TextBoxHandler(TextBox control) : base(control)
@@ -292,6 +396,42 @@ namespace GKUI.Providers
         public void Select()
         {
             Control.Select();
+        }
+    }
+
+    public sealed class TreeViewHandler : ControlHandler<TreeView, TreeViewHandler>, ITreeViewHandler
+    {
+        public TreeViewHandler(TreeView control) : base(control)
+        {
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public void BeginUpdate()
+        {
+            Control.BeginUpdate();
+        }
+
+        public void Clear()
+        {
+            Control.Nodes.Clear();
+        }
+
+        public void EndUpdate()
+        {
+            Control.EndUpdate();
+        }
+
+        public void Expand(object node)
+        {
+            TreeNode treeNode = node as TreeNode;
+            if (treeNode != null) {
+                treeNode.ExpandAll();
+            }
         }
     }
 }

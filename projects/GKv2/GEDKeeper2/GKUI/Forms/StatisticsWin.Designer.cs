@@ -6,7 +6,7 @@
 		private System.Windows.Forms.Panel Panel1;
 		private System.Windows.Forms.ToolStrip ToolBar1;
 		private System.Windows.Forms.ToolStripComboBox cbType;
-		private System.Windows.Forms.ListView lvSummary;
+		private GKUI.Components.GKListView lvSummary;
 		private System.Windows.Forms.ColumnHeader ColumnHeader1;
 		private System.Windows.Forms.ColumnHeader ColumnHeader2;
 		private System.Windows.Forms.ColumnHeader ColumnHeader3;
@@ -18,7 +18,7 @@
 		private void InitializeComponent()
 		{
 			this.grpSummary = new System.Windows.Forms.GroupBox();
-			this.lvSummary = new System.Windows.Forms.ListView();
+			this.lvSummary = new GKUI.Components.GKListView();
 			this.ColumnHeader1 = new System.Windows.Forms.ColumnHeader();
 			this.ColumnHeader2 = new System.Windows.Forms.ColumnHeader();
 			this.ColumnHeader3 = new System.Windows.Forms.ColumnHeader();

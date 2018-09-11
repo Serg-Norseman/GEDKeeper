@@ -335,6 +335,7 @@ namespace GKUI.Providers
             ControlsManager.RegisterHandlerType(typeof(TextArea), typeof(TextAreaHandler));
             ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
         }
 
         #endregion
