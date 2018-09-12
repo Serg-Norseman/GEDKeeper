@@ -35,14 +35,13 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class MapsViewerWin : CommonForm, IWindow, IMapsViewerWin
+    public sealed partial class MapsViewerWin : CommonForm, IMapsViewerWin
     {
         private readonly MapsViewerWinController fController;
 
-        private readonly TreeNode fBaseRoot;
+        private readonly GKTreeNode fBaseRoot;
         private readonly GKMapBrowser fMapBrowser;
         private readonly ExtList<GeoPoint> fMapPoints;
-        private readonly IBaseWindow fBase;
 
         #region View Interface
 
@@ -51,7 +50,7 @@ namespace GKUI.Forms
             get { return fMapBrowser; }
         }
 
-        object IMapsViewerWin.TreeRoot
+        ITVNode IMapsViewerWin.TreeRoot
         {
             get { return fBaseRoot; }
         }
@@ -156,9 +155,9 @@ namespace GKUI.Forms
             fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
         }
 
-        public void ProcessMap()
+        protected override void OnLoad(EventArgs e)
         {
-            AppHost.Instance.ShowWindow(this);
+            base.OnLoad(e);
             fController.LoadPlaces();
             Activate();
         }
@@ -171,12 +170,13 @@ namespace GKUI.Forms
             fMapBrowser.Dock = DockStyle.Fill;
             Panel1.Controls.Add(fMapBrowser);
 
-            fBase = baseWin;
             fController = new MapsViewerWinController(this, baseWin.GetContentList(GEDCOMRecordType.rtIndividual));
             fController.Init(baseWin);
 
             fMapPoints = new ExtList<GeoPoint>(true);
-            fBaseRoot = tvPlaces.Nodes.Add(LangMan.LS(LSID.LSID_RPLocations));
+
+            fBaseRoot = new GKTreeNode(LangMan.LS(LSID.LSID_RPLocations), null);
+            tvPlaces.Nodes.Add(fBaseRoot);
 
             radTotal.Checked = true;
             radTotal_Click(null, null);

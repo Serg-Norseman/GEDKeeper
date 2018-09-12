@@ -25,12 +25,9 @@
 		private System.Windows.Forms.ComboBox cmbMarriageStatus;
 		private System.Windows.Forms.Label lblRestriction;
 		private System.Windows.Forms.ComboBox cmbRestriction;
-		private System.ComponentModel.IContainer components;
-		private System.Windows.Forms.ToolTip toolTip1;
 
 		private void InitializeComponent()
 		{
-		    this.components = new System.ComponentModel.Container();
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
 		    this.GroupBox1 = new System.Windows.Forms.GroupBox();
@@ -54,7 +51,6 @@
 		    this.pageNotes = new System.Windows.Forms.TabPage();
 		    this.pageMultimedia = new System.Windows.Forms.TabPage();
 		    this.pageSources = new System.Windows.Forms.TabPage();
-		    this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 		    this.GroupBox1.SuspendLayout();
 		    this.tabsFamilyData.SuspendLayout();
 		    this.SuspendLayout();

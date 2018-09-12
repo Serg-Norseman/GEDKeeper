@@ -9,8 +9,8 @@ namespace GKUI.Forms
         private ToolBar ToolBar1;
         private ButtonToolItem tbLoadScript;
         private ButtonToolItem tbRun;
-        private GKUI.Components.TextBoxEx txtDebugOutput;
-        private TextBoxEx txtScriptText;
+        private TextArea txtDebugOutput;
+        private TextArea txtScriptText;
         private ButtonToolItem tbSaveScript;
         private ButtonToolItem tbNewScript;
         private Splitter splitContainer1;
@@ -21,19 +21,15 @@ namespace GKUI.Forms
 
             tbNewScript = new ButtonToolItem();
             tbNewScript.Click += tbNewScript_Click;
-            tbNewScript.Image = UIHelper.LoadResourceImage("Resources.btn_create_new.gif");
 
             tbLoadScript = new ButtonToolItem();
             tbLoadScript.Click += tbLoadScript_Click;
-            tbLoadScript.Image = UIHelper.LoadResourceImage("Resources.btn_load.gif");
 
             tbSaveScript = new ButtonToolItem();
             tbSaveScript.Click += tbSaveScript_Click;
-            tbSaveScript.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");
 
             tbRun = new ButtonToolItem();
             tbRun.Click += tbRun_Click;
-            tbRun.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
 
             ToolBar1 = new ToolBar();
             ToolBar1.TextAlign = ToolBarTextAlign.Right;
@@ -44,10 +40,10 @@ namespace GKUI.Forms
                                         new SeparatorToolItem(),
                                         tbRun});
 
-            txtScriptText = new TextBoxEx();
+            txtScriptText = new TextArea();
             txtScriptText.TextChanged += mmScriptText_TextChanged;
 
-            txtDebugOutput = new GKUI.Components.TextBoxEx();
+            txtDebugOutput = new TextArea();
             txtDebugOutput.ReadOnly = true;
 
             splitContainer1 = new Splitter();

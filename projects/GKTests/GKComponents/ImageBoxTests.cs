@@ -23,6 +23,7 @@
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
+using BSLib;
 using GKCommon;
 using GKCore;
 using GKUI.Components;
@@ -61,7 +62,7 @@ namespace GKUI.Components
         [Test]
         public void TestNamedRegion()
         {
-            var region = new NamedRegion("test", RectangleF.Empty);
+            var region = new NamedRegion("test", ExtRect.Empty);
             Assert.AreEqual("test", region.Name);
         }
 

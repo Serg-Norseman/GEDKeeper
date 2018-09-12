@@ -37,17 +37,12 @@ namespace GKUI.Forms
     {
         private PrintDocument fPrintDoc;
 
-        public PrintableForm()
+        public PrintableForm() : base()
         {
             InitPrintDoc();
         }
 
-        protected virtual IPrintable GetPrintable()
-        {
-            return null; // dummy
-        }
-
-        #region Print support
+        #region Internal print support
 
         private void InitPrintDoc()
         {
@@ -108,6 +103,15 @@ namespace GKUI.Forms
             }
 
             e.HasMorePages = false;
+        }
+
+        #endregion
+
+        #region Public interface
+
+        protected virtual IPrintable GetPrintable()
+        {
+            return null; // dummy
         }
 
         public bool AllowPrint()

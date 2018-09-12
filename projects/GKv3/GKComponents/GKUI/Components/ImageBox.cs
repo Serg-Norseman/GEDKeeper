@@ -77,9 +77,9 @@ namespace GKUI.Components
     public class NamedRegion
     {
         public readonly string Name;
-        public readonly RectangleF Region;
+        public readonly ExtRect Region;
 
-        public NamedRegion(string name, RectangleF region)
+        public NamedRegion(string name, ExtRect region)
         {
             Name = name;
             Region = region;
@@ -516,6 +516,11 @@ namespace GKUI.Components
                 viewport = Rectangle.Empty;
 
             return viewport;
+        }
+
+        private RectangleF GetOffsetRectangle(ExtRect source)
+        {
+            return GetOffsetRectangle(UIHelper.Rt2Rt(source));
         }
 
         /// <summary>

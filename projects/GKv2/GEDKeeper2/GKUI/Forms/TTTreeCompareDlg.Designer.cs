@@ -4,7 +4,7 @@
 	{
 		private System.Windows.Forms.TabControl tabsTools;
 		private System.Windows.Forms.TabPage pageTreeCompare;
-		private GKUI.Components.TextBoxEx ListCompare;
+		private System.Windows.Forms.TextBox ListCompare;
 		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.Label lblFile;
 		private System.Windows.Forms.TextBox txtCompareFile;
@@ -28,7 +28,7 @@
 		    this.btnFileChoose = new System.Windows.Forms.Button();
 		    this.radMatchInternal = new System.Windows.Forms.RadioButton();
 		    this.radMathExternal = new System.Windows.Forms.RadioButton();
-		    this.ListCompare = new GKUI.Components.TextBoxEx();
+		    this.ListCompare = new System.Windows.Forms.TextBox();
 		    this.pageTreeCompareOptions = new System.Windows.Forms.TabPage();
 		    this.btnClose = new System.Windows.Forms.Button();
 		    this.tabsTools.SuspendLayout();

@@ -91,6 +91,8 @@ namespace GKCore.Controllers
         bool ReadOnly { get; set; }
         string Text { get; set; }
 
+        void AppendText(string text);
+        void Clear();
         void Select();
     }
 
@@ -99,20 +101,41 @@ namespace GKCore.Controllers
         bool Enabled { get; set; }
         bool ReadOnly { get; set; }
         string Text { get; set; }
-        int Value { get; set; }
+        double Value { get; set; }
 
         void Select();
+    }
+
+    public interface ITVNode
+    {
     }
 
     public interface ITreeViewHandler : IControlHandler
     {
         bool Enabled { get; set; }
 
+        ITVNode AddNode(ITVNode parent, string name, object tag);
         void BeginUpdate();
         void Clear();
         void EndUpdate();
-        void Expand(object node);
+        void Expand(ITVNode node);
     }
+
+    public interface IProgressBarHandler : IControlHandler
+    {
+        int Minimum { get; set; }
+        int Maximum { get; set; }
+        int Value { get; set; }
+
+        void Increment(int value);
+    }
+
+    public interface ILogChart : IControlHandler
+    {
+        void AddFragment(int val);
+        void Clear();
+    }
+
 
     public sealed class ControlsManager
     {

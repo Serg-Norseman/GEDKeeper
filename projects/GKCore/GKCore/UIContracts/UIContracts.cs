@@ -66,16 +66,6 @@ namespace GKCore.UIContracts
     /// <summary>
     /// 
     /// </summary>
-    public interface ITextControl
-    {
-        void AppendText(string text);
-        void Clear();
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
     public interface IPortraitControl
     {
         int Height { get; set; }
@@ -119,6 +109,21 @@ namespace GKCore.UIContracts
 
 
     /// <summary>
+    /// 
+    /// </summary>
+    public interface IMergeControl
+    {
+        IBaseWindow Base { get; set; }
+        GEDCOMRecordType MergeMode { get; set; }
+        GEDCOMRecord Rec1 { get; }
+        GEDCOMRecord Rec2 { get; }
+        
+        void SetRec1(GEDCOMRecord value);
+        void SetRec2(GEDCOMRecord value);
+    }
+
+
+    /// <summary>
     /// The interface of the class for working with WinForms dialogs.
     /// </summary>
     public interface IStdDialogs
@@ -142,6 +147,7 @@ namespace GKCore.UIContracts
 
     public interface IView
     {
+        string Caption { get; set; }
     }
 
     public interface IAddressEditDlg : ICommonDialog, IBaseEditor, IView
@@ -227,6 +233,8 @@ namespace GKCore.UIContracts
 
         IComboBoxHandler MarriageStatus { get; }
         IComboBoxHandler Restriction { get; }
+        ITextBoxHandler Husband { get; }
+        ITextBoxHandler Wife { get; }
     }
 
     public interface IGroupEditDlg : ICommonDialog, IBaseEditor, IView
@@ -482,7 +490,6 @@ namespace GKCore.UIContracts
 
     public interface ICircleChartWin : IView
     {
-        string Caption { get; set; }
         ICircleChart CircleChart { get; }
     }
 
@@ -490,10 +497,10 @@ namespace GKCore.UIContracts
     {
     }
 
-    public interface IMapsViewerWin : IView
+    public interface IMapsViewerWin : IWindow, IView
     {
         IMapBrowser MapBrowser { get; }
-        object TreeRoot { get; }
+        ITVNode TreeRoot { get; }
         IComboBoxHandler PersonsCombo { get; }
         ITreeViewHandler PlacesTree { get; }
         IButtonHandler SelectPlacesBtn { get; }
@@ -515,7 +522,6 @@ namespace GKCore.UIContracts
 
     public interface IMediaViewerWin : IView
     {
-        string Caption { get; set; }
         void SetViewImage(IImage img, GEDCOMFileReferenceWithTitle fileRef);
         void SetViewMedia(string mediaFile);
         void SetViewText(string text);
@@ -531,9 +537,14 @@ namespace GKCore.UIContracts
 
     public interface ITreeChartWin : IView
     {
-        string Caption { get; set; }
         ITreeChartBox TreeBox { get; }
         TreeChartKind ChartKind { get; set; }
+    }
+
+    public interface IScriptEditWin : IView
+    {
+        ITextBoxHandler ScriptText { get; }
+        ITextBoxHandler DebugOutput { get; }
     }
 
     public interface IRelationshipCalculatorDlg : ICommonDialog, IView
@@ -543,5 +554,60 @@ namespace GKCore.UIContracts
         ITextBoxHandler Person1 { get; }
         ITextBoxHandler Person2 { get; }
         ITextBoxHandler Result { get; }
+    }
+
+    public interface IFragmentSearchDlg : ICommonDialog, IBaseEditor, IView
+    {
+        ITreeViewHandler GroupsTree { get; }
+        ILogChart LogChart { get; }
+    }
+
+    public interface IPatriarchsSearchDlg : ICommonDialog, IBaseEditor, IView
+    {
+        INumericBoxHandler MinGensNum { get; }
+        ICheckBoxHandler WithoutDatesCheck { get; }
+        IListView PatriarchsList { get; }
+    }
+
+    public interface IPlacesManagerDlg : ICommonDialog, IBaseEditor, IView
+    {
+        IListView PlacesList { get; }
+    }
+
+    public interface IRecMergeDlg : ICommonDialog, IBaseEditor, IView
+    {
+        IMergeControl MergeCtl { get; }
+        IButtonHandler SkipBtn { get; }
+        ICheckBoxHandler BirthYearChk { get; }
+        IProgressBarHandler ProgressBar { get; }
+        INumericBoxHandler NameAccuracyNum { get; }
+        INumericBoxHandler YearInaccuracyNum { get; }
+    }
+
+    public interface ITreeCheckDlg : ICommonDialog, IBaseEditor, IView
+    {
+        IListView ChecksList { get; }
+    }
+
+    public enum TreeMatchType { tmtInternal, tmtExternal, tmtAnalysis }
+
+    public interface ITreeCompareDlg : ICommonDialog, IBaseEditor, IView
+    {
+        ITextBoxHandler ExternalBase { get; }
+        ITextBoxHandler CompareOutput { get; }
+
+        TreeMatchType GetTreeMatchType();
+    }
+
+    public interface ITreeMergeDlg : ICommonDialog, IBaseEditor, IView
+    {
+        ITextBoxHandler UpdateBase { get; }
+        ITextBoxHandler SyncLog { get; }
+    }
+
+    public interface ITreeSplitDlg : ICommonDialog, IBaseEditor, IView
+    {
+        IListView SelectedList { get; }
+        IListView SkippedList { get; }
     }
 }

@@ -24,7 +24,7 @@
 		private System.Windows.Forms.RadioButton radSources;
 		private System.Windows.Forms.CheckBox chkBookmarkMerged;
 		private System.Windows.Forms.GroupBox grpMergeOther;
-		private GKUI.Components.GKMergeControl MergeCtl;
+		private GKUI.Components.GKMergeControl MergeControl;
 		private System.Windows.Forms.CheckBox chkIndistinctMatching;
 
 		private void InitializeComponent()
@@ -33,7 +33,7 @@
 		    this.pageRecMerge = new System.Windows.Forms.TabPage();
 		    this.PageControl1 = new System.Windows.Forms.TabControl();
 		    this.pageMerge = new System.Windows.Forms.TabPage();
-		    this.MergeCtl = new GKUI.Components.GKMergeControl();
+		    this.MergeControl = new GKUI.Components.GKMergeControl();
 		    this.btnAutoSearch = new System.Windows.Forms.Button();
 		    this.btnSkip = new System.Windows.Forms.Button();
 		    this.ProgressBar1 = new System.Windows.Forms.ProgressBar();
@@ -95,7 +95,7 @@
 		    // 
 		    // pageMerge
 		    // 
-		    this.pageMerge.Controls.Add(this.MergeCtl);
+		    this.pageMerge.Controls.Add(this.MergeControl);
 		    this.pageMerge.Controls.Add(this.btnAutoSearch);
 		    this.pageMerge.Controls.Add(this.btnSkip);
 		    this.pageMerge.Controls.Add(this.ProgressBar1);
@@ -105,18 +105,18 @@
 		    this.pageMerge.TabIndex = 0;
 		    this.pageMerge.Text = "pageMerge";
 		    // 
-		    // MergeCtl
+		    // MergeControl
 		    // 
-		    this.MergeCtl.AutoSize = true;
-		    this.MergeCtl.Base = null;
-		    this.MergeCtl.Bookmark = false;
-		    this.MergeCtl.Dock = System.Windows.Forms.DockStyle.Top;
-		    this.MergeCtl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-		    this.MergeCtl.Location = new System.Drawing.Point(0, 0);
-		    this.MergeCtl.MergeMode = GKCommon.GEDCOM.GEDCOMRecordType.rtNone;
-		    this.MergeCtl.Name = "MergeCtl";
-		    this.MergeCtl.Size = new System.Drawing.Size(957, 399);
-		    this.MergeCtl.TabIndex = 11;
+		    this.MergeControl.AutoSize = true;
+		    this.MergeControl.Base = null;
+		    this.MergeControl.Bookmark = false;
+		    this.MergeControl.Dock = System.Windows.Forms.DockStyle.Top;
+		    this.MergeControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+		    this.MergeControl.Location = new System.Drawing.Point(0, 0);
+		    this.MergeControl.MergeMode = GKCommon.GEDCOM.GEDCOMRecordType.rtNone;
+		    this.MergeControl.Name = "MergeCtl";
+		    this.MergeControl.Size = new System.Drawing.Size(957, 399);
+		    this.MergeControl.TabIndex = 11;
 		    // 
 		    // btnAutoSearch
 		    // 
@@ -337,7 +337,6 @@
 		    ((System.ComponentModel.ISupportInitialize)(this.edNameAccuracy)).EndInit();
 		    ((System.ComponentModel.ISupportInitialize)(this.edYearInaccuracy)).EndInit();
 		    this.ResumeLayout(false);
-
 		}
 	}
 }

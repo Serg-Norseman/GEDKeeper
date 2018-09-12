@@ -14,7 +14,7 @@ namespace GKUI.Forms
         private Label lblOtherBase;
         private TextBox edUpdateBase;
         private Button btnTreeMerge;
-        private TextBoxEx mSyncRes;
+        private TextArea mSyncRes;
 
         private void InitializeComponent()
         {
@@ -43,7 +43,7 @@ namespace GKUI.Forms
             btnTreeMerge.Text = "btnTreeMerge";
             btnTreeMerge.Click += btnTreeMerge_Click;
 
-            mSyncRes = new TextBoxEx();
+            mSyncRes = new TextArea();
             mSyncRes.ReadOnly = true;
             mSyncRes.Height = 160;
 

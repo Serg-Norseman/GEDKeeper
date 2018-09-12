@@ -481,18 +481,18 @@ namespace GKUI.Forms
             lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
             pageNames.Text = LangMan.LS(LSID.LSID_Names);
 
-            btnPortraitAdd.ToolTip = LangMan.LS(LSID.LSID_PortraitAddTip);
-            btnPortraitDelete.ToolTip = LangMan.LS(LSID.LSID_PortraitDeleteTip);
-            btnParentsAdd.ToolTip = LangMan.LS(LSID.LSID_ParentsAddTip);
-            btnParentsEdit.ToolTip = LangMan.LS(LSID.LSID_ParentsEditTip);
-            btnParentsDelete.ToolTip = LangMan.LS(LSID.LSID_ParentsDeleteTip);
-            btnFatherAdd.ToolTip = LangMan.LS(LSID.LSID_FatherAddTip);
-            btnFatherDelete.ToolTip = LangMan.LS(LSID.LSID_FatherDeleteTip);
-            btnFatherSel.ToolTip = LangMan.LS(LSID.LSID_FatherSelTip);
-            btnMotherAdd.ToolTip = LangMan.LS(LSID.LSID_MotherAddTip);
-            btnMotherDelete.ToolTip = LangMan.LS(LSID.LSID_MotherDeleteTip);
-            btnMotherSel.ToolTip = LangMan.LS(LSID.LSID_MotherSelTip);
-            btnNameCopy.ToolTip = LangMan.LS(LSID.LSID_NameCopyTip);
+            SetToolTip(btnPortraitAdd, LangMan.LS(LSID.LSID_PortraitAddTip));
+            SetToolTip(btnPortraitDelete, LangMan.LS(LSID.LSID_PortraitDeleteTip));
+            SetToolTip(btnParentsAdd, LangMan.LS(LSID.LSID_ParentsAddTip));
+            SetToolTip(btnParentsEdit, LangMan.LS(LSID.LSID_ParentsEditTip));
+            SetToolTip(btnParentsDelete, LangMan.LS(LSID.LSID_ParentsDeleteTip));
+            SetToolTip(btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
+            SetToolTip(btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
+            SetToolTip(btnFatherSel, LangMan.LS(LSID.LSID_FatherSelTip));
+            SetToolTip(btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
+            SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
+            SetToolTip(btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
+            SetToolTip(btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
         }
 
         public override void InitDialog(IBaseWindow baseWin)

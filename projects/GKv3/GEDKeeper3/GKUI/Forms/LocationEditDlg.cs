@@ -122,16 +122,9 @@ namespace GKUI.Forms
             btnSelect.Text = LangMan.LS(LSID.LSID_SelectCoords);
             btnSelectName.Text = LangMan.LS(LSID.LSID_SelectName);
 
-            btnShowOnMap.ToolTip = LangMan.LS(LSID.LSID_ShowOnMapTip);
+            SetToolTip(btnShowOnMap, LangMan.LS(LSID.LSID_ShowOnMapTip));
 
             fController = new LocationEditDlgController(this);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-            }
-            base.Dispose(disposing);
         }
 
         private void EditName_KeyDown(object sender, KeyEventArgs e)

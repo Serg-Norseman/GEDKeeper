@@ -6,8 +6,8 @@
 		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.TabPage pageTreeSplit;
 		private System.Windows.Forms.Button btnSelectAll;
-		private System.Windows.Forms.ListBox ListSelected;
-		private System.Windows.Forms.ListBox ListSkipped;
+		private GKUI.Components.GKListView ListSelected;
+		private GKUI.Components.GKListView ListSkipped;
 		private System.Windows.Forms.Button btnSelectFamily;
 		private System.Windows.Forms.Button btnSelectAncestors;
 		private System.Windows.Forms.Button btnSelectDescendants;
@@ -20,8 +20,8 @@
 		    this.tabsTools = new System.Windows.Forms.TabControl();
 		    this.pageTreeSplit = new System.Windows.Forms.TabPage();
 		    this.btnSelectAll = new System.Windows.Forms.Button();
-		    this.ListSelected = new System.Windows.Forms.ListBox();
-		    this.ListSkipped = new System.Windows.Forms.ListBox();
+		    this.ListSelected = new GKUI.Components.GKListView();
+		    this.ListSkipped = new GKUI.Components.GKListView();
 		    this.btnSelectFamily = new System.Windows.Forms.Button();
 		    this.btnSelectAncestors = new System.Windows.Forms.Button();
 		    this.btnSelectDescendants = new System.Windows.Forms.Button();
@@ -70,18 +70,18 @@
 		    // 
 		    // ListSelected
 		    // 
-		    this.ListSelected.ItemHeight = 17;
 		    this.ListSelected.Location = new System.Drawing.Point(11, 10);
 		    this.ListSelected.Name = "ListSelected";
 		    this.ListSelected.Size = new System.Drawing.Size(483, 395);
+		    this.ListSelected.View = System.Windows.Forms.View.List;
 		    this.ListSelected.TabIndex = 1;
 		    // 
 		    // ListSkipped
 		    // 
-		    this.ListSkipped.ItemHeight = 17;
 		    this.ListSkipped.Location = new System.Drawing.Point(504, 10);
 		    this.ListSkipped.Name = "ListSkipped";
 		    this.ListSkipped.Size = new System.Drawing.Size(483, 395);
+            this.ListSkipped.View = System.Windows.Forms.View.List;
 		    this.ListSkipped.TabIndex = 2;
 		    // 
 		    // btnSelectFamily

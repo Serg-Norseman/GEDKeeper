@@ -99,7 +99,7 @@ namespace GKUI.Forms
             lblPage.Text = LangMan.LS(LSID.LSID_Page);
             lblCertainty.Text = LangMan.LS(LSID.LSID_Certainty);
 
-            btnSourceAdd.ToolTip = LangMan.LS(LSID.LSID_SourceAddTip);
+            SetToolTip(btnSourceAdd, LangMan.LS(LSID.LSID_SourceAddTip));
 
             fController = new SourceCitEditDlgController(this);
         }
@@ -108,13 +108,6 @@ namespace GKUI.Forms
         {
             base.InitDialog(baseWin);
             fController.Init(baseWin);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-            }
-            base.Dispose(disposing);
         }
     }
 }

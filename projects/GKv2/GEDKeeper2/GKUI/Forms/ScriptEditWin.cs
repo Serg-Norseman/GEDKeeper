@@ -25,7 +25,9 @@ using System.Text;
 using System.Windows.Forms;
 
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -33,7 +35,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class ScriptEditWin : CommonForm, ILocalization
+    public sealed partial class ScriptEditWin : CommonDialog, ILocalization, IScriptEditWin
     {
         private readonly IBaseWindow fBase;
 
@@ -62,6 +64,22 @@ namespace GKUI.Forms
             }
         }
 
+        #region View Interface
+
+        //IScriptEditWin.
+        public ITextBoxHandler ScriptText
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtScriptText); }
+        }
+
+        //IScriptEditWin.
+        public ITextBoxHandler DebugOutput
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtDebugOutput); }
+        }
+
+        #endregion
+
         private bool CheckModified()
         {
             bool result = true;
@@ -72,8 +90,10 @@ namespace GKUI.Forms
                 case DialogResult.Yes:
                     tbSaveScript_Click(this, null);
                     break;
+
                 case DialogResult.No:
                     break;
+
                 case DialogResult.Cancel:
                     result = false;
                     break;
@@ -85,8 +105,7 @@ namespace GKUI.Forms
         private void SetTitle()
         {
             Text = Path.GetFileName(fFileName);
-            if (fModified)
-            {
+            if (fModified) {
                 Text = @"* " + Text;
             }
         }
@@ -95,7 +114,7 @@ namespace GKUI.Forms
         {
             if (!CheckModified()) return;
 
-            txtScriptText.Clear();
+            ScriptText.Clear();
             FileName = "unknown.lua";
             Modified = false;
         }
@@ -107,8 +126,7 @@ namespace GKUI.Forms
             string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
-            using (StreamReader strd = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
-            {
+            using (StreamReader strd = new StreamReader(File.OpenRead(fileName), Encoding.UTF8)) {
                 txtScriptText.Text = strd.ReadToEnd();
                 FileName = fileName;
                 Modified = false;
@@ -121,8 +139,7 @@ namespace GKUI.Forms
             string fileName = AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT, FileName);
             if (string.IsNullOrEmpty(fileName)) return;
 
-            using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8))
-            {
+            using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8)) {
                 strd.Write(txtScriptText.Text);
                 FileName = fileName;
                 Modified = false;
@@ -132,15 +149,12 @@ namespace GKUI.Forms
 
         private void tbRun_Click(object sender, EventArgs e)
         {
-            try
-            {
-                txtDebugOutput.Clear();
+            try {
+                DebugOutput.Clear();
                 using (ScriptEngine scrEngine = new ScriptEngine()) {
-                    scrEngine.lua_run(txtScriptText.Text, fBase, txtDebugOutput);
+                    scrEngine.lua_run(txtScriptText.Text, fBase, ((IScriptEditWin)this).DebugOutput);
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("ScriptEditWin.Run(): " + ex.Message);
                 Logger.LogWrite("ScriptEditWin.Run(): " + ex.StackTrace);
             }

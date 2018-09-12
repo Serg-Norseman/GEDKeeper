@@ -1,0 +1,135 @@
+﻿/*
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *
+ *  This file is part of "GEDKeeper".
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+using System;
+using BSLib;
+using GKCommon.GEDCOM;
+using GKCore.UIContracts;
+
+namespace GKCore.Controllers
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public class RecMergeController : DialogController<IRecMergeDlg>
+    {
+        private GEDCOMRecordType fRMMode;
+        private readonly StringList fRMSkip;
+        private int fRMIndex;
+
+        public GEDCOMRecordType RMMode
+        {
+            get { return fRMMode; }
+            set { fRMMode = value; }
+        }
+
+        public RecMergeController(IRecMergeDlg view) : base(view)
+        {
+            fRMSkip = new StringList();
+            fRMMode = GEDCOMRecordType.rtIndividual;
+        }
+
+        public override void UpdateView()
+        {
+        }
+
+        private static bool CheckPersonsEx(GEDCOMIndividualRecord rec1, GEDCOMIndividualRecord rec2)
+        {
+            GEDCOMFamilyRecord fam1 = rec1.GetParentsFamily();
+            GEDCOMFamilyRecord fam2 = rec2.GetParentsFamily();
+
+            return (!Equals(fam1, fam2));
+        }
+
+        public void Skip()
+        {
+            if (fView.MergeCtl.Rec1 != null && fView.MergeCtl.Rec2 != null) {
+                fRMSkip.Add(fView.MergeCtl.Rec1.XRef + "-" + fView.MergeCtl.Rec2.XRef);
+            }
+            SearchDuplicates();
+        }
+
+        public void Reset()
+        {
+            fRMIndex = 0;
+            fRMSkip.Clear();
+        }
+
+        public void SearchDuplicates()
+        {
+            fView.MergeCtl.Base = fBase;
+            fView.MergeCtl.MergeMode = fRMMode;
+
+            fView.MergeCtl.SetRec1(null);
+            fView.MergeCtl.SetRec2(null);
+
+            MatchParams mParams;
+            //mParams.IndistinctNameMatching = chkIndistinctMatching.Checked;
+            mParams.NamesIndistinctThreshold = ((float)fView.NameAccuracyNum.Value) / 100.0f;
+            mParams.DatesCheck = fView.BirthYearChk.Checked;
+            mParams.YearsInaccuracy = (int)fView.YearInaccuracyNum.Value;
+            mParams.CheckEventPlaces = false;
+
+            bool res = false;
+            fView.SkipBtn.Enabled = false;
+
+            try {
+                var tree = fBase.Context.Tree;
+
+                fView.ProgressBar.Minimum = 0;
+                fView.ProgressBar.Maximum = tree.RecordsCount;
+                fView.ProgressBar.Value = fRMIndex;
+
+                int recNum = tree.RecordsCount;
+                for (int i = fRMIndex; i < recNum; i++) {
+                    fRMIndex = i;
+                    fView.ProgressBar.Increment(1);
+
+                    GEDCOMRecord iRec = tree[i];
+                    if (iRec.RecordType != fRMMode) continue;
+
+                    for (int j = i + 1; j < recNum; j++) {
+                        GEDCOMRecord kRec = tree[j];
+                        if (kRec.RecordType != fRMMode) continue;
+
+                        if (iRec == kRec) continue;
+                        if (fRMSkip.IndexOf(iRec.XRef + "-" + kRec.XRef) >= 0) continue;
+
+                        res = iRec.IsMatch(kRec, mParams) >= 100.0f;
+
+                        if (res && fRMMode == GEDCOMRecordType.rtIndividual) {
+                            res = CheckPersonsEx((GEDCOMIndividualRecord)iRec, (GEDCOMIndividualRecord)kRec);
+                        }
+
+                        if (res) {
+                            fView.MergeCtl.SetRec1(iRec);
+                            fView.MergeCtl.SetRec2(kRec);
+                            break;
+                        }
+                    }
+
+                    if (res) break;
+                }
+            } finally {
+                fView.SkipBtn.Enabled = true;
+            }
+        }
+    }
+}

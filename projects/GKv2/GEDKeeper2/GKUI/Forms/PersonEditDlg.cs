@@ -496,18 +496,18 @@ namespace GKUI.Forms
             lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
             pageNames.Text = LangMan.LS(LSID.LSID_Names);
 
-            toolTip1.SetToolTip(btnPortraitAdd, LangMan.LS(LSID.LSID_PortraitAddTip));
-            toolTip1.SetToolTip(btnPortraitDelete, LangMan.LS(LSID.LSID_PortraitDeleteTip));
-            toolTip1.SetToolTip(btnParentsAdd, LangMan.LS(LSID.LSID_ParentsAddTip));
-            toolTip1.SetToolTip(btnParentsEdit, LangMan.LS(LSID.LSID_ParentsEditTip));
-            toolTip1.SetToolTip(btnParentsDelete, LangMan.LS(LSID.LSID_ParentsDeleteTip));
-            toolTip1.SetToolTip(btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
-            toolTip1.SetToolTip(btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
-            toolTip1.SetToolTip(btnFatherSel, LangMan.LS(LSID.LSID_FatherSelTip));
-            toolTip1.SetToolTip(btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
-            toolTip1.SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
-            toolTip1.SetToolTip(btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
-            toolTip1.SetToolTip(btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
+            SetToolTip(btnPortraitAdd, LangMan.LS(LSID.LSID_PortraitAddTip));
+            SetToolTip(btnPortraitDelete, LangMan.LS(LSID.LSID_PortraitDeleteTip));
+            SetToolTip(btnParentsAdd, LangMan.LS(LSID.LSID_ParentsAddTip));
+            SetToolTip(btnParentsEdit, LangMan.LS(LSID.LSID_ParentsEditTip));
+            SetToolTip(btnParentsDelete, LangMan.LS(LSID.LSID_ParentsDeleteTip));
+            SetToolTip(btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
+            SetToolTip(btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
+            SetToolTip(btnFatherSel, LangMan.LS(LSID.LSID_FatherSelTip));
+            SetToolTip(btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
+            SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
+            SetToolTip(btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
+            SetToolTip(btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
         }
 
         public override void InitDialog(IBaseWindow baseWin)

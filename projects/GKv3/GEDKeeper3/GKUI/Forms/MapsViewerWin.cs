@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using Eto.Forms;
 
 using BSLib;
@@ -36,14 +35,13 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class MapsViewerWin : CommonForm, IWindow, IMapsViewerWin
+    public sealed partial class MapsViewerWin : CommonForm, IMapsViewerWin
     {
         private readonly MapsViewerWinController fController;
 
         private readonly GKTreeNode fBaseRoot;
         private readonly GKMapBrowser fMapBrowser;
         private readonly ExtList<GeoPoint> fMapPoints;
-        private readonly IBaseWindow fBase;
 
         #region View Interface
 
@@ -52,7 +50,7 @@ namespace GKUI.Forms
             get { return fMapBrowser; }
         }
 
-        object IMapsViewerWin.TreeRoot
+        ITVNode IMapsViewerWin.TreeRoot
         {
             get { return fBaseRoot; }
         }
@@ -152,9 +150,9 @@ namespace GKUI.Forms
             fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
         }
 
-        public void ProcessMap()
+        protected override void OnLoad(EventArgs e)
         {
-            AppHost.Instance.ShowWindow(this);
+            base.OnLoad(e);
             fController.LoadPlaces();
             Focus();
         }
@@ -166,7 +164,6 @@ namespace GKUI.Forms
             fMapBrowser = new GKMapBrowser();
             Panel1.Content = fMapBrowser;
 
-            fBase = baseWin;
             fController = new MapsViewerWinController(this, baseWin.GetContentList(GEDCOMRecordType.rtIndividual));
             fController.Init(baseWin);
 

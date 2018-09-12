@@ -88,17 +88,15 @@ namespace GKUI.Forms
             get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRestriction); }
         }
 
-        /*
-        ITextBoxHandler IEventEditDlg.Date1
+        ITextBoxHandler IFamilyEditDlg.Husband
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtEventDate1); }
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtHusband); }
         }
 
-        ITextBoxHandler IEventEditDlg.Date2
+        ITextBoxHandler IFamilyEditDlg.Wife
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtEventDate2); }
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtWife); }
         }
-        */
 
         #endregion
 
@@ -149,12 +147,12 @@ namespace GKUI.Forms
             pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
             lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
 
-            toolTip1.SetToolTip(btnHusbandAdd, LangMan.LS(LSID.LSID_HusbandAddTip));
-            toolTip1.SetToolTip(btnHusbandDelete, LangMan.LS(LSID.LSID_HusbandDeleteTip));
-            toolTip1.SetToolTip(btnHusbandSel, LangMan.LS(LSID.LSID_HusbandSelTip));
-            toolTip1.SetToolTip(btnWifeAdd, LangMan.LS(LSID.LSID_WifeAddTip));
-            toolTip1.SetToolTip(btnWifeDelete, LangMan.LS(LSID.LSID_WifeDeleteTip));
-            toolTip1.SetToolTip(btnWifeSel, LangMan.LS(LSID.LSID_WifeSelTip));
+            SetToolTip(btnHusbandAdd, LangMan.LS(LSID.LSID_HusbandAddTip));
+            SetToolTip(btnHusbandDelete, LangMan.LS(LSID.LSID_HusbandDeleteTip));
+            SetToolTip(btnHusbandSel, LangMan.LS(LSID.LSID_HusbandSelTip));
+            SetToolTip(btnWifeAdd, LangMan.LS(LSID.LSID_WifeAddTip));
+            SetToolTip(btnWifeDelete, LangMan.LS(LSID.LSID_WifeDeleteTip));
+            SetToolTip(btnWifeSel, LangMan.LS(LSID.LSID_WifeSelTip));
 
             fController = new FamilyEditDlgController(this);
         }

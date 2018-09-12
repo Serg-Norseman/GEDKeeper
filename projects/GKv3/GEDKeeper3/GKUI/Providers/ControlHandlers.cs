@@ -228,6 +228,16 @@ namespace GKUI.Providers
             set { Control.Text = value; }
         }
 
+        public void AppendText(string text)
+        {
+            //Control.Append(text, true);
+        }
+
+        public void Clear()
+        {
+            Control.Text = string.Empty;
+        }
+
         public void Select()
         {
             Control.Focus();
@@ -275,6 +285,16 @@ namespace GKUI.Providers
             set { Control.Text = value; }
         }
 
+        public void AppendText(string text)
+        {
+            Control.Append(text, true);
+        }
+
+        public void Clear()
+        {
+            Control.Text = string.Empty;
+        }
+
         public void Select()
         {
             Control.Focus();
@@ -319,6 +339,16 @@ namespace GKUI.Providers
             set { Control.Text = value; }
         }
 
+        public void AppendText(string text)
+        {
+            //Control.Append(text, true);
+        }
+
+        public void Clear()
+        {
+            Control.Text = string.Empty;
+        }
+
         public void Select()
         {
             Control.Focus();
@@ -349,9 +379,9 @@ namespace GKUI.Providers
             set { /* TODO */ }
         }
 
-        public int Value
+        public double Value
         {
-            get { return (int)Control.Value; }
+            get { return Control.Value; }
             set { Control.Value = value; }
         }
 
@@ -363,6 +393,8 @@ namespace GKUI.Providers
 
     public sealed class TreeViewHandler : ControlHandler<TreeView, TreeViewHandler>, ITreeViewHandler
     {
+        private TreeItem fRootNode;
+
         public TreeViewHandler(TreeView control) : base(control)
         {
         }
@@ -373,8 +405,21 @@ namespace GKUI.Providers
             set { Control.Enabled = value; }
         }
 
+        public ITVNode AddNode(ITVNode parent, string name, object tag)
+        {
+            var node = new GKTreeNode(name, tag);
+            if (parent == null) {
+                fRootNode.Children.Add(node);
+            } else {
+                ((GKTreeNode)parent).Children.Add(node);
+            }
+            return node;
+        }
+
         public void BeginUpdate()
         {
+            Control.DataStore = null;
+            fRootNode = new TreeItem();
         }
 
         public void Clear()
@@ -383,14 +428,63 @@ namespace GKUI.Providers
 
         public void EndUpdate()
         {
+            Control.DataStore = fRootNode;
+            Control.RefreshData();
         }
 
-        public void Expand(object node)
+        public void Expand(ITVNode node)
         {
             GKTreeNode treeNode = node as GKTreeNode;
             if (treeNode != null) {
                 treeNode.Expanded = true;
             }
+        }
+    }
+
+    public sealed class ProgressBarHandler : ControlHandler<ProgressBar, ProgressBarHandler>, IProgressBarHandler
+    {
+        public ProgressBarHandler(ProgressBar control) : base(control)
+        {
+        }
+
+        public int Minimum
+        {
+            get { return Control.MinValue; }
+            set { Control.MinValue = value; }
+        }
+
+        public int Maximum
+        {
+            get { return Control.MaxValue; }
+            set { Control.MaxValue = value; }
+        }
+
+        public int Value
+        {
+            get { return Control.Value; }
+            set { Control.Value = value; }
+        }
+
+        public void Increment(int value)
+        {
+            Control.Value += value;
+        }
+    }
+
+    public sealed class LogChartHandler : ControlHandler<LogChart, LogChartHandler>, ILogChart
+    {
+        public LogChartHandler(LogChart control) : base(control)
+        {
+        }
+
+        public void AddFragment(int val)
+        {
+            Control.AddFragment(val);
+        }
+
+        public void Clear()
+        {
+            Control.Clear();
         }
     }
 }

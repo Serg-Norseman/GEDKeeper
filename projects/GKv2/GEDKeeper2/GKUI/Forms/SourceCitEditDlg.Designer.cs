@@ -14,7 +14,6 @@
 
 		private void InitializeComponent()
 		{
-		    this.components = new System.ComponentModel.Container();
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
 		    this.lblPage = new System.Windows.Forms.Label();
@@ -24,7 +23,6 @@
 		    this.lblCertainty = new System.Windows.Forms.Label();
 		    this.txtCertainty = new System.Windows.Forms.ComboBox();
 		    this.cmbSource = new System.Windows.Forms.ComboBox();
-		    this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 		    this.SuspendLayout();
 		    // 
 		    // btnAccept
@@ -147,7 +145,5 @@
 		    this.ResumeLayout(false);
 		    this.PerformLayout();
 		}
-		private System.ComponentModel.IContainer components;
-		private System.Windows.Forms.ToolTip toolTip1;
 	}
 }

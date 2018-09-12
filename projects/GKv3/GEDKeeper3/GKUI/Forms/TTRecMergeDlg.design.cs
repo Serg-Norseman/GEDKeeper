@@ -28,7 +28,7 @@ namespace GKUI.Forms
         private RadioButton radSources;
         private CheckBox chkBookmarkMerged;
         private GroupBox grpMergeOther;
-        private GKUI.Components.GKMergeControl MergeCtl;
+        private GKUI.Components.GKMergeControl MergeControl;
         private CheckBox chkIndistinctMatching;
 
         private void InitializeComponent()
@@ -37,10 +37,10 @@ namespace GKUI.Forms
 
             //
 
-            MergeCtl = new GKUI.Components.GKMergeControl();
-            MergeCtl.Base = null;
-            MergeCtl.Bookmark = false;
-            MergeCtl.MergeMode = GKCommon.GEDCOM.GEDCOMRecordType.rtNone;
+            MergeControl = new GKUI.Components.GKMergeControl();
+            MergeControl.Base = null;
+            MergeControl.Bookmark = false;
+            MergeControl.MergeMode = GKCommon.GEDCOM.GEDCOMRecordType.rtNone;
 
             btnAutoSearch = new Button();
             btnAutoSearch.Size = new Size(130, 26);
@@ -61,7 +61,7 @@ namespace GKUI.Forms
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { MergeCtl }
+                        Cells = { MergeControl }
                     },
                     UIHelper.MakeDialogFooter(btnAutoSearch, btnSkip, null, ProgressBar1)
                 }

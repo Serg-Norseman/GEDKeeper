@@ -12,7 +12,6 @@
 
 		private void InitializeComponent()
 		{
-		    this.components = new System.ComponentModel.Container();
 		    this.lblRelation = new System.Windows.Forms.Label();
 		    this.lblPerson = new System.Windows.Forms.Label();
 		    this.btnPersonAdd = new System.Windows.Forms.Button();
@@ -20,7 +19,6 @@
 		    this.btnCancel = new System.Windows.Forms.Button();
 		    this.cmbRelation = new System.Windows.Forms.ComboBox();
 		    this.txtPerson = new System.Windows.Forms.TextBox();
-		    this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 		    this.SuspendLayout();
 		    // 
 		    // lblRelation
@@ -114,7 +112,5 @@
 		    this.ResumeLayout(false);
 		    this.PerformLayout();
 		}
-		private System.ComponentModel.IContainer components;
-		private System.Windows.Forms.ToolTip toolTip1;
 	}
 }

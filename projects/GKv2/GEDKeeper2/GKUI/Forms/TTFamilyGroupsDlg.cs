@@ -19,12 +19,12 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Tools;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -32,29 +32,37 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTFamilyGroupsDlg : CommonDialog
+    public sealed partial class TTFamilyGroupsDlg : EditorDialog, IFragmentSearchDlg
     {
-        private readonly IBaseWindow fBase;
-        private readonly GEDCOMTree fTree;
+        private readonly FragmentSearchController fController;
+
+        #region View Interface
+
+        ITreeViewHandler IFragmentSearchDlg.GroupsTree
+        {
+            get { return fControlsManager.GetControlHandler<ITreeViewHandler>(tvGroups); }
+        }
+
+        ILogChart IFragmentSearchDlg.LogChart
+        {
+            get { return fControlsManager.GetControlHandler<ILogChart>(gkLogChart1); }
+        }
+
+        #endregion
 
         public TTFamilyGroupsDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
+
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fBase = baseWin;
-            fTree = fBase.Context.Tree;
+            InitDialog(baseWin);
+            fController = new FragmentSearchController(this);
+            fController.Init(baseWin);
 
             gkLogChart1.OnHintRequest += HintRequestEventHandler;
 
             SetLang();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-            }
-            base.Dispose(disposing);
         }
 
         public void SetLang()
@@ -68,60 +76,17 @@ namespace GKUI.Forms
 
         private void btnAnalyseGroups_Click(object sender, EventArgs e)
         {
-            CheckGroups();
-        }
-
-        private void CheckGroups()
-        {
-            IProgressController progress = AppHost.Progress;
-
-            gkLogChart1.Clear();
-            List<List<GEDCOMRecord>> treeFragments = TreeTools.SearchTreeFragments(fTree, progress);
-
-            //progress.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), fTree.RecordsCount);
-            try {
-                tvGroups.Nodes.Clear();
-
-                int num = treeFragments.Count;
-                for (int i = 0; i < num; i++) {
-                    var groupRecords = treeFragments[i];
-
-                    int cnt = groupRecords.Count;
-
-                    int groupNum = (i + 1);
-                    TreeNode groupItem = tvGroups.Nodes.Add(
-                        groupNum.ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + cnt.ToString() + ")");
-
-                    for (int j = 0; j < cnt; j++) {
-                        var iRec = (GEDCOMIndividualRecord)groupRecords[j];
-
-                        string pn = GKUtils.GetNameString(iRec, true, false);
-                        if (iRec.Patriarch) {
-                            pn = "(*) " + pn;
-                        }
-                        groupItem.Nodes.Add(new GKTreeNode(pn, iRec));
-                    }
-                    groupItem.ExpandAll();
-
-                    gkLogChart1.AddFragment(cnt);
-
-                    //progress.ProgressStep();
-                    Application.DoEvents();
-                }
-            } finally {
-                treeFragments.Clear();
-                //progress.ProgressDone();
-            }
+            fController.CheckGroups();
         }
 
         private void tvGroups_DoubleClick(object sender, EventArgs e)
         {
             GKTreeNode node = tvGroups.SelectedNode as GKTreeNode;
             if (node == null) return;
-            
+
             GEDCOMIndividualRecord iRec = node.Tag as GEDCOMIndividualRecord;
             if (iRec == null) return;
-            
+
             fBase.SelectRecordByXRef(iRec.XRef);
             Close();
         }

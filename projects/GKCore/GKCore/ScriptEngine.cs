@@ -32,7 +32,7 @@ using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
-using GKCore.UIContracts;
+using GKCore.Controllers;
 
 namespace GKCore
 {
@@ -58,7 +58,7 @@ namespace GKCore
     /// </summary>
     public class ScriptEngine : BaseObject
     {
-        private ITextControl fDebugOutput;
+        private ITextBoxHandler fDebugOutput;
         private IBaseWindow fBase;
 
         protected override void Dispose(bool disposing)
@@ -70,7 +70,7 @@ namespace GKCore
             base.Dispose(disposing);
         }
 
-        public void lua_run(string script, IBaseWindow baseWin, ITextControl debugOutput)
+        public void lua_run(string script, IBaseWindow baseWin, ITextBoxHandler debugOutput)
         {
             fDebugOutput = debugOutput;
             fBase = baseWin;

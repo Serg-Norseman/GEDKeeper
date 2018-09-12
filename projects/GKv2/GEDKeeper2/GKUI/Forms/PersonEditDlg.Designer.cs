@@ -52,14 +52,11 @@
         private System.Windows.Forms.Button btnMotherDelete;
         private System.Windows.Forms.Button btnMotherSel;
         private System.Windows.Forms.TabPage pageNames;
-        private System.ComponentModel.IContainer components;
-        private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.TextBox txtMarriedSurname;
         private System.Windows.Forms.Label lblMarriedSurname;
         
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblRestriction = new System.Windows.Forms.Label();
@@ -112,7 +109,6 @@
             this.pageMultimedia = new System.Windows.Forms.TabPage();
             this.pageSources = new System.Windows.Forms.TabPage();
             this.pageUserRefs = new System.Windows.Forms.TabPage();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.GroupBox1.SuspendLayout();
             this.panCtlParents.SuspendLayout();
             this.tabsPersonData.SuspendLayout();

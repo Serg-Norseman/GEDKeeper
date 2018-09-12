@@ -27,7 +27,6 @@
 
 		private void InitializeComponent()
 		{
-		    this.components = new System.ComponentModel.Container();
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
 		    this.tabsData = new System.Windows.Forms.TabControl();
@@ -50,7 +49,6 @@
 		    this.btnShowOnMap = new System.Windows.Forms.Button();
 		    this.pageNotes = new System.Windows.Forms.TabPage();
 		    this.pageMultimedia = new System.Windows.Forms.TabPage();
-		    this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 		    this.tabsData.SuspendLayout();
 		    this.pageCommon.SuspendLayout();
 		    this.grpSearch.SuspendLayout();
@@ -284,7 +282,5 @@
 		    this.grpSearch.ResumeLayout(false);
 		    this.ResumeLayout(false);
 		}
-		private System.ComponentModel.IContainer components;
-		private System.Windows.Forms.ToolTip toolTip1;
 	}
 }

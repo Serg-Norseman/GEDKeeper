@@ -232,7 +232,7 @@ namespace GKUI.Components
                 // set cache mode only if no internet avaible
                 if (!PingNetwork("pingtest.com")) {
                     fMapControl.Manager.Mode = AccessMode.CacheOnly;
-                    MessageBox.Show("No internet connection available, going to CacheOnly mode.", "GMap.NET - Demo.WindowsForms", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    //MessageBox.Show("No internet connection available, going to CacheOnly mode.", "GMap.NET - Demo.WindowsForms", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 } else {
                     fMapControl.Manager.Mode = AccessMode.ServerAndCache;
                 }

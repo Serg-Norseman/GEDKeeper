@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,16 +23,18 @@ using System.ComponentModel;
 using System.IO;
 using System.Text;
 using Eto.Forms;
-using GKCommon;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
+using GKCore.UIContracts;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class ScriptEditWin : Dialog, ILocalization
+    public sealed partial class ScriptEditWin : CommonDialog, ILocalization, IScriptEditWin
     {
         private readonly IBaseWindow fBase;
 
@@ -60,6 +62,22 @@ namespace GKUI.Forms
                 SetTitle();
             }
         }
+
+        #region View Interface
+
+        //IScriptEditWin.
+        public ITextBoxHandler ScriptText
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtScriptText); }
+        }
+
+        //IScriptEditWin.
+        public ITextBoxHandler DebugOutput
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtDebugOutput); }
+        }
+
+        #endregion
 
         private bool CheckModified()
         {
@@ -95,7 +113,7 @@ namespace GKUI.Forms
         {
             if (!CheckModified()) return;
 
-            txtScriptText.Clear();
+            ScriptText.Clear();
             FileName = "unknown.lua";
             Modified = false;
         }
@@ -107,8 +125,7 @@ namespace GKUI.Forms
             string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
-            using (StreamReader strd = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
-            {
+            using (StreamReader strd = new StreamReader(File.OpenRead(fileName), Encoding.UTF8)) {
                 txtScriptText.Text = strd.ReadToEnd();
                 FileName = fileName;
                 Modified = false;
@@ -121,8 +138,7 @@ namespace GKUI.Forms
             string fileName = AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT, FileName);
             if (string.IsNullOrEmpty(fileName)) return;
 
-            using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8))
-            {
+            using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8)) {
                 strd.Write(txtScriptText.Text);
                 FileName = fileName;
                 Modified = false;
@@ -132,15 +148,12 @@ namespace GKUI.Forms
 
         private void tbRun_Click(object sender, EventArgs e)
         {
-            try
-            {
-                txtDebugOutput.Clear();
+            try {
+                DebugOutput.Clear();
                 using (ScriptEngine scrEngine = new ScriptEngine()) {
-                    scrEngine.lua_run(txtScriptText.Text, fBase, txtDebugOutput);
+                    scrEngine.lua_run(txtScriptText.Text, fBase, ((IScriptEditWin)this).DebugOutput);
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("ScriptEditWin.Run(): " + ex.Message);
                 Logger.LogWrite("ScriptEditWin.Run(): " + ex.StackTrace);
             }
@@ -159,6 +172,11 @@ namespace GKUI.Forms
         public ScriptEditWin(IBaseWindow baseWin)
         {
             InitializeComponent();
+
+            tbNewScript.Image = UIHelper.LoadResourceImage("Resources.btn_create_new.gif");
+            tbLoadScript.Image = UIHelper.LoadResourceImage("Resources.btn_load.gif");
+            tbSaveScript.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");
+            tbRun.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
 
             fBase = baseWin;
 

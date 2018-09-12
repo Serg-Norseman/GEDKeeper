@@ -56,12 +56,6 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        public string Caption
-        {
-            get { return base.Text; }
-            set { base.Text = value; }
-        }
-
         public TreeChartKind ChartKind
         {
             get { return fChartKind; }

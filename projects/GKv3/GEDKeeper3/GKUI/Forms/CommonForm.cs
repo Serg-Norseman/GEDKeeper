@@ -21,6 +21,7 @@
 using System;
 using Eto.Forms;
 using GKCore.Controllers;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -28,22 +29,49 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonForm : Form
+    public class CommonForm : Form, IView
     {
         protected readonly ControlsManager fControlsManager;
+
+        #region View Interface
+
+        public string Caption
+        {
+            get { return base.Title; }
+            set { base.Title = value; }
+        }
+
+        #endregion
 
         public CommonForm()
         {
             fControlsManager = new ControlsManager();
+        }
+
+        public void SetToolTip(Control control, string toolTip)
+        {
+            if (control != null && !string.IsNullOrEmpty(toolTip)) {
+                control.ToolTip = toolTip;
+            }
         }
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public class CommonDialog : Dialog<DialogResult>
+    public class CommonDialog : Dialog<DialogResult>, IView
     {
         protected readonly ControlsManager fControlsManager;
+
+        #region View Interface
+
+        public string Caption
+        {
+            get { return base.Title; }
+            set { base.Title = value; }
+        }
+
+        #endregion
 
         public DialogResult DialogResult
         {
@@ -66,6 +94,13 @@ namespace GKUI.Forms
             ShowInTaskbar = false;
 
             fControlsManager = new ControlsManager();
+        }
+
+        public void SetToolTip(Control control, string toolTip)
+        {
+            if (control != null && !string.IsNullOrEmpty(toolTip)) {
+                control.ToolTip = toolTip;
+            }
         }
 
         public virtual bool ShowModalX(object owner)

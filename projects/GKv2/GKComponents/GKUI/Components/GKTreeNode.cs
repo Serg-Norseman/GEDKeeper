@@ -20,6 +20,7 @@
 
 using System;
 using System.Windows.Forms;
+using GKCore.Controllers;
 
 namespace GKUI.Components
 {
@@ -27,7 +28,7 @@ namespace GKUI.Components
     /// 
     /// </summary>
     [Serializable]
-    public class GKTreeNode : TreeNode
+    public class GKTreeNode : TreeNode, ITVNode
     {
         public GKTreeNode(string text, object tag) : base(text)
         {

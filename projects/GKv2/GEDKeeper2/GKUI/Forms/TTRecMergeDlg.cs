@@ -19,12 +19,12 @@
  */
 
 using System;
-using System.Windows.Forms;
 
-using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -32,36 +32,58 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTRecMergeDlg : CommonDialog
+    public sealed partial class TTRecMergeDlg : EditorDialog, IRecMergeDlg
     {
-        private readonly IBaseWindow fBase;
-        private readonly GEDCOMTree fTree;
-        private GEDCOMRecordType fRMMode;
-        private readonly StringList fRMSkip;
-        private int fRMIndex;
+        private readonly RecMergeController fController;
+
+        #region View Interface
+
+        IMergeControl IRecMergeDlg.MergeCtl
+        {
+            get { return MergeControl; }
+        }
+
+        IButtonHandler IRecMergeDlg.SkipBtn
+        {
+            get { return fControlsManager.GetControlHandler<IButtonHandler>(btnSkip); }
+        }
+
+        ICheckBoxHandler IRecMergeDlg.BirthYearChk
+        {
+            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkBirthYear); }
+        }
+
+        IProgressBarHandler IRecMergeDlg.ProgressBar
+        {
+            get { return fControlsManager.GetControlHandler<IProgressBarHandler>(ProgressBar1); }
+        }
+
+        INumericBoxHandler IRecMergeDlg.NameAccuracyNum
+        {
+            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(edNameAccuracy); }
+        }
+
+        INumericBoxHandler IRecMergeDlg.YearInaccuracyNum
+        {
+            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(edYearInaccuracy); }
+        }
+
+        #endregion
 
         public TTRecMergeDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
+
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fBase = baseWin;
-            fTree = fBase.Context.Tree;
-            fRMSkip = new StringList();
-            fRMMode = GEDCOMRecordType.rtIndividual;
+            InitDialog(baseWin);
+            fController = new RecMergeController(this);
+            fController.Init(baseWin);
 
-            MergeCtl.Base = fBase;
-            MergeCtl.MergeMode = fRMMode;
+            MergeControl.Base = fBase;
+            MergeControl.MergeMode = fController.RMMode;
 
             SetLang();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                fRMSkip.Dispose();
-            }
-            base.Dispose(disposing);
         }
 
         public void SetLang()
@@ -87,100 +109,30 @@ namespace GKUI.Forms
             chkBookmarkMerged.Text = LangMan.LS(LSID.LSID_BookmarkMerged);
         }
 
-        private static bool CheckPersonsEx(GEDCOMIndividualRecord rec1, GEDCOMIndividualRecord rec2)
-        {
-            GEDCOMFamilyRecord fam1 = rec1.GetParentsFamily();
-            GEDCOMFamilyRecord fam2 = rec2.GetParentsFamily();
-
-            return (!Equals(fam1, fam2));
-        }
-
-        private void SearchDuplicates()
-        {
-            MergeCtl.Base = fBase;
-            MergeCtl.MergeMode = fRMMode;
-            
-            MergeCtl.SetRec1(null);
-            MergeCtl.SetRec2(null);
-            
-            MatchParams mParams;
-            //mParams.IndistinctNameMatching = chkIndistinctMatching.Checked;
-            mParams.NamesIndistinctThreshold = (float)decimal.ToDouble(edNameAccuracy.Value) / 100.0f;
-            mParams.DatesCheck = chkBirthYear.Checked;
-            mParams.YearsInaccuracy = decimal.ToInt32(edYearInaccuracy.Value);
-            mParams.CheckEventPlaces = false;
-
-            bool res = false;
-            btnSkip.Enabled = false;
-
-            try {
-                ProgressBar1.Minimum = 0;
-                ProgressBar1.Maximum = fTree.RecordsCount;
-                ProgressBar1.Value = fRMIndex;
-
-                int recNum = fTree.RecordsCount;
-                for (int i = fRMIndex; i < recNum; i++) {
-                    fRMIndex = i;
-                    ProgressBar1.Increment(1);
-
-                    GEDCOMRecord iRec = fTree[i];
-                    if (iRec.RecordType != fRMMode) continue;
-
-                    for (int j = i + 1; j < recNum; j++) {
-                        GEDCOMRecord kRec = fTree[j];
-                        if (kRec.RecordType != fRMMode) continue;
-
-                        if (iRec == kRec) continue;
-                        if (fRMSkip.IndexOf(iRec.XRef + "-" + kRec.XRef) >= 0) continue;
-
-                        res = iRec.IsMatch(kRec, mParams) >= 100.0f;
-
-                        if (res && fRMMode == GEDCOMRecordType.rtIndividual) {
-                            res = CheckPersonsEx((GEDCOMIndividualRecord)iRec, (GEDCOMIndividualRecord)kRec);
-                        }
-
-                        if (res) {
-                            MergeCtl.SetRec1(iRec);
-                            MergeCtl.SetRec2(kRec);
-                            break;
-                        }
-                    }
-
-                    if (res) break;
-                }
-            } finally {
-                btnSkip.Enabled = true;
-            }
-        }
-
         private void radMergeMode_Click(object sender, EventArgs e)
         {
-            if (radPersons.Checked) fRMMode = GEDCOMRecordType.rtIndividual;
-            if (radNotes.Checked) fRMMode = GEDCOMRecordType.rtNote;
-            if (radFamilies.Checked) fRMMode = GEDCOMRecordType.rtFamily;
-            if (radSources.Checked) fRMMode = GEDCOMRecordType.rtSource;
+            if (radPersons.Checked) fController.RMMode = GEDCOMRecordType.rtIndividual;
+            if (radNotes.Checked) fController.RMMode = GEDCOMRecordType.rtNote;
+            if (radFamilies.Checked) fController.RMMode = GEDCOMRecordType.rtFamily;
+            if (radSources.Checked) fController.RMMode = GEDCOMRecordType.rtSource;
 
-            MergeCtl.MergeMode = fRMMode;
+            MergeControl.MergeMode = fController.RMMode;
         }
 
         private void chkBookmarkMerged_CheckedChanged(object sender, EventArgs e)
         {
-            MergeCtl.Bookmark = chkBookmarkMerged.Checked;
+            MergeControl.Bookmark = chkBookmarkMerged.Checked;
         }
 
         private void btnSkip_Click(object sender, EventArgs e)
         {
-            if (MergeCtl.Rec1 != null && MergeCtl.Rec2 != null) {
-                fRMSkip.Add(MergeCtl.Rec1.XRef + "-" + MergeCtl.Rec2.XRef);
-            }
-            SearchDuplicates();
+            fController.Skip();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            fRMIndex = 0;
-            fRMSkip.Clear();
-            SearchDuplicates();
+            fController.Reset();
+            fController.SearchDuplicates();
         }
     }
 }

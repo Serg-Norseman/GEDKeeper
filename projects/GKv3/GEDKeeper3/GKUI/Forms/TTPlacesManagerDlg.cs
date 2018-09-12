@@ -19,12 +19,11 @@
  */
 
 using System;
-using Eto.Forms;
-using BSLib;
-using GKCommon.GEDCOM;
+
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Tools;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -32,23 +31,29 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTPlacesManagerDlg : Dialog
+    public sealed partial class TTPlacesManagerDlg : EditorDialog, IPlacesManagerDlg
     {
-        private readonly IBaseWindow fBase;
-        private readonly GEDCOMTree fTree;
-        private readonly StringList fPlaces;
+        private readonly PlacesManagerController fController;
 
         private GKListView ListPlaces;
+
+        #region View Interface
+
+        IListView IPlacesManagerDlg.PlacesList
+        {
+            get { return ListPlaces; }
+        }
+
+        #endregion
 
         public TTPlacesManagerDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
+
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fBase = baseWin;
-            fTree = fBase.Context.Tree;
-            fPlaces = new StringList();
-            fPlaces.Sorted = true;
+            fController = new PlacesManagerController(this);
+            fController.Init(baseWin);
 
             ListPlaces = new GKListView();
             ListPlaces.MouseDoubleClick += ListPlaces_DblClick;
@@ -62,8 +67,7 @@ namespace GKUI.Forms
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                TreeTools.SearchPlaces_Clear(fPlaces);
-                fPlaces.Dispose();
+                fController.Clear();
             }
             base.Dispose(disposing);
         }
@@ -79,57 +83,17 @@ namespace GKUI.Forms
 
         private void btnAnalysePlaces_Click(object sender, EventArgs e)
         {
-            CheckPlaces();
-        }
-
-        private void CheckPlaces()
-        {
-            ListPlaces.BeginUpdate();
-            try {
-                TreeTools.SearchPlaces(fTree, fPlaces, AppHost.Progress);
-
-                ListPlaces.ClearItems();
-
-                int num4 = fPlaces.Count;
-                for (int i = 0; i < num4; i++) {
-                    PlaceObj placeObj = (PlaceObj)fPlaces.GetObject(i);
-
-                    ListPlaces.AddItem(placeObj, new object[] { fPlaces[i], placeObj.Facts.Count });
-                }
-            } finally {
-                ListPlaces.EndUpdate();
-            }
+            fController.CheckPlaces();
         }
 
         private void btnIntoList_Click(object sender, EventArgs e)
         {
-            ListPlaces_DblClick(null, null);
+            fController.CreateLocationRecord();
         }
 
         private void ListPlaces_DblClick(object sender, EventArgs e)
         {
-            GKListItem item = ListPlaces.GetSelectedItem();
-            if (item == null) return;
-
-            PlaceObj pObj = item.Data as PlaceObj;
-            if (pObj == null) return;
-
-            if (pObj.Name.IndexOf("[*]") == 0) {
-                AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_PlaceAlreadyInBook));
-            } else {
-                GEDCOMLocationRecord loc = fBase.Context.SelectRecord(GEDCOMRecordType.rtLocation, new object[] { pObj.Name }) as GEDCOMLocationRecord;
-                if (loc == null) return;
-
-                int num = pObj.Facts.Count;
-                for (int i = 0; i < num; i++) {
-                    GEDCOMCustomEvent evt = pObj.Facts[i];
-                    evt.Place.StringValue = loc.LocationName;
-                    evt.Place.Location.Value = loc;
-                }
-
-                CheckPlaces();
-                fBase.RefreshLists(false);
-            }
+            fController.CreateLocationRecord();
         }
     }
 }

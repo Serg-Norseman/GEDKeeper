@@ -321,6 +321,16 @@ namespace GKUI.Providers
             set { Control.Text = value; }
         }
 
+        public void AppendText(string text)
+        {
+            Control.AppendText(text);
+        }
+
+        public void Clear()
+        {
+            Control.Clear();
+        }
+
         public void Select()
         {
             Control.Select();
@@ -357,6 +367,16 @@ namespace GKUI.Providers
             set { Control.Text = value; }
         }
 
+        public void AppendText(string text)
+        {
+            Control.AppendText(text);
+        }
+
+        public void Clear()
+        {
+            Control.Clear();
+        }
+
         public void Select()
         {
             Control.Select();
@@ -387,10 +407,10 @@ namespace GKUI.Providers
             set { Control.Text = value; }
         }
 
-        public int Value
+        public double Value
         {
-            get { return (int)Control.Value; }
-            set { Control.Value = value; }
+            get { return decimal.ToDouble(Control.Value); }
+            set { Control.Value = (decimal)value; }
         }
 
         public void Select()
@@ -411,6 +431,17 @@ namespace GKUI.Providers
             set { Control.Enabled = value; }
         }
 
+        public ITVNode AddNode(ITVNode parent, string name, object tag)
+        {
+            var node = new GKTreeNode(name, tag);
+            if (parent == null) {
+                Control.Nodes.Add(node);
+            } else {
+                ((GKTreeNode)parent).Nodes.Add(node);
+            }
+            return node;
+        }
+
         public void BeginUpdate()
         {
             Control.BeginUpdate();
@@ -426,12 +457,59 @@ namespace GKUI.Providers
             Control.EndUpdate();
         }
 
-        public void Expand(object node)
+        public void Expand(ITVNode node)
         {
             TreeNode treeNode = node as TreeNode;
             if (treeNode != null) {
                 treeNode.ExpandAll();
             }
+        }
+    }
+
+    public sealed class ProgressBarHandler : ControlHandler<ProgressBar, ProgressBarHandler>, IProgressBarHandler
+    {
+        public ProgressBarHandler(ProgressBar control) : base(control)
+        {
+        }
+
+        public int Minimum
+        {
+            get { return Control.Minimum; }
+            set { Control.Minimum = value; }
+        }
+
+        public int Maximum
+        {
+            get { return Control.Maximum; }
+            set { Control.Maximum = value; }
+        }
+
+        public int Value
+        {
+            get { return Control.Value; }
+            set { Control.Value = value; }
+        }
+
+        public void Increment(int value)
+        {
+            Control.Increment(value);
+        }
+    }
+
+    public sealed class LogChartHandler : ControlHandler<LogChart, LogChartHandler>, ILogChart
+    {
+        public LogChartHandler(LogChart control) : base(control)
+        {
+        }
+
+        public void AddFragment(int val)
+        {
+            Control.AddFragment(val);
+        }
+
+        public void Clear()
+        {
+            Control.Clear();
         }
     }
 }

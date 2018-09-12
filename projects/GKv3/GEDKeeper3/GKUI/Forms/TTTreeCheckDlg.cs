@@ -19,12 +19,13 @@
  */
 
 using System;
-using System.Collections.Generic;
-using Eto.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Tools;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -32,22 +33,29 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTTreeCheckDlg : Dialog
+    public sealed partial class TTTreeCheckDlg : EditorDialog, ITreeCheckDlg
     {
-        private readonly IBaseWindow fBase;
-        private readonly GEDCOMTree fTree;
-        private readonly List<TreeTools.CheckObj> fChecksList;
+        private readonly TreeCheckController fController;
 
         private GKListView ListChecks;
+
+        #region View Interface
+
+        IListView ITreeCheckDlg.ChecksList
+        {
+            get { return ListChecks; }
+        }
+
+        #endregion
 
         public TTTreeCheckDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
+
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fBase = baseWin;
-            fTree = fBase.Context.Tree;
-            fChecksList = new List<TreeTools.CheckObj>();
+            fController = new TreeCheckController(this);
+            fController.Init(baseWin);
 
             ListChecks = new GKListView();
             ListChecks.MouseDoubleClick += ListChecks_DblClick;
@@ -58,14 +66,6 @@ namespace GKUI.Forms
             panProblemsContainer.Content = ListChecks;
 
             SetLang();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                //fChecksList.Dispose();
-            }
-            base.Dispose(disposing);
         }
 
         public void SetLang()
@@ -79,27 +79,7 @@ namespace GKUI.Forms
 
         private void btnAnalyseBase_Click(object sender, EventArgs e)
         {
-            CheckBase();
-        }
-
-        private void CheckBase()
-        {
-            TreeTools.CheckBase(fBase, fChecksList);
-
-            ListChecks.BeginUpdate();
-            try {
-                ListChecks.ClearItems();
-
-                foreach (TreeTools.CheckObj checkObj in fChecksList) {
-                    ListChecks.AddItem(checkObj, false, checkObj.GetRecordName(),
-                                       checkObj.Comment,
-                                       LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve]));
-                }
-
-                //ListChecks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            } finally {
-                ListChecks.EndUpdate();
-            }
+            fController.CheckBase();
         }
 
         private void btnBaseRepair_Click(object sender, EventArgs e)
@@ -116,16 +96,13 @@ namespace GKUI.Forms
                 }
             } finally {
                 fBase.RefreshLists(false);
-                CheckBase();
+                fController.CheckBase();
             }
         }
 
         private void ListChecks_DblClick(object sender, EventArgs e)
         {
-            GKListItem item = ListChecks.GetSelectedItem();
-            if (item == null) return;
-
-            GEDCOMRecord rec = ((TreeTools.CheckObj)item.Data).Rec;
+            GEDCOMRecord rec = ((TreeTools.CheckObj)ListChecks.GetSelectedData()).Rec;
             if (rec == null) return;
 
             fBase.SelectRecordByXRef(rec.XRef);

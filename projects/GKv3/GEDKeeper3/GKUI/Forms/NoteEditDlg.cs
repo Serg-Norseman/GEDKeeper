@@ -25,7 +25,6 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
 
@@ -44,10 +43,14 @@ namespace GKUI.Forms
             set { fController.NoteRecord = value; }
         }
 
+        #region View Interface
+
         ITextBoxHandler INoteEditDlg.Note
         {
             get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtNote); }
         }
+
+        #endregion
 
         private void btnAccept_Click(object sender, EventArgs e)
         {

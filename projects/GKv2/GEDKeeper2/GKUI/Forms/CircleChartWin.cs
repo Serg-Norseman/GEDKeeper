@@ -47,12 +47,6 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        public string Caption
-        {
-            get { return base.Text; }
-            set { base.Text = value; }
-        }
-
         ICircleChart ICircleChartWin.CircleChart
         {
             get { return fCircleChart; }

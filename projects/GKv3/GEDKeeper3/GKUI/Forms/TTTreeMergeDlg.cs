@@ -19,11 +19,11 @@
  */
 
 using System;
-using Eto.Forms;
-using GKCommon.GEDCOM;
+
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Tools;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -31,27 +31,34 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTTreeMergeDlg : Dialog
+    public sealed partial class TTTreeMergeDlg : EditorDialog, ITreeMergeDlg
     {
-        private readonly IBaseWindow fBase;
-        private readonly GEDCOMTree fTree;
+        private readonly TreeMergeController fController;
+
+        #region View Interface
+
+        ITextBoxHandler ITreeMergeDlg.UpdateBase
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(edUpdateBase); }
+        }
+
+        ITextBoxHandler ITreeMergeDlg.SyncLog
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(mSyncRes); }
+        }
+
+        #endregion
 
         public TTTreeMergeDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
+
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fBase = baseWin;
-            fTree = fBase.Context.Tree;
+            fController = new TreeMergeController(this);
+            fController.Init(baseWin);
 
             SetLang();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-            }
-            base.Dispose(disposing);
         }
 
         public void SetLang()
@@ -67,12 +74,7 @@ namespace GKUI.Forms
 
         private void btnTreeMerge_Click(object sender, EventArgs e)
         {
-            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
-            if (string.IsNullOrEmpty(fileName)) return;
-
-            edUpdateBase.Text = fileName;
-            TreeTools.MergeTreeFile(fBase.Context.Tree, edUpdateBase.Text, mSyncRes);
-            fBase.RefreshLists(false);
+            fController.Merge();
         }
     }
 }

@@ -91,7 +91,6 @@
       <DependentUpon>MediaPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Components\ObservableExtList.cs" />
-    <Compile Include="GKUI\Components\TextBoxEx.cs" />
     <Compile Include="GKUI\Components\UIHelper.cs" />
     <Compile Include="GKUI\Components\EtoGraphics.cs" />
     <Compile Include="GKUI\Components\ZGraphControl.cs" />

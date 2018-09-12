@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using BSLib;
 using BSLib.SmartGraph;
 using GKCommon.GEDCOM;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -811,7 +812,7 @@ namespace GKCore.Tools
 
         #region Merge trees and records
 
-        public static void MergeTree(GEDCOMTree mainTree, GEDCOMTree extTree, ITextControl logBox)
+        public static void MergeTree(GEDCOMTree mainTree, GEDCOMTree extTree, ITextBoxHandler logBox)
         {
             if (mainTree == null)
                 throw new ArgumentNullException("mainTree");
@@ -847,7 +848,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void MergeTreeFile(GEDCOMTree mainTree, string fileName, ITextControl logBox)
+        public static void MergeTreeFile(GEDCOMTree mainTree, string fileName, ITextBoxHandler logBox)
         {
             if (mainTree == null)
                 throw new ArgumentNullException("mainTree");
@@ -1526,7 +1527,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void CompareTree(IBaseContext context, string fileName, ITextControl logBox)
+        public static void CompareTree(IBaseContext context, string fileName, ITextBoxHandler logBox)
         {
             if (context == null)
                 throw new ArgumentNullException("context");

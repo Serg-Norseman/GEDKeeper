@@ -2,8 +2,6 @@
 {
 	partial class EventEditDlg
 	{
-		private System.ComponentModel.IContainer components = null;
-
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.TabControl tabsData;
@@ -34,19 +32,8 @@
 		private System.Windows.Forms.CheckBox btnBC1;
 		private System.Windows.Forms.CheckBox btnBC2;
 
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing) {
-				if (components != null) {
-					components.Dispose();
-				}
-			}
-			base.Dispose(disposing);
-		}
-
 		private void InitializeComponent()
 		{
-		    this.components = new System.ComponentModel.Container();
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
 		    this.tabsData = new System.Windows.Forms.TabControl();
@@ -76,7 +63,6 @@
 		    this.pageMultimedia = new System.Windows.Forms.TabPage();
 		    this.pageSources = new System.Windows.Forms.TabPage();
 		    this.btnAddress = new System.Windows.Forms.Button();
-		    this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 		    this.tabsData.SuspendLayout();
 		    this.pageCommon.SuspendLayout();
 		    this.SuspendLayout();
@@ -393,8 +379,6 @@
 		    this.pageCommon.ResumeLayout(false);
 		    this.pageCommon.PerformLayout();
 		    this.ResumeLayout(false);
-
 		}
-		private System.Windows.Forms.ToolTip toolTip1;
 	}
 }

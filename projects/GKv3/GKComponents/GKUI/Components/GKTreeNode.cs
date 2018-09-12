@@ -19,13 +19,14 @@
  */
 
 using Eto.Forms;
+using GKCore.Controllers;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public class GKTreeNode : TreeItem
+    public class GKTreeNode : TreeItem, ITVNode
     {
         public GKTreeNode(string text, object tag) : base()
         {

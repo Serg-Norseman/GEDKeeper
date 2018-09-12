@@ -162,8 +162,8 @@ namespace GKUI.Forms
             lblCause.Text = LangMan.LS(LSID.LSID_Cause);
             lblOrg.Text = LangMan.LS(LSID.LSID_Agency);
 
-            toolTip1.SetToolTip(btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
-            toolTip1.SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
+            SetToolTip(btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
+            SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
 
             fController = new EventEditDlgController(this);
         }

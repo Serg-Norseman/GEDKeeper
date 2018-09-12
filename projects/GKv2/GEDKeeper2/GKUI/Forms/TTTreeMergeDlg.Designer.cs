@@ -11,7 +11,7 @@
 		private System.Windows.Forms.Label lblOtherBase;
 		private System.Windows.Forms.TextBox edUpdateBase;
 		private System.Windows.Forms.Button btnTreeMerge;
-		private GKUI.Components.TextBoxEx mSyncRes;
+		private System.Windows.Forms.TextBox mSyncRes;
 
 		private void InitializeComponent()
 		{
@@ -22,7 +22,7 @@
 		    this.edMasterBase = new System.Windows.Forms.TextBox();
 		    this.edUpdateBase = new System.Windows.Forms.TextBox();
 		    this.btnTreeMerge = new System.Windows.Forms.Button();
-		    this.mSyncRes = new GKUI.Components.TextBoxEx();
+		    this.mSyncRes = new System.Windows.Forms.TextBox();
 		    this.pageTreeMergeOptions = new System.Windows.Forms.TabPage();
 		    this.btnClose = new System.Windows.Forms.Button();
 		    this.tabsTools.SuspendLayout();

@@ -47,16 +47,6 @@ namespace GKUI.Forms
             set { fController.FileRef = value; }
         }
 
-        #region View Interface
-
-        public string Caption
-        {
-            get { return base.Text; }
-            set { base.Text = value; }
-        }
-
-        #endregion
-
         public void SetViewText(string text)
         {
             try {
@@ -128,7 +118,7 @@ namespace GKUI.Forms
                 if (mmLink != null && mmLink.IsPrimary) {
                     var indiRec = mmLink.Parent as GEDCOMIndividualRecord;
                     string indiName = GKUtils.GetNameString(indiRec, true, false);
-                    var region = UIHelper.Rt2Rt(mmLink.CutoutPosition.Value);
+                    var region = mmLink.CutoutPosition.Value;
 
                     imageCtl.NamedRegions.Add(new NamedRegion(indiName, region));
                 }

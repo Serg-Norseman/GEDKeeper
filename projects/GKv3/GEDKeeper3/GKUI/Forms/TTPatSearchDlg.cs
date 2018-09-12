@@ -19,12 +19,12 @@
  */
 
 using System;
-using Eto.Forms;
-using BSLib;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -32,20 +32,39 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTPatSearchDlg : Dialog
+    public sealed partial class TTPatSearchDlg : EditorDialog, IPatriarchsSearchDlg
     {
-        private readonly IBaseWindow fBase;
-        private readonly GEDCOMTree fTree;
+        private readonly PatriarchsSearchController fController;
 
         private GKListView ListPatriarchs;
+
+        #region View Interface
+
+        INumericBoxHandler IPatriarchsSearchDlg.MinGensNum
+        {
+            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(edMinGens); }
+        }
+
+        ICheckBoxHandler IPatriarchsSearchDlg.WithoutDatesCheck
+        {
+            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkWithoutDates); }
+        }
+
+        IListView IPatriarchsSearchDlg.PatriarchsList
+        {
+            get { return ListPatriarchs; }
+        }
+
+        #endregion
 
         public TTPatSearchDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
+
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fBase = baseWin;
-            fTree = fBase.Context.Tree;
+            fController = new PatriarchsSearchController(this);
+            fController.Init(baseWin);
 
             ListPatriarchs = new GKListView();
             ListPatriarchs.MouseDoubleClick += ListPatriarchs_DblClick;
@@ -56,13 +75,6 @@ namespace GKUI.Forms
             panPatriarchsContainer.Content = ListPatriarchs;
 
             SetLang();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-            }
-            base.Dispose(disposing);
         }
 
         public void SetLang()
@@ -79,62 +91,21 @@ namespace GKUI.Forms
 
         private void ListPatriarchs_DblClick(object sender, EventArgs e)
         {
-            GKListItem item = ListPatriarchs.GetSelectedItem();
-            if (item == null) return;
-
-            GEDCOMIndividualRecord iRec = item.Data as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord iRec = ListPatriarchs.GetSelectedData() as GEDCOMIndividualRecord;
             if (iRec == null) return;
 
             fBase.SelectRecordByXRef(iRec.XRef);
             Close();
         }
 
-        private static int PatriarchsCompare(object item1, object item2)
-        {
-            return ((PatriarchObj)item1).BirthYear - ((PatriarchObj)item2).BirthYear;
-        }
-
         private void btnPatSearch_Click(object sender, EventArgs e)
         {
-            ListPatriarchs.BeginUpdate();
-            ExtList<PatriarchObj> lst = null;
-            try {
-                ListPatriarchs.ClearItems();
-                lst = PatriarchsMan.GetPatriarchsList(fBase.Context,
-                                                      (int)edMinGens.Value, !chkWithoutDates.Checked.GetValueOrDefault());
-                lst.QuickSort(PatriarchsCompare);
-
-                int num = lst.Count;
-                for (int i = 0; i < num; i++) {
-                    PatriarchObj pObj = lst[i];
-                    string pSign = ((pObj.IRec.Patriarch) ? "[*] " : "");
-
-                    ListPatriarchs.AddItem(pObj.IRec, new object[] { pSign + GKUtils.GetNameString(pObj.IRec, true, false),
-                                               pObj.BirthYear,
-                                               pObj.DescendantsCount,
-                                               pObj.DescGenerations });
-                }
-            } finally {
-                if (lst != null) lst.Dispose();
-                ListPatriarchs.EndUpdate();
-            }
+            fController.Search();
         }
 
         private void btnSetPatriarch_Click(object sender, EventArgs e)
         {
-            try {
-                GKListItem item = ListPatriarchs.GetSelectedItem();
-                if (item == null) return;
-
-                GEDCOMIndividualRecord iRec = item.Data as GEDCOMIndividualRecord;
-                if (iRec != null) {
-                    iRec.Patriarch = true;
-                }
-
-                fBase.RefreshLists(false);
-            } finally {
-                btnPatSearch_Click(null, null);
-            }
+            fController.SetPatriarch();
         }
 
         private void btnPatriarchsDiagram_Click(object sender, EventArgs e)

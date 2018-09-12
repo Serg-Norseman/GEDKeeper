@@ -8,7 +8,7 @@ namespace GKUI.Forms
     {
         private TabControl tabsTools;
         private TabPage pageTreeCompare;
-        private GKUI.Components.TextBoxEx ListCompare;
+        private TextArea ListCompare;
         private Button btnClose;
         private Label lblFile;
         private TextBox txtCompareFile;
@@ -73,7 +73,7 @@ namespace GKUI.Forms
                 }
             };
 
-            ListCompare = new GKUI.Components.TextBoxEx();
+            ListCompare = new TextArea();
             ListCompare.ReadOnly = true;
             ListCompare.Height = 160;
 

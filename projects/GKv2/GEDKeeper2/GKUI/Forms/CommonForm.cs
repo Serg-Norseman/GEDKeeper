@@ -21,19 +21,52 @@
 using System;
 using System.Windows.Forms;
 using GKCore.Controllers;
+using GKCore.UIContracts;
 
 namespace GKUI.Forms
 {
     /// <summary>
     /// 
     /// </summary>
-    public class CommonForm : Form
+    public class CommonForm : Form, IView
     {
+        private System.ComponentModel.IContainer fComponents;
+        private ToolTip fToolTip;
+
         protected readonly ControlsManager fControlsManager;
+
+        #region View Interface
+
+        public string Caption
+        {
+            get { return base.Text; }
+            set { base.Text = value; }
+        }
+
+        #endregion
 
         public CommonForm()
         {
+            fComponents = new System.ComponentModel.Container();
+            fToolTip = new ToolTip(this.fComponents);
+
             fControlsManager = new ControlsManager();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                if (fComponents != null) fComponents.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        public void SetToolTip(Control control, string toolTip)
+        {
+            //Control ctl = control as Control;
+            if (control != null && !string.IsNullOrEmpty(toolTip)) {
+                fToolTip.SetToolTip(control, toolTip);
+            }
         }
     }
 

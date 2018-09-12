@@ -17,12 +17,9 @@
 		private System.Windows.Forms.ComboBox cmbGoalType;
 		private System.Windows.Forms.TextBox txtGoal;
 		private System.Windows.Forms.Button btnGoalSelect;
-		private System.ComponentModel.IContainer components;
-		private System.Windows.Forms.ToolTip toolTip1;
 
 		private void InitializeComponent()
 		{
-		    this.components = new System.ComponentModel.Container();
 		    this.GroupBox1 = new System.Windows.Forms.GroupBox();
 		    this.lblPriority = new System.Windows.Forms.Label();
 		    this.lblStartDate = new System.Windows.Forms.Label();
@@ -38,7 +35,6 @@
 		    this.btnCancel = new System.Windows.Forms.Button();
 		    this.tabsData = new System.Windows.Forms.TabControl();
 		    this.pageNotes = new System.Windows.Forms.TabPage();
-		    this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 		    this.GroupBox1.SuspendLayout();
 		    this.tabsData.SuspendLayout();
 		    this.SuspendLayout();

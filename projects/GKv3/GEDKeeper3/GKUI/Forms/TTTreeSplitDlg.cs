@@ -19,14 +19,12 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using Eto.Forms;
-using GKCommon.GEDCOM;
+
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Options;
 using GKCore.Tools;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -34,30 +32,34 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTTreeSplitDlg : Dialog
+    public sealed partial class TTTreeSplitDlg : EditorDialog, ITreeSplitDlg
     {
-        private readonly IBaseWindow fBase;
-        private readonly GEDCOMTree fTree;
-        private readonly List<GEDCOMRecord> fSplitList;
+        private readonly TreeSplitController fController;
+
+        #region View Interface
+
+        IListView ITreeSplitDlg.SelectedList
+        {
+            get { return ListSelected; }
+        }
+
+        IListView ITreeSplitDlg.SkippedList
+        {
+            get { return ListSkipped; }
+        }
+
+        #endregion
 
         public TTTreeSplitDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
+
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fBase = baseWin;
-            fTree = fBase.Context.Tree;
-            fSplitList = new List<GEDCOMRecord>();
+            fController = new TreeSplitController(this);
+            fController.Init(baseWin);
 
             SetLang();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                //fSplitList.Dispose();
-            }
-            base.Dispose(disposing);
         }
 
         public void SetLang()
@@ -73,104 +75,34 @@ namespace GKUI.Forms
             btnSave.Text = LangMan.LS(LSID.LSID_MIFileSaveAs);
         }
 
-        private void UpdateSplitLists()
-        {
-            //ListSelected.BeginUpdate();
-            ListSelected.Items.Clear();
-            //ListSkipped.BeginUpdate();
-            ListSkipped.Items.Clear();
-            try {
-                int cnt = 0;
-                int num = fTree.RecordsCount;
-                for (int i = 0; i < num; i++) {
-                    GEDCOMRecord rec = fTree[i];
-                    if (rec is GEDCOMIndividualRecord) {
-                        cnt++;
-                        GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
-                        string st = iRec.XRef + " / " + GKUtils.GetNameString(iRec, true, false);
-
-                        if (fSplitList.IndexOf(iRec) < 0) {
-                            ListSkipped.Items.Add(st);
-                        } else {
-                            ListSelected.Items.Add(st);
-                        }
-                    }
-                }
-                Title = fSplitList.Count.ToString() + @" / " + cnt.ToString();
-            } finally {
-                //ListSelected.EndUpdate();
-                //ListSkipped.EndUpdate();
-            }
-        }
-
-        private void Select(GEDCOMIndividualRecord startPerson, TreeTools.TreeWalkMode walkMode)
-        {
-            fSplitList.Clear();
-
-            if (startPerson == null) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
-            } else {
-                TreeTools.WalkTree(startPerson, walkMode, fSplitList);
-            }
-
-            UpdateSplitLists();
-        }
-
         private void btnSelectFamily_Click(object sender, EventArgs e)
         {
-            Select(fBase.GetSelectedPerson(), TreeTools.TreeWalkMode.twmFamily);
+            fController.Select(fBase.GetSelectedPerson(), TreeTools.TreeWalkMode.twmFamily);
         }
 
         private void btnSelectAncestors_Click(object sender, EventArgs e)
         {
-            Select(fBase.GetSelectedPerson(), TreeTools.TreeWalkMode.twmAncestors);
+            fController.Select(fBase.GetSelectedPerson(), TreeTools.TreeWalkMode.twmAncestors);
         }
 
         private void btnSelectDescendants_Click(object sender, EventArgs e)
         {
-            Select(fBase.GetSelectedPerson(), TreeTools.TreeWalkMode.twmDescendants);
+            fController.Select(fBase.GetSelectedPerson(), TreeTools.TreeWalkMode.twmDescendants);
         }
 
         private void btnSelectAll_Click(object sender, EventArgs e)
         {
-            Select(fBase.GetSelectedPerson(), TreeTools.TreeWalkMode.twmAll);
+            fController.Select(fBase.GetSelectedPerson(), TreeTools.TreeWalkMode.twmAll);
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            int num = fSplitList.Count;
-            if (num == 0) return;
-
-            for (int i = 0; i < num; i++) {
-                object obj = fSplitList[i];
-
-                if (obj is GEDCOMIndividualRecord) {
-                    BaseController.DeleteRecord(fBase, obj as GEDCOMIndividualRecord, false);
-                }
-            }
-
-            fSplitList.Clear();
-            UpdateSplitLists();
-            fBase.RefreshLists(false);
-
-            AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_RecsDeleted));
+            fController.Delete();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, "");
-            if (string.IsNullOrEmpty(fileName)) return;
-
-            TreeTools.CheckRelations(fSplitList);
-
-            GKUtils.PrepareHeader(fTree, fileName, GlobalOptions.Instance.DefCharacterSet, true);
-
-            using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(fTree.Header.CharacterSet))) {
-                var gedcomProvider = new GEDCOMProvider(fTree);
-                gedcomProvider.SaveToStream(fs, fSplitList);
-
-                fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
-            }
+            fController.Save();
         }
     }
 }

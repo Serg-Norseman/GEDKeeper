@@ -69,7 +69,7 @@ namespace GKUI.Forms
             lblRelation.Text = LangMan.LS(LSID.LSID_Relation);
             lblPerson.Text = LangMan.LS(LSID.LSID_Person);
 
-            btnPersonAdd.ToolTip = LangMan.LS(LSID.LSID_PersonAttachTip);
+            SetToolTip(btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
 
             fController = new AssociationEditDlgController(this);
         }

@@ -19,13 +19,11 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using Eto.Forms;
-using GKCommon.GEDCOM;
+
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Tools;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -33,27 +31,34 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTTreeCompareDlg : Dialog
+    public sealed partial class TTTreeCompareDlg : EditorDialog, ITreeCompareDlg
     {
-        private readonly IBaseWindow fBase;
-        private readonly GEDCOMTree fTree;
+        private readonly TreeCompareController fController;
+
+        #region View Interface
+
+        ITextBoxHandler ITreeCompareDlg.ExternalBase
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtCompareFile); }
+        }
+
+        ITextBoxHandler ITreeCompareDlg.CompareOutput
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(ListCompare); }
+        }
+
+        #endregion
 
         public TTTreeCompareDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
+
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fBase = baseWin;
-            fTree = fBase.Context.Tree;
-
             SetLang();
-        }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-            }
-            base.Dispose(disposing);
+            fController = new TreeCompareController(this);
+            fController.Init(baseWin);
         }
 
         public void SetLang()
@@ -70,25 +75,15 @@ namespace GKUI.Forms
             btnMatch.Text = LangMan.LS(LSID.LSID_Match);
         }
 
-        private string external_match_db;
-        private enum TreeMatchType { tmtInternal, tmtExternal, tmtAnalysis }
-
         private void btnFileChoose_Click(object sender, EventArgs e)
         {
             string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
-            external_match_db = fileName;
-            txtCompareFile.Text = Path.GetFileName(external_match_db);
+            txtCompareFile.Text = fileName;
         }
 
-        private void DuplicateFoundFunc(GEDCOMIndividualRecord indivA, GEDCOMIndividualRecord indivB)
-        {
-            ListCompare.AppendText("    * [" + GKUtils.GetNameString(indivA, true, false) + "]\r\n");
-            ListCompare.AppendText("      [" + GKUtils.GetNameString(indivB, true, false) + "]\r\n\r\n");
-        }
-
-        private TreeMatchType GetTreeMatchType()
+        public TreeMatchType GetTreeMatchType()
         {
             TreeMatchType type =
                 ((radMatchInternal.Checked) ?
@@ -100,38 +95,7 @@ namespace GKUI.Forms
 
         private void btnMatch_Click(object sender, EventArgs e)
         {
-            TreeMatchType type = GetTreeMatchType();
-
-            ListCompare.Clear();
-
-            switch (type) {
-                case TreeMatchType.tmtInternal:
-                    TreeTools.FindDuplicates(fTree, fTree, 90 /*min: 80-85*/, DuplicateFoundFunc, AppHost.Progress);
-                    break;
-
-                case TreeMatchType.tmtExternal:
-                    TreeTools.CompareTree(fBase.Context, external_match_db, ListCompare);
-                    break;
-
-                case TreeMatchType.tmtAnalysis:
-                    {
-                        List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(fBase);
-
-                        ListCompare.AppendText("  " + LangMan.LS(LSID.LSID_SearchUnlinkedNamesakes) + ":\r\n");
-                        if (uln != null && uln.Count > 0)
-                        {
-                            foreach (TreeTools.ULIndividual indiv in uln)
-                            {
-                                ListCompare.AppendText("    - [" + indiv.Family + "] " + GKUtils.GetNameString(indiv.IRec, true, false) + "\r\n");
-                            }
-                        }
-                        else
-                        {
-                            ListCompare.AppendText("    - not found.");
-                        }
-                        break;
-                    }
-            }
+            fController.Match();
         }
 
         private void rbtnMatch_CheckedChanged(object sender, EventArgs e)

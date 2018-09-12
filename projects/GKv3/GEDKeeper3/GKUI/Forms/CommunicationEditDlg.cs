@@ -127,7 +127,7 @@ namespace GKUI.Forms
             lblType.Text = LangMan.LS(LSID.LSID_Type);
             lblDate.Text = LangMan.LS(LSID.LSID_Date);
 
-            btnPersonAdd.ToolTip = LangMan.LS(LSID.LSID_PersonAttachTip);
+            SetToolTip(btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
 
             fController = new CommunicationEditDlgController(this);
         }

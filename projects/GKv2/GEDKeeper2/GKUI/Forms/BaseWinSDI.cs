@@ -1475,7 +1475,7 @@ namespace GKUI.Forms
             //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             //#else
             MapsViewerWin mapsWin = new MapsViewerWin(this);
-            mapsWin.ProcessMap();
+            AppHost.Instance.ShowWindow(mapsWin);
             //#endif
         }
 

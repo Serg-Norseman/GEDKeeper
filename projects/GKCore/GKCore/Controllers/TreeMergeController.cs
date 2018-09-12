@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,24 +18,33 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using Eto.Forms;
+using System;
+using GKCore.Tools;
 using GKCore.UIContracts;
 
-namespace GKUI.Components
+namespace GKCore.Controllers
 {
     /// <summary>
     /// 
     /// </summary>
-    public class TextBoxEx : TextArea, ITextControl
+    public class TreeMergeController : DialogController<ITreeMergeDlg>
     {
-        public void AppendText(string text)
+        public TreeMergeController(ITreeMergeDlg view) : base(view)
         {
-            base.Append(text, true);
         }
 
-        public void Clear()
+        public override void UpdateView()
         {
-            base.Text = string.Empty;
+        }
+
+        public void Merge()
+        {
+            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            if (string.IsNullOrEmpty(fileName)) return;
+
+            fView.UpdateBase.Text = fileName;
+            TreeTools.MergeTreeFile(fBase.Context.Tree, fileName, fView.SyncLog);
+            fBase.RefreshLists(false);
         }
     }
 }

@@ -10,8 +10,8 @@ namespace GKUI.Forms
         private Button btnClose;
         private TabPage pageTreeSplit;
         private Button btnSelectAll;
-        private ListBox ListSelected;
-        private ListBox ListSkipped;
+        private GKListView ListSelected;
+        private GKListView ListSkipped;
         private Button btnSelectFamily;
         private Button btnSelectAncestors;
         private Button btnSelectDescendants;
@@ -22,10 +22,10 @@ namespace GKUI.Forms
         {
             SuspendLayout();
 
-            ListSelected = new ListBox();
+            ListSelected = new GKListView();
             ListSelected.Height = 200;
 
-            ListSkipped = new ListBox();
+            ListSkipped = new GKListView();
             ListSkipped.Height = 200;
 
             btnSelectAll = new Button();

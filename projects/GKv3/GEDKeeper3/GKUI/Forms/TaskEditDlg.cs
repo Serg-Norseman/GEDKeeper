@@ -131,7 +131,7 @@ namespace GKUI.Forms
             lblStartDate.Text = LangMan.LS(LSID.LSID_StartDate);
             lblStopDate.Text = LangMan.LS(LSID.LSID_StopDate);
 
-            btnGoalSelect.ToolTip = LangMan.LS(LSID.LSID_GoalSelectTip);
+            SetToolTip(btnGoalSelect, LangMan.LS(LSID.LSID_GoalSelectTip));
 
             fController = new TaskEditDlgController(this);
         }

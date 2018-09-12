@@ -18,12 +18,9 @@
 		private System.Windows.Forms.Label lblCorresponder;
 		private System.Windows.Forms.TextBox txtCorresponder;
 		private System.Windows.Forms.Button btnPersonAdd;
-		private System.ComponentModel.IContainer components;
-		private System.Windows.Forms.ToolTip toolTip1;
 
 		private void InitializeComponent()
 		{
-		    this.components = new System.ComponentModel.Container();
 		    this.GroupBox1 = new System.Windows.Forms.GroupBox();
 		    this.lblTheme = new System.Windows.Forms.Label();
 		    this.lblDate = new System.Windows.Forms.Label();
@@ -40,7 +37,6 @@
 		    this.tabsData = new System.Windows.Forms.TabControl();
 		    this.pageNotes = new System.Windows.Forms.TabPage();
 		    this.pageMultimedia = new System.Windows.Forms.TabPage();
-		    this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 		    this.GroupBox1.SuspendLayout();
 		    this.tabsData.SuspendLayout();
 		    this.SuspendLayout();

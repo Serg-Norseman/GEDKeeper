@@ -26,13 +26,14 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKCore.UIContracts;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public class GKMergeControl : Panel
+    public class GKMergeControl : Panel, IMergeControl
     {
         private GEDCOMRecord fRec1;
         private GEDCOMRecord fRec2;
