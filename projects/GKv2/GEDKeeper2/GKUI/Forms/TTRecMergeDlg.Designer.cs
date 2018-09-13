@@ -2,9 +2,6 @@
 {
 	partial class TTRecMergeDlg
 	{
-		private System.Windows.Forms.TabControl tabsTools;
-		private System.Windows.Forms.Button btnClose;
-		private System.Windows.Forms.TabPage pageRecMerge;
 		private System.Windows.Forms.TabControl PageControl1;
 		private System.Windows.Forms.TabPage pageMerge;
 		private System.Windows.Forms.Button btnAutoSearch;
@@ -29,8 +26,6 @@
 
 		private void InitializeComponent()
 		{
-		    this.tabsTools = new System.Windows.Forms.TabControl();
-		    this.pageRecMerge = new System.Windows.Forms.TabPage();
 		    this.PageControl1 = new System.Windows.Forms.TabControl();
 		    this.pageMerge = new System.Windows.Forms.TabPage();
 		    this.MergeControl = new GKUI.Components.GKMergeControl();
@@ -52,9 +47,6 @@
 		    this.edNameAccuracy = new System.Windows.Forms.NumericUpDown();
 		    this.edYearInaccuracy = new System.Windows.Forms.NumericUpDown();
 		    this.chkBirthYear = new System.Windows.Forms.CheckBox();
-		    this.btnClose = new System.Windows.Forms.Button();
-		    this.tabsTools.SuspendLayout();
-		    this.pageRecMerge.SuspendLayout();
 		    this.PageControl1.SuspendLayout();
 		    this.pageMerge.SuspendLayout();
 		    this.pageMergeOptions.SuspendLayout();
@@ -65,32 +57,15 @@
 		    ((System.ComponentModel.ISupportInitialize)(this.edYearInaccuracy)).BeginInit();
 		    this.SuspendLayout();
 		    // 
-		    // tabsTools
-		    // 
-		    this.tabsTools.Controls.Add(this.pageRecMerge);
-		    this.tabsTools.Location = new System.Drawing.Point(11, 10);
-		    this.tabsTools.Name = "tabsTools";
-		    this.tabsTools.SelectedIndex = 0;
-		    this.tabsTools.Size = new System.Drawing.Size(1010, 545);
-		    this.tabsTools.TabIndex = 0;
-		    // 
-		    // pageRecMerge
-		    // 
-		    this.pageRecMerge.Controls.Add(this.PageControl1);
-		    this.pageRecMerge.Location = new System.Drawing.Point(4, 26);
-		    this.pageRecMerge.Name = "pageRecMerge";
-		    this.pageRecMerge.Size = new System.Drawing.Size(1002, 515);
-		    this.pageRecMerge.TabIndex = 3;
-		    this.pageRecMerge.Text = "pageRecMerge";
-		    // 
 		    // PageControl1
 		    // 
 		    this.PageControl1.Controls.Add(this.pageMerge);
 		    this.PageControl1.Controls.Add(this.pageMergeOptions);
-		    this.PageControl1.Location = new System.Drawing.Point(11, 10);
+		    this.PageControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+		    this.PageControl1.Location = new System.Drawing.Point(0, 0);
 		    this.PageControl1.Name = "PageControl1";
 		    this.PageControl1.SelectedIndex = 0;
-		    this.PageControl1.Size = new System.Drawing.Size(965, 493);
+		    this.PageControl1.Size = new System.Drawing.Size(965, 499);
 		    this.PageControl1.TabIndex = 0;
 		    // 
 		    // pageMerge
@@ -101,7 +76,7 @@
 		    this.pageMerge.Controls.Add(this.ProgressBar1);
 		    this.pageMerge.Location = new System.Drawing.Point(4, 26);
 		    this.pageMerge.Name = "pageMerge";
-		    this.pageMerge.Size = new System.Drawing.Size(957, 463);
+		    this.pageMerge.Size = new System.Drawing.Size(957, 469);
 		    this.pageMerge.TabIndex = 0;
 		    this.pageMerge.Text = "pageMerge";
 		    // 
@@ -114,7 +89,7 @@
 		    this.MergeControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 		    this.MergeControl.Location = new System.Drawing.Point(0, 0);
 		    this.MergeControl.MergeMode = GKCommon.GEDCOM.GEDCOMRecordType.rtNone;
-		    this.MergeControl.Name = "MergeCtl";
+		    this.MergeControl.Name = "MergeControl";
 		    this.MergeControl.Size = new System.Drawing.Size(957, 399);
 		    this.MergeControl.TabIndex = 11;
 		    // 
@@ -151,7 +126,7 @@
 		    this.pageMergeOptions.Controls.Add(this.grpSearchPersons);
 		    this.pageMergeOptions.Location = new System.Drawing.Point(4, 26);
 		    this.pageMergeOptions.Name = "pageMergeOptions";
-		    this.pageMergeOptions.Size = new System.Drawing.Size(957, 463);
+		    this.pageMergeOptions.Size = new System.Drawing.Size(960, 471);
 		    this.pageMergeOptions.TabIndex = 1;
 		    this.pageMergeOptions.Text = "pageMergeOptions";
 		    // 
@@ -297,25 +272,13 @@
 		    this.chkBirthYear.TabIndex = 6;
 		    this.chkBirthYear.Text = "chkBirthYear";
 		    // 
-		    // btnClose
-		    // 
-		    this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-		    this.btnClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-		    this.btnClose.Location = new System.Drawing.Point(907, 583);
-		    this.btnClose.Name = "btnClose";
-		    this.btnClose.Size = new System.Drawing.Size(114, 30);
-		    this.btnClose.TabIndex = 1;
-		    this.btnClose.Text = "btnClose";
-		    this.btnClose.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-		    // 
 		    // TTRecMergeDlg
 		    // 
 		    this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
 		    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-		    this.CancelButton = this.btnClose;
-		    this.ClientSize = new System.Drawing.Size(1034, 625);
-		    this.Controls.Add(this.tabsTools);
-		    this.Controls.Add(this.btnClose);
+		    this.Caption = "TreeToolsWin";
+		    this.ClientSize = new System.Drawing.Size(965, 499);
+		    this.Controls.Add(this.PageControl1);
 		    this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 		    this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 		    this.KeyPreview = true;
@@ -325,8 +288,6 @@
 		    this.ShowInTaskbar = false;
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 		    this.Text = "TreeToolsWin";
-		    this.tabsTools.ResumeLayout(false);
-		    this.pageRecMerge.ResumeLayout(false);
 		    this.PageControl1.ResumeLayout(false);
 		    this.pageMerge.ResumeLayout(false);
 		    this.pageMerge.PerformLayout();
@@ -337,6 +298,7 @@
 		    ((System.ComponentModel.ISupportInitialize)(this.edNameAccuracy)).EndInit();
 		    ((System.ComponentModel.ISupportInitialize)(this.edYearInaccuracy)).EndInit();
 		    this.ResumeLayout(false);
+
 		}
 	}
 }

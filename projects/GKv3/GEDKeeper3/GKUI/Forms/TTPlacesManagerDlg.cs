@@ -52,6 +52,7 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
+            InitDialog(baseWin);
             fController = new PlacesManagerController(this);
             fController.Init(baseWin);
 
@@ -74,7 +75,7 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Title = LangMan.LS(LSID.LSID_MITreeTools);
+            Title = LangMan.LS(LSID.LSID_ToolOp_9);
             pagePlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             btnIntoList.Text = LangMan.LS(LSID.LSID_InsertIntoBook);

@@ -110,6 +110,11 @@ namespace GKCore
 
         private class ListViewMock : IListView
         {
+            IListViewItems IListView.Items
+            {
+                get { return null; }
+            }
+
             public void AddColumn(string caption, int width, bool autoSize) {}
             public IListItem AddItem(object rowData, params object[] columnValues) { return null; }
             public void BeginUpdate() {}

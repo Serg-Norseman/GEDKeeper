@@ -31,12 +31,23 @@ namespace GKCore.Controllers
     /// </summary>
     public class TreeCompareController : DialogController<ITreeCompareDlg>
     {
+        private string fExternalFile;
+
         public TreeCompareController(ITreeCompareDlg view) : base(view)
         {
         }
 
         public override void UpdateView()
         {
+        }
+
+        public void SelectExternalFile()
+        {
+            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            if (string.IsNullOrEmpty(fileName)) return;
+
+            fExternalFile = fileName;
+            fView.ExternalBase.Text = fileName;
         }
 
         private void DuplicateFoundFunc(GEDCOMIndividualRecord indivA, GEDCOMIndividualRecord indivB)
@@ -58,7 +69,7 @@ namespace GKCore.Controllers
                     break;
 
                 case TreeMatchType.tmtExternal:
-                    TreeTools.CompareTree(fBase.Context, fView.ExternalBase.Text, ((ITreeCompareDlg)this).CompareOutput);
+                    TreeTools.CompareTree(fBase.Context, fExternalFile, ((ITreeCompareDlg)this).CompareOutput);
                     break;
 
                 case TreeMatchType.tmtAnalysis:

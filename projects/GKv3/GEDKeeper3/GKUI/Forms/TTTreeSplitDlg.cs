@@ -56,6 +56,7 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
+            InitDialog(baseWin);
             fController = new TreeSplitController(this);
             fController.Init(baseWin);
 
@@ -64,7 +65,7 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Title = LangMan.LS(LSID.LSID_MITreeTools);
+            Title = LangMan.LS(LSID.LSID_ToolOp_3);
             pageTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             btnSelectAll.Text = LangMan.LS(LSID.LSID_SelAll);

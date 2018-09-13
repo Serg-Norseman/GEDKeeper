@@ -9,7 +9,6 @@
 		private System.Windows.Forms.Panel Panel3;
 		private System.Windows.Forms.Label lblMinGenerations;
 		private System.Windows.Forms.NumericUpDown edMinGens;
-		private System.Windows.Forms.TabPage pagePatSearchOptions;
 		private System.Windows.Forms.Button btnSetPatriarch;
 		private System.Windows.Forms.Button btnPatriarchsDiagram;
 		private System.Windows.Forms.CheckBox chkWithoutDates;
@@ -25,7 +24,6 @@
 		    this.Panel3 = new System.Windows.Forms.Panel();
 		    this.edMinGens = new System.Windows.Forms.NumericUpDown();
 		    this.btnSetPatriarch = new System.Windows.Forms.Button();
-		    this.pagePatSearchOptions = new System.Windows.Forms.TabPage();
 		    this.btnClose = new System.Windows.Forms.Button();
 		    this.tabsTools.SuspendLayout();
 		    this.pagePatSearch.SuspendLayout();
@@ -35,7 +33,6 @@
 		    // tabsTools
 		    // 
 		    this.tabsTools.Controls.Add(this.pagePatSearch);
-		    this.tabsTools.Controls.Add(this.pagePatSearchOptions);
 		    this.tabsTools.Location = new System.Drawing.Point(11, 10);
 		    this.tabsTools.Name = "tabsTools";
 		    this.tabsTools.SelectedIndex = 0;
@@ -122,14 +119,6 @@
 		    this.btnSetPatriarch.TabIndex = 4;
 		    this.btnSetPatriarch.Text = "btnSetPatriarch";
 		    this.btnSetPatriarch.Click += new System.EventHandler(this.btnSetPatriarch_Click);
-		    // 
-		    // pagePatSearchOptions
-		    // 
-		    this.pagePatSearchOptions.Location = new System.Drawing.Point(4, 26);
-		    this.pagePatSearchOptions.Name = "pagePatSearchOptions";
-		    this.pagePatSearchOptions.Size = new System.Drawing.Size(1002, 515);
-		    this.pagePatSearchOptions.TabIndex = 8;
-		    this.pagePatSearchOptions.Text = "pagePatSearchOptions";
 		    // 
 		    // btnClose
 		    // 

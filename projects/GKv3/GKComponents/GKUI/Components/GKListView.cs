@@ -39,6 +39,12 @@ namespace GKUI.Components
             set { fBackColor = value; }
         }
 
+        public bool Checked
+        {
+            get { return (bool)base.Values[0]; }
+            set { base.Values[0] = value; }
+        }
+
         public object Data
         {
             get { return fData; }
@@ -87,12 +93,33 @@ namespace GKUI.Components
 
     public delegate void ItemCheckEventHandler(object sender, ItemCheckEventArgs e);
 
+    public sealed class GKListViewItems : IListViewItems
+    {
+        private readonly GKListView fListView;
+
+        public GKCore.Interfaces.IListItem this[int index]
+        {
+            get { return fListView.Items[index]; }
+        }
+
+        public int Count
+        {
+            get { return fListView.Items.Count; }
+        }
+
+        public GKListViewItems(GKListView listView)
+        {
+            fListView = listView;
+        }
+    }
+
     /// <summary>
     /// 
     /// </summary>
     public class GKListView : GridView, IListView
     {
         private readonly ObservableExtList<GKListItem> fItems;
+        private readonly GKListViewItems fItemsAccessor;
 
         private bool fCheckedList;
         private IListManager fListMan;
@@ -105,6 +132,11 @@ namespace GKUI.Components
         public IList<GKListItem> Items
         {
             get { return fItems; }
+        }
+
+        IListViewItems IListView.Items
+        {
+            get { return fItemsAccessor; }
         }
 
         public IListManager ListMan
@@ -173,6 +205,7 @@ namespace GKUI.Components
 
             fCheckedList = false;
             fItems = new ObservableExtList<GKListItem>();
+            fItemsAccessor = new GKListViewItems(this);
             fListMan = null;
             fSortColumn = 0;
             fSortOrder = SortOrder.None;
@@ -600,7 +633,17 @@ namespace GKUI.Components
 
         public GKCore.Interfaces.IListItem AddItem(object rowData, params object[] columnValues)
         {
-            var item = new GKListItem(columnValues);
+            object[] itemValues;
+            if (fCheckedList) {
+                int num = columnValues.Length;
+                itemValues = new object[num + 1];
+                itemValues[0] = false;
+                Array.Copy(columnValues, 0, itemValues, 1, num);
+            } else {
+                itemValues = columnValues;
+            }
+
+            var item = new GKListItem(itemValues);
             item.Data = rowData;
             fItems.Add(item);
             return item;

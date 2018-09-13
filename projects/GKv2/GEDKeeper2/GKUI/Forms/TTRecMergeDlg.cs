@@ -74,8 +74,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
             InitDialog(baseWin);
             fController = new RecMergeController(this);
             fController.Init(baseWin);
@@ -88,9 +86,7 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_MITreeTools);
-            pageRecMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
+            Text = LangMan.LS(LSID.LSID_ToolOp_4);
             pageMerge.Text = LangMan.LS(LSID.LSID_RecMerge);
             pageMergeOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
             btnAutoSearch.Text = LangMan.LS(LSID.LSID_RM_Search);

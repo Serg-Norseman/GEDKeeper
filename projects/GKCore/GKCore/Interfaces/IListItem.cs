@@ -27,6 +27,9 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface IListItem : IComparable
     {
+        bool Checked { get; set; }
+        object Data { get; set; }
+
         void AddSubItem(object itemValue);
         void SetBackColor(IColor color);
     }

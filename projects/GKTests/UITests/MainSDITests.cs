@@ -813,12 +813,12 @@ namespace GKUI.Forms
 
             RSD_ItemIndex = 0;
             ModalFormHandler = RecordSelectDlg_SelectItem_Handler;
-            var btnRec1Sel = new ButtonTester("MergeCtl.btnRec1Select", form);
+            var btnRec1Sel = new ButtonTester("MergeControl.btnRec1Select", form);
             btnRec1Sel.Click();
 
             RSD_ItemIndex = 1;
             ModalFormHandler = RecordSelectDlg_SelectItem_Handler;
-            var btnRec2Sel = new ButtonTester("MergeCtl.btnRec2Select", form);
+            var btnRec2Sel = new ButtonTester("MergeControl.btnRec2Select", form);
             btnRec2Sel.Click();
 
             ClickButton("btnAutoSearch", form);

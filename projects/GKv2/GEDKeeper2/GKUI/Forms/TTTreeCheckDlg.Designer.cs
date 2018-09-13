@@ -6,8 +6,7 @@
 		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.TabPage pageTreeCheck;
 		private System.Windows.Forms.Button btnBaseRepair;
-		private System.Windows.Forms.Panel Panel1;
-		private System.Windows.Forms.TabPage pageTreeCheckOptions;
+		private System.Windows.Forms.Panel panProblemsContainer;
 		private System.Windows.Forms.Button btnAnalyseBase;
 
 		private void InitializeComponent()
@@ -15,8 +14,7 @@
 		    this.tabsTools = new System.Windows.Forms.TabControl();
 		    this.pageTreeCheck = new System.Windows.Forms.TabPage();
 		    this.btnBaseRepair = new System.Windows.Forms.Button();
-		    this.Panel1 = new System.Windows.Forms.Panel();
-		    this.pageTreeCheckOptions = new System.Windows.Forms.TabPage();
+		    this.panProblemsContainer = new System.Windows.Forms.Panel();
 		    this.btnClose = new System.Windows.Forms.Button();
 		    this.btnAnalyseBase = new System.Windows.Forms.Button();
 		    this.tabsTools.SuspendLayout();
@@ -26,7 +24,6 @@
 		    // tabsTools
 		    // 
 		    this.tabsTools.Controls.Add(this.pageTreeCheck);
-		    this.tabsTools.Controls.Add(this.pageTreeCheckOptions);
 		    this.tabsTools.Location = new System.Drawing.Point(11, 10);
 		    this.tabsTools.Name = "tabsTools";
 		    this.tabsTools.SelectedIndex = 0;
@@ -37,7 +34,7 @@
 		    // 
 		    this.pageTreeCheck.Controls.Add(this.btnAnalyseBase);
 		    this.pageTreeCheck.Controls.Add(this.btnBaseRepair);
-		    this.pageTreeCheck.Controls.Add(this.Panel1);
+		    this.pageTreeCheck.Controls.Add(this.panProblemsContainer);
 		    this.pageTreeCheck.Location = new System.Drawing.Point(4, 26);
 		    this.pageTreeCheck.Name = "pageTreeCheck";
 		    this.pageTreeCheck.Size = new System.Drawing.Size(1002, 515);
@@ -53,20 +50,12 @@
 		    this.btnBaseRepair.Text = "btnBaseRepair";
 		    this.btnBaseRepair.Click += new System.EventHandler(this.btnBaseRepair_Click);
 		    // 
-		    // Panel1
+		    // panProblemsContainer
 		    // 
-		    this.Panel1.Location = new System.Drawing.Point(0, 0);
-		    this.Panel1.Name = "Panel1";
-		    this.Panel1.Size = new System.Drawing.Size(998, 448);
-		    this.Panel1.TabIndex = 1;
-		    // 
-		    // pageTreeCheckOptions
-		    // 
-		    this.pageTreeCheckOptions.Location = new System.Drawing.Point(4, 26);
-		    this.pageTreeCheckOptions.Name = "pageTreeCheckOptions";
-		    this.pageTreeCheckOptions.Size = new System.Drawing.Size(1002, 515);
-		    this.pageTreeCheckOptions.TabIndex = 7;
-		    this.pageTreeCheckOptions.Text = "pageTreeCheckOptions";
+		    this.panProblemsContainer.Location = new System.Drawing.Point(0, 0);
+		    this.panProblemsContainer.Name = "panProblemsContainer";
+		    this.panProblemsContainer.Size = new System.Drawing.Size(998, 448);
+		    this.panProblemsContainer.TabIndex = 1;
 		    // 
 		    // btnClose
 		    // 
@@ -108,7 +97,6 @@
 		    this.tabsTools.ResumeLayout(false);
 		    this.pageTreeCheck.ResumeLayout(false);
 		    this.ResumeLayout(false);
-
 		}
 	}
 }

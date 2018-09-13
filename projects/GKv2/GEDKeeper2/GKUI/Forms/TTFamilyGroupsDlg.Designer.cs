@@ -6,7 +6,6 @@
 		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.TabPage pageFamilyGroups;
 		private System.Windows.Forms.TreeView tvGroups;
-		private System.Windows.Forms.TabPage pageFamilyGroupsOptions;
 		private GKUI.Components.LogChart gkLogChart1;
 		private System.Windows.Forms.Button btnAnalyseGroups;
 
@@ -17,7 +16,6 @@
 		    this.btnAnalyseGroups = new System.Windows.Forms.Button();
 		    this.gkLogChart1 = new GKUI.Components.LogChart();
 		    this.tvGroups = new System.Windows.Forms.TreeView();
-		    this.pageFamilyGroupsOptions = new System.Windows.Forms.TabPage();
 		    this.btnClose = new System.Windows.Forms.Button();
 		    this.tabsTools.SuspendLayout();
 		    this.pageFamilyGroups.SuspendLayout();
@@ -26,7 +24,6 @@
 		    // tabsTools
 		    // 
 		    this.tabsTools.Controls.Add(this.pageFamilyGroups);
-		    this.tabsTools.Controls.Add(this.pageFamilyGroupsOptions);
 		    this.tabsTools.Location = new System.Drawing.Point(9, 8);
 		    this.tabsTools.Margin = new System.Windows.Forms.Padding(2);
 		    this.tabsTools.Name = "tabsTools";
@@ -73,15 +70,6 @@
 		    this.tvGroups.Size = new System.Drawing.Size(782, 350);
 		    this.tvGroups.TabIndex = 0;
 		    this.tvGroups.DoubleClick += new System.EventHandler(this.tvGroups_DoubleClick);
-		    // 
-		    // pageFamilyGroupsOptions
-		    // 
-		    this.pageFamilyGroupsOptions.Location = new System.Drawing.Point(4, 22);
-		    this.pageFamilyGroupsOptions.Margin = new System.Windows.Forms.Padding(2);
-		    this.pageFamilyGroupsOptions.Name = "pageFamilyGroupsOptions";
-		    this.pageFamilyGroupsOptions.Size = new System.Drawing.Size(800, 410);
-		    this.pageFamilyGroupsOptions.TabIndex = 6;
-		    this.pageFamilyGroupsOptions.Text = "pageFamilyGroupsOptions";
 		    // 
 		    // btnClose
 		    // 

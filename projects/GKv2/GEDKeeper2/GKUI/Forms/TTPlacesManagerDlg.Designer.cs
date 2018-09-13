@@ -3,7 +3,6 @@
 	partial class TTPlacesManagerDlg
 	{
 		private System.Windows.Forms.TabControl tabsTools;
-		private System.Windows.Forms.TabPage pagePlaceManageOptions;
 		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.TabPage pagePlaceManage;
 		private System.Windows.Forms.Panel Panel4;
@@ -17,7 +16,6 @@
 		    this.Panel4 = new System.Windows.Forms.Panel();
 		    this.btnIntoList = new System.Windows.Forms.Button();
 		    this.btnAnalysePlaces = new System.Windows.Forms.Button();
-		    this.pagePlaceManageOptions = new System.Windows.Forms.TabPage();
 		    this.btnClose = new System.Windows.Forms.Button();
 		    this.tabsTools.SuspendLayout();
 		    this.pagePlaceManage.SuspendLayout();
@@ -26,7 +24,6 @@
 		    // tabsTools
 		    // 
 		    this.tabsTools.Controls.Add(this.pagePlaceManage);
-		    this.tabsTools.Controls.Add(this.pagePlaceManageOptions);
 		    this.tabsTools.Location = new System.Drawing.Point(9, 8);
 		    this.tabsTools.Margin = new System.Windows.Forms.Padding(2);
 		    this.tabsTools.Name = "tabsTools";
@@ -73,15 +70,6 @@
 		    this.btnAnalysePlaces.TabIndex = 1;
 		    this.btnAnalysePlaces.Text = "btnAnalysePlaces";
 		    this.btnAnalysePlaces.Click += new System.EventHandler(this.btnAnalysePlaces_Click);
-		    // 
-		    // pagePlaceManageOptions
-		    // 
-		    this.pagePlaceManageOptions.Location = new System.Drawing.Point(4, 22);
-		    this.pagePlaceManageOptions.Margin = new System.Windows.Forms.Padding(2);
-		    this.pagePlaceManageOptions.Name = "pagePlaceManageOptions";
-		    this.pagePlaceManageOptions.Size = new System.Drawing.Size(800, 410);
-		    this.pagePlaceManageOptions.TabIndex = 0;
-		    this.pagePlaceManageOptions.Text = "pagePlaceManageOptions";
 		    // 
 		    // btnClose
 		    // 

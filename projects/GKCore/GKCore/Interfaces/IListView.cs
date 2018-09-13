@@ -20,11 +20,19 @@
 
 namespace GKCore.Interfaces
 {
+    public interface IListViewItems
+    {
+        IListItem this[int index] { get; }
+        int Count { get; }
+    }
+
     /// <summary>
     /// 
     /// </summary>
     public interface IListView
     {
+        IListViewItems Items { get; }
+
         void AddColumn(string caption, int width, bool autoSize);
         IListItem AddItem(object rowData, params object[] columnValues);
         void BeginUpdate();

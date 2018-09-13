@@ -9,7 +9,6 @@
 		private System.Windows.Forms.Label lblFile;
 		private System.Windows.Forms.TextBox txtCompareFile;
 		private System.Windows.Forms.Button btnFileChoose;
-		private System.Windows.Forms.TabPage pageTreeCompareOptions;
 		private System.Windows.Forms.RadioButton radAnalysis;
 		private System.Windows.Forms.Button btnMatch;
 		private System.Windows.Forms.RadioButton radMathExternal;
@@ -29,7 +28,6 @@
 		    this.radMatchInternal = new System.Windows.Forms.RadioButton();
 		    this.radMathExternal = new System.Windows.Forms.RadioButton();
 		    this.ListCompare = new System.Windows.Forms.TextBox();
-		    this.pageTreeCompareOptions = new System.Windows.Forms.TabPage();
 		    this.btnClose = new System.Windows.Forms.Button();
 		    this.tabsTools.SuspendLayout();
 		    this.pageTreeCompare.SuspendLayout();
@@ -39,7 +37,6 @@
 		    // tabsTools
 		    // 
 		    this.tabsTools.Controls.Add(this.pageTreeCompare);
-		    this.tabsTools.Controls.Add(this.pageTreeCompareOptions);
 		    this.tabsTools.Location = new System.Drawing.Point(11, 10);
 		    this.tabsTools.Name = "tabsTools";
 		    this.tabsTools.SelectedIndex = 0;
@@ -151,14 +148,6 @@
 		    this.ListCompare.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 		    this.ListCompare.Size = new System.Drawing.Size(976, 351);
 		    this.ListCompare.TabIndex = 0;
-		    // 
-		    // pageTreeCompareOptions
-		    // 
-		    this.pageTreeCompareOptions.Location = new System.Drawing.Point(4, 26);
-		    this.pageTreeCompareOptions.Name = "pageTreeCompareOptions";
-		    this.pageTreeCompareOptions.Size = new System.Drawing.Size(1002, 515);
-		    this.pageTreeCompareOptions.TabIndex = 1;
-		    this.pageTreeCompareOptions.Text = "pageTreeCompareOptions";
 		    // 
 		    // btnClose
 		    // 

@@ -13,7 +13,6 @@
 		private System.Windows.Forms.Button btnSelectDescendants;
 		private System.Windows.Forms.Button btnDelete;
 		private System.Windows.Forms.Button btnSave;
-		private System.Windows.Forms.TabPage pageTreeSplitOptions;
 
 		private void InitializeComponent()
 		{
@@ -27,7 +26,6 @@
 		    this.btnSelectDescendants = new System.Windows.Forms.Button();
 		    this.btnDelete = new System.Windows.Forms.Button();
 		    this.btnSave = new System.Windows.Forms.Button();
-		    this.pageTreeSplitOptions = new System.Windows.Forms.TabPage();
 		    this.btnClose = new System.Windows.Forms.Button();
 		    this.tabsTools.SuspendLayout();
 		    this.pageTreeSplit.SuspendLayout();
@@ -36,7 +34,6 @@
 		    // tabsTools
 		    // 
 		    this.tabsTools.Controls.Add(this.pageTreeSplit);
-		    this.tabsTools.Controls.Add(this.pageTreeSplitOptions);
 		    this.tabsTools.Location = new System.Drawing.Point(11, 10);
 		    this.tabsTools.Name = "tabsTools";
 		    this.tabsTools.SelectedIndex = 0;
@@ -128,14 +125,6 @@
 		    this.btnSave.TabIndex = 7;
 		    this.btnSave.Text = "btnSave";
 		    this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-		    // 
-		    // pageTreeSplitOptions
-		    // 
-		    this.pageTreeSplitOptions.Location = new System.Drawing.Point(4, 26);
-		    this.pageTreeSplitOptions.Name = "pageTreeSplitOptions";
-		    this.pageTreeSplitOptions.Size = new System.Drawing.Size(1002, 515);
-		    this.pageTreeSplitOptions.TabIndex = 3;
-		    this.pageTreeSplitOptions.Text = "pageTreeSplitOptions";
 		    // 
 		    // btnClose
 		    // 

@@ -742,11 +742,36 @@ namespace GKCore.Tools
 
         #region Detect cycles
 
+        private enum DCFlag { dcfAncWalk, dcfDescWalk }
+
+        private static void SetIndiFlag(GEDCOMIndividualRecord iRec, DCFlag flag)
+        {
+            object data = iRec.ExtData;
+            if (data != null) {
+                int flags = (int)data;
+                flags = BitHelper.SetBit(flags, (int)flag);
+                iRec.ExtData = flags;
+            }
+        }
+
+        private static bool HasIndiFlag(GEDCOMIndividualRecord iRec, DCFlag flag)
+        {
+            object data = iRec.ExtData;
+            if (data != null) {
+                int flags = (int)data;
+                return BitHelper.IsSetBit(flags, (int)flag);
+            } else {
+                return false;
+            }
+        }
+
         private static GEDCOMIndividualRecord DetectCycleAncestors(GEDCOMIndividualRecord iRec, Stack<GEDCOMIndividualRecord> stack)
         {
             if (iRec == null) return null;
 
             if (stack.Contains(iRec)) return iRec;
+
+            SetIndiFlag(iRec, DCFlag.dcfAncWalk);
 
             stack.Push(iRec);
 
@@ -768,6 +793,8 @@ namespace GKCore.Tools
             if (iRec == null) return null;
 
             if (stack.Contains(iRec)) return iRec;
+
+            SetIndiFlag(iRec, DCFlag.dcfDescWalk);
 
             stack.Push(iRec);
 
@@ -803,6 +830,31 @@ namespace GKCore.Tools
             if (hasCycle != null) {
                 var lastRec = stack.Pop();
                 return iRec.XRef + " ... " + lastRec.XRef + " -> " + hasCycle.XRef;
+            }
+
+            return string.Empty;
+        }
+
+        private static string CheckCycle(GEDCOMIndividualRecord iRec)
+        {
+            var stack = new Stack<GEDCOMIndividualRecord>();
+            GEDCOMIndividualRecord hasCycle = null;
+
+            if (!HasIndiFlag(iRec, DCFlag.dcfAncWalk)) {
+                hasCycle = DetectCycleAncestors(iRec, stack);
+                if (hasCycle != null) {
+                    var lastRec = stack.Pop();
+                    return iRec.XRef + " ... " + lastRec.XRef + " -> " + hasCycle.XRef;
+                }
+                stack.Clear();
+            }
+
+            if (!HasIndiFlag(iRec, DCFlag.dcfDescWalk)) {
+                hasCycle = DetectCycleDescendants(iRec, stack);
+                if (hasCycle != null) {
+                    var lastRec = stack.Pop();
+                    return iRec.XRef + " ... " + lastRec.XRef + " -> " + hasCycle.XRef;
+                }
             }
 
             return string.Empty;
@@ -912,6 +964,7 @@ namespace GKCore.Tools
             cdMotherAsChild,
             cdDuplicateChildren,
             csDateInvalid,
+            csCycle
         }
 
         public enum CheckSolve
@@ -1034,6 +1087,13 @@ namespace GKCore.Tools
                 checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_StrangeParent), iAge.ToString());
                 checksList.Add(checkObj);
             }
+
+            string cycle = CheckCycle(iRec);
+            if (!string.IsNullOrEmpty(cycle)) {
+                CheckObj checkObj = new CheckObj(iRec, CheckDiag.csCycle, CheckSolve.csSkip);
+                checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_DetectedDataLoop), cycle);
+                checksList.Add(checkObj);
+            }
         }
 
         private static void CheckFamilyRecord(GEDCOMFamilyRecord fRec, List<CheckObj> checksList)
@@ -1098,6 +1158,7 @@ namespace GKCore.Tools
                 GEDCOMTree tree = baseWin.Context.Tree;
                 progress.ProgressInit(LangMan.LS(LSID.LSID_ToolOp_7), tree.RecordsCount);
                 checksList.Clear();
+                GKUtils.InitExtCounts(tree, 0);
 
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {

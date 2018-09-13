@@ -57,13 +57,14 @@ namespace GKUI.Forms
 
             SetLang();
 
+            InitDialog(baseWin);
             fController = new TreeCompareController(this);
             fController.Init(baseWin);
         }
 
         public void SetLang()
         {
-            Title = LangMan.LS(LSID.LSID_MITreeTools);
+            Title = LangMan.LS(LSID.LSID_ToolOp_1);
             pageTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             lblFile.Text = LangMan.LS(LSID.LSID_MIFile);
@@ -77,10 +78,7 @@ namespace GKUI.Forms
 
         private void btnFileChoose_Click(object sender, EventArgs e)
         {
-            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
-            if (string.IsNullOrEmpty(fileName)) return;
-
-            txtCompareFile.Text = fileName;
+            fController.SelectExternalFile();
         }
 
         public TreeMatchType GetTreeMatchType()

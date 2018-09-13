@@ -162,31 +162,7 @@ namespace GKUI.Forms
             PageControl1.Pages.Add(pageMerge);
             PageControl1.Pages.Add(pageMergeOptions);
 
-            pageRecMerge = new TabPage();
-            pageRecMerge.Content = PageControl1;
-            pageRecMerge.Text = "pageRecMerge";
-
-            //
-
-            tabsTools = new TabControl();
-            tabsTools.Pages.Add(pageRecMerge);
-            tabsTools.SelectedIndex = 0;
-
-            btnClose = new Button();
-            btnClose.ImagePosition = ButtonImagePosition.Left;
-            btnClose.Size = new Size(130, 26);
-            btnClose.Text = "btnClose";
-            btnClose.Click += (sender, e) => { Close(); };
-
-            Content = new DefTableLayout {
-                Rows = {
-                    new TableRow {
-                        ScaleHeight = true,
-                        Cells = { tabsTools }
-                    },
-                    UIHelper.MakeDialogFooter(null, btnClose)
-                }
-            };
+            Content = PageControl1;
 
             AbortButton = btnClose;
             Maximizable = false;

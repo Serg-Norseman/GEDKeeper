@@ -252,6 +252,17 @@ namespace GKUI.Components
             }
         }
 
+        public static GKListView CreateListView(Panel parent)
+        {
+            if (parent == null)
+                throw new ArgumentNullException("parent");
+
+            GKListView listView = new GKListView();
+            parent.Content = listView;
+
+            return listView;
+        }
+
         public static void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
                                                float inRad, float extRad, float wedgeAngle,
                                                float ang1, float ang2)

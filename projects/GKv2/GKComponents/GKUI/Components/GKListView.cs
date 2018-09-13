@@ -40,7 +40,7 @@ namespace GKUI.Components
     {
         protected object fValue;
 
-        public object Data;
+        public object Data { get; set; }
 
         public GKListItem(object itemValue, object data)
         {
@@ -144,6 +144,26 @@ namespace GKUI.Components
         }
     }
 
+    public sealed class GKListViewItems : IListViewItems
+    {
+        private readonly GKListView fListView;
+
+        public IListItem this[int index]
+        {
+            get { return (IListItem)fListView.Items[index]; }
+        }
+
+        public int Count
+        {
+            get { return fListView.Items.Count; }
+        }
+
+        public GKListViewItems(GKListView listView)
+        {
+            fListView = listView;
+        }
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -236,6 +256,7 @@ namespace GKUI.Components
         }
 
         private readonly LVColumnSorter fColumnSorter;
+        private readonly GKListViewItems fItemsAccessor;
 
         protected int fSortColumn;
         protected SortOrder fSortOrder;
@@ -257,6 +278,11 @@ namespace GKUI.Components
         {
             get { return fSortOrder; }
             set { fSortOrder = value; }
+        }
+
+        IListViewItems IListView.Items
+        {
+            get { return fItemsAccessor; }
         }
 
         public IListManager ListMan
@@ -300,6 +326,7 @@ namespace GKUI.Components
             fSortColumn = 0;
             fSortOrder = SortOrder.None;
             fColumnSorter = new LVColumnSorter(this);
+            fItemsAccessor = new GKListViewItems(this);
 
             ListViewItemSorter = fColumnSorter;
 

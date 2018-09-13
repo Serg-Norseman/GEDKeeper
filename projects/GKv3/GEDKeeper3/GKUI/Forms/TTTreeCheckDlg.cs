@@ -54,23 +54,23 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
+            InitDialog(baseWin);
             fController = new TreeCheckController(this);
             fController.Init(baseWin);
 
-            ListChecks = new GKListView();
+            ListChecks = UIHelper.CreateListView(panProblemsContainer);
             ListChecks.MouseDoubleClick += ListChecks_DblClick;
             ListChecks.AddCheckedColumn(@"x", 50, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
-            panProblemsContainer.Content = ListChecks;
 
             SetLang();
         }
 
         public void SetLang()
         {
-            Title = LangMan.LS(LSID.LSID_MITreeTools);
+            Title = LangMan.LS(LSID.LSID_ToolOp_7);
             pageTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             btnAnalyseBase.Text = LangMan.LS(LSID.LSID_Analysis);
@@ -84,20 +84,7 @@ namespace GKUI.Forms
 
         private void btnBaseRepair_Click(object sender, EventArgs e)
         {
-            try {
-                int num = ListChecks.Items.Count;
-                for (int i = 0; i < num; i++) {
-                    GKListItem item = (GKListItem)ListChecks.Items[i];
-                    bool check = (bool)item.Values[0];
-                    if (check) {
-                        var checkObj = item.Data as TreeTools.CheckObj;
-                        TreeTools.RepairProblem(fBase, checkObj);
-                    }
-                }
-            } finally {
-                fBase.RefreshLists(false);
-                fController.CheckBase();
-            }
+            fController.Repair();
         }
 
         private void ListChecks_DblClick(object sender, EventArgs e)

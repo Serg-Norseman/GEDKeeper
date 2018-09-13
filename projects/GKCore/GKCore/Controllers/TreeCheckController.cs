@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using GKCore.Interfaces;
 using GKCore.Tools;
 using GKCore.UIContracts;
 
@@ -60,6 +61,23 @@ namespace GKCore.Controllers
                 //fView.ChecksList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             } finally {
                 fView.ChecksList.EndUpdate();
+            }
+        }
+
+        public void Repair()
+        {
+            try {
+                int num = fView.ChecksList.Items.Count;
+                for (int i = 0; i < num; i++) {
+                    IListItem item = fView.ChecksList.Items[i];
+                    if (item.Checked) {
+                        var checkObj = item.Data as TreeTools.CheckObj;
+                        TreeTools.RepairProblem(fBase, checkObj);
+                    }
+                }
+            } finally {
+                fBase.RefreshLists(false);
+                CheckBase();
             }
         }
     }

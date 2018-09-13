@@ -63,6 +63,7 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
+            InitDialog(baseWin);
             fController = new PatriarchsSearchController(this);
             fController.Init(baseWin);
 
@@ -79,7 +80,7 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Title = LangMan.LS(LSID.LSID_MITreeTools);
+            Title = LangMan.LS(LSID.LSID_ToolOp_8);
             pagePatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             lblMinGenerations.Text = LangMan.LS(LSID.LSID_MinGenerations);

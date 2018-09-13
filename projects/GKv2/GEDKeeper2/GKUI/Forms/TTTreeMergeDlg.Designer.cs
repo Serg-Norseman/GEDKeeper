@@ -5,7 +5,6 @@
 		private System.Windows.Forms.TabControl tabsTools;
 		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.TabPage pageTreeMerge;
-		private System.Windows.Forms.TabPage pageTreeMergeOptions;
 		private System.Windows.Forms.Label lblMasterBase;
 		private System.Windows.Forms.TextBox edMasterBase;
 		private System.Windows.Forms.Label lblOtherBase;
@@ -23,7 +22,6 @@
 		    this.edUpdateBase = new System.Windows.Forms.TextBox();
 		    this.btnTreeMerge = new System.Windows.Forms.Button();
 		    this.mSyncRes = new System.Windows.Forms.TextBox();
-		    this.pageTreeMergeOptions = new System.Windows.Forms.TabPage();
 		    this.btnClose = new System.Windows.Forms.Button();
 		    this.tabsTools.SuspendLayout();
 		    this.pageTreeMerge.SuspendLayout();
@@ -32,7 +30,6 @@
 		    // tabsTools
 		    // 
 		    this.tabsTools.Controls.Add(this.pageTreeMerge);
-		    this.tabsTools.Controls.Add(this.pageTreeMergeOptions);
 		    this.tabsTools.Location = new System.Drawing.Point(11, 10);
 		    this.tabsTools.Name = "tabsTools";
 		    this.tabsTools.SelectedIndex = 0;
@@ -107,14 +104,6 @@
 		    this.mSyncRes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 		    this.mSyncRes.Size = new System.Drawing.Size(976, 371);
 		    this.mSyncRes.TabIndex = 4;
-		    // 
-		    // pageTreeMergeOptions
-		    // 
-		    this.pageTreeMergeOptions.Location = new System.Drawing.Point(4, 26);
-		    this.pageTreeMergeOptions.Name = "pageTreeMergeOptions";
-		    this.pageTreeMergeOptions.Size = new System.Drawing.Size(1002, 515);
-		    this.pageTreeMergeOptions.TabIndex = 2;
-		    this.pageTreeMergeOptions.Text = "pageTreeMergeOptions";
 		    // 
 		    // btnClose
 		    // 
