@@ -32,7 +32,7 @@ using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
-using GKCore.Controllers;
+using GKCore.UIContracts;
 
 namespace GKCore
 {

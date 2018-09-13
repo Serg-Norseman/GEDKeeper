@@ -34,6 +34,7 @@ using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -43,18 +44,6 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class BaseWinSDI : CommonForm, IBaseWindow
     {
-        private sealed class TabParts
-        {
-            public readonly GKListView ListView;
-            public readonly HyperView Summary;
-
-            public TabParts(GKListView listView, HyperView summary)
-            {
-                ListView = listView;
-                Summary = summary;
-            }
-        }
-
         #region Private fields
 
         private readonly List<GEDCOMRecord> fChangedRecords;
@@ -274,7 +263,7 @@ namespace GKUI.Forms
             return (GEDCOMRecordType)(tabsRecords.SelectedIndex + 1);
         }
 
-        public GKListView GetRecordsViewByType(GEDCOMRecordType recType)
+        public IListView GetRecordsViewByType(GEDCOMRecordType recType)
         {
             int rt = (int)recType;
             TabParts tabPart = (rt < 0 || rt >= fTabParts.Length) ? null : fTabParts[rt];
@@ -287,22 +276,22 @@ namespace GKUI.Forms
         /// <param name="recType">Record type for which a hyper view control is
         /// required.</param>
         /// <returns>Hyper view control.</returns>
-        public HyperView GetHyperViewByType(GEDCOMRecordType recType)
+        public IHyperView GetHyperViewByType(GEDCOMRecordType recType)
         {
-            HyperView view = fTabParts[(int)recType].Summary;
+            IHyperView view = fTabParts[(int)recType].Summary;
             return view;
         }
 
         public IListManager GetRecordsListManByType(GEDCOMRecordType recType)
         {
-            GKListView rView = GetRecordsViewByType(recType);
+            IListView rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : (IListManager)rView.ListMan;
         }
 
         public GEDCOMRecord GetSelectedRecordEx()
         {
             GEDCOMRecordType recType = GetSelectedRecordType();
-            GKListView rView = GetRecordsViewByType(recType);
+            IListView rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : (rView.GetSelectedData() as GEDCOMRecord);
         }
 
@@ -325,7 +314,7 @@ namespace GKUI.Forms
 
         public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType)
         {
-            GKListView rView = GetRecordsViewByType(recType);
+            IListView rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : rView.ListMan.GetRecordsList();
         }
 
@@ -500,7 +489,7 @@ namespace GKUI.Forms
         public void ClearSummaries()
         {
             for (var rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
-                HyperView summary = fTabParts[(int)rt].Summary;
+                IHyperView summary = fTabParts[(int)rt].Summary;
                 if (summary != null) {
                     summary.Lines.Clear();
                 }
@@ -510,7 +499,7 @@ namespace GKUI.Forms
         public void RefreshLists(bool columnsChanged)
         {
             for (var rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
-                GKListView listview = fTabParts[(int)rt].ListView;
+                IListView listview = fTabParts[(int)rt].ListView;
                 if (listview != null) {
                     listview.UpdateContents(columnsChanged);
                 }
@@ -521,7 +510,7 @@ namespace GKUI.Forms
 
         public void RefreshRecordsView(GEDCOMRecordType recType)
         {
-            GKListView rView = GetRecordsViewByType(recType);
+            IListView rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 rView.UpdateContents();
 
@@ -573,11 +562,11 @@ namespace GKUI.Forms
                     {
                         CheckChangedRecord(record, false);
 
-                        GKListView rView = GetRecordsViewByType(record.RecordType);
+                        IListView rView = GetRecordsViewByType(record.RecordType);
                         if (rView != null) {
                             rView.DeleteRecord(record);
 
-                            HyperView hView = GetHyperViewByType(record.RecordType);
+                            IHyperView hView = GetHyperViewByType(record.RecordType);
                             if ((hView != null) && (rView.ListMan.FilteredCount == 0)) {
                                 hView.Lines.Clear();
                             }
@@ -821,7 +810,7 @@ namespace GKUI.Forms
         {
             string statusLine = "";
             GEDCOMRecordType recType = GetSelectedRecordType();
-            GKListView rView = GetRecordsViewByType(recType);
+            IListView rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 var listMan = rView.ListMan;
                 statusLine = LangMan.LS(LSID.LSID_SBRecords) + ": " + listMan.TotalCount.ToString();
@@ -907,8 +896,7 @@ namespace GKUI.Forms
             QuickSearchDlg qsDlg = new QuickSearchDlg(this);
 
             Rectangle client = ClientRectangle;
-            Point pt = PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
-            qsDlg.Location = pt;
+            qsDlg.Location = PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
 
             qsDlg.Show();
         }
@@ -979,12 +967,12 @@ namespace GKUI.Forms
         public void SelectRecordByXRef(string xref)
         {
             GEDCOMRecord record = fContext.Tree.XRefIndex_Find(xref);
-            GKListView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
+            IListView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
 
             if (rView != null) {
                 ShowRecordsTab(record.RecordType);
-                ActiveControl = rView;
-                rView.SelectItemByData(record);
+                ActiveControl = (Control)rView;
+                rView.SelectItem(record);
             }
         }
 
@@ -994,7 +982,7 @@ namespace GKUI.Forms
 
             try
             {
-                HyperView hyperView = GetHyperViewByType(record.RecordType);
+                IHyperView hyperView = GetHyperViewByType(record.RecordType);
                 if (hyperView != null) {
                     GKUtils.GetRecordContent(fContext, record, hyperView.Lines);
                 }
@@ -1021,7 +1009,7 @@ namespace GKUI.Forms
         {
             bool result = false;
             if (record != null) {
-                GKListView rView = GetRecordsViewByType(record.RecordType);
+                IListView rView = GetRecordsViewByType(record.RecordType);
                 result = (rView != null && rView.ListMan.IndexOfRecord(record) >= 0);
             }
             return result;
@@ -1089,23 +1077,23 @@ namespace GKUI.Forms
 
         private void StatusBar_DrawItem(object sender, StatusBarDrawItemEventArgs sbdevent)
         {
-            Bitmap pic = null;
+            Bitmap img = null;
             switch (fContext.ShieldState)
             {
                 case ShieldState.None:
-                    pic = (Bitmap)UIHelper.LoadResourceImage("Resources.rg_shield_none.gif");
+                    img = UIHelper.LoadResourceImage("Resources.rg_shield_none.gif");
                     break;
                 case ShieldState.Middle:
-                    pic = (Bitmap)UIHelper.LoadResourceImage("Resources.rg_shield_mid.gif");
+                    img = UIHelper.LoadResourceImage("Resources.rg_shield_mid.gif");
                     break;
                 case ShieldState.Maximum:
-                    pic = (Bitmap)UIHelper.LoadResourceImage("Resources.rg_shield_max.gif");
+                    img = UIHelper.LoadResourceImage("Resources.rg_shield_max.gif");
                     break;
             }
 
-            if (pic != null) {
-                pic.MakeTransparent(pic.GetPixel(0, 0));
-                sbdevent.Graphics.DrawImage(pic, sbdevent.Bounds.Left, sbdevent.Bounds.Top);
+            if (img != null) {
+                img.MakeTransparent(img.GetPixel(0, 0));
+                sbdevent.Graphics.DrawImage(img, sbdevent.Bounds.Left, sbdevent.Bounds.Top);
             }
         }
 
@@ -1467,6 +1455,14 @@ namespace GKUI.Forms
         private void tbNext_Click(object sender, EventArgs e)
         {
             (this as IWorkWindow).NavNext();
+        }
+
+        private void tbSendMail_Click(object sender, EventArgs e)
+        {
+            if (CheckModified()) {
+                string fileName = Path.GetFileName(fContext.FileName);
+                SysUtils.SendMail("?", fileName, "?", fContext.FileName);
+            }
         }
 
         private void miMap_Click(object sender, EventArgs e)

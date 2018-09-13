@@ -24,7 +24,6 @@ using System.Reflection;
 using System.Text;
 
 using GKCommon.GEDCOM;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Lists;
@@ -32,7 +31,6 @@ using GKCore.Stats;
 using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
-using GKUI;
 using GKUI.Components;
 using GKUI.Providers;
 using NUnit.Framework;

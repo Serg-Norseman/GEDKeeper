@@ -485,7 +485,7 @@ namespace GKUI.Components
                 fListMan.SortContents(fSortColumn, fSortOrder == SortOrder.Ascending);
                 ResetCache();
 
-                if (restoreSelected) SelectItemByData(rec);
+                if (restoreSelected) SelectItem(rec);
             } else {
                 Sort();
             }
@@ -588,7 +588,7 @@ namespace GKUI.Components
                     EndUpdate();
                 }
 
-                if (tempRec != null) SelectItemByData(tempRec);
+                if (tempRec != null) SelectItem(tempRec);
             }
             catch (Exception ex)
             {
@@ -617,25 +617,6 @@ namespace GKUI.Components
             }
         }
 
-        public void SelectItemByData(object record)
-        {
-            try {
-                int idx = fListMan.IndexOfRecord(record);
-                if (idx >= 0) {
-                    ListViewItem item = Items[idx];
-
-                    SelectedIndices.Clear();
-                    item.Selected = true;
-
-                    // platform: in Mono it doesn't work
-                    //item.EnsureVisible();
-                    EnsureVisible(idx);
-                }
-            } catch (Exception ex) {
-                Logger.LogWrite("GKListView.SelectItemByData(): " + ex.Message);
-            }
-        }
-
         public object GetSelectedData()
         {
             try {
@@ -661,6 +642,11 @@ namespace GKUI.Components
         #endregion
 
         #region Public methods
+
+        public void ClearColumns()
+        {
+            Columns.Clear();
+        }
 
         public void AddColumn(string caption, int width, bool autoSize)
         {
@@ -724,7 +710,7 @@ namespace GKUI.Components
             return result;
         }
 
-        public void SelectItem(ListViewItem item)
+        private void SelectItem(ListViewItem item)
         {
             if (item == null) return;
 
@@ -741,16 +727,34 @@ namespace GKUI.Components
             }
         }
 
-        public void SelectItem(object data)
+        public void SelectItem(object rowData)
         {
-            int num = Items.Count;
-            for (int i = 0; i < num; i++) {
-                var item = (GKListItem)Items[i];
+            try {
+                if (fListMan != null) {
+                    // "virtual" mode
+                    int idx = fListMan.IndexOfRecord(rowData);
+                    if (idx >= 0) {
+                        ListViewItem item = Items[idx];
 
-                if (item.Data == data) {
-                    SelectItem(item);
-                    return;
+                        SelectedIndices.Clear();
+                        item.Selected = true;
+                        // platform: in Mono it doesn't work
+                        //item.EnsureVisible();
+                        EnsureVisible(idx);
+                    }
+                } else {
+                    int num = Items.Count;
+                    for (int i = 0; i < num; i++) {
+                        var item = (GKListItem)Items[i];
+
+                        if (item.Data == rowData) {
+                            SelectItem(item);
+                            return;
+                        }
+                    }
                 }
+            } catch (Exception ex) {
+                Logger.LogWrite("GKListView.SelectItem(): " + ex.Message);
             }
         }
 

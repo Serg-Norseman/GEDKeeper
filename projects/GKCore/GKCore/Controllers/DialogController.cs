@@ -20,17 +20,12 @@
 
 using System;
 using System.Collections.Generic;
-using BSLib;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.UIContracts;
 
 namespace GKCore.Controllers
 {
-    public interface IControlHandler
-    {
-    }
-
     public abstract class ControlHandler<T, TThis> : IControlHandler where TThis : ControlHandler<T, TThis>
     {
         protected T fControl;
@@ -42,100 +37,9 @@ namespace GKCore.Controllers
 
         protected ControlHandler(T control)
         {
-            this.fControl = control;
+            fControl = control;
         }
     }
-
-    public interface ILabelHandler : IControlHandler
-    {
-        string Text { get; set; }
-    }
-
-    public interface IButtonHandler : IControlHandler
-    {
-        bool Enabled { get; set; }
-        string Text { get; set; }
-    }
-
-    public interface ICheckBoxHandler : IControlHandler
-    {
-        bool Checked { get; set; }
-        bool Enabled { get; set; }
-        string Text { get; set; }
-    }
-
-    public interface IComboBoxHandler : IControlHandler
-    {
-        bool Enabled { get; set; }
-        bool ReadOnly { get; set; }
-        int SelectedIndex { get; set; }
-        object SelectedItem { get; set; }
-        object SelectedTag { get; set; }
-        string Text { get; set; }
-
-        void Add(object item);
-        void AddItem(string caption, object tag, IImage image = null);
-        void AddRange(object[] items, bool sorted = false);
-        void AddStrings(StringList strings);
-        void BeginUpdate();
-        void Clear();
-        void EndUpdate();
-        void Select();
-        void SortItems();
-    }
-
-    public interface ITextBoxHandler : IControlHandler
-    {
-        bool Enabled { get; set; }
-        string[] Lines { get; set; }
-        bool ReadOnly { get; set; }
-        string Text { get; set; }
-
-        void AppendText(string text);
-        void Clear();
-        void Select();
-    }
-
-    public interface INumericBoxHandler : IControlHandler
-    {
-        bool Enabled { get; set; }
-        bool ReadOnly { get; set; }
-        string Text { get; set; }
-        double Value { get; set; }
-
-        void Select();
-    }
-
-    public interface ITVNode
-    {
-    }
-
-    public interface ITreeViewHandler : IControlHandler
-    {
-        bool Enabled { get; set; }
-
-        ITVNode AddNode(ITVNode parent, string name, object tag);
-        void BeginUpdate();
-        void Clear();
-        void EndUpdate();
-        void Expand(ITVNode node);
-    }
-
-    public interface IProgressBarHandler : IControlHandler
-    {
-        int Minimum { get; set; }
-        int Maximum { get; set; }
-        int Value { get; set; }
-
-        void Increment(int value);
-    }
-
-    public interface ILogChart : IControlHandler
-    {
-        void AddFragment(int val);
-        void Clear();
-    }
-
 
     public sealed class ControlsManager
     {
@@ -166,6 +70,7 @@ namespace GKCore.Controllers
             fHandlerTypes.Add(controlType, handlerType);
         }
     }
+
 
     /// <summary>
     /// 

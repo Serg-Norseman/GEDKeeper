@@ -20,7 +20,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCore.Controllers;
+using GKCore.UIContracts;
 
 namespace GKUI.Components
 {

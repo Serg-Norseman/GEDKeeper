@@ -24,8 +24,8 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using BSLib;
-using GKCommon;
 using GKCore;
+using GKCore.UIContracts;
 
 namespace GKUI.Components
 {
@@ -36,7 +36,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class HyperView : ScrollablePanel
+    public class HyperView : ScrollablePanel, IHyperView
     {
         private readonly List<BBTextChunk> fChunks;
         private readonly List<int> fHeights;

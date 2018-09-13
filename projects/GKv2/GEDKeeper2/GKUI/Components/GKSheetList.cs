@@ -48,9 +48,8 @@ namespace GKUI.Components
         private readonly GKListView fList;
 
         private EnumSet<SheetButton> fButtons;
-        private bool fReadOnly;
-
         private ListModel fListModel;
+        private bool fReadOnly;
 
 
         public event ModifyEventHandler OnModify
@@ -380,7 +379,7 @@ namespace GKUI.Components
 
         public void ClearColumns()
         {
-            fList.Columns.Clear();
+            fList.ClearColumns();
         }
 
         public void ResizeColumn(int columnIndex)
@@ -410,7 +409,7 @@ namespace GKUI.Components
 
         public void ClearItems()
         {
-            fList.Items.Clear();
+            fList.ClearItems();
         }
 
         public void SelectItem(int index)
@@ -424,7 +423,7 @@ namespace GKUI.Components
 
             if (fListModel != null) {
                 if (fList.Columns.Count == 0 || fListModel.ColumnsHaveBeenChanged) {
-                    fList.Columns.Clear();
+                    fList.ClearColumns();
                     fListModel.UpdateColumns(fList);
                 }
 
@@ -434,8 +433,7 @@ namespace GKUI.Components
 
         public object GetSelectedData()
         {
-            GKListItem item = fList.GetSelectedItem();
-            return (item != null) ? item.Data : null;
+            return fList.GetSelectedData();
         }
     }
 }

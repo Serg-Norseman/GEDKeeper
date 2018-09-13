@@ -257,12 +257,9 @@ namespace GKUI.Components
                 return;
             }
 
-            if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535)
-            {
+            if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535) {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
-            }
-            else
-            {
+            } else {
                 ImageFormat imFmt = ImageFormat.Png;
                 if (ext == ".bmp") { imFmt = ImageFormat.Bmp; }
                 else

@@ -22,9 +22,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
+
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
@@ -33,6 +34,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -42,18 +44,6 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class BaseWinSDI : CommonForm, IBaseWindow
     {
-        private sealed class TabParts
-        {
-            public readonly GKListView ListView;
-            public readonly HyperView Summary;
-
-            public TabParts(GKListView listView, HyperView summary)
-            {
-                ListView = listView;
-                Summary = summary;
-            }
-        }
-
         #region Private fields
 
         private readonly List<GEDCOMRecord> fChangedRecords;
@@ -210,7 +200,7 @@ namespace GKUI.Forms
         {
             //GKListView recView = contextMenu.SourceControl as GKListViewStub;
             var recType = GetSelectedRecordType();
-            GKListView recView = GetRecordsViewByType(recType);
+            IListView recView = GetRecordsViewByType(recType);
 
             miRecordDuplicate.Enabled = (recView == fTabParts[(int)GEDCOMRecordType.rtIndividual].ListView);
         }
@@ -244,7 +234,7 @@ namespace GKUI.Forms
             return (GEDCOMRecordType)(tabsRecords.SelectedIndex + 1);
         }
 
-        public GKListView GetRecordsViewByType(GEDCOMRecordType recType)
+        public IListView GetRecordsViewByType(GEDCOMRecordType recType)
         {
             int rt = (int)recType;
             TabParts tabPart = (rt < 0 || rt >= fTabParts.Length) ? null : fTabParts[rt];
@@ -257,22 +247,22 @@ namespace GKUI.Forms
         /// <param name="recType">Record type for which a hyper view control is
         /// required.</param>
         /// <returns>Hyper view control.</returns>
-        public HyperView GetHyperViewByType(GEDCOMRecordType recType)
+        public IHyperView GetHyperViewByType(GEDCOMRecordType recType)
         {
-            HyperView view = fTabParts[(int)recType].Summary;
+            IHyperView view = fTabParts[(int)recType].Summary;
             return view;
         }
 
         public IListManager GetRecordsListManByType(GEDCOMRecordType recType)
         {
-            GKListView rView = GetRecordsViewByType(recType);
+            IListView rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : (IListManager)rView.ListMan;
         }
 
         public GEDCOMRecord GetSelectedRecordEx()
         {
             GEDCOMRecordType recType = GetSelectedRecordType();
-            GKListView rView = GetRecordsViewByType(recType);
+            IListView rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : (rView.GetSelectedData() as GEDCOMRecord);
         }
 
@@ -295,7 +285,7 @@ namespace GKUI.Forms
 
         public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType)
         {
-            GKListView rView = GetRecordsViewByType(recType);
+            IListView rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : rView.ListMan.GetRecordsList();
         }
 
@@ -464,7 +454,7 @@ namespace GKUI.Forms
         public void ClearSummaries()
         {
             for (var rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
-                HyperView summary = fTabParts[(int)rt].Summary;
+                IHyperView summary = fTabParts[(int)rt].Summary;
                 if (summary != null) {
                     summary.Lines.Clear();
                 }
@@ -474,7 +464,7 @@ namespace GKUI.Forms
         public void RefreshLists(bool columnsChanged)
         {
             for (var rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
-                GKListView listview = fTabParts[(int)rt].ListView;
+                IListView listview = fTabParts[(int)rt].ListView;
                 if (listview != null) {
                     listview.UpdateContents(columnsChanged);
                 }
@@ -485,9 +475,10 @@ namespace GKUI.Forms
 
         public void RefreshRecordsView(GEDCOMRecordType recType)
         {
-            GKListView rView = GetRecordsViewByType(recType);
+            IListView rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 rView.UpdateContents();
+
                 AppHost.Instance.UpdateControls(false);
             }
         }
@@ -536,11 +527,11 @@ namespace GKUI.Forms
                     {
                         CheckChangedRecord(record, false);
 
-                        GKListView rView = GetRecordsViewByType(record.RecordType);
+                        IListView rView = GetRecordsViewByType(record.RecordType);
                         if (rView != null) {
                             rView.DeleteRecord(record);
 
-                            HyperView hView = GetHyperViewByType(record.RecordType);
+                            IHyperView hView = GetHyperViewByType(record.RecordType);
                             if ((hView != null) && (rView.ListMan.FilteredCount == 0)) {
                                 hView.Lines.Clear();
                             }
@@ -779,12 +770,12 @@ namespace GKUI.Forms
         #endregion
 
         #region IWorkWindow implementation
-        
+
         void IWorkWindow.UpdateControls()
         {
             string statusLine = "";
             GEDCOMRecordType recType = GetSelectedRecordType();
-            GKListView rView = GetRecordsViewByType(recType);
+            IListView rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 var listMan = rView.ListMan;
                 statusLine = LangMan.LS(LSID.LSID_SBRecords) + ": " + listMan.TotalCount.ToString();
@@ -869,10 +860,11 @@ namespace GKUI.Forms
             if (!AllowQuickSearch()) return;
 
             QuickSearchDlg qsDlg = new QuickSearchDlg(this);
-            qsDlg.Show();
 
             Rectangle client = Bounds;
             qsDlg.Location = new Point(client.Left, client.Bottom - qsDlg.Height);
+
+            qsDlg.Show();
         }
 
         #endregion
@@ -940,11 +932,11 @@ namespace GKUI.Forms
         public void SelectRecordByXRef(string xref)
         {
             GEDCOMRecord record = fContext.Tree.XRefIndex_Find(xref);
-            GKListView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
+            IListView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
 
             if (rView != null) {
                 ShowRecordsTab(record.RecordType);
-                rView.Focus();
+                ((Control)rView).Focus();
                 rView.SelectItem(record);
             }
         }
@@ -955,7 +947,7 @@ namespace GKUI.Forms
 
             try
             {
-                HyperView hyperView = GetHyperViewByType(record.RecordType);
+                IHyperView hyperView = GetHyperViewByType(record.RecordType);
                 if (hyperView != null) {
                     GKUtils.GetRecordContent(fContext, record, hyperView.Lines);
                 }
@@ -982,7 +974,7 @@ namespace GKUI.Forms
         {
             bool result = false;
             if (record != null) {
-                GKListView rView = GetRecordsViewByType(record.RecordType);
+                IListView rView = GetRecordsViewByType(record.RecordType);
                 result = (rView != null && rView.ListMan.IndexOfRecord(record) >= 0);
             }
             return result;
@@ -1496,9 +1488,14 @@ namespace GKUI.Forms
         private void GeneratePedigree(PedigreeExporter.PedigreeKind kind)
         {
             var selPerson = GetSelectedPerson();
-            if (selPerson == null) return;
+            if (selPerson == null) {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
+                return;
+            }
 
-            using (PedigreeExporter p = new PedigreeExporter(this, selPerson)) {
+            if (BaseController.DetectCycle(selPerson)) return;
+
+            using (var p = new PedigreeExporter(this, selPerson)) {
                 p.Options = AppHost.Options;
                 p.Kind = kind;
                 p.Generate(true);
@@ -1540,6 +1537,8 @@ namespace GKUI.Forms
             var selPerson = GetSelectedPerson();
             if (selPerson == null) return;
 
+            if (BaseController.DetectCycle(selPerson)) return;
+
             if (TreeChartModel.CheckTreeChartSize(fContext.Tree, selPerson, chartKind)) {
                 TreeChartWin fmChart = new TreeChartWin(this, selPerson);
                 fmChart.ChartKind = chartKind;
@@ -1548,22 +1547,25 @@ namespace GKUI.Forms
             }
         }
 
-        private void miAncestorsCircle_Click(object sender, EventArgs e)
+        private void ShowCircleChart(CircleChartType chartKind)
         {
             var selPerson = GetSelectedPerson();
             if (selPerson == null) return;
 
-            CircleChartWin fmChart = new CircleChartWin(this, selPerson, CircleChartType.Ancestors);
+            if (BaseController.DetectCycle(selPerson)) return;
+
+            CircleChartWin fmChart = new CircleChartWin(this, selPerson, chartKind);
             AppHost.Instance.ShowWindow(fmChart);
+        }
+
+        private void miAncestorsCircle_Click(object sender, EventArgs e)
+        {
+            ShowCircleChart(CircleChartType.Ancestors);
         }
 
         private void miDescendantsCircle_Click(object sender, EventArgs e)
         {
-            var selPerson = GetSelectedPerson();
-            if (selPerson == null) return;
-
-            CircleChartWin fmChart = new CircleChartWin(this, selPerson, CircleChartType.Descendants);
-            AppHost.Instance.ShowWindow(fmChart);
+            ShowCircleChart(CircleChartType.Descendants);
         }
 
         private void miLogSend_Click(object sender, EventArgs e)

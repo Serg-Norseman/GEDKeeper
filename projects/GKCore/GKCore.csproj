@@ -387,6 +387,7 @@
     <Compile Include="GKCore\Tools\PlaceObj.cs" />
     <Compile Include="GKCore\Tools\TreeTools.cs" />
     <Compile Include="GKCore\Tween.cs" />
+    <Compile Include="GKCore\UIContracts\ControlHandlers.cs" />
     <Compile Include="GKCore\UpdateMan.cs" />
     <Compile Include="GKCore\Charts\ChartFilter.cs" />
     <Compile Include="GKCore\Charts\ITreeChartBox.cs" />
@@ -482,8 +483,6 @@
     <EmbeddedResource Include="Resources\btn_volume_mute.png" />
     <EmbeddedResource Include="Resources\pnl_video.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKCore\Controllers" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

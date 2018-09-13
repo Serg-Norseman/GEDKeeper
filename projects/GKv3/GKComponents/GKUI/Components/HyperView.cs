@@ -23,9 +23,9 @@ using System.Collections.Generic;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.UIContracts;
 
 namespace GKUI.Components
 {
@@ -36,7 +36,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class HyperView : CustomPanel
+    public class HyperView : CustomPanel, IHyperView
     {
         private readonly List<BBTextChunk> fChunks;
         private readonly List<int> fHeights;

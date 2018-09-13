@@ -22,6 +22,7 @@ using System.Windows.Forms;
 using BSLib;
 using GKCore.Controllers;
 using GKCore.Interfaces;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Providers

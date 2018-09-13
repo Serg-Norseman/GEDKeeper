@@ -661,7 +661,7 @@ namespace GKUI.Components
             return (item != null) ? item.Data : null;
         }
 
-        public void SelectItem(GKCore.Interfaces.IListItem item)
+        private void SelectItem(GKCore.Interfaces.IListItem item)
         {
             if (item != null) {
                 int idx = fItems.IndexOf((GKListItem)item);

@@ -19,9 +19,10 @@
  */
 
 using System;
-using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
+
+using BSLib;
 using GKCore;
 using GKCore.Lists;
 using GKCore.Types;
