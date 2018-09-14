@@ -43,7 +43,6 @@ namespace GKCore.Interfaces
         void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone);
         List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType);
         StringList GetRecordContent(GEDCOMRecord record);
-        string GetRecordName(GEDCOMRecord record, bool signed);
         IListManager GetRecordsListManByType(GEDCOMRecordType recType);
         GEDCOMIndividualRecord GetSelectedPerson();
         GEDCOMRecordType GetSelectedRecordType();

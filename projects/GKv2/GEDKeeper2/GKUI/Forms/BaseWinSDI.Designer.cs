@@ -1014,7 +1014,7 @@
             this.tabsRecords.SelectedIndex = 0;
             this.tabsRecords.Size = new System.Drawing.Size(976, 385);
             this.tabsRecords.TabIndex = 3;
-            this.tabsRecords.SelectedIndexChanged += new System.EventHandler(this.PageRecords_SelectedIndexChanged);
+            this.tabsRecords.SelectedIndexChanged += new System.EventHandler(this.tabsRecords_SelectedIndexChanged);
             // 
             // BaseWinSDI
             // 

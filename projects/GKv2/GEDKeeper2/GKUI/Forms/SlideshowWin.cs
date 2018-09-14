@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -72,7 +73,7 @@ namespace GKUI.Forms
             fController.LoadList();
         }
 
-        private void SlideshowWin_Load(object sender, System.EventArgs e)
+        private void SlideshowWin_Load(object sender, EventArgs e)
         {
             fController.Next();
         }
@@ -87,11 +88,11 @@ namespace GKUI.Forms
             if (e.KeyCode == Keys.Escape) Close();
         }
 
-        public void SetLang()
+        public override void SetLang()
         {
             Text = LangMan.LS(LSID.LSID_Slideshow);
-            tbPrev.ToolTipText = LangMan.LS(LSID.LSID_PrevRec);
-            tbNext.ToolTipText = LangMan.LS(LSID.LSID_NextRec);
+            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
+            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
         }
 
         public void SetImage(IImage image)
@@ -114,7 +115,7 @@ namespace GKUI.Forms
             timer1.Enabled = active;
         }
 
-        private void tsbStart_Click(object sender, System.EventArgs e)
+        private void tsbStart_Click(object sender, EventArgs e)
         {
             if (tbStart.Text == LangMan.LS(LSID.LSID_Start)) {
                 SetTimer(true);
@@ -123,17 +124,17 @@ namespace GKUI.Forms
             }
         }
 
-        private void tsbPrev_Click(object sender, System.EventArgs e)
+        private void tsbPrev_Click(object sender, EventArgs e)
         {
             fController.Prev();
         }
 
-        private void tsbNext_Click(object sender, System.EventArgs e)
+        private void tsbNext_Click(object sender, EventArgs e)
         {
             fController.Next();
         }
 
-        private void Timer1Tick(object sender, System.EventArgs e)
+        private void Timer1Tick(object sender, EventArgs e)
         {
             fController.Next();
         }

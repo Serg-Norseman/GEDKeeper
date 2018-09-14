@@ -189,6 +189,7 @@
     <Compile Include="GKCore\Charts\TCScaleControl.cs" />
     <Compile Include="GKCore\Controllers\AddressEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\AssociationEditDlgController.cs" />
+    <Compile Include="GKCore\Controllers\BaseWinController.cs" />
     <Compile Include="GKCore\Controllers\CircleChartWinController.cs" />
     <Compile Include="GKCore\Controllers\CommonFilterDlgController.cs" />
     <Compile Include="GKCore\Controllers\CommunicationEditDlgController.cs" />

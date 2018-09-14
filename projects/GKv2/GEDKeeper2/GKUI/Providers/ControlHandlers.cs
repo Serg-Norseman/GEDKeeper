@@ -513,4 +513,17 @@ namespace GKUI.Providers
             Control.Clear();
         }
     }
+
+    public sealed class TabControlHandler : ControlHandler<TabControl, TabControlHandler>, ITabControl
+    {
+        public TabControlHandler(TabControl control) : base(control)
+        {
+        }
+
+        public int SelectedIndex
+        {
+            get { return Control.SelectedIndex; }
+            set { Control.SelectedIndex = value; }
+        }
+    }
 }

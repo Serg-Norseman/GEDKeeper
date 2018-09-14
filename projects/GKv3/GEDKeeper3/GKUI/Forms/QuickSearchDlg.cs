@@ -21,6 +21,7 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -31,7 +32,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed class QuickSearchDlg : Form, ILocalization
+    public sealed class QuickSearchDlg : CommonForm, ILocalization
     {
         private readonly IWorkWindow fWorkWindow;
         private ISearchStrategy fStrategy;
@@ -143,8 +144,8 @@ namespace GKUI.Forms
         {
             Title = LangMan.LS(LSID.LSID_Search);
             //txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
-            btnPrev.ToolTip = LangMan.LS(LSID.LSID_FindPrevious);
-            btnNext.ToolTip = LangMan.LS(LSID.LSID_FindNext);
+            SetToolTip(btnPrev, LangMan.LS(LSID.LSID_FindPrevious));
+            SetToolTip(btnNext, LangMan.LS(LSID.LSID_FindNext));
         }
     }
 }

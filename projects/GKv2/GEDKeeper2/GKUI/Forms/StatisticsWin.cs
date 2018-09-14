@@ -133,7 +133,7 @@ namespace GKUI.Forms
             ColumnHeader3.Text = LangMan.LS(LSID.LSID_ManSum);
             ColumnHeader4.Text = LangMan.LS(LSID.LSID_WomanSum);
 
-            tbExcelExport.ToolTipText = LangMan.LS(LSID.LSID_MIExportToExcelFile);
+            SetToolTip(tbExcelExport, LangMan.LS(LSID.LSID_MIExportToExcelFile));
             fController.UpdateCommonStats();
 
             int oldIndex = cbType.SelectedIndex;

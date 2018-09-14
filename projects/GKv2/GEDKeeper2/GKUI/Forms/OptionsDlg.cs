@@ -27,6 +27,7 @@ using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -34,7 +35,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class OptionsDlg : CommonDialog, ILocalization
+    public sealed partial class OptionsDlg : CommonDialog, ILocalization, IOptionsDlg
     {
         private readonly IHost fHost;
         private GlobalOptions fOptions;
@@ -266,7 +267,7 @@ namespace GKUI.Forms
 
         private void UpdatePlugins()
         {
-            lvPlugins.Items.Clear();
+            lvPlugins.ClearItems();
 
             int num = AppHost.Plugins.Count;
             for (int i = 0; i < num; i++)
@@ -274,10 +275,10 @@ namespace GKUI.Forms
                 IPlugin plugin = AppHost.Plugins[i];
                 PluginInfo pInfo = PluginInfo.GetPluginInfo(plugin);
 
-                ListViewItem item = lvPlugins.Items.Add(pInfo.Title);
-                item.SubItems.Add(pInfo.Version);
-                item.SubItems.Add(pInfo.Copyright);
-                item.SubItems.Add(pInfo.Description);
+                lvPlugins.AddItem(null, pInfo.Title,
+                                  pInfo.Version,
+                                  pInfo.Copyright,
+                                  pInfo.Description);
             }
         }
 
@@ -286,11 +287,7 @@ namespace GKUI.Forms
             Label pan = (sender as Label);
             if (pan == null) return;
 
-            ColorDialog1.FullOpen = true;
-            ColorDialog1.Color = pan.BackColor;
-            if (ColorDialog1.ShowDialog() == DialogResult.OK) {
-                pan.BackColor = ColorDialog1.Color;
-            }
+            pan.BackColor = UIHelper.ConvertColor(AppHost.StdDialogs.SelectColor(UIHelper.ConvertColor(pan.BackColor)));
         }
 
         private void panDefFont_Click(object sender, EventArgs e)

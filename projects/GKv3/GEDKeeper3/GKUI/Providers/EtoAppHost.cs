@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using Eto.Forms;
+
 using GKCore;
 using GKCore.Charts;
 using GKCore.Controllers;
@@ -274,6 +275,9 @@ namespace GKUI.Providers
         /// </summary>
         public static void ConfigureBootstrap(bool mdi)
         {
+            if (mdi)
+                throw new ArgumentException("MDI obsolete");
+
             var appHost = new EtoAppHost();
             IContainer container = AppHost.Container;
 
@@ -289,7 +293,6 @@ namespace GKUI.Providers
 
             // controls and other
             container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
-            //container.Register<IWizardPages, WizardPages>(LifeCycle.Transient);
 
             // dialogs
             container.Register<IRecordSelectDialog, RecordSelectDlg>(LifeCycle.Transient);
@@ -319,12 +322,28 @@ namespace GKUI.Providers
             container.Register<IPortraitSelectDlg, PortraitSelectDlg>(LifeCycle.Transient);
             container.Register<IDayTipsDlg, DayTipsDlg>(LifeCycle.Transient);
 
-            if (!mdi) {
-                container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient);
-            } else {
-                //container.Register<IBaseWindow, BaseWin>(LifeCycle.Transient);
-                //container.Register<IMainWindow, MainWin>(LifeCycle.Singleton);
-            }
+            container.Register<ICommonFilterDlg, CommonFilterDlg>(LifeCycle.Transient);
+            container.Register<IPersonsFilterDlg, PersonsFilterDlg>(LifeCycle.Transient);
+            container.Register<IScriptEditWin, ScriptEditWin>(LifeCycle.Transient);
+            container.Register<ITreeSplitDlg, TTTreeSplitDlg>(LifeCycle.Transient);
+            container.Register<ITreeMergeDlg, TTTreeMergeDlg>(LifeCycle.Transient);
+            container.Register<ITreeCompareDlg, TTTreeCompareDlg>(LifeCycle.Transient);
+            container.Register<ITreeCheckDlg, TTTreeCheckDlg>(LifeCycle.Transient);
+            container.Register<IRecMergeDlg, TTRecMergeDlg>(LifeCycle.Transient);
+            container.Register<IPlacesManagerDlg, TTPlacesManagerDlg>(LifeCycle.Transient);
+            container.Register<IPatriarchsSearchDlg, TTPatSearchDlg>(LifeCycle.Transient);
+            container.Register<IFragmentSearchDlg, TTFamilyGroupsDlg>(LifeCycle.Transient);
+            container.Register<IMapsViewerWin, MapsViewerWin>(LifeCycle.Transient);
+            container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
+            container.Register<IRelationshipCalculatorDlg, RelationshipCalculatorDlg>(LifeCycle.Transient);
+            container.Register<ISlideshowWin, SlideshowWin>(LifeCycle.Transient);
+            container.Register<IStatisticsWin, StatisticsWin>(LifeCycle.Transient);
+            container.Register<ITreeChartWin, TreeChartWin>(LifeCycle.Transient);
+            container.Register<ICircleChartWin, CircleChartWin>(LifeCycle.Transient);
+            container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
+            container.Register<IOptionsDlg, OptionsDlg>(LifeCycle.Transient);
+
+            container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
@@ -338,6 +357,7 @@ namespace GKUI.Providers
             ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
+            ControlsManager.RegisterHandlerType(typeof(TabControl), typeof(TabControlHandler));
         }
 
         #endregion

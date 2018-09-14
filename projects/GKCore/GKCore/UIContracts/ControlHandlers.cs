@@ -211,4 +211,13 @@ namespace GKCore.UIContracts
     {
         StringList Lines { get; }
     }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface ITabControl : IControlHandler
+    {
+        int SelectedIndex { get; set; }
+    }
 }

@@ -28,11 +28,11 @@ namespace GKUI.Forms
     /// <summary>
     /// Form's class, common for the implementation of the print.
     /// </summary>
-    public class PrintableForm : StatusForm
+    public abstract class PrintableForm : StatusForm
     {
         private PrintDocument fPrintDoc;
 
-        public PrintableForm() : base()
+        protected PrintableForm() : base()
         {
             InitPrintDoc();
         }
@@ -62,7 +62,7 @@ namespace GKUI.Forms
             }
         }
 
-        // FIXME: GKv3 DevRestriction
+        // FIXME: Eto restriction
         /*private void printDocument1_BeginPrint(object sender, PrintEventArgs e)
         {
         }

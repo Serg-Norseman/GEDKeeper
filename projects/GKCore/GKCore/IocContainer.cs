@@ -105,12 +105,12 @@ namespace GKCore.IoC
                                                        typeof(TConcrete), lifeCycle));
         }
 
-        public TTypeToResolve Resolve<TTypeToResolve>(object[] parameters = null)
+        public TTypeToResolve Resolve<TTypeToResolve>(params object[] parameters)
         {
             return (TTypeToResolve) Resolve(typeof(TTypeToResolve), parameters);
         }
 
-        public object Resolve(Type typeToResolve, object[] parameters = null)
+        public object Resolve(Type typeToResolve, params object[] parameters)
         {
             RegisteredObject registeredObject;
             if (!fRegisteredObjects.TryGetValue(typeToResolve, out registeredObject)) {
@@ -120,10 +120,10 @@ namespace GKCore.IoC
             return GetInstance(registeredObject, parameters);
         }
 
-        private object GetInstance(RegisteredObject registeredObject, object[] parameters)
+        private object GetInstance(RegisteredObject registeredObject, params object[] parameters)
         {
             if (registeredObject.Instance == null || registeredObject.LifeCycle == LifeCycle.Transient) {
-                if (parameters == null) {
+                if (parameters == null || parameters.Length == 0) {
                     Type implementation = registeredObject.ConcreteType;
                     ConstructorInfo constructor = implementation.GetConstructors()[0];
                     ParameterInfo[] constructorParameters = constructor.GetParameters();

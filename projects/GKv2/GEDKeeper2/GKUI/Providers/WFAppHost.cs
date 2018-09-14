@@ -35,6 +35,10 @@ using GKUI.Forms;
 
 namespace GKUI.Providers
 {
+    /// <summary>
+    /// The main implementation of the platform-specific application's host for
+    /// WinForms.
+    /// </summary>
     public sealed class WFAppHost : AppHost
     {
         private readonly ApplicationContext fAppContext;
@@ -311,6 +315,28 @@ namespace GKUI.Providers
             container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
             container.Register<IPortraitSelectDlg, PortraitSelectDlg>(LifeCycle.Transient);
             container.Register<IDayTipsDlg, DayTipsDlg>(LifeCycle.Transient);
+
+            container.Register<ICommonFilterDlg, CommonFilterDlg>(LifeCycle.Transient);
+            container.Register<IPersonsFilterDlg, PersonsFilterDlg>(LifeCycle.Transient);
+            container.Register<IScriptEditWin, ScriptEditWin>(LifeCycle.Transient);
+            container.Register<ITreeSplitDlg, TTTreeSplitDlg>(LifeCycle.Transient);
+            container.Register<ITreeMergeDlg, TTTreeMergeDlg>(LifeCycle.Transient);
+            container.Register<ITreeCompareDlg, TTTreeCompareDlg>(LifeCycle.Transient);
+            container.Register<ITreeCheckDlg, TTTreeCheckDlg>(LifeCycle.Transient);
+            container.Register<IRecMergeDlg, TTRecMergeDlg>(LifeCycle.Transient);
+            container.Register<IPlacesManagerDlg, TTPlacesManagerDlg>(LifeCycle.Transient);
+            container.Register<IPatriarchsSearchDlg, TTPatSearchDlg>(LifeCycle.Transient);
+            container.Register<IFragmentSearchDlg, TTFamilyGroupsDlg>(LifeCycle.Transient);
+            container.Register<IMapsViewerWin, MapsViewerWin>(LifeCycle.Transient);
+            container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
+            container.Register<IRelationshipCalculatorDlg, RelationshipCalculatorDlg>(LifeCycle.Transient);
+            container.Register<ISlideshowWin, SlideshowWin>(LifeCycle.Transient);
+            container.Register<IStatisticsWin, StatisticsWin>(LifeCycle.Transient);
+            container.Register<ITreeChartWin, TreeChartWin>(LifeCycle.Transient);
+            container.Register<ICircleChartWin, CircleChartWin>(LifeCycle.Transient);
+            container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
+            container.Register<IOptionsDlg, OptionsDlg>(LifeCycle.Transient);
+
             container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
@@ -325,6 +351,7 @@ namespace GKUI.Providers
             ControlsManager.RegisterHandlerType(typeof(ToolStripComboBox), typeof(ToolStripComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
+            ControlsManager.RegisterHandlerType(typeof(TabControl), typeof(TabControlHandler));
         }
 
         #endregion

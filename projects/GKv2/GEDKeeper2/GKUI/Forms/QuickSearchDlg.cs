@@ -31,7 +31,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed class QuickSearchDlg : Form, ILocalization
+    public sealed class QuickSearchDlg : CommonForm, ILocalization
     {
         private readonly IWorkWindow fWorkWindow;
         private ISearchStrategy fStrategy;
@@ -157,9 +157,9 @@ namespace GKUI.Forms
         public void SetLang()
         {
             Text = LangMan.LS(LSID.LSID_Search);
-            //this.txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
-            //this.btnPrev.Text = LangMan.LS(LSID.LSID_FindPrevious);
-            //this.btnNext.Text = LangMan.LS(LSID.LSID_FindNext);
+            //txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
+            SetToolTip(btnPrev, LangMan.LS(LSID.LSID_FindPrevious));
+            SetToolTip(btnNext, LangMan.LS(LSID.LSID_FindNext));
         }
     }
 }

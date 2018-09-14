@@ -34,7 +34,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class OrganizerWin : CommonForm, IOrganizerWin
+    public sealed partial class OrganizerWin : CommonDialog, IOrganizerWin
     {
         private readonly OrganizerController fController;
 

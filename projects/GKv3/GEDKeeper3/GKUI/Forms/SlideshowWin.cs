@@ -84,7 +84,7 @@ namespace GKUI.Forms
             fController.Next();
         }
 
-        private void SlideshowWin_Load(object sender, System.EventArgs e)
+        private void SlideshowWin_Load(object sender, EventArgs e)
         {
         }
 
@@ -93,12 +93,12 @@ namespace GKUI.Forms
             if (e.Key == Keys.Escape) Close();
         }
 
-        public void SetLang()
+        public override void SetLang()
         {
             Title = LangMan.LS(LSID.LSID_Slideshow);
             tbStart.Text = LangMan.LS(LSID.LSID_Start);
-            tbPrev.ToolTip = LangMan.LS(LSID.LSID_PrevRec);
-            tbNext.ToolTip = LangMan.LS(LSID.LSID_NextRec);
+            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
+            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
         }
 
         public void SetImage(IImage image)
@@ -108,7 +108,7 @@ namespace GKUI.Forms
             fImageCtl.ZoomToFit();
         }
 
-        private void tsbStart_Click(object sender, System.EventArgs e)
+        private void tsbStart_Click(object sender, EventArgs e)
         {
             if (tbStart.Text == LangMan.LS(LSID.LSID_Start)) {
                 tbStart.Text = LangMan.LS(LSID.LSID_Stop);
@@ -121,17 +121,17 @@ namespace GKUI.Forms
             }
         }
 
-        private void tsbPrev_Click(object sender, System.EventArgs e)
+        private void tsbPrev_Click(object sender, EventArgs e)
         {
             fController.Prev();
         }
 
-        private void tsbNext_Click(object sender, System.EventArgs e)
+        private void tsbNext_Click(object sender, EventArgs e)
         {
             fController.Next();
         }
 
-        private void Timer1Tick(object sender, System.EventArgs e)
+        private void Timer1Tick(object sender, EventArgs e)
         {
             fController.Next();
         }

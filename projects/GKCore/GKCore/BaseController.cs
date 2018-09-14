@@ -29,18 +29,6 @@ using GKCore.UIContracts;
 
 namespace GKCore
 {
-    public sealed class TabParts
-    {
-        public readonly IListView ListView;
-        public readonly IHyperView Summary;
-
-        public TabParts(IListView listView, IHyperView summary)
-        {
-            ListView = listView;
-            Summary = summary;
-        }
-    }
-
     /// <summary>
     /// 
     /// </summary>

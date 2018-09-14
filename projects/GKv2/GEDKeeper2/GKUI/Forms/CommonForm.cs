@@ -19,8 +19,10 @@
  */
 
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using GKCore.Controllers;
+using GKCore.Interfaces;
 using GKCore.UIContracts;
 
 namespace GKUI.Forms
@@ -61,11 +63,16 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
-        public void SetToolTip(Control control, string toolTip)
+        public void SetToolTip(Component component, string toolTip)
         {
-            //Control ctl = control as Control;
-            if (control != null && !string.IsNullOrEmpty(toolTip)) {
-                fToolTip.SetToolTip(control, toolTip);
+            if (component != null && !string.IsNullOrEmpty(toolTip)) {
+                if (component is Control) {
+                    fToolTip.SetToolTip((Control)component, toolTip);
+                }
+                else
+                if (component is ToolStripItem) {
+                    ((ToolStripItem)component).ToolTipText = toolTip;
+                }
             }
         }
     }
@@ -73,7 +80,11 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonDialog : CommonForm
+    public class CommonDialog : CommonForm, ICommonDialog
     {
+        public virtual bool ShowModalX(object owner)
+        {
+            return (ShowDialog() == DialogResult.OK);
+        }
     }
 }

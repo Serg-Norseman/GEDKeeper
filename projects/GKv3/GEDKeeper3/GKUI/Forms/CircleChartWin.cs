@@ -155,7 +155,7 @@ namespace GKUI.Forms
 
         #region ILocalization implementation
 
-        public void SetLang()
+        public override void SetLang()
         {
             if (fCircleChart.ChartType == CircleChartType.Ancestors) {
                 Title = LangMan.LS(LSID.LSID_AncestorsCircle);
@@ -163,11 +163,11 @@ namespace GKUI.Forms
                 Title = LangMan.LS(LSID.LSID_DescendantsCircle);
             }
 
-            tbImageSave.ToolTip = LangMan.LS(LSID.LSID_ImageSaveTip);
-            tbDocPrint.ToolTip = LangMan.LS(LSID.LSID_DocPrint);
-            tbDocPreview.ToolTip = LangMan.LS(LSID.LSID_DocPreview);
-            tbPrev.ToolTip = LangMan.LS(LSID.LSID_PrevRec);
-            tbNext.ToolTip = LangMan.LS(LSID.LSID_NextRec);
+            SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));
+            SetToolTip(tbDocPrint, LangMan.LS(LSID.LSID_DocPrint));
+            SetToolTip(tbDocPreview, LangMan.LS(LSID.LSID_DocPreview));
+            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
+            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
         }
 
         #endregion

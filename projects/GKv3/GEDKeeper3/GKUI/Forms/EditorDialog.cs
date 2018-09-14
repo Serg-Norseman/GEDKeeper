@@ -25,7 +25,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class EditorDialog : CommonDialog, ICommonDialog, IBaseEditor
+    public class EditorDialog : CommonDialog, IBaseEditor
     {
         protected IBaseWindow fBase;
 

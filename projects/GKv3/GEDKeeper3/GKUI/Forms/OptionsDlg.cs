@@ -21,12 +21,14 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
+
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.Types;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -34,7 +36,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class OptionsDlg : CommonDialog, ILocalization
+    public sealed partial class OptionsDlg : CommonDialog, ILocalization, IOptionsDlg
     {
         private readonly IHost fHost;
         private GlobalOptions fOptions;
@@ -294,12 +296,7 @@ namespace GKUI.Forms
             Label pan = (sender as Label);
             if (pan == null) return;
 
-            using (var clrDlg = new ColorDialog()) {
-                clrDlg.Color = pan.BackgroundColor;
-                if (clrDlg.ShowDialog(this) == Eto.Forms.DialogResult.Ok) {
-                    pan.BackgroundColor = clrDlg.Color;
-                }
-            }
+            pan.BackgroundColor = UIHelper.ConvertColor(AppHost.StdDialogs.SelectColor(UIHelper.ConvertColor(pan.BackgroundColor)));
         }
 
         private void panDefFont_Click(object sender, EventArgs e)

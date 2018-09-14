@@ -21,6 +21,7 @@
 using System;
 using Eto.Forms;
 using GKCore.Controllers;
+using GKCore.Interfaces;
 using GKCore.UIContracts;
 using GKUI.Components;
 
@@ -48,18 +49,28 @@ namespace GKUI.Forms
             fControlsManager = new ControlsManager();
         }
 
-        public void SetToolTip(Control control, string toolTip)
+        public void SetToolTip(BindableWidget component, string toolTip)
         {
-            if (control != null && !string.IsNullOrEmpty(toolTip)) {
-                control.ToolTip = toolTip;
+            if (component != null && !string.IsNullOrEmpty(toolTip)) {
+                if (component is Control) {
+                    ((Control)component).ToolTip = toolTip;
+                } else
+                if (component is ToolItem) {
+                    ((ToolItem)component).ToolTip = toolTip;
+                }
             }
+        }
+
+        public void Activate()
+        {
+            Focus();
         }
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public class CommonDialog : Dialog<DialogResult>, IView
+    public class CommonDialog : Dialog<DialogResult>, ICommonDialog, IView
     {
         protected readonly ControlsManager fControlsManager;
 
@@ -96,11 +107,21 @@ namespace GKUI.Forms
             fControlsManager = new ControlsManager();
         }
 
-        public void SetToolTip(Control control, string toolTip)
+        public void SetToolTip(BindableWidget component, string toolTip)
         {
-            if (control != null && !string.IsNullOrEmpty(toolTip)) {
-                control.ToolTip = toolTip;
+            if (component != null && !string.IsNullOrEmpty(toolTip)) {
+                if (component is Control) {
+                    ((Control)component).ToolTip = toolTip;
+                } else
+                if (component is ToolItem) {
+                    ((ToolItem)component).ToolTip = toolTip;
+                }
             }
+        }
+
+        public void Activate()
+        {
+            Focus();
         }
 
         public virtual bool ShowModalX(object owner)

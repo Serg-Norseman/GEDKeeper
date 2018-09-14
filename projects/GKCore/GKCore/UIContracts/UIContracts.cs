@@ -24,6 +24,7 @@ using GKCommon.GEDCOM;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.UIContracts
@@ -34,6 +35,8 @@ namespace GKCore.UIContracts
     public interface IStdDialogs
     {
         IFont SelectFont(IFont font);
+        IColor SelectColor(IColor color);
+
         string GetOpenFile(string title, string context, string filter,
                            int filterIndex, string defaultExt);
         string GetSaveFile(string filter);
@@ -53,6 +56,8 @@ namespace GKCore.UIContracts
     public interface IView
     {
         string Caption { get; set; }
+
+        void Activate();
     }
 
 
@@ -68,7 +73,7 @@ namespace GKCore.UIContracts
     /// <summary>
     /// 
     /// </summary>
-    public interface IStatusForm
+    public interface IStatusForm : IWindow
     {
         IStatusLines StatusLines { get; }
     }
@@ -239,7 +244,7 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface IOrganizerWin : IView
+    public interface IOrganizerWin : ICommonDialog, IView
     {
         ISheetList AdrList { get; }
         ISheetList PhonesList { get; }
@@ -440,7 +445,7 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface ICircleChartWin : IView
+    public interface ICircleChartWin : IWindow, IView
     {
         ICircleChart CircleChart { get; }
     }
@@ -468,7 +473,7 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface IStatisticsWin : IView
+    public interface IStatisticsWin : IWindow, IView
     {
         IGraphControl Graph { get; }
         IListView ListStats { get; }
@@ -494,14 +499,16 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface ITreeChartWin : IView
+    public interface ITreeChartWin : IWindow, IView
     {
         ITreeChartBox TreeBox { get; }
         TreeChartKind ChartKind { get; set; }
+
+        void GenChart();
     }
 
 
-    public interface IScriptEditWin : IView
+    public interface IScriptEditWin : ICommonDialog, IView
     {
         ITextBoxHandler ScriptText { get; }
         ITextBoxHandler DebugOutput { get; }
@@ -578,5 +585,24 @@ namespace GKCore.UIContracts
     {
         IListView SelectedList { get; }
         IListView SkippedList { get; }
+    }
+
+
+    public interface IBaseWindowView : IBaseWindow, IView
+    {
+        ITabControl RecordTabs { get; }
+
+        bool CheckModified();
+    }
+
+
+    public interface IAboutDlg : ICommonDialog, IView
+    {
+    }
+
+
+    public interface IOptionsDlg : ICommonDialog, IView
+    {
+        void SetPage(OptionsPage page);
     }
 }

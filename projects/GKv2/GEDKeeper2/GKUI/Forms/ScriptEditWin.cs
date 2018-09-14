@@ -25,6 +25,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.UIContracts;
 using GKUI.Components;
@@ -189,10 +190,10 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            tbNewScript.ToolTipText = LangMan.LS(LSID.LSID_NewScriptTip);
-            tbLoadScript.ToolTipText = LangMan.LS(LSID.LSID_LoadScriptTip);
-            tbSaveScript.ToolTipText = LangMan.LS(LSID.LSID_SaveScriptTip);
-            tbRun.ToolTipText = LangMan.LS(LSID.LSID_RunScriptTip);
+            SetToolTip(tbNewScript, LangMan.LS(LSID.LSID_NewScriptTip));
+            SetToolTip(tbLoadScript, LangMan.LS(LSID.LSID_LoadScriptTip));
+            SetToolTip(tbSaveScript, LangMan.LS(LSID.LSID_SaveScriptTip));
+            SetToolTip(tbRun, LangMan.LS(LSID.LSID_RunScriptTip));
         }
 
         private void ScriptEditWin_KeyDown(object sender, KeyEventArgs e)

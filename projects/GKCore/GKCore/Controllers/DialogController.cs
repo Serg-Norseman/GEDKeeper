@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using BSLib;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.UIContracts;
@@ -75,7 +76,7 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public abstract class FormController<T> where T : IView
+    public abstract class FormController<T> : BaseObject where T : IView
     {
         protected readonly T fView;
         protected IBaseWindow fBase;

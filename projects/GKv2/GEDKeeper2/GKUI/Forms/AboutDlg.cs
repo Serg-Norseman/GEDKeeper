@@ -22,6 +22,7 @@ using System;
 using System.Windows.Forms;
 
 using GKCore;
+using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -29,7 +30,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class AboutDlg : CommonDialog
+    public sealed partial class AboutDlg : CommonDialog, IAboutDlg
     {
         public AboutDlg()
         {

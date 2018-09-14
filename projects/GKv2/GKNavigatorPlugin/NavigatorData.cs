@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using GKCommon.GEDCOM;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -66,7 +67,7 @@ namespace GKNavigatorPlugin
             GEDCOMRecord gRecord = record as GEDCOMRecord;
             if (gRecord == null) return;
 
-            string recName = baseWin.GetRecordName(gRecord, false);
+            string recName = GKUtils.GetRecordName(gRecord, false);
 
             int index = Find(gRecord);
             if (index >= 0) {

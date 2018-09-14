@@ -37,6 +37,20 @@ namespace GKUI.Providers
         {
         }
 
+        public IColor SelectColor(IColor color)
+        {
+            Color sdColor = ((ColorHandler)color).Handle;
+
+            using (var clrDlg = new ColorDialog()) {
+                clrDlg.Color = sdColor;
+                if (clrDlg.ShowDialog(null) == DialogResult.Ok) {
+                    return new ColorHandler(clrDlg.Color);
+                } else {
+                    return color;
+                }
+            }
+        }
+
         public IFont SelectFont(IFont font)
         {
             Font sdFont = ((FontHandler)font).Handle;

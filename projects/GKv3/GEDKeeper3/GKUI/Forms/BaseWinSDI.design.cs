@@ -131,12 +131,10 @@ namespace GKUI.Forms
             //
 
             tbFileNew = new ButtonToolItem();
-            tbFileNew.Click += ToolBar1_ButtonClick;
-            tbFileNew.Image = UIHelper.LoadResourceImage("Resources.btn_create_new.gif");
+            tbFileNew.Click += miFileNew_Click;
 
             tbFileLoad = new ButtonToolItem();
-            tbFileLoad.Click += ToolBar1_ButtonClick;
-            tbFileLoad.Image = UIHelper.LoadResourceImage("Resources.btn_load.gif");
+            tbFileLoad.Click += miFileLoad_Click;
 
             tbLoadMRU = new ButtonToolItem();
             tbLoadMRU.Text = "▼";
@@ -153,67 +151,53 @@ namespace GKUI.Forms
             };*/
 
             tbFileSave = new ButtonToolItem();
-            tbFileSave.Click += ToolBar1_ButtonClick;
-            tbFileSave.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");
+            tbFileSave.Click += miFileSave_Click;
 
             tbRecordAdd = new ButtonToolItem();
-            tbRecordAdd.Click += ToolBar1_ButtonClick;
-            tbRecordAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            tbRecordAdd.Click += miRecordAdd_Click;
 
             tbRecordEdit = new ButtonToolItem();
-            tbRecordEdit.Click += ToolBar1_ButtonClick;
-            tbRecordEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
+            tbRecordEdit.Click += miRecordEdit_Click;
 
             tbRecordDelete = new ButtonToolItem();
-            tbRecordDelete.Click += ToolBar1_ButtonClick;
-            tbRecordDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            tbRecordDelete.Click += miRecordDelete_Click;
 
             tbFilter = new ButtonToolItem();
-            tbFilter.Click += ToolBar1_ButtonClick;
-            tbFilter.Image = UIHelper.LoadResourceImage("Resources.btn_filter.gif");
+            tbFilter.Click += miFilter_Click;
 
             tbTreeAncestors = new ButtonToolItem();
-            tbTreeAncestors.Click += ToolBar1_ButtonClick;
-            tbTreeAncestors.Image = UIHelper.LoadResourceImage("Resources.btn_tree_ancestry.gif");
+            tbTreeAncestors.Click += miTreeAncestors_Click;
 
             tbTreeDescendants = new ButtonToolItem();
-            tbTreeDescendants.Click += ToolBar1_ButtonClick;
-            tbTreeDescendants.Image = UIHelper.LoadResourceImage("Resources.btn_tree_descendants.gif");
+            tbTreeDescendants.Click += miTreeDescendants_Click;
 
             tbTreeBoth = new ButtonToolItem();
-            tbTreeBoth.Click += ToolBar1_ButtonClick;
-            tbTreeBoth.Image = UIHelper.LoadResourceImage("Resources.btn_tree_both.gif");
+            tbTreeBoth.Click += miTreeBoth_Click;
 
             tbPedigree = new ButtonToolItem();
             tbPedigree.Click  += (sender, e) => MenuPedigree.Show(this);
-            tbPedigree.Image = UIHelper.LoadResourceImage("Resources.btn_scroll.gif");
 
             tbStats = new ButtonToolItem();
-            tbStats.Click += ToolBar1_ButtonClick;
-            tbStats.Image = UIHelper.LoadResourceImage("Resources.btn_table.gif");
+            tbStats.Click += miStats_Click;
 
             tbPrev = new ButtonToolItem();
             tbPrev.Enabled = false;
             tbPrev.Click += tbPrev_Click;
-            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
 
             tbNext = new ButtonToolItem();
             tbNext.Enabled = false;
             tbNext.Click += tbNext_Click;
-            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
             // Obsolete
             /*tbDocPreview = new ButtonToolItem();
             tbDocPreview.Click += tbDocPreview_Click;
-            tbDocPreview.Image = UIHelper.LoadResourceImage("Resources.btn_preview.gif");
 
             tbDocPrint = new ButtonToolItem();
             tbDocPrint.Click += tbDocPrint_Click;
-            tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");*/
+            */
 
             tbSendMail = new ButtonToolItem();
             tbSendMail.Click += tbSendMail_Click;
-            tbSendMail.Image = UIHelper.LoadResourceImage("Resources.btn_mail.gif");
 
             //
 
@@ -599,7 +583,6 @@ namespace GKUI.Forms
             Menu = MainMenu1;
             ToolBar = ToolBar1;
 
-            Icon = new Icon(GKUtils.LoadResourceStream("Resources.icon_gedkeeper.ico"));
             Title = "BaseWinSDI";
             GotFocus += Form_Activated;
             LostFocus += Form_Deactivate;

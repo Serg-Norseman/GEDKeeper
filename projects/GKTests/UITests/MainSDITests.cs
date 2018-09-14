@@ -325,9 +325,6 @@ namespace GKUI.Forms
             StringList recordContent = baseWin.GetRecordContent(record);
             Assert.IsNotNull(recordContent, stage + ".4.1");
 
-            string recordName = baseWin.GetRecordName(record, true);
-            Assert.IsNotNull(recordName, stage + ".4.2");
-
             Assert.IsTrue(baseWin.Context.IsAvailableRecord(record), stage + ".5");
             Assert.IsTrue(baseWin.RecordIsFiltered(record), stage + ".6");
 

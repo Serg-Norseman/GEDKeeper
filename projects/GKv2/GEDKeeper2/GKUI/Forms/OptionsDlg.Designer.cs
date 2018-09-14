@@ -21,7 +21,6 @@
         private System.Windows.Forms.Panel panUnkSexColor;
         private System.Windows.Forms.Panel panUnHusbandColor;
         private System.Windows.Forms.Panel panUnWifeColor;
-        private System.Windows.Forms.ColorDialog ColorDialog1;
         private System.Windows.Forms.GroupBox grpInternet;
         private System.Windows.Forms.Label lblProxyServer;
         private System.Windows.Forms.Label lblProxyPort;
@@ -75,7 +74,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ListView lvPlugins;
+        private GKUI.Components.GKListView lvPlugins;
         private System.Windows.Forms.TabPage pagePlugins;
         private System.Windows.Forms.Label lblChartFont;
         private System.Windows.Forms.TabControl tabsCharts;
@@ -221,14 +220,13 @@
             this.radExcess = new System.Windows.Forms.RadioButton();
             this.radCompact = new System.Windows.Forms.RadioButton();
             this.pagePlugins = new System.Windows.Forms.TabPage();
-            this.lvPlugins = new System.Windows.Forms.ListView();
+            this.lvPlugins = new GKUI.Components.GKListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();

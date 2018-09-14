@@ -208,7 +208,7 @@ namespace GKUI.Forms
             fController.SaveSnapshot();
         }
 
-        // FIXME: GKv3 DevRestriction
+        // FIXME: Eto restriction
         /*private void ImageTree_DragOver(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(typeof(string))) {
@@ -429,7 +429,7 @@ namespace GKUI.Forms
 
         #region ILocalization implementation
 
-        public void SetLang()
+        public override void SetLang()
         {
             tbGens.Text = LangMan.LS(LSID.LSID_Generations);
 
@@ -454,13 +454,12 @@ namespace GKUI.Forms
             miTraceKinships.Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
             miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
 
-            tbModes.ToolTip = LangMan.LS(LSID.LSID_ModesTip);
-
-            tbImageSave.ToolTip = LangMan.LS(LSID.LSID_ImageSaveTip);
-            tbDocPrint.ToolTip = LangMan.LS(LSID.LSID_DocPrint);
-            tbDocPreview.ToolTip = LangMan.LS(LSID.LSID_DocPreview);
-            tbPrev.ToolTip = LangMan.LS(LSID.LSID_PrevRec);
-            tbNext.ToolTip = LangMan.LS(LSID.LSID_NextRec);
+            SetToolTip(tbModes, LangMan.LS(LSID.LSID_ModesTip));
+            SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));
+            SetToolTip(tbDocPrint, LangMan.LS(LSID.LSID_DocPrint));
+            SetToolTip(tbDocPreview, LangMan.LS(LSID.LSID_DocPreview));
+            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
+            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
         }
 
         #endregion

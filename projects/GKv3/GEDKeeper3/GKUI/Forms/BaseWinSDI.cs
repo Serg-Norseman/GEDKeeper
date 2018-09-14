@@ -29,6 +29,7 @@ using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
+using GKCore.Controllers;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -42,14 +43,13 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class BaseWinSDI : CommonForm, IBaseWindow
+    public sealed partial class BaseWinSDI : CommonForm, IBaseWindowView
     {
         #region Private fields
 
-        private readonly List<GEDCOMRecord> fChangedRecords;
+        private readonly BaseWinController fController;
+
         private readonly IBaseContext fContext;
-        private readonly NavigationStack<GEDCOMRecord> fNavman;
-        private readonly TabParts[] fTabParts;
 
         #endregion
 
@@ -62,7 +62,16 @@ namespace GKUI.Forms
 
         public NavigationStack<GEDCOMRecord> Navman
         {
-            get { return fNavman; }
+            get { return fController.Navman; }
+        }
+
+        #endregion
+
+        #region View Interface
+
+        ITabControl IBaseWindowView.RecordTabs
+        {
+            get { return fControlsManager.GetControlHandler<ITabControl>(tabsRecords); }
         }
 
         #endregion
@@ -73,18 +82,33 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            Icon = new Icon(GKUtils.LoadResourceStream("Resources.icon_gedkeeper.ico"));
+            tbFileNew.Image = UIHelper.LoadResourceImage("Resources.btn_create_new.gif");
+            tbFileLoad.Image = UIHelper.LoadResourceImage("Resources.btn_load.gif");
+            tbFileSave.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");
+            tbRecordAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            tbRecordEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
+            tbRecordDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            tbFilter.Image = UIHelper.LoadResourceImage("Resources.btn_filter.gif");
+            tbTreeAncestors.Image = UIHelper.LoadResourceImage("Resources.btn_tree_ancestry.gif");
+            tbTreeDescendants.Image = UIHelper.LoadResourceImage("Resources.btn_tree_descendants.gif");
+            tbTreeBoth.Image = UIHelper.LoadResourceImage("Resources.btn_tree_both.gif");
+            tbPedigree.Image = UIHelper.LoadResourceImage("Resources.btn_scroll.gif");
+            tbStats.Image = UIHelper.LoadResourceImage("Resources.btn_table.gif");
+            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
+            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
+            //tbDocPreview.Image = UIHelper.LoadResourceImage("Resources.btn_preview.gif");
+            //tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
+            tbSendMail.Image = UIHelper.LoadResourceImage("Resources.btn_mail.gif");
+
             AppHost.Instance.LoadWindow(this);
 
-            fChangedRecords = new List<GEDCOMRecord>();
-
-            fContext = new BaseContext(this);
+            fController = new BaseWinController(this);
+            fContext = fController.Context;
             ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
-
-            fNavman = new NavigationStack<GEDCOMRecord>();
 
             tabsRecords.SuspendLayout();
 
-            fTabParts = new TabParts[(int)GEDCOMRecordType.rtLast + 1];
             CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GEDCOMRecordType.rtIndividual);
             CreatePage(LangMan.LS(LSID.LSID_RPFamilies), GEDCOMRecordType.rtFamily);
             CreatePage(LangMan.LS(LSID.LSID_RPNotes), GEDCOMRecordType.rtNote);
@@ -104,22 +128,43 @@ namespace GKUI.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                fNavman.Dispose();
-                fContext.Dispose();
+            if (disposing) {
+                fController.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        private void BaseContext_ModifiedChanged(object sender, EventArgs e)
+        private void CreatePage(string pageText, GEDCOMRecordType recType)
         {
-            SetMainTitle();
+            var summary = new HyperView();
+            summary.BorderWidth = 4;
+            summary.OnLink += mPersonSummaryLink;
+            summary.Font = UIHelper.GetDefaultFont();
+
+            var recView = new GKListView(ListManager.Create(fContext, recType));
+            recView.MouseDoubleClick += miRecordEdit_Click;
+            recView.SelectedItemsChanged += List_SelectedIndexChanged;
+            recView.UpdateContents();
+            recView.ContextMenu = contextMenu;
+
+            Splitter spl = new Splitter();
+            spl.Panel1 = recView;
+            spl.Panel2 = summary;
+            spl.RelativePosition = 300;
+            spl.Orientation = Orientation.Horizontal;
+            spl.FixedPanel = SplitterFixedPanel.Panel2;
+
+            TabPage tabPage = new TabPage();
+            tabPage.Text = pageText;
+            tabPage.Content = spl;
+            tabsRecords.Pages.Add(tabPage);
+
+            fController.SetTabPart(recType, recView, summary);
         }
 
-        public void Activate()
+        private void BaseContext_ModifiedChanged(object sender, EventArgs e)
         {
-            Focus();
+            fController.SetMainTitle();
         }
 
         #endregion
@@ -198,11 +243,9 @@ namespace GKUI.Forms
 
         private void contextMenu_Opening(object sender, EventArgs e)
         {
-            //GKListView recView = contextMenu.SourceControl as GKListViewStub;
-            var recType = GetSelectedRecordType();
-            IListView recView = GetRecordsViewByType(recType);
+            IListView recView = GetRecordsViewByType(GetSelectedRecordType());
 
-            miRecordDuplicate.Enabled = (recView == fTabParts[(int)GEDCOMRecordType.rtIndividual].ListView);
+            miRecordDuplicate.Enabled = (recView == fController.GetRecordsViewByType(GEDCOMRecordType.rtIndividual));
         }
 
         private void miRecordAdd_Click(object sender, EventArgs e)
@@ -225,93 +268,10 @@ namespace GKUI.Forms
             DuplicateRecord();
         }
 
-        #endregion
-
-        #region Basic function
-
-        public GEDCOMRecordType GetSelectedRecordType()
-        {
-            return (GEDCOMRecordType)(tabsRecords.SelectedIndex + 1);
-        }
-
-        public IListView GetRecordsViewByType(GEDCOMRecordType recType)
-        {
-            int rt = (int)recType;
-            TabParts tabPart = (rt < 0 || rt >= fTabParts.Length) ? null : fTabParts[rt];
-            return (tabPart == null) ? null : tabPart.ListView;
-        }
-
-        /// <summary>
-        /// Gets a hyper-view control for the specified record type.
-        /// </summary>
-        /// <param name="recType">Record type for which a hyper view control is
-        /// required.</param>
-        /// <returns>Hyper view control.</returns>
-        public IHyperView GetHyperViewByType(GEDCOMRecordType recType)
-        {
-            IHyperView view = fTabParts[(int)recType].Summary;
-            return view;
-        }
-
-        public IListManager GetRecordsListManByType(GEDCOMRecordType recType)
-        {
-            IListView rView = GetRecordsViewByType(recType);
-            return (rView == null) ? null : (IListManager)rView.ListMan;
-        }
-
-        public GEDCOMRecord GetSelectedRecordEx()
-        {
-            GEDCOMRecordType recType = GetSelectedRecordType();
-            IListView rView = GetRecordsViewByType(recType);
-            return (rView == null) ? null : (rView.GetSelectedData() as GEDCOMRecord);
-        }
-
-        public GEDCOMIndividualRecord GetSelectedPerson()
-        {
-            return GetSelectedRecordEx() as GEDCOMIndividualRecord;
-        }
-
         private void List_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (sender == null) return;
-
-            GEDCOMRecord rec = ((GKListView) sender).GetSelectedData() as GEDCOMRecord;
-            if (rec != null)
-            {
-                NavAdd(rec);
-            }
-            ShowRecordInfo(rec);
-        }
-
-        public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType)
-        {
-            IListView rView = GetRecordsViewByType(recType);
-            return (rView == null) ? null : rView.ListMan.GetRecordsList();
-        }
-
-        private void SetMainTitle()
-        {
-            Title = Path.GetFileName(fContext.FileName);
-            if (fContext.Modified) {
-                Title = @"* " + Title;
-            }
-        }
-
-        private void mPersonSummaryLink(object sender, string linkName)
-        {
-            if (linkName.StartsWith("view_"))
-            {
-                string xref = linkName.Remove(0, 5);
-                GEDCOMMultimediaRecord mmRec = fContext.Tree.XRefIndex_Find(xref) as GEDCOMMultimediaRecord;
-                if (mmRec != null)
-                {
-                    ShowMedia(mmRec, false);
-                }
-            }
-            else
-            {
-                SelectRecordByXRef(linkName);
-            }
+            if (sender != null) 
+                fController.ChangeListItem((IListView)sender);
         }
 
         private void tabsRecords_SelectedIndexChanged(object sender, EventArgs e)
@@ -319,38 +279,71 @@ namespace GKUI.Forms
             AppHost.Instance.UpdateControls(false);
         }
 
+        private void mPersonSummaryLink(object sender, string linkName)
+        {
+            if (linkName.StartsWith("view_")) {
+                string xref = linkName.Remove(0, 5);
+                GEDCOMMultimediaRecord mmRec = fContext.Tree.XRefIndex_Find(xref) as GEDCOMMultimediaRecord;
+                if (mmRec != null) {
+                    ShowMedia(mmRec, false);
+                }
+            } else {
+                SelectRecordByXRef(linkName);
+            }
+        }
+
+        #endregion
+
+        #region Basic function
+
+        public GEDCOMRecordType GetSelectedRecordType()
+        {
+            return fController.GetSelectedRecordType();
+        }
+
+        public IListView GetRecordsViewByType(GEDCOMRecordType recType)
+        {
+            return fController.GetRecordsViewByType(recType);
+        }
+
+        public IHyperView GetHyperViewByType(GEDCOMRecordType recType)
+        {
+            return fController.GetHyperViewByType(recType);
+        }
+
+        public IListManager GetRecordsListManByType(GEDCOMRecordType recType)
+        {
+            return fController.GetRecordsListManByType(recType);
+        }
+
+        public GEDCOMRecord GetSelectedRecordEx()
+        {
+            return fController.GetSelectedRecordEx();
+        }
+
+        public GEDCOMIndividualRecord GetSelectedPerson()
+        {
+            return fController.GetSelectedPerson();
+        }
+
+        public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType)
+        {
+            return fController.GetContentList(recType);
+        }
+
         public void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone)
         {
-            if (fContext.Tree.RecordsCount > 0)
-            {
-                if (recType == GEDCOMRecordType.rtNone) {
-                    RefreshLists(false);
-                } else {
-                    RefreshRecordsView(recType);
-                }
-            }
+            fController.ApplyFilter(recType);
         }
 
         public void SaveFileEx(bool saveAs)
         {
-            if (!fContext.IsUnknown() && !saveAs) {
-                SaveFile(fContext.FileName);
-            } else {
-                string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(fContext.FileName));
-                string fileName = AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, fContext.FileName, false);
-                if (!string.IsNullOrEmpty(fileName)) {
-                    SaveFile(fileName);
-                }
-            }
+            fController.SaveFileEx(saveAs);
         }
 
         public void CheckAutosave()
         {
-            // file is modified, isn't updated now, and isn't now created (exists)
-            if (fContext.Modified && !fContext.IsUpdated() && !fContext.IsUnknown()) {
-                // TODO: if file is new and not exists - don't save it, but hint to user
-                SaveFile(fContext.FileName);
-            }
+            fController.CheckAutosave();
         }
 
         public bool CheckModified()
@@ -373,186 +366,44 @@ namespace GKUI.Forms
             return result;
         }
 
-        private void CreatePage(string pageText, GEDCOMRecordType recType)
-        {
-            var summary = new HyperView();
-            summary.BorderWidth = 4;
-            summary.OnLink += mPersonSummaryLink;
-            summary.Font = UIHelper.GetDefaultFont();
-
-            var recView = new GKListView(ListManager.Create(fContext, recType));
-            recView.MouseDoubleClick += miRecordEdit_Click;
-            recView.SelectedItemsChanged += List_SelectedIndexChanged;
-            recView.UpdateContents();
-            recView.ContextMenu = contextMenu;
-
-            Splitter spl = new Splitter();
-            spl.Panel1 = recView;
-            spl.Panel2 = summary;
-            spl.RelativePosition = 300;
-            spl.Orientation = Orientation.Horizontal;
-            spl.FixedPanel = SplitterFixedPanel.Panel2;
-
-            TabPage tabPage = new TabPage();
-            tabPage.Text = pageText;
-            tabPage.Content = spl;
-            tabsRecords.Pages.Add(tabPage);
-
-            fTabParts[(int)recType] = new TabParts(recView, summary);
-        }
-
-        private void ChangeFileName()
-        {
-            SetMainTitle();
-            GlobalOptions.Instance.LastDir = Path.GetDirectoryName(fContext.FileName);
-            AppHost.Instance.AddMRU(fContext.FileName);
-        }
-
         public void Clear()
         {
-            fNavman.Clear();
-            fContext.Clear();
+            fController.Clear();
         }
 
         public void CreateNewFile()
         {
-            Clear();
-            RefreshLists(false);
-            ClearSummaries();
-            fContext.SetFileName(LangMan.LS(LSID.LSID_Unknown));
-            fContext.Tree.Header.Language.Value = GlobalOptions.Instance.GetCurrentItfLang();
-            fContext.Modified = false;
+            fController.CreateNewFile();
         }
 
         public void LoadFile(string fileName)
         {
-            Clear();
-
-            if (fContext.FileLoad(fileName)) {
-                fContext.Modified = false;
-                ChangeFileName();
-                RefreshLists(false);
-            }
+            fController.LoadFile(fileName);
         }
 
         public void SaveFile(string fileName)
         {
-            if (fContext.FileSave(fileName)) {
-                fContext.Modified = false;
-                ChangeFileName();
-            }
-        }
-
-        public void UpdateListsSettings()
-        {
-            IListManager listMan = GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
-            if (listMan != null) {
-                GlobalOptions.Instance.IndividualListColumns.CopyTo(listMan.ListColumns);
-            }
-        }
-
-        public void ClearSummaries()
-        {
-            for (var rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
-                IHyperView summary = fTabParts[(int)rt].Summary;
-                if (summary != null) {
-                    summary.Lines.Clear();
-                }
-            }
+            fController.SaveFile(fileName);
         }
 
         public void RefreshLists(bool columnsChanged)
         {
-            for (var rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
-                IListView listview = fTabParts[(int)rt].ListView;
-                if (listview != null) {
-                    listview.UpdateContents(columnsChanged);
-                }
-            }
-
-            AppHost.Instance.UpdateControls(false);
+            fController.RefreshLists(columnsChanged);
         }
 
         public void RefreshRecordsView(GEDCOMRecordType recType)
         {
-            IListView rView = GetRecordsViewByType(recType);
-            if (rView != null) {
-                rView.UpdateContents();
-
-                AppHost.Instance.UpdateControls(false);
-            }
+            fController.RefreshRecordsView(recType);
         }
 
         public void UpdateChangedRecords(GEDCOMRecord select = null)
         {
-            for (int i = fChangedRecords.Count - 1; i >= 0; i--) {
-                var record = fChangedRecords[i];
-
-                RefreshRecordsView(record.RecordType);
-            }
-
-            if (select != null) {
-                SelectRecordByXRef(select.XRef);
-            }
-        }
-
-        private void CheckChangedRecord(GEDCOMRecord record, bool active)
-        {
-            int idx = fChangedRecords.IndexOf(record);
-            if (active) {
-                if (idx < 0) {
-                    fChangedRecords.Add(record);
-                }
-            } else {
-                if (idx >= 0) {
-                    fChangedRecords.RemoveAt(idx);
-                }
-            }
+            fController.UpdateChangedRecords(select);
         }
 
         public void NotifyRecord(GEDCOMRecord record, RecordAction action)
         {
-            if (record == null) return;
-
-            DateTime dtNow = DateTime.Now;
-
-            switch (action) {
-                case RecordAction.raAdd:
-                case RecordAction.raEdit:
-                    record.ChangeDate.ChangeDateTime = dtNow;
-                    CheckChangedRecord(record, true);
-                    break;
-
-                case RecordAction.raDelete:
-                    {
-                        CheckChangedRecord(record, false);
-
-                        IListView rView = GetRecordsViewByType(record.RecordType);
-                        if (rView != null) {
-                            rView.DeleteRecord(record);
-
-                            IHyperView hView = GetHyperViewByType(record.RecordType);
-                            if ((hView != null) && (rView.ListMan.FilteredCount == 0)) {
-                                hView.Lines.Clear();
-                            }
-                        }
-                    }
-                    break;
-
-                case RecordAction.raJump:
-                    break;
-
-                case RecordAction.raMoveUp:
-                case RecordAction.raMoveDown:
-                    break;
-            }
-
-            if (action != RecordAction.raJump) {
-                fContext.Tree.Header.TransmissionDateTime = dtNow;
-                fContext.Modified = true;
-
-                AppHost.Instance.NotifyRecord(this, record, action);
-            }
+            fController.NotifyRecord(record, action);
         }
 
         public bool AllowFilter()
@@ -562,46 +413,7 @@ namespace GKUI.Forms
 
         public void SetFilter()
         {
-            if (!AllowFilter()) return;
-
-            GEDCOMRecordType rt = GetSelectedRecordType();
-            IListManager listMan = GetRecordsListManByType(rt);
-            if (listMan == null) return;
-
-            switch (rt) {
-                case GEDCOMRecordType.rtIndividual:
-                    using (PersonsFilterDlg fmFilter = new PersonsFilterDlg(this, listMan)) {
-                        if (AppHost.Instance.ShowModalX(fmFilter, false)) {
-                            ApplyFilter(rt);
-                        }
-                    }
-                    break;
-
-                case GEDCOMRecordType.rtFamily:
-                case GEDCOMRecordType.rtNote:
-                case GEDCOMRecordType.rtMultimedia:
-                case GEDCOMRecordType.rtSource:
-                case GEDCOMRecordType.rtRepository:
-                case GEDCOMRecordType.rtGroup:
-                case GEDCOMRecordType.rtResearch:
-                case GEDCOMRecordType.rtTask:
-                case GEDCOMRecordType.rtCommunication:
-                case GEDCOMRecordType.rtLocation:
-                    using (CommonFilterDlg fmComFilter = new CommonFilterDlg(this, listMan)) {
-                        if (AppHost.Instance.ShowModalX(fmComFilter, false)) {
-                            ApplyFilter(rt);
-                        }
-                    }
-                    break;
-            }
-        }
-
-        private void NavAdd(GEDCOMRecord aRec)
-        {
-            if (aRec == null || fNavman.Busy) return;
-
-            fNavman.Current = aRec;
-            AppHost.Instance.UpdateControls(false);
+            fController.SetFilter();
         }
 
         public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal)
@@ -623,10 +435,8 @@ namespace GKUI.Forms
                 GKUtils.LoadExtFile(targetFile);
             } else {
                 MediaViewerWin mediaViewer = new MediaViewerWin(this);
-                try
-                {
-                    try
-                    {
+                try {
+                    try {
                         mediaViewer.FileRef = fileRef;
                         if (modal) {
                             mediaViewer.Show();
@@ -634,14 +444,10 @@ namespace GKUI.Forms
                             mediaViewer.ShowInTaskbar = true;
                             mediaViewer.Show();
                         }
-                    }
-                    finally
-                    {
+                    } finally {
                         if (modal) mediaViewer.Dispose();
                     }
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     if (mediaViewer != null) mediaViewer.Dispose();
                     Logger.LogWrite("BaseWinSDI.ShowMedia(): " + ex.Message);
                 }
@@ -712,26 +518,26 @@ namespace GKUI.Forms
             miPlugins.Text = LangMan.LS(LSID.LSID_Plugins);
             miReports.Text = LangMan.LS(LSID.LSID_Reports);
 
-            tbFileNew.ToolTip = LangMan.LS(LSID.LSID_FileNewTip);
-            tbFileLoad.ToolTip = LangMan.LS(LSID.LSID_FileLoadTip);
-            tbFileSave.ToolTip = LangMan.LS(LSID.LSID_FileSaveTip);
-            tbRecordAdd.ToolTip = LangMan.LS(LSID.LSID_RecordAddTip);
-            tbRecordEdit.ToolTip = LangMan.LS(LSID.LSID_RecordEditTip);
-            tbRecordDelete.ToolTip = LangMan.LS(LSID.LSID_RecordDeleteTip);
-            tbFilter.ToolTip = LangMan.LS(LSID.LSID_FilterTip);
-            tbTreeAncestors.ToolTip = LangMan.LS(LSID.LSID_TreeAncestorsTip);
-            tbTreeDescendants.ToolTip = LangMan.LS(LSID.LSID_TreeDescendantsTip);
-            tbTreeBoth.ToolTip = LangMan.LS(LSID.LSID_TreeBothTip);
-            tbPedigree.ToolTip = LangMan.LS(LSID.LSID_PedigreeTip);
+            SetToolTip(tbFileNew, LangMan.LS(LSID.LSID_FileNewTip));
+            SetToolTip(tbFileLoad, LangMan.LS(LSID.LSID_FileLoadTip));
+            SetToolTip(tbFileSave, LangMan.LS(LSID.LSID_FileSaveTip));
+            SetToolTip(tbRecordAdd, LangMan.LS(LSID.LSID_RecordAddTip));
+            SetToolTip(tbRecordEdit, LangMan.LS(LSID.LSID_RecordEditTip));
+            SetToolTip(tbRecordDelete, LangMan.LS(LSID.LSID_RecordDeleteTip));
+            SetToolTip(tbFilter, LangMan.LS(LSID.LSID_FilterTip));
+            SetToolTip(tbTreeAncestors, LangMan.LS(LSID.LSID_TreeAncestorsTip));
+            SetToolTip(tbTreeDescendants, LangMan.LS(LSID.LSID_TreeDescendantsTip));
+            SetToolTip(tbTreeBoth, LangMan.LS(LSID.LSID_TreeBothTip));
+            SetToolTip(tbPedigree, LangMan.LS(LSID.LSID_PedigreeTip));
             miPedigree_dAboville2.Text = LangMan.LS(LSID.LSID_Pedigree_dAbovilleTip);
             miPedigree_Konovalov2.Text = LangMan.LS(LSID.LSID_Pedigree_KonovalovTip);
-            tbStats.ToolTip = LangMan.LS(LSID.LSID_StatsTip);
+            SetToolTip(tbStats, LangMan.LS(LSID.LSID_StatsTip));
 
-            //tbDocPrint.ToolTip = LangMan.LS(LSID.LSID_DocPrint);
-            //tbDocPreview.ToolTip = LangMan.LS(LSID.LSID_DocPreview);
+            //SetTooltip(tbDocPrint, LangMan.LS(LSID.LSID_DocPrint));
+            //SetTooltip(tbDocPreview, LangMan.LS(LSID.LSID_DocPreview));
 
-            tbPrev.ToolTip = LangMan.LS(LSID.LSID_PrevRec);
-            tbNext.ToolTip = LangMan.LS(LSID.LSID_NextRec);
+            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
+            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
 
             int num = miPlugins.Items.Count;
             for (int i = 0; i < num; i++) {
@@ -787,47 +593,27 @@ namespace GKUI.Forms
 
         void IWorkWindow.UpdateSettings()
         {
-            UpdateListsSettings();
-            RefreshLists(true);
-            UpdateShieldState();
+            fController.UpdateSettings();
         }
 
         void IWorkWindow.NavNext()
         {
-            fNavman.BeginNav();
-            try {
-                GEDCOMRecord rec = fNavman.Next() as GEDCOMRecord;
-                if (rec != null) {
-                    SelectRecordByXRef(rec.XRef);
-                    AppHost.Instance.UpdateControls(false);
-                }
-            } finally {
-                fNavman.EndNav();
-            }
+            fController.NavNext();
         }
 
         void IWorkWindow.NavPrev()
         {
-            fNavman.BeginNav();
-            try {
-                GEDCOMRecord rec = fNavman.Back() as GEDCOMRecord;
-                if (rec != null) {
-                    SelectRecordByXRef(rec.XRef);
-                    AppHost.Instance.UpdateControls(false);
-                }
-            } finally {
-                fNavman.EndNav();
-            }
+            fController.NavPrev();
         }
 
         bool IWorkWindow.NavCanBackward()
         {
-            return fNavman.CanBackward();
+            return fController.NavCanBackward();
         }
 
         bool IWorkWindow.NavCanForward()
         {
-            return fNavman.CanForward();
+            return fController.NavCanForward();
         }
 
         public bool AllowQuickSearch()
@@ -837,9 +623,7 @@ namespace GKUI.Forms
 
         IList<ISearchResult> IWorkWindow.FindAll(string searchPattern)
         {
-            GEDCOMRecordType rt = GetSelectedRecordType();
-            IList<ISearchResult> result = fContext.FindAll(rt, searchPattern);
-            return result;
+            return fController.FindAll(searchPattern);
         }
 
         void IWorkWindow.SelectByRec(GEDCOMIndividualRecord iRec)
@@ -873,55 +657,22 @@ namespace GKUI.Forms
 
         public void DuplicateRecord()
         {
-            GEDCOMRecord original = GetSelectedRecordEx();
-            if (original == null || original.RecordType != GEDCOMRecordType.rtIndividual) return;
-
-            AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_DuplicateWarning));
-
-            GEDCOMIndividualRecord target;
-            try {
-                fContext.BeginUpdate();
-
-                target = fContext.Tree.CreateIndividual();
-                target.Assign(original);
-
-                NotifyRecord(target, RecordAction.raAdd);
-            } finally {
-                fContext.EndUpdate();
-            }
-
-            RefreshLists(false);
-            SelectRecordByXRef(target.XRef);
+            fController.DuplicateRecord();
         }
 
         public void AddRecord()
         {
-            GEDCOMRecordType rt = GetSelectedRecordType();
-
-            GEDCOMRecord record = BaseController.AddRecord(this, rt, null);
-            if (record != null) {
-                RefreshLists(false);
-            }
-
-            UpdateChangedRecords(record);
+            fController.AddRecord();
         }
 
         public void EditRecord()
         {
-            GEDCOMRecord record = GetSelectedRecordEx();
-            if (record != null && BaseController.EditRecord(this, record)) {
-                RefreshLists(false);
-            }
-
-            UpdateChangedRecords(record);
+            fController.EditRecord();
         }
 
         public void DeleteRecord()
         {
-            GEDCOMRecord record = GetSelectedRecordEx();
-            if (record != null && BaseController.DeleteRecord(this, record, true)) {
-                RefreshLists(false);
-            }
+            fController.DeleteRecord();
         }
 
         public void ShowRecordsTab(GEDCOMRecordType recType)
@@ -941,65 +692,29 @@ namespace GKUI.Forms
             }
         }
 
-        public void ShowRecordInfo(GEDCOMRecord record)
-        {
-            if (record == null) return;
-
-            try
-            {
-                IHyperView hyperView = GetHyperViewByType(record.RecordType);
-                if (hyperView != null) {
-                    GKUtils.GetRecordContent(fContext, record, hyperView.Lines);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("BaseWinSDI.ShowRecordInfo(): " + ex.Message);
-            }
-        }
-
         public StringList GetRecordContent(GEDCOMRecord record)
         {
-            StringList ctx = new StringList();
-            GKUtils.GetRecordContent(fContext, record, ctx);
-            return ctx;
-        }
-
-        public string GetRecordName(GEDCOMRecord record, bool signed)
-        {
-            return GKUtils.GetRecordName(record, signed);
+            return fController.GetRecordContent(record);
         }
 
         public bool RecordIsFiltered(GEDCOMRecord record)
         {
-            bool result = false;
-            if (record != null) {
-                IListView rView = GetRecordsViewByType(record.RecordType);
-                result = (rView != null && rView.ListMan.IndexOfRecord(record) >= 0);
-            }
-            return result;
+            return fController.RecordIsFiltered(record);
         }
 
         #endregion
 
         #region From MainWin
 
-        // Obsolete
-        /*private void tbDocPrint_Click(object sender, EventArgs e)
+        private void tbDocPrint_Click(object sender, EventArgs e)
         {
-            IChartWindow chartWin = AppHost.Instance.GetWorkWindow() as IChartWindow;
-            if (chartWin != null && chartWin.AllowPrint()) {
-                chartWin.DoPrint();
-            }
+            // obsolete
         }
 
         private void tbDocPreview_Click(object sender, EventArgs e)
         {
-            IChartWindow chartWin = AppHost.Instance.GetWorkWindow() as IChartWindow;
-            if (chartWin != null && chartWin.AllowPrint()) {
-                chartWin.DoPrintPreview();
-            }
-        }*/
+            // obsolete
+        }
 
         public void Restore()
         {
@@ -1008,7 +723,7 @@ namespace GKUI.Forms
             }
         }
 
-        // FIXME: GKv3 DevRestriction
+        // FIXME: Eto restriction
         /*private void Form_DragEnter(object sender, DragEventArgs e)
         {
             e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
@@ -1061,33 +776,6 @@ namespace GKUI.Forms
             fContext.SwitchShieldState();
             UpdateShieldState();
             e.Handled = true;
-        }
-
-        private void ToolBar1_ButtonClick(object sender, EventArgs e)
-        {
-            if (sender == tbFileNew) {
-                miFileNew_Click(null, null);
-            } else if (sender == tbFileLoad) {
-                miFileLoad_Click(null, null);
-            } else if (sender == tbFileSave) {
-                miFileSave_Click(null, null);
-            } else if (sender == tbRecordAdd) {
-                miRecordAdd_Click(null, null);
-            } else if (sender == tbRecordEdit) {
-                miRecordEdit_Click(null, null);
-            } else if (sender == tbRecordDelete) {
-                miRecordDelete_Click(null, null);
-            } else if (sender == tbFilter) {
-                miFilter_Click(null, null);
-            } else if (sender == tbTreeAncestors) {
-                miTreeAncestors_Click(null, null);
-            } else if (sender == tbTreeDescendants) {
-                miTreeDescendants_Click(null, null);
-            } else if (sender == tbTreeBoth) {
-                miTreeBoth_Click(null, null);
-            } else if (sender == tbStats) {
-                miStats_Click(null, null);
-            }
         }
 
         private void MRUFileClick(object sender, EventArgs e)
@@ -1162,8 +850,8 @@ namespace GKUI.Forms
 
                 miSearch.Enabled = (workWin != null && workWin.AllowQuickSearch());
 
-                /*tbDocPrint.Enabled = (curChart != null && curChart.AllowPrint());
-                tbDocPreview.Enabled = (curChart != null && curChart.AllowPrint());*/
+                //tbDocPrint.Enabled = (curChart != null && curChart.AllowPrint());
+                //tbDocPreview.Enabled = (curChart != null && curChart.AllowPrint());
 
                 miTreeTools.Enabled = baseEn;
                 miExportToFamilyBook.Enabled = baseEn;
@@ -1200,193 +888,89 @@ namespace GKUI.Forms
 
         private void miExit_Click(object sender, EventArgs e)
         {
+            // FIXME: Controversial issue...
+            //AppHost.Instance.SaveLastBases();
             Application.Instance.Quit();
         }
 
         private void miUndo_Click(object sender, EventArgs e)
         {
-            fContext.DoUndo();
+            fController.Undo();
         }
 
         private void miRedo_Click(object sender, EventArgs e)
         {
-            fContext.DoRedo();
+            fController.Redo();
         }
 
         private void miExportToFamilyBook_Click(object sender, EventArgs e)
         {
-            //#if __MonoCS__
-            //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
-            //#else
-            //#endif
-
-            using (FamilyBookExporter fb = new FamilyBookExporter(this)) {
-                fb.Generate(true);
-            }
+            fController.ExportToFamilyBook();
         }
 
         private void miExportToTreesAlbum_Click(object sender, EventArgs e)
         {
-            //#if __MonoCS__
-            //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
-            //#else
-            //#endif
-
-            AppHost.StdDialogs.ShowWarning(@"This function is experimental and not completed. Only for PDF!");
-            using (TreesAlbumExporter ta = new TreesAlbumExporter(this)) {
-                ta.Generate(true);
-            }
+            fController.ExportToTreesAlbum();
         }
 
         private void miExportToExcelFile_Click(object sender, EventArgs e)
         {
-            using (ExcelExporter exExp = new ExcelExporter(this)) {
-                exExp.Options = AppHost.Options;
-                exExp.Generate(true);
-            }
+            fController.ExportToExcelFile();
         }
 
         private void miFileProperties_Click(object sender, EventArgs e)
         {
-            try {
-                fContext.BeginUpdate();
-
-                using (var dlg = new FilePropertiesDlg()) {
-                    dlg.InitDialog(this);
-                    AppHost.Instance.ShowModalX(dlg, false);
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
+            fController.ShowFileProperties();
         }
 
         private void miScripts_Click(object sender, EventArgs e)
         {
-            try {
-                fContext.BeginUpdate();
-
-                using (ScriptEditWin scriptWin = new ScriptEditWin(this)) {
-                    scriptWin.ShowModal(this);
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
+            fController.ShowScripts();
         }
 
         private void miTTTreeSplit_Click(object sender, EventArgs e)
         {
-            try {
-                fContext.BeginUpdate();
-                using (var dlg = new TTTreeSplitDlg(this)) {
-                    dlg.ShowModal(this);
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
+            fController.ShowTreeSplit();
         }
 
         private void miTTTreeMerge_Click(object sender, EventArgs e)
         {
-            try {
-                fContext.BeginUpdate();
-                using (var dlg = new TTTreeMergeDlg(this)) {
-                    dlg.ShowModal(this);
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
+            fController.ShowTreeMerge();
         }
 
         private void miTTTreeCompare_Click(object sender, EventArgs e)
         {
-            try {
-                fContext.BeginUpdate();
-                using (var dlg = new TTTreeCompareDlg(this)) {
-                    dlg.ShowModal(this);
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
+            fController.ShowTreeCompare();
         }
 
         private void miTTTreeCheck_Click(object sender, EventArgs e)
         {
-            try {
-                fContext.BeginUpdate();
-                using (var dlg = new TTTreeCheckDlg(this)) {
-                    dlg.ShowModal(this);
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
+            fController.ShowTreeCheck();
         }
 
         private void miTTRecMerge_Click(object sender, EventArgs e)
         {
-            try {
-                fContext.BeginUpdate();
-                using (var dlg = new TTRecMergeDlg(this)) {
-                    dlg.ShowModal(this);
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
+            fController.ShowRecMerge();
         }
 
         private void miTTPlacesManager_Click(object sender, EventArgs e)
         {
-            try {
-                fContext.BeginUpdate();
-                using (var dlg = new TTPlacesManagerDlg(this)) {
-                    dlg.ShowModal(this);
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
+            fController.ShowPlacesManager();
         }
 
         private void miTTPatSearch_Click(object sender, EventArgs e)
         {
-            try {
-                fContext.BeginUpdate();
-                using (var dlg = new TTPatSearchDlg(this)) {
-                    dlg.ShowModal(this);
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
+            fController.ShowPatSearch();
         }
 
         private void miTTFamilyGroups_Click(object sender, EventArgs e)
         {
-            try {
-                fContext.BeginUpdate();
-                using (var dlg = new TTFamilyGroupsDlg(this)) {
-                    dlg.ShowModal(this);
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
+            fController.ShowFamilyGroups();
         }
 
         private void miOptions_Click(object sender, EventArgs e)
         {
-            using (OptionsDlg dlgOptions = new OptionsDlg(AppHost.Instance))
-            {
-                IWindow activeWnd = AppHost.Instance.GetActiveWindow();
-                if (activeWnd is IBaseWindow) dlgOptions.SetPage(OptionsPage.opInterface);
-                if (activeWnd is IChartWindow) {
-                    if (activeWnd is CircleChartWin) {
-                        dlgOptions.SetPage(OptionsPage.opAncestorsCircle);
-                    } else {
-                        dlgOptions.SetPage(OptionsPage.opTreeChart);
-                    }
-                }
-
-                if (dlgOptions.ShowModal() == DialogResult.Ok) {
-                    AppHost.Instance.ApplyOptions();
-                }
-            }
+            fController.ShowOptions();
         }
 
         private void miFileClose_Click(object sender, EventArgs e)
@@ -1426,163 +1010,102 @@ namespace GKUI.Forms
 
         private void miFilter_Click(object sender, EventArgs e)
         {
-            (this as IWorkWindow).SetFilter();
+            fController.SetFilter();
         }
 
         private void tbPrev_Click(object sender, EventArgs e)
         {
-            (this as IWorkWindow).NavPrev();
+            fController.NavPrev();
         }
 
         private void tbNext_Click(object sender, EventArgs e)
         {
-            (this as IWorkWindow).NavNext();
+            fController.NavNext();
         }
 
         private void tbSendMail_Click(object sender, EventArgs e)
         {
-            if (CheckModified()) {
-                string fileName = Path.GetFileName(fContext.FileName);
-                SysUtils.SendMail("?", fileName, "?", fContext.FileName);
-            }
+            fController.SendMail();
         }
 
         private void miMap_Click(object sender, EventArgs e)
         {
-            #if __MonoCS__
-            AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
-            #else
-            MapsViewerWin mapsWin = new MapsViewerWin(this);
-            AppHost.Instance.ShowWindow(mapsWin);
-            #endif
+            fController.ShowMap();
         }
 
         private void miOrganizer_Click(object sender, EventArgs e)
         {
-            using (OrganizerWin dlg = new OrganizerWin(this)) {
-                dlg.ShowModal(this);
-            }
+            fController.ShowOrganizer();
         }
 
         private void miRelationshipCalculator_Click(object sender, EventArgs e)
         {
-            using (RelationshipCalculatorDlg relCalc = new RelationshipCalculatorDlg(this)) {
-                relCalc.ShowModal(this);
-            }
+            fController.ShowRelationshipCalculator();
         }
 
         private void miSlideshow_Click(object sender, EventArgs e)
         {
-            SlideshowWin win = new SlideshowWin(this);
-            AppHost.Instance.ShowWindow(win);
+            fController.ShowSlideshow();
         }
 
         private void miStats_Click(object sender, EventArgs e)
         {
-            List<GEDCOMRecord> selectedRecords = GetContentList(GEDCOMRecordType.rtIndividual);
-
-            StatisticsWin win = new StatisticsWin(this, selectedRecords);
-            AppHost.Instance.ShowWindow(win);
-        }
-
-        private void GeneratePedigree(PedigreeExporter.PedigreeKind kind)
-        {
-            var selPerson = GetSelectedPerson();
-            if (selPerson == null) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
-                return;
-            }
-
-            if (BaseController.DetectCycle(selPerson)) return;
-
-            using (var p = new PedigreeExporter(this, selPerson)) {
-                p.Options = AppHost.Options;
-                p.Kind = kind;
-                p.Generate(true);
-            }
+            fController.ShowStats();
         }
 
         private void miPedigreeAscend_Click(object sender, EventArgs e)
         {
-            GeneratePedigree(PedigreeExporter.PedigreeKind.pkAscend);
+            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.pkAscend);
         }
 
         private void miPedigree_dAbovilleClick(object sender, EventArgs e)
         {
-            GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_dAboville);
+            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_dAboville);
         }
 
         private void miPedigree_KonovalovClick(object sender, EventArgs e)
         {
-            GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_Konovalov);
+            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_Konovalov);
         }
 
         private void miTreeAncestors_Click(object sender, EventArgs e)
         {
-            ShowTreeChart(TreeChartKind.ckAncestors);
+            fController.ShowTreeChart(TreeChartKind.ckAncestors);
         }
 
         private void miTreeDescendants_Click(object sender, EventArgs e)
         {
-            ShowTreeChart(TreeChartKind.ckDescendants);
+            fController.ShowTreeChart(TreeChartKind.ckDescendants);
         }
 
         private void miTreeBoth_Click(object sender, EventArgs e)
         {
-            ShowTreeChart(TreeChartKind.ckBoth);
-        }
-
-        private void ShowTreeChart(TreeChartKind chartKind)
-        {
-            var selPerson = GetSelectedPerson();
-            if (selPerson == null) return;
-
-            if (BaseController.DetectCycle(selPerson)) return;
-
-            if (TreeChartModel.CheckTreeChartSize(fContext.Tree, selPerson, chartKind)) {
-                TreeChartWin fmChart = new TreeChartWin(this, selPerson);
-                fmChart.ChartKind = chartKind;
-                fmChart.GenChart();
-                AppHost.Instance.ShowWindow(fmChart);
-            }
-        }
-
-        private void ShowCircleChart(CircleChartType chartKind)
-        {
-            var selPerson = GetSelectedPerson();
-            if (selPerson == null) return;
-
-            if (BaseController.DetectCycle(selPerson)) return;
-
-            CircleChartWin fmChart = new CircleChartWin(this, selPerson, chartKind);
-            AppHost.Instance.ShowWindow(fmChart);
+            fController.ShowTreeChart(TreeChartKind.ckBoth);
         }
 
         private void miAncestorsCircle_Click(object sender, EventArgs e)
         {
-            ShowCircleChart(CircleChartType.Ancestors);
+            fController.ShowCircleChart(CircleChartType.Ancestors);
         }
 
         private void miDescendantsCircle_Click(object sender, EventArgs e)
         {
-            ShowCircleChart(CircleChartType.Descendants);
+            fController.ShowCircleChart(CircleChartType.Descendants);
         }
 
         private void miLogSend_Click(object sender, EventArgs e)
         {
-            SysUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: feedback", "This automatic notification of error.", AppHost.GetLogFilename());
+            fController.SendLog();
         }
 
         private void miLogView_Click(object sender, EventArgs e)
         {
-            GKUtils.LoadExtFile(AppHost.GetLogFilename());
+            fController.ShowLog();
         }
 
         private void miAbout_Click(object sender, EventArgs e)
         {
-            using (AboutDlg dlg = new AboutDlg()) {
-                AppHost.Instance.ShowModalX(dlg);
-            }
+            fController.ShowAbout();
         }
 
         private void miContext_Click(object sender, EventArgs e)

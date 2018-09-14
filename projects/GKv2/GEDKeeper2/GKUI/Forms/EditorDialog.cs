@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Windows.Forms;
 using GKCore.Interfaces;
 
 namespace GKUI.Forms
@@ -26,7 +25,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class EditorDialog : CommonDialog, ICommonDialog, IBaseEditor
+    public class EditorDialog : CommonDialog, IBaseEditor
     {
         protected IBaseWindow fBase;
 
@@ -50,11 +49,6 @@ namespace GKUI.Forms
         public virtual void InitDialog(IBaseWindow baseWin)
         {
             fBase = baseWin;
-        }
-
-        public virtual bool ShowModalX(object owner)
-        {
-            return (ShowDialog() == DialogResult.OK);
         }
     }
 }
