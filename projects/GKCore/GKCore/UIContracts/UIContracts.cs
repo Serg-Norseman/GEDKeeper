@@ -69,13 +69,18 @@ namespace GKCore.UIContracts
         string this[int index] { get; set; }
     }
 
-
     /// <summary>
     /// 
     /// </summary>
     public interface IStatusForm : IWindow
     {
         IStatusLines StatusLines { get; }
+    }
+
+
+
+    public interface IAboutDlg : ICommonDialog, IView
+    {
     }
 
 
@@ -104,6 +109,25 @@ namespace GKCore.UIContracts
     }
 
 
+    public interface IBaseWindowView : IBaseWindow, IView
+    {
+        ITabControl RecordTabs { get; }
+
+        bool CheckModified();
+    }
+
+
+    public interface ICircleChartWin : IChartWindow, IView
+    {
+        ICircleChart CircleChart { get; }
+    }
+
+
+    public interface ICommonFilterDlg : ICommonDialog, IView
+    {
+    }
+
+
     public interface ICommunicationEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMCommunicationRecord Communication { get; set; }
@@ -116,6 +140,14 @@ namespace GKCore.UIContracts
 
         ISheetList NotesList { get; }
         ISheetList MediaList { get; }
+    }
+
+
+    public interface IDayTipsDlg : ICommonDialog, IView
+    {
+        bool ShowTipsChecked { get; set; }
+
+        void Init(string caption, bool showTipsChecked, StringList tips);
     }
 
 
@@ -171,6 +203,17 @@ namespace GKCore.UIContracts
     }
 
 
+    public interface IFilePropertiesDlg : ICommonDialog, IBaseEditor, IView
+    {
+        IListView RecordStats { get; }
+
+        ITextBoxHandler Language { get; }
+        ITextBoxHandler Name { get; }
+        ITextBoxHandler Address { get; }
+        ITextBoxHandler Tel { get; }
+    }
+
+
     public interface IGroupEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMGroupRecord Group { get; set; }
@@ -183,13 +226,13 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface ILanguageEditDlg : ICommonDialog
+    public interface ILanguageEditDlg : ICommonDialog, IView
     {
         GEDCOMLanguageID LanguageID { get; set; }
     }
 
 
-    public interface ILanguageSelectDlg : ICommonDialog
+    public interface ILanguageSelectDlg : ICommonDialog, IView
     {
         int SelectedLanguage { get; set; }
     }
@@ -209,6 +252,18 @@ namespace GKCore.UIContracts
     }
 
 
+    public interface IMapsViewerWin : IWindow, IView
+    {
+        IMapBrowser MapBrowser { get; }
+        ITVNode TreeRoot { get; }
+        IComboBoxHandler PersonsCombo { get; }
+        ITreeViewHandler PlacesTree { get; }
+        IButtonHandler SelectPlacesBtn { get; }
+
+        void AddPlace(GEDCOMPlace place, GEDCOMCustomEvent placeEvent);
+    }
+
+
     public interface IMediaEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMMultimediaRecord MediaRec { get; set; }
@@ -221,6 +276,17 @@ namespace GKCore.UIContracts
         ITextBoxHandler Name { get; }
         ITextBoxHandler File { get; }
         IButtonHandler FileSelectButton { get; }
+    }
+
+
+    public interface IMediaViewerWin : IWindow, IView
+    {
+        void SetViewImage(IImage img, GEDCOMFileReferenceWithTitle fileRef);
+        void SetViewMedia(string mediaFile);
+        void SetViewText(string text);
+        void SetViewRTF(string text);
+        void SetViewHTML(Stream stm);
+        void DisposeViewControl();
     }
 
 
@@ -238,7 +304,7 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface INoteEditDlgEx : ICommonDialog, IBaseEditor
+    public interface INoteEditDlgEx : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMNoteRecord NoteRecord { get; set; }
     }
@@ -250,6 +316,12 @@ namespace GKCore.UIContracts
         ISheetList PhonesList { get; }
         ISheetList MailsList { get; }
         ISheetList WebsList { get; }
+    }
+
+
+    public interface IOptionsDlg : ICommonDialog, IView
+    {
+        void SetPage(OptionsPage page);
     }
 
 
@@ -317,6 +389,42 @@ namespace GKCore.UIContracts
     }
 
 
+    public interface IPersonsFilterDlg : ICommonDialog, IView
+    {
+    }
+
+
+    public interface IPortraitSelectDlg : ICommonDialog, IBaseEditor, IView
+    {
+        GEDCOMMultimediaLink MultimediaLink { get; set; }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IRecordSelectDialog : ICommonDialog, IBaseEditor, IView
+    {
+        string FastFilter { get; set; }
+        string Filter { get; set; }
+        GEDCOMRecordType RecType { get; set; }
+        TargetMode TargetMode { get; set; }
+        GEDCOMIndividualRecord Target { get; set; }
+        GEDCOMSex NeedSex { get; set; }
+        GEDCOMRecord ResultRecord { get; set; }
+    }
+
+
+    public interface IRelationshipCalculatorDlg : ICommonDialog, IView
+    {
+        ILabelHandler Label1 { get; }
+        ILabelHandler Label2 { get; }
+        ITextBoxHandler Person1 { get; }
+        ITextBoxHandler Person2 { get; }
+        ITextBoxHandler Result { get; }
+    }
+
+
     public interface IRepositoryEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMRepositoryRecord Repository { get; set; }
@@ -344,10 +452,23 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface ISexCheckDlg : ICommonDialog
+    public interface IScriptEditWin : ICommonDialog, IView
+    {
+        ITextBoxHandler ScriptText { get; }
+        ITextBoxHandler DebugOutput { get; }
+    }
+
+
+    public interface ISexCheckDlg : ICommonDialog, IView
     {
         string IndividualName { get; set; }
         GEDCOMSex Sex { get; set; }
+    }
+
+
+    public interface ISlideshowWin : IWindow, IStatusForm, IView
+    {
+        void SetImage(IImage image);
     }
 
 
@@ -377,6 +498,15 @@ namespace GKCore.UIContracts
     }
 
 
+    public interface IStatisticsWin : IWindow, IView
+    {
+        IGraphControl Graph { get; }
+        IListView ListStats { get; }
+        IListView Summary { get; }
+        IComboBoxHandler StatsType { get; }
+    }
+
+
     public interface ITaskEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMTaskRecord Task { get; set; }
@@ -391,52 +521,10 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface IUserRefEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface ITreeChartWin : IChartWindow, IView
     {
-        GEDCOMUserReference UserRef { get; set; }
-
-        IComboBoxHandler Ref { get; }
-        IComboBoxHandler RefType { get; }
-    }
-
-
-    public interface IFilePropertiesDlg : ICommonDialog, IBaseEditor, IView
-    {
-        IListView RecordStats { get; }
-
-        ITextBoxHandler Language { get; }
-        ITextBoxHandler Name { get; }
-        ITextBoxHandler Address { get; }
-        ITextBoxHandler Tel { get; }
-    }
-
-
-    public interface IPortraitSelectDlg : ICommonDialog, IBaseEditor
-    {
-        GEDCOMMultimediaLink MultimediaLink { get; set; }
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IRecordSelectDialog : ICommonDialog, IBaseEditor, IView
-    {
-        string FastFilter { get; set; }
-        string Filter { get; set; }
-        GEDCOMRecordType RecType { get; set; }
-        TargetMode TargetMode { get; set; }
-        GEDCOMIndividualRecord Target { get; set; }
-        GEDCOMSex NeedSex { get; set; }
-        GEDCOMRecord ResultRecord { get; set; }
-    }
-
-
-    public interface IDayTipsDlg : ICommonDialog
-    {
-        bool ShowTipsChecked { get; set; }
-
-        void Init(string caption, bool showTipsChecked, StringList tips);
+        ITreeChartBox TreeBox { get; }
+        TreeChartKind ChartKind { get; set; }
     }
 
 
@@ -445,84 +533,14 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface ICircleChartWin : IWindow, IView
+    public interface IUserRefEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        ICircleChart CircleChart { get; }
+        GEDCOMUserReference UserRef { get; set; }
+
+        IComboBoxHandler Ref { get; }
+        IComboBoxHandler RefType { get; }
     }
 
-
-    public interface ICommonFilterDlg : ICommonDialog, IView
-    {
-    }
-
-
-    public interface IMapsViewerWin : IWindow, IView
-    {
-        IMapBrowser MapBrowser { get; }
-        ITVNode TreeRoot { get; }
-        IComboBoxHandler PersonsCombo { get; }
-        ITreeViewHandler PlacesTree { get; }
-        IButtonHandler SelectPlacesBtn { get; }
-
-        void AddPlace(GEDCOMPlace place, GEDCOMCustomEvent placeEvent);
-    }
-
-
-    public interface IPersonsFilterDlg : ICommonDialog, IView
-    {
-    }
-
-
-    public interface IStatisticsWin : IWindow, IView
-    {
-        IGraphControl Graph { get; }
-        IListView ListStats { get; }
-        IListView Summary { get; }
-        IComboBoxHandler StatsType { get; }
-    }
-
-
-    public interface IMediaViewerWin : IView
-    {
-        void SetViewImage(IImage img, GEDCOMFileReferenceWithTitle fileRef);
-        void SetViewMedia(string mediaFile);
-        void SetViewText(string text);
-        void SetViewRTF(string text);
-        void SetViewHTML(Stream stm);
-        void DisposeViewControl();
-    }
-
-
-    public interface ISlideshowWin : IView, IStatusForm
-    {
-        void SetImage(IImage image);
-    }
-
-
-    public interface ITreeChartWin : IWindow, IView
-    {
-        ITreeChartBox TreeBox { get; }
-        TreeChartKind ChartKind { get; set; }
-
-        void GenChart();
-    }
-
-
-    public interface IScriptEditWin : ICommonDialog, IView
-    {
-        ITextBoxHandler ScriptText { get; }
-        ITextBoxHandler DebugOutput { get; }
-    }
-
-
-    public interface IRelationshipCalculatorDlg : ICommonDialog, IView
-    {
-        ILabelHandler Label1 { get; }
-        ILabelHandler Label2 { get; }
-        ITextBoxHandler Person1 { get; }
-        ITextBoxHandler Person2 { get; }
-        ITextBoxHandler Result { get; }
-    }
 
 
     public interface IFragmentSearchDlg : ICommonDialog, IBaseEditor, IView
@@ -585,24 +603,5 @@ namespace GKCore.UIContracts
     {
         IListView SelectedList { get; }
         IListView SkippedList { get; }
-    }
-
-
-    public interface IBaseWindowView : IBaseWindow, IView
-    {
-        ITabControl RecordTabs { get; }
-
-        bool CheckModified();
-    }
-
-
-    public interface IAboutDlg : ICommonDialog, IView
-    {
-    }
-
-
-    public interface IOptionsDlg : ICommonDialog, IView
-    {
-        void SetPage(OptionsPage page);
     }
 }

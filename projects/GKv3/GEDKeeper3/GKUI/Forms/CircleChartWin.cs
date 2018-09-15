@@ -33,7 +33,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class CircleChartWin : PrintableForm, IChartWindow, ICircleChartWin
+    public partial class CircleChartWin : PrintableForm, ICircleChartWin
     {
         private readonly CircleChartWinController fController;
 

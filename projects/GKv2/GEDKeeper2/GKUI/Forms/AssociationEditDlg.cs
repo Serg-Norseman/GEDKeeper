@@ -21,7 +21,6 @@
 using System;
 using System.Windows.Forms;
 
-using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
