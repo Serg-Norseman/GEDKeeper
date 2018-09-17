@@ -45,7 +45,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
 
-            fDialog = new RecordSelectDlg();
+            fDialog = new RecordSelectDlg(fBase, GEDCOMRecordType.rtIndividual);
             fDialog.InitDialog(fBase);
             fDialog.Show();
         }
@@ -58,8 +58,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_Common()
         {
-            Assert.AreEqual("*", fDialog.Filter);
-            Assert.AreEqual(GEDCOMRecordType.rtNone, fDialog.RecType);
+            Assert.AreEqual("*", fDialog.FastFilter);
             Assert.AreEqual(TargetMode.tmNone, fDialog.TargetMode);
             Assert.AreEqual(null, fDialog.ResultRecord);
 

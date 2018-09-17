@@ -79,11 +79,15 @@ namespace GKCore.UIContracts
         bool Enabled { get; set; }
         string[] Lines { get; set; }
         bool ReadOnly { get; set; }
+        string SelectedText { get; set; }
         string Text { get; set; }
 
         void AppendText(string text);
         void Clear();
         void Select();
+
+        void Copy();
+        void SelectAll();
     }
 
 

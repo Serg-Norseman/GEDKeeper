@@ -33,7 +33,6 @@ namespace GKUI.Forms
 
             Image1 = new Eto.Forms.ImageView();
             Image1.Size = new Size(41, 43);
-            Image1.Image = UIHelper.LoadResourceImage("Resources.image_tips_light.png");
 
             var imgLayout = new VDefStackLayout();
             imgLayout.HorizontalContentAlignment = HorizontalAlignment.Center;
@@ -79,7 +78,6 @@ namespace GKUI.Forms
             btnClose.ImagePosition = ButtonImagePosition.Left;
             btnClose.Size = new Size(130, 26);
             btnClose.Text = "btnClose";
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
             btnClose.Click += CancelClickHandler;
 
             Content = new DefTableLayout {

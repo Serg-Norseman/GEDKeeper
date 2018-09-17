@@ -25,7 +25,6 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Lists;
 using GKCore.Types;
 using GKCore.UIContracts;
 using GKUI.Components;
@@ -39,10 +38,7 @@ namespace GKUI.Forms
     {
         private readonly RecordSelectDlgController fController;
 
-        private string fFilter;
         private GKListView fListRecords;
-        private GEDCOMRecordType fRecType;
-        private Target fTarget;
 
 
         public string FastFilter
@@ -51,52 +47,37 @@ namespace GKUI.Forms
             set { txtFastFilter.Text = value; }
         }
 
-        public string Filter
-        {
-            get { return fFilter; }
-            set {
-                string flt = value;
-                if (flt == "") {
-                    flt = "*";
-                } else if (flt != "*") {
-                    flt = "*" + flt + "*";
-                }
-                fFilter = flt;
-                UpdateFilter();
-            }
-        }
-
-        public GEDCOMRecordType RecType
-        {
-            get { return fRecType; }
-            set {
-                fRecType = value;
-                UpdateRecordsView();
-            }
-        }
-
         public GEDCOMSex NeedSex
         {
-            get { return fTarget.NeedSex; }
-            set { fTarget.NeedSex = value; }
+            get { return fController.Target.NeedSex; }
+            set { fController.Target.NeedSex = value; }
         }
 
         public GEDCOMRecord ResultRecord { get; set; }
 
-        public GEDCOMIndividualRecord Target
+        public GEDCOMIndividualRecord TargetIndividual
         {
-            get { return fTarget.TargetIndividual; }
-            set { fTarget.TargetIndividual = value; }
+            get { return fController.Target.TargetIndividual; }
+            set { fController.Target.TargetIndividual = value; }
         }
 
         public TargetMode TargetMode
         {
-            get { return fTarget.TargetMode; }
-            set { fTarget.TargetMode = value; }
+            get { return fController.Target.TargetMode; }
+            set { fController.Target.TargetMode = value; }
         }
 
+        #region View Interface
 
-        public RecordSelectDlg()
+        IListView IRecordSelectDialog.RecordsList
+        {
+            get { return fListRecords; }
+        }
+
+        #endregion
+
+
+        public RecordSelectDlg(IBaseWindow baseWin, GEDCOMRecordType recType)
         {
             InitializeComponent();
 
@@ -109,9 +90,11 @@ namespace GKUI.Forms
             btnSelect.Text = LangMan.LS(LSID.LSID_DlgSelect);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 
-            fTarget = new Target();
-
             fController = new RecordSelectDlgController(this);
+            fController.Init(baseWin);
+            fController.RecType = recType;
+            UpdateRecordsView();
+            FastFilter = "*";
         }
 
         protected override void Dispose(bool disposing)
@@ -122,44 +105,15 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
-            fController.Init(baseWin);
-            fFilter = "*";
-        }
-
         private void UpdateRecordsView()
         {
             if (fListRecords != null) {
+                fListRecords.ListMan = null;
                 fListRecords.Dispose();
                 fListRecords = null;
             }
-            fListRecords = UIHelper.CreateRecordsView(panList, fBase.Context, fRecType);
+            fListRecords = UIHelper.CreateRecordsView(panList, fController.Base.Context, fController.RecType);
             fListRecords.Name = "fListRecords";
-        }
-
-        private void UpdateFilter()
-        {
-            fListRecords.ListMan.Filter.Clear();
-            fListRecords.ListMan.QuickFilter = fFilter;
-
-            if (fRecType == GEDCOMRecordType.rtIndividual) {
-                IndividualListFilter iFilter = (IndividualListFilter)fListRecords.ListMan.Filter;
-                iFilter.Sex = NeedSex;
-
-                if (fTarget.TargetMode == TargetMode.tmParent) {
-                    fListRecords.ListMan.ExternalFilter = ChildSelectorHandler;
-                }
-            }
-
-            fListRecords.UpdateContents();
-        }
-
-        private static bool ChildSelectorHandler(GEDCOMRecord record)
-        {
-            GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
-            return (iRec != null && iRec.ChildToFamilyLinks.Count == 0);
         }
 
         private void btnSelect_Click(object sender, EventArgs e)
@@ -177,7 +131,7 @@ namespace GKUI.Forms
         private void btnCreate_Click(object sender, EventArgs e)
         {
             try {
-                GEDCOMRecord rec = BaseController.AddRecord(fBase, fRecType, fTarget);
+                GEDCOMRecord rec = BaseController.AddRecord(fBase, fController.RecType, fController.Target);
                 if (rec != null) {
                     ResultRecord = rec;
                     DialogResult = DialogResult.OK;
@@ -191,7 +145,7 @@ namespace GKUI.Forms
 
         private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
-            Filter = txtFastFilter.Text;
+            fController.Filter = txtFastFilter.Text;
         }
     }
 }

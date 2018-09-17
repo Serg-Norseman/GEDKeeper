@@ -35,7 +35,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class SlideshowWin : StatusForm, IWorkWindow, ISlideshowWin
+    public partial class SlideshowWin : StatusForm, ISlideshowWin
     {
         private readonly SlideshowController fController;
 
@@ -88,7 +88,7 @@ namespace GKUI.Forms
             if (e.KeyCode == Keys.Escape) Close();
         }
 
-        public override void SetLang()
+        public void SetLang()
         {
             Text = LangMan.LS(LSID.LSID_Slideshow);
             SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));

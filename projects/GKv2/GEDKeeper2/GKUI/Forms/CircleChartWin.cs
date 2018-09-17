@@ -140,18 +140,12 @@ namespace GKUI.Forms
 
         private void tbOptions_Click(object sender, EventArgs e)
         {
-            using (OptionsDlg dlgOptions = new OptionsDlg(AppHost.Instance))
-            {
-                dlgOptions.SetPage(OptionsPage.opAncestorsCircle);
-                if (dlgOptions.ShowDialog() == DialogResult.OK) {
-                    AppHost.Instance.ApplyOptions();
-                }
-            }
+            AppHost.Instance.ShowOptions(OptionsPage.opCircleChart);
         }
 
         #region ILocalization implementation
 
-        public override void SetLang()
+        public void SetLang()
         {
             if (fCircleChart.ChartType == CircleChartType.Ancestors) {
                 Text = LangMan.LS(LSID.LSID_AncestorsCircle);

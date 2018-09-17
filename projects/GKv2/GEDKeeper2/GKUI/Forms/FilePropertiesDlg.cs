@@ -96,14 +96,7 @@ namespace GKUI.Forms
 
         private void btnLangEdit_Click(object sender, EventArgs e)
         {
-            using (var dlg = new LanguageEditDlg()) {
-                dlg.LanguageID = fBase.Context.Tree.Header.Language.Value;
-
-                if (dlg.ShowDialog() == DialogResult.OK) {
-                    // Assignment in control, instead of the header's property to work Cancel.
-                    txtLanguage.Text = GEDCOMLanguageEnum.Instance.GetStrValue(dlg.LanguageID);
-                }
-            }
+            fController.ChangeLanguage();
         }
 
         public override void InitDialog(IBaseWindow baseWin)

@@ -2,15 +2,8 @@
 {
     partial class LanguageSelectDlg
     {
-        /// <summary>
-        /// Designer variable used to keep track of non-visual components.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
         
-        /// <summary>
-        /// Disposes resources used by the form.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
@@ -21,16 +14,11 @@
             base.Dispose(disposing);
         }
         
-        /// <summary>
-        /// This method is required for Windows Forms designer support.
-        /// Do not change the method contents inside the source code editor. The Forms designer might
-        /// not be able to load this method if it was changed manually.
-        /// </summary>
         private void InitializeComponent()
         {
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.lstLanguages = new System.Windows.Forms.ListBox();
+            this.lstLanguages = new GKUI.Components.GKListView();
             this.SuspendLayout();
             // 
             // btnAccept
@@ -60,13 +48,12 @@
             // lstLanguages
             // 
             this.lstLanguages.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lstLanguages.FormattingEnabled = true;
-            this.lstLanguages.ItemHeight = 17;
             this.lstLanguages.Location = new System.Drawing.Point(16, 16);
             this.lstLanguages.Margin = new System.Windows.Forms.Padding(0);
             this.lstLanguages.Name = "lstLanguages";
             this.lstLanguages.Size = new System.Drawing.Size(278, 377);
             this.lstLanguages.TabIndex = 9;
+            this.lstLanguages.View = System.Windows.Forms.View.List;
             // 
             // LanguageSelectDlg
             // 
@@ -87,10 +74,9 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Select language";
-            this.Load += new System.EventHandler(this.LanguageSelectDlg_Load);
             this.ResumeLayout(false);
         }
-        private System.Windows.Forms.ListBox lstLanguages;
+        private GKUI.Components.GKListView lstLanguages;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnAccept;
     }

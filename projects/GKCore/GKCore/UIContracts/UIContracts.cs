@@ -72,7 +72,7 @@ namespace GKCore.UIContracts
     /// <summary>
     /// 
     /// </summary>
-    public interface IStatusForm : IWindow
+    public interface IStatusForm
     {
         IStatusLines StatusLines { get; }
     }
@@ -123,7 +123,7 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface ICommonFilterDlg : ICommonDialog, IView
+    public interface ICommonFilterDlg : ICommonDialog, IBaseEditor, IView
     {
     }
 
@@ -148,6 +148,10 @@ namespace GKCore.UIContracts
         bool ShowTipsChecked { get; set; }
 
         void Init(string caption, bool showTipsChecked, StringList tips);
+
+        ILabelHandler TitleLabel { get; }
+        ITextBoxHandler TipText { get; }
+        IButtonHandler NextButton { get; }
     }
 
 
@@ -229,12 +233,16 @@ namespace GKCore.UIContracts
     public interface ILanguageEditDlg : ICommonDialog, IView
     {
         GEDCOMLanguageID LanguageID { get; set; }
+
+        IComboBoxHandler LanguageCombo { get; }
     }
 
 
     public interface ILanguageSelectDlg : ICommonDialog, IView
     {
         int SelectedLanguage { get; set; }
+
+        IListView LanguagesList { get; }
     }
 
 
@@ -293,10 +301,15 @@ namespace GKCore.UIContracts
     public interface INameEditDlg : ICommonDialog, IView
     {
         NameEntry IName { get; set; }
+
+        ITextBoxHandler Name { get; }
+        ITextBoxHandler FPatr { get; }
+        ITextBoxHandler MPatr { get; }
+        IComboBoxHandler SexCombo { get; }
     }
 
 
-    public interface INoteEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface INoteEdit : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMNoteRecord NoteRecord { get; set; }
 
@@ -304,9 +317,12 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface INoteEditDlgEx : ICommonDialog, IBaseEditor, IView
+    public interface INoteEditDlg : INoteEdit
     {
-        GEDCOMNoteRecord NoteRecord { get; set; }
+    }
+
+    public interface INoteEditDlgEx : INoteEdit
+    {
     }
 
 
@@ -406,12 +422,12 @@ namespace GKCore.UIContracts
     public interface IRecordSelectDialog : ICommonDialog, IBaseEditor, IView
     {
         string FastFilter { get; set; }
-        string Filter { get; set; }
-        GEDCOMRecordType RecType { get; set; }
         TargetMode TargetMode { get; set; }
-        GEDCOMIndividualRecord Target { get; set; }
+        GEDCOMIndividualRecord TargetIndividual { get; set; }
         GEDCOMSex NeedSex { get; set; }
         GEDCOMRecord ResultRecord { get; set; }
+
+        IListView RecordsList { get; }
     }
 
 
@@ -452,10 +468,15 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface IScriptEditWin : ICommonDialog, IView
+    public interface IScriptEditWin : ICommonDialog, ILocalization, IView
     {
         ITextBoxHandler ScriptText { get; }
         ITextBoxHandler DebugOutput { get; }
+
+        string FileName { get; set; }
+        bool Modified { get; set; }
+
+        bool CheckModified();
     }
 
 
@@ -466,7 +487,7 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface ISlideshowWin : IWindow, IStatusForm, IView
+    public interface ISlideshowWin : IWorkWindow, IStatusForm, IView
     {
         void SetImage(IImage image);
     }
@@ -530,6 +551,7 @@ namespace GKCore.UIContracts
 
     public interface ITreeFilterDlg : ICommonDialog, IView
     {
+        ChartFilter Filter { get; set; }
     }
 
 

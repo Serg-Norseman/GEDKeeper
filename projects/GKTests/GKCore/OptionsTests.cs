@@ -144,6 +144,7 @@ namespace GKCore
 
                 globalOptions.UseExtendedNotes = true;
                 Assert.AreEqual(true, globalOptions.UseExtendedNotes);
+                globalOptions.UseExtendedNotes = false;
 
                 globalOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden;
                 Assert.AreEqual(WomanSurnameFormat.wsfMaiden, globalOptions.WomanSurnameFormat);

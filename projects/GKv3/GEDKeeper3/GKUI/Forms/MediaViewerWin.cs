@@ -37,7 +37,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class MediaViewerWin : CommonForm, ILocalization, IMediaViewerWin
+    public partial class MediaViewerWin : CommonForm, IMediaViewerWin
     {
         private readonly MediaViewerController fController;
         private ITimer fTimer;

@@ -1003,7 +1003,7 @@ namespace GKUI.Forms
 
         private void miOptions_Click(object sender, EventArgs e)
         {
-            fController.ShowOptions();
+            AppHost.Instance.ShowOptions();
         }
 
         private void miFileClose_Click(object sender, EventArgs e)

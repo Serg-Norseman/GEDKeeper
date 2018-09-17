@@ -337,6 +337,7 @@ namespace GKUI.Providers
             container.Register<ITreeChartWin, TreeChartWin>(LifeCycle.Transient);
             container.Register<ITreeCheckDlg, TTTreeCheckDlg>(LifeCycle.Transient);
             container.Register<ITreeCompareDlg, TTTreeCompareDlg>(LifeCycle.Transient);
+            container.Register<ITreeFilterDlg, TreeFilterDlg>(LifeCycle.Transient);
             container.Register<ITreeMergeDlg, TTTreeMergeDlg>(LifeCycle.Transient);
             container.Register<ITreeSplitDlg, TTTreeSplitDlg>(LifeCycle.Transient);
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);

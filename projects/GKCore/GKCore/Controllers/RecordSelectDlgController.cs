@@ -20,7 +20,8 @@
 
 using System;
 using GKCommon.GEDCOM;
-using GKCore.Options;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Types;
 using GKCore.UIContracts;
 
@@ -31,19 +32,65 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class RecordSelectDlgController : DialogController<IRecordSelectDialog>
     {
+        private string fFilter;
+        private GEDCOMRecordType fRecType;
+        private Target fTarget;
+
+
+        public string Filter
+        {
+            get { return fFilter; }
+            set {
+                string flt = value;
+                if (flt == "") {
+                    flt = "*";
+                } else if (flt != "*") {
+                    flt = "*" + flt + "*";
+                }
+                fFilter = flt;
+                UpdateFilter();
+            }
+        }
+
+        public GEDCOMRecordType RecType
+        {
+            get { return fRecType; }
+            set { fRecType = value; }
+        }
+
+        public Target Target
+        {
+            get { return fTarget; }
+        }
+
 
         public RecordSelectDlgController(IRecordSelectDialog view) : base(view)
         {
+            fTarget = new Target();
         }
 
-        public override bool Accept()
+        private void UpdateFilter()
         {
-            try {
-                return true;
-            } catch (Exception ex) {
-                Logger.LogWrite("RecordSelectDlgController.Accept(): " + ex.Message);
-                return false;
+            IListView recordsList = fView.RecordsList;
+            recordsList.ListMan.Filter.Clear();
+            recordsList.ListMan.QuickFilter = fFilter;
+
+            if (fRecType == GEDCOMRecordType.rtIndividual) {
+                IndividualListFilter iFilter = (IndividualListFilter)recordsList.ListMan.Filter;
+                iFilter.Sex = fTarget.NeedSex;
+
+                if (fTarget.TargetMode == TargetMode.tmParent) {
+                    recordsList.ListMan.ExternalFilter = ChildSelectorHandler;
+                }
             }
+
+            recordsList.UpdateContents();
+        }
+
+        private static bool ChildSelectorHandler(GEDCOMRecord record)
+        {
+            GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
+            return (iRec != null && iRec.ChildToFamilyLinks.Count == 0);
         }
 
         public override void UpdateView()

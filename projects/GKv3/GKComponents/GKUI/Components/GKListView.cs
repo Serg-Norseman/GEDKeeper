@@ -700,6 +700,11 @@ namespace GKUI.Components
             }
         }
 
+        public void Select()
+        {
+            Focus();
+        }
+
         #endregion
 
         #region CheckedList

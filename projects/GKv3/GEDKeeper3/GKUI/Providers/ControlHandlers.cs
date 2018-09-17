@@ -223,6 +223,12 @@ namespace GKUI.Providers
             }
         }
 
+        public string SelectedText
+        {
+            get { return Control.SelectedText; }
+            set { Control.SelectedText = value; }
+        }
+
         public string Text
         {
             get { return Control.Text; }
@@ -247,6 +253,16 @@ namespace GKUI.Providers
         private void SetBackColor()
         {
             Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
+        }
+
+        public void Copy()
+        {
+            UIHelper.SetClipboardText(Control.SelectedText);
+        }
+
+        public void SelectAll()
+        {
+            Control.SelectAll();
         }
     }
 
@@ -280,6 +296,12 @@ namespace GKUI.Providers
             }
         }
 
+        public string SelectedText
+        {
+            get { return Control.SelectedText; }
+            set { Control.SelectedText = value; }
+        }
+
         public string Text
         {
             get { return Control.Text; }
@@ -304,6 +326,16 @@ namespace GKUI.Providers
         private void SetBackColor()
         {
             Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
+        }
+
+        public void Copy()
+        {
+            UIHelper.SetClipboardText(Control.SelectedText);
+        }
+
+        public void SelectAll()
+        {
+            Control.SelectAll();
         }
     }
 
@@ -334,6 +366,12 @@ namespace GKUI.Providers
             set { Control.ReadOnly = value; }
         }
 
+        public string SelectedText
+        {
+            get { return Control.SelectedText; }
+            set { Control.SelectedText = value; }
+        }
+
         public string Text
         {
             get { return Control.Text; }
@@ -353,6 +391,16 @@ namespace GKUI.Providers
         public void Select()
         {
             Control.Focus();
+        }
+
+        public void Copy()
+        {
+            UIHelper.SetClipboardText(Control.SelectedText);
+        }
+
+        public void SelectAll()
+        {
+            Control.SelectAll();
         }
     }
 

@@ -184,8 +184,7 @@ namespace GKCore
         {
             if (fTips.Count <= 0) return;
 
-            using (var dlg = fIocContainer.Resolve<IDayTipsDlg>())
-            {
+            using (var dlg = fIocContainer.Resolve<IDayTipsDlg>()) {
                 dlg.Init(LangMan.LS(LSID.LSID_BirthDays), AppHost.Options.ShowTips, fTips);
                 ShowModalX(dlg, false);
                 AppHost.Options.ShowTips = dlg.ShowTipsChecked;
@@ -625,8 +624,7 @@ namespace GKCore
 
         public void LoadLanguage(int langCode)
         {
-            try
-            {
+            try {
                 if (langCode <= 0) {
                     langCode = RequestLanguage();
                 }
@@ -652,9 +650,7 @@ namespace GKCore
                 AppHost.Plugins.OnLanguageChange();
 
                 UpdateLang();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("AppHost.LoadLanguage(): " + ex.Message);
             }
         }
@@ -722,6 +718,33 @@ namespace GKCore
         }
 
         #endregion
+
+        public void ShowOptions()
+        {
+            OptionsPage page = OptionsPage.opCommon;
+            IWindow activeWin = GetActiveWindow();
+            if (activeWin is IBaseWindow) page = OptionsPage.opInterface;
+            if (activeWin is IChartWindow) {
+                if (activeWin is ICircleChartWin) {
+                    page = OptionsPage.opCircleChart;
+                } else {
+                    page = OptionsPage.opTreeChart;
+                }
+            }
+
+            ShowOptions(page);
+        }
+
+        public void ShowOptions(OptionsPage page)
+        {
+            using (var dlgOptions = AppHost.Container.Resolve<IOptionsDlg>(AppHost.Instance)) {
+                dlgOptions.SetPage(page);
+
+                if (AppHost.Instance.ShowModalX(dlgOptions)) {
+                    AppHost.Instance.ApplyOptions();
+                }
+            }
+        }
 
         public virtual void ApplyOptions()
         {

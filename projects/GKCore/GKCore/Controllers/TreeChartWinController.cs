@@ -244,5 +244,16 @@ namespace GKCore.Controllers
                 fView.TreeBox.SaveSnapshot(fileName);
             }
         }
+
+        public void SetFilter()
+        {
+            using (var dlgFilter = AppHost.Container.Resolve<ITreeFilterDlg>(fBase)) {
+                dlgFilter.Filter = fView.TreeBox.Model.Filter;
+
+                if (dlgFilter.ShowModalX(fView)) {
+                    fView.GenChart();
+                }
+            }
+        }
     }
 }

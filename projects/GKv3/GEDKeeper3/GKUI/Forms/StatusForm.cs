@@ -26,7 +26,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public abstract class StatusForm : CommonForm, IStatusForm
+    public class StatusForm : CommonForm, IStatusForm
     {
         public sealed class StatusLinesEx : IStatusLines
         {
@@ -68,7 +68,7 @@ namespace GKUI.Forms
             }
         }
 
-        protected StatusForm() : base()
+        public StatusForm() : base()
         {
             fStatusRow = new TableRow() {
                 Cells = { null }
@@ -132,7 +132,5 @@ namespace GKUI.Forms
 
             fStatusBar.ResumeLayout();
         }
-
-        public abstract void SetLang();
     }
 }

@@ -54,8 +54,7 @@ namespace GKUI.Forms
 
         public GEDCOMSex Sex
         {
-            get
-            {
+            get {
                 if (rbMale.Checked) {
                     return GEDCOMSex.svMale;
                 }
@@ -64,10 +63,8 @@ namespace GKUI.Forms
                 }
                 return GEDCOMSex.svNone;
             }
-            set
-            {
-                switch (value)
-                {
+            set {
+                switch (value) {
                     case GEDCOMSex.svNone:
                     case GEDCOMSex.svUndetermined:
                         rbNone.Checked = true;

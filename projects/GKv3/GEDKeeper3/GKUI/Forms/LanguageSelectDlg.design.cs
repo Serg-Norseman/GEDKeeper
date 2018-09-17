@@ -6,7 +6,7 @@ namespace GKUI.Forms
 {
     partial class LanguageSelectDlg
     {
-        private ListBox lstLanguages;
+        private GKListView lstLanguages;
         private Button btnCancel;
         private Button btnAccept;
 
@@ -19,16 +19,14 @@ namespace GKUI.Forms
             btnAccept.Size = new Size(130, 26);
             btnAccept.Text = "OK";
             btnAccept.Click += btnAccept_Click;
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
             btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "Cancel";
             btnCancel.Click += CancelClickHandler;
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            lstLanguages = new ListBox();
+            lstLanguages = new GKListView();
 
             Content = new DefTableLayout {
                 Rows = {
@@ -51,7 +49,6 @@ namespace GKUI.Forms
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
             Title = "Select language";
-            Load += LanguageSelectDlg_Load;
 
             SetPredefProperties(440, 400);
             ResumeLayout();

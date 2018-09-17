@@ -2,9 +2,6 @@
 {
     partial class PersonsFilterDlg
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.TabPage pageSpecificFilter;
         private System.Windows.Forms.ComboBox cmbEventVal;
@@ -31,25 +28,14 @@
         private System.Windows.Forms.Label lblPlaceMask;
         private System.Windows.Forms.Label lblNameMask;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-            {
+            if (disposing && (components != null)) {
                 components.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             this.pageSpecificFilter = new System.Windows.Forms.TabPage();
@@ -360,7 +346,5 @@
             this.rgSex.PerformLayout();
             this.ResumeLayout(false);
         }
-
-        #endregion
     }
 }

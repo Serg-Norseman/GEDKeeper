@@ -1416,13 +1416,12 @@ namespace GKCore
             GEDCOMFamilyRecord result;
 
             try {
-                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>()) {
+                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>(fViewer, GEDCOMRecordType.rtFamily)) {
                     dlg.InitDialog(fViewer);
 
-                    dlg.Target = target;
+                    dlg.TargetIndividual = target;
                     dlg.NeedSex = GEDCOMSex.svNone;
                     dlg.TargetMode = TargetMode.tmFamilyChild;
-                    dlg.RecType = GEDCOMRecordType.rtFamily;
                     dlg.FastFilter = "*";
 
                     if (AppHost.Instance.ShowModalX(dlg, false)) {
@@ -1445,13 +1444,12 @@ namespace GKCore
             GEDCOMIndividualRecord result;
 
             try {
-                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>()) {
+                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>(fViewer, GEDCOMRecordType.rtIndividual)) {
                     dlg.InitDialog(fViewer);
 
-                    dlg.Target = target;
+                    dlg.TargetIndividual = target;
                     dlg.NeedSex = needSex;
                     dlg.TargetMode = targetMode;
-                    dlg.RecType = GEDCOMRecordType.rtIndividual;
                     dlg.FastFilter = "*";
 
                     if (AppHost.Instance.ShowModalX(dlg, false)) {
@@ -1473,10 +1471,8 @@ namespace GKCore
             GEDCOMRecord result;
 
             try {
-                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>()) {
+                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>(fViewer, mode)) {
                     dlg.InitDialog(fViewer);
-
-                    dlg.RecType = mode;
 
                     if (args != null && args.Length > 0) {
                         dlg.FastFilter = (args[0] as string);

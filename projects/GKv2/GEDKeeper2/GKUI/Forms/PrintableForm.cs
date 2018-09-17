@@ -33,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// Form's class, common for the implementation of the print.
     /// </summary>
-    public abstract class PrintableForm : StatusForm
+    public class PrintableForm : StatusForm
     {
         private PrintDocument fPrintDoc;
 

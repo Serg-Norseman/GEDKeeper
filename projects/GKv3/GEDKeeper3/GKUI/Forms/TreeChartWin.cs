@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Eto.Drawing;
 using Eto.Forms;
 
@@ -96,7 +95,6 @@ namespace GKUI.Forms
 
             fTreeBox = new TreeChartBox(new EtoGfxRenderer());
             fTreeBox.Base = fBase;
-            //fTreeBox.Dock = DockStyle.Fill;
             //fTreeBox.DragOver += ImageTree_DragOver;
             fTreeBox.PersonModify += ImageTree_PersonModify;
             fTreeBox.RootChanged += ImageTree_RootChanged;
@@ -395,13 +393,7 @@ namespace GKUI.Forms
 
         private void tbOptions_Click(object sender, EventArgs e)
         {
-            using (OptionsDlg dlgOptions = new OptionsDlg(AppHost.Instance))
-            {
-                dlgOptions.SetPage(OptionsPage.opTreeChart);
-                if (dlgOptions.ShowModal() == DialogResult.Ok) {
-                    AppHost.Instance.ApplyOptions();
-                }
-            }
+            AppHost.Instance.ShowOptions(OptionsPage.opTreeChart);
         }
 
         #endregion
@@ -429,7 +421,7 @@ namespace GKUI.Forms
 
         #region ILocalization implementation
 
-        public override void SetLang()
+        public void SetLang()
         {
             tbGens.Text = LangMan.LS(LSID.LSID_Generations);
 
@@ -542,13 +534,7 @@ namespace GKUI.Forms
 
         public void SetFilter()
         {
-            using (TreeFilterDlg dlgFilter = new TreeFilterDlg(fBase)) {
-                dlgFilter.Filter = fTreeBox.Model.Filter;
-
-                if (dlgFilter.ShowModal() == DialogResult.Ok) {
-                    GenChart();
-                }
-            }
+            fController.SetFilter();
         }
 
         #endregion

@@ -21,7 +21,6 @@
 using System;
 using System.Windows.Forms;
 
-using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Types;
@@ -37,42 +36,39 @@ namespace GKUI.Forms
     {
         private readonly NameEditDlgController fController;
 
-        private NameEntry fNameEntry;
-
         public NameEntry IName
         {
-            get { return fNameEntry; }
-            set { SetIName(value); }
+            get { return fController.NameEntry; }
+            set { fController.NameEntry = value; }
         }
 
-        private void SetIName(NameEntry value)
+        #region View Interface
+
+        ITextBoxHandler INameEditDlg.Name
         {
-            fNameEntry = value;
-            if (fNameEntry == null) {
-                txtName.Text = "";
-                cmbSex.SelectedIndex = 0;
-                txtFPatr.Text = "";
-                txtMPatr.Text = "";
-            } else {
-                txtName.Text = fNameEntry.Name;
-                cmbSex.SelectedIndex = (sbyte)fNameEntry.Sex;
-                txtFPatr.Text = fNameEntry.F_Patronymic;
-                txtMPatr.Text = fNameEntry.M_Patronymic;
-            }
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
         }
+
+        ITextBoxHandler INameEditDlg.FPatr
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtFPatr); }
+        }
+
+        ITextBoxHandler INameEditDlg.MPatr
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtMPatr); }
+        }
+
+        IComboBoxHandler INameEditDlg.SexCombo
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbSex); }
+        }
+
+        #endregion
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try {
-                fNameEntry.Name = txtName.Text;
-                fNameEntry.Sex = (GEDCOMSex)cmbSex.SelectedIndex;
-                fNameEntry.F_Patronymic = txtFPatr.Text;
-                fNameEntry.M_Patronymic = txtMPatr.Text;
-                DialogResult = DialogResult.OK;
-            } catch (Exception ex) {
-                Logger.LogWrite("NameEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
 
         private void edName_KeyPress(object sender, KeyPressEventArgs e)
@@ -89,10 +85,6 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svLast; sx++) {
-                cmbSex.Items.Add(GKUtils.SexStr(sx));
-            }
-
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
@@ -104,11 +96,6 @@ namespace GKUI.Forms
             lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
 
             fController = new NameEditDlgController(this);
-        }
-
-        public bool ShowModalX(object owner)
-        {
-            return (ShowDialog() == DialogResult.OK);
         }
     }
 }

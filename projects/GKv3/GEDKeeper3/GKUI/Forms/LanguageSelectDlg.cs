@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,9 @@
 
 using System;
 using Eto.Forms;
-using GKCommon;
-using GKCore;
-using GKCore.Options;
+
+using GKCore.Controllers;
+using GKCore.Interfaces;
 using GKCore.UIContracts;
 using GKUI.Components;
 
@@ -33,39 +33,36 @@ namespace GKUI.Forms
     /// </summary>
     public partial class LanguageSelectDlg : CommonDialog, ILanguageSelectDlg
     {
-        public int SelectedLanguage { get; set; }
+        private readonly LanguageSelectDlgController fController;
+
+        public int SelectedLanguage
+        {
+            get { return fController.SelectedLanguage; }
+            set { fController.SelectedLanguage = value; }
+        }
+
+        #region View Interface
+
+        IListView ILanguageSelectDlg.LanguagesList
+        {
+            get { return lstLanguages; }
+        }
+
+        #endregion
 
         public LanguageSelectDlg()
         {
             InitializeComponent();
+
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+
+            fController = new LanguageSelectDlgController(this);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
-                GKComboItem item = lstLanguages.Items[lstLanguages.SelectedIndex] as GKComboItem;
-                if (item != null) {
-                    SelectedLanguage = (int)item.Tag;
-                }
-
-                DialogResult = DialogResult.Ok;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("LanguageSelectDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
-        }
-
-        private void LanguageSelectDlg_Load(object sender, EventArgs e)
-        {
-            lstLanguages.Items.Clear();
-            lstLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
-            foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
-                lstLanguages.Items.Add(new GKComboItem(lngRec.Name, lngRec.Code));
-            }
-            UIHelper.SelectComboItem(lstLanguages, LangMan.LS_DEF_CODE, true);
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
         }
     }
 }

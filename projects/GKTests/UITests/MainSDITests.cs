@@ -540,7 +540,7 @@ namespace GKUI.Forms
             chkPortraitsVisible.Properties.Checked = false;
             chkPortraitsVisible.Properties.Checked = true;
 
-            optDlg.SetPage(OptionsPage.opAncestorsCircle);
+            optDlg.SetPage(OptionsPage.opCircleChart);
 
             optDlg.SetPage(OptionsPage.opInterface);
             var chkExtendWomanSurnames = new CheckBoxTester("chkExtendWomanSurnames", form);
@@ -946,6 +946,7 @@ namespace GKUI.Forms
 
         #region EditorDlg handlers
 
+        private static bool NoteEditDlg_FirstCall = true;
         private static bool FamilyEditDlg_FirstCall = true;
         private static bool GroupEditDlg_FirstCall = true;
         private static bool PersonEditDlg_FirstCall = true;
@@ -957,6 +958,11 @@ namespace GKUI.Forms
 
         public void EditorDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
+            if (NoteEditDlg_FirstCall && form is NoteEditDlg) {
+                NoteEditDlg_Handler((NoteEditDlg) form);
+                NoteEditDlg_FirstCall = false;
+            }
+
             if (FamilyEditDlg_FirstCall && form is FamilyEditDlg) {
                 FamilyEditDlg_Handler((FamilyEditDlg) form);
                 FamilyEditDlg_FirstCall = false;
@@ -1054,6 +1060,13 @@ namespace GKUI.Forms
             sheetTester.Properties.SelectItem(0);
             ClickToolStripButton("fSourcesList_ToolBar_btnDelete", dlg);
             Assert.AreEqual(0, record.SourceCitations.Count);
+        }
+
+        public void NoteEditDlg_Handler(NoteEditDlg dlg)
+        {
+            var txtNote = new TextBoxTester("txtNote", dlg);
+            txtNote.Enter("sample text");
+            Assert.AreEqual("sample text", txtNote.Text);
         }
 
         private void FamilyEditDlg_Handler(FamilyEditDlg dlg)
@@ -1493,8 +1506,9 @@ namespace GKUI.Forms
 
         public void NoteAdd_Mini_Handler(string name, IntPtr ptr, Form form)
         {
-            var txtNote = new TextBoxTester("txtNote");
+            var txtNote = new TextBoxTester("txtNote", form);
             txtNote.Enter("sample text");
+            Assert.AreEqual("sample text", txtNote.Text);
 
             ClickButton("btnAccept", form);
         }

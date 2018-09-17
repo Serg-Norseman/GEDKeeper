@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,9 +19,12 @@
  */
 
 using System;
+
 using BSLib;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.UIContracts;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -30,7 +33,7 @@ namespace GKUI.Forms
     /// </summary>
     public partial class DayTipsDlg : CommonDialog, IDayTipsDlg
     {
-        private readonly StringList fTips;
+        private readonly DayTipsDlgController fController;
 
         public bool ShowTipsChecked
         {
@@ -38,11 +41,33 @@ namespace GKUI.Forms
             set { chkShow.Checked = value; }
         }
 
+        #region View Interface
+
+        ILabelHandler IDayTipsDlg.TitleLabel
+        {
+            get { return fControlsManager.GetControlHandler<ILabelHandler>(lblTitle); }
+        }
+
+        ITextBoxHandler IDayTipsDlg.TipText
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtTip); }
+        }
+
+        IButtonHandler IDayTipsDlg.NextButton
+        {
+            get { return fControlsManager.GetControlHandler<IButtonHandler>(btnNextTip); }
+        }
+
+        #endregion
+
         public DayTipsDlg()
         {
             InitializeComponent();
 
-            fTips = new StringList();
+            Image1.Image = UIHelper.LoadResourceImage("Resources.image_tips_light.png");
+            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+
+            fController = new DayTipsDlgController(this);
 
             // SetLang()
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
@@ -51,39 +76,9 @@ namespace GKUI.Forms
             lblTitle.Text = LangMan.LS(LSID.LSID_YouKnowWhat);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                fTips.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private void GetNextTip()
-        {
-            if (fTips.Count > 0)
-            {
-                string tip = fTips[0];
-
-                // processing "title's directives"
-                if (!string.IsNullOrEmpty(tip) && tip[0] == '#') {
-                    tip = tip.Substring(1);
-                    lblTitle.Text = tip;
-
-                    fTips.Delete(0);
-                    tip = fTips[0];
-                }
-
-                txtTip.Text = tip;
-                fTips.Delete(0);
-            }
-            btnNextTip.Enabled = (fTips.Count > 0);
-        }
-
         private void btnNextTip_Click(object sender, EventArgs e)
         {
-            GetNextTip();
+            fController.GetNextTip();
         }
 
         public void Init(string caption, bool showTipsChecked, StringList tips)
@@ -91,8 +86,8 @@ namespace GKUI.Forms
             chkShow.Checked = showTipsChecked;
             Title = caption;
             lblTitle.Text = caption;
-            fTips.Assign(tips);
-            GetNextTip();
+            fController.SetTips(tips);
+            fController.GetNextTip();
         }
     }
 }

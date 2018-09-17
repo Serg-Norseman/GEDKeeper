@@ -32,7 +32,7 @@ namespace GKCore.Options
 {
     public enum OptionsPage
     {
-        opCommon, opTreeChart, opAncestorsCircle, opInterface, opPedigree, opMultimedia
+        opCommon, opTreeChart, opCircleChart, opInterface, opPedigree, opMultimedia
     }
 
     /// <summary>

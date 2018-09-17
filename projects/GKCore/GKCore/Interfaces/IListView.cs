@@ -41,6 +41,7 @@ namespace GKCore.Interfaces
         void DeleteRecord(object data);
         void EndUpdate();
         object GetSelectedData();
+        void Select();
         void SelectItem(object rowData);
         void SetColumnCaption(int index, string caption);
         void UpdateContents(bool columnsChanged = false);

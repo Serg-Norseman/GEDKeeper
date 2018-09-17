@@ -19,10 +19,10 @@
  */
 
 using System;
-using System.Windows.Forms;
 
 using BSLib;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.UIContracts;
 using GKUI.Components;
 
@@ -33,7 +33,32 @@ namespace GKUI.Forms
     /// </summary>
     public partial class DayTipsDlg : CommonDialog, IDayTipsDlg
     {
-        private readonly StringList fTips;
+        private readonly DayTipsDlgController fController;
+
+        public bool ShowTipsChecked
+        {
+            get { return chkShow.Checked; }
+            set { chkShow.Checked = value; }
+        }
+
+        #region View Interface
+
+        ILabelHandler IDayTipsDlg.TitleLabel
+        {
+            get { return fControlsManager.GetControlHandler<ILabelHandler>(lblTitle); }
+        }
+
+        ITextBoxHandler IDayTipsDlg.TipText
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtTip); }
+        }
+
+        IButtonHandler IDayTipsDlg.NextButton
+        {
+            get { return fControlsManager.GetControlHandler<IButtonHandler>(btnNextTip); }
+        }
+
+        #endregion
 
         public DayTipsDlg()
         {
@@ -42,7 +67,7 @@ namespace GKUI.Forms
             Image1.Image = UIHelper.LoadResourceImage("Resources.image_tips_light.png");
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fTips = new StringList();
+            fController = new DayTipsDlgController(this);
 
             // SetLang()
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
@@ -51,45 +76,9 @@ namespace GKUI.Forms
             lblTitle.Text = LangMan.LS(LSID.LSID_YouKnowWhat);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                fTips.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private void GetNextTip()
-        {
-            if (fTips.Count > 0)
-            {
-                string tip = fTips[0];
-
-                // processing "title's directives"
-                if (!string.IsNullOrEmpty(tip) && tip[0] == '#') {
-                    tip = tip.Substring(1);
-                    lblTitle.Text = tip;
-
-                    fTips.Delete(0);
-                    tip = fTips[0];
-                }
-
-                txtTip.Text = tip;
-                fTips.Delete(0);
-            }
-            btnNextTip.Enabled = (fTips.Count > 0);
-        }
-
         private void btnNextTip_Click(object sender, EventArgs e)
         {
-            GetNextTip();
-        }
-
-        public bool ShowTipsChecked
-        {
-            get { return chkShow.Checked; }
-            set { chkShow.Checked = value; }
+            fController.GetNextTip();
         }
 
         public void Init(string caption, bool showTipsChecked, StringList tips)
@@ -97,13 +86,8 @@ namespace GKUI.Forms
             chkShow.Checked = showTipsChecked;
             Text = caption;
             lblTitle.Text = caption;
-            fTips.Assign(tips);
-            GetNextTip();
-        }
-
-        public bool ShowModalX(object owner)
-        {
-            return (ShowDialog() == DialogResult.OK);
+            fController.SetTips(tips);
+            fController.GetNextTip();
         }
     }
 }

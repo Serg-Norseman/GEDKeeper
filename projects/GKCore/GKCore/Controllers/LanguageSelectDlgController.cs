@@ -19,8 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
-using GKCore.Types;
+using GKCore.Options;
 using GKCore.UIContracts;
 
 namespace GKCore.Controllers
@@ -28,57 +27,53 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class NameEditDlgController : DialogController<INameEditDlg>
+    public class LanguageSelectDlgController : DialogController<ILanguageSelectDlg>
     {
-        private NameEntry fIName;
+        private int fSelectedLanguage;
 
-        public NameEntry NameEntry
+        public int SelectedLanguage
         {
-            get { return fIName; }
+            get { return fSelectedLanguage; }
             set {
-                if (fIName != value) {
-                    fIName = value;
+                if (fSelectedLanguage != value) {
+                    fSelectedLanguage = value;
                     UpdateView();
                 }
             }
         }
 
 
-        public NameEditDlgController(INameEditDlg view) : base(view)
+        public LanguageSelectDlgController(ILanguageSelectDlg view) : base(view)
         {
-            for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svLast; sx++) {
-                fView.SexCombo.Add(GKUtils.SexStr(sx));
+            fView.LanguagesList.ClearItems();
+            foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
+                fView.LanguagesList.AddItem(lngRec, lngRec.Name);
             }
+
+            // unit-testing and some other cases
+            if (fView.LanguagesList.Items.Count == 0) {
+                fView.LanguagesList.AddItem(new LangRecord(LangMan.LS_DEF_CODE, LangMan.LS_DEF_SIGN, LangMan.LS_DEF_NAME, ""), LangMan.LS_DEF_NAME);
+            }
+
+            fView.LanguagesList.SelectItem(GlobalOptions.Instance.GetLangByCode(LangMan.LS_DEF_CODE));
+            fView.LanguagesList.Select();
         }
 
         public override bool Accept()
         {
             try {
-                fIName.Name = fView.Name.Text;
-                fIName.Sex = (GEDCOMSex)fView.SexCombo.SelectedIndex;
-                fIName.F_Patronymic = fView.FPatr.Text;
-                fIName.M_Patronymic = fView.MPatr.Text;
+                LangRecord lngRec = fView.LanguagesList.GetSelectedData() as LangRecord;
+                fSelectedLanguage = lngRec.Code;
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("NameEditDlgController.Accept(): " + ex.Message);
+                Logger.LogWrite("LanguageSelectDlgController.Accept(): " + ex.Message);
                 return false;
             }
         }
 
         public override void UpdateView()
         {
-            if (fIName == null) {
-                fView.Name.Text = "";
-                fView.SexCombo.SelectedIndex = 0;
-                fView.FPatr.Text = "";
-                fView.MPatr.Text = "";
-            } else {
-                fView.Name.Text = fIName.Name;
-                fView.SexCombo.SelectedIndex = (sbyte)fIName.Sex;
-                fView.FPatr.Text = fIName.F_Patronymic;
-                fView.MPatr.Text = fIName.M_Patronymic;
-            }
         }
     }
 }

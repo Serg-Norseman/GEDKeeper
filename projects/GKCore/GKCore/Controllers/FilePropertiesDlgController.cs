@@ -78,5 +78,17 @@ namespace GKCore.Controllers
                 fView.RecordStats.AddItem(null, LangMan.LS(GKData.RecordTypes[i]), stats[i].ToString());
             }
         }
+
+        public void ChangeLanguage()
+        {
+            using (var dlg = AppHost.Container.Resolve<ILanguageEditDlg>()) {
+                dlg.LanguageID = fBase.Context.Tree.Header.Language.Value;
+
+                if (dlg.ShowModalX(this)) {
+                    // Assignment in control, instead of the header's property to work Cancel.
+                    fView.Language.Text = GEDCOMLanguageEnum.Instance.GetStrValue(dlg.LanguageID);
+                }
+            }
+        }
     }
 }

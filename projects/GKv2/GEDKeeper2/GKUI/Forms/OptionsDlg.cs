@@ -481,7 +481,7 @@ namespace GKUI.Forms
                     tabsCharts.SelectTab(0);
                     break;
 
-                case OptionsPage.opAncestorsCircle:
+                case OptionsPage.opCircleChart:
                     PageControl1.SelectedTab = pageCharts;
                     tabsCharts.SelectTab(1);
                     break;

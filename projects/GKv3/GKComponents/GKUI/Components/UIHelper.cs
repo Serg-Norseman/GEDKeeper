@@ -22,8 +22,10 @@ using System;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Lists;
 
 namespace GKUI.Components
 {
@@ -250,6 +252,21 @@ namespace GKUI.Components
             if (allowDefault) {
                 listBox.SelectedIndex = 0;
             }
+        }
+
+        public static GKListView CreateRecordsView(Panel parent, IBaseContext baseContext, GEDCOMRecordType recType)
+        {
+            if (parent == null)
+                throw new ArgumentNullException("parent");
+
+            if (baseContext == null)
+                throw new ArgumentNullException("baseContext");
+
+            GKListView recView = new GKListView();
+            recView.ListMan = ListManager.Create(baseContext, recType);
+            parent.Content = recView;
+
+            return recView;
         }
 
         public static GKListView CreateListView(Panel parent)

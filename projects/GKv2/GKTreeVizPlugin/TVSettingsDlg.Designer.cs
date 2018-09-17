@@ -2,9 +2,6 @@
 {
     partial class TVSettingsDlg
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.NumericUpDown edMinGens;
         private System.Windows.Forms.Label lblMinGens;
@@ -12,10 +9,6 @@
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -25,12 +18,6 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
         	this.chkWithoutDates = new System.Windows.Forms.CheckBox();
@@ -114,7 +101,5 @@
         	((System.ComponentModel.ISupportInitialize)(this.edMinGens)).EndInit();
         	this.ResumeLayout(false);
         }
-
-        #endregion
     }
 }

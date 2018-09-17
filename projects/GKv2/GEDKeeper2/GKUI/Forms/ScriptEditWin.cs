@@ -21,7 +21,6 @@
 using System;
 using System.ComponentModel;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 
 using GKCore;
@@ -35,8 +34,10 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class ScriptEditWin : CommonDialog, ILocalization, IScriptEditWin
+    public sealed partial class ScriptEditWin : CommonDialog, IScriptEditWin
     {
+        private readonly ScriptEditWinController fController;
+
         private readonly IBaseWindow fBase;
 
         private string fFileName;
@@ -66,21 +67,19 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        //IScriptEditWin.
-        public ITextBoxHandler ScriptText
+        ITextBoxHandler IScriptEditWin.ScriptText
         {
             get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtScriptText); }
         }
 
-        //IScriptEditWin.
-        public ITextBoxHandler DebugOutput
+        ITextBoxHandler IScriptEditWin.DebugOutput
         {
             get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtDebugOutput); }
         }
 
         #endregion
 
-        private bool CheckModified()
+        public bool CheckModified()
         {
             bool result = true;
             if (!Modified) return result;
@@ -112,52 +111,22 @@ namespace GKUI.Forms
 
         private void tbNewScript_Click(object sender, EventArgs e)
         {
-            if (!CheckModified()) return;
-
-            ScriptText.Clear();
-            FileName = "unknown.lua";
-            Modified = false;
+            fController.NewScript();
         }
 
         private void tbLoadScript_Click(object sender, EventArgs e)
         {
-            if (!CheckModified()) return;
-
-            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT);
-            if (string.IsNullOrEmpty(fileName)) return;
-
-            using (StreamReader strd = new StreamReader(File.OpenRead(fileName), Encoding.UTF8)) {
-                txtScriptText.Text = strd.ReadToEnd();
-                FileName = fileName;
-                Modified = false;
-                strd.Close();
-            }
+            fController.LoadScript();
         }
 
         private void tbSaveScript_Click(object sender, EventArgs e)
         {
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT, FileName);
-            if (string.IsNullOrEmpty(fileName)) return;
-
-            using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8)) {
-                strd.Write(txtScriptText.Text);
-                FileName = fileName;
-                Modified = false;
-                strd.Close();
-            }
+            fController.SaveScript();
         }
 
         private void tbRun_Click(object sender, EventArgs e)
         {
-            try {
-                DebugOutput.Clear();
-                using (ScriptEngine scrEngine = new ScriptEngine()) {
-                    scrEngine.lua_run(txtScriptText.Text, fBase, ((IScriptEditWin)this).DebugOutput);
-                }
-            } catch (Exception ex) {
-                Logger.LogWrite("ScriptEditWin.Run(): " + ex.Message);
-                Logger.LogWrite("ScriptEditWin.Run(): " + ex.StackTrace);
-            }
+            fController.RunScript();
         }
 
         private void ScriptEditWin_Closing(object sender, CancelEventArgs e)
@@ -180,6 +149,7 @@ namespace GKUI.Forms
             tbRun.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
 
             fBase = baseWin;
+            fController = new ScriptEditWinController(this);
 
             txtScriptText.TextChanged += mmScriptText_TextChanged;
 

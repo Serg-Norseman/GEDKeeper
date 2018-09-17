@@ -19,50 +19,53 @@
  */
 
 using System;
-using System.Windows.Forms;
-
-using GKCore.Controllers;
-using GKCore.Interfaces;
+using BSLib;
+using GKCommon.GEDCOM;
+using GKCore.Options;
+using GKCore.Types;
 using GKCore.UIContracts;
-using GKUI.Components;
 
-namespace GKUI.Forms
+namespace GKCore.Controllers
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class LanguageSelectDlg : CommonDialog, ILanguageSelectDlg
+    public class DayTipsDlgController : DialogController<IDayTipsDlg>
     {
-        private readonly LanguageSelectDlgController fController;
+        private readonly StringList fTips;
 
-        public int SelectedLanguage
+        public DayTipsDlgController(IDayTipsDlg view) : base(view)
         {
-            get { return fController.SelectedLanguage; }
-            set { fController.SelectedLanguage = value; }
+            fTips = new StringList();
         }
 
-        #region View Interface
-
-        IListView ILanguageSelectDlg.LanguagesList
+        public void GetNextTip()
         {
-            get { return lstLanguages; }
+            if (fTips.Count > 0) {
+                string tip = fTips[0];
+
+                // processing "title's directives"
+                if (!string.IsNullOrEmpty(tip) && tip[0] == '#') {
+                    tip = tip.Substring(1);
+                    fView.TitleLabel.Text = tip;
+
+                    fTips.Delete(0);
+                    tip = fTips[0];
+                }
+
+                fView.TipText.Text = tip;
+                fTips.Delete(0);
+            }
+            fView.NextButton.Enabled = (fTips.Count > 0);
         }
 
-        #endregion
-
-        public LanguageSelectDlg()
+        public void SetTips(StringList tips)
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fController = new LanguageSelectDlgController(this);
+            fTips.Assign(tips);
         }
 
-        private void btnAccept_Click(object sender, EventArgs e)
+        public override void UpdateView()
         {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
     }
 }

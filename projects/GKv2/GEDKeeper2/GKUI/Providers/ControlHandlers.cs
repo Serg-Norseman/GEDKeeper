@@ -316,6 +316,12 @@ namespace GKUI.Providers
             set { Control.ReadOnly = value; }
         }
 
+        public string SelectedText
+        {
+            get { return Control.SelectedText; }
+            set { Control.SelectedText = value; }
+        }
+
         public string Text
         {
             get { return Control.Text; }
@@ -335,6 +341,16 @@ namespace GKUI.Providers
         public void Select()
         {
             Control.Select();
+        }
+
+        public void Copy()
+        {
+            Control.Copy();
+        }
+
+        public void SelectAll()
+        {
+            Control.SelectAll();
         }
     }
 
@@ -362,6 +378,12 @@ namespace GKUI.Providers
             set { Control.ReadOnly = value; }
         }
 
+        public string SelectedText
+        {
+            get { return Control.SelectedText; }
+            set { Control.SelectedText = value; }
+        }
+
         public string Text
         {
             get { return Control.Text; }
@@ -381,6 +403,16 @@ namespace GKUI.Providers
         public void Select()
         {
             Control.Select();
+        }
+
+        public void Copy()
+        {
+            Control.Copy();
+        }
+
+        public void SelectAll()
+        {
+            Control.SelectAll();
         }
     }
 

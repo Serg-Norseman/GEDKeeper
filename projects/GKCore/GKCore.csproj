@@ -193,12 +193,15 @@
     <Compile Include="GKCore\Controllers\CircleChartWinController.cs" />
     <Compile Include="GKCore\Controllers\CommonFilterDlgController.cs" />
     <Compile Include="GKCore\Controllers\CommunicationEditDlgController.cs" />
+    <Compile Include="GKCore\Controllers\DayTipsDlgController.cs" />
     <Compile Include="GKCore\Controllers\DialogController.cs" />
     <Compile Include="GKCore\Controllers\EventEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\FamilyEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\FilePropertiesDlgController.cs" />
     <Compile Include="GKCore\Controllers\FragmentSearchController.cs" />
     <Compile Include="GKCore\Controllers\GroupEditDlgController.cs" />
+    <Compile Include="GKCore\Controllers\LanguageEditDlgController.cs" />
+    <Compile Include="GKCore\Controllers\LanguageSelectDlgController.cs" />
     <Compile Include="GKCore\Controllers\LocationEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\MapsViewerWinController.cs" />
     <Compile Include="GKCore\Controllers\MediaEditDlgController.cs" />
@@ -216,6 +219,7 @@
     <Compile Include="GKCore\Controllers\RelationshipCalculatorDlgController.cs" />
     <Compile Include="GKCore\Controllers\RepositoryEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\ResearchEditDlgController.cs" />
+    <Compile Include="GKCore\Controllers\ScriptEditWinController.cs" />
     <Compile Include="GKCore\Controllers\SlideshowController.cs" />
     <Compile Include="GKCore\Controllers\SourceCitEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\SourceEditDlgController.cs" />

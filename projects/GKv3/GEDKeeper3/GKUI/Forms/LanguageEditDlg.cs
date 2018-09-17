@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,10 @@
 
 using System;
 using Eto.Forms;
-using GKCommon;
+
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.UIContracts;
 using GKUI.Components;
 
@@ -33,45 +34,42 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class LanguageEditDlg : CommonDialog, ILanguageEditDlg
     {
-        private GEDCOMLanguageID fLanguageID;
+        private readonly LanguageEditDlgController fController;
 
         public GEDCOMLanguageID LanguageID
         {
-            get {
-                return fLanguageID;
-            }
-            set {
-                fLanguageID = value;
-                cmbLanguage.Text = GEDCOMLanguageEnum.Instance.GetStrValue(fLanguageID);
-            }
+            get { return fController.LanguageID; }
+            set { fController.LanguageID = value; }
         }
+
+        #region View Interface
+
+        IComboBoxHandler ILanguageEditDlg.LanguageCombo
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbLanguage); }
+        }
+
+        #endregion
 
         public LanguageEditDlg()
         {
             InitializeComponent();
 
-            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageEnum.LastVal; lid++) {
-                cmbLanguage.Items.Add(new GKComboItem(GEDCOMLanguageEnum.Instance.GetStrValue(lid), lid));
-            }
-            cmbLanguage.SortItems();
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             Title = LangMan.LS(LSID.LSID_Language);
             lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
+
+            fController = new LanguageEditDlgController(this);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try {
-                var item = (GKComboItem)cmbLanguage.Items[cmbLanguage.SelectedIndex];
-                fLanguageID = (GEDCOMLanguageID)item.Tag;
-                DialogResult = DialogResult.Ok;
-            } catch (Exception ex) {
-                Logger.LogWrite("LanguageEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
         }
     }
 }

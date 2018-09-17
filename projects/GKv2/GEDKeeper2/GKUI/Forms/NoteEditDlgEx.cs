@@ -19,12 +19,11 @@
  */
 
 using System;
-using System.IO;
 using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
 using GKCore;
-using GKCore.Types;
+using GKCore.Controllers;
 using GKCore.UIContracts;
 using GKUI.Components;
 
@@ -35,41 +34,26 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class NoteEditDlgEx : EditorDialog, INoteEditDlgEx
     {
-        private GEDCOMNoteRecord fNoteRecord;
+        private readonly NoteEditDlgController fController;
 
         public GEDCOMNoteRecord NoteRecord
         {
-            get { return fNoteRecord; }
-            set { SetNoteRecord(value); }
+            get { return fController.NoteRecord; }
+            set { fController.NoteRecord = value; }
         }
 
-        private void SetNoteRecord(GEDCOMNoteRecord value)
+        #region View Interface
+
+        ITextBoxHandler INoteEdit.Note
         {
-            fNoteRecord = value;
-            txtNote.Text = fNoteRecord.Note.Text.Trim();
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtNote); }
         }
+
+        #endregion
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try {
-                int length = 0;
-                for (int it = 0; txtNote.Lines.Length > it; ++it) {
-                    length += txtNote.Lines[it].Trim().Length;
-                }
-
-                if (length != 0) {
-                    fNoteRecord.SetNotesArray(txtNote.Lines);
-
-                    fBase.NotifyRecord(fNoteRecord, RecordAction.raEdit);
-
-                    DialogResult = DialogResult.OK;
-                } else {
-                    DialogResult = DialogResult.Cancel;
-                }
-            } catch (Exception ex) {
-                Logger.LogWrite("NoteEditDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
 
         public NoteEditDlgEx()
@@ -90,6 +74,10 @@ namespace GKUI.Forms
             miImport.Text = LangMan.LS(LSID.LSID_Import);
             miExport.Text = LangMan.LS(LSID.LSID_MIExport);
             miClear.Text = LangMan.LS(LSID.LSID_Clear);
+            pageEditor.Text = LangMan.LS(LSID.LSID_Note);
+            pagePreview.Text = LangMan.LS(LSID.LSID_DocPreview);
+
+            fController = new NoteEditDlgController(this);
         }
 
         private void FillSizes()
@@ -103,54 +91,42 @@ namespace GKUI.Forms
 
         private void btnBold_Click(object sender, EventArgs e)
         {
-            txtNote.SelectedText = string.Format(" [b]{0}[/b] ", txtNote.SelectedText);
+            fController.SetBold();
         }
 
         private void btnItalic_Click(object sender, EventArgs e)
         {
-            txtNote.SelectedText = string.Format(" [i]{0}[/i] ", txtNote.SelectedText);
+            fController.SetItalic();
         }
 
         private void btnUnderline_Click(object sender, EventArgs e)
         {
-            txtNote.SelectedText = string.Format(" [u]{0}[/u] ", txtNote.SelectedText);
+            fController.SetUnderline();
         }
 
         private void btnURL_Click(object sender, EventArgs e)
         {
-            txtNote.SelectedText = string.Format(" [url={0}]{0}[/url] ", txtNote.SelectedText);
+            fController.SetURL();
         }
 
         private void miSelectAndCopy_Click(object sender, EventArgs e)
         {
-            txtNote.Select();
-            txtNote.SelectAll();
-            txtNote.Copy();
+            fController.SelectAndCopy();
         }
 
         private void miImport_Click(object sender, EventArgs e)
         {
-            string fileName = AppHost.StdDialogs.GetOpenFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt");
-            if (string.IsNullOrEmpty(fileName)) return;
-
-            using (var sr = new StreamReader(fileName)) {
-                txtNote.Text = sr.ReadToEnd();
-            }
+            fController.Import();
         }
 
         private void miExport_Click(object sender, EventArgs e)
         {
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt", "", true);
-            if (string.IsNullOrEmpty(fileName)) return;
-
-            using (var sw = new StreamWriter(fileName)) {
-                sw.Write(txtNote.Text);
-            }
+            fController.Export();
         }
 
         private void miClear_Click(object sender, EventArgs e)
         {
-            txtNote.Text = string.Empty;
+            fController.Clear();
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -166,7 +142,7 @@ namespace GKUI.Forms
             if (item == null || item.Caption == "") return;
 
             string value = item.Tag.ToString();
-            txtNote.SelectedText = string.Format(" [size=+{0}]{1}[/size] ", value, txtNote.SelectedText);
+            fController.SetSize(value);
         }
     }
 }

@@ -710,27 +710,6 @@ namespace GKCore.Controllers
             }
         }
 
-        // FIXME: implement button of options into charts windows
-        public void ShowOptions()
-        {
-            using (var dlgOptions = AppHost.Container.Resolve<IOptionsDlg>(AppHost.Instance))
-            {
-                IWindow activeWin = AppHost.Instance.GetActiveWindow();
-                if (activeWin is IBaseWindow) dlgOptions.SetPage(OptionsPage.opInterface);
-                if (activeWin is IChartWindow) {
-                    if (activeWin is ICircleChartWin) {
-                        dlgOptions.SetPage(OptionsPage.opAncestorsCircle);
-                    } else {
-                        dlgOptions.SetPage(OptionsPage.opTreeChart);
-                    }
-                }
-
-                if (AppHost.Instance.ShowModalX(dlgOptions)) {
-                    AppHost.Instance.ApplyOptions();
-                }
-            }
-        }
-
         public void FileNew()
         {
             AppHost.Instance.CreateBase("");

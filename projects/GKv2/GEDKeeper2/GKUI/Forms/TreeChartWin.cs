@@ -97,7 +97,6 @@ namespace GKUI.Forms
             fTreeBox = new TreeChartBox(new WFGfxRenderer());
             fTreeBox.Name = "fTreeBox";
             fTreeBox.Base = fBase;
-            fTreeBox.Dock = DockStyle.Fill;
             fTreeBox.DragOver += ImageTree_DragOver;
             fTreeBox.PersonModify += ImageTree_PersonModify;
             fTreeBox.RootChanged += ImageTree_RootChanged;
@@ -105,7 +104,7 @@ namespace GKUI.Forms
             fTreeBox.Options = GlobalOptions.Instance.ChartOptions;
             fTreeBox.NavRefresh += ImageTree_NavRefresh;
             fTreeBox.ZoomChanged += ImageTree_NavRefresh;
-
+            fTreeBox.Dock = DockStyle.Fill;
             Controls.Add(fTreeBox);
             Controls.SetChildIndex(fTreeBox, 0);
             Controls.SetChildIndex(ToolBar1, 1);
@@ -403,13 +402,7 @@ namespace GKUI.Forms
 
         private void tbOptions_Click(object sender, EventArgs e)
         {
-            using (OptionsDlg dlgOptions = new OptionsDlg(AppHost.Instance))
-            {
-                dlgOptions.SetPage(OptionsPage.opTreeChart);
-                if (dlgOptions.ShowDialog() == DialogResult.OK) {
-                    AppHost.Instance.ApplyOptions();
-                }
-            }
+            AppHost.Instance.ShowOptions(OptionsPage.opTreeChart);
         }
 
         #endregion
@@ -437,7 +430,7 @@ namespace GKUI.Forms
 
         #region ILocalization implementation
 
-        public override void SetLang()
+        public void SetLang()
         {
             tbGens.Text = LangMan.LS(LSID.LSID_Generations);
 
@@ -550,13 +543,7 @@ namespace GKUI.Forms
 
         public void SetFilter()
         {
-            using (TreeFilterDlg dlgFilter = new TreeFilterDlg(fBase)) {
-                dlgFilter.Filter = fTreeBox.Model.Filter;
-
-                if (dlgFilter.ShowDialog() == DialogResult.OK) {
-                    GenChart();
-                }
-            }
+            fController.SetFilter();
         }
 
         #endregion

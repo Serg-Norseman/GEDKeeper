@@ -33,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class CommonFilterDlg : CommonDialog, ICommonDialog, IBaseEditor, ICommonFilterDlg
+    public partial class CommonFilterDlg : CommonDialog, ICommonFilterDlg
     {
         private readonly CommonFilterDlgController fController;
 
@@ -270,11 +270,6 @@ namespace GKUI.Forms
         {
             fListMan.Filter.Clear();
             UpdateGrid();
-        }
-
-        public bool ShowModalX(object owner)
-        {
-            return (ShowDialog() == DialogResult.OK);
         }
 
         public void UpdateView()

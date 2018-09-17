@@ -27,7 +27,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public abstract class StatusForm : CommonForm, IStatusForm
+    public class StatusForm : CommonForm, IStatusForm
     {
         public sealed class StatusLinesEx : IStatusLines
         {
@@ -53,7 +53,7 @@ namespace GKUI.Forms
             get { return fStatusLines; }
         }
 
-        protected StatusForm() : base()
+        public StatusForm() : base()
         {
             fStatusBar = new StatusBar();
             fStatusBar.Margin = new Padding(2);
@@ -92,7 +92,5 @@ namespace GKUI.Forms
             }
             fStatusBar.Panels[fStatusBar.Panels.Count - 1].AutoSize = StatusBarPanelAutoSize.Spring;
         }
-
-        public abstract void SetLang();
     }
 }

@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Windows.Forms;
-
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.UIContracts;
@@ -56,8 +54,7 @@ namespace GKUI.Forms
 
         public GEDCOMSex Sex
         {
-            get
-            {
+            get {
                 if (rbMale.Checked) {
                     return GEDCOMSex.svMale;
                 }
@@ -66,10 +63,8 @@ namespace GKUI.Forms
                 }
                 return GEDCOMSex.svNone;
             }
-            set
-            {
-                switch (value)
-                {
+            set {
+                switch (value) {
                     case GEDCOMSex.svNone:
                     case GEDCOMSex.svUndetermined:
                         rbNone.Checked = true;
@@ -84,11 +79,6 @@ namespace GKUI.Forms
                         break;
                 }
             }
-        }
-
-        public bool ShowModalX(object owner)
-        {
-            return (ShowDialog() == DialogResult.OK);
         }
     }
 }

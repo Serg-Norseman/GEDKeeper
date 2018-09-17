@@ -131,6 +131,7 @@ namespace GKCore
             public void SelectItem(object rowData) {}
             public void SetColumnCaption(int index, string caption) {}
             public void UpdateContents(bool columnsChanged = false) {}
+            public void Select() {}
         }
 
         private bool ExtFilterHandler(GEDCOMRecord record)

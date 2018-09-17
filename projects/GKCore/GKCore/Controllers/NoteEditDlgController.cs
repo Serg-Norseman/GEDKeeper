@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.IO;
 using GKCommon.GEDCOM;
 using GKCore.Types;
 using GKCore.UIContracts;
@@ -28,7 +29,7 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class NoteEditDlgController : DialogController<INoteEditDlg>
+    public sealed class NoteEditDlgController : DialogController<INoteEdit>
     {
         private GEDCOMNoteRecord fNoteRecord;
 
@@ -44,7 +45,7 @@ namespace GKCore.Controllers
         }
 
 
-        public NoteEditDlgController(INoteEditDlg view) : base(view)
+        public NoteEditDlgController(INoteEdit view) : base(view)
         {
         }
 
@@ -70,6 +71,62 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             fView.Note.Text = fNoteRecord.Note.Text.Trim();
+        }
+
+        public void SetBold()
+        {
+            fView.Note.SelectedText = string.Format(" [b]{0}[/b] ", fView.Note.SelectedText);
+        }
+
+        public void SetItalic()
+        {
+            fView.Note.SelectedText = string.Format(" [i]{0}[/i] ", fView.Note.SelectedText);
+        }
+
+        public void SetUnderline()
+        {
+            fView.Note.SelectedText = string.Format(" [u]{0}[/u] ", fView.Note.SelectedText);
+        }
+
+        public void SetURL()
+        {
+            fView.Note.SelectedText = string.Format(" [url={0}]{0}[/url] ", fView.Note.SelectedText);
+        }
+
+        public void SelectAndCopy()
+        {
+            fView.Note.SelectAll();
+            fView.Note.Copy();
+        }
+
+        public void Import()
+        {
+            string fileName = AppHost.StdDialogs.GetOpenFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt");
+            if (string.IsNullOrEmpty(fileName)) return;
+
+            using (var sr = new StreamReader(fileName)) {
+                fView.Note.Text = sr.ReadToEnd();
+            }
+        }
+
+        public void Export()
+        {
+            string fileName = AppHost.StdDialogs.GetSaveFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt", "", true);
+            if (string.IsNullOrEmpty(fileName)) return;
+
+            using (var sw = new StreamWriter(fileName)) {
+                sw.Write(fView.Note.Text);
+            }
+        }
+
+        public void Clear()
+        {
+            fView.Note.Text = string.Empty;
+        }
+
+        public void SetSize(string value)
+        {
+            fView.Note.SelectedText = string.Format(" [size=+{0}]{1}[/size] ", value, fView.Note.SelectedText);
         }
     }
 }
