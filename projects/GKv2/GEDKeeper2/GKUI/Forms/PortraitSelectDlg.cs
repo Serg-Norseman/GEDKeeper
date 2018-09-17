@@ -19,12 +19,11 @@
  */
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 
-using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.UIContracts;
 using GKUI.Components;
@@ -36,59 +35,29 @@ namespace GKUI.Forms
     /// </summary>
     public sealed partial class PortraitSelectDlg : EditorDialog, IPortraitSelectDlg
     {
-        private GEDCOMMultimediaLink fMultimediaLink;
+        private readonly PortraitSelectDlgController fController;
 
         public GEDCOMMultimediaLink MultimediaLink
         {
-            get { return fMultimediaLink; }
-            set { SetMultimediaLink(value); }
+            get { return fController.MultimediaLink; }
+            set { fController.MultimediaLink = value; }
         }
 
-        private void SetMultimediaLink(GEDCOMMultimediaLink value)
+        #region View Interface
+
+        IImageView IPortraitSelectDlg.ImageCtl
         {
-            fMultimediaLink = value;
-            if (fMultimediaLink == null || fMultimediaLink.Value == null) return;
-
-            GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)fMultimediaLink.Value;
-
-            IImage img = fBase.Context.LoadMediaImage(mmRec.FileReferences[0], false);
-            if (img == null) return;
-
-            imageView1.OpenImage(((ImageHandler)img).Handle);
-
-            if (fMultimediaLink.IsPrimaryCutout) {
-                ExtRect rt = fMultimediaLink.CutoutPosition.Value;
-                imageView1.SelectionRegion = new RectangleF(rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight());
-            }
+            get { return imageView1; }
         }
+
+        #endregion
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
-                RectangleF selectRegion = imageView1.SelectionRegion;
-
-                if (!selectRegion.IsEmpty) {
-                    fMultimediaLink.IsPrimaryCutout = true;
-                    fMultimediaLink.CutoutPosition.Value =
-                        ExtRect.Create((int)selectRegion.Left, (int)selectRegion.Top, (int)selectRegion.Right, (int)selectRegion.Bottom);
-                } else {
-                    fMultimediaLink.IsPrimaryCutout = false;
-                    fMultimediaLink.CutoutPosition.Value = ExtRect.CreateEmpty();
-                }
-
-                PortraitsCache.Instance.RemoveObsolete(fMultimediaLink);
-
-                DialogResult = DialogResult.OK;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("PortraitSelectDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
 
-        public PortraitSelectDlg()
+        public PortraitSelectDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -101,6 +70,9 @@ namespace GKUI.Forms
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             Text = LangMan.LS(LSID.LSID_PortraitSelect);
+
+            fController = new PortraitSelectDlgController(this);
+            fController.Init(baseWin);
         }
     }
 }

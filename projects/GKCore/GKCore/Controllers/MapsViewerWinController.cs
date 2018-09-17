@@ -33,16 +33,25 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class MapsViewerWinController : FormController<IMapsViewerWin>
     {
+        private readonly ExtList<GeoPoint> fMapPoints;
         private readonly List<GEDCOMRecord> fSelectedPersons;
         private readonly ExtList<MapPlace> fPlaces;
+
+        private ITVNode fBaseRoot;
 
         public ExtList<MapPlace> Places
         {
             get { return fPlaces; }
         }
 
+        public ITVNode TreeRoot
+        {
+            get { return fBaseRoot; }
+        }
+
         public MapsViewerWinController(IMapsViewerWin view, List<GEDCOMRecord> selectedPersons) : base(view)
         {
+            fMapPoints = new ExtList<GeoPoint>(true);
             fPlaces = new ExtList<MapPlace>(true);
             fSelectedPersons = selectedPersons;
         }
@@ -71,6 +80,8 @@ namespace GKCore.Controllers
                 fView.PlacesTree.BeginUpdate();
                 progress.ProgressInit(LangMan.LS(LSID.LSID_LoadingLocations), tree.RecordsCount);
                 try {
+                    fBaseRoot = fView.PlacesTree.AddNode(null, LangMan.LS(LSID.LSID_RPLocations), null);
+
                     fPlaces.Clear();
                     fView.PersonsCombo.Clear();
                     //fView.PersonsCombo.Sorted = false;
@@ -89,7 +100,7 @@ namespace GKCore.Controllers
                             for (int j = 0; j < num2; j++) {
                                 GEDCOMCustomEvent ev = ind.Events[j];
                                 if (ev.Place.StringValue != "") {
-                                    fView.AddPlace(ev.Place, ev);
+                                    AddPlace(ev.Place, ev);
                                     pCnt++;
                                 }
                             }
@@ -102,7 +113,7 @@ namespace GKCore.Controllers
                         progress.ProgressStep();
                     }
 
-                    fView.PlacesTree.Expand(fView.TreeRoot);
+                    fView.PlacesTree.Expand(fBaseRoot);
                     fView.PersonsCombo.SortItems();
 
                     fView.SelectPlacesBtn.Enabled = true;
@@ -116,6 +127,92 @@ namespace GKCore.Controllers
             } catch (Exception ex) {
                 Logger.LogWrite("MapsViewerWin.PlacesLoad(): " + ex.Message);
             }
+        }
+
+        private void AddPlace(GEDCOMPlace place, GEDCOMCustomEvent placeEvent)
+        {
+            try {
+                GEDCOMLocationRecord locRec = place.Location.Value as GEDCOMLocationRecord;
+                string placeName = (locRec != null) ? locRec.LocationName : place.StringValue;
+
+                ITVNode node = fView.FindTreeNode(placeName);
+                MapPlace mapPlace;
+
+                if (node == null) {
+                    mapPlace = new MapPlace();
+                    mapPlace.Name = placeName;
+                    fPlaces.Add(mapPlace);
+
+                    node = fView.PlacesTree.AddNode(fBaseRoot, placeName, mapPlace);
+
+                    if (locRec == null) {
+                        PlacesCache.Instance.GetPlacePoints(placeName, mapPlace.Points);
+                    } else {
+                        GeoPoint pt = new GeoPoint(locRec.Map.Lati, locRec.Map.Long, placeName);
+                        mapPlace.Points.Add(pt);
+                    }
+
+                    int num = mapPlace.Points.Count;
+                    for (int i = 0; i < num; i++) {
+                        GeoPoint pt = mapPlace.Points[i];
+                        string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
+                        fView.PlacesTree.AddNode(node, ptTitle, pt);
+                    }
+                } else {
+                    mapPlace = (node.Tag as MapPlace);
+                }
+
+                mapPlace.PlaceRefs.Add(new PlaceRef(placeEvent));
+            } catch (Exception ex) {
+                Logger.LogWrite("MapsViewerWin.AddPlace(): " + ex.Message);
+            }
+        }
+
+        public void SelectPlaces()
+        {
+            GEDCOMIndividualRecord ind = null;
+
+            bool condBirth = false;
+            bool condDeath = false;
+            bool condResidence = false;
+
+            if (fView.TotalRadio.Checked) {
+                condBirth = fView.BirthCheck.Checked;
+                condDeath = fView.DeathCheck.Checked;
+                condResidence = fView.ResidenceCheck.Checked;
+            } else if (fView.SelectedRadio.Checked && (fView.PersonsCombo.SelectedIndex >= 0)) {
+                ind = (fView.PersonsCombo.SelectedTag as GEDCOMIndividualRecord);
+            }
+
+            fView.MapBrowser.ShowLines = (ind != null && fView.LinesVisibleCheck.Checked);
+            fMapPoints.Clear();
+
+            int num = fPlaces.Count;
+            for (int i = 0; i < num; i++) {
+                MapPlace place = fPlaces[i];
+                if (place.Points.Count < 1) continue;
+
+                int num2 = place.PlaceRefs.Count;
+                for (int j = 0; j < num2; j++) {
+                    GEDCOMCustomEvent evt = place.PlaceRefs[j].Event;
+
+                    if ((ind != null && (evt.Parent == ind)) || (condBirth && evt.Name == "BIRT") || (condDeath && evt.Name == "DEAT") || (condResidence && evt.Name == "RESI")) {
+                        PlacesLoader.AddPoint(fMapPoints, place.Points[0], place.PlaceRefs[j]);
+                    }
+                }
+            }
+
+            if (ind != null) {
+                // sort points by date
+                fMapPoints.QuickSort(MapPointsCompare);
+            }
+
+            PlacesLoader.CopyPoints(fView.MapBrowser, fMapPoints, ind != null);
+        }
+
+        private static int MapPointsCompare(GeoPoint item1, GeoPoint item2)
+        {
+            return item1.Date.CompareTo(item2.Date);
         }
 
         // TODO: localize?

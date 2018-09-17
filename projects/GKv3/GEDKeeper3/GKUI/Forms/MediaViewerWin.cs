@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using Eto.Drawing;
@@ -99,35 +98,14 @@ namespace GKUI.Forms
         public void SetViewImage(IImage img, GEDCOMFileReferenceWithTitle fileRef)
         {
             var imageCtl = new GKUI.Components.ImageView();
-            imageCtl.OpenImage(((ImageHandler)img).Handle);
+            imageCtl.OpenImage(img);
 
-            ProcessPortraits(imageCtl, fileRef);
+            fController.ProcessPortraits(imageCtl, fileRef);
 
             fTimer = AppHost.Instance.CreateTimer(100.0f, InitViewer_Tick);
             fTimer.Start();
 
             SetViewControl(imageCtl);
-        }
-
-        private void ProcessPortraits(GKUI.Components.ImageView imageCtl, GEDCOMFileReferenceWithTitle fileRef)
-        {
-            var mmRec = fileRef.Parent as GEDCOMMultimediaRecord;
-
-            var linksList = new List<GEDCOMObject>();
-            GKUtils.SearchRecordLinks(linksList, mmRec.Owner, mmRec);
-
-            foreach (var link in linksList) {
-                var mmLink = link as GEDCOMMultimediaLink;
-                if (mmLink != null && mmLink.IsPrimary) {
-                    var indiRec = mmLink.Parent as GEDCOMIndividualRecord;
-                    string indiName = GKUtils.GetNameString(indiRec, true, false);
-                    var region = mmLink.CutoutPosition.Value;
-
-                    imageCtl.NamedRegions.Add(new NamedRegion(indiName, region));
-                }
-            }
-
-            imageCtl.ShowNamedRegionTips = (imageCtl.NamedRegions.Count > 0);
         }
 
         public void DisposeViewControl()

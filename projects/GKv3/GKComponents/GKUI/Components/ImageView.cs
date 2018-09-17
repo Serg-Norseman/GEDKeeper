@@ -22,12 +22,15 @@ using System;
 using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
+
+using BSLib;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.UIContracts;
 
 namespace GKUI.Components
 {
-    public class ImageView : Panel, ILocalization
+    public class ImageView : Panel, ILocalization, IImageView
     {
         private ImageBox imageBox;
         private Panel toolStrip;
@@ -60,10 +63,15 @@ namespace GKUI.Components
             set { imageBox.SelectionMode = value; }
         }
 
-        public RectangleF SelectionRegion
+        public ExtRect SelectionRegion
         {
-            get { return imageBox.SelectionRegion; }
-            set { imageBox.SelectionRegion = value; }
+            get {
+                RectangleF selectRegion = imageBox.SelectionRegion;
+                return ExtRect.Create((int)selectRegion.Left, (int)selectRegion.Top, (int)selectRegion.Right, (int)selectRegion.Bottom);
+            }
+            set {
+                imageBox.SelectionRegion = new RectangleF(value.Left, value.Top, value.GetWidth(), value.GetHeight());
+            }
         }
 
         public Rectangle Viewport
@@ -149,6 +157,18 @@ namespace GKUI.Components
 
         #endregion
 
+        public void AddNamedRegion(string name, ExtRect region)
+        {
+            imageBox.NamedRegions.Add(new NamedRegion(name, region));
+        }
+
+        public void OpenImage(IImage image)
+        {
+            if (image != null) {
+                OpenImage(((ImageHandler)image).Handle);
+            }
+        }
+
         public void OpenImage(Image image)
         {
             if (image != null) {
@@ -165,6 +185,19 @@ namespace GKUI.Components
         {
             imageBox.ZoomToFit();
             UpdateZoomLevels();
+        }
+
+        private void FillZoomLevels()
+        {
+            cbZoomLevels.Items.Clear();
+
+            foreach (int zoom in imageBox.ZoomLevels)
+                cbZoomLevels.Items.Add(string.Format("{0}%", zoom));
+        }
+
+        private void UpdateZoomLevels()
+        {
+            cbZoomLevels.Text = string.Format("{0}%", imageBox.Zoom);
         }
 
         private void btnSizeToFit_Click(object sender, EventArgs e)
@@ -187,23 +220,9 @@ namespace GKUI.Components
             UpdateZoomLevels();
         }
 
-        private void FillZoomLevels()
-        {
-            cbZoomLevels.Items.Clear();
-
-            foreach (int zoom in imageBox.ZoomLevels)
-                cbZoomLevels.Items.Add(string.Format("{0}%", zoom));
-        }
-
-        private void UpdateZoomLevels()
-        {
-            cbZoomLevels.Text = string.Format("{0}%", imageBox.Zoom);
-        }
-
         private void cbZoomLevels_SelectedIndexChanged(object sender, EventArgs e)
         {
             int zoom = Convert.ToInt32(cbZoomLevels.Text.Substring(0, cbZoomLevels.Text.Length - 1));
-            //int zoom = imageBox.ZoomLevels[cbZoomLevels.SelectedIndex];
             imageBox.Zoom = zoom;
         }
     }

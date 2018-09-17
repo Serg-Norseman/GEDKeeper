@@ -1046,7 +1046,7 @@ namespace GKCore
             mmLink = iRec.SetPrimaryMultimediaLink(mmRec);
 
             // select portrait area
-            using (var selectDlg = AppHost.Container.Resolve<IPortraitSelectDlg>())
+            using (var selectDlg = AppHost.Container.Resolve<IPortraitSelectDlg>(baseWin))
             {
                 selectDlg.InitDialog(baseWin);
                 selectDlg.MultimediaLink = mmLink;

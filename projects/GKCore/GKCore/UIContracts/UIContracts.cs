@@ -263,12 +263,17 @@ namespace GKCore.UIContracts
     public interface IMapsViewerWin : IWindow, IView
     {
         IMapBrowser MapBrowser { get; }
-        ITVNode TreeRoot { get; }
         IComboBoxHandler PersonsCombo { get; }
         ITreeViewHandler PlacesTree { get; }
         IButtonHandler SelectPlacesBtn { get; }
+        ICheckBoxHandler BirthCheck { get; }
+        ICheckBoxHandler DeathCheck { get; }
+        ICheckBoxHandler ResidenceCheck { get; }
+        ICheckBoxHandler LinesVisibleCheck { get; }
+        IRadioButtonHandler TotalRadio { get; }
+        IRadioButtonHandler SelectedRadio { get; }
 
-        void AddPlace(GEDCOMPlace place, GEDCOMCustomEvent placeEvent);
+        ITVNode FindTreeNode(string place);
     }
 
 
@@ -413,6 +418,8 @@ namespace GKCore.UIContracts
     public interface IPortraitSelectDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMMultimediaLink MultimediaLink { get; set; }
+
+        IImageView ImageCtl { get; }
     }
 
 

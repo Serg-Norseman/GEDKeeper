@@ -85,6 +85,31 @@ namespace GKUI.Providers
         }
     }
 
+    public sealed class RadioButtonHandler : ControlHandler<RadioButton, RadioButtonHandler>, IRadioButtonHandler
+    {
+        public RadioButtonHandler(RadioButton control) : base(control)
+        {
+        }
+
+        public bool Checked
+        {
+            get { return Control.Checked; }
+            set { Control.Checked = value; }
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+    }
+
     public sealed class ComboBoxHandler : ControlHandler<ComboBox, ComboBoxHandler>, IComboBoxHandler
     {
         public ComboBoxHandler(ComboBox control) : base(control)

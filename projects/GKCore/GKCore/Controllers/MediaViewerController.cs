@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using BSLib;
 using GKCommon.GEDCOM;
@@ -109,6 +110,29 @@ namespace GKCore.Controllers
                 fView.DisposeViewControl();
                 Logger.LogWrite("MediaViewerController.UpdateView(): " + ex.Message);
             }
+        }
+
+        public void ProcessPortraits(IImageView imageCtl, GEDCOMFileReferenceWithTitle fileRef)
+        {
+            var mmRec = fileRef.Parent as GEDCOMMultimediaRecord;
+
+            var linksList = new List<GEDCOMObject>();
+            GKUtils.SearchRecordLinks(linksList, mmRec.Owner, mmRec);
+
+            bool showRegions = false;
+            foreach (var link in linksList) {
+                var mmLink = link as GEDCOMMultimediaLink;
+                if (mmLink != null && mmLink.IsPrimary) {
+                    var indiRec = mmLink.Parent as GEDCOMIndividualRecord;
+                    string indiName = GKUtils.GetNameString(indiRec, true, false);
+                    var region = mmLink.CutoutPosition.Value;
+
+                    imageCtl.AddNamedRegion(indiName, region);
+                    showRegions = true;
+                }
+            }
+
+            imageCtl.ShowNamedRegionTips = showRegions;
         }
     }
 }

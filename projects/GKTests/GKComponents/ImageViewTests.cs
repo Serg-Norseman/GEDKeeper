@@ -23,8 +23,9 @@
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
-using GKCommon;
+using BSLib;
 using GKCore;
+using GKCore.Interfaces;
 using GKTests;
 using GKUI.Components;
 using NUnit.Extensions.Forms;
@@ -63,7 +64,11 @@ namespace GKUI.Components
         [Test]
         public void TestMethod()
         {
-            fImageView.OpenImage(null); // return without exceptions
+            IImage image1 = null;
+            fImageView.OpenImage(image1); // return without exceptions
+
+            Image image2 = null;
+            fImageView.OpenImage(image2); // return without exceptions
 
             Assembly assembly = typeof(CoreTests).Assembly;
             Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.jpg"));
@@ -81,8 +86,8 @@ namespace GKUI.Components
             fImageView.SelectionMode = ImageBoxSelectionMode.Zoom;
             Assert.AreEqual(ImageBoxSelectionMode.Zoom, fImageView.SelectionMode);
 
-            fImageView.SelectionRegion = RectangleF.Empty;
-            Assert.AreEqual(RectangleF.Empty, fImageView.SelectionRegion);
+            fImageView.SelectionRegion = ExtRect.Empty;
+            Assert.AreEqual(ExtRect.Empty, fImageView.SelectionRegion);
 
             ClickToolStripButton("btnZoomIn", fForm);
             ClickToolStripButton("btnZoomOut", fForm);

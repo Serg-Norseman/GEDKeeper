@@ -53,6 +53,14 @@ namespace GKCore.UIContracts
     }
 
 
+    public interface IRadioButtonHandler : IControlHandler
+    {
+        bool Checked { get; set; }
+        bool Enabled { get; set; }
+        string Text { get; set; }
+    }
+
+
     public interface IComboBoxHandler : IControlHandler
     {
         bool Enabled { get; set; }
@@ -104,6 +112,7 @@ namespace GKCore.UIContracts
 
     public interface ITVNode
     {
+        object Tag { get; set; }
     }
 
     public interface ITreeViewHandler : IControlHandler
@@ -214,6 +223,19 @@ namespace GKCore.UIContracts
     public interface IHyperView : IControlHandler
     {
         StringList Lines { get; }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IImageView : IControlHandler
+    {
+        ExtRect SelectionRegion { get; set; }
+        bool ShowNamedRegionTips { get; set; }
+
+        void AddNamedRegion(string name, ExtRect region);
+        void OpenImage(IImage image);
     }
 
 

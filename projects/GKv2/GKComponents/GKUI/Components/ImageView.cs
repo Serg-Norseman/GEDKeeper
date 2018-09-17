@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,12 +22,15 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+
+using BSLib;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.UIContracts;
 
 namespace GKUI.Components
 {
-    public class ImageView : UserControl, ILocalization
+    public class ImageView : UserControl, ILocalization, IImageView
     {
         private ImageBox imageBox;
         private ToolStrip toolStrip;
@@ -60,10 +63,15 @@ namespace GKUI.Components
             set { imageBox.SelectionMode = value; }
         }
 
-        public RectangleF SelectionRegion
+        public ExtRect SelectionRegion
         {
-            get { return imageBox.SelectionRegion; }
-            set { imageBox.SelectionRegion = value; }
+            get {
+                RectangleF selectRegion = imageBox.SelectionRegion;
+                return ExtRect.Create((int)selectRegion.Left, (int)selectRegion.Top, (int)selectRegion.Right, (int)selectRegion.Bottom);
+            }
+            set {
+                imageBox.SelectionRegion = new RectangleF(value.Left, value.Top, value.GetWidth(), value.GetHeight());
+            }
         }
 
 
@@ -85,15 +93,7 @@ namespace GKUI.Components
             btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
         }
 
-        #region Design
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                // dummy
-            }
-            base.Dispose(disposing);
-        }
+        #region Component design
 
         private void InitializeComponent()
         {
@@ -135,7 +135,7 @@ namespace GKUI.Components
             cbZoomLevels.DropDownStyle = ComboBoxStyle.DropDownList;
             cbZoomLevels.Name = "zoomLevelsToolStripComboBox";
             cbZoomLevels.Size = new Size(140, 28);
-            cbZoomLevels.SelectedIndexChanged += zoomLevelsToolStripComboBox_SelectedIndexChanged;
+            cbZoomLevels.SelectedIndexChanged += cbZoomLevels_SelectedIndexChanged;
 
             imageBox.BackColor = SystemColors.ControlDark;
             imageBox.Dock = DockStyle.Fill;
@@ -152,6 +152,18 @@ namespace GKUI.Components
 
         #endregion
 
+        public void AddNamedRegion(string name, ExtRect region)
+        {
+            imageBox.NamedRegions.Add(new NamedRegion(name, region));
+        }
+
+        public void OpenImage(IImage image)
+        {
+            if (image != null) {
+                OpenImage(((ImageHandler)image).Handle);
+            }
+        }
+
         public void OpenImage(Image image)
         {
             if (image != null) {
@@ -162,6 +174,12 @@ namespace GKUI.Components
 
                 UpdateZoomLevels();
             }
+        }
+
+        public void ZoomToFit()
+        {
+            imageBox.ZoomToFit();
+            UpdateZoomLevels();
         }
 
         private void FillZoomLevels()
@@ -179,8 +197,7 @@ namespace GKUI.Components
 
         private void btnSizeToFit_Click(object sender, EventArgs e)
         {
-            imageBox.ZoomToFit();
-            UpdateZoomLevels();
+            ZoomToFit();
         }
 
         private void btnZoomIn_Click(object sender, EventArgs e)
@@ -198,7 +215,7 @@ namespace GKUI.Components
             UpdateZoomLevels();
         }
 
-        private void zoomLevelsToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void cbZoomLevels_SelectedIndexChanged(object sender, EventArgs e)
         {
             int zoom = Convert.ToInt32(cbZoomLevels.Text.Substring(0, cbZoomLevels.Text.Length - 1));
             imageBox.Zoom = zoom;

@@ -63,13 +63,6 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-            }
-            base.Dispose(disposing);
-        }
-
         public void SetSpecificLang()
         {
             Title = LangMan.LS(LSID.LSID_MIFilter);

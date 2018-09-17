@@ -56,6 +56,7 @@ namespace GKCore.Controllers
                 Type handlerType;
                 if (fHandlerTypes.TryGetValue(controlType, out handlerType)) {
                     handler = (IControlHandler)Activator.CreateInstance(handlerType, control);
+                    fHandlers.Add(control, handler);
                 } else {
                     throw new Exception("handler type not found");
                 }

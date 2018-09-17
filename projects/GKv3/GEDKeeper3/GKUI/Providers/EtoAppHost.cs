@@ -351,6 +351,7 @@ namespace GKUI.Providers
             ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
+            ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(TabControl), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
