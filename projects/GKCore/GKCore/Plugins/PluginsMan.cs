@@ -75,7 +75,10 @@ namespace GKCore.Plugins
             if (!Directory.Exists(path)) return;
 
             try {
+                #if !NETSTANDARD
                 AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = path;
+                #else
+                #endif
 
                 string[] pluginFiles = Directory.GetFiles(path, "*.dll");
                 foreach (string pfn in pluginFiles) {

@@ -7,15 +7,22 @@
 #define IPC_SUPPORTS
 #endif
 
+#if NETSTANDARD
+#undef IPC_SUPPORTS
+#endif
+
 using System;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Ipc;
 using System.Threading;
 using BSLib;
 
 namespace GKCore.SingleInstance
 {
+#if IPC_SUPPORTS
+    using System.Runtime.Remoting;
+    using System.Runtime.Remoting.Channels;
+    using System.Runtime.Remoting.Channels.Ipc;
+#endif
+
     /// <summary>
     /// Represents an object used to check for a previous instance of an application, and sending messages to it.
     /// </summary>

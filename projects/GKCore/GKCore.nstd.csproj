@@ -1,72 +1,87 @@
-<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFrameworks>net461</TargetFrameworks>
-		<AssemblyName>GKCore</AssemblyName>
-		<RootNamespace />
-		<Company />
-		<Product>GEDKeeper</Product>
-		<Copyright>Copyright © 2014-2018 Sergey V. Zhdanovskih</Copyright>
-		<AssemblyVersion>3.0.0.0</AssemblyVersion>
-		<FileVersion>3.0.0.0</FileVersion>
-		<Authors>Sergey V. Zhdanovskih</Authors>
-		<Version>3.0.0</Version>
-	</PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+    <AssemblyName>GKCore</AssemblyName>
+    <RootNamespace />
+    <Company />
+    <Product>GEDKeeper</Product>
+    <Copyright>Copyright © 2014-2018 Sergey V. Zhdanovskih</Copyright>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
+    <Authors>Sergey V. Zhdanovskih</Authors>
+    <Version>3.0.0</Version>
+  </PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-		<Reference Include="System.Runtime.Remoting" />
-	</ItemGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <Reference Include="System.Runtime.Remoting" />
+  </ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-	</ItemGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+  </ItemGroup>
 
-	<ItemGroup>
-		<Reference Include="BSLib">
-			<HintPath>..\libs\netstd\BSLib.dll</HintPath>
-		</Reference>
-		<Reference Include="BSLib.SmartGraph">
-			<HintPath>..\libs\netstd\BSLib.SmartGraph.dll</HintPath>
-		</Reference>
-		<Reference Include="BSLib.Linguistics">
-		  <HintPath>..\libs\netstd\BSLib.Linguistics.dll</HintPath>
-		</Reference>
-		<Reference Include="DotNetRtfWriter">
-			<HintPath>..\libs\DotNetRtfWriter.dll</HintPath>
-		</Reference>
-		<Reference Include="ExcelLibrary">
-			<HintPath>..\libs\ExcelLibrary.dll</HintPath>
-		</Reference>
-		<Reference Include="itextsharp">
-			<HintPath>..\libs\itextsharp.dll</HintPath>
-		</Reference>
-		<Reference Include="NLua">
-			<HintPath>..\libs\linux\NLua.dll</HintPath>
-		</Reference>
-		<Reference Include="YamlSerializer">
-			<HintPath>..\libs\YamlSerializer.dll</HintPath>
-		</Reference>
-	</ItemGroup>
+  <ItemGroup>
+    <Reference Include="BSLib">
+      <HintPath>..\libs\netstd\BSLib.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.SmartGraph">
+      <HintPath>..\libs\netstd\BSLib.SmartGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.Linguistics">
+      <HintPath>..\libs\netstd\BSLib.Linguistics.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetRtfWriter">
+      <HintPath>..\libs\DotNetRtfWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelLibrary">
+      <HintPath>..\libs\ExcelLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\libs\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="NLua">
+      <HintPath>..\libs\linux\NLua.dll</HintPath>
+    </Reference>
+    <Reference Include="YamlSerializer">
+      <HintPath>..\libs\YamlSerializer.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
-	<ItemGroup>
-		<EmbeddedResource Include="Resources\fonts\FreeSans.ttf" />
-		<EmbeddedResource Include="Resources\fonts\FreeSansBold.ttf" />
-	</ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NLUA</DefineConstants>
+  </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DefineConstants>TRACE;DEBUG;NLUA</DefineConstants>
-	</PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;RELEASE;NLUA</DefineConstants>
+  </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DefineConstants>TRACE;RELEASE;NLUA</DefineConstants>
-	</PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
-		<OutputPath>bin\</OutputPath>
-	</PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
-		<OutputPath>bin\</OutputPath>
-	</PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">
+      <LogicalName>Resources.fonts.FreeSans.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\fonts\FreeSansBold.ttf">
+      <LogicalName>Resources.fonts.FreeSansBold.ttf</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\btn_accept.gif" />
     <EmbeddedResource Include="Resources\btn_cancel.gif" />
