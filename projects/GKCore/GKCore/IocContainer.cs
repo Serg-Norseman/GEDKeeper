@@ -44,20 +44,13 @@ namespace GKCore.IoC
         void Register<TTypeToResolve, TConcrete>();
         void Register<TTypeToResolve, TConcrete>(LifeCycle lifeCycle, bool canReplace = false);
         void Reset();
-        TTypeToResolve Resolve<TTypeToResolve>(object[] parameters = null);
-        object Resolve(Type typeToResolve, object[] parameters = null);
+        TTypeToResolve Resolve<TTypeToResolve>(params object[] parameters);
+        object Resolve(Type typeToResolve, params object[] parameters);
     }
 
 
     internal class RegisteredObject
     {
-        public RegisteredObject(Type typeToResolve, Type concreteType, LifeCycle lifeCycle)
-        {
-            TypeToResolve = typeToResolve;
-            ConcreteType = concreteType;
-            LifeCycle = lifeCycle;
-        }
-
         public Type TypeToResolve { get; private set; }
 
         public Type ConcreteType { get; private set; }
@@ -65,6 +58,13 @@ namespace GKCore.IoC
         public object Instance { get; private set; }
 
         public LifeCycle LifeCycle { get; private set; }
+
+        public RegisteredObject(Type typeToResolve, Type concreteType, LifeCycle lifeCycle)
+        {
+            TypeToResolve = typeToResolve;
+            ConcreteType = concreteType;
+            LifeCycle = lifeCycle;
+        }
 
         public void CreateInstance(params object[] args)
         {

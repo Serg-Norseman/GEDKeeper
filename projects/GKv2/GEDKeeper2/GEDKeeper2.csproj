@@ -123,6 +123,7 @@
     <Compile Include="GKUI\Components\CustomChart.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\Components\FilterGridView.cs" />
     <Compile Include="GKUI\Components\GKMergeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

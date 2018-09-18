@@ -37,12 +37,12 @@ namespace GKCore.Interfaces
         ck_NotEq, ck_LT, ck_LET, ck_Eq, ck_GET, ck_GT, ck_Contains, ck_NotContains
     }
 
-    public sealed class FilterCondition
+    public class FilterCondition
     {
         public int ColumnIndex;
         public ConditionKind Condition;
         public object Value;
-        
+
         public FilterCondition(int columnIndex, ConditionKind condition, object value)
         {
             ColumnIndex = columnIndex;

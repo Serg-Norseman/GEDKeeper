@@ -69,5 +69,9 @@ namespace GKCore.Interfaces
         void UpdateItem(IListItem item, object rowData);
 
         void UpdateItemProps(IListItem item, object rowData);
+
+        string[] CreateFields();
+        ConditionKind GetCondByName(string condName);
+        int GetFieldColumnId(string[] fields, string fieldName);
     }
 }

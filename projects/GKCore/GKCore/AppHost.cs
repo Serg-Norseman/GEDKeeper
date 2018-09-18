@@ -611,7 +611,7 @@ namespace GKCore
             // FIXME!
         }
 
-        private static ushort RequestLanguage()
+        public static ushort RequestLanguage()
         {
             using (var dlg = AppHost.Container.Resolve<ILanguageSelectDlg>()) {
                 if (AppHost.Instance.ShowModalX(dlg, false)) {

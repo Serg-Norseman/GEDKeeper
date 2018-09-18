@@ -703,5 +703,46 @@ namespace GKCore.Lists
 
             return result;
         }
+
+        public string[] CreateFields()
+        {
+            ListColumns listColumns = (ListColumns)ListColumns;
+            string[] fields = new string[listColumns.Count + 1]; // +empty item
+            fields[0] = "";
+
+            for (int idx = 0; idx < listColumns.Count; idx++) {
+                var cs = listColumns[idx];
+                fields[idx + 1] = GetColumnName(cs.Id);
+            }
+
+            return fields;
+        }
+
+        public ConditionKind GetCondByName(string condName)
+        {
+            ConditionKind res = ConditionKind.ck_NotEq;
+
+            for (ConditionKind pl = ConditionKind.ck_NotEq; pl <= ConditionKind.ck_NotContains; pl++) {
+                if (GKData.CondSigns[(int)pl] == condName) {
+                    res = pl;
+                    break;
+                }
+            }
+
+            return res;
+        }
+
+        public int GetFieldColumnId(string[] fields, string fieldName)
+        {
+            int idx = -1;
+            for (int i = 0; i < fields.Length; i++) {
+                if (fields[i] == fieldName) {
+                    idx = i - 1; // exclude empty item
+                    break;
+                }
+            }
+
+            return idx;
+        }
     }
 }

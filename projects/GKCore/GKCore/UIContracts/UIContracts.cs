@@ -123,7 +123,7 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface ICommonFilterDlg : ICommonDialog, IBaseEditor, IView
+    public interface ICommonFilterDlg : ICommonDialog, IView
     {
     }
 
@@ -412,6 +412,19 @@ namespace GKCore.UIContracts
 
     public interface IPersonsFilterDlg : ICommonDialog, IView
     {
+        IComboBoxHandler SourceCombo { get; }
+        IComboBoxHandler GroupCombo { get; }
+        ITextBoxHandler AliveBeforeDate { get; }
+        ICheckBoxHandler OnlyPatriarchsCheck { get; }
+        IComboBoxHandler EventValCombo { get; }
+        IComboBoxHandler ResidenceCombo { get; }
+        IComboBoxHandler NameCombo { get; }
+
+        void SetLifeRadio(int lifeSel);
+        void SetSexRadio(int sexSel);
+        int GetLifeRadio();
+        int GetSexRadio();
+        void SetLifeEnabled(bool value);
     }
 
 

@@ -188,7 +188,7 @@ namespace GKUI.Providers
         {
             int num = strings.Count;
             for (int i = 0; i < num; i++) {
-                Control.Items.Add(strings[i]);
+                AddItem(strings[i], strings.GetObject(i));
             }
         }
 

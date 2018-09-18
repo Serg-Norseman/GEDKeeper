@@ -751,20 +751,7 @@ namespace GKUI.Forms
 
         private void UpdateShieldState()
         {
-            Bitmap img = null;
-            switch (fContext.ShieldState)
-            {
-                case ShieldState.None:
-                    img = UIHelper.LoadResourceImage("Resources.rg_shield_none.gif");
-                    break;
-                case ShieldState.Middle:
-                    img = UIHelper.LoadResourceImage("Resources.rg_shield_mid.gif");
-                    break;
-                case ShieldState.Maximum:
-                    img = UIHelper.LoadResourceImage("Resources.rg_shield_max.gif");
-                    break;
-            }
-
+            Bitmap img = (Bitmap)((ImageHandler)fController.GetShieldImage()).Handle;
             if (img != null) {
                 panStatusShieldImage.Image = img;
             }

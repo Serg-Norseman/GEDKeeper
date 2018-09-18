@@ -46,17 +46,21 @@ namespace GKCore.Controllers
         public LanguageSelectDlgController(ILanguageSelectDlg view) : base(view)
         {
             fView.LanguagesList.ClearItems();
-            foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
-                fView.LanguagesList.AddItem(lngRec, lngRec.Name);
+
+            LangRecord defLang;
+            if (GlobalOptions.Instance.Languages.Count > 0) {
+                foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
+                    fView.LanguagesList.AddItem(lngRec, lngRec.Name);
+                }
+                defLang = GlobalOptions.Instance.GetLangByCode(LangMan.LS_DEF_CODE);
+            } else {
+                // unit-testing and some other cases
+                defLang = new LangRecord(LangMan.LS_DEF_CODE, LangMan.LS_DEF_SIGN, LangMan.LS_DEF_NAME, "English.lng");
+                fView.LanguagesList.AddItem(defLang, defLang.Name);
             }
 
-            // unit-testing and some other cases
-            if (fView.LanguagesList.Items.Count == 0) {
-                fView.LanguagesList.AddItem(new LangRecord(LangMan.LS_DEF_CODE, LangMan.LS_DEF_SIGN, LangMan.LS_DEF_NAME, ""), LangMan.LS_DEF_NAME);
-            }
-
-            fView.LanguagesList.SelectItem(GlobalOptions.Instance.GetLangByCode(LangMan.LS_DEF_CODE));
             fView.LanguagesList.Select();
+            fView.LanguagesList.SelectItem(defLang);
         }
 
         public override bool Accept()

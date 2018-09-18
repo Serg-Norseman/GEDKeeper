@@ -19,18 +19,11 @@
  */
 
 using System;
-using System.Windows.Forms;
 
-using BSLib;
-using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Lists;
-using GKCore.Options;
-using GKCore.Types;
 using GKCore.UIContracts;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -41,7 +34,101 @@ namespace GKUI.Forms
     {
         private readonly PersonsFilterDlgController fController;
 
-        private readonly IndividualListMan fListMan;
+        #region View Interface
+
+        IComboBoxHandler IPersonsFilterDlg.SourceCombo
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbSource); }
+        }
+
+        IComboBoxHandler IPersonsFilterDlg.GroupCombo
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbGroup); }
+        }
+
+        ITextBoxHandler IPersonsFilterDlg.AliveBeforeDate
+        {
+            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtAliveBeforeDate); }
+        }
+
+        ICheckBoxHandler IPersonsFilterDlg.OnlyPatriarchsCheck
+        {
+            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkOnlyPatriarchs); }
+        }
+
+        IComboBoxHandler IPersonsFilterDlg.EventValCombo
+        {
+            get { return  fControlsManager.GetControlHandler<IComboBoxHandler>(cmbEventVal); }
+        }
+
+        IComboBoxHandler IPersonsFilterDlg.ResidenceCombo
+        {
+            get { return  fControlsManager.GetControlHandler<IComboBoxHandler>(cmbResidence); }
+        }
+
+        IComboBoxHandler IPersonsFilterDlg.NameCombo
+        {
+            get { return  fControlsManager.GetControlHandler<IComboBoxHandler>(txtName); }
+        }
+
+        void IPersonsFilterDlg.SetLifeRadio(int lifeSel)
+        {
+            switch (lifeSel) {
+                case 0:
+                    rbAll.Checked = true;
+                    break;
+                case 1:
+                    rbOnlyLive.Checked = true;
+                    break;
+                case 2:
+                    rbOnlyDead.Checked = true;
+                    break;
+                case 3:
+                    rbAliveBefore.Checked = true;
+                    break;
+            }
+        }
+
+        void IPersonsFilterDlg.SetSexRadio(int sexSel)
+        {
+            switch (sexSel) {
+                case 0:
+                    rbSexAll.Checked = true;
+                    break;
+                case 1:
+                    rbSexMale.Checked = true;
+                    break;
+                case 2:
+                    rbSexFemale.Checked = true;
+                    break;
+            }
+        }
+
+        int IPersonsFilterDlg.GetLifeRadio()
+        {
+            int lifeSel = 0;
+            if (rbAll.Checked) lifeSel = 0;
+            if (rbOnlyLive.Checked) lifeSel = 1;
+            if (rbOnlyDead.Checked) lifeSel = 2;
+            if (rbAliveBefore.Checked) lifeSel = 3;
+            return lifeSel;
+        }
+
+        int IPersonsFilterDlg.GetSexRadio()
+        {
+            int sexSel = 0;
+            if (rbSexAll.Checked) sexSel = 0;
+            if (rbSexMale.Checked) sexSel = 1;
+            if (rbSexFemale.Checked) sexSel = 2;
+            return sexSel;
+        }
+
+        void IPersonsFilterDlg.SetLifeEnabled(bool value)
+        {
+            rgLife.Enabled = value;
+        }
+
+        #endregion
 
         public PersonsFilterDlg() : base()
         {
@@ -52,20 +139,17 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            SetSpecificLang();
-
-            fListMan = (IndividualListMan)listMan;
-            UpdateSpecific();
-
             // platform: in Mono tsSpecificFilter has 0 index, somehow
             #if __MonoCS__
             tabsFilters.Controls.SetChildIndex(pageSpecificFilter, 1);
             #endif
-
             tabsFilters.SelectedIndex = 1;
 
-            fController = new PersonsFilterDlgController(this);
+            fController = new PersonsFilterDlgController(this, listMan);
             fController.Init(baseWin);
+
+            SetSpecificLang();
+            fController.UpdateView();
         }
 
         public void SetSpecificLang()
@@ -96,201 +180,13 @@ namespace GKUI.Forms
         public override void DoReset()
         {
             base.DoReset();
-            UpdateSpecific();
-        }
-
-        private void UpdateSpecific()
-        {
-            IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
-            GlobalOptions options = GlobalOptions.Instance;
-
-            txtName.Items.Clear();
-            txtName.Items.AddRange(options.NameFilters.ToArray());
-            txtName.Items.Insert(0, "*");
-
-            cmbResidence.Items.Clear();
-            cmbResidence.Items.AddRange(options.ResidenceFilters.ToArray());
-            cmbResidence.Items.Insert(0, "*");
-
-            cmbEventVal.Items.Clear();
-            cmbEventVal.Items.AddRange(options.EventFilters.ToArray());
-
-            int lifeSel;
-            if (iFilter.FilterLifeMode != FilterLifeMode.lmTimeLocked)
-            {
-                lifeSel = (int)iFilter.FilterLifeMode;
-                rgLife.Enabled = true;
-                txtAliveBeforeDate.Text = iFilter.AliveBeforeDate;
-            } else {
-                lifeSel = -1;
-                rgLife.Enabled = false;
-                txtAliveBeforeDate.Text = "";
-            }
-
-            switch (lifeSel) {
-                case 0:
-                    rbAll.Checked = true;
-                    break;
-                case 1:
-                    rbOnlyLive.Checked = true;
-                    break;
-                case 2:
-                    rbOnlyDead.Checked = true;
-                    break;
-                case 3:
-                    rbAliveBefore.Checked = true;
-                    break;
-            }
-
-            int sexSel = (int)iFilter.Sex;
-            switch (sexSel) {
-                case 0:
-                    rbSexAll.Checked = true;
-                    break;
-                case 1:
-                    rbSexMale.Checked = true;
-                    break;
-                case 2:
-                    rbSexFemale.Checked = true;
-                    break;
-            }
-
-            txtName.Text = iFilter.Name;
-            cmbResidence.Text = iFilter.Residence;
-            cmbEventVal.Text = iFilter.EventVal;
-            chkOnlyPatriarchs.Checked = iFilter.PatriarchOnly;
-
-            GEDCOMTree tree = Base.Context.Tree;
-
-            cmbGroup.Items.Clear();
-            cmbGroup.Sorted = true;
-            int num = tree.RecordsCount;
-            for (int i = 0; i < num; i++) {
-                GEDCOMRecord rec = tree[i];
-                if (rec is GEDCOMGroupRecord) {
-                    cmbGroup.Items.Add(new GKComboItem((rec as GEDCOMGroupRecord).GroupName, rec));
-                }
-            }
-            cmbGroup.Sorted = false;
-            cmbGroup.Items.Insert(0, new GKComboItem(LangMan.LS(LSID.LSID_SrcAll), null));
-            cmbGroup.Items.Insert(1, new GKComboItem(LangMan.LS(LSID.LSID_SrcNot), null));
-            cmbGroup.Items.Insert(2, new GKComboItem(LangMan.LS(LSID.LSID_SrcAny), null));
-            if (iFilter.FilterGroupMode != FilterGroupMode.Selected) {
-                cmbGroup.SelectedIndex = (int)iFilter.FilterGroupMode;
-            } else {
-                GEDCOMGroupRecord groupRec = tree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
-                if (groupRec != null) cmbGroup.Text = groupRec.GroupName;
-            }
-
-            cmbSource.Items.Clear();
-            cmbSource.Sorted = true;
-            for (int i = 0; i < tree.RecordsCount; i++) {
-                GEDCOMRecord rec = tree[i];
-                if (rec is GEDCOMSourceRecord) {
-                    cmbSource.Items.Add(new GKComboItem((rec as GEDCOMSourceRecord).FiledByEntry, rec));
-                }
-            }
-            cmbSource.Sorted = false;
-            cmbSource.Items.Insert(0, new GKComboItem(LangMan.LS(LSID.LSID_SrcAll), null));
-            cmbSource.Items.Insert(1, new GKComboItem(LangMan.LS(LSID.LSID_SrcNot), null));
-            cmbSource.Items.Insert(2, new GKComboItem(LangMan.LS(LSID.LSID_SrcAny), null));
-            if (iFilter.SourceMode != FilterGroupMode.Selected) {
-                cmbSource.SelectedIndex = (int)iFilter.SourceMode;
-            } else {
-                GEDCOMSourceRecord sourceRec = tree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
-                if (sourceRec != null) cmbSource.Text = sourceRec.FiledByEntry;
-            }
-        }
-
-        private static void SaveFilter(string flt, StringList filters)
-        {
-            flt = flt.Trim();
-            if (flt != "" && flt != "*" && filters.IndexOf(flt) < 0) filters.Add(flt);
+            fController.UpdateView();
         }
 
         public override void AcceptChanges()
         {
             base.AcceptChanges();
-
-            IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
-
-            SaveFilter(txtName.Text, GlobalOptions.Instance.NameFilters);
-            SaveFilter(cmbResidence.Text, GlobalOptions.Instance.ResidenceFilters);
-            SaveFilter(cmbEventVal.Text, GlobalOptions.Instance.EventFilters);
-
-            iFilter.PatriarchOnly = chkOnlyPatriarchs.Checked;
-
-            int lifeSel = 0;
-            if (rbAll.Checked) lifeSel = 0;
-            if (rbOnlyLive.Checked) lifeSel = 1;
-            if (rbOnlyDead.Checked) lifeSel = 2;
-            if (rbAliveBefore.Checked) lifeSel = 3;
-
-            if (iFilter.FilterLifeMode != FilterLifeMode.lmTimeLocked)
-            {
-                iFilter.AliveBeforeDate = txtAliveBeforeDate.Text;
-                if (lifeSel == 3)
-                {
-                    try
-                    {
-                        /*DateTime dt = */
-                        DateTime.Parse(txtAliveBeforeDate.Text);
-                    }
-                    catch
-                    {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DateInvalid));
-                        DialogResult = DialogResult.None;
-                    }
-                }
-                iFilter.FilterLifeMode = (FilterLifeMode)lifeSel;
-            }
-
-            int sexSel = 0;
-            if (rbSexAll.Checked) sexSel = 0;
-            if (rbSexMale.Checked) sexSel = 1;
-            if (rbSexFemale.Checked) sexSel = 2;
-            iFilter.Sex = (GEDCOMSex)sexSel;
-
-            if (txtName.Text == "") txtName.Text = @"*";
-            iFilter.Name = txtName.Text;
-
-            if (cmbResidence.Text == "") cmbResidence.Text = @"*";
-            iFilter.Residence = cmbResidence.Text;
-
-            if (cmbEventVal.Text == "") cmbEventVal.Text = @"*";
-            iFilter.EventVal = cmbEventVal.Text;
-
-            int selectedIndex = cmbGroup.SelectedIndex;
-            if (selectedIndex >= 0 && selectedIndex < 3) {
-                iFilter.FilterGroupMode = (FilterGroupMode)cmbGroup.SelectedIndex;
-                iFilter.GroupRef = "";
-            } else {
-                GKComboItem item = (GKComboItem)cmbGroup.Items[cmbGroup.SelectedIndex];
-                GEDCOMRecord rec = item.Tag as GEDCOMRecord;
-                if (rec != null) {
-                    iFilter.FilterGroupMode = FilterGroupMode.Selected;
-                    iFilter.GroupRef = rec.XRef;
-                } else {
-                    iFilter.FilterGroupMode = FilterGroupMode.All;
-                    iFilter.GroupRef = "";
-                }
-            }
-
-            selectedIndex = cmbSource.SelectedIndex;
-            if (selectedIndex >= 0 && selectedIndex < 3) {
-                iFilter.SourceMode = (FilterGroupMode)cmbSource.SelectedIndex;
-                iFilter.SourceRef = "";
-            } else {
-                GKComboItem item = (GKComboItem)cmbSource.Items[cmbSource.SelectedIndex];
-                GEDCOMRecord rec = item.Tag as GEDCOMRecord;
-                if (rec != null) {
-                    iFilter.SourceMode = FilterGroupMode.Selected;
-                    iFilter.SourceRef = rec.XRef;
-                } else {
-                    iFilter.SourceMode = FilterGroupMode.All;
-                    iFilter.SourceRef = "";
-                }
-            }
+            fController.Accept();
         }
     }
 }

@@ -38,7 +38,8 @@ namespace GKUI.Forms
 
         private readonly IBaseWindow fBase;
         private readonly IListManager fListMan;
-        private MaskedTextBox fMaskedTextBox;
+
+        private FilterGridView filterView;
 
         public IBaseWindow Base
         {
@@ -69,123 +70,26 @@ namespace GKUI.Forms
             fBase = baseWin;
             fListMan = listMan;
             fController = new CommonFilterDlgController(this, listMan);
+            fController.Init(baseWin);
+
+            filterView = new FilterGridView(fListMan);
+            filterView.Height = 260;
+            tsFieldsFilter.Content = filterView;
 
             SetLang();
 
-            InitGrid();
             UpdateGrid();
+            this.KeyDown += Form_KeyDown;
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                // dummy
-            }
-            base.Dispose(disposing);
-        }
-
-        public virtual void InitDialog(IBaseWindow baseWin)
-        {
-            //base.InitDialog(baseWin);
-            fController.Init(baseWin);
-        }
-
-        #region Private functions
-
-        private void InitGrid()
-        {
-            fMaskedTextBox = new MaskedTextBox();
-            fMaskedTextBox.Visible = false;
-            fMaskedTextBox.Provider = new FixedMaskedTextProvider("00/00/0000");
-            //dataGridView1.Controls.Add(fMaskedTextBox);
-
-            dataGridView1.ClearItems();
-            dataGridView1.ClearColumns();
-            dataGridView1.AddComboColumn(LangMan.LS(LSID.LSID_Field), 200, false, fController.Fields);
-            dataGridView1.AddComboColumn(LangMan.LS(LSID.LSID_Condition), 150, false, GKData.CondSigns);
-            dataGridView1.AddTextColumn(LangMan.LS(LSID.LSID_Value), 300);
-
-            //dataGridView1.CellEditing += dataGridView1_CellBeginEdit;
-            //dataGridView1.CellEdited += dataGridView1_CellEndEdit;
-            //dataGridView1.Scroll += dataGridView1_Scroll;
-        }
-
-        private bool IsGEDCOMDateCell(int rowIndex)
-        {
-            /*DataGridViewRow row = dataGridView1.Rows[rowIndex];
-
-            string fld = (string)row.Cells[0].Value;
-            if (!string.IsNullOrEmpty(fld)) {
-                int colId = fController.GetFieldColumnId(fld);
-                DataType dataType = fListMan.GetColumnDataType(colId);
-
-                return (dataType == DataType.dtGEDCOMDate);
-            }*/
-
-            return false;
-        }
-
-        private void dataGridView1_Scroll(object sender, ScrollEventArgs e)
-        {
-            if (fMaskedTextBox.Visible) {
-                //DataGridViewCell cell = dataGridView1.CurrentCell;
-                //Rectangle rect = dataGridView1.GetCellDisplayRectangle(cell.ColumnIndex, cell.RowIndex, true);
-                //fMaskedTextBox.Location = rect.Location;
-            }
-        }
-
-        // FIXME: GKv3 DevRestriction
-        /*private void dataGridView1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
-        {
-            if (e.ColumnIndex == 2 && e.RowIndex < dataGridView1.NewRowIndex) {
-                if (IsGEDCOMDateCell(e.RowIndex)) {
-                    Rectangle rect = dataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true);
-
-                    if (dataGridView1[e.ColumnIndex, e.RowIndex].Value != null) {
-                        fMaskedTextBox.Text = dataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString();
-                    } else {
-                        fMaskedTextBox.Text = "";
-                    }
-
-                    fMaskedTextBox.Location = rect.Location;
-                    fMaskedTextBox.Size = rect.Size;
-                    fMaskedTextBox.Visible = true;
-                    fMaskedTextBox.Focus();
-                }
-            }
-        }
-
-        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            if (fMaskedTextBox.Visible) {
-                dataGridView1.CurrentCell.Value = fMaskedTextBox.Text;
-                fMaskedTextBox.Visible = false;
-                dataGridView1.Focus();
-            }
-        }*/
 
         private void UpdateGrid()
         {
-            /*dataGridView1.Rows.Clear();
-
+            filterView.Clear();
             int num = fListMan.Filter.Conditions.Count;
             for (int i = 0; i < num; i++) {
                 FilterCondition fcond = fListMan.Filter.Conditions[i];
-
-                int r = dataGridView1.Rows.Add();
-                DataGridViewRow row = dataGridView1.Rows[r];
-
-                int condIndex = ((IConvertible)fcond.Condition).ToByte(null);
-
-                row.Cells[0].Value = fController.Fields[fcond.ColumnIndex + 1];
-                row.Cells[1].Value = GKData.CondSigns[condIndex];
-                row.Cells[2].Value = fcond.Value.ToString();
+                filterView.AddCondition(fcond);
             }
-
-            //dataGridView1.AutoResizeColumns();
-            dataGridView1.Columns[0].Width = 150;
-            dataGridView1.Columns[1].Width = 150;
-            dataGridView1.Columns[2].Width = 150;*/
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -204,29 +108,17 @@ namespace GKUI.Forms
             DoReset();
         }
 
-        #endregion
-
         public virtual void AcceptChanges()
         {
-            /*fListMan.Filter.Clear();
+            fListMan.Filter.Clear();
 
-            int num = dataGridView1.Rows.Count;
+            int num = filterView.Count;
             for (int r = 0; r < num; r++) {
-                DataGridViewRow row = dataGridView1.Rows[r];
-
-                // ".Value" can be null, so that we should to use direct cast
-                string fld = (string)row.Cells[0].Value;
-                string cnd = (string)row.Cells[1].Value;
-                string val = (string)row.Cells[2].Value;
-
-                if (!string.IsNullOrEmpty(fld)) {
-                    int colId = fController.GetFieldColumnId(fld);
-                    if (colId != -1) {
-                        ConditionKind cond = fController.GetCondByName(cnd);
-                        fListMan.AddCondition((byte)colId, cond, val);
-                    }
+                FilterCondition fcond = filterView[r];
+                if (fcond != null) {
+                    fListMan.AddCondition((byte)fcond.ColumnIndex, fcond.Condition, fcond.Value.ToString());
                 }
-            }*/
+            }
 
             DialogResult = DialogResult.Ok;
         }
@@ -248,8 +140,21 @@ namespace GKUI.Forms
             UpdateGrid();
         }
 
-        public void UpdateView()
+        private void Form_KeyDown(object sender, KeyEventArgs e)
         {
+            switch (e.Key) {
+                case Keys.I:
+                    if (e.Control) {
+                        FilterCondition fcond = new FilterCondition(0, ConditionKind.ck_Contains, "");
+                        filterView.AddCondition(fcond);
+                    }
+                    break;
+
+                case Keys.D:
+                    if (e.Control) {
+                    }
+                    break;
+            }
         }
     }
 }

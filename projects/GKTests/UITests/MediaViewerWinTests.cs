@@ -23,6 +23,7 @@
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -69,7 +70,7 @@ namespace GKUI.Forms
         }
 
         [Test]
-        public void Test_Common()
+        public void Test_Image()
         {
             Assert.AreEqual(null, fDialog.FileRef);
             fDialog.FileRef = fileRef;
@@ -80,12 +81,67 @@ namespace GKUI.Forms
             IImage portableImage = new ImageHandler(img);
 
             fDialog.SetViewImage(portableImage, fileRef);
-
             fDialog.Refresh();
 
             ClickToolStripButton("btnZoomIn", fDialog);
             ClickToolStripButton("btnZoomOut", fDialog);
             ClickToolStripButton("btnSizeToFit", fDialog);
+
+            KeyDownForm(fDialog.Name, Keys.Escape);
+        }
+
+        [Test]
+        public void Test_Text()
+        {
+            Assert.AreEqual(null, fDialog.FileRef);
+            fDialog.FileRef = fileRef;
+            Assert.AreEqual(fileRef, fDialog.FileRef);
+
+            Assembly assembly = typeof(CoreTests).Assembly;
+            Stream stm = assembly.GetManifestResourceStream("GKTests.Resources.lorem_ipsum.txt");
+            string text;
+            using (StreamReader strd = new StreamReader(stm, Encoding.UTF8)) {
+                text = strd.ReadToEnd();
+            }
+
+            fDialog.SetViewText(text);
+            fDialog.Refresh();
+
+            KeyDownForm(fDialog.Name, Keys.Escape);
+        }
+
+        [Test]
+        public void Test_RTF()
+        {
+            Assert.AreEqual(null, fDialog.FileRef);
+            fDialog.FileRef = fileRef;
+            Assert.AreEqual(fileRef, fDialog.FileRef);
+
+            Assembly assembly = typeof(CoreTests).Assembly;
+            Stream stm = assembly.GetManifestResourceStream("GKTests.Resources.lorem_ipsum.txt");
+            string text;
+            using (StreamReader strd = new StreamReader(stm, Encoding.UTF8)) {
+                text = strd.ReadToEnd();
+            }
+
+            fDialog.SetViewRTF(text);
+            fDialog.Refresh();
+
+            KeyDownForm(fDialog.Name, Keys.Escape);
+        }
+
+        [Test]
+        public void Test_HTML()
+        {
+            Assert.AreEqual(null, fDialog.FileRef);
+            fDialog.FileRef = fileRef;
+            Assert.AreEqual(fileRef, fDialog.FileRef);
+
+            Assembly assembly = typeof(CoreTests).Assembly;
+            Stream stm = assembly.GetManifestResourceStream("GKTests.Resources.lorem_ipsum.txt");
+
+            fDialog.SetViewHTML(stm);
+            fDialog.Refresh();
 
             KeyDownForm(fDialog.Name, Keys.Escape);
         }

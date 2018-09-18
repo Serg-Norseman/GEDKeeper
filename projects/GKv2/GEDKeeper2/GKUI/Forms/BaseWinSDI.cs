@@ -783,22 +783,8 @@ namespace GKUI.Forms
 
         private void UpdateShieldState(StatusBarDrawItemEventArgs sbdevent)
         {
-            Bitmap img = null;
-            switch (fContext.ShieldState)
-            {
-                case ShieldState.None:
-                    img = UIHelper.LoadResourceImage("Resources.rg_shield_none.gif");
-                    break;
-                case ShieldState.Middle:
-                    img = UIHelper.LoadResourceImage("Resources.rg_shield_mid.gif");
-                    break;
-                case ShieldState.Maximum:
-                    img = UIHelper.LoadResourceImage("Resources.rg_shield_max.gif");
-                    break;
-            }
-
+            Bitmap img = (Bitmap)((ImageHandler)fController.GetShieldImage()).Handle;
             if (img != null) {
-                img.MakeTransparent(img.GetPixel(0, 0));
                 sbdevent.Graphics.DrawImage(img, sbdevent.Bounds.Left, sbdevent.Bounds.Top);
             }
         }

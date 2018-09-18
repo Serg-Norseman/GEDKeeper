@@ -12,7 +12,6 @@ namespace GKUI.Forms
         private Button btnCancel;
         private TabPage tsFieldsFilter;
         private Button btnReset;
-        private GKListView dataGridView1;
 
         private void InitializeComponent()
         {
@@ -35,11 +34,7 @@ namespace GKUI.Forms
             btnCancel.Text = "btnCancel";
             btnCancel.Click += CancelClickHandler;
 
-            dataGridView1 = new GKListView();
-            dataGridView1.Height = 460;
-
             tsFieldsFilter = new TabPage();
-            tsFieldsFilter.Content = dataGridView1;
             tsFieldsFilter.Text = "tsFieldsFilter";
 
             tabsFilters = new TabControl();

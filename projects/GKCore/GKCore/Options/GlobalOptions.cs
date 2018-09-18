@@ -297,7 +297,7 @@ namespace GKCore.Options
         }
 
 
-        public IEnumerable<LangRecord> Languages
+        public IList<LangRecord> Languages
         {
             get { return fLanguages; }
         }

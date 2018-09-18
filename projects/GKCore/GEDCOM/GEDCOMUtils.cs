@@ -77,7 +77,7 @@ namespace GKCommon.GEDCOM
 
         public T GetEnumValue(string key)
         {
-            if (!fCaseSensitive) {
+            if (!string.IsNullOrEmpty(key) && !fCaseSensitive) {
                 key = key.Trim().ToLowerInvariant();
             }
 
