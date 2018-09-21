@@ -31,8 +31,8 @@ using System.Text;
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.MVP.Controls;
 using GKCore.Types;
-using GKCore.UIContracts;
 
 namespace GKCore
 {

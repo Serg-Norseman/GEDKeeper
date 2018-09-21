@@ -23,10 +23,11 @@
 using System;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.MVP;
+using GKCore.MVP.Views;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
-using GKCore.UIContracts;
 
 namespace GKCore.Controllers
 {

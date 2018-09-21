@@ -21,9 +21,8 @@
 using System.Collections.Generic;
 using Eto.Forms;
 
+using GKCore.MVP.Controls;
 using GKCore.Stats;
-using GKCore.UIContracts;
-//using ZedGraph;
 
 namespace GKUI.Components
 {
@@ -34,6 +33,11 @@ namespace GKUI.Components
     {
         public ZGraphControl()
         {
+        }
+
+        public void Activate()
+        {
+            Focus();
         }
 
         public void Clear()

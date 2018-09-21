@@ -21,13 +21,13 @@
 using System;
 using Eto.Forms;
 
-using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Maps;
-using GKCore.UIContracts;
+using GKCore.MVP.Controls;
+using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms

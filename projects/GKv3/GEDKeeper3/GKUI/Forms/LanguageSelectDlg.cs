@@ -23,7 +23,7 @@ using Eto.Forms;
 
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.UIContracts;
+using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms

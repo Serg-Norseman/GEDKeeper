@@ -345,6 +345,11 @@ namespace GKUI.Components
             base.Dispose(disposing);
         }
 
+        public void Activate()
+        {
+            Select();
+        }
+
         public new void BeginUpdate()
         {
             if (fUpdateCount == 0)

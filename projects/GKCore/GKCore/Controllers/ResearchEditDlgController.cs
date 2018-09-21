@@ -20,9 +20,9 @@
 
 using System;
 using GKCommon.GEDCOM;
-using GKCore.Options;
+using GKCore.MVP;
+using GKCore.MVP.Views;
 using GKCore.Types;
-using GKCore.UIContracts;
 
 namespace GKCore.Controllers
 {

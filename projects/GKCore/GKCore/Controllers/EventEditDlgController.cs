@@ -21,8 +21,9 @@
 using System;
 using BSLib;
 using GKCommon.GEDCOM;
+using GKCore.MVP;
+using GKCore.MVP.Views;
 using GKCore.Types;
-using GKCore.UIContracts;
 
 namespace GKCore.Controllers
 {
@@ -67,7 +68,7 @@ namespace GKCore.Controllers
             fView.Date1Calendar.SelectedIndex = 0;
             fView.Date2Calendar.SelectedIndex = 0;
 
-            fView.EventType.Select();
+            fView.EventType.Activate();
         }
 
         private GEDCOMCustomDate AssembleDate()

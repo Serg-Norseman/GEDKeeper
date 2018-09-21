@@ -25,8 +25,8 @@ using Eto.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.MVP.Controls;
 using GKCore.Tools;
-using GKCore.UIContracts;
 
 namespace GKUI.Components
 {
@@ -37,6 +37,9 @@ namespace GKUI.Components
     {
         private GEDCOMRecord fRec1;
         private GEDCOMRecord fRec2;
+
+        private HyperView fView1;
+        private HyperView fView2;
 
         private IBaseWindow fBase;
         private GEDCOMRecordType fMergeMode;
@@ -85,6 +88,11 @@ namespace GKUI.Components
         {
             btnMergeToLeft.Enabled = (fRec1 != null && fRec2 != null);
             btnMergeToRight.Enabled = (fRec1 != null && fRec2 != null);
+        }
+
+        public void Activate()
+        {
+            Focus();
         }
 
         public void SetRec1(GEDCOMRecord value)
@@ -155,8 +163,6 @@ namespace GKUI.Components
         private TextBox Edit1;
         private Label Lab2;
         private Label Lab1;
-        private HyperView fView1;
-        private HyperView fView2;
 
         private void InitializeComponent()
         {

@@ -121,6 +121,12 @@ namespace GKCore
                 set {  }
             }
 
+            public bool Enabled
+            {
+                get { return true; }
+                set {  }
+            }
+
             public void AddColumn(string caption, int width, bool autoSize) {}
             public IListItem AddItem(object rowData, params object[] columnValues) { return null; }
             public void BeginUpdate() {}
@@ -131,7 +137,7 @@ namespace GKCore
             public void SelectItem(object rowData) {}
             public void SetColumnCaption(int index, string caption) {}
             public void UpdateContents(bool columnsChanged = false) {}
-            public void Select() {}
+            public void Activate() {}
         }
 
         private bool ExtFilterHandler(GEDCOMRecord record)

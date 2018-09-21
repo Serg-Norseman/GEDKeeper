@@ -23,9 +23,10 @@ using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.MVP;
+using GKCore.MVP.Views;
 using GKCore.Options;
 using GKCore.Types;
-using GKCore.UIContracts;
 
 namespace GKCore.Controllers
 {

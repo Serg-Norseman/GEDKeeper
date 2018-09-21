@@ -25,7 +25,7 @@ using System.Windows.Forms;
 
 using BSLib;
 using GKCore;
-using GKCore.UIContracts;
+using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
@@ -118,6 +118,11 @@ namespace GKUI.Components
                 fLines.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public void Activate()
+        {
+            Select();
         }
 
         private void LinesChanged(object sender)

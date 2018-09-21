@@ -20,7 +20,7 @@
 
 using GKCommon.GEDCOM;
 using GKCore;
-using GKCore.UIContracts;
+using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms

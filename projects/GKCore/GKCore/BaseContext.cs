@@ -31,11 +31,11 @@ using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Cultures;
 using GKCore.Interfaces;
+using GKCore.MVP.Views;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
-using GKCore.UIContracts;
 
 namespace GKCore
 {

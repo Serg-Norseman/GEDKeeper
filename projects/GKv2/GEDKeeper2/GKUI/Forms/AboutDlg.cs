@@ -22,7 +22,7 @@ using System;
 using System.Windows.Forms;
 
 using GKCore;
-using GKCore.UIContracts;
+using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -40,7 +40,6 @@ namespace GKUI.Forms
 
             Text = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-
             lblProduct.Text = GKData.APP_TITLE;
             lblVersion.Text = @"Version " + AppHost.Instance.GetAppVersion();
             lblCopyright.Text = AppHost.Instance.GetAppCopyright();

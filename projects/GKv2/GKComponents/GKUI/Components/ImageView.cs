@@ -26,7 +26,7 @@ using System.Windows.Forms;
 using BSLib;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.UIContracts;
+using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
@@ -84,6 +84,11 @@ namespace GKUI.Components
             imageBox.ImageBorderColor = Color.AliceBlue;
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
             imageBox.AllowZoom = true;
+        }
+
+        public void Activate()
+        {
+            Select();
         }
 
         public void SetLang()

@@ -24,7 +24,7 @@ using System.Globalization;
 
 using BSLib;
 using GKCommon.GEDCOM;
-using GKCore.UIContracts;
+using GKCore.MVP.Controls;
 
 namespace GKCore.Maps
 {

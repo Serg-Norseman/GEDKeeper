@@ -24,61 +24,12 @@ using GKCommon.GEDCOM;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.MVP.Controls;
 using GKCore.Options;
 using GKCore.Types;
 
-namespace GKCore.UIContracts
+namespace GKCore.MVP.Views
 {
-    /// <summary>
-    /// The interface of the class for working with WinForms dialogs.
-    /// </summary>
-    public interface IStdDialogs
-    {
-        IFont SelectFont(IFont font);
-        IColor SelectColor(IColor color);
-
-        string GetOpenFile(string title, string context, string filter,
-                           int filterIndex, string defaultExt);
-        string GetSaveFile(string filter);
-        string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
-                           string suggestedFileName, bool overwritePrompt = true);
-
-        void ShowMessage(string msg);
-        void ShowError(string msg);
-        bool ShowQuestionYN(string msg);
-        void ShowWarning(string msg);
-
-        bool GetInput(string prompt, ref string value);
-        bool GetPassword(string prompt, ref string value);
-    }
-
-
-    public interface IView
-    {
-        string Caption { get; set; }
-
-        void Activate();
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IStatusLines
-    {
-        string this[int index] { get; set; }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IStatusForm
-    {
-        IStatusLines StatusLines { get; }
-    }
-
-
-
     public interface IAboutDlg : ICommonDialog, IView
     {
     }
@@ -125,6 +76,7 @@ namespace GKCore.UIContracts
 
     public interface ICommonFilterDlg : ICommonDialog, IView
     {
+        IFilterGridView FilterGrid { get; }
     }
 
 

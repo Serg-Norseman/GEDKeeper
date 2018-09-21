@@ -194,7 +194,6 @@
     <Compile Include="GKCore\Controllers\CommonFilterDlgController.cs" />
     <Compile Include="GKCore\Controllers\CommunicationEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\DayTipsDlgController.cs" />
-    <Compile Include="GKCore\Controllers\DialogController.cs" />
     <Compile Include="GKCore\Controllers\EventEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\FamilyEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\FilePropertiesDlgController.cs" />
@@ -275,6 +274,9 @@
     <Compile Include="GKCore\Maps\OSMGeocoder.cs" />
     <Compile Include="GKCore\Maps\PlacesCache.cs" />
     <Compile Include="GKCore\Maps\YandexGeocoder.cs" />
+    <Compile Include="GKCore\MVP\DialogController.cs" />
+    <Compile Include="GKCore\MVP\Views\IStatusForm.cs" />
+    <Compile Include="GKCore\MVP\Views\IStdDialogs.cs" />
     <Compile Include="GKCore\Plugins\OrdinaryPlugin.cs" />
     <Compile Include="GKCore\SingleInstance\MapiMailMessage.cs" />
     <Compile Include="GKCore\SysUtils.cs" />
@@ -393,16 +395,21 @@
     <Compile Include="GKCore\Tools\PlaceObj.cs" />
     <Compile Include="GKCore\Tools\TreeTools.cs" />
     <Compile Include="GKCore\Tween.cs" />
-    <Compile Include="GKCore\UIContracts\ControlHandlers.cs" />
+    <Compile Include="GKCore\MVP\Controls\ControlHandlers.cs" />
     <Compile Include="GKCore\UpdateMan.cs" />
     <Compile Include="GKCore\Charts\ChartFilter.cs" />
     <Compile Include="GKCore\Charts\ITreeChartBox.cs" />
     <Compile Include="GKCore\Charts\TreeChartModel.cs" />
     <Compile Include="GKCore\Charts\TreeChartPerson.cs" />
     <Compile Include="GKCore\Charts\ChartRenderer.cs" />
-    <Compile Include="GKCore\UIContracts\UIContracts.cs" />
+    <Compile Include="GKCore\MVP\Views\UIContracts.cs" />
     <Compile Include="GKCore\ValuesCollection.cs" />
     <Compile Include="GKCore\YamlHelper.cs" />
+    <Compile Include="GKCore\MVP\ControlHandler.cs" />
+    <Compile Include="GKCore\MVP\ControlsManager.cs" />
+    <Compile Include="GKCore\MVP\FormController.cs" />
+    <Compile Include="GKCore\MVP\IView.cs" />
+    <Compile Include="GKCore\MVP\IControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">
@@ -489,6 +496,5 @@
     <EmbeddedResource Include="Resources\btn_volume_mute.png" />
     <EmbeddedResource Include="Resources\pnl_video.png" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

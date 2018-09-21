@@ -23,8 +23,8 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using GKCore;
-using GKCore.Controllers;
 using GKCore.Interfaces;
+using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
@@ -90,6 +90,11 @@ namespace GKUI.Components
         public void Clear()
         {
             Rows.Clear();
+        }
+
+        public void Activate()
+        {
+            Select();
         }
 
         #region Private functions

@@ -26,8 +26,8 @@ using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Maps;
+using GKCore.MVP.Controls;
 using GKCore.Types;
-using GKCore.UIContracts;
 
 namespace GKTests.Stubs
 {
@@ -195,12 +195,14 @@ namespace GKTests.Stubs
         public bool ShowPoints { get; set; }
         public bool ShowLines { get; set; }
         public ExtList<GeoPoint> MapPoints { get { return null; } }
+        public bool Enabled { get { return true; } set { } }
 
         public int AddPoint(double latitude, double longitude, string hint) { return -1; }
         public void ClearPoints() { }
         public void DeletePoint(int index) { }
         public void BeginUpdate() { }
         public void EndUpdate() { }
+        public void Activate() {}
         public void InitMap() { }
         public void RefreshPoints() { }
         public void SaveSnapshot(string fileName) { }

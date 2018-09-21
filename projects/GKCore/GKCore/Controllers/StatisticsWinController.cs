@@ -18,14 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Options;
+using GKCore.MVP;
+using GKCore.MVP.Controls;
+using GKCore.MVP.Views;
 using GKCore.Stats;
-using GKCore.Types;
-using GKCore.UIContracts;
 
 namespace GKCore.Controllers
 {

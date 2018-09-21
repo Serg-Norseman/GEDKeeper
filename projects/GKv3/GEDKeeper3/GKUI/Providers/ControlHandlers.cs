@@ -21,14 +21,35 @@
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.UIContracts;
+using GKCore.MVP;
+using GKCore.MVP.Controls;
 using GKUI.Components;
 
 namespace GKUI.Providers
 {
-    public sealed class LabelHandler : ControlHandler<Label, LabelHandler>, ILabelHandler
+    public abstract class BaseControlHandler<T, TThis> : ControlHandler<T, TThis>, IBaseControl
+        where T : Control
+        where TThis : ControlHandler<T, TThis>
+    {
+        protected BaseControlHandler(T control) : base(control)
+        {
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public void Activate()
+        {
+            Control.Focus();
+        }
+    }
+
+
+    public sealed class LabelHandler : BaseControlHandler<Label, LabelHandler>, ILabelHandler
     {
         public LabelHandler(Label control) : base(control)
         {
@@ -41,16 +62,10 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class ButtonHandler : ControlHandler<Button, ButtonHandler>, IButtonHandler
+    public sealed class ButtonHandler : BaseControlHandler<Button, ButtonHandler>, IButtonHandler
     {
         public ButtonHandler(Button control) : base(control)
         {
-        }
-
-        public bool Enabled
-        {
-            get { return Control.Enabled; }
-            set { Control.Enabled = value; }
         }
 
         public string Text
@@ -60,7 +75,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class CheckBoxHandler : ControlHandler<CheckBox, CheckBoxHandler>, ICheckBoxHandler
+    public sealed class CheckBoxHandler : BaseControlHandler<CheckBox, CheckBoxHandler>, ICheckBoxHandler
     {
         public CheckBoxHandler(CheckBox control) : base(control)
         {
@@ -72,12 +87,6 @@ namespace GKUI.Providers
             set { Control.Checked = value; }
         }
 
-        public bool Enabled
-        {
-            get { return Control.Enabled; }
-            set { Control.Enabled = value; }
-        }
-
         public string Text
         {
             get { return Control.Text; }
@@ -85,7 +94,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class RadioButtonHandler : ControlHandler<RadioButton, RadioButtonHandler>, IRadioButtonHandler
+    public sealed class RadioButtonHandler : BaseControlHandler<RadioButton, RadioButtonHandler>, IRadioButtonHandler
     {
         public RadioButtonHandler(RadioButton control) : base(control)
         {
@@ -97,12 +106,6 @@ namespace GKUI.Providers
             set { Control.Checked = value; }
         }
 
-        public bool Enabled
-        {
-            get { return Control.Enabled; }
-            set { Control.Enabled = value; }
-        }
-
         public string Text
         {
             get { return Control.Text; }
@@ -110,13 +113,13 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class ComboBoxHandler : ControlHandler<ComboBox, ComboBoxHandler>, IComboBoxHandler
+    public sealed class ComboBoxHandler : BaseControlHandler<ComboBox, ComboBoxHandler>, IComboBoxHandler
     {
         public ComboBoxHandler(ComboBox control) : base(control)
         {
         }
 
-        public bool Enabled
+        public new bool Enabled
         {
             get { return Control.Enabled; }
             set {
@@ -207,24 +210,19 @@ namespace GKUI.Providers
             //Control.EndUpdate();
         }
 
-        public void Select()
-        {
-            Control.Focus();
-        }
-
         public void SortItems()
         {
             Control.SortItems();
         }
     }
 
-    public sealed class TextBoxHandler : ControlHandler<TextBox, TextBoxHandler>, ITextBoxHandler
+    public sealed class TextBoxHandler : BaseControlHandler<TextBox, TextBoxHandler>, ITextBoxHandler
     {
         public TextBoxHandler(TextBox control) : base(control)
         {
         }
 
-        public bool Enabled
+        public new bool Enabled
         {
             get { return Control.Enabled; }
             set {
@@ -270,11 +268,6 @@ namespace GKUI.Providers
             Control.Text = string.Empty;
         }
 
-        public void Select()
-        {
-            Control.Focus();
-        }
-
         private void SetBackColor()
         {
             Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
@@ -291,13 +284,13 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class TextAreaHandler : ControlHandler<TextArea, TextAreaHandler>, ITextBoxHandler
+    public sealed class TextAreaHandler : BaseControlHandler<TextArea, TextAreaHandler>, ITextBoxHandler
     {
         public TextAreaHandler(TextArea control) : base(control)
         {
         }
 
-        public bool Enabled
+        public new bool Enabled
         {
             get { return Control.Enabled; }
             set {
@@ -343,11 +336,6 @@ namespace GKUI.Providers
             Control.Text = string.Empty;
         }
 
-        public void Select()
-        {
-            Control.Focus();
-        }
-
         private void SetBackColor()
         {
             Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
@@ -364,13 +352,13 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class MaskedTextBoxHandler : ControlHandler<MaskedTextBox, MaskedTextBoxHandler>, ITextBoxHandler
+    public sealed class MaskedTextBoxHandler : BaseControlHandler<MaskedTextBox, MaskedTextBoxHandler>, ITextBoxHandler
     {
         public MaskedTextBoxHandler(MaskedTextBox control) : base(control)
         {
         }
 
-        public bool Enabled
+        public new bool Enabled
         {
             get { return Control.Enabled; }
             set {
@@ -413,11 +401,6 @@ namespace GKUI.Providers
             Control.Text = string.Empty;
         }
 
-        public void Select()
-        {
-            Control.Focus();
-        }
-
         public void Copy()
         {
             UIHelper.SetClipboardText(Control.SelectedText);
@@ -429,16 +412,10 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class NumericBoxHandler : ControlHandler<NumericUpDown, NumericBoxHandler>, INumericBoxHandler
+    public sealed class NumericBoxHandler : BaseControlHandler<NumericUpDown, NumericBoxHandler>, INumericBoxHandler
     {
         public NumericBoxHandler(NumericUpDown control) : base(control)
         {
-        }
-
-        public bool Enabled
-        {
-            get { return Control.Enabled; }
-            set { Control.Enabled = value; }
         }
 
         public bool ReadOnly
@@ -458,25 +435,14 @@ namespace GKUI.Providers
             get { return Control.Value; }
             set { Control.Value = value; }
         }
-
-        public void Select()
-        {
-            //Control.Select();
-        }
     }
 
-    public sealed class TreeViewHandler : ControlHandler<TreeView, TreeViewHandler>, ITreeViewHandler
+    public sealed class TreeViewHandler : BaseControlHandler<TreeView, TreeViewHandler>, ITreeViewHandler
     {
         private TreeItem fRootNode;
 
         public TreeViewHandler(TreeView control) : base(control)
         {
-        }
-
-        public bool Enabled
-        {
-            get { return Control.Enabled; }
-            set { Control.Enabled = value; }
         }
 
         public ITVNode AddNode(ITVNode parent, string name, object tag)
@@ -515,7 +481,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class ProgressBarHandler : ControlHandler<ProgressBar, ProgressBarHandler>, IProgressBarHandler
+    public sealed class ProgressBarHandler : BaseControlHandler<ProgressBar, ProgressBarHandler>, IProgressBarHandler
     {
         public ProgressBarHandler(ProgressBar control) : base(control)
         {
@@ -545,7 +511,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class LogChartHandler : ControlHandler<LogChart, LogChartHandler>, ILogChart
+    public sealed class LogChartHandler : BaseControlHandler<LogChart, LogChartHandler>, ILogChart
     {
         public LogChartHandler(LogChart control) : base(control)
         {
@@ -562,7 +528,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class TabControlHandler : ControlHandler<TabControl, TabControlHandler>, ITabControl
+    public sealed class TabControlHandler : BaseControlHandler<TabControl, TabControlHandler>, ITabControl
     {
         public TabControlHandler(TabControl control) : base(control)
         {

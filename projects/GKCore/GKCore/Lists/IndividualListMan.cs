@@ -23,14 +23,13 @@ using System.Text;
 
 using BSLib;
 using BSLib.Calendar;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Charts;
 using GKCore.Interfaces;
+using GKCore.MVP.Views;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
-using GKCore.UIContracts;
 
 namespace GKCore.Lists
 {

@@ -25,45 +25,36 @@ using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.Stats;
 
-namespace GKCore.UIContracts
+namespace GKCore.MVP.Controls
 {
-    public interface IControlHandler
-    {
-    }
-
-
-    public interface ILabelHandler : IControlHandler
+    public interface ILabelHandler : IBaseControl
     {
         string Text { get; set; }
     }
 
 
-    public interface IButtonHandler : IControlHandler
+    public interface IButtonHandler : IBaseControl
     {
-        bool Enabled { get; set; }
         string Text { get; set; }
     }
 
 
-    public interface ICheckBoxHandler : IControlHandler
+    public interface ICheckBoxHandler : IBaseControl
     {
         bool Checked { get; set; }
-        bool Enabled { get; set; }
         string Text { get; set; }
     }
 
 
-    public interface IRadioButtonHandler : IControlHandler
+    public interface IRadioButtonHandler : IBaseControl
     {
         bool Checked { get; set; }
-        bool Enabled { get; set; }
         string Text { get; set; }
     }
 
 
-    public interface IComboBoxHandler : IControlHandler
+    public interface IComboBoxHandler : IBaseControl
     {
-        bool Enabled { get; set; }
         bool ReadOnly { get; set; }
         int SelectedIndex { get; set; }
         object SelectedItem { get; set; }
@@ -77,14 +68,12 @@ namespace GKCore.UIContracts
         void BeginUpdate();
         void Clear();
         void EndUpdate();
-        void Select();
         void SortItems();
     }
 
 
-    public interface ITextBoxHandler : IControlHandler
+    public interface ITextBoxHandler : IBaseControl
     {
-        bool Enabled { get; set; }
         string[] Lines { get; set; }
         bool ReadOnly { get; set; }
         string SelectedText { get; set; }
@@ -92,21 +81,16 @@ namespace GKCore.UIContracts
 
         void AppendText(string text);
         void Clear();
-        void Select();
-
         void Copy();
         void SelectAll();
     }
 
 
-    public interface INumericBoxHandler : IControlHandler
+    public interface INumericBoxHandler : IBaseControl
     {
-        bool Enabled { get; set; }
         bool ReadOnly { get; set; }
         string Text { get; set; }
         double Value { get; set; }
-
-        void Select();
     }
 
 
@@ -115,10 +99,8 @@ namespace GKCore.UIContracts
         object Tag { get; set; }
     }
 
-    public interface ITreeViewHandler : IControlHandler
+    public interface ITreeViewHandler : IBaseControl
     {
-        bool Enabled { get; set; }
-
         ITVNode AddNode(ITVNode parent, string name, object tag);
         void BeginUpdate();
         void Clear();
@@ -127,7 +109,7 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface IProgressBarHandler : IControlHandler
+    public interface IProgressBarHandler : IBaseControl
     {
         int Minimum { get; set; }
         int Maximum { get; set; }
@@ -137,7 +119,7 @@ namespace GKCore.UIContracts
     }
 
 
-    public interface ILogChart : IControlHandler
+    public interface ILogChart : IBaseControl
     {
         void AddFragment(int val);
         void Clear();
@@ -147,7 +129,7 @@ namespace GKCore.UIContracts
     /// <summary>
     /// 
     /// </summary>
-    public interface IMapBrowser : IControlHandler
+    public interface IMapBrowser : IBaseControl
     {
         bool ShowPoints { get; set; }
         bool ShowLines { get; set; }
@@ -178,7 +160,7 @@ namespace GKCore.UIContracts
     /// <summary>
     /// 
     /// </summary>
-    public interface IPortraitControl : IControlHandler
+    public interface IPortraitControl : IBaseControl
     {
         int Height { get; set; }
         int Width { get; set; }
@@ -195,7 +177,7 @@ namespace GKCore.UIContracts
     /// <summary>
     /// 
     /// </summary>
-    public interface IGraphControl : IControlHandler
+    public interface IGraphControl : IBaseControl
     {
         void Clear();
         void PrepareArray(string title, string xAxis, string yAxis, ChartStyle style, bool excludeUnknowns, List<StatsItem> vals);
@@ -205,7 +187,7 @@ namespace GKCore.UIContracts
     /// <summary>
     /// 
     /// </summary>
-    public interface IMergeControl : IControlHandler
+    public interface IMergeControl : IBaseControl
     {
         IBaseWindow Base { get; set; }
         GEDCOMRecordType MergeMode { get; set; }
@@ -220,7 +202,7 @@ namespace GKCore.UIContracts
     /// <summary>
     /// 
     /// </summary>
-    public interface IHyperView : IControlHandler
+    public interface IHyperView : IBaseControl
     {
         StringList Lines { get; }
     }
@@ -229,7 +211,7 @@ namespace GKCore.UIContracts
     /// <summary>
     /// 
     /// </summary>
-    public interface IImageView : IControlHandler
+    public interface IImageView : IBaseControl
     {
         ExtRect SelectionRegion { get; set; }
         bool ShowNamedRegionTips { get; set; }
@@ -242,8 +224,18 @@ namespace GKCore.UIContracts
     /// <summary>
     /// 
     /// </summary>
-    public interface ITabControl : IControlHandler
+    public interface ITabControl : IBaseControl
     {
         int SelectedIndex { get; set; }
+    }
+
+
+    public interface IFilterGridView : IBaseControl
+    {
+        int Count { get; }
+        FilterCondition this[int index] { get; }
+
+        void AddCondition(FilterCondition fcond);
+        void Clear();
     }
 }

@@ -24,7 +24,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.UIContracts;
+using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
@@ -101,11 +101,9 @@ namespace GKUI.Components
             fTimer.Stop();
         }
 
-        protected override void Dispose(bool disposing)
+        public void Activate()
         {
-            if (disposing) {
-            }
-            base.Dispose(disposing);
+            Focus();
         }
 
         public void AddButton(Button b)

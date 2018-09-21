@@ -25,7 +25,8 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.UIContracts;
+using GKCore.MVP.Controls;
+using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -43,6 +44,8 @@ namespace GKUI.Forms
             set { fController.Association = value; }
         }
 
+        #region View Interface
+
         IComboBoxHandler IAssociationEditDlg.Relation
         {
             get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRelation); }
@@ -52,6 +55,8 @@ namespace GKUI.Forms
         {
             get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtPerson); }
         }
+
+        #endregion
 
         public AssociationEditDlg()
         {

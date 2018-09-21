@@ -32,9 +32,10 @@ using GKCore.Controllers;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.MVP.Controls;
+using GKCore.MVP.Views;
 using GKCore.Options;
 using GKCore.Types;
-using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -681,14 +682,7 @@ namespace GKUI.Forms
 
         public void SelectRecordByXRef(string xref)
         {
-            GEDCOMRecord record = fContext.Tree.XRefIndex_Find(xref);
-            IListView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
-
-            if (rView != null) {
-                ShowRecordsTab(record.RecordType);
-                ((Control)rView).Focus();
-                rView.SelectItem(record);
-            }
+            fController.SelectRecordByXRef(xref);
         }
 
         public StringList GetRecordContent(GEDCOMRecord record)

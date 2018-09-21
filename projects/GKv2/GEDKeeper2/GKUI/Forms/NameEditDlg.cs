@@ -23,8 +23,9 @@ using System.Windows.Forms;
 
 using GKCore;
 using GKCore.Controllers;
+using GKCore.MVP.Controls;
+using GKCore.MVP.Views;
 using GKCore.Types;
-using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms

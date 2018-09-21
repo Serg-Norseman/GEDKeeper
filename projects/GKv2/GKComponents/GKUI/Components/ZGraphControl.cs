@@ -23,8 +23,8 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using BSLib;
+using GKCore.MVP.Controls;
 using GKCore.Stats;
-using GKCore.UIContracts;
 using ZedGraph;
 
 namespace GKUI.Components
@@ -42,6 +42,11 @@ namespace GKUI.Components
             fGraph.IsShowPointValues = true;
             fGraph.Dock = DockStyle.Fill;
             Controls.Add(fGraph);
+        }
+
+        public void Activate()
+        {
+            Select();
         }
 
         public void Clear()

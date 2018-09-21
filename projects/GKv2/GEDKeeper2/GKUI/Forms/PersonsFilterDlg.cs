@@ -23,7 +23,8 @@ using System;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.UIContracts;
+using GKCore.MVP.Controls;
+using GKCore.MVP.Views;
 
 namespace GKUI.Forms
 {

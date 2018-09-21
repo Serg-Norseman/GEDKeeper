@@ -21,11 +21,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.MVP;
+using GKCore.MVP.Controls;
+using GKCore.MVP.Views;
 using GKCore.Types;
-using GKCore.UIContracts;
 
 namespace GKCore.Controllers
 {

@@ -20,20 +20,11 @@
 
 using System;
 using GKCore.Interfaces;
-using GKCore.Lists;
-using GKCore.UIContracts;
+using GKCore.MVP;
+using GKCore.MVP.Views;
 
 namespace GKCore.Controllers
 {
-    public interface IFilterGridView
-    {
-        int Count { get; }
-        FilterCondition this[int index] { get; }
-
-        void AddCondition(FilterCondition fcond);
-        void Clear();
-    }
-
     /// <summary>
     /// 
     /// </summary>
@@ -49,6 +40,16 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
+                fListMan.Filter.Clear();
+
+                int num = fView.FilterGrid.Count;
+                for (int r = 0; r < num; r++) {
+                    FilterCondition fcond = fView.FilterGrid[r];
+                    if (fcond != null) {
+                        fListMan.AddCondition((byte)fcond.ColumnIndex, fcond.Condition, fcond.Value.ToString());
+                    }
+                }
+
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("CommonFilterDlgController.Accept(): " + ex.Message);
@@ -58,6 +59,12 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            fView.FilterGrid.Clear();
+            int num = fListMan.Filter.Conditions.Count;
+            for (int i = 0; i < num; i++) {
+                FilterCondition fcond = fListMan.Filter.Conditions[i];
+                fView.FilterGrid.AddCondition(fcond);
+            }
         }
     }
 }

@@ -19,7 +19,7 @@
  */
 
 using Eto.Forms;
-using GKCore.UIContracts;
+using GKCore.MVP.Views;
 
 namespace GKUI.Forms
 {

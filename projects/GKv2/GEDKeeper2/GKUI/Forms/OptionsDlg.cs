@@ -24,10 +24,10 @@ using System.Windows.Forms;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.MVP.Views;
 using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.Types;
-using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms

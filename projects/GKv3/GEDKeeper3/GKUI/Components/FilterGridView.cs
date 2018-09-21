@@ -23,8 +23,8 @@ using System.Collections.ObjectModel;
 using Eto.Forms;
 
 using GKCore;
-using GKCore.Controllers;
 using GKCore.Interfaces;
+using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
@@ -86,11 +86,6 @@ namespace GKUI.Components
         private ObservableCollection<FilterConditionRow> fCollection;
         internal string[] fFields;
 
-        internal ObservableCollection<FilterConditionRow> Collection
-        {
-            get { return fCollection; }
-        }
-
         public FilterGridView(IListManager listMan)
         {
             fCollection = new ObservableCollection<FilterConditionRow>();
@@ -100,6 +95,31 @@ namespace GKUI.Components
             fFields = fListMan.CreateFields();
 
             InitGrid();
+        }
+
+        public int Count
+        {
+            get { return fCollection.Count; }
+        }
+
+        public FilterCondition this[int index]
+        {
+            get { return fCollection[index]; }
+        }
+
+        public void AddCondition(FilterCondition fcond)
+        {
+            fCollection.Add(new FilterConditionRow(this, fcond));
+        }
+
+        public void Clear()
+        {
+            fCollection.Clear();
+        }
+
+        public void Activate()
+        {
+            Focus();
         }
 
         #region Private functions
@@ -164,25 +184,5 @@ namespace GKUI.Components
         */
 
         #endregion
-
-        public int Count
-        {
-            get { return fCollection.Count; }
-        }
-
-        public FilterCondition this[int index]
-        {
-            get { return fCollection[index]; }
-        }
-
-        public void AddCondition(FilterCondition fcond)
-        {
-            fCollection.Add(new FilterConditionRow(this, fcond));
-        }
-
-        public void Clear()
-        {
-            fCollection.Clear();
-        }
     }
 }

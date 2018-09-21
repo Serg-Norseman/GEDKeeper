@@ -19,8 +19,9 @@
  */
 
 using System;
+using GKCore.MVP;
+using GKCore.MVP.Views;
 using GKCore.Options;
-using GKCore.UIContracts;
 
 namespace GKCore.Controllers
 {
@@ -59,7 +60,7 @@ namespace GKCore.Controllers
                 fView.LanguagesList.AddItem(defLang, defLang.Name);
             }
 
-            fView.LanguagesList.Select();
+            fView.LanguagesList.Activate();
             fView.LanguagesList.SelectItem(defLang);
         }
 

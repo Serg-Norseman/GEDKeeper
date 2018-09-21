@@ -23,7 +23,7 @@ using BSLib;
 using Eto.Forms;
 using GKCore;
 using GKCore.Maps;
-using GKCore.UIContracts;
+using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
@@ -83,6 +83,11 @@ namespace GKUI.Components
                 fMapPoints.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public void Activate()
+        {
+            Focus();
         }
 
         public int AddPoint(double latitude, double longitude, string hint)

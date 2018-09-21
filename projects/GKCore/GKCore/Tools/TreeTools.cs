@@ -24,10 +24,9 @@ using System.Collections.Generic;
 using BSLib;
 using BSLib.SmartGraph;
 using GKCommon.GEDCOM;
-using GKCore.Controllers;
 using GKCore.Interfaces;
+using GKCore.MVP.Controls;
 using GKCore.Types;
-using GKCore.UIContracts;
 
 namespace GKCore.Tools
 {

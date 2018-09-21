@@ -25,8 +25,8 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.MVP.Controls;
 using GKCore.Tools;
-using GKCore.UIContracts;
 
 namespace GKUI.Components
 {
@@ -118,6 +118,11 @@ namespace GKUI.Components
             btnMergeToRight.Enabled = (fRec1 != null && fRec2 != null);
         }
 
+        public void Activate()
+        {
+            Select();
+        }
+
         public void SetRec1(GEDCOMRecord value)
         {
             fRec1 = value;
@@ -178,93 +183,85 @@ namespace GKUI.Components
 
         #region Design
 
-        private System.Windows.Forms.Button btnMergeToRight;
-        private System.Windows.Forms.Button btnMergeToLeft;
-        private System.Windows.Forms.Button btnRec2Select;
-        private System.Windows.Forms.Button btnRec1Select;
-        private System.Windows.Forms.TextBox Edit2;
-        private System.Windows.Forms.TextBox Edit1;
-        private System.Windows.Forms.Label Lab2;
-        private System.Windows.Forms.Label Lab1;
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                // dummy
-            }
-            base.Dispose(disposing);
-        }
+        private Button btnMergeToRight;
+        private Button btnMergeToLeft;
+        private Button btnRec2Select;
+        private Button btnRec1Select;
+        private TextBox Edit2;
+        private TextBox Edit1;
+        private Label Lab2;
+        private Label Lab1;
 
         private void InitializeComponent()
         {
-            Lab1 = new System.Windows.Forms.Label();
-            Lab2 = new System.Windows.Forms.Label();
-            Edit1 = new System.Windows.Forms.TextBox();
-            Edit2 = new System.Windows.Forms.TextBox();
-            btnRec1Select = new System.Windows.Forms.Button();
-            btnRec2Select = new System.Windows.Forms.Button();
-            btnMergeToLeft = new System.Windows.Forms.Button();
-            btnMergeToRight = new System.Windows.Forms.Button();
+            Lab1 = new Label();
+            Lab2 = new Label();
+            Edit1 = new TextBox();
+            Edit2 = new TextBox();
+            btnRec1Select = new Button();
+            btnRec2Select = new Button();
+            btnMergeToLeft = new Button();
+            btnMergeToRight = new Button();
             SuspendLayout();
 
             Lab1.AutoSize = true;
-            Lab1.Location = new System.Drawing.Point(14, 13);
+            Lab1.Location = new Point(14, 13);
             Lab1.Name = "Lab1";
-            Lab1.Size = new System.Drawing.Size(40, 17);
+            Lab1.Size = new Size(40, 17);
             Lab1.TabIndex = 9;
             Lab1.Text = "XXX1";
 
             Lab2.AutoSize = true;
-            Lab2.Location = new System.Drawing.Point(482, 13);
+            Lab2.Location = new Point(482, 13);
             Lab2.Name = "Lab2";
-            Lab2.Size = new System.Drawing.Size(40, 17);
+            Lab2.Size = new Size(40, 17);
             Lab2.TabIndex = 11;
             Lab2.Text = "XXX2";
 
-            Edit1.Location = new System.Drawing.Point(14, 33);
+            Edit1.Location = new Point(14, 33);
             Edit1.Name = "Edit1";
             Edit1.ReadOnly = true;
-            Edit1.Size = new System.Drawing.Size(366, 24);
+            Edit1.Size = new Size(366, 24);
             Edit1.TabIndex = 10;
 
-            Edit2.Location = new System.Drawing.Point(482, 33);
+            Edit2.Location = new Point(482, 33);
             Edit2.Name = "Edit2";
             Edit2.ReadOnly = true;
-            Edit2.Size = new System.Drawing.Size(373, 24);
+            Edit2.Size = new Size(373, 24);
             Edit2.TabIndex = 12;
 
-            btnRec1Select.Location = new System.Drawing.Point(386, 32);
+            btnRec1Select.Location = new Point(386, 32);
             btnRec1Select.Name = "btnRec1Select";
-            btnRec1Select.Size = new System.Drawing.Size(81, 25);
+            btnRec1Select.Size = new Size(81, 25);
             btnRec1Select.TabIndex = 13;
             btnRec1Select.Text = "btnRec1Select";
             btnRec1Select.Click += btnRec1Select_Click;
 
-            btnRec2Select.Location = new System.Drawing.Point(861, 32);
+            btnRec2Select.Location = new Point(861, 32);
             btnRec2Select.Name = "btnRec2Select";
-            btnRec2Select.Size = new System.Drawing.Size(81, 25);
+            btnRec2Select.Size = new Size(81, 25);
             btnRec2Select.TabIndex = 14;
             btnRec2Select.Text = "btnRec2Select";
             btnRec2Select.Click += btnRec2Select_Click;
 
             btnMergeToLeft.Enabled = false;
-            btnMergeToLeft.Location = new System.Drawing.Point(386, 371);
+            btnMergeToLeft.Location = new Point(386, 371);
             btnMergeToLeft.Name = "btnMergeToLeft";
-            btnMergeToLeft.Size = new System.Drawing.Size(81, 25);
+            btnMergeToLeft.Size = new Size(81, 25);
             btnMergeToLeft.TabIndex = 15;
             btnMergeToLeft.Text = "<<<";
             btnMergeToLeft.Click += btnMergeToLeft_Click;
 
             btnMergeToRight.Enabled = false;
-            btnMergeToRight.Location = new System.Drawing.Point(482, 371);
+            btnMergeToRight.Location = new Point(482, 371);
             btnMergeToRight.Name = "btnMergeToRight";
-            btnMergeToRight.Size = new System.Drawing.Size(81, 25);
+            btnMergeToRight.Size = new Size(81, 25);
             btnMergeToRight.TabIndex = 16;
             btnMergeToRight.Text = ">>>";
             btnMergeToRight.Click += btnMergeToRight_Click;
 
-            AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            AutoScaleDimensions = new SizeF(120F, 120F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             AutoSize = true;
             Controls.Add(Lab1);
             Controls.Add(Lab2);
@@ -274,9 +271,9 @@ namespace GKUI.Components
             Controls.Add(btnRec2Select);
             Controls.Add(btnMergeToLeft);
             Controls.Add(btnMergeToRight);
-            Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(204)));
             Name = "GKMergeControl";
-            Size = new System.Drawing.Size(957, 402);
+            Size = new Size(957, 402);
             ResumeLayout(false);
             PerformLayout();
         }

@@ -21,9 +21,10 @@
 using System;
 using BSLib;
 using GKCommon.GEDCOM;
+using GKCore.MVP;
+using GKCore.MVP.Views;
 using GKCore.Options;
 using GKCore.Types;
-using GKCore.UIContracts;
 
 namespace GKCore.Controllers
 {
@@ -53,7 +54,7 @@ namespace GKCore.Controllers
                 fView.MediaType.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
             }
 
-            fView.Name.Select();
+            fView.Name.Activate();
         }
 
         public override bool Accept()

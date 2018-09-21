@@ -26,9 +26,11 @@ using GKCommon.GEDCOM;
 using GKCore.Charts;
 using GKCore.Export;
 using GKCore.Interfaces;
+using GKCore.MVP;
+using GKCore.MVP.Controls;
+using GKCore.MVP.Views;
 using GKCore.Options;
 using GKCore.Types;
-using GKCore.UIContracts;
 
 namespace GKCore.Controllers
 {
@@ -271,6 +273,18 @@ namespace GKCore.Controllers
                 NavAdd(rec);
             }
             ShowRecordInfo(rec);
+        }
+
+        public void SelectRecordByXRef(string xref)
+        {
+            GEDCOMRecord record = fContext.Tree.XRefIndex_Find(xref);
+            IListView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
+
+            if (rView != null) {
+                fView.ShowRecordsTab(record.RecordType);
+                rView.Activate();
+                rView.SelectItem(record);
+            }
         }
 
         public StringList GetRecordContent(GEDCOMRecord record)

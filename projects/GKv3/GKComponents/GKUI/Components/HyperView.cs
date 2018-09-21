@@ -25,7 +25,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.UIContracts;
+using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
@@ -101,6 +101,11 @@ namespace GKUI.Components
                 fLines.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public void Activate()
+        {
+            Focus();
         }
 
         private void LinesChanged(object sender)

@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using GKCore.UIContracts;
+using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
@@ -89,6 +89,11 @@ namespace GKUI.Components
             InitializeComponent();
             btnPanel.Top = Height;
             timer.Stop();
+        }
+
+        public void Activate()
+        {
+            Select();
         }
 
         public void AddButton(Button b)

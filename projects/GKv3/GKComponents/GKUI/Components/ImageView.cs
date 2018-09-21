@@ -26,7 +26,7 @@ using Eto.Forms;
 using BSLib;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.UIContracts;
+using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
@@ -85,6 +85,11 @@ namespace GKUI.Components
             InitializeComponent();
 
             FillZoomLevels();
+        }
+
+        public void Activate()
+        {
+            Focus();
         }
 
         public void SetLang()

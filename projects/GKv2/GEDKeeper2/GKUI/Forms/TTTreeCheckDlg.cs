@@ -24,8 +24,8 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
+using GKCore.MVP.Views;
 using GKCore.Tools;
-using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms

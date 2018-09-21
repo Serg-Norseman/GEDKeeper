@@ -231,6 +231,11 @@ namespace GKUI.Components
             base.Dispose(disposing);
         }
 
+        public void Activate()
+        {
+            Focus();
+        }
+
         public void BeginUpdate()
         {
             if (fUpdateCount == 0) {
@@ -698,11 +703,6 @@ namespace GKUI.Components
             } catch (Exception ex) {
                 Logger.LogWrite("GKListView.SelectItem(): " + ex.Message);
             }
-        }
-
-        public void Select()
-        {
-            Focus();
         }
 
         #endregion

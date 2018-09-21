@@ -27,7 +27,7 @@ using System.Windows.Forms;
 
 using BSLib;
 using GKCore.Maps;
-using GKCore.UIContracts;
+using GKCore.MVP.Controls;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
@@ -88,6 +88,11 @@ namespace GKUI.Components
                 fMapPoints.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public void Activate()
+        {
+            Select();
         }
 
         public int AddPoint(double latitude, double longitude, string hint)

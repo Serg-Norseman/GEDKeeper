@@ -28,11 +28,12 @@ using BSLib;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Maps;
+using GKCore.MVP.Controls;
+using GKCore.MVP.Views;
 using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.SingleInstance;
 using GKCore.Types;
-using GKCore.UIContracts;
 
 // TODO: total search and fix references to Encoding.GetEncoding(1251)!
 namespace GKCore

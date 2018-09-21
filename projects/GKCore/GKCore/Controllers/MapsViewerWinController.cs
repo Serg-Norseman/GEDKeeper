@@ -24,7 +24,9 @@ using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Maps;
-using GKCore.UIContracts;
+using GKCore.MVP;
+using GKCore.MVP.Controls;
+using GKCore.MVP.Views;
 
 namespace GKCore.Controllers
 {

@@ -26,7 +26,7 @@ using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.UIContracts;
+using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms

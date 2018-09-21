@@ -24,7 +24,8 @@ using System.Windows.Forms;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.UIContracts;
+using GKCore.MVP.Controls;
+using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -49,6 +50,11 @@ namespace GKUI.Forms
         public IListManager ListMan
         {
             get { return fListMan; }
+        }
+
+        public IFilterGridView FilterGrid
+        {
+            get { return filterView; }
         }
 
         public CommonFilterDlg()
@@ -79,17 +85,7 @@ namespace GKUI.Forms
 
             SetLang();
 
-            UpdateGrid();
-        }
-
-        private void UpdateGrid()
-        {
-            filterView.Clear();
-            int num = fListMan.Filter.Conditions.Count;
-            for (int i = 0; i < num; i++) {
-                FilterCondition fcond = fListMan.Filter.Conditions[i];
-                filterView.AddCondition(fcond);
-            }
+            fController.UpdateView();
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -110,16 +106,7 @@ namespace GKUI.Forms
 
         public virtual void AcceptChanges()
         {
-            fListMan.Filter.Clear();
-
-            int num = filterView.Count;
-            for (int r = 0; r < num; r++) {
-                FilterCondition fcond = filterView[r];
-                if (fcond != null) {
-                    fListMan.AddCondition((byte)fcond.ColumnIndex, fcond.Condition, fcond.Value.ToString());
-                }
-            }
-
+            fController.Accept();
             DialogResult = DialogResult.OK;
         }
 
@@ -137,7 +124,7 @@ namespace GKUI.Forms
         public virtual void DoReset()
         {
             fListMan.Filter.Clear();
-            UpdateGrid();
+            fController.UpdateView();
         }
     }
 }

@@ -25,11 +25,11 @@ using Eto.Forms;
 
 using GKCore;
 using GKCore.Charts;
-using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.IoC;
+using GKCore.MVP;
+using GKCore.MVP.Views;
 using GKCore.Options;
-using GKCore.UIContracts;
 using GKUI.Components;
 using GKUI.Forms;
 

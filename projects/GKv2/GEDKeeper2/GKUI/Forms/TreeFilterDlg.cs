@@ -28,8 +28,8 @@ using GKCore.Charts;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.MVP.Views;
 using GKCore.Types;
-using GKCore.UIContracts;
 using GKUI.Components;
 
 namespace GKUI.Forms

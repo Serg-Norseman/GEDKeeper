@@ -21,11 +21,11 @@
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.MVP.Views;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
-using GKCore.UIContracts;
 
 namespace GKCore
 {
