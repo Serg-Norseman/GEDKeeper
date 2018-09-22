@@ -20,11 +20,13 @@
 
 using System.Collections.Generic;
 using GKCommon.GEDCOM;
+using GKCore.MVP;
 
 namespace GKCore.Interfaces
 {
-    public interface IWindow : ILocalization
+    public interface IWindow : IView, ILocalization
     {
+        void Show(bool showInTaskbar);
     }
 
     public interface IWorkWindow : IWindow
@@ -44,7 +46,7 @@ namespace GKCore.Interfaces
         bool AllowQuickSearch();
         IList<ISearchResult> FindAll(string searchPattern);
         void QuickSearch();
-        void SelectByRec(GEDCOMIndividualRecord iRec);
+        void SelectByRec(GEDCOMRecord record);
 
         bool AllowFilter();
         void SetFilter();

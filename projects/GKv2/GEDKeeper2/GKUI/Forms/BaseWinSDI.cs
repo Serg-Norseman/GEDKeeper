@@ -43,7 +43,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class BaseWinSDI : CommonForm, IBaseWindowView
+    public sealed partial class BaseWinSDI : CommonWindow, IBaseWindowView
     {
         #region Private fields
 
@@ -58,11 +58,6 @@ namespace GKUI.Forms
         public IBaseContext Context
         {
             get { return fContext; }
-        }
-
-        public NavigationStack<GEDCOMRecord> Navman
-        {
-            get { return fController.Navman; }
         }
 
         #endregion
@@ -303,15 +298,7 @@ namespace GKUI.Forms
 
         private void mPersonSummaryLink(object sender, string linkName)
         {
-            if (linkName.StartsWith("view_")) {
-                string xref = linkName.Remove(0, 5);
-                GEDCOMMultimediaRecord mmRec = fContext.Tree.XRefIndex_Find(xref) as GEDCOMMultimediaRecord;
-                if (mmRec != null) {
-                    ShowMedia(mmRec, false);
-                }
-            } else {
-                SelectRecordByXRef(linkName);
-            }
+            fController.SelectSummaryLink(linkName);
         }
 
         #endregion
@@ -456,6 +443,7 @@ namespace GKUI.Forms
                 string targetFile = fContext.MediaLoad(fileRef);
                 GKUtils.LoadExtFile(targetFile);
             } else {
+                //var mediaViewer = AppHost.Container.Resolve<IMediaViewerWin>(this);
                 MediaViewerWin mediaViewer = new MediaViewerWin(this);
                 try {
                     try {
@@ -480,7 +468,7 @@ namespace GKUI.Forms
 
         #region ILocalization implementation
 
-        public void SetLang()
+        public override void SetLang()
         {
             miFile.Text = LangMan.LS(LSID.LSID_MIFile);
             miEdit.Text = LangMan.LS(LSID.LSID_MIEdit);
@@ -648,17 +636,9 @@ namespace GKUI.Forms
             return fController.FindAll(searchPattern);
         }
 
-        void IWorkWindow.SelectByRec(GEDCOMIndividualRecord iRec)
+        void IWorkWindow.SelectByRec(GEDCOMRecord record)
         {
-            if (iRec == null)
-                throw new ArgumentNullException("iRec");
-
-            // platform: In Windows works without it
-            #if __MonoCS__
-            Activate();
-            #endif
-
-            SelectRecordByXRef(iRec.XRef);
+            fController.SelectByRec(record);
         }
 
         void IWorkWindow.QuickSearch()
@@ -901,9 +881,7 @@ namespace GKUI.Forms
 
         private void miExit_Click(object sender, EventArgs e)
         {
-            // FIXME: Controversial issue...
-            //AppHost.Instance.SaveLastBases();
-            Application.Exit();
+            AppHost.Instance.Quit();
         }
 
         private void miUndo_Click(object sender, EventArgs e)
@@ -998,12 +976,7 @@ namespace GKUI.Forms
 
         private void miFileLoad_Click(object sender, EventArgs e)
         {
-            string homePath = AppHost.Instance.GetUserFilesPath("");
-
-            string fileName = AppHost.StdDialogs.GetOpenFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
-            if (!string.IsNullOrEmpty(fileName)) {
-                AppHost.Instance.LoadBase(this, fileName);
-            }
+            fController.LoadFileEx();
         }
 
         private void miFileSaveAs_Click(object sender, EventArgs e)

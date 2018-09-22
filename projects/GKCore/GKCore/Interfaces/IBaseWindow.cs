@@ -30,15 +30,23 @@ namespace GKCore.Interfaces
     {
         IBaseContext Context { get; }
 
-        void Activate();
-        void Close();
-        void Show();
-
+        void AddRecord();
+        void CheckAutosave();
         void CreateNewFile();
+        void DeleteRecord();
+        void DuplicateRecord();
+        void EditRecord();
         void LoadFile(string fileName);
+        void NotifyRecord(GEDCOMRecord record, RecordAction action);
+        bool RecordIsFiltered(GEDCOMRecord record);
+        void RefreshLists(bool columnsChanged);
+        void RefreshRecordsView(GEDCOMRecordType recType);
         void SaveFile(string fileName);
         void SaveFileEx(bool saveAs);
-        void CheckAutosave();
+        void SelectRecordByXRef(string xref);
+        void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal);
+        void ShowRecordsTab(GEDCOMRecordType recType);
+        void UpdateControls(bool forceDeactivate, bool blockDependent = false);
 
         void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone);
         List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType);
@@ -46,18 +54,5 @@ namespace GKCore.Interfaces
         IListManager GetRecordsListManByType(GEDCOMRecordType recType);
         GEDCOMIndividualRecord GetSelectedPerson();
         GEDCOMRecordType GetSelectedRecordType();
-        void RefreshLists(bool columnsChanged);
-        void RefreshRecordsView(GEDCOMRecordType recType);
-        void ShowRecordsTab(GEDCOMRecordType recType);
-        void SelectRecordByXRef(string xref);
-        void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal);
-        void UpdateControls(bool forceDeactivate, bool blockDependent = false);
-
-        void AddRecord();
-        void DeleteRecord();
-        void EditRecord();
-        void DuplicateRecord();
-        bool RecordIsFiltered(GEDCOMRecord record);
-        void NotifyRecord(GEDCOMRecord record, RecordAction action);
     }
 }

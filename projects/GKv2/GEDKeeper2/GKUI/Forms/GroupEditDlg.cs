@@ -102,12 +102,8 @@ namespace GKUI.Forms
 
         private void ModifyMembersSheet(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMIndividualRecord member = eArgs.ItemData as GEDCOMIndividualRecord;
-            if (eArgs.Action == RecordAction.raJump && member != null) {
-                fController.Accept();
-                DialogResult = DialogResult.OK;
-                fBase.SelectRecordByXRef(member.XRef);
-                Close();
+            if (eArgs.Action == RecordAction.raJump) {
+                fController.JumpToRecord(eArgs.ItemData as GEDCOMIndividualRecord);
             }
         }
 

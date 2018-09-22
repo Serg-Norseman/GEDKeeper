@@ -88,7 +88,7 @@ namespace GKUI.Forms
             if (e.KeyCode == Keys.Escape) Close();
         }
 
-        public void SetLang()
+        public override void SetLang()
         {
             Text = LangMan.LS(LSID.LSID_Slideshow);
             SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
@@ -185,7 +185,7 @@ namespace GKUI.Forms
             return new List<ISearchResult>();
         }
 
-        public void SelectByRec(GEDCOMIndividualRecord iRec)
+        public void SelectByRec(GEDCOMRecord record)
         {
         }
 

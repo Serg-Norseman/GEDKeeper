@@ -128,9 +128,7 @@ namespace GKUI.Forms
         {
             GEDCOMRepositoryCitation cit = eArgs.ItemData as GEDCOMRepositoryCitation;
             if (eArgs.Action == RecordAction.raJump && cit != null) {
-                fController.Accept();
-                fBase.SelectRecordByXRef(cit.Value.XRef);
-                Close();
+                fController.JumpToRecord(cit.Value);
             }
         }
 

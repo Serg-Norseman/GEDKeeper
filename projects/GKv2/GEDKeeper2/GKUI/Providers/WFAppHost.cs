@@ -217,6 +217,13 @@ namespace GKUI.Providers
             return result;
         }
 
+        public override void Quit()
+        {
+            // FIXME: Controversial issue...
+            //AppHost.Instance.SaveLastBases();
+            Application.Exit();
+        }
+
         #region KeyLayout functions
 
         public override int GetKeyLayout()

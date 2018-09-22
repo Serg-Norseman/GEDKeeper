@@ -35,7 +35,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class MapsViewerWin : CommonForm, IMapsViewerWin
+    public sealed partial class MapsViewerWin : CommonWindow, IMapsViewerWin
     {
         private readonly MapsViewerWinController fController;
 
@@ -158,7 +158,7 @@ namespace GKUI.Forms
             SetLang();
         }
 
-        public void SetLang()
+        public override void SetLang()
         {
             Text = LangMan.LS(LSID.LSID_MIMap);
             pagePlaces.Text = LangMan.LS(LSID.LSID_RPLocations);

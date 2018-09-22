@@ -38,6 +38,16 @@ namespace GKImageViewerPlugin
         private ImageView fImageCtl;
         private readonly Plugin fPlugin;
 
+        #region View Interface
+
+        public string Caption
+        {
+            get { return base.Text; }
+            set { base.Text = value; }
+        }
+
+        #endregion
+
         public ImageViewerWin(Plugin plugin)
         {
             InitializeComponent();
@@ -192,6 +202,12 @@ namespace GKImageViewerPlugin
 
                 Logger.LogWrite("ImageViewerWin.SetFileRef()" + ex.Message);
             }
+        }
+
+        public void Show(bool showInTaskbar)
+        {
+            ShowInTaskbar = showInTaskbar;
+            Show();
         }
 
         #region ILocalization support

@@ -148,31 +148,22 @@ namespace GKUI.Forms
 
         private void ListTasksModify(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMTaskRecord task = eArgs.ItemData as GEDCOMTaskRecord;
-            if (eArgs.Action == RecordAction.raJump && task != null) {
-                fController.Accept();
-                fBase.SelectRecordByXRef(task.XRef);
-                Close();
+            if (eArgs.Action == RecordAction.raJump) {
+                fController.JumpToRecord(eArgs.ItemData as GEDCOMTaskRecord);
             }
         }
 
         private void ListCommunicationsModify(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMCommunicationRecord comm = eArgs.ItemData as GEDCOMCommunicationRecord;
-            if (eArgs.Action == RecordAction.raJump && comm != null) {
-                fController.Accept();
-                fBase.SelectRecordByXRef(comm.XRef);
-                Close();
+            if (eArgs.Action == RecordAction.raJump) {
+                fController.JumpToRecord(eArgs.ItemData as GEDCOMCommunicationRecord);
             }
         }
 
         private void ListGroupsModify(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMGroupRecord group = eArgs.ItemData as GEDCOMGroupRecord;
-            if (eArgs.Action == RecordAction.raJump && group != null) {
-                fController.Accept();
-                fBase.SelectRecordByXRef(group.XRef);
-                Close();
+            if (eArgs.Action == RecordAction.raJump) {
+                fController.JumpToRecord(eArgs.ItemData as GEDCOMGroupRecord);
             }
         }
 

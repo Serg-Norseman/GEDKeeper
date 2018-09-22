@@ -268,9 +268,7 @@ namespace GKUI.Forms
         {
             GEDCOMAssociation ast = eArgs.ItemData as GEDCOMAssociation;
             if (eArgs.Action == RecordAction.raJump && ast != null) {
-                fController.Accept();
-                fBase.SelectRecordByXRef(ast.Individual.XRef);
-                Close();
+                fController.JumpToRecord(ast.Individual);
             }
         }
 
@@ -289,21 +287,14 @@ namespace GKUI.Forms
                         break;
                 }
 
-                if (spouse != null) {
-                    fController.Accept();
-                    fBase.SelectRecordByXRef(spouse.XRef);
-                    Close();
-                }
+                fController.JumpToRecord(spouse);
             }
         }
 
         private void ModifyGroupsSheet(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMGroupRecord groupRec = eArgs.ItemData as GEDCOMGroupRecord;
-            if (eArgs.Action == RecordAction.raJump && groupRec != null) {
-                fController.Accept();
-                fBase.SelectRecordByXRef(groupRec.XRef);
-                Close();
+            if (eArgs.Action == RecordAction.raJump) {
+                fController.JumpToRecord(eArgs.ItemData as GEDCOMGroupRecord);
             }
         }
 
@@ -328,10 +319,7 @@ namespace GKUI.Forms
             GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fController.Person, false, null);
             if (family == null) return;
 
-            fController.Accept();
-            GEDCOMIndividualRecord father = family.GetHusband();
-            fBase.SelectRecordByXRef(father.XRef);
-            Close();
+            fController.JumpToRecord(family.GetHusband());
         }
 
         private void btnMotherAdd_Click(object sender, EventArgs e)
@@ -349,10 +337,7 @@ namespace GKUI.Forms
             GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fController.Person, false, null);
             if (family == null) return;
 
-            fController.Accept();
-            GEDCOMIndividualRecord mother = family.GetWife();
-            fBase.SelectRecordByXRef(mother.XRef);
-            Close();
+            fController.JumpToRecord(family.GetWife());
         }
 
         private void btnParentsAdd_Click(object sender, EventArgs e)

@@ -113,6 +113,16 @@ namespace GKCore.Controllers
             }
         }
 
+        public void LoadFileEx()
+        {
+            string homePath = AppHost.Instance.GetUserFilesPath("");
+
+            string fileName = AppHost.StdDialogs.GetOpenFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            if (!string.IsNullOrEmpty(fileName)) {
+                AppHost.Instance.LoadBase(fView, fileName);
+            }
+        }
+
         public void SaveFile(string fileName)
         {
             if (fContext.FileSave(fileName)) {
@@ -273,6 +283,28 @@ namespace GKCore.Controllers
                 NavAdd(rec);
             }
             ShowRecordInfo(rec);
+        }
+
+        public void SelectSummaryLink(string linkName)
+        {
+            if (linkName.StartsWith("view_")) {
+                string xref = linkName.Remove(0, 5);
+                GEDCOMMultimediaRecord mmRec = fContext.Tree.XRefIndex_Find(xref) as GEDCOMMultimediaRecord;
+                if (mmRec != null) {
+                    fView.ShowMedia(mmRec, false);
+                }
+            } else {
+                SelectRecordByXRef(linkName);
+            }
+        }
+
+        public void SelectByRec(GEDCOMRecord record)
+        {
+            if (record == null)
+                throw new ArgumentNullException("record");
+
+            fView.Activate();
+            SelectRecordByXRef(record.XRef);
         }
 
         public void SelectRecordByXRef(string xref)

@@ -6,9 +6,6 @@ namespace GKUI.Forms
 {
     partial class TTRecMergeDlg
     {
-        private TabControl tabsTools;
-        private Button btnClose;
-        private TabPage pageRecMerge;
         private TabControl PageControl1;
         private TabPage pageMerge;
         private Button btnAutoSearch;
@@ -164,7 +161,6 @@ namespace GKUI.Forms
 
             Content = PageControl1;
 
-            AbortButton = btnClose;
             Maximizable = false;
             Minimizable = false;
             ShowInTaskbar = false;

@@ -31,8 +31,14 @@ using GKCore.Types;
 
 namespace GKTests.Stubs
 {
-    internal class WorkWindowStub : IWorkWindow
+    internal class WorkWindowStub : BaseObject, IWorkWindow
     {
+        public string Caption { get; set; }
+        public bool Enabled { get; set; }
+
+        public void Activate() {}
+        public void Close() {}
+
         public void UpdateControls() {}
         public void UpdateSettings() {}
         public bool NavCanBackward() { return false; }
@@ -42,10 +48,11 @@ namespace GKTests.Stubs
         public bool AllowQuickSearch() { return false; }
         public IList<ISearchResult> FindAll(string searchPattern) { return new List<ISearchResult>(); }
         public void QuickSearch() {}
-        public void SelectByRec(GEDCOMIndividualRecord iRec) {}
+        public void SelectByRec(GEDCOMRecord record) {}
         public bool AllowFilter() { return false; }
         public void SetFilter() {}
         public void SetLang() {}
+        public void Show(bool showInTaskbar) {}
     }
 
     internal class ProgressStub : IProgressController
@@ -76,27 +83,30 @@ namespace GKTests.Stubs
             fTree = fContext.Tree;
         }
 
-        public new void SetLang() {}
-
-        public IHost Host { get { return fHost; } }
         public IBaseContext Context { get { return fContext; } }
-
+        public IHost Host { get { return fHost; } }
         public bool Modified { get { return false; } set {} }
         public GEDCOMTree Tree { get { return fTree; } }
         public ValuesCollection ValuesCollection { get { return null; } }
 
-        public void Activate() { }
+        public void AddRecord() { }
         public void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone) { }
         public void ChangeRecord(GEDCOMRecord record) { }
-        public void Close() { }
-
-        public bool IsUnknown() { return false; }
-        public void CreateNewFile() { }
-        public void LoadFile(string fileName) { }
-        public void SaveFile(string fileName) { }
-        public void CriticalSave() { }
-        public void SaveFileEx(bool saveAs) { }
         public void CheckAutosave() { }
+        public void CreateNewFile() { }
+        public void CriticalSave() { }
+        public void DeleteRecord() { }
+        public void DuplicateRecord() { }
+        public void EditRecord() { }
+        public bool IsUnknown() { return false; }
+        public void LoadFile(string fileName) { }
+        public void NotifyRecord(GEDCOMRecord record, RecordAction action) { }
+        public bool RecordIsFiltered(GEDCOMRecord record) { return false; }
+        public void SaveFile(string fileName) { }
+        public void SaveFileEx(bool saveAs) { }
+        public void SelectRecordByXRef(string xref) { }
+        public void Show() { }
+        public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal) { }
 
         public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType) { return null; }
         public StringList GetRecordContent(GEDCOMRecord record) { return null; }
@@ -108,17 +118,6 @@ namespace GKTests.Stubs
         public void RefreshRecordsView(GEDCOMRecordType recType) { }
         public void ShowRecordsTab(GEDCOMRecordType recType) { }
         public void UpdateControls(bool forceDeactivate, bool blockDependent = false) { }
-
-        public void AddRecord() { }
-        public void DeleteRecord() { }
-        public void EditRecord() { }
-        public void DuplicateRecord() { }
-        public bool RecordIsFiltered(GEDCOMRecord record) { return false; }
-        public void NotifyRecord(GEDCOMRecord record, RecordAction action) { }
-
-        public void SelectRecordByXRef(string xref) { }
-        public void Show() { }
-        public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal) { }
     }
 
     public class HostStub : IHost

@@ -218,6 +218,8 @@ namespace GKCore
 
         public abstract ITimer CreateTimer(double msInterval, EventHandler elapsedHandler);
 
+        public abstract void Quit();
+
         #region Executing environment
 
         public abstract Assembly GetExecutingAssembly();

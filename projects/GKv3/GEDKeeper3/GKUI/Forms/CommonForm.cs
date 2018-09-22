@@ -66,10 +66,28 @@ namespace GKUI.Forms
         }
     }
 
+
     /// <summary>
     /// 
     /// </summary>
-    public class CommonDialog : Dialog<DialogResult>, ICommonDialog, IView
+    public abstract class CommonWindow : CommonForm, IWindow
+    {
+        public virtual void Show(bool showInTaskbar)
+        {
+            ShowInTaskbar = showInTaskbar;
+            Show();
+        }
+
+        public virtual void SetLang()
+        {
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CommonDialog : Dialog<DialogResult>, ICommonDialog
     {
         protected readonly ControlsManager fControlsManager;
 

@@ -148,7 +148,7 @@ namespace GKCommon.GEDCOM
 
         protected GEDCOMRecord FindRecord(string xref)
         {
-            return ((fOwner == null) ? null : fOwner.XRefIndex_Find(xref));
+            return (fOwner == null) ? null : fOwner.XRefIndex_Find(xref);
         }
 
         protected GEDCOMTag InsertTag(GEDCOMTag tag)

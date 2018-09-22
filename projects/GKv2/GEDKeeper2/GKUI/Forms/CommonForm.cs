@@ -76,6 +76,24 @@ namespace GKUI.Forms
         }
     }
 
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract class CommonWindow : CommonForm, IWindow
+    {
+        public virtual void Show(bool showInTaskbar)
+        {
+            ShowInTaskbar = showInTaskbar;
+            Show();
+        }
+
+        public virtual void SetLang()
+        {
+        }
+    }
+
+
     /// <summary>
     /// 
     /// </summary>

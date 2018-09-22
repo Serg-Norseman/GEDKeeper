@@ -19,13 +19,14 @@
  */
 
 using System;
+using GKCore.MVP;
 
 namespace GKCore.Interfaces
 {
     /// <summary>
     /// 
     /// </summary>
-    public interface ICommonDialog : IDisposable
+    public interface ICommonDialog : IView
     {
         bool ShowModalX(object owner);
     }

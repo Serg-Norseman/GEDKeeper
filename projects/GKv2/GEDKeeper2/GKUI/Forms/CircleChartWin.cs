@@ -145,7 +145,7 @@ namespace GKUI.Forms
 
         #region ILocalization implementation
 
-        public void SetLang()
+        public override void SetLang()
         {
             if (fCircleChart.ChartType == CircleChartType.Ancestors) {
                 Text = LangMan.LS(LSID.LSID_AncestorsCircle);
@@ -229,7 +229,7 @@ namespace GKUI.Forms
         {
         }
 
-        public void SelectByRec(GEDCOMIndividualRecord iRec)
+        public void SelectByRec(GEDCOMRecord record)
         {
         }
 

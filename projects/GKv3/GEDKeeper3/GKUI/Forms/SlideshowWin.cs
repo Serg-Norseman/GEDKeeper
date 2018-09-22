@@ -93,7 +93,7 @@ namespace GKUI.Forms
             if (e.Key == Keys.Escape) Close();
         }
 
-        public void SetLang()
+        public override void SetLang()
         {
             Title = LangMan.LS(LSID.LSID_Slideshow);
             tbStart.Text = LangMan.LS(LSID.LSID_Start);
@@ -182,7 +182,7 @@ namespace GKUI.Forms
             return new List<ISearchResult>();
         }
 
-        public void SelectByRec(GEDCOMIndividualRecord iRec)
+        public void SelectByRec(GEDCOMRecord record)
         {
         }
 

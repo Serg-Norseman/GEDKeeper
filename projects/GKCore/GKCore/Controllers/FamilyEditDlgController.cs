@@ -173,5 +173,13 @@ namespace GKCore.Controllers
                 UpdateControls();
             }
         }
+
+        public void JumpToRecord(GEDCOMRecord record)
+        {
+            if (record != null && Accept()) {
+                fBase.SelectRecordByXRef(record.XRef);
+                fView.Close();
+            }
+        }
     }
 }

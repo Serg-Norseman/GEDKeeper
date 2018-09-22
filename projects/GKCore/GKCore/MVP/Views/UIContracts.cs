@@ -246,6 +246,8 @@ namespace GKCore.MVP.Views
 
     public interface IMediaViewerWin : IWindow, IView
     {
+        GEDCOMFileReferenceWithTitle FileRef { get; set; }
+
         void SetViewImage(IImage img, GEDCOMFileReferenceWithTitle fileRef);
         void SetViewMedia(string mediaFile);
         void SetViewText(string text);

@@ -100,5 +100,13 @@ namespace GKCore.Controllers
             fView.CommunicationsList.ListModel.DataOwner = fResearch;
             fView.GroupsList.ListModel.DataOwner = fResearch;
         }
+
+        public void JumpToRecord(GEDCOMRecord record)
+        {
+            if (record != null && Accept()) {
+                fBase.SelectRecordByXRef(record.XRef);
+                fView.Close();
+            }
+        }
     }
 }

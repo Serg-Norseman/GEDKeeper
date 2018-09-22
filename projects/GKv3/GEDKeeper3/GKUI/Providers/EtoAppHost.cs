@@ -77,10 +77,11 @@ namespace GKUI.Providers
             return (activeWnd is IWindow) ? (IWindow)activeWnd : null;
         }
 
+        // FIXME!
         public override IntPtr GetTopWindowHandle()
         {
             IntPtr mainHandle = IntPtr.Zero;
-            // FIXME
+
             return mainHandle;
         }
 
@@ -208,15 +209,18 @@ namespace GKUI.Providers
             }
         }
 
-        #region UI Timers
-
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
         {
             var result = new EUITimer(msInterval, elapsedHandler);
             return result;
         }
 
-        #endregion
+        public override void Quit()
+        {
+            // FIXME: Controversial issue...
+            //AppHost.Instance.SaveLastBases();
+            Application.Instance.Quit();
+        }
 
         #region KeyLayout functions
 

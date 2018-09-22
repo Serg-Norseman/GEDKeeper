@@ -74,5 +74,13 @@ namespace GKCore.Controllers
             fView.NotesList.ListModel.DataOwner = fGroup;
             fView.MediaList.ListModel.DataOwner = fGroup;
         }
+
+        public void JumpToRecord(GEDCOMRecord record)
+        {
+            if (record != null && Accept()) {
+                fBase.SelectRecordByXRef(record.XRef);
+                fView.Close();
+            }
+        }
     }
 }

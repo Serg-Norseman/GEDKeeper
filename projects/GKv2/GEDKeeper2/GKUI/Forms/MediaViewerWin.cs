@@ -35,7 +35,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public partial class MediaViewerWin : CommonForm, IMediaViewerWin
+    public partial class MediaViewerWin : CommonWindow, IMediaViewerWin
     {
         private readonly MediaViewerController fController;
         private Control fViewer;
@@ -137,7 +137,7 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        public void SetLang()
+        public override void SetLang()
         {
             var localizable = fViewer as ILocalization;
             if (localizable != null) localizable.SetLang();

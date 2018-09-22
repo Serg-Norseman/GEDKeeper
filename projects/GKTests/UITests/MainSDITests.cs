@@ -314,8 +314,6 @@ namespace GKUI.Forms
 
             Assert.IsTrue(baseWin.Context.IsUnknown(), stage + ".2");
 
-            Assert.IsNotNull(((BaseWinSDI)baseWin).Navman, stage + ".3");
-
             baseWin.ShowRecordsTab(GEDCOMRecordType.rtIndividual);
             baseWin.SelectRecordByXRef("I1");
 

@@ -430,7 +430,7 @@ namespace GKUI.Forms
 
         #region ILocalization implementation
 
-        public void SetLang()
+        public override void SetLang()
         {
             tbGens.Text = LangMan.LS(LSID.LSID_Generations);
 
@@ -518,8 +518,9 @@ namespace GKUI.Forms
             return fTreeBox.Model.FindAll(searchPattern);
         }
 
-        public void SelectByRec(GEDCOMIndividualRecord iRec)
+        public void SelectByRec(GEDCOMRecord record)
         {
+            GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 

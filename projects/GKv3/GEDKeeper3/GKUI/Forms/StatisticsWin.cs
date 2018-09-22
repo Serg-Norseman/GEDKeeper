@@ -36,7 +36,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class StatisticsWin : CommonForm, IWindow, IStatisticsWin
+    public sealed partial class StatisticsWin : CommonWindow, IStatisticsWin
     {
         private readonly StatisticsWinController fController;
 
@@ -117,7 +117,7 @@ namespace GKUI.Forms
             fController.UpdateCommonStats();
         }
 
-        public void SetLang()
+        public override void SetLang()
         {
             Title = LangMan.LS(LSID.LSID_MIStats);
             grpSummary.Text = LangMan.LS(LSID.LSID_Summary);

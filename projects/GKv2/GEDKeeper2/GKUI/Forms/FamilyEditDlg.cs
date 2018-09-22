@@ -199,11 +199,8 @@ namespace GKUI.Forms
 
         private void ModifyChildrenSheet(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMIndividualRecord child = eArgs.ItemData as GEDCOMIndividualRecord;
-            if (eArgs.Action == RecordAction.raJump && child != null) {
-                fController.Accept();
-                fBase.SelectRecordByXRef(child.XRef);
-                Close();
+            if (eArgs.Action == RecordAction.raJump) {
+                fController.JumpToRecord(eArgs.ItemData as GEDCOMIndividualRecord);
             }
         }
 
@@ -238,12 +235,7 @@ namespace GKUI.Forms
 
         private void btnHusbandSelClick(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord spouse = fController.Family.GetHusband();
-            if (spouse == null) return;
-
-            fController.Accept();
-            fBase.SelectRecordByXRef(spouse.XRef);
-            Close();
+            fController.JumpToRecord(fController.Family.GetHusband());
         }
 
         private void btnWifeAddClick(object sender, EventArgs e)
@@ -258,12 +250,7 @@ namespace GKUI.Forms
 
         private void btnWifeSelClick(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord spouse = fController.Family.GetWife();
-            if (spouse == null) return;
-
-            fController.Accept();
-            fBase.SelectRecordByXRef(spouse.XRef);
-            Close();
+            fController.JumpToRecord(fController.Family.GetWife());
         }
 
         private void EditSpouse_TextChanged(object sender, EventArgs e)

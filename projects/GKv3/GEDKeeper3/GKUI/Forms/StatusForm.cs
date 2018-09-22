@@ -26,7 +26,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class StatusForm : CommonForm, IStatusForm
+    public class StatusForm : CommonWindow, IStatusForm
     {
         public sealed class StatusLinesEx : IStatusLines
         {

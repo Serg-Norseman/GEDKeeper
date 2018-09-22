@@ -27,21 +27,28 @@ namespace GKCore.MVP.Views
     /// </summary>
     public interface IStdDialogs
     {
-        IFont SelectFont(IFont font);
-        IColor SelectColor(IColor color);
+        bool GetInput(string prompt, ref string value);
 
         string GetOpenFile(string title, string context, string filter,
                            int filterIndex, string defaultExt);
+
+        bool GetPassword(string prompt, ref string value);
+
         string GetSaveFile(string filter);
+
         string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
                            string suggestedFileName, bool overwritePrompt = true);
 
-        void ShowMessage(string msg);
-        void ShowError(string msg);
-        bool ShowQuestionYN(string msg);
-        void ShowWarning(string msg);
+        IColor SelectColor(IColor color);
 
-        bool GetInput(string prompt, ref string value);
-        bool GetPassword(string prompt, ref string value);
+        IFont SelectFont(IFont font);
+
+        void ShowError(string msg);
+
+        void ShowMessage(string msg);
+
+        bool ShowQuestionYN(string msg);
+
+        void ShowWarning(string msg);
     }
 }
