@@ -767,10 +767,7 @@ namespace GKCore.Lists
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (var dlg = AppHost.Container.Resolve<IPersonalNameEditDlg>())
-                    {
-                        dlg.InitDialog(fBaseWin);
-
+                    using (var dlg = AppHost.Container.Resolve<IPersonalNameEditDlg>(fBaseWin)) {
                         bool exists = (persName != null);
                         if (!exists) {
                             persName = new GEDCOMPersonalName(fBaseWin.Context.Tree, iRec, "", "");
@@ -803,8 +800,7 @@ namespace GKCore.Lists
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
                     int idx = iRec.PersonalNames.IndexOf(persName);
-                    switch (eArgs.Action)
-                    {
+                    switch (eArgs.Action) {
                         case RecordAction.raMoveUp:
                             iRec.PersonalNames.Exchange(idx - 1, idx);
                             break;
@@ -992,10 +988,7 @@ namespace GKCore.Lists
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (var dlg = AppHost.Container.Resolve<IUserRefEditDlg>())
-                    {
-                        dlg.InitDialog(fBaseWin);
-
+                    using (var dlg = AppHost.Container.Resolve<IUserRefEditDlg>(fBaseWin)) {
                         bool exists = (userRef != null);
                         if (!exists) {
                             userRef = new GEDCOMUserReference(fBaseWin.Context.Tree, iRec, "", "");
@@ -1017,12 +1010,10 @@ namespace GKCore.Lists
                 case RecordAction.raDelete:
                     {
                         string confirmation =
-                            !string.IsNullOrEmpty(userRef.StringValue) ?
-                            userRef.StringValue : userRef.ReferenceType;
+                            !string.IsNullOrEmpty(userRef.StringValue) ? userRef.StringValue : userRef.ReferenceType;
                         confirmation = string.Format(
                             LangMan.LS(LSID.LSID_RemoveUserRefQuery), confirmation);
-                        if (AppHost.StdDialogs.ShowQuestionYN(confirmation))
-                        {
+                        if (AppHost.StdDialogs.ShowQuestionYN(confirmation)) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, iRec, userRef);
                             fBaseWin.Context.Modified = true;
                         }

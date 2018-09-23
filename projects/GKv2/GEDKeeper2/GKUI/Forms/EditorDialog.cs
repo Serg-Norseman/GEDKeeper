@@ -27,28 +27,5 @@ namespace GKUI.Forms
     /// </summary>
     public class EditorDialog : CommonDialog, IBaseEditor
     {
-        protected IBaseWindow fBase;
-
-        public IBaseWindow Base
-        {
-            get { return fBase; }
-        }
-
-        /// <summary>
-        /// For the working state of the form designer,
-        /// it is essential that existed a simple constructor.
-        /// </summary>
-        public EditorDialog() : base()
-        {
-        }
-
-        public virtual void UpdateView()
-        {
-        }
-
-        public virtual void InitDialog(IBaseWindow baseWin)
-        {
-            fBase = baseWin;
-        }
     }
 }

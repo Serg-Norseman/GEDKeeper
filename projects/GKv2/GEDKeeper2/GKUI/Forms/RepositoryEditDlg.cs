@@ -80,7 +80,7 @@ namespace GKUI.Forms
             }
         }
 
-        public RepositoryEditDlg()
+        public RepositoryEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -98,14 +98,9 @@ namespace GKUI.Forms
             btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
 
             fController = new RepositoryEditDlgController(this);
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
             fController.Init(baseWin);
 
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
         }
     }
 }

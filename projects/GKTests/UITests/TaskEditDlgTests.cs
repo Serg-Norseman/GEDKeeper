@@ -48,8 +48,7 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
             fTaskRecord = new GEDCOMTaskRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new TaskEditDlg();
-            fDialog.InitDialog(fBase);
+            fDialog = new TaskEditDlg(fBase);
             fDialog.Task = fTaskRecord;
             fDialog.Show();
         }
@@ -69,7 +68,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fTaskRecord, fDialog.Task);
 
             var txtPriority = new ComboBoxTester("txtPriority", fDialog);
@@ -90,7 +88,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataDatesAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fTaskRecord, fDialog.Task);
 
             var txtPriority = new ComboBoxTester("txtPriority", fDialog);

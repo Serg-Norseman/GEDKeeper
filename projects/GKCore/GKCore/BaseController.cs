@@ -44,10 +44,7 @@ namespace GKCore
                 baseWin.Context.BeginUpdate();
                 GEDCOMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.Container.Resolve<IMediaEditDlg>())
-                {
-                    dlg.InitDialog(baseWin);
-
+                using (var dlg = AppHost.Container.Resolve<IMediaEditDlg>(baseWin)) {
                     bool exists = mediaRec != null;
                     if (!exists) {
                         mediaRec = new GEDCOMMultimediaRecord(tree, tree, "", "");
@@ -98,18 +95,12 @@ namespace GKCore
                     baseWin.Context.LockRecord(noteRec);
 
                     if (GlobalOptions.Instance.UseExtendedNotes) {
-                        using (var dlg = AppHost.Container.Resolve<INoteEditDlgEx>())
-                        {
-                            dlg.InitDialog(baseWin);
-
+                        using (var dlg = AppHost.Container.Resolve<INoteEditDlgEx>(baseWin)) {
                             dlg.NoteRecord = noteRec;
                             result = (AppHost.Instance.ShowModalX(dlg, false));
                         }
                     } else {
-                        using (var dlg = AppHost.Container.Resolve<INoteEditDlg>())
-                        {
-                            dlg.InitDialog(baseWin);
-
+                        using (var dlg = AppHost.Container.Resolve<INoteEditDlg>(baseWin)) {
                             dlg.NoteRecord = noteRec;
                             result = (AppHost.Instance.ShowModalX(dlg, false));
                         }
@@ -141,10 +132,7 @@ namespace GKCore
                 baseWin.Context.BeginUpdate();
                 GEDCOMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.Container.Resolve<ISourceEditDlg>())
-                {
-                    dlg.InitDialog(baseWin);
-
+                using (var dlg = AppHost.Container.Resolve<ISourceEditDlg>(baseWin)) {
                     bool exists = sourceRec != null;
                     if (!exists) {
                         sourceRec = new GEDCOMSourceRecord(tree, tree, "", "");
@@ -184,10 +172,7 @@ namespace GKCore
                 baseWin.Context.BeginUpdate();
                 GEDCOMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.Container.Resolve<ISourceCitEditDlg>())
-                {
-                    dlg.InitDialog(baseWin);
-
+                using (var dlg = AppHost.Container.Resolve<ISourceCitEditDlg>(baseWin)) {
                     bool exists = cit != null;
                     if (!exists) {
                         cit = new GEDCOMSourceCitation(tree, _struct as GEDCOMObject, "", "");
@@ -219,10 +204,7 @@ namespace GKCore
                 baseWin.Context.BeginUpdate();
                 GEDCOMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.Container.Resolve<IRepositoryEditDlg>())
-                {
-                    dlg.InitDialog(baseWin);
-
+                using (var dlg = AppHost.Container.Resolve<IRepositoryEditDlg>(baseWin)) {
                     bool exists = repRec != null;
                     if (!exists) {
                         repRec = new GEDCOMRepositoryRecord(tree, tree, "", "");
@@ -262,10 +244,7 @@ namespace GKCore
                 baseWin.Context.BeginUpdate();
                 GEDCOMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.Container.Resolve<IGroupEditDlg>())
-                {
-                    dlg.InitDialog(baseWin);
-
+                using (var dlg = AppHost.Container.Resolve<IGroupEditDlg>(baseWin)) {
                     bool exists = groupRec != null;
                     if (!exists) {
                         groupRec = new GEDCOMGroupRecord(tree, tree, "", "");
@@ -305,10 +284,7 @@ namespace GKCore
                 baseWin.Context.BeginUpdate();
                 GEDCOMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.Container.Resolve<IResearchEditDlg>())
-                {
-                    dlg.InitDialog(baseWin);
-
+                using (var dlg = AppHost.Container.Resolve<IResearchEditDlg>(baseWin)) {
                     bool exists = researchRec != null;
                     if (!exists) {
                         researchRec = new GEDCOMResearchRecord(tree, tree, "", "");
@@ -348,10 +324,7 @@ namespace GKCore
                 baseWin.Context.BeginUpdate();
                 GEDCOMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.Container.Resolve<ITaskEditDlg>())
-                {
-                    dlg.InitDialog(baseWin);
-
+                using (var dlg = AppHost.Container.Resolve<ITaskEditDlg>(baseWin)) {
                     bool exists = taskRec != null;
                     if (!exists) {
                         taskRec = new GEDCOMTaskRecord(tree, tree, "", "");
@@ -391,10 +364,7 @@ namespace GKCore
                 baseWin.Context.BeginUpdate();
                 GEDCOMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.Container.Resolve<ICommunicationEditDlg>())
-                {
-                    dlg.InitDialog(baseWin);
-
+                using (var dlg = AppHost.Container.Resolve<ICommunicationEditDlg>(baseWin)) {
                     bool exists = commRec != null;
                     if (!exists) {
                         commRec = new GEDCOMCommunicationRecord(tree, tree, "", "");
@@ -434,10 +404,7 @@ namespace GKCore
                 baseWin.Context.BeginUpdate();
                 GEDCOMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.Container.Resolve<ILocationEditDlg>())
-                {
-                    dlg.InitDialog(baseWin);
-
+                using (var dlg = AppHost.Container.Resolve<ILocationEditDlg>(baseWin)) {
                     bool exists = locRec != null;
                     if (!exists) {
                         locRec = new GEDCOMLocationRecord(tree, tree, "", "");
@@ -506,10 +473,7 @@ namespace GKCore
                 baseWin.Context.BeginUpdate();
                 GEDCOMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.Container.Resolve<IPersonEditDlg>())
-                {
-                    dlg.InitDialog(baseWin);
-
+                using (var dlg = AppHost.Container.Resolve<IPersonEditDlg>(baseWin)) {
                     bool exists = (indivRec != null);
                     if (!exists) {
                         indivRec = new GEDCOMIndividualRecord(tree, tree, "", "");
@@ -572,10 +536,7 @@ namespace GKCore
                     }
                 }
 
-                using (var dlg = AppHost.Container.Resolve<IFamilyEditDlg>())
-                {
-                    dlg.InitDialog(baseWin);
-
+                using (var dlg = AppHost.Container.Resolve<IFamilyEditDlg>(baseWin)) {
                     bool exists = (familyRec != null);
                     if (!exists) {
                         familyRec = new GEDCOMFamilyRecord(tree, tree, "", "");
@@ -620,10 +581,7 @@ namespace GKCore
             try {
                 baseWin.Context.BeginUpdate();
 
-                using (var dlg = AppHost.Container.Resolve<IAddressEditDlg>())
-                {
-                    dlg.InitDialog(baseWin);
-
+                using (var dlg = AppHost.Container.Resolve<IAddressEditDlg>(baseWin)) {
                     dlg.Address = address;
                     result = (AppHost.Instance.ShowModalX(dlg, false));
                 }
@@ -1046,9 +1004,7 @@ namespace GKCore
             mmLink = iRec.SetPrimaryMultimediaLink(mmRec);
 
             // select portrait area
-            using (var selectDlg = AppHost.Container.Resolve<IPortraitSelectDlg>(baseWin))
-            {
-                selectDlg.InitDialog(baseWin);
+            using (var selectDlg = AppHost.Container.Resolve<IPortraitSelectDlg>(baseWin)) {
                 selectDlg.MultimediaLink = mmLink;
                 result = AppHost.Instance.ShowModalX(selectDlg, false);
             }

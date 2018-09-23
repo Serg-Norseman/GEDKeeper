@@ -52,7 +52,6 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            InitDialog(baseWin);
             fController = new PlacesManagerController(this);
             fController.Init(baseWin);
 

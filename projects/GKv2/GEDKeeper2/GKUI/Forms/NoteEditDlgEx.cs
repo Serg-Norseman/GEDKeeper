@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
+using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
@@ -57,7 +58,7 @@ namespace GKUI.Forms
             DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
 
-        public NoteEditDlgEx()
+        public NoteEditDlgEx(IBaseWindow baseWin)
         {
             InitializeComponent();
             FillSizes();
@@ -79,6 +80,7 @@ namespace GKUI.Forms
             pagePreview.Text = LangMan.LS(LSID.LSID_DocPreview);
 
             fController = new NoteEditDlgController(this);
+            fController.Init(baseWin);
         }
 
         private void FillSizes()

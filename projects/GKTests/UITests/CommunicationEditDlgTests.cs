@@ -50,8 +50,7 @@ namespace GKUI.Forms
             fContext = fBase.Context;
             fCommunicationRecord = new GEDCOMCommunicationRecord(fContext.Tree, fContext.Tree, "", "");
 
-            fDialog = new CommunicationEditDlg();
-            fDialog.InitDialog(fBase);
+            fDialog = new CommunicationEditDlg(fBase);
             fDialog.Communication = fCommunicationRecord;
             fDialog.Show();
         }
@@ -71,7 +70,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fCommunicationRecord, fDialog.Communication);
 
             var txtName = new TextBoxTester("txtName");
@@ -90,7 +88,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataDatesAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fCommunicationRecord, fDialog.Communication);
 
             var txtName = new TextBoxTester("txtName");

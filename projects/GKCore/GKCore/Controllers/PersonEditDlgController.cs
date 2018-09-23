@@ -463,5 +463,21 @@ namespace GKCore.Controllers
                 fView.Close();
             }
         }
+
+        public void JumpToFather()
+        {
+            GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
+            if (family == null) return;
+
+            JumpToRecord(family.GetHusband());
+        }
+
+        public void JumpToMother()
+        {
+            GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
+            if (family == null) return;
+
+            JumpToRecord(family.GetWife());
+        }
     }
 }

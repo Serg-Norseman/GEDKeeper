@@ -116,7 +116,7 @@ namespace GKUI.Forms
             Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_RPMultimedia), txtName.Text);
         }
 
-        public MediaEditDlg()
+        public MediaEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -140,15 +140,10 @@ namespace GKUI.Forms
             btnView.Text = LangMan.LS(LSID.LSID_View) + @"...";
 
             fController = new MediaEditDlgController(this);
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
             fController.Init(baseWin);
 
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fController.LocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
+            fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
         }
     }
 }

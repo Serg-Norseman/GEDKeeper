@@ -74,7 +74,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public GroupEditDlg()
+        public GroupEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -98,6 +98,11 @@ namespace GKUI.Forms
             pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
 
             fController = new GroupEditDlgController(this);
+            fController.Init(baseWin);
+
+            fMembersList.ListModel = new GroupMembersSublistModel(baseWin, fController.LocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void ModifyMembersSheet(object sender, ModifyEventArgs eArgs)
@@ -119,16 +124,6 @@ namespace GKUI.Forms
             } catch (Exception ex) {
                 Logger.LogWrite("GroupEditDlg.btnCancel_Click(): " + ex.Message);
             }
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
-            fController.Init(baseWin);
-
-            fMembersList.ListModel = new GroupMembersSublistModel(fBase, fController.LocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(fBase, fController.LocalUndoman);
         }
     }
 }

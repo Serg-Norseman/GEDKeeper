@@ -202,6 +202,11 @@ namespace GKUI.Components
             base.Dispose(disposing);
         }
 
+        public void Activate()
+        {
+            Select();
+        }
+
         /// <summary>
         /// The library NUnitForms has a bug in the class Finder.
         /// So we need unique names for hierarchical included components.

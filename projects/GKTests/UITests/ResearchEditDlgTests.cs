@@ -49,8 +49,7 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
             fResearchRecord = new GEDCOMResearchRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new ResearchEditDlg();
-            fDialog.InitDialog(fBase);
+            fDialog = new ResearchEditDlg(fBase);
             fDialog.Research = fResearchRecord;
             fDialog.Show();
         }
@@ -71,7 +70,6 @@ namespace GKUI.Forms
         public void Test_EnterDataAndApply()
         {
             // Empty dates
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fResearchRecord, fDialog.Research);
 
             var txtName = new TextBoxTester("txtName", fDialog);
@@ -103,7 +101,6 @@ namespace GKUI.Forms
         public void Test_EnterDataDatesAndApply()
         {
             // Dates isn't empty
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fResearchRecord, fDialog.Research);
 
             var txtName = new TextBoxTester("txtName", fDialog);

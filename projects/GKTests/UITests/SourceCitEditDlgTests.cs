@@ -49,8 +49,7 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
             fSourceCitation = new GEDCOMSourceCitation(fBase.Context.Tree, null, "", "");
 
-            fDialog = new SourceCitEditDlg();
-            fDialog.InitDialog(fBase);
+            fDialog = new SourceCitEditDlg(fBase);
             fDialog.SourceCitation = fSourceCitation;
             fDialog.Show();
         }
@@ -70,7 +69,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fSourceCitation, fDialog.SourceCitation);
 
             // The links to other records can be added or edited only in MainWinTests

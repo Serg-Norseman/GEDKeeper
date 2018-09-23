@@ -47,8 +47,7 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
             fEvent = new GEDCOMIndividualEvent(fBase.Context.Tree, null, "", "");
 
-            fDialog = new EventEditDlg();
-            fDialog.InitDialog(fBase);
+            fDialog = new EventEditDlg(fBase);
             fDialog.Event = fEvent;
         }
 
@@ -176,7 +175,6 @@ namespace GKUI.Forms
         {
             fDialog.Show();
 
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fEvent, fDialog.Event);
 
             // The links to other records can be added or edited only in MainWinTests

@@ -101,7 +101,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public FamilyEditDlg()
+        public FamilyEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -151,6 +151,13 @@ namespace GKUI.Forms
             SetToolTip(btnWifeSel, LangMan.LS(LSID.LSID_WifeSelTip));
 
             fController = new FamilyEditDlgController(this);
+            fController.Init(baseWin);
+
+            fChildrenList.ListModel = new ChildrenListModel(baseWin, fController.LocalUndoman);
+            fEventsList.ListModel = new EventsListModel(baseWin, fController.LocalUndoman, false);
+            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
+            fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
         }
 
         public void LockEditor(bool locked)
@@ -256,23 +263,11 @@ namespace GKUI.Forms
 
         private void FamilyEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
         {
-            if (e.Item is GEDCOMRecord && !fBase.Context.IsAvailableRecord((GEDCOMRecord)e.Item)) {
+            if (e.Item is GEDCOMRecord && !fController.Base.Context.IsAvailableRecord((GEDCOMRecord)e.Item)) {
                 e.IsAvailable = false;
             } else {
                 e.IsAvailable = true;
             }
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
-            fController.Init(baseWin);
-
-            fChildrenList.ListModel = new ChildrenListModel(fBase, fController.LocalUndoman);
-            fEventsList.ListModel = new EventsListModel(fBase, fController.LocalUndoman, false);
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(fBase, fController.LocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fController.LocalUndoman);
         }
     }
 }

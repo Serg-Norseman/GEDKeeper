@@ -59,8 +59,7 @@ namespace GKUI.Forms
             fAddress.AddEmailAddress("test");
             fAddress.AddFaxNumber("test");
 
-            fDialog = new AddressEditDlg();
-            fDialog.InitDialog(fBase);
+            fDialog = new AddressEditDlg(fBase);
             fDialog.Address = fAddress;
             fDialog.Show();
         }
@@ -80,7 +79,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fAddress, fDialog.Address);
 
             var txtCountry = new TextBoxTester("txtCountry");

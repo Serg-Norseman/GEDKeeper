@@ -22,14 +22,13 @@ using System;
 using System.Windows.Forms;
 
 using BSLib;
-using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKCore.Types;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -43,164 +42,81 @@ namespace GKUI.Forms
 
         private readonly GKSheetList fPersonsList;
 
-        private ChartFilter fFilter;
-        private string fTemp;
-
         public ChartFilter Filter
         {
-            get { return fFilter; }
-            set { fFilter = value; }
+            get { return fController.Filter; }
+            set { fController.Filter = value; }
         }
+
+        #region View Interface
+
+        ISheetList ITreeFilterDlg.PersonsList
+        {
+            get { return fPersonsList; }
+        }
+
+        INumericBoxHandler ITreeFilterDlg.YearNum
+        {
+            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(edYear); }
+        }
+
+        IComboBoxHandler ITreeFilterDlg.SourceCombo
+        {
+            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbSource); }
+        }
+
+        void ITreeFilterDlg.SetCutModeRadio(int cutMode)
+        {
+            switch (cutMode) {
+                case 0:
+                    rbCutNone.Checked = true;
+                    break;
+                case 1:
+                    rbCutYears.Checked = true;
+                    break;
+                case 2:
+                    rbCutPersons.Checked = true;
+                    break;
+            }
+        }
+
+        int ITreeFilterDlg.GetCutModeRadio()
+        {
+            int cutMode = 0;
+            if (rbCutNone.Checked) cutMode = 0;
+            if (rbCutYears.Checked) cutMode = 1;
+            if (rbCutPersons.Checked) cutMode = 2;
+            return cutMode;
+        }
+
+        #endregion
 
         private void ListModify(object sender, ModifyEventArgs eArgs)
         {
             if (sender == fPersonsList) {
-                GEDCOMIndividualRecord iRec = eArgs.ItemData as GEDCOMIndividualRecord;
-
-                switch (eArgs.Action) {
-                    case RecordAction.raAdd:
-                        iRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-                        if (iRec != null) {
-                            fTemp = fTemp + iRec.XRef + ";";
-                        }
-                        break;
-
-                    case RecordAction.raDelete:
-                        if (iRec != null) {
-                            fTemp = fTemp.Replace(iRec.XRef + ";", "");
-                        }
-                        break;
-                }
-            }
-
-            UpdateControls();
-        }
-
-        private void UpdateControls()
-        {
-            switch (fFilter.BranchCut) {
-                case ChartFilter.BranchCutType.Persons:
-                    rbCutPersons.Checked = true;
-                    break;
-
-                case ChartFilter.BranchCutType.Years:
-                    rbCutYears.Checked = true;
-                    break;
-
-                case ChartFilter.BranchCutType.None:
-                    rbCutNone.Checked = true;
-                    break;
-            }
-
-            edYear.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Years);
-            fPersonsList.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Persons);
-            edYear.Text = fFilter.BranchYear.ToString();
-            fPersonsList.ClearItems();
-
-            if (!string.IsNullOrEmpty(fTemp)) {
-                string[] tmpRefs = fTemp.Split(';');
-
-                int num = tmpRefs.Length;
-                for (int i = 0; i < num; i++) {
-                    string xref = tmpRefs[i];
-                    GEDCOMIndividualRecord p = fBase.Context.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
-                    if (p != null) fPersonsList.AddItem(p, GKUtils.GetNameString(p, true, false));
-                }
-            }
-
-            if (fFilter.SourceMode != FilterGroupMode.Selected) {
-                cmbSource.SelectedIndex = (sbyte)fFilter.SourceMode;
-            } else {
-                GEDCOMSourceRecord srcRec = fBase.Context.Tree.XRefIndex_Find(fFilter.SourceRef) as GEDCOMSourceRecord;
-                if (srcRec != null) cmbSource.Text = srcRec.FiledByEntry;
+                fController.ModifyPersons(eArgs.Action, eArgs.ItemData);
             }
         }
 
         private void rbCutNoneClick(object sender, EventArgs e)
         {
-            if (rbCutNone.Checked) {
-                fFilter.BranchCut = ChartFilter.BranchCutType.None;
-            } else {
-                if (rbCutYears.Checked) {
-                    fFilter.BranchCut = ChartFilter.BranchCutType.Years;
-                } else {
-                    if (rbCutPersons.Checked) {
-                        fFilter.BranchCut = ChartFilter.BranchCutType.Persons;
-                    }
-                }
-            }
-            UpdateControls();
-        }
-
-        private void AcceptChanges()
-        {
-            if (rbCutNone.Checked) {
-                fFilter.BranchCut = ChartFilter.BranchCutType.None;
-            } else {
-                if (rbCutYears.Checked) {
-                    fFilter.BranchCut = ChartFilter.BranchCutType.Years;
-                    fFilter.BranchYear = int.Parse(edYear.Text);
-                } else {
-                    if (rbCutPersons.Checked) {
-                        fFilter.BranchCut = ChartFilter.BranchCutType.Persons;
-                        fFilter.BranchPersons = fTemp;
-                    }
-                }
-            }
-
-            int selectedIndex = cmbSource.SelectedIndex;
-            if (selectedIndex >= 0 && selectedIndex < 3) {
-                fFilter.SourceMode = (FilterGroupMode)cmbSource.SelectedIndex;
-                fFilter.SourceRef = "";
-            } else {
-                GKComboItem item = (GKComboItem)cmbSource.Items[cmbSource.SelectedIndex];
-                GEDCOMRecord rec = item.Tag as GEDCOMRecord;
-                if (rec != null) {
-                    fFilter.SourceMode = FilterGroupMode.Selected;
-                    fFilter.SourceRef = rec.XRef;
-                } else {
-                    fFilter.SourceMode = FilterGroupMode.All;
-                    fFilter.SourceRef = "";
-                }
-            }
+            fController.Filter.BranchCut = (ChartFilter.BranchCutType)((ITreeFilterDlg)this).GetCutModeRadio();
+            fController.UpdateControls();
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try {
-                AcceptChanges();
-                DialogResult = DialogResult.OK;
-            } catch (Exception ex) {
-                Logger.LogWrite("TreeFilterDlg.btnAccept_Click(): " + ex.Message);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            fFilter.Reset();
+            fController.Filter.Reset();
         }
 
         private void TreeFilterDlg_Load(object sender, EventArgs e)
         {
-            GEDCOMTree tree = fBase.Context.Tree;
-            fTemp = fFilter.BranchPersons;
-
-            cmbSource.Sorted = true;
-            int num = tree.RecordsCount;
-            for (int i = 0; i < num; i++) {
-                GEDCOMRecord rec = tree[i];
-                if (rec.RecordType == GEDCOMRecordType.rtSource) {
-                    cmbSource.Items.Add(new GKComboItem((rec as GEDCOMSourceRecord).FiledByEntry, rec));
-                }
-            }
-            cmbSource.Sorted = false;
-
-            cmbSource.Items.Insert(0, LangMan.LS(LSID.LSID_SrcAll));
-            cmbSource.Items.Insert(1, LangMan.LS(LSID.LSID_SrcNot));
-            cmbSource.Items.Insert(2, LangMan.LS(LSID.LSID_SrcAny));
-
-            UpdateControls();
+            fController.UpdateView();
         }
 
         public TreeFilterDlg(IBaseWindow baseWin)
@@ -210,7 +126,6 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fBase = baseWin;
             fPersonsList = new GKSheetList(Panel1);
             fPersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
             fPersonsList.OnModify += ListModify;
@@ -228,11 +143,6 @@ namespace GKUI.Forms
             lblRPSources.Text = LangMan.LS(LSID.LSID_RPSources);
 
             fController = new TreeFilterDlgController(this);
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
             fController.Init(baseWin);
         }
     }

@@ -49,8 +49,7 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
             fAssociation = new GEDCOMAssociation(fBase.Context.Tree, null, "", "");
 
-            fDialog = new AssociationEditDlg();
-            fDialog.InitDialog(fBase);
+            fDialog = new AssociationEditDlg(fBase);
             fDialog.Association = fAssociation;
             fDialog.Show();
         }
@@ -70,7 +69,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fAssociation, fDialog.Association);
 
             var cmbRelation = new ComboBoxTester("cmbRelation");

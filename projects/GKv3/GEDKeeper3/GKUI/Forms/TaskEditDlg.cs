@@ -111,7 +111,7 @@ namespace GKUI.Forms
             fController.ChangeGoalType();
         }
 
-        public TaskEditDlg()
+        public TaskEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -134,14 +134,9 @@ namespace GKUI.Forms
             SetToolTip(btnGoalSelect, LangMan.LS(LSID.LSID_GoalSelectTip));
 
             fController = new TaskEditDlgController(this);
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
             fController.Init(baseWin);
 
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
         }
     }
 }

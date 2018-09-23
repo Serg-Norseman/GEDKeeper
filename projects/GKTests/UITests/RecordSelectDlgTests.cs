@@ -46,7 +46,6 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
 
             fDialog = new RecordSelectDlg(fBase, GEDCOMRecordType.rtIndividual);
-            fDialog.InitDialog(fBase);
             fDialog.Show();
         }
 

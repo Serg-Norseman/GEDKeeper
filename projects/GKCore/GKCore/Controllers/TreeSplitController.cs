@@ -75,6 +75,11 @@ namespace GKCore.Controllers
             }
         }
 
+        public void Select(TreeTools.TreeWalkMode walkMode)
+        {
+            Select(fBase.GetSelectedPerson(), walkMode);
+        }
+
         public void Select(GEDCOMIndividualRecord startPerson, TreeTools.TreeWalkMode walkMode)
         {
             fSplitList.Clear();

@@ -70,6 +70,7 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             fView.StatusLines[0] = string.Format("{0} / {1} [{2}]", fCurrentIndex + 1, fFileRefs.Count, fCurrentText);
+            fView.UpdateControls();
         }
 
         private void SetFileRef()

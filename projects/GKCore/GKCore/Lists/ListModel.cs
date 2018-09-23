@@ -21,6 +21,7 @@
 using System;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.MVP;
 using GKCore.Operations;
 using GKCore.Types;
 
@@ -85,7 +86,7 @@ namespace GKCore.Lists
     }
 
 
-    public interface ISheetList
+    public interface ISheetList : IBaseControl
     {
         ListModel ListModel { get; set; }
         bool ReadOnly { get; set; }

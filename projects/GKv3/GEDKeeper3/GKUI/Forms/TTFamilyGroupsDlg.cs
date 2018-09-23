@@ -58,7 +58,6 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            InitDialog(baseWin);
             fController = new FragmentSearchController(this);
             fController.Init(baseWin);
 
@@ -86,7 +85,7 @@ namespace GKUI.Forms
             GEDCOMIndividualRecord iRec = node.Tag as GEDCOMIndividualRecord;
             if (iRec == null) return;
 
-            fBase.SelectRecordByXRef(iRec.XRef);
+            fController.Base.SelectRecordByXRef(iRec.XRef);
             Close();
         }
 

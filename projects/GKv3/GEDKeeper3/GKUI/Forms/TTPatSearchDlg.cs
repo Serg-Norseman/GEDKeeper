@@ -64,7 +64,6 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            InitDialog(baseWin);
             fController = new PatriarchsSearchController(this);
             fController.Init(baseWin);
 
@@ -96,7 +95,7 @@ namespace GKUI.Forms
             GEDCOMIndividualRecord iRec = ListPatriarchs.GetSelectedData() as GEDCOMIndividualRecord;
             if (iRec == null) return;
 
-            fBase.SelectRecordByXRef(iRec.XRef);
+            fController.Base.SelectRecordByXRef(iRec.XRef);
             Close();
         }
 
@@ -112,7 +111,7 @@ namespace GKUI.Forms
 
         private void btnPatriarchsDiagram_Click(object sender, EventArgs e)
         {
-            PatriarchsViewerWin wnd = new PatriarchsViewerWin(fBase, (int)(edMinGens.Value));
+            PatriarchsViewerWin wnd = new PatriarchsViewerWin(fController.Base, (int)(edMinGens.Value));
             wnd.Show();
         }
     }

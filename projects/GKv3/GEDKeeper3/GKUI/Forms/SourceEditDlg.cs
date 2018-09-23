@@ -94,7 +94,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public SourceEditDlg()
+        public SourceEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -122,6 +122,11 @@ namespace GKUI.Forms
             pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
 
             fController = new SourceEditDlgController(this);
+            fController.Init(baseWin);
+
+            fRepositoriesList.ListModel = new SourceRepositoriesSublistModel(baseWin, fController.LocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void ModifyReposSheet(object sender, ModifyEventArgs eArgs)
@@ -150,16 +155,6 @@ namespace GKUI.Forms
         private void EditShortTitle_TextChanged(object sender, EventArgs e)
         {
             Title = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Source), txtShortTitle.Text);
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
-            fController.Init(baseWin);
-
-            fRepositoriesList.ListModel = new SourceRepositoriesSublistModel(fBase, fController.LocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(fBase, fController.LocalUndoman);
         }
     }
 }

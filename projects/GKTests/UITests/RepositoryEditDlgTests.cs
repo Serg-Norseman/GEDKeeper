@@ -46,8 +46,7 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
             fRepositoryRecord = new GEDCOMRepositoryRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new RepositoryEditDlg();
-            fDialog.InitDialog(fBase);
+            fDialog = new RepositoryEditDlg(fBase);
             fDialog.Repository = fRepositoryRecord;
             fDialog.Show();
         }
@@ -67,7 +66,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fRepositoryRecord, fDialog.Repository);
 
             ClickButton("btnAccept", fDialog);

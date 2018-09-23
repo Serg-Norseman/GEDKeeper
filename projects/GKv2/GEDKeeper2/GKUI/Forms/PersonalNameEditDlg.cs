@@ -105,7 +105,7 @@ namespace GKUI.Forms
             DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
 
-        public PersonalNameEditDlg()
+        public PersonalNameEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -115,11 +115,6 @@ namespace GKUI.Forms
             SetLang();
 
             fController = new PersonalNameEditDlgController(this);
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
             fController.Init(baseWin);
         }
 

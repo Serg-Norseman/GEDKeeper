@@ -63,7 +63,7 @@ namespace GKUI.Forms
             DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
         }
 
-        public UserRefEditDlg()
+        public UserRefEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -78,11 +78,6 @@ namespace GKUI.Forms
             lblRefType.Text = LangMan.LS(LSID.LSID_Type);
 
             fController = new UserRefEditDlgController(this);
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
             fController.Init(baseWin);
         }
     }

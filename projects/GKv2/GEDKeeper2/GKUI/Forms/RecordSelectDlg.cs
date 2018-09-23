@@ -131,7 +131,7 @@ namespace GKUI.Forms
         private void btnCreate_Click(object sender, EventArgs e)
         {
             try {
-                GEDCOMRecord rec = BaseController.AddRecord(fBase, fController.RecType, fController.Target);
+                GEDCOMRecord rec = BaseController.AddRecord(fController.Base, fController.RecType, fController.Target);
                 if (rec != null) {
                     ResultRecord = rec;
                     DialogResult = DialogResult.OK;

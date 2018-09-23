@@ -1417,8 +1417,6 @@ namespace GKCore
 
             try {
                 using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>(fViewer, GEDCOMRecordType.rtFamily)) {
-                    dlg.InitDialog(fViewer);
-
                     dlg.TargetIndividual = target;
                     dlg.NeedSex = GEDCOMSex.svNone;
                     dlg.TargetMode = TargetMode.tmFamilyChild;
@@ -1445,8 +1443,6 @@ namespace GKCore
 
             try {
                 using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>(fViewer, GEDCOMRecordType.rtIndividual)) {
-                    dlg.InitDialog(fViewer);
-
                     dlg.TargetIndividual = target;
                     dlg.NeedSex = needSex;
                     dlg.TargetMode = targetMode;
@@ -1472,8 +1468,6 @@ namespace GKCore
 
             try {
                 using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>(fViewer, mode)) {
-                    dlg.InitDialog(fViewer);
-
                     if (args != null && args.Length > 0) {
                         dlg.FastFilter = (args[0] as string);
                     } else {

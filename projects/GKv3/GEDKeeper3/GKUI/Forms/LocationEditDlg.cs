@@ -89,7 +89,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public LocationEditDlg()
+        public LocationEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -126,6 +126,10 @@ namespace GKUI.Forms
             SetToolTip(btnShowOnMap, LangMan.LS(LSID.LSID_ShowOnMapTip));
 
             fController = new LocationEditDlgController(this);
+            fController.Init(baseWin);
+
+            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void EditName_KeyDown(object sender, KeyEventArgs e)
@@ -180,15 +184,6 @@ namespace GKUI.Forms
             if (txtLatitude.Text != "" && txtLongitude.Text != "") {
                 fMapBrowser.SetCenter(ConvertHelper.ParseFloat(txtLatitude.Text, 0), ConvertHelper.ParseFloat(txtLongitude.Text, 0), -1);
             }
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
-            fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(fBase, fController.LocalUndoman);
         }
     }
 }

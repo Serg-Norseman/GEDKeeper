@@ -102,16 +102,11 @@ namespace GKCore.Lists
 
             bool result = false;
 
-            try
-            {
-                switch (eArgs.Action)
-                {
+            try {
+                switch (eArgs.Action) {
                     case RecordAction.raAdd:
                     case RecordAction.raEdit:
-                        using (var dlgEventEdit = AppHost.Container.Resolve<IEventEditDlg>())
-                        {
-                            dlgEventEdit.InitDialog(fBaseWin);
-
+                        using (var dlgEventEdit = AppHost.Container.Resolve<IEventEditDlg>(fBaseWin)) {
                             bool exists = (evt != null);
 
                             GEDCOMCustomEvent newEvent;
@@ -161,8 +156,7 @@ namespace GKCore.Lists
                     case RecordAction.raMoveDown:
                         {
                             int idx = record.Events.IndexOf(evt);
-                            switch (eArgs.Action)
-                            {
+                            switch (eArgs.Action) {
                                 case RecordAction.raMoveUp:
                                     record.Events.Exchange(idx - 1, idx);
                                     break;
@@ -175,9 +169,7 @@ namespace GKCore.Lists
                         }
                         break;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("EventsListModel.Modify(): " + ex.Message);
                 result = false;
             }

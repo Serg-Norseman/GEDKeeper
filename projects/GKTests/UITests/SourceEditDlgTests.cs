@@ -47,8 +47,7 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
             fSourceRecord = new GEDCOMSourceRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new SourceEditDlg();
-            fDialog.InitDialog(fBase);
+            fDialog = new SourceEditDlg(fBase);
             fDialog.SourceRecord = fSourceRecord;
             fDialog.Show();
         }
@@ -68,7 +67,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fSourceRecord, fDialog.SourceRecord);
 
             var txtShortTitle = new TextBoxTester("txtShortTitle");

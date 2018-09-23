@@ -84,7 +84,7 @@ namespace GKUI.Forms
             //cmbSource.SelectionStart = cmbSource.Text.Length;
         }
 
-        public SourceCitEditDlg()
+        public SourceCitEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -103,11 +103,6 @@ namespace GKUI.Forms
             SetToolTip(btnSourceAdd, LangMan.LS(LSID.LSID_SourceAddTip));
 
             fController = new SourceCitEditDlgController(this);
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
             fController.Init(baseWin);
         }
     }

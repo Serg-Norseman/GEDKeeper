@@ -56,7 +56,6 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            InitDialog(baseWin);
             fController = new TreeSplitController(this);
             fController.Init(baseWin);
 
@@ -78,22 +77,22 @@ namespace GKUI.Forms
 
         private void btnSelectFamily_Click(object sender, EventArgs e)
         {
-            fController.Select(fBase.GetSelectedPerson(), TreeTools.TreeWalkMode.twmFamily);
+            fController.Select(TreeTools.TreeWalkMode.twmFamily);
         }
 
         private void btnSelectAncestors_Click(object sender, EventArgs e)
         {
-            fController.Select(fBase.GetSelectedPerson(), TreeTools.TreeWalkMode.twmAncestors);
+            fController.Select(TreeTools.TreeWalkMode.twmAncestors);
         }
 
         private void btnSelectDescendants_Click(object sender, EventArgs e)
         {
-            fController.Select(fBase.GetSelectedPerson(), TreeTools.TreeWalkMode.twmDescendants);
+            fController.Select(TreeTools.TreeWalkMode.twmDescendants);
         }
 
         private void btnSelectAll_Click(object sender, EventArgs e)
         {
-            fController.Select(fBase.GetSelectedPerson(), TreeTools.TreeWalkMode.twmAll);
+            fController.Select(TreeTools.TreeWalkMode.twmAll);
         }
 
         private void btnDelete_Click(object sender, EventArgs e)

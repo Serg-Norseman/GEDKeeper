@@ -49,7 +49,6 @@ namespace GKUI.Forms
             fMultimediaLink = new GEDCOMMultimediaLink(fContext.Tree, null, "", "");
 
             fDialog = new PortraitSelectDlg(fBase);
-            fDialog.InitDialog(fBase);
             fDialog.MultimediaLink = fMultimediaLink;
             fDialog.Show();
         }
@@ -69,7 +68,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fMultimediaLink, fDialog.MultimediaLink);
 
             ClickButton("btnAccept", fDialog);

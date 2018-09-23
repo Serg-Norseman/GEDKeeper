@@ -68,7 +68,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.IsNotNull(fDialog.Filter);
 
             var rbCutPersons = new RadioButtonTester("rbCutPersons", fDialog);

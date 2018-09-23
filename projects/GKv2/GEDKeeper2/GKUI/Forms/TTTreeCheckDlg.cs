@@ -54,7 +54,6 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            InitDialog(baseWin);
             fController = new TreeCheckController(this);
             fController.Init(baseWin);
 
@@ -92,7 +91,7 @@ namespace GKUI.Forms
             GEDCOMRecord rec = ((TreeTools.CheckObj)ListChecks.GetSelectedData()).Rec;
             if (rec == null) return;
 
-            fBase.SelectRecordByXRef(rec.XRef);
+            fController.Base.SelectRecordByXRef(rec.XRef);
             Close();
         }
     }

@@ -58,7 +58,7 @@ namespace GKUI.Forms
             DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
         }
 
-        public NoteEditDlg()
+        public NoteEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -71,11 +71,6 @@ namespace GKUI.Forms
             Title = LangMan.LS(LSID.LSID_Note);
 
             fController = new NoteEditDlgController(this);
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
             fController.Init(baseWin);
         }
     }

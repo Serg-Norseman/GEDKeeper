@@ -58,7 +58,6 @@ namespace GKUI.Forms
 
             SetLang();
 
-            InitDialog(baseWin);
             fController = new TreeCompareController(this);
             fController.Init(baseWin);
         }

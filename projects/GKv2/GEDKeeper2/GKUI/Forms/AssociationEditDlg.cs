@@ -58,7 +58,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public AssociationEditDlg()
+        public AssociationEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -76,11 +76,6 @@ namespace GKUI.Forms
             SetToolTip(btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
 
             fController = new AssociationEditDlgController(this);
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
             fController.Init(baseWin);
         }
 

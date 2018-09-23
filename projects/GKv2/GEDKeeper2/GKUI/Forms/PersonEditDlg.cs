@@ -316,10 +316,7 @@ namespace GKUI.Forms
 
         private void btnFatherSel_Click(object sender, EventArgs e)
         {
-            GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fController.Person, false, null);
-            if (family == null) return;
-
-            fController.JumpToRecord(family.GetHusband());
+            fController.JumpToFather();
         }
 
         private void btnMotherAdd_Click(object sender, EventArgs e)
@@ -334,10 +331,7 @@ namespace GKUI.Forms
 
         private void btnMotherSel_Click(object sender, EventArgs e)
         {
-            GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fController.Person, false, null);
-            if (family == null) return;
-
-            fController.JumpToRecord(family.GetWife());
+            fController.JumpToMother();
         }
 
         private void btnParentsAdd_Click(object sender, EventArgs e)
@@ -390,7 +384,7 @@ namespace GKUI.Forms
             cmbSex.SelectedIndex = (int)needSex;
         }
 
-        public PersonEditDlg()
+        public PersonEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -452,6 +446,18 @@ namespace GKUI.Forms
             SetLang();
 
             fController = new PersonEditDlgController(this);
+            fController.Init(baseWin);
+
+            fEventsList.ListModel = new EventsListModel(baseWin, fController.LocalUndoman, true);
+            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
+            fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
+            fAssociationsList.ListModel = new AssociationsListModel(baseWin, fController.LocalUndoman);
+
+            fGroupsList.ListModel = new GroupsSublistModel(baseWin, fController.LocalUndoman);
+            fNamesList.ListModel = new NamesSublistModel(baseWin, fController.LocalUndoman);
+            fSpousesList.ListModel = new SpousesSublistModel(baseWin, fController.LocalUndoman);
+            fUserRefList.ListModel = new URefsSublistModel(baseWin, fController.LocalUndoman);
         }
 
         public void SetLang()
@@ -494,23 +500,6 @@ namespace GKUI.Forms
             SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
             SetToolTip(btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
             SetToolTip(btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
-            fController.Init(baseWin);
-
-            fEventsList.ListModel = new EventsListModel(fBase, fController.LocalUndoman, true);
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(fBase, fController.LocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fController.LocalUndoman);
-            fAssociationsList.ListModel = new AssociationsListModel(fBase, fController.LocalUndoman);
-
-            fGroupsList.ListModel = new GroupsSublistModel(fBase, fController.LocalUndoman);
-            fNamesList.ListModel = new NamesSublistModel(fBase, fController.LocalUndoman);
-            fSpousesList.ListModel = new SpousesSublistModel(fBase, fController.LocalUndoman);
-            fUserRefList.ListModel = new URefsSublistModel(fBase, fController.LocalUndoman);
         }
     }
 }

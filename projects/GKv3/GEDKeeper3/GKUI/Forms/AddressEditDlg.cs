@@ -109,18 +109,12 @@ namespace GKUI.Forms
             }
         }
 
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
-            fController.Init(baseWin);
-        }
-
         private void btnAccept_Click(object sender, EventArgs e)
         {
             DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
         }
 
-        public AddressEditDlg()
+        public AddressEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -154,6 +148,7 @@ namespace GKUI.Forms
             pageWebPages.Text = LangMan.LS(LSID.LSID_WebSites);
 
             fController = new AddressEditDlgController(this);
+            fController.Init(baseWin);
         }
     }
 }

@@ -174,6 +174,11 @@ namespace GKUI.Components
             base.Dispose(disposing);
         }
 
+        public void Activate()
+        {
+            Focus();
+        }
+
         #region Private methods
 
         private void UpdateButtons()

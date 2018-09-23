@@ -134,7 +134,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public EventEditDlg()
+        public EventEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -167,6 +167,11 @@ namespace GKUI.Forms
             SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
 
             fController = new EventEditDlgController(this);
+            fController.Init(baseWin);
+
+            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
+            fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
         }
 
         public void SetLocationMode(bool active)
@@ -248,16 +253,6 @@ namespace GKUI.Forms
         private void EditEventDateType_SelectedIndexChanged(object sender, EventArgs e)
         {
             fController.ChangeDateType();
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
-            fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(fBase, fController.LocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(fBase, fController.LocalUndoman);
         }
     }
 }

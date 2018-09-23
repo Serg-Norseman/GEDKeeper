@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
 
-using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -136,69 +135,11 @@ namespace GKUI.Forms
             fController.Next();
         }
 
-        #region IWorkWindow implementation
-
         public void UpdateControls()
         {
-            fController.UpdateView();
-
             tbStart.Enabled = (fController.FileRefs.Count > 0);
             tbPrev.Enabled = (fController.CurrentIndex > 0);
             tbNext.Enabled = (fController.CurrentIndex < fController.FileRefs.Count - 1);
-
-            AppHost.Instance.UpdateControls(false, true);
         }
-
-        public void UpdateSettings()
-        {
-            // dummy
-        }
-
-        public void NavNext()
-        {
-        }
-
-        public void NavPrev()
-        {
-        }
-
-        public bool NavCanBackward()
-        {
-            return false;
-        }
-
-        public bool NavCanForward()
-        {
-            return false;
-        }
-
-        public bool AllowQuickSearch()
-        {
-            return false;
-        }
-
-        public IList<ISearchResult> FindAll(string searchPattern)
-        {
-            return new List<ISearchResult>();
-        }
-
-        public void SelectByRec(GEDCOMRecord record)
-        {
-        }
-
-        public void QuickSearch()
-        {
-        }
-
-        public bool AllowFilter()
-        {
-            return false;
-        }
-
-        public void SetFilter()
-        {
-        }
-
-        #endregion
     }
 }

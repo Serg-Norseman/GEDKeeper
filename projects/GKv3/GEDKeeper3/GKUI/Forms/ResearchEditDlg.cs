@@ -106,7 +106,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public ResearchEditDlg()
+        public ResearchEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -127,6 +127,12 @@ namespace GKUI.Forms
             SetLang();
 
             fController = new ResearchEditDlgController(this);
+            fController.Init(baseWin);
+
+            fTasksList.ListModel = new ResTasksSublistModel(baseWin, fController.LocalUndoman);
+            fCommunicationsList.ListModel = new ResCommunicationsSublistModel(baseWin, fController.LocalUndoman);
+            fGroupsList.ListModel = new ResGroupsSublistModel(baseWin, fController.LocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         public void SetLang()
@@ -180,17 +186,6 @@ namespace GKUI.Forms
             } catch (Exception ex) {
                 Logger.LogWrite("ResearchEditDlg.btnCancel_Click(): " + ex.Message);
             }
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
-            fController.Init(baseWin);
-
-            fTasksList.ListModel = new ResTasksSublistModel(fBase, fController.LocalUndoman);
-            fCommunicationsList.ListModel = new ResCommunicationsSublistModel(fBase, fController.LocalUndoman);
-            fGroupsList.ListModel = new ResGroupsSublistModel(fBase, fController.LocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
         }
     }
 }

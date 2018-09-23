@@ -656,8 +656,7 @@ namespace GKCore.Controllers
             try {
                 fContext.BeginUpdate();
 
-                using (var dlg = AppHost.Container.Resolve<IFilePropertiesDlg>()) {
-                    dlg.InitDialog(fView);
+                using (var dlg = AppHost.Container.Resolve<IFilePropertiesDlg>(fView)) {
                     AppHost.Instance.ShowModalX(dlg, false);
                 }
             } finally {

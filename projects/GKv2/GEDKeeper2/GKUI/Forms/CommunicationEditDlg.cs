@@ -106,7 +106,7 @@ namespace GKUI.Forms
             fController.SetPerson();
         }
 
-        public CommunicationEditDlg()
+        public CommunicationEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -131,15 +131,10 @@ namespace GKUI.Forms
             SetToolTip(btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
 
             fController = new CommunicationEditDlgController(this);
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
             fController.Init(baseWin);
 
-            fNotesList.ListModel = new NoteLinksListModel(fBase, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(fBase, fController.LocalUndoman);
+            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
         }
     }
 }

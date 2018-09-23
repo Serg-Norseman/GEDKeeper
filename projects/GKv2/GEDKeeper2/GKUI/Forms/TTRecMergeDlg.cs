@@ -74,11 +74,10 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            InitDialog(baseWin);
             fController = new RecMergeController(this);
             fController.Init(baseWin);
 
-            MergeControl.Base = fBase;
+            MergeControl.Base = baseWin;
             MergeControl.MergeMode = fController.RMMode;
 
             SetLang();

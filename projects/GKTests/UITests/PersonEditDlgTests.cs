@@ -47,8 +47,7 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
             fIndividualRecord = fBase.Context.CreatePersonEx("Ivan", "", "Smith", GEDCOMSex.svMale, true);
 
-            fDialog = new PersonEditDlg();
-            fDialog.InitDialog(fBase);
+            fDialog = new PersonEditDlg(fBase);
             fDialog.Person = fIndividualRecord;
             fDialog.Show();
         }
@@ -68,7 +67,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fIndividualRecord, fDialog.Person);
 
             Assert.AreEqual(null, fDialog.Target);

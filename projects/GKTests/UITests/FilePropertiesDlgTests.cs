@@ -45,8 +45,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
 
-            fDialog = new FilePropertiesDlg();
-            fDialog.InitDialog(fBase);
+            fDialog = new FilePropertiesDlg(fBase);
             fDialog.Show();
         }
 
@@ -64,8 +63,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
-
             var txtName = new TextBoxTester("txtName");
             txtName.Enter("sample text");
             Assert.AreEqual("sample text", txtName.Text);

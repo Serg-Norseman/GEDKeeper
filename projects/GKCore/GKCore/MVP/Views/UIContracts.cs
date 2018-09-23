@@ -461,9 +461,10 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface ISlideshowWin : IWorkWindow, IStatusForm, IView
+    public interface ISlideshowWin : IWindow, IStatusForm, IView
     {
         void SetImage(IImage image);
+        void UpdateControls();
     }
 
 
@@ -526,6 +527,13 @@ namespace GKCore.MVP.Views
     public interface ITreeFilterDlg : ICommonDialog, IView
     {
         ChartFilter Filter { get; set; }
+
+        ISheetList PersonsList { get; }
+        INumericBoxHandler YearNum { get; }
+        IComboBoxHandler SourceCombo { get; }
+
+        int GetCutModeRadio();
+        void SetCutModeRadio(int cutMode);
     }
 
 

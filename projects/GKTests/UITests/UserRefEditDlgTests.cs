@@ -50,8 +50,7 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
             fUserRef = new GEDCOMUserReference(fBase.Context.Tree, null, "", "");
 
-            fDialog = new UserRefEditDlg();
-            fDialog.InitDialog(fBase);
+            fDialog = new UserRefEditDlg(fBase);
             fDialog.UserRef = fUserRef;
             fDialog.Show();
         }
@@ -71,7 +70,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fUserRef, fDialog.UserRef);
 
             var cmbRef = new ComboBoxTester("cmbRef");

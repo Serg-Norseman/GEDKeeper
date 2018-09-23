@@ -50,8 +50,7 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
             fNoteRecord = new GEDCOMNoteRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new NoteEditDlg();
-            fDialog.InitDialog(fBase);
+            fDialog = new NoteEditDlg(fBase);
             fDialog.NoteRecord = fNoteRecord;
             fDialog.Show();
         }
@@ -71,7 +70,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fNoteRecord, fDialog.NoteRecord);
 
             var txtNote = new TextBoxTester("txtNote");

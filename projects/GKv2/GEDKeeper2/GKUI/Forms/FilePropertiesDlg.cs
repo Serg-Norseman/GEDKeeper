@@ -66,7 +66,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public FilePropertiesDlg()
+        public FilePropertiesDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -87,6 +87,8 @@ namespace GKUI.Forms
             lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
 
             fController = new FilePropertiesDlgController(this);
+            fController.Init(baseWin);
+            fController.UpdateView();
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -97,13 +99,6 @@ namespace GKUI.Forms
         private void btnLangEdit_Click(object sender, EventArgs e)
         {
             fController.ChangeLanguage();
-        }
-
-        public override void InitDialog(IBaseWindow baseWin)
-        {
-            base.InitDialog(baseWin);
-            fController.Init(baseWin);
-            fController.UpdateView();
         }
     }
 }

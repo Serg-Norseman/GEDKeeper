@@ -47,8 +47,7 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
             fFamilyRecord = new GEDCOMFamilyRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
-            fDialog = new FamilyEditDlg();
-            fDialog.InitDialog(fBase);
+            fDialog = new FamilyEditDlg(fBase);
             fDialog.Family = fFamilyRecord;
             fDialog.Show();
         }
@@ -68,7 +67,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fBase, fDialog.Base);
             Assert.AreEqual(fFamilyRecord, fDialog.Family);
 
             var cmbMarriageStatus = new ComboBoxTester("cmbMarriageStatus", fDialog);
