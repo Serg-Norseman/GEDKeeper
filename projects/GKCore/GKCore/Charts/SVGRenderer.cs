@@ -145,7 +145,6 @@ namespace GKCore.Charts
                 } else if (path is IGfxCircleSegmentPath) {
                     var segmPath = path as IGfxCircleSegmentPath;
                     fGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, null /*pen*/, brush);
-                } else {
                 }
             }
         }
@@ -159,7 +158,6 @@ namespace GKCore.Charts
                 } else if (path is IGfxCircleSegmentPath) {
                     var segmPath = path as IGfxCircleSegmentPath;
                     fGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, null /*brush*/);
-                } else {
                 }
             }
         }
@@ -173,31 +171,16 @@ namespace GKCore.Charts
                 } else if (path is IGfxCircleSegmentPath) {
                     var segmPath = path as IGfxCircleSegmentPath;
                     fGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, brush);
-                } else {
                 }
-            }
-        }
-
-        public override void DrawCircle(IPen pen, IBrush brush, float x, float y,
-                                        float width, float height)
-        {
-            if (fGfx != null) {
-                fGfx.DrawEllipse(x, y, width, height, pen, brush);
-            }
-        }
-
-        public override void DrawCircleSegment(IPen pen, IBrush brush, int ctX, int ctY,
-                                               float inRad, float extRad,
-                                               float startAngle, float wedgeAngle)
-        {
-            if (fGfx != null) {
-                fGfx.DrawCircleSegment(ctX, ctY, inRad, extRad, startAngle, startAngle + wedgeAngle, pen, brush);
             }
         }
 
         public override void SetTranslucent(float value)
         {
             fTranslucent = Algorithms.CheckBounds(value, 0.0f, 1.0f);
+            if (fGfx != null) {
+                fGfx.SetTranslucent(fTranslucent);
+            }
         }
 
         public override void ScaleTransform(float sx, float sy)

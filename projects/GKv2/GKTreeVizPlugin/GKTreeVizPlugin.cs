@@ -43,7 +43,7 @@ namespace GKTreeVizPlugin
         LSID_Cancel
     }
 
-    public sealed class Plugin : OrdinaryPlugin, IPlugin
+    public sealed class Plugin : OrdinaryPlugin
     {
         private string fDisplayName = "GKTreeVizPlugin";
         private ILangMan fLangMan;

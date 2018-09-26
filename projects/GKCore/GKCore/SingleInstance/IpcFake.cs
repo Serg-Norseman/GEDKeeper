@@ -215,10 +215,7 @@ namespace GKCore.SingleInstance
 
                 string strIpcFile = GetIpcFilePath(nId);
                 for (int r = 0; r < 50; ++r) {
-                    try {
-                        if (!File.Exists(strIpcFile)) break;
-                    } catch (Exception) {
-                    }
+                    if (!File.Exists(strIpcFile)) break;
 
                     Thread.Sleep(20);
                 }
@@ -323,7 +320,7 @@ namespace GKCore.SingleInstance
                                 File.Delete(mtx);
                             }
                             break;
-                        } catch (Exception) {
+                        } catch {
                         }
 
                         Thread.Sleep(10);

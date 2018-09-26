@@ -39,7 +39,7 @@ namespace GKCore.Operations
         private const CustomOperation TRANS_DELIMITER = null;
 
         private TransactionEventHandler fOnTransaction;
-        private readonly List<CustomOperation> fList;
+        private readonly List<IOperation> fList;
         private int fCurrentIndex;
 
 
@@ -61,7 +61,7 @@ namespace GKCore.Operations
 
         public UndoManager()
         {
-            fList = new List<CustomOperation>();
+            fList = new List<IOperation>();
             fCurrentIndex = -1;
 
             IntPush(TRANS_DELIMITER);
@@ -85,7 +85,7 @@ namespace GKCore.Operations
             }
         }
 
-        private CustomOperation IntPeek()
+        private IOperation IntPeek()
         {
             if (fCurrentIndex < 0 || fCurrentIndex >= fList.Count)
                 return null;
@@ -93,7 +93,7 @@ namespace GKCore.Operations
             return fList[fCurrentIndex];
         }
 
-        private void IntPush(CustomOperation op)
+        private void IntPush(IOperation op)
         {
             fList.Add(op);
             fCurrentIndex++;
@@ -109,7 +109,7 @@ namespace GKCore.Operations
             IntPush(TRANS_DELIMITER);
         }
 
-        public bool DoOperation(CustomOperation operation)
+        public bool DoOperation(IOperation operation)
         {
             if (operation == null) return false;
 
@@ -147,7 +147,7 @@ namespace GKCore.Operations
 
                 while (IntPeek() != TRANS_DELIMITER)
                 {
-                    CustomOperation cmd = fList[fCurrentIndex];
+                    IOperation cmd = fList[fCurrentIndex];
                     fCurrentIndex--;
                     cmd.Undo();
                 }
@@ -167,7 +167,7 @@ namespace GKCore.Operations
 
                 while (IntPeek() != TRANS_DELIMITER)
                 {
-                    CustomOperation cmd = fList[fCurrentIndex];
+                    IOperation cmd = fList[fCurrentIndex];
                     fCurrentIndex++;
 
                     if (!cmd.Redo())
@@ -204,7 +204,7 @@ namespace GKCore.Operations
         {
             while (IntPeek() != TRANS_DELIMITER)
             {
-                CustomOperation cmd = fList[fCurrentIndex];
+                IOperation cmd = fList[fCurrentIndex];
                 fCurrentIndex--;
                 cmd.Undo();
             }

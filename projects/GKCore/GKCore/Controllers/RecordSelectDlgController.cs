@@ -34,7 +34,7 @@ namespace GKCore.Controllers
     {
         private string fFilter;
         private GEDCOMRecordType fRecType;
-        private Target fTarget;
+        private readonly Target fTarget;
 
 
         public string Filter

@@ -19,6 +19,7 @@
  */
 
 using System.Windows.Forms;
+
 using BSLib;
 using GKCore.Interfaces;
 using GKCore.MVP;
@@ -534,6 +535,48 @@ namespace GKUI.Providers
         {
             get { return Control.SelectedIndex; }
             set { Control.SelectedIndex = value; }
+        }
+    }
+
+    public sealed class MenuItemHandler : ControlHandler<ToolStripMenuItem, MenuItemHandler>, IMenuItem
+    {
+        public MenuItemHandler(ToolStripMenuItem control) : base(control)
+        {
+        }
+
+        public bool Checked
+        {
+            get { return Control.Checked; }
+            set { Control.Checked = value; }
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public object Tag
+        {
+            get { return Control.Tag; }
+            set { Control.Tag = value; }
+        }
+
+        public int ItemsCount
+        {
+            get { return Control.DropDownItems.Count; }
+        }
+
+        public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
+        {
+            var item = new MenuItemEx(text, tag, image, action);
+            Control.DropDownItems.Add(item);
+            return item;
+        }
+
+        public void ClearItems()
+        {
+            Control.DropDownItems.Clear();
         }
     }
 }

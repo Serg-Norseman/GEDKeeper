@@ -91,18 +91,16 @@ namespace GKCore.IoC
         {
             Type typeToResolve = typeof(TTypeToResolve);
 
-            // TODO: exception?
             if (fRegisteredObjects.ContainsKey(typeToResolve)) {
                 if (!canReplace) {
-                    return;
+                    throw new TypeNotRegisteredException(string.Format(
+                        "The type {0} has been registered and can't replaced", typeToResolve.Name));
                 } else {
                     fRegisteredObjects.Remove(typeToResolve);
                 }
             }
 
-            fRegisteredObjects.Add(typeToResolve,
-                                  new RegisteredObject(typeToResolve,
-                                                       typeof(TConcrete), lifeCycle));
+            fRegisteredObjects.Add(typeToResolve, new RegisteredObject(typeToResolve, typeof(TConcrete), lifeCycle));
         }
 
         public TTypeToResolve Resolve<TTypeToResolve>(params object[] parameters)

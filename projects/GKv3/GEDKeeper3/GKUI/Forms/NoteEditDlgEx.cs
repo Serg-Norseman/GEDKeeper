@@ -86,7 +86,7 @@ namespace GKUI.Forms
         private void FillSizes()
         {
             for (int i = 1; i <= 7; i++) {
-                var item = new GKToolStripMenuItem(i.ToString(), i);
+                var item = new MenuItemEx(i.ToString(), i);
                 item.Click += cmbSizes_SelectedIndexChanged;
                 menuSizes.Items.Add(item);
             }
@@ -146,7 +146,7 @@ namespace GKUI.Forms
 
         private void cmbSizes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var item = sender as GKToolStripMenuItem; //menuSizes.SelectedItem as GKComboItem;
+            var item = sender as MenuItemEx; //menuSizes.SelectedItem as GKComboItem;
             if (item == null || item.Text == "") return;
 
             string value = item.Tag.ToString();

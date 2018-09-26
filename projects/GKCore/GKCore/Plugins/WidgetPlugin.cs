@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,21 +18,39 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GKCore.Interfaces;
 
-namespace GKCore.Operations
+namespace GKCore.Plugins
 {
-    public abstract class CustomOperation : IOperation
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract class WidgetPlugin : OrdinaryPlugin, IWidget
     {
-        protected readonly UndoManager fManager;
-
-        protected CustomOperation(UndoManager manager)
+        public virtual void WidgetInit(IHost host)
         {
-            fManager = manager;
+            // dummy
         }
 
-        public abstract bool Redo();
+        public virtual void BaseChanged(IBaseWindow baseWin)
+        {
+            // dummy
+        }
 
-        public abstract void Undo();
+        public virtual void BaseClosed(IBaseWindow baseWin)
+        {
+            // dummy
+        }
+
+        public virtual void BaseRenamed(IBaseWindow baseWin, string oldName, string newName)
+        {
+            // dummy
+        }
+
+        public virtual void WidgetEnable()
+        {
+            // dummy
+        }
     }
 }

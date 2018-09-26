@@ -43,7 +43,7 @@ namespace GKChroniclePlugin
         /* 05 */ LSID_Description
     }
 
-    public sealed class Plugin : OrdinaryPlugin, IWidget
+    public sealed class Plugin : WidgetPlugin
     {
         private string fDisplayName = "GKChroniclePlugin";
         private ILangMan fLangMan;
@@ -104,27 +104,18 @@ namespace GKChroniclePlugin
             return result;
         }
 
-        #region IWidget common
-
-        void IWidget.WidgetInit(IHost host) {}
-
-        void IWidget.BaseChanged(IBaseWindow baseWin)
+        public override void BaseChanged(IBaseWindow baseWin)
         {
             if (fForm != null) {
                 fForm.BaseChanged(baseWin);
             }
         }
 
-        void IWidget.BaseClosed(IBaseWindow baseWin)
+        public override void BaseClosed(IBaseWindow baseWin)
         {
             if (fForm != null) {
                 fForm.BaseChanged(null);
             }
         }
-
-        void IWidget.BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
-        void IWidget.WidgetEnable() {}
-
-        #endregion
     }
 }

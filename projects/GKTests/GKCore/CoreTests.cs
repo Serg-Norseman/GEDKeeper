@@ -343,7 +343,7 @@ namespace GKCore
             GKListSubItem listSubItem = new GKListSubItem("Test");
             Assert.IsNotNull(listSubItem);
 
-            GKToolStripMenuItem tsMenuItem = new GKToolStripMenuItem("Test", null);
+            MenuItemEx tsMenuItem = new MenuItemEx("Test", null);
             Assert.IsNotNull(tsMenuItem);
 
             GKTreeNode treeNode = new GKTreeNode("Test", null);

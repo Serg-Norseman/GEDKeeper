@@ -40,7 +40,7 @@ namespace GKImageViewerPlugin
         LSID_FileLoad
     }
 
-    public class Plugin : OrdinaryPlugin, IPlugin
+    public class Plugin : OrdinaryPlugin
     {
         private string fDisplayName = "ImageViewer";
         private ILangMan fLangMan;

@@ -39,7 +39,7 @@ namespace GKStdReports
         public const int METAPHONE_KEY_LENGTH = 4; //The length of the metaphone keys produced.  4 is sweet spot
         
         ///StringBuilders used to construct the keys
-        private StringBuilder m_primaryKey, m_alternateKey;
+        private readonly StringBuilder m_primaryKey, m_alternateKey;
         
         ///Actual keys, populated after construction
         private String m_primaryKeyString, m_alternateKeyString;

@@ -20,7 +20,6 @@
 
 using System;
 using System.Reflection;
-using GKCommon;
 using GKCore.Interfaces;
 
 namespace GKCore.Plugins

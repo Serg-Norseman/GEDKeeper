@@ -142,7 +142,6 @@ namespace GKCore.Controllers
             }
 
             fView.StoreType.SelectedTag = selectType;
-            //UIHelper.SelectComboItem(fView.StoreType, selectType, true);
         }
 
         public void SelectFile()

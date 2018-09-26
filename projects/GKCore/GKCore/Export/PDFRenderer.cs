@@ -267,15 +267,6 @@ namespace GKCore.Export
         {
         }
 
-        public override void DrawCircle(IPen pen, IBrush brush, float x, float y, float width, float height)
-        {
-        }
-
-        public override void DrawCircleSegment(IPen pen, IBrush brush, int ctX, int ctY,
-                                               float inRad, float extRad, float startAngle, float wedgeAngle)
-        {
-        }
-
         public override void ScaleTransform(float sx, float sy)
         {
         }

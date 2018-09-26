@@ -85,9 +85,7 @@ namespace GKCore.Controllers
                     fBaseRoot = fView.PlacesTree.AddNode(null, LangMan.LS(LSID.LSID_RPLocations), null);
 
                     fPlaces.Clear();
-                    fView.PersonsCombo.Clear();
-                    //fView.PersonsCombo.Sorted = false;
-                    fView.PersonsCombo.AddItem(LangMan.LS(LSID.LSID_NotSelected), null);
+                    var personValues = new StringList();
 
                     int num = tree.RecordsCount;
                     for (int i = 0; i < num; i++) {
@@ -108,7 +106,7 @@ namespace GKCore.Controllers
                             }
 
                             if (pCnt > 0) {
-                                fView.PersonsCombo.AddItem(GKUtils.GetNameString(ind, true, false) + " [" + pCnt.ToString() + "]", ind);
+                                personValues.AddObject(GKUtils.GetNameString(ind, true, false) + " [" + pCnt.ToString() + "]", ind);
                             }
                         }
 
@@ -116,7 +114,11 @@ namespace GKCore.Controllers
                     }
 
                     fView.PlacesTree.Expand(fBaseRoot);
-                    fView.PersonsCombo.SortItems();
+
+                    personValues.Sort();
+                    fView.PersonsCombo.Clear();
+                    fView.PersonsCombo.AddItem(LangMan.LS(LSID.LSID_NotSelected), null);
+                    fView.PersonsCombo.AddStrings(personValues);
 
                     fView.SelectPlacesBtn.Enabled = true;
                 } finally {

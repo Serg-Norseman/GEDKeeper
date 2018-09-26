@@ -63,6 +63,8 @@ namespace GKCore.MVP.Views
     public interface IBaseWindowView : IBaseWindow, IView
     {
         ITabControl RecordTabs { get; }
+        IMenuItem ReportsItem { get; }
+        IMenuItem PluginsItem { get; }
 
         bool CheckModified();
     }
@@ -572,9 +574,10 @@ namespace GKCore.MVP.Views
     {
         IMergeControl MergeCtl { get; }
         IButtonHandler SkipBtn { get; }
-        ICheckBoxHandler BirthYearChk { get; }
         IProgressBarHandler ProgressBar { get; }
+        ICheckBoxHandler IndistinctMatchingChk { get; }
         INumericBoxHandler NameAccuracyNum { get; }
+        ICheckBoxHandler BirthYearChk { get; }
         INumericBoxHandler YearInaccuracyNum { get; }
     }
 

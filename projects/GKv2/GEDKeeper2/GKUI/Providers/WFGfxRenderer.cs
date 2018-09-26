@@ -174,17 +174,6 @@ namespace GKUI.Providers
             }
         }
 
-        public override void DrawCircle(IPen pen, IBrush brush, float x, float y,
-                                        float width, float height)
-        {
-        }
-
-        public override void DrawCircleSegment(IPen pen, IBrush brush, int ctX, int ctY,
-                                               float inRad, float extRad,
-                                               float startAngle, float wedgeAngle)
-        {
-        }
-
         private Color PrepareColor(Color color)
         {
             int alpha = (int)((1 - fTranslucent) * 255);

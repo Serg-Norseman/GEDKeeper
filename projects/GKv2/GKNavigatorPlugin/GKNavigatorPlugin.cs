@@ -39,7 +39,7 @@ namespace GKNavigatorPlugin
         /* 001 */ LSID_Navigator,
     }
 
-    public sealed class Plugin : OrdinaryPlugin, IWidget, ISubscriber
+    public sealed class Plugin : WidgetPlugin, ISubscriber
     {
         private string fDisplayName = "GKNavigatorPlugin";
         private ILangMan fLangMan;
@@ -80,8 +80,6 @@ namespace GKNavigatorPlugin
             }
         }
 
-        #region IPlugin support
-
         public override void Execute()
         {
             if (!Host.IsWidgetActive(this)) {
@@ -117,36 +115,24 @@ namespace GKNavigatorPlugin
             return result;
         }
 
-        #endregion
-
-        #region IWidget support
-
-        void IWidget.WidgetInit(IHost host) {}
-
-        void IWidget.BaseChanged(IBaseWindow baseWin)
+        public override void BaseChanged(IBaseWindow baseWin)
         {
             if (fForm != null) {
                 fForm.BaseChanged(baseWin);
             }
         }
 
-        void IWidget.BaseClosed(IBaseWindow baseWin)
+        public override void BaseClosed(IBaseWindow baseWin)
         {
             if (fForm != null) {
                 fForm.BaseClosed(baseWin);
             }
         }
 
-        void IWidget.BaseRenamed(IBaseWindow baseWin, string oldName, string newName)
+        public override void BaseRenamed(IBaseWindow baseWin, string oldName, string newName)
         {
             fData.RenameBase(oldName, newName);
         }
-
-        void IWidget.WidgetEnable() {}
-
-        #endregion
-
-        #region ISubscriber support
 
         public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
         {
@@ -155,7 +141,5 @@ namespace GKNavigatorPlugin
             string baseName = baseWin.Context.FileName;
             fData[baseName].NotifyRecord(baseWin, record, action);
         }
-
-        #endregion
     }
 }

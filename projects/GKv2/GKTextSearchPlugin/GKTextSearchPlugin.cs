@@ -20,9 +20,9 @@
 
 using System;
 using System.Reflection;
-using BSLib;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Plugins;
 using GKCore.Types;
 
 [assembly: AssemblyTitle("GKTextSearchPlugin")]
@@ -44,26 +44,24 @@ namespace GKTextSearchPlugin
         LSID_Search
     }
 
-    public sealed class Plugin : BaseObject, IPlugin, ISubscriber
+    public sealed class Plugin : OrdinaryPlugin, ISubscriber
     {
         private string fDisplayName = "GKTextSearchPlugin";
-        private IHost fHost;
         private ILangMan fLangMan;
         private SearchManager fSearchMan;
 
-        public string DisplayName { get { return fDisplayName; } }
-        public IHost Host { get { return fHost; } }
-        public ILangMan LangMan { get { return fLangMan; } }
+        public override string DisplayName { get { return fDisplayName; } }
+        public override ILangMan LangMan { get { return fLangMan; } }
+        public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Common; } }
+
         public SearchManager SearchMan { get { return fSearchMan; } }
-        public IImage Icon { get { return null; } }
-        public PluginCategory Category { get { return PluginCategory.Common; } }
 
         internal TextSearchWin fForm;
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (fForm != null) fForm.Dispose();
             }
             base.Dispose(disposing);
@@ -71,65 +69,52 @@ namespace GKTextSearchPlugin
 
         #region IPlugin support
 
-        public void Execute()
+        public override void Execute()
         {
             if (SysUtils.IsUnix()) {
                 AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
                 return;
             }
 
-            IBaseWindow curBase = fHost.GetCurrentFile();
+            IBaseWindow curBase = Host.GetCurrentFile();
             if (curBase == null) return;
 
             fForm = new TextSearchWin(this, curBase);
             fForm.Show();
         }
-        
-        public void OnHostClosing(HostClosingEventArgs eventArgs) {}
-        public void OnHostActivate() {}
-        public void OnHostDeactivate() {}
 
-        public void OnLanguageChange()
+        public override void OnLanguageChange()
         {
-            try
-            {
-                fLangMan = fHost.CreateLangMan(this);
+            try {
+                fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(TLS.LSID_PluginTitle);
 
                 if (fForm != null) fForm.SetLang();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKTextSearchPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
-        
-        public bool Startup(IHost host)
+
+        public override bool Startup(IHost host)
         {
-            bool result = true;
-            try
-            {
-                fHost = host;
-                fSearchMan = new SearchManager(this);
-            }
-            catch (Exception ex)
-            {
+            bool result = base.Startup(host);
+            try {
+                if (result) {
+                    fSearchMan = new SearchManager(this);
+                }
+            } catch (Exception ex) {
                 Logger.LogWrite("GKTextSearchPlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
         }
 
-        public bool Shutdown()
+        public override bool Shutdown()
         {
-            bool result = true;
-            try
-            {
-                // Implement any shutdown code here
+            bool result = base.Shutdown();
+            try {
                 //if (this.fSearchMan != null) this.fSearchMan.Dispose();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKTextSearchPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }

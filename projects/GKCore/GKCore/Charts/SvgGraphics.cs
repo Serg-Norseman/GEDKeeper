@@ -276,6 +276,11 @@ namespace GKCore.Charts
             fLastColorOpacity = string.Format(fFmt, "{0}", c.GetA() / 255.0);
         }
 
+        public void SetTranslucent(float value)
+        {
+            // TODO: not implemented yet
+        }
+
         public void DrawPolygon(ExtPointF[] poly, IPen pen, IBrush brush)
         {
             string transform = GetTransform();

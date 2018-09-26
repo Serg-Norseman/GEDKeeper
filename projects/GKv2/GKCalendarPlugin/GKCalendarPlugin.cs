@@ -22,9 +22,9 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
-using BSLib;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Plugins;
 using GKUI.Components;
 
 [assembly: AssemblyTitle("GKCalendarPlugin")]
@@ -63,33 +63,30 @@ namespace GKCalendarPlugin
         LSID_BahaiCycles
     }
 
-    public sealed class Plugin : BaseObject, IPlugin, IWidget
+    public sealed class Plugin : WidgetPlugin
     {
         private string fDisplayName = "GKCalendarPlugin";
-        private IHost fHost;
         private ILangMan fLangMan;
         private IImage fIcon;
 
-        public string DisplayName { get { return fDisplayName; } }
-        public IHost Host { get { return fHost; } }
-        public ILangMan LangMan { get { return fLangMan; } }
-        public IImage Icon { get { return fIcon; } }
-        public PluginCategory Category { get { return PluginCategory.Tool; } }
+        public override string DisplayName { get { return fDisplayName; } }
+        public override ILangMan LangMan { get { return fLangMan; } }
+        public override IImage Icon { get { return fIcon; } }
+        public override PluginCategory Category { get { return PluginCategory.Tool; } }
 
         private CalendarWidget fForm;
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (fForm != null) fForm.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        public void Execute()
+        public override void Execute()
         {
-            if (!fHost.IsWidgetActive(this)) {
+            if (!Host.IsWidgetActive(this)) {
                 fForm = new CalendarWidget(this);
                 fForm.Show();
             } else {
@@ -97,69 +94,32 @@ namespace GKCalendarPlugin
             }
         }
 
-        public void OnHostClosing(HostClosingEventArgs eventArgs) {}
-        public void OnHostActivate() {}
-        public void OnHostDeactivate() {}
-
-        public void OnLanguageChange()
+        public override void OnLanguageChange()
         {
-            try
-            {
-                fLangMan = fHost.CreateLangMan(this);
+            try {
+                fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(PLS.LSID_MICalendar);
 
                 if (fForm != null) fForm.SetLang();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKCalendarPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 
-        public bool Startup(IHost host)
+        public override bool Startup(IHost host)
         {
-            bool result = true;
-            try
-            {
-                fHost = host;
-
+            bool result = base.Startup(host);
+            try {
                 Assembly assembly = typeof(Plugin).Assembly;
-                using (Stream stmIcon = assembly.GetManifestResourceStream("Resources.icon_time.gif"))
-                {
+                using (Stream stmIcon = assembly.GetManifestResourceStream("Resources.icon_time.gif")) {
                     Image bmp = Image.FromStream(stmIcon);
                     fIcon = new ImageHandler(bmp);
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKCalendarPlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
         }
-
-        public bool Shutdown()
-        {
-            bool result = true;
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKCalendarPlugin.Shutdown(): " + ex.Message);
-                result = false;
-            }
-            return result;
-        }
-
-        #region IWidget common
-
-        void IWidget.WidgetInit(IHost host) {}
-        void IWidget.BaseChanged(IBaseWindow baseWin) {}
-        void IWidget.BaseClosed(IBaseWindow baseWin) {}
-        void IWidget.BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
-        void IWidget.WidgetEnable() {}
-
-        #endregion
     }
 }

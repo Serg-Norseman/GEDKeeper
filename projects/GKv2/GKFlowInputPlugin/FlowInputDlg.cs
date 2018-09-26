@@ -25,6 +25,7 @@ using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Components;
 
 namespace GKFlowInputPlugin
 {
@@ -72,7 +73,7 @@ namespace GKFlowInputPlugin
         {
             InitializeComponent();
 
-            //this.btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fPlugin = plugin;
             fLangMan = plugin.LangMan;

@@ -18,9 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
+
+using BSLib;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Controls;
@@ -538,6 +539,48 @@ namespace GKUI.Providers
         {
             get { return Control.SelectedIndex; }
             set { Control.SelectedIndex = value; }
+        }
+    }
+
+    public sealed class MenuItemHandler : ControlHandler<ButtonMenuItem, MenuItemHandler>, IMenuItem
+    {
+        public MenuItemHandler(ButtonMenuItem control) : base(control)
+        {
+        }
+
+        public bool Checked
+        {
+            get { return false; }
+            set { }
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public object Tag
+        {
+            get { return Control.Tag; }
+            set { Control.Tag = value; }
+        }
+
+        public int ItemsCount
+        {
+            get { return Control.Items.Count; }
+        }
+
+        public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
+        {
+            var item = new MenuItemEx(text, tag, image, action);
+            Control.Items.Add(item);
+            return item;
+        }
+
+        public void ClearItems()
+        {
+            Control.Items.Clear();
         }
     }
 }

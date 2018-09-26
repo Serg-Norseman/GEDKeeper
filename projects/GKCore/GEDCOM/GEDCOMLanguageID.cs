@@ -112,8 +112,9 @@ namespace GKCommon.GEDCOM
         Vietnamese,
         Yiddish,
 
+        // GK Extensions: ancient languages
         AncientGreek, Latin,
-        // TODO: GK Extensions, extinct languages
+        // GK Extensions: extinct languages
         Akkadian, Eblaite, Hattic, Hittite, Hurrian, Luwian, MitanniAryan, Palaic, Sumerian
     }
 

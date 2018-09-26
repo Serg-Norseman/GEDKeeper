@@ -73,6 +73,7 @@ namespace GKCore.Controllers
                     case GKGoalType.gtSource:
                         fTask.Goal = GEDCOMUtils.EncloseXRef(fTempRec.XRef);
                         break;
+
                     case GKGoalType.gtOther:
                         fTask.Goal = fView.Goal.Text;
                         break;
@@ -153,15 +154,7 @@ namespace GKCore.Controllers
             GKGoalType gt = (GKGoalType)fView.GoalType.SelectedIndex;
             switch (gt) {
                 case GKGoalType.gtIndividual:
-                    fView.GoalSelect.Enabled = true;
-                    fView.Goal.ReadOnly = true;
-                    break;
-
                 case GKGoalType.gtFamily:
-                    fView.GoalSelect.Enabled = true;
-                    fView.Goal.ReadOnly = true;
-                    break;
-
                 case GKGoalType.gtSource:
                     fView.GoalSelect.Enabled = true;
                     fView.Goal.ReadOnly = true;

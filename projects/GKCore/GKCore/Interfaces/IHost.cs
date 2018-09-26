@@ -23,14 +23,6 @@ using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
-    [Obsolete]
-    public interface IMainWindow : IWindow
-    {
-        void Restore();
-        void UpdateControls(bool forceDeactivate);
-    }
-
-
     public interface IHost
     {
         IBaseWindow GetCurrentFile(bool extMode = false);

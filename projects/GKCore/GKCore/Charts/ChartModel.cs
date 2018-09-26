@@ -19,7 +19,6 @@
  */
 
 using BSLib;
-using GKCommon;
 
 namespace GKCore.Charts
 {

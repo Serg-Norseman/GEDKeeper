@@ -278,6 +278,7 @@
     <Compile Include="GKCore\MVP\Views\IStatusForm.cs" />
     <Compile Include="GKCore\MVP\Views\IStdDialogs.cs" />
     <Compile Include="GKCore\Plugins\OrdinaryPlugin.cs" />
+    <Compile Include="GKCore\Plugins\WidgetPlugin.cs" />
     <Compile Include="GKCore\SingleInstance\MapiMailMessage.cs" />
     <Compile Include="GKCore\SysUtils.cs" />
     <Compile Include="GKCore\Types\DateFormat.cs" />

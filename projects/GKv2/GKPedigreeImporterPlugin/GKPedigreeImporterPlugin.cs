@@ -22,6 +22,7 @@ using System;
 using System.Reflection;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Plugins;
 
 [assembly: AssemblyTitle("GKPedigreeImporterPlugin")]
 [assembly: AssemblyDescription("GEDKeeper PedigreeImporter plugin")]
@@ -72,72 +73,34 @@ namespace GKPedigreeImporterPlugin
         LSID_AllFiltersL,
         LSID_SpousesInfoConflict
     }
-    
-    public class PlugIn : IPlugin
+
+    public class PlugIn : OrdinaryPlugin
     {
         private string fDisplayName = "GKPedigreeImporterPlugin";
-        private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return fDisplayName; } }
-        public IHost Host { get { return fHost; } }
-        public ILangMan LangMan { get { return fLangMan; } }
-        public IImage Icon { get { return null; } }
-        public PluginCategory Category { get { return PluginCategory.Tool; } }
+        public override string DisplayName { get { return fDisplayName; } }
+        public override ILangMan LangMan { get { return fLangMan; } }
+        public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Tool; } }
 
-        public void Execute()
+        public override void Execute()
         {
-            IBaseWindow curBase = fHost.GetCurrentFile();
+            IBaseWindow curBase = Host.GetCurrentFile();
             if (curBase == null) return;
 
             PedigreeImporterDlg frm = new PedigreeImporterDlg(this, curBase);
             frm.ShowDialog();
         }
 
-        public void OnHostClosing(HostClosingEventArgs eventArgs) {}
-        public void OnHostActivate() {}
-        public void OnHostDeactivate() {}
-
-        public void OnLanguageChange()
+        public override void OnLanguageChange()
         {
-            try
-            {
-                fLangMan = fHost.CreateLangMan(this);
+            try {
+                fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(ILS.LSID_PluginTitle);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKPedigreeImporterPlugin.OnLanguageChange(): " + ex.Message);
             }
-        }
-
-        public bool Startup(IHost host)
-        {
-            bool result = true;
-            try
-            {
-                fHost = host;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKPedigreeImporterPlugin.Startup(): " + ex.Message);
-                result = false;
-            }
-            return result;
-        }
-
-        public bool Shutdown()
-        {
-            bool result = true;
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKPedigreeImporterPlugin.Shutdown(): " + ex.Message);
-                result = false;
-            }
-            return result;
         }
     }
 }

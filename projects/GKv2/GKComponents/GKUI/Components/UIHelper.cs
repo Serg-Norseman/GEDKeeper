@@ -28,17 +28,9 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
-    public class ToolStripMenuItemEx : ToolStripMenuItem, IMenuItem
-    {
-        public ToolStripMenuItemEx(string text) : base(text)
-        {
-        }
-    }
-
     /// <summary>
     /// Static functions only for UI implementation.
     /// </summary>

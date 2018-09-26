@@ -20,7 +20,6 @@
 
 using System;
 using BSLib;
-using GKCommon;
 
 namespace GKCore.Options
 {

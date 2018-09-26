@@ -357,6 +357,7 @@ namespace GKUI.Providers
             ControlsManager.RegisterHandlerType(typeof(TabControl), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
+            ControlsManager.RegisterHandlerType(typeof(ToolStripMenuItem), typeof(MenuItemHandler));
 
             ControlsManager.RegisterHandlerType(typeof(ToolStripComboBox), typeof(ToolStripComboBoxHandler));
         }

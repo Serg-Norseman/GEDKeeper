@@ -406,10 +406,7 @@ namespace GKUI.Forms
                 if (fPerson == null) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
                 } else {
-                    fController.UpdateTitle();
-
                     fTreeBox.GenChart(fPerson, fChartKind, true);
-
                     UpdateControls();
                 }
             } catch (Exception ex) {
@@ -461,6 +458,8 @@ namespace GKUI.Forms
         public void UpdateControls()
         {
             try {
+                fController.UpdateTitle();
+
                 StatusLines[0] = string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fTreeBox.IndividualsCount);
                 var imageSize = fTreeBox.GetImageSize();
                 StatusLines[1] = string.Format(LangMan.LS(LSID.LSID_ImageSize), imageSize.Width, imageSize.Height);

@@ -148,12 +148,20 @@ namespace GKCore.MVP.Controls
     }
 
 
+    public delegate void ItemAction(IMenuItem sender);
+
     /// <summary>
     /// 
     /// </summary>
-    public interface IMenuItem
+    public interface IMenuItem : IControl
     {
         bool Checked { get; set; }
+        bool Enabled { get; set; }
+        int ItemsCount { get; }
+        object Tag { get; set; }
+
+        IMenuItem AddItem(string text, object tag, IImage image, ItemAction action);
+        void ClearItems();
     }
 
 

@@ -31,8 +31,8 @@ namespace GKUI.Forms
     /// </summary>
     public class CommonForm : Form, IView
     {
-        private System.ComponentModel.IContainer fComponents;
-        private ToolTip fToolTip;
+        private readonly IContainer fComponents;
+        private readonly ToolTip fToolTip;
 
         protected readonly ControlsManager fControlsManager;
 
@@ -48,7 +48,7 @@ namespace GKUI.Forms
 
         public CommonForm()
         {
-            fComponents = new System.ComponentModel.Container();
+            fComponents = new Container();
             fToolTip = new ToolTip(this.fComponents);
 
             fControlsManager = new ControlsManager();

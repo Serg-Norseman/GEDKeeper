@@ -57,7 +57,6 @@ namespace GKCore.Controllers
             }
         }
 
-        // TODO: rework
         public void SetTarget(TargetMode targetType, GEDCOMIndividualRecord target)
         {
             if (targetType == TargetMode.tmNone || target == null) return;

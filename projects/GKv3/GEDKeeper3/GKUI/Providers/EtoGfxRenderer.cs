@@ -19,8 +19,9 @@
  */
 
 using System;
-using BSLib;
 using Eto.Drawing;
+
+using BSLib;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKUI.Components;
@@ -154,17 +155,6 @@ namespace GKUI.Providers
                 Pen sdPen = ((PenHandler)pen).Handle;
                 fCanvas.DrawPath(sdPen, sdPath);
             }
-        }
-
-        public override void DrawCircle(IPen pen, IBrush brush, float x, float y,
-                                        float width, float height)
-        {
-        }
-
-        public override void DrawCircleSegment(IPen pen, IBrush brush, int ctX, int ctY,
-                                               float inRad, float extRad,
-                                               float startAngle, float wedgeAngle)
-        {
         }
 
         private Color PrepareColor(Color color)

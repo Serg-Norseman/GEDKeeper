@@ -146,13 +146,6 @@ namespace GKCore.Charts
         public abstract void DrawPath(IPen pen, IGfxPath path);
         public abstract void DrawPath(IPen pen, IBrush brush, IGfxPath path);
 
-        // TODO: candidates for deletion
-        public abstract void DrawCircle(IPen pen, IBrush brush, float x, float y,
-                                        float width, float height);
-        public abstract void DrawCircleSegment(IPen pen, IBrush brush, int ctX, int ctY,
-                                               float inRad, float extRad,
-                                               float startAngle, float wedgeAngle);
-
         public virtual IPen CreatePen(IColor color, float width)
         {
             return AppHost.GfxProvider.CreatePen(color, width);

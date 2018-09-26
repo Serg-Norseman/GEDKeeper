@@ -99,7 +99,8 @@ namespace GKStdReports
                     if (personRange.IsOverlapped(indRange)) {
                         fWriter.AddListItem(" " + GetPersonalInfo(iRec), fTextFont);
                     }
-                } catch {
+                } catch (Exception ex) {
+                    Logger.LogWrite("ContemporariesReport.InternalGenerate(): " + ex.Message);
                 }
             }
 

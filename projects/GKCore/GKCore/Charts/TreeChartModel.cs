@@ -278,8 +278,8 @@ namespace GKCore.Charts
                 signsPic[6] = PrepareImage("tg_latin_cross.gif", false);
                 signsPic[7] = PrepareImage("tg_orthodox_cross.gif", false);
                 signsPic[8] = PrepareImage("tg_oldritual_cross.gif", false);
-
                 fSignsPic = signsPic;
+
                 fExpPic = PrepareImage("btn_expand.gif", true);
                 fPersExpPic = PrepareImage("btn_expand2.gif", true);
             } catch (Exception ex) {
@@ -287,7 +287,6 @@ namespace GKCore.Charts
             }
         }
 
-        // FIXME
         private void DoneSigns()
         {
             // dummy

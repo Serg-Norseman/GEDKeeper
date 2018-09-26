@@ -38,7 +38,7 @@ namespace GKHistoryDataPlugin
         LSID_Title,
     }
 
-    public sealed class Plugin : OrdinaryPlugin, IWidget
+    public sealed class Plugin : WidgetPlugin
     {
         private string fDisplayName = "GKHistoryDataPlugin";
         private ILangMan fLangMan;
@@ -98,15 +98,5 @@ namespace GKHistoryDataPlugin
             }
             return result;
         }
-
-        #region IWidget common
-
-        void IWidget.WidgetInit(IHost host) {}
-        void IWidget.BaseChanged(IBaseWindow baseWin) {}
-        void IWidget.BaseClosed(IBaseWindow baseWin) {}
-        void IWidget.BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
-        void IWidget.WidgetEnable() {}
-
-        #endregion
     }
 }

@@ -18,18 +18,57 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Windows.Forms;
+using GKCore.Interfaces;
+using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public class GKToolStripMenuItem : ToolStripMenuItem
+    public class MenuItemEx : ToolStripMenuItem, IMenuItem
     {
-        public GKToolStripMenuItem(string text, object tag) : base(text)
+        private ItemAction fAction;
+
+        public MenuItemEx(string text) : base(text)
+        {
+        }
+
+        public MenuItemEx(string text, object tag) : base(text)
         {
             Tag = tag;
+        }
+
+        public MenuItemEx(string text, object tag, IImage image, ItemAction action) : base(text)
+        {
+            Click += Plugin_Click;
+            Tag = tag;
+            ImageHandler hIcon = image as ImageHandler;
+            Image = (hIcon == null) ? null : hIcon.Handle;
+            fAction = action;
+        }
+
+        public int ItemsCount { get { return DropDownItems.Count; } }
+
+        public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
+        {
+            var item = new MenuItemEx(text, tag, image, action);
+            DropDownItems.Add(item);
+            return item;
+        }
+
+        public void ClearItems()
+        {
+            DropDownItems.Clear();
+        }
+
+        private void Plugin_Click(object sender, EventArgs e)
+        {
+            if (fAction != null) {
+                fAction(this);
+            }
         }
     }
 }

@@ -20,9 +20,9 @@
 
 using System;
 using System.Reflection;
-using BSLib;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Plugins;
 
 [assembly: AssemblyTitle("GKNamesBookPlugin")]
 [assembly: AssemblyDescription("GEDKeeper NamesBook plugin")]
@@ -38,33 +38,30 @@ namespace GKNamesBookPlugin
         LSID_MINamesBook,
         LSID_Calendar
     }
-    
-    public sealed class Plugin : BaseObject, IPlugin, IWidget
+
+    public sealed class Plugin : WidgetPlugin
     {
         private string fDisplayName = "GKNamesBookPlugin";
-        private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return fDisplayName; } }
-        public IHost Host { get { return fHost; } }
-        public ILangMan LangMan { get { return fLangMan; } }
-        public IImage Icon { get { return null; } }
-        public PluginCategory Category { get { return PluginCategory.Common; } }
+        public override string DisplayName { get { return fDisplayName; } }
+        public override ILangMan LangMan { get { return fLangMan; } }
+        public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Common; } }
 
         private NamesBookWidget fForm;
         
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (fForm != null) fForm.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        public void Execute()
+        public override void Execute()
         {
-            if (!fHost.IsWidgetActive(this)) {
+            if (!Host.IsWidgetActive(this)) {
                 fForm = new NamesBookWidget(this);
                 fForm.Show();
             } else {
@@ -72,62 +69,16 @@ namespace GKNamesBookPlugin
             }
         }
 
-        public void OnHostClosing(HostClosingEventArgs eventArgs) {}
-        public void OnHostActivate() {}
-        public void OnHostDeactivate() {}
-
-        public void OnLanguageChange()
+        public override void OnLanguageChange()
         {
-            try
-            {
-                fLangMan = fHost.CreateLangMan(this);
+            try {
+                fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(NLS.LSID_MINamesBook);
 
                 if (fForm != null) fForm.SetLang();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKNamesBookPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
-        
-        public bool Startup(IHost host)
-        {
-            bool result = true;
-            try
-            {
-                fHost = host;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKNamesBookPlugin.Startup(): " + ex.Message);
-                result = false;
-            }
-            return result;
-        }
-
-        public bool Shutdown()
-        {
-            bool result = true;
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKNamesBookPlugin.Shutdown(): " + ex.Message);
-                result = false;
-            }
-            return result;
-        }
-
-        #region IWidget support
-
-        void IWidget.WidgetInit(IHost host) {}
-        void IWidget.BaseChanged(IBaseWindow baseWin) {}
-        void IWidget.BaseClosed(IBaseWindow baseWin) {}
-        void IWidget.BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
-        void IWidget.WidgetEnable() {}
-
-        #endregion
     }
 }

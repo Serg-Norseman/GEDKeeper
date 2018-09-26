@@ -115,8 +115,6 @@ namespace GKCore.Controllers
                         fView.MapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
                     }
                 }
-
-                //fMapBrowser.ZoomToBounds();
             } finally {
                 fView.MapBrowser.EndUpdate();
                 fView.GeoCoordsList.EndUpdate();

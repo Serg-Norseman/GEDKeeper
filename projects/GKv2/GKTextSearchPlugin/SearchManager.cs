@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.IO;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;

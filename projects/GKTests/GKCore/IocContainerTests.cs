@@ -42,7 +42,10 @@ namespace GKCore.IoC
             var container = new IocContainer();
             container.Register<ITypeToResolve, ConcreteType>();
 
-            container.Register<ITypeToResolve, ConcreteType>(LifeCycle.Singleton, false);
+            Assert.Throws(typeof(TypeNotRegisteredException), () => {
+                              container.Register<ITypeToResolve, ConcreteType>(LifeCycle.Singleton, false);
+                          });
+
             container.Register<ITypeToResolve, ConcreteType>(LifeCycle.Singleton, true);
 
             var instance = container.Resolve<ITypeToResolve>();

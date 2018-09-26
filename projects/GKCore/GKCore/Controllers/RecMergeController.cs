@@ -81,7 +81,7 @@ namespace GKCore.Controllers
             fView.MergeCtl.SetRec2(null);
 
             MatchParams mParams;
-            //mParams.IndistinctNameMatching = chkIndistinctMatching.Checked;
+            //mParams.IndistinctNameMatching = fView.IndistinctMatchingCheck.Checked; // FIXME!
             mParams.NamesIndistinctThreshold = ((float)fView.NameAccuracyNum.Value) / 100.0f;
             mParams.DatesCheck = fView.BirthYearChk.Checked;
             mParams.YearsInaccuracy = (int)fView.YearInaccuracyNum.Value;

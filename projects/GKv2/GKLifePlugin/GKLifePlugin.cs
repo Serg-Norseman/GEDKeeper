@@ -46,7 +46,7 @@ namespace GKLifePlugin
         LSID_Options,
     }
 
-    public class Plugin : OrdinaryPlugin, IPlugin
+    public class Plugin : OrdinaryPlugin
     {
         private string fDisplayName = "Conway's Game of Life";
         private ILangMan fLangMan;

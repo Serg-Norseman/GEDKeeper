@@ -20,9 +20,9 @@
 
 using System;
 using System.Reflection;
-using BSLib;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Plugins;
 
 [assembly: AssemblyTitle("GKTimeLinePlugin")]
 [assembly: AssemblyDescription("GEDKeeper TimeLine plugin")]
@@ -40,34 +40,29 @@ namespace GKTimeLinePlugin
         /* 131 */ LSID_CurrentYear,
     }
 
-    public sealed class Plugin : BaseObject, IPlugin, IWidget
+    public sealed class Plugin : WidgetPlugin
     {
         private string fDisplayName = "GKTimeLinePlugin";
-        private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return fDisplayName; } }
-        public IHost Host { get { return fHost; } }
-        public ILangMan LangMan { get { return fLangMan; } }
-        public IImage Icon { get { return null; } }
-        public PluginCategory Category { get { return PluginCategory.Tool; } }
+        public override string DisplayName { get { return fDisplayName; } }
+        public override ILangMan LangMan { get { return fLangMan; } }
+        public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Tool; } }
 
         private TimeLineWidget fForm;
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (fForm != null) fForm.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        #region IPlugin support
-
-        public void Execute()
+        public override void Execute()
         {
-            if (!fHost.IsWidgetActive(this)) {
+            if (!Host.IsWidgetActive(this)) {
                 fForm = new TimeLineWidget(this);
                 fForm.Show();
             } else {
@@ -76,77 +71,30 @@ namespace GKTimeLinePlugin
             }
         }
 
-        public void OnHostClosing(HostClosingEventArgs eventArgs) {}
-        public void OnHostActivate() {}
-        public void OnHostDeactivate() {}
-
-        public void OnLanguageChange()
+        public override void OnLanguageChange()
         {
-            try
-            {
-                fLangMan = fHost.CreateLangMan(this);
+            try {
+                fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(PLS.LSID_MITimeLine);
 
                 if (fForm != null) fForm.SetLang();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKTimeLinePlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 
-        public bool Startup(IHost host)
-        {
-            bool result = true;
-            try
-            {
-                fHost = host;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKTimeLinePlugin.Startup(): " + ex.Message);
-                result = false;
-            }
-            return result;
-        }
-
-        public bool Shutdown()
-        {
-            bool result = true;
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKTimeLinePlugin.Shutdown(): " + ex.Message);
-                result = false;
-            }
-            return result;
-        }
-
-        #endregion
-
-        #region IWidget support
-
-        void IWidget.WidgetInit(IHost host) {}
-
-        void IWidget.BaseChanged(IBaseWindow baseWin)
+        public override void BaseChanged(IBaseWindow baseWin)
         {
             if (fForm != null) {
                 fForm.BaseChanged(baseWin);
             }
         }
 
-        void IWidget.BaseClosed(IBaseWindow baseWin)
+        public override void BaseClosed(IBaseWindow baseWin)
         {
             if (fForm != null) {
                 fForm.BaseChanged(null);
             }
         }
-
-        void IWidget.BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
-        void IWidget.WidgetEnable() {}
-
-        #endregion
     }
 }

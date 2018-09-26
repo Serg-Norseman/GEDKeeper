@@ -20,13 +20,20 @@
 
 namespace GKCore.Interfaces
 {
+    public interface IOperation
+    {
+        bool Redo();
+        void Undo();
+    }
+
     /// <summary>
     /// 
     /// </summary>
     public interface IUndoManager
     {
         void Clear();
-        //bool DoOperation(CustomOperation operation);
+        bool DoOperation(IOperation operation);
+
         void Undo();
         void Redo();
 

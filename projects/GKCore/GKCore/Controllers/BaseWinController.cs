@@ -92,6 +92,7 @@ namespace GKCore.Controllers
             fContext.Clear();
         }
 
+        // FIXME: Identify and test the need for this method
         public void CreateNewFile()
         {
             Clear();
@@ -100,6 +101,11 @@ namespace GKCore.Controllers
             fContext.SetFileName(LangMan.LS(LSID.LSID_Unknown));
             fContext.Tree.Header.Language.Value = GlobalOptions.Instance.GetCurrentItfLang();
             fContext.Modified = false;
+        }
+
+        public void NewFile()
+        {
+            AppHost.Instance.CreateBase("");
         }
 
         public void LoadFile(string fileName)
@@ -773,21 +779,6 @@ namespace GKCore.Controllers
             }
         }
 
-        public void FileNew()
-        {
-            AppHost.Instance.CreateBase("");
-        }
-
-        public void FileLoad()
-        {
-            string homePath = AppHost.Instance.GetUserFilesPath("");
-
-            string fileName = AppHost.StdDialogs.GetOpenFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
-            if (!string.IsNullOrEmpty(fileName)) {
-                AppHost.Instance.LoadBase(fView, fileName);
-            }
-        }
-
         public void SendMail()
         {
             if (fView.CheckModified()) {
@@ -891,6 +882,52 @@ namespace GKCore.Controllers
         {
             using (var dlg = AppHost.Container.Resolve<IAboutDlg>()) {
                 AppHost.Instance.ShowModalX(dlg, false);
+            }
+        }
+
+        private static void Plugin_Click(IMenuItem sender)
+        {
+            if (sender == null) return;
+
+            IPlugin plugin = sender.Tag as IPlugin;
+            if (plugin == null) return;
+
+            plugin.Execute();
+        }
+
+        public void UpdatePluginsItems()
+        {
+            try {
+                fView.PluginsItem.ClearItems();
+                fView.ReportsItem.ClearItems();
+
+                AppHost.Instance.ActiveWidgets.Clear();
+
+                int num = AppHost.Plugins.Count;
+                for (int i = 0; i < num; i++) {
+                    IPlugin plugin = AppHost.Plugins[i];
+
+                    IMenuItem mi;
+                    if (plugin.Category == PluginCategory.Report) {
+                        mi = fView.ReportsItem.AddItem(plugin.DisplayName, plugin, plugin.Icon, Plugin_Click);
+                    } else {
+                        mi = fView.PluginsItem.AddItem(plugin.DisplayName, plugin, plugin.Icon, Plugin_Click);
+                    }
+
+                    var widget = plugin as IWidget;
+                    if (widget != null) {
+                        WidgetInfo widInfo = new WidgetInfo();
+                        widInfo.Widget = widget;
+                        widInfo.MenuItem = mi;
+                        AppHost.Instance.ActiveWidgets.Add(widInfo);
+                        widget.WidgetInit(AppHost.Instance);
+                    }
+                }
+
+                fView.ReportsItem.Enabled = (fView.ReportsItem.ItemsCount > 0);
+                fView.PluginsItem.Enabled = (fView.PluginsItem.ItemsCount > 0);
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseWinController.UpdatePluginsItems(): " + ex.Message);
             }
         }
 

@@ -871,7 +871,7 @@ namespace GKCore
         /* 000 */ LSID_Last = LSID_Religion_TheOldBelievers
     }
 
-    // TODO: remove and merge with LangManager
+
     public static class LangMan
     {
         public const int LS_DEF_CODE = 1033;

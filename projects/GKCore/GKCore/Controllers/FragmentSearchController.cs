@@ -44,11 +44,9 @@ namespace GKCore.Controllers
         public void CheckGroups()
         {
             IProgressController progress = AppHost.Progress;
-
-            fView.LogChart.Clear();
             List<List<GEDCOMRecord>> treeFragments = TreeTools.SearchTreeFragments(fBase.Context.Tree, progress);
 
-            //progress.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), fTree.RecordsCount);
+            fView.LogChart.Clear();
             fView.GroupsTree.BeginUpdate();
             try {
                 fView.GroupsTree.Clear();
@@ -58,7 +56,6 @@ namespace GKCore.Controllers
                     var groupRecords = treeFragments[i];
 
                     int cnt = groupRecords.Count;
-
                     int groupNum = (i + 1);
                     ITVNode groupItem = fView.GroupsTree.AddNode(null,
                         groupNum.ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + cnt.ToString() + ")", null);
@@ -74,15 +71,10 @@ namespace GKCore.Controllers
                     }
 
                     fView.GroupsTree.Expand(groupItem);
-
                     fView.LogChart.AddFragment(cnt);
-
-                    //progress.ProgressStep();
-                    //Application.DoEvents();
                 }
             } finally {
                 treeFragments.Clear();
-                //progress.ProgressDone();
                 fView.GroupsTree.EndUpdate();
             }
         }

@@ -69,6 +69,16 @@ namespace GKUI.Forms
             get { return fControlsManager.GetControlHandler<ITabControl>(tabsRecords); }
         }
 
+        IMenuItem IBaseWindowView.ReportsItem
+        {
+            get { return fControlsManager.GetControlHandler<IMenuItem>(miReports); }
+        }
+
+        IMenuItem IBaseWindowView.PluginsItem
+        {
+            get { return fControlsManager.GetControlHandler<IMenuItem>(miPlugins); }
+        }
+
         #endregion
 
         #region Instance control
@@ -182,7 +192,7 @@ namespace GKUI.Forms
             {
                 ((IWorkWindow)this).UpdateSettings();
 
-                UpdatePluginsItems();
+                fController.UpdatePluginsItems();
                 UpdateMRU();
                 UpdateControls(false);
             } catch (Exception ex) {
@@ -755,11 +765,11 @@ namespace GKUI.Forms
                 for (int i = 0; i < num; i++) {
                     string fn = AppHost.Options.MRUFiles[i].FileName;
 
-                    GKToolStripMenuItem mi = new GKToolStripMenuItem(fn, i);
+                    MenuItemEx mi = new MenuItemEx(fn, i);
                     mi.Click += MRUFileClick;
                     miMRUFiles.Items.Add(mi);
 
-                    GKToolStripMenuItem tsmi = new GKToolStripMenuItem(fn, i);
+                    MenuItemEx tsmi = new MenuItemEx(fn, i);
                     tsmi.Click += MRUFileClick;
                     MenuMRU.Items.Add(tsmi);
                 }
@@ -938,7 +948,7 @@ namespace GKUI.Forms
 
         private void miFileNew_Click(object sender, EventArgs e)
         {
-            AppHost.Instance.CreateBase("");
+            fController.NewFile();
         }
 
         private void miFileLoad_Click(object sender, EventArgs e)
@@ -1064,59 +1074,6 @@ namespace GKUI.Forms
         private void miContext_Click(object sender, EventArgs e)
         {
             AppHost.Instance.ShowHelpTopic("");
-        }
-
-        private static void Plugin_Click(object sender, EventArgs e)
-        {
-            ButtonMenuItem item = sender as ButtonMenuItem;
-            if (item == null) return;
-
-            IPlugin plugin = item.Tag as IPlugin;
-            if (plugin == null) return;
-
-            plugin.Execute();
-        }
-
-        private void UpdatePluginsItems()
-        {
-            try {
-                miPlugins.Items.Clear();
-                miReports.Items.Clear();
-
-                AppHost.Instance.ActiveWidgets.Clear();
-
-                int num = AppHost.Plugins.Count;
-                for (int i = 0; i < num; i++) {
-                    IPlugin plugin = AppHost.Plugins[i];
-                    string dispName = plugin.DisplayName;
-                    ImageHandler hIcon = plugin.Icon as ImageHandler;
-
-                    MenuItemEx mi = new MenuItemEx(dispName/*, i*/);
-                    mi.Click += Plugin_Click;
-                    mi.Tag = plugin;
-                    mi.Image = (hIcon == null) ? null : hIcon.Handle;
-
-                    if (plugin.Category == PluginCategory.Report) {
-                        miReports.Items.Add(mi);
-                    } else {
-                        miPlugins.Items.Add(mi);
-                    }
-
-                    if (plugin is IWidget) {
-                        WidgetInfo widInfo = new WidgetInfo();
-                        widInfo.Widget = (plugin as IWidget);
-                        widInfo.MenuItem = mi;
-                        AppHost.Instance.ActiveWidgets.Add(widInfo);
-
-                        (plugin as IWidget).WidgetInit(AppHost.Instance);
-                    }
-                }
-
-                miReports.Enabled = (miReports.Items.Count > 0);
-                miPlugins.Enabled = (miPlugins.Items.Count > 0);
-            } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.UpdatePluginsItems(): " + ex.Message);
-            }
         }
 
         #endregion

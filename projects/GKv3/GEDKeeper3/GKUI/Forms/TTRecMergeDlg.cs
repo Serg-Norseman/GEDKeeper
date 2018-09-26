@@ -48,19 +48,24 @@ namespace GKUI.Forms
             get { return fControlsManager.GetControlHandler<IButtonHandler>(btnSkip); }
         }
 
-        ICheckBoxHandler IRecMergeDlg.BirthYearChk
-        {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkBirthYear); }
-        }
-
         IProgressBarHandler IRecMergeDlg.ProgressBar
         {
             get { return fControlsManager.GetControlHandler<IProgressBarHandler>(ProgressBar1); }
         }
 
+        ICheckBoxHandler IRecMergeDlg.IndistinctMatchingChk
+        {
+            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkIndistinctMatching); }
+        }
+
         INumericBoxHandler IRecMergeDlg.NameAccuracyNum
         {
             get { return fControlsManager.GetControlHandler<INumericBoxHandler>(edNameAccuracy); }
+        }
+
+        ICheckBoxHandler IRecMergeDlg.BirthYearChk
+        {
+            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkBirthYear); }
         }
 
         INumericBoxHandler IRecMergeDlg.YearInaccuracyNum
