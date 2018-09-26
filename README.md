@@ -4,6 +4,7 @@
 [![Website](https://img.shields.io/badge/www-en.gedkeeper.net-0099BC.svg?maxAge=3600)](http://en.gedkeeper.net/)
 [![Website](https://img.shields.io/badge/www-gedkeeper.github.io-0099BC.svg?maxAge=3600)](https://gedkeeper.github.io/)
 [![wiki](https://img.shields.io/badge/browse-the%20wiki-orange.svg)](https://github.com/Serg-Norseman/GEDKeeper/wiki)
+[![forums](https://img.shields.io/badge/join-the%20forums-yellowgreen.svg)](http://groups.google.com/group/gedkeeper-en)
 [![Join the chat at https://gitter.im/Serg-Norseman/GEDKeeper](https://badges.gitter.im/Serg-Norseman/GEDKeeper.svg)](https://gitter.im/Serg-Norseman/GEDKeeper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Semver](http://img.shields.io/SemVer/2.0.0.png)](http://semver.org/spec/v2.0.0.html)

@@ -1,4 +1,7 @@
 
+## ??.10.2018 [v2.15.0]
+
+
 ## 10.08.2018 [v2.14.0]
 - Fixed the bug with adding/removing portraits of persons.
 - Returned the status bar to the chart's windows and added 
