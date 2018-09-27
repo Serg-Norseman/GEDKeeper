@@ -263,15 +263,6 @@ namespace GKUI.Providers
 
         #endregion
 
-        #region Executing environment
-
-        public override Assembly GetExecutingAssembly()
-        {
-            return Assembly.GetExecutingAssembly();
-        }
-
-        #endregion
-
         #region Bootstrapper
 
         /// <summary>

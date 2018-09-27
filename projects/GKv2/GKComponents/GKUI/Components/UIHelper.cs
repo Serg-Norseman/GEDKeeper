@@ -31,6 +31,10 @@ using GKCore.Lists;
 
 namespace GKUI.Components
 {
+    #if !__MonoCS__
+    using Microsoft.Win32;
+    #endif
+
     /// <summary>
     /// Static functions only for UI implementation.
     /// </summary>
@@ -327,5 +331,41 @@ namespace GKUI.Components
         {
             Clipboard.SetDataObject(text);
         }
+
+
+        #region Application's autorun
+        #if !__MonoCS__
+
+        public static void RegisterStartup()
+        {
+            if (!IsStartupItem()) {
+                RegistryKey rkApp = GetRunKey();
+                string trayPath = GKUtils.GetAppPath() + "GKTray.exe";
+                rkApp.SetValue(GKData.APP_TITLE_NEW, trayPath);
+            }
+        }
+
+        public static void UnregisterStartup()
+        {
+            if (IsStartupItem()) {
+                RegistryKey rkApp = GetRunKey();
+                rkApp.DeleteValue(GKData.APP_TITLE_NEW, false);
+            }
+        }
+
+        public static bool IsStartupItem()
+        {
+            RegistryKey rkApp = GetRunKey();
+            return (rkApp.GetValue(GKData.APP_TITLE_NEW) == null) ? false : true;
+        }
+
+        private static RegistryKey GetRunKey()
+        {
+            RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            return rkApp;
+        }
+
+        #endif
+        #endregion
     }
 }

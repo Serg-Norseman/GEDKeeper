@@ -30,6 +30,9 @@ rmdir .\projects\GKIntl\obj /s /q
 rmdir .\projects\GKv2\GKSandbox\bin /s /q
 rmdir .\projects\GKv2\GKSandbox\obj /s /q
 
+rmdir .\projects\GKv2\GKTray\bin /s /q
+rmdir .\projects\GKv2\GKTray\obj /s /q
+
 rmdir .\projects\GKTests\bin /s /q
 rmdir .\projects\GKTests\obj /s /q
 rmdir .\projects\GKTests\OpenCover /s /q

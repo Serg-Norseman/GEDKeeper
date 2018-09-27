@@ -456,6 +456,23 @@ namespace GKCore.Options
         }
 
 
+        public static void LoadMRUFromFile(IniFile ini, List<MRUFile> mruFiles)
+        {
+            int cnt = ini.ReadInteger("Common", "MRUFiles_Count", 0);
+            for (int i = 0; i < cnt; i++) {
+                string sect = "MRUFile_" + i.ToString();
+                string fn = ini.ReadString(sect, "FileName", "");
+                if (File.Exists(fn)) {
+                    MRUFile mf = new MRUFile();
+                    mf.LoadFromFile(ini, sect);
+                    mruFiles.Add(mf);
+                } else {
+                    MRUFile.DeleteKeys(ini, sect);
+                }
+            }
+        }
+
+
         public void LoadFromFile(IniFile ini)
         {
             if (ini == null)
@@ -512,19 +529,7 @@ namespace GKCore.Options
                 fEventFilters.Add(ini.ReadString("EventFilters", "EventVal_" + i.ToString(), ""));
             }
 
-            cnt = ini.ReadInteger("Common", "MRUFiles_Count", 0);
-            for (int i = 0; i < cnt; i++)
-            {
-                string sect = "MRUFile_" + i.ToString();
-                string fn = ini.ReadString(sect, "FileName", "");
-                if (File.Exists(fn)) {
-                    MRUFile mf = new MRUFile();
-                    mf.LoadFromFile(ini, sect);
-                    fMRUFiles.Add(mf);
-                } else {
-                    MRUFile.DeleteKeys(ini, sect);
-                }
-            }
+            LoadMRUFromFile(ini, fMRUFiles);
 
             cnt = ini.ReadInteger("Relations", "Count", 0);
             for (int i = 0; i < cnt; i++)

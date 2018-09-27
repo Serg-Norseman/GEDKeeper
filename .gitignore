@@ -35,6 +35,9 @@ build_sonarqube.cmd
 /projects/GKIntl/bin/
 /projects/GKIntl/obj/
 
+/projects/GKv2/GKTray/bin/
+/projects/GKv2/GKTray/obj/
+
 /projects/GKv2/GKSandbox/bin/
 /projects/GKv2/GKSandbox/obj/
 

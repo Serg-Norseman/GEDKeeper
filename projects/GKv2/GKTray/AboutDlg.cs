@@ -22,15 +22,14 @@ using System;
 using System.Windows.Forms;
 
 using GKCore;
-using GKCore.MVP.Views;
 using GKUI.Components;
 
-namespace GKUI.Forms
+namespace GKTray
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class AboutDlg : CommonDialog, IAboutDlg
+    public sealed partial class AboutDlg : Form
     {
         public AboutDlg()
         {
@@ -40,7 +39,7 @@ namespace GKUI.Forms
 
             Text = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            lblProduct.Text = GKData.APP_TITLE;
+            lblProduct.Text = GKTray.APP_TITLE;
             lblVersion.Text = @"Version " + AppHost.GetAppVersion();
             lblCopyright.Text = AppHost.GetAppCopyright();
         }

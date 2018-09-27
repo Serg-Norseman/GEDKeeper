@@ -41,11 +41,11 @@ namespace GKCore
     {
         #region Aux functions
 
-        public static void LoadExtFile(string fileName)
+        public static void LoadExtFile(string fileName, string args = "")
         {
             #if !CI_MODE
             if (File.Exists(fileName)) {
-                Process.Start(new ProcessStartInfo("file://"+fileName) { UseShellExecute = true });
+                Process.Start(new ProcessStartInfo("file://"+fileName) { UseShellExecute = true, Arguments = args });
             } else {
                 Process.Start(fileName);
             }
@@ -1263,7 +1263,7 @@ namespace GKCore
 
         public static string GetAppPath()
         {
-            Module[] mods = AppHost.Instance.GetExecutingAssembly().GetModules();
+            Module[] mods = Assembly.GetEntryAssembly().GetModules();
             string fn = mods[0].FullyQualifiedName;
             return Path.GetDirectoryName(fn) + Path.DirectorySeparatorChar;
         }

@@ -22,7 +22,7 @@ using System;
 using Eto.Forms;
 
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -30,7 +30,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class AboutDlg : CommonDialog, ICommonDialog
+    public sealed partial class AboutDlg : CommonDialog, IAboutDlg
     {
         public AboutDlg()
         {
@@ -40,10 +40,9 @@ namespace GKUI.Forms
 
             Title = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-
             lblProduct.Text = GKData.APP_TITLE_NEW;
-            lblVersion.Text = @"Version " + AppHost.Instance.GetAppVersion();
-            lblCopyright.Text = AppHost.Instance.GetAppCopyright();
+            lblVersion.Text = @"Version " + AppHost.GetAppVersion();
+            lblCopyright.Text = AppHost.GetAppCopyright();
         }
 
         private void LabelMail_Click(object sender, EventArgs e)
