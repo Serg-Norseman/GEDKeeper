@@ -222,14 +222,23 @@ namespace GKCore
 
         #region Executing environment
 
+        private static Assembly GetAssembly()
+        {
+            Assembly asm = Assembly.GetEntryAssembly();
+            if (asm == null) {
+                asm = Assembly.GetExecutingAssembly();
+            }
+            return asm;
+        }
+
         public static Version GetAppVersion()
         {
-            return Assembly.GetEntryAssembly().GetName().Version;
+            return GetAssembly().GetName().Version;
         }
 
         public static string GetAppCopyright()
         {
-            var attr = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(Assembly.GetEntryAssembly());
+            var attr = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(GetAssembly());
             return (attr == null) ? string.Empty : attr.Copyright;
         }
 

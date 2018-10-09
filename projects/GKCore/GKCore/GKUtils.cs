@@ -1263,7 +1263,12 @@ namespace GKCore
 
         public static string GetAppPath()
         {
-            Module[] mods = Assembly.GetEntryAssembly().GetModules();
+            Assembly asm = Assembly.GetEntryAssembly();
+            if (asm == null) {
+                asm = Assembly.GetExecutingAssembly();
+            }
+
+            Module[] mods = asm.GetModules();
             string fn = mods[0].FullyQualifiedName;
             return Path.GetDirectoryName(fn) + Path.DirectorySeparatorChar;
         }
