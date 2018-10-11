@@ -22,16 +22,27 @@ using System;
 
 namespace GKCore.MVP
 {
-    public interface IView : IBaseControl, IDisposable
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract class EditorController<TModel, TView> : DialogController<TView>, IController<TModel, TView>
+         where TModel : class where TView : IView
     {
-        string Caption { get; set; }
+        protected TModel fModel;
 
-        void Close();
-    }
+        public TModel Model
+        {
+            get { return fModel; }
+            set {
+                if (fModel != value) {
+                    fModel = value;
+                    UpdateView();
+                }
+            }
+        }
 
-
-    public interface IView<TModel, TThis> : IView where TThis : IView<TModel, TThis>
-    {
-        TModel Model { get; set; }
+        protected EditorController(TView view) : base(view)
+        {
+        }
     }
 }

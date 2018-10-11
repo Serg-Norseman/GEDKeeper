@@ -1279,7 +1279,7 @@ namespace GKUI.Forms
 
         private void SourceEditDlg_Handler(SourceEditDlg dlg)
         {
-            GEDCOMSourceRecord srcRecord = dlg.SourceRecord;
+            GEDCOMSourceRecord srcRecord = dlg.Model;
             GKSheetListTester sheetTester;
             var tabs = new TabControlTester("tabsData", dlg);
 

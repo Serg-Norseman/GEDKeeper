@@ -33,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class FilePropertiesDlg : EditorDialog, IFilePropertiesDlg
+    public sealed partial class FilePropertiesDlg : CommonDialog, IFilePropertiesDlg
     {
         private readonly FilePropertiesDlgController fController;
 

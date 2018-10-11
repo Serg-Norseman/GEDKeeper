@@ -32,7 +32,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class RelationshipCalculatorDlg : EditorDialog, IRelationshipCalculatorDlg
+    public sealed partial class RelationshipCalculatorDlg : CommonDialog, IRelationshipCalculatorDlg
     {
         private readonly RelationshipCalculatorDlgController fController;
 

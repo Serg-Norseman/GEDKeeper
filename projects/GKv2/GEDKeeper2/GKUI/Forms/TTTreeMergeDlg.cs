@@ -32,7 +32,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTTreeMergeDlg : EditorDialog, ITreeMergeDlg
+    public sealed partial class TTTreeMergeDlg : CommonDialog, ITreeMergeDlg
     {
         private readonly TreeMergeController fController;
 

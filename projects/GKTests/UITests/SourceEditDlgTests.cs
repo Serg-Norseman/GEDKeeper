@@ -48,7 +48,7 @@ namespace GKUI.Forms
             fSourceRecord = new GEDCOMSourceRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
 
             fDialog = new SourceEditDlg(fBase);
-            fDialog.SourceRecord = fSourceRecord;
+            fDialog.Model = fSourceRecord;
             fDialog.Show();
         }
 
@@ -67,7 +67,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fSourceRecord, fDialog.SourceRecord);
+            Assert.AreEqual(fSourceRecord, fDialog.Model);
 
             var txtShortTitle = new TextBoxTester("txtShortTitle");
             txtShortTitle.Enter("sample text");

@@ -33,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTTreeCheckDlg : EditorDialog, ITreeCheckDlg
+    public sealed partial class TTTreeCheckDlg : CommonDialog, ITreeCheckDlg
     {
         private readonly TreeCheckController fController;
 

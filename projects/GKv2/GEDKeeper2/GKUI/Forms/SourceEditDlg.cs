@@ -44,10 +44,10 @@ namespace GKUI.Forms
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fRepositoriesList;
 
-        public GEDCOMSourceRecord SourceRecord
+        public GEDCOMSourceRecord Model
         {
-            get { return fController.SourceRecord; }
-            set { fController.SourceRecord = value; }
+            get { return fController.Model; }
+            set { fController.Model = value; }
         }
 
         #region View Interface

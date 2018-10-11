@@ -275,6 +275,8 @@
     <Compile Include="GKCore\Maps\PlacesCache.cs" />
     <Compile Include="GKCore\Maps\YandexGeocoder.cs" />
     <Compile Include="GKCore\MVP\DialogController.cs" />
+    <Compile Include="GKCore\MVP\EditorController.cs" />
+    <Compile Include="GKCore\MVP\IController.cs" />
     <Compile Include="GKCore\MVP\Views\IStatusForm.cs" />
     <Compile Include="GKCore\MVP\Views\IStdDialogs.cs" />
     <Compile Include="GKCore\Plugins\OrdinaryPlugin.cs" />

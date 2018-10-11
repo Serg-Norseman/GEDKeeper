@@ -142,7 +142,7 @@ namespace GKCore
                     try {
                         baseWin.Context.LockRecord(sourceRec);
 
-                        dlg.SourceRecord = sourceRec;
+                        dlg.Model = sourceRec;
                         result = (AppHost.Instance.ShowModalX(dlg, false));
                     } finally {
                         baseWin.Context.UnlockRecord(sourceRec);

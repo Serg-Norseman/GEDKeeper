@@ -32,7 +32,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTTreeCompareDlg : EditorDialog, ITreeCompareDlg
+    public sealed partial class TTTreeCompareDlg : CommonDialog, ITreeCompareDlg
     {
         private readonly TreeCompareController fController;
 

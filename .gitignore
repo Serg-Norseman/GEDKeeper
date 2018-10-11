@@ -23,6 +23,8 @@ NUnitResults.xml
 opencover.xml
 build_sonarqube.cmd
 
+/projects/GKvX/
+
 /projects/GKv2/GEDKeeper2/bin/
 /projects/GKv2/GEDKeeper2/obj/
 

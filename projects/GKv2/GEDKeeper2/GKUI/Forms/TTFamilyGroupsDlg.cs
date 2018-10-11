@@ -33,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTFamilyGroupsDlg : EditorDialog, IFragmentSearchDlg
+    public sealed partial class TTFamilyGroupsDlg : CommonDialog, IFragmentSearchDlg
     {
         private readonly FragmentSearchController fController;
 

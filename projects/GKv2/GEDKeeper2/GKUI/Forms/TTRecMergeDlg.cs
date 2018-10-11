@@ -32,7 +32,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTRecMergeDlg : EditorDialog, IRecMergeDlg
+    public sealed partial class TTRecMergeDlg : CommonDialog, IRecMergeDlg
     {
         private readonly RecMergeController fController;
 

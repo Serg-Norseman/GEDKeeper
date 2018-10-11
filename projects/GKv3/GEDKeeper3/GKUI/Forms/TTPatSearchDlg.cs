@@ -33,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TTPatSearchDlg : EditorDialog, IPatriarchsSearchDlg
+    public sealed partial class TTPatSearchDlg : CommonDialog, IPatriarchsSearchDlg
     {
         private readonly PatriarchsSearchController fController;
 

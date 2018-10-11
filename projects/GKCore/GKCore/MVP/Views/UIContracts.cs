@@ -480,10 +480,8 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface ISourceEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface ISourceEditDlg : ICommonDialog, IBaseEditor, IView<GEDCOMSourceRecord, ISourceEditDlg>
     {
-        GEDCOMSourceRecord SourceRecord { get; set; }
-
         ISheetList NotesList { get; }
         ISheetList MediaList { get; }
         ISheetList RepositoriesList { get; }

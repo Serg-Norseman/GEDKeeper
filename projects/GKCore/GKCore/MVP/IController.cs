@@ -18,19 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-
 namespace GKCore.MVP
 {
-    public interface IView : IBaseControl, IDisposable
-    {
-        string Caption { get; set; }
-
-        void Close();
-    }
-
-
-    public interface IView<TModel, TThis> : IView where TThis : IView<TModel, TThis>
+    public interface IController<TModel, TView> where TView : IView
     {
         TModel Model { get; set; }
     }
