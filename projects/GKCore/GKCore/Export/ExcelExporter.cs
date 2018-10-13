@@ -19,13 +19,16 @@
  */
 
 using System.Collections.Generic;
-using ExcelLibrary.SpreadSheet;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
 
 namespace GKCore.Export
 {
+#if !NETSTANDARD
+    using ExcelLibrary.SpreadSheet;
+#endif
+
     /// <summary>
     /// 
     /// </summary>
@@ -40,6 +43,7 @@ namespace GKCore.Export
 
         public override void Generate(bool show)
         {
+#if !NETSTANDARD
             fPath = AppHost.StdDialogs.GetSaveFile("Excel files (*.xls)|*.xls");
             if (string.IsNullOrEmpty(fPath)) return;
 
@@ -107,6 +111,7 @@ namespace GKCore.Export
             {
                 progress.ProgressDone();
             }
+#endif
         }
     }
 }

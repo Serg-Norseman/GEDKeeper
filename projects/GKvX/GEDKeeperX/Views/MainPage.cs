@@ -2,21 +2,32 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace GEDKeeperX.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : MasterDetailPage
     {
-        Dictionary<int, NavigationPage> MenuPages = new Dictionary<int, NavigationPage>();
+        private Dictionary<int, NavigationPage> MenuPages = new Dictionary<int, NavigationPage>();
+
         public MainPage()
         {
             InitializeComponent();
 
+            MenuPages.Add((int)MenuItemType.Browse, (NavigationPage)Detail);
+        }
+
+        private void InitializeComponent()
+        {
             MasterBehavior = MasterBehavior.Popover;
 
-            MenuPages.Add((int)MenuItemType.Browse, (NavigationPage)Detail);
+            var navPage = new NavigationPage(new ItemsPage());
+            if (Device.OS == TargetPlatform.iOS)
+            {
+                navPage.Icon = "tab_feed.png"; // FileImageSource
+            }
+
+            Master = new GEDKeeperX.Views.MenuPage();
+            Detail = navPage;
         }
 
         public async Task NavigateFromMenu(int id)

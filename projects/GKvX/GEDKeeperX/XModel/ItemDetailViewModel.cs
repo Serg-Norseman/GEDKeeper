@@ -1,6 +1,4 @@
-﻿using GEDKeeperX.XModel;
-
-namespace GEDKeeperX.ViewModels
+﻿namespace GEDKeeperX.XModel
 {
     public class ItemDetailViewModel : BaseViewModel
     {

@@ -1,12 +1,11 @@
 ﻿using GEDKeeperX.Views;
-using GEDKeeperX.XModel;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace GEDKeeperX.ViewModels
+namespace GEDKeeperX.XModel
 {
     public class ItemsViewModel : BaseViewModel
     {

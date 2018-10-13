@@ -24,12 +24,15 @@ using System.Diagnostics;
 using System.IO;
 
 using BSLib;
-using ExcelLibrary.SpreadSheet;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 
 namespace GKCore.Stats
 {
+#if !NETSTANDARD
+    using ExcelLibrary.SpreadSheet;
+#endif
+
     /// <summary>
     /// Class for calculate various types of statistics.
     /// </summary>
@@ -430,6 +433,7 @@ namespace GKCore.Stats
         // TODO: localize filter?
         public void WriteStatsReport(string title, string cap1, string cap2, List<StatsItem> vals)
         {
+#if !NETSTANDARD
             if (vals == null) return;
 
             string fileName = AppHost.StdDialogs.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
@@ -477,6 +481,7 @@ namespace GKCore.Stats
                 Logger.LogWrite("TreeStats.WriteStatsReport(): " + ex.Message);
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
             }
+#endif
         }
     }
 }

@@ -8,6 +8,8 @@
 *.userprefs
 *.DotSettings.user
 
+/temp/
+
 /GEDKeeperX/bin/
 /GEDKeeperX/obj/
 

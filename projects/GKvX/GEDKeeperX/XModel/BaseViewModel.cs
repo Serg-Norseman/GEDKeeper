@@ -1,11 +1,10 @@
-﻿using GEDKeeperX.XModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 
-namespace GEDKeeperX.ViewModels
+namespace GEDKeeperX.XModel
 {
     public class BaseViewModel : INotifyPropertyChanged
     {

@@ -10,7 +10,9 @@ namespace GEDKeeperX.Views
     public partial class MenuPage : ContentPage
     {
         MainPage RootPage { get => Application.Current.MainPage as MainPage; }
+
         List<HomeMenuItem> menuItems;
+
         public MenuPage()
         {
             InitializeComponent();

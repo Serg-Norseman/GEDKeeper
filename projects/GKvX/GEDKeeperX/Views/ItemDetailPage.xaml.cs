@@ -1,5 +1,4 @@
-﻿using GEDKeeperX.ViewModels;
-using GEDKeeperX.XModel;
+﻿using GEDKeeperX.XModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

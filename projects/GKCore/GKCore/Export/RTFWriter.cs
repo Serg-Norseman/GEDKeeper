@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if !NETSTANDARD
+
 using Elistia.DotNetRtfWriter;
 using BSLib;
 using GKCore.Interfaces;
@@ -249,3 +251,5 @@ namespace GKCore.Export
         }
     }
 }
+
+#endif
