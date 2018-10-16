@@ -3,7 +3,8 @@
     public enum MenuItemType
     {
         Browse,
-        About
+        About,
+        UserRef
     }
 
     public class HomeMenuItem

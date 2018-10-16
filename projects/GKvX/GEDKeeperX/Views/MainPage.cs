@@ -1,4 +1,5 @@
 ﻿using GEDKeeperX.XModel;
+using GKUI.Forms;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -41,6 +42,9 @@ namespace GEDKeeperX.Views
                         break;
                     case (int)MenuItemType.About:
                         MenuPages.Add(id, new NavigationPage(new AboutPage()));
+                        break;
+                    case (int)MenuItemType.UserRef:
+                        MenuPages.Add(id, new NavigationPage(new UserRefEditDlg()));
                         break;
                 }
             }

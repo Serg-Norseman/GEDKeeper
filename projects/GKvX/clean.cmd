@@ -1,5 +1,5 @@
 
-rem rmdir .\.vs /s /q
+rmdir .\.vs /s /q
 
 rmdir .\GEDKeeperX\bin /s /q
 rmdir .\GEDKeeperX\obj /s /q

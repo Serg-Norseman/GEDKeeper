@@ -22,4 +22,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BSLib">
+      <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

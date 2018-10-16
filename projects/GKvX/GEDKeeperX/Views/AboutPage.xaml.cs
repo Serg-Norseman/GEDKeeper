@@ -15,7 +15,7 @@ namespace GEDKeeperX.Views
             AppNameLabel.Text = GKCore.GKData.APP_TITLE_NEW + " " + GKCore.AppHost.GetAppVersion();
         }
 
-        async void OpenWeb_Clicked(object sender, EventArgs e)
+        private void OpenWeb_Clicked(object sender, EventArgs e)
         {
             Device.OpenUri(new Uri("https://gedkeeper.github.io/"));
         }
