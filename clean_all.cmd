@@ -2,6 +2,7 @@
 del .\GKCommon.*
 del .\GEDKeeper2.exe.*
 del .\GKUpdater.*
+del .\GKTray.*
 del .\*.dll
 del .\*.pdb
 del .\*.mdb
