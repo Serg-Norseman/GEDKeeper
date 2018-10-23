@@ -107,6 +107,12 @@ Google Maps (© Google).
 Если ваша проблема или идея еще не решены, создайте новую.
 
 
+## Implementations
+- Legacy (NET3.5 & WinForms based), "GEDKeeper2"
+- Cross-platform (NET Standard & Eto based), codenamed "GEDKeeper3", interface grinding stage
+- Future mobile (NET Standard & Xamarin based), codenamed "GEDKeeperX", initial experience
+
+
 ## Docs & Help
 
 - [Contributing guide](/CONTRIBUTING.md)
