@@ -78,5 +78,14 @@ namespace GKCore.Controllers
                 fView.GroupsTree.EndUpdate();
             }
         }
+
+        public void SelectPerson()
+        {
+            GEDCOMIndividualRecord iRec = fView.GroupsTree.GetSelectedData() as GEDCOMIndividualRecord;
+            if (iRec == null) return;
+
+            fBase.SelectRecordByXRef(iRec.XRef);
+            fView.Close();
+        }
     }
 }

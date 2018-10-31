@@ -49,7 +49,7 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class BaseWinController : DialogController<IBaseWindowView>
+    public sealed class BaseWinController : Controller<IBaseWindowView>
     {
         private readonly List<GEDCOMRecord> fChangedRecords;
         private readonly IBaseContext fContext;

@@ -21,7 +21,6 @@
 using System;
 using Eto.Forms;
 
-using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
@@ -181,9 +180,7 @@ namespace GKUI.Forms
 
         private void btnShowOnMap_Click(object sender, EventArgs e)
         {
-            if (txtLatitude.Text != "" && txtLongitude.Text != "") {
-                fMapBrowser.SetCenter(ConvertHelper.ParseFloat(txtLatitude.Text, 0), ConvertHelper.ParseFloat(txtLongitude.Text, 0), -1);
-            }
+            fController.ShowOnMap();
         }
     }
 }

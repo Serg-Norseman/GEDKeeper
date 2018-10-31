@@ -145,5 +145,12 @@ namespace GKCore.Controllers
 
             fView.MapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
         }
+
+        public void ShowOnMap()
+        {
+            if (fView.Latitude.Text != "" && fView.Longitude.Text != "") {
+                fView.MapBrowser.SetCenter(ConvertHelper.ParseFloat(fView.Latitude.Text, 0), ConvertHelper.ParseFloat(fView.Longitude.Text, 0), -1);
+            }
+        }
     }
 }

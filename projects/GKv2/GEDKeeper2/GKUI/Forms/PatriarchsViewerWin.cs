@@ -26,12 +26,13 @@ using BSLib.SmartGraph;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class PatriarchsViewerWin : CommonForm
+    public partial class PatriarchsViewerWin : CommonWindow, IPatriarchsViewer
     {
         private readonly IBaseWindow fBase;
         private readonly ToolTip fTip;

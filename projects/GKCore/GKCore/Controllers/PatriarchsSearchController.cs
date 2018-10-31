@@ -44,6 +44,15 @@ namespace GKCore.Controllers
             return ((PatriarchObj)item1).BirthYear - ((PatriarchObj)item2).BirthYear;
         }
 
+        public void SelectPatriarch()
+        {
+            GEDCOMIndividualRecord iRec = fView.PatriarchsList.GetSelectedData() as GEDCOMIndividualRecord;
+            if (iRec == null) return;
+
+            fBase.SelectRecordByXRef(iRec.XRef);
+            fView.Close();
+        }
+
         public void Search()
         {
             fView.PatriarchsList.BeginUpdate();
@@ -80,6 +89,12 @@ namespace GKCore.Controllers
             } finally {
                 Search();
             }
+        }
+
+        public void ShowPatriarchsDiagram()
+        {
+            var wnd = AppHost.Container.Resolve<IPatriarchsViewer>(fBase, (int)fView.MinGensNum.Value);
+            wnd.Show(false);
         }
     }
 }

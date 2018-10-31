@@ -480,6 +480,12 @@ namespace GKUI.Providers
                 treeNode.Expanded = true;
             }
         }
+
+        public object GetSelectedData()
+        {
+            GKTreeNode node = Control.SelectedItem as GKTreeNode;
+            return (node == null) ? null : node.Tag;
+        }
     }
 
     public sealed class ProgressBarHandler : BaseControlHandler<ProgressBar, ProgressBarHandler>, IProgressBarHandler

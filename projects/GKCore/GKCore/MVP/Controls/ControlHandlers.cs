@@ -106,6 +106,7 @@ namespace GKCore.MVP.Controls
         void Clear();
         void EndUpdate();
         void Expand(ITVNode node);
+        object GetSelectedData();
     }
 
 

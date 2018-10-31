@@ -562,6 +562,11 @@ namespace GKCore.MVP.Views
     }
 
 
+    public interface IPatriarchsViewer : IWindow, IView
+    {
+    }
+
+
     public interface IPlacesManagerDlg : ICommonDialog, IBaseEditor, IView
     {
         IListView PlacesList { get; }

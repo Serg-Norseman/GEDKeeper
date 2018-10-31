@@ -26,7 +26,8 @@ namespace GKCore.MVP
     /// 
     /// </summary>
     public abstract class EditorController<TModel, TView> : DialogController<TView>, IController<TModel, TView>
-         where TModel : class where TView : IView
+        where TModel : class
+        where TView : IView
     {
         protected TModel fModel;
 
@@ -35,14 +36,19 @@ namespace GKCore.MVP
             get { return fModel; }
             set {
                 if (fModel != value) {
-                    fModel = value;
-                    UpdateView();
+                    SetModel(value);
                 }
             }
         }
 
         protected EditorController(TView view) : base(view)
         {
+        }
+
+        protected virtual void SetModel(TModel value)
+        {
+            fModel = value;
+            UpdateView();
         }
     }
 }

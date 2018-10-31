@@ -238,7 +238,7 @@ namespace GKUI.Forms
 
         private void btnHusbandSelClick(object sender, EventArgs e)
         {
-            fController.JumpToRecord(fController.Family.GetHusband());
+            fController.JumpToHusband();
         }
 
         private void btnWifeAddClick(object sender, EventArgs e)
@@ -253,7 +253,7 @@ namespace GKUI.Forms
 
         private void btnWifeSelClick(object sender, EventArgs e)
         {
-            fController.JumpToRecord(fController.Family.GetWife());
+            fController.JumpToWife();
         }
 
         private void EditSpouse_TextChanged(object sender, EventArgs e)

@@ -42,10 +42,6 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-        }
-
-        public void UpdateSplitLists()
-        {
             fView.SelectedList.BeginUpdate();
             fView.SelectedList.ClearItems();
             fView.SkippedList.BeginUpdate();
@@ -90,7 +86,7 @@ namespace GKCore.Controllers
                 TreeTools.WalkTree(startPerson, walkMode, fSplitList);
             }
 
-            UpdateSplitLists();
+            UpdateView();
         }
 
         public void Delete()
@@ -107,7 +103,7 @@ namespace GKCore.Controllers
             }
 
             fSplitList.Clear();
-            UpdateSplitLists();
+            UpdateView();
             fBase.RefreshLists(false);
 
             AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_RecsDeleted));

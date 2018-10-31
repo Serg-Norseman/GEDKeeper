@@ -21,7 +21,6 @@
 using System;
 using Eto.Forms;
 
-using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -79,14 +78,7 @@ namespace GKUI.Forms
 
         private void tvGroups_DoubleClick(object sender, MouseEventArgs e)
         {
-            GKTreeNode node = tvGroups.SelectedItem as GKTreeNode;
-            if (node == null) return;
-
-            GEDCOMIndividualRecord iRec = node.Tag as GEDCOMIndividualRecord;
-            if (iRec == null) return;
-
-            fController.Base.SelectRecordByXRef(iRec.XRef);
-            Close();
+            fController.SelectPerson();
         }
 
         private void HintRequestEventHandler(object sender, HintRequestEventArgs args)

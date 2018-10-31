@@ -19,19 +19,21 @@
  */
 
 using System;
-using ArborGVT;
-using BSLib.SmartGraph;
 using Eto.Drawing;
 using Eto.Forms;
+
+using ArborGVT;
+using BSLib.SmartGraph;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public class PatriarchsViewerWin : Form
+    public partial class PatriarchsViewerWin : CommonWindow, IPatriarchsViewer
     {
         private readonly IBaseWindow fBase;
         private ArborViewer fArborViewer;

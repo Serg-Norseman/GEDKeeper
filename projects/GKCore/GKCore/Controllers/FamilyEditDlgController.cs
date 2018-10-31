@@ -180,5 +180,15 @@ namespace GKCore.Controllers
                 fView.Close();
             }
         }
+
+        public void JumpToHusband()
+        {
+            JumpToRecord(fFamily.GetHusband());
+        }
+
+        public void JumpToWife()
+        {
+            JumpToRecord(fFamily.GetWife());
+        }
     }
 }

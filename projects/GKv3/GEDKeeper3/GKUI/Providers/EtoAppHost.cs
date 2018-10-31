@@ -312,6 +312,7 @@ namespace GKUI.Providers
             container.Register<IOptionsDlg, OptionsDlg>(LifeCycle.Transient);
             container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
             container.Register<IPatriarchsSearchDlg, TTPatSearchDlg>(LifeCycle.Transient);
+            container.Register<IPatriarchsViewer, PatriarchsViewerWin>(LifeCycle.Transient);
             container.Register<IPersonsFilterDlg, PersonsFilterDlg>(LifeCycle.Transient);
             container.Register<IPlacesManagerDlg, TTPlacesManagerDlg>(LifeCycle.Transient);
             container.Register<IPersonalNameEditDlg, PersonalNameEditDlg>(LifeCycle.Transient);
