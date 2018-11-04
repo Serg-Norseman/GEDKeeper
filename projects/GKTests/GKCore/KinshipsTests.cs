@@ -24,7 +24,6 @@ using GKCore;
 using GKCore.Kinships;
 using GKCore.Types;
 using GKTests;
-using GKUI;
 using GKUI.Providers;
 using NUnit.Framework;
 

@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-
 using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -31,7 +30,6 @@ using GKCore.IoC;
 using GKCore.Tools;
 using GKTests;
 using GKTests.Stubs;
-using GKUI;
 using GKUI.Providers;
 using NUnit.Framework;
 

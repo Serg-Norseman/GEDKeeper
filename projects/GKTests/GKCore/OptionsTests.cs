@@ -25,7 +25,6 @@ using GKCore;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests;
-using GKUI;
 using GKUI.Providers;
 using NUnit.Framework;
 

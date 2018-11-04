@@ -22,7 +22,6 @@
 
 using System;
 using GKTests;
-using GKUI;
 using GKUI.Forms;
 using GKUI.Providers;
 using NUnit.Framework;

@@ -29,7 +29,6 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Types;
 using GKTests;
-using GKUI;
 using GKUI.Providers;
 using NUnit.Framework;
 

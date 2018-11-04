@@ -27,7 +27,6 @@ using GKCore.Interfaces;
 using GKTests;
 using GKTests.ControlTesters;
 using GKTests.Stubs;
-using GKUI;
 using GKUI.Forms;
 using GKUI.Providers;
 using NUnit.Extensions.Forms;

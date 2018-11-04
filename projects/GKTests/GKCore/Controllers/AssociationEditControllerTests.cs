@@ -19,37 +19,52 @@
  */
 
 using System;
+using GKCommon.GEDCOM;
+using GKCore.Controllers;
+using GKCore.Interfaces;
+using GKCore.MVP.Views;
+using GKTests.Stubs;
 using GKUI.Providers;
+using NSubstitute;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKTests.GKCore.Controllers
 {
     [TestFixture]
-    public class AppHostTests
+    public class AssociationEditControllerTests
     {
+        private GEDCOMAssociation fAssociation;
+        private IBaseWindow fBase;
+
         [TestFixtureSetUp]
         public void SetUp()
         {
             WFAppHost.ConfigureBootstrap(false);
+
+            fBase = new BaseWindowStub();
+            fAssociation = new GEDCOMAssociation(fBase.Context.Tree, null, "", "");
         }
 
         [Test]
-        public void Test_AppHost()
+        public void Test_Common()
         {
-            Assert.IsNotNullOrEmpty(AppHost.GetAppPath());
-            Assert.IsNotNullOrEmpty(AppHost.GetLogFilename());
+            var view = Substitute.For<IAssociationEditDlg>();
 
-            Assert.IsNotNullOrEmpty(AppHost.Instance.GetAppDataPath());
+            Assert.IsNull(view.Association);
+            Assert.IsNotNull(view.Person);
+            Assert.IsNotNull(view.Relation);
 
-            Assert.Throws(typeof(ArgumentNullException), () => { AppHost.Instance.LoadBase(null, null); });
+            var controller = new AssociationEditDlgController(view);
+            Assert.IsNotNull(controller);
 
-            AppHost.Instance.SetArgs(new string[] { "" });
+            controller.Association = fAssociation;
+            Assert.AreEqual(fAssociation, controller.Association);
 
-            AppHost.CheckPortable(new string[] { "" });
+            controller.Accept();
 
-            Assert.IsNotNull(AppHost.PathReplacer);
-            Assert.IsNotNull(AppHost.NamesTable);
-            Assert.IsNotNull(AppHost.Plugins);
+            //controller.SetPerson();
+
+            /*Assert.Throws(typeof(ArgumentNullException), () => { AppHost.Instance.LoadBase(null, null); });*/
         }
     }
 }

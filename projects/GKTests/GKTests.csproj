@@ -44,7 +44,7 @@
   </PropertyGroup>
   <ItemGroup Condition="!$(DefineConstants.Contains(';__MonoCS__'))">
     <Reference Include="NUnitForms">
-      <HintPath>NUnitForms.dll</HintPath>
+      <HintPath>libs\NUnitForms.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -60,8 +60,11 @@
     <Reference Include="BSLib.SmartGraph">
       <HintPath>..\libs\BSLib.SmartGraph.dll</HintPath>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>libs\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>nunit.framework.dll</HintPath>
+      <HintPath>libs\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -95,6 +98,7 @@
     <Compile Include="GKCore\AppHostTests.cs" />
     <Compile Include="GKCore\BaseContextTests.cs" />
     <Compile Include="GKCore\BBTextParserTests.cs" />
+    <Compile Include="GKCore\Controllers\AssociationEditControllerTests.cs" />
     <Compile Include="GKCore\CoreTests.cs" />
     <Compile Include="GKCore\CulturesTests.cs" />
     <Compile Include="GKCore\ExportersTests.cs" />
@@ -190,6 +194,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GKCore\Controllers" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

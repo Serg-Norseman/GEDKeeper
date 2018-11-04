@@ -31,7 +31,6 @@ using GKCore.Operations;
 using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
-using GKUI;
 using GKUI.Providers;
 using NUnit.Framework;
 

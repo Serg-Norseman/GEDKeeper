@@ -24,7 +24,6 @@ using GKCore;
 using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKTests;
-using GKUI;
 using GKUI.Providers;
 using NUnit.Framework;
 

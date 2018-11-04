@@ -20,7 +20,6 @@
 
 using System.Collections.Generic;
 using System.Drawing;
-using GKUI;
 using GKUI.Components;
 using GKUI.Providers;
 using NUnit.Framework;
