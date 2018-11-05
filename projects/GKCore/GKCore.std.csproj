@@ -1,0 +1,163 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <AssemblyName>GKCore</AssemblyName>
+    <RootNamespace />
+    <Company />
+    <Product>GEDKeeper</Product>
+    <Copyright>Copyright © 2014-2018 Sergey V. Zhdanovskih</Copyright>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
+    <Authors>Sergey V. Zhdanovskih</Authors>
+    <Version>3.0.0</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <Reference Include="System.Runtime.Remoting" />
+
+    <Reference Include="DotNetRtfWriter">
+      <HintPath>..\libs\DotNetRtfWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelLibrary">
+      <HintPath>..\libs\ExcelLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\libs\itextsharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BSLib">
+      <HintPath>..\libs\netstd\BSLib.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.SmartGraph">
+      <HintPath>..\libs\netstd\BSLib.SmartGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.Linguistics">
+      <HintPath>..\libs\netstd\BSLib.Linguistics.dll</HintPath>
+    </Reference>
+    <Reference Include="NLua">
+      <HintPath>..\libs\linux\NLua.dll</HintPath>
+    </Reference>
+    <Reference Include="YamlSerializer">
+      <HintPath>..\libs\YamlSerializer.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NLUA</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;RELEASE;NLUA</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">
+      <LogicalName>Resources.fonts.FreeSans.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\fonts\FreeSansBold.ttf">
+      <LogicalName>Resources.fonts.FreeSansBold.ttf</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\btn_accept.gif" />
+    <EmbeddedResource Include="Resources\btn_cancel.gif" />
+    <EmbeddedResource Include="Resources\btn_copy.gif" />
+    <EmbeddedResource Include="Resources\btn_create_new.gif" />
+    <EmbeddedResource Include="Resources\btn_down.gif" />
+    <EmbeddedResource Include="Resources\btn_excel.gif" />
+    <EmbeddedResource Include="Resources\btn_expand.gif" />
+    <EmbeddedResource Include="Resources\btn_filter.gif" />
+    <EmbeddedResource Include="Resources\btn_jump.gif" />
+    <EmbeddedResource Include="Resources\btn_left.gif" />
+    <EmbeddedResource Include="Resources\btn_load.gif" />
+    <EmbeddedResource Include="Resources\btn_preview.gif" />
+    <EmbeddedResource Include="Resources\btn_print.gif" />
+    <EmbeddedResource Include="Resources\btn_rec_delete.gif" />
+    <EmbeddedResource Include="Resources\btn_rec_edit.gif" />
+    <EmbeddedResource Include="Resources\btn_rec_new.gif" />
+    <EmbeddedResource Include="Resources\btn_redo.gif" />
+    <EmbeddedResource Include="Resources\btn_right.gif" />
+    <EmbeddedResource Include="Resources\btn_save.gif" />
+    <EmbeddedResource Include="Resources\btn_save_image.gif" />
+    <EmbeddedResource Include="Resources\btn_scroll.gif" />
+    <EmbeddedResource Include="Resources\btn_size_to_fit.png" />
+    <EmbeddedResource Include="Resources\btn_start.gif" />
+    <EmbeddedResource Include="Resources\btn_stop.gif" />
+    <EmbeddedResource Include="Resources\btn_table.gif" />
+    <EmbeddedResource Include="Resources\btn_tools.gif" />
+    <EmbeddedResource Include="Resources\btn_tree_ancestry.gif" />
+    <EmbeddedResource Include="Resources\btn_tree_both.gif" />
+    <EmbeddedResource Include="Resources\btn_tree_descendants.gif" />
+    <EmbeddedResource Include="Resources\btn_undo.gif" />
+    <EmbeddedResource Include="Resources\btn_up.gif" />
+    <EmbeddedResource Include="Resources\btn_zoom_in.png" />
+    <EmbeddedResource Include="Resources\btn_zoom_out.png" />
+    <EmbeddedResource Include="Resources\chart_controls.png" />
+    <EmbeddedResource Include="Resources\icon_gedkeeper.ico" />
+    <EmbeddedResource Include="Resources\icon_gedkeeper.png" />
+    <EmbeddedResource Include="Resources\image_tips_light.png" />
+    <EmbeddedResource Include="Resources\pi_female_140.png" />
+    <EmbeddedResource Include="Resources\pi_female_200.png" />
+    <EmbeddedResource Include="Resources\pi_female_400.png" />
+    <EmbeddedResource Include="Resources\pi_male_140.png" />
+    <EmbeddedResource Include="Resources\pi_male_200.png" />
+    <EmbeddedResource Include="Resources\pi_male_400.png" />
+    <EmbeddedResource Include="Resources\rg_shield_max.gif" />
+    <EmbeddedResource Include="Resources\rg_shield_mid.gif" />
+    <EmbeddedResource Include="Resources\rg_shield_none.gif" />
+    <EmbeddedResource Include="Resources\tg_barbed_wire.gif" />
+    <EmbeddedResource Include="Resources\tg_george_cross.gif" />
+    <EmbeddedResource Include="Resources\tg_islam_sym.gif" />
+    <EmbeddedResource Include="Resources\tg_latin_cross.gif" />
+    <EmbeddedResource Include="Resources\tg_oldritual_cross.gif" />
+    <EmbeddedResource Include="Resources\tg_orthodox_cross.gif" />
+    <EmbeddedResource Include="Resources\tg_soldier.gif" />
+    <EmbeddedResource Include="Resources\tg_soldier_fall.gif" />
+    <EmbeddedResource Include="Resources\tg_veteran_rear.gif" />
+    <EmbeddedResource Include="Resources\btn_organizer.gif" />
+    <EmbeddedResource Include="Resources\btn_slideshow.png" />
+    <EmbeddedResource Include="Resources\btn_mail.gif" />
+    <EmbeddedResource Include="Resources\btn_properties.gif" />
+    <EmbeddedResource Include="Resources\btn_help.gif" />
+    <EmbeddedResource Include="Resources\btn_export.gif" />
+    <EmbeddedResource Include="Resources\btn_exit.gif" />
+    <EmbeddedResource Include="Resources\btn_search.gif" />
+    <EmbeddedResource Include="Resources\btn_expand2.gif" />
+    <EmbeddedResource Include="Resources\sym_female.png" />
+    <EmbeddedResource Include="Resources\sym_male.png" />
+    <EmbeddedResource Include="Resources\btn_close.png" />
+    <EmbeddedResource Include="Resources\btn_pause.png" />
+    <EmbeddedResource Include="Resources\btn_play.png" />
+    <EmbeddedResource Include="Resources\btn_stop.png" />
+    <EmbeddedResource Include="Resources\btn_volume_max.png" />
+    <EmbeddedResource Include="Resources\btn_volume_middle.png" />
+    <EmbeddedResource Include="Resources\btn_volume_min.png" />
+    <EmbeddedResource Include="Resources\btn_volume_mute.png" />
+    <EmbeddedResource Include="Resources\pnl_video.png" />
+  </ItemGroup>
+</Project>
