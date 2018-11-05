@@ -5,6 +5,7 @@
 *.pdb
 *.mdb
 *.suo
+*.user
 *.userprefs
 *.DotSettings.user
 /appdata/
@@ -24,7 +25,6 @@ opencover.xml
 build_sonarqube.cmd
 
 /projects/GKvX/
-/projects/GKvU/
 
 /projects/GKv2/GEDKeeper2/bin/
 /projects/GKv2/GEDKeeper2/obj/
