@@ -122,7 +122,7 @@ namespace GKUI.Forms
             return false;//(ShowModal((Control)owner) == DialogResult.Ok);
         }
 
-        protected async virtual void CancelClickHandler(object sender, RoutedEventArgs e)
+        protected virtual void CancelClickHandler(object sender, RoutedEventArgs e)
         {
             //Close(DialogResult.Cancel);
             this.Frame.GoBack();

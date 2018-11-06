@@ -114,7 +114,7 @@ namespace GKUI.Providers
         }
     }
 
-    /*public sealed class RadioButtonHandler : BaseControlHandler<RadioButton, RadioButtonHandler>, IRadioButtonHandler
+    public sealed class RadioButtonHandler : BaseControlHandler<RadioButton, RadioButtonHandler>, IRadioButtonHandler
     {
         public RadioButtonHandler(RadioButton control) : base(control)
         {
@@ -122,16 +122,16 @@ namespace GKUI.Providers
 
         public bool Checked
         {
-            get { return Control.Checked; }
-            set { Control.Checked = value; }
+            get { return Control.IsChecked.GetValueOrDefault(); }
+            set { Control.IsChecked = value; }
         }
 
         public string Text
         {
-            get { return Control.Text; }
-            set { Control.Text = value; }
+            get { return (string)Control.Content; }
+            set { Control.Content = value; }
         }
-    }*/
+    }
 
     public sealed class ComboBoxHandler : BaseControlHandler<EditableComboBox, ComboBoxHandler>, IComboBoxHandler
     {
@@ -506,7 +506,7 @@ namespace GKUI.Providers
         }
     }*/
 
-    /*public sealed class ProgressBarHandler : BaseControlHandler<ProgressBar, ProgressBarHandler>, IProgressBarHandler
+    public sealed class ProgressBarHandler : BaseControlHandler<ProgressBar, ProgressBarHandler>, IProgressBarHandler
     {
         public ProgressBarHandler(ProgressBar control) : base(control)
         {
@@ -514,19 +514,19 @@ namespace GKUI.Providers
 
         public int Minimum
         {
-            get { return Control.MinValue; }
-            set { Control.MinValue = value; }
+            get { return (int)Control.Minimum; }
+            set { Control.Minimum = value; }
         }
 
         public int Maximum
         {
-            get { return Control.MaxValue; }
-            set { Control.MaxValue = value; }
+            get { return (int)Control.Maximum; }
+            set { Control.Maximum = value; }
         }
 
         public int Value
         {
-            get { return Control.Value; }
+            get { return (int)Control.Value; }
             set { Control.Value = value; }
         }
 
@@ -534,7 +534,7 @@ namespace GKUI.Providers
         {
             Control.Value += value;
         }
-    }*/
+    }
 
     /*public sealed class LogChartHandler : BaseControlHandler<LogChart, LogChartHandler>, ILogChart
     {

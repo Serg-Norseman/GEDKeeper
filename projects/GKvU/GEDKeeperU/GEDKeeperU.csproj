@@ -7,7 +7,7 @@
     <ProjectGuid>{270298F3-8636-4479-9003-A0EC47549891}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GEDKeeperU</RootNamespace>
+    <RootNamespace />
     <AssemblyName>GEDKeeperU</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
@@ -110,6 +110,7 @@
       <DependentUpon>UserRefEditDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Providers\ControlHandlers.cs" />
+    <Compile Include="GKUI\Providers\UWPAppHost.cs" />
     <Compile Include="GKUI\ToolsPage.xaml.cs">
       <DependentUpon>ToolsPage.xaml</DependentUpon>
     </Compile>

@@ -1,6 +1,6 @@
 ﻿using Windows.UI.Xaml.Controls;
 
-namespace GEDKeeperU
+namespace GKUI
 {
     /// <summary>
     /// 
