@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using GKCore;
 using Windows.Storage.Streams;
+using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -41,20 +42,27 @@ namespace GKUI.Components
             return CreateStackLayout(Orientation.Vertical, 0, 10, items);
         }
 
-        public static StackPanel CreateStackLayout(Orientation orientation,
-                                                    int padding, int spacing,
-                                                    params UIElement[] items)
+        public static StackPanel CreateStackLayout(Orientation orientation, int padding, int spacing,
+            params UIElement[] items)
         {
             var res = new StackPanel();
             res.Orientation = orientation;
             res.Padding = new Thickness(padding);
             res.Spacing = spacing;
             res.HorizontalAlignment = HorizontalAlignment.Center;
-            foreach (var itm in items)
-            {
-                res.Children.Add(itm);
+            foreach (var itm in items) {
+                if (itm == null) {
+                    // TODO: filler!
+                } else {
+                    res.Children.Add(itm);
+                }
             }
             return res;
+        }
+
+        public static StackPanel MakeDialogFooter(params UIElement[] items)
+        {
+            return CreateStackLayout(Orientation.Horizontal, 0, 10, items);
         }
 
         public static void SetGridElement(this Grid grid, FrameworkElement element, int col, int row)
@@ -72,6 +80,21 @@ namespace GKUI.Components
             btn.Content = title;
             btn.Click += clickHandler;
             return btn;
+        }
+
+        public static void SetDefaultFont(UIElement element, float size = 15.0f, FontWeight? weight = null)
+        {
+            if (element is TextBlock) {
+                var txt = element as TextBlock;
+                txt.FontSize = size;
+                if (weight == null) {
+                    txt.FontWeight = FontWeights.Normal;
+                } else {
+                    txt.FontWeight = weight.Value;
+                }
+            }
+            //string fontName = AppHost.Instance.GetDefaultFontName();
+            //return new Font(fontName, size);
         }
 
         public static ImageSource LoadResourceImage(string resName)

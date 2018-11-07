@@ -18,12 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using Windows.UI.Xaml.Controls;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using Windows.UI.Xaml;
-//using GKUI.Components;
+using Windows.UI.Xaml.Controls;
 
 namespace GKUI.Forms
 {
@@ -70,6 +68,7 @@ namespace GKUI.Forms
 
         public void Close()
         {
+            Frame.GoBack();
         }
 
         public void Dispose()
@@ -81,8 +80,12 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public abstract class CommonWindow : CommonForm, IWindow
+    public class CommonWindow : CommonForm, IWindow
     {
+        public CommonWindow() : base()
+        {
+        }
+
         public virtual void Show(bool showInTaskbar)
         {
             //ShowInTaskbar = showInTaskbar;
@@ -95,23 +98,33 @@ namespace GKUI.Forms
     }
 
 
+    public enum DialogResult
+    {
+        None,
+        Ok,
+        Cancel,
+    }
+
+
     /// <summary>
     /// 
     /// </summary>
     public class CommonDialog : CommonForm, ICommonDialog
     {
-        /*public DialogResult DialogResult
+        private DialogResult fResult;
+
+        public DialogResult DialogResult
         {
-            get { return base.Result; }
+            get { return fResult; }
             set {
-                if (base.Result != value) {
-                    base.Result = value;
+                if (fResult != value) {
+                    fResult = value;
                     if (value != DialogResult.None) {
                         Close();
                     }
                 }
             }
-        }*/
+        }
 
         public CommonDialog() : base()
         {
@@ -122,10 +135,17 @@ namespace GKUI.Forms
             return false;//(ShowModal((Control)owner) == DialogResult.Ok);
         }
 
+        public void Close(DialogResult dialogResult)
+        {
+            fResult = dialogResult;
+            if (fResult != DialogResult.None) {
+                Frame.GoBack();
+            }
+        }
+
         protected virtual void CancelClickHandler(object sender, RoutedEventArgs e)
         {
-            //Close(DialogResult.Cancel);
-            this.Frame.GoBack();
+            Close(DialogResult.Cancel);
         }
 
         public void SetPredefProperties(int width, int height, bool fontPreset = true)

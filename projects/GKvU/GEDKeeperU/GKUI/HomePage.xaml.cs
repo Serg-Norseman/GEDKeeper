@@ -2,9 +2,6 @@
 
 namespace GKUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class HomePage : Page
     {
         public HomePage()

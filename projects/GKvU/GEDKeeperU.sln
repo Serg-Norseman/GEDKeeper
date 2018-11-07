@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKComponents", "GKComponent
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKCore.std", "..\GKCore\GKCore.std.csproj", "{90EDBEEE-E312-42E3-996A-48736637FDCB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4BC8F408-B5E6-4BF6-94CA-F23A78F5C076}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.editorconfig = ..\..\.editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

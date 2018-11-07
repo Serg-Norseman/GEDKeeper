@@ -29,10 +29,7 @@ using Windows.UI.Xaml;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public partial class UserRefEditDlg : EditorDialog, IUserRefEditDlg
+    public sealed partial class UserRefEditDlg : EditorDialog, IUserRefEditDlg
     {
         private readonly UserRefEditDlgController fController;
 
@@ -58,7 +55,7 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, RoutedEventArgs e)
         {
-            //DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
         }
 
         public UserRefEditDlg() : this(null)
@@ -68,7 +65,6 @@ namespace GKUI.Forms
         public UserRefEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
-            InitializeComponentEx();
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");

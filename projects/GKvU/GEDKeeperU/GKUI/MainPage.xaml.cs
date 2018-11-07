@@ -12,9 +12,6 @@ using Windows.UI.Xaml.Navigation;
 
 namespace GKUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         // List of object holding the Navigation Tag and the relative Navigation Page 
@@ -23,6 +20,8 @@ namespace GKUI
             new PageItem("Home", typeof(HomePage)),
             new PageItem("Tools", typeof(ToolsPage)),
             new PageItem("UserRef", typeof(UserRefEditDlg), new SymbolIcon((Symbol)0xE15E)),
+            new PageItem("About", typeof(AboutDlg), new SymbolIcon((Symbol)0xE15E)),
+            new PageItem("PatriarchsViewer", typeof(PatriarchsViewerWin), new SymbolIcon((Symbol)0xE15E)),
         };
 
         public MainPage()

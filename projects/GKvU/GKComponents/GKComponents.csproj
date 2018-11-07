@@ -106,12 +106,26 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GKUI\Components\ArborViewer.xaml.cs">
+      <DependentUpon>ArborViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Components\EditableComboBox.xaml.cs">
+      <DependentUpon>EditableComboBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Components\GKComboItem.cs" />
+    <Compile Include="GKUI\Components\ImageButton.xaml.cs">
+      <DependentUpon>ImageButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Components\UIHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\GKComponents.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.9</Version>
+    </PackageReference>
+    <PackageReference Include="Win2D.uwp">
+      <Version>1.23.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -121,7 +135,29 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GKUI\Components\" />
+    <Page Include="GKUI\Components\ArborViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GKUI\Components\EditableComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GKUI\Components\ImageButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ArborGVT">
+      <HintPath>..\..\libs\ArborGVT.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib">
+      <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.SmartGraph">
+      <HintPath>..\..\libs\netstd\BSLib.SmartGraph.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

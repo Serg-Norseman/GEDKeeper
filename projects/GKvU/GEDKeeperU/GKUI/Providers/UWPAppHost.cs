@@ -41,8 +41,10 @@ namespace GKUI.Providers
             //var appHost = new EtoAppHost();
 
             IContainer container = AppHost.Container;
+
             if (container == null)
                 throw new ArgumentNullException("container");
+
             container.Reset();
 
             /*
@@ -51,8 +53,10 @@ namespace GKUI.Providers
             container.Register<IGraphicsProvider, EtoGfxProvider>(LifeCycle.Singleton);
             container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
             container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
+            */
             // dialogs
             container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
+            /*
             container.Register<IAddressEditDlg, AddressEditDlg>(LifeCycle.Transient);
             container.Register<IAssociationEditDlg, AssociationEditDlg>(LifeCycle.Transient);
             container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient);
@@ -76,6 +80,9 @@ namespace GKUI.Providers
             container.Register<IOptionsDlg, OptionsDlg>(LifeCycle.Transient);
             container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
             container.Register<IPatriarchsSearchDlg, TTPatSearchDlg>(LifeCycle.Transient);
+            */
+            container.Register<IPatriarchsViewer, PatriarchsViewerWin>(LifeCycle.Transient);
+            /*
             container.Register<IPersonsFilterDlg, PersonsFilterDlg>(LifeCycle.Transient);
             container.Register<IPlacesManagerDlg, TTPlacesManagerDlg>(LifeCycle.Transient);
             container.Register<IPersonalNameEditDlg, PersonalNameEditDlg>(LifeCycle.Transient);
@@ -98,7 +105,8 @@ namespace GKUI.Providers
             container.Register<ITreeCompareDlg, TTTreeCompareDlg>(LifeCycle.Transient);
             container.Register<ITreeFilterDlg, TreeFilterDlg>(LifeCycle.Transient);
             container.Register<ITreeMergeDlg, TTTreeMergeDlg>(LifeCycle.Transient);
-            container.Register<ITreeSplitDlg, TTTreeSplitDlg>(LifeCycle.Transient);*/
+            container.Register<ITreeSplitDlg, TTTreeSplitDlg>(LifeCycle.Transient);
+            */
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
