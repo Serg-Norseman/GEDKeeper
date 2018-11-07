@@ -22,6 +22,8 @@ namespace GKUI
             new PageItem("UserRef", typeof(UserRefEditDlg), new SymbolIcon((Symbol)0xE15E)),
             new PageItem("About", typeof(AboutDlg), new SymbolIcon((Symbol)0xE15E)),
             new PageItem("PatriarchsViewer", typeof(PatriarchsViewerWin), new SymbolIcon((Symbol)0xE15E)),
+            new PageItem("ProgressDlg", typeof(ProgressDlg), new SymbolIcon((Symbol)0xE15E)),
+            new PageItem("QuickSearchDlg", typeof(QuickSearchDlg), new SymbolIcon((Symbol)0xE15E)),
         };
 
         public MainPage()

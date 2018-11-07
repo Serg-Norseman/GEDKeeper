@@ -20,7 +20,9 @@
 
 using System;
 using System.IO;
+using BSLib;
 using GKCore;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage.Streams;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
@@ -30,58 +32,11 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace GKUI.Components
 {
+    /// <summary>
+    /// Static functions only for UI implementation.
+    /// </summary>
     public static class UIHelper
     {
-        public static StackPanel CreateHStackLayout(params UIElement[] items)
-        {
-            return CreateStackLayout(Orientation.Horizontal, 0, 10, items);
-        }
-
-        public static StackPanel CreateVStackLayout(params UIElement[] items)
-        {
-            return CreateStackLayout(Orientation.Vertical, 0, 10, items);
-        }
-
-        public static StackPanel CreateStackLayout(Orientation orientation, int padding, int spacing,
-            params UIElement[] items)
-        {
-            var res = new StackPanel();
-            res.Orientation = orientation;
-            res.Padding = new Thickness(padding);
-            res.Spacing = spacing;
-            res.HorizontalAlignment = HorizontalAlignment.Center;
-            foreach (var itm in items) {
-                if (itm == null) {
-                    // TODO: filler!
-                } else {
-                    res.Children.Add(itm);
-                }
-            }
-            return res;
-        }
-
-        public static StackPanel MakeDialogFooter(params UIElement[] items)
-        {
-            return CreateStackLayout(Orientation.Horizontal, 0, 10, items);
-        }
-
-        public static void SetGridElement(this Grid grid, FrameworkElement element, int col, int row)
-        {
-            Grid.SetColumn(element, col);
-            Grid.SetRow(element, row);
-            grid.Children.Add(element);
-        }
-
-        public static ImageButton CreateDialogButton(string title, RoutedEventHandler clickHandler)
-        {
-            var btn = new ImageButton();
-            btn.VerticalAlignment = VerticalAlignment.Center;
-            btn.HorizontalAlignment = HorizontalAlignment.Center;
-            btn.Content = title;
-            btn.Click += clickHandler;
-            return btn;
-        }
-
         public static void SetDefaultFont(UIElement element, float size = 15.0f, FontWeight? weight = null)
         {
             if (element is TextBlock) {
@@ -129,6 +84,71 @@ namespace GKUI.Components
             BitmapImage bitmapImage = new BitmapImage();
             bitmapImage.SetSource(randStream);
             return bitmapImage;
+        }
+
+        public static string[] Convert(string text)
+        {
+            var strList = new StringList(text);
+            return strList.ToArray();
+        }
+
+        public static void SetGridElement(this Grid grid, FrameworkElement element, int col, int row)
+        {
+            Grid.SetColumn(element, col);
+            Grid.SetRow(element, row);
+            grid.Children.Add(element);
+        }
+
+        public static ImageButton CreateDialogButton(string title, RoutedEventHandler clickHandler)
+        {
+            var btn = new ImageButton();
+            btn.VerticalAlignment = VerticalAlignment.Center;
+            btn.HorizontalAlignment = HorizontalAlignment.Center;
+            btn.Content = title;
+            btn.Click += clickHandler;
+            return btn;
+        }
+
+        public static StackPanel MakeDialogFooter(params UIElement[] items)
+        {
+            return CreateStackLayout(Orientation.Horizontal, 0, 10, items);
+        }
+
+        public static StackPanel CreateHStackLayout(params UIElement[] items)
+        {
+            return CreateStackLayout(Orientation.Horizontal, 0, 10, items);
+        }
+
+        public static StackPanel CreateVStackLayout(params UIElement[] items)
+        {
+            return CreateStackLayout(Orientation.Vertical, 0, 10, items);
+        }
+
+        public static StackPanel CreateStackLayout(Orientation orientation,
+                                                   int padding, int spacing,
+                                                   params UIElement[] items)
+        {
+            var res = new StackPanel();
+            res.Orientation = orientation;
+            res.Padding = new Thickness(padding);
+            res.Spacing = spacing;
+            res.HorizontalAlignment = HorizontalAlignment.Center;
+            foreach (var itm in items) {
+                if (itm == null) {
+                    // TODO: filler!
+                } else {
+                    res.Children.Add(itm);
+                }
+            }
+            return res;
+        }
+
+        public static void SetClipboardText(string text)
+        {
+            var dataPackage = new DataPackage();
+            dataPackage.RequestedOperation = DataPackageOperation.Copy;
+            dataPackage.SetText(text);
+            Clipboard.SetContent(dataPackage);
         }
     }
 }

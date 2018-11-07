@@ -36,19 +36,19 @@ namespace GKUI.Providers
         {
         }
 
-        public bool Enabled
+        public virtual bool Enabled
         {
             get { return true; }
             set { /* not exists */ }
         }
 
-        public void Activate()
+        public virtual void Activate()
         {
         }
     }
 
 
-    public abstract class BaseControlHandler<T, TThis> : ControlHandler<T, TThis>, IBaseControl
+    public abstract class BaseControlHandler<T, TThis> : BaseElementHandler<T, TThis>
         where T : Control
         where TThis : ControlHandler<T, TThis>
     {
@@ -56,13 +56,13 @@ namespace GKUI.Providers
         {
         }
 
-        public bool Enabled
+        public override bool Enabled
         {
             get { return Control.IsEnabled; }
             set { Control.IsEnabled = value; }
         }
 
-        public void Activate()
+        public override void Activate()
         {
             Control.Focus(FocusState.Programmatic);
         }
@@ -241,13 +241,13 @@ namespace GKUI.Providers
         }
     }
 
-    /*public sealed class TextBoxHandler : BaseControlHandler<Entry, TextBoxHandler>, ITextBoxHandler
+    public sealed class TextBoxHandler : BaseControlHandler<TextBox, TextBoxHandler>, ITextBoxHandler
     {
-        public TextBoxHandler(Entry control) : base(control)
+        public TextBoxHandler(TextBox control) : base(control)
         {
         }
 
-        public new bool Enabled
+        public override bool Enabled
         {
             get { return Control.IsEnabled; }
             set {
@@ -264,9 +264,9 @@ namespace GKUI.Providers
 
         public bool ReadOnly
         {
-            get { return Control.ReadOnly; }
+            get { return Control.IsReadOnly; }
             set {
-                Control.ReadOnly = value;
+                Control.IsReadOnly = value;
                 SetBackColor();
             }
         }
@@ -285,7 +285,7 @@ namespace GKUI.Providers
 
         public void AppendText(string text)
         {
-            //Control.Append(text, true);
+            Control.Text += text;
         }
 
         public void Clear()
@@ -295,7 +295,9 @@ namespace GKUI.Providers
 
         private void SetBackColor()
         {
-            Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
+            // TODO
+            //Color backColor = (!Control.IsReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
+            //Control.Background = new SolidColorBrush(backColor);
         }
 
         public void Copy()
@@ -307,75 +309,7 @@ namespace GKUI.Providers
         {
             Control.SelectAll();
         }
-    }*/
-
-    /*public sealed class TextAreaHandler : BaseControlHandler<Editor, TextAreaHandler>, ITextBoxHandler
-    {
-        public TextAreaHandler(Editor control) : base(control)
-        {
-        }
-
-        public new bool Enabled
-        {
-            get { return Control.IsEnabled; }
-            set {
-                Control.IsEnabled = value;
-                SetBackColor();
-            }
-        }
-
-        public string[] Lines
-        {
-            get { return UIHelper.Convert(Control.Text); }
-            set { } // TODO
-        }
-
-        public bool ReadOnly
-        {
-            get { return Control.ReadOnly; }
-            set {
-                Control.ReadOnly = value;
-                SetBackColor();
-            }
-        }
-
-        public string SelectedText
-        {
-            get { return Control.SelectedText; }
-            set { Control.SelectedText = value; }
-        }
-
-        public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
-        }
-
-        public void AppendText(string text)
-        {
-            Control.Append(text, true);
-        }
-
-        public void Clear()
-        {
-            Control.Text = string.Empty;
-        }
-
-        private void SetBackColor()
-        {
-            Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
-        }
-
-        public void Copy()
-        {
-            UIHelper.SetClipboardText(Control.SelectedText);
-        }
-
-        public void SelectAll()
-        {
-            Control.SelectAll();
-        }
-    }*/
+    }
 
     /*public sealed class MaskedTextBoxHandler : BaseControlHandler<Entry, MaskedTextBoxHandler>, ITextBoxHandler
     {

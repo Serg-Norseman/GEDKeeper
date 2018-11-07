@@ -103,6 +103,12 @@
     <Compile Include="GKUI\Forms\PatriarchsViewerWin.xaml.cs">
       <DependentUpon>PatriarchsViewerWin.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\ProgressDlg.xaml.cs">
+      <DependentUpon>ProgressDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\QuickSearchDlg.xaml.cs">
+      <DependentUpon>QuickSearchDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Forms\UserRefEditDlg.xaml.cs">
       <DependentUpon>UserRefEditDlg.xaml</DependentUpon>
     </Compile>
@@ -151,6 +157,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="GKUI\Forms\PatriarchsViewerWin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GKUI\Forms\ProgressDlg.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GKUI\Forms\QuickSearchDlg.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
