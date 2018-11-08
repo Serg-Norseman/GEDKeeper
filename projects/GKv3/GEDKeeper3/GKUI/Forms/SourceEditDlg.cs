@@ -33,9 +33,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class SourceEditDlg : EditorDialog, ISourceEditDlg
     {
         private readonly SourceEditDlgController fController;
@@ -69,27 +66,27 @@ namespace GKUI.Forms
 
         ITextBoxHandler ISourceEditDlg.ShortTitle
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtShortTitle); }
+            get { return GetControlHandler<ITextBoxHandler>(txtShortTitle); }
         }
 
         ITextBoxHandler ISourceEditDlg.Author
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtAuthor); }
+            get { return GetControlHandler<ITextBoxHandler>(txtAuthor); }
         }
 
         ITextBoxHandler ISourceEditDlg.Title
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtTitle); }
+            get { return GetControlHandler<ITextBoxHandler>(txtTitle); }
         }
 
         ITextBoxHandler ISourceEditDlg.Publication
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtPublication); }
+            get { return GetControlHandler<ITextBoxHandler>(txtPublication); }
         }
 
         ITextBoxHandler ISourceEditDlg.Text
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtText); }
+            get { return GetControlHandler<ITextBoxHandler>(txtText); }
         }
 
         #endregion

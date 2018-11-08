@@ -35,9 +35,6 @@ using GKUI.Providers;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class TreeChartWin : PrintableForm, ITreeChartWin
     {
         private readonly TreeChartWinController fController;

@@ -40,9 +40,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class BaseWinSDI : CommonWindow, IBaseWindowView
     {
         #region Private fields
@@ -66,17 +63,17 @@ namespace GKUI.Forms
 
         ITabControl IBaseWindowView.RecordTabs
         {
-            get { return fControlsManager.GetControlHandler<ITabControl>(tabsRecords); }
+            get { return GetControlHandler<ITabControl>(tabsRecords); }
         }
 
         IMenuItem IBaseWindowView.ReportsItem
         {
-            get { return fControlsManager.GetControlHandler<IMenuItem>(miReports); }
+            get { return GetControlHandler<IMenuItem>(miReports); }
         }
 
         IMenuItem IBaseWindowView.PluginsItem
         {
-            get { return fControlsManager.GetControlHandler<IMenuItem>(miPlugins); }
+            get { return GetControlHandler<IMenuItem>(miPlugins); }
         }
 
         #endregion

@@ -30,9 +30,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class FilePropertiesDlg : CommonDialog, IFilePropertiesDlg
     {
         private readonly FilePropertiesDlgController fController;
@@ -46,22 +43,22 @@ namespace GKUI.Forms
 
         ITextBoxHandler IFilePropertiesDlg.Language
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtLanguage); }
+            get { return GetControlHandler<ITextBoxHandler>(txtLanguage); }
         }
 
         ITextBoxHandler IFilePropertiesDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBoxHandler>(txtName); }
         }
 
         ITextBoxHandler IFilePropertiesDlg.Address
         {
-            get { return  fControlsManager.GetControlHandler<ITextBoxHandler>(txtAddress); }
+            get { return  GetControlHandler<ITextBoxHandler>(txtAddress); }
         }
 
         ITextBoxHandler IFilePropertiesDlg.Tel
         {
-            get { return  fControlsManager.GetControlHandler<ITextBoxHandler>(txtTel); }
+            get { return  GetControlHandler<ITextBoxHandler>(txtTel); }
         }
 
         #endregion

@@ -28,9 +28,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTPlacesManagerDlg : CommonDialog, IPlacesManagerDlg
     {
         private readonly PlacesManagerController fController;

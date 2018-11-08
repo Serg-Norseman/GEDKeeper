@@ -31,9 +31,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class NoteEditDlg : EditorDialog, INoteEditDlg
     {
         private readonly NoteEditDlgController fController;
@@ -48,7 +45,7 @@ namespace GKUI.Forms
 
         ITextBoxHandler INoteEdit.Note
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtNote); }
+            get { return GetControlHandler<ITextBoxHandler>(txtNote); }
         }
 
         #endregion

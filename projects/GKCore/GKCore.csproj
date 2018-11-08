@@ -214,6 +214,7 @@
     <Compile Include="GKCore\Controllers\PersonsFilterDlgController.cs" />
     <Compile Include="GKCore\Controllers\PlacesManagerController.cs" />
     <Compile Include="GKCore\Controllers\PortraitSelectDlgController.cs" />
+    <Compile Include="GKCore\Controllers\QuickSearchDlgController.cs" />
     <Compile Include="GKCore\Controllers\RecMergeController.cs" />
     <Compile Include="GKCore\Controllers\RecordSelectDlgController.cs" />
     <Compile Include="GKCore\Controllers\RelationshipCalculatorDlgController.cs" />

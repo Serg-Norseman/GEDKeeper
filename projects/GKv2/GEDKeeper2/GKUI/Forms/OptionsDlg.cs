@@ -32,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class OptionsDlg : CommonDialog, ILocalization, IOptionsDlg
     {
         private readonly IHost fHost;

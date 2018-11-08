@@ -33,9 +33,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class ResearchEditDlg : EditorDialog, IResearchEditDlg
     {
         private readonly ResearchEditDlgController fController;
@@ -76,32 +73,32 @@ namespace GKUI.Forms
 
         ITextBoxHandler IResearchEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBoxHandler>(txtName); }
         }
 
         IComboBoxHandler IResearchEditDlg.Priority
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbPriority); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbPriority); }
         }
 
         IComboBoxHandler IResearchEditDlg.Status
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbStatus); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbStatus); }
         }
 
         ITextBoxHandler IResearchEditDlg.StartDate
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtStartDate); }
+            get { return GetControlHandler<ITextBoxHandler>(txtStartDate); }
         }
 
         ITextBoxHandler IResearchEditDlg.StopDate
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtStopDate); }
+            get { return GetControlHandler<ITextBoxHandler>(txtStopDate); }
         }
 
         INumericBoxHandler IResearchEditDlg.Percent
         {
-            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(nudPercent); }
+            get { return GetControlHandler<INumericBoxHandler>(nudPercent); }
         }
 
         #endregion

@@ -33,9 +33,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class FamilyEditDlg : EditorDialog, IFamilyEditDlg
     {
         private readonly FamilyEditDlgController fController;
@@ -81,22 +78,22 @@ namespace GKUI.Forms
 
         IComboBoxHandler IFamilyEditDlg.MarriageStatus
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbMarriageStatus); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbMarriageStatus); }
         }
 
         IComboBoxHandler IFamilyEditDlg.Restriction
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRestriction); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbRestriction); }
         }
 
         ITextBoxHandler IFamilyEditDlg.Husband
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtHusband); }
+            get { return GetControlHandler<ITextBoxHandler>(txtHusband); }
         }
 
         ITextBoxHandler IFamilyEditDlg.Wife
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtWife); }
+            get { return GetControlHandler<ITextBoxHandler>(txtWife); }
         }
 
         #endregion

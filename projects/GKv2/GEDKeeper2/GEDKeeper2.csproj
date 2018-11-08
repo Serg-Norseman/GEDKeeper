@@ -313,6 +313,9 @@
     <Compile Include="GKUI\Forms\ProgressDlg.Designer.cs">
       <DependentUpon>ProgressDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\QuickSearchDlg.Designer.cs">
+      <DependentUpon>QuickSearchDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Forms\RecordSelectDlg.cs">
       <SubType>Form</SubType>
     </Compile>

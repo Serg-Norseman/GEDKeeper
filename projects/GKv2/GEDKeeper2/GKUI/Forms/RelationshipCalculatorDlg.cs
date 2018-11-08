@@ -29,9 +29,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class RelationshipCalculatorDlg : CommonDialog, IRelationshipCalculatorDlg
     {
         private readonly RelationshipCalculatorDlgController fController;
@@ -40,27 +37,27 @@ namespace GKUI.Forms
 
         ILabelHandler IRelationshipCalculatorDlg.Label1
         {
-            get { return fControlsManager.GetControlHandler<ILabelHandler>(Lab1); }
+            get { return GetControlHandler<ILabelHandler>(Lab1); }
         }
 
         ILabelHandler IRelationshipCalculatorDlg.Label2
         {
-            get { return fControlsManager.GetControlHandler<ILabelHandler>(Lab2); }
+            get { return GetControlHandler<ILabelHandler>(Lab2); }
         }
 
         ITextBoxHandler IRelationshipCalculatorDlg.Person1
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(Edit1); }
+            get { return GetControlHandler<ITextBoxHandler>(Edit1); }
         }
 
         ITextBoxHandler IRelationshipCalculatorDlg.Person2
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(Edit2); }
+            get { return GetControlHandler<ITextBoxHandler>(Edit2); }
         }
 
         ITextBoxHandler IRelationshipCalculatorDlg.Result
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtResult); }
+            get { return GetControlHandler<ITextBoxHandler>(txtResult); }
         }
 
         #endregion

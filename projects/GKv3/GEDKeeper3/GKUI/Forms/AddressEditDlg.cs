@@ -33,9 +33,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class AddressEditDlg : EditorDialog, IAddressEditDlg
     {
         private readonly AddressEditDlgController fController;
@@ -70,27 +67,27 @@ namespace GKUI.Forms
 
         ITextBoxHandler IAddressEditDlg.Country
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtCountry); }
+            get { return GetControlHandler<ITextBoxHandler>(txtCountry); }
         }
 
         ITextBoxHandler IAddressEditDlg.State
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtState); }
+            get { return GetControlHandler<ITextBoxHandler>(txtState); }
         }
 
         ITextBoxHandler IAddressEditDlg.City
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtCity); }
+            get { return GetControlHandler<ITextBoxHandler>(txtCity); }
         }
 
         ITextBoxHandler IAddressEditDlg.PostalCode
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtPostalCode); }
+            get { return GetControlHandler<ITextBoxHandler>(txtPostalCode); }
         }
 
         ITextBoxHandler IAddressEditDlg.AddressLine
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtAddress); }
+            get { return GetControlHandler<ITextBoxHandler>(txtAddress); }
         }
 
         #endregion

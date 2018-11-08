@@ -29,9 +29,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTTreeMergeDlg : CommonDialog, ITreeMergeDlg
     {
         private readonly TreeMergeController fController;
@@ -40,12 +37,12 @@ namespace GKUI.Forms
 
         ITextBoxHandler ITreeMergeDlg.UpdateBase
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(edUpdateBase); }
+            get { return GetControlHandler<ITextBoxHandler>(edUpdateBase); }
         }
 
         ITextBoxHandler ITreeMergeDlg.SyncLog
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(mSyncRes); }
+            get { return GetControlHandler<ITextBoxHandler>(mSyncRes); }
         }
 
         #endregion

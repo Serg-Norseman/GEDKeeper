@@ -32,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class LocationEditDlg : EditorDialog, ILocationEditDlg
     {
         private readonly LocationEditDlgController fController;
@@ -73,17 +70,17 @@ namespace GKUI.Forms
 
         ITextBoxHandler ILocationEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBoxHandler>(txtName); }
         }
 
         ITextBoxHandler ILocationEditDlg.Latitude
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtLatitude); }
+            get { return GetControlHandler<ITextBoxHandler>(txtLatitude); }
         }
 
         ITextBoxHandler ILocationEditDlg.Longitude
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtLongitude); }
+            get { return GetControlHandler<ITextBoxHandler>(txtLongitude); }
         }
 
         #endregion

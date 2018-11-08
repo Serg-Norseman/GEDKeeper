@@ -33,9 +33,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class GroupEditDlg : EditorDialog, IGroupEditDlg
     {
         private readonly GroupEditDlgController fController;
@@ -69,7 +66,7 @@ namespace GKUI.Forms
 
         ITextBoxHandler IGroupEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(edName); }
+            get { return GetControlHandler<ITextBoxHandler>(edName); }
         }
 
         #endregion

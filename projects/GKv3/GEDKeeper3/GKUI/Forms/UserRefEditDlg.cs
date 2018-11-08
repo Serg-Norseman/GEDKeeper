@@ -31,9 +31,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class UserRefEditDlg : EditorDialog, IUserRefEditDlg
     {
         private readonly UserRefEditDlgController fController;
@@ -48,12 +45,12 @@ namespace GKUI.Forms
 
         IComboBoxHandler IUserRefEditDlg.Ref
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRef); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbRef); }
         }
 
         IComboBoxHandler IUserRefEditDlg.RefType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRefType); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbRefType); }
         }
 
         #endregion

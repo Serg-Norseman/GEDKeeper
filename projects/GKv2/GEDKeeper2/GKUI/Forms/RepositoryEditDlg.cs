@@ -32,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class RepositoryEditDlg : EditorDialog, IRepositoryEditDlg
     {
         private readonly RepositoryEditDlgController fController;
@@ -56,7 +53,7 @@ namespace GKUI.Forms
 
         ITextBoxHandler IRepositoryEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBoxHandler>(txtName); }
         }
 
         #endregion

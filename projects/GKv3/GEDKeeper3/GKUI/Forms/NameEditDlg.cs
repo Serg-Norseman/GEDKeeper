@@ -30,9 +30,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class NameEditDlg : CommonDialog, INameEditDlg
     {
         private readonly NameEditDlgController fController;
@@ -47,22 +44,22 @@ namespace GKUI.Forms
 
         ITextBoxHandler INameEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBoxHandler>(txtName); }
         }
 
         ITextBoxHandler INameEditDlg.FPatr
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtFPatr); }
+            get { return GetControlHandler<ITextBoxHandler>(txtFPatr); }
         }
 
         ITextBoxHandler INameEditDlg.MPatr
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtMPatr); }
+            get { return GetControlHandler<ITextBoxHandler>(txtMPatr); }
         }
 
         IComboBoxHandler INameEditDlg.SexCombo
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbSex); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbSex); }
         }
 
         #endregion
