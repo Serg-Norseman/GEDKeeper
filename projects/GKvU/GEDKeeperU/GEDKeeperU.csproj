@@ -98,8 +98,20 @@
     <Compile Include="GKUI\Forms\AboutDlg.xaml.cs">
       <DependentUpon>AboutDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\AssociationEditDlg.xaml.cs">
+      <DependentUpon>AssociationEditDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Forms\CommonForm.cs" />
     <Compile Include="GKUI\Forms\EditorDialog.cs" />
+    <Compile Include="GKUI\Forms\LanguageEditDlg.xaml.cs">
+      <DependentUpon>LanguageEditDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\LanguageSelectDlg.xaml.cs">
+      <DependentUpon>LanguageSelectDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\NoteEditDlg.xaml.cs">
+      <DependentUpon>NoteEditDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Forms\PatriarchsViewerWin.xaml.cs">
       <DependentUpon>PatriarchsViewerWin.xaml</DependentUpon>
     </Compile>
@@ -153,6 +165,22 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="GKUI\Forms\AboutDlg.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GKUI\Forms\AssociationEditDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GKUI\Forms\LanguageEditDlg.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GKUI\Forms\LanguageSelectDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GKUI\Forms\NoteEditDlg.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

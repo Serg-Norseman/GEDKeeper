@@ -19,11 +19,16 @@ namespace GKUI
         {
             new PageItem("Home", typeof(HomePage)),
             new PageItem("Tools", typeof(ToolsPage)),
-            new PageItem("UserRef", typeof(UserRefEditDlg), new SymbolIcon((Symbol)0xE15E)),
+
             new PageItem("About", typeof(AboutDlg), new SymbolIcon((Symbol)0xE15E)),
+            new PageItem("AssociationEditDlg", typeof(AssociationEditDlg), new SymbolIcon((Symbol)0xE15E)),
+            new PageItem("LanguageEditDlg", typeof(LanguageEditDlg), new SymbolIcon((Symbol)0xE15E)),
+            new PageItem("LanguageSelectDlg", typeof(LanguageSelectDlg), new SymbolIcon((Symbol)0xE15E)),
+            new PageItem("NoteEditDlg", typeof(NoteEditDlg), new SymbolIcon((Symbol)0xE15E)),
             new PageItem("PatriarchsViewer", typeof(PatriarchsViewerWin), new SymbolIcon((Symbol)0xE15E)),
             new PageItem("ProgressDlg", typeof(ProgressDlg), new SymbolIcon((Symbol)0xE15E)),
             new PageItem("QuickSearchDlg", typeof(QuickSearchDlg), new SymbolIcon((Symbol)0xE15E)),
+            new PageItem("UserRef", typeof(UserRefEditDlg), new SymbolIcon((Symbol)0xE15E)),
         };
 
         public MainPage()

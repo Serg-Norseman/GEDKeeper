@@ -24,31 +24,25 @@ using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKUI.Components;
 using Windows.UI.Xaml;
 
 namespace GKUI.Forms
 {
-    public sealed partial class UserRefEditDlg : EditorDialog, IUserRefEditDlg
+    public sealed partial class NoteEditDlg : EditorDialog, INoteEditDlg
     {
-        private readonly UserRefEditDlgController fController;
+        private readonly NoteEditDlgController fController;
 
-        public GEDCOMUserReference UserRef
+        public GEDCOMNoteRecord NoteRecord
         {
-            get { return fController.UserRef; }
-            set { fController.UserRef = value; }
+            get { return fController.NoteRecord; }
+            set { fController.NoteRecord = value; }
         }
 
         #region View Interface
 
-        IComboBoxHandler IUserRefEditDlg.Ref
+        ITextBoxHandler INoteEdit.Note
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRef); }
-        }
-
-        IComboBoxHandler IUserRefEditDlg.RefType
-        {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRefType); }
+            get { return GetControlHandler<ITextBoxHandler>(txtNote); }
         }
 
         #endregion
@@ -58,25 +52,23 @@ namespace GKUI.Forms
             DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
         }
 
-        public UserRefEditDlg() : this(null)
+        public NoteEditDlg() : this(null)
         {
         }
 
-        public UserRefEditDlg(IBaseWindow baseWin)
+        public NoteEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            //btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            //btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             // SetLang()
             btnAccept.Content = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Content = LangMan.LS(LSID.LSID_DlgCancel);
-            Caption = LangMan.LS(LSID.LSID_WinUserRefEdit);
-            lblReference.Text = LangMan.LS(LSID.LSID_Reference);
-            lblRefType.Text = LangMan.LS(LSID.LSID_Type);
+            Caption = LangMan.LS(LSID.LSID_Note);
 
-            fController = new UserRefEditDlgController(this);
+            fController = new NoteEditDlgController(this);
             fController.Init(baseWin);
         }
     }

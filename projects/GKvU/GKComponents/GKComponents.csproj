@@ -113,6 +113,9 @@
       <DependentUpon>EditableComboBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Components\GKComboItem.cs" />
+    <Compile Include="GKUI\Components\GKListView.xaml.cs">
+      <DependentUpon>GKListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Components\ImageButton.xaml.cs">
       <DependentUpon>ImageButton.xaml</DependentUpon>
     </Compile>
@@ -142,6 +145,10 @@
     <Page Include="GKUI\Components\EditableComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GKUI\Components\GKListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GKUI\Components\ImageButton.xaml">
       <Generator>MSBuild:Compile</Generator>

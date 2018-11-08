@@ -30,7 +30,7 @@ namespace GKUI.Forms
     /// </summary>
     public class CommonForm : Page, IView
     {
-        protected readonly ControlsManager fControlsManager;
+        private readonly ControlsManager fControlsManager;
         private string fCaption;
 
         #region View Interface
@@ -73,6 +73,11 @@ namespace GKUI.Forms
 
         public void Dispose()
         {
+        }
+
+        protected T GetControlHandler<T>(object control) where T : IControl
+        {
+            return fControlsManager.GetControlHandler<T>(control);
         }
     }
 

@@ -18,20 +18,30 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
+using GKCore.MVP.Controls;
+using GKCore.MVP.Views;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using VKey = Windows.System.VirtualKey;
+using Keys = Windows.System.VirtualKey;
 
 namespace GKUI.Forms
 {
-    public sealed partial class QuickSearchDlg : CommonForm, ILocalization
+    public sealed partial class QuickSearchDlg : CommonForm, IQuickSearchDlg
     {
-        private readonly IWorkWindow fWorkWindow;
-        private ISearchStrategy fStrategy;
+        private readonly QuickSearchDlgController fController;
+
+        #region View Interface
+
+        ITextBoxHandler IQuickSearchDlg.SearchPattern
+        {
+            get { return GetControlHandler<ITextBoxHandler>(txtSearchPattern); }
+        }
+
+        #endregion
 
         public QuickSearchDlg() : this(null)
         {
@@ -45,64 +55,38 @@ namespace GKUI.Forms
             //btnPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
             //btnNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
-            fWorkWindow = workWindow;
+            fController = new QuickSearchDlgController(this, workWindow);
+
             SetLang();
         }
 
         private void SearchPattern_TextChanged(object sender, TextChangedEventArgs e)
         {
-            fStrategy = new SearchStrategy(fWorkWindow, txtSearchPattern.Text);
+            fController.ChangeText();
         }
 
         private void FindNext_Click(object sender, RoutedEventArgs e)
         {
-            if (fStrategy == null) return;
-
-            if (!fStrategy.HasResults()) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
-                return;
-            }
-
-            ISearchResult result = fStrategy.FindNext();
-            if (result != null) {
-                SelectResult(result as SearchResult);
-            }
+            fController.FindNext();
         }
 
         private void FindPrev_Click(object sender, RoutedEventArgs e)
         {
-            if (fStrategy == null) return;
-
-            if (!fStrategy.HasResults()) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
-                return;
-            }
-
-            ISearchResult result = fStrategy.FindPrev();
-            if (result != null) {
-                SelectResult(result as SearchResult);
-            }
-        }
-
-        private void SelectResult(SearchResult result)
-        {
-            if (result == null || result.Result == null) return;
-
-            fWorkWindow.SelectByRec(result.Result as GEDCOMIndividualRecord);
+            fController.FindPrev();
         }
 
         private void SearchPanel_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.VirtualKey) {
-                case VKey.Enter:
+                case Keys.Enter:
                     e.Handled = true;
                     /*if (e.Shift)
-                        FindPrev_Click(this, null);
+                        fController.FindPrev();
                     else
-                        FindNext_Click(this, null);*/
+                        fController.FindNext();*/
                     break;
 
-                case VKey.Escape:
+                case Keys.Escape:
                     e.Handled = true;
                     Close();
                     break;
