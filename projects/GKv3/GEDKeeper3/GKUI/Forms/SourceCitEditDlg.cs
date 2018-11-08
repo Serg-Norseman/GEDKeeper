@@ -31,9 +31,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class SourceCitEditDlg : EditorDialog, ISourceCitEditDlg
     {
         private readonly SourceCitEditDlgController fController;
@@ -48,17 +45,17 @@ namespace GKUI.Forms
 
         ITextBoxHandler ISourceCitEditDlg.Page
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtPage); }
+            get { return GetControlHandler<ITextBoxHandler>(txtPage); }
         }
 
         IComboBoxHandler ISourceCitEditDlg.Certainty
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(txtCertainty); }
+            get { return GetControlHandler<IComboBoxHandler>(txtCertainty); }
         }
 
         IComboBoxHandler ISourceCitEditDlg.Source
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbSource); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbSource); }
         }
 
         #endregion

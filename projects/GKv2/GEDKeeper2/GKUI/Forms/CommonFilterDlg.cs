@@ -30,9 +30,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class CommonFilterDlg : CommonDialog, ICommonFilterDlg
     {
         private readonly CommonFilterDlgController fController;
@@ -52,10 +49,14 @@ namespace GKUI.Forms
             get { return fListMan; }
         }
 
+        #region View Interface
+
         public IFilterGridView FilterGrid
         {
             get { return filterView; }
         }
+
+        #endregion
 
         public CommonFilterDlg()
         {

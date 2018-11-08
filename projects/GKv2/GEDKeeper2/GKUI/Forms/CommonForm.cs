@@ -34,7 +34,7 @@ namespace GKUI.Forms
         private readonly IContainer fComponents;
         private readonly ToolTip fToolTip;
 
-        protected readonly ControlsManager fControlsManager;
+        private readonly ControlsManager fControlsManager;
 
         #region View Interface
 
@@ -73,6 +73,11 @@ namespace GKUI.Forms
                     ((ToolStripItem)component).ToolTipText = toolTip;
                 }
             }
+        }
+
+        protected T GetControlHandler<T>(object control) where T : IControl
+        {
+            return fControlsManager.GetControlHandler<T>(control);
         }
     }
 

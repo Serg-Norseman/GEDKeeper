@@ -30,9 +30,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class SlideshowWin : StatusForm, ISlideshowWin
     {
         private readonly SlideshowController fController;

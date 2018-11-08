@@ -32,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class MediaEditDlg : EditorDialog, IMediaEditDlg
     {
         private readonly MediaEditDlgController fController;
@@ -62,27 +59,27 @@ namespace GKUI.Forms
 
         IComboBoxHandler IMediaEditDlg.MediaType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbMediaType); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbMediaType); }
         }
 
         IComboBoxHandler IMediaEditDlg.StoreType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbStoreType); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbStoreType); }
         }
 
         ITextBoxHandler IMediaEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBoxHandler>(txtName); }
         }
 
         ITextBoxHandler IMediaEditDlg.File
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtFile); }
+            get { return GetControlHandler<ITextBoxHandler>(txtFile); }
         }
 
         IButtonHandler IMediaEditDlg.FileSelectButton
         {
-            get { return fControlsManager.GetControlHandler<IButtonHandler>(btnFileSelect); }
+            get { return GetControlHandler<IButtonHandler>(btnFileSelect); }
         }
 
         #endregion

@@ -25,9 +25,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class SexCheckDlg : CommonDialog, ISexCheckDlg
     {
         public SexCheckDlg()

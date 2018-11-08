@@ -32,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class ScriptEditWin : CommonDialog, IScriptEditWin
     {
         private readonly ScriptEditWinController fController;
@@ -68,12 +65,12 @@ namespace GKUI.Forms
 
         ITextBoxHandler IScriptEditWin.ScriptText
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtScriptText); }
+            get { return GetControlHandler<ITextBoxHandler>(txtScriptText); }
         }
 
         ITextBoxHandler IScriptEditWin.DebugOutput
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtDebugOutput); }
+            get { return GetControlHandler<ITextBoxHandler>(txtDebugOutput); }
         }
 
         #endregion

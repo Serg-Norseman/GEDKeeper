@@ -29,9 +29,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class DayTipsDlg : CommonDialog, IDayTipsDlg
     {
         private readonly DayTipsDlgController fController;
@@ -46,17 +43,17 @@ namespace GKUI.Forms
 
         ILabelHandler IDayTipsDlg.TitleLabel
         {
-            get { return fControlsManager.GetControlHandler<ILabelHandler>(lblTitle); }
+            get { return GetControlHandler<ILabelHandler>(lblTitle); }
         }
 
         ITextBoxHandler IDayTipsDlg.TipText
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtTip); }
+            get { return GetControlHandler<ITextBoxHandler>(txtTip); }
         }
 
         IButtonHandler IDayTipsDlg.NextButton
         {
-            get { return fControlsManager.GetControlHandler<IButtonHandler>(btnNextTip); }
+            get { return GetControlHandler<IButtonHandler>(btnNextTip); }
         }
 
         #endregion

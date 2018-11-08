@@ -29,9 +29,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTTreeCompareDlg : CommonDialog, ITreeCompareDlg
     {
         private readonly TreeCompareController fController;
@@ -40,12 +37,12 @@ namespace GKUI.Forms
 
         ITextBoxHandler ITreeCompareDlg.ExternalBase
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtCompareFile); }
+            get { return GetControlHandler<ITextBoxHandler>(txtCompareFile); }
         }
 
         ITextBoxHandler ITreeCompareDlg.CompareOutput
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(ListCompare); }
+            get { return GetControlHandler<ITextBoxHandler>(ListCompare); }
         }
 
         #endregion

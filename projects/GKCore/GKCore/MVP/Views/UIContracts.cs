@@ -392,6 +392,12 @@ namespace GKCore.MVP.Views
     }
 
 
+    public interface IQuickSearchDlg : IView, ILocalization
+    {
+        ITextBoxHandler SearchPattern { get; }
+    }
+
+
     /// <summary>
     /// 
     /// </summary>

@@ -36,6 +36,9 @@
     <Compile Include="GKUI\Components\CustomChart.cs" />
     <Compile Include="GKUI\Components\TreeChartBox.cs" />
     <Compile Include="GKUI\Components\FilterGridView.cs" />
+    <Compile Include="GKUI\Forms\QuickSearchDlg.design.cs">
+      <DependentUpon>QuickSearchDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Providers\ControlHandlers.cs" />
     <Compile Include="GKUI\Providers\EtoGfxRenderer.cs" />
     <Compile Include="GKUI\Components\ACOptionsControl.cs" />

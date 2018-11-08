@@ -32,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class CommunicationEditDlg : EditorDialog, ICommunicationEditDlg
     {
         private readonly CommunicationEditDlgController fController;
@@ -62,27 +59,27 @@ namespace GKUI.Forms
 
         ITextBoxHandler ICommunicationEditDlg.Corresponder
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtCorresponder); }
+            get { return GetControlHandler<ITextBoxHandler>(txtCorresponder); }
         }
 
         IComboBoxHandler ICommunicationEditDlg.CorrType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbCorrType); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbCorrType); }
         }
 
         ITextBoxHandler ICommunicationEditDlg.Date
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtDate); }
+            get { return GetControlHandler<ITextBoxHandler>(txtDate); }
         }
 
         IComboBoxHandler ICommunicationEditDlg.Dir
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(txtDir); }
+            get { return GetControlHandler<IComboBoxHandler>(txtDir); }
         }
 
         ITextBoxHandler ICommunicationEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBoxHandler>(txtName); }
         }
 
         #endregion

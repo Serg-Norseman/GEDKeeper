@@ -31,9 +31,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
     {
         private readonly RecordSelectDlgController fController;

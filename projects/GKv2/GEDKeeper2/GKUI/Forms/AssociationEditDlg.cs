@@ -31,9 +31,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class AssociationEditDlg : EditorDialog, IAssociationEditDlg
     {
         private readonly AssociationEditDlgController fController;
@@ -48,12 +45,12 @@ namespace GKUI.Forms
 
         IComboBoxHandler IAssociationEditDlg.Relation
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRelation); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbRelation); }
         }
 
         ITextBoxHandler IAssociationEditDlg.Person
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtPerson); }
+            get { return GetControlHandler<ITextBoxHandler>(txtPerson); }
         }
 
         #endregion

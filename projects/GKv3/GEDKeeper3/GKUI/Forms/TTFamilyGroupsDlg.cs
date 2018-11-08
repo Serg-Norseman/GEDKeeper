@@ -30,9 +30,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTFamilyGroupsDlg : CommonDialog, IFragmentSearchDlg
     {
         private readonly FragmentSearchController fController;
@@ -41,12 +38,12 @@ namespace GKUI.Forms
 
         ITreeViewHandler IFragmentSearchDlg.GroupsTree
         {
-            get { return fControlsManager.GetControlHandler<ITreeViewHandler>(tvGroups); }
+            get { return GetControlHandler<ITreeViewHandler>(tvGroups); }
         }
 
         ILogChart IFragmentSearchDlg.LogChart
         {
-            get { return fControlsManager.GetControlHandler<ILogChart>(gkLogChart1); }
+            get { return GetControlHandler<ILogChart>(gkLogChart1); }
         }
 
         #endregion

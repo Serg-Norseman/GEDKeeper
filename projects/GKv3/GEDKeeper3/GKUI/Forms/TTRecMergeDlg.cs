@@ -29,9 +29,6 @@ using GKCore.MVP.Views;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTRecMergeDlg : CommonDialog, IRecMergeDlg
     {
         private readonly RecMergeController fController;
@@ -45,32 +42,32 @@ namespace GKUI.Forms
 
         IButtonHandler IRecMergeDlg.SkipBtn
         {
-            get { return fControlsManager.GetControlHandler<IButtonHandler>(btnSkip); }
+            get { return GetControlHandler<IButtonHandler>(btnSkip); }
         }
 
         IProgressBarHandler IRecMergeDlg.ProgressBar
         {
-            get { return fControlsManager.GetControlHandler<IProgressBarHandler>(ProgressBar1); }
+            get { return GetControlHandler<IProgressBarHandler>(ProgressBar1); }
         }
 
         ICheckBoxHandler IRecMergeDlg.IndistinctMatchingChk
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkIndistinctMatching); }
+            get { return GetControlHandler<ICheckBoxHandler>(chkIndistinctMatching); }
         }
 
         INumericBoxHandler IRecMergeDlg.NameAccuracyNum
         {
-            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(edNameAccuracy); }
+            get { return GetControlHandler<INumericBoxHandler>(edNameAccuracy); }
         }
 
         ICheckBoxHandler IRecMergeDlg.BirthYearChk
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkBirthYear); }
+            get { return GetControlHandler<ICheckBoxHandler>(chkBirthYear); }
         }
 
         INumericBoxHandler IRecMergeDlg.YearInaccuracyNum
         {
-            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(edYearInaccuracy); }
+            get { return GetControlHandler<INumericBoxHandler>(edYearInaccuracy); }
         }
 
         #endregion

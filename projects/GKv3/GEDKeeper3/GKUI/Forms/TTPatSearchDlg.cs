@@ -29,9 +29,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTPatSearchDlg : CommonDialog, IPatriarchsSearchDlg
     {
         private readonly PatriarchsSearchController fController;
@@ -42,12 +39,12 @@ namespace GKUI.Forms
 
         INumericBoxHandler IPatriarchsSearchDlg.MinGensNum
         {
-            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(edMinGens); }
+            get { return GetControlHandler<INumericBoxHandler>(edMinGens); }
         }
 
         ICheckBoxHandler IPatriarchsSearchDlg.WithoutDatesCheck
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkWithoutDates); }
+            get { return GetControlHandler<ICheckBoxHandler>(chkWithoutDates); }
         }
 
         IListView IPatriarchsSearchDlg.PatriarchsList

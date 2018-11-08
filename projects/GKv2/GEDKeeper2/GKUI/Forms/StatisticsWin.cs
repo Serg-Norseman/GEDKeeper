@@ -34,9 +34,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class StatisticsWin : CommonWindow, IStatisticsWin
     {
         private readonly StatisticsWinController fController;
@@ -65,7 +62,7 @@ namespace GKUI.Forms
 
         IComboBoxHandler IStatisticsWin.StatsType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cbType); }
+            get { return GetControlHandler<IComboBoxHandler>(cbType); }
         }
 
         #endregion

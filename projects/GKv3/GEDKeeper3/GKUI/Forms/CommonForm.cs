@@ -31,7 +31,7 @@ namespace GKUI.Forms
     /// </summary>
     public class CommonForm : Form, IView
     {
-        protected readonly ControlsManager fControlsManager;
+        private readonly ControlsManager fControlsManager;
 
         #region View Interface
 
@@ -64,6 +64,11 @@ namespace GKUI.Forms
         {
             Focus();
         }
+
+        protected T GetControlHandler<T>(object control) where T : IControl
+        {
+            return fControlsManager.GetControlHandler<T>(control);
+        }
     }
 
 
@@ -89,7 +94,7 @@ namespace GKUI.Forms
     /// </summary>
     public class CommonDialog : Dialog<DialogResult>, ICommonDialog
     {
-        protected readonly ControlsManager fControlsManager;
+        private readonly ControlsManager fControlsManager;
 
         #region View Interface
 
@@ -154,6 +159,11 @@ namespace GKUI.Forms
         public void SetPredefProperties(int width, int height, bool fontPreset = true)
         {
             UIHelper.SetPredefProperties(this, width, height, fontPreset);
+        }
+
+        protected T GetControlHandler<T>(object control) where T : IControl
+        {
+            return fControlsManager.GetControlHandler<T>(control);
         }
     }
 }
