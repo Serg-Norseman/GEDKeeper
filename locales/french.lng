@@ -25,8 +25,8 @@
 024=Arbre d'ancêtres
 025=Arbre de descendants
 026=Arbre complet
-027=ascendant pedigree D'Aboville 
-028=descendant pedigree de Konovalov 
+027=ascendant pedigree D'Aboville
+028=descendant pedigree de Konovalov
 029=Cartes
 030=Statistiques
 031=Ascendant pedigree
@@ -145,7 +145,7 @@
 144=Publié
 145=Commun
 146=Êtes-vous sûr de vouloir détacher le lien aux archives?
-147=Mode de stockage 
+147=Mode de stockage
 148=Fichier
 149=Vision
 150=Fragment {0}: {1} personne(s)
@@ -159,7 +159,7 @@
 158=Julien
 159=Juif
 160=Islamique (De L'Hégire)
-161=Perse 
+161=Perse
 162=Indien
 163=Bahai
 164=Français
@@ -206,7 +206,7 @@
 205=Place
 206=Raison
 207=Agence
-208=Féminin 
+208=Féminin
 209=Masculin
 210=Record personnel n'est pas sélectionné
 211=Cette personne n'a pas de sexe défini.
@@ -468,7 +468,7 @@
 467=Recherche
 468=Tâche
 469=Correspondance
-470=Correction de ID  
+470=Correction de ID
 471=Vérifier le format
 472=Nécessite de correction des ids, continuer?
 473=Le nombre d'objets dans une base de données principale: {0}
@@ -522,12 +522,12 @@
 521=Recherche des coïncidences...
 522=Vérifiez la connexion des familles
 523=tous
-524=seulement vivant 
+524=seulement vivant
 525=seulement mort
 526=En vivant jusqu'à
 527=seulement les hommes
 528=seulement les femmes
-529=Masque de nom 
+529=Masque de nom
 530=Masque de résidence
 531=Masque des faits
 532=Seulement les chefs de famille
@@ -615,11 +615,11 @@
 614=Diagrammes
 615=Ajusté à la taille de la fenêtre
 616=Zoom avant
-617=Zoom arrière	 
+617=Zoom arrière
 618=Vérifier le fait de la mort
 619=Déterminer le sexe
 620=Plug-in
-621=Autoconversion de la parenté 
+621=Autoconversion de la parenté
 622=Correspondances non trouvé
 623=Trouver le précédent
 624=Trouver la prochaine
@@ -638,7 +638,7 @@
 637=Stop
 638=Demographie
 639=Noms
-640=Faux nom 
+640=Faux nom
 641=Nom de naissance
 642=A l'immigration
 643=Nom de jeune fille
@@ -718,7 +718,7 @@
 717=minutes
 718=Y compris le nombre de générations
 719=Masquer les segments vides
-720=Cercle de Descendants 
+720=Cercle de Descendants
 721=Choix du portrait
 722=Calculateur de relation
 723={0} {1} {2}
@@ -743,7 +743,7 @@
 742=Géocodeur
 743=Ajouter un père
 744=Ajouter une mère
-745=Afficher les portraits défectueux 
+745=Afficher les portraits défectueux
 746=Un fichier multimédia est ajouté de la média amovible . Continuer?
 747=Avertir lors de l'ajout des fichiers multimédias de la média amovible
 748=Charge des fichiers récemment ouverts au démarrage

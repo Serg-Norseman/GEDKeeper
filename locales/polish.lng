@@ -268,7 +268,7 @@
 267=Lista osób
 268=Format nazwy w listach
 269=Nazwisko_Nazwa_Nazwisko rodowe
-270=Nazwisko; Nazwa; Nazwisko_rodowe
+270=Nazwisko; Nazwa_Nazwisko rodowe
 271=Nazwisko; Nazwa; Nazwisko rodowe
 272=Format daty w listach
 273=Dołączyć adres w miejsce tekstu
@@ -577,7 +577,7 @@
 576=Rejestracja w liście lokalizacji
 577=Podobne nazwiska:
 578=Podobne nazwy:
-579=Wybrane osobiste rekordy usunięte 
+579=Wybrane osobiste rekordy usunięte
 580=Rekord
 581=Problem
 582=Rozwiązania
@@ -652,7 +652,7 @@
 651=Uwaga: w przypadku zduplikowania indywidualnego, więzi rodzinne i stowarzyszenia nie są kopiowane
 652=Pokaż typ daty
 653=Utwórz nowy plik
-654=Otwórz plik 
+654=Otwórz plik
 655=Zapisz plik
 656=Dodaj rekord (Ctrl + I)
 657=Edytowanie rekordu (Ctrl + Enter)
