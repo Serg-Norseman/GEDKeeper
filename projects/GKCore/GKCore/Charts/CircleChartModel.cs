@@ -714,11 +714,10 @@ namespace GKCore.Charts
                         GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
                         if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
-                        family.SortChilds();
+                        fBase.Context.ProcessFamily(family);
 
                         int numberOfChildren = family.Children.Count;
-                        for (int i = 0; i < numberOfChildren; i++)
-                        {
+                        for (int i = 0; i < numberOfChildren; i++) {
                             GEDCOMIndividualRecord child = family.Children[i].Value as GEDCOMIndividualRecord;
                             DescPersonSegment childSegment = TraverseDescendants(child, gen + 1);
 

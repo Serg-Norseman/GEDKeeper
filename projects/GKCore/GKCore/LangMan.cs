@@ -833,10 +833,10 @@ namespace GKCore
         /* 775 */ LSID_MotherAsChild,
         /* 776 */ LSID_DuplicateChildrenInFamily,
         /* 777 */ LSID_SelectColor,
+        /* 778 */ LSID_AutoSortChildren,
+        /* 779 */ LSID_AutoSortSpouses,
 
-        /* 778 */ // reserved begin
-        /* 779 */
-        /* 780 */
+        /* 780 */ // reserved begin
         /* 781 */
         /* 782 */
         /* 783 */
@@ -1657,10 +1657,10 @@ namespace GKCore
             /* 775 */ "Mother is listed as a child",
             /* 776 */ "There are duplicate children in the family",
             /* 777 */ "Select color",
+            /* 778 */ "Autosort children",
+            /* 779 */ "Autosort spouses",
 
-            /* 778 */ "", // reserved begin
-            /* 779 */ "",
-            /* 780 */ "",
+            /* 780 */ "", // reserved begin
             /* 781 */ "",
             /* 782 */ "",
             /* 783 */ "",

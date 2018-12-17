@@ -380,25 +380,19 @@ namespace GKCore.Tools
         private static void CheckRecord_Family(GEDCOMTree tree, GEDCOMFormat format, GEDCOMFamilyRecord fam,
                                                IBaseContext baseContext)
         {
-            if (format == GEDCOMFormat.gf_Native)
-            {
+            if (format == GEDCOMFormat.gf_Native) {
                 int num = fam.Events.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     CheckRecord_EventPlace(fam.Events[i]);
                 }
-            }
-            else
-            {
+            } else {
                 int num2 = fam.Events.Count;
-                for (int i = 0; i < num2; i++)
-                {
+                for (int i = 0; i < num2; i++) {
                     CheckRecord_PrepareTag(tree, format, fam.Events[i]);
                 }
             }
 
-            for (int i = fam.Children.Count - 1; i >= 0; i--)
-            {
+            for (int i = fam.Children.Count - 1; i >= 0; i--) {
                 if (fam.Children[i].Value == null)
                     fam.Children.DeleteAt(i);
             }
@@ -407,13 +401,11 @@ namespace GKCore.Tools
             if (!string.IsNullOrEmpty(fam.Husband.XRef) && val == null) {
                 fam.Husband.Value = null;
             }
-            
+
             val = fam.Wife.Value;
             if (!string.IsNullOrEmpty(fam.Wife.XRef) && val == null) {
                 fam.Wife.Value = null;
             }
-            
-            fam.SortChilds();
         }
 
         private static void CheckRecord_Group(GEDCOMGroupRecord group)

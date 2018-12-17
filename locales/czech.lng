@@ -771,6 +771,13 @@
 770=Vzdálenost od generací
 771=Rozvedení manželů
 772=Velikost obrázku: {0} x {1} px
+773=A data loop was detected: {0}
+774=Father is listed as a child
+775=Mother is listed as a child
+776=There are duplicate children in the family
+777=Select color
+778=Autosort children
+779=Autosort spouses
 
 801=RI: George Knight
 802=SSSR: Druhá světová válka: Bitvy

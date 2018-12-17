@@ -21,6 +21,7 @@
 using System;
 using System.IO;
 using BSLib;
+using BSLib.Calendar;
 
 namespace GKCommon.GEDCOM
 {
@@ -860,7 +861,19 @@ namespace GKCommon.GEDCOM
 
             return result;
         }
-        
+
+        private static int EventsCompare(GEDCOMPointer cp1, GEDCOMPointer cp2)
+        {
+            UDN udn1 = ((GEDCOMFamilyRecord)cp1.Value).GetUDN("MARR");
+            UDN udn2 = ((GEDCOMFamilyRecord)cp2.Value).GetUDN("MARR");
+            return udn1.CompareTo(udn2);
+        }
+
+        public void SortSpouses()
+        {
+            fSpouseToFamilyLinks.Sort(EventsCompare);
+        }
+
         #endregion
     }
 }

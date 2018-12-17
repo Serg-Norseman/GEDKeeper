@@ -79,7 +79,7 @@ namespace GKCore.Controllers
 
                 fFamily.Restriction = (GEDCOMRestriction)fView.Restriction.SelectedIndex;
 
-                fFamily.SortChilds();
+                fBase.Context.ProcessFamily(fFamily);
 
                 fLocalUndoman.Commit();
 

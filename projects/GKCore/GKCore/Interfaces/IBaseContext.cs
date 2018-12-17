@@ -107,5 +107,8 @@ namespace GKCore.Interfaces
         GEDCOMFamilyRecord AddFamilyForSpouse(GEDCOMIndividualRecord spouse);
         GEDCOMIndividualRecord AddChildForParent(GEDCOMIndividualRecord parent, GEDCOMSex needSex);
         GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec);
+
+        void ProcessFamily(GEDCOMFamilyRecord famRec);
+        void ProcessIndividual(GEDCOMIndividualRecord indiRec);
     }
 }

@@ -480,11 +480,10 @@ namespace GKCore.Export
                     GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
                     if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
-                    family.SortChilds();
+                    fBase.Context.ProcessFamily(family);
 
                     int num3 = family.Children.Count;
-                    for (int i = 0; i < num3; i++)
-                    {
+                    for (int i = 0; i < num3; i++) {
                         GEDCOMIndividualRecord child = family.Children[i].Value as GEDCOMIndividualRecord;
                         GenStep(res, child, level + 1, i + 1);
                     }

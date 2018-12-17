@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -1631,6 +1631,28 @@ namespace GKCore
 
             GEDCOMIndividualRecord result = SelectPerson(target, targetMode, needSex);
             return result;
+        }
+
+        public void ProcessFamily(GEDCOMFamilyRecord famRec)
+        {
+            if (famRec == null) return;
+
+            if (GlobalOptions.Instance.AutoSortChildren) {
+                famRec.SortChilds();
+            }
+        }
+
+        public void ProcessIndividual(GEDCOMIndividualRecord indiRec)
+        {
+            if (indiRec == null) return;
+
+            if (indiRec.ChildToFamilyLinks.Count > 0) {
+                ProcessFamily(indiRec.ChildToFamilyLinks[0].Family);
+            }
+
+            if (GlobalOptions.Instance.AutoSortSpouses) {
+                indiRec.SortSpouses();
+            }
         }
 
         #endregion

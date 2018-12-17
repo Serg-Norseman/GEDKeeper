@@ -225,6 +225,9 @@ namespace GKUI.Forms
             ancOptionsControl1.UpdateControls();
 
             cmbGeocoder.Text = fOptions.Geocoder;
+
+            chkAutoSortChildren.Checked = fOptions.AutoSortChildren;
+            chkAutoSortSpouses.Checked = fOptions.AutoSortSpouses;
         }
 
         private void UpdateWomanSurnameFormat()
@@ -436,6 +439,9 @@ namespace GKUI.Forms
 
             fOptions.Geocoder = cmbGeocoder.Text;
 
+            fOptions.AutoSortChildren = chkAutoSortChildren.Checked.GetValueOrDefault();
+            fOptions.AutoSortSpouses = chkAutoSortSpouses.Checked.GetValueOrDefault();
+
             DialogResult = DialogResult.Ok;
         }
 
@@ -605,6 +611,9 @@ namespace GKUI.Forms
             lblBranchDist.Text = LangMan.LS(LSID.LSID_BranchDist);
             lblGenDist.Text = LangMan.LS(LSID.LSID_GenDist);
             lblSpouseDist.Text = LangMan.LS(LSID.LSID_SpouseDist);
+
+            chkAutoSortChildren.Text = LangMan.LS(LSID.LSID_AutoSortChildren);
+            chkAutoSortSpouses.Text = LangMan.LS(LSID.LSID_AutoSortSpouses);
         }
     }
 }

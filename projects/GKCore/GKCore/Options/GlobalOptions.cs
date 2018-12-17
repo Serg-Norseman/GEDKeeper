@@ -80,6 +80,8 @@ namespace GKCore.Options
         private bool fAllowMediaStoreReferences;
         private bool fUseExtendedNotes;
         private bool fAutoCheckUpdates;
+        private bool fAutoSortChildren;
+        private bool fAutoSortSpouses;
 
 
         public static GlobalOptions Instance
@@ -296,6 +298,17 @@ namespace GKCore.Options
             set { fAutoCheckUpdates = value; }
         }
 
+        public bool AutoSortChildren
+        {
+            get { return fAutoSortChildren; }
+            set { fAutoSortChildren = value; }
+        }
+
+        public bool AutoSortSpouses
+        {
+            get { return fAutoSortSpouses; }
+            set { fAutoSortSpouses = value; }
+        }
 
         public IList<LangRecord> Languages
         {
@@ -372,6 +385,8 @@ namespace GKCore.Options
             fAllowMediaStoreReferences = false;
             fUseExtendedNotes = false;
             fAutoCheckUpdates = true;
+            fAutoSortChildren = true;
+            fAutoSortSpouses = false;
 
             fIndividualListColumns = IndividualListMan.CreateIndividualListColumns();
             fIndividualListColumns.ResetDefaults();
@@ -516,6 +531,8 @@ namespace GKCore.Options
             fEmbeddedMediaPlayer = ini.ReadBool("Common", "EmbeddedMediaPlayer", true);
             fAllowMediaStoreReferences = ini.ReadBool("Common", "AllowMediaStoreReferences", false);
             fAutoCheckUpdates = ini.ReadBool("Common", "AutoCheckUpdates", true);
+            fAutoSortChildren = ini.ReadBool("Common", "AutoSortChildren", true);
+            fAutoSortSpouses = ini.ReadBool("Common", "AutoSortSpouses", false);
 
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -619,6 +636,8 @@ namespace GKCore.Options
             ini.WriteBool("Common", "EmbeddedMediaPlayer", fEmbeddedMediaPlayer);
             ini.WriteBool("Common", "AllowMediaStoreReferences", fAllowMediaStoreReferences);
             ini.WriteBool("Common", "AutoCheckUpdates", fAutoCheckUpdates);
+            ini.WriteBool("Common", "AutoSortChildren", fAutoSortChildren);
+            ini.WriteBool("Common", "AutoSortSpouses", fAutoSortSpouses);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 

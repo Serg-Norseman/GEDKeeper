@@ -123,6 +123,8 @@ namespace GKUI.Forms
         private NumericUpDown numGenDist;
         private NumericUpDown numBranchDist;
         private NumericUpDown numMargins;
+        private CheckBox chkAutoSortChildren;
+        private CheckBox chkAutoSortSpouses;
 
         private void InitializeComponent()
         {
@@ -663,6 +665,12 @@ namespace GKUI.Forms
             chkHighlightUnmarried = new CheckBox();
             chkHighlightUnmarried.Text = "chkHighlightUnmarried";
 
+            chkAutoSortChildren = new CheckBox();
+            chkAutoSortChildren.Text = "chkAutoSortChildren";
+
+            chkAutoSortSpouses = new CheckBox();
+            chkAutoSortSpouses.Text = "chkAutoSortSpouses";
+
             //
 
             pageViewCommon = new TabPage();
@@ -674,7 +682,8 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         Cells = { grpAdvancedNames, new VDefStackLayout{
-                                Items = { chkPlacesWithAddress, chkHighlightUnparented, chkHighlightUnmarried }
+                                Items = { chkPlacesWithAddress, chkHighlightUnparented, chkHighlightUnmarried,
+                                          chkAutoSortChildren, chkAutoSortSpouses}
                             }
                         }
                     },

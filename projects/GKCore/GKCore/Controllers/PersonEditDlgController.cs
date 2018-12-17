@@ -128,9 +128,7 @@ namespace GKCore.Controllers
                 fPerson.Bookmark = fView.Bookmark.Checked;
                 fPerson.Restriction = (GEDCOMRestriction)fView.RestrictionCombo.SelectedIndex;
 
-                if (fPerson.ChildToFamilyLinks.Count > 0) {
-                    fPerson.ChildToFamilyLinks[0].Family.SortChilds();
-                }
+                fBase.Context.ProcessIndividual(fPerson);
 
                 fLocalUndoman.Commit();
 
