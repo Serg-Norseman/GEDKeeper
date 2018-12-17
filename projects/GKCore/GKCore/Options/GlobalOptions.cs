@@ -445,6 +445,28 @@ namespace GKCore.Options
             }
         }
 
+        public void LoadLanguage(int langCode)
+        {
+            if (langCode != LangMan.LS_DEF_CODE) {
+                bool loaded = false;
+
+                foreach (LangRecord langRec in fLanguages) {
+                    if (langRec.Code == langCode) {
+                        loaded = LangMan.LoadFromFile(langRec.FileName);
+                        break;
+                    }
+                }
+
+                if (!loaded) langCode = LangMan.LS_DEF_CODE;
+            }
+
+            if (langCode == LangMan.LS_DEF_CODE) {
+                LangMan.DefInit();
+            }
+
+            fInterfaceLang = (ushort)langCode;
+        }
+
         public void AddLastBase(string fileName)
         {
             fLastBases.Add(fileName);

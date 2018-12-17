@@ -227,6 +227,7 @@ Section "$(gkreq)"
   File "..\GEDKeeper2.exe"
   File "..\GKComponents.dll"
   File "..\GKCore.dll"
+  File "..\GKTray.exe"
 
   File "..\ArborGVT.dll"
   File "..\BSLib.dll"
@@ -514,6 +515,7 @@ Section "Uninstall"
   Delete $INSTDIR\GEDKeeper2.exe
   Delete $INSTDIR\GKComponents.dll
   Delete $INSTDIR\GKCore.dll
+  Delete $INSTDIR\GKTray.exe
 
   Delete $INSTDIR\LinqBridge.dll
   Delete $INSTDIR\NLog.dll

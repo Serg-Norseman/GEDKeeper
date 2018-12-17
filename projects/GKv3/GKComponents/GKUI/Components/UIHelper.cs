@@ -421,7 +421,7 @@ namespace GKUI.Components
 
         public static Font GetDefaultFont(float size = 8.25f, FontStyle style = FontStyle.None)
         {
-            string fontName = AppHost.Instance.GetDefaultFontName();
+            string fontName = AppHost.GfxProvider.GetDefaultFontName();
             return new Font(fontName, size);
         }
 

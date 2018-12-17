@@ -254,5 +254,16 @@ namespace GKUI.Providers
                 return new ExtSizeF();
             }
         }
+
+        public string GetDefaultFontName()
+        {
+            string fontName;
+            #if __MonoCS__
+            fontName = "Noto Sans";
+            #else
+            fontName = "Verdana"; // "Tahoma";
+            #endif
+            return fontName;
+        }
     }
 }

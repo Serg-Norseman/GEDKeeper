@@ -248,17 +248,6 @@ namespace GKUI.Providers
             }
         }
 
-        public override string GetDefaultFontName()
-        {
-            string fontName;
-            #if __MonoCS__
-            fontName = "Noto Sans";
-            #else
-            fontName = "Verdana"; // "Tahoma";
-            #endif
-            return fontName;
-        }
-
         #endregion
 
         #region Bootstrapper

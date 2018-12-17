@@ -519,20 +519,15 @@ namespace GKCore
             if (tipsList == null)
                 throw new ArgumentNullException("tipsList");
 
-            if (!GlobalOptions.Instance.ShowTips) return;
-
-            try
-            {
-                try
-                {
+            try {
+                try {
                     bool firstTip = true;
                     int num = fTree.RecordsCount;
-                    for (int i = 0; i < num; i++)
-                    {
+                    for (int i = 0; i < num; i++) {
                         GEDCOMRecord rec = fTree[i];
                         if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
 
-                        GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord) rec;
+                        GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
 
                         int days = GKUtils.GetDaysForBirth(iRec);
                         if (days >= 0 && days < 3) {
@@ -560,14 +555,10 @@ namespace GKCore
                             tipsList.Add(tip);
                         }
                     }
-                }
-                finally
-                {
+                } finally {
                     // temp stub, remove try/finally here?
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.CollectTips(): " + ex.Message);
             }
         }
@@ -1065,34 +1056,51 @@ namespace GKCore
 
         public bool FileLoad(string fileName)
         {
+            return FileLoad(fileName, true, true, true);
+        }
+
+        public bool FileLoad(string fileName, bool loadSecure, bool showProgress, bool checkValidation)
+        {
             bool result = false;
 
-            try
-            {
+            try {
                 string pw = null;
                 string ext = FileHelper.GetFileExtension(fileName);
-                if (ext == ".geds" && !AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
-                    return false;
+                if (ext == ".geds") {
+                    if (loadSecure) {
+                        if (!AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
+                            AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
                 }
 
-                IProgressController progress = AppHost.Progress;
-                progress.ProgressInit(LangMan.LS(LSID.LSID_Loading), 100);
-                fTree.OnProgress += LoadProgress;
-                try
-                {
+                IProgressController progress;
+                if (!showProgress) {
+                    progress = null;
+                } else {
+                    progress = AppHost.Progress;
+                    progress.ProgressInit(LangMan.LS(LSID.LSID_Loading), 100);
+                    fTree.OnProgress += LoadProgress;
+                }
+
+                try {
                     FileLoad(fileName, pw);
-                    TreeTools.CheckGEDCOMFormat(fTree, this, progress);
+
+                    if (checkValidation) {
+                        TreeTools.CheckGEDCOMFormat(fTree, this, progress);
+                    }
+
                     result = true;
+                } finally {
+                    if (progress != null) {
+                        fTree.OnProgress -= LoadProgress;
+                        progress.ProgressDone();
+                    }
                 }
-                finally
-                {
-                    fTree.OnProgress -= LoadProgress;
-                    progress.ProgressDone();
-                }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.FileLoad(): " + ex.Message);
                 Logger.LogWrite("BaseContext.FileLoad(): " + ex.StackTrace.ToString());
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));

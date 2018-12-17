@@ -250,17 +250,6 @@ namespace GKUI.Providers
             }
         }
 
-        public override string GetDefaultFontName()
-        {
-            string fontName;
-            if (Application.Instance.Platform.IsGtk) {
-                fontName = "Noto Sans";
-            } else {
-                fontName = "Verdana"; // "Tahoma";
-            }
-            return fontName;
-        }
-
         #endregion
 
         #region Bootstrapper

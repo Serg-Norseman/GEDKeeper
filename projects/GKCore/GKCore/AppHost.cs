@@ -438,6 +438,13 @@ namespace GKCore
             return ufPath;
         }
 
+        private void ProcessLoaded(IBaseContext context)
+        {
+            if (GlobalOptions.Instance.ShowTips) {
+                context.CollectTips(fTips);
+            }
+        }
+
         public IBaseWindow CreateBase(string fileName)
         {
             IBaseWindow result = null;
@@ -457,7 +464,7 @@ namespace GKCore
 
                     if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName)) {
                         result.LoadFile(fileName);
-                        result.Context.CollectTips(fTips);
+                        ProcessLoaded(result.Context);
                     } else {
                         result.CreateNewFile();
                     }
@@ -495,7 +502,7 @@ namespace GKCore
 
                     if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName)) {
                         baseWin.LoadFile(fileName);
-                        baseWin.Context.CollectTips(fTips);
+                        ProcessLoaded(baseWin.Context);
                         RestoreWinMRU(baseWin);
                     }
                 } finally {
@@ -639,24 +646,7 @@ namespace GKCore
                     langCode = RequestLanguage();
                 }
 
-                if (langCode != LangMan.LS_DEF_CODE) {
-                    bool loaded = false;
-
-                    foreach (LangRecord langRec in AppHost.Options.Languages) {
-                        if (langRec.Code == langCode) {
-                            loaded = LangMan.LoadFromFile(langRec.FileName);
-                            break;
-                        }
-                    }
-
-                    if (!loaded) langCode = LangMan.LS_DEF_CODE;
-                }
-
-                if (langCode == LangMan.LS_DEF_CODE) {
-                    LangMan.DefInit();
-                }
-
-                AppHost.Options.InterfaceLang = (ushort)langCode;
+                AppHost.Options.LoadLanguage(langCode);
                 AppHost.Plugins.OnLanguageChange();
 
                 UpdateLang();
@@ -681,8 +671,6 @@ namespace GKCore
 
             UpdateMRU();
         }
-
-        public abstract string GetDefaultFontName();
 
         #region Geocoding
 

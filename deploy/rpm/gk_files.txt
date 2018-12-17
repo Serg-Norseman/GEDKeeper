@@ -5,6 +5,7 @@
 ../GEDKeeper2.exe
 ../GKCore.dll
 ../GKComponents.dll
+../GKTray.exe
 ../LinqBridge.dll
 ../NLog.dll
 ../nVLC.dll

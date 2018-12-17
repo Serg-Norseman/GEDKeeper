@@ -444,7 +444,6 @@
     </Compile>
     <Compile Include="GKUI\Providers\ControlHandlers.cs" />
     <Compile Include="GKUI\Providers\WFAppHost.cs" />
-    <Compile Include="GKUI\Providers\WFGfxProvider.cs" />
     <Compile Include="GKUI\Providers\WFGfxRenderer.cs" />
     <Compile Include="GKUI\Providers\WFStdDialogs.cs" />
   </ItemGroup>

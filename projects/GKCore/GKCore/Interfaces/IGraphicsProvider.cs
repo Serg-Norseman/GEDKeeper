@@ -50,5 +50,7 @@ namespace GKCore.Interfaces
         void SaveImage(IImage image, string fileName);
 
         ExtSizeF GetTextSize(string text, IFont font, object target);
+
+        string GetDefaultFontName();
     }
 }

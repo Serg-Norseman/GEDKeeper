@@ -48,7 +48,6 @@
     <Compile Include="GKUI\Components\GKPortrait.cs" />
     <Compile Include="GKUI\Components\GKSheetList.cs" />
     <Compile Include="GKUI\Providers\EtoAppHost.cs" />
-    <Compile Include="GKUI\Providers\EtoGfxProvider.cs" />
     <Compile Include="GKUI\Providers\EtoStdDialogs.cs" />
     <Compile Include="GKUI\Forms\AboutDlg.cs" />
     <Compile Include="GKUI\Forms\AboutDlg.design.cs">

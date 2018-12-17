@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using BSLib;
 using Eto.Drawing;
+using Eto.Forms;
 using GKCore.Interfaces;
 using GKUI.Components;
 
@@ -262,6 +263,17 @@ namespace GKUI.Providers
             } else {
                 return new ExtSizeF();
             }
+        }
+
+        public string GetDefaultFontName()
+        {
+            string fontName;
+            if (Application.Instance.Platform.IsGtk) {
+                fontName = "Noto Sans";
+            } else {
+                fontName = "Verdana"; // "Tahoma";
+            }
+            return fontName;
         }
     }
 }

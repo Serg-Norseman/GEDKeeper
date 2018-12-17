@@ -17,6 +17,7 @@ del ..\appdata\*.* /q
 echo "..\GEDKeeper2.exe" > %lstfile%
 echo "..\GKComponents.dll" >> %lstfile%
 echo "..\GKCore.dll" >> %lstfile%
+echo "..\GKTray.exe" >> %lstfile%
 
 echo "..\ArborGVT.dll" >> %lstfile%
 echo "..\BSLib.dll" >> %lstfile%
