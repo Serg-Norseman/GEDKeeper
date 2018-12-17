@@ -254,5 +254,14 @@ namespace GKCore.Controllers
                 }
             }
         }
+
+        public void SelectColor()
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p == null || p.Rec == null) return;
+
+            p.UserColor = AppHost.StdDialogs.SelectColor(p.UserColor);
+            fView.TreeBox.Invalidate();
+        }
     }
 }

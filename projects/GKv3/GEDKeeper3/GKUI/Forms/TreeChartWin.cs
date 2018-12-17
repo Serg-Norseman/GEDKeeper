@@ -372,6 +372,11 @@ namespace GKUI.Forms
             }
         }
 
+        private void miSelectColor_Click(object sender, EventArgs e)
+        {
+            fController.SelectColor();
+        }
+
         private void MenuPerson_Opening(object sender, EventArgs e)
         {
             miFatherAdd.Enabled = fController.ParentIsRequired(GEDCOMSex.svMale);
@@ -439,6 +444,7 @@ namespace GKUI.Forms
             miTraceSelected.Text = LangMan.LS(LSID.LSID_TM_TraceSelected);
             miTraceKinships.Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
             miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
+            miSelectColor.Text = LangMan.LS(LSID.LSID_SelectColor);
 
             SetToolTip(tbModes, LangMan.LS(LSID.LSID_ModesTip));
             SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));

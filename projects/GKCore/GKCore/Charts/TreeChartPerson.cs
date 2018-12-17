@@ -95,6 +95,7 @@ namespace GKCore.Charts
         public string MarriageDate;
         public bool IsCollapsed;
         public bool IsVisible;
+        public IColor UserColor;
 
 
         public IImage Portrait
@@ -220,6 +221,7 @@ namespace GKCore.Charts
             fPortrait = null;
             fSpouses = null;
             fChilds = null;
+            UserColor = null;
         }
 
         protected override void Dispose(bool disposing)
@@ -552,32 +554,33 @@ namespace GKCore.Charts
 
         public IColor GetFillColor(bool dead)
         {
-            IColor result;
-
             if (dead) {
-                result = ChartRenderer.GetColor(ChartRenderer.Black);
-            } else {
-                if (IsDup) {
-                    result = ChartRenderer.GetColor(ChartRenderer.Silver);
-                } else {
-                    TreeChartOptions options = fModel.Options;
-
-                    switch (fSex) {
-                        case GEDCOMSex.svMale:
-                            result = Divorced ? options.UnHusbandColor : options.MaleColor;
-                            break;
-
-                        case GEDCOMSex.svFemale:
-                            result = Divorced ? options.UnWifeColor : options.FemaleColor;
-                            break;
-
-                        default:
-                            result = options.UnkSexColor;
-                            break;
-                    }
-                }
+                return ChartRenderer.GetColor(ChartRenderer.Black);
             }
 
+            if (IsDup) {
+                return ChartRenderer.GetColor(ChartRenderer.Silver);
+            }
+
+            if (UserColor != null) {
+                return UserColor;
+            }
+
+            IColor result;
+            TreeChartOptions options = fModel.Options;
+            switch (fSex) {
+                case GEDCOMSex.svMale:
+                    result = Divorced ? options.UnHusbandColor : options.MaleColor;
+                    break;
+
+                case GEDCOMSex.svFemale:
+                    result = Divorced ? options.UnWifeColor : options.FemaleColor;
+                    break;
+
+                default:
+                    result = options.UnkSexColor;
+                    break;
+            }
             return result;
         }
     }

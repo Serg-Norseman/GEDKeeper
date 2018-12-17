@@ -39,10 +39,12 @@ namespace GKUI.Providers
 
         public IColor SelectColor(IColor color)
         {
-            Color sdColor = ((ColorHandler)color).Handle;
-
             using (var clrDlg = new ColorDialog()) {
-                clrDlg.Color = sdColor;
+                if (color != null) {
+                    Color sdColor = ((ColorHandler)color).Handle;
+                    clrDlg.Color = sdColor;
+                }
+
                 if (clrDlg.ShowDialog() == DialogResult.OK) {
                     return new ColorHandler(clrDlg.Color);
                 } else {
