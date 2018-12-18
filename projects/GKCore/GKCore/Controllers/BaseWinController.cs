@@ -431,11 +431,31 @@ namespace GKCore.Controllers
             return (rView == null) ? null : rView.ListMan.GetRecordsList();
         }
 
-        public void UpdateListsSettings()
+        public void RestoreListsSettings()
         {
-            IListManager listMan = GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
-            if (listMan != null) {
-                GlobalOptions.Instance.IndividualListColumns.CopyTo(listMan.ListColumns);
+            var globOptions = GlobalOptions.Instance;
+            for (var rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
+                IListView rView = fTabParts[(int)rt].ListView;
+                if (rView != null) {
+                    rView.SetSortColumn(globOptions.ListOptions[rt].SortColumn, false);
+                    if (rt == GEDCOMRecordType.rtIndividual) {
+                        globOptions.IndividualListColumns.CopyTo(rView.ListMan.ListColumns);
+                    }
+                }
+            }
+        }
+
+        public void SaveListsSettings()
+        {
+            var globOptions = GlobalOptions.Instance;
+            for (var rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
+                IListView rView = fTabParts[(int)rt].ListView;
+                if (rView != null) {
+                    globOptions.ListOptions[rt].SortColumn = rView.SortColumn;
+                    if (rt == GEDCOMRecordType.rtIndividual) {
+                        rView.ListMan.ListColumns.CopyTo(globOptions.IndividualListColumns);
+                    }
+                }
             }
         }
 
@@ -478,7 +498,7 @@ namespace GKCore.Controllers
 
         public void UpdateSettings()
         {
-            UpdateListsSettings();
+            RestoreListsSettings();
             RefreshLists(true);
         }
 

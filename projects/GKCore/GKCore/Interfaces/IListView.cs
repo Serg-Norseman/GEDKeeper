@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -35,6 +35,7 @@ namespace GKCore.Interfaces
     {
         IListViewItems Items { get; }
         IListManager ListMan { get; set; }
+        int SortColumn { get; set; }
 
         void AddColumn(string caption, int width, bool autoSize);
         IListItem AddItem(object rowData, params object[] columnValues);
@@ -45,6 +46,7 @@ namespace GKCore.Interfaces
         object GetSelectedData();
         void SelectItem(object rowData);
         void SetColumnCaption(int index, string caption);
+        void SetSortColumn(int sortColumn, bool checkOrder = true);
         void UpdateContents(bool columnsChanged = false);
     }
 }

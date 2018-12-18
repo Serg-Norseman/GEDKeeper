@@ -126,6 +126,12 @@ namespace GKCore
                 set {  }
             }
 
+            public int SortColumn
+            {
+                get { return 0; }
+                set {  }
+            }
+
             public void AddColumn(string caption, int width, bool autoSize) {}
             public IListItem AddItem(object rowData, params object[] columnValues) { return null; }
             public void BeginUpdate() {}
@@ -137,6 +143,7 @@ namespace GKCore
             public void SetColumnCaption(int index, string caption) {}
             public void UpdateContents(bool columnsChanged = false) {}
             public void Activate() {}
+            public void SetSortColumn(int sortColumn, bool checkOrder = true) {}
         }
 
         private bool ExtFilterHandler(GEDCOMRecord record)

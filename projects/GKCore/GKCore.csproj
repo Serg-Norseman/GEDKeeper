@@ -281,6 +281,7 @@
     <Compile Include="GKCore\MVP\IController.cs" />
     <Compile Include="GKCore\MVP\Views\IStatusForm.cs" />
     <Compile Include="GKCore\MVP\Views\IStdDialogs.cs" />
+    <Compile Include="GKCore\Options\ListOptions.cs" />
     <Compile Include="GKCore\Plugins\OrdinaryPlugin.cs" />
     <Compile Include="GKCore\Plugins\WidgetPlugin.cs" />
     <Compile Include="GKCore\SingleInstance\MapiMailMessage.cs" />

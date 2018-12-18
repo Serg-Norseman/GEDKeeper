@@ -202,10 +202,7 @@ namespace GKUI.Forms
             e.Cancel = !CheckModified();
             if (e.Cancel) return;
 
-            IListManager listMan = GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
-            if (listMan != null) {
-                listMan.ListColumns.CopyTo(GlobalOptions.Instance.IndividualListColumns);
-            }
+            fController.SaveListsSettings();
 
             AppHost.Instance.BaseClosed(this);
         }

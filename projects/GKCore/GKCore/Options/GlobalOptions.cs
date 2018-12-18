@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -82,6 +82,7 @@ namespace GKCore.Options
         private bool fAutoCheckUpdates;
         private bool fAutoSortChildren;
         private bool fAutoSortSpouses;
+        private readonly ListOptionsCollection fListOptions;
 
 
         public static GlobalOptions Instance
@@ -315,6 +316,10 @@ namespace GKCore.Options
             get { return fLanguages; }
         }
 
+        public ListOptionsCollection ListOptions
+        {
+            get { return fListOptions; }
+        }
 
         public LangRecord GetLangByCode(int code)
         {
@@ -396,6 +401,8 @@ namespace GKCore.Options
 
             fAutosave = false;
             fAutosaveInterval = 10;
+
+            fListOptions = new ListOptionsCollection();
         }
 
         protected override void Dispose(bool disposing)
@@ -595,6 +602,8 @@ namespace GKCore.Options
             }
 
             fAncestorsCircleOptions.LoadFromFile(ini);
+
+            fListOptions.LoadFromFile(ini);
         }
 
         public void LoadFromFile(string fileName)
@@ -720,6 +729,8 @@ namespace GKCore.Options
             }
 
             fAncestorsCircleOptions.SaveToFile(ini);
+
+            fListOptions.SaveToFile(ini);
         }
 
         public void SaveToFile(string fileName)
