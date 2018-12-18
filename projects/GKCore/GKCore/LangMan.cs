@@ -835,9 +835,9 @@ namespace GKCore
         /* 777 */ LSID_SelectColor,
         /* 778 */ LSID_AutoSortChildren,
         /* 779 */ LSID_AutoSortSpouses,
+        /* 780 */ LSID_CheckTreeSize,
 
-        /* 780 */ // reserved begin
-        /* 781 */
+        /* 781 */ // reserved begin
         /* 782 */
         /* 783 */
         /* 784 */
@@ -1659,9 +1659,9 @@ namespace GKCore
             /* 777 */ "Select color",
             /* 778 */ "Autosort children",
             /* 779 */ "Autosort spouses",
+            /* 780 */ "Check tree size allowed",
 
-            /* 780 */ "", // reserved begin
-            /* 781 */ "",
+            /* 781 */ "", // reserved begin
             /* 782 */ "",
             /* 783 */ "",
             /* 784 */ "",

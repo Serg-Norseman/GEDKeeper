@@ -228,6 +228,7 @@ namespace GKUI.Forms
 
             chkAutoSortChildren.Checked = fOptions.AutoSortChildren;
             chkAutoSortSpouses.Checked = fOptions.AutoSortSpouses;
+            chkCheckTreeSize.Checked = fOptions.CheckTreeSize;
         }
 
         private void UpdateWomanSurnameFormat()
@@ -441,6 +442,7 @@ namespace GKUI.Forms
 
             fOptions.AutoSortChildren = chkAutoSortChildren.Checked.GetValueOrDefault();
             fOptions.AutoSortSpouses = chkAutoSortSpouses.Checked.GetValueOrDefault();
+            fOptions.CheckTreeSize = chkCheckTreeSize.Checked.GetValueOrDefault();
 
             DialogResult = DialogResult.Ok;
         }
@@ -614,6 +616,7 @@ namespace GKUI.Forms
 
             chkAutoSortChildren.Text = LangMan.LS(LSID.LSID_AutoSortChildren);
             chkAutoSortSpouses.Text = LangMan.LS(LSID.LSID_AutoSortSpouses);
+            chkCheckTreeSize.Text = LangMan.LS(LSID.LSID_CheckTreeSize);
         }
     }
 }

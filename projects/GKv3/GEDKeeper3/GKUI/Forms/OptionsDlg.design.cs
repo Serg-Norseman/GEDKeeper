@@ -125,6 +125,7 @@ namespace GKUI.Forms
         private NumericUpDown numMargins;
         private CheckBox chkAutoSortChildren;
         private CheckBox chkAutoSortSpouses;
+        private CheckBox chkCheckTreeSize;
 
         private void InitializeComponent()
         {
@@ -370,12 +371,15 @@ namespace GKUI.Forms
             chkHideUnknownSpouses = new CheckBox();
             chkHideUnknownSpouses.Text = "chkHideUnknownSpouses";
 
+            chkCheckTreeSize = new CheckBox();
+            chkCheckTreeSize.Text = "chkCheckTreeSize";
+
             grpTreePersons = new GroupBox();
             grpTreePersons.Text = "grpTreePersons";
             grpTreePersons.Content = new VDefStackLayout {
                 Items = { chkSurname, chkName, chkPatronymic, chkDiffLines, chkBirthDate, chkDeathDate, chkOnlyYears,
                     chkMarriagesDates, chkKinship, chkSignsVisible, chkTreeDecorative, chkPortraitsVisible, chkDefaultPortraits,
-                    chkChildlessExclude, chkInvertedTree, chkShowPlaces, chkHideUnknownSpouses }
+                    chkChildlessExclude, chkInvertedTree, chkShowPlaces, chkHideUnknownSpouses, chkCheckTreeSize }
             };
 
             //

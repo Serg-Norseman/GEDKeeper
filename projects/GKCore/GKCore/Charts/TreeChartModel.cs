@@ -1623,6 +1623,7 @@ namespace GKCore.Charts
         public static bool CheckTreeChartSize(GEDCOMTree tree, GEDCOMIndividualRecord iRec, TreeChartKind chartKind)
         {
             bool result = true;
+            if (!GlobalOptions.Instance.CheckTreeSize) return result;
 
             if (chartKind == TreeChartKind.ckAncestors || chartKind == TreeChartKind.ckBoth) {
                 GKUtils.InitExtCounts(tree, -1);

@@ -83,6 +83,7 @@ namespace GKCore.Options
         private bool fAutoSortChildren;
         private bool fAutoSortSpouses;
         private readonly ListOptionsCollection fListOptions;
+        private bool fCheckTreeSize;
 
 
         public static GlobalOptions Instance
@@ -227,8 +228,6 @@ namespace GKCore.Options
             set { fShowDatesCalendar = value; }
         }
 
-
-
         public bool Autosave
         {
             get { return fAutosave; }
@@ -240,7 +239,6 @@ namespace GKCore.Options
             get { return fAutosaveInterval; }
             set { fAutosaveInterval = value; }
         }
-
 
         // TODO: Need to make a decision on additional types of names:
         // religious and according to the census (see GEDCOMPersonalNamePieces)
@@ -256,41 +254,12 @@ namespace GKCore.Options
             set { fWomanSurnameFormat = value; }
         }
 
-        public string Geocoder
-        {
-            get { return fGeocoder; }
-            set { fGeocoder = value; }
-        }
 
-
-        public bool RemovableMediaWarning
-        {
-            get { return fRemovableMediaWarning; }
-            set { fRemovableMediaWarning = value; }
-        }
-
-        public bool LoadRecentFiles
-        {
-            get { return fLoadRecentFiles; }
-            set { fLoadRecentFiles = value; }
-        }
-
-        public bool EmbeddedMediaPlayer
-        {
-            get { return fEmbeddedMediaPlayer; }
-            set { fEmbeddedMediaPlayer = value; }
-        }
 
         public bool AllowMediaStoreReferences
         {
             get { return fAllowMediaStoreReferences; }
             set { fAllowMediaStoreReferences = value; }
-        }
-
-        public bool UseExtendedNotes
-        {
-            get { return fUseExtendedNotes; }
-            set { fUseExtendedNotes = value; }
         }
 
         public bool AutoCheckUpdates
@@ -311,6 +280,24 @@ namespace GKCore.Options
             set { fAutoSortSpouses = value; }
         }
 
+        public bool CheckTreeSize
+        {
+            get { return fCheckTreeSize; }
+            set { fCheckTreeSize = value; }
+        }
+
+        public bool EmbeddedMediaPlayer
+        {
+            get { return fEmbeddedMediaPlayer; }
+            set { fEmbeddedMediaPlayer = value; }
+        }
+
+        public string Geocoder
+        {
+            get { return fGeocoder; }
+            set { fGeocoder = value; }
+        }
+
         public IList<LangRecord> Languages
         {
             get { return fLanguages; }
@@ -321,56 +308,24 @@ namespace GKCore.Options
             get { return fListOptions; }
         }
 
-        public LangRecord GetLangByCode(int code)
+        public bool LoadRecentFiles
         {
-            foreach (LangRecord lngRec in fLanguages) {
-                if (lngRec.Code == code) {
-                    return lngRec;
-                }
-            }
-
-            return null;
+            get { return fLoadRecentFiles; }
+            set { fLoadRecentFiles = value; }
         }
 
-        public string GetLanguageSign()
+        public bool RemovableMediaWarning
         {
-            LangRecord lngrec = GetLangByCode(InterfaceLang);
-            string lngSign = (lngrec == null) ? LangMan.LS_DEF_SIGN : lngrec.Sign;
-            return lngSign;
+            get { return fRemovableMediaWarning; }
+            set { fRemovableMediaWarning = value; }
         }
 
-        // TODO: rework it
-        public GEDCOMLanguageID GetCurrentItfLang()
+        public bool UseExtendedNotes
         {
-            if (InterfaceLang == LangMan.LS_DEF_CODE) {
-                return GEDCOMLanguageID.English;
-            } else {
-                LangRecord langRec = GetLangByCode(InterfaceLang);
-                return (langRec == null) ? GEDCOMLanguageID.English : langRec.LangID;
-            }
+            get { return fUseExtendedNotes; }
+            set { fUseExtendedNotes = value; }
         }
 
-        public string GetLastBase(int index)
-        {
-            return fLastBases[index];
-        }
-
-        public int GetLastBasesCount()
-        {
-            return fLastBases.Count;
-        }
-
-        public int MRUFiles_IndexOf(string fileName)
-        {
-            int num = fMRUFiles.Count;
-            for (int i = 0; i < num; i++) {
-                if (fMRUFiles[i].FileName == fileName) {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
 
         private GlobalOptions()
         {
@@ -389,9 +344,11 @@ namespace GKCore.Options
             fEmbeddedMediaPlayer = true;
             fAllowMediaStoreReferences = false;
             fUseExtendedNotes = false;
+
             fAutoCheckUpdates = true;
             fAutoSortChildren = true;
             fAutoSortSpouses = false;
+            fCheckTreeSize = true;
 
             fIndividualListColumns = IndividualListMan.CreateIndividualListColumns();
             fIndividualListColumns.ResetDefaults();
@@ -487,6 +444,57 @@ namespace GKCore.Options
             }
 
             fInterfaceLang = (ushort)langCode;
+        }
+
+        public LangRecord GetLangByCode(int code)
+        {
+            foreach (LangRecord lngRec in fLanguages) {
+                if (lngRec.Code == code) {
+                    return lngRec;
+                }
+            }
+
+            return null;
+        }
+
+        public string GetLanguageSign()
+        {
+            LangRecord lngrec = GetLangByCode(InterfaceLang);
+            string lngSign = (lngrec == null) ? LangMan.LS_DEF_SIGN : lngrec.Sign;
+            return lngSign;
+        }
+
+        // TODO: rework it
+        public GEDCOMLanguageID GetCurrentItfLang()
+        {
+            if (InterfaceLang == LangMan.LS_DEF_CODE) {
+                return GEDCOMLanguageID.English;
+            } else {
+                LangRecord langRec = GetLangByCode(InterfaceLang);
+                return (langRec == null) ? GEDCOMLanguageID.English : langRec.LangID;
+            }
+        }
+
+        public string GetLastBase(int index)
+        {
+            return fLastBases[index];
+        }
+
+        public int GetLastBasesCount()
+        {
+            return fLastBases.Count;
+        }
+
+        public int MRUFiles_IndexOf(string fileName)
+        {
+            int num = fMRUFiles.Count;
+            for (int i = 0; i < num; i++) {
+                if (fMRUFiles[i].FileName == fileName) {
+                    return i;
+                }
+            }
+
+            return -1;
         }
 
         public void AddLastBase(string fileName)
