@@ -736,21 +736,18 @@ namespace GKCore.Lists
             var iRec = fDataOwner as GEDCOMIndividualRecord;
             if (fSheetList == null || iRec == null) return;
 
-            try
-            {
+            try {
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMPersonalName pn in iRec.PersonalNames)
-                {
+                foreach (GEDCOMPersonalName pn in iRec.PersonalNames) {
                     string lang = GEDCOMLanguageEnum.Instance.GetStrValue(pn.Language.Value);
-                    fSheetList.AddItem(pn, new object[] { pn.FullName, LangMan.LS(GKData.NameTypes[(int)pn.NameType]), lang } );
+                    fSheetList.AddItem(pn, new object[] { GKUtils.GetNameString(iRec, pn, true, false),
+                                                          LangMan.LS(GKData.NameTypes[(int)pn.NameType]), lang });
                 }
 
                 fSheetList.EndUpdate();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("NamesSublistModel.UpdateContents(): " + ex.Message);
             }
         }

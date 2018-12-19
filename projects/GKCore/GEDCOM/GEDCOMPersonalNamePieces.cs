@@ -71,7 +71,7 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue("_PATN", value); }
         }
 
-        // as BKW6
+        // as BKW6 (MarriedSurname)
         public string MarriedName
         {
             get { return GetTagStringValue("_MARN"); }

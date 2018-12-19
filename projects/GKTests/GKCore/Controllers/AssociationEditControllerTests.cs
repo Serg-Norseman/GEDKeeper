@@ -28,7 +28,7 @@ using GKUI.Providers;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace GKTests.GKCore.Controllers
+namespace GKCore.Controllers
 {
     [TestFixture]
     public class AssociationEditControllerTests

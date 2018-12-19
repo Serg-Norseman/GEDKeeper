@@ -88,6 +88,7 @@
     <Compile Include="GEDCOM\GedcomTests.cs" />
     <Compile Include="GEDCOM\GEDCOMUtilsTests.cs" />
     <Compile Include="Externals\SmartGraphTests.cs" />
+    <Compile Include="GEDCOM\NamesTests.cs" />
     <Compile Include="GKComponents\CircleChartTests.cs" />
     <Compile Include="GKComponents\GKListItemTests.cs" />
     <Compile Include="GKComponents\HyperViewTests.cs" />
@@ -191,6 +192,8 @@
     <EmbeddedResource Include="Resources\test_holidays.yaml" />
     <EmbeddedResource Include="Resources\test_pathreplace.yaml" />
     <EmbeddedResource Include="Resources\lorem_ipsum.txt" />
+    <EmbeddedResource Include="Resources\test_names_01.ged" />
+    <EmbeddedResource Include="Resources\test_names_02.ged" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

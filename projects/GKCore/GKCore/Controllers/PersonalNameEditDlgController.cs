@@ -94,7 +94,7 @@ namespace GKCore.Controllers
         {
             GEDCOMIndividualRecord iRec = fPersonalName.Parent as GEDCOMIndividualRecord;
 
-            var parts = GKUtils.GetNameParts(iRec, fPersonalName);
+            var parts = GKUtils.GetNameParts(iRec, fPersonalName, false);
 
             fView.Surname.Text = parts.Surname;
             fView.Name.Text = parts.Name;

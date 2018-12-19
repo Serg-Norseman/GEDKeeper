@@ -2840,34 +2840,45 @@ namespace GKCore
             return result;
         }
 
+        public static string GetNameString(GEDCOMIndividualRecord iRec, GEDCOMPersonalName np, bool firstSurname, bool includePieces)
+        {
+            if (iRec == null)
+                throw new ArgumentNullException("iRec");
+
+            if (np == null)
+                throw new ArgumentNullException("np");
+
+            string result;
+
+            string firstPart = np.FirstPart;
+            string surname = np.Surname;
+
+            surname = GetFmtSurname(iRec, np, surname);
+
+            if (firstSurname) {
+                result = surname + " " + firstPart;
+            } else {
+                result = firstPart + " " + surname;
+            }
+
+            if (includePieces) {
+                string nick = np.Pieces.Nickname;
+                if (!string.IsNullOrEmpty(nick)) result = result + " [" + nick + "]";
+            }
+
+            return result;
+        }
+
         public static string GetNameString(GEDCOMIndividualRecord iRec, bool firstSurname, bool includePieces)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
             string result;
-            if (iRec.PersonalNames.Count > 0)
-            {
+            if (iRec.PersonalNames.Count > 0) {
                 GEDCOMPersonalName np = iRec.PersonalNames[0];
-
-                string firstPart = np.FirstPart;
-                string surname = np.Surname;
-
-                surname = GetFmtSurname(iRec, np, surname);
-
-                if (firstSurname) {
-                    result = surname + " " + firstPart;
-                } else {
-                    result = firstPart + " " + surname;
-                }
-
-                if (includePieces) {
-                    string nick = np.Pieces.Nickname;
-                    if (!string.IsNullOrEmpty(nick)) result = result + " [" + nick + "]";
-                }
-            }
-            else
-            {
+                result = GetNameString(iRec, np, firstSurname, includePieces);
+            } else {
                 result = "";
             }
             return result;
@@ -2908,31 +2919,39 @@ namespace GKCore
             if (personalName == null)
                 throw new ArgumentNullException("personalName");
 
+            // extracting standard parts
+            string stdSurname, stdName, stdPatronymic;
+            string firstPart = personalName.FirstPart;
+            stdSurname = personalName.Surname;
+            string[] parts = firstPart.Split(' ');
+            if (parts.Length > 1) {
+                stdName = parts[0];
+                stdPatronymic = parts[1];
+            } else {
+                stdName = firstPart;
+                stdPatronymic = "";
+            }
+
+            // extracting sub-tags parts (high priority if any)
             string surname = personalName.Pieces.Surname;
             string name = personalName.Pieces.Given;
             string patronymic = personalName.Pieces.PatronymicName;
-
-            if (string.IsNullOrEmpty(surname) && string.IsNullOrEmpty(name) && string.IsNullOrEmpty(patronymic))
-            {
-                string firstPart = personalName.FirstPart;
-                surname = personalName.Surname;
-
-                string[] parts = firstPart.Split(' ');
-                if (parts.Length > 1)
-                {
-                    name = parts[0];
-                    patronymic = parts[1];
-                } else {
-                    name = firstPart;
-                    patronymic = "";
-                }
+            string marriedSurname = personalName.Pieces.MarriedName;
+            parts = name.Split(' ');
+            if (!string.IsNullOrEmpty(name) && string.IsNullOrEmpty(patronymic) && parts.Length > 1) {
+                name = parts[0];
+                patronymic = parts[1];
             }
+
+            surname = !string.IsNullOrEmpty(surname) ? surname : stdSurname;
+            name = !string.IsNullOrEmpty(name) ? name : stdName;
+            patronymic = !string.IsNullOrEmpty(patronymic) ? patronymic : stdPatronymic;
 
             if (formatted) {
                 surname = GetFmtSurname(iRec, personalName, surname);
             }
 
-            return new NamePartsRet(surname, name, patronymic);
+            return new NamePartsRet(surname, marriedSurname, name, patronymic);
         }
 
         public static NamePartsRet GetNameParts(GEDCOMIndividualRecord iRec, bool formatted = true)
@@ -2949,13 +2968,25 @@ namespace GKCore
 
         public sealed class NamePartsRet
         {
+            // Simple or maiden surname
             public string Surname;
+
             public string Name;
             public string Patronymic;
+
+            public string MarriedSurname;
 
             public NamePartsRet(string surname, string name, string patronymic)
             {
                 Surname = surname;
+                Name = name;
+                Patronymic = patronymic;
+            }
+
+            public NamePartsRet(string maidenSurname, string marriedSurname, string name, string patronymic)
+            {
+                Surname = maidenSurname;
+                MarriedSurname = marriedSurname;
                 Name = name;
                 Patronymic = patronymic;
             }

@@ -1,0 +1,22 @@
+﻿0 HEAD
+1 SOUR GEDKeeper
+1 DEST GEDKeeper
+1 CHAR UTF-8
+1 LANG Russian
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+0 @I1@ INDI
+1 SEX F
+1 NAME Анна Сидоровна /Иванова (Петрова)/
+2 SURN Иванова (Петрова)
+2 GIVN Анна
+2 _PATN Сидоровна
+0 @I2@ INDI
+1 SEX F
+1 NAME Аглая Федоровна /Иванова/
+2 SURN Иванова
+2 GIVN Аглая
+2 _PATN Федоровна
+2 _MARN Лескова
+0 TRLR
