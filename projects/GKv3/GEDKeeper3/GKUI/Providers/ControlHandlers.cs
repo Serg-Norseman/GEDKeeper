@@ -168,7 +168,11 @@ namespace GKUI.Providers
         public string Text
         {
             get { return Control.Text; }
-            set { Control.Text = value; }
+            set {
+                Control.AutoComplete = true; // FIXME: Wrapper for EtoBug in ComboBox.setText
+                Control.Text = value;
+                Control.AutoComplete = false;
+            }
         }
 
         public void Add(object item)

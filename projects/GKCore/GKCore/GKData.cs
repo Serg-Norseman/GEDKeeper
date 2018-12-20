@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -171,6 +171,7 @@ namespace GKCore
         public static readonly StatsTitleStruct[] StatsTitles;
         public static readonly LSID[] CheckSolveNames;
         public static readonly LSID[] NameTypes;
+        public static readonly LSID[] ParentTypes;
         public static readonly string[] CondSigns;
         public static readonly string BloodGroups;
 
@@ -588,6 +589,14 @@ namespace GKCore
                 LSID.LSID_NTImmigrant,
                 LSID.LSID_NTMaiden,
                 LSID.LSID_NTMarried
+            };
+
+            ParentTypes = new LSID[] {
+                LSID.LSID_DefaultValue,
+                LSID.LSID_PLT_Adopted,
+                LSID.LSID_PLT_Birth,
+                LSID.LSID_PLT_Foster,
+                LSID.LSID_PLT_Sealing
             };
 
             BloodGroups = "|(I) O+|(I) O-|(II) A+|(II) A-|(III) B+|(III) B-|(IV) AB+|(IV) AB-";

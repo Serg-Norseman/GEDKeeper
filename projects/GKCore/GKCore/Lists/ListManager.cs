@@ -197,14 +197,8 @@ namespace GKCore.Lists
             bool result = false;
             if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(mask)) return result;
 
-            string stx = str.ToLower();
-            string[] masks = mask.ToLower().Split('|');
-
-            int num = masks.Length;
-            for (int i = 0; i < num; i++)
-            {
-                result = result || GKUtils.MatchesMask(stx, masks[i]);
-            }
+            // regex supports '|' (or) expression
+            result = GKUtils.MatchesMask(str, mask);
 
             return result;
         }

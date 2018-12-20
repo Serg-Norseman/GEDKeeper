@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -836,13 +836,13 @@ namespace GKCore
         /* 778 */ LSID_AutoSortChildren,
         /* 779 */ LSID_AutoSortSpouses,
         /* 780 */ LSID_CheckTreeSize,
+        /* 781 */ LSID_PLT_Adopted,
+        /* 782 */ LSID_PLT_Birth,
+        /* 783 */ LSID_PLT_Foster,
+        /* 784 */ LSID_PLT_Sealing,
+        /* 785 */ LSID_LinkageType,
 
-        /* 781 */ // reserved begin
-        /* 782 */
-        /* 783 */
-        /* 784 */
-        /* 785 */
-        /* 786 */
+        /* 786 */ // reserved begin
         /* 787 */
         /* 788 */
         /* 789 */
@@ -1660,13 +1660,13 @@ namespace GKCore
             /* 778 */ "Autosort children",
             /* 779 */ "Autosort spouses",
             /* 780 */ "Check tree size allowed",
+            /* 781 */ "Adopted",
+            /* 782 */ "Birth",
+            /* 783 */ "Foster",
+            /* 784 */ "Sealing",
+            /* 785 */ "Linkage type",
 
-            /* 781 */ "", // reserved begin
-            /* 782 */ "",
-            /* 783 */ "",
-            /* 784 */ "",
-            /* 785 */ "",
-            /* 786 */ "",
+            /* 786 */ "", // reserved begin
             /* 787 */ "",
             /* 788 */ "",
             /* 789 */ "",

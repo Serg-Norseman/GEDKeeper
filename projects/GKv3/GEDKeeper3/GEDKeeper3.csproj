@@ -148,6 +148,10 @@
     <Compile Include="GKUI\Forms\PersonalNameEditDlg.design.cs">
       <DependentUpon>PersonalNameEditDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\ParentsEditDlg.cs" />
+    <Compile Include="GKUI\Forms\ParentsEditDlg.design.cs">
+      <DependentUpon>ParentsEditDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Forms\PersonEditDlg.cs" />
     <Compile Include="GKUI\Forms\PersonEditDlg.design.cs">
       <DependentUpon>PersonEditDlg.cs</DependentUpon>

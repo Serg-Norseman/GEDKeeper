@@ -349,32 +349,33 @@ namespace GKCore
 
         #region Match functions
 
-        public static Regex InitMaskRegex(string mask)
+        private static string PrepareMask(string mask)
         {
-            Regex result = null;
+            string regexStr = "";
 
-            if (!string.IsNullOrEmpty(mask))
-            {
-                string regexStr = "";
+            if (!string.IsNullOrEmpty(mask)) {
                 int curPos = 0;
                 int len = mask.Length;
 
-                while (curPos < len)
-                {
-                    int I = mask.IndexOfAny("*?".ToCharArray(), curPos);
+                char[] syms = "*?|".ToCharArray();
+
+                while (curPos < len) {
+                    int I = mask.IndexOfAny(syms, curPos);
                     if (I < curPos) break;
                     if (I > curPos) {
                         string part = mask.Substring(curPos, I - curPos);
                         regexStr += Regex.Escape(part);
                     }
 
-                    char c = mask[I];
-                    switch (c) {
+                    switch (mask[I]) {
                         case '*':
                             regexStr += ".*";
                             break;
                         case '?':
                             regexStr += ".";
+                            break;
+                        case '|':
+                            regexStr += "|";
                             break;
                     }
 
@@ -385,8 +386,21 @@ namespace GKCore
                     string part = mask.Substring(curPos, len - curPos);
                     regexStr += Regex.Escape(part);
                 }
+            }
 
-                result = new Regex(regexStr, RegexOptions.IgnoreCase);
+            return regexStr;
+        }
+
+        private const RegexOptions RegexOpts = RegexOptions.Singleline | RegexOptions.Compiled |
+                                               RegexOptions.IgnoreCase | RegexOptions.CultureInvariant;
+
+        public static Regex InitMaskRegex(string mask)
+        {
+            Regex result = null;
+
+            string regexStr = PrepareMask(mask);
+            if (!string.IsNullOrEmpty(regexStr)) {
+                result = new Regex(regexStr, RegexOpts);
             }
 
             return result;
@@ -394,13 +408,13 @@ namespace GKCore
 
         public static bool MatchesRegex(string str, Regex regex)
         {
-            return (regex != null) && regex.IsMatch(str);
+            return (regex != null) && regex.IsMatch(str, 0);
         }
 
         public static bool MatchesMask(string str, string mask)
         {
-            Regex regex = InitMaskRegex(mask);
-            return MatchesRegex(str, regex);
+            // Regex.IsMatch() has caching
+            return Regex.IsMatch(str, PrepareMask(mask), RegexOpts);
         }
 
         #endregion

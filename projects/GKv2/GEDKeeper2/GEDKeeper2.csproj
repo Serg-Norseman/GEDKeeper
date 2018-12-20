@@ -274,6 +274,10 @@
     <Compile Include="GKUI\Forms\OrganizerWin.Designer.cs">
       <DependentUpon>OrganizerWin.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\ParentsEditDlg.cs" />
+    <Compile Include="GKUI\Forms\ParentsEditDlg.Designer.cs">
+      <DependentUpon>ParentsEditDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Forms\PatriarchsViewerWin.cs">
       <SubType>Form</SubType>
     </Compile>

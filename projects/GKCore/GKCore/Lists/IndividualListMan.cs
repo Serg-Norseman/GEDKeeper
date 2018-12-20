@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -804,6 +804,101 @@ namespace GKCore.Lists
 
                         case RecordAction.raMoveDown:
                             iRec.PersonalNames.Exchange(idx, idx + 1);
+                            break;
+                    }
+                    result = true;
+                    break;
+            }
+
+            if (result) {
+                fBaseWin.Context.Modified = true;
+                eArgs.IsChanged = true;
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class ParentsSublistModel : ListModel
+    {
+        public ParentsSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
+                RecordAction.raMoveDown, RecordAction.raMoveUp);
+
+            fListColumns.AddColumn(LSID.LSID_Name, 350, false);
+            fListColumns.AddColumn(LSID.LSID_Type, 100, false);
+            fListColumns.ResetDefaults();
+        }
+
+        public override void UpdateContents()
+        {
+            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            if (fSheetList == null || iRec == null) return;
+
+            try {
+                fSheetList.BeginUpdate();
+                fSheetList.ClearItems();
+
+                foreach (GEDCOMChildToFamilyLink cfLink in iRec.ChildToFamilyLinks) {
+                    GEDCOMFamilyRecord famRec = cfLink.Family;
+
+                    fSheetList.AddItem(cfLink, new object[] { GKUtils.GetFamilyString(famRec),
+                                                          LangMan.LS(GKData.ParentTypes[(int)cfLink.PedigreeLinkageType]) });
+                }
+
+                fSheetList.EndUpdate();
+            } catch (Exception ex) {
+                Logger.LogWrite("ParentsSublistModel.UpdateContents(): " + ex.Message);
+            }
+        }
+
+        public override void Modify(object sender, ModifyEventArgs eArgs)
+        {
+            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            if (fBaseWin == null || fSheetList == null || iRec == null) return;
+
+            GEDCOMChildToFamilyLink cfLink = eArgs.ItemData as GEDCOMChildToFamilyLink;
+
+            bool result = false;
+
+            switch (eArgs.Action) {
+                case RecordAction.raAdd:
+                    GEDCOMFamilyRecord family = fBaseWin.Context.SelectFamily(iRec);
+                    if (family != null && family.IndexOfChild(iRec) < 0) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, iRec, family);
+                    }
+                    break;
+
+                case RecordAction.raEdit:
+                    if (cfLink != null) {
+                        using (var dlg = AppHost.Container.Resolve<IParentsEditDlg>(fBaseWin)) {
+                            dlg.Person = iRec;
+                            dlg.Link = cfLink;
+                            result = AppHost.Instance.ShowModalX(dlg, false);
+                        }
+                    }
+                    break;
+
+                case RecordAction.raDelete:
+                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery))) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, iRec, cfLink.Family);
+                    }
+                    break;
+
+                case RecordAction.raMoveUp:
+                case RecordAction.raMoveDown:
+                    int idx = iRec.ChildToFamilyLinks.IndexOf(cfLink);
+                    switch (eArgs.Action) {
+                        case RecordAction.raMoveUp:
+                            iRec.ChildToFamilyLinks.Exchange(idx - 1, idx);
+                            break;
+
+                        case RecordAction.raMoveDown:
+                            iRec.ChildToFamilyLinks.Exchange(idx, idx + 1);
                             break;
                     }
                     result = true;

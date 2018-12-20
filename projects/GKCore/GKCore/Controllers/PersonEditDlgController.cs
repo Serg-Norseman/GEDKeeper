@@ -165,6 +165,7 @@ namespace GKCore.Controllers
                 fView.NamesList.ListModel.DataOwner = fPerson;
                 fView.SpousesList.ListModel.DataOwner = fPerson;
                 fView.UserRefList.ListModel.DataOwner = fPerson;
+                fView.ParentsList.ListModel.DataOwner = fPerson;
 
                 UpdateControls(true);
             } catch (Exception ex) {
@@ -172,7 +173,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void UpdateControls(bool totalUpdate = false)
+        public void UpdateParents()
         {
             bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
 
@@ -205,6 +206,11 @@ namespace GKCore.Controllers
                 fView.Father.Text = "";
                 fView.Mother.Text = "";
             }
+        }
+
+        public void UpdateControls(bool totalUpdate = false)
+        {
+            UpdateParents();
 
             if (totalUpdate) {
                 fView.EventsList.UpdateSheet();
@@ -217,9 +223,12 @@ namespace GKCore.Controllers
                 fView.NamesList.UpdateSheet();
                 fView.SpousesList.UpdateSheet();
                 fView.UserRefList.UpdateSheet();
+                fView.ParentsList.UpdateSheet();
             }
 
             UpdatePortrait(totalUpdate);
+
+            bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
 
             // controls lock
             fView.Name.Enabled = !locked;
@@ -243,6 +252,7 @@ namespace GKCore.Controllers
             fView.AssociationsList.ReadOnly = locked;
             fView.GroupsList.ReadOnly = locked;
             fView.UserRefList.ReadOnly = locked;
+            fView.ParentsList.ReadOnly = locked;
 
             ICulture culture = fBase.Context.Culture;
             fView.Surname.Enabled = fView.Surname.Enabled && culture.HasSurname();
@@ -397,9 +407,7 @@ namespace GKCore.Controllers
             AcceptTempData();
 
             GEDCOMFamilyRecord family = fBase.Context.SelectFamily(fPerson);
-            if (family == null) return;
-
-            if (family.IndexOfChild(fPerson) < 0) {
+            if (family != null && family.IndexOfChild(fPerson) < 0) {
                 fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, fPerson, family);
             }
             UpdateControls();

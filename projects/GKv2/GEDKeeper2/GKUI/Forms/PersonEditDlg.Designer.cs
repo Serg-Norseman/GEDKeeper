@@ -54,6 +54,7 @@
         private System.Windows.Forms.TabPage pageNames;
         private System.Windows.Forms.TextBox txtMarriedSurname;
         private System.Windows.Forms.Label lblMarriedSurname;
+        private System.Windows.Forms.TabPage pageParents;
         
         private void InitializeComponent()
         {
@@ -109,6 +110,7 @@
             this.pageMultimedia = new System.Windows.Forms.TabPage();
             this.pageSources = new System.Windows.Forms.TabPage();
             this.pageUserRefs = new System.Windows.Forms.TabPage();
+            this.pageParents = new System.Windows.Forms.TabPage();
             this.GroupBox1.SuspendLayout();
             this.panCtlParents.SuspendLayout();
             this.tabsPersonData.SuspendLayout();
@@ -571,6 +573,7 @@
             this.tabsPersonData.Controls.Add(this.pageMultimedia);
             this.tabsPersonData.Controls.Add(this.pageSources);
             this.tabsPersonData.Controls.Add(this.pageUserRefs);
+            this.tabsPersonData.Controls.Add(this.pageParents);
             this.tabsPersonData.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabsPersonData.Location = new System.Drawing.Point(0, 258);
             this.tabsPersonData.Margin = new System.Windows.Forms.Padding(2);
@@ -661,12 +664,23 @@
             this.pageUserRefs.TabIndex = 7;
             this.pageUserRefs.Text = "pageUserRefs";
             // 
+            // pageParents
+            // 
+            this.pageParents.BackColor = System.Drawing.SystemColors.Control;
+            this.pageParents.Location = new System.Drawing.Point(4, 22);
+            this.pageParents.Name = "pageParents";
+            this.pageParents.Padding = new System.Windows.Forms.Padding(3);
+            this.pageParents.Size = new System.Drawing.Size(691, 230);
+            this.pageParents.TabIndex = 9;
+            this.pageParents.Text = "pageParents";
+            // 
             // PersonEditDlg
             // 
             this.AcceptButton = this.btnAccept;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
+            this.Caption = "PersonEditDlg";
             this.ClientSize = new System.Drawing.Size(699, 563);
             this.Controls.Add(this.tabsPersonData);
             this.Controls.Add(this.lblRestriction);

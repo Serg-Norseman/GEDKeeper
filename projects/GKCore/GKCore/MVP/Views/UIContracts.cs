@@ -302,6 +302,22 @@ namespace GKCore.MVP.Views
     }
 
 
+    public interface IParentsEditDlg : ICommonDialog, IBaseEditor, IView
+    {
+        GEDCOMChildToFamilyLink Link { get; set; }
+        GEDCOMIndividualRecord Person { get; set; }
+
+        ITextBoxHandler Father { get; }
+        ITextBoxHandler Mother { get; }
+        ITextBoxHandler ChildName { get; }
+        IComboBoxHandler LinkageTypeCombo { get; }
+
+        void SetParentsAvl(bool avail);
+        void SetFatherAvl(bool avail);
+        void SetMotherAvl(bool avail);
+    }
+
+
     public interface IPersonalNameEditDlg : ICommonDialog, IBaseEditor, IView
     {
         GEDCOMPersonalName PersonalName { get; set; }
@@ -336,6 +352,7 @@ namespace GKCore.MVP.Views
         ISheetList NotesList { get; }
         ISheetList MediaList { get; }
         ISheetList SourcesList { get; }
+        ISheetList ParentsList { get; }
 
         IPortraitControl Portrait { get; }
         ITextBoxHandler Father { get; }

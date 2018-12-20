@@ -208,6 +208,7 @@
     <Compile Include="GKCore\Controllers\NameEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\NoteEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\OrganizerController.cs" />
+    <Compile Include="GKCore\Controllers\ParentsEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\PatriarchsSearchController.cs" />
     <Compile Include="GKCore\Controllers\PersonalNameEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\PersonEditDlgController.cs" />

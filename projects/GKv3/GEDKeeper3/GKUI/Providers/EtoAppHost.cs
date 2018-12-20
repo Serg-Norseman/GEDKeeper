@@ -300,6 +300,7 @@ namespace GKUI.Providers
             container.Register<INoteEditDlgEx, NoteEditDlgEx>(LifeCycle.Transient);
             container.Register<IOptionsDlg, OptionsDlg>(LifeCycle.Transient);
             container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
+            container.Register<IParentsEditDlg, ParentsEditDlg>(LifeCycle.Transient);
             container.Register<IPatriarchsSearchDlg, TTPatSearchDlg>(LifeCycle.Transient);
             container.Register<IPatriarchsViewer, PatriarchsViewerWin>(LifeCycle.Transient);
             container.Register<IPersonsFilterDlg, PersonsFilterDlg>(LifeCycle.Transient);

@@ -48,6 +48,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fSourcesList;
         private readonly GKSheetList fUserRefList;
         private readonly GKSheetList fNamesList;
+        private readonly GKSheetList fParentsList;
 
         public GEDCOMIndividualRecord Person
         {
@@ -113,6 +114,11 @@ namespace GKUI.Forms
         ISheetList IPersonEditDlg.SourcesList
         {
             get { return fSourcesList; }
+        }
+
+        ISheetList IPersonEditDlg.ParentsList
+        {
+            get { return fParentsList; }
         }
 
         IPortraitControl IPersonEditDlg.Portrait
@@ -289,6 +295,11 @@ namespace GKUI.Forms
             }
         }
 
+        private void ModifyParentsSheet(object sender, ModifyEventArgs eArgs)
+        {
+            fController.UpdateParents();
+        }
+
         private void ModifyGroupsSheet(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
@@ -422,6 +433,10 @@ namespace GKUI.Forms
             fSourcesList = new GKSheetList(pageSources);
 
             fUserRefList = new GKSheetList(pageUserRefs);
+
+            fParentsList = new GKSheetList(pageParents);
+            fParentsList.OnModify += ModifyParentsSheet;
+
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
 
@@ -440,6 +455,7 @@ namespace GKUI.Forms
             fNamesList.ListModel = new NamesSublistModel(baseWin, fController.LocalUndoman);
             fSpousesList.ListModel = new SpousesSublistModel(baseWin, fController.LocalUndoman);
             fUserRefList.ListModel = new URefsSublistModel(baseWin, fController.LocalUndoman);
+            fParentsList.ListModel = new ParentsSublistModel(baseWin, fController.LocalUndoman);
         }
 
         public void SetLang()
@@ -469,6 +485,7 @@ namespace GKUI.Forms
             pageUserRefs.Text = LangMan.LS(LSID.LSID_UserRefs);
             lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
             pageNames.Text = LangMan.LS(LSID.LSID_Names);
+            pageParents.Text = LangMan.LS(LSID.LSID_Parents);
 
             SetToolTip(btnPortraitAdd, LangMan.LS(LSID.LSID_PortraitAddTip));
             SetToolTip(btnPortraitDelete, LangMan.LS(LSID.LSID_PortraitDeleteTip));

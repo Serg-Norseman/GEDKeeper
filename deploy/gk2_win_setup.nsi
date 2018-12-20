@@ -4,6 +4,7 @@
 
 !include "MUI2.nsh"
 !include "DotNetChecker.nsh"
+!define MUI_ICON "..\projects\GKv2\GEDKeeper2\GEDKeeper2.ico"
 
 
 Unicode true
