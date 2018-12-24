@@ -573,9 +573,9 @@ namespace GKCore.Lists
             }
         }
 
-        public override void UpdateItem(IListItem item, object rowData)
+        public override void UpdateItem(int itemIndex, IListItem item, object rowData)
         {
-            base.UpdateItem(item, rowData);
+            base.UpdateItem(itemIndex, item, rowData);
 
             GlobalOptions gOptions = GlobalOptions.Instance;
 

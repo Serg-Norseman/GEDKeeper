@@ -199,6 +199,28 @@ LangString gkp_dqlt ${LANG_SIMPCHINESE} "数据质量"
 LangString gkp_histdata ${LANG_SIMPCHINESE} "历史数据（链接）"
 LangString gkp_stdreports ${LANG_SIMPCHINESE} "标准报告"
 
+!insertmacro MUI_LANGUAGE "Czech"
+LangString gkreq ${LANG_CZECH} "GEDKeeper2 (požadováno)"
+LangString gkscr ${LANG_CZECH} "Vzorky skriptů"
+LangString gkreg ${LANG_CZECH} "Registrace systému"
+LangString gklang ${LANG_CZECH} "Jazyky"
+LangString gkplg ${LANG_CZECH} "Pluginy"
+LangString gkp_calc ${LANG_CZECH} "Expresní kalkulačka"
+LangString gkp_calendar ${LANG_CZECH} "Kalendář"
+LangString gkp_nb ${LANG_CZECH} "Kniha jmen"
+LangString gkp_timeline ${LANG_CZECH} "Časový řádek"
+LangString gkp_flowinput ${LANG_CZECH} "Průtokový vstup"
+LangString gkp_pi ${LANG_CZECH} "Dovozce rodokmenů"
+LangString gkp_ts ${LANG_CZECH} "Hledání textu"
+LangString gkp_tv ${LANG_CZECH} "3D TreeViz"
+LangString gkp_iv ${LANG_CZECH} "Prohlížeč obrázků"
+LangString gkp_cl ${LANG_CZECH} "Conway Life"
+LangString gkp_chron ${LANG_CZECH} "Kronika"
+LangString gkp_cloud ${LANG_CZECH} "Slova Cloud"
+LangString gkp_dqlt ${LANG_CZECH} "Kvalita dat"
+LangString gkp_histdata ${LANG_CZECH} "Historie dat (odkazů)"
+LangString gkp_stdreports ${LANG_CZECH} "Standardní přehledy"
+
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)

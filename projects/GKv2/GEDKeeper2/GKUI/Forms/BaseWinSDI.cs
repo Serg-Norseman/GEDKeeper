@@ -101,6 +101,7 @@ namespace GKUI.Forms
             tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
             tbDocPreview.Image = UIHelper.LoadResourceImage("Resources.btn_preview.gif");
             tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
+            tbSendMail.Image = UIHelper.LoadResourceImage("Resources.btn_mail.gif");
 
             tbDocPrint.Visible = false;
             tbDocPreview.Visible = false;

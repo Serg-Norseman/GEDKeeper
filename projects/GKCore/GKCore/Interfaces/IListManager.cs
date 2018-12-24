@@ -66,7 +66,7 @@ namespace GKCore.Interfaces
         int IndexOfRecord(object data);
         bool IsColumnAutosize(int colIndex);
         void SortContents(int sortColumn, bool sortAscending);
-        void UpdateItem(IListItem item, object rowData);
+        void UpdateItem(int itemIndex, IListItem item, object rowData);
 
         void UpdateItemProps(IListItem item, object rowData);
 

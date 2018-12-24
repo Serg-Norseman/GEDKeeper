@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using BSLib;
 using BSLib.Calendar;
 using GKCommon.GEDCOM;
+using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -282,7 +283,7 @@ namespace GKCore.Lists
         {
         }
 
-        public virtual void UpdateItem(IListItem item, object rowData)
+        public virtual void UpdateItem(int itemIndex, IListItem item, object rowData)
         {
             GEDCOMRecord rec = rowData as GEDCOMRecord;
             if (item == null || rec == null) return;
@@ -300,6 +301,10 @@ namespace GKCore.Lists
                 string res = ConvertColumnValue(val, cs);
 
                 item.AddSubItem(res);
+            }
+
+            if (GlobalOptions.Instance.ReadabilityHighlightRows && MathHelper.IsOdd(itemIndex)) {
+                item.SetBackColor(ChartRenderer.GetColor(ChartRenderer.LightGray));
             }
         }
 

@@ -187,7 +187,7 @@ namespace GKCore
 
             listManager.UpdateColumns(lvMock);
             listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, grpRec);
+            listManager.UpdateItem(0, listItem, grpRec);
 
             //
             var colVal = listManager.GetColumnInternalValue(0);
@@ -241,7 +241,7 @@ namespace GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, commRec);
+            listManager.UpdateItem(0, listItem, commRec);
         }
 
         [Test]
@@ -263,7 +263,7 @@ namespace GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, famRec);
+            listManager.UpdateItem(0, listItem, famRec);
         }
 
         [Test]
@@ -292,17 +292,17 @@ namespace GKCore
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfFNP;
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, indRec);
+            listManager.UpdateItem(0, listItem, indRec);
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfF_NP;
             listManager.UpdateColumns(lvMock);
             listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, indRec);
+            listManager.UpdateItem(0, listItem, indRec);
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfF_N_P;
             listManager.UpdateColumns(lvMock);
             listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, indRec);
+            listManager.UpdateItem(0, listItem, indRec);
         }
 
         [Test]
@@ -324,7 +324,7 @@ namespace GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, locRec);
+            listManager.UpdateItem(0, listItem, locRec);
         }
 
         [Test]
@@ -346,7 +346,7 @@ namespace GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, mediaRec);
+            listManager.UpdateItem(0, listItem, mediaRec);
         }
 
         [Test]
@@ -369,9 +369,9 @@ namespace GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, noteRec);
+            listManager.UpdateItem(0, listItem, noteRec);
             noteRec.Clear();
-            listManager.UpdateItem(listItem, noteRec);
+            listManager.UpdateItem(0, listItem, noteRec);
         }
 
         [Test]
@@ -393,7 +393,7 @@ namespace GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, repoRec);
+            listManager.UpdateItem(0, listItem, repoRec);
         }
 
         [Test]
@@ -415,7 +415,7 @@ namespace GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, resRec);
+            listManager.UpdateItem(0, listItem, resRec);
         }
 
         [Test]
@@ -437,7 +437,7 @@ namespace GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, srcRec);
+            listManager.UpdateItem(0, listItem, srcRec);
         }
 
         [Test]
@@ -459,7 +459,7 @@ namespace GKCore
             var lvMock = new ListViewMock();
             listManager.UpdateColumns(lvMock);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, tskRec);
+            listManager.UpdateItem(0, listItem, tskRec);
         }
     }
 }

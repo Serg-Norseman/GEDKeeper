@@ -520,7 +520,7 @@ namespace GKUI.Components
                 newItem = null;
             } else {
                 newItem = fListMan.CreateListItem(rowData, CreateListItem) as GKListItem;
-                fListMan.UpdateItem(newItem, rowData);
+                fListMan.UpdateItem(itemIndex, newItem, rowData);
             }
 
             return newItem;

@@ -79,11 +79,13 @@ namespace GKCore.Options
         private bool fEmbeddedMediaPlayer;
         private bool fAllowMediaStoreReferences;
         private bool fUseExtendedNotes;
+
         private bool fAutoCheckUpdates;
         private bool fAutoSortChildren;
         private bool fAutoSortSpouses;
-        private readonly ListOptionsCollection fListOptions;
         private bool fCheckTreeSize;
+        private readonly ListOptionsCollection fListOptions;
+        private bool fReadabilityHighlightRows;
 
 
         public static GlobalOptions Instance
@@ -314,6 +316,12 @@ namespace GKCore.Options
             set { fLoadRecentFiles = value; }
         }
 
+        public bool ReadabilityHighlightRows
+        {
+            get { return fReadabilityHighlightRows; }
+            set { fReadabilityHighlightRows = value; }
+        }
+
         public bool RemovableMediaWarning
         {
             get { return fRemovableMediaWarning; }
@@ -360,6 +368,7 @@ namespace GKCore.Options
             fAutosaveInterval = 10;
 
             fListOptions = new ListOptionsCollection();
+            fReadabilityHighlightRows = true;
         }
 
         protected override void Dispose(bool disposing)
