@@ -212,8 +212,7 @@ namespace GKCommon.GEDCOM
         private void LoadFromStream(Stream fileStream, StreamReader reader)
         {
             fTree.State = GEDCOMState.osLoading;
-            try
-            {
+            try {
                 ProgressEventHandler progressHandler = fTree.OnProgress;
 
                 fSourceEncoding = DEFAULT_ENCODING;
@@ -225,170 +224,75 @@ namespace GKCommon.GEDCOM
                 GEDCOMTag curTag = null;
 
                 int lineNum = 0;
-                while (reader.Peek() != -1)
-                {
+                while (reader.Peek() != -1) {
                     lineNum++;
                     string str = reader.ReadLine();
                     str = GEDCOMUtils.TrimLeft(str);
                     if (str.Length == 0) continue;
 
-                    if (!ConvertHelper.IsDigit(str[0]))
-                    {
+                    if (!ConvertHelper.IsDigit(str[0])) {
                         FixFTBLine(curRecord, curTag, lineNum, str);
-                    }
-                    else
-                    {
+                    } else {
                         int tagLevel;
-                        string tagXRef = "", tagName, tagValue = "";
+                        string tagXRef, tagName, tagValue;
 
-                        try
-                        {
-                            var strTok = new StringTokenizer(str);
-                            strTok.RecognizeDecimals = false;
-                            strTok.IgnoreWhiteSpace = false;
-                            strTok.RecognizeIdents = true;
-
-                            var token = strTok.Next(); // already trimmed
-                            if (token.Kind != TokenKind.Number) {
-                                // syntax error
-                                throw new EGEDCOMException(string.Format("The string {0} doesn't start with a valid number", str));
-                            }
-                            tagLevel = (int)token.ValObj;
-
-                            token = strTok.Next();
-                            if (token.Kind != TokenKind.WhiteSpace) {
-                                // syntax error
-                            }
-
-                            token = strTok.Next();
-                            if (token.Kind == TokenKind.Symbol && token.Value[0] == '@')
-                            {
-                                token = strTok.Next();
-                                while (token.Kind != TokenKind.Symbol && token.Value[0] != '@') {
-                                    tagXRef += token.Value;
-                                    token = strTok.Next();
-                                }
-                                // FIXME: check for errors
-                                //throw new EGEDCOMException(string.Format("The string {0} contains an unterminated XRef pointer", str));
-                                //throw new EGEDCOMException(string.Format("The string {0} is expected to start with an XRef pointer", str));
-
-                                token = strTok.Next();
-                                strTok.SkipWhiteSpaces();
-                            }
-
-                            token = strTok.CurrentToken;
-                            if (token.Kind != TokenKind.Word && token.Kind != TokenKind.Ident) {
-                                // syntax error
-                            }
-                            tagName = token.Value.ToUpperInvariant();
-
-                            token = strTok.Next();
-                            if (token.Kind == TokenKind.WhiteSpace) {
-                                tagValue = strTok.GetRest();
-                            }
-                        }
-                        catch (EGEDCOMException ex)
-                        {
+                        try {
+                            ParseTag(str, out tagLevel, out tagXRef, out tagName, out tagValue);
+                        } catch (EGEDCOMException ex) {
                             throw new EGEDCOMException("Syntax error in line " + Convert.ToString(lineNum) + ".\r" + ex.Message);
                         }
 
-                        // convert codepages
-                        if (!string.IsNullOrEmpty(tagValue) && fEncodingState == EncodingState.esChanged)
-                        {
-                            tagValue = ConvertStr(fSourceEncoding, tagValue);
-                        }
-
-                        if (tagLevel == 0)
-                        {
+                        if (tagLevel == 0) {
                             if (curRecord == fTree.Header && fEncodingState == EncodingState.esUnchecked) {
                                 // beginning recognition of the first is not header record
                                 // to check for additional versions of the code page
                                 DefineEncoding(reader);
                             }
 
-                            if (tagName == "INDI")
-                            {
+                            if (tagName == "INDI") {
                                 curRecord = fTree.AddRecord(new GEDCOMIndividualRecord(fTree, fTree, "", ""));
-                            }
-                            else if (tagName == "FAM")
-                            {
+                            } else if (tagName == "FAM") {
                                 curRecord = fTree.AddRecord(new GEDCOMFamilyRecord(fTree, fTree, "", ""));
-                            }
-                            else if (tagName == "OBJE")
-                            {
+                            } else if (tagName == "OBJE") {
                                 curRecord = fTree.AddRecord(new GEDCOMMultimediaRecord(fTree, fTree, "", ""));
-                            }
-                            else if (tagName == "NOTE")
-                            {
+                            } else if (tagName == "NOTE") {
                                 curRecord = fTree.AddRecord(new GEDCOMNoteRecord(fTree, fTree, "", tagValue));
-                            }
-                            else if (tagName == "REPO")
-                            {
+                            } else if (tagName == "REPO") {
                                 curRecord = fTree.AddRecord(new GEDCOMRepositoryRecord(fTree, fTree, "", ""));
-                            }
-                            else if (tagName == "SOUR")
-                            {
+                            } else if (tagName == "SOUR") {
                                 curRecord = fTree.AddRecord(new GEDCOMSourceRecord(fTree, fTree, "", ""));
-                            }
-                            else if (tagName == "SUBN")
-                            {
+                            } else if (tagName == "SUBN") {
                                 curRecord = fTree.AddRecord(new GEDCOMSubmissionRecord(fTree, fTree, "", ""));
-                            }
-                            else if (tagName == "SUBM")
-                            {
+                            } else if (tagName == "SUBM") {
                                 curRecord = fTree.AddRecord(new GEDCOMSubmitterRecord(fTree, fTree, "", ""));
-                            }
-                            else if (tagName == "_GROUP")
-                            {
+                            } else if (tagName == "_GROUP") {
                                 curRecord = fTree.AddRecord(new GEDCOMGroupRecord(fTree, fTree, "", ""));
-                            }
-                            else if (tagName == "_RESEARCH")
-                            {
+                            } else if (tagName == "_RESEARCH") {
                                 curRecord = fTree.AddRecord(new GEDCOMResearchRecord(fTree, fTree, "", ""));
-                            }
-                            else if (tagName == "_TASK")
-                            {
+                            } else if (tagName == "_TASK") {
                                 curRecord = fTree.AddRecord(new GEDCOMTaskRecord(fTree, fTree, "", ""));
-                            }
-                            else if (tagName == "_COMM")
-                            {
+                            } else if (tagName == "_COMM") {
                                 curRecord = fTree.AddRecord(new GEDCOMCommunicationRecord(fTree, fTree, "", ""));
-                            }
-                            else if (tagName == "_LOC")
-                            {
+                            } else if (tagName == "_LOC") {
                                 curRecord = fTree.AddRecord(new GEDCOMLocationRecord(fTree, fTree, "", ""));
-                            }
-                            else if (tagName == "HEAD")
-                            {
+                            } else if (tagName == "HEAD") {
                                 curRecord = fTree.Header;
-                            }
-                            else if (tagName == "TRLR")
-                            {
+                            } else if (tagName == "TRLR") {
                                 break;
-                            }
-                            else
-                            {
+                            } else {
                                 curRecord = null;
                             }
 
-                            if (curRecord != null && tagXRef != "")
-                            {
+                            if (curRecord != null && tagXRef != "") {
                                 curRecord.XRef = tagXRef;
                             }
                             curTag = null;
-                        }
-                        else
-                        {
-                            if (curRecord != null)
-                            {
-                                if (curTag == null || tagLevel == 1)
-                                {
+                        } else {
+                            if (curRecord != null) {
+                                if (curTag == null || tagLevel == 1) {
                                     curTag = curRecord.AddTag(tagName, tagValue, null);
-                                }
-                                else
-                                {
-                                    while (tagLevel <= curTag.Level)
-                                    {
+                                } else {
+                                    while (tagLevel <= curTag.Level) {
                                         curTag = (curTag.Parent as GEDCOMTag);
                                     }
                                     curTag = curTag.AddTag(tagName, tagValue, null);
@@ -406,10 +310,64 @@ namespace GKCommon.GEDCOM
                         }
                     }
                 }
-            }
-            finally
-            {
+            } finally {
                 fTree.State = GEDCOMState.osReady;
+            }
+        }
+
+        private void ParseTag(string line, out int tagLevel, out string tagXRef, out string tagName, out string tagValue)
+        {
+            tagLevel = 0;
+            tagXRef = "";
+            tagName = "";
+            tagValue = "";
+
+            var strTok = new StringTokenizer(line);
+            strTok.RecognizeDecimals = false;
+            strTok.IgnoreWhiteSpace = false;
+            strTok.RecognizeIdents = true;
+
+            var token = strTok.Next(); // already trimmed
+            if (token.Kind != TokenKind.Number) {
+                // syntax error
+                throw new EGEDCOMException(string.Format("The string {0} doesn't start with a valid number", line));
+            }
+            tagLevel = (int)token.ValObj;
+
+            token = strTok.Next();
+            if (token.Kind != TokenKind.WhiteSpace) {
+                // syntax error
+            }
+
+            token = strTok.Next();
+            if (token.Kind == TokenKind.Symbol && token.Value[0] == '@') {
+                token = strTok.Next();
+                while (token.Kind != TokenKind.Symbol && token.Value[0] != '@') {
+                    tagXRef += token.Value;
+                    token = strTok.Next();
+                }
+                // FIXME: check for errors
+                //throw new EGEDCOMException(string.Format("The string {0} contains an unterminated XRef pointer", str));
+                //throw new EGEDCOMException(string.Format("The string {0} is expected to start with an XRef pointer", str));
+
+                token = strTok.Next();
+                strTok.SkipWhiteSpaces();
+            }
+
+            token = strTok.CurrentToken;
+            if (token.Kind != TokenKind.Word && token.Kind != TokenKind.Ident) {
+                // syntax error
+            }
+            tagName = token.Value.ToUpperInvariant();
+
+            token = strTok.Next();
+            if (token.Kind == TokenKind.WhiteSpace) {
+                tagValue = strTok.GetRest();
+            }
+
+            // convert codepages
+            if (!string.IsNullOrEmpty(tagValue) && fEncodingState == EncodingState.esChanged) {
+                tagValue = ConvertStr(fSourceEncoding, tagValue);
             }
         }
 

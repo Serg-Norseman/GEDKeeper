@@ -112,6 +112,8 @@ namespace GKCommon.GEDCOM
         Vietnamese,
         Yiddish,
 
+        // GK Extensions: additional languages
+        Kazakh,
         // GK Extensions: ancient languages
         AncientGreek, Latin,
         // GK Extensions: extinct languages
@@ -133,6 +135,7 @@ namespace GKCommon.GEDCOM
             "Rajasthani", "Russian", "Sanskrit", "Serb", "Tagalog", "Tamil", "Telugu", "Thai", "Tibetan", "Ukrainian", "Urdu",
             "Vietnamese", "Yiddish",
 
+            "Kazakh",
             "Ancient Greek", "Latin", 
             "Akkadian", "Eblaite", "Hattic", "Hittite", "Hurrian", "Luwian", "Mitanni-Aryan", "Palaic", "Sumerian"
         };

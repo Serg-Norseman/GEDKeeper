@@ -30,6 +30,40 @@ namespace GKCommon.GEDCOM
     public class FileFormatTests
     {
         [Test]
+        public void Test_GK_UTF8()
+        {
+            using (BaseContext ctx = new BaseContext(null)) {
+                Assembly assembly = typeof(CoreTests).Assembly;
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_gk_utf8.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+
+                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                    Assert.IsNotNull(iRec1);
+
+                    Assert.AreEqual("Иван Иванович Иванов", iRec1.GetPrimaryFullName());
+                }
+            }
+        }
+
+        [Test]
+        public void Test_Ahnenblatt_ANSI_Win1250()
+        {
+            using (BaseContext ctx = new BaseContext(null)) {
+                Assembly assembly = typeof(CoreTests).Assembly;
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ahn_ansi(win1250).ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+
+                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                    Assert.IsNotNull(iRec1);
+
+                    Assert.AreEqual("Stanisław Nowak", iRec1.GetPrimaryFullName());
+                }
+            }
+        }
+
+        [Test]
         public void Test_Agelong_PseudoAnsel_Win1251()
         {
             using (BaseContext ctx = new BaseContext(null)) {

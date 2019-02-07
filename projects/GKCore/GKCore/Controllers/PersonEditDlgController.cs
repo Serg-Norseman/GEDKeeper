@@ -229,11 +229,12 @@ namespace GKCore.Controllers
             UpdatePortrait(totalUpdate);
 
             bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+            ICulture culture = fBase.Context.Culture;
 
             // controls lock
             fView.Name.Enabled = !locked;
-            fView.Patronymic.Enabled = !locked;
-            fView.Surname.Enabled = !locked;
+            fView.Patronymic.Enabled = !locked && culture.HasPatronymic();
+            fView.Surname.Enabled = !locked && culture.HasSurname();
 
             fView.SexCombo.Enabled = !locked;
             fView.Patriarch.Enabled = !locked;
@@ -253,10 +254,6 @@ namespace GKCore.Controllers
             fView.GroupsList.ReadOnly = locked;
             fView.UserRefList.ReadOnly = locked;
             fView.ParentsList.ReadOnly = locked;
-
-            ICulture culture = fBase.Context.Culture;
-            fView.Surname.Enabled = fView.Surname.Enabled && culture.HasSurname();
-            fView.Patronymic.Enabled = fView.Patronymic.Enabled && culture.HasPatronymic();
         }
 
         public void UpdateNameControls(GEDCOMPersonalName np)
@@ -337,8 +334,8 @@ namespace GKCore.Controllers
                                 SetMarriedSurname(parts.Surname);
                             }
                             if (culture.HasPatronymic()) {
-                                fView.Patronymic.Add(namesTable.GetPatronymicByName(parts.Name, GEDCOMSex.svMale));
-                                fView.Patronymic.Add(namesTable.GetPatronymicByName(parts.Name, GEDCOMSex.svFemale));
+                                AddPatronymic(namesTable.GetPatronymicByName(parts.Name, GEDCOMSex.svMale));
+                                AddPatronymic(namesTable.GetPatronymicByName(parts.Name, GEDCOMSex.svFemale));
                                 fView.Patronymic.Text = namesTable.GetPatronymicByName(parts.Name, sx);
                             }
                             break;
@@ -364,6 +361,13 @@ namespace GKCore.Controllers
                 }
             } catch (Exception ex) {
                 Logger.LogWrite("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + "): " + ex.Message);
+            }
+        }
+
+        private void AddPatronymic(string patronymic)
+        {
+            if (!string.IsNullOrEmpty(patronymic)) {
+                fView.Patronymic.Add(patronymic);
             }
         }
 

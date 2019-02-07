@@ -315,7 +315,7 @@ namespace GKCore.Charts
                     fBirthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, false);
                     fDeathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, false);
 
-                    if (options.ShowPlaces && options.DiffLines) {
+                    if (options.ShowPlaces && !options.OnlyYears) {
                         string birthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false);
                         if (!string.IsNullOrEmpty(birthPlace)) {
                             if (!string.IsNullOrEmpty(fBirthDate)) {
@@ -333,7 +333,7 @@ namespace GKCore.Charts
                         }
                     }
 
-                    if (options.DiffLines) {
+                    if (!options.OnlyYears) {
                         if (!string.IsNullOrEmpty(fBirthDate)) {
                             fBirthDate = ImportUtils.STD_BIRTH_SIGN + " " + fBirthDate;
                         }

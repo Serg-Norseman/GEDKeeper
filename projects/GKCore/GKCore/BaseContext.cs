@@ -78,6 +78,7 @@ namespace GKCore
                 switch (langID) {
                     case GEDCOMLanguageID.Russian:
                     case GEDCOMLanguageID.Ukrainian:
+                    case GEDCOMLanguageID.Kazakh:
                         culture = new RussianCulture();
                         break;
 
