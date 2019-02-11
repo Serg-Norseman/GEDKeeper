@@ -103,6 +103,16 @@ namespace GKCommon.GEDCOM
             fMembers.SaveToStream(stream);
         }
 
+        // TODO: connect to use
+        public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
+        {
+            GEDCOMGroupRecord otherGroup = tag as GEDCOMGroupRecord;
+            if (otherGroup == null) return 0.0f;
+
+            float match = GetStrMatch(GroupName, otherGroup.GroupName, matchParams);
+            return match;
+        }
+
         public GEDCOMGroupRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
         {
         }

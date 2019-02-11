@@ -57,6 +57,16 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
+        // TODO: connect to use
+        public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
+        {
+            GEDCOMRepositoryRecord otherRep = tag as GEDCOMRepositoryRecord;
+            if (otherRep == null) return 0.0f;
+
+            float match = GetStrMatch(RepositoryName, otherRep.RepositoryName, matchParams);
+            return match;
+        }
+
         public GEDCOMRepositoryRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
         {
         }

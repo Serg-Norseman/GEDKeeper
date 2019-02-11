@@ -223,13 +223,7 @@ namespace GKCommon.GEDCOM
             GEDCOMSourceRecord otherSource = tag as GEDCOMSourceRecord;
             if (otherSource == null) return 0.0f;
 
-            float match = 0.0f;
-
-            if (string.Compare(FiledByEntry, otherSource.FiledByEntry, true) == 0)
-            {
-                match = 100.0f;
-            }
-
+            float match = GetStrMatch(FiledByEntry, otherSource.FiledByEntry, matchParams);
             return match;
         }
 

@@ -334,6 +334,24 @@ namespace GKCommon.GEDCOM
             return 0.0f;
         }
 
+        protected virtual float GetStrMatch(string str1, string str2, MatchParams matchParams)
+        {
+            float match = 0.0f;
+
+            if (matchParams.NamesIndistinctThreshold >= 0.99f) {
+                if (string.Compare(str1, str2, true) == 0) {
+                    match = 100.0f;
+                }
+            } else {
+                double sim = IndistinctMatching.GetSimilarity(str1, str2);
+                if (sim >= matchParams.NamesIndistinctThreshold) {
+                    match = 100.0f;
+                }
+            }
+
+            return match;
+        }
+
         #endregion
 
         #region Values management

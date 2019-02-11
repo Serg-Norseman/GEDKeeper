@@ -40,6 +40,16 @@ namespace GKCommon.GEDCOM
             SetName("_LOC");
         }
 
+        // TODO: connect to use
+        public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
+        {
+            GEDCOMLocationRecord otherLoc = tag as GEDCOMLocationRecord;
+            if (otherLoc == null) return 0.0f;
+
+            float match = GetStrMatch(LocationName, otherLoc.LocationName, matchParams);
+            return match;
+        }
+
         public GEDCOMLocationRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
         {
         }

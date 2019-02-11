@@ -284,17 +284,10 @@ namespace GKCommon.GEDCOM
 
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
         {
-            GEDCOMFamilyRecord fam = tag as GEDCOMFamilyRecord;
-            if (fam == null) return 0.0f;
+            GEDCOMFamilyRecord otherFam = tag as GEDCOMFamilyRecord;
+            if (otherFam == null) return 0.0f;
 
-            float match = 0.0f;
-
-            string title1 = GetFamilyString();
-            string title2 = fam.GetFamilyString();
-            if (string.Compare(title1, title2, true) == 0) {
-                match = 100.0f;
-            }
-
+            float match = GetStrMatch(GetFamilyString(), otherFam.GetFamilyString(), matchParams);
             return match;
         }
 

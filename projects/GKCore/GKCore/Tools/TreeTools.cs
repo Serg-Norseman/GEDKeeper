@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 using BSLib;
 using BSLib.SmartGraph;
@@ -855,7 +856,7 @@ namespace GKCore.Tools
 
         #region Merge trees and records
 
-        public static void MergeTree(GEDCOMTree mainTree, GEDCOMTree extTree, ITextBoxHandler logBox)
+        public static void MergeTree(GEDCOMTree mainTree, GEDCOMTree extTree, ITextBoxHandler logBox, bool selfTest = false)
         {
             if (mainTree == null)
                 throw new ArgumentNullException("mainTree");
@@ -866,6 +867,19 @@ namespace GKCore.Tools
             if (logBox != null) {
                 logBox.Clear();
                 logBox.AppendText(string.Format(LangMan.LS(LSID.LSID_MainBaseSize), mainTree.RecordsCount.ToString()) + "\r\n");
+            }
+
+            List<int> fragments = new List<int>();
+            if (selfTest) {
+                var tmpFrags = TreeTools.SearchTreeFragments(mainTree, null);
+                for (int i = 0; i < tmpFrags.Count; i++) {
+                    fragments.Add(tmpFrags[i].Count);
+                }
+
+                tmpFrags = TreeTools.SearchTreeFragments(extTree, null);
+                for (int i = 0; i < tmpFrags.Count; i++) {
+                    fragments.Add(tmpFrags[i].Count);
+                }
             }
 
             using (var repMap = new XRefReplacer()) {
@@ -889,9 +903,30 @@ namespace GKCore.Tools
                     logBox.AppendText(string.Format(LangMan.LS(LSID.LSID_MainBaseSize), mainTree.RecordsCount.ToString()) + "\r\n");
                 }
             }
+
+            if (selfTest) {
+                // FIXME: error reporting refactoring
+                var tmpFrags = TreeTools.SearchTreeFragments(mainTree, null);
+                if (fragments.Count != tmpFrags.Count) {
+                    if (logBox != null) {
+                        logBox.AppendText("The number of fragments is not as expected.\r\n");
+                    } else {
+                        throw new Exception("The number of fragments is not as expected.");
+                    }
+                }
+                for (int i = 0; i < tmpFrags.Count; i++) {
+                    if (fragments[i] != tmpFrags[i].Count) {
+                        if (logBox != null) {
+                            logBox.AppendText("The number of persons in the fragment is not as expected.\r\n");
+                        } else {
+                            throw new Exception("The number of persons in the fragment is not as expected.");
+                        }
+                    }
+                }
+            }
         }
 
-        public static void MergeTreeFile(GEDCOMTree mainTree, string fileName, ITextBoxHandler logBox)
+        public static void MergeTreeFile(GEDCOMTree mainTree, string fileName, ITextBoxHandler logBox, bool selfTest = false)
         {
             if (mainTree == null)
                 throw new ArgumentNullException("mainTree");
@@ -903,7 +938,7 @@ namespace GKCore.Tools
                 var gedcomProvider = new GEDCOMProvider(extTree);
                 gedcomProvider.LoadFromFile(fileName);
 
-                MergeTree(mainTree, extTree, logBox);
+                MergeTree(mainTree, extTree, logBox, selfTest);
             }
         }
 
@@ -1570,7 +1605,7 @@ namespace GKCore.Tools
                     }
 
                     pc.ProgressStep();
-                    System.Threading.Thread.Sleep(1);
+                    Thread.Sleep(1);
                 }
             }
             finally

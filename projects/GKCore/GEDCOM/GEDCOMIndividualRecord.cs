@@ -753,18 +753,8 @@ namespace GKCommon.GEDCOM
             string iName = GetComparableName(womanMode);
             string kName = indi.GetComparableName(womanMode);
 
-            if (!string.IsNullOrEmpty(iName) && !string.IsNullOrEmpty(kName))
-            {
-                if (matchParams.NamesIndistinctThreshold >= 0.99f) {
-                    if (iName == kName) {
-                        nameMatch = 100.0f;
-                    }
-                } else {
-                    double sim = IndistinctMatching.GetSimilarity(iName, kName);
-                    if (sim >= matchParams.NamesIndistinctThreshold) {
-                        nameMatch = 100.0f;
-                    }
-                }
+            if (!string.IsNullOrEmpty(iName) && !string.IsNullOrEmpty(kName)) {
+                nameMatch = GetStrMatch(iName, kName, matchParams);
                 matchesCount++;
             }
 

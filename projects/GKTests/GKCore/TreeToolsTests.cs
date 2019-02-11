@@ -127,6 +127,30 @@ namespace GKCore
         }
 
         [Test]
+        public void Test_MergeTree_SelfTest()
+        {
+            Assembly assembly = typeof(CoreTests).Assembly;
+
+            using (var ctx1 = new BaseContext(null)) {
+                IBaseWindow baseWin = new BaseWindowStub(ctx1);
+
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test1.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                }
+
+                using (var ctx2 = new BaseContext(null)) {
+                    using (Stream stmGed2 = assembly.GetManifestResourceStream("GKTests.Resources.test2.ged")) {
+                        var gedcomProvider = new GEDCOMProvider(ctx2.Tree);
+                        gedcomProvider.LoadFromStreamExt(stmGed2, stmGed2);
+                    }
+
+                    TreeTools.MergeTree(ctx1.Tree, ctx2.Tree, null, true);
+                }
+            }
+        }
+
+        [Test]
         public void Test_PlaceObj()
         {
             PlaceObj placeObj = new PlaceObj(null);
