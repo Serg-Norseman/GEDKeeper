@@ -1,7 +1,7 @@
 @echo off
 cls
 rem "GEDKeeper", the personal genealogical database editor.
-rem Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+rem Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
 rem This file is part of "GEDKeeper".
 
 set lstfile=".\listfile.txt"

@@ -1,5 +1,19 @@
 
-## ??.10.2018 [v2.15.0]
+## 14.02.2019 [v2.15.0]
+- Added control unit for several families of parents and for the type of 
+child/parent linkage (adoption, foster, etc.).
+- Improved handling of parts of names.
+- Added option to disable checking for a valid tree size (in most cases, 
+checking is outdated, but can sometimes be useful).
+- Added saving and restoring selected sorting columns in tables.
+- Added the feature to disable the sorting of children and enable sorting of 
+spouses for family's records.
+- Added the feature to select colors for persons in tree charts.
+- Created the Czech translation [Michal Novák].
+- Added GKTray application (birthdays reminder and recent files manager).
+- Added detection of data loops.
+- Fixed minor bugs.
+- Added new validations of data.
 
 
 ## 10.08.2018 [v2.14.0]

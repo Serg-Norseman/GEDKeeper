@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2018 Sergey V. Zhdanovskih <gedkeeper@yandex.ru> -->
+<!-- Copyright 2018-2019 Sergey V. Zhdanovskih <gedkeeper@yandex.ru> -->
 <component type="desktop-application">
   <id>net.GEDKeeper</id>
   <metadata_license>FSFAP</metadata_license>
@@ -40,7 +40,7 @@
   <developer_name>Sergey V. Zhdanovskih</developer_name>
 
   <releases>
-    <release version="2.15.0" date="2018-10-??">
+    <release version="2.15.0" date="2019-02-14">
       <description>
         <p>Fixes issues X, Y and Z</p>
       </description>
