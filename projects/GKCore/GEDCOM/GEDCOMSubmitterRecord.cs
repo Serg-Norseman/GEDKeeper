@@ -41,8 +41,8 @@ namespace GKCommon.GEDCOM
 
         public string RegisteredReference
         {
-            get { return GetTagStringValue("RFN"); }
-            set { SetTagStringValue("RFN", value); }
+            get { return GetTagStringValue(GEDCOMTagType.RFN); }
+            set { SetTagStringValue(GEDCOMTagType.RFN, value); }
         }
 
         public void SetLanguage(int index, string value)

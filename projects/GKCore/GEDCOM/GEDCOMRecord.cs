@@ -39,8 +39,8 @@ namespace GKCommon.GEDCOM
 
         public string AutomatedRecordID
         {
-            get { return GetTagStringValue("RIN"); }
-            set { SetTagStringValue("RIN", value); }
+            get { return GetTagStringValue(GEDCOMTagType.RIN); }
+            set { SetTagStringValue(GEDCOMTagType.RIN, value); }
         }
 
         public GEDCOMChangeDate ChangeDate
@@ -70,8 +70,8 @@ namespace GKCommon.GEDCOM
 
         public string UID
         {
-            get { return GetTagStringValue("_UID"); }
-            set { SetTagStringValue("_UID", value); }
+            get { return GetTagStringValue(GEDCOMTagType.UID); }
+            set { SetTagStringValue(GEDCOMTagType.UID, value); }
         }
 
         public GEDCOMList<GEDCOMUserReference> UserReferences
@@ -385,6 +385,60 @@ namespace GKCommon.GEDCOM
             GEDCOMUserReference uRef = new GEDCOMUserReference(Owner, this, "", "");
             uRef.StringValue = reference;
             UserReferences.Add(uRef);
+        }
+
+        public string GetFolder()
+        {
+            var folderTag = FindTag(GEDCOMTagType.FOLDER, 0);
+            return (folderTag == null) ? "" : folderTag.StringValue;
+        }
+
+        public void SetFolder(string value)
+        {
+            if (!HasFolderSupport()) {
+                return;
+            }
+
+            var folderTag = FindTag(GEDCOMTagType.FOLDER, 0);
+            if (!string.IsNullOrEmpty(value)) {
+                if (folderTag == null) {
+                    AddTag(GEDCOMTagType.FOLDER, value, null);
+                } else {
+                    folderTag.StringValue = value;
+                }
+            } else {
+                if (folderTag != null) {
+                    DeleteTag(GEDCOMTagType.FOLDER);
+                }
+            }
+        }
+
+        public bool HasFolderSupport()
+        {
+            bool result = false;
+
+            switch (fRecordType) {
+                case GEDCOMRecordType.rtNone:
+                case GEDCOMRecordType.rtNote:
+                case GEDCOMRecordType.rtMultimedia:
+                case GEDCOMRecordType.rtSource:
+                case GEDCOMRecordType.rtRepository:
+                case GEDCOMRecordType.rtLocation:
+                case GEDCOMRecordType.rtSubmission:
+                case GEDCOMRecordType.rtSubmitter:
+                    break;
+
+                case GEDCOMRecordType.rtIndividual:
+                case GEDCOMRecordType.rtFamily:
+                case GEDCOMRecordType.rtGroup:
+                case GEDCOMRecordType.rtResearch:
+                case GEDCOMRecordType.rtTask:
+                case GEDCOMRecordType.rtCommunication:
+                    result = true;
+                    break;
+            }
+
+            return result;
         }
 
         #endregion

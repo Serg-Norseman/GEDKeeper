@@ -249,7 +249,7 @@ namespace GKCommon.GEDCOM
                                 DefineEncoding(reader);
                             }
 
-                            if (tagName == "INDI") {
+                            if (tagName == GEDCOMTagType.INDI) {
                                 curRecord = fTree.AddRecord(new GEDCOMIndividualRecord(fTree, fTree, "", ""));
                             } else if (tagName == "FAM") {
                                 curRecord = fTree.AddRecord(new GEDCOMFamilyRecord(fTree, fTree, "", ""));
@@ -516,7 +516,7 @@ namespace GKCommon.GEDCOM
             result.Add("PLAC", new TagProperties("PLAC", true, false));
             result.Add("POST", new TagProperties("POST", true, false));
             result.Add("PUBL", new TagProperties("PUBL", true, false));
-            result.Add("RESN", new TagProperties("RESN", true, false));
+            result.Add(GEDCOMTagType.RESN, new TagProperties(GEDCOMTagType.RESN, true, false));
             result.Add("STAE", new TagProperties("STAE", true, false));
             result.Add("TEXT", new TagProperties("TEXT", true, false));
             result.Add("TIME", new TagProperties("TIME", true, false));

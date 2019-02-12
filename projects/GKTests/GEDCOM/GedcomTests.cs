@@ -1688,7 +1688,7 @@ namespace GKCommon.GEDCOM
                 groupRec.GroupName = "Test Group";
                 Assert.AreEqual("Test Group", groupRec.GroupName);
 
-                groupRec.DeleteTag("_UID");
+                groupRec.DeleteTag(GEDCOMTagType.UID);
                 groupRec.DeleteTag("CHAN");
                 string buf = TagStreamTest(groupRec);
                 Assert.AreEqual("0 @G2@ _GROUP\r\n1 NAME Test Group\r\n", buf);
@@ -1971,7 +1971,7 @@ namespace GKCommon.GEDCOM
             Assert.AreEqual(0, famRec.IndexOfChild(indiv));
 
             // stream test
-            famRec.DeleteTag("_UID");
+            famRec.DeleteTag(GEDCOMTagType.UID);
             famRec.DeleteTag("CHAN");
             string buf = TagStreamTest(famRec);
             Assert.AreEqual("0 @F1@ FAM\r\n"+
@@ -2170,7 +2170,7 @@ namespace GKCommon.GEDCOM
             GEDCOMSourceCitationTest(sourRec, indiv);
             GEDCOMRepositoryCitationTest(sourRec, repRec);
 
-            sourRec.DeleteTag("_UID");
+            sourRec.DeleteTag(GEDCOMTagType.UID);
             sourRec.DeleteTag("CHAN");
             string buf = TagStreamTest(sourRec);
             Assert.AreEqual("0 @S1@ SOUR\r\n"+
@@ -2263,7 +2263,7 @@ namespace GKCommon.GEDCOM
             resRec.Percent = 33;
             Assert.AreEqual(33, resRec.Percent);
 
-            resRec.DeleteTag("_UID");
+            resRec.DeleteTag(GEDCOMTagType.UID);
             resRec.DeleteTag("CHAN");
             string buf = TagStreamTest(resRec);
             Assert.AreEqual("0 @RS1@ _RESEARCH\r\n"+
@@ -2307,7 +2307,7 @@ namespace GKCommon.GEDCOM
 
                 Assert.IsNotNull(repoRec.Address);
 
-                repoRec.DeleteTag("_UID");
+                repoRec.DeleteTag(GEDCOMTagType.UID);
                 repoRec.DeleteTag("CHAN");
                 string buf = TagStreamTest(repoRec);
                 Assert.AreEqual("0 @R2@ REPO\r\n"+
@@ -2352,7 +2352,7 @@ namespace GKCommon.GEDCOM
             string title = mediaRec.GetFileTitle();
             Assert.AreEqual("File Title 2", title);
 
-            mediaRec.DeleteTag("_UID");
+            mediaRec.DeleteTag(GEDCOMTagType.UID);
             mediaRec.DeleteTag("CHAN");
             string buf = TagStreamTest(mediaRec);
             Assert.AreEqual("0 @O1@ OBJE\r\n"+

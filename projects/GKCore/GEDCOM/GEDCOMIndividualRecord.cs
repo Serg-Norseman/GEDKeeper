@@ -43,14 +43,14 @@ namespace GKCommon.GEDCOM
 
         public string AncestralFileNumber
         {
-            get { return GetTagStringValue("AFN"); }
-            set { SetTagStringValue("AFN", value); }
+            get { return GetTagStringValue(GEDCOMTagType.AFN); }
+            set { SetTagStringValue(GEDCOMTagType.AFN, value); }
         }
 
         public string PermanentRecordFileNumber
         {
-            get { return GetTagStringValue("RFN"); }
-            set { SetTagStringValue("RFN", value); }
+            get { return GetTagStringValue(GEDCOMTagType.RFN); }
+            set { SetTagStringValue(GEDCOMTagType.RFN, value); }
         }
 
         public GEDCOMList<GEDCOMIndividualOrdinance> IndividualOrdinances
@@ -65,8 +65,8 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMRestriction Restriction
         {
-            get { return GEDCOMUtils.GetRestrictionVal(GetTagStringValue("RESN")); }
-            set { SetTagStringValue("RESN", GEDCOMUtils.GetRestrictionStr(value)); }
+            get { return GEDCOMUtils.GetRestrictionVal(GetTagStringValue(GEDCOMTagType.RESN)); }
+            set { SetTagStringValue(GEDCOMTagType.RESN, GEDCOMUtils.GetRestrictionStr(value)); }
         }
 
         public GEDCOMSex Sex
@@ -78,15 +78,15 @@ namespace GKCommon.GEDCOM
         public bool Bookmark
         {
             get {
-                return FindTag("_BOOKMARK", 0) != null;
+                return FindTag(GEDCOMTagType.BOOKMARK, 0) != null;
             }
             set {
                 if (value) {
-                    if (FindTag("_BOOKMARK", 0) == null) {
-                        AddTag("_BOOKMARK", "", null);
+                    if (FindTag(GEDCOMTagType.BOOKMARK, 0) == null) {
+                        AddTag(GEDCOMTagType.BOOKMARK, "", null);
                     }
                 } else {
-                    DeleteTag("_BOOKMARK");
+                    DeleteTag(GEDCOMTagType.BOOKMARK);
                 }
             }
         }
@@ -94,15 +94,15 @@ namespace GKCommon.GEDCOM
         public bool Patriarch
         {
             get {
-                return FindTag("_PATRIARCH", 0) != null;
+                return FindTag(GEDCOMTagType.PATRIARCH, 0) != null;
             }
             set {
                 if (value) {
-                    if (FindTag("_PATRIARCH", 0) == null) {
-                        AddTag("_PATRIARCH", "", null);
+                    if (FindTag(GEDCOMTagType.PATRIARCH, 0) == null) {
+                        AddTag(GEDCOMTagType.PATRIARCH, "", null);
                     }
                 } else {
-                    DeleteTag("_PATRIARCH");
+                    DeleteTag(GEDCOMTagType.PATRIARCH);
                 }
             }
         }
@@ -151,7 +151,7 @@ namespace GKCommon.GEDCOM
         {
             base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtIndividual);
-            SetName("INDI");
+            SetName(GEDCOMTagType.INDI);
 
             fPersonalNames = new GEDCOMList<GEDCOMPersonalName>(this);
             fIndividualOrdinances = new GEDCOMList<GEDCOMIndividualOrdinance>(this);
@@ -472,7 +472,7 @@ namespace GKCommon.GEDCOM
 
             if (!clearDest) {
                 DeleteTag("SEX");
-                DeleteTag("_UID");
+                DeleteTag(GEDCOMTagType.UID);
             }
 
             base.MoveTo(targetRecord, clearDest);

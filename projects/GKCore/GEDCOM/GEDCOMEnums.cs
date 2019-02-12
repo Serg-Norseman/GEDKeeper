@@ -20,6 +20,23 @@
 
 namespace GKCommon.GEDCOM
 {
+    public static class GEDCOMTagType
+    {
+        public const string AFN = "AFN"; // AncestralFileNumber
+        public const string INDI = "INDI"; // IndividualRecord
+        public const string RESN = "RESN"; // Restriction
+        public const string RFN = "RFN"; // PermanentRecordFileNumber
+        public const string RIN = "RIN"; // AutomatedRecordID
+
+        // non-standard extended tags (other applications)
+        public const string UID = "_UID"; // 
+
+        // non-standard extended tags (GEDKeeper)
+        public const string BOOKMARK = "_BOOKMARK";
+        public const string FOLDER = "_FOLDER";
+        public const string PATRIARCH = "_PATRIARCH";
+    }
+
     public enum GEDCOMRecordType
     {
         rtNone,

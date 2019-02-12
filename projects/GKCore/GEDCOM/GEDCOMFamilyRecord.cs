@@ -53,8 +53,8 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMRestriction Restriction
         {
-            get { return GEDCOMUtils.GetRestrictionVal(GetTagStringValue("RESN")); }
-            set { SetTagStringValue("RESN", GEDCOMUtils.GetRestrictionStr(value)); }
+            get { return GEDCOMUtils.GetRestrictionVal(GetTagStringValue(GEDCOMTagType.RESN)); }
+            set { SetTagStringValue(GEDCOMTagType.RESN, GEDCOMUtils.GetRestrictionStr(value)); }
         }
 
         public GEDCOMList<GEDCOMSpouseSealing> SpouseSealings
