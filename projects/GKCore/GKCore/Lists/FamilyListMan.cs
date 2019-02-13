@@ -61,7 +61,7 @@ namespace GKCore.Lists
             bool res = (fBaseContext.IsRecordAccess(fRec.Restriction)
                         && (QuickFilter == "*" || IsMatchesMask(GKUtils.GetFamilyString(fRec), QuickFilter)));
 
-            res = res && CheckCommonFilter();
+            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
 
             return res;
         }

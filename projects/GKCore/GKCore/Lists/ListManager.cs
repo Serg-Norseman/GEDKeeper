@@ -461,20 +461,26 @@ namespace GKCore.Lists
         {
             bool res = true;
 
-            try
-            {
+            try {
                 int num = Filter.Conditions.Count;
                 for (int i = 0; i < num; i++) {
                     FilterCondition fcond = Filter.Conditions[i];
                     res = res && CheckCondition(fcond);
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("ListManager.CheckCommonFilter(): " + ex.Message);
                 res = true;
             }
 
+            return res;
+        }
+
+        protected bool CheckExternalFilter(GEDCOMRecord rec)
+        {
+            bool res = true;
+            if (fExternalFilter != null) {
+                res = res && fExternalFilter(rec);
+            }
             return res;
         }
 

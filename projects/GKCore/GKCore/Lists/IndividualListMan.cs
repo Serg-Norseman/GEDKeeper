@@ -289,11 +289,7 @@ namespace GKCore.Lists
             bool res = (fBaseContext.IsRecordAccess(fRec.Restriction)
                         && (QuickFilter == "*" || IsMatchesMask(buf_fullname, QuickFilter)));
 
-            res = res && CheckCommonFilter() && CheckSpecificFilter();
-
-            if (fExternalFilter != null) {
-                res = res && fExternalFilter(fRec);
-            }
+            res = res && CheckCommonFilter() && CheckExternalFilter(fRec) && CheckSpecificFilter();
 
             return res;
         }

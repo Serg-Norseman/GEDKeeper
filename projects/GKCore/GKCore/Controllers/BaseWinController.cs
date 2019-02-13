@@ -170,6 +170,19 @@ namespace GKCore.Controllers
             }
         }
 
+        public void SetExternalFilter(ExternalFilterHandler filterHandler, 
+                                      GEDCOMRecordType recType = GEDCOMRecordType.rtNone)
+        {
+            for (var rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
+                if (recType != GEDCOMRecordType.rtNone && recType != rt) continue;
+
+                IListView listview = fTabParts[(int)rt].ListView;
+                if (listview != null) {
+                    listview.ListMan.ExternalFilter = filterHandler;
+                }
+            }
+        }
+
         public void NotifyRecord(GEDCOMRecord record, RecordAction action)
         {
             if (record == null) return;

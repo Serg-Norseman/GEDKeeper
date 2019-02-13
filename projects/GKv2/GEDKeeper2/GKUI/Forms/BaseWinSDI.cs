@@ -350,6 +350,12 @@ namespace GKUI.Forms
             fController.ApplyFilter(recType);
         }
 
+        public void SetExternalFilter(ExternalFilterHandler filterHandler, 
+                                      GEDCOMRecordType recType = GEDCOMRecordType.rtNone)
+        {
+            fController.SetExternalFilter(filterHandler, recType);
+        }
+
         public void SaveFileEx(bool saveAs)
         {
             fController.SaveFileEx(saveAs);

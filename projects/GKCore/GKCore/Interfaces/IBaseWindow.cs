@@ -54,5 +54,7 @@ namespace GKCore.Interfaces
         IListManager GetRecordsListManByType(GEDCOMRecordType recType);
         GEDCOMIndividualRecord GetSelectedPerson();
         GEDCOMRecordType GetSelectedRecordType();
+        GEDCOMRecord GetSelectedRecordEx();
+        void SetExternalFilter(ExternalFilterHandler filterHandler, GEDCOMRecordType recType = GEDCOMRecordType.rtNone);
     }
 }

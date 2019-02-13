@@ -118,6 +118,9 @@ namespace GKTests.Stubs
         public void RefreshRecordsView(GEDCOMRecordType recType) { }
         public void ShowRecordsTab(GEDCOMRecordType recType) { }
         public void UpdateControls(bool forceDeactivate, bool blockDependent = false) { }
+        public void SetExternalFilter(ExternalFilterHandler filterHandler, 
+                                      GEDCOMRecordType recType = GEDCOMRecordType.rtNone) { }
+        public GEDCOMRecord GetSelectedRecordEx() { return null; }
     }
 
     public class HostStub : IHost

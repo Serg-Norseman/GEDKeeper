@@ -65,7 +65,7 @@ namespace GKCore.Lists
         {
             bool res = (QuickFilter == "*" || IsMatchesMask(fRec.CommName, QuickFilter));
 
-            res = res && CheckCommonFilter();
+            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
 
             return res;
         }
