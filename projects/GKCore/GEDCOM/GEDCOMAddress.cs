@@ -76,8 +76,8 @@ namespace GKCommon.GEDCOM
 
         public string AddressCountry
         {
-            get { return GetTagStringValue("CTRY"); }
-            set { SetTagStringValue("CTRY", value); }
+            get { return GetTagStringValue(GEDCOMTagType.CTRY); }
+            set { SetTagStringValue(GEDCOMTagType.CTRY, value); }
         }
 
         public GEDCOMList<GEDCOMTag> PhoneNumbers

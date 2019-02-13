@@ -50,8 +50,7 @@ namespace GKCommon.GEDCOM
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fSourceCitations.Dispose();
             }
             base.Dispose(disposing);
@@ -60,12 +59,9 @@ namespace GKCommon.GEDCOM
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
         {
             GEDCOMTag result;
-            if (tagName == "SOUR")
-            {
+            if (tagName == GEDCOMTagType.SOUR) {
                 result = fSourceCitations.Add(new GEDCOMSourceCitation(Owner, this, tagName, tagValue));
-            }
-            else
-            {
+            } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
             return result;

@@ -35,7 +35,7 @@ namespace GKCommon.GEDCOM
         {
             base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtMultimedia);
-            SetName("OBJE");
+            SetName(GEDCOMTagType.OBJE);
 
             fFileReferences = new GEDCOMList<GEDCOMFileReferenceWithTitle>(this);
         }

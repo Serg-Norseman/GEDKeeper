@@ -49,9 +49,8 @@ namespace GKCommon.GEDCOM
         {
             if (index < 0) return;
 
-            while (index >= fLanguages.Count)
-            {
-                fLanguages.Add(new GEDCOMLanguage(Owner, this, "LANG", ""));
+            while (index >= fLanguages.Count) {
+                fLanguages.Add(new GEDCOMLanguage(Owner, this, GEDCOMTagType.LANG, ""));
             }
             fLanguages[index].StringValue = value;
         }
@@ -67,8 +66,7 @@ namespace GKCommon.GEDCOM
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fLanguages.Dispose();
             }
             base.Dispose(disposing);
@@ -84,20 +82,13 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "NAME")
-            {
+            if (tagName == "NAME") {
                 result = base.AddTag(tagName, tagValue, GEDCOMPersonalName.Create);
-            }
-            else if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW")
-            {
+            } else if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW") {
                 result = Address.AddTag(tagName, tagValue, tagConstructor);
-            }
-            else if (tagName == "LANG")
-            {
+            } else if (tagName == GEDCOMTagType.LANG) {
                 result = AddLanguage(new GEDCOMLanguage(Owner, this, tagName, tagValue));
-            }
-            else
-            {
+            } else {
                 // "ADDR" defines by default
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }

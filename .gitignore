@@ -103,6 +103,9 @@ build_sonarqube.cmd
 /projects/GKv2/GKStdReports/bin/
 /projects/GKv2/GKStdReports/obj/
 
+/projects/GKv2/GKFoldersPlugin/bin/
+/projects/GKv2/GKFoldersPlugin/obj/
+
 
 /projects/GKv3/GEDKeeper3/bin/
 /projects/GKv3/GEDKeeper3/obj/

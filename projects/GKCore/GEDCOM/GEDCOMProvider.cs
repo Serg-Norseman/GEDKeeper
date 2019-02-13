@@ -253,13 +253,13 @@ namespace GKCommon.GEDCOM
                                 curRecord = fTree.AddRecord(new GEDCOMIndividualRecord(fTree, fTree, "", ""));
                             } else if (tagName == "FAM") {
                                 curRecord = fTree.AddRecord(new GEDCOMFamilyRecord(fTree, fTree, "", ""));
-                            } else if (tagName == "OBJE") {
+                            } else if (tagName == GEDCOMTagType.OBJE) {
                                 curRecord = fTree.AddRecord(new GEDCOMMultimediaRecord(fTree, fTree, "", ""));
-                            } else if (tagName == "NOTE") {
+                            } else if (tagName == GEDCOMTagType.NOTE) {
                                 curRecord = fTree.AddRecord(new GEDCOMNoteRecord(fTree, fTree, "", tagValue));
                             } else if (tagName == "REPO") {
                                 curRecord = fTree.AddRecord(new GEDCOMRepositoryRecord(fTree, fTree, "", ""));
-                            } else if (tagName == "SOUR") {
+                            } else if (tagName == GEDCOMTagType.SOUR) {
                                 curRecord = fTree.AddRecord(new GEDCOMSourceRecord(fTree, fTree, "", ""));
                             } else if (tagName == "SUBN") {
                                 curRecord = fTree.AddRecord(new GEDCOMSubmissionRecord(fTree, fTree, "", ""));
@@ -467,7 +467,7 @@ namespace GKCommon.GEDCOM
                     curTag.AddTag("CONT", str, null);
                 } else {
                     if (curRecord != null) {
-                        curRecord.AddTag("NOTE", str, null);
+                        curRecord.AddTag(GEDCOMTagType.NOTE, str, null);
                     }
                 }
             }
@@ -509,9 +509,9 @@ namespace GKCommon.GEDCOM
             result.Add("CAUS", new TagProperties("CAUS", true, false));
             result.Add("CHAN", new TagProperties("CHAN", true, false));
             result.Add("CITY", new TagProperties("CITY", true, false));
-            result.Add("CTRY", new TagProperties("CTRY", true, false));
+            result.Add(GEDCOMTagType.CTRY, new TagProperties(GEDCOMTagType.CTRY, true, false));
             result.Add("DATE", new TagProperties("DATE", true, false));
-            result.Add("PAGE", new TagProperties("PAGE", true, false));
+            result.Add(GEDCOMTagType.PAGE, new TagProperties(GEDCOMTagType.PAGE, true, false));
             result.Add("PHON", new TagProperties("PHON", true, false));
             result.Add("PLAC", new TagProperties("PLAC", true, false));
             result.Add("POST", new TagProperties("POST", true, false));
@@ -523,7 +523,7 @@ namespace GKCommon.GEDCOM
             result.Add("TYPE", new TagProperties("TYPE", true, false));
             result.Add("SUBM", new TagProperties("SUBM", true, false));
             result.Add("VERS", new TagProperties("VERS", true, false));
-            result.Add("LANG", new TagProperties("LANG", true, false));
+            result.Add(GEDCOMTagType.LANG, new TagProperties(GEDCOMTagType.LANG, true, false));
 
             result.Add("NPFX", new TagProperties("NPFX", true, false));
             result.Add("GIVN", new TagProperties("GIVN", true, false));

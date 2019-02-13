@@ -72,15 +72,14 @@ namespace GKCommon.GEDCOM
         {
             base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtSource);
-            SetName("SOUR");
+            SetName(GEDCOMTagType.SOUR);
 
             fRepositoryCitations = new GEDCOMList<GEDCOMRepositoryCitation>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fRepositoryCitations.Dispose();
             }
             base.Dispose(disposing);
@@ -90,16 +89,11 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "REPO")
-            {
+            if (tagName == "REPO") {
                 result = fRepositoryCitations.Add(new GEDCOMRepositoryCitation(Owner, this, tagName, tagValue));
-            }
-            else if (tagName == "DATA")
-            {
+            } else if (tagName == "DATA") {
                 result = base.AddTag(tagName, tagValue, GEDCOMData.Create);
-            }
-            else
-            {
+            } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
 

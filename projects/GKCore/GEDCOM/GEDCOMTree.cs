@@ -169,7 +169,7 @@ namespace GKCommon.GEDCOM
             f.RegisterTag("CHAN", GEDCOMChangeDate.Create);
             f.RegisterTag("DATE", GEDCOMDateValue.Create);
             f.RegisterTag("FAMC", GEDCOMPointer.Create);
-            f.RegisterTag("LANG", GEDCOMLanguage.Create);
+            f.RegisterTag(GEDCOMTagType.LANG, GEDCOMLanguage.Create);
             f.RegisterTag("MAP", GEDCOMMap.Create);
             f.RegisterTag("PLAC", GEDCOMPlace.Create);
             f.RegisterTag("TIME", GEDCOMTime.Create);

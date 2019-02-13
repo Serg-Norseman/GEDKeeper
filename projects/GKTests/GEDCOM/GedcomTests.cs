@@ -975,7 +975,7 @@ namespace GKCommon.GEDCOM
                 association.Individual = null;
                 Assert.IsNull(association.Individual);
 
-                GEDCOMTag tag = association.AddTag("SOUR", "xxx", null);
+                GEDCOMTag tag = association.AddTag(GEDCOMTagType.SOUR, "xxx", null);
                 Assert.IsNotNull(tag);
                 Assert.IsTrue(tag is GEDCOMSourceCitation);
 
@@ -2482,7 +2482,7 @@ namespace GKCommon.GEDCOM
                 subrRec.RegisteredReference = "regref";
                 Assert.AreEqual("regref", subrRec.RegisteredReference);
 
-                subrRec.AddTag("LANG", "Russian", null);
+                subrRec.AddTag(GEDCOMTagType.LANG, "Russian", null);
                 Assert.AreEqual("Russian", subrRec.Languages[0].StringValue);
 
                 subrRec.SetLanguage(0, "nothing"); // return without exceptions

@@ -37,14 +37,14 @@ namespace GKCommon.GEDCOM
 
         public StringList Notes
         {
-            get { return GetTagStrings(FindTag("NOTE", 0)); }
-            set { SetTagStrings(TagClass("NOTE", GEDCOMNotes.Create), value); }
+            get { return GetTagStrings(FindTag(GEDCOMTagType.NOTE, 0)); }
+            set { SetTagStrings(TagClass(GEDCOMTagType.NOTE, GEDCOMNotes.Create), value); }
         }
 
         public string Source
         {
-            get { return GetTagStringValue("SOUR"); }
-            set { SetTagStringValue("SOUR", value); }
+            get { return GetTagStringValue(GEDCOMTagType.SOUR); }
+            set { SetTagStringValue(GEDCOMTagType.SOUR, value); }
         }
 
         public string SourceVersion
@@ -111,7 +111,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMLanguage Language
         {
-            get { return TagClass("LANG", GEDCOMLanguage.Create) as GEDCOMLanguage; }
+            get { return TagClass(GEDCOMTagType.LANG, GEDCOMLanguage.Create) as GEDCOMLanguage; }
         }
 
         public string PlaceHierarchy

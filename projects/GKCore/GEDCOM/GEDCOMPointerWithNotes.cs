@@ -37,8 +37,7 @@ namespace GKCommon.GEDCOM
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fNotes.Dispose();
             }
             base.Dispose(disposing);
@@ -48,12 +47,9 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "NOTE")
-            {
+            if (tagName == GEDCOMTagType.NOTE) {
                 result = fNotes.Add(new GEDCOMNotes(Owner, this, tagName, tagValue));
-            }
-            else
-            {
+            } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
 

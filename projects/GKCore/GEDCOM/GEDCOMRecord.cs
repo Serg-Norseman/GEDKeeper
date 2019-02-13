@@ -252,11 +252,11 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "NOTE") {
+            if (tagName == GEDCOMTagType.NOTE) {
                 result = fNotes.Add(new GEDCOMNotes(Owner, this, tagName, tagValue));
-            } else if (tagName == "SOUR") {
+            } else if (tagName == GEDCOMTagType.SOUR) {
                 result = fSourceCitations.Add(new GEDCOMSourceCitation(Owner, this, tagName, tagValue));
-            } else if (tagName == "OBJE") {
+            } else if (tagName == GEDCOMTagType.OBJE) {
                 result = fMultimediaLinks.Add(new GEDCOMMultimediaLink(Owner, this, tagName, tagValue));
             } else if (tagName == "REFN") {
                 result = fUserReferences.Add(new GEDCOMUserReference(Owner, this, tagName, tagValue));

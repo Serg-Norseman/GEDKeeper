@@ -23,10 +23,17 @@ namespace GKCommon.GEDCOM
     public static class GEDCOMTagType
     {
         public const string AFN = "AFN"; // AncestralFileNumber
+        public const string CTRY = "CTRY";
         public const string INDI = "INDI"; // IndividualRecord
+        public const string LANG = "LANG";
+        public const string NOTE = "NOTE";
+        public const string OBJE = "OBJE";
+        public const string PAGE = "PAGE";
+        public const string QUAY = "QUAY";
         public const string RESN = "RESN"; // Restriction
         public const string RFN = "RFN"; // PermanentRecordFileNumber
         public const string RIN = "RIN"; // AutomatedRecordID
+        public const string SOUR = "SOUR";
 
         // non-standard extended tags (other applications)
         public const string UID = "_UID"; // 

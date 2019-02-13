@@ -57,20 +57,20 @@ namespace GKCommon.GEDCOM
 
         public string Page
         {
-            get { return GetTagStringValue("PAGE"); }
-            set { SetTagStringValue("PAGE", value); }
+            get { return GetTagStringValue(GEDCOMTagType.PAGE); }
+            set { SetTagStringValue(GEDCOMTagType.PAGE, value); }
         }
 
         public int CertaintyAssessment
         {
-            get { return GetTagIntegerValue("QUAY", 0); }
-            set { SetTagIntegerValue("QUAY", value); }
+            get { return GetTagIntegerValue(GEDCOMTagType.QUAY, 0); }
+            set { SetTagIntegerValue(GEDCOMTagType.QUAY, value); }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            SetName("SOUR");
+            SetName(GEDCOMTagType.SOUR);
         }
 
         protected override string GetStringValue()

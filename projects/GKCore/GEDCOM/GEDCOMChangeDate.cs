@@ -52,7 +52,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMNotes Notes
         {
-            get { return TagClass("NOTE", GEDCOMNotes.Create) as GEDCOMNotes; }
+            get { return TagClass(GEDCOMTagType.NOTE, GEDCOMNotes.Create) as GEDCOMNotes; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
@@ -65,16 +65,11 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "DATE")
-            {
+            if (tagName == "DATE") {
                 result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
-            }
-            else if (tagName == "NOTE")
-            {
+            } else if (tagName == GEDCOMTagType.NOTE) {
                 result = base.AddTag(tagName, tagValue, GEDCOMNotes.Create);
-            }
-            else
-            {
+            } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
 

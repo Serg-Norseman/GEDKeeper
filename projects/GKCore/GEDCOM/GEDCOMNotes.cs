@@ -65,7 +65,7 @@ namespace GKCommon.GEDCOM
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            SetName("NOTE");
+            SetName(GEDCOMTagType.NOTE);
         }
 
         protected override string GetStringValue()

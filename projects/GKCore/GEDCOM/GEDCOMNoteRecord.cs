@@ -44,7 +44,7 @@ namespace GKCommon.GEDCOM
         {
             base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtNote);
-            SetName("NOTE");
+            SetName(GEDCOMTagType.NOTE);
         }
 
         /// <summary>
