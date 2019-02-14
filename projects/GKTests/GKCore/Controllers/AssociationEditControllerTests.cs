@@ -25,7 +25,7 @@ using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKTests.Stubs;
 using GKUI.Providers;
-using NSubstitute;
+//using NSubstitute;
 using NUnit.Framework;
 
 namespace GKCore.Controllers
@@ -48,7 +48,7 @@ namespace GKCore.Controllers
         [Test]
         public void Test_Common()
         {
-            var view = Substitute.For<IAssociationEditDlg>();
+            /*var view = Substitute.For<IAssociationEditDlg>();
 
             Assert.IsNull(view.Association);
             Assert.IsNotNull(view.Person);
@@ -60,7 +60,7 @@ namespace GKCore.Controllers
             controller.Association = fAssociation;
             Assert.AreEqual(fAssociation, controller.Association);
 
-            controller.Accept();
+            controller.Accept();*/
 
             //controller.SetPerson();
 

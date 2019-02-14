@@ -60,9 +60,6 @@
     <Reference Include="BSLib.SmartGraph">
       <HintPath>..\libs\BSLib.SmartGraph.dll</HintPath>
     </Reference>
-    <Reference Include="NSubstitute">
-      <HintPath>libs\NSubstitute.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>libs\nunit.framework.dll</HintPath>
     </Reference>
