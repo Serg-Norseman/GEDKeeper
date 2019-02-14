@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -119,7 +119,7 @@ namespace GKCommon.GEDCOM
             {
                 result = fCommunications.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
             }
-            else if (tagName == "_GROUP")
+            else if (tagName == GEDCOMTagType.GROUP)
             {
                 result = fGroups.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
             }
@@ -227,7 +227,7 @@ namespace GKCommon.GEDCOM
 
             if (groupRecord != null) {
                 GEDCOMPointer ptr = new GEDCOMPointer(Owner, this, "", "");
-                ptr.SetNamedValue("_GROUP", groupRecord);
+                ptr.SetNamedValue(GEDCOMTagType.GROUP, groupRecord);
                 fGroups.Add(ptr);
                 result = true;
             }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -109,7 +109,7 @@ namespace GKCommon.GEDCOM
             f.RegisterTag("MARL", GEDCOMFamilyEvent.Create);
             f.RegisterTag("MARS", GEDCOMFamilyEvent.Create);
             f.RegisterTag("RESI", GEDCOMFamilyEvent.Create);
-            f.RegisterTag("EVEN", GEDCOMFamilyEvent.Create);
+            f.RegisterTag(GEDCOMTagType.EVEN, GEDCOMFamilyEvent.Create);
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

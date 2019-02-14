@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,8 +24,8 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMPointer Family
         {
-            // define "FAMC" tag constructor by default (GEDCOMTree.cctor) for AddTag()
-            get { return base.TagClass("FAMC", GEDCOMPointer.Create) as GEDCOMPointer; }
+            // define 'FAMC' tag constructor by default (GEDCOMTree.cctor) for AddTag()
+            get { return base.TagClass(GEDCOMTagType.FAMC, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
         public GEDCOMIndividualEvent(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -179,7 +179,7 @@ namespace GKCommon.GEDCOM
                 data.Agency = "test agency";
                 Assert.AreEqual("test agency", data.Agency);
                 
-                GEDCOMTag evenTag = data.AddTag("EVEN", "", null);
+                GEDCOMTag evenTag = data.AddTag(GEDCOMTagType.EVEN, "", null);
                 Assert.IsNotNull(evenTag);
                 
                 GEDCOMEvent evt = data.Events[0];
@@ -384,7 +384,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void GEDCOMChangeDate_Tests()
         {
-            using (GEDCOMChangeDate cd = GEDCOMChangeDate.Create(null, null, "CHAN", "") as GEDCOMChangeDate)
+            using (GEDCOMChangeDate cd = GEDCOMChangeDate.Create(null, null, GEDCOMTagType.CHAN, "") as GEDCOMChangeDate)
             {
                 Assert.IsNotNull(cd);
 
@@ -953,7 +953,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void GEDCOMAlias_Tests()
         {
-            using (GEDCOMAlias alias = GEDCOMAlias.Create(null, null, "ALIA", "") as GEDCOMAlias)
+            using (GEDCOMAlias alias = GEDCOMAlias.Create(null, null, GEDCOMTagType.ALIA, "") as GEDCOMAlias)
             {
                 Assert.IsNotNull(alias, "alias != null");
             }
@@ -962,7 +962,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void GEDCOMAssociation_Tests()
         {
-            using (GEDCOMAssociation association = GEDCOMAssociation.Create(null, null, "ASSO", "") as GEDCOMAssociation) {
+            using (GEDCOMAssociation association = GEDCOMAssociation.Create(null, null, GEDCOMTagType.ASSO, "") as GEDCOMAssociation) {
                 Assert.IsNotNull(association);
 
                 Assert.IsNotNull(association.SourceCitations);
@@ -992,7 +992,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void GEDCOMUserRef_Tests()
         {
-            using (GEDCOMUserReference userRef = GEDCOMUserReference.Create(null, null, "REFN", "") as GEDCOMUserReference)
+            using (GEDCOMUserReference userRef = GEDCOMUserReference.Create(null, null, GEDCOMTagType.REFN, "") as GEDCOMUserReference)
             {
                 Assert.IsNotNull(userRef);
 
@@ -1689,7 +1689,7 @@ namespace GKCommon.GEDCOM
                 Assert.AreEqual("Test Group", groupRec.GroupName);
 
                 groupRec.DeleteTag(GEDCOMTagType.UID);
-                groupRec.DeleteTag("CHAN");
+                groupRec.DeleteTag(GEDCOMTagType.CHAN);
                 string buf = TagStreamTest(groupRec);
                 Assert.AreEqual("0 @G2@ _GROUP\r\n1 NAME Test Group\r\n", buf);
 
@@ -1972,7 +1972,7 @@ namespace GKCommon.GEDCOM
 
             // stream test
             famRec.DeleteTag(GEDCOMTagType.UID);
-            famRec.DeleteTag("CHAN");
+            famRec.DeleteTag(GEDCOMTagType.CHAN);
             string buf = TagStreamTest(famRec);
             Assert.AreEqual("0 @F1@ FAM\r\n"+
                             "1 SUBM\r\n"+
@@ -2171,7 +2171,7 @@ namespace GKCommon.GEDCOM
             GEDCOMRepositoryCitationTest(sourRec, repRec);
 
             sourRec.DeleteTag(GEDCOMTagType.UID);
-            sourRec.DeleteTag("CHAN");
+            sourRec.DeleteTag(GEDCOMTagType.CHAN);
             string buf = TagStreamTest(sourRec);
             Assert.AreEqual("0 @S1@ SOUR\r\n"+
                             "1 DATA\r\n"+
@@ -2264,7 +2264,7 @@ namespace GKCommon.GEDCOM
             Assert.AreEqual(33, resRec.Percent);
 
             resRec.DeleteTag(GEDCOMTagType.UID);
-            resRec.DeleteTag("CHAN");
+            resRec.DeleteTag(GEDCOMTagType.CHAN);
             string buf = TagStreamTest(resRec);
             Assert.AreEqual("0 @RS1@ _RESEARCH\r\n"+
                             "1 NAME Test Research\r\n"+
@@ -2308,7 +2308,7 @@ namespace GKCommon.GEDCOM
                 Assert.IsNotNull(repoRec.Address);
 
                 repoRec.DeleteTag(GEDCOMTagType.UID);
-                repoRec.DeleteTag("CHAN");
+                repoRec.DeleteTag(GEDCOMTagType.CHAN);
                 string buf = TagStreamTest(repoRec);
                 Assert.AreEqual("0 @R2@ REPO\r\n"+
                                 "1 NAME Test Repository\r\n"+
@@ -2353,7 +2353,7 @@ namespace GKCommon.GEDCOM
             Assert.AreEqual("File Title 2", title);
 
             mediaRec.DeleteTag(GEDCOMTagType.UID);
-            mediaRec.DeleteTag("CHAN");
+            mediaRec.DeleteTag(GEDCOMTagType.CHAN);
             string buf = TagStreamTest(mediaRec);
             Assert.AreEqual("0 @O1@ OBJE\r\n"+
                             "1 FILE sample.png\r\n"+

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,22 +31,21 @@ namespace GKCommon.GEDCOM
 
         public string Agency
         {
-            get { return GetTagStringValue("AGNC"); }
-            set { SetTagStringValue("AGNC", value); }
+            get { return GetTagStringValue(GEDCOMTagType.AGNC); }
+            set { SetTagStringValue(GEDCOMTagType.AGNC, value); }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            SetName("DATA");
+            SetName(GEDCOMTagType.DATA);
 
             fEvents = new GEDCOMList<GEDCOMEvent>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fEvents.Dispose();
             }
             base.Dispose(disposing);
@@ -56,12 +55,9 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "EVEN")
-            {
+            if (tagName == GEDCOMTagType.EVEN) {
                 result = fEvents.Add(new GEDCOMEvent(Owner, this, tagName, tagValue));
-            }
-            else
-            {
+            } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
 

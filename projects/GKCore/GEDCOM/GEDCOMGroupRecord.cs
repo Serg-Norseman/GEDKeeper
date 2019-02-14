@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -41,7 +41,7 @@ namespace GKCommon.GEDCOM
         {
             base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtGroup);
-            SetName("_GROUP");
+            SetName(GEDCOMTagType.GROUP);
 
             fMembers = new GEDCOMList<GEDCOMPointer>(this);
         }
@@ -58,16 +58,11 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "NAME")
-            {
+            if (tagName == "NAME") {
                 result = base.AddTag(tagName, tagValue, null);
-            }
-            else if (tagName == "_MEMBER")
-            {
+            } else if (tagName == GEDCOMTagType.MEMBER) {
                 result = fMembers.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
-            }
-            else
-            {
+            } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
 
@@ -146,11 +141,11 @@ namespace GKCommon.GEDCOM
             if (member == null) return false;
 
             GEDCOMPointer ptr = new GEDCOMPointer(Owner, this, "", "");
-            ptr.SetNamedValue("_MEMBER", member);
+            ptr.SetNamedValue(GEDCOMTagType.MEMBER, member);
             fMembers.Add(ptr);
 
             ptr = new GEDCOMPointer(Owner, member, "", "");
-            ptr.SetNamedValue("_GROUP", this);
+            ptr.SetNamedValue(GEDCOMTagType.GROUP, this);
             member.Groups.Add(ptr);
 
             return true;

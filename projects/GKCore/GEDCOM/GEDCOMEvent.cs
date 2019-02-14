@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,26 +29,23 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPlace Place
         {
-            get	{ return TagClass("PLAC", GEDCOMPlace.Create) as GEDCOMPlace; }
+            get { return TagClass(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            SetName("EVEN");
+            SetName(GEDCOMTagType.EVEN);
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
         {
             GEDCOMTag result;
 
-            if (tagName == "DATE")
-            {
+            if (tagName == "DATE") {
                 result = base.AddTag(tagName, tagValue, GEDCOMDatePeriod.Create);
-            }
-            else
-            {
-                // define "PLAC" by default
+            } else {
+                // define 'PLAC' by default
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
 

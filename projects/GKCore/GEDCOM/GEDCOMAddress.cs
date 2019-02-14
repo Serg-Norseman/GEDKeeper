@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -40,38 +40,38 @@ namespace GKCommon.GEDCOM
 
         public string AddressLine1
         {
-            get { return GetTagStringValue("ADR1"); }
-            set { SetTagStringValue("ADR1", value); }
+            get { return GetTagStringValue(GEDCOMTagType.ADR1); }
+            set { SetTagStringValue(GEDCOMTagType.ADR1, value); }
         }
 
         public string AddressLine2
         {
-            get { return GetTagStringValue("ADR2"); }
-            set { SetTagStringValue("ADR2", value); }
+            get { return GetTagStringValue(GEDCOMTagType.ADR2); }
+            set { SetTagStringValue(GEDCOMTagType.ADR2, value); }
         }
 
         public string AddressLine3
         {
-            get { return GetTagStringValue("ADR3"); }
-            set { SetTagStringValue("ADR3", value); }
+            get { return GetTagStringValue(GEDCOMTagType.ADR3); }
+            set { SetTagStringValue(GEDCOMTagType.ADR3, value); }
         }
 
         public string AddressCity
         {
-            get { return GetTagStringValue("CITY"); }
-            set { SetTagStringValue("CITY", value); }
+            get { return GetTagStringValue(GEDCOMTagType.CITY); }
+            set { SetTagStringValue(GEDCOMTagType.CITY, value); }
         }
 
         public string AddressState
         {
-            get { return GetTagStringValue("STAE"); }
-            set { SetTagStringValue("STAE", value); }
+            get { return GetTagStringValue(GEDCOMTagType.STAE); }
+            set { SetTagStringValue(GEDCOMTagType.STAE, value); }
         }
 
         public string AddressPostalCode
         {
-            get { return GetTagStringValue("POST"); }
-            set { SetTagStringValue("POST", value); }
+            get { return GetTagStringValue(GEDCOMTagType.POST); }
+            set { SetTagStringValue(GEDCOMTagType.POST, value); }
         }
 
         public string AddressCountry
@@ -146,8 +146,7 @@ namespace GKCommon.GEDCOM
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fPhoneList.Dispose();
                 fEmailList.Dispose();
                 fFaxList.Dispose();
@@ -233,19 +232,13 @@ namespace GKCommon.GEDCOM
         {
             return new GEDCOMAddress(owner, parent, tagName, tagValue);
         }
-        
+
         #region Auxiliary
 
         public void SetAddressText(string value)
         {
-            StringList sl = new StringList(value);
-            try
-            {
+            using (StringList sl = new StringList(value)) {
                 Address = sl;
-            }
-            finally
-            {
-                sl.Dispose();
             }
         }
 

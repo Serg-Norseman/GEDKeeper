@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -58,16 +58,10 @@ namespace GKCommon.GEDCOM
             if (targetNote == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
 
-            StringList cont = new StringList();
-            try
-            {
+            using (StringList cont = new StringList()) {
                 cont.Text = targetNote.Note.Text;
                 base.MoveTo(targetRecord, clearDest);
                 targetNote.Note = cont;
-            }
-            finally
-            {
-                cont.Dispose();
             }
         }
 
@@ -92,16 +86,10 @@ namespace GKCommon.GEDCOM
 
         public void AddNoteText(string text)
         {
-            StringList strData = new StringList();
-            try
-            {
+            using (StringList strData = new StringList()) {
                 strData.Text = Note.Text.Trim();
                 strData.Add(text);
                 Note = strData;
-            }
-            finally
-            {
-                strData.Dispose();
             }
         }
 
@@ -110,14 +98,8 @@ namespace GKCommon.GEDCOM
             if (text == null)
                 throw new ArgumentNullException("text");
 
-            StringList strData = new StringList(text);
-            try
-            {
+            using (StringList strData = new StringList(text)) {
                 Note = strData;
-            }
-            finally
-            {
-                strData.Dispose();
             }
         }
     }

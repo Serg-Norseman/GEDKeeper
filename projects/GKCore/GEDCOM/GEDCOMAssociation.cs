@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,8 +32,8 @@ namespace GKCommon.GEDCOM
 
         public string Relation
         {
-            get { return GetTagStringValue("RELA"); }
-            set { SetTagStringValue("RELA", value); }
+            get { return GetTagStringValue(GEDCOMTagType.RELA); }
+            set { SetTagStringValue(GEDCOMTagType.RELA, value); }
         }
 
         public GEDCOMList<GEDCOMSourceCitation> SourceCitations
@@ -44,7 +44,7 @@ namespace GKCommon.GEDCOM
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            SetName("ASSO");
+            SetName(GEDCOMTagType.ASSO);
             fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
         }
 

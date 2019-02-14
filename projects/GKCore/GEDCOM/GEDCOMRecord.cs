@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -45,7 +45,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMChangeDate ChangeDate
         {
-            get { return TagClass("CHAN", GEDCOMChangeDate.Create) as GEDCOMChangeDate; }
+            get { return TagClass(GEDCOMTagType.CHAN, GEDCOMChangeDate.Create) as GEDCOMChangeDate; }
         }
 
         public GEDCOMList<GEDCOMMultimediaLink> MultimediaLinks
@@ -136,29 +136,25 @@ namespace GKCommon.GEDCOM
 
             base.Assign(source);
 
-            foreach (GEDCOMNotes sourceNote in sourceRec.fNotes)
-            {
+            foreach (GEDCOMNotes sourceNote in sourceRec.fNotes) {
                 GEDCOMNotes copy = (GEDCOMNotes)GEDCOMNotes.Create(Owner, this, "", "");
                 copy.Assign(sourceNote);
                 Notes.Add(copy);
             }
 
-            foreach (GEDCOMMultimediaLink sourceMediaLink in sourceRec.fMultimediaLinks)
-            {
+            foreach (GEDCOMMultimediaLink sourceMediaLink in sourceRec.fMultimediaLinks) {
                 GEDCOMMultimediaLink copy = (GEDCOMMultimediaLink)GEDCOMMultimediaLink.Create(Owner, this, "", "");
                 copy.Assign(sourceMediaLink);
                 MultimediaLinks.Add(copy);
             }
 
-            foreach (GEDCOMSourceCitation sourceSrcCit in sourceRec.fSourceCitations)
-            {
+            foreach (GEDCOMSourceCitation sourceSrcCit in sourceRec.fSourceCitations) {
                 GEDCOMSourceCitation copy = (GEDCOMSourceCitation)GEDCOMSourceCitation.Create(Owner, this, "", "");
                 copy.Assign(sourceSrcCit);
                 SourceCitations.Add(copy);
             }
 
-            foreach (GEDCOMUserReference sourceUserRef in sourceRec.fUserReferences)
-            {
+            foreach (GEDCOMUserReference sourceUserRef in sourceRec.fUserReferences) {
                 GEDCOMUserReference copy = (GEDCOMUserReference)GEDCOMUserReference.Create(Owner, this, "", "");
                 copy.Assign(sourceUserRef);
                 UserReferences.Add(copy);
@@ -174,7 +170,7 @@ namespace GKCommon.GEDCOM
             if (fTags != null) {
                 while (fTags.Count > 0) {
                     GEDCOMTag tag = fTags.Extract(0);
-                    if (tag.Name == "CHAN" && !clearDest) {
+                    if (tag.Name == GEDCOMTagType.CHAN && !clearDest) {
                         tag.Dispose();
                     } else {
                         tag.ResetParent(targetRecord);
@@ -258,7 +254,7 @@ namespace GKCommon.GEDCOM
                 result = fSourceCitations.Add(new GEDCOMSourceCitation(Owner, this, tagName, tagValue));
             } else if (tagName == GEDCOMTagType.OBJE) {
                 result = fMultimediaLinks.Add(new GEDCOMMultimediaLink(Owner, this, tagName, tagValue));
-            } else if (tagName == "REFN") {
+            } else if (tagName == GEDCOMTagType.REFN) {
                 result = fUserReferences.Add(new GEDCOMUserReference(Owner, this, tagName, tagValue));
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
@@ -284,8 +280,7 @@ namespace GKCommon.GEDCOM
 
         public string NewXRef()
         {
-            if (Owner != null)
-            {
+            if (Owner != null) {
                 string newXRef = Owner.XRefIndex_NewXRef(this);
                 XRef = newXRef;
             }
@@ -294,8 +289,7 @@ namespace GKCommon.GEDCOM
 
         public void RequireUID()
         {
-            if (string.IsNullOrEmpty(UID))
-            {
+            if (string.IsNullOrEmpty(UID)) {
                 UID = CreateUID();
             }
         }
@@ -326,13 +320,10 @@ namespace GKCommon.GEDCOM
         public int GetId()
         {
             int result;
-            try
-            {
+            try {
                 string xref = GetXRefNum();
                 result = ConvertHelper.ParseInt(xref, 0);
-            }
-            catch (Exception)
-            {
+            } catch (Exception) {
                 result = -1;
             }
             return result;
@@ -342,8 +333,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMNotes note = null;
 
-            if (noteRec != null)
-            {
+            if (noteRec != null) {
                 note = new GEDCOMNotes(Owner, this, "", "");
                 note.Value = noteRec;
                 Notes.Add(note);

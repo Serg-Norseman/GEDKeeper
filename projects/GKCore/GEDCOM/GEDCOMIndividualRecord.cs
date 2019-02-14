@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -188,10 +188,10 @@ namespace GKCommon.GEDCOM
             GEDCOMFactory f = new GEDCOMFactory();
             fTagsFactory = f;
 
-            f.RegisterTag("FAMC", GEDCOMChildToFamilyLink.Create);
+            f.RegisterTag(GEDCOMTagType.FAMC, GEDCOMChildToFamilyLink.Create);
             f.RegisterTag("FAMS", GEDCOMSpouseToFamilyLink.Create);
-            f.RegisterTag("ASSO", GEDCOMAssociation.Create);
-            f.RegisterTag("ALIA", GEDCOMAlias.Create);
+            f.RegisterTag(GEDCOMTagType.ASSO, GEDCOMAssociation.Create);
+            f.RegisterTag(GEDCOMTagType.ALIA, GEDCOMAlias.Create);
             
             f.RegisterTag("BAPL", GEDCOMIndividualOrdinance.Create);
             f.RegisterTag("CONL", GEDCOMIndividualOrdinance.Create);
@@ -226,7 +226,7 @@ namespace GKCommon.GEDCOM
 
             f.RegisterTag("GRAD", GEDCOMIndividualEvent.Create);
             f.RegisterTag("RETI", GEDCOMIndividualEvent.Create);
-            f.RegisterTag("EVEN", GEDCOMIndividualEvent.Create);
+            f.RegisterTag(GEDCOMTagType.EVEN, GEDCOMIndividualEvent.Create);
 
 
             f.RegisterTag("CAST", GEDCOMIndividualAttribute.Create);
@@ -281,7 +281,7 @@ namespace GKCommon.GEDCOM
             {
                 result = DescendantsInterest.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
             }
-            else if (tagName == "_GROUP")
+            else if (tagName == GEDCOMTagType.GROUP)
             {
                 result = fGroups.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
             }

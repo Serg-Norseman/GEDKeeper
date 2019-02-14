@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GKCommon.GEDCOM;
 using GKCore.Types;
 
 namespace GKCore
@@ -395,7 +396,7 @@ namespace GKCore
 
             FamilyEvents = new EventStruct[]
             {
-                new EventStruct(LSID.LSID_Event, "EVEN", PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Event, GEDCOMTagType.EVEN, PersonEventKind.ekEvent),
                 new EventStruct(LSID.LSID_FEvt_1, "ENGA", PersonEventKind.ekEvent),
                 new EventStruct(LSID.LSID_FEvt_2, "MARR", PersonEventKind.ekEvent),
                 new EventStruct(LSID.LSID_FEvt_3, "MARB", PersonEventKind.ekEvent),
@@ -436,7 +437,7 @@ namespace GKCore
 
 
             EventStruct[] array6 = new EventStruct[41];
-            array6[ 0] = new EventStruct(LSID.LSID_Event, "EVEN", PersonEventKind.ekEvent);
+            array6[ 0] = new EventStruct(LSID.LSID_Event, GEDCOMTagType.EVEN, PersonEventKind.ekEvent);
             array6[ 1] = new EventStruct(LSID.LSID_Birth, "BIRT", PersonEventKind.ekEvent);
             array6[ 2] = new EventStruct(LSID.LSID_Adoption, "ADOP", PersonEventKind.ekEvent);
             array6[ 3] = new EventStruct(LSID.LSID_Christening, "CHR", PersonEventKind.ekEvent);

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,20 +24,20 @@ namespace GKCommon.GEDCOM
     {
         public double Lati
         {
-            get { return GetTagFloatValue("LATI", 0.0); }
-            set { SetTagFloatValue("LATI", value); }
+            get { return GetTagFloatValue(GEDCOMTagType.LATI, 0.0); }
+            set { SetTagFloatValue(GEDCOMTagType.LATI, value); }
         }
 
         public double Long
         {
-            get { return GetTagFloatValue("LONG", 0.0); }
-            set { SetTagFloatValue("LONG", value); }
+            get { return GetTagFloatValue(GEDCOMTagType.LONG, 0.0); }
+            set { SetTagFloatValue(GEDCOMTagType.LONG, value); }
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            SetName("MAP");
+            SetName(GEDCOMTagType.MAP);
         }
 
         public GEDCOMMap(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,7 +30,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMData Data
         {
-            get { return TagClass("DATA", GEDCOMData.Create) as GEDCOMData; }
+            get { return TagClass(GEDCOMTagType.DATA, GEDCOMData.Create) as GEDCOMData; }
         }
 
         public StringList Originator
@@ -89,9 +89,9 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "REPO") {
+            if (tagName == GEDCOMTagType.REPO) {
                 result = fRepositoryCitations.Add(new GEDCOMRepositoryCitation(Owner, this, tagName, tagValue));
-            } else if (tagName == "DATA") {
+            } else if (tagName == GEDCOMTagType.DATA) {
                 result = base.AddTag(tagName, tagValue, GEDCOMData.Create);
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);

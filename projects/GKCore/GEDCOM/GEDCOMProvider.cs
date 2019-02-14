@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -257,7 +257,7 @@ namespace GKCommon.GEDCOM
                                 curRecord = fTree.AddRecord(new GEDCOMMultimediaRecord(fTree, fTree, "", ""));
                             } else if (tagName == GEDCOMTagType.NOTE) {
                                 curRecord = fTree.AddRecord(new GEDCOMNoteRecord(fTree, fTree, "", tagValue));
-                            } else if (tagName == "REPO") {
+                            } else if (tagName == GEDCOMTagType.REPO) {
                                 curRecord = fTree.AddRecord(new GEDCOMRepositoryRecord(fTree, fTree, "", ""));
                             } else if (tagName == GEDCOMTagType.SOUR) {
                                 curRecord = fTree.AddRecord(new GEDCOMSourceRecord(fTree, fTree, "", ""));
@@ -265,7 +265,7 @@ namespace GKCommon.GEDCOM
                                 curRecord = fTree.AddRecord(new GEDCOMSubmissionRecord(fTree, fTree, "", ""));
                             } else if (tagName == "SUBM") {
                                 curRecord = fTree.AddRecord(new GEDCOMSubmitterRecord(fTree, fTree, "", ""));
-                            } else if (tagName == "_GROUP") {
+                            } else if (tagName == GEDCOMTagType.GROUP) {
                                 curRecord = fTree.AddRecord(new GEDCOMGroupRecord(fTree, fTree, "", ""));
                             } else if (tagName == "_RESEARCH") {
                                 curRecord = fTree.AddRecord(new GEDCOMResearchRecord(fTree, fTree, "", ""));
@@ -504,20 +504,20 @@ namespace GKCommon.GEDCOM
             var result = new Dictionary<string, TagProperties>();
 
             result.Add("ADDR", new TagProperties("ADDR", true, false));
-            result.Add("AGNC", new TagProperties("AGNC", true, false));
+            result.Add(GEDCOMTagType.AGNC, new TagProperties(GEDCOMTagType.AGNC, true, false));
             result.Add("AUTH", new TagProperties("AUTH", true, false));
             result.Add("CAUS", new TagProperties("CAUS", true, false));
-            result.Add("CHAN", new TagProperties("CHAN", true, false));
-            result.Add("CITY", new TagProperties("CITY", true, false));
+            result.Add(GEDCOMTagType.CHAN, new TagProperties(GEDCOMTagType.CHAN, true, false));
+            result.Add(GEDCOMTagType.CITY, new TagProperties(GEDCOMTagType.CITY, true, false));
             result.Add(GEDCOMTagType.CTRY, new TagProperties(GEDCOMTagType.CTRY, true, false));
             result.Add("DATE", new TagProperties("DATE", true, false));
             result.Add(GEDCOMTagType.PAGE, new TagProperties(GEDCOMTagType.PAGE, true, false));
             result.Add("PHON", new TagProperties("PHON", true, false));
-            result.Add("PLAC", new TagProperties("PLAC", true, false));
-            result.Add("POST", new TagProperties("POST", true, false));
+            result.Add(GEDCOMTagType.PLAC, new TagProperties(GEDCOMTagType.PLAC, true, false));
+            result.Add(GEDCOMTagType.POST, new TagProperties(GEDCOMTagType.POST, true, false));
             result.Add("PUBL", new TagProperties("PUBL", true, false));
             result.Add(GEDCOMTagType.RESN, new TagProperties(GEDCOMTagType.RESN, true, false));
-            result.Add("STAE", new TagProperties("STAE", true, false));
+            result.Add(GEDCOMTagType.STAE, new TagProperties(GEDCOMTagType.STAE, true, false));
             result.Add("TEXT", new TagProperties("TEXT", true, false));
             result.Add("TIME", new TagProperties("TIME", true, false));
             result.Add("TYPE", new TagProperties("TYPE", true, false));
@@ -539,7 +539,7 @@ namespace GKCommon.GEDCOM
 
             result.Add("_LOC", new TagProperties("_LOC", true,  true));
             result.Add("_POSITION", new TagProperties("_POSITION", true,  true));
-            result.Add("ALIA", new TagProperties("ALIA", true, false));
+            result.Add(GEDCOMTagType.ALIA, new TagProperties(GEDCOMTagType.ALIA, true, false));
 
             // need for compatibility with Agelong Tree (ALTREE), and other
             result.Add("HUSB", new TagProperties("HUSB", true, false));

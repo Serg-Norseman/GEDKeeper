@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -37,7 +37,7 @@ namespace GKCommon.GEDCOM
         {
             base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtRepository);
-            SetName("REPO");
+            SetName(GEDCOMTagType.REPO);
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

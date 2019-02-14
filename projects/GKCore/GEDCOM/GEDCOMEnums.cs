@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,18 +22,39 @@ namespace GKCommon.GEDCOM
 {
     public static class GEDCOMTagType
     {
+        public const string ADR1 = "ADR1";
+        public const string ADR2 = "ADR2";
+        public const string ADR3 = "ADR3";
         public const string AFN = "AFN"; // AncestralFileNumber
+        public const string AGNC = "AGNC";
+        public const string ALIA = "ALIA";
+        public const string ASSO = "ASSO";
+        public const string CHAN = "CHAN";
+        public const string CITY = "CITY";
         public const string CTRY = "CTRY";
+        public const string DATA = "DATA";
+        public const string EVEN = "EVEN";
+        public const string FAMC = "FAMC";
         public const string INDI = "INDI"; // IndividualRecord
         public const string LANG = "LANG";
+        public const string LATI = "LATI";
+        public const string LONG = "LONG";
+        public const string MAP = "MAP";
         public const string NOTE = "NOTE";
         public const string OBJE = "OBJE";
         public const string PAGE = "PAGE";
+        public const string PEDI = "PEDI";
+        public const string PLAC = "PLAC";
+        public const string POST = "POST";
         public const string QUAY = "QUAY";
+        public const string REFN = "REFN";
+        public const string RELA = "RELA";
+        public const string REPO = "REPO";
         public const string RESN = "RESN"; // Restriction
         public const string RFN = "RFN"; // PermanentRecordFileNumber
         public const string RIN = "RIN"; // AutomatedRecordID
         public const string SOUR = "SOUR";
+        public const string STAE = "STAE";
 
         // non-standard extended tags (other applications)
         public const string UID = "_UID"; // 
@@ -41,6 +62,8 @@ namespace GKCommon.GEDCOM
         // non-standard extended tags (GEDKeeper)
         public const string BOOKMARK = "_BOOKMARK";
         public const string FOLDER = "_FOLDER";
+        public const string GROUP = "_GROUP";
+        public const string MEMBER = "_MEMBER";
         public const string PATRIARCH = "_PATRIARCH";
     }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -35,7 +35,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPlace Place
         {
-            get { return TagClass("PLAC", GEDCOMPlace.Create) as GEDCOMPlace; }
+            get { return TagClass(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
         }
 
         public GEDCOMBaptismDateStatus BaptismDateStatus
@@ -62,7 +62,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPointer Family
         {
-            get { return TagClass("FAMC", GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return TagClass(GEDCOMTagType.FAMC, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
         public GEDCOMChildSealingDateStatus ChildSealingDateStatus
@@ -93,7 +93,7 @@ namespace GKCommon.GEDCOM
             if (tagName == "STAT") {
                 result = base.AddTag(tagName, tagValue, GEDCOMDateStatus.Create);
             } else {
-                // define "DATE", "FAMC" by default
+                // define 'DATE', 'FAMC' by default
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
 

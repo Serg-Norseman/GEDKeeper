@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -166,12 +166,12 @@ namespace GKCommon.GEDCOM
             GEDCOMFactory f = GEDCOMFactory.GetInstance();
 
             f.RegisterTag("ADDR", GEDCOMAddress.Create);
-            f.RegisterTag("CHAN", GEDCOMChangeDate.Create);
+            f.RegisterTag(GEDCOMTagType.CHAN, GEDCOMChangeDate.Create);
             f.RegisterTag("DATE", GEDCOMDateValue.Create);
-            f.RegisterTag("FAMC", GEDCOMPointer.Create);
+            f.RegisterTag(GEDCOMTagType.FAMC, GEDCOMPointer.Create);
             f.RegisterTag(GEDCOMTagType.LANG, GEDCOMLanguage.Create);
-            f.RegisterTag("MAP", GEDCOMMap.Create);
-            f.RegisterTag("PLAC", GEDCOMPlace.Create);
+            f.RegisterTag(GEDCOMTagType.MAP, GEDCOMMap.Create);
+            f.RegisterTag(GEDCOMTagType.PLAC, GEDCOMPlace.Create);
             f.RegisterTag("TIME", GEDCOMTime.Create);
 
             f.RegisterTag("_LANG", GEDCOMLanguage.Create);

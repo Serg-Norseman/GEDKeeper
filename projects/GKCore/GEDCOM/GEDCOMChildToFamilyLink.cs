@@ -30,8 +30,8 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPedigreeLinkageType PedigreeLinkageType
         {
-            get { return GEDCOMUtils.GetPedigreeLinkageTypeVal(GetTagStringValue("PEDI")); }
-            set { SetTagStringValue("PEDI", GEDCOMUtils.GetPedigreeLinkageTypeStr(value)); }
+            get { return GEDCOMUtils.GetPedigreeLinkageTypeVal(GetTagStringValue(GEDCOMTagType.PEDI)); }
+            set { SetTagStringValue(GEDCOMTagType.PEDI, GEDCOMUtils.GetPedigreeLinkageTypeStr(value)); }
         }
 
         public GEDCOMFamilyRecord Family
@@ -43,7 +43,7 @@ namespace GKCommon.GEDCOM
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            SetName("FAMC");
+            SetName(GEDCOMTagType.FAMC);
         }
 
         public GEDCOMChildToFamilyLink(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

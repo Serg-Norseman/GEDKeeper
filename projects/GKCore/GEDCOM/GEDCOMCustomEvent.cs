@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,8 +32,8 @@ namespace GKCommon.GEDCOM
 
         public string Agency
         {
-            get { return GetTagStringValue("AGNC"); }
-            set { SetTagStringValue("AGNC", value); }
+            get { return GetTagStringValue(GEDCOMTagType.AGNC); }
+            set { SetTagStringValue(GEDCOMTagType.AGNC, value); }
         }
 
         public string ReligiousAffilation
@@ -50,7 +50,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPlace Place
         {
-            get { return TagClass("PLAC", GEDCOMPlace.Create) as GEDCOMPlace; }
+            get { return TagClass(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
         }
 
         public GEDCOMAddress Address
@@ -73,13 +73,10 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW")
-            {
+            if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW") {
                 result = Address.AddTag(tagName, tagValue, tagConstructor);
-            }
-            else
-            {
-                // define "PLAC", "ADDR", "DATE" by default
+            } else {
+                // define 'PLAC', 'ADDR', 'DATE' by default
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
 
