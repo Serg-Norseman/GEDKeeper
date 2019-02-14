@@ -41,7 +41,7 @@ namespace GKFoldersPlugin
         {
             InitializeComponent();
 
-            Location = new Point(10, Screen.PrimaryScreen.WorkingArea.Height - Height - 10);
+            Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - Width - 10, 50);
 
             fPlugin = plugin;
             fFolders = new StringList();
@@ -50,6 +50,11 @@ namespace GKFoldersPlugin
             fFilterFolder = string.Empty;
 
             SetLang();
+        }
+
+        private void Form_Resize(object sender, EventArgs e)
+        {
+            Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - Width - 10, 50);
         }
 
         private void FoldersWidget_Load(object sender, EventArgs e)
@@ -138,14 +143,14 @@ namespace GKFoldersPlugin
             string folder = cmbSelectFolder.Text;
             if (fBase != null) {
                 var record = fBase.GetSelectedRecordEx();
-                if (record != null) {
-                    record.SetFolder(folder);
-                }
-            }
 
-            fBase.Context.Modified = true;
-            CollectData();
-            UpdateControls();
+                if (SetRecordFolder(record, folder)) {
+                    AppHost.StdDialogs.ShowMessage(string.Format("Processed {0} record(s)", 1));
+                }
+
+                ModifyBase();
+                cmbSelectFolder.Text = "";
+            }
         }
 
         private void btnSetSelected_Click(object sender, EventArgs e)
@@ -159,18 +164,35 @@ namespace GKFoldersPlugin
             if (fBase != null) {
                 var tree = fBase.Context.Tree;
 
+                int setNum = 0;
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
                     GEDCOMRecord rec = tree[i];
-                    if (rec.HasFolderSupport()) {
-                        rec.SetFolder(folder);
+                    if (SetRecordFolder(rec, folder)) {
+                        setNum += 1;
                     }
                 }
-            }
+                AppHost.StdDialogs.ShowMessage(string.Format("Processed {0} record(s)", setNum));
 
+                ModifyBase();
+                cmbSelectFolder.Text = "";
+            }
+        }
+
+        private void ModifyBase()
+        {
             fBase.Context.Modified = true;
             CollectData();
             UpdateControls();
+        }
+
+        private bool SetRecordFolder(GEDCOMRecord record, string folder)
+        {
+            if (record != null && record.HasFolderSupport()) {
+                record.SetFolder(folder);
+                return true;
+            }
+            return false;
         }
 
         #region ILocalization support
@@ -178,8 +200,6 @@ namespace GKFoldersPlugin
         public void SetLang()
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_MIFolders);
-
-            //StatusUpdate();
         }
 
         #endregion

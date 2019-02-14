@@ -127,6 +127,7 @@
             this.TopMost = true;
             this.Closed += new System.EventHandler(this.FoldersWidget_Closed);
             this.Load += new System.EventHandler(this.FoldersWidget_Load);
+            this.Resize += new System.EventHandler(this.Form_Resize);
             this.tabControl1.ResumeLayout(false);
             this.tabFilter.ResumeLayout(false);
             this.tabSet.ResumeLayout(false);
