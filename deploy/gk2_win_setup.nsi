@@ -381,6 +381,11 @@ SectionGroup /e "$(gklang)"
 		SetOutPath "$INSTDIR\locales"
 		File "..\locales\Chinese Simplified.lng"
 	SectionEnd
+
+	Section "Čeština"
+		SetOutPath "$INSTDIR\locales"
+		File "..\locales\czech.lng"
+	SectionEnd
 SectionGroupEnd
 
 SectionGroup /e "$(gkplg)"
