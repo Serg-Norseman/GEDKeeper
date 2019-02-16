@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -179,6 +180,112 @@ namespace GKCommon.GEDCOM
                 }
             }
             return xref;
+        }
+
+        #endregion
+
+        #region Extra fast tag parsing (x8 compared to implementation on StringTokenizer!)
+
+        // Line format: <level>_<@xref@>_<tag>_<value>
+        public static int ParseTag(string str, out int tagLevel, out string tagXRef, out string tagName, out string tagValue)
+        {
+            tagLevel = 0;
+            tagXRef = "";
+            tagName = "";
+            tagValue = "";
+
+            char[] strChars = str.ToCharArray();
+            int strLen = strChars.Length;
+
+            int strBeg = 0;
+            while (strBeg < strLen && strChars[strBeg] == ' ') strBeg++;
+
+            int partStart, partLen;
+            partStart = strBeg;
+
+            partLen = strLen - partStart;
+            if (partLen == 0) {
+                return -2;
+            } else {
+                if (!ConvertHelper.IsDigit(strChars[partStart])) {
+                    tagValue = new string(strChars, partStart, partLen);
+                    return -1;
+                }
+            }
+
+            int partIdx = -1;
+            bool hasXRef = false;
+
+            for (int i = strBeg; i < strLen; i++) {
+                if (strChars[i] == GEDCOMProvider.GEDCOM_DELIMITER) {
+                    if (i > 0 && strChars[i - 1] != GEDCOMProvider.GEDCOM_DELIMITER) {
+                        partIdx += 1;
+                        partLen = i - partStart;
+
+                        switch (partIdx) {
+                            case 0:
+                                tagLevel = ConvertIntNumber(strChars, partStart, partStart + partLen, 10);
+                                break;
+
+                            case 1:
+                                hasXRef = (strChars[partStart] == GEDCOMProvider.GEDCOM_POINTER_DELIMITER);
+                                if (hasXRef) {
+                                    tagXRef = new string(strChars, partStart + 1, partLen - 2);
+                                } else {
+                                    tagName = new string(strChars, partStart, partLen);
+                                    partStart = i + 1;
+                                    partLen = strLen - partStart;
+                                    tagValue = new string(strChars, partStart, partLen);
+                                    return partIdx + 2;
+                                }
+                                break;
+
+                            case 2:
+                                tagName = new string(strChars, partStart, partLen);
+                                partStart = i + 1;
+                                partLen = strLen - partStart;
+                                tagValue = new string(strChars, partStart, partLen);
+                                return partIdx + 2;
+                        }
+                    }
+                    partStart = i + 1;
+                }
+            }
+
+            // find the last part
+            partLen = strLen - partStart;
+            partIdx += 1;
+            if (partIdx == 1 || hasXRef) {
+                tagName = new string(strChars, partStart, partLen);
+            } else {
+                tagValue = new string(strChars, partStart, partLen);
+            }
+            return partIdx + 1;
+        }
+
+        private static int ConvertIntNumber(char[] buf, int first, int last, int numBase)
+        {
+            int num = 0;
+            try {
+                while (first < last) {
+                    char c = buf[first];
+                    int b = (int)(c - '0');
+                    if (b > 9) {
+                        b -= 7;
+                        if (b > 15) {
+                            b -= 32;
+                        }
+                    }
+                    if (b >= numBase) {
+                        break;
+                    }
+                    num = num * numBase + b;
+                    first++;
+                }
+            }
+            catch (OverflowException) {
+            }
+            return num;
         }
 
         #endregion

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -148,7 +148,7 @@ namespace GKTests
 
             // media for tests
             GEDCOMMultimediaRecord mediaRec = context.Tree.CreateMultimedia();
-            mediaRec.AddTag("FILE", "", null);
+            mediaRec.AddTag(GEDCOMTagType.FILE, "", null);
             GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
             fileRef.Title = "Test multimedia";
             fileRef.LinkFile("sample.png");

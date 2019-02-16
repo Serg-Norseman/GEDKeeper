@@ -86,16 +86,16 @@ namespace GKCommon.GEDCOM
             var tag = new GEDCOMTag(null, null, "TEST", "");
             Assert.IsNotNull(tag);
 
-            tag.AddTag(GEDCOMTagType.FOLDER, "Private", null);
-            tag.AddTag(GEDCOMTagType.FOLDER, "Friends", null);
-            tag.AddTag(GEDCOMTagType.FOLDER, "Research", null);
+            tag.AddTag(GEDCOMTagType._FOLDER, "Private", null);
+            tag.AddTag(GEDCOMTagType._FOLDER, "Friends", null);
+            tag.AddTag(GEDCOMTagType._FOLDER, "Research", null);
 
-            var subTags = tag.FindTags(GEDCOMTagType.FOLDER);
+            var subTags = tag.FindTags(GEDCOMTagType._FOLDER);
             Assert.AreEqual(3, subTags.Count);
 
-            tag.DeleteTag(GEDCOMTagType.FOLDER);
+            tag.DeleteTag(GEDCOMTagType._FOLDER);
 
-            subTags = tag.FindTags(GEDCOMTagType.FOLDER);
+            subTags = tag.FindTags(GEDCOMTagType._FOLDER);
             Assert.AreEqual(0, subTags.Count);
         }
     }

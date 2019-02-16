@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -1238,7 +1238,7 @@ namespace GKCore
         {
             GEDCOMHeader header = tree.Header;
 
-            string subm = header.GetTagStringValue("SUBM");
+            string subm = header.GetTagStringValue(GEDCOMTagType.SUBM);
             int oldRev = header.FileRevision;
             GEDCOMLanguageID langId = header.Language.Value;
 
@@ -1261,7 +1261,7 @@ namespace GKCore
             }
 
             if (subm != "") {
-                header.SetTagStringValue("SUBM", subm);
+                header.SetTagStringValue(GEDCOMTagType.SUBM, subm);
             }
         }
 

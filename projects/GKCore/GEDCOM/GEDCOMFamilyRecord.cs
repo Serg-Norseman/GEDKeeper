@@ -38,17 +38,17 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPointer Husband
         {
-            get { return TagClass("HUSB", GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return TagClass(GEDCOMTagType.HUSB, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
         public GEDCOMPointer Wife
         {
-            get { return TagClass("WIFE", GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return TagClass(GEDCOMTagType.WIFE, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
         public GEDCOMPointer Submitter
         {
-            get { return TagClass("SUBM", GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return TagClass(GEDCOMTagType.SUBM, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
         public GEDCOMRestriction Restriction
@@ -66,7 +66,7 @@ namespace GKCommon.GEDCOM
         {
             base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtFamily);
-            SetName("FAM");
+            SetName(GEDCOMTagType.FAM);
 
             fChildren = new GEDCOMList<GEDCOMPointer>(this);
             fSpouseSealings = new GEDCOMList<GEDCOMSpouseSealing>(this);
@@ -116,9 +116,9 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "HUSB" || tagName == "WIFE") {
+            if (tagName == GEDCOMTagType.HUSB || tagName == GEDCOMTagType.WIFE) {
                 result = base.AddTag(tagName, tagValue, GEDCOMPointer.Create);
-            } else if (tagName == "CHIL") {
+            } else if (tagName == GEDCOMTagType.CHIL) {
                 result = fChildren.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
             } else {
                 result = fTagsFactory.CreateTag(Owner, this, tagName, tagValue);
@@ -363,7 +363,7 @@ namespace GKCommon.GEDCOM
             if (child == null) return false;
 
             GEDCOMPointer ptr = new GEDCOMPointer(Owner, this, "", "");
-            ptr.SetNamedValue("CHIL", child);
+            ptr.SetNamedValue(GEDCOMTagType.CHIL, child);
             fChildren.Add(ptr);
 
             GEDCOMChildToFamilyLink chLink = new GEDCOMChildToFamilyLink(Owner, child, "", "");

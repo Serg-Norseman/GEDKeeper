@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -41,8 +41,8 @@ namespace GKCommon.GEDCOM
 
         public string Title
         {
-            get { return GetTagStringValue("TITL"); }
-            set { SetTagStringValue("TITL", value); }
+            get { return GetTagStringValue(GEDCOMTagType.TITL); }
+            set { SetTagStringValue(GEDCOMTagType.TITL, value); }
         }
 
         /// <summary>
@@ -52,8 +52,8 @@ namespace GKCommon.GEDCOM
         /// </summary>
         public bool IsPrimary
         {
-            get { return GetTagYNValue("_PRIM"); }
-            set { SetTagYNValue("_PRIM", value); }
+            get { return GetTagYNValue(GEDCOMTagType._PRIM); }
+            set { SetTagYNValue(GEDCOMTagType._PRIM, value); }
         }
 
         /// <summary>
@@ -63,13 +63,13 @@ namespace GKCommon.GEDCOM
         /// </summary>
         public bool IsPrimaryCutout
         {
-            get { return GetTagYNValue("_PRIM_CUTOUT"); }
-            set { SetTagYNValue("_PRIM_CUTOUT", value); }
+            get { return GetTagYNValue(GEDCOMTagType._PRIM_CUTOUT); }
+            set { SetTagYNValue(GEDCOMTagType._PRIM_CUTOUT, value); }
         }
 
         public GEDCOMCutoutPosition CutoutPosition
         {
-            get { return TagClass("_POSITION", GEDCOMCutoutPosition.Create) as GEDCOMCutoutPosition; }
+            get { return TagClass(GEDCOMTagType._POSITION, GEDCOMCutoutPosition.Create) as GEDCOMCutoutPosition; }
         }
 
 
@@ -88,8 +88,7 @@ namespace GKCommon.GEDCOM
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fFileReferences.Dispose();
             }
             base.Dispose(disposing);
@@ -99,7 +98,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "FILE") {
+            if (tagName == GEDCOMTagType.FILE) {
                 result = fFileReferences.Add(new GEDCOMFileReference(Owner, this, tagName, tagValue));
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
@@ -157,10 +156,8 @@ namespace GKCommon.GEDCOM
         public string GetUID()
         {
             string result = null;
-            try
-            {
-                if (Value != null)
-                {
+            try {
+                if (Value != null) {
                     ExtRect cutoutArea;
                     if (IsPrimaryCutout) {
                         cutoutArea = CutoutPosition.Value;
@@ -171,9 +168,7 @@ namespace GKCommon.GEDCOM
                     GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)Value;
                     result = mmRec.UID + "-" + GKUtils.GetRectUID(cutoutArea.Left, cutoutArea.Top, cutoutArea.Right, cutoutArea.Bottom);
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GEDCOMMultimediaLink.GetUID(): " + ex.Message);
                 result = null;
             }

@@ -41,7 +41,7 @@ namespace GKCommon.GEDCOM
         {
             base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtGroup);
-            SetName(GEDCOMTagType.GROUP);
+            SetName(GEDCOMTagType._GROUP);
 
             fMembers = new GEDCOMList<GEDCOMPointer>(this);
         }
@@ -60,7 +60,7 @@ namespace GKCommon.GEDCOM
 
             if (tagName == "NAME") {
                 result = base.AddTag(tagName, tagValue, null);
-            } else if (tagName == GEDCOMTagType.MEMBER) {
+            } else if (tagName == GEDCOMTagType._MEMBER) {
                 result = fMembers.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
@@ -141,11 +141,11 @@ namespace GKCommon.GEDCOM
             if (member == null) return false;
 
             GEDCOMPointer ptr = new GEDCOMPointer(Owner, this, "", "");
-            ptr.SetNamedValue(GEDCOMTagType.MEMBER, member);
+            ptr.SetNamedValue(GEDCOMTagType._MEMBER, member);
             fMembers.Add(ptr);
 
             ptr = new GEDCOMPointer(Owner, member, "", "");
-            ptr.SetNamedValue(GEDCOMTagType.GROUP, this);
+            ptr.SetNamedValue(GEDCOMTagType._GROUP, this);
             member.Groups.Add(ptr);
 
             return true;

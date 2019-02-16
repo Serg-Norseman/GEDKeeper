@@ -843,7 +843,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void GEDCOMAddress_Tests()
         {
-            using (GEDCOMAddress addr = GEDCOMAddress.Create(null, null, "ADDR", "") as GEDCOMAddress)
+            using (GEDCOMAddress addr = GEDCOMAddress.Create(null, null, GEDCOMTagType.ADDR, "") as GEDCOMAddress)
             {
                 Assert.IsNotNull(addr, "addr != null");
 
@@ -911,7 +911,7 @@ namespace GKCommon.GEDCOM
                 addr.AddressPostalCode = "test7";
                 Assert.AreEqual("test7", addr.AddressPostalCode);
 
-                using (GEDCOMAddress addr2 = GEDCOMAddress.Create(null, null, "ADDR", "") as GEDCOMAddress)
+                using (GEDCOMAddress addr2 = GEDCOMAddress.Create(null, null, GEDCOMTagType.ADDR, "") as GEDCOMAddress)
                 {
                     Assert.Throws(typeof(ArgumentException), () => { addr2.Assign(null); });
 
@@ -1688,7 +1688,7 @@ namespace GKCommon.GEDCOM
                 groupRec.GroupName = "Test Group";
                 Assert.AreEqual("Test Group", groupRec.GroupName);
 
-                groupRec.DeleteTag(GEDCOMTagType.UID);
+                groupRec.DeleteTag(GEDCOMTagType._UID);
                 groupRec.DeleteTag(GEDCOMTagType.CHAN);
                 string buf = TagStreamTest(groupRec);
                 Assert.AreEqual("0 @G2@ _GROUP\r\n1 NAME Test Group\r\n", buf);
@@ -1971,7 +1971,7 @@ namespace GKCommon.GEDCOM
             Assert.AreEqual(0, famRec.IndexOfChild(indiv));
 
             // stream test
-            famRec.DeleteTag(GEDCOMTagType.UID);
+            famRec.DeleteTag(GEDCOMTagType._UID);
             famRec.DeleteTag(GEDCOMTagType.CHAN);
             string buf = TagStreamTest(famRec);
             Assert.AreEqual("0 @F1@ FAM\r\n"+
@@ -2170,7 +2170,7 @@ namespace GKCommon.GEDCOM
             GEDCOMSourceCitationTest(sourRec, indiv);
             GEDCOMRepositoryCitationTest(sourRec, repRec);
 
-            sourRec.DeleteTag(GEDCOMTagType.UID);
+            sourRec.DeleteTag(GEDCOMTagType._UID);
             sourRec.DeleteTag(GEDCOMTagType.CHAN);
             string buf = TagStreamTest(sourRec);
             Assert.AreEqual("0 @S1@ SOUR\r\n"+
@@ -2263,7 +2263,7 @@ namespace GKCommon.GEDCOM
             resRec.Percent = 33;
             Assert.AreEqual(33, resRec.Percent);
 
-            resRec.DeleteTag(GEDCOMTagType.UID);
+            resRec.DeleteTag(GEDCOMTagType._UID);
             resRec.DeleteTag(GEDCOMTagType.CHAN);
             string buf = TagStreamTest(resRec);
             Assert.AreEqual("0 @RS1@ _RESEARCH\r\n"+
@@ -2307,7 +2307,7 @@ namespace GKCommon.GEDCOM
 
                 Assert.IsNotNull(repoRec.Address);
 
-                repoRec.DeleteTag(GEDCOMTagType.UID);
+                repoRec.DeleteTag(GEDCOMTagType._UID);
                 repoRec.DeleteTag(GEDCOMTagType.CHAN);
                 string buf = TagStreamTest(repoRec);
                 Assert.AreEqual("0 @R2@ REPO\r\n"+
@@ -2336,7 +2336,7 @@ namespace GKCommon.GEDCOM
         {
             Assert.AreEqual("", mediaRec.GetFileTitle());
 
-            mediaRec.AddTag("FILE", "", null);
+            mediaRec.AddTag(GEDCOMTagType.FILE, "", null);
             GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
             Assert.IsNotNull(fileRef);
 
@@ -2352,7 +2352,7 @@ namespace GKCommon.GEDCOM
             string title = mediaRec.GetFileTitle();
             Assert.AreEqual("File Title 2", title);
 
-            mediaRec.DeleteTag(GEDCOMTagType.UID);
+            mediaRec.DeleteTag(GEDCOMTagType._UID);
             mediaRec.DeleteTag(GEDCOMTagType.CHAN);
             string buf = TagStreamTest(mediaRec);
             Assert.AreEqual("0 @O1@ OBJE\r\n"+
@@ -2462,7 +2462,7 @@ namespace GKCommon.GEDCOM
             submRec.OrdinanceProcessFlag = GEDCOMOrdinanceProcessFlag.opYes;
             Assert.AreEqual(GEDCOMOrdinanceProcessFlag.opYes, submRec.OrdinanceProcessFlag);
             
-            submRec.AddTag("SUBM", GEDCOMUtils.EncloseXRef(submitterXRef), null);
+            submRec.AddTag(GEDCOMTagType.SUBM, GEDCOMUtils.EncloseXRef(submitterXRef), null);
             GEDCOMSubmitterRecord subr = submRec.Submitter.Value as GEDCOMSubmitterRecord;
             Assert.IsNotNull(subr);
             

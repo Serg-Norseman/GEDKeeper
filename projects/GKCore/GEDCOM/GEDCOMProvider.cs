@@ -227,76 +227,85 @@ namespace GKCommon.GEDCOM
                 while (reader.Peek() != -1) {
                     lineNum++;
                     string str = reader.ReadLine();
-                    str = GEDCOMUtils.TrimLeft(str);
-                    if (str.Length == 0) continue;
 
-                    if (!ConvertHelper.IsDigit(str[0])) {
-                        FixFTBLine(curRecord, curTag, lineNum, str);
-                    } else {
-                        int tagLevel;
-                        string tagXRef, tagName, tagValue;
+                    int tagLevel;
+                    string tagXRef, tagName, tagValue;
 
-                        try {
-                            ParseTag(str, out tagLevel, out tagXRef, out tagName, out tagValue);
-                        } catch (EGEDCOMException ex) {
-                            throw new EGEDCOMException("Syntax error in line " + Convert.ToString(lineNum) + ".\r" + ex.Message);
+                    try {
+                        int lineRes = GEDCOMUtils.ParseTag(str, out tagLevel, out tagXRef, out tagName, out tagValue);
+
+                        // empty line
+                        if (lineRes == -2) continue;
+
+                        if (!string.IsNullOrEmpty(tagValue) && fEncodingState == EncodingState.esChanged) {
+                            tagValue = ConvertStr(fSourceEncoding, tagValue);
                         }
 
-                        if (tagLevel == 0) {
-                            if (curRecord == fTree.Header && fEncodingState == EncodingState.esUnchecked) {
-                                // beginning recognition of the first is not header record
-                                // to check for additional versions of the code page
-                                DefineEncoding(reader);
-                            }
+                        // line with text but not in standard tag format
+                        if (lineRes == -1) {
+                            FixFTBLine(curRecord, curTag, lineNum, str);
+                            continue;
+                        }
 
-                            if (tagName == GEDCOMTagType.INDI) {
-                                curRecord = fTree.AddRecord(new GEDCOMIndividualRecord(fTree, fTree, "", ""));
-                            } else if (tagName == "FAM") {
-                                curRecord = fTree.AddRecord(new GEDCOMFamilyRecord(fTree, fTree, "", ""));
-                            } else if (tagName == GEDCOMTagType.OBJE) {
-                                curRecord = fTree.AddRecord(new GEDCOMMultimediaRecord(fTree, fTree, "", ""));
-                            } else if (tagName == GEDCOMTagType.NOTE) {
-                                curRecord = fTree.AddRecord(new GEDCOMNoteRecord(fTree, fTree, "", tagValue));
-                            } else if (tagName == GEDCOMTagType.REPO) {
-                                curRecord = fTree.AddRecord(new GEDCOMRepositoryRecord(fTree, fTree, "", ""));
-                            } else if (tagName == GEDCOMTagType.SOUR) {
-                                curRecord = fTree.AddRecord(new GEDCOMSourceRecord(fTree, fTree, "", ""));
-                            } else if (tagName == "SUBN") {
-                                curRecord = fTree.AddRecord(new GEDCOMSubmissionRecord(fTree, fTree, "", ""));
-                            } else if (tagName == "SUBM") {
-                                curRecord = fTree.AddRecord(new GEDCOMSubmitterRecord(fTree, fTree, "", ""));
-                            } else if (tagName == GEDCOMTagType.GROUP) {
-                                curRecord = fTree.AddRecord(new GEDCOMGroupRecord(fTree, fTree, "", ""));
-                            } else if (tagName == "_RESEARCH") {
-                                curRecord = fTree.AddRecord(new GEDCOMResearchRecord(fTree, fTree, "", ""));
-                            } else if (tagName == "_TASK") {
-                                curRecord = fTree.AddRecord(new GEDCOMTaskRecord(fTree, fTree, "", ""));
-                            } else if (tagName == "_COMM") {
-                                curRecord = fTree.AddRecord(new GEDCOMCommunicationRecord(fTree, fTree, "", ""));
-                            } else if (tagName == "_LOC") {
-                                curRecord = fTree.AddRecord(new GEDCOMLocationRecord(fTree, fTree, "", ""));
-                            } else if (tagName == "HEAD") {
-                                curRecord = fTree.Header;
-                            } else if (tagName == "TRLR") {
-                                break;
-                            } else {
-                                curRecord = null;
-                            }
+                        tagName = tagName.ToUpperInvariant();
+                    } catch (EGEDCOMException ex) {
+                        throw new EGEDCOMException("Syntax error in line " + Convert.ToString(lineNum) + ".\r" + ex.Message);
+                    }
 
-                            if (curRecord != null && tagXRef != "") {
-                                curRecord.XRef = tagXRef;
-                            }
-                            curTag = null;
+                    if (tagLevel == 0) {
+                        if (curRecord == fTree.Header && fEncodingState == EncodingState.esUnchecked) {
+                            // beginning recognition of the first is not header record
+                            // to check for additional versions of the code page
+                            DefineEncoding(reader);
+                        }
+
+                        if (tagName == GEDCOMTagType.INDI) {
+                            curRecord = fTree.AddRecord(new GEDCOMIndividualRecord(fTree, fTree, "", ""));
+                        } else if (tagName == GEDCOMTagType.FAM) {
+                            curRecord = fTree.AddRecord(new GEDCOMFamilyRecord(fTree, fTree, "", ""));
+                        } else if (tagName == GEDCOMTagType.OBJE) {
+                            curRecord = fTree.AddRecord(new GEDCOMMultimediaRecord(fTree, fTree, "", ""));
+                        } else if (tagName == GEDCOMTagType.NOTE) {
+                            curRecord = fTree.AddRecord(new GEDCOMNoteRecord(fTree, fTree, "", tagValue));
+                        } else if (tagName == GEDCOMTagType.REPO) {
+                            curRecord = fTree.AddRecord(new GEDCOMRepositoryRecord(fTree, fTree, "", ""));
+                        } else if (tagName == GEDCOMTagType.SOUR) {
+                            curRecord = fTree.AddRecord(new GEDCOMSourceRecord(fTree, fTree, "", ""));
+                        } else if (tagName == GEDCOMTagType.SUBN) {
+                            curRecord = fTree.AddRecord(new GEDCOMSubmissionRecord(fTree, fTree, "", ""));
+                        } else if (tagName == GEDCOMTagType.SUBM) {
+                            curRecord = fTree.AddRecord(new GEDCOMSubmitterRecord(fTree, fTree, "", ""));
+                        } else if (tagName == GEDCOMTagType._GROUP) {
+                            curRecord = fTree.AddRecord(new GEDCOMGroupRecord(fTree, fTree, "", ""));
+                        } else if (tagName == GEDCOMTagType._RESEARCH) {
+                            curRecord = fTree.AddRecord(new GEDCOMResearchRecord(fTree, fTree, "", ""));
+                        } else if (tagName == GEDCOMTagType._TASK) {
+                            curRecord = fTree.AddRecord(new GEDCOMTaskRecord(fTree, fTree, "", ""));
+                        } else if (tagName == GEDCOMTagType._COMM) {
+                            curRecord = fTree.AddRecord(new GEDCOMCommunicationRecord(fTree, fTree, "", ""));
+                        } else if (tagName == GEDCOMTagType._LOC) {
+                            curRecord = fTree.AddRecord(new GEDCOMLocationRecord(fTree, fTree, "", ""));
+                        } else if (tagName == GEDCOMTagType.HEAD) {
+                            curRecord = fTree.Header;
+                        } else if (tagName == GEDCOMTagType.TRLR) {
+                            break;
                         } else {
-                            if (curRecord != null) {
-                                if (curTag == null || tagLevel == 1) {
-                                    curTag = curRecord.AddTag(tagName, tagValue, null);
-                                } else {
-                                    while (tagLevel <= curTag.Level) {
-                                        curTag = (curTag.Parent as GEDCOMTag);
-                                    }
-                                    curTag = curTag.AddTag(tagName, tagValue, null);
+                            curRecord = null;
+                        }
+
+                        if (curRecord != null && tagXRef != "") {
+                            curRecord.XRef = tagXRef;
+                        }
+                        curTag = null;
+                    } else {
+                        if (curRecord != null) {
+                            if (curTag == null || tagLevel == 1) {
+                                curTag = curRecord.AddTag(tagName, tagValue, null);
+                            } else {
+                                while (tagLevel <= curTag.Level) {
+                                    curTag = (curTag.Parent as GEDCOMTag);
                                 }
+                                curTag = curTag.AddTag(tagName, tagValue, null);
                             }
                         }
                     }
@@ -312,62 +321,6 @@ namespace GKCommon.GEDCOM
                 }
             } finally {
                 fTree.State = GEDCOMState.osReady;
-            }
-        }
-
-        private void ParseTag(string line, out int tagLevel, out string tagXRef, out string tagName, out string tagValue)
-        {
-            tagLevel = 0;
-            tagXRef = "";
-            tagName = "";
-            tagValue = "";
-
-            var strTok = new StringTokenizer(line);
-            strTok.RecognizeDecimals = false;
-            strTok.IgnoreWhiteSpace = false;
-            strTok.RecognizeIdents = true;
-
-            var token = strTok.Next(); // already trimmed
-            if (token.Kind != TokenKind.Number) {
-                // syntax error
-                throw new EGEDCOMException(string.Format("The string {0} doesn't start with a valid number", line));
-            }
-            tagLevel = (int)token.ValObj;
-
-            token = strTok.Next();
-            if (token.Kind != TokenKind.WhiteSpace) {
-                // syntax error
-            }
-
-            token = strTok.Next();
-            if (token.Kind == TokenKind.Symbol && token.Value[0] == '@') {
-                token = strTok.Next();
-                while (token.Kind != TokenKind.Symbol && token.Value[0] != '@') {
-                    tagXRef += token.Value;
-                    token = strTok.Next();
-                }
-                // FIXME: check for errors
-                //throw new EGEDCOMException(string.Format("The string {0} contains an unterminated XRef pointer", str));
-                //throw new EGEDCOMException(string.Format("The string {0} is expected to start with an XRef pointer", str));
-
-                token = strTok.Next();
-                strTok.SkipWhiteSpaces();
-            }
-
-            token = strTok.CurrentToken;
-            if (token.Kind != TokenKind.Word && token.Kind != TokenKind.Ident) {
-                // syntax error
-            }
-            tagName = token.Value.ToUpperInvariant();
-
-            token = strTok.Next();
-            if (token.Kind == TokenKind.WhiteSpace) {
-                tagValue = strTok.GetRest();
-            }
-
-            // convert codepages
-            if (!string.IsNullOrEmpty(tagValue) && fEncodingState == EncodingState.esChanged) {
-                tagValue = ConvertStr(fSourceEncoding, tagValue);
             }
         }
 
@@ -461,18 +414,17 @@ namespace GKCommon.GEDCOM
         /// </summary>
         private static void FixFTBLine(GEDCOMCustomRecord curRecord, GEDCOMTag curTag, int lineNum, string str)
         {
-            try
-            {
-                if (curTag is GEDCOMNotes) {
+            try {
+                if (curTag.Name == "CONT") {
+                    curTag.StringValue += " " + str;
+                } else if (curTag is GEDCOMNotes) {
                     curTag.AddTag("CONT", str, null);
                 } else {
                     if (curRecord != null) {
                         curRecord.AddTag(GEDCOMTagType.NOTE, str, null);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GEDCOMProvider.FixFTBLine(): Line " + lineNum.ToString() + " failed correct: " + ex.Message);
             }
         }
@@ -503,9 +455,9 @@ namespace GKCommon.GEDCOM
         {
             var result = new Dictionary<string, TagProperties>();
 
-            result.Add("ADDR", new TagProperties("ADDR", true, false));
+            result.Add(GEDCOMTagType.ADDR, new TagProperties(GEDCOMTagType.ADDR, true, false));
             result.Add(GEDCOMTagType.AGNC, new TagProperties(GEDCOMTagType.AGNC, true, false));
-            result.Add("AUTH", new TagProperties("AUTH", true, false));
+            result.Add(GEDCOMTagType.AUTH, new TagProperties(GEDCOMTagType.AUTH, true, false));
             result.Add("CAUS", new TagProperties("CAUS", true, false));
             result.Add(GEDCOMTagType.CHAN, new TagProperties(GEDCOMTagType.CHAN, true, false));
             result.Add(GEDCOMTagType.CITY, new TagProperties(GEDCOMTagType.CITY, true, false));
@@ -515,13 +467,13 @@ namespace GKCommon.GEDCOM
             result.Add("PHON", new TagProperties("PHON", true, false));
             result.Add(GEDCOMTagType.PLAC, new TagProperties(GEDCOMTagType.PLAC, true, false));
             result.Add(GEDCOMTagType.POST, new TagProperties(GEDCOMTagType.POST, true, false));
-            result.Add("PUBL", new TagProperties("PUBL", true, false));
+            result.Add(GEDCOMTagType.PUBL, new TagProperties(GEDCOMTagType.PUBL, true, false));
             result.Add(GEDCOMTagType.RESN, new TagProperties(GEDCOMTagType.RESN, true, false));
             result.Add(GEDCOMTagType.STAE, new TagProperties(GEDCOMTagType.STAE, true, false));
-            result.Add("TEXT", new TagProperties("TEXT", true, false));
+            result.Add(GEDCOMTagType.TEXT, new TagProperties(GEDCOMTagType.TEXT, true, false));
             result.Add("TIME", new TagProperties("TIME", true, false));
             result.Add("TYPE", new TagProperties("TYPE", true, false));
-            result.Add("SUBM", new TagProperties("SUBM", true, false));
+            result.Add(GEDCOMTagType.SUBM, new TagProperties(GEDCOMTagType.SUBM, true, false));
             result.Add("VERS", new TagProperties("VERS", true, false));
             result.Add(GEDCOMTagType.LANG, new TagProperties(GEDCOMTagType.LANG, true, false));
 
@@ -537,13 +489,13 @@ namespace GKCommon.GEDCOM
             result.Add("_RELN", new TagProperties("_RELN", true, true));
             result.Add("_CENN", new TagProperties("_CENN", true, true));
 
-            result.Add("_LOC", new TagProperties("_LOC", true,  true));
-            result.Add("_POSITION", new TagProperties("_POSITION", true,  true));
+            result.Add(GEDCOMTagType._LOC, new TagProperties(GEDCOMTagType._LOC, true,  true));
+            result.Add(GEDCOMTagType._POSITION, new TagProperties(GEDCOMTagType._POSITION, true,  true));
             result.Add(GEDCOMTagType.ALIA, new TagProperties(GEDCOMTagType.ALIA, true, false));
 
             // need for compatibility with Agelong Tree (ALTREE), and other
-            result.Add("HUSB", new TagProperties("HUSB", true, false));
-            result.Add("WIFE", new TagProperties("WIFE", true, false));
+            result.Add(GEDCOMTagType.HUSB, new TagProperties(GEDCOMTagType.HUSB, true, false));
+            result.Add(GEDCOMTagType.WIFE, new TagProperties(GEDCOMTagType.WIFE, true, false));
 
             // extensions
             result.Add("_BGRO", new TagProperties("_BGRO", true,  true));

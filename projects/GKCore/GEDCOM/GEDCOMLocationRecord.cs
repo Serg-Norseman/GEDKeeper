@@ -37,7 +37,7 @@ namespace GKCommon.GEDCOM
         {
             base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtLocation);
-            SetName("_LOC");
+            SetName(GEDCOMTagType._LOC);
         }
 
         // TODO: connect to use

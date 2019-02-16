@@ -127,7 +127,7 @@ namespace GKCommon.GEDCOM
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            SetName("ADDR");
+            SetName(GEDCOMTagType.ADDR);
 
             fPhoneList = new GEDCOMList<GEDCOMTag>(this);
             fEmailList = new GEDCOMList<GEDCOMTag>(this);

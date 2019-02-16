@@ -17,6 +17,7 @@ rmdir .\projects\.vs /s /q
 
 rmdir .\projects\GKv2\GEDKeeper2\bin /s /q
 rmdir .\projects\GKv2\GEDKeeper2\obj /s /q
+rmdir .\projects\GKv2\GEDKeeper2\ProfilingSessions /s /q
 
 rmdir .\projects\GKCore\bin /s /q
 rmdir .\projects\GKCore\obj /s /q
@@ -37,6 +38,7 @@ rmdir .\projects\GKTests\bin /s /q
 rmdir .\projects\GKTests\obj /s /q
 rmdir .\projects\GKTests\OpenCover /s /q
 rmdir .\projects\GKTests\PartCover /s /q
+rmdir .\projects\GKTests\ProfilingSessions /s /q
 
 rmdir .\projects\GKUpdater\bin /s /q
 rmdir .\projects\GKUpdater\obj /s /q

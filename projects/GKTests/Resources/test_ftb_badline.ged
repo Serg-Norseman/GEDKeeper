@@ -1,0 +1,17 @@
+0 HEAD
+1 GEDC
+2 VERS 5.5
+2 FORM LINEAGE-LINKED
+1 CHAR ANSI
+1 LANG Russian
+1 SOUR MYHERITAGE
+2 NAME MyHeritage Family Tree Builder
+2 VERS 6.0.0.5634
+2 CORP MyHeritage.com
+1 SUBM @U1@
+1 DEST MYHERITAGE
+0 @N1@ NOTE Test1
+1 CONT test2
+1 CONT test3
+badline badline badline badline
+0 TRLR

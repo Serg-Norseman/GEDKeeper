@@ -35,32 +35,32 @@ namespace GKCommon.GEDCOM
 
         public StringList Originator
         {
-            get { return GetTagStrings(TagClass("AUTH", GEDCOMTag.Create)); }
-            set { SetTagStrings(TagClass("AUTH", GEDCOMTag.Create), value); }
+            get { return GetTagStrings(TagClass(GEDCOMTagType.AUTH, GEDCOMTag.Create)); }
+            set { SetTagStrings(TagClass(GEDCOMTagType.AUTH, GEDCOMTag.Create), value); }
         }
 
         public StringList Title
         {
-            get { return GetTagStrings(TagClass("TITL", GEDCOMTag.Create)); }
-            set { SetTagStrings(TagClass("TITL", GEDCOMTag.Create), value); }
+            get { return GetTagStrings(TagClass(GEDCOMTagType.TITL, GEDCOMTag.Create)); }
+            set { SetTagStrings(TagClass(GEDCOMTagType.TITL, GEDCOMTag.Create), value); }
         }
 
         public string FiledByEntry
         {
-            get { return GetTagStringValue("ABBR"); }
-            set { SetTagStringValue("ABBR", value); }
+            get { return GetTagStringValue(GEDCOMTagType.ABBR); }
+            set { SetTagStringValue(GEDCOMTagType.ABBR, value); }
         }
 
         public StringList Publication
         {
-            get { return GetTagStrings(TagClass("PUBL", GEDCOMTag.Create)); }
-            set { SetTagStrings(TagClass("PUBL", GEDCOMTag.Create), value); }
+            get { return GetTagStrings(TagClass(GEDCOMTagType.PUBL, GEDCOMTag.Create)); }
+            set { SetTagStrings(TagClass(GEDCOMTagType.PUBL, GEDCOMTag.Create), value); }
         }
 
         public StringList Text
         {
-            get { return GetTagStrings(TagClass("TEXT", GEDCOMTag.Create)); }
-            set { SetTagStrings(TagClass("TEXT", GEDCOMTag.Create), value); }
+            get { return GetTagStrings(TagClass(GEDCOMTagType.TEXT, GEDCOMTag.Create)); }
+            set { SetTagStrings(TagClass(GEDCOMTagType.TEXT, GEDCOMTag.Create), value); }
         }
 
         public GEDCOMList<GEDCOMRepositoryCitation> RepositoryCitations
@@ -128,11 +128,11 @@ namespace GKCommon.GEDCOM
                 publ.Text = (targetSource.Publication.Text + "\n" + Publication.Text).Trim();
                 text.Text = (targetSource.Text.Text + "\n" + Text.Text).Trim();
 
-                DeleteTag("TITL");
-                DeleteTag("TEXT");
-                DeleteTag("ABBR");
-                DeleteTag("PUBL");
-                DeleteTag("AUTH");
+                DeleteTag(GEDCOMTagType.TITL);
+                DeleteTag(GEDCOMTagType.TEXT);
+                DeleteTag(GEDCOMTagType.ABBR);
+                DeleteTag(GEDCOMTagType.PUBL);
+                DeleteTag(GEDCOMTagType.AUTH);
 
                 base.MoveTo(targetRecord, clearDest);
 
@@ -184,22 +184,22 @@ namespace GKCommon.GEDCOM
 
         public void SetOriginatorArray(params string[] value)
         {
-            SetTagStrings(TagClass("AUTH", GEDCOMTag.Create), value);
+            SetTagStrings(TagClass(GEDCOMTagType.AUTH, GEDCOMTag.Create), value);
         }
 
         public void SetTitleArray(params string[] value)
         {
-            SetTagStrings(TagClass("TITL", GEDCOMTag.Create), value);
+            SetTagStrings(TagClass(GEDCOMTagType.TITL, GEDCOMTag.Create), value);
         }
 
         public void SetPublicationArray(params string[] value)
         {
-            SetTagStrings(TagClass("PUBL", GEDCOMTag.Create), value);
+            SetTagStrings(TagClass(GEDCOMTagType.PUBL, GEDCOMTag.Create), value);
         }
 
         public void SetTextArray(params string[] value)
         {
-            SetTagStrings(TagClass("TEXT", GEDCOMTag.Create), value);
+            SetTagStrings(TagClass(GEDCOMTagType.TEXT, GEDCOMTag.Create), value);
         }
 
 

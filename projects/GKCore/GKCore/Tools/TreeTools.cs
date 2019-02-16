@@ -439,16 +439,14 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRecord_Multimedia(GEDCOMMultimediaRecord mmRec,
-                                                   GEDCOMFormat format, int fileVer)
+        private static void CheckRecord_Multimedia(GEDCOMMultimediaRecord mmRec, GEDCOMFormat format, int fileVer)
         {
             for (int i = 0; i < mmRec.FileReferences.Count; i++) {
                 GEDCOMFileReferenceWithTitle fileRef = mmRec.FileReferences[i];
 
                 GEDCOMMultimediaFormat mmFormat = fileRef.MultimediaFormat;
                 if (mmFormat == GEDCOMMultimediaFormat.mfUnknown || mmFormat == GEDCOMMultimediaFormat.mfNone) {
-                    // tag "FORM" can be corrupted or GEDCOMCore in past not recognize format
-                    // attempt recovery
+                    // tag 'FORM' can be corrupted or GEDCOMCore in past not recognize format attempt recovery
                     fileRef.MultimediaFormat = GEDCOMFileReference.RecognizeFormat(fileRef.StringValue);
                 }
 

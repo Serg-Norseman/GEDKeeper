@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -53,7 +53,7 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
 
             GEDCOMMultimediaRecord mmRec = fBase.Context.Tree.CreateMultimedia();
-            mmRec.AddTag("FILE", "", null);
+            mmRec.AddTag(GEDCOMTagType.FILE, "", null);
             fileRef = mmRec.FileReferences[0];
             fileRef.Title = "File Title 2";
             fileRef.LinkFile("shaytan_plant.jpg");
@@ -158,7 +158,7 @@ namespace GKUI.Forms
             Assert.IsTrue(File.Exists(targetName));
 
             GEDCOMMultimediaRecord mmRecV = fBase.Context.Tree.CreateMultimedia();
-            mmRecV.AddTag("FILE", "", null);
+            mmRecV.AddTag(GEDCOMTagType.FILE, "", null);
             var fileRefV = mmRecV.FileReferences[0];
             fileRefV.Title = "File Title 2";
             fileRefV.LinkFile(targetName);

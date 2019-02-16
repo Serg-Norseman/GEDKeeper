@@ -22,19 +22,31 @@ namespace GKCommon.GEDCOM
 {
     public static class GEDCOMTagType
     {
+        public const string ABBR = "ABBR";
+        public const string ADDR = "ADDR";
         public const string ADR1 = "ADR1";
         public const string ADR2 = "ADR2";
         public const string ADR3 = "ADR3";
         public const string AFN = "AFN"; // AncestralFileNumber
         public const string AGNC = "AGNC";
         public const string ALIA = "ALIA";
+        public const string ANCI = "ANCI";
         public const string ASSO = "ASSO";
+        public const string AUTH = "AUTH";
         public const string CHAN = "CHAN";
+        public const string CHIL = "CHIL";
         public const string CITY = "CITY";
         public const string CTRY = "CTRY";
         public const string DATA = "DATA";
+        public const string DESI = "DESI";
         public const string EVEN = "EVEN";
+        public const string FAM = "FAM";
         public const string FAMC = "FAMC";
+        public const string FAMS = "FAMS";
+        public const string FILE = "FILE";
+        public const string FORM = "FORM";
+        public const string HEAD = "HEAD";
+        public const string HUSB = "HUSB";
         public const string INDI = "INDI"; // IndividualRecord
         public const string LANG = "LANG";
         public const string LATI = "LATI";
@@ -46,6 +58,7 @@ namespace GKCommon.GEDCOM
         public const string PEDI = "PEDI";
         public const string PLAC = "PLAC";
         public const string POST = "POST";
+        public const string PUBL = "PUBL";
         public const string QUAY = "QUAY";
         public const string REFN = "REFN";
         public const string RELA = "RELA";
@@ -53,18 +66,32 @@ namespace GKCommon.GEDCOM
         public const string RESN = "RESN"; // Restriction
         public const string RFN = "RFN"; // PermanentRecordFileNumber
         public const string RIN = "RIN"; // AutomatedRecordID
+        public const string SEX = "SEX";
         public const string SOUR = "SOUR";
         public const string STAE = "STAE";
+        public const string SUBM = "SUBM";
+        public const string SUBN = "SUBN";
+        public const string TEXT = "TEXT";
+        public const string TITL = "TITL";
+        public const string TRLR = "TRLR";
+        public const string WIFE = "WIFE";
 
         // non-standard extended tags (other applications)
-        public const string UID = "_UID"; // 
+        public const string _LOC = "_LOC"; // 
+        public const string _UID = "_UID"; // 
+        public const string _POSITION = "_POSITION";
+        public const string _PRIM = "_PRIM"; // PhpGedView, AQ3, PAF5, FO7
+        public const string _PRIM_CUTOUT = "_PRIM_CUTOUT"; // FTB
 
         // non-standard extended tags (GEDKeeper)
-        public const string BOOKMARK = "_BOOKMARK";
-        public const string FOLDER = "_FOLDER";
-        public const string GROUP = "_GROUP";
-        public const string MEMBER = "_MEMBER";
-        public const string PATRIARCH = "_PATRIARCH";
+        public const string _BOOKMARK = "_BOOKMARK";
+        public const string _COMM = "_COMM";
+        public const string _FOLDER = "_FOLDER";
+        public const string _GROUP = "_GROUP";
+        public const string _MEMBER = "_MEMBER";
+        public const string _PATRIARCH = "_PATRIARCH";
+        public const string _RESEARCH = "_RESEARCH";
+        public const string _TASK = "_TASK";
     }
 
     public enum GEDCOMRecordType

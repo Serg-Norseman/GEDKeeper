@@ -70,8 +70,8 @@ namespace GKCommon.GEDCOM
 
         public string UID
         {
-            get { return GetTagStringValue(GEDCOMTagType.UID); }
-            set { SetTagStringValue(GEDCOMTagType.UID, value); }
+            get { return GetTagStringValue(GEDCOMTagType._UID); }
+            set { SetTagStringValue(GEDCOMTagType._UID, value); }
         }
 
         public GEDCOMList<GEDCOMUserReference> UserReferences
@@ -379,7 +379,7 @@ namespace GKCommon.GEDCOM
 
         public string GetFolder()
         {
-            var folderTag = FindTag(GEDCOMTagType.FOLDER, 0);
+            var folderTag = FindTag(GEDCOMTagType._FOLDER, 0);
             return (folderTag == null) ? "" : folderTag.StringValue;
         }
 
@@ -389,16 +389,16 @@ namespace GKCommon.GEDCOM
                 return;
             }
 
-            var folderTag = FindTag(GEDCOMTagType.FOLDER, 0);
+            var folderTag = FindTag(GEDCOMTagType._FOLDER, 0);
             if (!string.IsNullOrEmpty(value)) {
                 if (folderTag == null) {
-                    AddTag(GEDCOMTagType.FOLDER, value, null);
+                    AddTag(GEDCOMTagType._FOLDER, value, null);
                 } else {
                     folderTag.StringValue = value;
                 }
             } else {
                 if (folderTag != null) {
-                    DeleteTag(GEDCOMTagType.FOLDER);
+                    DeleteTag(GEDCOMTagType._FOLDER);
                 }
             }
         }

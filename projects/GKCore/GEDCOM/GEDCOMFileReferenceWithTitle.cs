@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,8 +24,8 @@ namespace GKCommon.GEDCOM
     {
         public string Title
         {
-            get { return GetTagStringValue("TITL"); }
-            set { SetTagStringValue("TITL", value); }
+            get { return GetTagStringValue(GEDCOMTagType.TITL); }
+            set { SetTagStringValue(GEDCOMTagType.TITL, value); }
         }
 
         protected override string MediaTypeTagName()

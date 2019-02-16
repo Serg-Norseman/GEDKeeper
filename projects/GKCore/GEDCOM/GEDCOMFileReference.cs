@@ -26,8 +26,8 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMMultimediaFormat MultimediaFormat
         {
-            get { return GEDCOMUtils.GetMultimediaFormatVal(GetTagStringValue("FORM")); }
-            set { SetTagStringValue("FORM", GEDCOMUtils.GetMultimediaFormatStr(value)); }
+            get { return GEDCOMUtils.GetMultimediaFormatVal(GetTagStringValue(GEDCOMTagType.FORM)); }
+            set { SetTagStringValue(GEDCOMTagType.FORM, GEDCOMUtils.GetMultimediaFormatStr(value)); }
         }
 
         public GEDCOMMediaType MediaType
@@ -39,7 +39,7 @@ namespace GKCommon.GEDCOM
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {
             base.CreateObj(owner, parent);
-            SetName("FILE");
+            SetName(GEDCOMTagType.FILE);
         }
 
         protected virtual string MediaTypeTagName()

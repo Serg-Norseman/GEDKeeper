@@ -165,7 +165,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMFactory f = GEDCOMFactory.GetInstance();
 
-            f.RegisterTag("ADDR", GEDCOMAddress.Create);
+            f.RegisterTag(GEDCOMTagType.ADDR, GEDCOMAddress.Create);
             f.RegisterTag(GEDCOMTagType.CHAN, GEDCOMChangeDate.Create);
             f.RegisterTag("DATE", GEDCOMDateValue.Create);
             f.RegisterTag(GEDCOMTagType.FAMC, GEDCOMPointer.Create);
@@ -175,8 +175,8 @@ namespace GKCommon.GEDCOM
             f.RegisterTag("TIME", GEDCOMTime.Create);
 
             f.RegisterTag("_LANG", GEDCOMLanguage.Create);
-            f.RegisterTag("_LOC", GEDCOMPointer.Create);
-            f.RegisterTag("_POSITION", GEDCOMCutoutPosition.Create);
+            f.RegisterTag(GEDCOMTagType._LOC, GEDCOMPointer.Create);
+            f.RegisterTag(GEDCOMTagType._POSITION, GEDCOMCutoutPosition.Create);
         }
 
         private static string GetSignByRecord(GEDCOMRecord record)
@@ -377,12 +377,11 @@ namespace GKCommon.GEDCOM
         public GEDCOMSubmitterRecord GetSubmitter()
         {
             GEDCOMSubmitterRecord submitter = fHeader.Submitter.Value as GEDCOMSubmitterRecord;
-            if (submitter == null)
-            {
+            if (submitter == null) {
                 submitter = new GEDCOMSubmitterRecord(this, this, "", "");
                 submitter.InitNew();
                 AddRecord(submitter);
-                fHeader.SetTagStringValue("SUBM", "@" + submitter.XRef + "@");
+                fHeader.SetTagStringValue(GEDCOMTagType.SUBM, "@" + submitter.XRef + "@");
             }
             return submitter;
         }
@@ -680,17 +679,14 @@ namespace GKCommon.GEDCOM
             if (locRec == null) return false;
 
             int num = fRecords.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 var evsRec = this[i] as GEDCOMRecordWithEvents;
-                if (evsRec != null)
-                {
-                    for (int j = evsRec.Events.Count - 1; j >= 0; j--)
-                    {
+                if (evsRec != null) {
+                    for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
                         GEDCOMCustomEvent ev = evsRec.Events[j];
 
                         if (ev.Place.Location.Value == locRec) {
-                            ev.Place.DeleteTag("_LOC");
+                            ev.Place.DeleteTag(GEDCOMTagType._LOC);
                         }
                     }
                 }

@@ -81,7 +81,7 @@ namespace GKCommon.GEDCOM
         {
             base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtResearch);
-            SetName("_RESEARCH");
+            SetName(GEDCOMTagType._RESEARCH);
 
             fTasks = new GEDCOMList<GEDCOMPointer>(this);
             fCommunications = new GEDCOMList<GEDCOMPointer>(this);
@@ -111,15 +111,15 @@ namespace GKCommon.GEDCOM
             {
                 result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
             }
-            else if (tagName == "_TASK")
+            else if (tagName == GEDCOMTagType._TASK)
             {
                 result = fTasks.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
             }
-            else if (tagName == "_COMM")
+            else if (tagName == GEDCOMTagType._COMM)
             {
                 result = fCommunications.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
             }
-            else if (tagName == GEDCOMTagType.GROUP)
+            else if (tagName == GEDCOMTagType._GROUP)
             {
                 result = fGroups.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
             }
@@ -189,7 +189,7 @@ namespace GKCommon.GEDCOM
 
             if (taskRecord != null) {
                 GEDCOMPointer ptr = new GEDCOMPointer(Owner, this, "", "");
-                ptr.SetNamedValue("_TASK", taskRecord);
+                ptr.SetNamedValue(GEDCOMTagType._TASK, taskRecord);
                 fTasks.Add(ptr);
                 result = true;
             }
@@ -227,7 +227,7 @@ namespace GKCommon.GEDCOM
 
             if (groupRecord != null) {
                 GEDCOMPointer ptr = new GEDCOMPointer(Owner, this, "", "");
-                ptr.SetNamedValue(GEDCOMTagType.GROUP, groupRecord);
+                ptr.SetNamedValue(GEDCOMTagType._GROUP, groupRecord);
                 fGroups.Add(ptr);
                 result = true;
             }
@@ -265,7 +265,7 @@ namespace GKCommon.GEDCOM
 
             if (commRecord != null) {
                 GEDCOMPointer ptr = new GEDCOMPointer(Owner, this, "", "");
-                ptr.SetNamedValue("_COMM", commRecord);
+                ptr.SetNamedValue(GEDCOMTagType._COMM, commRecord);
                 fCommunications.Add(ptr);
                 result = true;
             }

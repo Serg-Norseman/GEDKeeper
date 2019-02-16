@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,7 +26,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMAddress Address
         {
-            get { return TagClass("ADDR", GEDCOMAddress.Create) as GEDCOMAddress; }
+            get { return TagClass(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress; }
         }
 
         public GEDCOMList<GEDCOMLanguage> Languages
@@ -59,7 +59,7 @@ namespace GKCommon.GEDCOM
         {
             base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtSubmitter);
-            SetName("SUBM");
+            SetName(GEDCOMTagType.SUBM);
 
             fLanguages = new GEDCOMList<GEDCOMLanguage>(this);
         }
@@ -89,7 +89,7 @@ namespace GKCommon.GEDCOM
             } else if (tagName == GEDCOMTagType.LANG) {
                 result = AddLanguage(new GEDCOMLanguage(Owner, this, tagName, tagValue));
             } else {
-                // "ADDR" defines by default
+                // 'ADDR' defines by default
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
 

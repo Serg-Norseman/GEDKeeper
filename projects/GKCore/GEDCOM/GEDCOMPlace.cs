@@ -24,13 +24,13 @@ namespace GKCommon.GEDCOM
     {
         public string Form
         {
-            get { return GetTagStringValue("FORM"); }
-            set { SetTagStringValue("FORM", value); }
+            get { return GetTagStringValue(GEDCOMTagType.FORM); }
+            set { SetTagStringValue(GEDCOMTagType.FORM, value); }
         }
 
         public GEDCOMPointer Location
         {
-            get { return TagClass("_LOC", GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return TagClass(GEDCOMTagType._LOC, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
         public GEDCOMMap Map

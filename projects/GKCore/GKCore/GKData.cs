@@ -466,7 +466,7 @@ namespace GKCore
             array6[25] = new EventStruct(LSID.LSID_Occupation, "OCCU", PersonEventKind.ekFact);
             array6[26] = new EventStruct(LSID.LSID_Caste, "CAST", PersonEventKind.ekFact);
             array6[27] = new EventStruct(LSID.LSID_Property, "PROP", PersonEventKind.ekFact);
-            array6[28] = new EventStruct(LSID.LSID_NobilityTitle, "TITL", PersonEventKind.ekFact);
+            array6[28] = new EventStruct(LSID.LSID_NobilityTitle, GEDCOMTagType.TITL, PersonEventKind.ekFact);
             array6[29] = new EventStruct(LSID.LSID_Travel, "_TRAVEL", PersonEventKind.ekFact);
             array6[30] = new EventStruct(LSID.LSID_Hobby, "_HOBBY", PersonEventKind.ekFact);
             array6[31] = new EventStruct(LSID.LSID_Award, "_AWARD", PersonEventKind.ekFact);

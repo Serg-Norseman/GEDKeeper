@@ -20,7 +20,6 @@
 
 using System;
 using System.IO;
-using BSLib;
 using BSLib.Calendar;
 
 namespace GKCommon.GEDCOM
@@ -71,22 +70,22 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMSex Sex
         {
-            get { return GEDCOMUtils.GetSexVal(GetTagStringValue("SEX")); }
-            set { SetTagStringValue("SEX", GEDCOMUtils.GetSexStr(value)); }
+            get { return GEDCOMUtils.GetSexVal(GetTagStringValue(GEDCOMTagType.SEX)); }
+            set { SetTagStringValue(GEDCOMTagType.SEX, GEDCOMUtils.GetSexStr(value)); }
         }
 
         public bool Bookmark
         {
             get {
-                return FindTag(GEDCOMTagType.BOOKMARK, 0) != null;
+                return FindTag(GEDCOMTagType._BOOKMARK, 0) != null;
             }
             set {
                 if (value) {
-                    if (FindTag(GEDCOMTagType.BOOKMARK, 0) == null) {
-                        AddTag(GEDCOMTagType.BOOKMARK, "", null);
+                    if (FindTag(GEDCOMTagType._BOOKMARK, 0) == null) {
+                        AddTag(GEDCOMTagType._BOOKMARK, "", null);
                     }
                 } else {
-                    DeleteTag(GEDCOMTagType.BOOKMARK);
+                    DeleteTag(GEDCOMTagType._BOOKMARK);
                 }
             }
         }
@@ -94,15 +93,15 @@ namespace GKCommon.GEDCOM
         public bool Patriarch
         {
             get {
-                return FindTag(GEDCOMTagType.PATRIARCH, 0) != null;
+                return FindTag(GEDCOMTagType._PATRIARCH, 0) != null;
             }
             set {
                 if (value) {
-                    if (FindTag(GEDCOMTagType.PATRIARCH, 0) == null) {
-                        AddTag(GEDCOMTagType.PATRIARCH, "", null);
+                    if (FindTag(GEDCOMTagType._PATRIARCH, 0) == null) {
+                        AddTag(GEDCOMTagType._PATRIARCH, "", null);
                     }
                 } else {
-                    DeleteTag(GEDCOMTagType.PATRIARCH);
+                    DeleteTag(GEDCOMTagType._PATRIARCH);
                 }
             }
         }
@@ -167,8 +166,7 @@ namespace GKCommon.GEDCOM
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fPersonalNames.Dispose();
                 fIndividualOrdinances.Dispose();
                 fChildToFamilyLinks.Dispose();
@@ -189,7 +187,7 @@ namespace GKCommon.GEDCOM
             fTagsFactory = f;
 
             f.RegisterTag(GEDCOMTagType.FAMC, GEDCOMChildToFamilyLink.Create);
-            f.RegisterTag("FAMS", GEDCOMSpouseToFamilyLink.Create);
+            f.RegisterTag(GEDCOMTagType.FAMS, GEDCOMSpouseToFamilyLink.Create);
             f.RegisterTag(GEDCOMTagType.ASSO, GEDCOMAssociation.Create);
             f.RegisterTag(GEDCOMTagType.ALIA, GEDCOMAlias.Create);
             
@@ -243,7 +241,7 @@ namespace GKCommon.GEDCOM
 
             f.RegisterTag("RESI", GEDCOMIndividualAttribute.Create);
             f.RegisterTag("SSN", GEDCOMIndividualAttribute.Create);
-            f.RegisterTag("TITL", GEDCOMIndividualAttribute.Create);
+            f.RegisterTag(GEDCOMTagType.TITL, GEDCOMIndividualAttribute.Create);
             f.RegisterTag("FACT", GEDCOMIndividualAttribute.Create);
             f.RegisterTag("_TRAVEL", GEDCOMIndividualAttribute.Create);
 
@@ -265,32 +263,20 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "NAME")
-            {
+            if (tagName == "NAME") {
                 result = AddPersonalName(new GEDCOMPersonalName(Owner, this, tagName, tagValue));
-            }
-            else if (tagName == "SUBM")
-            {
+            } else if (tagName == GEDCOMTagType.SUBM) {
                 result = Submittors.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
-            }
-            else if (tagName == "ANCI")
-            {
+            } else if (tagName == GEDCOMTagType.ANCI) {
                 result = AncestorsInterest.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
-            }
-            else if (tagName == "DESI")
-            {
+            } else if (tagName == GEDCOMTagType.DESI) {
                 result = DescendantsInterest.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
-            }
-            else if (tagName == GEDCOMTagType.GROUP)
-            {
+            } else if (tagName == GEDCOMTagType._GROUP) {
                 result = fGroups.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
-            }
-            else
-            {
+            } else {
                 result = fTagsFactory.CreateTag(Owner, this, tagName, tagValue);
 
-                if (result != null)
-                {
+                if (result != null) {
                     if (result is GEDCOMChildToFamilyLink) {
                         result = ChildToFamilyLinks.Add(result as GEDCOMChildToFamilyLink);
                     } else if (result is GEDCOMSpouseToFamilyLink) {
@@ -331,8 +317,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPersonalName AddPersonalName(GEDCOMPersonalName value)
         {
-            if (value != null)
-            {
+            if (value != null) {
                 value.SetLevel(Level + 1);
                 fPersonalNames.Add(value);
             }
@@ -343,22 +328,19 @@ namespace GKCommon.GEDCOM
         {
             base.Clear();
 
-            for (int i = fChildToFamilyLinks.Count - 1; i >= 0; i--)
-            {
+            for (int i = fChildToFamilyLinks.Count - 1; i >= 0; i--) {
                 GEDCOMFamilyRecord family = fChildToFamilyLinks[i].Family;
                 family.DeleteChild(this);
             }
             fChildToFamilyLinks.Clear();
 
-            for (int i = fSpouseToFamilyLinks.Count - 1; i >= 0; i--)
-            {
+            for (int i = fSpouseToFamilyLinks.Count - 1; i >= 0; i--) {
                 GEDCOMFamilyRecord family = fSpouseToFamilyLinks[i].Family;
                 family.RemoveSpouse(this);
             }
             fSpouseToFamilyLinks.Clear();
 
-            for (int i = fGroups.Count - 1; i >= 0; i--)
-            {
+            for (int i = fGroups.Count - 1; i >= 0; i--) {
                 GEDCOMGroupRecord group = (GEDCOMGroupRecord)fGroups[i].Value;
                 group.RemoveMember(this);
             }
@@ -387,8 +369,7 @@ namespace GKCommon.GEDCOM
         {
             if (groupRec != null) {
                 int num = fGroups.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     if (fGroups[i].XRef == groupRec.XRef) {
                         return i;
                     }
@@ -402,8 +383,7 @@ namespace GKCommon.GEDCOM
         {
             if (familyRec != null) {
                 int num = fSpouseToFamilyLinks.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     if (fSpouseToFamilyLinks[i].Family == familyRec) {
                         return i;
                     }
@@ -416,8 +396,7 @@ namespace GKCommon.GEDCOM
         public void DeleteSpouseToFamilyLink(GEDCOMFamilyRecord familyRec)
         {
             int num = fSpouseToFamilyLinks.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 if (fSpouseToFamilyLinks[i].Family == familyRec) {
                     fSpouseToFamilyLinks.DeleteAt(i);
                     break;
@@ -428,8 +407,7 @@ namespace GKCommon.GEDCOM
         public void DeleteChildToFamilyLink(GEDCOMFamilyRecord familyRec)
         {
             int num = fChildToFamilyLinks.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 if (fChildToFamilyLinks[i].Family == familyRec) {
                     fChildToFamilyLinks.DeleteAt(i);
                     break;
@@ -455,8 +433,7 @@ namespace GKCommon.GEDCOM
 
             base.Assign(source);
 
-            foreach (GEDCOMPersonalName srcName in sourceRec.fPersonalNames)
-            {
+            foreach (GEDCOMPersonalName srcName in sourceRec.fPersonalNames) {
                 GEDCOMPersonalName copyName = (GEDCOMPersonalName)GEDCOMPersonalName.Create(Owner, this, "", "");
                 copyName.Assign(srcName);
                 AddPersonalName(copyName);
@@ -471,8 +448,8 @@ namespace GKCommon.GEDCOM
             }
 
             if (!clearDest) {
-                DeleteTag("SEX");
-                DeleteTag(GEDCOMTagType.UID);
+                DeleteTag(GEDCOMTagType.SEX);
+                DeleteTag(GEDCOMTagType._UID);
             }
 
             base.MoveTo(targetRecord, clearDest);
