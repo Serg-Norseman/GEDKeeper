@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -92,7 +92,7 @@ namespace GKCommon.GEDCOM
             string result = strValue;
             if (!string.IsNullOrEmpty(result))
             {
-                result = GEDCOMUtils.ExtractDelimiter(result, 0);
+                result = GEDCOMUtils.ExtractDelimiter(result);
                 result = base.ParseString(result);
                 if (!IsPointer)
                 {

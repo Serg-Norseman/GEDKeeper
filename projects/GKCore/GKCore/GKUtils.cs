@@ -881,7 +881,7 @@ namespace GKCore
                         if (evt != null) {
                             var dt = evt.Date.Value as GEDCOMDate;
                             if (dt != null) {
-                                bdM = dt.GetMonthNumber();
+                                bdM = dt.Month;
                                 bdD = dt.Day;
 
                                 if (bdM != 0 && bdD != 0) {

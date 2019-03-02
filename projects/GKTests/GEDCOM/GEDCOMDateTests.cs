@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GKCommon.GEDCOM;
+using GKTests;
 using NUnit.Framework;
 
 namespace GKCommon.GEDCOM
@@ -29,6 +31,31 @@ namespace GKCommon.GEDCOM
         [Test]
         public void TestMethod()
         {
+        }
+
+        [Test]
+        public void Test_DateInterpreted()
+        {
+            DateTime dt = TestUtils.ParseDT("20.01.2013");
+
+            using (var dtx1 = new GEDCOMDateInterpreted(null, null, "", "")) {
+                Assert.IsNotNull(dtx1, "dtx1 != null");
+
+                dtx1.ParseString("INT 20 JAN 2013 (today)");
+                Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
+                Assert.AreEqual("today", dtx1.DatePhrase);
+
+                dtx1.DatePhrase = "now";
+                Assert.AreEqual("INT 20 JAN 2013 (now)", dtx1.StringValue);
+
+                dtx1.DatePhrase = "(yesterday)";
+                Assert.AreEqual("INT 20 JAN 2013 (yesterday)", dtx1.StringValue);
+
+                dtx1.ParseString("INT 20 JAN 2013 (yesterday)");
+                Assert.AreEqual("INT 20 JAN 2013 (yesterday)", dtx1.StringValue);
+
+                Assert.Throws(typeof(GEDCOMDateException), () => { dtx1.ParseString("10 JAN 2013 (today)"); });
+            }
         }
 
         [Test]

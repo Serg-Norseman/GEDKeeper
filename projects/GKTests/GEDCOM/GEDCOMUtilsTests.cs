@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -69,11 +69,69 @@ namespace GKCommon.GEDCOM
         public void Test_ExtractDelimiter()
         {
             string res;
-            res = GEDCOMUtils.ExtractDelimiter(" 12345 efgh", 0);
+            res = GEDCOMUtils.ExtractDelimiter(null);
+            Assert.AreEqual(string.Empty, res);
+
+            res = GEDCOMUtils.ExtractDelimiter("");
+            Assert.AreEqual(string.Empty, res);
+
+            res = GEDCOMUtils.ExtractDelimiter(" 12345 efgh");
             Assert.AreEqual("12345 efgh", res);
 
-            res = GEDCOMUtils.ExtractDelimiter("    abrvalg", 2);
-            Assert.AreEqual("  abrvalg", res);
+            res = GEDCOMUtils.ExtractDelimiter("... abrvalg", '.');
+            Assert.AreEqual(" abrvalg", res);
+        }
+
+        [Test]
+        public void Test_ExtractExpectedIdent()
+        {
+            bool res;
+            string rem;
+
+            res = GEDCOMUtils.ExtractExpectedIdent(null, "INT", out rem, true);
+            Assert.AreEqual(false, res);
+            Assert.AreEqual(string.Empty, rem);
+
+            res = GEDCOMUtils.ExtractExpectedIdent("", "INT", out rem, true);
+            Assert.AreEqual(false, res);
+            Assert.AreEqual(string.Empty, rem);
+
+            res = GEDCOMUtils.ExtractExpectedIdent("INT efgh", "INT", out rem, true);
+            Assert.AreEqual(true, res);
+            Assert.AreEqual(" efgh", rem);
+
+            res = GEDCOMUtils.ExtractExpectedIdent(" efgh", "INT", out rem, true);
+            Assert.AreEqual(false, res);
+            Assert.AreEqual(" efgh", rem);
+
+            res = GEDCOMUtils.ExtractExpectedIdent("INT", "INT", out rem, true);
+            Assert.AreEqual(true, res);
+            Assert.AreEqual(string.Empty, rem);
+
+            //res = GEDCOMUtils.ExtractIdent("... abrvalg", '.');
+            //Assert.AreEqual(" abrvalg", res);
+        }
+
+        [Test]
+        public void Test_ExtractIdent2()
+        {
+            string ident, rem;
+
+            rem = GEDCOMUtils.ExtractIdent(null, out ident, true);
+            Assert.AreEqual(string.Empty, ident);
+            Assert.AreEqual(string.Empty, rem);
+
+            rem = GEDCOMUtils.ExtractIdent("INT efgh", out ident, true);
+            Assert.AreEqual("INT", ident);
+            Assert.AreEqual(" efgh", rem);
+
+            rem = GEDCOMUtils.ExtractIdent(" efgh", out ident, true);
+            Assert.AreEqual(string.Empty, ident);
+            Assert.AreEqual(" efgh", rem);
+
+            rem = GEDCOMUtils.ExtractIdent("INT", out ident, true);
+            Assert.AreEqual("INT", ident);
+            Assert.AreEqual(string.Empty, rem);
         }
 
         [Test]

@@ -113,6 +113,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GEDCOM\AnselEncoding.cs" />
     <Compile Include="GEDCOM\GEDCOMCutoutPosition.cs" />
+    <Compile Include="GEDCOM\GEDCOMParser.cs" />
     <Compile Include="GEDCOM\GEDCOMProvider.cs" />
     <Compile Include="GEDCOM\EGEDCOMException.cs" />
     <Compile Include="GEDCOM\GEDCOMEnums.cs" />

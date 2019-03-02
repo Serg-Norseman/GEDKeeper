@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -78,16 +77,12 @@ namespace GKCommon.GEDCOM
         protected override string GetStringValue()
         {
             string result;
-            if (fHour == 0 && fMinutes == 0 && fSeconds == 0)
-            {
+            if (fHour == 0 && fMinutes == 0 && fSeconds == 0) {
                 result = "";
-            }
-            else
-            {
+            } else {
                 result = string.Format("{0:00}:{1:00}:{2:00}", new object[] { fHour, fMinutes, fSeconds });
 
-                if (fFraction > 0)
-                {
+                if (fFraction > 0) {
                     result = result + "." + fFraction.ToString();
                 }
             }
@@ -110,46 +105,16 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
-            fHour = 0;
-            fMinutes = 0;
-            fSeconds = 0;
-            fFraction = 0;
-
-            if (!string.IsNullOrEmpty(strValue))
-            {
-                var strTok = new StringTokenizer(strValue);
-                strTok.IgnoreWhiteSpace = true;
-
-                strTok.Next(); // initialize first token
-                fHour = (byte)strTok.RequestInt();
-
-                strTok.Next();
-                strTok.RequestSymbol(':');
-
-                strTok.Next();
-                fMinutes = (byte)strTok.RequestInt();
-
-                strTok.Next();
-                var tok = strTok.CurrentToken;
-                if (tok.Kind == TokenKind.Symbol && tok.Value[0] == ':')
-                {
-                    strTok.Next();
-                    fSeconds = (byte)strTok.RequestInt();
-
-                    strTok.Next();
-                    tok = strTok.CurrentToken;
-                    if (tok.Kind == TokenKind.Symbol && tok.Value[0] == '.')
-                    {
-                        strTok.Next();
-                        fFraction = (short)strTok.RequestInt();
-                    }
-                }
-
-                strValue = strTok.GetRest();
-            }
-
-            return strValue;
+            return GEDCOMUtils.ParseTime(strValue, out fHour, out fMinutes, out fSeconds, out fFraction);
         }
+
+        /*internal void SetRawData(byte hour, byte minutes, byte seconds, short fraction)
+        {
+            fHour = hour;
+            fMinutes = minutes;
+            fSeconds = seconds;
+            fFraction = fraction;
+        }*/
 
         public GEDCOMTime(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
         {

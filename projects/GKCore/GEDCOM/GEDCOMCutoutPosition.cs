@@ -103,29 +103,7 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
-            fX1 = 0;
-            fY1 = 0;
-            fX2 = 0;
-            fY2 = 0;
-
-            string result = strValue;
-            if (!string.IsNullOrEmpty(result))
-            {
-                StringTokenizer strTok = new StringTokenizer(result);
-                strTok.IgnoreWhiteSpace = true;
-                strTok.RecognizeDecimals = false;
-
-                Token token = strTok.Next();
-                fX1 = ((token.Kind != TokenKind.Number) ? 0 : int.Parse(token.Value));
-                token = strTok.Next();
-                fY1 = ((token.Kind != TokenKind.Number) ? 0 : int.Parse(token.Value));
-                token = strTok.Next();
-                fX2 = ((token.Kind != TokenKind.Number) ? 0 : int.Parse(token.Value));
-                token = strTok.Next();
-                fY2 = ((token.Kind != TokenKind.Number) ? 0 : int.Parse(token.Value));
-            }
-
-            return result;
+            return GEDCOMUtils.ParseCutoutPosition(strValue, out fX1, out fY1, out fX2, out fY2);
         }
 
         public GEDCOMCutoutPosition(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

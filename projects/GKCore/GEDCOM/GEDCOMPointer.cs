@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,7 +31,7 @@ namespace GKCommon.GEDCOM
                 return FindRecord(XRef);
             }
             set {
-                fXRef = "";
+                fXRef = string.Empty;
                 if (value == null) return;
 
                 string xrf = value.XRef;
@@ -67,21 +67,7 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
-            fXRef = "";
-            string result = strValue;
-            result = GEDCOMUtils.ExtractDelimiter(result, 0);
-
-            if (!string.IsNullOrEmpty(result) && result[0] == '@' && result[1] != '#')
-            {
-                int pos = result.IndexOf('@', 2);
-                if (pos > 0)
-                {
-                    pos++;
-                    fXRef = result.Substring(0, pos);
-                    result = result.Remove(0, pos);
-                }
-            }
-            return result;
+            return GEDCOMUtils.ParseXRefPointer(strValue, out fXRef);
         }
 
         public override void ReplaceXRefs(XRefReplacer map)

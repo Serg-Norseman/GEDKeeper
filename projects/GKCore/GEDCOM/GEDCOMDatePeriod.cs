@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -49,28 +49,14 @@ namespace GKCommon.GEDCOM
         protected override string GetStringValue()
         {
             string result;
-
-            if (!fDateFrom.IsEmpty() && !fDateTo.IsEmpty())
-            {
+            if (!fDateFrom.IsEmpty() && !fDateTo.IsEmpty()) {
                 result = string.Concat("FROM ", fDateFrom.StringValue, " TO ", fDateTo.StringValue);
-            }
-            else
-            {
-                if (!fDateFrom.IsEmpty())
-                {
-                    result = "FROM " + fDateFrom.StringValue;
-                }
-                else
-                {
-                    if (!fDateTo.IsEmpty())
-                    {
-                        result = "TO " + fDateTo.StringValue;
-                    }
-                    else
-                    {
-                        result = "";
-                    }
-                }
+            } else if (!fDateFrom.IsEmpty()) {
+                result = "FROM " + fDateFrom.StringValue;
+            } else if (!fDateTo.IsEmpty()) {
+                result = "TO " + fDateTo.StringValue;
+            } else {
+                result = "";
             }
             return result;
         }
@@ -78,27 +64,14 @@ namespace GKCommon.GEDCOM
         public override DateTime GetDateTime()
         {
             DateTime result;
-            if (fDateFrom.IsEmpty())
-            {
+            if (fDateFrom.IsEmpty()) {
                 result = fDateTo.GetDateTime();
-            }
-            else
-            {
-                if (fDateTo.IsEmpty())
-                {
-                    result = fDateFrom.GetDateTime();
-                }
-                else
-                {
-                    if (fDateFrom.GetDateTime() == fDateTo.GetDateTime())
-                    {
-                        result = fDateFrom.GetDateTime();
-                    }
-                    else
-                    {
-                        result = new DateTime(0);
-                    }
-                }
+            } else if (fDateTo.IsEmpty()) {
+                result = fDateFrom.GetDateTime();
+            } else if (fDateFrom.GetDateTime() == fDateTo.GetDateTime()) {
+                result = fDateFrom.GetDateTime();
+            } else {
+                result = new DateTime(0);
             }
             return result;
         }
@@ -111,8 +84,7 @@ namespace GKCommon.GEDCOM
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fDateFrom.Dispose();
                 fDateTo.Dispose();
             }
@@ -131,24 +103,19 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && fDateFrom.IsEmpty() && fDateTo.IsEmpty();
         }
 
+        // Format: FROM DATE1 TO DATE2
         public override string ParseString(string strValue)
         {
-            // Format: FROM DATE1 TO DATE2
-
             string result = strValue;
-            if (!string.IsNullOrEmpty(result))
-            {
-                if (result.StartsWith("FROM"))
-                {
-                    result = result.Remove(0, 4);
-                    result = GEDCOMUtils.ExtractDelimiter(result, 0);
+            if (!string.IsNullOrEmpty(result)) {
+                if (GEDCOMUtils.ExtractExpectedIdent(result, "FROM", out result, true)) {
+                    result = GEDCOMUtils.ExtractDelimiter(result);
                     result = fDateFrom.ParseString(result);
-                    result = GEDCOMUtils.ExtractDelimiter(result, 0);
+                    result = GEDCOMUtils.ExtractDelimiter(result);
                 }
-                if (result.StartsWith("TO"))
-                {
-                    result = result.Remove(0, 2);
-                    result = GEDCOMUtils.ExtractDelimiter(result, 0);
+
+                if (GEDCOMUtils.ExtractExpectedIdent(result, "TO", out result, true)) {
+                    result = GEDCOMUtils.ExtractDelimiter(result);
                     result = fDateTo.ParseString(result);
                 }
             }
@@ -158,12 +125,10 @@ namespace GKCommon.GEDCOM
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
-            if (fDateFrom != null)
-            {
+            if (fDateFrom != null) {
                 fDateFrom.ResetOwner(newOwner);
             }
-            if (fDateTo != null)
-            {
+            if (fDateTo != null) {
                 fDateTo.ResetOwner(newOwner);
             }
         }
@@ -181,20 +146,13 @@ namespace GKCommon.GEDCOM
         {
             UDN result;
 
-            if (fDateFrom.StringValue != "" && fDateTo.StringValue == "")
-            {
+            if (fDateFrom.StringValue != "" && fDateTo.StringValue == "") {
                 result = UDN.CreateAfter(fDateFrom.GetUDN());
-            }
-            else if (fDateFrom.StringValue == "" && fDateTo.StringValue != "")
-            {
+            } else if (fDateFrom.StringValue == "" && fDateTo.StringValue != "") {
                 result = UDN.CreateBefore(fDateTo.GetUDN());
-            }
-            else if (fDateFrom.StringValue != "" && fDateTo.StringValue != "")
-            {
+            } else if (fDateFrom.StringValue != "" && fDateTo.StringValue != "") {
                 result = UDN.CreateBetween(fDateFrom.GetUDN(), fDateTo.GetUDN());
-            }
-            else
-            {
+            } else {
                 result = UDN.CreateEmpty();
             }
 
@@ -205,18 +163,13 @@ namespace GKCommon.GEDCOM
         {
             string result = "";
 
-            if (fDateFrom.StringValue != "" && fDateTo.StringValue == "")
-            {
+            if (fDateFrom.StringValue != "" && fDateTo.StringValue == "") {
                 result = fDateFrom.GetDisplayString(format, true, showCalendar);
                 if (sign) result += " >";
-            }
-            else if (fDateFrom.StringValue == "" && fDateTo.StringValue != "")
-            {
+            } else if (fDateFrom.StringValue == "" && fDateTo.StringValue != "") {
                 result = fDateTo.GetDisplayString(format, true, showCalendar);
                 if (sign) result = "< " + result;
-            }
-            else if (fDateFrom.StringValue != "" && fDateTo.StringValue != "")
-            {
+            } else if (fDateFrom.StringValue != "" && fDateTo.StringValue != "") {
                 result = fDateFrom.GetDisplayString(format, true, showCalendar) + " - " + fDateTo.GetDisplayString(format, true, showCalendar);
             }
 

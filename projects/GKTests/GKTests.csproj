@@ -99,6 +99,7 @@
     <Compile Include="GEDCOM\GEDCOMDateTests2.cs" />
     <Compile Include="GEDCOM\GEDCOMListTests.cs" />
     <Compile Include="GEDCOM\GEDCOMNoteRecordTests.cs" />
+    <Compile Include="GEDCOM\GEDCOMParserTests.cs" />
     <Compile Include="GEDCOM\GEDCOMPersonalNameTests.cs" />
     <Compile Include="GEDCOM\GEDCOMProviderTests.cs" />
     <Compile Include="GEDCOM\GEDCOMTagTests.cs" />

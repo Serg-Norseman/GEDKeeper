@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -47,7 +47,7 @@ namespace GKCommon.GEDCOM
         private GEDCOMCalendar fCalendar;
         private GEDCOMDateFormat fDateFormat;
         private byte fDay;
-        private string fMonth;
+        private byte fMonth;
         private short fYear;
         private bool fYearBC;
         private string fYearModifier;
@@ -74,7 +74,7 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public string Month
+        public byte Month
         {
             get { return fMonth; }
             set {
@@ -127,7 +127,7 @@ namespace GKCommon.GEDCOM
             fYear = UNKNOWN_YEAR;
             fYearBC = false;
             fYearModifier = "";
-            fMonth = "";
+            fMonth = 0;
             fDay = 0;
             fDateFormat = GEDCOMDateFormat.dfGEDCOMStd;
         }
@@ -140,7 +140,7 @@ namespace GKCommon.GEDCOM
             fYear = UNKNOWN_YEAR;
             fYearBC = false;
             fYearModifier = "";
-            fMonth = "";
+            fMonth = 0;
             fDay = 0;
 
             DateChanged();
@@ -148,12 +148,12 @@ namespace GKCommon.GEDCOM
 
         public bool IsValidDate()
         {
-            return (fYear > 0 && fMonth != "" && fDay > 0);
+            return (fYear > 0 && fMonth > 0 && fDay > 0);
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fYear <= 0 && fMonth == "" && fDay <= 0;
+            return base.IsEmpty() && fYear <= 0 && fMonth <= 0 && fDay <= 0;
         }
 
         public override void Assign(GEDCOMTag source)
@@ -177,10 +177,9 @@ namespace GKCommon.GEDCOM
         {
             DateTime result;
 
-            int month = GEDCOMMonthToInt(fMonth);
-            if (fYear >= 0 && month >= 1 && month <= 12 && fDay >= 1 && fDay <= 31)
-            {
-                result = new DateTime(fYear, month, fDay);
+            // FIXME: check if the calendar is gregorian
+            if (fYear >= 0 && fMonth >= 1 && fMonth <= 12 && fDay >= 1 && fDay <= 31) {
+                result = new DateTime(fYear, fMonth, fDay);
                 return result;
             }
 
@@ -195,15 +194,17 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
-            GEDCOMFormat format = GEDCOMProvider.GetGEDCOMFormat(Owner);
+            GEDCOMFormat format = (Owner == null) ? GEDCOMFormat.gf_Native : Owner.Format;
 
             fApproximated = GEDCOMApproximated.daExact;
             fCalendar = GEDCOMCalendar.dcGregorian;
             fYear = UNKNOWN_YEAR;
             fYearBC = false;
             fYearModifier = "";
-            fMonth = "";
+            fMonth = 0;
             fDay = 0;
+
+            string result = strValue;
 
             if (!string.IsNullOrEmpty(strValue))
             {
@@ -211,134 +212,18 @@ namespace GKCommon.GEDCOM
                     strValue = PrepareAhnenblattDate(strValue);
                 }
 
-                var strTok = new StringTokenizer(strValue);
-                strTok.IgnoreWhiteSpace = false;
-                strTok.Next();
-                strTok.SkipWhiteSpaces();
-
-                // extract approximated
-                var token = strTok.CurrentToken;
-                if (token.Kind == TokenKind.Word) {
-                    string su = token.Value.ToUpperInvariant();
-                    int idx = Algorithms.IndexOf(GEDCOMDateApproximatedArray, su);
-                    if (idx >= 0) {
-                        fApproximated = (GEDCOMApproximated)idx;
-                        strTok.Next();
-                        strTok.SkipWhiteSpaces();
-                    }
-                }
-
-                // extract escape
-                token = strTok.CurrentToken;
-                if (token.Kind == TokenKind.Symbol && token.Value[0] == '@')
-                {
-                    var escapeStr = token.Value;
-                    do {
-                        token = strTok.Next();
-                        escapeStr += token.Value;
-                    } while (token.Kind != TokenKind.Symbol || token.Value[0] != '@');
-                    // FIXME: check for errors
-
-                    int idx = Algorithms.IndexOf(GEDCOMDateEscapeArray, escapeStr);
-                    if (idx >= 0) {
-                        fCalendar = (GEDCOMCalendar)idx;
-                    }
-
-                    strTok.Next();
-                    strTok.SkipWhiteSpaces();
-                }
-
-                // extract day
-                token = strTok.CurrentToken;
-                if (token.Kind == TokenKind.Number && token.Value.Length <= 2) {
-                    fDay = (byte)(int)token.ValObj;
-                    token = strTok.Next();
-                }
-
-                // extract delimiter
-                if (token.Kind == TokenKind.WhiteSpace && token.Value[0] == ' ') {
-                    fDateFormat = GEDCOMDateFormat.dfGEDCOMStd;
-                    token = strTok.Next();
-                } else if (token.Kind == TokenKind.Symbol && token.Value[0] == '.') {
-                    fDateFormat = GEDCOMDateFormat.dfSystem;
-                    token = strTok.Next();
-                }
-
-                // extract month
-                string[] monthes = GetMonthNames(fCalendar);
-                if (token.Kind == TokenKind.Word) {
-                    string mth = token.Value;
-
-                    int idx = Algorithms.IndexOf(monthes, mth);
-                    if (idx >= 0) {
-                        fMonth = mth;
-                    }
-
-                    token = strTok.Next();
-                } else if (fDateFormat == GEDCOMDateFormat.dfSystem && token.Kind == TokenKind.Number) {
-                    int idx = (int)token.ValObj;
-                    fMonth = monthes[idx - 1];
-
-                    token = strTok.Next();
-                }
-
-                // extract delimiter
-                if (fDateFormat == GEDCOMDateFormat.dfSystem) {
-                    if (token.Kind == TokenKind.Symbol && token.Value[0] == '.') {
-                        token = strTok.Next();
-                    }
-                } else {
-                    if (token.Kind == TokenKind.WhiteSpace && token.Value[0] == ' ') {
-                        token = strTok.Next();
-                    }
-                }
-
-                // extract year
-                if (token.Kind == TokenKind.Number) {
-                    fYear = (short)(int)token.ValObj;
-                    token = strTok.Next();
-
-                    // extract year modifier
-                    if (token.Kind == TokenKind.Symbol && token.Value[0] == '/') {
-                        token = strTok.Next();
-                        if (token.Kind != TokenKind.Number) {
-                            // error
-                        }
-                        fYearModifier = token.Value;
-                        token = strTok.Next();
-                    }
-
-                    // extract bc/ad
-                    if (token.Kind == TokenKind.Word && token.Value[0] == 'B') {
-                        token = strTok.Next();
-                        if (token.Kind != TokenKind.Symbol || token.Value[0] != '.') {
-                            // error
-                        }
-                        token = strTok.Next();
-                        if (token.Kind != TokenKind.Word || token.Value[0] != 'C') {
-                            // error
-                        }
-                        token = strTok.Next();
-                        if (token.Kind != TokenKind.Symbol || token.Value[0] != '.') {
-                            // error
-                        }
-                        strTok.Next();
-                        fYearBC = true;
-                    }
-                }
-
-                strValue = strTok.GetRest();
+                result = GEDCOMUtils.ParseDate(strValue, out fApproximated, out fCalendar, out fYear, out fYearBC, out fYearModifier, out fMonth, out fDay, out fDateFormat);
             }
 
             DateChanged();
 
-            return strValue;
+            return result;
         }
 
         #region Private methods of parsing of the input format
 
         // FIXME
-        private static string[] GetMonthNames(GEDCOMCalendar calendar)
+        public static string[] GetMonthNames(GEDCOMCalendar calendar)
         {
             string[] monthes;
             switch (calendar)
@@ -464,69 +349,6 @@ namespace GKCommon.GEDCOM
             return (m == 0) ? string.Empty : GEDCOMMonthHebrewArray[m - 1];
         }
 
-        private static int GEDCOMMonthToInt(string st)
-        {
-            int result = 0;
-
-            if (!string.IsNullOrEmpty(st))
-            {
-                st = st.ToUpperInvariant();
-
-                for (int m = 1; m <= 12; m++)
-                {
-                    if (GEDCOMMonthArray[m - 1] == st)
-                    {
-                        result = m;
-                        break;
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        private static int GEDCOMMonthFrenchToInt(string str)
-        {
-            int result = 0;
-
-            if (str != null)
-            {
-                str = str.ToUpperInvariant();
-
-                for (int m = 1; m <= 13; m++)
-                {
-                    if (GEDCOMMonthFrenchArray[m - 1] == str)
-                    {
-                        result = m;
-                        break;
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        private static int GEDCOMMonthHebrewToInt(string str)
-        {
-            int result = 0;
-
-            if (str != null)
-            {
-                str = str.ToUpperInvariant();
-
-                for (int m = 1; m <= 13; m++)
-                {
-                    if (GEDCOMMonthHebrewArray[m - 1] == str)
-                    {
-                        result = m;
-                        break;
-                    }
-                }
-            }
-
-            return result;
-        }
-
         #endregion
 
         protected override string GetStringValue()
@@ -551,8 +373,9 @@ namespace GKCommon.GEDCOM
             }
 
             string monthStr = string.Empty;
-            if (fMonth != "") {
-                monthStr = fMonth + " ";
+            if (fMonth > 0) {
+                string[] monthes = GEDCOMDate.GetMonthNames(fCalendar);
+                monthStr = monthes[fMonth - 1] + " ";
             }
 
             string yearStr = string.Empty;
@@ -570,23 +393,25 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public int GetMonthNumber()
+        public byte GetMonthNumber(GEDCOMCalendar calendar, string strMonth)
         {
+            string su = GEDCOMUtils.InvariantTextInfo.ToUpper(strMonth);
+
             int month;
-            switch (fCalendar) {
+            switch (calendar) {
                 case GEDCOMCalendar.dcHebrew:
-                    month = GEDCOMMonthHebrewToInt(fMonth);
+                    month = Algorithms.IndexOf(GEDCOMMonthHebrewArray, su);
                     break;
 
                 case GEDCOMCalendar.dcFrench:
-                    month = GEDCOMMonthFrenchToInt(fMonth);
+                    month = Algorithms.IndexOf(GEDCOMMonthFrenchArray, su);
                     break;
 
                 default:
-                    month = GEDCOMMonthToInt(fMonth);
+                    month = Algorithms.IndexOf(GEDCOMMonthArray, su);
                     break;
             }
-            return month;
+            return (byte)(month + 1);
         }
 
         public void SetDate(GEDCOMCalendar calendar, int day, int month, int year, bool yearBC = false)
@@ -626,7 +451,7 @@ namespace GKCommon.GEDCOM
         {
             fCalendar = calendar;
             fDay = (byte)day;
-            fMonth = month;
+            fMonth = GetMonthNumber(calendar, month);
             fYear = (short)year;
             fYearModifier = yearModifier;
             fYearBC = yearBC;
@@ -726,9 +551,6 @@ namespace GKCommon.GEDCOM
         protected override void DateChanged()
         {
             int year = fYear;
-            int month = GetMonthNumber();
-            int day = fDay;
-
             if (year == UNKNOWN_YEAR) {
                 year = UDN.UnknownYear;
             } else {
@@ -736,7 +558,7 @@ namespace GKCommon.GEDCOM
             }
 
             UDNCalendarType udnCalendar = UDNCalendars[(int)fCalendar];
-            fUDN = new UDN(udnCalendar, year, month, day);
+            fUDN = new UDN(udnCalendar, year, fMonth, fDay);
         }
 
         public override UDN GetUDN()
@@ -803,7 +625,7 @@ namespace GKCommon.GEDCOM
             string result = "";
 
             int year = fYear;
-            int month = GetMonthNumber();
+            int month = fMonth;
             int day = fDay;
             bool ybc = fYearBC;
 

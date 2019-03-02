@@ -87,6 +87,7 @@ namespace GKCommon.GEDCOM
         private readonly GEDCOMList<GEDCOMRecord> fRecords;
         private readonly Dictionary<string, GEDCOMCustomRecord> fXRefIndex;
 
+        private GEDCOMFormat fFormat;
         private EventHandler fOnChange;
         private EventHandler fOnChanging;
         private ProgressEventHandler fOnProgressEvent;
@@ -94,24 +95,10 @@ namespace GKCommon.GEDCOM
         private int fUpdateCount;
 
 
-        public ProgressEventHandler OnProgress
+        public GEDCOMFormat Format
         {
-            get {
-                return fOnProgressEvent;
-            }
-            set {
-                fOnProgressEvent = value;
-            }
-        }
-
-        public int RecordsCount
-        {
-            get { return fRecords.Count; }
-        }
-
-        public GEDCOMRecord this[int index]
-        {
-            get { return fRecords[index]; }
+            get { return fFormat; }
+            internal set { fFormat = value; }
         }
 
         public GEDCOMHeader Header
@@ -122,6 +109,16 @@ namespace GKCommon.GEDCOM
         public bool IsEmpty
         {
             get { return (fRecords.Count == 0); }
+        }
+
+        public int RecordsCount
+        {
+            get { return fRecords.Count; }
+        }
+
+        public GEDCOMRecord this[int index]
+        {
+            get { return fRecords[index]; }
         }
 
         public GEDCOMState State
@@ -140,6 +137,12 @@ namespace GKCommon.GEDCOM
         {
             add { fOnChanging = value; }
             remove { if (fOnChanging == value) fOnChanging = null; }
+        }
+
+        public ProgressEventHandler OnProgress
+        {
+            get { return fOnProgressEvent; }
+            set { fOnProgressEvent = value; }
         }
 
 

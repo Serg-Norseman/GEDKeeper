@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using BSLib;
 
@@ -100,6 +101,8 @@ namespace GKCommon.GEDCOM
     /// </summary>
     public static class GEDCOMUtils
     {
+        public static readonly TextInfo InvariantTextInfo = CultureInfo.InvariantCulture.TextInfo;
+
         #region Parse functions
 
         public static string TrimLeft(string str)
@@ -131,24 +134,115 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public static string ExtractDelimiter(string str, int max)
+        public static string ExtractDelimiter(string str, char delimiter = GEDCOMProvider.GEDCOM_DELIMITER)
         {
-            string result = str;
-
-            if (result != null)
-            {
-                while (result.Length > 0 && result[0] == ' ')
-                {
-                    result = result.Remove(0, 1);
-                    if (max > 0)
-                    {
-                        max--;
-                        if (max == 0) break;
-                    }
-                }
+            if (str == null) {
+                return string.Empty;
             }
 
-            return result;
+            int strLen = str.Length;
+            int strIdx = 0;
+
+            // skip delimiters
+            while (strIdx < strLen && str[strIdx] == delimiter) strIdx++;
+
+            // check empty string
+            if (strLen - strIdx == 0) {
+                return string.Empty;
+            }
+
+            return str.Substring(strIdx, strLen - strIdx);
+        }
+
+        public static bool ExtractExpectedIdent(string str, string expectedIdent, out string remainder, bool removeIdent = true)
+        {
+            if (str == null) {
+                remainder = string.Empty;
+                return false;
+            }
+
+            int strLen = str.Length;
+            int strIdx = 0;
+
+            // check ident
+            while (strIdx < strLen && ConvertHelper.IsLetterOrDigit(str[strIdx])) strIdx++;
+
+            string ident = InvariantTextInfo.ToUpper(str.Substring(0, strIdx));
+            if (expectedIdent.Equals(ident, StringComparison.Ordinal)) {
+                if (removeIdent) {
+                    if (strLen - strIdx == 0) {
+                        remainder = string.Empty;
+                    } else {
+                        remainder = str.Substring(strIdx, strLen - strIdx);
+                    }
+                } else {
+                    remainder = str;
+                }
+                return true;
+            } else {
+                remainder = str;
+                return false;
+            }
+        }
+
+        public static int ExtractExpectedIdents(string str, string[] expectedIdents, out string remainder, bool removeIdent = true)
+        {
+            if (str == null) {
+                remainder = string.Empty;
+                return -1;
+            }
+
+            int strLen = str.Length;
+            int strIdx = 0;
+
+            // check ident
+            while (strIdx < strLen && ConvertHelper.IsLetterOrDigit(str[strIdx])) strIdx++;
+
+            string ident = InvariantTextInfo.ToUpper(str.Substring(0, strIdx));
+            int idx = Algorithms.BinarySearch<string>(expectedIdents, ident, string.CompareOrdinal);
+
+            if (idx >= 0) {
+                if (removeIdent) {
+                    if (strLen - strIdx == 0) {
+                        remainder = string.Empty;
+                    } else {
+                        remainder = str.Substring(strIdx, strLen - strIdx);
+                    }
+                } else {
+                    remainder = str;
+                }
+                return idx;
+            } else {
+                remainder = str;
+                return -1;
+            }
+        }
+
+        public static string ExtractIdent(string str, out string ident, bool removeIdent = true)
+        {
+            if (str == null) {
+                ident = string.Empty;
+                return string.Empty;
+            }
+
+            int strLen = str.Length;
+            int strIdx = 0;
+
+            // check ident
+            while (strIdx < strLen && ConvertHelper.IsLetterOrDigit(str[strIdx])) strIdx++;
+
+            ident = InvariantTextInfo.ToUpper(str.Substring(0, strIdx));
+            string remainder;
+            if (removeIdent) {
+                if (strLen - strIdx == 0) {
+                    remainder = string.Empty;
+                } else {
+                    remainder = str.Substring(strIdx, strLen - strIdx);
+                }
+            } else {
+                remainder = str;
+            }
+            return remainder;
         }
 
         public static string CleanXRef(string xref)
@@ -184,108 +278,324 @@ namespace GKCommon.GEDCOM
 
         #endregion
 
-        #region Extra fast tag parsing (x8 compared to implementation on StringTokenizer!)
+        #region Special parsing routines
 
         // Line format: <level>_<@xref@>_<tag>_<value>
         public static int ParseTag(string str, out int tagLevel, out string tagXRef, out string tagName, out string tagValue)
         {
             tagLevel = 0;
-            tagXRef = "";
-            tagName = "";
-            tagValue = "";
+            tagXRef = string.Empty;
+            tagName = string.Empty;
+            tagValue = string.Empty;
+
+            int result = 0;
+            var strTok = new GEDCOMParser(str, false);
+            strTok.SkipWhitespaces();
+
+            var token = strTok.CurrentToken; // already trimmed
+            if (token == GEDCOMToken.EOL) {
+                return -2;
+            }
+            if (token != GEDCOMToken.Number) {
+                tagValue = str;
+                return -1;
+            }
+            tagLevel = strTok.GetNumber();
+            result += 1;
+
+            token = strTok.Next();
+            if (token != GEDCOMToken.Whitespace) {
+                // syntax error
+            }
+
+            token = strTok.Next();
+            if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '@') {
+                token = strTok.Next();
+                while (token != GEDCOMToken.Symbol && strTok.GetSymbol() != '@') {
+                    tagXRef += strTok.GetWord();
+                    token = strTok.Next();
+                }
+
+                // FIXME: check for errors
+                //throw new EGEDCOMException(string.Format("The string {0} contains an unterminated XRef pointer", str));
+                //throw new EGEDCOMException(string.Format("The string {0} is expected to start with an XRef pointer", str));
+                result += 1;
+
+                token = strTok.Next();
+                strTok.SkipWhitespaces();
+            }
+
+            token = strTok.CurrentToken;
+            if (token != GEDCOMToken.Word) {
+                // syntax error
+            }
+            tagName = strTok.GetWord();
+            result += 1;
+
+            token = strTok.Next();
+            if (token == GEDCOMToken.Whitespace) {
+                tagValue = strTok.GetRest();
+                result += 1;
+            }
+
+            return result;
+        }
+
+        // XRefPtr format: ...@<xref>@...
+        public static string ParseXRefPointer(string str, out string xref)
+        {
+            xref = string.Empty;
+            if (str == null) {
+                return string.Empty;
+            }
 
             char[] strChars = str.ToCharArray();
             int strLen = strChars.Length;
 
+            // skip leading whitespaces
             int strBeg = 0;
             while (strBeg < strLen && strChars[strBeg] == ' ') strBeg++;
 
-            int partStart, partLen;
-            partStart = strBeg;
-
-            partLen = strLen - partStart;
-            if (partLen == 0) {
-                return -2;
-            } else {
-                if (!ConvertHelper.IsDigit(strChars[partStart])) {
-                    tagValue = new string(strChars, partStart, partLen);
-                    return -1;
-                }
+            // check empty string
+            if (strLen - strBeg == 0) {
+                return string.Empty;
             }
 
-            int partIdx = -1;
-            bool hasXRef = false;
-
+            int init = -1, fin = strBeg;
             for (int i = strBeg; i < strLen; i++) {
-                if (strChars[i] == GEDCOMProvider.GEDCOM_DELIMITER) {
-                    if (i > 0 && strChars[i - 1] != GEDCOMProvider.GEDCOM_DELIMITER) {
-                        partIdx += 1;
-                        partLen = i - partStart;
-
-                        switch (partIdx) {
-                            case 0:
-                                tagLevel = ConvertIntNumber(strChars, partStart, partStart + partLen, 10);
-                                break;
-
-                            case 1:
-                                hasXRef = (strChars[partStart] == GEDCOMProvider.GEDCOM_POINTER_DELIMITER);
-                                if (hasXRef) {
-                                    tagXRef = new string(strChars, partStart + 1, partLen - 2);
-                                } else {
-                                    tagName = new string(strChars, partStart, partLen);
-                                    partStart = i + 1;
-                                    partLen = strLen - partStart;
-                                    tagValue = new string(strChars, partStart, partLen);
-                                    return partIdx + 2;
-                                }
-                                break;
-
-                            case 2:
-                                tagName = new string(strChars, partStart, partLen);
-                                partStart = i + 1;
-                                partLen = strLen - partStart;
-                                tagValue = new string(strChars, partStart, partLen);
-                                return partIdx + 2;
-                        }
-                    }
-                    partStart = i + 1;
-                }
-            }
-
-            // find the last part
-            partLen = strLen - partStart;
-            partIdx += 1;
-            if (partIdx == 1 || hasXRef) {
-                tagName = new string(strChars, partStart, partLen);
-            } else {
-                tagValue = new string(strChars, partStart, partLen);
-            }
-            return partIdx + 1;
-        }
-
-        private static int ConvertIntNumber(char[] buf, int first, int last, int numBase)
-        {
-            int num = 0;
-            try {
-                while (first < last) {
-                    char c = buf[first];
-                    int b = (int)(c - '0');
-                    if (b > 9) {
-                        b -= 7;
-                        if (b > 15) {
-                            b -= 32;
-                        }
-                    }
-                    if (b >= numBase) {
+                char chr = strChars[i];
+                if (chr == GEDCOMProvider.GEDCOM_POINTER_DELIMITER) {
+                    if (init == -1) {
+                        init = i;
+                    } else {
+                        fin = i;
+                        xref = new string(strChars, init, fin + 1 - init);
+                        fin += 1;
                         break;
                     }
-                    num = num * numBase + b;
-                    first++;
+                } else if (chr == '#' && i == init + 1) {
+                    break;
                 }
             }
-            catch (OverflowException) {
+
+            return new string(strChars, fin, strLen - fin);
+        }
+
+        // Time format: hour:minutes:seconds.fraction
+        public static string ParseTime(string strValue, out byte hour, out byte minutes, out byte seconds, out short fraction)
+        {
+            hour = 0;
+            minutes = 0;
+            seconds = 0;
+            fraction = 0;
+
+            if (!string.IsNullOrEmpty(strValue)) {
+                var strTok = new GEDCOMParser(strValue, true);
+
+                hour = (byte)strTok.RequestNextInt();
+                strTok.RequestNextSymbol(':');
+                minutes = (byte)strTok.RequestNextInt();
+
+                var tok = strTok.Next();
+                if (tok == GEDCOMToken.Symbol && strTok.GetSymbol() == ':') {
+                    seconds = (byte)strTok.RequestNextInt();
+
+                    tok = strTok.Next();
+                    if (tok == GEDCOMToken.Symbol && strTok.GetSymbol() == '.') {
+                        fraction = (short)strTok.RequestNextInt();
+                    }
+                }
+
+                strValue = strTok.GetRest();
             }
-            return num;
+
+            //time.SetRawData(hour, minutes, seconds, fraction);
+
+            return strValue;
+        }
+
+        // CutoutPosition format: x1 y1 x2 y2
+        public static string ParseCutoutPosition(string strValue, out int x1, out int y1, out int x2, out int y2)
+        {
+            x1 = 0;
+            y1 = 0;
+            x2 = 0;
+            y2 = 0;
+
+            if (!string.IsNullOrEmpty(strValue)) {
+                var parser = new GEDCOMParser(strValue, true);
+                x1 = parser.RequestNextInt();
+                y1 = parser.RequestNextInt();
+                x2 = parser.RequestNextInt();
+                y2 = parser.RequestNextInt();
+            }
+            return string.Empty;
+        }
+
+        // DateValue format: INT/FROM/TO/etc..._<date>
+        public static GEDCOMCustomDate ParseDateValue(string str, GEDCOMTree owner, GEDCOMDateValue parent)
+        {
+            if (str == null) {
+                return null;
+            }
+
+            string strDateType;
+            str = ExtractDelimiter(str);
+            str = ExtractIdent(str, out strDateType, false);
+
+            int idx = Algorithms.BinarySearch<string>(GEDCOMCustomDate.GEDCOMDateTypes, strDateType, string.CompareOrdinal);
+            if (idx < 0) idx = 0;
+            var dateType = (GEDCOMDateType)idx;
+
+            GEDCOMCustomDate result;
+            switch (dateType) {
+                case GEDCOMDateType.AFT:
+                case GEDCOMDateType.BEF:
+                case GEDCOMDateType.BET:
+                    result = new GEDCOMDateRange(owner, parent, "", "");
+                    break;
+                case GEDCOMDateType.INT:
+                    result = new GEDCOMDateInterpreted(owner, parent, "", "");
+                    break;
+                case GEDCOMDateType.FROM:
+                case GEDCOMDateType.TO:
+                    result = new GEDCOMDatePeriod(owner, parent, "", "");
+                    break;
+                default:
+                    result = new GEDCOMDate(owner, parent, "", "");
+                    break;
+            }
+            return result;
+        }
+
+        public static string ParseDate(string strValue, out GEDCOMApproximated approximated, out GEDCOMCalendar calendar, 
+                                       out short year, out bool yearBC, out string yearModifier, out byte month, out byte day,
+                                       out GEDCOMDateFormat dateFormat)
+        {
+            approximated = GEDCOMApproximated.daExact;
+            calendar = GEDCOMCalendar.dcGregorian;
+            year = GEDCOMDate.UNKNOWN_YEAR;
+            yearBC = false;
+            yearModifier = "";
+            month = 0;
+            day = 0;
+            dateFormat = GEDCOMDateFormat.dfGEDCOMStd;
+
+            var strTok = new GEDCOMParser(strValue, false);
+            var token = strTok.Next();
+            strTok.SkipWhitespaces();
+
+            // extract approximated
+            if (token == GEDCOMToken.Word) {
+                string su = InvariantTextInfo.ToUpper(strTok.GetWord());
+                int idx = Algorithms.IndexOf(GEDCOMCustomDate.GEDCOMDateApproximatedArray, su);
+                if (idx >= 0) {
+                    approximated = (GEDCOMApproximated)idx;
+                    strTok.Next();
+                    strTok.SkipWhitespaces();
+                }
+            }
+
+            // extract escape
+            token = strTok.CurrentToken;
+            if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '@') {
+                var escapeBuf = new StringBuilder();
+                escapeBuf.Append(strTok.GetWord());
+                do {
+                    token = strTok.Next();
+                    escapeBuf.Append(strTok.GetWord());
+                } while (token != GEDCOMToken.Symbol || strTok.GetSymbol() != '@');
+                // FIXME: check for errors
+
+                var escapeStr = escapeBuf.ToString();
+                int idx = Algorithms.IndexOf(GEDCOMCustomDate.GEDCOMDateEscapeArray, escapeStr);
+                if (idx >= 0) {
+                    calendar = (GEDCOMCalendar)idx;
+                }
+
+                strTok.Next();
+                strTok.SkipWhitespaces();
+            }
+
+            // extract day
+            token = strTok.CurrentToken;
+            int dNum;
+            if (token == GEDCOMToken.Number && ((dNum = strTok.GetNumber()) <= 31)) {
+                day = (byte)dNum;
+                token = strTok.Next();
+            }
+
+            // extract delimiter
+            if (token == GEDCOMToken.Whitespace && strTok.GetSymbol() == ' ') {
+                dateFormat = GEDCOMDateFormat.dfGEDCOMStd;
+                token = strTok.Next();
+            } else if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '.') {
+                dateFormat = GEDCOMDateFormat.dfSystem;
+                token = strTok.Next();
+            }
+
+            // extract month
+            string[] monthes = GEDCOMDate.GetMonthNames(calendar);
+            if (token == GEDCOMToken.Word) {
+                int idx = Algorithms.IndexOf(monthes, strTok.GetWord());
+                month = (byte)(idx + 1);
+
+                token = strTok.Next();
+            } else if (dateFormat == GEDCOMDateFormat.dfSystem && token == GEDCOMToken.Number) {
+                month = (byte)strTok.GetNumber();
+
+                token = strTok.Next();
+            }
+
+            // extract delimiter
+            if (dateFormat == GEDCOMDateFormat.dfSystem) {
+                if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '.') {
+                    token = strTok.Next();
+                }
+            } else {
+                if (token == GEDCOMToken.Whitespace && strTok.GetSymbol() == ' ') {
+                    token = strTok.Next();
+                }
+            }
+
+            // extract year
+            if (token == GEDCOMToken.Number) {
+                year = (short)strTok.GetNumber();
+                token = strTok.Next();
+
+                // extract year modifier
+                if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '/') {
+                    token = strTok.Next();
+                    if (token != GEDCOMToken.Number) {
+                        // error
+                    } else {
+                        yearModifier = strTok.GetWord();
+                    }
+                    token = strTok.Next();
+                }
+
+                // extract bc/ad
+                if (token == GEDCOMToken.Word && strTok.GetWord() == "B") {
+                    token = strTok.Next();
+                    if (token != GEDCOMToken.Symbol || strTok.GetSymbol() != '.') {
+                        // error
+                    }
+                    token = strTok.Next();
+                    if (token != GEDCOMToken.Word || strTok.GetWord() != "C") {
+                        // error
+                    }
+                    token = strTok.Next();
+                    if (token != GEDCOMToken.Symbol || strTok.GetSymbol() != '.') {
+                        // error
+                    }
+                    strTok.Next();
+                    yearBC = true;
+                }
+            }
+
+            strValue = strTok.GetRest();
+
+            return strValue;
         }
 
         #endregion
@@ -1193,22 +1503,17 @@ namespace GKCommon.GEDCOM
         {
             if (string.IsNullOrEmpty(str)) return GEDCOMSex.svNone;
 
-            string su = str.Trim().ToUpperInvariant();
+            str = str.Trim().ToUpperInvariant();
             GEDCOMSex result;
 
-            switch (su) {
-                case "M":
-                    result = GEDCOMSex.svMale;
-                    break;
-                case "F":
-                    result = GEDCOMSex.svFemale;
-                    break;
-                case "U":
-                    result = GEDCOMSex.svUndetermined;
-                    break;
-                default:
-                    result = GEDCOMSex.svNone;
-                    break;
+            if (str == "M") {
+                result = GEDCOMSex.svMale;
+            } else if (str == "F") {
+                result = GEDCOMSex.svFemale;
+            } else if (str == "U") {
+                result = GEDCOMSex.svUndetermined;
+            } else {
+                result = GEDCOMSex.svNone;
             }
             
             return result;

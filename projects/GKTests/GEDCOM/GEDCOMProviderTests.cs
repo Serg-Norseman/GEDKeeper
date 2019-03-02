@@ -20,7 +20,6 @@
 
 using GKCommon.GEDCOM;
 using NUnit.Framework;
-using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -49,131 +48,147 @@ namespace GKCommon.GEDCOM
             Assert.IsNull(props);
         }
 
-        private static void ParseTag_oldST(string line, out int tagLevel, out string tagXRef, out string tagName, out string tagValue)
+        [Test]
+        public void Test_GEDCOMPointer()
         {
-            tagLevel = 0;
-            tagXRef = "";
-            tagName = "";
-            tagValue = "";
+            using (var ptr = new GEDCOMPointer(null, null, "", "")) {
+                string remainder = ptr.ParseString("  @I1111@ test");
+                Assert.AreEqual("I1111", ptr.XRef);
+                Assert.AreEqual(" test", remainder);
 
-            var strTok = new StringTokenizer(line);
-            strTok.RecognizeDecimals = false;
-            strTok.IgnoreWhiteSpace = false;
-            strTok.RecognizeIdents = true;
+                remainder = ptr.ParseString("  @#I1111@ test21");
+                Assert.AreEqual("", ptr.XRef);
+                Assert.AreEqual("@#I1111@ test21", remainder);
 
-            var token = strTok.Next(); // already trimmed
-            if (token.Kind != TokenKind.Number) {
-                // syntax error
-                throw new EGEDCOMException(string.Format("The string {0} doesn't start with a valid number", line));
+                remainder = ptr.ParseString("    test2");
+                Assert.AreEqual("", ptr.XRef);
+                Assert.AreEqual("test2", remainder);
+
+                remainder = ptr.ParseString("    ");
+                Assert.AreEqual("", ptr.XRef);
+                Assert.AreEqual("", remainder);
+
+                remainder = ptr.ParseString("");
+                Assert.AreEqual("", ptr.XRef);
+                Assert.AreEqual("", remainder);
             }
-            tagLevel = (int)token.ValObj;
-
-            token = strTok.Next();
-            if (token.Kind != TokenKind.WhiteSpace) {
-                // syntax error
-            }
-
-            token = strTok.Next();
-            if (token.Kind == TokenKind.Symbol && token.Value[0] == '@') {
-                token = strTok.Next();
-                while (token.Kind != TokenKind.Symbol && token.Value[0] != '@') {
-                    tagXRef += token.Value;
-                    token = strTok.Next();
-                }
-                // FIXME: check for errors
-                //throw new EGEDCOMException(string.Format("The string {0} contains an unterminated XRef pointer", str));
-                //throw new EGEDCOMException(string.Format("The string {0} is expected to start with an XRef pointer", str));
-
-                token = strTok.Next();
-                strTok.SkipWhiteSpaces();
-            }
-
-            token = strTok.CurrentToken;
-            if (token.Kind != TokenKind.Word && token.Kind != TokenKind.Ident) {
-                // syntax error
-            }
-            tagName = token.Value.ToUpperInvariant();
-
-            token = strTok.Next();
-            if (token.Kind == TokenKind.WhiteSpace) {
-                tagValue = strTok.GetRest();
-            }
-
-            // convert codepages
-            /*if (!string.IsNullOrEmpty(tagValue) && fEncodingState == EncodingState.esChanged) {
-                tagValue = ConvertStr(fSourceEncoding, tagValue);
-            }*/
         }
+
+        [Test]
+        public void Test_GEDCOMTime()
+        {
+            using (GEDCOMTime time = new GEDCOMTime(null, null, "TIME", "20:20:20.100"))
+            {
+                Assert.IsNotNull(time, "time != null");
+
+                Assert.AreEqual(20, time.Hour);
+                Assert.AreEqual(20, time.Minutes);
+                Assert.AreEqual(20, time.Seconds);
+                Assert.AreEqual(100, time.Fraction);
+
+                time.Fraction = 200;
+                Assert.AreEqual(200, time.Fraction);
+
+                Assert.AreEqual("20:20:20.200", time.StringValue);
+
+                time.Hour = 0;
+                time.Minutes = 0;
+                time.Seconds = 0;
+                Assert.AreEqual("", time.StringValue);
+            }
+        }
+
+        /*[Test]
+        public void Test_ParseCutoutPosition_Perf()
+        {
+            string str = "150 150 1000 1000";
+            int x1, y1, x2, y2;
+            for (int i = 0; i < 10000; i++) {
+                GEDCOMUtils.ParseCutoutPosition(str, out x1, out y1, out x2, out y2); // x4 faster!
+                GEDCOMUtils.ParseCutoutPosition_old(str, out x1, out y1, out x2, out y2);
+            }
+        }*/
 
         [Test]
         public void Test_ParseTag()
         {
             string str;
-            int tagLevel1, tagLevel2, res;
-            string tagXRef1, tagName1, tagValue1, tagXRef2, tagName2, tagValue2;
+            int tagLevel2, res2;
+            string tagXRef2, tagName2, tagValue2;
 
             str = "0 HEAD";
-            ParseTag_oldST(str, out tagLevel1, out tagXRef1, out tagName1, out tagValue1);
-            res = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
-            Assert.AreEqual(tagLevel1, tagLevel2);
-            Assert.AreEqual(tagXRef1, tagXRef2);
-            Assert.AreEqual(tagName1, tagName2);
-            Assert.AreEqual(tagValue1, tagValue2);
-            Assert.AreEqual(2, res);
+            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            Assert.AreEqual(0, tagLevel2);
+            Assert.AreEqual("", tagXRef2);
+            Assert.AreEqual("HEAD", tagName2);
+            Assert.AreEqual("", tagValue2);
+            Assert.AreEqual(2, res2);
 
             str = "0 @SUB1@ SUBM";
-            ParseTag_oldST(str, out tagLevel1, out tagXRef1, out tagName1, out tagValue1);
-            res = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
-            Assert.AreEqual(tagLevel1, tagLevel2);
-            Assert.AreEqual(tagXRef1, tagXRef2);
-            Assert.AreEqual(tagName1, tagName2);
-            Assert.AreEqual(tagValue1, tagValue2);
-            Assert.AreEqual(3, res);
+            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            Assert.AreEqual(0, tagLevel2);
+            Assert.AreEqual("SUB1", tagXRef2);
+            Assert.AreEqual("SUBM", tagName2);
+            Assert.AreEqual("", tagValue2);
+            Assert.AreEqual(3, res2);
 
             str = "0 @SUB1@ SUBM testVal";
-            res = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(0, tagLevel2);
             Assert.AreEqual("SUB1", tagXRef2);
             Assert.AreEqual("SUBM", tagName2);
             Assert.AreEqual("testVal", tagValue2);
-            Assert.AreEqual(4, res);
+            Assert.AreEqual(4, res2);
 
             str = "1 SUBM @SUB1@";
-            ParseTag_oldST(str, out tagLevel1, out tagXRef1, out tagName1, out tagValue1);
-            res = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
-            Assert.AreEqual(tagLevel1, tagLevel2);
-            Assert.AreEqual(tagXRef1, tagXRef2);
-            Assert.AreEqual(tagName1, tagName2);
-            Assert.AreEqual(tagValue1, tagValue2);
-            Assert.AreEqual(3, res);
-
-            str = "    1 SUBM @SUB1@";
-            res = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(1, tagLevel2);
             Assert.AreEqual("", tagXRef2);
             Assert.AreEqual("SUBM", tagName2);
             Assert.AreEqual("@SUB1@", tagValue2);
-            Assert.AreEqual(3, res);
+            Assert.AreEqual(3, res2);
+
+            str = "    1 SUBM @SUB1@";
+            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            Assert.AreEqual(1, tagLevel2);
+            Assert.AreEqual("", tagXRef2);
+            Assert.AreEqual("SUBM", tagName2);
+            Assert.AreEqual("@SUB1@", tagValue2);
+            Assert.AreEqual(3, res2);
 
             str = "2 DATE FROM 20 JAN 1979 TO 15 MAY 2012";
-            ParseTag_oldST(str, out tagLevel1, out tagXRef1, out tagName1, out tagValue1);
-            res = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
-            Assert.AreEqual(tagLevel1, tagLevel2);
-            Assert.AreEqual(tagXRef1, tagXRef2);
-            Assert.AreEqual(tagName1, tagName2);
-            Assert.AreEqual(tagValue1, tagValue2);
-            Assert.AreEqual(3, res);
+            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            Assert.AreEqual(2, tagLevel2);
+            Assert.AreEqual("", tagXRef2);
+            Assert.AreEqual("DATE", tagName2);
+            Assert.AreEqual("FROM 20 JAN 1979 TO 15 MAY 2012", tagValue2);
+            Assert.AreEqual(3, res2);
 
 
             str = "    test test test (FTB line with error)";
-            res = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
-            Assert.AreEqual("test test test (FTB line with error)", tagValue2);
-            Assert.AreEqual(-1, res);
+            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            Assert.AreEqual("    test test test (FTB line with error)", tagValue2);
+            Assert.AreEqual(-1, res2);
 
             str = "        ";
-            res = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            Assert.AreEqual(0, tagLevel2);
+            Assert.AreEqual("", tagXRef2);
+            Assert.AreEqual("", tagName2);
             Assert.AreEqual("", tagValue2);
-            Assert.AreEqual(-2, res);
+            Assert.AreEqual(-2, res2);
+
+            str = "";
+            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            Assert.AreEqual(-2, res2);
+        }
+
+        [Test]
+        public void Test_CtorDyn()
+        {
+            var uref = GEDCOMFactory.CreateTagEx<GEDCOMUserReference>(null, null, "", "test 12345");
+            Assert.IsNotNull(uref);
+            Assert.AreEqual("test 12345", uref.StringValue);
         }
     }
 }

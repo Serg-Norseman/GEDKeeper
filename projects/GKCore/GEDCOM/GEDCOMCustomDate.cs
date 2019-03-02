@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,8 +24,14 @@ using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
+    public enum GEDCOMDateType
+    {
+        SIMP, ABT, AFT, BEF, BET, CAL, EST, FROM, INT, TO
+    }
+
     public abstract class GEDCOMCustomDate : GEDCOMTag, IComparable, IEquatable<GEDCOMCustomDate>
     {
+        public static readonly string[] GEDCOMDateTypes;
         public static readonly string[] GEDCOMDateApproximatedArray;
         public static readonly string[] GEDCOMDateRangeArray;
         public static readonly string[] GEDCOMDateEscapeArray;
@@ -39,6 +45,8 @@ namespace GKCommon.GEDCOM
 
         static GEDCOMCustomDate()
         {
+            GEDCOMDateTypes = new string[] { "", "ABT", "AFT", "BEF", "BET", "CAL", "EST", "FROM", "INT", "TO" };
+
             GEDCOMDateApproximatedArray = new string[] { "", "ABT", "CAL", "EST" };
             GEDCOMDateRangeArray = new string[] { "AFT", "BEF", "BET", "AND" };
 
@@ -169,6 +177,11 @@ namespace GKCommon.GEDCOM
             UDN abs1 = GetUDN();
             UDN abs2 = other.GetUDN();
             return abs1.Equals(abs2);
+        }
+
+        internal virtual string ParseContext(GEDCOMParser context)
+        {
+            return string.Empty;
         }
 
         public static GEDCOMDate CreateApproximated(GEDCOMTree owner, GEDCOMObject parent, GEDCOMDate date, GEDCOMApproximated approximated)

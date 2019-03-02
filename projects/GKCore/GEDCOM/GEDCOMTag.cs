@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -90,7 +90,7 @@ namespace GKCommon.GEDCOM
         public string StringValue
         {
             get { return GetStringValue(); }
-            set { SetStringValue(value); }
+            set { ParseString(value); }
         }
 
         #endregion
@@ -121,7 +121,7 @@ namespace GKCommon.GEDCOM
             }
 
             if (!string.IsNullOrEmpty(tagValue)) {
-                SetStringValue(tagValue);
+                ParseString(tagValue);
             }
         }
 
@@ -212,10 +212,9 @@ namespace GKCommon.GEDCOM
             if (source == null) return;
             
             SetName(source.Name);
-            SetStringValue(source.StringValue);
+            ParseString(source.StringValue);
 
-            foreach (GEDCOMTag sourceTag in source.fTags)
-            {
+            foreach (GEDCOMTag sourceTag in source.fTags) {
                 GEDCOMTag copy = CreateCopy(sourceTag);
                 InsertTag(copy);
             }
@@ -359,11 +358,6 @@ namespace GKCommon.GEDCOM
         protected virtual string GetStringValue()
         {
             return fStringValue;
-        }
-
-        protected virtual void SetStringValue(string strValue)
-        {
-            ParseString(strValue);
         }
 
         public virtual string ParseString(string strValue)

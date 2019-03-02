@@ -18,7 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 
 namespace GKCommon.GEDCOM
 {
@@ -58,6 +61,26 @@ namespace GKCommon.GEDCOM
             }
 
             return null;
+        }
+
+        public static T CreateTagEx<T>(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+            where T : GEDCOMTag
+        {
+            ConstructorInfo ctorInfo = typeof(T).GetConstructor(new[] {
+                typeof(GEDCOMTree), typeof(GEDCOMObject), typeof(string), typeof(string)
+            });
+            DynamicMethod dm = new DynamicMethod("Create", typeof(T), new Type[] {
+                typeof(GEDCOMTree), typeof(GEDCOMObject), typeof(string), typeof(string)
+            }, typeof(T), true);
+            ILGenerator il = dm.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Ldarg_2);
+            il.Emit(OpCodes.Ldarg_3);
+            il.Emit(OpCodes.Newobj, ctorInfo);
+            il.Emit(OpCodes.Ret);
+            TagConstructor ctor = (TagConstructor)dm.CreateDelegate(typeof(TagConstructor));
+            return (T)ctor(owner, parent, tagName, tagValue);
         }
     }
 }

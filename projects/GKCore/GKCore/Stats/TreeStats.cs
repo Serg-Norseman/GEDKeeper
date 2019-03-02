@@ -310,9 +310,8 @@ namespace GKCore.Stats
                     GEDCOMCustomEvent ev = iRec.FindEvent("BIRT");
                     if (ev != null) {
                         var dtx = ev.Date.Value as GEDCOMDate;
-                        if (dtx != null) {
-                            int month = dtx.GetMonthNumber();
-                            if (month > 0) CheckVal(values, month.ToString());
+                        if (dtx != null && dtx.Month > 0) {
+                            CheckVal(values, dtx.Month.ToString());
                         }
                     }
                     break;

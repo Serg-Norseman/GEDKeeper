@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,8 +42,7 @@ namespace GKCommon.GEDCOM
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (fValue != null) fValue.Dispose();
             }
             base.Dispose(disposing);
@@ -62,12 +61,9 @@ namespace GKCommon.GEDCOM
 
         public override void SetDateTime(DateTime value)
         {
-            if (fValue != null)
-            {
+            if (fValue != null) {
                 fValue.SetDateTime(value);
-            }
-            else
-            {
+            } else {
                 fValue = new GEDCOMDate(Owner, this, "", "");
                 fValue.Date = value;
             }
@@ -87,44 +83,20 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
-            try
-            {
+            try {
                 if (fValue != null) {
                     fValue.Dispose();
                     fValue = null;
                 }
 
                 if (string.IsNullOrEmpty(strValue)) {
-                    return "";
+                    return string.Empty;
                 }
 
-                string su = strValue.Substring(0, 3).ToUpperInvariant();
-
-                if (su == GEDCOMDateApproximatedArray[1] || su == GEDCOMDateApproximatedArray[2] || su == GEDCOMDateApproximatedArray[3])
-                {
-                    fValue = new GEDCOMDate(Owner, this, "", "");
-                }
-                else if (su == "INT")
-                {
-                    fValue = new GEDCOMDateInterpreted(Owner, this, "", "");
-                }
-                else if (su == GEDCOMDateRangeArray[0] || su == GEDCOMDateRangeArray[1] || su == GEDCOMDateRangeArray[2])
-                {
-                    fValue = new GEDCOMDateRange(Owner, this, "", "");
-                }
-                else if (strValue.StartsWith("FROM", StringComparison.InvariantCulture) || strValue.StartsWith("TO", StringComparison.InvariantCulture))
-                {
-                    fValue = new GEDCOMDatePeriod(Owner, this, "", "");
-                }
-                else
-                {
-                    fValue = new GEDCOMDate(Owner, this, "", "");
-                }
+                fValue = GEDCOMUtils.ParseDateValue(strValue, Owner, this);
 
                 return fValue.ParseString(strValue);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GEDCOMDateValue.ParseString(\"" + strValue + "\"): " + ex.Message);
                 return strValue;
             }
@@ -167,8 +139,7 @@ namespace GKCommon.GEDCOM
             float match = 0.0f;
             float matches = 0.0f;
 
-            if (absVal1 != 0 && absVal2 != 0)
-            {
+            if (absVal1 != 0 && absVal2 != 0) {
                 matches += 1.0f;
                 if (Math.Abs(absVal1 - absVal2) <= matchParams.YearsInaccuracy) match += 100.0f;
             }

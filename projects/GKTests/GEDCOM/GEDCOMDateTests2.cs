@@ -112,19 +112,15 @@ namespace GKCommon.GEDCOM
         public void testGetMonth()
         {
             GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/12/1980", false);
-            string expResult = "DEC";
-            string result = instance.Month;
-            Assert.AreEqual(expResult, result);
+            Assert.AreEqual(12, instance.Month);
         }
 
         [Test]
         public void testSetMonth()
         {
-            string value = "DEC";
             GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/01/1980", false);
-            instance.Month = value;
-            string result = instance.Month;
-            Assert.AreEqual(value, result);
+            instance.Month = 12;
+            Assert.AreEqual(12, instance.Month);
         }
 
         [Test]
@@ -309,9 +305,7 @@ namespace GKCommon.GEDCOM
             string strValue = "@#DUNKNOWN@ 20 DEC 1980";
             GEDCOMDate instance = new GEDCOMDate(null, null, "", "");
             instance.SetDate(GEDCOMCalendar.dcIslamic, 0, 0, 0);
-            string expResult = "";
-            string result = instance.ParseString(strValue);
-            Assert.AreEqual(expResult, result);
+            Assert.AreEqual(string.Empty, instance.ParseString(strValue));
             Assert.AreEqual("@#DUNKNOWN@ 20 DEC 1980", instance.StringValue);
         }
 
@@ -323,14 +317,14 @@ namespace GKCommon.GEDCOM
             Assert.AreEqual("@#DJULIAN@ 01 MAR 1980", instance.StringValue);
         }
 
-        [Test]
+        /*[Test]
         public void testGetMonthNumber()
         {
             GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/12/1980", false);
             int expResult = 12;
             int result = instance.GetMonthNumber();
             Assert.AreEqual(expResult, result);
-        }
+        }*/
 
         [Test]
         public void testSetDate()

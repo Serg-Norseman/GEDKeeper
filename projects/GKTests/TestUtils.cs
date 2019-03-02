@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using GKCommon.GEDCOM;
@@ -159,6 +161,11 @@ namespace GKTests
             GEDCOMCommunicationRecord commRec = context.Tree.CreateCommunication();
             commRec.CommName = "Test communication";
             Assert.IsNotNull(commRec, "commRec != null");
+        }
+
+        public static DateTime ParseDT(string dtx)
+        {
+            return DateTime.ParseExact(dtx, "dd.MM.yyyy", CultureInfo.InvariantCulture);
         }
 
         public static string GetTempFilePath(string fileName)

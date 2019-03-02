@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -57,6 +57,7 @@ namespace GKCommon.GEDCOM
             return ("INT " + base.GetStringValue() + " " + "(" + fDatePhrase + ")");
         }
 
+        // TODO: refactor it
         private string ExtractPhrase(string str)
         {
             string result = str;
@@ -97,17 +98,18 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
+        // Format: INT DATE (phrase)
         public override string ParseString(string strValue)
         {
             string result = strValue;
             if (!string.IsNullOrEmpty(result)) {
-                result = GEDCOMUtils.ExtractDelimiter(result, 0);
-                if (result.Substring(0, 3).ToUpperInvariant() == "INT") {
-                    result = result.Remove(0, 3);
+                result = GEDCOMUtils.ExtractDelimiter(result);
+                if (!GEDCOMUtils.ExtractExpectedIdent(result, "INT", out result, true)) {
+                    throw new GEDCOMDateException(string.Format("The interpreted date '{0}' doesn't start with a valid ident", strValue));
                 }
-                result = GEDCOMUtils.ExtractDelimiter(result, 0);
+                result = GEDCOMUtils.ExtractDelimiter(result);
                 result = base.ParseString(result);
-                result = GEDCOMUtils.ExtractDelimiter(result, 0);
+                result = GEDCOMUtils.ExtractDelimiter(result);
                 result = ExtractPhrase(result);
             }
             return result;
@@ -115,6 +117,11 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMDateInterpreted(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
         {
+        }
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        {
+            return new GEDCOMDateInterpreted(owner, parent, tagName, tagValue);
         }
     }
 }

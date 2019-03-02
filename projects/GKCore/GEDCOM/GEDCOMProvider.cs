@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using BSLib;
@@ -123,10 +124,8 @@ namespace GKCommon.GEDCOM
             fEncodingState = EncodingState.esChanged;
         }
 
-        private void DefineEncoding(StreamReader reader)
+        private void DefineEncoding(StreamReader reader, GEDCOMFormat format)
         {
-            var format = GetGEDCOMFormat(fTree);
-
             GEDCOMCharacterSet charSet = fTree.Header.CharacterSet;
             switch (charSet)
             {
@@ -219,6 +218,7 @@ namespace GKCommon.GEDCOM
                 fEncodingState = EncodingState.esUnchecked;
                 long fileSize = fileStream.Length;
                 int progress = 0;
+                var invariantText = GEDCOMUtils.InvariantTextInfo;
 
                 GEDCOMCustomRecord curRecord = null;
                 GEDCOMTag curTag = null;
@@ -243,11 +243,15 @@ namespace GKCommon.GEDCOM
 
                         // line with text but not in standard tag format
                         if (lineRes == -1) {
-                            FixFTBLine(curRecord, curTag, lineNum, str);
-                            continue;
+                            if (fTree.Format == GEDCOMFormat.gf_FTB) {
+                                FixFTBLine(curRecord, curTag, lineNum, str);
+                                continue;
+                            } else {
+                                throw new EGEDCOMException(string.Format("The string {0} doesn't start with a valid number", lineNum));
+                            }
                         }
 
-                        tagName = tagName.ToUpperInvariant();
+                        tagName = invariantText.ToUpper(tagName);
                     } catch (EGEDCOMException ex) {
                         throw new EGEDCOMException("Syntax error in line " + Convert.ToString(lineNum) + ".\r" + ex.Message);
                     }
@@ -256,7 +260,9 @@ namespace GKCommon.GEDCOM
                         if (curRecord == fTree.Header && fEncodingState == EncodingState.esUnchecked) {
                             // beginning recognition of the first is not header record
                             // to check for additional versions of the code page
-                            DefineEncoding(reader);
+                            var format = GetGEDCOMFormat(fTree);
+                            fTree.Format = format;
+                            DefineEncoding(reader, format);
                         }
 
                         if (tagName == GEDCOMTagType.INDI) {

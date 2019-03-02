@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -285,16 +285,19 @@ namespace GKCore.Tools
 
         private static void CheckRecord_EventPlace(GEDCOMCustomEvent aEvent)
         {
-            GEDCOMPlace place = aEvent.Place;
-            if (place.Location.XRef != "" && place.Location.Value == null)
-            {
-                place.Location.XRef = "";
+            GEDCOMPlace place = aEvent.FindTag(GEDCOMTagType.PLAC, 0) as GEDCOMPlace;
+            if (place == null) return;
+
+            GEDCOMPointer placeLocation = place.FindTag(GEDCOMTagType._LOC, 0) as GEDCOMPointer;
+            if (placeLocation == null) return;
+
+            if (placeLocation.XRef != "" && placeLocation.Value == null) {
+                placeLocation.XRef = "";
             }
-            if (place.StringValue != "")
-            {
-                GEDCOMLocationRecord loc = place.Location.Value as GEDCOMLocationRecord;
-                if (loc != null && place.StringValue != loc.LocationName)
-                {
+
+            if (place.StringValue != "") {
+                GEDCOMLocationRecord loc = placeLocation.Value as GEDCOMLocationRecord;
+                if (loc != null && place.StringValue != loc.LocationName) {
                     place.StringValue = loc.LocationName;
                 }
             }
@@ -565,18 +568,15 @@ namespace GKCore.Tools
 
             bool result = false;
 
-            try
-            {
-                pc.ProgressInit(LangMan.LS(LSID.LSID_FormatCheck), tree.RecordsCount);
-                try
-                {
+            try {
+                pc.ProgressInit(LangMan.LS(LSID.LSID_FormatCheck), 100);
+                try {
                     GEDCOMFormat format = GEDCOMProvider.GetGEDCOMFormat(tree);
                     bool idCheck = true;
                     int fileVer;
 
                     // remove a deprecated features
-                    if (format == GEDCOMFormat.gf_Native)
-                    {
+                    if (format == GEDCOMFormat.gf_Native) {
                         GEDCOMHeader header = tree.Header;
                         GEDCOMTag tag;
 
@@ -591,34 +591,32 @@ namespace GKCore.Tools
                         fileVer = -1;
                     }
 
+                    int progress = 0;
                     int num = tree.RecordsCount;
-                    for (int i = 0; i < num; i++)
-                    {
+                    for (int i = 0; i < num; i++) {
                         GEDCOMRecord rec = tree[i];
                         CheckRecord(tree, rec, format, fileVer, baseContext);
 
-                        if (format != GEDCOMFormat.gf_Native && idCheck && rec.GetId() < 0)
-                        {
+                        if (format != GEDCOMFormat.gf_Native && idCheck && rec.GetId() < 0) {
                             idCheck = false;
                         }
 
-                        pc.ProgressStep();
+                        int newProgress = (int)Math.Min(100, ((i + 1) * 100.0f) / num);
+                        if (progress != newProgress) {
+                            progress = newProgress;
+                            pc.ProgressStep(progress);
+                        }
                     }
 
-                    if (!idCheck && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IDsCorrectNeed)))
-                    {
+                    if (!idCheck && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IDsCorrectNeed))) {
                         CorrectIds(tree, pc);
                     }
 
                     result = true;
-                }
-                finally
-                {
+                } finally {
                     pc.ProgressDone();
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeTools.CheckGEDCOMFormat(): " + ex.Message);
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
             }
