@@ -28,8 +28,14 @@ namespace GKCommon.GEDCOM
             get { return base.TagClass(GEDCOMTagType.FAMC, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
-        public GEDCOMIndividualEvent(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+
+        public GEDCOMIndividualEvent(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
+        }
+
+        public GEDCOMIndividualEvent(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)

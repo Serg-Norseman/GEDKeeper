@@ -31,40 +31,39 @@ namespace GKCommon.GEDCOM
 
         public StringList Notes
         {
-            get { return GetNotes(); }
-            set { SetNotes(value); }
-        }
-
-        private StringList GetNotes()
-        {
-            StringList notes;
-
-            if (!IsPointer)
-            {
-                notes = GetTagStrings(this);
-            }
-            else
-            {
-                GEDCOMRecord notesRecord = Value;
-                if (notesRecord is GEDCOMNoteRecord) {
-                    notes = ((notesRecord as GEDCOMNoteRecord).Note);
+            get {
+                StringList notes;
+                if (!IsPointer) {
+                    notes = GetTagStrings(this);
                 } else {
-                    notes = new StringList();
+                    GEDCOMRecord notesRecord = Value;
+                    if (notesRecord is GEDCOMNoteRecord) {
+                        notes = ((notesRecord as GEDCOMNoteRecord).Note);
+                    } else {
+                        notes = new StringList();
+                    }
                 }
+                return notes;
             }
-
-            return notes;
+            set {
+                Clear();
+                SetTagStrings(this, value);
+            }
         }
 
-        private void SetNotes(StringList value)
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
-            Clear();
-            SetTagStrings(this, value);
+            return new GEDCOMNotes(owner, parent, tagName, tagValue);
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+        public GEDCOMNotes(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
         {
-            base.CreateObj(owner, parent);
+            SetNameValue(tagName, tagValue);
+        }
+
+        public GEDCOMNotes(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        {
             SetName(GEDCOMTagType.NOTE);
         }
 
@@ -101,15 +100,6 @@ namespace GKCommon.GEDCOM
                 }
             }
             return result;
-        }
-
-        public GEDCOMNotes(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMNotes(owner, parent, tagName, tagValue);
         }
     }
 }

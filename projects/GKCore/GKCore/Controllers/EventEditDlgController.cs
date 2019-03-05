@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -160,7 +160,7 @@ namespace GKCore.Controllers
 
                 if (fEvent is GEDCOMIndividualEvent) {
                     if (GKData.PersonEvents[eventType].Kind == PersonEventKind.ekFact) {
-                        GEDCOMIndividualAttribute attr = new GEDCOMIndividualAttribute(fEvent.Owner, fEvent.Parent, "", "");
+                        GEDCOMIndividualAttribute attr = new GEDCOMIndividualAttribute(fEvent.Owner, fEvent.Parent);
                         attr.Assign(fEvent);
                         fEvent = attr;
                     }

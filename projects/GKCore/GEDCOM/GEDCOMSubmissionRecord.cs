@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -57,9 +57,9 @@ namespace GKCommon.GEDCOM
             get { return TagClass(GEDCOMTagType.SUBM, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public GEDCOMSubmissionRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtSubmission);
             SetName(GEDCOMTagType.SUBN);
         }
@@ -75,15 +75,6 @@ namespace GKCommon.GEDCOM
             }
 
             return result;
-        }
-
-        public GEDCOMSubmissionRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMSubmissionRecord(owner, parent, tagName, tagValue);
         }
     }
 }

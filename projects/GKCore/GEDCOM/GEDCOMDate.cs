@@ -113,15 +113,8 @@ namespace GKCommon.GEDCOM
             return new GEDCOMDate(owner, parent, tagName, tagValue);
         }
 
-        public GEDCOMDate(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        public GEDCOMDate(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-        }
-
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
-        {
-            base.CreateObj(owner, parent);
-            SetName("DATE");
-
             fApproximated = GEDCOMApproximated.daExact;
             fCalendar = GEDCOMCalendar.dcGregorian;
             fYear = UNKNOWN_YEAR;
@@ -130,6 +123,11 @@ namespace GKCommon.GEDCOM
             fMonth = 0;
             fDay = 0;
             fDateFormat = GEDCOMDateFormat.dfGEDCOMStd;
+        }
+
+        public GEDCOMDate(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         public override void Clear()
@@ -393,7 +391,7 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public byte GetMonthNumber(GEDCOMCalendar calendar, string strMonth)
+        private static byte GetMonthNumber(GEDCOMCalendar calendar, string strMonth)
         {
             string su = GEDCOMUtils.InvariantTextInfo.ToUpper(strMonth);
 
@@ -411,6 +409,7 @@ namespace GKCommon.GEDCOM
                     month = Algorithms.IndexOf(GEDCOMMonthArray, su);
                     break;
             }
+
             return (byte)(month + 1);
         }
 
@@ -609,7 +608,7 @@ namespace GKCommon.GEDCOM
             int month = (pm == "") ? 0 : ConvertHelper.ParseInt(pm, 0);
             int year = (py == "") ? UNKNOWN_YEAR : ConvertHelper.ParseInt(py, UNKNOWN_YEAR);
 
-            var date = new GEDCOMDate(null, null, "", "");
+            var date = new GEDCOMDate(null, null);
             date.SetDate(calendar, day, month, year);
             return date;
         }

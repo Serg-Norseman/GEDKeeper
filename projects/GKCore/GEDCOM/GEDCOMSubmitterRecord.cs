@@ -55,9 +55,9 @@ namespace GKCommon.GEDCOM
             fLanguages[index].StringValue = value;
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public GEDCOMSubmitterRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtSubmitter);
             SetName(GEDCOMTagType.SUBM);
 
@@ -117,15 +117,6 @@ namespace GKCommon.GEDCOM
         {
             base.ResetOwner(newOwner);
             fLanguages.ResetOwner(newOwner);
-        }
-
-        public GEDCOMSubmitterRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMSubmitterRecord(owner, parent, tagName, tagValue);
         }
     }
 }

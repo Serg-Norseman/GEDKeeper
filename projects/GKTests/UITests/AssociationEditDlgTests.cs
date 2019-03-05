@@ -47,7 +47,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fAssociation = new GEDCOMAssociation(fBase.Context.Tree, null, "", "");
+            fAssociation = new GEDCOMAssociation(fBase.Context.Tree, null);
 
             fDialog = new AssociationEditDlg(fBase);
             fDialog.Association = fAssociation;

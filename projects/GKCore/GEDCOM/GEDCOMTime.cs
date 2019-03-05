@@ -68,10 +68,19 @@ namespace GKCommon.GEDCOM
         }
 
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
-            base.CreateObj(owner, parent);
+            return new GEDCOMTime(owner, parent, tagName, tagValue);
+        }
+
+        public GEDCOMTime(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        {
             SetName("TIME");
+        }
+
+        public GEDCOMTime(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         protected override string GetStringValue()
@@ -115,14 +124,5 @@ namespace GKCommon.GEDCOM
             fSeconds = seconds;
             fFraction = fraction;
         }*/
-
-        public GEDCOMTime(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMTime(owner, parent, tagName, tagValue);
-        }
     }
 }

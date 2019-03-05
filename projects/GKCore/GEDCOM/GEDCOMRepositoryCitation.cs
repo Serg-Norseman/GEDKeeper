@@ -22,14 +22,14 @@ namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMRepositoryCitation : GEDCOMPointer
     {
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+        public GEDCOMRepositoryCitation(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetName(GEDCOMTagType.REPO);
         }
 
-        public GEDCOMRepositoryCitation(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        public GEDCOMRepositoryCitation(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
         {
+            SetNameValue(tagName, tagValue);
         }
     }
 }

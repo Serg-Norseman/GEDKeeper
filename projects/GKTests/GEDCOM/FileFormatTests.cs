@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,6 +29,23 @@ namespace GKCommon.GEDCOM
     [TestFixture]
     public class FileFormatTests
     {
+        [Test]
+        public void Test_Standart()
+        {
+            Assembly assembly = typeof(CoreTests).Assembly;
+            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources.TGC55CLF.GED")) {
+                using (GEDCOMTree tree = new GEDCOMTree()) {
+                    var gedcomProvider = new GEDCOMProvider(tree);
+                    gedcomProvider.LoadFromStreamExt(inStream, inStream);
+
+                    using (MemoryStream outStream = new MemoryStream()) {
+                        gedcomProvider = new GEDCOMProvider(tree);
+                        gedcomProvider.SaveToStreamExt(outStream, GEDCOMCharacterSet.csASCII);
+                    }
+                }
+            }
+        }
+
         [Test]
         public void Test_GK_UTF8()
         {

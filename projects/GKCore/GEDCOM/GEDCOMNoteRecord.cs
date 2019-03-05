@@ -31,20 +31,15 @@ namespace GKCommon.GEDCOM
             set { SetTagStrings(this, value); }
         }
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public GEDCOMNoteRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            return new GEDCOMNoteRecord(owner, parent, tagName, tagValue);
-        }
-
-        public GEDCOMNoteRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
-        {
-            base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtNote);
             SetName(GEDCOMTagType.NOTE);
+        }
+
+        public GEDCOMNoteRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         /// <summary>

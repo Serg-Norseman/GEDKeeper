@@ -158,9 +158,9 @@ namespace GKCommon.GEDCOM
             set { SetTagIntegerValue(@"FILE\_REV", value); }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public GEDCOMHeader(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetName(GEDCOMTagType.HEAD);
         }
 
@@ -179,10 +179,6 @@ namespace GKCommon.GEDCOM
             }
 
             return result;
-        }
-
-        public GEDCOMHeader(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
         }
     }
 }

@@ -47,7 +47,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fSourceCitation = new GEDCOMSourceCitation(fBase.Context.Tree, null, "", "");
+            fSourceCitation = new GEDCOMSourceCitation(fBase.Context.Tree, null);
 
             fDialog = new SourceCitEditDlg(fBase);
             fDialog.SourceCitation = fSourceCitation;

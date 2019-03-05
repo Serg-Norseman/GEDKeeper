@@ -73,9 +73,13 @@ namespace GKCommon.GEDCOM
             return new GEDCOMSpouseSealing(owner, parent, tagName, tagValue);
         }
 
-        public GEDCOMSpouseSealing(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-            : base(owner, parent, tagName, tagValue)
+        public GEDCOMSpouseSealing(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
+        }
+
+        public GEDCOMSpouseSealing(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
     }
 }

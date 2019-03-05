@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -233,9 +233,12 @@ namespace GKCore
         {
             if (persName == null) return;
 
-            GEDCOMLanguageID lang = persName.Language.Value;
-            if (lang != GEDCOMLanguageID.Unknown && !fLangsList.Contains(lang)) {
-                fLangsList.Add(lang);
+            GEDCOMLanguage lang = persName.FindTag("_LANG", 0) as GEDCOMLanguage;
+            if (lang == null) return;
+
+            GEDCOMLanguageID langId = lang.Value;
+            if (langId != GEDCOMLanguageID.Unknown && !fLangsList.Contains(langId)) {
+                fLangsList.Add(langId);
             }
         }
 
@@ -252,12 +255,12 @@ namespace GKCore
 
             if (aRec is GEDCOMIndividualRecord) {
                 if (GKUtils.GetPersonEventKindBySign(evSign) == PersonEventKind.ekEvent) {
-                    result = new GEDCOMIndividualEvent(fTree, aRec, "", "");
+                    result = new GEDCOMIndividualEvent(fTree, aRec);
                 } else {
-                    result = new GEDCOMIndividualAttribute(fTree, aRec, "", "");
+                    result = new GEDCOMIndividualAttribute(fTree, aRec);
                 }
             } else if (aRec is GEDCOMFamilyRecord) {
-                result = new GEDCOMFamilyEvent(fTree, aRec, "", "");
+                result = new GEDCOMFamilyEvent(fTree, aRec);
             } else {
                 return null;
             }
@@ -282,7 +285,7 @@ namespace GKCore
             GEDCOMIndividualRecord iRec = fTree.CreateIndividual();
             iRec.Sex = iSex;
 
-            GEDCOMPersonalName pName = iRec.AddPersonalName(new GEDCOMPersonalName(fTree, iRec, "", ""));
+            GEDCOMPersonalName pName = iRec.AddPersonalName(new GEDCOMPersonalName(fTree, iRec));
             GKUtils.SetNameParts(pName, iSurname, iName, iPatronymic);
 
             if (birthEvent) CreateEventEx(iRec, "BIRT", "", "");

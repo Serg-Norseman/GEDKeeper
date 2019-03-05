@@ -46,7 +46,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fTaskRecord = new GEDCOMTaskRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fTaskRecord = new GEDCOMTaskRecord(fBase.Context.Tree, fBase.Context.Tree);
 
             fDialog = new TaskEditDlg(fBase);
             fDialog.Task = fTaskRecord;

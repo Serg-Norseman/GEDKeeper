@@ -146,9 +146,9 @@ namespace GKCommon.GEDCOM
             get { return fGroups; }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public GEDCOMIndividualRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtIndividual);
             SetName(GEDCOMTagType.INDI);
 
@@ -266,11 +266,11 @@ namespace GKCommon.GEDCOM
             if (tagName == "NAME") {
                 result = AddPersonalName(new GEDCOMPersonalName(Owner, this, tagName, tagValue));
             } else if (tagName == GEDCOMTagType.SUBM) {
-                result = Submittors.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
+                result = fSubmittors.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
             } else if (tagName == GEDCOMTagType.ANCI) {
-                result = AncestorsInterest.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
+                result = fAncestorsInterest.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
             } else if (tagName == GEDCOMTagType.DESI) {
-                result = DescendantsInterest.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
+                result = fDescendantsInterest.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
             } else if (tagName == GEDCOMTagType._GROUP) {
                 result = fGroups.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
             } else {
@@ -278,19 +278,19 @@ namespace GKCommon.GEDCOM
 
                 if (result != null) {
                     if (result is GEDCOMChildToFamilyLink) {
-                        result = ChildToFamilyLinks.Add(result as GEDCOMChildToFamilyLink);
+                        result = fChildToFamilyLinks.Add(result as GEDCOMChildToFamilyLink);
                     } else if (result is GEDCOMSpouseToFamilyLink) {
-                        result = SpouseToFamilyLinks.Add(result as GEDCOMSpouseToFamilyLink);
+                        result = fSpouseToFamilyLinks.Add(result as GEDCOMSpouseToFamilyLink);
                     } else if (result is GEDCOMIndividualOrdinance) {
-                        result = IndividualOrdinances.Add(result as GEDCOMIndividualOrdinance);
+                        result = fIndividualOrdinances.Add(result as GEDCOMIndividualOrdinance);
                     } else if (result is GEDCOMAssociation) {
-                        result = Associations.Add(result as GEDCOMAssociation);
+                        result = fAssociations.Add(result as GEDCOMAssociation);
                     } else if (result is GEDCOMIndividualEvent) {
                         result = AddEvent(result as GEDCOMCustomEvent);
                     } else if (result is GEDCOMIndividualAttribute) {
                         result = AddEvent(result as GEDCOMCustomEvent);
                     } else if (result is GEDCOMAlias) {
-                        result = Aliases.Add(result as GEDCOMAlias);
+                        result = fAliasses.Add(result as GEDCOMAlias);
                     }
                 } else {
                     result = base.AddTag(tagName, tagValue, tagConstructor);
@@ -434,7 +434,7 @@ namespace GKCommon.GEDCOM
             base.Assign(source);
 
             foreach (GEDCOMPersonalName srcName in sourceRec.fPersonalNames) {
-                GEDCOMPersonalName copyName = (GEDCOMPersonalName)GEDCOMPersonalName.Create(Owner, this, "", "");
+                GEDCOMPersonalName copyName = new GEDCOMPersonalName(Owner, this);
                 copyName.Assign(srcName);
                 AddPersonalName(copyName);
             }
@@ -601,15 +601,6 @@ namespace GKCommon.GEDCOM
             fGroups.SaveToStream(stream);
         }
 
-        public GEDCOMIndividualRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMIndividualRecord(owner, parent, tagName, tagValue);
-        }
-
         #region Auxiliary
 
         public sealed class LifeDatesRet
@@ -768,7 +759,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMAssociation AddAssociation(string relation, GEDCOMIndividualRecord relPerson)
         {
-            GEDCOMAssociation result = new GEDCOMAssociation(Owner, this, "", "");
+            GEDCOMAssociation result = new GEDCOMAssociation(Owner, this);
             result.Relation = relation;
             result.Individual = relPerson;
             Associations.Add(result);

@@ -45,7 +45,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fFamilyRecord = new GEDCOMFamilyRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fFamilyRecord = new GEDCOMFamilyRecord(fBase.Context.Tree, fBase.Context.Tree);
 
             fDialog = new FamilyEditDlg(fBase);
             fDialog.Family = fFamilyRecord;

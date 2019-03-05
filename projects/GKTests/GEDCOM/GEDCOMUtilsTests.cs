@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Text;
 using GKCommon.GEDCOM;
 using NUnit.Framework;
@@ -132,6 +133,24 @@ namespace GKCommon.GEDCOM
             rem = GEDCOMUtils.ExtractIdent("INT", out ident, true);
             Assert.AreEqual("INT", ident);
             Assert.AreEqual(string.Empty, rem);
+        }
+
+        [Test]
+        public void Test_ParseDate()
+        {
+            string strValue = "ABT @#DJULIAN@ 01 MAR 1980/10";
+            string result;
+
+            GEDCOMApproximated approximated;
+            GEDCOMCalendar calendar;
+            short year;
+            bool yearBC;
+            string yearModifier;
+            byte month, day;
+            GEDCOMDateFormat dateFormat;
+
+            result = GEDCOMUtils.ParseDate(strValue, out approximated, out calendar, out year, out yearBC,
+                                           out yearModifier, out month, out day, out dateFormat);
         }
 
         [Test]
@@ -262,6 +281,32 @@ namespace GKCommon.GEDCOM
             Assert.AreEqual(GEDCOMRestriction.rnPrivacy, GEDCOMUtils.GetRestrictionVal(GEDCOMUtils.GetRestrictionStr(GEDCOMRestriction.rnPrivacy)));
             Assert.AreEqual(GEDCOMRestriction.rnNone, GEDCOMUtils.GetRestrictionVal(GEDCOMUtils.GetRestrictionStr(GEDCOMRestriction.rnNone)));
             Assert.AreEqual(GEDCOMRestriction.rnNone, GEDCOMUtils.GetRestrictionVal("unk"));
+        }
+
+        [Test]
+        public void Test_GEDCOMEnumLang()
+        {
+            Assert.AreEqual(GEDCOMLanguageID.Unknown, GEDCOMUtils.GetLanguageVal(GEDCOMUtils.GetLanguageStr(GEDCOMLanguageID.Unknown)));
+
+            Assert.AreEqual(GEDCOMLanguageID.AncientGreek, GEDCOMUtils.GetLanguageVal(GEDCOMUtils.GetLanguageStr(GEDCOMLanguageID.AncientGreek)));
+
+            Assert.AreEqual(GEDCOMLanguageID.Esperanto, GEDCOMUtils.GetLanguageVal(GEDCOMUtils.GetLanguageStr(GEDCOMLanguageID.Esperanto)));
+
+            Assert.AreEqual(GEDCOMLanguageID.Russian, GEDCOMUtils.GetLanguageVal(GEDCOMUtils.GetLanguageStr(GEDCOMLanguageID.Russian)));
+
+            Assert.AreEqual(GEDCOMLanguageID.Sumerian, GEDCOMUtils.GetLanguageVal(GEDCOMUtils.GetLanguageStr(GEDCOMLanguageID.Sumerian)));
+
+            Assert.AreEqual(GEDCOMLanguageID.Urdu, GEDCOMUtils.GetLanguageVal(GEDCOMUtils.GetLanguageStr(GEDCOMLanguageID.Urdu)));
+            Assert.AreEqual(GEDCOMLanguageID.Vietnamese, GEDCOMUtils.GetLanguageVal(GEDCOMUtils.GetLanguageStr(GEDCOMLanguageID.Vietnamese)));
+            Assert.AreEqual(GEDCOMLanguageID.Wendic, GEDCOMUtils.GetLanguageVal(GEDCOMUtils.GetLanguageStr(GEDCOMLanguageID.Wendic)));
+
+            Assert.AreEqual(GEDCOMLanguageID.Yiddish, GEDCOMUtils.GetLanguageVal(GEDCOMUtils.GetLanguageStr(GEDCOMLanguageID.Yiddish)));
+
+            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageID.Yiddish; lid++) {
+                string strVal = GEDCOMUtils.GetLanguageStr(lid);
+                GEDCOMLanguageID val = GEDCOMUtils.GetLanguageVal(strVal);
+                Assert.AreEqual(lid, val);
+            }
         }
 
         [Test]

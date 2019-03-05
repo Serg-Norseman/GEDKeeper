@@ -22,14 +22,14 @@ namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMAlias : GEDCOMPointer
     {
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+        public GEDCOMAlias(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetName(GEDCOMTagType.ALIA);
         }
 
-        public GEDCOMAlias(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        public GEDCOMAlias(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
         {
+            SetNameValue(tagName, tagValue);
         }
 
         public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)

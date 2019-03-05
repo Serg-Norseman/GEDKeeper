@@ -53,7 +53,6 @@ namespace GKCommon.GEDCOM
             set { fY2 = value; }
         }
 
-
         public ExtRect Value
         {
             get {
@@ -67,10 +66,20 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public GEDCOMCutoutPosition(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetName(GEDCOMTagType._POSITION);
+        }
+
+        public GEDCOMCutoutPosition(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
+        }
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        {
+            return new GEDCOMCutoutPosition(owner, parent, tagName, tagValue);
         }
 
         protected override string GetStringValue()
@@ -104,15 +113,6 @@ namespace GKCommon.GEDCOM
         public override string ParseString(string strValue)
         {
             return GEDCOMUtils.ParseCutoutPosition(strValue, out fX1, out fY1, out fX2, out fY2);
-        }
-
-        public GEDCOMCutoutPosition(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMCutoutPosition(owner, parent, tagName, tagValue);
         }
     }
 }

@@ -34,10 +34,20 @@ namespace GKCommon.GEDCOM
             get { return fValue; }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
-            base.CreateObj(owner, parent);
+            return new GEDCOMDateValue(owner, parent, tagName, tagValue);
+        }
+
+        public GEDCOMDateValue(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        {
             fValue = null;
+        }
+
+        public GEDCOMDateValue(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         protected override void Dispose(bool disposing)
@@ -64,7 +74,7 @@ namespace GKCommon.GEDCOM
             if (fValue != null) {
                 fValue.SetDateTime(value);
             } else {
-                fValue = new GEDCOMDate(Owner, this, "", "");
+                fValue = new GEDCOMDate(Owner, this);
                 fValue.Date = value;
             }
         }
@@ -106,15 +116,6 @@ namespace GKCommon.GEDCOM
         {
             base.ResetOwner(newOwner);
             if (fValue != null) fValue.ResetOwner(newOwner);
-        }
-
-        public GEDCOMDateValue(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMDateValue(owner, parent, tagName, tagValue);
         }
 
         #region Auxiliary

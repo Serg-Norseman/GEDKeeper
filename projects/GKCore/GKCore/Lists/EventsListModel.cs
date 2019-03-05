@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -114,9 +114,9 @@ namespace GKCore.Lists
                                 newEvent = evt;
                             } else {
                                 if (record is GEDCOMIndividualRecord) {
-                                    newEvent = new GEDCOMIndividualEvent(fBaseWin.Context.Tree, record, "", "");
+                                    newEvent = new GEDCOMIndividualEvent(fBaseWin.Context.Tree, record);
                                 } else {
-                                    newEvent = new GEDCOMFamilyEvent(fBaseWin.Context.Tree, record, "", "");
+                                    newEvent = new GEDCOMFamilyEvent(fBaseWin.Context.Tree, record);
                                 }
                             }
 

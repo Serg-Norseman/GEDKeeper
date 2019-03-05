@@ -52,8 +52,8 @@ namespace GKCore.Controllers
                 fView.NameType.Add(LangMan.LS(GKData.NameTypes[(int)nt]));
             }
 
-            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageEnum.LastVal; lid++) {
-                fView.Language.AddItem(GEDCOMLanguageEnum.Instance.GetStrValue(lid), lid);
+            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageID.Yiddish; lid++) {
+                fView.Language.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
             }
             fView.Language.SortItems();
         }
@@ -121,7 +121,7 @@ namespace GKCore.Controllers
             fView.Patronymic.Enabled = fView.Patronymic.Enabled && culture.HasPatronymic();
 
             GEDCOMLanguageID langID = fPersonalName.Language.Value;
-            fView.Language.Text = GEDCOMLanguageEnum.Instance.GetStrValue(langID);
+            fView.Language.Text = GEDCOMUtils.GetLanguageStr(langID);
         }
     }
 }

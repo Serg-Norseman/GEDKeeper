@@ -308,27 +308,6 @@ namespace GKCore
 
         #region Encoding
 
-        public static string EncodeUID(byte[] binaryKey)
-        {
-            StringBuilder result = new StringBuilder(36);
-            byte checkA = 0;
-            byte checkB = 0;
-
-            int num = binaryKey.Length;
-            for (int i = 0; i < num; i++)
-            {
-                byte val = binaryKey[i];
-                checkA = unchecked((byte)(checkA + (uint)val));
-                checkB = unchecked((byte)(checkB + (uint)checkA));
-                result.Append(val.ToString("X2"));
-            }
-
-            result.Append(checkA.ToString("X2"));
-            result.Append(checkB.ToString("X2"));
-
-            return result.ToString();
-        }
-
         public static string GetRectUID(int x1, int y1, int x2, int y2)
         {
             byte[] bx1 = BitConverter.GetBytes((ushort)x1);
@@ -342,7 +321,7 @@ namespace GKCore
             Buffer.BlockCopy(bx2, 0, buffer, 4, 2);
             Buffer.BlockCopy(by2, 0, buffer, 6, 2);
 
-            return GKUtils.EncodeUID(buffer);
+            return GEDCOMUtils.EncodeUID(buffer);
         }
 
         #endregion
@@ -2905,7 +2884,7 @@ namespace GKCore
 
             GEDCOMPersonalName personalName;
             if (iRec.PersonalNames.Count <= 0) {
-                personalName = iRec.AddPersonalName(new GEDCOMPersonalName(iRec.Owner, iRec, "", ""));
+                personalName = iRec.AddPersonalName(new GEDCOMPersonalName(iRec.Owner, iRec));
             } else {
                 personalName = iRec.PersonalNames[0];
             }

@@ -41,9 +41,9 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue("TYPE", GEDCOMUtils.GetCommunicationTypeStr(value)); }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public GEDCOMCommunicationRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtCommunication);
             SetName(GEDCOMTagType._COMM);
         }
@@ -61,15 +61,6 @@ namespace GKCommon.GEDCOM
             }
 
             return result;
-        }
-
-        public GEDCOMCommunicationRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMCommunicationRecord(owner, parent, tagName, tagValue);
         }
         
         #region Auxiliary

@@ -76,6 +76,7 @@ namespace GKCommon.GEDCOM
         {
             int hash;
             IGEDCOMListEnumerator<GEDCOMCustomEvent> enumer = iRec.Events.GetEnumerator();
+            enumer.Reset();
             while (enumer.MoveNext()) {
                 GEDCOMCustomEvent evt1 = enumer.Current;
                 hash = evt1.GetHashCode();

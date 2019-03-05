@@ -37,9 +37,9 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue("NAME", value); }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public GEDCOMGroupRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtGroup);
             SetName(GEDCOMTagType._GROUP);
 
@@ -108,15 +108,6 @@ namespace GKCommon.GEDCOM
             return match;
         }
 
-        public GEDCOMGroupRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMGroupRecord(owner, parent, tagName, tagValue);
-        }
-
         #region Auxiliary
 
         public int IndexOfMember(GEDCOMIndividualRecord member)
@@ -140,11 +131,11 @@ namespace GKCommon.GEDCOM
         {
             if (member == null) return false;
 
-            GEDCOMPointer ptr = new GEDCOMPointer(Owner, this, "", "");
+            GEDCOMPointer ptr = new GEDCOMPointer(Owner, this);
             ptr.SetNamedValue(GEDCOMTagType._MEMBER, member);
             fMembers.Add(ptr);
 
-            ptr = new GEDCOMPointer(Owner, member, "", "");
+            ptr = new GEDCOMPointer(Owner, member);
             ptr.SetNamedValue(GEDCOMTagType._GROUP, this);
             member.Groups.Add(ptr);
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -101,8 +101,13 @@ namespace GKCommon.GEDCOM
             fSourceCitations.SaveToStream(stream);
         }
 
-        public GEDCOMPersonalNamePieces(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        public GEDCOMPersonalNamePieces(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
+        }
+
+        public GEDCOMPersonalNamePieces(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
     }
 }

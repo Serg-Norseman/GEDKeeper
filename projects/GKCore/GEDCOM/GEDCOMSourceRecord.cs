@@ -68,9 +68,9 @@ namespace GKCommon.GEDCOM
             get { return fRepositoryCitations; }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public GEDCOMSourceRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtSource);
             SetName(GEDCOMTagType.SOUR);
 
@@ -202,16 +202,6 @@ namespace GKCommon.GEDCOM
             SetTagStrings(TagClass(GEDCOMTagType.TEXT, GEDCOMTag.Create), value);
         }
 
-
-        public GEDCOMSourceRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMSourceRecord(owner, parent, tagName, tagValue);
-        }
-
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
         {
             GEDCOMSourceRecord otherSource = tag as GEDCOMSourceRecord;
@@ -228,9 +218,9 @@ namespace GKCommon.GEDCOM
             GEDCOMRepositoryCitation cit = null;
             
             if (repRec != null) {
-                cit = new GEDCOMRepositoryCitation(Owner, this, "", "");
+                cit = new GEDCOMRepositoryCitation(Owner, this);
                 cit.Value = repRec;
-                RepositoryCitations.Add(cit);
+                fRepositoryCitations.Add(cit);
             }
             
             return cit;

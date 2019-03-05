@@ -177,21 +177,11 @@ namespace GKCore.Tools
 
         private static void ReformNote(GEDCOMTree tree, GEDCOMNotes note)
         {
-            StringList strData = new StringList();
-            try
-            {
-                strData.Text = note.Notes.Text;
+            GEDCOMNoteRecord noteRec = tree.CreateNote();
+            noteRec.Note = note.Notes;
 
-                GEDCOMNoteRecord noteRec = tree.CreateNote();
-                noteRec.Note = strData;
-
-                note.Clear();
-                note.Value = noteRec;
-            }
-            finally
-            {
-                strData.Dispose();
-            }
+            note.Clear();
+            note.Value = noteRec;
         }
 
         private static void ReformMultimediaLink(GEDCOMTree tree, GEDCOMMultimediaLink mmLink)
@@ -203,7 +193,7 @@ namespace GKCore.Tools
             for (int i = 0; i < num; i++)
             {
                 GEDCOMFileReference srcFileRef = mmLink.FileReferences[i];
-                GEDCOMFileReferenceWithTitle tgtFileRef = new GEDCOMFileReferenceWithTitle(tree, mmRec, "", "");
+                GEDCOMFileReferenceWithTitle tgtFileRef = new GEDCOMFileReferenceWithTitle(tree, mmRec);
 
                 tgtFileRef.LinkFile(srcFileRef.StringValue);
 

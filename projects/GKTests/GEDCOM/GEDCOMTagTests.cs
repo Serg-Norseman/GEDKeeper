@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,20 +27,6 @@ namespace GKCommon.GEDCOM
     [TestFixture]
     public class GEDCOMTagTests
     {
-        [Test]
-        public void Test_Method()
-        {
-            // Reminder for yourself, about the work of string.Remove()
-
-            string str = "test string";
-            Assert.IsNotNull(str);
-            Assert.AreEqual(11, str.Length);
-
-            str = str.Remove(0, str.Length);
-            Assert.IsNotNull(str);
-            Assert.AreEqual(0, str.Length);
-        }
-
         [Test]
         public void Test_SetTagStringsA()
         {

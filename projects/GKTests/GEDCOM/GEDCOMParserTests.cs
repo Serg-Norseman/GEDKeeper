@@ -23,42 +23,8 @@ using NUnit.Framework;
 
 namespace GKCommon.GEDCOM
 {
-    [TestFixture]
+    /*[TestFixture]
     public class GEDCOMParserTests
     {
-        // access to characters in an array is 3-5% faster than characters in a string
-
-        [Test]
-        public void Test_ParseDate()
-        {
-            string strValue = "ABT @#DJULIAN@ 01 MAR 1980/10";
-            string result;
-
-            GEDCOMApproximated approximated;
-            GEDCOMCalendar calendar;
-            short year;
-            bool yearBC;
-            string yearModifier;
-            byte month, day;
-            GEDCOMDateFormat dateFormat;
-
-            result = GEDCOMUtils.ParseDate(strValue, out approximated, out calendar, out year, out yearBC,
-                                           out yearModifier, out month, out day, out dateFormat);
-        }
-
-        /*[Test]
-        public void Test_ParseTimePerf()
-        {
-            string strValue = "21:17:17:245";
-            string result;
-
-            byte hour, minutes, seconds;
-            short fraction;
-
-            for (int i = 0; i < 10000; i++) {
-                result = GEDCOMUtils.ParseTimeP(strValue, out hour, out minutes, out seconds, out fraction);
-                result = GEDCOMUtils.ParseTimeX(strValue, out hour, out minutes, out seconds, out fraction);
-            }
-        }*/
-    }
+    }*/
 }

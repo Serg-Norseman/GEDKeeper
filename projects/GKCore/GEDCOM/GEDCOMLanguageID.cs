@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,41 +25,11 @@ namespace GKCommon.GEDCOM
         Unknown,
 
         Afrikaans,
+        Akkadian,       // <extinct>
         Albanian,
-        AngloSaxon,
-        Catalan,
-        CatalanSpn,
-        Czech,
-        Danish,
-        Dutch,
-        English,
-        Esperanto,
-        Estonian,
-        Faroese,
-        Finnish,
-        French,
-        German,
-        Hawaiian,
-        Hungarian,
-        Icelandic,
-        Indonesian,
-        Italian,
-        Latvian,
-        Lithuanian,
-        Navaho,
-        Norwegian,
-        Polish,
-        Portuguese,
-        Romanian,
-        SerboCroatian,
-        Slovak,
-        Slovene,
-        Spanish,
-        Swedish,
-        Turkish,
-        Wendic,
-
         Amharic,        // Ethiopia
+        AncientGreek,   // <ancient>
+        AngloSaxon,
         Arabic,
         Armenian,
         Assamese,       // Bangladesh, Bhutan, India
@@ -69,20 +39,46 @@ namespace GKCommon.GEDCOM
         Bulgarian,
         Burmese,        // Myanmar/Burma
         Cantonese,      // Chinese
+        Catalan,
+        CatalanSpn,
         ChurchSlavic,
+        Czech,
+        Danish,
         Dogri,          // India
+        Dutch,
+        Eblaite,        // <extinct>
+        English,
+        Esperanto,
+        Estonian,
+        Faroese,
+        Finnish,
+        French,
         Georgian,
+        German,
         Greek,
         Gujarati,       // India
+        Hattic,         // <extinct>
+        Hawaiian,
         Hebrew,         // Israel
         Hindi,          // India
+        Hittite,        // <extinct>
+        Hungarian,
+        Hurrian,        // <extinct>
+        Icelandic,
+        Indonesian,
+        Italian,
         Japanese,
         Kannada,        // India
+        Kazakh,
         Khmer,          // Cambodia
         Konkani,        // India
         Korean,
         Lahnda,         // Pakistan
-        Lao,
+        Lao,            // Laos, Thailand
+        Latin,          // <ancient>
+        Latvian,
+        Lithuanian,
+        Luwian,         // <extinct>
         Macedonian,
         Maithili,       // Nepal, India
         Malayalam,      // India
@@ -90,62 +86,41 @@ namespace GKCommon.GEDCOM
         Manipuri,       // India
         Marathi,        // India
         Mewari,         // India
+        MitanniAryan,   // <extinct>
+        Navaho,
         Nepali,         // Nepal
+        Norwegian,
         Oriya,          // India
         Pahari,         // Nepal, India, Pakistan
-        Palio,
+        Palaic,         // <extinct>
+        Pali,           // India
         Panjabi,        // India, Pakistan
         Persian,
+        Polish,
+        Portuguese,
         Prakrit,        // India
         Pusto,
         Rajasthani,     // India
+        Romanian,
         Russian,
         Sanskrit,
         Serb,
+        SerboCroatian,
+        Slovak,
+        Slovene,
+        Spanish,
+        Sumerian,       // <extinct>
+        Swedish,
         Tagalog,        // Philippines
         Tamil,          // India
         Telugu,         // India
         Thai,
         Tibetan,
+        Turkish,
         Ukrainian,
         Urdu,           // India, Pakistan
         Vietnamese,
+        Wendic,
         Yiddish,
-
-        // GK Extensions: additional languages
-        Kazakh,
-        // GK Extensions: ancient languages
-        AncientGreek, Latin,
-        // GK Extensions: extinct languages
-        Akkadian, Eblaite, Hattic, Hittite, Hurrian, Luwian, MitanniAryan, Palaic, Sumerian
-    }
-
-    public class GEDCOMLanguageEnum : GEDCOMEnumHelper<GEDCOMLanguageID>
-    {
-        private static readonly string[] LngEnumStr = new string[] {
-            "", "Afrikaans", "Albanian", "Anglo-Saxon", "Catalan", "Catalan_Spn", "Czech", "Danish", "Dutch", "English",
-            "Esperanto", "Estonian", "Faroese", "Finnish", "French", "German", "Hawaiian", "Hungarian", "Icelandic",
-            "Indonesian", "Italian", "Latvian", "Lithuanian", "Navaho", "Norwegian", "Polish", "Portuguese", "Romanian",
-            "Serbo_Croa", "Slovak", "Slovene", "Spanish", "Swedish", "Turkish", "Wendic",
-
-            "Amharic", "Arabic", "Armenian", "Assamese", "Belorusian", "Bengali", "Braj", "Bulgarian", "Burmese",
-            "Cantonese", "Church-Slavic", "Dogri", "Georgian", "Greek", "Gujarati", "Hebrew", "Hindi", "Japanese",
-            "Kannada", "Khmer", "Konkani", "Korean", "Lahnda", "Lao", "Macedonian", "Maithili", "Malayalam", "Mandrin",
-            "Manipuri", "Marathi", "Mewari", "Nepali", "Oriya", "Pahari", "Pali", "Panjabi", "Persian", "Prakrit", "Pusto",
-            "Rajasthani", "Russian", "Sanskrit", "Serb", "Tagalog", "Tamil", "Telugu", "Thai", "Tibetan", "Ukrainian", "Urdu",
-            "Vietnamese", "Yiddish",
-
-            "Kazakh",
-            "Ancient Greek", "Latin", 
-            "Akkadian", "Eblaite", "Hattic", "Hittite", "Hurrian", "Luwian", "Mitanni-Aryan", "Palaic", "Sumerian"
-        };
-
-        protected GEDCOMLanguageEnum() : base(LngEnumStr, GEDCOMLanguageID.Unknown, true)
-        {
-        }
-
-        public static readonly GEDCOMLanguageEnum Instance = new GEDCOMLanguageEnum();
-
-        public static readonly GEDCOMLanguageID LastVal = GEDCOMLanguageID.Sumerian;
     }
 }

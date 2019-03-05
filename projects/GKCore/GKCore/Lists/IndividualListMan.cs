@@ -737,7 +737,7 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GEDCOMPersonalName pn in iRec.PersonalNames) {
-                    string lang = GEDCOMLanguageEnum.Instance.GetStrValue(pn.Language.Value);
+                    string lang = GEDCOMUtils.GetLanguageStr(pn.Language.Value);
                     fSheetList.AddItem(pn, new object[] { GKUtils.GetNameString(iRec, pn, true, false),
                                                           LangMan.LS(GKData.NameTypes[(int)pn.NameType]), lang });
                 }
@@ -763,7 +763,7 @@ namespace GKCore.Lists
                     using (var dlg = AppHost.Container.Resolve<IPersonalNameEditDlg>(fBaseWin)) {
                         bool exists = (persName != null);
                         if (!exists) {
-                            persName = new GEDCOMPersonalName(fBaseWin.Context.Tree, iRec, "", "");
+                            persName = new GEDCOMPersonalName(fBaseWin.Context.Tree, iRec);
                         }
 
                         dlg.PersonalName = persName;
@@ -1079,7 +1079,7 @@ namespace GKCore.Lists
                     using (var dlg = AppHost.Container.Resolve<IUserRefEditDlg>(fBaseWin)) {
                         bool exists = (userRef != null);
                         if (!exists) {
-                            userRef = new GEDCOMUserReference(fBaseWin.Context.Tree, iRec, "", "");
+                            userRef = new GEDCOMUserReference(fBaseWin.Context.Tree, iRec);
                         }
 
                         dlg.UserRef = userRef;

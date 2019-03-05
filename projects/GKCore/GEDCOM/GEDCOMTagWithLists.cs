@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -43,10 +43,9 @@ namespace GKCommon.GEDCOM
             get { return fMultimediaLinks; }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
-        {
-            base.CreateObj(owner, parent);
 
+        protected GEDCOMTagWithLists(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        {
             fNotes = new GEDCOMList<GEDCOMNotes>(this);
             fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
             fMultimediaLinks = new GEDCOMList<GEDCOMMultimediaLink>(this);
@@ -54,8 +53,7 @@ namespace GKCommon.GEDCOM
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fNotes.Dispose();
                 fSourceCitations.Dispose();
                 fMultimediaLinks.Dispose();
@@ -130,10 +128,6 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && fNotes.Count == 0 && fSourceCitations.Count == 0 && fMultimediaLinks.Count == 0;
         }
 
-        protected GEDCOMTagWithLists(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
         #region Auxiliary
 
         public GEDCOMNotes AddNote(GEDCOMNoteRecord noteRec)
@@ -142,7 +136,7 @@ namespace GKCommon.GEDCOM
             
             if (noteRec != null)
             {
-                note = new GEDCOMNotes(Owner, this, "", "");
+                note = new GEDCOMNotes(Owner, this);
                 note.Value = noteRec;
                 Notes.Add(note);
             }
@@ -156,7 +150,7 @@ namespace GKCommon.GEDCOM
             
             if (sourceRec != null)
             {
-                cit = new GEDCOMSourceCitation(Owner, this, "", "");
+                cit = new GEDCOMSourceCitation(Owner, this);
                 cit.Value = sourceRec;
                 cit.Page = page;
                 cit.CertaintyAssessment = quality;
@@ -172,7 +166,7 @@ namespace GKCommon.GEDCOM
 
             if (mediaRec != null)
             {
-                result = new GEDCOMMultimediaLink(Owner, this, "", "");
+                result = new GEDCOMMultimediaLink(Owner, this);
                 result.Value = mediaRec;
                 MultimediaLinks.Add(result);
             }

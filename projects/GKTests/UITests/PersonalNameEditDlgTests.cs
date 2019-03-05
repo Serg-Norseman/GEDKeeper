@@ -46,8 +46,8 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fPerson = new GEDCOMIndividualRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
-            fPersonalName = new GEDCOMPersonalName(fBase.Context.Tree, fPerson, "", "");
+            fPerson = new GEDCOMIndividualRecord(fBase.Context.Tree, fBase.Context.Tree);
+            fPersonalName = new GEDCOMPersonalName(fBase.Context.Tree, fPerson);
 
             fDialog = new PersonalNameEditDlg(fBase);
             fDialog.PersonalName = fPersonalName;

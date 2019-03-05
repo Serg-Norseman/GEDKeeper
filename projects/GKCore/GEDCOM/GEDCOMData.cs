@@ -35,12 +35,22 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.AGNC, value); }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
-            base.CreateObj(owner, parent);
+            return new GEDCOMData(owner, parent, tagName, tagValue);
+        }
+
+        public GEDCOMData(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        {
             SetName(GEDCOMTagType.DATA);
 
             fEvents = new GEDCOMList<GEDCOMEvent>(this);
+        }
+
+        public GEDCOMData(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         protected override void Dispose(bool disposing)
@@ -79,15 +89,6 @@ namespace GKCommon.GEDCOM
         {
             base.ResetOwner(newOwner);
             fEvents.ResetOwner(newOwner);
-        }
-
-        public GEDCOMData(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMData(owner, parent, tagName, tagValue);
         }
     }
 }

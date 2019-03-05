@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,10 +27,20 @@ namespace GKCommon.GEDCOM
             get { return TagClass("DATE", GEDCOMDate.Create) as GEDCOMDate; }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
-            base.CreateObj(owner, parent);
+            return new GEDCOMDateStatus(owner, parent, tagName, tagValue);
+        }
+
+        public GEDCOMDateStatus(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        {
             SetName("STAT");
+        }
+
+        public GEDCOMDateStatus(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
@@ -44,16 +54,6 @@ namespace GKCommon.GEDCOM
             }
 
             return result;
-        }
-
-        public GEDCOMDateStatus(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-            : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMDateStatus(owner, parent, tagName, tagValue);
         }
     }
 }

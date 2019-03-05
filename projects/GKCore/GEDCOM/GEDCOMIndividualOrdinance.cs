@@ -86,6 +86,21 @@ namespace GKCommon.GEDCOM
             get { return TagClass("STAT", GEDCOMDateStatus.Create) as GEDCOMDateStatus; }
         }
 
+
+        public GEDCOMIndividualOrdinance(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        {
+        }
+
+        public GEDCOMIndividualOrdinance(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
+        }
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        {
+            return new GEDCOMIndividualOrdinance(owner, parent, tagName, tagValue);
+        }
+
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
         {
             GEDCOMTag result;
@@ -98,16 +113,6 @@ namespace GKCommon.GEDCOM
             }
 
             return result;
-        }
-
-        public GEDCOMIndividualOrdinance(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-            : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMIndividualOrdinance(owner, parent, tagName, tagValue);
         }
     }
 }

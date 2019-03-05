@@ -73,11 +73,20 @@ namespace GKCommon.GEDCOM
         }
 
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
-            base.CreateObj(owner, parent);
+            return new GEDCOMMultimediaLink(owner, parent, tagName, tagValue);
+        }
+
+        public GEDCOMMultimediaLink(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        {
             SetName(GEDCOMTagType.OBJE);
             fFileReferences = new GEDCOMList<GEDCOMFileReference>(this);
+        }
+
+        public GEDCOMMultimediaLink(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         protected override string GetStringValue()
@@ -140,15 +149,6 @@ namespace GKCommon.GEDCOM
         {
             base.SaveToStream(stream);
             fFileReferences.SaveToStream(stream);
-        }
-
-        public GEDCOMMultimediaLink(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMMultimediaLink(owner, parent, tagName, tagValue);
         }
 
         #region Utilities

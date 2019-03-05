@@ -19,10 +19,6 @@
  */
 
 using System;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.Text;
 using BSLib;
 using BSLib.Calendar;
 using GKCommon.GEDCOM;
@@ -63,7 +59,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMFactory_Tests()
+        public void Test_GEDCOMFactory()
         {
             TagConstructor tagConst = TagConstructorTest;
             Assert.AreEqual(null, tagConst.Invoke(null, null, "x", "x"));
@@ -83,7 +79,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMMathes_Tests()
+        public void Test_GEDCOMMathes()
         {
             GEDCOMTree tree = new GEDCOMTree();
             Assert.IsNotNull(tree);
@@ -171,7 +167,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMData_Tests()
+        public void Test_GEDCOMData()
         {
             using (GEDCOMData data = GEDCOMData.Create(null, null, "", "") as GEDCOMData) {
                 Assert.IsNotNull(data);
@@ -195,7 +191,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMEvent_Tests()
+        public void Test_GEDCOMEvent()
         {
             using (GEDCOMEvent evt = GEDCOMEvent.Create(null, null, "", "") as GEDCOMEvent)
             {
@@ -208,7 +204,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMDateStatus_Tests()
+        public void Test_GEDCOMDateStatus()
         {
             using (GEDCOMDateStatus dateStatus = GEDCOMDateStatus.Create(null, null, "", "") as GEDCOMDateStatus)
             {
@@ -218,7 +214,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMIndividualEvent_Tests()
+        public void Test_GEDCOMIndividualEvent()
         {
             using (GEDCOMIndividualEvent iEvent = GEDCOMIndividualEvent.Create(null, null, "", "") as GEDCOMIndividualEvent)
             {
@@ -228,7 +224,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMIndividualOrdinance_Tests()
+        public void Test_GEDCOMIndividualOrdinance()
         {
             using (GEDCOMIndividualOrdinance iOrd = GEDCOMIndividualOrdinance.Create(null, null, "", "") as GEDCOMIndividualOrdinance)
             {
@@ -264,7 +260,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMSpouseSealing_Tests()
+        public void Test_GEDCOMSpouseSealing()
         {
             using (GEDCOMSpouseSealing spouseSealing = GEDCOMSpouseSealing.Create(null, null, "", "") as GEDCOMSpouseSealing)
             {
@@ -288,7 +284,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void XRefReplacer_Tests()
+        public void Test_XRefReplacer()
         {
             using (XRefReplacer replacer = new XRefReplacer())
             {
@@ -311,16 +307,13 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void UDN1_Tests()
+        public void Test_UDN()
         {
             UDN emptyUDN = UDN.CreateEmpty();
             Assert.IsTrue(emptyUDN.IsEmpty());
 
             // BIRT: "28 DEC 1990"
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
-
-            //Assert.AreEqual(EmptyUDN, GEDCOMUtils.GetUDN(null));
-            //Assert.AreEqual(EmptyUDN, GEDCOMUtils.GetUDN("0102"));
 
             UDN testUDN = iRec.GetUDN("BIRT");
             Assert.AreEqual("1990/12/28", testUDN.ToString());
@@ -360,7 +353,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMTagWithLists_Tests()
+        public void Test_GEDCOMTagWithLists()
         {
             // GEDCOMTagWithLists protected class, derived - GEDCOMEventDetail
             using (GEDCOMPlace tag = GEDCOMPlace.Create(null, null, "", "") as GEDCOMPlace)
@@ -376,13 +369,13 @@ namespace GKCommon.GEDCOM
                 Assert.IsNull(tag.AddMultimedia(null));
 
                 Assert.IsNotNull(tag.AddNote(new GEDCOMNoteRecord(null, null, "", "")));
-                Assert.IsNotNull(tag.AddSource(new GEDCOMSourceRecord(null, null, "", ""), "page", 1));
-                Assert.IsNotNull(tag.AddMultimedia(new GEDCOMMultimediaRecord(null, null, "", "")));
+                Assert.IsNotNull(tag.AddSource(new GEDCOMSourceRecord(null, null), "page", 1));
+                Assert.IsNotNull(tag.AddMultimedia(new GEDCOMMultimediaRecord(null, null)));
             }
         }
 
         [Test]
-        public void GEDCOMChangeDate_Tests()
+        public void Test_GEDCOMChangeDate()
         {
             using (GEDCOMChangeDate cd = GEDCOMChangeDate.Create(null, null, GEDCOMTagType.CHAN, "") as GEDCOMChangeDate)
             {
@@ -421,7 +414,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMTime_Tests()
+        public void Test_GEDCOMTime()
         {
             using (GEDCOMTime time = new GEDCOMTime(null, null, "TIME", "20:20:20.100"))
             {
@@ -444,76 +437,8 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        /*[Test]
-        public void GEDCOMTimePerf_Tests()
-        {
-            using (var dtx1 = new GEDCOMDate(null, null, "DATE", ""))
-            {
-                for (int k = 0; k < 100000; k++) {
-                    string rest = dtx1.ParseString("01 FEB 1934/11B.C.");
-                    Assert.IsNullOrEmpty(rest);
-                    string dts = dtx1.StringValue;
-
-                    rest = dtx1.ParseStringTok("01 FEB 1934/11B.C.");
-                    Assert.IsNullOrEmpty(rest);
-                    Assert.AreEqual(dts, dtx1.StringValue);
-                    Assert.AreEqual("01 FEB 1934/11B.C.", dtx1.StringValue);
-
-
-                    rest = dtx1.ParseString("ABT @#DJULIAN@ 01 APR 1934/11B.C.");
-                    Assert.IsNullOrEmpty(rest);
-                    dts = dtx1.StringValue;
-
-                    rest = dtx1.ParseStringTok("ABT @#DJULIAN@ 01 APR 1934/11B.C.");
-                    Assert.IsNullOrEmpty(rest);
-                    Assert.AreEqual(dts, dtx1.StringValue);
-                    Assert.AreEqual("ABT @#DJULIAN@ 01 APR 1934/11B.C.", dtx1.StringValue);
-
-
-                    rest = dtx1.ParseString("@#DJULIAN@ 01 APR 1934/11B.C.");
-                    Assert.IsNullOrEmpty(rest);
-                    dts = dtx1.StringValue;
-
-                    rest = dtx1.ParseStringTok("@#DJULIAN@ 01 APR 1934/11B.C.");
-                    Assert.IsNullOrEmpty(rest);
-                    Assert.AreEqual(dts, dtx1.StringValue);
-                    Assert.AreEqual("@#DJULIAN@ 01 APR 1934/11B.C.", dtx1.StringValue);
-
-
-                    rest = dtx1.ParseString("01 APR 1934/11B.C.");
-                    Assert.IsNullOrEmpty(rest);
-                    dts = dtx1.StringValue;
-
-                    rest = dtx1.ParseStringTok("01 APR 1934/11B.C.");
-                    Assert.IsNullOrEmpty(rest);
-                    Assert.AreEqual(dts, dtx1.StringValue);
-                    Assert.AreEqual("01 APR 1934/11B.C.", dtx1.StringValue);
-
-
-                    rest = dtx1.ParseString("01 1934/11B.C.");
-                    Assert.IsNullOrEmpty(rest);
-                    dts = dtx1.StringValue;
-
-                    rest = dtx1.ParseStringTok("01 1934/11B.C.");
-                    Assert.IsNullOrEmpty(rest);
-                    Assert.AreEqual(dts, dtx1.StringValue);
-                    Assert.AreEqual("01 1934/11B.C.", dtx1.StringValue);
-
-
-                    rest = dtx1.ParseString("AUG 1934/11");
-                    Assert.IsNullOrEmpty(rest);
-                    dts = dtx1.StringValue;
-
-                    rest = dtx1.ParseStringTok("AUG 1934/11");
-                    Assert.IsNullOrEmpty(rest);
-                    Assert.AreEqual(dts, dtx1.StringValue);
-                    Assert.AreEqual("AUG 1934/11", dtx1.StringValue);
-                }
-            }
-        }*/
-
         [Test]
-        public void GEDCOMDate_Tests()
+        public void Test_GEDCOMDate()
         {
             using (GEDCOMDate dtx1 = new GEDCOMDate(null, null, "DATE", "20 JAN 2013"))
             {
@@ -622,7 +547,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMDateRange_Tests()
+        public void Test_GEDCOMDateRange()
         {
             using (var dtx1 = (GEDCOMDateRange)GEDCOMDateRange.Create(null, null, "DATE", ""))
             {
@@ -661,7 +586,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMDatePeriod_Tests()
+        public void Test_GEDCOMDatePeriod()
         {
             using (GEDCOMDatePeriod dtx1 = new GEDCOMDatePeriod(null, null, "DATE", ""))
             {
@@ -711,7 +636,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMDateValue_Tests()
+        public void Test_GEDCOMDateValue()
         {
             // check empty dateval match
             using (GEDCOMDateValue dtx1 = new GEDCOMDateValue(null, null, "DATE", ""))
@@ -843,7 +768,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMAddress_Tests()
+        public void Test_GEDCOMAddress()
         {
             using (GEDCOMAddress addr = GEDCOMAddress.Create(null, null, GEDCOMTagType.ADDR, "") as GEDCOMAddress)
             {
@@ -871,7 +796,7 @@ namespace GKCommon.GEDCOM
                 Assert.AreEqual("http://test.com", addr.WebPages[0].StringValue);
 
                 // stream test
-                string buf = TagStreamTest(addr);
+                string buf = TestUtils.GetTagStreamText(addr);
                 Assert.AreEqual(buf, "0 ADDR This\r\n"+"1 CONT address\r\n"+"1 CONT test\r\n"
                                 +"0 PHON 8 911 101 99 99\r\n"
                                 +"0 EMAIL test@mail.com\r\n"
@@ -953,7 +878,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMAlias_Tests()
+        public void Test_GEDCOMAlias()
         {
             using (GEDCOMAlias alias = GEDCOMAlias.Create(null, null, GEDCOMTagType.ALIA, "") as GEDCOMAlias)
             {
@@ -962,7 +887,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMAssociation_Tests()
+        public void Test_GEDCOMAssociation()
         {
             using (GEDCOMAssociation association = GEDCOMAssociation.Create(null, null, GEDCOMTagType.ASSO, "") as GEDCOMAssociation) {
                 Assert.IsNotNull(association);
@@ -992,7 +917,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMUserRef_Tests()
+        public void Test_GEDCOMUserRef()
         {
             using (GEDCOMUserReference userRef = GEDCOMUserReference.Create(null, null, GEDCOMTagType.REFN, "") as GEDCOMUserReference)
             {
@@ -1008,7 +933,7 @@ namespace GKCommon.GEDCOM
         private void OnTreeProgress(object sender, int progress) {}
 
         [Test]
-        public void GEDCOMTree_Tests()
+        public void Test_GEDCOMTree()
         {
             GEDCOMTree tree = new GEDCOMTree();
             Assert.IsNotNull(tree);
@@ -1075,14 +1000,14 @@ namespace GKCommon.GEDCOM
             
             //
 
-            GEDCOMRecord sbmrRec = tree.AddRecord(GEDCOMSubmitterRecord.Create(tree, tree, "", "") as GEDCOMRecord);
+            GEDCOMRecord sbmrRec = tree.AddRecord(new GEDCOMSubmitterRecord(tree, tree));
             Assert.IsNotNull(sbmrRec, "sbmrRec != null");
             sbmrRec.InitNew();
             string submXRef = sbmrRec.XRef;
 
             //
 
-            GEDCOMSubmissionRecord submRec = tree.AddRecord(GEDCOMSubmissionRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMSubmissionRecord;
+            GEDCOMSubmissionRecord submRec = tree.AddRecord(new GEDCOMSubmissionRecord(tree, tree)) as GEDCOMSubmissionRecord;
             Assert.IsNotNull(submRec, "rec1 != null");
             submRec.InitNew();
             GEDCOMSubmissionRecordTest(submRec, submXRef);
@@ -1115,6 +1040,7 @@ namespace GKCommon.GEDCOM
             int size = 0;
             var enum1 = tree.GetEnumerator(GEDCOMRecordType.rtNone);
             GEDCOMRecord rec1;
+            enum1.Reset();
             while (enum1.MoveNext(out rec1)) {
                 size++;
             }
@@ -1183,7 +1109,7 @@ namespace GKCommon.GEDCOM
 
             // Tests of GEDCOMTree.Extract()
             using (GEDCOMTree tree2 = new GEDCOMTree()) {
-                GEDCOMIndividualRecord iRec2 = tree.AddRecord(GEDCOMIndividualRecord.Create(tree2, tree2, "", "") as GEDCOMRecord) as GEDCOMIndividualRecord;
+                GEDCOMIndividualRecord iRec2 = tree.AddRecord(new GEDCOMIndividualRecord(tree2, tree2)) as GEDCOMIndividualRecord;
                 Assert.IsNotNull(iRec2);
                 iRec2.InitNew();
 
@@ -1197,7 +1123,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMHeader_Tests()
+        public void Test_GEDCOMHeader()
         {
             GEDCOMHeader headRec = fContext.Tree.Header;
 
@@ -1261,7 +1187,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMMap_Tests()
+        public void Test_GEDCOMMap()
         {
             using (GEDCOMMap map = GEDCOMMap.Create(null, null, "", "") as GEDCOMMap) {
                 map.Lati = 5.11111;
@@ -1273,7 +1199,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMAux_Tests()
+        public void Test_GEDCOMAux()
         {
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             GEDCOMCustomEvent evt, evtd;
@@ -1289,7 +1215,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMIndividualRecord_Tests()
+        public void Test_GEDCOMIndividualRecord()
         {
             GEDCOMIndividualRecord ind3 = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
             Assert.IsNotNull(ind3.GetParentsFamily());
@@ -1351,7 +1277,7 @@ namespace GKCommon.GEDCOM
 
             Assert.Throws(typeof(ArgumentException), () => { indiRec.MoveTo(null, false); });
 
-            using (GEDCOMIndividualRecord copyIndi = new GEDCOMIndividualRecord(null, null, "", "")) {
+            using (GEDCOMIndividualRecord copyIndi = new GEDCOMIndividualRecord(null, null)) {
                 Assert.IsNotNull(copyIndi);
 
                 Assert.Throws(typeof(ArgumentException), () => { copyIndi.Assign(null); });
@@ -1387,7 +1313,7 @@ namespace GKCommon.GEDCOM
             GEDCOMAssociation asso = indiRec.AddAssociation("test", indi2);
             Assert.IsNotNull(asso);
 
-            using (GEDCOMIndividualRecord indi = new GEDCOMIndividualRecord(fContext.Tree, fContext.Tree, "", "")) {
+            using (GEDCOMIndividualRecord indi = new GEDCOMIndividualRecord(fContext.Tree, fContext.Tree)) {
                 Assert.IsNotNull(indi);
 
                 var parts = GKUtils.GetNameParts(indi); // test with empty PersonalNames
@@ -1406,7 +1332,7 @@ namespace GKCommon.GEDCOM
                 Assert.AreEqual("", GKUtils.GetNameString(indi, true, false));
                 Assert.AreEqual("", GKUtils.GetNickString(indi));
 
-                GEDCOMPersonalName pName = new GEDCOMPersonalName(fContext.Tree, indi, "", "");
+                GEDCOMPersonalName pName = new GEDCOMPersonalName(fContext.Tree, indi);
                 indi.AddPersonalName(pName);
                 pName.Pieces.Nickname = "BigHead";
                 pName.SetNameParts("Ivan", "Petrov", "");
@@ -1430,7 +1356,7 @@ namespace GKCommon.GEDCOM
                 indi.DescendantsInterest.Add(new GEDCOMPointer(fContext.Tree, indi, "", ""));
                 indi.Submittors.Add(new GEDCOMPointer(fContext.Tree, indi, "", ""));
 
-                using (GEDCOMIndividualRecord indi3 = new GEDCOMIndividualRecord(fContext.Tree, fContext.Tree, "", "")) {
+                using (GEDCOMIndividualRecord indi3 = new GEDCOMIndividualRecord(fContext.Tree, fContext.Tree)) {
                     indi.MoveTo(indi3, false);
 
                     st = GKUtils.GetNameString(indi3, true, true);
@@ -1443,7 +1369,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMPersonalName_Tests()
+        public void Test_GEDCOMPersonalName()
         {
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
 
@@ -1542,7 +1468,7 @@ namespace GKCommon.GEDCOM
 
             //
 
-            string buf = TagStreamTest(persName);
+            string buf = TestUtils.GetTagStreamText(persName);
             Assert.AreEqual("1 NAME Petr /Test/ Fedoroff\r\n"+
                             "2 TYPE birth\r\n"+
                             "2 _LANG Polish\r\n"+ // extension
@@ -1566,7 +1492,7 @@ namespace GKCommon.GEDCOM
                 iRec.AddPersonalName(nameCopy);
                 nameCopy.Assign(persName);
 
-                string buf2 = TagStreamTest(nameCopy);
+                string buf2 = TestUtils.GetTagStreamText(nameCopy);
                 Assert.AreEqual("1 NAME Petr /Test/ Fedoroff\r\n"+
                                 "2 TYPE birth\r\n"+
                                 "2 SURN Surname\r\n"+
@@ -1614,7 +1540,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMFileReference_Tests()
+        public void Test_GEDCOMFileReference()
         {
             using (GEDCOMFileReference fileRef = new GEDCOMFileReference(null, null, "", "")) {
                 fileRef.MediaType = GEDCOMMediaType.mtAudio;
@@ -1644,7 +1570,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMLanguage_Tests()
+        public void Test_GEDCOMLanguage()
         {
             using (GEDCOMLanguage langTag = GEDCOMLanguage.Create(null, null, "", "") as GEDCOMLanguage) {
                 Assert.IsTrue(langTag.IsEmpty());
@@ -1670,20 +1596,16 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMGroupRecord_Tests2()
+        public void Test_GEDCOMGroupRecord()
         {
-            using (GEDCOMGroupRecord grpRec = GEDCOMGroupRecord.Create(null, null, "", "") as GEDCOMGroupRecord)
+            using (GEDCOMGroupRecord grpRec = new GEDCOMGroupRecord(null, null))
             {
                 Assert.IsNotNull(grpRec);
 
                 grpRec.ResetOwner(fContext.Tree);
                 Assert.AreEqual(fContext.Tree, grpRec.Owner);
             }
-        }
 
-        [Test]
-        public void GEDCOMGroupRecord_Tests()
-        {
             using (GEDCOMGroupRecord groupRec = fContext.Tree.CreateGroup()) {
                 GEDCOMIndividualRecord member = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
 
@@ -1692,7 +1614,7 @@ namespace GKCommon.GEDCOM
 
                 groupRec.DeleteTag(GEDCOMTagType._UID);
                 groupRec.DeleteTag(GEDCOMTagType.CHAN);
-                string buf = TagStreamTest(groupRec);
+                string buf = TestUtils.GetTagStreamText(groupRec);
                 Assert.AreEqual("0 @G2@ _GROUP\r\n1 NAME Test Group\r\n", buf);
 
                 bool res = groupRec.AddMember(null);
@@ -1716,7 +1638,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMList_Tests()
+        public void Test_GEDCOMList()
         {
             GEDCOMObject obj1 = new GEDCOMObject();
             GEDCOMObject obj2 = new GEDCOMObject();
@@ -1761,7 +1683,7 @@ namespace GKCommon.GEDCOM
         #region Partial Tests
 
         [Test]
-        public void GEDCOMCustomEvent_Tests()
+        public void Test_GEDCOMCustomEvent()
         {
             using (GEDCOMIndividualAttribute customEvent = GEDCOMIndividualAttribute.Create(null, null, "", "") as GEDCOMIndividualAttribute)
             {
@@ -1789,7 +1711,7 @@ namespace GKCommon.GEDCOM
                 customEvent.SetName("BIRT");
                 customEvent.Date.ParseString("20 SEP 1970");
                 customEvent.Place.StringValue = "test place";
-                string buf = TagStreamTest(customEvent);
+                string buf = TestUtils.GetTagStreamText(customEvent);
                 Assert.AreEqual("0 BIRT\r\n"+
                                 "1 DATE 20 SEP 1970\r\n"+
                                 "1 PLAC test place\r\n", buf);
@@ -1799,7 +1721,7 @@ namespace GKCommon.GEDCOM
                     Assert.IsNotNull(copyEvent);
                     copyEvent.Assign(customEvent);
 
-                    string buf1 = TagStreamTest(copyEvent);
+                    string buf1 = TestUtils.GetTagStreamText(copyEvent);
                     Assert.AreEqual("0 BIRT\r\n"+
                                     "1 DATE 20 SEP 1970\r\n"+
                                     "1 PLAC test place\r\n", buf1);
@@ -1838,7 +1760,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMPlaceTest()
+        public void Test_GEDCOMPlace()
         {
             using (GEDCOMPlace place = GEDCOMPlace.Create(null, null, "", "") as GEDCOMPlace) {
                 place.Form = "abrakadabra";
@@ -1873,7 +1795,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMTag_Test()
+        public void Test_GEDCOMTag()
         {
             using (GEDCOMTag tag = GEDCOMTag.Create(null, null, "", "")) {
                 Assert.AreEqual(-1, tag.IndexOfTag(null));
@@ -1899,13 +1821,13 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMFamilyRecord_Tests()
+        public void Test_GEDCOMFamilyRecord()
         {
-            using (GEDCOMFamilyRecord famRec = GEDCOMFamilyRecord.Create(fContext.Tree, fContext.Tree, "", "") as GEDCOMFamilyRecord)
+            using (GEDCOMFamilyRecord famRec = new GEDCOMFamilyRecord(fContext.Tree, fContext.Tree))
             {
                 Assert.IsNotNull(famRec);
 
-                GEDCOMIndividualRecord unkInd = new GEDCOMIndividualRecord(null, null, "", "");
+                GEDCOMIndividualRecord unkInd = new GEDCOMIndividualRecord(null, null);
                 unkInd.Sex = GEDCOMSex.svUndetermined;
                 Assert.IsFalse(famRec.AddSpouse(unkInd));
 
@@ -1939,7 +1861,7 @@ namespace GKCommon.GEDCOM
                 Assert.AreEqual(1, famRec.SpouseSealings.Count);
                 Assert.AreEqual(sps, famRec.SpouseSealings[0]);
 
-                using (GEDCOMFamilyRecord famRec2 = GEDCOMFamilyRecord.Create(fContext.Tree, fContext.Tree, "", "") as GEDCOMFamilyRecord)
+                using (GEDCOMFamilyRecord famRec2 = new GEDCOMFamilyRecord(fContext.Tree, fContext.Tree))
                 {
                     Assert.AreEqual(0, famRec2.Events.Count);
                     Assert.AreEqual(null, famRec2.FindEvent("MARR"));
@@ -1975,7 +1897,7 @@ namespace GKCommon.GEDCOM
             // stream test
             famRec.DeleteTag(GEDCOMTagType._UID);
             famRec.DeleteTag(GEDCOMTagType.CHAN);
-            string buf = TagStreamTest(famRec);
+            string buf = TestUtils.GetTagStreamText(famRec);
             Assert.AreEqual("0 @F1@ FAM\r\n"+
                             "1 SUBM\r\n"+
                             "1 RESN locked\r\n"+
@@ -2037,7 +1959,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMChildToFamilyLink_Tests()
+        public void Test_GEDCOMChildToFamilyLink()
         {
             using (GEDCOMChildToFamilyLink childLink = GEDCOMChildToFamilyLink.Create(null, null, "", "") as GEDCOMChildToFamilyLink)
             {
@@ -2062,18 +1984,18 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMSourceRecord_Tests()
+        public void Test_GEDCOMSourceRecord()
         {
             GEDCOMTree tree = new GEDCOMTree();
 
             // check match
-            using (GEDCOMSourceRecord src1 = GEDCOMSourceRecord.Create(tree, tree, "", "") as GEDCOMSourceRecord)
+            using (GEDCOMSourceRecord src1 = new GEDCOMSourceRecord(tree, tree))
             {
                 Assert.IsNotNull(src1, "src1 != null");
 
                 Assert.Throws(typeof(ArgumentNullException), () => { src1.RemoveRepository(null); });
 
-                using (GEDCOMSourceRecord src2 = new GEDCOMSourceRecord(tree, tree, "", ""))
+                using (GEDCOMSourceRecord src2 = new GEDCOMSourceRecord(tree, tree))
                 {
                     Assert.IsNotNull(src2, "src2 != null");
 
@@ -2093,7 +2015,7 @@ namespace GKCommon.GEDCOM
             }
 
             // check move
-            using (GEDCOMSourceRecord src1 = GEDCOMSourceRecord.Create(tree, tree, "", "") as GEDCOMSourceRecord)
+            using (GEDCOMSourceRecord src1 = new GEDCOMSourceRecord(tree, tree))
             {
                 Assert.Throws(typeof(ArgumentException), () => { src1.MoveTo(null, false); });
 
@@ -2115,7 +2037,7 @@ namespace GKCommon.GEDCOM
                 src1.AddRepository(repRec);
                 Assert.AreEqual(1, src1.RepositoryCitations.Count);
 
-                using (GEDCOMSourceRecord src2 = new GEDCOMSourceRecord(tree, tree, "", ""))
+                using (GEDCOMSourceRecord src2 = new GEDCOMSourceRecord(tree, tree))
                 {
                     src2.FiledByEntry = "test source 2"; // title isn't replaced
 
@@ -2174,7 +2096,7 @@ namespace GKCommon.GEDCOM
 
             sourRec.DeleteTag(GEDCOMTagType._UID);
             sourRec.DeleteTag(GEDCOMTagType.CHAN);
-            string buf = TagStreamTest(sourRec);
+            string buf = TestUtils.GetTagStreamText(sourRec);
             Assert.AreEqual("0 @S1@ SOUR\r\n"+
                             "1 DATA\r\n"+
                             "1 ABBR This is test source\r\n"+
@@ -2191,7 +2113,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMSourceCitation_Tests()
+        public void Test_GEDCOMSourceCitation()
         {
             using (GEDCOMSourceCitation srcCit = GEDCOMSourceCitation.Create(null, null, "", "") as GEDCOMSourceCitation) {
                 Assert.IsNotNull(srcCit);
@@ -2232,9 +2154,9 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMResearchRecord_Tests()
+        public void Test_GEDCOMResearchRecord()
         {
-            using (GEDCOMResearchRecord resRec = GEDCOMResearchRecord.Create(null, null, "", "") as GEDCOMResearchRecord) {
+            using (GEDCOMResearchRecord resRec = new GEDCOMResearchRecord(null, null)) {
 
                 resRec.ResetOwner(fContext.Tree);
                 Assert.AreEqual(fContext.Tree, resRec.Owner);
@@ -2267,7 +2189,7 @@ namespace GKCommon.GEDCOM
 
             resRec.DeleteTag(GEDCOMTagType._UID);
             resRec.DeleteTag(GEDCOMTagType.CHAN);
-            string buf = TagStreamTest(resRec);
+            string buf = TestUtils.GetTagStreamText(resRec);
             Assert.AreEqual("0 @RS1@ _RESEARCH\r\n"+
                             "1 NAME Test Research\r\n"+
                             "1 _PRIORITY normal\r\n"+
@@ -2297,9 +2219,9 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMRepositoryRecord_Tests()
+        public void Test_GEDCOMRepositoryRecord()
         {
-            using (GEDCOMRepositoryRecord repoRec = GEDCOMRepositoryRecord.Create(fContext.Tree, fContext.Tree, "", "") as GEDCOMRepositoryRecord)
+            using (GEDCOMRepositoryRecord repoRec = new GEDCOMRepositoryRecord(fContext.Tree, fContext.Tree))
             {
                 Assert.IsNotNull(repoRec);
 
@@ -2311,7 +2233,7 @@ namespace GKCommon.GEDCOM
 
                 repoRec.DeleteTag(GEDCOMTagType._UID);
                 repoRec.DeleteTag(GEDCOMTagType.CHAN);
-                string buf = TagStreamTest(repoRec);
+                string buf = TestUtils.GetTagStreamText(repoRec);
                 Assert.AreEqual("0 @R2@ REPO\r\n"+
                                 "1 NAME Test Repository\r\n"+
                                 "1 ADDR\r\n", buf);
@@ -2323,9 +2245,9 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMMultimediaRecord_Tests()
+        public void Test_GEDCOMMultimediaRecord()
         {
-            using (GEDCOMMultimediaRecord mmRec = GEDCOMMultimediaRecord.Create(null, null, "", "") as GEDCOMMultimediaRecord)
+            using (var mmRec = new GEDCOMMultimediaRecord(null, null))
             {
                 Assert.IsNotNull(mmRec);
 
@@ -2356,7 +2278,7 @@ namespace GKCommon.GEDCOM
 
             mediaRec.DeleteTag(GEDCOMTagType._UID);
             mediaRec.DeleteTag(GEDCOMTagType.CHAN);
-            string buf = TagStreamTest(mediaRec);
+            string buf = TestUtils.GetTagStreamText(mediaRec);
             Assert.AreEqual("0 @O1@ OBJE\r\n"+
                             "1 FILE sample.png\r\n"+
                             "2 TITL File Title 2\r\n"+
@@ -2371,7 +2293,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMMultimediaLink_Tests()
+        public void Test_GEDCOMMultimediaLink()
         {
             using (GEDCOMMultimediaLink mmLink = GEDCOMMultimediaLink.Create(fContext.Tree, null, "", "") as GEDCOMMultimediaLink) {
                 Assert.IsNotNull(mmLink);
@@ -2407,7 +2329,7 @@ namespace GKCommon.GEDCOM
                 Assert.IsFalse(mmLink.CutoutPosition.IsEmpty());
                 Assert.AreEqual("11 15 576 611", mmLink.CutoutPosition.StringValue);
 
-                using (var mmRec = (GEDCOMMultimediaRecord)GEDCOMMultimediaRecord.Create(fContext.Tree, fContext.Tree, "", "")) {
+                using (var mmRec = new GEDCOMMultimediaRecord(fContext.Tree, fContext.Tree)) {
                     Assert.IsNull(mmLink.GetUID());
 
                     mmLink.Value = mmRec;
@@ -2433,7 +2355,7 @@ namespace GKCommon.GEDCOM
             mmLink.Title = "Title1";
             Assert.AreEqual("Title1", mmLink.Title);
 
-            string buf = TagStreamTest(mmLink);
+            string buf = TestUtils.GetTagStreamText(mmLink);
             Assert.AreEqual("1 OBJE @O1@\r\n"+
                             "2 TITL Title1\r\n", buf);
 
@@ -2475,9 +2397,9 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMSubmitterRecord_Tests()
+        public void Test_GEDCOMSubmitterRecord()
         {
-            using (GEDCOMSubmitterRecord subrRec = GEDCOMSubmitterRecord.Create(null, null, "", "") as GEDCOMSubmitterRecord) {
+            using (GEDCOMSubmitterRecord subrRec = new GEDCOMSubmitterRecord(null, null)) {
                 subrRec.Name.StringValue = "Test Submitter";
                 Assert.AreEqual("Test Submitter", subrRec.Name.StringValue);
 
@@ -2506,12 +2428,12 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMCommunicationRecord_Test()
+        public void Test_GEDCOMCommunicationRecord()
         {
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             Assert.IsNotNull(iRec);
 
-            using (GEDCOMCommunicationRecord comRec = GEDCOMCommunicationRecord.Create(fContext.Tree, fContext.Tree, "", "") as GEDCOMCommunicationRecord) {
+            using (GEDCOMCommunicationRecord comRec = new GEDCOMCommunicationRecord(fContext.Tree, fContext.Tree)) {
                 comRec.CommName = "Test Communication";
                 Assert.AreEqual("Test Communication", comRec.CommName);
 
@@ -2539,9 +2461,9 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMLocationRecord_Test()
+        public void Test_GEDCOMLocationRecord()
         {
-            using (GEDCOMLocationRecord locRec = GEDCOMLocationRecord.Create(null, null, "", "") as GEDCOMLocationRecord) {
+            using (GEDCOMLocationRecord locRec = new GEDCOMLocationRecord(null, null)) {
                 locRec.LocationName = "Test Location";
                 Assert.AreEqual("Test Location", locRec.LocationName);
 
@@ -2554,7 +2476,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMTaskRecord_Tests()
+        public void Test_GEDCOMTaskRecord()
         {
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             Assert.IsNotNull(iRec);
@@ -2565,7 +2487,7 @@ namespace GKCommon.GEDCOM
             GEDCOMSourceRecord srcRec = fContext.Tree.XRefIndex_Find("S1") as GEDCOMSourceRecord;
             Assert.IsNotNull(srcRec);
 
-            using (GEDCOMTaskRecord taskRec = GEDCOMTaskRecord.Create(fContext.Tree, fContext.Tree, "", "") as GEDCOMTaskRecord)
+            using (GEDCOMTaskRecord taskRec = new GEDCOMTaskRecord(fContext.Tree, fContext.Tree))
             {
                 Assert.IsNotNull(taskRec);
 
@@ -2606,7 +2528,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMNotes_Tests()
+        public void Test_GEDCOMNotes()
         {
             using (GEDCOMNotes notes = GEDCOMNotes.Create(null, null, "", "") as GEDCOMNotes) {
                 Assert.IsTrue(notes.IsEmpty());
@@ -2617,9 +2539,9 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void GEDCOMNoteRecord_Tests()
+        public void Test_GEDCOMNoteRecord()
         {
-            using (GEDCOMNoteRecord noteRec = GEDCOMNoteRecord.Create(null, null, "", "") as GEDCOMNoteRecord) {
+            using (GEDCOMNoteRecord noteRec = new GEDCOMNoteRecord(null, null)) {
                 noteRec.AddNoteText("text");
                 Assert.AreEqual("text", noteRec.Note.Text.Trim());
 
@@ -2628,7 +2550,7 @@ namespace GKCommon.GEDCOM
                 noteRec.SetNoteText("Test text");
                 Assert.AreEqual("Test text", noteRec.Note.Text.Trim());
 
-                using (GEDCOMNoteRecord noteRec2 = GEDCOMNoteRecord.Create(null, null, "", "") as GEDCOMNoteRecord) {
+                using (GEDCOMNoteRecord noteRec2 = new GEDCOMNoteRecord(null, null)) {
                     noteRec2.SetNoteText("Test text");
                     Assert.AreEqual("Test text", noteRec2.Note.Text.Trim());
 
@@ -2645,7 +2567,7 @@ namespace GKCommon.GEDCOM
 
                 Assert.Throws(typeof(ArgumentException), () => { noteRec.MoveTo(null, false); });
 
-                using (GEDCOMNoteRecord noteRec3 = GEDCOMNoteRecord.Create(null, null, "", "") as GEDCOMNoteRecord) {
+                using (GEDCOMNoteRecord noteRec3 = new GEDCOMNoteRecord(null, null)) {
                     noteRec3.SetNoteText("Test text 3");
                     Assert.AreEqual("Test text 3", noteRec3.Note.Text.Trim());
 
@@ -2697,129 +2619,6 @@ namespace GKCommon.GEDCOM
             notes.Clear();
         }
         
-        #endregion
-        
-        #region Private Aux functions
-        
-        private static string TagStreamTest(GEDCOMTag tag)
-        {
-            string result;
-            
-            using (MemoryStream stm = new MemoryStream()) {
-                using (StreamWriter fs = new StreamWriter(stm)) {
-                    tag.SaveToStream(fs);
-                    
-                    fs.Flush();
-                    
-                    result = Encoding.ASCII.GetString(stm.ToArray());
-                }
-            }
-            
-            return result;
-        }
-        
-        #endregion
-
-        [Test]
-        public void Standart_Tests()
-        {
-            Assembly assembly = typeof(CoreTests).Assembly;
-            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources.TGC55CLF.GED")) {
-                using (GEDCOMTree tree = new GEDCOMTree()) {
-                    var gedcomProvider = new GEDCOMProvider(tree);
-                    gedcomProvider.LoadFromStreamExt(inStream, inStream);
-
-                    using (MemoryStream outStream = new MemoryStream()) {
-                        gedcomProvider = new GEDCOMProvider(tree);
-                        gedcomProvider.SaveToStreamExt(outStream, GEDCOMCharacterSet.csASCII);
-                    }
-                }
-            }
-        }
-
-        #region GEDCOM Enums test
-
-        private class GEDCOMMediaTypeEnum : GEDCOMEnumHelper<GEDCOMMediaType>
-        {
-            private static string[] XMediaTypeArr = new string[] {
-                "", "audio", "book", "card", "electronic", "fiche", "film", "magazine",
-                "manuscript", "map", "newspaper", "photo", "tombstone", "video", "-1" };
-
-            protected GEDCOMMediaTypeEnum() : base(XMediaTypeArr, GEDCOMMediaType.mtUnknown, false)
-            {
-            }
-
-            public static readonly GEDCOMMediaTypeEnum Instance = new GEDCOMMediaTypeEnum();
-        }
-
-        [Test]
-        public void GEDCOMEnumParse_Tests()
-        {
-            Assert.IsNotNull(GEDCOMMediaTypeEnum.Instance);
-
-            string strVal3 = GEDCOMMediaTypeEnum.Instance.GetStrValue((GEDCOMMediaType) 15);
-            Assert.AreEqual("", strVal3);
-
-            strVal3 = GEDCOMMediaTypeEnum.Instance.GetStrValue(GEDCOMMediaType.mtMagazine);
-            Assert.AreEqual("magazine", strVal3);
-
-            GEDCOMMediaType mt3 = GEDCOMMediaTypeEnum.Instance.GetEnumValue(strVal3);
-            Assert.AreEqual(GEDCOMMediaType.mtMagazine, mt3);
-
-            mt3 = GEDCOMMediaTypeEnum.Instance.GetEnumValue("test");
-            Assert.AreEqual(GEDCOMMediaType.mtUnknown, mt3);
-
-            // performance test
-            /*Random rnd = new Random();
-            for (int k = 0; k < 100000; k++) {
-                string strVal1, strVal2, strVal3;
-
-                int i = rnd.Next(1, 13);
-
-                GEDCOMMediaType mt = (GEDCOMMediaType)i;
-                strVal1 = GEDCOMUtils.GetMediaTypeStr(mt);
-                strVal2 = Enum2Str(mt, MediaTypeArr); // slower for 1.2 ms
-                strVal3 = mediaEnumHelper.GetStrValue(mt); // slower for 1.4 ms
-                Assert.AreEqual(strVal1, strVal2);
-                Assert.AreEqual(strVal2, strVal3);
-
-                strVal1 = MediaTypeArr[i];
-                GEDCOMMediaType mt1 = GEDCOMUtils.GetMediaTypeVal(strVal1);
-                GEDCOMMediaType mt2 = (GEDCOMMediaType)Str2Enum(strVal1, MediaTypeArr, (int)GEDCOMMediaType.mtUnknown); // slower for 23 ms
-                GEDCOMMediaType mt3 = (GEDCOMMediaType)mediaEnumHelper.GetEnumValue(strVal1); // faster for 114 ms
-                Assert.AreEqual(mt1, mt2);
-                Assert.AreEqual(mt2, mt3);
-            }*/
-        }
-
-        #region Methods only for the test
-
-        public static int Str2Enum(string val, string[] values, int defVal)
-        {
-            if (string.IsNullOrEmpty(val)) return defVal;
-
-            val = val.Trim().ToLower(CultureInfo.InvariantCulture);
-            for (int i = 0; i < values.Length; i++) {
-                if (string.Equals(values[i], val)) {
-                    return i;
-                }
-            }
-
-            return defVal;
-        }
-
-        public static string Enum2Str(IConvertible elem, string[] values)
-        {
-            int idx = (int)elem;
-            if (idx < 0 || idx >= values.Length) {
-                return string.Empty;
-            } else {
-                return values[idx];
-            }
-        }
-
-        #endregion
-
         #endregion
     }
 }

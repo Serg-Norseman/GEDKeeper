@@ -121,7 +121,7 @@ namespace GKCommon.GEDCOM
         private void SetEncoding(Encoding encoding)
         {
             fSourceEncoding = encoding;
-            fEncodingState = EncodingState.esChanged;
+            fEncodingState = (DEFAULT_ENCODING.Equals(fSourceEncoding)) ? EncodingState.esUnchanged : EncodingState.esChanged;
         }
 
         private void DefineEncoding(StreamReader reader, GEDCOMFormat format)
@@ -216,6 +216,7 @@ namespace GKCommon.GEDCOM
 
                 fSourceEncoding = DEFAULT_ENCODING;
                 fEncodingState = EncodingState.esUnchecked;
+
                 long fileSize = fileStream.Length;
                 int progress = 0;
                 var invariantText = GEDCOMUtils.InvariantTextInfo;
@@ -266,31 +267,31 @@ namespace GKCommon.GEDCOM
                         }
 
                         if (tagName == GEDCOMTagType.INDI) {
-                            curRecord = fTree.AddRecord(new GEDCOMIndividualRecord(fTree, fTree, "", ""));
+                            curRecord = fTree.AddRecord(new GEDCOMIndividualRecord(fTree, fTree));
                         } else if (tagName == GEDCOMTagType.FAM) {
-                            curRecord = fTree.AddRecord(new GEDCOMFamilyRecord(fTree, fTree, "", ""));
+                            curRecord = fTree.AddRecord(new GEDCOMFamilyRecord(fTree, fTree));
                         } else if (tagName == GEDCOMTagType.OBJE) {
-                            curRecord = fTree.AddRecord(new GEDCOMMultimediaRecord(fTree, fTree, "", ""));
+                            curRecord = fTree.AddRecord(new GEDCOMMultimediaRecord(fTree, fTree));
                         } else if (tagName == GEDCOMTagType.NOTE) {
                             curRecord = fTree.AddRecord(new GEDCOMNoteRecord(fTree, fTree, "", tagValue));
                         } else if (tagName == GEDCOMTagType.REPO) {
-                            curRecord = fTree.AddRecord(new GEDCOMRepositoryRecord(fTree, fTree, "", ""));
+                            curRecord = fTree.AddRecord(new GEDCOMRepositoryRecord(fTree, fTree));
                         } else if (tagName == GEDCOMTagType.SOUR) {
-                            curRecord = fTree.AddRecord(new GEDCOMSourceRecord(fTree, fTree, "", ""));
+                            curRecord = fTree.AddRecord(new GEDCOMSourceRecord(fTree, fTree));
                         } else if (tagName == GEDCOMTagType.SUBN) {
-                            curRecord = fTree.AddRecord(new GEDCOMSubmissionRecord(fTree, fTree, "", ""));
+                            curRecord = fTree.AddRecord(new GEDCOMSubmissionRecord(fTree, fTree));
                         } else if (tagName == GEDCOMTagType.SUBM) {
-                            curRecord = fTree.AddRecord(new GEDCOMSubmitterRecord(fTree, fTree, "", ""));
+                            curRecord = fTree.AddRecord(new GEDCOMSubmitterRecord(fTree, fTree));
                         } else if (tagName == GEDCOMTagType._GROUP) {
-                            curRecord = fTree.AddRecord(new GEDCOMGroupRecord(fTree, fTree, "", ""));
+                            curRecord = fTree.AddRecord(new GEDCOMGroupRecord(fTree, fTree));
                         } else if (tagName == GEDCOMTagType._RESEARCH) {
-                            curRecord = fTree.AddRecord(new GEDCOMResearchRecord(fTree, fTree, "", ""));
+                            curRecord = fTree.AddRecord(new GEDCOMResearchRecord(fTree, fTree));
                         } else if (tagName == GEDCOMTagType._TASK) {
-                            curRecord = fTree.AddRecord(new GEDCOMTaskRecord(fTree, fTree, "", ""));
+                            curRecord = fTree.AddRecord(new GEDCOMTaskRecord(fTree, fTree));
                         } else if (tagName == GEDCOMTagType._COMM) {
-                            curRecord = fTree.AddRecord(new GEDCOMCommunicationRecord(fTree, fTree, "", ""));
+                            curRecord = fTree.AddRecord(new GEDCOMCommunicationRecord(fTree, fTree));
                         } else if (tagName == GEDCOMTagType._LOC) {
-                            curRecord = fTree.AddRecord(new GEDCOMLocationRecord(fTree, fTree, "", ""));
+                            curRecord = fTree.AddRecord(new GEDCOMLocationRecord(fTree, fTree));
                         } else if (tagName == GEDCOMTagType.HEAD) {
                             curRecord = fTree.Header;
                         } else if (tagName == GEDCOMTagType.TRLR) {

@@ -31,12 +31,12 @@ namespace GKCommon.GEDCOM
         private GEDCOMList<GEDCOMTag> fFaxList;
         private GEDCOMList<GEDCOMTag> fWWWList;
 
+
         public StringList Address
         {
             get { return GetTagStrings(this); }
             set { SetTagStrings(this, value); }
         }
-
 
         public string AddressLine1
         {
@@ -100,33 +100,14 @@ namespace GKCommon.GEDCOM
             get { return fWWWList; }
         }
 
-        public void AddEmailAddress(string value)
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
-            GEDCOMTag tag = fEmailList.Add(new GEDCOMTag(Owner, this, "EMAIL", value));
-            tag.SetLevel(Level);
+            return new GEDCOMAddress(owner, parent, tagName, tagValue);
         }
 
-        public void AddFaxNumber(string value)
+        public GEDCOMAddress(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            GEDCOMTag tag = fFaxList.Add(new GEDCOMTag(Owner, this, "FAX", value));
-            tag.SetLevel(Level);
-        }
-
-        public void AddPhoneNumber(string value)
-        {
-            GEDCOMTag tag = fPhoneList.Add(new GEDCOMTag(Owner, this, "PHON", value));
-            tag.SetLevel(Level);
-        }
-
-        public void AddWebPage(string value)
-        {
-            GEDCOMTag tag = fWWWList.Add(new GEDCOMTag(Owner, this, "WWW", value));
-            tag.SetLevel(Level);
-        }
-
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
-        {
-            base.CreateObj(owner, parent);
             SetName(GEDCOMTagType.ADDR);
 
             fPhoneList = new GEDCOMList<GEDCOMTag>(this);
@@ -135,13 +116,9 @@ namespace GKCommon.GEDCOM
             fWWWList = new GEDCOMList<GEDCOMTag>(this);
         }
 
-        protected override void SaveTagsToStream(StreamWriter stream)
+        public GEDCOMAddress(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
         {
-            base.SaveTagsToStream(stream);
-            fPhoneList.SaveToStream(stream);
-            fEmailList.SaveToStream(stream);
-            fFaxList.SaveToStream(stream);
-            fWWWList.SaveToStream(stream);
+            SetNameValue(tagName, tagValue);
         }
 
         protected override void Dispose(bool disposing)
@@ -153,6 +130,15 @@ namespace GKCommon.GEDCOM
                 fWWWList.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        protected override void SaveTagsToStream(StreamWriter stream)
+        {
+            base.SaveTagsToStream(stream);
+            fPhoneList.SaveToStream(stream);
+            fEmailList.SaveToStream(stream);
+            fFaxList.SaveToStream(stream);
+            fWWWList.SaveToStream(stream);
         }
 
         public override void Assign(GEDCOMTag source)
@@ -173,28 +159,19 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "PHON")
-            {
+            if (tagName == "PHON") {
                 result = (fPhoneList.Add(new GEDCOMTag(Owner, this, tagName, tagValue)));
                 result.SetLevel(Level);
-            }
-            else if (tagName == "EMAIL")
-            {
+            } else if (tagName == "EMAIL") {
                 result = (fEmailList.Add(new GEDCOMTag(Owner, this, tagName, tagValue)));
                 result.SetLevel(Level);
-            }
-            else if (tagName == "FAX")
-            {
+            } else if (tagName == "FAX") {
                 result = (fFaxList.Add(new GEDCOMTag(Owner, this, tagName, tagValue)));
                 result.SetLevel(Level);
-            }
-            else if (tagName == "WWW")
-            {
+            } else if (tagName == "WWW") {
                 result = (fWWWList.Add(new GEDCOMTag(Owner, this, tagName, tagValue)));
                 result.SetLevel(Level);
-            }
-            else
-            {
+            } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
 
@@ -224,16 +201,29 @@ namespace GKCommon.GEDCOM
             fWWWList.ResetOwner(newOwner);
         }
 
-        public GEDCOMAddress(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        public void AddEmailAddress(string value)
         {
+            GEDCOMTag tag = fEmailList.Add(new GEDCOMTag(Owner, this, "EMAIL", value));
+            tag.SetLevel(Level);
         }
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public void AddFaxNumber(string value)
         {
-            return new GEDCOMAddress(owner, parent, tagName, tagValue);
+            GEDCOMTag tag = fFaxList.Add(new GEDCOMTag(Owner, this, "FAX", value));
+            tag.SetLevel(Level);
         }
 
-        #region Auxiliary
+        public void AddPhoneNumber(string value)
+        {
+            GEDCOMTag tag = fPhoneList.Add(new GEDCOMTag(Owner, this, "PHON", value));
+            tag.SetLevel(Level);
+        }
+
+        public void AddWebPage(string value)
+        {
+            GEDCOMTag tag = fWWWList.Add(new GEDCOMTag(Owner, this, "WWW", value));
+            tag.SetLevel(Level);
+        }
 
         public void SetAddressText(string value)
         {
@@ -246,7 +236,5 @@ namespace GKCommon.GEDCOM
         {
             SetTagStrings(this, value);
         }
-
-        #endregion
     }
 }

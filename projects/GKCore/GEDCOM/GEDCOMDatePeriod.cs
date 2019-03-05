@@ -39,11 +39,21 @@ namespace GKCommon.GEDCOM
             get { return fDateTo; }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
-            base.CreateObj(owner, parent);
-            fDateFrom = new GEDCOMDate(owner, this, "", "");
-            fDateTo = new GEDCOMDate(owner, this, "", "");
+            return new GEDCOMDatePeriod(owner, parent, tagName, tagValue);
+        }
+
+        public GEDCOMDatePeriod(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        {
+            fDateFrom = new GEDCOMDate(owner, this);
+            fDateTo = new GEDCOMDate(owner, this);
+        }
+
+        public GEDCOMDatePeriod(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         protected override string GetStringValue()
@@ -131,15 +141,6 @@ namespace GKCommon.GEDCOM
             if (fDateTo != null) {
                 fDateTo.ResetOwner(newOwner);
             }
-        }
-
-        public GEDCOMDatePeriod(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMDatePeriod(owner, parent, tagName, tagValue);
         }
 
         public override UDN GetUDN()

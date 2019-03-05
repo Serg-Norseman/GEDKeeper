@@ -47,7 +47,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fResearchRecord = new GEDCOMResearchRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fResearchRecord = new GEDCOMResearchRecord(fBase.Context.Tree, fBase.Context.Tree);
 
             fDialog = new ResearchEditDlg(fBase);
             fDialog.Research = fResearchRecord;

@@ -355,7 +355,7 @@ namespace GKCore
             var listManager = new NoteListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GEDCOMNoteRecord noteRec = new GEDCOMNoteRecord(null, null, "", "");
+            GEDCOMNoteRecord noteRec = new GEDCOMNoteRecord(null, null);
             noteRec.AddNoteText("Test text");
             listManager.Fetch(noteRec);
 

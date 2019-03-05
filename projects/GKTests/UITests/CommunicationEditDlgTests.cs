@@ -48,7 +48,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
             fContext = fBase.Context;
-            fCommunicationRecord = new GEDCOMCommunicationRecord(fContext.Tree, fContext.Tree, "", "");
+            fCommunicationRecord = new GEDCOMCommunicationRecord(fContext.Tree, fContext.Tree);
 
             fDialog = new CommunicationEditDlg(fBase);
             fDialog.Communication = fCommunicationRecord;

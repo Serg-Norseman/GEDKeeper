@@ -234,10 +234,9 @@ namespace GKCore
         {
             if (iRec == null) return;
 
-            try
-            {
+            try {
                 string childName, childPat;
-                var parts = GKUtils.GetNameParts(iRec);
+                var parts = GKUtils.GetNameParts(iRec, false);
                 childName = parts.Name;
                 childPat = parts.Patronymic;
 
@@ -247,20 +246,16 @@ namespace GKCore
                 GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
                 GEDCOMIndividualRecord father = (fam == null) ? null : fam.GetHusband();
 
-                if (father != null)
-                {
-                    string fatherNam;
-                    parts = GKUtils.GetNameParts(father);
-                    fatherNam = parts.Name;
+                if (father != null) {
+                    string fatherName;
+                    parts = GKUtils.GetNameParts(father, false);
+                    fatherName = parts.Name;
 
-                    if (IsComparable(fatherNam, childPat))
-                    {
-                        SetName(fatherNam, childPat, iSex);
+                    if (IsComparable(fatherName, childPat)) {
+                        SetName(fatherName, childPat, iSex);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("NamesTable.ImportName(): " + ex.Message);
             }
         }

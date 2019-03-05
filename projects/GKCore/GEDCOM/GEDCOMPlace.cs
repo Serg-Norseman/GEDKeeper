@@ -38,14 +38,15 @@ namespace GKCommon.GEDCOM
             get { return TagClass(GEDCOMTagType.MAP, GEDCOMMap.Create) as GEDCOMMap; }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public GEDCOMPlace(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetName(GEDCOMTagType.PLAC);
         }
 
-        public GEDCOMPlace(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        public GEDCOMPlace(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
         {
+            SetNameValue(tagName, tagValue);
         }
 
         public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)

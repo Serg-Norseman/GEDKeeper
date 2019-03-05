@@ -44,7 +44,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fRepositoryRecord = new GEDCOMRepositoryRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fRepositoryRecord = new GEDCOMRepositoryRecord(fBase.Context.Tree, fBase.Context.Tree);
 
             fDialog = new RepositoryEditDlg(fBase);
             fDialog.Repository = fRepositoryRecord;

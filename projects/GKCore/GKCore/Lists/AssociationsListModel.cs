@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -81,7 +81,7 @@ namespace GKCore.Lists
                     using (var dlg = AppHost.Container.Resolve<IAssociationEditDlg>(fBaseWin)) {
                         bool exists = (ast != null);
                         if (!exists) {
-                            ast = new GEDCOMAssociation(fBaseWin.Context.Tree, person, "", "");
+                            ast = new GEDCOMAssociation(fBaseWin.Context.Tree, person);
                         }
 
                         dlg.Association = ast;

@@ -67,10 +67,20 @@ namespace GKCommon.GEDCOM
             set { SetTagIntegerValue(GEDCOMTagType.QUAY, value); }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
-            base.CreateObj(owner, parent);
+            return new GEDCOMSourceCitation(owner, parent, tagName, tagValue);
+        }
+
+        public GEDCOMSourceCitation(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        {
             SetName(GEDCOMTagType.SOUR);
+        }
+
+        public GEDCOMSourceCitation(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         protected override string GetStringValue()
@@ -106,15 +116,6 @@ namespace GKCommon.GEDCOM
                 }
             }
             return result;
-        }
-
-        public GEDCOMSourceCitation(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMSourceCitation(owner, parent, tagName, tagValue);
         }
     }
 }

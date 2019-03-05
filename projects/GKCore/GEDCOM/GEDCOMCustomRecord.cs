@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -56,7 +56,7 @@ namespace GKCommon.GEDCOM
             stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
         }
 
-        protected GEDCOMCustomRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        protected GEDCOMCustomRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
         }
     }

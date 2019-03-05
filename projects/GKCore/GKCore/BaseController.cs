@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -47,8 +47,8 @@ namespace GKCore
                 using (var dlg = AppHost.Container.Resolve<IMediaEditDlg>(baseWin)) {
                     bool exists = mediaRec != null;
                     if (!exists) {
-                        mediaRec = new GEDCOMMultimediaRecord(tree, tree, "", "");
-                        mediaRec.FileReferences.Add(new GEDCOMFileReferenceWithTitle(tree, mediaRec, "", ""));
+                        mediaRec = new GEDCOMMultimediaRecord(tree, tree);
+                        mediaRec.FileReferences.Add(new GEDCOMFileReferenceWithTitle(tree, mediaRec));
                         mediaRec.InitNew();
                     }
 
@@ -87,7 +87,7 @@ namespace GKCore
 
                 bool exists = noteRec != null;
                 if (!exists) {
-                    noteRec = new GEDCOMNoteRecord(tree, tree, "", "");
+                    noteRec = new GEDCOMNoteRecord(tree, tree);
                     noteRec.InitNew();
                 }
 
@@ -135,7 +135,7 @@ namespace GKCore
                 using (var dlg = AppHost.Container.Resolve<ISourceEditDlg>(baseWin)) {
                     bool exists = sourceRec != null;
                     if (!exists) {
-                        sourceRec = new GEDCOMSourceRecord(tree, tree, "", "");
+                        sourceRec = new GEDCOMSourceRecord(tree, tree);
                         sourceRec.InitNew();
                     }
 
@@ -175,7 +175,7 @@ namespace GKCore
                 using (var dlg = AppHost.Container.Resolve<ISourceCitEditDlg>(baseWin)) {
                     bool exists = cit != null;
                     if (!exists) {
-                        cit = new GEDCOMSourceCitation(tree, _struct as GEDCOMObject, "", "");
+                        cit = new GEDCOMSourceCitation(tree, _struct as GEDCOMObject);
                     }
 
                     dlg.SourceCitation = cit;
@@ -207,7 +207,7 @@ namespace GKCore
                 using (var dlg = AppHost.Container.Resolve<IRepositoryEditDlg>(baseWin)) {
                     bool exists = repRec != null;
                     if (!exists) {
-                        repRec = new GEDCOMRepositoryRecord(tree, tree, "", "");
+                        repRec = new GEDCOMRepositoryRecord(tree, tree);
                         repRec.InitNew();
                     }
 
@@ -247,7 +247,7 @@ namespace GKCore
                 using (var dlg = AppHost.Container.Resolve<IGroupEditDlg>(baseWin)) {
                     bool exists = groupRec != null;
                     if (!exists) {
-                        groupRec = new GEDCOMGroupRecord(tree, tree, "", "");
+                        groupRec = new GEDCOMGroupRecord(tree, tree);
                         groupRec.InitNew();
                     }
 
@@ -287,7 +287,7 @@ namespace GKCore
                 using (var dlg = AppHost.Container.Resolve<IResearchEditDlg>(baseWin)) {
                     bool exists = researchRec != null;
                     if (!exists) {
-                        researchRec = new GEDCOMResearchRecord(tree, tree, "", "");
+                        researchRec = new GEDCOMResearchRecord(tree, tree);
                         researchRec.InitNew();
                     }
 
@@ -327,7 +327,7 @@ namespace GKCore
                 using (var dlg = AppHost.Container.Resolve<ITaskEditDlg>(baseWin)) {
                     bool exists = taskRec != null;
                     if (!exists) {
-                        taskRec = new GEDCOMTaskRecord(tree, tree, "", "");
+                        taskRec = new GEDCOMTaskRecord(tree, tree);
                         taskRec.InitNew();
                     }
 
@@ -367,7 +367,7 @@ namespace GKCore
                 using (var dlg = AppHost.Container.Resolve<ICommunicationEditDlg>(baseWin)) {
                     bool exists = commRec != null;
                     if (!exists) {
-                        commRec = new GEDCOMCommunicationRecord(tree, tree, "", "");
+                        commRec = new GEDCOMCommunicationRecord(tree, tree);
                         commRec.InitNew();
                     }
 
@@ -407,7 +407,7 @@ namespace GKCore
                 using (var dlg = AppHost.Container.Resolve<ILocationEditDlg>(baseWin)) {
                     bool exists = locRec != null;
                     if (!exists) {
-                        locRec = new GEDCOMLocationRecord(tree, tree, "", "");
+                        locRec = new GEDCOMLocationRecord(tree, tree);
                         locRec.InitNew();
                     }
 
@@ -476,10 +476,10 @@ namespace GKCore
                 using (var dlg = AppHost.Container.Resolve<IPersonEditDlg>(baseWin)) {
                     bool exists = (indivRec != null);
                     if (!exists) {
-                        indivRec = new GEDCOMIndividualRecord(tree, tree, "", "");
+                        indivRec = new GEDCOMIndividualRecord(tree, tree);
                         indivRec.InitNew();
 
-                        indivRec.AddPersonalName(new GEDCOMPersonalName(tree, indivRec, "", ""));
+                        indivRec.AddPersonalName(new GEDCOMPersonalName(tree, indivRec));
                         baseWin.Context.CreateEventEx(indivRec, "BIRT", "", "");
                     }
 
@@ -539,7 +539,7 @@ namespace GKCore
                 using (var dlg = AppHost.Container.Resolve<IFamilyEditDlg>(baseWin)) {
                     bool exists = (familyRec != null);
                     if (!exists) {
-                        familyRec = new GEDCOMFamilyRecord(tree, tree, "", "");
+                        familyRec = new GEDCOMFamilyRecord(tree, tree);
                         familyRec.InitNew();
                     }
 

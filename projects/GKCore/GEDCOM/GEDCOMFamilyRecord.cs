@@ -62,9 +62,9 @@ namespace GKCommon.GEDCOM
             get { return fSpouseSealings; }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public GEDCOMFamilyRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtFamily);
             SetName(GEDCOMTagType.FAM);
 
@@ -260,15 +260,6 @@ namespace GKCommon.GEDCOM
             fSpouseSealings.SaveToStream(stream);
         }
 
-        public GEDCOMFamilyRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMFamilyRecord(owner, parent, tagName, tagValue);
-        }
-
         private string GetFamilyString()
         {
             string result = "";
@@ -334,7 +325,7 @@ namespace GKCommon.GEDCOM
                     break;
             }
 
-            GEDCOMSpouseToFamilyLink spLink = new GEDCOMSpouseToFamilyLink(Owner, spouse, "", "");
+            GEDCOMSpouseToFamilyLink spLink = new GEDCOMSpouseToFamilyLink(Owner, spouse);
             spLink.Family = this;
             spouse.SpouseToFamilyLinks.Add(spLink);
 
@@ -362,11 +353,11 @@ namespace GKCommon.GEDCOM
         {
             if (child == null) return false;
 
-            GEDCOMPointer ptr = new GEDCOMPointer(Owner, this, "", "");
+            GEDCOMPointer ptr = new GEDCOMPointer(Owner, this);
             ptr.SetNamedValue(GEDCOMTagType.CHIL, child);
             fChildren.Add(ptr);
 
-            GEDCOMChildToFamilyLink chLink = new GEDCOMChildToFamilyLink(Owner, child, "", "");
+            GEDCOMChildToFamilyLink chLink = new GEDCOMChildToFamilyLink(Owner, child);
             chLink.Family = this;
             child.ChildToFamilyLinks.Add(chLink);
 

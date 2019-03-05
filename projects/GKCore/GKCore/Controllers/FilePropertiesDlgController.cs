@@ -87,7 +87,7 @@ namespace GKCore.Controllers
 
                 if (dlg.ShowModalX(this)) {
                     // Assignment in control, instead of the header's property to work Cancel.
-                    fView.Language.Text = GEDCOMLanguageEnum.Instance.GetStrValue(dlg.LanguageID);
+                    fView.Language.Text = GEDCOMUtils.GetLanguageStr(dlg.LanguageID);
                 }
             }
         }

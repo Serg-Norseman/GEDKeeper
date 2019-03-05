@@ -26,9 +26,7 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMDate ChangeDate
         {
-            get {
-                return TagClass("DATE", GEDCOMDate.Create) as GEDCOMDate;
-            }
+            get { return TagClass("DATE", GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public GEDCOMTime ChangeTime
@@ -55,10 +53,20 @@ namespace GKCommon.GEDCOM
             get { return TagClass(GEDCOMTagType.NOTE, GEDCOMNotes.Create) as GEDCOMNotes; }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
-            base.CreateObj(owner, parent);
+            return new GEDCOMChangeDate(owner, parent, tagName, tagValue);
+        }
+
+        public GEDCOMChangeDate(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        {
             SetName(GEDCOMTagType.CHAN);
+        }
+
+        public GEDCOMChangeDate(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
@@ -81,15 +89,6 @@ namespace GKCommon.GEDCOM
             DateTime cdt = ChangeDateTime;
             string result = ((cdt.Ticks == 0) ? "" : cdt.ToString("yyyy.MM.dd HH:mm:ss", null));
             return result;
-        }
-
-        public GEDCOMChangeDate(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMChangeDate(owner, parent, tagName, tagValue);
         }
     }
 }

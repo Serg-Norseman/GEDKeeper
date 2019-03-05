@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,9 +34,9 @@ namespace GKCommon.GEDCOM
     public class GEDCOMNoteRecordTests
     {
         [Test]
-        public void testCommon()
+        public void Test_Common()
         {
-            using (GEDCOMNoteRecord noteRec = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "")) {
+            using (GEDCOMNoteRecord noteRec = new GEDCOMNoteRecord(null, null)) {
                 Assert.AreEqual(GEDCOMRecordType.rtNote, noteRec.RecordType);
 
                 noteRec.AddNoteText("text");
@@ -48,7 +48,7 @@ namespace GKCommon.GEDCOM
                 noteRec.SetNoteText("Test text");
                 Assert.AreEqual("Test text", noteRec.Note.Text.Trim());
 
-                using (GEDCOMNoteRecord noteRec2 = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "")) {
+                using (GEDCOMNoteRecord noteRec2 = new GEDCOMNoteRecord(null, null)) {
                     noteRec2.SetNoteText("Test text");
                     Assert.AreEqual("Test text", noteRec2.Note.Text.Trim());
 
@@ -66,7 +66,7 @@ namespace GKCommon.GEDCOM
                 Assert.Throws(typeof(ArgumentException), () => {
                     noteRec.MoveTo(null, false);
                 });
-                using (GEDCOMNoteRecord noteRec3 = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "")) {
+                using (GEDCOMNoteRecord noteRec3 = new GEDCOMNoteRecord(null, null)) {
                     noteRec3.SetNoteText("Test text 3");
                     Assert.AreEqual("Test text 3", noteRec3.Note.Text.Trim());
 
@@ -78,16 +78,15 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testGetNote()
+        public void Test_GetNote()
         {
-            GEDCOMNoteRecord instance = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "This is a test");
+            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null, "", "This is a test");
             StringList expResult = new StringList("This is a test");
-            StringList result = instance.Note;
-            Assert.AreEqual(expResult.Text, result.Text);
+            Assert.AreEqual(expResult.Text, instance.Note.Text);
         }
 
         [Test]
-        public void testSetNote()
+        public void Test_SetNote()
         {
             string[] lines = new string [] {
                 "This is a test line 1",
@@ -96,18 +95,16 @@ namespace GKCommon.GEDCOM
             };
             
             StringList value = new StringList(lines);
-            GEDCOMNoteRecord instance = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "");
+            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null);
             instance.Note = value;
-            
-            StringList result = instance.Note;
-            Assert.AreEqual(value.Text, result.Text);
+            Assert.AreEqual(value.Text, instance.Note.Text);
         }
 
         [Test]
-        public void testMoveTo1()
+        public void Test_MoveTo1()
         {
-            GEDCOMRecord other = new GEDCOMLocationRecord(null, null, "", "");
-            GEDCOMNoteRecord instance = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "");
+            GEDCOMRecord other = new GEDCOMLocationRecord(null, null);
+            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null);
             bool clearDest = false;
             
             Assert.Throws(typeof(ArgumentException), () => {
@@ -116,7 +113,7 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void testMoveTo2()
+        public void Test_MoveTo2()
         {
             string[] lines = new string[] {
                 "This is a test line 1",
@@ -125,8 +122,8 @@ namespace GKCommon.GEDCOM
             };
             
             string text = "This is a test";
-            GEDCOMNoteRecord instance1 = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "BLAH", text);
-            GEDCOMNoteRecord instance2 = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "BLUM", "");
+            GEDCOMNoteRecord instance1 = new GEDCOMNoteRecord(null, null, "BLAH", text);
+            GEDCOMNoteRecord instance2 = new GEDCOMNoteRecord(null, null, "BLUM", "");
             instance2.SetNotesArray(lines);
             bool clearDest = false;
             
@@ -134,45 +131,41 @@ namespace GKCommon.GEDCOM
 
             // moveTo preserved existing note text
             StringList value = new StringList(lines);
-            StringList result = instance2.Note;
-            Assert.AreEqual(value.Text, result.Text);
+            Assert.AreEqual(value.Text, instance2.Note.Text);
         }
         
         [Test]
-        public void testIsMatch()
+        public void Test_IsMatch()
         {
             var matchParams = new MatchParams();
-            GEDCOMTag other = GEDCOMAddress.Create(null, null, "", "");
-            GEDCOMNoteRecord instance = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "");
-            float expResult = 0.0F;
+            GEDCOMTag other = new GEDCOMAddress(null, null);
+            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null);
             float result = instance.IsMatch(other, matchParams); // TODO matchParams is not used
-            Assert.AreEqual(expResult, result, 0.0);
+            Assert.AreEqual(0.0F, result, 0.0);
         }
 
         [Test]
-        public void testIsMatch2()
+        public void Test_IsMatch2()
         {
             var matchParams = new MatchParams();
-            GEDCOMNoteRecord instance1 = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "This is a test");
-            GEDCOMNoteRecord instance2 = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "tHiS iS nOt A tEsT");
-            float expResult = 0.0F;
+            GEDCOMNoteRecord instance1 = new GEDCOMNoteRecord(null, null, "", "This is a test");
+            GEDCOMNoteRecord instance2 = new GEDCOMNoteRecord(null, null, "", "tHiS iS nOt A tEsT");
             float result = instance1.IsMatch(instance2, matchParams); // TODO matchParams is not used
-            Assert.AreEqual(expResult, result, 0.0);
+            Assert.AreEqual(0.0F, result, 0.0);
         }
 
         [Test]
-        public void testIsMatch3()
+        public void Test_IsMatch3()
         {
             var matchParams = new MatchParams();
-            GEDCOMNoteRecord instance1 = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "This is a test");
-            GEDCOMNoteRecord instance2 = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "This is a test");
-            float expResult = 100.0F;
+            GEDCOMNoteRecord instance1 = new GEDCOMNoteRecord(null, null, "", "This is a test");
+            GEDCOMNoteRecord instance2 = new GEDCOMNoteRecord(null, null, "", "This is a test");
             float result = instance1.IsMatch(instance2, matchParams); // TODO matchParams is not used
-            Assert.AreEqual(expResult, result, 0.0);
+            Assert.AreEqual(100.0F, result, 0.0);
         }
         
         [Test]
-        public void testSetNotesArray()
+        public void Test_SetNotesArray()
         {
             string[] lines = new string [] {
                 "This is a test line 1",
@@ -180,69 +173,64 @@ namespace GKCommon.GEDCOM
                 "This is a test line 3"
             };
             
-            GEDCOMNoteRecord instance = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "");
+            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null);
             instance.SetNotesArray(lines);
             
             StringList value = new StringList(lines);
-            StringList result = instance.Note;
-            Assert.AreEqual(value.Text, result.Text);
+            Assert.AreEqual(value.Text, instance.Note.Text);
         }
 
         [Test]
-        public void testAddNoteText1()
+        public void Test_AddNoteText1()
         {
             string text = "This is a test";
-            GEDCOMNoteRecord instance = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "");
+            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null);
             instance.AddNoteText(text);
 
             StringList value = new StringList(text);
-            StringList result = instance.Note;
-            Assert.AreEqual(value.Text, result.Text);
+            Assert.AreEqual(value.Text, instance.Note.Text);
         }
 
         [Test]
-        public void testAddNoteText2()
+        public void Test_AddNoteText2()
         {
             string text1 = "This is a test";
             string text2 = "This is another test";
-            GEDCOMNoteRecord instance = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", text1);
+            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null, "", text1);
             instance.AddNoteText(text2);
             
             StringList value = new StringList(text1);
             value.Add(text2);
-            StringList result = instance.Note;
-            Assert.AreEqual(value.Text, result.Text);
+            Assert.AreEqual(value.Text, instance.Note.Text);
         }
         
         [Test]
-        public void testSetNoteText1()
+        public void Test_SetNoteText1()
         {
             string text = "Yet another test";
-            GEDCOMNoteRecord instance = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "");
+            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null);
             instance.SetNoteText(text);
             
             StringList value = new StringList(text);
-            StringList result = instance.Note;
-            Assert.AreEqual(value.Text, result.Text);
+            Assert.AreEqual(value.Text, instance.Note.Text);
         }
 
         [Test]
-        public void testSetNoteText2()
+        public void Test_SetNoteText2()
         {
             string text = "Yet another test";
             string text0 = "Initial text";
-            GEDCOMNoteRecord instance = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", text0);
+            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null, "", text0);
             instance.SetNoteText(text);
             
             StringList value = new StringList(text);
-            StringList result = instance.Note;
-            Assert.AreEqual(value.Text, result.Text);
+            Assert.AreEqual(value.Text, instance.Note.Text);
         }
 
         [Test]
-        public void testSetNoteText3()
+        public void Test_SetNoteText3()
         {
-            GEDCOMNoteRecord instance = (GEDCOMNoteRecord)GEDCOMNoteRecord.Create(null, null, "", "");
+            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null);
             Assert.Throws(typeof(ArgumentNullException), () => {
                 instance.SetNoteText(null);
             });

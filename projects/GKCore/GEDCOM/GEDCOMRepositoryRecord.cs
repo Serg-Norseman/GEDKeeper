@@ -33,9 +33,9 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue("NAME", value); }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public GEDCOMRepositoryRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtRepository);
             SetName(GEDCOMTagType.REPO);
         }
@@ -62,15 +62,6 @@ namespace GKCommon.GEDCOM
 
             float match = GetStrMatch(RepositoryName, otherRep.RepositoryName, matchParams);
             return match;
-        }
-
-        public GEDCOMRepositoryRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMRepositoryRecord(owner, parent, tagName, tagValue);
         }
     }
 }

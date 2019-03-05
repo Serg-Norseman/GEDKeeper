@@ -46,10 +46,20 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
-            base.CreateObj(owner, parent);
-            fDatePhrase = "";
+            return new GEDCOMDateInterpreted(owner, parent, tagName, tagValue);
+        }
+
+        public GEDCOMDateInterpreted(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        {
+            fDatePhrase = string.Empty;
+        }
+
+        public GEDCOMDateInterpreted(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         protected override string GetStringValue()
@@ -113,15 +123,6 @@ namespace GKCommon.GEDCOM
                 result = ExtractPhrase(result);
             }
             return result;
-        }
-
-        public GEDCOMDateInterpreted(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMDateInterpreted(owner, parent, tagName, tagValue);
         }
     }
 }

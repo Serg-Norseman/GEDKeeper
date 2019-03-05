@@ -48,7 +48,7 @@ namespace GKUI.Forms
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fNoteRecord = new GEDCOMNoteRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fNoteRecord = new GEDCOMNoteRecord(fBase.Context.Tree, fBase.Context.Tree);
 
             fDialog = new NoteEditDlg(fBase);
             fDialog.NoteRecord = fNoteRecord;

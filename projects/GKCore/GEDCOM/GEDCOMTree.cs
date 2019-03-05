@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace GKCommon.GEDCOM
 {
@@ -88,6 +89,7 @@ namespace GKCommon.GEDCOM
         private readonly Dictionary<string, GEDCOMCustomRecord> fXRefIndex;
 
         private GEDCOMFormat fFormat;
+        private int[] fLastIDs;
         private EventHandler fOnChange;
         private EventHandler fOnChanging;
         private ProgressEventHandler fOnProgressEvent;
@@ -150,7 +152,9 @@ namespace GKCommon.GEDCOM
         {
             fXRefIndex = new Dictionary<string, GEDCOMCustomRecord>();
             fRecords = new GEDCOMList<GEDCOMRecord>(this);
-            fHeader = new GEDCOMHeader(this, this, "", "");
+            fHeader = new GEDCOMHeader(this, this);
+
+            ResetLastIDs();
         }
 
         protected override void Dispose(bool disposing)
@@ -184,7 +188,7 @@ namespace GKCommon.GEDCOM
 
         private static string GetSignByRecord(GEDCOMRecord record)
         {
-            string result = "";
+            string result = string.Empty;
             if (record == null) return result;
 
             switch (record.RecordType)
@@ -268,21 +272,32 @@ namespace GKCommon.GEDCOM
             }
         }
 
+        private void ResetLastIDs()
+        {
+            fLastIDs = new int[(int)GEDCOMRecordType.rtLast + 1];
+        }
+
         public string XRefIndex_NewXRef(GEDCOMRecord record)
         {
+            var invNFI = GEDCOMUtils.InvariantNumberFormatInfo;
             string sign = GetSignByRecord(record);
-            int I = 1;
-            while (fXRefIndex.ContainsKey(sign + I.ToString()))
-            {
-                I++;
-            }
-            return sign + I.ToString();
+            string xref;
+
+            int recType = (int)record.RecordType;
+            int lastId = fLastIDs[recType];
+
+            do {
+                lastId++;
+                xref = sign + lastId.ToString(invNFI);
+            } while (fXRefIndex.ContainsKey(xref));
+
+            fLastIDs[recType] = lastId;
+            return xref;
         }
 
         public void SetXRef(string oldXRef, GEDCOMCustomRecord record)
         {
-            if (!string.IsNullOrEmpty(oldXRef))
-            {
+            if (!string.IsNullOrEmpty(oldXRef)) {
                 bool exists = fXRefIndex.ContainsKey(oldXRef);
                 if (exists) fXRefIndex.Remove(oldXRef);
             }
@@ -304,6 +319,7 @@ namespace GKCommon.GEDCOM
             fHeader.Clear();
             fRecords.Clear();
             fXRefIndex.Clear();
+            ResetLastIDs();
         }
 
         public GEDCOMRecord AddRecord(GEDCOMRecord record)
@@ -381,7 +397,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMSubmitterRecord submitter = fHeader.Submitter.Value as GEDCOMSubmitterRecord;
             if (submitter == null) {
-                submitter = new GEDCOMSubmitterRecord(this, this, "", "");
+                submitter = new GEDCOMSubmitterRecord(this, this);
                 submitter.InitNew();
                 AddRecord(submitter);
                 fHeader.SetTagStringValue(GEDCOMTagType.SUBM, "@" + submitter.XRef + "@");
@@ -391,7 +407,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMIndividualRecord CreateIndividual()
         {
-            GEDCOMIndividualRecord result = new GEDCOMIndividualRecord(this, this, "", "");
+            GEDCOMIndividualRecord result = new GEDCOMIndividualRecord(this, this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -401,7 +417,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMFamilyRecord CreateFamily()
         {
-            GEDCOMFamilyRecord result = new GEDCOMFamilyRecord(this, this, "", "");
+            GEDCOMFamilyRecord result = new GEDCOMFamilyRecord(this, this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -411,7 +427,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMNoteRecord CreateNote()
         {
-            GEDCOMNoteRecord result = new GEDCOMNoteRecord(this, this, "", "");
+            GEDCOMNoteRecord result = new GEDCOMNoteRecord(this, this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -421,7 +437,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMSourceRecord CreateSource()
         {
-            GEDCOMSourceRecord result = new GEDCOMSourceRecord(this, this, "", "");
+            GEDCOMSourceRecord result = new GEDCOMSourceRecord(this, this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -431,7 +447,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMRepositoryRecord CreateRepository()
         {
-            GEDCOMRepositoryRecord result = new GEDCOMRepositoryRecord(this, this, "", "");
+            GEDCOMRepositoryRecord result = new GEDCOMRepositoryRecord(this, this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -441,7 +457,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMResearchRecord CreateResearch()
         {
-            GEDCOMResearchRecord result = new GEDCOMResearchRecord(this, this, "", "");
+            GEDCOMResearchRecord result = new GEDCOMResearchRecord(this, this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -451,7 +467,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMCommunicationRecord CreateCommunication()
         {
-            GEDCOMCommunicationRecord result = new GEDCOMCommunicationRecord(this, this, "", "");
+            GEDCOMCommunicationRecord result = new GEDCOMCommunicationRecord(this, this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -461,7 +477,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMTaskRecord CreateTask()
         {
-            GEDCOMTaskRecord result = new GEDCOMTaskRecord(this, this, "", "");
+            GEDCOMTaskRecord result = new GEDCOMTaskRecord(this, this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -471,7 +487,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMMultimediaRecord CreateMultimedia()
         {
-            GEDCOMMultimediaRecord result = new GEDCOMMultimediaRecord(this, this, "", "");
+            GEDCOMMultimediaRecord result = new GEDCOMMultimediaRecord(this, this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -481,7 +497,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMLocationRecord CreateLocation()
         {
-            GEDCOMLocationRecord result = new GEDCOMLocationRecord(this, this, "", "");
+            GEDCOMLocationRecord result = new GEDCOMLocationRecord(this, this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -491,7 +507,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMGroupRecord CreateGroup()
         {
-            GEDCOMGroupRecord result = new GEDCOMGroupRecord(this, this, "", "");
+            GEDCOMGroupRecord result = new GEDCOMGroupRecord(this, this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 

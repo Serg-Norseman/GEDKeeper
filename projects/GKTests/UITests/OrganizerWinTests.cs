@@ -44,7 +44,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fAddress = new GEDCOMAddress(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fAddress = new GEDCOMAddress(fBase.Context.Tree, fBase.Context.Tree);
 
             fAddress.AddWebPage("test");
             fAddress.AddPhoneNumber("test");

@@ -19,82 +19,30 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using BSLib;
 
 namespace GKCommon.GEDCOM
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class GEDCOMEnumHelper<T> where T : struct, IComparable, IFormattable
-        #if !PCL
-        , IConvertible
-        #endif
+    public sealed class EnumTuple : IComparable
     {
-        private readonly string[] fStrValues;
-        private readonly Dictionary<string, int> fValues;
-        private readonly T fDefaultValue;
-        private readonly bool fCaseSensitive;
+        public string Key;
+        public int Value;
 
-        protected GEDCOMEnumHelper(string[] strValues, T defaultValue, bool caseSensitive = false)
+        public EnumTuple(string key, int value)
         {
-            Type enumType = typeof(T);
-            if (!enumType.IsEnum)
-                throw new ArgumentException(string.Format("{0} is not of type Enum", enumType.Name));
-
-            T[] enums = (T[]) Enum.GetValues(enumType);
-
-            if (enums.Length != strValues.Length) {
-                throw new ArgumentException("Arguments are not compatible");
-            }
-
-            fStrValues = strValues;
-            fDefaultValue = defaultValue;
-            fCaseSensitive = caseSensitive;
-
-            fValues = new Dictionary<string, int>(enums.Length);
-            for (int i = 0; i < enums.Length; i++)
-            {
-                fValues.Add(strValues[i], i);
-            }
+            Key = key;
+            Value = value;
         }
 
-        public string GetStrValue(T enumVal)
+        public int CompareTo(object obj)
         {
-            #if PCL
-            int idx = (int)Convert.ChangeType(enumVal, typeof(int), null);
-            #else
-            int idx = (int)((IConvertible)enumVal);
-            #endif
-
-            if (idx < 0 || idx >= fStrValues.Length) {
-                return string.Empty;
-            } else {
-                return fStrValues[idx];
-            }
-        }
-
-        public T GetEnumValue(string key)
-        {
-            if (!string.IsNullOrEmpty(key) && !fCaseSensitive) {
-                key = key.Trim().ToLowerInvariant();
-            }
-
-            int result;
-            if (fValues.TryGetValue(key, out result)) {
-                #if PCL
-                return (T)Convert.ChangeType(result, typeof(T), null);
-                #else
-                return (T)((IConvertible)result);
-                #endif
-            } else {
-                return fDefaultValue;
-            }
+            // GEDCOM enums is ASCII identifiers
+            return string.Compare(Key, ((EnumTuple)obj).Key, StringComparison.OrdinalIgnoreCase);
         }
     }
+
 
     /// <summary>
     /// 
@@ -102,6 +50,7 @@ namespace GKCommon.GEDCOM
     public static class GEDCOMUtils
     {
         public static readonly TextInfo InvariantTextInfo = CultureInfo.InvariantCulture.TextInfo;
+        public static readonly NumberFormatInfo InvariantNumberFormatInfo = NumberFormatInfo.InvariantInfo;
 
         #region Parse functions
 
@@ -444,25 +393,24 @@ namespace GKCommon.GEDCOM
             str = ExtractIdent(str, out strDateType, false);
 
             int idx = Algorithms.BinarySearch<string>(GEDCOMCustomDate.GEDCOMDateTypes, strDateType, string.CompareOrdinal);
-            if (idx < 0) idx = 0;
-            var dateType = (GEDCOMDateType)idx;
+            var dateType = (idx < 0) ? GEDCOMDateType.SIMP : (GEDCOMDateType)idx;
 
             GEDCOMCustomDate result;
             switch (dateType) {
                 case GEDCOMDateType.AFT:
                 case GEDCOMDateType.BEF:
                 case GEDCOMDateType.BET:
-                    result = new GEDCOMDateRange(owner, parent, "", "");
+                    result = new GEDCOMDateRange(owner, parent);
                     break;
                 case GEDCOMDateType.INT:
-                    result = new GEDCOMDateInterpreted(owner, parent, "", "");
+                    result = new GEDCOMDateInterpreted(owner, parent);
                     break;
                 case GEDCOMDateType.FROM:
                 case GEDCOMDateType.TO:
-                    result = new GEDCOMDatePeriod(owner, parent, "", "");
+                    result = new GEDCOMDatePeriod(owner, parent);
                     break;
                 default:
-                    result = new GEDCOMDate(owner, parent, "", "");
+                    result = new GEDCOMDate(owner, parent);
                     break;
             }
             return result;
@@ -535,10 +483,15 @@ namespace GKCommon.GEDCOM
             }
 
             // extract month
-            string[] monthes = GEDCOMDate.GetMonthNames(calendar);
             if (token == GEDCOMToken.Word) {
-                int idx = Algorithms.IndexOf(monthes, strTok.GetWord());
-                month = (byte)(idx + 1);
+                //string[] monthes = GEDCOMDate.GetMonthNames(calendar);
+                //int idx = Algorithms.IndexOf(monthes, strTok.GetWord());
+                //month = (byte)(idx + 1);
+
+                // in this case, according to performance test results, BinarySearch is more efficient
+                // than a simple search or even a dictionary search
+                int idx = BinarySearch(GEDCOMCustomDate.GEDCOMMonthValues, InvariantTextInfo.ToUpper(strTok.GetWord()));
+                month = (byte)((idx < 0) ? 0 : idx);
 
                 token = strTok.Next();
             } else if (dateFormat == GEDCOMDateFormat.dfSystem && token == GEDCOMToken.Number) {
@@ -596,6 +549,77 @@ namespace GKCommon.GEDCOM
             strValue = strTok.GetRest();
 
             return strValue;
+        }
+
+        #endregion
+
+        #region GEDCOM Enums Parse
+
+        /*
+        public string GetStrValue(T enumVal)
+        {
+            #if PCL
+            int idx = (int)Convert.ChangeType(enumVal, typeof(int), null);
+            #else
+            int idx = (int)((IConvertible)enumVal);
+            #endif
+
+            if (idx < 0 || idx >= fStrValues.Length) {
+                return string.Empty;
+            } else {
+                return fStrValues[idx];
+            }
+        }
+
+        public T GetEnumValue(string key)
+        {
+            if (!string.IsNullOrEmpty(key) && !fCaseSensitive) {
+                key = key.Trim().ToLowerInvariant();
+            }
+
+            int result;
+            if (fValues.TryGetValue(key, out result)) {
+                #if PCL
+                return (T)Convert.ChangeType(result, typeof(T), null);
+                #else
+                return (T)((IConvertible)result);
+                #endif
+            } else {
+                return fDefaultValue;
+            }
+        }
+         */
+
+        public static string Enum2Str(IConvertible elem, string[] values)
+        {
+            int idx = (int)elem;
+
+            if (idx < 0 || idx >= values.Length) {
+                return string.Empty;
+            } else {
+                return values[idx];
+            }
+        }
+
+        /**
+         * Performance (100.000 iterations, random access):
+         *  - if-based (origin): 430 (100 %), 417 (100 %)
+         *  - simple-loop based (test): 449 (104 %), 437 (104.8 %)
+         *  - dict-based (GEDCOMEnumHelper): 399 (92.8 %), 397 (92 %)
+         *  - bin-search-based: 326 (75.8 %), 324 (77.7 %)
+         * 
+         * On all tests wins BinarySearch-based.
+         */
+        public static int Str2Enum(string val, string[] values, int defVal, bool normalize = true)
+        {
+            if (string.IsNullOrEmpty(val)) return defVal;
+
+            if (normalize) {
+                val = GEDCOMUtils.InvariantTextInfo.ToLower(val.Trim());
+            }
+
+            int idx = Algorithms.BinarySearch<string>(values, val, string.CompareOrdinal);
+            return (idx < 0) ? defVal : idx;
         }
 
         #endregion
@@ -1041,118 +1065,58 @@ namespace GKCommon.GEDCOM
             return s;
         }
 
+
+        public static string[] MediaTypes = new string[] {
+            "", "audio", "book", "card", "electronic", "fiche", "film", "magazine",
+            "manuscript", "map", "newspaper", "photo", "tombstone", "video", "z" };
+
         public static GEDCOMMediaType GetMediaTypeVal(string str)
         {
-            GEDCOMMediaType result = GEDCOMMediaType.mtUnknown;
-            if (string.IsNullOrEmpty(str)) return result;
-
-            str = str.Trim().ToLowerInvariant();
-
-            if (string.Equals(str, "audio"))
-            {
-                result = GEDCOMMediaType.mtAudio;
-            }
-            else if (string.Equals(str, "book"))
-            {
-                result = GEDCOMMediaType.mtBook;
-            }
-            else if (string.Equals(str, "card"))
-            {
-                result = GEDCOMMediaType.mtCard;
-            }
-            else if (string.Equals(str, "electronic"))
-            {
-                result = GEDCOMMediaType.mtElectronic;
-            }
-            else if (string.Equals(str, "fiche"))
-            {
-                result = GEDCOMMediaType.mtFiche;
-            }
-            else if (string.Equals(str, "film"))
-            {
-                result = GEDCOMMediaType.mtFilm;
-            }
-            else if (string.Equals(str, "magazine"))
-            {
-                result = GEDCOMMediaType.mtMagazine;
-            }
-            else if (string.Equals(str, "manuscript"))
-            {
-                result = GEDCOMMediaType.mtManuscript;
-            }
-            else if (string.Equals(str, "map"))
-            {
-                result = GEDCOMMediaType.mtMap;
-            }
-            else if (string.Equals(str, "newspaper"))
-            {
-                result = GEDCOMMediaType.mtNewspaper;
-            }
-            else if (string.Equals(str, "photo"))
-            {
-                result = GEDCOMMediaType.mtPhoto;
-            }
-            else if (string.Equals(str, "tombstone"))
-            {
-                result = GEDCOMMediaType.mtTombstone;
-            }
-            else if (string.Equals(str, "video"))
-            {
-                result = GEDCOMMediaType.mtVideo;
-            }
-
-            return result;
+            return (GEDCOMMediaType)Str2Enum(str, MediaTypes, (int)GEDCOMMediaType.mtUnknown);
         }
 
         public static string GetMediaTypeStr(GEDCOMMediaType value)
         {
-            string s;
-            switch (value) {
-                case GEDCOMMediaType.mtAudio:
-                    s = "audio";
-                    break;
-                case GEDCOMMediaType.mtBook:
-                    s = "book";
-                    break;
-                case GEDCOMMediaType.mtCard:
-                    s = "card";
-                    break;
-                case GEDCOMMediaType.mtElectronic:
-                    s = "electronic";
-                    break;
-                case GEDCOMMediaType.mtFiche:
-                    s = "fiche";
-                    break;
-                case GEDCOMMediaType.mtFilm:
-                    s = "film";
-                    break;
-                case GEDCOMMediaType.mtMagazine:
-                    s = "magazine";
-                    break;
-                case GEDCOMMediaType.mtManuscript:
-                    s = "manuscript";
-                    break;
-                case GEDCOMMediaType.mtMap:
-                    s = "map";
-                    break;
-                case GEDCOMMediaType.mtNewspaper:
-                    s = "newspaper";
-                    break;
-                case GEDCOMMediaType.mtPhoto:
-                    s = "photo";
-                    break;
-                case GEDCOMMediaType.mtTombstone:
-                    s = "tombstone";
-                    break;
-                case GEDCOMMediaType.mtVideo:
-                    s = "video";
-                    break;
-                default:
-                    s = "";
-                    break;
-            }
-            return s;
+            return GEDCOMUtils.Enum2Str(value, MediaTypes);
         }
+
+
+        public static readonly string[] LangNames = new string[] {
+            "",
+            "Afrikaans", "Akkadian", "Albanian", "Amharic", "Ancient Greek", "Anglo-Saxon", "Arabic", "Armenian", "Assamese",
+            "Belorusian", "Bengali", "Braj", "Bulgarian", "Burmese",
+            "Cantonese", "Catalan", "Catalan_Spn", "Church-Slavic", "Czech",
+            "Danish", "Dogri", "Dutch",
+            "Eblaite", "English", "Esperanto", "Estonian",
+            "Faroese", "Finnish", "French",
+            "Georgian", "German", "Greek", "Gujarati",
+            "Hattic", "Hawaiian", "Hebrew", "Hindi", "Hittite", "Hungarian", "Hurrian",
+            "Icelandic", "Indonesian", "Italian",
+            "Japanese",
+            "Kannada", "Kazakh", "Khmer", "Konkani", "Korean",
+            "Lahnda", "Lao", "Latin", "Latvian", "Lithuanian", "Luwian", 
+            "Macedonian", "Maithili", "Malayalam", "Mandrin", "Manipuri", "Marathi", "Mewari", "Mitanni-Aryan", 
+            "Navaho", "Nepali", "Norwegian",
+            "Oriya", 
+            "Pahari", "Palaic", "Pali", "Panjabi", "Persian", "Polish", "Portuguese", "Prakrit", "Pusto",
+            "Rajasthani", "Romanian", "Russian", 
+            "Sanskrit", "Serb", "Serbo_Croa", "Slovak", "Slovene", "Spanish", "Sumerian", "Swedish",
+            "Tagalog", "Tamil", "Telugu", "Thai", "Tibetan", "Turkish",
+            "Ukrainian", "Urdu",
+            "Vietnamese", "Wendic",
+            "Yiddish",
+        };
+
+        public static GEDCOMLanguageID GetLanguageVal(string str)
+        {
+            return (GEDCOMLanguageID)Str2Enum(str, LangNames, (int)GEDCOMLanguageID.Unknown, false);
+        }
+
+        public static string GetLanguageStr(GEDCOMLanguageID value)
+        {
+            return GEDCOMUtils.Enum2Str(value, LangNames);
+        }
+
 
         public static GEDCOMNameType GetNameTypeVal(string str)
         {
@@ -1279,7 +1243,7 @@ namespace GKCommon.GEDCOM
             if (string.IsNullOrEmpty(str)) return GEDCOMSpouseSealingDateStatus.sdsNone;
 
             GEDCOMSpouseSealingDateStatus result;
-            str = str.Trim().ToUpperInvariant();
+            str = GEDCOMUtils.InvariantTextInfo.ToUpper(str.Trim());
             
             if (str == "CANCELED")
             {
@@ -1360,7 +1324,7 @@ namespace GKCommon.GEDCOM
             if (string.IsNullOrEmpty(su)) return GEDCOMOrdinanceProcessFlag.opNone;
 
             GEDCOMOrdinanceProcessFlag result;
-            su = su.Trim().ToUpperInvariant();
+            su = GEDCOMUtils.InvariantTextInfo.ToUpper(su.Trim());
             
             if (su == "YES")
             {
@@ -1472,27 +1436,18 @@ namespace GKCommon.GEDCOM
         {
             if (string.IsNullOrEmpty(str)) return GEDCOMCharacterSet.csASCII;
 
-            string su = str.ToUpperInvariant();
+            string su = GEDCOMUtils.InvariantTextInfo.ToUpper(str);
             GEDCOMCharacterSet result;
 
-            if (su == "ASCII" || su == "ANSI" || su == "IBMPC")
-            {
+            if (su == "ASCII" || su == "ANSI" || su == "IBMPC") {
                 result = GEDCOMCharacterSet.csASCII;
-            }
-            else if (su == "ANSEL")
-            {
+            } else if (su == "ANSEL") {
                 result = GEDCOMCharacterSet.csANSEL;
-            }
-            else if (su == "UNICODE")
-            {
+            } else if (su == "UNICODE") {
                 result = GEDCOMCharacterSet.csUNICODE;
-            }
-            else if (su == "UTF8" || su == "UTF-8")
-            {
+            } else if (su == "UTF8" || su == "UTF-8") {
                 result = GEDCOMCharacterSet.csUTF8;
-            }
-            else
-            {
+            } else {
                 result = GEDCOMCharacterSet.csASCII;
             }
             
@@ -1503,7 +1458,7 @@ namespace GKCommon.GEDCOM
         {
             if (string.IsNullOrEmpty(str)) return GEDCOMSex.svNone;
 
-            str = str.Trim().ToUpperInvariant();
+            str = GEDCOMUtils.InvariantTextInfo.ToUpper(str.Trim());
             GEDCOMSex result;
 
             if (str == "M") {
@@ -1783,5 +1738,50 @@ namespace GKCommon.GEDCOM
         }
         
         #endregion
+
+        public static string EncodeUID(byte[] binaryKey)
+        {
+            var invNFI = GEDCOMUtils.InvariantNumberFormatInfo;
+
+            StringBuilder result = new StringBuilder(36);
+            byte checkA = 0;
+            byte checkB = 0;
+
+            int num = binaryKey.Length;
+            for (int i = 0; i < num; i++) {
+                byte val = binaryKey[i];
+                checkA = unchecked((byte)(checkA + (uint)val));
+                checkB = unchecked((byte)(checkB + (uint)checkA));
+                result.Append(val.ToString("X2", invNFI));
+            }
+
+            result.Append(checkA.ToString("X2", invNFI));
+            result.Append(checkB.ToString("X2", invNFI));
+
+            return result.ToString();
+        }
+
+        public static int BinarySearch(EnumTuple[] array, string key)
+        {
+            int i = 0;
+            int num = array.Length - 1;
+            while (i <= num) {
+                int num2 = i + (num - i >> 1);
+
+                EnumTuple ekv = array[num2];
+                int num3 = string.Compare(ekv.Key, key, StringComparison.OrdinalIgnoreCase);
+
+                if (num3 == 0) {
+                    return ekv.Value;
+                }
+                if (num3 < 0) {
+                    i = num2 + 1;
+                }
+                else {
+                    num = num2 - 1;
+                }
+            }
+            return ~i;
+        }
     }
 }

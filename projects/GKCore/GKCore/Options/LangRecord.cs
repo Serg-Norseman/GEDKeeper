@@ -40,7 +40,7 @@ namespace GKCore.Options
             FileName = fileName;
 
             string engLangName = ConvertHelper.UniformName(Path.GetFileNameWithoutExtension(fileName));
-            LangID = GEDCOMLanguageEnum.Instance.GetEnumValue(engLangName);
+            LangID = GEDCOMUtils.GetLanguageVal(engLangName);
         }
     }
 }

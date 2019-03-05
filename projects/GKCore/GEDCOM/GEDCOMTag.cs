@@ -96,13 +96,18 @@ namespace GKCommon.GEDCOM
         #endregion
         
         #region Object management
+
+        public static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        {
+            return new GEDCOMTag(owner, parent, tagName, tagValue);
+        }
         
-        protected virtual void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+        public GEDCOMTag(GEDCOMTree owner, GEDCOMObject parent)
         {
             fOwner = owner;
             fParent = parent;
             fTags = new GEDCOMList<GEDCOMTag>(this);
-            fStringValue = "";
+            fStringValue = string.Empty;
 
             GEDCOMTag parentTag = parent as GEDCOMTag;
             if (parentTag != null) {
@@ -112,23 +117,14 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public GEDCOMTag(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public GEDCOMTag(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
         {
-            CreateObj(owner, parent);
-
-            if (!string.IsNullOrEmpty(tagName)) {
-                SetName(tagName);
-            }
-
-            if (!string.IsNullOrEmpty(tagValue)) {
-                ParseString(tagValue);
-            }
+            SetNameValue(tagName, tagValue);
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (fTags != null) {
                     fTags.Dispose();
                     fTags = null;
@@ -137,9 +133,15 @@ namespace GKCommon.GEDCOM
             base.Dispose(disposing);
         }
 
-        public static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public void SetNameValue(string tagName, string tagValue)
         {
-            return new GEDCOMTag(owner, parent, tagName, tagValue);
+            if (!string.IsNullOrEmpty(tagName)) {
+                SetName(tagName);
+            }
+
+            if (!string.IsNullOrEmpty(tagValue)) {
+                ParseString(tagValue);
+            }
         }
 
         #endregion
@@ -260,7 +262,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMTag FindTag(string tagName, int startIndex)
         {
-            string su = tagName.ToUpperInvariant();
+            string su = GEDCOMUtils.InvariantTextInfo.ToUpper(tagName);
 
             int pos = su.IndexOf('\\');
             string S = ((pos >= 0) ? su.Substring(0, pos) : su);

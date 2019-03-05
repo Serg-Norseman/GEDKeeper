@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,8 +30,14 @@ namespace GKCommon.GEDCOM
             set { SetTagStrings(this, value); }
         }
 
-        public GEDCOMIndividualAttribute(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+
+        public GEDCOMIndividualAttribute(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
+        }
+
+        public GEDCOMIndividualAttribute(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)

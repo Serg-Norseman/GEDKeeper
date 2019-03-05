@@ -21,7 +21,6 @@
 using System;
 using System.IO;
 using BSLib;
-using GKCore;
 
 namespace GKCommon.GEDCOM
 {
@@ -79,16 +78,9 @@ namespace GKCommon.GEDCOM
             get { return fUserReferences; }
         }
 
-        private static string CreateUID()
-        {
-            byte[] binary = Guid.NewGuid().ToByteArray();
-            string result = GKUtils.EncodeUID(binary);
-            return result;
-        }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+        protected GEDCOMRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             fRecordType = GEDCOMRecordType.rtNone;
 
             fNotes = new GEDCOMList<GEDCOMNotes>(this);
@@ -111,6 +103,13 @@ namespace GKCommon.GEDCOM
         protected void SetRecordType(GEDCOMRecordType type)
         {
             fRecordType = type;
+        }
+
+        private static string CreateUID()
+        {
+            byte[] binary = Guid.NewGuid().ToByteArray();
+            string result = GEDCOMUtils.EncodeUID(binary);
+            return result;
         }
 
         public int IndexOfSource(GEDCOMSourceRecord sourceRec)
@@ -137,25 +136,25 @@ namespace GKCommon.GEDCOM
             base.Assign(source);
 
             foreach (GEDCOMNotes sourceNote in sourceRec.fNotes) {
-                GEDCOMNotes copy = (GEDCOMNotes)GEDCOMNotes.Create(Owner, this, "", "");
+                GEDCOMNotes copy = new GEDCOMNotes(Owner, this);
                 copy.Assign(sourceNote);
                 Notes.Add(copy);
             }
 
             foreach (GEDCOMMultimediaLink sourceMediaLink in sourceRec.fMultimediaLinks) {
-                GEDCOMMultimediaLink copy = (GEDCOMMultimediaLink)GEDCOMMultimediaLink.Create(Owner, this, "", "");
+                GEDCOMMultimediaLink copy = new GEDCOMMultimediaLink(Owner, this);
                 copy.Assign(sourceMediaLink);
                 MultimediaLinks.Add(copy);
             }
 
             foreach (GEDCOMSourceCitation sourceSrcCit in sourceRec.fSourceCitations) {
-                GEDCOMSourceCitation copy = (GEDCOMSourceCitation)GEDCOMSourceCitation.Create(Owner, this, "", "");
+                GEDCOMSourceCitation copy = new GEDCOMSourceCitation(Owner, this);
                 copy.Assign(sourceSrcCit);
                 SourceCitations.Add(copy);
             }
 
             foreach (GEDCOMUserReference sourceUserRef in sourceRec.fUserReferences) {
-                GEDCOMUserReference copy = (GEDCOMUserReference)GEDCOMUserReference.Create(Owner, this, "", "");
+                GEDCOMUserReference copy = new GEDCOMUserReference(Owner, this);
                 copy.Assign(sourceUserRef);
                 UserReferences.Add(copy);
             }
@@ -300,10 +299,6 @@ namespace GKCommon.GEDCOM
             RequireUID();
         }
 
-        protected GEDCOMRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
         #region Auxiliary
 
         public string GetXRefNum()
@@ -334,7 +329,7 @@ namespace GKCommon.GEDCOM
             GEDCOMNotes note = null;
 
             if (noteRec != null) {
-                note = new GEDCOMNotes(Owner, this, "", "");
+                note = new GEDCOMNotes(Owner, this);
                 note.Value = noteRec;
                 Notes.Add(note);
             }
@@ -347,7 +342,7 @@ namespace GKCommon.GEDCOM
             GEDCOMSourceCitation cit = null;
 
             if (sourceRec != null) {
-                cit = new GEDCOMSourceCitation(Owner, this, "", "");
+                cit = new GEDCOMSourceCitation(Owner, this);
                 cit.Value = sourceRec;
                 cit.Page = page;
                 cit.CertaintyAssessment = quality;
@@ -362,7 +357,7 @@ namespace GKCommon.GEDCOM
             GEDCOMMultimediaLink mmLink = null;
 
             if (mediaRec != null) {
-                mmLink = new GEDCOMMultimediaLink(Owner, this, "", "");
+                mmLink = new GEDCOMMultimediaLink(Owner, this);
                 mmLink.Value = mediaRec;
                 MultimediaLinks.Add(mmLink);
             }
@@ -372,7 +367,7 @@ namespace GKCommon.GEDCOM
 
         public void AddUserRef(string reference)
         {
-            GEDCOMUserReference uRef = new GEDCOMUserReference(Owner, this, "", "");
+            GEDCOMUserReference uRef = new GEDCOMUserReference(Owner, this);
             uRef.StringValue = reference;
             UserReferences.Add(uRef);
         }

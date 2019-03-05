@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -83,6 +83,7 @@ namespace GKCommon.GEDCOM
             get { return TagClass("_LANG", GEDCOMLanguage.Create) as GEDCOMLanguage; }
         }
 
+
         protected override string GetStringValue()
         {
             // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
@@ -138,17 +139,26 @@ namespace GKCommon.GEDCOM
             fLastPart = (string.IsNullOrEmpty(lastPart)) ? "" : lastPart.Trim();
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
-            base.CreateObj(owner, parent);
+            return new GEDCOMPersonalName(owner, parent, tagName, tagValue);
+        }
+
+        public GEDCOMPersonalName(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        {
             SetName("NAME");
 
-            fPieces = new GEDCOMPersonalNamePieces(owner, this, "", "");
+            fPieces = new GEDCOMPersonalNamePieces(owner, this);
             fPieces.SetLevel(Level);
 
             fFirstPart = "";
             fSurname = "";
             fLastPart = "";
+        }
+
+        public GEDCOMPersonalName(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         protected override void Dispose(bool disposing)
@@ -288,16 +298,6 @@ namespace GKCommon.GEDCOM
             }
 
             return match;
-        }
-
-        public GEDCOMPersonalName(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-            : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMPersonalName(owner, parent, tagName, tagValue);
         }
     }
 }

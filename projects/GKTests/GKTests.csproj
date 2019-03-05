@@ -96,7 +96,6 @@
     <Compile Include="GEDCOM\FileFormatTests.cs" />
     <Compile Include="GEDCOM\GEDCOMAddressTests.cs" />
     <Compile Include="GEDCOM\GEDCOMDateTests.cs" />
-    <Compile Include="GEDCOM\GEDCOMDateTests2.cs" />
     <Compile Include="GEDCOM\GEDCOMListTests.cs" />
     <Compile Include="GEDCOM\GEDCOMNoteRecordTests.cs" />
     <Compile Include="GEDCOM\GEDCOMParserTests.cs" />

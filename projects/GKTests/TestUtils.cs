@@ -22,6 +22,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -161,6 +162,21 @@ namespace GKTests
             GEDCOMCommunicationRecord commRec = context.Tree.CreateCommunication();
             commRec.CommName = "Test communication";
             Assert.IsNotNull(commRec, "commRec != null");
+        }
+
+        public static string GetTagStreamText(GEDCOMTag tag)
+        {
+            string result;
+            using (MemoryStream stm = new MemoryStream()) {
+                using (StreamWriter fs = new StreamWriter(stm)) {
+                    tag.SaveToStream(fs);
+
+                    fs.Flush();
+
+                    result = Encoding.ASCII.GetString(stm.ToArray());
+                }
+            }
+            return result;
         }
 
         public static DateTime ParseDT(string dtx)

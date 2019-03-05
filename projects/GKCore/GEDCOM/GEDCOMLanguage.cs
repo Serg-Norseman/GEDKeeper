@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -57,7 +57,7 @@ namespace GKCommon.GEDCOM
         public override string ParseString(string strValue)
         {
             if (!string.IsNullOrEmpty(strValue)) {
-                fValue = GEDCOMLanguageEnum.Instance.GetEnumValue(strValue);
+                fValue = GEDCOMUtils.GetLanguageVal(strValue);
             }
 
             return strValue;
@@ -65,18 +65,17 @@ namespace GKCommon.GEDCOM
 
         protected override string GetStringValue()
         {
-            return GEDCOMLanguageEnum.Instance.GetStrValue(fValue);
+            return GEDCOMUtils.GetLanguageStr(fValue);
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+        public GEDCOMLanguage(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetName(GEDCOMTagType.LANG);
         }
 
-        public GEDCOMLanguage(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-            : base(owner, parent, tagName, tagValue)
+        public GEDCOMLanguage(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
         {
+            SetNameValue(tagName, tagValue);
         }
 
         public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)

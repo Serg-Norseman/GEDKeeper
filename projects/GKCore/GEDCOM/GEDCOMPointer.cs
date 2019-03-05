@@ -49,10 +49,20 @@ namespace GKCommon.GEDCOM
             set { fXRef = GEDCOMUtils.EncloseXRef(value); }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
-            base.CreateObj(owner, parent);
-            fXRef = "";
+            return new GEDCOMPointer(owner, parent, tagName, tagValue);
+        }
+
+        public GEDCOMPointer(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        {
+            fXRef = string.Empty;
+        }
+
+        public GEDCOMPointer(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         protected override string GetStringValue()
@@ -76,19 +86,11 @@ namespace GKCommon.GEDCOM
             XRef = map.FindNewXRef(XRef);
         }
 
+        // TODO: refactor it
         public void SetNamedValue(string name, GEDCOMRecord record)
         {
             SetName(name);
             Value = record;
-        }
-
-        public GEDCOMPointer(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMPointer(owner, parent, tagName, tagValue);
         }
     }
 }

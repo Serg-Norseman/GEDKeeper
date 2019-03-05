@@ -48,7 +48,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fUserRef = new GEDCOMUserReference(fBase.Context.Tree, null, "", "");
+            fUserRef = new GEDCOMUserReference(fBase.Context.Tree, null);
 
             fDialog = new UserRefEditDlg(fBase);
             fDialog.UserRef = fUserRef;

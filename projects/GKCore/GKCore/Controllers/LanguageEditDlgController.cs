@@ -45,8 +45,8 @@ namespace GKCore.Controllers
 
         public LanguageEditDlgController(ILanguageEditDlg view) : base(view)
         {
-            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageEnum.LastVal; lid++) {
-                fView.LanguageCombo.AddItem(GEDCOMLanguageEnum.Instance.GetStrValue(lid), lid);
+            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageID.Yiddish; lid++) {
+                fView.LanguageCombo.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
             }
         }
 
@@ -63,7 +63,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.LanguageCombo.Text = GEDCOMLanguageEnum.Instance.GetStrValue(fLanguageID);
+            fView.LanguageCombo.Text = GEDCOMUtils.GetLanguageStr(fLanguageID);
         }
     }
 }

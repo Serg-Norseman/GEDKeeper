@@ -44,9 +44,9 @@ namespace GKCommon.GEDCOM
             get { return TagClass("_STOPDATE", GEDCOMDate.Create) as GEDCOMDate; }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public GEDCOMTaskRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtTask);
             SetName(GEDCOMTagType._TASK);
         }
@@ -62,15 +62,6 @@ namespace GKCommon.GEDCOM
             }
 
             return result;
-        }
-
-        public GEDCOMTaskRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMTaskRecord(owner, parent, tagName, tagValue);
         }
 
         #region Auxiliary
@@ -93,20 +84,13 @@ namespace GKCommon.GEDCOM
             GEDCOMRecord goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(Goal));
 
             GKGoalType goalType;
-            if (goalRec is GEDCOMIndividualRecord)
-            {
+            if (goalRec is GEDCOMIndividualRecord) {
                 goalType = GKGoalType.gtIndividual;
-            }
-            else if (goalRec is GEDCOMFamilyRecord)
-            {
+            } else if (goalRec is GEDCOMFamilyRecord) {
                 goalType = GKGoalType.gtFamily;
-            }
-            else if (goalRec is GEDCOMSourceRecord)
-            {
+            } else if (goalRec is GEDCOMSourceRecord) {
                 goalType = GKGoalType.gtSource;
-            }
-            else
-            {
+            } else {
                 goalType = GKGoalType.gtOther;
             }
 

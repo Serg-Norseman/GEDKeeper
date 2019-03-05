@@ -46,7 +46,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fGroupRecord = new GEDCOMGroupRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fGroupRecord = new GEDCOMGroupRecord(fBase.Context.Tree, fBase.Context.Tree);
 
             fDialog = new GroupEditDlg(fBase);
             fDialog.Group = fGroupRecord;

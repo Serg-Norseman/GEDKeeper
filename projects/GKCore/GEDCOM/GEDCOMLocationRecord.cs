@@ -33,9 +33,9 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue("NAME", value); }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public GEDCOMLocationRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtLocation);
             SetName(GEDCOMTagType._LOC);
         }
@@ -48,15 +48,6 @@ namespace GKCommon.GEDCOM
 
             float match = GetStrMatch(LocationName, otherLoc.LocationName, matchParams);
             return match;
-        }
-
-        public GEDCOMLocationRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMLocationRecord(owner, parent, tagName, tagValue);
         }
     }
 }

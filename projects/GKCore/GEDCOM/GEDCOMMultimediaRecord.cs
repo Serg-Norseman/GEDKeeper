@@ -24,16 +24,16 @@ namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMMultimediaRecord : GEDCOMRecord
     {
-        private GEDCOMList<GEDCOMFileReferenceWithTitle> fFileReferences;
+        private readonly GEDCOMList<GEDCOMFileReferenceWithTitle> fFileReferences;
 
         public GEDCOMList<GEDCOMFileReferenceWithTitle> FileReferences
         {
             get { return fFileReferences; }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
+
+        public GEDCOMMultimediaRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            base.CreateObj(owner, parent);
             SetRecordType(GEDCOMRecordType.rtMultimedia);
             SetName(GEDCOMTagType.OBJE);
 
@@ -94,15 +94,6 @@ namespace GKCommon.GEDCOM
         {
             base.SaveToStream(stream);
             fFileReferences.SaveToStream(stream);
-        }
-
-        public GEDCOMMultimediaRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMMultimediaRecord(owner, parent, tagName, tagValue);
         }
 
         #region Auxiliary

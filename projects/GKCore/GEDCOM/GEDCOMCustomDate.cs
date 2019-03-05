@@ -39,9 +39,9 @@ namespace GKCommon.GEDCOM
         public static readonly string[] GEDCOMMonthArray;
         public static readonly string[] GEDCOMMonthHebrewArray;
         public static readonly string[] GEDCOMMonthFrenchArray;
-
         public static readonly string[] GEDCOMMonthSysArray;
-        public static readonly string[] GEDCOMMonthRusArray;
+
+        public static readonly EnumTuple[] GEDCOMMonthValues;
 
         static GEDCOMCustomDate()
         {
@@ -56,6 +56,7 @@ namespace GKCommon.GEDCOM
                 "@#DISLAMIC@", // GK+ (nonstandard)
                 "@#DUNKNOWN@"
             };
+
 
             GEDCOMMonthArray = new string[]
             {
@@ -81,11 +82,65 @@ namespace GKCommon.GEDCOM
                 "07.", "08.", "09.", "10.", "11.", "12."
             };
 
-            GEDCOMMonthRusArray = new string[]
-            {
-                "ЯНВ", "ФЕВ", "МАР", "АПР", "МАЙ", "ИЮН",
-                "ИЮЛ", "АВГ", "СЕН", "ОКТ", "НОЯ", "ДЕК"
+            // post-arranged array
+            GEDCOMMonthValues = new EnumTuple[] {
+                new EnumTuple("JAN", 1), // J/G
+                new EnumTuple("FEB", 2), // J/G
+                new EnumTuple("MAR", 3), // J/G
+                new EnumTuple("APR", 4), // J/G
+                new EnumTuple("MAY", 5), // J/G
+                new EnumTuple("JUN", 6), // J/G
+                new EnumTuple("JUL", 7), // J/G
+                new EnumTuple("AUG", 8), // J/G
+                new EnumTuple("SEP", 9), // J/G
+                new EnumTuple("OCT", 10), // J/G
+                new EnumTuple("NOV", 11), // J/G
+                new EnumTuple("DEC", 12), // J/G
+
+                new EnumTuple("TSH", 1), // H
+                new EnumTuple("CSH", 2), // H
+                new EnumTuple("KSL", 3), // H
+                new EnumTuple("TVT", 4), // H
+                new EnumTuple("SHV", 5), // H
+                new EnumTuple("ADR", 6), // H
+                new EnumTuple("ADS", 7), // H
+                new EnumTuple("NSN", 8), // H
+                new EnumTuple("IYR", 9), // H
+                new EnumTuple("SVN", 10), // H
+                new EnumTuple("TMZ", 11), // H
+                new EnumTuple("AAV", 12), // H
+                new EnumTuple("ELL", 13), // H
+
+                new EnumTuple("VEND", 1), // F
+                new EnumTuple("BRUM", 2), // F
+                new EnumTuple("FRIM", 3), // F
+                new EnumTuple("NIVO", 4), // F
+                new EnumTuple("PLUV", 5), // F
+                new EnumTuple("VENT", 6), // F
+                new EnumTuple("GERM", 7), // F
+                new EnumTuple("FLOR", 8), // F
+                new EnumTuple("PRAI", 9), // F
+                new EnumTuple("MESS", 10), // F
+                new EnumTuple("THER", 11), // F
+                new EnumTuple("FRUC", 12), // F
+                new EnumTuple("COMP", 13), // F
+
+                // for files with poor standard support (Russian-localized names of the months)
+                new EnumTuple("ЯНВ", 1), // J/G
+                new EnumTuple("ФЕВ", 2), // J/G
+                new EnumTuple("МАР", 3), // J/G
+                new EnumTuple("АПР", 4), // J/G
+                new EnumTuple("МАЙ", 5), // J/G
+                new EnumTuple("ИЮН", 6), // J/G
+                new EnumTuple("ИЮЛ", 7), // J/G
+                new EnumTuple("АВГ", 8), // J/G
+                new EnumTuple("СЕН", 9), // J/G
+                new EnumTuple("ОКТ", 10), // J/G
+                new EnumTuple("НОЯ", 11), // J/G
+                new EnumTuple("ДЕК", 12), // J/G
             };
+            // BinarySearch requires a sorted array
+            Array.Sort(GEDCOMMonthValues);
         }
 
         public DateTime Date
@@ -94,14 +149,10 @@ namespace GKCommon.GEDCOM
             set { SetDateTime(value); }
         }
 
-        protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
-        {
-            base.CreateObj(owner, parent);
-            SetName("DATE");
-        }
 
-        protected GEDCOMCustomDate(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        protected GEDCOMCustomDate(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
+            SetName("DATE");
         }
 
         public abstract DateTime GetDateTime();
@@ -186,7 +237,7 @@ namespace GKCommon.GEDCOM
 
         public static GEDCOMDate CreateApproximated(GEDCOMTree owner, GEDCOMObject parent, GEDCOMDate date, GEDCOMApproximated approximated)
         {
-            GEDCOMDate result = new GEDCOMDate(owner, parent, "", "");
+            GEDCOMDate result = new GEDCOMDate(owner, parent);
             result.Assign(date);
             result.Approximated = approximated;
             return result;
@@ -194,7 +245,7 @@ namespace GKCommon.GEDCOM
 
         public static GEDCOMDatePeriod CreatePeriod(GEDCOMTree owner, GEDCOMObject parent, GEDCOMDate dateFrom, GEDCOMDate dateTo)
         {
-            GEDCOMDatePeriod result = new GEDCOMDatePeriod(owner, parent, "", "");
+            GEDCOMDatePeriod result = new GEDCOMDatePeriod(owner, parent);
             result.DateFrom.Assign(dateFrom);
             result.DateTo.Assign(dateTo);
             return result;
@@ -202,7 +253,7 @@ namespace GKCommon.GEDCOM
 
         public static GEDCOMDateRange CreateRange(GEDCOMTree owner, GEDCOMObject parent, GEDCOMDate dateAfter, GEDCOMDate dateBefore)
         {
-            GEDCOMDateRange result = new GEDCOMDateRange(owner, parent, "", "");
+            GEDCOMDateRange result = new GEDCOMDateRange(owner, parent);
             result.After.Assign(dateAfter);
             result.Before.Assign(dateBefore);
             return result;

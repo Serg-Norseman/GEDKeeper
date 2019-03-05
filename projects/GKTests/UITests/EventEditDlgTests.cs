@@ -45,7 +45,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fEvent = new GEDCOMIndividualEvent(fBase.Context.Tree, null, "", "");
+            fEvent = new GEDCOMIndividualEvent(fBase.Context.Tree, null);
 
             fDialog = new EventEditDlg(fBase);
             fDialog.Event = fEvent;
