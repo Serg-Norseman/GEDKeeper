@@ -366,7 +366,7 @@ namespace GKFlowInputPlugin
                                     evName = "DEAT";
                                     break;
                                 case  2:
-                                    evName = "MARR";
+                                    evName = GEDCOMTagType.MARR;
                                     break;
                             }
                         }
@@ -374,7 +374,7 @@ namespace GKFlowInputPlugin
                         if (evName == "BIRT" || evName == "DEAT") {
                             GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(iRec, evName, GEDCOMDate.CreateByFormattedStr(edEventDate.Text, false), "");
                             evt.Place.StringValue = place;
-                        } else if (evName == "MARR") {
+                        } else if (evName == GEDCOMTagType.MARR) {
                             family = iRec.GetMarriageFamily(true);
                             GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(family, evName, GEDCOMDate.CreateByFormattedStr(edEventDate.Text, false), "");
                             evt.Place.StringValue = place;

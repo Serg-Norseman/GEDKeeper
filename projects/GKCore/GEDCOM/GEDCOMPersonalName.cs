@@ -74,8 +74,8 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMNameType NameType
         {
-            get { return GEDCOMUtils.GetNameTypeVal(GetTagStringValue("TYPE")); }
-            set { SetTagStringValue("TYPE", GEDCOMUtils.GetNameTypeStr(value)); }
+            get { return GEDCOMUtils.GetNameTypeVal(GetTagStringValue(GEDCOMTagType.TYPE)); }
+            set { SetTagStringValue(GEDCOMTagType.TYPE, GEDCOMUtils.GetNameTypeStr(value)); }
         }
 
         public GEDCOMLanguage Language
@@ -173,7 +173,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "TYPE" || tagName == "FONE" || tagName == "ROMN" || tagName == "_LANG") {
+            if (tagName == GEDCOMTagType.TYPE || tagName == "FONE" || tagName == "ROMN" || tagName == "_LANG") {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             } else {
                 result = fPieces.AddTag(tagName, tagValue, tagConstructor);

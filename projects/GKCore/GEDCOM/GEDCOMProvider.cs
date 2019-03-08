@@ -208,6 +208,53 @@ namespace GKCommon.GEDCOM
             }
         }
 
+        #region Buffered read without excessive allocating memory
+
+        private const int SB_SIZE = 32 * 1024;
+        private const int LB_SIZE = 1024;
+
+        private char[] fStreamBuffer, fLineBuffer;
+        private int fStmBufLen, fStmBufPos, fLineBufPos;
+
+        private void InitBuffers()
+        {
+            fStreamBuffer = new char[SB_SIZE];
+            fLineBuffer = new char[LB_SIZE];
+            fStmBufLen = 0;
+            fStmBufPos = 0;
+            fLineBufPos = 0;
+        }
+
+        private int ReadLine(StreamReader reader)
+        {
+            while (true) {
+                if (fStmBufPos >= fStmBufLen) {
+                    fStmBufLen = reader.Read(fStreamBuffer, 0, SB_SIZE);
+                    if (fStmBufLen <= 0 && fLineBufPos <= 0) {
+                        return -1; // eof, no more lines and no line's buffer
+                    }
+                    fStmBufPos = 0;
+                }
+
+                // here '\r' - it's replace for \0, to reduce checks
+                char ch = (fStmBufPos >= fStmBufLen) ? '\r' : fStreamBuffer[fStmBufPos];
+                fStmBufPos += 1;
+
+                if (ch == '\r' || ch == '\n') {
+                    int linePos = fLineBufPos;
+                    fLineBufPos = 0;
+                    if (linePos > 0) {
+                        return linePos;
+                    }
+                } else {
+                    fLineBuffer[fLineBufPos] = ch;
+                    fLineBufPos += 1;
+                }
+            }
+        }
+
+        #endregion
+
         private void LoadFromStream(Stream fileStream, StreamReader reader)
         {
             fTree.State = GEDCOMState.osLoading;
@@ -221,19 +268,22 @@ namespace GKCommon.GEDCOM
                 int progress = 0;
                 var invariantText = GEDCOMUtils.InvariantTextInfo;
 
+                InitBuffers();
+                var strTok = new GEDCOMParser(false);
                 GEDCOMCustomRecord curRecord = null;
                 GEDCOMTag curTag = null;
 
                 int lineNum = 0;
-                while (reader.Peek() != -1) {
+                int lineLen;
+                while ((lineLen = ReadLine(reader)) != -1) {
                     lineNum++;
-                    string str = reader.ReadLine();
 
                     int tagLevel;
                     string tagXRef, tagName, tagValue;
 
                     try {
-                        int lineRes = GEDCOMUtils.ParseTag(str, out tagLevel, out tagXRef, out tagName, out tagValue);
+                        strTok.Reset(fLineBuffer, 0, lineLen);
+                        int lineRes = GEDCOMUtils.ParseTag(strTok, out tagLevel, out tagXRef, out tagName, out tagValue);
 
                         // empty line
                         if (lineRes == -2) continue;
@@ -245,7 +295,7 @@ namespace GKCommon.GEDCOM
                         // line with text but not in standard tag format
                         if (lineRes == -1) {
                             if (fTree.Format == GEDCOMFormat.gf_FTB) {
-                                FixFTBLine(curRecord, curTag, lineNum, str);
+                                FixFTBLine(curRecord, curTag, lineNum, tagValue);
                                 continue;
                             } else {
                                 throw new EGEDCOMException(string.Format("The string {0} doesn't start with a valid number", lineNum));
@@ -465,36 +515,36 @@ namespace GKCommon.GEDCOM
             result.Add(GEDCOMTagType.ADDR, new TagProperties(GEDCOMTagType.ADDR, true, false));
             result.Add(GEDCOMTagType.AGNC, new TagProperties(GEDCOMTagType.AGNC, true, false));
             result.Add(GEDCOMTagType.AUTH, new TagProperties(GEDCOMTagType.AUTH, true, false));
-            result.Add("CAUS", new TagProperties("CAUS", true, false));
+            result.Add(GEDCOMTagType.CAUS, new TagProperties(GEDCOMTagType.CAUS, true, false));
             result.Add(GEDCOMTagType.CHAN, new TagProperties(GEDCOMTagType.CHAN, true, false));
             result.Add(GEDCOMTagType.CITY, new TagProperties(GEDCOMTagType.CITY, true, false));
             result.Add(GEDCOMTagType.CTRY, new TagProperties(GEDCOMTagType.CTRY, true, false));
-            result.Add("DATE", new TagProperties("DATE", true, false));
+            result.Add(GEDCOMTagType.DATE, new TagProperties(GEDCOMTagType.DATE, true, false));
             result.Add(GEDCOMTagType.PAGE, new TagProperties(GEDCOMTagType.PAGE, true, false));
-            result.Add("PHON", new TagProperties("PHON", true, false));
+            result.Add(GEDCOMTagType.PHON, new TagProperties(GEDCOMTagType.PHON, true, false));
             result.Add(GEDCOMTagType.PLAC, new TagProperties(GEDCOMTagType.PLAC, true, false));
             result.Add(GEDCOMTagType.POST, new TagProperties(GEDCOMTagType.POST, true, false));
             result.Add(GEDCOMTagType.PUBL, new TagProperties(GEDCOMTagType.PUBL, true, false));
             result.Add(GEDCOMTagType.RESN, new TagProperties(GEDCOMTagType.RESN, true, false));
             result.Add(GEDCOMTagType.STAE, new TagProperties(GEDCOMTagType.STAE, true, false));
             result.Add(GEDCOMTagType.TEXT, new TagProperties(GEDCOMTagType.TEXT, true, false));
-            result.Add("TIME", new TagProperties("TIME", true, false));
-            result.Add("TYPE", new TagProperties("TYPE", true, false));
+            result.Add(GEDCOMTagType.TIME, new TagProperties(GEDCOMTagType.TIME, true, false));
+            result.Add(GEDCOMTagType.TYPE, new TagProperties(GEDCOMTagType.TYPE, true, false));
             result.Add(GEDCOMTagType.SUBM, new TagProperties(GEDCOMTagType.SUBM, true, false));
-            result.Add("VERS", new TagProperties("VERS", true, false));
+            result.Add(GEDCOMTagType.VERS, new TagProperties(GEDCOMTagType.VERS, true, false));
             result.Add(GEDCOMTagType.LANG, new TagProperties(GEDCOMTagType.LANG, true, false));
 
-            result.Add("NPFX", new TagProperties("NPFX", true, false));
-            result.Add("GIVN", new TagProperties("GIVN", true, false));
-            result.Add("NICK", new TagProperties("NICK", true, false));
-            result.Add("SPFX", new TagProperties("SPFX", true, false));
-            result.Add("SURN", new TagProperties("SURN", true, false));
-            result.Add("NSFX", new TagProperties("NSFX", true, false));
+            result.Add(GEDCOMTagType.NPFX, new TagProperties(GEDCOMTagType.NPFX, true, false));
+            result.Add(GEDCOMTagType.GIVN, new TagProperties(GEDCOMTagType.GIVN, true, false));
+            result.Add(GEDCOMTagType.NICK, new TagProperties(GEDCOMTagType.NICK, true, false));
+            result.Add(GEDCOMTagType.SPFX, new TagProperties(GEDCOMTagType.SPFX, true, false));
+            result.Add(GEDCOMTagType.SURN, new TagProperties(GEDCOMTagType.SURN, true, false));
+            result.Add(GEDCOMTagType.NSFX, new TagProperties(GEDCOMTagType.NSFX, true, false));
 
-            result.Add("_PATN", new TagProperties("_PATN", true, true));
-            result.Add("_MARN", new TagProperties("_MARN", true, true));
-            result.Add("_RELN", new TagProperties("_RELN", true, true));
-            result.Add("_CENN", new TagProperties("_CENN", true, true));
+            result.Add(GEDCOMTagType._PATN, new TagProperties(GEDCOMTagType._PATN, true, true));
+            result.Add(GEDCOMTagType._MARN, new TagProperties(GEDCOMTagType._MARN, true, true));
+            result.Add(GEDCOMTagType._RELN, new TagProperties(GEDCOMTagType._RELN, true, true));
+            result.Add(GEDCOMTagType._CENN, new TagProperties(GEDCOMTagType._CENN, true, true));
 
             result.Add(GEDCOMTagType._LOC, new TagProperties(GEDCOMTagType._LOC, true,  true));
             result.Add(GEDCOMTagType._POSITION, new TagProperties(GEDCOMTagType._POSITION, true,  true));

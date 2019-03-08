@@ -62,17 +62,38 @@ namespace GKCommon.GEDCOM
         }
 
 
+        public GEDCOMParser(bool ignoreWhitespace)
+        {
+            fIgnoreWhitespace = ignoreWhitespace;
+        }
+
         public GEDCOMParser(string data, bool ignoreWhitespace)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
 
-            fData = data.ToCharArray();
-            fLength = data.Length;
+            fIgnoreWhitespace = ignoreWhitespace;
+
+            Reset(data.ToCharArray(), 0, data.Length);
+        }
+
+        public GEDCOMParser(char[] data, int startIndex, int length, bool ignoreWhitespace)
+        {
+            if (data == null)
+                throw new ArgumentNullException("data");
 
             fIgnoreWhitespace = ignoreWhitespace;
+
+            Reset(data, startIndex, length);
+        }
+
+        public void Reset(char[] data, int startIndex, int length)
+        {
+            fData = data;
+            fLength = length;
+
             fCurrentToken = GEDCOMToken.Unknown;
-            fPos = 0;
+            fPos = startIndex;
             fValueReset = false;
         }
 
@@ -186,6 +207,16 @@ namespace GKCommon.GEDCOM
         public string GetRest()
         {
             return (fPos >= fLength) ? string.Empty : new string(fData, fPos, fLength - fPos);
+        }
+
+        public string GetSaveRest()
+        {
+            return (fSavePos >= fLength) ? string.Empty : new string(fData, fSavePos, fLength - fSavePos);
+        }
+
+        public string GetFullStr()
+        {
+            return new string(fData, 0, fLength);
         }
 
         public bool RequireToken(GEDCOMToken tokenKind)

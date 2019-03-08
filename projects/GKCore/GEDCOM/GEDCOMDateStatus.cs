@@ -24,7 +24,7 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMDate ChangeDate
         {
-            get { return TagClass("DATE", GEDCOMDate.Create) as GEDCOMDate; }
+            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate; }
         }
 
 
@@ -35,7 +35,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMDateStatus(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            SetName("STAT");
+            SetName(GEDCOMTagType.STAT);
         }
 
         public GEDCOMDateStatus(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
@@ -47,7 +47,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "DATE") {
+            if (tagName == GEDCOMTagType.DATE) {
                 result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);

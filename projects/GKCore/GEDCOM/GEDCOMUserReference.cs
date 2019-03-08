@@ -24,8 +24,8 @@ namespace GKCommon.GEDCOM
     {
         public string ReferenceType
         {
-            get	{ return GetTagStringValue("TYPE"); }
-            set	{ SetTagStringValue("TYPE", value); }
+            get { return GetTagStringValue(GEDCOMTagType.TYPE); }
+            set { SetTagStringValue(GEDCOMTagType.TYPE, value); }
         }
 
 

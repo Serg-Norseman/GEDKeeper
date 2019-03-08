@@ -44,7 +44,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW") {
+            if (tagName == GEDCOMTagType.PHON || tagName == "EMAIL" || tagName == "FAX" || tagName == GEDCOMTagType.WWW) {
                 result = Address.AddTag(tagName, tagValue, tagConstructor);
             } else {
                 // 'ADDR' defines by default

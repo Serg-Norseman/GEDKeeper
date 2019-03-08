@@ -69,9 +69,9 @@ namespace GKCommon.GEDCOM
             GEDCOMFactory f = GEDCOMFactory.GetInstance();
             Assert.IsNotNull(f, "f != null");
 
-            f.RegisterTag("DATE", GEDCOMDateValue.Create);
+            f.RegisterTag(GEDCOMTagType.DATE, GEDCOMDateValue.Create);
 
-            GEDCOMTag tag = f.CreateTag(null, null, "DATE", "");
+            GEDCOMTag tag = f.CreateTag(null, null, GEDCOMTagType.DATE, "");
             Assert.IsNotNull(tag, "tag != null");
 
             tag = f.CreateTag(null, null, "TEST", "");
@@ -416,9 +416,10 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GEDCOMTime()
         {
-            using (GEDCOMTime time = new GEDCOMTime(null, null, "TIME", "20:20:20.100"))
+            using (GEDCOMTime time = new GEDCOMTime(null, null, "", "20:20:20.100"))
             {
                 Assert.IsNotNull(time, "time != null");
+                Assert.AreEqual(GEDCOMTagType.TIME, time.Name);
 
                 Assert.AreEqual(20, time.Hour);
                 Assert.AreEqual(20, time.Minutes);
@@ -440,7 +441,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GEDCOMDate()
         {
-            using (GEDCOMDate dtx1 = new GEDCOMDate(null, null, "DATE", "20 JAN 2013"))
+            using (GEDCOMDate dtx1 = new GEDCOMDate(null, null, "", "20 JAN 2013"))
             {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
 
@@ -494,7 +495,7 @@ namespace GKCommon.GEDCOM
                 dtx1.ParseString("@#DJULIAN@ 01 MAR 1980");
                 Assert.AreEqual("@#DJULIAN@ 01 MAR 1980", dtx1.StringValue);
 
-                using (GEDCOMDate dtx2 = new GEDCOMDate(null, null, "DATE", ""))
+                using (GEDCOMDate dtx2 = new GEDCOMDate(null, null, "", ""))
                 {
                     Assert.IsNotNull(dtx2, "dtx2 != null");
 
@@ -549,7 +550,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GEDCOMDateRange()
         {
-            using (var dtx1 = (GEDCOMDateRange)GEDCOMDateRange.Create(null, null, "DATE", ""))
+            using (var dtx1 = (GEDCOMDateRange)GEDCOMDateRange.Create(null, null, "", ""))
             {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
                 Assert.AreEqual("", dtx1.StringValue);
@@ -588,7 +589,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GEDCOMDatePeriod()
         {
-            using (GEDCOMDatePeriod dtx1 = new GEDCOMDatePeriod(null, null, "DATE", ""))
+            using (GEDCOMDatePeriod dtx1 = new GEDCOMDatePeriod(null, null, "", ""))
             {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
                 Assert.AreEqual("", dtx1.StringValue);
@@ -639,11 +640,11 @@ namespace GKCommon.GEDCOM
         public void Test_GEDCOMDateValue()
         {
             // check empty dateval match
-            using (GEDCOMDateValue dtx1 = new GEDCOMDateValue(null, null, "DATE", ""))
+            using (GEDCOMDateValue dtx1 = new GEDCOMDateValue(null, null, "", ""))
             {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
 
-                using (GEDCOMDateValue dtx2 = new GEDCOMDateValue(null, null, "DATE", ""))
+                using (GEDCOMDateValue dtx2 = new GEDCOMDateValue(null, null, "", ""))
                 {
                     Assert.IsNotNull(dtx2, "dtx1 != null");
 
@@ -651,7 +652,7 @@ namespace GKCommon.GEDCOM
                 }
             }
 
-            using (GEDCOMDateValue dtx1 = new GEDCOMDateValue(null, null, "DATE", ""))
+            using (GEDCOMDateValue dtx1 = new GEDCOMDateValue(null, null, "", ""))
             {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
                 Assert.AreEqual("", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true)); // value is empty
@@ -660,7 +661,7 @@ namespace GKCommon.GEDCOM
                 Assert.AreEqual("2013.01.20 [G]", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
             }
 
-            using (GEDCOMDateValue dtx1 = new GEDCOMDateValue(null, null, "DATE", "20 JAN 2013"))
+            using (GEDCOMDateValue dtx1 = new GEDCOMDateValue(null, null, "", "20 JAN 2013"))
             {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
 
@@ -724,7 +725,7 @@ namespace GKCommon.GEDCOM
                 ((GEDCOMDate)dtx1.Value).Approximated = GEDCOMApproximated.daExact;
                 Assert.AreEqual("20 DEC 2013", dtx1.StringValue);
 
-                using (GEDCOMDateValue dtx2 = new GEDCOMDateValue(null, null, "DATE", "19 JAN 2013"))
+                using (GEDCOMDateValue dtx2 = new GEDCOMDateValue(null, null, "", "19 JAN 2013"))
                 {
                     int res = dtx1.CompareTo(dtx2);
                     Assert.AreEqual(1, res);
@@ -783,7 +784,7 @@ namespace GKCommon.GEDCOM
                 Assert.AreEqual("address", addr.Address[1]);
                 Assert.AreEqual("test", addr.Address[2]);
 
-                addr.AddTag("PHON", "8 911 101 99 99", null);
+                addr.AddTag(GEDCOMTagType.PHON, "8 911 101 99 99", null);
                 Assert.AreEqual("8 911 101 99 99", addr.PhoneNumbers[0].StringValue);
 
                 addr.AddTag("EMAIL", "test@mail.com", null);
@@ -792,7 +793,7 @@ namespace GKCommon.GEDCOM
                 addr.AddTag("FAX", "abrakadabra", null);
                 Assert.AreEqual("abrakadabra", addr.FaxNumbers[0].StringValue);
 
-                addr.AddTag("WWW", "http://test.com", null);
+                addr.AddTag(GEDCOMTagType.WWW, "http://test.com", null);
                 Assert.AreEqual("http://test.com", addr.WebPages[0].StringValue);
 
                 // stream test
@@ -1853,9 +1854,9 @@ namespace GKCommon.GEDCOM
                 // MoveTo test
                 Assert.Throws(typeof(ArgumentException), () => { famRec.MoveTo(null, false); });
 
-                GEDCOMCustomEvent evt = famRec.AddEvent(new GEDCOMFamilyEvent(fContext.Tree, famRec, "MARR", "01 SEP 1981"));
+                GEDCOMCustomEvent evt = famRec.AddEvent(new GEDCOMFamilyEvent(fContext.Tree, famRec, GEDCOMTagType.MARR, "01 SEP 1981"));
                 Assert.AreEqual(1, famRec.Events.Count);
-                Assert.AreEqual(evt, famRec.FindEvent("MARR"));
+                Assert.AreEqual(evt, famRec.FindEvent(GEDCOMTagType.MARR));
 
                 GEDCOMSpouseSealing sps = famRec.SpouseSealings.Add(new GEDCOMSpouseSealing(fContext.Tree, fContext.Tree, "", ""));
                 Assert.AreEqual(1, famRec.SpouseSealings.Count);
@@ -1864,7 +1865,7 @@ namespace GKCommon.GEDCOM
                 using (GEDCOMFamilyRecord famRec2 = new GEDCOMFamilyRecord(fContext.Tree, fContext.Tree))
                 {
                     Assert.AreEqual(0, famRec2.Events.Count);
-                    Assert.AreEqual(null, famRec2.FindEvent("MARR"));
+                    Assert.AreEqual(null, famRec2.FindEvent(GEDCOMTagType.MARR));
 
                     Assert.AreEqual(0, famRec2.SpouseSealings.Count);
                     Assert.AreEqual(null, famRec2.SpouseSealings[0]);
@@ -1872,7 +1873,7 @@ namespace GKCommon.GEDCOM
                     famRec.MoveTo(famRec2, false);
 
                     Assert.AreEqual(1, famRec2.Events.Count);
-                    Assert.AreEqual(evt, famRec2.FindEvent("MARR"));
+                    Assert.AreEqual(evt, famRec2.FindEvent(GEDCOMTagType.MARR));
 
                     Assert.AreEqual(1, famRec2.SpouseSealings.Count);
                     Assert.AreEqual(sps, famRec2.SpouseSealings[0]);

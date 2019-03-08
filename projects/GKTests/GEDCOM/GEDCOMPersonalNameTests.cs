@@ -189,7 +189,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_AddTag()
         {
-            string tagName = "TYPE";
+            string tagName = GEDCOMTagType.TYPE;
             string tagValue = "gibber";
             TagConstructor tagConstructor = null;
             GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");

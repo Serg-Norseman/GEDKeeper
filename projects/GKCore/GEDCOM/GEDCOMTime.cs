@@ -75,7 +75,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMTime(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            SetName("TIME");
+            SetName(GEDCOMTagType.TIME);
         }
 
         public GEDCOMTime(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)

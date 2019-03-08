@@ -398,7 +398,7 @@ namespace GKCore
             {
                 new EventStruct(LSID.LSID_Event, GEDCOMTagType.EVEN, PersonEventKind.ekEvent),
                 new EventStruct(LSID.LSID_FEvt_1, "ENGA", PersonEventKind.ekEvent),
-                new EventStruct(LSID.LSID_FEvt_2, "MARR", PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_FEvt_2, GEDCOMTagType.MARR, PersonEventKind.ekEvent),
                 new EventStruct(LSID.LSID_FEvt_3, "MARB", PersonEventKind.ekEvent),
                 new EventStruct(LSID.LSID_FEvt_4, "MARC", PersonEventKind.ekEvent),
                 new EventStruct(LSID.LSID_FEvt_5, "MARL", PersonEventKind.ekEvent),
@@ -454,7 +454,7 @@ namespace GKCore
             array6[14] = new EventStruct(LSID.LSID_Cremation, "CREM", PersonEventKind.ekEvent);
 
             array6[15] = new EventStruct(LSID.LSID_Fact, "FACT", PersonEventKind.ekFact);
-            array6[16] = new EventStruct(LSID.LSID_Religion, "RELI", PersonEventKind.ekFact);
+            array6[16] = new EventStruct(LSID.LSID_Religion, GEDCOMTagType.RELI, PersonEventKind.ekFact);
             array6[17] = new EventStruct(LSID.LSID_Nationality, "NATI", PersonEventKind.ekFact);
             array6[18] = new EventStruct(LSID.LSID_Residence, "RESI", PersonEventKind.ekFact);
             array6[19] = new EventStruct(LSID.LSID_PhysicalDesc, "DSCR", PersonEventKind.ekFact);

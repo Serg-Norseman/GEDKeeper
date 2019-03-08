@@ -263,7 +263,7 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smReligious:
-                    CheckVal(values, GKUtils.GetAttributeValue(iRec, "RELI"));
+                    CheckVal(values, GKUtils.GetAttributeValue(iRec, GEDCOMTagType.RELI));
                     break;
 
                 case StatsMode.smNational:

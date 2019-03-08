@@ -31,8 +31,8 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMCharacterSet CharacterSet
         {
-            get { return GEDCOMUtils.GetCharacterSetVal(GetTagStringValue("CHAR")); }
-            set { SetTagStringValue("CHAR", GEDCOMUtils.GetCharacterSetStr(value)); }
+            get { return GEDCOMUtils.GetCharacterSetVal(GetTagStringValue(GEDCOMTagType.CHAR)); }
+            set { SetTagStringValue(GEDCOMTagType.CHAR, GEDCOMUtils.GetCharacterSetStr(value)); }
         }
 
         public StringList Notes
@@ -75,8 +75,8 @@ namespace GKCommon.GEDCOM
 
         public string ReceivingSystemName
         {
-            get { return GetTagStringValue("DEST"); }
-            set { SetTagStringValue("DEST", value); }
+            get { return GetTagStringValue(GEDCOMTagType.DEST); }
+            set { SetTagStringValue(GEDCOMTagType.DEST, value); }
         }
 
         public string FileName
@@ -87,8 +87,8 @@ namespace GKCommon.GEDCOM
 
         public string Copyright
         {
-            get { return GetTagStringValue("COPR"); }
-            set { SetTagStringValue("COPR", value); }
+            get { return GetTagStringValue(GEDCOMTagType.COPR); }
+            set { SetTagStringValue(GEDCOMTagType.COPR, value); }
         }
 
         public string GEDCOMVersion
@@ -132,12 +132,12 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMDate TransmissionDate
         {
-            get { return TagClass("DATE", GEDCOMDate.Create) as GEDCOMDate; }
+            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public GEDCOMTime TransmissionTime
         {
-            get { return TransmissionDate.TagClass("TIME", GEDCOMTime.Create) as GEDCOMTime; }
+            get { return TransmissionDate.TagClass(GEDCOMTagType.TIME, GEDCOMTime.Create) as GEDCOMTime; }
         }
 
         public DateTime TransmissionDateTime
@@ -168,7 +168,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "DATE") {
+            if (tagName == GEDCOMTagType.DATE) {
                 result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
             } else if (tagName == GEDCOMTagType.SUBM) {
                 result = base.AddTag(tagName, tagValue, GEDCOMPointer.Create);

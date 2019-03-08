@@ -119,7 +119,7 @@ namespace GKCommon.GEDCOM
             fCalendar = GEDCOMCalendar.dcGregorian;
             fYear = UNKNOWN_YEAR;
             fYearBC = false;
-            fYearModifier = "";
+            fYearModifier = string.Empty;
             fMonth = 0;
             fDay = 0;
             fDateFormat = GEDCOMDateFormat.dfGEDCOMStd;
@@ -187,7 +187,7 @@ namespace GKCommon.GEDCOM
 
         public override void SetDateTime(DateTime value)
         {
-            SetGregorian(value.Day, GEDCOMMonthArray[value.Month - 1], value.Year, "", false);
+            SetGregorian(value.Day, value.Month, value.Year);
         }
 
         public override string ParseString(string strValue)
@@ -198,7 +198,7 @@ namespace GKCommon.GEDCOM
             fCalendar = GEDCOMCalendar.dcGregorian;
             fYear = UNKNOWN_YEAR;
             fYearBC = false;
-            fYearModifier = "";
+            fYearModifier = string.Empty;
             fMonth = 0;
             fDay = 0;
 
@@ -448,9 +448,14 @@ namespace GKCommon.GEDCOM
 
         private void SetDateInternal(GEDCOMCalendar calendar, int day, string month, int year, string yearModifier, bool yearBC)
         {
+            SetDateInternal(calendar, day, GetMonthNumber(calendar, month), year, yearModifier, yearBC);
+        }
+
+        private void SetDateInternal(GEDCOMCalendar calendar, int day, int month, int year, string yearModifier, bool yearBC)
+        {
             fCalendar = calendar;
             fDay = (byte)day;
-            fMonth = GetMonthNumber(calendar, month);
+            fMonth = (byte)month;
             fYear = (short)year;
             fYearModifier = yearModifier;
             fYearBC = yearBC;
@@ -460,7 +465,7 @@ namespace GKCommon.GEDCOM
 
         public void SetGregorian(int day, int month, int year)
         {
-            SetGregorian(day, IntToGEDCOMMonth(month), year, "", false);
+            SetDateInternal(GEDCOMCalendar.dcGregorian, day, month, year, "", false);
         }
 
         public void SetGregorian(int day, string month, int year, string yearModifier, bool yearBC)

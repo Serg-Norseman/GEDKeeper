@@ -77,7 +77,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GEDCOMTime()
         {
-            using (GEDCOMTime time = new GEDCOMTime(null, null, "TIME", "20:20:20.100"))
+            using (GEDCOMTime time = new GEDCOMTime(null, null, "", "20:20:20.100"))
             {
                 Assert.IsNotNull(time, "time != null");
 
@@ -162,7 +162,7 @@ namespace GKCommon.GEDCOM
             res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(2, tagLevel2);
             Assert.AreEqual("", tagXRef2);
-            Assert.AreEqual("DATE", tagName2);
+            Assert.AreEqual(GEDCOMTagType.DATE, tagName2);
             Assert.AreEqual("FROM 20 JAN 1979 TO 15 MAY 2012", tagValue2);
             Assert.AreEqual(3, res2);
 

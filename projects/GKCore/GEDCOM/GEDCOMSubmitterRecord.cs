@@ -84,7 +84,7 @@ namespace GKCommon.GEDCOM
 
             if (tagName == "NAME") {
                 result = base.AddTag(tagName, tagValue, GEDCOMPersonalName.Create);
-            } else if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW") {
+            } else if (tagName == GEDCOMTagType.PHON || tagName == "EMAIL" || tagName == "FAX" || tagName == GEDCOMTagType.WWW) {
                 result = Address.AddTag(tagName, tagValue, tagConstructor);
             } else if (tagName == GEDCOMTagType.LANG) {
                 result = AddLanguage(new GEDCOMLanguage(Owner, this, tagName, tagValue));

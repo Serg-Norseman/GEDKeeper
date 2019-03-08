@@ -174,12 +174,12 @@ namespace GKCommon.GEDCOM
 
             f.RegisterTag(GEDCOMTagType.ADDR, GEDCOMAddress.Create);
             f.RegisterTag(GEDCOMTagType.CHAN, GEDCOMChangeDate.Create);
-            f.RegisterTag("DATE", GEDCOMDateValue.Create);
+            f.RegisterTag(GEDCOMTagType.DATE, GEDCOMDateValue.Create);
             f.RegisterTag(GEDCOMTagType.FAMC, GEDCOMPointer.Create);
             f.RegisterTag(GEDCOMTagType.LANG, GEDCOMLanguage.Create);
             f.RegisterTag(GEDCOMTagType.MAP, GEDCOMMap.Create);
             f.RegisterTag(GEDCOMTagType.PLAC, GEDCOMPlace.Create);
-            f.RegisterTag("TIME", GEDCOMTime.Create);
+            f.RegisterTag(GEDCOMTagType.TIME, GEDCOMTime.Create);
 
             f.RegisterTag("_LANG", GEDCOMLanguage.Create);
             f.RegisterTag(GEDCOMTagType._LOC, GEDCOMPointer.Create);

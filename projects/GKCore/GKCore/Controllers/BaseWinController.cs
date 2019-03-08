@@ -116,6 +116,7 @@ namespace GKCore.Controllers
                 fContext.Modified = false;
                 ChangeFileName();
                 RefreshLists(false);
+                fView.Activate();
             }
         }
 

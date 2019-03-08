@@ -526,7 +526,7 @@ namespace GKCore.Lists
                 {
                     buf_residence = GKUtils.GetPlaceStr(ev, gOptions.PlacesWithAddress);
                 }
-                else if (ev.Name == "RELI" && buf_religion == "")
+                else if (ev.Name == GEDCOMTagType.RELI && buf_religion == "")
                 {
                     buf_religion = ev.StringValue;
                 }

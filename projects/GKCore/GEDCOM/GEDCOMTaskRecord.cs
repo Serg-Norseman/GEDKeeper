@@ -36,12 +36,12 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMDate StartDate
         {
-            get { return TagClass("_STARTDATE", GEDCOMDate.Create) as GEDCOMDate; }
+            get { return TagClass(GEDCOMTagType._STARTDATE, GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public GEDCOMDate StopDate
         {
-            get { return TagClass("_STOPDATE", GEDCOMDate.Create) as GEDCOMDate; }
+            get { return TagClass(GEDCOMTagType._STOPDATE, GEDCOMDate.Create) as GEDCOMDate; }
         }
 
 
@@ -55,7 +55,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "_STARTDATE" || tagName == "_STOPDATE") {
+            if (tagName == GEDCOMTagType._STARTDATE || tagName == GEDCOMTagType._STOPDATE) {
                 result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);

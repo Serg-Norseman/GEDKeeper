@@ -24,8 +24,8 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMChildLinkageStatus ChildLinkageStatus
         {
-            get { return GEDCOMUtils.GetChildLinkageStatusVal(GetTagStringValue("STAT")); }
-            set { SetTagStringValue("STAT", GEDCOMUtils.GetChildLinkageStatusStr(value)); }
+            get { return GEDCOMUtils.GetChildLinkageStatusVal(GetTagStringValue(GEDCOMTagType.STAT)); }
+            set { SetTagStringValue(GEDCOMTagType.STAT, GEDCOMUtils.GetChildLinkageStatusStr(value)); }
         }
 
         public GEDCOMPedigreeLinkageType PedigreeLinkageType

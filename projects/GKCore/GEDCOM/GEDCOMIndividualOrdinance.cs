@@ -24,13 +24,13 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMDateValue Date
         {
-            get { return TagClass("DATE", GEDCOMDateValue.Create) as GEDCOMDateValue; }
+            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDateValue.Create) as GEDCOMDateValue; }
         }
 
         public string TempleCode
         {
-            get { return GetTagStringValue("TEMP"); }
-            set { SetTagStringValue("TEMP", value); }
+            get { return GetTagStringValue(GEDCOMTagType.TEMP); }
+            set { SetTagStringValue(GEDCOMTagType.TEMP, value); }
         }
 
         public GEDCOMPlace Place
@@ -40,8 +40,8 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMBaptismDateStatus BaptismDateStatus
         {
-            get { return GEDCOMUtils.GetBaptismDateStatusVal(GetTagStringValue("STAT")); }
-            set { SetTagStringValue("STAT", GEDCOMUtils.GetBaptismDateStatusStr(value)); }
+            get { return GEDCOMUtils.GetBaptismDateStatusVal(GetTagStringValue(GEDCOMTagType.STAT)); }
+            set { SetTagStringValue(GEDCOMTagType.STAT, GEDCOMUtils.GetBaptismDateStatusStr(value)); }
         }
 
         public GEDCOMDate BaptismChangeDate
@@ -51,8 +51,8 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMEndowmentDateStatus EndowmentDateStatus
         {
-            get { return GEDCOMUtils.GetEndowmentDateStatusVal(GetTagStringValue("STAT")); }
-            set { SetTagStringValue("STAT", GEDCOMUtils.GetEndowmentDateStatusStr(value)); }
+            get { return GEDCOMUtils.GetEndowmentDateStatusVal(GetTagStringValue(GEDCOMTagType.STAT)); }
+            set { SetTagStringValue(GEDCOMTagType.STAT, GEDCOMUtils.GetEndowmentDateStatusStr(value)); }
         }
 
         public GEDCOMDate EndowmentChangeDate
@@ -67,8 +67,8 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMChildSealingDateStatus ChildSealingDateStatus
         {
-            get { return GEDCOMUtils.GetChildSealingDateStatusVal(GetTagStringValue("STAT")); }
-            set { SetTagStringValue("STAT", GEDCOMUtils.GetChildSealingDateStatusStr(value)); }
+            get { return GEDCOMUtils.GetChildSealingDateStatusVal(GetTagStringValue(GEDCOMTagType.STAT)); }
+            set { SetTagStringValue(GEDCOMTagType.STAT, GEDCOMUtils.GetChildSealingDateStatusStr(value)); }
         }
 
         public GEDCOMDate ChildSealingChangeDate
@@ -78,12 +78,12 @@ namespace GKCommon.GEDCOM
 
         private GEDCOMDate GetChangeDate()
         {
-            return DateStatus.TagClass("DATE", GEDCOMDate.Create) as GEDCOMDate;
+            return DateStatus.TagClass(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate;
         }
 
         public GEDCOMDateStatus DateStatus
         {
-            get { return TagClass("STAT", GEDCOMDateStatus.Create) as GEDCOMDateStatus; }
+            get { return TagClass(GEDCOMTagType.STAT, GEDCOMDateStatus.Create) as GEDCOMDateStatus; }
         }
 
 
@@ -105,7 +105,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "STAT") {
+            if (tagName == GEDCOMTagType.STAT) {
                 result = base.AddTag(tagName, tagValue, GEDCOMDateStatus.Create);
             } else {
                 // define 'DATE', 'FAMC' by default

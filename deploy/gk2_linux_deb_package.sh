@@ -33,6 +33,7 @@ cp $DEV_PATH/deploy/application-x-gedkeeper.xml ~/$PACK_PATH/usr/share/mime/pack
 cp $DEV_PATH/deploy/gedkeeper.appdata.xml ~/$PACK_PATH/usr/share/metainfo/
 
 cp $DEV_PATH/GEDKeeper2.exe ~/$LIB_PATH
+cp $DEV_PATH/GEDKeeper2.exe.config ~/$LIB_PATH
 cp $DEV_PATH/GKCore.dll ~/$LIB_PATH
 cp $DEV_PATH/GKComponents.dll ~/$LIB_PATH
 cp $DEV_PATH/GKTray.exe ~/$LIB_PATH

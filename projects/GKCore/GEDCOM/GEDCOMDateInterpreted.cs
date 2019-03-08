@@ -64,7 +64,7 @@ namespace GKCommon.GEDCOM
 
         protected override string GetStringValue()
         {
-            return ("INT " + base.GetStringValue() + " " + "(" + fDatePhrase + ")");
+            return string.Format("{0} {1} ({2})", GEDCOMTagType.INT, base.GetStringValue(), fDatePhrase);
         }
 
         // TODO: refactor it
@@ -114,7 +114,7 @@ namespace GKCommon.GEDCOM
             string result = strValue;
             if (!string.IsNullOrEmpty(result)) {
                 result = GEDCOMUtils.ExtractDelimiter(result);
-                if (!GEDCOMUtils.ExtractExpectedIdent(result, "INT", out result, true)) {
+                if (!GEDCOMUtils.ExtractExpectedIdent(result, GEDCOMTagType.INT, out result, true)) {
                     throw new GEDCOMDateException(string.Format("The interpreted date '{0}' doesn't start with a valid ident", strValue));
                 }
                 result = GEDCOMUtils.ExtractDelimiter(result);

@@ -26,9 +26,7 @@ namespace GKCommon.GEDCOM
     {
         public bool IsPointer
         {
-            get {
-                return (!string.IsNullOrEmpty(XRef));
-            }
+            get { return (!string.IsNullOrEmpty(XRef)); }
         }
 
         public StringList Description
@@ -102,18 +100,12 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
-            fStringValue = "";
-            XRef = "";
-            string result = strValue;
-            if (!string.IsNullOrEmpty(result))
-            {
-                result = GEDCOMUtils.ExtractDelimiter(result);
-                result = base.ParseString(result);
-                if (!IsPointer)
-                {
-                    fStringValue = result;
-                    result = "";
-                }
+            string result = base.ParseString(strValue);
+            if (!IsPointer) {
+                fStringValue = result;
+                result = string.Empty;
+            } else {
+                fStringValue = string.Empty;
             }
             return result;
         }

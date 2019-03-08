@@ -29,67 +29,63 @@ namespace GKCommon.GEDCOM
     {
         public string Prefix
         {
-            get { return GetTagStringValue("NPFX"); }
-            set { SetTagStringValue("NPFX", value); }
+            get { return GetTagStringValue(GEDCOMTagType.NPFX); }
+            set { SetTagStringValue(GEDCOMTagType.NPFX, value); }
         }
 
         public string Given
         {
-            get { return GetTagStringValue("GIVN"); }
-            set { SetTagStringValue("GIVN", value); }
+            get { return GetTagStringValue(GEDCOMTagType.GIVN); }
+            set { SetTagStringValue(GEDCOMTagType.GIVN, value); }
         }
 
         public string Nickname
         {
-            get { return GetTagStringValue("NICK"); }
-            set { SetTagStringValue("NICK", value); }
+            get { return GetTagStringValue(GEDCOMTagType.NICK); }
+            set { SetTagStringValue(GEDCOMTagType.NICK, value); }
         }
 
         public string SurnamePrefix
         {
-            get { return GetTagStringValue("SPFX"); }
-            set { SetTagStringValue("SPFX", value); }
+            get { return GetTagStringValue(GEDCOMTagType.SPFX); }
+            set { SetTagStringValue(GEDCOMTagType.SPFX, value); }
         }
 
         public string Surname
         {
-            get { return GetTagStringValue("SURN"); }
-            set { SetTagStringValue("SURN", value); }
+            get { return GetTagStringValue(GEDCOMTagType.SURN); }
+            set { SetTagStringValue(GEDCOMTagType.SURN, value); }
         }
 
         public string Suffix
         {
-            get { return GetTagStringValue("NSFX"); }
-            set { SetTagStringValue("NSFX", value); }
+            get { return GetTagStringValue(GEDCOMTagType.NSFX); }
+            set { SetTagStringValue(GEDCOMTagType.NSFX, value); }
         }
-
 
 
         public string PatronymicName
         {
-            get { return GetTagStringValue("_PATN"); }
-            set { SetTagStringValue("_PATN", value); }
+            get { return GetTagStringValue(GEDCOMTagType._PATN); }
+            set { SetTagStringValue(GEDCOMTagType._PATN, value); }
         }
 
-        // as BKW6 (MarriedSurname)
         public string MarriedName
         {
-            get { return GetTagStringValue("_MARN"); }
-            set { SetTagStringValue("_MARN", value); }
+            get { return GetTagStringValue(GEDCOMTagType._MARN); }
+            set { SetTagStringValue(GEDCOMTagType._MARN, value); }
         }
 
-        // as BKW6
         public string ReligiousName
         {
-            get { return GetTagStringValue("_RELN"); }
-            set { SetTagStringValue("_RELN", value); }
+            get { return GetTagStringValue(GEDCOMTagType._RELN); }
+            set { SetTagStringValue(GEDCOMTagType._RELN, value); }
         }
 
-        // as BKW6
         public string CensusName
         {
-            get { return GetTagStringValue("_CENN"); }
-            set { SetTagStringValue("_CENN", value); }
+            get { return GetTagStringValue(GEDCOMTagType._CENN); }
+            set { SetTagStringValue(GEDCOMTagType._CENN, value); }
         }
 
 

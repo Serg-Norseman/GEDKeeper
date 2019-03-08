@@ -828,7 +828,7 @@ namespace GKCore
                 return null;
             }
 
-            GEDCOMCustomEvent evt = fRec.FindEvent("MARR");
+            GEDCOMCustomEvent evt = fRec.FindEvent(GEDCOMTagType.MARR);
             return ((evt == null) ? null : evt.Date.Value);
         }
 
@@ -1156,7 +1156,7 @@ namespace GKCore
                     {
                         GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
-                        GEDCOMCustomEvent marrEvt = family.FindEvent("MARR");
+                        GEDCOMCustomEvent marrEvt = family.FindEvent(GEDCOMTagType.MARR);
                         if (marrEvt == null) continue;
 
                         int spouseYear = marrEvt.GetChronologicalYear();

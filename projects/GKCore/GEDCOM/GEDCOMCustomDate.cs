@@ -152,7 +152,7 @@ namespace GKCommon.GEDCOM
 
         protected GEDCOMCustomDate(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            SetName("DATE");
+            SetName(GEDCOMTagType.DATE);
         }
 
         public abstract DateTime GetDateTime();

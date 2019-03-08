@@ -30,58 +30,89 @@ namespace GKCommon.GEDCOM
         public const string AFN = "AFN"; // AncestralFileNumber
         public const string AGNC = "AGNC";
         public const string ALIA = "ALIA";
+        public const string ANCE = "ANCE";
         public const string ANCI = "ANCI";
         public const string ASSO = "ASSO";
         public const string AUTH = "AUTH";
+        public const string CAUS = "CAUS";
         public const string CHAN = "CHAN";
+        public const string CHAR = "CHAR";
         public const string CHIL = "CHIL";
         public const string CITY = "CITY";
+        public const string COPR = "COPR";
         public const string CTRY = "CTRY";
         public const string DATA = "DATA";
+        public const string DATE = "DATE";
+        public const string DESC = "DESC";
         public const string DESI = "DESI";
+        public const string DEST = "DEST";
         public const string EVEN = "EVEN";
         public const string FAM = "FAM";
         public const string FAMC = "FAMC";
+        public const string FAMF = "FAMF";
         public const string FAMS = "FAMS";
         public const string FILE = "FILE";
         public const string FORM = "FORM";
+        public const string FROM = "FROM";
+        public const string GIVN = "GIVN";
         public const string HEAD = "HEAD";
         public const string HUSB = "HUSB";
         public const string INDI = "INDI"; // IndividualRecord
+        public const string INT = "INT";
         public const string LANG = "LANG";
         public const string LATI = "LATI";
         public const string LONG = "LONG";
         public const string MAP = "MAP";
+        public const string MARR = "MARR";
+        public const string NICK = "NICK";
         public const string NOTE = "NOTE";
+        public const string NPFX = "NPFX";
+        public const string NSFX = "NSFX";
         public const string OBJE = "OBJE";
+        public const string ORDI = "ORDI";
         public const string PAGE = "PAGE";
         public const string PEDI = "PEDI";
+        public const string PHON = "PHON";
         public const string PLAC = "PLAC";
         public const string POST = "POST";
         public const string PUBL = "PUBL";
         public const string QUAY = "QUAY";
         public const string REFN = "REFN";
         public const string RELA = "RELA";
+        public const string RELI = "RELI";
         public const string REPO = "REPO";
         public const string RESN = "RESN"; // Restriction
         public const string RFN = "RFN"; // PermanentRecordFileNumber
         public const string RIN = "RIN"; // AutomatedRecordID
         public const string SEX = "SEX";
         public const string SOUR = "SOUR";
+        public const string SPFX = "SPFX";
         public const string STAE = "STAE";
+        public const string STAT = "STAT";
         public const string SUBM = "SUBM";
         public const string SUBN = "SUBN";
+        public const string SURN = "SURN";
+        public const string TEMP = "TEMP";
         public const string TEXT = "TEXT";
+        public const string TIME = "TIME";
         public const string TITL = "TITL";
+        public const string TO = "TO";
         public const string TRLR = "TRLR";
+        public const string TYPE = "TYPE";
+        public const string VERS = "VERS";
         public const string WIFE = "WIFE";
+        public const string WWW = "WWW";
 
         // non-standard extended tags (other applications)
+        public const string _CENN = "_CENN"; // Census Name [BKW6]
         public const string _LOC = "_LOC"; // 
+        public const string _MARN = "_MARN"; // Married Surname [BKW6]
         public const string _UID = "_UID"; // 
+        public const string _PATN = "_PATN"; // Patronymic Name
         public const string _POSITION = "_POSITION";
-        public const string _PRIM = "_PRIM"; // PhpGedView, AQ3, PAF5, FO7
-        public const string _PRIM_CUTOUT = "_PRIM_CUTOUT"; // FTB
+        public const string _PRIM = "_PRIM"; // [PhpGedView, AQ3, PAF5, FO7]
+        public const string _PRIM_CUTOUT = "_PRIM_CUTOUT"; // [FTB]
+        public const string _RELN = "_RELN"; // Religious Name [BKW6]
 
         // non-standard extended tags (GEDKeeper)
         public const string _BOOKMARK = "_BOOKMARK";
@@ -91,6 +122,8 @@ namespace GKCommon.GEDCOM
         public const string _MEMBER = "_MEMBER";
         public const string _PATRIARCH = "_PATRIARCH";
         public const string _RESEARCH = "_RESEARCH";
+        public const string _STARTDATE = "_STARTDATE";
+        public const string _STOPDATE = "_STOPDATE";
         public const string _TASK = "_TASK";
     }
 
@@ -273,9 +306,9 @@ namespace GKCommon.GEDCOM
         sdsNone,
         sdsCanceled,
         sdsCompleted,
-        sdsExcluded,
         sdsDNS,
         sdsDNSCAN,
+        sdsExcluded,
         sdsPre1970,
         sdsSubmitted,
         sdsUncleared

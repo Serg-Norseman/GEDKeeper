@@ -118,13 +118,13 @@ namespace GKCommon.GEDCOM
         {
             string result = strValue;
             if (!string.IsNullOrEmpty(result)) {
-                if (GEDCOMUtils.ExtractExpectedIdent(result, "FROM", out result, true)) {
+                if (GEDCOMUtils.ExtractExpectedIdent(result, GEDCOMTagType.FROM, out result, true)) {
                     result = GEDCOMUtils.ExtractDelimiter(result);
                     result = fDateFrom.ParseString(result);
                     result = GEDCOMUtils.ExtractDelimiter(result);
                 }
 
-                if (GEDCOMUtils.ExtractExpectedIdent(result, "TO", out result, true)) {
+                if (GEDCOMUtils.ExtractExpectedIdent(result, GEDCOMTagType.TO, out result, true)) {
                     result = GEDCOMUtils.ExtractDelimiter(result);
                     result = fDateTo.ParseString(result);
                 }

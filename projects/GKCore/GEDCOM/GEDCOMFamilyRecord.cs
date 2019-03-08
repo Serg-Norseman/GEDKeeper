@@ -105,7 +105,7 @@ namespace GKCommon.GEDCOM
             f.RegisterTag("ENGA", GEDCOMFamilyEvent.Create);
             f.RegisterTag("MARB", GEDCOMFamilyEvent.Create);
             f.RegisterTag("MARC", GEDCOMFamilyEvent.Create);
-            f.RegisterTag("MARR", GEDCOMFamilyEvent.Create);
+            f.RegisterTag(GEDCOMTagType.MARR, GEDCOMFamilyEvent.Create);
             f.RegisterTag("MARL", GEDCOMFamilyEvent.Create);
             f.RegisterTag("MARS", GEDCOMFamilyEvent.Create);
             f.RegisterTag("RESI", GEDCOMFamilyEvent.Create);
@@ -354,7 +354,7 @@ namespace GKCommon.GEDCOM
             if (child == null) return false;
 
             GEDCOMPointer ptr = new GEDCOMPointer(Owner, this);
-            ptr.SetNamedValue(GEDCOMTagType.CHIL, child);
+            ptr.SetNameValue(GEDCOMTagType.CHIL, child);
             fChildren.Add(ptr);
 
             GEDCOMChildToFamilyLink chLink = new GEDCOMChildToFamilyLink(Owner, child);

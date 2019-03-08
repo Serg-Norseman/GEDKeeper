@@ -594,7 +594,7 @@ namespace GKPedigreeImporterPlugin
                                     string marrDate = slRet.ExtData.Substring(1, slRet.ExtData.Length - 2).Trim();
 
                                     if (marrDate != "")
-                                        SetEvent(family, "MARR", marrDate);
+                                        SetEvent(family, GEDCOMTagType.MARR, marrDate);
                                 }
                             }
                         }

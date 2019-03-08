@@ -1104,6 +1104,8 @@ namespace GKCore
                         progress.ProgressDone();
                     }
                 }
+
+                AppHost.ForceGC();
             } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.FileLoad(): " + ex.Message);
                 Logger.LogWrite("BaseContext.FileLoad(): " + ex.StackTrace.ToString());

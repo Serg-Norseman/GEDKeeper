@@ -110,11 +110,7 @@ namespace GKCommon.GEDCOM
             fStringValue = string.Empty;
 
             GEDCOMTag parentTag = parent as GEDCOMTag;
-            if (parentTag != null) {
-                fLevel = parentTag.Level + 1;
-            } else {
-                fLevel = 0;
-            }
+            fLevel = (parentTag != null) ? parentTag.Level + 1 : 0;
         }
 
         public GEDCOMTag(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
@@ -272,11 +268,11 @@ namespace GKCommon.GEDCOM
             while (true) {
                 int index = ((S == su) ? startIndex : 0);
 
-                while (index < tempTag.Count && tempTag[index].Name != S) index++;
-
-                if (index >= tempTag.Count) break;
-
-                tempTag = tempTag[index];
+                GEDCOMList<GEDCOMTag> tempSubTags = tempTag.fTags;
+                int tempSubCount = tempSubTags.Count;
+                while (index < tempSubCount && tempSubTags[index].Name != S) index++;
+                if (index >= tempSubCount) break;
+                tempTag = tempSubTags[index];
 
                 pos = su.IndexOf('\\');
                 if (pos >= 0) {

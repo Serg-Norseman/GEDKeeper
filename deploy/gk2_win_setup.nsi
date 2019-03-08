@@ -248,6 +248,7 @@ Section "$(gkreq)"
   !insertmacro CheckNetFramework 35
 
   File "..\GEDKeeper2.exe"
+  File "..\GEDKeeper2.exe.config"
   File "..\GKComponents.dll"
   File "..\GKCore.dll"
   File "..\GKTray.exe"
@@ -541,6 +542,7 @@ Section "Uninstall"
   ; Remove files and uninstaller
   Delete $INSTDIR\LICENSE
   Delete $INSTDIR\GEDKeeper2.exe
+  Delete $INSTDIR\GEDKeeper2.exe.config
   Delete $INSTDIR\GKComponents.dll
   Delete $INSTDIR\GKCore.dll
   Delete $INSTDIR\GKTray.exe

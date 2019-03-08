@@ -26,7 +26,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMDate Date
         {
-            get { return TagClass("DATE", GEDCOMDate.Create) as GEDCOMDate; }
+            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public string CommName
@@ -37,8 +37,8 @@ namespace GKCommon.GEDCOM
 
         public GKCommunicationType CommunicationType
         {
-            get { return GEDCOMUtils.GetCommunicationTypeVal(GetTagStringValue("TYPE")); }
-            set { SetTagStringValue("TYPE", GEDCOMUtils.GetCommunicationTypeStr(value)); }
+            get { return GEDCOMUtils.GetCommunicationTypeVal(GetTagStringValue(GEDCOMTagType.TYPE)); }
+            set { SetTagStringValue(GEDCOMTagType.TYPE, GEDCOMUtils.GetCommunicationTypeStr(value)); }
         }
 
 
@@ -54,7 +54,7 @@ namespace GKCommon.GEDCOM
 
             if (tagName == "NAME") {
                 result = base.AddTag(tagName, tagValue, null);
-            } else if (tagName == "DATE") {
+            } else if (tagName == GEDCOMTagType.DATE) {
                 result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
@@ -82,17 +82,17 @@ namespace GKCommon.GEDCOM
             GKCommunicationDir commDir = GKCommunicationDir.cdFrom;
             GEDCOMIndividualRecord corresponder = null;
 
-            GEDCOMTag corrTag = FindTag("FROM", 0);
+            GEDCOMTag corrTag = FindTag(GEDCOMTagType.FROM, 0);
             if (corrTag == null) {
-                corrTag = FindTag("TO", 0);
+                corrTag = FindTag(GEDCOMTagType.TO, 0);
             }
 
             if (corrTag != null) {
                 corresponder = (Owner.XRefIndex_Find(GEDCOMUtils.CleanXRef(corrTag.StringValue)) as GEDCOMIndividualRecord);
 
-                if (corrTag.Name == "FROM") {
+                if (corrTag.Name == GEDCOMTagType.FROM) {
                     commDir = GKCommunicationDir.cdFrom;
-                } else if (corrTag.Name == "TO") {
+                } else if (corrTag.Name == GEDCOMTagType.TO) {
                     commDir = GKCommunicationDir.cdTo;
                 }
             }
@@ -102,8 +102,8 @@ namespace GKCommon.GEDCOM
 
         public void SetCorresponder(GKCommunicationDir commDir, GEDCOMIndividualRecord corresponder)
         {
-            DeleteTag("FROM");
-            DeleteTag("TO");
+            DeleteTag(GEDCOMTagType.FROM);
+            DeleteTag(GEDCOMTagType.TO);
 
             if (corresponder != null) {
                 AddTag(CommunicationTags[(int)commDir], GEDCOMUtils.EncloseXRef(corresponder.XRef), null);

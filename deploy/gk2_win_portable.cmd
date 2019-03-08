@@ -15,6 +15,7 @@ del .\*.zip /q
 del ..\appdata\*.* /q
 
 echo "..\GEDKeeper2.exe" > %lstfile%
+echo "..\GEDKeeper2.exe.config" > %lstfile%
 echo "..\GKComponents.dll" >> %lstfile%
 echo "..\GKCore.dll" >> %lstfile%
 echo "..\GKTray.exe" >> %lstfile%

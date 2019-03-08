@@ -48,12 +48,12 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMDate StartDate
         {
-            get { return TagClass("_STARTDATE", GEDCOMDate.Create) as GEDCOMDate; }
+            get { return TagClass(GEDCOMTagType._STARTDATE, GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public GEDCOMDate StopDate
         {
-            get { return TagClass("_STOPDATE", GEDCOMDate.Create) as GEDCOMDate; }
+            get { return TagClass(GEDCOMTagType._STOPDATE, GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public int Percent
@@ -106,7 +106,7 @@ namespace GKCommon.GEDCOM
             {
                 result = base.AddTag(tagName, tagValue, null);
             }
-            else if (tagName == "_STARTDATE" || tagName == "_STOPDATE")
+            else if (tagName == GEDCOMTagType._STARTDATE || tagName == GEDCOMTagType._STOPDATE)
             {
                 result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
             }
@@ -179,7 +179,7 @@ namespace GKCommon.GEDCOM
 
             if (taskRecord != null) {
                 GEDCOMPointer ptr = new GEDCOMPointer(Owner, this);
-                ptr.SetNamedValue(GEDCOMTagType._TASK, taskRecord);
+                ptr.SetNameValue(GEDCOMTagType._TASK, taskRecord);
                 fTasks.Add(ptr);
                 result = true;
             }
@@ -217,7 +217,7 @@ namespace GKCommon.GEDCOM
 
             if (groupRecord != null) {
                 GEDCOMPointer ptr = new GEDCOMPointer(Owner, this);
-                ptr.SetNamedValue(GEDCOMTagType._GROUP, groupRecord);
+                ptr.SetNameValue(GEDCOMTagType._GROUP, groupRecord);
                 fGroups.Add(ptr);
                 result = true;
             }
@@ -255,7 +255,7 @@ namespace GKCommon.GEDCOM
 
             if (commRecord != null) {
                 GEDCOMPointer ptr = new GEDCOMPointer(Owner, this);
-                ptr.SetNamedValue(GEDCOMTagType._COMM, commRecord);
+                ptr.SetNameValue(GEDCOMTagType._COMM, commRecord);
                 fCommunications.Add(ptr);
                 result = true;
             }

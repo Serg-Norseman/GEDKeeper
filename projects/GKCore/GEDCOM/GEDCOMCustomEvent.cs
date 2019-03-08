@@ -26,8 +26,8 @@ namespace GKCommon.GEDCOM
     {
         public string Classification
         {
-            get { return GetTagStringValue("TYPE"); }
-            set { SetTagStringValue("TYPE", value); }
+            get { return GetTagStringValue(GEDCOMTagType.TYPE); }
+            set { SetTagStringValue(GEDCOMTagType.TYPE, value); }
         }
 
         public string Agency
@@ -38,14 +38,14 @@ namespace GKCommon.GEDCOM
 
         public string ReligiousAffilation
         {
-            get { return GetTagStringValue("RELI"); }
-            set { SetTagStringValue("RELI", value); }
+            get { return GetTagStringValue(GEDCOMTagType.RELI); }
+            set { SetTagStringValue(GEDCOMTagType.RELI, value); }
         }
 
         public string Cause
         {
-            get { return GetTagStringValue("CAUS"); }
-            set { SetTagStringValue("CAUS", value); }
+            get { return GetTagStringValue(GEDCOMTagType.CAUS); }
+            set { SetTagStringValue(GEDCOMTagType.CAUS, value); }
         }
 
         public GEDCOMPlace Place
@@ -60,7 +60,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMDateValue Date
         {
-            get { return TagClass("DATE", GEDCOMDateValue.Create) as GEDCOMDateValue; }
+            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDateValue.Create) as GEDCOMDateValue; }
         }
 
         public GEDCOMRestriction Restriction
@@ -78,7 +78,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW") {
+            if (tagName == GEDCOMTagType.PHON || tagName == "EMAIL" || tagName == "FAX" || tagName == GEDCOMTagType.WWW) {
                 result = Address.AddTag(tagName, tagValue, tagConstructor);
             } else {
                 // define 'PLAC', 'ADDR', 'DATE' by default

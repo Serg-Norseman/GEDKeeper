@@ -67,7 +67,7 @@ namespace GKCore
         public void Test_GetXIndex()
         {
             Assert.AreEqual(1, GKUtils.GetPersonEventIndex("BIRT"));
-            Assert.AreEqual(2, GKUtils.GetFamilyEventIndex("MARR"));
+            Assert.AreEqual(2, GKUtils.GetFamilyEventIndex(GEDCOMTagType.MARR));
             Assert.AreEqual(1, GKUtils.GetMarriageStatusIndex("MARRIED"));
         }
 

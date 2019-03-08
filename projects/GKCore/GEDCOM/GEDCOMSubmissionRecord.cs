@@ -24,32 +24,32 @@ namespace GKCommon.GEDCOM
     {
         public string FamilyFileName
         {
-            get { return GetTagStringValue("FAMF"); }
-            set { SetTagStringValue("FAMF", value); }
+            get { return GetTagStringValue(GEDCOMTagType.FAMF); }
+            set { SetTagStringValue(GEDCOMTagType.FAMF, value); }
         }
 
         public string TempleCode
         {
-            get { return GetTagStringValue("TEMP"); }
-            set { SetTagStringValue("TEMP", value); }
+            get { return GetTagStringValue(GEDCOMTagType.TEMP); }
+            set { SetTagStringValue(GEDCOMTagType.TEMP, value); }
         }
 
         public int GenerationsOfAncestors
         {
-            get { return GetTagIntegerValue("ANCE", 0); }
-            set { SetTagIntegerValue("ANCE", value); }
+            get { return GetTagIntegerValue(GEDCOMTagType.ANCE, 0); }
+            set { SetTagIntegerValue(GEDCOMTagType.ANCE, value); }
         }
 
         public int GenerationsOfDescendants
         {
-            get { return GetTagIntegerValue("DESC", 0); }
-            set { SetTagIntegerValue("DESC", value); }
+            get { return GetTagIntegerValue(GEDCOMTagType.DESC, 0); }
+            set { SetTagIntegerValue(GEDCOMTagType.DESC, value); }
         }
 
         public GEDCOMOrdinanceProcessFlag OrdinanceProcessFlag
         {
-            get { return GEDCOMUtils.GetOrdinanceProcessFlagVal(GetTagStringValue("ORDI")); }
-            set { SetTagStringValue("ORDI", GEDCOMUtils.GetOrdinanceProcessFlagStr(value)); }
+            get { return GEDCOMUtils.GetOrdinanceProcessFlagVal(GetTagStringValue(GEDCOMTagType.ORDI)); }
+            set { SetTagStringValue(GEDCOMTagType.ORDI, GEDCOMUtils.GetOrdinanceProcessFlagStr(value)); }
         }
 
         public GEDCOMPointer Submitter

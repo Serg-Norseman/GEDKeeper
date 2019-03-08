@@ -237,7 +237,7 @@ namespace GKCommon.GEDCOM
             f.RegisterTag("NMR", GEDCOMIndividualAttribute.Create);
             f.RegisterTag("OCCU", GEDCOMIndividualAttribute.Create);
             f.RegisterTag("PROP", GEDCOMIndividualAttribute.Create);
-            f.RegisterTag("RELI", GEDCOMIndividualAttribute.Create);
+            f.RegisterTag(GEDCOMTagType.RELI, GEDCOMIndividualAttribute.Create);
 
             f.RegisterTag("RESI", GEDCOMIndividualAttribute.Create);
             f.RegisterTag("SSN", GEDCOMIndividualAttribute.Create);
@@ -822,8 +822,8 @@ namespace GKCommon.GEDCOM
 
         private static int EventsCompare(GEDCOMPointer cp1, GEDCOMPointer cp2)
         {
-            UDN udn1 = ((GEDCOMFamilyRecord)cp1.Value).GetUDN("MARR");
-            UDN udn2 = ((GEDCOMFamilyRecord)cp2.Value).GetUDN("MARR");
+            UDN udn1 = ((GEDCOMFamilyRecord)cp1.Value).GetUDN(GEDCOMTagType.MARR);
+            UDN udn2 = ((GEDCOMFamilyRecord)cp2.Value).GetUDN(GEDCOMTagType.MARR);
             return udn1.CompareTo(udn2);
         }
 

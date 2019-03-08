@@ -81,7 +81,7 @@ namespace GKTests
             famRec.AddSpouse(iRec2);
             famRec.AddChild(iRec3);
 
-            context.CreateEventEx(famRec, "MARR", "01 JAN 2000", "unknown");
+            context.CreateEventEx(famRec, GEDCOMTagType.MARR, "01 JAN 2000", "unknown");
 
             // individual outside the family (I4)
             GEDCOMIndividualRecord iRec4 = context.CreatePersonEx("Alex", "", "Petrov", GEDCOMSex.svMale, true);

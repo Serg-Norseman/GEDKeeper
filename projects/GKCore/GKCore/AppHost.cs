@@ -949,6 +949,12 @@ namespace GKCore
             options.Dispose();
         }
 
+        public static void ForceGC()
+        {
+            GC.Collect(2, GCCollectionMode.Forced);
+            GC.WaitForPendingFinalizers();
+        }
+
         #endregion
     }
 }

@@ -229,8 +229,15 @@ namespace GKCommon.GEDCOM
 
         #region Special parsing routines
 
-        // Line format: <level>_<@xref@>_<tag>_<value>
+        // Line format: <level>_<@xref@>_<tag>_<value> (for test's purpose)
         public static int ParseTag(string str, out int tagLevel, out string tagXRef, out string tagName, out string tagValue)
+        {
+            var strTok = new GEDCOMParser(str, false);
+            return ParseTag(strTok, out tagLevel, out tagXRef, out tagName, out tagValue);
+        }
+
+        // Line format: <level>_<@xref@>_<tag>_<value>
+        public static int ParseTag(GEDCOMParser strTok, out int tagLevel, out string tagXRef, out string tagName, out string tagValue)
         {
             tagLevel = 0;
             tagXRef = string.Empty;
@@ -238,7 +245,7 @@ namespace GKCommon.GEDCOM
             tagValue = string.Empty;
 
             int result = 0;
-            var strTok = new GEDCOMParser(str, false);
+            //var strTok = new GEDCOMParser(str, false);
             strTok.SkipWhitespaces();
 
             var token = strTok.CurrentToken; // already trimmed
@@ -246,7 +253,7 @@ namespace GKCommon.GEDCOM
                 return -2;
             }
             if (token != GEDCOMToken.Number) {
-                tagValue = str;
+                tagValue = /*str;//*/strTok.GetFullStr();
                 return -1;
             }
             tagLevel = strTok.GetNumber();
@@ -327,6 +334,7 @@ namespace GKCommon.GEDCOM
                 }
             }
 
+            xref = GEDCOMUtils.CleanXRef(xref);
             return new string(strChars, fin, strLen - fin);
         }
 
@@ -424,19 +432,19 @@ namespace GKCommon.GEDCOM
             calendar = GEDCOMCalendar.dcGregorian;
             year = GEDCOMDate.UNKNOWN_YEAR;
             yearBC = false;
-            yearModifier = "";
+            yearModifier = string.Empty;
             month = 0;
             day = 0;
             dateFormat = GEDCOMDateFormat.dfGEDCOMStd;
 
             var strTok = new GEDCOMParser(strValue, false);
-            var token = strTok.Next();
             strTok.SkipWhitespaces();
 
             // extract approximated
+            var token = strTok.CurrentToken;
             if (token == GEDCOMToken.Word) {
                 string su = InvariantTextInfo.ToUpper(strTok.GetWord());
-                int idx = Algorithms.IndexOf(GEDCOMCustomDate.GEDCOMDateApproximatedArray, su);
+                int idx = Algorithms.BinarySearch(GEDCOMCustomDate.GEDCOMDateApproximatedArray, su, string.CompareOrdinal);
                 if (idx >= 0) {
                     approximated = (GEDCOMApproximated)idx;
                     strTok.Next();
@@ -489,7 +497,7 @@ namespace GKCommon.GEDCOM
                 //month = (byte)(idx + 1);
 
                 // in this case, according to performance test results, BinarySearch is more efficient
-                // than a simple search or even a dictionary search
+                // than a simple search or even a dictionary search (why?!)
                 int idx = BinarySearch(GEDCOMCustomDate.GEDCOMMonthValues, InvariantTextInfo.ToUpper(strTok.GetWord()));
                 month = (byte)((idx < 0) ? 0 : idx);
 
@@ -555,44 +563,13 @@ namespace GKCommon.GEDCOM
 
         #region GEDCOM Enums Parse
 
-        /*
-        public string GetStrValue(T enumVal)
+        public static string Enum2Str(IConvertible enumVal, string[] values)
         {
             #if PCL
             int idx = (int)Convert.ChangeType(enumVal, typeof(int), null);
             #else
-            int idx = (int)((IConvertible)enumVal);
+            int idx = (int)enumVal;
             #endif
-
-            if (idx < 0 || idx >= fStrValues.Length) {
-                return string.Empty;
-            } else {
-                return fStrValues[idx];
-            }
-        }
-
-        public T GetEnumValue(string key)
-        {
-            if (!string.IsNullOrEmpty(key) && !fCaseSensitive) {
-                key = key.Trim().ToLowerInvariant();
-            }
-
-            int result;
-            if (fValues.TryGetValue(key, out result)) {
-                #if PCL
-                return (T)Convert.ChangeType(result, typeof(T), null);
-                #else
-                return (T)((IConvertible)result);
-                #endif
-            } else {
-                return fDefaultValue;
-            }
-        }
-         */
-
-        public static string Enum2Str(IConvertible elem, string[] values)
-        {
-            int idx = (int)elem;
 
             if (idx < 0 || idx >= values.Length) {
                 return string.Empty;
@@ -610,7 +587,7 @@ namespace GKCommon.GEDCOM
          * 
          * On all tests wins BinarySearch-based.
          */
-        public static int Str2Enum(string val, string[] values, int defVal, bool normalize = true)
+        public static T Str2Enum<T>(string val, string[] values, T defVal, bool normalize = true)
         {
             if (string.IsNullOrEmpty(val)) return defVal;
 
@@ -619,7 +596,15 @@ namespace GKCommon.GEDCOM
             }
 
             int idx = Algorithms.BinarySearch<string>(values, val, string.CompareOrdinal);
-            return (idx < 0) ? defVal : idx;
+            if (idx >= 0) {
+                #if PCL
+                return (T)Convert.ChangeType(idx, typeof(T), null);
+                #else
+                return (T)((IConvertible)idx);
+                #endif
+            } else {
+                return defVal;
+            }
         }
 
         #endregion
@@ -651,6 +636,7 @@ namespace GKCommon.GEDCOM
             return res;
         }
 
+
         public static GEDCOMRestriction GetRestrictionVal(string str)
         {
             if (string.IsNullOrEmpty(str)) return GEDCOMRestriction.rnNone;
@@ -658,20 +644,13 @@ namespace GKCommon.GEDCOM
             GEDCOMRestriction res;
             str = str.Trim().ToLowerInvariant();
             
-            if (str == "confidential")
-            {
+            if (str == "confidential") {
                 res = GEDCOMRestriction.rnConfidential;
-            }
-            else if (str == "locked")
-            {
+            } else if (str == "locked") {
                 res = GEDCOMRestriction.rnLocked;
-            }
-            else if (str == "privacy")
-            {
+            } else if (str == "privacy") {
                 res = GEDCOMRestriction.rnPrivacy;
-            }
-            else
-            {
+            } else {
                 res = GEDCOMRestriction.rnNone;
             }
             return res;
@@ -702,58 +681,20 @@ namespace GKCommon.GEDCOM
             return s;
         }
 
+
+        public static string[] PedigreeLinkageTypes = new string[] {
+            "", "adopted", "birth", "foster", "sealing" };
+
         public static GEDCOMPedigreeLinkageType GetPedigreeLinkageTypeVal(string str)
         {
-            if (string.IsNullOrEmpty(str)) return GEDCOMPedigreeLinkageType.plNone;
-
-            GEDCOMPedigreeLinkageType result;
-            str = str.Trim().ToLowerInvariant();
-            
-            if (str == "adopted")
-            {
-                result = GEDCOMPedigreeLinkageType.plAdopted;
-            }
-            else if (str == "birth")
-            {
-                result = GEDCOMPedigreeLinkageType.plBirth;
-            }
-            else if (str == "foster")
-            {
-                result = GEDCOMPedigreeLinkageType.plFoster;
-            }
-            else if (str == "sealing")
-            {
-                result = GEDCOMPedigreeLinkageType.plSealing;
-            }
-            else
-            {
-                result = GEDCOMPedigreeLinkageType.plNone;
-            }
-            return result;
+            return Str2Enum(str, PedigreeLinkageTypes, GEDCOMPedigreeLinkageType.plNone);
         }
 
         public static string GetPedigreeLinkageTypeStr(GEDCOMPedigreeLinkageType value)
         {
-            string s;
-            switch (value) {
-                case GEDCOMPedigreeLinkageType.plAdopted:
-                    s = "adopted";
-                    break;
-                case GEDCOMPedigreeLinkageType.plBirth:
-                    s = "birth";
-                    break;
-                case GEDCOMPedigreeLinkageType.plFoster:
-                    s = "foster";
-                    break;
-                case GEDCOMPedigreeLinkageType.plSealing:
-                    s = "sealing";
-                    break;
-                default:
-                    s = "";
-                    break;
-            }
-            return s;
+            return GEDCOMUtils.Enum2Str(value, PedigreeLinkageTypes);
         }
+
 
         public static GEDCOMChildLinkageStatus GetChildLinkageStatusVal(string str)
         {
@@ -762,20 +703,13 @@ namespace GKCommon.GEDCOM
             GEDCOMChildLinkageStatus result;
             str = str.Trim().ToLowerInvariant();
             
-            if (str == "challenged")
-            {
+            if (str == "challenged") {
                 result = GEDCOMChildLinkageStatus.clChallenged;
-            }
-            else if (str == "disproven")
-            {
+            } else if (str == "disproven") {
                 result = GEDCOMChildLinkageStatus.clDisproven;
-            }
-            else if (str == "proven")
-            {
+            } else if (str == "proven") {
                 result = GEDCOMChildLinkageStatus.clProven;
-            }
-            else
-            {
+            } else {
                 result = GEDCOMChildLinkageStatus.clNone;
             }
             return result;
@@ -801,69 +735,20 @@ namespace GKCommon.GEDCOM
             return s;
         }
 
+
+        public static string[] CommunicationTypes = new string[] {
+            "call", "email", "fax", "letter", "tape", "visit" };
+
         public static GKCommunicationType GetCommunicationTypeVal(string str)
         {
-            if (string.IsNullOrEmpty(str)) return GKCommunicationType.ctVisit;
-
-            GKCommunicationType result;
-            str = str.Trim().ToLowerInvariant();
-            
-            if (str == "call")
-            {
-                result = GKCommunicationType.ctCall;
-            }
-            else if (str == "email")
-            {
-                result = GKCommunicationType.ctEMail;
-            }
-            else if (str == "fax")
-            {
-                result = GKCommunicationType.ctFax;
-            }
-            else if (str == "letter")
-            {
-                result = GKCommunicationType.ctLetter;
-            }
-            else if (str == "tape")
-            {
-                result = GKCommunicationType.ctTape;
-            }
-            else if (str == "visit")
-            {
-                result = GKCommunicationType.ctVisit;
-            }
-            else
-            {
-                result = GKCommunicationType.ctVisit;
-            }
-            return result;
+            return Str2Enum(str, CommunicationTypes, GKCommunicationType.ctVisit);
         }
 
         public static string GetCommunicationTypeStr(GKCommunicationType value)
         {
-            string s = "";
-            switch (value) {
-                case GKCommunicationType.ctCall:
-                    s = "call";
-                    break;
-                case GKCommunicationType.ctEMail:
-                    s = "email";
-                    break;
-                case GKCommunicationType.ctFax:
-                    s = "fax";
-                    break;
-                case GKCommunicationType.ctLetter:
-                    s = "letter";
-                    break;
-                case GKCommunicationType.ctTape:
-                    s = "tape";
-                    break;
-                case GKCommunicationType.ctVisit:
-                    s = "visit";
-                    break;
-            }
-            return s;
+            return GEDCOMUtils.Enum2Str(value, CommunicationTypes);
         }
+
 
         public static GEDCOMMultimediaFormat GetMultimediaFormatVal(string str)
         {
@@ -872,108 +757,57 @@ namespace GKCommon.GEDCOM
             GEDCOMMultimediaFormat result;
             str = str.Trim().ToLowerInvariant();
             
-            if (str == "bmp")
-            {
+            if (str == "bmp") {
                 result = GEDCOMMultimediaFormat.mfBMP;
-            }
-            else if (str == "gif")
-            {
+            } else if (str == "gif") {
                 result = GEDCOMMultimediaFormat.mfGIF;
-            }
-            else if (str == "jpg" || str == "jpeg")
-            {
+            } else if (str == "jpg" || str == "jpeg") {
                 result = GEDCOMMultimediaFormat.mfJPG;
-            }
-            else if (str == "ole")
-            {
+            } else if (str == "ole") {
                 result = GEDCOMMultimediaFormat.mfOLE;
-            }
-            else if (str == "pcx")
-            {
+            } else if (str == "pcx") {
                 result = GEDCOMMultimediaFormat.mfPCX;
-            }
-            else if (str == "tif" || str == "tiff")
-            {
+            } else if (str == "tif" || str == "tiff") {
                 result = GEDCOMMultimediaFormat.mfTIF;
-            }
-            else if (str == "wav")
-            {
+            } else if (str == "wav") {
                 result = GEDCOMMultimediaFormat.mfWAV;
-            }
-            else if (str == "txt")
-            {
+            } else if (str == "txt") {
                 result = GEDCOMMultimediaFormat.mfTXT;
-            }
-            else if (str == "rtf")
-            {
+            } else if (str == "rtf") {
                 result = GEDCOMMultimediaFormat.mfRTF;
-            }
-            else if (str == "avi")
-            {
+            } else if (str == "avi") {
                 result = GEDCOMMultimediaFormat.mfAVI;
-            }
-            else if (str == "tga")
-            {
+            } else if (str == "tga") {
                 result = GEDCOMMultimediaFormat.mfTGA;
-            }
-            else if (str == "png")
-            {
+            } else if (str == "png") {
                 result = GEDCOMMultimediaFormat.mfPNG;
-            }
-            else if (str == "mpg" || str == "mpeg")
-            {
+            } else if (str == "mpg" || str == "mpeg") {
                 result = GEDCOMMultimediaFormat.mfMPG;
-            }
-            else if (str == "htm" || str == "html")
-            {
+            } else if (str == "htm" || str == "html") {
                 result = GEDCOMMultimediaFormat.mfHTM;
-            }
-            else if (str == "raw")
-            {
+            } else if (str == "raw") {
                 result = GEDCOMMultimediaFormat.mfRAW;
-            }
-            else if (str == "mp3")
-            {
+            } else if (str == "mp3") {
                 result = GEDCOMMultimediaFormat.mfMP3;
-            }
-            else if (str == "wma")
-            {
+            } else if (str == "wma") {
                 result = GEDCOMMultimediaFormat.mfWMA;
-            }
-            else if (str == "psd")
-            {
+            } else if (str == "psd") {
                 result = GEDCOMMultimediaFormat.mfPSD;
-            }
-            else if (str == "pdf")
-            {
+            } else if (str == "pdf") {
                 result = GEDCOMMultimediaFormat.mfPDF;
-            }
-            else if (str == "mp4")
-            {
+            } else if (str == "mp4") {
                 result = GEDCOMMultimediaFormat.mfMP4;
-            }
-            else if (str == "ogv")
-            {
+            } else if (str == "ogv") {
                 result = GEDCOMMultimediaFormat.mfOGV;
-            }
-            else if (str == "mka")
-            {
+            } else if (str == "mka") {
                 result = GEDCOMMultimediaFormat.mfMKA;
-            }
-            else if (str == "wmv")
-            {
+            } else if (str == "wmv") {
                 result = GEDCOMMultimediaFormat.mfWMV;
-            }
-            else if (str == "mkv")
-            {
+            } else if (str == "mkv") {
                 result = GEDCOMMultimediaFormat.mfMKV;
-            }
-            else if (str == "mov")
-            {
+            } else if (str == "mov") {
                 result = GEDCOMMultimediaFormat.mfMOV;
-            }
-            else
-            {
+            } else {
                 result = GEDCOMMultimediaFormat.mfUnknown;
             }
             return result;
@@ -1072,7 +906,7 @@ namespace GKCommon.GEDCOM
 
         public static GEDCOMMediaType GetMediaTypeVal(string str)
         {
-            return (GEDCOMMediaType)Str2Enum(str, MediaTypes, (int)GEDCOMMediaType.mtUnknown);
+            return Str2Enum(str, MediaTypes, GEDCOMMediaType.mtUnknown);
         }
 
         public static string GetMediaTypeStr(GEDCOMMediaType value)
@@ -1109,7 +943,7 @@ namespace GKCommon.GEDCOM
 
         public static GEDCOMLanguageID GetLanguageVal(string str)
         {
-            return (GEDCOMLanguageID)Str2Enum(str, LangNames, (int)GEDCOMLanguageID.Unknown, false);
+            return Str2Enum(str, LangNames, GEDCOMLanguageID.Unknown, false);
         }
 
         public static string GetLanguageStr(GEDCOMLanguageID value)
@@ -1118,65 +952,19 @@ namespace GKCommon.GEDCOM
         }
 
 
+        public static string[] NameTypes = new string[] {
+            "", "aka", "birth", "immigrant", "maiden", "married" };
+
         public static GEDCOMNameType GetNameTypeVal(string str)
         {
-            if (string.IsNullOrEmpty(str)) return GEDCOMNameType.ntNone;
-
-            GEDCOMNameType result;
-            str = str.Trim().ToLowerInvariant();
-            
-            if (str == "aka")
-            {
-                result = GEDCOMNameType.ntAka;
-            }
-            else if (str == "birth")
-            {
-                result = GEDCOMNameType.ntBirth;
-            }
-            else if (str == "immigrant")
-            {
-                result = GEDCOMNameType.ntImmigrant;
-            }
-            else if (str == "maiden")
-            {
-                result = GEDCOMNameType.ntMaiden;
-            }
-            else if (str == "married")
-            {
-                result = GEDCOMNameType.ntMarried;
-            }
-            else
-            {
-                result = GEDCOMNameType.ntNone;
-            }
-            return result;
+            return Str2Enum(str, NameTypes, GEDCOMNameType.ntNone);
         }
 
         public static string GetNameTypeStr(GEDCOMNameType value)
         {
-            string s = "";
-            switch (value) {
-                case GEDCOMNameType.ntNone:
-                    s = "";
-                    break;
-                case GEDCOMNameType.ntAka:
-                    s = "aka";
-                    break;
-                case GEDCOMNameType.ntBirth:
-                    s = "birth";
-                    break;
-                case GEDCOMNameType.ntImmigrant:
-                    s = "immigrant";
-                    break;
-                case GEDCOMNameType.ntMaiden:
-                    s = "maiden";
-                    break;
-                case GEDCOMNameType.ntMarried:
-                    s = "married";
-                    break;
-            }
-            return s;
+            return GEDCOMUtils.Enum2Str(value, NameTypes);
         }
+
 
         public static GKResearchStatus GetStatusVal(string str)
         {
@@ -1185,28 +973,17 @@ namespace GKCommon.GEDCOM
             GKResearchStatus result;
             str = str.Trim().ToLowerInvariant();
             
-            if (str == "inprogress")
-            {
+            if (str == "inprogress") {
                 result = GKResearchStatus.rsInProgress;
-            }
-            else if (str == "onhold")
-            {
+            } else if (str == "onhold") {
                 result = GKResearchStatus.rsOnHold;
-            }
-            else if (str == "problems")
-            {
+            } else if (str == "problems") {
                 result = GKResearchStatus.rsProblems;
-            }
-            else if (str == "completed")
-            {
+            } else if (str == "completed") {
                 result = GKResearchStatus.rsCompleted;
-            }
-            else if (str == "withdrawn")
-            {
+            } else if (str == "withdrawn") {
                 result = GKResearchStatus.rsWithdrawn;
-            }
-            else
-            {
+            } else {
                 result = GKResearchStatus.rsDefined;
             }
             return result;
@@ -1238,86 +1015,20 @@ namespace GKCommon.GEDCOM
             return s;
         }
 
+
+        public static string[] SpouseSealingDateStatuses = new string[] {
+            "", "CANCELED", "COMPLETED", "DNS", "DNS/CAN", "EXCLUDED", "PRE-1970", "SUBMITTED", "UNCLEARED" };
+
         public static GEDCOMSpouseSealingDateStatus GetSpouseSealingDateStatusVal(string str)
         {
-            if (string.IsNullOrEmpty(str)) return GEDCOMSpouseSealingDateStatus.sdsNone;
-
-            GEDCOMSpouseSealingDateStatus result;
-            str = GEDCOMUtils.InvariantTextInfo.ToUpper(str.Trim());
-            
-            if (str == "CANCELED")
-            {
-                result = GEDCOMSpouseSealingDateStatus.sdsCanceled;
-            }
-            else if (str == "COMPLETED")
-            {
-                result = GEDCOMSpouseSealingDateStatus.sdsCompleted;
-            }
-            else if (str == "EXCLUDED")
-            {
-                result = GEDCOMSpouseSealingDateStatus.sdsExcluded;
-            }
-            else if (str == "DNS")
-            {
-                result = GEDCOMSpouseSealingDateStatus.sdsDNS;
-            }
-            else if (str == "DNS/CAN")
-            {
-                result = GEDCOMSpouseSealingDateStatus.sdsDNSCAN;
-            }
-            else if (str == "PRE-1970")
-            {
-                result = GEDCOMSpouseSealingDateStatus.sdsPre1970;
-            }
-            else if (str == "SUBMITTED")
-            {
-                result = GEDCOMSpouseSealingDateStatus.sdsSubmitted;
-            }
-            else if (str == "UNCLEARED")
-            {
-                result = GEDCOMSpouseSealingDateStatus.sdsUncleared;
-            }
-            else
-            {
-                result = GEDCOMSpouseSealingDateStatus.sdsNone;
-            }
-            return result;
+            return Str2Enum(str, SpouseSealingDateStatuses, GEDCOMSpouseSealingDateStatus.sdsNone, false);
         }
 
         public static string GetSpouseSealingDateStatusStr(GEDCOMSpouseSealingDateStatus value)
         {
-            string str;
-            switch (value) {
-                case GEDCOMSpouseSealingDateStatus.sdsCanceled:
-                    str = "CANCELED";
-                    break;
-                case GEDCOMSpouseSealingDateStatus.sdsCompleted:
-                    str = "COMPLETED";
-                    break;
-                case GEDCOMSpouseSealingDateStatus.sdsExcluded:
-                    str = "EXCLUDED";
-                    break;
-                case GEDCOMSpouseSealingDateStatus.sdsDNS:
-                    str = "DNS";
-                    break;
-                case GEDCOMSpouseSealingDateStatus.sdsDNSCAN:
-                    str = "DNS/CAN";
-                    break;
-                case GEDCOMSpouseSealingDateStatus.sdsPre1970:
-                    str = "PRE-1970";
-                    break;
-                case GEDCOMSpouseSealingDateStatus.sdsSubmitted:
-                    str = "SUBMITTED";
-                    break;
-                case GEDCOMSpouseSealingDateStatus.sdsUncleared:
-                    str = "UNCLEARED";
-                    break;
-                default:
-                    str = "";
-                    break;
-            }
-            return str;
+            return GEDCOMUtils.Enum2Str(value, SpouseSealingDateStatuses);
         }
+
 
         public static GEDCOMOrdinanceProcessFlag GetOrdinanceProcessFlagVal(string su)
         {
@@ -1326,16 +1037,11 @@ namespace GKCommon.GEDCOM
             GEDCOMOrdinanceProcessFlag result;
             su = GEDCOMUtils.InvariantTextInfo.ToUpper(su.Trim());
             
-            if (su == "YES")
-            {
+            if (su == "YES") {
                 result = GEDCOMOrdinanceProcessFlag.opYes;
-            }
-            else if (su == "NO")
-            {
+            } else if (su == "NO") {
                 result = GEDCOMOrdinanceProcessFlag.opNo;
-            }
-            else
-            {
+            } else {
                 result = GEDCOMOrdinanceProcessFlag.opNone;
             }
             return result;
@@ -1357,6 +1063,7 @@ namespace GKCommon.GEDCOM
             }
             return str;
         }
+
 
         public static string GetPriorityStr(GKResearchPriority value)
         {
@@ -1388,29 +1095,21 @@ namespace GKCommon.GEDCOM
             string su = str.Trim().ToLowerInvariant();
             GKResearchPriority result;
 
-            if (su == "low")
-            {
+            if (su == "low") {
                 result = GKResearchPriority.rpLow;
-            }
-            else if (su == "normal")
-            {
+            } else if (su == "normal") {
                 result = GKResearchPriority.rpNormal;
-            }
-            else if (su == "high")
-            {
+            } else if (su == "high") {
                 result = GKResearchPriority.rpHigh;
-            }
-            else if (su == "top")
-            {
+            } else if (su == "top") {
                 result = GKResearchPriority.rpTop;
-            }
-            else
-            {
+            } else {
                 result = GKResearchPriority.rpNone;
             }
             
             return result;
         }
+
 
         public static string GetCharacterSetStr(GEDCOMCharacterSet value)
         {
@@ -1453,6 +1152,7 @@ namespace GKCommon.GEDCOM
             
             return result;
         }
+
 
         public static GEDCOMSex GetSexVal(string str)
         {
@@ -1497,244 +1197,45 @@ namespace GKCommon.GEDCOM
         }
 
 
+        public static string[] BaptismDateStatuses = new string[] {
+            "", "CHILD", "COMPLETED", "EXCLUDED", "PRE-1970", "STILLBORN", "SUBMITTED", "UNCLEARED" };
+
         public static GEDCOMBaptismDateStatus GetBaptismDateStatusVal(string str)
         {
-            if (string.IsNullOrEmpty(str)) return GEDCOMBaptismDateStatus.bdsNone;
-
-            string su = str.Trim().ToUpperInvariant();
-            GEDCOMBaptismDateStatus result;
-
-            if (su == "CHILD")
-            {
-                result = GEDCOMBaptismDateStatus.bdsChild;
-            }
-            else if (su == "COMPLETED")
-            {
-                result = GEDCOMBaptismDateStatus.bdsCompleted;
-            }
-            else if (su == "EXCLUDED")
-            {
-                result = GEDCOMBaptismDateStatus.bdsExcluded;
-            }
-            else if (su == "PRE-1970")
-            {
-                result = GEDCOMBaptismDateStatus.bdsPre1970;
-            }
-            else if (su == "STILLBORN")
-            {
-                result = GEDCOMBaptismDateStatus.bdsStillborn;
-            }
-            else if (su == "SUBMITTED")
-            {
-                result = GEDCOMBaptismDateStatus.bdsSubmitted;
-            }
-            else if (su == "UNCLEARED")
-            {
-                result = GEDCOMBaptismDateStatus.bdsUncleared;
-            }
-            else
-            {
-                result = GEDCOMBaptismDateStatus.bdsNone;
-            }
-            return result;
+            return Str2Enum(str, BaptismDateStatuses, GEDCOMBaptismDateStatus.bdsNone, false);
         }
 
         public static string GetBaptismDateStatusStr(GEDCOMBaptismDateStatus value)
         {
-            string str = "";
-            switch (value)
-            {
-                case GEDCOMBaptismDateStatus.bdsChild:
-                    str = "CHILD";
-                    break;
-
-                case GEDCOMBaptismDateStatus.bdsCompleted:
-                    str = "COMPLETED";
-                    break;
-
-                case GEDCOMBaptismDateStatus.bdsExcluded:
-                    str = "EXCLUDED";
-                    break;
-
-                case GEDCOMBaptismDateStatus.bdsPre1970:
-                    str = "PRE-1970";
-                    break;
-
-                case GEDCOMBaptismDateStatus.bdsStillborn:
-                    str = "STILLBORN";
-                    break;
-
-                case GEDCOMBaptismDateStatus.bdsSubmitted:
-                    str = "SUBMITTED";
-                    break;
-
-                case GEDCOMBaptismDateStatus.bdsUncleared:
-                    str = "UNCLEARED";
-                    break;
-            }
-
-            return str;
+            return GEDCOMUtils.Enum2Str(value, BaptismDateStatuses);
         }
+
+
+        public static string[] EndowmentDateStatuses = new string[] {
+            "", "CHILD", "COMPLETED", "EXCLUDED", "INFANT", "PRE-1970", "STILLBORN", "SUBMITTED", "UNCLEARED" };
 
         public static GEDCOMEndowmentDateStatus GetEndowmentDateStatusVal(string str)
         {
-            if (string.IsNullOrEmpty(str)) return GEDCOMEndowmentDateStatus.edsNone;
-
-            string su = str.Trim().ToUpperInvariant();
-            GEDCOMEndowmentDateStatus result;
-
-            if (su == "CHILD")
-            {
-                result = GEDCOMEndowmentDateStatus.edsChild;
-            }
-            else if (su == "COMPLETED")
-            {
-                result = GEDCOMEndowmentDateStatus.edsCompleted;
-            }
-            else if (su == "EXCLUDED")
-            {
-                result = GEDCOMEndowmentDateStatus.edsExcluded;
-            }
-            else if (su == "INFANT")
-            {
-                result = GEDCOMEndowmentDateStatus.edsInfant;
-            }
-            else if (su == "PRE-1970")
-            {
-                result = GEDCOMEndowmentDateStatus.edsPre1970;
-            }
-            else if (su == "STILLBORN")
-            {
-                result = GEDCOMEndowmentDateStatus.edsStillborn;
-            }
-            else if (su == "SUBMITTED")
-            {
-                result = GEDCOMEndowmentDateStatus.edsSubmitted;
-            }
-            else if (su == "UNCLEARED")
-            {
-                result = GEDCOMEndowmentDateStatus.edsUncleared;
-            }
-            else
-            {
-                result = GEDCOMEndowmentDateStatus.edsNone;
-            }
-            return result;
+            return Str2Enum(str, EndowmentDateStatuses, GEDCOMEndowmentDateStatus.edsNone, false);
         }
 
         public static string GetEndowmentDateStatusStr(GEDCOMEndowmentDateStatus value)
         {
-            string str = "";
-            
-            switch (value)
-            {
-                case GEDCOMEndowmentDateStatus.edsChild:
-                    str = "CHILD";
-                    break;
-
-                case GEDCOMEndowmentDateStatus.edsCompleted:
-                    str = "COMPLETED";
-                    break;
-
-                case GEDCOMEndowmentDateStatus.edsExcluded:
-                    str = "EXCLUDED";
-                    break;
-
-                case GEDCOMEndowmentDateStatus.edsInfant:
-                    str = "INFANT";
-                    break;
-
-                case GEDCOMEndowmentDateStatus.edsPre1970:
-                    str = "PRE-1970";
-                    break;
-
-                case GEDCOMEndowmentDateStatus.edsStillborn:
-                    str = "STILLBORN";
-                    break;
-
-                case GEDCOMEndowmentDateStatus.edsSubmitted:
-                    str = "SUBMITTED";
-                    break;
-
-                case GEDCOMEndowmentDateStatus.edsUncleared:
-                    str = "UNCLEARED";
-                    break;
-            }
-
-            return str;
+            return GEDCOMUtils.Enum2Str(value, EndowmentDateStatuses);
         }
+
+
+        public static string[] ChildSealingDateStatuses = new string[] {
+            "", "BIC", "EXCLUDED", "PRE-1970", "STILLBORN", "SUBMITTED", "UNCLEARED" };
 
         public static GEDCOMChildSealingDateStatus GetChildSealingDateStatusVal(string str)
         {
-            if (string.IsNullOrEmpty(str)) return GEDCOMChildSealingDateStatus.cdsNone;
-
-            string su = str.Trim().ToUpperInvariant();
-            GEDCOMChildSealingDateStatus result;
-
-            if (su == "BIC")
-            {
-                result = GEDCOMChildSealingDateStatus.cdsBIC;
-            }
-            else if (su == "EXCLUDED")
-            {
-                result = GEDCOMChildSealingDateStatus.cdsExcluded;
-            }
-            else if (su == "PRE-1970")
-            {
-                result = GEDCOMChildSealingDateStatus.cdsPre1970;
-            }
-            else if (su == "STILLBORN")
-            {
-                result = GEDCOMChildSealingDateStatus.cdsStillborn;
-            }
-            else if (su == "SUBMITTED")
-            {
-                result = GEDCOMChildSealingDateStatus.cdsSubmitted;
-            }
-            else if (su == "UNCLEARED")
-            {
-                result = GEDCOMChildSealingDateStatus.cdsUncleared;
-            }
-            else
-            {
-                result = GEDCOMChildSealingDateStatus.cdsNone;
-            }
-
-            return result;
+            return Str2Enum(str, ChildSealingDateStatuses, GEDCOMChildSealingDateStatus.cdsNone, false);
         }
 
         public static string GetChildSealingDateStatusStr(GEDCOMChildSealingDateStatus value)
         {
-            string str = "";
-
-            switch (value)
-            {
-                case GEDCOMChildSealingDateStatus.cdsBIC:
-                    str = "BIC";
-                    break;
-
-                case GEDCOMChildSealingDateStatus.cdsExcluded:
-                    str = "EXCLUDED";
-                    break;
-
-                case GEDCOMChildSealingDateStatus.cdsPre1970:
-                    str = "PRE-1970";
-                    break;
-
-                case GEDCOMChildSealingDateStatus.cdsStillborn:
-                    str = "STILLBORN";
-                    break;
-
-                case GEDCOMChildSealingDateStatus.cdsSubmitted:
-                    str = "SUBMITTED";
-                    break;
-
-                case GEDCOMChildSealingDateStatus.cdsUncleared:
-                    str = "UNCLEARED";
-                    break;
-            }
-
-            return str;
+            return GEDCOMUtils.Enum2Str(value, ChildSealingDateStatuses);
         }
         
         #endregion

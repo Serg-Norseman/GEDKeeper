@@ -159,7 +159,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "PHON") {
+            if (tagName == GEDCOMTagType.PHON) {
                 result = (fPhoneList.Add(new GEDCOMTag(Owner, this, tagName, tagValue)));
                 result.SetLevel(Level);
             } else if (tagName == "EMAIL") {
@@ -168,7 +168,7 @@ namespace GKCommon.GEDCOM
             } else if (tagName == "FAX") {
                 result = (fFaxList.Add(new GEDCOMTag(Owner, this, tagName, tagValue)));
                 result.SetLevel(Level);
-            } else if (tagName == "WWW") {
+            } else if (tagName == GEDCOMTagType.WWW) {
                 result = (fWWWList.Add(new GEDCOMTag(Owner, this, tagName, tagValue)));
                 result.SetLevel(Level);
             } else {
@@ -215,13 +215,13 @@ namespace GKCommon.GEDCOM
 
         public void AddPhoneNumber(string value)
         {
-            GEDCOMTag tag = fPhoneList.Add(new GEDCOMTag(Owner, this, "PHON", value));
+            GEDCOMTag tag = fPhoneList.Add(new GEDCOMTag(Owner, this, GEDCOMTagType.PHON, value));
             tag.SetLevel(Level);
         }
 
         public void AddWebPage(string value)
         {
-            GEDCOMTag tag = fWWWList.Add(new GEDCOMTag(Owner, this, "WWW", value));
+            GEDCOMTag tag = fWWWList.Add(new GEDCOMTag(Owner, this, GEDCOMTagType.WWW, value));
             tag.SetLevel(Level);
         }
 

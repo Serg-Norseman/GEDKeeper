@@ -24,13 +24,13 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMDateValue Date
         {
-            get { return TagClass("DATE", GEDCOMDateValue.Create) as GEDCOMDateValue; }
+            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDateValue.Create) as GEDCOMDateValue; }
         }
 
         public string TempleCode
         {
-            get { return GetTagStringValue("TEMP"); }
-            set { SetTagStringValue("TEMP", value); }
+            get { return GetTagStringValue(GEDCOMTagType.TEMP); }
+            set { SetTagStringValue(GEDCOMTagType.TEMP, value); }
         }
 
         public GEDCOMPlace Place
@@ -40,28 +40,28 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMSpouseSealingDateStatus SpouseSealingDateStatus
         {
-            get { return GEDCOMUtils.GetSpouseSealingDateStatusVal(GetTagStringValue("STAT")); }
-            set { SetTagStringValue("STAT", GEDCOMUtils.GetSpouseSealingDateStatusStr(value)); }
+            get { return GEDCOMUtils.GetSpouseSealingDateStatusVal(GetTagStringValue(GEDCOMTagType.STAT)); }
+            set { SetTagStringValue(GEDCOMTagType.STAT, GEDCOMUtils.GetSpouseSealingDateStatusStr(value)); }
         }
 
         public GEDCOMDate SpouseSealingChangeDate
         {
-            get { return DateStatus.TagClass("DATE", GEDCOMDate.Create) as GEDCOMDate; }
+            get { return DateStatus.TagClass(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public GEDCOMDateStatus DateStatus
         {
-            get { return TagClass("STAT", GEDCOMDateStatus.Create) as GEDCOMDateStatus; }
+            get { return TagClass(GEDCOMTagType.STAT, GEDCOMDateStatus.Create) as GEDCOMDateStatus; }
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
         {
             GEDCOMTag result;
 
-            if (tagName == "STAT") {
+            if (tagName == GEDCOMTagType.STAT) {
                 result = base.AddTag(tagName, tagValue, GEDCOMDateStatus.Create);
             } else {
-                // define "DATE" by default
+                // define 'DATE' by default
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
 

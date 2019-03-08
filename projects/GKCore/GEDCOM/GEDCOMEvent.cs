@@ -24,7 +24,7 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMDatePeriod Date
         {
-            get { return TagClass("DATE", GEDCOMDatePeriod.Create) as GEDCOMDatePeriod; }
+            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDatePeriod.Create) as GEDCOMDatePeriod; }
         }
 
         public GEDCOMPlace Place
@@ -52,7 +52,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "DATE") {
+            if (tagName == GEDCOMTagType.DATE) {
                 result = base.AddTag(tagName, tagValue, GEDCOMDatePeriod.Create);
             } else {
                 // define 'PLAC' by default

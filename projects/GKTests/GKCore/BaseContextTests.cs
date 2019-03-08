@@ -159,7 +159,7 @@ namespace GKCore
             GEDCOMFamilyRecord fRec = fContext.Tree.CreateFamily();
             Assert.IsNotNull(fRec);
 
-            evt = fContext.CreateEventEx(fRec, "MARR", "28 DEC 2013", "Ivanovo");
+            evt = fContext.CreateEventEx(fRec, GEDCOMTagType.MARR, "28 DEC 2013", "Ivanovo");
             Assert.IsNotNull(evt);
         }
 

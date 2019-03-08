@@ -289,7 +289,7 @@ namespace GKCore.Export
                         st = evt.StringValue;
                         if (!string.IsNullOrEmpty(st))
                             PrepareSpecIndex(occuIndex, st, iRec);
-                    } else if (evt.Name == "RELI") {
+                    } else if (evt.Name == GEDCOMTagType.RELI) {
                         // Analysis by religion
                         st = evt.StringValue;
                         if (!string.IsNullOrEmpty(st))

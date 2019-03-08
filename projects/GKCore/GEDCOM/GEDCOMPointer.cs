@@ -45,8 +45,8 @@ namespace GKCommon.GEDCOM
 
         public string XRef
         {
-            get { return GEDCOMUtils.CleanXRef(fXRef); }
-            set { fXRef = GEDCOMUtils.EncloseXRef(value); }
+            get { return fXRef; }
+            set { fXRef = value; }
         }
 
 
@@ -65,14 +65,14 @@ namespace GKCommon.GEDCOM
             SetNameValue(tagName, tagValue);
         }
 
-        protected override string GetStringValue()
-        {
-            return fXRef;
-        }
-
         public override bool IsEmpty()
         {
             return (base.IsEmpty() && string.IsNullOrEmpty(fXRef));
+        }
+
+        protected override string GetStringValue()
+        {
+            return GEDCOMUtils.EncloseXRef(fXRef);
         }
 
         public override string ParseString(string strValue)
@@ -86,8 +86,7 @@ namespace GKCommon.GEDCOM
             XRef = map.FindNewXRef(XRef);
         }
 
-        // TODO: refactor it
-        public void SetNamedValue(string name, GEDCOMRecord record)
+        public void SetNameValue(string name, GEDCOMRecord record)
         {
             SetName(name);
             Value = record;

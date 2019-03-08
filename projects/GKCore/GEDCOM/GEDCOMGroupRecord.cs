@@ -132,11 +132,11 @@ namespace GKCommon.GEDCOM
             if (member == null) return false;
 
             GEDCOMPointer ptr = new GEDCOMPointer(Owner, this);
-            ptr.SetNamedValue(GEDCOMTagType._MEMBER, member);
+            ptr.SetNameValue(GEDCOMTagType._MEMBER, member);
             fMembers.Add(ptr);
 
             ptr = new GEDCOMPointer(Owner, member);
-            ptr.SetNamedValue(GEDCOMTagType._GROUP, this);
+            ptr.SetNameValue(GEDCOMTagType._GROUP, this);
             member.Groups.Add(ptr);
 
             return true;
