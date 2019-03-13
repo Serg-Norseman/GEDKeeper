@@ -480,7 +480,7 @@ namespace GKCore
                         indivRec.InitNew();
 
                         indivRec.AddPersonalName(new GEDCOMPersonalName(tree, indivRec));
-                        baseWin.Context.CreateEventEx(indivRec, "BIRT", "", "");
+                        baseWin.Context.CreateEventEx(indivRec, GEDCOMTagType.BIRT, "", "");
                     }
 
                     try {

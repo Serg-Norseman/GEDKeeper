@@ -81,20 +81,20 @@ namespace GKCommon.GEDCOM
             SetNameValue(tagName, tagValue);
         }
 
-        protected override string GetStringValue()
-        {
-            string result = IsPointer ? base.GetStringValue() : fStringValue;
-            return result;
-        }
-
         public override bool IsEmpty()
         {
             bool result;
             if (IsPointer) {
                 result = base.IsEmpty();
             } else {
-                result = (fStringValue == "" && Count == 0);
+                result = (string.IsNullOrEmpty(fStringValue) && Count == 0);
             }
+            return result;
+        }
+
+        protected override string GetStringValue()
+        {
+            string result = IsPointer ? base.GetStringValue() : fStringValue;
             return result;
         }
 

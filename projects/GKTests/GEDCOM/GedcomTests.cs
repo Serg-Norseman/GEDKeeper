@@ -98,11 +98,11 @@ namespace GKCommon.GEDCOM
             pn = ind2.AddPersonalName(new GEDCOMPersonalName(tree, ind2, "", ""));
             pn.SetNameParts("Ivan Ivanovich", "Fedoroff", "");
 
-            ev1 = new GEDCOMIndividualEvent(tree, ind1, "BIRT", "");
+            ev1 = new GEDCOMIndividualEvent(tree, ind1, GEDCOMTagType.BIRT, "");
             dtVal1 = ev1.Date;
             ind1.AddEvent(ev1);
 
-            ev2 = new GEDCOMIndividualEvent(tree, ind2, "BIRT", "");
+            ev2 = new GEDCOMIndividualEvent(tree, ind2, GEDCOMTagType.BIRT, "");
             dtVal2 = ev2.Date;
             ind2.AddEvent(ev2);
 
@@ -315,7 +315,7 @@ namespace GKCommon.GEDCOM
             // BIRT: "28 DEC 1990"
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
 
-            UDN testUDN = iRec.GetUDN("BIRT");
+            UDN testUDN = iRec.GetUDN(GEDCOMTagType.BIRT);
             Assert.AreEqual("1990/12/28", testUDN.ToString());
 
             testUDN = GEDCOMDate.GetUDNByFormattedStr("28/12/1990", GEDCOMCalendar.dcGregorian);
@@ -368,7 +368,7 @@ namespace GKCommon.GEDCOM
                 Assert.IsNull(tag.AddSource(null, "page", 1));
                 Assert.IsNull(tag.AddMultimedia(null));
 
-                Assert.IsNotNull(tag.AddNote(new GEDCOMNoteRecord(null, null, "", "")));
+                Assert.IsNotNull(tag.AddNote(new GEDCOMNoteRecord(null, null)));
                 Assert.IsNotNull(tag.AddSource(new GEDCOMSourceRecord(null, null), "page", 1));
                 Assert.IsNotNull(tag.AddMultimedia(new GEDCOMMultimediaRecord(null, null)));
             }
@@ -787,10 +787,10 @@ namespace GKCommon.GEDCOM
                 addr.AddTag(GEDCOMTagType.PHON, "8 911 101 99 99", null);
                 Assert.AreEqual("8 911 101 99 99", addr.PhoneNumbers[0].StringValue);
 
-                addr.AddTag("EMAIL", "test@mail.com", null);
+                addr.AddTag(GEDCOMTagType.EMAIL, "test@mail.com", null);
                 Assert.AreEqual("test@mail.com", addr.EmailAddresses[0].StringValue);
 
-                addr.AddTag("FAX", "abrakadabra", null);
+                addr.AddTag(GEDCOMTagType.FAX, "abrakadabra", null);
                 Assert.AreEqual("abrakadabra", addr.FaxNumbers[0].StringValue);
 
                 addr.AddTag(GEDCOMTagType.WWW, "http://test.com", null);
@@ -1205,10 +1205,10 @@ namespace GKCommon.GEDCOM
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             GEDCOMCustomEvent evt, evtd;
 
-            evt = iRec.FindEvent("BIRT");
+            evt = iRec.FindEvent(GEDCOMTagType.BIRT);
             Assert.IsNotNull(evt);
 
-            evtd = iRec.FindEvent("DEAT");
+            evtd = iRec.FindEvent(GEDCOMTagType.DEAT);
             Assert.IsNotNull(evtd);
 
             GEDCOMCustomEventTest(evt, "28.12.1990");
@@ -1694,7 +1694,7 @@ namespace GKCommon.GEDCOM
                 customEvent.PhysicalDescription = strs;
                 Assert.AreEqual(strs.Text, customEvent.PhysicalDescription.Text);
 
-                customEvent.AddTag("EMAIL", "email", null);
+                customEvent.AddTag(GEDCOMTagType.EMAIL, "email", null);
                 Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
 
                 customEvent.Pack();
@@ -1709,7 +1709,7 @@ namespace GKCommon.GEDCOM
                 Assert.IsNotNull(customEvent);
 
                 // stream test
-                customEvent.SetName("BIRT");
+                customEvent.SetName(GEDCOMTagType.BIRT);
                 customEvent.Date.ParseString("20 SEP 1970");
                 customEvent.Place.StringValue = "test place";
                 string buf = TestUtils.GetTagStreamText(customEvent);
@@ -1728,7 +1728,7 @@ namespace GKCommon.GEDCOM
                                     "1 PLAC test place\r\n", buf1);
                 }
 
-                customEvent.AddTag("EMAIL", "email", null);
+                customEvent.AddTag(GEDCOMTagType.EMAIL, "email", null);
                 Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
 
                 customEvent.Pack();
@@ -1742,7 +1742,7 @@ namespace GKCommon.GEDCOM
             {
                 Assert.IsNotNull(customEvent);
 
-                customEvent.AddTag("EMAIL", "email", null);
+                customEvent.AddTag(GEDCOMTagType.EMAIL, "email", null);
                 Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
 
                 customEvent.Pack();

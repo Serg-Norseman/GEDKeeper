@@ -587,7 +587,7 @@ namespace GKCore
         {
             if (iRec == null) return null;
 
-            GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
+            GEDCOMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.BIRT);
             GEDCOMCustomDate result = ((evt == null) ? null : evt.Date.Value);
             return result;
         }
@@ -596,7 +596,7 @@ namespace GKCore
         {
             if (iRec == null) return string.Empty;
 
-            GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
+            GEDCOMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.BIRT);
             string result = ((evt == null) ? "" : GEDCOMEventToDateStr(evt, dateFormat, false));
             if (compact) result = CompactDate(result);
             return result;
@@ -606,7 +606,7 @@ namespace GKCore
         {
             if (iRec == null) return string.Empty;
 
-            GEDCOMCustomEvent evt = iRec.FindEvent("DEAT");
+            GEDCOMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.DEAT);
             string result = ((evt == null) ? "" : GEDCOMEventToDateStr(evt, dateFormat, false));
             if (compact) result = CompactDate(result);
             return result;
@@ -628,7 +628,7 @@ namespace GKCore
             ds = GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, false);
             if (ds == "")
             {
-                GEDCOMCustomEvent ev = iRec.FindEvent("DEAT");
+                GEDCOMCustomEvent ev = iRec.FindEvent(GEDCOMTagType.DEAT);
                 if (ev != null)
                 {
                     ds = "?";
@@ -685,7 +685,7 @@ namespace GKCore
                         ds = GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, true);
                         if (ds == "")
                         {
-                            GEDCOMCustomEvent ev = iRec.FindEvent("DEAT");
+                            GEDCOMCustomEvent ev = iRec.FindEvent(GEDCOMTagType.DEAT);
                             if (ev != null)
                             {
                                 ds = "?";
@@ -702,7 +702,7 @@ namespace GKCore
                     {
                         string ds, ps;
 
-                        GetEventDatePlace(iRec, "BIRT", DateFormat.dfDD_MM_YYYY, true, true, out ds, out ps);
+                        GetEventDatePlace(iRec, GEDCOMTagType.BIRT, DateFormat.dfDD_MM_YYYY, true, true, out ds, out ps);
                         if (ps != "") {
                             if (ds != "") {
                                 ds += ", ";
@@ -714,7 +714,7 @@ namespace GKCore
                         }
                         result += ds;
 
-                        GetEventDatePlace(iRec, "DEAT", DateFormat.dfDD_MM_YYYY, true, true, out ds, out ps);
+                        GetEventDatePlace(iRec, GEDCOMTagType.DEAT, DateFormat.dfDD_MM_YYYY, true, true, out ds, out ps);
                         if (ps != "") {
                             if (ds != "") {
                                 ds += ", ";
@@ -854,9 +854,9 @@ namespace GKCore
                 int bdD, bdM, bdY;
 
                 try {
-                    GEDCOMCustomEvent evt = iRec.FindEvent("DEAT");
+                    GEDCOMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.DEAT);
                     if (evt == null) {
-                        evt = iRec.FindEvent("BIRT");
+                        evt = iRec.FindEvent(GEDCOMTagType.BIRT);
                         if (evt != null) {
                             var dt = evt.Date.Value as GEDCOMDate;
                             if (dt != null) {
@@ -897,17 +897,17 @@ namespace GKCore
 
         public static string GetBirthPlace(GEDCOMIndividualRecord iRec)
         {
-            return (iRec == null) ? string.Empty : GetPlaceStr(iRec.FindEvent("BIRT"), false);
+            return (iRec == null) ? string.Empty : GetPlaceStr(iRec.FindEvent(GEDCOMTagType.BIRT), false);
         }
 
         public static string GetDeathPlace(GEDCOMIndividualRecord iRec)
         {
-            return (iRec == null) ? string.Empty : GetPlaceStr(iRec.FindEvent("DEAT"), false);
+            return (iRec == null) ? string.Empty : GetPlaceStr(iRec.FindEvent(GEDCOMTagType.DEAT), false);
         }
 
         public static string GetResidencePlace(GEDCOMIndividualRecord iRec, bool includeAddress)
         {
-            return (iRec == null) ? string.Empty : GetPlaceStr(iRec.FindEvent("RESI"), includeAddress);
+            return (iRec == null) ? string.Empty : GetPlaceStr(iRec.FindEvent(GEDCOMTagType.RESI), includeAddress);
         }
 
         public static string GetPlaceStr(GEDCOMCustomEvent evt, bool includeAddress)
@@ -1052,8 +1052,8 @@ namespace GKCore
 
                     if (husb != null && wife != null)
                     {
-                        GEDCOMCustomEvent evH = husb.FindEvent("BIRT");
-                        GEDCOMCustomEvent evW = wife.FindEvent("BIRT");
+                        GEDCOMCustomEvent evH = husb.FindEvent(GEDCOMTagType.BIRT);
+                        GEDCOMCustomEvent evW = wife.FindEvent(GEDCOMTagType.BIRT);
 
                         result = GetEventsYearsDiff(evH, evW, false);
                     }
@@ -1087,7 +1087,7 @@ namespace GKCore
                         GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
                         if (child == null) continue;
 
-                        GEDCOMCustomEvent evt = child.FindEvent("BIRT");
+                        GEDCOMCustomEvent evt = child.FindEvent(GEDCOMTagType.BIRT);
                         if (evt == null) continue;
 
                         int childYear = evt.GetChronologicalYear();
@@ -1118,11 +1118,11 @@ namespace GKCore
 
             try
             {
-                GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
+                GEDCOMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.BIRT);
                 if (evt == null) return result;
                 int parentYear = evt.GetChronologicalYear();
 
-                evt = iChild.FindEvent("BIRT");
+                evt = iChild.FindEvent(GEDCOMTagType.BIRT);
                 if (evt == null) return result;
                 int childYear = evt.GetChronologicalYear();
 
@@ -1146,7 +1146,7 @@ namespace GKCore
             {
                 int firstYear = 0;
 
-                GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
+                GEDCOMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.BIRT);
                 if (evt != null)
                 {
                     int mainYear = evt.GetChronologicalYear();

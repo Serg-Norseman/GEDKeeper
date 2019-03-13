@@ -241,13 +241,13 @@ namespace GKCore.Stats
                 case StatsMode.smBirthYears:
                 case StatsMode.smBirthTenYears:
                 case StatsMode.smBirthPlaces:
-                    GetEventField(mode, values, iRec, "BIRT");
+                    GetEventField(mode, values, iRec, GEDCOMTagType.BIRT);
                     break;
 
                 case StatsMode.smDeathYears:
                 case StatsMode.smDeathTenYears:
                 case StatsMode.smDeathPlaces:
-                    GetEventField(mode, values, iRec, "DEAT");
+                    GetEventField(mode, values, iRec, GEDCOMTagType.DEAT);
                     break;
 
                 case StatsMode.smChildsDistribution:
@@ -259,7 +259,7 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smOccupation:
-                    CheckVal(values, GKUtils.GetAttributeValue(iRec, "OCCU"));
+                    CheckVal(values, GKUtils.GetAttributeValue(iRec, GEDCOMTagType.OCCU));
                     break;
 
                 case StatsMode.smReligious:
@@ -267,39 +267,39 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smNational:
-                    CheckVal(values, GKUtils.GetAttributeValue(iRec, "NATI"));
+                    CheckVal(values, GKUtils.GetAttributeValue(iRec, GEDCOMTagType.NATI));
                     break;
 
                 case StatsMode.smEducation:
-                    CheckVal(values, GKUtils.GetAttributeValue(iRec, "EDUC"));
+                    CheckVal(values, GKUtils.GetAttributeValue(iRec, GEDCOMTagType.EDUC));
                     break;
 
                 case StatsMode.smCaste:
-                    CheckVal(values, GKUtils.GetAttributeValue(iRec, "CAST"));
+                    CheckVal(values, GKUtils.GetAttributeValue(iRec, GEDCOMTagType.CAST));
                     break;
 
                 case StatsMode.smHobby:
-                    CheckVal(values, GKUtils.GetAttributeValue(iRec, "_HOBBY"));
+                    CheckVal(values, GKUtils.GetAttributeValue(iRec, GEDCOMTagType._HOBBY));
                     break;
 
                 case StatsMode.smAward:
-                    CheckVal(values, GKUtils.GetAttributeValue(iRec, "_AWARD"));
+                    CheckVal(values, GKUtils.GetAttributeValue(iRec, GEDCOMTagType._AWARD));
                     break;
 
                 case StatsMode.smMili:
-                    CheckVal(values, GKUtils.GetAttributeValue(iRec, "_MILI"));
+                    CheckVal(values, GKUtils.GetAttributeValue(iRec, GEDCOMTagType._MILI));
                     break;
 
                 case StatsMode.smMiliInd:
-                    CheckVal(values, GKUtils.GetAttributeValue(iRec, "_MILI_IND"));
+                    CheckVal(values, GKUtils.GetAttributeValue(iRec, GEDCOMTagType._MILI_IND));
                     break;
 
                 case StatsMode.smMiliDis:
-                    CheckVal(values, GKUtils.GetAttributeValue(iRec, "_MILI_DIS"));
+                    CheckVal(values, GKUtils.GetAttributeValue(iRec, GEDCOMTagType._MILI_DIS));
                     break;
 
                 case StatsMode.smMiliRank:
-                    CheckVal(values, GKUtils.GetAttributeValue(iRec, "_MILI_RANK"));
+                    CheckVal(values, GKUtils.GetAttributeValue(iRec, GEDCOMTagType._MILI_RANK));
                     break;
 
                 case StatsMode.smCertaintyIndex:
@@ -307,7 +307,7 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smBirthByMonth:
-                    GEDCOMCustomEvent ev = iRec.FindEvent("BIRT");
+                    GEDCOMCustomEvent ev = iRec.FindEvent(GEDCOMTagType.BIRT);
                     if (ev != null) {
                         var dtx = ev.Date.Value as GEDCOMDate;
                         if (dtx != null && dtx.Month > 0) {
@@ -365,7 +365,7 @@ namespace GKCore.Stats
                             switch (mode)
                             {
                                 case StatsMode.smAAF_1:
-                                    int dty1 = iRec.GetChronologicalYear("BIRT");
+                                    int dty1 = iRec.GetChronologicalYear(GEDCOMTagType.BIRT);
                                     if (dty1 != 0) {
                                         key = MathHelper.Trunc(dty1 / 10 * 10).ToString();
 
@@ -380,7 +380,7 @@ namespace GKCore.Stats
                                     break;
 
                                 case StatsMode.smAAF_2:
-                                    int dty2 = iChild.GetChronologicalYear("BIRT");
+                                    int dty2 = iChild.GetChronologicalYear(GEDCOMTagType.BIRT);
                                     if (dty2 != 0) {
                                         key = MathHelper.Trunc(dty2 / 10 * 10).ToString();
 

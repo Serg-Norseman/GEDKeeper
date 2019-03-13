@@ -113,21 +113,16 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && fDateFrom.IsEmpty() && fDateTo.IsEmpty();
         }
 
-        // Format: FROM DATE1 TO DATE2
         public override string ParseString(string strValue)
         {
-            string result = strValue;
-            if (!string.IsNullOrEmpty(result)) {
-                if (GEDCOMUtils.ExtractExpectedIdent(result, GEDCOMTagType.FROM, out result, true)) {
-                    result = GEDCOMUtils.ExtractDelimiter(result);
-                    result = fDateFrom.ParseString(result);
-                    result = GEDCOMUtils.ExtractDelimiter(result);
-                }
+            fDateFrom.Clear();
+            fDateTo.Clear();
 
-                if (GEDCOMUtils.ExtractExpectedIdent(result, GEDCOMTagType.TO, out result, true)) {
-                    result = GEDCOMUtils.ExtractDelimiter(result);
-                    result = fDateTo.ParseString(result);
-                }
+            string result;
+            if (string.IsNullOrEmpty(strValue)) {
+                result = string.Empty;
+            } else {
+                result = GEDCOMUtils.ParsePeriodDate(strValue, this);
             }
             return result;
         }

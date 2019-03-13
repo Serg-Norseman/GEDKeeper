@@ -132,9 +132,9 @@ namespace GKCommon.GEDCOM
             base.Dispose(disposing);
         }
 
-        protected override void SaveTagsToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream)
         {
-            base.SaveTagsToStream(stream);
+            base.SaveToStream(stream);
             fPhoneList.SaveToStream(stream);
             fEmailList.SaveToStream(stream);
             fFaxList.SaveToStream(stream);
@@ -162,10 +162,10 @@ namespace GKCommon.GEDCOM
             if (tagName == GEDCOMTagType.PHON) {
                 result = (fPhoneList.Add(new GEDCOMTag(Owner, this, tagName, tagValue)));
                 result.SetLevel(Level);
-            } else if (tagName == "EMAIL") {
+            } else if (tagName == GEDCOMTagType.EMAIL) {
                 result = (fEmailList.Add(new GEDCOMTag(Owner, this, tagName, tagValue)));
                 result.SetLevel(Level);
-            } else if (tagName == "FAX") {
+            } else if (tagName == GEDCOMTagType.FAX) {
                 result = (fFaxList.Add(new GEDCOMTag(Owner, this, tagName, tagValue)));
                 result.SetLevel(Level);
             } else if (tagName == GEDCOMTagType.WWW) {
@@ -203,13 +203,13 @@ namespace GKCommon.GEDCOM
 
         public void AddEmailAddress(string value)
         {
-            GEDCOMTag tag = fEmailList.Add(new GEDCOMTag(Owner, this, "EMAIL", value));
+            GEDCOMTag tag = fEmailList.Add(new GEDCOMTag(Owner, this, GEDCOMTagType.EMAIL, value));
             tag.SetLevel(Level);
         }
 
         public void AddFaxNumber(string value)
         {
-            GEDCOMTag tag = fFaxList.Add(new GEDCOMTag(Owner, this, "FAX", value));
+            GEDCOMTag tag = fFaxList.Add(new GEDCOMTag(Owner, this, GEDCOMTagType.FAX, value));
             tag.SetLevel(Level);
         }
 

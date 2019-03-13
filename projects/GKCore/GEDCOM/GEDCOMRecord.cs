@@ -166,15 +166,14 @@ namespace GKCommon.GEDCOM
                 targetRecord.Clear();
             }
 
-            if (fTags != null) {
-                while (fTags.Count > 0) {
-                    GEDCOMTag tag = fTags.Extract(0);
-                    if (tag.Name == GEDCOMTagType.CHAN && !clearDest) {
-                        tag.Dispose();
-                    } else {
-                        tag.ResetParent(targetRecord);
-                        targetRecord.InsertTag(tag);
-                    }
+            var subtags = GetTagList();
+            while (subtags.Count > 0) {
+                GEDCOMTag tag = subtags.Extract(0);
+                if (tag.Name == GEDCOMTagType.CHAN && !clearDest) {
+                    tag.Dispose();
+                } else {
+                    tag.ResetParent(targetRecord);
+                    targetRecord.InsertTag(tag);
                 }
             }
 
@@ -308,20 +307,13 @@ namespace GKCommon.GEDCOM
             int i = 0;
             int last = xref.Length;
             while (i < last && (xref[i] < '0' || xref[i] > '9')) i++;
-            xref = ((i < last) ? xref.Substring(i) : "");
+            xref = ((i < last) ? xref.Substring(i) : string.Empty);
             return xref;
         }
 
         public int GetId()
         {
-            int result;
-            try {
-                string xref = GetXRefNum();
-                result = ConvertHelper.ParseInt(xref, 0);
-            } catch (Exception) {
-                result = -1;
-            }
-            return result;
+            return GEDCOMUtils.GetXRefNumber(XRef);
         }
 
         public GEDCOMNotes AddNote(GEDCOMNoteRecord noteRec)

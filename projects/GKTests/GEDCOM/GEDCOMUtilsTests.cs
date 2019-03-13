@@ -29,24 +29,19 @@ namespace GKCommon.GEDCOM
     public class GEDCOMUtilsTests
     {
         [Test]
-        public void Test_TrimLeft()
+        public void Test_Trim()
         {
             string str;
-            str = GEDCOMUtils.TrimLeft("	test1");
+            str = GEDCOMUtils.Trim("    test1");
             Assert.AreEqual("test1", str);
 
-            str = GEDCOMUtils.TrimLeft(null);
-            Assert.AreEqual("", str);
-        }
-
-        [Test]
-        public void Test_TrimRight()
-        {
-            string str;
-            str = GEDCOMUtils.TrimRight("test2		");
+            str = GEDCOMUtils.Trim("test2        ");
             Assert.AreEqual("test2", str);
 
-            str = GEDCOMUtils.TrimRight(null);
+            str = GEDCOMUtils.Trim("   test3        ");
+            Assert.AreEqual("test3", str);
+
+            str = GEDCOMUtils.Trim(null);
             Assert.AreEqual("", str);
         }
 
@@ -64,93 +59,6 @@ namespace GKCommon.GEDCOM
         {
             Assert.AreEqual("I12", GEDCOMUtils.CleanXRef("@I12@"), "CleanXRef(@I12@)");
             Assert.AreEqual("@I12@", GEDCOMUtils.EncloseXRef("I12"), "EncloseXRef(I12)");
-        }
-
-        [Test]
-        public void Test_ExtractDelimiter()
-        {
-            string res;
-            res = GEDCOMUtils.ExtractDelimiter(null);
-            Assert.AreEqual(string.Empty, res);
-
-            res = GEDCOMUtils.ExtractDelimiter("");
-            Assert.AreEqual(string.Empty, res);
-
-            res = GEDCOMUtils.ExtractDelimiter(" 12345 efgh");
-            Assert.AreEqual("12345 efgh", res);
-
-            res = GEDCOMUtils.ExtractDelimiter("... abrvalg", '.');
-            Assert.AreEqual(" abrvalg", res);
-        }
-
-        [Test]
-        public void Test_ExtractExpectedIdent()
-        {
-            bool res;
-            string rem;
-
-            res = GEDCOMUtils.ExtractExpectedIdent(null, "INT", out rem, true);
-            Assert.AreEqual(false, res);
-            Assert.AreEqual(string.Empty, rem);
-
-            res = GEDCOMUtils.ExtractExpectedIdent("", "INT", out rem, true);
-            Assert.AreEqual(false, res);
-            Assert.AreEqual(string.Empty, rem);
-
-            res = GEDCOMUtils.ExtractExpectedIdent("INT efgh", "INT", out rem, true);
-            Assert.AreEqual(true, res);
-            Assert.AreEqual(" efgh", rem);
-
-            res = GEDCOMUtils.ExtractExpectedIdent(" efgh", "INT", out rem, true);
-            Assert.AreEqual(false, res);
-            Assert.AreEqual(" efgh", rem);
-
-            res = GEDCOMUtils.ExtractExpectedIdent("INT", "INT", out rem, true);
-            Assert.AreEqual(true, res);
-            Assert.AreEqual(string.Empty, rem);
-
-            //res = GEDCOMUtils.ExtractIdent("... abrvalg", '.');
-            //Assert.AreEqual(" abrvalg", res);
-        }
-
-        [Test]
-        public void Test_ExtractIdent2()
-        {
-            string ident, rem;
-
-            rem = GEDCOMUtils.ExtractIdent(null, out ident, true);
-            Assert.AreEqual(string.Empty, ident);
-            Assert.AreEqual(string.Empty, rem);
-
-            rem = GEDCOMUtils.ExtractIdent("INT efgh", out ident, true);
-            Assert.AreEqual("INT", ident);
-            Assert.AreEqual(" efgh", rem);
-
-            rem = GEDCOMUtils.ExtractIdent(" efgh", out ident, true);
-            Assert.AreEqual(string.Empty, ident);
-            Assert.AreEqual(" efgh", rem);
-
-            rem = GEDCOMUtils.ExtractIdent("INT", out ident, true);
-            Assert.AreEqual("INT", ident);
-            Assert.AreEqual(string.Empty, rem);
-        }
-
-        [Test]
-        public void Test_ParseDate()
-        {
-            string strValue = "ABT @#DJULIAN@ 01 MAR 1980/10";
-            string result;
-
-            GEDCOMApproximated approximated;
-            GEDCOMCalendar calendar;
-            short year;
-            bool yearBC;
-            string yearModifier;
-            byte month, day;
-            GEDCOMDateFormat dateFormat;
-
-            result = GEDCOMUtils.ParseDate(strValue, out approximated, out calendar, out year, out yearBC,
-                                           out yearModifier, out month, out day, out dateFormat);
         }
 
         [Test]

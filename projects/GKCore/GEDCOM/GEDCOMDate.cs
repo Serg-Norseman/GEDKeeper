@@ -134,6 +134,7 @@ namespace GKCommon.GEDCOM
         {
             base.Clear();
 
+            fApproximated = GEDCOMApproximated.daExact;
             fCalendar = GEDCOMCalendar.dcGregorian;
             fYear = UNKNOWN_YEAR;
             fYearBC = false;
@@ -192,30 +193,33 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
-            GEDCOMFormat format = (Owner == null) ? GEDCOMFormat.gf_Native : Owner.Format;
-
-            fApproximated = GEDCOMApproximated.daExact;
-            fCalendar = GEDCOMCalendar.dcGregorian;
-            fYear = UNKNOWN_YEAR;
-            fYearBC = false;
-            fYearModifier = string.Empty;
-            fMonth = 0;
-            fDay = 0;
-
-            string result = strValue;
-
-            if (!string.IsNullOrEmpty(strValue))
-            {
-                if (format == GEDCOMFormat.gf_Ahnenblatt) {
-                    strValue = PrepareAhnenblattDate(strValue);
-                }
-
-                result = GEDCOMUtils.ParseDate(strValue, out fApproximated, out fCalendar, out fYear, out fYearBC, out fYearModifier, out fMonth, out fDay, out fDateFormat);
+            string result;
+            if (string.IsNullOrEmpty(strValue)) {
+                Clear();
+                result = string.Empty;
+            } else {
+                result = GEDCOMUtils.ParseDate(strValue, Owner, this);
             }
+            return result;
+        }
+
+        /// <summary>
+        /// Internal helper method for parser
+        /// </summary>
+        internal void SetRawData(GEDCOMApproximated approximated, GEDCOMCalendar calendar, 
+                                 short year, bool yearBC, string yearModifier, byte month, byte day,
+                                 GEDCOMDateFormat dateFormat)
+        {
+            fApproximated = approximated;
+            fCalendar = calendar;
+            fYear = year;
+            fYearBC = yearBC;
+            fYearModifier = yearModifier;
+            fMonth = month;
+            fDay = day;
+            fDateFormat = dateFormat;
 
             DateChanged();
-
-            return result;
         }
 
         #region Private methods of parsing of the input format
@@ -250,23 +254,6 @@ namespace GKCommon.GEDCOM
                     break;
             }
             return monthes;
-        }
-
-        private static string PrepareAhnenblattDate(string str)
-        {
-            // TODO: remove this dirty hack!
-            string result = str.Trim();
-            if (!string.IsNullOrEmpty(result) && result.StartsWith("(") && result.EndsWith(")")) {
-                result = result.Substring(1, result.Length - 2);
-
-                // ALERT: Ahnenblatt GEDCOM files can contain the dates with any separator!
-                // by standard it's "(<DATE_PHRASE>)" (gedcom-5.5.1, p.47)
-                // FIXME: this code need to move to GEDCOMDateInterpreted
-                result = result.Replace('/', '.');
-                result = result.Replace('-', '.');
-                result = result.Replace(' ', '.');
-            }
-            return result;
         }
 
         private static string CheckGEDCOMMonth(string str)

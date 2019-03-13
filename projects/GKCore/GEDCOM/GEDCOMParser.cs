@@ -224,6 +224,16 @@ namespace GKCommon.GEDCOM
             return (fCurrentToken == tokenKind);
         }
 
+        public bool RequireWord(string token)
+        {
+            return (fCurrentToken == GEDCOMToken.Word && GetWord() == token);
+        }
+
+        public bool RequireSymbol(char symbol)
+        {
+            return (fCurrentToken == GEDCOMToken.Symbol && GetSymbol() == symbol);
+        }
+
         public void RequestSymbol(char symbol)
         {
             if (fCurrentToken != GEDCOMToken.Symbol || GetSymbol() != symbol) {

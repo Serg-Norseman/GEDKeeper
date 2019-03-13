@@ -36,15 +36,13 @@ namespace GKCommon.GEDCOM
         public string FullName
         {
             get {
-                string result = GEDCOMUtils.TrimLeft(fFirstPart);
+                string result = fFirstPart;
                 if (!string.IsNullOrEmpty(fSurname)) {
                     result += " " + fSurname;
-
                     if (!string.IsNullOrEmpty(fLastPart)) {
-                        result += GEDCOMUtils.TrimRight(" " + fLastPart);
+                        result += " " + fLastPart;
                     }
                 }
-
                 return result;
             }
         }
@@ -52,19 +50,19 @@ namespace GKCommon.GEDCOM
         public string FirstPart
         {
             get { return fFirstPart; }
-            set { fFirstPart = value; }
+            set { fFirstPart = GEDCOMUtils.Trim(value); }
         }
 
         public string Surname
         {
             get { return fSurname; }
-            set { fSurname = value; }
+            set { fSurname = GEDCOMUtils.Trim(value); }
         }
 
         public string LastPart
         {
             get { return fLastPart; }
-            set { fLastPart = value; }
+            set { fLastPart = GEDCOMUtils.Trim(value); }
         }
 
         public GEDCOMPersonalNamePieces Pieces
@@ -84,16 +82,14 @@ namespace GKCommon.GEDCOM
         }
 
 
+        // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
         protected override string GetStringValue()
         {
-            // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
-
-            string result = GEDCOMUtils.TrimLeft(fFirstPart);
+            string result = fFirstPart;
             if (!string.IsNullOrEmpty(fSurname)) {
                 result += " /" + fSurname + "/";
-
                 if (!string.IsNullOrEmpty(fLastPart)) {
-                    result += GEDCOMUtils.TrimRight(" " + fLastPart);
+                    result += " " + fLastPart;
                 }
             }
             return result;
@@ -101,42 +97,14 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
-            fFirstPart = "";
-            fSurname = "";
-            fLastPart = "";
-
-            string sv = strValue;
-            if (string.IsNullOrEmpty(sv))
-                return string.Empty;
-
-            int p = sv.IndexOf('/');
-            if (p < 0) {
-                fFirstPart = sv;
-                return string.Empty;
-            }
-
-            fFirstPart = sv.Substring(0, p);
-            fFirstPart = GEDCOMUtils.TrimRight(fFirstPart);
-
-            int p2 = sv.IndexOf('/', p + 1);
-            if (p2 < 0)
-                return string.Empty;
-
-            p++;
-            fSurname = sv.Substring(p, p2 - p).Trim();
-
-            if (p2 >= sv.Length - 1)
-                return string.Empty;
-
-            fLastPart = GEDCOMUtils.TrimLeft(sv.Substring(p2 + 1));
-            return string.Empty;
+            return GEDCOMUtils.ParseName(strValue, this);
         }
 
         public void SetNameParts(string firstPart, string surname, string lastPart)
         {
-            fFirstPart = (string.IsNullOrEmpty(firstPart)) ? "" : firstPart.Trim();
-            fSurname = (string.IsNullOrEmpty(surname)) ? "" : surname.Trim();
-            fLastPart = (string.IsNullOrEmpty(lastPart)) ? "" : lastPart.Trim();
+            fFirstPart = GEDCOMUtils.Trim(firstPart);
+            fSurname = GEDCOMUtils.Trim(surname);
+            fLastPart = GEDCOMUtils.Trim(lastPart);
         }
 
         public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
@@ -146,14 +114,14 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPersonalName(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            SetName("NAME");
+            SetName(GEDCOMTagType.NAME);
 
             fPieces = new GEDCOMPersonalNamePieces(owner, this);
             fPieces.SetLevel(Level);
 
-            fFirstPart = "";
-            fSurname = "";
-            fLastPart = "";
+            fFirstPart = string.Empty;
+            fSurname = string.Empty;
+            fLastPart = string.Empty;
         }
 
         public GEDCOMPersonalName(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
@@ -173,7 +141,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == GEDCOMTagType.TYPE || tagName == "FONE" || tagName == "ROMN" || tagName == "_LANG") {
+            if (tagName == GEDCOMTagType.TYPE || tagName == GEDCOMTagType.FONE || tagName == GEDCOMTagType.ROMN || tagName == "_LANG") {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             } else {
                 result = fPieces.AddTag(tagName, tagValue, tagConstructor);
@@ -201,9 +169,9 @@ namespace GKCommon.GEDCOM
         {
             base.Clear();
 
-            fFirstPart = "";
-            fSurname = "";
-            fLastPart = "";
+            fFirstPart = string.Empty;
+            fSurname = string.Empty;
+            fLastPart = string.Empty;
 
             if (fPieces != null)
                 fPieces.Clear();

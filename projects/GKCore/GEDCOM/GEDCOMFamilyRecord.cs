@@ -96,19 +96,19 @@ namespace GKCommon.GEDCOM
             GEDCOMFactory f = new GEDCOMFactory();
             fTagsFactory = f;
 
-            f.RegisterTag("SLGS", GEDCOMSpouseSealing.Create);
+            f.RegisterTag(GEDCOMTagType.SLGS, GEDCOMSpouseSealing.Create);
 
-            f.RegisterTag("ANUL", GEDCOMFamilyEvent.Create);
-            f.RegisterTag("CENS", GEDCOMFamilyEvent.Create);
-            f.RegisterTag("DIV", GEDCOMFamilyEvent.Create);
-            f.RegisterTag("DIVF", GEDCOMFamilyEvent.Create);
-            f.RegisterTag("ENGA", GEDCOMFamilyEvent.Create);
-            f.RegisterTag("MARB", GEDCOMFamilyEvent.Create);
-            f.RegisterTag("MARC", GEDCOMFamilyEvent.Create);
+            f.RegisterTag(GEDCOMTagType.ANUL, GEDCOMFamilyEvent.Create);
+            f.RegisterTag(GEDCOMTagType.CENS, GEDCOMFamilyEvent.Create);
+            f.RegisterTag(GEDCOMTagType.DIV, GEDCOMFamilyEvent.Create);
+            f.RegisterTag(GEDCOMTagType.DIVF, GEDCOMFamilyEvent.Create);
+            f.RegisterTag(GEDCOMTagType.ENGA, GEDCOMFamilyEvent.Create);
+            f.RegisterTag(GEDCOMTagType.MARB, GEDCOMFamilyEvent.Create);
+            f.RegisterTag(GEDCOMTagType.MARC, GEDCOMFamilyEvent.Create);
             f.RegisterTag(GEDCOMTagType.MARR, GEDCOMFamilyEvent.Create);
-            f.RegisterTag("MARL", GEDCOMFamilyEvent.Create);
-            f.RegisterTag("MARS", GEDCOMFamilyEvent.Create);
-            f.RegisterTag("RESI", GEDCOMFamilyEvent.Create);
+            f.RegisterTag(GEDCOMTagType.MARL, GEDCOMFamilyEvent.Create);
+            f.RegisterTag(GEDCOMTagType.MARS, GEDCOMFamilyEvent.Create);
+            f.RegisterTag(GEDCOMTagType.RESI, GEDCOMFamilyEvent.Create);
             f.RegisterTag(GEDCOMTagType.EVEN, GEDCOMFamilyEvent.Create);
         }
 
@@ -286,8 +286,8 @@ namespace GKCommon.GEDCOM
 
         private static int EventsCompare(GEDCOMPointer cp1, GEDCOMPointer cp2)
         {
-            UDN udn1 = ((GEDCOMIndividualRecord)cp1.Value).GetUDN("BIRT");
-            UDN udn2 = ((GEDCOMIndividualRecord)cp2.Value).GetUDN("BIRT");
+            UDN udn1 = ((GEDCOMIndividualRecord)cp1.Value).GetUDN(GEDCOMTagType.BIRT);
+            UDN udn2 = ((GEDCOMIndividualRecord)cp2.Value).GetUDN(GEDCOMTagType.BIRT);
             return udn1.CompareTo(udn2);
         }
 

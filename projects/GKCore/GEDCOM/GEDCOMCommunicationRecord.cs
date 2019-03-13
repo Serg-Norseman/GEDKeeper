@@ -31,8 +31,8 @@ namespace GKCommon.GEDCOM
 
         public string CommName
         {
-            get { return GetTagStringValue("NAME"); }
-            set { SetTagStringValue("NAME", value); }
+            get { return GetTagStringValue(GEDCOMTagType.NAME); }
+            set { SetTagStringValue(GEDCOMTagType.NAME, value); }
         }
 
         public GKCommunicationType CommunicationType
@@ -52,7 +52,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "NAME") {
+            if (tagName == GEDCOMTagType.NAME) {
                 result = base.AddTag(tagName, tagValue, null);
             } else if (tagName == GEDCOMTagType.DATE) {
                 result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);

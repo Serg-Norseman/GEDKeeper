@@ -36,7 +36,7 @@ namespace GKCommon.GEDCOM
 
         public new GEDCOMPersonalName Name
         {
-            get { return TagClass("NAME", GEDCOMPersonalName.Create) as GEDCOMPersonalName; }
+            get { return TagClass(GEDCOMTagType.NAME, GEDCOMPersonalName.Create) as GEDCOMPersonalName; }
         }
 
         public string RegisteredReference
@@ -82,9 +82,9 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "NAME") {
+            if (tagName == GEDCOMTagType.NAME) {
                 result = base.AddTag(tagName, tagValue, GEDCOMPersonalName.Create);
-            } else if (tagName == GEDCOMTagType.PHON || tagName == "EMAIL" || tagName == "FAX" || tagName == GEDCOMTagType.WWW) {
+            } else if (tagName == GEDCOMTagType.PHON || tagName == GEDCOMTagType.EMAIL || tagName == GEDCOMTagType.FAX || tagName == GEDCOMTagType.WWW) {
                 result = Address.AddTag(tagName, tagValue, tagConstructor);
             } else if (tagName == GEDCOMTagType.LANG) {
                 result = AddLanguage(new GEDCOMLanguage(Owner, this, tagName, tagValue));

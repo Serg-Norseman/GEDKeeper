@@ -63,9 +63,11 @@ namespace GKCommon.GEDCOM
     {
         public const char GEDCOM_DELIMITER = ' ';
         public const char GEDCOM_YEAR_MODIFIER_SEPARATOR = '/';
+        public const char GEDCOM_NAME_SEPARATOR = '/';
         public const string GEDCOM_YEAR_BC = "B.C.";
         public const char GEDCOM_POINTER_DELIMITER = '@';
         public const string GEDCOM_NEWLINE = "\r\n";
+        public const int MAX_LINE_LENGTH = 248;
 
         // deprecated
         //public const byte GEDCOMMaxPhoneNumbers = 3;
@@ -323,7 +325,8 @@ namespace GKCommon.GEDCOM
                         } else if (tagName == GEDCOMTagType.OBJE) {
                             curRecord = fTree.AddRecord(new GEDCOMMultimediaRecord(fTree, fTree));
                         } else if (tagName == GEDCOMTagType.NOTE) {
-                            curRecord = fTree.AddRecord(new GEDCOMNoteRecord(fTree, fTree, "", tagValue));
+                            curRecord = fTree.AddRecord(new GEDCOMNoteRecord(fTree, fTree));
+                            curRecord.ParseString(tagValue);
                         } else if (tagName == GEDCOMTagType.REPO) {
                             curRecord = fTree.AddRecord(new GEDCOMRepositoryRecord(fTree, fTree));
                         } else if (tagName == GEDCOMTagType.SOUR) {
@@ -357,13 +360,14 @@ namespace GKCommon.GEDCOM
                     } else {
                         if (curRecord != null) {
                             if (curTag == null || tagLevel == 1) {
-                                curTag = curRecord.AddTag(tagName, tagValue, null);
+                                curTag = curRecord.AddTag(tagName, string.Empty, null);
                             } else {
                                 while (tagLevel <= curTag.Level) {
                                     curTag = (curTag.Parent as GEDCOMTag);
                                 }
-                                curTag = curTag.AddTag(tagName, tagValue, null);
+                                curTag = curTag.AddTag(tagName, string.Empty, null);
                             }
+                            curTag.ParseString(tagValue);
                         }
                     }
 
@@ -508,6 +512,11 @@ namespace GKCommon.GEDCOM
 
         private static readonly Dictionary<string, TagProperties> fTagsBase;
 
+        private static void RegisterTagProps(Dictionary<string, TagProperties> dict, TagProperties props)
+        {
+            // TODO
+        }
+
         private static Dictionary<string, TagProperties> CreatePropertiesDict()
         {
             var result = new Dictionary<string, TagProperties>();
@@ -533,33 +542,29 @@ namespace GKCommon.GEDCOM
             result.Add(GEDCOMTagType.SUBM, new TagProperties(GEDCOMTagType.SUBM, true, false));
             result.Add(GEDCOMTagType.VERS, new TagProperties(GEDCOMTagType.VERS, true, false));
             result.Add(GEDCOMTagType.LANG, new TagProperties(GEDCOMTagType.LANG, true, false));
-
             result.Add(GEDCOMTagType.NPFX, new TagProperties(GEDCOMTagType.NPFX, true, false));
             result.Add(GEDCOMTagType.GIVN, new TagProperties(GEDCOMTagType.GIVN, true, false));
             result.Add(GEDCOMTagType.NICK, new TagProperties(GEDCOMTagType.NICK, true, false));
             result.Add(GEDCOMTagType.SPFX, new TagProperties(GEDCOMTagType.SPFX, true, false));
             result.Add(GEDCOMTagType.SURN, new TagProperties(GEDCOMTagType.SURN, true, false));
             result.Add(GEDCOMTagType.NSFX, new TagProperties(GEDCOMTagType.NSFX, true, false));
-
-            result.Add(GEDCOMTagType._PATN, new TagProperties(GEDCOMTagType._PATN, true, true));
-            result.Add(GEDCOMTagType._MARN, new TagProperties(GEDCOMTagType._MARN, true, true));
-            result.Add(GEDCOMTagType._RELN, new TagProperties(GEDCOMTagType._RELN, true, true));
-            result.Add(GEDCOMTagType._CENN, new TagProperties(GEDCOMTagType._CENN, true, true));
-
-            result.Add(GEDCOMTagType._LOC, new TagProperties(GEDCOMTagType._LOC, true,  true));
-            result.Add(GEDCOMTagType._POSITION, new TagProperties(GEDCOMTagType._POSITION, true,  true));
             result.Add(GEDCOMTagType.ALIA, new TagProperties(GEDCOMTagType.ALIA, true, false));
-
-            // need for compatibility with Agelong Tree (ALTREE), and other
             result.Add(GEDCOMTagType.HUSB, new TagProperties(GEDCOMTagType.HUSB, true, false));
             result.Add(GEDCOMTagType.WIFE, new TagProperties(GEDCOMTagType.WIFE, true, false));
 
             // extensions
-            result.Add("_BGRO", new TagProperties("_BGRO", true,  true));
-            result.Add("_HAIR", new TagProperties("_HAIR", true,  true));
-            result.Add("_EYES", new TagProperties("_EYES", true,  true));
-            result.Add("_MDNA", new TagProperties("_MDNA", true,  true));
-            result.Add("_YDNA", new TagProperties("_YDNA", true,  true));
+            result.Add(GEDCOMTagType._PATN, new TagProperties(GEDCOMTagType._PATN, true, true));
+            result.Add(GEDCOMTagType._MARN, new TagProperties(GEDCOMTagType._MARN, true, true));
+            result.Add(GEDCOMTagType._RELN, new TagProperties(GEDCOMTagType._RELN, true, true));
+            result.Add(GEDCOMTagType._CENN, new TagProperties(GEDCOMTagType._CENN, true, true));
+            result.Add(GEDCOMTagType._LOC, new TagProperties(GEDCOMTagType._LOC, true,  true));
+            result.Add(GEDCOMTagType._POSITION, new TagProperties(GEDCOMTagType._POSITION, true,  true));
+            result.Add(GEDCOMTagType._BGRO, new TagProperties(GEDCOMTagType._BGRO, true,  true));
+            result.Add(GEDCOMTagType._HAIR, new TagProperties(GEDCOMTagType._HAIR, true,  true));
+            result.Add(GEDCOMTagType._EYES, new TagProperties(GEDCOMTagType._EYES, true,  true));
+            result.Add(GEDCOMTagType._MDNA, new TagProperties(GEDCOMTagType._MDNA, true,  true));
+            result.Add(GEDCOMTagType._YDNA, new TagProperties(GEDCOMTagType._YDNA, true,  true));
+
             result.Add("_LANG", new TagProperties("_LANG", true,  true));
 
             // TODO

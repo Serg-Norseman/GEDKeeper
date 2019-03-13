@@ -25,7 +25,7 @@ using BSLib;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class EnumTuple : IComparable
+    public sealed class EnumTuple : IComparable<EnumTuple>
     {
         public string Key;
         public int Value;
@@ -36,10 +36,10 @@ namespace GKCommon.GEDCOM
             Value = value;
         }
 
-        public int CompareTo(object obj)
+        public int CompareTo(EnumTuple other)
         {
             // GEDCOM enums is ASCII identifiers
-            return string.Compare(Key, ((EnumTuple)obj).Key, StringComparison.OrdinalIgnoreCase);
+            return string.Compare(Key, other.Key, StringComparison.OrdinalIgnoreCase);
         }
     }
 
@@ -52,162 +52,126 @@ namespace GKCommon.GEDCOM
         public static readonly TextInfo InvariantTextInfo = CultureInfo.InvariantCulture.TextInfo;
         public static readonly NumberFormatInfo InvariantNumberFormatInfo = NumberFormatInfo.InvariantInfo;
 
+        //public static readonly EnumTuple[] GEDCOMRecordIdents;
+
+        static GEDCOMUtils()
+        {
+            /*GEDCOMRecordIdents = new EnumTuple[] {
+                new EnumTuple(GEDCOMTagType.INDI, (int)GEDCOMRecordType.rtIndividual),
+                new EnumTuple(GEDCOMTagType.FAM, (int)GEDCOMRecordType.rtFamily),
+                new EnumTuple(GEDCOMTagType.OBJE, (int)GEDCOMRecordType.rtMultimedia),
+                new EnumTuple(GEDCOMTagType.NOTE, (int)GEDCOMRecordType.rtNote),
+                new EnumTuple(GEDCOMTagType.REPO, (int)GEDCOMRecordType.rtRepository),
+                new EnumTuple(GEDCOMTagType.SOUR, (int)GEDCOMRecordType.rtSource),
+                new EnumTuple(GEDCOMTagType.SUBN, (int)GEDCOMRecordType.rtSubmission),
+                new EnumTuple(GEDCOMTagType.SUBM, (int)GEDCOMRecordType.rtSubmitter),
+                new EnumTuple(GEDCOMTagType._GROUP, (int)GEDCOMRecordType.rtGroup),
+                new EnumTuple(GEDCOMTagType._RESEARCH, (int)GEDCOMRecordType.rtResearch),
+                new EnumTuple(GEDCOMTagType._TASK, (int)GEDCOMRecordType.rtTask),
+                new EnumTuple(GEDCOMTagType._COMM, (int)GEDCOMRecordType.rtCommunication),
+                new EnumTuple(GEDCOMTagType._LOC, (int)GEDCOMRecordType.rtLocation),
+                new EnumTuple(GEDCOMTagType.HEAD, -1),
+                new EnumTuple(GEDCOMTagType.TRLR, -2),
+            };
+            Array.Sort(GEDCOMRecordIdents);*/
+        }
+
         #region Parse functions
 
-        public static string TrimLeft(string str)
+        public static string Trim(string str)
         {
-            if (string.IsNullOrEmpty(str)) return "";
+            if (string.IsNullOrEmpty(str)) return string.Empty;
 
-            int len = str.Length;
-            int i = 1;
-            while (i <= len && str[i - 1] <= ' ') i++;
+            int strLen = str.Length;
+            int li = 0;
+            while (li < strLen && str[li] <= ' ') li++;
 
-            string result;
-            if (i > len) {
-                result = "";
-            } else {
-                result = ((i != 1) ? str.Substring(i - 1) : str);
-            }
+            int ri = strLen - 1;
+            while (ri >= li && str[ri] <= ' ') ri--;
+
+            string result = str.Substring(li, ri - li + 1);
             return result;
         }
 
-        public static string TrimRight(string str)
+        /// <summary>
+        /// This function is optimized for maximum performance and combines Trim and ToLower operations.
+        /// </summary>
+        public static string NormalizeLo(string str)
         {
-            if (string.IsNullOrEmpty(str)) return "";
+            if (string.IsNullOrEmpty(str)) return string.Empty;
 
-            int len = str.Length;
-            int i = len;
-            while (i > 0 && str[i - 1] <= ' ') i--;
+            char[] strChars = str.ToCharArray();
+            int strLen = strChars.Length;
 
-            string result = ((i != len) ? str.Substring(0, i) : str);
+            int li = 0;
+            while (li < strLen && strChars[li] <= ' ') li++;
+
+            int ri = strLen - 1;
+            while (ri >= li && strChars[ri] <= ' ') ri--;
+
+            for (int i = li; i <= ri; i++) {
+                char ch = strChars[i];
+                char ltr = (char)(ch | ' ');
+                if (ltr >= 'a' && ltr <= 'z') {
+                    strChars[i] = ltr;
+                } else {
+                    strChars[i] = ch;
+                }
+            }
+
+            string result = new string(strChars, li, ri - li + 1);
             return result;
         }
 
-        public static string ExtractDelimiter(string str, char delimiter = GEDCOMProvider.GEDCOM_DELIMITER)
+        /// <summary>
+        /// This function is optimized for maximum performance and combines Trim and ToUpper operations.
+        /// </summary>
+        public static string NormalizeUp(string str)
         {
-            if (str == null) {
-                return string.Empty;
+            if (string.IsNullOrEmpty(str)) return string.Empty;
+
+            char[] strChars = str.ToCharArray();
+            int strLen = strChars.Length;
+
+            int li = 0;
+            while (li < strLen && strChars[li] <= ' ') li++;
+
+            int ri = strLen - 1;
+            while (ri >= li && strChars[ri] <= ' ') ri--;
+
+            for (int i = li; i <= ri; i++) {
+                char ch = strChars[i];
+                char ltr = (char)(ch & -33);
+                if (ltr >= 'A' && ltr <= 'Z') {
+                    strChars[i] = ltr;
+                } else {
+                    strChars[i] = ch;
+                }
             }
 
-            int strLen = str.Length;
-            int strIdx = 0;
-
-            // skip delimiters
-            while (strIdx < strLen && str[strIdx] == delimiter) strIdx++;
-
-            // check empty string
-            if (strLen - strIdx == 0) {
-                return string.Empty;
-            }
-
-            return str.Substring(strIdx, strLen - strIdx);
+            string result = new string(strChars, li, ri - li + 1);
+            return result;
         }
 
-        public static bool ExtractExpectedIdent(string str, string expectedIdent, out string remainder, bool removeIdent = true)
+        public static string CleanXRef(string str)
         {
-            if (str == null) {
-                remainder = string.Empty;
-                return false;
-            }
-
-            int strLen = str.Length;
-            int strIdx = 0;
-
-            // check ident
-            while (strIdx < strLen && ConvertHelper.IsLetterOrDigit(str[strIdx])) strIdx++;
-
-            string ident = InvariantTextInfo.ToUpper(str.Substring(0, strIdx));
-            if (expectedIdent.Equals(ident, StringComparison.Ordinal)) {
-                if (removeIdent) {
-                    if (strLen - strIdx == 0) {
-                        remainder = string.Empty;
-                    } else {
-                        remainder = str.Substring(strIdx, strLen - strIdx);
+            string result = str;
+            if (!string.IsNullOrEmpty(str)) {
+                char[] strChars = str.ToCharArray();
+                int strLen = strChars.Length;
+                int sx = -1;
+                for (int i = 0; i < strLen; i++) {
+                    char chr = strChars[i];
+                    if (chr == GEDCOMProvider.GEDCOM_POINTER_DELIMITER) {
+                        if (sx == -1) {
+                            sx = i;
+                        } else {
+                            result = new string(strChars, sx + 1, i - 1 - sx);
+                            break;
+                        }
                     }
-                } else {
-                    remainder = str;
-                }
-                return true;
-            } else {
-                remainder = str;
-                return false;
-            }
-        }
-
-        public static int ExtractExpectedIdents(string str, string[] expectedIdents, out string remainder, bool removeIdent = true)
-        {
-            if (str == null) {
-                remainder = string.Empty;
-                return -1;
-            }
-
-            int strLen = str.Length;
-            int strIdx = 0;
-
-            // check ident
-            while (strIdx < strLen && ConvertHelper.IsLetterOrDigit(str[strIdx])) strIdx++;
-
-            string ident = InvariantTextInfo.ToUpper(str.Substring(0, strIdx));
-            int idx = Algorithms.BinarySearch<string>(expectedIdents, ident, string.CompareOrdinal);
-
-            if (idx >= 0) {
-                if (removeIdent) {
-                    if (strLen - strIdx == 0) {
-                        remainder = string.Empty;
-                    } else {
-                        remainder = str.Substring(strIdx, strLen - strIdx);
-                    }
-                } else {
-                    remainder = str;
-                }
-                return idx;
-            } else {
-                remainder = str;
-                return -1;
-            }
-        }
-
-        public static string ExtractIdent(string str, out string ident, bool removeIdent = true)
-        {
-            if (str == null) {
-                ident = string.Empty;
-                return string.Empty;
-            }
-
-            int strLen = str.Length;
-            int strIdx = 0;
-
-            // check ident
-            while (strIdx < strLen && ConvertHelper.IsLetterOrDigit(str[strIdx])) strIdx++;
-
-            ident = InvariantTextInfo.ToUpper(str.Substring(0, strIdx));
-            string remainder;
-            if (removeIdent) {
-                if (strLen - strIdx == 0) {
-                    remainder = string.Empty;
-                } else {
-                    remainder = str.Substring(strIdx, strLen - strIdx);
-                }
-            } else {
-                remainder = str;
-            }
-            return remainder;
-        }
-
-        public static string CleanXRef(string xref)
-        {
-            string result = xref;
-
-            if (!string.IsNullOrEmpty(result)) {
-                if (result[0] == '@') {
-                    result = result.Remove(0, 1);
-                }
-
-                if (result.Length > 0 && result[result.Length - 1] == '@') {
-                    result = result.Remove(result.Length - 1, 1);
                 }
             }
-
             return result;
         }
 
@@ -223,6 +187,26 @@ namespace GKCommon.GEDCOM
                 }
             }
             return xref;
+        }
+
+        // Performance improvement: x3.5
+        public static int GetXRefNumber(string str)
+        {
+            if (string.IsNullOrEmpty(str)) {
+                return -1;
+            }
+
+            char[] strChars = str.ToCharArray();
+            int strLen = strChars.Length;
+
+            int result = 0;
+            for (int i = 0; i < strLen; i++) {
+                char ch = strChars[i];
+                if (ch >= '0' && ch <= '9') {
+                    result = (result * 10 + ((int)ch - 48));
+                }
+            }
+            return result;
         }
 
         #endregion
@@ -339,12 +323,12 @@ namespace GKCommon.GEDCOM
         }
 
         // Time format: hour:minutes:seconds.fraction
-        public static string ParseTime(string strValue, out byte hour, out byte minutes, out byte seconds, out short fraction)
+        public static string ParseTime(string strValue, GEDCOMTime time)
         {
-            hour = 0;
-            minutes = 0;
-            seconds = 0;
-            fraction = 0;
+            byte hour = 0;
+            byte minutes = 0;
+            byte seconds = 0;
+            short fraction = 0;
 
             if (!string.IsNullOrEmpty(strValue)) {
                 var strTok = new GEDCOMParser(strValue, true);
@@ -366,18 +350,18 @@ namespace GKCommon.GEDCOM
                 strValue = strTok.GetRest();
             }
 
-            //time.SetRawData(hour, minutes, seconds, fraction);
+            time.SetRawData(hour, minutes, seconds, fraction);
 
             return strValue;
         }
 
         // CutoutPosition format: x1 y1 x2 y2
-        public static string ParseCutoutPosition(string strValue, out int x1, out int y1, out int x2, out int y2)
+        public static string ParseCutoutPosition(string strValue, GEDCOMCutoutPosition position)
         {
-            x1 = 0;
-            y1 = 0;
-            x2 = 0;
-            y2 = 0;
+            int x1 = 0;
+            int y1 = 0;
+            int x2 = 0;
+            int y2 = 0;
 
             if (!string.IsNullOrEmpty(strValue)) {
                 var parser = new GEDCOMParser(strValue, true);
@@ -386,58 +370,209 @@ namespace GKCommon.GEDCOM
                 x2 = parser.RequestNextInt();
                 y2 = parser.RequestNextInt();
             }
+
+            position.SetRawData(x1, y1, x2, y2);
+
             return string.Empty;
         }
 
+        public static string PrepareAhnenblattDate(string str)
+        {
+            // TODO: remove this dirty hack!
+            string result = str.Trim();
+            if (!string.IsNullOrEmpty(result) && result.StartsWith("(") && result.EndsWith(")")) {
+                result = result.Substring(1, result.Length - 2);
+
+                // ALERT: Ahnenblatt GEDCOM files can contain the dates with any separator!
+                // by standard it's "(<DATE_PHRASE>)" (gedcom-5.5.1, p.47)
+                // FIXME: this code need to move to GEDCOMDateInterpreted
+                result = result.Replace('/', '.');
+                result = result.Replace('-', '.');
+                result = result.Replace(' ', '.');
+            }
+            return result;
+        }
+
         // DateValue format: INT/FROM/TO/etc..._<date>
-        public static GEDCOMCustomDate ParseDateValue(string str, GEDCOMTree owner, GEDCOMDateValue parent)
+        public static string ParseDateValue(string str, GEDCOMTree owner, GEDCOMDateValue dateValue)
         {
             if (str == null) {
                 return null;
             }
 
-            string strDateType;
-            str = ExtractDelimiter(str);
-            str = ExtractIdent(str, out strDateType, false);
+            GEDCOMFormat format = (owner == null) ? GEDCOMFormat.gf_Native : owner.Format;
+            if (format == GEDCOMFormat.gf_Ahnenblatt) {
+                str = GEDCOMUtils.PrepareAhnenblattDate(str);
+            }
 
-            int idx = Algorithms.BinarySearch<string>(GEDCOMCustomDate.GEDCOMDateTypes, strDateType, string.CompareOrdinal);
+            var strTok = new GEDCOMParser(str, false);
+            strTok.SkipWhitespaces();
+
+            int idx = 0;
+            var token = strTok.CurrentToken;
+            if (token == GEDCOMToken.Word) {
+                string su = strTok.GetWord();
+                idx = Algorithms.BinarySearch(GEDCOMCustomDate.GEDCOMDateTypes, su, string.CompareOrdinal);
+            }
             var dateType = (idx < 0) ? GEDCOMDateType.SIMP : (GEDCOMDateType)idx;
 
-            GEDCOMCustomDate result;
+            string result;
+            GEDCOMCustomDate date;
             switch (dateType) {
                 case GEDCOMDateType.AFT:
                 case GEDCOMDateType.BEF:
                 case GEDCOMDateType.BET:
-                    result = new GEDCOMDateRange(owner, parent);
+                    date = new GEDCOMDateRange(owner, dateValue);
+                    result = GEDCOMUtils.ParseRangeDate(strTok, date as GEDCOMDateRange);
                     break;
                 case GEDCOMDateType.INT:
-                    result = new GEDCOMDateInterpreted(owner, parent);
+                    date = new GEDCOMDateInterpreted(owner, dateValue);
+                    result = GEDCOMUtils.ParseIntDate(strTok, date as GEDCOMDateInterpreted);
                     break;
                 case GEDCOMDateType.FROM:
                 case GEDCOMDateType.TO:
-                    result = new GEDCOMDatePeriod(owner, parent);
+                    date = new GEDCOMDatePeriod(owner, dateValue);
+                    result = GEDCOMUtils.ParsePeriodDate(strTok, date as GEDCOMDatePeriod);
                     break;
                 default:
-                    result = new GEDCOMDate(owner, parent);
+                    date = new GEDCOMDate(owner, dateValue);
+                    result = GEDCOMUtils.ParseDate(strTok, date as GEDCOMDate);
                     break;
             }
+
+            dateValue.SetRawData(date);
             return result;
         }
 
-        public static string ParseDate(string strValue, out GEDCOMApproximated approximated, out GEDCOMCalendar calendar, 
-                                       out short year, out bool yearBC, out string yearModifier, out byte month, out byte day,
-                                       out GEDCOMDateFormat dateFormat)
+        // Format: FROM DATE1 TO DATE2
+        public static string ParsePeriodDate(string strValue, GEDCOMDatePeriod date)
         {
-            approximated = GEDCOMApproximated.daExact;
-            calendar = GEDCOMCalendar.dcGregorian;
-            year = GEDCOMDate.UNKNOWN_YEAR;
-            yearBC = false;
-            yearModifier = string.Empty;
-            month = 0;
-            day = 0;
-            dateFormat = GEDCOMDateFormat.dfGEDCOMStd;
+            var strTok = new GEDCOMParser(strValue, false);
+            return ParsePeriodDate(strTok, date);
+        }
+
+        // Format: FROM DATE1 TO DATE2
+        public static string ParsePeriodDate(GEDCOMParser strTok, GEDCOMDatePeriod date)
+        {
+            strTok.SkipWhitespaces();
+
+            if (strTok.RequireWord(GEDCOMTagType.FROM)) {
+                strTok.Next();
+                ParseDate(strTok, date.DateFrom);
+                strTok.SkipWhitespaces();
+            }
+
+            if (strTok.RequireWord(GEDCOMTagType.TO)) {
+                strTok.Next();
+                ParseDate(strTok, date.DateTo);
+                strTok.SkipWhitespaces();
+            }
+
+            return strTok.GetRest();
+        }
+
+        // Format: AFT DATE | BEF DATE | BET AFT_DATE AND BEF_DATE
+        public static string ParseRangeDate(string strValue, GEDCOMDateRange date)
+        {
+            var strTok = new GEDCOMParser(strValue, false);
+            return ParseRangeDate(strTok, date);
+        }
+
+        // Format: AFT DATE | BEF DATE | BET AFT_DATE AND BEF_DATE
+        public static string ParseRangeDate(GEDCOMParser strTok, GEDCOMDateRange date)
+        {
+            strTok.SkipWhitespaces();
+
+            var token = strTok.CurrentToken;
+            if (token != GEDCOMToken.Word) {
+                // error!
+            }
+            string su = strTok.GetWord();
+            int dateType = Algorithms.BinarySearch(GEDCOMCustomDate.GEDCOMDateRangeArray, su, string.CompareOrdinal);
+
+            if (dateType == 0) { // "AFT"
+                strTok.Next();
+                ParseDate(strTok, date.After);
+            } else if (dateType == 1) { // "BEF"
+                strTok.Next();
+                ParseDate(strTok, date.Before);
+            } else if (dateType == 2) { // "BET"
+                strTok.Next();
+                //result = GEDCOMProvider.FixFTB(result);
+                ParseDate(strTok, date.After);
+                strTok.SkipWhitespaces();
+
+                if (!strTok.RequireWord(GEDCOMCustomDate.GEDCOMDateRangeArray[3])) { // "AND"
+                    throw new GEDCOMDateException(string.Format("The range date '{0}' doesn't contain 'and' token", strTok.GetFullStr()));
+                }
+
+                strTok.Next();
+                strTok.SkipWhitespaces();
+                //result = GEDCOMProvider.FixFTB(result);
+                ParseDate(strTok, date.Before);
+            }
+
+            return strTok.GetRest();
+        }
+
+        // Format: INT DATE (phrase)
+        public static string ParseIntDate(string strValue, GEDCOMDateInterpreted date)
+        {
+            var strTok = new GEDCOMParser(strValue, false);
+            return ParseIntDate(strTok, date);
+        }
+
+        // Format: INT DATE (phrase)
+        public static string ParseIntDate(GEDCOMParser strTok, GEDCOMDateInterpreted date)
+        {
+            strTok.SkipWhitespaces();
+
+            if (!strTok.RequireWord(GEDCOMTagType.INT)) {
+                throw new GEDCOMDateException(string.Format("The interpreted date '{0}' doesn't start with a valid ident", strTok.GetFullStr()));
+            }
+            strTok.Next();
+            ParseDate(strTok, date);
+
+            strTok.SkipWhitespaces();
+            var token = strTok.CurrentToken;
+            if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '(') {
+                var phrase = new StringBuilder();
+                phrase.Append(strTok.GetWord());
+                do {
+                    token = strTok.Next();
+                    phrase.Append(strTok.GetWord());
+                } while (token != GEDCOMToken.Symbol || strTok.GetSymbol() != ')');
+
+                date.DatePhrase = phrase.ToString();
+            } else {
+                date.DatePhrase = string.Empty;
+            }
+
+            return strTok.GetRest();
+        }
+
+        public static string ParseDate(string strValue, GEDCOMTree owner, GEDCOMDate date)
+        {
+            GEDCOMFormat format = (owner == null) ? GEDCOMFormat.gf_Native : owner.Format;
+            if (format == GEDCOMFormat.gf_Ahnenblatt) {
+                strValue = GEDCOMUtils.PrepareAhnenblattDate(strValue);
+            }
 
             var strTok = new GEDCOMParser(strValue, false);
+            return ParseDate(strTok, date);
+        }
+
+        public static string ParseDate(GEDCOMParser strTok, GEDCOMDate date)
+        {
+            GEDCOMApproximated approximated = GEDCOMApproximated.daExact;
+            GEDCOMCalendar calendar = GEDCOMCalendar.dcGregorian;
+            short year = GEDCOMDate.UNKNOWN_YEAR;
+            bool yearBC = false;
+            string yearModifier = string.Empty;
+            byte month = 0;
+            byte day = 0;
+            GEDCOMDateFormat dateFormat = GEDCOMDateFormat.dfGEDCOMStd;
+
             strTok.SkipWhitespaces();
 
             // extract approximated
@@ -498,7 +633,8 @@ namespace GKCommon.GEDCOM
 
                 // in this case, according to performance test results, BinarySearch is more efficient
                 // than a simple search or even a dictionary search (why?!)
-                int idx = BinarySearch(GEDCOMCustomDate.GEDCOMMonthValues, InvariantTextInfo.ToUpper(strTok.GetWord()));
+                string su = InvariantTextInfo.ToUpper(strTok.GetWord());
+                int idx = BinarySearch(GEDCOMCustomDate.GEDCOMMonthValues, su, string.CompareOrdinal);
                 month = (byte)((idx < 0) ? 0 : idx);
 
                 token = strTok.Next();
@@ -554,9 +690,58 @@ namespace GKCommon.GEDCOM
                 }
             }
 
-            strValue = strTok.GetRest();
+            date.SetRawData(approximated, calendar, year, yearBC, yearModifier, month, day, dateFormat);
+            string result = strTok.GetRest();
+            return result;
+        }
 
-            return strValue;
+        public static string ParseName(string strValue, GEDCOMPersonalName persName)
+        {
+            string firstPart = string.Empty;
+            string surname = string.Empty;
+            string lastPart = string.Empty;
+
+            if (strValue == null) {
+                return string.Empty;
+            }
+
+            char[] strChars = strValue.ToCharArray();
+            int strLen = strChars.Length;
+
+            // skip leading whitespaces
+            int strBeg = 0;
+            while (strBeg < strLen && strChars[strBeg] == ' ') strBeg++;
+
+            // check empty string
+            if (strLen - strBeg == 0) {
+                return string.Empty;
+            }
+
+            int fs = -1, ss = strBeg;
+            for (int i = strBeg; i < strLen; i++) {
+                char chr = strChars[i];
+                if (chr == GEDCOMProvider.GEDCOM_NAME_SEPARATOR) {
+                    if (fs == -1) {
+                        fs = i;
+                        firstPart = new string(strChars, 0, i);
+                    } else {
+                        ss = i;
+                        surname = new string(strChars, fs + 1, (ss - fs) - 1);
+                        ss += 1;
+                        break;
+                    }
+                }
+            }
+
+            if (fs < 0) {
+                firstPart = new string(strChars, ss, strLen - ss);
+            } else {
+                lastPart = new string(strChars, ss, strLen - ss);
+            }
+
+            persName.SetNameParts(firstPart, surname, lastPart);
+
+            return string.Empty;
         }
 
         #endregion
@@ -696,43 +881,17 @@ namespace GKCommon.GEDCOM
         }
 
 
+        public static string[] ChildLinkageStatuses = new string[] {
+            "", "challenged", "disproven", "proven" };
+
         public static GEDCOMChildLinkageStatus GetChildLinkageStatusVal(string str)
         {
-            if (string.IsNullOrEmpty(str)) return GEDCOMChildLinkageStatus.clNone;
-
-            GEDCOMChildLinkageStatus result;
-            str = str.Trim().ToLowerInvariant();
-            
-            if (str == "challenged") {
-                result = GEDCOMChildLinkageStatus.clChallenged;
-            } else if (str == "disproven") {
-                result = GEDCOMChildLinkageStatus.clDisproven;
-            } else if (str == "proven") {
-                result = GEDCOMChildLinkageStatus.clProven;
-            } else {
-                result = GEDCOMChildLinkageStatus.clNone;
-            }
-            return result;
+            return Str2Enum(str, ChildLinkageStatuses, GEDCOMChildLinkageStatus.clNone);
         }
 
         public static string GetChildLinkageStatusStr(GEDCOMChildLinkageStatus value)
         {
-            string s;
-            switch (value) {
-                case GEDCOMChildLinkageStatus.clChallenged:
-                    s = "challenged";
-                    break;
-                case GEDCOMChildLinkageStatus.clDisproven:
-                    s = "disproven";
-                    break;
-                case GEDCOMChildLinkageStatus.clProven:
-                    s = "proven";
-                    break;
-                default:
-                    s = "";
-                    break;
-            }
-            return s;
+            return GEDCOMUtils.Enum2Str(value, ChildLinkageStatuses);
         }
 
 
@@ -1156,21 +1315,21 @@ namespace GKCommon.GEDCOM
 
         public static GEDCOMSex GetSexVal(string str)
         {
-            if (string.IsNullOrEmpty(str)) return GEDCOMSex.svNone;
+            str = NormalizeUp(str);
+            if (str.Length != 1) return GEDCOMSex.svNone;
 
-            str = GEDCOMUtils.InvariantTextInfo.ToUpper(str.Trim());
+            char sl = str[0];
+
             GEDCOMSex result;
-
-            if (str == "M") {
+            if (sl == 'M') {
                 result = GEDCOMSex.svMale;
-            } else if (str == "F") {
+            } else if (sl == 'F') {
                 result = GEDCOMSex.svFemale;
-            } else if (str == "U") {
+            } else if (sl == 'U') {
                 result = GEDCOMSex.svUndetermined;
             } else {
                 result = GEDCOMSex.svNone;
             }
-            
             return result;
         }
 
@@ -1262,7 +1421,7 @@ namespace GKCommon.GEDCOM
             return result.ToString();
         }
 
-        public static int BinarySearch(EnumTuple[] array, string key)
+        public static int BinarySearch(EnumTuple[] array, string key, Comparison<string> comparer)
         {
             int i = 0;
             int num = array.Length - 1;
@@ -1270,7 +1429,7 @@ namespace GKCommon.GEDCOM
                 int num2 = i + (num - i >> 1);
 
                 EnumTuple ekv = array[num2];
-                int num3 = string.Compare(ekv.Key, key, StringComparison.OrdinalIgnoreCase);
+                int num3 = comparer(ekv.Key, key);
 
                 if (num3 == 0) {
                     return ekv.Value;

@@ -78,7 +78,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == GEDCOMTagType.PHON || tagName == "EMAIL" || tagName == "FAX" || tagName == GEDCOMTagType.WWW) {
+            if (tagName == GEDCOMTagType.PHON || tagName == GEDCOMTagType.EMAIL || tagName == GEDCOMTagType.FAX || tagName == GEDCOMTagType.WWW) {
                 result = Address.AddTag(tagName, tagValue, tagConstructor);
             } else {
                 // define 'PLAC', 'ADDR', 'DATE' by default

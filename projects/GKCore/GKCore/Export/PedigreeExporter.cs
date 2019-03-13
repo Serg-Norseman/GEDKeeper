@@ -273,7 +273,7 @@ namespace GKCore.Export
                     for (int j = 0; j < childrenCount; j++)
                     {
                         irec = (GEDCOMIndividualRecord)family.Children[j].Value;
-                        evList.Add(new PedigreeEvent(irec, irec.FindEvent("BIRT")));
+                        evList.Add(new PedigreeEvent(irec, irec.FindEvent(GEDCOMTagType.BIRT)));
                     }
                     WriteEventList(person, evList);
                 }
@@ -372,9 +372,9 @@ namespace GKCore.Export
                 GEDCOMCustomEvent evt = evList[i].Event;
                 if (evt != null && Equals(evList[i].IRec, person.IRec))
                 {
-                    if (evt.Name == "BIRT") {
+                    if (evt.Name == GEDCOMTagType.BIRT) {
                         evList.Exchange(i, 0);
-                    } else if (evt.Name == "DEAT") {
+                    } else if (evt.Name == GEDCOMTagType.DEAT) {
                         evList.Exchange(i, evList.Count - 1);
                     }
                 }

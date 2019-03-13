@@ -233,9 +233,9 @@ namespace GKCommon.GEDCOM
 
             int num = fDataList.Count;
             for (int i = 0; i < num; i++) {
-                T item = fDataList[i];
-                if (item is GEDCOMTag) {
-                    (item as GEDCOMTag).SaveToStream(stream);
+                var item = fDataList[i] as GEDCOMTag;
+                if (item != null) {
+                    item.SaveToStream(stream);
                 }
             }
         }
@@ -246,9 +246,9 @@ namespace GKCommon.GEDCOM
 
             int num = fDataList.Count;
             for (int i = 0; i < num; i++) {
-                T item = fDataList[i];
-                if (item is GEDCOMTag) {
-                    (item as GEDCOMTag).ReplaceXRefs(map);
+                var item = fDataList[i] as GEDCOMTag;
+                if (item != null) {
+                    item.ReplaceXRefs(map);
                 }
             }
         }
@@ -273,11 +273,10 @@ namespace GKCommon.GEDCOM
             if (fDataList == null) return;
 
             for (int i = fDataList.Count - 1; i >= 0; i--) {
-                T item = fDataList[i];
-                if (item is GEDCOMTag) {
-                    GEDCOMTag tag = item as GEDCOMTag;
-                    tag.Pack();
-                    if (tag.IsEmpty() && tag.IsEmptySkip()) {
+                var item = fDataList[i] as GEDCOMTag;
+                if (item != null) {
+                    item.Pack();
+                    if (item.IsEmpty() && item.IsEmptySkip()) {
                         DeleteAt(i);
                     }
                 }

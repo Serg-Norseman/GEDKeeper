@@ -91,8 +91,8 @@ namespace GKCommon.GEDCOM
 
         public override void SaveToStream(StreamWriter stream)
         {
+            // without NameValue
             SaveTagsToStream(stream);
-
             fNotes.SaveToStream(stream);
             fSourceCitations.SaveToStream(stream);
         }

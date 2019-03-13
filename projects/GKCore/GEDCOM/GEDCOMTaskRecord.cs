@@ -24,14 +24,14 @@ namespace GKCommon.GEDCOM
     {
         public string Goal
         {
-            get { return GetTagStringValue("_GOAL"); }
-            set { SetTagStringValue("_GOAL", value); }
+            get { return GetTagStringValue(GEDCOMTagType._GOAL); }
+            set { SetTagStringValue(GEDCOMTagType._GOAL, value); }
         }
 
         public GKResearchPriority Priority
         {
-            get { return GEDCOMUtils.GetPriorityVal(GetTagStringValue("_PRIORITY")); }
-            set { SetTagStringValue("_PRIORITY", GEDCOMUtils.GetPriorityStr(value)); }
+            get { return GEDCOMUtils.GetPriorityVal(GetTagStringValue(GEDCOMTagType._PRIORITY)); }
+            set { SetTagStringValue(GEDCOMTagType._PRIORITY, GEDCOMUtils.GetPriorityStr(value)); }
         }
 
         public GEDCOMDate StartDate

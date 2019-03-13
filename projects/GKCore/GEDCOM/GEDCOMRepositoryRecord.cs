@@ -29,8 +29,8 @@ namespace GKCommon.GEDCOM
 
         public string RepositoryName
         {
-            get { return GetTagStringValue("NAME"); }
-            set { SetTagStringValue("NAME", value); }
+            get { return GetTagStringValue(GEDCOMTagType.NAME); }
+            set { SetTagStringValue(GEDCOMTagType.NAME, value); }
         }
 
 
@@ -44,7 +44,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == GEDCOMTagType.PHON || tagName == "EMAIL" || tagName == "FAX" || tagName == GEDCOMTagType.WWW) {
+            if (tagName == GEDCOMTagType.PHON || tagName == GEDCOMTagType.EMAIL || tagName == GEDCOMTagType.FAX || tagName == GEDCOMTagType.WWW) {
                 result = Address.AddTag(tagName, tagValue, tagConstructor);
             } else {
                 // 'ADDR' defines by default

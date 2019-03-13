@@ -37,11 +37,6 @@ namespace GKCommon.GEDCOM
             SetName(GEDCOMTagType.NOTE);
         }
 
-        public GEDCOMNoteRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
-        {
-            SetNameValue(tagName, tagValue);
-        }
-
         /// <summary>
         /// The MoveTo() merges records and their references, but does not change the text in the target.
         /// </summary>

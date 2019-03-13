@@ -67,60 +67,15 @@ namespace GKCommon.GEDCOM
             return string.Format("{0} {1} ({2})", GEDCOMTagType.INT, base.GetStringValue(), fDatePhrase);
         }
 
-        // TODO: refactor it
-        private string ExtractPhrase(string str)
-        {
-            string result = str;
-            if (result.Length >= 2 && result[0] == '(')
-            {
-                result = result.Remove(0, 1);
-
-                int c = 0;
-                int num = result.Length;
-                for (int I = 1; I <= num; I++)
-                {
-                    if (result[I - 1] == '(')
-                    {
-                        c++;
-                    }
-                    else
-                    {
-                        if (result[I - 1] == ')' || I == result.Length)
-                        {
-                            c--;
-                            if (c <= 0 || I == result.Length)
-                            {
-                                if (result[I - 1] == ')')
-                                {
-                                    fDatePhrase = result.Substring(0, I - 1);
-                                }
-                                else
-                                {
-                                    fDatePhrase = result.Substring(0, I);
-                                }
-                                result = result.Remove(0, I);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-
-        // Format: INT DATE (phrase)
         public override string ParseString(string strValue)
         {
-            string result = strValue;
-            if (!string.IsNullOrEmpty(result)) {
-                result = GEDCOMUtils.ExtractDelimiter(result);
-                if (!GEDCOMUtils.ExtractExpectedIdent(result, GEDCOMTagType.INT, out result, true)) {
-                    throw new GEDCOMDateException(string.Format("The interpreted date '{0}' doesn't start with a valid ident", strValue));
-                }
-                result = GEDCOMUtils.ExtractDelimiter(result);
-                result = base.ParseString(result);
-                result = GEDCOMUtils.ExtractDelimiter(result);
-                result = ExtractPhrase(result);
+            string result;
+            if (string.IsNullOrEmpty(strValue)) {
+                Clear();
+                fDatePhrase = string.Empty;
+                result = string.Empty;
+            } else {
+                result = GEDCOMUtils.ParseIntDate(strValue, this);
             }
             return result;
         }

@@ -119,7 +119,7 @@ namespace GKStdReports
                 int num3 = family.Children.Count;
                 for (int i = 0; i < num3; i++) {
                     GEDCOMIndividualRecord child = family.Children[i].Value as GEDCOMIndividualRecord;
-                    GEDCOMCustomEvent evt = child.FindEvent("BIRT");
+                    GEDCOMCustomEvent evt = child.FindEvent(GEDCOMTagType.BIRT);
                     if (evt != null && evt.GetChronologicalYear() != 0) {
                         evList.Add(new PersonalEvent(EventType.Child, child, evt));
                     }
@@ -155,7 +155,7 @@ namespace GKStdReports
                 if (evObj.Rec is GEDCOMIndividualRecord) {
                     GEDCOMIndividualRecord iRec = evObj.Rec as GEDCOMIndividualRecord;
 
-                    if (evt.Name == "BIRT") {
+                    if (evt.Name == GEDCOMTagType.BIRT) {
                         if (evObj.Type == EventType.Personal) {
                             if (father != null) {
                                 fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", fTextFont);

@@ -35,20 +35,17 @@ namespace GKCommon.GEDCOM
     /// </summary>
     public class GEDCOMTag : GEDCOMObject
     {
-        private const int MAX_LINE_LENGTH = 248;
-
         #region Protected fields
 
         private int fLevel;
         private GEDCOMTree fOwner;
         private string fName;
         private GEDCOMObject fParent;
-
         protected string fStringValue;
-        protected GEDCOMList<GEDCOMTag> fTags;
+        private GEDCOMList<GEDCOMTag> fTags;
 
         #endregion
-        
+
         #region Public properties
 
         /// <summary>
@@ -94,14 +91,14 @@ namespace GKCommon.GEDCOM
         }
 
         #endregion
-        
+
         #region Object management
 
         public static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
             return new GEDCOMTag(owner, parent, tagName, tagValue);
         }
-        
+
         public GEDCOMTag(GEDCOMTree owner, GEDCOMObject parent)
         {
             fOwner = owner;
@@ -129,6 +126,11 @@ namespace GKCommon.GEDCOM
             base.Dispose(disposing);
         }
 
+        protected GEDCOMList<GEDCOMTag> GetTagList()
+        {
+            return fTags;
+        }
+
         public void SetNameValue(string tagName, string tagValue)
         {
             if (!string.IsNullOrEmpty(tagName)) {
@@ -141,7 +143,7 @@ namespace GKCommon.GEDCOM
         }
 
         #endregion
-        
+
         #region Content management
 
         protected GEDCOMRecord FindRecord(string xref)
@@ -181,8 +183,7 @@ namespace GKCommon.GEDCOM
         public virtual GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
         {
             GEDCOMTag tag = null;
-            try
-            {
+            try {
                 if (tagConstructor != null) {
                     tag = tagConstructor(fOwner, this, tagName, tagValue);
                 } else {
@@ -193,9 +194,7 @@ namespace GKCommon.GEDCOM
                 }
 
                 InsertTag(tag);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GEDCOMTag.AddTag(): " + ex.Message);
             }
             return tag;
@@ -208,7 +207,7 @@ namespace GKCommon.GEDCOM
         public virtual void Assign(GEDCOMTag source/*, string[] skipList = null*/)
         {
             if (source == null) return;
-            
+
             SetName(source.Name);
             ParseString(source.StringValue);
 
@@ -220,8 +219,7 @@ namespace GKCommon.GEDCOM
 
         protected void AssignList(GEDCOMList<GEDCOMTag> srcList, GEDCOMList<GEDCOMTag> destList)
         {
-            foreach (GEDCOMTag sourceTag in srcList)
-            {
+            foreach (GEDCOMTag sourceTag in srcList) {
                 GEDCOMTag copy = CreateCopy(sourceTag);
                 destList.Add(copy);
             }
@@ -229,7 +227,7 @@ namespace GKCommon.GEDCOM
 
         private GEDCOMTag CreateCopy(GEDCOMTag sourceTag)
         {
-            GEDCOMTag result = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { Owner, this, "", "" });
+            GEDCOMTag result = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { Owner, this, string.Empty, string.Empty });
             result.Assign(sourceTag);
             return result;
         }
@@ -237,7 +235,7 @@ namespace GKCommon.GEDCOM
         public virtual void Clear()
         {
             fTags.Clear();
-            fStringValue = "";
+            fStringValue = string.Empty;
         }
 
         public void Delete(int index)
@@ -406,45 +404,31 @@ namespace GKCommon.GEDCOM
 
             GEDCOMTag P = FindTag(su, 0);
 
-            if (P != null)
-            {
+            if (P != null) {
                 P.StringValue = value;
-            }
-            else
-            {
+            } else {
                 GEDCOMTag O = this;
-                while (su != "")
-                {
+                while (su != "") {
                     string S;
 
                     int index = su.IndexOf('\\');
-                    if (index >= 0)
-                    {
+                    if (index >= 0) {
                         S = su.Substring(0, index);
                         su = su.Substring(index + 1);
-                    }
-                    else
-                    {
+                    } else {
                         S = su;
                         su = "";
                     }
 
                     P = O.FindTag(S, 0);
-                    if (P == null)
-                    {
-                        if (su == "")
-                        {
+                    if (P == null) {
+                        if (su == "") {
                             P = O.AddTag(S, value, null);
-                        }
-                        else
-                        {
+                        } else {
                             P = O.AddTag(S, "", null);
                         }
-                    }
-                    else
-                    {
-                        if (su == "")
-                        {
+                    } else {
+                        if (su == "") {
                             P.StringValue = value;
                         }
                     }
@@ -458,15 +442,13 @@ namespace GKCommon.GEDCOM
         {
             StringList strings = new StringList();
 
-            if (strTag != null)
-            {
+            if (strTag != null) {
                 if (strTag.StringValue != "") {
                     strings.Add(strTag.StringValue);
                 }
 
                 int num = strTag.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GEDCOMTag tag = strTag[i];
 
                     if (tag.Name == "CONC") {
@@ -505,7 +487,7 @@ namespace GKCommon.GEDCOM
                 for (int i = 0; i < num; i++) {
                     string str = strings[i];
 
-                    int len = ((str.Length > MAX_LINE_LENGTH) ? MAX_LINE_LENGTH : str.Length);
+                    int len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
                     string sub = str.Substring(0, len);
                     str = str.Remove(0, len);
 
@@ -516,7 +498,7 @@ namespace GKCommon.GEDCOM
                     }
 
                     while (str.Length > 0) {
-                        len = ((str.Length > MAX_LINE_LENGTH) ? MAX_LINE_LENGTH : str.Length);
+                        len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
                         tag.AddTag("CONC", str.Substring(0, len), null);
                         str = str.Remove(0, len);
                     }
@@ -543,7 +525,7 @@ namespace GKCommon.GEDCOM
                 for (int i = 0; i < num; i++) {
                     string str = strings[i];
 
-                    int len = ((str.Length > MAX_LINE_LENGTH) ? MAX_LINE_LENGTH : str.Length);
+                    int len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
                     string sub = str.Substring(0, len);
                     str = str.Remove(0, len);
 
@@ -554,7 +536,7 @@ namespace GKCommon.GEDCOM
                     }
 
                     while (str.Length > 0) {
-                        len = ((str.Length > MAX_LINE_LENGTH) ? MAX_LINE_LENGTH : str.Length);
+                        len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
                         tag.AddTag("CONC", str.Substring(0, len), null);
                         str = str.Remove(0, len);
                     }
@@ -608,60 +590,26 @@ namespace GKCommon.GEDCOM
         }
 
         #endregion
-        
+
         #region Stream management
 
-        protected virtual void SaveTagsToStream(StreamWriter stream)
+        protected void SaveTagsToStream(StreamWriter stream)
         {
-            if (Count <= 0) return;
-
-            StringList savedTags = new StringList();
-            try
-            {
-                savedTags.DuplicateSolve = DuplicateSolve.Ignore;
-                savedTags.Sorted = true;
-
-                int num = Count;
-                for (int i = 0; i < num; i++)
-                {
-                    savedTags.Add(this[i].Name);
-                }
-
-                if (savedTags.IndexOf("CONC") >= 0 || savedTags.IndexOf("CONT") >= 0)
-                {
-                    int num2 = Count;
-                    for (int i = 0; i < num2; i++)
-                    {
-                        GEDCOMTag tmp = this[i];
-                        
-                        if (tmp.Name == "CONC" || tmp.Name == "CONT")
-                        {
-                            tmp.SaveToStream(stream);
-                        }
-                    }
-
-                    if (savedTags.IndexOf("CONC") >= 0)
-                    {
-                        savedTags.Delete(savedTags.IndexOf("CONC"));
-                    }
-                    if (savedTags.IndexOf("CONT") >= 0)
-                    {
-                        savedTags.Delete(savedTags.IndexOf("CONT"));
+            int subtagsCount = fTags.Count;
+            if (subtagsCount > 0) {
+                for (int i = 0; i < subtagsCount; i++) {
+                    GEDCOMTag subtag = fTags[i];
+                    if (subtag.Name == "CONC" || subtag.Name == "CONT") {
+                        subtag.SaveToStream(stream);
                     }
                 }
 
-                int num3 = Count;
-                for (int i = 0; i < num3; i++) {
-                    GEDCOMTag tmp = this[i];
-                    
-                    if (tmp.Name != "CONT" && tmp.Name != "CONC") {
-                        tmp.SaveToStream(stream);
+                for (int i = 0; i < subtagsCount; i++) {
+                    GEDCOMTag subtag = fTags[i];
+                    if (subtag.Name != "CONT" && subtag.Name != "CONC") {
+                        subtag.SaveToStream(stream);
                     }
                 }
-            }
-            finally
-            {
-                savedTags.Dispose();
             }
         }
 

@@ -36,12 +36,8 @@ namespace GKCommon.GEDCOM
                 if (!IsPointer) {
                     notes = GetTagStrings(this);
                 } else {
-                    GEDCOMRecord notesRecord = Value;
-                    if (notesRecord is GEDCOMNoteRecord) {
-                        notes = ((notesRecord as GEDCOMNoteRecord).Note);
-                    } else {
-                        notes = new StringList();
-                    }
+                    GEDCOMNoteRecord notesRecord = Value as GEDCOMNoteRecord;
+                    notes = (notesRecord != null) ? notesRecord.Note : new StringList();
                 }
                 return notes;
             }
@@ -67,20 +63,20 @@ namespace GKCommon.GEDCOM
             SetName(GEDCOMTagType.NOTE);
         }
 
-        protected override string GetStringValue()
-        {
-            string result = IsPointer ? base.GetStringValue() : fStringValue;
-            return result;
-        }
-
         public override bool IsEmpty()
         {
             bool result;
             if (IsPointer) {
                 result = base.IsEmpty();
             } else {
-                result = (fStringValue == "" && Count == 0);
+                result = (string.IsNullOrEmpty(fStringValue) && Count == 0);
             }
+            return result;
+        }
+
+        protected override string GetStringValue()
+        {
+            string result = IsPointer ? base.GetStringValue() : fStringValue;
             return result;
         }
 

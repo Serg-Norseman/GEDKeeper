@@ -66,7 +66,7 @@ namespace GKCore
         [Test]
         public void Test_GetXIndex()
         {
-            Assert.AreEqual(1, GKUtils.GetPersonEventIndex("BIRT"));
+            Assert.AreEqual(1, GKUtils.GetPersonEventIndex(GEDCOMTagType.BIRT));
             Assert.AreEqual(2, GKUtils.GetFamilyEventIndex(GEDCOMTagType.MARR));
             Assert.AreEqual(1, GKUtils.GetMarriageStatusIndex("MARRIED"));
         }
@@ -76,10 +76,10 @@ namespace GKCore
         {
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
 
-            string st1 = GKUtils.GetAttributeValue(null, "BIRT");
+            string st1 = GKUtils.GetAttributeValue(null, GEDCOMTagType.BIRT);
             Assert.AreEqual("", st1);
 
-            st1 = GKUtils.GetAttributeValue(iRec, "BIRT");
+            st1 = GKUtils.GetAttributeValue(iRec, GEDCOMTagType.BIRT);
             Assert.AreEqual("", st1);
         }
 
@@ -88,7 +88,7 @@ namespace GKCore
         {
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
 
-            GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
+            GEDCOMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.BIRT);
             Assert.IsNotNull(evt);
 
             string st2 = GKUtils.GEDCOMEventToDateStr(null, DateFormat.dfYYYY_MM_DD, false);

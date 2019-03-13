@@ -29,8 +29,8 @@ namespace GKCommon.GEDCOM
 
         public string LocationName
         {
-            get { return GetTagStringValue("NAME"); }
-            set { SetTagStringValue("NAME", value); }
+            get { return GetTagStringValue(GEDCOMTagType.NAME); }
+            set { SetTagStringValue(GEDCOMTagType.NAME, value); }
         }
 
 

@@ -119,7 +119,7 @@ namespace GKTimeLinePlugin
                 {
                     GEDCOMCustomEvent ev = iRec.Events[k];
 
-                    if (ev.Name == "BIRT" || ev.Name == "DEAT") {
+                    if (ev.Name == GEDCOMTagType.BIRT || ev.Name == GEDCOMTagType.DEAT) {
                         int year = ev.GetChronologicalYear();
                         if (year != 0) {
                             if (fYearMin > year) fYearMin = year;
@@ -180,8 +180,8 @@ namespace GKTimeLinePlugin
             try
             {
                 GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)record;
-                int bdy = iRec.GetChronologicalYear("BIRT");
-                int ddy = iRec.GetChronologicalYear("DEAT");
+                int bdy = iRec.GetChronologicalYear(GEDCOMTagType.BIRT);
+                int ddy = iRec.GetChronologicalYear(GEDCOMTagType.DEAT);
 
                 if (bdy != 0 && ddy == 0) {
                     ddy = bdy + GKData.PROVED_LIFE_LENGTH;

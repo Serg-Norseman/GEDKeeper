@@ -108,7 +108,7 @@ namespace GKCore
             Assert.AreEqual(1, fContext.LangsList.Count);
             
             // FIXME: move to other tests
-            Assert.AreEqual(1990, iRec.GetChronologicalYear("BIRT"));
+            Assert.AreEqual(1990, iRec.GetChronologicalYear(GEDCOMTagType.BIRT));
 
             Assert.AreEqual(1990, fContext.FindBirthYear(iRec));
             Assert.AreEqual(2010, fContext.FindDeathYear(iRec));
@@ -153,7 +153,7 @@ namespace GKCore
 
             //
 
-            var evt = fContext.CreateEventEx(iRec, "FACT", "17 JAN 2013", "Ivanovo");
+            var evt = fContext.CreateEventEx(iRec, GEDCOMTagType.FACT, "17 JAN 2013", "Ivanovo");
             Assert.IsNotNull(evt);
 
             GEDCOMFamilyRecord fRec = fContext.Tree.CreateFamily();

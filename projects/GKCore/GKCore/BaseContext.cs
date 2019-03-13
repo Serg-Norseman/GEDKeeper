@@ -288,7 +288,7 @@ namespace GKCore
             GEDCOMPersonalName pName = iRec.AddPersonalName(new GEDCOMPersonalName(fTree, iRec));
             GKUtils.SetNameParts(pName, iSurname, iName, iPatronymic);
 
-            if (birthEvent) CreateEventEx(iRec, "BIRT", "", "");
+            if (birthEvent) CreateEventEx(iRec, GEDCOMTagType.BIRT, "", "");
 
             return iRec;
         }
@@ -459,7 +459,7 @@ namespace GKCore
         public int FindBirthYear(GEDCOMIndividualRecord iRec)
         {
             if (iRec != null) {
-                int birthDate = iRec.GetChronologicalYear("BIRT");
+                int birthDate = iRec.GetChronologicalYear(GEDCOMTagType.BIRT);
                 if (birthDate != 0) {
                     return birthDate;
                 }
@@ -487,7 +487,7 @@ namespace GKCore
         public int FindDeathYear(GEDCOMIndividualRecord iRec)
         {
             if (iRec != null) {
-                int deathDate = iRec.GetChronologicalYear("DEAT");
+                int deathDate = iRec.GetChronologicalYear(GEDCOMTagType.DEAT);
                 if (deathDate != 0) {
                     return deathDate;
                 }

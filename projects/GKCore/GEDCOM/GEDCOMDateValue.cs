@@ -103,13 +103,19 @@ namespace GKCommon.GEDCOM
                     return string.Empty;
                 }
 
-                fValue = GEDCOMUtils.ParseDateValue(strValue, Owner, this);
-
-                return fValue.ParseString(strValue);
+                return GEDCOMUtils.ParseDateValue(strValue, Owner, this);
             } catch (Exception ex) {
                 Logger.LogWrite("GEDCOMDateValue.ParseString(\"" + strValue + "\"): " + ex.Message);
                 return strValue;
             }
+        }
+
+        /// <summary>
+        /// Internal helper method for parser
+        /// </summary>
+        internal void SetRawData(GEDCOMCustomDate value)
+        {
+            fValue = value;
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)

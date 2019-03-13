@@ -89,12 +89,6 @@ namespace GKCommon.GEDCOM
             SetNameValue(tagName, tagValue);
         }
 
-        protected override string GetStringValue()
-        {
-            string result = IsPointer ? base.GetStringValue() : fStringValue;
-            return result;
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
@@ -133,9 +127,15 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
+        protected override string GetStringValue()
+        {
+            string result = IsPointer ? base.GetStringValue() : fStringValue;
+            return result;
+        }
+
         public override string ParseString(string strValue)
         {
-            fStringValue = "";
+            fStringValue = string.Empty;
             return base.ParseString(strValue);
         }
 

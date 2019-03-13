@@ -114,15 +114,15 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
-            return GEDCOMUtils.ParseTime(strValue, out fHour, out fMinutes, out fSeconds, out fFraction);
+            return GEDCOMUtils.ParseTime(strValue, this);
         }
 
-        /*internal void SetRawData(byte hour, byte minutes, byte seconds, short fraction)
+        internal void SetRawData(byte hour, byte minutes, byte seconds, short fraction)
         {
             fHour = hour;
             fMinutes = minutes;
             fSeconds = seconds;
             fFraction = fraction;
-        }*/
+        }
     }
 }

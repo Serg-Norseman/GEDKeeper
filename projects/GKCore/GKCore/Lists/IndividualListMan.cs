@@ -514,15 +514,15 @@ namespace GKCore.Lists
             {
                 GEDCOMCustomEvent ev = fRec.Events[i];
 
-                if (ev.Name == "BIRT" && buf_bd == null)
+                if (ev.Name == GEDCOMTagType.BIRT && buf_bd == null)
                 {
                     buf_bd = ev;
                 }
-                else if (ev.Name == "DEAT" && buf_dd == null)
+                else if (ev.Name == GEDCOMTagType.DEAT && buf_dd == null)
                 {
                     buf_dd = ev;
                 }
-                else if (ev.Name == "RESI" && buf_residence == "")
+                else if (ev.Name == GEDCOMTagType.RESI && buf_residence == "")
                 {
                     buf_residence = GKUtils.GetPlaceStr(ev, gOptions.PlacesWithAddress);
                 }
@@ -530,35 +530,35 @@ namespace GKCore.Lists
                 {
                     buf_religion = ev.StringValue;
                 }
-                else if (ev.Name == "NATI" && buf_nationality == "")
+                else if (ev.Name == GEDCOMTagType.NATI && buf_nationality == "")
                 {
                     buf_nationality = ev.StringValue;
                 }
-                else if (ev.Name == "EDUC" && buf_education == "")
+                else if (ev.Name == GEDCOMTagType.EDUC && buf_education == "")
                 {
                     buf_education = ev.StringValue;
                 }
-                else if (ev.Name == "OCCU" && buf_occupation == "")
+                else if (ev.Name == GEDCOMTagType.OCCU && buf_occupation == "")
                 {
                     buf_occupation = ev.StringValue;
                 }
-                else if (ev.Name == "CAST" && buf_caste == "")
+                else if (ev.Name == GEDCOMTagType.CAST && buf_caste == "")
                 {
                     buf_caste = ev.StringValue;
                 }
-                else if (ev.Name == "_MILI" && buf_mili == "")
+                else if (ev.Name == GEDCOMTagType._MILI && buf_mili == "")
                 {
                     buf_mili = ev.StringValue;
                 }
-                else if (ev.Name == "_MILI_IND" && buf_mili_ind == "")
+                else if (ev.Name == GEDCOMTagType._MILI_IND && buf_mili_ind == "")
                 {
                     buf_mili_ind = ev.StringValue;
                 }
-                else if (ev.Name == "_MILI_DIS" && buf_mili_dis == "")
+                else if (ev.Name == GEDCOMTagType._MILI_DIS && buf_mili_dis == "")
                 {
                     buf_mili_dis = ev.StringValue;
                 }
-                else if (ev.Name == "_MILI_RANK" && buf_mili_rank == "")
+                else if (ev.Name == GEDCOMTagType._MILI_RANK && buf_mili_rank == "")
                 {
                     buf_mili_rank = ev.StringValue;
                 }

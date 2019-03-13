@@ -87,7 +87,7 @@ namespace GKCommon.GEDCOM
             string result;
 
             if (fX1 == 0 && fY1 == 0 && fX2 == 0 && fY2 == 0) {
-                result = "";
+                result = string.Empty;
             } else {
                 result = string.Format("{0} {1} {2} {3}", new object[] { fX1, fY1, fX2, fY2 });
             }
@@ -112,7 +112,15 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
-            return GEDCOMUtils.ParseCutoutPosition(strValue, out fX1, out fY1, out fX2, out fY2);
+            return GEDCOMUtils.ParseCutoutPosition(strValue, this);
+        }
+
+        internal void SetRawData(int x1, int y1, int x2, int y2)
+        {
+            fX1 = x1;
+            fY1 = y1;
+            fX2 = x2;
+            fY2 = y2;
         }
     }
 }

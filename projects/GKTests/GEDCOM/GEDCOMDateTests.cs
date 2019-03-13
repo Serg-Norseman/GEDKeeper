@@ -706,13 +706,13 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_DateInterpreted()
         {
-            DateTime dt = TestUtils.ParseDT("20.01.2013");
+            DateTime expectDate = TestUtils.ParseDT("20.01.2013");
 
             using (var dtx1 = new GEDCOMDateInterpreted(null, null, "", "")) {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
 
                 dtx1.ParseString("INT 20 JAN 2013 (today)");
-                Assert.AreEqual(dtx1.Date, dt);
+                Assert.AreEqual(expectDate, dtx1.Date);
                 Assert.AreEqual("today", dtx1.DatePhrase);
 
                 dtx1.DatePhrase = "now";

@@ -268,11 +268,11 @@ namespace GKFlowInputPlugin
 
             GEDCOMIndividualRecord iRec = fBase.Context.CreatePersonEx(nam, pat, fam, fSimpleTempSex, false);
             if (CheckBirth.Checked) {
-                fBase.Context.CreateEventEx(iRec, "BIRT", GEDCOMDate.CreateByFormattedStr(EditBirthDate.Text, true), EditBirthPlace.Text);
+                fBase.Context.CreateEventEx(iRec, GEDCOMTagType.BIRT, GEDCOMDate.CreateByFormattedStr(EditBirthDate.Text, true), EditBirthPlace.Text);
             }
 
             if (CheckDeath.Checked) {
-                fBase.Context.CreateEventEx(iRec, "DEAT", GEDCOMDate.CreateByFormattedStr(EditDeathDate.Text, true), EditDeathPlace.Text);
+                fBase.Context.CreateEventEx(iRec, GEDCOMTagType.DEAT, GEDCOMDate.CreateByFormattedStr(EditDeathDate.Text, true), EditDeathPlace.Text);
             }
 
             if (!string.IsNullOrEmpty(MemoNote.Text)) {
@@ -330,11 +330,11 @@ namespace GKFlowInputPlugin
 
                     if (!string.IsNullOrEmpty(age) && ConvertHelper.IsDigits(age)) {
                         int birthYear = srcYear - int.Parse(age);
-                        fBase.Context.CreateEventEx(iRec, "BIRT", "ABT "+birthYear.ToString(), "");
+                        fBase.Context.CreateEventEx(iRec, GEDCOMTagType.BIRT, "ABT "+birthYear.ToString(), "");
                     }
 
                     if (!string.IsNullOrEmpty(place)) {
-                        GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(iRec, "RESI", "", "");
+                        GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(iRec, GEDCOMTagType.RESI, "", "");
                         evt.Place.StringValue = place;
                     }
 
@@ -360,10 +360,10 @@ namespace GKFlowInputPlugin
                         if (rbSK_Met.Checked) {
                             switch (cbEventType.SelectedIndex) {
                                 case  0:
-                                    evName = "BIRT";
+                                    evName = GEDCOMTagType.BIRT;
                                     break;
                                 case  1:
-                                    evName = "DEAT";
+                                    evName = GEDCOMTagType.DEAT;
                                     break;
                                 case  2:
                                     evName = GEDCOMTagType.MARR;
@@ -371,7 +371,7 @@ namespace GKFlowInputPlugin
                             }
                         }
 
-                        if (evName == "BIRT" || evName == "DEAT") {
+                        if (evName == GEDCOMTagType.BIRT || evName == GEDCOMTagType.DEAT) {
                             GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(iRec, evName, GEDCOMDate.CreateByFormattedStr(edEventDate.Text, false), "");
                             evt.Place.StringValue = place;
                         } else if (evName == GEDCOMTagType.MARR) {

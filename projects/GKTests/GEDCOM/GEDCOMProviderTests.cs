@@ -99,19 +99,6 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void Test_ParseCutoutPosition()
-        {
-            string str = "150 150 1000 1000";
-            int x1, y1, x2, y2;
-            GEDCOMUtils.ParseCutoutPosition(str, out x1, out y1, out x2, out y2);
-
-            Assert.AreEqual(150, x1);
-            Assert.AreEqual(150, y1);
-            Assert.AreEqual(1000, x2);
-            Assert.AreEqual(1000, y2);
-        }
-
-        [Test]
         public void Test_ParseTag()
         {
             string str;

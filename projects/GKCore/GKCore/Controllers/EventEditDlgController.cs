@@ -370,7 +370,7 @@ namespace GKCore.Controllers
             string[] vals;
             bool canbeSorted, userInput;
 
-            if (evName == "_BGRO") {
+            if (evName == GEDCOMTagType._BGRO) {
                 vals = GKData.BloodGroups.Split('|');
                 canbeSorted = false;
                 userInput = false;

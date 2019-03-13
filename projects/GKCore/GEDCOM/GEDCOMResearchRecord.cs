@@ -30,20 +30,20 @@ namespace GKCommon.GEDCOM
 
         public string ResearchName
         {
-            get { return GetTagStringValue("NAME"); }
-            set { SetTagStringValue("NAME", value); }
+            get { return GetTagStringValue(GEDCOMTagType.NAME); }
+            set { SetTagStringValue(GEDCOMTagType.NAME, value); }
         }
 
         public GKResearchPriority Priority
         {
-            get { return GEDCOMUtils.GetPriorityVal(GetTagStringValue("_PRIORITY")); }
-            set { SetTagStringValue("_PRIORITY", GEDCOMUtils.GetPriorityStr(value)); }
+            get { return GEDCOMUtils.GetPriorityVal(GetTagStringValue(GEDCOMTagType._PRIORITY)); }
+            set { SetTagStringValue(GEDCOMTagType._PRIORITY, GEDCOMUtils.GetPriorityStr(value)); }
         }
 
         public GKResearchStatus Status
         {
-            get { return GEDCOMUtils.GetStatusVal(GetTagStringValue("_STATUS")); }
-            set { SetTagStringValue("_STATUS", GEDCOMUtils.GetStatusStr(value)); }
+            get { return GEDCOMUtils.GetStatusVal(GetTagStringValue(GEDCOMTagType._STATUS)); }
+            set { SetTagStringValue(GEDCOMTagType._STATUS, GEDCOMUtils.GetStatusStr(value)); }
         }
 
         public GEDCOMDate StartDate
@@ -58,8 +58,8 @@ namespace GKCommon.GEDCOM
 
         public int Percent
         {
-            get { return GetTagIntegerValue("_PERCENT", 0); }
-            set { SetTagIntegerValue("_PERCENT", value); }
+            get { return GetTagIntegerValue(GEDCOMTagType._PERCENT, 0); }
+            set { SetTagIntegerValue(GEDCOMTagType._PERCENT, value); }
         }
 
         public GEDCOMList<GEDCOMPointer> Tasks
@@ -102,28 +102,17 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "NAME")
-            {
+            if (tagName == GEDCOMTagType.NAME) {
                 result = base.AddTag(tagName, tagValue, null);
-            }
-            else if (tagName == GEDCOMTagType._STARTDATE || tagName == GEDCOMTagType._STOPDATE)
-            {
+            } else if (tagName == GEDCOMTagType._STARTDATE || tagName == GEDCOMTagType._STOPDATE) {
                 result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
-            }
-            else if (tagName == GEDCOMTagType._TASK)
-            {
+            } else if (tagName == GEDCOMTagType._TASK) {
                 result = fTasks.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
-            }
-            else if (tagName == GEDCOMTagType._COMM)
-            {
+            } else if (tagName == GEDCOMTagType._COMM) {
                 result = fCommunications.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
-            }
-            else if (tagName == GEDCOMTagType._GROUP)
-            {
+            } else if (tagName == GEDCOMTagType._GROUP) {
                 result = fGroups.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
-            }
-            else
-            {
+            } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
 

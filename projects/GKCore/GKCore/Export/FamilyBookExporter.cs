@@ -268,13 +268,13 @@ namespace GKCore.Export
                     //						st = ev.Detail.Place.StringValue;
                     //						if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(places, st, iRec);
 
-                    if (evt.Name == "BIRT") {
+                    if (evt.Name == GEDCOMTagType.BIRT) {
                         // Analysis on births
                         PrepareEventYear(byIndex, evt, iRec);
                         st = GKUtils.GetPlaceStr(evt, false);
                         if (!string.IsNullOrEmpty(st))
                             PrepareSpecIndex(bpIndex, st, iRec);
-                    } else if (evt.Name == "DEAT") {
+                    } else if (evt.Name == GEDCOMTagType.DEAT) {
                         // Analysis by causes of death
                         PrepareEventYear(dyIndex, evt, iRec);
                         st = GKUtils.GetPlaceStr(evt, false);
@@ -284,7 +284,7 @@ namespace GKCore.Export
                         st = evt.Cause;
                         if (!string.IsNullOrEmpty(st))
                             PrepareSpecIndex(deathCauses, st, iRec);
-                    } else if (evt.Name == "OCCU") {
+                    } else if (evt.Name == GEDCOMTagType.OCCU) {
                         // Analysis by occupation
                         st = evt.StringValue;
                         if (!string.IsNullOrEmpty(st))
@@ -360,7 +360,7 @@ namespace GKCore.Export
                 int num = iRec.Events.Count;
                 for (int i = 0; i < num; i++) {
                     GEDCOMCustomEvent evt = iRec.Events[i];
-                    if (evt.Name == "BIRT" || evt.Name == "DEAT")
+                    if (evt.Name == GEDCOMTagType.BIRT || evt.Name == GEDCOMTagType.DEAT)
                         continue;
                     
                     string evtName = GKUtils.GetEventName(evt);

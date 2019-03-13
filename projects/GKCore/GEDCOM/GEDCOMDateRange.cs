@@ -112,36 +112,16 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && fDateAfter.IsEmpty() && fDateBefore.IsEmpty();
         }
 
-        // Format: AFT DATE | BEF DATE | BET AFT_DATE AND BEF_DATE
         public override string ParseString(string strValue)
         {
             fDateAfter.Clear();
             fDateBefore.Clear();
 
-            string result = strValue;
-            if (!string.IsNullOrEmpty(result)) {
-                int dateType = GEDCOMUtils.ExtractExpectedIdents(result, GEDCOMDateRangeArray, out result, true);
-
-                if (dateType == 0) { // "AFT"
-                    result = GEDCOMUtils.ExtractDelimiter(result);
-                    result = fDateAfter.ParseString(result);
-                } else if (dateType == 1) { // "BEF"
-                    result = GEDCOMUtils.ExtractDelimiter(result);
-                    result = fDateBefore.ParseString(result);
-                } else if (dateType == 2) { // "BET"
-                    result = GEDCOMUtils.ExtractDelimiter(result);
-                    result = GEDCOMProvider.FixFTB(result);
-                    result = fDateAfter.ParseString(result);
-                    result = GEDCOMUtils.ExtractDelimiter(result);
-
-                    if (!GEDCOMUtils.ExtractExpectedIdent(result, GEDCOMDateRangeArray[3], out result, true)) { // "AND"
-                        throw new GEDCOMDateException(string.Format("The range date '{0}' doesn't contain 'and' token", strValue));
-                    }
-
-                    result = GEDCOMUtils.ExtractDelimiter(result);
-                    result = GEDCOMProvider.FixFTB(result);
-                    result = fDateBefore.ParseString(result);
-                }
+            string result;
+            if (string.IsNullOrEmpty(strValue)) {
+                result = string.Empty;
+            } else {
+                result = GEDCOMUtils.ParseRangeDate(strValue, this);
             }
             return result;
         }

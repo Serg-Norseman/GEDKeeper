@@ -33,8 +33,8 @@ namespace GKCommon.GEDCOM
 
         public string GroupName
         {
-            get { return GetTagStringValue("NAME"); }
-            set { SetTagStringValue("NAME", value); }
+            get { return GetTagStringValue(GEDCOMTagType.NAME); }
+            set { SetTagStringValue(GEDCOMTagType.NAME, value); }
         }
 
 
@@ -58,7 +58,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMTag result;
 
-            if (tagName == "NAME") {
+            if (tagName == GEDCOMTagType.NAME) {
                 result = base.AddTag(tagName, tagValue, null);
             } else if (tagName == GEDCOMTagType._MEMBER) {
                 result = fMembers.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));

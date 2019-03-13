@@ -80,7 +80,8 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetNote()
         {
-            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null, "", "This is a test");
+            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null);
+            instance.ParseString("This is a test");
             StringList expResult = new StringList("This is a test");
             Assert.AreEqual(expResult.Text, instance.Note.Text);
         }
@@ -122,8 +123,9 @@ namespace GKCommon.GEDCOM
             };
             
             string text = "This is a test";
-            GEDCOMNoteRecord instance1 = new GEDCOMNoteRecord(null, null, "BLAH", text);
-            GEDCOMNoteRecord instance2 = new GEDCOMNoteRecord(null, null, "BLUM", "");
+            GEDCOMNoteRecord instance1 = new GEDCOMNoteRecord(null, null);
+            instance1.ParseString(text);
+            GEDCOMNoteRecord instance2 = new GEDCOMNoteRecord(null, null);
             instance2.SetNotesArray(lines);
             bool clearDest = false;
             
@@ -148,8 +150,13 @@ namespace GKCommon.GEDCOM
         public void Test_IsMatch2()
         {
             var matchParams = new MatchParams();
-            GEDCOMNoteRecord instance1 = new GEDCOMNoteRecord(null, null, "", "This is a test");
-            GEDCOMNoteRecord instance2 = new GEDCOMNoteRecord(null, null, "", "tHiS iS nOt A tEsT");
+
+            GEDCOMNoteRecord instance1 = new GEDCOMNoteRecord(null, null);
+            instance1.ParseString("This is a test");
+
+            GEDCOMNoteRecord instance2 = new GEDCOMNoteRecord(null, null);
+            instance2.ParseString("tHiS iS nOt A tEsT");
+
             float result = instance1.IsMatch(instance2, matchParams); // TODO matchParams is not used
             Assert.AreEqual(0.0F, result, 0.0);
         }
@@ -158,8 +165,13 @@ namespace GKCommon.GEDCOM
         public void Test_IsMatch3()
         {
             var matchParams = new MatchParams();
-            GEDCOMNoteRecord instance1 = new GEDCOMNoteRecord(null, null, "", "This is a test");
-            GEDCOMNoteRecord instance2 = new GEDCOMNoteRecord(null, null, "", "This is a test");
+
+            GEDCOMNoteRecord instance1 = new GEDCOMNoteRecord(null, null);
+            instance1.ParseString("This is a test");
+
+            GEDCOMNoteRecord instance2 = new GEDCOMNoteRecord(null, null);
+            instance2.ParseString("This is a test");
+
             float result = instance1.IsMatch(instance2, matchParams); // TODO matchParams is not used
             Assert.AreEqual(100.0F, result, 0.0);
         }
@@ -196,7 +208,10 @@ namespace GKCommon.GEDCOM
         {
             string text1 = "This is a test";
             string text2 = "This is another test";
-            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null, "", text1);
+
+            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null);
+            instance.ParseString(text1);
+
             instance.AddNoteText(text2);
             
             StringList value = new StringList(text1);
@@ -220,7 +235,9 @@ namespace GKCommon.GEDCOM
         {
             string text = "Yet another test";
             string text0 = "Initial text";
-            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null, "", text0);
+
+            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null, null);
+            instance.ParseString(text0);
             instance.SetNoteText(text);
             
             StringList value = new StringList(text);
