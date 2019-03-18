@@ -18,14 +18,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.IO;
+
 namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMUserReference : GEDCOMTag
     {
+        private string fReferenceType;
+
         public string ReferenceType
         {
-            get { return GetTagStringValue(GEDCOMTagType.TYPE); }
-            set { SetTagStringValue(GEDCOMTagType.TYPE, value); }
+            get { return fReferenceType; }
+            set { fReferenceType = value; }
         }
 
 
@@ -42,6 +47,48 @@ namespace GKCommon.GEDCOM
         public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
             return new GEDCOMUserReference(owner, parent, tagName, tagValue);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+            fReferenceType = string.Empty;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && string.IsNullOrEmpty(fReferenceType);
+        }
+
+        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
+        {
+            GEDCOMTag result;
+
+            if (tagName == GEDCOMTagType.TYPE) {
+                fReferenceType = tagValue;
+                result = null;
+            } else {
+                result = base.AddTag(tagName, tagValue, tagConstructor);
+            }
+
+            return result;
+        }
+
+        public override void SaveToStream(StreamWriter stream)
+        {
+            base.SaveToStream(stream);
+            WriteTagLine(stream, Level + 1, GEDCOMTagType.TYPE, fReferenceType, true);
+        }
+
+        public override void Assign(GEDCOMTag source)
+        {
+            GEDCOMUserReference srcUserRef = (source as GEDCOMUserReference);
+            if (srcUserRef == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(source);
+
+            fReferenceType = srcUserRef.fReferenceType;
         }
     }
 }

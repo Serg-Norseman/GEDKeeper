@@ -20,6 +20,10 @@
 
 namespace GKCommon.GEDCOM
 {
+    /// <summary>
+    /// Interpreted from knowledge about the associated date phrase included in parentheses (see GEDCOM 5.5.1 p.47).
+    /// Objects of this class are created only from GEDCOMDateValue.
+    /// </summary>
     public sealed class GEDCOMDateInterpreted : GEDCOMDate
     {
         private string fDatePhrase;
@@ -47,19 +51,9 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMDateInterpreted(owner, parent, tagName, tagValue);
-        }
-
         public GEDCOMDateInterpreted(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
             fDatePhrase = string.Empty;
-        }
-
-        public GEDCOMDateInterpreted(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
-        {
-            SetNameValue(tagName, tagValue);
         }
 
         protected override string GetStringValue()
@@ -75,7 +69,7 @@ namespace GKCommon.GEDCOM
                 fDatePhrase = string.Empty;
                 result = string.Empty;
             } else {
-                result = GEDCOMUtils.ParseIntDate(strValue, this);
+                result = GEDCOMUtils.ParseIntDate(Owner, this, strValue);
             }
             return result;
         }

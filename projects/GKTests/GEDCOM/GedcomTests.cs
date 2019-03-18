@@ -499,7 +499,8 @@ namespace GKCommon.GEDCOM
                 {
                     Assert.IsNotNull(dtx2, "dtx2 != null");
 
-                    dtx2.Assign(null);
+                    Assert.Throws(typeof(ArgumentException), () => { dtx2.Assign(null); });
+
                     Assert.AreEqual("", dtx2.StringValue);
                     Assert.AreEqual(new DateTime(0), dtx2.GetDateTime());
 
@@ -1585,7 +1586,7 @@ namespace GKCommon.GEDCOM
                 using (GEDCOMLanguage langTag2 = GEDCOMLanguage.Create(null, null, "", "") as GEDCOMLanguage) {
                     Assert.IsTrue(langTag2.IsEmpty());
 
-                    langTag2.Assign(null);
+                    Assert.Throws(typeof(ArgumentException), () => { langTag2.Assign(null); });
 
                     langTag2.Assign(langTag);
                     Assert.AreEqual("Spanish", langTag2.StringValue);

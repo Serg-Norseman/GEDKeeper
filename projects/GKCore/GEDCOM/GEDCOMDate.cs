@@ -138,7 +138,7 @@ namespace GKCommon.GEDCOM
             fCalendar = GEDCOMCalendar.dcGregorian;
             fYear = UNKNOWN_YEAR;
             fYearBC = false;
-            fYearModifier = "";
+            fYearModifier = string.Empty;
             fMonth = 0;
             fDay = 0;
 
@@ -158,18 +158,20 @@ namespace GKCommon.GEDCOM
         public override void Assign(GEDCOMTag source)
         {
             GEDCOMDate srcDate = source as GEDCOMDate;
-            if (srcDate != null) {
-                fCalendar = srcDate.fCalendar;
-                fYear = srcDate.fYear;
-                fYearBC = srcDate.fYearBC;
-                fYearModifier = srcDate.fYearModifier;
-                fMonth = srcDate.fMonth;
-                fDay = srcDate.fDay;
+            if (srcDate == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
 
-                DateChanged();
-            } else {
-                base.Assign(source);
-            }
+            base.Assign(source);
+
+            fApproximated = srcDate.fApproximated;
+            fCalendar = srcDate.fCalendar;
+            fYear = srcDate.fYear;
+            fYearBC = srcDate.fYearBC;
+            fYearModifier = srcDate.fYearModifier;
+            fMonth = srcDate.fMonth;
+            fDay = srcDate.fDay;
+
+            DateChanged();
         }
 
         public override DateTime GetDateTime()
@@ -191,6 +193,11 @@ namespace GKCommon.GEDCOM
             SetGregorian(value.Day, value.Month, value.Year);
         }
 
+        internal override GEDCOMParseFunc GetParseFunc()
+        {
+            return GEDCOMParseFunc.Date;
+        }
+
         public override string ParseString(string strValue)
         {
             string result;
@@ -198,7 +205,7 @@ namespace GKCommon.GEDCOM
                 Clear();
                 result = string.Empty;
             } else {
-                result = GEDCOMUtils.ParseDate(strValue, Owner, this);
+                result = GEDCOMUtils.ParseDate(Owner, this, strValue);
             }
             return result;
         }

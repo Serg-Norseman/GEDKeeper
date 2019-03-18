@@ -22,7 +22,7 @@ namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMCommunicationRecord : GEDCOMRecord
     {
-        public static readonly string[] CommunicationTags = new string[] { "FROM", "TO" };
+        public static readonly string[] CommunicationTags = new string[] { GEDCOMTagType.FROM, GEDCOMTagType.TO };
 
         public GEDCOMDate Date
         {

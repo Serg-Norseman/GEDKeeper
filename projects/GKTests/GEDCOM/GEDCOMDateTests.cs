@@ -223,13 +223,10 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_Assign()
         {
-            // TODO review the generated test code and remove the default call to fail.
-            GEDCOMDate instance = new GEDCOMDate(null, null, "", "");
+            GEDCOMDate instance = new GEDCOMDate(null, null);
 
             GEDCOMTag source = null;
-            //Assert.Throws(typeof(ArgumentNullException), () => {
-            instance.Assign(source);
-            //});
+            Assert.Throws(typeof(ArgumentException), () => { instance.Assign(source); });
         }
 
         private static DateTime ParseDT(string dtx)
@@ -708,7 +705,7 @@ namespace GKCommon.GEDCOM
         {
             DateTime expectDate = TestUtils.ParseDT("20.01.2013");
 
-            using (var dtx1 = new GEDCOMDateInterpreted(null, null, "", "")) {
+            using (var dtx1 = new GEDCOMDateInterpreted(null, null)) {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
 
                 dtx1.ParseString("INT 20 JAN 2013 (today)");

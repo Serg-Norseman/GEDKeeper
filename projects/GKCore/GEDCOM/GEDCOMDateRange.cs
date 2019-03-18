@@ -114,14 +114,12 @@ namespace GKCommon.GEDCOM
 
         public override string ParseString(string strValue)
         {
-            fDateAfter.Clear();
-            fDateBefore.Clear();
-
+            Clear();
             string result;
             if (string.IsNullOrEmpty(strValue)) {
                 result = string.Empty;
             } else {
-                result = GEDCOMUtils.ParseRangeDate(strValue, this);
+                result = GEDCOMUtils.ParseRangeDate(Owner, this, strValue);
             }
             return result;
         }

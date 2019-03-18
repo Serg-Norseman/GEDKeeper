@@ -52,6 +52,9 @@
   <PropertyGroup Condition=" '$(Framework)' == 'NET40' ">
     <DefineConstants>NET40</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">
+    <DefineConstants>$(DefineConstants);NET40</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Framework)' == 'NET45' ">
     <DefineConstants>NET45</DefineConstants>
   </PropertyGroup>

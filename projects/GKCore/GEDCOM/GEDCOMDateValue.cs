@@ -91,6 +91,11 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && (fValue == null || fValue.IsEmpty());
         }
 
+        internal override GEDCOMParseFunc GetParseFunc()
+        {
+            return GEDCOMParseFunc.DateValue;
+        }
+
         public override string ParseString(string strValue)
         {
             try {
@@ -99,11 +104,7 @@ namespace GKCommon.GEDCOM
                     fValue = null;
                 }
 
-                if (string.IsNullOrEmpty(strValue)) {
-                    return string.Empty;
-                }
-
-                return GEDCOMUtils.ParseDateValue(strValue, Owner, this);
+                return string.IsNullOrEmpty(strValue) ? string.Empty : GEDCOMUtils.ParseDateValue(Owner, this, strValue);
             } catch (Exception ex) {
                 Logger.LogWrite("GEDCOMDateValue.ParseString(\"" + strValue + "\"): " + ex.Message);
                 return strValue;

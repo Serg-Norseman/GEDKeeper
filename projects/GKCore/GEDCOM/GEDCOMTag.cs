@@ -593,6 +593,11 @@ namespace GKCommon.GEDCOM
 
         #region Stream management
 
+        internal virtual GEDCOMParseFunc GetParseFunc()
+        {
+            return GEDCOMParseFunc.Default;
+        }
+
         protected void SaveTagsToStream(StreamWriter stream)
         {
             int subtagsCount = fTags.Count;
@@ -613,16 +618,21 @@ namespace GKCommon.GEDCOM
             }
         }
 
+        protected static void WriteTagLine(StreamWriter stream, int level, string tagName, string tagValue, bool skipEmpty = false)
+        {
+            bool isEmpty = string.IsNullOrEmpty(tagValue);
+            if (isEmpty && skipEmpty) return;
+
+            string str = level.ToString() + " " + tagName;
+            if (!string.IsNullOrEmpty(tagValue)) {
+                str = str + " " + tagValue;
+            }
+            stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
+        }
+
         protected virtual void SaveValueToStream(StreamWriter stream)
         {
-            string str = fLevel.ToString() + " " + fName;
-
-            string val = StringValue;
-            if (!string.IsNullOrEmpty(val)) {
-                str = str + " " + val;
-            }
-
-            stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
+            WriteTagLine(stream, fLevel, fName, StringValue);
         }
 
         public virtual void SaveToStream(StreamWriter stream)

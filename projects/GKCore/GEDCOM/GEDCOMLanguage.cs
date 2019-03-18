@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+
 namespace GKCommon.GEDCOM
 {
     /// <summary>
@@ -47,20 +49,18 @@ namespace GKCommon.GEDCOM
         public override void Assign(GEDCOMTag source)
         {
             GEDCOMLanguage srcLang = (source as GEDCOMLanguage);
-            if (srcLang != null) {
-                fValue = srcLang.fValue;
-            }
+            if (srcLang == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
 
             base.Assign(source);
+
+            fValue = srcLang.fValue;
         }
 
         public override string ParseString(string strValue)
         {
-            if (!string.IsNullOrEmpty(strValue)) {
-                fValue = GEDCOMUtils.GetLanguageVal(strValue);
-            }
-
-            return strValue;
+            fValue = GEDCOMUtils.GetLanguageVal(strValue);
+            return string.Empty;
         }
 
         protected override string GetStringValue()

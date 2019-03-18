@@ -44,6 +44,20 @@ namespace GKCommon.GEDCOM
     }
 
 
+    internal enum GEDCOMParseFunc
+    {
+        Default,
+        XRefPtr,
+        Name,
+        Date,
+        Time,
+        DateValue,
+        CutoutPos
+    }
+
+    internal delegate string ParseFunc(GEDCOMTree owner, GEDCOMTag tag, GEDCOMParser parser);
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -82,11 +96,10 @@ namespace GKCommon.GEDCOM
         {
             if (string.IsNullOrEmpty(str)) return string.Empty;
 
-            int strLen = str.Length;
             int li = 0;
-            while (li < strLen && str[li] <= ' ') li++;
+            int ri = str.Length - 1;
 
-            int ri = strLen - 1;
+            while (li < ri && str[li] <= ' ') li++;
             while (ri >= li && str[ri] <= ' ') ri--;
 
             string result = str.Substring(li, ri - li + 1);
@@ -96,18 +109,18 @@ namespace GKCommon.GEDCOM
         /// <summary>
         /// This function is optimized for maximum performance and combines Trim and ToLower operations.
         /// </summary>
-        public static string NormalizeLo(string str)
+        public static string NormalizeLo(string str, bool trim = true)
         {
             if (string.IsNullOrEmpty(str)) return string.Empty;
 
             char[] strChars = str.ToCharArray();
-            int strLen = strChars.Length;
-
             int li = 0;
-            while (li < strLen && strChars[li] <= ' ') li++;
+            int ri = strChars.Length - 1;
 
-            int ri = strLen - 1;
-            while (ri >= li && strChars[ri] <= ' ') ri--;
+            if (trim) {
+                while (li < ri && strChars[li] <= ' ') li++;
+                while (ri >= li && strChars[ri] <= ' ') ri--;
+            }
 
             for (int i = li; i <= ri; i++) {
                 char ch = strChars[i];
@@ -126,18 +139,18 @@ namespace GKCommon.GEDCOM
         /// <summary>
         /// This function is optimized for maximum performance and combines Trim and ToUpper operations.
         /// </summary>
-        public static string NormalizeUp(string str)
+        public static string NormalizeUp(string str, bool trim = true)
         {
             if (string.IsNullOrEmpty(str)) return string.Empty;
 
             char[] strChars = str.ToCharArray();
-            int strLen = strChars.Length;
-
             int li = 0;
-            while (li < strLen && strChars[li] <= ' ') li++;
+            int ri = strChars.Length - 1;
 
-            int ri = strLen - 1;
-            while (ri >= li && strChars[ri] <= ' ') ri--;
+            if (trim) {
+                while (li < ri && strChars[li] <= ' ') li++;
+                while (ri >= li && strChars[ri] <= ' ') ri--;
+            }
 
             for (int i = li; i <= ri; i++) {
                 char ch = strChars[i];
@@ -249,12 +262,8 @@ namespace GKCommon.GEDCOM
             }
 
             token = strTok.Next();
-            if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '@') {
-                token = strTok.Next();
-                while (token != GEDCOMToken.Symbol && strTok.GetSymbol() != '@') {
-                    tagXRef += strTok.GetWord();
-                    token = strTok.Next();
-                }
+            if (token == GEDCOMToken.XRef) {
+                tagXRef = strTok.GetWord();
 
                 // FIXME: check for errors
                 //throw new EGEDCOMException(string.Format("The string {0} contains an unterminated XRef pointer", str));
@@ -280,6 +289,19 @@ namespace GKCommon.GEDCOM
 
             return result;
         }
+
+
+        // GEDCOMTagParseFunc
+        internal static ParseFunc[] TagParseFuncs = new ParseFunc[] {
+            null, // Default
+            null, // XRefPtr
+            null, // Name
+            ParseDate, // Date
+            null, // Time
+            ParseDateValue, // DateValue
+            null // CutoutPos
+        };
+
 
         // XRefPtr format: ...@<xref>@...
         public static string ParseXRefPointer(string str, out string xref)
@@ -376,36 +398,26 @@ namespace GKCommon.GEDCOM
             return string.Empty;
         }
 
-        public static string PrepareAhnenblattDate(string str)
-        {
-            // TODO: remove this dirty hack!
-            string result = str.Trim();
-            if (!string.IsNullOrEmpty(result) && result.StartsWith("(") && result.EndsWith(")")) {
-                result = result.Substring(1, result.Length - 2);
-
-                // ALERT: Ahnenblatt GEDCOM files can contain the dates with any separator!
-                // by standard it's "(<DATE_PHRASE>)" (gedcom-5.5.1, p.47)
-                // FIXME: this code need to move to GEDCOMDateInterpreted
-                result = result.Replace('/', '.');
-                result = result.Replace('-', '.');
-                result = result.Replace(' ', '.');
-            }
-            return result;
-        }
-
         // DateValue format: INT/FROM/TO/etc..._<date>
-        public static string ParseDateValue(string str, GEDCOMTree owner, GEDCOMDateValue dateValue)
+        public static string ParseDateValue(GEDCOMTree owner, GEDCOMDateValue dateValue, string str)
         {
             if (str == null) {
                 return null;
             }
 
-            GEDCOMFormat format = (owner == null) ? GEDCOMFormat.gf_Native : owner.Format;
-            if (format == GEDCOMFormat.gf_Ahnenblatt) {
-                str = GEDCOMUtils.PrepareAhnenblattDate(str);
-            }
-
             var strTok = new GEDCOMParser(str, false);
+            return ParseDateValue(owner, dateValue, strTok);
+        }
+
+        // DateValue format: INT/FROM/TO/etc..._<date>
+        public static string ParseDateValue(GEDCOMTree owner, GEDCOMTag dateValue, GEDCOMParser strTok)
+        {
+            return ParseDateValue(owner, (GEDCOMDateValue)dateValue, strTok);
+        }
+
+        // DateValue format: INT/FROM/TO/etc..._<date>
+        public static string ParseDateValue(GEDCOMTree owner, GEDCOMDateValue dateValue, GEDCOMParser strTok)
+        {
             strTok.SkipWhitespaces();
 
             int idx = 0;
@@ -423,20 +435,20 @@ namespace GKCommon.GEDCOM
                 case GEDCOMDateType.BEF:
                 case GEDCOMDateType.BET:
                     date = new GEDCOMDateRange(owner, dateValue);
-                    result = GEDCOMUtils.ParseRangeDate(strTok, date as GEDCOMDateRange);
+                    result = GEDCOMUtils.ParseRangeDate(owner, (GEDCOMDateRange)date, strTok);
                     break;
                 case GEDCOMDateType.INT:
                     date = new GEDCOMDateInterpreted(owner, dateValue);
-                    result = GEDCOMUtils.ParseIntDate(strTok, date as GEDCOMDateInterpreted);
+                    result = GEDCOMUtils.ParseIntDate(owner, (GEDCOMDateInterpreted)date, strTok);
                     break;
                 case GEDCOMDateType.FROM:
                 case GEDCOMDateType.TO:
                     date = new GEDCOMDatePeriod(owner, dateValue);
-                    result = GEDCOMUtils.ParsePeriodDate(strTok, date as GEDCOMDatePeriod);
+                    result = GEDCOMUtils.ParsePeriodDate(owner, (GEDCOMDatePeriod)date, strTok);
                     break;
                 default:
                     date = new GEDCOMDate(owner, dateValue);
-                    result = GEDCOMUtils.ParseDate(strTok, date as GEDCOMDate);
+                    result = GEDCOMUtils.ParseDate(owner, (GEDCOMDate)date, strTok);
                     break;
             }
 
@@ -445,26 +457,26 @@ namespace GKCommon.GEDCOM
         }
 
         // Format: FROM DATE1 TO DATE2
-        public static string ParsePeriodDate(string strValue, GEDCOMDatePeriod date)
+        public static string ParsePeriodDate(GEDCOMTree owner, GEDCOMDatePeriod date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
-            return ParsePeriodDate(strTok, date);
+            return ParsePeriodDate(owner, date, strTok);
         }
 
         // Format: FROM DATE1 TO DATE2
-        public static string ParsePeriodDate(GEDCOMParser strTok, GEDCOMDatePeriod date)
+        public static string ParsePeriodDate(GEDCOMTree owner, GEDCOMDatePeriod date, GEDCOMParser strTok)
         {
             strTok.SkipWhitespaces();
 
             if (strTok.RequireWord(GEDCOMTagType.FROM)) {
                 strTok.Next();
-                ParseDate(strTok, date.DateFrom);
+                ParseDate(owner, date.DateFrom, strTok);
                 strTok.SkipWhitespaces();
             }
 
             if (strTok.RequireWord(GEDCOMTagType.TO)) {
                 strTok.Next();
-                ParseDate(strTok, date.DateTo);
+                ParseDate(owner, date.DateTo, strTok);
                 strTok.SkipWhitespaces();
             }
 
@@ -472,14 +484,14 @@ namespace GKCommon.GEDCOM
         }
 
         // Format: AFT DATE | BEF DATE | BET AFT_DATE AND BEF_DATE
-        public static string ParseRangeDate(string strValue, GEDCOMDateRange date)
+        public static string ParseRangeDate(GEDCOMTree owner, GEDCOMDateRange date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
-            return ParseRangeDate(strTok, date);
+            return ParseRangeDate(owner, date, strTok);
         }
 
         // Format: AFT DATE | BEF DATE | BET AFT_DATE AND BEF_DATE
-        public static string ParseRangeDate(GEDCOMParser strTok, GEDCOMDateRange date)
+        public static string ParseRangeDate(GEDCOMTree owner, GEDCOMDateRange date, GEDCOMParser strTok)
         {
             strTok.SkipWhitespaces();
 
@@ -492,14 +504,14 @@ namespace GKCommon.GEDCOM
 
             if (dateType == 0) { // "AFT"
                 strTok.Next();
-                ParseDate(strTok, date.After);
+                ParseDate(owner, date.After, strTok);
             } else if (dateType == 1) { // "BEF"
                 strTok.Next();
-                ParseDate(strTok, date.Before);
+                ParseDate(owner, date.Before, strTok);
             } else if (dateType == 2) { // "BET"
                 strTok.Next();
                 //result = GEDCOMProvider.FixFTB(result);
-                ParseDate(strTok, date.After);
+                ParseDate(owner, date.After, strTok);
                 strTok.SkipWhitespaces();
 
                 if (!strTok.RequireWord(GEDCOMCustomDate.GEDCOMDateRangeArray[3])) { // "AND"
@@ -509,21 +521,21 @@ namespace GKCommon.GEDCOM
                 strTok.Next();
                 strTok.SkipWhitespaces();
                 //result = GEDCOMProvider.FixFTB(result);
-                ParseDate(strTok, date.Before);
+                ParseDate(owner, date.Before, strTok);
             }
 
             return strTok.GetRest();
         }
 
         // Format: INT DATE (phrase)
-        public static string ParseIntDate(string strValue, GEDCOMDateInterpreted date)
+        public static string ParseIntDate(GEDCOMTree owner, GEDCOMDateInterpreted date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
-            return ParseIntDate(strTok, date);
+            return ParseIntDate(owner, date, strTok);
         }
 
         // Format: INT DATE (phrase)
-        public static string ParseIntDate(GEDCOMParser strTok, GEDCOMDateInterpreted date)
+        public static string ParseIntDate(GEDCOMTree owner, GEDCOMDateInterpreted date, GEDCOMParser strTok)
         {
             strTok.SkipWhitespaces();
 
@@ -531,7 +543,7 @@ namespace GKCommon.GEDCOM
                 throw new GEDCOMDateException(string.Format("The interpreted date '{0}' doesn't start with a valid ident", strTok.GetFullStr()));
             }
             strTok.Next();
-            ParseDate(strTok, date);
+            ParseDate(owner, date, strTok);
 
             strTok.SkipWhitespaces();
             var token = strTok.CurrentToken;
@@ -551,18 +563,18 @@ namespace GKCommon.GEDCOM
             return strTok.GetRest();
         }
 
-        public static string ParseDate(string strValue, GEDCOMTree owner, GEDCOMDate date)
+        public static string ParseDate(GEDCOMTree owner, GEDCOMDate date, string strValue)
         {
-            GEDCOMFormat format = (owner == null) ? GEDCOMFormat.gf_Native : owner.Format;
-            if (format == GEDCOMFormat.gf_Ahnenblatt) {
-                strValue = GEDCOMUtils.PrepareAhnenblattDate(strValue);
-            }
-
             var strTok = new GEDCOMParser(strValue, false);
-            return ParseDate(strTok, date);
+            return ParseDate(owner, date, strTok);
         }
 
-        public static string ParseDate(GEDCOMParser strTok, GEDCOMDate date)
+        public static string ParseDate(GEDCOMTree owner, GEDCOMTag date, GEDCOMParser strTok)
+        {
+            return ParseDate(owner, (GEDCOMDate)date, strTok);
+        }
+
+        public static string ParseDate(GEDCOMTree owner, GEDCOMDate date, GEDCOMParser strTok)
         {
             GEDCOMApproximated approximated = GEDCOMApproximated.daExact;
             GEDCOMCalendar calendar = GEDCOMCalendar.dcGregorian;
@@ -573,10 +585,21 @@ namespace GKCommon.GEDCOM
             byte day = 0;
             GEDCOMDateFormat dateFormat = GEDCOMDateFormat.dfGEDCOMStd;
 
+            GEDCOMFormat format = (owner == null) ? GEDCOMFormat.gf_Native : owner.Format;
+            bool isAhnDeviance = (format == GEDCOMFormat.gf_Ahnenblatt);
+            if (isAhnDeviance) {
+                GEDCOMUtils.PrepareAhnenblattDate(strTok.Data, strTok.Position, strTok.Length);
+            }
+
             strTok.SkipWhitespaces();
 
-            // extract approximated
             var token = strTok.CurrentToken;
+            if (isAhnDeviance && token == GEDCOMToken.Symbol && strTok.GetSymbol() == '(') {
+                token = strTok.Next();
+            }
+
+            // extract approximated
+            token = strTok.CurrentToken;
             if (token == GEDCOMToken.Word) {
                 string su = InvariantTextInfo.ToUpper(strTok.GetWord());
                 int idx = Algorithms.BinarySearch(GEDCOMCustomDate.GEDCOMDateApproximatedArray, su, string.CompareOrdinal);
@@ -589,16 +612,9 @@ namespace GKCommon.GEDCOM
 
             // extract escape
             token = strTok.CurrentToken;
-            if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '@') {
-                var escapeBuf = new StringBuilder();
-                escapeBuf.Append(strTok.GetWord());
-                do {
-                    token = strTok.Next();
-                    escapeBuf.Append(strTok.GetWord());
-                } while (token != GEDCOMToken.Symbol || strTok.GetSymbol() != '@');
+            if (token == GEDCOMToken.XRef) {
                 // FIXME: check for errors
-
-                var escapeStr = escapeBuf.ToString();
+                var escapeStr = "@" + strTok.GetWord() + "@";
                 int idx = Algorithms.IndexOf(GEDCOMCustomDate.GEDCOMDateEscapeArray, escapeStr);
                 if (idx >= 0) {
                     calendar = (GEDCOMCalendar)idx;
@@ -627,10 +643,6 @@ namespace GKCommon.GEDCOM
 
             // extract month
             if (token == GEDCOMToken.Word) {
-                //string[] monthes = GEDCOMDate.GetMonthNames(calendar);
-                //int idx = Algorithms.IndexOf(monthes, strTok.GetWord());
-                //month = (byte)(idx + 1);
-
                 // in this case, according to performance test results, BinarySearch is more efficient
                 // than a simple search or even a dictionary search (why?!)
                 string su = InvariantTextInfo.ToUpper(strTok.GetWord());
@@ -690,9 +702,31 @@ namespace GKCommon.GEDCOM
                 }
             }
 
+            token = strTok.CurrentToken;
+            if (isAhnDeviance && token == GEDCOMToken.Symbol && strTok.GetSymbol() == ')') {
+                token = strTok.Next();
+            }
+
             date.SetRawData(approximated, calendar, year, yearBC, yearModifier, month, day, dateFormat);
             string result = strTok.GetRest();
             return result;
+        }
+
+        private static void PrepareAhnenblattDate(char[] str, int startIndex, int length)
+        {
+            // ALERT: Ahnenblatt GEDCOM files can contain the dates with any separator and in (...)!
+            // by standard it's "(<DATE_PHRASE>)" (gedcom-5.5.1, p.47)
+            // FIXME: this code need to move to GEDCOMDateInterpreted?
+
+            // Different execution path if the input is from a string or a parser
+            int lastIndex = Math.Min(str.Length - 1, startIndex + length - 1);
+
+            for (int i = startIndex; i <= lastIndex; i++) {
+                char ch = str[i];
+                if (ch == '/' || ch == '-' || ch == ' ') {
+                    str[i] = '.';
+                }
+            }
         }
 
         public static string ParseName(string strValue, GEDCOMPersonalName persName)
@@ -1194,7 +1228,7 @@ namespace GKCommon.GEDCOM
             if (string.IsNullOrEmpty(su)) return GEDCOMOrdinanceProcessFlag.opNone;
 
             GEDCOMOrdinanceProcessFlag result;
-            su = GEDCOMUtils.InvariantTextInfo.ToUpper(su.Trim());
+            su = NormalizeUp(su);
             
             if (su == "YES") {
                 result = GEDCOMOrdinanceProcessFlag.opYes;

@@ -113,13 +113,6 @@ namespace GKCommon.GEDCOM
         private Encoding fSourceEncoding;
         private EncodingState fEncodingState;
 
-        private static string ConvertStr(Encoding encoding, string str)
-        {
-            byte[] src = DEFAULT_ENCODING.GetBytes(str);
-            str = encoding.GetString(src);
-            return str;
-        }
-
         private void SetEncoding(Encoding encoding)
         {
             fSourceEncoding = encoding;
@@ -246,6 +239,11 @@ namespace GKCommon.GEDCOM
                     int linePos = fLineBufPos;
                     fLineBufPos = 0;
                     if (linePos > 0) {
+                        if (fEncodingState == EncodingState.esChanged) {
+                            byte[] src = DEFAULT_ENCODING.GetBytes(fLineBuffer, 0, linePos);
+                            linePos = fSourceEncoding.GetChars(src, 0, src.Length, fLineBuffer, 0);
+                        }
+
                         return linePos;
                     }
                 } else {
@@ -289,10 +287,6 @@ namespace GKCommon.GEDCOM
 
                         // empty line
                         if (lineRes == -2) continue;
-
-                        if (!string.IsNullOrEmpty(tagValue) && fEncodingState == EncodingState.esChanged) {
-                            tagValue = ConvertStr(fSourceEncoding, tagValue);
-                        }
 
                         // line with text but not in standard tag format
                         if (lineRes == -1) {
@@ -359,15 +353,21 @@ namespace GKCommon.GEDCOM
                         curTag = null;
                     } else {
                         if (curRecord != null) {
+                            GEDCOMTag parentTag;
                             if (curTag == null || tagLevel == 1) {
-                                curTag = curRecord.AddTag(tagName, string.Empty, null);
+                                parentTag = curRecord;
                             } else {
-                                while (tagLevel <= curTag.Level) {
-                                    curTag = (curTag.Parent as GEDCOMTag);
+                                parentTag = curTag;
+                                while (tagLevel <= parentTag.Level) {
+                                    parentTag = (GEDCOMTag)parentTag.Parent;
                                 }
-                                curTag = curTag.AddTag(tagName, string.Empty, null);
                             }
-                            curTag.ParseString(tagValue);
+
+                            curTag = parentTag.AddTag(tagName, tagValue, null);
+
+                            /*if (curTag != null) {
+                                ParseTagValue(fTree, curTag, strTok, tagValue);
+                            }*/
                         }
                     }
 
@@ -384,6 +384,16 @@ namespace GKCommon.GEDCOM
                 fTree.State = GEDCOMState.osReady;
             }
         }
+
+        /*private static void ParseTagValue(GEDCOMTree owner, GEDCOMTag tag, GEDCOMParser lineParser, string strValue)
+        {
+            var parseFunc = GEDCOMUtils.TagParseFuncs[(int)tag.GetParseFunc()];
+            if (parseFunc == null) {
+                tag.ParseString(lineParser.GetRest()); // strValue
+            } else {
+                parseFunc(owner, tag, lineParser);
+            }
+        }*/
 
         #endregion
 

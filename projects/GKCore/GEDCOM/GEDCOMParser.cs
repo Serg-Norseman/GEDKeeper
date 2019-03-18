@@ -29,6 +29,7 @@ namespace GKCommon.GEDCOM
         Symbol,
         Word,
         Number,
+        XRef,
         EOL
     }
 
@@ -45,6 +46,7 @@ namespace GKCommon.GEDCOM
         private int fLength;
         private int fPos;
         private int fSavePos;
+        private int fTokenEnd;
 
         private int fIntValue;
         private string fStrValue;
@@ -54,6 +56,16 @@ namespace GKCommon.GEDCOM
         public GEDCOMToken CurrentToken
         {
             get { return fCurrentToken; }
+        }
+
+        public char[] Data
+        {
+            get { return fData; }
+        }
+
+        public int Length
+        {
+            get { return fLength; }
         }
 
         public int Position
@@ -115,6 +127,7 @@ namespace GKCommon.GEDCOM
                             break;
                     }
 
+                    fTokenEnd = fPos;
                     fValueReset = true;
                     fCurrentToken = GEDCOMToken.Word;
                     return fCurrentToken;
@@ -133,6 +146,7 @@ namespace GKCommon.GEDCOM
                             break;
                     }
 
+                    fTokenEnd = fPos;
                     fValueReset = true;
                     fCurrentToken = GEDCOMToken.Number;
                     return fCurrentToken;
@@ -154,8 +168,25 @@ namespace GKCommon.GEDCOM
                             break;
                     }
 
+                    fTokenEnd = fPos;
                     fValueReset = true;
                     fCurrentToken = GEDCOMToken.Whitespace;
+                    return fCurrentToken;
+                }
+
+                if (ch == '@') {
+                    fSavePos = ++fPos;
+                    while (true) {
+                        ch = (fPos >= fLength) ? EOL : fData[fPos];
+                        fPos++;
+                        if (ch == '@') {
+                            fTokenEnd = fPos - 1;
+                            break;
+                        }
+                    }
+
+                    fValueReset = true;
+                    fCurrentToken = GEDCOMToken.XRef;
                     return fCurrentToken;
                 }
 
@@ -167,6 +198,7 @@ namespace GKCommon.GEDCOM
                     fSavePos = fPos;
                     fPos++;
 
+                    fTokenEnd = fPos;
                     fValueReset = true;
                     fCurrentToken = GEDCOMToken.Symbol;
                     return fCurrentToken;
@@ -188,7 +220,7 @@ namespace GKCommon.GEDCOM
         public string GetWord()
         {
             if (fValueReset) {
-                fStrValue = new string(fData, fSavePos, fPos - fSavePos);
+                fStrValue = new string(fData, fSavePos, fTokenEnd - fSavePos);
                 fValueReset = false;
             }
             return fStrValue;
