@@ -20,7 +20,7 @@
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMRepositoryCitation : GEDCOMPointer
+    public sealed class GEDCOMRepositoryCitation : GEDCOMPointerWithNotes
     {
         public GEDCOMRepositoryCitation(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {

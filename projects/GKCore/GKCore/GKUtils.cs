@@ -2067,21 +2067,17 @@ namespace GKCore
         {
             if (summary == null) return;
 
-            try
-            {
+            try {
                 summary.BeginUpdate();
                 summary.Clear();
-                try
-                {
-                    if (iRec != null)
-                    {
+                try {
+                    if (iRec != null) {
                         GEDCOMTree tree = iRec.Owner;
 
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + GetNameString(iRec, true, true) + "[/size][/u][/b]");
                         summary.Add(LangMan.LS(LSID.LSID_Sex) + ": " + SexStr(iRec.Sex));
-                        try
-                        {
+                        try {
                             GEDCOMIndividualRecord father, mother;
                             GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
                             if (fam == null) {
@@ -2092,8 +2088,7 @@ namespace GKCore
                                 mother = fam.GetWife();
                             }
 
-                            if (father != null || mother != null)
-                            {
+                            if (father != null || mother != null) {
                                 summary.Add("");
                                 summary.Add(LangMan.LS(LSID.LSID_Parents) + ":");
 
@@ -2105,17 +2100,13 @@ namespace GKCore
                                 st = (mother == null) ? LangMan.LS(LSID.LSID_UnkFemale) : HyperLink(mother.XRef, GetNameString(mother, true, false), 0);
                                 summary.Add("  " + LangMan.LS(LSID.LSID_Mother) + ": " + st + GetLifeStr(mother));
                             }
-                        }
-                        catch (Exception ex)
-                        {
+                        } catch (Exception ex) {
                             Logger.LogWrite("GKUtils.ShowPersonInfo().Parents(): " + ex.Message);
                         }
 
-                        try
-                        {
+                        try {
                             int num = iRec.SpouseToFamilyLinks.Count;
-                            for (int i = 0; i < num; i++)
-                            {
+                            for (int i = 0; i < num; i++) {
                                 GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
                                 if (family == null) continue;
                                 if (!baseContext.IsRecordAccess(family.Restriction)) continue;
@@ -2123,58 +2114,46 @@ namespace GKCore
                                 string st;
                                 GEDCOMPointer sp;
                                 string unk;
-                                if (iRec.Sex == GEDCOMSex.svMale)
-                                {
+                                if (iRec.Sex == GEDCOMSex.svMale) {
                                     sp = family.Wife;
                                     st = LangMan.LS(LSID.LSID_Wife) + ": ";
                                     unk = LangMan.LS(LSID.LSID_UnkFemale);
-                                }
-                                else
-                                {
+                                } else {
                                     sp = family.Husband;
                                     st = LangMan.LS(LSID.LSID_Husband) + ": ";
                                     unk = LangMan.LS(LSID.LSID_UnkMale);
                                 }
                                 string marr = GetMarriageDateStr(family, DateFormat.dfDD_MM_YYYY);
-                                if (marr != "")
-                                {
+                                if (marr != "") {
                                     marr = LangMan.LS(LSID.LSID_LMarriage) + " " + marr;
-                                }
-                                else
-                                {
+                                } else {
                                     marr = LangMan.LS(LSID.LSID_LFamily);
                                 }
 
-                                GEDCOMIndividualRecord relPerson = sp.Value as GEDCOMIndividualRecord;
-                                
+                                GEDCOMIndividualRecord relPerson = (sp == null) ? null : (sp.Value as GEDCOMIndividualRecord);
+
                                 summary.Add("");
-                                if (relPerson != null)
-                                {
+                                if (relPerson != null) {
                                     st = st + HyperLink(relPerson.XRef, GetNameString(relPerson, true, false), 0) + " (" + HyperLink(family.XRef, marr, 0) + ")";
-                                }
-                                else
-                                {
+                                } else {
                                     st = st + unk + " (" + HyperLink(family.XRef, marr, 0) + ")";
                                 }
                                 summary.Add(st);
-                                
-                                if (family.Children.Count != 0)
-                                {
+
+                                int chNum = family.Children.Count;
+                                if (chNum != 0) {
                                     summary.Add("");
                                     summary.Add(LangMan.LS(LSID.LSID_Childs) + ":");
-                                }
 
-                                int num2 = family.Children.Count;
-                                for (int k = 0; k < num2; k++)
-                                {
-                                    relPerson = (GEDCOMIndividualRecord)family.Children[k].Value;
-                                    
-                                    summary.Add("    " + HyperLink(relPerson.XRef, GetNameString(relPerson, true, false), 0) + GetLifeStr(relPerson));
+                                    for (int k = 0; k < chNum; k++) {
+                                        relPerson = (GEDCOMIndividualRecord)family.Children[k].Value;
+                                        if (relPerson == null) continue;
+
+                                        summary.Add("    " + HyperLink(relPerson.XRef, GetNameString(relPerson, true, false), 0) + GetLifeStr(relPerson));
+                                    }
                                 }
                             }
-                        }
-                        catch (Exception ex)
-                        {
+                        } catch (Exception ex) {
                             Logger.LogWrite("GKUtils.ShowPersonInfo().Families(): " + ex.Message);
                         }
 

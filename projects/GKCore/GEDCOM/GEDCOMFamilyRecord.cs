@@ -62,6 +62,12 @@ namespace GKCommon.GEDCOM
             get { return fSpouseSealings; }
         }
 
+        public GKMarriageStatus Status
+        {
+            get { return GEDCOMUtils.GetMarriageStatusVal(GetTagStringValue("_STAT")); }
+            set { SetTagStringValue("_STAT", GEDCOMUtils.GetMarriageStatusStr(value)); }
+        }
+
 
         public GEDCOMFamilyRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {

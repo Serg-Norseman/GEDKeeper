@@ -179,7 +179,7 @@ namespace GKCore.Export
                     string text = mainIndex[i];
                     GEDCOMIndividualRecord iRec = mainIndex.GetObject(i) as GEDCOMIndividualRecord;
 
-                    char isym = text[0];
+                    char isym = (string.IsNullOrEmpty(text)) ? '?' : text[0];
                     if ((isym >= 'A' && isym <= 'Z') || (isym >= 'А' && isym <= 'Я')) {
                         if (sym != isym) {
                             fWriter.AddParagraph("" + isym, fSymFont, TextAlignment.taCenter);

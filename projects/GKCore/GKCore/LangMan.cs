@@ -839,7 +839,7 @@ namespace GKCore
         /* 781 */ LSID_PLT_Adopted,
         /* 782 */ LSID_PLT_Birth,
         /* 783 */ LSID_PLT_Foster,
-        /* 784 */ LSID_PLT_Sealing,
+        /* 784 */ LSID_ToExclude, /* should be excluded */
         /* 785 */ LSID_LinkageType,
 
         /* 786 */ // reserved begin
@@ -1663,7 +1663,7 @@ namespace GKCore
             /* 781 */ "Adopted",
             /* 782 */ "Birth",
             /* 783 */ "Foster",
-            /* 784 */ "Sealing",
+            /* 784 */ "<?>",
             /* 785 */ "Linkage type",
 
             /* 786 */ "", // reserved begin

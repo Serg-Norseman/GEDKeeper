@@ -367,7 +367,6 @@ namespace GKCommon.GEDCOM
         plAdopted,
         plBirth,
         plFoster,
-        plSealing
     }
 
     public enum GEDCOMSpouseSealingDateStatus
@@ -484,5 +483,13 @@ namespace GKCommon.GEDCOM
         rsProblems,
         rsCompleted,
         rsWithdrawn
+    }
+
+    public enum GKMarriageStatus
+    {
+        Unknown,
+        MarrRegistered,
+        MarrNotRegistered,
+        MarrDivorced
     }
 }

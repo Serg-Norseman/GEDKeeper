@@ -47,24 +47,23 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGEDCOMStructWithLists;
             if (fSheetList == null || dataOwner == null) return;
 
-            try
-            {
+            try {
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMSourceCitation cit in dataOwner.SourceCitations)
-                {
+                foreach (GEDCOMSourceCitation cit in dataOwner.SourceCitations) {
                     GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
                     if (sourceRec == null) continue;
 
+                    int ca = GEDCOMUtils.GetValidCertaintyAssessment(cit.CertaintyAssessment);
+
                     fSheetList.AddItem(cit, new object[] { sourceRec.Originator.Text.Trim(),
-                                           sourceRec.FiledByEntry, cit.Page,
-                                           LangMan.LS(GKData.CertaintyAssessments[cit.CertaintyAssessment]) } );
+                        sourceRec.FiledByEntry, cit.Page,
+                        LangMan.LS(GKData.CertaintyAssessments[ca])
+                    });
                 }
 
                 fSheetList.ResizeColumn(1);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("SourceCitationsListModel.UpdateContents(): " + ex.Message);
             }
         }

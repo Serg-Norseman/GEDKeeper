@@ -597,7 +597,6 @@ namespace GKCore
                 LSID.LSID_PLT_Adopted,
                 LSID.LSID_PLT_Birth,
                 LSID.LSID_PLT_Foster,
-                LSID.LSID_PLT_Sealing
             };
 
             BloodGroups = "|(I) O+|(I) O-|(II) A+|(II) A-|(III) B+|(III) B-|(IV) AB+|(IV) AB-";

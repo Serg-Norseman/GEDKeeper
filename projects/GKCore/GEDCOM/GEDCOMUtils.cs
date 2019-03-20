@@ -902,7 +902,7 @@ namespace GKCommon.GEDCOM
 
 
         public static string[] PedigreeLinkageTypes = new string[] {
-            "", "adopted", "birth", "foster", "sealing" };
+            "", "adopted", "birth", "foster" };
 
         public static GEDCOMPedigreeLinkageType GetPedigreeLinkageTypeVal(string str)
         {
@@ -1430,8 +1430,32 @@ namespace GKCommon.GEDCOM
         {
             return GEDCOMUtils.Enum2Str(value, ChildSealingDateStatuses);
         }
-        
+
+
+        public static string[] MarriageStatuses = new string[] {
+            "", "married", "marrnotreg", "notmarr" };
+
+        public static GKMarriageStatus GetMarriageStatusVal(string str)
+        {
+            return Str2Enum(str, MarriageStatuses, GKMarriageStatus.Unknown);
+        }
+
+        public static string GetMarriageStatusStr(GKMarriageStatus value)
+        {
+            return GEDCOMUtils.Enum2Str(value, MarriageStatuses);
+        }
+
         #endregion
+
+        /// <summary>
+        /// Strange values were found, possibly from other genealogical programs.
+        /// </summary>
+        /// <param name="value">Input value of CertaintyAssessment</param>
+        /// <returns>Checked value</returns>
+        public static int GetValidCertaintyAssessment(int value)
+        {
+            return (value >= 0 && value <= 3) ? value : 0;
+        }
 
         public static string EncodeUID(byte[] binaryKey)
         {

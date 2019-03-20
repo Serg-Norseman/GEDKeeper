@@ -74,6 +74,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
+                // FIXME: to new property
                 string stat = GKData.MarriageStatus[fView.MarriageStatus.SelectedIndex].StatSign;
                 fFamily.SetTagStringValue("_STAT", stat);
 

@@ -161,8 +161,6 @@ namespace GKCommon.GEDCOM
             if (srcDate == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
-            base.Assign(source);
-
             fApproximated = srcDate.fApproximated;
             fCalendar = srcDate.fCalendar;
             fYear = srcDate.fYear;

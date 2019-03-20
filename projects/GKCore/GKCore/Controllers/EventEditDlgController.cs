@@ -150,8 +150,9 @@ namespace GKCore.Controllers
                 if (fEvent is GEDCOMFamilyEvent) {
                     fEvent.SetName(GKData.FamilyEvents[eventType].Sign);
                 } else {
-                    fEvent.SetName(GKData.PersonEvents[eventType].Sign);
-                    if (GKData.PersonEvents[eventType].Kind == PersonEventKind.ekFact) {
+                    GKData.EventStruct eventProps = GKData.PersonEvents[eventType];
+                    fEvent.SetName(eventProps.Sign);
+                    if (eventProps.Kind == PersonEventKind.ekFact) {
                         fEvent.StringValue = fView.Attribute.Text;
                     } else {
                         fEvent.StringValue = "";

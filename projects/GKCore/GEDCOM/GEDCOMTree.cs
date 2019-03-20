@@ -309,6 +309,20 @@ namespace GKCommon.GEDCOM
 
         #region Main functionality
 
+        public List<T> GetRecords<T>() where T : GEDCOMRecord
+        {
+            List<T> result = new List<T>();
+
+            for (int i = 0; i < fRecords.Count; i++) {
+                T rec = fRecords[i] as T;
+                if (rec != null) {
+                    result.Add(rec);
+                }
+            }
+
+            return result;
+        }
+
         public IGEDCOMTreeEnumerator GetEnumerator(GEDCOMRecordType recType)
         {
             return new TreeEnumerator(this, recType);
