@@ -74,10 +74,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                // FIXME: to new property
-                string stat = GKData.MarriageStatus[fView.MarriageStatus.SelectedIndex].StatSign;
-                fFamily.SetTagStringValue("_STAT", stat);
-
+                fFamily.Status = (GKMarriageStatus)fView.MarriageStatus.SelectedIndex;
                 fFamily.Restriction = (GEDCOMRestriction)fView.Restriction.SelectedIndex;
 
                 fBase.Context.ProcessFamily(fFamily);
@@ -107,10 +104,8 @@ namespace GKCore.Controllers
                     fView.MarriageStatus.SelectedIndex = 0;
                     fView.Restriction.SelectedIndex = 0;
                 } else {
-                    string stat = fFamily.GetTagStringValue("_STAT");
-                    int statIdx = GKUtils.GetMarriageStatusIndex(stat);
                     fView.MarriageStatus.Enabled = true;
-                    fView.MarriageStatus.SelectedIndex = statIdx;
+                    fView.MarriageStatus.SelectedIndex = (int)fFamily.Status;
                     fView.Restriction.SelectedIndex = (sbyte)fFamily.Restriction;
                 }
 

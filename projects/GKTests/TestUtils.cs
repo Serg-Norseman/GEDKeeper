@@ -134,7 +134,7 @@ namespace GKTests
 
             // source for tests
             GEDCOMSourceRecord srcRec = context.Tree.CreateSource();
-            srcRec.FiledByEntry = "Test source";
+            srcRec.ShortTitle = "Test source";
             Assert.IsNotNull(srcRec, "srcRec != null");
             iRec.AddSource(srcRec, "p1", 0);
 

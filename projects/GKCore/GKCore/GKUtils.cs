@@ -192,7 +192,7 @@ namespace GKCore
                         st = ((GEDCOMMultimediaRecord)record).FileReferences[0].Title;
                         break;
                     case GEDCOMRecordType.rtSource:
-                        st = ((GEDCOMSourceRecord)record).FiledByEntry;
+                        st = ((GEDCOMSourceRecord)record).ShortTitle;
                         break;
                     case GEDCOMRecordType.rtRepository:
                         st = ((GEDCOMRepositoryRecord)record).RepositoryName;
@@ -298,7 +298,7 @@ namespace GKCore
                     return GetFamilyString(tempRec as GEDCOMFamilyRecord);
 
                 case GKGoalType.gtSource:
-                    return ((GEDCOMSourceRecord)tempRec).FiledByEntry;
+                    return ((GEDCOMSourceRecord)tempRec).ShortTitle;
             }
 
             return string.Empty;
@@ -438,22 +438,6 @@ namespace GKCore
             for (int i = 0; i < GKData.FamilyEvents.Length; i++)
             {
                 if (GKData.FamilyEvents[i].Sign == sign)
-                {
-                    res = i;
-                    break;
-                }
-            }
-
-            return res;
-        }
-
-        public static int GetMarriageStatusIndex(string sign)
-        {
-            int res = 0;
-
-            for (int i = 0; i < GKData.MarriageStatus.Length; i++)
-            {
-                if (GKData.MarriageStatus[i].StatSign == sign)
                 {
                     res = i;
                     break;
@@ -1423,7 +1407,7 @@ namespace GKCore
                     GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
                     if (sourceRec == null) continue;
 
-                    string nm = "\"" + sourceRec.FiledByEntry + "\"";
+                    string nm = "\"" + sourceRec.ShortTitle + "\"";
                     if (cit.Page != "")
                     {
                         nm = nm + ", " + cit.Page;
@@ -1740,7 +1724,7 @@ namespace GKCore
                         GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
                         if (sourceRec == null) continue;
 
-                        string nm = "\"" + sourceRec.FiledByEntry + "\"";
+                        string nm = "\"" + sourceRec.ShortTitle + "\"";
 
                         if (cit.Page != "") {
                             nm = nm + ", " + cit.Page;
@@ -2193,7 +2177,7 @@ namespace GKCore
                     if (sourceRec != null)
                     {
                         summary.Add("");
-                        summary.Add("[u][b][size=+1]" + sourceRec.FiledByEntry + "[/size][/b][/u]");
+                        summary.Add("[u][b][size=+1]" + sourceRec.ShortTitle + "[/size][/b][/u]");
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Author) + ": " + sourceRec.Originator.Text.Trim());
                         summary.Add(LangMan.LS(LSID.LSID_Title) + ": \"" + sourceRec.Title.Text.Trim() + "\"");

@@ -414,45 +414,30 @@ namespace GKCommon.GEDCOM
 
             fTree.Pack();
             using (StreamWriter writer = new StreamWriter(outputStream, GEDCOMUtils.GetEncodingByCharacterSet(charSet))) {
-                SaveToStream(writer);
+                IList<GEDCOMRecord> records = fTree.GetRecords().GetList();
+                SaveToStream(writer, records);
+
                 writer.Flush();
             }
 
             fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
         }
 
-        private void SaveToStream(StreamWriter writer)
-        {
-            IList<GEDCOMRecord> records = fTree.GetRecords().GetList();
-
-            SaveToStream(writer, records);
-        }
-
         public void SaveToStream(StreamWriter writer, IList<GEDCOMRecord> list)
         {
-            SaveHeaderToStream(writer);
+            // write header
+            fTree.Header.SaveToStream(writer);
 
-            if (list != null)
-            {
+            if (list != null) {
                 int num = list.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     list[i].SaveToStream(writer);
                 }
             }
 
-            SaveFooterToStream(writer);
-        }
-
-        private void SaveHeaderToStream(StreamWriter stream)
-        {
-            fTree.Header.SaveToStream(stream);
-        }
-
-        private static void SaveFooterToStream(StreamWriter stream)
-        {
+            // write footer
             const string str = "0 TRLR";
-            stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
+            writer.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
         }
 
         #endregion

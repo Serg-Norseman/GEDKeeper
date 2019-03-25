@@ -54,6 +54,7 @@ namespace GKCore
     {
         #region Private fields
 
+        private ICulture fCulture;
         private string fFileName;
         private bool fModified;
         private ShieldState fShieldState;
@@ -73,59 +74,10 @@ namespace GKCore
         {
             get {
                 GEDCOMLanguageID langID = fTree.Header.Language.Value;
-                ICulture culture;
-
-                switch (langID) {
-                    case GEDCOMLanguageID.Russian:
-                    case GEDCOMLanguageID.Ukrainian:
-                    case GEDCOMLanguageID.Kazakh:
-                        culture = new RussianCulture();
-                        break;
-
-                    case GEDCOMLanguageID.Polish:
-                        culture = new PolishCulture();
-                        break;
-
-                    case GEDCOMLanguageID.German:
-                        culture = new GermanCulture();
-                        break;
-
-                    case GEDCOMLanguageID.Swedish:
-                        culture = new SwedishCulture();
-                        break;
-
-                    case GEDCOMLanguageID.Icelandic:
-                        culture = new IcelandCulture();
-                        break;
-
-                    case GEDCOMLanguageID.Armenian:
-                        culture = new ArmenianCulture();
-                        break;
-
-                    case GEDCOMLanguageID.Turkish:
-                        culture = new TurkishCulture();
-                        break;
-
-                    case GEDCOMLanguageID.French:
-                        culture = new FrenchCulture();
-                        break;
-
-                    case GEDCOMLanguageID.Italian:
-                        culture = new ItalianCulture();
-                        break;
-
-                    case GEDCOMLanguageID.Cantonese:
-                    case GEDCOMLanguageID.Mandrin:
-                        culture = new ChineseCulture();
-                        break;
-
-                    case GEDCOMLanguageID.English:
-                    default:
-                        culture = new BritishCulture();
-                        break;
+                if (fCulture == null || fCulture.Language != langID) {
+                    fCulture = GetCultureByLang(langID);
                 }
-
-                return culture;
+                return fCulture;
             }
         }
 
@@ -239,6 +191,13 @@ namespace GKCore
             GEDCOMLanguageID langId = lang.Value;
             if (langId != GEDCOMLanguageID.Unknown && !fLangsList.Contains(langId)) {
                 fLangsList.Add(langId);
+            }
+        }
+
+        public void ImportNames(GEDCOMIndividualRecord iRec)
+        {
+            if (Culture is RussianCulture) {
+                AppHost.NamesTable.ImportNames(iRec);
             }
         }
 
@@ -419,7 +378,7 @@ namespace GKCore
             {
                 GEDCOMRecord rec = fTree[i];
 
-                if (rec.RecordType == GEDCOMRecordType.rtSource && ((GEDCOMSourceRecord) rec).FiledByEntry == sourceName)
+                if (rec.RecordType == GEDCOMRecordType.rtSource && ((GEDCOMSourceRecord) rec).ShortTitle == sourceName)
                 {
                     result = (rec as GEDCOMSourceRecord);
                     break;
@@ -441,7 +400,7 @@ namespace GKCore
                 GEDCOMRecord rec = fTree[i];
                 if (rec is GEDCOMSourceRecord)
                 {
-                    sources.AddObject((rec as GEDCOMSourceRecord).FiledByEntry, rec);
+                    sources.AddObject((rec as GEDCOMSourceRecord).ShortTitle, rec);
                 }
             }
         }
@@ -570,6 +529,63 @@ namespace GKCore
         #endregion
 
         #region Name and sex functions
+
+        public static ICulture GetCultureByLang(GEDCOMLanguageID langID)
+        {
+            ICulture culture;
+            switch (langID) {
+                case GEDCOMLanguageID.Russian:
+                case GEDCOMLanguageID.Ukrainian:
+                case GEDCOMLanguageID.Kazakh:
+                    culture = new RussianCulture();
+                    break;
+
+                case GEDCOMLanguageID.Polish:
+                    culture = new PolishCulture();
+                    break;
+
+                case GEDCOMLanguageID.German:
+                    culture = new GermanCulture();
+                    break;
+
+                case GEDCOMLanguageID.Swedish:
+                    culture = new SwedishCulture();
+                    break;
+
+                case GEDCOMLanguageID.Icelandic:
+                    culture = new IcelandCulture();
+                    break;
+
+                case GEDCOMLanguageID.Armenian:
+                    culture = new ArmenianCulture();
+                    break;
+
+                case GEDCOMLanguageID.Turkish:
+                    culture = new TurkishCulture();
+                    break;
+
+                case GEDCOMLanguageID.French:
+                    culture = new FrenchCulture();
+                    break;
+
+                case GEDCOMLanguageID.Italian:
+                    culture = new ItalianCulture();
+                    break;
+
+                case GEDCOMLanguageID.Cantonese:
+                case GEDCOMLanguageID.Mandrin:
+                    culture = new ChineseCulture();
+                    break;
+
+                case GEDCOMLanguageID.English:
+                default:
+                    culture = new BritishCulture();
+                    break;
+            }
+
+            culture.Language = langID;
+            return culture;
+        }
 
         public string DefinePatronymic(string name, GEDCOMSex sex, bool confirm)
         {
@@ -1598,7 +1614,7 @@ namespace GKCore
                     if (child != null && family.AddChild(child)) {
                         // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
                         // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
-                        AppHost.NamesTable.ImportNames(child);
+                        ImportNames(child);
 
                         resultChild = child;
                     }

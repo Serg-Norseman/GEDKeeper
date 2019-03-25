@@ -60,6 +60,7 @@ namespace GKCore.Interfaces
         void CollectEventValues(GEDCOMCustomEvent evt);
         void CollectNameLangs(GEDCOMPersonalName persName);
         void CollectTips(StringList tipsList);
+        void ImportNames(GEDCOMIndividualRecord iRec);
         IList<ISearchResult> FindAll(GEDCOMRecordType recordType, string searchPattern);
 
         // Multimedia support

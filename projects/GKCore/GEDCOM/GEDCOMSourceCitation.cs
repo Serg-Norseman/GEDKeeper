@@ -24,11 +24,6 @@ namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMSourceCitation : GEDCOMPointer
     {
-        public bool IsPointer
-        {
-            get { return (!string.IsNullOrEmpty(XRef)); }
-        }
-
         public StringList Description
         {
             get {

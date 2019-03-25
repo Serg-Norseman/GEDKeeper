@@ -181,6 +181,14 @@ namespace GKCommon.GEDCOM
             f.RegisterTag(GEDCOMTagType.PLAC, GEDCOMPlace.Create);
             f.RegisterTag(GEDCOMTagType.TIME, GEDCOMTime.Create);
 
+            f.RegisterTag(GEDCOMTagType.ANCI, GEDCOMPointer.Create);
+            f.RegisterTag(GEDCOMTagType.BAPL, GEDCOMIndividualOrdinance.Create);
+            f.RegisterTag(GEDCOMTagType.CONL, GEDCOMIndividualOrdinance.Create);
+            f.RegisterTag(GEDCOMTagType.DESI, GEDCOMPointer.Create);
+            f.RegisterTag(GEDCOMTagType.ENDL, GEDCOMIndividualOrdinance.Create);
+            f.RegisterTag(GEDCOMTagType.SLGC, GEDCOMIndividualOrdinance.Create);
+            f.RegisterTag(GEDCOMTagType.SLGS, GEDCOMSpouseSealing.Create);
+
             f.RegisterTag("_LANG", GEDCOMLanguage.Create);
             f.RegisterTag(GEDCOMTagType._LOC, GEDCOMPointer.Create);
             f.RegisterTag(GEDCOMTagType._POSITION, GEDCOMCutoutPosition.Create);

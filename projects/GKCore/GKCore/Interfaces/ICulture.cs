@@ -33,6 +33,8 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface ICulture
     {
+        GEDCOMLanguageID Language { get; set; }
+
         bool HasPatronymic();
         bool HasSurname();
 

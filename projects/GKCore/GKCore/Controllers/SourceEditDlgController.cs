@@ -39,7 +39,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fModel.FiledByEntry = fView.ShortTitle.Text;
+                fModel.ShortTitle = fView.ShortTitle.Text;
                 fModel.Originator.Clear();
                 fModel.SetOriginatorArray(fView.Author.Lines);
                 fModel.Title.Clear();
@@ -62,7 +62,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.ShortTitle.Text = fModel.FiledByEntry;
+            fView.ShortTitle.Text = fModel.ShortTitle;
             fView.Author.Text = fModel.Originator.Text.Trim();
             fView.Title.Text = fModel.Title.Text.Trim();
             fView.Publication.Text = fModel.Publication.Text.Trim();

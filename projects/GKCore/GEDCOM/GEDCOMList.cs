@@ -75,18 +75,12 @@ namespace GKCommon.GEDCOM
             {
                 get { return fOwnList.fDataList[fIndex]; }
             }
-
-            GEDCOMObject IGEDCOMListEnumerator<T>.Owner
-            {
-                get { return fOwnList.fOwner; }
-            }
         }
 
         #endregion
 
 
         private List<T> fDataList; // lazy implementation
-        private GEDCOMObject fOwner;
         private bool fDisposed;
 
 
@@ -103,18 +97,10 @@ namespace GKCommon.GEDCOM
                 return ((fDataList == null) ? default(T) : fDataList[index]);
             }
         }
-
-        public GEDCOMObject Owner
-        {
-            get {
-                return fOwner;
-            }
-        }
         
 
         public GEDCOMList(GEDCOMObject owner)
         {
-            fOwner = owner;
             fDataList = null;
         }
 
@@ -255,8 +241,6 @@ namespace GKCommon.GEDCOM
 
         public void ResetOwner(GEDCOMTree newOwner)
         {
-            fOwner = newOwner;
-
             if (fDataList == null) return;
 
             int num = fDataList.Count;

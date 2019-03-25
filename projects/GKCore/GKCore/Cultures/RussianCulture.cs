@@ -21,25 +21,24 @@
 using System;
 using BSLib.Linguistics.Grammar;
 using GKCommon.GEDCOM;
-using GKCore.Interfaces;
 
 namespace GKCore.Cultures
 {
     /// <summary>
     /// 
     /// </summary>
-    public class RussianCulture : ICulture
+    public class RussianCulture : DefaultCulture
     {
         public RussianCulture()
         {
         }
 
-        public bool HasPatronymic()
+        public override bool HasPatronymic()
         {
             return true;
         }
 
-        public bool HasSurname()
+        public override bool HasSurname()
         {
             return true;
         }
@@ -53,7 +52,7 @@ namespace GKCore.Cultures
             return result;
         }
 
-        public string NormalizeSurname(string sn, bool aFemale)
+        public override string NormalizeSurname(string sn, bool aFemale)
         {
             if (string.IsNullOrEmpty(sn) || (sn[0] == '(' && sn[sn.Length - 1] == ')'))
             {
@@ -81,7 +80,7 @@ namespace GKCore.Cultures
         private const string CONSONANTS = "бвгджзклмнпрстфхцчшщ";
         private const string VOWELS = "абвгдежзиклмнопрстуфхцчшщьыъэюя";
 
-        public string GetMarriedSurname(string husbSurname)
+        public override string GetMarriedSurname(string husbSurname)
         {
             string res;
             if (string.IsNullOrEmpty(husbSurname)) {
@@ -111,7 +110,7 @@ namespace GKCore.Cultures
             return str.IndexOf(c) >= 0;
         }
 
-        public GEDCOMSex GetSex(string iName, string iPat, bool canQuery)
+        public override GEDCOMSex GetSex(string iName, string iPat, bool canQuery)
         {
             GEDCOMSex result = GEDCOMSex.svNone;
             if (string.IsNullOrEmpty(iName)) return result;
@@ -141,7 +140,7 @@ namespace GKCore.Cultures
             return result;
         }
 
-        public string[] GetSurnames(string surname, bool female)
+        public override string[] GetSurnames(string surname, bool female)
         {
             string[] result = new string[1];
 
@@ -171,7 +170,7 @@ namespace GKCore.Cultures
             return result;
         }
 
-        public string[] GetSurnames(GEDCOMIndividualRecord iRec)
+        public override string[] GetSurnames(GEDCOMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
@@ -182,7 +181,7 @@ namespace GKCore.Cultures
             return GetSurnames(parts.Surname, female);
         }
 
-        public string GetPossessiveName(GEDCOMIndividualRecord iRec)
+        public override string GetPossessiveName(GEDCOMIndividualRecord iRec)
         {
             var nameParts = GKUtils.GetNameParts(iRec);
             var gender = DeclGenders[(int)iRec.Sex];
@@ -216,7 +215,7 @@ namespace GKCore.Cultures
             return result;
         }
 
-        public string GetPossessiveName(string name)
+        public override string GetPossessiveName(string name)
         {
             // (genitive) "[the] sailor's / [of the] sailor"
             // (e.g. Сын моряка — художник – the sailor's son is an artist)

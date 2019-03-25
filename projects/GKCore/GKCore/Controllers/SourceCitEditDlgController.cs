@@ -82,7 +82,7 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             GEDCOMSourceRecord src = (fSourceCitation.Value as GEDCOMSourceRecord);
-            if (src != null) fView.Source.Text = src.FiledByEntry;
+            if (src != null) fView.Source.Text = src.ShortTitle;
 
             fView.Page.Text = fSourceCitation.Page;
             fView.Certainty.SelectedIndex = fSourceCitation.CertaintyAssessment;
@@ -96,7 +96,7 @@ namespace GKCore.Controllers
 
             fBase.Context.GetSourcesList(fSourcesList);
             RefreshSourcesList("");
-            fView.Source.Text = src.FiledByEntry;
+            fView.Source.Text = src.ShortTitle;
         }
 
         public override void Init(IBaseWindow baseWin)

@@ -438,7 +438,7 @@ namespace GKCore
 
         private static void PostProcessPerson(IBaseWindow baseWin, GEDCOMIndividualRecord indivRec)
         {
-            AppHost.NamesTable.ImportNames(indivRec);
+            baseWin.Context.ImportNames(indivRec);
 
             IListManager listMan = baseWin.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
             if (listMan == null) return;
@@ -814,7 +814,7 @@ namespace GKCore
                         break;
 
                     case GEDCOMRecordType.rtSource:
-                        msg = string.Format(LangMan.LS(LSID.LSID_SourceDeleteQuery), ((GEDCOMSourceRecord)record).FiledByEntry);
+                        msg = string.Format(LangMan.LS(LSID.LSID_SourceDeleteQuery), ((GEDCOMSourceRecord)record).ShortTitle);
                         break;
 
                     case GEDCOMRecordType.rtRepository:

@@ -427,7 +427,7 @@ namespace GKCore.Charts
                             GEDCOMIndividualRecord iFather = family.GetHusband();
                             GEDCOMIndividualRecord iMother = family.GetWife();
 
-                            bool divorced = (family.GetTagStringValue("_STAT") == "NOTMARR");
+                            bool divorced = (family.Status == GKMarriageStatus.MarrDivorced);
 
                             if (iFather != null && fBase.Context.IsRecordAccess(iFather.Restriction))
                             {

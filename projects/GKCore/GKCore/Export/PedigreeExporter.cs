@@ -447,7 +447,7 @@ namespace GKCore.Export
 
                     string srcName = GKUtils.MergeStrings(sourceRec.Title);
                     if (srcName == "") {
-                        srcName = sourceRec.FiledByEntry;
+                        srcName = sourceRec.ShortTitle;
                     }
 
                     int j = fSourceList.IndexOf(srcName);

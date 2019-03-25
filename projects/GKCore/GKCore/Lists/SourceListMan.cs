@@ -64,7 +64,7 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.FiledByEntry, QuickFilter));
+            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.ShortTitle, QuickFilter));
 
             res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
 
@@ -82,7 +82,7 @@ namespace GKCore.Lists
             switch ((SourceColumnType)colType)
             {
                 case SourceColumnType.ctShortName:
-                    result = fRec.FiledByEntry.Trim();
+                    result = fRec.ShortTitle.Trim();
                     break;
 
                 case SourceColumnType.ctAuthor:

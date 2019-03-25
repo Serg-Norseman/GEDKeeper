@@ -20,7 +20,6 @@
 
 using System;
 using System.IO;
-using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -81,8 +80,6 @@ namespace GKCommon.GEDCOM
 
         protected GEDCOMRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
-            fRecordType = GEDCOMRecordType.rtNone;
-
             fNotes = new GEDCOMList<GEDCOMNotes>(this);
             fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
             fMultimediaLinks = new GEDCOMList<GEDCOMMultimediaLink>(this);

@@ -79,7 +79,7 @@ namespace GKUI.Forms
 
             ClickButton("btnAccept", fDialog);
 
-            Assert.AreEqual("sample text", fSourceRecord.FiledByEntry);
+            Assert.AreEqual("sample text", fSourceRecord.ShortTitle);
             Assert.AreEqual("sample text", fSourceRecord.Originator.Text);
         }
     }

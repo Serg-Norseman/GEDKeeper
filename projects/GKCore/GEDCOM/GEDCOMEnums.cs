@@ -169,6 +169,7 @@ namespace GKCommon.GEDCOM
         public const string _PRIM = "_PRIM"; // [PhpGedView, AQ3, PAF5, FO7]
         public const string _PRIM_CUTOUT = "_PRIM_CUTOUT"; // [FTB]
         public const string _RELN = "_RELN"; // Religious Name [BKW6]
+        public const string _STAT = "_STAT";
         public const string _TRAVEL = "_TRAVEL";
         public const string _UID = "_UID"; // 
 

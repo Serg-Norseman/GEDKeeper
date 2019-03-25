@@ -28,17 +28,17 @@ namespace GKCommon.GEDCOM
     {
         private static readonly GEDCOMFactory fTagsFactory;
         
-        private GEDCOMList<GEDCOMPersonalName> fPersonalNames;
-        private GEDCOMList<GEDCOMIndividualOrdinance> fIndividualOrdinances;
-        private GEDCOMList<GEDCOMChildToFamilyLink> fChildToFamilyLinks;
-        private GEDCOMList<GEDCOMSpouseToFamilyLink> fSpouseToFamilyLinks;
-        private GEDCOMList<GEDCOMPointer> fSubmittors;
-        private GEDCOMList<GEDCOMAssociation> fAssociations;
         private GEDCOMList<GEDCOMAlias> fAliasses;
-        private GEDCOMList<GEDCOMPointer> fAncestorsInterest;
-        private GEDCOMList<GEDCOMPointer> fDescendantsInterest;
+        private GEDCOMList<GEDCOMAssociation> fAssociations;
+        private GEDCOMList<GEDCOMChildToFamilyLink> fChildToFamilyLinks;
         private GEDCOMList<GEDCOMPointer> fGroups;
+        private GEDCOMList<GEDCOMPersonalName> fPersonalNames;
+        private GEDCOMList<GEDCOMSpouseToFamilyLink> fSpouseToFamilyLinks;
 
+        public GEDCOMList<GEDCOMAlias> Aliases
+        {
+            get { return fAliasses; }
+        }
 
         public string AncestralFileNumber
         {
@@ -46,32 +46,9 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.AFN, value); }
         }
 
-        public string PermanentRecordFileNumber
+        public GEDCOMList<GEDCOMAssociation> Associations
         {
-            get { return GetTagStringValue(GEDCOMTagType.RFN); }
-            set { SetTagStringValue(GEDCOMTagType.RFN, value); }
-        }
-
-        public GEDCOMList<GEDCOMIndividualOrdinance> IndividualOrdinances
-        {
-            get { return fIndividualOrdinances; }
-        }
-
-        public GEDCOMList<GEDCOMPersonalName> PersonalNames
-        {
-            get { return fPersonalNames; }
-        }
-
-        public GEDCOMRestriction Restriction
-        {
-            get { return GEDCOMUtils.GetRestrictionVal(GetTagStringValue(GEDCOMTagType.RESN)); }
-            set { SetTagStringValue(GEDCOMTagType.RESN, GEDCOMUtils.GetRestrictionStr(value)); }
-        }
-
-        public GEDCOMSex Sex
-        {
-            get { return GEDCOMUtils.GetSexVal(GetTagStringValue(GEDCOMTagType.SEX)); }
-            set { SetTagStringValue(GEDCOMTagType.SEX, GEDCOMUtils.GetSexStr(value)); }
+            get { return fAssociations; }
         }
 
         public bool Bookmark
@@ -90,6 +67,16 @@ namespace GKCommon.GEDCOM
             }
         }
 
+        public GEDCOMList<GEDCOMChildToFamilyLink> ChildToFamilyLinks
+        {
+            get { return fChildToFamilyLinks; }
+        }
+
+        public GEDCOMList<GEDCOMPointer> Groups
+        {
+            get { return fGroups; }
+        }
+
         public bool Patriarch
         {
             get {
@@ -106,44 +93,26 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public GEDCOMList<GEDCOMChildToFamilyLink> ChildToFamilyLinks
+        public string PermanentRecordFileNumber
         {
-            get { return fChildToFamilyLinks; }
+            get { return GetTagStringValue(GEDCOMTagType.RFN); }
+            set { SetTagStringValue(GEDCOMTagType.RFN, value); }
+        }
+
+        public GEDCOMList<GEDCOMPersonalName> PersonalNames
+        {
+            get { return fPersonalNames; }
+        }
+
+        public GEDCOMSex Sex
+        {
+            get { return GEDCOMUtils.GetSexVal(GetTagStringValue(GEDCOMTagType.SEX)); }
+            set { SetTagStringValue(GEDCOMTagType.SEX, GEDCOMUtils.GetSexStr(value)); }
         }
 
         public GEDCOMList<GEDCOMSpouseToFamilyLink> SpouseToFamilyLinks
         {
             get { return fSpouseToFamilyLinks; }
-        }
-
-        public GEDCOMList<GEDCOMPointer> Submittors
-        {
-            get { return fSubmittors; }
-        }
-
-        public GEDCOMList<GEDCOMAssociation> Associations
-        {
-            get { return fAssociations; }
-        }
-
-        public GEDCOMList<GEDCOMAlias> Aliases
-        {
-            get { return fAliasses; }
-        }
-
-        public GEDCOMList<GEDCOMPointer> AncestorsInterest
-        {
-            get { return fAncestorsInterest; }
-        }
-
-        public GEDCOMList<GEDCOMPointer> DescendantsInterest
-        {
-            get { return fDescendantsInterest; }
-        }
-
-        public GEDCOMList<GEDCOMPointer> Groups
-        {
-            get { return fGroups; }
         }
 
 
@@ -152,31 +121,23 @@ namespace GKCommon.GEDCOM
             SetRecordType(GEDCOMRecordType.rtIndividual);
             SetName(GEDCOMTagType.INDI);
 
-            fPersonalNames = new GEDCOMList<GEDCOMPersonalName>(this);
-            fIndividualOrdinances = new GEDCOMList<GEDCOMIndividualOrdinance>(this);
-            fChildToFamilyLinks = new GEDCOMList<GEDCOMChildToFamilyLink>(this);
-            fSpouseToFamilyLinks = new GEDCOMList<GEDCOMSpouseToFamilyLink>(this);
-            fSubmittors = new GEDCOMList<GEDCOMPointer>(this);
-            fAssociations = new GEDCOMList<GEDCOMAssociation>(this);
             fAliasses = new GEDCOMList<GEDCOMAlias>(this);
-            fAncestorsInterest = new GEDCOMList<GEDCOMPointer>(this);
-            fDescendantsInterest = new GEDCOMList<GEDCOMPointer>(this);
+            fAssociations = new GEDCOMList<GEDCOMAssociation>(this);
+            fChildToFamilyLinks = new GEDCOMList<GEDCOMChildToFamilyLink>(this);
             fGroups = new GEDCOMList<GEDCOMPointer>(this);
+            fPersonalNames = new GEDCOMList<GEDCOMPersonalName>(this);
+            fSpouseToFamilyLinks = new GEDCOMList<GEDCOMSpouseToFamilyLink>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fPersonalNames.Dispose();
-                fIndividualOrdinances.Dispose();
-                fChildToFamilyLinks.Dispose();
-                fSpouseToFamilyLinks.Dispose();
-                fSubmittors.Dispose();
-                fAssociations.Dispose();
                 fAliasses.Dispose();
-                fAncestorsInterest.Dispose();
-                fDescendantsInterest.Dispose();
+                fAssociations.Dispose();
+                fChildToFamilyLinks.Dispose();
                 fGroups.Dispose();
+                fPersonalNames.Dispose();
+                fSpouseToFamilyLinks.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -192,58 +153,44 @@ namespace GKCommon.GEDCOM
             f.RegisterTag(GEDCOMTagType.ASSO, GEDCOMAssociation.Create);
             f.RegisterTag(GEDCOMTagType.ALIA, GEDCOMAlias.Create);
 
-            f.RegisterTag(GEDCOMTagType.BAPL, GEDCOMIndividualOrdinance.Create);
-            f.RegisterTag(GEDCOMTagType.CONL, GEDCOMIndividualOrdinance.Create);
-            f.RegisterTag(GEDCOMTagType.ENDL, GEDCOMIndividualOrdinance.Create);
-            f.RegisterTag(GEDCOMTagType.SLGC, GEDCOMIndividualOrdinance.Create);
-
-            // // //
-
-            f.RegisterTag(GEDCOMTagType.BIRT, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.CHR, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.DEAT, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.BURI, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.CREM, GEDCOMIndividualEvent.Create);
-
             f.RegisterTag(GEDCOMTagType.ADOP, GEDCOMIndividualEvent.Create);
             f.RegisterTag(GEDCOMTagType.BAPM, GEDCOMIndividualEvent.Create);
             f.RegisterTag(GEDCOMTagType.BARM, GEDCOMIndividualEvent.Create);
             f.RegisterTag(GEDCOMTagType.BASM, GEDCOMIndividualEvent.Create);
+            f.RegisterTag(GEDCOMTagType.BIRT, GEDCOMIndividualEvent.Create);
             f.RegisterTag(GEDCOMTagType.BLES, GEDCOMIndividualEvent.Create);
-
+            f.RegisterTag(GEDCOMTagType.BURI, GEDCOMIndividualEvent.Create);
+            f.RegisterTag(GEDCOMTagType.CENS, GEDCOMIndividualEvent.Create);
+            f.RegisterTag(GEDCOMTagType.CHR, GEDCOMIndividualEvent.Create);
             f.RegisterTag(GEDCOMTagType.CHRA, GEDCOMIndividualEvent.Create);
             f.RegisterTag(GEDCOMTagType.CONF, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.FCOM, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.ORDN, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.NATU, GEDCOMIndividualEvent.Create);
-
-            f.RegisterTag(GEDCOMTagType.EMIG, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.IMMI, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.CENS, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.PROB, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.WILL, GEDCOMIndividualEvent.Create);
-
-            f.RegisterTag(GEDCOMTagType.GRAD, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.RETI, GEDCOMIndividualEvent.Create);
+            f.RegisterTag(GEDCOMTagType.CREM, GEDCOMIndividualEvent.Create);
+            f.RegisterTag(GEDCOMTagType.DEAT, GEDCOMIndividualEvent.Create);
             f.RegisterTag(GEDCOMTagType.EVEN, GEDCOMIndividualEvent.Create);
-
+            f.RegisterTag(GEDCOMTagType.EMIG, GEDCOMIndividualEvent.Create);
+            f.RegisterTag(GEDCOMTagType.FCOM, GEDCOMIndividualEvent.Create);
+            f.RegisterTag(GEDCOMTagType.GRAD, GEDCOMIndividualEvent.Create);
+            f.RegisterTag(GEDCOMTagType.IMMI, GEDCOMIndividualEvent.Create);
+            f.RegisterTag(GEDCOMTagType.NATU, GEDCOMIndividualEvent.Create);
+            f.RegisterTag(GEDCOMTagType.ORDN, GEDCOMIndividualEvent.Create);
+            f.RegisterTag(GEDCOMTagType.PROB, GEDCOMIndividualEvent.Create);
+            f.RegisterTag(GEDCOMTagType.RETI, GEDCOMIndividualEvent.Create);
+            f.RegisterTag(GEDCOMTagType.WILL, GEDCOMIndividualEvent.Create);
 
             f.RegisterTag(GEDCOMTagType.CAST, GEDCOMIndividualAttribute.Create);
             f.RegisterTag(GEDCOMTagType.DSCR, GEDCOMIndividualAttribute.Create);
             f.RegisterTag(GEDCOMTagType.EDUC, GEDCOMIndividualAttribute.Create);
+            f.RegisterTag(GEDCOMTagType.FACT, GEDCOMIndividualAttribute.Create);
             f.RegisterTag(GEDCOMTagType.IDNO, GEDCOMIndividualAttribute.Create);
             f.RegisterTag(GEDCOMTagType.NATI, GEDCOMIndividualAttribute.Create);
-
             f.RegisterTag(GEDCOMTagType.NCHI, GEDCOMIndividualAttribute.Create);
             f.RegisterTag(GEDCOMTagType.NMR, GEDCOMIndividualAttribute.Create);
             f.RegisterTag(GEDCOMTagType.OCCU, GEDCOMIndividualAttribute.Create);
             f.RegisterTag(GEDCOMTagType.PROP, GEDCOMIndividualAttribute.Create);
             f.RegisterTag(GEDCOMTagType.RELI, GEDCOMIndividualAttribute.Create);
-
             f.RegisterTag(GEDCOMTagType.RESI, GEDCOMIndividualAttribute.Create);
             f.RegisterTag(GEDCOMTagType.SSN, GEDCOMIndividualAttribute.Create);
             f.RegisterTag(GEDCOMTagType.TITL, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType.FACT, GEDCOMIndividualAttribute.Create);
 
             f.RegisterTag(GEDCOMTagType._TRAVEL, GEDCOMIndividualAttribute.Create);
             f.RegisterTag(GEDCOMTagType._HOBBY, GEDCOMIndividualAttribute.Create);
@@ -254,8 +201,8 @@ namespace GKCommon.GEDCOM
             f.RegisterTag(GEDCOMTagType._MILI_RANK, GEDCOMIndividualAttribute.Create);
 
             f.RegisterTag(GEDCOMTagType._BGRO, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType._HAIR, GEDCOMIndividualAttribute.Create);
             f.RegisterTag(GEDCOMTagType._EYES, GEDCOMIndividualAttribute.Create);
+            f.RegisterTag(GEDCOMTagType._HAIR, GEDCOMIndividualAttribute.Create);
             f.RegisterTag(GEDCOMTagType._MDNA, GEDCOMIndividualAttribute.Create);
             f.RegisterTag(GEDCOMTagType._YDNA, GEDCOMIndividualAttribute.Create);
         }
@@ -276,18 +223,10 @@ namespace GKCommon.GEDCOM
                     result = fAssociations.Add(result as GEDCOMAssociation);
                 } else if (result is GEDCOMAlias) {
                     result = fAliasses.Add(result as GEDCOMAlias);
-                } else if (result is GEDCOMIndividualOrdinance) {
-                    result = fIndividualOrdinances.Add(result as GEDCOMIndividualOrdinance);
                 }
             } else {
                 if (tagName == GEDCOMTagType._GROUP) {
                     result = fGroups.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
-                } else if (tagName == GEDCOMTagType.SUBM) {
-                    result = fSubmittors.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
-                } else if (tagName == GEDCOMTagType.ANCI) {
-                    result = fAncestorsInterest.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
-                } else if (tagName == GEDCOMTagType.DESI) {
-                    result = fDescendantsInterest.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
                 } else {
                     result = base.AddTag(tagName, tagValue, tagConstructor);
                 }
@@ -342,23 +281,16 @@ namespace GKCommon.GEDCOM
             }
             fGroups.Clear();
 
-            fPersonalNames.Clear();
-            fIndividualOrdinances.Clear();
-            fSubmittors.Clear();
-            fAssociations.Clear();
             fAliasses.Clear();
-            fAncestorsInterest.Clear();
-            fDescendantsInterest.Clear();
+            fAssociations.Clear();
+            fPersonalNames.Clear();
         }
 
         public override bool IsEmpty()
         {
             return base.IsEmpty() && fPersonalNames.Count == 0
-                && fIndividualOrdinances.Count == 0 && fChildToFamilyLinks.Count == 0
-                && fSpouseToFamilyLinks.Count == 0 && fSubmittors.Count == 0
-                && fAssociations.Count == 0 && fAliasses.Count == 0
-                && fAncestorsInterest.Count == 0 && fDescendantsInterest.Count == 0
-                && fGroups.Count == 0;
+                && fChildToFamilyLinks.Count == 0 && fSpouseToFamilyLinks.Count == 0
+                && fAssociations.Count == 0 && fAliasses.Count == 0 && fGroups.Count == 0;
         }
 
         public int IndexOfGroup(GEDCOMGroupRecord groupRec)
@@ -489,18 +421,6 @@ namespace GKCommon.GEDCOM
                 toRec.SpouseToFamilyLinks.Add(stfLink);
             }
 
-            while (fIndividualOrdinances.Count > 0) {
-                GEDCOMIndividualOrdinance ord = fIndividualOrdinances.Extract(0);
-                ord.ResetParent(toRec);
-                toRec.IndividualOrdinances.Add(ord);
-            }
-
-            while (fSubmittors.Count > 0) {
-                GEDCOMPointer obj = fSubmittors.Extract(0);
-                obj.ResetParent(toRec);
-                toRec.Submittors.Add(obj);
-            }
-
             while (fAssociations.Count > 0) {
                 GEDCOMAssociation obj = fAssociations.Extract(0);
                 obj.ResetParent(toRec);
@@ -511,18 +431,6 @@ namespace GKCommon.GEDCOM
                 GEDCOMAlias obj = fAliasses.Extract(0);
                 obj.ResetParent(toRec);
                 toRec.Aliases.Add(obj);
-            }
-
-            while (fAncestorsInterest.Count > 0) {
-                GEDCOMPointer obj = fAncestorsInterest.Extract(0);
-                obj.ResetParent(toRec);
-                toRec.AncestorsInterest.Add(obj);
-            }
-
-            while (fDescendantsInterest.Count > 0) {
-                GEDCOMPointer obj = fDescendantsInterest.Extract(0);
-                obj.ResetParent(toRec);
-                toRec.DescendantsInterest.Add(obj);
             }
 
             while (fGroups.Count > 0) {
@@ -536,48 +444,36 @@ namespace GKCommon.GEDCOM
         {
             base.Pack();
 
-            fPersonalNames.Pack();
-            fChildToFamilyLinks.Pack();
-            fSpouseToFamilyLinks.Pack();
-            fIndividualOrdinances.Pack();
-            fSubmittors.Pack();
-            fAssociations.Pack();
             fAliasses.Pack();
-            fAncestorsInterest.Pack();
-            fDescendantsInterest.Pack();
+            fAssociations.Pack();
+            fChildToFamilyLinks.Pack();
             fGroups.Pack();
+            fPersonalNames.Pack();
+            fSpouseToFamilyLinks.Pack();
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
         {
             base.ReplaceXRefs(map);
 
-            fPersonalNames.ReplaceXRefs(map);
-            fChildToFamilyLinks.ReplaceXRefs(map);
-            fSpouseToFamilyLinks.ReplaceXRefs(map);
-            fIndividualOrdinances.ReplaceXRefs(map);
-            fSubmittors.ReplaceXRefs(map);
-            fAssociations.ReplaceXRefs(map);
             fAliasses.ReplaceXRefs(map);
-            fAncestorsInterest.ReplaceXRefs(map);
-            fDescendantsInterest.ReplaceXRefs(map);
+            fAssociations.ReplaceXRefs(map);
+            fChildToFamilyLinks.ReplaceXRefs(map);
             fGroups.ReplaceXRefs(map);
+            fPersonalNames.ReplaceXRefs(map);
+            fSpouseToFamilyLinks.ReplaceXRefs(map);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
 
-            fPersonalNames.ResetOwner(newOwner);
-            fChildToFamilyLinks.ResetOwner(newOwner);
-            fSpouseToFamilyLinks.ResetOwner(newOwner);
-            fIndividualOrdinances.ResetOwner(newOwner);
-            fSubmittors.ResetOwner(newOwner);
-            fAssociations.ResetOwner(newOwner);
             fAliasses.ResetOwner(newOwner);
-            fAncestorsInterest.ResetOwner(newOwner);
-            fDescendantsInterest.ResetOwner(newOwner);
+            fAssociations.ResetOwner(newOwner);
+            fChildToFamilyLinks.ResetOwner(newOwner);
             fGroups.ResetOwner(newOwner);
+            fPersonalNames.ResetOwner(newOwner);
+            fSpouseToFamilyLinks.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)
@@ -588,12 +484,8 @@ namespace GKCommon.GEDCOM
             fChildToFamilyLinks.SaveToStream(stream);
             fSpouseToFamilyLinks.SaveToStream(stream);
             Events.SaveToStream(stream); // for files content compatibility
-            fIndividualOrdinances.SaveToStream(stream);
-            fSubmittors.SaveToStream(stream);
             fAssociations.SaveToStream(stream);
             fAliasses.SaveToStream(stream);
-            fAncestorsInterest.SaveToStream(stream);
-            fDescendantsInterest.SaveToStream(stream);
             fGroups.SaveToStream(stream);
         }
 

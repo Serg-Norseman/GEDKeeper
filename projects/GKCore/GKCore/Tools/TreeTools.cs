@@ -368,7 +368,7 @@ namespace GKCore.Tools
                     iRec.SpouseToFamilyLinks.DeleteAt(i);
             }
 
-            AppHost.NamesTable.ImportNames(iRec);
+            baseContext.ImportNames(iRec);
         }
 
         private static void CheckRecord_Family(GEDCOMTree tree, GEDCOMFormat format, GEDCOMFamilyRecord fam,
@@ -1116,7 +1116,7 @@ namespace GKCore.Tools
             GEDCOMRecord wife = fRec.Wife.Value;
 
             bool empty = (fRec.Notes.Count == 0 && fRec.SourceCitations.Count == 0 && fRec.MultimediaLinks.Count == 0 && fRec.UserReferences.Count == 0);
-            empty = empty && (fRec.Events.Count == 0 && fRec.Children.Count == 0 && fRec.SpouseSealings.Count == 0);
+            empty = empty && (fRec.Events.Count == 0 && fRec.Children.Count == 0);
             empty = empty && (husb == null && wife == null);
 
             if (empty) {
@@ -1325,12 +1325,6 @@ namespace GKCore.Tools
                 CheckRelations_CheckTag(splitList, iRec.Events[i]);
             }
 
-            int num4 = iRec.IndividualOrdinances.Count;
-            for (int i = 0; i < num4; i++)
-            {
-                CheckRelations_CheckTag(splitList, iRec.IndividualOrdinances[i]);
-            }
-
             int num5 = iRec.Submittors.Count;
             for (int i = 0; i < num5; i++)
             {
@@ -1349,18 +1343,6 @@ namespace GKCore.Tools
                 CheckRelations_AddRel(splitList, iRec.Aliases[i].Value);
             }
 
-            int num8 = iRec.AncestorsInterest.Count;
-            for (int i = 0; i < num8; i++)
-            {
-                CheckRelations_AddRel(splitList, iRec.AncestorsInterest[i].Value);
-            }
-
-            int num9 = iRec.DescendantsInterest.Count;
-            for (int i = 0; i < num9; i++)
-            {
-                CheckRelations_AddRel(splitList, iRec.DescendantsInterest[i].Value);
-            }
-
             int num10 = iRec.Groups.Count;
             for (int i = 0; i < num10; i++)
             {
@@ -1377,12 +1359,11 @@ namespace GKCore.Tools
             {
                 CheckRelations_CheckTag(splitList, fRec.Events[i]);
             }
-            CheckRelations_AddRel(splitList, fRec.Submitter.Value);
 
-            int num2 = fRec.SpouseSealings.Count;
-            for (int i = 0; i < num2; i++)
+            int num5 = fRec.Submittors.Count;
+            for (int i = 0; i < num5; i++)
             {
-                CheckRelations_CheckTag(splitList, fRec.SpouseSealings[i]);
+                CheckRelations_AddRel(splitList, fRec.Submittors[i].Value);
             }
         }
 

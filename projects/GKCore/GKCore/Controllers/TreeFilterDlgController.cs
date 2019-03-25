@@ -88,7 +88,7 @@ namespace GKCore.Controllers
             for (int i = 0; i < num; i++) {
                 GEDCOMRecord rec = tree[i];
                 if (rec.RecordType == GEDCOMRecordType.rtSource) {
-                    values.AddObject((rec as GEDCOMSourceRecord).FiledByEntry, rec);
+                    values.AddObject((rec as GEDCOMSourceRecord).ShortTitle, rec);
                 }
             }
             values.Sort();
@@ -123,7 +123,7 @@ namespace GKCore.Controllers
                 fView.SourceCombo.SelectedIndex = (sbyte)fFilter.SourceMode;
             } else {
                 GEDCOMSourceRecord srcRec = fBase.Context.Tree.XRefIndex_Find(fFilter.SourceRef) as GEDCOMSourceRecord;
-                if (srcRec != null) fView.SourceCombo.Text = srcRec.FiledByEntry;
+                if (srcRec != null) fView.SourceCombo.Text = srcRec.ShortTitle;
             }
         }
 

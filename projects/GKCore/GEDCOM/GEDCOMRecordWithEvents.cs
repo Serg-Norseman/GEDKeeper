@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.IO;
 using BSLib.Calendar;
 
 namespace GKCommon.GEDCOM
@@ -26,35 +27,71 @@ namespace GKCommon.GEDCOM
     public abstract class GEDCOMRecordWithEvents : GEDCOMRecord, IGEDCOMRecordWithEvents
     {
         private GEDCOMList<GEDCOMCustomEvent> fEvents;
+        private GEDCOMRestriction fRestriction;
+        private GEDCOMList<GEDCOMPointer> fSubmittors;
+
 
         public GEDCOMList<GEDCOMCustomEvent> Events
         {
             get { return fEvents; }
         }
 
+        public GEDCOMRestriction Restriction
+        {
+            get { return fRestriction; }
+            set { fRestriction = value; }
+        }
+
+        public GEDCOMList<GEDCOMPointer> Submittors
+        {
+            get { return fSubmittors; }
+        }
+
 
         protected GEDCOMRecordWithEvents(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
         {
             fEvents = new GEDCOMList<GEDCOMCustomEvent>(this);
+            fSubmittors = new GEDCOMList<GEDCOMPointer>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
                 fEvents.Dispose();
+                fSubmittors.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
+        {
+            GEDCOMTag result;
+
+            if (tagName == GEDCOMTagType.RESN) {
+                fRestriction = GEDCOMUtils.GetRestrictionVal(tagValue);
+                result = null;
+            } else if (tagName == GEDCOMTagType.SUBM) {
+                result = fSubmittors.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
+            } else {
+                result = base.AddTag(tagName, tagValue, tagConstructor);
+            }
+
+            return result;
         }
 
         public override void Clear()
         {
             base.Clear();
+
             fEvents.Clear();
+            fRestriction = GEDCOMRestriction.rnNone;
+            fSubmittors.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fEvents.Count == 0);
+            // Restrictions are not checked because they are not important if other fields are empty.
+            return base.IsEmpty() && (fEvents.Count == 0) && (fSubmittors.Count == 0);
         }
 
         public override void Assign(GEDCOMTag source)
@@ -65,12 +102,13 @@ namespace GKCommon.GEDCOM
 
             base.Assign(source);
 
-            foreach (GEDCOMCustomEvent sourceEvent in sourceRec.fEvents)
-            {
+            foreach (GEDCOMCustomEvent sourceEvent in sourceRec.fEvents) {
                 GEDCOMCustomEvent copy = (GEDCOMCustomEvent)Activator.CreateInstance(sourceEvent.GetType(), new object[] { Owner, this, "", "" });
                 copy.Assign(sourceEvent);
                 AddEvent(copy);
             }
+
+            fRestriction = sourceRec.Restriction;
         }
 
         public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
@@ -86,24 +124,43 @@ namespace GKCommon.GEDCOM
                 obj.ResetParent(target);
                 target.AddEvent(obj);
             }
+
+            target.Restriction = fRestriction;
+
+            while (fSubmittors.Count > 0) {
+                GEDCOMPointer obj = fSubmittors.Extract(0);
+                obj.ResetParent(target);
+                target.Submittors.Add(obj);
+            }
         }
 
         public override void Pack()
         {
             base.Pack();
             fEvents.Pack();
+            fSubmittors.Pack();
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
         {
             base.ReplaceXRefs(map);
             fEvents.ReplaceXRefs(map);
+            fSubmittors.ReplaceXRefs(map);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
         {
             base.ResetOwner(newOwner);
             fEvents.ResetOwner(newOwner);
+            fSubmittors.ResetOwner(newOwner);
+        }
+
+        public override void SaveToStream(StreamWriter stream)
+        {
+            base.SaveToStream(stream);
+
+            WriteTagLine(stream, Level + 1, GEDCOMTagType.RESN, GEDCOMUtils.GetRestrictionStr(fRestriction), true);
+            fSubmittors.SaveToStream(stream);
         }
 
         public GEDCOMCustomEvent FindEvent(string eventName)

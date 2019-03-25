@@ -511,7 +511,7 @@ namespace GKCore
         public object gt_create_source(string name)
         {
             GEDCOMSourceRecord srcRec = fBase.Context.Tree.CreateSource();
-            srcRec.FiledByEntry = name;
+            srcRec.ShortTitle = name;
             return srcRec;
         }
 

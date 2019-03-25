@@ -240,20 +240,14 @@ namespace GKCommon.GEDCOM
                 
                 iOrd.BaptismDateStatus = GEDCOMBaptismDateStatus.bdsCompleted;
                 Assert.AreEqual(GEDCOMBaptismDateStatus.bdsCompleted, iOrd.BaptismDateStatus);
-                
-                Assert.IsNotNull(iOrd.BaptismChangeDate);
-                
+
                 iOrd.EndowmentDateStatus = GEDCOMEndowmentDateStatus.edsExcluded;
                 Assert.AreEqual(GEDCOMEndowmentDateStatus.edsExcluded, iOrd.EndowmentDateStatus);
-                
-                Assert.IsNotNull(iOrd.EndowmentChangeDate);
                 
                 Assert.IsNotNull(iOrd.Family);
                 
                 iOrd.ChildSealingDateStatus = GEDCOMChildSealingDateStatus.cdsPre1970;
                 Assert.AreEqual(GEDCOMChildSealingDateStatus.cdsPre1970, iOrd.ChildSealingDateStatus);
-                
-                Assert.IsNotNull(iOrd.ChildSealingChangeDate);
                 
                 Assert.IsNotNull(iOrd.DateStatus);
             }
@@ -276,8 +270,6 @@ namespace GKCommon.GEDCOM
 
                 spouseSealing.SpouseSealingDateStatus = GEDCOMSpouseSealingDateStatus.sdsCanceled;
                 Assert.AreEqual(GEDCOMSpouseSealingDateStatus.sdsCanceled, spouseSealing.SpouseSealingDateStatus);
-
-                Assert.IsNotNull(spouseSealing.SpouseSealingChangeDate);
 
                 Assert.IsNotNull(spouseSealing.DateStatus);
             }
@@ -1233,10 +1225,7 @@ namespace GKCommon.GEDCOM
             GEDCOMRecordTest(indiRec);
 
             Assert.IsNotNull(indiRec.Aliases);
-            Assert.IsNotNull(indiRec.AncestorsInterest);
             Assert.IsNotNull(indiRec.Associations);
-            Assert.IsNotNull(indiRec.DescendantsInterest);
-            Assert.IsNotNull(indiRec.IndividualOrdinances);
             Assert.IsNotNull(indiRec.Submittors);
             Assert.IsNotNull(indiRec.UserReferences); // for GEDCOMRecord
 
@@ -1353,9 +1342,6 @@ namespace GKCommon.GEDCOM
 
                 indi.AddAssociation("test", ind);
                 indi.Aliases.Add(new GEDCOMAlias(fContext.Tree, indi, "", ""));
-                indi.IndividualOrdinances.Add(new GEDCOMIndividualOrdinance(fContext.Tree, indi, "", ""));
-                indi.AncestorsInterest.Add(new GEDCOMPointer(fContext.Tree, indi, "", ""));
-                indi.DescendantsInterest.Add(new GEDCOMPointer(fContext.Tree, indi, "", ""));
                 indi.Submittors.Add(new GEDCOMPointer(fContext.Tree, indi, "", ""));
 
                 using (GEDCOMIndividualRecord indi3 = new GEDCOMIndividualRecord(fContext.Tree, fContext.Tree)) {
@@ -1646,8 +1632,6 @@ namespace GKCommon.GEDCOM
             GEDCOMObject obj2 = new GEDCOMObject();
 
             using (GEDCOMList<GEDCOMObject> list = new GEDCOMList<GEDCOMObject>(null)) {
-                Assert.IsNull(list.Owner);
-
                 // internal list is null (all routines instant returned)
                 list.Delete(null);
                 list.Exchange(0, 1);
@@ -1859,25 +1843,15 @@ namespace GKCommon.GEDCOM
                 Assert.AreEqual(1, famRec.Events.Count);
                 Assert.AreEqual(evt, famRec.FindEvent(GEDCOMTagType.MARR));
 
-                GEDCOMSpouseSealing sps = famRec.SpouseSealings.Add(new GEDCOMSpouseSealing(fContext.Tree, fContext.Tree, "", ""));
-                Assert.AreEqual(1, famRec.SpouseSealings.Count);
-                Assert.AreEqual(sps, famRec.SpouseSealings[0]);
-
                 using (GEDCOMFamilyRecord famRec2 = new GEDCOMFamilyRecord(fContext.Tree, fContext.Tree))
                 {
                     Assert.AreEqual(0, famRec2.Events.Count);
                     Assert.AreEqual(null, famRec2.FindEvent(GEDCOMTagType.MARR));
 
-                    Assert.AreEqual(0, famRec2.SpouseSealings.Count);
-                    Assert.AreEqual(null, famRec2.SpouseSealings[0]);
-
                     famRec.MoveTo(famRec2, false);
 
                     Assert.AreEqual(1, famRec2.Events.Count);
                     Assert.AreEqual(evt, famRec2.FindEvent(GEDCOMTagType.MARR));
-
-                    Assert.AreEqual(1, famRec2.SpouseSealings.Count);
-                    Assert.AreEqual(sps, famRec2.SpouseSealings[0]);
                 }
 
                 famRec.ResetOwner(fContext.Tree);
@@ -1887,8 +1861,7 @@ namespace GKCommon.GEDCOM
 
         private static void GEDCOMFamilyRecordTest(GEDCOMFamilyRecord famRec, GEDCOMIndividualRecord indiv)
         {
-            Assert.IsNotNull(famRec.Submitter);
-            Assert.IsNotNull(famRec.SpouseSealings);
+            Assert.IsNotNull(famRec.Submittors);
 
             famRec.Restriction = GEDCOMRestriction.rnLocked;
             Assert.AreEqual(GEDCOMRestriction.rnLocked, famRec.Restriction);
@@ -1901,7 +1874,6 @@ namespace GKCommon.GEDCOM
             famRec.DeleteTag(GEDCOMTagType.CHAN);
             string buf = TestUtils.GetTagStreamText(famRec);
             Assert.AreEqual("0 @F1@ FAM\r\n"+
-                            "1 SUBM\r\n"+
                             "1 RESN locked\r\n"+
                             "1 CHIL @I1@\r\n", buf);
 
@@ -2007,8 +1979,8 @@ namespace GKCommon.GEDCOM
                     Assert.AreEqual(100.0f, src1.IsMatch(src2, new MatchParams()));
 
                     // filled records
-                    src1.FiledByEntry = "test source";
-                    src2.FiledByEntry = "test source";
+                    src1.ShortTitle = "test source";
+                    src2.ShortTitle = "test source";
                     Assert.AreEqual(100.0f, src1.IsMatch(src2, new MatchParams()));
                 }
 
@@ -2022,13 +1994,13 @@ namespace GKCommon.GEDCOM
                 Assert.Throws(typeof(ArgumentException), () => { src1.MoveTo(null, false); });
 
                 // fill the record
-                src1.FiledByEntry = "test source";
+                src1.ShortTitle = "test source";
                 src1.Title = new StringList("test title");
                 src1.Originator = new StringList("test author");
                 src1.Publication = new StringList("test publ");
                 src1.Text = new StringList("test text");
 
-                Assert.AreEqual("test source", src1.FiledByEntry);
+                Assert.AreEqual("test source", src1.ShortTitle);
                 Assert.AreEqual("test title", src1.Title.Text);
                 Assert.AreEqual("test author", src1.Originator.Text);
                 Assert.AreEqual("test publ", src1.Publication.Text);
@@ -2041,13 +2013,13 @@ namespace GKCommon.GEDCOM
 
                 using (GEDCOMSourceRecord src2 = new GEDCOMSourceRecord(tree, tree))
                 {
-                    src2.FiledByEntry = "test source 2"; // title isn't replaced
+                    src2.ShortTitle = "test source 2"; // title isn't replaced
 
                     Assert.AreEqual(0, src2.RepositoryCitations.Count);
 
                     src1.MoveTo(src2, false);
 
-                    Assert.AreEqual("test source 2", src2.FiledByEntry);
+                    Assert.AreEqual("test source 2", src2.ShortTitle);
 
                     Assert.AreEqual("test title", src2.Title.Text);
                     Assert.AreEqual("test author", src2.Originator.Text);
@@ -2063,8 +2035,8 @@ namespace GKCommon.GEDCOM
         {
             Assert.IsNotNull(sourRec.Data);
             
-            sourRec.FiledByEntry = "This is test source";
-            Assert.AreEqual("This is test source", sourRec.FiledByEntry);
+            sourRec.ShortTitle = "This is test source";
+            Assert.AreEqual("This is test source", sourRec.ShortTitle);
 
             //
             sourRec.Originator = new StringList("author");

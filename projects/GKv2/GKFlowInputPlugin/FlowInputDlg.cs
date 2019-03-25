@@ -304,7 +304,7 @@ namespace GKFlowInputPlugin
                 srcRec = fBase.Context.FindSource(srcName);
                 if (srcRec == null) {
                     srcRec = fBase.Context.Tree.CreateSource();
-                    srcRec.FiledByEntry = srcName;
+                    srcRec.ShortTitle = srcName;
                 }
             }
 

@@ -45,7 +45,7 @@ namespace GKCommon.GEDCOM
             set { SetTagStrings(TagClass(GEDCOMTagType.TITL, GEDCOMTag.Create), value); }
         }
 
-        public string FiledByEntry
+        public string ShortTitle
         {
             get { return GetTagStringValue(GEDCOMTagType.ABBR); }
             set { SetTagStringValue(GEDCOMTagType.ABBR, value); }
@@ -57,15 +57,15 @@ namespace GKCommon.GEDCOM
             set { SetTagStrings(TagClass(GEDCOMTagType.PUBL, GEDCOMTag.Create), value); }
         }
 
+        public GEDCOMList<GEDCOMRepositoryCitation> RepositoryCitations
+        {
+            get { return fRepositoryCitations; }
+        }
+
         public StringList Text
         {
             get { return GetTagStrings(TagClass(GEDCOMTagType.TEXT, GEDCOMTag.Create)); }
             set { SetTagStrings(TagClass(GEDCOMTagType.TEXT, GEDCOMTag.Create), value); }
-        }
-
-        public GEDCOMList<GEDCOMRepositoryCitation> RepositoryCitations
-        {
-            get { return fRepositoryCitations; }
         }
 
 
@@ -207,7 +207,7 @@ namespace GKCommon.GEDCOM
             GEDCOMSourceRecord otherSource = tag as GEDCOMSourceRecord;
             if (otherSource == null) return 0.0f;
 
-            float match = GetStrMatch(FiledByEntry, otherSource.FiledByEntry, matchParams);
+            float match = GetStrMatch(ShortTitle, otherSource.ShortTitle, matchParams);
             return match;
         }
 

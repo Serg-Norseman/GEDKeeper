@@ -18,10 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.IO;
+
 namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMAssociation : GEDCOMPointerWithNotes
     {
+        private string fRelation;
         private GEDCOMList<GEDCOMSourceCitation> fSourceCitations;
 
         public GEDCOMIndividualRecord Individual
@@ -32,8 +36,8 @@ namespace GKCommon.GEDCOM
 
         public string Relation
         {
-            get { return GetTagStringValue(GEDCOMTagType.RELA); }
-            set { SetTagStringValue(GEDCOMTagType.RELA, value); }
+            get { return fRelation; }
+            set { fRelation = value; }
         }
 
         public GEDCOMList<GEDCOMSourceCitation> SourceCitations
@@ -69,7 +73,10 @@ namespace GKCommon.GEDCOM
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
         {
             GEDCOMTag result;
-            if (tagName == GEDCOMTagType.SOUR) {
+            if (tagName == GEDCOMTagType.RELA) {
+                fRelation = tagValue;
+                result = null;
+            } else if (tagName == GEDCOMTagType.SOUR) {
                 result = fSourceCitations.Add(new GEDCOMSourceCitation(Owner, this, tagName, tagValue));
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
@@ -81,11 +88,12 @@ namespace GKCommon.GEDCOM
         {
             base.Clear();
             fSourceCitations.Clear();
+            fRelation = string.Empty;
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fSourceCitations.Count == 0;
+            return base.IsEmpty() && string.IsNullOrEmpty(fRelation) && (fSourceCitations.Count == 0);
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
@@ -98,6 +106,24 @@ namespace GKCommon.GEDCOM
         {
             base.ResetOwner(newOwner);
             fSourceCitations.ResetOwner(newOwner);
+        }
+
+        public override void SaveToStream(StreamWriter stream)
+        {
+            base.SaveToStream(stream);
+            WriteTagLine(stream, Level + 1, GEDCOMTagType.RELA, fRelation, true);
+            fSourceCitations.SaveToStream(stream);
+        }
+
+        public override void Assign(GEDCOMTag source)
+        {
+            GEDCOMAssociation srcAsso = (source as GEDCOMAssociation);
+            if (srcAsso == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(source);
+
+            fRelation = srcAsso.fRelation;
         }
     }
 }

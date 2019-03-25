@@ -64,7 +64,7 @@ namespace GKCommon.GEDCOM
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && Count == 0 && fNotes.Count == 0;
+            return base.IsEmpty() && (fNotes.Count == 0);
         }
 
         public override void ReplaceXRefs(XRefReplacer map)

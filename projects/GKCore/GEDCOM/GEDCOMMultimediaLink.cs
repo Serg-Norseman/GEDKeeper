@@ -34,11 +34,6 @@ namespace GKCommon.GEDCOM
             get { return fFileReferences; }
         }
 
-        public bool IsPointer
-        {
-            get { return (!string.IsNullOrEmpty(XRef)); }
-        }
-
         public string Title
         {
             get { return GetTagStringValue(GEDCOMTagType.TITL); }

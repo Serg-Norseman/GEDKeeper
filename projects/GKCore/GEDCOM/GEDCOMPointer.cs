@@ -24,6 +24,12 @@ namespace GKCommon.GEDCOM
     {
         private string fXRef;
 
+
+        public bool IsPointer
+        {
+            get { return (!string.IsNullOrEmpty(fXRef)); }
+        }
+
         // TODO: need to do a protection test on the proper records (with XRef)
         public GEDCOMRecord Value
         {

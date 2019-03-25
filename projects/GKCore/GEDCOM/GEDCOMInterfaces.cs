@@ -24,10 +24,6 @@ namespace GKCommon.GEDCOM
 {
     public interface IGEDCOMListEnumerator<T> : IEnumerator<T>
     {
-        GEDCOMObject Owner
-        {
-            get;
-        }
     }
 
     public interface IGEDCOMTreeEnumerator

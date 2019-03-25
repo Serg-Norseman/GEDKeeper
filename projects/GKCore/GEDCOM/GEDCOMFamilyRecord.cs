@@ -20,7 +20,6 @@
 
 using System;
 using System.IO;
-
 using BSLib.Calendar;
 
 namespace GKCommon.GEDCOM
@@ -28,8 +27,10 @@ namespace GKCommon.GEDCOM
     public sealed class GEDCOMFamilyRecord : GEDCOMRecordWithEvents
     {
         private static readonly GEDCOMFactory fTagsFactory;
+
         private GEDCOMList<GEDCOMPointer> fChildren;
-        private GEDCOMList<GEDCOMSpouseSealing> fSpouseSealings;
+        private GKMarriageStatus fStatus;
+
 
         public GEDCOMList<GEDCOMPointer> Children
         {
@@ -46,26 +47,10 @@ namespace GKCommon.GEDCOM
             get { return TagClass(GEDCOMTagType.WIFE, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
-        public GEDCOMPointer Submitter
-        {
-            get { return TagClass(GEDCOMTagType.SUBM, GEDCOMPointer.Create) as GEDCOMPointer; }
-        }
-
-        public GEDCOMRestriction Restriction
-        {
-            get { return GEDCOMUtils.GetRestrictionVal(GetTagStringValue(GEDCOMTagType.RESN)); }
-            set { SetTagStringValue(GEDCOMTagType.RESN, GEDCOMUtils.GetRestrictionStr(value)); }
-        }
-
-        public GEDCOMList<GEDCOMSpouseSealing> SpouseSealings
-        {
-            get { return fSpouseSealings; }
-        }
-
         public GKMarriageStatus Status
         {
-            get { return GEDCOMUtils.GetMarriageStatusVal(GetTagStringValue("_STAT")); }
-            set { SetTagStringValue("_STAT", GEDCOMUtils.GetMarriageStatusStr(value)); }
+            get { return fStatus; }
+            set { fStatus = value; }
         }
 
 
@@ -75,14 +60,12 @@ namespace GKCommon.GEDCOM
             SetName(GEDCOMTagType.FAM);
 
             fChildren = new GEDCOMList<GEDCOMPointer>(this);
-            fSpouseSealings = new GEDCOMList<GEDCOMSpouseSealing>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
                 fChildren.Dispose();
-                fSpouseSealings.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -101,8 +84,6 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMFactory f = new GEDCOMFactory();
             fTagsFactory = f;
-
-            f.RegisterTag(GEDCOMTagType.SLGS, GEDCOMSpouseSealing.Create);
 
             f.RegisterTag(GEDCOMTagType.ANUL, GEDCOMFamilyEvent.Create);
             f.RegisterTag(GEDCOMTagType.CENS, GEDCOMFamilyEvent.Create);
@@ -126,14 +107,15 @@ namespace GKCommon.GEDCOM
                 result = base.AddTag(tagName, tagValue, GEDCOMPointer.Create);
             } else if (tagName == GEDCOMTagType.CHIL) {
                 result = fChildren.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
+            } else if (tagName == GEDCOMTagType._STAT) {
+                fStatus = GEDCOMUtils.GetMarriageStatusVal(tagValue);
+                result = null;
             } else {
                 result = fTagsFactory.CreateTag(Owner, this, tagName, tagValue);
 
                 if (result != null) {
                     if (result is GEDCOMFamilyEvent) {
                         result = AddEvent(result as GEDCOMFamilyEvent);
-                    } else if (result is GEDCOMSpouseSealing) {
-                        result = fSpouseSealings.Add(result as GEDCOMSpouseSealing);
                     }
                 } else {
                     result = base.AddTag(tagName, tagValue, tagConstructor);
@@ -172,12 +154,13 @@ namespace GKCommon.GEDCOM
             }
             fChildren.Clear();
 
-            fSpouseSealings.Clear();
+            fStatus = GKMarriageStatus.Unknown;
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fChildren.Count == 0 && fSpouseSealings.Count == 0;
+            // Status are not checked because they are not important if other fields are empty.
+            return base.IsEmpty() && (fChildren.Count == 0);
         }
 
         public void DeleteChild(GEDCOMRecord childRec)
@@ -204,6 +187,15 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
+        public override void Assign(GEDCOMTag source)
+        {
+            GEDCOMFamilyRecord sourceRec = source as GEDCOMFamilyRecord;
+            if (sourceRec == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(source);
+        }
+
         public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
         {
             GEDCOMFamilyRecord targetFamily = targetRecord as GEDCOMFamilyRecord;
@@ -212,16 +204,12 @@ namespace GKCommon.GEDCOM
 
             base.MoveTo(targetRecord, clearDest);
 
+            targetFamily.Status = fStatus;
+
             while (fChildren.Count > 0) {
                 GEDCOMPointer obj = fChildren.Extract(0);
                 obj.ResetParent(targetFamily);
                 targetFamily.Children.Add(obj);
-            }
-
-            while (fSpouseSealings.Count > 0) {
-                GEDCOMSpouseSealing obj = fSpouseSealings.Extract(0);
-                obj.ResetParent(targetFamily);
-                targetFamily.SpouseSealings.Add(obj);
             }
         }
 
@@ -230,7 +218,6 @@ namespace GKCommon.GEDCOM
             base.Pack();
 
             fChildren.Pack();
-            fSpouseSealings.Pack();
         }
 
         public override void ReplaceXRefs(XRefReplacer map)
@@ -246,7 +233,6 @@ namespace GKCommon.GEDCOM
             }
 
             fChildren.ReplaceXRefs(map);
-            fSpouseSealings.ReplaceXRefs(map);
         }
 
         public override void ResetOwner(GEDCOMTree newOwner)
@@ -254,7 +240,6 @@ namespace GKCommon.GEDCOM
             base.ResetOwner(newOwner);
 
             fChildren.ResetOwner(newOwner);
-            fSpouseSealings.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)
@@ -263,7 +248,8 @@ namespace GKCommon.GEDCOM
 
             fChildren.SaveToStream(stream);
             Events.SaveToStream(stream); // for files content compatibility
-            fSpouseSealings.SaveToStream(stream);
+
+            WriteTagLine(stream, Level + 1, GEDCOMTagType._STAT, GEDCOMUtils.GetMarriageStatusStr(fStatus), true);
         }
 
         private string GetFamilyString()

@@ -20,7 +20,7 @@
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMIndividualOrdinance : GEDCOMTagWithLists
+    public class GEDCOMIndividualOrdinance : GEDCOMTagWithLists
     {
         public GEDCOMDateValue Date
         {
@@ -44,20 +44,10 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.STAT, GEDCOMUtils.GetBaptismDateStatusStr(value)); }
         }
 
-        public GEDCOMDate BaptismChangeDate
-        {
-            get { return GetChangeDate(); }
-        }
-
         public GEDCOMEndowmentDateStatus EndowmentDateStatus
         {
             get { return GEDCOMUtils.GetEndowmentDateStatusVal(GetTagStringValue(GEDCOMTagType.STAT)); }
             set { SetTagStringValue(GEDCOMTagType.STAT, GEDCOMUtils.GetEndowmentDateStatusStr(value)); }
-        }
-
-        public GEDCOMDate EndowmentChangeDate
-        {
-            get { return GetChangeDate(); }
         }
 
         public GEDCOMPointer Family
@@ -69,16 +59,6 @@ namespace GKCommon.GEDCOM
         {
             get { return GEDCOMUtils.GetChildSealingDateStatusVal(GetTagStringValue(GEDCOMTagType.STAT)); }
             set { SetTagStringValue(GEDCOMTagType.STAT, GEDCOMUtils.GetChildSealingDateStatusStr(value)); }
-        }
-
-        public GEDCOMDate ChildSealingChangeDate
-        {
-            get { return GetChangeDate(); }
-        }
-
-        private GEDCOMDate GetChangeDate()
-        {
-            return DateStatus.TagClass(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate;
         }
 
         public GEDCOMDateStatus DateStatus
