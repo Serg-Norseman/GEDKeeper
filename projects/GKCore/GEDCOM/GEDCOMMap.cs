@@ -35,19 +35,19 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMMap(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMMap(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.MAP);
         }
 
-        public GEDCOMMap(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMMap(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMMap(owner, parent, tagName, tagValue);
+            return new GEDCOMMap(owner, tagName, tagValue);
         }
     }
 }

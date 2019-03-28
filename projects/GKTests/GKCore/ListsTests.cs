@@ -56,7 +56,7 @@ namespace GKCore
         [Test]
         public void Test_DateItems_IConvertible()
         {
-            var dtx1 = new GEDCOMDateValue(null, null, "", "05 JAN 2013");
+            var dtx1 = new GEDCOMDateValue(null, "", "05 JAN 2013");
             var dtItem1 = new GEDCOMDateItem(dtx1);
 
             Assert.AreEqual(TypeCode.Object, ((IConvertible)dtItem1).GetTypeCode());
@@ -81,11 +81,11 @@ namespace GKCore
         [Test]
         public void Test_DateItems()
         {
-            var dtx1 = new GEDCOMDateValue(null, null, "", "05 JAN 2013");
+            var dtx1 = new GEDCOMDateValue(null, "", "05 JAN 2013");
             var dtItem1 = new GEDCOMDateItem(dtx1);
             Assert.AreEqual("05.01.2013", dtItem1.ToString());
 
-            var dtx2 = new GEDCOMDateValue(null, null, "", "17 FEB 2013");
+            var dtx2 = new GEDCOMDateValue(null, "", "17 FEB 2013");
             var dtItem2 = new GEDCOMDateItem(dtx2);
             Assert.AreEqual("17.02.2013", dtItem2.ToString());
 
@@ -355,7 +355,7 @@ namespace GKCore
             var listManager = new NoteListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GEDCOMNoteRecord noteRec = new GEDCOMNoteRecord(null, null);
+            GEDCOMNoteRecord noteRec = new GEDCOMNoteRecord(null);
             noteRec.AddNoteText("Test text");
             listManager.Fetch(noteRec);
 

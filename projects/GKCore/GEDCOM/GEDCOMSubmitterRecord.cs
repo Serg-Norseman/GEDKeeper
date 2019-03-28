@@ -50,13 +50,13 @@ namespace GKCommon.GEDCOM
             if (index < 0) return;
 
             while (index >= fLanguages.Count) {
-                fLanguages.Add(new GEDCOMLanguage(Owner, this, GEDCOMTagType.LANG, ""));
+                fLanguages.Add(new GEDCOMLanguage(this, GEDCOMTagType.LANG, ""));
             }
             fLanguages[index].StringValue = value;
         }
 
 
-        public GEDCOMSubmitterRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMSubmitterRecord(GEDCOMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtSubmitter);
             SetName(GEDCOMTagType.SUBM);
@@ -87,7 +87,7 @@ namespace GKCommon.GEDCOM
             } else if (tagName == GEDCOMTagType.PHON || tagName == GEDCOMTagType.EMAIL || tagName == GEDCOMTagType.FAX || tagName == GEDCOMTagType.WWW) {
                 result = Address.AddTag(tagName, tagValue, tagConstructor);
             } else if (tagName == GEDCOMTagType.LANG) {
-                result = AddLanguage(new GEDCOMLanguage(Owner, this, tagName, tagValue));
+                result = AddLanguage(new GEDCOMLanguage(this, tagName, tagValue));
             } else {
                 // 'ADDR' defines by default
                 result = base.AddTag(tagName, tagValue, tagConstructor);
@@ -111,12 +111,6 @@ namespace GKCommon.GEDCOM
         {
             base.ReplaceXRefs(map);
             fLanguages.ReplaceXRefs(map);
-        }
-
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-            fLanguages.ResetOwner(newOwner);
         }
     }
 }

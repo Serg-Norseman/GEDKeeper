@@ -81,7 +81,7 @@ namespace GKCore.Lists
                     using (var dlg = AppHost.Container.Resolve<IAssociationEditDlg>(fBaseWin)) {
                         bool exists = (ast != null);
                         if (!exists) {
-                            ast = new GEDCOMAssociation(fBaseWin.Context.Tree, person);
+                            ast = new GEDCOMAssociation(person);
                         }
 
                         dlg.Association = ast;

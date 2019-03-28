@@ -30,7 +30,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMPointerWithNotes(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMPointerWithNotes(GEDCOMObject owner) : base(owner)
         {
             fNotes = new GEDCOMList<GEDCOMNotes>(this);
         }
@@ -48,7 +48,7 @@ namespace GKCommon.GEDCOM
             GEDCOMTag result;
 
             if (tagName == GEDCOMTagType.NOTE) {
-                result = fNotes.Add(new GEDCOMNotes(Owner, this, tagName, tagValue));
+                result = fNotes.Add(new GEDCOMNotes(this, tagName, tagValue));
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
@@ -71,12 +71,6 @@ namespace GKCommon.GEDCOM
         {
             base.ReplaceXRefs(map);
             fNotes.ReplaceXRefs(map);
-        }
-
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-            fNotes.ResetOwner(newOwner);
         }
     }
 }

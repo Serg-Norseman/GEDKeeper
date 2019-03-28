@@ -35,17 +35,17 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMDateValue(owner, parent, tagName, tagValue);
+            return new GEDCOMDateValue(owner, tagName, tagValue);
         }
 
-        public GEDCOMDateValue(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMDateValue(GEDCOMObject owner) : base(owner)
         {
             fValue = null;
         }
 
-        public GEDCOMDateValue(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMDateValue(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -74,7 +74,7 @@ namespace GKCommon.GEDCOM
             if (fValue != null) {
                 fValue.SetDateTime(value);
             } else {
-                fValue = new GEDCOMDate(Owner, this);
+                fValue = new GEDCOMDate(this);
                 fValue.Date = value;
             }
         }
@@ -104,7 +104,7 @@ namespace GKCommon.GEDCOM
                     fValue = null;
                 }
 
-                return string.IsNullOrEmpty(strValue) ? string.Empty : GEDCOMUtils.ParseDateValue(Owner, this, strValue);
+                return string.IsNullOrEmpty(strValue) ? string.Empty : GEDCOMUtils.ParseDateValue(GetTree(), this, strValue);
             } catch (Exception ex) {
                 Logger.LogWrite("GEDCOMDateValue.ParseString(\"" + strValue + "\"): " + ex.Message);
                 return strValue;
@@ -117,12 +117,6 @@ namespace GKCommon.GEDCOM
         internal void SetRawData(GEDCOMCustomDate value)
         {
             fValue = value;
-        }
-
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-            if (fValue != null) fValue.ResetOwner(newOwner);
         }
 
         #region Auxiliary

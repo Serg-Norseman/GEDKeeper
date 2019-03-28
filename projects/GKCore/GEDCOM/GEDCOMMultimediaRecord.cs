@@ -32,7 +32,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMMultimediaRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMMultimediaRecord(GEDCOMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtMultimedia);
             SetName(GEDCOMTagType.OBJE);
@@ -53,7 +53,7 @@ namespace GKCommon.GEDCOM
             GEDCOMTag result;
 
             if (tagName == GEDCOMTagType.FILE) {
-                result = fFileReferences.Add(new GEDCOMFileReferenceWithTitle(Owner, this, tagName, tagValue));
+                result = fFileReferences.Add(new GEDCOMFileReferenceWithTitle(this, tagName, tagValue));
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
@@ -82,12 +82,6 @@ namespace GKCommon.GEDCOM
         {
             base.ReplaceXRefs(map);
             fFileReferences.ReplaceXRefs(map);
-        }
-
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-            fFileReferences.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)

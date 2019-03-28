@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,7 +27,7 @@ using BSLib;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMList<T> : IDisposable, IEnumerable<T> where T : GEDCOMObject
+    public sealed class GEDCOMList<T> : IDisposable, IEnumerable<T> where T : GEDCOMTag
     {
         #region ListEnumerator
 
@@ -81,7 +81,6 @@ namespace GKCommon.GEDCOM
 
 
         private List<T> fDataList; // lazy implementation
-        private bool fDisposed;
 
 
         public int Count
@@ -106,10 +105,9 @@ namespace GKCommon.GEDCOM
 
         public void Dispose()
         {
-            if (!fDisposed) {
+            if (fDataList != null) {
                 Clear();
                 fDataList = null;
-                fDisposed = true;
             }
         }
 
@@ -219,7 +217,7 @@ namespace GKCommon.GEDCOM
 
             int num = fDataList.Count;
             for (int i = 0; i < num; i++) {
-                var item = fDataList[i] as GEDCOMTag;
+                var item = fDataList[i];
                 if (item != null) {
                     item.SaveToStream(stream);
                 }
@@ -232,22 +230,9 @@ namespace GKCommon.GEDCOM
 
             int num = fDataList.Count;
             for (int i = 0; i < num; i++) {
-                var item = fDataList[i] as GEDCOMTag;
+                var item = fDataList[i];
                 if (item != null) {
                     item.ReplaceXRefs(map);
-                }
-            }
-        }
-
-        public void ResetOwner(GEDCOMTree newOwner)
-        {
-            if (fDataList == null) return;
-
-            int num = fDataList.Count;
-            for (int i = 0; i < num; i++) {
-                GEDCOMTag item = fDataList[i] as GEDCOMTag;
-                if (item != null) {
-                    item.ResetOwner(newOwner);
                 }
             }
         }
@@ -257,7 +242,7 @@ namespace GKCommon.GEDCOM
             if (fDataList == null) return;
 
             for (int i = fDataList.Count - 1; i >= 0; i--) {
-                var item = fDataList[i] as GEDCOMTag;
+                var item = fDataList[i];
                 if (item != null) {
                     item.Pack();
                     if (item.IsEmpty() && item.IsEmptySkip()) {

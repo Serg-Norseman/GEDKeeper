@@ -45,7 +45,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fSourceRecord = new GEDCOMSourceRecord(fBase.Context.Tree, fBase.Context.Tree);
+            fSourceRecord = new GEDCOMSourceRecord(fBase.Context.Tree);
 
             fDialog = new SourceEditDlg(fBase);
             fDialog.Model = fSourceRecord;

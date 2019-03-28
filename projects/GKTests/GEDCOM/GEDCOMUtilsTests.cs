@@ -49,8 +49,15 @@ namespace GKCommon.GEDCOM
         public void Test_GEDCOMObject()
         {
             GEDCOMObject obj = new GEDCOMObject();
+            obj.Dispose();
+        }
+
+        [Test]
+        public void Test_GEDCOMRecord_ExtData()
+        {
+            GEDCOMNoteRecord obj = new GEDCOMNoteRecord(null);
             obj.ExtData = this;
-            Assert.AreEqual(obj.ExtData, this);
+            Assert.AreEqual(this, obj.ExtData);
             obj.Dispose();
         }
 

@@ -152,7 +152,7 @@ namespace GKCommon.GEDCOM
         {
             fXRefIndex = new Dictionary<string, GEDCOMCustomRecord>();
             fRecords = new GEDCOMList<GEDCOMRecord>(this);
-            fHeader = new GEDCOMHeader(this, this);
+            fHeader = new GEDCOMHeader(this);
 
             ResetLastIDs();
         }
@@ -419,7 +419,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMSubmitterRecord submitter = fHeader.Submitter.Value as GEDCOMSubmitterRecord;
             if (submitter == null) {
-                submitter = new GEDCOMSubmitterRecord(this, this);
+                submitter = new GEDCOMSubmitterRecord(this);
                 submitter.InitNew();
                 AddRecord(submitter);
                 fHeader.SetTagStringValue(GEDCOMTagType.SUBM, "@" + submitter.XRef + "@");
@@ -429,7 +429,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMIndividualRecord CreateIndividual()
         {
-            GEDCOMIndividualRecord result = new GEDCOMIndividualRecord(this, this);
+            GEDCOMIndividualRecord result = new GEDCOMIndividualRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -439,7 +439,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMFamilyRecord CreateFamily()
         {
-            GEDCOMFamilyRecord result = new GEDCOMFamilyRecord(this, this);
+            GEDCOMFamilyRecord result = new GEDCOMFamilyRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -449,7 +449,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMNoteRecord CreateNote()
         {
-            GEDCOMNoteRecord result = new GEDCOMNoteRecord(this, this);
+            GEDCOMNoteRecord result = new GEDCOMNoteRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -459,7 +459,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMSourceRecord CreateSource()
         {
-            GEDCOMSourceRecord result = new GEDCOMSourceRecord(this, this);
+            GEDCOMSourceRecord result = new GEDCOMSourceRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -469,7 +469,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMRepositoryRecord CreateRepository()
         {
-            GEDCOMRepositoryRecord result = new GEDCOMRepositoryRecord(this, this);
+            GEDCOMRepositoryRecord result = new GEDCOMRepositoryRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -479,7 +479,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMResearchRecord CreateResearch()
         {
-            GEDCOMResearchRecord result = new GEDCOMResearchRecord(this, this);
+            GEDCOMResearchRecord result = new GEDCOMResearchRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -489,7 +489,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMCommunicationRecord CreateCommunication()
         {
-            GEDCOMCommunicationRecord result = new GEDCOMCommunicationRecord(this, this);
+            GEDCOMCommunicationRecord result = new GEDCOMCommunicationRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -499,7 +499,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMTaskRecord CreateTask()
         {
-            GEDCOMTaskRecord result = new GEDCOMTaskRecord(this, this);
+            GEDCOMTaskRecord result = new GEDCOMTaskRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -509,7 +509,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMMultimediaRecord CreateMultimedia()
         {
-            GEDCOMMultimediaRecord result = new GEDCOMMultimediaRecord(this, this);
+            GEDCOMMultimediaRecord result = new GEDCOMMultimediaRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -519,7 +519,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMLocationRecord CreateLocation()
         {
-            GEDCOMLocationRecord result = new GEDCOMLocationRecord(this, this);
+            GEDCOMLocationRecord result = new GEDCOMLocationRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -529,7 +529,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMGroupRecord CreateGroup()
         {
-            GEDCOMGroupRecord result = new GEDCOMGroupRecord(this, this);
+            GEDCOMGroupRecord result = new GEDCOMGroupRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 

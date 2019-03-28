@@ -200,7 +200,7 @@ namespace GKCore.Controllers
                 for (int j = 0; j < num2; j++) {
                     GEDCOMCustomEvent evt = place.PlaceRefs[j].Event;
 
-                    if ((ind != null && (evt.Parent == ind)) || (condBirth && evt.Name == GEDCOMTagType.BIRT) || (condDeath && evt.Name == GEDCOMTagType.DEAT) || (condResidence && evt.Name == GEDCOMTagType.RESI)) {
+                    if ((ind != null && (evt.Owner == ind)) || (condBirth && evt.Name == GEDCOMTagType.BIRT) || (condDeath && evt.Name == GEDCOMTagType.DEAT) || (condResidence && evt.Name == GEDCOMTagType.RESI)) {
                         PlacesLoader.AddPoint(fMapPoints, place.Points[0], place.PlaceRefs[j]);
                     }
                 }

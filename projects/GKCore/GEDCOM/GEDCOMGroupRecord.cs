@@ -38,7 +38,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMGroupRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMGroupRecord(GEDCOMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtGroup);
             SetName(GEDCOMTagType._GROUP);
@@ -61,7 +61,7 @@ namespace GKCommon.GEDCOM
             if (tagName == GEDCOMTagType.NAME) {
                 result = base.AddTag(tagName, tagValue, null);
             } else if (tagName == GEDCOMTagType._MEMBER) {
-                result = fMembers.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
+                result = fMembers.Add(new GEDCOMPointer(this, tagName, tagValue));
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
@@ -84,12 +84,6 @@ namespace GKCommon.GEDCOM
         {
             base.ReplaceXRefs(map);
             fMembers.ReplaceXRefs(map);
-        }
-
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-            fMembers.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)
@@ -131,11 +125,11 @@ namespace GKCommon.GEDCOM
         {
             if (member == null) return false;
 
-            GEDCOMPointer ptr = new GEDCOMPointer(Owner, this);
+            GEDCOMPointer ptr = new GEDCOMPointer(this);
             ptr.SetNameValue(GEDCOMTagType._MEMBER, member);
             fMembers.Add(ptr);
 
-            ptr = new GEDCOMPointer(Owner, member);
+            ptr = new GEDCOMPointer(member);
             ptr.SetNameValue(GEDCOMTagType._GROUP, this);
             member.Groups.Add(ptr);
 

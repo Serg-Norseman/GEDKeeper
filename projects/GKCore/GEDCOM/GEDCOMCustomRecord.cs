@@ -32,8 +32,10 @@ namespace GKCommon.GEDCOM
             set {
                 string oldXRef = fXRef;
                 fXRef = value;
-                if (Owner != null) {
-                    Owner.SetXRef(oldXRef, this);
+
+                var owner = GetTree();
+                if (owner != null) {
+                    owner.SetXRef(oldXRef, this);
                 }
             }
         }
@@ -56,7 +58,12 @@ namespace GKCommon.GEDCOM
             stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
         }
 
-        protected GEDCOMCustomRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public override GEDCOMTree GetTree()
+        {
+            return (Owner as GEDCOMTree);
+        }
+
+        protected GEDCOMCustomRecord(GEDCOMObject owner) : base(owner)
         {
         }
     }

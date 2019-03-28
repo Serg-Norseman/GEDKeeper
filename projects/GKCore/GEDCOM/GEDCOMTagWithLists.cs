@@ -44,7 +44,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        protected GEDCOMTagWithLists(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        protected GEDCOMTagWithLists(GEDCOMObject owner) : base(owner)
         {
             fNotes = new GEDCOMList<GEDCOMNotes>(this);
             fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
@@ -79,15 +79,6 @@ namespace GKCommon.GEDCOM
             fMultimediaLinks.ReplaceXRefs(map);
         }
 
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-
-            fNotes.ResetOwner(newOwner);
-            fSourceCitations.ResetOwner(newOwner);
-            fMultimediaLinks.ResetOwner(newOwner);
-        }
-
         public override void SaveToStream(StreamWriter stream)
         {
             base.SaveToStream(stream);
@@ -102,11 +93,11 @@ namespace GKCommon.GEDCOM
             GEDCOMTag result;
 
             if (tagName == GEDCOMTagType.NOTE) {
-                result = fNotes.Add(new GEDCOMNotes(Owner, this, tagName, tagValue));
+                result = fNotes.Add(new GEDCOMNotes(this, tagName, tagValue));
             } else if (tagName == GEDCOMTagType.SOUR) {
-                result = fSourceCitations.Add(new GEDCOMSourceCitation(Owner, this, tagName, tagValue));
+                result = fSourceCitations.Add(new GEDCOMSourceCitation(this, tagName, tagValue));
             } else if (tagName == GEDCOMTagType.OBJE) {
-                result = fMultimediaLinks.Add(new GEDCOMMultimediaLink(Owner, this, tagName, tagValue));
+                result = fMultimediaLinks.Add(new GEDCOMMultimediaLink(this, tagName, tagValue));
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
@@ -136,7 +127,7 @@ namespace GKCommon.GEDCOM
             
             if (noteRec != null)
             {
-                note = new GEDCOMNotes(Owner, this);
+                note = new GEDCOMNotes(this);
                 note.Value = noteRec;
                 Notes.Add(note);
             }
@@ -150,7 +141,7 @@ namespace GKCommon.GEDCOM
             
             if (sourceRec != null)
             {
-                cit = new GEDCOMSourceCitation(Owner, this);
+                cit = new GEDCOMSourceCitation(this);
                 cit.Value = sourceRec;
                 cit.Page = page;
                 cit.CertaintyAssessment = quality;
@@ -166,7 +157,7 @@ namespace GKCommon.GEDCOM
 
             if (mediaRec != null)
             {
-                result = new GEDCOMMultimediaLink(Owner, this);
+                result = new GEDCOMMultimediaLink(this);
                 result.Value = mediaRec;
                 MultimediaLinks.Add(result);
             }

@@ -1989,7 +1989,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
 
-                        GEDCOMTree tree = mediaRec.Owner;
+                        GEDCOMTree tree = mediaRec.GetTree();
                         int num = tree.RecordsCount;
                         for (int i = 0; i < num; i++)
                         {
@@ -2028,7 +2028,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
 
-                        GEDCOMTree tree = noteRec.Owner;
+                        GEDCOMTree tree = noteRec.GetTree();
                         int num = tree.RecordsCount;
                         for (int i = 0; i < num; i++)
                         {
@@ -2056,7 +2056,7 @@ namespace GKCore
                 summary.Clear();
                 try {
                     if (iRec != null) {
-                        GEDCOMTree tree = iRec.Owner;
+                        GEDCOMTree tree = iRec.GetTree();
 
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + GetNameString(iRec, true, true) + "[/size][/u][/b]");
@@ -2200,7 +2200,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
 
-                        GEDCOMTree tree = sourceRec.Owner;
+                        GEDCOMTree tree = sourceRec.GetTree();
 
                         int num2 = tree.RecordsCount;
                         for (int j = 0; j < num2; j++)
@@ -2253,7 +2253,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_RPSources) + ":");
 
-                        GEDCOMTree tree = repositoryRec.Owner;
+                        GEDCOMTree tree = repositoryRec.GetTree();
 
                         int num = tree.RecordsCount;
                         for (int i = 0; i < num; i++)
@@ -2408,7 +2408,7 @@ namespace GKCore
                     summary.Clear();
                     if (commRec != null)
                     {
-                        GEDCOMTree tree = commRec.Owner;
+                        GEDCOMTree tree = commRec.GetTree();
 
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Theme) + ": [u][b][size=+1]\"" + commRec.CommName.Trim() + "\"[/size][/b][/u]");
@@ -2451,7 +2451,7 @@ namespace GKCore
                         summary.Add(LangMan.LS(LSID.LSID_Latitude) + ": " + locRec.Map.Lati);
                         summary.Add(LangMan.LS(LSID.LSID_Longitude) + ": " + locRec.Map.Long);
 
-                        GEDCOMTree tree = locRec.Owner;
+                        GEDCOMTree tree = locRec.GetTree();
 
                         linkList = GetLocationLinks(tree, locRec);
 
@@ -2847,7 +2847,7 @@ namespace GKCore
 
             GEDCOMPersonalName personalName;
             if (iRec.PersonalNames.Count <= 0) {
-                personalName = iRec.AddPersonalName(new GEDCOMPersonalName(iRec.Owner, iRec));
+                personalName = iRec.AddPersonalName(new GEDCOMPersonalName(iRec));
             } else {
                 personalName = iRec.PersonalNames[0];
             }

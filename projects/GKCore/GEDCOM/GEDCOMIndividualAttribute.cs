@@ -31,18 +31,18 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMIndividualAttribute(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMIndividualAttribute(GEDCOMObject owner) : base(owner)
         {
         }
 
-        public GEDCOMIndividualAttribute(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMIndividualAttribute(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMIndividualAttribute(owner, parent, tagName, tagValue);
+            return new GEDCOMIndividualAttribute(owner, tagName, tagValue);
         }
     }
 }

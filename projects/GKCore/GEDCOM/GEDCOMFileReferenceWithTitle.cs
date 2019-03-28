@@ -33,11 +33,11 @@ namespace GKCommon.GEDCOM
             return @"FORM\TYPE";
         }
 
-        public GEDCOMFileReferenceWithTitle(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMFileReferenceWithTitle(GEDCOMObject owner) : base(owner)
         {
         }
 
-        public GEDCOMFileReferenceWithTitle(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMFileReferenceWithTitle(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

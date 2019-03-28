@@ -150,7 +150,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        protected GEDCOMCustomDate(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        protected GEDCOMCustomDate(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.DATE);
         }
@@ -235,25 +235,25 @@ namespace GKCommon.GEDCOM
             return string.Empty;
         }
 
-        public static GEDCOMDate CreateApproximated(GEDCOMTree owner, GEDCOMObject parent, GEDCOMDate date, GEDCOMApproximated approximated)
+        public static GEDCOMDate CreateApproximated(GEDCOMObject owner, GEDCOMDate date, GEDCOMApproximated approximated)
         {
-            GEDCOMDate result = new GEDCOMDate(owner, parent);
+            GEDCOMDate result = new GEDCOMDate(owner);
             result.Assign(date);
             result.Approximated = approximated;
             return result;
         }
 
-        public static GEDCOMDatePeriod CreatePeriod(GEDCOMTree owner, GEDCOMObject parent, GEDCOMDate dateFrom, GEDCOMDate dateTo)
+        public static GEDCOMDatePeriod CreatePeriod(GEDCOMObject owner, GEDCOMDate dateFrom, GEDCOMDate dateTo)
         {
-            GEDCOMDatePeriod result = new GEDCOMDatePeriod(owner, parent);
+            GEDCOMDatePeriod result = new GEDCOMDatePeriod(owner);
             result.DateFrom.Assign(dateFrom);
             result.DateTo.Assign(dateTo);
             return result;
         }
 
-        public static GEDCOMDateRange CreateRange(GEDCOMTree owner, GEDCOMObject parent, GEDCOMDate dateAfter, GEDCOMDate dateBefore)
+        public static GEDCOMDateRange CreateRange(GEDCOMObject owner, GEDCOMDate dateAfter, GEDCOMDate dateBefore)
         {
-            GEDCOMDateRange result = new GEDCOMDateRange(owner, parent);
+            GEDCOMDateRange result = new GEDCOMDateRange(owner);
             result.After.Assign(dateAfter);
             result.Before.Assign(dateBefore);
             return result;

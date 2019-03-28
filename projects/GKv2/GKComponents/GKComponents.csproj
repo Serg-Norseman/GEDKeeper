@@ -126,6 +126,7 @@
     <Compile Include="GKUI\Components\WizardPages.cs" />
     <Compile Include="GKUI\Components\ZGraphControl.cs" />
     <Compile Include="GKUI\Providers\WFGfxProvider.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.csproj">
@@ -133,8 +134,6 @@
       <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKUI\Providers" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

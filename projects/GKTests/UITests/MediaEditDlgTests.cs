@@ -48,8 +48,8 @@ namespace GKUI.Forms
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fMultimediaRecord = new GEDCOMMultimediaRecord(fBase.Context.Tree, fBase.Context.Tree);
-            fMultimediaRecord.FileReferences.Add(new GEDCOMFileReferenceWithTitle(fBase.Context.Tree, fMultimediaRecord, "", ""));
+            fMultimediaRecord = new GEDCOMMultimediaRecord(fBase.Context.Tree);
+            fMultimediaRecord.FileReferences.Add(new GEDCOMFileReferenceWithTitle(fMultimediaRecord, "", ""));
 
             fDialog = new MediaEditDlg(fBase);
             fDialog.MediaRec = fMultimediaRecord;

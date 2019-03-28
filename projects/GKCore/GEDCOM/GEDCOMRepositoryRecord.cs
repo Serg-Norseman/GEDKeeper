@@ -34,7 +34,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMRepositoryRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMRepositoryRecord(GEDCOMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtRepository);
             SetName(GEDCOMTagType.REPO);

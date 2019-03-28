@@ -114,9 +114,9 @@ namespace GKCore.Lists
                                 newEvent = evt;
                             } else {
                                 if (record is GEDCOMIndividualRecord) {
-                                    newEvent = new GEDCOMIndividualEvent(fBaseWin.Context.Tree, record);
+                                    newEvent = new GEDCOMIndividualEvent(record);
                                 } else {
-                                    newEvent = new GEDCOMFamilyEvent(fBaseWin.Context.Tree, record);
+                                    newEvent = new GEDCOMFamilyEvent(record);
                                 }
                             }
 

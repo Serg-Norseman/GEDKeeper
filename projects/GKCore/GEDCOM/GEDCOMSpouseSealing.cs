@@ -29,18 +29,18 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMSpouseSealing(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMSpouseSealing(GEDCOMObject owner) : base(owner)
         {
         }
 
-        public GEDCOMSpouseSealing(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMSpouseSealing(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMSpouseSealing(owner, parent, tagName, tagValue);
+            return new GEDCOMSpouseSealing(owner, tagName, tagValue);
         }
     }
 }

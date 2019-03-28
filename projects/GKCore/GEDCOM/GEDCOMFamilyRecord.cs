@@ -54,7 +54,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMFamilyRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMFamilyRecord(GEDCOMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtFamily);
             SetName(GEDCOMTagType.FAM);
@@ -106,12 +106,12 @@ namespace GKCommon.GEDCOM
             if (tagName == GEDCOMTagType.HUSB || tagName == GEDCOMTagType.WIFE) {
                 result = base.AddTag(tagName, tagValue, GEDCOMPointer.Create);
             } else if (tagName == GEDCOMTagType.CHIL) {
-                result = fChildren.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
+                result = fChildren.Add(new GEDCOMPointer(this, tagName, tagValue));
             } else if (tagName == GEDCOMTagType._STAT) {
                 fStatus = GEDCOMUtils.GetMarriageStatusVal(tagValue);
                 result = null;
             } else {
-                result = fTagsFactory.CreateTag(Owner, this, tagName, tagValue);
+                result = fTagsFactory.CreateTag(this, tagName, tagValue);
 
                 if (result != null) {
                     if (result is GEDCOMFamilyEvent) {
@@ -194,6 +194,8 @@ namespace GKCommon.GEDCOM
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
             base.Assign(source);
+
+            fStatus = sourceRec.fStatus;
         }
 
         public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
@@ -208,7 +210,7 @@ namespace GKCommon.GEDCOM
 
             while (fChildren.Count > 0) {
                 GEDCOMPointer obj = fChildren.Extract(0);
-                obj.ResetParent(targetFamily);
+                obj.ResetOwner(targetFamily);
                 targetFamily.Children.Add(obj);
             }
         }
@@ -233,13 +235,6 @@ namespace GKCommon.GEDCOM
             }
 
             fChildren.ReplaceXRefs(map);
-        }
-
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-
-            fChildren.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)
@@ -317,7 +312,7 @@ namespace GKCommon.GEDCOM
                     break;
             }
 
-            GEDCOMSpouseToFamilyLink spLink = new GEDCOMSpouseToFamilyLink(Owner, spouse);
+            GEDCOMSpouseToFamilyLink spLink = new GEDCOMSpouseToFamilyLink(spouse);
             spLink.Family = this;
             spouse.SpouseToFamilyLinks.Add(spLink);
 
@@ -345,11 +340,11 @@ namespace GKCommon.GEDCOM
         {
             if (child == null) return false;
 
-            GEDCOMPointer ptr = new GEDCOMPointer(Owner, this);
+            GEDCOMPointer ptr = new GEDCOMPointer(this);
             ptr.SetNameValue(GEDCOMTagType.CHIL, child);
             fChildren.Add(ptr);
 
-            GEDCOMChildToFamilyLink chLink = new GEDCOMChildToFamilyLink(Owner, child);
+            GEDCOMChildToFamilyLink chLink = new GEDCOMChildToFamilyLink(child);
             chLink.Family = this;
             child.ChildToFamilyLinks.Add(chLink);
 

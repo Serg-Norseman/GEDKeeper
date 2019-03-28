@@ -35,7 +35,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetFullName()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.SetNameParts("Ivan Ivanov", "Fedoroff", "");
             string expResult = "Ivan Ivanov Fedoroff";
             string result = instance.FullName;
@@ -45,7 +45,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetFirstPart()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.ParseString("Ivan/Fedoroff/");
             string expResult = "Ivan";
             string result = instance.FirstPart;
@@ -55,7 +55,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_SetFirstPart()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.ParseString("Ivan/Fedoroff/");
             string value = "Baba Yaga";
             instance.FirstPart = value;
@@ -67,7 +67,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetSurname()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.ParseString("Ivan/Fedoroff/");
             string expResult = "Fedoroff";
             string result = instance.Surname;
@@ -77,7 +77,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_SetSurname()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.ParseString("Ivan/Fedoroff/");
             string value = "Yaga";
             instance.Surname = value;
@@ -89,7 +89,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetLastPart()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.ParseString("Ivan/Fedoroff/ Esquire");
             string expResult = "Esquire";
             string result = instance.LastPart;
@@ -99,7 +99,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_SetLastPart()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.ParseString("Ivan/Fedoroff/ Esquire");
             string value = "the III";
             instance.LastPart = value;
@@ -110,14 +110,14 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetPieces()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             Assert.IsNotNull(instance.Pieces);
         }
 
         [Test]
         public void Test_GetNameType()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             GEDCOMNameType expResult = GEDCOMNameType.ntNone;
             GEDCOMNameType result = instance.NameType;
             Assert.AreEqual(expResult, result);
@@ -127,7 +127,7 @@ namespace GKCommon.GEDCOM
         public void Test_SetNameType()
         {
             GEDCOMNameType value = GEDCOMNameType.ntBirth;
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.NameType = value;
             GEDCOMNameType result = instance.NameType;
             Assert.AreEqual(value, result);
@@ -136,7 +136,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetStringValue()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.ParseString(" Ivan Ivanoff / Fedoroff / Esquire ");
 
             string expResult = "Ivan Ivanoff /Fedoroff/ Esquire";
@@ -148,7 +148,7 @@ namespace GKCommon.GEDCOM
         {
             // TODO BUG return value from parsestring has no meaning (all codepaths return same)
             string strValue = "";
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             Assert.AreEqual("", instance.ParseString(strValue));
         }
 
@@ -159,7 +159,7 @@ namespace GKCommon.GEDCOM
         public void Test_ParseString2()
         {
             string strValue = "Pytor /the great";
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.ParseString(strValue);
             Assert.AreEqual("Pytor", instance.FullName);
         }
@@ -170,7 +170,7 @@ namespace GKCommon.GEDCOM
             string firstPart = "Ivan Ivanoff";
             string surname = "Fedoroff";
             string lastPart = "Esquire";
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.SetNameParts(firstPart, surname, lastPart);
             Assert.AreEqual("Ivan Ivanoff Fedoroff Esquire", instance.FullName);
         }
@@ -181,7 +181,7 @@ namespace GKCommon.GEDCOM
             string firstPart = "Ivan Ivanoff";
             string surname = "Fedoroff";
             string lastPart = null;
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.SetNameParts(firstPart, surname, lastPart);
             Assert.AreEqual("Ivan Ivanoff Fedoroff", instance.FullName);
         }
@@ -192,7 +192,7 @@ namespace GKCommon.GEDCOM
             string tagName = GEDCOMTagType.TYPE;
             string tagValue = "gibber";
             TagConstructor tagConstructor = null;
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.AddTag(tagName, tagValue, tagConstructor);
             Assert.IsNotNull(instance.FindTag(tagName, 0));
         }
@@ -200,7 +200,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_Assign()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
 
             GEDCOMTag source = null;
             Assert.Throws(typeof(ArgumentException), () => {
@@ -211,7 +211,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_Clear()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.ParseString(" Ivan Ivanoff / Fedoroff / Esquire ");
             instance.Clear();
             Assert.AreEqual(true, instance.IsEmpty());
@@ -220,14 +220,14 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_IsEmpty()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             Assert.AreEqual(true, instance.IsEmpty());
         }
 
         [Test]
         public void Test_IsEmptyF()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.ParseString(" Ivan Ivanoff / Fedoroff / Esquire ");
             Assert.AreEqual(false, instance.IsEmpty());
         }
@@ -235,7 +235,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_Pack()
         {
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.AddTag("BLECH", null, null);
             instance.Pack();
             Assert.IsNull(instance.FindTag("BLECH", 0));
@@ -245,25 +245,15 @@ namespace GKCommon.GEDCOM
         public void Test_ReplaceXRefs()
         {
             XRefReplacer map = null;
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.ReplaceXRefs(map);
-        }
-
-        [Test]
-        public void Test_ResetOwner()
-        {
-            GEDCOMTree newOwner = new GEDCOMTree();
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
-            instance.ResetOwner(newOwner);
-
-            Assert.AreEqual(newOwner, instance.Owner);
         }
 
         [Test]
         public void Test_SaveToStream()
         {
             StreamWriter stream = null;
-            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
 
             Assert.Throws(typeof(NullReferenceException), () => {
                 instance.SaveToStream(stream);
@@ -276,10 +266,10 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_IsMatch1()
         {
-            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, "", "");
             instance1.ParseString("Ivan Ivanoff /Fedoroff/");
 
-            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, "", "");
             instance2.ParseString("Ivan Ivanoff");
 
             float result = instance1.IsMatch(instance2, true);
@@ -292,9 +282,9 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_IsMatch2()
         {
-            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, "", "");
             instance1.ParseString("Ivan Ivanoff /Fedoroff/");
-            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, "", "");
             instance2.ParseString("Pyotr Ivanoff");
             float result = instance1.IsMatch(instance2, true);
             Assert.AreEqual(0.0F, result, 0.0);
@@ -306,9 +296,9 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_IsMatch3()
         {
-            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, "", "");
             instance1.ParseString("Ivan Ivanoff /Fedoroff/");
-            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, "", "");
             instance2.SetNameParts("Ivan Ivanoff", "Fedoroff", "");
             float result = instance1.IsMatch(instance2, false);
             Assert.AreEqual(100.0F, result, 0.0);
@@ -320,9 +310,9 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_IsMatch4()
         {
-            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, "", "");
             instance1.ParseString("Ivan Ivanoff /Fedoroff/");
-            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, "", "");
             instance2.SetNameParts("Pyotr", "Fedoroff", "Esquire");
             float result = instance1.IsMatch(instance2, false);
             Assert.AreNotEqual(100.0F, result);
@@ -334,7 +324,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_IsMatch5()
         {
-            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, "", "");
             instance1.ParseString("Ivan Ivanoff /Fedoroff/");
             float result = instance1.IsMatch(null, false);
             Assert.AreEqual(0.0F, result, 0.0);
@@ -346,9 +336,9 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_IsMatch6()
         {
-            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, "", "");
             instance1.ParseString("Ivan Ivanoff /?/");
-            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, "", "");
             instance2.SetNameParts("Ivan Ivanoff", "?", "");
             float result = instance1.IsMatch(instance2, false);
             Assert.AreEqual(100.0F, result, 0.0);
@@ -360,9 +350,9 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_IsMatch7()
         {
-            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, "", "");
             instance1.ParseString("/Federoff/");
-            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, "", "");
             instance2.SetNameParts("", "Federoff", "");
             float result = instance1.IsMatch(instance2, false);
             Assert.AreEqual(100.0F, result, 0.0);
@@ -374,10 +364,10 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_IsMatch8()
         {
-            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, "", "");
             instance1.ParseString("Ivan Ivanoff /?/");
 
-            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, "", "");
             instance2.SetNameParts("Ivan Ivanoff", "Unknown", "");
 
             float result = instance1.IsMatch(instance2, false);
@@ -390,9 +380,9 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_IsMatch9()
         {
-            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance1 = new GEDCOMPersonalName(null, "", "");
             instance1.ParseString("Vasiliy Pupkin");
-            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, null, "", "");
+            GEDCOMPersonalName instance2 = new GEDCOMPersonalName(null, "", "");
             instance2.SetNameParts("Vasiliy Pupkin", "", "");
             float result = instance1.IsMatch(instance2, false);
             Assert.AreEqual(100.0F, result, 0.0);
@@ -401,7 +391,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_Create()
         {
-            GEDCOMTag result = GEDCOMPersonalName.Create(null, null, "", "");
+            GEDCOMTag result = GEDCOMPersonalName.Create(null, "", "");
             Assert.IsNotNull(result);
         }
     }

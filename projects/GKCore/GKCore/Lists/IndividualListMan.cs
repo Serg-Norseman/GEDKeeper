@@ -763,7 +763,7 @@ namespace GKCore.Lists
                     using (var dlg = AppHost.Container.Resolve<IPersonalNameEditDlg>(fBaseWin)) {
                         bool exists = (persName != null);
                         if (!exists) {
-                            persName = new GEDCOMPersonalName(fBaseWin.Context.Tree, iRec);
+                            persName = new GEDCOMPersonalName(iRec);
                         }
 
                         dlg.PersonalName = persName;
@@ -1079,7 +1079,7 @@ namespace GKCore.Lists
                     using (var dlg = AppHost.Container.Resolve<IUserRefEditDlg>(fBaseWin)) {
                         bool exists = (userRef != null);
                         if (!exists) {
-                            userRef = new GEDCOMUserReference(fBaseWin.Context.Tree, iRec);
+                            userRef = new GEDCOMUserReference(iRec);
                         }
 
                         dlg.UserRef = userRef;

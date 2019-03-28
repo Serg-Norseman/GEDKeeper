@@ -38,9 +38,8 @@ namespace GKCommon.GEDCOM
         #region Protected fields
 
         private int fLevel;
-        private GEDCOMTree fOwner;
         private string fName;
-        private GEDCOMObject fParent;
+        private GEDCOMObject fOwner;
         protected string fStringValue;
         private GEDCOMList<GEDCOMTag> fTags;
 
@@ -74,14 +73,9 @@ namespace GKCommon.GEDCOM
             get { return fName; }
         }
 
-        public GEDCOMTree Owner
+        public GEDCOMObject Owner
         {
             get { return fOwner; }
-        }
-
-        public GEDCOMObject Parent
-        {
-            get { return fParent; }
         }
 
         public string StringValue
@@ -94,23 +88,22 @@ namespace GKCommon.GEDCOM
 
         #region Object management
 
-        public static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMTag(owner, parent, tagName, tagValue);
+            return new GEDCOMTag(owner, tagName, tagValue);
         }
 
-        public GEDCOMTag(GEDCOMTree owner, GEDCOMObject parent)
+        public GEDCOMTag(GEDCOMObject owner)
         {
             fOwner = owner;
-            fParent = parent;
             fTags = new GEDCOMList<GEDCOMTag>(this);
             fStringValue = string.Empty;
 
-            GEDCOMTag parentTag = parent as GEDCOMTag;
-            fLevel = (parentTag != null) ? parentTag.Level + 1 : 0;
+            GEDCOMTag ownerTag = owner as GEDCOMTag;
+            fLevel = (ownerTag != null) ? ownerTag.Level + 1 : 0;
         }
 
-        public GEDCOMTag(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMTag(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -146,9 +139,33 @@ namespace GKCommon.GEDCOM
 
         #region Content management
 
+        public virtual GEDCOMTree GetTree()
+        {
+            GEDCOMTree owner = null;
+
+            GEDCOMTag current = this;
+            while (current != null) {
+                GEDCOMObject parent = current.fOwner;
+
+                var parentTag = parent as GEDCOMTag;
+                if (parentTag != null) {
+                    current = parentTag;
+                } else {
+                    var parentTree = parent as GEDCOMTree;
+                    if (parentTree != null) {
+                        owner = parentTree;
+                    }
+                    break;
+                }
+            }
+
+            return owner;
+        }
+
         protected GEDCOMRecord FindRecord(string xref)
         {
-            return (fOwner == null) ? null : fOwner.XRefIndex_Find(xref);
+            GEDCOMTree tree = GetTree();
+            return (tree == null) ? null : tree.XRefIndex_Find(xref);
         }
 
         protected GEDCOMTag InsertTag(GEDCOMTag tag)
@@ -185,11 +202,11 @@ namespace GKCommon.GEDCOM
             GEDCOMTag tag = null;
             try {
                 if (tagConstructor != null) {
-                    tag = tagConstructor(fOwner, this, tagName, tagValue);
+                    tag = tagConstructor(this, tagName, tagValue);
                 } else {
-                    tag = GEDCOMFactory.GetInstance().CreateTag(fOwner, this, tagName, tagValue);
+                    tag = GEDCOMFactory.GetInstance().CreateTag(this, tagName, tagValue);
                     if (tag == null) {
-                        tag = new GEDCOMTag(fOwner, this, tagName, tagValue);
+                        tag = new GEDCOMTag(this, tagName, tagValue);
                     }
                 }
 
@@ -227,7 +244,7 @@ namespace GKCommon.GEDCOM
 
         private GEDCOMTag CreateCopy(GEDCOMTag sourceTag)
         {
-            GEDCOMTag result = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { Owner, this, string.Empty, string.Empty });
+            GEDCOMTag result = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { this, string.Empty, string.Empty });
             result.Assign(sourceTag);
             return result;
         }
@@ -578,15 +595,9 @@ namespace GKCommon.GEDCOM
             fTags.ReplaceXRefs(map);
         }
 
-        public virtual void ResetOwner(GEDCOMTree newOwner)
+        public void ResetOwner(GEDCOMObject owner)
         {
-            fOwner = newOwner;
-            fTags.ResetOwner(newOwner);
-        }
-
-        public void ResetParent(GEDCOMObject parent)
-        {
-            fParent = parent;
+            fOwner = owner;
         }
 
         #endregion

@@ -68,17 +68,17 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMTime(owner, parent, tagName, tagValue);
+            return new GEDCOMTime(owner, tagName, tagValue);
         }
 
-        public GEDCOMTime(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMTime(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.TIME);
         }
 
-        public GEDCOMTime(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMTime(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

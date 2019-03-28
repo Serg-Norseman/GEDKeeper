@@ -25,7 +25,7 @@ using System.Reflection.Emit;
 
 namespace GKCommon.GEDCOM
 {
-    public delegate GEDCOMTag TagConstructor(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue);
+    public delegate GEDCOMTag TagConstructor(GEDCOMObject owner, string tagName, string tagValue);
 
     public sealed class GEDCOMFactory
     {
@@ -51,36 +51,34 @@ namespace GKCommon.GEDCOM
                 fConstructors.Add(key, constructor);
         }
 
-        public GEDCOMTag CreateTag(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public GEDCOMTag CreateTag(GEDCOMObject owner, string tagName, string tagValue)
         {
             TagConstructor constructor;
-
-            if (fConstructors.TryGetValue(tagName, out constructor))
-            {
-                return constructor(owner, parent, tagName, tagValue);
+            if (fConstructors.TryGetValue(tagName, out constructor)) {
+                return constructor(owner, tagName, tagValue);
             }
-
             return null;
         }
 
-        public static T CreateTagEx<T>(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-            where T : GEDCOMTag
+        public static T CreateTagEx<T>(GEDCOMObject owner, string tagName, string tagValue) where T : GEDCOMTag
         {
             ConstructorInfo ctorInfo = typeof(T).GetConstructor(new[] {
-                typeof(GEDCOMTree), typeof(GEDCOMObject), typeof(string), typeof(string)
+                typeof(GEDCOMObject), typeof(string), typeof(string)
             });
+
             DynamicMethod dm = new DynamicMethod("Create", typeof(T), new Type[] {
-                typeof(GEDCOMTree), typeof(GEDCOMObject), typeof(string), typeof(string)
+                typeof(GEDCOMObject), typeof(string), typeof(string)
             }, typeof(T), true);
+
             ILGenerator il = dm.GetILGenerator();
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Ldarg_1);
             il.Emit(OpCodes.Ldarg_2);
-            il.Emit(OpCodes.Ldarg_3);
             il.Emit(OpCodes.Newobj, ctorInfo);
             il.Emit(OpCodes.Ret);
+
             TagConstructor ctor = (TagConstructor)dm.CreateDelegate(typeof(TagConstructor));
-            return (T)ctor(owner, parent, tagName, tagValue);
+            return (T)ctor(owner, tagName, tagValue);
         }
     }
 }

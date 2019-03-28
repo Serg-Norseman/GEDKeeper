@@ -70,7 +70,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        protected GEDCOMCustomEvent(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        protected GEDCOMCustomEvent(GEDCOMObject owner) : base(owner)
         {
         }
 

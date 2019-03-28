@@ -193,7 +193,7 @@ namespace GKCore.Tools
             for (int i = 0; i < num; i++)
             {
                 GEDCOMFileReference srcFileRef = mmLink.FileReferences[i];
-                GEDCOMFileReferenceWithTitle tgtFileRef = new GEDCOMFileReferenceWithTitle(tree, mmRec);
+                GEDCOMFileReferenceWithTitle tgtFileRef = new GEDCOMFileReferenceWithTitle(mmRec);
 
                 tgtFileRef.LinkFile(srcFileRef.StringValue);
 

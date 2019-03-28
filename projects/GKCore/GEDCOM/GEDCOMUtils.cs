@@ -434,20 +434,20 @@ namespace GKCommon.GEDCOM
                 case GEDCOMDateType.AFT:
                 case GEDCOMDateType.BEF:
                 case GEDCOMDateType.BET:
-                    date = new GEDCOMDateRange(owner, dateValue);
+                    date = new GEDCOMDateRange(dateValue);
                     result = GEDCOMUtils.ParseRangeDate(owner, (GEDCOMDateRange)date, strTok);
                     break;
                 case GEDCOMDateType.INT:
-                    date = new GEDCOMDateInterpreted(owner, dateValue);
+                    date = new GEDCOMDateInterpreted(dateValue);
                     result = GEDCOMUtils.ParseIntDate(owner, (GEDCOMDateInterpreted)date, strTok);
                     break;
                 case GEDCOMDateType.FROM:
                 case GEDCOMDateType.TO:
-                    date = new GEDCOMDatePeriod(owner, dateValue);
+                    date = new GEDCOMDatePeriod(dateValue);
                     result = GEDCOMUtils.ParsePeriodDate(owner, (GEDCOMDatePeriod)date, strTok);
                     break;
                 default:
-                    date = new GEDCOMDate(owner, dateValue);
+                    date = new GEDCOMDate(dateValue);
                     result = GEDCOMUtils.ParseDate(owner, (GEDCOMDate)date, strTok);
                     break;
             }
@@ -1477,6 +1477,13 @@ namespace GKCommon.GEDCOM
             result.Append(checkB.ToString("X2", invNFI));
 
             return result.ToString();
+        }
+
+        public static string CreateUID()
+        {
+            byte[] binary = Guid.NewGuid().ToByteArray();
+            string result = GEDCOMUtils.EncodeUID(binary);
+            return result;
         }
 
         public static int BinarySearch(EnumTuple[] array, string key, Comparison<string> comparer)

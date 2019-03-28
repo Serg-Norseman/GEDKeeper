@@ -51,7 +51,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GEDCOMPointer()
         {
-            using (var ptr = new GEDCOMPointer(null, null, "", "")) {
+            using (var ptr = new GEDCOMPointer(null, "", "")) {
                 string remainder = ptr.ParseString("  @I1111@ test");
                 Assert.AreEqual("I1111", ptr.XRef);
                 Assert.AreEqual(" test", remainder);
@@ -77,7 +77,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GEDCOMTime()
         {
-            using (GEDCOMTime time = new GEDCOMTime(null, null, "", "20:20:20.100"))
+            using (GEDCOMTime time = new GEDCOMTime(null, "", "20:20:20.100"))
             {
                 Assert.IsNotNull(time, "time != null");
 
@@ -175,7 +175,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_CtorDyn()
         {
-            var uref = GEDCOMFactory.CreateTagEx<GEDCOMUserReference>(null, null, "", "test 12345");
+            var uref = GEDCOMFactory.CreateTagEx<GEDCOMUserReference>(null, "", "test 12345");
             Assert.IsNotNull(uref);
             Assert.AreEqual("test 12345", uref.StringValue);
         }

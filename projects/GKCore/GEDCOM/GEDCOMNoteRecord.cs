@@ -31,7 +31,7 @@ namespace GKCommon.GEDCOM
             set { SetTagStrings(this, value); }
         }
 
-        public GEDCOMNoteRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMNoteRecord(GEDCOMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtNote);
             SetName(GEDCOMTagType.NOTE);

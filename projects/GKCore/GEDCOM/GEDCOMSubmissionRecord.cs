@@ -58,7 +58,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMSubmissionRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMSubmissionRecord(GEDCOMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtSubmission);
             SetName(GEDCOMTagType.SUBN);

@@ -46,18 +46,18 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMAssociation(owner, parent, tagName, tagValue);
+            return new GEDCOMAssociation(owner, tagName, tagValue);
         }
 
-        public GEDCOMAssociation(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMAssociation(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.ASSO);
             fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
         }
 
-        public GEDCOMAssociation(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMAssociation(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -77,7 +77,7 @@ namespace GKCommon.GEDCOM
                 fRelation = tagValue;
                 result = null;
             } else if (tagName == GEDCOMTagType.SOUR) {
-                result = fSourceCitations.Add(new GEDCOMSourceCitation(Owner, this, tagName, tagValue));
+                result = fSourceCitations.Add(new GEDCOMSourceCitation(this, tagName, tagValue));
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
@@ -100,12 +100,6 @@ namespace GKCommon.GEDCOM
         {
             base.ReplaceXRefs(map);
             fSourceCitations.ReplaceXRefs(map);
-        }
-
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-            fSourceCitations.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)

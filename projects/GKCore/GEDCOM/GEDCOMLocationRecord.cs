@@ -34,7 +34,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMLocationRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMLocationRecord(GEDCOMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtLocation);
             SetName(GEDCOMTagType._LOC);

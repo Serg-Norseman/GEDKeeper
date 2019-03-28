@@ -48,7 +48,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        protected GEDCOMRecordWithEvents(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        protected GEDCOMRecordWithEvents(GEDCOMObject owner) : base(owner)
         {
             fEvents = new GEDCOMList<GEDCOMCustomEvent>(this);
             fSubmittors = new GEDCOMList<GEDCOMPointer>(this);
@@ -71,7 +71,7 @@ namespace GKCommon.GEDCOM
                 fRestriction = GEDCOMUtils.GetRestrictionVal(tagValue);
                 result = null;
             } else if (tagName == GEDCOMTagType.SUBM) {
-                result = fSubmittors.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
+                result = fSubmittors.Add(new GEDCOMPointer(this, tagName, tagValue));
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
@@ -103,7 +103,7 @@ namespace GKCommon.GEDCOM
             base.Assign(source);
 
             foreach (GEDCOMCustomEvent sourceEvent in sourceRec.fEvents) {
-                GEDCOMCustomEvent copy = (GEDCOMCustomEvent)Activator.CreateInstance(sourceEvent.GetType(), new object[] { Owner, this, "", "" });
+                GEDCOMCustomEvent copy = (GEDCOMCustomEvent)Activator.CreateInstance(sourceEvent.GetType(), new object[] { this, "", "" });
                 copy.Assign(sourceEvent);
                 AddEvent(copy);
             }
@@ -121,7 +121,7 @@ namespace GKCommon.GEDCOM
 
             while (fEvents.Count > 0) {
                 GEDCOMCustomEvent obj = fEvents.Extract(0);
-                obj.ResetParent(target);
+                obj.ResetOwner(target);
                 target.AddEvent(obj);
             }
 
@@ -129,7 +129,7 @@ namespace GKCommon.GEDCOM
 
             while (fSubmittors.Count > 0) {
                 GEDCOMPointer obj = fSubmittors.Extract(0);
-                obj.ResetParent(target);
+                obj.ResetOwner(target);
                 target.Submittors.Add(obj);
             }
         }
@@ -146,13 +146,6 @@ namespace GKCommon.GEDCOM
             base.ReplaceXRefs(map);
             fEvents.ReplaceXRefs(map);
             fSubmittors.ReplaceXRefs(map);
-        }
-
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-            fEvents.ResetOwner(newOwner);
-            fSubmittors.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)

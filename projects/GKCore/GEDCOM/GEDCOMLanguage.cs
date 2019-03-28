@@ -68,19 +68,19 @@ namespace GKCommon.GEDCOM
             return GEDCOMUtils.GetLanguageStr(fValue);
         }
 
-        public GEDCOMLanguage(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMLanguage(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.LANG);
         }
 
-        public GEDCOMLanguage(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMLanguage(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMLanguage(owner, parent, tagName, tagValue);
+            return new GEDCOMLanguage(owner, tagName, tagValue);
         }
     }
 }

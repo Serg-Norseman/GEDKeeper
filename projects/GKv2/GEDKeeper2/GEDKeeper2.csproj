@@ -450,6 +450,7 @@
     <Compile Include="GKUI\Providers\WFAppHost.cs" />
     <Compile Include="GKUI\Providers\WFGfxRenderer.cs" />
     <Compile Include="GKUI\Providers\WFStdDialogs.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -465,8 +466,6 @@
       <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKUI\Providers" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

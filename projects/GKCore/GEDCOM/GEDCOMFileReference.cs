@@ -37,12 +37,12 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMFileReference(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMFileReference(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.FILE);
         }
 
-        public GEDCOMFileReference(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMFileReference(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

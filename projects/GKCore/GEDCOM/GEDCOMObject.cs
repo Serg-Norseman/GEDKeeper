@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,19 +18,33 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib;
+using System;
 
 namespace GKCommon.GEDCOM
 {
     /// <summary>
     /// Base class for all GEDCOM objects like tags, and tree and xref replacer.
     /// </summary>
-    public class GEDCOMObject : BaseObject
+    public class GEDCOMObject : IDisposable
     {
-        public object ExtData
+        private bool fDisposed;
+
+        protected virtual void Dispose(bool disposing)
         {
-            get;
-            set;
+        }
+
+        public void Dispose()
+        {
+            if (!fDisposed) {
+                Dispose(true);
+                fDisposed = true;
+            }
+            GC.SuppressFinalize(this);
+        }
+
+        ~GEDCOMObject()
+        {
+            Dispose(false);
         }
     }
 }

@@ -115,16 +115,16 @@ namespace GKCore.Controllers
 
         public void ProcessPortraits(IImageView imageCtl, GEDCOMFileReferenceWithTitle fileRef)
         {
-            var mmRec = fileRef.Parent as GEDCOMMultimediaRecord;
+            var mmRec = fileRef.Owner as GEDCOMMultimediaRecord;
 
             var linksList = new List<GEDCOMObject>();
-            GKUtils.SearchRecordLinks(linksList, mmRec.Owner, mmRec);
+            GKUtils.SearchRecordLinks(linksList, mmRec.GetTree(), mmRec);
 
             bool showRegions = false;
             foreach (var link in linksList) {
                 var mmLink = link as GEDCOMMultimediaLink;
                 if (mmLink != null && mmLink.IsPrimary) {
-                    var indiRec = mmLink.Parent as GEDCOMIndividualRecord;
+                    var indiRec = mmLink.Owner as GEDCOMIndividualRecord;
                     string indiName = GKUtils.GetNameString(indiRec, true, false);
                     var region = mmLink.CutoutPosition.Value;
 

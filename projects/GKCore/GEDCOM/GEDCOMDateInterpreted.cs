@@ -51,7 +51,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMDateInterpreted(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMDateInterpreted(GEDCOMObject owner) : base(owner)
         {
             fDatePhrase = string.Empty;
         }
@@ -69,7 +69,7 @@ namespace GKCommon.GEDCOM
                 fDatePhrase = string.Empty;
                 result = string.Empty;
             } else {
-                result = GEDCOMUtils.ParseIntDate(Owner, this, strValue);
+                result = GEDCOMUtils.ParseIntDate(GetTree(), this, strValue);
             }
             return result;
         }

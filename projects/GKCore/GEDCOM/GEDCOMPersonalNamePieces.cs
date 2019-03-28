@@ -97,11 +97,11 @@ namespace GKCommon.GEDCOM
             fSourceCitations.SaveToStream(stream);
         }
 
-        public GEDCOMPersonalNamePieces(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMPersonalNamePieces(GEDCOMObject owner) : base(owner)
         {
         }
 
-        public GEDCOMPersonalNamePieces(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMPersonalNamePieces(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

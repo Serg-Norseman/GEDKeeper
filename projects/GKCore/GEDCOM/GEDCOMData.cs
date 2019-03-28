@@ -36,19 +36,19 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMData(owner, parent, tagName, tagValue);
+            return new GEDCOMData(owner, tagName, tagValue);
         }
 
-        public GEDCOMData(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMData(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.DATA);
 
             fEvents = new GEDCOMList<GEDCOMEvent>(this);
         }
 
-        public GEDCOMData(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMData(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -66,7 +66,7 @@ namespace GKCommon.GEDCOM
             GEDCOMTag result;
 
             if (tagName == GEDCOMTagType.EVEN) {
-                result = fEvents.Add(new GEDCOMEvent(Owner, this, tagName, tagValue));
+                result = fEvents.Add(new GEDCOMEvent(this, tagName, tagValue));
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
@@ -83,12 +83,6 @@ namespace GKCommon.GEDCOM
         public override bool IsEmpty()
         {
             return base.IsEmpty() && (fEvents.Count == 0);
-        }
-
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-            fEvents.ResetOwner(newOwner);
         }
     }
 }

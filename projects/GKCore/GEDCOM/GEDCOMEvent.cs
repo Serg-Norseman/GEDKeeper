@@ -33,17 +33,17 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMEvent(owner, parent, tagName, tagValue);
+            return new GEDCOMEvent(owner, tagName, tagValue);
         }
 
-        public GEDCOMEvent(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMEvent(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.EVEN);
         }
 
-        public GEDCOMEvent(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMEvent(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

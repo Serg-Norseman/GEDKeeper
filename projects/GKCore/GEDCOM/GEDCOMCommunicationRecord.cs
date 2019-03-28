@@ -42,7 +42,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMCommunicationRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMCommunicationRecord(GEDCOMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtCommunication);
             SetName(GEDCOMTagType._COMM);
@@ -88,7 +88,7 @@ namespace GKCommon.GEDCOM
             }
 
             if (corrTag != null) {
-                corresponder = (Owner.XRefIndex_Find(GEDCOMUtils.CleanXRef(corrTag.StringValue)) as GEDCOMIndividualRecord);
+                corresponder = (GetTree().XRefIndex_Find(GEDCOMUtils.CleanXRef(corrTag.StringValue)) as GEDCOMIndividualRecord);
 
                 if (corrTag.Name == GEDCOMTagType.FROM) {
                     commDir = GKCommunicationDir.cdFrom;

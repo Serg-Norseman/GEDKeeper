@@ -108,12 +108,12 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMDate(owner, parent, tagName, tagValue);
+            return new GEDCOMDate(owner, tagName, tagValue);
         }
 
-        public GEDCOMDate(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMDate(GEDCOMObject owner) : base(owner)
         {
             fApproximated = GEDCOMApproximated.daExact;
             fCalendar = GEDCOMCalendar.dcGregorian;
@@ -125,7 +125,7 @@ namespace GKCommon.GEDCOM
             fDateFormat = GEDCOMDateFormat.dfGEDCOMStd;
         }
 
-        public GEDCOMDate(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMDate(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -203,7 +203,7 @@ namespace GKCommon.GEDCOM
                 Clear();
                 result = string.Empty;
             } else {
-                result = GEDCOMUtils.ParseDate(Owner, this, strValue);
+                result = GEDCOMUtils.ParseDate(GetTree(), this, strValue);
             }
             return result;
         }
@@ -605,7 +605,7 @@ namespace GKCommon.GEDCOM
             int month = (pm == "") ? 0 : ConvertHelper.ParseInt(pm, 0);
             int year = (py == "") ? UNKNOWN_YEAR : ConvertHelper.ParseInt(py, UNKNOWN_YEAR);
 
-            var date = new GEDCOMDate(null, null);
+            var date = new GEDCOMDate(null);
             date.SetDate(calendar, day, month, year);
             return date;
         }

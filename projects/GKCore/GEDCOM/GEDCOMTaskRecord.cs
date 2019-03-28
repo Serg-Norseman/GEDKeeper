@@ -45,7 +45,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMTaskRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMTaskRecord(GEDCOMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtTask);
             SetName(GEDCOMTagType._TASK);
@@ -80,7 +80,7 @@ namespace GKCommon.GEDCOM
 
         public TaskGoalRet GetTaskGoal()
         {
-            GEDCOMTree tree = Owner;
+            GEDCOMTree tree = GetTree();
             GEDCOMRecord goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(Goal));
 
             GKGoalType goalType;

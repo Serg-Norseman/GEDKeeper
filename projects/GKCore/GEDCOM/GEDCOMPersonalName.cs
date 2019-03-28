@@ -107,16 +107,16 @@ namespace GKCommon.GEDCOM
             fLastPart = GEDCOMUtils.Trim(lastPart);
         }
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMPersonalName(owner, parent, tagName, tagValue);
+            return new GEDCOMPersonalName(owner, tagName, tagValue);
         }
 
-        public GEDCOMPersonalName(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMPersonalName(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.NAME);
 
-            fPieces = new GEDCOMPersonalNamePieces(owner, this);
+            fPieces = new GEDCOMPersonalNamePieces(this);
             fPieces.SetLevel(Level);
 
             fFirstPart = string.Empty;
@@ -124,7 +124,7 @@ namespace GKCommon.GEDCOM
             fLastPart = string.Empty;
         }
 
-        public GEDCOMPersonalName(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMPersonalName(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -194,12 +194,6 @@ namespace GKCommon.GEDCOM
         {
             base.ReplaceXRefs(map);
             fPieces.ReplaceXRefs(map);
-        }
-
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-            fPieces.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)

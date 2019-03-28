@@ -68,18 +68,18 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMMultimediaLink(owner, parent, tagName, tagValue);
+            return new GEDCOMMultimediaLink(owner, tagName, tagValue);
         }
 
-        public GEDCOMMultimediaLink(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMMultimediaLink(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.OBJE);
             fFileReferences = new GEDCOMList<GEDCOMFileReference>(this);
         }
 
-        public GEDCOMMultimediaLink(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMMultimediaLink(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -97,7 +97,7 @@ namespace GKCommon.GEDCOM
             GEDCOMTag result;
 
             if (tagName == GEDCOMTagType.FILE) {
-                result = fFileReferences.Add(new GEDCOMFileReference(Owner, this, tagName, tagValue));
+                result = fFileReferences.Add(new GEDCOMFileReference(this, tagName, tagValue));
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
@@ -132,12 +132,6 @@ namespace GKCommon.GEDCOM
         {
             fStringValue = string.Empty;
             return base.ParseString(strValue);
-        }
-
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-            fFileReferences.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)

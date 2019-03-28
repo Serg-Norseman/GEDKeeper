@@ -313,32 +313,32 @@ namespace GKCommon.GEDCOM
                         }
 
                         if (tagName == GEDCOMTagType.INDI) {
-                            curRecord = fTree.AddRecord(new GEDCOMIndividualRecord(fTree, fTree));
+                            curRecord = fTree.AddRecord(new GEDCOMIndividualRecord(fTree));
                         } else if (tagName == GEDCOMTagType.FAM) {
-                            curRecord = fTree.AddRecord(new GEDCOMFamilyRecord(fTree, fTree));
+                            curRecord = fTree.AddRecord(new GEDCOMFamilyRecord(fTree));
                         } else if (tagName == GEDCOMTagType.OBJE) {
-                            curRecord = fTree.AddRecord(new GEDCOMMultimediaRecord(fTree, fTree));
+                            curRecord = fTree.AddRecord(new GEDCOMMultimediaRecord(fTree));
                         } else if (tagName == GEDCOMTagType.NOTE) {
-                            curRecord = fTree.AddRecord(new GEDCOMNoteRecord(fTree, fTree));
+                            curRecord = fTree.AddRecord(new GEDCOMNoteRecord(fTree));
                             curRecord.ParseString(tagValue);
                         } else if (tagName == GEDCOMTagType.REPO) {
-                            curRecord = fTree.AddRecord(new GEDCOMRepositoryRecord(fTree, fTree));
+                            curRecord = fTree.AddRecord(new GEDCOMRepositoryRecord(fTree));
                         } else if (tagName == GEDCOMTagType.SOUR) {
-                            curRecord = fTree.AddRecord(new GEDCOMSourceRecord(fTree, fTree));
+                            curRecord = fTree.AddRecord(new GEDCOMSourceRecord(fTree));
                         } else if (tagName == GEDCOMTagType.SUBN) {
-                            curRecord = fTree.AddRecord(new GEDCOMSubmissionRecord(fTree, fTree));
+                            curRecord = fTree.AddRecord(new GEDCOMSubmissionRecord(fTree));
                         } else if (tagName == GEDCOMTagType.SUBM) {
-                            curRecord = fTree.AddRecord(new GEDCOMSubmitterRecord(fTree, fTree));
+                            curRecord = fTree.AddRecord(new GEDCOMSubmitterRecord(fTree));
                         } else if (tagName == GEDCOMTagType._GROUP) {
-                            curRecord = fTree.AddRecord(new GEDCOMGroupRecord(fTree, fTree));
+                            curRecord = fTree.AddRecord(new GEDCOMGroupRecord(fTree));
                         } else if (tagName == GEDCOMTagType._RESEARCH) {
-                            curRecord = fTree.AddRecord(new GEDCOMResearchRecord(fTree, fTree));
+                            curRecord = fTree.AddRecord(new GEDCOMResearchRecord(fTree));
                         } else if (tagName == GEDCOMTagType._TASK) {
-                            curRecord = fTree.AddRecord(new GEDCOMTaskRecord(fTree, fTree));
+                            curRecord = fTree.AddRecord(new GEDCOMTaskRecord(fTree));
                         } else if (tagName == GEDCOMTagType._COMM) {
-                            curRecord = fTree.AddRecord(new GEDCOMCommunicationRecord(fTree, fTree));
+                            curRecord = fTree.AddRecord(new GEDCOMCommunicationRecord(fTree));
                         } else if (tagName == GEDCOMTagType._LOC) {
-                            curRecord = fTree.AddRecord(new GEDCOMLocationRecord(fTree, fTree));
+                            curRecord = fTree.AddRecord(new GEDCOMLocationRecord(fTree));
                         } else if (tagName == GEDCOMTagType.HEAD) {
                             curRecord = fTree.Header;
                         } else if (tagName == GEDCOMTagType.TRLR) {
@@ -359,7 +359,7 @@ namespace GKCommon.GEDCOM
                             } else {
                                 parentTag = curTag;
                                 while (tagLevel <= parentTag.Level) {
-                                    parentTag = (GEDCOMTag)parentTag.Parent;
+                                    parentTag = (GEDCOMTag)parentTag.Owner;
                                 }
                             }
 

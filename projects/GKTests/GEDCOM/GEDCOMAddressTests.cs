@@ -36,7 +36,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_Create()
         {
-            GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, null, "", "");
+            GEDCOMAddress instance = (GEDCOMAddress)GEDCOMAddress.Create(null, "", "");
             Assert.IsNotNull(instance);
         }
 
@@ -48,7 +48,7 @@ namespace GKCommon.GEDCOM
                 "Address Line 2"
             };
             StringList value = new StringList(vals);
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.Address = value;
             Assert.AreEqual(value.Text, instance.Address.Text);
         }
@@ -57,7 +57,7 @@ namespace GKCommon.GEDCOM
         public void Test_SetAddressLine1()
         {
             string value = "1234 Main St";
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.AddressLine1 = value;
             Assert.AreEqual(value, instance.AddressLine1);
         }
@@ -66,7 +66,7 @@ namespace GKCommon.GEDCOM
         public void Test_SetAddressLine2()
         {
             string value = "Novozavodskaya ul., 10";
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.AddressLine2 = value;
             Assert.AreEqual(value, instance.AddressLine2);
         }
@@ -75,7 +75,7 @@ namespace GKCommon.GEDCOM
         public void Test_SetAddressLine3()
         {
             string value = "ALEKSCEVSKTY r-n";
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.AddressLine3 = value;
             Assert.AreEqual(value, instance.AddressLine3);
         }
@@ -84,7 +84,7 @@ namespace GKCommon.GEDCOM
         public void Test_SetAddressCity()
         {
             string value = "Moskva";
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.AddressCity = value;
             Assert.AreEqual(value, instance.AddressCity);
         }
@@ -93,7 +93,7 @@ namespace GKCommon.GEDCOM
         public void Test_SetAddressState()
         {
             string value = "VORONEJSKAYA obl";
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.AddressState = value;
             Assert.AreEqual(value, instance.AddressState);
         }
@@ -102,7 +102,7 @@ namespace GKCommon.GEDCOM
         public void Test_SetAddressPostalCode()
         {
             string value = "1234A567";
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.AddressPostalCode = value;
             Assert.AreEqual(value, instance.AddressPostalCode);
         }
@@ -111,7 +111,7 @@ namespace GKCommon.GEDCOM
         public void Test_SetAddressCountry()
         {
             string value = "Moosylvania";
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.AddressCountry = value;
             Assert.AreEqual(value, instance.AddressCountry);
         }
@@ -120,7 +120,7 @@ namespace GKCommon.GEDCOM
         public void Test_AddEmailAddress()
         {
             string value = "serg.zhdanovskih@yandex.ru";
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.AddEmailAddress(value);
             GEDCOMList<GEDCOMTag> pl = instance.EmailAddresses;
             Assert.AreEqual(1, pl.Count);
@@ -131,7 +131,7 @@ namespace GKCommon.GEDCOM
         public void Test_AddFaxNumber()
         {
             string value = "(214) 748-3647";
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.AddFaxNumber(value);
             GEDCOMList<GEDCOMTag> pl = instance.FaxNumbers;
             Assert.AreEqual(1, pl.Count);
@@ -142,7 +142,7 @@ namespace GKCommon.GEDCOM
         public void Test_AddPhoneNumber()
         {
             string value = "(214) 748-3647";
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.AddPhoneNumber(value);
             GEDCOMList<GEDCOMTag> pl = instance.PhoneNumbers;
             Assert.AreEqual(1, pl.Count);
@@ -154,7 +154,7 @@ namespace GKCommon.GEDCOM
         {
             string value1 = "(214) 748-3647";
             string value2 = "(999) 748-3647";
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.AddPhoneNumber(value1);
             instance.AddPhoneNumber(value2);
             GEDCOMList<GEDCOMTag> pl = instance.PhoneNumbers;
@@ -169,7 +169,7 @@ namespace GKCommon.GEDCOM
         public void Test_AddWebPage1()
         {
             string value = "http://www.bitboost.com/ref/international-address-formats/russia/";
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.AddWebPage(value);
             GEDCOMList<GEDCOMTag> wp = instance.WebPages;
             Assert.AreEqual(1, wp.Count);
@@ -182,7 +182,7 @@ namespace GKCommon.GEDCOM
         {
             string value1 = "http://www.bitboost.com/ref/international-address-formats/russia/";
             string value2 = "http://google.com/search";
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.AddWebPage(value1);
             instance.AddWebPage(value2);
             GEDCOMList<GEDCOMTag> wp = instance.WebPages;
@@ -196,7 +196,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_SaveTagsToStream()
         {
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
 
             StreamWriter stream = null;
             Assert.Throws(typeof(NullReferenceException), () => {
@@ -208,13 +208,13 @@ namespace GKCommon.GEDCOM
         public void Test_Assign()
         {
             GEDCOMTag source = null;
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
 
             Assert.Throws(typeof(ArgumentException), () => {
                 instance.Assign(source);
             });
 
-            source = new GEDCOMAddress(null, null);
+            source = new GEDCOMAddress(null);
             instance.Assign(source);
         }
 
@@ -224,7 +224,7 @@ namespace GKCommon.GEDCOM
             const string tagName = "BABA";
             const string tagValue = "YAGA";
             TagConstructor tagConstructor = null;
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             GEDCOMTag result = instance.AddTag(tagName, tagValue, tagConstructor);
             Assert.IsNotNull(instance.FindTag(tagName, 0));
         }
@@ -232,7 +232,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_Clear()
         {
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.SetAddressText("blah");
             instance.Clear();
             Assert.IsTrue(instance.IsEmpty());
@@ -241,33 +241,23 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_IsEmptyT()
         {
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             Assert.AreEqual(true, instance.IsEmpty());
         }
 
         [Test]
         public void Test_IsEmptyF()
         {
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.SetAddressText("blah");
             Assert.AreEqual(false, instance.IsEmpty());
-        }
-        
-        [Test]
-        public void Test_ResetOwner()
-        {
-            GEDCOMTree newOwner = new GEDCOMTree();
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
-
-            instance.ResetOwner(newOwner);
-            Assert.AreEqual(newOwner, instance.Owner);
         }
         
         [Test]
         public void Test_SetAddressText()
         {
             string value = "this is a test";
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.SetAddressText(value);
             StringList val2 = new StringList(value);
             Assert.AreEqual(val2.Text, instance.Address.Text);
@@ -285,7 +275,7 @@ namespace GKCommon.GEDCOM
                 "247112",
                 "RUSSIAN FEDERATION"
             };
-            GEDCOMAddress instance = new GEDCOMAddress(null, null);
+            GEDCOMAddress instance = new GEDCOMAddress(null);
             instance.SetAddressArray(value);
             Assert.AreEqual(new StringList(value).Text, instance.Address.Text);
         }

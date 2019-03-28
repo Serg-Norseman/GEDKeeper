@@ -159,7 +159,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMHeader(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMHeader(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.HEAD);
         }

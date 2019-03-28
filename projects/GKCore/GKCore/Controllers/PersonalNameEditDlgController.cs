@@ -83,7 +83,7 @@ namespace GKCore.Controllers
 
         private bool IsExtendedWomanSurname()
         {
-            GEDCOMIndividualRecord iRec = fPersonalName.Parent as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord iRec = fPersonalName.Owner as GEDCOMIndividualRecord;
 
             bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
                 (iRec.Sex == GEDCOMSex.svFemale);
@@ -92,7 +92,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            GEDCOMIndividualRecord iRec = fPersonalName.Parent as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord iRec = fPersonalName.Owner as GEDCOMIndividualRecord;
 
             var parts = GKUtils.GetNameParts(iRec, fPersonalName, false);
 

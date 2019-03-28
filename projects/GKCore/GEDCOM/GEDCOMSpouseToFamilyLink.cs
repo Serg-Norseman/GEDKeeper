@@ -29,19 +29,19 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMSpouseToFamilyLink(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMSpouseToFamilyLink(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.FAMS);
         }
 
-        public GEDCOMSpouseToFamilyLink(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMSpouseToFamilyLink(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMSpouseToFamilyLink(owner, parent, tagName, tagValue);
+            return new GEDCOMSpouseToFamilyLink(owner, tagName, tagValue);
         }
     }
 }

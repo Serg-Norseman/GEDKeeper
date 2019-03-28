@@ -137,6 +137,7 @@
     <Compile Include="GKCore\TreeToolsTests.cs" />
     <Compile Include="GKCore\ValuesCollectionTests.cs" />
     <Compile Include="GKCore\YamlHelperTests.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="TestStubs.cs" />
     <Compile Include="ControlTesters\DataGridViewTester.cs" />
     <Compile Include="ControlTesters\GKRecordsViewTester.cs" />
@@ -218,8 +219,6 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKCore\Controllers" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

@@ -69,7 +69,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMSourceRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMSourceRecord(GEDCOMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtSource);
             SetName(GEDCOMTagType.SOUR);
@@ -90,7 +90,7 @@ namespace GKCommon.GEDCOM
             GEDCOMTag result;
 
             if (tagName == GEDCOMTagType.REPO) {
-                result = fRepositoryCitations.Add(new GEDCOMRepositoryCitation(Owner, this, tagName, tagValue));
+                result = fRepositoryCitations.Add(new GEDCOMRepositoryCitation(this, tagName, tagValue));
             } else if (tagName == GEDCOMTagType.DATA) {
                 result = base.AddTag(tagName, tagValue, GEDCOMData.Create);
             } else {
@@ -144,7 +144,7 @@ namespace GKCommon.GEDCOM
                 while (fRepositoryCitations.Count > 0)
                 {
                     GEDCOMRepositoryCitation obj = fRepositoryCitations.Extract(0);
-                    obj.ResetParent(targetSource);
+                    obj.ResetOwner(targetSource);
                     targetSource.RepositoryCitations.Add(obj);
                 }
             }
@@ -167,12 +167,6 @@ namespace GKCommon.GEDCOM
         {
             base.ReplaceXRefs(map);
             fRepositoryCitations.ReplaceXRefs(map);
-        }
-
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-            fRepositoryCitations.ResetOwner(newOwner);
         }
 
         public override void SaveToStream(StreamWriter stream)
@@ -218,7 +212,7 @@ namespace GKCommon.GEDCOM
             GEDCOMRepositoryCitation cit = null;
             
             if (repRec != null) {
-                cit = new GEDCOMRepositoryCitation(Owner, this);
+                cit = new GEDCOMRepositoryCitation(this);
                 cit.Value = repRec;
                 fRepositoryCitations.Add(cit);
             }

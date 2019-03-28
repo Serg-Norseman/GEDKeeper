@@ -30,7 +30,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_SetTagStringsA()
         {
-            var tag = new GEDCOMTag(null, null, "TEST", "");
+            var tag = new GEDCOMTag(null, "TEST", "");
             Assert.IsNotNull(tag);
 
             // very long string, 248"A" and " BBB BBBB"
@@ -48,7 +48,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_SetTagStringsL()
         {
-            var tag = new GEDCOMTag(null, null, "TEST", "");
+            var tag = new GEDCOMTag(null, "TEST", "");
             Assert.IsNotNull(tag);
 
             // very long string, 248"A" and " BBB BBBB"
@@ -69,7 +69,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_FindTags()
         {
-            var tag = new GEDCOMTag(null, null, "TEST", "");
+            var tag = new GEDCOMTag(null, "TEST", "");
             Assert.IsNotNull(tag);
 
             tag.AddTag(GEDCOMTagType._FOLDER, "Private", null);

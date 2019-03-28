@@ -34,6 +34,8 @@ namespace GKCommon.GEDCOM
         private GEDCOMList<GEDCOMPointer> fGroups;
         private GEDCOMList<GEDCOMPersonalName> fPersonalNames;
         private GEDCOMList<GEDCOMSpouseToFamilyLink> fSpouseToFamilyLinks;
+        private GEDCOMSex fSex;
+
 
         public GEDCOMList<GEDCOMAlias> Aliases
         {
@@ -106,8 +108,8 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMSex Sex
         {
-            get { return GEDCOMUtils.GetSexVal(GetTagStringValue(GEDCOMTagType.SEX)); }
-            set { SetTagStringValue(GEDCOMTagType.SEX, GEDCOMUtils.GetSexStr(value)); }
+            get { return fSex; }
+            set { fSex = value; }
         }
 
         public GEDCOMList<GEDCOMSpouseToFamilyLink> SpouseToFamilyLinks
@@ -116,7 +118,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMIndividualRecord(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMIndividualRecord(GEDCOMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtIndividual);
             SetName(GEDCOMTagType.INDI);
@@ -209,7 +211,7 @@ namespace GKCommon.GEDCOM
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
         {
-            GEDCOMTag result = fTagsFactory.CreateTag(Owner, this, tagName, tagValue);
+            GEDCOMTag result = fTagsFactory.CreateTag(this, tagName, tagValue);
             if (result != null) {
                 if (result is GEDCOMCustomEvent) {
                     result = AddEvent(result as GEDCOMCustomEvent);
@@ -226,7 +228,10 @@ namespace GKCommon.GEDCOM
                 }
             } else {
                 if (tagName == GEDCOMTagType._GROUP) {
-                    result = fGroups.Add(new GEDCOMPointer(Owner, this, tagName, tagValue));
+                    result = fGroups.Add(new GEDCOMPointer(this, tagName, tagValue));
+                } else if (tagName == GEDCOMTagType.SEX) {
+                    fSex = GEDCOMUtils.GetSexVal(tagValue);
+                    result = null;
                 } else {
                     result = base.AddTag(tagName, tagValue, tagConstructor);
                 }
@@ -263,6 +268,8 @@ namespace GKCommon.GEDCOM
         {
             base.Clear();
 
+            fSex = GEDCOMSex.svNone;
+
             for (int i = fChildToFamilyLinks.Count - 1; i >= 0; i--) {
                 GEDCOMFamilyRecord family = fChildToFamilyLinks[i].Family;
                 family.DeleteChild(this);
@@ -288,7 +295,7 @@ namespace GKCommon.GEDCOM
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fPersonalNames.Count == 0
+            return base.IsEmpty() && (fSex == GEDCOMSex.svNone) && fPersonalNames.Count == 0
                 && fChildToFamilyLinks.Count == 0 && fSpouseToFamilyLinks.Count == 0
                 && fAssociations.Count == 0 && fAliasses.Count == 0 && fGroups.Count == 0;
         }
@@ -361,8 +368,10 @@ namespace GKCommon.GEDCOM
 
             base.Assign(source);
 
+            fSex = sourceRec.fSex;
+
             foreach (GEDCOMPersonalName srcName in sourceRec.fPersonalNames) {
-                GEDCOMPersonalName copyName = new GEDCOMPersonalName(Owner, this);
+                GEDCOMPersonalName copyName = new GEDCOMPersonalName(this);
                 copyName.Assign(srcName);
                 AddPersonalName(copyName);
             }
@@ -370,25 +379,27 @@ namespace GKCommon.GEDCOM
 
         public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
         {
-            GEDCOMIndividualRecord toRec = targetRecord as GEDCOMIndividualRecord;
-            if (toRec == null) {
+            GEDCOMIndividualRecord targetIndi = targetRecord as GEDCOMIndividualRecord;
+            if (targetIndi == null) {
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
             }
 
-            if (!clearDest) {
+            /*if (!clearDest) {
                 DeleteTag(GEDCOMTagType.SEX);
                 DeleteTag(GEDCOMTagType._UID);
-            }
+            }*/
 
             base.MoveTo(targetRecord, clearDest);
 
+            targetIndi.Sex = fSex;
+
             while (fPersonalNames.Count > 0) {
                 GEDCOMPersonalName obj = fPersonalNames.Extract(0);
-                obj.ResetParent(toRec);
-                toRec.AddPersonalName(obj);
+                obj.ResetOwner(targetIndi);
+                targetIndi.AddPersonalName(obj);
             }
 
-            if (toRec.ChildToFamilyLinks.Count == 0 && ChildToFamilyLinks.Count != 0 && fChildToFamilyLinks != null) {
+            if (targetIndi.ChildToFamilyLinks.Count == 0 && ChildToFamilyLinks.Count != 0 && fChildToFamilyLinks != null) {
                 GEDCOMChildToFamilyLink ctfLink = fChildToFamilyLinks.Extract(0);
                 GEDCOMFamilyRecord family = ctfLink.Family;
 
@@ -401,8 +412,8 @@ namespace GKCommon.GEDCOM
                     }
                 }
 
-                ctfLink.ResetParent(toRec);
-                toRec.ChildToFamilyLinks.Add(ctfLink);
+                ctfLink.ResetOwner(targetIndi);
+                targetIndi.ChildToFamilyLinks.Add(ctfLink);
             }
 
             while (fSpouseToFamilyLinks.Count > 0) {
@@ -417,26 +428,26 @@ namespace GKCommon.GEDCOM
                     family.Wife.StringValue = targetXRef;
                 }
 
-                stfLink.ResetParent(toRec);
-                toRec.SpouseToFamilyLinks.Add(stfLink);
+                stfLink.ResetOwner(targetIndi);
+                targetIndi.SpouseToFamilyLinks.Add(stfLink);
             }
 
             while (fAssociations.Count > 0) {
                 GEDCOMAssociation obj = fAssociations.Extract(0);
-                obj.ResetParent(toRec);
-                toRec.Associations.Add(obj);
+                obj.ResetOwner(targetIndi);
+                targetIndi.Associations.Add(obj);
             }
 
             while (fAliasses.Count > 0) {
                 GEDCOMAlias obj = fAliasses.Extract(0);
-                obj.ResetParent(toRec);
-                toRec.Aliases.Add(obj);
+                obj.ResetOwner(targetIndi);
+                targetIndi.Aliases.Add(obj);
             }
 
             while (fGroups.Count > 0) {
                 GEDCOMPointer obj = fGroups.Extract(0);
-                obj.ResetParent(toRec);
-                toRec.Groups.Add(obj);
+                obj.ResetOwner(targetIndi);
+                targetIndi.Groups.Add(obj);
             }
         }
 
@@ -464,21 +475,11 @@ namespace GKCommon.GEDCOM
             fSpouseToFamilyLinks.ReplaceXRefs(map);
         }
 
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-
-            fAliasses.ResetOwner(newOwner);
-            fAssociations.ResetOwner(newOwner);
-            fChildToFamilyLinks.ResetOwner(newOwner);
-            fGroups.ResetOwner(newOwner);
-            fPersonalNames.ResetOwner(newOwner);
-            fSpouseToFamilyLinks.ResetOwner(newOwner);
-        }
-
         public override void SaveToStream(StreamWriter stream)
         {
             base.SaveToStream(stream);
+
+            WriteTagLine(stream, Level + 1, GEDCOMTagType.SEX, GEDCOMUtils.GetSexStr(fSex), true);
 
             fPersonalNames.SaveToStream(stream);
             fChildToFamilyLinks.SaveToStream(stream);
@@ -533,7 +534,7 @@ namespace GKCommon.GEDCOM
             GEDCOMFamilyRecord result = (fSpouseToFamilyLinks.Count < 1) ? null : fSpouseToFamilyLinks[0].Family;
 
             if (result == null && canCreate) {
-                result = Owner.CreateFamily();
+                result = GetTree().CreateFamily();
                 result.AddSpouse(this);
             }
 
@@ -550,7 +551,7 @@ namespace GKCommon.GEDCOM
             GEDCOMFamilyRecord result = (fChildToFamilyLinks.Count < 1) ? null : fChildToFamilyLinks[0].Value as GEDCOMFamilyRecord;
 
             if (result == null && canCreate) {
-                result = Owner.CreateFamily();
+                result = GetTree().CreateFamily();
                 result.AddChild(this);
             }
 
@@ -647,7 +648,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMAssociation AddAssociation(string relation, GEDCOMIndividualRecord relPerson)
         {
-            GEDCOMAssociation result = new GEDCOMAssociation(Owner, this);
+            GEDCOMAssociation result = new GEDCOMAssociation(this);
             result.Relation = relation;
             result.Individual = relPerson;
             Associations.Add(result);

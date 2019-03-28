@@ -61,17 +61,17 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMSourceCitation(owner, parent, tagName, tagValue);
+            return new GEDCOMSourceCitation(owner, tagName, tagValue);
         }
 
-        public GEDCOMSourceCitation(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMSourceCitation(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.SOUR);
         }
 
-        public GEDCOMSourceCitation(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMSourceCitation(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

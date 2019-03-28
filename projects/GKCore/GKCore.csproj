@@ -421,6 +421,7 @@
     <Compile Include="GKCore\MVP\FormController.cs" />
     <Compile Include="GKCore\MVP\IView.cs" />
     <Compile Include="GKCore\MVP\IControl.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">

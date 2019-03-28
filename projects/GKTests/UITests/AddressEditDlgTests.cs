@@ -51,7 +51,7 @@ namespace GKUI.Forms
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fAddress = new GEDCOMAddress(fBase.Context.Tree, null);
+            fAddress = new GEDCOMAddress(null);
 
             fAddress.AddWebPage("test");
             fAddress.AddPhoneNumber("test");

@@ -40,18 +40,18 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMDateRange(owner, parent, tagName, tagValue);
+            return new GEDCOMDateRange(owner, tagName, tagValue);
         }
 
-        public GEDCOMDateRange(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMDateRange(GEDCOMObject owner) : base(owner)
         {
-            fDateAfter = new GEDCOMDate(owner, this);
-            fDateBefore = new GEDCOMDate(owner, this);
+            fDateAfter = new GEDCOMDate(this);
+            fDateBefore = new GEDCOMDate(this);
         }
 
-        public GEDCOMDateRange(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMDateRange(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -119,16 +119,9 @@ namespace GKCommon.GEDCOM
             if (string.IsNullOrEmpty(strValue)) {
                 result = string.Empty;
             } else {
-                result = GEDCOMUtils.ParseRangeDate(Owner, this, strValue);
+                result = GEDCOMUtils.ParseRangeDate(GetTree(), this, strValue);
             }
             return result;
-        }
-
-        public override void ResetOwner(GEDCOMTree newOwner)
-        {
-            base.ResetOwner(newOwner);
-            if (fDateAfter != null) fDateAfter.ResetOwner(newOwner);
-            if (fDateBefore != null) fDateBefore.ResetOwner(newOwner);
         }
 
         public override UDN GetUDN()

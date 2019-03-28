@@ -54,17 +54,17 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMChangeDate(owner, parent, tagName, tagValue);
+            return new GEDCOMChangeDate(owner, tagName, tagValue);
         }
 
-        public GEDCOMChangeDate(GEDCOMTree owner, GEDCOMObject parent) : base(owner, parent)
+        public GEDCOMChangeDate(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.CHAN);
         }
 
-        public GEDCOMChangeDate(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : this(owner, parent)
+        public GEDCOMChangeDate(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

@@ -93,39 +93,39 @@ namespace GKCore.Controllers
                     break;
 
                 case 1: // BEF gcd2
-                    result = GEDCOMCustomDate.CreateRange(null, null, null, gcd2);
+                    result = GEDCOMCustomDate.CreateRange(null, null, gcd2);
                     break;
 
                 case 2: // AFT gcd1
-                    result = GEDCOMCustomDate.CreateRange(null, null, gcd1, null);
+                    result = GEDCOMCustomDate.CreateRange(null, gcd1, null);
                     break;
 
                 case 3: // "BET " + gcd1 + " AND " + gcd2
-                    result = GEDCOMCustomDate.CreateRange(null, null, gcd1, gcd2);
+                    result = GEDCOMCustomDate.CreateRange(null, gcd1, gcd2);
                     break;
 
                 case 4: // FROM gcd1
-                    result = GEDCOMCustomDate.CreatePeriod(null, null, gcd1, null);
+                    result = GEDCOMCustomDate.CreatePeriod(null, gcd1, null);
                     break;
 
                 case 5: // TO gcd2
-                    result = GEDCOMCustomDate.CreatePeriod(null, null, null, gcd2);
+                    result = GEDCOMCustomDate.CreatePeriod(null, null, gcd2);
                     break;
 
                 case 6: // FROM gcd1 TO gcd2
-                    result = GEDCOMCustomDate.CreatePeriod(null, null, gcd1, gcd2);
+                    result = GEDCOMCustomDate.CreatePeriod(null, gcd1, gcd2);
                     break;
 
                 case 7: // ABT gcd1
-                    result = GEDCOMCustomDate.CreateApproximated(null, null, gcd1, GEDCOMApproximated.daAbout);
+                    result = GEDCOMCustomDate.CreateApproximated(null, gcd1, GEDCOMApproximated.daAbout);
                     break;
 
                 case 8: // CAL gcd1
-                    result = GEDCOMCustomDate.CreateApproximated(null, null, gcd1, GEDCOMApproximated.daCalculated);
+                    result = GEDCOMCustomDate.CreateApproximated(null, gcd1, GEDCOMApproximated.daCalculated);
                     break;
 
                 case 9: // EST gcd1
-                    result = GEDCOMCustomDate.CreateApproximated(null, null, gcd1, GEDCOMApproximated.daEstimated);
+                    result = GEDCOMCustomDate.CreateApproximated(null, gcd1, GEDCOMApproximated.daEstimated);
                     break;
             }
 
@@ -161,7 +161,7 @@ namespace GKCore.Controllers
 
                 if (fEvent is GEDCOMIndividualEvent) {
                     if (GKData.PersonEvents[eventType].Kind == PersonEventKind.ekFact) {
-                        GEDCOMIndividualAttribute attr = new GEDCOMIndividualAttribute(fEvent.Owner, fEvent.Parent);
+                        GEDCOMIndividualAttribute attr = new GEDCOMIndividualAttribute(fEvent.Owner);
                         attr.Assign(fEvent);
                         fEvent = attr;
                     }
