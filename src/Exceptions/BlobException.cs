@@ -1,4 +1,4 @@
-/* CISRecordChanges.cs
+/* BlobException.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -22,35 +22,17 @@
  *
  */
 
-using System.Collections;
-using GKCommon.GEDCOM;
+using System;
 
-namespace GEDmill
+namespace GEDmill.Exceptions
 {
     /// <summary>
-    /// Data structure to hold a record for the load/save changes option on the prune
-    /// individuals and sources page. See also CISRecord.
+    /// Exception that gets thrown if inline binary file in GEDCOM can't be decoded.
     /// </summary>
-    public class CISRecordChanges
+    public class BlobException : Exception
     {
-        // True if this record is to be included (e.g. individual's checkbox is checked)
-        public bool IncludeInWebsite;
-
-        // Helper for parser
-        public GEDCOMFileReferenceWithTitle CurrentMFR;
-
-        // The multimedia file references
-        public ArrayList MFRList;
-
-        public bool Visibility;
-
-
-        public CISRecordChanges(bool includeInWebsite)
+        public BlobException()
         {
-            IncludeInWebsite = includeInWebsite;
-            MFRList = new ArrayList();
-            CurrentMFR = null;
-            Visibility = true;
         }
     }
 }

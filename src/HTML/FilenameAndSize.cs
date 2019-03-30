@@ -1,4 +1,4 @@
-/* CISRecordChanges.cs
+/* CFilenameAndSize.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -22,35 +22,25 @@
  *
  */
 
-using System.Collections;
-using GKCommon.GEDCOM;
-
-namespace GEDmill
+namespace GEDmill.HTML
 {
     /// <summary>
-    /// Data structure to hold a record for the load/save changes option on the prune
-    /// individuals and sources page. See also CISRecord.
+    /// Once a file has been copied to the output directory, it needn't be copied again. 
+    /// However, we still need to know the size of the image, even if we don't copy it a 
+    /// second time. This class encapsulates the size along with the sFilename.
     /// </summary>
-    public class CISRecordChanges
+    public class FilenameAndSize
     {
-        // True if this record is to be included (e.g. individual's checkbox is checked)
-        public bool IncludeInWebsite;
-
-        // Helper for parser
-        public GEDCOMFileReferenceWithTitle CurrentMFR;
-
-        // The multimedia file references
-        public ArrayList MFRList;
-
-        public bool Visibility;
+        public string FileName;
+        public int Width;
+        public int Height;
 
 
-        public CISRecordChanges(bool includeInWebsite)
+        public FilenameAndSize(string filename, int width, int height)
         {
-            IncludeInWebsite = includeInWebsite;
-            MFRList = new ArrayList();
-            CurrentMFR = null;
-            Visibility = true;
+            FileName = filename;
+            Width = width;
+            Height = height;
         }
     }
 }

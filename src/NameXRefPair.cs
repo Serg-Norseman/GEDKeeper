@@ -1,4 +1,4 @@
-/* CISRecordChanges.cs
+/* NameXRefPair.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -22,35 +22,30 @@
  *
  */
 
-using System.Collections;
-using GKCommon.GEDCOM;
-
 namespace GEDmill
 {
     /// <summary>
-    /// Data structure to hold a record for the load/save changes option on the prune
-    /// individuals and sources page. See also CISRecord.
+    /// Data structure used to hold the name and xref of an individual in the "key individuals" list box.
     /// </summary>
-    public class CISRecordChanges
+    public class NameXRefPair
     {
-        // True if this record is to be included (e.g. individual's checkbox is checked)
-        public bool IncludeInWebsite;
+        // The individual's name
+        public string Name;
 
-        // Helper for parser
-        public GEDCOMFileReferenceWithTitle CurrentMFR;
-
-        // The multimedia file references
-        public ArrayList MFRList;
-
-        public bool Visibility;
+        // The record xref
+        public string XRef;
 
 
-        public CISRecordChanges(bool includeInWebsite)
+        public NameXRefPair(string name, string xref)
         {
-            IncludeInWebsite = includeInWebsite;
-            MFRList = new ArrayList();
-            CurrentMFR = null;
-            Visibility = true;
+            Name = name;
+            XRef = xref;
+        }
+
+        // Override returns string to display in list
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

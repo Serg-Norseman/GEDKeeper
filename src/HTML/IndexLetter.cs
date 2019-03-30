@@ -1,4 +1,4 @@
-/* CISRecordChanges.cs
+/* CIndexLetter.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -23,34 +23,25 @@
  */
 
 using System.Collections;
-using GKCommon.GEDCOM;
 
-namespace GEDmill
+namespace GEDmill.HTML
 {
     /// <summary>
-    /// Data structure to hold a record for the load/save changes option on the prune
-    /// individuals and sources page. See also CISRecord.
+    /// Data structure holding all the entries in the index under the given letter.
+    /// Title is usually the same as initial, except for no-surname case.
     /// </summary>
-    public class CISRecordChanges
+    public class IndexLetter
     {
-        // True if this record is to be included (e.g. individual's checkbox is checked)
-        public bool IncludeInWebsite;
-
-        // Helper for parser
-        public GEDCOMFileReferenceWithTitle CurrentMFR;
-
-        // The multimedia file references
-        public ArrayList MFRList;
-
-        public bool Visibility;
+        public ArrayList Items;
+        public string Initial;
+        public string Title;
 
 
-        public CISRecordChanges(bool includeInWebsite)
+        public IndexLetter(string initial, string title, ArrayList letterList)
         {
-            IncludeInWebsite = includeInWebsite;
-            MFRList = new ArrayList();
-            CurrentMFR = null;
-            Visibility = true;
+            Initial = initial;
+            Title = title;
+            Items = letterList;
         }
     }
 }

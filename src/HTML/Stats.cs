@@ -1,8 +1,8 @@
-/* CISRecordChanges.cs
- * 
+/* CStats.cs
+ *
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
- * 
+ *
  * GEDmill is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,40 +17,37 @@
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  *
  *
- * History:  
+ * History:
  * 10Dec08 AlexC          Migrated from GEDmill 1.10
  *
  */
 
-using System.Collections;
-using GKCommon.GEDCOM;
-
-namespace GEDmill
+namespace GEDmill.HTML
 {
     /// <summary>
-    /// Data structure to hold a record for the load/save changes option on the prune
-    /// individuals and sources page. See also CISRecord.
+    /// Data structure to contain statistics about the website being created.
     /// </summary>
-    public class CISRecordChanges
+    public class Stats
     {
-        // True if this record is to be included (e.g. individual's checkbox is checked)
-        public bool IncludeInWebsite;
+        // The number of individual records in the website.
+        public uint Individuals;
 
-        // Helper for parser
-        public GEDCOMFileReferenceWithTitle CurrentMFR;
+        // The number of source records in the website.
+        public uint Sources;
 
-        // The multimedia file references
-        public ArrayList MFRList;
+        // The number of multimedia files in the website.
+        public uint MultimediaFiles;
 
-        public bool Visibility;
+        // True if the website includes multimedia files other than pictures.
+        public bool NonPicturesIncluded;
 
 
-        public CISRecordChanges(bool includeInWebsite)
+        public Stats()
         {
-            IncludeInWebsite = includeInWebsite;
-            MFRList = new ArrayList();
-            CurrentMFR = null;
-            Visibility = true;
+            Individuals = 0;
+            Sources = 0;
+            MultimediaFiles = 0;
+            NonPicturesIncluded = false;
         }
     }
 }

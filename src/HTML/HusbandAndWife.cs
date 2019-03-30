@@ -1,4 +1,4 @@
-/* CISRecordChanges.cs
+/* CHusbandAndWife.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -22,35 +22,22 @@
  *
  */
 
-using System.Collections;
 using GKCommon.GEDCOM;
 
-namespace GEDmill
+namespace GEDmill.HTML
 {
     /// <summary>
-    /// Data structure to hold a record for the load/save changes option on the prune
-    /// individuals and sources page. See also CISRecord.
+    /// A data structure to encapsulate a marriage or other connection of a husband and a wife.
+    /// Used as an element in the list of all an individual's frParents.
     /// </summary>
-    public class CISRecordChanges
+    public class HusbandAndWife
     {
-        // True if this record is to be included (e.g. individual's checkbox is checked)
-        public bool IncludeInWebsite;
-
-        // Helper for parser
-        public GEDCOMFileReferenceWithTitle CurrentMFR;
-
-        // The multimedia file references
-        public ArrayList MFRList;
-
-        public bool Visibility;
+        public GEDCOMIndividualRecord Husband;
+        public GEDCOMIndividualRecord Wife;
 
 
-        public CISRecordChanges(bool includeInWebsite)
+        public HusbandAndWife()
         {
-            IncludeInWebsite = includeInWebsite;
-            MFRList = new ArrayList();
-            CurrentMFR = null;
-            Visibility = true;
         }
     }
 }

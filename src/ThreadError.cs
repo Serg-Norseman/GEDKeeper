@@ -1,4 +1,4 @@
-/* CISRecordChanges.cs
+/* ThreadError.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -22,35 +22,24 @@
  *
  */
 
-using System.Collections;
-using GKCommon.GEDCOM;
-
 namespace GEDmill
 {
     /// <summary>
-    /// Data structure to hold a record for the load/save changes option on the prune
-    /// individuals and sources page. See also CISRecord.
+    /// A data structure containing an nError code and a sMessage, for passing back from threads to their creator.
     /// </summary>
-    public class CISRecordChanges
+    public class ThreadError
     {
-        // True if this record is to be included (e.g. individual's checkbox is checked)
-        public bool IncludeInWebsite;
+        // The error code
+        public int Error;
 
-        // Helper for parser
-        public GEDCOMFileReferenceWithTitle CurrentMFR;
-
-        // The multimedia file references
-        public ArrayList MFRList;
-
-        public bool Visibility;
+        // The error message
+        public string Message;
 
 
-        public CISRecordChanges(bool includeInWebsite)
+        public ThreadError(int error, string message)
         {
-            IncludeInWebsite = includeInWebsite;
-            MFRList = new ArrayList();
-            CurrentMFR = null;
-            Visibility = true;
+            Error = error;
+            Message = message;
         }
     }
 }

@@ -1,4 +1,4 @@
-/* CISRecordChanges.cs
+/* CListableSource.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -22,35 +22,34 @@
  *
  */
 
-using System.Collections;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 
-namespace GEDmill
+namespace GEDmill.ListView
 {
-    /// <summary>
-    /// Data structure to hold a record for the load/save changes option on the prune
-    /// individuals and sources page. See also CISRecord.
-    /// </summary>
-    public class CISRecordChanges
+    // Represents a source record in the list of sources, and provides sorting.
+    public class CListableSource : ListViewItem.ListViewSubItem
     {
-        // True if this record is to be included (e.g. individual's checkbox is checked)
-        public bool IncludeInWebsite;
-
-        // Helper for parser
-        public GEDCOMFileReferenceWithTitle CurrentMFR;
-
-        // The multimedia file references
-        public ArrayList MFRList;
-
-        public bool Visibility;
+        // The record in question
+        private GEDCOMSourceRecord fRecord;
 
 
-        public CISRecordChanges(bool includeInWebsite)
+        public CListableSource(GEDCOMSourceRecord sr)
         {
-            IncludeInWebsite = includeInWebsite;
-            MFRList = new ArrayList();
-            CurrentMFR = null;
-            Visibility = true;
+            fRecord = sr;
+            base.Text = sr.ShortTitle;
+        }
+
+        // Used by the list box to display the name of the source
+        public override string ToString()
+        {
+            return fRecord.ToString();
+        }
+
+        // Used when sorting the list box
+        public int CompareTo(CListableSource other)
+        {
+            return fRecord.ShortTitle.CompareTo(other.fRecord.ShortTitle);
         }
     }
 }

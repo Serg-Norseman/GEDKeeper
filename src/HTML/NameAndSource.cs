@@ -1,4 +1,4 @@
-/* CISRecordChanges.cs
+/* CNameAndSource.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -22,35 +22,27 @@
  *
  */
 
-using System.Collections;
 using GKCommon.GEDCOM;
 
 namespace GEDmill
 {
     /// <summary>
-    /// Data structure to hold a record for the load/save changes option on the prune
-    /// individuals and sources page. See also CISRecord.
+    /// A data structure to encapsulate an individual's name and source records that confirm it.
+    /// Also contains the HTML for the source reference superscript numbers for this particular name.
+    /// Used as an element in the list of all an individual's names.
     /// </summary>
-    public class CISRecordChanges
+    public class NameAndSource
     {
-        // True if this record is to be included (e.g. individual's checkbox is checked)
-        public bool IncludeInWebsite;
-
-        // Helper for parser
-        public GEDCOMFileReferenceWithTitle CurrentMFR;
-
-        // The multimedia file references
-        public ArrayList MFRList;
-
-        public bool Visibility;
+        public string Name;
+        public string SourceHtml;
+        public GEDCOMList<GEDCOMSourceCitation> Sources;
 
 
-        public CISRecordChanges(bool includeInWebsite)
+        public NameAndSource(string name)
         {
-            IncludeInWebsite = includeInWebsite;
-            MFRList = new ArrayList();
-            CurrentMFR = null;
-            Visibility = true;
+            Name = name;
+            SourceHtml = "";
+            Sources = new GEDCOMList<GEDCOMSourceCitation>(null);
         }
     }
 }

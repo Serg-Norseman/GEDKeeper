@@ -1,4 +1,4 @@
-/* CISRecordChanges.cs
+/* CPGQualifiedDate.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -22,35 +22,44 @@
  *
  */
 
-using System.Collections;
 using GKCommon.GEDCOM;
 
 namespace GEDmill
 {
-    /// <summary>
-    /// Data structure to hold a record for the load/save changes option on the prune
-    /// individuals and sources page. See also CISRecord.
-    /// </summary>
-    public class CISRecordChanges
+    public enum DateQualification
     {
-        // True if this record is to be included (e.g. individual's checkbox is checked)
-        public bool IncludeInWebsite;
+        Birth,
+        Baptism,
+        Christening,
+        Death,
+        Burial,
+        Cremation
+    }
 
-        // Helper for parser
-        public GEDCOMFileReferenceWithTitle CurrentMFR;
+    /// <summary>
+    /// Class used to find the best date to use for an individual's birth or death.
+    /// Naturally an actual birth record would be best, but if this is missing, we can use the Christening date etc..
+    /// See also GEDCOMDateValue.
+    /// </summary>
+    public class QualifiedDate
+    {
+        public DateQualification Qualification;
+        public GEDCOMDateValue Date;
 
-        // The multimedia file references
-        public ArrayList MFRList;
 
-        public bool Visibility;
-
-
-        public CISRecordChanges(bool includeInWebsite)
+        public QualifiedDate(GEDCOMDateValue date, DateQualification qualification)
         {
-            IncludeInWebsite = includeInWebsite;
-            MFRList = new ArrayList();
-            CurrentMFR = null;
-            Visibility = true;
+            Date = date;
+            Qualification = qualification;
+        }
+
+        // Just delegates to GEDCOMDateValue::ToString()
+        public override string ToString()
+        {
+            if (Date != null) {
+                return Date.ToString();
+            }
+            return "";
         }
     }
 }

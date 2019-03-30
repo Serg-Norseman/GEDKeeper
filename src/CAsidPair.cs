@@ -29,7 +29,7 @@ namespace GEDmill
 {
     // An ASID pair is used by Family Historian to delimit an sArea of a larger picture that contains the 
     // individual in question.
-    public class CAsidPair
+    /*public class CAsidPair
     {
         // The ASID
         public string m_sAsid;
@@ -54,14 +54,14 @@ namespace GEDmill
             int nLeft,nTop,nBottom,nRight;
             try 
             {
-                CGedcom.ParseWhitespace( ref sArea );
+                GEDCOMTree.ParseWhitespace( ref sArea );
                 if (sArea[0] != '{')
                 {
                     return;
                 }
 
                 sArea = sArea.Substring(1);
-                nTop = CGedcom.ParseNumber( ref sArea );
+                nTop = GEDCOMTree.ParseNumber( ref sArea );
                 if (nTop < 0)
                 {
                     nTop = 0;
@@ -72,7 +72,7 @@ namespace GEDmill
                 }
 
                 sArea = sArea.Substring(1);
-                nLeft = CGedcom.ParseNumber( ref sArea );
+                nLeft = GEDCOMTree.ParseNumber( ref sArea );
                 if (nLeft < 0)
                 {
                     nLeft = 0;
@@ -83,7 +83,7 @@ namespace GEDmill
                 }
 
                 sArea = sArea.Substring(1);
-                nBottom = CGedcom.ParseNumber( ref sArea );
+                nBottom = GEDCOMTree.ParseNumber( ref sArea );
                 if (nBottom < 0)
                 {
                     nBottom = 0;
@@ -94,7 +94,7 @@ namespace GEDmill
                 }
 
                 sArea = sArea.Substring(1);
-                nRight = CGedcom.ParseNumber( ref sArea );
+                nRight = GEDCOMTree.ParseNumber( ref sArea );
                 if (nRight < 0)
                 {
                     nRight = 0;
@@ -119,5 +119,5 @@ namespace GEDmill
             m_rectArea = ap.m_rectArea;
         }
 
-    }
+    }*/
 }

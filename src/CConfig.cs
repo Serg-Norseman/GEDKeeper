@@ -31,419 +31,399 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace GEDmill
 {
-    // Class that contains all the user configurable settings, and serialises them into IsolatedStorage at program start and exit.
-    // Note not all settings here are presented through the UI, but most are. Originally there was a distinction her but it has become blurred.
+    /// <summary>
+    /// Class that contains all the user configurable settings, and serialises them into IsolatedStorage at program start and exit.
+    /// Note not all settings here are presented through the UI, but most are. Originally there was a distinction her but it has become blurred.
+    /// </summary>
     public class CConfig
     {
         // Filename used to store users config in isolated storage.
-        public string m_configFilename;
+        public string ConfigFilename;
 
         // Name to use where no other name is available
-        public string m_sUnknownName;
+        public string UnknownName;
 
         // How to capitalise individuals' names
-        public int m_nNameCapitalisation;
+        public int NameCapitalisation;
 
         // File extension for html files
-        public string m_sHtmlExtension;
+        public string HtmlExtension;
 
         // Absolute sFilename of image to use as background
-        public string m_sBackgroundImage;
+        public string BackgroundImage;
 
         // Maximum allowed width of individual image
-        public uint m_uMaxImageWidth;
+        public uint MaxImageWidth;
 
         // Maximum allowed height of individual image
-        public uint m_uMaxImageHeight;
+        public uint MaxImageHeight;
 
         // Age at which defining occupation is chosen
-        public int m_nAgeForOccupation;
+        public int AgeForOccupation;
 
         // Maximum allowed width of source image
-        public uint m_uMaxSourceImageWidth;
+        public uint MaxSourceImageWidth;
 
         // Maximum allowed height of source image
-        public uint m_uMaxSourceImageHeight;
+        public uint MaxSourceImageHeight;
 
         // Maximum allowed width of thumbnail image
-        public uint m_uMaxThumbnailImageWidth;
+        public uint MaxThumbnailImageWidth;
 
         // Maximum allowed height of thumbnail image
-        public uint m_uMaxThumbnailImageHeight;
+        public uint MaxThumbnailImageHeight;
 
         // Filename of image if any to use on front webpage.
-        public string m_sFrontPageImageFilename;
+        public string FrontPageImageFilename;
 
         // Filename of front webpage.
-        public string m_sFrontPageFilename;
+        public string FrontPageFilename;
 
         // Number of spaces between each tab stop, when converting \t characters to html.
-        public uint m_uTabSpaces;
+        public uint TabSpaces;
 
         // True if event descriptions to start with capital letter, e.g. "Born" as opposed to "born".
-        public bool m_bCapitaliseEventDescriptions;
+        public bool CapitaliseEventDescriptions;
 
         // True if to include text about website statistics on front page.
-        public bool m_bFrontPageStats;
+        public bool ShowFrontPageStats;
 
         // Extra text to include on title page.
-        public string m_sCommentaryText;
+        public string CommentaryText;
 
         // Name of font to render tree diagrams with
-        public string m_sTreeFontName;
+        public string TreeFontName;
 
         // Size of font to render tree diagrams with
-        public float m_fTreeFontSize;
+        public float TreeFontSize;
 
         // Width to try not to exceed when creating mini tree diagrams
-        public int m_nTargetTreeWidth;
+        public int TargetTreeWidth;
 
         // True if mini tree diagrams are to be added to pages
-        public bool m_bShowMiniTrees;
+        public bool ShowMiniTrees;
 
         // User's email address to include on webpages
-        public string m_sUserEmailAddress;
-
-        // Character set to encode output html files
-        public ECharset m_ecHtmlCharset;
+        public string UserEmailAddress;
 
         // Allow multiple multimedia files per individual. Enables m_nMaxNumberMultimediaFiles.
-        public bool m_bAllowMultipleImages;
+        public bool AllowMultipleImages;
 
         // If true will not overwrite existing front page file.
-        public bool m_bPreserveFrontPage;
+        public bool PreserveFrontPage;
 
         // If true will not overwrite existing style sheet css file.
-        public bool m_bPreserveStylesheet;
+        public bool PreserveStylesheet;
 
         // Whether to create autorun.inf and autoplay.exe files
-        public bool m_bCreateCDROMFiles;
+        public bool CreateCDROMFiles;
 
         // Whether to include files that aren't pictures as multimedia objects
-        public bool m_bAllowNonPictures;
+        public bool AllowNonPictures;
 
         // Link to users main website, put at top of each indi page.
-        public string m_sMainWebsiteLink;
+        public string MainWebsiteLink;
 
         // Name to use for stylesheet css file.
-        public string m_sStylesheetFilename;
+        public string StylesheetFilename;
 
         // Name to user for individuals who appear but have their information withheld
-        public string m_sConcealedName;
+        public string ConcealedName;
 
         // Word used to prefix locations, e.g. "at" or "in".
-        public string m_sPlaceWord;
+        public string PlaceWord;
 
         // String to use (in index) for names with no surname
-        public string m_sNoSurname;
+        public string NoSurname;
 
         // True and parser won't strip leading whitespace from gedcomLine value fields.
-        public bool m_bDataMayStartWithWhitespace;
+        public bool DataMayStartWithWhitespace;
 
         // True and parser won't strip trailing whitespace from gedcomLine value fields.
-        public bool m_bDataMayEndWithWhitespace;
+        public bool DataMayEndWithWhitespace;
 
         // True if all sources mentioned by a restricted individual should also be restricted (i.e. omitted from website)
-        public bool m_bRestrictAssociatedSources;
+        public bool RestrictAssociatedSources;
 
         // True if all multimedia files are to be renamed to a standard naming system. Now generally superceded by m_renameOriginalPicture
-        public bool m_bRenameMultimedia;
+        public bool RenameMultimedia;
 
         // True to generate a separate html page for each letter of names index. Useful if index would otherwise be massive.
-        public bool m_bIndexLetterPerPage;
+        public bool IndexLetterPerPage;
 
         // HTML string representing colour to draw connecting lines in mini trees
-        public string m_sMiniTreeColourBranch;
+        public string MiniTreeColourBranch;
 
         // HTML string representing colour to draw outline of individual boxes in mini trees
-        public string m_sMiniTreeColourIndiBorder;
+        public string MiniTreeColourIndiBorder;
 
         // HTML string representing colour to fill normal individual boxes in mini trees
-        public string m_sMiniTreeColourIndiBackground;
+        public string MiniTreeColourIndiBackground;
 
         // HTML string representing colour to fill selected individual boxes in mini trees
-        public string m_sMiniTreeColourIndiHighlight;
+        public string MiniTreeColourIndiHighlight;
 
         // HTML string representing colour to fill boxes for individuals marked as concealed in mini trees.
-        public string m_sMiniTreeColourIndiBgConcealed;
+        public string MiniTreeColourIndiBgConcealed;
 
         // HTML string representing colour to write text for individuals marked as concealed in mini trees.
-        public string m_sMiniTreeColourIndiFgConcealed;
+        public string MiniTreeColourIndiFgConcealed;
 
         // HTML string representing colour to fill shaded individual boxes in mini trees
-        public string m_sMiniTreeColourIndiShade;
+        public string MiniTreeColourIndiShade;
 
         // HTML string representing colour to draw text in individual boxes in mini trees
-        public string m_sMiniTreeColourIndiText;
+        public string MiniTreeColourIndiText;
 
         // HTML string representing colour to draw linkable text in individual boxes in mini trees
-        public string m_sMiniTreeColourIndiLink;
+        public string MiniTreeColourIndiLink;
 
         // HTML string representing colour to fill entire background of mini tree diagrams
-        public string m_sMiniTreeColourBackground;
+        public string MiniTreeColourBackground;
 
         // Whether to restrict records with RESN set to confidential
-        public bool m_bRestrictConfidential;
+        public bool RestrictConfidential;
 
         // Whether to restrict records with RESN set to privacy
-        public bool m_bRestrictPrivacy;
+        public bool RestrictPrivacy;
 
         // If true, multimedia files are copied into m_imageFolder.
-        public bool m_bCopyMultimedia;
+        public bool CopyMultimedia;
 
         // Which folder to copy multimedia into. Ends up as subdirectory to m_outputFolder;
-        public string m_sImageFolder;
+        public string ImageFolder;
 
         // If true, links to multimedia are altered to be relative to output folder (e.g. ..\..\files\file.zzz). If false, they are left as absolute (e.g. D:\files\file.zzz)
-        public bool m_bRelativiseMultimedia;
+        public bool RelativiseMultimedia;
 
         // Maximum number of multimedia files per individual page
-        public int m_nMaxNumberMultimediaFiles;
+        public int MaxNumberMultimediaFiles;
 
         // Title to use for index page
-        public string m_sIndexTitle;
+        public string IndexTitle;
 
         // Folder in which to dump all the html output
-        public string m_sOutputFolder;
+        public string OutputFolder;
 
         // Which version number of the software this config file is for
-        public string m_sVersion;
+        public string Version;
 
         // Name of owner used in titles, descriptions of pages.
-        public string m_sOwnersName;
+        public string OwnersName;
 
         // Xref of root individual in tree, for link on front page.
-        public string m_sFirstRecordXref;
+        public string FirstRecordXRef;
 
         // Title to put on front page of website
-        public string m_sTitle;
+        public string SiteTitle;
 
         // Filename of gedcom file to parse
-        public string m_sInputFilename;
+        public string InputFilename;
 
         // Path to folder containing this application.
-        public string m_sApplicationPath;
+        public string ApplicationPath;
 
         // Address of remote FTP server in which to put the files
-        public string m_sFtpServer;
+        public string FtpServer;
 
         // Username on remote server
-        public string m_sFtpUsername;
+        public string FtpUsername;
 
         // Password for remote server
-        public string m_sFtpPassword;
+        public string FtpPassword;
 
         // Folder on remote server in which to put the files
-        public string m_sFtpUploadFolder;
+        public string FtpUploadFolder;
 
         // String indicating image format to use to store mini tree file
-        public string m_sMiniTreeImageFormat;
+        public string MiniTreeImageFormat;
 
         // If true, the background image will be used to fill in the background of mini trees, giving the effect that they are transparent.
-        public bool m_bFakeMiniTreeTransparency;
+        public bool FakeMiniTreeTransparency;
 
         // List of Xrefs for individuals to be mentioned on front page.
-        public ArrayList m_alKeyIndividuals;
+        public ArrayList KeyIndividuals;
 
         // Set true if indexes are allowed to span multiple html files
-        public bool m_bMultiPageIndexes;
+        public bool MultiPageIndexes;
 
         // Number of individuals to aim to list per index page.
-        public uint m_uIndividualsPerIndexPage;
+        public uint IndividualsPerIndexPage;
 
         // If true, website pages are opened in web browser once app exits with Finish button.
-        public bool m_bOpenWebsiteOnExit;
+        public bool OpenWebsiteOnExit;
 
         // If true, instead of pretending restricted individuals don't exist, they are shown as black boxes.
-        public bool m_bOnlyConceal;
+        public bool OnlyConceal;
 
         // If true, clicking the picture will link to the original large picture.
-        public bool m_bLinkOriginalPicture;
+        public bool LinkOriginalPicture;
 
         // If true, the original picture will be renamed as it is copied. Now takes on role of m_renameMultimedia.
-        public bool m_bRenameOriginalPicture;
+        public bool RenameOriginalPicture;
 
         // Directory in which list of excluded individuals is stored
-        public string m_sExcludeFileDir;
+        public string ExcludeFileDir;
 
         // Name of file in which list of excluded individuals is stored
-        public string m_sExcludeFileName;
+        public string ExcludeFileName;
 
         // Directory in which pictures were added from for an individual
-        public string m_sLastPictureAddedDir;
+        public string LastPictureAddedDir;
 
         // If true, email addresses won't appear in web pages in harvestable form.
-        public bool m_bObfuscateEmails;
+        public bool ObfuscateEmails;
 
         // If true, "Last updated <date>" appears on home page.
-        public bool m_bAddHomePageCreateTime;
+        public bool AddHomePageCreateTime;
 
         // If true, pages get "Valid XHTML" validator link at bottom.
-        public bool m_bIncludeValiditySticker;
+        public bool IncludeValiditySticker;
 
         // If true, nickName else otherName appears in brackets in individual's index entry.
-        public bool m_bIncludeNickNamesInIndex;
+        public bool IncludeNickNamesInIndex;
 
         // Optional text user can have displayed in each page footer.
-        public string m_sCustomFooter;
+        public string CustomFooter;
 
         // If true, the user's custom individual reference number will appear in the index.
-        public bool m_bIncludeUserRefInIndex;
+        public bool IncludeUserRefInIndex;
 
         // If true, include the individuals (most appropriate, best) occupation in page header.
-        public bool m_bOccupationHeadline;
+        public bool OccupationHeadline;
 
         // True indicates that text in Commentary box (settings pane) should not be escaped. (i.e. HTML is preserved)
-        public bool m_bCommentaryIsHtml;
+        public bool CommentaryIsHtml;
 
         // True indicates that text in Footer box (settings pane) should not be escaped. (i.e. HTML is preserved)
-        public bool m_bFooterIsHtml;
+        public bool FooterIsHtml;
 
         // True means when naming html files, to use user record number if present for sFilename.
-        public bool m_bUserRecFilename;
+        public bool UserRecFilename;
 
         // If false, doesn't include the navigation bar at the top of each page.
-        public bool m_bIncludeNavbar;
+        public bool IncludeNavbar;
 
         // If true, withheld records will use the indivdual's name in minitrees, rather than m_concealedName.
-        public bool m_bUseWithheldNames;
+        public bool UseWithheldNames;
 
         // If true, first names are put on a different gedcomLine to surnames in minitree individual boxes.
-        public bool m_bConserveTreeWidth;
+        public bool ConserveTreeWidth;
 
         // If true, the mini tree has siblings of the selected individuals ordered as they are in the GEDCOM. False means sort them by date. Significant when some siblings have no recorded birth date
-        public bool m_bKeepSiblingOrder;
+        public bool KeepSiblingOrder;
 
         // If false, no multimedia pics, images, files etc. will appear in HTML.
-        public bool m_bAllowMultimedia;
+        public bool AllowMultimedia;
 
         // If false, no Byte-Order-Mark will be output at the start of any UTF8 files generated.
-        public bool m_bUseBom;
+        public bool UseBom;
 
         // If true, the list of "Citations" on source records will not be generated.
-        public bool m_bSupressBackreferences;
+        public bool SupressBackreferences;
 
         // If true a help page will be included in the output, with a link at the top of each record page.
-        public bool m_bIncludeHelppage; 
+        public bool IncludeHelpPage;
 
-        
+
         // Constructor, sets default values for the config
         public CConfig()
         {
-            m_configFilename = "GEDmill Config";
-            m_bRestrictConfidential = false;
-            m_bRestrictPrivacy = false;
-            m_sOutputFolder = "";
-            m_sUnknownName = "<unknown>"; // "no name" implied we knew them and they had no name.
-            m_nNameCapitalisation = 1;
-            m_sVersion = "1.11.0";
-            m_sHtmlExtension = "html";
-            m_bCopyMultimedia = true;
-            m_sImageFolder = "multimedia";
-            m_bRelativiseMultimedia = false;
-            m_sApplicationPath = System.IO.Path.GetDirectoryName( System.Reflection.Assembly.GetExecutingAssembly().Location );
-            m_sBackgroundImage = m_sApplicationPath + "\\bg-gedmill.jpg";
-            m_uMaxImageWidth = 160; 
-            m_uMaxImageHeight = 160;
-            m_nMaxNumberMultimediaFiles = 32;
-            m_nAgeForOccupation = 50;
-            m_sOwnersName = Environment.UserName;
-            m_sNoSurname = "No Surname";
-            m_sIndexTitle = "Index Of Names";
-            m_uMaxSourceImageWidth = 800;
-            m_uMaxSourceImageHeight = 800;
-            m_uMaxThumbnailImageWidth = 45;
-            m_uMaxThumbnailImageHeight = 45;
-            m_sFirstRecordXref = "";
-            m_sTitle = "Family history";
-            if( m_sOwnersName != null && m_sOwnersName != "" )
-                m_sTitle += " of " + m_sOwnersName;
-            m_sInputFilename = "";
-            m_sFrontPageImageFilename = m_sApplicationPath + "\\gedmill.jpg";
-            m_uTabSpaces = 8;
-            m_sPlaceWord = "in";
-            m_bCapitaliseEventDescriptions = true;
-            m_bDataMayStartWithWhitespace = true;
-            m_bRestrictAssociatedSources = true;
-            m_bRenameMultimedia = true;
-            m_bIndexLetterPerPage = false;
-            m_bFrontPageStats = true;
-            m_sCommentaryText = "";
-            m_sFtpServer = "";
-            m_sFtpUsername = "";
-            m_sFtpPassword = "";
-            m_sFtpUploadFolder = "/";
-            m_ecHtmlCharset = ECharset.UTF8;
+            ConfigFilename = "GEDmill Config";
+            RestrictConfidential = false;
+            RestrictPrivacy = false;
+            OutputFolder = "";
+            UnknownName = "<unknown>"; // "no name" implied we knew them and they had no name.
+            NameCapitalisation = 1;
+            Version = "1.11.0";
+            HtmlExtension = "html";
+            CopyMultimedia = true;
+            ImageFolder = "multimedia";
+            RelativiseMultimedia = false;
+            ApplicationPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            BackgroundImage = ApplicationPath + "\\bg-gedmill.jpg";
+            MaxImageWidth = 160;
+            MaxImageHeight = 160;
+            MaxNumberMultimediaFiles = 32;
+            AgeForOccupation = 50;
+            OwnersName = Environment.UserName;
+            NoSurname = "No Surname";
+            IndexTitle = "Index Of Names";
+            MaxSourceImageWidth = 800;
+            MaxSourceImageHeight = 800;
+            MaxThumbnailImageWidth = 45;
+            MaxThumbnailImageHeight = 45;
+            FirstRecordXRef = "";
+            SiteTitle = "Family history";
+            if (OwnersName != null && OwnersName != "")
+                SiteTitle += " of " + OwnersName;
+            InputFilename = "";
+            FrontPageImageFilename = ApplicationPath + "\\gedmill.jpg";
+            TabSpaces = 8;
+            PlaceWord = "in";
+            CapitaliseEventDescriptions = true;
+            DataMayStartWithWhitespace = true;
+            RestrictAssociatedSources = true;
+            RenameMultimedia = true;
+            IndexLetterPerPage = false;
+            ShowFrontPageStats = true;
+            CommentaryText = "";
+            FtpServer = "";
+            FtpUsername = "";
+            FtpPassword = "";
+            FtpUploadFolder = "/";
 
             // Reset those settings that can be modified by the user on the config screen.
-            ResetUserSettings(); 
+            ResetUserSettings();
         }
 
         // Capitalises an individual's name according to config setting
-        public string CapitaliseName( string name, ref string firstName, ref string surname )
+        public string CapitaliseName(string name, ref string firstName, ref string surname)
         {
-            if( name == null )
-            {
-                if (surname != null)
-                {
-                    surname = m_sUnknownName;
+            if (name == null) {
+                if (surname != null) {
+                    surname = UnknownName;
                 }
-                return m_sUnknownName;
+                return UnknownName;
             }
 
             string newName = "";
-            switch( m_nNameCapitalisation )
-            {
+            switch (NameCapitalisation) {
                 case 1:
                 case 0:
                     // capitalise surname (the bit in //s)
                     bool bSeenSlash = false;
                     bool bFirstName = true;
                     char oldc = '\0';
-                    foreach( char c in name )
-                    {
-                        if( c == '/' )
-                        {
+                    foreach (char c in name) {
+                        if (c == '/') {
                             bSeenSlash = !bSeenSlash;
-                            if( bFirstName && oldc != ' ' && newName.Length > 0 )
-                            {
+                            if (bFirstName && oldc != ' ' && newName.Length > 0) {
                                 // Ensure there is a space between first and last names (e.g. from "Fred/Bloggs/")
                                 newName += ' ';
                                 oldc = ' '; // To make oldc set to space too.
-                            }
-                            else
-                            {
+                            } else {
                                 oldc = c;
                             }
                             bFirstName = false;
-                        }
-                        else if( bSeenSlash )
-                        {
+                        } else if (bSeenSlash) {
                             char cc = c;
-                            if( m_nNameCapitalisation == 1 )
-                            {
+                            if (NameCapitalisation == 1) {
                                 cc = char.ToUpper(cc);
                             }
                             newName += cc;
-                            if (surname != null)
-                            {
+                            if (surname != null) {
                                 surname += cc;
                             }
                             oldc = c;
-                        }
-                        else
-                        {
+                        } else {
                             newName += c;
 
                             // Collapse multiple spaces into one
-                            if( oldc != ' ' || c != ' ' )
-                            {
-                                if (bFirstName && firstName != null)
-                                {
+                            if (oldc != ' ' || c != ' ') {
+                                if (bFirstName && firstName != null) {
                                     firstName += c;
-                                }
-                                else if (!bFirstName && surname != null)
-                                {
+                                } else if (!bFirstName && surname != null) {
                                     surname += c;
                                 }
                             }
@@ -456,169 +436,151 @@ namespace GEDmill
                     break;
             }
 
-            // Strip trailing spaces from newName (happens if surname is blank)
-            CGedcom.StripTrailingWhitespace( ref newName );
-
-            // Strip trailing spaces from firstName (e.g. from "Fred /Bloggs/")
-            CGedcom.StripTrailingWhitespace( ref firstName );
-
             return newName;
         }
 
         // Construct the HTTP URL for the created site's landing page
         public string FrontPageURL
         {
-            get
-            {
-                return String.Concat( m_sOutputFolder, "\\", m_sFrontPageFilename, ".", m_sHtmlExtension );
+            get {
+                return String.Concat(OutputFolder, "\\", FrontPageFilename, ".", HtmlExtension);
             }
         }
 
         // Construct the HTTP URL for the created site's help page
-        public string HelppageURL
+        public string HelpPageURL
         {
-          get
-          {
-            return String.Concat( m_sOutputFolder, "\\", "help.", m_sHtmlExtension );
-          }
+            get {
+                return String.Concat(OutputFolder, "\\", "help.", HtmlExtension);
+            }
         }
 
         // Serialise all the config settings into isolated storage.
         public void StoreSettings()
         {
             // Open the stream from the IsolatedStorage.
-            IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore( IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null );
-            Stream stream = new IsolatedStorageFileStream( m_configFilename, FileMode.Create, isoStore );
+            IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);
+            Stream stream = new IsolatedStorageFileStream(ConfigFilename, FileMode.Create, isoStore);
 
-            if ( stream == null )
-            {
+            if (stream == null) {
                 return;
             }
-            try
-            {
+            try {
                 // Serialize the configuration into the IsolatedStorage.
                 IFormatter formatter = new BinaryFormatter();
 
-                formatter.Serialize( stream, m_sVersion );
-                formatter.Serialize( stream, m_bRestrictConfidential );
-                formatter.Serialize( stream, m_bRestrictPrivacy );
-                formatter.Serialize( stream, m_sOutputFolder );
-                formatter.Serialize( stream, m_sUnknownName );
-                formatter.Serialize( stream, m_nNameCapitalisation );
-                formatter.Serialize( stream, m_sHtmlExtension );
-                formatter.Serialize( stream, m_bCopyMultimedia );
-                formatter.Serialize( stream, m_sImageFolder );
-                formatter.Serialize( stream, m_bRelativiseMultimedia );
-                formatter.Serialize( stream, m_sBackgroundImage );
-                formatter.Serialize( stream, m_uMaxImageWidth );
-                formatter.Serialize( stream, m_uMaxImageHeight );
-                formatter.Serialize( stream, m_nMaxNumberMultimediaFiles );
-                formatter.Serialize( stream, m_nAgeForOccupation );
-                formatter.Serialize( stream, m_sOwnersName );
-                formatter.Serialize( stream, m_sNoSurname );
-                formatter.Serialize( stream, m_sIndexTitle );
-                formatter.Serialize( stream, m_uMaxSourceImageWidth );
-                formatter.Serialize( stream, m_uMaxSourceImageHeight );
-                formatter.Serialize( stream, m_sFirstRecordXref );
-                formatter.Serialize( stream, m_sTitle );
-                formatter.Serialize( stream, m_sInputFilename );
-                formatter.Serialize( stream, m_sApplicationPath );
-                formatter.Serialize( stream, m_sFrontPageImageFilename );
-                formatter.Serialize( stream, m_uTabSpaces );
-                formatter.Serialize( stream, m_sPlaceWord );
-                formatter.Serialize( stream, m_bCapitaliseEventDescriptions );
-                formatter.Serialize( stream, m_bDataMayStartWithWhitespace );
-                formatter.Serialize( stream, m_bRestrictAssociatedSources );
-                formatter.Serialize( stream, m_bRenameMultimedia );
-                formatter.Serialize( stream, m_bIndexLetterPerPage );
-                formatter.Serialize( stream, m_sMiniTreeColourBranch );
-                formatter.Serialize( stream, m_sMiniTreeColourIndiBorder );
-                formatter.Serialize( stream, m_sMiniTreeColourIndiBackground );
-                formatter.Serialize( stream, m_sMiniTreeColourIndiHighlight );
-                formatter.Serialize( stream, m_sMiniTreeColourIndiShade );
-                formatter.Serialize( stream, m_bFrontPageStats );
-                formatter.Serialize( stream, m_sCommentaryText );
-                formatter.Serialize( stream, m_sFtpServer );
-                formatter.Serialize( stream, m_sFtpUsername );
-                formatter.Serialize( stream, m_sFtpPassword );
-                formatter.Serialize( stream, m_sFtpUploadFolder );
-                formatter.Serialize( stream, m_sTreeFontName );
-                formatter.Serialize( stream, m_fTreeFontSize );
-                formatter.Serialize( stream, m_nTargetTreeWidth );
-                formatter.Serialize( stream, m_sMiniTreeImageFormat );
-                formatter.Serialize( stream, m_sMiniTreeColourIndiText );
-                formatter.Serialize( stream, m_sMiniTreeColourIndiLink );
-                formatter.Serialize( stream, m_sMiniTreeColourBackground );
-                formatter.Serialize( stream, m_bShowMiniTrees );
-                formatter.Serialize( stream, m_sUserEmailAddress );
-                formatter.Serialize( stream, m_bFakeMiniTreeTransparency );
+                formatter.Serialize(stream, Version);
+                formatter.Serialize(stream, RestrictConfidential);
+                formatter.Serialize(stream, RestrictPrivacy);
+                formatter.Serialize(stream, OutputFolder);
+                formatter.Serialize(stream, UnknownName);
+                formatter.Serialize(stream, NameCapitalisation);
+                formatter.Serialize(stream, HtmlExtension);
+                formatter.Serialize(stream, CopyMultimedia);
+                formatter.Serialize(stream, ImageFolder);
+                formatter.Serialize(stream, RelativiseMultimedia);
+                formatter.Serialize(stream, BackgroundImage);
+                formatter.Serialize(stream, MaxImageWidth);
+                formatter.Serialize(stream, MaxImageHeight);
+                formatter.Serialize(stream, MaxNumberMultimediaFiles);
+                formatter.Serialize(stream, AgeForOccupation);
+                formatter.Serialize(stream, OwnersName);
+                formatter.Serialize(stream, NoSurname);
+                formatter.Serialize(stream, IndexTitle);
+                formatter.Serialize(stream, MaxSourceImageWidth);
+                formatter.Serialize(stream, MaxSourceImageHeight);
+                formatter.Serialize(stream, FirstRecordXRef);
+                formatter.Serialize(stream, SiteTitle);
+                formatter.Serialize(stream, InputFilename);
+                formatter.Serialize(stream, ApplicationPath);
+                formatter.Serialize(stream, FrontPageImageFilename);
+                formatter.Serialize(stream, TabSpaces);
+                formatter.Serialize(stream, PlaceWord);
+                formatter.Serialize(stream, CapitaliseEventDescriptions);
+                formatter.Serialize(stream, DataMayStartWithWhitespace);
+                formatter.Serialize(stream, RestrictAssociatedSources);
+                formatter.Serialize(stream, RenameMultimedia);
+                formatter.Serialize(stream, IndexLetterPerPage);
+                formatter.Serialize(stream, MiniTreeColourBranch);
+                formatter.Serialize(stream, MiniTreeColourIndiBorder);
+                formatter.Serialize(stream, MiniTreeColourIndiBackground);
+                formatter.Serialize(stream, MiniTreeColourIndiHighlight);
+                formatter.Serialize(stream, MiniTreeColourIndiShade);
+                formatter.Serialize(stream, ShowFrontPageStats);
+                formatter.Serialize(stream, CommentaryText);
+                formatter.Serialize(stream, FtpServer);
+                formatter.Serialize(stream, FtpUsername);
+                formatter.Serialize(stream, FtpPassword);
+                formatter.Serialize(stream, FtpUploadFolder);
+                formatter.Serialize(stream, TreeFontName);
+                formatter.Serialize(stream, TreeFontSize);
+                formatter.Serialize(stream, TargetTreeWidth);
+                formatter.Serialize(stream, MiniTreeImageFormat);
+                formatter.Serialize(stream, MiniTreeColourIndiText);
+                formatter.Serialize(stream, MiniTreeColourIndiLink);
+                formatter.Serialize(stream, MiniTreeColourBackground);
+                formatter.Serialize(stream, ShowMiniTrees);
+                formatter.Serialize(stream, UserEmailAddress);
+                formatter.Serialize(stream, FakeMiniTreeTransparency);
                 int nKeyIndividuals = 0;
-                if( m_alKeyIndividuals != null )
-                {
-                    nKeyIndividuals = m_alKeyIndividuals.Count;
+                if (KeyIndividuals != null) {
+                    nKeyIndividuals = KeyIndividuals.Count;
                 }
-                formatter.Serialize( stream, nKeyIndividuals );
-                if( m_alKeyIndividuals != null )
-                {
-                    foreach( string keyXref in m_alKeyIndividuals )
-                    {
-                        formatter.Serialize( stream, keyXref );
+                formatter.Serialize(stream, nKeyIndividuals);
+                if (KeyIndividuals != null) {
+                    foreach (string keyXref in KeyIndividuals) {
+                        formatter.Serialize(stream, keyXref);
                     }
                 }
-                formatter.Serialize( stream, m_bMultiPageIndexes );
-                formatter.Serialize( stream, m_uIndividualsPerIndexPage );
-                formatter.Serialize( stream, m_bOpenWebsiteOnExit );
-                formatter.Serialize( stream, m_sFrontPageFilename );
-                formatter.Serialize( stream, m_ecHtmlCharset );
-                formatter.Serialize( stream, m_bCreateCDROMFiles );
-                formatter.Serialize( stream, m_nMaxNumberMultimediaFiles );
-                formatter.Serialize( stream, m_bAllowMultipleImages );
-                formatter.Serialize( stream, m_bAllowNonPictures );
-                formatter.Serialize( stream, m_uMaxThumbnailImageWidth );
-                formatter.Serialize( stream, m_uMaxThumbnailImageHeight );
-                formatter.Serialize( stream, m_sMainWebsiteLink );
-                formatter.Serialize( stream, m_bPreserveFrontPage );
-                formatter.Serialize( stream, m_bPreserveStylesheet );
-                formatter.Serialize( stream, m_sStylesheetFilename );
-                formatter.Serialize( stream, m_sMiniTreeColourIndiBgConcealed );
-                formatter.Serialize( stream, m_bOnlyConceal );
-                formatter.Serialize( stream, m_sConcealedName );
-                formatter.Serialize( stream, m_sMiniTreeColourIndiFgConcealed );
-                formatter.Serialize( stream, m_bLinkOriginalPicture );
-                formatter.Serialize( stream, m_bRenameOriginalPicture );
-                formatter.Serialize( stream, m_sExcludeFileDir );
-                formatter.Serialize( stream, m_sExcludeFileName );
-                formatter.Serialize( stream, m_sLastPictureAddedDir );
-                formatter.Serialize( stream, m_bObfuscateEmails );
-                formatter.Serialize( stream, m_bAddHomePageCreateTime );
-                formatter.Serialize( stream, m_bIncludeValiditySticker );
-                formatter.Serialize( stream, m_bIncludeNickNamesInIndex );
-                formatter.Serialize( stream, m_sCustomFooter );
-                formatter.Serialize( stream, m_bIncludeUserRefInIndex );
-                formatter.Serialize( stream, m_bOccupationHeadline );
-                formatter.Serialize( stream, m_bCommentaryIsHtml );
-                formatter.Serialize( stream, m_bFooterIsHtml );
-                formatter.Serialize( stream, m_bUserRecFilename );
-                formatter.Serialize( stream, m_bIncludeNavbar );
-                formatter.Serialize( stream, m_bUseWithheldNames );
-                uint uVersionMajor=1, uVersionMinor=11, uVersionBuild=0; // 1.9.2, 1.10.0, 1.10.1, 1.10.2, 1.10.3, 1.10.4, 1.11.0
-                formatter.Serialize( stream, uVersionMajor );
-                formatter.Serialize( stream, uVersionMinor );
-                formatter.Serialize( stream, uVersionBuild );
-                formatter.Serialize( stream, m_bConserveTreeWidth );
-                formatter.Serialize( stream, m_bAllowMultimedia );
-                formatter.Serialize( stream, m_bUseBom );
-                formatter.Serialize( stream, m_bSupressBackreferences );
-                formatter.Serialize( stream, m_bDataMayEndWithWhitespace );
-                formatter.Serialize( stream, m_bKeepSiblingOrder );
-                formatter.Serialize( stream, m_bIncludeHelppage );
-            }
-            catch( Exception e )
-            {
-                LogFile.TheLogFile.WriteLine( LogFile.DT_CONFIG, LogFile.EDebugLevel.Error, "Exception caught while writing MainForm.s_config : " + e.ToString() );
-            }
-            finally
-            {
+                formatter.Serialize(stream, MultiPageIndexes);
+                formatter.Serialize(stream, IndividualsPerIndexPage);
+                formatter.Serialize(stream, OpenWebsiteOnExit);
+                formatter.Serialize(stream, FrontPageFilename);
+                formatter.Serialize(stream, CreateCDROMFiles);
+                formatter.Serialize(stream, MaxNumberMultimediaFiles);
+                formatter.Serialize(stream, AllowMultipleImages);
+                formatter.Serialize(stream, AllowNonPictures);
+                formatter.Serialize(stream, MaxThumbnailImageWidth);
+                formatter.Serialize(stream, MaxThumbnailImageHeight);
+                formatter.Serialize(stream, MainWebsiteLink);
+                formatter.Serialize(stream, PreserveFrontPage);
+                formatter.Serialize(stream, PreserveStylesheet);
+                formatter.Serialize(stream, StylesheetFilename);
+                formatter.Serialize(stream, MiniTreeColourIndiBgConcealed);
+                formatter.Serialize(stream, OnlyConceal);
+                formatter.Serialize(stream, ConcealedName);
+                formatter.Serialize(stream, MiniTreeColourIndiFgConcealed);
+                formatter.Serialize(stream, LinkOriginalPicture);
+                formatter.Serialize(stream, RenameOriginalPicture);
+                formatter.Serialize(stream, ExcludeFileDir);
+                formatter.Serialize(stream, ExcludeFileName);
+                formatter.Serialize(stream, LastPictureAddedDir);
+                formatter.Serialize(stream, ObfuscateEmails);
+                formatter.Serialize(stream, AddHomePageCreateTime);
+                formatter.Serialize(stream, IncludeValiditySticker);
+                formatter.Serialize(stream, IncludeNickNamesInIndex);
+                formatter.Serialize(stream, CustomFooter);
+                formatter.Serialize(stream, IncludeUserRefInIndex);
+                formatter.Serialize(stream, OccupationHeadline);
+                formatter.Serialize(stream, CommentaryIsHtml);
+                formatter.Serialize(stream, FooterIsHtml);
+                formatter.Serialize(stream, UserRecFilename);
+                formatter.Serialize(stream, IncludeNavbar);
+                formatter.Serialize(stream, UseWithheldNames);
+                uint uVersionMajor = 1, uVersionMinor = 11, uVersionBuild = 0; // 1.9.2, 1.10.0, 1.10.1, 1.10.2, 1.10.3, 1.10.4, 1.11.0
+                formatter.Serialize(stream, uVersionMajor);
+                formatter.Serialize(stream, uVersionMinor);
+                formatter.Serialize(stream, uVersionBuild);
+                formatter.Serialize(stream, ConserveTreeWidth);
+                formatter.Serialize(stream, AllowMultimedia);
+                formatter.Serialize(stream, UseBom);
+                formatter.Serialize(stream, SupressBackreferences);
+                formatter.Serialize(stream, DataMayEndWithWhitespace);
+                formatter.Serialize(stream, KeepSiblingOrder);
+                formatter.Serialize(stream, IncludeHelpPage);
+            } catch (Exception e) {
+                LogFile.Instance.WriteLine(LogFile.DT_CONFIG, LogFile.EDebugLevel.Error, "Exception caught while writing MainForm.s_config : " + e.ToString());
+            } finally {
                 stream.Close();
             }
         }
@@ -626,150 +588,139 @@ namespace GEDmill
         // Deserialise all the settings from isolated storage.
         public void RecoverSettings()
         {
-            uint uVersionMajor=0, uVersionMinor=0, uVersionBuild=0;
+            uint uVersionMajor = 0, uVersionMinor = 0, uVersionBuild = 0;
 
-            IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore( IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null );
-            if( isoStore.GetFileNames( m_configFilename ).Length == 0 )
-            {
+            IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);
+            if (isoStore.GetFileNames(ConfigFilename).Length == 0) {
                 // File doesn't exist. Leave defaults in place.
                 return;
             }
             // Read the stream from Isolated Storage.
-            Stream stream = new IsolatedStorageFileStream(m_configFilename, FileMode.OpenOrCreate, isoStore );
-            if ( stream == null )
-            {
+            Stream stream = new IsolatedStorageFileStream(ConfigFilename, FileMode.OpenOrCreate, isoStore);
+            if (stream == null) {
                 return;
             }
 
-            try
-            {
+            try {
                 // DeSerialize the Hashtable from stream.
                 IFormatter formatter = new BinaryFormatter();
 
-                m_sVersion = ( string )formatter.Deserialize(stream);
-                m_bRestrictConfidential = ( bool )formatter.Deserialize(stream);
-                m_bRestrictPrivacy = ( bool )formatter.Deserialize(stream);
-                m_sOutputFolder = ( string )formatter.Deserialize(stream);
-                m_sUnknownName = ( string )formatter.Deserialize(stream);
-                m_nNameCapitalisation = ( int )formatter.Deserialize(stream);
-                m_sHtmlExtension = ( string )formatter.Deserialize(stream);
-                m_bCopyMultimedia = ( bool )formatter.Deserialize(stream);
-                m_sImageFolder = ( string )formatter.Deserialize(stream);
-                m_bRelativiseMultimedia = ( bool )formatter.Deserialize(stream);
-                m_sBackgroundImage = ( string )formatter.Deserialize(stream);
-                m_uMaxImageWidth = ( uint )formatter.Deserialize(stream);
-                m_uMaxImageHeight = ( uint )formatter.Deserialize(stream);
-                int deprecated_m_nMaxNumberMultimediaFiles = ( int )formatter.Deserialize(stream);
-                m_nAgeForOccupation = ( int )formatter.Deserialize(stream);
-                m_sOwnersName = ( string )formatter.Deserialize(stream);
-                m_sNoSurname = ( string )formatter.Deserialize(stream);
-                m_sIndexTitle = ( string )formatter.Deserialize(stream);
-                m_uMaxSourceImageWidth = ( uint )formatter.Deserialize(stream);
-                m_uMaxSourceImageHeight = ( uint )formatter.Deserialize(stream);
-                m_sFirstRecordXref = ( string )formatter.Deserialize(stream);
-                m_sTitle = ( string )formatter.Deserialize(stream);
-                m_sInputFilename = ( string )formatter.Deserialize(stream);
-                m_sApplicationPath = ( string )formatter.Deserialize(stream);
-                m_sFrontPageImageFilename = ( string )formatter.Deserialize(stream);
-                m_uTabSpaces = ( uint )formatter.Deserialize(stream);
-                m_sPlaceWord = (string)formatter.Deserialize(stream);
-                m_bCapitaliseEventDescriptions = (bool)formatter.Deserialize(stream);
-                m_bDataMayStartWithWhitespace = (bool)formatter.Deserialize(stream);
-                m_bRestrictAssociatedSources = (bool)formatter.Deserialize(stream);
-                m_bRenameMultimedia = (bool)formatter.Deserialize(stream);
-                m_bIndexLetterPerPage = (bool)formatter.Deserialize(stream);
-                m_sMiniTreeColourBranch = (string)formatter.Deserialize(stream);
-                m_sMiniTreeColourIndiBorder = (string)formatter.Deserialize(stream);
-                m_sMiniTreeColourIndiBackground = (string)formatter.Deserialize(stream);
-                m_sMiniTreeColourIndiHighlight = (string)formatter.Deserialize(stream);
-                m_sMiniTreeColourIndiShade = (string)formatter.Deserialize(stream);
-                m_bFrontPageStats = (bool)formatter.Deserialize(stream);
-                m_sCommentaryText = (string)formatter.Deserialize(stream);
-                m_sFtpServer = (string)formatter.Deserialize(stream);
-                m_sFtpUsername = (string)formatter.Deserialize(stream);
-                m_sFtpPassword = (string)formatter.Deserialize(stream);
-                m_sFtpUploadFolder = (string)formatter.Deserialize(stream);
-                m_sTreeFontName = (string)formatter.Deserialize(stream);
-                m_fTreeFontSize = (float)formatter.Deserialize(stream);
-                m_nTargetTreeWidth = (int)formatter.Deserialize(stream);
-                m_sMiniTreeImageFormat = (string)formatter.Deserialize(stream);
-                m_sMiniTreeColourIndiText = (string)formatter.Deserialize(stream);
-                m_sMiniTreeColourIndiLink = (string)formatter.Deserialize(stream);
-                m_sMiniTreeColourBackground = (string)formatter.Deserialize(stream);
-                m_bShowMiniTrees = (bool)formatter.Deserialize(stream);
-                m_sUserEmailAddress = (string)formatter.Deserialize(stream);
-                m_bFakeMiniTreeTransparency = (bool)formatter.Deserialize(stream);
+                Version = (string)formatter.Deserialize(stream);
+                RestrictConfidential = (bool)formatter.Deserialize(stream);
+                RestrictPrivacy = (bool)formatter.Deserialize(stream);
+                OutputFolder = (string)formatter.Deserialize(stream);
+                UnknownName = (string)formatter.Deserialize(stream);
+                NameCapitalisation = (int)formatter.Deserialize(stream);
+                HtmlExtension = (string)formatter.Deserialize(stream);
+                CopyMultimedia = (bool)formatter.Deserialize(stream);
+                ImageFolder = (string)formatter.Deserialize(stream);
+                RelativiseMultimedia = (bool)formatter.Deserialize(stream);
+                BackgroundImage = (string)formatter.Deserialize(stream);
+                MaxImageWidth = (uint)formatter.Deserialize(stream);
+                MaxImageHeight = (uint)formatter.Deserialize(stream);
+                int deprecated_m_nMaxNumberMultimediaFiles = (int)formatter.Deserialize(stream);
+                AgeForOccupation = (int)formatter.Deserialize(stream);
+                OwnersName = (string)formatter.Deserialize(stream);
+                NoSurname = (string)formatter.Deserialize(stream);
+                IndexTitle = (string)formatter.Deserialize(stream);
+                MaxSourceImageWidth = (uint)formatter.Deserialize(stream);
+                MaxSourceImageHeight = (uint)formatter.Deserialize(stream);
+                FirstRecordXRef = (string)formatter.Deserialize(stream);
+                SiteTitle = (string)formatter.Deserialize(stream);
+                InputFilename = (string)formatter.Deserialize(stream);
+                ApplicationPath = (string)formatter.Deserialize(stream);
+                FrontPageImageFilename = (string)formatter.Deserialize(stream);
+                TabSpaces = (uint)formatter.Deserialize(stream);
+                PlaceWord = (string)formatter.Deserialize(stream);
+                CapitaliseEventDescriptions = (bool)formatter.Deserialize(stream);
+                DataMayStartWithWhitespace = (bool)formatter.Deserialize(stream);
+                RestrictAssociatedSources = (bool)formatter.Deserialize(stream);
+                RenameMultimedia = (bool)formatter.Deserialize(stream);
+                IndexLetterPerPage = (bool)formatter.Deserialize(stream);
+                MiniTreeColourBranch = (string)formatter.Deserialize(stream);
+                MiniTreeColourIndiBorder = (string)formatter.Deserialize(stream);
+                MiniTreeColourIndiBackground = (string)formatter.Deserialize(stream);
+                MiniTreeColourIndiHighlight = (string)formatter.Deserialize(stream);
+                MiniTreeColourIndiShade = (string)formatter.Deserialize(stream);
+                ShowFrontPageStats = (bool)formatter.Deserialize(stream);
+                CommentaryText = (string)formatter.Deserialize(stream);
+                FtpServer = (string)formatter.Deserialize(stream);
+                FtpUsername = (string)formatter.Deserialize(stream);
+                FtpPassword = (string)formatter.Deserialize(stream);
+                FtpUploadFolder = (string)formatter.Deserialize(stream);
+                TreeFontName = (string)formatter.Deserialize(stream);
+                TreeFontSize = (float)formatter.Deserialize(stream);
+                TargetTreeWidth = (int)formatter.Deserialize(stream);
+                MiniTreeImageFormat = (string)formatter.Deserialize(stream);
+                MiniTreeColourIndiText = (string)formatter.Deserialize(stream);
+                MiniTreeColourIndiLink = (string)formatter.Deserialize(stream);
+                MiniTreeColourBackground = (string)formatter.Deserialize(stream);
+                ShowMiniTrees = (bool)formatter.Deserialize(stream);
+                UserEmailAddress = (string)formatter.Deserialize(stream);
+                FakeMiniTreeTransparency = (bool)formatter.Deserialize(stream);
                 int nKeyIndividuals = (int)formatter.Deserialize(stream);
-                m_alKeyIndividuals = new ArrayList();
-                while( nKeyIndividuals-- > 0 )
-                {
+                KeyIndividuals = new ArrayList();
+                while (nKeyIndividuals-- > 0) {
                     string keyXref = (string)formatter.Deserialize(stream);
-                    m_alKeyIndividuals.Add( keyXref );
+                    KeyIndividuals.Add(keyXref);
                 }
-                m_bMultiPageIndexes = (bool)formatter.Deserialize(stream);
-                m_uIndividualsPerIndexPage = (uint)formatter.Deserialize(stream);
-                m_bOpenWebsiteOnExit = (bool)formatter.Deserialize(stream);
-                m_sFrontPageFilename = (string)formatter.Deserialize(stream);
-                m_ecHtmlCharset = (ECharset)formatter.Deserialize(stream);
-                m_bCreateCDROMFiles = (bool)formatter.Deserialize(stream);
-                m_nMaxNumberMultimediaFiles = ( int )formatter.Deserialize(stream);
-                m_bAllowMultipleImages = (bool)formatter.Deserialize(stream);
-                m_bAllowNonPictures = (bool)formatter.Deserialize(stream);
-                m_uMaxThumbnailImageWidth = ( uint )formatter.Deserialize(stream);
-                m_uMaxThumbnailImageHeight = ( uint )formatter.Deserialize(stream);
-                m_sMainWebsiteLink = (string)formatter.Deserialize(stream);
-                m_bPreserveFrontPage = (bool)formatter.Deserialize(stream);
-                m_bPreserveStylesheet = (bool)formatter.Deserialize(stream);
-                m_sStylesheetFilename = (string)formatter.Deserialize(stream);
-                m_sMiniTreeColourIndiBgConcealed = (string)formatter.Deserialize(stream);
-                m_bOnlyConceal = (bool)formatter.Deserialize(stream);
-                m_sConcealedName = (string)formatter.Deserialize(stream);
-                m_sMiniTreeColourIndiFgConcealed = (string)formatter.Deserialize(stream);
-                m_bLinkOriginalPicture = (bool)formatter.Deserialize(stream);
-                m_bRenameOriginalPicture = (bool)formatter.Deserialize(stream);
-                m_sExcludeFileDir = (string)formatter.Deserialize(stream);
-                m_sExcludeFileName = (string)formatter.Deserialize(stream);
-                m_sLastPictureAddedDir = (string)formatter.Deserialize(stream);
-                m_bObfuscateEmails = (bool)formatter.Deserialize(stream);
-                m_bAddHomePageCreateTime = (bool)formatter.Deserialize(stream);
-                m_bIncludeValiditySticker = (bool)formatter.Deserialize(stream);
-                m_bIncludeNickNamesInIndex = (bool)formatter.Deserialize(stream);
-                m_sCustomFooter = (string)formatter.Deserialize(stream);
-                m_bIncludeUserRefInIndex = (bool)formatter.Deserialize(stream);
-                m_bOccupationHeadline = (bool)formatter.Deserialize(stream);
-                m_bCommentaryIsHtml = (bool)formatter.Deserialize(stream);
-                m_bFooterIsHtml = (bool)formatter.Deserialize(stream);
-                m_bUserRecFilename = (bool)formatter.Deserialize( stream );
-                m_bIncludeNavbar = (bool)formatter.Deserialize( stream );
-                m_bUseWithheldNames = (bool)formatter.Deserialize( stream );
-                uVersionMajor = (uint)formatter.Deserialize( stream );
-                uVersionMinor = (uint)formatter.Deserialize( stream );
-                uVersionBuild = (uint)formatter.Deserialize( stream );
-                m_bConserveTreeWidth = (bool)formatter.Deserialize( stream );
-                m_bAllowMultimedia = (bool)formatter.Deserialize( stream );
-                m_bUseBom = (bool)formatter.Deserialize( stream );
-                m_bSupressBackreferences = (bool)formatter.Deserialize( stream );
-                m_bDataMayEndWithWhitespace = (bool)formatter.Deserialize(stream);
-                m_bKeepSiblingOrder = (bool)formatter.Deserialize( stream );
-                m_bIncludeHelppage = (bool)formatter.Deserialize( stream );
-            }
-            catch( Exception e )
-            {
-                LogFile.TheLogFile.WriteLine( LogFile.DT_CONFIG, LogFile.EDebugLevel.Error, "Exception caught while reading MainForm.s_config : " + e.ToString() );
-            }
-            finally
-            {
+                MultiPageIndexes = (bool)formatter.Deserialize(stream);
+                IndividualsPerIndexPage = (uint)formatter.Deserialize(stream);
+                OpenWebsiteOnExit = (bool)formatter.Deserialize(stream);
+                FrontPageFilename = (string)formatter.Deserialize(stream);
+                CreateCDROMFiles = (bool)formatter.Deserialize(stream);
+                MaxNumberMultimediaFiles = (int)formatter.Deserialize(stream);
+                AllowMultipleImages = (bool)formatter.Deserialize(stream);
+                AllowNonPictures = (bool)formatter.Deserialize(stream);
+                MaxThumbnailImageWidth = (uint)formatter.Deserialize(stream);
+                MaxThumbnailImageHeight = (uint)formatter.Deserialize(stream);
+                MainWebsiteLink = (string)formatter.Deserialize(stream);
+                PreserveFrontPage = (bool)formatter.Deserialize(stream);
+                PreserveStylesheet = (bool)formatter.Deserialize(stream);
+                StylesheetFilename = (string)formatter.Deserialize(stream);
+                MiniTreeColourIndiBgConcealed = (string)formatter.Deserialize(stream);
+                OnlyConceal = (bool)formatter.Deserialize(stream);
+                ConcealedName = (string)formatter.Deserialize(stream);
+                MiniTreeColourIndiFgConcealed = (string)formatter.Deserialize(stream);
+                LinkOriginalPicture = (bool)formatter.Deserialize(stream);
+                RenameOriginalPicture = (bool)formatter.Deserialize(stream);
+                ExcludeFileDir = (string)formatter.Deserialize(stream);
+                ExcludeFileName = (string)formatter.Deserialize(stream);
+                LastPictureAddedDir = (string)formatter.Deserialize(stream);
+                ObfuscateEmails = (bool)formatter.Deserialize(stream);
+                AddHomePageCreateTime = (bool)formatter.Deserialize(stream);
+                IncludeValiditySticker = (bool)formatter.Deserialize(stream);
+                IncludeNickNamesInIndex = (bool)formatter.Deserialize(stream);
+                CustomFooter = (string)formatter.Deserialize(stream);
+                IncludeUserRefInIndex = (bool)formatter.Deserialize(stream);
+                OccupationHeadline = (bool)formatter.Deserialize(stream);
+                CommentaryIsHtml = (bool)formatter.Deserialize(stream);
+                FooterIsHtml = (bool)formatter.Deserialize(stream);
+                UserRecFilename = (bool)formatter.Deserialize(stream);
+                IncludeNavbar = (bool)formatter.Deserialize(stream);
+                UseWithheldNames = (bool)formatter.Deserialize(stream);
+                uVersionMajor = (uint)formatter.Deserialize(stream);
+                uVersionMinor = (uint)formatter.Deserialize(stream);
+                uVersionBuild = (uint)formatter.Deserialize(stream);
+                ConserveTreeWidth = (bool)formatter.Deserialize(stream);
+                AllowMultimedia = (bool)formatter.Deserialize(stream);
+                UseBom = (bool)formatter.Deserialize(stream);
+                SupressBackreferences = (bool)formatter.Deserialize(stream);
+                DataMayEndWithWhitespace = (bool)formatter.Deserialize(stream);
+                KeepSiblingOrder = (bool)formatter.Deserialize(stream);
+                IncludeHelpPage = (bool)formatter.Deserialize(stream);
+            } catch (Exception e) {
+                LogFile.Instance.WriteLine(LogFile.DT_CONFIG, LogFile.EDebugLevel.Error, "Exception caught while reading MainForm.s_config : " + e.ToString());
+            } finally {
                 // We are done with it.
                 stream.Close();
             }
 
-            if( !(uVersionMajor > 1 || uVersionMinor > 9 || (uVersionMinor == 9 && uVersionBuild > 0) ) )
-            {
+            if (!(uVersionMajor > 1 || uVersionMinor > 9 || (uVersionMinor == 9 && uVersionBuild > 0))) {
                 // This config came from a version less than 1.9.1
                 // Need to mangle m_mainWebsiteLink, because it now must include the http:// prefix.
-                if( m_sMainWebsiteLink.Length > 0 )
-                {
-                    m_sMainWebsiteLink = "http://" + m_sMainWebsiteLink;
+                if (MainWebsiteLink.Length > 0) {
+                    MainWebsiteLink = "http://" + MainWebsiteLink;
                 }
             }
         }
@@ -777,61 +728,61 @@ namespace GEDmill
         // Reset those settings that can be modified by the user on the config screen.
         public void ResetUserSettings()
         {
-            m_sTreeFontName = "Arial";
-            m_fTreeFontSize = 7.2f;
-            m_nTargetTreeWidth = 800;
-            m_sMiniTreeImageFormat = "gif";
-            m_sMiniTreeColourBranch = "#000000";
-            m_sMiniTreeColourIndiBorder = "#000000";
-            m_sMiniTreeColourIndiBackground = "#ffffd2";
-            m_sMiniTreeColourIndiHighlight = "#ffffff";
-            m_sMiniTreeColourIndiBgConcealed = "#cccccc";
-            m_sMiniTreeColourIndiFgConcealed = "#000000";
-            m_sMiniTreeColourIndiShade = "#ffffd2";
-            m_sMiniTreeColourIndiText = "#000000";
-            m_sMiniTreeColourIndiLink = "#3333ff";
-            m_sMiniTreeColourBackground = "#aaaaaa";
-            m_bFakeMiniTreeTransparency = false;
-            m_bShowMiniTrees = true;
-            m_sUserEmailAddress = "";
-            m_alKeyIndividuals = new ArrayList();
-            m_bMultiPageIndexes = true;
-            m_uIndividualsPerIndexPage = 1000;
-            m_bOpenWebsiteOnExit = true;
-            m_sFrontPageFilename = "home";
-            m_bAllowMultipleImages = false;
-            m_bCreateCDROMFiles = false;
-            m_bAllowNonPictures = true;
-            m_sMainWebsiteLink = "";
-            m_bPreserveFrontPage = false;
-            m_bPreserveStylesheet = false;
-            m_sStylesheetFilename = "gedmill-style";
-            m_bOnlyConceal = false;
-            m_sConcealedName = "Private Record";
-            m_bLinkOriginalPicture = false;
-            m_bRenameOriginalPicture = false;
-            m_sExcludeFileDir = "";
-            m_sExcludeFileName = "";
-            m_sLastPictureAddedDir = "";
-            m_bObfuscateEmails = false;
-            m_bAddHomePageCreateTime = true;
-            m_bIncludeValiditySticker = false;
-            m_bIncludeNickNamesInIndex = true;
-            m_sCustomFooter = "";
-            m_bIncludeUserRefInIndex = false;
-            m_bOccupationHeadline = true;
-            m_bCommentaryIsHtml = false;
-            m_bFooterIsHtml = false;
-            m_bUserRecFilename = false;
-            m_bIncludeNavbar = true;
-            m_bUseWithheldNames = false;
-            m_bConserveTreeWidth = false;
-            m_bKeepSiblingOrder = false;
-            m_bAllowMultimedia = true;
-            m_bUseBom = false;
-            m_bSupressBackreferences = false;
-            m_bDataMayEndWithWhitespace = false;
-            m_bIncludeHelppage = true;
+            TreeFontName = "Arial";
+            TreeFontSize = 7.2f;
+            TargetTreeWidth = 800;
+            MiniTreeImageFormat = "gif";
+            MiniTreeColourBranch = "#000000";
+            MiniTreeColourIndiBorder = "#000000";
+            MiniTreeColourIndiBackground = "#ffffd2";
+            MiniTreeColourIndiHighlight = "#ffffff";
+            MiniTreeColourIndiBgConcealed = "#cccccc";
+            MiniTreeColourIndiFgConcealed = "#000000";
+            MiniTreeColourIndiShade = "#ffffd2";
+            MiniTreeColourIndiText = "#000000";
+            MiniTreeColourIndiLink = "#3333ff";
+            MiniTreeColourBackground = "#aaaaaa";
+            FakeMiniTreeTransparency = false;
+            ShowMiniTrees = true;
+            UserEmailAddress = "";
+            KeyIndividuals = new ArrayList();
+            MultiPageIndexes = true;
+            IndividualsPerIndexPage = 1000;
+            OpenWebsiteOnExit = true;
+            FrontPageFilename = "home";
+            AllowMultipleImages = false;
+            CreateCDROMFiles = false;
+            AllowNonPictures = true;
+            MainWebsiteLink = "";
+            PreserveFrontPage = false;
+            PreserveStylesheet = false;
+            StylesheetFilename = "gedmill-style";
+            OnlyConceal = false;
+            ConcealedName = "Private Record";
+            LinkOriginalPicture = false;
+            RenameOriginalPicture = false;
+            ExcludeFileDir = "";
+            ExcludeFileName = "";
+            LastPictureAddedDir = "";
+            ObfuscateEmails = false;
+            AddHomePageCreateTime = true;
+            IncludeValiditySticker = false;
+            IncludeNickNamesInIndex = true;
+            CustomFooter = "";
+            IncludeUserRefInIndex = false;
+            OccupationHeadline = true;
+            CommentaryIsHtml = false;
+            FooterIsHtml = false;
+            UserRecFilename = false;
+            IncludeNavbar = true;
+            UseWithheldNames = false;
+            ConserveTreeWidth = false;
+            KeepSiblingOrder = false;
+            AllowMultimedia = true;
+            UseBom = false;
+            SupressBackreferences = false;
+            DataMayEndWithWhitespace = false;
+            IncludeHelpPage = true;
         }
     }
 }

@@ -27,8 +27,10 @@ using System.IO;
 
 namespace GEDmill
 {
-    // Manages the debug message log file. Log messages are optionally written to a file on disk, and also the most
-    // recent messages are stored to be displayed by the applications exception handler.
+    /// <summary>
+    /// Manages the debug message log file. Log messages are optionally written to a file on disk, and also the most
+    /// recent messages are stored to be displayed by the applications exception handler.
+    /// </summary>
     public class LogFile
     {
         // Used to set the degree of verbosity of the tracing
@@ -57,163 +59,145 @@ namespace GEDmill
         private static int ERROR_LINE_LENGTH = 135;
 
         // Filename of the log file on disk
-        private static LogFile s_sLogFilename;
+        private static LogFile fLogFilename;
 
         // Set to level of debug output needed
-        private EDebugLevel m_edlDebugLevel; 
+        private EDebugLevel fDebugLevel;
 
         // The areas of the application to log
-        private uint m_uDebugFilter;
+        private uint fDebugFilter;
 
         // The stream writer to write the log file to the file stream
-        private StreamWriter m_sw;
+        private StreamWriter fWriter;
 
         // The file stream to write the log file to the disk
-        private FileStream m_fs;
+        private FileStream fStream;
 
         // The circular buffer of most recent log messages
-        private string[] m_asLatestLines;
+        private string[] fLatestLines;
 
         // Index into the circular buffer
-        private int m_nLatestLineIndex;
+        private int fLatestLineIndex;
+
 
         // Constructor, default values
         private LogFile()
         {
-            m_uDebugFilter = DT_NONE;
-            m_edlDebugLevel = EDebugLevel.None;
-            m_sw = null;
-            m_fs = null;
-            m_asLatestLines = new string[LINE_BUFSIZE]; // TODO: Check all entries initialise
-            m_nLatestLineIndex = 0;
+            fDebugFilter = DT_NONE;
+            fDebugLevel = EDebugLevel.None;
+            fWriter = null;
+            fStream = null;
+            fLatestLines = new string[LINE_BUFSIZE]; // TODO: Check all entries initialise
+            fLatestLineIndex = 0;
         }
 
         // Singleton
-        public static LogFile TheLogFile
+        public static LogFile Instance
         {
-            get
-            {
-                if( s_sLogFilename == null )
-                {
-                    s_sLogFilename = new LogFile();
+            get {
+                if (fLogFilename == null) {
+                    fLogFilename = new LogFile();
                 }
-                return s_sLogFilename;
+                return fLogFilename;
             }
         }
 
         // Opens the log file on disk
-        public void StartLogFile( string filename )
+        public void StartLogFile(string filename)
         {
-            m_fs = new FileStream( filename, FileMode.Create );
-            m_sw = new StreamWriter( m_fs );
+            fStream = new FileStream(filename, FileMode.Create);
+            fWriter = new StreamWriter(fStream);
         }
 
         // Closes the log file on disk
         public void StopLogFile()
         {
-            if( m_sw != null )
-            {
-                m_sw.Close();
+            if (fWriter != null) {
+                fWriter.Close();
             }
-            if( m_fs != null )
-            {
-                m_fs.Close();
+            if (fStream != null) {
+                fStream.Close();
             }
-            m_fs = null;
-            m_sw = null;
+            fStream = null;
+            fWriter = null;
         }
-        
+
         // Sets level of verbosity
-        public void SetLogLevel( EDebugLevel d )
+        public void SetLogLevel(EDebugLevel d)
         {
-            m_edlDebugLevel = d;
+            fDebugLevel = d;
         }
 
         // Sets filter for which areas of the app to trace
-        public void SetDebugAllowFilter( uint debugFilter )
+        public void SetDebugAllowFilter(uint debugFilter)
         {
-            m_uDebugFilter = debugFilter;
+            fDebugFilter = debugFilter;
         }
-        
+
         // Writes a line to the log file
-        public void WriteLine( uint t, EDebugLevel d, string s )
+        public void WriteLine(uint t, EDebugLevel d, string s)
         {
-            WriteLine( t, d, s, false );
+            WriteLine(t, d, s, false);
         }
 
         // Writes a line to the log file, but not to the log buffer that gets printed by the exception handler
-        public void WriteLine( uint t, EDebugLevel d, string s, bool b_exclude_from_exception_message )
+        public void WriteLine(uint t, EDebugLevel d, string s, bool b_exclude_from_exception_message)
         {
-            if( b_exclude_from_exception_message == false )
-            {
-                m_asLatestLines[ m_nLatestLineIndex ] = s;
-                m_nLatestLineIndex++;
-                if( m_nLatestLineIndex == LINE_BUFSIZE )
-                {
-                    m_nLatestLineIndex = 0;
+            if (b_exclude_from_exception_message == false) {
+                fLatestLines[fLatestLineIndex] = s;
+                fLatestLineIndex++;
+                if (fLatestLineIndex == LINE_BUFSIZE) {
+                    fLatestLineIndex = 0;
                 }
             }
-            try
-            {
-                if( (t & m_uDebugFilter) != 0 )
-                {
-                    if( d >= m_edlDebugLevel ) 
-                    {
-                        if( m_sw != null )
-                        {
-                            m_sw.WriteLine( s );
+            try {
+                if ((t & fDebugFilter) != 0) {
+                    if (d >= fDebugLevel) {
+                        if (fWriter != null) {
+                            fWriter.WriteLine(s);
                         }
-                        System.Diagnostics.Trace.WriteLine( System.DateTime.Now.ToFileTime() + " " + s );
+                        System.Diagnostics.Trace.WriteLine(System.DateTime.Now.ToFileTime() + " " + s);
                     }
                 }
-            }
-            catch( Exception e )
-            {
-                System.Diagnostics.Trace.WriteLine( e.Message );
+            } catch (Exception e) {
+                System.Diagnostics.Trace.WriteLine(e.Message);
             }
         }
 
         // Prints the log buffer of most recent lines written to the log file (or not written if no file active)
         public string ErrorReport()
         {
-            int nLatestLine = m_nLatestLineIndex;
-            string s= String.Concat(MainForm.m_sSoftwareName, "\r\n");
+            int nLatestLine = fLatestLineIndex;
+            string s = String.Concat(MainForm.SoftwareName, "\r\n");
             string t;
-            do
-            {
-                t = m_asLatestLines[ nLatestLine++ ];
-                if( t != null && t != "" )
-                {
-                    do 
-                    {
+            do {
+                t = fLatestLines[nLatestLine++];
+                if (t != null && t != "") {
+                    do {
                         int tlen = t.Length;
-                        if( tlen > ERROR_LINE_LENGTH )
-                        {
-                            tlen = t.LastIndexOf( ' ', ERROR_LINE_LENGTH );
-                            if( tlen == -1 )
-                            {
+                        if (tlen > ERROR_LINE_LENGTH) {
+                            tlen = t.LastIndexOf(' ', ERROR_LINE_LENGTH);
+                            if (tlen == -1) {
                                 tlen = ERROR_LINE_LENGTH;
                             }
-                            
+
                         }
-                        string tsub =  t.Substring(0, tlen );
-                        t = t.Substring( tlen );
-                        if( t != "" )
-                        {
+                        string tsub = t.Substring(0, tlen);
+                        t = t.Substring(tlen);
+                        if (t != "") {
                             // Indent non blank strings. Blank string signifies end of loop.
-                            t = " " + t; 
+                            t = " " + t;
                         }
-                        s = String.Concat( s, tsub, "\r\n" );
+                        s = String.Concat(s, tsub, "\r\n");
                     }
-                    while( t != "" );
+                    while (t != "");
                 }
 
-                if( nLatestLine == LINE_BUFSIZE )
-                {
+                if (nLatestLine == LINE_BUFSIZE) {
                     nLatestLine = 0;
-                }           
+                }
             }
-            while( nLatestLine != m_nLatestLineIndex );
+            while (nLatestLine != fLatestLineIndex);
 
             return s;
         }

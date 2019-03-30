@@ -39,7 +39,7 @@ namespace GEDmill
         /// </summary>
         /// <param name="minimum">The minimum value in the progress range (e.g. 0)</param>
         /// <param name="maximum">The maximum value in the progress range (e.g. 100)</param>
-        void Begin( int minimum, int maximum );
+        void Begin(int minimum, int maximum);
 
         /// <summary>
         /// Call this method from the worker thread to initialize
@@ -53,28 +53,28 @@ namespace GEDmill
         /// <param name="minimum">The minimum value in the progress range (e.g. 0)</param>
         /// <param name="maximum">The maximum value in the progress range (e.g. 100)</param>
         /// <remarks>You must have called one of the Begin() methods prior to this call.</remarks>
-        void SetRange( int minimum, int maximum );
+        void SetRange(int minimum, int maximum);
 
         /// <summary>
         /// Call this method from the worker thread to update the progress text.
         /// </summary>
         /// <param name="text">The progress text to display</param>
         /// <remarks>You must have called one of the Begin() methods prior to this call.</remarks>
-        void SetText( String text );
+        void SetText(String text);
 
         /// <summary>
         /// Call this method from the worker thread to increase the progress counter by a specified value.
         /// </summary>
         /// <param name="val">The amount by which to increment the progress indicator</param>
         /// <remarks>You must have called one of the Begin() methods prior to this call.</remarks>
-        void StepTo( int val );
+        void StepTo(int val);
 
         /// <summary>
         /// Call this method from the worker thread to step the progress meter to a particular value.
         /// </summary>
         /// <param name="val">The value to which to step the meter</param>
         /// <remarks>You must have called one of the Begin() methods prior to this call.</remarks>
-        void Increment( int val );
+        void Increment(int val);
 
         /// <summary>
         /// If this property is true, then you should abort work
@@ -89,6 +89,6 @@ namespace GEDmill
         /// Call this method from the worker thread to finalize the progress meter
         /// </summary>
         /// <remarks>You must have called one of the Begin() methods prior to this call.</remarks>
-        void End( CThreadError thread_error );
+        void End(ThreadError thread_error);
     }
 }

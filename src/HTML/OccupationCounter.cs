@@ -1,4 +1,4 @@
-/* CISRecordChanges.cs
+/* COccupationCounter.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -22,35 +22,24 @@
  *
  */
 
-using System.Collections;
 using GKCommon.GEDCOM;
 
-namespace GEDmill
+namespace GEDmill.HTML
 {
     /// <summary>
-    /// Data structure to hold a record for the load/save changes option on the prune
-    /// individuals and sources page. See also CISRecord.
+    /// A data structure to encapsulate an occupation name and the date when an individual had the occupation.
+    /// Used as an element in the list of all an individual's employments.
     /// </summary>
-    public class CISRecordChanges
+    public class OccupationCounter
     {
-        // True if this record is to be included (e.g. individual's checkbox is checked)
-        public bool IncludeInWebsite;
-
-        // Helper for parser
-        public GEDCOMFileReferenceWithTitle CurrentMFR;
-
-        // The multimedia file references
-        public ArrayList MFRList;
-
-        public bool Visibility;
+        public string Name;
+        public GEDCOMDateValue Date;
 
 
-        public CISRecordChanges(bool includeInWebsite)
+        public OccupationCounter(string name, GEDCOMDateValue date)
         {
-            IncludeInWebsite = includeInWebsite;
-            MFRList = new ArrayList();
-            CurrentMFR = null;
-            Visibility = true;
+            Name = name;
+            Date = date;
         }
     }
 }

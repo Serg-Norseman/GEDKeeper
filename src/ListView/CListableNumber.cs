@@ -1,4 +1,4 @@
-/* CISRecordChanges.cs
+/* CListableNumber.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -22,35 +22,40 @@
  *
  */
 
-using System.Collections;
-using GKCommon.GEDCOM;
+using System.Windows.Forms;
 
-namespace GEDmill
+namespace GEDmill.ListView
 {
     /// <summary>
-    /// Data structure to hold a record for the load/save changes option on the prune
-    /// individuals and sources page. See also CISRecord.
+    /// Special type of ListViewSubItem that stores a number in both a numeric and a text form. 
+    /// The numeric form is used for sorting. (Used to display number of items and total, e.g. 10/50, 11/50 etc)
     /// </summary>
-    public class CISRecordChanges
+    public class CListableNumber : ListViewItem.ListViewSubItem
     {
-        // True if this record is to be included (e.g. individual's checkbox is checked)
-        public bool IncludeInWebsite;
+        // Numeric representation
+        protected int fNumber;
 
-        // Helper for parser
-        public GEDCOMFileReferenceWithTitle CurrentMFR;
-
-        // The multimedia file references
-        public ArrayList MFRList;
-
-        public bool Visibility;
+        // Text representation
+        protected string fString;
 
 
-        public CISRecordChanges(bool includeInWebsite)
+        public CListableNumber(int number, string s)
         {
-            IncludeInWebsite = includeInWebsite;
-            MFRList = new ArrayList();
-            CurrentMFR = null;
-            Visibility = true;
+            fNumber = number;
+            fString = s;
+            base.Text = s;
+        }
+
+        // For displaying the list item
+        public override string ToString()
+        {
+            return fString;
+        }
+
+        // Returns -ve if this instance is less than other...
+        public int CompareTo(CListableNumber other)
+        {
+            return fNumber - other.fNumber;
         }
     }
 }
