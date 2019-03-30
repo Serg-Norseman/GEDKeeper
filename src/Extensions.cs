@@ -115,32 +115,26 @@ namespace GEDmill
 
         public static void BeginPruning(this GEDCOMTree tree)
         {
-
         }
 
         public static void EndPruning(this GEDCOMTree tree)
         {
-
         }
 
         public static void PruneAncestors(this GEDCOMTree tree, GEDCOMIndividualRecord iRec, bool x)
         {
-
         }
 
         public static void PruneDescendants(this GEDCOMTree tree, GEDCOMIndividualRecord iRec, bool x)
         {
-
         }
 
         public static void PruneMarkConnected(this GEDCOMTree tree, GEDCOMIndividualRecord iRec)
         {
-
         }
 
         public static void PruneUnmarked(this GEDCOMTree tree)
         {
-
         }
 
         public static string MakeLinkNumber(this GEDCOMSourceCitation sourCit, uint uSourceCount, bool bComma)

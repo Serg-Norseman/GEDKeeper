@@ -42,7 +42,7 @@ namespace GEDmill.HTML
         // This is a hack ( because I don't know the official way to find the path of the user's Desktop ).
         public static bool IsDesktop(string filename)
         {
-            string path_part = System.IO.Path.GetDirectoryName(filename);
+            string path_part = Path.GetDirectoryName(filename);
             // Strip trailing slashes
             while (path_part.Length > 0 && path_part.Substring(path_part.Length - 1, 1) == "\\") {
                 path_part = path_part.Substring(0, path_part.Length - 1);
@@ -75,7 +75,7 @@ namespace GEDmill.HTML
             Stream = null;
             try {
                 Stream = new FileStream(filename, FileMode.Create);
-            } catch (System.NotSupportedException) {
+            } catch (NotSupportedException) {
                 throw new HTMLException(String.Format("A problem occurred when creating an HTML file:\r\nThe path or filename {0} is not valid.", filename));
             }
 

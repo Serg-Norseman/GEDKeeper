@@ -30,7 +30,7 @@ namespace GEDmill.HTML
     /// Generally useful class for containing strings.
     /// Currently (10Dec08) used when creating the index, to store title, filename and extra text.
     /// </summary>
-    public class StringTuple : IComparable
+    public class StringTuple : IComparable<StringTuple>
     {
         public string First;
         public string Second;
@@ -57,15 +57,11 @@ namespace GEDmill.HTML
             return First;
         }
 
-        // Compares first string of two CStringTuple instances
-        public int CompareTo(object obj)
+        // Compares first string of two StringTuple instances
+        public int CompareTo(StringTuple other)
         {
-            if (obj != null) {
-                if (obj is StringTuple) {
-                    int res = First.CompareTo(((StringTuple)obj).First);
-                    return res;
-                }
-                throw new ArgumentException("Object is not a CStringTuple(250)");
+            if (other != null) {
+                return First.CompareTo(other.First);
             }
             return 1;
         }

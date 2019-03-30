@@ -25,13 +25,15 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using BSLib;
+using System.Globalization;
 
 namespace GEDmill.MiniTree
 {
     /// <summary>
     /// A data structure to contain the graphics drawing elements in the appropriate colours for the tree diagram.
     /// </summary>
-    public class Paintbox
+    public class Paintbox : BaseObject
     {
         public SolidBrush BrushBg;
         public SolidBrush BrushBox;
@@ -94,6 +96,30 @@ namespace GEDmill.MiniTree
             BrushFakeTransparency = null;
         }
 
+        // Clean up any resources being used.
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                BrushBgGif.Dispose();
+                BrushBg.Dispose();
+                BrushBox.Dispose();
+                BrushBoxHighlight.Dispose();
+                BrushBoxConcealed.Dispose();
+                BrushBoxShade.Dispose();
+                BrushText.Dispose();
+                BrushTextLink.Dispose();
+                BrushTextConcealed.Dispose();
+                PenConnector.Dispose();
+                PenConnectorDotted.Dispose();
+                PenBox.Dispose();
+                Font.Dispose();
+                if (BrushFakeTransparency != null) {
+                    BrushFakeTransparency.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
+
         // Converts a string of the form #RRGGBB to a Color instance.
         // Used when retrieving colours from the config.
         public static Color ConvertColour(string s)
@@ -111,17 +137,17 @@ namespace GEDmill.MiniTree
                     s = s.Substring(1);
                     goto case 3;
                 case 3:
-                    nRed = System.Int32.Parse(s.Substring(0, 1), System.Globalization.NumberStyles.HexNumber);
-                    nGreen = System.Int32.Parse(s.Substring(1, 1), System.Globalization.NumberStyles.HexNumber);
-                    nBlue = System.Int32.Parse(s.Substring(2, 1), System.Globalization.NumberStyles.HexNumber);
+                    nRed = int.Parse(s.Substring(0, 1), NumberStyles.HexNumber);
+                    nGreen = int.Parse(s.Substring(1, 1), NumberStyles.HexNumber);
+                    nBlue = int.Parse(s.Substring(2, 1), NumberStyles.HexNumber);
                     break;
                 case 7:
                     s = s.Substring(1);
                     goto case 6;
                 case 6:
-                    nRed = System.Int32.Parse(s.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
-                    nGreen = System.Int32.Parse(s.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
-                    nBlue = System.Int32.Parse(s.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+                    nRed = int.Parse(s.Substring(0, 2), NumberStyles.HexNumber);
+                    nGreen = int.Parse(s.Substring(2, 2), NumberStyles.HexNumber);
+                    nBlue = int.Parse(s.Substring(4, 2), NumberStyles.HexNumber);
                     break;
             }
 
@@ -132,7 +158,7 @@ namespace GEDmill.MiniTree
         // Used when storing colours in the config.
         public static string ConvertColour(Color c)
         {
-            string s = String.Format("#{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
+            string s = string.Format("#{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
             return s;
         }
 
@@ -145,7 +171,7 @@ namespace GEDmill.MiniTree
                     BrushFakeTransparency = new TextureBrush(bgImage);
                 } catch (Exception e) {
                     // e.g. System.IO.FileNotFoundException
-                    LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, String.Format("SetBackgroundImage() Caught exception {0}", e.ToString()));
+                    LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, string.Format("SetBackgroundImage() Caught exception {0}", e.ToString()));
                     BrushFakeTransparency = null;
                 }
             }

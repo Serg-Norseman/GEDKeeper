@@ -431,4 +431,3 @@ namespace GEDmill.MiniTree
         }
     }
 }
-

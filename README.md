@@ -1,3 +1,6 @@
+[![BCH compliance](https://bettercodehub.com/edge/badge/Serg-Norseman/GEDmill?branch=master)](https://bettercodehub.com/)
+[![CodeFactor](https://www.codefactor.io/repository/github/serg-norseman/gedmill/badge)](https://www.codefactor.io/repository/github/serg-norseman/gedmill)
+
 # GEDmill (Family History Website Generator)
 
 GEDmill is an easy-to-use program that lets you create webpages from your family history data. It accepts output from most family history programs and uses it to build HTML webpages.

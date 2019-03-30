@@ -41,7 +41,7 @@ namespace GEDmill
             Warning,
             Error,
             None
-        };
+        }
 
         // Bitmasks define the areas of the application that we are interested in logging
         public static uint DT_ALL = 0xffffffff;

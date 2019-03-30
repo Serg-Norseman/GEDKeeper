@@ -38,7 +38,7 @@ namespace GEDmill.HTML
     /// <summary>
     /// Encapsulates an event in an individual's life for sorting into chronological order.
     /// </summary>
-    public class Event : IComparable
+    public class Event : IComparable<Event>
     {
         // Date or date range for the event
         private GEDCOMDateValue fDate;
@@ -130,44 +130,37 @@ namespace GEDmill.HTML
         }
 
         // Used when sorting events into chronological order. If no dates are explicitly attached to the event, tries to work out an order.
-        public int CompareTo(object obj)
+        public int CompareTo(Event other)
         {
-            if (obj is Event) {
-                Event ievThat = (Event)obj;
-
-                if (fDate != null && ievThat.fDate != null) {
-                    int res = fDate.CompareTo(ievThat.fDate);
-                    if (res != 0)
-                        return res;
-
-                    // Some events naturally precede others: BIRTH, MARRIAGE, DEATH, BURIAL
-                    int precedence = Precedence - ievThat.Precedence;
-                    if (precedence != 0) {
-                        return precedence;
-                    }
-
-                    // Sort alphabetically if all else fails.
-                    return fDescription.CompareTo(ievThat.fDescription);
-
-                } else if (ievThat.fDate != null) {
-                    // This goes after valid dates.
-                    return 1;
-                } else if (fDate != null) {
-                    // This goes before invalid dates.
-                    return -1;
-                }
+            if (fDate != null && other.fDate != null) {
+                int res = fDate.CompareTo(other.fDate);
+                if (res != 0)
+                    return res;
 
                 // Some events naturally precede others: BIRTH, MARRIAGE, DEATH, BURIAL
-                int precedence2 = Precedence - ievThat.Precedence;
-                if (precedence2 != 0) {
-                    return precedence2;
+                int precedence = Precedence - other.Precedence;
+                if (precedence != 0) {
+                    return precedence;
                 }
-                // Sort alphabetically if all else fails
-                return fDescription.CompareTo(ievThat.fDescription);
 
+                // Sort alphabetically if all else fails.
+                return fDescription.CompareTo(other.fDescription);
+            } else if (other.fDate != null) {
+                // This goes after valid dates.
+                return 1;
+            } else if (fDate != null) {
+                // This goes before invalid dates.
+                return -1;
             }
 
-            throw new ArgumentException("object is not a CIEvent (248)");
+            // Some events naturally precede others: BIRTH, MARRIAGE, DEATH, BURIAL
+            int precedence2 = Precedence - other.Precedence;
+            if (precedence2 != 0) {
+                return precedence2;
+            }
+
+            // Sort alphabetically if all else fails
+            return fDescription.CompareTo(other.fDescription);
         }
 
         // Returns a value between 0 (earliest) and 100 (latest) used to

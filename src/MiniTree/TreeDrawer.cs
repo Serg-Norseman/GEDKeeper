@@ -290,10 +290,10 @@ namespace GEDmill.MiniTree
             MiniTreeIndividual mtiRightmostChild = null;
 
             // For each sibling (including the subject)
-            for (; ; )
+            while (true)
             {
                 GEDCOMIndividualRecord irSibling = GetChild(frParents, nSiblings, irSubject);
-                if (null == irSibling) {
+                if (irSibling == null) {
                     break;
                 }
 

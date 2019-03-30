@@ -1,0 +1,7 @@
+languages:
+  - csharp
+
+#component_depth: 3
+
+exclude:
+  - /temp/.*

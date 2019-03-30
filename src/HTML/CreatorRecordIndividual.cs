@@ -199,7 +199,7 @@ namespace GEDmill.HTML
 
             // We should have birthday and deathday by now, so find longest occupation
             if (!fConcealed) {
-                fOccupation = BestOccupation(fOccupations, age30, (fInferredBirthday != null) ? fInferredBirthday.Date : null, (fInferredDeathday != null) ? fInferredDeathday.Date : null);// Picks occupation with longest time span
+                fOccupation = BestOccupation(fOccupations, age30, (fInferredBirthday != null) ? fInferredBirthday.Date : null, (fInferredDeathday != null) ? fInferredDeathday.Date : null); // Picks occupation with longest time span
             }
 
             // Go through all families this person was a irSubject to
@@ -328,8 +328,6 @@ namespace GEDmill.HTML
 
                     int previousDifference = -100 * 365; // 100 years should be enough
                     int nextDifference = 100 * 365;
-                    int previousXrefDifference = -100 * 365; // Arbitrary big value
-                    int nextXrefDifference = 100 * 365; // Arbitrary big value
 
                     foreach (var ch in fr.Children) {
                         if (ch.XRef == fIndiRec.XRef)
@@ -398,7 +396,7 @@ namespace GEDmill.HTML
                 }
             }
 
-            if (null != fIndiIndexCreator) {
+            if (fIndiIndexCreator != null) {
                 // Add index entry for this individuals main name (or hidden/unknown string)
                 string sFirstName = fFirstName;
                 if (fNameSuffix != null && fNameSuffix != "") {

@@ -184,6 +184,9 @@ namespace GEDmill
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
+                fAbortEvent.Dispose();
+                fInitEvent.Dispose();
+
                 if (components != null) {
                     components.Dispose();
                 }

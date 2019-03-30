@@ -39,7 +39,7 @@ namespace GEDmill.MiniTree
             Solid = 0,
             DottedLeft = 1,
             DottedRight = 2
-        };
+        }
 
         // The CMiniTreeIndividual boxes and groups that make up this group.
         private ArrayList fMembers;

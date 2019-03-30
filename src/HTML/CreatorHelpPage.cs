@@ -67,7 +67,7 @@ namespace GEDmill.HTML
 
                     // Copy in the help html source
                     string sHelpLine;
-                    while (null != (sHelpLine = helpReader.ReadLine())) {
+                    while ((sHelpLine = helpReader.ReadLine()) != null) {
                         f.Writer.WriteLine(sHelpLine);
                     }
 
