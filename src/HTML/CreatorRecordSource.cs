@@ -26,6 +26,7 @@ using System;
 using System.Collections;
 using System.IO;
 using GKCommon.GEDCOM;
+using GKCore.Logging;
 
 namespace GEDmill.HTML
 {
@@ -34,6 +35,8 @@ namespace GEDmill.HTML
     /// </summary>
     public class CreatorRecordSource : CreatorRecord
     {
+        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CreatorRecordSource).Name);
+
         // The source record that we are creating the page for.
         private GEDCOMSourceRecord fSourceRecord;
 
@@ -228,9 +231,9 @@ namespace GEDmill.HTML
 
                 f.Writer.WriteLine("    </div> <!-- page -->");
             } catch (IOException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught IO Exception(6) : " + e.ToString());
+                fLogger.WriteError("Caught IO Exception(6) : ", e);
             } catch (ArgumentException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught Argument Exception(6) : " + e.ToString());
+                fLogger.WriteError("Caught Argument Exception(6) : ", e);
             } finally {
                 if (f != null) {
                     f.Close(); // Adds standard footer to the file

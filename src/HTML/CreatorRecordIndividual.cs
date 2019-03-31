@@ -29,12 +29,15 @@ using System.Drawing;
 using System.IO;
 using GEDmill.MiniTree;
 using GKCommon.GEDCOM;
+using GKCore.Logging;
 using GKCore.Types;
 
 namespace GEDmill.HTML
 {
     public class CreatorRecordIndividual : CreatorRecord
     {
+        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CreatorRecordIndividual).Name);
+
         // The individual record that we are creating the page for.
         private GEDCOMIndividualRecord fIndiRec;
 
@@ -42,7 +45,7 @@ namespace GEDmill.HTML
         private bool fConcealed;
 
         // List of the events in the individual's life history.
-        private ArrayList fEventList;
+        private List<Event> fEventList;
 
         // List of other facts known about the individual.
         private ArrayList fAttributeList;
@@ -142,7 +145,7 @@ namespace GEDmill.HTML
             fSurname = "";
             fOccupation = "";
             fConcealed = !fIndiRec.GetVisibility();
-            fEventList = new ArrayList();
+            fEventList = new List<Event>();
             fAttributeList = new ArrayList();
             fReferenceList = new List<GEDCOMSourceCitation>();
             fOccupations = new ArrayList();
@@ -159,7 +162,7 @@ namespace GEDmill.HTML
         // The main method that causes the page to be created.
         public bool Create(Stats stats)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "CCreatorRecordIndividual.Create()");
+            fLogger.WriteInfo("CCreatorRecordIndividual.Create()");
 
             if (fIndiRec == null) {
                 return false;
@@ -686,8 +689,6 @@ namespace GEDmill.HTML
 
                     f.Writer.WriteLine("      <div id=\"main\">");
 
-
-
                     f.Writer.WriteLine("        <div id=\"summary\">");
                     OutputNames(f);
                     OutputIndividualSummary(f);
@@ -700,7 +701,6 @@ namespace GEDmill.HTML
                     if (!fConcealed) {
                         fEventList.Sort();
                         OutputEvents(f);
-
                         OutputAttributes(f);
                         OutputNotes(f);
                         OutputSourceReferences(f);
@@ -716,9 +716,9 @@ namespace GEDmill.HTML
                     f.Writer.WriteLine("    </div> <!-- page -->");
                 }
             } catch (IOException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught IO Exception(4) : " + e.ToString());
+                fLogger.WriteError("Caught IO Exception(4) : ", e);
             } catch (ArgumentException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught Argument Exception(4) : " + e.ToString());
+                fLogger.WriteError("Caught Argument Exception(4) : ", e);
             } finally {
                 if (f != null) {
                     // Close adds the standard footer to the file
@@ -846,7 +846,6 @@ namespace GEDmill.HTML
                     f.Writer.WriteLine("              <td class=\"date\"><p>&nbsp;</p></td>");
                     f.Writer.WriteLine("              <td class=\"event\"><p{0}>{1}</p>{2}</td>", importance, iEvent.ToString(), attrNote);
                     f.Writer.WriteLine("            </tr>");
-
                 }
                 f.Writer.WriteLine("          </table>");
                 f.Writer.WriteLine("        </div> <!-- facts -->");
@@ -862,7 +861,7 @@ namespace GEDmill.HTML
                 f.Writer.WriteLine("          <table>");
 
                 for (int i = 0; i < fEventList.Count; i++) {
-                    Event iEvent = (Event)fEventList[i];
+                    Event iEvent = fEventList[i];
 
                     string importance;
                     if (iEvent.Important) {
@@ -890,7 +889,6 @@ namespace GEDmill.HTML
                     f.Writer.WriteLine("              <td class=\"date\"><p{0}>{1}</p></td>", importance, EscapeHTML(iEvent.Date, false));
                     f.Writer.WriteLine("              <td class=\"event\"><p{0}>{1}</p>{2}{3}</td>", importance, iEvent.ToString(), preference, eventNote);
                     f.Writer.WriteLine("            </tr>");
-
                 }
                 f.Writer.WriteLine("          </table>");
                 f.Writer.WriteLine("        </div> <!-- events -->");
@@ -940,14 +938,14 @@ namespace GEDmill.HTML
 
             string sBirthday;
             if (fActualBirthday != null) {
-                sBirthday = fActualBirthday.ToString() + fBirthdaySourceRefs;
+                sBirthday = fActualBirthday.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, false) + fBirthdaySourceRefs;
             } else {
                 sBirthday = "";
             }
 
             string sDeathday;
             if (fActualDeathday != null) {
-                sDeathday = fActualDeathday.ToString() + fDeathdaySourceRefs;
+                sDeathday = fActualDeathday.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, false) + fDeathdaySourceRefs;
             } else {
                 sDeathday = "";
             }
@@ -1016,7 +1014,6 @@ namespace GEDmill.HTML
                             f.Writer.WriteLine(String.Concat("        <img id=\"mainphoto_img\" src=\"", non_pic_main_filename, "\" alt=\"", alt_name, "\" />"));
                         }
                     }
-
                 } else // Not linking to original picture.
                   {
                     if (iMultimedia.Width != 0 && iMultimedia.Height != 0) {
@@ -1122,7 +1119,7 @@ namespace GEDmill.HTML
                             }
                         }
                         if (!bSanityCheck) {
-                            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Warning, "Expected to find occupation event");
+                            fLogger.WriteDebug("Expected to find occupation event");
                         }
                     }
                 }
@@ -1135,7 +1132,7 @@ namespace GEDmill.HTML
         // the other party would be the partner.
         private void ProcessEvent(GEDCOMCustomEvent es, string linkToOtherParty)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, String.Format("ProcessEvent( {0}, {1} )", es.Name, es.StringValue));
+            fLogger.WriteInfo(String.Format("ProcessEvent( {0}, {1} )", es.Name, es.StringValue));
 
             if (es.Name == null) {
                 return;
@@ -1379,19 +1376,19 @@ namespace GEDmill.HTML
                     break;
 
                 case "EVEN":
-                    if (subtype != null && subtype != "") {
+                    if (!string.IsNullOrEmpty(subtype)) {
                         escaped_description = EscapeHTML(subtype, false);
                     } else {
                         escaped_description = "other event";
                     }
-                    if (es.StringValue != null && es.StringValue != "") {
+                    if (!string.IsNullOrEmpty(es.StringValue)) {
                         escaped_description += ": " + es.StringValue;
                     }
                     break;
 
                 case "CAST":
                     escaped_description = "caste";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
@@ -1399,7 +1396,7 @@ namespace GEDmill.HTML
 
                 case "DSCR":
                     escaped_description = "physical description";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
@@ -1407,7 +1404,7 @@ namespace GEDmill.HTML
 
                 case "EDUC":
                     escaped_description = "educated";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
@@ -1415,7 +1412,7 @@ namespace GEDmill.HTML
 
                 case "IDNO":
                     escaped_description = "ID number";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
@@ -1423,7 +1420,7 @@ namespace GEDmill.HTML
 
                 case "NATI":
                     escaped_description = "nationality";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
@@ -1432,7 +1429,7 @@ namespace GEDmill.HTML
                 case "NCHI":
                     bTypeIsAOneOff = true;
                     escaped_description = "number of children";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
@@ -1441,7 +1438,7 @@ namespace GEDmill.HTML
                 case "NMR":
                     bTypeIsAOneOff = true;
                     escaped_description = "number of marriages";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
@@ -1450,7 +1447,7 @@ namespace GEDmill.HTML
 
                 case "OCCU":
                     escaped_description = "occupation";
-                    if (es.StringValue != null && es.StringValue != "") {
+                    if (!string.IsNullOrEmpty(es.StringValue)) {
                         OccupationCounter oc = new OccupationCounter(EscapeHTML(es.StringValue, false) + sourceRefs, date);
                         fOccupations.Add(oc);
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
@@ -1461,7 +1458,7 @@ namespace GEDmill.HTML
 
                 case "PROP":
                     escaped_description = "property";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
@@ -1469,7 +1466,7 @@ namespace GEDmill.HTML
 
                 case "RELI":
                     escaped_description = "religion";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
@@ -1477,7 +1474,7 @@ namespace GEDmill.HTML
 
                 case "RESI":
                     escaped_description = "resident";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = false; // Special case, we need the "at" word left in for this.
@@ -1485,7 +1482,7 @@ namespace GEDmill.HTML
 
                 case "SSN":
                     escaped_description = "Social Security number";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
@@ -1498,7 +1495,7 @@ namespace GEDmill.HTML
 
                 case "FACT":
                     escaped_description = "other fact";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
@@ -1508,7 +1505,7 @@ namespace GEDmill.HTML
                 case "_NMR": // _NMR Brother's Keeper
                     bTypeIsAOneOff = true;
                     escaped_description = "never married";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
@@ -1517,7 +1514,7 @@ namespace GEDmill.HTML
                 case "_AKA": // _AKA Brother's Keeper
                 case "_AKAN": // _AKAN Brother's Keeper
                     escaped_description = "also known as";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
@@ -1526,14 +1523,13 @@ namespace GEDmill.HTML
                 // Now the fr events:
                 case "ANUL":
                     escaped_description = "annulment of marriage";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
-                    if (linkToOtherParty != null && linkToOtherParty != "") {
+                    if (!string.IsNullOrEmpty(linkToOtherParty)) {
                         escaped_description = String.Concat(escaped_description, " to ", linkToOtherParty);
                     }
-
                     break;
 
                 case "CENS":
@@ -1545,42 +1541,38 @@ namespace GEDmill.HTML
                         place = ""; // Clear place to prevent this event being shown
                     } else {
                         escaped_description = "divorced";
-                        if (linkToOtherParty != null && linkToOtherParty != "") {
+                        if (!string.IsNullOrEmpty(linkToOtherParty)) {
                             escaped_description = String.Concat(escaped_description, " from ", linkToOtherParty);
                         }
                     }
-
-
                     break;
 
                 case "DIVF":
                     escaped_description = "filing of divorce";
-                    if (linkToOtherParty != null && linkToOtherParty != "") {
+                    if (!string.IsNullOrEmpty(linkToOtherParty)) {
                         escaped_description = String.Concat(escaped_description, " from ", linkToOtherParty);
                     }
                     break;
 
                 case "ENGA":
                     escaped_description = "engagement";
-                    if (linkToOtherParty != null && linkToOtherParty != "") {
+                    if (!string.IsNullOrEmpty(linkToOtherParty)) {
                         escaped_description = String.Concat(escaped_description, " to ", linkToOtherParty);
                     }
                     break;
 
                 case "MARB":
                     escaped_description = "publication of banns of marriage";
-                    if (linkToOtherParty != null && linkToOtherParty != "") {
+                    if (!string.IsNullOrEmpty(linkToOtherParty)) {
                         escaped_description = String.Concat(escaped_description, " to ", linkToOtherParty);
                     }
-
                     break;
 
                 case "MARC":
                     escaped_description = "contract of marriage";
-                    if (linkToOtherParty != null && linkToOtherParty != "") {
+                    if (!string.IsNullOrEmpty(linkToOtherParty)) {
                         escaped_description = String.Concat(escaped_description, " to ", linkToOtherParty);
                     }
-
                     break;
 
                 case "MARR":
@@ -1590,7 +1582,7 @@ namespace GEDmill.HTML
 
                 case "MARL":
                     escaped_description = "licence obtained for marriage";
-                    if (linkToOtherParty != null && linkToOtherParty != "") {
+                    if (!string.IsNullOrEmpty(linkToOtherParty)) {
                         escaped_description = String.Concat(escaped_description, " to ", linkToOtherParty);
                     }
 
@@ -1598,15 +1590,14 @@ namespace GEDmill.HTML
 
                 case "MARS":
                     escaped_description = "settlement of marriage";
-                    if (linkToOtherParty != null && linkToOtherParty != "") {
+                    if (!string.IsNullOrEmpty(linkToOtherParty)) {
                         escaped_description = String.Concat(escaped_description, " to ", linkToOtherParty);
                     }
-
                     break;
 
                 default:
                     escaped_description = "unknown event";
-                    if (es.StringValue != null && es.StringValue != "")
+                    if (!string.IsNullOrEmpty(es.StringValue))
                         escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
@@ -1619,7 +1610,7 @@ namespace GEDmill.HTML
 
             if (place != "") {
                 // It seems some earlier GEDCOM has PLAC value filled with the event value, and the event value blank. Accomodate this:
-                if ((es.StringValue == null || es.StringValue == "") && bNeedValue) {
+                if ((string.IsNullOrEmpty(es.StringValue)) && bNeedValue) {
                     escaped_description += " " + EscapeHTML(place, false);
                     if (utype == "OCCU") {
                         OccupationCounter oc = new OccupationCounter(place, date);
@@ -1629,7 +1620,7 @@ namespace GEDmill.HTML
                     bIncludeOccupation = true; // Needed to include occupation event, (without date or place), in page.
                 } else {
                     escaped_description += String.Concat(" ", place_word, " ", EscapeHTML(place, false));
-                    if (alternative_place != null && alternative_place.Length > 0) {
+                    if (!string.IsNullOrEmpty(alternative_place)) {
                         escaped_description += String.Concat(" ", alternative_place_word, " ", EscapeHTML(alternative_place, false));
                     }
                 }
@@ -1652,7 +1643,7 @@ namespace GEDmill.HTML
             }
 
             string overview = "";
-            if (es.Classification != null && es.Classification != "") {
+            if (!string.IsNullOrEmpty(es.Classification)) {
                 overview = es.Classification;
             }
 
@@ -1722,14 +1713,11 @@ namespace GEDmill.HTML
                     fFirstFoundEvent[utype] = iEvent;
                 }
             }
-
         }
 
         // Adds the given source citations to the given list of referenced sources, and returns an HTML link string.
         private static string AddSources(ref List<GEDCOMSourceCitation> referenceList, GEDCOMList<GEDCOMSourceCitation> sourceCitations)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "AddSources()");
-
             string sourceRefs = "";
             foreach (GEDCOMSourceCitation sc in sourceCitations) {
                 int sourceNumber = -1;

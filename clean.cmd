@@ -4,3 +4,4 @@ rmdir .\obj /s /q
 del *.exe*
 del *.dll
 del *.pdb
+del *.log

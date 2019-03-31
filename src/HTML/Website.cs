@@ -28,6 +28,7 @@ using System.IO;
 using GEDmill.Exceptions;
 using GEDmill.MiniTree;
 using GKCommon.GEDCOM;
+using GKCore.Logging;
 
 namespace GEDmill.HTML
 {
@@ -38,6 +39,8 @@ namespace GEDmill.HTML
     /// </summary>
     public class Website
     {
+        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(Website).Name);
+
         // The raw data that we are turning into a website.
         protected GEDCOMTree fTree;
 
@@ -54,7 +57,7 @@ namespace GEDmill.HTML
         // The heart of GEDmill is here.
         public void Create()
         {
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "CWebsite::Create()");
+            fLogger.WriteInfo("CWebsite::Create()");
 
             // 1 means the process was aborted, for signalling back to calling thread. 2 means file nError.      
             ThreadError threaderror = new ThreadError(1, "No error");
@@ -234,36 +237,31 @@ namespace GEDmill.HTML
                 fProgressWindow.StepTo(++nProgress);
 
                 // Done
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "Finished");
+                fLogger.WriteInfo("Finished");
                 fProgressWindow.SetText("Done");
                 threaderror.Error = 0;
                 threaderror.Message = "";
             } catch (ArgumentException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught Argument Exception : " + e.ToString());
-
+                fLogger.WriteError("Caught Argument Exception : ", e);
                 threaderror.Error = 2; // 2 => abnormal abort.
                 threaderror.Message = "";
             } catch (IOException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught IO Exception : " + e.ToString());
-
+                fLogger.WriteError("Caught IO Exception : ", e);
                 threaderror.Error = 2; // 2 => abnormal abort.
                 threaderror.Message = "";
             } catch (NullReferenceException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught NullReference Exception : " + e.ToString());
-
+                fLogger.WriteError("Caught NullReference Exception : ", e);
                 threaderror.Error = 2; // 2 => abnormal abort.
                 threaderror.Message = "";
             } catch (HTMLException e) {
                 threaderror.Error = 2; // 2 => abnormal abort.
                 threaderror.Message = e.Message;
             } catch (Exception e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught Exception : " + e.ToString());
-
+                fLogger.WriteError("Caught Exception : ", e);
                 threaderror.Error = 2; // 2 => abnormal abort.
                 threaderror.Message = "";
             } finally {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "Thread ending...");
-
+                fLogger.WriteInfo("Thread ending...");
                 if (fProgressWindow != null) {
                     fProgressWindow.End(threaderror);
                 }
@@ -273,7 +271,7 @@ namespace GEDmill.HTML
         // Copy the files for the images to use in place of non-picture multimedia files.
         private void CopyIcons()
         {
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "Copying icon files...");
+            fLogger.WriteInfo("Copying icon files...");
             try {
                 // uint num_copied = 0;
                 Rectangle rectNewArea = new Rectangle(0, 0, 0, 0);
@@ -295,9 +293,9 @@ namespace GEDmill.HTML
                 rectNewArea = new Rectangle(0, 0, 0, 0);
                 Creator.CopyMultimedia(MainForm.Config.ApplicationPath + "\\gmdocn.png", "", MainForm.Config.MaxImageWidth, MainForm.Config.MaxImageHeight, ref rectNewArea, null);
             } catch (IOException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, String.Format("Caught io exception while copying nonpic images: {0}", e.ToString()));
+                fLogger.WriteError("Caught io exception while copying nonpic images: {0}", e);
             } catch (ArgumentException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, String.Format("Caught argument exception while copying nonpic images: {0}", e.ToString()));
+                fLogger.WriteError("Caught argument exception while copying nonpic images: {0}", e);
             }
         }
 
@@ -305,14 +303,14 @@ namespace GEDmill.HTML
         private string CopyW3CSticker()
         {
             string sW3CFile = "";
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "Copying W3C sticker ...");
+            fLogger.WriteInfo("Copying W3C sticker ...");
             try {
                 Rectangle rectNewArea = new Rectangle(0, 0, 0, 0);
                 sW3CFile = Creator.CopyMultimedia(MainForm.Config.ApplicationPath + "\\valid-xhtml10.png", "", 0, 0, ref rectNewArea, null);
             } catch (IOException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, String.Format("Caught io exception while copying W3C sticker: {0}", e.ToString()));
+                fLogger.WriteError("Caught io exception while copying W3C sticker: {0}", e);
             } catch (ArgumentException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, String.Format("Caught argument exception while copying W3C sticker: {0}", e.ToString()));
+                fLogger.WriteError("Caught argument exception while copying W3C sticker: {0}", e);
             }
             return sW3CFile;
         }
@@ -327,12 +325,10 @@ namespace GEDmill.HTML
                     Rectangle newArea = new Rectangle(0, 0, 0, 0);
                     sBackgroundImage = Creator.CopyMultimedia(MainForm.Config.BackgroundImage, "", 0, 0, ref newArea, null);
                 } catch (IOException e) {
-                    LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, String.Format("Caught io exception while copying background image: {0}", e.ToString()));
-
+                    fLogger.WriteError("Caught io exception while copying background image: {0}", e);
                     sBackgroundImage = "";
                 } catch (ArgumentException e) {
-                    LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, String.Format("Caught argument exception while copying background image: {0}", e.ToString()));
-
+                    fLogger.WriteError("Caught argument exception while copying background image: {0}", e);
                     sBackgroundImage = "";
                 }
             }
@@ -354,7 +350,7 @@ namespace GEDmill.HTML
                     File.SetAttributes(sFileopenDest, FileAttributes.Normal);
                     File.Delete(sFileopenDest);
                 }
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "Copying fileopen.exe");
+                fLogger.WriteInfo("Copying fileopen.exe");
                 File.Copy(sFileopenSrc, sFileopenDest, true);
 
 
@@ -363,7 +359,7 @@ namespace GEDmill.HTML
                     File.SetAttributes(sAutorunDest, FileAttributes.Normal);
                     File.Delete(sAutorunDest);
                 }
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "Creating autorun.inf");
+                fLogger.WriteInfo("Creating autorun.inf");
 
                 FileStream fs = new FileStream(sAutorunDest, FileMode.Create);
                 StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.ASCII);
@@ -388,10 +384,10 @@ namespace GEDmill.HTML
                         File.SetAttributes(sJavascriptDest, FileAttributes.Normal);
                         File.Delete(sJavascriptDest);
                     }
-                    LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "Copying gedmill.js");
+                    fLogger.WriteInfo("Copying gedmill.js");
                     File.Copy(sJavascriptSrc, sJavascriptDest, true);
                 } else {
-                    LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, String.Format("{0} not found. No Javascript.", sJavascriptSrc));
+                    fLogger.WriteError(string.Format("{0} not found. No Javascript.", sJavascriptSrc));
                 }
             }
         }

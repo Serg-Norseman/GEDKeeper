@@ -24,6 +24,7 @@
 
 using System;
 using GKCommon.GEDCOM;
+using GKCore.Types;
 
 namespace GEDmill.HTML
 {
@@ -65,10 +66,7 @@ namespace GEDmill.HTML
         public string Date
         {
             get {
-                if (fDate == null) {
-                    return null;
-                }
-                return fDate.ToString();
+                return (fDate == null) ? null : fDate.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, false);
             }
         }
 

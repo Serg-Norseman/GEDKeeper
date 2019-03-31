@@ -26,6 +26,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using GEDmill.Exceptions;
+using GKCore.Logging;
 
 namespace GEDmill.HTML
 {
@@ -34,6 +35,8 @@ namespace GEDmill.HTML
     /// </summary>
     public class HTMLFile
     {
+        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(HTMLFile).Name);
+
         public FileStream Stream;
         public StreamWriter Writer;
 
@@ -65,7 +68,7 @@ namespace GEDmill.HTML
                 throw new HTMLException(String.Format("A problem occurred when creating an HTML file:\r\nGEDmill will not place files onto the Desktop."));
             }
 
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "CHTMLFile : " + filename);
+            fLogger.WriteInfo("CHTMLFile : " + filename);
 
             if (File.Exists(filename)) {
                 // Delete any current file

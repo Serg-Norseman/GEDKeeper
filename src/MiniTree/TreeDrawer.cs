@@ -26,6 +26,7 @@ using System.Collections;
 using System.Drawing;
 using System.Drawing.Imaging;
 using GKCommon.GEDCOM;
+using GKCore.Logging;
 
 namespace GEDmill.MiniTree
 {
@@ -49,6 +50,8 @@ namespace GEDmill.MiniTree
     /// </summary>
     public class TreeDrawer
     {
+        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(TreeDrawer).Name);
+
         /// <summary>
         /// Data structure containing the information to put in the boxes in the tree
         /// </summary>
@@ -79,8 +82,9 @@ namespace GEDmill.MiniTree
                     FirstName = "";
                     Surname = Name = MainForm.Config.ConcealedName;
                 } else {
-                    if (ir.Name != "") {
-                        Name = MainForm.Config.CapitaliseName(ir.Name, ref FirstName, ref Surname);
+                    var irName = ir.GetPrimaryFullName();
+                    if (irName != "") {
+                        Name = MainForm.Config.CapitaliseName(irName, ref FirstName, ref Surname);
                     } else {
                         FirstName = "";
                         Surname = Name = MainForm.Config.UnknownName;
@@ -175,7 +179,7 @@ namespace GEDmill.MiniTree
             mtgParent.DrawBitmap(paintbox, g, alMap);
 
             // Save the bitmap
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "Saving mini tree as " + fileName);
+            fLogger.WriteInfo("Saving mini tree as " + fileName);
 
             if (System.IO.File.Exists(fileName)) {
                 // Delete any current file
@@ -257,7 +261,7 @@ namespace GEDmill.MiniTree
                     imageGif = bm;
                     colorpalette = imageGif.Palette;
 
-                    LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "Re-saving mini gif as " + fileName);
+                    fLogger.WriteInfo("Re-saving mini gif as " + fileName);
 
                     imageGif.Save(fileName, imageFormat);
                 }

@@ -3,5 +3,5 @@ languages:
 
 #component_depth: 3
 
-exclude:
-  - /temp/.*
+#exclude:
+#  - /temp/.*

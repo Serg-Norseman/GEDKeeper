@@ -33,6 +33,7 @@ using GEDmill.HTML;
 using GEDmill.ListView;
 using GEDmill.MiniTree;
 using GKCommon.GEDCOM;
+using GKCore.Logging;
 
 namespace GEDmill
 {
@@ -41,6 +42,8 @@ namespace GEDmill
     /// </summary>
     public partial class MainForm : Form
     {
+        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(MainForm).Name);
+
         // The current version of this app, for display purposes.
         public static string SoftwareVersion = "1.11.0";
 
@@ -1097,13 +1100,6 @@ namespace GEDmill
             bool nextArgIsFilename = false;
             string logFilename = "";
 
-            // User can hold down Ctrl and Shift while app starts to enable log file creation
-            // People will find this easier than altering command gedcomLine options!
-            if (Control.ModifierKeys == (Keys.Shift | Keys.Control)) {
-                LogFile.Instance.SetLogLevel(LogFile.EDebugLevel.All);
-                LogFile.Instance.StartLogFile("C:\\gedmill.txt");
-            }
-
             if (args != null) {
                 foreach (string sArg in args) {
                     if (nextArgIsFilename) {
@@ -1111,22 +1107,6 @@ namespace GEDmill
                         nextArgIsFilename = false;
                     } else {
                         switch (sArg) {
-                            case "-logfile": {
-                                    LogFile.Instance.SetLogLevel(LogFile.EDebugLevel.All);
-                                    LogFile.Instance.SetDebugAllowFilter(LogFile.DT_ALL ^ LogFile.DT_GEDCOM); // Everything but gedcom
-                                    nextArgIsFilename = true;
-                                    break;
-                                }
-                            case "-debug": {
-                                    LogFile.Instance.SetLogLevel(LogFile.EDebugLevel.All);
-                                    LogFile.Instance.SetDebugAllowFilter(LogFile.DT_ALL ^ LogFile.DT_GEDCOM); // Everything but gedcom
-                                    break;
-                                }
-                            case "-debug_gedcom": {
-                                    LogFile.Instance.SetLogLevel(LogFile.EDebugLevel.All);
-                                    LogFile.Instance.SetDebugAllowFilter(LogFile.DT_ALL); // All
-                                    break;
-                                }
                             case "-reset": {
                                     resetConfig = true;
                                     break;
@@ -1135,23 +1115,18 @@ namespace GEDmill
                     }
                 }
             }
-            if (logFilename != "") {
-                LogFile.Instance.StartLogFile(logFilename);
-            }
             string startTime = DateTime.Now.ToString();
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, MainForm.SoftwareName + " started at " + startTime);
+            fLogger.WriteInfo(MainForm.SoftwareName + " started at " + startTime);
 
             m_mainForm = new MainForm(resetConfig);
             Application.Run(m_mainForm);
-
-            LogFile.Instance.StopLogFile();
         }
 
         #region Event handlers
 
         private void backButton_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Back button");
+            fLogger.WriteInfo("Back button");
 
             // Mustn't affect configPanel 
             if (fConfigPanelOn) {
@@ -1168,7 +1143,7 @@ namespace GEDmill
 
         private void nextButton_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Next button clicked. current panel = " + fCurrentPanel.ToString());
+            fLogger.WriteInfo("Next button clicked. current panel = " + fCurrentPanel.ToString());
 
             // Mustn't affect configPanel
             if (fConfigPanelOn) {
@@ -1218,7 +1193,7 @@ namespace GEDmill
         // Event handler
         private void cancelButton_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Quit button clicked.");
+            fLogger.WriteInfo("Quit button clicked.");
 
             DialogResult dialogResult = DialogResult.Yes;
 
@@ -1300,7 +1275,7 @@ namespace GEDmill
         // Event handler
         private void configButton_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Config button clicked. current panel = " + fCurrentPanel.ToString());
+            fLogger.WriteInfo("Config button clicked. current panel = " + fCurrentPanel.ToString());
 
             if (!fConfigPanelOn) {
                 // Switch config panel on
@@ -1318,7 +1293,7 @@ namespace GEDmill
         // Event handler
         private void configCancelButton_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Config reset button clicked. current panel = " + fCurrentPanel.ToString());
+            fLogger.WriteInfo("Config reset button clicked. current panel = " + fCurrentPanel.ToString());
 
             // Ensure config panel on
             if (!fConfigPanelOn) {
@@ -1342,7 +1317,7 @@ namespace GEDmill
         // Event handler
         private void buttonChooseGedcomBrowse_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Panel 2 browse button clicked.");
+            fLogger.WriteInfo("Panel 2 browse button clicked.");
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
@@ -1371,7 +1346,7 @@ namespace GEDmill
                 m_textboxChooseGedcom.SelectionStart = InputFile.Length;
                 m_textboxChooseGedcom.SelectionLength = InputFile.Length;
             }
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Selected file : " + InputFile);
+            fLogger.WriteInfo("Selected file : " + InputFile);
         }
 
         // Event handler
@@ -1475,7 +1450,7 @@ namespace GEDmill
                 string sURL = m_linklabelAllDone.Text;
                 System.Diagnostics.Process.Start(sURL);
             } catch (Exception e2) {
-                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, String.Format("Caught exception while viewing folder : {0}", e2.ToString()));
+                fLogger.WriteError("Caught exception while viewing folder : {0}", e2);
                 m_linklabelAllDone.Links[m_linklabelAllDone.Links.IndexOf(e.Link)].Visited = bOldVisitedValue;
             }
         }
@@ -1483,7 +1458,7 @@ namespace GEDmill
         // Event handler
         private void configPanel_BackImage_BrowseButton_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "config panel back image browse button clicked.");
+            fLogger.WriteInfo("config panel back image browse button clicked.");
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
@@ -1523,13 +1498,13 @@ namespace GEDmill
                     m_textboxConfigBackImageEdit.SelectionLength = m_textboxConfigBackImageEdit.Text.Length;
                 }
             }
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Selected file : " + m_textboxConfigBackImageEdit.Text);
+            fLogger.WriteInfo("Selected file : " + m_textboxConfigBackImageEdit.Text);
         }
 
         // Event handler
         private void configPanel_FrontImage_BrowseButton_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "config panel front image browse button clicked.");
+            fLogger.WriteInfo("config panel front image browse button clicked.");
 
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
@@ -1569,8 +1544,7 @@ namespace GEDmill
                     m_textboxConfigFrontImageEdit.SelectionLength = m_textboxConfigFrontImageEdit.Text.Length;
                 }
             }
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Selected file : " + m_textboxConfigFrontImageEdit.Text);
-
+            fLogger.WriteInfo("Selected file : " + m_textboxConfigFrontImageEdit.Text);
         }
 
         // Event handler
@@ -1582,7 +1556,7 @@ namespace GEDmill
         // Event handler
         private void configPanel_MiniTreeColourIndiBackground_Button_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "configPanel_MiniTreeColourIndiBackground_Button_click.");
+            fLogger.WriteInfo("configPanel_MiniTreeColourIndiBackground_Button_click.");
 
             fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiBackground;
             if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
@@ -1594,7 +1568,7 @@ namespace GEDmill
         // Event handler
         private void configPanel_MiniTreeColourIndiHighlight_Button_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "configPanel_MiniTreeColourIndiHighlight_Button_click.");
+            fLogger.WriteInfo("configPanel_MiniTreeColourIndiHighlight_Button_click.");
 
             fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiHighlight;
             if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
@@ -1606,7 +1580,7 @@ namespace GEDmill
         // Event handler
         private void configPanel_MiniTreeColourIndiBgConcealed_Button_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "configPanel_MiniTreeColourIndiBgConcealed_Button_click.");
+            fLogger.WriteInfo("configPanel_MiniTreeColourIndiBgConcealed_Button_click.");
 
             fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiBgConcealed;
             if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
@@ -1618,7 +1592,7 @@ namespace GEDmill
         // Event handler
         private void configPanel_MiniTreeColourIndiShade_Button_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "configPanel_MiniTreeColourIndiShade_Button_click.");
+            fLogger.WriteInfo("configPanel_MiniTreeColourIndiShade_Button_click.");
 
             fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiShade;
             if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
@@ -1630,7 +1604,7 @@ namespace GEDmill
         // Event handler
         private void configPanel_MiniTreeColourIndiText_Button_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "configPanel_MiniTreeColourIndiText_Button_click.");
+            fLogger.WriteInfo("configPanel_MiniTreeColourIndiText_Button_click.");
 
             fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiText;
             if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
@@ -1642,7 +1616,7 @@ namespace GEDmill
         // Event handler
         private void configPanel_MiniTreeColourIndiLink_Button_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "configPanel_MiniTreeColourIndiLink_Button_click.");
+            fLogger.WriteInfo("configPanel_MiniTreeColourIndiLink_Button_click.");
 
             fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiLink;
             if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
@@ -1654,7 +1628,7 @@ namespace GEDmill
         // Event handler
         private void configPanel_MiniTreeColourBranch_Button_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "configPanel_MiniTreeColourBranch_Button_click.");
+            fLogger.WriteInfo("configPanel_MiniTreeColourBranch_Button_click.");
 
             fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeBranch;
             if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
@@ -1666,7 +1640,7 @@ namespace GEDmill
         // Event handler
         private void configPanel_MiniTreeColourIndiBorder_Button_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "configPanel_MiniTreeColourIndiBorder_Button_click.");
+            fLogger.WriteInfo("configPanel_MiniTreeColourIndiBorder_Button_click.");
 
             fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiBorder;
             if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
@@ -1678,7 +1652,7 @@ namespace GEDmill
         // Event handler
         private void configPanel_MiniTreeColourIndiFgConcealed_Button_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "configPanel_MiniTreeColourIndiFgConcealed_Button_click.");
+            fLogger.WriteInfo("configPanel_MiniTreeColourIndiFgConcealed_Button_click.");
 
             fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiFgConcealed;
             if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
@@ -1690,35 +1664,35 @@ namespace GEDmill
         // Event handler
         private void configPanel_MultiPageIndex_CheckBox_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "config panel multi page index button clicked.");
+            fLogger.WriteInfo("config panel multi page index button clicked.");
             EnableMultiPageIndexConfig();
         }
 
         // Event handler
         private void configPanel_AllowMultimedia_CheckBox_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "allow multimedia button clicked.");
+            fLogger.WriteInfo("allow multimedia button clicked.");
             EnableMultimediaConfig();
         }
 
         // Event handler
         private void configPanel_IndiImages_CheckBox_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "config panel multi images button clicked.");
+            fLogger.WriteInfo("config panel multi images button clicked.");
             EnableThumbnailsConfig();
         }
 
         // Event handler
         private void configPanel_ShowWithheldRecords_CheckBox_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "config panel show withheld records button clicked.");
+            fLogger.WriteInfo("config panel show withheld records button clicked.");
             EnableWithheldConfig();
         }
 
         // Event handler
         private void configPanel_WithheldName_Label_click(object sender, System.EventArgs e)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "config panel withheld label clicked.");
+            fLogger.WriteInfo("config panel withheld label clicked.");
             EnableWithheldConfig();
         }
 
@@ -2024,7 +1998,6 @@ namespace GEDmill
             Cursor.Hide();
 
             ShowPruneResult(PruneExcluded, 0, "individual");
-
         }
 
         private void pruneSourcesContextMenuInclude_Click(Object sender, System.EventArgs e)
@@ -2274,7 +2247,7 @@ namespace GEDmill
                 fileDir = Path.GetDirectoryName(fileDialog.FileName);
                 fileName = Path.GetFileName(fileDialog.FileName);
             }
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Selected file : " + fileDir + "\\" + fileName);
+            fLogger.WriteInfo("Selected file : " + fileDir + "\\" + fileName);
 
             return (fileSelected);
         }
@@ -2320,7 +2293,6 @@ namespace GEDmill
                     break;
             }
             return sFilename;
-
         }
 
         // Brings up a CRecordDetailsForm for the given individual
@@ -2563,7 +2535,7 @@ namespace GEDmill
         // Handles the processing needed at each stage of the app, as the user moves through each page of the wizard.
         private bool ValidateCurrentPanel()
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "ValidateCurrentPanel()");
+            fLogger.WriteInfo("ValidateCurrentPanel()");
             DialogResult result = DialogResult.OK;
 
             // Loop gives user the option to retry folder creation. Use return to exit.
@@ -2571,12 +2543,12 @@ namespace GEDmill
                 switch (fCurrentPanel) {
                     case 2:
                         if (File.Exists(InputFile) == false) {
-                            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "File not found.");
+                            fLogger.WriteInfo("File not found.");
 
                             MessageBoxEx.Show(m_mainForm, "The file you have selected could not be found.", "File Not Found",
                                 MessageBoxButtons.OK, MessageBoxIcon.Exclamation, false);
 
-                            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "File not found. Returning. ");
+                            fLogger.WriteInfo("File not found. Returning. ");
                             return false;
                         }
 
@@ -2600,23 +2572,23 @@ namespace GEDmill
                         provider.LoadFromFile(InputFile);
                         //m_gedcom.ProgressCallback = progressWindow;
 
-                        LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Reading GEDCOM file " + InputFile);
+                        fLogger.WriteInfo("Reading GEDCOM file " + InputFile);
 
                         //ThreadStart threadStart = new ThreadStart(m_gedcom.ParseFile);
                         //Thread threadWorker = new Thread(threadStart);
 
-                        LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Starting thread");
+                        fLogger.WriteInfo("Starting thread");
 
                         //threadWorker.Start();
                         //result = progressWindow.ShowDialog(this);
                         //threadWorker.Join();
 
-                        //LogFile.TheLogFile.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Thread finished, result=" + result.ToString());
+                        //LogFile.TheLogFile.WriteLine(LogFile.DT_APP.Info("Thread finished, result=" + result.ToString());
 
                         if (result == DialogResult.Abort) // Abort means abnormal failure (ie. not user pressing cancel)
                         {
                             // Abort means there were file IO errors
-                            MessageBoxEx.Show(m_mainForm, String.Format("A problem was encountered while reading the GEDCOM file:\r\n\r\n{0}", LogFile.Instance.ErrorReport()), MainForm.SoftwareName,
+                            MessageBoxEx.Show(m_mainForm, String.Format("A problem was encountered while reading the GEDCOM file"), MainForm.SoftwareName,
                                 MessageBoxButtons.OK, MessageBoxIcon.Exclamation, true);
                         } else if (result == DialogResult.Retry) // Something went wrong, let user retry
                           {
@@ -2720,7 +2692,7 @@ namespace GEDmill
         private void FillIndividualsList(SortableListView listView, bool firstColumnIsCheckbox)
         {
             var indiRecs = fTree.GetRecords<GEDCOMIndividualRecord>();
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "FillIndividualsList() : " + indiRecs.Count.ToString());
+            fLogger.WriteInfo("FillIndividualsList() : " + indiRecs.Count.ToString());
 
             fDisablePrunepanelCheckEvent = true;
 
@@ -2758,7 +2730,7 @@ namespace GEDmill
                 } else {
                     string sSurname = "";
                     string sFirstName = "";
-                    Config.CapitaliseName(ir.Name, ref sFirstName, ref sSurname);
+                    Config.CapitaliseName(ir.GetPrimaryFullName(), ref sFirstName, ref sSurname);
                     /*if (ir.NameSuffix != null && ir.NameSuffix != "") {
                         sFirstName += ", " + ir.NameSuffix;
                     }*/
@@ -2829,7 +2801,7 @@ namespace GEDmill
         private void FillSourcesList(SortableListView listView, bool firstColumnIsCheckbox)
         {
             var sources = fTree.GetRecords<GEDCOMSourceRecord>();
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "FillSourcesList() : " + sources.Count.ToString());
+            fLogger.WriteInfo("FillSourcesList() : " + sources.Count.ToString());
 
             fDisablePrunepanelCheckEvent = true; // call to item.Checked below invokes event handler.
 
@@ -2971,29 +2943,29 @@ namespace GEDmill
             try {
                 System.Diagnostics.Process.Start(sURL);
             } catch (Exception e2) {
-                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, String.Format("Caught exception while opening finished webpages : {0}", e2.ToString()));
+                fLogger.WriteError("Caught exception while opening finished webpages : {0}", e2);
             }
         }
 
         // Spawns the website creation thread, which calls CWebsite.Create to do the work.
         private bool CreateWebsite(string outputFolder, string imagesFolder)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Creating website");
+            fLogger.WriteInfo("Creating website");
             DialogResult dialogResult;
 
             // If user has specified a background image, check it exists
             if (Config.BackgroundImage != null && Config.BackgroundImage.Length != 0 && File.Exists(Config.BackgroundImage) == false) {
-                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Warning, "Can't find background image " + Config.BackgroundImage);
+                fLogger.WriteError("Can't find background image " + Config.BackgroundImage);
 
                 dialogResult = MessageBoxEx.Show(m_mainForm, string.Format("The file {0} is missing. \r\nPages will be created without any background image.", Config.BackgroundImage),
                     "Creating website", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, false);
                 if (dialogResult == DialogResult.Cancel) {
-                    LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Message box cancelled (1)");
+                    fLogger.WriteInfo("Message box cancelled (1)");
                     return false;
                 }
             }
 
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Starting progress window");
+            fLogger.WriteInfo("Starting progress window");
 
             ProgressWindow progressWindow = new ProgressWindow();
             progressWindow.Text = "Creating web pages";
@@ -3003,7 +2975,7 @@ namespace GEDmill
             ThreadStart threadStart = new ThreadStart(website.Create);
             Thread threadWorker = new Thread(threadStart);
 
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Starting progress thread");
+            fLogger.WriteInfo("Starting progress thread");
 
             dialogResult = DialogResult.Abort;
             try {
@@ -3017,10 +2989,10 @@ namespace GEDmill
             }
 
             if (dialogResult == DialogResult.Abort) {
-                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Thread aborted");
+                fLogger.WriteInfo("Thread aborted");
                 if (progressWindow.ThreadError.Message == "") {
                     // Abort means there were file IO errors
-                    MessageBoxEx.Show(m_mainForm, String.Format("A problem was encountered while creating the website files:\r\n\r\n{0}", LogFile.Instance.ErrorReport()), MainForm.SoftwareName,
+                    MessageBoxEx.Show(m_mainForm, String.Format("A problem was encountered while creating the website files"), MainForm.SoftwareName,
                         MessageBoxButtons.OK, MessageBoxIcon.Exclamation, true);
                 } else {
                     // Abort means there were file IO errors
@@ -3030,11 +3002,11 @@ namespace GEDmill
             }
 
             if (dialogResult != DialogResult.OK) {
-                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Dialog not OK");
+                fLogger.WriteInfo("Dialog not OK");
                 return false;
             }
 
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Website create done.");
+            fLogger.WriteInfo("Website create done.");
 
             return true;
         }
@@ -3068,10 +3040,10 @@ namespace GEDmill
         // Reports any exception thrown during the prune operation
         private void ReportPruneError(Exception e)
         {
-            MessageBoxEx.Show(m_mainForm, String.Format("A problem was encountered while navigating the tree structure:\r\n\r\n{0}", LogFile.Instance.ErrorReport()), MainForm.SoftwareName,
+            MessageBoxEx.Show(m_mainForm, String.Format("A problem was encountered while navigating the tree structure:\r\n\r\n{0}", e.StackTrace), MainForm.SoftwareName,
                 MessageBoxButtons.OK, MessageBoxIcon.Exclamation, true);
 
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, String.Format("Caught navigation exception : {0}", e.ToString()));
+            fLogger.WriteInfo(String.Format("Caught navigation exception : {0}", e.ToString()));
         }
 
         // Helper function. Compares dates to see if we know this person is alive
@@ -3485,7 +3457,7 @@ namespace GEDmill
                 return;
             }
 
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "FillKeyIndividualsList() : " + Config.KeyIndividuals.Count.ToString());
+            fLogger.WriteInfo("FillKeyIndividualsList() : " + Config.KeyIndividuals.Count.ToString());
 
             string sSurname;
             string sFirstName;
@@ -3502,7 +3474,7 @@ namespace GEDmill
                     if (irKey != null && irKey.GetVisibility()) {
                         sFirstName = "";
                         sSurname = "";
-                        sFullName = Config.CapitaliseName(irKey.Name, ref sFirstName, ref sSurname);
+                        sFullName = Config.CapitaliseName(irKey.GetPrimaryFullName(), ref sFirstName, ref sSurname);
                         if (sFullName == "") {
                             sFullName = Config.UnknownName;
                         }
@@ -3522,7 +3494,7 @@ namespace GEDmill
         // front_page_filename is the name of a file to survive throughout this process (see also s_config.m_preserveFrontPage)
         private DialogResult PrepareOutputDirectory(string sOutputFolder, bool bPreserveFiles)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, String.Format("PrepareOutputDirectory({0})", sOutputFolder));
+            fLogger.WriteInfo(String.Format("PrepareOutputDirectory({0})", sOutputFolder));
 
             string sMessage = "Could not access or create folder.";
             MessageBoxButtons messageBoxButtons = MessageBoxButtons.RetryCancel;
@@ -3532,35 +3504,35 @@ namespace GEDmill
 
             // First see if folder clashes with a file
             if (File.Exists(sOutputFolder)) {
-                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Folder clashes with file : " + sOutputFolder);
+                fLogger.WriteInfo("Folder clashes with file : " + sOutputFolder);
 
                 // Earn user that file is being deleted
                 dialogResult = MessageBoxEx.Show(m_mainForm, String.Format("The folder {0} needs to be created. " +
                     "\r\nThis will destroy an existing file with that name.", sOutputFolder),
                     "Creating website", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, false);
                 if (dialogResult == DialogResult.Cancel) {
-                    LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Message box cancelled (2)");
+                    fLogger.WriteInfo("Message box cancelled (2)");
                     return DialogResult.Cancel;
                 }
 
                 // Now delete output folder (which is currently a file)
                 do {
                     bFailed = false;
-                    LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Deleting output folder as file : " + sOutputFolder);
+                    fLogger.WriteInfo("Deleting output folder as file : " + sOutputFolder);
                     try {
                         Cursor.Current = Cursors.WaitCursor;
                         Cursor.Show();
                         File.Delete(sOutputFolder);
                     } catch (IOException e) {
-                        LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, "Caught IO exception : " + e.ToString());
+                        fLogger.WriteError("Caught IO exception : ", e);
                         sExceptionMessage = e.Message;
                         bFailed = true;
                     } catch (System.UnauthorizedAccessException e) {
-                        LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, "Caught UnauthorizedAccessException(3) : " + e.ToString());
+                        fLogger.WriteError("Caught UnauthorizedAccessException(3) : ", e);
                         sExceptionMessage = e.Message;
                         bFailed = true;
                     } catch (Exception e) {
-                        LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, "Caught generic exception(3) : " + e.ToString());
+                        fLogger.WriteError("Caught generic exception(3) : ", e);
                         sExceptionMessage = e.Message;
                         bFailed = true;
                     }
@@ -3574,7 +3546,7 @@ namespace GEDmill
                 }
                 while (bFailed && dialogResult == DialogResult.Retry);
                 if (bFailed && dialogResult == DialogResult.Cancel) {
-                    LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Message box cancelled (6)");
+                    fLogger.WriteInfo("Message box cancelled (6)");
                     return DialogResult.Cancel;
                 }
             } // End if output folder exists
@@ -3582,11 +3554,11 @@ namespace GEDmill
             // Next see if folder already exists
             // If output folder exists, offer to delete it
             if (Directory.Exists(sOutputFolder)) {
-                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Folder exists(11) : " + sOutputFolder);
+                fLogger.WriteInfo("Folder exists(11) : " + sOutputFolder);
 
                 if (HTMLFile.IsDesktop(sOutputFolder)) {
                     dialogResult = MessageBoxEx.Show(m_mainForm, "GEDmill will not allow you to create files directly on the Desktop", "Creating website", MessageBoxButtons.OK, MessageBoxIcon.Stop, false);
-                    LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Desktop detected as output folder.");
+                    fLogger.WriteInfo("Desktop detected as output folder.");
                     return DialogResult.Cancel;
                 }
 
@@ -3595,7 +3567,7 @@ namespace GEDmill
                     "Creating website",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, false);
                 if (dialogResult == DialogResult.Cancel) {
-                    LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Message box cancelled (3a)");
+                    fLogger.WriteInfo("Message box cancelled (3a)");
                     return DialogResult.Cancel;
                 }
                 if (dialogResult == DialogResult.Yes) {
@@ -3604,19 +3576,19 @@ namespace GEDmill
                             "Creating website",
                             MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, false);
                         if (dialogResult == DialogResult.Cancel) {
-                            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Message box cancelled (3b)");
+                            fLogger.WriteInfo("Message box cancelled (3b)");
                             return DialogResult.Cancel;
                         }
                     } else {
                         dialogResult = MessageBoxEx.Show(m_mainForm, "WARNING: If the folder contains non-GEDmill files they will be deleted also.\r\nDelete folder anyway?",
                             "Creating website", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, false);
                         if (dialogResult == DialogResult.Cancel) {
-                            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Message box cancelled (3c)");
+                            fLogger.WriteInfo("Message box cancelled (3c)");
                             return DialogResult.Cancel;
                         }
                     }
                     if (dialogResult == DialogResult.Yes) {
-                        LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Message box yes. Deleting output folder.");
+                        fLogger.WriteInfo("Message box yes. Deleting output folder.");
                         do {
                             bFailed = false;
                             try {
@@ -3626,15 +3598,15 @@ namespace GEDmill
                                     Directory.Delete(sOutputFolder, true);
                                 }
                             } catch (IOException e) {
-                                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, "Caught IOException(2) : " + e.ToString());
+                                fLogger.WriteError("Caught IOException(2) : ", e);
                                 sExceptionMessage = e.Message;
                                 bFailed = true;
                             } catch (System.UnauthorizedAccessException e) {
-                                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, "Caught UnauthorizedAccessException(2) : " + e.ToString());
+                                fLogger.WriteError("Caught UnauthorizedAccessException(2) : ", e);
                                 sExceptionMessage = e.Message;
                                 bFailed = true;
                             } catch (Exception e) {
-                                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, "Caught generic exception(2) : " + e.ToString());
+                                fLogger.WriteError("Caught generic exception(2) : ", e);
                                 sExceptionMessage = e.Message;
                                 bFailed = true;
                             }
@@ -3657,7 +3629,7 @@ namespace GEDmill
             // At last, try to create the folder
             bFailed = false;
             DirectoryInfo directoryInfo = null;
-            LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Note, "Creating output folder.");
+            fLogger.WriteInfo("Creating output folder.");
             try {
                 directoryInfo = Directory.CreateDirectory(sOutputFolder);
             }
@@ -3666,43 +3638,43 @@ namespace GEDmill
                 sMessage = "The folder you have selected could not be found.";
                 sExceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
-                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, "Caught DirectoryNotFoundException(5) : " + e.ToString());
+                fLogger.WriteError("Caught DirectoryNotFoundException(5) : ", e);
                 bFailed = true;
             } catch (ArgumentNullException e) {
                 sMessage = "The folder name is missing or illegal.";
                 sExceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
-                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, "Caught ArgumentNullException(5) : " + e.ToString());
+                fLogger.WriteError("Caught ArgumentNullException(5) : ", e);
                 bFailed = true;
             } catch (PathTooLongException e) {
                 sMessage = "The folder name you have selected is too long.";
                 sExceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
-                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, "Caught PathTooLongException(5) : " + e.ToString());
+                fLogger.WriteError("Caught PathTooLongException(5) : ", e);
                 bFailed = true;
             } catch (IOException e) {
                 sMessage = "The path you have selected is read-only, or the folder is not empty.";
                 sExceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.RetryCancel; // Let them correct this outside of app
-                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, "Caught IOException(5) : " + e.ToString());
+                fLogger.WriteError("Caught IOException(5) : ", e);
                 bFailed = true;
             } catch (UnauthorizedAccessException e) {
                 sMessage = "You do not have the correct permissions to access the folder.";
                 sExceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.RetryCancel; // Let them correct this outside of app
-                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, "Caught UnauthorizedAccessException(5) : " + e.ToString());
+                fLogger.WriteError("Caught UnauthorizedAccessException(5) : ", e);
                 bFailed = true;
             } catch (ArgumentException e) {
                 sMessage = "The folder name you have selected is of an illegal format.";
                 sExceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
-                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, "Caught ArgumentException(5) : " + e.ToString());
+                fLogger.WriteError("Caught ArgumentException(5) : ", e);
                 bFailed = true;
             } catch (NotSupportedException e) {
                 sMessage = "The folder name you have selected is of an unsupported format.";
                 sExceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
-                LogFile.Instance.WriteLine(LogFile.DT_APP, LogFile.EDebugLevel.Error, "Caught NotSupportedException(5) : " + e.ToString());
+                fLogger.WriteError("Caught NotSupportedException(5) : ", e);
                 bFailed = true;
             }
 

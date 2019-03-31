@@ -29,6 +29,7 @@ using System.IO;
 using GEDmill.Exceptions;
 using GKCommon.GEDCOM;
 using System.Text;
+using GKCore.Logging;
 
 namespace GEDmill.HTML
 {
@@ -37,6 +38,8 @@ namespace GEDmill.HTML
     /// </summary>
     public abstract class Creator
     {
+        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(Creator).Name);
+
         // The raw data that we are turning into a website.
         protected GEDCOMTree fTree;
 
@@ -70,7 +73,7 @@ namespace GEDmill.HTML
         // TODO: Might want to preserve <a> links in the HTML in case user has specified them in their data.
         protected static string EscapeHTML(string original, bool hardSpace)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, String.Format("EscapeHTML({0})", original));
+            fLogger.WriteInfo(String.Format("EscapeHTML({0})", original));
 
             uint tabSpaces = MainForm.Config.TabSpaces;
 
@@ -137,7 +140,6 @@ namespace GEDmill.HTML
                     case '\n':
                         if (!bDoneCRLF) {
                             sb.Append("<br />");
-
                         }
                         bDoneCRLF = false; // To allow multiple CRLFs to produce multiple <BR />s
                         bDoneSpace = false;
@@ -197,7 +199,7 @@ namespace GEDmill.HTML
         // Converts all invalid sFilename characters into underscores
         protected static string EscapeFilename(string original)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, String.Format("EscapeFilename({0})", original));
+            fLogger.WriteInfo(String.Format("EscapeFilename({0})", original));
 
             if (original == null) {
                 return "_";
@@ -349,8 +351,7 @@ namespace GEDmill.HTML
                             nState = 0;
                         }
                         break;
-
-                } // End of switch.
+                }
                 ++i;
             }
 
@@ -438,7 +439,7 @@ namespace GEDmill.HTML
         public static string CopyMultimedia(string fullFilename, string newFilename, uint maxWidth, uint maxHeight,
                                             ref Rectangle rectArea, Stats stats)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, String.Format("CopyMultimedia( {0}, {1}, {2} )", fullFilename, maxWidth, maxHeight));
+            fLogger.WriteInfo(String.Format("CopyMultimedia( {0}, {1}, {2} )", fullFilename, maxWidth, maxHeight));
 
             if (!File.Exists(fullFilename)) {
                 return "";
@@ -513,7 +514,7 @@ namespace GEDmill.HTML
                                 absCopyFilename = String.Concat(outputFolder, copyFilename);
                             }
 
-                            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, String.Format("Copying \"{0}\" to \"{1}\"", fullFilename, absCopyFilename));
+                            fLogger.WriteInfo(String.Format("Copying \"{0}\" to \"{1}\"", fullFilename, absCopyFilename));
 
                             File.Copy(fullFilename, absCopyFilename, true);
 
@@ -538,16 +539,16 @@ namespace GEDmill.HTML
                 }
                 result = result.Replace('\\', '/');
             } catch (IOException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught IO Exception : " + e.ToString());
+                fLogger.WriteError("Caught IO Exception : ", e);
                 result = "";
             } catch (ArgumentException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught Argument Exception : " + e.ToString());
+                fLogger.WriteError("Caught Argument Exception : ", e);
                 result = "";
             } catch (HTMLException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught HTML Exception : " + e.ToString());
+                fLogger.WriteError("Caught HTML Exception : ", e);
                 result = "";
             } catch (Exception e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught generic exception : " + e.ToString());
+                fLogger.WriteError("Caught generic exception : ", e);
                 result = "";
             }
 
@@ -568,7 +569,7 @@ namespace GEDmill.HTML
         // Creates link HTML for the individual e.g. <a href="indiI1.html">Fred Bloggs</a>
         protected static string MakeLink(GEDCOMIndividualRecord ir)
         {
-            string name = ir.Name;
+            string name = ir.GetPrimaryFullName();
             string dummy = "";
             if (name == "") {
                 name = MainForm.Config.UnknownName;
@@ -615,7 +616,7 @@ namespace GEDmill.HTML
         // sArea is changed to reflect new image size
         private static string ConvertAndCropImage(string folder, string fileName, ref Rectangle rectArea, uint maxWidth, uint maxHeight)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, String.Format("ConvertAndCropImage( {0}, {1} )", folder != null ? folder : "null", fileName != null ? fileName : "null"));
+            fLogger.WriteInfo(String.Format("ConvertAndCropImage( {0}, {1} )", folder != null ? folder : "null", fileName != null ? fileName : "null"));
 
             string absFilename = String.Concat(folder, fileName);
 
@@ -702,9 +703,7 @@ namespace GEDmill.HTML
                     File.Delete(absFilename);
                 }
             } catch (Exception e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Warning,
-                  String.Format("Caught exception while removing old bitmap file {0} : {1}",
-                  absFilename, e.ToString()));
+                fLogger.WriteError(string.Format("Caught exception while removing old bitmap file {0} : {1}", absFilename), e);
             }
             try {
                 if (File.Exists(absFilenameNew)) {
@@ -714,9 +713,7 @@ namespace GEDmill.HTML
                 }
                 bitmapNew.Save(absFilenameNew, imageFormat);
             } catch (Exception e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Warning,
-                  String.Format("Caught exception while writing bitmap file {0} : {1}",
-                  filenameNew, e.ToString()));
+                fLogger.WriteError(string.Format("Caught exception while writing bitmap file {0} : {1}", filenameNew), e);
                 filenameNew = "";
             }
             graphicsNew.Dispose();

@@ -28,6 +28,7 @@ using System.IO;
 using System.IO.IsolatedStorage;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using GKCore.Logging;
 
 namespace GEDmill
 {
@@ -37,6 +38,11 @@ namespace GEDmill
     /// </summary>
     public class CConfig
     {
+        public const string LOG_FILE = "GEDmill.log";
+        public const string LOG_LEVEL = "INFO"; // "DEBUG";
+
+        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CConfig).Name);
+
         // Filename used to store users config in isolated storage.
         public string ConfigFilename;
 
@@ -340,7 +346,7 @@ namespace GEDmill
             CopyMultimedia = true;
             ImageFolder = "multimedia";
             RelativiseMultimedia = false;
-            ApplicationPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            ApplicationPath = GetAppPath();
             BackgroundImage = ApplicationPath + "\\bg-gedmill.jpg";
             MaxImageWidth = 160;
             MaxImageHeight = 160;
@@ -579,7 +585,7 @@ namespace GEDmill
                 formatter.Serialize(stream, KeepSiblingOrder);
                 formatter.Serialize(stream, IncludeHelpPage);
             } catch (Exception e) {
-                LogFile.Instance.WriteLine(LogFile.DT_CONFIG, LogFile.EDebugLevel.Error, "Exception caught while writing MainForm.s_config : " + e.ToString());
+                fLogger.WriteError("Exception caught while writing MainForm.s_config : ", e);
             } finally {
                 stream.Close();
             }
@@ -710,7 +716,7 @@ namespace GEDmill
                 KeepSiblingOrder = (bool)formatter.Deserialize(stream);
                 IncludeHelpPage = (bool)formatter.Deserialize(stream);
             } catch (Exception e) {
-                LogFile.Instance.WriteLine(LogFile.DT_CONFIG, LogFile.EDebugLevel.Error, "Exception caught while reading MainForm.s_config : " + e.ToString());
+                fLogger.WriteError("Exception caught while reading MainForm.s_config : ", e);
             } finally {
                 // We are done with it.
                 stream.Close();
@@ -783,6 +789,11 @@ namespace GEDmill
             SupressBackreferences = false;
             DataMayEndWithWhitespace = false;
             IncludeHelpPage = true;
+        }
+
+        public static string GetAppPath()
+        {
+            return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         }
     }
 }

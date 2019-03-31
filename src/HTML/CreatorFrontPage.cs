@@ -28,6 +28,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using GKCommon.GEDCOM;
+using GKCore.Logging;
 
 namespace GEDmill.HTML
 {
@@ -36,6 +37,8 @@ namespace GEDmill.HTML
     /// </summary>
     public class CreatorFrontPage : Creator
     {
+        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CreatorFrontPage).Name);
+
         // Statistics about the website (number of files etc.)
         private Stats fStats;
 
@@ -171,9 +174,9 @@ namespace GEDmill.HTML
                 f.Writer.WriteLine("    </div> <!-- cover -->");
                 f.Writer.WriteLine("  </div> <!-- page -->");
             } catch (IOException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught IO Exception(7) : " + e.ToString());
+                fLogger.WriteError("Caught IO Exception(7) : ", e);
             } catch (ArgumentException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught Argument Exception(7) : " + e.ToString());
+                fLogger.WriteError("Caught Argument Exception(7) : ", e);
             } finally {
                 if (f != null) {
                     // Add standard footer to the file

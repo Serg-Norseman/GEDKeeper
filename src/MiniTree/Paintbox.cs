@@ -27,6 +27,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using BSLib;
 using System.Globalization;
+using GKCore.Logging;
 
 namespace GEDmill.MiniTree
 {
@@ -35,6 +36,8 @@ namespace GEDmill.MiniTree
     /// </summary>
     public class Paintbox : BaseObject
     {
+        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(Paintbox).Name);
+
         public SolidBrush BrushBg;
         public SolidBrush BrushBox;
         public SolidBrush BrushBoxHighlight;
@@ -171,7 +174,7 @@ namespace GEDmill.MiniTree
                     BrushFakeTransparency = new TextureBrush(bgImage);
                 } catch (Exception e) {
                     // e.g. System.IO.FileNotFoundException
-                    LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, string.Format("SetBackgroundImage() Caught exception {0}", e.ToString()));
+                    fLogger.WriteInfo(string.Format("SetBackgroundImage() Caught exception {0}", e.ToString()));
                     BrushFakeTransparency = null;
                 }
             }

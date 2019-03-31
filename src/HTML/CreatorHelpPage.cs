@@ -25,6 +25,7 @@
 using System;
 using System.IO;
 using GKCommon.GEDCOM;
+using GKCore.Logging;
 
 namespace GEDmill.HTML
 {
@@ -33,6 +34,8 @@ namespace GEDmill.HTML
     /// </summary>
     public class CreatorHelpPage : Creator
     {
+        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CreatorHelpPage).Name);
+
         public CreatorHelpPage(GEDCOMTree gedcom, IProgressCallback progress, string w3cfile) : base(gedcom, progress, w3cfile)
         {
         }
@@ -46,7 +49,7 @@ namespace GEDmill.HTML
                 helpStream = new FileStream(MainForm.Config.ApplicationPath + "\\helpsource.html", FileMode.Open);
                 helpReader = new StreamReader(helpStream, System.Text.Encoding.UTF8);
             } catch (IOException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, String.Format("Caught io exception while loading help file source: {0}", e.ToString()));
+                fLogger.WriteError("Caught io exception while loading help file source: {0}", e);
                 helpStream = null;
                 helpReader = null;
             }
@@ -73,9 +76,9 @@ namespace GEDmill.HTML
 
                     f.Writer.WriteLine("  </div> <!-- page -->");
                 } catch (IOException e) {
-                    LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught IO Exception : " + e.ToString());
+                    fLogger.WriteError("Caught IO Exception : ", e);
                 } catch (ArgumentException e) {
-                    LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught Argument Exception : " + e.ToString());
+                    fLogger.WriteError("Caught Argument Exception : ", e);
                 } finally {
                     if (f != null) {
                         // Add standard footer to the file

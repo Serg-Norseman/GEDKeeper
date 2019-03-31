@@ -24,9 +24,11 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using GKCommon.GEDCOM;
+using GKCore.Logging;
 
 namespace GEDmill.HTML
 {
@@ -35,23 +37,27 @@ namespace GEDmill.HTML
     /// </summary>
     public class CreatorIndexIndividuals : Creator
     {
+        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CreatorIndexIndividuals).Name);
+
+
         // This is the list of all the individual records that need to be in the index.
-        private ArrayList fIndividualIndex;
+        private List<StringTuple> fIndividualIndex;
 
 
         public CreatorIndexIndividuals(GEDCOMTree gedcom, IProgressCallback progress, string sW3cfile) : base(gedcom, progress, sW3cfile)
         {
-            fIndividualIndex = new ArrayList();
+            fIndividualIndex = new List<StringTuple>();
         }
 
         // The main method that causes the index to be created. (Note that m_individualIndex needs to be populated first using AddIndividualToIndex() ) 
         public void Create()
         {
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "Creating individuals index...");
+            fLogger.WriteInfo("Creating individuals index...");
 
             // Sort the index
-            AlphabetComparer comparer = new AlphabetComparer();
-            fIndividualIndex.Sort(comparer);
+            //AlphabetComparer comparer = new AlphabetComparer();
+            //fIndividualIndex.Sort(comparer);
+            // FIXME
 
             // Split into letter groups
             ArrayList alLetters = CreateIndexLetters();
@@ -203,11 +209,9 @@ namespace GEDmill.HTML
                         }
                         sLastInitial = sInitial;
                         sLastTitle = sTitle;
-
                     }
                     sCurrentLetterList.Add(tuple);
                 }
-
             }
             if (sCurrentLetterList != null) {
                 IndexLetter letter = new IndexLetter(sLastInitial, sLastTitle, sCurrentLetterList);
@@ -218,9 +222,9 @@ namespace GEDmill.HTML
         }
 
         // Generates the HTML file for the given page of the index.
-        private static void OutputIndividualsIndexPage(GEDCOMTree gedcom, string headingsLinks, IndexPage indexPage)
+        private void OutputIndividualsIndexPage(GEDCOMTree gedcom, string headingsLinks, IndexPage indexPage)
         {
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "OutputIndividualsIndexPage()");
+            fLogger.WriteInfo("OutputIndividualsIndexPage()");
 
             string sOwner = MainForm.Config.OwnersName;
             if (sOwner != "") {
@@ -255,9 +259,9 @@ namespace GEDmill.HTML
 
                 f.Writer.WriteLine("  </div> <!-- page -->");
             } catch (IOException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught IO Exception(3) : " + e.ToString());
+                fLogger.WriteError("Caught IO Exception(3) : ", e);
             } catch (ArgumentException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught Argument Exception(3) : " + e.ToString());
+                fLogger.WriteError("Caught Argument Exception(3) : ", e);
             } finally {
                 if (f != null) {
                     f.Close();

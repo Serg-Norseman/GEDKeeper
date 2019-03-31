@@ -26,6 +26,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using GKCommon.GEDCOM;
+using GKCore.Logging;
 
 namespace GEDmill.HTML
 {
@@ -34,6 +35,8 @@ namespace GEDmill.HTML
     /// </summary>
     public class CreatorStylesheet : Creator
     {
+        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CreatorStylesheet).Name);
+
         // Name of the CSS file we are creating
         private string fCssFilename;
 
@@ -49,7 +52,7 @@ namespace GEDmill.HTML
 
         public void Create()
         {
-            LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Note, "CCreatorStylesheet::Create()");
+            fLogger.WriteInfo("CCreatorStylesheet::Create()");
 
             DateTime dtNow = DateTime.Now;
             String date = dtNow.ToString("r", DateTimeFormatInfo.InvariantInfo);
@@ -448,11 +451,11 @@ namespace GEDmill.HTML
                 sw.WriteLine("}");
 
             } catch (IOException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught IO Exception(5) : " + e.ToString());
+                fLogger.WriteError("Caught IO Exception(5) : ", e);
             } catch (ArgumentException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught Argument Exception(5) : " + e.ToString());
+                fLogger.WriteError("Caught Argument Exception(5) : ", e);
             } catch (System.UnauthorizedAccessException e) {
-                LogFile.Instance.WriteLine(LogFile.DT_HTML, LogFile.EDebugLevel.Error, "Caught UnauthorizedAccessException(5) : " + e.ToString());
+                fLogger.WriteError("Caught UnauthorizedAccessException(5) : ", e);
             } finally {
                 if (sw != null) {
                     sw.Close();
