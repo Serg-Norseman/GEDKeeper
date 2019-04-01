@@ -136,6 +136,17 @@ namespace GKCore.Logging
             fLog.Error(string.IsNullOrEmpty(fContext) ? msg : string.Format("[{0}] {1}", fContext, msg), ex);
         }
 
+        public void WriteWarn(string msg)
+        {
+            fLog.Warn(string.IsNullOrEmpty(fContext) ? msg : string.Format("[{0}] {1}", fContext, msg));
+        }
+
+        public void WriteWarn(string str, params object[] args)
+        {
+            WriteInfo(string.Format(str, args));
+        }
+
+
         public void WriteNumError(int num, Exception ex)
         {
             var err = ex as ReflectionTypeLoadException;

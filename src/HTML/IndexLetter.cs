@@ -22,7 +22,7 @@
  *
  */
 
-using System.Collections;
+using System.Collections.Generic;
 
 namespace GEDmill.HTML
 {
@@ -32,12 +32,12 @@ namespace GEDmill.HTML
     /// </summary>
     public class IndexLetter
     {
-        public ArrayList Items;
+        public List<StringTuple> Items;
         public string Initial;
         public string Title;
 
 
-        public IndexLetter(string initial, string title, ArrayList letterList)
+        public IndexLetter(string initial, string title, List<StringTuple> letterList)
         {
             Initial = initial;
             Title = title;

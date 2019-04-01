@@ -83,12 +83,8 @@ namespace GEDmill.HTML
             }
 
             if (Stream != null) {
-                string charsetString;
-                System.Text.Encoding encoding;
-                {
-                    charsetString = "utf-8";
-                    encoding = new UTF8EncodingWithoutPreamble();
-                }
+                string charsetString = "utf-8";
+                System.Text.Encoding encoding = new UTF8EncodingWithoutPreamble();
 
                 Writer = new StreamWriter(Stream, encoding);
 
@@ -115,7 +111,7 @@ namespace GEDmill.HTML
                 Writer.WriteLine("  </head>");
                 Writer.WriteLine("  ");
                 Writer.WriteLine("  <body>");
-            } // end if (m_fs != null )
+            }
         }
 
         // Write HTML footer and close the file.

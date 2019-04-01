@@ -224,7 +224,7 @@ namespace GEDmill.HTML
         // Modifies the provided string to have its first letter capitalised and the rest unchanged.
         public static void Capitalise(ref string s)
         {
-            if (s != null && s != "") {
+            if (!string.IsNullOrEmpty(s)) {
                 s = Char.ToUpper(s[0]) + s.Substring(1);
             } else {
                 s = "";
@@ -238,7 +238,7 @@ namespace GEDmill.HTML
                 return null;
             }
             int nLength = text.Length;
-            System.Text.StringBuilder sb = new System.Text.StringBuilder(nLength);
+            StringBuilder sb = new StringBuilder(nLength);
             int i = 0;
             int nNameStart = -1;
             int nState = 0;

@@ -55,13 +55,6 @@ namespace GEDmill.ListView
             base.Text = ToString();
         }
 
-        public GEDCOMIndividualRecord Individual
-        {
-            get {
-                return fRecord;
-            }
-        }
-
         // To display the name in the list
         public override string ToString()
         {

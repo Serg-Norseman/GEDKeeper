@@ -73,6 +73,9 @@
     <Reference Include="BSLib">
       <HintPath>libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="GKComponents">
+      <HintPath>libs\GKComponents.dll</HintPath>
+    </Reference>
     <Reference Include="GKCore">
       <HintPath>libs\GKCore.dll</HintPath>
     </Reference>
@@ -139,9 +142,6 @@
     <Compile Include="src\Logging\LogManager.cs" />
     <Compile Include="src\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\MessageBoxEx.Designer.cs">
-      <DependentUpon>MessageBoxEx.cs</DependentUpon>
     </Compile>
     <Compile Include="src\NameXRefPair.cs">
       <SubType>Code</SubType>
@@ -239,32 +239,15 @@
     <Compile Include="src\IProgressCallback.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\ListView\CSortableListComparer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\MessageBoxEx.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="src\ProgressWindow.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\ListView\CSortableListView.cs">
-      <SubType>Component</SubType>
     </Compile>
     <EmbeddedResource Include="src\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\MessageBoxEx.resx">
-      <DependentUpon>MessageBoxEx.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="src\ProgressWindow.resx">
       <DependentUpon>ProgressWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\ListView\CSortableListView.resx">
-      <DependentUpon>CSortableListView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

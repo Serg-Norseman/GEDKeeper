@@ -23,7 +23,7 @@
  */
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Threading;
@@ -34,6 +34,7 @@ using GEDmill.ListView;
 using GEDmill.MiniTree;
 using GKCommon.GEDCOM;
 using GKCore.Logging;
+using GKUI.Components;
 
 namespace GEDmill
 {
@@ -44,20 +45,11 @@ namespace GEDmill
     {
         private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(MainForm).Name);
 
-        // The current version of this app, for display purposes.
-        public static string SoftwareVersion = "1.11.0";
-
-        // The name of the app for display purposes
-        public static string SoftwareName = "GEDmill " + SoftwareVersion;
-
         // Effectively a global reference to the app's GUI object!
         public static MainForm m_mainForm = null;
 
         // Stores user's configuration parameters (mostly set using Settings panes)
         public static CConfig Config;
-
-        // Filename for the online help (as in "on the same system", as opposed to offline e.g. printed manual)
-        public static string HelpFilename = "GEDmill Help.chm";
 
 
         // Stores and parses data from GEDCOM files
@@ -138,7 +130,8 @@ namespace GEDmill
             // Creates the entire GUI
             InitializeComponent();
 
-            m_helpProvider.HelpNamespace = Config.ApplicationPath + "\\" + HelpFilename;
+            m_labelWelcomeVersion.Text = "version " + CConfig.SoftwareVersion;
+            m_helpProvider.HelpNamespace = Config.ApplicationPath + "\\" + CConfig.HelpFilename;
 
             fTree = new GEDCOMTree();
             fCurrentPanel = 1;
@@ -169,954 +162,12 @@ namespace GEDmill
             base.Dispose(disposing);
         }
 
-        // Builds the GUI for the webpages pane in the config panel
-        private void InitialiseSettingsWebpagesPane()
-        {
-            // 
-            // configPanel_Commentary_Label (Webpages)
-            // 
-            m_labelConfigCommentary.Location = new System.Drawing.Point(9, 0);
-            m_labelConfigCommentary.Name = "m_labelConfigCommentary";
-            m_labelConfigCommentary.RightToLeft = RightToLeft.No;
-            m_labelConfigCommentary.Size = new System.Drawing.Size(200, 24);
-            m_labelConfigCommentary.TabIndex = 1;
-            m_labelConfigCommentary.Text = "Commentary for &title page:";
-            m_labelConfigCommentary.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_Commentary_EditBox (Webpages)
-            // 
-            m_textboxConfigCommentary.Location = new System.Drawing.Point(9, 26);
-            m_textboxConfigCommentary.Name = "m_textboxConfigCommentary";
-            m_textboxConfigCommentary.Size = new System.Drawing.Size(240, 70);
-            m_textboxConfigCommentary.TabIndex = 2;
-            m_textboxConfigCommentary.Text = "";
-            m_textboxConfigCommentary.Multiline = true;
-
-            // 
-            // configPanel_CommentaryIsHtml_Label (Webpages)
-            // 
-            m_labelConfigCommentaryIsHtml.Location = new System.Drawing.Point(9, 91);
-            m_labelConfigCommentaryIsHtml.Name = "m_labelConfigCommentaryIsHtml";
-            m_labelConfigCommentaryIsHtml.RightToLeft = RightToLeft.No;
-            m_labelConfigCommentaryIsHtml.Size = new System.Drawing.Size(8, 24);
-            m_labelConfigCommentaryIsHtml.TabIndex = 3;
-            m_labelConfigCommentaryIsHtml.Text = "(";
-            m_labelConfigCommentaryIsHtml.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_CommentaryIsHtml_CheckBox (Webpages)
-            // 
-            m_checkboxConfigCommentaryIsHtml.Location = new System.Drawing.Point(19, 96);
-            m_checkboxConfigCommentaryIsHtml.Name = "m_checkboxConfigCommentaryIsHtml";
-            m_checkboxConfigCommentaryIsHtml.Size = new System.Drawing.Size(190, 24);
-            m_checkboxConfigCommentaryIsHtml.TabIndex = 4;
-            m_checkboxConfigCommentaryIsHtml.Text = "the a&bove text is HTML)";
-
-            // 
-            // configPanel_UserLink_Label (Webpages)
-            // 
-            m_labelConfigUserLink.Location = new System.Drawing.Point(9, 121);
-            m_labelConfigUserLink.Name = "m_labelConfigUserLink";
-            m_labelConfigUserLink.RightToLeft = RightToLeft.No;
-            m_labelConfigUserLink.Size = new System.Drawing.Size(260, 24);
-            m_labelConfigUserLink.TabIndex = 5;
-            m_labelConfigUserLink.Text = "&Link to your website: (with http:// prefix)";
-            m_labelConfigUserLink.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_UserLink_EditBox (Webpages)
-            // 
-            m_textboxConfigUserLink.Location = new System.Drawing.Point(9, 147);
-            m_textboxConfigUserLink.Name = "m_textboxConfigUserLink";
-            m_textboxConfigUserLink.Size = new System.Drawing.Size(240, 20);
-            m_textboxConfigUserLink.TabIndex = 7;
-            m_textboxConfigUserLink.Text = "";
-            m_textboxConfigUserLink.Multiline = false;
-
-            // 
-            // configPanel_CustomFooter_Label (Webpages)
-            // 
-            m_labelConfigCustomFooter.Location = new System.Drawing.Point(9, 172);
-            m_labelConfigCustomFooter.Name = "m_labelConfigCustomFooter";
-            m_labelConfigCustomFooter.RightToLeft = RightToLeft.No;
-            m_labelConfigCustomFooter.Size = new System.Drawing.Size(224, 24);
-            m_labelConfigCustomFooter.TabIndex = 8;
-            m_labelConfigCustomFooter.Text = "Te&xt for page footer:";
-            m_labelConfigCustomFooter.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_CustomFooter_EditBox (Webpages)
-            //
-            m_textboxConfigCustomFooter.Location = new System.Drawing.Point(9, 198);
-            m_textboxConfigCustomFooter.Name = "m_textboxConfigCustomFooter";
-            m_textboxConfigCustomFooter.Size = new System.Drawing.Size(200, 20);
-            m_textboxConfigCustomFooter.Text = "";
-            m_textboxConfigCustomFooter.TabIndex = 9;
-
-            // 
-            // configPanel_FooterIsHtml_Label (Webpages)
-            // 
-            m_labelConfigFooterIsHtml.Location = new System.Drawing.Point(9, 213);
-            m_labelConfigFooterIsHtml.Name = "m_labelConfigFooterIsHtml";
-            m_labelConfigFooterIsHtml.RightToLeft = RightToLeft.No;
-            m_labelConfigFooterIsHtml.Size = new System.Drawing.Size(8, 24);
-            m_labelConfigFooterIsHtml.TabIndex = 10;
-            m_labelConfigFooterIsHtml.Text = "(";
-            m_labelConfigFooterIsHtml.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_FooterIsHtml_CheckBox (Webpages)
-            // 
-            m_checkboxConfigFooterIsHtml.Location = new System.Drawing.Point(19, 218);
-            m_checkboxConfigFooterIsHtml.Name = "m_checkboxConfigFooterIsHtml";
-            m_checkboxConfigFooterIsHtml.Size = new System.Drawing.Size(190, 24);
-            m_checkboxConfigFooterIsHtml.TabIndex = 11;
-            m_checkboxConfigFooterIsHtml.Text = "the abo&ve text is HTML)";
-
-            //
-            // configPanel_Stats_CheckBox (Webpages)
-            // 
-            m_checkboxConfigStats.Location = new System.Drawing.Point(266, 7);
-            m_checkboxConfigStats.Name = "m_checkboxConfigStats";
-            m_checkboxConfigStats.Size = new System.Drawing.Size(200, 20);
-            m_checkboxConfigStats.Text = "Include website &statistics";
-            m_checkboxConfigStats.TabIndex = 12;
-
-            //
-            // configPanel_CDROM_CheckBox (Webpages)
-            // 
-            m_checkboxConfigCdrom.Location = new System.Drawing.Point(266, 30);
-            m_checkboxConfigCdrom.Name = "m_checkboxConfigCdrom";
-            m_checkboxConfigCdrom.Size = new System.Drawing.Size(200, 20);
-            m_checkboxConfigCdrom.Text = "Create CD-ROM &auto-run files";
-            m_checkboxConfigCdrom.TabIndex = 13;
-
-            //
-            // configPanel_MultiPageIndex_CheckBox (Webpages)
-            // 
-            m_checkboxConfigMultiPageIndex.Location = new System.Drawing.Point(266, 53);
-            m_checkboxConfigMultiPageIndex.Name = "m_checkboxConfigMultiPageIndex";
-            m_checkboxConfigMultiPageIndex.Size = new System.Drawing.Size(220, 20);
-            m_checkboxConfigMultiPageIndex.Text = "&Multi-page individuals index";
-            m_checkboxConfigMultiPageIndex.TabIndex = 14;
-            m_checkboxConfigMultiPageIndex.Click += new System.EventHandler(configPanel_MultiPageIndex_CheckBox_click);
-
-            //
-            // configPanel_UserRefInIndex_CheckBox (Webpages)
-            //
-            m_checkboxConfigUserRefInIndex.Location = new System.Drawing.Point(266, 76);
-            m_checkboxConfigUserRefInIndex.Name = "m_checkboxConfigUserRefInIndex";
-            m_checkboxConfigUserRefInIndex.Size = new System.Drawing.Size(220, 20);
-            m_checkboxConfigUserRefInIndex.Text = "&User Reference numbers in index";
-            m_checkboxConfigUserRefInIndex.TabIndex = 15;
-
-            // 
-            // configPanel_MultiPageIndexNumber_Label (Webpages)
-            // 
-            m_labelConfigMultiPageIndexNumber.Location = new System.Drawing.Point(266, 96);
-            m_labelConfigMultiPageIndexNumber.Name = "m_labelConfigMultiPageIndexNumber";
-            m_labelConfigMultiPageIndexNumber.RightToLeft = RightToLeft.No;
-            m_labelConfigMultiPageIndexNumber.Size = new System.Drawing.Size(170, 24);
-            m_labelConfigMultiPageIndexNumber.TabIndex = 16;
-            m_labelConfigMultiPageIndexNumber.Text = "&Individuals per index page:";
-            m_labelConfigMultiPageIndexNumber.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_MultiPageIndexNumber_TextBox (Webpages)
-            // 
-            m_textboxConfigMultiPageIndexNumber.Location = new System.Drawing.Point(446, 100);
-            m_textboxConfigMultiPageIndexNumber.Name = "m_textboxConfigMultiPageIndexNumber";
-            m_textboxConfigMultiPageIndexNumber.Size = new System.Drawing.Size(45, 20);
-            m_textboxConfigMultiPageIndexNumber.TabIndex = 17;
-            m_textboxConfigMultiPageIndexNumber.Text = "";
-
-            // 
-            // configPanel_IndexName_Label (Webpages)
-            // 
-            m_labelConfigIndexName.Location = new System.Drawing.Point(266, 126);
-            m_labelConfigIndexName.Name = "m_labelConfigIndexName";
-            m_labelConfigIndexName.RightToLeft = RightToLeft.No;
-            m_labelConfigIndexName.Size = new System.Drawing.Size(224, 20);
-            m_labelConfigIndexName.TabIndex = 18;
-            m_labelConfigIndexName.Text = "Name of &front page file:";
-            m_labelConfigIndexName.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_IndexName_EditBox (Webpages)
-            // 
-            m_textboxConfigIndexName.Location = new System.Drawing.Point(266, 148);
-            m_textboxConfigIndexName.Name = "m_textboxConfigIndexName";
-            m_textboxConfigIndexName.Size = new System.Drawing.Size(175, 20);
-            m_textboxConfigIndexName.TabIndex = 19;
-            m_textboxConfigIndexName.Text = "";
-            m_textboxConfigIndexName.Multiline = false;
-
-            // 
-            // configPanel_IndexName_ExtnLabel (Webpages)
-            // 
-            m_labelConfigIndexNameExtn.Location = new System.Drawing.Point(440, 141);
-            m_labelConfigIndexNameExtn.Name = "m_labelConfigIndexNameExtn";
-            m_labelConfigIndexNameExtn.RightToLeft = RightToLeft.No;
-            m_labelConfigIndexNameExtn.Size = new System.Drawing.Size(60, 24);
-            m_labelConfigIndexNameExtn.TabIndex = 20;
-            m_labelConfigIndexNameExtn.Text = ""; //Filled programatically
-            m_labelConfigIndexNameExtn.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_PreserveFrontPage_CheckBox (Webpages)
-            // 
-            m_checkboxConfigPreserveFrontPage.Location = new System.Drawing.Point(266, 170);
-            m_checkboxConfigPreserveFrontPage.Name = "m_checkboxConfigPreserveFrontPage";
-            m_checkboxConfigPreserveFrontPage.Size = new System.Drawing.Size(250, 20);
-            m_checkboxConfigPreserveFrontPage.Text = "&Do not generate new front page";
-            m_checkboxConfigPreserveFrontPage.TabIndex = 21;
-
-            // 
-            // configPanel_Email_Label (Webpages)
-            // 
-            m_labelConfigEmail.Location = new System.Drawing.Point(266, 190);
-            m_labelConfigEmail.Name = "m_labelConfigEmail";
-            m_labelConfigEmail.RightToLeft = RightToLeft.No;
-            m_labelConfigEmail.Size = new System.Drawing.Size(220, 24);
-            m_labelConfigEmail.TabIndex = 22;
-            m_labelConfigEmail.Text = "&Email address to put on front page:";
-            m_labelConfigEmail.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_Email_EditBox (Webpages)
-            // 
-            m_textboxConfigEmail.Location = new System.Drawing.Point(266, 216);
-            m_textboxConfigEmail.Name = "m_textboxConfigEmail";
-            m_textboxConfigEmail.Size = new System.Drawing.Size(220, 20);
-            m_textboxConfigEmail.TabIndex = 23;
-            m_textboxConfigEmail.Text = "";
-            m_textboxConfigEmail.Multiline = false;
-        }
-
-        // Builds the GUI for the images pane in the config panel
-        private void InitialiseSettingsImagesPane()
-        {
-            // 
-            // configPanel_BackImage_EditLabel (Images)
-            // 
-            this.m_labelConfigBackImageEdit.Location = new System.Drawing.Point(9, 0);
-            this.m_labelConfigBackImageEdit.Name = "m_labelConfigBackImageEdit";
-            this.m_labelConfigBackImageEdit.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.m_labelConfigBackImageEdit.Size = new System.Drawing.Size(156, 24);
-            this.m_labelConfigBackImageEdit.TabIndex = 1;
-            this.m_labelConfigBackImageEdit.Text = "&Background image:";
-            this.m_labelConfigBackImageEdit.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_BackImage_EditBox (Images)
-            // 
-            this.m_textboxConfigBackImageEdit.Location = new System.Drawing.Point(9, 26);
-            this.m_textboxConfigBackImageEdit.Name = "m_textboxConfigBackImageEdit";
-            this.m_textboxConfigBackImageEdit.Size = new System.Drawing.Size(191, 20);
-            this.m_textboxConfigBackImageEdit.TabIndex = 2;
-            this.m_textboxConfigBackImageEdit.Text = "";
-
-            // 
-            // configPanel_BackImage_BrowseButton (Images)
-            // 
-            this.m_buttonConfigBackImageBrowse.Location = new System.Drawing.Point(208, 25);
-            this.m_buttonConfigBackImageBrowse.Name = "m_buttonConfigBackImageBrowse";
-            this.m_buttonConfigBackImageBrowse.TabIndex = 3;
-            this.m_buttonConfigBackImageBrowse.Text = "B&rowse...";
-            this.m_buttonConfigBackImageBrowse.Click += new System.EventHandler(this.configPanel_BackImage_BrowseButton_click);
-
-            // 
-            // configPanel_FrontImage_EditLabel (Images)
-            // 
-            this.m_labelConfigFrontImageEdit.Location = new System.Drawing.Point(9, 46);
-            this.m_labelConfigFrontImageEdit.Name = "m_labelConfigFrontImageEdit";
-            this.m_labelConfigFrontImageEdit.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.m_labelConfigFrontImageEdit.Size = new System.Drawing.Size(156, 20);
-            this.m_labelConfigFrontImageEdit.TabIndex = 4;
-            this.m_labelConfigFrontImageEdit.Text = "&Picture on front page:";
-            this.m_labelConfigFrontImageEdit.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_FrontImage_EditBox (Images)
-            // 
-            this.m_textboxConfigFrontImageEdit.Location = new System.Drawing.Point(9, 68);
-            this.m_textboxConfigFrontImageEdit.Name = "m_textboxConfigFrontImageEdit";
-            this.m_textboxConfigFrontImageEdit.Size = new System.Drawing.Size(191, 20);
-            this.m_textboxConfigFrontImageEdit.TabIndex = 5;
-            this.m_textboxConfigFrontImageEdit.Text = "";
-
-            // 
-            // configPanel_FrontImage_BrowseButton (Images)
-            // 
-            this.m_buttonConfigFrontImageBrowse.Location = new System.Drawing.Point(208, 68);
-            this.m_buttonConfigFrontImageBrowse.Name = "m_buttonConfigFrontImageBrowse";
-            this.m_buttonConfigFrontImageBrowse.TabIndex = 6;
-            this.m_buttonConfigFrontImageBrowse.Text = "Br&owse...";
-            this.m_buttonConfigFrontImageBrowse.Click += new System.EventHandler(this.configPanel_FrontImage_BrowseButton_click);
-
-            // 
-            // configPanel_IndiImageSize_Label (Images)
-            // 
-            this.m_labelConfigIndiImageSize.Location = new System.Drawing.Point(9, 108);
-            this.m_labelConfigIndiImageSize.Name = "m_labelConfigIndiImageSize";
-            this.m_labelConfigIndiImageSize.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.m_labelConfigIndiImageSize.Size = new System.Drawing.Size(256, 24);
-            this.m_labelConfigIndiImageSize.TabIndex = 7;
-            this.m_labelConfigIndiImageSize.Text = "Maximum size of individual images";
-            this.m_labelConfigIndiImageSize.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            // 
-            // configPanel_IndiImageWidth_Label (Images)
-            // 
-            this.m_labelConfigIndiImageWidth.Location = new System.Drawing.Point(9, 138);
-            this.m_labelConfigIndiImageWidth.Name = "m_labelConfigIndiImageWidth";
-            this.m_labelConfigIndiImageWidth.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.m_labelConfigIndiImageWidth.Size = new System.Drawing.Size(50, 24);
-            this.m_labelConfigIndiImageWidth.TabIndex = 8;
-            this.m_labelConfigIndiImageWidth.Text = "&Width:";
-            this.m_labelConfigIndiImageWidth.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_IndiImageWidth_EditBox (Images)
-            // 
-            this.m_textboxConfigIndiImageWidth.Location = new System.Drawing.Point(61, 138);
-            this.m_textboxConfigIndiImageWidth.Name = "m_textboxConfigIndiImageWidth";
-            this.m_textboxConfigIndiImageWidth.Size = new System.Drawing.Size(34, 20);
-            this.m_textboxConfigIndiImageWidth.TabIndex = 9;
-            this.m_textboxConfigIndiImageWidth.Text = "";
-
-            // 
-            // configPanel_IndiImageHeight_Label (Images)
-            // 
-            this.m_labelConfigIndiImageHeight.Location = new System.Drawing.Point(109, 138);
-            this.m_labelConfigIndiImageHeight.Name = "m_labelConfigIndiImageHeight";
-            this.m_labelConfigIndiImageHeight.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.m_labelConfigIndiImageHeight.Size = new System.Drawing.Size(50, 24);
-            this.m_labelConfigIndiImageHeight.TabIndex = 10;
-            this.m_labelConfigIndiImageHeight.Text = "&Height:";
-            this.m_labelConfigIndiImageHeight.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_IndiImageHeight_EditBox (Images)
-            // 
-            this.m_textboxConfigIndiImageHeight.Location = new System.Drawing.Point(162, 138);
-            this.m_textboxConfigIndiImageHeight.Name = "m_textboxConfigIndiImageHeight";
-            this.m_textboxConfigIndiImageHeight.Size = new System.Drawing.Size(34, 20);
-            this.m_textboxConfigIndiImageHeight.TabIndex = 11;
-            this.m_textboxConfigIndiImageHeight.Text = "";
-
-            // 
-            // configPanel_SourceImageSize_Label (Images)
-            // 
-            this.m_labelConfigSourceImageSize.Location = new System.Drawing.Point(9, 167);
-            this.m_labelConfigSourceImageSize.Name = "m_labelConfigSourceImageSize";
-            this.m_labelConfigSourceImageSize.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.m_labelConfigSourceImageSize.Size = new System.Drawing.Size(256, 24);
-            this.m_labelConfigSourceImageSize.TabIndex = 12;
-            this.m_labelConfigSourceImageSize.Text = "Maximum size of source images";
-            this.m_labelConfigSourceImageSize.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            // 
-            // configPanel_SourceImageWidth_Label (Images)
-            // 
-            this.m_labelConfigSourceImageWidth.Location = new System.Drawing.Point(9, 193);
-            this.m_labelConfigSourceImageWidth.Name = "m_labelConfigSourceImageWidth";
-            this.m_labelConfigSourceImageWidth.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.m_labelConfigSourceImageWidth.Size = new System.Drawing.Size(50, 24);
-            this.m_labelConfigSourceImageWidth.TabIndex = 13;
-            this.m_labelConfigSourceImageWidth.Text = "W&idth:";
-            this.m_labelConfigSourceImageWidth.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_SourceImageWidth_EditBox (Images)
-            // 
-            this.m_textboxConfigSourceImageWidth.Location = new System.Drawing.Point(60, 197);
-            this.m_textboxConfigSourceImageWidth.Name = "m_textboxConfigSourceImageWidth";
-            this.m_textboxConfigSourceImageWidth.Size = new System.Drawing.Size(34, 20);
-            this.m_textboxConfigSourceImageWidth.TabIndex = 14;
-            this.m_textboxConfigSourceImageWidth.Text = "";
-
-            // 
-            // configPanel_SourceImageHeight_Label (Images)
-            // 
-            this.m_labelConfigSourceImageHeight.Location = new System.Drawing.Point(109, 193);
-            this.m_labelConfigSourceImageHeight.Name = "m_labelConfigSourceImageHeight";
-            this.m_labelConfigSourceImageHeight.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.m_labelConfigSourceImageHeight.Size = new System.Drawing.Size(50, 24);
-            this.m_labelConfigSourceImageHeight.TabIndex = 15;
-            this.m_labelConfigSourceImageHeight.Text = "H&eight:";
-            this.m_labelConfigSourceImageHeight.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_SourceImageHeight_EditBox (Images)
-            // 
-            this.m_textboxConfigSourceImageHeight.Location = new System.Drawing.Point(162, 197);
-            this.m_textboxConfigSourceImageHeight.Name = "m_textboxConfigSourceImageHeight";
-            this.m_textboxConfigSourceImageHeight.Size = new System.Drawing.Size(34, 20);
-            this.m_textboxConfigSourceImageHeight.TabIndex = 16;
-            this.m_textboxConfigSourceImageHeight.Text = "";
-
-            //
-            // configPanel_AllowMultimedia_CheckBox (Images)
-            // 
-            this.m_checkboxConfigAllowMultimedia.Location = new System.Drawing.Point(300, 8);
-            this.m_checkboxConfigAllowMultimedia.Name = "m_checkboxConfigAllowMultimedia";
-            this.m_checkboxConfigAllowMultimedia.Size = new System.Drawing.Size(190, 24);
-            this.m_checkboxConfigAllowMultimedia.TabIndex = 5;
-            this.m_checkboxConfigAllowMultimedia.Text = "&Allow images etc.";
-            this.m_checkboxConfigAllowMultimedia.Click += new System.EventHandler(this.configPanel_AllowMultimedia_CheckBox_click);
-
-            //
-            // configPanel_RenameOriginals_CheckBox (Images)
-            // 
-            this.m_checkboxConfigRenameOriginals.Location = new System.Drawing.Point(300, 38);
-            this.m_checkboxConfigRenameOriginals.Name = "m_checkboxConfigRenameOriginals";
-            this.m_checkboxConfigRenameOriginals.Size = new System.Drawing.Size(200, 30);
-            this.m_checkboxConfigRenameOriginals.Text = "Re&name files";
-            this.m_checkboxConfigRenameOriginals.TabIndex = 17;
-
-            //
-            // configPanel_KeepOriginals_CheckBox (Images)
-            // 
-            this.m_checkboxConfigKeepOriginals.Location = new System.Drawing.Point(300, 64);
-            this.m_checkboxConfigKeepOriginals.Name = "m_checkboxConfigKeepOriginals";
-            this.m_checkboxConfigKeepOriginals.Size = new System.Drawing.Size(200, 40);
-            this.m_checkboxConfigKeepOriginals.Text = "In&clude original (full-size) files";
-            this.m_checkboxConfigKeepOriginals.TabIndex = 18;
-
-            //
-            // configPanel_NonPictures_CheckBox (Images)
-            // 
-            this.m_checkboxConfigNonPictures.Location = new System.Drawing.Point(266, 120);
-            this.m_checkboxConfigNonPictures.Name = "m_checkboxConfigNonPictures";
-            this.m_checkboxConfigNonPictures.Size = new System.Drawing.Size(200, 20);
-            this.m_checkboxConfigNonPictures.Text = "&Allow files other than pictures";
-            this.m_checkboxConfigNonPictures.TabIndex = 19;
-
-            //
-            // configPanel_IndiImages_CheckBox (Images)
-            // 
-            this.m_checkboxConfigIndiImages.Location = new System.Drawing.Point(266, 147);
-            this.m_checkboxConfigIndiImages.Name = "m_checkboxConfigIndiImages";
-            this.m_checkboxConfigIndiImages.Size = new System.Drawing.Size(200, 20);
-            this.m_checkboxConfigIndiImages.Text = "&Multiple individual images";
-            this.m_checkboxConfigIndiImages.TabIndex = 20;
-            this.m_checkboxConfigIndiImages.Click += new System.EventHandler(this.configPanel_IndiImages_CheckBox_click);
-
-            // 
-            // configPanel_ThumbnailImageSize_Label (Images)
-            // 
-            this.m_labelConfigThumbnailImageSize.Location = new System.Drawing.Point(266, 167);
-            this.m_labelConfigThumbnailImageSize.Name = "m_labelConfigThumbnailImageSize";
-            this.m_labelConfigThumbnailImageSize.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.m_labelConfigThumbnailImageSize.Size = new System.Drawing.Size(256, 24);
-            this.m_labelConfigThumbnailImageSize.TabIndex = 21;
-            this.m_labelConfigThumbnailImageSize.Text = "Maximum size of thumbnail images";
-            this.m_labelConfigThumbnailImageSize.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            // 
-            // configPanel_ThumbnailImageWidth_Label (Images)
-            // 
-            this.m_labelConfigThumbnailImageWidth.Location = new System.Drawing.Point(266, 193);
-            this.m_labelConfigThumbnailImageWidth.Name = "m_labelConfigThumbnailImageWidth";
-            this.m_labelConfigThumbnailImageWidth.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.m_labelConfigThumbnailImageWidth.Size = new System.Drawing.Size(50, 24);
-            this.m_labelConfigThumbnailImageWidth.TabIndex = 22;
-            this.m_labelConfigThumbnailImageWidth.Text = "Wid&th:";
-            this.m_labelConfigThumbnailImageWidth.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_ThumbnailImageWidth_EditBox (Images)
-            // 
-            this.m_textboxConfigThumbnailImageWidth.Location = new System.Drawing.Point(317, 197);
-            this.m_textboxConfigThumbnailImageWidth.Name = "m_textboxConfigThumbnailImageWidth";
-            this.m_textboxConfigThumbnailImageWidth.Size = new System.Drawing.Size(34, 20);
-            this.m_textboxConfigThumbnailImageWidth.TabIndex = 23;
-            this.m_textboxConfigThumbnailImageWidth.Text = "";
-
-            // 
-            // configPanel_ThumbnailImageHeight_Label (Images)
-            // 
-            this.m_labelConfigThumbnailImageHeight.Location = new System.Drawing.Point(366, 193);
-            this.m_labelConfigThumbnailImageHeight.Name = "m_labelConfigThumbnailImageHeight";
-            this.m_labelConfigThumbnailImageHeight.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.m_labelConfigThumbnailImageHeight.Size = new System.Drawing.Size(50, 24);
-            this.m_labelConfigThumbnailImageHeight.TabIndex = 24;
-            this.m_labelConfigThumbnailImageHeight.Text = "Hei&ght:";
-            this.m_labelConfigThumbnailImageHeight.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_ThumbnailImageHeight_EditBox (Images)
-            // 
-            this.m_textboxConfigThumbnailImageHeight.Location = new System.Drawing.Point(419, 197);
-            this.m_textboxConfigThumbnailImageHeight.Name = "m_textboxConfigThumbnailImageHeight";
-            this.m_textboxConfigThumbnailImageHeight.Size = new System.Drawing.Size(34, 20);
-            this.m_textboxConfigThumbnailImageHeight.TabIndex = 25;
-            this.m_textboxConfigThumbnailImageHeight.Text = "";
-        }
-
-        // Builds the GUI for the GEDCOM pane in the config panel
-        private void InitialiseSettingsGedcomPane()
-        {
-            // 
-            // configPanel_TabSpaces_Label (GEDCOM)
-            // 
-            m_labelConfigTabSpaces.Location = new System.Drawing.Point(6, 0);
-            m_labelConfigTabSpaces.Name = "m_labelConfigTabSpaces";
-            m_labelConfigTabSpaces.RightToLeft = RightToLeft.No;
-            m_labelConfigTabSpaces.Size = new System.Drawing.Size(188, 24);
-            m_labelConfigTabSpaces.TabIndex = 1;
-            m_labelConfigTabSpaces.Text = "&Num spaces to replace tabs:";
-            m_labelConfigTabSpaces.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_TabSpaces_EditBox (GEDCOM)
-            // 
-            m_textboxConfigTabSpaces.Location = new System.Drawing.Point(203, 4);
-            m_textboxConfigTabSpaces.Name = "m_textboxConfigTabSpaces";
-            m_textboxConfigTabSpaces.Size = new System.Drawing.Size(31, 20);
-            m_textboxConfigTabSpaces.TabIndex = 2;
-            m_textboxConfigTabSpaces.Text = "";
-
-            // 
-            // configPanel_NoName_Label (GEDCOM)
-            // 
-            m_labelConfigNoName.Location = new System.Drawing.Point(6, 24);
-            m_labelConfigNoName.Name = "m_labelConfigNoName";
-            m_labelConfigNoName.RightToLeft = RightToLeft.No;
-            m_labelConfigNoName.Size = new System.Drawing.Size(200, 24);
-            m_labelConfigNoName.TabIndex = 3;
-            m_labelConfigNoName.Text = "Show &missing names as:";
-            m_labelConfigNoName.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_NoName_EditBox (GEDCOM)
-            // 
-            m_textboxConfigNoName.Location = new System.Drawing.Point(6, 48);
-            m_textboxConfigNoName.Name = "m_textboxConfigNoName";
-            m_textboxConfigNoName.Size = new System.Drawing.Size(228, 20);
-            m_textboxConfigNoName.TabIndex = 4;
-            m_textboxConfigNoName.Text = "";
-
-            //
-            // configPanel_ShowWithheldRecords_CheckBox (GEDCOM)
-            // 
-            m_checkboxConfigShowWithheldRecords.Location = new System.Drawing.Point(6, 86);
-            m_checkboxConfigShowWithheldRecords.Name = "m_checkboxConfigShowWithheldRecords";
-            m_checkboxConfigShowWithheldRecords.Size = new System.Drawing.Size(200, 16);
-            m_checkboxConfigShowWithheldRecords.TabIndex = 5;
-            m_checkboxConfigShowWithheldRecords.Text = "Include &withheld records";
-            m_checkboxConfigShowWithheldRecords.Click += new System.EventHandler(configPanel_ShowWithheldRecords_CheckBox_click);
-
-            // 
-            // configPanel_WithheldName_GroupBox (GEDCOM)
-            // 
-            m_groupboxConfigWithheldName.Location = new System.Drawing.Point(6, 113);
-            m_groupboxConfigWithheldName.Name = "m_groupboxConfigWithheldName";
-            m_groupboxConfigWithheldName.Size = new System.Drawing.Size(228, 104);
-            m_groupboxConfigWithheldName.TabIndex = 6;
-            m_groupboxConfigWithheldName.Text = "Label w&ithheld records with:";
-            m_groupboxConfigWithheldName.FlatStyle = FlatStyle.System;
-
-            // 
-            // configPanel_WithheldName_Label (GEDCOM)
-            // 
-            m_radiobuttonConfigWithheldNameLabel.Location = new System.Drawing.Point(10, 18);
-            m_radiobuttonConfigWithheldNameLabel.Name = "m_radiobuttonConfigWithheldNameLabel";
-            m_radiobuttonConfigWithheldNameLabel.RightToLeft = RightToLeft.No;
-            m_radiobuttonConfigWithheldNameLabel.Size = new System.Drawing.Size(180, 20);
-            m_radiobuttonConfigWithheldNameLabel.TabIndex = 7;
-            m_radiobuttonConfigWithheldNameLabel.Text = "this &text:";
-            m_radiobuttonConfigWithheldNameLabel.Click += new System.EventHandler(configPanel_WithheldName_Label_click);
-
-            //
-            // configPanel_WithheldName_EditBox (GEDCOM)
-            // 
-            m_textboxConfigWithheldName.Location = new System.Drawing.Point(28, 38);
-            m_textboxConfigWithheldName.Name = "m_textboxConfigWithheldName";
-            m_textboxConfigWithheldName.Size = new System.Drawing.Size(188, 20);
-            m_textboxConfigWithheldName.TabIndex = 8;
-            m_textboxConfigWithheldName.Text = "";
-
-            // 
-            // configPanel_WithheldName_Name (GEDCOM)
-            // 
-            m_radiobuttonConfigWithheldNameName.Location = new System.Drawing.Point(10, 72);
-            m_radiobuttonConfigWithheldNameName.Name = "m_radiobuttonConfigWithheldNameName";
-            m_radiobuttonConfigWithheldNameName.RightToLeft = RightToLeft.No;
-            m_radiobuttonConfigWithheldNameName.Size = new System.Drawing.Size(180, 20);
-            m_radiobuttonConfigWithheldNameName.TabIndex = 9;
-            m_radiobuttonConfigWithheldNameName.Text = "the individual's n&ame";
-            m_radiobuttonConfigWithheldNameName.Click += new System.EventHandler(configPanel_WithheldName_Label_click);
-
-            //
-            // configPanel_CapNames_CheckBox (GEDCOM)
-            // 
-            m_checkboxConfigCapNames.Location = new System.Drawing.Point(266, 7);
-            m_checkboxConfigCapNames.Name = "m_checkboxConfigCapNames";
-            m_checkboxConfigCapNames.Size = new System.Drawing.Size(200, 20);
-            m_checkboxConfigCapNames.TabIndex = 10;
-            m_checkboxConfigCapNames.Text = "&Put surnames in CAPITALS";
-
-            //
-            // configPanel_CapEvents_CheckBox (GEDCOM)
-            // 
-            m_checkboxConfigCapEvents.Location = new System.Drawing.Point(266, 34);
-            m_checkboxConfigCapEvents.Name = "m_checkboxConfigCapEvents";
-            m_checkboxConfigCapEvents.Size = new System.Drawing.Size(260, 20);
-            m_checkboxConfigCapEvents.TabIndex = 11;
-            m_checkboxConfigCapEvents.Text = "&Start events with a capital letter";
-
-            //
-            // configPanel_HideEmails_CheckBox (GEDCOM)
-            // 
-            m_checkboxConfigHideEmails.Location = new System.Drawing.Point(266, 60);
-            m_checkboxConfigHideEmails.Name = "m_checkboxConfigHideEmails";
-            m_checkboxConfigHideEmails.Size = new System.Drawing.Size(260, 20);
-            m_checkboxConfigHideEmails.TabIndex = 12;
-            m_checkboxConfigHideEmails.Text = "Don't show &email addresses";
-
-            //
-            // configPanel_OccupationHeadline_CheckBox (GEDCOM)
-            // 
-            m_checkboxConfigOccupationHeadline.Location = new System.Drawing.Point(266, 86);
-            m_checkboxConfigOccupationHeadline.Name = "m_checkboxConfigOccupationHeadline";
-            m_checkboxConfigOccupationHeadline.Size = new System.Drawing.Size(260, 20);
-            m_checkboxConfigOccupationHeadline.TabIndex = 13;
-            m_checkboxConfigOccupationHeadline.Text = "Show occupation in pa&ge heading";
-
-            //
-            // configPanel_AllowTrailingSpaces_CheckBox (GEDCOM)
-            // 
-            m_checkboxConfigAllowTrailingSpaces.Location = new System.Drawing.Point(266, 110);
-            m_checkboxConfigAllowTrailingSpaces.Name = "m_checkboxConfigAllowTrailingSpaces";
-            m_checkboxConfigAllowTrailingSpaces.Size = new System.Drawing.Size(260, 20);
-            m_checkboxConfigAllowTrailingSpaces.TabIndex = 14;
-            m_checkboxConfigAllowTrailingSpaces.Text = "Preserve t&railing spaces in GEDCOM";
-        }
-
-        // Builds the GUI for the Tree Diagrams pane in the config panel
-        private void InitialiseSettingsTreeDiagramsPane()
-        {
-            //
-            // configPanel_TreeDiagrams_CheckBox (Tree Diagrams)
-            // 
-            m_checkboxConfigTreeDiagrams.Location = new System.Drawing.Point(8, 8);
-            m_checkboxConfigTreeDiagrams.Name = "m_checkboxConfigTreeDiagrams";
-            m_checkboxConfigTreeDiagrams.Size = new System.Drawing.Size(200, 20);
-            m_checkboxConfigTreeDiagrams.TabIndex = 2;
-            m_checkboxConfigTreeDiagrams.Text = "Include &tree diagrams";
-            m_checkboxConfigTreeDiagrams.Click += new System.EventHandler(configPanel_TreeDiagrams_CheckBox_click);
-
-            // 
-            // configPanel_TreeDiagramsFormat_Label (Tree Diagrams)
-            // 
-            m_labelConfigTreeDiagramsFormat.Location = new System.Drawing.Point(22, 25);
-            m_labelConfigTreeDiagramsFormat.Name = "m_labelConfigTreeDiagramsFormat";
-            m_labelConfigTreeDiagramsFormat.RightToLeft = RightToLeft.No;
-            m_labelConfigTreeDiagramsFormat.Size = new System.Drawing.Size(134, 24);
-            m_labelConfigTreeDiagramsFormat.TabIndex = 3;
-            m_labelConfigTreeDiagramsFormat.Text = "&File format:";
-            m_labelConfigTreeDiagramsFormat.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_TreeDiagramsFormat_ComboBox (Tree Diagrams)
-            // 
-            m_comboboxConfigTreeDiagramsFormat.Location = new System.Drawing.Point(158, 30);
-            m_comboboxConfigTreeDiagramsFormat.Name = "m_comboboxConfigTreeDiagramsFormat";
-            m_comboboxConfigTreeDiagramsFormat.Size = new System.Drawing.Size(85, 20);
-            m_comboboxConfigTreeDiagramsFormat.TabIndex = 4;
-            m_comboboxConfigTreeDiagramsFormat.DropDownWidth = 40;
-            m_comboboxConfigTreeDiagramsFormat.DropDownStyle = ComboBoxStyle.DropDownList;
-
-            //
-            // configPanel_TreeDiagramsFakeBG_CheckBox (Tree Diagrams)
-            // 
-            m_checkboxConfigTreeDiagramsFakeBg.Location = new System.Drawing.Point(8, 66);
-            m_checkboxConfigTreeDiagramsFakeBg.Name = "m_checkboxConfigTreeDiagramsFakeBg";
-            m_checkboxConfigTreeDiagramsFakeBg.Size = new System.Drawing.Size(200, 20);
-            m_checkboxConfigTreeDiagramsFakeBg.TabIndex = 5;
-            m_checkboxConfigTreeDiagramsFakeBg.Text = "&Simulate transparency";
-
-            //
-            // configPanel_ConserveTreeWidth_CheckBox (Tree Diagrams)
-            // 
-            m_checkboxConfigConserveTreeWidth.Location = new System.Drawing.Point(8, 90);
-            m_checkboxConfigConserveTreeWidth.Name = "m_checkboxConfigConserveTreeWidth";
-            m_checkboxConfigConserveTreeWidth.Size = new System.Drawing.Size(190, 24);
-            m_checkboxConfigConserveTreeWidth.TabIndex = 6;
-            m_checkboxConfigConserveTreeWidth.Text = "Conserve tree &width";
-
-            //
-            // configPanel_KeepSiblingOrder_CheckBox (Tree Diagrams)
-            // 
-            m_checkboxConfigKeepSiblingOrder.Location = new System.Drawing.Point(8, 114);
-            m_checkboxConfigKeepSiblingOrder.Name = "m_checkboxConfigKeepSiblingOrder";
-            m_checkboxConfigKeepSiblingOrder.Size = new System.Drawing.Size(230, 24);
-            m_checkboxConfigKeepSiblingOrder.TabIndex = 7;
-            m_checkboxConfigKeepSiblingOrder.Text = "Keep s&ibling order from GEDCOM";
-
-            //
-            // configPanel_MiniTreeColours_GroupBox (Tree Diagrams)
-            // 
-            m_groupboxMiniTreeColours.Location = new System.Drawing.Point(260, 11);
-            m_groupboxMiniTreeColours.Name = "m_groupboxMiniTreeColours";
-            m_groupboxMiniTreeColours.Size = new System.Drawing.Size(230, 224);
-            m_groupboxMiniTreeColours.TabIndex = 8;
-            m_groupboxMiniTreeColours.Text = "Colours";
-            m_groupboxMiniTreeColours.FlatStyle = FlatStyle.System;
-
-            //
-            // configPanel_MiniTreeColourIndiHighlight_Button (Tree Diagrams)
-            // 
-            m_buttonConfigMiniTreeColourIndiHighlight.Location = new System.Drawing.Point(12, 24);
-            m_buttonConfigMiniTreeColourIndiHighlight.Name = "m_buttonConfigMiniTreeColourIndiHighlight";
-            m_buttonConfigMiniTreeColourIndiHighlight.Size = new System.Drawing.Size(98, 24);
-            m_buttonConfigMiniTreeColourIndiHighlight.TabIndex = 9;
-            m_buttonConfigMiniTreeColourIndiHighlight.Text = "Selected &box";
-            m_buttonConfigMiniTreeColourIndiHighlight.Click += new System.EventHandler(configPanel_MiniTreeColourIndiHighlight_Button_click);
-
-            //
-            // configPanel_MiniTreeColourIndiText_Button (Tree Diagrams)
-            // 
-            m_buttonConfigMiniTreeColourIndiText.Location = new System.Drawing.Point(122, 24);
-            m_buttonConfigMiniTreeColourIndiText.Name = "m_buttonConfigMiniTreeColourIndiText";
-            m_buttonConfigMiniTreeColourIndiText.Size = new System.Drawing.Size(98, 24);
-            m_buttonConfigMiniTreeColourIndiText.TabIndex = 10;
-            m_buttonConfigMiniTreeColourIndiText.Text = "Selected te&xt";
-            m_buttonConfigMiniTreeColourIndiText.Click += new System.EventHandler(configPanel_MiniTreeColourIndiText_Button_click);
-
-            //
-            // configPanel_MiniTreeColourIndiBackground_Button (Tree Diagrams)
-            // 
-            m_buttonConfigMiniTreeColourIndiBackground.Location = new System.Drawing.Point(12, 60);
-            m_buttonConfigMiniTreeColourIndiBackground.Name = "m_buttonConfigMiniTreeColourIndiBackground";
-            m_buttonConfigMiniTreeColourIndiBackground.Size = new System.Drawing.Size(98, 24);
-            m_buttonConfigMiniTreeColourIndiBackground.TabIndex = 11;
-            m_buttonConfigMiniTreeColourIndiBackground.Text = "&General box";
-            m_buttonConfigMiniTreeColourIndiBackground.BackColor = Color.FromArgb(255, 0, 0);
-            m_buttonConfigMiniTreeColourIndiBackground.Click += new System.EventHandler(configPanel_MiniTreeColourIndiBackground_Button_click);
-
-            //
-            // configPanel_MiniTreeColourIndiLink_Button (Tree Diagrams)
-            // 
-            m_buttonConfigMiniTreeColourIndiLink.Location = new System.Drawing.Point(122, 60);
-            m_buttonConfigMiniTreeColourIndiLink.Name = "m_buttonConfigMiniTreeColourIndiLink";
-            m_buttonConfigMiniTreeColourIndiLink.Size = new System.Drawing.Size(98, 24);
-            m_buttonConfigMiniTreeColourIndiLink.TabIndex = 12;
-            m_buttonConfigMiniTreeColourIndiLink.Text = "&Link text";
-            m_buttonConfigMiniTreeColourIndiLink.Click += new System.EventHandler(configPanel_MiniTreeColourIndiLink_Button_click);
-
-            //
-            // configPanel_MiniTreeColourIndiBgConcealed_Button (Tree Diagrams)
-            // 
-            m_buttonConfigMiniTreeColourIndiBgConcealed.Location = new System.Drawing.Point(12, 96);
-            m_buttonConfigMiniTreeColourIndiBgConcealed.Name = "m_buttonConfigMiniTreeColourIndiBgConcealed";
-            m_buttonConfigMiniTreeColourIndiBgConcealed.Size = new System.Drawing.Size(98, 24);
-            m_buttonConfigMiniTreeColourIndiBgConcealed.TabIndex = 13;
-            m_buttonConfigMiniTreeColourIndiBgConcealed.Text = "&Private box";
-            m_buttonConfigMiniTreeColourIndiBgConcealed.Click += new System.EventHandler(configPanel_MiniTreeColourIndiBgConcealed_Button_click);
-
-            //
-            // configPanel_MiniTreeColourIndiFgConcealed_Button (Tree Diagrams)
-            // 
-            m_buttonConfigMiniTreeColourIndiFgConcealed.Location = new System.Drawing.Point(122, 96);
-            m_buttonConfigMiniTreeColourIndiFgConcealed.Name = "m_buttonConfigMiniTreeColourIndiFgConcealed";
-            m_buttonConfigMiniTreeColourIndiFgConcealed.Size = new System.Drawing.Size(98, 24);
-            m_buttonConfigMiniTreeColourIndiFgConcealed.TabIndex = 14;
-            m_buttonConfigMiniTreeColourIndiFgConcealed.Text = "P&rivate text";
-            m_buttonConfigMiniTreeColourIndiFgConcealed.Click += new System.EventHandler(configPanel_MiniTreeColourIndiFgConcealed_Button_click);
-
-            //
-            // configPanel_MiniTreeColourIndiShade_Button (Tree Diagrams)
-            // 
-            m_buttonConfigMiniTreeColourIndiShade.Location = new System.Drawing.Point(12, 132);
-            m_buttonConfigMiniTreeColourIndiShade.Name = "m_buttonConfigMiniTreeColourIndiShade";
-            m_buttonConfigMiniTreeColourIndiShade.Size = new System.Drawing.Size(98, 24);
-            m_buttonConfigMiniTreeColourIndiShade.TabIndex = 15;
-            m_buttonConfigMiniTreeColourIndiShade.Text = "Spous&e box";
-            m_buttonConfigMiniTreeColourIndiShade.Click += new System.EventHandler(configPanel_MiniTreeColourIndiShade_Button_click);
-
-            //
-            // configPanel_MiniTreeColourBranch_Button (Tree Diagrams)
-            // 
-            m_buttonConfigMiniTreeColourBranch.Location = new System.Drawing.Point(12, 168);
-            m_buttonConfigMiniTreeColourBranch.Name = "m_buttonConfigMiniTreeColourBranch";
-            m_buttonConfigMiniTreeColourBranch.Size = new System.Drawing.Size(98, 24);
-            m_buttonConfigMiniTreeColourBranch.TabIndex = 16;
-            m_buttonConfigMiniTreeColourBranch.Text = "Br&anches";
-            m_buttonConfigMiniTreeColourBranch.Click += new System.EventHandler(configPanel_MiniTreeColourBranch_Button_click);
-
-            //
-            // configPanel_MiniTreeColourIndiBorder_Button (Tree Diagrams)
-            // 
-            m_buttonConfigMiniTreeColourIndiBorder.Location = new System.Drawing.Point(122, 168);
-            m_buttonConfigMiniTreeColourIndiBorder.Name = "m_buttonConfigMiniTreeColourIndiBorder";
-            m_buttonConfigMiniTreeColourIndiBorder.Size = new System.Drawing.Size(98, 24);
-            m_buttonConfigMiniTreeColourIndiBorder.TabIndex = 17;
-            m_buttonConfigMiniTreeColourIndiBorder.Text = "Box bor&ders";
-            m_buttonConfigMiniTreeColourIndiBorder.Click += new System.EventHandler(configPanel_MiniTreeColourIndiBorder_Button_click);
-        }
-
-        // Builds the GUI for the Advanced pane in the config panel
-        private void InitialiseSettingsAdvancedPane()
-        {
-            // 
-            // configPanel_Charset_Label  (Advanced)
-            // 
-            m_labelConfigCharset.Location = new System.Drawing.Point(9, 0);
-            m_labelConfigCharset.Name = "m_labelConfigCharset";
-            m_labelConfigCharset.RightToLeft = RightToLeft.No;
-            m_labelConfigCharset.Size = new System.Drawing.Size(120, 24);
-            m_labelConfigCharset.TabIndex = 1;
-            m_labelConfigCharset.Text = "Ch&aracter set:";
-            m_labelConfigCharset.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_Charset_ComboBox (Advanced)
-            // 
-            m_comboboxConfigCharset.Location = new System.Drawing.Point(139, 1);
-            m_comboboxConfigCharset.Name = "m_comboboxConfigCharset";
-            m_comboboxConfigCharset.Size = new System.Drawing.Size(95, 20);
-            m_comboboxConfigCharset.TabIndex = 2;
-            m_comboboxConfigCharset.DropDownWidth = 40;
-            m_comboboxConfigCharset.DropDownStyle = ComboBoxStyle.DropDownList;
-            m_comboboxConfigCharset.SelectedIndexChanged += new System.EventHandler(configPanel_Charset_ComboBox_changed);
-
-            //
-            // configPanel_UseBom_CheckBox (Advanced)
-            // 
-            m_checkboxConfigUseBom.Location = new System.Drawing.Point(11, 26);
-            m_checkboxConfigUseBom.Name = "m_checkboxConfigUseBom";
-            m_checkboxConfigUseBom.Size = new System.Drawing.Size(200, 20);
-            m_checkboxConfigUseBom.Text = "Include &byte order mark (BOM)";
-            m_checkboxConfigUseBom.TabIndex = 3;
-
-            // 
-            // configPanel_HTMLExtn_Label (Advanced)
-            // 
-            m_labelConfigHtmlExtn.Location = new System.Drawing.Point(9, 54);
-            m_labelConfigHtmlExtn.Name = "m_labelConfigHtmlExtn";
-            m_labelConfigHtmlExtn.RightToLeft = RightToLeft.No;
-            m_labelConfigHtmlExtn.Size = new System.Drawing.Size(140, 24);
-            m_labelConfigHtmlExtn.TabIndex = 4;
-            m_labelConfigHtmlExtn.Text = "H&TML file extension:";
-            m_labelConfigHtmlExtn.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_HTMLExtn_ComboBox  (Advanced)
-            // 
-            m_comboboxConfigHtmlExtn.Location = new System.Drawing.Point(149, 55);
-            m_comboboxConfigHtmlExtn.Name = "m_comboboxConfigHtmlExtn";
-            m_comboboxConfigHtmlExtn.Size = new System.Drawing.Size(85, 20);
-            m_comboboxConfigHtmlExtn.TabIndex = 5;
-            m_comboboxConfigHtmlExtn.DropDownWidth = 40;
-            m_comboboxConfigHtmlExtn.DropDownStyle = ComboBoxStyle.DropDownList;
-
-            //
-            // configPanel_W3C_CheckBox (Advanced)
-            // 
-            m_checkboxConfigW3C.Location = new System.Drawing.Point(11, 91);
-            m_checkboxConfigW3C.Name = "m_checkboxConfigW3C";
-            m_checkboxConfigW3C.Size = new System.Drawing.Size(200, 20);
-            m_checkboxConfigW3C.Text = "Add &W3C validator sticker";
-            m_checkboxConfigW3C.TabIndex = 6;
-
-            //
-            // configPanel_user_rec_filename_CheckBox (Advanced)
-            // 
-            m_checkboxConfigUserRecFilename.Location = new System.Drawing.Point(11, 112);
-            m_checkboxConfigUserRecFilename.Name = "m_checkboxConfigUserRecFilename";
-            m_checkboxConfigUserRecFilename.Size = new System.Drawing.Size(240, 24);
-            m_checkboxConfigUserRecFilename.Text = "&Use custom record number for filenames";
-            m_checkboxConfigUserRecFilename.TabIndex = 7;
-
-            //
-            // configPanel_SupressBackreferences_CheckBox (Advanced)
-            // 
-            m_checkboxConfigSupressBackreferences.Location = new System.Drawing.Point(11, 136);
-            m_checkboxConfigSupressBackreferences.Name = "m_checkboxConfigSupressBackreferences";
-            m_checkboxConfigSupressBackreferences.Size = new System.Drawing.Size(250, 20);
-            m_checkboxConfigSupressBackreferences.Text = "List c&iting records on source pages";
-            m_checkboxConfigSupressBackreferences.TabIndex = 8;
-
-            // 
-            // m_labelConfigStylesheetName (Advanced)
-            // 
-            m_labelConfigStylesheetName.Location = new System.Drawing.Point(266, 0);
-            m_labelConfigStylesheetName.Name = "m_labelConfigStylesheetName";
-            m_labelConfigStylesheetName.RightToLeft = RightToLeft.No;
-            m_labelConfigStylesheetName.Size = new System.Drawing.Size(224, 24);
-            m_labelConfigStylesheetName.TabIndex = 9;
-            m_labelConfigStylesheetName.Text = "Name of st&ylesheet:";
-            m_labelConfigStylesheetName.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_StylesheetName_EditBox (Advanced)
-            // 
-            m_textboxConfigStylesheetName.Location = new System.Drawing.Point(266, 32);
-            m_textboxConfigStylesheetName.Name = "m_textboxConfigStylesheetName";
-            m_textboxConfigStylesheetName.Size = new System.Drawing.Size(175, 20);
-            m_textboxConfigStylesheetName.TabIndex = 10;
-            m_textboxConfigStylesheetName.Text = "";
-            m_textboxConfigStylesheetName.Multiline = false;
-
-            // 
-            // configPanel_StylesheetName_ExtnLabel (Advanced)
-            // 
-            m_labelConfigStylesheetNameExtn.Location = new System.Drawing.Point(440, 27);
-            m_labelConfigStylesheetNameExtn.Name = "m_labelConfigStylesheetNameExtn";
-            m_labelConfigStylesheetNameExtn.RightToLeft = RightToLeft.No;
-            m_labelConfigStylesheetNameExtn.Size = new System.Drawing.Size(60, 24);
-            m_labelConfigStylesheetNameExtn.TabIndex = 11;
-            m_labelConfigStylesheetNameExtn.Text = ".css";
-            m_labelConfigStylesheetNameExtn.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_PreserveStylesheet_CheckBox (Advanced)
-            // 
-            m_checkboxConfigPreserveStylesheet.Location = new System.Drawing.Point(266, 56);
-            m_checkboxConfigPreserveStylesheet.Name = "m_checkboxConfigPreserveStylesheet";
-            m_checkboxConfigPreserveStylesheet.Size = new System.Drawing.Size(250, 20);
-            m_checkboxConfigPreserveStylesheet.Text = "Do &not generate new stylesheet";
-            m_checkboxConfigPreserveStylesheet.TabIndex = 12;
-
-            //
-            // m_checkboxConfigExcludeHelppage (Advanced)
-            // 
-            m_checkboxConfigIncludeHelppage.Location = new System.Drawing.Point(266, 91);
-            m_checkboxConfigIncludeHelppage.Name = "m_checkboxConfigExcludeHelppage";
-            m_checkboxConfigIncludeHelppage.Size = new System.Drawing.Size(250, 20);
-            m_checkboxConfigIncludeHelppage.Text = "Include help page";
-            m_checkboxConfigIncludeHelppage.TabIndex = 15;
-        }
-
         // The main entry point for the application.
         [STAThread]
         static void Main(string[] args)
         {
-            bool resetConfig = false;
-            bool nextArgIsFilename = false;
-            string logFilename = "";
-
-            if (args != null) {
-                foreach (string sArg in args) {
-                    if (nextArgIsFilename) {
-                        logFilename = sArg;
-                        nextArgIsFilename = false;
-                    } else {
-                        switch (sArg) {
-                            case "-reset": {
-                                    resetConfig = true;
-                                    break;
-                                }
-                        }
-                    }
-                }
-            }
-            string startTime = DateTime.Now.ToString();
-            fLogger.WriteInfo(MainForm.SoftwareName + " started at " + startTime);
+            bool resetConfig = (args != null) && (Array.IndexOf(args, "-reset") >= 0);
+            fLogger.WriteInfo(CConfig.SoftwareName + " started at " + DateTime.Now.ToString());
 
             m_mainForm = new MainForm(resetConfig);
             Application.Run(m_mainForm);
@@ -1190,7 +241,6 @@ namespace GEDmill
             EnableCurrentPanel(true);
         }
 
-        // Event handler
         private void cancelButton_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("Quit button clicked.");
@@ -1199,8 +249,8 @@ namespace GEDmill
 
             if (fCurrentPanel != 6) {
                 // Cancel button is "Finish" in panel 6
-                dialogResult = MessageBoxEx.Show(m_mainForm, "Are you sure you wish to exit GEDmill?", "Quit GEDmill",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question, false);
+                dialogResult = MessageBox.Show(m_mainForm, "Are you sure you wish to exit GEDmill?", "Quit GEDmill",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             }
 
             if (dialogResult == DialogResult.Yes) {
@@ -1222,10 +272,9 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void helpButton_click(object sender, System.EventArgs e)
         {
-            string sHelpFile = Config.ApplicationPath + "\\" + HelpFilename;
+            string sHelpFile = Config.ApplicationPath + "\\" + CConfig.HelpFilename;
 
             if (fConfigPanelOn) {
                 switch (m_tabcontrolConfigPanel.SelectedIndex) {
@@ -1272,7 +321,6 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void configButton_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("Config button clicked. current panel = " + fCurrentPanel.ToString());
@@ -1290,7 +338,6 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void configCancelButton_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("Config reset button clicked. current panel = " + fCurrentPanel.ToString());
@@ -1304,17 +351,14 @@ namespace GEDmill
             SwitchConfigPanelOff();
         }
 
-        // Event handler
         private void buttonPruneRecordsSave_click(object sender, System.EventArgs e)
         {
         }
 
-        // Event handler
         private void buttonPruneRecordsLoad_click(object sender, System.EventArgs e)
         {
         }
 
-        // Event handler
         private void buttonChooseGedcomBrowse_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("Panel 2 browse button clicked.");
@@ -1349,25 +393,21 @@ namespace GEDmill
             fLogger.WriteInfo("Selected file : " + InputFile);
         }
 
-        // Event handler
         private void textboxChooseGedcom_textChanged(object sender, System.EventArgs e)
         {
             EnableNextButton();
         }
 
-        // Event handler
         private void textboxChooseOutput_textChanged(object sender, System.EventArgs e)
         {
             EnableNextButton();
         }
 
-        // Event handler
         private void listboxSelectKey_selectedValueChanged(object sender, System.EventArgs e)
         {
             EnableKeyIndividualsDeleteButton();
         }
 
-        // Event handler
         private void buttonSelectKeyAdd_click(object sender, System.EventArgs e)
         {
             /*// Use a dialog box to let them choose an individual
@@ -1396,7 +436,6 @@ namespace GEDmill
             FillKeyIndividualsList();*/
         }
 
-        // Event handler
         private void buttonSelectKeyDelete_click(object sender, System.EventArgs e)
         {
             NameXRefPair xrefPairName = (NameXRefPair)m_listboxSelectKey.SelectedItem;
@@ -1416,7 +455,6 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void buttonChooseOutputBrowse_click(object sender, System.EventArgs e)
         {
             FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
@@ -1441,7 +479,6 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void linklabelAllDone_click(object sender, LinkLabelLinkClickedEventArgs e)
         {
             bool bOldVisitedValue = m_linklabelAllDone.Links[m_linklabelAllDone.Links.IndexOf(e.Link)].Visited;
@@ -1455,7 +492,6 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void configPanel_BackImage_BrowseButton_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("config panel back image browse button clicked.");
@@ -1490,8 +526,8 @@ namespace GEDmill
                 string sExtn = Path.GetExtension(openFileDialog.FileName);
                 sExtn = sExtn.ToLower();
                 if (sExtn != ".jpg" && sExtn != ".jpeg" && sExtn != ".png" && sExtn != ".gif" && sExtn != ".bmp") {
-                    MessageBoxEx.Show(m_mainForm, "The file you have selected is not a supported picture type.", "Unsupported Format",
-                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation, false);
+                    MessageBox.Show(m_mainForm, "The file you have selected is not a supported picture type.", "Unsupported Format",
+                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 } else {
                     m_textboxConfigBackImageEdit.Text = openFileDialog.FileName;
                     m_textboxConfigBackImageEdit.SelectionStart = m_textboxConfigBackImageEdit.Text.Length;
@@ -1501,7 +537,6 @@ namespace GEDmill
             fLogger.WriteInfo("Selected file : " + m_textboxConfigBackImageEdit.Text);
         }
 
-        // Event handler
         private void configPanel_FrontImage_BrowseButton_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("config panel front image browse button clicked.");
@@ -1536,8 +571,8 @@ namespace GEDmill
                 string sExtn = Path.GetExtension(openFileDialog1.FileName);
                 sExtn = sExtn.ToLower();
                 if (sExtn != ".jpg" && sExtn != ".jpeg" && sExtn != ".png" && sExtn != ".gif" && sExtn != ".bmp") {
-                    MessageBoxEx.Show(m_mainForm, "The file you have selected is not a supported picture type.", "Unsupported Format",
-                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation, false);
+                    MessageBox.Show(m_mainForm, "The file you have selected is not a supported picture type.", "Unsupported Format",
+                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 } else {
                     m_textboxConfigFrontImageEdit.Text = openFileDialog1.FileName;
                     m_textboxConfigFrontImageEdit.SelectionStart = m_textboxConfigFrontImageEdit.Text.Length;
@@ -1547,13 +582,11 @@ namespace GEDmill
             fLogger.WriteInfo("Selected file : " + m_textboxConfigFrontImageEdit.Text);
         }
 
-        // Event handler
         private void configPanel_TreeDiagrams_CheckBox_click(object sender, System.EventArgs e)
         {
             EnableMiniTreeButtons();
         }
 
-        // Event handler
         private void configPanel_MiniTreeColourIndiBackground_Button_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("configPanel_MiniTreeColourIndiBackground_Button_click.");
@@ -1565,7 +598,6 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void configPanel_MiniTreeColourIndiHighlight_Button_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("configPanel_MiniTreeColourIndiHighlight_Button_click.");
@@ -1577,7 +609,6 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void configPanel_MiniTreeColourIndiBgConcealed_Button_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("configPanel_MiniTreeColourIndiBgConcealed_Button_click.");
@@ -1589,7 +620,6 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void configPanel_MiniTreeColourIndiShade_Button_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("configPanel_MiniTreeColourIndiShade_Button_click.");
@@ -1601,7 +631,6 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void configPanel_MiniTreeColourIndiText_Button_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("configPanel_MiniTreeColourIndiText_Button_click.");
@@ -1613,7 +642,6 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void configPanel_MiniTreeColourIndiLink_Button_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("configPanel_MiniTreeColourIndiLink_Button_click.");
@@ -1625,7 +653,6 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void configPanel_MiniTreeColourBranch_Button_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("configPanel_MiniTreeColourBranch_Button_click.");
@@ -1637,7 +664,6 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void configPanel_MiniTreeColourIndiBorder_Button_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("configPanel_MiniTreeColourIndiBorder_Button_click.");
@@ -1649,7 +675,6 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void configPanel_MiniTreeColourIndiFgConcealed_Button_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("configPanel_MiniTreeColourIndiFgConcealed_Button_click.");
@@ -1661,48 +686,41 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void configPanel_MultiPageIndex_CheckBox_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("config panel multi page index button clicked.");
             EnableMultiPageIndexConfig();
         }
 
-        // Event handler
         private void configPanel_AllowMultimedia_CheckBox_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("allow multimedia button clicked.");
             EnableMultimediaConfig();
         }
 
-        // Event handler
         private void configPanel_IndiImages_CheckBox_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("config panel multi images button clicked.");
             EnableThumbnailsConfig();
         }
 
-        // Event handler
         private void configPanel_ShowWithheldRecords_CheckBox_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("config panel show withheld records button clicked.");
             EnableWithheldConfig();
         }
 
-        // Event handler
         private void configPanel_WithheldName_Label_click(object sender, System.EventArgs e)
         {
             fLogger.WriteInfo("config panel withheld label clicked.");
             EnableWithheldConfig();
         }
 
-        // Event handler
         private void configPanel_Charset_ComboBox_changed(object sender, System.EventArgs e)
         {
             EnableBOMCheckBox();
         }
 
-        // Event handler
         private void pruneIndividualsContextMenuDetails_Click(Object sender, System.EventArgs e)
         {
             GEDCOMIndividualRecord ir = null;
@@ -1716,7 +734,6 @@ namespace GEDmill
             ShowIndividualDetailsDialog(this, lb, ir, true, true);
         }
 
-        // Event handler
         private void pruneSourcesContextMenuDetails_Click(Object sender, System.EventArgs e)
         {
             GEDCOMSourceRecord sr = null;
@@ -1730,7 +747,6 @@ namespace GEDmill
             ShowSourceDetailsDialog(this, ((CListableBool)((ListViewItem)lvi)), sr, true, true);
         }
 
-        // Event handler
         private void pruneIndividualsContextMenuUnconnected_Click(Object sender, System.EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -1772,7 +788,6 @@ namespace GEDmill
             ShowPruneResult(PruneExcluded, PruneIncluded, "individual");
         }
 
-        // Event handler
         private void pruneIndividualsContextMenuDescendantsExc_Click(Object sender, System.EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -1788,9 +803,9 @@ namespace GEDmill
                     if (lvi is CListableBool) {
                         GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)((ListViewItem)lvi)).Record;
                         if (ir != null) {
-                            fTree.BeginPruning(); // Initialises visisted hash table
+                            fTree.BeginPruning();
                             fTree.PruneDescendants(ir, true);
-                            fTree.EndPruning(); // Destroys visited hash table
+                            fTree.EndPruning();
                         }
                     }
                 }
@@ -1807,7 +822,6 @@ namespace GEDmill
             ShowPruneResult(PruneExcluded, PruneIncluded, "individual");
         }
 
-        // Event handler
         private void pruneIndividualsContextMenuDescendantsInc_Click(Object sender, System.EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -1842,7 +856,6 @@ namespace GEDmill
             ShowPruneResult(PruneExcluded, PruneIncluded, "individual");
         }
 
-        // Event handler
         private void pruneIndividualsContextMenuAncestorsExc_Click(Object sender, System.EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -1877,7 +890,6 @@ namespace GEDmill
             ShowPruneResult(PruneExcluded, PruneIncluded, "individual");
         }
 
-        // Event handler
         private void pruneIndividualsContextMenuAncestorsInc_Click(Object sender, System.EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -1922,10 +934,9 @@ namespace GEDmill
             foreach (ListViewItem lvi in lvPruneIndividuals.Items) {
                 if (lvi is CListableBool) {
                     GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
-
                     if (!ir.GetVisibility()) {
-                        ir.SetVisibility(true);
                         ++PruneIncluded;
+                        ir.SetVisibility(true);
                     }
                 }
             }
@@ -1985,8 +996,8 @@ namespace GEDmill
                 if (lvi is CListableBool) {
                     GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
                     if (ir.GetVisibility()) {
-                        ir.SetVisibility(false);
                         PruneExcluded++;
+                        ir.SetVisibility(false);
                     }
                 }
             }
@@ -2039,8 +1050,8 @@ namespace GEDmill
                 if (lvi is CListableBool) {
                     GEDCOMSourceRecord sr = (GEDCOMSourceRecord)((CListableBool)lvi).Record;
                     if (sr.GetVisibility()) {
-                        sr.SetVisibility(false);
                         PruneExcluded++;
+                        sr.SetVisibility(false);
                     }
                 }
             }
@@ -2065,29 +1076,15 @@ namespace GEDmill
 
             try {
                 fTree.BeginPruning();
-
                 foreach (ListViewItem lvi in lvPruneIndividuals.Items) {
                     if (lvi is CListableBool) {
                         GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
-                        if (ir != null) {
-                            GEDCOMDateValue dateBorn = null, dateDied = null;
-                            var lifeDatesX = ir.GetLifeDates();
-                            dateBorn = (lifeDatesX.BirthEvent == null) ? null : lifeDatesX.BirthEvent.Date;
-                            dateDied = (lifeDatesX.DeathEvent == null) ? null : lifeDatesX.DeathEvent.Date;
-
-                            bool bInclude = true;
-                            if (ir.IsLive()) {
-                                bInclude = false;
-                            }
-
-                            if (bInclude == false && ir.GetVisibility()) {
-                                PruneExcluded++;
-                                ir.SetVisibility(false);
-                            }
+                        if (ir != null && ir.IsLive() && ir.GetVisibility()) {
+                            PruneExcluded++;
+                            ir.SetVisibility(false);
                         }
                     }
                 }
-
                 fTree.EndPruning();
             } catch (Exception ex) {
                 ReportPruneError(ex);
@@ -2151,7 +1148,6 @@ namespace GEDmill
             }
         }
 
-        // Event handler
         private void listviewPruneRecordsSources_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             if (!fDisablePrunepanelCheckEvent) {
@@ -2177,7 +1173,7 @@ namespace GEDmill
 
         // Presents a file selection dialog and returns the selecetd file name and path
         public static bool SelectFile(ref string fileDir, ref string fileName, string title, string defaultName,
-                                      bool loadNotSave, string filterName, ArrayList filterExtensions)
+                                      bool loadNotSave, string filterName, List<string> filterExtensions)
         {
             bool fileSelected = false;
 
@@ -2545,8 +1541,8 @@ namespace GEDmill
                         if (File.Exists(InputFile) == false) {
                             fLogger.WriteInfo("File not found.");
 
-                            MessageBoxEx.Show(m_mainForm, "The file you have selected could not be found.", "File Not Found",
-                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation, false);
+                            MessageBox.Show(m_mainForm, "The file you have selected could not be found.", "File Not Found",
+                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                             fLogger.WriteInfo("File not found. Returning. ");
                             return false;
@@ -2564,7 +1560,7 @@ namespace GEDmill
                             Config.FirstRecordXRef = "";
 
                             // User is using a new file, so key individuals won't be the same as they were in config
-                            Config.KeyIndividuals = new ArrayList();
+                            Config.KeyIndividuals = new List<string>();
                             Config.FirstRecordXRef = "";
                         }
 
@@ -2588,13 +1584,13 @@ namespace GEDmill
                         if (result == DialogResult.Abort) // Abort means abnormal failure (ie. not user pressing cancel)
                         {
                             // Abort means there were file IO errors
-                            MessageBoxEx.Show(m_mainForm, String.Format("A problem was encountered while reading the GEDCOM file"), MainForm.SoftwareName,
-                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation, true);
+                            MessageBox.Show(m_mainForm, String.Format("A problem was encountered while reading the GEDCOM file"), CConfig.SoftwareName,
+                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         } else if (result == DialogResult.Retry) // Something went wrong, let user retry
                           {
                             // Currently the only thing this can be is "file already open"
-                            MessageBoxEx.Show(m_mainForm, "A problem was encountered while reading the GEDCOM file.\r\n\r\nPerhaps the file is already open elsewhere.", MainForm.SoftwareName,
-                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation, true);
+                            MessageBox.Show(m_mainForm, "A problem was encountered while reading the GEDCOM file.\r\n\r\nPerhaps the file is already open elsewhere.", CConfig.SoftwareName,
+                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                         if (result != DialogResult.OK) {
                             return false; // Go back and let user retry loading file.
@@ -2620,14 +1616,14 @@ namespace GEDmill
                         }
 
                         if (somethingChecked == false) {
-                            MessageBoxEx.Show(m_mainForm, "Please select at least one individual.", "No Individuals Selected",
-                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation, false);
+                            MessageBox.Show(m_mainForm, "Please select at least one individual.", "No Individuals Selected",
+                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             return false;
                         }
 
                         if (PrunepanelDataChanged) {
-                            DialogResult dialogResult = MessageBoxEx.Show(m_mainForm, "You have made changes which will affect the website but have not saved them.\r\nWould you like to save them now?", "Save changes",
-                                MessageBoxButtons.YesNo, MessageBoxIcon.Question, false);
+                            DialogResult dialogResult = MessageBox.Show(m_mainForm, "You have made changes which will affect the website but have not saved them.\r\nWould you like to save them now?", "Save changes",
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                             if (dialogResult == DialogResult.Yes) {
                                 buttonPruneRecordsSave_click(null, null);
                             }
@@ -2689,7 +1685,7 @@ namespace GEDmill
         }
 
         // Populates the list of individuals records for inclusion/exclusion in the website
-        private void FillIndividualsList(SortableListView listView, bool firstColumnIsCheckbox)
+        private void FillIndividualsList(GKListView listView, bool firstColumnIsCheckbox)
         {
             var indiRecs = fTree.GetRecords<GEDCOMIndividualRecord>();
             fLogger.WriteInfo("FillIndividualsList() : " + indiRecs.Count.ToString());
@@ -2798,7 +1794,7 @@ namespace GEDmill
         }
 
         // Populates the list of source records for inclusion/exclusion in the website
-        private void FillSourcesList(SortableListView listView, bool firstColumnIsCheckbox)
+        private void FillSourcesList(GKListView listView, bool firstColumnIsCheckbox)
         {
             var sources = fTree.GetRecords<GEDCOMSourceRecord>();
             fLogger.WriteInfo("FillSourcesList() : " + sources.Count.ToString());
@@ -2870,7 +1866,7 @@ namespace GEDmill
                     }
                 }
             }
-            lbItem.SubItems.Add(new ListViewItem.ListViewSubItem(lbItem, repositories));
+            lbItem.SubItems.Add(new CListableString(repositories));
 
             int nBirths = 0;
             int nMarriages = 0;
@@ -2920,19 +1916,19 @@ namespace GEDmill
                 }
             }*/
 
-            lbItem.SubItems.Add(new ListViewItem.ListViewSubItem(lbItem, nCitations.ToString()));
-            lbItem.SubItems.Add(new ListViewItem.ListViewSubItem(lbItem, nBirths.ToString()));
-            lbItem.SubItems.Add(new ListViewItem.ListViewSubItem(lbItem, nMarriages.ToString()));
-            lbItem.SubItems.Add(new ListViewItem.ListViewSubItem(lbItem, nDeaths.ToString()));
+            lbItem.SubItems.Add(new CListableNumber(nCitations));
+            lbItem.SubItems.Add(new CListableNumber(nBirths));
+            lbItem.SubItems.Add(new CListableNumber(nMarriages));
+            lbItem.SubItems.Add(new CListableNumber(nDeaths));
             lbItem.SubItems.Add(new CListableString(sr.XRef));
 
             int nVisiblePics = sr.CountVisibleMFRs();
             int nTotalPics = sr.CountAllMFRs();
 
             if (nVisiblePics != nTotalPics) {
-                lbItem.SubItems.Add(new CListableNumber(nVisiblePics, String.Format("{0}/{1}", nVisiblePics, nTotalPics)));
+                lbItem.SubItems.Add(new CListableNumber(nVisiblePics, string.Format("{0}/{1}", nVisiblePics, nTotalPics)));
             } else {
-                lbItem.SubItems.Add(new CListableNumber(nTotalPics, String.Format("{0}", nTotalPics)));
+                lbItem.SubItems.Add(new CListableNumber(nTotalPics, string.Format("{0}", nTotalPics)));
             }
             lbItem.Checked = wasChecked;
         }
@@ -2954,11 +1950,11 @@ namespace GEDmill
             DialogResult dialogResult;
 
             // If user has specified a background image, check it exists
-            if (Config.BackgroundImage != null && Config.BackgroundImage.Length != 0 && File.Exists(Config.BackgroundImage) == false) {
+            if (!string.IsNullOrEmpty(Config.BackgroundImage) && File.Exists(Config.BackgroundImage) == false) {
                 fLogger.WriteError("Can't find background image " + Config.BackgroundImage);
 
-                dialogResult = MessageBoxEx.Show(m_mainForm, string.Format("The file {0} is missing. \r\nPages will be created without any background image.", Config.BackgroundImage),
-                    "Creating website", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, false);
+                dialogResult = MessageBox.Show(m_mainForm, string.Format("The file {0} is missing. \r\nPages will be created without any background image.", Config.BackgroundImage),
+                    "Creating website", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
                 if (dialogResult == DialogResult.Cancel) {
                     fLogger.WriteInfo("Message box cancelled (1)");
                     return false;
@@ -2982,8 +1978,8 @@ namespace GEDmill
                 threadWorker.Start();
                 dialogResult = progressWindow.ShowDialog(this);
             } catch (HTMLException e) {
-                MessageBoxEx.Show(m_mainForm, String.Concat(e.Message), "Creating website",
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation, false);
+                MessageBox.Show(m_mainForm, String.Concat(e.Message), "Creating website",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } finally {
                 threadWorker.Join();
             }
@@ -2992,12 +1988,12 @@ namespace GEDmill
                 fLogger.WriteInfo("Thread aborted");
                 if (progressWindow.ThreadError.Message == "") {
                     // Abort means there were file IO errors
-                    MessageBoxEx.Show(m_mainForm, String.Format("A problem was encountered while creating the website files"), MainForm.SoftwareName,
-                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation, true);
+                    MessageBox.Show(m_mainForm, String.Format("A problem was encountered while creating the website files"), CConfig.SoftwareName,
+                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 } else {
                     // Abort means there were file IO errors
-                    MessageBoxEx.Show(m_mainForm, progressWindow.ThreadError.Message, MainForm.SoftwareName,
-                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation, true);
+                    MessageBox.Show(m_mainForm, progressWindow.ThreadError.Message, CConfig.SoftwareName,
+                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
 
@@ -3040,8 +2036,8 @@ namespace GEDmill
         // Reports any exception thrown during the prune operation
         private void ReportPruneError(Exception e)
         {
-            MessageBoxEx.Show(m_mainForm, String.Format("A problem was encountered while navigating the tree structure:\r\n\r\n{0}", e.StackTrace), MainForm.SoftwareName,
-                MessageBoxButtons.OK, MessageBoxIcon.Exclamation, true);
+            MessageBox.Show(m_mainForm, String.Format("A problem was encountered while navigating the tree structure:\r\n\r\n{0}", e.StackTrace), CConfig.SoftwareName,
+                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
             fLogger.WriteInfo(String.Format("Caught navigation exception : {0}", e.ToString()));
         }
@@ -3079,7 +2075,7 @@ namespace GEDmill
                 }
             }
 
-            MessageBoxEx.Show(this, sMsg, "Select Records", MessageBoxButtons.OK, MessageBoxIcon.Information, false);
+            MessageBox.Show(this, sMsg, "Select Records", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         // Displays the statistics of the remove pictures operation
@@ -3093,7 +2089,7 @@ namespace GEDmill
                     sMsg = String.Format("{0} multimedia file{1} hidden.", nHidden, nHidden > 1 ? "s" : "");
                 }
             }
-            MessageBoxEx.Show(this, sMsg, "Hide Pictures", MessageBoxButtons.OK, MessageBoxIcon.Information, false);
+            MessageBox.Show(this, sMsg, "Hide Pictures", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         // Initialises config panel controls
@@ -3243,9 +2239,9 @@ namespace GEDmill
                 if (maxImageWidth > 0 && maxImageWidth <= 300) {
                     Config.MaxImageWidth = maxImageWidth;
                 } else if (Config.MaxImageWidth != maxImageWidth && maxImageWidth > 300) {
-                    DialogResult dialogResult = MessageBoxEx.Show(m_mainForm,
+                    DialogResult dialogResult = MessageBox.Show(m_mainForm,
                         String.Format("Setting the image width to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxImageWidth),
-                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question, false);
+                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (dialogResult == DialogResult.Yes) {
                         Config.MaxImageWidth = maxImageWidth;
                     }
@@ -3260,9 +2256,9 @@ namespace GEDmill
                 if (maxImageHeight > 0 && maxImageHeight <= 800) {
                     Config.MaxImageHeight = maxImageHeight;
                 } else if (Config.MaxImageHeight != maxImageHeight && maxImageHeight > 800) {
-                    DialogResult dialogResult = MessageBoxEx.Show(m_mainForm,
+                    DialogResult dialogResult = MessageBox.Show(m_mainForm,
                         String.Format("Setting the image height to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxImageHeight),
-                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question, false);
+                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (dialogResult == DialogResult.Yes) {
                         Config.MaxImageHeight = maxImageHeight;
                     }
@@ -3277,9 +2273,9 @@ namespace GEDmill
                 if (maxSourceImageWidth > 0 && maxSourceImageWidth <= 800) {
                     Config.MaxSourceImageWidth = maxSourceImageWidth;
                 } else if (Config.MaxSourceImageWidth != maxSourceImageWidth && maxSourceImageWidth > 800) {
-                    DialogResult dialogResult = MessageBoxEx.Show(m_mainForm,
+                    DialogResult dialogResult = MessageBox.Show(m_mainForm,
                         String.Format("Setting the source width to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxSourceImageWidth),
-                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question, false);
+                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (dialogResult == DialogResult.Yes) {
                         Config.MaxSourceImageWidth = maxSourceImageWidth;
                     }
@@ -3294,9 +2290,9 @@ namespace GEDmill
                 if (maxSourceImageHeight > 0 && maxSourceImageHeight <= 800) {
                     Config.MaxSourceImageHeight = maxSourceImageHeight;
                 } else if (Config.MaxSourceImageHeight != maxSourceImageHeight && maxSourceImageHeight > 800) {
-                    DialogResult dialogResult = MessageBoxEx.Show(m_mainForm,
+                    DialogResult dialogResult = MessageBox.Show(m_mainForm,
                         String.Format("Setting the source height to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxSourceImageHeight),
-                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question, false);
+                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (dialogResult == DialogResult.Yes) {
                         Config.MaxSourceImageHeight = maxSourceImageHeight;
                     }
@@ -3311,9 +2307,9 @@ namespace GEDmill
                 if (maxThumbnailImageWidth > 0 && maxThumbnailImageWidth < 80) {
                     Config.MaxThumbnailImageWidth = maxThumbnailImageWidth;
                 } else if (Config.MaxThumbnailImageWidth != maxThumbnailImageWidth && maxThumbnailImageWidth > 80) {
-                    DialogResult dialogResult = MessageBoxEx.Show(m_mainForm,
+                    DialogResult dialogResult = MessageBox.Show(m_mainForm,
                         String.Format("Setting the thumbnail width to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxThumbnailImageWidth),
-                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question, false);
+                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (dialogResult == DialogResult.Yes) {
                         Config.MaxThumbnailImageWidth = maxThumbnailImageWidth;
                     }
@@ -3328,9 +2324,9 @@ namespace GEDmill
                 if (maxThumbnailImageHeight > 0 && maxThumbnailImageHeight < 80) {
                     Config.MaxThumbnailImageHeight = maxThumbnailImageHeight;
                 } else if (Config.MaxThumbnailImageHeight != maxThumbnailImageHeight && maxThumbnailImageHeight > 80) {
-                    DialogResult dialogResult = MessageBoxEx.Show(m_mainForm,
+                    DialogResult dialogResult = MessageBox.Show(m_mainForm,
                         String.Format("Setting the thumbnail height to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxThumbnailImageHeight),
-                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question, false);
+                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (dialogResult == DialogResult.Yes) {
                         Config.MaxThumbnailImageHeight = maxThumbnailImageHeight;
                     }
@@ -3507,9 +2503,9 @@ namespace GEDmill
                 fLogger.WriteInfo("Folder clashes with file : " + sOutputFolder);
 
                 // Earn user that file is being deleted
-                dialogResult = MessageBoxEx.Show(m_mainForm, String.Format("The folder {0} needs to be created. " +
+                dialogResult = MessageBox.Show(m_mainForm, String.Format("The folder {0} needs to be created. " +
                     "\r\nThis will destroy an existing file with that name.", sOutputFolder),
-                    "Creating website", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, false);
+                    "Creating website", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
                 if (dialogResult == DialogResult.Cancel) {
                     fLogger.WriteInfo("Message box cancelled (2)");
                     return DialogResult.Cancel;
@@ -3541,7 +2537,7 @@ namespace GEDmill
                         // Catch failure, e.g. if user has dir/file open elsewhere
                         sMessage = String.Format("The file {0} could not be deleted.\r\n{1}", sOutputFolder, sExceptionMessage);
                         messageBoxButtons = MessageBoxButtons.RetryCancel;
-                        dialogResult = MessageBoxEx.Show(m_mainForm, sMessage, "Creating website", messageBoxButtons, MessageBoxIcon.Exclamation, false);
+                        dialogResult = MessageBox.Show(m_mainForm, sMessage, "Creating website", messageBoxButtons, MessageBoxIcon.Exclamation);
                     }
                 }
                 while (bFailed && dialogResult == DialogResult.Retry);
@@ -3557,31 +2553,32 @@ namespace GEDmill
                 fLogger.WriteInfo("Folder exists(11) : " + sOutputFolder);
 
                 if (HTMLFile.IsDesktop(sOutputFolder)) {
-                    dialogResult = MessageBoxEx.Show(m_mainForm, "GEDmill will not allow you to create files directly on the Desktop", "Creating website", MessageBoxButtons.OK, MessageBoxIcon.Stop, false);
+                    dialogResult = MessageBox.Show(m_mainForm, "GEDmill will not allow you to create files directly on the Desktop",
+                                                   "Creating website", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     fLogger.WriteInfo("Desktop detected as output folder.");
                     return DialogResult.Cancel;
                 }
 
                 // Warn user that file is being deleted
-                dialogResult = MessageBoxEx.Show(m_mainForm, String.Format("The folder {0} already exists.\r\nWould you like to delete any files it contains before creating the website files?", sOutputFolder),
+                dialogResult = MessageBox.Show(m_mainForm, String.Format("The folder {0} already exists.\r\nWould you like to delete any files it contains before creating the website files?", sOutputFolder),
                     "Creating website",
-                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, false);
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.Cancel) {
                     fLogger.WriteInfo("Message box cancelled (3a)");
                     return DialogResult.Cancel;
                 }
                 if (dialogResult == DialogResult.Yes) {
                     if (bPreserveFiles) {
-                        dialogResult = MessageBoxEx.Show(m_mainForm, String.Format("WARNING: Deleting the folder {0} will not preserve any existing front page and stylesheet files.\r\nDelete folder anyway?", sOutputFolder),
+                        dialogResult = MessageBox.Show(m_mainForm, String.Format("WARNING: Deleting the folder {0} will not preserve any existing front page and stylesheet files.\r\nDelete folder anyway?", sOutputFolder),
                             "Creating website",
-                            MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, false);
+                            MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
                         if (dialogResult == DialogResult.Cancel) {
                             fLogger.WriteInfo("Message box cancelled (3b)");
                             return DialogResult.Cancel;
                         }
                     } else {
-                        dialogResult = MessageBoxEx.Show(m_mainForm, "WARNING: If the folder contains non-GEDmill files they will be deleted also.\r\nDelete folder anyway?",
-                            "Creating website", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, false);
+                        dialogResult = MessageBox.Show(m_mainForm, "WARNING: If the folder contains non-GEDmill files they will be deleted also.\r\nDelete folder anyway?",
+                            "Creating website", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
                         if (dialogResult == DialogResult.Cancel) {
                             fLogger.WriteInfo("Message box cancelled (3c)");
                             return DialogResult.Cancel;
@@ -3614,8 +2611,8 @@ namespace GEDmill
                                 // Catch failure, e.g. if user has dir/file open elsewhere
                                 sMessage = String.Format("The folder {0} could not be deleted.\r\n{1}", sOutputFolder, sExceptionMessage);
                                 messageBoxButtons = MessageBoxButtons.RetryCancel;
-                                dialogResult = MessageBoxEx.Show(m_mainForm, sMessage, "Creating website",
-                                    messageBoxButtons, MessageBoxIcon.Exclamation, false);
+                                dialogResult = MessageBox.Show(m_mainForm, sMessage, "Creating website",
+                                    messageBoxButtons, MessageBoxIcon.Exclamation);
                             }
                         }
                         while (bFailed && dialogResult == DialogResult.Retry);
@@ -3680,7 +2677,7 @@ namespace GEDmill
 
             // Handle any failure with a sMessage box
             if (bFailed) {
-                dialogResult = MessageBoxEx.Show(m_mainForm, String.Concat(sMessage, "\r\n", sExceptionMessage), "Creating website", messageBoxButtons, MessageBoxIcon.Exclamation, false);
+                dialogResult = MessageBox.Show(m_mainForm, String.Concat(sMessage, "\r\n", sExceptionMessage), "Creating website", messageBoxButtons, MessageBoxIcon.Exclamation);
 
                 if (dialogResult == DialogResult.Retry) {
                     return DialogResult.Retry;

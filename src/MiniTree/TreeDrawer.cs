@@ -22,9 +22,10 @@
  *
  */
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using GKCommon.GEDCOM;
 using GKCore.Logging;
 
@@ -121,14 +122,14 @@ namespace GEDmill.MiniTree
         // This is the main tree drawing method.
         // irSubject is the individual for whom the tree is based. 
         // nTargeWidth is the width below which the layout is free to use up space to produce a nice tree.
-        public ArrayList CreateMiniTree(Paintbox paintbox, GEDCOMIndividualRecord ir, string fileName, int targetWidth, ImageFormat imageFormat)
+        public List<MiniTreeMap> CreateMiniTree(Paintbox paintbox, GEDCOMIndividualRecord ir, string fileName, int targetWidth, ImageFormat imageFormat)
         {
             // First calculate size required for tree, by iterating through individuals and building a data structure
             MiniTreeGroup mtgParent = CreateDataStructure(ir);
 
             // For each individual calculate size of box required for display using helper function
             // There must be a better way to get a graphics:
-            Bitmap bmp = new Bitmap(1, 1, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format24bppRgb);
             Graphics g = Graphics.FromImage(bmp);
             Font f = paintbox.Font;
 
@@ -165,7 +166,7 @@ namespace GEDmill.MiniTree
             // Can't do this so create a new bitmap: bmp.Height = totalSize.Height;
             int nTotalWidth = (int)(fSizeTotal.Width + 1.0f);
             int nTotalHeight = (int)(fSizeTotal.Height + 1.0f);
-            bmp = new Bitmap(nTotalWidth, nTotalHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            bmp = new Bitmap(nTotalWidth, nTotalHeight, PixelFormat.Format32bppArgb);
             g = Graphics.FromImage(bmp);
 
             // Do background fill
@@ -175,20 +176,20 @@ namespace GEDmill.MiniTree
                 g.FillRectangle(paintbox.BrushBgGif, 0, 0, nTotalWidth, nTotalHeight);
             }
 
-            ArrayList alMap = new ArrayList();
+            List<MiniTreeMap> alMap = new List<MiniTreeMap>();
             mtgParent.DrawBitmap(paintbox, g, alMap);
 
             // Save the bitmap
             fLogger.WriteInfo("Saving mini tree as " + fileName);
 
-            if (System.IO.File.Exists(fileName)) {
+            if (File.Exists(fileName)) {
                 // Delete any current file
-                System.IO.File.SetAttributes(fileName, System.IO.FileAttributes.Normal);
-                System.IO.File.Delete(fileName);
+                File.SetAttributes(fileName, FileAttributes.Normal);
+                File.Delete(fileName);
             }
 
             // Save using FileStream to try to avoid crash (only seen by customers)
-            System.IO.FileStream fs = new System.IO.FileStream(fileName, System.IO.FileMode.Create);
+            FileStream fs = new FileStream(fileName, FileMode.Create);
             bmp.Save(fs, imageFormat);
             fs.Close();
 

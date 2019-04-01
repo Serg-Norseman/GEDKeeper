@@ -23,7 +23,6 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -60,10 +59,10 @@ namespace GEDmill.HTML
             // FIXME
 
             // Split into letter groups
-            ArrayList alLetters = CreateIndexLetters();
+            List<IndexLetter> alLetters = CreateIndexLetters();
 
             // Split across multiple pages
-            ArrayList alPages = CreateIndexPages(alLetters);
+            List<IndexPage> alPages = CreateIndexPages(alLetters);
 
             // Create header navbar
             string sHeadingsLinks = CreateIndexNavbar(alPages);
@@ -101,7 +100,7 @@ namespace GEDmill.HTML
         }
 
         // Creates the page header navbar containing links to the initial letters in the index.
-        private static string CreateIndexNavbar(ArrayList pages)
+        private static string CreateIndexNavbar(List<IndexPage> pages)
         {
             string headingsLinks = "";
             foreach (IndexPage indexpage in pages) {
@@ -122,9 +121,9 @@ namespace GEDmill.HTML
         }
 
         // Splits the index across multiple pages
-        private static ArrayList CreateIndexPages(ArrayList letters)
+        private static List<IndexPage> CreateIndexPages(List<IndexLetter> letters)
         {
-            ArrayList pages = new ArrayList();
+            var pages = new List<IndexPage>();
             uint uLetters = (uint)(letters.Count);
             uint uIndisPerPage;
             if (MainForm.Config.MultiPageIndexes == false) {
@@ -166,12 +165,12 @@ namespace GEDmill.HTML
         }
 
         // Collects together the first letters of the items in the index
-        private ArrayList CreateIndexLetters()
+        private List<IndexLetter> CreateIndexLetters()
         {
-            ArrayList alLetters = new ArrayList();
+            List<IndexLetter> alLetters = new List<IndexLetter>();
             string sLastInitial = "";
             string sLastTitle = "";
-            ArrayList sCurrentLetterList = null;
+            List<StringTuple> sCurrentLetterList = null;
             foreach (StringTuple tuple in fIndividualIndex) {
                 string sName = tuple.First;
                 string sLink = tuple.Second;
@@ -179,7 +178,7 @@ namespace GEDmill.HTML
 
                 string sInitial;
                 string sTitle;
-                if (sName != null && sName.Length > 0) {
+                if (!string.IsNullOrEmpty(sName)) {
                     sInitial = sName.Substring(0, 1);
                     if (sInitial == ",") {
                         // TODO: handle no surname in such a way that names starting with commas don't count.
@@ -190,8 +189,7 @@ namespace GEDmill.HTML
                     }
 
                     int nCmp = 0;
-                    if (sLastInitial == "" && sInitial != "") // Z,A
-                    {
+                    if (sLastInitial == "" && sInitial != "") { // Z,A
                         nCmp = 1;
                     } else if (sLastInitial == "-" && sInitial != "-") {
                         nCmp = 1;
@@ -205,7 +203,7 @@ namespace GEDmill.HTML
                             sCurrentLetterList = null;
                         }
                         if (sCurrentLetterList == null) {
-                            sCurrentLetterList = new ArrayList();
+                            sCurrentLetterList = new List<StringTuple>();
                         }
                         sLastInitial = sInitial;
                         sLastTitle = sTitle;
@@ -275,9 +273,9 @@ namespace GEDmill.HTML
             int nTotal = indexPage.TotalIndis + indexPage.Letters.Count;
 
             if (indexPage.Letters.Count > 0) {
-                ArrayList alFirstHalf = new ArrayList();
-                ArrayList alSecondHalf = new ArrayList();
-                ArrayList alCurrentHalf = alFirstHalf;
+                List<StringTuple> alFirstHalf = new List<StringTuple>();
+                List<StringTuple> alSecondHalf = new List<StringTuple>();
+                List<StringTuple> alCurrentHalf = alFirstHalf;
 
                 int nHalfWay;
                 if (nTotal < 20) {
@@ -317,7 +315,7 @@ namespace GEDmill.HTML
         }
 
         // Outputs the HTML table that lists the names in two columns.
-        private static void OutputIndexPageColumns(HTMLFile f, ArrayList firstHalf, ArrayList secondHalf)
+        private static void OutputIndexPageColumns(HTMLFile f, List<StringTuple> firstHalf, List<StringTuple> secondHalf)
         {
             f.Writer.WriteLine("    <table id=\"index\">");
             int i = 0, j = 0;

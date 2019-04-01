@@ -22,7 +22,7 @@
  *
  */
 
-using System.Collections;
+using System.Collections.Generic;
 using GKCommon.GEDCOM;
 
 namespace GEDmill
@@ -40,7 +40,7 @@ namespace GEDmill
         public GEDCOMFileReferenceWithTitle CurrentMFR;
 
         // The multimedia file references
-        public ArrayList MFRList;
+        public List<GEDCOMFileReferenceWithTitle> MFRList;
 
         public bool Visibility;
 
@@ -48,7 +48,7 @@ namespace GEDmill
         public CISRecordChanges(bool includeInWebsite)
         {
             IncludeInWebsite = includeInWebsite;
-            MFRList = new ArrayList();
+            MFRList = new List<GEDCOMFileReferenceWithTitle>();
             CurrentMFR = null;
             Visibility = true;
         }

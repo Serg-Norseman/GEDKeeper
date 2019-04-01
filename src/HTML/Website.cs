@@ -216,7 +216,7 @@ namespace GEDmill.HTML
                 // Copy the CD ROM autorun file
                 fProgressWindow.SetText("Creating CD-ROM files");
                 if (MainForm.Config.CreateCDROMFiles) {
-                    CreateCDROMFiles(fTree);
+                    CreateCDROMFiles();
                 }
                 if (fProgressWindow.IsAborting) {
                     return;
@@ -226,9 +226,9 @@ namespace GEDmill.HTML
 
                 // Copy the Javascript
                 fProgressWindow.SetText("Creating Javascript file");
-                if (MainForm.Config.AllowMultipleImages) // Currently (10Dec08) the only thing that uses javascript is the multiple images feature.
-                {
-                    CreateJavascriptFiles(fTree);
+                // Currently (10Dec08) the only thing that uses javascript is the multiple images feature.
+                if (MainForm.Config.AllowMultipleImages) {
+                    CreateJavascriptFiles();
                 }
                 if (fProgressWindow.IsAborting) {
                     return;
@@ -319,28 +319,28 @@ namespace GEDmill.HTML
         // Returns the sFilename of the copy.
         private string CopyBackgroundImage()
         {
-            string sBackgroundImage = "";
-            if (MainForm.Config.BackgroundImage != null && MainForm.Config.BackgroundImage.Length > 0) {
+            string backgroundImage = "";
+            if (!string.IsNullOrEmpty(MainForm.Config.BackgroundImage)) {
                 try {
                     Rectangle newArea = new Rectangle(0, 0, 0, 0);
-                    sBackgroundImage = Creator.CopyMultimedia(MainForm.Config.BackgroundImage, "", 0, 0, ref newArea, null);
+                    backgroundImage = Creator.CopyMultimedia(MainForm.Config.BackgroundImage, "", 0, 0, ref newArea, null);
                 } catch (IOException e) {
                     fLogger.WriteError("Caught io exception while copying background image: {0}", e);
-                    sBackgroundImage = "";
+                    backgroundImage = "";
                 } catch (ArgumentException e) {
                     fLogger.WriteError("Caught argument exception while copying background image: {0}", e);
-                    sBackgroundImage = "";
+                    backgroundImage = "";
                 }
             }
-            return sBackgroundImage;
+            return backgroundImage;
         }
 
         // Copy the CD ROM autorun loader program.
-        private void CreateCDROMFiles(GEDCOMTree gedcom)
+        private void CreateCDROMFiles()
         {
             string sHomepageUrl = String.Concat(MainForm.Config.FrontPageFilename, ".", MainForm.Config.HtmlExtension);
 
-            if (sHomepageUrl != null && MainForm.Config.OutputFolder != null && MainForm.Config.OutputFolder != "") {
+            if (sHomepageUrl != null && !string.IsNullOrEmpty(MainForm.Config.OutputFolder)) {
                 string sFileopenSrc = MainForm.Config.ApplicationPath + "\\fileopen.exe";
                 string sFileopenDest = MainForm.Config.OutputFolder + "\\fileopen.exe";
                 string sAutorunDest = MainForm.Config.OutputFolder + "\\autorun.inf";
@@ -352,7 +352,6 @@ namespace GEDmill.HTML
                 }
                 fLogger.WriteInfo("Copying fileopen.exe");
                 File.Copy(sFileopenSrc, sFileopenDest, true);
-
 
                 // Create autorun.inf
                 if (File.Exists(sAutorunDest)) {
@@ -373,21 +372,21 @@ namespace GEDmill.HTML
         }
 
         // Copy the javascript picture-selection script.
-        private void CreateJavascriptFiles(GEDCOMTree gedcom)
+        private void CreateJavascriptFiles()
         {
-            if (MainForm.Config.OutputFolder != null && MainForm.Config.OutputFolder != "") {
-                string sJavascriptSrc = MainForm.Config.ApplicationPath + "\\gedmill.js";
-                string sJavascriptDest = MainForm.Config.OutputFolder + "\\gedmill.js";
-                if (File.Exists(sJavascriptSrc)) {
+            if (!string.IsNullOrEmpty(MainForm.Config.OutputFolder)) {
+                string jsSrc = MainForm.Config.ApplicationPath + "\\gedmill.js";
+                string jsDest = MainForm.Config.OutputFolder + "\\gedmill.js";
+                if (File.Exists(jsSrc)) {
                     // Copy gedmill.js into output folder
-                    if (File.Exists(sJavascriptDest)) {
-                        File.SetAttributes(sJavascriptDest, FileAttributes.Normal);
-                        File.Delete(sJavascriptDest);
+                    if (File.Exists(jsDest)) {
+                        File.SetAttributes(jsDest, FileAttributes.Normal);
+                        File.Delete(jsDest);
                     }
                     fLogger.WriteInfo("Copying gedmill.js");
-                    File.Copy(sJavascriptSrc, sJavascriptDest, true);
+                    File.Copy(jsSrc, jsDest, true);
                 } else {
-                    fLogger.WriteError(string.Format("{0} not found. No Javascript.", sJavascriptSrc));
+                    fLogger.WriteError(string.Format("{0} not found. No Javascript.", jsSrc));
                 }
             }
         }

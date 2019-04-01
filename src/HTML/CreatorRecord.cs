@@ -23,7 +23,6 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -37,12 +36,12 @@ namespace GEDmill.HTML
     public class CreatorRecord : Creator
     {
         // All the images and other multimedia files associated with this record.
-        protected ArrayList fMultimediaList;
+        protected List<Multimedia> fMultimediaList;
 
 
         protected CreatorRecord(GEDCOMTree gedcom, IProgressCallback progress, string w3cfile) : base(gedcom, progress, w3cfile)
         {
-            fMultimediaList = new ArrayList();
+            fMultimediaList = new List<Multimedia>();
         }
 
         // Adds the given multimedia links to the given multimedia list.
@@ -79,7 +78,7 @@ namespace GEDmill.HTML
         {
             f.Writer.WriteLine("      <div id=\"footer\">");
             if ((r.UserReferences.Count > 0)
-              || (r.AutomatedRecordID != null && r.AutomatedRecordID != "")
+              || (!string.IsNullOrEmpty(r.AutomatedRecordID))
               || (r.ChangeDate != null)
               || (MainForm.Config.CustomFooter != "")) {
                 foreach (GEDCOMUserReference urn in r.UserReferences) {
@@ -90,7 +89,7 @@ namespace GEDmill.HTML
                     f.Writer.WriteLine(String.Concat("        <p>", idType, ": ", EscapeHTML(urn.StringValue, false), "</p>"));
                 }
 
-                if (r.AutomatedRecordID != null && r.AutomatedRecordID != "") {
+                if (!string.IsNullOrEmpty(r.AutomatedRecordID)) {
                     f.Writer.WriteLine(String.Concat("        <p>Record ", r.AutomatedRecordID, "</p>"));
                 }
                 if (r.ChangeDate != null) {
@@ -113,7 +112,7 @@ namespace GEDmill.HTML
             }
             f.Writer.WriteLine("      </div> <!-- footer -->");
 
-            f.Writer.WriteLine("<p class=\"plain\">Page created using GEDmill " + MainForm.SoftwareVersion + "</p>");
+            f.Writer.WriteLine("<p class=\"plain\">Page created using GEDmill " + CConfig.SoftwareVersion + "</p>");
 
             if (MainForm.Config.IncludeValiditySticker) {
                 OutputValiditySticker(f);
@@ -177,7 +176,7 @@ namespace GEDmill.HTML
                     }
 
                     string sNewFilename = sOriginalFilename;
-                    if (sMmFilename != null && sMmFilename != "") {
+                    if (!string.IsNullOrEmpty(sMmFilename)) {
                         // Give multimedia files a standard name
                         if (MainForm.Config.RenameOriginalPicture) {
                             //string sFilePart = sMmPrefix;//String.Concat( mm_prefix, nMultimediaFiles.ToString() );
@@ -198,7 +197,7 @@ namespace GEDmill.HTML
                         }
                     }
 
-                    if (sCopyFilename != null && sCopyFilename != "") {
+                    if (!string.IsNullOrEmpty(sCopyFilename)) {
                         string sLargeFilename = "";
                         // Copy original original version
                         if (MainForm.Config.LinkOriginalPicture) {

@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using GKCommon.GEDCOM;
 using GKCore.Logging;
@@ -100,7 +101,7 @@ namespace GEDmill.HTML
                 foreach (GEDCOMRepositoryCitation src in fSourceRecord.RepositoryCitations) {
                     GEDCOMRepositoryRecord rr = src.Value as GEDCOMRepositoryRecord;
                     if (rr != null) {
-                        if (rr.RepositoryName != null && rr.RepositoryName != "") {
+                        if (!string.IsNullOrEmpty(rr.RepositoryName)) {
                             f.Writer.WriteLine(String.Concat("            <h2>", EscapeHTML(rr.RepositoryName, false), "</h2>"));
                         }
 
@@ -136,7 +137,7 @@ namespace GEDmill.HTML
                 } else {
                     sPubFacts = fSourceRecord.Publication.Text;
                 }
-                if (sPubFacts != null && sPubFacts != "") {
+                if (!string.IsNullOrEmpty(sPubFacts)) {
                     if (sPubFacts.Length > 7 && sPubFacts.ToUpper().Substring(0, 7) == "HTTP://") {
                         f.Writer.WriteLine(String.Concat("            <h2>", "<a href=\"", sPubFacts, "\">", EscapeHTML(sPubFacts, false), "</a>", "</h2>"));
                     } else {
@@ -161,7 +162,7 @@ namespace GEDmill.HTML
                 if (MainForm.Config.ObfuscateEmails) {
                     sCleanText = ObfuscateEmail(sCleanText);
                 }
-                if (sCleanText != null && sCleanText != "") {
+                if (!string.IsNullOrEmpty(sCleanText)) {
                     f.Writer.WriteLine("        <div id=\"text\">");
                     f.Writer.WriteLine("          <h1>Text</h1>");
                     f.Writer.WriteLine("          <p class=\"pretext\">");
@@ -173,10 +174,10 @@ namespace GEDmill.HTML
                 // Add notes
                 if (fSourceRecord.Notes.Count > 0) {
                     // Generate notes list into a local array before adding header title. This is to cope with the case where all notes are nothing but blanks.
-                    ArrayList alNoteStrings = new ArrayList(fSourceRecord.Notes.Count);
+                    var alNoteStrings = new List<string>(fSourceRecord.Notes.Count);
 
                     foreach (GEDCOMNotes ns in fSourceRecord.Notes) {
-                        if (ns.Notes.Text != null && ns.Notes.Text.Length > 0) {
+                        if (!string.IsNullOrEmpty(ns.Notes.Text)) {
                             string sNoteText;
                             if (MainForm.Config.ObfuscateEmails) {
                                 sNoteText = ObfuscateEmail(ns.Notes.Text);
@@ -241,7 +242,6 @@ namespace GEDmill.HTML
             }
             return true;
         }
-
 
         // Writes the HTML for the multimedia files associated with this record. 
         private void OutputMultimedia(HTMLFile f)

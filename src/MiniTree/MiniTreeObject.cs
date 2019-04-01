@@ -22,7 +22,7 @@
  *
  */
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace GEDmill.MiniTree
@@ -82,7 +82,7 @@ namespace GEDmill.MiniTree
         public abstract SizeF CalculateSize(Graphics g, Font f);
 
         // Draws the element to the graphics instance.
-        public abstract void DrawBitmap(Paintbox paintbox, Graphics g, ArrayList alMap);
+        public abstract void DrawBitmap(Paintbox paintbox, Graphics g, List<MiniTreeMap> alMap);
 
         // Calculates how to lay out this element.
         public abstract SizeF CalculateLayout(float x, float y);

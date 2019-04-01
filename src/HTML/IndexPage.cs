@@ -22,7 +22,7 @@
  *
  */
 
-using System.Collections;
+using System.Collections.Generic;
 
 namespace GEDmill.HTML
 {
@@ -31,7 +31,7 @@ namespace GEDmill.HTML
     /// </summary>
     public class IndexPage
     {
-        public ArrayList Letters;
+        public List<IndexLetter> Letters;
         public string FileName;
         public int TotalIndis;
 
@@ -39,7 +39,7 @@ namespace GEDmill.HTML
         public IndexPage(string filename)
         {
             FileName = filename;
-            Letters = new ArrayList();
+            Letters = new List<IndexLetter>();
             TotalIndis = 0;
         }
     }

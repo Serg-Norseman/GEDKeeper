@@ -127,7 +127,7 @@ namespace GEDmill.MiniTree
         // Used when retrieving colours from the config.
         public static Color ConvertColour(string s)
         {
-            if (s == null || s == "") {
+            if (string.IsNullOrEmpty(s)) {
                 return Color.Black;
             }
 
@@ -168,7 +168,7 @@ namespace GEDmill.MiniTree
         // Sets the brush used to fill the background to the graphics image provided.
         public void SetBackgroundImage(string filename)
         {
-            if (filename != null && filename.Length > 0) {
+            if (!string.IsNullOrEmpty(filename)) {
                 try {
                     Image bgImage = Image.FromFile(filename);
                     BrushFakeTransparency = new TextureBrush(bgImage);

@@ -72,11 +72,9 @@ namespace GEDmill
             if (record.PersonalNames.Count <= n || n < 0) {
                 return null;
             }
-            GEDCOMPersonalName pns = ((GEDCOMPersonalName)record.PersonalNames[n]);
+            GEDCOMPersonalName pns = record.PersonalNames[n];
             NameAndSource nas = new NameAndSource(pns.StringValue);
-            /*if (pns.m_personalNamePieces != null) {
-                nas.m_alSources.AddRange(pns.m_personalNamePieces.m_alSourceCitations);
-            }*/
+            nas.Sources.AddRange(pns.Pieces.SourceCitations);
             return nas;
         }
 
@@ -190,9 +188,17 @@ namespace GEDmill
             }
         }
 
-        public static int SetAllMFRsVisible(this GEDCOMSourceRecord sourRec, bool x)
+        public static int SetAllMFRsVisible(this GEDCOMRecord record, bool visible)
         {
-            return 0;
+            int nChanged = 0;
+            foreach (GEDCOMMultimediaLink mfr in record.MultimediaLinks) {
+                var mmRec = mfr.Value as GEDCOMMultimediaRecord;
+                if (mmRec != null && mmRec.GetVisibility() != visible) {
+                    mmRec.SetVisibility(visible);
+                    nChanged++;
+                }
+            }
+            return nChanged;
         }
 
         public static int CountVisibleMFRs(this GEDCOMSourceRecord sourRec)

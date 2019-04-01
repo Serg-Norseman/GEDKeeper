@@ -22,6 +22,7 @@
  *
  */
 
+using System;
 using System.Windows.Forms;
 
 namespace GEDmill.ListView
@@ -30,7 +31,7 @@ namespace GEDmill.ListView
     /// Special type of ListViewSubItem that stores a number in both a numeric and a text form. 
     /// The numeric form is used for sorting. (Used to display number of items and total, e.g. 10/50, 11/50 etc)
     /// </summary>
-    public class CListableNumber : ListViewItem.ListViewSubItem
+    public class CListableNumber : ListViewItem.ListViewSubItem, IComparable, IComparable<CListableNumber>
     {
         // Numeric representation
         protected int fNumber;
@@ -38,6 +39,13 @@ namespace GEDmill.ListView
         // Text representation
         protected string fString;
 
+
+        public CListableNumber(int number)
+        {
+            fNumber = number;
+            fString = number.ToString();
+            base.Text = fString;
+        }
 
         public CListableNumber(int number, string s)
         {
@@ -50,6 +58,11 @@ namespace GEDmill.ListView
         public override string ToString()
         {
             return fString;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return CompareTo((CListableNumber)obj);
         }
 
         // Returns -ve if this instance is less than other...

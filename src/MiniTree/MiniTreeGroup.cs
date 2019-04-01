@@ -22,7 +22,7 @@
  *
  */
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using GKCommon.GEDCOM;
 
@@ -42,7 +42,7 @@ namespace GEDmill.MiniTree
         }
 
         // The CMiniTreeIndividual boxes and groups that make up this group.
-        private ArrayList fMembers;
+        private List<MiniTreeObject> fMembers;
 
         // Width of the gedcomLine joining this group to group above.
         private const float TEE_WIDTH = 0.0f;
@@ -114,7 +114,7 @@ namespace GEDmill.MiniTree
                                                               highlight, concealed, shade, MainForm.Config.ConserveTreeWidth);
 
             if (fMembers == null) {
-                fMembers = new ArrayList();
+                fMembers = new List<MiniTreeObject>();
             }
             fMembers.Add(mti);
 
@@ -141,7 +141,7 @@ namespace GEDmill.MiniTree
         {
             if (mtg != null) {
                 if (fMembers == null) {
-                    fMembers = new ArrayList();
+                    fMembers = new List<MiniTreeObject>();
                 }
                 fMembers.Add(mtg);
 
@@ -157,7 +157,7 @@ namespace GEDmill.MiniTree
             }
         }
 
-        // Calculates the size required by this group. Initialises the class fields 
+        // Calculates the size required by this group. Initialises the class fields
         // that contain size information. Returns the overall group size.
         public override SizeF CalculateSize(Graphics g, Font f)
         {
@@ -199,7 +199,7 @@ namespace GEDmill.MiniTree
         }
 
         // Draws the group to the graphics instance.
-        public override void DrawBitmap(Paintbox paintbox, Graphics g, ArrayList alMap)
+        public override void DrawBitmap(Paintbox paintbox, Graphics g, List<MiniTreeMap> alMap)
         {
             if (fMembers == null) {
                 // Empty group
@@ -267,7 +267,7 @@ namespace GEDmill.MiniTree
                         }
                     }
 
-                  ((MiniTreeGroup)obj).DrawBitmap(paintbox, g, alMap);
+                    ((MiniTreeGroup)obj).DrawBitmap(paintbox, g, alMap);
                 } else if (obj is MiniTreeIndividual) {
                     // Draw individual box
                     ((MiniTreeIndividual)obj).DrawBitmap(paintbox, g, alMap);
@@ -301,7 +301,6 @@ namespace GEDmill.MiniTree
                             fRight = fIndividualRight;
                         }
                         bFirst = false;
-
                     } else if (obj is MiniTreeGroup) {
                         if (((MiniTreeGroup)obj).fMembers != null) {
                             RectangleF rectSubGroup = ((MiniTreeGroup)obj).GetExtent();
@@ -319,7 +318,6 @@ namespace GEDmill.MiniTree
                                 fRight = rectSubGroup.Right;
                             }
                             bFirst = false;
-
                         }
                     }
                 }
@@ -382,9 +380,10 @@ namespace GEDmill.MiniTree
             }
 
             foreach (MiniTreeObject obj in fMembers) {
-                if (obj is MiniTreeGroup) {
+                var mtGroup = obj as MiniTreeGroup;
+                if (mtGroup != null) {
                     // Propagate the compression.
-                    ((MiniTreeGroup)obj).Compress();
+                    mtGroup.Compress();
                 }
             }
 
@@ -424,10 +423,11 @@ namespace GEDmill.MiniTree
                 float fMax = 0;
                 bool bFirst = true;
                 foreach (MiniTreeObject obj in fMembers) {
-                    if (obj is MiniTreeIndividual) {
-                        if (bFirst || ((MiniTreeIndividual)obj).Left > fMax) {
-                            fMax = ((MiniTreeIndividual)obj).Left;
-                            mtiRightmost = ((MiniTreeIndividual)obj);
+                    var mtIndi = obj as MiniTreeIndividual;
+                    if (mtIndi != null) {
+                        if (bFirst || mtIndi.Left > fMax) {
+                            fMax = mtIndi.Left;
+                            mtiRightmost = mtIndi;
                         }
                         bFirst = false;
                     }
@@ -459,10 +459,11 @@ namespace GEDmill.MiniTree
                 float fMin = 0;
                 bool fFirst = true;
                 foreach (MiniTreeObject obj in fMembers) {
-                    if (obj is MiniTreeIndividual) {
-                        if (fFirst || ((MiniTreeIndividual)obj).Right < fMin) {
-                            fMin = ((MiniTreeIndividual)obj).Right;
-                            mtiLeftmost = ((MiniTreeIndividual)obj);
+                    var mtIndi = obj as MiniTreeIndividual;
+                    if (mtIndi != null) {
+                        if (fFirst || mtIndi.Right < fMin) {
+                            fMin = mtIndi.Right;
+                            mtiLeftmost = mtIndi;
                         }
                         fFirst = false;
                     }
@@ -506,17 +507,16 @@ namespace GEDmill.MiniTree
                 float fMax = 0f;
                 bool bFirst = true;
                 foreach (MiniTreeObject obj in fMembers) {
-                    if (obj is MiniTreeIndividual) {
-                        if (((MiniTreeIndividual)obj).HasStalk) {
-                            float fStalk = ((MiniTreeIndividual)obj).Stalk;
-                            if (bFirst || fStalk < fMin) {
-                                fMin = fStalk;
-                            }
-                            if (bFirst || fStalk > fMax) {
-                                fMax = fStalk;
-                            }
-                            bFirst = false;
+                    var mtIndi = obj as MiniTreeIndividual;
+                    if (mtIndi != null && mtIndi.HasStalk) {
+                        float fStalk = mtIndi.Stalk;
+                        if (bFirst || fStalk < fMin) {
+                            fMin = fStalk;
                         }
+                        if (bFirst || fStalk > fMax) {
+                            fMax = fStalk;
+                        }
+                        bFirst = false;
                     }
                 }
 
@@ -530,22 +530,18 @@ namespace GEDmill.MiniTree
         // They must not collide with other boxes.
         private void PullLeftStuffRight(float fCentre)
         {
-            MiniTreeObject mtoLeft = LeftObject;
+            var mtoLeft = LeftObject as MiniTreeIndividual;
             if (mtoLeft != null) {
-                if (mtoLeft is MiniTreeIndividual) {
-                    mtoLeft.PullRight(fCentre - ((MiniTreeIndividual)mtoLeft).Right);
-                }
+                mtoLeft.PullRight(fCentre - mtoLeft.Right);
             }
         }
 
         // Pulls right box as close as can be, to compress group.
         private void PullRightStuffLeft(float fCentre)
         {
-            MiniTreeObject mtoRight = RightObject;
+            var mtoRight = RightObject as MiniTreeIndividual;
             if (mtoRight != null) {
-                if (mtoRight is MiniTreeIndividual) {
-                    mtoRight.PullLeft(((MiniTreeIndividual)mtoRight).Left - fCentre);
-                }
+                mtoRight.PullLeft(mtoRight.Left - fCentre);
             }
         }
     }

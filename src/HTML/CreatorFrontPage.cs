@@ -23,7 +23,7 @@
  */
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -63,15 +63,15 @@ namespace GEDmill.HTML
 
                 f.Writer.WriteLine(String.Concat("       <h1>", EscapeHTML(title, false), "</h1>"));
 
-                if (MainForm.Config.FrontPageImageFilename != "") {
+                if (!string.IsNullOrEmpty(MainForm.Config.FrontPageImageFilename)) {
                     Rectangle newArea = new Rectangle(0, 0, 0, 0);
                     string pictureFile = CopyMultimedia(MainForm.Config.FrontPageImageFilename, "", 0, 0, ref newArea, null);
-                    if (pictureFile != null && pictureFile != "") {
+                    if (!string.IsNullOrEmpty(pictureFile)) {
                         f.Writer.WriteLine(String.Concat("       <p><img src=\"" + pictureFile + "\" alt=\"Front page image\" /></p>"));
                     }
                 }
 
-                if (MainForm.Config.CommentaryText != null && MainForm.Config.CommentaryText != "") {
+                if (!string.IsNullOrEmpty(MainForm.Config.CommentaryText)) {
                     if (MainForm.Config.CommentaryIsHtml) {
                         f.Writer.WriteLine(String.Concat("       <p>", MainForm.Config.CommentaryText, "</p>"));
                     } else {
@@ -81,38 +81,24 @@ namespace GEDmill.HTML
 
                 if (MainForm.Config.ShowFrontPageStats) {
                     string sIndividuals;
-                    if (fStats.Individuals == 0) {
-                        sIndividuals = "no";
-                    } else {
-                        sIndividuals = fStats.Individuals.ToString();
-                    }
+                    sIndividuals = fStats.Individuals == 0 ? "no" : fStats.Individuals.ToString();
                     sIndividuals += " individual";
                     if (fStats.Individuals != 1) {
                         sIndividuals += "s";
                     }
 
                     string sSources;
-                    if (fStats.Sources == 0) {
-                        sSources = "";
-                    } else {
-                        sSources = String.Concat(", cross-referenced to ", fStats.Sources.ToString(), " source");
-                    }
+                    sSources = fStats.Sources == 0 ? "" : String.Concat(", cross-referenced to ", fStats.Sources.ToString(), " source");
                     if (fStats.Sources > 1) {
                         sSources += "s";
                     }
 
-                    string sMultimedia;
                     string sFileType;
-                    if (fStats.NonPicturesIncluded) {
-                        sFileType = "multimedia file";
-                    } else {
-                        sFileType = "image";
-                    }
-                    if (fStats.MultimediaFiles == 0) {
-                        sMultimedia = "";
-                    } else {
-                        sMultimedia = String.Concat(". There are links to ", fStats.MultimediaFiles.ToString(), " ", sFileType);
-                    }
+                    sFileType = fStats.NonPicturesIncluded ? "multimedia file" : "image";
+
+                    string sMultimedia;
+                    sMultimedia = fStats.MultimediaFiles == 0 ? "" : String.Concat(". There are links to ", fStats.MultimediaFiles.ToString(), " ", sFileType);
+
                     if (fStats.MultimediaFiles > 1) {
                         sMultimedia += "s";
                     }
@@ -125,24 +111,24 @@ namespace GEDmill.HTML
                 f.Writer.WriteLine("       </div> <!-- links -->");
                 if (MainForm.Config.KeyIndividuals != null && MainForm.Config.KeyIndividuals.Count > 0) {
                     // Although in theory you might want a restricted individual as a key individual, (they still form part of the tree), in practice this isn't allowed:
-                    ArrayList alCensoredKeyIndividuals = new ArrayList(MainForm.Config.KeyIndividuals.Count);
+                    var censoredKeyIndividuals = new List<string>(MainForm.Config.KeyIndividuals.Count);
 
                     foreach (string keyXref in MainForm.Config.KeyIndividuals) {
                         GEDCOMIndividualRecord air = fTree.XRefIndex_Find(keyXref) as GEDCOMIndividualRecord;
                         if (air != null) {
-                            alCensoredKeyIndividuals.Add(MakeLink(air));
+                            censoredKeyIndividuals.Add(MakeLink(air));
                         }
                     }
 
-                    if (alCensoredKeyIndividuals.Count > 0) {
+                    if (censoredKeyIndividuals.Count > 0) {
                         string plural = "";
-                        if (alCensoredKeyIndividuals.Count > 1) {
+                        if (censoredKeyIndividuals.Count > 1) {
                             plural = "s";
                         }
                         f.Writer.WriteLine("         <div id=\"keyindividuals\">");
                         f.Writer.WriteLine(String.Concat("           <p>Key Individual", plural, ":</p>"));
                         f.Writer.WriteLine("           <ul>");
-                        foreach (string air_link in alCensoredKeyIndividuals) {
+                        foreach (string air_link in censoredKeyIndividuals) {
                             f.Writer.WriteLine(String.Concat("             <li>", air_link, "</li>"));
                         }
                         f.Writer.WriteLine("           </ul>");
@@ -152,7 +138,7 @@ namespace GEDmill.HTML
 
                 string byEmail = "";
                 // Email contact address
-                if (MainForm.Config.UserEmailAddress != null && MainForm.Config.UserEmailAddress.Length > 0) {
+                if (!string.IsNullOrEmpty(MainForm.Config.UserEmailAddress)) {
                     byEmail = String.Concat(" by <a href=\"mailto:", MainForm.Config.UserEmailAddress, "\">", EscapeHTML(MainForm.Config.UserEmailAddress, false), "</a>");
                 }
 
@@ -167,7 +153,7 @@ namespace GEDmill.HTML
                 }
 
                 // Add link to users main website
-                if (MainForm.Config.MainWebsiteLink != "") {
+                if (!string.IsNullOrEmpty(MainForm.Config.MainWebsiteLink)) {
                     f.Writer.WriteLine(String.Concat("    <p><a href=\"", MainForm.Config.MainWebsiteLink, "\">Return to main site</a></p>"));
                 }
 

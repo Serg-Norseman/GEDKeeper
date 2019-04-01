@@ -22,13 +22,14 @@
  *
  */
 
+using System;
 using System.Windows.Forms;
 using GKCommon.GEDCOM;
 
 namespace GEDmill.ListView
 {
     // Represents a source record in the list of sources, and provides sorting.
-    public class CListableSource : ListViewItem.ListViewSubItem
+    public class CListableSource : ListViewItem.ListViewSubItem, IComparable, IComparable<CListableSource>
     {
         // The record in question
         private GEDCOMSourceRecord fRecord;
@@ -44,6 +45,11 @@ namespace GEDmill.ListView
         public override string ToString()
         {
             return fRecord.ToString();
+        }
+
+        public int CompareTo(object obj)
+        {
+            return CompareTo((CListableSource)obj);
         }
 
         // Used when sorting the list box

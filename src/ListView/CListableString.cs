@@ -30,10 +30,10 @@ namespace GEDmill.ListView
     /// <summary>
     /// Special class of ListViewSubItem that sorts strings numerically even if they start with alphabetic character.
     /// </summary>
-    public class CListableString : ListViewItem.ListViewSubItem
+    public class CListableString : ListViewItem.ListViewSubItem, IComparable, IComparable<CListableString>
     {
         // The string we are encapsulating
-        protected string fString;
+        private string fString;
 
         // Constructor
         public CListableString(string s)
@@ -46,6 +46,11 @@ namespace GEDmill.ListView
         public override string ToString()
         {
             return fString;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return CompareTo((CListableString)obj);
         }
 
         // Special compare will sort numerically if string is formated like "AAA111" or "I124".
@@ -96,7 +101,6 @@ namespace GEDmill.ListView
                 } else if (cLeft > cRight) {
                     return 1;
                 }
-
             }
             return fString.CompareTo(other.fString);
         }

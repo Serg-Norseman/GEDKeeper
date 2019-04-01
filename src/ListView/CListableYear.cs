@@ -22,18 +22,20 @@
  *
  */
 
+using System;
 using System.Windows.Forms;
 using GKCommon.GEDCOM;
+using GKCore.Types;
 
 namespace GEDmill.ListView
 {
     /// <summary>
     /// Holds a year for use in a list box and provides sorting by year.
     /// </summary>
-    public class CListableYear : ListViewItem.ListViewSubItem
+    public class CListableYear : ListViewItem.ListViewSubItem, IComparable, IComparable<CListableYear>
     {
         // Date holds the year
-        protected GEDCOMDateValue fDate;
+        private GEDCOMDateValue fDate;
 
         public CListableYear(GEDCOMDateValue date)
         {
@@ -41,19 +43,16 @@ namespace GEDmill.ListView
             base.Text = ToString();
         }
 
-        // Used for guesses made from parent's death year
-        public CListableYear(GEDCOMDateValue date, bool bBefore) : this(date)
-        {
-        }
-
         // String to display in list control
         public override string ToString()
         {
-            var xdate = (fDate == null) ? null : fDate.Value as GEDCOMDate;
-            if (xdate == null || xdate.Year == 0)
-                return "";
+            var xdate = (fDate == null) ? "" : fDate.GetDisplayStringExt(DateFormat.dfYYYY, false, false);
+            return xdate;
+        }
 
-            return xdate.Year.ToString();
+        public int CompareTo(object obj)
+        {
+            return CompareTo((CListableYear)obj);
         }
 
         // Comparer for sorting list
@@ -65,14 +64,6 @@ namespace GEDmill.ListView
                 return 1;
 
             return fDate.CompareTo(other.fDate);
-        }
-
-        // Accessor
-        public GEDCOMDateValue Date
-        {
-            get {
-                return fDate;
-            }
         }
     }
 }

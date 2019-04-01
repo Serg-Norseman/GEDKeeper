@@ -31,6 +31,9 @@ namespace GKCore.Logging
         void WriteInfo(string msg);
         void WriteInfo(string str, params object[] args);
 
+        void WriteWarn(string msg);
+        void WriteWarn(string str, params object[] args);
+
         void WriteError(string msg);
         void WriteError(string msg, Exception ex);
 

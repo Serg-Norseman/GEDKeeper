@@ -23,7 +23,7 @@
  */
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Runtime.Serialization;
@@ -39,7 +39,16 @@ namespace GEDmill
     public class CConfig
     {
         public const string LOG_FILE = "GEDmill.log";
-        public const string LOG_LEVEL = "INFO"; // "DEBUG";
+        public const string LOG_LEVEL = "WARN";
+
+        // The current version of this app, for display purposes.
+        public static string SoftwareVersion = "1.11.0";
+
+        // The name of the app for display purposes
+        public static string SoftwareName = "GEDmill " + SoftwareVersion;
+
+        // Filename for the online help (as in "on the same system", as opposed to offline e.g. printed manual)
+        public static string HelpFilename = "GEDmill Help.chm";
 
         private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CConfig).Name);
 
@@ -248,7 +257,7 @@ namespace GEDmill
         public bool FakeMiniTreeTransparency;
 
         // List of Xrefs for individuals to be mentioned on front page.
-        public ArrayList KeyIndividuals;
+        public List<string> KeyIndividuals;
 
         // Set true if indexes are allowed to span multiple html files
         public bool MultiPageIndexes;
@@ -665,7 +674,7 @@ namespace GEDmill
                 UserEmailAddress = (string)formatter.Deserialize(stream);
                 FakeMiniTreeTransparency = (bool)formatter.Deserialize(stream);
                 int nKeyIndividuals = (int)formatter.Deserialize(stream);
-                KeyIndividuals = new ArrayList();
+                KeyIndividuals = new List<string>();
                 while (nKeyIndividuals-- > 0) {
                     string keyXref = (string)formatter.Deserialize(stream);
                     KeyIndividuals.Add(keyXref);
@@ -751,7 +760,7 @@ namespace GEDmill
             FakeMiniTreeTransparency = false;
             ShowMiniTrees = true;
             UserEmailAddress = "";
-            KeyIndividuals = new ArrayList();
+            KeyIndividuals = new List<string>();
             MultiPageIndexes = true;
             IndividualsPerIndexPage = 1000;
             OpenWebsiteOnExit = true;

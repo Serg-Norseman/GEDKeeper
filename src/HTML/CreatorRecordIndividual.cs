@@ -48,13 +48,13 @@ namespace GEDmill.HTML
         private List<Event> fEventList;
 
         // List of other facts known about the individual.
-        private ArrayList fAttributeList;
+        private List<Event> fAttributeList;
 
         // List of sources referenced by this page.
         private List<GEDCOMSourceCitation> fReferenceList;
 
         // List of occupations known for the individual
-        private ArrayList fOccupations;
+        private List<OccupationCounter> fOccupations;
 
         // An HTML link to the previous sibling in this fr.
         private string fPreviousChildLink;
@@ -63,7 +63,7 @@ namespace GEDmill.HTML
         private string fNextChildLink;
 
         // List of aliases and other names for the individual
-        private ArrayList fOtherNames;
+        private List<NameAndSource> fOtherNames;
 
         // A date inferred for the individual's birthday, with associated quality so that it can be rejected in favour of more certain information.
         private QualifiedDate fInferredBirthday;
@@ -120,7 +120,7 @@ namespace GEDmill.HTML
         private string fOccupation;
 
         // All the frParents of the individual. May be more than one pair if individual was associated with more than one fr.
-        private ArrayList fParents;
+        private List<HusbandAndWife> fParents;
 
         // A reference to the index creator, so that individual pages can be added to the index as they are created.
         private CreatorIndexIndividuals fIndiIndexCreator;
@@ -146,17 +146,17 @@ namespace GEDmill.HTML
             fOccupation = "";
             fConcealed = !fIndiRec.GetVisibility();
             fEventList = new List<Event>();
-            fAttributeList = new ArrayList();
+            fAttributeList = new List<Event>();
             fReferenceList = new List<GEDCOMSourceCitation>();
-            fOccupations = new ArrayList();
+            fOccupations = new List<OccupationCounter>();
             fPreviousChildLink = "";
             fNextChildLink = "";
-            fOtherNames = new ArrayList();
+            fOtherNames = new List<NameAndSource>();
             fInferredBirthday = null;
             fActualBirthday = null;
             fInferredDeathday = null;
             fActualDeathday = null;
-            fParents = new ArrayList();
+            fParents = new List<HusbandAndWife>();
         }
 
         // The main method that causes the page to be created.
@@ -402,7 +402,7 @@ namespace GEDmill.HTML
             if (fIndiIndexCreator != null) {
                 // Add index entry for this individuals main name (or hidden/unknown string)
                 string sFirstName = fFirstName;
-                if (fNameSuffix != null && fNameSuffix != "") {
+                if (!string.IsNullOrEmpty(fNameSuffix)) {
                     sFirstName += ", " + fNameSuffix;
                 }
                 fIndiIndexCreator.AddIndividualToIndex(sFirstName, fSurname, fUnknownName, alterEgo, lifeDates, fConcealed, relativeFilename, sUserRef);
@@ -790,7 +790,7 @@ namespace GEDmill.HTML
         {
             if (fIndiRec.Notes.Count > 0) {
                 // Generate notes list into a local array before adding header title. This is to cope with the case where all notes are nothing but blanks.
-                ArrayList note_strings = new ArrayList(fIndiRec.Notes.Count);
+                var note_strings = new List<string>(fIndiRec.Notes.Count);
 
                 foreach (GEDCOMNotes ns in fIndiRec.Notes) {
                     string noteText;
@@ -872,11 +872,11 @@ namespace GEDmill.HTML
 
                     string eventNote = "";
                     string overviewString = iEvent.Overview;
-                    if (overviewString != null && overviewString != "") {
+                    if (!string.IsNullOrEmpty(overviewString)) {
                         eventNote = String.Concat("<p class=\"eventNote\">", EscapeHTML(overviewString, false), "</p>");
                     }
                     string noteString = iEvent.Note;
-                    if (noteString != null && noteString != "") {
+                    if (!string.IsNullOrEmpty(noteString)) {
                         eventNote += String.Concat("<p class=\"eventNote\">", EscapeHTML(noteString, false), "</p>");
                     }
                     string preference = "";
@@ -1037,7 +1037,7 @@ namespace GEDmill.HTML
                         non_pic_main_filename = "multimedia/" + MainForm.NonPicFilename(iMultimedia.Format, false, MainForm.Config.LinkOriginalPicture);
 
                         string largeFilenameArg;
-                        if (iMultimedia.LargeFileName != null && iMultimedia.LargeFileName.Length > 0) {
+                        if (!string.IsNullOrEmpty(iMultimedia.LargeFileName)) {
                             largeFilenameArg = String.Concat("'", iMultimedia.LargeFileName, "'");
                         } else {
                             largeFilenameArg = "null";
@@ -1084,7 +1084,7 @@ namespace GEDmill.HTML
             TreeDrawer treeDrawer = new TreeDrawer(fTree);
             string relativeTreeFilename = String.Concat("tree", fIndiRec.XRef, ".", miniTreeExtn);
             string fullTreeFilename = String.Concat(MainForm.Config.OutputFolder, "\\", relativeTreeFilename);
-            ArrayList map = treeDrawer.CreateMiniTree(fPaintbox, fIndiRec, fullTreeFilename, MainForm.Config.TargetTreeWidth, imageFormat);
+            var map = treeDrawer.CreateMiniTree(fPaintbox, fIndiRec, fullTreeFilename, MainForm.Config.TargetTreeWidth, imageFormat);
             if (map != null) {
                 // Add space to height so that IE's horiz scroll bar has room and doesn't create a vertical scroll bar.
                 f.Writer.WriteLine(String.Format("    <div id=\"minitree\" style=\"height:{0}px;\">", treeDrawer.Height + 20));
@@ -1105,22 +1105,20 @@ namespace GEDmill.HTML
         // ensures that we show it only in the title, not in the other facts section as well.
         private void RemoveLoneOccupation()
         {
-            bool bSanityCheck = false;
+            bool sanityCheck = false;
             if (MainForm.Config.OccupationHeadline) {
-                if (fOccupations.Count == 1) {
-                    if (((OccupationCounter)fOccupations[0]).Date == null) {
-                        // Remove from attributeList
-                        for (int i = 0; i < fAttributeList.Count; i++) {
-                            Event iEvent = (Event)fAttributeList[i];
-                            if (iEvent.Type == "OCCU") {
-                                fAttributeList.RemoveAt(i);
-                                bSanityCheck = true;
-                                break;
-                            }
+                if (fOccupations.Count == 1 && fOccupations[0].Date == null) {
+                    // Remove from attributeList
+                    for (int i = 0; i < fAttributeList.Count; i++) {
+                        Event iEvent = fAttributeList[i];
+                        if (iEvent.Type == "OCCU") {
+                            fAttributeList.RemoveAt(i);
+                            sanityCheck = true;
+                            break;
                         }
-                        if (!bSanityCheck) {
-                            fLogger.WriteDebug("Expected to find occupation event");
-                        }
+                    }
+                    if (!sanityCheck) {
+                        fLogger.WriteWarn("Expected to find occupation event");
                     }
                 }
             }
@@ -1746,7 +1744,8 @@ namespace GEDmill.HTML
         }
 
         // Picks the individual's occupation closest to the given date, within the given limits.
-        private static string BestOccupation(ArrayList occupations, GEDCOMDateValue givenDate, GEDCOMDateValue lowerLimit, GEDCOMDateValue upperLimit)
+        private static string BestOccupation(List<OccupationCounter> occupations, GEDCOMDateValue givenDate,
+                                             GEDCOMDateValue lowerLimit, GEDCOMDateValue upperLimit)
         {
             int minDifference;
             if (lowerLimit == null || upperLimit == null) {

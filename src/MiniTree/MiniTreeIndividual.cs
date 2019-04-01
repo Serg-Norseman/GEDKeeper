@@ -23,7 +23,7 @@
  */
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using GKCommon.GEDCOM;
 
@@ -181,7 +181,7 @@ namespace GEDmill.MiniTree
         }
 
         // Draws the actual box, and adds the region of the box to the image alMap list.
-        public override void DrawBitmap(Paintbox paintbox, Graphics g, ArrayList alImageMap)
+        public override void DrawBitmap(Paintbox paintbox, Graphics g, List<MiniTreeMap> alImageMap)
         {
             SolidBrush solidbrushBg, solidbrushText;
 
@@ -221,7 +221,7 @@ namespace GEDmill.MiniTree
             g.DrawString(fDate, paintbox.Font, solidbrushText, fTextX + fDatePad, fTextY);
 
             if (fChild) {
-                g.DrawLine(paintbox.PenConnector, fX + MARGIN_HORIZ + fSizeText.Width / 2f, fY, fX + MARGIN_HORIZ + fSizeText.Width / 2f, fY + MARGIN_VERT/* -1f*/ );
+                g.DrawLine(paintbox.PenConnector, fX + MARGIN_HORIZ + (fSizeText.Width / 2f), fY, fX + MARGIN_HORIZ + (fSizeText.Width / 2f), fY + MARGIN_VERT/* -1f*/ );
             }
 
             if (fIndiRec != null) {
@@ -285,7 +285,7 @@ namespace GEDmill.MiniTree
         public float TeeCentreVert
         {
             get {
-                return fY + MARGIN_VERT + fSizeText.Height / 2f;
+                return fY + MARGIN_VERT + (fSizeText.Height / 2f);
             }
         }
 
@@ -310,7 +310,7 @@ namespace GEDmill.MiniTree
         public float Stalk
         {
             get {
-                return fX + fSize.Width / 2f;
+                return fX + (fSize.Width / 2f);
             }
         }
 
