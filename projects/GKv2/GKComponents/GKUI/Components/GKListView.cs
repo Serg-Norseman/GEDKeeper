@@ -185,8 +185,7 @@ namespace GKUI.Components
                 int sortColumn = fOwner.fSortColumn;
                 SortOrder sortOrder = fOwner.fSortOrder;
 
-                if (sortOrder != SortOrder.None && sortColumn >= 0)
-                {
+                if (sortOrder != SortOrder.None && sortColumn >= 0) {
                     ListViewItem item1 = (ListViewItem)x;
                     ListViewItem item2 = (ListViewItem)y;
 
@@ -194,26 +193,27 @@ namespace GKUI.Components
                         if (sortColumn == 0) {
                             IComparable eitem1 = (IComparable)x;
                             IComparable eitem2 = (IComparable)y;
-
                             result = eitem1.CompareTo(eitem2);
                         } else {
-                            if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count)
-                            {
+                            if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count) {
                                 IComparable sub1 = (IComparable)item1.SubItems[sortColumn];
                                 IComparable sub2 = (IComparable)item2.SubItems[sortColumn];
-
                                 result = sub1.CompareTo(sub2);
                             }
                         }
                     } else {
-                        if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count)
-                        {
-                            result = agCompare(item1.SubItems[sortColumn].Text, item2.SubItems[sortColumn].Text);
+                        if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count) {
+                            ListViewItem.ListViewSubItem subitem1 = item1.SubItems[sortColumn];
+                            ListViewItem.ListViewSubItem subitem2 = item2.SubItems[sortColumn];
+                            if (subitem1 is IComparable && subitem2 is IComparable) {
+                                result = ((IComparable)subitem1).CompareTo(subitem2);
+                            } else {
+                                result = agCompare(subitem1.Text, subitem2.Text);
+                            }
                         }
                     }
 
-                    if (sortOrder == SortOrder.Descending)
-                    {
+                    if (sortOrder == SortOrder.Descending) {
                         result = -result;
                     }
                 }

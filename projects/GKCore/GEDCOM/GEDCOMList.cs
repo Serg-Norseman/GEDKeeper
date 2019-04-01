@@ -144,6 +144,17 @@ namespace GKCommon.GEDCOM
             return item;
         }
 
+        public void AddRange(GEDCOMList<T> list)
+        {
+            if (list != null && list.fDataList != null) {
+                if (fDataList == null) {
+                    fDataList = new List<T>();
+                }
+
+                fDataList.AddRange(list.fDataList);
+            }
+        }
+
         public void Clear()
         {
             if (fDataList == null) return;
