@@ -331,9 +331,6 @@ namespace GEDmill
         // If false, no multimedia pics, images, files etc. will appear in HTML.
         public bool AllowMultimedia;
 
-        // If false, no Byte-Order-Mark will be output at the start of any UTF8 files generated.
-        public bool UseBom;
-
         // If true, the list of "Citations" on source records will not be generated.
         public bool SupressBackreferences;
 
@@ -341,8 +338,21 @@ namespace GEDmill
         public bool IncludeHelpPage;
 
 
+        private static CConfig fInstance;
+
+        public static CConfig Instance
+        {
+            get {
+                if (fInstance == null) {
+                    fInstance = new CConfig();
+                }
+                return fInstance;
+            }
+        }
+
+
         // Constructor, sets default values for the config
-        public CConfig()
+        private CConfig()
         {
             ConfigFilename = "GEDmill Config";
             RestrictConfidential = false;
@@ -355,7 +365,7 @@ namespace GEDmill
             CopyMultimedia = true;
             ImageFolder = "multimedia";
             RelativiseMultimedia = false;
-            ApplicationPath = GetAppPath();
+            ApplicationPath = GMHelper.GetAppPath();
             BackgroundImage = ApplicationPath + "\\bg-gedmill.jpg";
             MaxImageWidth = 160;
             MaxImageHeight = 160;
@@ -458,7 +468,7 @@ namespace GEDmill
         public string FrontPageURL
         {
             get {
-                return String.Concat(OutputFolder, "\\", FrontPageFilename, ".", HtmlExtension);
+                return string.Concat(OutputFolder, "\\", FrontPageFilename, ".", HtmlExtension);
             }
         }
 
@@ -466,7 +476,7 @@ namespace GEDmill
         public string HelpPageURL
         {
             get {
-                return String.Concat(OutputFolder, "\\", "help.", HtmlExtension);
+                return string.Concat(OutputFolder, "\\", "help.", HtmlExtension);
             }
         }
 
@@ -588,7 +598,6 @@ namespace GEDmill
                 formatter.Serialize(stream, uVersionBuild);
                 formatter.Serialize(stream, ConserveTreeWidth);
                 formatter.Serialize(stream, AllowMultimedia);
-                formatter.Serialize(stream, UseBom);
                 formatter.Serialize(stream, SupressBackreferences);
                 formatter.Serialize(stream, DataMayEndWithWhitespace);
                 formatter.Serialize(stream, KeepSiblingOrder);
@@ -719,7 +728,6 @@ namespace GEDmill
                 uVersionBuild = (uint)formatter.Deserialize(stream);
                 ConserveTreeWidth = (bool)formatter.Deserialize(stream);
                 AllowMultimedia = (bool)formatter.Deserialize(stream);
-                UseBom = (bool)formatter.Deserialize(stream);
                 SupressBackreferences = (bool)formatter.Deserialize(stream);
                 DataMayEndWithWhitespace = (bool)formatter.Deserialize(stream);
                 KeepSiblingOrder = (bool)formatter.Deserialize(stream);
@@ -794,15 +802,9 @@ namespace GEDmill
             ConserveTreeWidth = false;
             KeepSiblingOrder = false;
             AllowMultimedia = true;
-            UseBom = false;
             SupressBackreferences = false;
             DataMayEndWithWhitespace = false;
             IncludeHelpPage = true;
-        }
-
-        public static string GetAppPath()
-        {
-            return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         }
     }
 }

@@ -25,8 +25,8 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using BSLib;
 using System.Globalization;
+using BSLib;
 using GKCore.Logging;
 
 namespace GEDmill.MiniTree

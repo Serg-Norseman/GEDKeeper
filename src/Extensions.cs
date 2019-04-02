@@ -25,6 +25,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using GEDmill.Model;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Types;
@@ -138,14 +139,14 @@ namespace GEDmill
         public static string MakeLinkNumber(this GEDCOMSourceCitation sourCit, uint uSourceCount, bool bComma)
         {
             string sComma = bComma ? "," : "";
-            return String.Concat("<span class=\"reference\">", sComma, uSourceCount.ToString(), "</span>");
+            return string.Concat("<span class=\"reference\">", sComma, uSourceCount.ToString(), "</span>");
         }
 
         // Returns a string to use in the list of references at the bottom of the page
         public static string MakeLinkText(this GEDCOMSourceCitation sourCit, uint uSourceCount)
         {
             var sourRec = sourCit.Value as GEDCOMSourceRecord;
-            return String.Concat(uSourceCount.ToString(), ". ", /*m_sSourceDescription*/sourRec.ShortTitle);
+            return string.Concat(uSourceCount.ToString(), ". ", /*m_sSourceDescription*/sourRec.ShortTitle);
         }
 
         public static void RestrictAssociatedSources(this GEDCOMTree tree, GEDCOMIndividualRecord iRec)
@@ -178,12 +179,12 @@ namespace GEDmill
         }
 
         // Marks the given source citation as (un)restricted
-        public static void RestrictSource(GEDCOMSourceCitation sc, bool bRestricted)
+        public static void RestrictSource(GEDCOMSourceCitation sc, bool visible)
         {
             if (sc != null) {
                 GEDCOMSourceRecord sr = sc.Value as GEDCOMSourceRecord;
                 if (sr != null) {
-                    sr.SetVisibility(!bRestricted);
+                    sr.SetVisibility(visible);
                 }
             }
         }

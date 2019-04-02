@@ -1,4 +1,4 @@
-/* CNameAndSource.cs
+/* ThreadError.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -22,27 +22,24 @@
  *
  */
 
-using GKCommon.GEDCOM;
-
-namespace GEDmill
+namespace GEDmill.Model
 {
     /// <summary>
-    /// A data structure to encapsulate an individual's name and source records that confirm it.
-    /// Also contains the HTML for the source reference superscript numbers for this particular name.
-    /// Used as an element in the list of all an individual's names.
+    /// A data structure containing an nError code and a sMessage, for passing back from threads to their creator.
     /// </summary>
-    public class NameAndSource
+    public class ThreadError
     {
-        public string Name;
-        public string SourceHtml;
-        public GEDCOMList<GEDCOMSourceCitation> Sources;
+        // The error code
+        public int Error;
+
+        // The error message
+        public string Message;
 
 
-        public NameAndSource(string name)
+        public ThreadError(int error, string message)
         {
-            Name = name;
-            SourceHtml = "";
-            Sources = new GEDCOMList<GEDCOMSourceCitation>(null);
+            Error = error;
+            Message = message;
         }
     }
 }

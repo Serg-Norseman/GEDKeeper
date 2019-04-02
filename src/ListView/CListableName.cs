@@ -33,9 +33,6 @@ namespace GEDmill.ListView
     /// </summary>
     public class CListableName : ListViewItem.ListViewSubItem
     {
-        // The string to display if no other name is present in this instance
-        public static string UnknownName;
-
         // The surname (for sorting)
         private string fSurname;
 
@@ -60,7 +57,7 @@ namespace GEDmill.ListView
         {
             string name = "";
             if (fFirstName != "" && fSurname != "") {
-                name = String.Concat(fSurname, ", ", fFirstName);
+                name = string.Concat(fSurname, ", ", fFirstName);
             } else if (fSurname != "") {
                 name = fSurname;
             } else {
@@ -68,7 +65,7 @@ namespace GEDmill.ListView
             }
 
             if (name == "") {
-                name = UnknownName;
+                name = CConfig.Instance.UnknownName;
             }
 
             return name;

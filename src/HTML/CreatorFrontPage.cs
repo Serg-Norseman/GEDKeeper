@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using GEDmill.Model;
 using GKCommon.GEDCOM;
 using GKCore.Logging;
 
@@ -51,35 +52,34 @@ namespace GEDmill.HTML
         // The main method that causes the front page to be created. 
         public void Create()
         {
-            string pageDescription = "GEDmill GEDCOM to HTML family history website";
-            string keywords = "family tree history " + MainForm.Config.OwnersName;
-            string title = MainForm.Config.SiteTitle;
+            string keywords = "family tree history " + CConfig.Instance.OwnersName;
+            string title = CConfig.Instance.SiteTitle;
 
             HTMLFile f = null;
             try {
-                f = new HTMLFile(MainForm.Config.FrontPageURL, title, pageDescription, keywords); // Creates a new file, and puts standard header html into it.
-                f.Writer.WriteLine("  <div id=\"page\"> <!-- page -->");
-                f.Writer.WriteLine("    <div id=\"cover\"> <!-- cover -->");
+                f = new HTMLFile(CConfig.Instance.FrontPageURL, title, PageDescription, keywords); // Creates a new file, and puts standard header html into it.
+                f.WriteLine("  <div id=\"page\"> <!-- page -->");
+                f.WriteLine("    <div id=\"cover\"> <!-- cover -->");
 
-                f.Writer.WriteLine(String.Concat("       <h1>", EscapeHTML(title, false), "</h1>"));
+                f.WriteLine(string.Concat("       <h1>", EscapeHTML(title, false), "</h1>"));
 
-                if (!string.IsNullOrEmpty(MainForm.Config.FrontPageImageFilename)) {
+                if (!string.IsNullOrEmpty(CConfig.Instance.FrontPageImageFilename)) {
                     Rectangle newArea = new Rectangle(0, 0, 0, 0);
-                    string pictureFile = CopyMultimedia(MainForm.Config.FrontPageImageFilename, "", 0, 0, ref newArea, null);
+                    string pictureFile = CopyMultimedia(CConfig.Instance.FrontPageImageFilename, "", 0, 0, ref newArea, null);
                     if (!string.IsNullOrEmpty(pictureFile)) {
-                        f.Writer.WriteLine(String.Concat("       <p><img src=\"" + pictureFile + "\" alt=\"Front page image\" /></p>"));
+                        f.WriteLine(string.Concat("       <p><img src=\"" + pictureFile + "\" alt=\"Front page image\" /></p>"));
                     }
                 }
 
-                if (!string.IsNullOrEmpty(MainForm.Config.CommentaryText)) {
-                    if (MainForm.Config.CommentaryIsHtml) {
-                        f.Writer.WriteLine(String.Concat("       <p>", MainForm.Config.CommentaryText, "</p>"));
+                if (!string.IsNullOrEmpty(CConfig.Instance.CommentaryText)) {
+                    if (CConfig.Instance.CommentaryIsHtml) {
+                        f.WriteLine(string.Concat("       <p>", CConfig.Instance.CommentaryText, "</p>"));
                     } else {
-                        f.Writer.WriteLine(String.Concat("       <p>", EscapeHTML(MainForm.Config.CommentaryText, false), "</p>"));
+                        f.WriteLine(string.Concat("       <p>", EscapeHTML(CConfig.Instance.CommentaryText, false), "</p>"));
                     }
                 }
 
-                if (MainForm.Config.ShowFrontPageStats) {
+                if (CConfig.Instance.ShowFrontPageStats) {
                     string sIndividuals;
                     sIndividuals = fStats.Individuals == 0 ? "no" : fStats.Individuals.ToString();
                     sIndividuals += " individual";
@@ -88,7 +88,7 @@ namespace GEDmill.HTML
                     }
 
                     string sSources;
-                    sSources = fStats.Sources == 0 ? "" : String.Concat(", cross-referenced to ", fStats.Sources.ToString(), " source");
+                    sSources = fStats.Sources == 0 ? "" : string.Concat(", cross-referenced to ", fStats.Sources.ToString(), " source");
                     if (fStats.Sources > 1) {
                         sSources += "s";
                     }
@@ -97,23 +97,23 @@ namespace GEDmill.HTML
                     sFileType = fStats.NonPicturesIncluded ? "multimedia file" : "image";
 
                     string sMultimedia;
-                    sMultimedia = fStats.MultimediaFiles == 0 ? "" : String.Concat(". There are links to ", fStats.MultimediaFiles.ToString(), " ", sFileType);
+                    sMultimedia = fStats.MultimediaFiles == 0 ? "" : string.Concat(". There are links to ", fStats.MultimediaFiles.ToString(), " ", sFileType);
 
                     if (fStats.MultimediaFiles > 1) {
                         sMultimedia += "s";
                     }
 
-                    f.Writer.WriteLine(String.Concat("       <p>This website contains records on ", sIndividuals, sSources, sMultimedia, ".</p>"));
+                    f.WriteLine(string.Concat("       <p>This website contains records on ", sIndividuals, sSources, sMultimedia, ".</p>"));
                 }
 
-                f.Writer.WriteLine("       <div id=\"links\"> <!-- links -->");
-                f.Writer.WriteLine(String.Concat("         <p><a href=\"individuals1.", MainForm.Config.HtmlExtension, "\">", MainForm.Config.IndexTitle, "</a></p>"));
-                f.Writer.WriteLine("       </div> <!-- links -->");
-                if (MainForm.Config.KeyIndividuals != null && MainForm.Config.KeyIndividuals.Count > 0) {
+                f.WriteLine("       <div id=\"links\"> <!-- links -->");
+                f.WriteLine(string.Concat("         <p><a href=\"individuals1.", CConfig.Instance.HtmlExtension, "\">", CConfig.Instance.IndexTitle, "</a></p>"));
+                f.WriteLine("       </div> <!-- links -->");
+                if (CConfig.Instance.KeyIndividuals != null && CConfig.Instance.KeyIndividuals.Count > 0) {
                     // Although in theory you might want a restricted individual as a key individual, (they still form part of the tree), in practice this isn't allowed:
-                    var censoredKeyIndividuals = new List<string>(MainForm.Config.KeyIndividuals.Count);
+                    var censoredKeyIndividuals = new List<string>(CConfig.Instance.KeyIndividuals.Count);
 
-                    foreach (string keyXref in MainForm.Config.KeyIndividuals) {
+                    foreach (string keyXref in CConfig.Instance.KeyIndividuals) {
                         GEDCOMIndividualRecord air = fTree.XRefIndex_Find(keyXref) as GEDCOMIndividualRecord;
                         if (air != null) {
                             censoredKeyIndividuals.Add(MakeLink(air));
@@ -125,40 +125,40 @@ namespace GEDmill.HTML
                         if (censoredKeyIndividuals.Count > 1) {
                             plural = "s";
                         }
-                        f.Writer.WriteLine("         <div id=\"keyindividuals\">");
-                        f.Writer.WriteLine(String.Concat("           <p>Key Individual", plural, ":</p>"));
-                        f.Writer.WriteLine("           <ul>");
+                        f.WriteLine("         <div id=\"keyindividuals\">");
+                        f.WriteLine(string.Concat("           <p>Key Individual", plural, ":</p>"));
+                        f.WriteLine("           <ul>");
                         foreach (string air_link in censoredKeyIndividuals) {
-                            f.Writer.WriteLine(String.Concat("             <li>", air_link, "</li>"));
+                            f.WriteLine(string.Concat("             <li>", air_link, "</li>"));
                         }
-                        f.Writer.WriteLine("           </ul>");
-                        f.Writer.WriteLine("         </div> <!-- keyindividuals -->");
+                        f.WriteLine("           </ul>");
+                        f.WriteLine("         </div> <!-- keyindividuals -->");
                     }
                 }
 
                 string byEmail = "";
                 // Email contact address
-                if (!string.IsNullOrEmpty(MainForm.Config.UserEmailAddress)) {
-                    byEmail = String.Concat(" by <a href=\"mailto:", MainForm.Config.UserEmailAddress, "\">", EscapeHTML(MainForm.Config.UserEmailAddress, false), "</a>");
+                if (!string.IsNullOrEmpty(CConfig.Instance.UserEmailAddress)) {
+                    byEmail = string.Concat(" by <a href=\"mailto:", CConfig.Instance.UserEmailAddress, "\">", EscapeHTML(CConfig.Instance.UserEmailAddress, false), "</a>");
                 }
 
                 // Add brand and contact label
-                f.Writer.WriteLine(String.Concat("       <p>Website created", byEmail, " using GEDmill.</p>"));
+                f.WriteLine(string.Concat("       <p>Website created", byEmail, " using GEDmill.</p>"));
                 // Add last update string
-                if (MainForm.Config.AddHomePageCreateTime) {
+                if (CConfig.Instance.AddHomePageCreateTime) {
                     DateTime dt = DateTime.Now;
                     string update_date_string = dt.ToString("dd MMMM yyyy", DateTimeFormatInfo.InvariantInfo);
 
-                    f.Writer.WriteLine(String.Concat("       <p>Created on ", update_date_string, ".</p>"));
+                    f.WriteLine(string.Concat("       <p>Created on ", update_date_string, ".</p>"));
                 }
 
                 // Add link to users main website
-                if (!string.IsNullOrEmpty(MainForm.Config.MainWebsiteLink)) {
-                    f.Writer.WriteLine(String.Concat("    <p><a href=\"", MainForm.Config.MainWebsiteLink, "\">Return to main site</a></p>"));
+                if (!string.IsNullOrEmpty(CConfig.Instance.MainWebsiteLink)) {
+                    f.WriteLine(string.Concat("    <p><a href=\"", CConfig.Instance.MainWebsiteLink, "\">Return to main site</a></p>"));
                 }
 
-                f.Writer.WriteLine("    </div> <!-- cover -->");
-                f.Writer.WriteLine("  </div> <!-- page -->");
+                f.WriteLine("    </div> <!-- cover -->");
+                f.WriteLine("  </div> <!-- page -->");
             } catch (IOException e) {
                 fLogger.WriteError("Caught IO Exception(7) : ", e);
             } catch (ArgumentException e) {

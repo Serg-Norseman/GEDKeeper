@@ -22,7 +22,7 @@
  *
  */
 
-namespace GEDmill
+namespace GEDmill.Model
 {
     /// <summary>
     /// Data structure used to hold the name and xref of an individual in the "key individuals" list box.

@@ -1,8 +1,8 @@
-/* CStats.cs
- *
+/* CNameAndSource.cs
+ * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
- *
+ * 
  * GEDmill is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,37 +17,32 @@
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  *
  *
- * History:
+ * History:  
  * 10Dec08 AlexC          Migrated from GEDmill 1.10
  *
  */
 
-namespace GEDmill.HTML
+using GKCommon.GEDCOM;
+
+namespace GEDmill.Model
 {
     /// <summary>
-    /// Data structure to contain statistics about the website being created.
+    /// A data structure to encapsulate an individual's name and source records that confirm it.
+    /// Also contains the HTML for the source reference superscript numbers for this particular name.
+    /// Used as an element in the list of all an individual's names.
     /// </summary>
-    public class Stats
+    public class NameAndSource
     {
-        // The number of individual records in the website.
-        public uint Individuals;
-
-        // The number of source records in the website.
-        public uint Sources;
-
-        // The number of multimedia files in the website.
-        public uint MultimediaFiles;
-
-        // True if the website includes multimedia files other than pictures.
-        public bool NonPicturesIncluded;
+        public string Name;
+        public string SourceHtml;
+        public GEDCOMList<GEDCOMSourceCitation> Sources;
 
 
-        public Stats()
+        public NameAndSource(string name)
         {
-            Individuals = 0;
-            Sources = 0;
-            MultimediaFiles = 0;
-            NonPicturesIncluded = false;
+            Name = name;
+            SourceHtml = "";
+            Sources = new GEDCOMList<GEDCOMSourceCitation>(null);
         }
     }
 }

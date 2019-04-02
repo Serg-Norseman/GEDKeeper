@@ -1,4 +1,4 @@
-/* CHusbandAndWife.cs
+/* CIndexPage.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -22,22 +22,25 @@
  *
  */
 
-using GKCommon.GEDCOM;
+using System.Collections.Generic;
 
-namespace GEDmill.HTML
+namespace GEDmill.Model
 {
     /// <summary>
-    /// A data structure to encapsulate a marriage or other connection of a husband and a wife.
-    /// Used as an element in the list of all an individual's frParents.
+    /// Data structure holding all the entries in an index page. (Significant for indexes that spread over multiple pages.)
     /// </summary>
-    public class HusbandAndWife
+    public class IndexPage
     {
-        public GEDCOMIndividualRecord Husband;
-        public GEDCOMIndividualRecord Wife;
+        public List<IndexLetter> Letters;
+        public string FileName;
+        public int TotalIndis;
 
 
-        public HusbandAndWife()
+        public IndexPage(string filename)
         {
+            FileName = filename;
+            Letters = new List<IndexLetter>();
+            TotalIndis = 0;
         }
     }
 }

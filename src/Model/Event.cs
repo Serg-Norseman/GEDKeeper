@@ -26,7 +26,7 @@ using System;
 using GKCommon.GEDCOM;
 using GKCore.Types;
 
-namespace GEDmill.HTML
+namespace GEDmill.Model
 {
     // Indicates preference in cases where multiple records for a one-off event exist (e.g. birth)
     public enum EventPreference
@@ -103,7 +103,7 @@ namespace GEDmill.HTML
             fPreference = EventPreference.Unknown;
             fDate = date;
             if (capitalise) {
-                Creator.Capitalise(ref description);
+                GMHelper.Capitalise(ref description);
             }
             if (description.Length > 0) {
                 if (description[description.Length - 1] == '.') {

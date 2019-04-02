@@ -31,10 +31,6 @@ namespace GEDmill.ListView
     // Special class of ListViewItem can represent individual/source records.
     public class CListableBool : ListViewItem
     {
-        // What name to use if individual has no name
-        public static string UnknownName;
-
-
         // The record associated with this list item
         protected GEDCOMRecord fRecord;
 
@@ -79,7 +75,7 @@ namespace GEDmill.ListView
                     return fRecord.ToString();
                 } else {
                     if (fFirstName != "" && fSurname != "") {
-                        name = String.Concat(fSurname, ", ", fFirstName);
+                        name = string.Concat(fSurname, ", ", fFirstName);
                     } else if (fSurname != "") {
                         name = fSurname;
                     } else {
@@ -87,7 +83,7 @@ namespace GEDmill.ListView
                     }
 
                     if (name == "") {
-                        name = UnknownName;
+                        name = CConfig.Instance.UnknownName;
                     }
                 }
             }

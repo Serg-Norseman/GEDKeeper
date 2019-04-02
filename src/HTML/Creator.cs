@@ -26,9 +26,10 @@ using System;
 using System.Collections;
 using System.Drawing;
 using System.IO;
-using GEDmill.Exceptions;
-using GKCommon.GEDCOM;
 using System.Text;
+using GEDmill.Exceptions;
+using GEDmill.Model;
+using GKCommon.GEDCOM;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -39,6 +40,8 @@ namespace GEDmill.HTML
     public abstract class Creator
     {
         private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(Creator).Name);
+
+        protected const string PageDescription = "GEDmill GEDCOM to HTML family history website";
 
         // The raw data that we are turning into a website.
         protected GEDCOMTree fTree;
@@ -71,11 +74,11 @@ namespace GEDmill.HTML
         // Set bHardSpace to false if you want to keep first space as breakable, true if you want all nbsp.
         // TODO: Surely there is a .Net function to do this?
         // TODO: Might want to preserve <a> links in the HTML in case user has specified them in their data.
-        protected static string EscapeHTML(string original, bool hardSpace)
+        public static string EscapeHTML(string original, bool hardSpace)
         {
-            fLogger.WriteInfo(String.Format("EscapeHTML({0})", original));
+            fLogger.WriteInfo(string.Format("EscapeHTML({0})", original));
 
-            uint tabSpaces = MainForm.Config.TabSpaces;
+            uint tabSpaces = CConfig.Instance.TabSpaces;
 
             if (original == null) {
                 return "&lt;null&gt;";
@@ -161,8 +164,8 @@ namespace GEDmill.HTML
                         while ((uTabPos % tabSpaces) != 0);
                         bDoneSpace = true;
                         break;
-                    default:
 
+                    default:
                         sb.Append(c);
                         bDoneCRLF = false;
                         bDoneSpace = false;
@@ -199,7 +202,7 @@ namespace GEDmill.HTML
         // Converts all invalid sFilename characters into underscores
         protected static string EscapeFilename(string original)
         {
-            fLogger.WriteInfo(String.Format("EscapeFilename({0})", original));
+            fLogger.WriteInfo(string.Format("EscapeFilename({0})", original));
 
             if (original == null) {
                 return "_";
@@ -219,16 +222,6 @@ namespace GEDmill.HTML
                 ++n;
             }
             return sb.ToString();
-        }
-
-        // Modifies the provided string to have its first letter capitalised and the rest unchanged.
-        public static void Capitalise(ref string s)
-        {
-            if (!string.IsNullOrEmpty(s)) {
-                s = Char.ToUpper(s[0]) + s.Substring(1);
-            } else {
-                s = "";
-            }
         }
 
         // Returns a string with all email addresses replaced by value of sReplacement.
@@ -370,21 +363,21 @@ namespace GEDmill.HTML
         }
 
         // Generates navbar at top of page, in header div
-        protected static void OutputPageHeader(StreamWriter sw, string previousChildLink, string nextChildLink,
+        protected static void OutputPageHeader(HTMLFile f, string previousChildLink, string nextChildLink,
                                                bool includeIndexLink, bool includeHelpLink)
         {
-            if (MainForm.Config.IncludeNavbar) {
+            if (CConfig.Instance.IncludeNavbar) {
                 string frontPageLink = "";
-                if (MainForm.Config.FrontPageFilename != "") {
-                    frontPageLink += String.Concat("<a href=\"", MainForm.Config.FrontPageFilename, ".", MainForm.Config.HtmlExtension, "\">front page</a>");
+                if (CConfig.Instance.FrontPageFilename != "") {
+                    frontPageLink += string.Concat("<a href=\"", CConfig.Instance.FrontPageFilename, ".", CConfig.Instance.HtmlExtension, "\">front page</a>");
                 }
                 string mainSiteLink = "";
-                if (MainForm.Config.MainWebsiteLink != "") {
-                    mainSiteLink += String.Concat("<a href=\"", MainForm.Config.MainWebsiteLink, "\">main site</a>");
+                if (CConfig.Instance.MainWebsiteLink != "") {
+                    mainSiteLink += string.Concat("<a href=\"", CConfig.Instance.MainWebsiteLink, "\">main site</a>");
                 }
                 string helpPageLink = "";
-                if (MainForm.Config.IncludeHelpPage) {
-                    helpPageLink += String.Concat("<a href=\"help.", MainForm.Config.HtmlExtension, "\">help</a>");
+                if (CConfig.Instance.IncludeHelpPage) {
+                    helpPageLink += string.Concat("<a href=\"help.", CConfig.Instance.HtmlExtension, "\">help</a>");
                 }
                 bool includeNavbar = previousChildLink != ""
                   || nextChildLink != ""
@@ -394,38 +387,38 @@ namespace GEDmill.HTML
                   || helpPageLink != "";
 
                 if (includeNavbar) {
-                    sw.WriteLine("    <div id=\"header\">");
-                    sw.WriteLine("      <ul>");
+                    f.WriteLine("    <div id=\"header\">");
+                    f.WriteLine("      <ul>");
 
                     if (previousChildLink != "") {
-                        sw.WriteLine(String.Concat("        <li>", previousChildLink, "</li>"));
+                        f.WriteLine(string.Concat("        <li>", previousChildLink, "</li>"));
                     }
 
                     if (nextChildLink != "") {
-                        sw.WriteLine(String.Concat("        <li>", nextChildLink, "</li>"));
+                        f.WriteLine(string.Concat("        <li>", nextChildLink, "</li>"));
                     }
 
                     if (includeIndexLink) {
-                        sw.WriteLine(String.Concat("        <li><a href=\"individuals1.",
-                          MainForm.Config.HtmlExtension,
+                        f.WriteLine(string.Concat("        <li><a href=\"individuals1.",
+                          CConfig.Instance.HtmlExtension,
                           "\">index</a></li>"));
                     }
 
                     if (frontPageLink != "") {
-                        sw.WriteLine(String.Concat("        <li>", frontPageLink, "</li>"));
+                        f.WriteLine(string.Concat("        <li>", frontPageLink, "</li>"));
                     }
 
                     if (mainSiteLink != "") {
-                        sw.WriteLine(String.Concat("        <li>", mainSiteLink, "</li>"));
+                        f.WriteLine(string.Concat("        <li>", mainSiteLink, "</li>"));
                     }
 
                     if (includeHelpLink && helpPageLink != "") {
-                        sw.WriteLine(String.Concat("        <li>", helpPageLink, "</li>"));
+                        f.WriteLine(string.Concat("        <li>", helpPageLink, "</li>"));
                     }
 
-                    sw.WriteLine("      </ul>");
-                    sw.WriteLine("    </div> <!-- header -->");
-                    sw.WriteLine("");
+                    f.WriteLine("      </ul>");
+                    f.WriteLine("    </div> <!-- header -->");
+                    f.WriteLine("");
                 }
             }
         }
@@ -439,7 +432,7 @@ namespace GEDmill.HTML
         public static string CopyMultimedia(string fullFilename, string newFilename, uint maxWidth, uint maxHeight,
                                             ref Rectangle rectArea, Stats stats)
         {
-            fLogger.WriteInfo(String.Format("CopyMultimedia( {0}, {1}, {2} )", fullFilename, maxWidth, maxHeight));
+            fLogger.WriteInfo(string.Format("CopyMultimedia( {0}, {1}, {2} )", fullFilename, maxWidth, maxHeight));
 
             if (!File.Exists(fullFilename)) {
                 return "";
@@ -456,14 +449,14 @@ namespace GEDmill.HTML
                 if (rectArea.Width == 0) {
                     asidFilename = fullFilename;
                 } else {
-                    asidFilename = String.Concat(fullFilename, ".", rectArea.X.ToString(), ",", rectArea.Y.ToString(), ",", rectArea.Width.ToString(), ",", rectArea.Height.ToString());
+                    asidFilename = string.Concat(fullFilename, ".", rectArea.X.ToString(), ",", rectArea.Y.ToString(), ",", rectArea.Width.ToString(), ",", rectArea.Height.ToString());
                 }
 
                 if (maxWidth != 0 && maxHeight != 0) {
-                    asidFilename = String.Concat(asidFilename, "(", maxWidth.ToString(), "x", maxHeight.ToString(), ")");
+                    asidFilename = string.Concat(asidFilename, "(", maxWidth.ToString(), "x", maxHeight.ToString(), ")");
                 }
 
-                if (fullFilename != null && MainForm.Config.OutputFolder != null && MainForm.Config.OutputFolder != "") {
+                if (fullFilename != null && CConfig.Instance.OutputFolder != null && CConfig.Instance.OutputFolder != "") {
                     // Have we already copied the sFilename?
                     if (fCopiedFiles.ContainsKey(asidFilename)) {
                         FilenameAndSize filenameAndSize = (FilenameAndSize)fCopiedFiles[asidFilename];
@@ -472,9 +465,9 @@ namespace GEDmill.HTML
                         rectArea.Height = filenameAndSize.Height;
                     } else {
                         // Copy file into output directory
-                        if (MainForm.Config.CopyMultimedia) {
-                            string imageFolder = MainForm.Config.ImageFolder;
-                            string outputFolder = MainForm.Config.OutputFolder;
+                        if (CConfig.Instance.CopyMultimedia) {
+                            string imageFolder = CConfig.Instance.ImageFolder;
+                            string outputFolder = CConfig.Instance.OutputFolder;
 
                             if (imageFolder != "") {
                                 imageFolder = imageFolder + '\\';
@@ -483,9 +476,9 @@ namespace GEDmill.HTML
                                 outputFolder = outputFolder + '\\';
                             }
 
-                            string copyFilename = String.Concat(imageFolder, newFilename);
-                            string absImageFolder = String.Concat(outputFolder, imageFolder);
-                            string absCopyFilename = String.Concat(absImageFolder, newFilename);
+                            string copyFilename = string.Concat(imageFolder, newFilename);
+                            string absImageFolder = string.Concat(outputFolder, imageFolder);
+                            string absCopyFilename = string.Concat(absImageFolder, newFilename);
 
                             // If image folder doesn't exist, create it
                             if (!File.Exists(absImageFolder) && !Directory.Exists(absImageFolder)) // TODO: this returns false if it exists but you don't have permission!
@@ -499,22 +492,22 @@ namespace GEDmill.HTML
                             string extnPart = Path.GetExtension(copyFilename);
                             while (File.Exists(absCopyFilename)) {
                                 const string sAdditionalLetters = "abcdefghijklmnopqrstuvwxyz";
-                                if (MainForm.Config.RenameMultimedia == false) {
+                                if (CConfig.Instance.RenameMultimedia == false) {
                                     uint nCopyPlus = uCopy + 2;
-                                    copyFilename = String.Concat(imageFolder, filePart, "-", nCopyPlus.ToString(), extnPart);
+                                    copyFilename = string.Concat(imageFolder, filePart, "-", nCopyPlus.ToString(), extnPart);
                                 } else if (uCopy >= sAdditionalLetters.Length) {
                                     // Once all the extra letters have been used up, put number as "-n", where n starts from 2.
                                     uint nCopyMinus = uCopy - (uint)(sAdditionalLetters.Length - 2);
-                                    copyFilename = String.Concat(imageFolder, filePart, "-", nCopyMinus.ToString(), extnPart);
+                                    copyFilename = string.Concat(imageFolder, filePart, "-", nCopyMinus.ToString(), extnPart);
                                 } else {
-                                    copyFilename = String.Concat(imageFolder, filePart, sAdditionalLetters[(int)uCopy], extnPart);
+                                    copyFilename = string.Concat(imageFolder, filePart, sAdditionalLetters[(int)uCopy], extnPart);
                                 }
                                 uCopy++;
 
-                                absCopyFilename = String.Concat(outputFolder, copyFilename);
+                                absCopyFilename = string.Concat(outputFolder, copyFilename);
                             }
 
-                            fLogger.WriteInfo(String.Format("Copying \"{0}\" to \"{1}\"", fullFilename, absCopyFilename));
+                            fLogger.WriteInfo(string.Format("Copying \"{0}\" to \"{1}\"", fullFilename, absCopyFilename));
 
                             File.Copy(fullFilename, absCopyFilename, true);
 
@@ -526,7 +519,7 @@ namespace GEDmill.HTML
                             fCopiedFiles[asidFilename] = new FilenameAndSize(copyFilename, rectArea.Width, rectArea.Height);
                             result = copyFilename;
                         } else {
-                            if (MainForm.Config.RelativiseMultimedia) {
+                            if (CConfig.Instance.RelativiseMultimedia) {
                                 // TODO: make path of sFilename relative to MainForm.s_config.m_outputFolder
                                 string sRelativeFilename = fullFilename;
                                 result = sRelativeFilename;
@@ -558,12 +551,12 @@ namespace GEDmill.HTML
         // Outputs the HTML to display the W3C Valid XHTML image on the page.
         protected void OutputValiditySticker(HTMLFile f)
         {
-            f.Writer.WriteLine("<p class=\"plain\">");
-            f.Writer.WriteLine("<a href=\"http://validator.w3.org/check?uri=referer\"><img");
-            f.Writer.WriteLine("src=\"" + fW3CFile + "\"");
-            f.Writer.WriteLine("style=\"margin-top:4px\"");
-            f.Writer.WriteLine("alt=\"Valid XHTML 1.0 Strict\" height=\"31\" width=\"88\" /></a>");
-            f.Writer.WriteLine("</p>");
+            f.WriteLine("<p class=\"plain\">");
+            f.WriteLine("<a href=\"http://validator.w3.org/check?uri=referer\"><img");
+            f.WriteLine("src=\"" + fW3CFile + "\"");
+            f.WriteLine("style=\"margin-top:4px\"");
+            f.WriteLine("alt=\"Valid XHTML 1.0 Strict\" height=\"31\" width=\"88\" /></a>");
+            f.WriteLine("</p>");
         }
 
         // Creates link HTML for the individual e.g. <a href="indiI1.html">Fred Bloggs</a>
@@ -572,11 +565,11 @@ namespace GEDmill.HTML
             string name = ir.GetPrimaryFullName();
             string dummy = "";
             if (name == "") {
-                name = MainForm.Config.UnknownName;
-            } else if (!ir.GetVisibility() && !MainForm.Config.UseWithheldNames) {
-                name = MainForm.Config.ConcealedName;
+                name = CConfig.Instance.UnknownName;
+            } else if (!ir.GetVisibility() && !CConfig.Instance.UseWithheldNames) {
+                name = CConfig.Instance.ConcealedName;
             } else {
-                name = MainForm.Config.CapitaliseName(name, ref dummy, ref dummy);
+                name = CConfig.Instance.CapitaliseName(name, ref dummy, ref dummy);
             }
             return MakeLink(ir, name);
         }
@@ -598,13 +591,13 @@ namespace GEDmill.HTML
         // The string is just the sFilename, not a fully qualified path.
         protected static string GetIndividualHTMLFilename(GEDCOMIndividualRecord ir)
         {
-            string relativeFilename = string.Concat("indi", ir.XRef, ".", MainForm.Config.HtmlExtension);
-            if (MainForm.Config.UserRecFilename) {
+            string relativeFilename = string.Concat("indi", ir.XRef, ".", CConfig.Instance.HtmlExtension);
+            if (CConfig.Instance.UserRecFilename) {
                 if (ir.UserReferences.Count > 0) {
                     GEDCOMUserReference urn = ir.UserReferences[0];
                     string filenameUserRef = EscapeFilename(urn.StringValue);
                     if (filenameUserRef.Length > 0) {
-                        relativeFilename = string.Concat("indi", filenameUserRef, ".", MainForm.Config.HtmlExtension);
+                        relativeFilename = string.Concat("indi", filenameUserRef, ".", CConfig.Instance.HtmlExtension);
                     }
                 }
             }
@@ -616,9 +609,9 @@ namespace GEDmill.HTML
         // sArea is changed to reflect new image size
         private static string ConvertAndCropImage(string folder, string fileName, ref Rectangle rectArea, uint maxWidth, uint maxHeight)
         {
-            fLogger.WriteInfo(String.Format("ConvertAndCropImage( {0}, {1} )", folder != null ? folder : "null", fileName != null ? fileName : "null"));
+            fLogger.WriteInfo(string.Format("ConvertAndCropImage( {0}, {1} )", folder != null ? folder : "null", fileName != null ? fileName : "null"));
 
-            string absFilename = String.Concat(folder, fileName);
+            string absFilename = string.Concat(folder, fileName);
 
             Image image = null;
             try {
@@ -652,7 +645,7 @@ namespace GEDmill.HTML
 
             if (maxWidth != 0 && maxHeight != 0) {
                 // If image is too big then shrink it. (Can't always use GetThumbnailImage because that might use embedded thumbnail).
-                MainForm.ScaleAreaToFit(ref rectNewArea, maxWidth, maxHeight);
+                GMHelper.ScaleAreaToFit(ref rectNewArea, maxWidth, maxHeight);
             }
 
             Bitmap bitmapNew = new Bitmap(rectNewArea.Width, rectNewArea.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
@@ -696,14 +689,14 @@ namespace GEDmill.HTML
             }
 
             string filenameNew = sFilepart + sExtn;
-            string absFilenameNew = String.Concat(folder, filenameNew);
+            string absFilenameNew = string.Concat(folder, filenameNew);
             try {
                 if (File.Exists(absFilename)) {
                     // Delete the old file (e.g. if converting from tif to png)
                     File.Delete(absFilename);
                 }
             } catch (Exception e) {
-                fLogger.WriteError(string.Format("Caught exception while removing old bitmap file {0} : {1}", absFilename), e);
+                fLogger.WriteError(string.Format("Caught exception while removing old bitmap file {0}", absFilename), e);
             }
             try {
                 if (File.Exists(absFilenameNew)) {
@@ -713,7 +706,7 @@ namespace GEDmill.HTML
                 }
                 bitmapNew.Save(absFilenameNew, imageFormat);
             } catch (Exception e) {
-                fLogger.WriteError(string.Format("Caught exception while writing bitmap file {0} : {1}", filenameNew), e);
+                fLogger.WriteError(string.Format("Caught exception while writing bitmap file {0}", filenameNew), e);
                 filenameNew = "";
             }
             graphicsNew.Dispose();

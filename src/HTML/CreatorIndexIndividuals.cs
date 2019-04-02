@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using GEDmill.Model;
 using GKCommon.GEDCOM;
 using GKCore.Logging;
 
@@ -59,17 +60,17 @@ namespace GEDmill.HTML
             // FIXME
 
             // Split into letter groups
-            List<IndexLetter> alLetters = CreateIndexLetters();
+            List<IndexLetter> letters = CreateIndexLetters();
 
             // Split across multiple pages
-            List<IndexPage> alPages = CreateIndexPages(alLetters);
+            List<IndexPage> pages = CreateIndexPages(letters);
 
             // Create header navbar
-            string sHeadingsLinks = CreateIndexNavbar(alPages);
+            string headingsLinks = CreateIndexNavbar(pages);
 
             // Output HTML index pages
-            foreach (IndexPage page in alPages) {
-                OutputIndividualsIndexPage(fTree, sHeadingsLinks, page);
+            foreach (IndexPage page in pages) {
+                OutputIndividualsIndexPage(fTree, headingsLinks, page);
             }
         }
 
@@ -77,17 +78,17 @@ namespace GEDmill.HTML
         public void AddIndividualToIndex(string firstName, string surname, bool unknownName, string alterEgo, string lifeDates,
             bool concealed, string relativeFilename, string userRef)
         {
-            string sCommaFirstName = "";
+            string commaFirstName = "";
             if (firstName != "") {
-                sCommaFirstName = ", " + firstName;
+                commaFirstName = ", " + firstName;
             }
 
-            string indexEntry = String.Concat(surname, sCommaFirstName, " ", alterEgo, lifeDates);
+            string indexEntry = string.Concat(surname, commaFirstName, " ", alterEgo, lifeDates);
             if (unknownName) {
                 // Put this entry with the no-surname people
                 indexEntry = ",_" + indexEntry;
             }
-            if (!concealed || MainForm.Config.UseWithheldNames) {
+            if (!concealed || CConfig.Instance.UseWithheldNames) {
                 AddIndividualToIndex(indexEntry, relativeFilename, userRef);
             }
         }
@@ -95,8 +96,7 @@ namespace GEDmill.HTML
         // Internal method to add individuals to the index. Use the public one in normal circumstances.
         private void AddIndividualToIndex(string title, string fullFilename, string extraText)
         {
-            StringTuple stringtuple = new StringTuple(title, fullFilename, extraText);
-            fIndividualIndex.Add(stringtuple);
+            fIndividualIndex.Add(new StringTuple(title, fullFilename, extraText));
         }
 
         // Creates the page header navbar containing links to the initial letters in the index.
@@ -111,9 +111,9 @@ namespace GEDmill.HTML
                     }
                     if (firstLetter) {
                         firstLetter = false;
-                        headingsLinks = String.Concat(headingsLinks, "<a href=\"", indexpage.FileName, "\">", indexletter.Initial, "</a>");
+                        headingsLinks = string.Concat(headingsLinks, "<a href=\"", indexpage.FileName, "\">", indexletter.Initial, "</a>");
                     } else {
-                        headingsLinks = String.Concat(headingsLinks, "<a href=\"", indexpage.FileName, "#", indexletter.Initial, "\">", indexletter.Initial, "</a>");
+                        headingsLinks = string.Concat(headingsLinks, "<a href=\"", indexpage.FileName, "#", indexletter.Initial, "\">", indexletter.Initial, "</a>");
                     }
                 }
             }
@@ -126,15 +126,15 @@ namespace GEDmill.HTML
             var pages = new List<IndexPage>();
             uint uLetters = (uint)(letters.Count);
             uint uIndisPerPage;
-            if (MainForm.Config.MultiPageIndexes == false) {
+            if (CConfig.Instance.MultiPageIndexes == false) {
                 // Set to 0 for all names in one page.
                 uIndisPerPage = 0;
             } else {
-                uIndisPerPage = MainForm.Config.IndividualsPerIndexPage;
+                uIndisPerPage = CConfig.Instance.IndividualsPerIndexPage;
             }
             uint uIndiAccumulator = 0;
             uint uCurrentPage = 0;
-            string currentPageName = String.Format("individuals{0}.{1}", ++uCurrentPage, MainForm.Config.HtmlExtension);
+            string currentPageName = string.Format("individuals{0}.{1}", ++uCurrentPage, CConfig.Instance.HtmlExtension);
             IndexPage indexpageCurrent = new IndexPage(currentPageName);
             uint uLetter = 0;
             while (uLetter < uLetters) {
@@ -149,7 +149,7 @@ namespace GEDmill.HTML
                     }
                     // Start new page.
                     pages.Add(indexpageCurrent);
-                    currentPageName = String.Format("individuals{0}.{1}", ++uCurrentPage, MainForm.Config.HtmlExtension);
+                    currentPageName = string.Format("individuals{0}.{1}", ++uCurrentPage, CConfig.Instance.HtmlExtension);
                     indexpageCurrent = new IndexPage(currentPageName);
                     uIndiAccumulator = 0;
                 } else {
@@ -167,10 +167,10 @@ namespace GEDmill.HTML
         // Collects together the first letters of the items in the index
         private List<IndexLetter> CreateIndexLetters()
         {
-            List<IndexLetter> alLetters = new List<IndexLetter>();
-            string sLastInitial = "";
-            string sLastTitle = "";
-            List<StringTuple> sCurrentLetterList = null;
+            List<IndexLetter> letters = new List<IndexLetter>();
+            string lastInitial = "";
+            string lastTitle = "";
+            List<StringTuple> currentLetterList = null;
             foreach (StringTuple tuple in fIndividualIndex) {
                 string sName = tuple.First;
                 string sLink = tuple.Second;
@@ -183,40 +183,40 @@ namespace GEDmill.HTML
                     if (sInitial == ",") {
                         // TODO: handle no surname in such a way that names starting with commas don't count.
                         sInitial = "-";
-                        sTitle = MainForm.Config.NoSurname;
+                        sTitle = CConfig.Instance.NoSurname;
                     } else {
                         sTitle = sInitial;
                     }
 
                     int nCmp = 0;
-                    if (sLastInitial == "" && sInitial != "") { // Z,A
+                    if (lastInitial == "" && sInitial != "") { // Z,A
                         nCmp = 1;
-                    } else if (sLastInitial == "-" && sInitial != "-") {
+                    } else if (lastInitial == "-" && sInitial != "-") {
                         nCmp = 1;
                     } else {
-                        nCmp = String.Compare(sInitial, sLastInitial, true, CultureInfo.CurrentCulture);
+                        nCmp = string.Compare(sInitial, lastInitial, true, CultureInfo.CurrentCulture);
                     }
                     if (nCmp != 0) {
-                        if (sCurrentLetterList != null) {
-                            IndexLetter letter = new IndexLetter(sLastInitial, sLastTitle, sCurrentLetterList);
-                            alLetters.Add(letter);
-                            sCurrentLetterList = null;
+                        if (currentLetterList != null) {
+                            IndexLetter letter = new IndexLetter(lastInitial, lastTitle, currentLetterList);
+                            letters.Add(letter);
+                            currentLetterList = null;
                         }
-                        if (sCurrentLetterList == null) {
-                            sCurrentLetterList = new List<StringTuple>();
+                        if (currentLetterList == null) {
+                            currentLetterList = new List<StringTuple>();
                         }
-                        sLastInitial = sInitial;
-                        sLastTitle = sTitle;
+                        lastInitial = sInitial;
+                        lastTitle = sTitle;
                     }
-                    sCurrentLetterList.Add(tuple);
+                    currentLetterList.Add(tuple);
                 }
             }
-            if (sCurrentLetterList != null) {
-                IndexLetter letter = new IndexLetter(sLastInitial, sLastTitle, sCurrentLetterList);
-                alLetters.Add(letter);
-                sCurrentLetterList = null;
+            if (currentLetterList != null) {
+                IndexLetter letter = new IndexLetter(lastInitial, lastTitle, currentLetterList);
+                letters.Add(letter);
+                currentLetterList = null;
             }
-            return alLetters;
+            return letters;
         }
 
         // Generates the HTML file for the given page of the index.
@@ -224,38 +224,38 @@ namespace GEDmill.HTML
         {
             fLogger.WriteInfo("OutputIndividualsIndexPage()");
 
-            string sOwner = MainForm.Config.OwnersName;
-            if (sOwner != "") {
-                sOwner = " of " + sOwner;
+            string ownerName = CConfig.Instance.OwnersName;
+            if (ownerName != "") {
+                ownerName = " of " + ownerName;
             }
 
-            string sFullFilename = MainForm.Config.OutputFolder;
-            if (sFullFilename != "") {
-                sFullFilename += "\\";
+            string fullFilename = CConfig.Instance.OutputFolder;
+            if (fullFilename != "") {
+                fullFilename += "\\";
             }
-            sFullFilename += indexPage.FileName;
+            fullFilename += indexPage.FileName;
 
             HTMLFile f = null;
             try {
-                f = new HTMLFile(sFullFilename, MainForm.Config.IndexTitle, "Index of all individuals in the family tree" + sOwner, "individuals index family tree people history dates"); // Creates a new file, and puts standard header html into it.
+                f = new HTMLFile(fullFilename, CConfig.Instance.IndexTitle, "Index of all individuals in the family tree" + ownerName, "individuals index family tree people history dates"); // Creates a new file, and puts standard header html into it.
 
-                OutputPageHeader(f.Writer, "", "", false, true);
+                OutputPageHeader(f, "", "", false, true);
 
-                f.Writer.WriteLine("    <div class=\"hr\" />");
-                f.Writer.WriteLine("");
+                f.WriteLine("    <div class=\"hr\" />");
+                f.WriteLine("");
 
-                f.Writer.WriteLine("  <div id=\"page\">");
-                f.Writer.WriteLine(String.Concat("    <h1 class=\"centred\">", MainForm.Config.IndexTitle, "</h1>"));
+                f.WriteLine("  <div id=\"page\">");
+                f.WriteLine(string.Concat("    <h1 class=\"centred\">", CConfig.Instance.IndexTitle, "</h1>"));
 
                 if (headingsLinks != "") {
-                    f.Writer.WriteLine("    <div id=\"headingsLinks\">");
-                    f.Writer.WriteLine(String.Concat("      <p>", headingsLinks, "</p>"));
-                    f.Writer.WriteLine("    </div>");
+                    f.WriteLine("    <div id=\"headingsLinks\">");
+                    f.WriteLine(string.Concat("      <p>", headingsLinks, "</p>"));
+                    f.WriteLine("    </div>");
                 }
 
                 OutputIndexPage(indexPage, f);
 
-                f.Writer.WriteLine("  </div> <!-- page -->");
+                f.WriteLine("  </div> <!-- page -->");
             } catch (IOException e) {
                 fLogger.WriteError("Caught IO Exception(3) : ", e);
             } catch (ArgumentException e) {
@@ -273,9 +273,9 @@ namespace GEDmill.HTML
             int nTotal = indexPage.TotalIndis + indexPage.Letters.Count;
 
             if (indexPage.Letters.Count > 0) {
-                List<StringTuple> alFirstHalf = new List<StringTuple>();
-                List<StringTuple> alSecondHalf = new List<StringTuple>();
-                List<StringTuple> alCurrentHalf = alFirstHalf;
+                List<StringTuple> firstHalf = new List<StringTuple>();
+                List<StringTuple> secondHalf = new List<StringTuple>();
+                List<StringTuple> currentHalf = firstHalf;
 
                 int nHalfWay;
                 if (nTotal < 20) {
@@ -290,34 +290,34 @@ namespace GEDmill.HTML
                 foreach (IndexLetter letter in indexPage.Letters) {
                     if (nAdded == nHalfWay) {
                         // Don't add heading letter to bottom of first half.
-                        alCurrentHalf = alSecondHalf;
+                        currentHalf = secondHalf;
                     }
 
                     // Add heading letter.
-                    alCurrentHalf.Add(new StringTuple(letter.Title, ""));
+                    currentHalf.Add(new StringTuple(letter.Title, ""));
                     ++nAdded;
 
                     // Add indis.
                     foreach (StringTuple tuple in letter.Items) {
                         if (nAdded == nHalfWay) {
-                            alCurrentHalf = alSecondHalf;
+                            currentHalf = secondHalf;
                         }
-                        alCurrentHalf.Add(tuple);
+                        currentHalf.Add(tuple);
                         ++nAdded;
                     }
                 }
 
                 // Output HTML.
-                OutputIndexPageColumns(f, alFirstHalf, alSecondHalf);
+                OutputIndexPageColumns(f, firstHalf, secondHalf);
             } else {
-                f.Writer.WriteLine("    <p>There are no individuals to list.</p>");
+                f.WriteLine("    <p>There are no individuals to list.</p>");
             }
         }
 
         // Outputs the HTML table that lists the names in two columns.
         private static void OutputIndexPageColumns(HTMLFile f, List<StringTuple> firstHalf, List<StringTuple> secondHalf)
         {
-            f.Writer.WriteLine("    <table id=\"index\">");
+            f.WriteLine("    <table id=\"index\">");
             int i = 0, j = 0;
             while (i < firstHalf.Count || j < secondHalf.Count) {
                 string sLink1 = "&nbsp;";
@@ -330,7 +330,7 @@ namespace GEDmill.HTML
                     if (sName.Length >= 7 && sName.Substring(0, 7) == ",&nbsp;") // Hack for no surname.
                     {
                         if (sName.Length == 7) {
-                            sName = MainForm.Config.UnknownName;
+                            sName = CConfig.Instance.UnknownName;
                         } else {
                             sName = sName.Substring(7);
                         }
@@ -340,12 +340,12 @@ namespace GEDmill.HTML
                     }
                     string sLink = tuple.Second;
                     if (sLink != "") {
-                        sLink1 = String.Concat("<a href=\"", sLink, "\">", sName, "</a>");
-                    } else if (sName == MainForm.Config.NoSurname) // Hack for no surname.
+                        sLink1 = string.Concat("<a href=\"", sLink, "\">", sName, "</a>");
+                    } else if (sName == CConfig.Instance.NoSurname) // Hack for no surname.
                       {
-                        sLink1 = String.Concat("<h2 id=\"-\">", sName, "</h2>");
+                        sLink1 = string.Concat("<h2 id=\"-\">", sName, "</h2>");
                     } else {
-                        sLink1 = String.Concat("<h2 id=\"", sName[0], "\">", sName, "</h2>");
+                        sLink1 = string.Concat("<h2 id=\"", sName[0], "\">", sName, "</h2>");
                     }
 
                     sExtras1 = tuple.Third;
@@ -357,7 +357,7 @@ namespace GEDmill.HTML
                     if (sName.Length >= 7 && sName.Substring(0, 7) == ",&nbsp;") // Hack for no surname.
                     {
                         if (sName.Length == 7) {
-                            sName = MainForm.Config.UnknownName;
+                            sName = CConfig.Instance.UnknownName;
                         } else {
                             sName = sName.Substring(7);
                         }
@@ -368,24 +368,24 @@ namespace GEDmill.HTML
 
                     string sLink = tuple.Second;
                     if (sLink != "") {
-                        sLink2 = String.Concat("<a href=\"", sLink, "\">", sName, "</a>");
-                    } else if (sName == MainForm.Config.NoSurname) // Hack for no surname.
+                        sLink2 = string.Concat("<a href=\"", sLink, "\">", sName, "</a>");
+                    } else if (sName == CConfig.Instance.NoSurname) // Hack for no surname.
                       {
-                        sLink2 = String.Concat("<h2 id=\"-\">", sName, "</h2>");
+                        sLink2 = string.Concat("<h2 id=\"-\">", sName, "</h2>");
                     } else {
-                        sLink2 = String.Concat("<h2 id=\"", sName[0], "\">", sName, "</h2>");
+                        sLink2 = string.Concat("<h2 id=\"", sName[0], "\">", sName, "</h2>");
                     }
 
                     sExtras2 = tuple.Third;
                     ++j;
                 }
-                if (MainForm.Config.IncludeUserRefInIndex) {
-                    f.Writer.WriteLine(String.Concat("        <tr><td>", sExtras1, "</td><td>", sLink1, "</td><td>", sExtras2, "</td><td>", sLink2, "</td></tr>"));
+                if (CConfig.Instance.IncludeUserRefInIndex) {
+                    f.WriteLine(string.Concat("        <tr><td>", sExtras1, "</td><td>", sLink1, "</td><td>", sExtras2, "</td><td>", sLink2, "</td></tr>"));
                 } else {
-                    f.Writer.WriteLine(String.Concat("        <tr><td>", sLink1, "</td><td>", sLink2, "</td></tr>"));
+                    f.WriteLine(string.Concat("        <tr><td>", sLink1, "</td><td>", sLink2, "</td></tr>"));
                 }
             }
-            f.Writer.WriteLine("    </table>");
+            f.WriteLine("    </table>");
         }
     }
 }

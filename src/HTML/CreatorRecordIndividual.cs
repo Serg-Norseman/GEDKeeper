@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using GEDmill.MiniTree;
+using GEDmill.Model;
 using GKCommon.GEDCOM;
 using GKCore.Logging;
 using GKCore.Types;
@@ -173,8 +174,8 @@ namespace GEDmill.HTML
             }
 
             // Collect together multimedia links
-            if (MainForm.Config.AllowMultimedia && !fConcealed) {
-                AddMultimedia(fIndiRec.MultimediaLinks, String.Concat(fIndiRec.XRef, "mm"), String.Concat(fIndiRec.XRef, "mo"), MainForm.Config.MaxImageWidth, MainForm.Config.MaxImageHeight, stats);
+            if (CConfig.Instance.AllowMultimedia && !fConcealed) {
+                AddMultimedia(fIndiRec.MultimediaLinks, string.Concat(fIndiRec.XRef, "mm"), string.Concat(fIndiRec.XRef, "mo"), CConfig.Instance.MaxImageWidth, CConfig.Instance.MaxImageHeight, stats);
             }
 
             AddEvents();
@@ -196,7 +197,7 @@ namespace GEDmill.HTML
                 age30.SetDateTime(DateTime.Now);
             }
             try {
-                ((GEDCOMDate)age30.Value).Year += (short)MainForm.Config.AgeForOccupation;
+                ((GEDCOMDate)age30.Value).Year += (short)CConfig.Instance.AgeForOccupation;
             } catch { }
             // FIXME
 
@@ -246,8 +247,8 @@ namespace GEDmill.HTML
             string lifeDates = "";
             if (!fConcealed) {
                 if (birthyear != "" || deathyear != "") {
-                    lifeDates = String.Concat(birthyear, "-", deathyear);
-                    title = String.Concat(fName, " ", lifeDates);
+                    lifeDates = string.Concat(birthyear, "-", deathyear);
+                    title = string.Concat(fName, " ", lifeDates);
                 }
             }
 
@@ -277,7 +278,7 @@ namespace GEDmill.HTML
                     if (marriageNote != "") {
                         marriageNote += "\n";
                     }
-                    if (MainForm.Config.ObfuscateEmails) {
+                    if (CConfig.Instance.ObfuscateEmails) {
                         marriageNote += ObfuscateEmail(ns.Notes.Text);
                     } else {
                         marriageNote += ns.Notes.Text;
@@ -289,12 +290,12 @@ namespace GEDmill.HTML
                     marriedString = "partner of ";
                 }
                 if (marriageDate != null) {
-                    Event iEvent = new Event(marriageDate, "_MARRIAGE", String.Concat(marriedString, spouseLink, marriagePlace, ".", sourceRefs), "", marriageNote, true, MainForm.Config.CapitaliseEventDescriptions);
+                    Event iEvent = new Event(marriageDate, "_MARRIAGE", string.Concat(marriedString, spouseLink, marriagePlace, ".", sourceRefs), "", marriageNote, true, CConfig.Instance.CapitaliseEventDescriptions);
                     fEventList.Add(iEvent);
                 }
                 // else its an attribute.
                 else {
-                    Event iEvent = new Event(marriageDate, "_MARRIAGE", String.Concat(marriedString, spouseLink, marriagePlace, ".", sourceRefs), "", marriageNote, true, MainForm.Config.CapitaliseEventDescriptions);
+                    Event iEvent = new Event(marriageDate, "_MARRIAGE", string.Concat(marriedString, spouseLink, marriagePlace, ".", sourceRefs), "", marriageNote, true, CConfig.Instance.CapitaliseEventDescriptions);
                     // Marriages go at the front of the list so that they appear first in "Other facts"
                     fAttributeList.Insert(0, iEvent);
                 }
@@ -387,15 +388,15 @@ namespace GEDmill.HTML
                 GEDCOMUserReference urn = fIndiRec.UserReferences[0];
                 sUserRef = EscapeHTML(urn.StringValue, false);
                 if (sUserRef.Length > 0) {
-                    sUserRef = String.Concat(" [", sUserRef, "]");
+                    sUserRef = string.Concat(" [", sUserRef, "]");
                 }
             }
             string alterEgo = "";
-            if (MainForm.Config.IncludeNickNamesInIndex) {
+            if (CConfig.Instance.IncludeNickNamesInIndex) {
                 if (fNickName != "") {
-                    alterEgo = String.Concat("(", fNickName, ") ");
+                    alterEgo = string.Concat("(", fNickName, ") ");
                 } else if (fUsedName != "") {
-                    alterEgo = String.Concat("(", fUsedName, ") ");
+                    alterEgo = string.Concat("(", fUsedName, ") ");
                 }
             }
 
@@ -413,7 +414,7 @@ namespace GEDmill.HTML
                     for (int i = 1; (other_name = fIndiRec.GetName(i)) != ""; i++) {
                         string other_firstName = "";
                         string other_surname = "";
-                        other_name = MainForm.Config.CapitaliseName(other_name, ref other_firstName, ref other_surname); // Also splits name into first name and surname
+                        other_name = CConfig.Instance.CapitaliseName(other_name, ref other_firstName, ref other_surname); // Also splits name into first name and surname
                         fIndiIndexCreator.AddIndividualToIndex(other_firstName, other_surname, fUnknownName, alterEgo, lifeDates, fConcealed, relativeFilename, sUserRef);
                     }
                 }
@@ -435,7 +436,7 @@ namespace GEDmill.HTML
 
                         if (fes.Place != null) {
                             if (fes.Place.StringValue != "")
-                                marriagePlace = String.Concat(" ", MainForm.Config.PlaceWord, " ", EscapeHTML(fes.Place.StringValue, false));
+                                marriagePlace = string.Concat(" ", CConfig.Instance.PlaceWord, " ", EscapeHTML(fes.Place.StringValue, false));
                         }
 
                         sourceRefs = AddSources(ref fReferenceList, fes.SourceCitations);
@@ -446,7 +447,7 @@ namespace GEDmill.HTML
                                     marriageNote += "\n";
                                 }
 
-                                if (MainForm.Config.ObfuscateEmails) {
+                                if (CConfig.Instance.ObfuscateEmails) {
                                     marriageNote += ObfuscateEmail(ns.Notes.Text);
                                 } else {
                                     marriageNote += ns.Notes.Text;
@@ -476,18 +477,18 @@ namespace GEDmill.HTML
                                 if (fInferredDeathday == null || fInferredDeathday.Date == null || spouseDeathDate.CompareTo(fInferredDeathday.Date) <= 0) {
                                     if (ies.Place != null) {
                                         if (ies.Place.StringValue != "")
-                                            place = String.Concat(" ", MainForm.Config.PlaceWord, " ", EscapeHTML(ies.Place.StringValue, false));
+                                            place = string.Concat(" ", CConfig.Instance.PlaceWord, " ", EscapeHTML(ies.Place.StringValue, false));
                                     }
 
                                     sourceRefs = AddSources(ref fReferenceList, ies.SourceCitations);
 
                                     if (spouseDeathDate != null) {
-                                        Event iEvent = new Event(spouseDeathDate, "_SPOUSEDIED", String.Concat("death of ", spouseLink, place, ".", sourceRefs), "", null, false, MainForm.Config.CapitaliseEventDescriptions);
+                                        Event iEvent = new Event(spouseDeathDate, "_SPOUSEDIED", string.Concat("death of ", spouseLink, place, ".", sourceRefs), "", null, false, CConfig.Instance.CapitaliseEventDescriptions);
                                         fEventList.Add(iEvent);
                                     }
                                     // else its an attribute.
                                     else {
-                                        Event iEvent = new Event(null, "_SPOUSEDIED", String.Concat("death of ", spouseLink, place, ".", sourceRefs), "", null, false, MainForm.Config.CapitaliseEventDescriptions);
+                                        Event iEvent = new Event(null, "_SPOUSEDIED", string.Concat("death of ", spouseLink, place, ".", sourceRefs), "", null, false, CConfig.Instance.CapitaliseEventDescriptions);
                                         fAttributeList.Add(iEvent);
                                     }
                                 }
@@ -541,14 +542,14 @@ namespace GEDmill.HTML
 
                             if (childDeathday.Place != null) {
                                 if (childDeathday.Place.StringValue != "") {
-                                    deathPlace = String.Concat(" ", MainForm.Config.PlaceWord, " ", EscapeHTML(childDeathday.Place.StringValue, false));
+                                    deathPlace = string.Concat(" ", CConfig.Instance.PlaceWord, " ", EscapeHTML(childDeathday.Place.StringValue, false));
                                 }
                             }
                         }
 
                         if (childDeathdate != null && fInferredDeathday != null && fInferredDeathday.Date != null && (childDeathdate.CompareTo(fInferredDeathday.Date) <= 0)) {
                             sourceRefs = AddSources(ref fReferenceList, childDeathday.SourceCitations);
-                            Event iEvent = new Event(childDeathdate, "_CHILDDIED", String.Concat("death of ", childSex, " ", childLink, deathPlace, ".", sourceRefs), "", null, false, MainForm.Config.CapitaliseEventDescriptions);
+                            Event iEvent = new Event(childDeathdate, "_CHILDDIED", string.Concat("death of ", childSex, " ", childLink, deathPlace, ".", sourceRefs), "", null, false, CConfig.Instance.CapitaliseEventDescriptions);
                             fEventList.Add(iEvent);
                         }
                     }
@@ -572,17 +573,17 @@ namespace GEDmill.HTML
 
                         if (childBirthday.Place != null) {
                             if (childBirthday.Place.StringValue != "") {
-                                birthPlace = String.Concat(" ", MainForm.Config.PlaceWord, " ", EscapeHTML(childBirthday.Place.StringValue, false));
+                                birthPlace = string.Concat(" ", CConfig.Instance.PlaceWord, " ", EscapeHTML(childBirthday.Place.StringValue, false));
                             }
                         }
                         sourceRefs = AddSources(ref fReferenceList, childBirthday.SourceCitations);
                     }
 
                     if (childBirthdate == null) {
-                        Event iEvent = new Event(null, "_CHILDBORN", String.Concat("birth of ", childSex, " ", childLink, birthPlace, ".", sourceRefs), "", null, true, MainForm.Config.CapitaliseEventDescriptions);
+                        Event iEvent = new Event(null, "_CHILDBORN", string.Concat("birth of ", childSex, " ", childLink, birthPlace, ".", sourceRefs), "", null, true, CConfig.Instance.CapitaliseEventDescriptions);
                         fAttributeList.Add(iEvent);
                     } else {
-                        Event iEvent = new Event(childBirthdate, "_CHILDBORN", String.Concat("birth of ", childSex, " ", childLink, birthPlace, ".", sourceRefs), "", null, true, MainForm.Config.CapitaliseEventDescriptions);
+                        Event iEvent = new Event(childBirthdate, "_CHILDBORN", string.Concat("birth of ", childSex, " ", childLink, birthPlace, ".", sourceRefs), "", null, true, CConfig.Instance.CapitaliseEventDescriptions);
                         fEventList.Add(iEvent);
                     }
                 }
@@ -609,15 +610,15 @@ namespace GEDmill.HTML
         private void ConstructName()
         {
             // Construct the guy's name
-            if (fConcealed && !MainForm.Config.UseWithheldNames) {
+            if (fConcealed && !CConfig.Instance.UseWithheldNames) {
                 fFirstName = "";
-                fSurname = fName = MainForm.Config.ConcealedName;
+                fSurname = fName = CConfig.Instance.ConcealedName;
             } else {
-                fName = MainForm.Config.CapitaliseName(fName, ref fFirstName, ref fSurname); // Also splits name into first name and surname
+                fName = CConfig.Instance.CapitaliseName(fName, ref fFirstName, ref fSurname); // Also splits name into first name and surname
             }
             if (fName == "") {
                 fFirstName = "";
-                fSurname = fName = MainForm.Config.UnknownName;
+                fSurname = fName = CConfig.Instance.UnknownName;
                 fUnknownName = true;
             }
 
@@ -627,25 +628,25 @@ namespace GEDmill.HTML
                 for (int i = 1; (nasOther = fIndiRec.GetNameAndSource(i)) != null; i++) {
                     string sFirstNameOther = "";
                     string sSurnameOther = "";
-                    nasOther.Name = MainForm.Config.CapitaliseName(nasOther.Name, ref sFirstNameOther, ref sSurnameOther); // Also splits name into first name and surname
+                    nasOther.Name = CConfig.Instance.CapitaliseName(nasOther.Name, ref sFirstNameOther, ref sSurnameOther); // Also splits name into first name and surname
                     nasOther.SourceHtml = AddSources(ref fReferenceList, nasOther.Sources);
                     fOtherNames.Add(nasOther);
                 }
             }
 
-            if (fConcealed && !MainForm.Config.UseWithheldNames) {
-                fFullName = MainForm.Config.ConcealedName;
+            if (fConcealed && !CConfig.Instance.UseWithheldNames) {
+                fFullName = CConfig.Instance.ConcealedName;
             } else {
                 fFullName = fIndiRec.GetPrimaryFullName();
                 string sDummy = "";
-                fFullName = MainForm.Config.CapitaliseName(fFullName, ref sDummy, ref sDummy); // Also splits name into first name and surname
+                fFullName = CConfig.Instance.CapitaliseName(fFullName, ref sDummy, ref sDummy); // Also splits name into first name and surname
             }
             if (fFullName == "") {
-                fFullName = MainForm.Config.UnknownName;
+                fFullName = CConfig.Instance.UnknownName;
             }
 
             if (fNameTitle.Length > 0) {
-                fFullName = String.Concat(fNameTitle, " ", fFullName);
+                fFullName = string.Concat(fNameTitle, " ", fFullName);
             }
             if (fConcealed) {
                 fNickName = "";
@@ -670,31 +671,31 @@ namespace GEDmill.HTML
             string pageDescription = "GEDmill GEDCOM to HTML page for " + fName;
             string keywords = "family tree history " + fName;
             string relativeFilename = GetIndividualHTMLFilename(fIndiRec);
-            string fullFilename = String.Concat(MainForm.Config.OutputFolder, "\\", relativeFilename);
+            string fullFilename = string.Concat(CConfig.Instance.OutputFolder, "\\", relativeFilename);
 
             try {
                 f = new HTMLFile(fullFilename, title, pageDescription, keywords); // Creates a new file, and puts standard header html into it.
 
                 if (f != null) {
-                    OutputPageHeader(f.Writer, fPreviousChildLink, fNextChildLink, true, true);
+                    OutputPageHeader(f, fPreviousChildLink, fNextChildLink, true, true);
 
-                    if (MainForm.Config.ShowMiniTrees) {
+                    if (CConfig.Instance.ShowMiniTrees) {
                         OutputMiniTree(f);
                     }
-                    f.Writer.WriteLine("    <div class=\"hr\" />");
-                    f.Writer.WriteLine("");
-                    f.Writer.WriteLine("    <div id=\"page\"> <!-- page -->");
+                    f.WriteLine("    <div class=\"hr\" />");
+                    f.WriteLine("");
+                    f.WriteLine("    <div id=\"page\"> <!-- page -->");
 
                     OutputMultimedia(f);
 
-                    f.Writer.WriteLine("      <div id=\"main\">");
+                    f.WriteLine("      <div id=\"main\">");
 
-                    f.Writer.WriteLine("        <div id=\"summary\">");
+                    f.WriteLine("        <div id=\"summary\">");
                     OutputNames(f);
                     OutputIndividualSummary(f);
-                    f.Writer.WriteLine("        </div> <!-- summary -->");
+                    f.WriteLine("        </div> <!-- summary -->");
 
-                    if (!MainForm.Config.ShowMiniTrees) {
+                    if (!CConfig.Instance.ShowMiniTrees) {
                         OutputParentNames(f);
                     }
 
@@ -706,14 +707,14 @@ namespace GEDmill.HTML
                         OutputSourceReferences(f);
                     }
 
-                    f.Writer.WriteLine("      </div> <!-- main -->");
+                    f.WriteLine("      </div> <!-- main -->");
 
-                    f.Writer.WriteLine("");
+                    f.WriteLine("");
 
                     // Add footer (Record date, W3C sticker, GEDmill credit etc.)
                     OutputFooter(f, fIndiRec);
 
-                    f.Writer.WriteLine("    </div> <!-- page -->");
+                    f.WriteLine("    </div> <!-- page -->");
                 }
             } catch (IOException e) {
                 fLogger.WriteError("Caught IO Exception(4) : ", e);
@@ -731,12 +732,12 @@ namespace GEDmill.HTML
         private void OutputSourceReferences(HTMLFile f)
         {
             if (fReferenceList.Count > 0) {
-                f.Writer.WriteLine("        <div id=\"references\">");
-                f.Writer.WriteLine("          <h1>Sources</h1>");
-                f.Writer.WriteLine("          <ul>");
+                f.WriteLine("        <div id=\"references\">");
+                f.WriteLine("          <h1>Sources</h1>");
+                f.WriteLine("          <ul>");
 
                 for (uint i = 0; i < fReferenceList.Count; i++) {
-                    GEDCOMSourceCitation sc = (GEDCOMSourceCitation)(fReferenceList[(int)i]);
+                    GEDCOMSourceCitation sc = fReferenceList[(int)i];
 
                     string extraInfo = "";
                     GEDCOMSourceRecord sr = sc.Value as GEDCOMSourceRecord;
@@ -744,17 +745,17 @@ namespace GEDmill.HTML
                     // Publication facts
                     if (sr != null && sr.Publication.Text != null && sr.Publication.Text != "") {
                         string pubFacts;
-                        if (MainForm.Config.ObfuscateEmails) {
+                        if (CConfig.Instance.ObfuscateEmails) {
                             pubFacts = ObfuscateEmail(sr.Publication.Text);
                         } else {
                             pubFacts = sr.Publication.Text;
                         }
 
                         if (pubFacts.Length > 7 && pubFacts.ToUpper().Substring(0, 7) == "HTTP://") {
-                            pubFacts = String.Concat("<a href=\"", pubFacts, "\">", EscapeHTML(pubFacts, false), "</a>");
-                            extraInfo += String.Concat("\n                <li>", pubFacts, "</li>");
+                            pubFacts = string.Concat("<a href=\"", pubFacts, "\">", EscapeHTML(pubFacts, false), "</a>");
+                            extraInfo += string.Concat("\n                <li>", pubFacts, "</li>");
                         } else {
-                            extraInfo += String.Concat("\n                <li>", EscapeHTML(pubFacts, false), "</li>");
+                            extraInfo += string.Concat("\n                <li>", EscapeHTML(pubFacts, false), "</li>");
                         }
                     }
 
@@ -762,26 +763,26 @@ namespace GEDmill.HTML
                     // TODO
                     /*string whereWithinSource = sc.GetWhereWithinSource();
                     if (whereWithinSource != null && whereWithinSource.Length > 0) {
-                        extraInfo += String.Concat("\n                <li>", EscapeHTML(whereWithinSource, false), "</li>");
+                        extraInfo += string.Concat("\n                <li>", EscapeHTML(whereWithinSource, false), "</li>");
                     }*/
 
                     // Certainty assessment
                     // TODO
                     /*string certaintyAssessment = sc.GetCertaintyAssessment();
                     if (certaintyAssessment != null && certaintyAssessment.Length > 0) {
-                        extraInfo += String.Concat("\n                <li>", EscapeHTML(certaintyAssessment, false), "</li>");
+                        extraInfo += string.Concat("\n                <li>", EscapeHTML(certaintyAssessment, false), "</li>");
                     }*/
 
                     // Surround any extra info in its own list
                     if (extraInfo.Length > 0) {
-                        extraInfo = String.Concat("\n              <ul>", extraInfo, "\n              </ul>");
+                        extraInfo = string.Concat("\n              <ul>", extraInfo, "\n              </ul>");
                     }
 
                     // Finally write source link and extra info
-                    f.Writer.WriteLine(String.Concat("            <li>", sc.MakeLinkText(i + 1), extraInfo, "</li>"));
+                    f.WriteLine(string.Concat("            <li>", sc.MakeLinkText(i + 1), extraInfo, "</li>"));
                 }
-                f.Writer.WriteLine("          </ul>");
-                f.Writer.WriteLine("        </div> <!-- references -->");
+                f.WriteLine("          </ul>");
+                f.WriteLine("        </div> <!-- references -->");
             }
         }
 
@@ -794,26 +795,26 @@ namespace GEDmill.HTML
 
                 foreach (GEDCOMNotes ns in fIndiRec.Notes) {
                     string noteText;
-                    if (MainForm.Config.ObfuscateEmails) {
+                    if (CConfig.Instance.ObfuscateEmails) {
                         noteText = ObfuscateEmail(ns.Notes.Text);
                     } else {
                         noteText = ns.Notes.Text;
                     }
 
-                    note_strings.Add(String.Concat("            <li>", EscapeHTML(noteText, false), "</li>"));
+                    note_strings.Add(string.Concat("            <li>", EscapeHTML(noteText, false), "</li>"));
                 }
 
                 if (note_strings.Count > 0) {
-                    f.Writer.WriteLine("        <div id=\"notes\">");
-                    f.Writer.WriteLine("          <h1>Notes</h1>");
-                    f.Writer.WriteLine("          <ul>");
+                    f.WriteLine("        <div id=\"notes\">");
+                    f.WriteLine("          <h1>Notes</h1>");
+                    f.WriteLine("          <ul>");
 
                     foreach (string note_string in note_strings) {
-                        f.Writer.WriteLine(note_string);
+                        f.WriteLine(note_string);
                     }
 
-                    f.Writer.WriteLine("          </ul>");
-                    f.Writer.WriteLine("        </div> <!-- notes -->");
+                    f.WriteLine("          </ul>");
+                    f.WriteLine("        </div> <!-- notes -->");
                 }
             }
         }
@@ -822,12 +823,12 @@ namespace GEDmill.HTML
         private void OutputAttributes(HTMLFile f)
         {
             if (fAttributeList.Count > 0) {
-                f.Writer.WriteLine("        <div id=\"facts\">");
-                f.Writer.WriteLine("          <h1>Other facts</h1>");
-                f.Writer.WriteLine("          <table>");
+                f.WriteLine("        <div id=\"facts\">");
+                f.WriteLine("          <h1>Other facts</h1>");
+                f.WriteLine("          <table>");
 
                 for (int i = 0; i < fAttributeList.Count; i++) {
-                    Event iEvent = (Event)fAttributeList[i];
+                    Event iEvent = fAttributeList[i];
 
                     string importance;
                     if (iEvent.Important) {
@@ -839,16 +840,16 @@ namespace GEDmill.HTML
                     string attrNote = "";
                     string noteString = iEvent.Note;
                     if (noteString != null) {
-                        attrNote = String.Concat("<p class=\"eventNote\">", EscapeHTML(noteString, false), "</p>");
+                        attrNote = string.Concat("<p class=\"eventNote\">", EscapeHTML(noteString, false), "</p>");
                     }
 
-                    f.Writer.WriteLine("            <tr>");
-                    f.Writer.WriteLine("              <td class=\"date\"><p>&nbsp;</p></td>");
-                    f.Writer.WriteLine("              <td class=\"event\"><p{0}>{1}</p>{2}</td>", importance, iEvent.ToString(), attrNote);
-                    f.Writer.WriteLine("            </tr>");
+                    f.WriteLine("            <tr>");
+                    f.WriteLine("              <td class=\"date\"><p>&nbsp;</p></td>");
+                    f.WriteLine("              <td class=\"event\"><p{0}>{1}</p>{2}</td>", importance, iEvent.ToString(), attrNote);
+                    f.WriteLine("            </tr>");
                 }
-                f.Writer.WriteLine("          </table>");
-                f.Writer.WriteLine("        </div> <!-- facts -->");
+                f.WriteLine("          </table>");
+                f.WriteLine("        </div> <!-- facts -->");
             }
         }
 
@@ -856,9 +857,9 @@ namespace GEDmill.HTML
         private void OutputEvents(HTMLFile f)
         {
             if (fEventList.Count > 0) {
-                f.Writer.WriteLine("        <div id=\"events\">");
-                f.Writer.WriteLine("          <h1>Life History</h1>");
-                f.Writer.WriteLine("          <table>");
+                f.WriteLine("        <div id=\"events\">");
+                f.WriteLine("          <h1>Life History</h1>");
+                f.WriteLine("          <table>");
 
                 for (int i = 0; i < fEventList.Count; i++) {
                     Event iEvent = fEventList[i];
@@ -873,11 +874,11 @@ namespace GEDmill.HTML
                     string eventNote = "";
                     string overviewString = iEvent.Overview;
                     if (!string.IsNullOrEmpty(overviewString)) {
-                        eventNote = String.Concat("<p class=\"eventNote\">", EscapeHTML(overviewString, false), "</p>");
+                        eventNote = string.Concat("<p class=\"eventNote\">", EscapeHTML(overviewString, false), "</p>");
                     }
                     string noteString = iEvent.Note;
                     if (!string.IsNullOrEmpty(noteString)) {
-                        eventNote += String.Concat("<p class=\"eventNote\">", EscapeHTML(noteString, false), "</p>");
+                        eventNote += string.Concat("<p class=\"eventNote\">", EscapeHTML(noteString, false), "</p>");
                     }
                     string preference = "";
                     if (iEvent.Preference == EventPreference.First) {
@@ -885,13 +886,13 @@ namespace GEDmill.HTML
                     } else if (iEvent.Preference == EventPreference.Subsequent) {
                         preference = " (less likely)";
                     }
-                    f.Writer.WriteLine("            <tr>");
-                    f.Writer.WriteLine("              <td class=\"date\"><p{0}>{1}</p></td>", importance, EscapeHTML(iEvent.Date, false));
-                    f.Writer.WriteLine("              <td class=\"event\"><p{0}>{1}</p>{2}{3}</td>", importance, iEvent.ToString(), preference, eventNote);
-                    f.Writer.WriteLine("            </tr>");
+                    f.WriteLine("            <tr>");
+                    f.WriteLine("              <td class=\"date\"><p{0}>{1}</p></td>", importance, EscapeHTML(iEvent.Date, false));
+                    f.WriteLine("              <td class=\"event\"><p{0}>{1}</p>{2}{3}</td>", importance, iEvent.ToString(), preference, eventNote);
+                    f.WriteLine("            </tr>");
                 }
-                f.Writer.WriteLine("          </table>");
-                f.Writer.WriteLine("        </div> <!-- events -->");
+                f.WriteLine("          </table>");
+                f.WriteLine("        </div> <!-- events -->");
             }
         }
 
@@ -899,8 +900,8 @@ namespace GEDmill.HTML
         private void OutputParentNames(HTMLFile f)
         {
             if (fParents.Count > 0) {
-                f.Writer.WriteLine("        <div id=\"parents\">");
-                f.Writer.WriteLine("          <h1>Parents</h1>");
+                f.WriteLine("        <div id=\"parents\">");
+                f.WriteLine("          <h1>Parents</h1>");
 
                 string sChild = "Child";
                 if (fIndiRec.Sex == GEDCOMSex.svMale) {
@@ -910,7 +911,7 @@ namespace GEDmill.HTML
                 }
 
                 for (int i = 0; i < fParents.Count; i++) {
-                    HusbandAndWife parents = (HusbandAndWife)fParents[i];
+                    HusbandAndWife parents = fParents[i];
                     string sParents = "";
                     if (parents.Husband != null && parents.Husband.GetVisibility()) {
                         sParents = MakeLink(parents.Husband);
@@ -924,17 +925,17 @@ namespace GEDmill.HTML
                         }
                     }
                     if (sParents != "") {
-                        f.Writer.WriteLine(String.Concat("          <p>", sChild, " of ", sParents, ".</p>"));
+                        f.WriteLine(string.Concat("          <p>", sChild, " of ", sParents, ".</p>"));
                     }
                 }
-                f.Writer.WriteLine("        </div> <!-- parents -->");
+                f.WriteLine("        </div> <!-- parents -->");
             }
         }
 
         // Writes the individual's lifespan and occupation to the HTML file. 
         private void OutputIndividualSummary(HTMLFile f)
         {
-            f.Writer.WriteLine("          <div id=\"individualSummary\">");
+            f.WriteLine("          <div id=\"individualSummary\">");
 
             string sBirthday;
             if (fActualBirthday != null) {
@@ -951,36 +952,36 @@ namespace GEDmill.HTML
             }
 
             if (fActualBirthday != null || fActualDeathday != null) {
-                f.Writer.WriteLine(String.Concat("            <p>", sBirthday, " - ", sDeathday, "</p>"));
+                f.WriteLine(string.Concat("            <p>", sBirthday, " - ", sDeathday, "</p>"));
             }
-            if (MainForm.Config.OccupationHeadline && fOccupation != null && fOccupation != "") {
-                f.Writer.WriteLine(String.Concat("            <p>", fOccupation, "</p>"));
+            if (CConfig.Instance.OccupationHeadline && fOccupation != null && fOccupation != "") {
+                f.WriteLine(string.Concat("            <p>", fOccupation, "</p>"));
             }
             if (fConcealed) {
-                f.Writer.WriteLine("            <p>Information about this individual has been withheld.</p>");
+                f.WriteLine("            <p>Information about this individual has been withheld.</p>");
             }
-            f.Writer.WriteLine("          </div> <!-- individualSummary -->");
+            f.WriteLine("          </div> <!-- individualSummary -->");
         }
 
         // Writes the individual's names to the HTML file. 
         private void OutputNames(HTMLFile f)
         {
-            f.Writer.WriteLine("          <div id=\"names\">");
+            f.WriteLine("          <div id=\"names\">");
             if (fFullName != fName) {
-                f.Writer.WriteLine(String.Concat("            <h2>", EscapeHTML(fFullName, false), "</h2>"));
+                f.WriteLine(string.Concat("            <h2>", EscapeHTML(fFullName, false), "</h2>"));
             }
             if (fUsedName != "" && fNickName != "") {
                 fUsedName += ", ";
             }
             string nicknames = "";
             if (fUsedName != "" || fNickName != "") {
-                nicknames = String.Concat(" <span class=\"nicknames\">(", EscapeHTML(fUsedName, false), EscapeHTML(fNickName, false), ")</span>");
+                nicknames = string.Concat(" <span class=\"nicknames\">(", EscapeHTML(fUsedName, false), EscapeHTML(fNickName, false), ")</span>");
             }
-            f.Writer.WriteLine(String.Concat("            <h1>", EscapeHTML(fName, false), fNameSources, nicknames, "</h1>"));
+            f.WriteLine(string.Concat("            <h1>", EscapeHTML(fName, false), fNameSources, nicknames, "</h1>"));
             foreach (NameAndSource other_name in fOtherNames) {
-                f.Writer.WriteLine(String.Concat("            <h2>also known as ", EscapeHTML(other_name.Name, false), other_name.SourceHtml, "</h2>"));
+                f.WriteLine(string.Concat("            <h2>also known as ", EscapeHTML(other_name.Name, false), other_name.SourceHtml, "</h2>"));
             }
-            f.Writer.WriteLine("          </div> <!-- names -->");
+            f.WriteLine("          </div> <!-- names -->");
         }
 
         // Writes the HTML for the multimedia files associated with this record. 
@@ -988,79 +989,79 @@ namespace GEDmill.HTML
         {
             if (fMultimediaList.Count > 0) {
                 Multimedia iMultimedia = (Multimedia)fMultimediaList[0];
-                f.Writer.WriteLine("    <div id=\"photos\">");
-                f.Writer.WriteLine("      <div id=\"mainphoto\">");
-                string non_pic_small_filename = "multimedia/" + MainForm.NonPicFilename(iMultimedia.Format, true, MainForm.Config.LinkOriginalPicture);
-                string non_pic_main_filename = "multimedia/" + MainForm.NonPicFilename(iMultimedia.Format, false, MainForm.Config.LinkOriginalPicture);
+                f.WriteLine("    <div id=\"photos\">");
+                f.WriteLine("      <div id=\"mainphoto\">");
+                string non_pic_small_filename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, true, CConfig.Instance.LinkOriginalPicture);
+                string non_pic_main_filename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, CConfig.Instance.LinkOriginalPicture);
                 string image_title = "";
                 string alt_name = fFullName;
                 if (iMultimedia.Title != null) {
                     image_title = iMultimedia.Title;
                     alt_name = iMultimedia.Title;
                 }
-                if (MainForm.Config.LinkOriginalPicture) {
+                if (CConfig.Instance.LinkOriginalPicture) {
                     if (iMultimedia.Width != 0 && iMultimedia.Height != 0) {
                         // Must be a picture.
                         if (iMultimedia.LargeFileName.Length > 0) {
-                            f.Writer.WriteLine(String.Concat("        <a href=\"", iMultimedia.LargeFileName, "\" id=\"mainphoto_link\"><img id=\"mainphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"", alt_name, "\" /></a>"));
+                            f.WriteLine(string.Concat("        <a href=\"", iMultimedia.LargeFileName, "\" id=\"mainphoto_link\"><img id=\"mainphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"", alt_name, "\" /></a>"));
                         } else {
-                            f.Writer.WriteLine(String.Concat("        <img id=\"mainphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"I", alt_name, "\" />"));
+                            f.WriteLine(string.Concat("        <img id=\"mainphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"I", alt_name, "\" />"));
                         }
                     } else {
                         // Must be a non-picture multimedia file.
                         if (iMultimedia.LargeFileName.Length > 0) {
-                            f.Writer.WriteLine(String.Concat("        <a href=\"", iMultimedia.LargeFileName, "\" id=\"mainphoto_link\"><img id=\"mainphoto_img\" src=\"", non_pic_main_filename, "\" alt=\"", alt_name, "\" /></a>"));
+                            f.WriteLine(string.Concat("        <a href=\"", iMultimedia.LargeFileName, "\" id=\"mainphoto_link\"><img id=\"mainphoto_img\" src=\"", non_pic_main_filename, "\" alt=\"", alt_name, "\" /></a>"));
                         } else {
-                            f.Writer.WriteLine(String.Concat("        <img id=\"mainphoto_img\" src=\"", non_pic_main_filename, "\" alt=\"", alt_name, "\" />"));
+                            f.WriteLine(string.Concat("        <img id=\"mainphoto_img\" src=\"", non_pic_main_filename, "\" alt=\"", alt_name, "\" />"));
                         }
                     }
                 } else // Not linking to original picture.
                   {
                     if (iMultimedia.Width != 0 && iMultimedia.Height != 0) {
                         // Must be a picture.
-                        f.Writer.WriteLine(String.Concat("        <img id=\"mainphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"", alt_name, "\" />"));
+                        f.WriteLine(string.Concat("        <img id=\"mainphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"", alt_name, "\" />"));
                     } else {
                         // Must be a non-picture multimedia file.
-                        f.Writer.WriteLine(String.Concat("        <img id=\"mainphoto_img\" src=\"", non_pic_main_filename, "\" alt=\"", alt_name, "\" />"));
+                        f.WriteLine(string.Concat("        <img id=\"mainphoto_img\" src=\"", non_pic_main_filename, "\" alt=\"", alt_name, "\" />"));
                     }
                 }
-                f.Writer.WriteLine(String.Concat("        <p id=\"mainphoto_title\">", image_title, "</p>"));
-                f.Writer.WriteLine("      </div>");
+                f.WriteLine(string.Concat("        <p id=\"mainphoto_title\">", image_title, "</p>"));
+                f.WriteLine("      </div>");
 
-                if (fMultimediaList.Count > 1 && MainForm.Config.AllowMultipleImages) {
-                    f.Writer.WriteLine("      <div id=\"miniphotos\">");
+                if (fMultimediaList.Count > 1 && CConfig.Instance.AllowMultipleImages) {
+                    f.WriteLine("      <div id=\"miniphotos\">");
 
                     for (int i = 0; i < fMultimediaList.Count; i++) {
                         iMultimedia = (Multimedia)fMultimediaList[i];
 
-                        non_pic_small_filename = "multimedia/" + MainForm.NonPicFilename(iMultimedia.Format, true, MainForm.Config.LinkOriginalPicture);
-                        non_pic_main_filename = "multimedia/" + MainForm.NonPicFilename(iMultimedia.Format, false, MainForm.Config.LinkOriginalPicture);
+                        non_pic_small_filename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, true, CConfig.Instance.LinkOriginalPicture);
+                        non_pic_main_filename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, CConfig.Instance.LinkOriginalPicture);
 
                         string largeFilenameArg;
                         if (!string.IsNullOrEmpty(iMultimedia.LargeFileName)) {
-                            largeFilenameArg = String.Concat("'", iMultimedia.LargeFileName, "'");
+                            largeFilenameArg = string.Concat("'", iMultimedia.LargeFileName, "'");
                         } else {
                             largeFilenameArg = "null";
                         }
 
-                        f.Writer.WriteLine("         <div class=\"miniphoto\">");
+                        f.WriteLine("         <div class=\"miniphoto\">");
                         if (iMultimedia.Width != 0 && iMultimedia.Height != 0) {
                             // Must be a picture.
                             // Scale mini pic down to thumbnail.
                             Rectangle newArea = new Rectangle(0, 0, iMultimedia.Width, iMultimedia.Height);
-                            MainForm.ScaleAreaToFit(ref newArea, MainForm.Config.MaxThumbnailImageWidth, MainForm.Config.MaxThumbnailImageHeight);
+                            GMHelper.ScaleAreaToFit(ref newArea, CConfig.Instance.MaxThumbnailImageWidth, CConfig.Instance.MaxThumbnailImageHeight);
 
-                            f.Writer.WriteLine(String.Concat("          <img style=\"width:", newArea.Width, "px; height:", newArea.Height, "px; margin-bottom:", MainForm.Config.MaxThumbnailImageHeight - newArea.Height, "px;\" class=\"miniphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"Click to select\" onclick=\"updateMainPhoto('", iMultimedia.FileName, "','", EscapeJavascript(iMultimedia.Title), "',", largeFilenameArg, ")\" />"));
+                            f.WriteLine(string.Concat("          <img style=\"width:", newArea.Width, "px; height:", newArea.Height, "px; margin-bottom:", CConfig.Instance.MaxThumbnailImageHeight - newArea.Height, "px;\" class=\"miniphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"Click to select\" onclick=\"updateMainPhoto('", iMultimedia.FileName, "','", EscapeJavascript(iMultimedia.Title), "',", largeFilenameArg, ")\" />"));
                         } else {
                             // Other multimedia.
-                            f.Writer.WriteLine(String.Concat("          <img style=\"width:", MainForm.Config.MaxThumbnailImageWidth, "px; height:", MainForm.Config.MaxThumbnailImageHeight, "px;\" class=\"miniphoto_img\" src=\"", non_pic_small_filename, "\" alt=\"Click to select\" onclick=\"updateMainPhoto('", non_pic_main_filename, "','", EscapeJavascript(iMultimedia.Title), "',", largeFilenameArg, ")\" />"));
+                            f.WriteLine(string.Concat("          <img style=\"width:", CConfig.Instance.MaxThumbnailImageWidth, "px; height:", CConfig.Instance.MaxThumbnailImageHeight, "px;\" class=\"miniphoto_img\" src=\"", non_pic_small_filename, "\" alt=\"Click to select\" onclick=\"updateMainPhoto('", non_pic_main_filename, "','", EscapeJavascript(iMultimedia.Title), "',", largeFilenameArg, ")\" />"));
                         }
-                        f.Writer.WriteLine("         </div>");
+                        f.WriteLine("         </div>");
                     }
 
-                    f.Writer.WriteLine("      </div>");
+                    f.WriteLine("      </div>");
                 }
-                f.Writer.WriteLine("    </div> <!-- photos -->");
+                f.WriteLine("    </div> <!-- photos -->");
             }
         }
 
@@ -1069,7 +1070,7 @@ namespace GEDmill.HTML
         {
             System.Drawing.Imaging.ImageFormat imageFormat;
             string miniTreeExtn;
-            string imageFormatString = MainForm.Config.MiniTreeImageFormat;
+            string imageFormatString = CConfig.Instance.MiniTreeImageFormat;
             switch (imageFormatString) {
                 case "png":
                     imageFormat = System.Drawing.Imaging.ImageFormat.Png;
@@ -1082,22 +1083,22 @@ namespace GEDmill.HTML
             }
 
             TreeDrawer treeDrawer = new TreeDrawer(fTree);
-            string relativeTreeFilename = String.Concat("tree", fIndiRec.XRef, ".", miniTreeExtn);
-            string fullTreeFilename = String.Concat(MainForm.Config.OutputFolder, "\\", relativeTreeFilename);
-            var map = treeDrawer.CreateMiniTree(fPaintbox, fIndiRec, fullTreeFilename, MainForm.Config.TargetTreeWidth, imageFormat);
+            string relativeTreeFilename = string.Concat("tree", fIndiRec.XRef, ".", miniTreeExtn);
+            string fullTreeFilename = string.Concat(CConfig.Instance.OutputFolder, "\\", relativeTreeFilename);
+            var map = treeDrawer.CreateMiniTree(fPaintbox, fIndiRec, fullTreeFilename, CConfig.Instance.TargetTreeWidth, imageFormat);
             if (map != null) {
                 // Add space to height so that IE's horiz scroll bar has room and doesn't create a vertical scroll bar.
-                f.Writer.WriteLine(String.Format("    <div id=\"minitree\" style=\"height:{0}px;\">", treeDrawer.Height + 20));
-                f.Writer.WriteLine("      <map name=\"treeMap\" id=\"tree\">");
+                f.WriteLine(string.Format("    <div id=\"minitree\" style=\"height:{0}px;\">", treeDrawer.Height + 20));
+                f.WriteLine("      <map name=\"treeMap\" id=\"tree\">");
                 foreach (MiniTreeMap mapItem in map) {
                     if (mapItem.Linkable) {
                         string href = GetIndividualHTMLFilename(mapItem.IndiRec);
-                        f.Writer.WriteLine(String.Concat("        <area alt=\"", mapItem.Name, "\" coords=\"", mapItem.X1, ",", mapItem.Y1, ",", mapItem.X2, ",", mapItem.Y2, "\" href=\"", href, "\" shape=\"rect\" />"));
+                        f.WriteLine(string.Concat("        <area alt=\"", mapItem.Name, "\" coords=\"", mapItem.X1, ",", mapItem.Y1, ",", mapItem.X2, ",", mapItem.Y2, "\" href=\"", href, "\" shape=\"rect\" />"));
                     }
                 }
-                f.Writer.WriteLine("      </map>");
-                f.Writer.WriteLine(String.Concat("      <img src=\"", relativeTreeFilename, "\"  usemap=\"#treeMap\" alt=\"Mini tree diagram\"/>"));
-                f.Writer.WriteLine("    </div>");
+                f.WriteLine("      </map>");
+                f.WriteLine(string.Concat("      <img src=\"", relativeTreeFilename, "\"  usemap=\"#treeMap\" alt=\"Mini tree diagram\"/>"));
+                f.WriteLine("    </div>");
             }
         }
 
@@ -1106,7 +1107,7 @@ namespace GEDmill.HTML
         private void RemoveLoneOccupation()
         {
             bool sanityCheck = false;
-            if (MainForm.Config.OccupationHeadline) {
+            if (CConfig.Instance.OccupationHeadline) {
                 if (fOccupations.Count == 1 && fOccupations[0].Date == null) {
                     // Remove from attributeList
                     for (int i = 0; i < fAttributeList.Count; i++) {
@@ -1130,7 +1131,7 @@ namespace GEDmill.HTML
         // the other party would be the partner.
         private void ProcessEvent(GEDCOMCustomEvent es, string linkToOtherParty)
         {
-            fLogger.WriteInfo(String.Format("ProcessEvent( {0}, {1} )", es.Name, es.StringValue));
+            fLogger.WriteInfo(string.Format("ProcessEvent( {0}, {1} )", es.Name, es.StringValue));
 
             if (es.Name == null) {
                 return;
@@ -1154,7 +1155,7 @@ namespace GEDmill.HTML
             bool important = false;
             date = null;
             place = "";
-            string place_word = MainForm.Config.PlaceWord;
+            string place_word = CConfig.Instance.PlaceWord;
             string alternative_place_word = "and"; // For want of anything better...
             string alternative_place = "";
             if (es.Date != null) {
@@ -1252,13 +1253,12 @@ namespace GEDmill.HTML
                     if (es is GEDCOMCustomEvent) {
                         if (fInferredDeathday != null) {
                             // Throw away lesser qualified birthday inferences.
-                            if (fInferredDeathday.Qualification > DateQualification.Death) // ">" here means "further from the truth".
-                            {
+                            if (fInferredDeathday.Qualification > DateQualification.Death) {
+                                // ">" here means "further from the truth".
                                 fInferredDeathday = null;
                             }
-                        }
-                        if (fInferredDeathday == null) // Take first DEAT we come across. In GEDCOM this means it is the preferred event.
-                        {
+                        } else {
+                            // Take first DEAT we come across. In GEDCOM this means it is the preferred event.
                             fInferredDeathday = new QualifiedDate(date, DateQualification.Death);
                         }
                         fDeathdaySourceRefs = sourceRefs;
@@ -1387,7 +1387,7 @@ namespace GEDmill.HTML
                 case "CAST":
                     escaped_description = "caste";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
                     break;
@@ -1395,7 +1395,7 @@ namespace GEDmill.HTML
                 case "DSCR":
                     escaped_description = "physical description";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
                     break;
@@ -1403,7 +1403,7 @@ namespace GEDmill.HTML
                 case "EDUC":
                     escaped_description = "educated";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
                     break;
@@ -1411,7 +1411,7 @@ namespace GEDmill.HTML
                 case "IDNO":
                     escaped_description = "ID number";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
                     break;
@@ -1419,7 +1419,7 @@ namespace GEDmill.HTML
                 case "NATI":
                     escaped_description = "nationality";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
                     break;
@@ -1428,7 +1428,7 @@ namespace GEDmill.HTML
                     bTypeIsAOneOff = true;
                     escaped_description = "number of children";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
                     break;
@@ -1437,7 +1437,7 @@ namespace GEDmill.HTML
                     bTypeIsAOneOff = true;
                     escaped_description = "number of marriages";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
 
@@ -1448,7 +1448,7 @@ namespace GEDmill.HTML
                     if (!string.IsNullOrEmpty(es.StringValue)) {
                         OccupationCounter oc = new OccupationCounter(EscapeHTML(es.StringValue, false) + sourceRefs, date);
                         fOccupations.Add(oc);
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                         bIncludeOccupation = true;
                     } else
                         bNeedValue = true;
@@ -1457,7 +1457,7 @@ namespace GEDmill.HTML
                 case "PROP":
                     escaped_description = "property";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
                     break;
@@ -1465,7 +1465,7 @@ namespace GEDmill.HTML
                 case "RELI":
                     escaped_description = "religion";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
                     break;
@@ -1473,7 +1473,7 @@ namespace GEDmill.HTML
                 case "RESI":
                     escaped_description = "resident";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = false; // Special case, we need the "at" word left in for this.
                     break;
@@ -1481,7 +1481,7 @@ namespace GEDmill.HTML
                 case "SSN":
                     escaped_description = "Social Security number";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
                     break;
@@ -1494,7 +1494,7 @@ namespace GEDmill.HTML
                 case "FACT":
                     escaped_description = "other fact";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
                     break;
@@ -1504,7 +1504,7 @@ namespace GEDmill.HTML
                     bTypeIsAOneOff = true;
                     escaped_description = "never married";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
                     break;
@@ -1513,7 +1513,7 @@ namespace GEDmill.HTML
                 case "_AKAN": // _AKAN Brother's Keeper
                     escaped_description = "also known as";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
                     break;
@@ -1522,11 +1522,11 @@ namespace GEDmill.HTML
                 case "ANUL":
                     escaped_description = "annulment of marriage";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escaped_description = String.Concat(escaped_description, " to ", linkToOtherParty);
+                        escaped_description = string.Concat(escaped_description, " to ", linkToOtherParty);
                     }
                     break;
 
@@ -1540,7 +1540,7 @@ namespace GEDmill.HTML
                     } else {
                         escaped_description = "divorced";
                         if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                            escaped_description = String.Concat(escaped_description, " from ", linkToOtherParty);
+                            escaped_description = string.Concat(escaped_description, " from ", linkToOtherParty);
                         }
                     }
                     break;
@@ -1548,28 +1548,28 @@ namespace GEDmill.HTML
                 case "DIVF":
                     escaped_description = "filing of divorce";
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escaped_description = String.Concat(escaped_description, " from ", linkToOtherParty);
+                        escaped_description = string.Concat(escaped_description, " from ", linkToOtherParty);
                     }
                     break;
 
                 case "ENGA":
                     escaped_description = "engagement";
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escaped_description = String.Concat(escaped_description, " to ", linkToOtherParty);
+                        escaped_description = string.Concat(escaped_description, " to ", linkToOtherParty);
                     }
                     break;
 
                 case "MARB":
                     escaped_description = "publication of banns of marriage";
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escaped_description = String.Concat(escaped_description, " to ", linkToOtherParty);
+                        escaped_description = string.Concat(escaped_description, " to ", linkToOtherParty);
                     }
                     break;
 
                 case "MARC":
                     escaped_description = "contract of marriage";
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escaped_description = String.Concat(escaped_description, " to ", linkToOtherParty);
+                        escaped_description = string.Concat(escaped_description, " to ", linkToOtherParty);
                     }
                     break;
 
@@ -1581,7 +1581,7 @@ namespace GEDmill.HTML
                 case "MARL":
                     escaped_description = "licence obtained for marriage";
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escaped_description = String.Concat(escaped_description, " to ", linkToOtherParty);
+                        escaped_description = string.Concat(escaped_description, " to ", linkToOtherParty);
                     }
 
                     break;
@@ -1589,21 +1589,21 @@ namespace GEDmill.HTML
                 case "MARS":
                     escaped_description = "settlement of marriage";
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escaped_description = String.Concat(escaped_description, " to ", linkToOtherParty);
+                        escaped_description = string.Concat(escaped_description, " to ", linkToOtherParty);
                     }
                     break;
 
                 default:
                     escaped_description = "unknown event";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = String.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
                     else
                         bNeedValue = true;
                     break;
             }
 
-            if (MainForm.Config.CapitaliseEventDescriptions) {
-                Capitalise(ref escaped_description);
+            if (CConfig.Instance.CapitaliseEventDescriptions) {
+                GMHelper.Capitalise(ref escaped_description);
             }
 
             if (place != "") {
@@ -1617,9 +1617,9 @@ namespace GEDmill.HTML
                     place = "";
                     bIncludeOccupation = true; // Needed to include occupation event, (without date or place), in page.
                 } else {
-                    escaped_description += String.Concat(" ", place_word, " ", EscapeHTML(place, false));
+                    escaped_description += string.Concat(" ", place_word, " ", EscapeHTML(place, false));
                     if (!string.IsNullOrEmpty(alternative_place)) {
-                        escaped_description += String.Concat(" ", alternative_place_word, " ", EscapeHTML(alternative_place, false));
+                        escaped_description += string.Concat(" ", alternative_place_word, " ", EscapeHTML(alternative_place, false));
                     }
                 }
             }
@@ -1656,13 +1656,13 @@ namespace GEDmill.HTML
 
             if (cause != "") {
                 cause = EscapeHTML(cause, false);
-                if (MainForm.Config.CapitaliseEventDescriptions) {
-                    Capitalise(ref cause);
+                if (CConfig.Instance.CapitaliseEventDescriptions) {
+                    GMHelper.Capitalise(ref cause);
                 }
                 if (eventNote.Length > 0) {
                     eventNote += "\n";
                 }
-                if (MainForm.Config.ObfuscateEmails) {
+                if (CConfig.Instance.ObfuscateEmails) {
                     eventNote += ObfuscateEmail(cause);
                 } else {
                     eventNote += cause;
@@ -1673,7 +1673,7 @@ namespace GEDmill.HTML
                 if (eventNote != "") {
                     eventNote += "\n";
                 }
-                if (MainForm.Config.ObfuscateEmails) {
+                if (CConfig.Instance.ObfuscateEmails) {
                     eventNote += ObfuscateEmail(ns.Notes.Text);
                 } else {
                     eventNote += ns.Notes.Text;
@@ -1684,7 +1684,7 @@ namespace GEDmill.HTML
 
             if (!bOnlyIncludeIfNotePresent || eventNote != "") {
                 if (date != null) {
-                    iEvent = new Event(date, utype, escaped_description, overview, eventNote, important, MainForm.Config.CapitaliseEventDescriptions);
+                    iEvent = new Event(date, utype, escaped_description, overview, eventNote, important, CConfig.Instance.CapitaliseEventDescriptions);
                     fEventList.Add(iEvent);
                 }
                 // else its an attribute.
@@ -1693,7 +1693,7 @@ namespace GEDmill.HTML
                     // GSP Family Tree puts lots of blank tags (OCCU, CHR, SEX, NOTE, etc.etc). Don't display those without meaning
                     // Note CHR is contentious, as other s/w may use a CHR with no other info to mean that they were christened. GSP it appears puts a CHR for everyone?
                     if ((utype != "DEAT" && utype != "BIRT" && utype != "CHR" && utype != "OCCU") || place != "" || eventNote != "" || bIncludeOccupation) {
-                        iEvent = new Event(null, utype, escaped_description, overview, eventNote, important, MainForm.Config.CapitaliseEventDescriptions);
+                        iEvent = new Event(null, utype, escaped_description, overview, eventNote, important, CConfig.Instance.CapitaliseEventDescriptions);
                         fAttributeList.Add(iEvent);
                     }
                 }

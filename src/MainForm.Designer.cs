@@ -41,8 +41,6 @@ namespace GEDmill
         private TextBox m_textboxConfigThumbnailImageWidth;
         private Label m_labelConfigThumbnailImageHeight;
         private TextBox m_textboxConfigThumbnailImageHeight;
-        private Label m_labelConfigCharset;
-        private ComboBox m_comboboxConfigCharset;
         private Label m_labelConfigHtmlExtn;
         private ComboBox m_comboboxConfigHtmlExtn;
         private CheckBox m_checkboxConfigW3C;
@@ -109,7 +107,6 @@ namespace GEDmill
         private CheckBox m_checkboxConfigTreeDiagramsFakeBg;
         private Label m_labelConfigTreeDiagramsFormat;
         private ComboBox m_comboboxConfigTreeDiagramsFormat;
-        private CheckBox m_checkboxConfigUseBom;
         private CheckBox m_checkboxConfigSupressBackreferences;
         private Label m_labelWelcomeContinue;
         private Label m_labelWelcomeVersion;
@@ -188,8 +185,6 @@ namespace GEDmill
             m_textboxConfigThumbnailImageWidth = new TextBox();
             m_labelConfigThumbnailImageHeight = new Label();
             m_textboxConfigThumbnailImageHeight = new TextBox();
-            m_labelConfigCharset = new Label();
-            m_comboboxConfigCharset = new ComboBox();
             m_labelConfigHtmlExtn = new Label();
             m_comboboxConfigHtmlExtn = new ComboBox();
             m_checkboxConfigW3C = new CheckBox();
@@ -211,7 +206,6 @@ namespace GEDmill
             m_buttonConfigMiniTreeColourIndiBorder = new Button();
             m_buttonConfigMiniTreeColourIndiFgConcealed = new Button();
             m_checkboxConfigAllowMultimedia = new CheckBox();
-            m_checkboxConfigUseBom = new CheckBox();
             m_checkboxConfigSupressBackreferences = new CheckBox();
             m_labelConfigNoName = new Label();
             m_textboxConfigNoName = new TextBox();
@@ -1459,37 +1453,6 @@ namespace GEDmill
             m_buttonConfigMiniTreeColourIndiBorder.Click += new System.EventHandler(configPanel_MiniTreeColourIndiBorder_Button_click);
 
             // 
-            // configPanel_Charset_Label  (Advanced)
-            // 
-            m_labelConfigCharset.Location = new System.Drawing.Point(9, 0);
-            m_labelConfigCharset.Name = "m_labelConfigCharset";
-            m_labelConfigCharset.RightToLeft = RightToLeft.No;
-            m_labelConfigCharset.Size = new System.Drawing.Size(120, 24);
-            m_labelConfigCharset.TabIndex = 1;
-            m_labelConfigCharset.Text = "Ch&aracter set:";
-            m_labelConfigCharset.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
-            //
-            // configPanel_Charset_ComboBox (Advanced)
-            // 
-            m_comboboxConfigCharset.Location = new System.Drawing.Point(139, 1);
-            m_comboboxConfigCharset.Name = "m_comboboxConfigCharset";
-            m_comboboxConfigCharset.Size = new System.Drawing.Size(95, 20);
-            m_comboboxConfigCharset.TabIndex = 2;
-            m_comboboxConfigCharset.DropDownWidth = 40;
-            m_comboboxConfigCharset.DropDownStyle = ComboBoxStyle.DropDownList;
-            m_comboboxConfigCharset.SelectedIndexChanged += new System.EventHandler(configPanel_Charset_ComboBox_changed);
-
-            //
-            // configPanel_UseBom_CheckBox (Advanced)
-            // 
-            m_checkboxConfigUseBom.Location = new System.Drawing.Point(11, 26);
-            m_checkboxConfigUseBom.Name = "m_checkboxConfigUseBom";
-            m_checkboxConfigUseBom.Size = new System.Drawing.Size(200, 20);
-            m_checkboxConfigUseBom.Text = "Include &byte order mark (BOM)";
-            m_checkboxConfigUseBom.TabIndex = 3;
-
-            // 
             // configPanel_HTMLExtn_Label (Advanced)
             // 
             m_labelConfigHtmlExtn.Location = new System.Drawing.Point(9, 54);
@@ -1804,8 +1767,6 @@ namespace GEDmill
             m_tabcontrolConfigPanel.TabPages.Add(tabPageSettingsTreeDiagrams);
 
             TabPage tabPageSettingsAdvanced = new TabPage("Advanced");
-            tabPageSettingsAdvanced.Controls.Add(m_labelConfigCharset);
-            tabPageSettingsAdvanced.Controls.Add(m_comboboxConfigCharset);
             tabPageSettingsAdvanced.Controls.Add(m_labelConfigHtmlExtn);
             tabPageSettingsAdvanced.Controls.Add(m_comboboxConfigHtmlExtn);
             tabPageSettingsAdvanced.Controls.Add(m_checkboxConfigW3C);
@@ -1814,7 +1775,6 @@ namespace GEDmill
             tabPageSettingsAdvanced.Controls.Add(m_labelConfigStylesheetName);
             tabPageSettingsAdvanced.Controls.Add(m_labelConfigStylesheetNameExtn);
             tabPageSettingsAdvanced.Controls.Add(m_checkboxConfigPreserveStylesheet);
-            tabPageSettingsAdvanced.Controls.Add(m_checkboxConfigUseBom);
             tabPageSettingsAdvanced.Controls.Add(m_checkboxConfigSupressBackreferences);
             tabPageSettingsAdvanced.Controls.Add(m_checkboxConfigIncludeHelppage);
             m_tabcontrolConfigPanel.TabPages.Add(tabPageSettingsAdvanced);

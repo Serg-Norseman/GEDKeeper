@@ -24,6 +24,7 @@
 
 using System;
 using System.Windows.Forms;
+using GEDmill.Model;
 
 namespace GEDmill
 {

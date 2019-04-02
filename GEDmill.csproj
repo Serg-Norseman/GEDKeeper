@@ -30,6 +30,7 @@
     <SignAssembly>False</SignAssembly>
     <RunCodeAnalysis>False</RunCodeAnalysis>
     <SourceAnalysisOverrideSettingsFile>C:\Users\Norseman\AppData\Roaming\ICSharpCode\SharpDevelop5\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <StartupObject>GEDmill.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>.\</OutputPath>
@@ -103,11 +104,8 @@
     <Compile Include="src\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\CAsidPair.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="src\Extensions.cs" />
-    <Compile Include="src\HTML\QualifiedDate.cs" />
+    <Compile Include="src\GMHelper.cs" />
     <Compile Include="src\ListView\CListableMFR.cs" />
     <Compile Include="src\ListView\CListableNumber.cs" />
     <Compile Include="src\Exceptions\BlobException.cs">
@@ -117,9 +115,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\Exceptions\HTMLException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\CISRecordChanges.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\ListView\CListableBool.cs">
@@ -143,20 +138,12 @@
     <Compile Include="src\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\NameXRefPair.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="src\Program.cs" />
     <Compile Include="src\ProgressWindow.Designer.cs">
       <DependentUpon>ProgressWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\ThreadError.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="src\MainForm.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\HTML\AlphabetComparer.cs">
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\HTML\Creator.cs">
       <SubType>Code</SubType>
@@ -182,37 +169,7 @@
     <Compile Include="src\HTML\CreatorStylesheet.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\HTML\FilenameAndSize.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="src\HTML\HTMLFile.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\HTML\HusbandAndWife.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\HTML\Event.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\HTML\Multimedia.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\HTML\IndexLetter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\HTML\IndexPage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\HTML\NameAndSource.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\HTML\OccupationCounter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\HTML\Stats.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\HTML\StringTuple.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\HTML\Website.cs">
@@ -236,11 +193,57 @@
     <Compile Include="src\MiniTree\TreeDrawer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\IProgressCallback.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="src\ProgressWindow.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Model\AlphabetComparer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\CAsidPair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\CISRecordChanges.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\Event.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\FilenameAndSize.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\HusbandAndWife.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\IndexLetter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\IndexPage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\IProgressCallback.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\Multimedia.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\NameAndSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\NameXRefPair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\OccupationCounter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\QualifiedDate.cs" />
+    <Compile Include="src\Model\Stats.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\StringTuple.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\ThreadError.cs">
+      <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="src\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -256,6 +259,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\Logging" />
+    <Folder Include="src\Model" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">

@@ -25,7 +25,7 @@
 using System;
 using System.Drawing;
 
-namespace GEDmill
+namespace GEDmill.Model
 {
     // An ASID pair is used by Family Historian to delimit an sArea of a larger picture that contains the 
     // individual in question.
@@ -106,7 +106,7 @@ namespace GEDmill
             }
             catch( CParsingException )
             {
-                LogFile.TheLogFile.WriteLine( LogFile.DT_GEDCOM, LogFile.EDebugLevel.Error, String.Format("Caught CAsidPair exception {0}", sOriginalArea) );
+                LogFile.TheLogFile.WriteLine( LogFile.DT_GEDCOM, LogFile.EDebugLevel.Error, string.Format("Caught CAsidPair exception {0}", sOriginalArea) );
                 return;
             }
             m_rectArea = new Rectangle( nLeft, nTop, nRight-nLeft, nBottom-nTop );

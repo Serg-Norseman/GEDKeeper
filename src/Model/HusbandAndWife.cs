@@ -1,4 +1,4 @@
-/* CIndexLetter.cs
+/* CHusbandAndWife.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -22,26 +22,22 @@
  *
  */
 
-using System.Collections.Generic;
+using GKCommon.GEDCOM;
 
-namespace GEDmill.HTML
+namespace GEDmill.Model
 {
     /// <summary>
-    /// Data structure holding all the entries in the index under the given letter.
-    /// Title is usually the same as initial, except for no-surname case.
+    /// A data structure to encapsulate a marriage or other connection of a husband and a wife.
+    /// Used as an element in the list of all an individual's frParents.
     /// </summary>
-    public class IndexLetter
+    public class HusbandAndWife
     {
-        public List<StringTuple> Items;
-        public string Initial;
-        public string Title;
+        public GEDCOMIndividualRecord Husband;
+        public GEDCOMIndividualRecord Wife;
 
 
-        public IndexLetter(string initial, string title, List<StringTuple> letterList)
+        public HusbandAndWife()
         {
-            Initial = initial;
-            Title = title;
-            Items = letterList;
         }
     }
 }

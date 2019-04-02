@@ -24,7 +24,7 @@
 
 using System;
 
-namespace GEDmill.HTML
+namespace GEDmill.Model
 {
     /// <summary>
     /// Generally useful class for containing strings.

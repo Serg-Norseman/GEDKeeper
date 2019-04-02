@@ -24,6 +24,7 @@
 
 using System;
 using System.IO;
+using GEDmill.Model;
 using GKCommon.GEDCOM;
 using GKCore.Logging;
 
@@ -46,7 +47,7 @@ namespace GEDmill.HTML
             FileStream helpStream = null;
             StreamReader helpReader = null;
             try {
-                helpStream = new FileStream(MainForm.Config.ApplicationPath + "\\helpsource.html", FileMode.Open);
+                helpStream = new FileStream(CConfig.Instance.ApplicationPath + "\\helpsource.html", FileMode.Open);
                 helpReader = new StreamReader(helpStream, System.Text.Encoding.UTF8);
             } catch (IOException e) {
                 fLogger.WriteError("Caught io exception while loading help file source: {0}", e);
@@ -55,26 +56,25 @@ namespace GEDmill.HTML
             }
 
             if (helpStream != null && helpReader != null) {
-                string pageDescription = "GEDmill GEDCOM to HTML family history website";
-                string keywords = "family tree history " + MainForm.Config.OwnersName;
-                string title = MainForm.Config.SiteTitle;
+                string keywords = "family tree history " + CConfig.Instance.OwnersName;
+                string title = CConfig.Instance.SiteTitle;
 
                 HTMLFile f = null;
                 try {
                     // Create a new file and put standard header html into it.
-                    f = new HTMLFile(MainForm.Config.HelpPageURL, title, pageDescription, keywords);
+                    f = new HTMLFile(CConfig.Instance.HelpPageURL, title, PageDescription, keywords);
 
-                    OutputPageHeader(f.Writer, "", "", true, false);
+                    OutputPageHeader(f, "", "", true, false);
 
-                    f.Writer.WriteLine("  <div id=\"page\"> <!-- page -->");
+                    f.WriteLine("  <div id=\"page\"> <!-- page -->");
 
                     // Copy in the help html source
                     string sHelpLine;
                     while ((sHelpLine = helpReader.ReadLine()) != null) {
-                        f.Writer.WriteLine(sHelpLine);
+                        f.WriteLine(sHelpLine);
                     }
 
-                    f.Writer.WriteLine("  </div> <!-- page -->");
+                    f.WriteLine("  </div> <!-- page -->");
                 } catch (IOException e) {
                     fLogger.WriteError("Caught IO Exception : ", e);
                 } catch (ArgumentException e) {

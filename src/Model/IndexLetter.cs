@@ -1,4 +1,4 @@
-/* CFilenameAndSize.cs
+/* CIndexLetter.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -22,25 +22,26 @@
  *
  */
 
-namespace GEDmill.HTML
+using System.Collections.Generic;
+
+namespace GEDmill.Model
 {
     /// <summary>
-    /// Once a file has been copied to the output directory, it needn't be copied again. 
-    /// However, we still need to know the size of the image, even if we don't copy it a 
-    /// second time. This class encapsulates the size along with the sFilename.
+    /// Data structure holding all the entries in the index under the given letter.
+    /// Title is usually the same as initial, except for no-surname case.
     /// </summary>
-    public class FilenameAndSize
+    public class IndexLetter
     {
-        public string FileName;
-        public int Width;
-        public int Height;
+        public List<StringTuple> Items;
+        public string Initial;
+        public string Title;
 
 
-        public FilenameAndSize(string filename, int width, int height)
+        public IndexLetter(string initial, string title, List<StringTuple> letterList)
         {
-            FileName = filename;
-            Width = width;
-            Height = height;
+            Initial = initial;
+            Title = title;
+            Items = letterList;
         }
     }
 }

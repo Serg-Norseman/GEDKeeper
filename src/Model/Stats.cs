@@ -1,8 +1,8 @@
-/* COccupationCounter.cs
- * 
+/* CStats.cs
+ *
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
- * 
+ *
  * GEDmill is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,29 +17,37 @@
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  *
  *
- * History:  
+ * History:
  * 10Dec08 AlexC          Migrated from GEDmill 1.10
  *
  */
 
-using GKCommon.GEDCOM;
-
-namespace GEDmill.HTML
+namespace GEDmill.Model
 {
     /// <summary>
-    /// A data structure to encapsulate an occupation name and the date when an individual had the occupation.
-    /// Used as an element in the list of all an individual's employments.
+    /// Data structure to contain statistics about the website being created.
     /// </summary>
-    public class OccupationCounter
+    public class Stats
     {
-        public string Name;
-        public GEDCOMDateValue Date;
+        // The number of individual records in the website.
+        public uint Individuals;
+
+        // The number of source records in the website.
+        public uint Sources;
+
+        // The number of multimedia files in the website.
+        public uint MultimediaFiles;
+
+        // True if the website includes multimedia files other than pictures.
+        public bool NonPicturesIncluded;
 
 
-        public OccupationCounter(string name, GEDCOMDateValue date)
+        public Stats()
         {
-            Name = name;
-            Date = date;
+            Individuals = 0;
+            Sources = 0;
+            MultimediaFiles = 0;
+            NonPicturesIncluded = false;
         }
     }
 }

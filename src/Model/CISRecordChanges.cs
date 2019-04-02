@@ -1,4 +1,4 @@
-/* CIndexPage.cs
+/* CISRecordChanges.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -23,24 +23,34 @@
  */
 
 using System.Collections.Generic;
+using GKCommon.GEDCOM;
 
-namespace GEDmill.HTML
+namespace GEDmill.Model
 {
     /// <summary>
-    /// Data structure holding all the entries in an index page. (Significant for indexes that spread over multiple pages.)
+    /// Data structure to hold a record for the load/save changes option on the prune
+    /// individuals and sources page. See also CISRecord.
     /// </summary>
-    public class IndexPage
+    public class CISRecordChanges
     {
-        public List<IndexLetter> Letters;
-        public string FileName;
-        public int TotalIndis;
+        // True if this record is to be included (e.g. individual's checkbox is checked)
+        public bool IncludeInWebsite;
+
+        // Helper for parser
+        public GEDCOMFileReferenceWithTitle CurrentMFR;
+
+        // The multimedia file references
+        public List<GEDCOMFileReferenceWithTitle> MFRList;
+
+        public bool Visibility;
 
 
-        public IndexPage(string filename)
+        public CISRecordChanges(bool includeInWebsite)
         {
-            FileName = filename;
-            Letters = new List<IndexLetter>();
-            TotalIndis = 0;
+            IncludeInWebsite = includeInWebsite;
+            MFRList = new List<GEDCOMFileReferenceWithTitle>();
+            CurrentMFR = null;
+            Visibility = true;
         }
     }
 }

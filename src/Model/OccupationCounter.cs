@@ -1,4 +1,4 @@
-/* CPGQualifiedDate.cs
+/* COccupationCounter.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -24,42 +24,22 @@
 
 using GKCommon.GEDCOM;
 
-namespace GEDmill
+namespace GEDmill.Model
 {
-    public enum DateQualification
-    {
-        Birth,
-        Baptism,
-        Christening,
-        Death,
-        Burial,
-        Cremation
-    }
-
     /// <summary>
-    /// Class used to find the best date to use for an individual's birth or death.
-    /// Naturally an actual birth record would be best, but if this is missing, we can use the Christening date etc..
-    /// See also GEDCOMDateValue.
+    /// A data structure to encapsulate an occupation name and the date when an individual had the occupation.
+    /// Used as an element in the list of all an individual's employments.
     /// </summary>
-    public class QualifiedDate
+    public class OccupationCounter
     {
-        public DateQualification Qualification;
+        public string Name;
         public GEDCOMDateValue Date;
 
 
-        public QualifiedDate(GEDCOMDateValue date, DateQualification qualification)
+        public OccupationCounter(string name, GEDCOMDateValue date)
         {
+            Name = name;
             Date = date;
-            Qualification = qualification;
-        }
-
-        // Just delegates to GEDCOMDateValue::ToString()
-        public override string ToString()
-        {
-            if (Date != null) {
-                return Date.ToString();
-            }
-            return "";
         }
     }
 }

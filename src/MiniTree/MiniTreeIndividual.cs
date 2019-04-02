@@ -235,7 +235,7 @@ namespace GEDmill.MiniTree
         private string Name
         {
             get {
-                return String.Concat(fFirstnames, " ", fSurname);
+                return string.Concat(fFirstnames, " ", fSurname);
             }
         }
 

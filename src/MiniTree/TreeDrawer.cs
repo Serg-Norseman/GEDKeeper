@@ -79,16 +79,16 @@ namespace GEDmill.MiniTree
                 FirstName = "";
                 Surname = "";
                 Concealed = (!ir.GetVisibility());
-                if (Concealed && !MainForm.Config.UseWithheldNames) {
+                if (Concealed && !CConfig.Instance.UseWithheldNames) {
                     FirstName = "";
-                    Surname = Name = MainForm.Config.ConcealedName;
+                    Surname = Name = CConfig.Instance.ConcealedName;
                 } else {
                     var irName = ir.GetPrimaryFullName();
                     if (irName != "") {
-                        Name = MainForm.Config.CapitaliseName(irName, ref FirstName, ref Surname);
+                        Name = CConfig.Instance.CapitaliseName(irName, ref FirstName, ref Surname);
                     } else {
                         FirstName = "";
-                        Surname = Name = MainForm.Config.UnknownName;
+                        Surname = Name = CConfig.Instance.UnknownName;
                     }
                 }
 
@@ -134,8 +134,8 @@ namespace GEDmill.MiniTree
             Font f = paintbox.Font;
 
             // Record what font windows actually used, in case it chose a different one
-            MainForm.Config.TreeFontName = f.Name;
-            MainForm.Config.TreeFontSize = f.Size;
+            CConfig.Instance.TreeFontName = f.Name;
+            CConfig.Instance.TreeFontSize = f.Size;
 
             // Recursively calculate sizes of other groups
             mtgParent.CalculateSize(g, f);
@@ -170,7 +170,7 @@ namespace GEDmill.MiniTree
             g = Graphics.FromImage(bmp);
 
             // Do background fill
-            if (MainForm.Config.FakeMiniTreeTransparency && paintbox.BrushFakeTransparency != null) {
+            if (CConfig.Instance.FakeMiniTreeTransparency && paintbox.BrushFakeTransparency != null) {
                 g.FillRectangle(paintbox.BrushFakeTransparency, 0, 0, nTotalWidth, nTotalHeight);
             } else if (imageFormat == ImageFormat.Gif && paintbox.BrushBgGif != null) {
                 g.FillRectangle(paintbox.BrushBgGif, 0, 0, nTotalWidth, nTotalHeight);
@@ -197,7 +197,7 @@ namespace GEDmill.MiniTree
             bmp.Dispose();
 
             // For gifs we need to reload and set transparency colour
-            if (imageFormat == ImageFormat.Gif && !MainForm.Config.FakeMiniTreeTransparency) {
+            if (imageFormat == ImageFormat.Gif && !CConfig.Instance.FakeMiniTreeTransparency) {
                 Image imageGif;
                 ColorPalette colorpalette;
                 imageGif = Image.FromFile(fileName);
@@ -429,7 +429,7 @@ namespace GEDmill.MiniTree
                 // The ordering of children in the tree can be selected to be the same as it is in the GEDCOM file. This 
                 // is because the file should be ordered as the user chose to order the fr when entering the data in 
                 // their fr history app, regardless of actual birth dates. 
-                if (MainForm.Config.KeepSiblingOrder) {
+                if (CConfig.Instance.KeepSiblingOrder) {
                     irChild = fr.Children[nChild].Value as GEDCOMIndividualRecord;
                 } else {
                     irChild = fr.Children[nChild].Value as GEDCOMIndividualRecord;
@@ -451,7 +451,7 @@ namespace GEDmill.MiniTree
                 CBoxText boxtext = new CBoxText(ir);
                 mti = mtg.AddIndividual(ir, boxtext.FirstName, boxtext.Surname, boxtext.Date, true, false, false, boxtext.Concealed, true);
             } else {
-                mti = mtg.AddIndividual(null, "", MainForm.Config.UnknownName, " ", false, false, false, false, true);
+                mti = mtg.AddIndividual(null, "", CConfig.Instance.UnknownName, " ", false, false, false, false, true);
             }
             return mti;
         }

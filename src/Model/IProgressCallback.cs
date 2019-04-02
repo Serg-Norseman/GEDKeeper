@@ -24,7 +24,7 @@
 
 using System;
 
-namespace GEDmill
+namespace GEDmill.Model
 {
     /// <summary>
     /// This defines an interface which can be implemented by UI elements

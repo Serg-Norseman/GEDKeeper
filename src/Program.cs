@@ -1,4 +1,4 @@
-/* ThreadError.cs
+﻿/* Program.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -16,30 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  *
- *
- * History:  
- * 10Dec08 AlexC          Migrated from GEDmill 1.10
- *
  */
+
+using System;
+using System.Windows.Forms;
 
 namespace GEDmill
 {
-    /// <summary>
-    /// A data structure containing an nError code and a sMessage, for passing back from threads to their creator.
-    /// </summary>
-    public class ThreadError
+    static class Program
     {
-        // The error code
-        public int Error;
-
-        // The error message
-        public string Message;
-
-
-        public ThreadError(int error, string message)
+        [STAThread]
+        static void Main(string[] args)
         {
-            Error = error;
-            Message = message;
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainForm());
         }
     }
 }

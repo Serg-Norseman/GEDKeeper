@@ -24,7 +24,7 @@
 
 using System.Collections;
 
-namespace GEDmill.HTML
+namespace GEDmill.Model
 {
     /// <summary>
     /// Data structure encapsulating a multimedia file record, for sorting the attached multimedia into a user-specified order.

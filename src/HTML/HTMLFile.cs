@@ -37,35 +37,18 @@ namespace GEDmill.HTML
     {
         private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(HTMLFile).Name);
 
-        public FileStream Stream;
-        public StreamWriter Writer;
+        private const string CharsetString = "utf-8";
 
+        private FileStream fStream;
+        private StreamWriter fWriter;
 
-        // Returns true if the given sFilename would exist on the Windows Desktop.
-        // This is a hack ( because I don't know the official way to find the path of the user's Desktop ).
-        public static bool IsDesktop(string filename)
-        {
-            string path_part = Path.GetDirectoryName(filename);
-            // Strip trailing slashes
-            while (path_part.Length > 0 && path_part.Substring(path_part.Length - 1, 1) == "\\") {
-                path_part = path_part.Substring(0, path_part.Length - 1);
-            }
-            int folder_index = path_part.LastIndexOf('\\');
-            if (folder_index > 0 && (folder_index + 1) < path_part.Length) {
-                string folder_name = path_part.Substring(folder_index + 1);
-                if (folder_name == "Desktop") {
-                    return (true);
-                }
-            }
-            return (false);
-        }
 
         // Constructor. Creates a file with the given name and writes a standard HTML header.
         public HTMLFile(string filename, string title, string description, string keywords)
         {
             // This is for CJ who ended up with 17000 files plastered all over her desktop...
-            if (IsDesktop(filename)) {
-                throw new HTMLException(String.Format("A problem occurred when creating an HTML file:\r\nGEDmill will not place files onto the Desktop."));
+            if (GMHelper.IsDesktop(filename)) {
+                throw new HTMLException(string.Format("A problem occurred when creating an HTML file:\r\nGEDmill will not place files onto the Desktop."));
             }
 
             fLogger.WriteInfo("CHTMLFile : " + filename);
@@ -75,61 +58,77 @@ namespace GEDmill.HTML
                 File.SetAttributes(filename, FileAttributes.Normal);
                 File.Delete(filename);
             }
-            Stream = null;
+            fStream = null;
             try {
-                Stream = new FileStream(filename, FileMode.Create);
+                fStream = new FileStream(filename, FileMode.Create);
             } catch (NotSupportedException) {
-                throw new HTMLException(String.Format("A problem occurred when creating an HTML file:\r\nThe path or filename {0} is not valid.", filename));
+                throw new HTMLException(string.Format("A problem occurred when creating an HTML file:\r\nThe path or filename {0} is not valid.", filename));
             }
 
-            if (Stream != null) {
-                string charsetString = "utf-8";
+            if (fStream != null) {
                 System.Text.Encoding encoding = new UTF8EncodingWithoutPreamble();
 
-                Writer = new StreamWriter(Stream, encoding);
+                fWriter = new StreamWriter(fStream, encoding);
 
                 string date;
                 DateTime dt = DateTime.Now;
                 date = dt.ToString("yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo);
 
-                Writer.WriteLine("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
-                Writer.WriteLine("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">");
-                Writer.WriteLine("  <head>");
-                Writer.WriteLine("    <link rel=\"stylesheet\" type=\"text/css\" href=\"" + MainForm.Config.StylesheetFilename + ".css\" />");
-                if (MainForm.Config.AllowMultipleImages) // Multiple images feature is currently (10Dec08) the only thing that uses javascript
+                fWriter.WriteLine("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+                fWriter.WriteLine("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">");
+                fWriter.WriteLine("  <head>");
+                fWriter.WriteLine("    <link rel=\"stylesheet\" type=\"text/css\" href=\"" + CConfig.Instance.StylesheetFilename + ".css\" />");
+                if (CConfig.Instance.AllowMultipleImages) // Multiple images feature is currently (10Dec08) the only thing that uses javascript
                 {
-                    Writer.WriteLine("    <script type=\"text/javascript\" src=\"gedmill.js\"></script>");
+                    fWriter.WriteLine("    <script type=\"text/javascript\" src=\"gedmill.js\"></script>");
                 }
-                Writer.WriteLine("    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + charsetString + "\" />");
-                Writer.WriteLine("    <meta http-equiv=\"imagetoolbar\" content=\"no\" />");
-                Writer.WriteLine(String.Concat("    <meta name=\"Title\" content=\"", title, "\" />"));
-                Writer.WriteLine(String.Concat("    <meta name=\"Description\" content=\"", description, "\" />"));
-                Writer.WriteLine(String.Concat("    <meta name=\"Keywords\" content=\"", keywords, "\" />"));
-                Writer.WriteLine("    <meta name=\"Version\" content=\"1.00\" />");
-                Writer.WriteLine(String.Concat("    <meta name=\"VersionDate\" content=\"", date, "\" />"));
-                Writer.WriteLine(String.Concat("    <title>", title, "</title>"));
-                Writer.WriteLine("  </head>");
-                Writer.WriteLine("  ");
-                Writer.WriteLine("  <body>");
+                fWriter.WriteLine("    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + CharsetString + "\" />");
+                fWriter.WriteLine("    <meta http-equiv=\"imagetoolbar\" content=\"no\" />");
+                fWriter.WriteLine(string.Concat("    <meta name=\"Title\" content=\"", title, "\" />"));
+                fWriter.WriteLine(string.Concat("    <meta name=\"Description\" content=\"", description, "\" />"));
+                fWriter.WriteLine(string.Concat("    <meta name=\"Keywords\" content=\"", keywords, "\" />"));
+                fWriter.WriteLine("    <meta name=\"Version\" content=\"1.00\" />");
+                fWriter.WriteLine(string.Concat("    <meta name=\"VersionDate\" content=\"", date, "\" />"));
+                fWriter.WriteLine(string.Concat("    <title>", title, "</title>"));
+                fWriter.WriteLine("  </head>");
+                fWriter.WriteLine("  ");
+                fWriter.WriteLine("  <body>");
             }
         }
 
         // Write HTML footer and close the file.
         public void Close()
         {
-            Writer.WriteLine("  </body>");
-            Writer.WriteLine("</html>");
-            Writer.Close();
+            fWriter.WriteLine("  </body>");
+            fWriter.WriteLine("</html>");
+            fWriter.Close();
         }
 
-        // A class just like .Net's UTF8Encoding, except it doesn't write the Byte Order Mark (BOM).
+        public void WriteLine(string value)
+        {
+            fWriter.WriteLine(value);
+        }
+
+        public void WriteLine(string format, params object[] arg)
+        {
+            fWriter.WriteLine(string.Format(format, arg));
+        }
+
+        public void WriteH1(string text)
+        {
+            fWriter.WriteLine(string.Concat("<h1>", text, "</h1>"));
+        }
+
+        /// <summary>
+        /// A class just like .Net's UTF8Encoding, except it doesn't write the Byte Order Mark (BOM).
+        /// </summary>
         public class UTF8EncodingWithoutPreamble : System.Text.UTF8Encoding
         {
-            private static byte[] s_preamble = new byte[0];
+            private static readonly byte[] Preamble = new byte[0];
 
             public override byte[] GetPreamble()
             {
-                return s_preamble;
+                return Preamble;
             }
         }
     }

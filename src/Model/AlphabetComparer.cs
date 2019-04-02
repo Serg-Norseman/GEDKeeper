@@ -26,7 +26,7 @@ using System;
 using System.Collections;
 using System.Globalization;
 
-namespace GEDmill.HTML
+namespace GEDmill.Model
 {
     /// <summary>
     /// Used to sort the individuals index.

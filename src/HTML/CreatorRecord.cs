@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using GEDmill.Model;
 using GKCommon.GEDCOM;
 
 namespace GEDmill.HTML
@@ -76,21 +77,21 @@ namespace GEDmill.HTML
         // Adds an HTML page footer (Record date, W3C sticker, GEDmill credit etc.)
         protected void OutputFooter(HTMLFile f, GEDCOMRecord r)
         {
-            f.Writer.WriteLine("      <div id=\"footer\">");
+            f.WriteLine("      <div id=\"footer\">");
             if ((r.UserReferences.Count > 0)
               || (!string.IsNullOrEmpty(r.AutomatedRecordID))
               || (r.ChangeDate != null)
-              || (MainForm.Config.CustomFooter != "")) {
+              || (CConfig.Instance.CustomFooter != "")) {
                 foreach (GEDCOMUserReference urn in r.UserReferences) {
                     string idType = EscapeHTML(urn.ReferenceType, false);
                     if (idType == "") {
                         idType = "User reference number";
                     }
-                    f.Writer.WriteLine(String.Concat("        <p>", idType, ": ", EscapeHTML(urn.StringValue, false), "</p>"));
+                    f.WriteLine(string.Concat("        <p>", idType, ": ", EscapeHTML(urn.StringValue, false), "</p>"));
                 }
 
                 if (!string.IsNullOrEmpty(r.AutomatedRecordID)) {
-                    f.Writer.WriteLine(String.Concat("        <p>Record ", r.AutomatedRecordID, "</p>"));
+                    f.WriteLine(string.Concat("        <p>Record ", r.AutomatedRecordID, "</p>"));
                 }
                 if (r.ChangeDate != null) {
                     GEDCOMChangeDate changeDate = r.ChangeDate;
@@ -99,22 +100,22 @@ namespace GEDmill.HTML
                         if (dtx != "") {
                             dtx = " " + dtx;
                         }
-                        f.Writer.WriteLine(String.Concat("        <p id=\"changedate\">Record last changed ", dtx.ToString(), "</p>"));
+                        f.WriteLine(string.Concat("        <p id=\"changedate\">Record last changed ", dtx.ToString(), "</p>"));
                     }
                 }
-                if (MainForm.Config.CustomFooter != "") {
-                    if (MainForm.Config.FooterIsHtml) {
-                        f.Writer.WriteLine(String.Concat("        <p>", MainForm.Config.CustomFooter, "</p>"));
+                if (CConfig.Instance.CustomFooter != "") {
+                    if (CConfig.Instance.FooterIsHtml) {
+                        f.WriteLine(string.Concat("        <p>", CConfig.Instance.CustomFooter, "</p>"));
                     } else {
-                        f.Writer.WriteLine(String.Concat("        <p>", EscapeHTML(MainForm.Config.CustomFooter, false), "</p>"));
+                        f.WriteLine(string.Concat("        <p>", EscapeHTML(CConfig.Instance.CustomFooter, false), "</p>"));
                     }
                 }
             }
-            f.Writer.WriteLine("      </div> <!-- footer -->");
+            f.WriteLine("      </div> <!-- footer -->");
 
-            f.Writer.WriteLine("<p class=\"plain\">Page created using GEDmill " + CConfig.SoftwareVersion + "</p>");
+            f.WriteLine("<p class=\"plain\">Page created using GEDmill " + CConfig.SoftwareVersion + "</p>");
 
-            if (MainForm.Config.IncludeValiditySticker) {
+            if (CConfig.Instance.IncludeValiditySticker) {
                 OutputValiditySticker(f);
             }
         }
@@ -170,17 +171,17 @@ namespace GEDmill.HTML
                 string sOriginalFilename = Path.GetFileName(sMmFilename);
 
                 bool bPictureFormat = mfr.IsPictureFormat();
-                if (bPictureFormat || MainForm.Config.AllowNonPictures) {
-                    if (!bPictureFormat && MainForm.Config.AllowNonPictures) {
+                if (bPictureFormat || CConfig.Instance.AllowNonPictures) {
+                    if (!bPictureFormat && CConfig.Instance.AllowNonPictures) {
                         stats.NonPicturesIncluded = true;
                     }
 
                     string sNewFilename = sOriginalFilename;
                     if (!string.IsNullOrEmpty(sMmFilename)) {
                         // Give multimedia files a standard name
-                        if (MainForm.Config.RenameOriginalPicture) {
-                            //string sFilePart = sMmPrefix;//String.Concat( mm_prefix, nMultimediaFiles.ToString() );
-                            sNewFilename = String.Concat(mmPrefix, sExtnPart.ToLower());
+                        if (CConfig.Instance.RenameOriginalPicture) {
+                            //string sFilePart = sMmPrefix;//string.Concat( mm_prefix, nMultimediaFiles.ToString() );
+                            sNewFilename = string.Concat(mmPrefix, sExtnPart.ToLower());
                         }
 
                         if (!bBlockThisMediaType) {
@@ -200,10 +201,10 @@ namespace GEDmill.HTML
                     if (!string.IsNullOrEmpty(sCopyFilename)) {
                         string sLargeFilename = "";
                         // Copy original original version
-                        if (MainForm.Config.LinkOriginalPicture) {
-                            if (MainForm.Config.RenameOriginalPicture) {
+                        if (CConfig.Instance.LinkOriginalPicture) {
+                            if (CConfig.Instance.RenameOriginalPicture) {
                                 //string sFilePart = sMmLargePrefix;
-                                sLargeFilename = String.Concat(mmLargePrefix, sExtnPart.ToLower());
+                                sLargeFilename = string.Concat(mmLargePrefix, sExtnPart.ToLower());
                             } else {
                                 sLargeFilename = sOriginalFilename;
                             }
