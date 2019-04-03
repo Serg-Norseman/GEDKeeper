@@ -123,9 +123,6 @@
     <Compile Include="src\ListView\CListableName.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\ListView\CListableSource.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="src\ListView\CListableString.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -138,6 +135,7 @@
     <Compile Include="src\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\Model\BackReference.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="src\ProgressWindow.Designer.cs">
       <DependentUpon>ProgressWindow.cs</DependentUpon>

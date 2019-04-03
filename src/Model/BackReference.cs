@@ -1,4 +1,4 @@
-/* CListableSource.cs
+/* BackReference.cs
  * 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
@@ -23,39 +23,38 @@
  */
 
 using System;
-using System.Windows.Forms;
 using GKCommon.GEDCOM;
 
-namespace GEDmill.ListView
+namespace GEDmill.Model
 {
-    // Represents a source record in the list of sources, and provides sorting.
-    public class CListableSource : ListViewItem.ListViewSubItem, IComparable, IComparable<CListableSource>
+    /// <summary>
+    /// Data structure used to refer from a record back to whatever references it
+    /// </summary>
+    public class BackReference
     {
-        // The record in question
-        private GEDCOMSourceRecord fRecord;
+        // The record sType (individual, family, note)
+        public GEDCOMRecordType RecordType;
 
+        // The xref of the record being referenced
+        public string XRef;
 
-        public CListableSource(GEDCOMSourceRecord sr)
+        // Stores the event sType that cites this source so that the event 
+        // sType can be shown in the sources list box.
+        public string EventType;
+        
+
+        public BackReference(GEDCOMRecordType recordType, string xref, string eventType)
         {
-            fRecord = sr;
-            base.Text = sr.ShortTitle;
+            RecordType = recordType;
+            XRef = xref;
+            EventType = eventType;
         }
 
-        // Used by the list box to display the name of the source
-        public override string ToString()
+        public BackReference(BackReference other)
         {
-            return fRecord.ToString();
-        }
-
-        public int CompareTo(object obj)
-        {
-            return CompareTo((CListableSource)obj);
-        }
-
-        // Used when sorting the list box
-        public int CompareTo(CListableSource other)
-        {
-            return fRecord.ShortTitle.CompareTo(other.fRecord.ShortTitle);
+            RecordType = other.RecordType;
+            XRef = other.XRef;
+            EventType = other.EventType;
         }
     }
 }

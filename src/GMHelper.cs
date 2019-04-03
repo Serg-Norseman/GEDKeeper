@@ -198,6 +198,5 @@ namespace GEDmill
             }
             return filename;
         }
-
     }
 }

@@ -230,7 +230,7 @@ namespace GEDmill.HTML
                     }
                 }
                 AddParentsAndSiblings();
-            } // end if !concealed
+            }
 
             string birthyear = "";
             string deathyear = "";
@@ -316,10 +316,7 @@ namespace GEDmill.HTML
                     GEDCOMIndividualRecord wife = fr.GetWife();
 
                     if (husband != null || wife != null) {
-                        HusbandAndWife parents = new HusbandAndWife();
-                        parents.Husband = husband;
-                        parents.Wife = wife;
-                        fParents.Add(parents);
+                        fParents.Add(new HusbandAndWife(husband, wife));
                     }
 
                     // Get all the children in order, to find previous and next irSibling
@@ -1015,8 +1012,8 @@ namespace GEDmill.HTML
                             f.WriteLine(string.Concat("        <img id=\"mainphoto_img\" src=\"", non_pic_main_filename, "\" alt=\"", alt_name, "\" />"));
                         }
                     }
-                } else // Not linking to original picture.
-                  {
+                } else {
+                    // Not linking to original picture.
                     if (iMultimedia.Width != 0 && iMultimedia.Height != 0) {
                         // Must be a picture.
                         f.WriteLine(string.Concat("        <img id=\"mainphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"", alt_name, "\" />"));

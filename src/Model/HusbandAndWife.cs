@@ -36,8 +36,10 @@ namespace GEDmill.Model
         public GEDCOMIndividualRecord Wife;
 
 
-        public HusbandAndWife()
+        public HusbandAndWife(GEDCOMIndividualRecord husband, GEDCOMIndividualRecord wife)
         {
+            Husband = husband;
+            Wife = wife;
         }
     }
 }

@@ -34,117 +34,45 @@ namespace GEDmill.ListView
         // The record associated with this list item
         protected GEDCOMRecord fRecord;
 
-        // Surname of individual
-        protected string fSurname;
-
-        // Firstname of individual
-        protected string fFirstName;
-
         // True if this list item has a check box
-        protected bool fThisIsACheckBox;
+        protected bool fCheckBox;
 
 
-        // Constructor from individual record
-        public CListableBool(GEDCOMIndividualRecord ir, string surname, string firstname, bool bThisIsACheckBox)
+        // Constructor from record
+        public CListableBool(GEDCOMRecord ir, bool checkBox)
         {
             fRecord = ir;
-            fSurname = surname;
-            fFirstName = firstname;
-            fThisIsACheckBox = bThisIsACheckBox;
-
-            base.Text = ToString();
-        }
-
-        // Constructor
-        public CListableBool(GEDCOMRecord isr, bool bThisIsACheckBox)
-        {
-            fRecord = isr;
-            fSurname = "";
-            fFirstName = "";
-            fThisIsACheckBox = bThisIsACheckBox;
-
+            fCheckBox = checkBox;
             base.Text = ToString();
         }
 
         // For displaying the list item
         public override string ToString()
         {
-            string name = "";
-            if (!fThisIsACheckBox) {
-                if (fRecord is GEDCOMSourceRecord) {
-                    return fRecord.ToString();
-                } else {
-                    if (fFirstName != "" && fSurname != "") {
-                        name = string.Concat(fSurname, ", ", fFirstName);
-                    } else if (fSurname != "") {
-                        name = fSurname;
-                    } else {
-                        name = fFirstName;
-                    }
-
-                    if (name == "") {
-                        name = CConfig.Instance.UnknownName;
-                    }
-                }
-            }
-
-            return name;
+            return string.Empty;
         }
 
         // For sorting the list
         public int CompareTo(CListableBool other)
         {
-            // Assumption here is that other.m_bThisIsACheckBox will be the same (i.e. list is homogeneous)
-            if (!fThisIsACheckBox) {
-                // Assumption here is that other is also GEDCOMSourceRecord (i.e. list is homogeneous)
-                if (fRecord is GEDCOMSourceRecord) {
-                    return ((GEDCOMSourceRecord)fRecord).ShortTitle.CompareTo(((GEDCOMSourceRecord)other.fRecord).ShortTitle);
-                } else {
-                    if (fSurname != "" && other.fSurname != "") {
-                        int result = fSurname.CompareTo(other.fSurname);
-                        if (result != 0) {
-                            return result;
-                        }
-                    } else if (fSurname != "") {
-                        return 1;
-                    } else if (other.fSurname != "") {
-                        return -1;
-                    }
-
-                    if (fFirstName != "" && other.fFirstName != "") {
-                        return fFirstName.CompareTo(other.fFirstName);
-                    }
-
-                    if (fFirstName != "") {
-                        return 1;
-                    }
-
-                    if (other.fFirstName != "") {
-                        return -1;
-                    }
-
-                    return 0;
-                }
-            } else {
-                if (fRecord == null && other.fRecord == null) {
-                    return 0;
-                }
-                if (fRecord == null) {
-                    return 1;
-                }
-                if (other.fRecord == null) {
-                    return -1;
-                }
-                bool tr = fRecord.GetVisibility();
-                bool or = other.fRecord.GetVisibility();
-                if (tr == or) {
-                    return 0;
-                }
-                if (tr) {
-                    return 1;
-                }
+            if (fRecord == null && other.fRecord == null) {
+                return 0;
+            }
+            if (fRecord == null) {
+                return 1;
+            }
+            if (other.fRecord == null) {
                 return -1;
             }
+            bool tr = fRecord.GetVisibility();
+            bool or = other.fRecord.GetVisibility();
+            if (tr == or) {
+                return 0;
+            }
+            if (tr) {
+                return 1;
+            }
+            return -1;
         }
 
         // Used to exclude the record from the generated web site
@@ -155,9 +83,7 @@ namespace GEDmill.ListView
 
         public GEDCOMRecord Record
         {
-            get {
-                return fRecord;
-            }
+            get { return fRecord; }
         }
     }
 }

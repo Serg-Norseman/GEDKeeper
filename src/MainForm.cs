@@ -340,33 +340,34 @@ namespace GEDmill
         {
             fLogger.WriteInfo("Panel 2 browse button clicked.");
 
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            if (Directory.Exists(InputFile)) {
-                openFileDialog.InitialDirectory = InputFile;
-            } else {
-                string sPath = InputFile;
-                int nLastFolder = sPath.LastIndexOf('\\'); // Try parent folder
-                if (nLastFolder >= 0) {
-                    sPath = sPath.Substring(0, nLastFolder);
-                }
-                if (Directory.Exists(sPath)) {
-                    openFileDialog.InitialDirectory = sPath;
+            using (var openFileDialog = new OpenFileDialog()) {
+                if (Directory.Exists(InputFile)) {
+                    openFileDialog.InitialDirectory = InputFile;
                 } else {
-                    openFileDialog.InitialDirectory = Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                    string sPath = InputFile;
+                    int nLastFolder = sPath.LastIndexOf('\\'); // Try parent folder
+                    if (nLastFolder >= 0) {
+                        sPath = sPath.Substring(0, nLastFolder);
+                    }
+                    if (Directory.Exists(sPath)) {
+                        openFileDialog.InitialDirectory = sPath;
+                    } else {
+                        openFileDialog.InitialDirectory = Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                    }
+                }
+
+                openFileDialog.FileName = InputFile;
+                openFileDialog.Filter = "GEDCOM files (*.ged)|*.ged|All files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                    InputFile = openFileDialog.FileName;
+                    m_textboxChooseGedcom.SelectionStart = InputFile.Length;
+                    m_textboxChooseGedcom.SelectionLength = InputFile.Length;
                 }
             }
 
-            openFileDialog.FileName = InputFile;
-            openFileDialog.Filter = "GEDCOM files (*.ged)|*.ged|All files (*.*)|*.*";
-            openFileDialog.FilterIndex = 1;
-            openFileDialog.RestoreDirectory = true;
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                InputFile = openFileDialog.FileName;
-                m_textboxChooseGedcom.SelectionStart = InputFile.Length;
-                m_textboxChooseGedcom.SelectionLength = InputFile.Length;
-            }
             fLogger.WriteInfo("Selected file : " + InputFile);
         }
 
@@ -728,9 +729,7 @@ namespace GEDmill
             PruneIncluded = 0;
 
             try {
-                // Clear visited list
-                fTree.BeginPruning();
-
+                var marks = new List<GEDCOMRecord>();
                 // exclude all individuals unless connected in any way to this person through non-excluded people
                 foreach (ListViewItem lvi in lvPruneIndividuals.SelectedItems) {
                     if (lvi is CListableBool) {
@@ -738,21 +737,18 @@ namespace GEDmill
                         if (ir != null) {
                             // First mark as visited all possible relations of irSubject, not following restricted people
                             // Adds to visited list
-                            fTree.PruneMarkConnected(ir);
+                            fTree.PruneMarkConnected(ir, marks);
                         }
                     }
                 }
                 // Then exclude all unmarked individuals (i.e. not in visited list)
-                fTree.PruneUnmarked();
-
-                // Remove visited list
-                fTree.EndPruning();
+                fTree.PruneUnmarked(marks);
             } catch (Exception ex) {
                 ReportPruneError(ex);
             }
 
             // Rebuild list
-            FillIndividualsList(lvPruneIndividuals, true);
+            FillIndividualsList();
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -775,9 +771,7 @@ namespace GEDmill
                     if (lvi is CListableBool) {
                         GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
-                            fTree.BeginPruning();
-                            fTree.PruneDescendants(ir, true);
-                            fTree.EndPruning();
+                            fTree.PruneDescendants(ir, false);
                         }
                     }
                 }
@@ -786,7 +780,7 @@ namespace GEDmill
             }
 
             // Rebuild list
-            FillIndividualsList(lvPruneIndividuals, true);
+            FillIndividualsList();
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -809,9 +803,7 @@ namespace GEDmill
                     if (lvi is CListableBool) {
                         GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
-                            fTree.BeginPruning();
-                            fTree.PruneDescendants(ir, false);
-                            fTree.EndPruning();
+                            fTree.PruneDescendants(ir, true);
                         }
                     }
                 }
@@ -820,7 +812,7 @@ namespace GEDmill
             }
 
             // Rebuild lists
-            FillIndividualsList(lvPruneIndividuals, true);
+            FillIndividualsList();
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -843,9 +835,7 @@ namespace GEDmill
                     if (lvi is CListableBool) {
                         GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
-                            fTree.BeginPruning();
-                            fTree.PruneAncestors(ir, true);
-                            fTree.EndPruning();
+                            fTree.PruneAncestors(ir, false);
                         }
                     }
                 }
@@ -854,7 +844,7 @@ namespace GEDmill
             }
 
             // Rebuild lists
-            FillIndividualsList(lvPruneIndividuals, true);
+            FillIndividualsList();
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -877,9 +867,7 @@ namespace GEDmill
                     if (lvi is CListableBool) {
                         GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
-                            fTree.BeginPruning();
-                            fTree.PruneAncestors(ir, false);
-                            fTree.EndPruning();
+                            fTree.PruneAncestors(ir, true);
                         }
                     }
                 }
@@ -888,7 +876,7 @@ namespace GEDmill
             }
 
             // Rebuild lists
-            FillIndividualsList(lvPruneIndividuals, true);
+            FillIndividualsList();
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -914,7 +902,7 @@ namespace GEDmill
             }
 
             // Rebuild lists
-            FillIndividualsList(lvPruneIndividuals, true);
+            FillIndividualsList();
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -943,7 +931,7 @@ namespace GEDmill
             }
 
             // Rebuild lists
-            FillSourcesList(lvPruneSources, true);
+            FillSourcesList();
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -975,7 +963,7 @@ namespace GEDmill
             }
 
             // Rebuild lists
-            FillIndividualsList(lvPruneIndividuals, true);
+            FillIndividualsList();
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -1002,7 +990,7 @@ namespace GEDmill
             }
 
             // Rebuild list
-            FillSourcesList(lvPruneSources, true);
+            FillSourcesList();
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -1029,7 +1017,7 @@ namespace GEDmill
             }
 
             // Rebuild list
-            FillSourcesList(lvPruneSources, true);
+            FillSourcesList();
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -1047,7 +1035,6 @@ namespace GEDmill
             PruneIncluded = 0;
 
             try {
-                fTree.BeginPruning();
                 foreach (ListViewItem lvi in lvPruneIndividuals.Items) {
                     if (lvi is CListableBool) {
                         GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
@@ -1057,13 +1044,12 @@ namespace GEDmill
                         }
                     }
                 }
-                fTree.EndPruning();
             } catch (Exception ex) {
                 ReportPruneError(ex);
             }
 
             // Rebuild list
-            FillIndividualsList(lvPruneIndividuals, true);
+            FillIndividualsList();
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -1448,8 +1434,8 @@ namespace GEDmill
                             return false; // Go back and let user retry loading file.
                         }
                         PrunepanelDataChanged = false; // A fresh file, no user changes yet.
-                        FillIndividualsList(lvPruneIndividuals, true);
-                        FillSourcesList(lvPruneSources, true);
+                        FillIndividualsList();
+                        FillSourcesList();
 
                         return true;
 
@@ -1537,7 +1523,7 @@ namespace GEDmill
         }
 
         // Populates the list of individuals records for inclusion/exclusion in the website
-        private void FillIndividualsList(GKListView listView, bool firstColumnIsCheckbox)
+        private void FillIndividualsList()
         {
             var indiRecs = fTree.GetRecords<GEDCOMIndividualRecord>();
             fLogger.WriteInfo("FillIndividualsList() : " + indiRecs.Count.ToString());
@@ -1547,20 +1533,18 @@ namespace GEDmill
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            listView.Clear();
+            lvPruneIndividuals.Clear();
 
-            listView.View = View.Details;
-            int nameWidth = listView.Width - 70 - 70 - 20;
-            if (firstColumnIsCheckbox) {
-                listView.Columns.Add("Include", 30, HorizontalAlignment.Left);
-                nameWidth -= 30;
-            }
-            listView.Columns.Add("Name", nameWidth, HorizontalAlignment.Left);
-            listView.Columns.Add("Born", 70, HorizontalAlignment.Left);
-            listView.Columns.Add("Died", 70, HorizontalAlignment.Left);
-            listView.Columns.Add("Id", 60, HorizontalAlignment.Left);
-            listView.Columns.Add("User ref", 78, HorizontalAlignment.Left);
-            listView.Columns.Add("Pics", 48, HorizontalAlignment.Left);
+            lvPruneIndividuals.View = View.Details;
+            int nameWidth = lvPruneIndividuals.Width - 70 - 70 - 20;
+            lvPruneIndividuals.Columns.Add("Include", 30, HorizontalAlignment.Left);
+            nameWidth -= 30;
+            lvPruneIndividuals.Columns.Add("Name", nameWidth, HorizontalAlignment.Left);
+            lvPruneIndividuals.Columns.Add("Born", 70, HorizontalAlignment.Left);
+            lvPruneIndividuals.Columns.Add("Died", 70, HorizontalAlignment.Left);
+            lvPruneIndividuals.Columns.Add("Id", 60, HorizontalAlignment.Left);
+            lvPruneIndividuals.Columns.Add("User ref", 78, HorizontalAlignment.Left);
+            lvPruneIndividuals.Columns.Add("Pics", 48, HorizontalAlignment.Left);
 
             // Build an array first then blit the whole array to the list control. This is faster than adding each item to the list control individually.
             ListViewItem[] temporaryItemsList = new ListViewItem[indiRecs.Count];
@@ -1572,29 +1556,17 @@ namespace GEDmill
                     continue;
                 }*/
 
-                CListableBool lbItem;
-                if (firstColumnIsCheckbox) {
-                    lbItem = new CListableBool(ir, true);
-                } else {
-                    string sSurname = "";
-                    string sFirstName = "";
-                    CConfig.Instance.CapitaliseName(ir.GetPrimaryFullName(), ref sFirstName, ref sSurname);
-                    /*if (ir.NameSuffix != null && ir.NameSuffix != "") {
-                        sFirstName += ", " + ir.NameSuffix;
-                    }*/
-                    lbItem = new CListableBool(ir, sSurname, sFirstName, false);
-                }
-
-                SetIndividualSubItems(lbItem, ir, firstColumnIsCheckbox);
+                CListableBool lbItem = new CListableBool(ir, true);
+                SetIndividualSubItems(lbItem, ir, true);
 
                 lbItem.Checked = ir.GetVisibility();
                 temporaryItemsList[nItem++] = lbItem;
             }
 
-            listView.Items.AddRange(temporaryItemsList);
-            listView.Sort();
+            lvPruneIndividuals.Items.AddRange(temporaryItemsList);
+            lvPruneIndividuals.Sort();
 
-            m_tabpagePruneRecordsIndis.Text = "Individuals (" + listView.Items.Count + ")";
+            m_tabpagePruneRecordsIndis.Text = "Individuals (" + lvPruneIndividuals.Items.Count + ")";
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -1607,9 +1579,7 @@ namespace GEDmill
         {
             // Save checkbox state because SubItems.Clear() clears item.Text and item.Checked as well, so replace old value after calling Clear().
             bool bWasChecked = lbItem.Checked;
-            string sItemText = lbItem.Text;
             lbItem.SubItems.Clear();
-            lbItem.Text = sItemText;
             lbItem.Checked = bWasChecked;
 
             // If the list view has check boxes, the item is for the checkbox.
@@ -1646,7 +1616,7 @@ namespace GEDmill
         }
 
         // Populates the list of source records for inclusion/exclusion in the website
-        private void FillSourcesList(GKListView listView, bool firstColumnIsCheckbox)
+        private void FillSourcesList()
         {
             var sources = fTree.GetRecords<GEDCOMSourceRecord>();
             fLogger.WriteInfo("FillSourcesList() : " + sources.Count.ToString());
@@ -1656,36 +1626,34 @@ namespace GEDmill
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            listView.Clear();
+            lvPruneSources.Clear();
 
-            listView.View = View.Details;
-            int nWidthTitle = listView.Width - 140 - 20;
-            if (firstColumnIsCheckbox) {
-                listView.Columns.Add("Include", 30, HorizontalAlignment.Left);
-                nWidthTitle -= 30;
-            }
-            listView.Columns.Add("Title", nWidthTitle, HorizontalAlignment.Left);
-            listView.Columns.Add("Repository", 100, HorizontalAlignment.Left);
-            listView.Columns.Add("Citations", 60, HorizontalAlignment.Left);
-            listView.Columns.Add("B", 30, HorizontalAlignment.Left);
-            listView.Columns.Add("M", 30, HorizontalAlignment.Left);
-            listView.Columns.Add("D", 30, HorizontalAlignment.Left);
-            listView.Columns.Add("Id", 60, HorizontalAlignment.Left);
-            listView.Columns.Add("Pics", 48, HorizontalAlignment.Left);
+            lvPruneSources.View = View.Details;
+            int nWidthTitle = lvPruneSources.Width - 140 - 20;
+            lvPruneSources.Columns.Add("Include", 30, HorizontalAlignment.Left);
+            nWidthTitle -= 30;
+            lvPruneSources.Columns.Add("Title", nWidthTitle, HorizontalAlignment.Left);
+            lvPruneSources.Columns.Add("Repository", 100, HorizontalAlignment.Left);
+            lvPruneSources.Columns.Add("Citations", 60, HorizontalAlignment.Left);
+            lvPruneSources.Columns.Add("B", 30, HorizontalAlignment.Left);
+            lvPruneSources.Columns.Add("M", 30, HorizontalAlignment.Left);
+            lvPruneSources.Columns.Add("D", 30, HorizontalAlignment.Left);
+            lvPruneSources.Columns.Add("Id", 60, HorizontalAlignment.Left);
+            lvPruneSources.Columns.Add("Pics", 48, HorizontalAlignment.Left);
 
             ListViewItem[] temporaryItemsList = new ListViewItem[sources.Count];
             int nItem = 0;
             foreach (GEDCOMSourceRecord sr in sources) {
-                CListableBool item = new CListableBool(sr, firstColumnIsCheckbox);
-                SetSourceSubItems(item, sr, firstColumnIsCheckbox);
+                CListableBool item = new CListableBool(sr, true);
+                SetSourceSubItems(item, sr, true);
                 item.Checked = sr.GetVisibility();
                 temporaryItemsList[nItem++] = item;
             }
 
-            listView.Items.AddRange(temporaryItemsList);
-            listView.Sort();
+            lvPruneSources.Items.AddRange(temporaryItemsList);
+            lvPruneSources.Sort();
 
-            m_tabpagePruneRecordsSources.Text = "Sources (" + listView.Items.Count + ")";
+            m_tabpagePruneRecordsSources.Text = "Sources (" + lvPruneSources.Items.Count + ")";
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -1703,7 +1671,7 @@ namespace GEDmill
 
             if (firstColumnIsCheckbox) {
                 // First nColumn (ie. item) is checkbox, so first sub-item is title.
-                lbItem.SubItems.Add(new CListableSource(sr));
+                lbItem.SubItems.Add(new CListableString(sr.ShortTitle));
             }
 
             string repositories = "";
@@ -1729,10 +1697,10 @@ namespace GEDmill
             int nOther = 0;
             int nCitations = 0;
 
-            // TODO
-            /*if (sr.m_alBackreferences.Count > 0) {
-                foreach (CBackReference br in sr.m_alBackreferences) {
-                    switch (br.m_sEventType) {
+            var backReferences = sr.GetBackReferences();
+            if (backReferences.Count > 0) {
+                foreach (BackReference br in backReferences) {
+                    switch (br.EventType) {
                         case "BIRT":
                             nBirths++;
                             nCitations++;
@@ -1746,7 +1714,7 @@ namespace GEDmill
                             nDeaths++;
                             break;
                         default:
-                            switch (br.m_ertRecordType) {
+                            switch (br.RecordType) {
                                 case GEDCOMRecordType.rtIndividual:
                                     nCitations++;
                                     nIndis++;
@@ -1766,7 +1734,7 @@ namespace GEDmill
                             break;
                     }
                 }
-            }*/
+            }
 
             lbItem.SubItems.Add(new CListableNumber(nCitations));
             lbItem.SubItems.Add(new CListableNumber(nBirths));
@@ -2310,23 +2278,23 @@ namespace GEDmill
         // Creates output directory, deleting old ones if required, leaving them place if required.
         // Returns OK if website creation can proceed, Cancel if user should be returned to main form, Retry to retry the process without returning to main form.
         // front_page_filename is the name of a file to survive throughout this process (see also s_config.m_preserveFrontPage)
-        private DialogResult PrepareOutputDirectory(string sOutputFolder, bool bPreserveFiles)
+        private DialogResult PrepareOutputDirectory(string outputFolder, bool preserveFiles)
         {
-            fLogger.WriteInfo(string.Format("PrepareOutputDirectory({0})", sOutputFolder));
+            fLogger.WriteInfo(string.Format("PrepareOutputDirectory({0})", outputFolder));
 
             string sMessage = "Could not access or create folder.";
             MessageBoxButtons messageBoxButtons = MessageBoxButtons.RetryCancel;
             DialogResult dialogResult = DialogResult.OK;
-            bool bFailed = false;
-            string sExceptionMessage = "";
+            bool failed = false;
+            string exceptionMessage = "";
 
             // First see if folder clashes with a file
-            if (File.Exists(sOutputFolder)) {
-                fLogger.WriteInfo("Folder clashes with file : " + sOutputFolder);
+            if (File.Exists(outputFolder)) {
+                fLogger.WriteInfo("Folder clashes with file : " + outputFolder);
 
                 // Earn user that file is being deleted
                 dialogResult = MessageBox.Show(this, string.Format("The folder {0} needs to be created. " +
-                    "\r\nThis will destroy an existing file with that name.", sOutputFolder),
+                    "\r\nThis will destroy an existing file with that name.", outputFolder),
                     "Creating website", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
                 if (dialogResult == DialogResult.Cancel) {
                     fLogger.WriteInfo("Message box cancelled (2)");
@@ -2335,35 +2303,35 @@ namespace GEDmill
 
                 // Now delete output folder (which is currently a file)
                 do {
-                    bFailed = false;
-                    fLogger.WriteInfo("Deleting output folder as file : " + sOutputFolder);
+                    failed = false;
+                    fLogger.WriteInfo("Deleting output folder as file : " + outputFolder);
                     try {
                         Cursor.Current = Cursors.WaitCursor;
                         Cursor.Show();
-                        File.Delete(sOutputFolder);
+                        File.Delete(outputFolder);
                     } catch (IOException e) {
                         fLogger.WriteError("Caught IO exception : ", e);
-                        sExceptionMessage = e.Message;
-                        bFailed = true;
+                        exceptionMessage = e.Message;
+                        failed = true;
                     } catch (System.UnauthorizedAccessException e) {
                         fLogger.WriteError("Caught UnauthorizedAccessException(3) : ", e);
-                        sExceptionMessage = e.Message;
-                        bFailed = true;
+                        exceptionMessage = e.Message;
+                        failed = true;
                     } catch (Exception e) {
                         fLogger.WriteError("Caught generic exception(3) : ", e);
-                        sExceptionMessage = e.Message;
-                        bFailed = true;
+                        exceptionMessage = e.Message;
+                        failed = true;
                     }
 
-                    if (bFailed) {
+                    if (failed) {
                         // Catch failure, e.g. if user has dir/file open elsewhere
-                        sMessage = string.Format("The file {0} could not be deleted.\r\n{1}", sOutputFolder, sExceptionMessage);
+                        sMessage = string.Format("The file {0} could not be deleted.\r\n{1}", outputFolder, exceptionMessage);
                         messageBoxButtons = MessageBoxButtons.RetryCancel;
                         dialogResult = MessageBox.Show(this, sMessage, "Creating website", messageBoxButtons, MessageBoxIcon.Exclamation);
                     }
                 }
-                while (bFailed && dialogResult == DialogResult.Retry);
-                if (bFailed && dialogResult == DialogResult.Cancel) {
+                while (failed && dialogResult == DialogResult.Retry);
+                if (failed && dialogResult == DialogResult.Cancel) {
                     fLogger.WriteInfo("Message box cancelled (6)");
                     return DialogResult.Cancel;
                 }
@@ -2371,10 +2339,10 @@ namespace GEDmill
 
             // Next see if folder already exists
             // If output folder exists, offer to delete it
-            if (Directory.Exists(sOutputFolder)) {
-                fLogger.WriteInfo("Folder exists(11) : " + sOutputFolder);
+            if (Directory.Exists(outputFolder)) {
+                fLogger.WriteInfo("Folder exists(11) : " + outputFolder);
 
-                if (GMHelper.IsDesktop(sOutputFolder)) {
+                if (GMHelper.IsDesktop(outputFolder)) {
                     dialogResult = MessageBox.Show(this, "GEDmill will not allow you to create files directly on the Desktop",
                                                    "Creating website", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     fLogger.WriteInfo("Desktop detected as output folder.");
@@ -2382,7 +2350,7 @@ namespace GEDmill
                 }
 
                 // Warn user that file is being deleted
-                dialogResult = MessageBox.Show(this, string.Format("The folder {0} already exists.\r\nWould you like to delete any files it contains before creating the website files?", sOutputFolder),
+                dialogResult = MessageBox.Show(this, string.Format("The folder {0} already exists.\r\nWould you like to delete any files it contains before creating the website files?", outputFolder),
                     "Creating website",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.Cancel) {
@@ -2390,8 +2358,8 @@ namespace GEDmill
                     return DialogResult.Cancel;
                 }
                 if (dialogResult == DialogResult.Yes) {
-                    if (bPreserveFiles) {
-                        dialogResult = MessageBox.Show(this, string.Format("WARNING: Deleting the folder {0} will not preserve any existing front page and stylesheet files.\r\nDelete folder anyway?", sOutputFolder),
+                    if (preserveFiles) {
+                        dialogResult = MessageBox.Show(this, string.Format("WARNING: Deleting the folder {0} will not preserve any existing front page and stylesheet files.\r\nDelete folder anyway?", outputFolder),
                             "Creating website",
                             MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
                         if (dialogResult == DialogResult.Cancel) {
@@ -2409,36 +2377,36 @@ namespace GEDmill
                     if (dialogResult == DialogResult.Yes) {
                         fLogger.WriteInfo("Message box yes. Deleting output folder.");
                         do {
-                            bFailed = false;
+                            failed = false;
                             try {
                                 Cursor.Current = Cursors.WaitCursor;
                                 Cursor.Show();
-                                if (Directory.Exists(sOutputFolder)) {
-                                    Directory.Delete(sOutputFolder, true);
+                                if (Directory.Exists(outputFolder)) {
+                                    Directory.Delete(outputFolder, true);
                                 }
                             } catch (IOException e) {
                                 fLogger.WriteError("Caught IOException(2) : ", e);
-                                sExceptionMessage = e.Message;
-                                bFailed = true;
+                                exceptionMessage = e.Message;
+                                failed = true;
                             } catch (System.UnauthorizedAccessException e) {
                                 fLogger.WriteError("Caught UnauthorizedAccessException(2) : ", e);
-                                sExceptionMessage = e.Message;
-                                bFailed = true;
+                                exceptionMessage = e.Message;
+                                failed = true;
                             } catch (Exception e) {
                                 fLogger.WriteError("Caught generic exception(2) : ", e);
-                                sExceptionMessage = e.Message;
-                                bFailed = true;
+                                exceptionMessage = e.Message;
+                                failed = true;
                             }
-                            if (bFailed) {
+                            if (failed) {
                                 // Catch failure, e.g. if user has dir/file open elsewhere
-                                sMessage = string.Format("The folder {0} could not be deleted.\r\n{1}", sOutputFolder, sExceptionMessage);
+                                sMessage = string.Format("The folder {0} could not be deleted.\r\n{1}", outputFolder, exceptionMessage);
                                 messageBoxButtons = MessageBoxButtons.RetryCancel;
                                 dialogResult = MessageBox.Show(this, sMessage, "Creating website",
                                     messageBoxButtons, MessageBoxIcon.Exclamation);
                             }
                         }
-                        while (bFailed && dialogResult == DialogResult.Retry);
-                        if (bFailed && dialogResult == DialogResult.Cancel) {
+                        while (failed && dialogResult == DialogResult.Retry);
+                        if (failed && dialogResult == DialogResult.Cancel) {
                             return DialogResult.Cancel;
                         }
                     } // end "Yes" to not preserve files
@@ -2446,60 +2414,60 @@ namespace GEDmill
             } // end if output folder exists
 
             // At last, try to create the folder
-            bFailed = false;
+            failed = false;
             DirectoryInfo directoryInfo = null;
             fLogger.WriteInfo("Creating output folder.");
             try {
-                directoryInfo = Directory.CreateDirectory(sOutputFolder);
+                directoryInfo = Directory.CreateDirectory(outputFolder);
             }
             // Order of catches is important here, due to hierarchy of exception classes.
             catch (DirectoryNotFoundException e) {
                 sMessage = "The folder you have selected could not be found.";
-                sExceptionMessage = e.Message;
+                exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught DirectoryNotFoundException(5) : ", e);
-                bFailed = true;
+                failed = true;
             } catch (ArgumentNullException e) {
                 sMessage = "The folder name is missing or illegal.";
-                sExceptionMessage = e.Message;
+                exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught ArgumentNullException(5) : ", e);
-                bFailed = true;
+                failed = true;
             } catch (PathTooLongException e) {
                 sMessage = "The folder name you have selected is too long.";
-                sExceptionMessage = e.Message;
+                exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught PathTooLongException(5) : ", e);
-                bFailed = true;
+                failed = true;
             } catch (IOException e) {
                 sMessage = "The path you have selected is read-only, or the folder is not empty.";
-                sExceptionMessage = e.Message;
+                exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.RetryCancel; // Let them correct this outside of app
                 fLogger.WriteError("Caught IOException(5) : ", e);
-                bFailed = true;
+                failed = true;
             } catch (UnauthorizedAccessException e) {
                 sMessage = "You do not have the correct permissions to access the folder.";
-                sExceptionMessage = e.Message;
+                exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.RetryCancel; // Let them correct this outside of app
                 fLogger.WriteError("Caught UnauthorizedAccessException(5) : ", e);
-                bFailed = true;
+                failed = true;
             } catch (ArgumentException e) {
                 sMessage = "The folder name you have selected is of an illegal format.";
-                sExceptionMessage = e.Message;
+                exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught ArgumentException(5) : ", e);
-                bFailed = true;
+                failed = true;
             } catch (NotSupportedException e) {
                 sMessage = "The folder name you have selected is of an unsupported format.";
-                sExceptionMessage = e.Message;
+                exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught NotSupportedException(5) : ", e);
-                bFailed = true;
+                failed = true;
             }
 
             // Handle any failure with a sMessage box
-            if (bFailed) {
-                dialogResult = MessageBox.Show(this, string.Concat(sMessage, "\r\n", sExceptionMessage), "Creating website", messageBoxButtons, MessageBoxIcon.Exclamation);
+            if (failed) {
+                dialogResult = MessageBox.Show(this, string.Concat(sMessage, "\r\n", exceptionMessage), "Creating website", messageBoxButtons, MessageBoxIcon.Exclamation);
 
                 if (dialogResult == DialogResult.Retry) {
                     return DialogResult.Retry;

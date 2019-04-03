@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using GEDmill.Model;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Tools;
 using GKCore.Types;
 
 namespace GEDmill
@@ -93,6 +94,12 @@ namespace GEDmill
             return result;
         }
 
+        public static List<BackReference> GetBackReferences(this GEDCOMSourceRecord record)
+        {
+            var result = new List<BackReference>();
+            return result;
+        }
+
         public static string GetLifeDatesStr(this GEDCOMIndividualRecord record)
         {
             var lifeDates = record.GetLifeDates();
@@ -112,28 +119,44 @@ namespace GEDmill
             return (mmKind == MultimediaKind.mkImage);
         }
 
-        public static void BeginPruning(this GEDCOMTree tree)
+        private static bool PruneProc(GEDCOMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
         {
+            bool visible = (bool)extData;
+            iRec.SetVisibility(visible);
+            return true;
         }
 
-        public static void EndPruning(this GEDCOMTree tree)
+        public static void PruneAncestors(this GEDCOMTree tree, GEDCOMIndividualRecord iRec, bool visible)
         {
+            TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAncestors, PruneProc, ((object)visible));
         }
 
-        public static void PruneAncestors(this GEDCOMTree tree, GEDCOMIndividualRecord iRec, bool x)
+        public static void PruneDescendants(this GEDCOMTree tree, GEDCOMIndividualRecord iRec, bool visible)
         {
+            TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmDescendants, PruneProc, ((object)visible));
         }
 
-        public static void PruneDescendants(this GEDCOMTree tree, GEDCOMIndividualRecord iRec, bool x)
+        private static bool PruneMarkProc(GEDCOMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
         {
+            var marks = (List<GEDCOMRecord>)extData;
+            marks.Add(iRec);
+            return true;
         }
 
-        public static void PruneMarkConnected(this GEDCOMTree tree, GEDCOMIndividualRecord iRec)
+        public static void PruneMarkConnected(this GEDCOMTree tree, GEDCOMIndividualRecord iRec, List<GEDCOMRecord> marks)
         {
+            TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, PruneMarkProc, marks);
         }
 
-        public static void PruneUnmarked(this GEDCOMTree tree)
+        public static void PruneUnmarked(this GEDCOMTree tree, List<GEDCOMRecord> marks)
         {
+            var treeEnum = tree.GetEnumerator(GEDCOMRecordType.rtIndividual);
+            GEDCOMRecord record;
+            while (treeEnum.MoveNext(out record)) {
+                if (marks.IndexOf(record) < 0) {
+                    record.SetVisibility(false);
+                }
+            }
         }
 
         public static string MakeLinkNumber(this GEDCOMSourceCitation sourCit, uint uSourceCount, bool bComma)

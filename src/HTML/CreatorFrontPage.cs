@@ -61,21 +61,21 @@ namespace GEDmill.HTML
                 f.WriteLine("  <div id=\"page\"> <!-- page -->");
                 f.WriteLine("    <div id=\"cover\"> <!-- cover -->");
 
-                f.WriteLine(string.Concat("       <h1>", EscapeHTML(title, false), "</h1>"));
+                f.WriteLine("<h1>{0}</h1>", EscapeHTML(title, false));
 
                 if (!string.IsNullOrEmpty(CConfig.Instance.FrontPageImageFilename)) {
                     Rectangle newArea = new Rectangle(0, 0, 0, 0);
                     string pictureFile = CopyMultimedia(CConfig.Instance.FrontPageImageFilename, "", 0, 0, ref newArea, null);
                     if (!string.IsNullOrEmpty(pictureFile)) {
-                        f.WriteLine(string.Concat("       <p><img src=\"" + pictureFile + "\" alt=\"Front page image\" /></p>"));
+                        f.WriteLine("<p><img src=\"{0}\" alt=\"Front page image\" /></p>", pictureFile);
                     }
                 }
 
                 if (!string.IsNullOrEmpty(CConfig.Instance.CommentaryText)) {
                     if (CConfig.Instance.CommentaryIsHtml) {
-                        f.WriteLine(string.Concat("       <p>", CConfig.Instance.CommentaryText, "</p>"));
+                        f.WriteLine("<p>{0}</p>", CConfig.Instance.CommentaryText);
                     } else {
-                        f.WriteLine(string.Concat("       <p>", EscapeHTML(CConfig.Instance.CommentaryText, false), "</p>"));
+                        f.WriteLine("<p>{0}</p>", EscapeHTML(CConfig.Instance.CommentaryText, false));
                     }
                 }
 
@@ -93,17 +93,14 @@ namespace GEDmill.HTML
                         sSources += "s";
                     }
 
-                    string sFileType;
-                    sFileType = fStats.NonPicturesIncluded ? "multimedia file" : "image";
-
-                    string sMultimedia;
-                    sMultimedia = fStats.MultimediaFiles == 0 ? "" : string.Concat(". There are links to ", fStats.MultimediaFiles.ToString(), " ", sFileType);
+                    string fileType = fStats.NonPicturesIncluded ? "multimedia file" : "image";
+                    string multimedia = fStats.MultimediaFiles == 0 ? "" : string.Concat(". There are links to ", fStats.MultimediaFiles.ToString(), " ", fileType);
 
                     if (fStats.MultimediaFiles > 1) {
-                        sMultimedia += "s";
+                        multimedia += "s";
                     }
 
-                    f.WriteLine(string.Concat("       <p>This website contains records on ", sIndividuals, sSources, sMultimedia, ".</p>"));
+                    f.WriteLine(string.Concat("       <p>This website contains records on ", sIndividuals, sSources, multimedia, ".</p>"));
                 }
 
                 f.WriteLine("       <div id=\"links\"> <!-- links -->");
@@ -125,14 +122,14 @@ namespace GEDmill.HTML
                         if (censoredKeyIndividuals.Count > 1) {
                             plural = "s";
                         }
-                        f.WriteLine("         <div id=\"keyindividuals\">");
-                        f.WriteLine(string.Concat("           <p>Key Individual", plural, ":</p>"));
-                        f.WriteLine("           <ul>");
+                        f.WriteLine("<div id=\"keyindividuals\">");
+                        f.WriteLine("<p>Key Individual{0}:</p>", plural);
+                        f.WriteLine("<ul>");
                         foreach (string air_link in censoredKeyIndividuals) {
-                            f.WriteLine(string.Concat("             <li>", air_link, "</li>"));
+                            f.WriteLine("<li>{0}</li>", air_link);
                         }
-                        f.WriteLine("           </ul>");
-                        f.WriteLine("         </div> <!-- keyindividuals -->");
+                        f.WriteLine("</ul>");
+                        f.WriteLine("</div> <!-- keyindividuals -->");
                     }
                 }
 
@@ -143,18 +140,17 @@ namespace GEDmill.HTML
                 }
 
                 // Add brand and contact label
-                f.WriteLine(string.Concat("       <p>Website created", byEmail, " using GEDmill.</p>"));
+                f.WriteLine("<p>Website created{0} using GEDmill.</p>", byEmail);
                 // Add last update string
                 if (CConfig.Instance.AddHomePageCreateTime) {
                     DateTime dt = DateTime.Now;
                     string update_date_string = dt.ToString("dd MMMM yyyy", DateTimeFormatInfo.InvariantInfo);
-
-                    f.WriteLine(string.Concat("       <p>Created on ", update_date_string, ".</p>"));
+                    f.WriteLine("<p>Created on {0}.</p>", update_date_string);
                 }
 
                 // Add link to users main website
                 if (!string.IsNullOrEmpty(CConfig.Instance.MainWebsiteLink)) {
-                    f.WriteLine(string.Concat("    <p><a href=\"", CConfig.Instance.MainWebsiteLink, "\">Return to main site</a></p>"));
+                    f.WriteLine("<p><a href=\"{0}\">Return to main site</a></p>", CConfig.Instance.MainWebsiteLink);
                 }
 
                 f.WriteLine("    </div> <!-- cover -->");

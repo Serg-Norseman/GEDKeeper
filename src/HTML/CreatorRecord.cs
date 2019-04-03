@@ -46,7 +46,8 @@ namespace GEDmill.HTML
         }
 
         // Adds the given multimedia links to the given multimedia list.
-        protected void AddMultimedia(GEDCOMList<GEDCOMMultimediaLink> multimediaLinks, string mmPrefix, string mmLargePrefix, uint maxWidth, uint maxHeight, Stats stats)
+        protected void AddMultimedia(GEDCOMList<GEDCOMMultimediaLink> multimediaLinks, string mmPrefix,
+                                     string mmLargePrefix, uint maxWidth, uint maxHeight, Stats stats)
         {
             // TODO: ml.GetFileReferences();
             var fileRefs = new List<GEDCOMFileReference>();
@@ -121,7 +122,8 @@ namespace GEDmill.HTML
         }
 
         // Adds the given list of file references to the multimedia list.
-        private void AddMultimediaFileReferences(List<GEDCOMFileReference> fileRefs, string mmPrefix, string mmLargePrefix, uint maxWidth, uint maxHeight, Stats stats)
+        private void AddMultimediaFileReferences(List<GEDCOMFileReference> fileRefs, string mmPrefix,
+                                                 string mmLargePrefix, uint maxWidth, uint maxHeight, Stats stats)
         {
             if (fileRefs == null) {
                 return;
