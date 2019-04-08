@@ -228,11 +228,10 @@ namespace GKCommon.GEDCOM
         gf_Ahnenblatt,
         gf_Genealogy_RusOld,
         gf_FTB,
-        gf_FamilyTreeMakerW,
-        gf_FamilyTreeMakerM,
+        gf_FamilyTreeMaker,
         gf_FamilyHistorian,
 
-        gf_Last = gf_FTB
+        gf_Last = gf_FamilyHistorian
     }
 
     public enum GEDCOMCharacterSet

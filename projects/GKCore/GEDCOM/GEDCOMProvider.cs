@@ -44,12 +44,14 @@ namespace GKCommon.GEDCOM
 
     public sealed class GEDCOMAppFormat
     {
+        public readonly GEDCOMFormat Format;
         public readonly string Sign;
         public readonly string Name;
         public readonly int PredefCharset;
 
-        public GEDCOMAppFormat(string sign, string name, int predefCharset)
+        public GEDCOMAppFormat(GEDCOMFormat format, string sign, string name, int predefCharset)
         {
+            Format = format;
             Sign = sign;
             Name = name;
             PredefCharset = predefCharset;
@@ -92,18 +94,18 @@ namespace GKCommon.GEDCOM
             fTagsBase = CreatePropertiesDict();
 
             GEDCOMFormats = new GEDCOMAppFormat[] {
-                new GEDCOMAppFormat("", "", -1),
-                new GEDCOMAppFormat("GEDKeeper", "", -1),
-                new GEDCOMAppFormat("GENBOX", "Genbox Family History", -1),
-                new GEDCOMAppFormat("ALTREE", "Agelong Tree", -1),
-                new GEDCOMAppFormat("AGES", "Ages!", -1),
-                new GEDCOMAppFormat("PAF", "Personal Ancestral File", -1),
-                new GEDCOMAppFormat("AHN", "Ahnenblatt", -1),
-                new GEDCOMAppFormat("├σφσαδεπΦ", "Genealogy (Rus, old)", 1251), // signature in CP437
-                new GEDCOMAppFormat("MYHERITAGE", "MyHeritage Family Tree Builder", -1),
-                new GEDCOMAppFormat("FTW", "Family Tree Maker for Windows", -1),
-                new GEDCOMAppFormat("FTM", "Family Tree Maker for Windows", -1),
-                new GEDCOMAppFormat("FAMILY_HISTORIAN", "Family Historian", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_Unknown, "", "", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_Native, "GEDKeeper", "", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_GENBOX, "GENBOX", "Genbox Family History", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_ALTREE, "ALTREE", "Agelong Tree", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_AGES, "AGES", "Ages!", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_PAF, "PAF", "Personal Ancestral File", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_Ahnenblatt, "AHN", "Ahnenblatt", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_Genealogy_RusOld, "├σφσαδεπΦ", "Genealogy (Rus, old)", 1251), // signature in CP437
+                new GEDCOMAppFormat(GEDCOMFormat.gf_FTB, "MYHERITAGE", "MyHeritage Family Tree Builder", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_FamilyTreeMaker, "FTM", "Family Tree Maker for Windows", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_FamilyTreeMaker, "FTW", "Family Tree Maker for Windows", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_FamilyHistorian, "FAMILY_HISTORIAN", "Family Historian", -1),
             };
         }
 
@@ -158,7 +160,7 @@ namespace GKCommon.GEDCOM
                         // GEDKeeper native format (old) and ASCII charset
                         SetEncoding(Encoding.GetEncoding(1251));
                     } else {
-                        var fmtProps = GEDCOMFormats[(int)format];
+                        var fmtProps = GetGEDCOMFormatProps(format);
                         if (fmtProps.PredefCharset > -1) {
                             SetEncoding(Encoding.GetEncoding(fmtProps.PredefCharset));
                         } else {
@@ -504,15 +506,29 @@ namespace GKCommon.GEDCOM
             if (tree != null) {
                 string sour = tree.Header.Source.Trim();
 
-                for (GEDCOMFormat gf = GEDCOMFormat.gf_Native; gf <= GEDCOMFormat.gf_Last; gf++) {
-                    string fmtSign = GEDCOMProvider.GEDCOMFormats[(int)gf].Sign;
-                    if (string.Equals(fmtSign, sour, StringComparison.Ordinal)) {
-                        return gf;
+                int num = GEDCOMProvider.GEDCOMFormats.Length;
+                for (int i = 1; i < num; i++) {
+                    var appFmt = GEDCOMProvider.GEDCOMFormats[i];
+                    if (string.Equals(appFmt.Sign, sour, StringComparison.Ordinal)) {
+                        return appFmt.Format;
                     }
                 }
             }
 
             return GEDCOMFormat.gf_Unknown;
+        }
+
+        public static GEDCOMAppFormat GetGEDCOMFormatProps(GEDCOMFormat format)
+        {
+            int num = GEDCOMProvider.GEDCOMFormats.Length;
+            for (int i = 1; i < num; i++) {
+                var appFmt = GEDCOMProvider.GEDCOMFormats[i];
+                if (appFmt.Format == format) {
+                    return appFmt;
+                }
+            }
+
+            return GEDCOMProvider.GEDCOMFormats[0];
         }
 
         #endregion

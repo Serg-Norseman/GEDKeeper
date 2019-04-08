@@ -22,6 +22,8 @@ using System;
 using System.IO;
 using System.Reflection;
 using GKCore;
+using GKCore.Tools;
+using GKTests.Stubs;
 using NUnit.Framework;
 
 namespace GKCommon.GEDCOM
@@ -157,6 +159,82 @@ namespace GKCommon.GEDCOM
                     GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
                     Assert.IsNotNull(noteRec1);
                     Assert.AreEqual("Test1\r\ntest2\r\ntest3 badline badline badline badline", noteRec1.Note.Text);
+                }
+            }
+        }
+
+        [Test]
+        public void Test_MinIndented()
+        {
+            using (BaseContext ctx = new BaseContext(null)) {
+                Assembly assembly = typeof(CoreTests).Assembly;
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_min_indented.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+
+                    var subm = ctx.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+                    Assert.IsNotNull(subm);
+                    Assert.AreEqual("John Doe", subm.Name.FullName);
+                }
+            }
+        }
+
+        [Test]
+        public void Test_EmptyLines()
+        {
+            using (BaseContext ctx = new BaseContext(null)) {
+                Assembly assembly = typeof(CoreTests).Assembly;
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_empty_lines.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+
+                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I001") as GEDCOMIndividualRecord;
+                    Assert.IsNotNull(iRec1);
+                    Assert.AreEqual("John Doe", iRec1.GetPrimaryFullName());
+
+                    GEDCOMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I002") as GEDCOMIndividualRecord;
+                    Assert.IsNotNull(iRec2);
+                    Assert.AreEqual("Jane Doe", iRec2.GetPrimaryFullName());
+                }
+            }
+        }
+
+        [Test]
+        public void Test_FamilyHistorian()
+        {
+            using (BaseContext ctx = new BaseContext(null)) {
+                Assembly assembly = typeof(CoreTests).Assembly;
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_famhist.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                    TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
+
+                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                    Assert.IsNotNull(iRec1);
+                    Assert.AreEqual("Tom Thompson", iRec1.GetPrimaryFullName());
+                }
+            }
+        }
+
+        [Test]
+        public void Test_FamilyTreeMaker_2008()
+        {
+            // actually need to find the real signature of version for FTM 2008 (wrong in the file)
+            using (BaseContext ctx = new BaseContext(null)) {
+                Assembly assembly = typeof(CoreTests).Assembly;
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ftm2008.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                    TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
+
+                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                    Assert.IsNotNull(iRec1);
+                    Assert.AreEqual("John Smith", iRec1.GetPrimaryFullName());
+
+                    // test of conversion
+                    var occuEvent = iRec1.FindEvent("OCCU");
+                    Assert.IsNotNull(occuEvent);
+                    Assert.AreEqual("test occupation", occuEvent.StringValue);
                 }
             }
         }

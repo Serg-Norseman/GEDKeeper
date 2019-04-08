@@ -275,11 +275,11 @@ namespace GKCore.Tools
         private static void CheckRecord_IndiEvent(GEDCOMCustomEvent evt, GEDCOMFormat format)
         {
             // Fix for Family Tree Maker 2008 which exports occupation as generic EVEN events
-            if (format == GEDCOMFormat.gf_FamilyTreeMakerM || format == GEDCOMFormat.gf_FamilyTreeMakerW) {
-                string subtype = evt.StringValue;
+            if (format == GEDCOMFormat.gf_FamilyTreeMaker) {
+                string subtype = evt.Classification;
                 if (evt.Name == "EVEN" && subtype.ToLower() == "occupation") {
                     evt.SetName("OCCU");
-                    evt.StringValue = string.Empty;
+                    evt.Classification = string.Empty;
                 }
             }
         }
@@ -324,7 +324,6 @@ namespace GKCore.Tools
                 for (int i = 0, num = iRec.Events.Count; i < num; i++) {
                     GEDCOMCustomEvent evt = iRec.Events[i];
 
-                    CheckRecord_IndiEvent(evt, format);
                     CheckRecord_EventPlace(evt);
                     CheckRecord_AttrCompatible(tree, format, iRec, evt);
                     CheckRecord_RepairTag(tree, format, evt);
@@ -340,23 +339,22 @@ namespace GKCore.Tools
                     CheckRecord_Name(iRec, iRec.PersonalNames[i], baseContext);
                 }
             } else {
-                int num = iRec.Events.Count;
-                for (int i = 0; i < num; i++) {
-                    CheckRecord_PrepareTag(tree, format, iRec.Events[i]);
+                for (int i = 0, num = iRec.Events.Count; i < num; i++) {
+                    GEDCOMCustomEvent evt = iRec.Events[i];
+
+                    CheckRecord_IndiEvent(evt, format);
+                    CheckRecord_PrepareTag(tree, format, evt);
                 }
 
-                num = iRec.ChildToFamilyLinks.Count;
-                for (int i = 0; i < num; i++) {
+                for (int i = 0, num = iRec.ChildToFamilyLinks.Count; i < num; i++) {
                     CheckRecord_PreparePtr(tree, format, iRec.ChildToFamilyLinks[i]);
                 }
 
-                num = iRec.SpouseToFamilyLinks.Count;
-                for (int i = 0; i < num; i++) {
+                for (int i = 0, num = iRec.SpouseToFamilyLinks.Count; i < num; i++) {
                     CheckRecord_PreparePtr(tree, format, iRec.SpouseToFamilyLinks[i]);
                 }
 
-                num = iRec.Associations.Count;
-                for (int i = 0; i < num; i++) {
+                for (int i = 0, num = iRec.Associations.Count; i < num; i++) {
                     CheckRecord_PreparePtr(tree, format, iRec.Associations[i]);
                 }
             }
