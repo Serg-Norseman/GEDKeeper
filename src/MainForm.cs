@@ -1953,16 +1953,16 @@ namespace GEDmill
             m_checkboxConfigKeepSiblingOrder.Checked = CConfig.Instance.KeepSiblingOrder;
             m_checkboxConfigAllowMultimedia.Checked = CConfig.Instance.AllowMultimedia;
 
-            m_colorConfigMiniTreeBranch = Paintbox.ConvertColour(CConfig.Instance.MiniTreeColourBranch);
-            m_colorConfigMiniTreeIndiBorder = Paintbox.ConvertColour(CConfig.Instance.MiniTreeColourIndiBorder);
-            m_colorConfigMiniTreeIndiBackground = Paintbox.ConvertColour(CConfig.Instance.MiniTreeColourIndiBackground);
-            m_colorConfigMiniTreeIndiHighlight = Paintbox.ConvertColour(CConfig.Instance.MiniTreeColourIndiHighlight);
-            m_colorConfigMiniTreeIndiBgConcealed = Paintbox.ConvertColour(CConfig.Instance.MiniTreeColourIndiBgConcealed);
-            m_colorConfigMiniTreeIndiFgConcealed = Paintbox.ConvertColour(CConfig.Instance.MiniTreeColourIndiFgConcealed);
-            m_colorConfigMiniTreeIndiShade = Paintbox.ConvertColour(CConfig.Instance.MiniTreeColourIndiShade);
-            m_colorConfigMiniTreeIndiText = Paintbox.ConvertColour(CConfig.Instance.MiniTreeColourIndiText);
-            m_colorConfigMiniTreeIndiLink = Paintbox.ConvertColour(CConfig.Instance.MiniTreeColourIndiLink);
-            m_colorConfigMiniTreeBackground = Paintbox.ConvertColour(CConfig.Instance.MiniTreeColourBackground);
+            m_colorConfigMiniTreeBranch = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourBranch);
+            m_colorConfigMiniTreeIndiBorder = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiBorder);
+            m_colorConfigMiniTreeIndiBackground = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiBackground);
+            m_colorConfigMiniTreeIndiHighlight = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiHighlight);
+            m_colorConfigMiniTreeIndiBgConcealed = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiBgConcealed);
+            m_colorConfigMiniTreeIndiFgConcealed = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiFgConcealed);
+            m_colorConfigMiniTreeIndiShade = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiShade);
+            m_colorConfigMiniTreeIndiText = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiText);
+            m_colorConfigMiniTreeIndiLink = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiLink);
+            m_colorConfigMiniTreeBackground = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourBackground);
 
             m_checkboxConfigSupressBackreferences.Checked = !CConfig.Instance.SupressBackreferences;
 
@@ -2222,16 +2222,16 @@ namespace GEDmill
             CConfig.Instance.KeepSiblingOrder = m_checkboxConfigKeepSiblingOrder.Checked;
             CConfig.Instance.AllowMultimedia = m_checkboxConfigAllowMultimedia.Checked;
 
-            CConfig.Instance.MiniTreeColourBranch = Paintbox.ConvertColour(m_colorConfigMiniTreeBranch);
-            CConfig.Instance.MiniTreeColourIndiBorder = Paintbox.ConvertColour(m_colorConfigMiniTreeIndiBorder);
-            CConfig.Instance.MiniTreeColourIndiBackground = Paintbox.ConvertColour(m_colorConfigMiniTreeIndiBackground);
-            CConfig.Instance.MiniTreeColourIndiHighlight = Paintbox.ConvertColour(m_colorConfigMiniTreeIndiHighlight);
-            CConfig.Instance.MiniTreeColourIndiBgConcealed = Paintbox.ConvertColour(m_colorConfigMiniTreeIndiBgConcealed);
-            CConfig.Instance.MiniTreeColourIndiFgConcealed = Paintbox.ConvertColour(m_colorConfigMiniTreeIndiFgConcealed);
-            CConfig.Instance.MiniTreeColourIndiShade = Paintbox.ConvertColour(m_colorConfigMiniTreeIndiShade);
-            CConfig.Instance.MiniTreeColourIndiText = Paintbox.ConvertColour(m_colorConfigMiniTreeIndiText);
-            CConfig.Instance.MiniTreeColourIndiLink = Paintbox.ConvertColour(m_colorConfigMiniTreeIndiLink);
-            CConfig.Instance.MiniTreeColourBackground = Paintbox.ConvertColour(m_colorConfigMiniTreeBackground);
+            CConfig.Instance.MiniTreeColourBranch = GMHelper.ConvertColour(m_colorConfigMiniTreeBranch);
+            CConfig.Instance.MiniTreeColourIndiBorder = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiBorder);
+            CConfig.Instance.MiniTreeColourIndiBackground = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiBackground);
+            CConfig.Instance.MiniTreeColourIndiHighlight = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiHighlight);
+            CConfig.Instance.MiniTreeColourIndiBgConcealed = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiBgConcealed);
+            CConfig.Instance.MiniTreeColourIndiFgConcealed = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiFgConcealed);
+            CConfig.Instance.MiniTreeColourIndiShade = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiShade);
+            CConfig.Instance.MiniTreeColourIndiText = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiText);
+            CConfig.Instance.MiniTreeColourIndiLink = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiLink);
+            CConfig.Instance.MiniTreeColourBackground = GMHelper.ConvertColour(m_colorConfigMiniTreeBackground);
 
             CConfig.Instance.SupressBackreferences = !m_checkboxConfigSupressBackreferences.Checked;
         }

@@ -111,21 +111,85 @@ namespace GEDmill.MiniTree
         private SizeF fSizeDate;
 
 
-        public MiniTreeIndividual(GEDCOMIndividualRecord ir, string sFirstNames, string sSurname, string sDate, bool bCreateLink, bool bCreateStalk, bool bHighlight, bool bConcealed, bool bShade, bool bConserveWidth)
+        // Accessor for the individual's name
+        private string Name
+        {
+            get { return string.Concat(fFirstnames, " ", fSurname); }
+        }
+
+        // Accessor for left side position of box sArea.
+        public float Left
+        {
+            get { return fX; }
+        }
+
+        // Accessor for right side position of box sArea.
+        public float Right
+        {
+            get { return fX + fSize.Width; }
+        }
+
+        // Accessor for top side position of box sArea.
+        public float Top
+        {
+            get { return fY; }
+        }
+
+        // Accessor for bottom side position of box sArea.
+        public float Bottom
+        {
+            get { return fY + fSize.Height; }
+        }
+
+        // The vertical centre of the box, where the tee gedcomLine between boxes should attach.
+        public float TeeCentreVert
+        {
+            get { return fY + MARGIN_VERT + (fSizeText.Height / 2f); }
+        }
+
+        // The left edge of the box, where the tee gedcomLine between boxes should attach.
+        public float TeeLeft
+        {
+            get { return fX + MARGIN_HORIZ; }
+        }
+
+        // The right edge of the box, where the tee gedcomLine between boxes should attach.
+        public float TeeRight
+        {
+            get { return fX + fSize.Width - MARGIN_HORIZ; }
+        }
+
+        // Caller should call HasStalk first to ensure nResult from this property is valid.
+        // The horizontal centre of the box, where the tee gedcomLine up to frParents should attach.
+        public float Stalk
+        {
+            get { return fX + (fSize.Width / 2f); }
+        }
+
+        // Returns true if this box needs a gedcomLine drawing up to a parent.
+        public bool HasStalk
+        {
+            get { return fChild; }
+        }
+
+
+        public MiniTreeIndividual(GEDCOMIndividualRecord ir, string firstNames, string surname, string date,
+                                  bool createLink, bool createStalk, bool highlight, bool concealed, bool shade,
+                                  bool conserveWidth)
         {
             fIndiRec = ir;
-            fFirstnames = sFirstNames;
-            fSurname = sSurname;
-            fDate = sDate;
-            fLinkable = bCreateLink;
-            fHighlight = bHighlight;
-            fConcealed = bConcealed;
-            fChild = bCreateStalk;
-            fShade = bShade;
+            fFirstnames = firstNames;
+            fSurname = surname;
+            fDate = date;
+            fLinkable = createLink;
+            fHighlight = highlight;
+            fConcealed = concealed;
+            fChild = createStalk;
+            fShade = shade;
             fFirstnamesPad = 0f;
             fSurnamePad = 0f;
             fDatePad = 0f;
-            fConserveWidth = bConserveWidth;
+            fConserveWidth = conserveWidth;
             fSizeText = new Size();
         }
 
@@ -181,7 +245,7 @@ namespace GEDmill.MiniTree
         }
 
         // Draws the actual box, and adds the region of the box to the image alMap list.
-        public override void DrawBitmap(Paintbox paintbox, Graphics g, List<MiniTreeMap> alImageMap)
+        public override void DrawBitmap(Paintbox paintbox, Graphics g, List<MiniTreeMap> map)
         {
             SolidBrush solidbrushBg, solidbrushText;
 
@@ -225,17 +289,9 @@ namespace GEDmill.MiniTree
             }
 
             if (fIndiRec != null) {
-                alImageMap.Add(new MiniTreeMap(Name, fIndiRec, fLinkable,
+                map.Add(new MiniTreeMap(Name, fIndiRec, fLinkable,
                     (int)(fX + MARGIN_HORIZ), (int)(fY + MARGIN_VERT),
                     (int)(fX + MARGIN_HORIZ + fSizeText.Width), (int)(fY + MARGIN_VERT + fSizeText.Height - 1f)));
-            }
-        }
-
-        // Accessor for the individual's name
-        private string Name
-        {
-            get {
-                return string.Concat(fFirstnames, " ", fSurname);
             }
         }
 
@@ -249,185 +305,112 @@ namespace GEDmill.MiniTree
             return fSize;
         }
 
-        // Accessor for left side position of box sArea.
-        public float Left
-        {
-            get {
-                return fX;
-            }
-        }
-
-        // Accessor for right side position of box sArea.
-        public float Right
-        {
-            get {
-                return fX + fSize.Width;
-            }
-        }
-
-        // Accessor for top side position of box sArea.
-        public float Top
-        {
-            get {
-                return fY;
-            }
-        }
-
-        // Accessor for bottom side position of box sArea.
-        public float Bottom
-        {
-            get {
-                return fY + fSize.Height;
-            }
-        }
-
-        // The vertical centre of the box, where the tee gedcomLine between boxes should attach.
-        public float TeeCentreVert
-        {
-            get {
-                return fY + MARGIN_VERT + (fSizeText.Height / 2f);
-            }
-        }
-
-        // The left edge of the box, where the tee gedcomLine between boxes should attach.
-        public float TeeLeft
-        {
-            get {
-                return fX + MARGIN_HORIZ;
-            }
-        }
-
-        // The right edge of the box, where the tee gedcomLine between boxes should attach.
-        public float TeeRight
-        {
-            get {
-                return fX + fSize.Width - MARGIN_HORIZ;
-            }
-        }
-
-        // Caller should call HasStalk first to ensure nResult from this property is valid.
-        // The horizontal centre of the box, where the tee gedcomLine up to frParents should attach.
-        public float Stalk
-        {
-            get {
-                return fX + (fSize.Width / 2f);
-            }
-        }
-
-        // Returns true if this box needs a gedcomLine drawing up to a parent.
-        public bool HasStalk
-        {
-            get {
-                return fChild;
-            }
-        }
-
         // Moves this object left and all objects to its right left, until one of them
         // can't move without breaking the diagram.
         // Returns amount actually moved, which may be less than amount asked for.
-        public override float PullLeft(float fAmount)
+        public override float PullLeft(float amount)
         {
             if (RightObject != null) {
                 if (RightObject is MiniTreeGroup) {
                     // Groups are stretchy so we can ignore if they get 
                     // stuck( and hence reduce 'amount')
-                    RightObject.PullLeft(fAmount);
+                    RightObject.PullLeft(amount);
                 } else {
-                    fAmount = RightObject.PullLeft(fAmount);
+                    amount = RightObject.PullLeft(amount);
                 }
             }
-            if (fAmount <= 0f) {
+            if (amount <= 0f) {
                 // Nothing to do
-                return fAmount;
+                return amount;
             }
 
             // Individuals are free to move unless anchored by an attached group.
-            fX -= fAmount;
+            fX -= amount;
 
-            return fAmount;
+            return amount;
         }
 
         // Moves this object right and all objects to its left right, until one of them
         // can't move without breaking the diagram.
         // Returns amount actually moved, which may be less than amount asked for.
-        public override float PullRight(float fAmount)
+        public override float PullRight(float amount)
         {
             if (LeftObject != null) {
                 if (LeftObject is MiniTreeGroup) {
                     // Groups are stretchy so we can ignore if they 
                     // get stuck( and hence reduce 'amount')
-                    LeftObject.PullRight(fAmount);
+                    LeftObject.PullRight(amount);
                 } else {
-                    fAmount = LeftObject.PullRight(fAmount);
+                    amount = LeftObject.PullRight(amount);
                 }
             }
-            if (fAmount <= 0f) {
+            if (amount <= 0f) {
                 // Nothing to do
-                return fAmount;
+                return amount;
             }
             // Individuals are free to move unless anchored by an attached group.
-            fX += fAmount;
+            fX += amount;
 
-            return fAmount;
+            return amount;
         }
 
         // Moves this object left and all objects to its left left, until one of them
         // can't move without breaking the diagram.
         // Returns amount actually moved, which may be less than amount asked for.
-        public override float PushLeft(float fAmount)
+        public override float PushLeft(float amount)
         {
             if (LeftObject != null) {
-                fAmount = LeftObject.PushLeft(fAmount);
+                amount = LeftObject.PushLeft(amount);
             } else if (LeftObjectAlien != null) {
                 if (LeftObjectAlien is MiniTreeIndividual) {
                     // Push left until hit alien object
                     float distance = Left - ((MiniTreeIndividual)LeftObjectAlien).Right;
-                    if (distance < fAmount) {
-                        fAmount = distance;
+                    if (distance < amount) {
+                        amount = distance;
                     }
                 }
             }
-            if (fAmount <= 0f) {
+            if (amount <= 0f) {
                 // Nothing to do
-                return fAmount;
+                return amount;
             }
             // Individuals are free to move unless anchored by an attached group.
-            fX -= fAmount;
+            fX -= amount;
 
-            return fAmount;
+            return amount;
         }
 
         // Moves this object right and all objects to its right right, until one of them
         // can't move without breaking the diagram.
         // Returns amount actually moved, which may be less than amount asked for.
-        public override float PushRight(float fAmount)
+        public override float PushRight(float amount)
         {
             if (RightObject != null) {
-                fAmount = RightObject.PushRight(fAmount);
+                amount = RightObject.PushRight(amount);
             } else if (RightObjectAlien != null) {
                 if (RightObjectAlien is MiniTreeIndividual) {
                     // Push right until hit alien object
                     float distance = ((MiniTreeIndividual)RightObjectAlien).Left - Right;
-                    if (distance < fAmount) {
-                        fAmount = distance;
+                    if (distance < amount) {
+                        amount = distance;
                     }
                 }
             }
 
-            if (fAmount <= 0f) {
+            if (amount <= 0f) {
                 // Nothing to do
-                return fAmount;
+                return amount;
             }
-            fX += fAmount; // Individuals are free to move unless anchored by a group attached
+            fX += amount; // Individuals are free to move unless anchored by a group attached
 
-            return fAmount;
+            return amount;
         }
 
         // Moves the position of the box by an absolute amount.
-        public override void Translate(float fDeltaX, float fDeltaY)
+        public override void Translate(float deltaX, float deltaY)
         {
-            fX += fDeltaX;
-            fY += fDeltaY;
+            fX += deltaX;
+            fY += deltaY;
         }
     }
 }

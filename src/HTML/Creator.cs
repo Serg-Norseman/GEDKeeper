@@ -72,7 +72,7 @@ namespace GEDmill.HTML
 
         // Converts all HTML characters into their escaped versions
         // Set bHardSpace to false if you want to keep first space as breakable, true if you want all nbsp.
-        // TODO: Surely there is a .Net function to do this?
+        // TODO: Surely there is a .Net function to do this (WebUtility.HtmlEncode)?
         // TODO: Might want to preserve <a> links in the HTML in case user has specified them in their data.
         public static string EscapeHTML(string original, bool hardSpace)
         {

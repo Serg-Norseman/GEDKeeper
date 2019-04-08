@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using GKCore.Logging;
@@ -197,6 +198,48 @@ namespace GEDmill
                     break;
             }
             return filename;
+        }
+
+        // Converts a string of the form #RRGGBB to a Color instance.
+        // Used when retrieving colours from the config.
+        public static Color ConvertColour(string s)
+        {
+            if (string.IsNullOrEmpty(s)) {
+                return Color.Black;
+            }
+
+            int nRed = 0;
+            int nGreen = 0;
+            int nBlue = 0;
+
+            switch (s.Length) {
+                case 4:
+                    s = s.Substring(1);
+                    goto case 3;
+                case 3:
+                    nRed = int.Parse(s.Substring(0, 1), NumberStyles.HexNumber);
+                    nGreen = int.Parse(s.Substring(1, 1), NumberStyles.HexNumber);
+                    nBlue = int.Parse(s.Substring(2, 1), NumberStyles.HexNumber);
+                    break;
+                case 7:
+                    s = s.Substring(1);
+                    goto case 6;
+                case 6:
+                    nRed = int.Parse(s.Substring(0, 2), NumberStyles.HexNumber);
+                    nGreen = int.Parse(s.Substring(2, 2), NumberStyles.HexNumber);
+                    nBlue = int.Parse(s.Substring(4, 2), NumberStyles.HexNumber);
+                    break;
+            }
+
+            return Color.FromArgb(nRed, nGreen, nBlue);
+        }
+
+        // Converts a Color instance to a string of the form #RRGGBB.
+        // Used when storing colours in the config.
+        public static string ConvertColour(Color c)
+        {
+            string s = string.Format("#{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
+            return s;
         }
     }
 }

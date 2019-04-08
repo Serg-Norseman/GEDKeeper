@@ -69,16 +69,16 @@ namespace GEDmill.MiniTree
         // Construct the paintbox, reading values for the colours etc from the config.
         public Paintbox(CConfig config)
         {
-            ColourBg = ConvertColour(config.MiniTreeColourBackground);
-            ColourOutline = ConvertColour(config.MiniTreeColourIndiBorder);
-            ColourBox = ConvertColour(config.MiniTreeColourIndiBackground);
-            ColourHighlight = ConvertColour(config.MiniTreeColourIndiHighlight);
-            ColourBgConcealed = ConvertColour(config.MiniTreeColourIndiBgConcealed);
-            ColourShade = ConvertColour(config.MiniTreeColourIndiShade);
-            ColourText = ConvertColour(config.MiniTreeColourIndiText);
-            ColourLink = ConvertColour(config.MiniTreeColourIndiLink);
-            ColourFgConcealed = ConvertColour(config.MiniTreeColourIndiFgConcealed);
-            ColourConnector = ConvertColour(config.MiniTreeColourBranch);
+            ColourBg = GMHelper.ConvertColour(config.MiniTreeColourBackground);
+            ColourOutline = GMHelper.ConvertColour(config.MiniTreeColourIndiBorder);
+            ColourBox = GMHelper.ConvertColour(config.MiniTreeColourIndiBackground);
+            ColourHighlight = GMHelper.ConvertColour(config.MiniTreeColourIndiHighlight);
+            ColourBgConcealed = GMHelper.ConvertColour(config.MiniTreeColourIndiBgConcealed);
+            ColourShade = GMHelper.ConvertColour(config.MiniTreeColourIndiShade);
+            ColourText = GMHelper.ConvertColour(config.MiniTreeColourIndiText);
+            ColourLink = GMHelper.ConvertColour(config.MiniTreeColourIndiLink);
+            ColourFgConcealed = GMHelper.ConvertColour(config.MiniTreeColourIndiFgConcealed);
+            ColourConnector = GMHelper.ConvertColour(config.MiniTreeColourBranch);
             ColourGifTransparent = Color.Magenta;
             BrushBgGif = new SolidBrush(ColourGifTransparent);
             BrushBg = new SolidBrush(ColourBg);
@@ -121,48 +121,6 @@ namespace GEDmill.MiniTree
                 }
             }
             base.Dispose(disposing);
-        }
-
-        // Converts a string of the form #RRGGBB to a Color instance.
-        // Used when retrieving colours from the config.
-        public static Color ConvertColour(string s)
-        {
-            if (string.IsNullOrEmpty(s)) {
-                return Color.Black;
-            }
-
-            int nRed = 0;
-            int nGreen = 0;
-            int nBlue = 0;
-
-            switch (s.Length) {
-                case 4:
-                    s = s.Substring(1);
-                    goto case 3;
-                case 3:
-                    nRed = int.Parse(s.Substring(0, 1), NumberStyles.HexNumber);
-                    nGreen = int.Parse(s.Substring(1, 1), NumberStyles.HexNumber);
-                    nBlue = int.Parse(s.Substring(2, 1), NumberStyles.HexNumber);
-                    break;
-                case 7:
-                    s = s.Substring(1);
-                    goto case 6;
-                case 6:
-                    nRed = int.Parse(s.Substring(0, 2), NumberStyles.HexNumber);
-                    nGreen = int.Parse(s.Substring(2, 2), NumberStyles.HexNumber);
-                    nBlue = int.Parse(s.Substring(4, 2), NumberStyles.HexNumber);
-                    break;
-            }
-
-            return Color.FromArgb(nRed, nGreen, nBlue);
-        }
-
-        // Converts a Color instance to a string of the form #RRGGBB.
-        // Used when storing colours in the config.
-        public static string ConvertColour(Color c)
-        {
-            string s = string.Format("#{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
-            return s;
         }
 
         // Sets the brush used to fill the background to the graphics image provided.

@@ -339,33 +339,33 @@ namespace GEDmill.HTML
         // Copy the CD ROM autorun loader program.
         private void CreateCDROMFiles()
         {
-            string sHomepageUrl = string.Concat(CConfig.Instance.FrontPageFilename, ".", CConfig.Instance.HtmlExtension);
+            string homepageUrl = string.Concat(CConfig.Instance.FrontPageFilename, ".", CConfig.Instance.HtmlExtension);
 
-            if (sHomepageUrl != null && !string.IsNullOrEmpty(CConfig.Instance.OutputFolder)) {
-                string sFileopenSrc = CConfig.Instance.ApplicationPath + "\\fileopen.exe";
-                string sFileopenDest = CConfig.Instance.OutputFolder + "\\fileopen.exe";
-                string sAutorunDest = CConfig.Instance.OutputFolder + "\\autorun.inf";
+            if (homepageUrl != null && !string.IsNullOrEmpty(CConfig.Instance.OutputFolder)) {
+                string fileopenSrc = CConfig.Instance.ApplicationPath + "\\fileopen.exe";
+                string fileopenDest = CConfig.Instance.OutputFolder + "\\fileopen.exe";
+                string autorunDest = CConfig.Instance.OutputFolder + "\\autorun.inf";
 
                 // Copy fileopen.exe into output folder
-                if (File.Exists(sFileopenDest)) {
-                    File.SetAttributes(sFileopenDest, FileAttributes.Normal);
-                    File.Delete(sFileopenDest);
+                if (File.Exists(fileopenDest)) {
+                    File.SetAttributes(fileopenDest, FileAttributes.Normal);
+                    File.Delete(fileopenDest);
                 }
                 fLogger.WriteInfo("Copying fileopen.exe");
-                File.Copy(sFileopenSrc, sFileopenDest, true);
+                File.Copy(fileopenSrc, fileopenDest, true);
 
                 // Create autorun.inf
-                if (File.Exists(sAutorunDest)) {
-                    File.SetAttributes(sAutorunDest, FileAttributes.Normal);
-                    File.Delete(sAutorunDest);
+                if (File.Exists(autorunDest)) {
+                    File.SetAttributes(autorunDest, FileAttributes.Normal);
+                    File.Delete(autorunDest);
                 }
                 fLogger.WriteInfo("Creating autorun.inf");
 
-                FileStream fs = new FileStream(sAutorunDest, FileMode.Create);
+                FileStream fs = new FileStream(autorunDest, FileMode.Create);
                 StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.ASCII);
 
                 sw.WriteLine("[AUTORUN]");
-                sw.WriteLine(string.Concat("open=fileopen.exe \"", sHomepageUrl, "\""));
+                sw.WriteLine(string.Concat("open=fileopen.exe \"", homepageUrl, "\""));
                 sw.WriteLine("");
 
                 sw.Close();

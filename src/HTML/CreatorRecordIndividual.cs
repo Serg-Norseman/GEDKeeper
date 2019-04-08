@@ -26,6 +26,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using GEDmill.MiniTree;
 using GEDmill.Model;
@@ -199,7 +200,6 @@ namespace GEDmill.HTML
             try {
                 ((GEDCOMDate)age30.Value).Year += (short)CConfig.Instance.AgeForOccupation;
             } catch { }
-            // FIXME
 
             // We should have birthday and deathday by now, so find longest occupation
             if (!fConcealed) {
@@ -700,7 +700,7 @@ namespace GEDmill.HTML
                         fEventList.Sort();
                         OutputEvents(f);
                         OutputAttributes(f);
-                        OutputNotes(f);
+                        OutputNotes(f, fIndiRec.Notes);
                         OutputSourceReferences(f);
                     }
 
@@ -776,43 +776,10 @@ namespace GEDmill.HTML
                     }
 
                     // Finally write source link and extra info
-                    f.WriteLine(string.Concat("            <li>", sc.MakeLinkText(i + 1), extraInfo, "</li>"));
+                    f.WriteLine("<li>{0}{1}</li>", sc.MakeLinkText(i + 1), extraInfo);
                 }
                 f.WriteLine("          </ul>");
                 f.WriteLine("        </div> <!-- references -->");
-            }
-        }
-
-        // Outputs the HTML for the Notes section of the page
-        private void OutputNotes(HTMLFile f)
-        {
-            if (fIndiRec.Notes.Count > 0) {
-                // Generate notes list into a local array before adding header title. This is to cope with the case where all notes are nothing but blanks.
-                var note_strings = new List<string>(fIndiRec.Notes.Count);
-
-                foreach (GEDCOMNotes ns in fIndiRec.Notes) {
-                    string noteText;
-                    if (CConfig.Instance.ObfuscateEmails) {
-                        noteText = ObfuscateEmail(ns.Notes.Text);
-                    } else {
-                        noteText = ns.Notes.Text;
-                    }
-
-                    note_strings.Add(string.Concat("            <li>", EscapeHTML(noteText, false), "</li>"));
-                }
-
-                if (note_strings.Count > 0) {
-                    f.WriteLine("        <div id=\"notes\">");
-                    f.WriteLine("          <h1>Notes</h1>");
-                    f.WriteLine("          <ul>");
-
-                    foreach (string note_string in note_strings) {
-                        f.WriteLine(note_string);
-                    }
-
-                    f.WriteLine("          </ul>");
-                    f.WriteLine("        </div> <!-- notes -->");
-                }
             }
         }
 
@@ -985,44 +952,48 @@ namespace GEDmill.HTML
         private void OutputMultimedia(HTMLFile f)
         {
             if (fMultimediaList.Count > 0) {
-                Multimedia iMultimedia = (Multimedia)fMultimediaList[0];
+                Multimedia iMultimedia = fMultimediaList[0];
                 f.WriteLine("    <div id=\"photos\">");
                 f.WriteLine("      <div id=\"mainphoto\">");
+
                 string non_pic_small_filename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, true, CConfig.Instance.LinkOriginalPicture);
                 string non_pic_main_filename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, CConfig.Instance.LinkOriginalPicture);
-                string image_title = "";
-                string alt_name = fFullName;
+
+                string imageTitle = "";
+                string altName = fFullName;
+
                 if (iMultimedia.Title != null) {
-                    image_title = iMultimedia.Title;
-                    alt_name = iMultimedia.Title;
+                    imageTitle = iMultimedia.Title;
+                    altName = iMultimedia.Title;
                 }
+
                 if (CConfig.Instance.LinkOriginalPicture) {
                     if (iMultimedia.Width != 0 && iMultimedia.Height != 0) {
                         // Must be a picture.
                         if (iMultimedia.LargeFileName.Length > 0) {
-                            f.WriteLine(string.Concat("        <a href=\"", iMultimedia.LargeFileName, "\" id=\"mainphoto_link\"><img id=\"mainphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"", alt_name, "\" /></a>"));
+                            f.WriteLine(string.Concat("        <a href=\"", iMultimedia.LargeFileName, "\" id=\"mainphoto_link\"><img id=\"mainphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"", altName, "\" /></a>"));
                         } else {
-                            f.WriteLine(string.Concat("        <img id=\"mainphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"I", alt_name, "\" />"));
+                            f.WriteLine(string.Concat("        <img id=\"mainphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"I", altName, "\" />"));
                         }
                     } else {
                         // Must be a non-picture multimedia file.
                         if (iMultimedia.LargeFileName.Length > 0) {
-                            f.WriteLine(string.Concat("        <a href=\"", iMultimedia.LargeFileName, "\" id=\"mainphoto_link\"><img id=\"mainphoto_img\" src=\"", non_pic_main_filename, "\" alt=\"", alt_name, "\" /></a>"));
+                            f.WriteLine(string.Concat("        <a href=\"", iMultimedia.LargeFileName, "\" id=\"mainphoto_link\"><img id=\"mainphoto_img\" src=\"", non_pic_main_filename, "\" alt=\"", altName, "\" /></a>"));
                         } else {
-                            f.WriteLine(string.Concat("        <img id=\"mainphoto_img\" src=\"", non_pic_main_filename, "\" alt=\"", alt_name, "\" />"));
+                            f.WriteLine(string.Concat("        <img id=\"mainphoto_img\" src=\"", non_pic_main_filename, "\" alt=\"", altName, "\" />"));
                         }
                     }
                 } else {
                     // Not linking to original picture.
                     if (iMultimedia.Width != 0 && iMultimedia.Height != 0) {
                         // Must be a picture.
-                        f.WriteLine(string.Concat("        <img id=\"mainphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"", alt_name, "\" />"));
+                        f.WriteLine(string.Concat("        <img id=\"mainphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"", altName, "\" />"));
                     } else {
                         // Must be a non-picture multimedia file.
-                        f.WriteLine(string.Concat("        <img id=\"mainphoto_img\" src=\"", non_pic_main_filename, "\" alt=\"", alt_name, "\" />"));
+                        f.WriteLine(string.Concat("        <img id=\"mainphoto_img\" src=\"", non_pic_main_filename, "\" alt=\"", altName, "\" />"));
                     }
                 }
-                f.WriteLine(string.Concat("        <p id=\"mainphoto_title\">", image_title, "</p>"));
+                f.WriteLine(string.Concat("        <p id=\"mainphoto_title\">", imageTitle, "</p>"));
                 f.WriteLine("      </div>");
 
                 if (fMultimediaList.Count > 1 && CConfig.Instance.AllowMultipleImages) {
@@ -1065,16 +1036,16 @@ namespace GEDmill.HTML
         // Writes the HTML for the mini tree diagram, including the image alMap data. 
         private void OutputMiniTree(HTMLFile f)
         {
-            System.Drawing.Imaging.ImageFormat imageFormat;
+            ImageFormat imageFormat;
             string miniTreeExtn;
             string imageFormatString = CConfig.Instance.MiniTreeImageFormat;
             switch (imageFormatString) {
                 case "png":
-                    imageFormat = System.Drawing.Imaging.ImageFormat.Png;
+                    imageFormat = ImageFormat.Png;
                     miniTreeExtn = "png";
                     break;
                 default:
-                    imageFormat = System.Drawing.Imaging.ImageFormat.Gif;
+                    imageFormat = ImageFormat.Gif;
                     miniTreeExtn = "gif";
                     break;
             }
@@ -1085,7 +1056,7 @@ namespace GEDmill.HTML
             var map = treeDrawer.CreateMiniTree(fPaintbox, fIndiRec, fullTreeFilename, CConfig.Instance.TargetTreeWidth, imageFormat);
             if (map != null) {
                 // Add space to height so that IE's horiz scroll bar has room and doesn't create a vertical scroll bar.
-                f.WriteLine(string.Format("    <div id=\"minitree\" style=\"height:{0}px;\">", treeDrawer.Height + 20));
+                f.WriteLine("    <div id=\"minitree\" style=\"height:{0}px;\">", treeDrawer.Height + 20);
                 f.WriteLine("      <map name=\"treeMap\" id=\"tree\">");
                 foreach (MiniTreeMap mapItem in map) {
                     if (mapItem.Linkable) {
@@ -1094,7 +1065,7 @@ namespace GEDmill.HTML
                     }
                 }
                 f.WriteLine("      </map>");
-                f.WriteLine(string.Concat("      <img src=\"", relativeTreeFilename, "\"  usemap=\"#treeMap\" alt=\"Mini tree diagram\"/>"));
+                f.WriteLine("      <img src=\"{0}\"  usemap=\"#treeMap\" alt=\"Mini tree diagram\"/>", relativeTreeFilename);
                 f.WriteLine("    </div>");
             }
         }
@@ -1137,14 +1108,14 @@ namespace GEDmill.HTML
             string subtype = es.StringValue;
 
             // Strip trailing _ that FTM seems sometimes to include
-            while (subtype.Length > 0 && subtype.Substring(subtype.Length - 1, 1) == "_") {
+            while (subtype.Length > 0 && subtype[subtype.Length - 1] == '_') {
                 subtype = subtype.Substring(0, subtype.Length - 1);
             }
 
             // Useful holder vars
             GEDCOMDateValue date;
             string place;
-            string escaped_description = "";
+            string escapedDescription = "";
             string address = "";
             string url = "";
             string cause = "";
@@ -1152,9 +1123,9 @@ namespace GEDmill.HTML
             bool important = false;
             date = null;
             place = "";
-            string place_word = CConfig.Instance.PlaceWord;
-            string alternative_place_word = "and"; // For want of anything better...
-            string alternative_place = "";
+            string placeWord = CConfig.Instance.PlaceWord;
+            string alternativePlaceWord = "and"; // For want of anything better...
+            string alternativePlace = "";
             if (es.Date != null) {
                 date = es.Date;
                 if (es.Place != null) {
@@ -1170,317 +1141,289 @@ namespace GEDmill.HTML
             }
 
             string sourceRefs = "";
-            if (es.Name != "MARR" && es.Name != "TITL") // Marriage handled separately later.
-            {
+            if (es.Name != "MARR" && es.Name != "TITL") {
+                // Marriage handled separately later.
                 sourceRefs = AddSources(ref fReferenceList, es.SourceCitations);
             }
 
-            bool bNeedValue = false;
-            bool bOnlyIncludeIfNotePresent = false;
-            bool bIncludeOccupation = false;
+            bool needValue = false;
+            bool onlyIncludeIfNotePresent = false;
+            bool includeOccupation = false;
 
             // First occurrence of an event in GEDCOM is the "preferred" one, where in real life there can be only one of the event (e.g. BIRT)
-            bool bTypeIsAOneOff = false;
-
-            // Fix for Family Tree Maker 2008 which exports occupation as generic EVEN events.
-            // It also puts occupation in PLAC field, but this is already accommodated later.
-            if (es.Name == "EVEN" && subtype.ToLower() == "occupation") {
-                es.SetName("OCCU"); // FIXME!
-            }
+            bool typeIsAOneOff = false;
 
             switch (utype) {
                 case "BIRT":
-                    if (es is GEDCOMCustomEvent) {
-                        bTypeIsAOneOff = true;
-                        if (fInferredBirthday != null) {
-                            // Throw away lesser qualified birthday inferences.
-                            if (fInferredBirthday.Qualification > DateQualification.Birth) // ">" here means "further from the truth".
-                            {
-                                fInferredBirthday = null;
-                            }
+                    typeIsAOneOff = true;
+                    if (fInferredBirthday != null) {
+                        // Throw away lesser qualified birthday inferences.
+                        if (fInferredBirthday.Qualification > DateQualification.Birth) {
+                            // ">" here means "further from the truth".
+                            fInferredBirthday = null;
                         }
-                        if (fInferredBirthday == null) // Take first BIRT we come across. In GEDCOM this means it is the preferred event.
-                        {
-                            fInferredBirthday = new QualifiedDate(date, DateQualification.Birth);
-                        }
-                        fBirthdaySourceRefs = sourceRefs;
+                    } else {
+                        // Take first BIRT we come across. In GEDCOM this means it is the preferred event.
+                        fInferredBirthday = new QualifiedDate(date, DateQualification.Birth);
                     }
-                    escaped_description = "born";
+                    fBirthdaySourceRefs = sourceRefs;
+                    escapedDescription = "born";
                     important = true;
                     break;
 
                 case "CHR":
-                    if (es is GEDCOMCustomEvent) {
-                        if (fInferredBirthday != null) {
-                            // Throw away lesser qualified birthday inferences.
-                            if (fInferredBirthday.Qualification > DateQualification.Christening) // ">" here means "further from the truth".
-                            {
-                                fInferredBirthday = null;
-                            }
+                    if (fInferredBirthday != null) {
+                        // Throw away lesser qualified birthday inferences.
+                        if (fInferredBirthday.Qualification > DateQualification.Christening) {
+                            // ">" here means "further from the truth".
+                            fInferredBirthday = null;
                         }
-                        if (fInferredBirthday == null) // In the absence of a BIRT event this will have to do.
-                        {
-                            fInferredBirthday = new QualifiedDate(date, DateQualification.Christening);
-                            fBirthdaySourceRefs = sourceRefs;
-                        }
+                    } else {
+                        // In the absence of a BIRT event this will have to do.
+                        fInferredBirthday = new QualifiedDate(date, DateQualification.Christening);
+                        fBirthdaySourceRefs = sourceRefs;
                     }
-                    escaped_description = "christened";
+                    escapedDescription = "christened";
                     break;
 
                 case "BAPM":
-                    if (es is GEDCOMCustomEvent) {
-                        if (fInferredBirthday != null) {
-                            // Throw away lesser qualified birthday inferences.
-                            if (fInferredBirthday.Qualification > DateQualification.Baptism) // ">" here means "further from the truth".
-                            {
-                                fInferredBirthday = null;
-                            }
+                    if (fInferredBirthday != null) {
+                        // Throw away lesser qualified birthday inferences.
+                        if (fInferredBirthday.Qualification > DateQualification.Baptism) {
+                            // ">" here means "further from the truth".
+                            fInferredBirthday = null;
                         }
-                        if (fInferredBirthday == null) // In the absence of a BIRT event this will have to do.
-                        {
-                            fInferredBirthday = new QualifiedDate(date, DateQualification.Baptism);
-                            fBirthdaySourceRefs = sourceRefs;
-                        }
+                    } else {
+                        // In the absence of a BIRT event this will have to do.
+                        fInferredBirthday = new QualifiedDate(date, DateQualification.Baptism);
+                        fBirthdaySourceRefs = sourceRefs;
                     }
-                    escaped_description = "baptised";
+                    escapedDescription = "baptised";
                     break;
 
                 case "DEAT":
-                    bTypeIsAOneOff = true;
-                    if (es is GEDCOMCustomEvent) {
-                        if (fInferredDeathday != null) {
-                            // Throw away lesser qualified birthday inferences.
-                            if (fInferredDeathday.Qualification > DateQualification.Death) {
-                                // ">" here means "further from the truth".
-                                fInferredDeathday = null;
-                            }
-                        } else {
-                            // Take first DEAT we come across. In GEDCOM this means it is the preferred event.
-                            fInferredDeathday = new QualifiedDate(date, DateQualification.Death);
+                    typeIsAOneOff = true;
+                    if (fInferredDeathday != null) {
+                        // Throw away lesser qualified birthday inferences.
+                        if (fInferredDeathday.Qualification > DateQualification.Death) {
+                            // ">" here means "further from the truth".
+                            fInferredDeathday = null;
                         }
-                        fDeathdaySourceRefs = sourceRefs;
+                    } else {
+                        // Take first DEAT we come across. In GEDCOM this means it is the preferred event.
+                        fInferredDeathday = new QualifiedDate(date, DateQualification.Death);
                     }
-                    escaped_description = "died";
+                    fDeathdaySourceRefs = sourceRefs;
+                    escapedDescription = "died";
                     important = true;
                     break;
 
                 case "BURI":
-                    bTypeIsAOneOff = true;
-                    if (es is GEDCOMCustomEvent) {
-                        if (fInferredDeathday != null) {
-                            // Throw away lesser qualified birthday inferences.
-                            if (fInferredDeathday.Qualification > DateQualification.Burial) // ">" here means "further from the truth".
-                            {
-                                fInferredDeathday = null;
-                            }
+                    typeIsAOneOff = true;
+                    if (fInferredDeathday != null) {
+                        // Throw away lesser qualified birthday inferences.
+                        if (fInferredDeathday.Qualification > DateQualification.Burial) {
+                            // ">" here means "further from the truth".
+                            fInferredDeathday = null;
                         }
-                        if (fInferredDeathday == null) // In the absence of a DEAT event this will have to do.
-                        {
-                            fInferredDeathday = new QualifiedDate(date, DateQualification.Burial);
-                            fDeathdaySourceRefs = sourceRefs;
-                        }
+                    } else {
+                        // In the absence of a DEAT event this will have to do.
+                        fInferredDeathday = new QualifiedDate(date, DateQualification.Burial);
+                        fDeathdaySourceRefs = sourceRefs;
                     }
-                    escaped_description = "buried";
+                    escapedDescription = "buried";
                     break;
 
                 case "CREM":
-                    bTypeIsAOneOff = true;
-                    if (es is GEDCOMCustomEvent) {
-                        if (fInferredDeathday != null) {
-                            // Throw away lesser qualified birthday inferences.
-                            if (fInferredDeathday.Qualification > DateQualification.Cremation) // ">" here means "further from the truth".
-                            {
-                                fInferredDeathday = null;
-                            }
+                    typeIsAOneOff = true;
+                    if (fInferredDeathday != null) {
+                        // Throw away lesser qualified birthday inferences.
+                        if (fInferredDeathday.Qualification > DateQualification.Cremation) {
+                            // ">" here means "further from the truth".
+                            fInferredDeathday = null;
                         }
-                        if (fInferredDeathday == null) // In the absence of a DEAT event this will have to do.
-                        {
-                            fInferredDeathday = new QualifiedDate(date, DateQualification.Cremation);
-                            fDeathdaySourceRefs = sourceRefs;
-                        }
+                    } else {
+                        // In the absence of a DEAT event this will have to do.
+                        fInferredDeathday = new QualifiedDate(date, DateQualification.Cremation);
+                        fDeathdaySourceRefs = sourceRefs;
                     }
-                    escaped_description = "cremated";
+                    escapedDescription = "cremated";
                     break;
 
                 case "ADOP":
-                    escaped_description = "adopted";
+                    escapedDescription = "adopted";
                     break;
 
                 case "BARM":
-                    escaped_description = "bar mitzvah";
+                    escapedDescription = "bar mitzvah";
                     break;
 
                 case "BASM":
-                    escaped_description = "bat mitzvah";
+                    escapedDescription = "bat mitzvah";
                     break;
 
                 case "BLES":
-                    escaped_description = "blessing";
+                    escapedDescription = "blessing";
                     break;
 
                 case "CHRA":
-                    escaped_description = "christened (as adult)";
+                    escapedDescription = "christened (as adult)";
                     break;
 
                 case "CONF":
-                    escaped_description = "confirmed";
+                    escapedDescription = "confirmed";
                     break;
 
                 case "FCOM":
-                    escaped_description = "first communion";
+                    escapedDescription = "first communion";
                     break;
 
                 case "ORDN":
-                    escaped_description = "ordained";
+                    escapedDescription = "ordained";
                     break;
 
                 case "NATU":
-                    escaped_description = "naturalized";
+                    escapedDescription = "naturalized";
                     break;
 
                 case "EMIG":
-                    escaped_description = "emigrated";
-                    place_word = "from";
-                    alternative_place_word = "to";
+                    escapedDescription = "emigrated";
+                    placeWord = "from";
+                    alternativePlaceWord = "to";
                     break;
 
                 case "IMMI":
-                    escaped_description = "immigrated";
-                    place_word = "to";
-                    alternative_place_word = "from";
+                    escapedDescription = "immigrated";
+                    placeWord = "to";
+                    alternativePlaceWord = "from";
                     break;
-                /*  handled as fr event below
-                        case "CENS":
-                          escaped_description = "recorded in census";
-                          break;*/
 
                 case "PROB":
-                    escaped_description = "probate";
+                    escapedDescription = "probate";
                     break;
 
                 case "WILL":
-                    escaped_description = "wrote will";
+                    escapedDescription = "wrote will";
                     break;
 
                 case "GRAD":
-                    escaped_description = "graduated";
+                    escapedDescription = "graduated";
                     break;
 
                 case "RETI":
-                    escaped_description = "retired";
+                    escapedDescription = "retired";
                     break;
 
                 case "EVEN":
                     if (!string.IsNullOrEmpty(subtype)) {
-                        escaped_description = EscapeHTML(subtype, false);
+                        escapedDescription = EscapeHTML(subtype, false);
                     } else {
-                        escaped_description = "other event";
+                        escapedDescription = "other event";
                     }
                     if (!string.IsNullOrEmpty(es.StringValue)) {
-                        escaped_description += ": " + es.StringValue;
+                        escapedDescription += ": " + es.StringValue;
                     }
                     break;
 
                 case "CAST":
-                    escaped_description = "caste";
+                    escapedDescription = "caste";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
+                        needValue = true;
                     break;
 
                 case "DSCR":
-                    escaped_description = "physical description";
+                    escapedDescription = "physical description";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
+                        needValue = true;
                     break;
 
                 case "EDUC":
-                    escaped_description = "educated";
+                    escapedDescription = "educated";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
+                        needValue = true;
                     break;
 
                 case "IDNO":
-                    escaped_description = "ID number";
+                    escapedDescription = "ID number";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
+                        needValue = true;
                     break;
 
                 case "NATI":
-                    escaped_description = "nationality";
+                    escapedDescription = "nationality";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
+                        needValue = true;
                     break;
 
                 case "NCHI":
-                    bTypeIsAOneOff = true;
-                    escaped_description = "number of children";
+                    typeIsAOneOff = true;
+                    escapedDescription = "number of children";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
+                        needValue = true;
                     break;
 
                 case "NMR":
-                    bTypeIsAOneOff = true;
-                    escaped_description = "number of marriages";
+                    typeIsAOneOff = true;
+                    escapedDescription = "number of marriages";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
-
+                        needValue = true;
                     break;
 
                 case "OCCU":
-                    escaped_description = "occupation";
+                    escapedDescription = "occupation";
                     if (!string.IsNullOrEmpty(es.StringValue)) {
                         OccupationCounter oc = new OccupationCounter(EscapeHTML(es.StringValue, false) + sourceRefs, date);
                         fOccupations.Add(oc);
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
-                        bIncludeOccupation = true;
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
+                        includeOccupation = true;
                     } else
-                        bNeedValue = true;
+                        needValue = true;
                     break;
 
                 case "PROP":
-                    escaped_description = "property";
+                    escapedDescription = "property";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
+                        needValue = true;
                     break;
 
                 case "RELI":
-                    escaped_description = "religion";
+                    escapedDescription = "religion";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
+                        needValue = true;
                     break;
 
                 case "RESI":
-                    escaped_description = "resident";
+                    escapedDescription = "resident";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = false; // Special case, we need the "at" word left in for this.
+                        needValue = false; // Special case, we need the "at" word left in for this.
                     break;
 
                 case "SSN":
-                    escaped_description = "Social Security number";
+                    escapedDescription = "Social Security number";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
+                        needValue = true;
                     break;
 
                 case "TITL":
@@ -1489,84 +1432,84 @@ namespace GEDmill.HTML
                     break;
 
                 case "FACT":
-                    escaped_description = "other fact";
+                    escapedDescription = "other fact";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
+                        needValue = true;
                     break;
 
 
                 case "_NMR": // _NMR Brother's Keeper
-                    bTypeIsAOneOff = true;
-                    escaped_description = "never married";
+                    typeIsAOneOff = true;
+                    escapedDescription = "never married";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
+                        needValue = true;
                     break;
 
                 case "_AKA": // _AKA Brother's Keeper
                 case "_AKAN": // _AKAN Brother's Keeper
-                    escaped_description = "also known as";
+                    escapedDescription = "also known as";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
+                        needValue = true;
                     break;
 
                 // Now the fr events:
                 case "ANUL":
-                    escaped_description = "annulment of marriage";
+                    escapedDescription = "annulment of marriage";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
+                        needValue = true;
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escaped_description = string.Concat(escaped_description, " to ", linkToOtherParty);
+                        escapedDescription = string.Concat(escapedDescription, " to ", linkToOtherParty);
                     }
                     break;
 
                 case "CENS":
-                    escaped_description = "recorded in census";
+                    escapedDescription = "recorded in census";
                     break;
 
                 case "DIV":
                     if (es.StringValue != null && (es.StringValue == "N" || es.StringValue == "n")) {
                         place = ""; // Clear place to prevent this event being shown
                     } else {
-                        escaped_description = "divorced";
+                        escapedDescription = "divorced";
                         if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                            escaped_description = string.Concat(escaped_description, " from ", linkToOtherParty);
+                            escapedDescription = string.Concat(escapedDescription, " from ", linkToOtherParty);
                         }
                     }
                     break;
 
                 case "DIVF":
-                    escaped_description = "filing of divorce";
+                    escapedDescription = "filing of divorce";
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escaped_description = string.Concat(escaped_description, " from ", linkToOtherParty);
+                        escapedDescription = string.Concat(escapedDescription, " from ", linkToOtherParty);
                     }
                     break;
 
                 case "ENGA":
-                    escaped_description = "engagement";
+                    escapedDescription = "engagement";
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escaped_description = string.Concat(escaped_description, " to ", linkToOtherParty);
+                        escapedDescription = string.Concat(escapedDescription, " to ", linkToOtherParty);
                     }
                     break;
 
                 case "MARB":
-                    escaped_description = "publication of banns of marriage";
+                    escapedDescription = "publication of banns of marriage";
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escaped_description = string.Concat(escaped_description, " to ", linkToOtherParty);
+                        escapedDescription = string.Concat(escapedDescription, " to ", linkToOtherParty);
                     }
                     break;
 
                 case "MARC":
-                    escaped_description = "contract of marriage";
+                    escapedDescription = "contract of marriage";
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escaped_description = string.Concat(escaped_description, " to ", linkToOtherParty);
+                        escapedDescription = string.Concat(escapedDescription, " to ", linkToOtherParty);
                     }
                     break;
 
@@ -1576,64 +1519,63 @@ namespace GEDmill.HTML
                     break;
 
                 case "MARL":
-                    escaped_description = "licence obtained for marriage";
+                    escapedDescription = "licence obtained for marriage";
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escaped_description = string.Concat(escaped_description, " to ", linkToOtherParty);
+                        escapedDescription = string.Concat(escapedDescription, " to ", linkToOtherParty);
                     }
-
                     break;
 
                 case "MARS":
-                    escaped_description = "settlement of marriage";
+                    escapedDescription = "settlement of marriage";
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escaped_description = string.Concat(escaped_description, " to ", linkToOtherParty);
+                        escapedDescription = string.Concat(escapedDescription, " to ", linkToOtherParty);
                     }
                     break;
 
                 default:
-                    escaped_description = "unknown event";
+                    escapedDescription = "unknown event";
                     if (!string.IsNullOrEmpty(es.StringValue))
-                        escaped_description = string.Concat(escaped_description, " ", EscapeHTML(es.StringValue, false));
+                        escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
-                        bNeedValue = true;
+                        needValue = true;
                     break;
             }
 
             if (CConfig.Instance.CapitaliseEventDescriptions) {
-                GMHelper.Capitalise(ref escaped_description);
+                GMHelper.Capitalise(ref escapedDescription);
             }
 
             if (place != "") {
                 // It seems some earlier GEDCOM has PLAC value filled with the event value, and the event value blank. Accomodate this:
-                if ((string.IsNullOrEmpty(es.StringValue)) && bNeedValue) {
-                    escaped_description += " " + EscapeHTML(place, false);
+                if ((string.IsNullOrEmpty(es.StringValue)) && needValue) {
+                    escapedDescription += " " + EscapeHTML(place, false);
                     if (utype == "OCCU") {
                         OccupationCounter oc = new OccupationCounter(place, date);
                         fOccupations.Add(oc);
                     }
                     place = "";
-                    bIncludeOccupation = true; // Needed to include occupation event, (without date or place), in page.
+                    includeOccupation = true; // Needed to include occupation event, (without date or place), in page.
                 } else {
-                    escaped_description += string.Concat(" ", place_word, " ", EscapeHTML(place, false));
-                    if (!string.IsNullOrEmpty(alternative_place)) {
-                        escaped_description += string.Concat(" ", alternative_place_word, " ", EscapeHTML(alternative_place, false));
+                    escapedDescription += string.Concat(" ", placeWord, " ", EscapeHTML(place, false));
+                    if (!string.IsNullOrEmpty(alternativePlace)) {
+                        escapedDescription += string.Concat(" ", alternativePlaceWord, " ", EscapeHTML(alternativePlace, false));
                     }
                 }
             }
 
             if (address != "") {
-                if (escaped_description.Length > 0) {
-                    escaped_description += " (" + EscapeHTML(address, false) + ")";
+                if (escapedDescription.Length > 0) {
+                    escapedDescription += " (" + EscapeHTML(address, false) + ")";
                 } else {
-                    escaped_description = EscapeHTML(address, false);
+                    escapedDescription = EscapeHTML(address, false);
                 }
             }
 
             if (url != "") {
-                if (escaped_description.Length > 0) {
-                    escaped_description += " (<a href=\"" + (url) + "\">" + (url) + "</a>)";
+                if (escapedDescription.Length > 0) {
+                    escapedDescription += string.Format(" (<a href=\"{0}\">{0}</a>)", url);
                 } else {
-                    escaped_description = "<a href=\"" + (url) + "\">" + (url) + "</a>";
+                    escapedDescription = string.Format("<a href=\"{0}\">{0}</a>", url);
                 }
             }
 
@@ -1642,12 +1584,12 @@ namespace GEDmill.HTML
                 overview = es.Classification;
             }
 
-            if (escaped_description == "") {
+            if (escapedDescription == "") {
                 return; // In the case of MARR and TITL and DIV N we don't want to add anything here.
             }
 
-            escaped_description += ".";
-            escaped_description += sourceRefs;
+            escapedDescription += ".";
+            escapedDescription += sourceRefs;
 
             string eventNote = "";
 
@@ -1679,9 +1621,9 @@ namespace GEDmill.HTML
 
             Event iEvent = null;
 
-            if (!bOnlyIncludeIfNotePresent || eventNote != "") {
+            if (!onlyIncludeIfNotePresent || eventNote != "") {
                 if (date != null) {
-                    iEvent = new Event(date, utype, escaped_description, overview, eventNote, important, CConfig.Instance.CapitaliseEventDescriptions);
+                    iEvent = new Event(date, utype, escapedDescription, overview, eventNote, important, CConfig.Instance.CapitaliseEventDescriptions);
                     fEventList.Add(iEvent);
                 }
                 // else its an attribute.
@@ -1689,14 +1631,14 @@ namespace GEDmill.HTML
                     // Don't include plain "Died" and nothing else. Roots Magic seems to use this just to signify that person died. But it appears on every single page and looks silly.
                     // GSP Family Tree puts lots of blank tags (OCCU, CHR, SEX, NOTE, etc.etc). Don't display those without meaning
                     // Note CHR is contentious, as other s/w may use a CHR with no other info to mean that they were christened. GSP it appears puts a CHR for everyone?
-                    if ((utype != "DEAT" && utype != "BIRT" && utype != "CHR" && utype != "OCCU") || place != "" || eventNote != "" || bIncludeOccupation) {
-                        iEvent = new Event(null, utype, escaped_description, overview, eventNote, important, CConfig.Instance.CapitaliseEventDescriptions);
+                    if ((utype != "DEAT" && utype != "BIRT" && utype != "CHR" && utype != "OCCU") || place != "" || eventNote != "" || includeOccupation) {
+                        iEvent = new Event(null, utype, escapedDescription, overview, eventNote, important, CConfig.Instance.CapitaliseEventDescriptions);
                         fAttributeList.Add(iEvent);
                     }
                 }
             }
 
-            if (iEvent != null && bTypeIsAOneOff) {
+            if (iEvent != null && typeIsAOneOff) {
                 if (fFirstFoundEvent.ContainsKey(utype)) {
                     // We have multiple occurences of this event. Mark the one we saw first as 'preferred'.
                     Event firstEvent = (Event)fFirstFoundEvent[utype];

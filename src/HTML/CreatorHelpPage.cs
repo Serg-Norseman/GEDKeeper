@@ -69,9 +69,9 @@ namespace GEDmill.HTML
                     f.WriteLine("  <div id=\"page\"> <!-- page -->");
 
                     // Copy in the help html source
-                    string sHelpLine;
-                    while ((sHelpLine = helpReader.ReadLine()) != null) {
-                        f.WriteLine(sHelpLine);
+                    string helpLine;
+                    while ((helpLine = helpReader.ReadLine()) != null) {
+                        f.WriteLine(helpLine);
                     }
 
                     f.WriteLine("  </div> <!-- page -->");

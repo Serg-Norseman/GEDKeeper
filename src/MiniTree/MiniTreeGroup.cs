@@ -199,7 +199,7 @@ namespace GEDmill.MiniTree
         }
 
         // Draws the group to the graphics instance.
-        public override void DrawBitmap(Paintbox paintbox, Graphics g, List<MiniTreeMap> alMap)
+        public override void DrawBitmap(Paintbox paintbox, Graphics g, List<MiniTreeMap> map)
         {
             if (fMembers == null) {
                 // Empty group
@@ -208,69 +208,70 @@ namespace GEDmill.MiniTree
 
             foreach (object obj in fMembers) {
                 if (obj is MiniTreeGroup) {
-                    if (((MiniTreeGroup)obj).fBoxLeft != null && ((MiniTreeGroup)obj).fBoxRight != null) {
+                    var mtg = (MiniTreeGroup)obj;
+                    if (mtg.fBoxLeft != null && mtg.fBoxRight != null) {
                         // Draw crossbar
-                        float fCrossbarLeft = ((MiniTreeGroup)obj).fBoxLeft.TeeRight;
-                        float fCrossbarRight = ((MiniTreeGroup)obj).fBoxRight.TeeLeft;
-                        float fCrossbarLeftGap = ((MiniTreeGroup)obj).fBoxLeft.Right;
-                        float fCrossbarRightGap = ((MiniTreeGroup)obj).fBoxRight.Left;
-                        float fCrossbarY = (((MiniTreeGroup)obj).fBoxLeft.TeeCentreVert + ((MiniTreeGroup)obj).fBoxRight.TeeCentreVert) / 2f;
-                        switch (((MiniTreeGroup)obj).fCrossbar) {
+                        float crossbarLeft = mtg.fBoxLeft.TeeRight;
+                        float crossbarRight = mtg.fBoxRight.TeeLeft;
+                        float crossbarLeftGap = mtg.fBoxLeft.Right;
+                        float crossbarRightGap = mtg.fBoxRight.Left;
+                        float crossbarY = (mtg.fBoxLeft.TeeCentreVert + mtg.fBoxRight.TeeCentreVert) / 2f;
+                        switch (mtg.fCrossbar) {
                             case ECrossbar.Solid:
-                                g.DrawLine(paintbox.PenConnector, fCrossbarLeft, fCrossbarY, fCrossbarRight, fCrossbarY);
+                                g.DrawLine(paintbox.PenConnector, crossbarLeft, crossbarY, crossbarRight, crossbarY);
                                 break;
 
                             case ECrossbar.DottedLeft:
-                                g.DrawLine(paintbox.PenConnectorDotted, fCrossbarLeft, fCrossbarY, fCrossbarRightGap, fCrossbarY);
+                                g.DrawLine(paintbox.PenConnectorDotted, crossbarLeft, crossbarY, crossbarRightGap, crossbarY);
                                 break;
 
                             case ECrossbar.DottedRight:
-                                g.DrawLine(paintbox.PenConnectorDotted, fCrossbarLeftGap, fCrossbarY, fCrossbarRight, fCrossbarY);
+                                g.DrawLine(paintbox.PenConnectorDotted, crossbarLeftGap, crossbarY, crossbarRight, crossbarY);
                                 break;
 
                             default:
                                 break;
                         }
 
-                        if (((MiniTreeGroup)obj).fStalkedIndividuals > 0) {
+                        if (mtg.fStalkedIndividuals > 0) {
                             // Draw down to individuals
                             // Use y coord of first individual, assuming all are at the same y coord
-                            float fIndividualY = 0f;
-                            bool bHaveIndividuals = false;
-                            foreach (MiniTreeObject groupObj in ((MiniTreeGroup)obj).fMembers) {
+                            float individualY = 0f;
+                            bool haveIndividuals = false;
+                            foreach (MiniTreeObject groupObj in mtg.fMembers) {
                                 if (groupObj is MiniTreeIndividual) {
-                                    fIndividualY = ((MiniTreeIndividual)groupObj).Top;
-                                    bHaveIndividuals = true;
+                                    individualY = ((MiniTreeIndividual)groupObj).Top;
+                                    haveIndividuals = true;
                                     break;
                                 }
                             }
-                            float fCrossbarCentre = (fCrossbarLeft + fCrossbarRight) / 2f;
-                            if (bHaveIndividuals) {
-                                g.DrawLine(paintbox.PenConnector, fCrossbarCentre, fCrossbarY, fCrossbarCentre, fIndividualY);
+                            float crossbarCentre = (crossbarLeft + crossbarRight) / 2f;
+                            if (haveIndividuals) {
+                                g.DrawLine(paintbox.PenConnector, crossbarCentre, crossbarY, crossbarCentre, individualY);
 
                                 // Connect individuals
-                                SizeF stalkMinMax = ((MiniTreeGroup)obj).StalkMinMax;
+                                SizeF stalkMinMax = mtg.StalkMinMax;
 
                                 // Width irrelevant, using SizeF simply as a way to pass 2 floats:
-                                float fStalkMin = stalkMinMax.Width;
+                                float stalkMin = stalkMinMax.Width;
 
                                 // Height irrelevant, using SizeF simply as a way to pass 2 floats
-                                float fStalkMax = stalkMinMax.Height;
+                                float stalkMax = stalkMinMax.Height;
 
-                                if (fCrossbarCentre < fStalkMin) {
-                                    fStalkMin = fCrossbarCentre;
-                                } else if (fCrossbarCentre > fStalkMax) {
-                                    fStalkMax = fCrossbarCentre;
+                                if (crossbarCentre < stalkMin) {
+                                    stalkMin = crossbarCentre;
+                                } else if (crossbarCentre > stalkMax) {
+                                    stalkMax = crossbarCentre;
                                 }
-                                g.DrawLine(paintbox.PenConnector, fStalkMin, fIndividualY, fStalkMax, fIndividualY);
+                                g.DrawLine(paintbox.PenConnector, stalkMin, individualY, stalkMax, individualY);
                             }
                         }
                     }
 
-                    ((MiniTreeGroup)obj).DrawBitmap(paintbox, g, alMap);
+                    mtg.DrawBitmap(paintbox, g, map);
                 } else if (obj is MiniTreeIndividual) {
                     // Draw individual box
-                    ((MiniTreeIndividual)obj).DrawBitmap(paintbox, g, alMap);
+                    ((MiniTreeIndividual)obj).DrawBitmap(paintbox, g, map);
                 }
             }
         }
@@ -279,58 +280,59 @@ namespace GEDmill.MiniTree
         // Caller must ensure members != null otherwise they will get returned an invalid rectangle.
         public RectangleF GetExtent()
         {
-            float fTop = 0f, fRight = 0f, fBottom = 0f, fLeft = 0f;
+            float top = 0f, right = 0f, bottom = 0f, left = 0f;
             if (fMembers != null) {
-                bool bFirst = true;
+                bool first = true;
                 foreach (MiniTreeObject obj in fMembers) {
                     if (obj is MiniTreeIndividual) {
-                        float fIndividualTop = ((MiniTreeIndividual)obj).Top;
-                        float fIndividualBottom = ((MiniTreeIndividual)obj).Bottom;
-                        float fIndividualLeft = ((MiniTreeIndividual)obj).Left;
-                        float fIndividualRight = ((MiniTreeIndividual)obj).Right;
-                        if (bFirst || fIndividualTop < fTop) {
-                            fTop = fIndividualTop;
+                        var mtIndi = (MiniTreeIndividual)obj;
+                        float individualTop = mtIndi.Top;
+                        float individualBottom = mtIndi.Bottom;
+                        float individualLeft = mtIndi.Left;
+                        float individualRight = mtIndi.Right;
+                        if (first || individualTop < top) {
+                            top = individualTop;
                         }
-                        if (bFirst || fIndividualBottom > fBottom) {
-                            fBottom = fIndividualBottom;
+                        if (first || individualBottom > bottom) {
+                            bottom = individualBottom;
                         }
-                        if (bFirst || fIndividualLeft < fLeft) {
-                            fLeft = fIndividualLeft;
+                        if (first || individualLeft < left) {
+                            left = individualLeft;
                         }
-                        if (bFirst || fIndividualRight > fRight) {
-                            fRight = fIndividualRight;
+                        if (first || individualRight > right) {
+                            right = individualRight;
                         }
-                        bFirst = false;
+                        first = false;
                     } else if (obj is MiniTreeGroup) {
                         if (((MiniTreeGroup)obj).fMembers != null) {
                             RectangleF rectSubGroup = ((MiniTreeGroup)obj).GetExtent();
 
-                            if (bFirst || rectSubGroup.Top < fTop) {
-                                fTop = rectSubGroup.Top;
+                            if (first || rectSubGroup.Top < top) {
+                                top = rectSubGroup.Top;
                             }
-                            if (bFirst || rectSubGroup.Bottom > fBottom) {
-                                fBottom = rectSubGroup.Bottom;
+                            if (first || rectSubGroup.Bottom > bottom) {
+                                bottom = rectSubGroup.Bottom;
                             }
-                            if (bFirst || rectSubGroup.Left < fLeft) {
-                                fLeft = rectSubGroup.Left;
+                            if (first || rectSubGroup.Left < left) {
+                                left = rectSubGroup.Left;
                             }
-                            if (bFirst || rectSubGroup.Right > fRight) {
-                                fRight = rectSubGroup.Right;
+                            if (first || rectSubGroup.Right > right) {
+                                right = rectSubGroup.Right;
                             }
-                            bFirst = false;
+                            first = false;
                         }
                     }
                 }
             }
-            return new RectangleF(fLeft, fTop, fRight - fLeft, fBottom - fTop);
+            return new RectangleF(left, top, right - left, bottom - top);
         }
 
         // Moves the position of the boxes in this group and its sub groups by an absolute amount.
-        public override void Translate(float fDeltaX, float fDeltaY)
+        public override void Translate(float deltaX, float deltaY)
         {
             if (fMembers != null) {
                 foreach (MiniTreeObject obj in fMembers) {
-                    obj.Translate(fDeltaX, fDeltaY);
+                    obj.Translate(deltaX, deltaY);
                 }
             }
         }
@@ -340,9 +342,9 @@ namespace GEDmill.MiniTree
         public override SizeF CalculateLayout(float x, float y)
         {
             SizeF sizeMax = new SizeF(0f, 0f);
-            float fStartX = x;
-            float fHeight = 0f;
-            float fHeightChild = 0f;
+            float startX = x;
+            float height = 0f;
+            float heightChild = 0f;
 
             if (fMembers == null) {
                 // Empty group
@@ -353,21 +355,20 @@ namespace GEDmill.MiniTree
                 if (obj is MiniTreeGroup) {
                     SizeF size = ((MiniTreeGroup)obj).CalculateLayout(x, y + fSize.Height);
                     x += size.Width;
-                    if (fHeightChild < size.Height) {
-                        fHeightChild = size.Height;
+                    if (heightChild < size.Height) {
+                        heightChild = size.Height;
                     }
                 } else if (obj is MiniTreeIndividual) {
                     SizeF size = ((MiniTreeIndividual)obj).CalculateLayout(x, y);
                     x += size.Width;
-                    if (fHeight < size.Height) {
-                        fHeight = size.Height;
+                    if (height < size.Height) {
+                        height = size.Height;
                     }
                 }
             }
 
-            sizeMax.Width = x - fStartX;
-            sizeMax.Height = fHeight + fHeightChild;
-
+            sizeMax.Width = x - startX;
+            sizeMax.Height = height + heightChild;
             return sizeMax;
         }
 
@@ -393,26 +394,26 @@ namespace GEDmill.MiniTree
                 SizeF stalkMinMax = StalkMinMax;
 
                 // Width irrelevant, using SizeF simply as a way to pass 2 floats
-                float fStalkMin = stalkMinMax.Width;
+                float stalkMin = stalkMinMax.Width;
 
                 // Height irrelevant, using SizeF simply as a way to pass 2 floats
-                float fStalkMax = stalkMinMax.Height;
+                float stalkMax = stalkMinMax.Height;
 
                 // Pull both halves towards centre
-                float fCentre = (fStalkMax + fStalkMin) / 2f;
+                float centre = (stalkMax + stalkMin) / 2f;
 
                 // The following creates 'mooted' coordinates:
 
                 // Pull as much as allowed
-                PullLeftStuffRight(fCentre);
+                PullLeftStuffRight(centre);
 
                 // Pull as much as allowed
-                PullRightStuffLeft(fCentre);
+                PullRightStuffLeft(centre);
             }
         }
 
         // Shifts this object and all objects to its left, until one can't move.
-        public override float PullLeft(float fAmount)
+        public override float PullLeft(float amount)
         {
             // Did this couple have children?
             if (fMembers != null) {
@@ -420,34 +421,34 @@ namespace GEDmill.MiniTree
                 // Find the rightmost underhanging member and shift it left. 
                 // That will interact with other members to find max possible shift amount.
                 MiniTreeIndividual mtiRightmost = null;
-                float fMax = 0;
-                bool bFirst = true;
+                float max = 0;
+                bool first = true;
                 foreach (MiniTreeObject obj in fMembers) {
                     var mtIndi = obj as MiniTreeIndividual;
                     if (mtIndi != null) {
-                        if (bFirst || mtIndi.Left > fMax) {
-                            fMax = mtIndi.Left;
+                        if (first || mtIndi.Left > max) {
+                            max = mtIndi.Left;
                             mtiRightmost = mtIndi;
                         }
-                        bFirst = false;
+                        first = false;
                     }
                 }
                 if (mtiRightmost != null) {
-                    fAmount = mtiRightmost.PushLeft(fAmount);
+                    amount = mtiRightmost.PushLeft(amount);
                 }
             }
 
             // Now shift right object left.
             MiniTreeObject mtoRight = RightObject;
             if (mtoRight != null) {
-                fAmount = mtoRight.PullLeft(fAmount);
+                amount = mtoRight.PullLeft(amount);
             }
 
-            return fAmount;
+            return amount;
         }
 
         // Shifts this object and all objects to its right, until one can't move.
-        public override float PullRight(float fAmount)
+        public override float PullRight(float amount)
         {
             if (fMembers != null) {
                 // This couple had children
@@ -456,44 +457,44 @@ namespace GEDmill.MiniTree
                 // Find the leftmost underhanging member and shift it right. 
                 // That will interact with other members to find max possible shift amount.
                 MiniTreeIndividual mtiLeftmost = null;
-                float fMin = 0;
-                bool fFirst = true;
+                float min = 0;
+                bool first = true;
                 foreach (MiniTreeObject obj in fMembers) {
                     var mtIndi = obj as MiniTreeIndividual;
                     if (mtIndi != null) {
-                        if (fFirst || mtIndi.Right < fMin) {
-                            fMin = mtIndi.Right;
+                        if (first || mtIndi.Right < min) {
+                            min = mtIndi.Right;
                             mtiLeftmost = mtIndi;
                         }
-                        fFirst = false;
+                        first = false;
                     }
                 }
                 if (mtiLeftmost != null) {
-                    fAmount = mtiLeftmost.PushRight(fAmount);
+                    amount = mtiLeftmost.PushRight(amount);
                 }
             }
 
             // Now shift left object right.
             MiniTreeObject mtoLeft = LeftObject;
             if (mtoLeft != null) {
-                fAmount = mtoLeft.PullRight(fAmount);
+                amount = mtoLeft.PullRight(amount);
             }
 
-            return fAmount;
+            return amount;
         }
 
         // Pushes this object left and all objects to its left left, until one can't move.
-        public override float PushLeft(float fAmount)
+        public override float PushLeft(float amount)
         {
             // TODO: Not yet implemented - compression won't be optimal.
-            return fAmount;
+            return amount;
         }
 
         // Pushes this object right and all objects to its right right, until one can't move.
-        public override float PushRight(float fAmount)
+        public override float PushRight(float amount)
         {
             // TODO: Not yet implemented - compression won't be optimal.
-            return fAmount;
+            return amount;
         }
 
 
@@ -503,24 +504,24 @@ namespace GEDmill.MiniTree
         private SizeF StalkMinMax
         {
             get {
-                float fMin = 0f;
-                float fMax = 0f;
-                bool bFirst = true;
+                float min = 0f;
+                float max = 0f;
+                bool first = true;
                 foreach (MiniTreeObject obj in fMembers) {
                     var mtIndi = obj as MiniTreeIndividual;
                     if (mtIndi != null && mtIndi.HasStalk) {
                         float fStalk = mtIndi.Stalk;
-                        if (bFirst || fStalk < fMin) {
-                            fMin = fStalk;
+                        if (first || fStalk < min) {
+                            min = fStalk;
                         }
-                        if (bFirst || fStalk > fMax) {
-                            fMax = fStalk;
+                        if (first || fStalk > max) {
+                            max = fStalk;
                         }
-                        bFirst = false;
+                        first = false;
                     }
                 }
 
-                return new SizeF(fMin, fMax);
+                return new SizeF(min, max);
             }
         }
 
@@ -528,20 +529,20 @@ namespace GEDmill.MiniTree
         // Gets left box to pull its left box/group in turn.
         // Boxes are free to move. Moving a group will pull its members.
         // They must not collide with other boxes.
-        private void PullLeftStuffRight(float fCentre)
+        private void PullLeftStuffRight(float centre)
         {
             var mtoLeft = LeftObject as MiniTreeIndividual;
             if (mtoLeft != null) {
-                mtoLeft.PullRight(fCentre - mtoLeft.Right);
+                mtoLeft.PullRight(centre - mtoLeft.Right);
             }
         }
 
         // Pulls right box as close as can be, to compress group.
-        private void PullRightStuffLeft(float fCentre)
+        private void PullRightStuffLeft(float centre)
         {
             var mtoRight = RightObject as MiniTreeIndividual;
             if (mtoRight != null) {
-                mtoRight.PullLeft(mtoRight.Left - fCentre);
+                mtoRight.PullLeft(mtoRight.Left - centre);
             }
         }
     }

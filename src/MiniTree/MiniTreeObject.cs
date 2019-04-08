@@ -82,24 +82,24 @@ namespace GEDmill.MiniTree
         public abstract SizeF CalculateSize(Graphics g, Font f);
 
         // Draws the element to the graphics instance.
-        public abstract void DrawBitmap(Paintbox paintbox, Graphics g, List<MiniTreeMap> alMap);
+        public abstract void DrawBitmap(Paintbox paintbox, Graphics g, List<MiniTreeMap> map);
 
         // Calculates how to lay out this element.
         public abstract SizeF CalculateLayout(float x, float y);
 
         // Shifts this object and all objects to its left, until one can't move.
-        public abstract float PullLeft(float fAmount);
+        public abstract float PullLeft(float amount);
 
         // Shifts this object and all objects to its right, until one can't move.
-        public abstract float PullRight(float fAmount);
+        public abstract float PullRight(float amount);
 
         // Pushes this object left and all objects to its left left, until one can't move.
-        public abstract float PushLeft(float fAmount);
+        public abstract float PushLeft(float amount);
 
         // Shifts this object and all objects to its right, until one can't move.
-        public abstract float PushRight(float fAmount);
+        public abstract float PushRight(float amount);
 
         // Moves the position of this object by an absolute amount.
-        public abstract void Translate(float fDeltaX, float fDeltaY);
+        public abstract void Translate(float deltaX, float deltaY);
     }
 }

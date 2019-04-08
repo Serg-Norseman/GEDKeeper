@@ -88,12 +88,13 @@ namespace GEDmill.HTML
                     if (idType == "") {
                         idType = "User reference number";
                     }
-                    f.WriteLine(string.Concat("        <p>", idType, ": ", EscapeHTML(urn.StringValue, false), "</p>"));
+                    f.WriteLine("<p>{0}: {1}</p>", idType, EscapeHTML(urn.StringValue, false));
                 }
 
                 if (!string.IsNullOrEmpty(r.AutomatedRecordID)) {
-                    f.WriteLine(string.Concat("        <p>Record ", r.AutomatedRecordID, "</p>"));
+                    f.WriteLine("<p>Record {0}</p>", r.AutomatedRecordID);
                 }
+
                 if (r.ChangeDate != null) {
                     GEDCOMChangeDate changeDate = r.ChangeDate;
                     string dtx = r.ChangeDate.ToString();
@@ -101,20 +102,21 @@ namespace GEDmill.HTML
                         if (dtx != "") {
                             dtx = " " + dtx;
                         }
-                        f.WriteLine(string.Concat("        <p id=\"changedate\">Record last changed ", dtx.ToString(), "</p>"));
+                        f.WriteLine("<p id=\"changedate\">Record last changed {0}</p>", dtx);
                     }
                 }
+
                 if (CConfig.Instance.CustomFooter != "") {
                     if (CConfig.Instance.FooterIsHtml) {
-                        f.WriteLine(string.Concat("        <p>", CConfig.Instance.CustomFooter, "</p>"));
+                        f.WriteLine("<p>{0}</p>", CConfig.Instance.CustomFooter);
                     } else {
-                        f.WriteLine(string.Concat("        <p>", EscapeHTML(CConfig.Instance.CustomFooter, false), "</p>"));
+                        f.WriteLine("<p>{0}</p>", EscapeHTML(CConfig.Instance.CustomFooter, false));
                     }
                 }
             }
             f.WriteLine("      </div> <!-- footer -->");
 
-            f.WriteLine("<p class=\"plain\">Page created using GEDmill " + CConfig.SoftwareVersion + "</p>");
+            f.WriteLine("<p class=\"plain\">Page created using GEDmill {0}</p>", CConfig.SoftwareVersion);
 
             if (CConfig.Instance.IncludeValiditySticker) {
                 OutputValiditySticker(f);
@@ -131,96 +133,123 @@ namespace GEDmill.HTML
 
             for (int i = 0; i < fileRefs.Count; i++) {
                 GEDCOMFileReferenceWithTitle mfr = fileRefs[i] as GEDCOMFileReferenceWithTitle;
-                string sCopyFilename = "";
+                string copyFilename = "";
                 int nMmOrdering = i;
-                string sMmTitle = mfr.Title;
-                string sMmFilename = mfr.StringValue;
-                string sMmFormat = mfr.MultimediaFormat.ToString();
+                string mmTitle = mfr.Title;
+                string mmFilename = mfr.StringValue;
+                string mmFormat = mfr.MultimediaFormat.ToString();
                 Rectangle rectArea = new Rectangle(0, 0, 0, 0);
-                string sExtnPart;
-                bool bBlockThisMediaType = false;
+                string extPart;
+                bool blockThisMediaType = false;
 
                 // Don't trust extension on sFilename. Use our own. (Happens for .tmp files from embedded data)
-                switch (sMmFormat) {
+                switch (mmFormat) {
                     case "bmp":
-                        sExtnPart = ".bmp";
+                        extPart = ".bmp";
                         break;
                     case "gif":
-                        sExtnPart = ".gif";
+                        extPart = ".gif";
                         break;
                     case "jpg":
                     case "jpeg":
-                        sExtnPart = ".jpg";
+                        extPart = ".jpg";
                         break;
                     case "tiff":
                     case "tif":
-                        sExtnPart = ".tif";
+                        extPart = ".tif";
                         break;
                     case "png":
-                        sExtnPart = ".png";
+                        extPart = ".png";
                         break;
                     case "ole":
-                        bBlockThisMediaType = true;
-                        sExtnPart = ".ole";
+                        blockThisMediaType = true;
+                        extPart = ".ole";
                         break;
                     default:
-                        sExtnPart = Path.GetExtension(sMmFilename);
-                        if (sExtnPart.ToUpper() == ".TMP") {
-                            sExtnPart = "." + sMmFormat;
+                        extPart = Path.GetExtension(mmFilename);
+                        if (extPart.ToUpper() == ".TMP") {
+                            extPart = "." + mmFormat;
                         }
                         break;
                 }
-                string sOriginalFilename = Path.GetFileName(sMmFilename);
+                string originalFilename = Path.GetFileName(mmFilename);
 
-                bool bPictureFormat = mfr.IsPictureFormat();
-                if (bPictureFormat || CConfig.Instance.AllowNonPictures) {
-                    if (!bPictureFormat && CConfig.Instance.AllowNonPictures) {
+                bool pictureFormat = mfr.IsPictureFormat();
+                if (pictureFormat || CConfig.Instance.AllowNonPictures) {
+                    if (!pictureFormat && CConfig.Instance.AllowNonPictures) {
                         stats.NonPicturesIncluded = true;
                     }
 
-                    string sNewFilename = sOriginalFilename;
-                    if (!string.IsNullOrEmpty(sMmFilename)) {
+                    string newFilename = originalFilename;
+                    if (!string.IsNullOrEmpty(mmFilename)) {
                         // Give multimedia files a standard name
                         if (CConfig.Instance.RenameOriginalPicture) {
                             //string sFilePart = sMmPrefix;//string.Concat( mm_prefix, nMultimediaFiles.ToString() );
-                            sNewFilename = string.Concat(mmPrefix, sExtnPart.ToLower());
+                            newFilename = string.Concat(mmPrefix, extPart.ToLower());
                         }
 
-                        if (!bBlockThisMediaType) {
-                            if (bPictureFormat) {
+                        if (!blockThisMediaType) {
+                            if (pictureFormat) {
                                 // TODO
                                 /*if (mfr.m_asidPair != null) {
                                     Rectangle rectAsidArea = mfr.m_asidPair.m_rectArea;
                                     rectArea = new Rectangle(rectAsidArea.X, rectAsidArea.Y, rectAsidArea.Width, rectAsidArea.Height);
                                 }*/
-                                sCopyFilename = CopyMultimedia(sMmFilename, sNewFilename, maxWidth, maxHeight, ref rectArea, stats);
+                                copyFilename = CopyMultimedia(mmFilename, newFilename, maxWidth, maxHeight, ref rectArea, stats);
                             } else {
-                                sCopyFilename = CopyMultimedia(sMmFilename, sNewFilename, 0, 0, ref rectArea, stats);
+                                copyFilename = CopyMultimedia(mmFilename, newFilename, 0, 0, ref rectArea, stats);
                             }
                         }
                     }
 
-                    if (!string.IsNullOrEmpty(sCopyFilename)) {
-                        string sLargeFilename = "";
+                    if (!string.IsNullOrEmpty(copyFilename)) {
+                        string largeFilename = "";
                         // Copy original original version
                         if (CConfig.Instance.LinkOriginalPicture) {
                             if (CConfig.Instance.RenameOriginalPicture) {
                                 //string sFilePart = sMmLargePrefix;
-                                sLargeFilename = string.Concat(mmLargePrefix, sExtnPart.ToLower());
+                                largeFilename = string.Concat(mmLargePrefix, extPart.ToLower());
                             } else {
-                                sLargeFilename = sOriginalFilename;
+                                largeFilename = originalFilename;
                             }
 
                             Rectangle rectLargeArea = new Rectangle(0, 0, 0, 0);
-                            sLargeFilename = CopyMultimedia(sMmFilename, sLargeFilename, 0, 0, ref rectLargeArea, null);
+                            largeFilename = CopyMultimedia(mmFilename, largeFilename, 0, 0, ref rectLargeArea, null);
                         }
 
                         // Add format and new sFilename to multimedia list
-                        Multimedia imm = new Multimedia(nMmOrdering, sMmFormat, sMmTitle, sCopyFilename, sLargeFilename, rectArea.Width, rectArea.Height);
+                        Multimedia imm = new Multimedia(nMmOrdering, mmFormat, mmTitle, copyFilename, largeFilename, rectArea.Width, rectArea.Height);
                         fMultimediaList.Add(imm);
                     } else {
                         // Happens e.g. when original file doesn't exist.
                     }
+                }
+            }
+        }
+
+        // Outputs the HTML for the Notes section of the page
+        protected static void OutputNotes(HTMLFile f, GEDCOMList<GEDCOMNotes> notes)
+        {
+            if (notes.Count > 0) {
+                // Generate notes list into a local array before adding header title. This is to cope with the case where all notes are nothing but blanks.
+                var note_strings = new List<string>(notes.Count);
+
+                foreach (GEDCOMNotes ns in notes) {
+                    string noteText = CConfig.Instance.ObfuscateEmails ? ObfuscateEmail(ns.Notes.Text) : ns.Notes.Text;
+                    note_strings.Add(string.Concat("<li>", EscapeHTML(noteText, false), "</li>"));
+                }
+
+                if (note_strings.Count > 0) {
+                    f.WriteLine("<div id=\"notes\">");
+                    f.WriteLine("<h1>Notes</h1>");
+                    f.WriteLine("<ul>");
+
+                    foreach (string note_string in note_strings) {
+                        f.WriteLine(note_string);
+                    }
+
+                    f.WriteLine("</ul>");
+                    f.WriteLine("</div> <!-- notes -->");
                 }
             }
         }

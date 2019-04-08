@@ -124,7 +124,7 @@ namespace GEDmill.HTML
         private static List<IndexPage> CreateIndexPages(List<IndexLetter> letters)
         {
             var pages = new List<IndexPage>();
-            uint uLetters = (uint)(letters.Count);
+            uint uLetters = (uint)letters.Count;
             uint uIndisPerPage;
             if (CConfig.Instance.MultiPageIndexes == false) {
                 // Set to 0 for all names in one page.
@@ -138,13 +138,13 @@ namespace GEDmill.HTML
             IndexPage indexpageCurrent = new IndexPage(currentPageName);
             uint uLetter = 0;
             while (uLetter < uLetters) {
-                uint uCurrentIndis = (uint)(((IndexLetter)letters[(int)uLetter]).Items.Count);
+                uint uCurrentIndis = (uint)(letters[(int)uLetter].Items.Count);
                 if (uIndisPerPage != 0 && uIndiAccumulator + uCurrentIndis > uIndisPerPage) {
                     uint uWith = (uint)(uIndiAccumulator + uCurrentIndis - uIndisPerPage);
                     uint uWithout = uIndisPerPage - uIndiAccumulator;
                     if (uWith < uWithout || uIndiAccumulator == 0) {
                         // Better to include it.
-                        indexpageCurrent.TotalIndis += ((IndexLetter)letters[(int)uLetter]).Items.Count;
+                        indexpageCurrent.TotalIndis += letters[(int)uLetter].Items.Count;
                         indexpageCurrent.Letters.Add(letters[(int)uLetter++]);
                     }
                     // Start new page.
@@ -153,7 +153,7 @@ namespace GEDmill.HTML
                     indexpageCurrent = new IndexPage(currentPageName);
                     uIndiAccumulator = 0;
                 } else {
-                    indexpageCurrent.TotalIndis += ((IndexLetter)letters[(int)uLetter]).Items.Count;
+                    indexpageCurrent.TotalIndis += letters[(int)uLetter].Items.Count;
                     indexpageCurrent.Letters.Add(letters[(int)uLetter++]);
                     uIndiAccumulator += uCurrentIndis;
                 }
@@ -167,7 +167,7 @@ namespace GEDmill.HTML
         // Collects together the first letters of the items in the index
         private List<IndexLetter> CreateIndexLetters()
         {
-            List<IndexLetter> letters = new List<IndexLetter>();
+            var letters = new List<IndexLetter>();
             string lastInitial = "";
             string lastTitle = "";
             List<StringTuple> currentLetterList = null;
@@ -245,11 +245,11 @@ namespace GEDmill.HTML
                 f.WriteLine("");
 
                 f.WriteLine("  <div id=\"page\">");
-                f.WriteLine(string.Concat("    <h1 class=\"centred\">", CConfig.Instance.IndexTitle, "</h1>"));
+                f.WriteLine("    <h1 class=\"centred\">{0}</h1>", CConfig.Instance.IndexTitle);
 
                 if (headingsLinks != "") {
                     f.WriteLine("    <div id=\"headingsLinks\">");
-                    f.WriteLine(string.Concat("      <p>", headingsLinks, "</p>"));
+                    f.WriteLine("      <p>{0}</p>", headingsLinks);
                     f.WriteLine("    </div>");
                 }
 

@@ -81,18 +81,18 @@ namespace GEDmill.HTML
                 string sourName = fSourceRecord.ShortTitle;
                 if (sourName == "") {
                     sourName = "Source ";
-                    bool bGotSourceName = false;
+                    bool gotSourceName = false;
                     // Try user reference number
                     foreach (GEDCOMUserReference urn in fSourceRecord.UserReferences) {
                         if (urn.StringValue != "") {
                             sourName += urn.StringValue;
-                            bGotSourceName = true;
+                            gotSourceName = true;
                             break;
                         }
                     }
-                    if (!bGotSourceName && fSourceRecord.AutomatedRecordID != null && fSourceRecord.AutomatedRecordID != "") {
+                    if (!gotSourceName && fSourceRecord.AutomatedRecordID != null && fSourceRecord.AutomatedRecordID != "") {
                         sourName += fSourceRecord.AutomatedRecordID;
-                    } else if (!bGotSourceName) {
+                    } else if (!gotSourceName) {
                         sourName += fSourceRecord.XRef;
                     }
                 }
@@ -172,37 +172,7 @@ namespace GEDmill.HTML
                 }
 
                 // Add notes
-                if (fSourceRecord.Notes.Count > 0) {
-                    // Generate notes list into a local array before adding header title. This is to cope with the case where all notes are nothing but blanks.
-                    var noteStrings = new List<string>(fSourceRecord.Notes.Count);
-
-                    foreach (GEDCOMNotes ns in fSourceRecord.Notes) {
-                        if (!string.IsNullOrEmpty(ns.Notes.Text)) {
-                            string noteText;
-                            if (CConfig.Instance.ObfuscateEmails) {
-                                noteText = ObfuscateEmail(ns.Notes.Text);
-                            } else {
-                                noteText = ns.Notes.Text;
-                            }
-
-                            string sourceRefs = "";
-                            noteStrings.Add(string.Concat("          <li>", EscapeHTML(noteText, false), sourceRefs, "</li>"));
-                        }
-                    }
-
-                    if (noteStrings.Count > 0) {
-                        f.WriteLine("        <div id=\"notes\">");
-                        f.WriteLine("          <h1>Notes</h1>");
-                        f.WriteLine("          <ul>");
-
-                        foreach (string note_string in noteStrings) {
-                            f.WriteLine(note_string);
-                        }
-
-                        f.WriteLine("          </ul>");
-                        f.WriteLine("        </div> <!-- notes -->");
-                    }
-                }
+                OutputNotes(f, fSourceRecord.Notes);
 
                 if (CConfig.Instance.SupressBackreferences == false) {
                     f.WriteLine("        <div id=\"citations\">");
@@ -246,14 +216,15 @@ namespace GEDmill.HTML
         // Writes the HTML for the multimedia files associated with this record. 
         private void OutputMultimedia(HTMLFile f)
         {
-            string sNonPicMainFilename = "";
+            string nonPicMainFilename = "";
             if (fMultimediaList.Count > 0) {
                 f.WriteLine("        <div id=\"sourcePics\">");
                 foreach (Multimedia iMultimedia in fMultimediaList) {
-                    sNonPicMainFilename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, CConfig.Instance.LinkOriginalPicture);
+                    nonPicMainFilename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, CConfig.Instance.LinkOriginalPicture);
 
                     string imageTitle = "";
                     string altName = "";
+
                     if (iMultimedia.Title != null) {
                         imageTitle = iMultimedia.Title;
                         altName = iMultimedia.Title;
@@ -278,9 +249,9 @@ namespace GEDmill.HTML
                         }
 
                         if (CConfig.Instance.LinkOriginalPicture) {
-                            f.WriteLine(string.Concat("            <a href=\"", iMultimedia.FileName, "\"><img src=\"", sNonPicMainFilename, "\" alt=\"", altName, "\" /></a>")); // TODO: clip and scale properly. Use MainForm.s_config to set a max scale
+                            f.WriteLine(string.Concat("            <a href=\"", iMultimedia.FileName, "\"><img src=\"", nonPicMainFilename, "\" alt=\"", altName, "\" /></a>")); // TODO: clip and scale properly. Use MainForm.s_config to set a max scale
                         } else {
-                            f.WriteLine(string.Concat("            <img src=\"", sNonPicMainFilename, "\" alt=\"", altName, "\" />")); // TODO: clip and scale properly. Use MainForm.s_config to set a max scale
+                            f.WriteLine(string.Concat("            <img src=\"", nonPicMainFilename, "\" alt=\"", altName, "\" />")); // TODO: clip and scale properly. Use MainForm.s_config to set a max scale
                         }
                     }
                     f.WriteLine(string.Concat("          </p>"));
