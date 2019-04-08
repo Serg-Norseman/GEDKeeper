@@ -200,7 +200,7 @@ namespace GKCommon.GEDCOM
 
             StreamWriter stream = null;
             Assert.Throws(typeof(NullReferenceException), () => {
-                instance.SaveToStream(stream);
+                instance.SaveToStream(stream, 0);
             });
         }
 

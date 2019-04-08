@@ -132,13 +132,18 @@ namespace GKCommon.GEDCOM
             base.Dispose(disposing);
         }
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
-            base.SaveToStream(stream);
-            fPhoneList.SaveToStream(stream);
-            fEmailList.SaveToStream(stream);
-            fFaxList.SaveToStream(stream);
-            fWWWList.SaveToStream(stream);
+            SaveValueToStream(stream, level);
+
+            int lev = level + 1;
+            SaveTagsToStream(stream, lev);
+
+            // same level
+            fPhoneList.SaveToStream(stream, level);
+            fEmailList.SaveToStream(stream, level);
+            fFaxList.SaveToStream(stream, level);
+            fWWWList.SaveToStream(stream, level);
         }
 
         public override void Assign(GEDCOMTag source)
@@ -160,17 +165,13 @@ namespace GKCommon.GEDCOM
             GEDCOMTag result;
 
             if (tagName == GEDCOMTagType.PHON) {
-                result = (fPhoneList.Add(new GEDCOMTag(this, tagName, tagValue)));
-                result.SetLevel(Level);
+                result = AddPhoneNumber(tagValue);
             } else if (tagName == GEDCOMTagType.EMAIL) {
-                result = (fEmailList.Add(new GEDCOMTag(this, tagName, tagValue)));
-                result.SetLevel(Level);
+                result = AddEmailAddress(tagValue);
             } else if (tagName == GEDCOMTagType.FAX) {
-                result = (fFaxList.Add(new GEDCOMTag(this, tagName, tagValue)));
-                result.SetLevel(Level);
+                result = AddFaxNumber(tagValue);
             } else if (tagName == GEDCOMTagType.WWW) {
-                result = (fWWWList.Add(new GEDCOMTag(this, tagName, tagValue)));
-                result.SetLevel(Level);
+                result = AddWebPage(tagValue);
             } else {
                 result = base.AddTag(tagName, tagValue, tagConstructor);
             }
@@ -192,28 +193,24 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && fPhoneList.Count == 0 && fEmailList.Count == 0 && fFaxList.Count == 0 && fWWWList.Count == 0;
         }
 
-        public void AddEmailAddress(string value)
+        public GEDCOMTag AddEmailAddress(string value)
         {
-            GEDCOMTag tag = fEmailList.Add(new GEDCOMTag(this, GEDCOMTagType.EMAIL, value));
-            tag.SetLevel(Level);
+            return fEmailList.Add(new GEDCOMTag(this, GEDCOMTagType.EMAIL, value));
         }
 
-        public void AddFaxNumber(string value)
+        public GEDCOMTag AddFaxNumber(string value)
         {
-            GEDCOMTag tag = fFaxList.Add(new GEDCOMTag(this, GEDCOMTagType.FAX, value));
-            tag.SetLevel(Level);
+            return fFaxList.Add(new GEDCOMTag(this, GEDCOMTagType.FAX, value));
         }
 
-        public void AddPhoneNumber(string value)
+        public GEDCOMTag AddPhoneNumber(string value)
         {
-            GEDCOMTag tag = fPhoneList.Add(new GEDCOMTag(this, GEDCOMTagType.PHON, value));
-            tag.SetLevel(Level);
+            return fPhoneList.Add(new GEDCOMTag(this, GEDCOMTagType.PHON, value));
         }
 
-        public void AddWebPage(string value)
+        public GEDCOMTag AddWebPage(string value)
         {
-            GEDCOMTag tag = fWWWList.Add(new GEDCOMTag(this, GEDCOMTagType.WWW, value));
-            tag.SetLevel(Level);
+            return fWWWList.Add(new GEDCOMTag(this, GEDCOMTagType.WWW, value));
         }
 
         public void SetAddressText(string value)

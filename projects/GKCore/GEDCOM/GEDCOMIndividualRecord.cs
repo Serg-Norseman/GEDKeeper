@@ -244,8 +244,6 @@ namespace GKCommon.GEDCOM
         {
             if (evt != null) {
                 if (evt is GEDCOMIndividualEvent || evt is GEDCOMIndividualAttribute) {
-                    // SetLevel need for events created outside!
-                    evt.SetLevel(Level + 1);
                     Events.Add(evt);
                 } else {
                     throw new ArgumentException(@"Event has the invalid type", "evt");
@@ -258,7 +256,6 @@ namespace GKCommon.GEDCOM
         public GEDCOMPersonalName AddPersonalName(GEDCOMPersonalName value)
         {
             if (value != null) {
-                value.SetLevel(Level + 1);
                 fPersonalNames.Add(value);
             }
             return value;
@@ -475,19 +472,20 @@ namespace GKCommon.GEDCOM
             fSpouseToFamilyLinks.ReplaceXRefs(map);
         }
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
-            base.SaveToStream(stream);
+            base.SaveToStream(stream, level);
 
-            WriteTagLine(stream, Level + 1, GEDCOMTagType.SEX, GEDCOMUtils.GetSexStr(fSex), true);
+            level += 1;
+            WriteTagLine(stream, level, GEDCOMTagType.SEX, GEDCOMUtils.GetSexStr(fSex), true);
 
-            fPersonalNames.SaveToStream(stream);
-            fChildToFamilyLinks.SaveToStream(stream);
-            fSpouseToFamilyLinks.SaveToStream(stream);
-            Events.SaveToStream(stream); // for files content compatibility
-            fAssociations.SaveToStream(stream);
-            fAliasses.SaveToStream(stream);
-            fGroups.SaveToStream(stream);
+            fPersonalNames.SaveToStream(stream, level);
+            fChildToFamilyLinks.SaveToStream(stream, level);
+            fSpouseToFamilyLinks.SaveToStream(stream, level);
+            Events.SaveToStream(stream, level); // for files content compatibility
+            fAssociations.SaveToStream(stream, level);
+            fAliasses.SaveToStream(stream, level);
+            fGroups.SaveToStream(stream, level);
         }
 
         #region Auxiliary

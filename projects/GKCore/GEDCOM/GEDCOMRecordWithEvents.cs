@@ -148,12 +148,13 @@ namespace GKCommon.GEDCOM
             fSubmittors.ReplaceXRefs(map);
         }
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
-            base.SaveToStream(stream);
+            base.SaveToStream(stream, level);
 
-            WriteTagLine(stream, Level + 1, GEDCOMTagType.RESN, GEDCOMUtils.GetRestrictionStr(fRestriction), true);
-            fSubmittors.SaveToStream(stream);
+            level += 1;
+            WriteTagLine(stream, level, GEDCOMTagType.RESN, GEDCOMUtils.GetRestrictionStr(fRestriction), true);
+            fSubmittors.SaveToStream(stream, level);
         }
 
         public GEDCOMCustomEvent FindEvent(string eventName)

@@ -86,10 +86,10 @@ namespace GKCommon.GEDCOM
             fMembers.ReplaceXRefs(map);
         }
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
-            base.SaveToStream(stream);
-            fMembers.SaveToStream(stream);
+            base.SaveToStream(stream, level);
+            fMembers.SaveToStream(stream, ++level);
         }
 
         // TODO: connect to use

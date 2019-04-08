@@ -102,11 +102,13 @@ namespace GKCommon.GEDCOM
             fSourceCitations.ReplaceXRefs(map);
         }
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
-            base.SaveToStream(stream);
-            WriteTagLine(stream, Level + 1, GEDCOMTagType.RELA, fRelation, true);
-            fSourceCitations.SaveToStream(stream);
+            base.SaveToStream(stream, level);
+
+            level += 1;
+            WriteTagLine(stream, level, GEDCOMTagType.RELA, fRelation, true);
+            fSourceCitations.SaveToStream(stream, level);
         }
 
         public override void Assign(GEDCOMTag source)

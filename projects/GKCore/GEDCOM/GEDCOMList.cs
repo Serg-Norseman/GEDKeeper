@@ -222,7 +222,7 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public void SaveToStream(StreamWriter stream)
+        public void SaveToStream(StreamWriter stream, int level)
         {
             if (fDataList == null) return;
 
@@ -230,7 +230,7 @@ namespace GKCommon.GEDCOM
             for (int i = 0; i < num; i++) {
                 var item = fDataList[i];
                 if (item != null) {
-                    item.SaveToStream(stream);
+                    item.SaveToStream(stream, level);
                 }
             }
         }

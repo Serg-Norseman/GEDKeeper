@@ -37,7 +37,6 @@ namespace GKCommon.GEDCOM
     {
         #region Protected fields
 
-        private int fLevel;
         private string fName;
         private GEDCOMObject fOwner;
         protected string fStringValue;
@@ -61,11 +60,6 @@ namespace GKCommon.GEDCOM
         public GEDCOMTag this[int index]
         {
             get { return fTags[index]; }
-        }
-
-        internal int Level
-        {
-            get { return fLevel; }
         }
 
         public string Name
@@ -98,9 +92,6 @@ namespace GKCommon.GEDCOM
             fOwner = owner;
             fTags = new GEDCOMList<GEDCOMTag>(this);
             fStringValue = string.Empty;
-
-            GEDCOMTag ownerTag = owner as GEDCOMTag;
-            fLevel = (ownerTag != null) ? ownerTag.Level + 1 : 0;
         }
 
         public GEDCOMTag(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
@@ -178,11 +169,6 @@ namespace GKCommon.GEDCOM
         {
             TagProperties props = GEDCOMProvider.GetTagProps(fName);
             return (props != null && props.SkipEmpty);
-        }
-
-        internal void SetLevel(int value)
-        {
-            fLevel = value;
         }
 
         public void SetName(string value)
@@ -609,21 +595,21 @@ namespace GKCommon.GEDCOM
             return GEDCOMParseFunc.Default;
         }
 
-        protected void SaveTagsToStream(StreamWriter stream)
+        protected void SaveTagsToStream(StreamWriter stream, int level)
         {
             int subtagsCount = fTags.Count;
             if (subtagsCount > 0) {
                 for (int i = 0; i < subtagsCount; i++) {
                     GEDCOMTag subtag = fTags[i];
                     if (subtag.Name == "CONC" || subtag.Name == "CONT") {
-                        subtag.SaveToStream(stream);
+                        subtag.SaveToStream(stream, level);
                     }
                 }
 
                 for (int i = 0; i < subtagsCount; i++) {
                     GEDCOMTag subtag = fTags[i];
                     if (subtag.Name != "CONT" && subtag.Name != "CONC") {
-                        subtag.SaveToStream(stream);
+                        subtag.SaveToStream(stream, level);
                     }
                 }
             }
@@ -634,22 +620,22 @@ namespace GKCommon.GEDCOM
             bool isEmpty = string.IsNullOrEmpty(tagValue);
             if (isEmpty && skipEmpty) return;
 
-            string str = level.ToString() + " " + tagName;
+            string str = level + " " + tagName;
             if (!string.IsNullOrEmpty(tagValue)) {
                 str = str + " " + tagValue;
             }
             stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
         }
 
-        protected virtual void SaveValueToStream(StreamWriter stream)
+        protected virtual void SaveValueToStream(StreamWriter stream, int level)
         {
-            WriteTagLine(stream, fLevel, fName, StringValue);
+            WriteTagLine(stream, level, fName, StringValue);
         }
 
-        public virtual void SaveToStream(StreamWriter stream)
+        public virtual void SaveToStream(StreamWriter stream, int level)
         {
-            SaveValueToStream(stream);
-            SaveTagsToStream(stream);
+            SaveValueToStream(stream, level);
+            SaveTagsToStream(stream, ++level);
         }
 
         #endregion

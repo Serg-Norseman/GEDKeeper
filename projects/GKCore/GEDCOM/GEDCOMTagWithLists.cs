@@ -79,13 +79,14 @@ namespace GKCommon.GEDCOM
             fMultimediaLinks.ReplaceXRefs(map);
         }
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
-            base.SaveToStream(stream);
+            base.SaveToStream(stream, level);
 
-            fNotes.SaveToStream(stream);
-            fSourceCitations.SaveToStream(stream);
-            fMultimediaLinks.SaveToStream(stream);
+            level += 1;
+            fNotes.SaveToStream(stream, level);
+            fSourceCitations.SaveToStream(stream, level);
+            fMultimediaLinks.SaveToStream(stream, level);
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

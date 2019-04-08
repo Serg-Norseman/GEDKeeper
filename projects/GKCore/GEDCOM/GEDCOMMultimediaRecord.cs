@@ -84,10 +84,10 @@ namespace GKCommon.GEDCOM
             fFileReferences.ReplaceXRefs(map);
         }
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
-            base.SaveToStream(stream);
-            fFileReferences.SaveToStream(stream);
+            base.SaveToStream(stream, level);
+            fFileReferences.SaveToStream(stream, ++level);
         }
 
         #region Auxiliary

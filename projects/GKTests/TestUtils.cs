@@ -164,12 +164,12 @@ namespace GKTests
             Assert.IsNotNull(commRec, "commRec != null");
         }
 
-        public static string GetTagStreamText(GEDCOMTag tag)
+        public static string GetTagStreamText(GEDCOMTag tag, int level)
         {
             string result;
             using (MemoryStream stm = new MemoryStream()) {
                 using (StreamWriter fs = new StreamWriter(stm)) {
-                    tag.SaveToStream(fs);
+                    tag.SaveToStream(fs, level);
 
                     fs.Flush();
 

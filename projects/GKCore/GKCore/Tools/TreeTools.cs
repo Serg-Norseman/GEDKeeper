@@ -268,8 +268,19 @@ namespace GKCore.Tools
             int num = ptr.Notes.Count;
             for (int i = 0; i < num; i++) {
                 GEDCOMNotes note = ptr.Notes[i];
-                if (!note.IsPointer)
-                    ReformNote(tree, note);
+                if (!note.IsPointer) ReformNote(tree, note);
+            }
+        }
+
+        private static void CheckRecord_IndiEvent(GEDCOMCustomEvent evt, GEDCOMFormat format)
+        {
+            // Fix for Family Tree Maker 2008 which exports occupation as generic EVEN events
+            if (format == GEDCOMFormat.gf_FamilyTreeMakerM || format == GEDCOMFormat.gf_FamilyTreeMakerW) {
+                string subtype = evt.StringValue;
+                if (evt.Name == "EVEN" && subtype.ToLower() == "occupation") {
+                    evt.SetName("OCCU");
+                    evt.StringValue = string.Empty;
+                }
             }
         }
 
@@ -306,14 +317,14 @@ namespace GKCore.Tools
             baseContext.CollectNameLangs(persName);
         }
 
-        private static void CheckRecord_Individual(GEDCOMTree tree, GEDCOMFormat format, GEDCOMIndividualRecord iRec,
-                                                   IBaseContext baseContext)
+        private static void CheckRecord_Individual(IBaseContext baseContext, GEDCOMTree tree, GEDCOMFormat format,
+                                                   GEDCOMIndividualRecord iRec)
         {
-            if (format == GEDCOMFormat.gf_Native)
-            {
+            if (format == GEDCOMFormat.gf_Native) {
                 for (int i = 0, num = iRec.Events.Count; i < num; i++) {
                     GEDCOMCustomEvent evt = iRec.Events[i];
 
+                    CheckRecord_IndiEvent(evt, format);
                     CheckRecord_EventPlace(evt);
                     CheckRecord_AttrCompatible(tree, format, iRec, evt);
                     CheckRecord_RepairTag(tree, format, evt);
@@ -328,42 +339,34 @@ namespace GKCore.Tools
                 for (int i = 0, num = iRec.PersonalNames.Count; i < num; i++) {
                     CheckRecord_Name(iRec, iRec.PersonalNames[i], baseContext);
                 }
-            }
-            else
-            {
-                int num3 = iRec.Events.Count;
-                for (int i = 0; i < num3; i++)
-                {
+            } else {
+                int num = iRec.Events.Count;
+                for (int i = 0; i < num; i++) {
                     CheckRecord_PrepareTag(tree, format, iRec.Events[i]);
                 }
 
-                int num4 = iRec.ChildToFamilyLinks.Count;
-                for (int i = 0; i < num4; i++)
-                {
+                num = iRec.ChildToFamilyLinks.Count;
+                for (int i = 0; i < num; i++) {
                     CheckRecord_PreparePtr(tree, format, iRec.ChildToFamilyLinks[i]);
                 }
 
-                int num5 = iRec.SpouseToFamilyLinks.Count;
-                for (int i = 0; i < num5; i++)
-                {
+                num = iRec.SpouseToFamilyLinks.Count;
+                for (int i = 0; i < num; i++) {
                     CheckRecord_PreparePtr(tree, format, iRec.SpouseToFamilyLinks[i]);
                 }
 
-                int num6 = iRec.Associations.Count;
-                for (int i = 0; i < num6; i++)
-                {
+                num = iRec.Associations.Count;
+                for (int i = 0; i < num; i++) {
                     CheckRecord_PreparePtr(tree, format, iRec.Associations[i]);
                 }
             }
 
-            for (int i = iRec.ChildToFamilyLinks.Count - 1; i >= 0; i--)
-            {
+            for (int i = iRec.ChildToFamilyLinks.Count - 1; i >= 0; i--) {
                 if (iRec.ChildToFamilyLinks[i].Family == null)
                     iRec.ChildToFamilyLinks.DeleteAt(i);
             }
 
-            for (int i = iRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--)
-            {
+            for (int i = iRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--) {
                 if (iRec.SpouseToFamilyLinks[i].Family == null)
                     iRec.SpouseToFamilyLinks.DeleteAt(i);
             }
@@ -371,8 +374,8 @@ namespace GKCore.Tools
             baseContext.ImportNames(iRec);
         }
 
-        private static void CheckRecord_Family(GEDCOMTree tree, GEDCOMFormat format, GEDCOMFamilyRecord fam,
-                                               IBaseContext baseContext)
+        private static void CheckRecord_Family(IBaseContext baseContext, GEDCOMTree tree, GEDCOMFormat format,
+                                               GEDCOMFamilyRecord fam)
         {
             if (format == GEDCOMFormat.gf_Native) {
                 int num = fam.Events.Count;
@@ -455,31 +458,24 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRecord(GEDCOMTree tree, GEDCOMRecord rec,
-                                        GEDCOMFormat format, int fileVer,
-                                        IBaseContext baseContext)
+        private static void CheckRecord(IBaseContext baseContext, GEDCOMTree tree, GEDCOMRecord rec,
+                                        GEDCOMFormat format, int fileVer)
         {
-            rec.RequireUID();
-
-            if (format != GEDCOMFormat.gf_Native)
-            {
+            if (format != GEDCOMFormat.gf_Native) {
                 int num = rec.MultimediaLinks.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GEDCOMMultimediaLink mmLink = rec.MultimediaLinks[i];
                     if (!mmLink.IsPointer) ReformMultimediaLink(tree, mmLink);
                 }
 
                 num = rec.Notes.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GEDCOMNotes note = rec.Notes[i];
                     if (!note.IsPointer) ReformNote(tree, note);
                 }
 
                 num = rec.SourceCitations.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GEDCOMSourceCitation sourCit = rec.SourceCitations[i];
                     if (!sourCit.IsPointer) ReformSourceCitation(tree, sourCit);
                 }
@@ -487,11 +483,11 @@ namespace GKCore.Tools
 
             switch (rec.RecordType) {
                 case GEDCOMRecordType.rtIndividual:
-                    CheckRecord_Individual(tree, format, rec as GEDCOMIndividualRecord, baseContext);
+                    CheckRecord_Individual(baseContext, tree, format, rec as GEDCOMIndividualRecord);
                     break;
 
                 case GEDCOMRecordType.rtFamily:
-                    CheckRecord_Family(tree, format, rec as GEDCOMFamilyRecord, baseContext);
+                    CheckRecord_Family(baseContext, tree, format, rec as GEDCOMFamilyRecord);
                     break;
 
                 case GEDCOMRecordType.rtGroup:
@@ -562,7 +558,6 @@ namespace GKCore.Tools
                 pc.ProgressInit(LangMan.LS(LSID.LSID_FormatCheck), 100);
                 try {
                     GEDCOMFormat format = GEDCOMProvider.GetGEDCOMFormat(tree);
-                    bool idCheck = true;
                     int fileVer;
 
                     // remove a deprecated features
@@ -581,11 +576,13 @@ namespace GKCore.Tools
                         fileVer = -1;
                     }
 
+                    bool idCheck = true;
+
                     int progress = 0;
                     int num = tree.RecordsCount;
                     for (int i = 0; i < num; i++) {
                         GEDCOMRecord rec = tree[i];
-                        CheckRecord(tree, rec, format, fileVer, baseContext);
+                        CheckRecord(baseContext, tree, rec, format, fileVer);
 
                         if (format != GEDCOMFormat.gf_Native && idCheck && rec.GetId() < 0) {
                             idCheck = false;

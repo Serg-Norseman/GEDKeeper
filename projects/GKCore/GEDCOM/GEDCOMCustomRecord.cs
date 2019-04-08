@@ -40,9 +40,9 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        protected override void SaveValueToStream(StreamWriter stream)
+        protected override void SaveValueToStream(StreamWriter stream, int level)
         {
-            string str = Level.ToString();
+            string str = level.ToString();
 
             if (!string.IsNullOrEmpty(fXRef)) {
                 str = str + " @" + fXRef + "@";

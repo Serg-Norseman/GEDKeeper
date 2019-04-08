@@ -169,10 +169,10 @@ namespace GKCommon.GEDCOM
             fRepositoryCitations.ReplaceXRefs(map);
         }
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
-            base.SaveToStream(stream);
-            fRepositoryCitations.SaveToStream(stream);
+            base.SaveToStream(stream, level);
+            fRepositoryCitations.SaveToStream(stream, ++level);
         }
 
 

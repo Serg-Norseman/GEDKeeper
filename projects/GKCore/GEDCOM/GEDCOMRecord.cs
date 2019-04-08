@@ -77,7 +77,12 @@ namespace GKCommon.GEDCOM
 
         public string UID
         {
-            get { return fUID; }
+            get {
+                if (string.IsNullOrEmpty(fUID)) {
+                    fUID = GEDCOMUtils.CreateUID();
+                }
+                return fUID;
+            }
             set { fUID = value; }
         }
 
@@ -221,16 +226,17 @@ namespace GKCommon.GEDCOM
             fUserReferences.ReplaceXRefs(map);
         }
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
-            base.SaveToStream(stream);
+            base.SaveToStream(stream, level);
 
-            WriteTagLine(stream, Level + 1, GEDCOMTagType._UID, fUID, true);
+            level += 1;
+            WriteTagLine(stream, level, GEDCOMTagType._UID, fUID, true);
 
-            fNotes.SaveToStream(stream);
-            fSourceCitations.SaveToStream(stream);
-            fMultimediaLinks.SaveToStream(stream);
-            fUserReferences.SaveToStream(stream);
+            fNotes.SaveToStream(stream, level);
+            fSourceCitations.SaveToStream(stream, level);
+            fMultimediaLinks.SaveToStream(stream, level);
+            fUserReferences.SaveToStream(stream, level);
         }
 
         public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
@@ -281,17 +287,9 @@ namespace GKCommon.GEDCOM
             return XRef;
         }
 
-        public void RequireUID()
-        {
-            if (string.IsNullOrEmpty(fUID)) {
-                fUID = GEDCOMUtils.CreateUID();
-            }
-        }
-
         public void InitNew()
         {
             NewXRef();
-            RequireUID();
         }
 
         #region Auxiliary

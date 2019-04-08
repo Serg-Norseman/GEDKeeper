@@ -228,6 +228,9 @@ namespace GKCommon.GEDCOM
         gf_Ahnenblatt,
         gf_Genealogy_RusOld,
         gf_FTB,
+        gf_FamilyTreeMakerW,
+        gf_FamilyTreeMakerM,
+        gf_FamilyHistorian,
 
         gf_Last = gf_FTB
     }

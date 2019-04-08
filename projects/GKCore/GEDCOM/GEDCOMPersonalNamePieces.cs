@@ -89,12 +89,14 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
             // without NameValue
-            SaveTagsToStream(stream);
-            fNotes.SaveToStream(stream);
-            fSourceCitations.SaveToStream(stream);
+            int lev = level + 1;
+            SaveTagsToStream(stream, lev);
+
+            fNotes.SaveToStream(stream, level);
+            fSourceCitations.SaveToStream(stream, level);
         }
 
         public GEDCOMPersonalNamePieces(GEDCOMObject owner) : base(owner)

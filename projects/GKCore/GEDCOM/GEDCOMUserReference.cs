@@ -74,10 +74,10 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
-            base.SaveToStream(stream);
-            WriteTagLine(stream, Level + 1, GEDCOMTagType.TYPE, fReferenceType, true);
+            base.SaveToStream(stream, level);
+            WriteTagLine(stream, ++level, GEDCOMTagType.TYPE, fReferenceType, true);
         }
 
         public override void Assign(GEDCOMTag source)

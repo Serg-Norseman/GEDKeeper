@@ -127,14 +127,11 @@ namespace GKCommon.GEDCOM
 
         public override GEDCOMCustomEvent AddEvent(GEDCOMCustomEvent evt)
         {
-            if (evt != null) {
-                if (evt is GEDCOMFamilyEvent) {
-                    // SetLevel need for events created outside!
-                    evt.SetLevel(Level + 1);
-                    Events.Add(evt);
-                } else {
-                    throw new ArgumentException(@"Event has the invalid type", "evt");
-                }
+            var famEvent = evt as GEDCOMFamilyEvent;
+            if (famEvent != null) {
+                Events.Add(evt);
+            } else {
+                throw new ArgumentException(@"Event has the invalid type", "evt");
             }
 
             return evt;
@@ -237,14 +234,15 @@ namespace GKCommon.GEDCOM
             fChildren.ReplaceXRefs(map);
         }
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
-            base.SaveToStream(stream);
+            base.SaveToStream(stream, level);
 
-            fChildren.SaveToStream(stream);
-            Events.SaveToStream(stream); // for files content compatibility
+            level += 1;
+            fChildren.SaveToStream(stream, level);
+            Events.SaveToStream(stream, level); // for files content compatibility
 
-            WriteTagLine(stream, Level + 1, GEDCOMTagType._STAT, GEDCOMUtils.GetMarriageStatusStr(fStatus), true);
+            WriteTagLine(stream, level, GEDCOMTagType._STAT, GEDCOMUtils.GetMarriageStatusStr(fStatus), true);
         }
 
         private string GetFamilyString()

@@ -256,7 +256,7 @@ namespace GKCommon.GEDCOM
             GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
 
             Assert.Throws(typeof(NullReferenceException), () => {
-                instance.SaveToStream(stream);
+                instance.SaveToStream(stream, 0);
             });
         }
 

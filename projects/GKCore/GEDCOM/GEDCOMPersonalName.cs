@@ -117,7 +117,6 @@ namespace GKCommon.GEDCOM
             SetName(GEDCOMTagType.NAME);
 
             fPieces = new GEDCOMPersonalNamePieces(this);
-            fPieces.SetLevel(Level);
 
             fFirstPart = string.Empty;
             fSurname = string.Empty;
@@ -196,10 +195,10 @@ namespace GKCommon.GEDCOM
             fPieces.ReplaceXRefs(map);
         }
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
-            base.SaveToStream(stream);
-            fPieces.SaveToStream(stream);
+            base.SaveToStream(stream, level);
+            fPieces.SaveToStream(stream, level); // same level
         }
 
         private static bool IsUnknown(string str)

@@ -142,13 +142,14 @@ namespace GKCommon.GEDCOM
             fGroups.ReplaceXRefs(map);
         }
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
-            base.SaveToStream(stream);
+            base.SaveToStream(stream, level);
 
-            fTasks.SaveToStream(stream);
-            fCommunications.SaveToStream(stream);
-            fGroups.SaveToStream(stream);
+            level += 1;
+            fTasks.SaveToStream(stream, level);
+            fCommunications.SaveToStream(stream, level);
+            fGroups.SaveToStream(stream, level);
         }
 
         #region Auxiliary

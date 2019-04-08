@@ -134,10 +134,10 @@ namespace GKCommon.GEDCOM
             return base.ParseString(strValue);
         }
 
-        public override void SaveToStream(StreamWriter stream)
+        public override void SaveToStream(StreamWriter stream, int level)
         {
-            base.SaveToStream(stream);
-            fFileReferences.SaveToStream(stream);
+            base.SaveToStream(stream, level);
+            fFileReferences.SaveToStream(stream, ++level);
         }
 
         #region Utilities

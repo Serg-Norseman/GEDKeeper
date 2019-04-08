@@ -779,7 +779,7 @@ namespace GKCommon.GEDCOM
                 Assert.AreEqual("http://test.com", addr.WebPages[0].StringValue);
 
                 // stream test
-                string buf = TestUtils.GetTagStreamText(addr);
+                string buf = TestUtils.GetTagStreamText(addr, 0);
                 Assert.AreEqual(buf, "0 ADDR This\r\n"+"1 CONT address\r\n"+"1 CONT test\r\n"
                                 +"0 PHON 8 911 101 99 99\r\n"
                                 +"0 EMAIL test@mail.com\r\n"
@@ -1437,7 +1437,7 @@ namespace GKCommon.GEDCOM
 
             //
 
-            string buf = TestUtils.GetTagStreamText(persName);
+            string buf = TestUtils.GetTagStreamText(persName, 1);
             Assert.AreEqual("1 NAME Petr /Test/ Fedoroff\r\n"+
                             "2 TYPE birth\r\n"+
                             "2 _LANG Polish\r\n"+ // extension
@@ -1461,7 +1461,7 @@ namespace GKCommon.GEDCOM
                 iRec.AddPersonalName(nameCopy);
                 nameCopy.Assign(persName);
 
-                string buf2 = TestUtils.GetTagStreamText(nameCopy);
+                string buf2 = TestUtils.GetTagStreamText(nameCopy, 1);
                 Assert.AreEqual("1 NAME Petr /Test/ Fedoroff\r\n"+
                                 "2 TYPE birth\r\n"+
                                 "2 SURN Surname\r\n"+
@@ -1583,7 +1583,7 @@ namespace GKCommon.GEDCOM
 
                 groupRec.UID = string.Empty;
                 groupRec.DeleteTag(GEDCOMTagType.CHAN);
-                string buf = TestUtils.GetTagStreamText(groupRec);
+                string buf = TestUtils.GetTagStreamText(groupRec, 0);
                 Assert.AreEqual("0 @G2@ _GROUP\r\n1 NAME Test Group\r\n", buf);
 
                 bool res = groupRec.AddMember(null);
@@ -1674,7 +1674,7 @@ namespace GKCommon.GEDCOM
                 customEvent.SetName(GEDCOMTagType.BIRT);
                 customEvent.Date.ParseString("20 SEP 1970");
                 customEvent.Place.StringValue = "test place";
-                string buf = TestUtils.GetTagStreamText(customEvent);
+                string buf = TestUtils.GetTagStreamText(customEvent, 0);
                 Assert.AreEqual("0 BIRT\r\n"+
                                 "1 DATE 20 SEP 1970\r\n"+
                                 "1 PLAC test place\r\n", buf);
@@ -1684,7 +1684,7 @@ namespace GKCommon.GEDCOM
                     Assert.IsNotNull(copyEvent);
                     copyEvent.Assign(customEvent);
 
-                    string buf1 = TestUtils.GetTagStreamText(copyEvent);
+                    string buf1 = TestUtils.GetTagStreamText(copyEvent, 0);
                     Assert.AreEqual("0 BIRT\r\n"+
                                     "1 DATE 20 SEP 1970\r\n"+
                                     "1 PLAC test place\r\n", buf1);
@@ -1841,7 +1841,7 @@ namespace GKCommon.GEDCOM
             // stream test
             famRec.UID = string.Empty;
             famRec.DeleteTag(GEDCOMTagType.CHAN);
-            string buf = TestUtils.GetTagStreamText(famRec);
+            string buf = TestUtils.GetTagStreamText(famRec, 0);
             Assert.AreEqual("0 @F1@ FAM\r\n"+
                             "1 RESN locked\r\n"+
                             "1 CHIL @I1@\r\n", buf);
@@ -2039,7 +2039,7 @@ namespace GKCommon.GEDCOM
 
             sourRec.UID = string.Empty;
             sourRec.DeleteTag(GEDCOMTagType.CHAN);
-            string buf = TestUtils.GetTagStreamText(sourRec);
+            string buf = TestUtils.GetTagStreamText(sourRec, 0);
             Assert.AreEqual("0 @S1@ SOUR\r\n"+
                             "1 DATA\r\n"+
                             "1 ABBR This is test source\r\n"+
@@ -2131,7 +2131,7 @@ namespace GKCommon.GEDCOM
 
             resRec.UID = string.Empty;
             resRec.DeleteTag(GEDCOMTagType.CHAN);
-            string buf = TestUtils.GetTagStreamText(resRec);
+            string buf = TestUtils.GetTagStreamText(resRec, 0);
             Assert.AreEqual("0 @RS1@ _RESEARCH\r\n"+
                             "1 NAME Test Research\r\n"+
                             "1 _PRIORITY normal\r\n"+
@@ -2175,7 +2175,7 @@ namespace GKCommon.GEDCOM
 
                 repoRec.UID = string.Empty;
                 repoRec.DeleteTag(GEDCOMTagType.CHAN);
-                string buf = TestUtils.GetTagStreamText(repoRec);
+                string buf = TestUtils.GetTagStreamText(repoRec, 0);
                 Assert.AreEqual("0 @R2@ REPO\r\n"+
                                 "1 NAME Test Repository\r\n"+
                                 "1 ADDR\r\n", buf);
@@ -2220,7 +2220,7 @@ namespace GKCommon.GEDCOM
 
             mediaRec.UID = string.Empty;
             mediaRec.DeleteTag(GEDCOMTagType.CHAN);
-            string buf = TestUtils.GetTagStreamText(mediaRec);
+            string buf = TestUtils.GetTagStreamText(mediaRec, 0);
             Assert.AreEqual("0 @O1@ OBJE\r\n"+
                             "1 FILE sample.png\r\n"+
                             "2 TITL File Title 2\r\n"+
@@ -2295,7 +2295,7 @@ namespace GKCommon.GEDCOM
             mmLink.Title = "Title1";
             Assert.AreEqual("Title1", mmLink.Title);
 
-            string buf = TestUtils.GetTagStreamText(mmLink);
+            string buf = TestUtils.GetTagStreamText(mmLink, 1);
             Assert.AreEqual("1 OBJE @O1@\r\n"+
                             "2 TITL Title1\r\n", buf);
 

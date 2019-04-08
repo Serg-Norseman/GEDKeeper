@@ -101,6 +101,9 @@ namespace GKCommon.GEDCOM
                 new GEDCOMAppFormat("AHN", "Ahnenblatt", -1),
                 new GEDCOMAppFormat("├σφσαδεπΦ", "Genealogy (Rus, old)", 1251), // signature in CP437
                 new GEDCOMAppFormat("MYHERITAGE", "MyHeritage Family Tree Builder", -1),
+                new GEDCOMAppFormat("FTW", "Family Tree Maker for Windows", -1),
+                new GEDCOMAppFormat("FTM", "Family Tree Maker for Windows", -1),
+                new GEDCOMAppFormat("FAMILY_HISTORIAN", "Family Historian", -1),
             };
         }
 
@@ -272,6 +275,7 @@ namespace GKCommon.GEDCOM
                 var strTok = new GEDCOMParser(false);
                 GEDCOMCustomRecord curRecord = null;
                 GEDCOMTag curTag = null;
+                var stack = new Stack<StackTuple>(9);
 
                 int lineNum = 0;
                 int lineLen;
@@ -347,53 +351,63 @@ namespace GKCommon.GEDCOM
                             curRecord = null;
                         }
 
-                        if (curRecord != null && tagXRef != "") {
-                            curRecord.XRef = tagXRef;
+                        if (curRecord != null) {
+                            stack.Clear();
+                            stack.Push(new StackTuple(tagLevel, curRecord));
+
+                            if (tagXRef != "") {
+                                curRecord.XRef = tagXRef;
+                            }
                         }
+
                         curTag = null;
                     } else {
                         if (curRecord != null) {
-                            GEDCOMTag parentTag;
-                            if (curTag == null || tagLevel == 1) {
-                                parentTag = curRecord;
-                            } else {
-                                parentTag = curTag;
-                                while (tagLevel <= parentTag.Level) {
-                                    parentTag = (GEDCOMTag)parentTag.Owner;
+                            GEDCOMTag parentTag = null;
+                            while (stack.Count > 0) {
+                                var tuple = stack.Peek();
+                                if (tagLevel > tuple.Level) {
+                                    parentTag = tuple.Tag;
+                                    break;
                                 }
+                                stack.Pop();
                             }
 
-                            curTag = parentTag.AddTag(tagName, tagValue, null);
-
-                            /*if (curTag != null) {
-                                ParseTagValue(fTree, curTag, strTok, tagValue);
-                            }*/
+                            if (parentTag != null) {
+                                curTag = parentTag.AddTag(tagName, tagValue, null);
+                                if (curTag != null) {
+                                    stack.Push(new StackTuple(tagLevel, curTag));
+                                }
+                            }
                         }
                     }
 
                     if (progressHandler != null) {
                         int newProgress = (int)Math.Min(100, (fileStream.Position * 100.0f) / fileSize);
-
                         if (progress != newProgress) {
                             progress = newProgress;
                             progressHandler(fTree, progress);
                         }
                     }
                 }
+
+                stack.Clear();
             } finally {
                 fTree.State = GEDCOMState.osReady;
             }
         }
 
-        /*private static void ParseTagValue(GEDCOMTree owner, GEDCOMTag tag, GEDCOMParser lineParser, string strValue)
+        private class StackTuple
         {
-            var parseFunc = GEDCOMUtils.TagParseFuncs[(int)tag.GetParseFunc()];
-            if (parseFunc == null) {
-                tag.ParseString(lineParser.GetRest()); // strValue
-            } else {
-                parseFunc(owner, tag, lineParser);
+            public int Level;
+            public GEDCOMTag Tag;
+
+            public StackTuple(int level, GEDCOMTag tag)
+            {
+                Level = level;
+                Tag = tag;
             }
-        }*/
+        }
 
         #endregion
 
@@ -426,12 +440,12 @@ namespace GKCommon.GEDCOM
         public void SaveToStream(StreamWriter writer, IList<GEDCOMRecord> list)
         {
             // write header
-            fTree.Header.SaveToStream(writer);
+            fTree.Header.SaveToStream(writer, 0);
 
             if (list != null) {
                 int num = list.Count;
                 for (int i = 0; i < num; i++) {
-                    list[i].SaveToStream(writer);
+                    list[i].SaveToStream(writer, 0);
                 }
             }
 
