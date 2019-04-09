@@ -1135,9 +1135,9 @@ namespace GKCore
         {
             if (string.IsNullOrEmpty(password)) {
                 var gedcomProvider = new GEDCOMProvider(fTree);
-                gedcomProvider.LoadFromFile(fileName);
+                gedcomProvider.LoadFromFile(fileName, GlobalOptions.Instance.CharsetDetection);
             } else {
-                LoadFromSecFile(fileName, password);
+                LoadFromSecFile(fileName, password, GlobalOptions.Instance.CharsetDetection);
             }
 
             fFileName = fileName;
@@ -1281,7 +1281,7 @@ namespace GKCore
             return null;
         }
 
-        public void LoadFromSecStream(Stream stream, string password)
+        public void LoadFromSecStream(Stream stream, string password, bool charsetDetection = false)
         {
             byte[] gsHeader = new byte[8];
             stream.Read(gsHeader, 0, 8);
@@ -1302,7 +1302,7 @@ namespace GKCore
             using (var cryptic = CreateCSP(gsMajVer, gsMinVer, password)) {
                 using (CryptoStream crStream = new CryptoStream(stream, cryptic.CreateDecryptor(), CryptoStreamMode.Read)) {
                     var gedcomProvider = new GEDCOMProvider(fTree);
-                    gedcomProvider.LoadFromStreamExt(stream, crStream);
+                    gedcomProvider.LoadFromStreamExt(stream, crStream, charsetDetection);
                 }
             }
         }
@@ -1323,10 +1323,10 @@ namespace GKCore
             }
         }
 
-        public void LoadFromSecFile(string fileName, string password)
+        public void LoadFromSecFile(string fileName, string password, bool charsetDetection = false)
         {
             using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                LoadFromSecStream(fileStream, password);
+                LoadFromSecStream(fileStream, password, charsetDetection);
             }
         }
 

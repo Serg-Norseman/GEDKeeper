@@ -86,6 +86,7 @@ namespace GKCore.Options
         private bool fCheckTreeSize;
         private readonly ListOptionsCollection fListOptions;
         private bool fReadabilityHighlightRows;
+        private bool fCharsetDetection;
 
 
         public static GlobalOptions Instance
@@ -282,6 +283,12 @@ namespace GKCore.Options
             set { fAutoSortSpouses = value; }
         }
 
+        public bool CharsetDetection
+        {
+            get { return fCharsetDetection; }
+            set { fCharsetDetection = value; }
+        }
+
         public bool CheckTreeSize
         {
             get { return fCheckTreeSize; }
@@ -369,6 +376,8 @@ namespace GKCore.Options
 
             fListOptions = new ListOptionsCollection();
             fReadabilityHighlightRows = true;
+
+            fCharsetDetection = false;
         }
 
         protected override void Dispose(bool disposing)
@@ -557,6 +566,7 @@ namespace GKCore.Options
             fAutoCheckUpdates = ini.ReadBool("Common", "AutoCheckUpdates", true);
             fAutoSortChildren = ini.ReadBool("Common", "AutoSortChildren", true);
             fAutoSortSpouses = ini.ReadBool("Common", "AutoSortSpouses", false);
+            fCharsetDetection = ini.ReadBool("Common", "CharsetDetection", false);
 
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -664,6 +674,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "AutoCheckUpdates", fAutoCheckUpdates);
             ini.WriteBool("Common", "AutoSortChildren", fAutoSortChildren);
             ini.WriteBool("Common", "AutoSortSpouses", fAutoSortSpouses);
+            ini.WriteBool("Common", "CharsetDetection", fCharsetDetection);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 

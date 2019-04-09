@@ -40,6 +40,8 @@ namespace GKCommon.GEDCOM
                     var gedcomProvider = new GEDCOMProvider(tree);
                     gedcomProvider.LoadFromStreamExt(inStream, inStream);
 
+                    Assert.AreEqual(GEDCOMFormat.gf_Unknown, tree.Format);
+
                     using (MemoryStream outStream = new MemoryStream()) {
                         gedcomProvider = new GEDCOMProvider(tree);
                         gedcomProvider.SaveToStreamExt(outStream, GEDCOMCharacterSet.csASCII);
@@ -54,8 +56,14 @@ namespace GKCommon.GEDCOM
             using (BaseContext ctx = new BaseContext(null)) {
                 Assembly assembly = typeof(CoreTests).Assembly;
                 using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_gk_utf8.ged")) {
+                    var charsetRes = GKUtils.DetectCharset(stmGed1);
+                    Assert.AreEqual("UTF-8", charsetRes.Charset);
+                    Assert.AreEqual(1.0f, charsetRes.Confidence);
+
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+
+                    Assert.AreEqual(GEDCOMFormat.gf_Native, ctx.Tree.Format);
 
                     GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
                     Assert.IsNotNull(iRec1);
@@ -71,8 +79,14 @@ namespace GKCommon.GEDCOM
             using (BaseContext ctx = new BaseContext(null)) {
                 Assembly assembly = typeof(CoreTests).Assembly;
                 using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ahn_ansi(win1250).ged")) {
+                    var charsetRes = GKUtils.DetectCharset(stmGed1);
+                    Assert.AreEqual("windows-1252", charsetRes.Charset);
+                    Assert.GreaterOrEqual(charsetRes.Confidence, 0.5f);
+
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+
+                    Assert.AreEqual(GEDCOMFormat.gf_Ahnenblatt, ctx.Tree.Format);
 
                     GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
                     Assert.IsNotNull(iRec1);
@@ -88,8 +102,14 @@ namespace GKCommon.GEDCOM
             using (BaseContext ctx = new BaseContext(null)) {
                 Assembly assembly = typeof(CoreTests).Assembly;
                 using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_agelong_ansel(win1251).ged")) {
+                    var charsetRes = GKUtils.DetectCharset(stmGed1);
+                    Assert.AreEqual("windows-1251", charsetRes.Charset);
+                    Assert.GreaterOrEqual(charsetRes.Confidence, 0.7f);
+
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+
+                    Assert.AreEqual(GEDCOMFormat.gf_ALTREE, ctx.Tree.Format);
 
                     GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
                     Assert.IsNotNull(iRec1);
@@ -105,8 +125,14 @@ namespace GKCommon.GEDCOM
             using (BaseContext ctx = new BaseContext(null)) {
                 Assembly assembly = typeof(CoreTests).Assembly;
                 using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ftb6_ansi(win1251).ged")) {
+                    var charsetRes = GKUtils.DetectCharset(stmGed1);
+                    Assert.AreEqual("windows-1251", charsetRes.Charset);
+                    Assert.GreaterOrEqual(charsetRes.Confidence, 0.9f);
+
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+
+                    Assert.AreEqual(GEDCOMFormat.gf_FTB, ctx.Tree.Format);
 
                     GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
                     Assert.IsNotNull(iRec1);
@@ -125,6 +151,8 @@ namespace GKCommon.GEDCOM
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
 
+                    Assert.AreEqual(GEDCOMFormat.gf_Native, ctx.Tree.Format);
+
                     GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
                     Assert.IsNotNull(noteRec1);
                     Assert.AreEqual("Test1\r\ntest2\r\ntest3", noteRec1.Note.Text);
@@ -136,11 +164,18 @@ namespace GKCommon.GEDCOM
             }
         }
 
+        [Test]
         public void Test_TrueAnsel()
         {
             using (BaseContext ctx = new BaseContext(null)) {
                 Assembly assembly = typeof(CoreTests).Assembly;
                 using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ansel.ged")) {
+                    var charsetRes = GKUtils.DetectCharset(stmGed1);
+                    Assert.AreEqual(null, charsetRes.Charset);
+                    Assert.GreaterOrEqual(charsetRes.Confidence, 0.0f);
+
+                    Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
+
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
                 }
@@ -155,6 +190,8 @@ namespace GKCommon.GEDCOM
                 using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ftb_badline.ged")) {
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+
+                    Assert.AreEqual(GEDCOMFormat.gf_FTB, ctx.Tree.Format);
 
                     GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
                     Assert.IsNotNull(noteRec1);
@@ -172,6 +209,8 @@ namespace GKCommon.GEDCOM
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
 
+                    Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
+
                     var subm = ctx.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
                     Assert.IsNotNull(subm);
                     Assert.AreEqual("John Doe", subm.Name.FullName);
@@ -187,6 +226,8 @@ namespace GKCommon.GEDCOM
                 using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_empty_lines.ged")) {
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+
+                    Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
 
                     GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I001") as GEDCOMIndividualRecord;
                     Assert.IsNotNull(iRec1);
@@ -209,6 +250,8 @@ namespace GKCommon.GEDCOM
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
                     TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
 
+                    Assert.AreEqual(GEDCOMFormat.gf_FamilyHistorian, ctx.Tree.Format);
+
                     GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
                     Assert.IsNotNull(iRec1);
                     Assert.AreEqual("Tom Thompson", iRec1.GetPrimaryFullName());
@@ -225,6 +268,9 @@ namespace GKCommon.GEDCOM
                 using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ftm2008.ged")) {
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+
+                    Assert.AreEqual(GEDCOMFormat.gf_FamilyTreeMaker, ctx.Tree.Format);
+
                     TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
 
                     GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;

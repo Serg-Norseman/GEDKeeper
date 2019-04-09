@@ -126,6 +126,7 @@ namespace GKUI.Forms
         private CheckBox chkAutoSortChildren;
         private CheckBox chkAutoSortSpouses;
         private CheckBox chkCheckTreeSize;
+        private CheckBox chkCharsetDetection;
 
         private void InitializeComponent()
         {
@@ -249,6 +250,9 @@ namespace GKUI.Forms
             chkAutoCheckUpdates = new CheckBox();
             chkAutoCheckUpdates.Text = "chkAutoCheckUpdates";
 
+            chkCharsetDetection = new CheckBox();
+            chkCharsetDetection.Text = "chkCharsetDetection";
+
             lblGeocoder = new Label();
             lblGeocoder.Text = "lblGeocoder";
 
@@ -276,6 +280,9 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         Cells = { chkAutoCheckUpdates }
+                    },
+                    new TableRow {
+                        Cells = { chkCharsetDetection }
                     },
                     new TableRow {
                         Cells = { lblLanguage, cmbLanguages }

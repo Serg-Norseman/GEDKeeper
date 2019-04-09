@@ -31,6 +31,7 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
+using Ude;
 
 namespace GKCore
 {
@@ -322,6 +323,28 @@ namespace GKCore
             Buffer.BlockCopy(by2, 0, buffer, 6, 2);
 
             return GEDCOMUtils.EncodeUID(buffer);
+        }
+
+        public static CharsetResult DetectCharset(Stream stream, int bufferSize = 32768)
+        {
+            var result = new CharsetResult();
+
+            ICharsetDetector cdet = new CharsetDetector();
+            byte[] buffer = new byte[bufferSize];
+            int read = stream.Read(buffer, 0, buffer.Length);
+            if (read > 0) {
+                cdet.Feed(buffer, 0, read);
+                cdet.DataEnd();
+                stream.Seek(0, SeekOrigin.Begin);
+
+                result.Charset = cdet.Charset;
+                result.Confidence = cdet.Confidence;
+            } else {
+                result.Charset = null;
+                result.Confidence = 0.0f;
+            }
+
+            return result;
         }
 
         #endregion

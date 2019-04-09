@@ -124,7 +124,7 @@ namespace GKCommon.GEDCOM
             fEncodingState = (DEFAULT_ENCODING.Equals(fSourceEncoding)) ? EncodingState.esUnchanged : EncodingState.esChanged;
         }
 
-        private void DefineEncoding(StreamReader reader, GEDCOMFormat format)
+        private void DefineEncoding(StreamReader reader, GEDCOMFormat format, string streamCharset)
         {
             GEDCOMCharacterSet charSet = fTree.Header.CharacterSet;
             switch (charSet)
@@ -172,7 +172,11 @@ namespace GKCommon.GEDCOM
                                 if (fTree.Header.Language.Value == GEDCOMLanguageID.Russian) {
                                     SetEncoding(Encoding.GetEncoding(1251));
                                 } else {
-                                    SetEncoding(Encoding.GetEncoding(DEF_CODEPAGE));
+                                    if (streamCharset == null) {
+                                        SetEncoding(Encoding.GetEncoding(DEF_CODEPAGE));
+                                    } else {
+                                        SetEncoding(Encoding.GetEncoding(streamCharset));
+                                    }
                                 }
                             }
                         }
@@ -185,25 +189,34 @@ namespace GKCommon.GEDCOM
 
         #region Loading functions
 
-        public void LoadFromString(string gedcomText)
+        public void LoadFromString(string gedcomText, bool charsetDetection = false)
         {
             using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(gedcomText))) {
-                LoadFromStreamExt(stream, stream);
+                LoadFromStreamExt(stream, stream, charsetDetection);
             }
         }
 
-        public void LoadFromFile(string fileName)
+        public void LoadFromFile(string fileName, bool charsetDetection = false)
         {
             using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                LoadFromStreamExt(fileStream, fileStream);
+                LoadFromStreamExt(fileStream, fileStream, charsetDetection);
             }
         }
 
-        public void LoadFromStreamExt(Stream fileStream, Stream inputStream)
+        public void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
         {
             using (StreamReader reader = FileHelper.OpenStreamReader(inputStream, DEFAULT_ENCODING)) {
                 fTree.Clear();
-                LoadFromStream(fileStream, reader);
+
+                string streamCharset = null;
+                if (charsetDetection) {
+                    var charsetRes = GKUtils.DetectCharset(inputStream);
+                    if (charsetRes.Confidence >= 0.7f) {
+                        streamCharset = charsetRes.Charset;
+                    }
+                }
+
+                LoadFromReader(fileStream, reader, streamCharset);
                 fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
             }
         }
@@ -260,7 +273,7 @@ namespace GKCommon.GEDCOM
 
         #endregion
 
-        private void LoadFromStream(Stream fileStream, StreamReader reader)
+        private void LoadFromReader(Stream fileStream, StreamReader reader, string streamCharset = null)
         {
             fTree.State = GEDCOMState.osLoading;
             try {
@@ -315,7 +328,7 @@ namespace GKCommon.GEDCOM
                             // to check for additional versions of the code page
                             var format = GetGEDCOMFormat(fTree);
                             fTree.Format = format;
-                            DefineEncoding(reader, format);
+                            DefineEncoding(reader, format, streamCharset);
                         }
 
                         if (tagName == GEDCOMTagType.INDI) {

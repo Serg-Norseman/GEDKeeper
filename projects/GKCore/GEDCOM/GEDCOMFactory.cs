@@ -60,6 +60,8 @@ namespace GKCommon.GEDCOM
             return null;
         }
 
+        #if !NETSTANDARD
+
         public static T CreateTagEx<T>(GEDCOMObject owner, string tagName, string tagValue) where T : GEDCOMTag
         {
             ConstructorInfo ctorInfo = typeof(T).GetConstructor(new[] {
@@ -80,5 +82,7 @@ namespace GKCommon.GEDCOM
             TagConstructor ctor = (TagConstructor)dm.CreateDelegate(typeof(TagConstructor));
             return (T)ctor(owner, tagName, tagValue);
         }
+
+        #endif
     }
 }
