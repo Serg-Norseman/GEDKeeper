@@ -138,6 +138,8 @@ namespace GKTests.Stubs
         public void BaseClosed(IBaseWindow baseWin) {}
         public void BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
         public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action) {}
+        public void SelectedIndexChanged(IBaseWindow baseWin) {}
+        public void TabChanged(IBaseWindow baseWin) {}
 
         public void ApplyOptions() { }
         public string GetAppDataPath() { return string.Empty; }

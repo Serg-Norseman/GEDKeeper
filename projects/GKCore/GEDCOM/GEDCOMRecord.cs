@@ -358,60 +358,6 @@ namespace GKCommon.GEDCOM
             UserReferences.Add(uRef);
         }
 
-        public string GetFolder()
-        {
-            var folderTag = FindTag(GEDCOMTagType._FOLDER, 0);
-            return (folderTag == null) ? "" : folderTag.StringValue;
-        }
-
-        public void SetFolder(string value)
-        {
-            if (!HasFolderSupport()) {
-                return;
-            }
-
-            var folderTag = FindTag(GEDCOMTagType._FOLDER, 0);
-            if (!string.IsNullOrEmpty(value)) {
-                if (folderTag == null) {
-                    AddTag(GEDCOMTagType._FOLDER, value, null);
-                } else {
-                    folderTag.StringValue = value;
-                }
-            } else {
-                if (folderTag != null) {
-                    DeleteTag(GEDCOMTagType._FOLDER);
-                }
-            }
-        }
-
-        public bool HasFolderSupport()
-        {
-            bool result = false;
-
-            switch (fRecordType) {
-                case GEDCOMRecordType.rtNone:
-                case GEDCOMRecordType.rtNote:
-                case GEDCOMRecordType.rtMultimedia:
-                case GEDCOMRecordType.rtSource:
-                case GEDCOMRecordType.rtRepository:
-                case GEDCOMRecordType.rtLocation:
-                case GEDCOMRecordType.rtSubmission:
-                case GEDCOMRecordType.rtSubmitter:
-                    break;
-
-                case GEDCOMRecordType.rtIndividual:
-                case GEDCOMRecordType.rtFamily:
-                case GEDCOMRecordType.rtGroup:
-                case GEDCOMRecordType.rtResearch:
-                case GEDCOMRecordType.rtTask:
-                case GEDCOMRecordType.rtCommunication:
-                    result = true;
-                    break;
-            }
-
-            return result;
-        }
-
         #endregion
     }
 }

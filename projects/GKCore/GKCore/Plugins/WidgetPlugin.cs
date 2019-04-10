@@ -48,6 +48,16 @@ namespace GKCore.Plugins
             // dummy
         }
 
+        public virtual void SelectedIndexChanged(IBaseWindow baseWin)
+        {
+            // dummy
+        }
+
+        public virtual void TabChanged(IBaseWindow baseWin)
+        {
+            // dummy
+        }
+
         public virtual void WidgetEnable()
         {
             // dummy

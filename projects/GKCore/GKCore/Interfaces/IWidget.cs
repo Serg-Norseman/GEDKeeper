@@ -35,6 +35,9 @@ namespace GKCore.Interfaces
         void BaseClosed(IBaseWindow baseWin);
         void BaseRenamed(IBaseWindow baseWin, string oldName, string newName);
 
+        void SelectedIndexChanged(IBaseWindow baseWin);
+        void TabChanged(IBaseWindow baseWin);
+
         void WidgetInit(IHost host);
         void WidgetEnable();
     }

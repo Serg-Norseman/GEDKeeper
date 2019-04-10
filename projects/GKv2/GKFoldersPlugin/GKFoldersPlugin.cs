@@ -94,5 +94,19 @@ namespace GKFoldersPlugin
                 fForm.BaseChanged(null);
             }
         }
+
+        public override void SelectedIndexChanged(IBaseWindow baseWin)
+        {
+            if (fForm != null) {
+                fForm.SelectedIndexChanged(baseWin);
+            }
+        }
+
+        public override void TabChanged(IBaseWindow baseWin)
+        {
+            if (fForm != null) {
+                fForm.TabChanged(baseWin);
+            }
+        }
     }
 }

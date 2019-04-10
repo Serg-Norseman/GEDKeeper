@@ -399,6 +399,24 @@ namespace GKCore
             // TODO: implementation of Base.SaveAs
         }
 
+        public virtual void SelectedIndexChanged(IBaseWindow baseWin)
+        {
+            if (baseWin == null) return;
+
+            foreach (WidgetInfo widgetInfo in fActiveWidgets) {
+                widgetInfo.Widget.SelectedIndexChanged(baseWin);
+            }
+        }
+
+        public virtual void TabChanged(IBaseWindow baseWin)
+        {
+            if (baseWin == null) return;
+
+            foreach (WidgetInfo widgetInfo in fActiveWidgets) {
+                widgetInfo.Widget.TabChanged(baseWin);
+            }
+        }
+
         public virtual bool ShowModalX(ICommonDialog form, bool keepModeless = false)
         {
             var owner = GetActiveWindow();

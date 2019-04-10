@@ -52,6 +52,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FoldersHelper.cs" />
     <Compile Include="GKFoldersPlugin.cs" />
     <Compile Include="FoldersWidget.cs">
       <SubType>Form</SubType>

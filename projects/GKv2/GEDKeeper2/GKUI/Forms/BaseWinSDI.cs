@@ -292,13 +292,16 @@ namespace GKUI.Forms
 
         private void List_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (sender != null) 
+            if (sender != null) {
                 fController.ChangeListItem((IListView)sender);
+                AppHost.Instance.SelectedIndexChanged(this);
+            }
         }
 
         private void tabsRecords_SelectedIndexChanged(object sender, EventArgs e)
         {
             AppHost.Instance.UpdateControls(false);
+            AppHost.Instance.TabChanged(this);
         }
 
         private void mPersonSummaryLink(object sender, string linkName)

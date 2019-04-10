@@ -97,8 +97,8 @@ namespace GKFoldersPlugin
             int num = fBase.Context.Tree.RecordsCount;
             for (int i = 0; i < num; i++) {
                 GEDCOMRecord rec = fBase.Context.Tree[i];
-                if (rec.HasFolderSupport()) {
-                    string folder = rec.GetFolder();
+                if (FoldersHelper.HasFolderSupport(rec.RecordType)) {
+                    string folder = FoldersHelper.GetFolder(rec);
                     if (!string.IsNullOrEmpty(folder)) {
                         fFolders.Add(folder);
                     }
@@ -115,14 +115,16 @@ namespace GKFoldersPlugin
             cmbSelectFolder.Items.Clear();
             cmbSelectFolder.Items.Add("");
             cmbSelectFolder.Items.AddRange(fFolders.ToArray());
+
+            UpdateButtons(fBase);
         }
 
         private bool FilterHandler(GEDCOMRecord record)
         {
             bool result = true;
             try {
-                if (!string.IsNullOrEmpty(fFilterFolder) && record.HasFolderSupport()) {
-                    result = fFilterFolder.Equals(record.GetFolder());
+                if (!string.IsNullOrEmpty(fFilterFolder) && FoldersHelper.HasFolderSupport(record.RecordType)) {
+                    result = fFilterFolder.Equals(FoldersHelper.GetFolder(record));
                 }
             } catch (Exception ex) {
                 Logger.LogWrite("FoldersWidget.FilterHandler(): " + ex.Message);
@@ -155,7 +157,24 @@ namespace GKFoldersPlugin
 
         private void btnSetSelected_Click(object sender, EventArgs e)
         {
-            
+            string folder = cmbSelectFolder.Text;
+            if (fBase != null) {
+                var recType = fBase.GetSelectedRecordType();
+                var records = fBase.GetContentList(recType);
+
+                int changed = 0;
+                int num = records.Count;
+                for (int i = 0; i < num; i++) {
+                    GEDCOMRecord rec = records[i];
+                    if (SetRecordFolder(rec, folder)) {
+                        changed += 1;
+                    }
+                }
+                AppHost.StdDialogs.ShowMessage(string.Format("Processed {0} record(s)", changed));
+
+                ModifyBase();
+                cmbSelectFolder.Text = "";
+            }
         }
 
         private void btnSetAll_Click(object sender, EventArgs e)
@@ -164,15 +183,15 @@ namespace GKFoldersPlugin
             if (fBase != null) {
                 var tree = fBase.Context.Tree;
 
-                int setNum = 0;
+                int changed = 0;
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
                     GEDCOMRecord rec = tree[i];
                     if (SetRecordFolder(rec, folder)) {
-                        setNum += 1;
+                        changed += 1;
                     }
                 }
-                AppHost.StdDialogs.ShowMessage(string.Format("Processed {0} record(s)", setNum));
+                AppHost.StdDialogs.ShowMessage(string.Format("Processed {0} record(s)", changed));
 
                 ModifyBase();
                 cmbSelectFolder.Text = "";
@@ -188,11 +207,38 @@ namespace GKFoldersPlugin
 
         private bool SetRecordFolder(GEDCOMRecord record, string folder)
         {
-            if (record != null && record.HasFolderSupport()) {
-                record.SetFolder(folder);
+            if (record != null && FoldersHelper.HasFolderSupport(record.RecordType)) {
+                FoldersHelper.SetFolder(record, folder);
                 return true;
             }
             return false;
+        }
+
+        public void SelectedIndexChanged(IBaseWindow baseWin)
+        {
+            UpdateButtons(baseWin);
+        }
+
+        public void TabChanged(IBaseWindow baseWin)
+        {
+            UpdateButtons(baseWin);
+        }
+
+        private void UpdateButtons(IBaseWindow baseWin)
+        {
+            if (baseWin != null) {
+                var recType = baseWin.GetSelectedRecordType();
+                var hasFS = FoldersHelper.HasFolderSupport(recType);
+                var selectedRecord = baseWin.GetSelectedRecordEx();
+
+                int treeRecords = fBase.Context.Tree.RecordsCount;
+                int selRecords = fBase.GetContentList(recType).Count;
+
+                btnSetFilter.Enabled = hasFS;
+                btnSetCurrent.Enabled = hasFS && (selectedRecord != null);
+                btnSetSelected.Enabled = hasFS && (selRecords > 0);
+                btnSetAll.Enabled = hasFS && (treeRecords > 0);
+            }
         }
 
         #region ILocalization support
