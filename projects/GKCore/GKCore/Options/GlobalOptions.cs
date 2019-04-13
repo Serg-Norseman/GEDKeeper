@@ -751,9 +751,8 @@ namespace GKCore.Options
 
             cnt = fLastBases.Count;
             ini.WriteInteger("LastBases", "Count", cnt);
-            for (int i = 0; i < cnt; i++)
-            {
-                ini.WriteString("LastBases", "LB" + i.ToString(), GetLastBase(i));
+            for (int i = 0; i < cnt; i++) {
+                ini.WriteString("LastBases", "LB" + i.ToString(), fLastBases[i]);
             }
 
             fAncestorsCircleOptions.SaveToFile(ini);

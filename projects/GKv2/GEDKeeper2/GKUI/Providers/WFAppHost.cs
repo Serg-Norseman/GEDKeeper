@@ -199,18 +199,6 @@ namespace GKUI.Providers
             }
         }
 
-        public override void SaveLastBases()
-        {
-            AppHost.Options.ClearLastBases();
-
-            foreach (IWindow win in fRunningForms) {
-                var baseWin = win as IBaseWindow;
-                if (baseWin != null) {
-                    AppHost.Options.AddLastBase(baseWin.Context.FileName);
-                }
-            }
-        }
-
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
         {
             var result = new WinUITimer(msInterval, elapsedHandler);
@@ -219,8 +207,7 @@ namespace GKUI.Providers
 
         public override void Quit()
         {
-            // FIXME: Controversial issue...
-            //AppHost.Instance.SaveLastBases();
+            base.Quit();
             Application.Exit();
         }
 

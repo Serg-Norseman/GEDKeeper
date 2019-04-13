@@ -210,7 +210,19 @@ namespace GKCore
 
         protected abstract void UpdateMRU();
 
-        public abstract void SaveLastBases();
+        public void SaveLastBases()
+        {
+            #if !CI_MODE
+            AppHost.Options.ClearLastBases();
+
+            foreach (IWindow win in fRunningForms) {
+                var baseWin = win as IBaseWindow;
+                if (baseWin != null) {
+                    AppHost.Options.AddLastBase(baseWin.Context.FileName);
+                }
+            }
+            #endif
+        }
 
         public abstract int GetKeyLayout();
 
@@ -218,7 +230,11 @@ namespace GKCore
 
         public abstract ITimer CreateTimer(double msInterval, EventHandler elapsedHandler);
 
-        public abstract void Quit();
+        public virtual void Quit()
+        {
+            // FIXME: Controversial issue...
+            AppHost.Instance.SaveLastBases();
+        }
 
         #region Executing environment
 
