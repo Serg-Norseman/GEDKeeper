@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -85,8 +85,7 @@ namespace GKFlowInputPlugin
                                            fPlugin.LangMan.LS(FLS.LSID_Death),
                                            fPlugin.LangMan.LS(FLS.LSID_Marriage) });
 
-            PersonLinks = new FLS[]
-            {
+            PersonLinks = new FLS[] {
                 FLS.LSID_RK_Unk,
                 FLS.LSID_PLPerson,
                 FLS.LSID_Father,
@@ -100,8 +99,7 @@ namespace GKFlowInputPlugin
             InitSimpleControls();
             InitSourceControls();
 
-            for (PersonLink pl = PersonLink.plPerson; pl <= PersonLink.plChild; pl++)
-            {
+            for (PersonLink pl = PersonLink.plPerson; pl <= PersonLink.plChild; pl++) {
                 cbPersonLink.Items.Add(fLangMan.LS(PersonLinks[(int)pl]));
             }
 
@@ -110,8 +108,7 @@ namespace GKFlowInputPlugin
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fSourcesList.Dispose();
             }
             base.Dispose(disposing);
@@ -165,10 +162,8 @@ namespace GKFlowInputPlugin
         {
             PersonLink res = PersonLink.plNone;
 
-            for (PersonLink pl = PersonLink.plPerson; pl <= PersonLink.plLast; pl++)
-            {
-                if (fLangMan.LS(PersonLinks[(int)pl]) == aName)
-                {
+            for (PersonLink pl = PersonLink.plPerson; pl <= PersonLink.plLast; pl++) {
+                if (fLangMan.LS(PersonLinks[(int)pl]) == aName) {
                     res = pl;
                     break;
                 }
@@ -185,7 +180,7 @@ namespace GKFlowInputPlugin
             return col;
         }
 
-        public static DataGridViewColumn AddComboColumn(string colName, string headerText, object[] items)
+        public static DataGridViewComboBoxColumn AddComboColumn(string colName, string headerText, object[] items)
         {
             DataGridViewComboBoxColumn col = new DataGridViewComboBoxColumn();
             col.HeaderText = headerText;
@@ -238,15 +233,62 @@ namespace GKFlowInputPlugin
             object[] linksList = new object[num];
             for (int i = 0; i < num; i++) linksList[i] = fLangMan.LS(PersonLinks[i]);
 
-            ((System.ComponentModel.ISupportInitialize)(dgv)).BeginInit();
+            string[] namesList = new string[0];
+            string[] patrList = new string[0];
+            string[] surnamesList = new string[0];
+
             dgv.Columns.AddRange(new DataGridViewColumn[] {
                                      AddComboColumn("FLink", fLangMan.LS(FLS.LSID_Join), linksList),
-                                     AddTextColumn("FName", fLangMan.LS(FLS.LSID_Name)),
-                                     AddTextColumn("FPatronymic", fLangMan.LS(FLS.LSID_Patronymic)),
-                                     AddTextColumn("FSurname", fLangMan.LS(FLS.LSID_Surname)),
+
+                                     AddComboColumn("FName", fLangMan.LS(FLS.LSID_Name), namesList),
+                                     AddComboColumn("FPatronymic", fLangMan.LS(FLS.LSID_Patronymic), patrList),
+                                     AddComboColumn("FSurname", fLangMan.LS(FLS.LSID_Surname), surnamesList),
+                                     //AddTextColumn("FName", fLangMan.LS(FLS.LSID_Name)),
+                                     //AddTextColumn("FPatronymic", fLangMan.LS(FLS.LSID_Patronymic)),
+                                     //AddTextColumn("FSurname", fLangMan.LS(FLS.LSID_Surname)),
+
                                      AddTextColumn("FAge", fLangMan.LS(FLS.LSID_Age)),
                                      AddTextColumn("FComment", fLangMan.LS(FLS.LSID_Comment))});
-            ((System.ComponentModel.ISupportInitialize)(dgv)).EndInit();
+
+            dgv.CellValidating += dataGridView1_CellValidating;
+            dgv.EditingControlShowing += dataGridView1_EditingControlShowing;
+            dgv.EditMode = DataGridViewEditMode.EditOnEnter;
+        }
+
+        private DataGridViewComboBoxColumn GetComboBoxColumn(int columnIndex)
+        {
+            if (columnIndex >= 1 && columnIndex <= 3) {
+                return dataGridView1.Columns[columnIndex] as DataGridViewComboBoxColumn;
+            } else {
+                return null;
+            }
+        }
+
+        private void dataGridView1_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            var comboColumn = GetComboBoxColumn(e.ColumnIndex);
+            if (comboColumn != null) {
+                DataGridViewComboBoxCell cell = dataGridView1.CurrentCell as DataGridViewComboBoxCell;
+                if (!comboColumn.Items.Contains(e.FormattedValue)) {
+                    comboColumn.Items.Add(e.FormattedValue);
+                }
+                if (dataGridView1.IsCurrentCellDirty) {
+                    dataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                    dataGridView1.EndEdit();
+                }
+                cell.Value = e.FormattedValue;
+            }
+        }
+ 
+        private void dataGridView1_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            var comboColumn = GetComboBoxColumn(dataGridView1.CurrentCellAddress.X);
+            if (comboColumn != null) {
+                ComboBox cb = e.Control as ComboBox;
+                if (cb != null) {
+                    cb.DropDownStyle = ComboBoxStyle.DropDown;
+                }
+            }
         }
 
         #endregion
@@ -286,6 +328,11 @@ namespace GKFlowInputPlugin
             InitSimpleControls();
         }
 
+        private static string CheckStr(string val)
+        {
+            return (val == null) ? string.Empty : val;
+        }
+
         // TODO: rollback changes when exception!
         private void ParseSource()
         {
@@ -315,12 +362,12 @@ namespace GKFlowInputPlugin
             {
                 DataGridViewRow row = dataGridView1.Rows[r];
 
-                string lnk = (string)row.Cells[0].Value;
-                string nm = (string)row.Cells[1].Value;
-                string pt = (string)row.Cells[2].Value;
-                string fm = (string)row.Cells[3].Value;
-                string age = (string)row.Cells[4].Value;
-                string comment = (string)row.Cells[5].Value;
+                string lnk = CheckStr((string)row.Cells[0].Value);
+                string nm = CheckStr((string)row.Cells[1].Value);
+                string pt = CheckStr((string)row.Cells[2].Value);
+                string fm = CheckStr((string)row.Cells[3].Value);
+                string age = CheckStr((string)row.Cells[4].Value);
+                string comment = CheckStr((string)row.Cells[5].Value);
 
                 if (!string.IsNullOrEmpty(lnk)) {
                     PersonLink link = GetLinkByName(lnk);
