@@ -82,7 +82,7 @@ namespace GKCore.Controllers
 
         public void ChangeLanguage()
         {
-            using (var dlg = AppHost.Container.Resolve<ILanguageEditDlg>()) {
+            using (var dlg = AppHost.ResolveDialog<ILanguageEditDlg>()) {
                 dlg.LanguageID = fBase.Context.Tree.Header.Language.Value;
 
                 if (dlg.ShowModalX(this)) {

@@ -106,7 +106,7 @@ namespace GKCore.Lists
                 switch (eArgs.Action) {
                     case RecordAction.raAdd:
                     case RecordAction.raEdit:
-                        using (var dlgEventEdit = AppHost.Container.Resolve<IEventEditDlg>(fBaseWin)) {
+                        using (var dlgEventEdit = AppHost.ResolveDialog<IEventEditDlg>(fBaseWin)) {
                             bool exists = (evt != null);
 
                             GEDCOMCustomEvent newEvent;

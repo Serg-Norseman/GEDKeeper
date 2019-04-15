@@ -760,7 +760,7 @@ namespace GKCore.Lists
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (var dlg = AppHost.Container.Resolve<IPersonalNameEditDlg>(fBaseWin)) {
+                    using (var dlg = AppHost.ResolveDialog<IPersonalNameEditDlg>(fBaseWin)) {
                         bool exists = (persName != null);
                         if (!exists) {
                             persName = new GEDCOMPersonalName(iRec);
@@ -871,7 +871,7 @@ namespace GKCore.Lists
 
                 case RecordAction.raEdit:
                     if (cfLink != null) {
-                        using (var dlg = AppHost.Container.Resolve<IParentsEditDlg>(fBaseWin)) {
+                        using (var dlg = AppHost.ResolveDialog<IParentsEditDlg>(fBaseWin)) {
                             dlg.Person = iRec;
                             dlg.Link = cfLink;
                             result = AppHost.Instance.ShowModalX(dlg, false);
@@ -1076,7 +1076,7 @@ namespace GKCore.Lists
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (var dlg = AppHost.Container.Resolve<IUserRefEditDlg>(fBaseWin)) {
+                    using (var dlg = AppHost.ResolveDialog<IUserRefEditDlg>(fBaseWin)) {
                         bool exists = (userRef != null);
                         if (!exists) {
                             userRef = new GEDCOMUserReference(iRec);

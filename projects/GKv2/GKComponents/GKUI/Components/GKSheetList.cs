@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,11 +19,12 @@
  */
 
 using System;
-using Eto.Drawing;
-using Eto.Forms;
+using System.Drawing;
+using System.Windows.Forms;
 
 using BSLib;
 using GKCore;
+using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 
@@ -32,14 +33,18 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class GKSheetList : Panel, ISheetList
+    public class GKSheetList : ContainerControl, ISheetList
     {
-        private readonly Button fBtnAdd;
-        private readonly Button fBtnDelete;
-        private readonly Button fBtnEdit;
-        private readonly Button fBtnLinkJump;
-        private readonly Button fBtnMoveUp;
-        private readonly Button fBtnMoveDown;
+        private static readonly object EventModify;
+        private static readonly object EventItemValidating;
+
+        private readonly ToolStripButton fBtnAdd;
+        private readonly ToolStripButton fBtnDelete;
+        private readonly ToolStripButton fBtnEdit;
+        private readonly ToolStripButton fBtnLinkJump;
+        private readonly ToolStripButton fBtnMoveUp;
+        private readonly ToolStripButton fBtnMoveDown;
+        private readonly ToolStrip fToolBar;
         private readonly GKListView fList;
 
         private EnumSet<SheetButton> fButtons;
@@ -47,10 +52,17 @@ namespace GKUI.Components
         private bool fReadOnly;
 
 
-        public event ModifyEventHandler OnModify;
+        public event ModifyEventHandler OnModify
+        {
+            add { Events.AddHandler(EventModify, value); }
+            remove { Events.RemoveHandler(EventModify, value); }
+        }
 
-        public event ItemValidatingEventHandler OnItemValidating;
-
+        public event ItemValidatingEventHandler OnItemValidating
+        {
+            add { Events.AddHandler(EventItemValidating, value); }
+            remove { Events.RemoveHandler(EventItemValidating, value); }
+        }
 
         public EnumSet<SheetButton> Buttons
         {
@@ -89,71 +101,86 @@ namespace GKUI.Components
             set { SetReadOnly(value); }
         }
 
+        static GKSheetList()
+        {
+            EventModify = new object();
+            EventItemValidating = new object();
+        }
 
-        public GKSheetList(Panel owner)
+        public GKSheetList(Control owner)
         {
             if (owner == null)
                 throw new ArgumentNullException("owner");
 
-            fBtnMoveDown = new Button();
+            fBtnMoveDown = new ToolStripButton();
             fBtnMoveDown.Image = UIHelper.LoadResourceImage("Resources.btn_down.gif");
-            fBtnMoveDown.Size = UIHelper.ShortButtonSize;
-            fBtnMoveDown.ToolTip = LangMan.LS(LSID.LSID_RecordMoveDown);
+            fBtnMoveDown.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveDown);
             fBtnMoveDown.Click += ItemMoveDown;
 
-            fBtnMoveUp = new Button();
+            fBtnMoveUp = new ToolStripButton();
             fBtnMoveUp.Image = UIHelper.LoadResourceImage("Resources.btn_up.gif");
-            fBtnMoveUp.Size = UIHelper.ShortButtonSize;
-            fBtnMoveUp.ToolTip = LangMan.LS(LSID.LSID_RecordMoveUp);
+            fBtnMoveUp.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveUp);
             fBtnMoveUp.Click += ItemMoveUp;
 
-            fBtnLinkJump = new Button();
+            fBtnLinkJump = new ToolStripButton();
             fBtnLinkJump.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            fBtnLinkJump.Size = UIHelper.ShortButtonSize;
-            fBtnLinkJump.ToolTip = LangMan.LS(LSID.LSID_RecordGoto);
+            fBtnLinkJump.ToolTipText = LangMan.LS(LSID.LSID_RecordGoto);
             fBtnLinkJump.Click += ItemJump;
 
-            fBtnDelete = new Button();
+            fBtnDelete = new ToolStripButton();
+            fBtnDelete.Name = "btnDelete";
             fBtnDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            fBtnDelete.Size = UIHelper.ShortButtonSize;
-            fBtnDelete.ToolTip = LangMan.LS(LSID.LSID_MIRecordDelete);
+            fBtnDelete.ToolTipText = LangMan.LS(LSID.LSID_MIRecordDelete);
             fBtnDelete.Click += ItemDelete;
 
-            fBtnEdit = new Button();
+            fBtnEdit = new ToolStripButton();
+            fBtnEdit.Name = "btnEdit";
             fBtnEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            fBtnEdit.Size = UIHelper.ShortButtonSize;
-            fBtnEdit.ToolTip = LangMan.LS(LSID.LSID_MIRecordEdit);
+            fBtnEdit.ToolTipText = LangMan.LS(LSID.LSID_MIRecordEdit);
             fBtnEdit.Click += ItemEdit;
 
-            fBtnAdd = new Button();
+            fBtnAdd = new ToolStripButton();
+            fBtnAdd.Name = "btnAdd";
             fBtnAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            fBtnAdd.Size = UIHelper.ShortButtonSize;
-            fBtnAdd.ToolTip = LangMan.LS(LSID.LSID_MIRecordAdd);
+            fBtnAdd.ToolTipText = LangMan.LS(LSID.LSID_MIRecordAdd);
             fBtnAdd.Click += ItemAdd;
 
+            fToolBar = new ToolStrip();
+            fToolBar.Name = "ToolBar";
+            fToolBar.Dock = DockStyle.Right;
+            fToolBar.Items.AddRange(new ToolStripItem[] {
+                                        fBtnAdd,
+                                        fBtnEdit,
+                                        fBtnDelete,
+                                        fBtnLinkJump,
+                                        fBtnMoveUp,
+                                        fBtnMoveDown});
+            fToolBar.GripStyle = ToolStripGripStyle.Hidden;
+            fToolBar.ImageScalingSize = new Size(24, 20);
+            fToolBar.AutoSize = true;
+            fToolBar.ShowItemToolTips = true;
+
             fList = new GKListView();
-            fList.MouseDoubleClick += List_DoubleClick;
+            fList.Dock = DockStyle.Fill;
+            fList.Location = new Point(0, 0);
+            fList.Size = new Size(500, 290);
+            fList.HideSelection = false;
+            fList.LabelEdit = false;
+            fList.FullRowSelect = true;
+            fList.View = View.Details;
+            fList.DoubleClick += List_DoubleClick;
             fList.KeyDown += List_KeyDown;
 
             SuspendLayout();
+            Controls.Add(fList);
+            Controls.Add(fToolBar);
+            ResumeLayout(false);
 
-            var toolbar = new DefStackLayout(Orientation.Vertical, 4,
-                                             fBtnAdd, fBtnEdit, fBtnDelete,
-                                             fBtnLinkJump, fBtnMoveUp, fBtnMoveDown);
-
-            var tab = new TableLayout(2, 1);
-            tab.Spacing = new Size(4, 4);
-            tab.SetColumnScale(0, true);
-            tab.SetColumnScale(1, false);
-            tab.Add(fList, 0, 0);
-            tab.Add(toolbar, 1, 0);
-
-            Content = tab;
-            ResumeLayout();
+            Dock = DockStyle.Fill;
 
             owner.SuspendLayout();
-            owner.Content = this;
-            owner.ResumeLayout();
+            owner.Controls.Add(this);
+            owner.ResumeLayout(false);
 
             fButtons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
             fListModel = null;
@@ -170,13 +197,30 @@ namespace GKUI.Components
                 fBtnDelete.Dispose();
                 fBtnEdit.Dispose();
                 fBtnAdd.Dispose();
+                fToolBar.Dispose();
             }
             base.Dispose(disposing);
         }
 
         public void Activate()
         {
-            Focus();
+            Select();
+        }
+
+        /// <summary>
+        /// The library NUnitForms has a bug in the class Finder.
+        /// So we need unique names for hierarchical included components.
+        /// </summary>
+        /// <param name="name">name of component</param>
+        public void SetControlName(string name)
+        {
+            Name = name;
+            fToolBar.Name = name + "_ToolBar";
+            fBtnAdd.Name = fToolBar.Name + "_btnAdd";
+            fBtnEdit.Name = fToolBar.Name + "_btnEdit";
+            fBtnDelete.Name = fToolBar.Name + "_btnDelete";
+            fBtnMoveUp.Name = fToolBar.Name + "_btnMoveUp";
+            fBtnMoveDown.Name = fToolBar.Name + "_btnMoveDown";
         }
 
         #region Private methods
@@ -190,7 +234,7 @@ namespace GKUI.Components
                 fBtnLinkJump.Visible = fButtons.Contains(SheetButton.lbJump);
                 fBtnMoveUp.Visible = fButtons.Contains(SheetButton.lbMoveUp);
                 fBtnMoveDown.Visible = fButtons.Contains(SheetButton.lbMoveDown);
-                //fToolBar.Enabled = !fButtons.IsEmpty();
+                fToolBar.Visible = !fButtons.IsEmpty();
             } else {
                 EnumSet<RecordAction> allowedActions = fListModel.AllowedActions;
                 fBtnAdd.Visible = allowedActions.Contains(RecordAction.raAdd);
@@ -199,7 +243,7 @@ namespace GKUI.Components
                 fBtnLinkJump.Visible = allowedActions.Contains(RecordAction.raJump);
                 fBtnMoveUp.Visible = allowedActions.Contains(RecordAction.raMoveUp);
                 fBtnMoveDown.Visible = allowedActions.Contains(RecordAction.raMoveDown);
-                //fToolBar.Visible = !allowedActions.IsEmpty();
+                fToolBar.Visible = !allowedActions.IsEmpty();
             }
         }
 
@@ -212,7 +256,7 @@ namespace GKUI.Components
             fBtnMoveUp.Enabled = !fReadOnly;
             fBtnMoveDown.Enabled = !fReadOnly;
 
-            fList.BackgroundColor = (fReadOnly) ? SystemColors.Control : SystemColors.WindowBackground;
+            fList.BackColor = (fReadOnly) ? SystemColors.Control : SystemColors.Window;
         }
 
         private void List_DoubleClick(object sender, EventArgs e)
@@ -224,14 +268,14 @@ namespace GKUI.Components
         {
             if (e.Control)
             {
-                switch (e.Key) {
+                switch (e.KeyCode) {
                     case Keys.I:
                         ItemAdd(sender, e);
                         break;
                     case Keys.D:
                         ItemDelete(sender, e);
                         break;
-                    case Keys.Enter:
+                    case Keys.Return:
                         ItemEdit(sender, e);
                         break;
                 }
@@ -253,7 +297,7 @@ namespace GKUI.Components
                 }
             }
 
-            var eventHandler = (ModifyEventHandler)OnModify;
+            var eventHandler = (ModifyEventHandler)Events[EventModify];
             if (eventHandler != null) {
                 eventHandler(this, eArgs);
             }
@@ -263,7 +307,7 @@ namespace GKUI.Components
         {
             var args = new ItemValidatingEventArgs(item);
 
-            var eventHandler = (ItemValidatingEventHandler)OnItemValidating;
+            var eventHandler = (ItemValidatingEventHandler)Events[EventItemValidating];
             if (eventHandler == null)
             {
                 return true;
@@ -363,7 +407,7 @@ namespace GKUI.Components
             fList.EndUpdate();
         }
 
-        public GKCore.Interfaces.IListItem AddItem(object rowData, params object[] columnValues)
+        public IListItem AddItem(object rowData, params object[] columnValues)
         {
             return fList.AddItem(rowData, columnValues);
         }

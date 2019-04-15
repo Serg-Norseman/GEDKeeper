@@ -696,7 +696,7 @@ namespace GKCore.Controllers
             try {
                 fContext.BeginUpdate();
 
-                using (var dlg = AppHost.Container.Resolve<IFilePropertiesDlg>(fView)) {
+                using (var dlg = AppHost.ResolveDialog<IFilePropertiesDlg>(fView)) {
                     AppHost.Instance.ShowModalX(dlg, false);
                 }
             } finally {
@@ -940,6 +940,10 @@ namespace GKCore.Controllers
                 int num = AppHost.Plugins.Count;
                 for (int i = 0; i < num; i++) {
                     IPlugin plugin = AppHost.Plugins[i];
+
+                    if (plugin is IDialogReplacement || plugin.Category == PluginCategory.DialogReplacement) {
+                        continue;
+                    }
 
                     IMenuItem mi;
                     if (plugin.Category == PluginCategory.Report) {

@@ -45,8 +45,6 @@
     <Compile Include="GKUI\Components\GKInputBox.cs" />
     <Compile Include="GKUI\Components\GKMapBrowser.cs" />
     <Compile Include="GKUI\Components\GKMergeControl.cs" />
-    <Compile Include="GKUI\Components\GKPortrait.cs" />
-    <Compile Include="GKUI\Components\GKSheetList.cs" />
     <Compile Include="GKUI\Providers\EtoAppHost.cs" />
     <Compile Include="GKUI\Providers\EtoStdDialogs.cs" />
     <Compile Include="GKUI\Forms\AboutDlg.cs" />
@@ -73,7 +71,6 @@
     <Compile Include="GKUI\Forms\CommonFilterDlg.design.cs">
       <DependentUpon>CommonFilterDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\CommonForm.cs" />
     <Compile Include="GKUI\Forms\CommunicationEditDlg.cs" />
     <Compile Include="GKUI\Forms\CommunicationEditDlg.design.cs">
       <DependentUpon>CommunicationEditDlg.cs</DependentUpon>

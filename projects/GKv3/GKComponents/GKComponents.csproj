@@ -81,6 +81,8 @@
     <Compile Include="GKUI\Components\GKComboItem.cs" />
     <Compile Include="GKUI\Components\GKListView.cs" />
     <Compile Include="GKUI\Components\GKMenuItem.cs" />
+    <Compile Include="GKUI\Components\GKPortrait.cs" />
+    <Compile Include="GKUI\Components\GKSheetList.cs" />
     <Compile Include="GKUI\Components\GKTreeNode.cs" />
     <Compile Include="GKUI\Components\HyperView.cs" />
     <Compile Include="GKUI\Components\ImageBox.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="GKUI\Components\UIHelper.cs" />
     <Compile Include="GKUI\Components\EtoGraphics.cs" />
     <Compile Include="GKUI\Components\ZGraphControl.cs" />
+    <Compile Include="GKUI\Forms\CommonForm.cs" />
     <Compile Include="GKUI\Providers\EtoGfxProvider.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <None Include="packages.config" />

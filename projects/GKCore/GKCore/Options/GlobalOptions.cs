@@ -25,6 +25,7 @@ using System.Text;
 
 using BSLib;
 using GKCommon.GEDCOM;
+using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 
@@ -542,6 +543,39 @@ namespace GKCore.Options
             }
         }
 
+        public void LoadPluginsFromFile(IniFile ini)
+        {
+            if (ini == null)
+                throw new ArgumentNullException("ini");
+
+            int num = AppHost.Plugins.Count;
+            for (int i = 0; i < num; i++) {
+                var plugin = AppHost.Plugins[i];
+
+                var dlgPlugin = plugin as IDialogReplacement;
+                if (dlgPlugin != null) {
+                    var plgName = plugin.GetType().Name;
+                    dlgPlugin.Enabled = ini.ReadBool("Plugins", plgName + ".Enabled", false);
+                }
+            }
+        }
+
+        public void SavePluginsToFile(IniFile ini)
+        {
+            if (ini == null)
+                throw new ArgumentNullException("ini");
+
+            int num = AppHost.Plugins.Count;
+            for (int i = 0; i < num; i++) {
+                var plugin = AppHost.Plugins[i];
+
+                var dlgPlugin = plugin as IDialogReplacement;
+                if (dlgPlugin != null) {
+                    var plgName = plugin.GetType().Name;
+                    ini.WriteBool("Plugins", plgName + ".Enabled", dlgPlugin.Enabled);
+                }
+            }
+        }
 
         public void LoadFromFile(IniFile ini)
         {
@@ -631,6 +665,8 @@ namespace GKCore.Options
             fAncestorsCircleOptions.LoadFromFile(ini);
 
             fListOptions.LoadFromFile(ini);
+
+            LoadPluginsFromFile(ini);
         }
 
         public void LoadFromFile(string fileName)
@@ -758,6 +794,8 @@ namespace GKCore.Options
             fAncestorsCircleOptions.SaveToFile(ini);
 
             fListOptions.SaveToFile(ini);
+
+            SavePluginsToFile(ini);
         }
 
         public void SaveToFile(string fileName)

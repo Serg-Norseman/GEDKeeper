@@ -646,7 +646,7 @@ namespace GKCore
 
             if (result == GEDCOMSex.svNone)
             {
-                using (var dlg = AppHost.Container.Resolve<ISexCheckDlg>())
+                using (var dlg = AppHost.ResolveDialog<ISexCheckDlg>())
                 {
                     dlg.IndividualName = iName + " " + iPatr;
                     result = this.Culture.GetSex(iName, iPatr, false);
@@ -1446,7 +1446,7 @@ namespace GKCore
             GEDCOMFamilyRecord result;
 
             try {
-                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>(fViewer, GEDCOMRecordType.rtFamily)) {
+                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GEDCOMRecordType.rtFamily)) {
                     dlg.TargetIndividual = target;
                     dlg.NeedSex = GEDCOMSex.svNone;
                     dlg.TargetMode = TargetMode.tmFamilyChild;
@@ -1472,7 +1472,7 @@ namespace GKCore
             GEDCOMIndividualRecord result;
 
             try {
-                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>(fViewer, GEDCOMRecordType.rtIndividual)) {
+                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GEDCOMRecordType.rtIndividual)) {
                     dlg.TargetIndividual = target;
                     dlg.NeedSex = needSex;
                     dlg.TargetMode = targetMode;
@@ -1497,7 +1497,7 @@ namespace GKCore
             GEDCOMRecord result;
 
             try {
-                using (var dlg = AppHost.Container.Resolve<IRecordSelectDialog>(fViewer, mode)) {
+                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, mode)) {
                     if (args != null && args.Length > 0) {
                         dlg.FastFilter = (args[0] as string);
                     } else {

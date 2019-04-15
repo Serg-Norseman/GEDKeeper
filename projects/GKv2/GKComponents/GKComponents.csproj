@@ -102,6 +102,12 @@
     <Compile Include="GKUI\Components\GKMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\Components\GKPortrait.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\GKSheetList.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\GKTabControl.cs" />
     <Compile Include="GKUI\Components\GKTextBox.cs">
       <SubType>Component</SubType>
@@ -125,6 +131,7 @@
     <Compile Include="GKUI\Components\WinUITimer.cs" />
     <Compile Include="GKUI\Components\WizardPages.cs" />
     <Compile Include="GKUI\Components\ZGraphControl.cs" />
+    <Compile Include="GKUI\Forms\CommonForm.cs" />
     <Compile Include="GKUI\Providers\WFGfxProvider.cs" />
     <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
@@ -134,6 +141,8 @@
       <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="GKUI\Forms" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

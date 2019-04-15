@@ -130,12 +130,6 @@
     <Compile Include="GKUI\Components\GKInputBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\GKPortrait.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GKUI\Components\GKSheetList.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GKUI\Components\NativeMethods.cs" />
     <Compile Include="GKUI\Components\TreeChartBox.cs" />
     <Compile Include="GKUI\Forms\AboutDlg.cs">
@@ -174,7 +168,6 @@
     <Compile Include="GKUI\Forms\CommonFilterDlg.Designer.cs">
       <DependentUpon>CommonFilterDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\CommonForm.cs" />
     <Compile Include="GKUI\Forms\CommunicationEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>

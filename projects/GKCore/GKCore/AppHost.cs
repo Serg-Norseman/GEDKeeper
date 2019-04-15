@@ -664,7 +664,7 @@ namespace GKCore
 
         public static ushort RequestLanguage()
         {
-            using (var dlg = AppHost.Container.Resolve<ILanguageSelectDlg>()) {
+            using (var dlg = AppHost.ResolveDialog<ILanguageSelectDlg>()) {
                 if (AppHost.Instance.ShowModalX(dlg, false)) {
                     return (ushort)dlg.SelectedLanguage;
                 }
@@ -749,6 +749,25 @@ namespace GKCore
             }
         }
 
+        public static TTypeToResolve ResolveDialog<TTypeToResolve>(params object[] parameters) where TTypeToResolve : ICommonDialog
+        {
+            Type resolveType = typeof(TTypeToResolve);
+
+            int num = AppHost.Plugins.Count;
+            for (int i = 0; i < num; i++) {
+                var dlgPlugin = AppHost.Plugins[i] as IDialogReplacement;
+
+                if (dlgPlugin != null && dlgPlugin.Category == PluginCategory.DialogReplacement) {
+                    var dlgType = dlgPlugin.GetDialogType();
+                    if (GKUtils.ImplementsInterface(dlgType, resolveType) && dlgPlugin.Enabled) {
+                        return (TTypeToResolve)dlgPlugin.CreateDialog(parameters);
+                    }
+                }
+            }
+
+            return Container.Resolve<TTypeToResolve>(parameters);
+        }
+
         #endregion
 
         public void ShowOptions()
@@ -769,7 +788,7 @@ namespace GKCore
 
         public void ShowOptions(OptionsPage page)
         {
-            using (var dlgOptions = AppHost.Container.Resolve<IOptionsDlg>(AppHost.Instance)) {
+            using (var dlgOptions = AppHost.ResolveDialog<IOptionsDlg>(AppHost.Instance)) {
                 dlgOptions.SetPage(page);
 
                 if (AppHost.Instance.ShowModalX(dlgOptions)) {
@@ -961,6 +980,8 @@ namespace GKCore
         {
             Logger.LogInit(GetLogFilename());
 
+            Plugins.Load(AppHost.Instance, GKUtils.GetPluginsPath());
+
             var options = GlobalOptions.Instance;
             options.LoadFromFile(GetAppDataPathStatic() + "GEDKeeper2.ini");
             options.FindLanguages();
@@ -968,8 +989,6 @@ namespace GKCore
             NamesTable.LoadFromFile(GetAppDataPathStatic() + "GEDKeeper2.nms");
 
             PathReplacer.Load(GKUtils.GetAppPath() + "crossplatform.yaml"); // FIXME: path
-
-            Plugins.Load(AppHost.Instance, GKUtils.GetPluginsPath());
         }
 
         public static void DoneSettings()

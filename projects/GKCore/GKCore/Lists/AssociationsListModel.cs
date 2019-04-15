@@ -78,7 +78,7 @@ namespace GKCore.Lists
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (var dlg = AppHost.Container.Resolve<IAssociationEditDlg>(fBaseWin)) {
+                    using (var dlg = AppHost.ResolveDialog<IAssociationEditDlg>(fBaseWin)) {
                         bool exists = (ast != null);
                         if (!exists) {
                             ast = new GEDCOMAssociation(person);
