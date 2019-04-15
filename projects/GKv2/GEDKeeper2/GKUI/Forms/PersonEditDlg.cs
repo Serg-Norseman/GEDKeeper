@@ -275,6 +275,13 @@ namespace GKUI.Forms
             }
         }
 
+        private void BeforeChangeSpousesSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raEdit) {
+                fController.AcceptTempData();
+            }
+        }
+
         private void ModifySpousesSheet(object sender, ModifyEventArgs eArgs)
         {
             GEDCOMFamilyRecord family = eArgs.ItemData as GEDCOMFamilyRecord;
@@ -422,6 +429,7 @@ namespace GKUI.Forms
             fSpousesList = new GKSheetList(pageSpouses);
             fSpousesList.SetControlName("fSpousesList"); // for purpose of tests
             fSpousesList.OnModify += ModifySpousesSheet;
+            fSpousesList.OnBeforeChange += BeforeChangeSpousesSheet;
 
             fNamesList = new GKSheetList(pageNames);
             fNamesList.OnModify += ModifyNamesSheet;

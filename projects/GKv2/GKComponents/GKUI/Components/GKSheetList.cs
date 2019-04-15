@@ -37,6 +37,7 @@ namespace GKUI.Components
     {
         private static readonly object EventModify;
         private static readonly object EventItemValidating;
+        private static readonly object EventBeforeChange;
 
         private readonly ToolStripButton fBtnAdd;
         private readonly ToolStripButton fBtnDelete;
@@ -63,6 +64,13 @@ namespace GKUI.Components
             add { Events.AddHandler(EventItemValidating, value); }
             remove { Events.RemoveHandler(EventItemValidating, value); }
         }
+
+        public event ModifyEventHandler OnBeforeChange
+        {
+            add { Events.AddHandler(EventBeforeChange, value); }
+            remove { Events.RemoveHandler(EventBeforeChange, value); }
+        }
+
 
         public EnumSet<SheetButton> Buttons
         {
@@ -105,6 +113,7 @@ namespace GKUI.Components
         {
             EventModify = new object();
             EventItemValidating = new object();
+            EventBeforeChange = new object();
         }
 
         public GKSheetList(Control owner)
@@ -287,8 +296,18 @@ namespace GKUI.Components
             if (itemData != null) fList.SelectItem(itemData);
         }
 
+        private void DoBeforeChange(ModifyEventArgs eArgs)
+        {
+            var eventHandler = (ModifyEventHandler)Events[EventBeforeChange];
+            if (eventHandler != null) {
+                eventHandler(this, eArgs);
+            }
+        }
+
         private void DoModify(ModifyEventArgs eArgs)
         {
+            DoBeforeChange(eArgs);
+
             if (fListModel != null) {
                 fListModel.Modify(this, eArgs);
 

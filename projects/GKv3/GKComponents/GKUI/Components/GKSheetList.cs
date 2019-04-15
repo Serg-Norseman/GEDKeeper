@@ -51,6 +51,8 @@ namespace GKUI.Components
 
         public event ItemValidatingEventHandler OnItemValidating;
 
+        public event ModifyEventHandler OnBeforeChange;
+
 
         public EnumSet<SheetButton> Buttons
         {
@@ -243,8 +245,18 @@ namespace GKUI.Components
             if (itemData != null) fList.SelectItem(itemData);
         }
 
+        private void DoBeforeChange(ModifyEventArgs eArgs)
+        {
+            var eventHandler = (ModifyEventHandler)OnBeforeChange;
+            if (eventHandler != null) {
+                eventHandler(this, eArgs);
+            }
+        }
+
         private void DoModify(ModifyEventArgs eArgs)
         {
+            DoBeforeChange(eArgs);
+
             if (fListModel != null) {
                 fListModel.Modify(this, eArgs);
 
