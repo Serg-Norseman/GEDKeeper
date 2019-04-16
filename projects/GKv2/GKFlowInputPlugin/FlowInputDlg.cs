@@ -60,7 +60,7 @@ namespace GKFlowInputPlugin
         }
 
         private readonly FLS[] PersonLinks;
-        private readonly Plugin fPlugin;
+        private readonly IPlugin fPlugin;
         private readonly ILangMan fLangMan;
         private readonly IBaseWindow fBase;
         private readonly StringList fSourcesList;
@@ -69,7 +69,7 @@ namespace GKFlowInputPlugin
 
         #region Instance control
         
-        public FlowInputDlg(Plugin plugin, IBaseWindow baseWin)
+        public FlowInputDlg(IPlugin plugin, IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -371,6 +371,7 @@ namespace GKFlowInputPlugin
 
                 if (!string.IsNullOrEmpty(lnk)) {
                     PersonLink link = GetLinkByName(lnk);
+                    if (link == PersonLink.plNone) continue;
 
                     GEDCOMSex sx = fBase.Context.DefineSex(nm, pt);
                     GEDCOMIndividualRecord iRec = fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
@@ -427,7 +428,7 @@ namespace GKFlowInputPlugin
                             evt.Place.StringValue = place;
                         }
 
-                    } else if (link > PersonLink.plPerson) {
+                    } else {
 
                         if (iMain == null) {
                             throw new PersonScanException(fLangMan.LS(FLS.LSID_BasePersonInvalid));

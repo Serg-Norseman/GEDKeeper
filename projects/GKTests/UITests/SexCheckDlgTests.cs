@@ -77,11 +77,17 @@ namespace GKUI.Forms
 
         #region Handlers for external tests
 
-        public static void SexCheckDlgTests_Accept_Handler(string name, IntPtr ptr, Form form)
+        public static void SexCheckDlgTests_AcceptM_Handler(string name, IntPtr ptr, Form form)
         {
             var rbMale = new RadioButtonTester("rbMale", form);
             rbMale.Properties.Checked = true;
+            ClickButton("btnAccept", form);
+        }
 
+        public static void SexCheckDlgTests_AcceptF_Handler(string name, IntPtr ptr, Form form)
+        {
+            var rbFemale = new RadioButtonTester("rbFemale", form);
+            rbFemale.Properties.Checked = true;
             ClickButton("btnAccept", form);
         }
 

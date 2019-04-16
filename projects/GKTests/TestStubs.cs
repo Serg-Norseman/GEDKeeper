@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 
 using BSLib;
@@ -27,6 +28,7 @@ using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.MVP.Controls;
+using GKCore.Plugins;
 using GKCore.Types;
 
 namespace GKTests.Stubs
@@ -70,10 +72,12 @@ namespace GKTests.Stubs
         private readonly IBaseContext fContext;
         private readonly GEDCOMTree fTree;
 
-        public BaseWindowStub()
+        public BaseWindowStub(bool fill = true)
         {
             fContext = TestUtils.CreateContext(/*this*/);
-            TestUtils.FillContext(fContext);
+            if (fill) {
+                TestUtils.FillContext(fContext);
+            }
             fTree = fContext.Tree;
         }
 
@@ -212,5 +216,42 @@ namespace GKTests.Stubs
         public void SaveSnapshot(string fileName) { }
         public void SetCenter(double latitude, double longitude, int scale) { }
         public void ZoomToBounds() { }
+    }
+
+    public class TestLangMan : ILangMan
+    {
+        public string LS(Enum lsid)
+        {
+            return "test";
+        }
+
+        public bool LoadFromFile(string fileName, int offset = 0)
+        {
+            return true;
+        }
+    }
+
+    public class TestPlugin : OrdinaryPlugin, IPlugin
+    {
+        private ILangMan fLangMan;
+
+        public override string DisplayName { get { return "TestPlugin"; } }
+        public override ILangMan LangMan { get { return fLangMan; } }
+        public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Common; } }
+
+        public TestPlugin()
+        {
+            fLangMan = null;
+        }
+
+        public TestPlugin(ILangMan langMan)
+        {
+            fLangMan = (langMan != null) ? langMan : new TestLangMan();
+        }
+
+        public override void Execute()
+        {
+        }
     }
 }

@@ -141,6 +141,7 @@
     <Compile Include="GKCore\ValuesCollectionTests.cs" />
     <Compile Include="GKCore\YamlHelperTests.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Plugins\FlowInputTests.cs" />
     <Compile Include="TestStubs.cs" />
     <Compile Include="ControlTesters\DataGridViewTester.cs" />
     <Compile Include="ControlTesters\GKRecordsViewTester.cs" />
@@ -199,6 +200,10 @@
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GKv2\GKFlowInputPlugin\GKFlowInputPlugin.csproj">
+      <Project>{66b64b00-c457-404e-aa2b-90f18127e394}</Project>
+      <Name>GKFlowInputPlugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\test1.ged" />
@@ -233,6 +238,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\test_ftm2008.ged" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Plugins" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

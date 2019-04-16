@@ -79,6 +79,30 @@ namespace GKTests
             radBtn.Click();
         }
 
+        public static void SelectTab(string name, Form form, int value)
+        {
+            var tabCtl = new TabControlTester(name, form);
+            tabCtl.SelectTab(value);
+        }
+
+        public static void SelectCombo(string name, Form form, int value)
+        {
+            var combo = new ComboBoxTester(name, form);
+            combo.Select(value);
+        }
+
+        public static void EnterCombo(string name, Form form, string value)
+        {
+            var combo = new ComboBoxTester(name, form);
+            combo.Enter(value);
+        }
+
+        public static void EnterText(string name, Form form, string value)
+        {
+            var combo = new TextBoxTester(name, form);
+            combo.Enter(value);
+        }
+
 
         public static void KeyDownForm(string formName, Keys keyData)
         {

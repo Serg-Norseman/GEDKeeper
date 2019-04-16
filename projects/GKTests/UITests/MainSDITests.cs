@@ -349,7 +349,7 @@ namespace GKUI.Forms
             string patr = baseWin.Context.DefinePatronymic("Ivan", GEDCOMSex.svMale, false);
             Assert.AreEqual("", patr);
 
-            ModalFormHandler = SexCheckDlgTests.SexCheckDlgTests_Accept_Handler;
+            ModalFormHandler = SexCheckDlgTests.SexCheckDlgTests_AcceptM_Handler;
             GEDCOMSex sex = baseWin.Context.DefineSex("Ivan", "Ivanovich");
             Assert.AreEqual(GEDCOMSex.svMale, sex);
         }
