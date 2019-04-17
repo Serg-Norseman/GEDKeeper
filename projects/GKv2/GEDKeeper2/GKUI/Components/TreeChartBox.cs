@@ -388,6 +388,8 @@ namespace GKUI.Components
 
             fModel.SetOffsets(spx, spy);
 
+            fRenderer.SetSmoothing(true);
+
             DrawBackground(background);
 
             #if DEBUG_IMAGE
@@ -407,6 +409,13 @@ namespace GKUI.Components
 
             if (hasDeep && fOptions.DeepMode == DeepMode.Foreground) {
                 DrawDeep(fOptions.DeepMode, spx, spy);
+            }
+
+            if (fOptions.BorderStyle != GfxBorderStyle.None) {
+                fRenderer.SetSmoothing(false);
+                var rt = ExtRect.CreateBounds(spx, spy, fModel.ImageWidth, fModel.ImageHeight);
+                BorderPainter.DrawBorder(fRenderer, rt, fOptions.BorderStyle);
+                fRenderer.SetSmoothing(true);
             }
         }
 

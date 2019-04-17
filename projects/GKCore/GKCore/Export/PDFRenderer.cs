@@ -56,6 +56,11 @@ namespace GKCore.Export
             fCanvas = gfx;
         }
 
+        public override void SetSmoothing(bool value)
+        {
+            // dummy
+        }
+
         #region Private methods
 
         private static BaseFont GetBaseFont(IFont font)

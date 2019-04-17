@@ -72,6 +72,11 @@ namespace GKCore.Charts
             fTarget = target;
         }
 
+        public override void SetSmoothing(bool value)
+        {
+            // dummy
+        }
+
         public override void DrawImage(IImage image, float x, float y, float width, float height)
         {
             // dont implemented yet

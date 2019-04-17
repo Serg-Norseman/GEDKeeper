@@ -63,6 +63,7 @@ namespace GKCore.Options
         public bool HideUnknownSpouses;
 
         public DeepMode DeepMode;
+        public GfxBorderStyle BorderStyle;
 
         public IColor MaleColor;
         public IColor FemaleColor;
@@ -105,6 +106,7 @@ namespace GKCore.Options
             MarriagesDates = false;
             ShowPlaces = false;
             HideUnknownSpouses = false;
+            BorderStyle = GfxBorderStyle.None;
 
             MaleColor = ChartRenderer.GetColor(MALE_COLOR);
             FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);

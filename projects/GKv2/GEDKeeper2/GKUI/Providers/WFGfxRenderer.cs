@@ -52,12 +52,21 @@ namespace GKUI.Providers
                 throw new ArgumentException(@"Argument's type mismatch", "target");
 
             fCanvas = gfx;
+        }
 
-            fCanvas.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            fCanvas.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            fCanvas.CompositingQuality = CompositingQuality.HighQuality;
-            fCanvas.SmoothingMode = SmoothingMode.HighQuality;
-            //fCanvas.TextRenderingHint = TextRenderingHint.AntiAlias;
+        public override void SetSmoothing(bool value)
+        {
+            if (value) {
+                fCanvas.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                fCanvas.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                fCanvas.CompositingQuality = CompositingQuality.HighQuality;
+                fCanvas.SmoothingMode = SmoothingMode.HighQuality;
+            } else {
+                fCanvas.InterpolationMode = InterpolationMode.Default;
+                fCanvas.PixelOffsetMode = PixelOffsetMode.Default;
+                fCanvas.CompositingQuality = CompositingQuality.Default;
+                fCanvas.SmoothingMode = SmoothingMode.Default;
+            }
         }
 
         public override void DrawImage(IImage image, float x, float y,
@@ -110,7 +119,7 @@ namespace GKUI.Providers
         public override void DrawRectangle(IPen pen, IColor fillColor,
                                            float x, float y, float width, float height)
         {
-            Color sdFillColor = ((ColorHandler)fillColor).Handle;
+            Color sdFillColor = (fillColor == null) ? Color.Transparent : ((ColorHandler)fillColor).Handle;
 
             using (GraphicsPath path = UIHelper.CreateRectangle(x, y, width, height)) {
                 if (sdFillColor != Color.Transparent) {

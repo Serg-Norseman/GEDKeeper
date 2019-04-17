@@ -69,6 +69,10 @@ namespace GKCore.Charts
         public const int Snow = 0xFFFAFA;
         public const int White = 0xFFFFFF;
 
+        public const int ControlDark = 0xACA899;
+        public const int ControlDarkDark = 0x716F64;
+        public const int ControlLightLight = 0xFFFFFF;
+        public const int ControlLight = 0xF1EFE2;
 
         // Example of string to measurement the height, where there are chars
         // with the ascent and descent of elements.
@@ -78,6 +82,8 @@ namespace GKCore.Charts
         protected ChartRenderer()
         {
         }
+
+        public abstract void SetSmoothing(bool value);
 
         public virtual void BeginDrawing()
         {
@@ -149,6 +155,12 @@ namespace GKCore.Charts
 
         public virtual IPen CreatePen(IColor color, float width)
         {
+            return AppHost.GfxProvider.CreatePen(color, width);
+        }
+
+        public IPen CreatePen(int argb, float width = 1.0f)
+        {
+            IColor color = GetColor(argb);
             return AppHost.GfxProvider.CreatePen(color, width);
         }
 
