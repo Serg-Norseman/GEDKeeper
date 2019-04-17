@@ -1,49 +1,56 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="styles.css" type="text/css" />
-<title>Filter masks</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Filter Masks</title>
 </head>
 <body>
-<h1>Filter masks</h1>
-<p>You use masks in GEDKeeper to select persons, events or locations
-having specific name. Text of a mask consists of general printable
-characters, allowed for object names, and two special symbols
-&#39;*&#39; and &#39;?&#39;.</p>
-<p><em>Mask</em> name is used because &#39;*&#39; and &#39;?&#39;
-symbols mask some arbitrary parts of a value.</p>
-<ul>
-<li>&#39;*&#39; inside a pattern matches any number of any characters;</li>
-<li>&#39;?&#39; matches one any character.</li>
-</ul>
-<p>If you want to specify several different masks, you can use
-&quot;|&quot; symbol to delimit each mask. For example, to get all
-persons with names Mitch and John you can use &quot;*Mitch*|*John*&quot;
-mask. &quot;|&quot; symbol acts as &quot;OR&quot; conjunction,
-therefore any person whose name matches one of the masks, matches
-entire &quot;Mitch*|John*&quot; mask.</p>
-<p>Any person's name, event or location always matches &#39;*&#39;
-mask. When you use such mask in a filter, it will show all objects.</p>
-<p>When you need to get all persons with &quot;Ivanovs&quot; as last
-name, you use &quot;Ivanov*&quot; masks in &quot;Name mask&quot; filter.
-Star symbol matches any characters after initial substring
-&quot;Ivanov&quot;. This way you get all persons with Ivanov,
-Ivanovskih and so on as their last name. If you want to filter out all
-persons with &quot;Vasiliy&quot; first name, you should use &quot;*
-Vasiliy *&quot; pattern; thus you are masking any last name and
-surname. To get all women with Vasilevna surname you use &quot;*
-Vasilevna&quot;, masking any first name and last name.</p>
-<p>Examples:<br />
-- Names &quot;Litvin Ivan Andreevich&quot; and &quot;Semenov Ivan
-Andreevich&quot; can be filtered out with &quot;*Ivan Andreevich&quot;
-mask;<br />
-- Any person with first name, last name or surname having
-&quot;Ivan&quot; inside, matches &quot;*Ivan*&quot; mask;<br />
-- Any woman with &quot;Natal<strong>i</strong>a&quot; or
-&quot;Natal<strong>y</strong>a&quot; name matches &quot;Natal?a*&quot;
-pattern.
-</p>
+    <h1>Filter Masks</h1>
+    <p>
+        You use masks in GEDKeeper to narrow down persons, events, or locations.
+        The text of a mask consists of general printable
+        characters allowed for object names, and two special symbols
+        &#39;*&#39; and &#39;?&#39; for wildcard support.
+    </p>
+    <p>
+        The term <em>mask</em> is used because the &#39;*&#39; and &#39;?&#39;
+        symbols mask some arbitrary parts of a value.
+    </p>
+    <ul>
+        <li>&#39;*&#39; inside a pattern matches any number of any characters.</li>
+        <li>&#39;?&#39; matches one single character.</li>
+    </ul>
+    <p>
+        If you want to specify several different masks, you can use the
+        &quot;|&quot; symbol to delimit each mask. For example, to get all
+        persons with names Mitch and John you can use the &quot;*Mitch*|*John*&quot;
+        mask. The &quot;|&quot; symbol acts as an &quot;OR&quot; conjunction,
+        therefore any person whose name matches one of the masks, matches the
+        entire &quot;Mitch*|John*&quot; mask.
+    </p>
+    <p>
+        Any person&#39;s name, event, or location will always match the &#39;*&#39;
+        mask. When you use such a mask as a filter, it will show all objects.
+    </p>
+    <p>
+        When you need to see all persons with &quot;Ivanov&quot; as beginning part of the last
+        name, you would use a &quot;Ivanov*&quot; mask in the &quot;Name mask&quot; filter.
+        The asterick symbol (&quot;*&quot;) matches any characters after the initial substring
+        &quot;Ivanov&quot;. This way you get all persons with Ivanov,
+        Ivanovskih, and so on as a last name. If you want to filter out all
+        persons with &quot;Vasiliy&quot; as a first name, you should use a &quot;*Vasiliy *&quot;
+        mask; thus you are masking any last name and
+        surname. To get all women with Vasilevna surname you use &quot;*Vasilevna&quot;, masking any first name and last name.
+    </p>
+    <p>
+        Examples:<br />
+        <ul>
+            <li>Names &quot;Litvin Ivan Andreevich&quot; and &quot;Semenov Ivan Andreevich&quot; can be filtered with a &quot;*Ivan Andreevich&quot; mask.</li>
+            <li>Any person with first name, last name, or surname having &quot;Ivan&quot; inside, matches the &quot;*Ivan*&quot; mask.</li>
+            <li>Any person with the name &quot;Natal<strong>i</strong>a&quot; or &quot;Natal<strong>y</strong>a&quot; is matched with the &quot;Natal?a*&quot; mask.</li>
+        </ul>
+    </p>
 </body>
 </html>

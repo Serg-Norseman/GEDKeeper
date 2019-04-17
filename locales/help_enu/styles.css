@@ -111,8 +111,8 @@ li
 
 ul ol, ol ol
   {
-  list-style-type: lower-alpha;
-  {
+    list-style-type: lower-alpha;
+  }
 
   /*
 pre

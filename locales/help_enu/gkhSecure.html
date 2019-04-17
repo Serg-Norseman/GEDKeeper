@@ -4,30 +4,44 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="styles.css" type="text/css" />
-<title>File encryption</title>
+<title>File Encryption</title>
 </head>
 <body>
 
-<h1>File encryption</h1>
+    <h1>File Encryption</h1>
 
-<p>GEDKeeper supports storing and loading encrypted GEDCOM files. The standard does not support encryption, therefore 
-GEDKeeper chose its own implementation for file encryption.</p>
+    <p>
+        GEDKeeper supports storing and loading encrypted GEDCOM files. The GEDCOM standard does not support encryption, therefore
+        GEDKeeper chose its own implementation for file encryption based on industry standards.
+    </p>
 
-<p>When you are saving a database, you must choose &quot;GEDKeeper encrypted GEDCOM files (*.geds)&quot; as target file 
-format. Files of this format have &quot;.geds&quot; extension. After you have selected the file format and entered file 
-name, you are prompted to enter password. When you are about to load an encrypted file, you select the same file format 
-and enter your password when you will be prompted.</p>
+    <p>
+        Currently GEDKeeper uses an <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank">AES</a>
+        algorithm for encryption and <a href="https://en.wikipedia.org/wiki/SHA-1" target="_blank">SHA1</a> for signing.
+    </p>
 
-<p>Attention: GEDKeeper uses cryptographically secure encryption method and following &quot;security best practices&quot; 
-it does not store a password within an encrypted file. Therefore, if you will forget or lose your password once, nobody
-(including GEDKeeper author) will be able to open your database file. Be careful and enter your password cautiously. 
-Any symbol inadvertently added can be a cause for losing your file.</p>
+    <p>
+        When you are saving a database you must choose &quot;GEDKeeper encrypted GEDCOM files (*.geds)&quot; as the target file
+        format. Files of this format have a file extension of &quot;.geds&quot;. After you have selected the file format and entered the file
+        name, you are prompted to enter a password. When you are about to load an encrypted file, you select the same file format
+        and enter your password when you are prompted.
+    </p>
 
-<p>Currently GEDKeeper uses &quot;AES&quot; algorithm for encryption and &quot;SHA1&quot; for signing.</p>
+    <p>
+        Attention: GEDKeeper uses a cryptographically secure encryption method and following &quot;security best practices&quot;
+        it does not store the password within the encrypted files. Therefore, if the password is lost or forgotten nobody,
+        including the GEDKeeper author, will be able to open your database file. Be prudent and enter your password carefully.
+        Any symbol inadvertently added can be a cause for losing your file. Please note that passwords are case sensitive.
+    </p>
 
-<p>Also, the following features are delayed for future development: choosing encryption method by user, prompting for 
-password only once for the same file, adding password repeat field when a file is saved at first time (to avoid typos 
-in password text).</p>
+    <p>
+        Future releases will likely include:
+        <ul>
+            <li>Allowing the user to choose the encryption algorithm.</li>
+            <li>Prompting for the password only once for the same file.</li>
+            <li>Adding a &quot;password repeat&quot; field when a file is saved the first time (to help avoid typos in the password).</li>
+        </ul>
+    </p>
 
 </body>
 </html>

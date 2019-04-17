@@ -1,32 +1,40 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="styles.css" type="text/css" />
-<title>Portable application</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Portable Application</title>
 </head>
 <body>
 
-<h1>Portable application</h1>
+    <h1>Portable Application</h1>
 
-<p>A portable application, is a program designed to read and write its 
-configuration settings into an accessible folder in the computer, usually 
-the folder where the portable application can be found. This makes it easier 
-to transfer the program with the user's preferences and data between different computers.</p>
-
-<p>First method: to make GEDKeeper portable just create folder `appdata` 
-(for Windows) in the directory where GEDKeeper2.exe is located.</p>
-
-<p>Second method: the `GEDKeeper' has the `-homedir:path` command-line option which, 
-for example, stores the application's configuration files. User may define a 
-relative directory, if he/she wants to specify "the current directory" (the 
-current for environment or for GEDKeeper binary, etc). If the option is not 
-used, the "home directory" defaults to system dependent path (like `%APPDATA%\GEDKeeper2`).</p>
-
-<p>In the case that the subfolder `appdata` is in the program start folder and 
-the command line argument` -homedir:path` is given - the priority for the command 
-line argument and the subfolder will be ignored.</p>
+    <p>
+        A portable application is a program designed to read and write its
+        configuration settings into an accessible folder in the computer. This generally
+        refers to the folder where the portable application can be found. This makes it easy
+        to transfer the program, with user preferences and data, to a different computer.
+        There are two options for making GEDKeeper portable:
+    </p>
+    <p>
+        <ul>
+            <li>
+                Copy the file <kbd>GEDKeeper2.exe</kbd> to a directory (e.g., &#39;<kbd>c:\apps\GEDKeeper</kbd>&#39;). Then create a subdirectory
+                for the application data where <kbd>GEDKeeper2.exe</kbd> is located (e.g., &#39;<kbd>c:\apps\GEDKeeper\appddata</kbd>&#39;).
+            </li>
+            <li>
+                GEDKeeper supports the command line option &#39;<kbd>-homedir:<i>path</i></kbd>&#39; where <i><kbd>path</kbd></i>
+                is the directory to store the configuration files (the settings). Both absolute and relative directories are supported.
+                If this option is not used, the directory defaults to the system dependent path for a users&#39; data
+                (i.e., in Windows this would be &#39;<kbd>%APPDATA%\GEDKeeper2</kbd>&#39;).
+                <p>
+                    If a subdirectory called &#39;<kbd>appdata</kbd>&#39; exists in the directory where
+                    GEDKeeper is located then the &#39;<kbd>-homedir:<i>path</i></kbd>&#39; option is ignonred.
+                </p>
+            </li>
+        </ul>
+    </p>
 
 </body>
 </html>

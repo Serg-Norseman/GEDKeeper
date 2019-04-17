@@ -1,72 +1,87 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="styles.css" type="text/css" />
-<title>Tips and tricks for advanced using</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Tips and Tricks for Advanced Use</title>
 </head>
 <body>
-<h1>Tips and tricks for advanced using</h1>
-<h3>Data input</h3>
-<p>If you need to add to database large amount of individuals from an
-audit tale or a register of births, and you are sure that no one of the
-added individuals already exists in your database, you should create a
-source record first, and then use that source as person filter. After
-you completed those steps, you can start to add new data. Each new
-person will get the source automatically. It makes providing a correct
-source for person more easily -- all you need is just add page numbers
-and authenticity index for person reference in a source. If you add an
-individual who already exists in your database, you have two possible
-solutions: not to filtering the content, and use the merging duplicates
-tool after you completed data entering.</p>
-<p>There is a specialized plug-in provided with GEDKeeper --
-&quot;Streamed data input&quot;, that allows add data from audit tales
-and a register of births. Using this plug-in you enter data in format,
-that is very close to one used in the sources. But remember that
-currently this plug-in is an experiment; it is not supported and not
-developed; we do not guarantee stable work of the plug-in.</p>
-<p>Starting from version 2.3 GEDKeeper has image viewer plug-in. It
-becomes useful when you need to simultaneously work with a photo or
-scanned page of a document and database. To work this way, you need to
-open a database, open image viewer plug-in and click
-&quot;Windows&#47;Vertical tile&quot; menu item. After this, both
-windows lay itself out to be very useful for you. The image viewer
-plug-in is a very simple image viewer, but it has enough functions for
-the mode of operation described above. You can zoom and pan image.
-There is only one advantage of this plug-in over external third party
-image viewer software: when you use GEDKeeper on a large monitor or on
-a multi-monitor configuration, you do not have to switch between
-applications or be careful not to press one of many hot-keys, used in
-an external software, that can change the current image appearance.</p>
-<p>When you process a source and know that your large database already
-has person being processed, you can use &quot;Time line&quot; plug-in to
-quickly find that person. After you moved &quot;slider&quot; to the
-necessary year, you get list of individuals who was alive in this year.
-When this technique is combined with location or name filters, you can
-speed up data processing noticeably.</p>
-<h3>Data processing</h3>
-<p>When you continuously process large databases, you would like
-&quot;Check family connectivity&quot; and &quot;Database check&quot;
-tools. The former discovers data fragmentation: it shows all unrelated
-groups of person records. Sometimes this reveals errors made at the
-time of heavy work, when a person was disjoined from a family, but was
-not attached to another one. Thus, such person remains
-&quot;free&quot;. Database check discovers all errors or
-inconsistencies in database. There are not so many criteria currently,
-but, for example, this tool reveals erroneous years of birth in
-families (when one of parents or their descendants have incorrect year
-and age differences are less than a reasonable limit). Or, another
-example, heavy work with sources frequently ends up with empty family
-records. GEDKeeper does not remove such records automatically, but this
-tool finds it and can remove the records from database.</p>
-<h3>Tips and tricks for easy handling</h3>
-<p>You can use <img src="images/iCopy.gif" align="absmiddle"> button in
-person editor window to copy person&#39;s full name to the
-clipboard.</p>
-<p>Text fields for names in the first, small window for person adding,
-can change case of the first letter in a name and remove leading and
-trailing spaces in text. To use those function just press [ Ctrl + Down
-] keys while you are in a text field.</p>
+    <h1>Tips and Tricks for Advanced Use</h1>
+    <h3>Data input</h3>
+    <p>
+        If a large number of individuals are to be added to the database from an
+        audit tale or a register of births, and you are sure that none of the
+        added individuals already exists in your database, you should create a
+        source record first, and then use that source as a person filter. After
+        you completing those steps, you can start to add new data. Each new
+        person will get the source automatically. It makes providing a correct
+        source for a person simple&#151;all you need is to add page numbers
+        and authenticity index for person reference in a source. If you add an
+        individual who already exists in your database, you have two possible
+        solutions: to not filter the content, or use the merging duplicates
+        tool after you completed data entering.
+    </p>
+    <p>
+        There is a specialized plug-in provided with GEDKeeper called
+        &quot;Streamed data input&quot;, that allows adding of data from audit tales
+        and a register of births. Using this plug-in requires entered data in a format
+        that is very close to the one used in the sources. Be aware that
+        this plug-in is currently experimental. As such, it is not supported and
+        further development is unlikely. Therefore, there is no guarantee on the
+        stability of this plug-in.
+    </p>
+    <p>
+        Starting from version 2.3 GEDKeeper has an image viewer plug-in. It
+        becomes useful when you need to simultaneously work with a photo or
+        scanned page of a document and a database. To perform this you need to
+        open a database then open the image viewer plug-in by clicking the
+        &quot;Windows&#47;Vertical tile&quot; menu item. After this, both
+        windows lay themselves out in a  useful manner. The image viewer
+        plug-in is a very simple image viewer, but it has enough functionality for
+        the mode of operation described above. You can zoom and pan an image.
+        There is one distinct advantage to using this plug-in over external third party
+        image viewer software. When using GEDKeeper on a large monitor or on
+        a multi-monitor configuration, you do not have to switch between
+        applications or be careful not to press one of many hotkeys, used in
+        external software, that may change the image appearance.
+    </p>
+    <p>
+        When you process a source and know that your large database already
+        has the person being processed, you can use the &quot;Time line&quot; plug-in to
+        quickly find that person. After moving the &quot;slider&quot; to the
+        desired year, you get a list of individuals who were alive in that year.
+        When this technique is combined with location or name filters, you can
+        speed up data processing noticeably.
+    </p>
+    <h3>Data Processing</h3>
+    <p>
+        When continuously processing large databases, you may want to use the
+        &quot;Check family connectivity&quot; and &quot;Database check&quot;
+        tools. The former discovers data fragmentation: it shows all unrelated
+        groups of person records. Sometimes this reveals errors made at the
+        time of heavy work, when a person was disjoined from a family, but was
+        not attached to another one. Thus, such a person remains
+        &quot;free&quot;. Database check discovers all errors or
+        inconsistencies in the database. Currently there is little criteria.
+        When used, this tool reveals erroneous years of birth in
+        families (when one of the parents or their descendants have an incorrect year
+        and age differences are less than a reasonable limit). Another
+        example is heavy work with sources frequently that ends up with empty family
+        records. GEDKeeper does not remove such records automatically, but this
+        tool finds it and provides the option to remove the records from the database.
+    </p>
+    <h3>Text Handling</h3>
+    <p>
+        You can use the <img src="images/iCopy.gif" align="middle"> button in the
+        person editor window to a copy person&#39;s full name to the
+        clipboard.
+    </p>
+    <p>
+        Text fields for names in the first small window for person adding
+        can change the case of the first letter in a name. This also removes leading and
+        trailing spaces in the text. To use this function just press the [ Ctrl + Down ]
+        hotkey while you are in a text field.
+    </p>
 </body>
 </html>

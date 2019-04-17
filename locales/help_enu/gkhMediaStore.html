@@ -1,43 +1,44 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="styles.css" type="text/css" />
-<title>Storing multimedia content files</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Storing Multimedia Content Files</title>
 </head>
 <body>
-<h1>Storing multimedia content files</h1>
-<p>There are three ways to store multimedia content within GEDKeeper:
-store file in an original place and use absolute pathname as a
-reference, use file &quot;storage&quot; (a directory) or use file
-archive (ZIP). Every method has its own advantages and
-disadvantages.</p>
-<ul>
-<li>Using absolute pathname. When this method is applied, database
-stores only pathname. When system reads this file, it is opened using
-that pathname. Such file is completely independent from GEDKeeper's
-database, but once you have moved the database to another system, it is
-necessary to fix all broken pathnames.</li>
-<li>Storing in archive. GEDKeeper creates ZIP-archive having the same
-name as your database has, and sharing the same directory with the
-database. Any multimedia file you have added to database, is moved into
-this archive. This method has several advantages. One of which is
-having single data storage for all files in the database. It is also
-very easy to move such database to another system. You just need to
-move database itself and ZIP archive of the same name. But you cannot
-add large files (video, music and photos) into archive; it is
-disallowed by GEDKeeper. Large files have very low compression rate,
-that is why there is no sense to add such files into an archive.</li>
-<li>Using &quot;storage&quot;. In this case GEDKeeper creates new
-directory near your database file (in the same directory with database
-filename). The new directory has the same name as your database
-filename has. When you add a multimedia file to database, this file is
-copied into this directory. Thus, you got a centralized files storage
-linked to your database, which is very easy to be moved to another
-system -- you just copy database file and sibling directory of the same
-name. There are no limits and disadvantages in this method.</li>
-</ul>
-<p>You can use any of the above methods freely.</p>
+    <h1>Storing Multimedia Content Files</h1>
+    <p>There are three ways to store multimedia content within GEDKeeper&#151;each with its&#39; advantages:</p>
+    <ul>
+        <li>
+            Using absolute pathname<br />When this method is applied, the database
+            only stores a pathname to the directory. When GEDKeeper reads a file, it is opened using
+            that pathname. Such a file is completely independent from GEDKeeper&#39;s
+            database. This can result in a smaller database size.
+            However, moving the database to another system means fixing all broken pathnames.
+        </li>
+        <li>
+            Storing in an archive<br />GEDKeeper creates a ZIP archive file having the same
+            name as your database&#151;sharing the same directory with the
+            database. All non-multimedia files added to the database are moved into
+            this archive. This method has several advantages. One of which is
+            having a single data storage medium for all non-multimedia files in the database. It is also
+            very easy to move such a database to another system: just
+            move the database and its&#39; ZIP archive of the same name. Multimedia
+            files (video, music, and photos) are not put into an archive since
+            binary (non-text) files have very low compression rates.
+        </li>
+        <li>
+            Using &quot;storage&quot;<br />In this case GEDKeeper creates a new
+            directory by your database file (in the same directory with the database
+            filename). This new directory has the same name as your database
+            filename has. All multimedia files added to the database are
+            copied into that directory. Thus, you have centralized file storage
+            linked to your database; which is very easy to move to another
+            system. You would just move the database file, and subdirectory of the same
+            name, to the new systsem.
+        </li>
+    </ul>
+    <p>You can use any of the above methods to your preference, but only a single method may be used.</p>
 </body>
 </html>

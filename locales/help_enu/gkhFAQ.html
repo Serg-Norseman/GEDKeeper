@@ -4,72 +4,70 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="styles.css" type="text/css" />
-<title>Frequently asked questions</title>
+<title>Frequently Asked Questions</title>
 </head>
 <body>
 
-<h1>Frequently asked questions</h1>
+<h1>Frequently Asked Questions</h1>
 
 <dl>
-<dt>1. Can I have thousands of persons in my database?</dt>
-<dd>There is no limit for number of records in program&#39;s database. May be in the future big database size (about ten thousand records) will hit program performance. But this will be fixed in the next releases.</dd>
+<dt>1. Can I have thousands of people in my database?</dt>
+<dd>Theoretically GEDKeeper does not have a limit to the number of records that can be stored. Performance may be impacted with larger databases (e.g., tens of thousands of records). This may be addressed in a future release.</dd>
 
-<dt>2. Can I add source references to each person, family and case?</dt>
-<dd>You have no limits when attaching source references to person, family and other objects, including all events and cases. All references to sources may be grouped by archives.</dd>
+<dt>2. Can I add source references to each person, family, and event?</dt>
+<dd>There are no limits when attaching source references to a person, family, or event&#151;including cases and other objects. In addition, references to sources may be grouped by archives.</dd>
 
-<dt>3. I need to record data about unrelated persons, which lived in a single village and were at most relative of each other in the past, but this was not revealed quickly. Can I do this with GEDKeeper?</dt>
-<dd>The program has no limits for storing unrelated persons. Moreover, having unrelated persons in database was an initial program requirement.</dd>
+<dt>3. I need to record data about unrelated persons who lived in a single community and were perhaps related to each other in the past, but was not revealed quickly. Can I do this with GEDKeeper?</dt>
+<dd>GEDKeeper can store an unlimited number of unrelated persons.</dd>
 
 <dt>4. Can I print or export data from GEDKeeper to some commonly used formats?</dt>
-<dd>There are following options available for data exporting:
-<p>a) Three types of trees: ancestors and descendants, combined. Other types are not yet implemented 
-currently, but can be added later while number of requests increases. GEDKeeper can print trees itself, and you can 
-export a tree to JPG or WMF or SVG graphics file and print such file from an external application.</p>
+<dd>The following are options for data exporting:
+<p>a) Three types of trees: ancestors, descendants, and combined. Other types may be implemented in a future
+release if such requests continue to increase. GEDKeeper can print trees itself, and you can 
+export a tree to a graphics file (JPG, SVG, or WMF) then print that file from an external application.</p>
 
-<p>b) Export list of person to Excel workbook. Currently there are no many settings for export tuning and selecting 
-exported information, but this will evolve as needed.</p>
+<p>b) Export a list of persons to an Excel workbook. Currently there are not many settings for export tuning and selecting exported information, but this will evolve as needed.</p>
 
-<p>c) Export persons’ statistical data with cataloging, in several Web-formats.</p>
+<p>c) Export a persons&#39; statistical data with cataloging&#151;in several Web-centric formats.</p>
 
-<p>d) Create pedigrees having two schemes of numbering: d&#39;Aboville&#39;s and Konovalov&#39;s schemes. Such pedigrees 
-are created as HTML, RTF or PDF files and you can use any third party viewer, installed in your system (for example, 
-<a href="https://github.com/sumatrapdfreader/sumatrapdf" target="_blank">SumatraPDF</a> or Adobe Reader) to print such 
-files. Generated files have hyperlinks for main directions. Optionally you can add references to sources and notes into 
-the generated files.</p>
+<p>d) Create pedigrees having two schemes of numbering: d&#39;Aboville and Konovalov. Such pedigrees 
+are created as HTML, PDF, or RTF files which may be viewed by a third-party viewer. For example, 
+<a href="https://github.com/sumatrapdfreader/sumatrapdf/wiki" target="_blank">SumatraPDF</a> and <a href="https://www.adobe.com/reader" target="_blank">Adobe Reader</a> can print such 
+files. Generated files have hyperlinks for main directions. Optionally you can add references to sources and notes into the generated files.</p>
 
-<p>e) Create Google-maps with marks for places of birth, death, living of all persons in database or of a single 
-selected person. Printing may be implemented in the future.</p>
+<p>e) Create Google-maps with markers for places of birth and death&#151;for any number of people stored in the database. Printing these maps may be implemented in a future release.</p>
 </dd>
 
-<dt>5. Can I import data from other application using GEDCOM format?</dt>
-<dd>Yes, import GEDCOM-formatted data is fully supported. GEDCOM is native data format for GEDKeeper. GEDKeeper uses some extensions of the format, but all of them meet requirements for GEDCOM extensions. Therefore, you can also export data from GEDKeeper to other software supporting GEDCOM. We sometimes check such compatibility. Here is the list of out extensions: groups for quick and vivid joining unrelated persons, objects: &quot;research&quot;, &quot;task&quot; and &quot;communication&quot; (to store correspondence archive, creating and tracking tasks and researches).</dd>
+<dt>5. Can I import data from other applications using the GEDCOM format?</dt>
+<dd>Yes, importing GEDCOM-formatted data is fully supported. GEDCOM is the native data format for GEDKeeper. GEDKeeper uses extensions within the format&#151;retaining full GEDCOM compatiblity.
+Therefore, you may also export data from GEDKeeper to other software supporting GEDCOM.
+The list of extensions are: groups for quick and vivid joining of unrelated persons, objects: &quot;research&quot;, &quot;task&quot;, and &quot;communication&quot; (to store correspondence archive, creating and tracking tasks, and researches).</dd>
 
-<dt>6. How to create list or persons grouped by one of properties: sex, age, place or social status, define in a source?</dt>
+<dt>6. How can I create a list of persons grouped by a property (sex, age, place, or social status) as defined in a source?</dt>
 <dd>To create such lists you can use one of the following methods:
 
-<p>a) Sort a list by clicking a column header. Ascending or descending order sorting is implemented in all lists in the program, including age, sex and
+<p>a) Sort a list by clicking a column header. Ascending or descending order sorting is implemented in all lists. This includes age, sex, and
 place of residence columns.</p>
 
-<p>b) Sort on an individual part of name. In order to use this, you have to split one full name column to three parted columns. Go to &quot;Edit\Options...&quot;
-and change how a name is shown in list to split on individual component.</p>
+<p>b) Sort on an individual part of a name. To accomplish this, the &quot;full name&quot; column is divided into three separate columns using the &quot;Edit\Options...&quot; menu
+to change how a name is shown in lists to split on individual components.</p>
 
-<p>c) Filter content. You can use filter on the following object properties: sex, live&#47;died attribute, &quot;patriarch&quot; attribute, logical group of people, name and
-place of residence. When filtering by name and place you can use special meta-characters to search by &quot;mask&quot;: &#39;*&#39; symbol matches any number of any characters,
-&#39;?&#39; symbol matches any single character. In such a way &quot;Sm*&quot; filter matches any name starting with &quot;Sm&quot;, &quot;*sm*&quot; matches any name having &quot;sm&quot; inside the name.
-You can define compound filter using &quot;OR&quot; conjunction, for example: &quot;*jo*|*sm*&quot; matches any name with &quot;jo&quot; or &quot;sm&quot; inside the name.</p>
+<p>c) Filter on content. You can use filter on the following object properties: sex, live&#47;died attribute, &quot;patriarch&quot; attribute, logical group of people, name, and
+place of residence. When filtering by name or place you can use special meta-characters to search by &quot;mask&quot;: the &#39;*&#39; symbol matches any number of any characters and the
+&#39;?&#39; symbol matches any single character. In this way a &quot;Sm*&quot; filter matches any name starting with &quot;Sm&quot; while &quot;*sm*&quot; matches any name having &quot;sm&quot; within the name.
+Compound filters use the &quot;OR&quot; conjunction symbol. For example, &quot;*jo*|*sm*&quot; matches any name with &quot;jo&quot; or &quot;sm&quot; inside the name.</p>
 
-<p>d) Use groups. You can sort by a group, apply filter by a group and view a group’s members when you have selected the group in its native list.
-This is one of the most flexible and advanced navigation, because one person can have several social or other groups.</p>
+<p>d) Use groups. You can sort by a group and apply a filter by a group then view a group&#39;s members when you have selected the group in its native list.
+A person may have several social or other type of groups.</p>
 </dd>
 
 <dt>7. Can GEDKeeper shows empty dates on death and birth events as &quot;?&quot; in lists?</dt>
-<dd>Currently this is not implemented. But may be implemented in the future as an optional feature. Numerous tests revealed that such behavior clutters main lists up.
-If we will get enough number of requests for this feature, we will implement it.</dd>
+<dd>This is not currently implemented. However, this may be implemented in a future release as an optional feature. Numerous tests revealed that such behavior clutters the main lists up.
+If we receive enough requests for this feature we will likely implement it.</dd>
 
-<dt>8. Can you improve new persons adding feature by implementing &quot;Apply and continue&quot; button?</dt>
-<dd>Similar feature is implemented by the plug-in that can be accessed via &quot;Plug-ins\Continuous data adding&quot; menu. This plug-in gives ability to add minimal
-information about a person while you need to handle big number of persons. You enter only some main information and put aside adding information about
-relationships and other secondary data.</dd>
+<dt>8. Can you improve the new person adding feature by implementing an &quot;Apply and continue&quot; button?</dt>
+<dd>A similar feature is implemented by the plug-in that can be accessed through the &quot;Plug-ins\Continuous data adding&quot; menu. This plug-in gives the ability to add minimal
+information about a person while handling large numbers of people. You could add main information for each person&#151;postponing secondary data, such as relationships, until a future time.</dd>
 </dl>
 
 <p>Authors: Zhdanovskih Sergey Vladimirovich, Tarasova Oksana Vladimirovna.</p>

@@ -1,75 +1,83 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="styles.css" type="text/css" />
-<title>Family tree</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Family Tree</title>
 </head>
 <body>
 
-<h1>Family tree</h1>
+    <h1>Family Tree</h1>
 
-<p>There are three types of tree diagrams GEDKeeper can create: tree of ancestors (ascending relationship tree), tree of 
-descendants (descending relationship tree) and combined tree -- tree of ancestors and descendants. You can set up 
-diagram appearance in &quot;Options&quot; dialog on &quot;<a href="gkhOptions.html#tree">Tree</a>&quot; tab (you can get 
-an access to &quot;Options&quot; dialog via &quot;Edit&#47;Options...&quot; menu item). You can change information to 
-show about persons and change colors of tree elements.</p>
+    <p>
+        Three types of tree diagrams are available: tree of ancestors (ascending relationship tree), tree of
+        descendants (descending relationship tree), and combined tree (ancestors and descendants). You can set up the
+        diagram appearance in the &quot;Options&quot; dialog on the &quot;<a href="gkhOptions.html#tree">Tree</a>&quot; tab
+        (accessed by the &quot;Options&quot; dialog via the &quot;Edit&#47;Options...&quot; menu item). You can change information to
+        show about persons and change colors of tree elements.
+    </p>
 
-<p>To build a tree, you pick a person out in person list, then choose a tree type (ancestors, descendants or complete) 
-in &quot;Pedigree&quot; menu. Also you can use the following main window&#39;s toolbar&#39;s buttons:</p>
+    <p>
+        To build a tree, you pick a person from the person list. Then choose a tree type (ancestors, descendants, or complete)
+        in the &quot;Pedigree&quot; menu. The following main window&#39;s toolbar&#39;s buttons may also be used:
+    </p>
 
-<ul>
-<li><img src="images/iTreeAncestry.gif" align="absmiddle">&nbsp;Tree of ancestors</li>
-<li><img src="images/iTreeDescendants.gif" align="absmiddle">&nbsp;Tree of descendants</li>
-<li><img src="images/iTreeBoth.gif" align="absmiddle">&nbsp;Complete tree</li>
-</ul>
+    <ul>
+        <li><img src="images/iTreeAncestry.gif" align="middle">&nbsp;Tree of ancestors</li>
+        <li><img src="images/iTreeDescendants.gif" align="middle">&nbsp;Tree of descendants</li>
+        <li><img src="images/iTreeBoth.gif" align="middle">&nbsp;Complete tree</li>
+    </ul>
 
-<p>After you have created a tree, you can use <img src="images/iSaveImage.gif" align="absmiddle"> button to export the
-tree in one of the following formats: raster format (BMP, JPEG, PNG or GIF) or vector (EMF, SVG). Not every family tree 
-may be saved as a bitmap file, because the latter may not store more than 65k pixels per horizontal line. Vector file 
-does not have such restriction; therefore, it can store trees of any size. Moreover, having a vector file is better for 
-the next image processing in graphical applications and printing.</p>
+    <p>
+        After a tree is created, you can use the <img src="images/iSaveImage.gif" align="middle"> button to export the
+        tree in one of the following formats: <a href="https://en.wikipedia.org/wiki/Raster_graphics" target="_blank">raster format</a>
+        (BMP, JPEG, PNG or, GIF) or <a href="https://en.wikipedia.org/wiki/Vector_graphics" target="_blank">vector format</a> (EMF, SVG). Not every family tree
+        may be saved as a raster (bitmap) file. Bitmaps may not store more than 65k pixels per horizontal line. Vector files
+        do not have such restriction; therefore it can store trees of any size. Moreover, a vector file is better for
+        additional image processing in graphical applications and for printing.
+    </p>
 
-<p>The following controls are available when you view a diagram:</p>
-<ul>
-<li>vertical scrolling with mouse wheel;</li>
-<li>horizontal scrolling with mouse wheel and holding <kbd>[ Shift ]</kbd> key;</li>
-<li>zoom with mouse wheel and holding <kbd>[ Ctrl ]</kbd> key;</li>
-<li>zoom with scale control at top right corner of the window;</li>
-<li><kbd>[ F4 ]</kbd> performs the folding or unfolding of the selected person's branch;</li>
-<li><kbd>[ F5 ]</kbd> key rebuilds the tree;</li>
-<li><kbd>[ F6 ]</kbd> key marks the currently selected person as a starting point and updates all ancestors and 
-descendants of the starting point;</li>
-<li><kbd>[ F7 ]</kbd> key recalculates relation degrees (if they are turned on) of the currently selected person;</li>
-<li>double click on a person to open it in edit mode;</li>
-<li>click on a person to adjust it with window&#39;s center;</li>
-<li>pan the content while mouse&#39;s right button is held;</li>
-<li>click on <img src="images/iExpand.gif" align="absmiddle"> icon (&quot;there are additional hidden data&quot;) near 
-a person to rebuild the tree relatively to that person (this icon is not exported to image file).</li>
-</ul>
+    <p>The following controls are available when you view a diagram:</p>
+    <ul>
+        <li>Vertical scrolling with mouse wheel.</li>
+        <li>Horizontal scrolling with mouse wheel and holding the <kbd>[ Shift ]</kbd> key.</li>
+        <li>Zoom with mouse wheel and holding the <kbd>[ Ctrl ]</kbd> key.</li>
+        <li>Zoom with scale control at top right corner of the window.</li>
+        <li><kbd>[ F4 ]</kbd> performs the folding or unfolding of the selected person's branch.</li>
+        <li><kbd>[ F5 ]</kbd> rebuilds the tree.</li>
+        <li><kbd>[ F6 ]</kbd> marks the currently selected person as a starting point and updates all ancestors and descendants of the starting point.</li>
+        <li><kbd>[ F7 ]</kbd> recalculates the relation degrees of the selected person (if that option is turned on).</li>
+        <li>Double-click on a person to open it in edit mode.</li>
+        <li>Click on a person to adjust it with the window&#39;s center.</li>
+        <li>Pan the content while holding the right mouse button.</li>
+        <li>Click on the <img src="images/iExpand.gif" align="middle"> icon (&quot;if there is additional hidden data&quot;) near a person to rebuild the tree relative to that person (this icon is not exported to any image file).</li>
+    </ul>
 
-<p>Number of visible generations (of both ancestors and descendants) can be adjusted from one to nine (+ with no limits) 
-by the button with drop down menu on the window&#39;s toolbar.</p>
+    <p>
+        The number of visible generations, of both ancestors and descendants, can be adjusted from one to nine or unlimited
+        by the button with drop down menu on the window&#39;s toolbar.
+    </p>
 
-<p>Also you can filter content out with <img src="images/iFilter.gif" align="absmiddle"> button.</p>
+    <p>Content may also be filtered by the <img src="images/iFilter.gif" align="middle"> button.</p>
 
-<p>If you have used [ F6 ] key or <img src="images/iExpand.gif" align="absmiddle"> icon (set new person as a central one 
-for the tree), you can use <img src="images/iLeft1.gif" align="absmiddle"> and <img src="images/iRight1.gif" align="absmiddle"> 
-buttons to return to the previous or next person.</p>
+    <p>
+        If the [ F6 ] key is used or the <img src="images/iExpand.gif" align="middle"> icon (set new person as a central one
+        for the tree), then you can use the <img src="images/iLeft1.gif" align="middle"> and <img src="images/iRight1.gif" align="middle">
+        buttons to return to the previous or next person.
+    </p>
 
-<p><img src="images/iTools.gif" align="absmiddle"> shows the following tree options:</p>
+    <p>The <img src="images/iTools.gif" align="middle"> icon dispalys the following tree options:</p>
 
-<ul>
-<li>All -- show both ancestors and descendants for a specified person;</li>
-<li>Ancestors only -- only ancestors of the selected person are visible;</li>
-<li>Descendants only -- only descendants of the selected person are visible;</li>
-<li>Center auto-change -- turn off/on a mode when center of the tree is smoothly adjusted with the selected person;</li>
-<li>Authenticity index -- turn off/on authenticity index visibility for each person in the tree (it is handy for visual 
-valuation of development progress);</li>
-<li>Background color -- change background color for this tree;</li>
-<li>Background image -- change background image for this tree.</li>
-</ul>
+    <ul>
+        <li>All -- show both ancestors and descendants for a selected person.</li>
+        <li>Ancestors only -- only ancestors of the selected person are visible.</li>
+        <li>Descendants only -- only descendants of the selected person are visible.</li>
+        <li>Center auto-change -- toggle off/on a mode when the center of the tree is smoothly adjusted with the selected person.</li>
+        <li>Authenticity index -- toggle off/on the authenticity index visibility for each person in the tree (it is handy for visual valuation of development progress).</li>
+        <li>Background color -- change the background color for this tree.</li>
+        <li>Background image -- change the background image for this tree.</li>
+    </ul>
 
 </body>
 </html>
