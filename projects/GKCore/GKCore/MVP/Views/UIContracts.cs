@@ -122,8 +122,8 @@ namespace GKCore.MVP.Views
         IComboBoxHandler Date1Calendar { get; }
         IComboBoxHandler Date2Calendar { get; }
 
-        ITextBoxHandler Date1 { get; }
-        ITextBoxHandler Date2 { get; }
+        IDateBoxHandler Date1 { get; }
+        IDateBoxHandler Date2 { get; }
 
         IComboBoxHandler Attribute { get; }
         ITextBoxHandler Place { get; }

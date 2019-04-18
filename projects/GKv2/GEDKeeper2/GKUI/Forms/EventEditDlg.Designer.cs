@@ -20,8 +20,8 @@
 		private System.Windows.Forms.TextBox txtEventName;
 		private System.Windows.Forms.TextBox txtEventPlace;
 		private System.Windows.Forms.ComboBox cmbEventDateType;
-		private System.Windows.Forms.MaskedTextBox txtEventDate1;
-		private System.Windows.Forms.MaskedTextBox txtEventDate2;
+		private GKUI.Components.GKDateBox txtEventDate1;
+		private GKUI.Components.GKDateBox txtEventDate2;
 		private System.Windows.Forms.TextBox txtEventCause;
 		private System.Windows.Forms.TextBox txtEventOrg;
 		private System.Windows.Forms.ComboBox txtAttribute;
@@ -52,8 +52,8 @@
 		    this.txtEventName = new System.Windows.Forms.TextBox();
 		    this.txtEventPlace = new System.Windows.Forms.TextBox();
 		    this.cmbEventDateType = new System.Windows.Forms.ComboBox();
-		    this.txtEventDate1 = new System.Windows.Forms.MaskedTextBox();
-		    this.txtEventDate2 = new System.Windows.Forms.MaskedTextBox();
+		    this.txtEventDate1 = new GKUI.Components.GKDateBox();
+		    this.txtEventDate2 = new GKUI.Components.GKDateBox();
 		    this.txtEventCause = new System.Windows.Forms.TextBox();
 		    this.txtEventOrg = new System.Windows.Forms.TextBox();
 		    this.txtAttribute = new System.Windows.Forms.ComboBox();
@@ -263,26 +263,20 @@
 		    // 
 		    this.txtEventDate1.AllowDrop = true;
 		    this.txtEventDate1.BackColor = System.Drawing.SystemColors.Window;
-		    this.txtEventDate1.Culture = new System.Globalization.CultureInfo("");
 		    this.txtEventDate1.Location = new System.Drawing.Point(152, 163);
-		    this.txtEventDate1.Mask = "00/00/0000";
 		    this.txtEventDate1.Name = "txtEventDate1";
 		    this.txtEventDate1.Size = new System.Drawing.Size(158, 21);
 		    this.txtEventDate1.TabIndex = 12;
-		    this.txtEventDate1.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
 		    this.txtEventDate1.DragDrop += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragDrop);
 		    this.txtEventDate1.DragOver += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragOver);
 		    // 
 		    // txtEventDate2
 		    // 
 		    this.txtEventDate2.AllowDrop = true;
-		    this.txtEventDate2.Culture = new System.Globalization.CultureInfo("");
 		    this.txtEventDate2.Location = new System.Drawing.Point(320, 163);
-		    this.txtEventDate2.Mask = "00/00/0000";
 		    this.txtEventDate2.Name = "txtEventDate2";
 		    this.txtEventDate2.Size = new System.Drawing.Size(158, 21);
 		    this.txtEventDate2.TabIndex = 15;
-		    this.txtEventDate2.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
 		    this.txtEventDate2.DragDrop += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragDrop);
 		    this.txtEventDate2.DragOver += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragOver);
 		    // 

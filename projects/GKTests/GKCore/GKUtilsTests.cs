@@ -589,5 +589,21 @@ namespace GKCore
 
             GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
         }
+
+        [Test]
+        public void Test_GetNormalizeDate()
+        {
+            Assert.AreEqual("", GKUtils.GetNormalizeDate("", "mm/dd/yyyy"));
+            Assert.AreEqual("30.01.1980", GKUtils.GetNormalizeDate("01/30/1980", "mm/dd/yyyy"));
+            Assert.AreEqual("30.01.1980", GKUtils.GetNormalizeDate("1980/01/30", "yyyy/mm/dd"));
+        }
+
+        [Test]
+        public void Test_GetRegionalDate()
+        {
+            Assert.AreEqual("", GKUtils.GetRegionalDate("", "mm/dd/yyyy"));
+            Assert.AreEqual("01/30/1980", GKUtils.GetRegionalDate("30.01.1980", "mm/dd/yyyy"));
+            Assert.AreEqual("1980/01/30", GKUtils.GetRegionalDate("30.01.1980", "yyyy/mm/dd"));
+        }
     }
 }

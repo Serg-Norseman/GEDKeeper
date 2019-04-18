@@ -78,10 +78,10 @@ namespace GKCore.Controllers
             GEDCOMCalendar cal1 = (GEDCOMCalendar)fView.Date1Calendar.SelectedTag;
             GEDCOMCalendar cal2 = (GEDCOMCalendar)fView.Date2Calendar.SelectedTag;
 
-            GEDCOMDate gcd1 = GEDCOMDate.CreateByFormattedStr(fView.Date1.Text, cal1, true);
+            GEDCOMDate gcd1 = GEDCOMDate.CreateByFormattedStr(fView.Date1.NormalizeDate, cal1, true);
             if (gcd1 == null) throw new ArgumentNullException("gcd1");
 
-            GEDCOMDate gcd2 = GEDCOMDate.CreateByFormattedStr(fView.Date2.Text, cal2, true);
+            GEDCOMDate gcd2 = GEDCOMDate.CreateByFormattedStr(fView.Date2.NormalizeDate, cal2, true);
             if (gcd2 == null) throw new ArgumentNullException("gcd2");
 
             gcd1.YearBC = fView.Date1BC.Checked;
@@ -222,8 +222,8 @@ namespace GKCore.Controllers
                     fView.EventDateType.SelectedIndex = 3;
                 }
 
-                fView.Date1.Text = dtRange.After.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.Date2.Text = dtRange.Before.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.Date1.NormalizeDate = dtRange.After.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.Date2.NormalizeDate = dtRange.Before.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                 fView.Date1Calendar.SelectedTag = dtRange.After.DateCalendar;
                 fView.Date2Calendar.SelectedTag = dtRange.Before.DateCalendar;
                 fView.Date1BC.Checked = dtRange.After.YearBC;
@@ -239,8 +239,8 @@ namespace GKCore.Controllers
                     fView.EventDateType.SelectedIndex = 6;
                 }
 
-                fView.Date1.Text = dtPeriod.DateFrom.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.Date2.Text = dtPeriod.DateTo.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.Date1.NormalizeDate = dtPeriod.DateFrom.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.Date2.NormalizeDate = dtPeriod.DateTo.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                 fView.Date1Calendar.SelectedTag = dtPeriod.DateFrom.DateCalendar;
                 fView.Date2Calendar.SelectedTag = dtPeriod.DateTo.DateCalendar;
                 fView.Date1BC.Checked = dtPeriod.DateFrom.YearBC;
@@ -263,12 +263,12 @@ namespace GKCore.Controllers
                         break;
                 }
 
-                fView.Date1.Text = (date as GEDCOMDate).GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.Date1.NormalizeDate = (date as GEDCOMDate).GetDisplayString(DateFormat.dfDD_MM_YYYY);
                 fView.Date1Calendar.SelectedTag = (date as GEDCOMDate).DateCalendar;
                 fView.Date1BC.Checked = (date as GEDCOMDate).YearBC;
             } else {
                 fView.EventDateType.SelectedIndex = 0;
-                fView.Date1.Text = "";
+                fView.Date1.NormalizeDate = "";
                 fView.Date1Calendar.SelectedTag = GEDCOMCalendar.dcGregorian;
                 fView.Date1BC.Checked = false;
             }

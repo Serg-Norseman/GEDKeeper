@@ -95,6 +95,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\GKComboItem.cs" />
+    <Compile Include="GKUI\Components\GKDateBox.cs" />
     <Compile Include="GKUI\Components\GKListView.cs" />
     <Compile Include="GKUI\Components\GKMapBrowser.cs">
       <SubType>Component</SubType>

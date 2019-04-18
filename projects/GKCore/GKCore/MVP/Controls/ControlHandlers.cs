@@ -86,6 +86,19 @@ namespace GKCore.MVP.Controls
     }
 
 
+    public interface IDateBoxHandler : IBaseControl
+    {
+        string NormalizeDate { get; set; }
+        bool ReadOnly { get; set; }
+        string SelectedText { get; set; }
+        string Text { get; set; }
+
+        void Clear();
+        void Copy();
+        void SelectAll();
+    }
+
+
     public interface INumericBoxHandler : IBaseControl
     {
         bool ReadOnly { get; set; }

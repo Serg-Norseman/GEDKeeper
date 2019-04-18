@@ -94,14 +94,14 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBoxHandler>(cmbDate2Calendar); }
         }
 
-        ITextBoxHandler IEventEditDlg.Date1
+        IDateBoxHandler IEventEditDlg.Date1
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtEventDate1); }
+            get { return GetControlHandler<IDateBoxHandler>(txtEventDate1); }
         }
 
-        ITextBoxHandler IEventEditDlg.Date2
+        IDateBoxHandler IEventEditDlg.Date2
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtEventDate2); }
+            get { return GetControlHandler<IDateBoxHandler>(txtEventDate2); }
         }
 
         IComboBoxHandler IEventEditDlg.Attribute
@@ -162,6 +162,9 @@ namespace GKUI.Forms
 
             SetToolTip(btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
             SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
+
+            SetToolTip(txtEventDate1, txtEventDate1.RegionalDatePattern);
+            SetToolTip(txtEventDate2, txtEventDate2.RegionalDatePattern);
 
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);

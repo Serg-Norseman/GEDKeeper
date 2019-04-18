@@ -412,6 +412,52 @@ namespace GKUI.Providers
         }
     }
 
+    public sealed class DateBoxHandler : BaseControlHandler<GKDateBox, DateBoxHandler>, IDateBoxHandler
+    {
+        public DateBoxHandler(GKDateBox control) : base(control)
+        {
+        }
+
+        public string NormalizeDate
+        {
+            get { return Control.NormalizeDate; }
+            set { Control.NormalizeDate = value; }
+        }
+
+        public bool ReadOnly
+        {
+            get { return Control.ReadOnly; }
+            set { Control.ReadOnly = value; }
+        }
+
+        public string SelectedText
+        {
+            get { return Control.SelectedText; }
+            set { Control.SelectedText = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+
+        public void Clear()
+        {
+            Control.Clear();
+        }
+
+        public void Copy()
+        {
+            Control.Copy();
+        }
+
+        public void SelectAll()
+        {
+            Control.SelectAll();
+        }
+    }
+
     public sealed class NumericBoxHandler : BaseControlHandler<NumericUpDown, NumericBoxHandler>, INumericBoxHandler
     {
         public NumericBoxHandler(NumericUpDown control) : base(control)

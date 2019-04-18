@@ -589,6 +589,64 @@ namespace GKCore
 
         #region Date functions
 
+        public static string GetNormalizeDate(string regionalDate, string pattern)
+        {
+            if (string.IsNullOrEmpty(regionalDate)) return string.Empty;
+
+            string[] regionalParts = regionalDate.Split('/');
+            string[] patternParts = pattern.Split('/');
+            string[] resultParts = new string[3];
+
+            for (int i = 0; i < patternParts.Length; i++) {
+                string part = patternParts[i];
+                switch (part[0]) {
+                    case 'd':
+                        resultParts[0] = regionalParts[i];
+                        break;
+
+                    case 'm':
+                        resultParts[1] = regionalParts[i];
+                        break;
+
+                    case 'y':
+                        resultParts[2] = regionalParts[i];
+                        break;
+                }
+            }
+
+            string result = string.Join(".", resultParts);
+            return result;
+        }
+
+        public static string GetRegionalDate(string normalizeDate, string pattern)
+        {
+            if (string.IsNullOrEmpty(normalizeDate)) return string.Empty;
+
+            string[] normalizeParts = normalizeDate.Split('.');
+            string[] patternParts = pattern.Split('/');
+            string[] resultParts = new string[3];
+
+            for (int i = 0; i < patternParts.Length; i++) {
+                string part = patternParts[i];
+                switch (part[0]) {
+                    case 'd':
+                        resultParts[i] = normalizeParts[0];
+                        break;
+
+                    case 'm':
+                        resultParts[i] = normalizeParts[1];
+                        break;
+
+                    case 'y':
+                        resultParts[i] = normalizeParts[2];
+                        break;
+                }
+            }
+
+            string result = string.Join("/", resultParts);
+            return result;
+        }
+
         public static string GEDCOMEventToDateStr(GEDCOMCustomEvent evt, DateFormat format, bool sign)
         {
             return (evt == null) ? string.Empty : evt.Date.GetDisplayStringExt(format, sign, false);

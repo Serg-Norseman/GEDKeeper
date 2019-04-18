@@ -94,14 +94,14 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBoxHandler>(cmbDate2Calendar); }
         }
 
-        ITextBoxHandler IEventEditDlg.Date1
+        IDateBoxHandler IEventEditDlg.Date1
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtEventDate1); }
+            get { return GetControlHandler<IDateBoxHandler>(txtEventDate1); }
         }
 
-        ITextBoxHandler IEventEditDlg.Date2
+        IDateBoxHandler IEventEditDlg.Date2
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtEventDate2); }
+            get { return GetControlHandler<IDateBoxHandler>(txtEventDate2); }
         }
 
         IComboBoxHandler IEventEditDlg.Attribute
