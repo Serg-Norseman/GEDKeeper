@@ -980,12 +980,9 @@ namespace GKCore.Charts
 
             person.PtX += offset;
 
-            if (person.BaseSpouse != null && (person.BaseSpouse.Sex == GEDCOMSex.svFemale || person.BaseSpouse.GetSpousesCount() == 1))
-            {
+            if (person.BaseSpouse != null && (person.BaseSpouse.Sex == GEDCOMSex.svFemale || person.BaseSpouse.GetSpousesCount() == 1)) {
                 ShiftDesc(person.BaseSpouse, offset, isSingle);
-            }
-            else
-            {
+            } else {
                 if (!isSingle) {
                     ShiftDesc(person.Father, offset, false);
                     ShiftDesc(person.Mother, offset, false);
@@ -1089,10 +1086,10 @@ namespace GKCore.Charts
 
             person.IsVisible = true;
 
-            if (person.GetSpousesCount() > 0) {
+            int spousesCount = person.GetSpousesCount();
+            if (spousesCount > 0) {
                 TreeChartPerson prev = person;
-                int num = person.GetSpousesCount();
-                for (int i = 0; i < num; i++) {
+                for (int i = 0; i < spousesCount; i++) {
                     TreeChartPerson sp = person.GetSpouse(i);
                     int spX = 0, spY = 0;
 
@@ -1125,6 +1122,20 @@ namespace GKCore.Charts
             // then breaks the normal sequence of formation of coordinates.
             if (person.Sex == GEDCOMSex.svNone || person.Sex == GEDCOMSex.svUndetermined) {
                 fEdges[gen] = person.Rect.Right;
+            }
+
+            // Fix of long-distance displacement of male nodes in the presence of more than 
+            // one marriage and a large tree of descendants from the first wife
+            if (person.Sex == GEDCOMSex.svMale && spousesCount >= 2) {
+                var firstWife = person.GetSpouse(0);
+                if (firstWife.GetChildsCount() > 0) {
+                    int d = firstWife.Rect.Left - person.Rect.Right;
+                    if (d > fBranchDistance * 1.5f) {
+                        //person.SetFlag(PersonFlag.pfSpecialMark);
+                        offset = (d - fBranchDistance);
+                        ShiftDesc(person, offset, true);
+                    }
+                }
             }
         }
 

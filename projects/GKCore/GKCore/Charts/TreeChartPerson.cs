@@ -46,7 +46,8 @@ namespace GKCore.Charts
         pfDivorced, pfIsDead, pfSelected, pfIsDup, pfSpouse,
         pfDescByFather, pfDescByMother, // descending flags
         pfAncWalk, pfDescWalk, // walk flags
-        pfHasInvAnc, pfHasInvDesc // invisible flags
+        pfHasInvAnc, pfHasInvDesc, // invisible flags
+        pfSpecialMark, // debug flag for special goals
     }
 
     /// <summary>
@@ -554,6 +555,10 @@ namespace GKCore.Charts
 
         public IColor GetFillColor(bool dead)
         {
+            if (fFlags.Contains(PersonFlag.pfSpecialMark)) {
+                return ChartRenderer.GetColor(ChartRenderer.Khaki);
+            }
+
             if (dead) {
                 return ChartRenderer.GetColor(ChartRenderer.Black);
             }
