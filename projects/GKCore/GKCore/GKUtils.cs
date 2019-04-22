@@ -42,6 +42,32 @@ namespace GKCore
     {
         #region Aux functions
 
+        public static int StrCompareEx(string str1, string str2)
+        {
+            double val1, val2;
+            bool v1 = double.TryParse(str1, out val1);
+            bool v2 = double.TryParse(str2, out val2);
+
+            int result;
+            if (v1 && v2) {
+                if (val1 < val2) {
+                    result = -1;
+                } else if (val1 > val2) {
+                    result = +1;
+                } else {
+                    result = 0;
+                }
+            } else {
+                result = string.Compare(str1, str2, false);
+                if (str1 != "" && str2 == "") {
+                    result = -1;
+                } else if (str1 == "" && str2 != "") {
+                    result = +1;
+                }
+            }
+            return result;
+        }
+
         public static bool ImplementsInterface(Type type, Type ifaceType)
         {
             Type[] intf = type.GetInterfaces();

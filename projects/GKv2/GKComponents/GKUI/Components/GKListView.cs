@@ -121,6 +121,10 @@ namespace GKUI.Components
                 return -1;
             }
 
+            if (fValue is string && otherItem.fValue is string) {
+                return GKUtils.StrCompareEx((string)fValue, (string)otherItem.fValue);
+            }
+
             IComparable cv1 = fValue as IComparable;
             IComparable cv2 = otherItem.fValue as IComparable;
 
@@ -189,27 +193,24 @@ namespace GKUI.Components
                     ListViewItem item1 = (ListViewItem)x;
                     ListViewItem item2 = (ListViewItem)y;
 
-                    if (item1 is IComparable && item2 is IComparable) {
-                        if (sortColumn == 0) {
+                    if (sortColumn == 0) {
+                        if (item1 is IComparable && item2 is IComparable) {
                             IComparable eitem1 = (IComparable)x;
                             IComparable eitem2 = (IComparable)y;
                             result = eitem1.CompareTo(eitem2);
                         } else {
-                            if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count) {
-                                IComparable sub1 = (IComparable)item1.SubItems[sortColumn];
-                                IComparable sub2 = (IComparable)item2.SubItems[sortColumn];
-                                result = sub1.CompareTo(sub2);
-                            }
+                            result = GKUtils.StrCompareEx(item1.Text, item2.Text);
                         }
-                    } else {
-                        if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count) {
-                            ListViewItem.ListViewSubItem subitem1 = item1.SubItems[sortColumn];
-                            ListViewItem.ListViewSubItem subitem2 = item2.SubItems[sortColumn];
-                            if (subitem1 is IComparable && subitem2 is IComparable) {
-                                result = ((IComparable)subitem1).CompareTo(subitem2);
-                            } else {
-                                result = agCompare(subitem1.Text, subitem2.Text);
-                            }
+                    } else if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count) {
+                        ListViewItem.ListViewSubItem subitem1 = item1.SubItems[sortColumn];
+                        ListViewItem.ListViewSubItem subitem2 = item2.SubItems[sortColumn];
+
+                        if (subitem1 is IComparable && subitem2 is IComparable) {
+                            IComparable sub1 = (IComparable)subitem1;
+                            IComparable sub2 = (IComparable)subitem2;
+                            result = sub1.CompareTo(sub2);
+                        } else {
+                            result = GKUtils.StrCompareEx(subitem1.Text, subitem2.Text);
                         }
                     }
 
@@ -220,39 +221,6 @@ namespace GKUI.Components
 
                 return result;
             }
-
-            #region Private methods
-
-            private static int agCompare(string str1, string str2)
-            {
-                double val1, val2;
-                bool v1 = double.TryParse(str1, out val1);
-                bool v2 = double.TryParse(str2, out val2);
-
-                int result;
-                if (v1 && v2)
-                {
-                    if (val1 < val2) {
-                        result = -1;
-                    } else if (val1 > val2) {
-                        result = +1;
-                    } else {
-                        result = 0;
-                    }
-                }
-                else
-                {
-                    result = string.Compare(str1, str2, false);
-                    if (str1 != "" && str2 == "") {
-                        result = -1;
-                    } else if (str1 == "" && str2 != "") {
-                        result = +1;
-                    }
-                }
-                return result;
-            }
-
-            #endregion
         }
 
         private readonly LVColumnSorter fColumnSorter;
