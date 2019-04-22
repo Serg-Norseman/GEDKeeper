@@ -37,6 +37,7 @@ namespace GKCore.Charts
         DoubleRoundCuts,
         SingleBevels,
         DoubleBevels,
+        CrossCorners,
     }
 
     /// <summary>
@@ -45,7 +46,7 @@ namespace GKCore.Charts
     public static class BorderPainter
     {
         private const int DefaultPenWidth = 1;
-        private const int DefaultAngleOffset = 10;
+        private const int DefaultAngleOffset = 12;
         private const int DefaultStreak = 3;
 
         public static void DrawBorder(ChartRenderer renderer, ExtRect rect, GfxBorderStyle borderStyle)
@@ -82,9 +83,11 @@ namespace GKCore.Charts
                     break;
 
                 case GfxBorderStyle.SingleRoundCuts:
+                    DrawSingleRoundCuts(renderer, rL, rT, rR, rB, DefaultAngleOffset, DefaultPenWidth);
                     break;
 
                 case GfxBorderStyle.DoubleRoundCuts:
+                    DrawDoubleRoundCuts(renderer, rL, rT, rR, rB, DefaultAngleOffset, DefaultStreak, DefaultPenWidth);
                     break;
 
                 case GfxBorderStyle.SingleBevels:
@@ -93,6 +96,10 @@ namespace GKCore.Charts
 
                 case GfxBorderStyle.DoubleBevels:
                     DrawDoubleBevels(renderer, rL, rT, rR, rB, DefaultAngleOffset, DefaultStreak, DefaultPenWidth);
+                    break;
+
+                case GfxBorderStyle.CrossCorners:
+                    DrawCrossCorners(renderer, rL, rT, rR, rB, DefaultAngleOffset, DefaultPenWidth);
                     break;
             }
         }
@@ -231,6 +238,70 @@ namespace GKCore.Charts
                 // RB corner
                 renderer.DrawLine(p, rR, rB - gap, rR - gap, rB);
             }
+        }
+
+        private static void DrawDoubleRoundCuts(ChartRenderer renderer, int rL, int rT, int rR, int rB, float gap, int streak, float pw)
+        {
+            DrawSingleRoundCuts(renderer, rL, rT, rR, rB, gap, pw);
+            rL += streak;
+            rT += streak;
+            rR -= streak;
+            rB -= streak;
+            DrawSingleRoundCuts(renderer, rL, rT, rR, rB, gap, pw);
+        }
+
+        private static void DrawSingleRoundCuts(ChartRenderer renderer, int rL, int rT, int rR, int rB, float gap, float pw)
+        {
+            using (var p = renderer.CreatePen(ChartRenderer.Black, pw)) {
+                renderer.DrawLine(p, rL, rB - gap, rL, rT + gap); // L
+                renderer.DrawLine(p, rL + gap, rT, rR - gap, rT); // T
+                renderer.DrawLine(p, rL + gap, rB, rR - gap, rB); // B
+                renderer.DrawLine(p, rR, rB - gap, rR, rT + gap); // R
+
+                float gap2 = gap * 2;
+
+                // LT corner
+                renderer.DrawArc(p, rL - gap, rT - gap, gap2, gap2, 0, 90);
+
+                // RT corner
+                renderer.DrawArc(p, rR - gap, rT - gap, gap2, gap2, 90, 90);
+
+                // LB corner
+                renderer.DrawArc(p, rL - gap, rB - gap, gap2, gap2, 270, 90);
+
+                // RB corner
+                renderer.DrawArc(p, rR - gap, rB - gap, gap2, gap2, 180, 90);
+            }
+        }
+
+        private static void DrawCrossCorners(ChartRenderer renderer, int rL, int rT, int rR, int rB, float gap, float pw)
+        {
+            DrawDoubleSquareCuts(renderer, rL, rT, rR, rB, gap, DefaultStreak, pw);
+
+            int xgap = (int)(gap / 2);
+            rL += xgap;
+            rT += xgap;
+            rR -= xgap;
+            rB -= xgap;
+
+            using (var pen = renderer.CreatePen(ChartRenderer.Silver, DefaultStreak)) {
+                renderer.DrawLine(pen, rL, rB, rL, rT); // L
+                renderer.DrawLine(pen, rL, rT, rR, rT); // T
+                renderer.DrawLine(pen, rL, rB, rR, rB); // B
+                renderer.DrawLine(pen, rR, rB, rR, rT); // R
+            }
+
+            int halfStreak = (int)(DefaultStreak / 2);
+            rL -= halfStreak;
+            rT -= halfStreak;
+            rR += halfStreak;
+            rB += halfStreak;
+            DrawSingleRect(renderer, rL, rT, (rR - rL), (rB - rT), pw);
+            rL += DefaultStreak;
+            rT += DefaultStreak;
+            rR -= DefaultStreak;
+            rB -= DefaultStreak;
+            DrawSingleRect(renderer, rL, rT, (rR - rL), (rB - rT), pw);
         }
     }
 }

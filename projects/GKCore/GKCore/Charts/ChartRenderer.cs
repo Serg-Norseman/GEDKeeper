@@ -136,6 +136,11 @@ namespace GKCore.Charts
             // Not applicable for most areas except exports
         }
 
+        public virtual void DrawArc(IPen pen, float x, float y, float width, float height, float startAngle, float sweepAngle)
+        {
+            // Not applicable for most areas
+        }
+
         public virtual void DrawHyperlink(string text, string anchor, IFont font, IBrush brush, float x, float y)
         {
             // Not applicable for most areas except exports

@@ -69,6 +69,13 @@ namespace GKUI.Providers
             }
         }
 
+        public override void DrawArc(IPen pen, float x, float y, float width, float height, float startAngle, float sweepAngle)
+        {
+            Pen sdPen = ((PenHandler)pen).Handle;
+
+            fCanvas.DrawArc(sdPen, x, y, width, height, startAngle, sweepAngle);
+        }
+
         public override void DrawImage(IImage image, float x, float y,
                                        float width, float height)
         {
