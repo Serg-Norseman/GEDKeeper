@@ -206,6 +206,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Resources\test1.ged" />
     <EmbeddedResource Include="Resources\test2.ged" />
     <EmbeddedResource Include="Resources\test_agelong_ansel%28win1251%29.ged" />
@@ -223,24 +226,17 @@
     <EmbeddedResource Include="Resources\test_ahn_ansi%28win1250%29.ged" />
     <EmbeddedResource Include="Resources\test_gk_utf8.ged" />
     <EmbeddedResource Include="Resources\test_ftb_badline.ged" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\test_min_indented.ged" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\test_empty_lines.ged" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\test_famhist.ged" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\test_ftm2008.ged" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Plugins" />
+    <EmbeddedResource Include="Resources\test_longline.ged" />
+    <EmbeddedResource Include="Resources\test_heredis.ged" />
+    <EmbeddedResource Include="Resources\test_aq.ged" />
+    <EmbeddedResource Include="Resources\test_geni.ged" />
+    <EmbeddedResource Include="Resources\test_legacy.ged" />
+    <EmbeddedResource Include="Resources\test_easytree.ged" />
+    <EmbeddedResource Include="Resources\test_genney.ged" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

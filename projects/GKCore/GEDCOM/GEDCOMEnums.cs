@@ -230,8 +230,14 @@ namespace GKCommon.GEDCOM
         gf_FTB,
         gf_FamilyTreeMaker,
         gf_FamilyHistorian,
+        gf_Heredis,
+        gf_AncestQuest,
+        gf_Geni,
+        gf_Legacy,
+        gf_EasyTree,
+        gf_Genney,
 
-        gf_Last = gf_FamilyHistorian
+        gf_Last = gf_Genney
     }
 
     public enum GEDCOMCharacterSet

@@ -20,6 +20,7 @@
 
 using System;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using BSLib;
 
@@ -1507,6 +1508,66 @@ namespace GKCommon.GEDCOM
                 }
             }
             return ~i;
+        }
+
+        /// <summary>
+        /// Decode the blob string (for multimedia embedded in the GEDCOM file)
+        /// </summary>
+        public static MemoryStream DecodeBlob(string blob)
+        {
+            const string validChars = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+            var stream = new MemoryStream();
+
+            int i = 0;
+            int length = blob.Length - 3;
+            while (i < length) {
+                byte c1, c2, c3, c4, b1, b2, b3;
+
+                int ix = validChars.IndexOf(blob[i++]);
+                if (ix >= 0) {
+                    c1 = (byte)ix;
+                } else {
+                    throw new EGEDCOMException("DecodeBlob");
+                }
+
+                ix = validChars.IndexOf(blob[i++]);
+                if (ix >= 0) {
+                    c2 = (byte)ix;
+                } else {
+                    throw new EGEDCOMException("DecodeBlob");
+                }
+
+                ix = validChars.IndexOf(blob[i++]);
+                if (ix >= 0) {
+                    c3 = (byte)ix;
+                } else {
+                    throw new EGEDCOMException("DecodeBlob");
+                }
+
+                ix = validChars.IndexOf(blob[i++]);
+                if (ix >= 0) {
+                    c4 = (byte)ix;
+                } else {
+                    throw new EGEDCOMException("DecodeBlob");
+                }
+
+                // The following decodes Family Historian blobs.
+                // This might differ from the GEDCOM 5.5 spec in terms of bit ordering.
+                /*b1 = (byte)((c2 & 0x03) << 6 | (c1 & 0x3f));
+                b2 = (byte)((c3 & 0x0f) << 4 | (c2 & 0x3c) >> 2);
+                b3 = (byte)((c4 & 0x3f) << 2 | (c3 & 0x30) >> 4);*/
+                uint group = (uint)((c4 & 0x3f) | (c3 & 0x3f) << 6 | (c2 & 0x3f) << 12 | (c1 & 0x3f) << 18);
+                b3 = (byte)(group & 0xff);
+                b2 = (byte)((group >> 8) & 0xff);
+                b1 = (byte)((group >> 16) & 0xff);
+
+                stream.WriteByte(b1);
+                stream.WriteByte(b2);
+                stream.WriteByte(b3);
+            }
+
+            return stream;
         }
     }
 }

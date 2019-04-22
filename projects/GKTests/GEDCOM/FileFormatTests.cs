@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using GKCore;
+using GKCore.Interfaces;
 using GKCore.Tools;
 using GKTests.Stubs;
 using NUnit.Framework;
@@ -31,6 +32,19 @@ namespace GKCommon.GEDCOM
     [TestFixture]
     public class FileFormatTests
     {
+        private static IBaseContext LoadResourceGEDCOMFile(string resName)
+        {
+            BaseContext ctx = new BaseContext(null);
+
+            Assembly assembly = typeof(CoreTests).Assembly;
+            using (Stream stream = assembly.GetManifestResourceStream("GKTests.Resources." + resName)) {
+                var gedcomProvider = new GEDCOMProvider(ctx.Tree);
+                gedcomProvider.LoadFromStreamExt(stream, stream);
+            }
+
+            return ctx;
+        }
+
         [Test]
         public void Test_Standart()
         {
@@ -41,6 +55,22 @@ namespace GKCommon.GEDCOM
                     gedcomProvider.LoadFromStreamExt(inStream, inStream);
 
                     Assert.AreEqual(GEDCOMFormat.gf_Unknown, tree.Format);
+
+                    GEDCOMMultimediaRecord mmRec1 = tree.XRefIndex_Find("M1") as GEDCOMMultimediaRecord;
+                    Assert.IsNotNull(mmRec1);
+
+                    GEDCOMTag blobTag = mmRec1.FindTag("BLOB", 0);
+                    Assert.IsNotNull(blobTag);
+                    var strBlob = GEDCOMTag.GetTagStrings(blobTag).Text;
+                    Assert.IsNotNull(strBlob);
+                    MemoryStream blobStream = GEDCOMUtils.DecodeBlob(strBlob.Replace("\r\n", ""));
+                    Assert.IsNotNull(blobStream);
+
+                    // unsupported apple's `pict` format
+                    /*using (FileStream file = new FileStream("d:\\image.pict", FileMode.Create, FileAccess.Write)) {
+                        blobStream.WriteTo(file);
+                        blobStream.Close();
+                    }*/
 
                     using (MemoryStream outStream = new MemoryStream()) {
                         gedcomProvider = new GEDCOMProvider(tree);
@@ -145,22 +175,16 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_StdGEDCOM_Notes()
         {
-            using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_stdgedcom_notes.ged")) {
-                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+            using (var ctx = LoadResourceGEDCOMFile("test_stdgedcom_notes.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_Native, ctx.Tree.Format);
 
-                    Assert.AreEqual(GEDCOMFormat.gf_Native, ctx.Tree.Format);
+                GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
+                Assert.IsNotNull(noteRec1);
+                Assert.AreEqual("Test1\r\ntest2\r\ntest3", noteRec1.Note.Text);
 
-                    GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
-                    Assert.IsNotNull(noteRec1);
-                    Assert.AreEqual("Test1\r\ntest2\r\ntest3", noteRec1.Note.Text);
-
-                    GEDCOMNoteRecord noteRec2 = ctx.Tree.XRefIndex_Find("N2") as GEDCOMNoteRecord;
-                    Assert.IsNotNull(noteRec2);
-                    Assert.AreEqual("Test\r\ntest2\r\ntest3", noteRec2.Note.Text);
-                }
+                GEDCOMNoteRecord noteRec2 = ctx.Tree.XRefIndex_Find("N2") as GEDCOMNoteRecord;
+                Assert.IsNotNull(noteRec2);
+                Assert.AreEqual("Test\r\ntest2\r\ntest3", noteRec2.Note.Text);
             }
         }
 
@@ -185,77 +209,54 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_FTB_BadLine()
         {
-            using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ftb_badline.ged")) {
-                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+            using (var ctx = LoadResourceGEDCOMFile("test_ftb_badline.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_FTB, ctx.Tree.Format);
 
-                    Assert.AreEqual(GEDCOMFormat.gf_FTB, ctx.Tree.Format);
-
-                    GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
-                    Assert.IsNotNull(noteRec1);
-                    Assert.AreEqual("Test1\r\ntest2\r\ntest3 badline badline badline badline", noteRec1.Note.Text);
-                }
+                GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
+                Assert.IsNotNull(noteRec1);
+                Assert.AreEqual("Test1\r\ntest2\r\ntest3 badline badline badline badline", noteRec1.Note.Text);
             }
         }
 
         [Test]
         public void Test_MinIndented()
         {
-            using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_min_indented.ged")) {
-                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+            using (var ctx = LoadResourceGEDCOMFile("test_min_indented.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
 
-                    Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
-
-                    var subm = ctx.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
-                    Assert.IsNotNull(subm);
-                    Assert.AreEqual("John Doe", subm.Name.FullName);
-                }
+                var subm = ctx.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+                Assert.IsNotNull(subm);
+                Assert.AreEqual("John Doe", subm.Name.FullName);
             }
         }
 
         [Test]
         public void Test_EmptyLines()
         {
-            using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_empty_lines.ged")) {
-                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+            using (var ctx = LoadResourceGEDCOMFile("test_empty_lines.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
 
-                    Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
+                GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I001") as GEDCOMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+                Assert.AreEqual("John Doe", iRec1.GetPrimaryFullName());
 
-                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I001") as GEDCOMIndividualRecord;
-                    Assert.IsNotNull(iRec1);
-                    Assert.AreEqual("John Doe", iRec1.GetPrimaryFullName());
-
-                    GEDCOMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I002") as GEDCOMIndividualRecord;
-                    Assert.IsNotNull(iRec2);
-                    Assert.AreEqual("Jane Doe", iRec2.GetPrimaryFullName());
-                }
+                GEDCOMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I002") as GEDCOMIndividualRecord;
+                Assert.IsNotNull(iRec2);
+                Assert.AreEqual("Jane Doe", iRec2.GetPrimaryFullName());
             }
         }
 
         [Test]
         public void Test_FamilyHistorian()
         {
-            using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_famhist.ged")) {
-                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
-                    TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
+            using (var ctx = LoadResourceGEDCOMFile("test_famhist.ged")) {
+                TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
 
-                    Assert.AreEqual(GEDCOMFormat.gf_FamilyHistorian, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.gf_FamilyHistorian, ctx.Tree.Format);
 
-                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
-                    Assert.IsNotNull(iRec1);
-                    Assert.AreEqual("Tom Thompson", iRec1.GetPrimaryFullName());
-                }
+                GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+                Assert.AreEqual("Tom Thompson", iRec1.GetPrimaryFullName());
             }
         }
 
@@ -263,25 +264,82 @@ namespace GKCommon.GEDCOM
         public void Test_FamilyTreeMaker_2008()
         {
             // actually need to find the real signature of version for FTM 2008 (wrong in the file)
-            using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ftm2008.ged")) {
-                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+            using (var ctx = LoadResourceGEDCOMFile("test_ftm2008.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_FamilyTreeMaker, ctx.Tree.Format);
 
-                    Assert.AreEqual(GEDCOMFormat.gf_FamilyTreeMaker, ctx.Tree.Format);
+                TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
 
-                    TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
+                GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+                Assert.AreEqual("John Smith", iRec1.GetPrimaryFullName());
 
-                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
-                    Assert.IsNotNull(iRec1);
-                    Assert.AreEqual("John Smith", iRec1.GetPrimaryFullName());
+                // test of conversion
+                var occuEvent = iRec1.FindEvent("OCCU");
+                Assert.IsNotNull(occuEvent);
+                Assert.AreEqual("test occupation", occuEvent.StringValue);
+            }
+        }
 
-                    // test of conversion
-                    var occuEvent = iRec1.FindEvent("OCCU");
-                    Assert.IsNotNull(occuEvent);
-                    Assert.AreEqual("test occupation", occuEvent.StringValue);
-                }
+        [Test]
+        public void Test_NoteLongLine()
+        {
+            using (var ctx = LoadResourceGEDCOMFile("test_longline.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
+
+                GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
+                Assert.IsNotNull(noteRec1);
+                string str = noteRec1.Note.Text;
+                Assert.IsTrue(str.EndsWith("non-standard GEDCOM files."));
+            }
+        }
+
+        [Test]
+        public void Test_Heredis()
+        {
+            // TODO: interest feature - use PLAC.FORM
+            using (var ctx = LoadResourceGEDCOMFile("test_heredis.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_Heredis, ctx.Tree.Format);
+            }
+        }
+
+        [Test]
+        public void Test_AncestQuest()
+        {
+            using (var ctx = LoadResourceGEDCOMFile("test_aq.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_AncestQuest, ctx.Tree.Format);
+            }
+        }
+
+        [Test]
+        public void Test_Geni()
+        {
+            using (var ctx = LoadResourceGEDCOMFile("test_geni.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_Geni, ctx.Tree.Format);
+            }
+        }
+
+        [Test]
+        public void Test_Legacy()
+        {
+            using (var ctx = LoadResourceGEDCOMFile("test_legacy.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_Legacy, ctx.Tree.Format);
+            }
+        }
+
+        [Test]
+        public void Test_EasyTree()
+        {
+            using (var ctx = LoadResourceGEDCOMFile("test_easytree.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_EasyTree, ctx.Tree.Format);
+            }
+        }
+
+        [Test]
+        public void Test_Genney()
+        {
+            // TODO: interest feature - use _GRP & _PLC records! OBJE._PRIM
+            using (var ctx = LoadResourceGEDCOMFile("test_genney.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_Genney, ctx.Tree.Format);
             }
         }
     }

@@ -1,0 +1,66 @@
+0 HEAD
+1 SOUR Genney
+2 VERS 2.0b27
+2 CORP Genney Digit
+1 DEST Genney
+1 GEDC
+2 VERS 5.5
+2 FORM LINEAGE-LINKED
+1 CHAR UTF-8
+1 LANG Swedish
+0 @I29@ INDI
+1 NAME Klara* Lilly /Pettersson/
+2 GIVN Klara* Lilly
+2 SURN Pettersson
+1 SEX F
+1 BIRT
+2 DATE 29 APR 1908
+2 PLAC Tving (K)
+3 MAP
+4 LATI N56.30915
+4 LONG E15.465633
+2 _PLC @0@
+1 _GRP @G10@
+0 @G11@ _GRP
+1 NAME DNA-kusin
+1 NOTE Personer som har givit träffar via DNA
+0 @G10@ _GRP
+1 NAME Emigrant
+1 NOTE Personer som emigrerat permanent från Sverige
+0 @G16@ _GRP
+1 NAME Koppla bort från föräldrar 2018-01-07 20:52:01
+0 @G15@ _GRP
+1 NAME Koppla bort partner 2017-12-28 11:35:44
+0 @G13@ _GRP
+1 NAME Koppla bort partner 2017-12-28 11:35:44
+0 @G14@ _GRP
+1 NAME Ta bort familj 2017-12-28 11:35:44
+0 @0@ _PLC
+1 _PLP @1@
+1 RIN 799
+1 FORM Tving, Karlskrona, Blekinge län, Sverige
+1 NAME Tving
+1 TYPE 2
+1 NOTE Pastoratskod: 071910 Indelning: 1870 utbrutet Eringsboda. Pastorat: -1870 eget
+2 CONC , 1870-1920 Tving och Eringsboda, 1920-05-01-1961 eget, 1962-1970 Tving och Erin
+2 CONC gsboda, 1971-1974 eget, 1975- Fridlevstad. Husförhörslängd: (1683), 1786Födelseb
+2 CONC ok: 1711-.
+0 @1@ _PLC
+1 _PLP @2@
+1 RIN 786
+1 FORM Karlskrona, Blekinge län, Sverige
+1 NAME Karlskrona
+1 TYPE 7
+0 @2@ _PLC
+1 _PLP @3@
+1 RIN 782
+1 FORM Blekinge län, Sverige
+1 NAME Blekinge län
+1 TYPE 13
+1 ABBR K
+0 @3@ _PLC
+1 FORM Sverige
+1 NAME Sverige
+1 TYPE 10
+1 ABBR SE
+0 TRLR
