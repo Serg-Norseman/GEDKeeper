@@ -152,6 +152,7 @@
     <Compile Include="UITests\AboutDlgTests.cs" />
     <Compile Include="UITests\AddressEditDlgTests.cs" />
     <Compile Include="UITests\AssociationEditDlgTests.cs" />
+    <Compile Include="UITests\CircleChartWinTests.cs" />
     <Compile Include="UITests\CommonFilterDlgTests.cs" />
     <Compile Include="UITests\CommonTests.cs" />
     <Compile Include="UITests\CommunicationEditDlgTests.cs" />
@@ -162,7 +163,11 @@
     <Compile Include="UITests\FilePropertiesDlgTests.cs" />
     <Compile Include="UITests\GroupEditDlgTests.cs" />
     <Compile Include="UITests\InputBoxTests.cs" />
+    <Compile Include="UITests\LanguageEditDlgTests.cs" />
+    <Compile Include="UITests\LanguageSelectDlgTests.cs" />
+    <Compile Include="UITests\LocationEditDlgTests.cs" />
     <Compile Include="UITests\MainSDITests.cs" />
+    <Compile Include="UITests\MapsViewerWinTests.cs" />
     <Compile Include="UITests\MediaEditDlgTests.cs" />
     <Compile Include="UITests\MediaViewerWinTests.cs" />
     <Compile Include="UITests\NameEditDlgTests.cs" />
@@ -175,16 +180,20 @@
     <Compile Include="UITests\PersonsFilterDlgTests.cs" />
     <Compile Include="UITests\PortraitSelectDlgTests.cs" />
     <Compile Include="UITests\ProgressDlgTests.cs" />
+    <Compile Include="UITests\QuickSearchDlgTests.cs" />
     <Compile Include="UITests\RecordSelectDlgTests.cs" />
     <Compile Include="UITests\RelationshipCalculatorDlgTests.cs" />
     <Compile Include="UITests\RepositoryEditDlgTests.cs" />
     <Compile Include="UITests\ResearchEditDlgTests.cs" />
     <Compile Include="UITests\SexCheckDlgTests.cs" />
+    <Compile Include="UITests\SlideshowWinTests.cs" />
     <Compile Include="UITests\SourceCitEditDlgTests.cs" />
     <Compile Include="UITests\SourceEditDlgTests.cs" />
     <Compile Include="UITests\StatisticsWinTests.cs" />
     <Compile Include="UITests\TaskEditDlgTests.cs" />
+    <Compile Include="UITests\TreeChartWinTests.cs" />
     <Compile Include="UITests\TreeFilterDlgTests.cs" />
+    <Compile Include="UITests\TreeToolsWinTests.cs" />
     <Compile Include="UITests\UserRefEditDlgTests.cs" />
   </ItemGroup>
   <ItemGroup>

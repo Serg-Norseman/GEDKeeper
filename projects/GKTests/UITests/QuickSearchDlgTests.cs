@@ -24,10 +24,11 @@ using System;
 using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
 using GKUI.Forms;
+using GKUI.Providers;
+using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -36,41 +37,29 @@ namespace GKUI.Forms
     /// 
     /// </summary>
     [TestFixture]
-    public class RecordSelectDlgTests : CustomWindowTest
+    public class QuickSearchDlgTests : CustomWindowTest
     {
-        private IBaseWindow fBase;
-        private RecordSelectDlg fDialog;
-
-        public override void Setup()
-        {
-            base.Setup();
-
-            fBase = new BaseWindowStub();
-
-            fDialog = new RecordSelectDlg(fBase, GEDCOMRecordType.rtIndividual);
-            fDialog.Show();
-        }
-
-        public override void TearDown()
-        {
-            fDialog.Dispose();
-        }
-
-        [Test]
-        public void Test_Common()
-        {
-            Assert.AreEqual("*", fDialog.FastFilter);
-            Assert.AreEqual(TargetMode.tmNone, fDialog.TargetMode);
-            Assert.AreEqual(null, fDialog.ResultRecord);
-
-            ClickButton("btnCancel", fDialog);
-        }
 
         #region Handlers for external tests
 
-        public static void RecordSelectDlg_Cancel_Handler(string name, IntPtr ptr, Form form)
+        public static void QuickSearch_Test(Form mainWin)
         {
-            ClickButton("btnCancel", form);
+            ClickToolStripMenuItem("miSearch", mainWin);
+
+            var searchPanel = new FormTester("QuickSearchDlg");
+            Form frm = searchPanel.Properties;
+
+            // handlers for empty text
+            ClickButton("btnPrev", frm);
+            ClickButton("btnNext", frm);
+            // enter text
+            var txtSearchPattern = new TextBoxTester("txtSearchPattern", frm);
+            txtSearchPattern.Enter("John");
+            // handlers for entered text? - msgbox processing
+
+            KeyDownForm(frm.Name, Keys.Enter);
+            KeyDownForm(frm.Name, Keys.Enter | Keys.Shift);
+            KeyDownForm(frm.Name, Keys.Escape);
         }
 
         #endregion

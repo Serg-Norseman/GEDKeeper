@@ -20,6 +20,8 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
@@ -65,6 +67,16 @@ namespace GKUI.Forms
         public void Test_Common()
         {
         }
+
+        #region Handlers for external tests
+
+        public static void OrganizerWin_Handler(string name, IntPtr ptr, Form form)
+        {
+            KeyDownForm(form.Name, Keys.Escape);
+            form.Dispose();
+        }
+
+        #endregion
     }
 }
 

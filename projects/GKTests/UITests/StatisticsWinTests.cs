@@ -66,7 +66,7 @@ namespace GKUI.Forms
                 cbType.Select(i);
 
                 if (i == 0) {
-                    //ModalFormHandler = GenerateExcel_Handler;
+                    //ModalFormHandler = GenerateXLS_Handler;
                     //ClickToolStripButton("tbExcelExport", fDialog);
                 }
             }
@@ -74,10 +74,20 @@ namespace GKUI.Forms
             KeyDownForm(fDialog.Name, Keys.Escape);
         }
 
-        private void GenerateExcel_Handler(string name, IntPtr hWnd, Form form)
+        #region Handlers for external tests
+
+        public static void StatsWin_Handler(CustomWindowTest formTest, Form frm, string stageMessage)
         {
-            PrepareFileSave("test.xls", hWnd);
+            Assert.IsInstanceOf(typeof(StatisticsWin), frm, stageMessage);
+
+            formTest.ModalFormHandler = SaveFile_Cancel_Handler;
+            ClickToolStripButton("tbExcelExport", frm);
+
+            KeyDownForm(frm.Name, Keys.Escape);
+            frm.Dispose();
         }
+
+        #endregion
     }
 }
 

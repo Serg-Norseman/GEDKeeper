@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -72,9 +72,7 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fUserRef, fDialog.UserRef);
 
-            var cmbRef = new ComboBoxTester("cmbRef");
-            cmbRef.Enter("sample text");
-
+            EnterCombo("cmbRef", fDialog, "sample text");
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fUserRef.StringValue);
@@ -82,11 +80,9 @@ namespace GKUI.Forms
 
         #region Handlers for external tests
 
-        public static void AcceptModalHandler(string name, IntPtr ptr, Form form)
+        public static void AcceptHandler(string name, IntPtr ptr, Form form)
         {
-            var cmbRef = new ComboBoxTester("cmbRef", form);
-            cmbRef.Enter("sample reference");
-
+            EnterCombo("cmbRef", form, "sample reference");
             ClickButton("btnAccept", form);
         }
 

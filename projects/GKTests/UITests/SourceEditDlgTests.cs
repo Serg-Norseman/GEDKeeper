@@ -20,6 +20,8 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
@@ -82,6 +84,17 @@ namespace GKUI.Forms
             Assert.AreEqual("sample text", fSourceRecord.ShortTitle);
             Assert.AreEqual("sample text", fSourceRecord.Originator.Text);
         }
+
+        #region Handlers for external tests
+
+        public static void SourceAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtShortTitle", form, "sample text");
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

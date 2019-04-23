@@ -22,13 +22,11 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
-using GKCore.Interfaces;
-using GKCore.Types;
 using GKTests;
-using GKTests.Stubs;
 using GKUI.Forms;
+using GKUI.Providers;
 using NUnit.Framework;
+using NUnit.Extensions.Forms;
 
 namespace GKUI.Forms
 {
@@ -36,41 +34,16 @@ namespace GKUI.Forms
     /// 
     /// </summary>
     [TestFixture]
-    public class RecordSelectDlgTests : CustomWindowTest
+    public class LocationEditDlgTests : CustomWindowTest
     {
-        private IBaseWindow fBase;
-        private RecordSelectDlg fDialog;
-
-        public override void Setup()
-        {
-            base.Setup();
-
-            fBase = new BaseWindowStub();
-
-            fDialog = new RecordSelectDlg(fBase, GEDCOMRecordType.rtIndividual);
-            fDialog.Show();
-        }
-
-        public override void TearDown()
-        {
-            fDialog.Dispose();
-        }
-
-        [Test]
-        public void Test_Common()
-        {
-            Assert.AreEqual("*", fDialog.FastFilter);
-            Assert.AreEqual(TargetMode.tmNone, fDialog.TargetMode);
-            Assert.AreEqual(null, fDialog.ResultRecord);
-
-            ClickButton("btnCancel", fDialog);
-        }
 
         #region Handlers for external tests
 
-        public static void RecordSelectDlg_Cancel_Handler(string name, IntPtr ptr, Form form)
+        public static void LocationAdd_Mini_Handler(string name, IntPtr ptr, Form form)
         {
-            ClickButton("btnCancel", form);
+            EnterText("txtName", form, "sample location");
+
+            ClickButton("btnAccept", form);
         }
 
         #endregion

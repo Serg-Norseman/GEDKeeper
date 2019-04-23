@@ -20,13 +20,13 @@
 
 #if !__MonoCS__
 
-using System;
 using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
 using GKUI.Forms;
+using GKUI.Providers;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -36,59 +36,60 @@ namespace GKUI.Forms
     /// 
     /// </summary>
     [TestFixture]
-    public class FamilyEditDlgTests : CustomWindowTest
+    public class SlideshowWinTests : CustomWindowTest
     {
-        private GEDCOMFamilyRecord fFamilyRecord;
-        private IBaseWindow fBase;
-        private FamilyEditDlg fDialog;
 
         public override void Setup()
         {
             base.Setup();
 
-            fBase = new BaseWindowStub();
-            fFamilyRecord = new GEDCOMFamilyRecord(fBase.Context.Tree);
-
-            fDialog = new FamilyEditDlg(fBase);
-            fDialog.Family = fFamilyRecord;
-            fDialog.Show();
+            WFAppHost.ConfigureBootstrap(false);
         }
 
         public override void TearDown()
         {
-            fDialog.Dispose();
-            fFamilyRecord.Dispose();
         }
 
         [Test]
-        public void Test_Cancel()
+        public void Test_Common()
         {
-            ClickButton("btnCancel", fDialog);
-        }
-
-        [Test]
-        public void Test_EnterDataAndApply()
-        {
-            Assert.AreEqual(fFamilyRecord, fDialog.Family);
-
-            SelectCombo("cmbMarriageStatus", fDialog, 0);
-
-            // The links to other records can be added or edited only in MainWinTests
-            // (where there is a complete infrastructure of the calls to BaseWin.ModifyX)
-
-            ClickButton("btnAccept", fDialog);
         }
 
         #region Handlers for external tests
 
-        public static void SpouseEdit_Handler(string name, IntPtr ptr, Form form)
+        public static void SlideshowWin_Handler(CustomWindowTest formTest, Form frm, string stageMessage)
         {
-            ClickButton("btnAccept", form);
-        }
+            Assert.IsInstanceOf(typeof(SlideshowWin), frm, stageMessage);
 
-        public static void FamilyAdd_Mini_Handler(string name, IntPtr ptr, Form form)
-        {
-            ClickButton("btnAccept", form);
+            SlideshowWin slidesWin = (SlideshowWin)frm;
+
+            /*
+            Assert.IsNotNull(slidesWin.FindAll(""));
+
+            Assert.AreEqual(false, slidesWin.AllowFilter());
+            slidesWin.SetFilter();
+
+            slidesWin.SelectByRec(null);
+            slidesWin.UpdateSettings();
+
+            Assert.AreEqual(false, slidesWin.AllowQuickSearch());
+            slidesWin.QuickSearch();
+
+            Assert.AreEqual(false, slidesWin.NavCanBackward());
+            slidesWin.NavPrev();
+
+            Assert.AreEqual(false, slidesWin.NavCanForward());
+            slidesWin.NavNext();
+            */
+
+            ClickToolStripButton("tbStart", frm); // start
+            ClickToolStripButton("tbStart", frm); // stop
+
+            ClickToolStripButton("tbNext", frm);
+            ClickToolStripButton("tbPrev", frm);
+
+            KeyDownForm(frm.Name, Keys.Escape);
+            frm.Dispose();
         }
 
         #endregion

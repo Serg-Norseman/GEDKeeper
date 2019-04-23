@@ -132,11 +132,8 @@ namespace GKFlowInputPlugin
         {
             SelectTab("PageControl1", fDialog, 0);
 
-            var editBirthDate = new MaskedTextBoxTester("EditBirthDate", fDialog);
-            editBirthDate.Enter("01/01/1890");
-
-            var editDeathDate = new MaskedTextBoxTester("EditDeathDate", fDialog);
-            editDeathDate.Enter("01/01/1890");
+            EnterMaskedText("EditBirthDate", fDialog, "01/01/1890");
+            EnterMaskedText("EditDeathDate", fDialog, "01/01/1890");
 
             ClickButton("btnMale", fDialog);
             ClickButton("btnMale", fDialog);

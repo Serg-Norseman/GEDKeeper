@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,11 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
-
 using System;
 using System.Windows.Forms;
 using NUnit.Extensions.Forms;
+using GKTests.ControlTesters;
 
 namespace GKTests
 {
@@ -31,6 +30,8 @@ namespace GKTests
     /// </summary>
     public abstract class CustomWindowTest : NUnitFormTest
     {
+        #if !__MonoCS__
+
         public static void ClickButton(string name, Form form)
         {
             var tsBtn = new ButtonTester(name, form);
@@ -99,8 +100,32 @@ namespace GKTests
 
         public static void EnterText(string name, Form form, string value)
         {
-            var combo = new TextBoxTester(name, form);
-            combo.Enter(value);
+            var textBox = new TextBoxTester(name, form);
+            textBox.Enter(value);
+        }
+
+        public static void EnterMaskedText(string name, Form form, string value)
+        {
+            var textBox = new MaskedTextBoxTester(name, form);
+            textBox.Enter(value);
+        }
+
+        public static void SelectSheetListItem(string name, Form form, int value)
+        {
+            var sheetTester = new GKSheetListTester(name, form);
+            sheetTester.Properties.SelectItem(value);
+        }
+
+        public static void EnterNumeric(string name, Form form, int value)
+        {
+            var nud = new NumericUpDownTester(name, form);
+            nud.EnterValue(value);
+        }
+
+        public static void CheckBox(string name, Form form, bool value)
+        {
+            var chk = new CheckBoxTester(name, form);
+            chk.Properties.Checked = value;
         }
 
 
@@ -161,11 +186,80 @@ namespace GKTests
             saveDlg.ClickCancel();
         }
 
+        public static void SaveFile_GED_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.ged", hWnd);
+        }
+
         public static void Dialog_Cancel_Handler(string name, IntPtr ptr, Form form)
         {
             ClickButton("btnCancel", form);
         }
+
+        public static void InputBox_Add_Handler(string name, IntPtr ptr, Form form)
+        {
+            var txtValue = new TextBoxTester("txtValue", form);
+            txtValue.Enter("sample add");
+            //Assert.AreEqual("sample add", txtValue.Text);
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void InputBox_Edit_Handler(string name, IntPtr ptr, Form form)
+        {
+            var txtValue = new TextBoxTester("txtValue", form);
+            txtValue.Enter("sample edit");
+            //Assert.AreEqual("sample edit", txtValue.Text);
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void SaveSnapshotJPG_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.jpg", hWnd);
+        }
+
+        public static void SaveSnapshotEMF_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.emf", hWnd);
+        }
+
+        public static void SaveSnapshotSVG_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.svg", hWnd);
+        }
+
+        public static void PrintDialog_Handler(string name, IntPtr ptr, Form form)
+        {
+            form.Close();
+        }
+
+        public static void PrintPreviewDialog_Handler(string name, IntPtr ptr, Form form)
+        {
+            form.Refresh();
+            form.Close();
+        }
+
+        public static void GenerateXLS_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.xls", hWnd);
+        }
+
+        public static void GeneratePDF_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.pdf", hWnd);
+        }
+
+        public static void GeneratePedigreeHTML_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.html", hWnd);
+        }
+
+        public static void GeneratePedigreeRTF_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.rtf", hWnd);
+        }
+
+        #endif
     }
 }
-
-#endif

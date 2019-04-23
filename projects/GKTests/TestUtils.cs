@@ -211,5 +211,18 @@ namespace GKTests
 
             return fileName;
         }
+
+        public static IBaseContext LoadResourceGEDCOMFile(string resName)
+        {
+            BaseContext ctx = new BaseContext(null);
+
+            Assembly assembly = typeof(CoreTests).Assembly;
+            using (Stream stream = assembly.GetManifestResourceStream("GKTests.Resources." + resName)) {
+                var gedcomProvider = new GEDCOMProvider(ctx.Tree);
+                gedcomProvider.LoadFromStreamExt(stream, stream);
+            }
+
+            return ctx;
+        }
     }
 }

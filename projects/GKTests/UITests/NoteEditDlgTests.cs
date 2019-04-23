@@ -20,6 +20,8 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
@@ -72,14 +74,32 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fNoteRecord, fDialog.NoteRecord);
 
-            var txtNote = new TextBoxTester("txtNote");
-            txtNote.Enter("sample text");
-            Assert.AreEqual("sample text", txtNote.Text);
-
+            EnterText("txtNote", fDialog, "sample text");
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fNoteRecord.Note.Text);
         }
+
+        #region Handlers for external tests
+
+        public static void NoteEditDlg_Handler(NoteEditDlg dlg)
+        {
+            EnterText("txtNote", dlg, "sample text");
+            ClickButton("btnAccept", dlg);
+
+            Assert.AreEqual("sample text", dlg.NoteRecord.Note.Text);
+        }
+
+        public static void NoteAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            var txtNote = new TextBoxTester("txtNote", form);
+            txtNote.Enter("sample text");
+            Assert.AreEqual("sample text", txtNote.Text);
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

@@ -20,6 +20,8 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
@@ -79,6 +81,24 @@ namespace GKUI.Forms
 
             Assert.AreEqual("sample text", fPersonalName.Pieces.Surname);
         }
+
+        #region Handlers for external tests
+
+        public static void NameEditAdd_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtSurname", form, "sample surname");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void NameEditEdit_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtSurname", form, "sample surname2");
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -72,17 +72,10 @@ namespace GKUI.Forms
             // Empty dates
             Assert.AreEqual(fResearchRecord, fDialog.Research);
 
-            var txtName = new TextBoxTester("txtName", fDialog);
-            txtName.Enter("sample text");
-
-            var cmbPriority = new ComboBoxTester("cmbPriority", fDialog);
-            cmbPriority.Select(1);
-
-            var cmbStatus = new ComboBoxTester("cmbStatus", fDialog);
-            cmbStatus.Select(1);
-
-            var nudPercent = new NumericUpDownTester("nudPercent", fDialog);
-            nudPercent.EnterValue(11);
+            EnterText("txtName", fDialog, "sample text");
+            SelectCombo("cmbPriority", fDialog, 1);
+            SelectCombo("cmbStatus", fDialog, 1);
+            EnterNumeric("nudPercent", fDialog, 11);
 
             // The links to other records can be added or edited only in MainWinTests
             // (where there is a complete infrastructure of the calls to BaseWin.ModifyX)
@@ -103,14 +96,9 @@ namespace GKUI.Forms
             // Dates isn't empty
             Assert.AreEqual(fResearchRecord, fDialog.Research);
 
-            var txtName = new TextBoxTester("txtName", fDialog);
-            txtName.Enter("sample text");
-
-            var txtStartDate = new MaskedTextBoxTester("txtStartDate", fDialog);
-            txtStartDate.Enter("01.01.2000");
-
-            var txtStopDate = new MaskedTextBoxTester("txtStopDate", fDialog);
-            txtStopDate.Enter("20.02.2000");
+            EnterText("txtName", fDialog, "sample text");
+            EnterMaskedText("txtStartDate", fDialog, "01.01.2000");
+            EnterMaskedText("txtStopDate", fDialog, "20.02.2000");
 
             // The links to other records can be added or edited only in MainWinTests
             // (where there is a complete infrastructure of the calls to BaseWin.ModifyX)

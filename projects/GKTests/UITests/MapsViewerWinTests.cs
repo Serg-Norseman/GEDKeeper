@@ -20,14 +20,13 @@
 
 #if !__MonoCS__
 
-using System;
 using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
-using GKTests.ControlTesters;
 using GKTests.Stubs;
 using GKUI.Forms;
+using GKUI.Providers;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -37,60 +36,38 @@ namespace GKUI.Forms
     /// 
     /// </summary>
     [TestFixture]
-    public class GroupEditDlgTests : CustomWindowTest
+    public class MapsViewerWinTests : CustomWindowTest
     {
-        private GEDCOMGroupRecord fGroupRecord;
-        private IBaseWindow fBase;
-        private GroupEditDlg fDialog;
 
         public override void Setup()
         {
             base.Setup();
 
-            fBase = new BaseWindowStub();
-            fGroupRecord = new GEDCOMGroupRecord(fBase.Context.Tree);
-
-            fDialog = new GroupEditDlg(fBase);
-            fDialog.Group = fGroupRecord;
-            fDialog.Show();
+            WFAppHost.ConfigureBootstrap(false);
         }
 
         public override void TearDown()
         {
-            fDialog.Dispose();
-            fGroupRecord.Dispose();
         }
 
         [Test]
-        public void Test_Cancel()
+        public void Test_Common()
         {
-            ClickButton("btnCancel", fDialog);
-        }
-
-        [Test]
-        public void Test_EnterDataAndApply()
-        {
-            Assert.AreEqual(fGroupRecord, fDialog.Group);
-
-            var sheetTester = new GKSheetListTester("fMembersList", fDialog);
-            //EnumSet<SheetButton> buttons = sheetTester.Properties.Buttons;
-            //Assert.IsTrue(buttons.ContainsAll(SheetButton.lbAdd, SheetButton.lbDelete, SheetButton.lbJump));
-            Assert.IsFalse(sheetTester.Properties.ReadOnly);
-
-            EnterText("edName", fDialog, "sample text");
-
-            ClickButton("btnAccept", fDialog);
-
-            Assert.AreEqual("sample text", fGroupRecord.GroupName);
         }
 
         #region Handlers for external tests
 
-        public static void GroupAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        public static void MapsViewerWin_Handler(CustomWindowTest formTest, Form form, string stageMessage)
         {
-            EnterText("edName", form, "sample group");
+            Assert.IsInstanceOf(typeof(MapsViewerWin), form, stageMessage);
 
-            ClickButton("btnAccept", form);
+            ClickRadioButton("radTotal", form);
+
+            formTest.ModalFormHandler = SaveFile_Cancel_Handler;
+            ClickButton("btnSaveImage", form);
+
+            KeyDownForm(form.Name, Keys.Escape);
+            form.Dispose();
         }
 
         #endregion

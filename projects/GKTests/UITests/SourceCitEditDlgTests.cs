@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -79,9 +79,7 @@ namespace GKUI.Forms
 
         public static void AcceptModalHandler(string name, IntPtr ptr, Form form)
         {
-            var cmbSource = new ComboBoxTester("cmbSource", form);
-            cmbSource.Select(0);
-
+            SelectCombo("cmbSource", form, 0);
             ClickButton("btnAccept", form);
         }
 

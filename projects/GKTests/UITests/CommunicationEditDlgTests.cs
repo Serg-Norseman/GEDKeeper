@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,8 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
@@ -72,12 +74,8 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fCommunicationRecord, fDialog.Communication);
 
-            var txtName = new TextBoxTester("txtName");
-            txtName.Enter("sample text");
-
-            var cmbCorrType = new ComboBoxTester("cmbCorrType", fDialog);
-            cmbCorrType.Select(1);
-
+            EnterText("txtName", fDialog, "sample text");
+            SelectCombo("cmbCorrType", fDialog, 1);
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fCommunicationRecord.CommName);
@@ -90,17 +88,24 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fCommunicationRecord, fDialog.Communication);
 
-            var txtName = new TextBoxTester("txtName");
-            txtName.Enter("sample text");
-
-            var txtDate = new MaskedTextBoxTester("txtDate", fDialog);
-            txtDate.Enter("20.02.2000");
-
+            EnterText("txtName", fDialog, "sample text");
+            EnterMaskedText("txtDate", fDialog, "20.02.2000");
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fCommunicationRecord.CommName);
             Assert.AreEqual("20 FEB 2000", fCommunicationRecord.Date.StringValue);
         }
+
+        #region Handlers for external tests
+
+        public static void CommunicationAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //EnterText("edName", form, "sample group");
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

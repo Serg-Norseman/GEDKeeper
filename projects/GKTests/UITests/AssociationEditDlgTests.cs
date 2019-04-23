@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -71,12 +71,10 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fAssociation, fDialog.Association);
 
-            var cmbRelation = new ComboBoxTester("cmbRelation");
-            cmbRelation.Enter("sample text");
-            Assert.AreEqual("sample text", cmbRelation.Text);
+            EnterCombo("cmbRelation", fDialog, "sample text");
 
             // TODO: click and select Individual reference
-            //ModalFormHandler = RecordSelectDlg_Cancel_Handler;
+            //ModalFormHandler = RecordSelectDlgTests.RecordSelectDlg_Cancel_Handler;
             //ClickButton("btnPersonAdd", fDialog);
 
             ClickButton("btnAccept", fDialog);
@@ -89,9 +87,7 @@ namespace GKUI.Forms
 
         public static void AcceptModalHandler(string name, IntPtr ptr, Form form)
         {
-            var cmbRelation = new ComboBoxTester("cmbRelation", form);
-            cmbRelation.Enter("sample relation");
-
+            EnterCombo("cmbRelation", form, "sample relation");
             ClickButton("btnAccept", form);
         }
 

@@ -37,9 +37,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.SetNameParts("Ivan Ivanov", "Fedoroff", "");
-            string expResult = "Ivan Ivanov Fedoroff";
-            string result = instance.FullName;
-            Assert.AreEqual(expResult, result);
+            Assert.AreEqual("Ivan Ivanov Fedoroff", instance.FullName);
         }
 
         [Test]
@@ -47,9 +45,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.ParseString("Ivan/Fedoroff/");
-            string expResult = "Ivan";
-            string result = instance.FirstPart;
-            Assert.AreEqual(expResult, result);
+            Assert.AreEqual("Ivan", instance.FirstPart);
         }
 
         [Test]
@@ -57,11 +53,8 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
             instance.ParseString("Ivan/Fedoroff/");
-            string value = "Baba Yaga";
-            instance.FirstPart = value;
-            string result = instance.FullName;
-            string expResult = "Baba Yaga Fedoroff";
-            Assert.AreEqual(expResult, result);
+            instance.FirstPart = "Baba Yaga";
+            Assert.AreEqual("Baba Yaga Fedoroff", instance.FullName);
         }
 
         [Test]

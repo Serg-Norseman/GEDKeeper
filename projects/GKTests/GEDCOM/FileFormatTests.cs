@@ -24,6 +24,7 @@ using System.Reflection;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Tools;
+using GKTests;
 using GKTests.Stubs;
 using NUnit.Framework;
 
@@ -32,19 +33,6 @@ namespace GKCommon.GEDCOM
     [TestFixture]
     public class FileFormatTests
     {
-        private static IBaseContext LoadResourceGEDCOMFile(string resName)
-        {
-            BaseContext ctx = new BaseContext(null);
-
-            Assembly assembly = typeof(CoreTests).Assembly;
-            using (Stream stream = assembly.GetManifestResourceStream("GKTests.Resources." + resName)) {
-                var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                gedcomProvider.LoadFromStreamExt(stream, stream);
-            }
-
-            return ctx;
-        }
-
         [Test]
         public void Test_Standart()
         {
@@ -175,7 +163,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_StdGEDCOM_Notes()
         {
-            using (var ctx = LoadResourceGEDCOMFile("test_stdgedcom_notes.ged")) {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_stdgedcom_notes.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Native, ctx.Tree.Format);
 
                 GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
@@ -209,7 +197,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_FTB_BadLine()
         {
-            using (var ctx = LoadResourceGEDCOMFile("test_ftb_badline.ged")) {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ftb_badline.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_FTB, ctx.Tree.Format);
 
                 GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
@@ -221,7 +209,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_MinIndented()
         {
-            using (var ctx = LoadResourceGEDCOMFile("test_min_indented.ged")) {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_min_indented.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
 
                 var subm = ctx.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
@@ -233,7 +221,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_EmptyLines()
         {
-            using (var ctx = LoadResourceGEDCOMFile("test_empty_lines.ged")) {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_empty_lines.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
 
                 GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I001") as GEDCOMIndividualRecord;
@@ -249,7 +237,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_FamilyHistorian()
         {
-            using (var ctx = LoadResourceGEDCOMFile("test_famhist.ged")) {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_famhist.ged")) {
                 TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
 
                 Assert.AreEqual(GEDCOMFormat.gf_FamilyHistorian, ctx.Tree.Format);
@@ -264,7 +252,7 @@ namespace GKCommon.GEDCOM
         public void Test_FamilyTreeMaker_2008()
         {
             // actually need to find the real signature of version for FTM 2008 (wrong in the file)
-            using (var ctx = LoadResourceGEDCOMFile("test_ftm2008.ged")) {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ftm2008.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_FamilyTreeMaker, ctx.Tree.Format);
 
                 TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
@@ -283,7 +271,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_NoteLongLine()
         {
-            using (var ctx = LoadResourceGEDCOMFile("test_longline.ged")) {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_longline.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
 
                 GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
@@ -297,7 +285,7 @@ namespace GKCommon.GEDCOM
         public void Test_Heredis()
         {
             // TODO: interest feature - use PLAC.FORM
-            using (var ctx = LoadResourceGEDCOMFile("test_heredis.ged")) {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_heredis.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Heredis, ctx.Tree.Format);
             }
         }
@@ -305,7 +293,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_AncestQuest()
         {
-            using (var ctx = LoadResourceGEDCOMFile("test_aq.ged")) {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_aq.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_AncestQuest, ctx.Tree.Format);
             }
         }
@@ -313,7 +301,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_Geni()
         {
-            using (var ctx = LoadResourceGEDCOMFile("test_geni.ged")) {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_geni.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Geni, ctx.Tree.Format);
             }
         }
@@ -321,7 +309,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_Legacy()
         {
-            using (var ctx = LoadResourceGEDCOMFile("test_legacy.ged")) {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_legacy.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Legacy, ctx.Tree.Format);
             }
         }
@@ -329,7 +317,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_EasyTree()
         {
-            using (var ctx = LoadResourceGEDCOMFile("test_easytree.ged")) {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_easytree.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_EasyTree, ctx.Tree.Format);
             }
         }
@@ -338,7 +326,7 @@ namespace GKCommon.GEDCOM
         public void Test_Genney()
         {
             // TODO: interest feature - use _GRP & _PLC records! OBJE._PRIM
-            using (var ctx = LoadResourceGEDCOMFile("test_genney.ged")) {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_genney.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Genney, ctx.Tree.Format);
             }
         }

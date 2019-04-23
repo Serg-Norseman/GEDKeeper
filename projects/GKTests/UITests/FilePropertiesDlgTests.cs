@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -72,6 +72,9 @@ namespace GKUI.Forms
             GEDCOMSubmitterRecord submitter = fBase.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
             Assert.AreEqual("sample text", submitter.Name.StringValue);
         }
+
+        #region Handlers for external tests
+        #endregion
     }
 }
 

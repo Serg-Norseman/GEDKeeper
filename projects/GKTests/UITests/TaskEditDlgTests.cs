@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,8 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
@@ -70,12 +72,10 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fTaskRecord, fDialog.Task);
 
-            var txtPriority = new ComboBoxTester("txtPriority", fDialog);
-            txtPriority.Select(1);
+            SelectCombo("txtPriority", fDialog, 1);
 
-            var cmbGoalType = new ComboBoxTester("cmbGoalType", fDialog);
             for (GKGoalType gt = GKGoalType.gtIndividual; gt <= GKGoalType.gtOther; gt++) {
-                cmbGoalType.Select((int)gt);
+                SelectCombo("cmbGoalType", fDialog, (int)gt);
             }
 
             ClickButton("btnAccept", fDialog);
@@ -90,18 +90,12 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fTaskRecord, fDialog.Task);
 
-            var txtPriority = new ComboBoxTester("txtPriority", fDialog);
-            txtPriority.Select(1);
+            SelectCombo("txtPriority", fDialog, 1);
+            EnterMaskedText("txtStartDate", fDialog, "01.01.2000");
+            EnterMaskedText("txtStopDate", fDialog, "20.02.2000");
 
-            var txtStartDate = new MaskedTextBoxTester("txtStartDate", fDialog);
-            txtStartDate.Enter("01.01.2000");
-
-            var txtStopDate = new MaskedTextBoxTester("txtStopDate", fDialog);
-            txtStopDate.Enter("20.02.2000");
-
-            var cmbGoalType = new ComboBoxTester("cmbGoalType", fDialog);
             for (GKGoalType gt = GKGoalType.gtIndividual; gt <= GKGoalType.gtOther; gt++) {
-                cmbGoalType.Select((int)gt);
+                SelectCombo("cmbGoalType", fDialog, (int)gt);
             }
 
             ClickButton("btnAccept", fDialog);
@@ -110,6 +104,17 @@ namespace GKUI.Forms
             Assert.AreEqual("01 JAN 2000", fTaskRecord.StartDate.StringValue);
             Assert.AreEqual("20 FEB 2000", fTaskRecord.StopDate.StringValue);
         }
+
+        #region Handlers for external tests
+
+        public static void TaskAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //EnterText("edName", form, "sample group");
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

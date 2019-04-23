@@ -20,6 +20,8 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
@@ -84,6 +86,17 @@ namespace GKUI.Forms
 
             //Assert.AreEqual("sample text", fMultimediaRecord.GetFileTitle());
         }
+
+        #region Handlers for external tests
+
+        public static void MediaAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //EnterText("txtName", "sample text");
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

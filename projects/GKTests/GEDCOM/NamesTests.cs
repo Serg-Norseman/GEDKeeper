@@ -23,6 +23,7 @@ using System.IO;
 using System.Reflection;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKTests;
 using GKUI.Providers;
 using NUnit.Framework;
 
@@ -40,65 +41,53 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_Names_01()
         {
-            using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_names_01.ged")) {
-                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_names_01.ged")) {
+                GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+                Assert.AreEqual("Александра Анатольевна Лазорева (Иванова)", iRec1.GetPrimaryFullName());
+                // std-surn exists and double, but sub-surn has only second part
+                // sub-givn exists, but sub-patn is not
+                var parts = GKUtils.GetNameParts(iRec1);
+                Assert.AreEqual("Иванова", parts.Surname);
+                Assert.AreEqual("Александра", parts.Name);
+                Assert.AreEqual("Анатольевна", parts.Patronymic);
 
-                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
-                    Assert.IsNotNull(iRec1);
-                    Assert.AreEqual("Александра Анатольевна Лазорева (Иванова)", iRec1.GetPrimaryFullName());
-                    // std-surn exists and double, but sub-surn has only second part
-                    // sub-givn exists, but sub-patn is not
-                    var parts = GKUtils.GetNameParts(iRec1);
-                    Assert.AreEqual("Иванова", parts.Surname);
-                    Assert.AreEqual("Александра", parts.Name);
-                    Assert.AreEqual("Анатольевна", parts.Patronymic);
-
-                    GEDCOMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
-                    Assert.IsNotNull(iRec2);
-                    Assert.AreEqual("Петр Константинович Лазорев", iRec2.GetPrimaryFullName());
-                    // std-surn exists, but sub-surn is not
-                    // sub-givn exists, but sub-patn is not
-                    parts = GKUtils.GetNameParts(iRec2);
-                    Assert.AreEqual("Лазорев", parts.Surname);
-                    Assert.AreEqual("Петр", parts.Name);
-                    Assert.AreEqual("Константинович", parts.Patronymic);
-                }
+                GEDCOMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
+                Assert.IsNotNull(iRec2);
+                Assert.AreEqual("Петр Константинович Лазорев", iRec2.GetPrimaryFullName());
+                // std-surn exists, but sub-surn is not
+                // sub-givn exists, but sub-patn is not
+                parts = GKUtils.GetNameParts(iRec2);
+                Assert.AreEqual("Лазорев", parts.Surname);
+                Assert.AreEqual("Петр", parts.Name);
+                Assert.AreEqual("Константинович", parts.Patronymic);
             }
         }
 
         [Test]
         public void Test_Names_02()
         {
-            using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_names_02.ged")) {
-                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_names_02.ged")) {
+                GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+                Assert.AreEqual("Анна Сидоровна Иванова (Петрова)", iRec1.GetPrimaryFullName());
+                // std-surn exists and double, and sub-surn same
+                // sub-givn and sub-patn exists
+                var parts = GKUtils.GetNameParts(iRec1);
+                Assert.AreEqual("Иванова (Петрова)", parts.Surname);
+                Assert.AreEqual("Анна", parts.Name);
+                Assert.AreEqual("Сидоровна", parts.Patronymic);
 
-                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
-                    Assert.IsNotNull(iRec1);
-                    Assert.AreEqual("Анна Сидоровна Иванова (Петрова)", iRec1.GetPrimaryFullName());
-                    // std-surn exists and double, and sub-surn same
-                    // sub-givn and sub-patn exists
-                    var parts = GKUtils.GetNameParts(iRec1);
-                    Assert.AreEqual("Иванова (Петрова)", parts.Surname);
-                    Assert.AreEqual("Анна", parts.Name);
-                    Assert.AreEqual("Сидоровна", parts.Patronymic);
-
-                    GEDCOMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
-                    Assert.IsNotNull(iRec2);
-                    Assert.AreEqual("Аглая Федоровна Иванова", iRec2.GetPrimaryFullName());
-                    // std-surn exists (maiden), and sub-surn same, and sub-marn exists (married)
-                    // sub-givn and sub-patn exists
-                    parts = GKUtils.GetNameParts(iRec2);
-                    Assert.AreEqual("Иванова", parts.Surname);
-                    Assert.AreEqual("Лескова", parts.MarriedSurname);
-                    Assert.AreEqual("Аглая", parts.Name);
-                    Assert.AreEqual("Федоровна", parts.Patronymic);
-                }
+                GEDCOMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
+                Assert.IsNotNull(iRec2);
+                Assert.AreEqual("Аглая Федоровна Иванова", iRec2.GetPrimaryFullName());
+                // std-surn exists (maiden), and sub-surn same, and sub-marn exists (married)
+                // sub-givn and sub-patn exists
+                parts = GKUtils.GetNameParts(iRec2);
+                Assert.AreEqual("Иванова", parts.Surname);
+                Assert.AreEqual("Лескова", parts.MarriedSurname);
+                Assert.AreEqual("Аглая", parts.Name);
+                Assert.AreEqual("Федоровна", parts.Patronymic);
             }
         }
     }

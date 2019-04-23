@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -68,12 +68,10 @@ namespace GKUI.Forms
         public void Test_EnterDataAndApply()
         {
             Assert.AreEqual(fIndividualRecord, fDialog.Person);
-
             Assert.AreEqual(null, fDialog.Target);
             Assert.AreEqual(TargetMode.tmNone, fDialog.TargetMode);
 
-            //var txtSurname = new TextBoxTester("txtSurname");
-            //txtSurname.Enter("sample text");
+            //EnterText("txtSurname", "sample text");
 
             ClickButton("btnAccept", fDialog);
 
