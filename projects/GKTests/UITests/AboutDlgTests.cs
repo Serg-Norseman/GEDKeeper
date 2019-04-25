@@ -66,7 +66,7 @@ namespace GKUI.Forms
 
         public static void AboutDlg_Handler(string name, IntPtr ptr, Form form)
         {
-            ClickButton("btnClose", "AboutDlg");
+            ClickButton("btnClose", form);
         }
 
         #endregion

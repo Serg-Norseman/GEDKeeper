@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,11 +24,12 @@ using System.Windows.Forms;
 using GKUI.Components;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
+using GKTests;
 
 namespace GKUI.Components
 {
     [TestFixture]
-    public class SmallComponents : NUnitFormTest
+    public class SmallComponents : CustomWindowTest
     {
         public SmallComponents()
         {

@@ -20,6 +20,8 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -27,6 +29,7 @@ using GKTests;
 using GKTests.Stubs;
 using GKUI.Forms;
 using NUnit.Framework;
+using NUnit.Extensions.Forms;
 
 namespace GKUI.Forms
 {
@@ -77,6 +80,26 @@ namespace GKUI.Forms
 
             //Assert.AreEqual("sample text", fIndividualRecord.PersonalNames[0].Pieces.Surname);
         }
+
+        #region Handlers for external tests
+
+        private static GEDCOMSex fNeedIndividualSex;
+
+        private static void IndividualAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtName", form, "test");
+            SelectCombo("cmbSex", form, (int)fNeedIndividualSex);
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void SetCreateIndividualHandler(NUnitFormTest formTest, GEDCOMSex needIndividualSex)
+        {
+            fNeedIndividualSex = needIndividualSex;
+            RecordSelectDlgTests.SetCreateItemHandler(formTest, IndividualAdd_Mini_Handler);
+        }
+
+        #endregion
     }
 }
 

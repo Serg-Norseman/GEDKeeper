@@ -94,6 +94,25 @@ namespace GKUI.Forms
             ClickButton("btnAccept", form);
         }
 
+        public static void SourceEditDlg_Handler(SourceEditDlg dlg)
+        {
+            GEDCOMSourceRecord srcRecord = dlg.Model;
+            SelectTab("tabsData", dlg, 2);
+
+            // repositories
+            Assert.AreEqual(0, srcRecord.RepositoryCitations.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, TaskEditDlgTests.TaskAdd_Mini_Handler);
+            ClickToolStripButton("fRepositoriesList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, srcRecord.RepositoryCitations.Count);
+
+            SelectSheetListItem("fRepositoriesList", dlg, 0);
+            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
+            ClickToolStripButton("fRepositoriesList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, srcRecord.RepositoryCitations.Count);
+
+            ClickButton("btnAccept", dlg);
+        }
+
         #endregion
     }
 }

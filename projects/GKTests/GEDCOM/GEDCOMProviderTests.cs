@@ -171,13 +171,5 @@ namespace GKCommon.GEDCOM
             res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(-2, res2);
         }
-
-        [Test]
-        public void Test_CtorDyn()
-        {
-            var uref = GEDCOMFactory.CreateTagEx<GEDCOMUserReference>(null, "", "test 12345");
-            Assert.IsNotNull(uref);
-            Assert.AreEqual("test 12345", uref.StringValue);
-        }
     }
 }

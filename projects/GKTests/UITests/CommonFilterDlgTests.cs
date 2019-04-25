@@ -28,6 +28,7 @@ using GKTests;
 using GKTests.Stubs;
 using GKUI.Forms;
 using NUnit.Framework;
+using GKTests.ControlTesters;
 
 namespace GKUI.Forms
 {
@@ -81,6 +82,36 @@ namespace GKUI.Forms
         public static void CommonFilterDlg_btnReset_Handler(string name, IntPtr ptr, Form form)
         {
             ClickButton("btnReset", form);
+            ClickButton("btnAccept", form);
+        }
+
+        public static void CommonFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            CommonFilterDlg cfDlg = ((CommonFilterDlg)form);
+            Assert.IsNotNull(cfDlg.Base);
+
+            IListManager listMan = cfDlg.ListMan;
+
+            SelectTab("tabsFilters", form, 0);
+
+            var dataGridView1 = new DataGridViewTester("dataGridView1", form);
+            dataGridView1.SelectCell(0, 0);
+            dataGridView1.Properties.BeginEdit(false);
+            dataGridView1.Properties.EndEdit();
+            dataGridView1.SelectCell(0, 1);
+            dataGridView1.Properties.BeginEdit(false);
+            dataGridView1.Properties.EndEdit();
+            dataGridView1.SelectCell(0, 2);
+            dataGridView1.Properties.BeginEdit(false);
+            dataGridView1.Properties.EndEdit();
+
+            // Fail: AmbiguousMatch?!
+            //dataGridView1.FireEvent("Scroll", new ScrollEventArgs(ScrollEventType.SmallIncrement, 1));
+
+            if (form is PersonsFilterDlg) {
+                PersonsFilterDlgTests.PersonsFilterDlg_Handler(form);
+            }
+
             ClickButton("btnAccept", form);
         }
 

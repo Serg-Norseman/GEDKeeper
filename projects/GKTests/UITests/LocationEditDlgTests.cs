@@ -46,6 +46,23 @@ namespace GKUI.Forms
             ClickButton("btnAccept", form);
         }
 
+        public static void LocationEditDlg_Handler(LocationEditDlg dlg)
+        {
+            SelectTab("tabsData", dlg, 0);
+
+            EnterText("txtName", dlg, "Moscow");
+
+            var listGeoCoords = new ListViewTester("ListGeoCoords", dlg);
+            listGeoCoords.FireEvent("Click", new EventArgs());
+
+            ClickButton("btnSearch", dlg);
+            ClickButton("btnSelect", dlg);
+            ClickButton("btnSelectName", dlg);
+            ClickButton("btnShowOnMap", dlg);
+
+            ClickButton("btnAccept", dlg);
+        }
+
         #endregion
     }
 }

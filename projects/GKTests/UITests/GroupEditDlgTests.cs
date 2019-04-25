@@ -93,6 +93,24 @@ namespace GKUI.Forms
             ClickButton("btnAccept", form);
         }
 
+        public static void GroupEditDlg_Handler(GroupEditDlg dlg)
+        {
+            GEDCOMGroupRecord groupRecord = dlg.Group;
+
+            // members
+            Assert.AreEqual(0, groupRecord.Members.Count);
+            RecordSelectDlgTests.SetSelectItemHandler(fFormTest, 0);
+            ClickToolStripButton("fMembersList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, groupRecord.Members.Count);
+
+            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
+            SelectSheetListItem("fMembersList", dlg, 0);
+            ClickToolStripButton("fMembersList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, groupRecord.Members.Count);
+
+            ClickButton("btnAccept", dlg);
+        }
+
         #endregion
     }
 }

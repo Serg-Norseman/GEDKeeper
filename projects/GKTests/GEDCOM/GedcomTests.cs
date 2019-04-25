@@ -53,31 +53,6 @@ namespace GKCommon.GEDCOM
 
         #region True Tests
 
-        private GEDCOMTag TagConstructorTest(GEDCOMObject owner, string tagName, string tagValue)
-        {
-            return null;
-        }
-
-        [Test]
-        public void Test_GEDCOMFactory()
-        {
-            TagConstructor tagConst = TagConstructorTest;
-            Assert.AreEqual(null, tagConst.Invoke(null, "x", "x"));
-
-            //
-
-            GEDCOMFactory f = GEDCOMFactory.GetInstance();
-            Assert.IsNotNull(f, "f != null");
-
-            f.RegisterTag(GEDCOMTagType.DATE, GEDCOMDateValue.Create);
-
-            GEDCOMTag tag = f.CreateTag(null, GEDCOMTagType.DATE, "");
-            Assert.IsNotNull(tag, "tag != null");
-
-            tag = f.CreateTag(null, "TEST", "");
-            Assert.IsNull(tag, "tag == null");
-        }
-
         [Test]
         public void Test_GEDCOMMathes()
         {

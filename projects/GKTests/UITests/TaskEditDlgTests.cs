@@ -114,6 +114,26 @@ namespace GKUI.Forms
             ClickButton("btnAccept", form);
         }
 
+        public static void TaskEditDlg_Handler(TaskEditDlg dlg)
+        {
+            SelectCombo("cmbGoalType", dlg, 3);
+            ClickButton("btnGoalSelect", dlg);
+
+            SelectCombo("cmbGoalType", dlg, 2);
+            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, SourceEditDlgTests.SourceAdd_Mini_Handler);
+            ClickButton("btnGoalSelect", dlg);
+
+            SelectCombo("cmbGoalType", dlg, 1);
+            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, FamilyEditDlgTests.FamilyAdd_Mini_Handler);
+            ClickButton("btnGoalSelect", dlg);
+
+            SelectCombo("cmbGoalType", dlg, 0);
+            PersonEditDlgTests.SetCreateIndividualHandler(fFormTest, GEDCOMSex.svMale);
+            ClickButton("btnGoalSelect", dlg);
+
+            ClickButton("btnAccept", dlg);
+        }
+
         #endregion
     }
 }

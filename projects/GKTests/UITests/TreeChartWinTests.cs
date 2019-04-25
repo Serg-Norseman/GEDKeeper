@@ -143,14 +143,14 @@ namespace GKUI.Forms
             //ClickToolStripMenuItem("miFillImage", tcWin);
             //ClickToolStripMenuItem("miRebuildTree", tcWin);
 
-            formTest.ModalFormHandler = SaveSnapshotJPG_Handler;
+            formTest.ModalFormHandler = SaveFileJPG_Handler;
             ClickToolStripButton("tbImageSave", tcWin);
 
             // FIXME exception!
             //ModalFormHandler = SaveSnapshotEMF_Handler;
             //ClickToolStripButton("tbImageSave", tcWin);
 
-            formTest.ModalFormHandler = SaveSnapshotSVG_Handler;
+            formTest.ModalFormHandler = SaveFileSVG_Handler;
             ClickToolStripButton("tbImageSave", tcWin);
 
             //ModalFormHandler = PrintPreviewDialog_Handler;

@@ -34,6 +34,11 @@ namespace GKUI.Forms
     {
         private readonly FilePropertiesDlgController fController;
 
+        public IBaseWindow Base
+        {
+            get { return fController.Base; }
+        }
+
         #region View Interface
 
         IListView IFilePropertiesDlg.RecordStats

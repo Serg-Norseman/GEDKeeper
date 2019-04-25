@@ -38,6 +38,126 @@ namespace GKUI.Forms
     {
 
         #region Handlers for external tests
+
+        public static void TreeCompareDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
+
+            ClickRadioButton("radMatchInternal", form);
+            ClickButton("btnMatch", form);
+
+            ClickRadioButton("radAnalysis", form);
+            ClickButton("btnMatch", form);
+
+            ClickRadioButton("radMathExternal", form);
+
+            SetModalFormHandler(fFormTest, OpenFile_Cancel_Handler);
+            ClickButton("btnFileChoose", form);
+            //ClickButton("btnMatch", form);
+
+            form.Close();
+        }
+
+        public static void TreeMergeDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
+
+            SetModalFormHandler(fFormTest, OpenFile_Cancel_Handler);
+            ClickButton("btnTreeMerge", form);
+
+            form.Close();
+        }
+
+        public static void TreeSplitDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
+
+            ClickButton("btnSelectFamily", form);
+
+            ClickButton("btnSelectAncestors", form);
+
+            ClickButton("btnSelectDescendants", form);
+
+            ClickButton("btnSelectAll", form);
+
+            SetModalFormHandler(fFormTest, SaveFile_Cancel_Handler);
+            ClickButton("btnSave", form);
+
+            SetModalFormHandler(fFormTest, SaveFileGED_Handler);
+            ClickButton("btnSave", form);
+
+            form.Close();
+        }
+
+        public static void RecMergeDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
+
+            CheckBox("chkBookmarkMerged", form, true);
+            CheckBox("chkBookmarkMerged", form, false);
+
+            var radPersons = new RadioButtonTester("radPersons", form);
+            radPersons.Properties.Checked = true;
+
+            RecordSelectDlgTests.SetSelectItemHandler(fFormTest, 0);
+            ClickButton("MergeControl.btnRec1Select", form);
+
+            RecordSelectDlgTests.SetSelectItemHandler(fFormTest, 1);
+            ClickButton("MergeControl.btnRec2Select", form);
+
+            ClickButton("btnAutoSearch", form);
+
+            ClickButton("btnSkip", form);
+
+            form.Close();
+        }
+
+        public static void FamilyGroupsDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
+
+            ClickButton("btnAnalyseGroups", form);
+
+            form.Close();
+        }
+
+        public static void TreeCheckDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
+
+            ClickButton("btnAnalyseBase", form);
+            ClickButton("btnBaseRepair", form);
+
+            form.Close();
+        }
+
+        public static void PatSearchDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
+
+            EnterNumeric("edMinGens", form, 1);
+
+            ClickButton("btnPatSearch", form);
+
+            ClickButton("btnSetPatriarch", form);
+
+            ClickButton("btnPatriarchsDiagram", form);
+            var pvWin = new FormTester("PatriarchsViewerWin");
+            pvWin.Close();
+
+            form.Close();
+        }
+
+        public static void PlacesManagerDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            var tabs = new TabControlTester("tabsTools", form);
+
+            ClickButton("btnAnalysePlaces", form);
+            ClickButton("btnIntoList", form);
+
+            form.Close();
+        }
+
         #endregion
     }
 }

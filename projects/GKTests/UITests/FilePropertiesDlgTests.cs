@@ -20,6 +20,8 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKTests;
@@ -74,6 +76,23 @@ namespace GKUI.Forms
         }
 
         #region Handlers for external tests
+
+        public static void FilePropertiesDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            FilePropertiesDlg dlg = (FilePropertiesDlg)form;
+            IBaseContext baseContext = dlg.Base.Context;
+
+            EnterText("txtName", form, "sample text");
+
+            SetModalFormHandler(fFormTest, LanguageEditDlgTests.LanguageEditDlg_Handler);
+            ClickButton("btnLangEdit", form);
+
+            ClickButton("btnAccept", form);
+
+            GEDCOMSubmitterRecord submitter = baseContext.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+            Assert.AreEqual("sample text", submitter.Name.StringValue);
+        }
+
         #endregion
     }
 }

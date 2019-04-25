@@ -99,6 +99,7 @@
     <Compile Include="GEDCOM\FileFormatTests.cs" />
     <Compile Include="GEDCOM\GEDCOMAddressTests.cs" />
     <Compile Include="GEDCOM\GEDCOMDateTests.cs" />
+    <Compile Include="GEDCOM\GEDCOMFactoryTests.cs" />
     <Compile Include="GEDCOM\GEDCOMListTests.cs" />
     <Compile Include="GEDCOM\GEDCOMNoteRecordTests.cs" />
     <Compile Include="GEDCOM\GEDCOMParserTests.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="UITests\RelationshipCalculatorDlgTests.cs" />
     <Compile Include="UITests\RepositoryEditDlgTests.cs" />
     <Compile Include="UITests\ResearchEditDlgTests.cs" />
+    <Compile Include="UITests\ScriptEditWinTests.cs" />
     <Compile Include="UITests\SexCheckDlgTests.cs" />
     <Compile Include="UITests\SlideshowWinTests.cs" />
     <Compile Include="UITests\SourceCitEditDlgTests.cs" />

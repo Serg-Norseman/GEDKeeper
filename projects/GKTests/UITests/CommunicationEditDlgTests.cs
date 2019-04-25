@@ -105,6 +105,14 @@ namespace GKUI.Forms
             ClickButton("btnAccept", form);
         }
 
+        public static void CommunicationEditDlg_Handler(CommunicationEditDlg dlg)
+        {
+            PersonEditDlgTests.SetCreateIndividualHandler(fFormTest, GEDCOMSex.svMale);
+            ClickButton("btnPersonAdd", dlg);
+
+            ClickButton("btnAccept", dlg);
+        }
+
         #endregion
     }
 }

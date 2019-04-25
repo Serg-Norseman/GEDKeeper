@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if !__MonoCS__
+
 using System;
 using System.Windows.Forms;
 using NUnit.Extensions.Forms;
@@ -30,7 +32,18 @@ namespace GKTests
     /// </summary>
     public abstract class CustomWindowTest : NUnitFormTest
     {
-        #if !__MonoCS__
+        public override bool UseHidden
+        {
+            get { return true; }
+        }
+
+        public static Form GetActiveForm(string formName)
+        {
+            var tester = new FormTester(formName);
+            return (tester == null) ? null : (Form)tester.TheObject;
+        }
+
+        #region Control Actions
 
         public static void ClickButton(string name, Form form)
         {
@@ -128,12 +141,15 @@ namespace GKTests
             chk.Properties.Checked = value;
         }
 
-
         public static void KeyDownForm(string formName, Keys keyData)
         {
             var formTester = new FormTester(formName);
             formTester.FireEvent("KeyDown", new KeyEventArgs(keyData));
         }
+
+        #endregion
+
+        #region Dialogs Handlers
 
         public static void MessageBox_YesHandler(string name, IntPtr ptr, Form form)
         {
@@ -159,19 +175,15 @@ namespace GKTests
             messageBox.SendCommand(MessageBoxTester.Command.Cancel);
         }
 
-        public static void PrepareFileSave(string fileName, IntPtr hWnd)
+        public static void PrintDialog_Handler(string name, IntPtr ptr, Form form)
         {
-            fileName = TestUtils.GetTempFilePath(fileName);
-
-            var saveDlg = new SaveFileDialogTester(hWnd);
-            saveDlg.SaveFile(fileName);
-            saveDlg.SaveFile();
+            form.Close();
         }
 
-        public static Form GetActiveForm(string formName)
+        public static void PrintPreviewDialog_Handler(string name, IntPtr ptr, Form form)
         {
-            var tester = new FormTester(formName);
-            return (tester == null) ? null : (Form)tester.TheObject;
+            form.Refresh();
+            form.Close();
         }
 
         public static void OpenFile_Cancel_Handler(string name, IntPtr hWnd, Form form)
@@ -186,9 +198,13 @@ namespace GKTests
             saveDlg.ClickCancel();
         }
 
-        public static void SaveFile_GED_Handler(string name, IntPtr hWnd, Form form)
+        public static void PrepareFileSave(string fileName, IntPtr hWnd)
         {
-            PrepareFileSave("test.ged", hWnd);
+            fileName = TestUtils.GetTempFilePath(fileName);
+
+            var saveDlg = new SaveFileDialogTester(hWnd);
+            saveDlg.SaveFile(fileName);
+            saveDlg.SaveFile();
         }
 
         public static void Dialog_Cancel_Handler(string name, IntPtr ptr, Form form)
@@ -196,70 +212,76 @@ namespace GKTests
             ClickButton("btnCancel", form);
         }
 
+        #endregion
+
+        #region InputBox Handlers
+
         public static void InputBox_Add_Handler(string name, IntPtr ptr, Form form)
         {
-            var txtValue = new TextBoxTester("txtValue", form);
-            txtValue.Enter("sample add");
-            //Assert.AreEqual("sample add", txtValue.Text);
-
+            EnterText("txtValue", form, "sample add");
             ClickButton("btnAccept", form);
         }
 
         public static void InputBox_Edit_Handler(string name, IntPtr ptr, Form form)
         {
-            var txtValue = new TextBoxTester("txtValue", form);
-            txtValue.Enter("sample edit");
-            //Assert.AreEqual("sample edit", txtValue.Text);
-
+            EnterText("txtValue", form, "sample edit");
             ClickButton("btnAccept", form);
         }
 
-        public static void SaveSnapshotJPG_Handler(string name, IntPtr hWnd, Form form)
+        #endregion
+
+        #region FileSave Handlers
+
+        public static void SaveFileGED_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.ged", hWnd);
+        }
+
+        public static void SaveFileJPG_Handler(string name, IntPtr hWnd, Form form)
         {
             PrepareFileSave("test.jpg", hWnd);
         }
 
-        public static void SaveSnapshotEMF_Handler(string name, IntPtr hWnd, Form form)
+        public static void SaveFileEMF_Handler(string name, IntPtr hWnd, Form form)
         {
             PrepareFileSave("test.emf", hWnd);
         }
 
-        public static void SaveSnapshotSVG_Handler(string name, IntPtr hWnd, Form form)
+        public static void SaveFileSVG_Handler(string name, IntPtr hWnd, Form form)
         {
             PrepareFileSave("test.svg", hWnd);
         }
 
-        public static void PrintDialog_Handler(string name, IntPtr ptr, Form form)
-        {
-            form.Close();
-        }
-
-        public static void PrintPreviewDialog_Handler(string name, IntPtr ptr, Form form)
-        {
-            form.Refresh();
-            form.Close();
-        }
-
-        public static void GenerateXLS_Handler(string name, IntPtr hWnd, Form form)
+        public static void SaveFileXLS_Handler(string name, IntPtr hWnd, Form form)
         {
             PrepareFileSave("test.xls", hWnd);
         }
 
-        public static void GeneratePDF_Handler(string name, IntPtr hWnd, Form form)
+        public static void SaveFilePDF_Handler(string name, IntPtr hWnd, Form form)
         {
             PrepareFileSave("test.pdf", hWnd);
         }
 
-        public static void GeneratePedigreeHTML_Handler(string name, IntPtr hWnd, Form form)
+        public static void SaveFileHTML_Handler(string name, IntPtr hWnd, Form form)
         {
             PrepareFileSave("test.html", hWnd);
         }
 
-        public static void GeneratePedigreeRTF_Handler(string name, IntPtr hWnd, Form form)
+        public static void SaveFileRTF_Handler(string name, IntPtr hWnd, Form form)
         {
             PrepareFileSave("test.rtf", hWnd);
         }
 
-        #endif
+        #endregion
+
+        protected static NUnitFormTest fFormTest;
+
+        public static void SetModalFormHandler(NUnitFormTest formTest, ModalFormHandler modalFormHandler)
+        {
+            fFormTest = formTest;
+            fFormTest.ModalFormHandler = modalFormHandler;
+        }
     }
 }
+
+#endif

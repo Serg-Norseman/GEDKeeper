@@ -84,14 +84,14 @@ namespace GKUI.Forms
             ccWin.SelectByRec(null);
             ccWin.SetFilter();
 
-            formTest.ModalFormHandler = SaveSnapshotJPG_Handler;
+            formTest.ModalFormHandler = SaveFileJPG_Handler;
             ClickToolStripButton("tbImageSave", ccWin);
 
             // FIXME exception!
-            //ModalFormHandler = SaveSnapshotEMF_Handler;
+            //ModalFormHandler = SaveFileEMF_Handler;
             //ClickToolStripButton("tbImageSave", ccWin);
 
-            formTest.ModalFormHandler = SaveSnapshotSVG_Handler;
+            formTest.ModalFormHandler = SaveFileSVG_Handler;
             ClickToolStripButton("tbImageSave", ccWin);
 
             KeyDownForm(frm.Name, Keys.Escape);
