@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -104,7 +104,7 @@ namespace GKCore.Charts
         private ExtRectF fBounds;
         private float fGenWidth;
         private int fIndividualsCount;
-        private AncestorsCircleOptions fOptions;
+        private CircleChartOptions fOptions;
         private IPen fPen;
         private GEDCOMIndividualRecord fRootPerson;
         private readonly List<CircleSegment> fSegments;
@@ -164,7 +164,7 @@ namespace GKCore.Charts
             get { return fIndividualsCount; }
         }
 
-        public AncestorsCircleOptions Options
+        public CircleChartOptions Options
         {
             get { return fOptions; }
             set { fOptions = value; }
@@ -211,8 +211,8 @@ namespace GKCore.Charts
 
         public CircleChartModel()
         {
-            fCircleBrushes = new IBrush[AncestorsCircleOptions.MAX_BRUSHES];
-            fDarkBrushes = new IBrush[AncestorsCircleOptions.MAX_BRUSHES];
+            fCircleBrushes = new IBrush[CircleChartOptions.MAX_BRUSHES];
+            fDarkBrushes = new IBrush[CircleChartOptions.MAX_BRUSHES];
 
             fBounds = new ExtRectF();
             fGenWidth = CircleChartModel.DEFAULT_GEN_WIDTH;
@@ -356,6 +356,7 @@ namespace GKCore.Charts
 
             if (gen == 0) {
 
+                // central circle
                 size = fRenderer.GetTextSize(surn, Font);
                 fRenderer.DrawString(surn, Font, brush, -size.Width / 2f, -size.Height / 2f - size.Height / 2f);
                 size = fRenderer.GetTextSize(givn, Font);
@@ -364,10 +365,17 @@ namespace GKCore.Charts
             } else {
 
                 if (isNarrow) {
+                    //var debugBrush = fRenderer.CreateSolidBrush(ChartRenderer.Red);
 
+                    // narrow segments of 6-8 generations, radial text
                     float dx = (float)Math.Sin(Math.PI * angle / 180.0f) * rad;
                     float dy = (float)Math.Cos(Math.PI * angle / 180.0f) * rad;
                     fRenderer.TranslateTransform(dx, -dy);
+
+                    if (fOptions.LTRCorrection && (angle >= 180 && angle < 360)) {
+                        angle -= 180.0f;
+                    }
+
                     fRenderer.RotateTransform(angle - 90.0f);
 
                     size = fRenderer.GetTextSize(givn, Font);

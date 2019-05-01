@@ -83,7 +83,7 @@ namespace GKUI.Components
             get { return fModel; }
         }
 
-        public AncestorsCircleOptions Options
+        public CircleChartOptions Options
         {
             get { return fModel.Options; }
         }
@@ -157,7 +157,7 @@ namespace GKUI.Components
             fRenderer = new WFGfxRenderer();
             fModel = new CircleChartModel();
             fModel.SetRenderer(fRenderer);
-            fModel.Options = new AncestorsCircleOptions();
+            fModel.Options = new CircleChartOptions();
             fModel.Font = AppHost.GfxProvider.CreateFont(this.Font.Name, this.Font.Size, false);
 
             fComponents = new Container();

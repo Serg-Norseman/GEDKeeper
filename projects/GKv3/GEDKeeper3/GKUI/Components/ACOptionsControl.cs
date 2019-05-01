@@ -28,7 +28,7 @@ namespace GKUI.Components
 {
     public sealed class ACOptionsControl : Panel, IOptionsControl
     {
-        private AncestorsCircleOptions fOptions;
+        private CircleChartOptions fOptions;
 
         public IOptions Options
         {
@@ -36,10 +36,10 @@ namespace GKUI.Components
                 return fOptions;
             }
             set {
-                var ancestorsCircleOptions = value as AncestorsCircleOptions;
-                if (ancestorsCircleOptions == null) return;
+                var circleOptions = value as CircleChartOptions;
+                if (circleOptions == null) return;
 
-                fOptions = ancestorsCircleOptions;
+                fOptions = circleOptions;
                 UpdateControls();
             }
         }

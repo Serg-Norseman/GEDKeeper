@@ -174,6 +174,12 @@ namespace GKCore.Charts
             return AppHost.GfxProvider.CreateSolidBrush(color);
         }
 
+        public IBrush CreateSolidBrush(int argb)
+        {
+            IColor color = GetColor(argb);
+            return CreateSolidBrush(color);
+        }
+
         public virtual IGfxPath CreatePath()
         {
             return AppHost.GfxProvider.CreatePath();

@@ -85,7 +85,7 @@ namespace GKUI.Forms
 
         private void UpdateControls()
         {
-            lblChartFont.Text = fOptions.ChartOptions.DefFontName + @", " + fOptions.ChartOptions.DefFontSize.ToString();
+            lblChartFont.Text = fOptions.TreeChartOptions.DefFontName + @", " + fOptions.TreeChartOptions.DefFontSize.ToString();
         }
 
         private void UpdateLangs()
@@ -138,34 +138,34 @@ namespace GKUI.Forms
             chkAllowMediaDirectRefs.Checked = fOptions.AllowMediaStoreReferences;
             chkAutoCheckUpdates.Checked = fOptions.AutoCheckUpdates;
 
-            chkSurname.Checked = fOptions.ChartOptions.FamilyVisible;
-            chkName.Checked = fOptions.ChartOptions.NameVisible;
-            chkPatronymic.Checked = fOptions.ChartOptions.PatronymicVisible;
-            chkDiffLines.Checked = fOptions.ChartOptions.DiffLines;
-            chkBirthDate.Checked = fOptions.ChartOptions.BirthDateVisible;
-            chkDeathDate.Checked = fOptions.ChartOptions.DeathDateVisible;
-            chkOnlyYears.Checked = fOptions.ChartOptions.OnlyYears;
-            chkKinship.Checked = fOptions.ChartOptions.Kinship;
-            chkSignsVisible.Checked = fOptions.ChartOptions.SignsVisible;
-            chkChildlessExclude.Checked = fOptions.ChartOptions.ChildlessExclude;
-            chkTreeDecorative.Checked = fOptions.ChartOptions.Decorative;
-            chkPortraitsVisible.Checked = fOptions.ChartOptions.PortraitsVisible;
-            chkDefaultPortraits.Checked = fOptions.ChartOptions.DefaultPortraits;
-            chkInvertedTree.Checked = fOptions.ChartOptions.InvertedTree;
-            chkMarriagesDates.Checked = fOptions.ChartOptions.MarriagesDates;
-            chkShowPlaces.Checked = fOptions.ChartOptions.ShowPlaces;
-            chkHideUnknownSpouses.Checked = fOptions.ChartOptions.HideUnknownSpouses;
+            chkSurname.Checked = fOptions.TreeChartOptions.FamilyVisible;
+            chkName.Checked = fOptions.TreeChartOptions.NameVisible;
+            chkPatronymic.Checked = fOptions.TreeChartOptions.PatronymicVisible;
+            chkDiffLines.Checked = fOptions.TreeChartOptions.DiffLines;
+            chkBirthDate.Checked = fOptions.TreeChartOptions.BirthDateVisible;
+            chkDeathDate.Checked = fOptions.TreeChartOptions.DeathDateVisible;
+            chkOnlyYears.Checked = fOptions.TreeChartOptions.OnlyYears;
+            chkKinship.Checked = fOptions.TreeChartOptions.Kinship;
+            chkSignsVisible.Checked = fOptions.TreeChartOptions.SignsVisible;
+            chkChildlessExclude.Checked = fOptions.TreeChartOptions.ChildlessExclude;
+            chkTreeDecorative.Checked = fOptions.TreeChartOptions.Decorative;
+            chkPortraitsVisible.Checked = fOptions.TreeChartOptions.PortraitsVisible;
+            chkDefaultPortraits.Checked = fOptions.TreeChartOptions.DefaultPortraits;
+            chkInvertedTree.Checked = fOptions.TreeChartOptions.InvertedTree;
+            chkMarriagesDates.Checked = fOptions.TreeChartOptions.MarriagesDates;
+            chkShowPlaces.Checked = fOptions.TreeChartOptions.ShowPlaces;
+            chkHideUnknownSpouses.Checked = fOptions.TreeChartOptions.HideUnknownSpouses;
 
-            numMargins.Value = fOptions.ChartOptions.Margins;
-            numBranchDist.Value = fOptions.ChartOptions.BranchDistance;
-            numGenDist.Value = fOptions.ChartOptions.LevelDistance;
-            numSpouseDist.Value = fOptions.ChartOptions.SpouseDistance;
+            numMargins.Value = fOptions.TreeChartOptions.Margins;
+            numBranchDist.Value = fOptions.TreeChartOptions.BranchDistance;
+            numGenDist.Value = fOptions.TreeChartOptions.LevelDistance;
+            numSpouseDist.Value = fOptions.TreeChartOptions.SpouseDistance;
 
-            lblMaleColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.MaleColor);
-            lblFemaleColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.FemaleColor);
-            lblUnkSexColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.UnkSexColor);
-            lblUnHusbandColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.UnHusbandColor);
-            lblUnWifeColor.BackColor = UIHelper.ConvertColor(fOptions.ChartOptions.UnWifeColor);
+            lblMaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.MaleColor);
+            lblFemaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.FemaleColor);
+            lblUnkSexColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.UnkSexColor);
+            lblUnHusbandColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.UnHusbandColor);
+            lblUnWifeColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.UnWifeColor);
 
             chkUseProxy.Checked = fOptions.Proxy.UseProxy;
             txtProxyServer.Text = fOptions.Proxy.Server;
@@ -212,7 +212,7 @@ namespace GKUI.Forms
             UpdatePlugins();
             UpdateWomanSurnameFormat();
 
-            ancOptionsControl1.Options = fOptions.AncestorsCircleOptions;
+            ancOptionsControl1.Options = fOptions.CircleChartOptions;
             ancOptionsControl1.UpdateControls();
 
             cmbGeocoder.Text = fOptions.Geocoder;
@@ -294,7 +294,7 @@ namespace GKUI.Forms
 
         private void panDefFont_Click(object sender, EventArgs e)
         {
-            TreeChartOptions chartOptions = fOptions.ChartOptions;
+            TreeChartOptions chartOptions = fOptions.TreeChartOptions;
 
             var sdFont = new System.Drawing.Font(chartOptions.DefFontName, chartOptions.DefFontSize);
             IFont font = new FontHandler(sdFont);
@@ -353,34 +353,34 @@ namespace GKUI.Forms
             fOptions.AllowMediaStoreReferences = chkAllowMediaDirectRefs.Checked;
             fOptions.AutoCheckUpdates = chkAutoCheckUpdates.Checked;
 
-            fOptions.ChartOptions.FamilyVisible = chkSurname.Checked;
-            fOptions.ChartOptions.NameVisible = chkName.Checked;
-            fOptions.ChartOptions.PatronymicVisible = chkPatronymic.Checked;
-            fOptions.ChartOptions.DiffLines = chkDiffLines.Checked;
-            fOptions.ChartOptions.BirthDateVisible = chkBirthDate.Checked;
-            fOptions.ChartOptions.DeathDateVisible = chkDeathDate.Checked;
-            fOptions.ChartOptions.OnlyYears = chkOnlyYears.Checked;
-            fOptions.ChartOptions.Kinship = chkKinship.Checked;
-            fOptions.ChartOptions.SignsVisible = chkSignsVisible.Checked;
-            fOptions.ChartOptions.ChildlessExclude = chkChildlessExclude.Checked;
-            fOptions.ChartOptions.Decorative = chkTreeDecorative.Checked;
-            fOptions.ChartOptions.PortraitsVisible = chkPortraitsVisible.Checked;
-            fOptions.ChartOptions.DefaultPortraits = chkDefaultPortraits.Checked;
-            fOptions.ChartOptions.InvertedTree = chkInvertedTree.Checked;
-            fOptions.ChartOptions.MarriagesDates = chkMarriagesDates.Checked;
-            fOptions.ChartOptions.ShowPlaces = chkShowPlaces.Checked;
-            fOptions.ChartOptions.HideUnknownSpouses = chkHideUnknownSpouses.Checked;
+            fOptions.TreeChartOptions.FamilyVisible = chkSurname.Checked;
+            fOptions.TreeChartOptions.NameVisible = chkName.Checked;
+            fOptions.TreeChartOptions.PatronymicVisible = chkPatronymic.Checked;
+            fOptions.TreeChartOptions.DiffLines = chkDiffLines.Checked;
+            fOptions.TreeChartOptions.BirthDateVisible = chkBirthDate.Checked;
+            fOptions.TreeChartOptions.DeathDateVisible = chkDeathDate.Checked;
+            fOptions.TreeChartOptions.OnlyYears = chkOnlyYears.Checked;
+            fOptions.TreeChartOptions.Kinship = chkKinship.Checked;
+            fOptions.TreeChartOptions.SignsVisible = chkSignsVisible.Checked;
+            fOptions.TreeChartOptions.ChildlessExclude = chkChildlessExclude.Checked;
+            fOptions.TreeChartOptions.Decorative = chkTreeDecorative.Checked;
+            fOptions.TreeChartOptions.PortraitsVisible = chkPortraitsVisible.Checked;
+            fOptions.TreeChartOptions.DefaultPortraits = chkDefaultPortraits.Checked;
+            fOptions.TreeChartOptions.InvertedTree = chkInvertedTree.Checked;
+            fOptions.TreeChartOptions.MarriagesDates = chkMarriagesDates.Checked;
+            fOptions.TreeChartOptions.ShowPlaces = chkShowPlaces.Checked;
+            fOptions.TreeChartOptions.HideUnknownSpouses = chkHideUnknownSpouses.Checked;
 
-            fOptions.ChartOptions.Margins = (int)numMargins.Value;
-            fOptions.ChartOptions.BranchDistance = (int)numBranchDist.Value;
-            fOptions.ChartOptions.LevelDistance = (int)numGenDist.Value;
-            fOptions.ChartOptions.SpouseDistance = (int)numSpouseDist.Value;
+            fOptions.TreeChartOptions.Margins = (int)numMargins.Value;
+            fOptions.TreeChartOptions.BranchDistance = (int)numBranchDist.Value;
+            fOptions.TreeChartOptions.LevelDistance = (int)numGenDist.Value;
+            fOptions.TreeChartOptions.SpouseDistance = (int)numSpouseDist.Value;
 
-            fOptions.ChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackColor);
-            fOptions.ChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackColor);
-            fOptions.ChartOptions.UnkSexColor = UIHelper.ConvertColor(lblUnkSexColor.BackColor);
-            fOptions.ChartOptions.UnHusbandColor = UIHelper.ConvertColor(lblUnHusbandColor.BackColor);
-            fOptions.ChartOptions.UnWifeColor = UIHelper.ConvertColor(lblUnWifeColor.BackColor);
+            fOptions.TreeChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackColor);
+            fOptions.TreeChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackColor);
+            fOptions.TreeChartOptions.UnkSexColor = UIHelper.ConvertColor(lblUnkSexColor.BackColor);
+            fOptions.TreeChartOptions.UnHusbandColor = UIHelper.ConvertColor(lblUnHusbandColor.BackColor);
+            fOptions.TreeChartOptions.UnWifeColor = UIHelper.ConvertColor(lblUnWifeColor.BackColor);
 
             fOptions.Proxy.UseProxy = chkUseProxy.Checked;
             fOptions.Proxy.Server = txtProxyServer.Text;

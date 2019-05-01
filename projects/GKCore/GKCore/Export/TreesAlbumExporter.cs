@@ -75,7 +75,7 @@ namespace GKCore.Export
                 fWriter.AddParagraph(fTitle, titleFont, TextAlignment.taCenter);
 
                 var chartOptions = new TreeChartOptions();
-                chartOptions.Assign(GlobalOptions.Instance.ChartOptions);
+                chartOptions.Assign(GlobalOptions.Instance.TreeChartOptions);
                 chartOptions.DefaultPortraits = false;
                 chartOptions.HideUnknownSpouses = true;
                 chartOptions.InvertedTree = false;

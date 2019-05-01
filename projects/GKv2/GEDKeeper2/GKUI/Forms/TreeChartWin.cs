@@ -98,7 +98,7 @@ namespace GKUI.Forms
             fTreeBox.PersonModify += ImageTree_PersonModify;
             fTreeBox.RootChanged += ImageTree_RootChanged;
             fTreeBox.PersonProperties += ImageTree_PersonProperties;
-            fTreeBox.Options = GlobalOptions.Instance.ChartOptions;
+            fTreeBox.Options = GlobalOptions.Instance.TreeChartOptions;
             fTreeBox.NavRefresh += ImageTree_NavRefresh;
             fTreeBox.ZoomChanged += ImageTree_NavRefresh;
             fTreeBox.Dock = DockStyle.Fill;

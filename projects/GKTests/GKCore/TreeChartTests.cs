@@ -168,8 +168,8 @@ namespace GKCore
 
                 Assert.IsNotNull(model.Segments);
 
-                model.Options = GlobalOptions.Instance.AncestorsCircleOptions;
-                Assert.AreEqual(GlobalOptions.Instance.AncestorsCircleOptions, model.Options);
+                model.Options = GlobalOptions.Instance.CircleChartOptions;
+                Assert.AreEqual(GlobalOptions.Instance.CircleChartOptions, model.Options);
 
                 model.Base = fBase;
                 Assert.AreEqual(fBase, model.Base);

@@ -385,7 +385,7 @@
     <Compile Include="GKCore\Operations\IndividualNameChange.cs" />
     <Compile Include="GKCore\Operations\OrdinaryOperation.cs" />
     <Compile Include="GKCore\Operations\UndoManager.cs" />
-    <Compile Include="GKCore\Options\AncestorsCircleOptions.cs" />
+    <Compile Include="GKCore\Options\CircleChartOptions.cs" />
     <Compile Include="GKCore\Options\GlobalOptions.cs" />
     <Compile Include="GKCore\Options\LangRecord.cs" />
     <Compile Include="GKCore\Options\MRUFile.cs" />
