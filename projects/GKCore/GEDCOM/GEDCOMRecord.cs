@@ -177,7 +177,7 @@ namespace GKCommon.GEDCOM
                     tag.Dispose();
                 } else {
                     tag.ResetOwner(targetRecord);
-                    targetRecord.InsertTag(tag);
+                    targetRecord.AddTag(tag);
                 }
             }
 

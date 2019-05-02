@@ -159,21 +159,15 @@ namespace GKCommon.GEDCOM
             return (tree == null) ? null : tree.XRefIndex_Find(xref);
         }
 
-        protected GEDCOMTag InsertTag(GEDCOMTag tag)
-        {
-            fTags.Add(tag);
-            return tag;
-        }
-
-        public bool IsEmptySkip()
-        {
-            TagProperties props = GEDCOMProvider.GetTagProps(fName);
-            return (props != null && props.SkipEmpty);
-        }
-
         public void SetName(string value)
         {
             fName = value;
+        }
+
+        public GEDCOMTag AddTag(GEDCOMTag tag)
+        {
+            fTags.Add(tag);
+            return tag;
         }
 
         /// <summary>
@@ -196,7 +190,7 @@ namespace GKCommon.GEDCOM
                     }
                 }
 
-                InsertTag(tag);
+                AddTag(tag);
             } catch (Exception ex) {
                 Logger.LogWrite("GEDCOMTag.AddTag(): " + ex.Message);
             }
@@ -214,25 +208,17 @@ namespace GKCommon.GEDCOM
             SetName(source.Name);
             ParseString(source.StringValue);
 
-            foreach (GEDCOMTag sourceTag in source.fTags) {
-                GEDCOMTag copy = CreateCopy(sourceTag);
-                InsertTag(copy);
-            }
+            AssignList(source.fTags, this.fTags);
         }
 
         protected void AssignList(GEDCOMList<GEDCOMTag> srcList, GEDCOMList<GEDCOMTag> destList)
         {
             foreach (GEDCOMTag sourceTag in srcList) {
-                GEDCOMTag copy = CreateCopy(sourceTag);
-                destList.Add(copy);
-            }
-        }
+                GEDCOMTag copyTag = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { this, string.Empty, string.Empty });
+                copyTag.Assign(sourceTag);
 
-        private GEDCOMTag CreateCopy(GEDCOMTag sourceTag)
-        {
-            GEDCOMTag result = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { this, string.Empty, string.Empty });
-            result.Assign(sourceTag);
-            return result;
+                destList.Add(copyTag);
+            }
         }
 
         public virtual void Clear()

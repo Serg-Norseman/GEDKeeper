@@ -112,6 +112,8 @@ namespace GKCommon.GEDCOM
                 new GEDCOMAppFormat(GEDCOMFormat.gf_Legacy, "Legacy", "Legacy", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.gf_EasyTree, "EasyTree", "EasyTree", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.gf_Genney, "Genney", "Genney", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_GeneWeb, "GeneWeb", "GeneWeb", 1252),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_GENJ, "GENJ", "GENJ", -1),
             };
         }
 
@@ -144,10 +146,16 @@ namespace GKCommon.GEDCOM
                     break;
 
                 case GEDCOMCharacterSet.csUNICODE:
-                    if (!SysUtils.IsUnicodeEncoding(reader.CurrentEncoding)) {
-                        SetEncoding(Encoding.Unicode); // file without BOM
+                    if (format == GEDCOMFormat.gf_Geni) {
+                        SetEncoding(Encoding.UTF8);
+                    } else if (format == GEDCOMFormat.gf_GENJ) {
+                        SetEncoding(Encoding.UTF8);
                     } else {
-                        fEncodingState = EncodingState.esUnchanged;
+                        if (!SysUtils.IsUnicodeEncoding(reader.CurrentEncoding)) {
+                            SetEncoding(Encoding.Unicode); // file without BOM
+                        } else {
+                            fEncodingState = EncodingState.esUnchanged;
+                        }
                     }
                     break;
 
@@ -156,6 +164,8 @@ namespace GKCommon.GEDCOM
                         // Agelong Tree 4.0 with ANSEL is actually characteristic 
                         // for the Russian-language data export
                         SetEncoding(Encoding.GetEncoding(1251));
+                    } else if (format == GEDCOMFormat.gf_Geni) {
+                        SetEncoding(Encoding.UTF8);
                     } else {
                         SetEncoding(new AnselEncoding());
                     }
@@ -625,6 +635,12 @@ namespace GKCommon.GEDCOM
             TagProperties result;
             fTagsBase.TryGetValue(tagName, out result);
             return result;
+        }
+
+        public static bool SkipEmptyTag(string tagName)
+        {
+            TagProperties props = GEDCOMProvider.GetTagProps(tagName);
+            return (props != null && props.SkipEmpty);
         }
 
         #endregion

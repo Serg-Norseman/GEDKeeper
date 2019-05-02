@@ -277,8 +277,8 @@ namespace GKCore.Tools
             // Fix for Family Tree Maker 2008 which exports occupation as generic EVEN events
             if (format == GEDCOMFormat.gf_FamilyTreeMaker) {
                 string subtype = evt.Classification;
-                if (evt.Name == "EVEN" && subtype.ToLower() == "occupation") {
-                    evt.SetName("OCCU");
+                if (evt.Name == GEDCOMTagType.EVEN && subtype.ToLower() == "occupation") {
+                    evt.SetName(GEDCOMTagType.OCCU);
                     evt.Classification = string.Empty;
                 }
             }

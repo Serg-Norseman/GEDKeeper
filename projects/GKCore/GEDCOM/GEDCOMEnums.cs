@@ -236,8 +236,10 @@ namespace GKCommon.GEDCOM
         gf_Legacy,
         gf_EasyTree,
         gf_Genney,
+        gf_GeneWeb,
+        gf_GENJ,
 
-        gf_Last = gf_Genney
+        gf_Last = gf_GENJ
     }
 
     public enum GEDCOMCharacterSet
