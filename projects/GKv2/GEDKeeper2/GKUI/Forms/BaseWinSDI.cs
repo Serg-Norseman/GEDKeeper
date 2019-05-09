@@ -445,6 +445,8 @@ namespace GKUI.Forms
                 throw new ArgumentNullException("mediaRec");
 
             GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
+            if (fileRef == null) return;
+
             MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
             if (mmKind == MultimediaKind.mkNone) {
                 return;
