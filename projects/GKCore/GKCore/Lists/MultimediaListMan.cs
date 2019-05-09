@@ -77,6 +77,9 @@ namespace GKCore.Lists
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             GEDCOMFileReferenceWithTitle fileRef = fRec.FileReferences[0];
+            if (fileRef == null) {
+                return null;
+            }
 
             object result = null;
             switch ((MultimediaColumnType)colType) {
