@@ -213,6 +213,18 @@ namespace GKCore.Tools
 
         private static void ReformSourceCitation(GEDCOMTree tree, GEDCOMSourceCitation sourCit)
         {
+            GEDCOMSourceRecord sourRec = tree.CreateSource();
+
+            StringList description = sourCit.Description;
+            string page = sourCit.Page;
+            int certaintyAssessment = sourCit.CertaintyAssessment;
+
+            sourRec.Text = description;
+
+            sourCit.Clear();
+            sourCit.Value = sourRec;
+            sourCit.Page = page;
+            sourCit.CertaintyAssessment = certaintyAssessment;
         }
 
         private static void CheckRecord_PrepareTag(GEDCOMTree tree, GEDCOMFormat format, GEDCOMTagWithLists tag)
