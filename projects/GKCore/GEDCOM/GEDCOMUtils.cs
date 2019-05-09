@@ -586,16 +586,14 @@ namespace GKCommon.GEDCOM
             byte day = 0;
             GEDCOMDateFormat dateFormat = GEDCOMDateFormat.dfGEDCOMStd;
 
+            strTok.SkipWhitespaces();
+
             GEDCOMFormat format = (owner == null) ? GEDCOMFormat.gf_Native : owner.Format;
             bool isAhnDeviance = (format == GEDCOMFormat.gf_Ahnenblatt);
-            if (isAhnDeviance) {
-                GEDCOMUtils.PrepareAhnenblattDate(strTok.Data, strTok.Position, strTok.Length);
-            }
-
-            strTok.SkipWhitespaces();
 
             var token = strTok.CurrentToken;
             if (isAhnDeviance && token == GEDCOMToken.Symbol && strTok.GetSymbol() == '(') {
+                GEDCOMUtils.PrepareAhnenblattDate(strTok.Data, strTok.Position, strTok.Length);
                 token = strTok.Next();
             }
 
