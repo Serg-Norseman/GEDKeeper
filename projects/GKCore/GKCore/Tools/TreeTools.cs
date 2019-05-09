@@ -190,28 +190,25 @@ namespace GKCore.Tools
             GEDCOMMultimediaRecord mmRec = tree.CreateMultimedia();
 
             int num = mmLink.FileReferences.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GEDCOMFileReference srcFileRef = mmLink.FileReferences[i];
                 GEDCOMFileReferenceWithTitle tgtFileRef = new GEDCOMFileReferenceWithTitle(mmRec);
 
                 tgtFileRef.LinkFile(srcFileRef.StringValue);
 
-                if (srcFileRef.MultimediaFormat != GEDCOMMultimediaFormat.mfNone)
-                {
+                if (srcFileRef.MultimediaFormat != GEDCOMMultimediaFormat.mfNone) {
                     tgtFileRef.MultimediaFormat = srcFileRef.MultimediaFormat;
                 }
-                if (srcFileRef.MediaType != GEDCOMMediaType.mtUnknown)
-                {
+                if (srcFileRef.MediaType != GEDCOMMediaType.mtUnknown) {
                     tgtFileRef.MediaType = srcFileRef.MediaType;
                 }
+                tgtFileRef.Title = title;
 
                 mmRec.FileReferences.Add(tgtFileRef);
             }
 
             mmLink.Clear();
             mmLink.Value = mmRec;
-            mmLink.Title = title;
         }
 
         private static void ReformSourceCitation(GEDCOMTree tree, GEDCOMSourceCitation sourCit)
@@ -502,18 +499,24 @@ namespace GKCore.Tools
             }
         }
 
+        private static bool CheckRecordXRef(GEDCOMRecord record)
+        {
+            string stdSign = GEDCOMUtils.GetSignByRecord(record);
+            string xrefNum = record.GetXRefNum();
+            string recXRef = record.XRef;
+
+            return ((recXRef == stdSign + xrefNum) && record.GetId() > 0);
+        }
+
         private static void CorrectIds(GEDCOMTree tree, IProgressController pc)
         {
             pc.ProgressInit(LangMan.LS(LSID.LSID_IDsCorrect), tree.RecordsCount);
             XRefReplacer repMap = new XRefReplacer();
-            try
-            {
+            try {
                 int num = tree.RecordsCount;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GEDCOMRecord rec = tree[i];
-                    if (rec.GetId() < 0)
-                    {
+                    if (!CheckRecordXRef(rec)) {
                         string newXRef = tree.XRefIndex_NewXRef(rec);
                         repMap.AddXRef(rec, rec.XRef, newXRef);
                         rec.XRef = newXRef;
@@ -525,15 +528,12 @@ namespace GKCore.Tools
                 pc.ProgressInit(LangMan.LS(LSID.LSID_IDsCorrect), repMap.Count);
 
                 int num2 = repMap.Count;
-                for (int i = 0; i < num2; i++)
-                {
+                for (int i = 0; i < num2; i++) {
                     GEDCOMRecord rec = repMap[i].Rec;
                     rec.ReplaceXRefs(repMap);
                     pc.ProgressStep();
                 }
-            }
-            finally
-            {
+            } finally {
                 repMap.Dispose();
                 pc.ProgressDone();
             }
@@ -574,7 +574,7 @@ namespace GKCore.Tools
                         fileVer = -1;
                     }
 
-                    bool idCheck = true;
+                    bool xrefValid = true;
 
                     int progress = 0;
                     int num = tree.RecordsCount;
@@ -582,8 +582,8 @@ namespace GKCore.Tools
                         GEDCOMRecord rec = tree[i];
                         CheckRecord(baseContext, tree, rec, format, fileVer);
 
-                        if (format != GEDCOMFormat.gf_Native && idCheck && rec.GetId() < 0) {
-                            idCheck = false;
+                        if (format != GEDCOMFormat.gf_Native && xrefValid && !CheckRecordXRef(rec)) {
+                            xrefValid = false;
                         }
 
                         int newProgress = (int)Math.Min(100, ((i + 1) * 100.0f) / num);
@@ -593,7 +593,8 @@ namespace GKCore.Tools
                         }
                     }
 
-                    if (!idCheck && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IDsCorrectNeed))) {
+                    // obsolete: AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IDsCorrectNeed))
+                    if (!xrefValid) {
                         CorrectIds(tree, pc);
                     }
 
@@ -608,7 +609,6 @@ namespace GKCore.Tools
 
             return result;
         }
-
 
         #endregion
 

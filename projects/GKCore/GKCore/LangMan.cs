@@ -521,7 +521,7 @@ namespace GKCore
         /* 469 */ LSID_Communication,
         /* 470 */ LSID_IDsCorrect,
         /* 471 */ LSID_FormatCheck,
-        /* 472 */ LSID_IDsCorrectNeed,
+        /* 472 */ LSID_IDsCorrectNeed, // obsolete
         /* 473 */ LSID_MainBaseSize,
         /* 474 */ LSID_SyncFin,
         /* 475 */ LSID_PatSearch,
@@ -1351,7 +1351,7 @@ namespace GKCore
             /* 469 */ "Correspondence",
             /* 470 */ "Correction IDs",
             /* 471 */ "Check format",
-            /* 472 */ "Correction of identity records is required, continue?",
+            /* 472 */ "Correction of identity records is required, continue?", // obsolete
             /* 473 */ "Number of objects in the master database: {0}",
             /* 474 */ "Synchronization is complete.",
             /* 475 */ "Search the patriarchs",

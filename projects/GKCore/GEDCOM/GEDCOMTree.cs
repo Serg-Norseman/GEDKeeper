@@ -194,57 +194,6 @@ namespace GKCommon.GEDCOM
             f.RegisterTag(GEDCOMTagType._POSITION, GEDCOMCutoutPosition.Create);
         }
 
-        private static string GetSignByRecord(GEDCOMRecord record)
-        {
-            string result = string.Empty;
-            if (record == null) return result;
-
-            switch (record.RecordType)
-            {
-                case GEDCOMRecordType.rtIndividual:
-                    result = "I";
-                    break;
-                case GEDCOMRecordType.rtFamily:
-                    result = "F";
-                    break;
-                case GEDCOMRecordType.rtNote:
-                    result = "N";
-                    break;
-                case GEDCOMRecordType.rtMultimedia:
-                    result = "O";
-                    break;
-                case GEDCOMRecordType.rtSource:
-                    result = "S";
-                    break;
-                case GEDCOMRecordType.rtRepository:
-                    result = "R";
-                    break;
-                case GEDCOMRecordType.rtGroup:
-                    result = "G";
-                    break;
-                case GEDCOMRecordType.rtResearch:
-                    result = "RS";
-                    break;
-                case GEDCOMRecordType.rtTask:
-                    result = "TK";
-                    break;
-                case GEDCOMRecordType.rtCommunication:
-                    result = "CM";
-                    break;
-                case GEDCOMRecordType.rtLocation:
-                    result = "L";
-                    break;
-                case GEDCOMRecordType.rtSubmission:
-                    result = "????";
-                    break;
-                case GEDCOMRecordType.rtSubmitter:
-                    result = "SUB";
-                    break;
-            }
-
-            return result;
-        }
-
         internal GEDCOMList<GEDCOMRecord> GetRecords()
         {
             return fRecords;
@@ -288,7 +237,7 @@ namespace GKCommon.GEDCOM
         public string XRefIndex_NewXRef(GEDCOMRecord record)
         {
             var invNFI = GEDCOMUtils.InvariantNumberFormatInfo;
-            string sign = GetSignByRecord(record);
+            string sign = GEDCOMUtils.GetSignByRecord(record);
             string xref;
 
             int recType = (int)record.RecordType;
