@@ -503,4 +503,10 @@ namespace GKCommon.GEDCOM
         MarrNotRegistered,
         MarrDivorced
     }
+
+    public enum GeoCoord
+    {
+        Lati,
+        Long
+    }
 }
