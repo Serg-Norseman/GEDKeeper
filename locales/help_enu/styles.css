@@ -261,3 +261,18 @@ kbd
   padding-left: 2pt;
   padding-right: 2pt;
   }
+
+/* Use: for command lines, references to executables. */
+cmdline
+  {
+  color: #cc9900;
+  font-family: monospace;
+  font-size: 100%;
+  }
+
+img.center
+  {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  }
