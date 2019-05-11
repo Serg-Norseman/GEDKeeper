@@ -257,7 +257,22 @@ kbd
   {
   color: #009999;
   font-family: monospace;
-  font-size: 100%;
+  font-size: 120%;
+  font-weight: bold;
   padding-left: 2pt;
   padding-right: 2pt;
+  }
+
+img
+  {
+  vertical-align: middle;
+  }
+
+/* Use: for samples, examples, command lines, and references to executables. */
+samp
+  {
+  color: #cc9900;
+  font-family: monospace;
+  font-size: 120%;
+  font-weight: bold;
   }
