@@ -291,8 +291,7 @@ namespace GKCore.Charts
 
         public void BuildBy(GEDCOMIndividualRecord iRec)
         {
-            try
-            {
+            try {
                 fRec = iRec;
 
                 if (iRec != null) {
@@ -316,25 +315,25 @@ namespace GKCore.Charts
                     fBirthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, false);
                     fDeathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, false);
 
-                    if (options.ShowPlaces && !options.OnlyYears) {
-                        string birthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false);
-                        if (!string.IsNullOrEmpty(birthPlace)) {
-                            if (!string.IsNullOrEmpty(fBirthDate)) {
-                                fBirthDate += ", ";
-                            }
-                            fBirthDate += birthPlace;
-                        }
-
-                        string deathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false);
-                        if (!string.IsNullOrEmpty(deathPlace)) {
-                            if (!string.IsNullOrEmpty(fDeathDate)) {
-                                fDeathDate += ", ";
-                            }
-                            fDeathDate += deathPlace;
-                        }
-                    }
-
                     if (!options.OnlyYears) {
+                        if (options.ShowPlaces) {
+                            string birthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false);
+                            if (!string.IsNullOrEmpty(birthPlace)) {
+                                if (!string.IsNullOrEmpty(fBirthDate)) {
+                                    fBirthDate += ", ";
+                                }
+                                fBirthDate += birthPlace;
+                            }
+
+                            string deathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false);
+                            if (!string.IsNullOrEmpty(deathPlace)) {
+                                if (!string.IsNullOrEmpty(fDeathDate)) {
+                                    fDeathDate += ", ";
+                                }
+                                fDeathDate += deathPlace;
+                            }
+                        }
+
                         if (!string.IsNullOrEmpty(fBirthDate)) {
                             fBirthDate = ImportUtils.STD_BIRTH_SIGN + " " + fBirthDate;
                         }
@@ -347,12 +346,10 @@ namespace GKCore.Charts
                         EnumSet<SpecialUserRef> signs = EnumSet<SpecialUserRef>.Create();
 
                         int num = fRec.UserReferences.Count;
-                        for (int i = 0; i < num; i++)
-                        {
+                        for (int i = 0; i < num; i++) {
                             string rs = fRec.UserReferences[i].StringValue;
 
-                            for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++)
-                            {
+                            for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++) {
                                 string sur = LangMan.LS(GKData.SpecialUserRefs[(int)cps].Title);
                                 if (rs == sur) {
                                     signs.Include(cps);
@@ -366,17 +363,14 @@ namespace GKCore.Charts
                     }
 
                     if (options.PortraitsVisible) {
-                        try
-                        {
+                        try {
                             fPortrait = PortraitsCache.Instance.GetImage(fModel.Base.Context, iRec);
 
                             if (fPortrait == null && options.DefaultPortraits) {
                                 string resName = (fSex == GEDCOMSex.svFemale) ? "pi_female_140.png" : "pi_male_140.png";
                                 fPortrait = AppHost.GfxProvider.LoadResourceImage(resName, false);
                             }
-                        }
-                        catch (MediaFileNotFoundException)
-                        {
+                        } catch (MediaFileNotFoundException) {
                             if (!fModel.HasMediaFail) {
                                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
                                 fModel.HasMediaFail = true;
@@ -398,9 +392,7 @@ namespace GKCore.Charts
 
                     CertaintyAssessment = 0.0f;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeChartPerson.BuildBy(): " + ex.Message);
                 throw;
             }
@@ -410,8 +402,7 @@ namespace GKCore.Charts
         {
             Lines = new string[lines];
 
-            try
-            {
+            try {
                 TreeChartOptions options = fModel.Options;
 
                 // prepare
@@ -470,9 +461,7 @@ namespace GKCore.Charts
                     Lines[idx] = PathDebug;
                     //idx++;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeChartPerson.InitInfo(): " + ex.Message);
             }
         }
@@ -492,8 +481,7 @@ namespace GKCore.Charts
 
         public void CalcBounds(int lines, ChartRenderer renderer)
         {
-            try
-            {
+            try {
                 InitInfo(lines);
                 DefineExpands();
 
@@ -525,9 +513,7 @@ namespace GKCore.Charts
 
                     fWidth += imgW;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeChartPerson.CalcBounds(): " + ex.Message);
             }
         }

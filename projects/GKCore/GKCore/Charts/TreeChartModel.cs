@@ -225,6 +225,7 @@ namespace GKCore.Charts
         public TreeChartModel()
         {
             fDepthLimit = -1;
+            fEdges = new int[256];
             fFilter = new ChartFilter();
             fGraph = null;
             fPersons = new PersonList(true);
@@ -958,7 +959,6 @@ namespace GKCore.Charts
 
         private void RecalcAncestorsChart()
         {
-            fEdges = new int[256];
             Array.Clear(fEdges, 0, fEdges.Length);
 
             var prev = new ExtList<TreeChartPerson>();
@@ -966,34 +966,46 @@ namespace GKCore.Charts
                 RecalcAnc(prev, fRoot, fMargins, fMargins);
             } finally {
                 prev.Dispose();
-                fEdges = new int[0];
             }
         }
 
-        private void ShiftDesc(TreeChartPerson person, int offset, bool isSingle)
+        private bool ShiftDesc(TreeChartPerson person, int offset, bool isSingle, bool verify = false)
         {
-            if (person == null) return;
+            if (person == null) return true;
 
             if (person == fRoot) {
                 isSingle = false;
             }
 
-            person.PtX += offset;
+            // fix #189
+            if (verify && (person.Rect.Left + offset < fEdges[person.Generation] + fBranchDistance)) {
+                return false;
+            }
 
+            bool res = true;
             if (person.BaseSpouse != null && (person.BaseSpouse.Sex == GEDCOMSex.svFemale || person.BaseSpouse.GetSpousesCount() == 1)) {
-                ShiftDesc(person.BaseSpouse, offset, isSingle);
+                res = ShiftDesc(person.BaseSpouse, offset, isSingle, verify);
+                if (!res) return false;
             } else {
                 if (!isSingle) {
-                    ShiftDesc(person.Father, offset, false);
-                    ShiftDesc(person.Mother, offset, false);
+                    res = ShiftDesc(person.Father, offset, false, verify);
+                    if (!res) return false;
+
+                    res = ShiftDesc(person.Mother, offset, false, verify);
+                    if (!res) return false;
                 } else {
                     if (person.HasFlag(PersonFlag.pfDescByFather)) {
-                        ShiftDesc(person.Father, offset, true);
+                        res = ShiftDesc(person.Father, offset, true, verify);
+                        if (!res) return false;
                     } else if (person.HasFlag(PersonFlag.pfDescByMother)) {
-                        ShiftDesc(person.Mother, offset, true);
+                        res = ShiftDesc(person.Mother, offset, true, verify);
+                        if (!res) return false;
                     }
                 }
             }
+
+            person.PtX += offset;
+            return true;
         }
 
         private void RecalcDescChilds(TreeChartPerson person)
@@ -1005,13 +1017,11 @@ namespace GKCore.Charts
             int childrenCount = person.GetChildsCount();
             if (childrenCount == 0) return;
 
-            bool fixPair = person.BaseSpouse != null && person.BaseSpouse.GetSpousesCount() == 1;
+            bool alignPair = person.BaseSpouse != null && person.BaseSpouse.GetSpousesCount() == 1;
             int centX = 0;
 
-            if (fixPair) {
-                GEDCOMSex sex = person.Sex;
-                switch (sex)
-                {
+            if (alignPair) {
+                switch (person.Sex) {
                     case GEDCOMSex.svMale:
                         centX = (person.Rect.Right + person.BaseSpouse.Rect.Left) / 2;
                         break;
@@ -1046,20 +1056,44 @@ namespace GKCore.Charts
                 curX += (person.GetChild(childrenCount - 1).PtX - curX) / 2;
             }
 
-            if (fixPair) {
+            // This code is designed to align parents in the center of the location of children (across width),
+            // because in the process of drawing children, various kinds of displacement are formed, 
+            // and the initial arrangement of the parents can be very laterally, 
+            // after the formation of a complete tree of their descendants.
+            // However, this may be a problem (reason of #189) in the case if a shift initiated from descendants, 
+            // must be performed to the left with an overlay on an already formed side branch.
+
+            if (!fOptions.AutoAlign) {
+                return;
+            }
+
+            if (alignPair) {
+                int offset;
                 switch (person.Sex) {
                     case GEDCOMSex.svMale:
+                        // fix #189
+                        offset = curX - (fBranchDistance + person.Width) / 2 + 1 - person.PtX;
+                        if (person.Rect.Left + offset < fEdges[person.Generation]) {
+                            return;
+                        }
+
                         ShiftDesc(person, curX - (fBranchDistance + person.Width) / 2 + 1 - person.PtX, true);
                         ShiftDesc(person.BaseSpouse, curX + (fBranchDistance + person.BaseSpouse.Width) / 2 - person.BaseSpouse.PtX, true);
                         break;
 
                     case GEDCOMSex.svFemale:
+                        // fix #189
+                        offset = curX - (fBranchDistance + person.BaseSpouse.Width) / 2 + 1 - person.BaseSpouse.PtX;
+                        if (person.BaseSpouse.Rect.Left + offset < fEdges[person.BaseSpouse.Generation]) {
+                            return;
+                        }
+
                         ShiftDesc(person, curX + (fBranchDistance + person.Width) / 2 - person.PtX, true);
                         ShiftDesc(person.BaseSpouse, curX - (fBranchDistance + person.BaseSpouse.Width) / 2 + 1 - person.BaseSpouse.PtX, true);
                         break;
                 }
             } else {
-                ShiftDesc(person, curX - person.PtX, true);
+                ShiftDesc(person, curX - person.PtX, true, true);
             }
         }
 
@@ -1075,7 +1109,7 @@ namespace GKCore.Charts
 
             int offset = (fEdges[gen] > 0) ? fBranchDistance : fMargins;
             int bound = fEdges[gen] + offset;
-            if (person.Rect.Left <= bound) {
+            if (person.Rect.Left < bound) {
                 ShiftDesc(person, bound - person.Rect.Left, true);
             }
 
@@ -1091,22 +1125,24 @@ namespace GKCore.Charts
                 TreeChartPerson prev = person;
                 for (int i = 0; i < spousesCount; i++) {
                     TreeChartPerson sp = person.GetSpouse(i);
-                    int spX = 0, spY = 0;
+                    int spOffset = (fBranchDistance + sp.Width / 2);
+                    int spX = 0;
 
                     switch (person.Sex) {
                         case GEDCOMSex.svMale:
-                            spX = prev.Rect.Right + (fBranchDistance + sp.Width / 2);
-                            spY = person.PtY;
+                            spX = prev.Rect.Right + spOffset;
                             break;
 
                         case GEDCOMSex.svFemale:
-                            spX = prev.Rect.Left - (fBranchDistance + sp.Width / 2);
-                            spY = person.PtY;
+                            spX = prev.Rect.Left - spOffset;
                             break;
                     }
 
-                    RecalcDesc(sp, spX, spY, true);
+                    RecalcDesc(sp, spX, person.PtY, true);
 
+                    // spouses arranged from first to last from left to right
+                    // therefore for several wifes of one man, the previous node is the previous wife
+                    // however, for several husbands of one woman, the previous node is a woman
                     if (sp.Sex != GEDCOMSex.svMale) {
                         prev = sp;
                     }
@@ -1141,14 +1177,8 @@ namespace GKCore.Charts
 
         private void RecalcDescendantsChart(bool predef)
         {
-            fEdges = new int[256];
             Array.Clear(fEdges, 0, fEdges.Length);
-
-            try {
-                RecalcDesc(fRoot, fMargins, fMargins, predef);
-            } finally {
-                fEdges = new int[0];
-            }
+            RecalcDesc(fRoot, fMargins, fMargins, predef);
         }
 
         #endregion
