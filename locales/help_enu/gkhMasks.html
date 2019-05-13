@@ -8,42 +8,43 @@
 </head>
 <body>
 <h1>Filter masks</h1>
-<p>You use masks in GEDKeeper to select persons, events or locations
-having specific name. Text of a mask consists of general printable
-characters, allowed for object names, and two special symbols
-&#39;*&#39; and &#39;?&#39;.</p>
-<p><em>Mask</em> name is used because &#39;*&#39; and &#39;?&#39;
+<p>You use masks in GEDKeeper to select persons, events, or locations
+having a specific name. Text of a mask consists of general printable
+characters, allowed for object names, and two special symbols:
+&quot;<samp>*</samp>&quot; and &quot;<samp>?</samp>&quot;.</p>
+<p>The <em>Mask</em> name is used because the &quot;<samp>*</samp>&quot; and &quot;<samp>?</samp>&quot;
 symbols mask some arbitrary parts of a value.</p>
 <ul>
-<li>&#39;*&#39; inside a pattern matches any number of any characters;</li>
-<li>&#39;?&#39; matches one any character.</li>
+<li>&quot;<samp>*</samp>&quot; inside a mask matches any number of any characters.</li>
+<li>&quot;<samp>?</samp>&quot; matches any single character.</li>
 </ul>
-<p>If you want to specify several different masks, you can use
-&quot;|&quot; symbol to delimit each mask. For example, to get all
-persons with names Mitch and John you can use &quot;*Mitch*|*John*&quot;
-mask. &quot;|&quot; symbol acts as &quot;OR&quot; conjunction,
-therefore any person whose name matches one of the masks, matches
-entire &quot;Mitch*|John*&quot; mask.</p>
-<p>Any person's name, event or location always matches &#39;*&#39;
-mask. When you use such mask in a filter, it will show all objects.</p>
-<p>When you need to get all persons with &quot;Ivanovs&quot; as last
-name, you use &quot;Ivanov*&quot; masks in &quot;Name mask&quot; filter.
-Star symbol matches any characters after initial substring
-&quot;Ivanov&quot;. This way you get all persons with Ivanov,
-Ivanovskih and so on as their last name. If you want to filter out all
-persons with &quot;Vasiliy&quot; first name, you should use &quot;*
-Vasiliy *&quot; pattern; thus you are masking any last name and
-surname. To get all women with Vasilevna surname you use &quot;*
-Vasilevna&quot;, masking any first name and last name.</p>
+<p>If you want to specify several different masks, you use the
+&quot;<samp>|</samp>&quot; symbol to delimit each mask. For example, to get all
+persons with names Mitch and John you can use the &quot;<samp>*Mitch*|*John*</samp>&quot;
+mask. The &quot;<samp>|</samp>&quot; symbol acts as an &quot;OR&quot; conjunction,
+therefore any person whose name matches one of the masks, matches the
+entire &quot;<samp>Mitch*|John*</samp>&quot; mask.</p>
+<p>Any person's name, event, or location always matches the &quot;<samp>*</samp>&quot;
+mask. When you use such a mask in a filter, it will show all objects.</p>
+<p>When you need to get all persons with &quot;Johnson&quot; as a last
+name, you use the &quot;<samp>Johnson*</samp>&quot; mask in the &quot;Name mask&quot; filter.
+The &quot;<samp>*</samp>&quot; symbol matches any characters after the initial substring
+&quot;Johnson&quot;. This way you get all persons with Johnson,
+Johnsons, and so on as their last name. If you want to filter all
+persons with &quot;Joe&quot; as a first name, you would use the &quot;<samp>*
+Joe *</samp>&quot; mask; thus you are masking any last name and
+surname. To get all people with the &quot;Smith&quot; surname you use &quot;<samp>*
+Smith</samp>&quot;, masking any first name and last name.</p>
+<!-- TODO: In the following examples, change the list to an unordered list -->
 <p>Examples:<br />
-- Names &quot;Litvin Ivan Andreevich&quot; and &quot;Semenov Ivan
-Andreevich&quot; can be filtered out with &quot;*Ivan Andreevich&quot;
-mask;<br />
-- Any person with first name, last name or surname having
-&quot;Ivan&quot; inside, matches &quot;*Ivan*&quot; mask;<br />
-- Any woman with &quot;Natal<strong>i</strong>a&quot; or
-&quot;Natal<strong>y</strong>a&quot; name matches &quot;Natal?a*&quot;
-pattern.
+- The names &quot;Mary Anne Johnson&quot; and &quot;Elizabeth Anne
+Johnson&quot; can be filtered with the &quot;<samp>*Anne Johnson</samp>&quot;
+mask.<br />
+- Any person with a first name, last name, or surname having
+&quot;George&quot; inside, matches the &quot;<samp>*George*</samp>&quot; mask.<br />
+- Any person with the names &quot;Natal<strong>i</strong>a&quot; or
+&quot;Natal<strong>y</strong>a&quot; matches the &quot;<samp>Natal?a*</samp>&quot;
+mask.
 </p>
 </body>
 </html>
