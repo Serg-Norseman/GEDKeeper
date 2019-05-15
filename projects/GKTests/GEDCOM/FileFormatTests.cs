@@ -21,6 +21,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using GKCommon.GedML;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Tools;
@@ -328,6 +329,27 @@ namespace GKCommon.GEDCOM
             // TODO: interest feature - use _GRP & _PLC records! OBJE._PRIM
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_genney.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Genney, ctx.Tree.Format);
+            }
+        }
+
+
+        [Test]
+        public void Test_GedML()
+        {
+            using (BaseContext ctx = new BaseContext(null)) {
+                Assembly assembly = typeof(CoreTests).Assembly;
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_gedml.xml")) {
+                    var gedmlProvider = new GedMLProvider(ctx.Tree);
+                    gedmlProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                }
+
+                GEDCOMSubmitterRecord submRec = ctx.Tree.XRefIndex_Find("SUB1") as GEDCOMSubmitterRecord;
+                Assert.IsNotNull(submRec);
+                Assert.AreEqual("Michael Kay", submRec.Name.FullName);
+
+                GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+                //Assert.AreEqual("John Smith", iRec1.GetPrimaryFullName());
             }
         }
     }

@@ -187,6 +187,7 @@
     <Compile Include="GEDCOM\MatchParams.cs" />
     <Compile Include="GEDCOM\XRefReplacer.cs" />
     <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
+    <Compile Include="GedML\GedMLProvider.cs" />
     <Compile Include="GKCore\BBTextParser.cs" />
     <Compile Include="GKCore\Charts\BorderPainter.cs" />
     <Compile Include="GKCore\Charts\ICircleChart.cs" />

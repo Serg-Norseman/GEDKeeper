@@ -28,6 +28,29 @@ using GKCore;
 
 namespace GKCommon.GEDCOM
 {
+    public delegate StackTuple AddTagHandler(GEDCOMObject owner, int tagLevel, string tagName, string tagValue);
+
+    public sealed class StackTuple
+    {
+        public int Level;
+        public GEDCOMTag Tag;
+        public AddTagHandler AddHandler;
+
+        public StackTuple(int level, GEDCOMTag tag)
+        {
+            Level = level;
+            Tag = tag;
+            AddHandler = null;
+        }
+
+        public StackTuple(int level, GEDCOMTag tag, AddTagHandler addHandler)
+        {
+            Level = level;
+            Tag = tag;
+            AddHandler = addHandler;
+        }
+    }
+
     public sealed class TagProperties
     {
         public readonly string Name;
@@ -425,18 +448,6 @@ namespace GKCommon.GEDCOM
                 stack.Clear();
             } finally {
                 fTree.State = GEDCOMState.osReady;
-            }
-        }
-
-        private class StackTuple
-        {
-            public int Level;
-            public GEDCOMTag Tag;
-
-            public StackTuple(int level, GEDCOMTag tag)
-            {
-                Level = level;
-                Tag = tag;
             }
         }
 
