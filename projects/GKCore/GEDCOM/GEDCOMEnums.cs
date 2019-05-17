@@ -52,8 +52,10 @@ namespace GKCommon.GEDCOM
         public const string CHR = "CHR";
         public const string CHRA = "CHRA";
         public const string CITY = "CITY";
+        public const string CONC = "CONC";
         public const string CONF = "CONF";
         public const string CONL = "CONL";
+        public const string CONT = "CONT";
         public const string COPR = "COPR";
         public const string CREM = "CREM";
         public const string CTRY = "CTRY";

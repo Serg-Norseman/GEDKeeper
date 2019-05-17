@@ -25,7 +25,7 @@ namespace GKCommon.GEDCOM
         public GEDCOMPointer Family
         {
             // define 'FAMC' tag constructor by default (GEDCOMTree.cctor) for AddTag()
-            get { return base.TagClass(GEDCOMTagType.FAMC, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return base.GetTag(GEDCOMTagType.FAMC, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
 

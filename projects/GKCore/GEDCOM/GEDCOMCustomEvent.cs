@@ -50,17 +50,17 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPlace Place
         {
-            get { return TagClass(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
+            get { return GetTag(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
         }
 
         public GEDCOMAddress Address
         {
-            get { return TagClass(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress; }
+            get { return GetTag(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress; }
         }
 
         public GEDCOMDateValue Date
         {
-            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDateValue.Create) as GEDCOMDateValue; }
+            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDateValue.Create) as GEDCOMDateValue; }
         }
 
         public GEDCOMRestriction Restriction

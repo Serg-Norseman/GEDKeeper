@@ -26,7 +26,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMAddress Address
         {
-            get { return TagClass(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress; }
+            get { return GetTag(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress; }
         }
 
         public GEDCOMList<GEDCOMLanguage> Languages
@@ -36,7 +36,7 @@ namespace GKCommon.GEDCOM
 
         public new GEDCOMPersonalName Name
         {
-            get { return TagClass(GEDCOMTagType.NAME, GEDCOMPersonalName.Create) as GEDCOMPersonalName; }
+            get { return GetTag(GEDCOMTagType.NAME, GEDCOMPersonalName.Create) as GEDCOMPersonalName; }
         }
 
         public string RegisteredReference

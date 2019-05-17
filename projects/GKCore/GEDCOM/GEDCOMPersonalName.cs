@@ -78,7 +78,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMLanguage Language
         {
-            get { return TagClass("_LANG", GEDCOMLanguage.Create) as GEDCOMLanguage; }
+            get { return GetTag("_LANG", GEDCOMLanguage.Create) as GEDCOMLanguage; }
         }
 
 

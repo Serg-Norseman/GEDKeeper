@@ -54,7 +54,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPointer Submitter
         {
-            get { return TagClass(GEDCOMTagType.SUBM, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag(GEDCOMTagType.SUBM, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
 

@@ -26,7 +26,7 @@ namespace GKCommon.GEDCOM
     /// <summary>
     /// 
     /// </summary>
-    public abstract class GEDCOMRecord : GEDCOMCustomRecord, IGEDCOMStructWithLists
+    public class GEDCOMRecord : GEDCOMCustomRecord, IGEDCOMStructWithLists
     {
         private object fExtData;
         private GEDCOMRecordType fRecordType;
@@ -46,7 +46,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMChangeDate ChangeDate
         {
-            get { return TagClass(GEDCOMTagType.CHAN, GEDCOMChangeDate.Create) as GEDCOMChangeDate; }
+            get { return GetTag(GEDCOMTagType.CHAN, GEDCOMChangeDate.Create) as GEDCOMChangeDate; }
         }
 
         public object ExtData
@@ -92,7 +92,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        protected GEDCOMRecord(GEDCOMObject owner) : base(owner)
+        public GEDCOMRecord(GEDCOMObject owner) : base(owner)
         {
             fNotes = new GEDCOMList<GEDCOMNotes>(this);
             fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);

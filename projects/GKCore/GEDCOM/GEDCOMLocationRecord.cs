@@ -24,7 +24,7 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMMap Map
         {
-            get { return TagClass(GEDCOMTagType.MAP, GEDCOMMap.Create) as GEDCOMMap; }
+            get { return GetTag(GEDCOMTagType.MAP, GEDCOMMap.Create) as GEDCOMMap; }
         }
 
         public string LocationName

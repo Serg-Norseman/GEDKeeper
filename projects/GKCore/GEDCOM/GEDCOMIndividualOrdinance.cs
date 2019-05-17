@@ -24,7 +24,7 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMDateValue Date
         {
-            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDateValue.Create) as GEDCOMDateValue; }
+            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDateValue.Create) as GEDCOMDateValue; }
         }
 
         public string TempleCode
@@ -35,7 +35,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPlace Place
         {
-            get { return TagClass(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
+            get { return GetTag(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
         }
 
         public GEDCOMBaptismDateStatus BaptismDateStatus
@@ -52,7 +52,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPointer Family
         {
-            get { return TagClass(GEDCOMTagType.FAMC, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag(GEDCOMTagType.FAMC, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
         public GEDCOMChildSealingDateStatus ChildSealingDateStatus
@@ -63,7 +63,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMDateStatus DateStatus
         {
-            get { return TagClass(GEDCOMTagType.STAT, GEDCOMDateStatus.Create) as GEDCOMDateStatus; }
+            get { return GetTag(GEDCOMTagType.STAT, GEDCOMDateStatus.Create) as GEDCOMDateStatus; }
         }
 
 

@@ -24,7 +24,7 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMAddress Address
         {
-            get { return TagClass(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress; }
+            get { return GetTag(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress; }
         }
 
         public string RepositoryName

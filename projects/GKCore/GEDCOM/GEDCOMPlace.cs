@@ -30,12 +30,12 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPointer Location
         {
-            get { return TagClass(GEDCOMTagType._LOC, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag(GEDCOMTagType._LOC, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
         public GEDCOMMap Map
         {
-            get { return TagClass(GEDCOMTagType.MAP, GEDCOMMap.Create) as GEDCOMMap; }
+            get { return GetTag(GEDCOMTagType.MAP, GEDCOMMap.Create) as GEDCOMMap; }
         }
 
 
