@@ -173,7 +173,7 @@ namespace GKCore.Tools
 
         #endregion
 
-        #region Tree Check
+        #region GEDCOM Format Verification
 
         private static void ReformNote(GEDCOMTree tree, GEDCOMNotes note)
         {

@@ -841,10 +841,10 @@ namespace GKCore
         /* 783 */ LSID_PLT_Foster,
         /* 784 */ LSID_CharsetDetection,
         /* 785 */ LSID_LinkageType,
+        /* 786 */ LSID_HeWasBorn,
+        /* 787 */ LSID_SheWasBorn,
 
-        /* 786 */ // reserved begin
-        /* 787 */
-        /* 788 */
+        /* 788 */ // reserved begin
         /* 789 */
         /* 790 */
         /* 791 */
@@ -1665,10 +1665,10 @@ namespace GKCore
             /* 783 */ "Foster",
             /* 784 */ "Charset detection at load",
             /* 785 */ "Linkage type",
+            /* 786 */ "Was born",
+            /* 787 */ "Was born",
 
-            /* 786 */ "", // reserved begin
-            /* 787 */ "",
-            /* 788 */ "",
+            /* 788 */ "", // reserved begin
             /* 789 */ "",
             /* 790 */ "",
             /* 791 */ "",

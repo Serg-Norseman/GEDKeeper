@@ -24,12 +24,12 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMDatePeriod Date
         {
-            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDatePeriod.Create) as GEDCOMDatePeriod; }
+            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDatePeriod.Create) as GEDCOMDatePeriod; }
         }
 
         public GEDCOMPlace Place
         {
-            get { return TagClass(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
+            get { return GetTag(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
         }
 
 

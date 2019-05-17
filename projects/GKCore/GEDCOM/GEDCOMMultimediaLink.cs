@@ -64,7 +64,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMCutoutPosition CutoutPosition
         {
-            get { return TagClass(GEDCOMTagType._POSITION, GEDCOMCutoutPosition.Create) as GEDCOMCutoutPosition; }
+            get { return GetTag(GEDCOMTagType._POSITION, GEDCOMCutoutPosition.Create) as GEDCOMCutoutPosition; }
         }
 
 

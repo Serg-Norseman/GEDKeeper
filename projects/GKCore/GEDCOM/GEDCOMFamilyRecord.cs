@@ -39,12 +39,12 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPointer Husband
         {
-            get { return TagClass(GEDCOMTagType.HUSB, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag(GEDCOMTagType.HUSB, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
         public GEDCOMPointer Wife
         {
-            get { return TagClass(GEDCOMTagType.WIFE, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag(GEDCOMTagType.WIFE, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
         public GKMarriageStatus Status

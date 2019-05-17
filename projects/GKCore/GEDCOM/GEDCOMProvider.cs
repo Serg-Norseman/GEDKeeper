@@ -402,7 +402,7 @@ namespace GKCommon.GEDCOM
                         } else if (tagName == GEDCOMTagType.TRLR) {
                             break;
                         } else {
-                            curRecord = null;
+                            curRecord = fTree.AddRecord(new GEDCOMRecord(fTree));
                         }
 
                         if (curRecord != null) {
@@ -527,10 +527,10 @@ namespace GKCommon.GEDCOM
         private static void FixFTBLine(GEDCOMCustomRecord curRecord, GEDCOMTag curTag, int lineNum, string str)
         {
             try {
-                if (curTag.Name == "CONT") {
+                if (curTag.Name == GEDCOMTagType.CONT) {
                     curTag.StringValue += " " + str;
                 } else if (curTag is GEDCOMNotes) {
-                    curTag.AddTag("CONT", str, null);
+                    curTag.AddTag(GEDCOMTagType.CONT, str, null);
                 } else {
                     if (curRecord != null) {
                         curRecord.AddTag(GEDCOMTagType.NOTE, str, null);

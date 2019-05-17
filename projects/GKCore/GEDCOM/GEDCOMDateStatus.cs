@@ -24,7 +24,7 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMDate ChangeDate
         {
-            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate; }
+            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate; }
         }
 
 
