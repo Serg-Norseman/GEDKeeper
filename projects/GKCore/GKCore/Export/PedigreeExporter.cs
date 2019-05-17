@@ -366,31 +366,26 @@ namespace GKCore.Export
         {
             evList.QuickSort(EventsCompare);
 
-            int num3 = evList.Count;
-            for (int i = 0; i < num3; i++)
-            {
+            int evtNum = evList.Count;
+            for (int i = 0; i < evtNum; i++) {
                 GEDCOMCustomEvent evt = evList[i].Event;
-                if (evt != null && Equals(evList[i].IRec, person.IRec))
-                {
+                if (evt != null && Equals(evList[i].IRec, person.IRec)) {
                     if (evt.Name == GEDCOMTagType.BIRT) {
                         evList.Exchange(i, 0);
                     } else if (evt.Name == GEDCOMTagType.DEAT) {
-                        evList.Exchange(i, evList.Count - 1);
+                        evList.Exchange(i, evtNum - 1);
                     }
                 }
             }
 
             fWriter.BeginList();
 
-            int num4 = evList.Count;
-            for (int i = 0; i < num4; i++)
-            {
+            for (int i = 0; i < evtNum; i++) {
                 PedigreeEvent evObj = evList[i];
                 GEDCOMCustomEvent evt = evObj.Event;
                 string li;
 
-                if (evObj.IRec == person.IRec)
-                {
+                if (evObj.IRec == person.IRec) {
                     int ev = GKUtils.GetPersonEventIndex(evt.Name);
                     string st;
                     if (ev == 0) {
@@ -401,20 +396,17 @@ namespace GKCore.Export
 
                     string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
                     li = dt + ": " + st + ".";
-                    if (evt.Place.StringValue != "")
-                    {
+                    if (evt.Place.StringValue != "") {
                         li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
                     }
 
                     fWriter.AddListItem(" " + li, fTextFont);
-                }
-                else
-                {
+                } else {
                     string dt = (evt == null) ? "?" : GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
 
-                    string st = (evObj.IRec.Sex == GEDCOMSex.svMale) ? ": Родился " : ": Родилась ";
+                    string st = (evObj.IRec.Sex == GEDCOMSex.svMale) ? LangMan.LS(LSID.LSID_HeWasBorn) : LangMan.LS(LSID.LSID_SheWasBorn);
 
-                    li = dt + st + GKUtils.GetNameString(evObj.IRec, true, false);
+                    li = string.Format("{0}: {1} {2}", dt, st, GKUtils.GetNameString(evObj.IRec, true, false));
                     PedigreePerson prs = FindPerson(evObj.IRec);
                     string id = (prs != null) ? prs.Id : "";
 
