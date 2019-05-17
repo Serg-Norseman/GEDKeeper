@@ -29,6 +29,7 @@ using System.Text.RegularExpressions;
 
 using BSLib;
 using GKCommon.GEDCOM;
+using GKCommon.GedML;
 using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -1084,9 +1085,15 @@ namespace GKCore
             bool result = false;
 
             try {
+                FileProvider fileProvider;
+
                 string pw = null;
                 string ext = FileHelper.GetFileExtension(fileName);
                 if (ext == ".geds") {
+                    fileProvider = new GEDCOMProvider(fTree);
+                } else if (ext == ".geds") {
+                    fileProvider = new GEDCOMProvider(fTree);
+
                     if (loadSecure) {
                         if (!AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
                             AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
@@ -1095,6 +1102,11 @@ namespace GKCore
                     } else {
                         return false;
                     }
+                } else if (ext == ".xml") {
+                    fileProvider = new GedMLProvider(fTree);
+                } else {
+                    // TODO: message?
+                    return false;
                 }
 
                 IProgressController progress;
@@ -1107,7 +1119,7 @@ namespace GKCore
                 }
 
                 try {
-                    FileLoad(fileName, pw);
+                    FileLoad(fileProvider, fileName, pw);
 
                     if (checkValidation) {
                         TreeTools.CheckGEDCOMFormat(fTree, this, progress);
@@ -1131,11 +1143,10 @@ namespace GKCore
             return result;
         }
 
-        private void FileLoad(string fileName, string password)
+        private void FileLoad(FileProvider fileProvider, string fileName, string password)
         {
             if (string.IsNullOrEmpty(password)) {
-                var gedcomProvider = new GEDCOMProvider(fTree);
-                gedcomProvider.LoadFromFile(fileName, GlobalOptions.Instance.CharsetDetection);
+                fileProvider.LoadFromFile(fileName, GlobalOptions.Instance.CharsetDetection);
             } else {
                 LoadFromSecFile(fileName, password, GlobalOptions.Instance.CharsetDetection);
             }

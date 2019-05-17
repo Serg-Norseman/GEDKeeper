@@ -25,40 +25,36 @@ using System.Text;
 using System.Xml;
 using BSLib;
 using GKCommon.GEDCOM;
+using GKCore;
 
 namespace GKCommon.GedML
 {
     /// <summary>
     /// 
     /// </summary>
-    public class GedMLProvider
+    public class GedMLProvider : FileProvider
     {
-        private static readonly Encoding DEFAULT_ENCODING = Encoding.UTF8;
-
-        private readonly GEDCOMTree fTree;
-
-        public GedMLProvider(GEDCOMTree tree)
+        public GedMLProvider(GEDCOMTree tree) : base(tree)
         {
-            fTree = tree;
         }
 
-        public void LoadFromFile(string fileName)
+        public override string GetFilesFilter()
         {
-            using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                LoadFromStreamExt(fileStream, fileStream);
-            }
+            return LangMan.LS(LSID.LSID_GedMLFilter);
         }
 
-        public void LoadFromStreamExt(Stream fileStream, Stream inputStream)
+        protected override Encoding GetDefaultEncoding()
         {
-            using (StreamReader reader = FileHelper.OpenStreamReader(inputStream, DEFAULT_ENCODING)) {
-                fTree.Clear();
-                LoadFromReader(fileStream, reader);
-                fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
-            }
+            return Encoding.UTF8;
         }
 
-        private void LoadFromReader(Stream fileStream, StreamReader reader)
+        protected override string DetectCharset(Stream inputStream, bool charsetDetection)
+        {
+            string streamCharset = null;
+            return streamCharset;
+        }
+
+        protected override void LoadFromReader(Stream fileStream, StreamReader reader, string streamCharset = null)
         {
             fTree.State = GEDCOMState.osLoading;
             try {

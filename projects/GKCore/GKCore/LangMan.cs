@@ -843,9 +843,9 @@ namespace GKCore
         /* 785 */ LSID_LinkageType,
         /* 786 */ LSID_HeWasBorn,
         /* 787 */ LSID_SheWasBorn,
+        /* 788 */ LSID_GedMLFilter,
 
-        /* 788 */ // reserved begin
-        /* 789 */
+        /* 789 */ // reserved begin
         /* 790 */
         /* 791 */
         /* 792 */
@@ -1667,9 +1667,9 @@ namespace GKCore
             /* 785 */ "Linkage type",
             /* 786 */ "Was born",
             /* 787 */ "Was born",
+            /* 788 */ "GedML files (*.xml)|*.xml",
 
-            /* 788 */ "", // reserved begin
-            /* 789 */ "",
+            /* 789 */ "", // reserved begin
             /* 790 */ "",
             /* 791 */ "",
             /* 792 */ "",

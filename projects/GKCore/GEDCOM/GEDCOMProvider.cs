@@ -28,29 +28,6 @@ using GKCore;
 
 namespace GKCommon.GEDCOM
 {
-    public delegate StackTuple AddTagHandler(GEDCOMObject owner, int tagLevel, string tagName, string tagValue);
-
-    public sealed class StackTuple
-    {
-        public int Level;
-        public GEDCOMTag Tag;
-        public AddTagHandler AddHandler;
-
-        public StackTuple(int level, GEDCOMTag tag)
-        {
-            Level = level;
-            Tag = tag;
-            AddHandler = null;
-        }
-
-        public StackTuple(int level, GEDCOMTag tag, AddTagHandler addHandler)
-        {
-            Level = level;
-            Tag = tag;
-            AddHandler = addHandler;
-        }
-    }
-
     public sealed class TagProperties
     {
         public readonly string Name;
@@ -84,7 +61,7 @@ namespace GKCommon.GEDCOM
     /// <summary>
     /// 
     /// </summary>
-    public class GEDCOMProvider
+    public class GEDCOMProvider : FileProvider
     {
         public const char GEDCOM_DELIMITER = ' ';
         public const char GEDCOM_YEAR_MODIFIER_SEPARATOR = '/';
@@ -104,12 +81,13 @@ namespace GKCommon.GEDCOM
         public static readonly GEDCOMAppFormat[] GEDCOMFormats;
 
 
-        private readonly GEDCOMTree fTree;
-
-
-        public GEDCOMProvider(GEDCOMTree tree)
+        public GEDCOMProvider(GEDCOMTree tree) : base(tree)
         {
-            fTree = tree;
+        }
+
+        public override string GetFilesFilter()
+        {
+            return LangMan.LS(LSID.LSID_GEDCOMFilter);
         }
 
         static GEDCOMProvider()
@@ -140,19 +118,19 @@ namespace GKCommon.GEDCOM
             };
         }
 
-        #region Encoding hack
+        #region Encoding routines
 
         private enum EncodingState { esUnchecked, esUnchanged, esChanged }
 
         private const int DEF_CODEPAGE = 437;
-        private static readonly Encoding DEFAULT_ENCODING = Encoding.GetEncoding(DEF_CODEPAGE);
+        private Encoding fDefaultEncoding;
         private Encoding fSourceEncoding;
         private EncodingState fEncodingState;
 
         private void SetEncoding(Encoding encoding)
         {
             fSourceEncoding = encoding;
-            fEncodingState = (DEFAULT_ENCODING.Equals(fSourceEncoding)) ? EncodingState.esUnchanged : EncodingState.esChanged;
+            fEncodingState = (fDefaultEncoding.Equals(fSourceEncoding)) ? EncodingState.esUnchanged : EncodingState.esChanged;
         }
 
         private void DefineEncoding(StreamReader reader, GEDCOMFormat format, string streamCharset)
@@ -224,41 +202,24 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        #endregion
-
-        #region Loading functions
-
-        public void LoadFromString(string gedcomText, bool charsetDetection = false)
+        protected override Encoding GetDefaultEncoding()
         {
-            using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(gedcomText))) {
-                LoadFromStreamExt(stream, stream, charsetDetection);
-            }
+            return Encoding.GetEncoding(DEF_CODEPAGE);
         }
 
-        public void LoadFromFile(string fileName, bool charsetDetection = false)
+        protected override string DetectCharset(Stream inputStream, bool charsetDetection)
         {
-            using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                LoadFromStreamExt(fileStream, fileStream, charsetDetection);
-            }
-        }
-
-        public void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
-        {
-            using (StreamReader reader = FileHelper.OpenStreamReader(inputStream, DEFAULT_ENCODING)) {
-                fTree.Clear();
-
-                string streamCharset = null;
-                if (charsetDetection) {
-                    var charsetRes = GKUtils.DetectCharset(inputStream);
-                    if (charsetRes.Confidence >= 0.7f) {
-                        streamCharset = charsetRes.Charset;
-                    }
+            string streamCharset = null;
+            if (charsetDetection) {
+                var charsetRes = GKUtils.DetectCharset(inputStream);
+                if (charsetRes.Confidence >= 0.7f) {
+                    streamCharset = charsetRes.Charset;
                 }
-
-                LoadFromReader(fileStream, reader, streamCharset);
-                fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
             }
+            return streamCharset;
         }
+
+        #endregion
 
         #region Buffered read without excessive allocating memory
 
@@ -297,7 +258,7 @@ namespace GKCommon.GEDCOM
                     fLineBufPos = 0;
                     if (linePos > 0) {
                         if (fEncodingState == EncodingState.esChanged) {
-                            byte[] src = DEFAULT_ENCODING.GetBytes(fLineBuffer, 0, linePos);
+                            byte[] src = fDefaultEncoding.GetBytes(fLineBuffer, 0, linePos);
                             linePos = fSourceEncoding.GetChars(src, 0, src.Length, fLineBuffer, 0);
                         }
 
@@ -312,13 +273,16 @@ namespace GKCommon.GEDCOM
 
         #endregion
 
-        private void LoadFromReader(Stream fileStream, StreamReader reader, string streamCharset = null)
+        #region Loading functions
+
+        protected override void LoadFromReader(Stream fileStream, StreamReader reader, string streamCharset = null)
         {
             fTree.State = GEDCOMState.osLoading;
             try {
                 ProgressEventHandler progressHandler = fTree.OnProgress;
 
-                fSourceEncoding = DEFAULT_ENCODING;
+                fDefaultEncoding = GetDefaultEncoding();
+                fSourceEncoding = fDefaultEncoding;
                 fEncodingState = EncodingState.esUnchecked;
 
                 long fileSize = fileStream.Length;
@@ -370,51 +334,19 @@ namespace GKCommon.GEDCOM
                             DefineEncoding(reader, format, streamCharset);
                         }
 
-                        if (tagName == GEDCOMTagType.INDI) {
-                            curRecord = fTree.AddRecord(new GEDCOMIndividualRecord(fTree));
-                        } else if (tagName == GEDCOMTagType.FAM) {
-                            curRecord = fTree.AddRecord(new GEDCOMFamilyRecord(fTree));
-                        } else if (tagName == GEDCOMTagType.OBJE) {
-                            curRecord = fTree.AddRecord(new GEDCOMMultimediaRecord(fTree));
-                        } else if (tagName == GEDCOMTagType.NOTE) {
-                            curRecord = fTree.AddRecord(new GEDCOMNoteRecord(fTree));
-                            curRecord.ParseString(tagValue);
-                        } else if (tagName == GEDCOMTagType.REPO) {
-                            curRecord = fTree.AddRecord(new GEDCOMRepositoryRecord(fTree));
-                        } else if (tagName == GEDCOMTagType.SOUR) {
-                            curRecord = fTree.AddRecord(new GEDCOMSourceRecord(fTree));
-                        } else if (tagName == GEDCOMTagType.SUBN) {
-                            curRecord = fTree.AddRecord(new GEDCOMSubmissionRecord(fTree));
-                        } else if (tagName == GEDCOMTagType.SUBM) {
-                            curRecord = fTree.AddRecord(new GEDCOMSubmitterRecord(fTree));
-                        } else if (tagName == GEDCOMTagType._GROUP) {
-                            curRecord = fTree.AddRecord(new GEDCOMGroupRecord(fTree));
-                        } else if (tagName == GEDCOMTagType._RESEARCH) {
-                            curRecord = fTree.AddRecord(new GEDCOMResearchRecord(fTree));
-                        } else if (tagName == GEDCOMTagType._TASK) {
-                            curRecord = fTree.AddRecord(new GEDCOMTaskRecord(fTree));
-                        } else if (tagName == GEDCOMTagType._COMM) {
-                            curRecord = fTree.AddRecord(new GEDCOMCommunicationRecord(fTree));
-                        } else if (tagName == GEDCOMTagType._LOC) {
-                            curRecord = fTree.AddRecord(new GEDCOMLocationRecord(fTree));
-                        } else if (tagName == GEDCOMTagType.HEAD) {
-                            curRecord = fTree.Header;
-                        } else if (tagName == GEDCOMTagType.TRLR) {
-                            break;
-                        } else {
-                            curRecord = fTree.AddRecord(new GEDCOMRecord(fTree));
-                        }
-
-                        if (curRecord != null) {
+                        StackTuple stackTuple = AddTreeTagHandler(fTree, tagLevel, tagName, tagValue);
+                        if (stackTuple != null) {
                             stack.Clear();
-                            stack.Push(new StackTuple(tagLevel, curRecord));
-
-                            if (tagXRef != "") {
+                            stack.Push(stackTuple);
+                            curRecord = (GEDCOMCustomRecord)stackTuple.Tag;
+                            if (!string.IsNullOrEmpty(tagXRef)) {
                                 curRecord.XRef = tagXRef;
                             }
+                            curTag = null;
+                        } else {
+                            // only TRLR
+                            break;
                         }
-
-                        curTag = null;
                     } else {
                         if (curRecord != null) {
                             GEDCOMTag parentTag = null;
@@ -448,6 +380,54 @@ namespace GKCommon.GEDCOM
                 stack.Clear();
             } finally {
                 fTree.State = GEDCOMState.osReady;
+            }
+        }
+
+        private static StackTuple AddTreeTagHandler(GEDCOMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GEDCOMTree tree = (GEDCOMTree)owner;
+            GEDCOMCustomRecord curRecord = null;
+            AddTagHandler addHandler = null;
+
+            if (tagName == GEDCOMTagType.INDI) {
+                curRecord = tree.AddRecord(new GEDCOMIndividualRecord(tree));
+            } else if (tagName == GEDCOMTagType.FAM) {
+                curRecord = tree.AddRecord(new GEDCOMFamilyRecord(tree));
+            } else if (tagName == GEDCOMTagType.OBJE) {
+                curRecord = tree.AddRecord(new GEDCOMMultimediaRecord(tree));
+            } else if (tagName == GEDCOMTagType.NOTE) {
+                curRecord = tree.AddRecord(new GEDCOMNoteRecord(tree));
+                curRecord.ParseString(tagValue);
+            } else if (tagName == GEDCOMTagType.REPO) {
+                curRecord = tree.AddRecord(new GEDCOMRepositoryRecord(tree));
+            } else if (tagName == GEDCOMTagType.SOUR) {
+                curRecord = tree.AddRecord(new GEDCOMSourceRecord(tree));
+            } else if (tagName == GEDCOMTagType.SUBN) {
+                curRecord = tree.AddRecord(new GEDCOMSubmissionRecord(tree));
+            } else if (tagName == GEDCOMTagType.SUBM) {
+                curRecord = tree.AddRecord(new GEDCOMSubmitterRecord(tree));
+            } else if (tagName == GEDCOMTagType._GROUP) {
+                curRecord = tree.AddRecord(new GEDCOMGroupRecord(tree));
+            } else if (tagName == GEDCOMTagType._RESEARCH) {
+                curRecord = tree.AddRecord(new GEDCOMResearchRecord(tree));
+            } else if (tagName == GEDCOMTagType._TASK) {
+                curRecord = tree.AddRecord(new GEDCOMTaskRecord(tree));
+            } else if (tagName == GEDCOMTagType._COMM) {
+                curRecord = tree.AddRecord(new GEDCOMCommunicationRecord(tree));
+            } else if (tagName == GEDCOMTagType._LOC) {
+                curRecord = tree.AddRecord(new GEDCOMLocationRecord(tree));
+            } else if (tagName == GEDCOMTagType.HEAD) {
+                curRecord = tree.Header;
+            } else if (tagName == GEDCOMTagType.TRLR) {
+                curRecord = null;
+            } else {
+                curRecord = tree.AddRecord(new GEDCOMRecord(tree));
+            }
+
+            if (curRecord != null) {
+                return new StackTuple(tagLevel, curRecord, addHandler);
+            } else {
+                return null;
             }
         }
 

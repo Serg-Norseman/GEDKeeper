@@ -244,6 +244,7 @@
     <Compile Include="GKCore\Controllers\TreeSplitController.cs" />
     <Compile Include="GKCore\Controllers\UserRefEditDlgController.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
+    <Compile Include="GKCore\FileProvider.cs" />
     <Compile Include="GKCore\ImportUtils.cs" />
     <Compile Include="GKCore\Interfaces\IBaseContext.cs" />
     <Compile Include="GKCore\Interfaces\IBaseEditor.cs" />

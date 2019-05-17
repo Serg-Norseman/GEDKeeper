@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -17,6 +17,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#define GEDML_SUPPORT
 
 using System;
 using System.Collections.Generic;
@@ -124,7 +126,12 @@ namespace GKCore.Controllers
         {
             string homePath = AppHost.Instance.GetUserFilesPath("");
 
-            string fileName = AppHost.StdDialogs.GetOpenFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            string filters = LangMan.LS(LSID.LSID_GEDCOMFilter);
+            #if GEDML_SUPPORT
+            filters += "|" + LangMan.LS(LSID.LSID_GedMLFilter);
+            #endif
+
+            string fileName = AppHost.StdDialogs.GetOpenFile("", homePath, filters, 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName)) {
                 AppHost.Instance.LoadBase(fView, fileName);
             }
