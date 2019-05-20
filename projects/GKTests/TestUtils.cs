@@ -151,8 +151,9 @@ namespace GKTests
 
             // media for tests
             GEDCOMMultimediaRecord mediaRec = context.Tree.CreateMultimedia();
-            mediaRec.AddTag(GEDCOMTagType.FILE, "", null);
+            mediaRec.FileReferences.Add(new GEDCOMFileReferenceWithTitle(mediaRec, GEDCOMTagType.FILE, ""));
             GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
+
             fileRef.Title = "Test multimedia";
             fileRef.LinkFile("sample.png");
             Assert.IsNotNull(mediaRec, "mediaRec != null");

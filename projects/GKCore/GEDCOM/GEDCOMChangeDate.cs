@@ -69,21 +69,6 @@ namespace GKCommon.GEDCOM
             SetNameValue(tagName, tagValue);
         }
 
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.DATE) {
-                result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
-            } else if (tagName == GEDCOMTagType.NOTE) {
-                result = base.AddTag(tagName, tagValue, GEDCOMNotes.Create);
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
-        }
-
         public override string ToString()
         {
             DateTime cdt = ChangeDateTime;

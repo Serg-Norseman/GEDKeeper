@@ -26,8 +26,6 @@ namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMFamilyRecord : GEDCOMRecordWithEvents
     {
-        private static readonly GEDCOMFactory fTagsFactory;
-
         private GEDCOMList<GEDCOMPointer> fChildren;
         private GKMarriageStatus fStatus;
 
@@ -78,51 +76,6 @@ namespace GKCommon.GEDCOM
         public GEDCOMIndividualRecord GetWife()
         {
             return Wife.Value as GEDCOMIndividualRecord;
-        }
-
-        static GEDCOMFamilyRecord()
-        {
-            GEDCOMFactory f = new GEDCOMFactory();
-            fTagsFactory = f;
-
-            f.RegisterTag(GEDCOMTagType.ANUL, GEDCOMFamilyEvent.Create);
-            f.RegisterTag(GEDCOMTagType.CENS, GEDCOMFamilyEvent.Create);
-            f.RegisterTag(GEDCOMTagType.DIV, GEDCOMFamilyEvent.Create);
-            f.RegisterTag(GEDCOMTagType.DIVF, GEDCOMFamilyEvent.Create);
-            f.RegisterTag(GEDCOMTagType.ENGA, GEDCOMFamilyEvent.Create);
-            f.RegisterTag(GEDCOMTagType.MARB, GEDCOMFamilyEvent.Create);
-            f.RegisterTag(GEDCOMTagType.MARC, GEDCOMFamilyEvent.Create);
-            f.RegisterTag(GEDCOMTagType.MARR, GEDCOMFamilyEvent.Create);
-            f.RegisterTag(GEDCOMTagType.MARL, GEDCOMFamilyEvent.Create);
-            f.RegisterTag(GEDCOMTagType.MARS, GEDCOMFamilyEvent.Create);
-            f.RegisterTag(GEDCOMTagType.RESI, GEDCOMFamilyEvent.Create);
-            f.RegisterTag(GEDCOMTagType.EVEN, GEDCOMFamilyEvent.Create);
-        }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.HUSB || tagName == GEDCOMTagType.WIFE) {
-                result = base.AddTag(tagName, tagValue, GEDCOMPointer.Create);
-            } else if (tagName == GEDCOMTagType.CHIL) {
-                result = fChildren.Add(new GEDCOMPointer(this, tagName, tagValue));
-            } else if (tagName == GEDCOMTagType._STAT) {
-                fStatus = GEDCOMUtils.GetMarriageStatusVal(tagValue);
-                result = null;
-            } else {
-                result = fTagsFactory.CreateTag(this, tagName, tagValue);
-
-                if (result != null) {
-                    if (result is GEDCOMFamilyEvent) {
-                        result = AddEvent(result as GEDCOMFamilyEvent);
-                    }
-                } else {
-                    result = base.AddTag(tagName, tagValue, tagConstructor);
-                }
-            }
-
-            return result;
         }
 
         public override GEDCOMCustomEvent AddEvent(GEDCOMCustomEvent evt)
@@ -239,10 +192,10 @@ namespace GKCommon.GEDCOM
             base.SaveToStream(stream, level);
 
             level += 1;
+            WriteTagLine(stream, level, GEDCOMTagType._STAT, GEDCOMUtils.GetMarriageStatusStr(fStatus), true);
+
             fChildren.SaveToStream(stream, level);
             Events.SaveToStream(stream, level); // for files content compatibility
-
-            WriteTagLine(stream, level, GEDCOMTagType._STAT, GEDCOMUtils.GetMarriageStatusStr(fStatus), true);
         }
 
         private string GetFamilyString()

@@ -1089,7 +1089,7 @@ namespace GKCore
 
                 string pw = null;
                 string ext = FileHelper.GetFileExtension(fileName);
-                if (ext == ".geds") {
+                if (ext == ".ged") {
                     fileProvider = new GEDCOMProvider(fTree);
                 } else if (ext == ".geds") {
                     fileProvider = new GEDCOMProvider(fTree);

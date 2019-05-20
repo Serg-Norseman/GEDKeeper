@@ -47,21 +47,6 @@ namespace GKCommon.GEDCOM
             SetRecordType(GEDCOMRecordType.rtCommunication);
             SetName(GEDCOMTagType._COMM);
         }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.NAME) {
-                result = base.AddTag(tagName, tagValue, null);
-            } else if (tagName == GEDCOMTagType.DATE) {
-                result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
-        }
         
         #region Auxiliary
 

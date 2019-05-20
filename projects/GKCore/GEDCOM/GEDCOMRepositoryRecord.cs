@@ -40,20 +40,6 @@ namespace GKCommon.GEDCOM
             SetName(GEDCOMTagType.REPO);
         }
 
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.PHON || tagName == GEDCOMTagType.EMAIL || tagName == GEDCOMTagType.FAX || tagName == GEDCOMTagType.WWW) {
-                result = Address.AddTag(tagName, tagValue, tagConstructor);
-            } else {
-                // 'ADDR' defines by default
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
-        }
-
         // TODO: connect to use
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
         {

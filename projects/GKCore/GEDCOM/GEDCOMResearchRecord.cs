@@ -98,27 +98,6 @@ namespace GKCommon.GEDCOM
             base.Dispose(disposing);
         }
 
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.NAME) {
-                result = base.AddTag(tagName, tagValue, null);
-            } else if (tagName == GEDCOMTagType._STARTDATE || tagName == GEDCOMTagType._STOPDATE) {
-                result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
-            } else if (tagName == GEDCOMTagType._TASK) {
-                result = fTasks.Add(new GEDCOMPointer(this, tagName, tagValue));
-            } else if (tagName == GEDCOMTagType._COMM) {
-                result = fCommunications.Add(new GEDCOMPointer(this, tagName, tagValue));
-            } else if (tagName == GEDCOMTagType._GROUP) {
-                result = fGroups.Add(new GEDCOMPointer(this, tagName, tagValue));
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
-        }
-
         public override void Clear()
         {
             base.Clear();

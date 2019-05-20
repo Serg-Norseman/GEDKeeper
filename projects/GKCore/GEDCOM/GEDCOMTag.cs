@@ -180,7 +180,7 @@ namespace GKCommon.GEDCOM
         /// <param name="tagValue">A string value of sub-tag.</param>
         /// <param name="tagConstructor">The default constructor of sub-tag.</param>
         /// <returns></returns>
-        public virtual GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
+        internal GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
         {
             GEDCOMTag tag = null;
             try {
@@ -583,6 +583,7 @@ namespace GKCommon.GEDCOM
 
         #region Stream management
 
+        // FIXME: refactor it!
         internal virtual GEDCOMParseFunc GetParseFunc()
         {
             return GEDCOMParseFunc.Default;

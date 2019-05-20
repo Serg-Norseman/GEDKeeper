@@ -51,19 +51,6 @@ namespace GKCommon.GEDCOM
             SetName(GEDCOMTagType._TASK);
         }
 
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType._STARTDATE || tagName == GEDCOMTagType._STOPDATE) {
-                result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
-        }
-
         #region Auxiliary
 
         public sealed class TaskGoalRet

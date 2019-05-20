@@ -40,14 +40,14 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMBaptismDateStatus BaptismDateStatus
         {
-            get { return GEDCOMUtils.GetBaptismDateStatusVal(GetTagStringValue(GEDCOMTagType.STAT)); }
-            set { SetTagStringValue(GEDCOMTagType.STAT, GEDCOMUtils.GetBaptismDateStatusStr(value)); }
+            get { return GEDCOMUtils.GetBaptismDateStatusVal(DateStatus.StringValue); }
+            set { DateStatus.StringValue = GEDCOMUtils.GetBaptismDateStatusStr(value); }
         }
 
         public GEDCOMEndowmentDateStatus EndowmentDateStatus
         {
-            get { return GEDCOMUtils.GetEndowmentDateStatusVal(GetTagStringValue(GEDCOMTagType.STAT)); }
-            set { SetTagStringValue(GEDCOMTagType.STAT, GEDCOMUtils.GetEndowmentDateStatusStr(value)); }
+            get { return GEDCOMUtils.GetEndowmentDateStatusVal(DateStatus.StringValue); }
+            set { DateStatus.StringValue = GEDCOMUtils.GetEndowmentDateStatusStr(value); }
         }
 
         public GEDCOMPointer Family
@@ -57,8 +57,8 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMChildSealingDateStatus ChildSealingDateStatus
         {
-            get { return GEDCOMUtils.GetChildSealingDateStatusVal(GetTagStringValue(GEDCOMTagType.STAT)); }
-            set { SetTagStringValue(GEDCOMTagType.STAT, GEDCOMUtils.GetChildSealingDateStatusStr(value)); }
+            get { return GEDCOMUtils.GetChildSealingDateStatusVal(DateStatus.StringValue); }
+            set { DateStatus.StringValue = GEDCOMUtils.GetChildSealingDateStatusStr(value); }
         }
 
         public GEDCOMDateStatus DateStatus
@@ -79,20 +79,6 @@ namespace GKCommon.GEDCOM
         public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
             return new GEDCOMIndividualOrdinance(owner, tagName, tagValue);
-        }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.STAT) {
-                result = base.AddTag(tagName, tagValue, GEDCOMDateStatus.Create);
-            } else {
-                // define 'DATE', 'FAMC' by default
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
         }
     }
 }

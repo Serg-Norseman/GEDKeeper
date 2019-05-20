@@ -47,19 +47,5 @@ namespace GKCommon.GEDCOM
         {
             SetNameValue(tagName, tagValue);
         }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.DATE) {
-                result = base.AddTag(tagName, tagValue, GEDCOMDatePeriod.Create);
-            } else {
-                // define 'PLAC' by default
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
-        }
     }
 }

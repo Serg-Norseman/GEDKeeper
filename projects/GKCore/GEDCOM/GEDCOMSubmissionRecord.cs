@@ -63,18 +63,5 @@ namespace GKCommon.GEDCOM
             SetRecordType(GEDCOMRecordType.rtSubmission);
             SetName(GEDCOMTagType.SUBN);
         }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.SUBM) {
-                result = base.AddTag(tagName, tagValue, GEDCOMPointer.Create);
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
-        }
     }
 }

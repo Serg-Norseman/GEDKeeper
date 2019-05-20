@@ -168,32 +168,6 @@ namespace GKCommon.GEDCOM
 
         #region Internal
 
-        static GEDCOMTree()
-        {
-            GEDCOMFactory f = GEDCOMFactory.GetInstance();
-
-            f.RegisterTag(GEDCOMTagType.ADDR, GEDCOMAddress.Create);
-            f.RegisterTag(GEDCOMTagType.CHAN, GEDCOMChangeDate.Create);
-            f.RegisterTag(GEDCOMTagType.DATE, GEDCOMDateValue.Create);
-            f.RegisterTag(GEDCOMTagType.FAMC, GEDCOMPointer.Create);
-            f.RegisterTag(GEDCOMTagType.LANG, GEDCOMLanguage.Create);
-            f.RegisterTag(GEDCOMTagType.MAP, GEDCOMMap.Create);
-            f.RegisterTag(GEDCOMTagType.PLAC, GEDCOMPlace.Create);
-            f.RegisterTag(GEDCOMTagType.TIME, GEDCOMTime.Create);
-
-            f.RegisterTag(GEDCOMTagType.ANCI, GEDCOMPointer.Create);
-            f.RegisterTag(GEDCOMTagType.BAPL, GEDCOMIndividualOrdinance.Create);
-            f.RegisterTag(GEDCOMTagType.CONL, GEDCOMIndividualOrdinance.Create);
-            f.RegisterTag(GEDCOMTagType.DESI, GEDCOMPointer.Create);
-            f.RegisterTag(GEDCOMTagType.ENDL, GEDCOMIndividualOrdinance.Create);
-            f.RegisterTag(GEDCOMTagType.SLGC, GEDCOMIndividualOrdinance.Create);
-            f.RegisterTag(GEDCOMTagType.SLGS, GEDCOMSpouseSealing.Create);
-
-            f.RegisterTag("_LANG", GEDCOMLanguage.Create);
-            f.RegisterTag(GEDCOMTagType._LOC, GEDCOMPointer.Create);
-            f.RegisterTag(GEDCOMTagType._POSITION, GEDCOMCutoutPosition.Create);
-        }
-
         internal GEDCOMList<GEDCOMRecord> GetRecords()
         {
             return fRecords;

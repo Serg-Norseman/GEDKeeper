@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,15 +22,40 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
+using GKCore;
 
 namespace GKCommon.GEDCOM
 {
     public delegate GEDCOMTag TagConstructor(GEDCOMObject owner, string tagName, string tagValue);
 
+    public sealed class TagInfo
+    {
+        public readonly TagConstructor Constructor;
+        public readonly AddTagHandler AddHandler;
+        public readonly bool SkipEmpty;
+        public readonly bool GKExtend;
+
+        public TagInfo(TagConstructor constructor, AddTagHandler addHandler)
+        {
+            Constructor = constructor;
+            AddHandler = addHandler;
+            SkipEmpty = false;
+            GKExtend = false;
+        }
+
+        public TagInfo(TagConstructor constructor, AddTagHandler addHandler, bool skipEmpty, bool extend)
+        {
+            Constructor = constructor;
+            AddHandler = addHandler;
+            SkipEmpty = skipEmpty;
+            GKExtend = extend;
+        }
+    }
+
     public sealed class GEDCOMFactory
     {
         private static GEDCOMFactory fInstance;
-        private readonly Dictionary<string, TagConstructor> fConstructors;
+        private readonly Dictionary<string, TagInfo> fTags;
 
         public static GEDCOMFactory GetInstance()
         {
@@ -40,24 +65,45 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMFactory()
         {
-            fConstructors = new Dictionary<string, TagConstructor>();
+            fTags = new Dictionary<string, TagInfo>();
         }
 
-        public void RegisterTag(string key, TagConstructor constructor)
+        public void RegisterTag(string tagName, TagConstructor constructor, AddTagHandler addHandler = null,
+                                bool skipEmpty = false, bool extend = false)
         {
-            if (fConstructors.ContainsKey(key))
-                fConstructors[key] = constructor;
-            else
-                fConstructors.Add(key, constructor);
+            TagInfo tagInfo;
+            if (!fTags.TryGetValue(tagName, out tagInfo)) {
+                tagInfo = new TagInfo(constructor, addHandler, skipEmpty, extend);
+                fTags.Add(tagName, tagInfo);
+            } else {
+                //tagInfo.Constructor = constructor;
+                //tagInfo.AddHandler = addHandler;
+            }
         }
 
         public GEDCOMTag CreateTag(GEDCOMObject owner, string tagName, string tagValue)
         {
-            TagConstructor constructor;
-            if (fConstructors.TryGetValue(tagName, out constructor)) {
-                return constructor(owner, tagName, tagValue);
+            TagInfo tagInfo;
+            if (fTags.TryGetValue(tagName, out tagInfo)) {
+                return tagInfo.Constructor(owner, tagName, tagValue);
             }
             return null;
+        }
+
+        public TagInfo GetTagInfo(string tagName)
+        {
+            TagInfo result;
+            fTags.TryGetValue(tagName, out result);
+            return result;
+        }
+
+        public AddTagHandler GetAddHandler(string tagName)
+        {
+            TagInfo tagInfo;
+            if (fTags.TryGetValue(tagName, out tagInfo)) {
+                return tagInfo.AddHandler;
+            }
+            return GEDCOMProvider.AddBaseTag;
         }
 
         #if !NETSTANDARD

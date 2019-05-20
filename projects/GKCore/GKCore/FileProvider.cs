@@ -45,7 +45,11 @@ namespace GKCore
         {
             Level = level;
             Tag = tag;
-            AddHandler = addHandler;
+            if (addHandler != null) {
+                AddHandler = addHandler;
+            } else {
+                AddHandler = GEDCOMFactory.GetInstance().GetAddHandler(tag.Name);
+            }
         }
     }
 

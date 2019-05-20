@@ -74,20 +74,6 @@ namespace GKCommon.GEDCOM
         {
         }
 
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.PHON || tagName == GEDCOMTagType.EMAIL || tagName == GEDCOMTagType.FAX || tagName == GEDCOMTagType.WWW) {
-                result = Address.AddTag(tagName, tagValue, tagConstructor);
-            } else {
-                // define 'PLAC', 'ADDR', 'DATE' by default
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
-        }
-
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
         {
             if (tag == null) return 0.0f;

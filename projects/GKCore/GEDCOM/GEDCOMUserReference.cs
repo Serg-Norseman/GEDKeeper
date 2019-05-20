@@ -60,20 +60,6 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && string.IsNullOrEmpty(fReferenceType);
         }
 
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.TYPE) {
-                fReferenceType = tagValue;
-                result = null;
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
-        }
-
         public override void SaveToStream(StreamWriter stream, int level)
         {
             base.SaveToStream(stream, level);

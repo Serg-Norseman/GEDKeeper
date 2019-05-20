@@ -26,8 +26,6 @@ namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMIndividualRecord : GEDCOMRecordWithEvents
     {
-        private static readonly GEDCOMFactory fTagsFactory;
-        
         private GEDCOMList<GEDCOMAlias> fAliasses;
         private GEDCOMList<GEDCOMAssociation> fAssociations;
         private GEDCOMList<GEDCOMChildToFamilyLink> fChildToFamilyLinks;
@@ -142,102 +140,6 @@ namespace GKCommon.GEDCOM
                 fSpouseToFamilyLinks.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        static GEDCOMIndividualRecord()
-        {
-            GEDCOMFactory f = new GEDCOMFactory();
-            fTagsFactory = f;
-
-            f.RegisterTag(GEDCOMTagType.NAME, GEDCOMPersonalName.Create);
-            f.RegisterTag(GEDCOMTagType.FAMC, GEDCOMChildToFamilyLink.Create);
-            f.RegisterTag(GEDCOMTagType.FAMS, GEDCOMSpouseToFamilyLink.Create);
-            f.RegisterTag(GEDCOMTagType.ASSO, GEDCOMAssociation.Create);
-            f.RegisterTag(GEDCOMTagType.ALIA, GEDCOMAlias.Create);
-
-            f.RegisterTag(GEDCOMTagType.ADOP, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.BAPM, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.BARM, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.BASM, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.BIRT, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.BLES, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.BURI, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.CENS, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.CHR, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.CHRA, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.CONF, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.CREM, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.DEAT, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.EVEN, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.EMIG, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.FCOM, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.GRAD, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.IMMI, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.NATU, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.ORDN, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.PROB, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.RETI, GEDCOMIndividualEvent.Create);
-            f.RegisterTag(GEDCOMTagType.WILL, GEDCOMIndividualEvent.Create);
-
-            f.RegisterTag(GEDCOMTagType.CAST, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType.DSCR, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType.EDUC, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType.FACT, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType.IDNO, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType.NATI, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType.NCHI, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType.NMR, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType.OCCU, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType.PROP, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType.RELI, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType.RESI, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType.SSN, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType.TITL, GEDCOMIndividualAttribute.Create);
-
-            f.RegisterTag(GEDCOMTagType._TRAVEL, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType._HOBBY, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType._AWARD, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType._MILI, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType._MILI_IND, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType._MILI_DIS, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType._MILI_RANK, GEDCOMIndividualAttribute.Create);
-
-            f.RegisterTag(GEDCOMTagType._BGRO, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType._EYES, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType._HAIR, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType._MDNA, GEDCOMIndividualAttribute.Create);
-            f.RegisterTag(GEDCOMTagType._YDNA, GEDCOMIndividualAttribute.Create);
-        }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result = fTagsFactory.CreateTag(this, tagName, tagValue);
-            if (result != null) {
-                if (result is GEDCOMCustomEvent) {
-                    result = AddEvent(result as GEDCOMCustomEvent);
-                } else if (result is GEDCOMChildToFamilyLink) {
-                    result = fChildToFamilyLinks.Add(result as GEDCOMChildToFamilyLink);
-                } else if (result is GEDCOMSpouseToFamilyLink) {
-                    result = fSpouseToFamilyLinks.Add(result as GEDCOMSpouseToFamilyLink);
-                } else if (result is GEDCOMPersonalName) {
-                    result = AddPersonalName(result as GEDCOMPersonalName);
-                } else if (result is GEDCOMAssociation) {
-                    result = fAssociations.Add(result as GEDCOMAssociation);
-                } else if (result is GEDCOMAlias) {
-                    result = fAliasses.Add(result as GEDCOMAlias);
-                }
-            } else {
-                if (tagName == GEDCOMTagType._GROUP) {
-                    result = fGroups.Add(new GEDCOMPointer(this, tagName, tagValue));
-                } else if (tagName == GEDCOMTagType.SEX) {
-                    fSex = GEDCOMUtils.GetSexVal(tagValue);
-                    result = null;
-                } else {
-                    result = base.AddTag(tagName, tagValue, tagConstructor);
-                }
-            }
-
-            return result;
         }
 
         public override GEDCOMCustomEvent AddEvent(GEDCOMCustomEvent evt)

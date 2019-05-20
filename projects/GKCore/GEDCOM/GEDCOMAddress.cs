@@ -160,25 +160,6 @@ namespace GKCommon.GEDCOM
             AssignList(otherAddr.fWWWList, fWWWList);
         }
 
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.PHON) {
-                result = AddPhoneNumber(tagValue);
-            } else if (tagName == GEDCOMTagType.EMAIL) {
-                result = AddEmailAddress(tagValue);
-            } else if (tagName == GEDCOMTagType.FAX) {
-                result = AddFaxNumber(tagValue);
-            } else if (tagName == GEDCOMTagType.WWW) {
-                result = AddWebPage(tagValue);
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
-        }
-
         public override void Clear()
         {
             base.Clear();

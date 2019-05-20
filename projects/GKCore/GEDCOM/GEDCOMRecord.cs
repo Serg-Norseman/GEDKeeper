@@ -239,28 +239,6 @@ namespace GKCommon.GEDCOM
             fUserReferences.SaveToStream(stream, level);
         }
 
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.NOTE) {
-                result = fNotes.Add(new GEDCOMNotes(this, tagName, tagValue));
-            } else if (tagName == GEDCOMTagType.SOUR) {
-                result = fSourceCitations.Add(new GEDCOMSourceCitation(this, tagName, tagValue));
-            } else if (tagName == GEDCOMTagType.OBJE) {
-                result = fMultimediaLinks.Add(new GEDCOMMultimediaLink(this, tagName, tagValue));
-            } else if (tagName == GEDCOMTagType.REFN) {
-                result = fUserReferences.Add(new GEDCOMUserReference(this, tagName, tagValue));
-            } else if (tagName == GEDCOMTagType._UID) {
-                fUID = tagValue;
-                result = null;
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
-        }
-
         public override void Clear()
         {
             base.Clear();
