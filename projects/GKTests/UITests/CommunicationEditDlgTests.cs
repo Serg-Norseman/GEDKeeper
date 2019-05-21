@@ -79,7 +79,7 @@ namespace GKUI.Forms
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fCommunicationRecord.CommName);
-            Assert.AreEqual(GKCommunicationType.ctEMail, fCommunicationRecord.CommunicationType);
+            Assert.AreEqual(GDMCommunicationType.ctEMail, fCommunicationRecord.CommunicationType);
             Assert.AreEqual("", fCommunicationRecord.Date.StringValue);
         }
 

@@ -2089,11 +2089,11 @@ namespace GKCommon.GEDCOM
             resRec.ResearchName = "Test Research";
             Assert.AreEqual("Test Research", resRec.ResearchName);
             
-            resRec.Priority = GKResearchPriority.rpNormal;
-            Assert.AreEqual(GKResearchPriority.rpNormal, resRec.Priority);
+            resRec.Priority = GDMResearchPriority.rpNormal;
+            Assert.AreEqual(GDMResearchPriority.rpNormal, resRec.Priority);
             
-            resRec.Status = GKResearchStatus.rsOnHold;
-            Assert.AreEqual(GKResearchStatus.rsOnHold, resRec.Status);
+            resRec.Status = GDMResearchStatus.rsOnHold;
+            Assert.AreEqual(GDMResearchStatus.rsOnHold, resRec.Status);
             
             resRec.StartDate.Date = TestUtils.ParseDT("20.01.2013");
             Assert.AreEqual(TestUtils.ParseDT("20.01.2013"), resRec.StartDate.Date);
@@ -2352,21 +2352,21 @@ namespace GKCommon.GEDCOM
                 comRec.CommName = "Test Communication";
                 Assert.AreEqual("Test Communication", comRec.CommName);
 
-                comRec.CommunicationType = GKCommunicationType.ctFax;
-                Assert.AreEqual(GKCommunicationType.ctFax, comRec.CommunicationType);
+                comRec.CommunicationType = GDMCommunicationType.ctFax;
+                Assert.AreEqual(GDMCommunicationType.ctFax, comRec.CommunicationType);
 
                 comRec.Date.Date = TestUtils.ParseDT("23.01.2013");
                 Assert.AreEqual(TestUtils.ParseDT("23.01.2013"), comRec.Date.Date);
 
-                comRec.SetCorresponder(GKCommunicationDir.cdFrom, iRec);
+                comRec.SetCorresponder(GDMCommunicationDir.cdFrom, iRec);
 
                 var corr = comRec.GetCorresponder();
-                Assert.AreEqual(GKCommunicationDir.cdFrom, corr.CommDir);
+                Assert.AreEqual(GDMCommunicationDir.cdFrom, corr.CommDir);
                 Assert.AreEqual(iRec, corr.Corresponder);
 
-                comRec.SetCorresponder(GKCommunicationDir.cdTo, iRec);
+                comRec.SetCorresponder(GDMCommunicationDir.cdTo, iRec);
                 corr = comRec.GetCorresponder();
-                Assert.AreEqual(GKCommunicationDir.cdTo, corr.CommDir);
+                Assert.AreEqual(GDMCommunicationDir.cdTo, corr.CommDir);
                 Assert.AreEqual(iRec, corr.Corresponder);
 
                 Assert.IsFalse(comRec.IsEmpty());
@@ -2406,8 +2406,8 @@ namespace GKCommon.GEDCOM
             {
                 Assert.IsNotNull(taskRec);
 
-                taskRec.Priority = GKResearchPriority.rpNormal;
-                Assert.AreEqual(GKResearchPriority.rpNormal, taskRec.Priority);
+                taskRec.Priority = GDMResearchPriority.rpNormal;
+                Assert.AreEqual(GDMResearchPriority.rpNormal, taskRec.Priority);
 
                 taskRec.StartDate.Date = TestUtils.ParseDT("20.01.2013");
                 Assert.AreEqual(TestUtils.ParseDT("20.01.2013"), taskRec.StartDate.Date);
@@ -2418,22 +2418,22 @@ namespace GKCommon.GEDCOM
                 taskRec.Goal = "Test Goal";
                 Assert.AreEqual("Test Goal", taskRec.Goal);
                 var goal = taskRec.GetTaskGoal();
-                Assert.AreEqual(GKGoalType.gtOther, goal.GoalType);
+                Assert.AreEqual(GDMGoalType.gtOther, goal.GoalType);
                 Assert.AreEqual(null, goal.GoalRec);
 
                 taskRec.Goal = iRec.XRef;
                 goal = taskRec.GetTaskGoal();
-                Assert.AreEqual(GKGoalType.gtIndividual, goal.GoalType);
+                Assert.AreEqual(GDMGoalType.gtIndividual, goal.GoalType);
                 Assert.AreEqual(iRec, goal.GoalRec);
 
                 taskRec.Goal = famRec.XRef;
                 goal = taskRec.GetTaskGoal();
-                Assert.AreEqual(GKGoalType.gtFamily, goal.GoalType);
+                Assert.AreEqual(GDMGoalType.gtFamily, goal.GoalType);
                 Assert.AreEqual(famRec, goal.GoalRec);
 
                 taskRec.Goal = srcRec.XRef;
                 goal = taskRec.GetTaskGoal();
-                Assert.AreEqual(GKGoalType.gtSource, goal.GoalType);
+                Assert.AreEqual(GDMGoalType.gtSource, goal.GoalType);
                 Assert.AreEqual(srcRec, goal.GoalRec);
 
                 Assert.IsFalse(taskRec.IsEmpty());

@@ -20,6 +20,7 @@
 
 using System;
 using BSLib;
+using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {

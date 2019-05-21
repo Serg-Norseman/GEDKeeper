@@ -33,7 +33,7 @@
 using System;
 using System.Text;
 
-namespace GKCommon.GEDCOM
+namespace GDModel.Providers.GEDCOM
 {
     public sealed class AnselEncoding : Encoding
     {

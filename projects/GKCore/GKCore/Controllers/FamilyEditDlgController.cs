@@ -74,7 +74,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fFamily.Status = (GKMarriageStatus)fView.MarriageStatus.SelectedIndex;
+                fFamily.Status = (GDMMarriageStatus)fView.MarriageStatus.SelectedIndex;
                 fFamily.Restriction = (GEDCOMRestriction)fView.Restriction.SelectedIndex;
 
                 fBase.Context.ProcessFamily(fFamily);

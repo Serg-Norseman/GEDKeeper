@@ -24,6 +24,7 @@ using System.Globalization;
 using System.IO;
 using BSLib;
 using GKCore;
+using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
@@ -582,12 +583,6 @@ namespace GKCommon.GEDCOM
         #endregion
 
         #region Stream management
-
-        // FIXME: refactor it!
-        internal virtual GEDCOMParseFunc GetParseFunc()
-        {
-            return GEDCOMParseFunc.Default;
-        }
 
         protected void SaveTagsToStream(StreamWriter stream, int level)
         {

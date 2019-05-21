@@ -22,6 +22,7 @@ using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.MVP;
 using GKCore.MVP.Views;
+using GKCore.Types;
 
 namespace GKCore.Controllers
 {

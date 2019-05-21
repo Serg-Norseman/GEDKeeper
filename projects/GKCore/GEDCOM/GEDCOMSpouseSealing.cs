@@ -20,6 +20,20 @@
 
 namespace GKCommon.GEDCOM
 {
+    public enum GEDCOMSpouseSealingDateStatus
+    {
+        sdsNone,
+        sdsCanceled,
+        sdsCompleted,
+        sdsDNS,
+        sdsDNSCAN,
+        sdsExcluded,
+        sdsPre1970,
+        sdsSubmitted,
+        sdsUncleared
+    }
+
+
     public sealed class GEDCOMSpouseSealing : GEDCOMIndividualOrdinance
     {
         public GEDCOMSpouseSealingDateStatus SpouseSealingDateStatus

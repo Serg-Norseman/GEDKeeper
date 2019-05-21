@@ -20,6 +20,18 @@
 
 namespace GKCommon.GEDCOM
 {
+    /// <summary>
+    /// This type of Genealogical Data Model (GDM) defines the goal of the task.
+    /// </summary>
+    public enum GDMGoalType
+    {
+        gtIndividual,
+        gtFamily,
+        gtSource,
+        gtOther
+    }
+
+
     public sealed class GEDCOMTaskRecord : GEDCOMRecord
     {
         public string Goal
@@ -28,7 +40,7 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType._GOAL, value); }
         }
 
-        public GKResearchPriority Priority
+        public GDMResearchPriority Priority
         {
             get { return GEDCOMUtils.GetPriorityVal(GetTagStringValue(GEDCOMTagType._PRIORITY)); }
             set { SetTagStringValue(GEDCOMTagType._PRIORITY, GEDCOMUtils.GetPriorityStr(value)); }
@@ -55,10 +67,10 @@ namespace GKCommon.GEDCOM
 
         public sealed class TaskGoalRet
         {
-            public readonly GKGoalType GoalType;
+            public readonly GDMGoalType GoalType;
             public readonly GEDCOMRecord GoalRec;
 
-            public TaskGoalRet(GKGoalType goalType, GEDCOMRecord goalRec)
+            public TaskGoalRet(GDMGoalType goalType, GEDCOMRecord goalRec)
             {
                 GoalType = goalType;
                 GoalRec = goalRec;
@@ -70,15 +82,15 @@ namespace GKCommon.GEDCOM
             GEDCOMTree tree = GetTree();
             GEDCOMRecord goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(Goal));
 
-            GKGoalType goalType;
+            GDMGoalType goalType;
             if (goalRec is GEDCOMIndividualRecord) {
-                goalType = GKGoalType.gtIndividual;
+                goalType = GDMGoalType.gtIndividual;
             } else if (goalRec is GEDCOMFamilyRecord) {
-                goalType = GKGoalType.gtFamily;
+                goalType = GDMGoalType.gtFamily;
             } else if (goalRec is GEDCOMSourceRecord) {
-                goalType = GKGoalType.gtSource;
+                goalType = GDMGoalType.gtSource;
             } else {
-                goalType = GKGoalType.gtOther;
+                goalType = GDMGoalType.gtOther;
             }
 
             return new TaskGoalRet(goalType, goalRec);

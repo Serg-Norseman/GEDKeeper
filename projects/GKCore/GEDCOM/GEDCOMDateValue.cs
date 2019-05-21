@@ -91,11 +91,6 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && (fValue == null || fValue.IsEmpty());
         }
 
-        internal override GEDCOMParseFunc GetParseFunc()
-        {
-            return GEDCOMParseFunc.DateValue;
-        }
-
         public override string ParseString(string strValue)
         {
             try {

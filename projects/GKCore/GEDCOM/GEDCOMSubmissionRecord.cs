@@ -20,6 +20,14 @@
 
 namespace GKCommon.GEDCOM
 {
+    public enum GEDCOMOrdinanceProcessFlag
+    {
+        opNone,
+        opYes,
+        opNo
+    }
+
+
     public sealed class GEDCOMSubmissionRecord : GEDCOMRecord
     {
         public string FamilyFileName

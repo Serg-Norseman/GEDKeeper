@@ -23,6 +23,17 @@ using System.IO;
 
 namespace GKCommon.GEDCOM
 {
+    public enum GEDCOMNameType
+    {
+        ntNone,
+        ntAka,
+        ntBirth,
+        ntImmigrant,
+        ntMaiden,
+        ntMarried
+    }
+
+
     /// <summary>
     /// 
     /// </summary>

@@ -23,11 +23,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
-using BSLib;
 using GKCommon.GEDCOM;
 using GKCore;
 
-namespace GKCommon.GedML
+namespace GDModel.Providers.GedML
 {
     /// <summary>
     /// 

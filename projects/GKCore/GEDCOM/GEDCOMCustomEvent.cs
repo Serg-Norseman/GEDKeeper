@@ -19,6 +19,7 @@
  */
 
 using BSLib.Calendar;
+using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {

@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GKCommon.GEDCOM;
+using GKCore.Types;
 using NUnit.Framework;
 
 namespace GKCommon.GEDCOM

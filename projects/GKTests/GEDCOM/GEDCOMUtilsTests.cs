@@ -20,6 +20,7 @@
 
 using System;
 using System.Text;
+using GDModel.Providers.GEDCOM;
 using GKCommon.GEDCOM;
 using NUnit.Framework;
 
@@ -86,12 +87,12 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GEDCOMEnumRP()
         {
-            Assert.AreEqual(GKResearchPriority.rpLow, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GKResearchPriority.rpLow)));
-            Assert.AreEqual(GKResearchPriority.rpNormal, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GKResearchPriority.rpNormal)));
-            Assert.AreEqual(GKResearchPriority.rpHigh, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GKResearchPriority.rpHigh)));
-            Assert.AreEqual(GKResearchPriority.rpTop, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GKResearchPriority.rpTop)));
-            Assert.AreEqual(GKResearchPriority.rpNone, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GKResearchPriority.rpNone)));
-            Assert.AreEqual(GKResearchPriority.rpNone, GEDCOMUtils.GetPriorityVal("unk"));
+            Assert.AreEqual(GDMResearchPriority.rpLow, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GDMResearchPriority.rpLow)));
+            Assert.AreEqual(GDMResearchPriority.rpNormal, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GDMResearchPriority.rpNormal)));
+            Assert.AreEqual(GDMResearchPriority.rpHigh, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GDMResearchPriority.rpHigh)));
+            Assert.AreEqual(GDMResearchPriority.rpTop, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GDMResearchPriority.rpTop)));
+            Assert.AreEqual(GDMResearchPriority.rpNone, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GDMResearchPriority.rpNone)));
+            Assert.AreEqual(GDMResearchPriority.rpNone, GEDCOMUtils.GetPriorityVal("unk"));
         }
 
         [Test]
@@ -106,14 +107,14 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GEDCOMEnumRS()
         {
-            Assert.AreEqual(GKResearchStatus.rsInProgress, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GKResearchStatus.rsInProgress)));
-            Assert.AreEqual(GKResearchStatus.rsOnHold, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GKResearchStatus.rsOnHold)));
-            Assert.AreEqual(GKResearchStatus.rsProblems, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GKResearchStatus.rsProblems)));
-            Assert.AreEqual(GKResearchStatus.rsCompleted, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GKResearchStatus.rsCompleted)));
-            Assert.AreEqual(GKResearchStatus.rsWithdrawn, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GKResearchStatus.rsWithdrawn)));
-            Assert.AreEqual(GKResearchStatus.rsDefined, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GKResearchStatus.rsDefined)));
-            Assert.AreEqual(GKResearchStatus.rsDefined, GEDCOMUtils.GetStatusVal(""));
-            Assert.AreEqual(GKResearchStatus.rsDefined, GEDCOMUtils.GetStatusVal("unk"));
+            Assert.AreEqual(GDMResearchStatus.rsInProgress, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GDMResearchStatus.rsInProgress)));
+            Assert.AreEqual(GDMResearchStatus.rsOnHold, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GDMResearchStatus.rsOnHold)));
+            Assert.AreEqual(GDMResearchStatus.rsProblems, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GDMResearchStatus.rsProblems)));
+            Assert.AreEqual(GDMResearchStatus.rsCompleted, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GDMResearchStatus.rsCompleted)));
+            Assert.AreEqual(GDMResearchStatus.rsWithdrawn, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GDMResearchStatus.rsWithdrawn)));
+            Assert.AreEqual(GDMResearchStatus.rsDefined, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GDMResearchStatus.rsDefined)));
+            Assert.AreEqual(GDMResearchStatus.rsDefined, GEDCOMUtils.GetStatusVal(""));
+            Assert.AreEqual(GDMResearchStatus.rsDefined, GEDCOMUtils.GetStatusVal("unk"));
         }
 
         [Test]
@@ -157,14 +158,14 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GEDCOMEnumCT()
         {
-            Assert.AreEqual(GKCommunicationType.ctCall, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GKCommunicationType.ctCall)));
-            Assert.AreEqual(GKCommunicationType.ctEMail, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GKCommunicationType.ctEMail)));
-            Assert.AreEqual(GKCommunicationType.ctFax, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GKCommunicationType.ctFax)));
-            Assert.AreEqual(GKCommunicationType.ctLetter, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GKCommunicationType.ctLetter)));
-            Assert.AreEqual(GKCommunicationType.ctTape, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GKCommunicationType.ctTape)));
-            Assert.AreEqual(GKCommunicationType.ctVisit, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GKCommunicationType.ctVisit)));
-            Assert.AreEqual(GKCommunicationType.ctVisit, GEDCOMUtils.GetCommunicationTypeVal(""));
-            Assert.AreEqual(GKCommunicationType.ctVisit, GEDCOMUtils.GetCommunicationTypeVal("unk"));
+            Assert.AreEqual(GDMCommunicationType.ctCall, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GDMCommunicationType.ctCall)));
+            Assert.AreEqual(GDMCommunicationType.ctEMail, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GDMCommunicationType.ctEMail)));
+            Assert.AreEqual(GDMCommunicationType.ctFax, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GDMCommunicationType.ctFax)));
+            Assert.AreEqual(GDMCommunicationType.ctLetter, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GDMCommunicationType.ctLetter)));
+            Assert.AreEqual(GDMCommunicationType.ctTape, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GDMCommunicationType.ctTape)));
+            Assert.AreEqual(GDMCommunicationType.ctVisit, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GDMCommunicationType.ctVisit)));
+            Assert.AreEqual(GDMCommunicationType.ctVisit, GEDCOMUtils.GetCommunicationTypeVal(""));
+            Assert.AreEqual(GDMCommunicationType.ctVisit, GEDCOMUtils.GetCommunicationTypeVal("unk"));
         }
 
         [Test]

@@ -191,11 +191,6 @@ namespace GKCommon.GEDCOM
             SetGregorian(value.Day, value.Month, value.Year);
         }
 
-        internal override GEDCOMParseFunc GetParseFunc()
-        {
-            return GEDCOMParseFunc.Date;
-        }
-
         public override string ParseString(string strValue)
         {
             string result;

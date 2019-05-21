@@ -117,17 +117,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="GEDCOM\AnselEncoding.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\AnselEncoding.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMFactory.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParser.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMProvider.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMUtils.cs" />
+    <Compile Include="GDModel\Providers\GedML\GedMLProvider.cs" />
     <Compile Include="GEDCOM\GEDCOMCutoutPosition.cs" />
-    <Compile Include="GEDCOM\GEDCOMParser.cs" />
-    <Compile Include="GEDCOM\GEDCOMProvider.cs" />
     <Compile Include="GEDCOM\EGEDCOMException.cs" />
-    <Compile Include="GEDCOM\GEDCOMEnums.cs" />
-    <Compile Include="GEDCOM\GEDCOMFactory.cs" />
     <Compile Include="GEDCOM\GEDCOMList.cs" />
     <Compile Include="GEDCOM\GEDCOMObject.cs" />
     <Compile Include="GEDCOM\GEDCOMRecordWithEvents.cs" />
-    <Compile Include="GEDCOM\GEDCOMUtils.cs" />
     <Compile Include="GEDCOM\GEDCOMInterfaces.cs" />
     <Compile Include="GEDCOM\GEDCOMAddress.cs" />
     <Compile Include="GEDCOM\GEDCOMAlias.cs" />
@@ -184,10 +184,8 @@
     <Compile Include="GEDCOM\GEDCOMTime.cs" />
     <Compile Include="GEDCOM\GEDCOMTree.cs" />
     <Compile Include="GEDCOM\GEDCOMUserReference.cs" />
-    <Compile Include="GEDCOM\MatchParams.cs" />
     <Compile Include="GEDCOM\XRefReplacer.cs" />
     <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
-    <Compile Include="GedML\GedMLProvider.cs" />
     <Compile Include="GKCore\BBTextParser.cs" />
     <Compile Include="GKCore\Charts\BorderPainter.cs" />
     <Compile Include="GKCore\Charts\ICircleChart.cs" />
@@ -302,6 +300,7 @@
     <Compile Include="GKCore\Types\FileBackup.cs" />
     <Compile Include="GKCore\Types\FilterGroupMode.cs" />
     <Compile Include="GKCore\Types\FilterLifeMode.cs" />
+    <Compile Include="GKCore\Types\MatchParams.cs" />
     <Compile Include="GKCore\Types\MediaStore.cs" />
     <Compile Include="GKCore\Types\MediaStoreType.cs" />
     <Compile Include="GKCore\Types\MultimediaKind.cs" />
@@ -514,6 +513,12 @@
     <EmbeddedResource Include="Resources\btn_volume_min.png" />
     <EmbeddedResource Include="Resources\btn_volume_mute.png" />
     <EmbeddedResource Include="Resources\pnl_video.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GDModel" />
+    <Folder Include="GDModel\Providers" />
+    <Folder Include="GDModel\Providers\GEDCOM" />
+    <Folder Include="GDModel\Providers\GedML" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

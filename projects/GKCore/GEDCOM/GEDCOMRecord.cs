@@ -23,6 +23,27 @@ using System.IO;
 
 namespace GKCommon.GEDCOM
 {
+    public enum GEDCOMRecordType
+    {
+        rtNone,
+        rtIndividual,
+        rtFamily,
+        rtNote,
+        rtMultimedia,
+        rtSource,
+        rtRepository,
+        rtGroup,
+        rtResearch,
+        rtTask,
+        rtCommunication,
+        rtLocation,
+        rtSubmission,
+        rtSubmitter,
+
+        rtLast/* = rtSubmitter*/
+    }
+
+
     /// <summary>
     /// 
     /// </summary>

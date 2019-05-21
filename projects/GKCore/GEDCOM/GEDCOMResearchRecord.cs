@@ -22,6 +22,33 @@ using System.IO;
 
 namespace GKCommon.GEDCOM
 {
+    /// <summary>
+    /// This type of Genealogical Data Model (GDM) defines the priority of the research.
+    /// </summary>
+    public enum GDMResearchPriority
+    {
+        rpNone,
+        rpLow,
+        rpNormal,
+        rpHigh,
+        rpTop
+    }
+
+
+    /// <summary>
+    /// This type of Genealogical Data Model (GDM) defines the status of the research.
+    /// </summary>
+    public enum GDMResearchStatus
+    {
+        rsDefined,
+        rsInProgress,
+        rsOnHold,
+        rsProblems,
+        rsCompleted,
+        rsWithdrawn
+    }
+
+
     public sealed class GEDCOMResearchRecord : GEDCOMRecord
     {
         private GEDCOMList<GEDCOMPointer> fTasks;
@@ -34,13 +61,13 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.NAME, value); }
         }
 
-        public GKResearchPriority Priority
+        public GDMResearchPriority Priority
         {
             get { return GEDCOMUtils.GetPriorityVal(GetTagStringValue(GEDCOMTagType._PRIORITY)); }
             set { SetTagStringValue(GEDCOMTagType._PRIORITY, GEDCOMUtils.GetPriorityStr(value)); }
         }
 
-        public GKResearchStatus Status
+        public GDMResearchStatus Status
         {
             get { return GEDCOMUtils.GetStatusVal(GetTagStringValue(GEDCOMTagType._STATUS)); }
             set { SetTagStringValue(GEDCOMTagType._STATUS, GEDCOMUtils.GetStatusStr(value)); }

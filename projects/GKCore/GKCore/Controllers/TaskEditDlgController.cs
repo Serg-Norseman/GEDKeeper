@@ -50,11 +50,11 @@ namespace GKCore.Controllers
         {
             fTempRec = null;
 
-            for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++) {
+            for (GDMResearchPriority rp = GDMResearchPriority.rpNone; rp <= GDMResearchPriority.rpTop; rp++) {
                 fView.Priority.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
             }
 
-            for (GKGoalType gt = GKGoalType.gtIndividual; gt <= GKGoalType.gtOther; gt++) {
+            for (GDMGoalType gt = GDMGoalType.gtIndividual; gt <= GDMGoalType.gtOther; gt++) {
                 fView.GoalType.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
             }
         }
@@ -62,19 +62,19 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fTask.Priority = (GKResearchPriority)fView.Priority.SelectedIndex;
+                fTask.Priority = (GDMResearchPriority)fView.Priority.SelectedIndex;
                 fTask.StartDate.Assign(GEDCOMDate.CreateByFormattedStr(fView.StartDate.Text, true));
                 fTask.StopDate.Assign(GEDCOMDate.CreateByFormattedStr(fView.StopDate.Text, true));
 
-                GKGoalType gt = (GKGoalType)fView.GoalType.SelectedIndex;
+                GDMGoalType gt = (GDMGoalType)fView.GoalType.SelectedIndex;
                 switch (gt) {
-                    case GKGoalType.gtIndividual:
-                    case GKGoalType.gtFamily:
-                    case GKGoalType.gtSource:
+                    case GDMGoalType.gtIndividual:
+                    case GDMGoalType.gtFamily:
+                    case GDMGoalType.gtSource:
                         fTask.Goal = GEDCOMUtils.EncloseXRef(fTempRec.XRef);
                         break;
 
-                    case GKGoalType.gtOther:
+                    case GDMGoalType.gtOther:
                         fTask.Goal = fView.Goal.Text;
                         break;
                 }
@@ -108,13 +108,13 @@ namespace GKCore.Controllers
                 fView.GoalType.SelectedIndex = (sbyte)goal.GoalType;
 
                 switch (goal.GoalType) {
-                    case GKGoalType.gtIndividual:
-                    case GKGoalType.gtFamily:
-                    case GKGoalType.gtSource:
+                    case GDMGoalType.gtIndividual:
+                    case GDMGoalType.gtFamily:
+                    case GDMGoalType.gtSource:
                         fView.Goal.Text = GKUtils.GetGoalStr(goal.GoalType, fTempRec);
                         break;
 
-                    case GKGoalType.gtOther:
+                    case GDMGoalType.gtOther:
                         fView.Goal.Text = fTask.Goal;
                         break;
                 }
@@ -127,40 +127,40 @@ namespace GKCore.Controllers
 
         public void SelectGoal()
         {
-            GKGoalType gt = (GKGoalType)fView.GoalType.SelectedIndex;
+            GDMGoalType gt = (GDMGoalType)fView.GoalType.SelectedIndex;
             switch (gt) {
-                case GKGoalType.gtIndividual:
+                case GDMGoalType.gtIndividual:
                     fTempRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
                     fView.Goal.Text = GKUtils.GetGoalStr(gt, fTempRec);
                     break;
 
-                case GKGoalType.gtFamily:
+                case GDMGoalType.gtFamily:
                     fTempRec = fBase.Context.SelectRecord(GEDCOMRecordType.rtFamily, new object[0]);
                     fView.Goal.Text = GKUtils.GetGoalStr(gt, fTempRec);
                     break;
 
-                case GKGoalType.gtSource:
+                case GDMGoalType.gtSource:
                     fTempRec = fBase.Context.SelectRecord(GEDCOMRecordType.rtSource, new object[0]);
                     fView.Goal.Text = GKUtils.GetGoalStr(gt, fTempRec);
                     break;
 
-                case GKGoalType.gtOther:
+                case GDMGoalType.gtOther:
                     break;
             }
         }
 
         public void ChangeGoalType()
         {
-            GKGoalType gt = (GKGoalType)fView.GoalType.SelectedIndex;
+            GDMGoalType gt = (GDMGoalType)fView.GoalType.SelectedIndex;
             switch (gt) {
-                case GKGoalType.gtIndividual:
-                case GKGoalType.gtFamily:
-                case GKGoalType.gtSource:
+                case GDMGoalType.gtIndividual:
+                case GDMGoalType.gtFamily:
+                case GDMGoalType.gtSource:
                     fView.GoalSelect.Enabled = true;
                     fView.Goal.ReadOnly = true;
                     break;
 
-                case GKGoalType.gtOther:
+                case GDMGoalType.gtOther:
                     fView.GoalSelect.Enabled = false;
                     fView.Goal.ReadOnly = false;
                     break;

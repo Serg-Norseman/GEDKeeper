@@ -24,6 +24,9 @@ namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMMap : GEDCOMTag
     {
+        private enum GeoCoord { Lati, Long }
+
+
         public double Lati
         {
             get { return GetGeoCoord(GetTagStringValue(GEDCOMTagType.LATI), GeoCoord.Lati); }

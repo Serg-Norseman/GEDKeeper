@@ -21,9 +21,21 @@
 using System;
 using System.IO;
 using BSLib.Calendar;
+using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
+    public enum GEDCOMSex
+    {
+        svNone,
+        svMale,
+        svFemale,
+        svUndetermined,
+
+        svLast = svUndetermined
+    }
+
+
     public sealed class GEDCOMIndividualRecord : GEDCOMRecordWithEvents
     {
         private GEDCOMList<GEDCOMAlias> fAliasses;

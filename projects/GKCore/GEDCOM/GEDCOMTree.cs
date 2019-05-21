@@ -26,6 +26,14 @@ namespace GKCommon.GEDCOM
 {
     public delegate void ProgressEventHandler(object sender, int progress);
 
+
+    public enum GEDCOMState
+    {
+        osLoading,
+        osReady
+    }
+
+
     /// <summary>
     /// 
     /// </summary>

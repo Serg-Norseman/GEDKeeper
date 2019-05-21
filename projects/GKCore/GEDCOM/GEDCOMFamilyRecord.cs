@@ -21,13 +21,26 @@
 using System;
 using System.IO;
 using BSLib.Calendar;
+using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
+    /// <summary>
+    /// This type of Genealogical Data Model (GDM) defines the status of the marriage.
+    /// </summary>
+    public enum GDMMarriageStatus
+    {
+        Unknown,
+        MarrRegistered,
+        MarrNotRegistered,
+        MarrDivorced
+    }
+
+
     public sealed class GEDCOMFamilyRecord : GEDCOMRecordWithEvents
     {
         private GEDCOMList<GEDCOMPointer> fChildren;
-        private GKMarriageStatus fStatus;
+        private GDMMarriageStatus fStatus;
 
 
         public GEDCOMList<GEDCOMPointer> Children
@@ -45,7 +58,7 @@ namespace GKCommon.GEDCOM
             get { return GetTag(GEDCOMTagType.WIFE, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
-        public GKMarriageStatus Status
+        public GDMMarriageStatus Status
         {
             get { return fStatus; }
             set { fStatus = value; }
@@ -104,7 +117,7 @@ namespace GKCommon.GEDCOM
             }
             fChildren.Clear();
 
-            fStatus = GKMarriageStatus.Unknown;
+            fStatus = GDMMarriageStatus.Unknown;
         }
 
         public override bool IsEmpty()

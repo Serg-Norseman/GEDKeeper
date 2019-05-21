@@ -18,6 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
+using GKCore;
+
 namespace GKCommon.GEDCOM
 {
     public static class GEDCOMTagType
@@ -199,316 +205,127 @@ namespace GKCommon.GEDCOM
         public const string _TASK = "_TASK";
     }
 
-    public enum GEDCOMRecordType
-    {
-        rtNone,
-        rtIndividual,
-        rtFamily,
-        rtNote,
-        rtMultimedia,
-        rtSource,
-        rtRepository,
-        rtGroup,
-        rtResearch,
-        rtTask,
-        rtCommunication,
-        rtLocation,
-        rtSubmission,
-        rtSubmitter,
 
-        rtLast/* = rtSubmitter*/
+    public delegate GEDCOMTag TagConstructor(GEDCOMObject owner, string tagName, string tagValue);
+
+
+    public sealed class TagInfo
+    {
+        public readonly TagConstructor Constructor;
+        public readonly AddTagHandler AddHandler;
+        public readonly bool SkipEmpty;
+        public readonly bool GKExtend;
+
+        public TagInfo(TagConstructor constructor, AddTagHandler addHandler)
+        {
+            Constructor = constructor;
+            AddHandler = addHandler;
+            SkipEmpty = false;
+            GKExtend = false;
+        }
+
+        public TagInfo(TagConstructor constructor, AddTagHandler addHandler, bool skipEmpty, bool extend)
+        {
+            Constructor = constructor;
+            AddHandler = addHandler;
+            SkipEmpty = skipEmpty;
+            GKExtend = extend;
+        }
     }
 
-    public enum GEDCOMFormat
-    {
-        gf_Unknown,
-        gf_Native,
-        gf_GENBOX,
-        gf_ALTREE,
-        gf_AGES,
-        gf_PAF,
-        gf_Ahnenblatt,
-        gf_Genealogy_RusOld,
-        gf_FTB,
-        gf_FamilyTreeMaker,
-        gf_FamilyHistorian,
-        gf_Heredis,
-        gf_AncestQuest,
-        gf_Geni,
-        gf_Legacy,
-        gf_EasyTree,
-        gf_Genney,
-        gf_GeneWeb,
-        gf_GENJ,
 
-        gf_Last = gf_GENJ
+    public sealed class TagProperties
+    {
+        public readonly string Name;
+        public readonly bool SkipEmpty;
+        public readonly bool GKExtend;
+
+        public TagProperties(string name, bool skipEmpty, bool extend)
+        {
+            Name = name;
+            SkipEmpty = skipEmpty;
+            GKExtend = extend;
+        }
     }
 
-    public enum GEDCOMCharacterSet
+
+    public sealed class GEDCOMFactory
     {
-        csASCII,
-        csANSEL,
-        csUNICODE,
-        csUTF8
-    }
+        private static GEDCOMFactory fInstance;
+        private readonly Dictionary<string, TagInfo> fTags;
 
-    public enum GEDCOMState
-    {
-        osLoading,
-        osReady
-    }
+        public static GEDCOMFactory GetInstance()
+        {
+            if (fInstance == null) fInstance = new GEDCOMFactory();
+            return fInstance;
+        }
 
-    public enum GEDCOMRestriction
-    {
-        rnNone,
-        rnLocked,
-        rnConfidential,
-        rnPrivacy,
+        public GEDCOMFactory()
+        {
+            fTags = new Dictionary<string, TagInfo>();
+        }
 
-        rnLast = rnPrivacy
-    }
+        public void RegisterTag(string tagName, TagConstructor constructor, AddTagHandler addHandler = null,
+                                bool skipEmpty = false, bool extend = false)
+        {
+            TagInfo tagInfo;
+            if (!fTags.TryGetValue(tagName, out tagInfo)) {
+                tagInfo = new TagInfo(constructor, addHandler, skipEmpty, extend);
+                fTags.Add(tagName, tagInfo);
+            } else {
+                //tagInfo.Constructor = constructor;
+                //tagInfo.AddHandler = addHandler;
+            }
+        }
 
-    public enum GEDCOMSex
-    {
-        svNone,
-        svMale,
-        svFemale,
-        svUndetermined,
+        public GEDCOMTag CreateTag(GEDCOMObject owner, string tagName, string tagValue)
+        {
+            TagInfo tagInfo;
+            if (fTags.TryGetValue(tagName, out tagInfo)) {
+                return tagInfo.Constructor(owner, tagName, tagValue);
+            }
+            return null;
+        }
 
-        svLast = svUndetermined
-    }
+        public TagInfo GetTagInfo(string tagName)
+        {
+            TagInfo result;
+            fTags.TryGetValue(tagName, out result);
+            return result;
+        }
 
-    public enum GEDCOMNameType
-    {
-        ntNone,
-        ntAka,
-        ntBirth,
-        ntImmigrant,
-        ntMaiden,
-        ntMarried
-    }
+        public AddTagHandler GetAddHandler(string tagName)
+        {
+            TagInfo tagInfo;
+            if (fTags.TryGetValue(tagName, out tagInfo)) {
+                return tagInfo.AddHandler;
+            }
+            return GEDCOMProvider.AddBaseTag;
+        }
 
-    public enum GEDCOMCalendar
-    {
-        dcGregorian,
-        dcJulian,
-        dcHebrew,
-        dcFrench,
-        dcRoman,
-        dcIslamic, // GK+ (nonstandard)
-        dcUnknown,
+        #if !NETSTANDARD
 
-        dcLast = dcUnknown
-    }
+        public static T CreateTagEx<T>(GEDCOMObject owner, string tagName, string tagValue) where T : GEDCOMTag
+        {
+            ConstructorInfo ctorInfo = typeof(T).GetConstructor(new[] {
+                typeof(GEDCOMObject), typeof(string), typeof(string)
+            });
 
-    public enum GEDCOMDateFormat
-    {
-        dfGEDCOMStd,
-        dfSystem
-    }
+            DynamicMethod dm = new DynamicMethod("Create", typeof(T), new Type[] {
+                typeof(GEDCOMObject), typeof(string), typeof(string)
+            }, typeof(T), true);
 
-    public enum GEDCOMApproximated
-    {
-        daExact,
-        daAbout,
-        daCalculated,
-        daEstimated
-    }
+            ILGenerator il = dm.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Ldarg_2);
+            il.Emit(OpCodes.Newobj, ctorInfo);
+            il.Emit(OpCodes.Ret);
 
-    public enum GEDCOMRange
-    {
-        drAfter,
-        drBefore,
-        drBetween,
-        drAnd
-    }
+            TagConstructor ctor = (TagConstructor)dm.CreateDelegate(typeof(TagConstructor));
+            return (T)ctor(owner, tagName, tagValue);
+        }
 
-    public enum GEDCOMBaptismDateStatus
-    {
-        bdsNone,
-        bdsChild,
-        bdsCompleted,
-        bdsExcluded,
-        bdsPre1970,
-        bdsStillborn,
-        bdsSubmitted,
-        bdsUncleared
-    }
-
-    public enum GEDCOMEndowmentDateStatus
-    {
-        edsNone,
-        edsChild,
-        edsCompleted,
-        edsExcluded,
-        edsInfant,
-        edsPre1970,
-        edsStillborn,
-        edsSubmitted,
-        edsUncleared
-    }
-
-    public enum GEDCOMChildSealingDateStatus
-    {
-        cdsNone,
-        cdsBIC,
-        cdsExcluded,
-        cdsPre1970,
-        cdsStillborn,
-        cdsSubmitted,
-        cdsUncleared
-    }
-
-    public enum GEDCOMChildLinkageStatus
-    {
-        clNone,
-        clChallenged,
-        clDisproven,
-        clProven
-    }
-
-    public enum GEDCOMOrdinanceProcessFlag
-    {
-        opNone,
-        opYes,
-        opNo
-    }
-
-    public enum GEDCOMPedigreeLinkageType
-    {
-        plNone,
-        plAdopted,
-        plBirth,
-        plFoster,
-    }
-
-    public enum GEDCOMSpouseSealingDateStatus
-    {
-        sdsNone,
-        sdsCanceled,
-        sdsCompleted,
-        sdsDNS,
-        sdsDNSCAN,
-        sdsExcluded,
-        sdsPre1970,
-        sdsSubmitted,
-        sdsUncleared
-    }
-
-    public enum GEDCOMMediaType
-    {
-        mtUnknown,
-
-        mtAudio,
-        mtBook,
-        mtCard,
-        mtElectronic,
-        mtFiche,
-        mtFilm,
-        mtMagazine,
-        mtManuscript,
-        mtMap,
-        mtNewspaper,
-        mtPhoto,
-        mtTombstone,
-        mtVideo,
-
-        mtLast = mtVideo
-    }
-
-    // TODO: doc/docx/odt, xls/xlsx/ods, ppt/pptx/odp
-    public enum GEDCOMMultimediaFormat
-    {
-        mfNone,
-
-        mfBMP,
-        mfGIF,
-        mfJPG,
-        mfPCX,
-        mfTIF,
-        mfTGA,
-        mfPNG,
-        mfRAW,
-        mfPSD,
-
-        mfTXT,
-        mfRTF,
-        mfHTM,
-        mfPDF,
-
-        mfWAV,
-        mfMP3,
-        mfWMA,
-        mfMKA,
-
-        mfAVI,
-        mfMPG,
-        mfWMV,
-        mfMP4,
-        mfOGV,
-        mfMKV,
-        mfMOV,
-
-        mfOLE,
-        mfUnknown
-    }
-
-    public enum GKCommunicationDir
-    {
-        cdFrom,
-        cdTo
-    }
-
-    public enum GKCommunicationType
-    {
-        ctCall,
-        ctEMail,
-        ctFax,
-        ctLetter,
-        ctTape,
-        ctVisit,
-
-        ctLast = ctVisit
-    }
-
-    public enum GKGoalType
-    {
-        gtIndividual,
-        gtFamily,
-        gtSource,
-        gtOther
-    }
-
-    public enum GKResearchPriority
-    {
-        rpNone,
-        rpLow,
-        rpNormal,
-        rpHigh,
-        rpTop
-    }
-
-    public enum GKResearchStatus
-    {
-        rsDefined,
-        rsInProgress,
-        rsOnHold,
-        rsProblems,
-        rsCompleted,
-        rsWithdrawn
-    }
-
-    public enum GKMarriageStatus
-    {
-        Unknown,
-        MarrRegistered,
-        MarrNotRegistered,
-        MarrDivorced
-    }
-
-    public enum GeoCoord
-    {
-        Lati,
-        Long
+        #endif
     }
 }

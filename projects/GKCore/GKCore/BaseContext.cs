@@ -28,8 +28,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using BSLib;
+using GDModel.Providers.GedML;
 using GKCommon.GEDCOM;
-using GKCommon.GedML;
 using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;

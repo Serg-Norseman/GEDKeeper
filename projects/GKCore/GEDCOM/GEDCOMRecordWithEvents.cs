@@ -24,6 +24,17 @@ using BSLib.Calendar;
 
 namespace GKCommon.GEDCOM
 {
+    public enum GEDCOMRestriction
+    {
+        rnNone,
+        rnLocked,
+        rnConfidential,
+        rnPrivacy,
+
+        rnLast = rnPrivacy
+    }
+
+
     public abstract class GEDCOMRecordWithEvents : GEDCOMRecord, IGEDCOMRecordWithEvents
     {
         private GEDCOMList<GEDCOMCustomEvent> fEvents;

@@ -20,6 +20,24 @@
 
 namespace GKCommon.GEDCOM
 {
+    public enum GEDCOMChildLinkageStatus
+    {
+        clNone,
+        clChallenged,
+        clDisproven,
+        clProven
+    }
+
+
+    public enum GEDCOMPedigreeLinkageType
+    {
+        plNone,
+        plAdopted,
+        plBirth,
+        plFoster,
+    }
+
+
     public sealed class GEDCOMChildToFamilyLink : GEDCOMPointerWithNotes
     {
         public GEDCOMChildLinkageStatus ChildLinkageStatus

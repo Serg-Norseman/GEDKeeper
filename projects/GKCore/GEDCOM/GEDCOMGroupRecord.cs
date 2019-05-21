@@ -19,6 +19,7 @@
  */
 
 using System.IO;
+using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {

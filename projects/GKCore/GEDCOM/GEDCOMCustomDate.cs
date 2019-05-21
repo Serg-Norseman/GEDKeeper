@@ -24,10 +24,50 @@ using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
+    public enum GEDCOMCalendar
+    {
+        dcGregorian,
+        dcJulian,
+        dcHebrew,
+        dcFrench,
+        dcRoman,
+        dcIslamic, // GK+ (nonstandard)
+        dcUnknown,
+
+        dcLast = dcUnknown
+    }
+
+
+    public enum GEDCOMDateFormat
+    {
+        dfGEDCOMStd,
+        dfSystem
+    }
+
+
+    public enum GEDCOMApproximated
+    {
+        daExact,
+        daAbout,
+        daCalculated,
+        daEstimated
+    }
+
+
+    public enum GEDCOMRange
+    {
+        drAfter,
+        drBefore,
+        drBetween,
+        drAnd
+    }
+
+
     public enum GEDCOMDateType
     {
         SIMP, ABT, AFT, BEF, BET, CAL, EST, FROM, INT, TO
     }
+
 
     public abstract class GEDCOMCustomDate : GEDCOMTag, IComparable, IEquatable<GEDCOMCustomDate>
     {

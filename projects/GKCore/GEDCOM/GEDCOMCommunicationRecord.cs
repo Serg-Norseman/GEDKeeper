@@ -20,6 +20,32 @@
 
 namespace GKCommon.GEDCOM
 {
+    /// <summary>
+    /// This type of Genealogical Data Model (GDM) defines the direction of the communication.
+    /// </summary>
+    public enum GDMCommunicationDir
+    {
+        cdFrom,
+        cdTo
+    }
+
+
+    /// <summary>
+    /// This type of Genealogical Data Model (GDM) defines the kinds of the communication.
+    /// </summary>
+    public enum GDMCommunicationType
+    {
+        ctCall,
+        ctEMail,
+        ctFax,
+        ctLetter,
+        ctTape,
+        ctVisit,
+
+        ctLast = ctVisit
+    }
+
+
     public sealed class GEDCOMCommunicationRecord : GEDCOMRecord
     {
         public static readonly string[] CommunicationTags = new string[] { GEDCOMTagType.FROM, GEDCOMTagType.TO };
@@ -35,7 +61,7 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.NAME, value); }
         }
 
-        public GKCommunicationType CommunicationType
+        public GDMCommunicationType CommunicationType
         {
             get { return GEDCOMUtils.GetCommunicationTypeVal(GetTagStringValue(GEDCOMTagType.TYPE)); }
             set { SetTagStringValue(GEDCOMTagType.TYPE, GEDCOMUtils.GetCommunicationTypeStr(value)); }
@@ -52,10 +78,10 @@ namespace GKCommon.GEDCOM
 
         public sealed class CorresponderRet
         {
-            public readonly GKCommunicationDir CommDir;
+            public readonly GDMCommunicationDir CommDir;
             public readonly GEDCOMIndividualRecord Corresponder;
 
-            public CorresponderRet(GKCommunicationDir commDir, GEDCOMIndividualRecord corresponder)
+            public CorresponderRet(GDMCommunicationDir commDir, GEDCOMIndividualRecord corresponder)
             {
                 CommDir = commDir;
                 Corresponder = corresponder;
@@ -64,7 +90,7 @@ namespace GKCommon.GEDCOM
 
         public CorresponderRet GetCorresponder()
         {
-            GKCommunicationDir commDir = GKCommunicationDir.cdFrom;
+            GDMCommunicationDir commDir = GDMCommunicationDir.cdFrom;
             GEDCOMIndividualRecord corresponder = null;
 
             GEDCOMTag corrTag = FindTag(GEDCOMTagType.FROM, 0);
@@ -76,16 +102,16 @@ namespace GKCommon.GEDCOM
                 corresponder = (GetTree().XRefIndex_Find(GEDCOMUtils.CleanXRef(corrTag.StringValue)) as GEDCOMIndividualRecord);
 
                 if (corrTag.Name == GEDCOMTagType.FROM) {
-                    commDir = GKCommunicationDir.cdFrom;
+                    commDir = GDMCommunicationDir.cdFrom;
                 } else if (corrTag.Name == GEDCOMTagType.TO) {
-                    commDir = GKCommunicationDir.cdTo;
+                    commDir = GDMCommunicationDir.cdTo;
                 }
             }
 
             return new CorresponderRet(commDir, corresponder);
         }
 
-        public void SetCorresponder(GKCommunicationDir commDir, GEDCOMIndividualRecord corresponder)
+        public void SetCorresponder(GDMCommunicationDir commDir, GEDCOMIndividualRecord corresponder)
         {
             DeleteTag(GEDCOMTagType.FROM);
             DeleteTag(GEDCOMTagType.TO);

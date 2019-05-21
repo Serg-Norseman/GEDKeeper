@@ -85,8 +85,8 @@ namespace GKUI.Forms
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fResearchRecord.ResearchName);
-            Assert.AreEqual(GKResearchPriority.rpLow, fResearchRecord.Priority);
-            Assert.AreEqual(GKResearchStatus.rsInProgress, fResearchRecord.Status);
+            Assert.AreEqual(GDMResearchPriority.rpLow, fResearchRecord.Priority);
+            Assert.AreEqual(GDMResearchStatus.rsInProgress, fResearchRecord.Status);
             Assert.AreEqual(11, fResearchRecord.Percent);
             Assert.AreEqual("", fResearchRecord.StartDate.StringValue);
             Assert.AreEqual("", fResearchRecord.StopDate.StringValue);

@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GKCore.Types;
+
 namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMRepositoryRecord : GEDCOMRecord

@@ -269,7 +269,7 @@ namespace GKCore
         public void Test_GetXGoalStr()
         {
             Assert.AreEqual("", GKUtils.GetTaskGoalStr(null));
-            Assert.AreEqual("", GKUtils.GetGoalStr(GKGoalType.gtIndividual, null));
+            Assert.AreEqual("", GKUtils.GetGoalStr(GDMGoalType.gtIndividual, null));
 
             var rec = fContext.Tree.XRefIndex_Find("TK1") as GEDCOMTaskRecord;
             Assert.IsNotNull(rec);

@@ -23,12 +23,20 @@ using BSLib;
 
 namespace GKCommon.GEDCOM
 {
+    public enum GEDCOMCharacterSet
+    {
+        csASCII,
+        csANSEL,
+        csUNICODE,
+        csUTF8
+    }
+
+
     /// <summary>
     /// 
     /// </summary>
     public sealed class GEDCOMHeader : GEDCOMCustomRecord
     {
-
         public GEDCOMCharacterSet CharacterSet
         {
             get { return GEDCOMUtils.GetCharacterSetVal(GetTagStringValue(GEDCOMTagType.CHAR)); }

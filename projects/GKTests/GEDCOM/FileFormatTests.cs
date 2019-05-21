@@ -21,7 +21,7 @@
 using System;
 using System.IO;
 using System.Reflection;
-using GKCommon.GedML;
+using GDModel.Providers.GedML;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Tools;

@@ -304,18 +304,18 @@ namespace GKCore
             var goal = taskRec.GetTaskGoal();
 
             switch (goal.GoalType) {
-                case GKGoalType.gtIndividual:
-                case GKGoalType.gtFamily:
-                case GKGoalType.gtSource:
+                case GDMGoalType.gtIndividual:
+                case GDMGoalType.gtFamily:
+                case GDMGoalType.gtSource:
                     result = GetGoalStr(goal.GoalType, goal.GoalRec);
                     break;
 
-                case GKGoalType.gtOther:
+                case GDMGoalType.gtOther:
                     result = taskRec.Goal;
                     break;
             }
 
-            if (goal.GoalType != GKGoalType.gtOther)
+            if (goal.GoalType != GDMGoalType.gtOther)
             {
                 result = "[" + LangMan.LS(GKData.GoalNames[(int)goal.GoalType]) + "] " + result;
             }
@@ -323,19 +323,19 @@ namespace GKCore
             return result;
         }
 
-        public static string GetGoalStr(GKGoalType gt, GEDCOMRecord tempRec)
+        public static string GetGoalStr(GDMGoalType gt, GEDCOMRecord tempRec)
         {
             if (tempRec == null) return string.Empty;
 
             switch (gt)
             {
-                case GKGoalType.gtIndividual:
+                case GDMGoalType.gtIndividual:
                     return GetNameString(((GEDCOMIndividualRecord)tempRec), true, false);
 
-                case GKGoalType.gtFamily:
+                case GDMGoalType.gtFamily:
                     return GetFamilyString(tempRec as GEDCOMFamilyRecord);
 
-                case GKGoalType.gtSource:
+                case GDMGoalType.gtSource:
                     return ((GEDCOMSourceRecord)tempRec).ShortTitle;
             }
 

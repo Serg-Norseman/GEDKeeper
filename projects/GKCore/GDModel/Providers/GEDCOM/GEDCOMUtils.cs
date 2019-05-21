@@ -23,6 +23,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using BSLib;
+using GDModel.Providers.GEDCOM;
 
 namespace GKCommon.GEDCOM
 {
@@ -45,20 +46,6 @@ namespace GKCommon.GEDCOM
     }
 
 
-    internal enum GEDCOMParseFunc
-    {
-        Default,
-        XRefPtr,
-        Name,
-        Date,
-        Time,
-        DateValue,
-        CutoutPos
-    }
-
-    internal delegate string ParseFunc(GEDCOMTree owner, GEDCOMTag tag, GEDCOMParser parser);
-
-
     /// <summary>
     /// 
     /// </summary>
@@ -67,29 +54,6 @@ namespace GKCommon.GEDCOM
         public static readonly TextInfo InvariantTextInfo = CultureInfo.InvariantCulture.TextInfo;
         public static readonly NumberFormatInfo InvariantNumberFormatInfo = NumberFormatInfo.InvariantInfo;
 
-        //public static readonly EnumTuple[] GEDCOMRecordIdents;
-
-        static GEDCOMUtils()
-        {
-            /*GEDCOMRecordIdents = new EnumTuple[] {
-                new EnumTuple(GEDCOMTagType.INDI, (int)GEDCOMRecordType.rtIndividual),
-                new EnumTuple(GEDCOMTagType.FAM, (int)GEDCOMRecordType.rtFamily),
-                new EnumTuple(GEDCOMTagType.OBJE, (int)GEDCOMRecordType.rtMultimedia),
-                new EnumTuple(GEDCOMTagType.NOTE, (int)GEDCOMRecordType.rtNote),
-                new EnumTuple(GEDCOMTagType.REPO, (int)GEDCOMRecordType.rtRepository),
-                new EnumTuple(GEDCOMTagType.SOUR, (int)GEDCOMRecordType.rtSource),
-                new EnumTuple(GEDCOMTagType.SUBN, (int)GEDCOMRecordType.rtSubmission),
-                new EnumTuple(GEDCOMTagType.SUBM, (int)GEDCOMRecordType.rtSubmitter),
-                new EnumTuple(GEDCOMTagType._GROUP, (int)GEDCOMRecordType.rtGroup),
-                new EnumTuple(GEDCOMTagType._RESEARCH, (int)GEDCOMRecordType.rtResearch),
-                new EnumTuple(GEDCOMTagType._TASK, (int)GEDCOMRecordType.rtTask),
-                new EnumTuple(GEDCOMTagType._COMM, (int)GEDCOMRecordType.rtCommunication),
-                new EnumTuple(GEDCOMTagType._LOC, (int)GEDCOMRecordType.rtLocation),
-                new EnumTuple(GEDCOMTagType.HEAD, -1),
-                new EnumTuple(GEDCOMTagType.TRLR, -2),
-            };
-            Array.Sort(GEDCOMRecordIdents);*/
-        }
 
         #region Parse functions
 
@@ -290,19 +254,6 @@ namespace GKCommon.GEDCOM
 
             return result;
         }
-
-
-        // GEDCOMTagParseFunc
-        internal static ParseFunc[] TagParseFuncs = new ParseFunc[] {
-            null, // Default
-            null, // XRefPtr
-            null, // Name
-            ParseDate, // Date
-            null, // Time
-            ParseDateValue, // DateValue
-            null // CutoutPos
-        };
-
 
         // XRefPtr format: ...@<xref>@...
         public static string ParseXRefPointer(string str, out string xref)
@@ -931,12 +882,12 @@ namespace GKCommon.GEDCOM
         public static string[] CommunicationTypes = new string[] {
             "call", "email", "fax", "letter", "tape", "visit" };
 
-        public static GKCommunicationType GetCommunicationTypeVal(string str)
+        public static GDMCommunicationType GetCommunicationTypeVal(string str)
         {
-            return Str2Enum(str, CommunicationTypes, GKCommunicationType.ctVisit);
+            return Str2Enum(str, CommunicationTypes, GDMCommunicationType.ctVisit);
         }
 
-        public static string GetCommunicationTypeStr(GKCommunicationType value)
+        public static string GetCommunicationTypeStr(GDMCommunicationType value)
         {
             return GEDCOMUtils.Enum2Str(value, CommunicationTypes);
         }
@@ -1158,49 +1109,49 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public static GKResearchStatus GetStatusVal(string str)
+        public static GDMResearchStatus GetStatusVal(string str)
         {
-            if (string.IsNullOrEmpty(str)) return GKResearchStatus.rsDefined;
+            if (string.IsNullOrEmpty(str)) return GDMResearchStatus.rsDefined;
 
-            GKResearchStatus result;
+            GDMResearchStatus result;
             str = str.Trim().ToLowerInvariant();
             
             if (str == "inprogress") {
-                result = GKResearchStatus.rsInProgress;
+                result = GDMResearchStatus.rsInProgress;
             } else if (str == "onhold") {
-                result = GKResearchStatus.rsOnHold;
+                result = GDMResearchStatus.rsOnHold;
             } else if (str == "problems") {
-                result = GKResearchStatus.rsProblems;
+                result = GDMResearchStatus.rsProblems;
             } else if (str == "completed") {
-                result = GKResearchStatus.rsCompleted;
+                result = GDMResearchStatus.rsCompleted;
             } else if (str == "withdrawn") {
-                result = GKResearchStatus.rsWithdrawn;
+                result = GDMResearchStatus.rsWithdrawn;
             } else {
-                result = GKResearchStatus.rsDefined;
+                result = GDMResearchStatus.rsDefined;
             }
             return result;
         }
 
-        public static string GetStatusStr(GKResearchStatus value)
+        public static string GetStatusStr(GDMResearchStatus value)
         {
             string s = "";
             switch (value) {
-                case GKResearchStatus.rsDefined:
+                case GDMResearchStatus.rsDefined:
                     s = "defined";
                     break;
-                case GKResearchStatus.rsInProgress:
+                case GDMResearchStatus.rsInProgress:
                     s = "inprogress";
                     break;
-                case GKResearchStatus.rsOnHold:
+                case GDMResearchStatus.rsOnHold:
                     s = "onhold";
                     break;
-                case GKResearchStatus.rsProblems:
+                case GDMResearchStatus.rsProblems:
                     s = "problems";
                     break;
-                case GKResearchStatus.rsCompleted:
+                case GDMResearchStatus.rsCompleted:
                     s = "completed";
                     break;
-                case GKResearchStatus.rsWithdrawn:
+                case GDMResearchStatus.rsWithdrawn:
                     s = "withdrawn";
                     break;
             }
@@ -1257,46 +1208,46 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public static string GetPriorityStr(GKResearchPriority value)
+        public static string GetPriorityStr(GDMResearchPriority value)
         {
             string str = "";
             switch (value) {
-                case GKResearchPriority.rpNone:
+                case GDMResearchPriority.rpNone:
                     str = "";
                     break;
-                case GKResearchPriority.rpLow:
+                case GDMResearchPriority.rpLow:
                     str = "low";
                     break;
-                case GKResearchPriority.rpNormal:
+                case GDMResearchPriority.rpNormal:
                     str = "normal";
                     break;
-                case GKResearchPriority.rpHigh:
+                case GDMResearchPriority.rpHigh:
                     str = "high";
                     break;
-                case GKResearchPriority.rpTop:
+                case GDMResearchPriority.rpTop:
                     str = "top";
                     break;
             }
             return str;
         }
 
-        public static GKResearchPriority GetPriorityVal(string str)
+        public static GDMResearchPriority GetPriorityVal(string str)
         {
-            if (string.IsNullOrEmpty(str)) return GKResearchPriority.rpNone;
+            if (string.IsNullOrEmpty(str)) return GDMResearchPriority.rpNone;
 
             string su = str.Trim().ToLowerInvariant();
-            GKResearchPriority result;
+            GDMResearchPriority result;
 
             if (su == "low") {
-                result = GKResearchPriority.rpLow;
+                result = GDMResearchPriority.rpLow;
             } else if (su == "normal") {
-                result = GKResearchPriority.rpNormal;
+                result = GDMResearchPriority.rpNormal;
             } else if (su == "high") {
-                result = GKResearchPriority.rpHigh;
+                result = GDMResearchPriority.rpHigh;
             } else if (su == "top") {
-                result = GKResearchPriority.rpTop;
+                result = GDMResearchPriority.rpTop;
             } else {
-                result = GKResearchPriority.rpNone;
+                result = GDMResearchPriority.rpNone;
             }
             
             return result;
@@ -1434,12 +1385,12 @@ namespace GKCommon.GEDCOM
         public static string[] MarriageStatuses = new string[] {
             "", "married", "marrnotreg", "notmarr" };
 
-        public static GKMarriageStatus GetMarriageStatusVal(string str)
+        public static GDMMarriageStatus GetMarriageStatusVal(string str)
         {
-            return Str2Enum(str, MarriageStatuses, GKMarriageStatus.Unknown);
+            return Str2Enum(str, MarriageStatuses, GDMMarriageStatus.Unknown);
         }
 
-        public static string GetMarriageStatusStr(GKMarriageStatus value)
+        public static string GetMarriageStatusStr(GDMMarriageStatus value)
         {
             return GEDCOMUtils.Enum2Str(value, MarriageStatuses);
         }

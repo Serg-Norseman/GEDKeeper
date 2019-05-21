@@ -20,6 +20,45 @@
 
 namespace GKCommon.GEDCOM
 {
+    public enum GEDCOMBaptismDateStatus
+    {
+        bdsNone,
+        bdsChild,
+        bdsCompleted,
+        bdsExcluded,
+        bdsPre1970,
+        bdsStillborn,
+        bdsSubmitted,
+        bdsUncleared
+    }
+
+
+    public enum GEDCOMEndowmentDateStatus
+    {
+        edsNone,
+        edsChild,
+        edsCompleted,
+        edsExcluded,
+        edsInfant,
+        edsPre1970,
+        edsStillborn,
+        edsSubmitted,
+        edsUncleared
+    }
+
+
+    public enum GEDCOMChildSealingDateStatus
+    {
+        cdsNone,
+        cdsBIC,
+        cdsExcluded,
+        cdsPre1970,
+        cdsStillborn,
+        cdsSubmitted,
+        cdsUncleared
+    }
+
+
     public class GEDCOMIndividualOrdinance : GEDCOMTagWithLists
     {
         public GEDCOMDateValue Date

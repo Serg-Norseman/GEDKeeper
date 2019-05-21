@@ -22,6 +22,66 @@ using BSLib;
 
 namespace GKCommon.GEDCOM
 {
+    public enum GEDCOMMediaType
+    {
+        mtUnknown,
+
+        mtAudio,
+        mtBook,
+        mtCard,
+        mtElectronic,
+        mtFiche,
+        mtFilm,
+        mtMagazine,
+        mtManuscript,
+        mtMap,
+        mtNewspaper,
+        mtPhoto,
+        mtTombstone,
+        mtVideo,
+
+        mtLast = mtVideo
+    }
+
+
+    // TODO: doc/docx/odt, xls/xlsx/ods, ppt/pptx/odp
+    public enum GEDCOMMultimediaFormat
+    {
+        mfNone,
+
+        mfBMP,
+        mfGIF,
+        mfJPG,
+        mfPCX,
+        mfTIF,
+        mfTGA,
+        mfPNG,
+        mfRAW,
+        mfPSD,
+
+        mfTXT,
+        mfRTF,
+        mfHTM,
+        mfPDF,
+
+        mfWAV,
+        mfMP3,
+        mfWMA,
+        mfMKA,
+
+        mfAVI,
+        mfMPG,
+        mfWMV,
+        mfMP4,
+        mfOGV,
+        mfMKV,
+        mfMOV,
+
+        mfOLE,
+        mfUnknown
+    }
+
+
     public class GEDCOMFileReference : GEDCOMTag
     {
         public GEDCOMMultimediaFormat MultimediaFormat

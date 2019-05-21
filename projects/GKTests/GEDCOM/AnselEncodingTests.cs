@@ -22,7 +22,7 @@ using System;
 using System.Text;
 using NUnit.Framework;
 
-namespace GKCommon.GEDCOM
+namespace GDModel.Providers.GEDCOM
 {
     [TestFixture]
     public class AnselEncodingTests

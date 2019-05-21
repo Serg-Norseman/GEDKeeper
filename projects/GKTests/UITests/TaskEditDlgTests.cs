@@ -74,13 +74,13 @@ namespace GKUI.Forms
 
             SelectCombo("txtPriority", fDialog, 1);
 
-            for (GKGoalType gt = GKGoalType.gtIndividual; gt <= GKGoalType.gtOther; gt++) {
+            for (GDMGoalType gt = GDMGoalType.gtIndividual; gt <= GDMGoalType.gtOther; gt++) {
                 SelectCombo("cmbGoalType", fDialog, (int)gt);
             }
 
             ClickButton("btnAccept", fDialog);
 
-            Assert.AreEqual(GKResearchPriority.rpLow, fTaskRecord.Priority);
+            Assert.AreEqual(GDMResearchPriority.rpLow, fTaskRecord.Priority);
             Assert.AreEqual("", fTaskRecord.StartDate.StringValue);
             Assert.AreEqual("", fTaskRecord.StopDate.StringValue);
         }
@@ -94,13 +94,13 @@ namespace GKUI.Forms
             EnterMaskedText("txtStartDate", fDialog, "01.01.2000");
             EnterMaskedText("txtStopDate", fDialog, "20.02.2000");
 
-            for (GKGoalType gt = GKGoalType.gtIndividual; gt <= GKGoalType.gtOther; gt++) {
+            for (GDMGoalType gt = GDMGoalType.gtIndividual; gt <= GDMGoalType.gtOther; gt++) {
                 SelectCombo("cmbGoalType", fDialog, (int)gt);
             }
 
             ClickButton("btnAccept", fDialog);
 
-            Assert.AreEqual(GKResearchPriority.rpLow, fTaskRecord.Priority);
+            Assert.AreEqual(GDMResearchPriority.rpLow, fTaskRecord.Priority);
             Assert.AreEqual("01 JAN 2000", fTaskRecord.StartDate.StringValue);
             Assert.AreEqual("20 FEB 2000", fTaskRecord.StopDate.StringValue);
         }

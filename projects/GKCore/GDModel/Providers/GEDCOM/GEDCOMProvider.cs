@@ -24,23 +24,36 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using BSLib;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class TagProperties
+    public enum GEDCOMFormat
     {
-        public readonly string Name;
-        public readonly bool SkipEmpty;
-        public readonly bool GKExtend;
+        gf_Unknown,
+        gf_Native,
+        gf_GENBOX,
+        gf_ALTREE,
+        gf_AGES,
+        gf_PAF,
+        gf_Ahnenblatt,
+        gf_Genealogy_RusOld,
+        gf_FTB,
+        gf_FamilyTreeMaker,
+        gf_FamilyHistorian,
+        gf_Heredis,
+        gf_AncestQuest,
+        gf_Geni,
+        gf_Legacy,
+        gf_EasyTree,
+        gf_Genney,
+        gf_GeneWeb,
+        gf_GENJ,
 
-        public TagProperties(string name, bool skipEmpty, bool extend)
-        {
-            Name = name;
-            SkipEmpty = skipEmpty;
-            GKExtend = extend;
-        }
+        gf_Last = gf_GENJ
     }
+
 
     public sealed class GEDCOMAppFormat
     {
@@ -57,6 +70,7 @@ namespace GKCommon.GEDCOM
             PredefCharset = predefCharset;
         }
     }
+
 
     /// <summary>
     /// 
