@@ -179,7 +179,7 @@ namespace GEDmill.HTML
                     f.WriteLine("          <h1>Citations</h1>");
                     f.WriteLine("          <ul>");
 
-                    Hashtable htBackrefs = fSourceRecord.MakeBackReferences();
+                    var htBackrefs = fSourceRecord.MakeBackReferences();
                     IDictionaryEnumerator enumerator = htBackrefs.GetEnumerator();
                     while (enumerator.MoveNext()) {
                         GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)(enumerator.Value);

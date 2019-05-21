@@ -58,17 +58,15 @@ namespace GEDmill.Model
         {
             public int Compare(object x, object y)
             {
-                Multimedia im1 = null;
-                Multimedia im2 = null;
+                Multimedia im1 = x as Multimedia;
+                Multimedia im2 = y as Multimedia;
                 int order1 = 0;
                 int order2 = 0;
 
-                if (x != null && x is Multimedia) {
-                    im1 = (Multimedia)x;
+                if (im1 != null) {
                     order1 = im1.Ordering;
                 }
-                if (y != null && y is Multimedia) {
-                    im2 = (Multimedia)y;
+                if (im2 != null) {
                     order2 = im2.Ordering;
                 }
 

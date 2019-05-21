@@ -23,7 +23,6 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -80,7 +79,7 @@ namespace GEDmill.HTML
         private GEDCOMDateValue fActualDeathday;
 
         // Records first occurrence of one-off events, so that they may be marked as "preferred"
-        private Hashtable fFirstFoundEvent;
+        private Dictionary<string, Event> fFirstFoundEvent;
 
         // The sources giving the individual's birth date
         private string fBirthdaySourceRefs;
@@ -136,7 +135,7 @@ namespace GEDmill.HTML
             fIndiRec = ir;
             fIndiIndexCreator = indiIndexCreator;
             fPaintbox = paintbox;
-            fFirstFoundEvent = new Hashtable();
+            fFirstFoundEvent = new Dictionary<string, Event>();
             fBirthdaySourceRefs = "";
             fDeathdaySourceRefs = "";
             fNameTitle = "";
@@ -286,15 +285,14 @@ namespace GEDmill.HTML
                 }
 
                 string marriedString = "married ";
-                if (fr.Status == GKMarriageStatus.MarrNotRegistered) {
+                if (fr.Status == GDMMarriageStatus.MarrNotRegistered) {
                     marriedString = "partner of ";
                 }
+
                 if (marriageDate != null) {
                     Event iEvent = new Event(marriageDate, "_MARRIAGE", string.Concat(marriedString, spouseLink, marriagePlace, ".", sourceRefs), "", marriageNote, true, CConfig.Instance.CapitaliseEventDescriptions);
                     fEventList.Add(iEvent);
-                }
-                // else its an attribute.
-                else {
+                } else {
                     Event iEvent = new Event(marriageDate, "_MARRIAGE", string.Concat(marriedString, spouseLink, marriagePlace, ".", sourceRefs), "", marriageNote, true, CConfig.Instance.CapitaliseEventDescriptions);
                     // Marriages go at the front of the list so that they appear first in "Other facts"
                     fAttributeList.Insert(0, iEvent);
@@ -482,9 +480,7 @@ namespace GEDmill.HTML
                                     if (spouseDeathDate != null) {
                                         Event iEvent = new Event(spouseDeathDate, "_SPOUSEDIED", string.Concat("death of ", spouseLink, place, ".", sourceRefs), "", null, false, CConfig.Instance.CapitaliseEventDescriptions);
                                         fEventList.Add(iEvent);
-                                    }
-                                    // else its an attribute.
-                                    else {
+                                    } else {
                                         Event iEvent = new Event(null, "_SPOUSEDIED", string.Concat("death of ", spouseLink, place, ".", sourceRefs), "", null, false, CConfig.Instance.CapitaliseEventDescriptions);
                                         fAttributeList.Add(iEvent);
                                     }
@@ -1150,7 +1146,8 @@ namespace GEDmill.HTML
             bool onlyIncludeIfNotePresent = false;
             bool includeOccupation = false;
 
-            // First occurrence of an event in GEDCOM is the "preferred" one, where in real life there can be only one of the event (e.g. BIRT)
+            // First occurrence of an event in GEDCOM is the "preferred" one, where in real life 
+            // there can be only one of the event (e.g. BIRT)
             bool typeIsAOneOff = false;
 
             switch (utype) {
@@ -1625,9 +1622,7 @@ namespace GEDmill.HTML
                 if (date != null) {
                     iEvent = new Event(date, utype, escapedDescription, overview, eventNote, important, CConfig.Instance.CapitaliseEventDescriptions);
                     fEventList.Add(iEvent);
-                }
-                // else its an attribute.
-                else {
+                } else {
                     // Don't include plain "Died" and nothing else. Roots Magic seems to use this just to signify that person died. But it appears on every single page and looks silly.
                     // GSP Family Tree puts lots of blank tags (OCCU, CHR, SEX, NOTE, etc.etc). Don't display those without meaning
                     // Note CHR is contentious, as other s/w may use a CHR with no other info to mean that they were christened. GSP it appears puts a CHR for everyone?
@@ -1641,7 +1636,7 @@ namespace GEDmill.HTML
             if (iEvent != null && typeIsAOneOff) {
                 if (fFirstFoundEvent.ContainsKey(utype)) {
                     // We have multiple occurences of this event. Mark the one we saw first as 'preferred'.
-                    Event firstEvent = (Event)fFirstFoundEvent[utype];
+                    Event firstEvent = fFirstFoundEvent[utype];
                     if (firstEvent != null) {
                         firstEvent.Preference = EventPreference.First;
                         iEvent.Preference = EventPreference.Subsequent;
@@ -1728,7 +1723,7 @@ namespace GEDmill.HTML
             }
 
             // Nasty hack for Family Historian using strings to denote marital status
-            if (fr.Status == GKMarriageStatus.Unknown) {
+            if (fr.Status == GDMMarriageStatus.Unknown) {
                 marriageNote += "Marital status unknown";
             } else {
                 marriageNote += fr.Status.ToString();

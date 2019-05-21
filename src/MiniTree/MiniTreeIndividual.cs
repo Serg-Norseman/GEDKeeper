@@ -312,8 +312,7 @@ namespace GEDmill.MiniTree
         {
             if (RightObject != null) {
                 if (RightObject is MiniTreeGroup) {
-                    // Groups are stretchy so we can ignore if they get 
-                    // stuck( and hence reduce 'amount')
+                    // Groups are stretchy so we can ignore if they get stuck (and hence reduce 'amount')
                     RightObject.PullLeft(amount);
                 } else {
                     amount = RightObject.PullLeft(amount);

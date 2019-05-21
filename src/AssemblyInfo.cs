@@ -22,7 +22,9 @@ using System;
  * History:  
  * 10Dec08 AlexC          Migrated from GEDmill 1.10
  *
- */using System.Reflection;
+ */
+
+using System.Reflection;
 
 [assembly: AssemblyTitle ("GEDmill")]
 [assembly: AssemblyDescription ("")]

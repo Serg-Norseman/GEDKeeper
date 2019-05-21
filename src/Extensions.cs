@@ -23,7 +23,6 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using GEDmill.Model;
 using GKCommon.GEDCOM;
@@ -62,9 +61,9 @@ namespace GEDmill
             return changes.Visibility;
         }
 
-        public static Hashtable MakeBackReferences(this GEDCOMRecord record)
+        public static Dictionary<object, GEDCOMIndividualRecord> MakeBackReferences(this GEDCOMRecord record)
         {
-            Hashtable result = new Hashtable();
+            var result = new Dictionary<object, GEDCOMIndividualRecord>();
             return result;
         }
 

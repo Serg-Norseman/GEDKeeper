@@ -1213,8 +1213,7 @@ namespace GEDmill
                 m_panelChooseOutput.Visible = false;
                 m_panelAllDone.Visible = false;
                 m_tabcontrolConfigPanel.Visible = true;
-            } // End showing config panel
-            else {
+            } else {
                 m_panelWelcome.Visible = (fCurrentPanel == 1);
                 m_panelChooseGedcom.Visible = (fCurrentPanel == 2);
                 m_panelPruneRecords.Visible = (fCurrentPanel == 3);
@@ -1272,12 +1271,10 @@ namespace GEDmill
                 }
 
                 EnableNextButton();
-            } // End showing generic panels
+            }
 
             fDisablePrunepanelCheckEvent = false;
         }
-
-        // TODO: GEDCOMFileReference/"_REGION"/CAsidPair
 
         // Logic for the next page button to ensure that user has completed the current page
         private void EnableNextButton()
@@ -2331,11 +2328,12 @@ namespace GEDmill
                     }
                 }
                 while (failed && dialogResult == DialogResult.Retry);
+
                 if (failed && dialogResult == DialogResult.Cancel) {
                     fLogger.WriteInfo("Message box cancelled (6)");
                     return DialogResult.Cancel;
                 }
-            } // End if output folder exists
+            }
 
             // Next see if folder already exists
             // If output folder exists, offer to delete it
@@ -2357,6 +2355,7 @@ namespace GEDmill
                     fLogger.WriteInfo("Message box cancelled (3a)");
                     return DialogResult.Cancel;
                 }
+
                 if (dialogResult == DialogResult.Yes) {
                     if (preserveFiles) {
                         dialogResult = MessageBox.Show(this, string.Format("WARNING: Deleting the folder {0} will not preserve any existing front page and stylesheet files.\r\nDelete folder anyway?", outputFolder),
@@ -2374,6 +2373,7 @@ namespace GEDmill
                             return DialogResult.Cancel;
                         }
                     }
+
                     if (dialogResult == DialogResult.Yes) {
                         fLogger.WriteInfo("Message box yes. Deleting output folder.");
                         do {
@@ -2406,12 +2406,13 @@ namespace GEDmill
                             }
                         }
                         while (failed && dialogResult == DialogResult.Retry);
+
                         if (failed && dialogResult == DialogResult.Cancel) {
                             return DialogResult.Cancel;
                         }
-                    } // end "Yes" to not preserve files
-                } // end "Yes to delete folder"
-            } // end if output folder exists
+                    }
+                }
+            }
 
             // At last, try to create the folder
             failed = false;

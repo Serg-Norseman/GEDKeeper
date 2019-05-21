@@ -23,8 +23,9 @@
  */
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using GEDmill.Exceptions;
@@ -51,7 +52,7 @@ namespace GEDmill.HTML
 
         // The same multimedia file may be referenced multiple times. 
         // This hash prevents it being copied to the output directory more than once.
-        private static Hashtable fCopiedFiles = new Hashtable();
+        private static Dictionary<string, FilenameAndSize> fCopiedFiles = new Dictionary<string, FilenameAndSize>();
 
         // The sFilename for the Valid XHTML sticker image.
         private string fW3CFile;
@@ -391,29 +392,27 @@ namespace GEDmill.HTML
                     f.WriteLine("      <ul>");
 
                     if (previousChildLink != "") {
-                        f.WriteLine(string.Concat("        <li>", previousChildLink, "</li>"));
+                        f.WriteLine("<li>{0}</li>", previousChildLink);
                     }
 
                     if (nextChildLink != "") {
-                        f.WriteLine(string.Concat("        <li>", nextChildLink, "</li>"));
+                        f.WriteLine("<li>{0}</li>", nextChildLink);
                     }
 
                     if (includeIndexLink) {
-                        f.WriteLine(string.Concat("        <li><a href=\"individuals1.",
-                          CConfig.Instance.HtmlExtension,
-                          "\">index</a></li>"));
+                        f.WriteLine(string.Concat("<li><a href=\"individuals1.", CConfig.Instance.HtmlExtension, "\">index</a></li>"));
                     }
 
                     if (frontPageLink != "") {
-                        f.WriteLine(string.Concat("        <li>", frontPageLink, "</li>"));
+                        f.WriteLine("<li>{0}</li>", frontPageLink);
                     }
 
                     if (mainSiteLink != "") {
-                        f.WriteLine(string.Concat("        <li>", mainSiteLink, "</li>"));
+                        f.WriteLine("<li>{0}</li>", mainSiteLink);
                     }
 
                     if (includeHelpLink && helpPageLink != "") {
-                        f.WriteLine(string.Concat("        <li>", helpPageLink, "</li>"));
+                        f.WriteLine("<li>{0}</li>", helpPageLink);
                     }
 
                     f.WriteLine("      </ul>");
@@ -511,7 +510,7 @@ namespace GEDmill.HTML
 
                             File.Copy(fullFilename, absCopyFilename, true);
 
-                            File.SetAttributes(fullFilename, System.IO.FileAttributes.Normal); // Make any Read-Only files read-write.
+                            File.SetAttributes(fullFilename, FileAttributes.Normal); // Make any Read-Only files read-write.
                             if (maxWidth != 0 && maxHeight != 0) {
                                 // It must be a picture file
                                 copyFilename = ConvertAndCropImage(outputFolder, copyFilename, ref rectArea, maxWidth, maxHeight);
@@ -648,7 +647,7 @@ namespace GEDmill.HTML
                 GMHelper.ScaleAreaToFit(ref rectNewArea, maxWidth, maxHeight);
             }
 
-            Bitmap bitmapNew = new Bitmap(rectNewArea.Width, rectNewArea.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Bitmap bitmapNew = new Bitmap(rectNewArea.Width, rectNewArea.Height, PixelFormat.Format24bppRgb);
             Graphics graphicsNew = Graphics.FromImage(bitmapNew);
 
             graphicsNew.DrawImage(image, rectNewArea, rectArea, GraphicsUnit.Pixel);
@@ -663,28 +662,28 @@ namespace GEDmill.HTML
                 case ".jpg":
                 case ".jpeg":
                     sExtn = ".jpg";
-                    imageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
+                    imageFormat = ImageFormat.Jpeg;
                     break;
                 case ".gif":
-                    imageFormat = System.Drawing.Imaging.ImageFormat.Gif;
+                    imageFormat = ImageFormat.Gif;
                     break;
                 case ".bmp":
-                    imageFormat = System.Drawing.Imaging.ImageFormat.Bmp;
+                    imageFormat = ImageFormat.Bmp;
                     break;
                 case ".tif":
                 case ".tiff":
                     // Tif's don't display in browsers, so convert to png.
-                    imageFormat = System.Drawing.Imaging.ImageFormat.Png;
+                    imageFormat = ImageFormat.Png;
                     sExtn = ".png";
                     break;
                 case ".exif":
-                    imageFormat = System.Drawing.Imaging.ImageFormat.Exif;
+                    imageFormat = ImageFormat.Exif;
                     break;
                 case ".png":
-                    imageFormat = System.Drawing.Imaging.ImageFormat.Png;
+                    imageFormat = ImageFormat.Png;
                     break;
                 default:
-                    imageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
+                    imageFormat = ImageFormat.Jpeg;
                     break;
             }
 

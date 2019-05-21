@@ -403,7 +403,6 @@ namespace GEDmill.MiniTree
 
                 nSiblings++;
             }
-            // End: for each child in frParents.
 
             // Add siblings group after subject's father
             mtgParents.AddGroup(mtgSiblings);
