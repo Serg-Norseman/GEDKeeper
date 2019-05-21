@@ -70,23 +70,23 @@ namespace GKCalendarPlugin
             fPlugin.Host.WidgetClose(fPlugin);
         }
 
-        private static string d2s(int day, string month, int year, string weekday)
-        {
-            return string.Format("{0} {1} {2}, {3}", day, month, year, weekday);
-        }
-
         private void AddCItem(double jd, int year, int month, int day,
-                              string[] months, string[] weekdays, string ext, string cdrName)
+                              string[] months, string[] weekdays, string ext, string calendar)
         {
-            string s = ext + d2s(day, months[month - 1], year, weekdays[CalendarConverter.jwday(jd)]);
-            AddItem(cdrName, s);
+            // jwday (sunday == 0)
+            int jwday = CalendarConverter.jwday(jd);
+            // all arrays in range [monday..sunday]
+            int weekDay = (jwday > 0) ? jwday - 1 : 6;
+            string strDate = ext + string.Format("{0} {1} {2}, {3}", day, months[month - 1], year, weekdays[weekDay]);
+
+            ListViewItem item = lvDates.Items.Add(calendar);
+            item.SubItems.Add(strDate);
         }
 
         private void qtc_DateSelected(object sender, DateRangeEventArgs e)
         {
             lvDates.BeginUpdate();
-            try
-            {
+            try {
                 lvDates.Items.Clear();
 
                 DateTime gdt = qtc.SelectionStart;
@@ -116,17 +116,10 @@ namespace GKCalendarPlugin
                 CalendarConverter.jd_to_bahai(jd, out major, out cycle, out year, out month, out day);
                 string s = string.Format(fPlugin.LangMan.LS(PLS.LSID_BahaiCycles), major, cycle) + ", ";
                 AddCItem(jd, year, month, day, fBahaiMonths, fBahaiWeekdays, s, fPlugin.LangMan.LS(PLS.LSID_Cal_Bahai));
-            }
-            finally
-            {
+            } finally {
                 lvDates.EndUpdate();
+                lvDates.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             }
-        }
-
-        private void AddItem(string calendar, string date)
-        {
-            ListViewItem item = lvDates.Items.Add(calendar);
-            item.SubItems.Add(date);
         }
 
         #region ILocalization support

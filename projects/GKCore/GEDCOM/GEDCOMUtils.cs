@@ -586,16 +586,14 @@ namespace GKCommon.GEDCOM
             byte day = 0;
             GEDCOMDateFormat dateFormat = GEDCOMDateFormat.dfGEDCOMStd;
 
+            strTok.SkipWhitespaces();
+
             GEDCOMFormat format = (owner == null) ? GEDCOMFormat.gf_Native : owner.Format;
             bool isAhnDeviance = (format == GEDCOMFormat.gf_Ahnenblatt);
-            if (isAhnDeviance) {
-                GEDCOMUtils.PrepareAhnenblattDate(strTok.Data, strTok.Position, strTok.Length);
-            }
-
-            strTok.SkipWhitespaces();
 
             var token = strTok.CurrentToken;
             if (isAhnDeviance && token == GEDCOMToken.Symbol && strTok.GetSymbol() == '(') {
+                GEDCOMUtils.PrepareAhnenblattDate(strTok.Data, strTok.Position, strTok.Length);
                 token = strTok.Next();
             }
 
@@ -1447,6 +1445,57 @@ namespace GKCommon.GEDCOM
         }
 
         #endregion
+
+        public static string GetSignByRecord(GEDCOMRecord record)
+        {
+            string result = string.Empty;
+            if (record == null) return result;
+
+            switch (record.RecordType)
+            {
+                case GEDCOMRecordType.rtIndividual:
+                    result = "I";
+                    break;
+                case GEDCOMRecordType.rtFamily:
+                    result = "F";
+                    break;
+                case GEDCOMRecordType.rtNote:
+                    result = "N";
+                    break;
+                case GEDCOMRecordType.rtMultimedia:
+                    result = "O";
+                    break;
+                case GEDCOMRecordType.rtSource:
+                    result = "S";
+                    break;
+                case GEDCOMRecordType.rtRepository:
+                    result = "R";
+                    break;
+                case GEDCOMRecordType.rtGroup:
+                    result = "G";
+                    break;
+                case GEDCOMRecordType.rtResearch:
+                    result = "RS";
+                    break;
+                case GEDCOMRecordType.rtTask:
+                    result = "TK";
+                    break;
+                case GEDCOMRecordType.rtCommunication:
+                    result = "CM";
+                    break;
+                case GEDCOMRecordType.rtLocation:
+                    result = "L";
+                    break;
+                case GEDCOMRecordType.rtSubmission:
+                    result = "????";
+                    break;
+                case GEDCOMRecordType.rtSubmitter:
+                    result = "SUB";
+                    break;
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// Strange values were found, possibly from other genealogical programs.

@@ -62,8 +62,9 @@ namespace GKCore.Options
         public bool ShowPlaces;
         public bool HideUnknownSpouses;
 
-        public DeepMode DeepMode;
+        public bool AutoAlign; // debug option, for future purposes
         public GfxBorderStyle BorderStyle;
+        public DeepMode DeepMode;
 
         public IColor MaleColor;
         public IColor FemaleColor;
@@ -101,12 +102,14 @@ namespace GKCore.Options
             TraceSelected = true;
             ChildlessExclude = false;
             Decorative = true;
-            DeepMode = DeepMode.None;
             InvertedTree = false;
             MarriagesDates = false;
             ShowPlaces = false;
             HideUnknownSpouses = false;
+
+            AutoAlign = true;
             BorderStyle = GfxBorderStyle.None;
+            DeepMode = DeepMode.None;
 
             MaleColor = ChartRenderer.GetColor(MALE_COLOR);
             FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);

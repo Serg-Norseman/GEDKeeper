@@ -187,6 +187,7 @@
     <Compile Include="GEDCOM\MatchParams.cs" />
     <Compile Include="GEDCOM\XRefReplacer.cs" />
     <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
+    <Compile Include="GedML\GedMLProvider.cs" />
     <Compile Include="GKCore\BBTextParser.cs" />
     <Compile Include="GKCore\Charts\BorderPainter.cs" />
     <Compile Include="GKCore\Charts\ICircleChart.cs" />
@@ -243,6 +244,7 @@
     <Compile Include="GKCore\Controllers\TreeSplitController.cs" />
     <Compile Include="GKCore\Controllers\UserRefEditDlgController.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
+    <Compile Include="GKCore\FileProvider.cs" />
     <Compile Include="GKCore\ImportUtils.cs" />
     <Compile Include="GKCore\Interfaces\IBaseContext.cs" />
     <Compile Include="GKCore\Interfaces\IBaseEditor.cs" />
@@ -385,7 +387,7 @@
     <Compile Include="GKCore\Operations\IndividualNameChange.cs" />
     <Compile Include="GKCore\Operations\OrdinaryOperation.cs" />
     <Compile Include="GKCore\Operations\UndoManager.cs" />
-    <Compile Include="GKCore\Options\AncestorsCircleOptions.cs" />
+    <Compile Include="GKCore\Options\CircleChartOptions.cs" />
     <Compile Include="GKCore\Options\GlobalOptions.cs" />
     <Compile Include="GKCore\Options\LangRecord.cs" />
     <Compile Include="GKCore\Options\MRUFile.cs" />

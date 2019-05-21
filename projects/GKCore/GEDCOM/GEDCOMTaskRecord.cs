@@ -36,12 +36,12 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMDate StartDate
         {
-            get { return TagClass(GEDCOMTagType._STARTDATE, GEDCOMDate.Create) as GEDCOMDate; }
+            get { return GetTag(GEDCOMTagType._STARTDATE, GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public GEDCOMDate StopDate
         {
-            get { return TagClass(GEDCOMTagType._STOPDATE, GEDCOMDate.Create) as GEDCOMDate; }
+            get { return GetTag(GEDCOMTagType._STOPDATE, GEDCOMDate.Create) as GEDCOMDate; }
         }
 
 
@@ -49,19 +49,6 @@ namespace GKCommon.GEDCOM
         {
             SetRecordType(GEDCOMRecordType.rtTask);
             SetName(GEDCOMTagType._TASK);
-        }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType._STARTDATE || tagName == GEDCOMTagType._STOPDATE) {
-                result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
         }
 
         #region Auxiliary

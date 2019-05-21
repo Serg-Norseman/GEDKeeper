@@ -78,7 +78,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMLanguage Language
         {
-            get { return TagClass("_LANG", GEDCOMLanguage.Create) as GEDCOMLanguage; }
+            get { return GetTag("_LANG", GEDCOMLanguage.Create) as GEDCOMLanguage; }
         }
 
 
@@ -134,19 +134,6 @@ namespace GKCommon.GEDCOM
                 fPieces.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.TYPE || tagName == GEDCOMTagType.FONE || tagName == GEDCOMTagType.ROMN || tagName == "_LANG") {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            } else {
-                result = fPieces.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
         }
 
         public override void Assign(GEDCOMTag source)

@@ -38,7 +38,7 @@ namespace GKCommon.GEDCOM
         public StringList Notes
         {
             get { return GetTagStrings(FindTag(GEDCOMTagType.NOTE, 0)); }
-            set { SetTagStrings(TagClass(GEDCOMTagType.NOTE, GEDCOMNotes.Create), value); }
+            set { SetTagStrings(GetTag(GEDCOMTagType.NOTE, GEDCOMNotes.Create), value); }
         }
 
         public string Source
@@ -68,8 +68,8 @@ namespace GKCommon.GEDCOM
         public GEDCOMAddress SourceBusinessAddress
         {
             get {
-                GEDCOMTag corpTag = TagClass(@"SOUR\CORP", Create);
-                return corpTag.TagClass(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress;
+                GEDCOMTag corpTag = GetTag(@"SOUR\CORP", Create);
+                return corpTag.GetTag(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress;
             }
         }
 
@@ -111,7 +111,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMLanguage Language
         {
-            get { return TagClass(GEDCOMTagType.LANG, GEDCOMLanguage.Create) as GEDCOMLanguage; }
+            get { return GetTag(GEDCOMTagType.LANG, GEDCOMLanguage.Create) as GEDCOMLanguage; }
         }
 
         public string PlaceHierarchy
@@ -122,22 +122,22 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPointer Submission
         {
-            get { return TagClass(GEDCOMTagType.SUBN, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag(GEDCOMTagType.SUBN, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
         public GEDCOMPointer Submitter
         {
-            get { return TagClass(GEDCOMTagType.SUBM, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag(GEDCOMTagType.SUBM, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
         public GEDCOMDate TransmissionDate
         {
-            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate; }
+            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public GEDCOMTime TransmissionTime
         {
-            get { return TransmissionDate.TagClass(GEDCOMTagType.TIME, GEDCOMTime.Create) as GEDCOMTime; }
+            get { return TransmissionDate.GetTag(GEDCOMTagType.TIME, GEDCOMTime.Create) as GEDCOMTime; }
         }
 
         public DateTime TransmissionDateTime
@@ -162,23 +162,6 @@ namespace GKCommon.GEDCOM
         public GEDCOMHeader(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.HEAD);
-        }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.DATE) {
-                result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
-            } else if (tagName == GEDCOMTagType.SUBM) {
-                result = base.AddTag(tagName, tagValue, GEDCOMPointer.Create);
-            } else if (tagName == GEDCOMTagType.SUBN) {
-                result = base.AddTag(tagName, tagValue, GEDCOMPointer.Create);
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
         }
     }
 }

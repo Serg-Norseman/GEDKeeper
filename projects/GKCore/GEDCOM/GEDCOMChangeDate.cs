@@ -26,14 +26,14 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMDate ChangeDate
         {
-            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate; }
+            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate; }
         }
 
         public GEDCOMTime ChangeTime
         {
             get {
                 GEDCOMTag dateTag = ChangeDate;
-                return dateTag.TagClass(GEDCOMTagType.TIME, GEDCOMTime.Create) as GEDCOMTime;
+                return dateTag.GetTag(GEDCOMTagType.TIME, GEDCOMTime.Create) as GEDCOMTime;
             }
         }
 
@@ -50,7 +50,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMNotes Notes
         {
-            get { return TagClass(GEDCOMTagType.NOTE, GEDCOMNotes.Create) as GEDCOMNotes; }
+            get { return GetTag(GEDCOMTagType.NOTE, GEDCOMNotes.Create) as GEDCOMNotes; }
         }
 
 
@@ -67,21 +67,6 @@ namespace GKCommon.GEDCOM
         public GEDCOMChangeDate(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
-        }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.DATE) {
-                result = base.AddTag(tagName, tagValue, GEDCOMDate.Create);
-            } else if (tagName == GEDCOMTagType.NOTE) {
-                result = base.AddTag(tagName, tagValue, GEDCOMNotes.Create);
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
         }
 
         public override string ToString()

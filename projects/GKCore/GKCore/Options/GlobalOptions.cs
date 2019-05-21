@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -45,7 +45,7 @@ namespace GKCore.Options
 
         private static GlobalOptions fInstance = null;
 
-        private readonly TreeChartOptions fChartOptions;
+        private readonly TreeChartOptions fTreeChartOptions;
         private DateFormat fDefDateFormat;
         private bool fShowDatesSign;
         private NameFormat fDefNameFormat;
@@ -73,7 +73,7 @@ namespace GKCore.Options
         private int fAutosaveInterval;
         private bool fExtendedNames;
         private WomanSurnameFormat fWomanSurnameFormat;
-        private readonly AncestorsCircleOptions fAncestorsCircleOptions;
+        private readonly CircleChartOptions fCircleChartOptions;
         private string fGeocoder;
         private bool fRemovableMediaWarning;
         private bool fLoadRecentFiles;
@@ -99,14 +99,14 @@ namespace GKCore.Options
         }
 
 
-        public TreeChartOptions ChartOptions
+        public TreeChartOptions TreeChartOptions
         {
-            get { return fChartOptions; }
+            get { return fTreeChartOptions; }
         }
 
-        public AncestorsCircleOptions AncestorsCircleOptions
+        public CircleChartOptions CircleChartOptions
         {
-            get { return fAncestorsCircleOptions; }
+            get { return fCircleChartOptions; }
         }
 
         public GEDCOMCharacterSet DefCharacterSet
@@ -345,7 +345,7 @@ namespace GKCore.Options
 
         private GlobalOptions()
         {
-            fChartOptions = new TreeChartOptions();
+            fTreeChartOptions = new TreeChartOptions();
             fEventFilters = new StringList();
             fMRUFiles = new List<MRUFile>();
             fNameFilters = new StringList();
@@ -353,7 +353,7 @@ namespace GKCore.Options
             fPedigreeOptions = new PedigreeOptions();
             fProxy = new ProxyOptions();
             fRelations = new StringList();
-            fAncestorsCircleOptions = new AncestorsCircleOptions();
+            fCircleChartOptions = new CircleChartOptions();
             fGeocoder = "Google";
             fRemovableMediaWarning = true;
             fLoadRecentFiles = true;
@@ -395,7 +395,7 @@ namespace GKCore.Options
 
                 fProxy.Dispose();
                 fPedigreeOptions.Dispose();
-                fChartOptions.Dispose();
+                fTreeChartOptions.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -613,7 +613,7 @@ namespace GKCore.Options
             int kl = ini.ReadInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
             AppHost.Instance.SetKeyLayout(kl);
 
-            fChartOptions.LoadFromFile(ini);
+            fTreeChartOptions.LoadFromFile(ini);
             fPedigreeOptions.LoadFromFile(ini);
             fProxy.LoadFromFile(ini);
 
@@ -662,7 +662,7 @@ namespace GKCore.Options
                 AddLastBase(st);
             }
 
-            fAncestorsCircleOptions.LoadFromFile(ini);
+            fCircleChartOptions.LoadFromFile(ini);
 
             fListOptions.LoadFromFile(ini);
 
@@ -722,7 +722,7 @@ namespace GKCore.Options
 
             ini.WriteString("Common", "Geocoder", fGeocoder);
 
-            fChartOptions.SaveToFile(ini);
+            fTreeChartOptions.SaveToFile(ini);
             fPedigreeOptions.SaveToFile(ini);
             fProxy.SaveToFile(ini);
 
@@ -791,7 +791,7 @@ namespace GKCore.Options
                 ini.WriteString("LastBases", "LB" + i.ToString(), fLastBases[i]);
             }
 
-            fAncestorsCircleOptions.SaveToFile(ini);
+            fCircleChartOptions.SaveToFile(ini);
 
             fListOptions.SaveToFile(ini);
 

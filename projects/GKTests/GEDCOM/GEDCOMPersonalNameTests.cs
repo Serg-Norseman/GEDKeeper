@@ -180,14 +180,11 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void Test_AddTag()
+        public void Test_NameType()
         {
-            string tagName = GEDCOMTagType.TYPE;
-            string tagValue = "gibber";
-            TagConstructor tagConstructor = null;
             GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
-            instance.AddTag(tagName, tagValue, tagConstructor);
-            Assert.IsNotNull(instance.FindTag(tagName, 0));
+            instance.NameType = GEDCOMNameType.ntImmigrant;
+            Assert.AreEqual(GEDCOMNameType.ntImmigrant, instance.NameType);
         }
 
         [Test]
@@ -229,9 +226,9 @@ namespace GKCommon.GEDCOM
         public void Test_Pack()
         {
             GEDCOMPersonalName instance = new GEDCOMPersonalName(null, "", "");
-            instance.AddTag("BLECH", null, null);
+            instance.AddTag(new GEDCOMTag(instance, "BLECH", null));
             instance.Pack();
-            Assert.IsNull(instance.FindTag("BLECH", 0));
+            Assert.IsNotNull(instance.FindTag("BLECH", 0));
         }
 
         [Test]

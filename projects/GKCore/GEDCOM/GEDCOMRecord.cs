@@ -26,7 +26,7 @@ namespace GKCommon.GEDCOM
     /// <summary>
     /// 
     /// </summary>
-    public abstract class GEDCOMRecord : GEDCOMCustomRecord, IGEDCOMStructWithLists
+    public class GEDCOMRecord : GEDCOMCustomRecord, IGEDCOMStructWithLists
     {
         private object fExtData;
         private GEDCOMRecordType fRecordType;
@@ -46,7 +46,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMChangeDate ChangeDate
         {
-            get { return TagClass(GEDCOMTagType.CHAN, GEDCOMChangeDate.Create) as GEDCOMChangeDate; }
+            get { return GetTag(GEDCOMTagType.CHAN, GEDCOMChangeDate.Create) as GEDCOMChangeDate; }
         }
 
         public object ExtData
@@ -92,7 +92,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        protected GEDCOMRecord(GEDCOMObject owner) : base(owner)
+        public GEDCOMRecord(GEDCOMObject owner) : base(owner)
         {
             fNotes = new GEDCOMList<GEDCOMNotes>(this);
             fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
@@ -177,7 +177,7 @@ namespace GKCommon.GEDCOM
                     tag.Dispose();
                 } else {
                     tag.ResetOwner(targetRecord);
-                    targetRecord.InsertTag(tag);
+                    targetRecord.AddTag(tag);
                 }
             }
 
@@ -237,28 +237,6 @@ namespace GKCommon.GEDCOM
             fSourceCitations.SaveToStream(stream, level);
             fMultimediaLinks.SaveToStream(stream, level);
             fUserReferences.SaveToStream(stream, level);
-        }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.NOTE) {
-                result = fNotes.Add(new GEDCOMNotes(this, tagName, tagValue));
-            } else if (tagName == GEDCOMTagType.SOUR) {
-                result = fSourceCitations.Add(new GEDCOMSourceCitation(this, tagName, tagValue));
-            } else if (tagName == GEDCOMTagType.OBJE) {
-                result = fMultimediaLinks.Add(new GEDCOMMultimediaLink(this, tagName, tagValue));
-            } else if (tagName == GEDCOMTagType.REFN) {
-                result = fUserReferences.Add(new GEDCOMUserReference(this, tagName, tagValue));
-            } else if (tagName == GEDCOMTagType._UID) {
-                fUID = tagValue;
-                result = null;
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
         }
 
         public override void Clear()

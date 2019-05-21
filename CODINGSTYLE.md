@@ -1,15 +1,15 @@
 # Target .NET platform
 
-The only allowed target platfrom is '.NET 3.5'. This ensures maximum coverage of users,
+The only allowed target platfrom is '.NET 4.0'. This ensures maximum coverage of users,
 and both gives ability to inexperienced or conservative users to avoid platform upgrading, and
-adds old, un-upgradable versions of Microsoft Windows to list of the supported operating systems.
+adds old, un-upgradable versions of Microsoft Windows (from WinXP and above) to list of the supported operating systems.
 
 The only one exception of this rule is the sub-project 'GKTests', where more higher versions of
 .NET are allowed.
 
 # Language Integrated Query (LINQ)
 
-Using of LINQ in the project is not desirable, but is permissible in a limited scope.
+Using of LINQ in the project is not desirable, but is permissible in a limited scope (exceptionally not in the Core).
 
 # Non-portable features
 
@@ -17,6 +17,12 @@ To develop a program feature, that is known to be non-portable between Linux and
 you **must** get project's owner (@Serg-Norseman) approval before doing that.
 
 # C# features
+
+# `foreach` operator
+
+We do not recommend to use operator `foreach` in the code. One can use it in some GUI implementations,
+but we still strongly advise against it. Using the operator in the main classes of the core is 
+completely unacceptable, to avoid performance degradation.
 
 ## Use of var
 

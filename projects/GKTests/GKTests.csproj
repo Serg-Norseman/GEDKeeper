@@ -248,6 +248,7 @@
     <EmbeddedResource Include="Resources\test_legacy.ged" />
     <EmbeddedResource Include="Resources\test_easytree.ged" />
     <EmbeddedResource Include="Resources\test_genney.ged" />
+    <EmbeddedResource Include="Resources\test_gedml.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

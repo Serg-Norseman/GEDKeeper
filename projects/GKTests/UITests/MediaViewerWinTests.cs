@@ -53,8 +53,9 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
 
             GEDCOMMultimediaRecord mmRec = fBase.Context.Tree.CreateMultimedia();
-            mmRec.AddTag(GEDCOMTagType.FILE, "", null);
+            mmRec.FileReferences.Add(new GEDCOMFileReferenceWithTitle(mmRec, GEDCOMTagType.FILE, ""));
             fileRef = mmRec.FileReferences[0];
+
             fileRef.Title = "File Title 2";
             fileRef.LinkFile("shaytan_plant.jpg");
             fileRef.MediaType = GEDCOMMediaType.mtPhoto;
@@ -158,8 +159,9 @@ namespace GKUI.Forms
             Assert.IsTrue(File.Exists(targetName));
 
             GEDCOMMultimediaRecord mmRecV = fBase.Context.Tree.CreateMultimedia();
-            mmRecV.AddTag(GEDCOMTagType.FILE, "", null);
+            mmRecV.FileReferences.Add(new GEDCOMFileReferenceWithTitle(mmRecV, GEDCOMTagType.FILE, ""));
             var fileRefV = mmRecV.FileReferences[0];
+
             fileRefV.Title = "File Title 2";
             fileRefV.LinkFile(targetName);
             fileRefV.MediaType = GEDCOMMediaType.mtVideo;

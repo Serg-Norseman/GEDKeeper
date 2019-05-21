@@ -50,17 +50,17 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPlace Place
         {
-            get { return TagClass(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
+            get { return GetTag(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
         }
 
         public GEDCOMAddress Address
         {
-            get { return TagClass(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress; }
+            get { return GetTag(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress; }
         }
 
         public GEDCOMDateValue Date
         {
-            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDateValue.Create) as GEDCOMDateValue; }
+            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDateValue.Create) as GEDCOMDateValue; }
         }
 
         public GEDCOMRestriction Restriction
@@ -72,20 +72,6 @@ namespace GKCommon.GEDCOM
 
         protected GEDCOMCustomEvent(GEDCOMObject owner) : base(owner)
         {
-        }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.PHON || tagName == GEDCOMTagType.EMAIL || tagName == GEDCOMTagType.FAX || tagName == GEDCOMTagType.WWW) {
-                result = Address.AddTag(tagName, tagValue, tagConstructor);
-            } else {
-                // define 'PLAC', 'ADDR', 'DATE' by default
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
         }
 
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)

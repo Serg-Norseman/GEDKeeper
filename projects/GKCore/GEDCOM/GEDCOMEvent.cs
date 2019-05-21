@@ -24,12 +24,12 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMDatePeriod Date
         {
-            get { return TagClass(GEDCOMTagType.DATE, GEDCOMDatePeriod.Create) as GEDCOMDatePeriod; }
+            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDatePeriod.Create) as GEDCOMDatePeriod; }
         }
 
         public GEDCOMPlace Place
         {
-            get { return TagClass(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
+            get { return GetTag(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
         }
 
 
@@ -46,20 +46,6 @@ namespace GKCommon.GEDCOM
         public GEDCOMEvent(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
-        }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.DATE) {
-                result = base.AddTag(tagName, tagValue, GEDCOMDatePeriod.Create);
-            } else {
-                // define 'PLAC' by default
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
         }
     }
 }

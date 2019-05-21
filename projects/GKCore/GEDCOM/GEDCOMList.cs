@@ -256,7 +256,7 @@ namespace GKCommon.GEDCOM
                 var item = fDataList[i];
                 if (item != null) {
                     item.Pack();
-                    if (item.IsEmpty() && item.IsEmptySkip()) {
+                    if (item.IsEmpty() && GEDCOMProvider.SkipEmptyTag(item.Name)) {
                         DeleteAt(i);
                     }
                 }

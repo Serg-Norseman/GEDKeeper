@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,9 +26,9 @@ using GKCore.Interfaces;
 namespace GKCore.Options
 {
     /// <summary>
-    /// 
+    /// Class of options for circle charts. Common for the circles of ancestors and the circles of descendants.
     /// </summary>
-    public class AncestorsCircleOptions : IOptions
+    public class CircleChartOptions : IOptions
     {
         public const int MAX_BRUSHES = 12;
 
@@ -47,11 +47,12 @@ namespace GKCore.Options
             /* 11 */ ChartRenderer.PaleGreen // lines?
         };
 
-        public bool ArcText; // TODO: to OptionsDlg
+        public bool ArcText;
         public IColor[] BrushColor = new IColor[MAX_BRUSHES];
         public bool HideEmptySegments;
+        public bool LTRCorrection; // text correction from left to right [experimental]
 
-        public AncestorsCircleOptions()
+        public CircleChartOptions()
         {
             for (int i = 0; i < MAX_BRUSHES; i++) {
                 BrushColor[i] = ChartRenderer.GetColor(DefBrushColor[i]);
@@ -59,11 +60,12 @@ namespace GKCore.Options
 
             ArcText = true;
             HideEmptySegments = false;
+            LTRCorrection = false;
         }
 
         public void Assign(IOptions source)
         {
-            AncestorsCircleOptions srcOptions = source as AncestorsCircleOptions;
+            CircleChartOptions srcOptions = source as CircleChartOptions;
             if (srcOptions == null) return;
 
             for (int i = 0; i < MAX_BRUSHES; i++) {
@@ -72,6 +74,7 @@ namespace GKCore.Options
 
             ArcText = srcOptions.ArcText;
             HideEmptySegments = srcOptions.HideEmptySegments;
+            LTRCorrection = srcOptions.LTRCorrection;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -89,6 +92,7 @@ namespace GKCore.Options
 
                 ArcText = iniFile.ReadBool("AncestorsCircle", "ArcText", true);
                 HideEmptySegments = iniFile.ReadBool("AncestorsCircle", "HideEmptySegments", false);
+                LTRCorrection = iniFile.ReadBool("AncestorsCircle", "LTRCorrection", false);
             }
             catch (Exception)
             {
@@ -107,6 +111,7 @@ namespace GKCore.Options
 
             iniFile.WriteBool("AncestorsCircle", "ArcText", ArcText);
             iniFile.WriteBool("AncestorsCircle", "HideEmptySegments", HideEmptySegments);
+            iniFile.WriteBool("AncestorsCircle", "LTRCorrection", LTRCorrection);
         }
     }
 }

@@ -150,7 +150,7 @@ namespace GKCommon.GEDCOM
                 data.Agency = "test agency";
                 Assert.AreEqual("test agency", data.Agency);
                 
-                GEDCOMTag evenTag = data.AddTag(GEDCOMTagType.EVEN, "", null);
+                GEDCOMTag evenTag = data.Events.Add(new GEDCOMEvent(data, GEDCOMTagType.EVEN, ""));
                 Assert.IsNotNull(evenTag);
                 
                 GEDCOMEvent evt = data.Events[0];
@@ -741,16 +741,16 @@ namespace GKCommon.GEDCOM
                 Assert.AreEqual("address", addr.Address[1]);
                 Assert.AreEqual("test", addr.Address[2]);
 
-                addr.AddTag(GEDCOMTagType.PHON, "8 911 101 99 99", null);
+                addr.AddPhoneNumber("8 911 101 99 99");
                 Assert.AreEqual("8 911 101 99 99", addr.PhoneNumbers[0].StringValue);
 
-                addr.AddTag(GEDCOMTagType.EMAIL, "test@mail.com", null);
+                addr.AddEmailAddress("test@mail.com");
                 Assert.AreEqual("test@mail.com", addr.EmailAddresses[0].StringValue);
 
-                addr.AddTag(GEDCOMTagType.FAX, "abrakadabra", null);
+                addr.AddFaxNumber("abrakadabra");
                 Assert.AreEqual("abrakadabra", addr.FaxNumbers[0].StringValue);
 
-                addr.AddTag(GEDCOMTagType.WWW, "http://test.com", null);
+                addr.AddWebPage("http://test.com");
                 Assert.AreEqual("http://test.com", addr.WebPages[0].StringValue);
 
                 // stream test
@@ -856,7 +856,7 @@ namespace GKCommon.GEDCOM
                 association.Individual = null;
                 Assert.IsNull(association.Individual);
 
-                GEDCOMTag tag = association.AddTag(GEDCOMTagType.SOUR, "xxx", null);
+                GEDCOMTag tag = association.SourceCitations.Add(new GEDCOMSourceCitation(association, GEDCOMTagType.SOUR, "xxx"));
                 Assert.IsNotNull(tag);
                 Assert.IsTrue(tag is GEDCOMSourceCitation);
 
@@ -1635,7 +1635,7 @@ namespace GKCommon.GEDCOM
                 customEvent.PhysicalDescription = strs;
                 Assert.AreEqual(strs.Text, customEvent.PhysicalDescription.Text);
 
-                customEvent.AddTag(GEDCOMTagType.EMAIL, "email", null);
+                customEvent.Address.AddEmailAddress("email");
                 Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
 
                 customEvent.Pack();
@@ -1665,7 +1665,7 @@ namespace GKCommon.GEDCOM
                                     "1 PLAC test place\r\n", buf1);
                 }
 
-                customEvent.AddTag(GEDCOMTagType.EMAIL, "email", null);
+                customEvent.Address.AddEmailAddress("email");
                 Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
 
                 customEvent.Pack();
@@ -1675,7 +1675,7 @@ namespace GKCommon.GEDCOM
             {
                 Assert.IsNotNull(customEvent);
 
-                customEvent.AddTag(GEDCOMTagType.EMAIL, "email", null);
+                customEvent.Address.AddEmailAddress("email");
                 Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
 
                 customEvent.Pack();
@@ -2177,7 +2177,7 @@ namespace GKCommon.GEDCOM
         {
             Assert.AreEqual("", mediaRec.GetFileTitle());
 
-            mediaRec.AddTag(GEDCOMTagType.FILE, "", null);
+            mediaRec.FileReferences.Add(new GEDCOMFileReferenceWithTitle(mediaRec, GEDCOMTagType.FILE, ""));
             GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
             Assert.IsNotNull(fileRef);
 
@@ -2301,7 +2301,7 @@ namespace GKCommon.GEDCOM
             submRec.OrdinanceProcessFlag = GEDCOMOrdinanceProcessFlag.opYes;
             Assert.AreEqual(GEDCOMOrdinanceProcessFlag.opYes, submRec.OrdinanceProcessFlag);
             
-            submRec.AddTag(GEDCOMTagType.SUBM, GEDCOMUtils.EncloseXRef(submitterXRef), null);
+            submRec.Submitter.XRef = submitterXRef;
             GEDCOMSubmitterRecord subr = submRec.Submitter.Value as GEDCOMSubmitterRecord;
             Assert.IsNotNull(subr);
             
@@ -2321,7 +2321,7 @@ namespace GKCommon.GEDCOM
                 subrRec.RegisteredReference = "regref";
                 Assert.AreEqual("regref", subrRec.RegisteredReference);
 
-                subrRec.AddTag(GEDCOMTagType.LANG, "Russian", null);
+                subrRec.Languages.Add(new GEDCOMLanguage(subrRec, "", "Russian"));
                 Assert.AreEqual("Russian", subrRec.Languages[0].StringValue);
 
                 subrRec.SetLanguage(0, "nothing"); // return without exceptions

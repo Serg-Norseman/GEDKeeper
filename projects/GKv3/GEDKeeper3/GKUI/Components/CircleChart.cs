@@ -77,7 +77,7 @@ namespace GKUI.Components
             get { return fModel; }
         }
 
-        public AncestorsCircleOptions Options
+        public CircleChartOptions Options
         {
             get { return fModel.Options; }
         }
@@ -136,7 +136,7 @@ namespace GKUI.Components
             fRenderer = new EtoGfxRenderer();
             fModel = new CircleChartModel();
             fModel.SetRenderer(fRenderer);
-            fModel.Options = new AncestorsCircleOptions();
+            fModel.Options = new CircleChartOptions();
             fModel.Font = AppHost.GfxProvider.CreateFont(Font.FamilyName, Font.Size, false);
 
             fMouseCaptured = MouseCaptured.mcNone;

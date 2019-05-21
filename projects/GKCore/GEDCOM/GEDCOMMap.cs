@@ -18,19 +18,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib;
+
 namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMMap : GEDCOMTag
     {
         public double Lati
         {
-            get { return GetTagFloatValue(GEDCOMTagType.LATI, 0.0); }
+            get { return GetGeoCoord(GetTagStringValue(GEDCOMTagType.LATI), GeoCoord.Lati); }
             set { SetTagFloatValue(GEDCOMTagType.LATI, value); }
         }
 
         public double Long
         {
-            get { return GetTagFloatValue(GEDCOMTagType.LONG, 0.0); }
+            get { return GetGeoCoord(GetTagStringValue(GEDCOMTagType.LONG), GeoCoord.Long); }
             set { SetTagFloatValue(GEDCOMTagType.LONG, value); }
         }
 
@@ -48,6 +50,38 @@ namespace GKCommon.GEDCOM
         public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
             return new GEDCOMMap(owner, tagName, tagValue);
+        }
+
+        /// <summary>
+        /// It is agreed to follow the requirements of the GEDCOM standard:
+        /// PLACE_LATITUDE must be represented as [Ngg.nnnnnn (+) | Sgg.nnnnnn (-)]
+        /// PLACE_LONGITUDE must be represented as [Wgg.nnnnnn (-) | Egg.nnnnnn (+)]
+        /// </summary>
+        private static double GetGeoCoord(string value, GeoCoord coordType)
+        {
+            if (string.IsNullOrEmpty(value)) {
+                return 0.0;
+            }
+
+            int sign = 1;
+            char firstChr = value[0];
+            if ("NSWE".IndexOf(firstChr) >= 0) {
+                switch (firstChr) {
+                    case 'N':
+                    case 'E':
+                        sign = +1;
+                        break;
+
+                    case 'S':
+                    case 'W':
+                        sign = -1;
+                        break;
+                }
+                value = value.Substring(1);
+            }
+
+            double result = ConvertHelper.ParseFloat(value, 0.0);
+            return result * sign;
         }
     }
 }

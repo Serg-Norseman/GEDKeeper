@@ -219,17 +219,6 @@ namespace GKCommon.GEDCOM
         }
 
         [Test]
-        public void Test_AddTag()
-        {
-            const string tagName = "BABA";
-            const string tagValue = "YAGA";
-            TagConstructor tagConstructor = null;
-            GEDCOMAddress instance = new GEDCOMAddress(null);
-            GEDCOMTag result = instance.AddTag(tagName, tagValue, tagConstructor);
-            Assert.IsNotNull(instance.FindTag(tagName, 0));
-        }
-
-        [Test]
         public void Test_Clear()
         {
             GEDCOMAddress instance = new GEDCOMAddress(null);

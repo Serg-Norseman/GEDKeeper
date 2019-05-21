@@ -24,8 +24,8 @@ namespace GKCommon.GEDCOM
     {
         public GEDCOMSpouseSealingDateStatus SpouseSealingDateStatus
         {
-            get { return GEDCOMUtils.GetSpouseSealingDateStatusVal(GetTagStringValue(GEDCOMTagType.STAT)); }
-            set { SetTagStringValue(GEDCOMTagType.STAT, GEDCOMUtils.GetSpouseSealingDateStatusStr(value)); }
+            get { return GEDCOMUtils.GetSpouseSealingDateStatusVal(DateStatus.StringValue); }
+            set { DateStatus.StringValue = GEDCOMUtils.GetSpouseSealingDateStatusStr(value); }
         }
 
 

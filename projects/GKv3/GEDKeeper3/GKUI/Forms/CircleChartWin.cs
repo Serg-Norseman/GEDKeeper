@@ -74,7 +74,7 @@ namespace GKUI.Forms
             fCircleChart.ZoomChanged += CircleChartWin_NavRefresh;
             fCircleChart.RootChanged += CircleChartWin_RootChanged;
             fCircleChart.RootPerson = startPerson;
-            fCircleChart.Options.Assign(GlobalOptions.Instance.AncestorsCircleOptions);
+            fCircleChart.Options.Assign(GlobalOptions.Instance.CircleChartOptions);
             Content = fCircleChart;
 
             SetLang();
@@ -195,7 +195,7 @@ namespace GKUI.Forms
 
         public void UpdateSettings()
         {
-            fCircleChart.Options.Assign(GlobalOptions.Instance.AncestorsCircleOptions);
+            fCircleChart.Options.Assign(GlobalOptions.Instance.CircleChartOptions);
             fCircleChart.Changed();
         }
 

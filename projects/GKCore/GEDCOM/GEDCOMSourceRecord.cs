@@ -30,19 +30,19 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMData Data
         {
-            get { return TagClass(GEDCOMTagType.DATA, GEDCOMData.Create) as GEDCOMData; }
+            get { return GetTag(GEDCOMTagType.DATA, GEDCOMData.Create) as GEDCOMData; }
         }
 
         public StringList Originator
         {
-            get { return GetTagStrings(TagClass(GEDCOMTagType.AUTH, GEDCOMTag.Create)); }
-            set { SetTagStrings(TagClass(GEDCOMTagType.AUTH, GEDCOMTag.Create), value); }
+            get { return GetTagStrings(GetTag(GEDCOMTagType.AUTH, GEDCOMTag.Create)); }
+            set { SetTagStrings(GetTag(GEDCOMTagType.AUTH, GEDCOMTag.Create), value); }
         }
 
         public StringList Title
         {
-            get { return GetTagStrings(TagClass(GEDCOMTagType.TITL, GEDCOMTag.Create)); }
-            set { SetTagStrings(TagClass(GEDCOMTagType.TITL, GEDCOMTag.Create), value); }
+            get { return GetTagStrings(GetTag(GEDCOMTagType.TITL, GEDCOMTag.Create)); }
+            set { SetTagStrings(GetTag(GEDCOMTagType.TITL, GEDCOMTag.Create), value); }
         }
 
         public string ShortTitle
@@ -53,8 +53,8 @@ namespace GKCommon.GEDCOM
 
         public StringList Publication
         {
-            get { return GetTagStrings(TagClass(GEDCOMTagType.PUBL, GEDCOMTag.Create)); }
-            set { SetTagStrings(TagClass(GEDCOMTagType.PUBL, GEDCOMTag.Create), value); }
+            get { return GetTagStrings(GetTag(GEDCOMTagType.PUBL, GEDCOMTag.Create)); }
+            set { SetTagStrings(GetTag(GEDCOMTagType.PUBL, GEDCOMTag.Create), value); }
         }
 
         public GEDCOMList<GEDCOMRepositoryCitation> RepositoryCitations
@@ -64,8 +64,8 @@ namespace GKCommon.GEDCOM
 
         public StringList Text
         {
-            get { return GetTagStrings(TagClass(GEDCOMTagType.TEXT, GEDCOMTag.Create)); }
-            set { SetTagStrings(TagClass(GEDCOMTagType.TEXT, GEDCOMTag.Create), value); }
+            get { return GetTagStrings(GetTag(GEDCOMTagType.TEXT, GEDCOMTag.Create)); }
+            set { SetTagStrings(GetTag(GEDCOMTagType.TEXT, GEDCOMTag.Create), value); }
         }
 
 
@@ -83,21 +83,6 @@ namespace GKCommon.GEDCOM
                 fRepositoryCitations.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.REPO) {
-                result = fRepositoryCitations.Add(new GEDCOMRepositoryCitation(this, tagName, tagValue));
-            } else if (tagName == GEDCOMTagType.DATA) {
-                result = base.AddTag(tagName, tagValue, GEDCOMData.Create);
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
         }
 
         public override void Clear()
@@ -178,22 +163,22 @@ namespace GKCommon.GEDCOM
 
         public void SetOriginatorArray(params string[] value)
         {
-            SetTagStrings(TagClass(GEDCOMTagType.AUTH, GEDCOMTag.Create), value);
+            SetTagStrings(GetTag(GEDCOMTagType.AUTH, GEDCOMTag.Create), value);
         }
 
         public void SetTitleArray(params string[] value)
         {
-            SetTagStrings(TagClass(GEDCOMTagType.TITL, GEDCOMTag.Create), value);
+            SetTagStrings(GetTag(GEDCOMTagType.TITL, GEDCOMTag.Create), value);
         }
 
         public void SetPublicationArray(params string[] value)
         {
-            SetTagStrings(TagClass(GEDCOMTagType.PUBL, GEDCOMTag.Create), value);
+            SetTagStrings(GetTag(GEDCOMTagType.PUBL, GEDCOMTag.Create), value);
         }
 
         public void SetTextArray(params string[] value)
         {
-            SetTagStrings(TagClass(GEDCOMTagType.TEXT, GEDCOMTag.Create), value);
+            SetTagStrings(GetTag(GEDCOMTagType.TEXT, GEDCOMTag.Create), value);
         }
 
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)

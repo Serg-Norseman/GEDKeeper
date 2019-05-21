@@ -63,22 +63,6 @@ namespace GKCommon.GEDCOM
             base.Dispose(disposing);
         }
 
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.RESN) {
-                fRestriction = GEDCOMUtils.GetRestrictionVal(tagValue);
-                result = null;
-            } else if (tagName == GEDCOMTagType.SUBM) {
-                result = fSubmittors.Add(new GEDCOMPointer(this, tagName, tagValue));
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
-        }
-
         public override void Clear()
         {
             base.Clear();

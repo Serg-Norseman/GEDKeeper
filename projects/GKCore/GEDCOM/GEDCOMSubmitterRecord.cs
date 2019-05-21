@@ -26,7 +26,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMAddress Address
         {
-            get { return TagClass(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress; }
+            get { return GetTag(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress; }
         }
 
         public GEDCOMList<GEDCOMLanguage> Languages
@@ -36,7 +36,7 @@ namespace GKCommon.GEDCOM
 
         public new GEDCOMPersonalName Name
         {
-            get { return TagClass(GEDCOMTagType.NAME, GEDCOMPersonalName.Create) as GEDCOMPersonalName; }
+            get { return GetTag(GEDCOMTagType.NAME, GEDCOMPersonalName.Create) as GEDCOMPersonalName; }
         }
 
         public string RegisteredReference
@@ -76,24 +76,6 @@ namespace GKCommon.GEDCOM
         {
             fLanguages.Add(value);
             return value;
-        }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.NAME) {
-                result = base.AddTag(tagName, tagValue, GEDCOMPersonalName.Create);
-            } else if (tagName == GEDCOMTagType.PHON || tagName == GEDCOMTagType.EMAIL || tagName == GEDCOMTagType.FAX || tagName == GEDCOMTagType.WWW) {
-                result = Address.AddTag(tagName, tagValue, tagConstructor);
-            } else if (tagName == GEDCOMTagType.LANG) {
-                result = AddLanguage(new GEDCOMLanguage(this, tagName, tagValue));
-            } else {
-                // 'ADDR' defines by default
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
         }
 
         public override void Clear()

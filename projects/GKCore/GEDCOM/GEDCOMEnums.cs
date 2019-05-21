@@ -52,8 +52,10 @@ namespace GKCommon.GEDCOM
         public const string CHR = "CHR";
         public const string CHRA = "CHRA";
         public const string CITY = "CITY";
+        public const string CONC = "CONC";
         public const string CONF = "CONF";
         public const string CONL = "CONL";
+        public const string CONT = "CONT";
         public const string COPR = "COPR";
         public const string CREM = "CREM";
         public const string CTRY = "CTRY";
@@ -236,8 +238,10 @@ namespace GKCommon.GEDCOM
         gf_Legacy,
         gf_EasyTree,
         gf_Genney,
+        gf_GeneWeb,
+        gf_GENJ,
 
-        gf_Last = gf_Genney
+        gf_Last = gf_GENJ
     }
 
     public enum GEDCOMCharacterSet
@@ -500,5 +504,11 @@ namespace GKCommon.GEDCOM
         MarrRegistered,
         MarrNotRegistered,
         MarrDivorced
+    }
+
+    public enum GeoCoord
+    {
+        Lati,
+        Long
     }
 }

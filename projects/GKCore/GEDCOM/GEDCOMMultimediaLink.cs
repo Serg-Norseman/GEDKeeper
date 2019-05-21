@@ -64,7 +64,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMCutoutPosition CutoutPosition
         {
-            get { return TagClass(GEDCOMTagType._POSITION, GEDCOMCutoutPosition.Create) as GEDCOMCutoutPosition; }
+            get { return GetTag(GEDCOMTagType._POSITION, GEDCOMCutoutPosition.Create) as GEDCOMCutoutPosition; }
         }
 
 
@@ -90,19 +90,6 @@ namespace GKCommon.GEDCOM
                 fFileReferences.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.FILE) {
-                result = fFileReferences.Add(new GEDCOMFileReference(this, tagName, tagValue));
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
         }
 
         public override void Clear()

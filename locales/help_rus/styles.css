@@ -112,7 +112,7 @@ li
 ul ol, ol ol
   {
   list-style-type: lower-alpha;
-  {
+  }
 
   /*
 pre
@@ -234,9 +234,9 @@ a.parameter:visited
   }
 
 .filename
-{
+  {
   color: #F00000;
-}
+  }
 
 
 ol.ctx
@@ -252,3 +252,24 @@ li.ctx
   margin-bottom: 0;
   margin-left: 0;
   }
+
+kbd
+  {
+  color: #009999;
+  font-family: monospace;
+  font-size: 120%;
+  font-weight: bold;
+  padding-left: 2pt;
+  padding-right: 2pt;
+  }
+
+img {
+  vertical-align: middle;
+}
+
+samp {
+  color: #cc9900;
+  font-family: monospace;
+  font-size: 120%;
+  font-weight: bold;
+}

@@ -43,7 +43,7 @@ namespace GKFoldersPlugin
             var folderTag = record.FindTag(GEDCOMTagType._FOLDER, 0);
             if (!string.IsNullOrEmpty(value)) {
                 if (folderTag == null) {
-                    record.AddTag(GEDCOMTagType._FOLDER, value, null);
+                    record.AddTag(new GEDCOMTag(record, GEDCOMTagType._FOLDER, value));
                 } else {
                     folderTag.StringValue = value;
                 }

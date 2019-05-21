@@ -521,7 +521,7 @@ namespace GKCore
         /* 469 */ LSID_Communication,
         /* 470 */ LSID_IDsCorrect,
         /* 471 */ LSID_FormatCheck,
-        /* 472 */ LSID_IDsCorrectNeed,
+        /* 472 */ LSID_IDsCorrectNeed, // obsolete
         /* 473 */ LSID_MainBaseSize,
         /* 474 */ LSID_SyncFin,
         /* 475 */ LSID_PatSearch,
@@ -841,11 +841,11 @@ namespace GKCore
         /* 783 */ LSID_PLT_Foster,
         /* 784 */ LSID_CharsetDetection,
         /* 785 */ LSID_LinkageType,
+        /* 786 */ LSID_HeWasBorn,
+        /* 787 */ LSID_SheWasBorn,
+        /* 788 */ LSID_GedMLFilter,
 
-        /* 786 */ // reserved begin
-        /* 787 */
-        /* 788 */
-        /* 789 */
+        /* 789 */ // reserved begin
         /* 790 */
         /* 791 */
         /* 792 */
@@ -1351,7 +1351,7 @@ namespace GKCore
             /* 469 */ "Correspondence",
             /* 470 */ "Correction IDs",
             /* 471 */ "Check format",
-            /* 472 */ "Correction of identity records is required, continue?",
+            /* 472 */ "Correction of identity records is required, continue?", // obsolete
             /* 473 */ "Number of objects in the master database: {0}",
             /* 474 */ "Synchronization is complete.",
             /* 475 */ "Search the patriarchs",
@@ -1665,11 +1665,11 @@ namespace GKCore
             /* 783 */ "Foster",
             /* 784 */ "Charset detection at load",
             /* 785 */ "Linkage type",
+            /* 786 */ "Was born",
+            /* 787 */ "Was born",
+            /* 788 */ "GedML files (*.xml)|*.xml",
 
-            /* 786 */ "", // reserved begin
-            /* 787 */ "",
-            /* 788 */ "",
-            /* 789 */ "",
+            /* 789 */ "", // reserved begin
             /* 790 */ "",
             /* 791 */ "",
             /* 792 */ "",

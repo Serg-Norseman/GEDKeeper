@@ -54,7 +54,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMPointer Submitter
         {
-            get { return TagClass(GEDCOMTagType.SUBM, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag(GEDCOMTagType.SUBM, GEDCOMPointer.Create) as GEDCOMPointer; }
         }
 
 
@@ -62,19 +62,6 @@ namespace GKCommon.GEDCOM
         {
             SetRecordType(GEDCOMRecordType.rtSubmission);
             SetName(GEDCOMTagType.SUBN);
-        }
-
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-
-            if (tagName == GEDCOMTagType.SUBM) {
-                result = base.AddTag(tagName, tagValue, GEDCOMPointer.Create);
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-
-            return result;
         }
     }
 }

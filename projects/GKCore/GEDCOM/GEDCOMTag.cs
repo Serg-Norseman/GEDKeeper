@@ -159,21 +159,18 @@ namespace GKCommon.GEDCOM
             return (tree == null) ? null : tree.XRefIndex_Find(xref);
         }
 
-        protected GEDCOMTag InsertTag(GEDCOMTag tag)
+        public void SetName(string value)
+        {
+            if (value != null) {
+                value = string.Intern(value);
+            }
+            fName = value;
+        }
+
+        public GEDCOMTag AddTag(GEDCOMTag tag)
         {
             fTags.Add(tag);
             return tag;
-        }
-
-        public bool IsEmptySkip()
-        {
-            TagProperties props = GEDCOMProvider.GetTagProps(fName);
-            return (props != null && props.SkipEmpty);
-        }
-
-        public void SetName(string value)
-        {
-            fName = value;
         }
 
         /// <summary>
@@ -183,7 +180,7 @@ namespace GKCommon.GEDCOM
         /// <param name="tagValue">A string value of sub-tag.</param>
         /// <param name="tagConstructor">The default constructor of sub-tag.</param>
         /// <returns></returns>
-        public virtual GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
+        internal GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
         {
             GEDCOMTag tag = null;
             try {
@@ -196,7 +193,7 @@ namespace GKCommon.GEDCOM
                     }
                 }
 
-                InsertTag(tag);
+                AddTag(tag);
             } catch (Exception ex) {
                 Logger.LogWrite("GEDCOMTag.AddTag(): " + ex.Message);
             }
@@ -214,25 +211,17 @@ namespace GKCommon.GEDCOM
             SetName(source.Name);
             ParseString(source.StringValue);
 
-            foreach (GEDCOMTag sourceTag in source.fTags) {
-                GEDCOMTag copy = CreateCopy(sourceTag);
-                InsertTag(copy);
-            }
+            AssignList(source.fTags, this.fTags);
         }
 
         protected void AssignList(GEDCOMList<GEDCOMTag> srcList, GEDCOMList<GEDCOMTag> destList)
         {
             foreach (GEDCOMTag sourceTag in srcList) {
-                GEDCOMTag copy = CreateCopy(sourceTag);
-                destList.Add(copy);
-            }
-        }
+                GEDCOMTag copyTag = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { this, string.Empty, string.Empty });
+                copyTag.Assign(sourceTag);
 
-        private GEDCOMTag CreateCopy(GEDCOMTag sourceTag)
-        {
-            GEDCOMTag result = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { this, string.Empty, string.Empty });
-            result.Assign(sourceTag);
-            return result;
+                destList.Add(copyTag);
+            }
         }
 
         public virtual void Clear()
@@ -306,7 +295,11 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public GEDCOMTag TagClass(string tagName, TagConstructor tagConstructor)
+        /// <summary>
+        /// Get an existing or create a new subtag. Can use the creation of known and unknown tags 
+        /// with the default constructor or specify the specific constructor.
+        /// </summary>
+        internal GEDCOMTag GetTag(string tagName, TagConstructor tagConstructor)
         {
             GEDCOMTag result = FindTag(tagName, 0);
 
@@ -454,14 +447,14 @@ namespace GKCommon.GEDCOM
                 for (int i = 0; i < num; i++) {
                     GEDCOMTag tag = strTag[i];
 
-                    if (tag.Name == "CONC") {
+                    if (tag.Name == GEDCOMTagType.CONC) {
                         if (strings.Count > 0) {
                             strings[strings.Count - 1] = strings[strings.Count - 1] + tag.StringValue;
                         } else {
                             strings.Add(tag.StringValue);
                         }
                     } else {
-                        if (tag.Name == "CONT") {
+                        if (tag.Name == GEDCOMTagType.CONT) {
                             strings.Add(tag.StringValue);
                         }
                     }
@@ -478,7 +471,7 @@ namespace GKCommon.GEDCOM
             tag.StringValue = "";
             for (int i = tag.Count - 1; i >= 0; i--) {
                 string subtag = tag[i].Name;
-                if (subtag == "CONT" || subtag == "CONC") {
+                if (subtag == GEDCOMTagType.CONT || subtag == GEDCOMTagType.CONC) {
                     tag.Delete(i);
                 }
             }
@@ -497,12 +490,12 @@ namespace GKCommon.GEDCOM
                     if (i == 0 && !isRecordTag) {
                         tag.StringValue = sub;
                     } else {
-                        tag.AddTag("CONT", sub, null);
+                        tag.AddTag(GEDCOMTagType.CONT, sub, null);
                     }
 
                     while (str.Length > 0) {
                         len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
-                        tag.AddTag("CONC", str.Substring(0, len), null);
+                        tag.AddTag(GEDCOMTagType.CONC, str.Substring(0, len), null);
                         str = str.Remove(0, len);
                     }
                 }
@@ -516,7 +509,7 @@ namespace GKCommon.GEDCOM
             tag.StringValue = "";
             for (int i = tag.Count - 1; i >= 0; i--) {
                 string subtag = tag[i].Name;
-                if (subtag == "CONT" || subtag == "CONC") {
+                if (subtag == GEDCOMTagType.CONT || subtag == GEDCOMTagType.CONC) {
                     tag.Delete(i);
                 }
             }
@@ -535,12 +528,12 @@ namespace GKCommon.GEDCOM
                     if (i == 0 && !isRecordTag) {
                         tag.StringValue = sub;
                     } else {
-                        tag.AddTag("CONT", sub, null);
+                        tag.AddTag(GEDCOMTagType.CONT, sub, null);
                     }
 
                     while (str.Length > 0) {
                         len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
-                        tag.AddTag("CONC", str.Substring(0, len), null);
+                        tag.AddTag(GEDCOMTagType.CONC, str.Substring(0, len), null);
                         str = str.Remove(0, len);
                     }
                 }
@@ -590,6 +583,7 @@ namespace GKCommon.GEDCOM
 
         #region Stream management
 
+        // FIXME: refactor it!
         internal virtual GEDCOMParseFunc GetParseFunc()
         {
             return GEDCOMParseFunc.Default;
@@ -601,14 +595,14 @@ namespace GKCommon.GEDCOM
             if (subtagsCount > 0) {
                 for (int i = 0; i < subtagsCount; i++) {
                     GEDCOMTag subtag = fTags[i];
-                    if (subtag.Name == "CONC" || subtag.Name == "CONT") {
+                    if (subtag.Name == GEDCOMTagType.CONC || subtag.Name == GEDCOMTagType.CONT) {
                         subtag.SaveToStream(stream, level);
                     }
                 }
 
                 for (int i = 0; i < subtagsCount; i++) {
                     GEDCOMTag subtag = fTags[i];
-                    if (subtag.Name != "CONT" && subtag.Name != "CONC") {
+                    if (subtag.Name != GEDCOMTagType.CONT && subtag.Name != GEDCOMTagType.CONC) {
                         subtag.SaveToStream(stream, level);
                     }
                 }

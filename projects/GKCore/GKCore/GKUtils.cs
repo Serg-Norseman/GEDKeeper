@@ -2092,39 +2092,36 @@ namespace GKCore
         {
             if (summary == null) return;
 
-            try
-            {
+            try {
                 summary.BeginUpdate();
-                try
-                {
+                try {
                     summary.Clear();
-                    if (mediaRec != null)
-                    {
+                    if (mediaRec != null) {
+                        GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
+                        string mediaTitle = (fileRef == null) ? LangMan.LS(LSID.LSID_Unknown) : fileRef.Title;
+
                         summary.Add("");
-                        summary.Add("[u][b][size=+1]" + mediaRec.FileReferences[0].Title + "[/size][/b][/u]");
+                        summary.Add("[u][b][size=+1]" + mediaTitle + "[/size][/b][/u]");
                         summary.Add("");
-                        summary.Add("[ " + HyperLink("view_" + mediaRec.XRef, LangMan.LS(LSID.LSID_View), 0) + " ]");
+                        if (fileRef != null) {
+                            summary.Add("[ " + HyperLink("view_" + mediaRec.XRef, LangMan.LS(LSID.LSID_View), 0) + " ]");
+                        }
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
 
                         GEDCOMTree tree = mediaRec.GetTree();
                         int num = tree.RecordsCount;
-                        for (int i = 0; i < num; i++)
-                        {
+                        for (int i = 0; i < num; i++) {
                             ShowSubjectLinks(tree[i], mediaRec, summary);
                         }
 
                         RecListNotesRefresh(mediaRec, summary);
                         RecListSourcesRefresh(mediaRec, summary);
                     }
-                }
-                finally
-                {
+                } finally {
                     summary.EndUpdate();
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKUtils.ShowMultimediaInfo(): " + ex.Message);
             }
         }

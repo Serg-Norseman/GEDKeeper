@@ -70,20 +70,6 @@ namespace GKCommon.GEDCOM
             base.Dispose(disposing);
         }
 
-        public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GEDCOMTag result;
-            if (tagName == GEDCOMTagType.RELA) {
-                fRelation = tagValue;
-                result = null;
-            } else if (tagName == GEDCOMTagType.SOUR) {
-                result = fSourceCitations.Add(new GEDCOMSourceCitation(this, tagName, tagValue));
-            } else {
-                result = base.AddTag(tagName, tagValue, tagConstructor);
-            }
-            return result;
-        }
-
         public override void Clear()
         {
             base.Clear();
