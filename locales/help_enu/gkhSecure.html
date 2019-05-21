@@ -10,24 +10,25 @@
 
 <h1>File encryption</h1>
 
-<p>GEDKeeper supports storing and loading encrypted GEDCOM files. The standard does not support encryption, therefore 
-GEDKeeper chose its own implementation for file encryption.</p>
+<p>GEDKeeper supports storing and loading encrypted GEDCOM files. The GEDCOM standard does not support encryption, therefore 
+GEDKeeper has its own implementation of file encryption.</p>
 
-<p>When you are saving a database, you must choose &quot;GEDKeeper encrypted GEDCOM files (*.geds)&quot; as target file 
-format. Files of this format have &quot;.geds&quot; extension. After you have selected the file format and entered file 
-name, you are prompted to enter password. When you are about to load an encrypted file, you select the same file format 
-and enter your password when you will be prompted.</p>
+<p>When saving a database, you must choose &quot;GEDKeeper GEDCOM encrypted files (*.geds)&quot; as the target file 
+format. Files of this format have a &quot;<samp>.geds</samp>&quot; extension. After you have selected the file format and entered a file 
+name, you are prompted to enter password. When you load an encrypted file, select the encrypted file format 
+and enter the password when prompted. Note: passwords are case-sensitive.</p>
 
-<p>Attention: GEDKeeper uses cryptographically secure encryption method and following &quot;security best practices&quot; 
-it does not store a password within an encrypted file. Therefore, if you will forget or lose your password once, nobody
-(including GEDKeeper author) will be able to open your database file. Be careful and enter your password cautiously. 
+<p>Attention: GEDKeeper uses a cryptographically secure encryption method and following &quot;security best practices&quot; 
+it does not store the password within an encrypted file. Therefore, if you forget or lose your password, nobody
+(including the GEDKeeper author) will be able to open your database file. Be careful and enter your password cautiously. 
 Any symbol inadvertently added can be a cause for losing your file.</p>
 
-<p>Currently GEDKeeper uses &quot;AES&quot; algorithm for encryption and &quot;SHA1&quot; for signing.</p>
+<p>Currently GEDKeeper uses the &quot;<a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>&quot; algorithm for encryption and
+&quot;<a href="https://en.wikipedia.org/wiki/SHA-1">SHA-1</a>&quot; for signing.</p>
 
-<p>Also, the following features are delayed for future development: choosing encryption method by user, prompting for 
-password only once for the same file, adding password repeat field when a file is saved at first time (to avoid typos 
-in password text).</p>
+<p>The following features are delayed for future development: choosing the encryption method, prompting for the
+password only once for the same file, and adding a password repeat field when a file is saved the first time (to avoid typos 
+in the password).</p>
 
 </body>
 </html>
