@@ -20,8 +20,9 @@
 
 using System;
 using System.IO;
+using GDModel.Providers.GEDCOM;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public enum GEDCOMRecordType
     {
@@ -141,8 +142,7 @@ namespace GKCommon.GEDCOM
         {
             if (sourceRec != null) {
                 int num = fSourceCitations.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     if (fSourceCitations[i].XRef == sourceRec.XRef) {
                         return i;
                     }
@@ -237,7 +237,7 @@ namespace GKCommon.GEDCOM
             fUserReferences.Pack();
         }
 
-        public override void ReplaceXRefs(XRefReplacer map)
+        public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
 

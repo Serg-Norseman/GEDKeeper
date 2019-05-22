@@ -20,13 +20,14 @@
 
 using System.IO;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public class GDMTagWithLists : GDMTag, IGEDCOMStructWithLists
     {
         protected GDMList<GDMNotes> fNotes;
         protected GDMList<GDMSourceCitation> fSourceCitations;
         protected GDMList<GDMMultimediaLink> fMultimediaLinks;
+
 
         public GDMList<GDMNotes> Notes
         {
@@ -70,7 +71,7 @@ namespace GKCommon.GEDCOM
             fMultimediaLinks.Pack();
         }
 
-        public override void ReplaceXRefs(XRefReplacer map)
+        public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
 
@@ -107,8 +108,7 @@ namespace GKCommon.GEDCOM
         {
             GDMNotes note = null;
             
-            if (noteRec != null)
-            {
+            if (noteRec != null) {
                 note = new GDMNotes(this);
                 note.Value = noteRec;
                 Notes.Add(note);
@@ -121,8 +121,7 @@ namespace GKCommon.GEDCOM
         {
             GDMSourceCitation cit = null;
             
-            if (sourceRec != null)
-            {
+            if (sourceRec != null) {
                 cit = new GDMSourceCitation(this);
                 cit.Value = sourceRec;
                 cit.Page = page;
@@ -137,8 +136,7 @@ namespace GKCommon.GEDCOM
         {
             GDMMultimediaLink result = null;
 
-            if (mediaRec != null)
-            {
+            if (mediaRec != null) {
                 result = new GDMMultimediaLink(this);
                 result.Value = mediaRec;
                 MultimediaLinks.Add(result);

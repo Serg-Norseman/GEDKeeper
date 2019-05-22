@@ -20,10 +20,9 @@
 
 using System;
 using System.Collections.Generic;
-
 using BSLib;
 using BSLib.SmartGraph;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Types;
 

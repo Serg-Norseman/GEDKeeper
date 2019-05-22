@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Controls;

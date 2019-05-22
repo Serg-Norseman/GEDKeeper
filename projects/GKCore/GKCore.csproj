@@ -184,7 +184,7 @@
     <Compile Include="GDModel\GDMTime.cs" />
     <Compile Include="GDModel\GDMTree.cs" />
     <Compile Include="GDModel\GDMUserReference.cs" />
-    <Compile Include="GDModel\Providers\XRefReplacer.cs" />
+    <Compile Include="GDModel\GDMXRefReplacer.cs" />
     <Compile Include="GKCore\BBTextParser.cs" />
     <Compile Include="GKCore\Charts\BorderPainter.cs" />
     <Compile Include="GKCore\Charts\ICircleChart.cs" />

@@ -22,9 +22,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;

@@ -21,12 +21,10 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
-
+using GDModel;
 using GKCore;
-using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
-using GKUI.Components;
 
 namespace GKNavigatorPlugin
 {

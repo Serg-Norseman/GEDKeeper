@@ -21,9 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
 using BSLib.Calendar;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;

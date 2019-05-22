@@ -19,9 +19,8 @@
  */
 
 using System;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Options;
 

@@ -21,8 +21,8 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;

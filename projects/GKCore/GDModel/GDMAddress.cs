@@ -21,8 +21,9 @@
 using System;
 using System.IO;
 using BSLib;
+using GDModel.Providers.GEDCOM;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public sealed class GDMAddress : GDMTag
     {

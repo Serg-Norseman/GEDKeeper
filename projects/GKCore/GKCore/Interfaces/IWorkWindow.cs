@@ -19,7 +19,7 @@
  */
 
 using System.Collections.Generic;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 
 namespace GKCore.Interfaces

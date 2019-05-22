@@ -20,10 +20,9 @@
 
 using System.Drawing;
 using System.Windows.Forms;
-
 using ArborGVT;
 using BSLib.SmartGraph;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;

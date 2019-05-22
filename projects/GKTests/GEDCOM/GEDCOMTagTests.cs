@@ -19,10 +19,11 @@
  */
 
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using NUnit.Framework;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     [TestFixture]
     public class GEDCOMTagTests

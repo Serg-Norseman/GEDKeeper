@@ -20,7 +20,7 @@
 
 using BSLib;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public class GDMIndividualAttribute : GDMCustomEvent
     {

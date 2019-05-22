@@ -19,7 +19,7 @@
  */
 
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GKCore.Stats
 {

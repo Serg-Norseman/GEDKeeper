@@ -22,11 +22,13 @@ using System;
 using System.IO;
 using System.Text;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 
 namespace GDModel.Providers
 {
     public delegate StackTuple AddTagHandler(GDMObject owner, int tagLevel, string tagName, string tagValue);
+
 
     public sealed class StackTuple
     {
@@ -53,12 +55,14 @@ namespace GDModel.Providers
         }
     }
 
+
     /// <summary>
-    /// 
+    /// Abstract class of generalized provider of files read / write operations.
     /// </summary>
     public abstract class FileProvider
     {
         protected readonly GDMTree fTree;
+
 
         protected FileProvider(GDMTree tree)
         {

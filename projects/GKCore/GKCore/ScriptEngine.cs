@@ -27,9 +27,8 @@ using System.Data;
 using System.IO;
 using System.Reflection;
 using System.Text;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.Types;

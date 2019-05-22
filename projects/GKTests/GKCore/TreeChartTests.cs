@@ -22,7 +22,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;

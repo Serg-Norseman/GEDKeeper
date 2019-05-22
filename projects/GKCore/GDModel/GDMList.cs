@@ -22,10 +22,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-
 using BSLib;
+using GDModel.Providers.GEDCOM;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public sealed class GDMList<T> : IDisposable, IEnumerable<T> where T : GDMTag
     {
@@ -235,7 +235,7 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public void ReplaceXRefs(XRefReplacer map)
+        public void ReplaceXRefs(GDMXRefReplacer map)
         {
             if (fDataList == null) return;
 

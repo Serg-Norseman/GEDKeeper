@@ -18,13 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
-using GKCore;
-using GKTests;
-using GKUI.Providers;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using NUnit.Framework;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     [TestFixture]
     public class GEDCOMFactoryTests

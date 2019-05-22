@@ -19,8 +19,9 @@
  */
 
 using System.IO;
+using GDModel.Providers.GEDCOM;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     /// <summary>
     /// 

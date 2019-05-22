@@ -23,9 +23,9 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using BSLib;
-using GDModel.Providers.GEDCOM;
+using GDModel;
 
-namespace GKCommon.GEDCOM
+namespace GDModel.Providers.GEDCOM
 {
     public sealed class EnumTuple : IComparable<EnumTuple>
     {

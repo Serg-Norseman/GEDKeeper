@@ -22,9 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;

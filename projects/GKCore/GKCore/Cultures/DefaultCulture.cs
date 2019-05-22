@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 
 namespace GKCore.Cultures

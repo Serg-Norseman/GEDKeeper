@@ -19,9 +19,10 @@
  */
 
 using BSLib.Calendar;
+using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public abstract class GDMCustomEvent : GDMTagWithLists
     {

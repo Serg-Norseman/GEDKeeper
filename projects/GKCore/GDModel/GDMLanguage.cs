@@ -19,8 +19,9 @@
  */
 
 using System;
+using GDModel.Providers.GEDCOM;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public enum GEDCOMLanguageID
     {

@@ -21,9 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using Xapian;

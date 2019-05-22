@@ -21,9 +21,10 @@
 using System;
 using System.IO;
 using BSLib;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public sealed class GDMMultimediaLink : GDMPointer
     {

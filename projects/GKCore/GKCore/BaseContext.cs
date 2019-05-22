@@ -26,11 +26,11 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-
 using BSLib;
+using GDModel;
 using GDModel.Providers;
+using GDModel.Providers.GEDCOM;
 using GDModel.Providers.GedML;
-using GKCommon.GEDCOM;
 using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;

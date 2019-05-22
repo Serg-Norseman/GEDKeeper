@@ -21,7 +21,7 @@
 using System;
 using BSLib;
 using BSLib.Linguistics.Grammar;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;

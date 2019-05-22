@@ -21,12 +21,13 @@
 using System;
 using System.Globalization;
 using BSLib.Calendar;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     // TODO KBR date formats 20-DEC-1980,12/20/1980(american),others? createbyformattedstr() doesn't accept
     // TODO KBR leap year

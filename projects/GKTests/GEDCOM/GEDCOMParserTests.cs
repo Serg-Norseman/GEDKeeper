@@ -21,7 +21,7 @@
 using System;
 using NUnit.Framework;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     /*[TestFixture]
     public class GEDCOMParserTests

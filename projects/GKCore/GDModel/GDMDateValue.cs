@@ -20,10 +20,11 @@
 
 using System;
 using BSLib.Calendar;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Types;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public class GDMDateValue : GDMCustomDate
     {

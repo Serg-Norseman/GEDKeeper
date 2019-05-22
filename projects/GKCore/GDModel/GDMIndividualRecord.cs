@@ -21,9 +21,10 @@
 using System;
 using System.IO;
 using BSLib.Calendar;
+using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public enum GEDCOMSex
     {
@@ -374,7 +375,7 @@ namespace GKCommon.GEDCOM
             fSpouseToFamilyLinks.Pack();
         }
 
-        public override void ReplaceXRefs(XRefReplacer map)
+        public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
 
@@ -571,8 +572,7 @@ namespace GKCommon.GEDCOM
             GDMMultimediaLink mmLink = null;
 
             int num = MultimediaLinks.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMMultimediaLink lnk = MultimediaLinks[i];
 
                 if (lnk.Value == mediaRec) {
@@ -610,8 +610,7 @@ namespace GKCommon.GEDCOM
             int result = 0;
 
             int num = SpouseToFamilyLinks.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMFamilyRecord family = SpouseToFamilyLinks[i].Family;
                 result += family.Children.Count;
             }

@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public class GDMPointerWithNotes : GDMPointer
     {
@@ -54,7 +54,7 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && (fNotes.Count == 0);
         }
 
-        public override void ReplaceXRefs(XRefReplacer map)
+        public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
             fNotes.ReplaceXRefs(map);

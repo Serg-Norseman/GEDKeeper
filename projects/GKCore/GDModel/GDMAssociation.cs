@@ -20,8 +20,9 @@
 
 using System;
 using System.IO;
+using GDModel.Providers.GEDCOM;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public sealed class GDMAssociation : GDMPointerWithNotes
     {
@@ -83,7 +84,7 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && string.IsNullOrEmpty(fRelation) && (fSourceCitations.Count == 0);
         }
 
-        public override void ReplaceXRefs(XRefReplacer map)
+        public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
             fSourceCitations.ReplaceXRefs(map);

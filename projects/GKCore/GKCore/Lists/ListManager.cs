@@ -20,10 +20,9 @@
 
 using System;
 using System.Collections.Generic;
-
 using BSLib;
 using BSLib.Calendar;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;

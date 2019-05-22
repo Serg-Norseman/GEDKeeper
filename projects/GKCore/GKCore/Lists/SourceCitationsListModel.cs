@@ -20,7 +20,8 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;

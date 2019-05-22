@@ -19,15 +19,13 @@
  */
 
 using System;
-using System.IO;
-using System.Reflection;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKTests;
 using GKUI.Providers;
 using NUnit.Framework;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     [TestFixture]
     public class NamesTests

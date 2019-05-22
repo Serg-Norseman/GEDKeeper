@@ -23,10 +23,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using BSLib;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Types;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     /// <summary>
     /// The main class of the entire storage infrastructure in the GEDCOM format.
@@ -570,7 +571,7 @@ namespace GKCommon.GEDCOM
             fTags.Pack();
         }
 
-        public virtual void ReplaceXRefs(XRefReplacer map)
+        public virtual void ReplaceXRefs(GDMXRefReplacer map)
         {
             fTags.ReplaceXRefs(map);
         }

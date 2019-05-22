@@ -21,14 +21,15 @@
 using System;
 using BSLib;
 using BSLib.Calendar;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Types;
 using GKTests;
 using GKUI.Providers;
 using NUnit.Framework;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     [TestFixture]
     public class GedcomTests
@@ -249,7 +250,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_XRefReplacer()
         {
-            using (XRefReplacer replacer = new XRefReplacer())
+            using (GDMXRefReplacer replacer = new GDMXRefReplacer())
             {
                 Assert.IsNotNull(replacer);
 
@@ -263,7 +264,7 @@ namespace GKCommon.GEDCOM
                 Assert.AreEqual("I310", newXRef);
 
                 for (int i = 0; i < replacer.Count; i++) {
-                    XRefReplacer.XRefEntry xre = replacer[i];
+                    GDMXRefReplacer.XRefEntry xre = replacer[i];
                     Assert.AreEqual(iRec, xre.Rec);
                 }
             }

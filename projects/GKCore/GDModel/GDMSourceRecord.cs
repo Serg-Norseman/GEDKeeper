@@ -21,9 +21,10 @@
 using System;
 using System.IO;
 using BSLib;
+using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public sealed class GDMSourceRecord : GDMRecord
     {
@@ -108,8 +109,7 @@ namespace GKCommon.GEDCOM
             StringList orig = new StringList();
             StringList publ = new StringList();
             StringList text = new StringList();
-            try
-            {
+            try {
                 titl.Text = (targetSource.Title.Text + "\n" + Title.Text).Trim();
                 orig.Text = (targetSource.Originator.Text + "\n" + Originator.Text).Trim();
                 publ.Text = (targetSource.Publication.Text + "\n" + Publication.Text).Trim();
@@ -128,15 +128,12 @@ namespace GKCommon.GEDCOM
                 targetSource.Publication = publ;
                 targetSource.Text = text;
 
-                while (fRepositoryCitations.Count > 0)
-                {
+                while (fRepositoryCitations.Count > 0) {
                     GDMRepositoryCitation obj = fRepositoryCitations.Extract(0);
                     obj.ResetOwner(targetSource);
                     targetSource.RepositoryCitations.Add(obj);
                 }
-            }
-            finally
-            {
+            } finally {
                 titl.Dispose();
                 orig.Dispose();
                 publ.Dispose();
@@ -150,7 +147,7 @@ namespace GKCommon.GEDCOM
             fRepositoryCitations.Pack();
         }
 
-        public override void ReplaceXRefs(XRefReplacer map)
+        public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
             fRepositoryCitations.ReplaceXRefs(map);

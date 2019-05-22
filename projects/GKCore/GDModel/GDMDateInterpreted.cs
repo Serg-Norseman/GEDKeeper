@@ -18,7 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCommon.GEDCOM
+using GDModel.Providers.GEDCOM;
+
+namespace GDModel
 {
     /// <summary>
     /// Interpreted from knowledge about the associated date phrase included in parentheses (see GEDCOM 5.5.1 p.47).

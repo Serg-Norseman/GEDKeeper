@@ -26,7 +26,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 
 namespace GKNamesBookPlugin

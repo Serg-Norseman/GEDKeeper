@@ -21,10 +21,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-
 using BSLib;
 using BSLib.SmartGraph;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.Types;
@@ -523,7 +523,7 @@ namespace GKCore.Tools
         private static void CorrectIds(GDMTree tree, IProgressController pc)
         {
             pc.ProgressInit(LangMan.LS(LSID.LSID_IDsCorrect), tree.RecordsCount);
-            XRefReplacer repMap = new XRefReplacer();
+            GDMXRefReplacer repMap = new GDMXRefReplacer();
             try {
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
@@ -875,7 +875,7 @@ namespace GKCore.Tools
                 }
             }
 
-            using (var repMap = new XRefReplacer()) {
+            using (var repMap = new GDMXRefReplacer()) {
                 extTree.Header.Clear();
                 while (extTree.RecordsCount > 0) {
                     GDMRecord rec = extTree.Extract(0);
@@ -946,7 +946,7 @@ namespace GKCore.Tools
             if (sourceRec == null)
                 throw new ArgumentNullException("sourceRec");
 
-            using (var repMap = new XRefReplacer()) {
+            using (var repMap = new GDMXRefReplacer()) {
                 repMap.AddXRef(sourceRec, sourceRec.XRef, targetRec.XRef);
 
                 GDMTree tree = baseWin.Context.Tree;

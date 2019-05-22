@@ -18,7 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCommon.GEDCOM
+using GDModel.Providers.GEDCOM;
+
+namespace GDModel
 {
     public sealed class GDMSubmitterRecord : GDMRecord
     {
@@ -90,7 +92,7 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && (fLanguages.Count == 0);
         }
 
-        public override void ReplaceXRefs(XRefReplacer map)
+        public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
             fLanguages.ReplaceXRefs(map);

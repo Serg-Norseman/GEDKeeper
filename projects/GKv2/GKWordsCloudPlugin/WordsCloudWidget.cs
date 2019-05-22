@@ -21,8 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Stats;
 using GKUI.Components;

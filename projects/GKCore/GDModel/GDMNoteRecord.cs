@@ -20,9 +20,10 @@
 
 using System;
 using BSLib;
+using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public sealed class GDMNoteRecord : GDMRecord
     {

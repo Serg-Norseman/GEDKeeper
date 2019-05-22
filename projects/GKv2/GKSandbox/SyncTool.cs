@@ -20,9 +20,10 @@
 
 using System.Windows.Forms;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 
-namespace GKCommon.GKCore
+namespace GKCore
 {
     public static class SyncTool
     {
@@ -42,12 +43,13 @@ namespace GKCommon.GKCore
             public string UpdateNewXRef;
         }
 
+
         public static void TreeSync(GDMTree mainTree, string fileName, TextBox logText)
         {
             logText.Clear();
 
             GDMTree extTree = new GDMTree();
-            XRefReplacer repMap = new XRefReplacer();
+            GDMXRefReplacer repMap = new GDMXRefReplacer();
             ExtList<SyncRecord> syncList = new ExtList<SyncRecord>(true);
             try {
                 var gedcomProvider = new GEDCOMProvider(extTree);

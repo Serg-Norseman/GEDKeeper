@@ -19,8 +19,9 @@
  */
 
 using System.IO;
+using GDModel.Providers.GEDCOM;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public sealed class GDMMultimediaRecord : GDMRecord
     {
@@ -65,7 +66,7 @@ namespace GKCommon.GEDCOM
             fFileReferences.Pack();
         }
 
-        public override void ReplaceXRefs(XRefReplacer map)
+        public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
             fFileReferences.ReplaceXRefs(map);

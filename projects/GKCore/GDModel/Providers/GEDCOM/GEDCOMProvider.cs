@@ -24,11 +24,11 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using BSLib;
+using GDModel;
 using GDModel.Providers;
-using GDModel.Providers.GEDCOM;
 using GKCore;
 
-namespace GKCommon.GEDCOM
+namespace GDModel.Providers.GEDCOM
 {
     public enum GEDCOMFormat
     {

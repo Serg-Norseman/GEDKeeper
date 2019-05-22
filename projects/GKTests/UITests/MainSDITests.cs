@@ -24,7 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Export;

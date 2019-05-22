@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 
 namespace GKCore

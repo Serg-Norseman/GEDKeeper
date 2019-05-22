@@ -19,7 +19,8 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 
 namespace GKFoldersPlugin
 {

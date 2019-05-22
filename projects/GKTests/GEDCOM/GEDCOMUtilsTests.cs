@@ -20,11 +20,11 @@
 
 using System;
 using System.Text;
+using GDModel;
 using GDModel.Providers.GEDCOM;
-using GKCommon.GEDCOM;
 using NUnit.Framework;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     [TestFixture]
     public class GEDCOMUtilsTests

@@ -20,7 +20,7 @@
 
 using System.Collections.Generic;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.Stats;

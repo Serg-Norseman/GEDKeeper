@@ -21,9 +21,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Options;

@@ -21,7 +21,7 @@
 using System;
 using BSLib;
 using BSLib.SmartGraph;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Tools;
 using GKCore.Types;

@@ -22,9 +22,10 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
+using GDModel;
 using GDModel.Providers;
 
-namespace GKCommon.GEDCOM
+namespace GDModel.Providers.GEDCOM
 {
     public static class GEDCOMTagType
     {

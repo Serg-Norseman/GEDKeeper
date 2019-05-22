@@ -23,7 +23,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 
 namespace GDModel.Providers.GedML

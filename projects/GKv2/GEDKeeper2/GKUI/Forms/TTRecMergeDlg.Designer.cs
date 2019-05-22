@@ -88,7 +88,7 @@
 		    this.MergeControl.Dock = System.Windows.Forms.DockStyle.Top;
 		    this.MergeControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 		    this.MergeControl.Location = new System.Drawing.Point(0, 0);
-		    this.MergeControl.MergeMode = GKCommon.GEDCOM.GEDCOMRecordType.rtNone;
+		    this.MergeControl.MergeMode = GDModel.GEDCOMRecordType.rtNone;
 		    this.MergeControl.Name = "MergeControl";
 		    this.MergeControl.Size = new System.Drawing.Size(957, 399);
 		    this.MergeControl.TabIndex = 11;

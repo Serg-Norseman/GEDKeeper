@@ -19,8 +19,9 @@
  */
 
 using System.IO;
+using GDModel.Providers.GEDCOM;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     /// <summary>
     /// This type of Genealogical Data Model (GDM) defines the priority of the research.
@@ -140,7 +141,7 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && fTasks.Count == 0 && fCommunications.Count == 0 && fGroups.Count == 0;
         }
 
-        public override void ReplaceXRefs(XRefReplacer map)
+        public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
 

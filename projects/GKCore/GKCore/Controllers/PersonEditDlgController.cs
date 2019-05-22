@@ -21,7 +21,7 @@
 #define SEX_SYMBOLS
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;

@@ -34,7 +34,7 @@ using GKCore.Types;
 
 namespace GKTextSearchPlugin
 {
-    using GKCommon.GEDCOM;
+    using GDModel;
 
     public enum TLS
     {

@@ -18,7 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCommon.GEDCOM
+using GDModel.Providers.GEDCOM;
+
+namespace GDModel
 {
     public class GDMPointer : GDMTag
     {
@@ -86,7 +88,7 @@ namespace GKCommon.GEDCOM
             return GEDCOMUtils.ParseXRefPointer(strValue, out fXRef);
         }
 
-        public override void ReplaceXRefs(XRefReplacer map)
+        public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
             XRef = map.FindNewXRef(XRef);

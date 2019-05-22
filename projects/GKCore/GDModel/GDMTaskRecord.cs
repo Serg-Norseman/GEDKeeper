@@ -18,7 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCommon.GEDCOM
+using GDModel.Providers.GEDCOM;
+
+namespace GDModel
 {
     /// <summary>
     /// This type of Genealogical Data Model (GDM) defines the goal of the task.

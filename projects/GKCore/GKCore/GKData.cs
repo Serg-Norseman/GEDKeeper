@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
 namespace GKCore

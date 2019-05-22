@@ -20,7 +20,7 @@
 
 using System;
 
-namespace GKCommon.GEDCOM
+namespace GDModel.Providers.GEDCOM
 {
     public enum GEDCOMToken
     {

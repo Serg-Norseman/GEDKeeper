@@ -21,8 +21,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using GDModel.Providers.GEDCOM;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public delegate void ProgressEventHandler(object sender, int progress);
 

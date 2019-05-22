@@ -21,9 +21,9 @@
 using System;
 using System.IO;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 
-namespace GKCommon.GKCore
+namespace GKCore
 {
     public class WebTree
     {
@@ -32,7 +32,6 @@ namespace GKCommon.GKCore
             ckSpace,
             ckLine,
             ckPerson
-
         }
 
         private class TreeCell
@@ -43,6 +42,7 @@ namespace GKCommon.GKCore
             public ExtList<TreeCell> Row;
             public GDMIndividualRecord Rec;
         }
+
 
         public WebTree()
         {

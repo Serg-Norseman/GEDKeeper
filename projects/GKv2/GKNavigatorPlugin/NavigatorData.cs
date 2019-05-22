@@ -20,7 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;

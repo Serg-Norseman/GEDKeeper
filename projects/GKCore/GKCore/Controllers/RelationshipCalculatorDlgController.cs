@@ -20,7 +20,7 @@
 
 //#define DEBUG_SOLVE
 
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Kinships;
 using GKCore.MVP;
 using GKCore.MVP.Views;

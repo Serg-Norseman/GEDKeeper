@@ -20,9 +20,9 @@
 
 using System;
 using System.Windows.Forms;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Components;

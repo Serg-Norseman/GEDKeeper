@@ -21,8 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GKTreeVizPlugin
 {

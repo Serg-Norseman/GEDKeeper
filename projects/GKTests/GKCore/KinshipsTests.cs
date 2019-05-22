@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Kinships;
 using GKCore.Types;

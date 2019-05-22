@@ -21,9 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP.Controls;
 
 namespace GKCore.Maps

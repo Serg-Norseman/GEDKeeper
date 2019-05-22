@@ -20,10 +20,10 @@
 
 using System;
 using System.IO;
-using GKCommon.GEDCOM;
+using GDModel;
 using NUnit.Framework;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     /**
      *
@@ -234,7 +234,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_ReplaceXRefs()
         {
-            XRefReplacer map = null;
+            GDMXRefReplacer map = null;
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
             instance.ReplaceXRefs(map);
         }

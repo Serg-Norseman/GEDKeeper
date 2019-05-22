@@ -21,6 +21,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using GDModel.Providers.GEDCOM;
 using GDModel.Providers.GedML;
 using GKCore;
 using GKCore.Interfaces;
@@ -29,7 +30,7 @@ using GKTests;
 using GKTests.Stubs;
 using NUnit.Framework;
 
-namespace GKCommon.GEDCOM
+namespace GDModel.Providers
 {
     [TestFixture]
     public class FileFormatTests

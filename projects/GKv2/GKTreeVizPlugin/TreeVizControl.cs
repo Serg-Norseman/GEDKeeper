@@ -24,11 +24,10 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Timers;
 using System.Windows.Forms;
-
 using ArborGVT;
 using BSLib;
 using CsGL.OpenGL;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;

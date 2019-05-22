@@ -21,8 +21,9 @@
 using System;
 using System.IO;
 using BSLib.Calendar;
+using GDModel.Providers.GEDCOM;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public enum GEDCOMRestriction
     {
@@ -136,7 +137,7 @@ namespace GKCommon.GEDCOM
             fSubmittors.Pack();
         }
 
-        public override void ReplaceXRefs(XRefReplacer map)
+        public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
             fEvents.ReplaceXRefs(map);

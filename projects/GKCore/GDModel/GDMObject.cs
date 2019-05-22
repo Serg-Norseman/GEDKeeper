@@ -20,7 +20,7 @@
 
 using System;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     /// <summary>
     /// Base class for all GEDCOM objects like tags, and tree and xref replacer.

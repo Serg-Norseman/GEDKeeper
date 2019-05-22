@@ -21,9 +21,10 @@
 using System;
 using System.IO;
 using BSLib.Calendar;
+using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     /// <summary>
     /// This type of Genealogical Data Model (GDM) defines the status of the marriage.
@@ -185,7 +186,7 @@ namespace GKCommon.GEDCOM
             fChildren.Pack();
         }
 
-        public override void ReplaceXRefs(XRefReplacer map)
+        public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
 

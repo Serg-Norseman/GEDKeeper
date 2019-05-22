@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKTests;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;

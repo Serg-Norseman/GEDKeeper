@@ -20,7 +20,7 @@
 
 #if !__MonoCS__
 
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;

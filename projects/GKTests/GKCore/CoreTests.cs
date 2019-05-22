@@ -22,8 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Lists;

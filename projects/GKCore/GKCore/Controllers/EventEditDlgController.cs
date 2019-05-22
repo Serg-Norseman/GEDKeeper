@@ -20,7 +20,8 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;

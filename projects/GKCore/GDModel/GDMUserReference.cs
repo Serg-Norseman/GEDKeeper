@@ -20,8 +20,9 @@
 
 using System;
 using System.IO;
+using GDModel.Providers.GEDCOM;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public sealed class GDMUserReference : GDMTag
     {

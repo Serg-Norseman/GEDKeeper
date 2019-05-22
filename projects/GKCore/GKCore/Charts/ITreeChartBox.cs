@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Options;
 

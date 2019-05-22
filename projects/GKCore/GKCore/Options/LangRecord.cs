@@ -20,7 +20,8 @@
 
 using System.IO;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 
 namespace GKCore.Options
 {

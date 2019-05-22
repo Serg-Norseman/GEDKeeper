@@ -20,8 +20,9 @@
 
 using System;
 using System.IO;
+using GDModel.Providers.GEDCOM;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public enum GEDCOMNameType
     {
@@ -188,7 +189,7 @@ namespace GKCommon.GEDCOM
             fPieces.Pack();
         }
 
-        public override void ReplaceXRefs(XRefReplacer map)
+        public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
             fPieces.ReplaceXRefs(map);

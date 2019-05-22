@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Maps;
 using GKCore.MVP;
 using GKCore.MVP.Views;

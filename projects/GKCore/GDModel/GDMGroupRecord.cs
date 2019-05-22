@@ -19,9 +19,10 @@
  */
 
 using System.IO;
+using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public sealed class GDMGroupRecord : GDMRecord
     {
@@ -66,7 +67,7 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && fMembers.Count == 0;
         }
 
-        public override void ReplaceXRefs(XRefReplacer map)
+        public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
             fMembers.ReplaceXRefs(map);

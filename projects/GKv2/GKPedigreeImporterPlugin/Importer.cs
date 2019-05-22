@@ -30,9 +30,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;

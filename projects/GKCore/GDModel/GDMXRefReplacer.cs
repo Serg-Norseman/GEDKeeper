@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,10 +19,11 @@
  */
 
 using System.Collections.Generic;
+using GDModel.Providers.GEDCOM;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
-    public sealed class XRefReplacer : GDMObject
+    public sealed class GDMXRefReplacer : GDMObject
     {
         public sealed class XRefEntry
         {
@@ -39,6 +40,7 @@ namespace GKCommon.GEDCOM
 
         private readonly List<XRefEntry> fList;
 
+
         public int Count
         {
             get	{ return fList.Count; }
@@ -49,7 +51,8 @@ namespace GKCommon.GEDCOM
             get { return fList[index]; }
         }
 
-        public XRefReplacer()
+
+        public GDMXRefReplacer()
         {
             fList = new List<XRefEntry>();
         }
@@ -63,10 +66,8 @@ namespace GKCommon.GEDCOM
         {
             string result = oldXRef;
 
-            foreach (XRefEntry entry in fList)
-            {
-                if (GEDCOMUtils.CleanXRef(entry.OldXRef) == GEDCOMUtils.CleanXRef(oldXRef))
-                {
+            foreach (XRefEntry entry in fList) {
+                if (GEDCOMUtils.CleanXRef(entry.OldXRef) == GEDCOMUtils.CleanXRef(oldXRef)) {
                     result = entry.NewXRef;
                     break;
                 }

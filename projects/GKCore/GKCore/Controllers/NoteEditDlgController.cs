@@ -20,7 +20,7 @@
 
 using System;
 using System.IO;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;

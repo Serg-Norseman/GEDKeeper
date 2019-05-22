@@ -20,17 +20,19 @@
 
 using System.Collections.Generic;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     public interface IGEDCOMListEnumerator<T> : IEnumerator<T>
     {
     }
+
 
     public interface IGEDCOMTreeEnumerator
     {
         bool MoveNext(out GDMRecord current);
         void Reset();
     }
+
 
     public interface IGEDCOMStructWithLists
     {
@@ -42,6 +44,7 @@ namespace GKCommon.GEDCOM
         GDMSourceCitation AddSource(GDMSourceRecord sourceRec, string page, int quality);
         GDMMultimediaLink AddMultimedia(GDMMultimediaRecord mediaRec);
     }
+
 
     public interface IGEDCOMRecordWithEvents
     {

@@ -19,10 +19,8 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
-using GKCore.Controllers;
+using GDModel;
 using GKCore.Interfaces;
-using GKCore.MVP.Views;
 using GKTests.Stubs;
 using GKUI.Providers;
 //using NSubstitute;
