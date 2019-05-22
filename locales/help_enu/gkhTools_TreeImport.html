@@ -4,31 +4,31 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="styles.css" type="text/css" />
-<title>Tools: pedigrees import</title>
+<title>Tools: Import pedigrees</title>
 </head>
 <body>
-<h1>Tools: pedigrees import</h1>
-<p>Attention:</p>
+<h1>Tools: Import pedigrees</h1>
+<p>Characteristics of the input file:</p>
 <ul>
 <li>Import processes pedigrees in text format only.</li>
-<li>Person must be identified by Konovalov&#39;s scheme.</li>
-<li>Person identifier and its name must be delimited by period (for
+<li>Each person must be identified by the <a href="gkhPedigrees.html#Konovalov">Konovalov</a> scheme.</li>
+<li>The person identifier and its name must be delimited by a period (for
 example, &quot;2-1. Daniel Garner&quot;).</li>
-<li>Name must have the following format:&quot;First_name
+<li>Name must have the following format: &quot;First_name
 Patronymic_name Last_name&quot;.</li>
-<li>Person sex is determined basing on typical features of Russian
-language&#39;s woman names, on names reference index, and, in all other
-cases, on user decision (via prompting).</li>
+<li>The person's sex is determined based on typical features of the Russian
+language&#39;s woman names on the names reference index, and in all other
+cases on responding to a prompt.</li>
 </ul>
-<p><b>A recommendation:</b> make several import attempts and check
-result after each attempt. If you find an error, modify the origin
-text. For example, frequently birthdays inside a row with name are not
-marked with &quot;*&quot; symbol. It is impossible to recognize such
-situations intelligently, because this will increase number of false
-positives. Moreover, name may contain name variants enclosed in
-parentheses, without parentheses or with &quot;?&quot; mark. It is
-impossible to recognize these with a simple enough algorithm. It is
+<p><b>A recommendation:</b> Create a temporary database and make several import attempts and check
+the results after each attempt. If you find an error, modify the original
+text. For example, frequently birthdays inside a row with a name are not
+marked with the &quot;*&quot; symbol. It is impossible to recognize such
+situations programmatically&#151;this would increase the number of false
+positives. Moreover, a name may contain name variants enclosed in
+parentheses, without parentheses, or with the &quot;?&quot; symbol. It is
+impossible to recognize these with a simple algorithm. It is
 better to extract such data, and various date formats, to a text block
-after the row with name.</p>
+after the row with a name.</p>
 </body>
 </html>
