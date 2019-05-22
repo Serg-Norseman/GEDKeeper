@@ -31,9 +31,9 @@ namespace GKCore.Maps
     public class PlaceRef
     {
         public readonly DateTime Date;
-        public readonly GEDCOMCustomEvent Event;
+        public readonly GDMCustomEvent Event;
 
-        public PlaceRef(GEDCOMCustomEvent evt)
+        public PlaceRef(GDMCustomEvent evt)
         {
             Event = evt;
             Date = (evt == null) ? new DateTime(0) : evt.Date.GetDateTime();

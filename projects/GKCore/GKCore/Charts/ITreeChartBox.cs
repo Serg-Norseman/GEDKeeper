@@ -64,7 +64,7 @@ namespace GKCore.Charts
         TreeChartPerson Selected { get; set; }
         int Width { get; set; }
 
-        void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
+        void GenChart(GDMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
         ExtRect GetClientRect();
         ExtSize GetImageSize();
         ExtPoint GetOffsets();

@@ -32,9 +32,9 @@ namespace GKCore.Controllers
     /// </summary>
     public class PortraitSelectDlgController : DialogController<IPortraitSelectDlg>
     {
-        private GEDCOMMultimediaLink fMultimediaLink;
+        private GDMMultimediaLink fMultimediaLink;
 
-        public GEDCOMMultimediaLink MultimediaLink
+        public GDMMultimediaLink MultimediaLink
         {
             get { return fMultimediaLink; }
             set {
@@ -76,7 +76,7 @@ namespace GKCore.Controllers
         {
             if (fMultimediaLink == null || fMultimediaLink.Value == null) return;
 
-            GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)fMultimediaLink.Value;
+            GDMMultimediaRecord mmRec = (GDMMultimediaRecord)fMultimediaLink.Value;
 
             IImage img = fBase.Context.LoadMediaImage(mmRec.FileReferences[0], false);
             if (img == null) return;

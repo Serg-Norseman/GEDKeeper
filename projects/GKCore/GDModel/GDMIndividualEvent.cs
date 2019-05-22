@@ -20,27 +20,27 @@
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMIndividualEvent : GEDCOMCustomEvent
+    public sealed class GDMIndividualEvent : GDMCustomEvent
     {
-        public GEDCOMPointer Family
+        public GDMPointer Family
         {
             // define 'FAMC' tag constructor by default (GEDCOMTree.cctor) for AddTag()
-            get { return base.GetTag(GEDCOMTagType.FAMC, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag<GDMPointer>(GEDCOMTagType.FAMC, GDMPointer.Create); }
         }
 
 
-        public GEDCOMIndividualEvent(GEDCOMObject owner) : base(owner)
+        public GDMIndividualEvent(GDMObject owner) : base(owner)
         {
         }
 
-        public GEDCOMIndividualEvent(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMIndividualEvent(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMIndividualEvent(owner, tagName, tagValue);
+            return new GDMIndividualEvent(owner, tagName, tagValue);
         }
     }
 }

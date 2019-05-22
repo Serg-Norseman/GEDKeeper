@@ -24,34 +24,34 @@ using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMDateRange : GEDCOMCustomDate
+    public sealed class GDMDateRange : GDMCustomDate
     {
-        private GEDCOMDate fDateAfter;
-        private GEDCOMDate fDateBefore;
+        private GDMDate fDateAfter;
+        private GDMDate fDateBefore;
 
-        public GEDCOMDate After
+        public GDMDate After
         {
             get { return fDateAfter; }
         }
 
-        public GEDCOMDate Before
+        public GDMDate Before
         {
             get { return fDateBefore; }
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMDateRange(owner, tagName, tagValue);
+            return new GDMDateRange(owner, tagName, tagValue);
         }
 
-        public GEDCOMDateRange(GEDCOMObject owner) : base(owner)
+        public GDMDateRange(GDMObject owner) : base(owner)
         {
-            fDateAfter = new GEDCOMDate(this);
-            fDateBefore = new GEDCOMDate(this);
+            fDateAfter = new GDMDate(this);
+            fDateBefore = new GDMDate(this);
         }
 
-        public GEDCOMDateRange(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMDateRange(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

@@ -22,9 +22,9 @@ using System;
 
 namespace GKCommon.GEDCOM
 {
-    public class EGEDCOMException : Exception
+    public class GDMException : Exception
     {
-        public EGEDCOMException(string message) : base(message)
+        public GDMException(string message) : base(message)
         {
         }
     }

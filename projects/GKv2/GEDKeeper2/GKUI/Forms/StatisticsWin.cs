@@ -67,7 +67,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public StatisticsWin(IBaseWindow baseWin, List<GEDCOMRecord> selectedRecords)
+        public StatisticsWin(IBaseWindow baseWin, List<GDMRecord> selectedRecords)
         {
             InitializeComponent();
 

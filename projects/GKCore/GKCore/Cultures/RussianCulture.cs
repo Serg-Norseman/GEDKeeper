@@ -170,7 +170,7 @@ namespace GKCore.Cultures
             return result;
         }
 
-        public override string[] GetSurnames(GEDCOMIndividualRecord iRec)
+        public override string[] GetSurnames(GDMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
@@ -181,7 +181,7 @@ namespace GKCore.Cultures
             return GetSurnames(parts.Surname, female);
         }
 
-        public override string GetPossessiveName(GEDCOMIndividualRecord iRec)
+        public override string GetPossessiveName(GDMIndividualRecord iRec)
         {
             var nameParts = GKUtils.GetNameParts(iRec);
             var gender = DeclGenders[(int)iRec.Sex];

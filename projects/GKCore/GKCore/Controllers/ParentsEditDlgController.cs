@@ -32,10 +32,10 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class ParentsEditDlgController : DialogController<IParentsEditDlg>
     {
-        private GEDCOMChildToFamilyLink fLink;
-        private GEDCOMIndividualRecord fPerson;
+        private GDMChildToFamilyLink fLink;
+        private GDMIndividualRecord fPerson;
 
-        public GEDCOMChildToFamilyLink Link
+        public GDMChildToFamilyLink Link
         {
             get { return fLink; }
             set {
@@ -46,7 +46,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public GEDCOMIndividualRecord Person
+        public GDMIndividualRecord Person
         {
             get { return fPerson; }
             set { fPerson = value; }
@@ -55,7 +55,7 @@ namespace GKCore.Controllers
 
         public ParentsEditDlgController(IParentsEditDlg view) : base(view)
         {
-            for (GEDCOMPedigreeLinkageType plt = GEDCOMPedigreeLinkageType.plNone; plt <= GEDCOMPedigreeLinkageType.plFoster; plt++) {
+            for (GDMPedigreeLinkageType plt = GDMPedigreeLinkageType.plNone; plt <= GDMPedigreeLinkageType.plFoster; plt++) {
                 fView.LinkageTypeCombo.Add(LangMan.LS(GKData.ParentTypes[(int)plt]));
             }
         }
@@ -63,7 +63,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fLink.PedigreeLinkageType = (GEDCOMPedigreeLinkageType)fView.LinkageTypeCombo.SelectedIndex;
+                fLink.PedigreeLinkageType = (GDMPedigreeLinkageType)fView.LinkageTypeCombo.SelectedIndex;
 
                 fLocalUndoman.Commit();
 
@@ -91,10 +91,10 @@ namespace GKCore.Controllers
         public void UpdateControls()
         {
             if (fLink != null) {
-                GEDCOMFamilyRecord family = fLink.Family;
+                GDMFamilyRecord family = fLink.Family;
                 fView.SetParentsAvl(true);
 
-                GEDCOMIndividualRecord relPerson = family.GetHusband();
+                GDMIndividualRecord relPerson = family.GetHusband();
                 if (relPerson != null) {
                     fView.SetFatherAvl(true);
                     fView.Father.Text = GKUtils.GetNameString(relPerson, true, false);
@@ -123,7 +123,7 @@ namespace GKCore.Controllers
 
         public void EditParents()
         {
-            GEDCOMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
+            GDMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
             if (family != null && BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null)) {
                 UpdateControls();
             }

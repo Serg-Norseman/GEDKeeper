@@ -24,7 +24,7 @@ using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMNoteRecord : GEDCOMRecord
+    public sealed class GDMNoteRecord : GDMRecord
     {
         public StringList Note
         {
@@ -32,7 +32,8 @@ namespace GKCommon.GEDCOM
             set { SetTagStrings(this, value); }
         }
 
-        public GEDCOMNoteRecord(GEDCOMObject owner) : base(owner)
+
+        public GDMNoteRecord(GDMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtNote);
             SetName(GEDCOMTagType.NOTE);
@@ -43,9 +44,9 @@ namespace GKCommon.GEDCOM
         /// </summary>
         /// <param name="targetRecord"></param>
         /// <param name="clearDest"></param>
-        public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
+        public override void MoveTo(GDMRecord targetRecord, bool clearDest)
         {
-            GEDCOMNoteRecord targetNote = (targetRecord as GEDCOMNoteRecord);
+            GDMNoteRecord targetNote = (targetRecord as GDMNoteRecord);
             if (targetNote == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
 
@@ -56,9 +57,9 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
+        public override float IsMatch(GDMTag tag, MatchParams matchParams)
         {
-            GEDCOMNoteRecord note = tag as GEDCOMNoteRecord;
+            GDMNoteRecord note = tag as GDMNoteRecord;
             if (note == null) return 0.0f;
 
             float match = 0.0f;

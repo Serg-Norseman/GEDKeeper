@@ -25,7 +25,7 @@ namespace GKCommon.GEDCOM
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GEDCOMPersonalNamePieces : GEDCOMTagWithLists
+    public sealed class GDMPersonalNamePieces : GDMTagWithLists
     {
         public string Prefix
         {
@@ -99,11 +99,11 @@ namespace GKCommon.GEDCOM
             fSourceCitations.SaveToStream(stream, level);
         }
 
-        public GEDCOMPersonalNamePieces(GEDCOMObject owner) : base(owner)
+        public GDMPersonalNamePieces(GDMObject owner) : base(owner)
         {
         }
 
-        public GEDCOMPersonalNamePieces(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMPersonalNamePieces(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

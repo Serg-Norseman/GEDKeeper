@@ -28,7 +28,7 @@ namespace GKCommon.GEDCOM
     }
 
 
-    public sealed class GEDCOMSubmissionRecord : GEDCOMRecord
+    public sealed class GDMSubmissionRecord : GDMRecord
     {
         public string FamilyFileName
         {
@@ -60,13 +60,13 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.ORDI, GEDCOMUtils.GetOrdinanceProcessFlagStr(value)); }
         }
 
-        public GEDCOMPointer Submitter
+        public GDMPointer Submitter
         {
-            get { return GetTag(GEDCOMTagType.SUBM, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag<GDMPointer>(GEDCOMTagType.SUBM, GDMPointer.Create); }
         }
 
 
-        public GEDCOMSubmissionRecord(GEDCOMObject owner) : base(owner)
+        public GDMSubmissionRecord(GDMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtSubmission);
             SetName(GEDCOMTagType.SUBN);

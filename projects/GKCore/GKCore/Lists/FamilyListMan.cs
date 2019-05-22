@@ -36,7 +36,7 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class FamilyListMan : ListManager
     {
-        private GEDCOMFamilyRecord fRec;
+        private GDMFamilyRecord fRec;
 
 
         public FamilyListMan(IBaseContext baseContext) :
@@ -66,9 +66,9 @@ namespace GKCore.Lists
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMFamilyRecord);
+            fRec = (aRec as GDMFamilyRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

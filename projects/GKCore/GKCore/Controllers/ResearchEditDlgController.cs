@@ -31,9 +31,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class ResearchEditDlgController : DialogController<IResearchEditDlg>
     {
-        private GEDCOMResearchRecord fResearch;
+        private GDMResearchRecord fResearch;
 
-        public GEDCOMResearchRecord Research
+        public GDMResearchRecord Research
         {
             get { return fResearch; }
             set {
@@ -62,8 +62,8 @@ namespace GKCore.Controllers
                 fResearch.ResearchName = fView.Name.Text;
                 fResearch.Priority = (GDMResearchPriority)fView.Priority.SelectedIndex;
                 fResearch.Status = (GDMResearchStatus)fView.Status.SelectedIndex;
-                fResearch.StartDate.Assign(GEDCOMDate.CreateByFormattedStr(fView.StartDate.Text, true));
-                fResearch.StopDate.Assign(GEDCOMDate.CreateByFormattedStr(fView.StopDate.Text, true));
+                fResearch.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.Text, true));
+                fResearch.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.Text, true));
                 fResearch.Percent = int.Parse(fView.Percent.Text);
 
                 fLocalUndoman.Commit();
@@ -101,7 +101,7 @@ namespace GKCore.Controllers
             fView.GroupsList.ListModel.DataOwner = fResearch;
         }
 
-        public void JumpToRecord(GEDCOMRecord record)
+        public void JumpToRecord(GDMRecord record)
         {
             if (record != null && Accept()) {
                 fBase.SelectRecordByXRef(record.XRef);

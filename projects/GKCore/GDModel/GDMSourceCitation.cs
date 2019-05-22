@@ -22,7 +22,7 @@ using BSLib;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMSourceCitation : GEDCOMPointer
+    public sealed class GDMSourceCitation : GDMPointer
     {
         public StringList Description
         {
@@ -32,7 +32,7 @@ namespace GKCommon.GEDCOM
                 if (!IsPointer) {
                     description = GetTagStrings(this);
                 } else {
-                    GEDCOMSourceRecord sourceRecord = Value as GEDCOMSourceRecord;
+                    GDMSourceRecord sourceRecord = Value as GDMSourceRecord;
                     if (sourceRecord != null) {
                         description = sourceRecord.Title;
                     } else {
@@ -61,17 +61,17 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMSourceCitation(owner, tagName, tagValue);
+            return new GDMSourceCitation(owner, tagName, tagValue);
         }
 
-        public GEDCOMSourceCitation(GEDCOMObject owner) : base(owner)
+        public GDMSourceCitation(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.SOUR);
         }
 
-        public GEDCOMSourceCitation(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMSourceCitation(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

@@ -30,12 +30,12 @@ namespace GKCore.Tools
     public sealed class PlaceObj : BaseObject
     {
         public readonly string Name;
-        public readonly List<GEDCOMCustomEvent> Facts;
+        public readonly List<GDMCustomEvent> Facts;
 
         public PlaceObj(string name)
         {
             Name = name;
-            Facts = new List<GEDCOMCustomEvent>();
+            Facts = new List<GDMCustomEvent>();
         }
 
         protected override void Dispose(bool disposing)

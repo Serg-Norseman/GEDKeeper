@@ -26,22 +26,22 @@ using GKCommon.GEDCOM;
 
 namespace GDModel.Providers
 {
-    public delegate StackTuple AddTagHandler(GEDCOMObject owner, int tagLevel, string tagName, string tagValue);
+    public delegate StackTuple AddTagHandler(GDMObject owner, int tagLevel, string tagName, string tagValue);
 
     public sealed class StackTuple
     {
         public int Level;
-        public GEDCOMTag Tag;
+        public GDMTag Tag;
         public AddTagHandler AddHandler;
 
-        public StackTuple(int level, GEDCOMTag tag)
+        public StackTuple(int level, GDMTag tag)
         {
             Level = level;
             Tag = tag;
             AddHandler = null;
         }
 
-        public StackTuple(int level, GEDCOMTag tag, AddTagHandler addHandler)
+        public StackTuple(int level, GDMTag tag, AddTagHandler addHandler)
         {
             Level = level;
             Tag = tag;
@@ -58,9 +58,9 @@ namespace GDModel.Providers
     /// </summary>
     public abstract class FileProvider
     {
-        protected readonly GEDCOMTree fTree;
+        protected readonly GDMTree fTree;
 
-        protected FileProvider(GEDCOMTree tree)
+        protected FileProvider(GDMTree tree)
         {
             fTree = tree;
         }

@@ -36,7 +36,7 @@ namespace GKUI.Forms
     public class PortraitSelectDlgTests : CustomWindowTest
     {
         private IBaseContext fContext;
-        private GEDCOMMultimediaLink fMultimediaLink;
+        private GDMMultimediaLink fMultimediaLink;
         private IBaseWindow fBase;
         private PortraitSelectDlg fDialog;
 
@@ -46,7 +46,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
             fContext = fBase.Context;
-            fMultimediaLink = new GEDCOMMultimediaLink(null);
+            fMultimediaLink = new GDMMultimediaLink(null);
 
             fDialog = new PortraitSelectDlg(fBase);
             fDialog.MultimediaLink = fMultimediaLink;

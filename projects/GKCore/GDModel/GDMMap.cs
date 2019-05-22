@@ -22,7 +22,7 @@ using BSLib;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMMap : GEDCOMTag
+    public sealed class GDMMap : GDMTag
     {
         private enum GeoCoord { Lati, Long }
 
@@ -40,19 +40,19 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMMap(GEDCOMObject owner) : base(owner)
+        public GDMMap(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.MAP);
         }
 
-        public GEDCOMMap(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMMap(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMMap(owner, tagName, tagValue);
+            return new GDMMap(owner, tagName, tagValue);
         }
 
         /// <summary>

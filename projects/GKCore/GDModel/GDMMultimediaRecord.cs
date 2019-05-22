@@ -22,22 +22,22 @@ using System.IO;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMMultimediaRecord : GEDCOMRecord
+    public sealed class GDMMultimediaRecord : GDMRecord
     {
-        private readonly GEDCOMList<GEDCOMFileReferenceWithTitle> fFileReferences;
+        private readonly GDMList<GDMFileReferenceWithTitle> fFileReferences;
 
-        public GEDCOMList<GEDCOMFileReferenceWithTitle> FileReferences
+        public GDMList<GDMFileReferenceWithTitle> FileReferences
         {
             get { return fFileReferences; }
         }
 
 
-        public GEDCOMMultimediaRecord(GEDCOMObject owner) : base(owner)
+        public GDMMultimediaRecord(GDMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtMultimedia);
             SetName(GEDCOMTagType.OBJE);
 
-            fFileReferences = new GEDCOMList<GEDCOMFileReferenceWithTitle>(this);
+            fFileReferences = new GDMList<GDMFileReferenceWithTitle>(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -77,16 +77,12 @@ namespace GKCommon.GEDCOM
             fFileReferences.SaveToStream(stream, ++level);
         }
 
-        #region Auxiliary
-
         public string GetFileTitle()
         {
             if (fFileReferences.Count <= 0) return string.Empty;
 
-            GEDCOMFileReferenceWithTitle fileRef = fFileReferences[0];
+            GDMFileReferenceWithTitle fileRef = fFileReferences[0];
             return fileRef.Title;
         }
-        
-        #endregion
     }
 }

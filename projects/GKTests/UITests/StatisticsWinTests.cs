@@ -48,7 +48,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
 
-            fDialog = new StatisticsWin(fBase, new List<GEDCOMRecord>());
+            fDialog = new StatisticsWin(fBase, new List<GDMRecord>());
             fDialog.Show();
         }
 

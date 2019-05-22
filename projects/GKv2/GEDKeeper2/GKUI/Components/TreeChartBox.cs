@@ -55,7 +55,7 @@ namespace GKUI.Components
         private int fMouseY;
         private TreeChartOptions fOptions;
         private TreeChartPerson fSelected;
-        private GEDCOMIndividualRecord fSaveSelection;
+        private GDMIndividualRecord fSaveSelection;
         private Timer fTimer;
         private bool fTraceKinships;
         private bool fTraceSelected;
@@ -267,7 +267,7 @@ namespace GKUI.Components
             DoZoomChanged();
         }
 
-        public void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
+        public void GenChart(GDMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
         {
             if (iRec == null) return;
 
@@ -292,7 +292,7 @@ namespace GKUI.Components
             try {
                 if (fModel.Root == null) return;
 
-                GEDCOMIndividualRecord rootRec = fModel.Root.Rec;
+                GDMIndividualRecord rootRec = fModel.Root.Rec;
 
                 SaveSelection();
                 GenChart(rootRec, fModel.Kind, false);
@@ -809,7 +809,7 @@ namespace GKUI.Components
 
         protected override void SetNavObject(object obj)
         {
-            var iRec = obj as GEDCOMIndividualRecord;
+            var iRec = obj as GDMIndividualRecord;
             GenChart(iRec, TreeChartKind.ckBoth, true);
         }
 
@@ -849,7 +849,7 @@ namespace GKUI.Components
             if (needCenter && fTraceSelected) CenterPerson(person);
         }
 
-        public void SelectByRec(GEDCOMIndividualRecord iRec)
+        public void SelectByRec(GDMIndividualRecord iRec)
         {
             if (iRec == null) return;
 

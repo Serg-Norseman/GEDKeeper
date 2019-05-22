@@ -22,11 +22,11 @@ using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMRepositoryRecord : GEDCOMRecord
+    public sealed class GDMRepositoryRecord : GDMRecord
     {
-        public GEDCOMAddress Address
+        public GDMAddress Address
         {
-            get { return GetTag(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress; }
+            get { return GetTag<GDMAddress>(GEDCOMTagType.ADDR, GDMAddress.Create); }
         }
 
         public string RepositoryName
@@ -36,16 +36,16 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMRepositoryRecord(GEDCOMObject owner) : base(owner)
+        public GDMRepositoryRecord(GDMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtRepository);
             SetName(GEDCOMTagType.REPO);
         }
 
         // TODO: connect to use
-        public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
+        public override float IsMatch(GDMTag tag, MatchParams matchParams)
         {
-            GEDCOMRepositoryRecord otherRep = tag as GEDCOMRepositoryRecord;
+            GDMRepositoryRecord otherRep = tag as GDMRepositoryRecord;
             if (otherRep == null) return 0.0f;
 
             float match = GetStrMatch(RepositoryName, otherRep.RepositoryName, matchParams);

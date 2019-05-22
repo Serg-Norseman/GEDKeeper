@@ -20,28 +20,28 @@
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMSpouseToFamilyLink : GEDCOMPointerWithNotes
+    public sealed class GDMSpouseToFamilyLink : GDMPointerWithNotes
     {
-        public GEDCOMFamilyRecord Family
+        public GDMFamilyRecord Family
         {
-            get { return (Value as GEDCOMFamilyRecord); }
+            get { return (Value as GDMFamilyRecord); }
             set { Value = value; }
         }
 
 
-        public GEDCOMSpouseToFamilyLink(GEDCOMObject owner) : base(owner)
+        public GDMSpouseToFamilyLink(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.FAMS);
         }
 
-        public GEDCOMSpouseToFamilyLink(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMSpouseToFamilyLink(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMSpouseToFamilyLink(owner, tagName, tagValue);
+            return new GDMSpouseToFamilyLink(owner, tagName, tagValue);
         }
     }
 }

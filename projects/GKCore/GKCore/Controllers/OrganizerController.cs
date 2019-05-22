@@ -42,13 +42,13 @@ namespace GKCore.Controllers
 
             int num = fBase.Context.Tree.RecordsCount;
             for (int i = 0; i < num; i++) {
-                GEDCOMRecord rec = fBase.Context.Tree[i];
+                GDMRecord rec = fBase.Context.Tree[i];
                 if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
 
-                GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
+                GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
                 string nm = GKUtils.GetNameString(iRec, true, false);
 
-                foreach (GEDCOMCustomEvent evt in iRec.Events) {
+                foreach (GDMCustomEvent evt in iRec.Events) {
                     PrepareEvent(nm, evt);
                 }
             }
@@ -63,9 +63,9 @@ namespace GKCore.Controllers
             fView.WebsList.ResizeColumn(1);
         }
 
-        private void PrepareEvent(string iName, GEDCOMCustomEvent ev)
+        private void PrepareEvent(string iName, GDMCustomEvent ev)
         {
-            GEDCOMAddress addr = ev.Address;
+            GDMAddress addr = ev.Address;
             if (addr == null) return;
 
             string addrStr = addr.Address.Text.Trim();
@@ -77,15 +77,15 @@ namespace GKCore.Controllers
                 fView.AdrList.AddItem(null, iName, addrStr);
             }
 
-            foreach (GEDCOMTag tag in addr.PhoneNumbers) {
+            foreach (GDMTag tag in addr.PhoneNumbers) {
                 fView.PhonesList.AddItem(null, iName, tag.StringValue);
             }
 
-            foreach (GEDCOMTag tag in addr.EmailAddresses) {
+            foreach (GDMTag tag in addr.EmailAddresses) {
                 fView.MailsList.AddItem(null, iName, tag.StringValue);
             }
 
-            foreach (GEDCOMTag tag in addr.WebPages) {
+            foreach (GDMTag tag in addr.WebPages) {
                 fView.WebsList.AddItem(null, iName, tag.StringValue);
             }
         }

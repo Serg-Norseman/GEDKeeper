@@ -76,12 +76,12 @@ namespace GKCore.Controllers
             if (pObj.Name.IndexOf("[*]") == 0) {
                 AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_PlaceAlreadyInBook));
             } else {
-                GEDCOMLocationRecord loc = fBase.Context.SelectRecord(GEDCOMRecordType.rtLocation, new object[] { pObj.Name }) as GEDCOMLocationRecord;
+                GDMLocationRecord loc = fBase.Context.SelectRecord(GEDCOMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
                 if (loc == null) return;
 
                 int num = pObj.Facts.Count;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMCustomEvent evt = pObj.Facts[i];
+                    GDMCustomEvent evt = pObj.Facts[i];
                     evt.Place.StringValue = loc.LocationName;
                     evt.Place.Location.Value = loc;
                 }

@@ -34,14 +34,14 @@ namespace GKCommon.GEDCOM
     /// for reading and writing the values of tags in the terminology and
     /// according to the rules of GEDCOM.
     /// </summary>
-    public class GEDCOMTag : GEDCOMObject
+    public class GDMTag : GDMObject
     {
         #region Protected fields
 
         private string fName;
-        private GEDCOMObject fOwner;
+        private GDMObject fOwner;
         protected string fStringValue;
-        private GEDCOMList<GEDCOMTag> fTags;
+        private GDMList<GDMTag> fTags;
 
         #endregion
 
@@ -58,7 +58,7 @@ namespace GKCommon.GEDCOM
         /// <summary>
         /// Access to items of nested sub-tags.
         /// </summary>
-        public GEDCOMTag this[int index]
+        public GDMTag this[int index]
         {
             get { return fTags[index]; }
         }
@@ -68,7 +68,7 @@ namespace GKCommon.GEDCOM
             get { return fName; }
         }
 
-        public GEDCOMObject Owner
+        public GDMObject Owner
         {
             get { return fOwner; }
         }
@@ -83,19 +83,19 @@ namespace GKCommon.GEDCOM
 
         #region Object management
 
-        public static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMTag(owner, tagName, tagValue);
+            return new GDMTag(owner, tagName, tagValue);
         }
 
-        public GEDCOMTag(GEDCOMObject owner)
+        public GDMTag(GDMObject owner)
         {
             fOwner = owner;
-            fTags = new GEDCOMList<GEDCOMTag>(this);
+            fTags = new GDMList<GDMTag>(this);
             fStringValue = string.Empty;
         }
 
-        public GEDCOMTag(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMTag(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -111,7 +111,7 @@ namespace GKCommon.GEDCOM
             base.Dispose(disposing);
         }
 
-        protected GEDCOMList<GEDCOMTag> GetTagList()
+        protected GDMList<GDMTag> GetTagList()
         {
             return fTags;
         }
@@ -131,19 +131,19 @@ namespace GKCommon.GEDCOM
 
         #region Content management
 
-        public virtual GEDCOMTree GetTree()
+        public virtual GDMTree GetTree()
         {
-            GEDCOMTree owner = null;
+            GDMTree owner = null;
 
-            GEDCOMTag current = this;
+            GDMTag current = this;
             while (current != null) {
-                GEDCOMObject parent = current.fOwner;
+                GDMObject parent = current.fOwner;
 
-                var parentTag = parent as GEDCOMTag;
+                var parentTag = parent as GDMTag;
                 if (parentTag != null) {
                     current = parentTag;
                 } else {
-                    var parentTree = parent as GEDCOMTree;
+                    var parentTree = parent as GDMTree;
                     if (parentTree != null) {
                         owner = parentTree;
                     }
@@ -154,9 +154,9 @@ namespace GKCommon.GEDCOM
             return owner;
         }
 
-        protected GEDCOMRecord FindRecord(string xref)
+        protected GDMRecord FindRecord(string xref)
         {
-            GEDCOMTree tree = GetTree();
+            GDMTree tree = GetTree();
             return (tree == null) ? null : tree.XRefIndex_Find(xref);
         }
 
@@ -168,7 +168,7 @@ namespace GKCommon.GEDCOM
             fName = value;
         }
 
-        public GEDCOMTag AddTag(GEDCOMTag tag)
+        public GDMTag AddTag(GDMTag tag)
         {
             fTags.Add(tag);
             return tag;
@@ -181,16 +181,16 @@ namespace GKCommon.GEDCOM
         /// <param name="tagValue">A string value of sub-tag.</param>
         /// <param name="tagConstructor">The default constructor of sub-tag.</param>
         /// <returns></returns>
-        internal GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
+        internal GDMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
         {
-            GEDCOMTag tag = null;
+            GDMTag tag = null;
             try {
                 if (tagConstructor != null) {
                     tag = tagConstructor(this, tagName, tagValue);
                 } else {
                     tag = GEDCOMFactory.GetInstance().CreateTag(this, tagName, tagValue);
                     if (tag == null) {
-                        tag = new GEDCOMTag(this, tagName, tagValue);
+                        tag = new GDMTag(this, tagName, tagValue);
                     }
                 }
 
@@ -205,7 +205,7 @@ namespace GKCommon.GEDCOM
         /// Copying the sub-tags from the source to the current tag.
         /// </summary>
         /// <param name="source">A source tag.</param>
-        public virtual void Assign(GEDCOMTag source/*, string[] skipList = null*/)
+        public virtual void Assign(GDMTag source/*, string[] skipList = null*/)
         {
             if (source == null) return;
 
@@ -215,10 +215,10 @@ namespace GKCommon.GEDCOM
             AssignList(source.fTags, this.fTags);
         }
 
-        protected void AssignList(GEDCOMList<GEDCOMTag> srcList, GEDCOMList<GEDCOMTag> destList)
+        protected void AssignList(GDMList<GDMTag> srcList, GDMList<GDMTag> destList)
         {
-            foreach (GEDCOMTag sourceTag in srcList) {
-                GEDCOMTag copyTag = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { this, string.Empty, string.Empty });
+            foreach (GDMTag sourceTag in srcList) {
+                GDMTag copyTag = (GDMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { this, string.Empty, string.Empty });
                 copyTag.Assign(sourceTag);
 
                 destList.Add(copyTag);
@@ -238,7 +238,7 @@ namespace GKCommon.GEDCOM
 
         public void DeleteTag(string tagName)
         {
-            GEDCOMTag tag = FindTag(tagName, 0);
+            GDMTag tag = FindTag(tagName, 0);
             while (tag != null) {
                 int idx = fTags.IndexOf(tag);
                 fTags.DeleteAt(idx);
@@ -247,19 +247,19 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public GEDCOMTag FindTag(string tagName, int startIndex)
+        public GDMTag FindTag(string tagName, int startIndex)
         {
             string su = GEDCOMUtils.InvariantTextInfo.ToUpper(tagName);
 
             int pos = su.IndexOf('\\');
             string S = ((pos >= 0) ? su.Substring(0, pos) : su);
 
-            GEDCOMTag tempTag = this;
+            GDMTag tempTag = this;
 
             while (true) {
                 int index = ((S == su) ? startIndex : 0);
 
-                GEDCOMList<GEDCOMTag> tempSubTags = tempTag.fTags;
+                GDMList<GDMTag> tempSubTags = tempTag.fTags;
                 int tempSubCount = tempSubTags.Count;
                 while (index < tempSubCount && tempSubTags[index].Name != S) index++;
                 if (index >= tempSubCount) break;
@@ -281,11 +281,11 @@ namespace GKCommon.GEDCOM
             return null;
         }
 
-        public IList<GEDCOMTag> FindTags(string tagName)
+        public IList<GDMTag> FindTags(string tagName)
         {
-            IList<GEDCOMTag> result = new List<GEDCOMTag>();
+            IList<GDMTag> result = new List<GDMTag>();
 
-            GEDCOMTag tag = FindTag(tagName, 0);
+            GDMTag tag = FindTag(tagName, 0);
             while (tag != null) {
                 int idx = fTags.IndexOf(tag);
                 result.Add(tag);
@@ -300,18 +300,18 @@ namespace GKCommon.GEDCOM
         /// Get an existing or create a new subtag. Can use the creation of known and unknown tags 
         /// with the default constructor or specify the specific constructor.
         /// </summary>
-        internal GEDCOMTag GetTag(string tagName, TagConstructor tagConstructor)
+        internal T GetTag<T>(string tagName, TagConstructor tagConstructor) where T : GDMTag
         {
-            GEDCOMTag result = FindTag(tagName, 0);
+            GDMTag result = FindTag(tagName, 0);
 
             if (result == null) {
                 result = AddTag(tagName, "", tagConstructor);
             }
 
-            return result;
+            return result as T;
         }
 
-        public int IndexOfTag(GEDCOMTag tag)
+        public int IndexOfTag(GDMTag tag)
         {
             return fTags.IndexOf(tag);
         }
@@ -321,7 +321,7 @@ namespace GKCommon.GEDCOM
             return (string.IsNullOrEmpty(fStringValue) && (fTags.Count == 0));
         }
 
-        public virtual float IsMatch(GEDCOMTag tag, MatchParams matchParams)
+        public virtual float IsMatch(GDMTag tag, MatchParams matchParams)
         {
             return 0.0f;
         }
@@ -390,7 +390,7 @@ namespace GKCommon.GEDCOM
 
         public string GetTagStringValue(string tagName)
         {
-            GEDCOMTag tag = FindTag(tagName, 0);
+            GDMTag tag = FindTag(tagName, 0);
             string result = ((tag == null) ? "" : tag.StringValue);
             return result;
         }
@@ -399,12 +399,12 @@ namespace GKCommon.GEDCOM
         {
             string su = tagName;
 
-            GEDCOMTag P = FindTag(su, 0);
+            GDMTag P = FindTag(su, 0);
 
             if (P != null) {
                 P.StringValue = value;
             } else {
-                GEDCOMTag O = this;
+                GDMTag O = this;
                 while (su != "") {
                     string S;
 
@@ -435,7 +435,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public static StringList GetTagStrings(GEDCOMTag strTag)
+        public static StringList GetTagStrings(GDMTag strTag)
         {
             StringList strings = new StringList();
 
@@ -446,7 +446,7 @@ namespace GKCommon.GEDCOM
 
                 int num = strTag.Count;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMTag tag = strTag[i];
+                    GDMTag tag = strTag[i];
 
                     if (tag.Name == GEDCOMTagType.CONC) {
                         if (strings.Count > 0) {
@@ -465,7 +465,7 @@ namespace GKCommon.GEDCOM
             return strings;
         }
 
-        public static void SetTagStrings(GEDCOMTag tag, StringList strings)
+        public static void SetTagStrings(GDMTag tag, StringList strings)
         {
             if (tag == null) return;
 
@@ -478,7 +478,7 @@ namespace GKCommon.GEDCOM
             }
 
             if (strings != null) {
-                bool isRecordTag = (tag is GEDCOMRecord);
+                bool isRecordTag = (tag is GDMRecord);
 
                 int num = strings.Count;
                 for (int i = 0; i < num; i++) {
@@ -503,7 +503,7 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public static void SetTagStrings(GEDCOMTag tag, string[] strings)
+        public static void SetTagStrings(GDMTag tag, string[] strings)
         {
             if (tag == null) return;
 
@@ -516,7 +516,7 @@ namespace GKCommon.GEDCOM
             }
 
             if (strings != null) {
-                bool isRecordTag = (tag is GEDCOMRecord);
+                bool isRecordTag = (tag is GDMRecord);
 
                 int num = strings.Length;
                 for (int i = 0; i < num; i++) {
@@ -544,14 +544,14 @@ namespace GKCommon.GEDCOM
 
         public bool GetTagYNValue(string tagName)
         {
-            GEDCOMTag tag = FindTag(tagName, 0);
+            GDMTag tag = FindTag(tagName, 0);
             return (tag != null) && (tag.StringValue == "Y");
         }
 
         public void SetTagYNValue(string tagName, bool value)
         {
             if (value) {
-                GEDCOMTag tag = FindTag(tagName, 0);
+                GDMTag tag = FindTag(tagName, 0);
                 if (tag == null) {
                     tag = AddTag(tagName, "", null);
                 }
@@ -575,7 +575,7 @@ namespace GKCommon.GEDCOM
             fTags.ReplaceXRefs(map);
         }
 
-        public void ResetOwner(GEDCOMObject owner)
+        public void ResetOwner(GDMObject owner)
         {
             fOwner = owner;
         }
@@ -589,14 +589,14 @@ namespace GKCommon.GEDCOM
             int subtagsCount = fTags.Count;
             if (subtagsCount > 0) {
                 for (int i = 0; i < subtagsCount; i++) {
-                    GEDCOMTag subtag = fTags[i];
+                    GDMTag subtag = fTags[i];
                     if (subtag.Name == GEDCOMTagType.CONC || subtag.Name == GEDCOMTagType.CONT) {
                         subtag.SaveToStream(stream, level);
                     }
                 }
 
                 for (int i = 0; i < subtagsCount; i++) {
-                    GEDCOMTag subtag = fTags[i];
+                    GDMTag subtag = fTags[i];
                     if (subtag.Name != GEDCOMTagType.CONT && subtag.Name != GEDCOMTagType.CONC) {
                         subtag.SaveToStream(stream, level);
                     }

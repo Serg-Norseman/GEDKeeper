@@ -24,7 +24,7 @@ namespace GKCommon.GEDCOM
     /// Interpreted from knowledge about the associated date phrase included in parentheses (see GEDCOM 5.5.1 p.47).
     /// Objects of this class are created only from GEDCOMDateValue.
     /// </summary>
-    public sealed class GEDCOMDateInterpreted : GEDCOMDate
+    public sealed class GDMDateInterpreted : GDMDate
     {
         private string fDatePhrase;
 
@@ -51,7 +51,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMDateInterpreted(GEDCOMObject owner) : base(owner)
+        public GDMDateInterpreted(GDMObject owner) : base(owner)
         {
             fDatePhrase = string.Empty;
         }

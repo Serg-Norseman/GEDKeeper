@@ -38,7 +38,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class FamilyEditDlgTests : CustomWindowTest
     {
-        private GEDCOMFamilyRecord fFamilyRecord;
+        private GDMFamilyRecord fFamilyRecord;
         private IBaseWindow fBase;
         private FamilyEditDlg fDialog;
 
@@ -47,7 +47,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fFamilyRecord = new GEDCOMFamilyRecord(fBase.Context.Tree);
+            fFamilyRecord = new GDMFamilyRecord(fBase.Context.Tree);
 
             fDialog = new FamilyEditDlg(fBase);
             fDialog.Family = fFamilyRecord;

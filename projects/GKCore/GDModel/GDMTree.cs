@@ -37,18 +37,18 @@ namespace GKCommon.GEDCOM
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GEDCOMTree : GEDCOMObject
+    public sealed class GDMTree : GDMObject
     {
         #region Tree Enumerator
 
         private struct TreeEnumerator : IGEDCOMTreeEnumerator
         {
-            private readonly GEDCOMTree fTree;
+            private readonly GDMTree fTree;
             private readonly GEDCOMRecordType fRecType;
             private readonly int fEndIndex;
             private int fIndex;
 
-            public TreeEnumerator(GEDCOMTree tree, GEDCOMRecordType recType)
+            public TreeEnumerator(GDMTree tree, GEDCOMRecordType recType)
             {
                 fTree = tree;
                 fIndex = -1;
@@ -56,7 +56,7 @@ namespace GKCommon.GEDCOM
                 fRecType = recType;
             }
 
-            public bool MoveNext(out GEDCOMRecord current)
+            public bool MoveNext(out GDMRecord current)
             {
                 if (fRecType == GEDCOMRecordType.rtNone)
                 {
@@ -70,7 +70,7 @@ namespace GKCommon.GEDCOM
                     while (fIndex < fEndIndex)
                     {
                         fIndex++;
-                        GEDCOMRecord rec = fTree[fIndex];
+                        GDMRecord rec = fTree[fIndex];
                         if (rec.RecordType == fRecType) {
                             current = rec;
                             return true;
@@ -93,8 +93,8 @@ namespace GKCommon.GEDCOM
 
 
         private readonly GEDCOMHeader fHeader;
-        private readonly GEDCOMList<GEDCOMRecord> fRecords;
-        private readonly Dictionary<string, GEDCOMCustomRecord> fXRefIndex;
+        private readonly GDMList<GDMRecord> fRecords;
+        private readonly Dictionary<string, GDMCustomRecord> fXRefIndex;
 
         private GEDCOMFormat fFormat;
         private int[] fLastIDs;
@@ -126,7 +126,7 @@ namespace GKCommon.GEDCOM
             get { return fRecords.Count; }
         }
 
-        public GEDCOMRecord this[int index]
+        public GDMRecord this[int index]
         {
             get { return fRecords[index]; }
         }
@@ -156,10 +156,10 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMTree()
+        public GDMTree()
         {
-            fXRefIndex = new Dictionary<string, GEDCOMCustomRecord>();
-            fRecords = new GEDCOMList<GEDCOMRecord>(this);
+            fXRefIndex = new Dictionary<string, GDMCustomRecord>();
+            fRecords = new GDMList<GDMRecord>(this);
             fHeader = new GEDCOMHeader(this);
 
             ResetLastIDs();
@@ -176,7 +176,7 @@ namespace GKCommon.GEDCOM
 
         #region Internal
 
-        internal GEDCOMList<GEDCOMRecord> GetRecords()
+        internal GDMList<GDMRecord> GetRecords()
         {
             return fRecords;
         }
@@ -185,7 +185,7 @@ namespace GKCommon.GEDCOM
 
         #region XRef Search
 
-        private void XRefIndex_AddRecord(GEDCOMCustomRecord record)
+        private void XRefIndex_AddRecord(GDMCustomRecord record)
         {
             if (record == null || string.IsNullOrEmpty(record.XRef)) return;
 
@@ -193,19 +193,19 @@ namespace GKCommon.GEDCOM
             if (!exists) fXRefIndex.Add(record.XRef, record);
         }
 
-        private void XRefIndex_DeleteRecord(GEDCOMRecord record)
+        private void XRefIndex_DeleteRecord(GDMRecord record)
         {
             bool exists = fXRefIndex.ContainsKey(record.XRef);
             if (exists) fXRefIndex.Remove(record.XRef);
         }
 
-        public GEDCOMRecord XRefIndex_Find(string xref)
+        public GDMRecord XRefIndex_Find(string xref)
         {
             if (string.IsNullOrEmpty(xref)) return null;
 
-            GEDCOMCustomRecord record;
+            GDMCustomRecord record;
             if (fXRefIndex.TryGetValue(xref, out record)) {
-                return (record as GEDCOMRecord);
+                return (record as GDMRecord);
             } else {
                 return null;
             }
@@ -216,7 +216,7 @@ namespace GKCommon.GEDCOM
             fLastIDs = new int[(int)GEDCOMRecordType.rtLast + 1];
         }
 
-        public string XRefIndex_NewXRef(GEDCOMRecord record)
+        public string XRefIndex_NewXRef(GDMRecord record)
         {
             var invNFI = GEDCOMUtils.InvariantNumberFormatInfo;
             string sign = GEDCOMUtils.GetSignByRecord(record);
@@ -234,7 +234,7 @@ namespace GKCommon.GEDCOM
             return xref;
         }
 
-        public void SetXRef(string oldXRef, GEDCOMCustomRecord record)
+        public void SetXRef(string oldXRef, GDMCustomRecord record)
         {
             if (!string.IsNullOrEmpty(oldXRef)) {
                 bool exists = fXRefIndex.ContainsKey(oldXRef);
@@ -248,7 +248,7 @@ namespace GKCommon.GEDCOM
 
         #region Main functionality
 
-        public List<T> GetRecords<T>() where T : GEDCOMRecord
+        public List<T> GetRecords<T>() where T : GDMRecord
         {
             List<T> result = new List<T>();
 
@@ -275,7 +275,7 @@ namespace GKCommon.GEDCOM
             ResetLastIDs();
         }
 
-        public GEDCOMRecord AddRecord(GEDCOMRecord record)
+        public GDMRecord AddRecord(GDMRecord record)
         {
             fRecords.Add(record);
             XRefIndex_AddRecord(record);
@@ -288,29 +288,29 @@ namespace GKCommon.GEDCOM
             fRecords.DeleteAt(index);
         }*/
 
-        public void DeleteRecord(GEDCOMRecord record)
+        public void DeleteRecord(GDMRecord record)
         {
             XRefIndex_DeleteRecord(record);
             fRecords.Delete(record);
         }
 
-        public GEDCOMRecord Extract(int index)
+        public GDMRecord Extract(int index)
         {
             XRefIndex_DeleteRecord(fRecords[index]);
             return fRecords.Extract(index);
         }
 
-        public int IndexOf(GEDCOMRecord record)
+        public int IndexOf(GDMRecord record)
         {
             return fRecords.IndexOf(record);
         }
 
-        public GEDCOMRecord FindUID(string uid)
+        public GDMRecord FindUID(string uid)
         {
             int num = fRecords.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = fRecords[i];
+                GDMRecord rec = fRecords[i];
                 if (rec.UID == uid) {
                     return rec;
                 }
@@ -329,8 +329,6 @@ namespace GKCommon.GEDCOM
 
         #endregion
 
-        #region Auxiliary
-
         public int[] GetRecordStats()
         {
             int[] stats = new int[((int)GEDCOMRecordType.rtLast)];
@@ -338,7 +336,7 @@ namespace GKCommon.GEDCOM
             int num = RecordsCount;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = this[i];
+                GDMRecord rec = this[i];
                 int index = (int)rec.RecordType;
                 stats[index] += 1;
             }
@@ -346,11 +344,11 @@ namespace GKCommon.GEDCOM
             return stats;
         }
 
-        public GEDCOMSubmitterRecord GetSubmitter()
+        public GDMSubmitterRecord GetSubmitter()
         {
-            GEDCOMSubmitterRecord submitter = fHeader.Submitter.Value as GEDCOMSubmitterRecord;
+            GDMSubmitterRecord submitter = fHeader.Submitter.Value as GDMSubmitterRecord;
             if (submitter == null) {
-                submitter = new GEDCOMSubmitterRecord(this);
+                submitter = new GDMSubmitterRecord(this);
                 submitter.InitNew();
                 AddRecord(submitter);
                 fHeader.SetTagStringValue(GEDCOMTagType.SUBM, "@" + submitter.XRef + "@");
@@ -358,9 +356,9 @@ namespace GKCommon.GEDCOM
             return submitter;
         }
 
-        public GEDCOMIndividualRecord CreateIndividual()
+        public GDMIndividualRecord CreateIndividual()
         {
-            GEDCOMIndividualRecord result = new GEDCOMIndividualRecord(this);
+            GDMIndividualRecord result = new GDMIndividualRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -368,9 +366,9 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public GEDCOMFamilyRecord CreateFamily()
+        public GDMFamilyRecord CreateFamily()
         {
-            GEDCOMFamilyRecord result = new GEDCOMFamilyRecord(this);
+            GDMFamilyRecord result = new GDMFamilyRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -378,9 +376,9 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public GEDCOMNoteRecord CreateNote()
+        public GDMNoteRecord CreateNote()
         {
-            GEDCOMNoteRecord result = new GEDCOMNoteRecord(this);
+            GDMNoteRecord result = new GDMNoteRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -388,9 +386,9 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public GEDCOMSourceRecord CreateSource()
+        public GDMSourceRecord CreateSource()
         {
-            GEDCOMSourceRecord result = new GEDCOMSourceRecord(this);
+            GDMSourceRecord result = new GDMSourceRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -398,9 +396,9 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public GEDCOMRepositoryRecord CreateRepository()
+        public GDMRepositoryRecord CreateRepository()
         {
-            GEDCOMRepositoryRecord result = new GEDCOMRepositoryRecord(this);
+            GDMRepositoryRecord result = new GDMRepositoryRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -408,9 +406,9 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public GEDCOMResearchRecord CreateResearch()
+        public GDMResearchRecord CreateResearch()
         {
-            GEDCOMResearchRecord result = new GEDCOMResearchRecord(this);
+            GDMResearchRecord result = new GDMResearchRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -418,9 +416,9 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public GEDCOMCommunicationRecord CreateCommunication()
+        public GDMCommunicationRecord CreateCommunication()
         {
-            GEDCOMCommunicationRecord result = new GEDCOMCommunicationRecord(this);
+            GDMCommunicationRecord result = new GDMCommunicationRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -428,9 +426,9 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public GEDCOMTaskRecord CreateTask()
+        public GDMTaskRecord CreateTask()
         {
-            GEDCOMTaskRecord result = new GEDCOMTaskRecord(this);
+            GDMTaskRecord result = new GDMTaskRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -438,9 +436,9 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public GEDCOMMultimediaRecord CreateMultimedia()
+        public GDMMultimediaRecord CreateMultimedia()
         {
-            GEDCOMMultimediaRecord result = new GEDCOMMultimediaRecord(this);
+            GDMMultimediaRecord result = new GDMMultimediaRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -448,9 +446,9 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public GEDCOMLocationRecord CreateLocation()
+        public GDMLocationRecord CreateLocation()
         {
-            GEDCOMLocationRecord result = new GEDCOMLocationRecord(this);
+            GDMLocationRecord result = new GDMLocationRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -458,9 +456,9 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public GEDCOMGroupRecord CreateGroup()
+        public GDMGroupRecord CreateGroup()
         {
-            GEDCOMGroupRecord result = new GEDCOMGroupRecord(this);
+            GDMGroupRecord result = new GDMGroupRecord(this);
             result.InitNew();
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
@@ -470,7 +468,7 @@ namespace GKCommon.GEDCOM
 
         //
 
-        public bool DeleteIndividualRecord(GEDCOMIndividualRecord iRec)
+        public bool DeleteIndividualRecord(GDMIndividualRecord iRec)
         {
             if (iRec == null) return false;
 
@@ -479,7 +477,7 @@ namespace GKCommon.GEDCOM
             return true;
         }
 
-        public bool DeleteFamilyRecord(GEDCOMFamilyRecord famRec)
+        public bool DeleteFamilyRecord(GDMFamilyRecord famRec)
         {
             if (famRec == null) return false;
 
@@ -488,13 +486,13 @@ namespace GKCommon.GEDCOM
             return true;
         }
 
-        public bool DeleteGroupRecord(GEDCOMGroupRecord groupRec)
+        public bool DeleteGroupRecord(GDMGroupRecord groupRec)
         {
             if (groupRec == null) return false;
 
             for (int i = groupRec.Members.Count - 1; i >= 0; i--)
             {
-                GEDCOMIndividualRecord member = groupRec.Members[i].Value as GEDCOMIndividualRecord;
+                GDMIndividualRecord member = groupRec.Members[i].Value as GDMIndividualRecord;
                 groupRec.RemoveMember(member);
             }
 
@@ -502,14 +500,14 @@ namespace GKCommon.GEDCOM
             return true;
         }
 
-        public bool DeleteMediaRecord(GEDCOMMultimediaRecord mRec)
+        public bool DeleteMediaRecord(GDMMultimediaRecord mRec)
         {
             if (mRec == null) return false;
 
             int num = fRecords.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = this[i];
+                GDMRecord rec = this[i];
                 for (int j = rec.MultimediaLinks.Count - 1; j >= 0; j--)
                 {
                     if (rec.MultimediaLinks[j].Value == mRec)
@@ -523,14 +521,14 @@ namespace GKCommon.GEDCOM
             return true;
         }
 
-        public bool DeleteNoteRecord(GEDCOMNoteRecord nRec)
+        public bool DeleteNoteRecord(GDMNoteRecord nRec)
         {
             if (nRec == null) return false;
 
             int num = fRecords.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = this[i];
+                GDMRecord rec = this[i];
                 for (int j = rec.Notes.Count - 1; j >= 0; j--)
                 {
                     if (rec.Notes[j].Value == nRec)
@@ -542,17 +540,17 @@ namespace GKCommon.GEDCOM
             return true;
         }
 
-        public bool DeleteRepositoryRecord(GEDCOMRepositoryRecord repRec)
+        public bool DeleteRepositoryRecord(GDMRepositoryRecord repRec)
         {
             if (repRec == null) return false;
 
             int num = fRecords.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = this[i];
+                GDMRecord rec = this[i];
                 if (rec.RecordType == GEDCOMRecordType.rtSource)
                 {
-                    GEDCOMSourceRecord srcRec = (GEDCOMSourceRecord) rec;
+                    GDMSourceRecord srcRec = (GDMSourceRecord) rec;
                     for (int j = srcRec.RepositoryCitations.Count - 1; j >= 0; j--)
                     {
                         if (srcRec.RepositoryCitations[j].Value == repRec)
@@ -567,7 +565,7 @@ namespace GKCommon.GEDCOM
             return true;
         }
 
-        public bool DeleteResearchRecord(GEDCOMResearchRecord resRec)
+        public bool DeleteResearchRecord(GDMResearchRecord resRec)
         {
             if (resRec == null) return false;
 
@@ -575,14 +573,14 @@ namespace GKCommon.GEDCOM
             return true;
         }
 
-        public bool DeleteSourceRecord(GEDCOMSourceRecord srcRec)
+        public bool DeleteSourceRecord(GDMSourceRecord srcRec)
         {
             if (srcRec == null) return false;
 
             int num = fRecords.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = this[i];
+                GDMRecord rec = this[i];
                 for (int j = rec.SourceCitations.Count - 1; j >= 0; j--)
                 {
                     if (rec.SourceCitations[j].Value == srcRec)
@@ -596,17 +594,17 @@ namespace GKCommon.GEDCOM
             return true;
         }
 
-        public bool DeleteTaskRecord(GEDCOMTaskRecord taskRec)
+        public bool DeleteTaskRecord(GDMTaskRecord taskRec)
         {
             if (taskRec == null) return false;
 
             int num = fRecords.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = this[i];
+                GDMRecord rec = this[i];
                 if (rec.RecordType == GEDCOMRecordType.rtResearch)
                 {
-                    GEDCOMResearchRecord resRec = (GEDCOMResearchRecord) rec;
+                    GDMResearchRecord resRec = (GDMResearchRecord) rec;
                     for (int j = resRec.Tasks.Count - 1; j >= 0; j--)
                     {
                         if (resRec.Tasks[j].Value == taskRec)
@@ -621,17 +619,17 @@ namespace GKCommon.GEDCOM
             return true;
         }
 
-        public bool DeleteCommunicationRecord(GEDCOMCommunicationRecord commRec)
+        public bool DeleteCommunicationRecord(GDMCommunicationRecord commRec)
         {
             if (commRec == null) return false;
 
             int num = fRecords.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = this[i];
+                GDMRecord rec = this[i];
                 if (rec.RecordType == GEDCOMRecordType.rtResearch)
                 {
-                    GEDCOMResearchRecord resRec = (GEDCOMResearchRecord) rec;
+                    GDMResearchRecord resRec = (GDMResearchRecord) rec;
                     for (int j = resRec.Communications.Count - 1; j >= 0; j--)
                     {
                         if (resRec.Communications[j].Value == commRec)
@@ -646,16 +644,16 @@ namespace GKCommon.GEDCOM
             return true;
         }
 
-        public bool DeleteLocationRecord(GEDCOMLocationRecord locRec)
+        public bool DeleteLocationRecord(GDMLocationRecord locRec)
         {
             if (locRec == null) return false;
 
             int num = fRecords.Count;
             for (int i = 0; i < num; i++) {
-                var evsRec = this[i] as GEDCOMRecordWithEvents;
+                var evsRec = this[i] as GDMRecordWithEvents;
                 if (evsRec != null) {
                     for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
-                        GEDCOMCustomEvent ev = evsRec.Events[j];
+                        GDMCustomEvent ev = evsRec.Events[j];
 
                         if (ev.Place.Location.Value == locRec) {
                             ev.Place.DeleteTag(GEDCOMTagType._LOC);
@@ -667,8 +665,6 @@ namespace GKCommon.GEDCOM
             DeleteRecord(locRec);
             return true;
         }
-
-        #endregion
 
         #region Utilities
 

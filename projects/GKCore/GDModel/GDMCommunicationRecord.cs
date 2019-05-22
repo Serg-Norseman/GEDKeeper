@@ -46,13 +46,13 @@ namespace GKCommon.GEDCOM
     }
 
 
-    public sealed class GEDCOMCommunicationRecord : GEDCOMRecord
+    public sealed class GDMCommunicationRecord : GDMRecord
     {
         public static readonly string[] CommunicationTags = new string[] { GEDCOMTagType.FROM, GEDCOMTagType.TO };
 
-        public GEDCOMDate Date
+        public GDMDate Date
         {
-            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate; }
+            get { return GetTag<GDMDate>(GEDCOMTagType.DATE, GDMDate.Create); }
         }
 
         public string CommName
@@ -68,20 +68,18 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMCommunicationRecord(GEDCOMObject owner) : base(owner)
+        public GDMCommunicationRecord(GDMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtCommunication);
             SetName(GEDCOMTagType._COMM);
         }
         
-        #region Auxiliary
-
         public sealed class CorresponderRet
         {
             public readonly GDMCommunicationDir CommDir;
-            public readonly GEDCOMIndividualRecord Corresponder;
+            public readonly GDMIndividualRecord Corresponder;
 
-            public CorresponderRet(GDMCommunicationDir commDir, GEDCOMIndividualRecord corresponder)
+            public CorresponderRet(GDMCommunicationDir commDir, GDMIndividualRecord corresponder)
             {
                 CommDir = commDir;
                 Corresponder = corresponder;
@@ -91,15 +89,15 @@ namespace GKCommon.GEDCOM
         public CorresponderRet GetCorresponder()
         {
             GDMCommunicationDir commDir = GDMCommunicationDir.cdFrom;
-            GEDCOMIndividualRecord corresponder = null;
+            GDMIndividualRecord corresponder = null;
 
-            GEDCOMTag corrTag = FindTag(GEDCOMTagType.FROM, 0);
+            GDMTag corrTag = FindTag(GEDCOMTagType.FROM, 0);
             if (corrTag == null) {
                 corrTag = FindTag(GEDCOMTagType.TO, 0);
             }
 
             if (corrTag != null) {
-                corresponder = (GetTree().XRefIndex_Find(GEDCOMUtils.CleanXRef(corrTag.StringValue)) as GEDCOMIndividualRecord);
+                corresponder = (GetTree().XRefIndex_Find(GEDCOMUtils.CleanXRef(corrTag.StringValue)) as GDMIndividualRecord);
 
                 if (corrTag.Name == GEDCOMTagType.FROM) {
                     commDir = GDMCommunicationDir.cdFrom;
@@ -111,7 +109,7 @@ namespace GKCommon.GEDCOM
             return new CorresponderRet(commDir, corresponder);
         }
 
-        public void SetCorresponder(GDMCommunicationDir commDir, GEDCOMIndividualRecord corresponder)
+        public void SetCorresponder(GDMCommunicationDir commDir, GDMIndividualRecord corresponder)
         {
             DeleteTag(GEDCOMTagType.FROM);
             DeleteTag(GEDCOMTagType.TO);
@@ -120,7 +118,5 @@ namespace GKCommon.GEDCOM
                 AddTag(CommunicationTags[(int)commDir], GEDCOMUtils.EncloseXRef(corresponder.XRef), null);
             }
         }
-
-        #endregion
     }
 }

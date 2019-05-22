@@ -32,11 +32,11 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class EventEditDlgController : DialogController<IEventEditDlg>
     {
-        private GEDCOMCustomEvent fEvent;
-        private GEDCOMLocationRecord fTempLocation;
+        private GDMCustomEvent fEvent;
+        private GDMLocationRecord fTempLocation;
 
 
-        public GEDCOMCustomEvent Event
+        public GDMCustomEvent Event
         {
             get { return fEvent; }
             set {
@@ -71,17 +71,17 @@ namespace GKCore.Controllers
             fView.EventType.Activate();
         }
 
-        private GEDCOMCustomDate AssembleDate()
+        private GDMCustomDate AssembleDate()
         {
-            GEDCOMCustomDate result = null;
+            GDMCustomDate result = null;
 
             GEDCOMCalendar cal1 = (GEDCOMCalendar)fView.Date1Calendar.SelectedTag;
             GEDCOMCalendar cal2 = (GEDCOMCalendar)fView.Date2Calendar.SelectedTag;
 
-            GEDCOMDate gcd1 = GEDCOMDate.CreateByFormattedStr(fView.Date1.NormalizeDate, cal1, true);
+            GDMDate gcd1 = GDMDate.CreateByFormattedStr(fView.Date1.NormalizeDate, cal1, true);
             if (gcd1 == null) throw new ArgumentNullException("gcd1");
 
-            GEDCOMDate gcd2 = GEDCOMDate.CreateByFormattedStr(fView.Date2.NormalizeDate, cal2, true);
+            GDMDate gcd2 = GDMDate.CreateByFormattedStr(fView.Date2.NormalizeDate, cal2, true);
             if (gcd2 == null) throw new ArgumentNullException("gcd2");
 
             gcd1.YearBC = fView.Date1BC.Checked;
@@ -93,39 +93,39 @@ namespace GKCore.Controllers
                     break;
 
                 case 1: // BEF gcd2
-                    result = GEDCOMCustomDate.CreateRange(null, null, gcd2);
+                    result = GDMCustomDate.CreateRange(null, null, gcd2);
                     break;
 
                 case 2: // AFT gcd1
-                    result = GEDCOMCustomDate.CreateRange(null, gcd1, null);
+                    result = GDMCustomDate.CreateRange(null, gcd1, null);
                     break;
 
                 case 3: // "BET " + gcd1 + " AND " + gcd2
-                    result = GEDCOMCustomDate.CreateRange(null, gcd1, gcd2);
+                    result = GDMCustomDate.CreateRange(null, gcd1, gcd2);
                     break;
 
                 case 4: // FROM gcd1
-                    result = GEDCOMCustomDate.CreatePeriod(null, gcd1, null);
+                    result = GDMCustomDate.CreatePeriod(null, gcd1, null);
                     break;
 
                 case 5: // TO gcd2
-                    result = GEDCOMCustomDate.CreatePeriod(null, null, gcd2);
+                    result = GDMCustomDate.CreatePeriod(null, null, gcd2);
                     break;
 
                 case 6: // FROM gcd1 TO gcd2
-                    result = GEDCOMCustomDate.CreatePeriod(null, gcd1, gcd2);
+                    result = GDMCustomDate.CreatePeriod(null, gcd1, gcd2);
                     break;
 
                 case 7: // ABT gcd1
-                    result = GEDCOMCustomDate.CreateApproximated(null, gcd1, GEDCOMApproximated.daAbout);
+                    result = GDMCustomDate.CreateApproximated(null, gcd1, GEDCOMApproximated.daAbout);
                     break;
 
                 case 8: // CAL gcd1
-                    result = GEDCOMCustomDate.CreateApproximated(null, gcd1, GEDCOMApproximated.daCalculated);
+                    result = GDMCustomDate.CreateApproximated(null, gcd1, GEDCOMApproximated.daCalculated);
                     break;
 
                 case 9: // EST gcd1
-                    result = GEDCOMCustomDate.CreateApproximated(null, gcd1, GEDCOMApproximated.daEstimated);
+                    result = GDMCustomDate.CreateApproximated(null, gcd1, GEDCOMApproximated.daEstimated);
                     break;
             }
 
@@ -141,13 +141,13 @@ namespace GKCore.Controllers
                 fEvent.Cause = fView.Cause.Text;
                 fEvent.Agency = fView.Agency.Text;
 
-                GEDCOMCustomDate dt = AssembleDate();
+                GDMCustomDate dt = AssembleDate();
                 if (dt == null) throw new ArgumentNullException("dt");
 
                 fEvent.Date.ParseString(dt.StringValue);
 
                 int eventType = fView.EventType.SelectedIndex;
-                if (fEvent is GEDCOMFamilyEvent) {
+                if (fEvent is GDMFamilyEvent) {
                     fEvent.SetName(GKData.FamilyEvents[eventType].Sign);
                 } else {
                     GKData.EventStruct eventProps = GKData.PersonEvents[eventType];
@@ -159,9 +159,9 @@ namespace GKCore.Controllers
                     }
                 }
 
-                if (fEvent is GEDCOMIndividualEvent) {
+                if (fEvent is GDMIndividualEvent) {
                     if (GKData.PersonEvents[eventType].Kind == PersonEventKind.ekFact) {
-                        GEDCOMIndividualAttribute attr = new GEDCOMIndividualAttribute(fEvent.Owner);
+                        GDMIndividualAttribute attr = new GDMIndividualAttribute(fEvent.Owner);
                         attr.Assign(fEvent);
                         fEvent = attr;
                     }
@@ -191,7 +191,7 @@ namespace GKCore.Controllers
             fView.MediaList.ListModel.DataOwner = fEvent;
             fView.SourcesList.ListModel.DataOwner = fEvent;
 
-            if (fEvent is GEDCOMFamilyEvent) {
+            if (fEvent is GDMFamilyEvent) {
                 SetEventTypes(GKData.FamilyEvents);
                 int idx = GKUtils.GetFamilyEventIndex(fEvent.Name);
                 if (idx < 0) idx = 0;
@@ -209,10 +209,10 @@ namespace GKCore.Controllers
 
             ChangeEventType();
 
-            GEDCOMCustomDate date = fEvent.Date.Value;
+            GDMCustomDate date = fEvent.Date.Value;
 
-            if (date is GEDCOMDateRange) {
-                GEDCOMDateRange dtRange = date as GEDCOMDateRange;
+            if (date is GDMDateRange) {
+                GDMDateRange dtRange = date as GDMDateRange;
 
                 if (dtRange.After.StringValue == "" && dtRange.Before.StringValue != "") {
                     fView.EventDateType.SelectedIndex = 1;
@@ -228,8 +228,8 @@ namespace GKCore.Controllers
                 fView.Date2Calendar.SelectedTag = dtRange.Before.DateCalendar;
                 fView.Date1BC.Checked = dtRange.After.YearBC;
                 fView.Date2BC.Checked = dtRange.Before.YearBC;
-            } else if (date is GEDCOMDatePeriod) {
-                GEDCOMDatePeriod dtPeriod = date as GEDCOMDatePeriod;
+            } else if (date is GDMDatePeriod) {
+                GDMDatePeriod dtPeriod = date as GDMDatePeriod;
 
                 if (dtPeriod.DateFrom.StringValue != "" && dtPeriod.DateTo.StringValue == "") {
                     fView.EventDateType.SelectedIndex = 4;
@@ -245,8 +245,8 @@ namespace GKCore.Controllers
                 fView.Date2Calendar.SelectedTag = dtPeriod.DateTo.DateCalendar;
                 fView.Date1BC.Checked = dtPeriod.DateFrom.YearBC;
                 fView.Date2BC.Checked = dtPeriod.DateTo.YearBC;
-            } else if (date is GEDCOMDate) {
-                GEDCOMApproximated approximated = (date as GEDCOMDate).Approximated;
+            } else if (date is GDMDate) {
+                GEDCOMApproximated approximated = (date as GDMDate).Approximated;
 
                 switch (approximated) {
                     case GEDCOMApproximated.daExact:
@@ -263,9 +263,9 @@ namespace GKCore.Controllers
                         break;
                 }
 
-                fView.Date1.NormalizeDate = (date as GEDCOMDate).GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.Date1Calendar.SelectedTag = (date as GEDCOMDate).DateCalendar;
-                fView.Date1BC.Checked = (date as GEDCOMDate).YearBC;
+                fView.Date1.NormalizeDate = (date as GDMDate).GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.Date1Calendar.SelectedTag = (date as GDMDate).DateCalendar;
+                fView.Date1BC.Checked = (date as GDMDate).YearBC;
             } else {
                 fView.EventDateType.SelectedIndex = 0;
                 fView.Date1.NormalizeDate = "";
@@ -278,7 +278,7 @@ namespace GKCore.Controllers
             fView.Cause.Text = fEvent.Cause;
             fView.Agency.Text = fEvent.Agency;
 
-            fTempLocation = (fEvent.Place.Location.Value as GEDCOMLocationRecord);
+            fTempLocation = (fEvent.Place.Location.Value as GDMLocationRecord);
             UpdatePlace();
 
             fView.NotesList.UpdateSheet();
@@ -299,7 +299,7 @@ namespace GKCore.Controllers
 
         public void AddPlace()
         {
-            fTempLocation = (fBase.Context.SelectRecord(GEDCOMRecordType.rtLocation, null) as GEDCOMLocationRecord);
+            fTempLocation = (fBase.Context.SelectRecord(GEDCOMRecordType.rtLocation, null) as GDMLocationRecord);
             UpdatePlace();
         }
 
@@ -346,7 +346,7 @@ namespace GKCore.Controllers
 
         public void ChangeEventType()
         {
-            if (fEvent is GEDCOMFamilyEvent) {
+            if (fEvent is GDMFamilyEvent) {
                 SetAttributeMode(false);
             } else {
                 int idx = fView.EventType.SelectedIndex;
@@ -361,7 +361,7 @@ namespace GKCore.Controllers
 
             string evName;
             int id = fView.EventType.SelectedIndex;
-            if (fEvent is GEDCOMFamilyEvent) {
+            if (fEvent is GDMFamilyEvent) {
                 evName = GKData.FamilyEvents[id].Sign;
             } else {
                 evName = GKData.PersonEvents[id].Sign;

@@ -96,7 +96,7 @@ namespace GKCore.Charts
         private IImage[] fSignsPic;
         private IBrush fSolidBlack;
         private int fSpouseDistance;
-        private GEDCOMTree fTree;
+        private GDMTree fTree;
         private ExtRect fTreeBounds;
         private ExtRect fVisibleArea;
 
@@ -319,7 +319,7 @@ namespace GKCore.Charts
             fTree = sourceModel.fTree;
         }
 
-        public void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
+        public void GenChart(GDMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
         {
             fKind = kind;
             fPersons.Clear();
@@ -352,7 +352,7 @@ namespace GKCore.Charts
 
         #region Tree walking
 
-        private TreeChartPerson AddDescPerson(TreeChartPerson parent, GEDCOMIndividualRecord iRec, bool outsideKin, int generation)
+        private TreeChartPerson AddDescPerson(TreeChartPerson parent, GDMIndividualRecord iRec, bool outsideKin, int generation)
         {
             try
             {
@@ -382,7 +382,7 @@ namespace GKCore.Charts
             }
         }
 
-        private TreeChartPerson CreatePerson(GEDCOMIndividualRecord iRec, int generation, bool prevSearch = false)
+        private TreeChartPerson CreatePerson(GDMIndividualRecord iRec, int generation, bool prevSearch = false)
         {
             // search root or previous added ancestors
             TreeChartPerson result = (!prevSearch) ? null : FindPersonByRec(iRec);
@@ -401,7 +401,7 @@ namespace GKCore.Charts
             return result;
         }
 
-        private TreeChartPerson DoAncestorsStep(TreeChartPerson aChild, GEDCOMIndividualRecord aPerson, int generation, bool dupFlag)
+        private TreeChartPerson DoAncestorsStep(TreeChartPerson aChild, GDMIndividualRecord aPerson, int generation, bool dupFlag)
         {
             try
             {
@@ -418,15 +418,15 @@ namespace GKCore.Charts
 
                     if ((fDepthLimit <= -1 || generation != fDepthLimit) && aPerson.ChildToFamilyLinks.Count > 0 && !dupFlag)
                     {
-                        GEDCOMFamilyRecord family = aPerson.ChildToFamilyLinks[0].Family;
+                        GDMFamilyRecord family = aPerson.ChildToFamilyLinks[0].Family;
 
                         bool isDup = (fPreparedFamilies.IndexOf(family.XRef) >= 0);
                         if (!isDup) fPreparedFamilies.Add(family.XRef);
 
                         if (fBase.Context.IsRecordAccess(family.Restriction))
                         {
-                            GEDCOMIndividualRecord iFather = family.GetHusband();
-                            GEDCOMIndividualRecord iMother = family.GetWife();
+                            GDMIndividualRecord iFather = family.GetHusband();
+                            GDMIndividualRecord iMother = family.GetWife();
 
                             bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
 
@@ -487,7 +487,7 @@ namespace GKCore.Charts
             }
         }
 
-        private bool CheckDescendantFilter(GEDCOMIndividualRecord person, int level)
+        private bool CheckDescendantFilter(GDMIndividualRecord person, int level)
         {
             bool result = true;
 
@@ -509,11 +509,11 @@ namespace GKCore.Charts
                     break;
 
                 case FilterGroupMode.Selected:
-                    GEDCOMSourceRecord filterSource;
+                    GDMSourceRecord filterSource;
                     if (fFilter.SourceRef == "") {
                         filterSource = null;
                     } else {
-                        filterSource = fTree.XRefIndex_Find(fFilter.SourceRef) as GEDCOMSourceRecord;
+                        filterSource = fTree.XRefIndex_Find(fFilter.SourceRef) as GDMSourceRecord;
                     }
                     if (person.IndexOfSource(filterSource) < 0) {
                         result = false;
@@ -528,7 +528,7 @@ namespace GKCore.Charts
             return result;
         }
 
-        private TreeChartPerson DoDescendantsStep(TreeChartPerson parent, GEDCOMIndividualRecord person, int level)
+        private TreeChartPerson DoDescendantsStep(TreeChartPerson parent, GDMIndividualRecord person, int level)
         {
             try
             {
@@ -551,7 +551,7 @@ namespace GKCore.Charts
 
                     for (int i = 0; i < spousesNum; i++)
                     {
-                        GEDCOMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
+                        GDMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
 
                         // protection against invalid third-party files
                         if (family == null) {
@@ -574,7 +574,7 @@ namespace GKCore.Charts
                         switch (person.Sex) {
                             case GEDCOMSex.svFemale:
                                 {
-                                    GEDCOMIndividualRecord sp = family.GetHusband();
+                                    GDMIndividualRecord sp = family.GetHusband();
                                     skipUnk = skipUnkSpouses && (sp == null);
 
                                     if (!skipUnk) {
@@ -600,7 +600,7 @@ namespace GKCore.Charts
 
                             case GEDCOMSex.svMale:
                                 {
-                                    GEDCOMIndividualRecord sp = family.GetWife();
+                                    GDMIndividualRecord sp = family.GetWife();
                                     skipUnk = skipUnkSpouses && (sp == null);
 
                                     if (!skipUnk) {
@@ -668,7 +668,7 @@ namespace GKCore.Charts
                             int num2 = family.Children.Count;
                             for (int j = 0; j < num2; j++)
                             {
-                                var childRec = family.Children[j].Value as GEDCOMIndividualRecord;
+                                var childRec = family.Children[j].Value as GDMIndividualRecord;
 
                                 // protection against invalid third-party files
                                 if (childRec == null) {
@@ -1185,7 +1185,7 @@ namespace GKCore.Charts
 
         #region Filtering and search
 
-        public void DoFilter(GEDCOMIndividualRecord root)
+        public void DoFilter(GDMIndividualRecord root)
         {
             if (root == null)
                 throw new ArgumentNullException("root");
@@ -1197,7 +1197,7 @@ namespace GKCore.Charts
             root.ExtData = true;
         }
 
-        private bool DoDescendantsFilter(GEDCOMIndividualRecord person)
+        private bool DoDescendantsFilter(GDMIndividualRecord person)
         {
             bool result = false;
             if (person == null) return result;
@@ -1217,12 +1217,12 @@ namespace GKCore.Charts
             int num = person.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
+                GDMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
 
                 int num2 = family.Children.Count;
                 for (int j = 0; j < num2; j++)
                 {
-                    GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
+                    GDMIndividualRecord child = family.Children[j].Value as GDMIndividualRecord;
                     bool resChild = DoDescendantsFilter(child);
                     result |= resChild;
                 }
@@ -1241,7 +1241,7 @@ namespace GKCore.Charts
             int num = fPersons.Count;
             for (int i = 0; i < num; i++) {
                 TreeChartPerson person = fPersons[i];
-                GEDCOMIndividualRecord iRec = person.Rec;
+                GDMIndividualRecord iRec = person.Rec;
                 if (iRec == null) continue;
 
                 string fullname = GKUtils.GetNameString(iRec, true, false);
@@ -1257,7 +1257,7 @@ namespace GKCore.Charts
 
         #region Navigation
 
-        public TreeChartPerson FindPersonByRec(GEDCOMIndividualRecord iRec)
+        public TreeChartPerson FindPersonByRec(GDMIndividualRecord iRec)
         {
             if (iRec != null) {
                 int num = fPersons.Count;
@@ -1661,7 +1661,7 @@ namespace GKCore.Charts
 
         #endregion
 
-        public static bool CheckTreeChartSize(GEDCOMTree tree, GEDCOMIndividualRecord iRec, TreeChartKind chartKind)
+        public static bool CheckTreeChartSize(GDMTree tree, GDMIndividualRecord iRec, TreeChartKind chartKind)
         {
             bool result = true;
             if (!GlobalOptions.Instance.CheckTreeSize) return result;

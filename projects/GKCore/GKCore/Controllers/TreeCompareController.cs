@@ -50,7 +50,7 @@ namespace GKCore.Controllers
             fView.ExternalBase.Text = fileName;
         }
 
-        private void DuplicateFoundFunc(GEDCOMIndividualRecord indivA, GEDCOMIndividualRecord indivB)
+        private void DuplicateFoundFunc(GDMIndividualRecord indivA, GDMIndividualRecord indivB)
         {
             fView.CompareOutput.AppendText("    * [" + GKUtils.GetNameString(indivA, true, false) + "]\r\n");
             fView.CompareOutput.AppendText("      [" + GKUtils.GetNameString(indivB, true, false) + "]\r\n\r\n");

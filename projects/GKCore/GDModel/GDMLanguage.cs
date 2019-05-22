@@ -130,7 +130,7 @@ namespace GKCommon.GEDCOM
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GEDCOMLanguage : GEDCOMTag
+    public sealed class GDMLanguage : GDMTag
     {
         private GEDCOMLanguageID fValue;
 
@@ -151,9 +151,9 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && (fValue == GEDCOMLanguageID.Unknown);
         }
 
-        public override void Assign(GEDCOMTag source)
+        public override void Assign(GDMTag source)
         {
-            GEDCOMLanguage srcLang = (source as GEDCOMLanguage);
+            GDMLanguage srcLang = (source as GDMLanguage);
             if (srcLang == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
@@ -173,19 +173,19 @@ namespace GKCommon.GEDCOM
             return GEDCOMUtils.GetLanguageStr(fValue);
         }
 
-        public GEDCOMLanguage(GEDCOMObject owner) : base(owner)
+        public GDMLanguage(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.LANG);
         }
 
-        public GEDCOMLanguage(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMLanguage(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMLanguage(owner, tagName, tagValue);
+            return new GDMLanguage(owner, tagName, tagValue);
         }
     }
 }

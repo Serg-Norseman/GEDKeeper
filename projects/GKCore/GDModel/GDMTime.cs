@@ -22,7 +22,7 @@ using System;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMTime : GEDCOMTag
+    public sealed class GDMTime : GDMTag
     {
         private byte fHour;
         private byte fMinutes;
@@ -68,17 +68,17 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMTime(owner, tagName, tagValue);
+            return new GDMTime(owner, tagName, tagValue);
         }
 
-        public GEDCOMTime(GEDCOMObject owner) : base(owner)
+        public GDMTime(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.TIME);
         }
 
-        public GEDCOMTime(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMTime(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

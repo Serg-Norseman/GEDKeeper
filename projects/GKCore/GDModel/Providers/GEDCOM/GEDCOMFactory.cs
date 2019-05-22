@@ -206,7 +206,7 @@ namespace GKCommon.GEDCOM
     }
 
 
-    public delegate GEDCOMTag TagConstructor(GEDCOMObject owner, string tagName, string tagValue);
+    public delegate GDMTag TagConstructor(GDMObject owner, string tagName, string tagValue);
 
 
     public sealed class TagInfo
@@ -278,7 +278,7 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public GEDCOMTag CreateTag(GEDCOMObject owner, string tagName, string tagValue)
+        public GDMTag CreateTag(GDMObject owner, string tagName, string tagValue)
         {
             TagInfo tagInfo;
             if (fTags.TryGetValue(tagName, out tagInfo)) {
@@ -305,14 +305,14 @@ namespace GKCommon.GEDCOM
 
         #if !NETSTANDARD
 
-        public static T CreateTagEx<T>(GEDCOMObject owner, string tagName, string tagValue) where T : GEDCOMTag
+        public static T CreateTagEx<T>(GDMObject owner, string tagName, string tagValue) where T : GDMTag
         {
             ConstructorInfo ctorInfo = typeof(T).GetConstructor(new[] {
-                typeof(GEDCOMObject), typeof(string), typeof(string)
+                typeof(GDMObject), typeof(string), typeof(string)
             });
 
             DynamicMethod dm = new DynamicMethod("Create", typeof(T), new Type[] {
-                typeof(GEDCOMObject), typeof(string), typeof(string)
+                typeof(GDMObject), typeof(string), typeof(string)
             }, typeof(T), true);
 
             ILGenerator il = dm.GetILGenerator();

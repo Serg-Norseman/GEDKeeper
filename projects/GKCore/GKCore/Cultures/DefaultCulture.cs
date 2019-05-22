@@ -60,7 +60,7 @@ namespace GKCore.Cultures
             return result;
         }
 
-        public virtual string[] GetSurnames(GEDCOMIndividualRecord iRec)
+        public virtual string[] GetSurnames(GDMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
@@ -76,7 +76,7 @@ namespace GKCore.Cultures
             return name;
         }
 
-        public virtual string GetPossessiveName(GEDCOMIndividualRecord iRec)
+        public virtual string GetPossessiveName(GDMIndividualRecord iRec)
         {
             string nm = GKUtils.GetNameString(iRec, true, false);
             nm = GetPossessiveName(nm);

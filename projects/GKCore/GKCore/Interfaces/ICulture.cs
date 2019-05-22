@@ -43,9 +43,9 @@ namespace GKCore.Interfaces
         GEDCOMSex GetSex(string iName, string iPat, bool canQuery);
 
         string[] GetSurnames(string surname, bool female);
-        string[] GetSurnames(GEDCOMIndividualRecord iRec);
+        string[] GetSurnames(GDMIndividualRecord iRec);
 
         string GetPossessiveName(string name);
-        string GetPossessiveName(GEDCOMIndividualRecord iRec);
+        string GetPossessiveName(GDMIndividualRecord iRec);
     }
 }

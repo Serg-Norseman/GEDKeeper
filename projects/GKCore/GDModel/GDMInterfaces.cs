@@ -28,26 +28,26 @@ namespace GKCommon.GEDCOM
 
     public interface IGEDCOMTreeEnumerator
     {
-        bool MoveNext(out GEDCOMRecord current);
+        bool MoveNext(out GDMRecord current);
         void Reset();
     }
 
     public interface IGEDCOMStructWithLists
     {
-        GEDCOMList<GEDCOMNotes> Notes { get; }
-        GEDCOMList<GEDCOMSourceCitation> SourceCitations { get; }
-        GEDCOMList<GEDCOMMultimediaLink> MultimediaLinks { get; }
+        GDMList<GDMNotes> Notes { get; }
+        GDMList<GDMSourceCitation> SourceCitations { get; }
+        GDMList<GDMMultimediaLink> MultimediaLinks { get; }
 
-        GEDCOMNotes AddNote(GEDCOMNoteRecord noteRec);
-        GEDCOMSourceCitation AddSource(GEDCOMSourceRecord sourceRec, string page, int quality);
-        GEDCOMMultimediaLink AddMultimedia(GEDCOMMultimediaRecord mediaRec);
+        GDMNotes AddNote(GDMNoteRecord noteRec);
+        GDMSourceCitation AddSource(GDMSourceRecord sourceRec, string page, int quality);
+        GDMMultimediaLink AddMultimedia(GDMMultimediaRecord mediaRec);
     }
 
     public interface IGEDCOMRecordWithEvents
     {
-        GEDCOMList<GEDCOMCustomEvent> Events { get; }
+        GDMList<GDMCustomEvent> Events { get; }
         
-        GEDCOMCustomEvent AddEvent(GEDCOMCustomEvent evt);
-        GEDCOMCustomEvent FindEvent(string eventName);
+        GDMCustomEvent AddEvent(GDMCustomEvent evt);
+        GDMCustomEvent FindEvent(string eventName);
     }
 }

@@ -41,7 +41,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
 
-        public GEDCOMGroupRecord Group
+        public GDMGroupRecord Group
         {
             get { return fController.Group; }
             set { fController.Group = value; }
@@ -105,7 +105,7 @@ namespace GKUI.Forms
         private void ModifyMembersSheet(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GEDCOMIndividualRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
             }
         }
 

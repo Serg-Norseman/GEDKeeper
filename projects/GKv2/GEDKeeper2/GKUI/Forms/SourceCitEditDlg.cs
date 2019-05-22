@@ -35,7 +35,7 @@ namespace GKUI.Forms
     {
         private readonly SourceCitEditDlgController fController;
 
-        public GEDCOMSourceCitation SourceCitation
+        public GDMSourceCitation SourceCitation
         {
             get { return fController.SourceCitation; }
             set { fController.SourceCitation = value; }

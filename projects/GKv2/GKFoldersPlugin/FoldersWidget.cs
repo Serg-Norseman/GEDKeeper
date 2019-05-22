@@ -96,7 +96,7 @@ namespace GKFoldersPlugin
         {
             int num = fBase.Context.Tree.RecordsCount;
             for (int i = 0; i < num; i++) {
-                GEDCOMRecord rec = fBase.Context.Tree[i];
+                GDMRecord rec = fBase.Context.Tree[i];
                 if (FoldersHelper.HasFolderSupport(rec.RecordType)) {
                     string folder = FoldersHelper.GetFolder(rec);
                     if (!string.IsNullOrEmpty(folder)) {
@@ -119,7 +119,7 @@ namespace GKFoldersPlugin
             UpdateButtons(fBase);
         }
 
-        private bool FilterHandler(GEDCOMRecord record)
+        private bool FilterHandler(GDMRecord record)
         {
             bool result = true;
             try {
@@ -165,7 +165,7 @@ namespace GKFoldersPlugin
                 int changed = 0;
                 int num = records.Count;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMRecord rec = records[i];
+                    GDMRecord rec = records[i];
                     if (SetRecordFolder(rec, folder)) {
                         changed += 1;
                     }
@@ -186,7 +186,7 @@ namespace GKFoldersPlugin
                 int changed = 0;
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMRecord rec = tree[i];
+                    GDMRecord rec = tree[i];
                     if (SetRecordFolder(rec, folder)) {
                         changed += 1;
                     }
@@ -205,7 +205,7 @@ namespace GKFoldersPlugin
             UpdateControls();
         }
 
-        private bool SetRecordFolder(GEDCOMRecord record, string folder)
+        private bool SetRecordFolder(GDMRecord record, string folder)
         {
             if (record != null && FoldersHelper.HasFolderSupport(record.RecordType)) {
                 FoldersHelper.SetFolder(record, folder);

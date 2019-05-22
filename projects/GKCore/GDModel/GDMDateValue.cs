@@ -25,27 +25,27 @@ using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
-    public class GEDCOMDateValue : GEDCOMCustomDate
+    public class GDMDateValue : GDMCustomDate
     {
-        private GEDCOMCustomDate fValue;
+        private GDMCustomDate fValue;
 
-        public GEDCOMCustomDate Value
+        public GDMCustomDate Value
         {
             get { return fValue; }
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMDateValue(owner, tagName, tagValue);
+            return new GDMDateValue(owner, tagName, tagValue);
         }
 
-        public GEDCOMDateValue(GEDCOMObject owner) : base(owner)
+        public GDMDateValue(GDMObject owner) : base(owner)
         {
             fValue = null;
         }
 
-        public GEDCOMDateValue(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMDateValue(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -74,7 +74,7 @@ namespace GKCommon.GEDCOM
             if (fValue != null) {
                 fValue.SetDateTime(value);
             } else {
-                fValue = new GEDCOMDate(this);
+                fValue = new GDMDate(this);
                 fValue.Date = value;
             }
         }
@@ -109,12 +109,10 @@ namespace GKCommon.GEDCOM
         /// <summary>
         /// Internal helper method for parser
         /// </summary>
-        internal void SetRawData(GEDCOMCustomDate value)
+        internal void SetRawData(GDMCustomDate value)
         {
             fValue = value;
         }
-
-        #region Auxiliary
 
         /// <summary>
         /// This function compares dates only by chronological year.
@@ -123,10 +121,10 @@ namespace GKCommon.GEDCOM
         /// <param name="tag"></param>
         /// <param name="matchParams"></param>
         /// <returns></returns>
-        public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
+        public override float IsMatch(GDMTag tag, MatchParams matchParams)
         {
             if (tag == null) return 0.0f;
-            GEDCOMDateValue date = (GEDCOMDateValue)tag;
+            GDMDateValue date = (GDMDateValue)tag;
 
             if (IsEmpty() || date.IsEmpty()) return 0.0f;
 
@@ -166,7 +164,5 @@ namespace GKCommon.GEDCOM
             string result = (fValue == null) ? string.Empty : fValue.GetDisplayStringExt(format, sign, showCalendar);
             return result;
         }
-
-        #endregion
     }
 }

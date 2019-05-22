@@ -20,7 +20,7 @@
 
 namespace GKCommon.GEDCOM
 {
-    public enum GEDCOMChildLinkageStatus
+    public enum GDMChildLinkageStatus
     {
         clNone,
         clChallenged,
@@ -29,7 +29,7 @@ namespace GKCommon.GEDCOM
     }
 
 
-    public enum GEDCOMPedigreeLinkageType
+    public enum GDMPedigreeLinkageType
     {
         plNone,
         plAdopted,
@@ -38,40 +38,40 @@ namespace GKCommon.GEDCOM
     }
 
 
-    public sealed class GEDCOMChildToFamilyLink : GEDCOMPointerWithNotes
+    public sealed class GDMChildToFamilyLink : GDMPointerWithNotes
     {
-        public GEDCOMChildLinkageStatus ChildLinkageStatus
+        public GDMChildLinkageStatus ChildLinkageStatus
         {
             get { return GEDCOMUtils.GetChildLinkageStatusVal(GetTagStringValue(GEDCOMTagType.STAT)); }
             set { SetTagStringValue(GEDCOMTagType.STAT, GEDCOMUtils.GetChildLinkageStatusStr(value)); }
         }
 
-        public GEDCOMPedigreeLinkageType PedigreeLinkageType
+        public GDMPedigreeLinkageType PedigreeLinkageType
         {
             get { return GEDCOMUtils.GetPedigreeLinkageTypeVal(GetTagStringValue(GEDCOMTagType.PEDI)); }
             set { SetTagStringValue(GEDCOMTagType.PEDI, GEDCOMUtils.GetPedigreeLinkageTypeStr(value)); }
         }
 
-        public GEDCOMFamilyRecord Family
+        public GDMFamilyRecord Family
         {
-            get { return (Value as GEDCOMFamilyRecord); }
+            get { return (Value as GDMFamilyRecord); }
             set { Value = value; }
         }
 
 
-        public GEDCOMChildToFamilyLink(GEDCOMObject owner) : base(owner)
+        public GDMChildToFamilyLink(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.FAMC);
         }
 
-        public GEDCOMChildToFamilyLink(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMChildToFamilyLink(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMChildToFamilyLink(owner, tagName, tagValue);
+            return new GDMChildToFamilyLink(owner, tagName, tagValue);
         }
     }
 }

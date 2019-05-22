@@ -213,11 +213,11 @@ namespace GKCore.MVP.Controls
     {
         IBaseWindow Base { get; set; }
         GEDCOMRecordType MergeMode { get; set; }
-        GEDCOMRecord Rec1 { get; }
-        GEDCOMRecord Rec2 { get; }
+        GDMRecord Rec1 { get; }
+        GDMRecord Rec2 { get; }
 
-        void SetRec1(GEDCOMRecord value);
-        void SetRec2(GEDCOMRecord value);
+        void SetRec1(GDMRecord value);
+        void SetRec2(GDMRecord value);
     }
 
 

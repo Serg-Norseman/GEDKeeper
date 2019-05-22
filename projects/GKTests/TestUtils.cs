@@ -43,11 +43,11 @@ namespace GKTests
         public static void FillContext(IBaseContext context)
         {
             // a null result if the record is not defined
-            GEDCOMCustomEvent evt = context.CreateEventEx(null, GEDCOMTagType.BIRT, "xxxxx", "xxxxx");
+            GDMCustomEvent evt = context.CreateEventEx(null, GEDCOMTagType.BIRT, "xxxxx", "xxxxx");
             Assert.IsNull(evt);
 
             // first individual (I1)
-            GEDCOMIndividualRecord iRec = context.CreatePersonEx("Ivan", "Ivanovich", "Ivanov", GEDCOMSex.svMale, true);
+            GDMIndividualRecord iRec = context.CreatePersonEx("Ivan", "Ivanovich", "Ivanov", GEDCOMSex.svMale, true);
             Assert.IsNotNull(iRec);
 
             evt = iRec.FindEvent(GEDCOMTagType.BIRT);
@@ -55,11 +55,11 @@ namespace GKTests
             evt.Date.ParseString("28 DEC 1990");
             evt.Place.StringValue = "Ivanovo";
 
-            GEDCOMCustomEvent evtd = context.CreateEventEx(iRec, GEDCOMTagType.DEAT, "28 DEC 2010", "Ivanovo");
+            GDMCustomEvent evtd = context.CreateEventEx(iRec, GEDCOMTagType.DEAT, "28 DEC 2010", "Ivanovo");
             Assert.IsNotNull(evtd);
 
             // second individual, wife (I2)
-            GEDCOMIndividualRecord iRec2 = context.CreatePersonEx("Maria", "Petrovna", "Ivanova", GEDCOMSex.svFemale, true);
+            GDMIndividualRecord iRec2 = context.CreatePersonEx("Maria", "Petrovna", "Ivanova", GEDCOMSex.svFemale, true);
             evt = iRec2.FindEvent(GEDCOMTagType.BIRT);
             Assert.IsNotNull(evt);
             evt.Date.ParseString("17 MAR 1991");
@@ -68,14 +68,14 @@ namespace GKTests
             iRec.AddAssociation("spouse", iRec2);
 
             // third individual, child (I3)
-            GEDCOMIndividualRecord iRec3 = context.CreatePersonEx("Anna", "Ivanovna", "Ivanova", GEDCOMSex.svFemale, true);
+            GDMIndividualRecord iRec3 = context.CreatePersonEx("Anna", "Ivanovna", "Ivanova", GEDCOMSex.svFemale, true);
             evt = iRec3.FindEvent(GEDCOMTagType.BIRT);
             Assert.IsNotNull(evt);
             evt.Date.ParseString("11 FEB 2010");
             evt.Place.StringValue = "Ivanovo";
 
             // their family
-            GEDCOMFamilyRecord famRec = context.Tree.CreateFamily();
+            GDMFamilyRecord famRec = context.Tree.CreateFamily();
             Assert.IsNotNull(famRec);
             famRec.AddSpouse(iRec);
             famRec.AddSpouse(iRec2);
@@ -84,7 +84,7 @@ namespace GKTests
             context.CreateEventEx(famRec, GEDCOMTagType.MARR, "01 JAN 2000", "unknown");
 
             // individual outside the family (I4)
-            GEDCOMIndividualRecord iRec4 = context.CreatePersonEx("Alex", "", "Petrov", GEDCOMSex.svMale, true);
+            GDMIndividualRecord iRec4 = context.CreatePersonEx("Alex", "", "Petrov", GEDCOMSex.svMale, true);
             evt = iRec4.FindEvent(GEDCOMTagType.BIRT);
             Assert.IsNotNull(evt);
             evt.Date.ParseString("15 JUN 1989");
@@ -94,15 +94,15 @@ namespace GKTests
             Assert.IsNotNull(evt);
 
             // fifth (I5)
-            GEDCOMIndividualRecord iRec5 = context.CreatePersonEx("Anna", "", "Jones", GEDCOMSex.svFemale, false);
+            GDMIndividualRecord iRec5 = context.CreatePersonEx("Anna", "", "Jones", GEDCOMSex.svFemale, false);
             Assert.IsNotNull(iRec5);
 
             // sixth (I6)
-            GEDCOMIndividualRecord iRec6 = context.CreatePersonEx("Mary", "", "Jones", GEDCOMSex.svFemale, false);
+            GDMIndividualRecord iRec6 = context.CreatePersonEx("Mary", "", "Jones", GEDCOMSex.svFemale, false);
             Assert.IsNotNull(iRec6);
             evt = context.CreateEventEx(iRec6, GEDCOMTagType.BIRT, "12 FEB 1650", "Far Forest");
 
-            GEDCOMFamilyRecord famRec2 = context.Tree.CreateFamily();
+            GDMFamilyRecord famRec2 = context.Tree.CreateFamily();
             Assert.IsNotNull(famRec2);
             famRec2.AddSpouse(iRec3);
             //famRec2.AddSpouse(iRec4);
@@ -110,49 +110,49 @@ namespace GKTests
             famRec2.AddChild(iRec6);
 
             // group for tests
-            GEDCOMGroupRecord groupRec = context.Tree.CreateGroup();
+            GDMGroupRecord groupRec = context.Tree.CreateGroup();
             groupRec.GroupName = "GroupTest";
             Assert.IsNotNull(groupRec, "group1 != null");
             groupRec.AddMember(iRec);
 
             // location for tests
-            GEDCOMLocationRecord locRec = context.Tree.CreateLocation();
+            GDMLocationRecord locRec = context.Tree.CreateLocation();
             locRec.LocationName = "Test Location";
             locRec.Map.Lati = 5.11111;
             locRec.Map.Long = 7.99999;
             Assert.IsNotNull(locRec, "locRec != null");
 
             // repository for tests
-            GEDCOMRepositoryRecord repoRec = context.Tree.CreateRepository();
+            GDMRepositoryRecord repoRec = context.Tree.CreateRepository();
             repoRec.RepositoryName = "Test repository";
             Assert.IsNotNull(repoRec, "repoRec != null");
 
             // research for tests
-            GEDCOMResearchRecord resRec = context.Tree.CreateResearch();
+            GDMResearchRecord resRec = context.Tree.CreateResearch();
             resRec.ResearchName = "Test research";
             Assert.IsNotNull(resRec, "resRec != null");
 
             // source for tests
-            GEDCOMSourceRecord srcRec = context.Tree.CreateSource();
+            GDMSourceRecord srcRec = context.Tree.CreateSource();
             srcRec.ShortTitle = "Test source";
             Assert.IsNotNull(srcRec, "srcRec != null");
             iRec.AddSource(srcRec, "p1", 0);
 
             // note for tests
-            GEDCOMNoteRecord noteRec = context.Tree.CreateNote();
+            GDMNoteRecord noteRec = context.Tree.CreateNote();
             noteRec.SetNoteText("Test note");
             Assert.IsNotNull(noteRec, "noteRec != null");
             iRec.AddNote(noteRec);
 
             // task for tests
-            GEDCOMTaskRecord tskRec = context.Tree.CreateTask();
+            GDMTaskRecord tskRec = context.Tree.CreateTask();
             tskRec.Goal = "Test task";
             Assert.IsNotNull(tskRec, "tskRec != null");
 
             // media for tests
-            GEDCOMMultimediaRecord mediaRec = context.Tree.CreateMultimedia();
-            mediaRec.FileReferences.Add(new GEDCOMFileReferenceWithTitle(mediaRec, GEDCOMTagType.FILE, ""));
-            GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
+            GDMMultimediaRecord mediaRec = context.Tree.CreateMultimedia();
+            mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle(mediaRec, GEDCOMTagType.FILE, ""));
+            GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
 
             fileRef.Title = "Test multimedia";
             fileRef.LinkFile("sample.png");
@@ -160,12 +160,12 @@ namespace GKTests
             iRec.AddMultimedia(mediaRec);
 
             // communication for tests
-            GEDCOMCommunicationRecord commRec = context.Tree.CreateCommunication();
+            GDMCommunicationRecord commRec = context.Tree.CreateCommunication();
             commRec.CommName = "Test communication";
             Assert.IsNotNull(commRec, "commRec != null");
         }
 
-        public static string GetTagStreamText(GEDCOMTag tag, int level)
+        public static string GetTagStreamText(GDMTag tag, int level)
         {
             string result;
             using (MemoryStream stm = new MemoryStream()) {

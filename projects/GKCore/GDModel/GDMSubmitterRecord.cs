@@ -20,23 +20,24 @@
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMSubmitterRecord : GEDCOMRecord
+    public sealed class GDMSubmitterRecord : GDMRecord
     {
-        private GEDCOMList<GEDCOMLanguage> fLanguages;
+        private GDMList<GDMLanguage> fLanguages;
 
-        public GEDCOMAddress Address
+
+        public GDMAddress Address
         {
-            get { return GetTag(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress; }
+            get { return GetTag<GDMAddress>(GEDCOMTagType.ADDR, GDMAddress.Create); }
         }
 
-        public GEDCOMList<GEDCOMLanguage> Languages
+        public GDMList<GDMLanguage> Languages
         {
             get { return fLanguages; }
         }
 
-        public new GEDCOMPersonalName Name
+        public new GDMPersonalName Name
         {
-            get { return GetTag(GEDCOMTagType.NAME, GEDCOMPersonalName.Create) as GEDCOMPersonalName; }
+            get { return GetTag<GDMPersonalName>(GEDCOMTagType.NAME, GDMPersonalName.Create); }
         }
 
         public string RegisteredReference
@@ -45,23 +46,23 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.RFN, value); }
         }
 
+
         public void SetLanguage(int index, string value)
         {
             if (index < 0) return;
 
             while (index >= fLanguages.Count) {
-                fLanguages.Add(new GEDCOMLanguage(this, GEDCOMTagType.LANG, ""));
+                fLanguages.Add(new GDMLanguage(this, GEDCOMTagType.LANG, ""));
             }
             fLanguages[index].StringValue = value;
         }
 
-
-        public GEDCOMSubmitterRecord(GEDCOMObject owner) : base(owner)
+        public GDMSubmitterRecord(GDMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtSubmitter);
             SetName(GEDCOMTagType.SUBM);
 
-            fLanguages = new GEDCOMList<GEDCOMLanguage>(this);
+            fLanguages = new GDMList<GDMLanguage>(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -72,7 +73,7 @@ namespace GKCommon.GEDCOM
             base.Dispose(disposing);
         }
 
-        public GEDCOMLanguage AddLanguage(GEDCOMLanguage value)
+        public GDMLanguage AddLanguage(GDMLanguage value)
         {
             fLanguages.Add(value);
             return value;

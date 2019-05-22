@@ -31,9 +31,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class RepositoryEditDlgController : DialogController<IRepositoryEditDlg>
     {
-        private GEDCOMRepositoryRecord fRepository;
+        private GDMRepositoryRecord fRepository;
 
-        public GEDCOMRepositoryRecord Repository
+        public GDMRepositoryRecord Repository
         {
             get { return fRepository; }
             set {

@@ -35,7 +35,7 @@ namespace GKUI.Forms
     {
         private readonly PortraitSelectDlgController fController;
 
-        public GEDCOMMultimediaLink MultimediaLink
+        public GDMMultimediaLink MultimediaLink
         {
             get { return fController.MultimediaLink; }
             set { fController.MultimediaLink = value; }

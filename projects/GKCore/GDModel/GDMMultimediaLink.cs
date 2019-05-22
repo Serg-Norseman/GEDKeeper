@@ -25,11 +25,12 @@ using GKCore;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMMultimediaLink : GEDCOMPointer
+    public sealed class GDMMultimediaLink : GDMPointer
     {
-        private GEDCOMList<GEDCOMFileReference> fFileReferences;
+        private GDMList<GDMFileReference> fFileReferences;
 
-        public GEDCOMList<GEDCOMFileReference> FileReferences
+
+        public GDMList<GDMFileReference> FileReferences
         {
             get { return fFileReferences; }
         }
@@ -62,24 +63,24 @@ namespace GKCommon.GEDCOM
             set { SetTagYNValue(GEDCOMTagType._PRIM_CUTOUT, value); }
         }
 
-        public GEDCOMCutoutPosition CutoutPosition
+        public GDMCutoutPosition CutoutPosition
         {
-            get { return GetTag(GEDCOMTagType._POSITION, GEDCOMCutoutPosition.Create) as GEDCOMCutoutPosition; }
+            get { return GetTag<GDMCutoutPosition>(GEDCOMTagType._POSITION, GDMCutoutPosition.Create); }
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMMultimediaLink(owner, tagName, tagValue);
+            return new GDMMultimediaLink(owner, tagName, tagValue);
         }
 
-        public GEDCOMMultimediaLink(GEDCOMObject owner) : base(owner)
+        public GDMMultimediaLink(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.OBJE);
-            fFileReferences = new GEDCOMList<GEDCOMFileReference>(this);
+            fFileReferences = new GDMList<GDMFileReference>(this);
         }
 
-        public GEDCOMMultimediaLink(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMMultimediaLink(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -141,7 +142,7 @@ namespace GKCommon.GEDCOM
                         cutoutArea = ExtRect.CreateEmpty();
                     }
 
-                    GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)Value;
+                    GDMMultimediaRecord mmRec = (GDMMultimediaRecord)Value;
                     result = mmRec.UID + "-" + GKUtils.GetRectUID(cutoutArea.Left, cutoutArea.Top, cutoutArea.Right, cutoutArea.Bottom);
                 }
             } catch (Exception ex) {

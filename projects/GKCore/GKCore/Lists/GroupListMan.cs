@@ -39,7 +39,7 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class GroupListMan : ListManager
     {
-        private GEDCOMGroupRecord fRec;
+        private GDMGroupRecord fRec;
 
 
         public GroupListMan(IBaseContext baseContext) :
@@ -67,9 +67,9 @@ namespace GKCore.Lists
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMGroupRecord);
+            fRec = (aRec as GDMGroupRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -106,7 +106,7 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var grp = fDataOwner as GEDCOMGroupRecord;
+            var grp = fDataOwner as GDMGroupRecord;
             if (fSheetList == null || grp == null) return;
 
             try
@@ -114,8 +114,8 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMPointer ptrMember in grp.Members) {
-                    GEDCOMIndividualRecord member = ptrMember.Value as GEDCOMIndividualRecord;
+                foreach (GDMPointer ptrMember in grp.Members) {
+                    GDMIndividualRecord member = ptrMember.Value as GDMIndividualRecord;
                     if (member == null) continue;
 
                     fSheetList.AddItem(member, new object[] { GKUtils.GetNameString(member, true, false) });
@@ -131,10 +131,10 @@ namespace GKCore.Lists
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var grp = fDataOwner as GEDCOMGroupRecord;
+            var grp = fDataOwner as GDMGroupRecord;
             if (fBaseWin == null || fSheetList == null || grp == null) return;
 
-            GEDCOMIndividualRecord member = eArgs.ItemData as GEDCOMIndividualRecord;
+            GDMIndividualRecord member = eArgs.ItemData as GDMIndividualRecord;
 
             bool result = false;
 

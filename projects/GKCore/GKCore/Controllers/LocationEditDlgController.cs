@@ -34,9 +34,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class LocationEditDlgController : DialogController<ILocationEditDlg>
     {
-        private GEDCOMLocationRecord fLocationRecord;
+        private GDMLocationRecord fLocationRecord;
 
-        public GEDCOMLocationRecord LocationRecord
+        public GDMLocationRecord LocationRecord
         {
             get { return fLocationRecord; }
             set {

@@ -20,30 +20,30 @@
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GDMSourceEvent : GEDCOMTag
+    public sealed class GDMSourceEvent : GDMTag
     {
-        public GEDCOMDatePeriod Date
+        public GDMDatePeriod Date
         {
-            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDatePeriod.Create) as GEDCOMDatePeriod; }
+            get { return GetTag<GDMDatePeriod>(GEDCOMTagType.DATE, GDMDatePeriod.Create); }
         }
 
-        public GEDCOMPlace Place
+        public GDMPlace Place
         {
-            get { return GetTag(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
+            get { return GetTag<GDMPlace>(GEDCOMTagType.PLAC, GDMPlace.Create); }
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
             return new GDMSourceEvent(owner, tagName, tagValue);
         }
 
-        public GDMSourceEvent(GEDCOMObject owner) : base(owner)
+        public GDMSourceEvent(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.EVEN);
         }
 
-        public GDMSourceEvent(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMSourceEvent(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

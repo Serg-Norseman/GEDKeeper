@@ -39,7 +39,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class PersonEditDlgTests : CustomWindowTest
     {
-        private GEDCOMIndividualRecord fIndividualRecord;
+        private GDMIndividualRecord fIndividualRecord;
         private IBaseWindow fBase;
         private PersonEditDlg fDialog;
 

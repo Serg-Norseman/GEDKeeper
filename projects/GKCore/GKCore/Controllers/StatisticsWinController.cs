@@ -33,7 +33,7 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class StatisticsWinController : FormController<IStatisticsWin>
     {
-        private readonly List<GEDCOMRecord> fSelectedRecords;
+        private readonly List<GDMRecord> fSelectedRecords;
 
         private string fChartTitle;
         private string fChartXTitle;
@@ -47,7 +47,7 @@ namespace GKCore.Controllers
             get { return fTreeStats; }
         }
 
-        public StatisticsWinController(IStatisticsWin view, List<GEDCOMRecord> selectedRecords) : base(view)
+        public StatisticsWinController(IStatisticsWin view, List<GDMRecord> selectedRecords) : base(view)
         {
             fSelectedRecords = selectedRecords;
         }

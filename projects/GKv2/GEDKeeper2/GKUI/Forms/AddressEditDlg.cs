@@ -41,7 +41,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fMailsList;
         private readonly GKSheetList fWebsList;
 
-        public GEDCOMAddress Address
+        public GDMAddress Address
         {
             get { return fController.Address; }
             set { fController.Address = value; }
@@ -94,7 +94,7 @@ namespace GKUI.Forms
 
         private void ListModify(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMTag itemTag = eArgs.ItemData as GEDCOMTag;
+            GDMTag itemTag = eArgs.ItemData as GDMTag;
             if ((eArgs.Action == RecordAction.raEdit || eArgs.Action == RecordAction.raDelete) && (itemTag == null)) return;
 
             if (sender == fPhonesList) {

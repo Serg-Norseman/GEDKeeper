@@ -35,7 +35,7 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class RepositoryListMan : ListManager
     {
-        private GEDCOMRepositoryRecord fRec;
+        private GDMRepositoryRecord fRec;
 
 
         public RepositoryListMan(IBaseContext baseContext) :
@@ -63,9 +63,9 @@ namespace GKCore.Lists
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMRepositoryRecord);
+            fRec = (aRec as GDMRepositoryRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

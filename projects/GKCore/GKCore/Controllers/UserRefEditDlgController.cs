@@ -31,9 +31,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class UserRefEditDlgController : DialogController<IUserRefEditDlg>
     {
-        private GEDCOMUserReference fUserRef;
+        private GDMUserReference fUserRef;
 
-        public GEDCOMUserReference UserRef
+        public GDMUserReference UserRef
         {
             get { return fUserRef; }
             set {

@@ -25,7 +25,7 @@ namespace GKCommon.GEDCOM
     /// <summary>
     /// Base class for all GEDCOM objects like tags, and tree and xref replacer.
     /// </summary>
-    public class GEDCOMObject : IDisposable
+    public class GDMObject : IDisposable
     {
         private bool fDisposed;
 
@@ -42,7 +42,7 @@ namespace GKCommon.GEDCOM
             GC.SuppressFinalize(this);
         }
 
-        ~GEDCOMObject()
+        ~GDMObject()
         {
             Dispose(false);
         }

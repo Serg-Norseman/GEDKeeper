@@ -26,9 +26,9 @@ using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
-    public class GEDCOMDateException : EGEDCOMException
+    public class GDMDateException : GDMException
     {
-        public GEDCOMDateException(string message) : base(message)
+        public GDMDateException(string message) : base(message)
         {
         }
     }
@@ -39,7 +39,7 @@ namespace GKCommon.GEDCOM
     /// because these dates there is a special property.
     /// Dates of type "BC" should have a positive Year + the property YearBC.
     /// </summary>
-    public class GEDCOMDate : GEDCOMCustomDate
+    public class GDMDate : GDMCustomDate
     {
         public const int UNKNOWN_YEAR = -1;
 
@@ -108,12 +108,12 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMDate(owner, tagName, tagValue);
+            return new GDMDate(owner, tagName, tagValue);
         }
 
-        public GEDCOMDate(GEDCOMObject owner) : base(owner)
+        public GDMDate(GDMObject owner) : base(owner)
         {
             fApproximated = GEDCOMApproximated.daExact;
             fCalendar = GEDCOMCalendar.dcGregorian;
@@ -125,7 +125,7 @@ namespace GKCommon.GEDCOM
             fDateFormat = GEDCOMDateFormat.dfGEDCOMStd;
         }
 
-        public GEDCOMDate(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMDate(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -155,9 +155,9 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && fYear <= 0 && fMonth <= 0 && fDay <= 0;
         }
 
-        public override void Assign(GEDCOMTag source)
+        public override void Assign(GDMTag source)
         {
-            GEDCOMDate srcDate = source as GEDCOMDate;
+            GDMDate srcDate = source as GDMDate;
             if (srcDate == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
@@ -274,7 +274,7 @@ namespace GKCommon.GEDCOM
                 }
             }
 
-            throw new GEDCOMDateException(string.Format("The string {0} is not a valid month identifier", str));
+            throw new GDMDateException(string.Format("The string {0} is not a valid month identifier", str));
         }
 
         private static string CheckGEDCOMMonthFrench(string str)
@@ -295,7 +295,7 @@ namespace GKCommon.GEDCOM
                 }
             }
 
-            throw new GEDCOMDateException(string.Format("The string {0} is not a valid French month identifier", str));
+            throw new GDMDateException(string.Format("The string {0} is not a valid French month identifier", str));
         }
 
         private static string CheckGEDCOMMonthHebrew(string str)
@@ -316,7 +316,7 @@ namespace GKCommon.GEDCOM
                 }
             }
 
-            throw new GEDCOMDateException(string.Format("The string {0} is not a valid Hebrew month identifier", str));
+            throw new GDMDateException(string.Format("The string {0} is not a valid Hebrew month identifier", str));
         }
 
         private static string IntToGEDCOMMonth(int m)
@@ -359,7 +359,7 @@ namespace GKCommon.GEDCOM
 
             string monthStr = string.Empty;
             if (fMonth > 0) {
-                string[] monthes = GEDCOMDate.GetMonthNames(fCalendar);
+                string[] monthes = GDMDate.GetMonthNames(fCalendar);
                 monthStr = monthes[fMonth - 1] + " ";
             }
 
@@ -561,7 +561,7 @@ namespace GKCommon.GEDCOM
 
         #region Utilities
 
-        public static GEDCOMDate CreateByFormattedStr(string strDate, bool aException)
+        public static GDMDate CreateByFormattedStr(string strDate, bool aException)
         {
             return CreateByFormattedStr(strDate, GEDCOMCalendar.dcGregorian, aException);
         }
@@ -574,7 +574,7 @@ namespace GKCommon.GEDCOM
         /// <param name="calendar"></param>
         /// <param name="aException"></param>
         /// <returns></returns>
-        public static GEDCOMDate CreateByFormattedStr(string dateStr, GEDCOMCalendar calendar, bool aException)
+        public static GDMDate CreateByFormattedStr(string dateStr, GEDCOMCalendar calendar, bool aException)
         {
             if (string.IsNullOrEmpty(dateStr)) return null;
 
@@ -586,7 +586,7 @@ namespace GKCommon.GEDCOM
             if (dtParts.Length < 3)
             {
                 if (aException) {
-                    throw new GEDCOMDateException(string.Format("GEDCOMDate.CreateByFormattedStr(): date format is invalid {0}", dateStr));
+                    throw new GDMDateException(string.Format("GEDCOMDate.CreateByFormattedStr(): date format is invalid {0}", dateStr));
                 }
 
                 return null;
@@ -600,14 +600,14 @@ namespace GKCommon.GEDCOM
             int month = (pm == "") ? 0 : ConvertHelper.ParseInt(pm, 0);
             int year = (py == "") ? UNKNOWN_YEAR : ConvertHelper.ParseInt(py, UNKNOWN_YEAR);
 
-            var date = new GEDCOMDate(null);
+            var date = new GDMDate(null);
             date.SetDate(calendar, day, month, year);
             return date;
         }
 
         public static UDN GetUDNByFormattedStr(string dateStr, GEDCOMCalendar calendar, bool aException = false)
         {
-            GEDCOMDate dtx = GEDCOMDate.CreateByFormattedStr(dateStr, calendar, aException);
+            GDMDate dtx = GDMDate.CreateByFormattedStr(dateStr, calendar, aException);
             return (dtx != null) ? dtx.GetUDN() : UDN.CreateEmpty();
         }
 

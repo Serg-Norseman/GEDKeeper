@@ -50,9 +50,9 @@ namespace GKUI.Forms
             set { fController.Target.NeedSex = value; }
         }
 
-        public GEDCOMRecord ResultRecord { get; set; }
+        public GDMRecord ResultRecord { get; set; }
 
-        public GEDCOMIndividualRecord TargetIndividual
+        public GDMIndividualRecord TargetIndividual
         {
             get { return fController.Target.TargetIndividual; }
             set { fController.Target.TargetIndividual = value; }
@@ -116,7 +116,7 @@ namespace GKUI.Forms
         private void btnSelect_Click(object sender, EventArgs e)
         {
             try {
-                ResultRecord = fListRecords.GetSelectedData() as GEDCOMRecord;
+                ResultRecord = fListRecords.GetSelectedData() as GDMRecord;
                 DialogResult = DialogResult.OK;
             } catch (Exception ex) {
                 Logger.LogWrite("RecordSelectDlg.btnSelect_Click(): " + ex.Message);
@@ -128,7 +128,7 @@ namespace GKUI.Forms
         private void btnCreate_Click(object sender, EventArgs e)
         {
             try {
-                GEDCOMRecord rec = BaseController.AddRecord(fController.Base, fController.RecType, fController.Target);
+                GDMRecord rec = BaseController.AddRecord(fController.Base, fController.RecType, fController.Target);
                 if (rec != null) {
                     ResultRecord = rec;
                     DialogResult = DialogResult.OK;

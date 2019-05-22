@@ -22,11 +22,11 @@ using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMLocationRecord : GEDCOMRecord
+    public sealed class GDMLocationRecord : GDMRecord
     {
-        public GEDCOMMap Map
+        public GDMMap Map
         {
-            get { return GetTag(GEDCOMTagType.MAP, GEDCOMMap.Create) as GEDCOMMap; }
+            get { return GetTag<GDMMap>(GEDCOMTagType.MAP, GDMMap.Create); }
         }
 
         public string LocationName
@@ -36,16 +36,16 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMLocationRecord(GEDCOMObject owner) : base(owner)
+        public GDMLocationRecord(GDMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtLocation);
             SetName(GEDCOMTagType._LOC);
         }
 
         // TODO: connect to use
-        public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
+        public override float IsMatch(GDMTag tag, MatchParams matchParams)
         {
-            GEDCOMLocationRecord otherLoc = tag as GEDCOMLocationRecord;
+            GDMLocationRecord otherLoc = tag as GDMLocationRecord;
             if (otherLoc == null) return 0.0f;
 
             float match = GetStrMatch(LocationName, otherLoc.LocationName, matchParams);

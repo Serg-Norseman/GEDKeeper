@@ -35,7 +35,7 @@ namespace GKCommon.GEDCOM
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GEDCOMHeader : GEDCOMCustomRecord
+    public sealed class GEDCOMHeader : GDMCustomRecord
     {
         public GEDCOMCharacterSet CharacterSet
         {
@@ -46,7 +46,7 @@ namespace GKCommon.GEDCOM
         public StringList Notes
         {
             get { return GetTagStrings(FindTag(GEDCOMTagType.NOTE, 0)); }
-            set { SetTagStrings(GetTag(GEDCOMTagType.NOTE, GEDCOMNotes.Create), value); }
+            set { SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.NOTE, GDMNotes.Create), value); }
         }
 
         public string Source
@@ -73,11 +73,11 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(@"SOUR\CORP", value); }
         }
 
-        public GEDCOMAddress SourceBusinessAddress
+        public GDMAddress SourceBusinessAddress
         {
             get {
-                GEDCOMTag corpTag = GetTag(@"SOUR\CORP", Create);
-                return corpTag.GetTag(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress;
+                GDMTag corpTag = GetTag<GDMTag>(@"SOUR\CORP", Create);
+                return corpTag.GetTag<GDMAddress>(GEDCOMTagType.ADDR, GDMAddress.Create);
             }
         }
 
@@ -117,9 +117,9 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(@"CHAR\VERS", value); }
         }
 
-        public GEDCOMLanguage Language
+        public GDMLanguage Language
         {
-            get { return GetTag(GEDCOMTagType.LANG, GEDCOMLanguage.Create) as GEDCOMLanguage; }
+            get { return GetTag<GDMLanguage>(GEDCOMTagType.LANG, GDMLanguage.Create); }
         }
 
         public string PlaceHierarchy
@@ -128,24 +128,24 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(@"PLAC\FORM", value); }
         }
 
-        public GEDCOMPointer Submission
+        public GDMPointer Submission
         {
-            get { return GetTag(GEDCOMTagType.SUBN, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag<GDMPointer>(GEDCOMTagType.SUBN, GDMPointer.Create); }
         }
 
-        public GEDCOMPointer Submitter
+        public GDMPointer Submitter
         {
-            get { return GetTag(GEDCOMTagType.SUBM, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag<GDMPointer>(GEDCOMTagType.SUBM, GDMPointer.Create); }
         }
 
-        public GEDCOMDate TransmissionDate
+        public GDMDate TransmissionDate
         {
-            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate; }
+            get { return GetTag<GDMDate>(GEDCOMTagType.DATE, GDMDate.Create); }
         }
 
-        public GEDCOMTime TransmissionTime
+        public GDMTime TransmissionTime
         {
-            get { return TransmissionDate.GetTag(GEDCOMTagType.TIME, GEDCOMTime.Create) as GEDCOMTime; }
+            get { return TransmissionDate.GetTag<GDMTime>(GEDCOMTagType.TIME, GDMTime.Create); }
         }
 
         public DateTime TransmissionDateTime
@@ -167,7 +167,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMHeader(GEDCOMObject owner) : base(owner)
+        public GEDCOMHeader(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.HEAD);
         }

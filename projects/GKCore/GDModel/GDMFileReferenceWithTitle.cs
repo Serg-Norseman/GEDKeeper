@@ -20,7 +20,7 @@
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMFileReferenceWithTitle : GEDCOMFileReference
+    public sealed class GDMFileReferenceWithTitle : GDMFileReference
     {
         public string Title
         {
@@ -33,11 +33,11 @@ namespace GKCommon.GEDCOM
             return @"FORM\TYPE";
         }
 
-        public GEDCOMFileReferenceWithTitle(GEDCOMObject owner) : base(owner)
+        public GDMFileReferenceWithTitle(GDMObject owner) : base(owner)
         {
         }
 
-        public GEDCOMFileReferenceWithTitle(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMFileReferenceWithTitle(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

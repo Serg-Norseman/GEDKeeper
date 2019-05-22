@@ -82,7 +82,7 @@ namespace GKCommon.GEDCOM
     }
 
 
-    public class GEDCOMFileReference : GEDCOMTag
+    public class GDMFileReference : GDMTag
     {
         public GEDCOMMultimediaFormat MultimediaFormat
         {
@@ -97,12 +97,12 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMFileReference(GEDCOMObject owner) : base(owner)
+        public GDMFileReference(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.FILE);
         }
 
-        public GEDCOMFileReference(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMFileReference(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

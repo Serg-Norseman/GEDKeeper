@@ -34,18 +34,18 @@ namespace GKStdReports
     /// </summary>
     public class ContemporariesReport : ReportExporter
     {
-        private readonly GEDCOMIndividualRecord fPerson;
+        private readonly GDMIndividualRecord fPerson;
         private IFont fTitleFont, fChapFont, fTextFont;
         private CommonStats fStats;
 
-        public ContemporariesReport(IBaseWindow baseWin, GEDCOMIndividualRecord selectedPerson)
+        public ContemporariesReport(IBaseWindow baseWin, GDMIndividualRecord selectedPerson)
             : base(baseWin, false)
         {
             fTitle = SRLangMan.LS(RLS.LSID_Contemporaries_Title);
             fPerson = selectedPerson;
         }
 
-        private Range<int> GetIndividualDates(GEDCOMIndividualRecord iRec)
+        private Range<int> GetIndividualDates(GDMIndividualRecord iRec)
         {
             var dates = iRec.GetLifeDates();
 
@@ -66,7 +66,7 @@ namespace GKStdReports
             return range;
         }
 
-        private static string GetPersonalInfo(GEDCOMIndividualRecord iRec)
+        private static string GetPersonalInfo(GDMIndividualRecord iRec)
         {
             return GKUtils.GetNameString(iRec, true, false) + GKUtils.GetLifeStr(iRec);
         }
@@ -91,9 +91,9 @@ namespace GKStdReports
             fWriter.BeginList();
 
             var enumer = fBase.Context.Tree.GetEnumerator(GEDCOMRecordType.rtIndividual);
-            GEDCOMRecord record;
+            GDMRecord record;
             while (enumer.MoveNext(out record)) {
-                var iRec = record as GEDCOMIndividualRecord;
+                var iRec = record as GDMIndividualRecord;
                 var indRange = GetIndividualDates(iRec);
                 try {
                     if (personRange.IsOverlapped(indRange)) {

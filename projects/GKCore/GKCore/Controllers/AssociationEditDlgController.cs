@@ -32,10 +32,10 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class AssociationEditDlgController : DialogController<IAssociationEditDlg>
     {
-        private GEDCOMAssociation fAssociation;
-        private GEDCOMIndividualRecord fTempPerson;
+        private GDMAssociation fAssociation;
+        private GDMIndividualRecord fTempPerson;
 
-        public GEDCOMAssociation Association
+        public GDMAssociation Association
         {
             get { return fAssociation; }
             set {

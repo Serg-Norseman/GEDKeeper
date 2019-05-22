@@ -40,7 +40,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class AddressEditDlgTests : CustomWindowTest
     {
-        private GEDCOMAddress fAddress;
+        private GDMAddress fAddress;
         private IBaseWindow fBase;
         private AddressEditDlg fDialog;
 
@@ -51,7 +51,7 @@ namespace GKUI.Forms
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fAddress = new GEDCOMAddress(null);
+            fAddress = new GDMAddress(null);
 
             fAddress.AddWebPage("test");
             fAddress.AddPhoneNumber("test");

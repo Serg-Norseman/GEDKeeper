@@ -43,7 +43,7 @@ namespace GKUI.Forms
         private readonly TreeChartBox fTreeBox;
 
         private TreeChartKind fChartKind;
-        private GEDCOMIndividualRecord fPerson;
+        private GDMIndividualRecord fPerson;
 
 
         public IBaseWindow Base
@@ -69,7 +69,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public TreeChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson)
+        public TreeChartWin(IBaseWindow baseWin, GDMIndividualRecord startPerson)
         {
             InitializeComponent();
 
@@ -520,9 +520,9 @@ namespace GKUI.Forms
             return fTreeBox.Model.FindAll(searchPattern);
         }
 
-        public void SelectByRec(GEDCOMRecord record)
+        public void SelectByRec(GDMRecord record)
         {
-            GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = record as GDMIndividualRecord;
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 

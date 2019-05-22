@@ -33,10 +33,10 @@ namespace GKNavigatorPlugin
         public readonly RecordAction Action;
         public readonly string XRef;
         public readonly string Name;
-        public readonly GEDCOMRecord Record; // null for deleted records
+        public readonly GDMRecord Record; // null for deleted records
         public readonly DateTime Time;
 
-        public RecordInfo(RecordAction action, string xref, string name, GEDCOMRecordType type, GEDCOMRecord record)
+        public RecordInfo(RecordAction action, string xref, string name, GEDCOMRecordType type, GDMRecord record)
         {
             Action = action;
             XRef = xref;
@@ -64,7 +64,7 @@ namespace GKNavigatorPlugin
 
         public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
         {
-            GEDCOMRecord gRecord = record as GEDCOMRecord;
+            GDMRecord gRecord = record as GDMRecord;
             if (gRecord == null) return;
 
             string recName = GKUtils.GetRecordName(gRecord, false);
@@ -86,7 +86,7 @@ namespace GKNavigatorPlugin
             }
         }
 
-        public int Find(GEDCOMRecord record)
+        public int Find(GDMRecord record)
         {
             for (int i = 0; i < fChangedRecords.Count; i++)
             {

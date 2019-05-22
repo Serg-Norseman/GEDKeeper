@@ -23,14 +23,15 @@ using System.IO;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMAssociation : GEDCOMPointerWithNotes
+    public sealed class GDMAssociation : GDMPointerWithNotes
     {
         private string fRelation;
-        private GEDCOMList<GEDCOMSourceCitation> fSourceCitations;
+        private GDMList<GDMSourceCitation> fSourceCitations;
 
-        public GEDCOMIndividualRecord Individual
+
+        public GDMIndividualRecord Individual
         {
-            get { return (Value as GEDCOMIndividualRecord); }
+            get { return (Value as GDMIndividualRecord); }
             set { Value = value; }
         }
 
@@ -40,24 +41,24 @@ namespace GKCommon.GEDCOM
             set { fRelation = value; }
         }
 
-        public GEDCOMList<GEDCOMSourceCitation> SourceCitations
+        public GDMList<GDMSourceCitation> SourceCitations
         {
             get { return fSourceCitations; }
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMAssociation(owner, tagName, tagValue);
+            return new GDMAssociation(owner, tagName, tagValue);
         }
 
-        public GEDCOMAssociation(GEDCOMObject owner) : base(owner)
+        public GDMAssociation(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.ASSO);
-            fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
+            fSourceCitations = new GDMList<GDMSourceCitation>(this);
         }
 
-        public GEDCOMAssociation(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMAssociation(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -97,9 +98,9 @@ namespace GKCommon.GEDCOM
             fSourceCitations.SaveToStream(stream, level);
         }
 
-        public override void Assign(GEDCOMTag source)
+        public override void Assign(GDMTag source)
         {
-            GEDCOMAssociation srcAsso = (source as GEDCOMAssociation);
+            GDMAssociation srcAsso = (source as GDMAssociation);
             if (srcAsso == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 

@@ -32,7 +32,7 @@ namespace GKCore.Interfaces
     {
         ICulture Culture { get; }
         string FileName { get; }
-        GEDCOMTree Tree { get; }
+        GDMTree Tree { get; }
         ValuesCollection ValuesCollection { get; }
         ShieldState ShieldState { get; set; }
         bool Modified { get; set; }
@@ -47,35 +47,35 @@ namespace GKCore.Interfaces
         void CriticalSave();
 
         // Data manipulation
-        GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, string evDate, string evPlace);
-        GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, GEDCOMCustomDate evDate, string evPlace);
-        GEDCOMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex, bool birthEvent);
-        bool DeleteRecord(GEDCOMRecord record);
+        GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, string evDate, string evPlace);
+        GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, GDMCustomDate evDate, string evPlace);
+        GDMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex, bool birthEvent);
+        bool DeleteRecord(GDMRecord record);
         bool IsRecordAccess(GEDCOMRestriction restriction);
 
         // Individual utils
-        bool IsChildless(GEDCOMIndividualRecord iRec);
-        int FindBirthYear(GEDCOMIndividualRecord iRec);
-        int FindDeathYear(GEDCOMIndividualRecord iRec);
-        void CollectEventValues(GEDCOMCustomEvent evt);
-        void CollectNameLangs(GEDCOMPersonalName persName);
+        bool IsChildless(GDMIndividualRecord iRec);
+        int FindBirthYear(GDMIndividualRecord iRec);
+        int FindDeathYear(GDMIndividualRecord iRec);
+        void CollectEventValues(GDMCustomEvent evt);
+        void CollectNameLangs(GDMPersonalName persName);
         void CollectTips(StringList tipsList);
-        void ImportNames(GEDCOMIndividualRecord iRec);
+        void ImportNames(GDMIndividualRecord iRec);
         IList<ISearchResult> FindAll(GEDCOMRecordType recordType, string searchPattern);
 
         // Multimedia support
         bool CheckBasePath();
-        MediaStore GetStoreType(GEDCOMFileReference fileReference);
-        Stream MediaLoad(GEDCOMFileReference fileReference, bool throwException);
-        string MediaLoad(GEDCOMFileReference fileReference);
-        bool MediaSave(GEDCOMFileReference fileReference, string fileName, MediaStoreType storeType);
+        MediaStore GetStoreType(GDMFileReference fileReference);
+        Stream MediaLoad(GDMFileReference fileReference, bool throwException);
+        string MediaLoad(GDMFileReference fileReference);
+        bool MediaSave(GDMFileReference fileReference, string fileName, MediaStoreType storeType);
 
         // Used only in MediaViewer and Slideshow
-        IImage LoadMediaImage(GEDCOMFileReference fileReference, bool throwException);
-        IImage LoadMediaImage(GEDCOMFileReference fileReference, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException);
+        IImage LoadMediaImage(GDMFileReference fileReference, bool throwException);
+        IImage LoadMediaImage(GDMFileReference fileReference, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException);
         // Used in FamilyBookExporter, TreeChart and PersonEdit
-        IImage GetPrimaryBitmap(GEDCOMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException);
-        string GetPrimaryBitmapUID(GEDCOMIndividualRecord iRec);
+        IImage GetPrimaryBitmap(GDMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException);
+        string GetPrimaryBitmapUID(GDMIndividualRecord iRec);
 
         bool IsUpdated();
         void BeginUpdate();
@@ -87,29 +87,29 @@ namespace GKCore.Interfaces
         void DoCommit();
         void DoRollback();
 
-        void LockRecord(GEDCOMRecord record);
-        void UnlockRecord(GEDCOMRecord record);
-        bool IsAvailableRecord(GEDCOMRecord record);
+        void LockRecord(GDMRecord record);
+        void UnlockRecord(GDMRecord record);
+        bool IsAvailableRecord(GDMRecord record);
 
-        GEDCOMSourceRecord FindSource(string sourceName);
+        GDMSourceRecord FindSource(string sourceName);
         void GetSourcesList(StringList sources);
 
         string DefinePatronymic(string name, GEDCOMSex sex, bool confirm);
         GEDCOMSex DefineSex(string iName, string iPatr);
-        void CheckPersonSex(GEDCOMIndividualRecord iRec);
+        void CheckPersonSex(GDMIndividualRecord iRec);
 
-        GEDCOMFamilyRecord SelectFamily(GEDCOMIndividualRecord target);
-        GEDCOMIndividualRecord SelectPerson(GEDCOMIndividualRecord target,
+        GDMFamilyRecord SelectFamily(GDMIndividualRecord target);
+        GDMIndividualRecord SelectPerson(GDMIndividualRecord target,
                                             TargetMode targetMode, GEDCOMSex needSex);
-        GEDCOMRecord SelectRecord(GEDCOMRecordType mode, params object[] args);
-        GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild,
+        GDMRecord SelectRecord(GEDCOMRecordType mode, params object[] args);
+        GDMFamilyRecord GetChildFamily(GDMIndividualRecord iChild,
                                           bool canCreate,
-                                          GEDCOMIndividualRecord newParent);
-        GEDCOMFamilyRecord AddFamilyForSpouse(GEDCOMIndividualRecord spouse);
-        GEDCOMIndividualRecord AddChildForParent(GEDCOMIndividualRecord parent, GEDCOMSex needSex);
-        GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec);
+                                          GDMIndividualRecord newParent);
+        GDMFamilyRecord AddFamilyForSpouse(GDMIndividualRecord spouse);
+        GDMIndividualRecord AddChildForParent(GDMIndividualRecord parent, GEDCOMSex needSex);
+        GDMIndividualRecord SelectSpouseFor(GDMIndividualRecord iRec);
 
-        void ProcessFamily(GEDCOMFamilyRecord famRec);
-        void ProcessIndividual(GEDCOMIndividualRecord indiRec);
+        void ProcessFamily(GDMFamilyRecord famRec);
+        void ProcessIndividual(GDMIndividualRecord indiRec);
     }
 }

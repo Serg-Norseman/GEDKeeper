@@ -89,7 +89,7 @@ namespace GKImageViewerPlugin
             Control ctl = null;
             fImageCtl = null;
 
-            GEDCOMMultimediaFormat fmt = GEDCOMFileReference.RecognizeFormat(fileName);
+            GEDCOMMultimediaFormat fmt = GDMFileReference.RecognizeFormat(fileName);
 
             try
             {

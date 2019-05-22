@@ -33,7 +33,7 @@ namespace GDModel.Providers.GedML
     /// </summary>
     public class GedMLProvider : FileProvider
     {
-        public GedMLProvider(GEDCOMTree tree) : base(tree)
+        public GedMLProvider(GDMTree tree) : base(tree)
         {
         }
 
@@ -64,8 +64,8 @@ namespace GDModel.Providers.GedML
                 var invariantText = GEDCOMUtils.InvariantTextInfo;
 
                 var strTok = new GEDCOMParser(false);
-                GEDCOMCustomRecord curRecord = null;
-                GEDCOMTag curTag = null;
+                GDMCustomRecord curRecord = null;
+                GDMTag curTag = null;
                 var stack = new Stack<StackTuple>(9);
 
                 XmlReaderSettings settings = new XmlReaderSettings();
@@ -95,7 +95,7 @@ namespace GDModel.Providers.GedML
                                 if (stackTuple != null) {
                                     stack.Clear();
                                     stack.Push(stackTuple);
-                                    curRecord = (GEDCOMCustomRecord)stackTuple.Tag;
+                                    curRecord = (GDMCustomRecord)stackTuple.Tag;
                                     if (!string.IsNullOrEmpty(tagId)) {
                                         curRecord.XRef = tagId;
                                     }

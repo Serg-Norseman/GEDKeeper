@@ -41,7 +41,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fSourcesList;
 
-        public GEDCOMCustomEvent Event
+        public GDMCustomEvent Event
         {
             get { return fController.Event; }
             set { fController.Event = value; }

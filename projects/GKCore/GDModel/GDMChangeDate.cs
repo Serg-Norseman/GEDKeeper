@@ -22,18 +22,18 @@ using System;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMChangeDate : GEDCOMTag
+    public sealed class GDMChangeDate : GDMTag
     {
-        public GEDCOMDate ChangeDate
+        public GDMDate ChangeDate
         {
-            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate; }
+            get { return GetTag<GDMDate>(GEDCOMTagType.DATE, GDMDate.Create); }
         }
 
-        public GEDCOMTime ChangeTime
+        public GDMTime ChangeTime
         {
             get {
-                GEDCOMTag dateTag = ChangeDate;
-                return dateTag.GetTag(GEDCOMTagType.TIME, GEDCOMTime.Create) as GEDCOMTime;
+                GDMTag dateTag = ChangeDate;
+                return dateTag.GetTag<GDMTime>(GEDCOMTagType.TIME, GDMTime.Create);
             }
         }
 
@@ -48,23 +48,23 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public GEDCOMNotes Notes
+        public GDMNotes Notes
         {
-            get { return GetTag(GEDCOMTagType.NOTE, GEDCOMNotes.Create) as GEDCOMNotes; }
+            get { return GetTag<GDMNotes>(GEDCOMTagType.NOTE, GDMNotes.Create); }
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMChangeDate(owner, tagName, tagValue);
+            return new GDMChangeDate(owner, tagName, tagValue);
         }
 
-        public GEDCOMChangeDate(GEDCOMObject owner) : base(owner)
+        public GDMChangeDate(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.CHAN);
         }
 
-        public GEDCOMChangeDate(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMChangeDate(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

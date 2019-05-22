@@ -44,7 +44,7 @@ namespace GKUI.Forms
     {
         private IBaseWindow fBase;
         private MediaViewerWin fDialog;
-        private GEDCOMFileReferenceWithTitle fileRef;
+        private GDMFileReferenceWithTitle fileRef;
 
         public override void Setup()
         {
@@ -52,8 +52,8 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
 
-            GEDCOMMultimediaRecord mmRec = fBase.Context.Tree.CreateMultimedia();
-            mmRec.FileReferences.Add(new GEDCOMFileReferenceWithTitle(mmRec, GEDCOMTagType.FILE, ""));
+            GDMMultimediaRecord mmRec = fBase.Context.Tree.CreateMultimedia();
+            mmRec.FileReferences.Add(new GDMFileReferenceWithTitle(mmRec, GEDCOMTagType.FILE, ""));
             fileRef = mmRec.FileReferences[0];
 
             fileRef.Title = "File Title 2";
@@ -158,8 +158,8 @@ namespace GKUI.Forms
             GKUtils.CopyFile(vidstm, new FileInfo(targetName), null);
             Assert.IsTrue(File.Exists(targetName));
 
-            GEDCOMMultimediaRecord mmRecV = fBase.Context.Tree.CreateMultimedia();
-            mmRecV.FileReferences.Add(new GEDCOMFileReferenceWithTitle(mmRecV, GEDCOMTagType.FILE, ""));
+            GDMMultimediaRecord mmRecV = fBase.Context.Tree.CreateMultimedia();
+            mmRecV.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecV, GEDCOMTagType.FILE, ""));
             var fileRefV = mmRecV.FileReferences[0];
 
             fileRefV.Title = "File Title 2";

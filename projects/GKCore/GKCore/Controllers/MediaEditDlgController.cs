@@ -33,10 +33,10 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class MediaEditDlgController : DialogController<IMediaEditDlg>
     {
-        private GEDCOMMultimediaRecord fMediaRec;
+        private GDMMultimediaRecord fMediaRec;
         private bool fIsNew;
 
-        public GEDCOMMultimediaRecord MediaRec
+        public GDMMultimediaRecord MediaRec
         {
             get { return fMediaRec; }
             set {
@@ -60,7 +60,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                GEDCOMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
+                GDMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
 
                 if (fIsNew) {
                     MediaStoreType gst = (MediaStoreType)fView.StoreType.SelectedTag;
@@ -101,7 +101,7 @@ namespace GKCore.Controllers
 
         private void UpdateControls()
         {
-            GEDCOMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
+            GDMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
 
             fIsNew = (fileRef.StringValue == "");
 

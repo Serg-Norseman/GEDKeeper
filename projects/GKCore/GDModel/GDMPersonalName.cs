@@ -37,12 +37,13 @@ namespace GKCommon.GEDCOM
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GEDCOMPersonalName : GEDCOMTag
+    public sealed class GDMPersonalName : GDMTag
     {
         private string fFirstPart;
         private string fSurname;
         private string fLastPart;
-        private GEDCOMPersonalNamePieces fPieces;
+        private GDMPersonalNamePieces fPieces;
+
 
         public string FullName
         {
@@ -76,7 +77,7 @@ namespace GKCommon.GEDCOM
             set { fLastPart = GEDCOMUtils.Trim(value); }
         }
 
-        public GEDCOMPersonalNamePieces Pieces
+        public GDMPersonalNamePieces Pieces
         {
             get { return fPieces; }
         }
@@ -87,9 +88,9 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.TYPE, GEDCOMUtils.GetNameTypeStr(value)); }
         }
 
-        public GEDCOMLanguage Language
+        public GDMLanguage Language
         {
-            get { return GetTag("_LANG", GEDCOMLanguage.Create) as GEDCOMLanguage; }
+            get { return GetTag<GDMLanguage>("_LANG", GDMLanguage.Create); }
         }
 
 
@@ -118,23 +119,23 @@ namespace GKCommon.GEDCOM
             fLastPart = GEDCOMUtils.Trim(lastPart);
         }
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMPersonalName(owner, tagName, tagValue);
+            return new GDMPersonalName(owner, tagName, tagValue);
         }
 
-        public GEDCOMPersonalName(GEDCOMObject owner) : base(owner)
+        public GDMPersonalName(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.NAME);
 
-            fPieces = new GEDCOMPersonalNamePieces(this);
+            fPieces = new GDMPersonalNamePieces(this);
 
             fFirstPart = string.Empty;
             fSurname = string.Empty;
             fLastPart = string.Empty;
         }
 
-        public GEDCOMPersonalName(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMPersonalName(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -147,9 +148,9 @@ namespace GKCommon.GEDCOM
             base.Dispose(disposing);
         }
 
-        public override void Assign(GEDCOMTag source)
+        public override void Assign(GDMTag source)
         {
-            GEDCOMPersonalName otherName = (source as GEDCOMPersonalName);
+            GDMPersonalName otherName = (source as GDMPersonalName);
             if (otherName == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
@@ -204,7 +205,7 @@ namespace GKCommon.GEDCOM
             return string.Equals(str, "?") || (string.Compare(str, "unknown", true) == 0);
         }
 
-        public float IsMatch(GEDCOMPersonalName otherName, bool onlyFirstPart)
+        public float IsMatch(GDMPersonalName otherName, bool onlyFirstPart)
         {
             if (otherName == null)
                 return 0.0f;

@@ -35,18 +35,18 @@ namespace GKCommon.GKCore
 
         public class SyncRecord
         {
-            public GEDCOMRecord MasterRecord;
-            public GEDCOMRecord UpdateRecord;
+            public GDMRecord MasterRecord;
+            public GDMRecord UpdateRecord;
             public SyncState State;
             public string UpdateOldXRef;
             public string UpdateNewXRef;
         }
 
-        public static void TreeSync(GEDCOMTree mainTree, string fileName, TextBox logText)
+        public static void TreeSync(GDMTree mainTree, string fileName, TextBox logText)
         {
             logText.Clear();
 
-            GEDCOMTree extTree = new GEDCOMTree();
+            GDMTree extTree = new GDMTree();
             XRefReplacer repMap = new XRefReplacer();
             ExtList<SyncRecord> syncList = new ExtList<SyncRecord>(true);
             try {
@@ -57,7 +57,7 @@ namespace GKCommon.GKCore
 
                 int num = extTree.RecordsCount;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMRecord rec = extTree[i];
+                    GDMRecord rec = extTree[i];
                     syncList.Add(new SyncRecord {
                         MasterRecord = null,
                         UpdateRecord = rec,
@@ -71,7 +71,7 @@ namespace GKCommon.GKCore
                 for (int i = 0; i < num2; i++) {
                     SyncRecord syncRec = syncList[i];
 
-                    GEDCOMRecord rec = mainTree.FindUID(syncRec.UpdateRecord.UID);
+                    GDMRecord rec = mainTree.FindUID(syncRec.UpdateRecord.UID);
 
                     if (rec != null) {
                         syncRec.MasterRecord = rec;
@@ -89,13 +89,13 @@ namespace GKCommon.GKCore
 
                 int num3 = repMap.Count;
                 for (int i = 0; i < num3; i++) {
-                    GEDCOMRecord rec = repMap[i].Rec;
+                    GDMRecord rec = repMap[i].Rec;
                     rec.ReplaceXRefs(repMap);
                 }
 
                 int num4 = extTree.RecordsCount;
                 for (int i = 0; i < num4; i++) {
-                    GEDCOMRecord rec = extTree[i];
+                    GDMRecord rec = extTree[i];
                     rec.ReplaceXRefs(repMap);
                 }
 
@@ -103,7 +103,7 @@ namespace GKCommon.GKCore
                 for (int i = 0; i < num5; i++) {
                     SyncRecord syncRec = syncList[i];
                     if (syncRec.State == SyncState.ssHasMaster) {
-                        GEDCOMRecord rec = extTree.Extract(extTree.IndexOf(syncRec.UpdateRecord));
+                        GDMRecord rec = extTree.Extract(extTree.IndexOf(syncRec.UpdateRecord));
                         rec.XRef = mainTree.XRefIndex_NewXRef(rec);
                         rec.ResetOwner(mainTree);
                         mainTree.AddRecord(rec);

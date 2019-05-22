@@ -22,7 +22,7 @@ using BSLib;
 
 namespace GKCommon.GEDCOM
 {
-    public class GEDCOMIndividualAttribute : GEDCOMCustomEvent
+    public class GDMIndividualAttribute : GDMCustomEvent
     {
         public StringList PhysicalDescription
         {
@@ -31,18 +31,18 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMIndividualAttribute(GEDCOMObject owner) : base(owner)
+        public GDMIndividualAttribute(GDMObject owner) : base(owner)
         {
         }
 
-        public GEDCOMIndividualAttribute(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMIndividualAttribute(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMIndividualAttribute(owner, tagName, tagValue);
+            return new GDMIndividualAttribute(owner, tagName, tagValue);
         }
     }
 }

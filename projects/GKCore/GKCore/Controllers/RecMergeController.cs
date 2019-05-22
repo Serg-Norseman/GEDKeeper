@@ -51,10 +51,10 @@ namespace GKCore.Controllers
         {
         }
 
-        private static bool CheckPersonsEx(GEDCOMIndividualRecord rec1, GEDCOMIndividualRecord rec2)
+        private static bool CheckPersonsEx(GDMIndividualRecord rec1, GDMIndividualRecord rec2)
         {
-            GEDCOMFamilyRecord fam1 = rec1.GetParentsFamily();
-            GEDCOMFamilyRecord fam2 = rec2.GetParentsFamily();
+            GDMFamilyRecord fam1 = rec1.GetParentsFamily();
+            GDMFamilyRecord fam2 = rec2.GetParentsFamily();
 
             return (!Equals(fam1, fam2));
         }
@@ -103,11 +103,11 @@ namespace GKCore.Controllers
                     fRMIndex = i;
                     fView.ProgressBar.Increment(1);
 
-                    GEDCOMRecord iRec = tree[i];
+                    GDMRecord iRec = tree[i];
                     if (iRec.RecordType != fRMMode) continue;
 
                     for (int j = i + 1; j < recNum; j++) {
-                        GEDCOMRecord kRec = tree[j];
+                        GDMRecord kRec = tree[j];
                         if (kRec.RecordType != fRMMode) continue;
 
                         if (iRec == kRec) continue;
@@ -116,7 +116,7 @@ namespace GKCore.Controllers
                         res = iRec.IsMatch(kRec, mParams) >= 100.0f;
 
                         if (res && fRMMode == GEDCOMRecordType.rtIndividual) {
-                            res = CheckPersonsEx((GEDCOMIndividualRecord)iRec, (GEDCOMIndividualRecord)kRec);
+                            res = CheckPersonsEx((GDMIndividualRecord)iRec, (GDMIndividualRecord)kRec);
                         }
 
                         if (res) {

@@ -29,7 +29,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetGEDCOMFormat()
         {
-            GEDCOMTree tree = new GEDCOMTree();
+            GDMTree tree = new GDMTree();
 
             // Tests of determine GEDCOM-format
             Assert.AreEqual(GEDCOMFormat.gf_Unknown, GEDCOMProvider.GetGEDCOMFormat(tree));
@@ -51,7 +51,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GEDCOMPointer()
         {
-            using (var ptr = new GEDCOMPointer(null, "", "")) {
+            using (var ptr = new GDMPointer(null, "", "")) {
                 string remainder = ptr.ParseString("  @I1111@ test");
                 Assert.AreEqual("I1111", ptr.XRef);
                 Assert.AreEqual(" test", remainder);
@@ -77,7 +77,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GEDCOMTime()
         {
-            using (GEDCOMTime time = new GEDCOMTime(null, "", "20:20:20.100"))
+            using (GDMTime time = new GDMTime(null, "", "20:20:20.100"))
             {
                 Assert.IsNotNull(time, "time != null");
 

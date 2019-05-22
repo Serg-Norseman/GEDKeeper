@@ -38,7 +38,7 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class CommunicationListMan : ListManager
     {
-        private GEDCOMCommunicationRecord fRec;
+        private GDMCommunicationRecord fRec;
 
 
         public CommunicationListMan(IBaseContext baseContext) :
@@ -70,9 +70,9 @@ namespace GKCore.Lists
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMCommunicationRecord);
+            fRec = (aRec as GDMCommunicationRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

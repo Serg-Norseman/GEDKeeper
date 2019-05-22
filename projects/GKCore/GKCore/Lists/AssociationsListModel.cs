@@ -46,14 +46,14 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var person = fDataOwner as GEDCOMIndividualRecord;
+            var person = fDataOwner as GDMIndividualRecord;
             if (fSheetList == null || person == null) return;
 
             try
             {
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMAssociation ast in person.Associations) {
+                foreach (GDMAssociation ast in person.Associations) {
                     string nm = ((ast.Individual == null) ? "" : GKUtils.GetNameString(ast.Individual, true, false));
 
                     fSheetList.AddItem(ast, new object[] { ast.Relation, nm });
@@ -67,12 +67,12 @@ namespace GKCore.Lists
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var person = fDataOwner as GEDCOMIndividualRecord;
+            var person = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || fSheetList == null || person == null) return;
 
             bool result = false;
 
-            GEDCOMAssociation ast = eArgs.ItemData as GEDCOMAssociation;
+            GDMAssociation ast = eArgs.ItemData as GDMAssociation;
 
             switch (eArgs.Action)
             {
@@ -81,7 +81,7 @@ namespace GKCore.Lists
                     using (var dlg = AppHost.ResolveDialog<IAssociationEditDlg>(fBaseWin)) {
                         bool exists = (ast != null);
                         if (!exists) {
-                            ast = new GEDCOMAssociation(person);
+                            ast = new GDMAssociation(person);
                         }
 
                         dlg.Association = ast;

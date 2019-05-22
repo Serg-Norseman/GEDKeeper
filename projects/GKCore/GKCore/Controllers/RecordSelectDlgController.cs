@@ -87,9 +87,9 @@ namespace GKCore.Controllers
             recordsList.UpdateContents();
         }
 
-        private static bool ChildSelectorHandler(GEDCOMRecord record)
+        private static bool ChildSelectorHandler(GDMRecord record)
         {
-            GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = record as GDMIndividualRecord;
             return (iRec != null && iRec.ChildToFamilyLinks.Count == 0);
         }
 

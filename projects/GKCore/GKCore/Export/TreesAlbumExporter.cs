@@ -114,10 +114,10 @@ namespace GKCore.Export
 
         private sealed class IndiObj
         {
-            public GEDCOMIndividualRecord IRec;
+            public GDMIndividualRecord IRec;
             public TreeChartKind TreeKind;
 
-            public IndiObj(GEDCOMIndividualRecord iRec, TreeChartKind treeKind)
+            public IndiObj(GDMIndividualRecord iRec, TreeChartKind treeKind)
             {
                 IRec = iRec;
                 TreeKind = treeKind;
@@ -132,7 +132,7 @@ namespace GKCore.Export
             Break
         }
 
-        private void TryRenderTreeSlice(ITreeChartBox treeBox, int index, GEDCOMIndividualRecord currentPatriarch)
+        private void TryRenderTreeSlice(ITreeChartBox treeBox, int index, GDMIndividualRecord currentPatriarch)
         {
             IndiObj indi = fIndiQueue[index];
             fProcessed.Add(indi.IRec.XRef);
@@ -198,7 +198,7 @@ namespace GKCore.Export
 
             for (int i = 0; i < treeBox.Model.Persons.Count; i++) {
                 TreeChartPerson person = treeBox.Model.Persons[i];
-                GEDCOMIndividualRecord indiRec = person.Rec;
+                GDMIndividualRecord indiRec = person.Rec;
                 if (indiRec == null) continue;
 
                 int iNum = (int)indiRec.ExtData;
@@ -241,14 +241,14 @@ namespace GKCore.Export
             }
         }
 
-        private void CheckQueue(GEDCOMIndividualRecord iRec, TreeChartKind treeKind)
+        private void CheckQueue(GDMIndividualRecord iRec, TreeChartKind treeKind)
         {
             if (fProcessed.IndexOf(iRec.XRef) >= 0) return;
 
             fIndiQueue.Add(new IndiObj(iRec, treeKind));
         }
 
-        private bool IsPatriarchsDescendant(GEDCOMIndividualRecord iRec, GEDCOMIndividualRecord currentPatriarch)
+        private bool IsPatriarchsDescendant(GDMIndividualRecord iRec, GDMIndividualRecord currentPatriarch)
         {
             bool result = false;
 

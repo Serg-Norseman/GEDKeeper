@@ -54,7 +54,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public CircleChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson, CircleChartType type)
+        public CircleChartWin(IBaseWindow baseWin, GDMIndividualRecord startPerson, CircleChartType type)
         {
             InitializeComponent();
 
@@ -104,7 +104,7 @@ namespace GKUI.Forms
             GenChart();
         }
 
-        private void CircleChartWin_RootChanged(object sender, GEDCOMIndividualRecord person)
+        private void CircleChartWin_RootChanged(object sender, GDMIndividualRecord person)
         {
             GenChart();
         }
@@ -229,7 +229,7 @@ namespace GKUI.Forms
         {
         }
 
-        public void SelectByRec(GEDCOMRecord record)
+        public void SelectByRec(GDMRecord record)
         {
         }
 

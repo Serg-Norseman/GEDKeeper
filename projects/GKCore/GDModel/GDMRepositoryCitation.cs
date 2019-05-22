@@ -20,14 +20,14 @@
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMRepositoryCitation : GEDCOMPointerWithNotes
+    public sealed class GDMRepositoryCitation : GDMPointerWithNotes
     {
-        public GEDCOMRepositoryCitation(GEDCOMObject owner) : base(owner)
+        public GDMRepositoryCitation(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.REPO);
         }
 
-        public GEDCOMRepositoryCitation(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMRepositoryCitation(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

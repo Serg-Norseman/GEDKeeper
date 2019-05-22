@@ -49,11 +49,12 @@ namespace GKCommon.GEDCOM
     }
 
 
-    public sealed class GEDCOMResearchRecord : GEDCOMRecord
+    public sealed class GDMResearchRecord : GDMRecord
     {
-        private GEDCOMList<GEDCOMPointer> fTasks;
-        private GEDCOMList<GEDCOMPointer> fCommunications;
-        private GEDCOMList<GEDCOMPointer> fGroups;
+        private GDMList<GDMPointer> fTasks;
+        private GDMList<GDMPointer> fCommunications;
+        private GDMList<GDMPointer> fGroups;
+
 
         public string ResearchName
         {
@@ -73,14 +74,14 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType._STATUS, GEDCOMUtils.GetStatusStr(value)); }
         }
 
-        public GEDCOMDate StartDate
+        public GDMDate StartDate
         {
-            get { return GetTag(GEDCOMTagType._STARTDATE, GEDCOMDate.Create) as GEDCOMDate; }
+            get { return GetTag<GDMDate>(GEDCOMTagType._STARTDATE, GDMDate.Create); }
         }
 
-        public GEDCOMDate StopDate
+        public GDMDate StopDate
         {
-            get { return GetTag(GEDCOMTagType._STOPDATE, GEDCOMDate.Create) as GEDCOMDate; }
+            get { return GetTag<GDMDate>(GEDCOMTagType._STOPDATE, GDMDate.Create); }
         }
 
         public int Percent
@@ -89,30 +90,30 @@ namespace GKCommon.GEDCOM
             set { SetTagIntegerValue(GEDCOMTagType._PERCENT, value); }
         }
 
-        public GEDCOMList<GEDCOMPointer> Tasks
+        public GDMList<GDMPointer> Tasks
         {
             get { return fTasks; }
         }
 
-        public GEDCOMList<GEDCOMPointer> Communications
+        public GDMList<GDMPointer> Communications
         {
             get { return fCommunications; }
         }
 
-        public GEDCOMList<GEDCOMPointer> Groups
+        public GDMList<GDMPointer> Groups
         {
             get { return fGroups; }
         }
 
 
-        public GEDCOMResearchRecord(GEDCOMObject owner) : base(owner)
+        public GDMResearchRecord(GDMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtResearch);
             SetName(GEDCOMTagType._RESEARCH);
 
-            fTasks = new GEDCOMList<GEDCOMPointer>(this);
-            fCommunications = new GEDCOMList<GEDCOMPointer>(this);
-            fGroups = new GEDCOMList<GEDCOMPointer>(this);
+            fTasks = new GDMList<GDMPointer>(this);
+            fCommunications = new GDMList<GDMPointer>(this);
+            fGroups = new GDMList<GDMPointer>(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -158,14 +159,12 @@ namespace GKCommon.GEDCOM
             fGroups.SaveToStream(stream, level);
         }
 
-        #region Auxiliary
-
-        public bool AddTask(GEDCOMTaskRecord taskRecord)
+        public bool AddTask(GDMTaskRecord taskRecord)
         {
             bool result = false;
 
             if (taskRecord != null) {
-                GEDCOMPointer ptr = new GEDCOMPointer(this);
+                GDMPointer ptr = new GDMPointer(this);
                 ptr.SetNameValue(GEDCOMTagType._TASK, taskRecord);
                 fTasks.Add(ptr);
                 result = true;
@@ -174,14 +173,14 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public void RemoveTask(GEDCOMTaskRecord taskRecord)
+        public void RemoveTask(GDMTaskRecord taskRecord)
         {
             if (taskRecord == null) return;
 
             fTasks.DeleteAt(IndexOfTask(taskRecord));
         }
 
-        public int IndexOfTask(GEDCOMTaskRecord taskRec)
+        public int IndexOfTask(GDMTaskRecord taskRec)
         {
             int result = -1;
 
@@ -198,12 +197,12 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public bool AddGroup(GEDCOMGroupRecord groupRecord)
+        public bool AddGroup(GDMGroupRecord groupRecord)
         {
             bool result = false;
 
             if (groupRecord != null) {
-                GEDCOMPointer ptr = new GEDCOMPointer(this);
+                GDMPointer ptr = new GDMPointer(this);
                 ptr.SetNameValue(GEDCOMTagType._GROUP, groupRecord);
                 fGroups.Add(ptr);
                 result = true;
@@ -212,14 +211,14 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public void RemoveGroup(GEDCOMGroupRecord groupRecord)
+        public void RemoveGroup(GDMGroupRecord groupRecord)
         {
             if (groupRecord == null) return;
 
             fGroups.DeleteAt(IndexOfGroup(groupRecord));
         }
 
-        public int IndexOfGroup(GEDCOMGroupRecord groupRec)
+        public int IndexOfGroup(GDMGroupRecord groupRec)
         {
             int result = -1;
 
@@ -236,12 +235,12 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public bool AddCommunication(GEDCOMCommunicationRecord commRecord)
+        public bool AddCommunication(GDMCommunicationRecord commRecord)
         {
             bool result = false;
 
             if (commRecord != null) {
-                GEDCOMPointer ptr = new GEDCOMPointer(this);
+                GDMPointer ptr = new GDMPointer(this);
                 ptr.SetNameValue(GEDCOMTagType._COMM, commRecord);
                 fCommunications.Add(ptr);
                 result = true;
@@ -250,14 +249,14 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public void RemoveCommunication(GEDCOMCommunicationRecord commRecord)
+        public void RemoveCommunication(GDMCommunicationRecord commRecord)
         {
             if (commRecord == null) return;
 
             fCommunications.DeleteAt(IndexOfCommunication(commRecord));
         }
 
-        public int IndexOfCommunication(GEDCOMCommunicationRecord commRec)
+        public int IndexOfCommunication(GDMCommunicationRecord commRec)
         {
             int result = -1;
 
@@ -273,7 +272,5 @@ namespace GKCommon.GEDCOM
 
             return result;
         }
-
-        #endregion
     }
 }

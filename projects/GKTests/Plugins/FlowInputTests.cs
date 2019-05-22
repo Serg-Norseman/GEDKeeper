@@ -149,7 +149,7 @@ namespace GKFlowInputPlugin
 
             Assert.AreEqual(2, fBase.Context.Tree.RecordsCount); // indiRec + noteRec
 
-            GEDCOMIndividualRecord iRec1 = fBase.Context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec1 = fBase.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec1);
             Assert.AreEqual("Иван Иванович Иванов", iRec1.GetPrimaryFullName());
         }
@@ -195,7 +195,7 @@ namespace GKFlowInputPlugin
 
             Assert.AreEqual(3, fBase.Context.Tree.RecordsCount); // newSourceRec + newIndiRec + newNoteRec
 
-            GEDCOMIndividualRecord iRec1 = fBase.Context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec1 = fBase.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec1);
             Assert.AreEqual("Иван Иванович Иванов", iRec1.GetPrimaryFullName());
         }
@@ -227,7 +227,7 @@ namespace GKFlowInputPlugin
 
             Assert.AreEqual(3, fBase.Context.Tree.RecordsCount); // newSourceRec + newIndiRec + newNoteRec
 
-            GEDCOMIndividualRecord iRec1 = fBase.Context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec1 = fBase.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec1);
             Assert.AreEqual("Анна Васильевна Иванова", iRec1.GetPrimaryFullName());
         }
@@ -264,11 +264,11 @@ namespace GKFlowInputPlugin
 
             Assert.AreEqual(6, fBase.Context.Tree.RecordsCount); // source + indi1 + note1 + family + indi2 + note2
 
-            GEDCOMIndividualRecord iRec1 = fBase.Context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec1 = fBase.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec1);
             Assert.AreEqual("Иван Иванович Иванов", iRec1.GetPrimaryFullName());
 
-            GEDCOMIndividualRecord iRec2 = fBase.Context.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec2 = fBase.Context.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
             Assert.IsNotNull(iRec2);
             Assert.AreEqual("Анна Васильевна Иванова", iRec2.GetPrimaryFullName());
         }
@@ -323,19 +323,19 @@ namespace GKFlowInputPlugin
 
             Assert.AreEqual(10, fBase.Context.Tree.RecordsCount);
 
-            GEDCOMIndividualRecord iRec1 = fBase.Context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec1 = fBase.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec1);
             Assert.AreEqual("Иван Иванович Иванов", iRec1.GetPrimaryFullName());
 
-            GEDCOMIndividualRecord iRec2 = fBase.Context.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec2 = fBase.Context.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
             Assert.IsNotNull(iRec2);
             Assert.AreEqual("Анна Васильевна Иванова", iRec2.GetPrimaryFullName());
 
-            GEDCOMIndividualRecord iRec3 = fBase.Context.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec3 = fBase.Context.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec3);
             Assert.AreEqual("Иван Петрович Иванов", iRec3.GetPrimaryFullName());
 
-            GEDCOMIndividualRecord iRec4 = fBase.Context.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec4 = fBase.Context.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
             Assert.IsNotNull(iRec4);
             Assert.AreEqual("Василий Иванович Иванов", iRec4.GetPrimaryFullName());
         }

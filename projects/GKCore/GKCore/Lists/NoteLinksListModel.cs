@@ -47,7 +47,7 @@ namespace GKCore.Lists
             {
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMNotes note in dataOwner.Notes)
+                foreach (GDMNotes note in dataOwner.Notes)
                 {
                     fSheetList.AddItem(note, new object[] { note.Notes.Text.Trim() });
                 }
@@ -63,24 +63,24 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGEDCOMStructWithLists;
             if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
-            GEDCOMNotes notes = eArgs.ItemData as GEDCOMNotes;
+            GDMNotes notes = eArgs.ItemData as GDMNotes;
 
             bool result = false;
 
-            GEDCOMNoteRecord noteRec;
+            GDMNoteRecord noteRec;
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    noteRec = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtNote, null) as GEDCOMNoteRecord;
+                    noteRec = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtNote, null) as GDMNoteRecord;
                     if (noteRec != null) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GEDCOMObject)dataOwner, noteRec);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GDMObject)dataOwner, noteRec);
                     }
                     break;
 
                 case RecordAction.raEdit:
                     if (notes != null)
                     {
-                        noteRec = notes.Value as GEDCOMNoteRecord;
+                        noteRec = notes.Value as GDMNoteRecord;
                         result = BaseController.ModifyNote(fBaseWin, ref noteRec);
                     }
                     break;
@@ -88,7 +88,7 @@ namespace GKCore.Lists
                 case RecordAction.raDelete:
                     if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachNoteQuery)))
                     {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GEDCOMObject)dataOwner, notes);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GDMObject)dataOwner, notes);
                     }
                     break;
             }

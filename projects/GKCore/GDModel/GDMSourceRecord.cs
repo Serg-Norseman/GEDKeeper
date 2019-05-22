@@ -25,25 +25,26 @@ using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMSourceRecord : GEDCOMRecord
+    public sealed class GDMSourceRecord : GDMRecord
     {
-        private GEDCOMList<GEDCOMRepositoryCitation> fRepositoryCitations;
+        private GDMList<GDMRepositoryCitation> fRepositoryCitations;
+
 
         public GDMSourceData Data
         {
-            get { return GetTag(GEDCOMTagType.DATA, GDMSourceData.Create) as GDMSourceData; }
+            get { return GetTag<GDMSourceData>(GEDCOMTagType.DATA, GDMSourceData.Create); }
         }
 
         public StringList Originator
         {
-            get { return GetTagStrings(GetTag(GEDCOMTagType.AUTH, GEDCOMTag.Create)); }
-            set { SetTagStrings(GetTag(GEDCOMTagType.AUTH, GEDCOMTag.Create), value); }
+            get { return GetTagStrings(GetTag<GDMTag>(GEDCOMTagType.AUTH, GDMTag.Create)); }
+            set { SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.AUTH, GDMTag.Create), value); }
         }
 
         public StringList Title
         {
-            get { return GetTagStrings(GetTag(GEDCOMTagType.TITL, GEDCOMTag.Create)); }
-            set { SetTagStrings(GetTag(GEDCOMTagType.TITL, GEDCOMTag.Create), value); }
+            get { return GetTagStrings(GetTag<GDMTag>(GEDCOMTagType.TITL, GDMTag.Create)); }
+            set { SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.TITL, GDMTag.Create), value); }
         }
 
         public string ShortTitle
@@ -54,28 +55,28 @@ namespace GKCommon.GEDCOM
 
         public StringList Publication
         {
-            get { return GetTagStrings(GetTag(GEDCOMTagType.PUBL, GEDCOMTag.Create)); }
-            set { SetTagStrings(GetTag(GEDCOMTagType.PUBL, GEDCOMTag.Create), value); }
+            get { return GetTagStrings(GetTag<GDMTag>(GEDCOMTagType.PUBL, GDMTag.Create)); }
+            set { SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.PUBL, GDMTag.Create), value); }
         }
 
-        public GEDCOMList<GEDCOMRepositoryCitation> RepositoryCitations
+        public GDMList<GDMRepositoryCitation> RepositoryCitations
         {
             get { return fRepositoryCitations; }
         }
 
         public StringList Text
         {
-            get { return GetTagStrings(GetTag(GEDCOMTagType.TEXT, GEDCOMTag.Create)); }
-            set { SetTagStrings(GetTag(GEDCOMTagType.TEXT, GEDCOMTag.Create), value); }
+            get { return GetTagStrings(GetTag<GDMTag>(GEDCOMTagType.TEXT, GDMTag.Create)); }
+            set { SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.TEXT, GDMTag.Create), value); }
         }
 
 
-        public GEDCOMSourceRecord(GEDCOMObject owner) : base(owner)
+        public GDMSourceRecord(GDMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtSource);
             SetName(GEDCOMTagType.SOUR);
 
-            fRepositoryCitations = new GEDCOMList<GEDCOMRepositoryCitation>(this);
+            fRepositoryCitations = new GDMList<GDMRepositoryCitation>(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -97,9 +98,9 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && fRepositoryCitations.Count == 0;
         }
 
-        public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
+        public override void MoveTo(GDMRecord targetRecord, bool clearDest)
         {
-            GEDCOMSourceRecord targetSource = targetRecord as GEDCOMSourceRecord;
+            GDMSourceRecord targetSource = targetRecord as GDMSourceRecord;
             if (targetSource == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
 
@@ -129,7 +130,7 @@ namespace GKCommon.GEDCOM
 
                 while (fRepositoryCitations.Count > 0)
                 {
-                    GEDCOMRepositoryCitation obj = fRepositoryCitations.Extract(0);
+                    GDMRepositoryCitation obj = fRepositoryCitations.Extract(0);
                     obj.ResetOwner(targetSource);
                     targetSource.RepositoryCitations.Add(obj);
                 }
@@ -164,41 +165,39 @@ namespace GKCommon.GEDCOM
 
         public void SetOriginatorArray(params string[] value)
         {
-            SetTagStrings(GetTag(GEDCOMTagType.AUTH, GEDCOMTag.Create), value);
+            SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.AUTH, GDMTag.Create), value);
         }
 
         public void SetTitleArray(params string[] value)
         {
-            SetTagStrings(GetTag(GEDCOMTagType.TITL, GEDCOMTag.Create), value);
+            SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.TITL, GDMTag.Create), value);
         }
 
         public void SetPublicationArray(params string[] value)
         {
-            SetTagStrings(GetTag(GEDCOMTagType.PUBL, GEDCOMTag.Create), value);
+            SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.PUBL, GDMTag.Create), value);
         }
 
         public void SetTextArray(params string[] value)
         {
-            SetTagStrings(GetTag(GEDCOMTagType.TEXT, GEDCOMTag.Create), value);
+            SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.TEXT, GDMTag.Create), value);
         }
 
-        public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
+        public override float IsMatch(GDMTag tag, MatchParams matchParams)
         {
-            GEDCOMSourceRecord otherSource = tag as GEDCOMSourceRecord;
+            GDMSourceRecord otherSource = tag as GDMSourceRecord;
             if (otherSource == null) return 0.0f;
 
             float match = GetStrMatch(ShortTitle, otherSource.ShortTitle, matchParams);
             return match;
         }
 
-        #region Auxiliary
-
-        public GEDCOMRepositoryCitation AddRepository(GEDCOMRepositoryRecord repRec)
+        public GDMRepositoryCitation AddRepository(GDMRepositoryRecord repRec)
         {
-            GEDCOMRepositoryCitation cit = null;
+            GDMRepositoryCitation cit = null;
             
             if (repRec != null) {
-                cit = new GEDCOMRepositoryCitation(this);
+                cit = new GDMRepositoryCitation(this);
                 cit.Value = repRec;
                 fRepositoryCitations.Add(cit);
             }
@@ -206,13 +205,13 @@ namespace GKCommon.GEDCOM
             return cit;
         }
 
-        public void RemoveRepository(GEDCOMRepositoryRecord repRec)
+        public void RemoveRepository(GDMRepositoryRecord repRec)
         {
             if (repRec == null)
                 throw new ArgumentNullException("repRec");
 
-            foreach (GEDCOMRepositoryCitation repCit in fRepositoryCitations) {
-                GEDCOMRepositoryRecord rep = repCit.Value as GEDCOMRepositoryRecord;
+            foreach (GDMRepositoryCitation repCit in fRepositoryCitations) {
+                GDMRepositoryRecord rep = repCit.Value as GDMRepositoryRecord;
 
                 if (rep == repRec) {
                     fRepositoryCitations.Delete(repCit);
@@ -220,7 +219,5 @@ namespace GKCommon.GEDCOM
                 }
             }
         }
-
-        #endregion
     }
 }

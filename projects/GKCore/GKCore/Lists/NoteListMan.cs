@@ -35,7 +35,7 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class NoteListMan : ListManager
     {
-        private GEDCOMNoteRecord fRec;
+        private GDMNoteRecord fRec;
 
 
         public NoteListMan(IBaseContext baseContext) :
@@ -63,9 +63,9 @@ namespace GKCore.Lists
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMNoteRecord);
+            fRec = (aRec as GDMNoteRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

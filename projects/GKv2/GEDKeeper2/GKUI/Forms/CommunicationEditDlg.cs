@@ -39,7 +39,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
 
-        public GEDCOMCommunicationRecord Communication
+        public GDMCommunicationRecord Communication
         {
             get { return fController.Communication; }
             set { fController.Communication = value; }

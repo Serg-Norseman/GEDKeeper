@@ -22,33 +22,33 @@ using System.IO;
 
 namespace GKCommon.GEDCOM
 {
-    public class GEDCOMTagWithLists : GEDCOMTag, IGEDCOMStructWithLists
+    public class GDMTagWithLists : GDMTag, IGEDCOMStructWithLists
     {
-        protected GEDCOMList<GEDCOMNotes> fNotes;
-        protected GEDCOMList<GEDCOMSourceCitation> fSourceCitations;
-        protected GEDCOMList<GEDCOMMultimediaLink> fMultimediaLinks;
+        protected GDMList<GDMNotes> fNotes;
+        protected GDMList<GDMSourceCitation> fSourceCitations;
+        protected GDMList<GDMMultimediaLink> fMultimediaLinks;
 
-        public GEDCOMList<GEDCOMNotes> Notes
+        public GDMList<GDMNotes> Notes
         {
             get { return fNotes; }
         }
 
-        public GEDCOMList<GEDCOMSourceCitation> SourceCitations
+        public GDMList<GDMSourceCitation> SourceCitations
         {
             get { return fSourceCitations; }
         }
 
-        public GEDCOMList<GEDCOMMultimediaLink> MultimediaLinks
+        public GDMList<GDMMultimediaLink> MultimediaLinks
         {
             get { return fMultimediaLinks; }
         }
 
 
-        protected GEDCOMTagWithLists(GEDCOMObject owner) : base(owner)
+        protected GDMTagWithLists(GDMObject owner) : base(owner)
         {
-            fNotes = new GEDCOMList<GEDCOMNotes>(this);
-            fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
-            fMultimediaLinks = new GEDCOMList<GEDCOMMultimediaLink>(this);
+            fNotes = new GDMList<GDMNotes>(this);
+            fSourceCitations = new GDMList<GDMSourceCitation>(this);
+            fMultimediaLinks = new GDMList<GDMMultimediaLink>(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -103,15 +103,13 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && fNotes.Count == 0 && fSourceCitations.Count == 0 && fMultimediaLinks.Count == 0;
         }
 
-        #region Auxiliary
-
-        public GEDCOMNotes AddNote(GEDCOMNoteRecord noteRec)
+        public GDMNotes AddNote(GDMNoteRecord noteRec)
         {
-            GEDCOMNotes note = null;
+            GDMNotes note = null;
             
             if (noteRec != null)
             {
-                note = new GEDCOMNotes(this);
+                note = new GDMNotes(this);
                 note.Value = noteRec;
                 Notes.Add(note);
             }
@@ -119,13 +117,13 @@ namespace GKCommon.GEDCOM
             return note;
         }
 
-        public GEDCOMSourceCitation AddSource(GEDCOMSourceRecord sourceRec, string page, int quality)
+        public GDMSourceCitation AddSource(GDMSourceRecord sourceRec, string page, int quality)
         {
-            GEDCOMSourceCitation cit = null;
+            GDMSourceCitation cit = null;
             
             if (sourceRec != null)
             {
-                cit = new GEDCOMSourceCitation(this);
+                cit = new GDMSourceCitation(this);
                 cit.Value = sourceRec;
                 cit.Page = page;
                 cit.CertaintyAssessment = quality;
@@ -135,20 +133,18 @@ namespace GKCommon.GEDCOM
             return cit;
         }
 
-        public GEDCOMMultimediaLink AddMultimedia(GEDCOMMultimediaRecord mediaRec)
+        public GDMMultimediaLink AddMultimedia(GDMMultimediaRecord mediaRec)
         {
-            GEDCOMMultimediaLink result = null;
+            GDMMultimediaLink result = null;
 
             if (mediaRec != null)
             {
-                result = new GEDCOMMultimediaLink(this);
+                result = new GDMMultimediaLink(this);
                 result.Value = mediaRec;
                 MultimediaLinks.Add(result);
             }
 
             return result;
         }
-
-        #endregion
     }
 }

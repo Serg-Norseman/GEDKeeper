@@ -333,17 +333,17 @@ namespace GKUI.Forms
             return fController.GetRecordsListManByType(recType);
         }
 
-        public GEDCOMRecord GetSelectedRecordEx()
+        public GDMRecord GetSelectedRecordEx()
         {
             return fController.GetSelectedRecordEx();
         }
 
-        public GEDCOMIndividualRecord GetSelectedPerson()
+        public GDMIndividualRecord GetSelectedPerson()
         {
             return fController.GetSelectedPerson();
         }
 
-        public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType)
+        public List<GDMRecord> GetContentList(GEDCOMRecordType recType)
         {
             return fController.GetContentList(recType);
         }
@@ -419,12 +419,12 @@ namespace GKUI.Forms
             fController.RefreshRecordsView(recType);
         }
 
-        public void UpdateChangedRecords(GEDCOMRecord select = null)
+        public void UpdateChangedRecords(GDMRecord select = null)
         {
             fController.UpdateChangedRecords(select);
         }
 
-        public void NotifyRecord(GEDCOMRecord record, RecordAction action)
+        public void NotifyRecord(GDMRecord record, RecordAction action)
         {
             fController.NotifyRecord(record, action);
         }
@@ -439,12 +439,12 @@ namespace GKUI.Forms
             fController.SetFilter();
         }
 
-        public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal)
+        public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal)
         {
             if (mediaRec == null)
                 throw new ArgumentNullException("mediaRec");
 
-            GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
+            GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
             if (fileRef == null) return;
 
             MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
@@ -652,7 +652,7 @@ namespace GKUI.Forms
             return fController.FindAll(searchPattern);
         }
 
-        void IWorkWindow.SelectByRec(GEDCOMRecord record)
+        void IWorkWindow.SelectByRec(GDMRecord record)
         {
             fController.SelectByRec(record);
         }
@@ -704,12 +704,12 @@ namespace GKUI.Forms
             fController.SelectRecordByXRef(xref);
         }
 
-        public StringList GetRecordContent(GEDCOMRecord record)
+        public StringList GetRecordContent(GDMRecord record)
         {
             return fController.GetRecordContent(record);
         }
 
-        public bool RecordIsFiltered(GEDCOMRecord record)
+        public bool RecordIsFiltered(GDMRecord record)
         {
             return fController.RecordIsFiltered(record);
         }

@@ -36,19 +36,19 @@ namespace GKCore
     {
         #region Modify routines
 
-        public static bool ModifyMedia(IBaseWindow baseWin, ref GEDCOMMultimediaRecord mediaRec)
+        public static bool ModifyMedia(IBaseWindow baseWin, ref GDMMultimediaRecord mediaRec)
         {
             bool result;
 
             try {
                 baseWin.Context.BeginUpdate();
-                GEDCOMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseWin.Context.Tree;
 
                 using (var dlg = AppHost.ResolveDialog<IMediaEditDlg>(baseWin)) {
                     bool exists = mediaRec != null;
                     if (!exists) {
-                        mediaRec = new GEDCOMMultimediaRecord(tree);
-                        mediaRec.FileReferences.Add(new GEDCOMFileReferenceWithTitle(mediaRec));
+                        mediaRec = new GDMMultimediaRecord(tree);
+                        mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle(mediaRec));
                         mediaRec.InitNew();
                     }
 
@@ -77,17 +77,17 @@ namespace GKCore
             return result;
         }
 
-        public static bool ModifyNote(IBaseWindow baseWin, ref GEDCOMNoteRecord noteRec)
+        public static bool ModifyNote(IBaseWindow baseWin, ref GDMNoteRecord noteRec)
         {
             bool result;
 
             try {
                 baseWin.Context.BeginUpdate();
-                GEDCOMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseWin.Context.Tree;
 
                 bool exists = noteRec != null;
                 if (!exists) {
-                    noteRec = new GEDCOMNoteRecord(tree);
+                    noteRec = new GDMNoteRecord(tree);
                     noteRec.InitNew();
                 }
 
@@ -124,18 +124,18 @@ namespace GKCore
             return result;
         }
 
-        public static bool ModifySource(IBaseWindow baseWin, ref GEDCOMSourceRecord sourceRec)
+        public static bool ModifySource(IBaseWindow baseWin, ref GDMSourceRecord sourceRec)
         {
             bool result;
 
             try {
                 baseWin.Context.BeginUpdate();
-                GEDCOMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseWin.Context.Tree;
 
                 using (var dlg = AppHost.ResolveDialog<ISourceEditDlg>(baseWin)) {
                     bool exists = sourceRec != null;
                     if (!exists) {
-                        sourceRec = new GEDCOMSourceRecord(tree);
+                        sourceRec = new GDMSourceRecord(tree);
                         sourceRec.InitNew();
                     }
 
@@ -164,18 +164,18 @@ namespace GKCore
             return result;
         }
 
-        public static bool ModifySourceCitation(IBaseWindow baseWin, ChangeTracker undoman, IGEDCOMStructWithLists _struct, ref GEDCOMSourceCitation cit)
+        public static bool ModifySourceCitation(IBaseWindow baseWin, ChangeTracker undoman, IGEDCOMStructWithLists _struct, ref GDMSourceCitation cit)
         {
             bool result;
 
             try {
                 baseWin.Context.BeginUpdate();
-                GEDCOMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseWin.Context.Tree;
 
                 using (var dlg = AppHost.ResolveDialog<ISourceCitEditDlg>(baseWin)) {
                     bool exists = cit != null;
                     if (!exists) {
-                        cit = new GEDCOMSourceCitation(_struct as GEDCOMObject);
+                        cit = new GDMSourceCitation(_struct as GDMObject);
                     }
 
                     dlg.SourceCitation = cit;
@@ -183,7 +183,7 @@ namespace GKCore
 
                     if (!exists) {
                         if (result) {
-                            result = undoman.DoOrdinaryOperation(OperationType.otRecordSourceCitAdd, (GEDCOMObject)_struct, cit);
+                            result = undoman.DoOrdinaryOperation(OperationType.otRecordSourceCitAdd, (GDMObject)_struct, cit);
                         } else {
                             cit.Dispose();
                         }
@@ -196,18 +196,18 @@ namespace GKCore
             return result;
         }
 
-        public static bool ModifyRepository(IBaseWindow baseWin, ref GEDCOMRepositoryRecord repRec)
+        public static bool ModifyRepository(IBaseWindow baseWin, ref GDMRepositoryRecord repRec)
         {
             bool result;
 
             try {
                 baseWin.Context.BeginUpdate();
-                GEDCOMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseWin.Context.Tree;
 
                 using (var dlg = AppHost.ResolveDialog<IRepositoryEditDlg>(baseWin)) {
                     bool exists = repRec != null;
                     if (!exists) {
-                        repRec = new GEDCOMRepositoryRecord(tree);
+                        repRec = new GDMRepositoryRecord(tree);
                         repRec.InitNew();
                     }
 
@@ -236,18 +236,18 @@ namespace GKCore
             return result;
         }
 
-        public static bool ModifyGroup(IBaseWindow baseWin, ref GEDCOMGroupRecord groupRec)
+        public static bool ModifyGroup(IBaseWindow baseWin, ref GDMGroupRecord groupRec)
         {
             bool result;
 
             try {
                 baseWin.Context.BeginUpdate();
-                GEDCOMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseWin.Context.Tree;
 
                 using (var dlg = AppHost.ResolveDialog<IGroupEditDlg>(baseWin)) {
                     bool exists = groupRec != null;
                     if (!exists) {
-                        groupRec = new GEDCOMGroupRecord(tree);
+                        groupRec = new GDMGroupRecord(tree);
                         groupRec.InitNew();
                     }
 
@@ -276,18 +276,18 @@ namespace GKCore
             return result;
         }
 
-        public static bool ModifyResearch(IBaseWindow baseWin, ref GEDCOMResearchRecord researchRec)
+        public static bool ModifyResearch(IBaseWindow baseWin, ref GDMResearchRecord researchRec)
         {
             bool result;
 
             try {
                 baseWin.Context.BeginUpdate();
-                GEDCOMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseWin.Context.Tree;
 
                 using (var dlg = AppHost.ResolveDialog<IResearchEditDlg>(baseWin)) {
                     bool exists = researchRec != null;
                     if (!exists) {
-                        researchRec = new GEDCOMResearchRecord(tree);
+                        researchRec = new GDMResearchRecord(tree);
                         researchRec.InitNew();
                     }
 
@@ -316,18 +316,18 @@ namespace GKCore
             return result;
         }
 
-        public static bool ModifyTask(IBaseWindow baseWin, ref GEDCOMTaskRecord taskRec)
+        public static bool ModifyTask(IBaseWindow baseWin, ref GDMTaskRecord taskRec)
         {
             bool result;
 
             try {
                 baseWin.Context.BeginUpdate();
-                GEDCOMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseWin.Context.Tree;
 
                 using (var dlg = AppHost.ResolveDialog<ITaskEditDlg>(baseWin)) {
                     bool exists = taskRec != null;
                     if (!exists) {
-                        taskRec = new GEDCOMTaskRecord(tree);
+                        taskRec = new GDMTaskRecord(tree);
                         taskRec.InitNew();
                     }
 
@@ -356,18 +356,18 @@ namespace GKCore
             return result;
         }
 
-        public static bool ModifyCommunication(IBaseWindow baseWin, ref GEDCOMCommunicationRecord commRec)
+        public static bool ModifyCommunication(IBaseWindow baseWin, ref GDMCommunicationRecord commRec)
         {
             bool result;
 
             try {
                 baseWin.Context.BeginUpdate();
-                GEDCOMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseWin.Context.Tree;
 
                 using (var dlg = AppHost.ResolveDialog<ICommunicationEditDlg>(baseWin)) {
                     bool exists = commRec != null;
                     if (!exists) {
-                        commRec = new GEDCOMCommunicationRecord(tree);
+                        commRec = new GDMCommunicationRecord(tree);
                         commRec.InitNew();
                     }
 
@@ -396,18 +396,18 @@ namespace GKCore
             return result;
         }
 
-        public static bool ModifyLocation(IBaseWindow baseWin, ref GEDCOMLocationRecord locRec)
+        public static bool ModifyLocation(IBaseWindow baseWin, ref GDMLocationRecord locRec)
         {
             bool result;
 
             try {
                 baseWin.Context.BeginUpdate();
-                GEDCOMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseWin.Context.Tree;
 
                 using (var dlg = AppHost.ResolveDialog<ILocationEditDlg>(baseWin)) {
                     bool exists = locRec != null;
                     if (!exists) {
-                        locRec = new GEDCOMLocationRecord(tree);
+                        locRec = new GDMLocationRecord(tree);
                         locRec.InitNew();
                     }
 
@@ -436,7 +436,7 @@ namespace GKCore
             return result;
         }
 
-        private static void PostProcessPerson(IBaseWindow baseWin, GEDCOMIndividualRecord indivRec)
+        private static void PostProcessPerson(IBaseWindow baseWin, GDMIndividualRecord indivRec)
         {
             baseWin.Context.ImportNames(indivRec);
 
@@ -447,7 +447,7 @@ namespace GKCore
 
             if (iFilter.SourceMode == FilterGroupMode.Selected)
             {
-                GEDCOMSourceRecord src = baseWin.Context.Tree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
+                GDMSourceRecord src = baseWin.Context.Tree.XRefIndex_Find(iFilter.SourceRef) as GDMSourceRecord;
                 if (src != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedSourceFilter)))
                 {
                     indivRec.AddSource(src, "", 0);
@@ -456,7 +456,7 @@ namespace GKCore
 
             if (iFilter.FilterGroupMode == FilterGroupMode.Selected)
             {
-                GEDCOMGroupRecord grp = baseWin.Context.Tree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
+                GDMGroupRecord grp = baseWin.Context.Tree.XRefIndex_Find(iFilter.GroupRef) as GDMGroupRecord;
                 if (grp != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedGroupFilter)))
                 {
                     grp.AddMember(indivRec);
@@ -464,22 +464,22 @@ namespace GKCore
             }
         }
 
-        public static bool ModifyIndividual(IBaseWindow baseWin, ref GEDCOMIndividualRecord indivRec,
-                                     GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex)
+        public static bool ModifyIndividual(IBaseWindow baseWin, ref GDMIndividualRecord indivRec,
+                                     GDMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex)
         {
             bool result;
 
             try {
                 baseWin.Context.BeginUpdate();
-                GEDCOMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseWin.Context.Tree;
 
                 using (var dlg = AppHost.ResolveDialog<IPersonEditDlg>(baseWin)) {
                     bool exists = (indivRec != null);
                     if (!exists) {
-                        indivRec = new GEDCOMIndividualRecord(tree);
+                        indivRec = new GDMIndividualRecord(tree);
                         indivRec.InitNew();
 
-                        indivRec.AddPersonalName(new GEDCOMPersonalName(indivRec));
+                        indivRec.AddPersonalName(new GDMPersonalName(indivRec));
                         baseWin.Context.CreateEventEx(indivRec, GEDCOMTagType.BIRT, "", "");
                     }
 
@@ -520,13 +520,13 @@ namespace GKCore
             return result;
         }
 
-        public static bool ModifyFamily(IBaseWindow baseWin, ref GEDCOMFamilyRecord familyRec, TargetMode targetType, GEDCOMIndividualRecord target)
+        public static bool ModifyFamily(IBaseWindow baseWin, ref GDMFamilyRecord familyRec, TargetMode targetType, GDMIndividualRecord target)
         {
             bool result;
 
             try {
                 baseWin.Context.BeginUpdate();
-                GEDCOMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseWin.Context.Tree;
 
                 if (targetType == TargetMode.tmFamilySpouse && target != null) {
                     GEDCOMSex sex = target.Sex;
@@ -539,7 +539,7 @@ namespace GKCore
                 using (var dlg = AppHost.ResolveDialog<IFamilyEditDlg>(baseWin)) {
                     bool exists = (familyRec != null);
                     if (!exists) {
-                        familyRec = new GEDCOMFamilyRecord(tree);
+                        familyRec = new GDMFamilyRecord(tree);
                         familyRec.InitNew();
                     }
 
@@ -574,7 +574,7 @@ namespace GKCore
             return result;
         }
 
-        public static bool ModifyAddress(IBaseWindow baseWin, GEDCOMAddress address)
+        public static bool ModifyAddress(IBaseWindow baseWin, GDMAddress address)
         {
             bool result;
 
@@ -615,10 +615,10 @@ namespace GKCore
 
         #region Data modification functions for UI
 
-        public static GEDCOMRecord AddRecord(IBaseWindow baseWin, GEDCOMRecordType rt, Target target)
+        public static GDMRecord AddRecord(IBaseWindow baseWin, GEDCOMRecordType rt, Target target)
         {
             bool result = false;
-            GEDCOMRecord rec = null;
+            GDMRecord rec = null;
 
             switch (rt)
             {
@@ -630,7 +630,7 @@ namespace GKCore
                             target.TargetMode = TargetMode.tmParent;
                         }
 
-                        GEDCOMIndividualRecord indivRec = null;
+                        GDMIndividualRecord indivRec = null;
                         result = ModifyIndividual(baseWin, ref indivRec, target.TargetIndividual, target.TargetMode, target.NeedSex);
                         rec = indivRec;
                         break;
@@ -644,70 +644,70 @@ namespace GKCore
 
                         TargetMode famTarget = (target.TargetMode != TargetMode.tmFamilyChild) ? TargetMode.tmNone : target.TargetMode;
 
-                        GEDCOMFamilyRecord fam = null;
+                        GDMFamilyRecord fam = null;
                         result = ModifyFamily(baseWin, ref fam, famTarget, target.TargetIndividual);
                         rec = fam;
                         break;
                     }
                 case GEDCOMRecordType.rtNote:
                     {
-                        GEDCOMNoteRecord note = null;
+                        GDMNoteRecord note = null;
                         result = ModifyNote(baseWin, ref note);
                         rec = note;
                         break;
                     }
                 case GEDCOMRecordType.rtMultimedia:
                     {
-                        GEDCOMMultimediaRecord mmRec = null;
+                        GDMMultimediaRecord mmRec = null;
                         result = ModifyMedia(baseWin, ref mmRec);
                         rec = mmRec;
                         break;
                     }
                 case GEDCOMRecordType.rtSource:
                     {
-                        GEDCOMSourceRecord src = null;
+                        GDMSourceRecord src = null;
                         result = ModifySource(baseWin, ref src);
                         rec = src;
                         break;
                     }
                 case GEDCOMRecordType.rtRepository:
                     {
-                        GEDCOMRepositoryRecord rep = null;
+                        GDMRepositoryRecord rep = null;
                         result = ModifyRepository(baseWin, ref rep);
                         rec = rep;
                         break;
                     }
                 case GEDCOMRecordType.rtGroup:
                     {
-                        GEDCOMGroupRecord grp = null;
+                        GDMGroupRecord grp = null;
                         result = ModifyGroup(baseWin, ref grp);
                         rec = grp;
                         break;
                     }
                 case GEDCOMRecordType.rtResearch:
                     {
-                        GEDCOMResearchRecord rsr = null;
+                        GDMResearchRecord rsr = null;
                         result = ModifyResearch(baseWin, ref rsr);
                         rec = rsr;
                         break;
                     }
                 case GEDCOMRecordType.rtTask:
                     {
-                        GEDCOMTaskRecord tsk = null;
+                        GDMTaskRecord tsk = null;
                         result = ModifyTask(baseWin, ref tsk);
                         rec = tsk;
                         break;
                     }
                 case GEDCOMRecordType.rtCommunication:
                     {
-                        GEDCOMCommunicationRecord comm = null;
+                        GDMCommunicationRecord comm = null;
                         result = ModifyCommunication(baseWin, ref comm);
                         rec = comm;
                         break;
                     }
                 case GEDCOMRecordType.rtLocation:
                     {
-                        GEDCOMLocationRecord loc = null;
+                        GDMLocationRecord loc = null;
                         result = ModifyLocation(baseWin, ref loc);
                         rec = loc;
                         break;
@@ -717,63 +717,63 @@ namespace GKCore
             return (result) ? rec : null;
         }
 
-        public static bool EditRecord(IBaseWindow baseWin, GEDCOMRecord rec)
+        public static bool EditRecord(IBaseWindow baseWin, GDMRecord rec)
         {
             bool result = false;
 
             switch (rec.RecordType) {
                 case GEDCOMRecordType.rtIndividual:
-                    GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
+                    GDMIndividualRecord ind = rec as GDMIndividualRecord;
                     result = ModifyIndividual(baseWin, ref ind, null, TargetMode.tmNone, GEDCOMSex.svNone);
                     break;
 
                 case GEDCOMRecordType.rtFamily:
-                    GEDCOMFamilyRecord fam = rec as GEDCOMFamilyRecord;
+                    GDMFamilyRecord fam = rec as GDMFamilyRecord;
                     result = ModifyFamily(baseWin, ref fam, TargetMode.tmNone, null);
                     break;
 
                 case GEDCOMRecordType.rtNote:
-                    GEDCOMNoteRecord note = rec as GEDCOMNoteRecord;
+                    GDMNoteRecord note = rec as GDMNoteRecord;
                     result = ModifyNote(baseWin, ref note);
                     break;
 
                 case GEDCOMRecordType.rtMultimedia:
-                    GEDCOMMultimediaRecord mmRec = rec as GEDCOMMultimediaRecord;
+                    GDMMultimediaRecord mmRec = rec as GDMMultimediaRecord;
                     result = ModifyMedia(baseWin, ref mmRec);
                     break;
 
                 case GEDCOMRecordType.rtSource:
-                    GEDCOMSourceRecord src = rec as GEDCOMSourceRecord;
+                    GDMSourceRecord src = rec as GDMSourceRecord;
                     result = ModifySource(baseWin, ref src);
                     break;
 
                 case GEDCOMRecordType.rtRepository:
-                    GEDCOMRepositoryRecord rep = rec as GEDCOMRepositoryRecord;
+                    GDMRepositoryRecord rep = rec as GDMRepositoryRecord;
                     result = ModifyRepository(baseWin, ref rep);
                     break;
 
                 case GEDCOMRecordType.rtGroup:
-                    GEDCOMGroupRecord grp = rec as GEDCOMGroupRecord;
+                    GDMGroupRecord grp = rec as GDMGroupRecord;
                     result = ModifyGroup(baseWin, ref grp);
                     break;
 
                 case GEDCOMRecordType.rtResearch:
-                    GEDCOMResearchRecord rsr = rec as GEDCOMResearchRecord;
+                    GDMResearchRecord rsr = rec as GDMResearchRecord;
                     result = ModifyResearch(baseWin, ref rsr);
                     break;
 
                 case GEDCOMRecordType.rtTask:
-                    GEDCOMTaskRecord tsk = rec as GEDCOMTaskRecord;
+                    GDMTaskRecord tsk = rec as GDMTaskRecord;
                     result = ModifyTask(baseWin, ref tsk);
                     break;
 
                 case GEDCOMRecordType.rtCommunication:
-                    GEDCOMCommunicationRecord comm = rec as GEDCOMCommunicationRecord;
+                    GDMCommunicationRecord comm = rec as GDMCommunicationRecord;
                     result = ModifyCommunication(baseWin, ref comm);
                     break;
 
                 case GEDCOMRecordType.rtLocation:
-                    GEDCOMLocationRecord loc = rec as GEDCOMLocationRecord;
+                    GDMLocationRecord loc = rec as GDMLocationRecord;
                     result = ModifyLocation(baseWin, ref loc);
                     break;
             }
@@ -781,7 +781,7 @@ namespace GKCore
             return result;
         }
 
-        public static bool DeleteRecord(IBaseWindow baseWin, GEDCOMRecord record, bool confirm)
+        public static bool DeleteRecord(IBaseWindow baseWin, GDMRecord record, bool confirm)
         {
             bool result = false;
 
@@ -791,16 +791,16 @@ namespace GKCore
                 switch (record.RecordType)
                 {
                     case GEDCOMRecordType.rtIndividual:
-                        msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), GKUtils.GetNameString(((GEDCOMIndividualRecord)record), true, false));
+                        msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), GKUtils.GetNameString(((GDMIndividualRecord)record), true, false));
                         break;
 
                     case GEDCOMRecordType.rtFamily:
-                        msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString((GEDCOMFamilyRecord)record));
+                        msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString((GDMFamilyRecord)record));
                         break;
 
                     case GEDCOMRecordType.rtNote:
                         {
-                            string value = GKUtils.TruncateStrings(((GEDCOMNoteRecord) (record)).Note, GKData.NOTE_NAME_MAX_LENGTH);
+                            string value = GKUtils.TruncateStrings(((GDMNoteRecord) (record)).Note, GKData.NOTE_NAME_MAX_LENGTH);
                             if (string.IsNullOrEmpty(value))
                             {
                                 value = string.Format("#{0}", record.GetId().ToString());
@@ -810,35 +810,35 @@ namespace GKCore
                         }
 
                     case GEDCOMRecordType.rtMultimedia:
-                        msg = string.Format(LangMan.LS(LSID.LSID_MediaDeleteQuery), ((GEDCOMMultimediaRecord)record).GetFileTitle());
+                        msg = string.Format(LangMan.LS(LSID.LSID_MediaDeleteQuery), ((GDMMultimediaRecord)record).GetFileTitle());
                         break;
 
                     case GEDCOMRecordType.rtSource:
-                        msg = string.Format(LangMan.LS(LSID.LSID_SourceDeleteQuery), ((GEDCOMSourceRecord)record).ShortTitle);
+                        msg = string.Format(LangMan.LS(LSID.LSID_SourceDeleteQuery), ((GDMSourceRecord)record).ShortTitle);
                         break;
 
                     case GEDCOMRecordType.rtRepository:
-                        msg = string.Format(LangMan.LS(LSID.LSID_RepositoryDeleteQuery), ((GEDCOMRepositoryRecord)record).RepositoryName);
+                        msg = string.Format(LangMan.LS(LSID.LSID_RepositoryDeleteQuery), ((GDMRepositoryRecord)record).RepositoryName);
                         break;
 
                     case GEDCOMRecordType.rtGroup:
-                        msg = string.Format(LangMan.LS(LSID.LSID_GroupDeleteQuery), ((GEDCOMGroupRecord)record).GroupName);
+                        msg = string.Format(LangMan.LS(LSID.LSID_GroupDeleteQuery), ((GDMGroupRecord)record).GroupName);
                         break;
 
                     case GEDCOMRecordType.rtResearch:
-                        msg = string.Format(LangMan.LS(LSID.LSID_ResearchDeleteQuery), ((GEDCOMResearchRecord)record).ResearchName);
+                        msg = string.Format(LangMan.LS(LSID.LSID_ResearchDeleteQuery), ((GDMResearchRecord)record).ResearchName);
                         break;
 
                     case GEDCOMRecordType.rtTask:
-                        msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery), GKUtils.GetTaskGoalStr((GEDCOMTaskRecord)record));
+                        msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery), GKUtils.GetTaskGoalStr((GDMTaskRecord)record));
                         break;
 
                     case GEDCOMRecordType.rtCommunication:
-                        msg = string.Format(LangMan.LS(LSID.LSID_CommunicationDeleteQuery), ((GEDCOMCommunicationRecord)record).CommName);
+                        msg = string.Format(LangMan.LS(LSID.LSID_CommunicationDeleteQuery), ((GDMCommunicationRecord)record).CommName);
                         break;
 
                     case GEDCOMRecordType.rtLocation:
-                        msg = string.Format(LangMan.LS(LSID.LSID_LocationDeleteQuery), ((GEDCOMLocationRecord)record).LocationName);
+                        msg = string.Format(LangMan.LS(LSID.LSID_LocationDeleteQuery), ((GDMLocationRecord)record).LocationName);
                         break;
                 }
 
@@ -850,14 +850,14 @@ namespace GKCore
             return result;
         }
 
-        public static bool AddIndividualFather(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMIndividualRecord person)
+        public static bool AddIndividualFather(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
 
-            GEDCOMIndividualRecord father = baseWin.Context.SelectPerson(person, TargetMode.tmChild, GEDCOMSex.svMale);
+            GDMIndividualRecord father = baseWin.Context.SelectPerson(person, TargetMode.tmChild, GEDCOMSex.svMale);
             if (father != null)
             {
-                GEDCOMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, father);
+                GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, father);
                 if (family != null)
                 {
                     if (family.Husband.Value == null) {
@@ -874,16 +874,16 @@ namespace GKCore
             return result;
         }
 
-        public static bool DeleteIndividualFather(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMIndividualRecord person)
+        public static bool DeleteIndividualFather(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
 
             if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachFatherQuery)))
             {
-                GEDCOMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
+                GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
                 if (family != null)
                 {
-                    GEDCOMIndividualRecord father = family.GetHusband();
+                    GDMIndividualRecord father = family.GetHusband();
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, father);
                 }
             }
@@ -891,13 +891,13 @@ namespace GKCore
             return result;
         }
 
-        public static bool AddIndividualMother(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMIndividualRecord person)
+        public static bool AddIndividualMother(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
 
-            GEDCOMIndividualRecord mother = baseWin.Context.SelectPerson(person, TargetMode.tmChild, GEDCOMSex.svFemale);
+            GDMIndividualRecord mother = baseWin.Context.SelectPerson(person, TargetMode.tmChild, GEDCOMSex.svFemale);
             if (mother != null) {
-                GEDCOMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, mother);
+                GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, mother);
                 if (family != null) {
                     if (family.Wife.Value == null) {
                         // new family
@@ -913,16 +913,16 @@ namespace GKCore
             return result;
         }
 
-        public static bool DeleteIndividualMother(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMIndividualRecord person)
+        public static bool DeleteIndividualMother(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
 
             if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMotherQuery)))
             {
-                GEDCOMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
+                GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
                 if (family != null)
                 {
-                    GEDCOMIndividualRecord mother = family.GetWife();
+                    GDMIndividualRecord mother = family.GetWife();
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, mother);
                 }
             }
@@ -931,11 +931,11 @@ namespace GKCore
         }
 
 
-        public static bool AddFamilyHusband(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMFamilyRecord family)
+        public static bool AddFamilyHusband(IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
         {
             bool result = false;
 
-            GEDCOMIndividualRecord husband = baseWin.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svMale);
+            GDMIndividualRecord husband = baseWin.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svMale);
             if (husband != null && family.Husband.StringValue == "")
             {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, husband);
@@ -944,11 +944,11 @@ namespace GKCore
             return result;
         }
 
-        public static bool DeleteFamilyHusband(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMFamilyRecord family)
+        public static bool DeleteFamilyHusband(IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
         {
             bool result = false;
 
-            GEDCOMIndividualRecord husband = family.GetHusband();
+            GDMIndividualRecord husband = family.GetHusband();
             if (!baseWin.Context.IsAvailableRecord(husband)) return false;
 
             if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachHusbandQuery)))
@@ -959,11 +959,11 @@ namespace GKCore
             return result;
         }
 
-        public static bool AddFamilyWife(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMFamilyRecord family)
+        public static bool AddFamilyWife(IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
         {
             bool result = false;
 
-            GEDCOMIndividualRecord wife = baseWin.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svFemale);
+            GDMIndividualRecord wife = baseWin.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svFemale);
             if (wife != null && family.Wife.StringValue == "")
             {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, wife);
@@ -972,11 +972,11 @@ namespace GKCore
             return result;
         }
 
-        public static bool DeleteFamilyWife(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMFamilyRecord family)
+        public static bool DeleteFamilyWife(IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
         {
             bool result = false;
 
-            GEDCOMIndividualRecord wife = family.GetWife();
+            GDMIndividualRecord wife = family.GetWife();
             if (!baseWin.Context.IsAvailableRecord(wife)) return false;
 
             if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachWifeQuery)))
@@ -987,15 +987,15 @@ namespace GKCore
             return result;
         }
 
-        public static bool AddIndividualPortrait(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMIndividualRecord iRec)
+        public static bool AddIndividualPortrait(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord iRec)
         {
             bool result = false;
 
-            GEDCOMMultimediaRecord mmRec = baseWin.Context.SelectRecord(GEDCOMRecordType.rtMultimedia, null) as GEDCOMMultimediaRecord;
+            GDMMultimediaRecord mmRec = baseWin.Context.SelectRecord(GEDCOMRecordType.rtMultimedia, null) as GDMMultimediaRecord;
             if (mmRec == null) return false;
 
             // remove previous portrait link
-            GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
+            GDMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
             if (mmLink != null) {
                 mmLink.IsPrimary = false;
             }
@@ -1016,9 +1016,9 @@ namespace GKCore
             return result;
         }
 
-        public static bool DeleteIndividualPortrait(IBaseWindow baseWin, ChangeTracker localUndoman, GEDCOMIndividualRecord iRec)
+        public static bool DeleteIndividualPortrait(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord iRec)
         {
-            GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
+            GDMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
             if (mmLink != null) {
                 return localUndoman.DoOrdinaryOperation(OperationType.otIndividualPortraitDetach, iRec, mmLink);
             }
@@ -1029,7 +1029,7 @@ namespace GKCore
 
         #region Aux
 
-        public static bool DetectCycle(GEDCOMIndividualRecord iRec)
+        public static bool DetectCycle(GDMIndividualRecord iRec)
         {
             string res = TreeTools.DetectCycle(iRec);
             if (!string.IsNullOrEmpty(res)) {

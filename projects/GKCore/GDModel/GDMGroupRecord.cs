@@ -23,11 +23,11 @@ using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMGroupRecord : GEDCOMRecord
+    public sealed class GDMGroupRecord : GDMRecord
     {
-        private GEDCOMList<GEDCOMPointer> fMembers;
+        private GDMList<GDMPointer> fMembers;
 
-        public GEDCOMList<GEDCOMPointer> Members
+        public GDMList<GDMPointer> Members
         {
             get { return fMembers; }
         }
@@ -39,12 +39,12 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMGroupRecord(GEDCOMObject owner) : base(owner)
+        public GDMGroupRecord(GDMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtGroup);
             SetName(GEDCOMTagType._GROUP);
 
-            fMembers = new GEDCOMList<GEDCOMPointer>(this);
+            fMembers = new GDMList<GDMPointer>(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -79,18 +79,16 @@ namespace GKCommon.GEDCOM
         }
 
         // TODO: connect to use
-        public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
+        public override float IsMatch(GDMTag tag, MatchParams matchParams)
         {
-            GEDCOMGroupRecord otherGroup = tag as GEDCOMGroupRecord;
+            GDMGroupRecord otherGroup = tag as GDMGroupRecord;
             if (otherGroup == null) return 0.0f;
 
             float match = GetStrMatch(GroupName, otherGroup.GroupName, matchParams);
             return match;
         }
 
-        #region Auxiliary
-
-        public int IndexOfMember(GEDCOMIndividualRecord member)
+        public int IndexOfMember(GDMIndividualRecord member)
         {
             int result = -1;
 
@@ -107,22 +105,22 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public bool AddMember(GEDCOMIndividualRecord member)
+        public bool AddMember(GDMIndividualRecord member)
         {
             if (member == null) return false;
 
-            GEDCOMPointer ptr = new GEDCOMPointer(this);
+            GDMPointer ptr = new GDMPointer(this);
             ptr.SetNameValue(GEDCOMTagType._MEMBER, member);
             fMembers.Add(ptr);
 
-            ptr = new GEDCOMPointer(member);
+            ptr = new GDMPointer(member);
             ptr.SetNameValue(GEDCOMTagType._GROUP, this);
             member.Groups.Add(ptr);
 
             return true;
         }
 
-        public bool RemoveMember(GEDCOMIndividualRecord member)
+        public bool RemoveMember(GDMIndividualRecord member)
         {
             if (member == null) return false;
 
@@ -131,7 +129,5 @@ namespace GKCommon.GEDCOM
 
             return true;
         }
-
-        #endregion
     }
 }

@@ -20,21 +20,21 @@
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMAlias : GEDCOMPointer
+    public sealed class GDMAlias : GDMPointer
     {
-        public GEDCOMAlias(GEDCOMObject owner) : base(owner)
+        public GDMAlias(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.ALIA);
         }
 
-        public GEDCOMAlias(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMAlias(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMAlias(owner, tagName, tagValue);
+            return new GDMAlias(owner, tagName, tagValue);
         }
     }
 }

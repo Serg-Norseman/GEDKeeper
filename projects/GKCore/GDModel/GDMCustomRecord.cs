@@ -22,7 +22,7 @@ using System.IO;
 
 namespace GKCommon.GEDCOM
 {
-    public abstract class GEDCOMCustomRecord : GEDCOMTag
+    public abstract class GDMCustomRecord : GDMTag
     {
         private string fXRef;
 
@@ -58,12 +58,12 @@ namespace GKCommon.GEDCOM
             stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
         }
 
-        public override GEDCOMTree GetTree()
+        public override GDMTree GetTree()
         {
-            return (Owner as GEDCOMTree);
+            return (Owner as GDMTree);
         }
 
-        protected GEDCOMCustomRecord(GEDCOMObject owner) : base(owner)
+        protected GDMCustomRecord(GDMObject owner) : base(owner)
         {
         }
     }

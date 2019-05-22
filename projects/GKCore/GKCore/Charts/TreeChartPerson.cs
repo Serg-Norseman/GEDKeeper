@@ -64,7 +64,7 @@ namespace GKCore.Charts
         private string fNick;
         private string fPatronymic;
         private string fSurname;
-        private GEDCOMIndividualRecord fRec;
+        private GDMIndividualRecord fRec;
         private EnumSet<SpecialUserRef> fSigns;
         private GEDCOMSex fSex;
         private PersonList fChilds;
@@ -79,7 +79,7 @@ namespace GKCore.Charts
         private int fWidth;
 
         // without property controlling
-        public GEDCOMFamilyRecord BaseFamily;
+        public GDMFamilyRecord BaseFamily;
         public TreeChartPerson BaseSpouse;
         public float CertaintyAssessment;
         public TreeChartPerson Father;
@@ -168,7 +168,7 @@ namespace GKCore.Charts
             set { fPtY = value; }
         }
 
-        public GEDCOMIndividualRecord Rec
+        public GDMIndividualRecord Rec
         {
             get { return fRec; }
         }
@@ -289,7 +289,7 @@ namespace GKCore.Charts
             fSpouses.Add(spouse);
         }
 
-        public void BuildBy(GEDCOMIndividualRecord iRec)
+        public void BuildBy(GDMIndividualRecord iRec)
         {
             try {
                 fRec = iRec;

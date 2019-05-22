@@ -27,17 +27,17 @@ using BSLib;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMList<T> : IDisposable, IEnumerable<T> where T : GEDCOMTag
+    public sealed class GDMList<T> : IDisposable, IEnumerable<T> where T : GDMTag
     {
         #region ListEnumerator
 
         private struct GEDCOMListEnumerator : IGEDCOMListEnumerator<T>
         {
-            private readonly GEDCOMList<T> fOwnList;
+            private readonly GDMList<T> fOwnList;
             private int fIndex;
             private int fSize;
 
-            public GEDCOMListEnumerator(GEDCOMList<T> list)
+            public GEDCOMListEnumerator(GDMList<T> list)
             {
                 fOwnList = list;
 
@@ -98,7 +98,7 @@ namespace GKCommon.GEDCOM
         }
         
 
-        public GEDCOMList(GEDCOMObject owner)
+        public GDMList(GDMObject owner)
         {
             fDataList = null;
         }
@@ -144,7 +144,7 @@ namespace GKCommon.GEDCOM
             return item;
         }
 
-        public void AddRange(GEDCOMList<T> list)
+        public void AddRange(GDMList<T> list)
         {
             if (list != null && list.fDataList != null) {
                 if (fDataList == null) {

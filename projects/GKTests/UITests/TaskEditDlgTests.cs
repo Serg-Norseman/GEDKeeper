@@ -39,7 +39,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class TaskEditDlgTests : CustomWindowTest
     {
-        private GEDCOMTaskRecord fTaskRecord;
+        private GDMTaskRecord fTaskRecord;
         private IBaseWindow fBase;
         private TaskEditDlg fDialog;
 
@@ -48,7 +48,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fTaskRecord = new GEDCOMTaskRecord(fBase.Context.Tree);
+            fTaskRecord = new GDMTaskRecord(fBase.Context.Tree);
 
             fDialog = new TaskEditDlg(fBase);
             fDialog.Task = fTaskRecord;

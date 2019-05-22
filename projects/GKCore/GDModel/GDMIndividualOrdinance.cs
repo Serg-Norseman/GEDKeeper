@@ -59,11 +59,11 @@ namespace GKCommon.GEDCOM
     }
 
 
-    public class GEDCOMIndividualOrdinance : GEDCOMTagWithLists
+    public class GDMIndividualOrdinance : GDMTagWithLists
     {
-        public GEDCOMDateValue Date
+        public GDMDateValue Date
         {
-            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDateValue.Create) as GEDCOMDateValue; }
+            get { return GetTag<GDMDateValue>(GEDCOMTagType.DATE, GDMDateValue.Create); }
         }
 
         public string TempleCode
@@ -72,9 +72,9 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.TEMP, value); }
         }
 
-        public GEDCOMPlace Place
+        public GDMPlace Place
         {
-            get { return GetTag(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
+            get { return GetTag<GDMPlace>(GEDCOMTagType.PLAC, GDMPlace.Create); }
         }
 
         public GEDCOMBaptismDateStatus BaptismDateStatus
@@ -89,9 +89,9 @@ namespace GKCommon.GEDCOM
             set { DateStatus.StringValue = GEDCOMUtils.GetEndowmentDateStatusStr(value); }
         }
 
-        public GEDCOMPointer Family
+        public GDMPointer Family
         {
-            get { return GetTag(GEDCOMTagType.FAMC, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag<GDMPointer>(GEDCOMTagType.FAMC, GDMPointer.Create); }
         }
 
         public GEDCOMChildSealingDateStatus ChildSealingDateStatus
@@ -100,24 +100,24 @@ namespace GKCommon.GEDCOM
             set { DateStatus.StringValue = GEDCOMUtils.GetChildSealingDateStatusStr(value); }
         }
 
-        public GEDCOMDateStatus DateStatus
+        public GDMDateStatus DateStatus
         {
-            get { return GetTag(GEDCOMTagType.STAT, GEDCOMDateStatus.Create) as GEDCOMDateStatus; }
+            get { return GetTag<GDMDateStatus>(GEDCOMTagType.STAT, GDMDateStatus.Create); }
         }
 
 
-        public GEDCOMIndividualOrdinance(GEDCOMObject owner) : base(owner)
+        public GDMIndividualOrdinance(GDMObject owner) : base(owner)
         {
         }
 
-        public GEDCOMIndividualOrdinance(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMIndividualOrdinance(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMIndividualOrdinance(owner, tagName, tagValue);
+            return new GDMIndividualOrdinance(owner, tagName, tagValue);
         }
     }
 }

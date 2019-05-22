@@ -86,17 +86,17 @@ namespace GKDataQualityPlugin
 
             string hint = fPlugin.LangMan.LS(CLS.LSID_Hint);
 
-            GEDCOMTree tree = fBase.Context.Tree;
-            List<GEDCOMIndividualRecord> prepared = new List<GEDCOMIndividualRecord>();
-            List<GEDCOMRecord> groupRecords = new List<GEDCOMRecord>();
+            GDMTree tree = fBase.Context.Tree;
+            List<GDMIndividualRecord> prepared = new List<GDMIndividualRecord>();
+            List<GDMRecord> groupRecords = new List<GDMRecord>();
             try {
                 int groupNum = 0;
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMRecord rec = tree[i];
+                    GDMRecord rec = tree[i];
 
                     if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
-                        GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+                        GDMIndividualRecord iRec = rec as GDMIndividualRecord;
                         if (prepared.IndexOf(iRec) < 0) {
                             groupNum++;
                             groupRecords.Clear();
@@ -106,7 +106,7 @@ namespace GKDataQualityPlugin
                             int groupSize = groupRecords.Count;
                             float quality = 0.0f;
                             for (int j = 0; j < groupSize; j++) {
-                                iRec = (GEDCOMIndividualRecord)groupRecords[j];
+                                iRec = (GDMIndividualRecord)groupRecords[j];
                                 prepared.Add(iRec);
 
                                 quality += iRec.GetCertaintyAssessment();

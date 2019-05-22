@@ -65,7 +65,7 @@ namespace GKUI.Forms
 
             Assert.Throws(typeof(ArgumentNullException), () => { tcWin.SelectByRec(null); });
 
-            GEDCOMIndividualRecord iRec = curBase.GetSelectedPerson();
+            GDMIndividualRecord iRec = curBase.GetSelectedPerson();
             Assert.AreEqual(checkXRef, iRec.XRef);
             tcWin.SelectByRec(iRec);
 

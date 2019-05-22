@@ -71,7 +71,7 @@ namespace GKUI.Forms
 
             ClickButton("btnAccept", fDialog);
 
-            GEDCOMSubmitterRecord submitter = fBase.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+            GDMSubmitterRecord submitter = fBase.Context.Tree.Header.Submitter.Value as GDMSubmitterRecord;
             Assert.AreEqual("sample text", submitter.Name.StringValue);
         }
 
@@ -89,7 +89,7 @@ namespace GKUI.Forms
 
             ClickButton("btnAccept", form);
 
-            GEDCOMSubmitterRecord submitter = baseContext.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+            GDMSubmitterRecord submitter = baseContext.Tree.Header.Submitter.Value as GDMSubmitterRecord;
             Assert.AreEqual("sample text", submitter.Name.StringValue);
         }
 

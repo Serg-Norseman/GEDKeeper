@@ -38,7 +38,7 @@ namespace GKUI.Forms
 
         private readonly GKSheetList fNotesList;
 
-        public GEDCOMTaskRecord Task
+        public GDMTaskRecord Task
         {
             get { return fController.Task; }
             set { fController.Task = value; }

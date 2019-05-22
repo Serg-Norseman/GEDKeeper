@@ -36,18 +36,18 @@ namespace GKCommon.GEDCOM
     }
 
 
-    public sealed class GEDCOMIndividualRecord : GEDCOMRecordWithEvents
+    public sealed class GDMIndividualRecord : GDMRecordWithEvents
     {
-        private GEDCOMList<GEDCOMAlias> fAliasses;
-        private GEDCOMList<GEDCOMAssociation> fAssociations;
-        private GEDCOMList<GEDCOMChildToFamilyLink> fChildToFamilyLinks;
-        private GEDCOMList<GEDCOMPointer> fGroups;
-        private GEDCOMList<GEDCOMPersonalName> fPersonalNames;
-        private GEDCOMList<GEDCOMSpouseToFamilyLink> fSpouseToFamilyLinks;
+        private GDMList<GDMAlias> fAliasses;
+        private GDMList<GDMAssociation> fAssociations;
+        private GDMList<GDMChildToFamilyLink> fChildToFamilyLinks;
+        private GDMList<GDMPointer> fGroups;
+        private GDMList<GDMPersonalName> fPersonalNames;
+        private GDMList<GDMSpouseToFamilyLink> fSpouseToFamilyLinks;
         private GEDCOMSex fSex;
 
 
-        public GEDCOMList<GEDCOMAlias> Aliases
+        public GDMList<GDMAlias> Aliases
         {
             get { return fAliasses; }
         }
@@ -58,7 +58,7 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.AFN, value); }
         }
 
-        public GEDCOMList<GEDCOMAssociation> Associations
+        public GDMList<GDMAssociation> Associations
         {
             get { return fAssociations; }
         }
@@ -79,12 +79,12 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public GEDCOMList<GEDCOMChildToFamilyLink> ChildToFamilyLinks
+        public GDMList<GDMChildToFamilyLink> ChildToFamilyLinks
         {
             get { return fChildToFamilyLinks; }
         }
 
-        public GEDCOMList<GEDCOMPointer> Groups
+        public GDMList<GDMPointer> Groups
         {
             get { return fGroups; }
         }
@@ -111,7 +111,7 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.RFN, value); }
         }
 
-        public GEDCOMList<GEDCOMPersonalName> PersonalNames
+        public GDMList<GDMPersonalName> PersonalNames
         {
             get { return fPersonalNames; }
         }
@@ -122,23 +122,23 @@ namespace GKCommon.GEDCOM
             set { fSex = value; }
         }
 
-        public GEDCOMList<GEDCOMSpouseToFamilyLink> SpouseToFamilyLinks
+        public GDMList<GDMSpouseToFamilyLink> SpouseToFamilyLinks
         {
             get { return fSpouseToFamilyLinks; }
         }
 
 
-        public GEDCOMIndividualRecord(GEDCOMObject owner) : base(owner)
+        public GDMIndividualRecord(GDMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtIndividual);
             SetName(GEDCOMTagType.INDI);
 
-            fAliasses = new GEDCOMList<GEDCOMAlias>(this);
-            fAssociations = new GEDCOMList<GEDCOMAssociation>(this);
-            fChildToFamilyLinks = new GEDCOMList<GEDCOMChildToFamilyLink>(this);
-            fGroups = new GEDCOMList<GEDCOMPointer>(this);
-            fPersonalNames = new GEDCOMList<GEDCOMPersonalName>(this);
-            fSpouseToFamilyLinks = new GEDCOMList<GEDCOMSpouseToFamilyLink>(this);
+            fAliasses = new GDMList<GDMAlias>(this);
+            fAssociations = new GDMList<GDMAssociation>(this);
+            fChildToFamilyLinks = new GDMList<GDMChildToFamilyLink>(this);
+            fGroups = new GDMList<GDMPointer>(this);
+            fPersonalNames = new GDMList<GDMPersonalName>(this);
+            fSpouseToFamilyLinks = new GDMList<GDMSpouseToFamilyLink>(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -154,10 +154,10 @@ namespace GKCommon.GEDCOM
             base.Dispose(disposing);
         }
 
-        public override GEDCOMCustomEvent AddEvent(GEDCOMCustomEvent evt)
+        public override GDMCustomEvent AddEvent(GDMCustomEvent evt)
         {
             if (evt != null) {
-                if (evt is GEDCOMIndividualEvent || evt is GEDCOMIndividualAttribute) {
+                if (evt is GDMIndividualEvent || evt is GDMIndividualAttribute) {
                     Events.Add(evt);
                 } else {
                     throw new ArgumentException(@"Event has the invalid type", "evt");
@@ -167,7 +167,7 @@ namespace GKCommon.GEDCOM
             return evt;
         }
 
-        public GEDCOMPersonalName AddPersonalName(GEDCOMPersonalName value)
+        public GDMPersonalName AddPersonalName(GDMPersonalName value)
         {
             if (value != null) {
                 fPersonalNames.Add(value);
@@ -182,19 +182,19 @@ namespace GKCommon.GEDCOM
             fSex = GEDCOMSex.svNone;
 
             for (int i = fChildToFamilyLinks.Count - 1; i >= 0; i--) {
-                GEDCOMFamilyRecord family = fChildToFamilyLinks[i].Family;
+                GDMFamilyRecord family = fChildToFamilyLinks[i].Family;
                 family.DeleteChild(this);
             }
             fChildToFamilyLinks.Clear();
 
             for (int i = fSpouseToFamilyLinks.Count - 1; i >= 0; i--) {
-                GEDCOMFamilyRecord family = fSpouseToFamilyLinks[i].Family;
+                GDMFamilyRecord family = fSpouseToFamilyLinks[i].Family;
                 family.RemoveSpouse(this);
             }
             fSpouseToFamilyLinks.Clear();
 
             for (int i = fGroups.Count - 1; i >= 0; i--) {
-                GEDCOMGroupRecord group = (GEDCOMGroupRecord)fGroups[i].Value;
+                GDMGroupRecord group = (GDMGroupRecord)fGroups[i].Value;
                 group.RemoveMember(this);
             }
             fGroups.Clear();
@@ -211,7 +211,7 @@ namespace GKCommon.GEDCOM
                 && fAssociations.Count == 0 && fAliasses.Count == 0 && fGroups.Count == 0;
         }
 
-        public int IndexOfGroup(GEDCOMGroupRecord groupRec)
+        public int IndexOfGroup(GDMGroupRecord groupRec)
         {
             if (groupRec != null) {
                 int num = fGroups.Count;
@@ -225,7 +225,7 @@ namespace GKCommon.GEDCOM
             return -1;
         }
 
-        public int IndexOfSpouse(GEDCOMFamilyRecord familyRec)
+        public int IndexOfSpouse(GDMFamilyRecord familyRec)
         {
             if (familyRec != null) {
                 int num = fSpouseToFamilyLinks.Count;
@@ -239,7 +239,7 @@ namespace GKCommon.GEDCOM
             return -1;
         }
 
-        public void DeleteSpouseToFamilyLink(GEDCOMFamilyRecord familyRec)
+        public void DeleteSpouseToFamilyLink(GDMFamilyRecord familyRec)
         {
             int num = fSpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
@@ -250,7 +250,7 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public void DeleteChildToFamilyLink(GEDCOMFamilyRecord familyRec)
+        public void DeleteChildToFamilyLink(GDMFamilyRecord familyRec)
         {
             int num = fChildToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
@@ -271,9 +271,9 @@ namespace GKCommon.GEDCOM
             return FindEvent(GEDCOMTagType.DEAT) == null;
         }
 
-        public override void Assign(GEDCOMTag source)
+        public override void Assign(GDMTag source)
         {
-            GEDCOMIndividualRecord sourceRec = source as GEDCOMIndividualRecord;
+            GDMIndividualRecord sourceRec = source as GDMIndividualRecord;
             if (sourceRec == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
@@ -281,16 +281,16 @@ namespace GKCommon.GEDCOM
 
             fSex = sourceRec.fSex;
 
-            foreach (GEDCOMPersonalName srcName in sourceRec.fPersonalNames) {
-                GEDCOMPersonalName copyName = new GEDCOMPersonalName(this);
+            foreach (GDMPersonalName srcName in sourceRec.fPersonalNames) {
+                GDMPersonalName copyName = new GDMPersonalName(this);
                 copyName.Assign(srcName);
                 AddPersonalName(copyName);
             }
         }
 
-        public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
+        public override void MoveTo(GDMRecord targetRecord, bool clearDest)
         {
-            GEDCOMIndividualRecord targetIndi = targetRecord as GEDCOMIndividualRecord;
+            GDMIndividualRecord targetIndi = targetRecord as GDMIndividualRecord;
             if (targetIndi == null) {
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
             }
@@ -305,18 +305,18 @@ namespace GKCommon.GEDCOM
             targetIndi.Sex = fSex;
 
             while (fPersonalNames.Count > 0) {
-                GEDCOMPersonalName obj = fPersonalNames.Extract(0);
+                GDMPersonalName obj = fPersonalNames.Extract(0);
                 obj.ResetOwner(targetIndi);
                 targetIndi.AddPersonalName(obj);
             }
 
             if (targetIndi.ChildToFamilyLinks.Count == 0 && ChildToFamilyLinks.Count != 0 && fChildToFamilyLinks != null) {
-                GEDCOMChildToFamilyLink ctfLink = fChildToFamilyLinks.Extract(0);
-                GEDCOMFamilyRecord family = ctfLink.Family;
+                GDMChildToFamilyLink ctfLink = fChildToFamilyLinks.Extract(0);
+                GDMFamilyRecord family = ctfLink.Family;
 
                 int num = family.Children.Count;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMPointer childPtr = family.Children[i];
+                    GDMPointer childPtr = family.Children[i];
 
                     if (childPtr.StringValue == "@" + XRef + "@") {
                         childPtr.StringValue = "@" + targetRecord.XRef + "@";
@@ -328,8 +328,8 @@ namespace GKCommon.GEDCOM
             }
 
             while (fSpouseToFamilyLinks.Count > 0) {
-                GEDCOMSpouseToFamilyLink stfLink = fSpouseToFamilyLinks.Extract(0);
-                GEDCOMFamilyRecord family = stfLink.Family;
+                GDMSpouseToFamilyLink stfLink = fSpouseToFamilyLinks.Extract(0);
+                GDMFamilyRecord family = stfLink.Family;
 
                 string targetXRef = "@" + targetRecord.XRef + "@";
 
@@ -344,19 +344,19 @@ namespace GKCommon.GEDCOM
             }
 
             while (fAssociations.Count > 0) {
-                GEDCOMAssociation obj = fAssociations.Extract(0);
+                GDMAssociation obj = fAssociations.Extract(0);
                 obj.ResetOwner(targetIndi);
                 targetIndi.Associations.Add(obj);
             }
 
             while (fAliasses.Count > 0) {
-                GEDCOMAlias obj = fAliasses.Extract(0);
+                GDMAlias obj = fAliasses.Extract(0);
                 obj.ResetOwner(targetIndi);
                 targetIndi.Aliases.Add(obj);
             }
 
             while (fGroups.Count > 0) {
-                GEDCOMPointer obj = fGroups.Extract(0);
+                GDMPointer obj = fGroups.Extract(0);
                 obj.ResetOwner(targetIndi);
                 targetIndi.Groups.Add(obj);
             }
@@ -402,14 +402,12 @@ namespace GKCommon.GEDCOM
             fGroups.SaveToStream(stream, level);
         }
 
-        #region Auxiliary
-
         public sealed class LifeDatesRet
         {
-            public readonly GEDCOMCustomEvent BirthEvent;
-            public readonly GEDCOMCustomEvent DeathEvent;
+            public readonly GDMCustomEvent BirthEvent;
+            public readonly GDMCustomEvent DeathEvent;
 
-            public LifeDatesRet(GEDCOMCustomEvent birthEvent, GEDCOMCustomEvent deathEvent)
+            public LifeDatesRet(GDMCustomEvent birthEvent, GDMCustomEvent deathEvent)
             {
                 BirthEvent = birthEvent;
                 DeathEvent = deathEvent;
@@ -418,13 +416,13 @@ namespace GKCommon.GEDCOM
 
         public LifeDatesRet GetLifeDates()
         {
-            GEDCOMCustomEvent birthEvent = null;
-            GEDCOMCustomEvent deathEvent = null;
+            GDMCustomEvent birthEvent = null;
+            GDMCustomEvent deathEvent = null;
 
             int num = Events.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMCustomEvent evt = Events[i];
+                GDMCustomEvent evt = Events[i];
 
                 if (evt.Name == GEDCOMTagType.BIRT && birthEvent == null) {
                     birthEvent = evt;
@@ -441,9 +439,9 @@ namespace GKCommon.GEDCOM
         /// </summary>
         /// <param name="canCreate">can create if does not exist</param>
         /// <returns></returns>
-        public GEDCOMFamilyRecord GetMarriageFamily(bool canCreate = false)
+        public GDMFamilyRecord GetMarriageFamily(bool canCreate = false)
         {
-            GEDCOMFamilyRecord result = (fSpouseToFamilyLinks.Count < 1) ? null : fSpouseToFamilyLinks[0].Family;
+            GDMFamilyRecord result = (fSpouseToFamilyLinks.Count < 1) ? null : fSpouseToFamilyLinks[0].Family;
 
             if (result == null && canCreate) {
                 result = GetTree().CreateFamily();
@@ -458,9 +456,9 @@ namespace GKCommon.GEDCOM
         /// </summary>
         /// <param name="canCreate">can create if does not exist</param>
         /// <returns></returns>
-        public GEDCOMFamilyRecord GetParentsFamily(bool canCreate = false)
+        public GDMFamilyRecord GetParentsFamily(bool canCreate = false)
         {
-            GEDCOMFamilyRecord result = (fChildToFamilyLinks.Count < 1) ? null : fChildToFamilyLinks[0].Value as GEDCOMFamilyRecord;
+            GDMFamilyRecord result = (fChildToFamilyLinks.Count < 1) ? null : fChildToFamilyLinks[0].Value as GDMFamilyRecord;
 
             if (result == null && canCreate) {
                 result = GetTree().CreateFamily();
@@ -481,7 +479,7 @@ namespace GKCommon.GEDCOM
             string resName;
 
             if (fPersonalNames.Count > 0) {
-                GEDCOMPersonalName np = fPersonalNames[0];
+                GDMPersonalName np = fPersonalNames[0];
 
                 if (onlyFirstPart) {
                     resName = np.FirstPart;
@@ -495,9 +493,9 @@ namespace GKCommon.GEDCOM
             return resName;
         }
 
-        public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
+        public override float IsMatch(GDMTag tag, MatchParams matchParams)
         {
-            GEDCOMIndividualRecord indi = tag as GEDCOMIndividualRecord;
+            GDMIndividualRecord indi = tag as GDMIndividualRecord;
             if (indi == null) return 0.0f;
 
             if (Sex != indi.Sex) return 0.0f;
@@ -558,24 +556,24 @@ namespace GKCommon.GEDCOM
             return match;
         }
 
-        public GEDCOMAssociation AddAssociation(string relation, GEDCOMIndividualRecord relPerson)
+        public GDMAssociation AddAssociation(string relation, GDMIndividualRecord relPerson)
         {
-            GEDCOMAssociation result = new GEDCOMAssociation(this);
+            GDMAssociation result = new GDMAssociation(this);
             result.Relation = relation;
             result.Individual = relPerson;
             Associations.Add(result);
             return result;
         }
 
-        public GEDCOMMultimediaLink SetPrimaryMultimediaLink(GEDCOMMultimediaRecord mediaRec)
+        public GDMMultimediaLink SetPrimaryMultimediaLink(GDMMultimediaRecord mediaRec)
         {
             if (mediaRec == null) return null;
-            GEDCOMMultimediaLink mmLink = null;
+            GDMMultimediaLink mmLink = null;
 
             int num = MultimediaLinks.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMMultimediaLink lnk = MultimediaLinks[i];
+                GDMMultimediaLink lnk = MultimediaLinks[i];
 
                 if (lnk.Value == mediaRec) {
                     mmLink = lnk;
@@ -591,13 +589,13 @@ namespace GKCommon.GEDCOM
             return mmLink;
         }
 
-        public GEDCOMMultimediaLink GetPrimaryMultimediaLink()
+        public GDMMultimediaLink GetPrimaryMultimediaLink()
         {
-            GEDCOMMultimediaLink result = null;
+            GDMMultimediaLink result = null;
 
             int num = MultimediaLinks.Count;
             for (int i = 0; i < num; i++) {
-                GEDCOMMultimediaLink mmLink = MultimediaLinks[i];
+                GDMMultimediaLink mmLink = MultimediaLinks[i];
                 if (mmLink.IsPrimary) {
                     result = mmLink;
                     break;
@@ -614,17 +612,17 @@ namespace GKCommon.GEDCOM
             int num = SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMFamilyRecord family = SpouseToFamilyLinks[i].Family;
+                GDMFamilyRecord family = SpouseToFamilyLinks[i].Family;
                 result += family.Children.Count;
             }
 
             return result;
         }
 
-        private static int EventsCompare(GEDCOMPointer cp1, GEDCOMPointer cp2)
+        private static int EventsCompare(GDMPointer cp1, GDMPointer cp2)
         {
-            UDN udn1 = ((GEDCOMFamilyRecord)cp1.Value).GetUDN(GEDCOMTagType.MARR);
-            UDN udn2 = ((GEDCOMFamilyRecord)cp2.Value).GetUDN(GEDCOMTagType.MARR);
+            UDN udn1 = ((GDMFamilyRecord)cp1.Value).GetUDN(GEDCOMTagType.MARR);
+            UDN udn2 = ((GDMFamilyRecord)cp2.Value).GetUDN(GEDCOMTagType.MARR);
             return udn1.CompareTo(udn2);
         }
 
@@ -632,7 +630,5 @@ namespace GKCommon.GEDCOM
         {
             fSpouseToFamilyLinks.Sort(EventsCompare);
         }
-
-        #endregion
     }
 }

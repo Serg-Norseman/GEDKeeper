@@ -38,7 +38,7 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class LocationListMan : ListManager
     {
-        private GEDCOMLocationRecord fRec;
+        private GDMLocationRecord fRec;
 
 
         public LocationListMan(IBaseContext baseContext) :
@@ -71,9 +71,9 @@ namespace GKCore.Lists
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMLocationRecord);
+            fRec = (aRec as GDMLocationRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

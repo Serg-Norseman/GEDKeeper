@@ -31,10 +31,10 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class CommunicationEditDlgController : DialogController<ICommunicationEditDlg>
     {
-        private GEDCOMCommunicationRecord fCommunication;
-        private GEDCOMIndividualRecord fTempInd;
+        private GDMCommunicationRecord fCommunication;
+        private GDMIndividualRecord fTempInd;
 
-        public GEDCOMCommunicationRecord Communication
+        public GDMCommunicationRecord Communication
         {
             get { return fCommunication; }
             set {
@@ -67,7 +67,7 @@ namespace GKCore.Controllers
             try {
                 fCommunication.CommName = fView.Name.Text;
                 fCommunication.CommunicationType = (GDMCommunicationType)fView.CorrType.SelectedIndex;
-                fCommunication.Date.Assign(GEDCOMDate.CreateByFormattedStr(fView.Date.Text, true));
+                fCommunication.Date.Assign(GDMDate.CreateByFormattedStr(fView.Date.Text, true));
                 fCommunication.SetCorresponder((GDMCommunicationDir)fView.Dir.SelectedIndex, fTempInd);
 
                 fBase.NotifyRecord(fCommunication, RecordAction.raEdit);

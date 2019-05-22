@@ -33,9 +33,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class PersonalNameEditDlgController : DialogController<IPersonalNameEditDlg>
     {
-        private GEDCOMPersonalName fPersonalName;
+        private GDMPersonalName fPersonalName;
 
-        public GEDCOMPersonalName PersonalName
+        public GDMPersonalName PersonalName
         {
             get { return fPersonalName; }
             set {
@@ -63,7 +63,7 @@ namespace GKCore.Controllers
             try {
                 GKUtils.SetNameParts(fPersonalName, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
 
-                GEDCOMPersonalNamePieces pieces = fPersonalName.Pieces;
+                GDMPersonalNamePieces pieces = fPersonalName.Pieces;
                 pieces.Nickname = fView.Nickname.Text;
                 pieces.Prefix = fView.NamePrefix.Text;
                 pieces.SurnamePrefix = fView.SurnamePrefix.Text;
@@ -83,7 +83,7 @@ namespace GKCore.Controllers
 
         private bool IsExtendedWomanSurname()
         {
-            GEDCOMIndividualRecord iRec = fPersonalName.Owner as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fPersonalName.Owner as GDMIndividualRecord;
 
             bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
                 (iRec.Sex == GEDCOMSex.svFemale);
@@ -92,7 +92,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            GEDCOMIndividualRecord iRec = fPersonalName.Owner as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fPersonalName.Owner as GDMIndividualRecord;
 
             var parts = GKUtils.GetNameParts(iRec, fPersonalName, false);
 

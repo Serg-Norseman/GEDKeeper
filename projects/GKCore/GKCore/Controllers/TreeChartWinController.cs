@@ -73,7 +73,7 @@ namespace GKCore.Controllers
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GEDCOMFamilyRecord fam = fBase.Context.AddFamilyForSpouse(p.Rec);
+            GDMFamilyRecord fam = fBase.Context.AddFamilyForSpouse(p.Rec);
             if (fam == null) return;
 
             UpdateChart();
@@ -84,7 +84,7 @@ namespace GKCore.Controllers
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GEDCOMIndividualRecord child = fBase.Context.AddChildForParent(p.Rec, needSex);
+            GDMIndividualRecord child = fBase.Context.AddChildForParent(p.Rec, needSex);
             if (child == null) return;
 
             UpdateChart();
@@ -105,11 +105,11 @@ namespace GKCore.Controllers
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GEDCOMIndividualRecord iRec = p.Rec;
-            GEDCOMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(iRec);
+            GDMIndividualRecord iRec = p.Rec;
+            GDMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(iRec);
             if (iSpouse == null) return;
 
-            GEDCOMFamilyRecord fam = fBase.Context.Tree.CreateFamily();
+            GDMFamilyRecord fam = fBase.Context.Tree.CreateFamily();
             fam.AddSpouse(iRec);
             fam.AddSpouse(iSpouse);
             UpdateChart();
@@ -124,8 +124,8 @@ namespace GKCore.Controllers
             bool familyExist = p.Rec.GetParentsFamily() != null;
 
             if (familyExist) {
-                GEDCOMIndividualRecord mother, father;
-                GEDCOMFamilyRecord fam = p.Rec.GetParentsFamily();
+                GDMIndividualRecord mother, father;
+                GDMFamilyRecord fam = p.Rec.GetParentsFamily();
                 if (fam == null) {
                     father = null;
                     mother = null;
@@ -139,9 +139,9 @@ namespace GKCore.Controllers
             }
 
             if (!familyExist || needParent) {
-                GEDCOMIndividualRecord child = p.Rec;
-                GEDCOMFamilyRecord fam = (familyExist) ? p.Rec.GetParentsFamily() : fBase.Context.Tree.CreateFamily();
-                GEDCOMIndividualRecord parent = fBase.Context.SelectPerson(null, TargetMode.tmParent, needSex);
+                GDMIndividualRecord child = p.Rec;
+                GDMFamilyRecord fam = (familyExist) ? p.Rec.GetParentsFamily() : fBase.Context.Tree.CreateFamily();
+                GDMIndividualRecord parent = fBase.Context.SelectPerson(null, TargetMode.tmParent, needSex);
                 if (parent != null) {
                     fam.AddSpouse(parent);
                     if (!familyExist)
@@ -167,7 +167,7 @@ namespace GKCore.Controllers
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GEDCOMIndividualRecord iRec = p.Rec;
+            GDMIndividualRecord iRec = p.Rec;
             if (BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone)) {
                 UpdateChart();
             }
@@ -189,16 +189,16 @@ namespace GKCore.Controllers
             bool modified = false;
 
             if (person.Rec != null) {
-                GEDCOMIndividualRecord iRec = person.Rec;
+                GDMIndividualRecord iRec = person.Rec;
                 modified = BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone);
             } else {
                 // this is "stub" person, only in descendant tree
                 // key properties = BaseSpouse & BaseFamily
                 TreeChartPerson baseSpouse = person.BaseSpouse;
-                GEDCOMFamilyRecord baseFamily = person.BaseFamily;
+                GDMFamilyRecord baseFamily = person.BaseFamily;
 
                 if (baseSpouse != null && baseFamily != null) {
-                    GEDCOMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(person.BaseSpouse.Rec);
+                    GDMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(person.BaseSpouse.Rec);
 
                     if (iSpouse != null) {
                         modified = baseFamily.AddSpouse(iSpouse);
@@ -219,8 +219,8 @@ namespace GKCore.Controllers
             bool familyExist = p.Rec.GetParentsFamily() != null;
             if (!familyExist) return true;
 
-            GEDCOMIndividualRecord mother, father;
-            GEDCOMFamilyRecord fam = p.Rec.GetParentsFamily();
+            GDMIndividualRecord mother, father;
+            GDMFamilyRecord fam = p.Rec.GetParentsFamily();
             if (fam == null) {
                 father = null;
                 mother = null;

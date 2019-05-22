@@ -52,7 +52,7 @@ namespace GKCore.Controllers
         {
             if (result == null || result.Result == null) return;
 
-            fWorkWindow.SelectByRec(result.Result as GEDCOMIndividualRecord);
+            fWorkWindow.SelectByRec(result.Result as GDMIndividualRecord);
         }
 
         public void FindNext()

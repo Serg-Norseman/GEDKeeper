@@ -38,7 +38,7 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class TaskListMan : ListManager
     {
-        private GEDCOMTaskRecord fRec;
+        private GDMTaskRecord fRec;
 
 
         public TaskListMan(IBaseContext baseContext) :
@@ -69,9 +69,9 @@ namespace GKCore.Lists
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMTaskRecord);
+            fRec = (aRec as GDMTaskRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

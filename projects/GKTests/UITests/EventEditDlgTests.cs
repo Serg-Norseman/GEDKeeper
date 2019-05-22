@@ -37,7 +37,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class EventEditDlgTests : CustomWindowTest
     {
-        private GEDCOMCustomEvent fEvent;
+        private GDMCustomEvent fEvent;
         private IBaseWindow fBase;
         private EventEditDlg fDialog;
 
@@ -46,7 +46,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fEvent = new GEDCOMIndividualEvent(null);
+            fEvent = new GDMIndividualEvent(null);
 
             fDialog = new EventEditDlg(fBase);
             fDialog.Event = fEvent;

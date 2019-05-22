@@ -23,7 +23,7 @@ using GKCore.Types;
 
 namespace GKCommon.GEDCOM
 {
-    public abstract class GEDCOMCustomEvent : GEDCOMTagWithLists
+    public abstract class GDMCustomEvent : GDMTagWithLists
     {
         public string Classification
         {
@@ -49,19 +49,19 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.CAUS, value); }
         }
 
-        public GEDCOMPlace Place
+        public GDMPlace Place
         {
-            get { return GetTag(GEDCOMTagType.PLAC, GEDCOMPlace.Create) as GEDCOMPlace; }
+            get { return GetTag<GDMPlace>(GEDCOMTagType.PLAC, GDMPlace.Create); }
         }
 
-        public GEDCOMAddress Address
+        public GDMAddress Address
         {
-            get { return GetTag(GEDCOMTagType.ADDR, GEDCOMAddress.Create) as GEDCOMAddress; }
+            get { return GetTag<GDMAddress>(GEDCOMTagType.ADDR, GDMAddress.Create); }
         }
 
-        public GEDCOMDateValue Date
+        public GDMDateValue Date
         {
-            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDateValue.Create) as GEDCOMDateValue; }
+            get { return GetTag<GDMDateValue>(GEDCOMTagType.DATE, GDMDateValue.Create); }
         }
 
         public GEDCOMRestriction Restriction
@@ -71,22 +71,22 @@ namespace GKCommon.GEDCOM
         }
 
 
-        protected GEDCOMCustomEvent(GEDCOMObject owner) : base(owner)
+        protected GDMCustomEvent(GDMObject owner) : base(owner)
         {
         }
 
-        public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
+        public override float IsMatch(GDMTag tag, MatchParams matchParams)
         {
             if (tag == null) return 0.0f;
-            GEDCOMCustomEvent ev = (GEDCOMCustomEvent)tag;
+            GDMCustomEvent ev = (GDMCustomEvent)tag;
 
             // match date
             float dateMatch = 0.0f;
             float locMatch = 0.0f;
             int matches = 0;
 
-            GEDCOMDateValue dtVal = this.Date;
-            GEDCOMDateValue dtVal2 = ev.Date;
+            GDMDateValue dtVal = this.Date;
+            GDMDateValue dtVal2 = ev.Date;
 
             matches += 1;
             if (dtVal != null && dtVal2 != null) {

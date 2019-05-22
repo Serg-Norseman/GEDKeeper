@@ -83,7 +83,7 @@ namespace GKCore
             Assert.AreEqual(ShieldState.Maximum, fContext.ShieldState, "BaseContext.ShieldState.4");
 
 
-            GEDCOMSourceRecord srcRec = fContext.FindSource("test source");
+            GDMSourceRecord srcRec = fContext.FindSource("test source");
             Assert.IsNull(srcRec);
 
             StringList sources = new StringList();
@@ -92,7 +92,7 @@ namespace GKCore
 
             Assert.IsNotNull(fContext.ValuesCollection);
 
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             fContext.LockRecord(iRec);
@@ -128,11 +128,11 @@ namespace GKCore
             Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateLocation()));
 
             Assert.Throws(typeof(ArgumentNullException), () => { fContext.GetStoreType(null); });
-            var mediaStore = fContext.GetStoreType(new GEDCOMFileReference(null, "", "file.txt"));
+            var mediaStore = fContext.GetStoreType(new GDMFileReference(null, "", "file.txt"));
             Assert.AreEqual(MediaStoreType.mstReference, mediaStore.StoreType);
-            mediaStore = fContext.GetStoreType(new GEDCOMFileReference(null, "", "stg:file.txt"));
+            mediaStore = fContext.GetStoreType(new GDMFileReference(null, "", "stg:file.txt"));
             Assert.AreEqual(MediaStoreType.mstStorage, mediaStore.StoreType);
-            mediaStore = fContext.GetStoreType(new GEDCOMFileReference(null, "", "arc:file.txt"));
+            mediaStore = fContext.GetStoreType(new GDMFileReference(null, "", "arc:file.txt"));
             Assert.AreEqual(MediaStoreType.mstArchive, mediaStore.StoreType);
 
             fContext.CollectEventValues(null);
@@ -156,7 +156,7 @@ namespace GKCore
             var evt = fContext.CreateEventEx(iRec, GEDCOMTagType.FACT, "17 JAN 2013", "Ivanovo");
             Assert.IsNotNull(evt);
 
-            GEDCOMFamilyRecord fRec = fContext.Tree.CreateFamily();
+            GDMFamilyRecord fRec = fContext.Tree.CreateFamily();
             Assert.IsNotNull(fRec);
 
             evt = fContext.CreateEventEx(fRec, GEDCOMTagType.MARR, "28 DEC 2013", "Ivanovo");
@@ -206,20 +206,20 @@ namespace GKCore
                 ctx.FileSave(gedFile);
                 Assert.AreEqual(true, ctx.CheckBasePath()); // need path for archive and storage
 
-                var mmRecR = new GEDCOMMultimediaRecord(ctx.Tree);
-                mmRecR.FileReferences.Add(new GEDCOMFileReferenceWithTitle(mmRecR));
+                var mmRecR = new GDMMultimediaRecord(ctx.Tree);
+                mmRecR.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecR));
                 Assert.AreEqual(true, ctx.MediaSave(mmRecR.FileReferences[0], sourFile, MediaStoreType.mstReference));
                 Assert.IsNotNull(ctx.LoadMediaImage(mmRecR.FileReferences[0], false));
                 Assert.IsNotNull(ctx.MediaLoad(mmRecR.FileReferences[0]));
 
-                var mmRecA = new GEDCOMMultimediaRecord(ctx.Tree);
-                mmRecA.FileReferences.Add(new GEDCOMFileReferenceWithTitle(mmRecA));
+                var mmRecA = new GDMMultimediaRecord(ctx.Tree);
+                mmRecA.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecA));
                 Assert.AreEqual(true, ctx.MediaSave(mmRecA.FileReferences[0], sourFile, MediaStoreType.mstArchive));
                 Assert.IsNotNull(ctx.LoadMediaImage(mmRecA.FileReferences[0], false));
                 Assert.IsNotNull(ctx.MediaLoad(mmRecA.FileReferences[0]));
 
-                var mmRecS = new GEDCOMMultimediaRecord(ctx.Tree);
-                mmRecS.FileReferences.Add(new GEDCOMFileReferenceWithTitle(mmRecS));
+                var mmRecS = new GDMMultimediaRecord(ctx.Tree);
+                mmRecS.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecS));
                 Assert.AreEqual(true, ctx.MediaSave(mmRecS.FileReferences[0], sourFile, MediaStoreType.mstStorage));
                 Assert.IsNotNull(ctx.LoadMediaImage(mmRecS.FileReferences[0], false));
                 Assert.IsNotNull(ctx.MediaLoad(mmRecS.FileReferences[0]));
@@ -358,7 +358,7 @@ namespace GKCore
 
             fContext.Undoman.Clear();
 
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             Assert.Throws(typeof(ArgumentNullException), () => {

@@ -37,7 +37,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class OrganizerWinTests : CustomWindowTest
     {
-        private GEDCOMAddress fAddress;
+        private GDMAddress fAddress;
         private IBaseWindow fBase;
         private OrganizerWin fDialog;
 
@@ -46,7 +46,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fAddress = new GEDCOMAddress(fBase.Context.Tree);
+            fAddress = new GDMAddress(fBase.Context.Tree);
 
             fAddress.AddWebPage("test");
             fAddress.AddPhoneNumber("test");

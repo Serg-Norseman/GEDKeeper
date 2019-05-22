@@ -22,15 +22,15 @@ using System.Collections.Generic;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class XRefReplacer : GEDCOMObject
+    public sealed class XRefReplacer : GDMObject
     {
         public sealed class XRefEntry
         {
-            public readonly GEDCOMRecord Rec;
+            public readonly GDMRecord Rec;
             public readonly string OldXRef;
             public readonly string NewXRef;
 
-            public XRefEntry(GEDCOMRecord rec, string oldXRef, string newXRef) {
+            public XRefEntry(GDMRecord rec, string oldXRef, string newXRef) {
                 Rec = rec;
                 OldXRef = oldXRef;
                 NewXRef = newXRef;
@@ -54,7 +54,7 @@ namespace GKCommon.GEDCOM
             fList = new List<XRefEntry>();
         }
 
-        public void AddXRef(GEDCOMRecord rec, string oldXRef, string newXRef)
+        public void AddXRef(GDMRecord rec, string oldXRef, string newXRef)
         {
             fList.Add(new XRefEntry(rec, oldXRef, newXRef));
         }

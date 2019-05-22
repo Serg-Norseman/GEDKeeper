@@ -28,13 +28,13 @@ namespace GKFoldersPlugin
     /// </summary>
     public static class FoldersHelper
     {
-        public static string GetFolder(GEDCOMRecord record)
+        public static string GetFolder(GDMRecord record)
         {
             var folderTag = record.FindTag(GEDCOMTagType._FOLDER, 0);
             return (folderTag == null) ? "" : folderTag.StringValue;
         }
 
-        public static void SetFolder(GEDCOMRecord record, string value)
+        public static void SetFolder(GDMRecord record, string value)
         {
             if (!HasFolderSupport(record.RecordType)) {
                 return;
@@ -43,7 +43,7 @@ namespace GKFoldersPlugin
             var folderTag = record.FindTag(GEDCOMTagType._FOLDER, 0);
             if (!string.IsNullOrEmpty(value)) {
                 if (folderTag == null) {
-                    record.AddTag(new GEDCOMTag(record, GEDCOMTagType._FOLDER, value));
+                    record.AddTag(new GDMTag(record, GEDCOMTagType._FOLDER, value));
                 } else {
                     folderTag.StringValue = value;
                 }

@@ -20,7 +20,7 @@
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMPlace : GEDCOMTagWithLists
+    public sealed class GDMPlace : GDMTagWithLists
     {
         public string Form
         {
@@ -28,30 +28,30 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.FORM, value); }
         }
 
-        public GEDCOMPointer Location
+        public GDMPointer Location
         {
-            get { return GetTag(GEDCOMTagType._LOC, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag<GDMPointer>(GEDCOMTagType._LOC, GDMPointer.Create); }
         }
 
-        public GEDCOMMap Map
+        public GDMMap Map
         {
-            get { return GetTag(GEDCOMTagType.MAP, GEDCOMMap.Create) as GEDCOMMap; }
+            get { return GetTag<GDMMap>(GEDCOMTagType.MAP, GDMMap.Create); }
         }
 
 
-        public GEDCOMPlace(GEDCOMObject owner) : base(owner)
+        public GDMPlace(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.PLAC);
         }
 
-        public GEDCOMPlace(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMPlace(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMPlace(owner, tagName, tagValue);
+            return new GDMPlace(owner, tagName, tagValue);
         }
     }
 }

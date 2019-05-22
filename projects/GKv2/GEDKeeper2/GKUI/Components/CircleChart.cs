@@ -125,7 +125,7 @@ namespace GKUI.Components
             remove { Events.RemoveHandler(EventZoomChanged, value); }
         }
 
-        public GEDCOMIndividualRecord RootPerson
+        public GDMIndividualRecord RootPerson
         {
             get {
                 return fModel.RootPerson;
@@ -205,7 +205,7 @@ namespace GKUI.Components
             AdjustViewport(boundary, false);
         }
 
-        private void DoRootChanged(GEDCOMIndividualRecord person)
+        private void DoRootChanged(GDMIndividualRecord person)
         {
             var eventHandler = (ARootChangedEventHandler)Events[EventRootChanged];
             if (eventHandler != null)
@@ -282,7 +282,7 @@ namespace GKUI.Components
 
         protected override void SetNavObject(object obj)
         {
-            RootPerson = obj as GEDCOMIndividualRecord;
+            RootPerson = obj as GDMIndividualRecord;
         }
 
         protected override void OnDoubleClick(EventArgs e)
@@ -342,7 +342,7 @@ namespace GKUI.Components
 
                 case Keys.Left:
                     if (fChartType == CircleChartType.Ancestors && fModel.RootPerson != null) {
-                        GEDCOMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
+                        GDMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
                         var father = (fam == null) ? null : fam.GetHusband();
                         if (father != null) {
                             RootPerson = father;
@@ -352,7 +352,7 @@ namespace GKUI.Components
 
                 case Keys.Right:
                     if (fChartType == CircleChartType.Ancestors && fModel.RootPerson != null) {
-                        GEDCOMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
+                        GDMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
                         var mother = (fam == null) ? null : fam.GetWife();
                         if (mother != null) {
                             RootPerson = mother;

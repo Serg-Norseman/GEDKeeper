@@ -46,7 +46,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetApproximated()
         {
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             GEDCOMApproximated expResult = GEDCOMApproximated.daExact;
             GEDCOMApproximated result = instance.Approximated;
             Assert.AreEqual(expResult, result);
@@ -56,7 +56,7 @@ namespace GKCommon.GEDCOM
         public void Test_SetApproximated()
         {
             GEDCOMApproximated value = GEDCOMApproximated.daAbout;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.Approximated = value;
             Assert.AreEqual(value, instance.Approximated);
         }
@@ -64,10 +64,10 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetDateCalendar()
         {
-            GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/12/1980", false);
+            GDMDate instance = GDMDate.CreateByFormattedStr("20/12/1980", false);
             GEDCOMCalendar result = instance.DateCalendar;
             Assert.AreEqual(GEDCOMCalendar.dcGregorian, result);
-            instance = GEDCOMDate.CreateByFormattedStr("20/12/1980", GEDCOMCalendar.dcJulian, false);
+            instance = GDMDate.CreateByFormattedStr("20/12/1980", GEDCOMCalendar.dcJulian, false);
             result = instance.DateCalendar;
             Assert.AreEqual(GEDCOMCalendar.dcJulian, result);
         }
@@ -75,7 +75,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetDay()
         {
-            GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/12/1980", false);
+            GDMDate instance = GDMDate.CreateByFormattedStr("20/12/1980", false);
             byte result = instance.Day;
             Assert.AreEqual(20, result);
         }
@@ -93,7 +93,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_SetDay()
         {
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             byte val = 20;
             instance.Day = val;
             Assert.AreEqual(val, instance.Day);
@@ -102,7 +102,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_SetDayInvalid()
         {
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             byte val = 99;
             instance.Day = val;
             Assert.AreEqual(val, instance.Day);
@@ -112,14 +112,14 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetMonth()
         {
-            GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/12/1980", false);
+            GDMDate instance = GDMDate.CreateByFormattedStr("20/12/1980", false);
             Assert.AreEqual(12, instance.Month);
         }
 
         [Test]
         public void Test_SetMonth()
         {
-            GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/01/1980", false);
+            GDMDate instance = GDMDate.CreateByFormattedStr("20/01/1980", false);
             instance.Month = 12;
             Assert.AreEqual(12, instance.Month);
         }
@@ -127,7 +127,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetYear()
         {
-            GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/01/1980", false);
+            GDMDate instance = GDMDate.CreateByFormattedStr("20/01/1980", false);
             short expResult = 1980;
             short result = instance.Year;
             Assert.AreEqual(expResult, result);
@@ -137,7 +137,7 @@ namespace GKCommon.GEDCOM
         public void Test_SetYear()
         {
             short value = 2001;
-            GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/01/1980", false);
+            GDMDate instance = GDMDate.CreateByFormattedStr("20/01/1980", false);
             instance.Year = value;
             short result = instance.Year;
             Assert.AreEqual(value, result);
@@ -146,7 +146,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetYearBC()
         {
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             bool expResult = false;
             bool result = instance.YearBC;
             Assert.AreEqual(expResult, result);
@@ -156,7 +156,7 @@ namespace GKCommon.GEDCOM
         public void Test_SetYearBC()
         {
             bool value = true;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.YearBC = value;
             Assert.AreEqual(value, instance.YearBC);
         }
@@ -164,7 +164,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetYearModifier()
         {
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             string expResult = "";
             string result = instance.YearModifier;
             Assert.AreEqual(expResult, result);
@@ -178,7 +178,7 @@ namespace GKCommon.GEDCOM
         public void Test_SetYearModifier()
         {
             string value = "2";
-            GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/01/1980", false);
+            GDMDate instance = GDMDate.CreateByFormattedStr("20/01/1980", false);
             instance.YearModifier = value;
             string result = instance.StringValue;
             Assert.AreEqual("20 JAN 1980/2", result);
@@ -188,7 +188,7 @@ namespace GKCommon.GEDCOM
         public void Test_Create()
         {
             const string tagName = "BLAH";
-            GEDCOMTag result = GEDCOMDate.Create(null, tagName, "");
+            GDMTag result = GDMDate.Create(null, tagName, "");
             Assert.IsNotNull(result);
             Assert.AreEqual(tagName, result.Name);
         }
@@ -196,7 +196,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_Clear()
         {
-            GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/01/1980", false);
+            GDMDate instance = GDMDate.CreateByFormattedStr("20/01/1980", false);
             instance.Clear();
             string result = instance.StringValue;
             Assert.AreEqual("", result);
@@ -205,7 +205,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_IsValidDate()
         {
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             bool expResult = false;
             bool result = instance.IsValidDate();
             Assert.AreEqual(expResult, result);
@@ -214,7 +214,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_IsEmpty()
         {
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             bool expResult = true;
             bool result = instance.IsEmpty();
             Assert.AreEqual(expResult, result);
@@ -223,9 +223,9 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_Assign()
         {
-            GEDCOMDate instance = new GEDCOMDate(null);
+            GDMDate instance = new GDMDate(null);
 
-            GEDCOMTag source = null;
+            GDMTag source = null;
             Assert.Throws(typeof(ArgumentException), () => { instance.Assign(source); });
         }
 
@@ -237,7 +237,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetDateTime()
         {
-            GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/01/1980", false);
+            GDMDate instance = GDMDate.CreateByFormattedStr("20/01/1980", false);
             DateTime expResult;
             try {
                 expResult = ParseDT("1980-01-20");
@@ -251,7 +251,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_SetDateTime()
         {
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             DateTime expResult;
             try {
                 expResult = ParseDT("1980-01-20");
@@ -266,7 +266,7 @@ namespace GKCommon.GEDCOM
         public void Test_ParseString()
         {
             string strValue = "20 DEC 1980";
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             string expResult = "";
             string result = instance.ParseString(strValue);
             Assert.AreEqual(expResult, result);
@@ -277,7 +277,7 @@ namespace GKCommon.GEDCOM
         public void Test_ParseString_system()
         {
             string strValue = "20.12.1980";
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             string expResult = "";
             string result = instance.ParseString(strValue);
             Assert.AreEqual(expResult, result);
@@ -301,7 +301,7 @@ namespace GKCommon.GEDCOM
         public void Test_ParseStringUnknown()
         {
             string strValue = "@#DUNKNOWN@ 20 DEC 1980";
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetDate(GEDCOMCalendar.dcIslamic, 0, 0, 0);
             Assert.AreEqual(string.Empty, instance.ParseString(strValue));
             Assert.AreEqual("@#DUNKNOWN@ 20 DEC 1980", instance.StringValue);
@@ -310,7 +310,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetStringValue()
         {
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetJulian(1, 3, 1980);
             Assert.AreEqual("@#DJULIAN@ 01 MAR 1980", instance.StringValue);
         }
@@ -331,7 +331,7 @@ namespace GKCommon.GEDCOM
             int day = 20;
             int month = 12;
             int year = 1980;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetDate(calendar, day, month, year);
             string result = instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false);
             Assert.AreEqual("1980.12.20", result);
@@ -345,7 +345,7 @@ namespace GKCommon.GEDCOM
             int day = 20;
             int month = 12;
             int year = 1980;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetDate(calendar, day, month, year);
             string result = instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false);
             Assert.AreEqual("1980.12.20", result);
@@ -359,7 +359,7 @@ namespace GKCommon.GEDCOM
             int day = 20;
             int month = 12;
             int year = 1980;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetDate(calendar, day, month, year);
             string result = instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false);
             Assert.AreEqual("1980.12.20", result);
@@ -373,7 +373,7 @@ namespace GKCommon.GEDCOM
             int day = 20;
             int month = 12;
             int year = 1980;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetDate(calendar, day, month, year);
             string result = instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false);
             Assert.AreEqual("1980.12.20", result);
@@ -400,7 +400,7 @@ namespace GKCommon.GEDCOM
             int day = 20;
             int month = 12;
             int year = 1980;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetGregorian(day, month, year);
             string result = instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false);
             Assert.AreEqual("1980.12.20", result);
@@ -414,7 +414,7 @@ namespace GKCommon.GEDCOM
             int year = 1980;
             string yearModifier = "";
             bool yearBC = false;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetGregorian(day, month, year, yearModifier, yearBC);
             string result = instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false);
             Assert.AreEqual("1980.12.20", result);
@@ -428,7 +428,7 @@ namespace GKCommon.GEDCOM
             int year = 1980;
             string yearModifier = "";
             bool yearBC = true;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetGregorian(day, month, year, yearModifier, yearBC);
             string result = instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, false);
             Assert.AreEqual("BC 1980.12.20", result);
@@ -440,7 +440,7 @@ namespace GKCommon.GEDCOM
             int day = 20;
             int month = 12;
             int year = 1980;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetJulian(day, month, year);
             string result = instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false);
             Assert.AreEqual("1980.12.20", result);
@@ -453,7 +453,7 @@ namespace GKCommon.GEDCOM
             string month = "DEC";
             int year = 1980;
             bool yearBC = false;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetJulian(day, month, year, yearBC);
             string result = instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false);
             Assert.AreEqual("1980.12.20", result);
@@ -465,7 +465,7 @@ namespace GKCommon.GEDCOM
             int day = 1;
             int month = 2;
             int year = 1980;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetHebrew(day, month, year);
             Assert.AreEqual(GEDCOMCalendar.dcHebrew, instance.DateCalendar);
             Assert.AreEqual("@#DHEBREW@ 01 CSH 1980", instance.StringValue);
@@ -478,7 +478,7 @@ namespace GKCommon.GEDCOM
             string month = "TSH";
             int year = 1980;
             bool yearBC = false;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetHebrew(day, month, year, yearBC);
             Assert.AreEqual(GEDCOMCalendar.dcHebrew, instance.DateCalendar);
             Assert.AreEqual("@#DHEBREW@ 01 TSH 1980", instance.StringValue);
@@ -494,7 +494,7 @@ namespace GKCommon.GEDCOM
             int day = 1;
             int month = 2;
             int year = 1980;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetFrench(day, month, year);
             Assert.AreEqual(GEDCOMCalendar.dcFrench, instance.DateCalendar);
             Assert.AreEqual("@#DFRENCH R@ 01 BRUM 1980", instance.StringValue);
@@ -507,7 +507,7 @@ namespace GKCommon.GEDCOM
             string month = "VEND";
             int year = 1980;
             bool yearBC = false;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetFrench(day, month, year, yearBC);
             Assert.AreEqual(GEDCOMCalendar.dcFrench, instance.DateCalendar);
             Assert.AreEqual("@#DFRENCH R@ 01 VEND 1980", instance.StringValue);
@@ -524,7 +524,7 @@ namespace GKCommon.GEDCOM
             string month = "JAN";
             int year = 1980;
             bool yearBC = false;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetRoman(day, month, year, yearBC);
             Assert.AreEqual(GEDCOMCalendar.dcRoman, instance.DateCalendar);
         }
@@ -536,7 +536,7 @@ namespace GKCommon.GEDCOM
             string month = "";
             int year = 0;
             bool yearBC = false;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetUnknown(day, month, year, yearBC);
             Assert.AreEqual(GEDCOMCalendar.dcUnknown, instance.DateCalendar);
         }
@@ -544,7 +544,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_DateChanged()
         {
-            GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("31/11/1980", true);
+            GDMDate instance = GDMDate.CreateByFormattedStr("31/11/1980", true);
             //instance.dateChanged();
             string result = instance.GetUDN().ToString();
             Assert.AreEqual("1980/12/01", result);
@@ -553,7 +553,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetUDN()
         {
-            GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/12/1980", true);
+            GDMDate instance = GDMDate.CreateByFormattedStr("20/12/1980", true);
             UDN expResult = new UDN(UDNCalendarType.ctGregorian, 1980, 12, 20);
             UDN result = instance.GetUDN();
             bool resu2 = expResult.Equals(result);
@@ -564,20 +564,20 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_CreateByFormattedStr_String_boolean()
         {
-            Assert.AreEqual(null, GEDCOMDate.CreateByFormattedStr(null, false));
-            Assert.AreEqual("20 DEC 1980", GEDCOMDate.CreateByFormattedStr("20/12/1980", false).StringValue);
-            Assert.AreEqual("DEC 1980", GEDCOMDate.CreateByFormattedStr("__/12/1980", false).StringValue);
-            Assert.AreEqual(null, GEDCOMDate.CreateByFormattedStr("1980", false));
+            Assert.AreEqual(null, GDMDate.CreateByFormattedStr(null, false));
+            Assert.AreEqual("20 DEC 1980", GDMDate.CreateByFormattedStr("20/12/1980", false).StringValue);
+            Assert.AreEqual("DEC 1980", GDMDate.CreateByFormattedStr("__/12/1980", false).StringValue);
+            Assert.AreEqual(null, GDMDate.CreateByFormattedStr("1980", false));
             //Assert.Throws(typeof(GEDCOMDateException), () => { GEDCOMDate.createByFormattedStr("1980", true); });
         }
 
         [Test]
         public void Test_CreateByFormattedStr_3args()
         {
-            Assert.AreEqual(null, GEDCOMDate.CreateByFormattedStr(null, GEDCOMCalendar.dcGregorian, false));
-            Assert.AreEqual("20 DEC 1980", GEDCOMDate.CreateByFormattedStr("20/12/1980", GEDCOMCalendar.dcGregorian, false).StringValue);
-            Assert.AreEqual("DEC 1980", GEDCOMDate.CreateByFormattedStr("__/12/1980", GEDCOMCalendar.dcGregorian, false).StringValue);
-            Assert.AreEqual(null, GEDCOMDate.CreateByFormattedStr("1980", GEDCOMCalendar.dcGregorian, false));
+            Assert.AreEqual(null, GDMDate.CreateByFormattedStr(null, GEDCOMCalendar.dcGregorian, false));
+            Assert.AreEqual("20 DEC 1980", GDMDate.CreateByFormattedStr("20/12/1980", GEDCOMCalendar.dcGregorian, false).StringValue);
+            Assert.AreEqual("DEC 1980", GDMDate.CreateByFormattedStr("__/12/1980", GEDCOMCalendar.dcGregorian, false).StringValue);
+            Assert.AreEqual(null, GDMDate.CreateByFormattedStr("1980", GEDCOMCalendar.dcGregorian, false));
             //Assert.Throws(typeof(GEDCOMDateException), () => { GEDCOMDate.createByFormattedStr("1980", GEDCOMCalendar.dcGregorian, true); });
         }
 
@@ -586,7 +586,7 @@ namespace GKCommon.GEDCOM
         {
             string dateStr = "";
             UDN expResult = UDN.CreateEmpty();
-            UDN result = GEDCOMDate.GetUDNByFormattedStr(dateStr, GEDCOMCalendar.dcGregorian);
+            UDN result = GDMDate.GetUDNByFormattedStr(dateStr, GEDCOMCalendar.dcGregorian);
             Assert.AreEqual(expResult, result);
         }
 
@@ -595,7 +595,7 @@ namespace GKCommon.GEDCOM
         {
             DateFormat format = DateFormat.dfDD_MM_YYYY;
             bool includeBC = false;
-            GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/12/1980", true);
+            GDMDate instance = GDMDate.CreateByFormattedStr("20/12/1980", true);
             string expResult = "20.12.1980";
             string result = instance.GetDisplayString(format, includeBC);
             Assert.AreEqual(expResult, result);
@@ -604,7 +604,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetDisplayString_DateFormat()
         {
-            GEDCOMDate instance = GEDCOMDate.CreateByFormattedStr("20/12/1980", true);
+            GDMDate instance = GDMDate.CreateByFormattedStr("20/12/1980", true);
             string expResult = "1980.12.20";
             string result = instance.GetDisplayString(DateFormat.dfYYYY_MM_DD);
             Assert.AreEqual(expResult, result);
@@ -622,7 +622,7 @@ namespace GKCommon.GEDCOM
             DateFormat format = DateFormat.dfYYYY_MM_DD;
             bool includeBC = true;
             bool showCalendar = true;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetJulian(20, 12, 1980);
             instance.YearBC = true;
             string expResult = "BC 1980.12.20 [J]";
@@ -641,7 +641,7 @@ namespace GKCommon.GEDCOM
         {
             DateFormat format = DateFormat.dfYYYY_MM_DD;
             bool showCalendar = true;
-            GEDCOMDate instance = new GEDCOMDate(null, "", "");
+            GDMDate instance = new GDMDate(null, "", "");
             instance.SetJulian(20, 12, 1980);
             instance.YearBC = true;
             string expResult = "BC 1980.12.20 [J]";
@@ -658,8 +658,8 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_CreateByFormattedStr_exception()
         {
-            Assert.Throws(typeof(GEDCOMDateException), () => {
-                              GEDCOMDate.CreateByFormattedStr("1.2", true);
+            Assert.Throws(typeof(GDMDateException), () => {
+                              GDMDate.CreateByFormattedStr("1.2", true);
                           });
         }
 
@@ -667,7 +667,7 @@ namespace GKCommon.GEDCOM
         public void Test_getUDNByFormattedStr2()
         {
             //Assert.Throws(typeof(GEDCOMDateException), () => {
-            var dtx = GEDCOMDate.GetUDNByFormattedStr("20-12-1980", GEDCOMCalendar.dcGregorian, true);
+            var dtx = GDMDate.GetUDNByFormattedStr("20-12-1980", GEDCOMCalendar.dcGregorian, true);
             Assert.AreEqual("1980/12/20", dtx.ToString());
             //});
         }
@@ -681,22 +681,22 @@ namespace GKCommon.GEDCOM
             string gedcom = "0 HEAD\n1 SOUR AHN\n0 @I1@ INDI\n1 BIRT\n2 DATE (20/12-1980)";
 
             // TODO this bit needs to go into utility class
-            GEDCOMTree tee = new GEDCOMTree();
+            GDMTree tee = new GDMTree();
             GEDCOMProvider gp = new GEDCOMProvider(tee);
             try {
                 gp.LoadFromString(gedcom);
             } catch (Exception) {
             }
             Assert.AreEqual(1, tee.RecordsCount);
-            GEDCOMRecord rec = tee[0];
-            Assert.IsTrue(rec is GEDCOMIndividualRecord);
-            GEDCOMIndividualRecord rec2 = (GEDCOMIndividualRecord)rec;
+            GDMRecord rec = tee[0];
+            Assert.IsTrue(rec is GDMIndividualRecord);
+            GDMIndividualRecord rec2 = (GDMIndividualRecord)rec;
             // end for utility class
 
-            GEDCOMList<GEDCOMCustomEvent> events = rec2.Events;
+            GDMList<GDMCustomEvent> events = rec2.Events;
             Assert.AreEqual(1, events.Count);
-            GEDCOMCustomEvent birt = events.Extract(0);
-            GEDCOMDateValue dv = birt.Date;
+            GDMCustomEvent birt = events.Extract(0);
+            GDMDateValue dv = birt.Date;
             Assert.AreEqual("20 DEC 1980", dv.StringValue);
         }
 
@@ -705,7 +705,7 @@ namespace GKCommon.GEDCOM
         {
             DateTime expectDate = TestUtils.ParseDT("20.01.2013");
 
-            using (var dtx1 = new GEDCOMDateInterpreted(null)) {
+            using (var dtx1 = new GDMDateInterpreted(null)) {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
 
                 dtx1.ParseString("INT 20 JAN 2013 (today)");
@@ -721,19 +721,19 @@ namespace GKCommon.GEDCOM
                 dtx1.ParseString("INT 20 JAN 2013 (yesterday)");
                 Assert.AreEqual("INT 20 JAN 2013 (yesterday)", dtx1.StringValue);
 
-                Assert.Throws(typeof(GEDCOMDateException), () => { dtx1.ParseString("10 JAN 2013 (today)"); });
+                Assert.Throws(typeof(GDMDateException), () => { dtx1.ParseString("10 JAN 2013 (today)"); });
             }
         }
 
         [Test]
         public void Test_CreateByFormattedStr()
         {
-            Assert.AreEqual(null, GEDCOMDate.CreateByFormattedStr(null, false));
-            Assert.AreEqual("20 DEC 1980", GEDCOMDate.CreateByFormattedStr("20/12/1980", false).StringValue);
-            Assert.AreEqual("DEC 1980", GEDCOMDate.CreateByFormattedStr("__/12/1980", false).StringValue);
-            Assert.AreEqual(null, GEDCOMDate.CreateByFormattedStr("1980", false));
+            Assert.AreEqual(null, GDMDate.CreateByFormattedStr(null, false));
+            Assert.AreEqual("20 DEC 1980", GDMDate.CreateByFormattedStr("20/12/1980", false).StringValue);
+            Assert.AreEqual("DEC 1980", GDMDate.CreateByFormattedStr("__/12/1980", false).StringValue);
+            Assert.AreEqual(null, GDMDate.CreateByFormattedStr("1980", false));
             
-            Assert.Throws(typeof(GEDCOMDateException), () => { GEDCOMDate.CreateByFormattedStr("1980", true); });
+            Assert.Throws(typeof(GDMDateException), () => { GDMDate.CreateByFormattedStr("1980", true); });
         }
     }
 }

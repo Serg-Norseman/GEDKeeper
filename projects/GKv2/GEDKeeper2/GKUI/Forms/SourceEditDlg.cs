@@ -41,7 +41,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fRepositoriesList;
 
-        public GEDCOMSourceRecord Model
+        public GDMSourceRecord Model
         {
             get { return fController.Model; }
             set { fController.Model = value; }
@@ -129,7 +129,7 @@ namespace GKUI.Forms
 
         private void ModifyReposSheet(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMRepositoryCitation cit = eArgs.ItemData as GEDCOMRepositoryCitation;
+            GDMRepositoryCitation cit = eArgs.ItemData as GDMRepositoryCitation;
             if (eArgs.Action == RecordAction.raJump && cit != null) {
                 fController.JumpToRecord(cit.Value);
             }

@@ -109,15 +109,15 @@ namespace GKTimeLinePlugin
             int num = fBase.Context.Tree.RecordsCount;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = fBase.Context.Tree[i];
+                GDMRecord rec = fBase.Context.Tree[i];
                 if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
 
-                GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
+                GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
 
                 int num2 = iRec.Events.Count;
                 for (int k = 0; k < num2; k++)
                 {
-                    GEDCOMCustomEvent ev = iRec.Events[k];
+                    GDMCustomEvent ev = iRec.Events[k];
 
                     if (ev.Name == GEDCOMTagType.BIRT || ev.Name == GEDCOMTagType.DEAT) {
                         int year = ev.GetChronologicalYear();
@@ -173,13 +173,13 @@ namespace GKTimeLinePlugin
         }
 
         // FIXME: perhaps it is necessary to define the maximum age by statistics
-        private bool FilterHandler(GEDCOMRecord record)
+        private bool FilterHandler(GDMRecord record)
         {
             bool result = true;
 
             try
             {
-                GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)record;
+                GDMIndividualRecord iRec = (GDMIndividualRecord)record;
                 int bdy = iRec.GetChronologicalYear(GEDCOMTagType.BIRT);
                 int ddy = iRec.GetChronologicalYear(GEDCOMTagType.DEAT);
 

@@ -29,9 +29,9 @@ namespace GKCore.Lists
     /// </summary>
     public class GEDCOMDateItem : IComparable, IConvertible
     {
-        private readonly GEDCOMCustomDate fDate;
+        private readonly GDMCustomDate fDate;
 
-        public GEDCOMDateItem(GEDCOMCustomDate date)
+        public GEDCOMDateItem(GDMCustomDate date)
         {
             fDate = date;
         }

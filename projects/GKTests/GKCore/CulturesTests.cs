@@ -54,7 +54,7 @@ namespace GKCore
         [Test]
         public void Test_AncientCulture()
         {
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             var culture = new AncientCulture();
@@ -75,7 +75,7 @@ namespace GKCore
         [Test]
         public void Test_IcelandCulture()
         {
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             var culture = new IcelandCulture();
@@ -96,7 +96,7 @@ namespace GKCore
         [Test]
         public void Test_BritishCulture()
         {
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             var culture = new BritishCulture();
@@ -117,7 +117,7 @@ namespace GKCore
         [Test]
         public void Test_SwedishCulture()
         {
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             var culture = new SwedishCulture();
@@ -138,7 +138,7 @@ namespace GKCore
         [Test]
         public void Test_RussianCulture()
         {
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             ICulture rusCulture = new RussianCulture();

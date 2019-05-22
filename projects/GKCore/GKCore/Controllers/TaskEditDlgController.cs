@@ -31,10 +31,10 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class TaskEditDlgController : DialogController<ITaskEditDlg>
     {
-        private GEDCOMTaskRecord fTask;
-        private GEDCOMRecord fTempRec;
+        private GDMTaskRecord fTask;
+        private GDMRecord fTempRec;
 
-        public GEDCOMTaskRecord Task
+        public GDMTaskRecord Task
         {
             get { return fTask; }
             set {
@@ -63,8 +63,8 @@ namespace GKCore.Controllers
         {
             try {
                 fTask.Priority = (GDMResearchPriority)fView.Priority.SelectedIndex;
-                fTask.StartDate.Assign(GEDCOMDate.CreateByFormattedStr(fView.StartDate.Text, true));
-                fTask.StopDate.Assign(GEDCOMDate.CreateByFormattedStr(fView.StopDate.Text, true));
+                fTask.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.Text, true));
+                fTask.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.Text, true));
 
                 GDMGoalType gt = (GDMGoalType)fView.GoalType.SelectedIndex;
                 switch (gt) {

@@ -42,7 +42,7 @@ namespace GKCommon.GEDCOM
         public void Test_Names_01()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_names_01.ged")) {
-                GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
                 Assert.AreEqual("Александра Анатольевна Лазорева (Иванова)", iRec1.GetPrimaryFullName());
                 // std-surn exists and double, but sub-surn has only second part
@@ -52,7 +52,7 @@ namespace GKCommon.GEDCOM
                 Assert.AreEqual("Александра", parts.Name);
                 Assert.AreEqual("Анатольевна", parts.Patronymic);
 
-                GEDCOMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
+                GDMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec2);
                 Assert.AreEqual("Петр Константинович Лазорев", iRec2.GetPrimaryFullName());
                 // std-surn exists, but sub-surn is not
@@ -68,7 +68,7 @@ namespace GKCommon.GEDCOM
         public void Test_Names_02()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_names_02.ged")) {
-                GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
                 Assert.AreEqual("Анна Сидоровна Иванова (Петрова)", iRec1.GetPrimaryFullName());
                 // std-surn exists and double, and sub-surn same
@@ -78,7 +78,7 @@ namespace GKCommon.GEDCOM
                 Assert.AreEqual("Анна", parts.Name);
                 Assert.AreEqual("Сидоровна", parts.Patronymic);
 
-                GEDCOMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
+                GDMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec2);
                 Assert.AreEqual("Аглая Федоровна Иванова", iRec2.GetPrimaryFullName());
                 // std-surn exists (maiden), and sub-surn same, and sub-marn exists (married)

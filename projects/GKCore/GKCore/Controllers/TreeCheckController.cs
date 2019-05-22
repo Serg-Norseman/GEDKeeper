@@ -84,7 +84,7 @@ namespace GKCore.Controllers
 
         public void SelectRecord()
         {
-            GEDCOMRecord rec = ((TreeTools.CheckObj)fView.ChecksList.GetSelectedData()).Rec;
+            GDMRecord rec = ((TreeTools.CheckObj)fView.ChecksList.GetSelectedData()).Rec;
             if (rec == null) return;
 
             fBase.SelectRecordByXRef(rec.XRef);

@@ -46,11 +46,11 @@ namespace GKStdReports
         private class PersonalEvent
         {
             public readonly EventType Type;
-            public readonly GEDCOMRecord Rec;
-            public readonly GEDCOMCustomEvent Event;
+            public readonly GDMRecord Rec;
+            public readonly GDMCustomEvent Event;
             public readonly UDN Date;
 
-            public PersonalEvent(EventType type, GEDCOMRecord rec, GEDCOMCustomEvent evt)
+            public PersonalEvent(EventType type, GDMRecord rec, GDMCustomEvent evt)
             {
                 Type = type;
                 Rec = rec;
@@ -59,12 +59,12 @@ namespace GKStdReports
             }
         }
 
-        private readonly GEDCOMIndividualRecord fPerson;
+        private readonly GDMIndividualRecord fPerson;
         private IFont fTitleFont, fChapFont, fTextFont;
 
         public bool ShowAges = true;
 
-        public PersonalEventsReport(IBaseWindow baseWin, GEDCOMIndividualRecord selectedPerson)
+        public PersonalEventsReport(IBaseWindow baseWin, GDMIndividualRecord selectedPerson)
             : base(baseWin, false)
         {
             fTitle = SRLangMan.LS(RLS.LSID_PER_Title);
@@ -75,9 +75,9 @@ namespace GKStdReports
         {
             int num = record.Events.Count;
             for (int i = 0; i < num; i++) {
-                GEDCOMCustomEvent evt = record.Events[i];
+                GDMCustomEvent evt = record.Events[i];
                 if (evt.GetChronologicalYear() != 0) {
-                    list.Add(new PersonalEvent(type, (GEDCOMRecord)record, evt));
+                    list.Add(new PersonalEvent(type, (GDMRecord)record, evt));
                 }
             }
         }
@@ -97,9 +97,9 @@ namespace GKStdReports
 
             var evList = new List<PersonalEvent>();
 
-            GEDCOMIndividualRecord father = null, mother = null;
+            GDMIndividualRecord father = null, mother = null;
             if (fPerson.ChildToFamilyLinks.Count > 0) {
-                GEDCOMFamilyRecord family = fPerson.ChildToFamilyLinks[0].Family;
+                GDMFamilyRecord family = fPerson.ChildToFamilyLinks[0].Family;
                 if (fBase.Context.IsRecordAccess(family.Restriction)) {
                     father = family.GetHusband();
                     mother = family.GetWife();
@@ -110,7 +110,7 @@ namespace GKStdReports
 
             int num2 = fPerson.SpouseToFamilyLinks.Count;
             for (int j = 0; j < num2; j++) {
-                GEDCOMFamilyRecord family = fPerson.SpouseToFamilyLinks[j].Family;
+                GDMFamilyRecord family = fPerson.SpouseToFamilyLinks[j].Family;
                 if (!fBase.Context.IsRecordAccess(family.Restriction))
                     continue;
 
@@ -118,8 +118,8 @@ namespace GKStdReports
 
                 int num3 = family.Children.Count;
                 for (int i = 0; i < num3; i++) {
-                    GEDCOMIndividualRecord child = family.Children[i].Value as GEDCOMIndividualRecord;
-                    GEDCOMCustomEvent evt = child.FindEvent(GEDCOMTagType.BIRT);
+                    GDMIndividualRecord child = family.Children[i].Value as GDMIndividualRecord;
+                    GDMCustomEvent evt = child.FindEvent(GEDCOMTagType.BIRT);
                     if (evt != null && evt.GetChronologicalYear() != 0) {
                         evList.Add(new PersonalEvent(EventType.Child, child, evt));
                     }
@@ -134,7 +134,7 @@ namespace GKStdReports
                 PersonalEvent evObj = evList[i];
                 if (!evObj.Date.HasKnownYear()) continue;
 
-                GEDCOMCustomEvent evt = evObj.Event;
+                GDMCustomEvent evt = evObj.Event;
                 string st = GKUtils.GetEventName(evt);
                 string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
 
@@ -152,8 +152,8 @@ namespace GKStdReports
                 }
                 fWriter.AddListItem("   " + li, fTextFont);
 
-                if (evObj.Rec is GEDCOMIndividualRecord) {
-                    GEDCOMIndividualRecord iRec = evObj.Rec as GEDCOMIndividualRecord;
+                if (evObj.Rec is GDMIndividualRecord) {
+                    GDMIndividualRecord iRec = evObj.Rec as GDMIndividualRecord;
 
                     if (evt.Name == GEDCOMTagType.BIRT) {
                         if (evObj.Type == EventType.Personal) {
@@ -173,10 +173,10 @@ namespace GKStdReports
                             fWriter.AddListItem("   " + "   " + st, fTextFont);
                         }
                     }
-                } else if (evObj.Rec is GEDCOMFamilyRecord) {
-                    GEDCOMFamilyRecord famRec = evObj.Rec as GEDCOMFamilyRecord;
+                } else if (evObj.Rec is GDMFamilyRecord) {
+                    GDMFamilyRecord famRec = evObj.Rec as GDMFamilyRecord;
 
-                    GEDCOMIndividualRecord sp;
+                    GDMIndividualRecord sp;
                     string unk;
                     if (fPerson.Sex == GEDCOMSex.svMale) {
                         sp = famRec.GetWife();

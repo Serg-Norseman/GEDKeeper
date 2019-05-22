@@ -24,7 +24,7 @@ namespace GKCore.Types
 {
     public sealed class Target
     {
-        public GEDCOMIndividualRecord TargetIndividual;
+        public GDMIndividualRecord TargetIndividual;
         public TargetMode TargetMode;
         public GEDCOMSex NeedSex;
     }

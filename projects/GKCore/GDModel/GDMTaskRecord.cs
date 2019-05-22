@@ -32,7 +32,7 @@ namespace GKCommon.GEDCOM
     }
 
 
-    public sealed class GEDCOMTaskRecord : GEDCOMRecord
+    public sealed class GDMTaskRecord : GDMRecord
     {
         public string Goal
         {
@@ -46,31 +46,29 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType._PRIORITY, GEDCOMUtils.GetPriorityStr(value)); }
         }
 
-        public GEDCOMDate StartDate
+        public GDMDate StartDate
         {
-            get { return GetTag(GEDCOMTagType._STARTDATE, GEDCOMDate.Create) as GEDCOMDate; }
+            get { return GetTag<GDMDate>(GEDCOMTagType._STARTDATE, GDMDate.Create); }
         }
 
-        public GEDCOMDate StopDate
+        public GDMDate StopDate
         {
-            get { return GetTag(GEDCOMTagType._STOPDATE, GEDCOMDate.Create) as GEDCOMDate; }
+            get { return GetTag<GDMDate>(GEDCOMTagType._STOPDATE, GDMDate.Create); }
         }
 
 
-        public GEDCOMTaskRecord(GEDCOMObject owner) : base(owner)
+        public GDMTaskRecord(GDMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtTask);
             SetName(GEDCOMTagType._TASK);
         }
 
-        #region Auxiliary
-
         public sealed class TaskGoalRet
         {
             public readonly GDMGoalType GoalType;
-            public readonly GEDCOMRecord GoalRec;
+            public readonly GDMRecord GoalRec;
 
-            public TaskGoalRet(GDMGoalType goalType, GEDCOMRecord goalRec)
+            public TaskGoalRet(GDMGoalType goalType, GDMRecord goalRec)
             {
                 GoalType = goalType;
                 GoalRec = goalRec;
@@ -79,15 +77,15 @@ namespace GKCommon.GEDCOM
 
         public TaskGoalRet GetTaskGoal()
         {
-            GEDCOMTree tree = GetTree();
-            GEDCOMRecord goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(Goal));
+            GDMTree tree = GetTree();
+            GDMRecord goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(Goal));
 
             GDMGoalType goalType;
-            if (goalRec is GEDCOMIndividualRecord) {
+            if (goalRec is GDMIndividualRecord) {
                 goalType = GDMGoalType.gtIndividual;
-            } else if (goalRec is GEDCOMFamilyRecord) {
+            } else if (goalRec is GDMFamilyRecord) {
                 goalType = GDMGoalType.gtFamily;
-            } else if (goalRec is GEDCOMSourceRecord) {
+            } else if (goalRec is GDMSourceRecord) {
                 goalType = GDMGoalType.gtSource;
             } else {
                 goalType = GDMGoalType.gtOther;
@@ -95,7 +93,5 @@ namespace GKCommon.GEDCOM
 
             return new TaskGoalRet(goalType, goalRec);
         }
-
-        #endregion
     }
 }

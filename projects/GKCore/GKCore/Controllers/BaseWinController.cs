@@ -53,9 +53,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class BaseWinController : Controller<IBaseWindowView>
     {
-        private readonly List<GEDCOMRecord> fChangedRecords;
+        private readonly List<GDMRecord> fChangedRecords;
         private readonly IBaseContext fContext;
-        private readonly NavigationStack<GEDCOMRecord> fNavman;
+        private readonly NavigationStack<GDMRecord> fNavman;
         private readonly TabParts[] fTabParts;
 
         public IBaseContext Context
@@ -63,7 +63,7 @@ namespace GKCore.Controllers
             get { return fContext; }
         }
 
-        public NavigationStack<GEDCOMRecord> Navman
+        public NavigationStack<GDMRecord> Navman
         {
             get { return fNavman; }
         }
@@ -72,8 +72,8 @@ namespace GKCore.Controllers
         public BaseWinController(IBaseWindowView view) : base(view)
         {
             fContext = new BaseContext(view);
-            fChangedRecords = new List<GEDCOMRecord>();
-            fNavman = new NavigationStack<GEDCOMRecord>();
+            fChangedRecords = new List<GDMRecord>();
+            fNavman = new NavigationStack<GDMRecord>();
             fTabParts = new TabParts[(int)GEDCOMRecordType.rtLast + 1];
         }
 
@@ -191,7 +191,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void NotifyRecord(GEDCOMRecord record, RecordAction action)
+        public void NotifyRecord(GDMRecord record, RecordAction action)
         {
             if (record == null) return;
 
@@ -238,12 +238,12 @@ namespace GKCore.Controllers
 
         public void DuplicateRecord()
         {
-            GEDCOMRecord original = GetSelectedRecordEx();
+            GDMRecord original = GetSelectedRecordEx();
             if (original == null || original.RecordType != GEDCOMRecordType.rtIndividual) return;
 
             AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_DuplicateWarning));
 
-            GEDCOMIndividualRecord target;
+            GDMIndividualRecord target;
             try {
                 fContext.BeginUpdate();
 
@@ -263,7 +263,7 @@ namespace GKCore.Controllers
         {
             GEDCOMRecordType rt = GetSelectedRecordType();
 
-            GEDCOMRecord record = BaseController.AddRecord(fView, rt, null);
+            GDMRecord record = BaseController.AddRecord(fView, rt, null);
             if (record != null) {
                 RefreshLists(false);
             }
@@ -273,7 +273,7 @@ namespace GKCore.Controllers
 
         public void EditRecord()
         {
-            GEDCOMRecord record = GetSelectedRecordEx();
+            GDMRecord record = GetSelectedRecordEx();
             if (record != null && BaseController.EditRecord(fView, record)) {
                 RefreshLists(false);
             }
@@ -283,13 +283,13 @@ namespace GKCore.Controllers
 
         public void DeleteRecord()
         {
-            GEDCOMRecord record = GetSelectedRecordEx();
+            GDMRecord record = GetSelectedRecordEx();
             if (record != null && BaseController.DeleteRecord(fView, record, true)) {
                 RefreshLists(false);
             }
         }
 
-        public void ShowRecordInfo(GEDCOMRecord record)
+        public void ShowRecordInfo(GDMRecord record)
         {
             if (record == null) return;
 
@@ -305,7 +305,7 @@ namespace GKCore.Controllers
 
         public void ChangeListItem(IListView sender)
         {
-            GEDCOMRecord rec = sender.GetSelectedData() as GEDCOMRecord;
+            GDMRecord rec = sender.GetSelectedData() as GDMRecord;
             if (rec != null) {
                 NavAdd(rec);
             }
@@ -316,7 +316,7 @@ namespace GKCore.Controllers
         {
             if (linkName.StartsWith("view_")) {
                 string xref = linkName.Remove(0, 5);
-                GEDCOMMultimediaRecord mmRec = fContext.Tree.XRefIndex_Find(xref) as GEDCOMMultimediaRecord;
+                GDMMultimediaRecord mmRec = fContext.Tree.XRefIndex_Find(xref) as GDMMultimediaRecord;
                 if (mmRec != null) {
                     fView.ShowMedia(mmRec, false);
                 }
@@ -325,7 +325,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void SelectByRec(GEDCOMRecord record)
+        public void SelectByRec(GDMRecord record)
         {
             if (record == null)
                 throw new ArgumentNullException("record");
@@ -336,7 +336,7 @@ namespace GKCore.Controllers
 
         public void SelectRecordByXRef(string xref)
         {
-            GEDCOMRecord record = fContext.Tree.XRefIndex_Find(xref);
+            GDMRecord record = fContext.Tree.XRefIndex_Find(xref);
             IListView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
 
             if (rView != null) {
@@ -346,14 +346,14 @@ namespace GKCore.Controllers
             }
         }
 
-        public StringList GetRecordContent(GEDCOMRecord record)
+        public StringList GetRecordContent(GDMRecord record)
         {
             StringList ctx = new StringList();
             GKUtils.GetRecordContent(fContext, record, ctx);
             return ctx;
         }
 
-        public bool RecordIsFiltered(GEDCOMRecord record)
+        public bool RecordIsFiltered(GDMRecord record)
         {
             bool result = false;
             if (record != null) {
@@ -412,16 +412,16 @@ namespace GKCore.Controllers
             return (rView == null) ? null : (IListManager)rView.ListMan;
         }
 
-        public GEDCOMRecord GetSelectedRecordEx()
+        public GDMRecord GetSelectedRecordEx()
         {
             GEDCOMRecordType recType = GetSelectedRecordType();
             IListView rView = GetRecordsViewByType(recType);
-            return (rView == null) ? null : (rView.GetSelectedData() as GEDCOMRecord);
+            return (rView == null) ? null : (rView.GetSelectedData() as GDMRecord);
         }
 
-        public GEDCOMIndividualRecord GetSelectedPerson()
+        public GDMIndividualRecord GetSelectedPerson()
         {
-            return GetSelectedRecordEx() as GEDCOMIndividualRecord;
+            return GetSelectedRecordEx() as GDMIndividualRecord;
         }
 
         public void ClearSummaries()
@@ -446,7 +446,7 @@ namespace GKCore.Controllers
             AppHost.Instance.UpdateControls(false);
         }
 
-        public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType)
+        public List<GDMRecord> GetContentList(GEDCOMRecordType recType)
         {
             IListView rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : rView.ListMan.GetRecordsList();
@@ -490,7 +490,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void UpdateChangedRecords(GEDCOMRecord select = null)
+        public void UpdateChangedRecords(GDMRecord select = null)
         {
             for (int i = fChangedRecords.Count - 1; i >= 0; i--) {
                 var record = fChangedRecords[i];
@@ -503,7 +503,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void CheckChangedRecord(GEDCOMRecord record, bool active)
+        public void CheckChangedRecord(GDMRecord record, bool active)
         {
             int idx = fChangedRecords.IndexOf(record);
             if (active) {
@@ -523,7 +523,7 @@ namespace GKCore.Controllers
             RefreshLists(true);
         }
 
-        public void NavAdd(GEDCOMRecord aRec)
+        public void NavAdd(GDMRecord aRec)
         {
             if (aRec == null || fNavman.Busy) return;
 
@@ -535,7 +535,7 @@ namespace GKCore.Controllers
         {
             fNavman.BeginNav();
             try {
-                GEDCOMRecord rec = fNavman.Next() as GEDCOMRecord;
+                GDMRecord rec = fNavman.Next() as GDMRecord;
                 if (rec != null) {
                     fView.SelectRecordByXRef(rec.XRef);
                     AppHost.Instance.UpdateControls(false);
@@ -549,7 +549,7 @@ namespace GKCore.Controllers
         {
             fNavman.BeginNav();
             try {
-                GEDCOMRecord rec = fNavman.Back() as GEDCOMRecord;
+                GDMRecord rec = fNavman.Back() as GDMRecord;
                 if (rec != null) {
                     fView.SelectRecordByXRef(rec.XRef);
                     AppHost.Instance.UpdateControls(false);
@@ -860,7 +860,7 @@ namespace GKCore.Controllers
 
         public void ShowStats()
         {
-            List<GEDCOMRecord> selectedRecords = GetContentList(GEDCOMRecordType.rtIndividual);
+            List<GDMRecord> selectedRecords = GetContentList(GEDCOMRecordType.rtIndividual);
 
             var win = AppHost.Container.Resolve<IStatisticsWin>(fView, selectedRecords);
             AppHost.Instance.ShowWindow(win);

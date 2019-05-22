@@ -80,12 +80,12 @@ namespace GKCore.Operations
     public class OrdinaryOperation : CustomOperation
     {
         private readonly OperationType fType;
-        private readonly GEDCOMObject fObj;
+        private readonly GDMObject fObj;
         private object fOldVal;
         private readonly object fNewVal;
 
         public OrdinaryOperation(UndoManager manager, OperationType type,
-                                 GEDCOMObject obj, object newVal) : base(manager)
+                                 GDMObject obj, object newVal) : base(manager)
         {
             fType = type;
             fObj = obj;
@@ -215,8 +215,8 @@ namespace GKCore.Operations
 
         private bool ProcessIndividualParents(bool redo)
         {
-            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
-            GEDCOMFamilyRecord familyRec = fNewVal as GEDCOMFamilyRecord;
+            GDMIndividualRecord iRec = fObj as GDMIndividualRecord;
+            GDMFamilyRecord familyRec = fNewVal as GDMFamilyRecord;
 
             if (iRec == null || familyRec == null) {
                 return false;
@@ -235,8 +235,8 @@ namespace GKCore.Operations
 
         private bool ProcessFamilySpouse(bool redo)
         {
-            GEDCOMFamilyRecord famRec = fObj as GEDCOMFamilyRecord;
-            GEDCOMIndividualRecord spouseRec = fNewVal as GEDCOMIndividualRecord;
+            GDMFamilyRecord famRec = fObj as GDMFamilyRecord;
+            GDMIndividualRecord spouseRec = fNewVal as GDMIndividualRecord;
 
             if (famRec == null || spouseRec == null) {
                 return false;
@@ -255,8 +255,8 @@ namespace GKCore.Operations
 
         private bool ProcessGroupMember(bool redo)
         {
-            GEDCOMGroupRecord grpRec = fObj as GEDCOMGroupRecord;
-            GEDCOMIndividualRecord mbrRec = fNewVal as GEDCOMIndividualRecord;
+            GDMGroupRecord grpRec = fObj as GDMGroupRecord;
+            GDMIndividualRecord mbrRec = fNewVal as GDMIndividualRecord;
 
             if (grpRec == null || mbrRec == null) {
                 return false;
@@ -275,8 +275,8 @@ namespace GKCore.Operations
 
         private bool ProcessSourceRepositoryCitation(bool redo)
         {
-            GEDCOMSourceRecord srcRec = fObj as GEDCOMSourceRecord;
-            GEDCOMRepositoryRecord repRec = fNewVal as GEDCOMRepositoryRecord;
+            GDMSourceRecord srcRec = fObj as GDMSourceRecord;
+            GDMRepositoryRecord repRec = fNewVal as GDMRepositoryRecord;
 
             if (srcRec == null || repRec == null) {
                 return false;
@@ -295,8 +295,8 @@ namespace GKCore.Operations
 
         private bool ProcessResearchTask(bool redo)
         {
-            GEDCOMResearchRecord resRec = fObj as GEDCOMResearchRecord;
-            GEDCOMTaskRecord taskRec = fNewVal as GEDCOMTaskRecord;
+            GDMResearchRecord resRec = fObj as GDMResearchRecord;
+            GDMTaskRecord taskRec = fNewVal as GDMTaskRecord;
 
             if (resRec == null || taskRec == null) {
                 return false;
@@ -315,8 +315,8 @@ namespace GKCore.Operations
 
         private bool ProcessResearchCommunication(bool redo)
         {
-            GEDCOMResearchRecord resRec = fObj as GEDCOMResearchRecord;
-            GEDCOMCommunicationRecord commRec = fNewVal as GEDCOMCommunicationRecord;
+            GDMResearchRecord resRec = fObj as GDMResearchRecord;
+            GDMCommunicationRecord commRec = fNewVal as GDMCommunicationRecord;
 
             if (resRec == null || commRec == null) {
                 return false;
@@ -335,8 +335,8 @@ namespace GKCore.Operations
 
         private bool ProcessResearchGroup(bool redo)
         {
-            GEDCOMResearchRecord resRec = fObj as GEDCOMResearchRecord;
-            GEDCOMGroupRecord grpRec = fNewVal as GEDCOMGroupRecord;
+            GDMResearchRecord resRec = fObj as GDMResearchRecord;
+            GDMGroupRecord grpRec = fNewVal as GDMGroupRecord;
 
             if (resRec == null || grpRec == null) {
                 return false;
@@ -356,15 +356,15 @@ namespace GKCore.Operations
         private bool ProcessRecordNoteAdd(bool redo)
         {
             IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
-            GEDCOMNoteRecord noteRec = fNewVal as GEDCOMNoteRecord;
+            GDMNoteRecord noteRec = fNewVal as GDMNoteRecord;
 
             bool result = (swl != null && noteRec != null);
             if (result) {
                 if (redo) {
-                    GEDCOMNotes notes = swl.AddNote(noteRec);
+                    GDMNotes notes = swl.AddNote(noteRec);
                     fOldVal = notes;
                 } else {
-                    GEDCOMNotes notes = fOldVal as GEDCOMNotes;
+                    GDMNotes notes = fOldVal as GDMNotes;
                     swl.Notes.Delete(notes);
                 }
             }
@@ -374,7 +374,7 @@ namespace GKCore.Operations
         private bool ProcessRecordNoteRemove(bool redo)
         {
             IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
-            GEDCOMNotes notes = fNewVal as GEDCOMNotes;
+            GDMNotes notes = fNewVal as GDMNotes;
 
             bool result = (swl != null && notes != null);
             if (result) {
@@ -390,15 +390,15 @@ namespace GKCore.Operations
         private bool ProcessRecordMediaAdd(bool redo)
         {
             IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
-            GEDCOMMultimediaRecord mediaRec = fNewVal as GEDCOMMultimediaRecord;
+            GDMMultimediaRecord mediaRec = fNewVal as GDMMultimediaRecord;
 
             bool result = (swl != null && mediaRec != null);
             if (result) {
                 if (redo) {
-                    GEDCOMMultimediaLink mmLink = swl.AddMultimedia(mediaRec);
+                    GDMMultimediaLink mmLink = swl.AddMultimedia(mediaRec);
                     fOldVal = mmLink;
                 } else {
-                    GEDCOMMultimediaLink mmLink = fOldVal as GEDCOMMultimediaLink;
+                    GDMMultimediaLink mmLink = fOldVal as GDMMultimediaLink;
                     swl.MultimediaLinks.Delete(mmLink);
                 }
             }
@@ -408,7 +408,7 @@ namespace GKCore.Operations
         private bool ProcessRecordMediaRemove(bool redo)
         {
             IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
-            GEDCOMMultimediaLink mediaLink = fNewVal as GEDCOMMultimediaLink;
+            GDMMultimediaLink mediaLink = fNewVal as GDMMultimediaLink;
 
             bool result = (swl != null && mediaLink != null);
             if (result) {
@@ -424,7 +424,7 @@ namespace GKCore.Operations
         private bool ProcessRecordSourceCit(bool redo)
         {
             IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
-            GEDCOMSourceCitation sourceCit = fNewVal as GEDCOMSourceCitation;
+            GDMSourceCitation sourceCit = fNewVal as GDMSourceCitation;
 
             if (swl == null || sourceCit == null) {
                 return false;
@@ -443,8 +443,8 @@ namespace GKCore.Operations
 
         private bool ProcessRecordEvent(bool redo)
         {
-            GEDCOMRecordWithEvents rwe = fObj as GEDCOMRecordWithEvents;
-            GEDCOMCustomEvent evt = fNewVal as GEDCOMCustomEvent;
+            GDMRecordWithEvents rwe = fObj as GDMRecordWithEvents;
+            GDMCustomEvent evt = fNewVal as GDMCustomEvent;
 
             if (rwe == null || evt == null) {
                 return false;
@@ -463,8 +463,8 @@ namespace GKCore.Operations
 
         private bool ProcessIndividualAssociation(bool redo)
         {
-            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
-            GEDCOMAssociation asso = fNewVal as GEDCOMAssociation;
+            GDMIndividualRecord iRec = fObj as GDMIndividualRecord;
+            GDMAssociation asso = fNewVal as GDMAssociation;
 
             if (iRec == null || asso == null) {
                 return false;
@@ -483,8 +483,8 @@ namespace GKCore.Operations
 
         private bool ProcessIndividualName(bool redo)
         {
-            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
-            GEDCOMPersonalName persName = fNewVal as GEDCOMPersonalName;
+            GDMIndividualRecord iRec = fObj as GDMIndividualRecord;
+            GDMPersonalName persName = fNewVal as GDMPersonalName;
 
             if (iRec == null || persName == null) {
                 return false;
@@ -503,8 +503,8 @@ namespace GKCore.Operations
 
         private bool ProcessIndividualURef(bool redo)
         {
-            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
-            GEDCOMUserReference uRef = fNewVal as GEDCOMUserReference;
+            GDMIndividualRecord iRec = fObj as GDMIndividualRecord;
+            GDMUserReference uRef = fNewVal as GDMUserReference;
 
             if (iRec == null || uRef == null) {
                 return false;
@@ -523,8 +523,8 @@ namespace GKCore.Operations
 
         private bool ProcessIndividualPortrait(bool redo)
         {
-            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
-            GEDCOMMultimediaLink mmLink = fNewVal as GEDCOMMultimediaLink;
+            GDMIndividualRecord iRec = fObj as GDMIndividualRecord;
+            GDMMultimediaLink mmLink = fNewVal as GDMMultimediaLink;
 
             if (iRec == null || mmLink == null) {
                 return false;
@@ -550,7 +550,7 @@ namespace GKCore.Operations
         /// <returns></returns>
         private bool ProcessIndividualBookmarkChange(bool redo)
         {
-            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fObj as GDMIndividualRecord;
 
             if (iRec == null || fNewVal == null) {
                 return false;
@@ -572,7 +572,7 @@ namespace GKCore.Operations
         /// <returns></returns>
         private bool ProcessIndividualPatriarchChange(bool redo)
         {
-            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fObj as GDMIndividualRecord;
 
             if (iRec == null || fNewVal == null) {
                 return false;
@@ -594,7 +594,7 @@ namespace GKCore.Operations
         /// <returns></returns>
         private bool ProcessIndividualSexChange(bool redo)
         {
-            GEDCOMIndividualRecord iRec = fObj as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fObj as GDMIndividualRecord;
 
             if (iRec == null || fNewVal == null) {
                 return false;

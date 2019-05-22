@@ -47,16 +47,16 @@ namespace GKCommon.GEDCOM
     /// <summary>
     /// 
     /// </summary>
-    public class GEDCOMRecord : GEDCOMCustomRecord, IGEDCOMStructWithLists
+    public class GDMRecord : GDMCustomRecord, IGEDCOMStructWithLists
     {
         private object fExtData;
         private GEDCOMRecordType fRecordType;
         private string fUID;
 
-        private GEDCOMList<GEDCOMMultimediaLink> fMultimediaLinks;
-        private GEDCOMList<GEDCOMNotes> fNotes;
-        private GEDCOMList<GEDCOMSourceCitation> fSourceCitations;
-        private GEDCOMList<GEDCOMUserReference> fUserReferences;
+        private GDMList<GDMMultimediaLink> fMultimediaLinks;
+        private GDMList<GDMNotes> fNotes;
+        private GDMList<GDMSourceCitation> fSourceCitations;
+        private GDMList<GDMUserReference> fUserReferences;
 
 
         public string AutomatedRecordID
@@ -65,9 +65,9 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.RIN, value); }
         }
 
-        public GEDCOMChangeDate ChangeDate
+        public GDMChangeDate ChangeDate
         {
-            get { return GetTag(GEDCOMTagType.CHAN, GEDCOMChangeDate.Create) as GEDCOMChangeDate; }
+            get { return GetTag<GDMChangeDate>(GEDCOMTagType.CHAN, GDMChangeDate.Create); }
         }
 
         public object ExtData
@@ -76,12 +76,12 @@ namespace GKCommon.GEDCOM
             set { fExtData = value; }
         }
 
-        public GEDCOMList<GEDCOMMultimediaLink> MultimediaLinks
+        public GDMList<GDMMultimediaLink> MultimediaLinks
         {
             get	{ return fMultimediaLinks; }
         }
 
-        public GEDCOMList<GEDCOMNotes> Notes
+        public GDMList<GDMNotes> Notes
         {
             get { return fNotes; }
         }
@@ -91,7 +91,7 @@ namespace GKCommon.GEDCOM
             get { return fRecordType; }
         }
 
-        public GEDCOMList<GEDCOMSourceCitation> SourceCitations
+        public GDMList<GDMSourceCitation> SourceCitations
         {
             get { return fSourceCitations; }
         }
@@ -107,18 +107,18 @@ namespace GKCommon.GEDCOM
             set { fUID = value; }
         }
 
-        public GEDCOMList<GEDCOMUserReference> UserReferences
+        public GDMList<GDMUserReference> UserReferences
         {
             get { return fUserReferences; }
         }
 
 
-        public GEDCOMRecord(GEDCOMObject owner) : base(owner)
+        public GDMRecord(GDMObject owner) : base(owner)
         {
-            fNotes = new GEDCOMList<GEDCOMNotes>(this);
-            fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
-            fMultimediaLinks = new GEDCOMList<GEDCOMMultimediaLink>(this);
-            fUserReferences = new GEDCOMList<GEDCOMUserReference>(this);
+            fNotes = new GDMList<GDMNotes>(this);
+            fSourceCitations = new GDMList<GDMSourceCitation>(this);
+            fMultimediaLinks = new GDMList<GDMMultimediaLink>(this);
+            fUserReferences = new GDMList<GDMUserReference>(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -137,7 +137,7 @@ namespace GKCommon.GEDCOM
             fRecordType = type;
         }
 
-        public int IndexOfSource(GEDCOMSourceRecord sourceRec)
+        public int IndexOfSource(GDMSourceRecord sourceRec)
         {
             if (sourceRec != null) {
                 int num = fSourceCitations.Count;
@@ -152,40 +152,40 @@ namespace GKCommon.GEDCOM
             return -1;
         }
 
-        public override void Assign(GEDCOMTag source)
+        public override void Assign(GDMTag source)
         {
-            GEDCOMRecord sourceRec = source as GEDCOMRecord;
+            GDMRecord sourceRec = source as GDMRecord;
             if (sourceRec == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
             base.Assign(source);
 
-            foreach (GEDCOMNotes sourceNote in sourceRec.fNotes) {
-                GEDCOMNotes copy = new GEDCOMNotes(this);
+            foreach (GDMNotes sourceNote in sourceRec.fNotes) {
+                GDMNotes copy = new GDMNotes(this);
                 copy.Assign(sourceNote);
                 Notes.Add(copy);
             }
 
-            foreach (GEDCOMMultimediaLink sourceMediaLink in sourceRec.fMultimediaLinks) {
-                GEDCOMMultimediaLink copy = new GEDCOMMultimediaLink(this);
+            foreach (GDMMultimediaLink sourceMediaLink in sourceRec.fMultimediaLinks) {
+                GDMMultimediaLink copy = new GDMMultimediaLink(this);
                 copy.Assign(sourceMediaLink);
                 MultimediaLinks.Add(copy);
             }
 
-            foreach (GEDCOMSourceCitation sourceSrcCit in sourceRec.fSourceCitations) {
-                GEDCOMSourceCitation copy = new GEDCOMSourceCitation(this);
+            foreach (GDMSourceCitation sourceSrcCit in sourceRec.fSourceCitations) {
+                GDMSourceCitation copy = new GDMSourceCitation(this);
                 copy.Assign(sourceSrcCit);
                 SourceCitations.Add(copy);
             }
 
-            foreach (GEDCOMUserReference sourceUserRef in sourceRec.fUserReferences) {
-                GEDCOMUserReference copy = new GEDCOMUserReference(this);
+            foreach (GDMUserReference sourceUserRef in sourceRec.fUserReferences) {
+                GDMUserReference copy = new GDMUserReference(this);
                 copy.Assign(sourceUserRef);
                 UserReferences.Add(copy);
             }
         }
 
-        public virtual void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
+        public virtual void MoveTo(GDMRecord targetRecord, bool clearDest)
         {
             if (clearDest) {
                 targetRecord.Clear();
@@ -193,7 +193,7 @@ namespace GKCommon.GEDCOM
 
             var subtags = GetTagList();
             while (subtags.Count > 0) {
-                GEDCOMTag tag = subtags.Extract(0);
+                GDMTag tag = subtags.Extract(0);
                 if (tag.Name == GEDCOMTagType.CHAN && !clearDest) {
                     tag.Dispose();
                 } else {
@@ -203,27 +203,27 @@ namespace GKCommon.GEDCOM
             }
 
             while (fNotes.Count > 0) {
-                GEDCOMTag tag = fNotes.Extract(0);
+                GDMTag tag = fNotes.Extract(0);
                 tag.ResetOwner(targetRecord);
-                targetRecord.Notes.Add((GEDCOMNotes)tag);
+                targetRecord.Notes.Add((GDMNotes)tag);
             }
 
             while (fMultimediaLinks.Count > 0) {
-                GEDCOMTag tag = fMultimediaLinks.Extract(0);
+                GDMTag tag = fMultimediaLinks.Extract(0);
                 tag.ResetOwner(targetRecord);
-                targetRecord.MultimediaLinks.Add((GEDCOMMultimediaLink)tag);
+                targetRecord.MultimediaLinks.Add((GDMMultimediaLink)tag);
             }
 
             while (fSourceCitations.Count > 0) {
-                GEDCOMTag tag = fSourceCitations.Extract(0);
+                GDMTag tag = fSourceCitations.Extract(0);
                 tag.ResetOwner(targetRecord);
-                targetRecord.SourceCitations.Add((GEDCOMSourceCitation)tag);
+                targetRecord.SourceCitations.Add((GDMSourceCitation)tag);
             }
 
             while (fUserReferences.Count > 0) {
-                GEDCOMTag tag = fUserReferences.Extract(0);
+                GDMTag tag = fUserReferences.Extract(0);
                 tag.ResetOwner(targetRecord);
-                targetRecord.UserReferences.Add((GEDCOMUserReference)tag);
+                targetRecord.UserReferences.Add((GDMUserReference)tag);
             }
         }
 
@@ -291,8 +291,6 @@ namespace GKCommon.GEDCOM
             NewXRef();
         }
 
-        #region Auxiliary
-
         public string GetXRefNum()
         {
             string xref = XRef;
@@ -309,12 +307,12 @@ namespace GKCommon.GEDCOM
             return GEDCOMUtils.GetXRefNumber(XRef);
         }
 
-        public GEDCOMNotes AddNote(GEDCOMNoteRecord noteRec)
+        public GDMNotes AddNote(GDMNoteRecord noteRec)
         {
-            GEDCOMNotes note = null;
+            GDMNotes note = null;
 
             if (noteRec != null) {
-                note = new GEDCOMNotes(this);
+                note = new GDMNotes(this);
                 note.Value = noteRec;
                 Notes.Add(note);
             }
@@ -322,12 +320,12 @@ namespace GKCommon.GEDCOM
             return note;
         }
 
-        public GEDCOMSourceCitation AddSource(GEDCOMSourceRecord sourceRec, string page, int quality)
+        public GDMSourceCitation AddSource(GDMSourceRecord sourceRec, string page, int quality)
         {
-            GEDCOMSourceCitation cit = null;
+            GDMSourceCitation cit = null;
 
             if (sourceRec != null) {
-                cit = new GEDCOMSourceCitation(this);
+                cit = new GDMSourceCitation(this);
                 cit.Value = sourceRec;
                 cit.Page = page;
                 cit.CertaintyAssessment = quality;
@@ -337,12 +335,12 @@ namespace GKCommon.GEDCOM
             return cit;
         }
 
-        public GEDCOMMultimediaLink AddMultimedia(GEDCOMMultimediaRecord mediaRec)
+        public GDMMultimediaLink AddMultimedia(GDMMultimediaRecord mediaRec)
         {
-            GEDCOMMultimediaLink mmLink = null;
+            GDMMultimediaLink mmLink = null;
 
             if (mediaRec != null) {
-                mmLink = new GEDCOMMultimediaLink(this);
+                mmLink = new GDMMultimediaLink(this);
                 mmLink.Value = mediaRec;
                 MultimediaLinks.Add(mmLink);
             }
@@ -352,11 +350,9 @@ namespace GKCommon.GEDCOM
 
         public void AddUserRef(string reference)
         {
-            GEDCOMUserReference uRef = new GEDCOMUserReference(this);
+            GDMUserReference uRef = new GDMUserReference(this);
             uRef.StringValue = reference;
             UserReferences.Add(uRef);
         }
-
-        #endregion
     }
 }

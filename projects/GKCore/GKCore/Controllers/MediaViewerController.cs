@@ -35,9 +35,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class MediaViewerController : DialogController<IMediaViewerWin>
     {
-        private GEDCOMFileReferenceWithTitle fFileRef;
+        private GDMFileReferenceWithTitle fFileRef;
 
-        public GEDCOMFileReferenceWithTitle FileRef
+        public GDMFileReferenceWithTitle FileRef
         {
             get { return fFileRef; }
             set {
@@ -113,18 +113,18 @@ namespace GKCore.Controllers
             }
         }
 
-        public void ProcessPortraits(IImageView imageCtl, GEDCOMFileReferenceWithTitle fileRef)
+        public void ProcessPortraits(IImageView imageCtl, GDMFileReferenceWithTitle fileRef)
         {
-            var mmRec = fileRef.Owner as GEDCOMMultimediaRecord;
+            var mmRec = fileRef.Owner as GDMMultimediaRecord;
 
-            var linksList = new List<GEDCOMObject>();
+            var linksList = new List<GDMObject>();
             GKUtils.SearchRecordLinks(linksList, mmRec.GetTree(), mmRec);
 
             bool showRegions = false;
             foreach (var link in linksList) {
-                var mmLink = link as GEDCOMMultimediaLink;
+                var mmLink = link as GDMMultimediaLink;
                 if (mmLink != null && mmLink.IsPrimary) {
-                    var indiRec = mmLink.Owner as GEDCOMIndividualRecord;
+                    var indiRec = mmLink.Owner as GDMIndividualRecord;
                     string indiName = GKUtils.GetNameString(indiRec, true, false);
                     var region = mmLink.CutoutPosition.Value;
 

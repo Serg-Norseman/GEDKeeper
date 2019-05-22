@@ -32,9 +32,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class NoteEditDlgController : DialogController<INoteEdit>
     {
-        private GEDCOMNoteRecord fNoteRecord;
+        private GDMNoteRecord fNoteRecord;
 
-        public GEDCOMNoteRecord NoteRecord
+        public GDMNoteRecord NoteRecord
         {
             get { return fNoteRecord; }
             set {

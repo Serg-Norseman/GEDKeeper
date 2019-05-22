@@ -366,7 +366,7 @@ namespace GKUI.Forms
             baseWin.ShowRecordsTab(GEDCOMRecordType.rtIndividual);
             baseWin.SelectRecordByXRef("I1");
 
-            GEDCOMRecord record = ((BaseWinSDI)baseWin).GetSelectedRecordEx();
+            GDMRecord record = ((BaseWinSDI)baseWin).GetSelectedRecordEx();
             Assert.IsNotNull(record, stage + ".4");
 
             StringList recordContent = baseWin.GetRecordContent(record);
@@ -496,7 +496,7 @@ namespace GKUI.Forms
             }
         }
 
-        private void StructsDlg_Handler(GEDCOMRecordWithEvents record, Form dlg, TabControlTester tabs, int[] tabIndexes)
+        private void StructsDlg_Handler(GDMRecordWithEvents record, Form dlg, TabControlTester tabs, int[] tabIndexes)
         {
             GKSheetListTester sheetTester;
 
@@ -551,7 +551,7 @@ namespace GKUI.Forms
 
         private void FamilyEditDlg_Handler(FamilyEditDlg dlg)
         {
-            GEDCOMFamilyRecord familyRecord = dlg.Family;
+            GDMFamilyRecord familyRecord = dlg.Family;
             var tabs = new TabControlTester("tabsFamilyData", dlg);
             GKSheetListTester sheetTester;
 
@@ -608,7 +608,7 @@ namespace GKUI.Forms
 
         private void PersonEditDlg_Handler(PersonEditDlg dlg)
         {
-            GEDCOMIndividualRecord indiRecord = dlg.Person;
+            GDMIndividualRecord indiRecord = dlg.Person;
 
             SelectCombo("cmbSex", dlg, 1); // male
 
@@ -716,7 +716,7 @@ namespace GKUI.Forms
             RecordSelectDlgTests.SetCreateItemHandler(this, GroupEditDlgTests.GroupAdd_Mini_Handler);
             ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, indiRecord.Groups.Count);
-            Assert.AreEqual("sample group", ((GEDCOMGroupRecord)indiRecord.Groups[0].Value).GroupName);
+            Assert.AreEqual("sample group", ((GDMGroupRecord)indiRecord.Groups[0].Value).GroupName);
 
             ModalFormHandler = MessageBox_YesHandler;
             SelectSheetListItem("fGroupsList", dlg, 0);

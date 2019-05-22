@@ -39,7 +39,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fSourcesList;
 
-        public GEDCOMMultimediaRecord MediaRec
+        public GDMMultimediaRecord MediaRec
         {
             get { return fController.MediaRec; }
             set { fController.MediaRec = value; }

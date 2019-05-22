@@ -69,7 +69,7 @@ namespace GKCommon.GEDCOM
     }
 
 
-    public abstract class GEDCOMCustomDate : GEDCOMTag, IComparable, IEquatable<GEDCOMCustomDate>
+    public abstract class GDMCustomDate : GDMTag, IComparable, IEquatable<GDMCustomDate>
     {
         public static readonly string[] GEDCOMDateTypes;
         public static readonly string[] GEDCOMDateApproximatedArray;
@@ -83,7 +83,7 @@ namespace GKCommon.GEDCOM
 
         public static readonly EnumTuple[] GEDCOMMonthValues;
 
-        static GEDCOMCustomDate()
+        static GDMCustomDate()
         {
             GEDCOMDateTypes = new string[] { "", "ABT", "AFT", "BEF", "BET", "CAL", "EST", "FROM", "INT", "TO" };
 
@@ -190,7 +190,7 @@ namespace GKCommon.GEDCOM
         }
 
 
-        protected GEDCOMCustomDate(GEDCOMObject owner) : base(owner)
+        protected GDMCustomDate(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.DATE);
         }
@@ -233,7 +233,7 @@ namespace GKCommon.GEDCOM
 
         public int CompareTo(object obj)
         {
-            GEDCOMCustomDate otherDate = obj as GEDCOMCustomDate;
+            GDMCustomDate otherDate = obj as GDMCustomDate;
 
             if (otherDate != null) {
                 UDN abs1 = GetUDN();
@@ -252,7 +252,7 @@ namespace GKCommon.GEDCOM
 
         public override bool Equals(object obj)
         {
-            GEDCOMCustomDate otherDate = obj as GEDCOMCustomDate;
+            GDMCustomDate otherDate = obj as GDMCustomDate;
 
             if (otherDate != null) {
                 UDN abs1 = GetUDN();
@@ -263,7 +263,7 @@ namespace GKCommon.GEDCOM
             return false;
         }
 
-        public bool Equals(GEDCOMCustomDate other)
+        public bool Equals(GDMCustomDate other)
         {
             UDN abs1 = GetUDN();
             UDN abs2 = other.GetUDN();
@@ -275,25 +275,25 @@ namespace GKCommon.GEDCOM
             return string.Empty;
         }
 
-        public static GEDCOMDate CreateApproximated(GEDCOMObject owner, GEDCOMDate date, GEDCOMApproximated approximated)
+        public static GDMDate CreateApproximated(GDMObject owner, GDMDate date, GEDCOMApproximated approximated)
         {
-            GEDCOMDate result = new GEDCOMDate(owner);
+            GDMDate result = new GDMDate(owner);
             result.Assign(date);
             result.Approximated = approximated;
             return result;
         }
 
-        public static GEDCOMDatePeriod CreatePeriod(GEDCOMObject owner, GEDCOMDate dateFrom, GEDCOMDate dateTo)
+        public static GDMDatePeriod CreatePeriod(GDMObject owner, GDMDate dateFrom, GDMDate dateTo)
         {
-            GEDCOMDatePeriod result = new GEDCOMDatePeriod(owner);
+            GDMDatePeriod result = new GDMDatePeriod(owner);
             result.DateFrom.Assign(dateFrom);
             result.DateTo.Assign(dateTo);
             return result;
         }
 
-        public static GEDCOMDateRange CreateRange(GEDCOMObject owner, GEDCOMDate dateAfter, GEDCOMDate dateBefore)
+        public static GDMDateRange CreateRange(GDMObject owner, GDMDate dateAfter, GDMDate dateBefore)
         {
-            GEDCOMDateRange result = new GEDCOMDateRange(owner);
+            GDMDateRange result = new GDMDateRange(owner);
             result.After.Assign(dateAfter);
             result.Before.Assign(dateBefore);
             return result;

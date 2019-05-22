@@ -41,7 +41,7 @@ namespace GKCore.Controllers
             try {
                 fBase.Context.Tree.Header.Language.ParseString(fView.Language.Text);
 
-                GEDCOMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
+                GDMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
                 submitter.Name.StringValue = fView.Name.Text;
                 submitter.Address.SetAddressArray(fView.Address.Lines);
 
@@ -64,7 +64,7 @@ namespace GKCore.Controllers
         {
             fView.Language.Text = fBase.Context.Tree.Header.Language.StringValue;
 
-            GEDCOMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
+            GDMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
             fView.Name.Text = submitter.Name.FullName;
             fView.Address.Text = submitter.Address.Address.Text;
 

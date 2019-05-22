@@ -20,7 +20,7 @@
 
 namespace GKCommon.GEDCOM
 {
-    public enum GEDCOMSpouseSealingDateStatus
+    public enum GDMSpouseSealingDateStatus
     {
         sdsNone,
         sdsCanceled,
@@ -34,27 +34,27 @@ namespace GKCommon.GEDCOM
     }
 
 
-    public sealed class GEDCOMSpouseSealing : GEDCOMIndividualOrdinance
+    public sealed class GDMSpouseSealing : GDMIndividualOrdinance
     {
-        public GEDCOMSpouseSealingDateStatus SpouseSealingDateStatus
+        public GDMSpouseSealingDateStatus SpouseSealingDateStatus
         {
             get { return GEDCOMUtils.GetSpouseSealingDateStatusVal(DateStatus.StringValue); }
             set { DateStatus.StringValue = GEDCOMUtils.GetSpouseSealingDateStatusStr(value); }
         }
 
 
-        public GEDCOMSpouseSealing(GEDCOMObject owner) : base(owner)
+        public GDMSpouseSealing(GDMObject owner) : base(owner)
         {
         }
 
-        public GEDCOMSpouseSealing(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMSpouseSealing(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMSpouseSealing(owner, tagName, tagValue);
+            return new GDMSpouseSealing(owner, tagName, tagValue);
         }
     }
 }

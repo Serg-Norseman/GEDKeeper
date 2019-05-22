@@ -30,16 +30,16 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_SetTagStringsA()
         {
-            var tag = new GEDCOMTag(null, "TEST", "");
+            var tag = new GDMTag(null, "TEST", "");
             Assert.IsNotNull(tag);
 
             // very long string, 248"A" and " BBB BBBB"
             var strings = new string[] { "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA BBB BBBB" };
-            GEDCOMTag.SetTagStrings(tag, strings);
+            GDMTag.SetTagStrings(tag, strings);
 
             Assert.AreEqual(248, tag.StringValue.Length);
 
-            var strList = GEDCOMTag.GetTagStrings(tag);
+            var strList = GDMTag.GetTagStrings(tag);
             Assert.IsNotNull(strList);
             Assert.AreEqual(1, strList.Count);
             Assert.AreEqual(strings[0], strList.Text);
@@ -48,19 +48,19 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_SetTagStringsL()
         {
-            var tag = new GEDCOMTag(null, "TEST", "");
+            var tag = new GDMTag(null, "TEST", "");
             Assert.IsNotNull(tag);
 
             // very long string, 248"A" and " BBB BBBB"
             var strings = new StringList( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA BBB BBBB" );
 
-            GEDCOMTag.SetTagStrings(null, strings);
+            GDMTag.SetTagStrings(null, strings);
 
-            GEDCOMTag.SetTagStrings(tag, strings);
+            GDMTag.SetTagStrings(tag, strings);
 
             Assert.AreEqual(248, tag.StringValue.Length);
 
-            var strList = GEDCOMTag.GetTagStrings(tag);
+            var strList = GDMTag.GetTagStrings(tag);
             Assert.IsNotNull(strList);
             Assert.AreEqual(1, strList.Count);
             Assert.AreEqual(strings.Text, strList.Text);
@@ -69,12 +69,12 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_FindTags()
         {
-            var tag = new GEDCOMTag(null, "TEST", "");
+            var tag = new GDMTag(null, "TEST", "");
             Assert.IsNotNull(tag);
 
-            tag.AddTag(new GEDCOMTag(tag, GEDCOMTagType._FOLDER, "Private"));
-            tag.AddTag(new GEDCOMTag(tag, GEDCOMTagType._FOLDER, "Friends"));
-            tag.AddTag(new GEDCOMTag(tag, GEDCOMTagType._FOLDER, "Research"));
+            tag.AddTag(new GDMTag(tag, GEDCOMTagType._FOLDER, "Private"));
+            tag.AddTag(new GDMTag(tag, GEDCOMTagType._FOLDER, "Friends"));
+            tag.AddTag(new GDMTag(tag, GEDCOMTagType._FOLDER, "Research"));
 
             var subTags = tag.FindTags(GEDCOMTagType._FOLDER);
             Assert.AreEqual(3, subTags.Count);

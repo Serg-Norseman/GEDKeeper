@@ -29,7 +29,7 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SourceEditDlgController : EditorController<GEDCOMSourceRecord, ISourceEditDlg>
+    public sealed class SourceEditDlgController : EditorController<GDMSourceRecord, ISourceEditDlg>
     {
         public SourceEditDlgController(ISourceEditDlg view) : base(view)
         {
@@ -73,7 +73,7 @@ namespace GKCore.Controllers
             fView.MediaList.ListModel.DataOwner = fModel;
         }
 
-        public void JumpToRecord(GEDCOMRecord record)
+        public void JumpToRecord(GDMRecord record)
         {
             if (record != null && Accept()) {
                 fBase.SelectRecordByXRef(record.XRef);

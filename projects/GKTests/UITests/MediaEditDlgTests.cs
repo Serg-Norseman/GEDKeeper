@@ -39,7 +39,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class MediaEditDlgTests : CustomWindowTest
     {
-        private GEDCOMMultimediaRecord fMultimediaRecord;
+        private GDMMultimediaRecord fMultimediaRecord;
         private IBaseWindow fBase;
         private MediaEditDlg fDialog;
 
@@ -50,8 +50,8 @@ namespace GKUI.Forms
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fMultimediaRecord = new GEDCOMMultimediaRecord(fBase.Context.Tree);
-            fMultimediaRecord.FileReferences.Add(new GEDCOMFileReferenceWithTitle(fMultimediaRecord, "", ""));
+            fMultimediaRecord = new GDMMultimediaRecord(fBase.Context.Tree);
+            fMultimediaRecord.FileReferences.Add(new GDMFileReferenceWithTitle(fMultimediaRecord, "", ""));
 
             fDialog = new MediaEditDlg(fBase);
             fDialog.MediaRec = fMultimediaRecord;

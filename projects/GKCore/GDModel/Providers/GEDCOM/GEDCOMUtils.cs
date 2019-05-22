@@ -297,7 +297,7 @@ namespace GKCommon.GEDCOM
         }
 
         // Time format: hour:minutes:seconds.fraction
-        public static string ParseTime(string strValue, GEDCOMTime time)
+        public static string ParseTime(string strValue, GDMTime time)
         {
             byte hour = 0;
             byte minutes = 0;
@@ -330,7 +330,7 @@ namespace GKCommon.GEDCOM
         }
 
         // CutoutPosition format: x1 y1 x2 y2
-        public static string ParseCutoutPosition(string strValue, GEDCOMCutoutPosition position)
+        public static string ParseCutoutPosition(string strValue, GDMCutoutPosition position)
         {
             int x1 = 0;
             int y1 = 0;
@@ -351,7 +351,7 @@ namespace GKCommon.GEDCOM
         }
 
         // DateValue format: INT/FROM/TO/etc..._<date>
-        public static string ParseDateValue(GEDCOMTree owner, GEDCOMDateValue dateValue, string str)
+        public static string ParseDateValue(GDMTree owner, GDMDateValue dateValue, string str)
         {
             if (str == null) {
                 return null;
@@ -362,13 +362,13 @@ namespace GKCommon.GEDCOM
         }
 
         // DateValue format: INT/FROM/TO/etc..._<date>
-        public static string ParseDateValue(GEDCOMTree owner, GEDCOMTag dateValue, GEDCOMParser strTok)
+        public static string ParseDateValue(GDMTree owner, GDMTag dateValue, GEDCOMParser strTok)
         {
-            return ParseDateValue(owner, (GEDCOMDateValue)dateValue, strTok);
+            return ParseDateValue(owner, (GDMDateValue)dateValue, strTok);
         }
 
         // DateValue format: INT/FROM/TO/etc..._<date>
-        public static string ParseDateValue(GEDCOMTree owner, GEDCOMDateValue dateValue, GEDCOMParser strTok)
+        public static string ParseDateValue(GDMTree owner, GDMDateValue dateValue, GEDCOMParser strTok)
         {
             strTok.SkipWhitespaces();
 
@@ -376,31 +376,31 @@ namespace GKCommon.GEDCOM
             var token = strTok.CurrentToken;
             if (token == GEDCOMToken.Word) {
                 string su = strTok.GetWord();
-                idx = Algorithms.BinarySearch(GEDCOMCustomDate.GEDCOMDateTypes, su, string.CompareOrdinal);
+                idx = Algorithms.BinarySearch(GDMCustomDate.GEDCOMDateTypes, su, string.CompareOrdinal);
             }
             var dateType = (idx < 0) ? GEDCOMDateType.SIMP : (GEDCOMDateType)idx;
 
             string result;
-            GEDCOMCustomDate date;
+            GDMCustomDate date;
             switch (dateType) {
                 case GEDCOMDateType.AFT:
                 case GEDCOMDateType.BEF:
                 case GEDCOMDateType.BET:
-                    date = new GEDCOMDateRange(dateValue);
-                    result = GEDCOMUtils.ParseRangeDate(owner, (GEDCOMDateRange)date, strTok);
+                    date = new GDMDateRange(dateValue);
+                    result = GEDCOMUtils.ParseRangeDate(owner, (GDMDateRange)date, strTok);
                     break;
                 case GEDCOMDateType.INT:
-                    date = new GEDCOMDateInterpreted(dateValue);
-                    result = GEDCOMUtils.ParseIntDate(owner, (GEDCOMDateInterpreted)date, strTok);
+                    date = new GDMDateInterpreted(dateValue);
+                    result = GEDCOMUtils.ParseIntDate(owner, (GDMDateInterpreted)date, strTok);
                     break;
                 case GEDCOMDateType.FROM:
                 case GEDCOMDateType.TO:
-                    date = new GEDCOMDatePeriod(dateValue);
-                    result = GEDCOMUtils.ParsePeriodDate(owner, (GEDCOMDatePeriod)date, strTok);
+                    date = new GDMDatePeriod(dateValue);
+                    result = GEDCOMUtils.ParsePeriodDate(owner, (GDMDatePeriod)date, strTok);
                     break;
                 default:
-                    date = new GEDCOMDate(dateValue);
-                    result = GEDCOMUtils.ParseDate(owner, (GEDCOMDate)date, strTok);
+                    date = new GDMDate(dateValue);
+                    result = GEDCOMUtils.ParseDate(owner, (GDMDate)date, strTok);
                     break;
             }
 
@@ -409,14 +409,14 @@ namespace GKCommon.GEDCOM
         }
 
         // Format: FROM DATE1 TO DATE2
-        public static string ParsePeriodDate(GEDCOMTree owner, GEDCOMDatePeriod date, string strValue)
+        public static string ParsePeriodDate(GDMTree owner, GDMDatePeriod date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
             return ParsePeriodDate(owner, date, strTok);
         }
 
         // Format: FROM DATE1 TO DATE2
-        public static string ParsePeriodDate(GEDCOMTree owner, GEDCOMDatePeriod date, GEDCOMParser strTok)
+        public static string ParsePeriodDate(GDMTree owner, GDMDatePeriod date, GEDCOMParser strTok)
         {
             strTok.SkipWhitespaces();
 
@@ -436,14 +436,14 @@ namespace GKCommon.GEDCOM
         }
 
         // Format: AFT DATE | BEF DATE | BET AFT_DATE AND BEF_DATE
-        public static string ParseRangeDate(GEDCOMTree owner, GEDCOMDateRange date, string strValue)
+        public static string ParseRangeDate(GDMTree owner, GDMDateRange date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
             return ParseRangeDate(owner, date, strTok);
         }
 
         // Format: AFT DATE | BEF DATE | BET AFT_DATE AND BEF_DATE
-        public static string ParseRangeDate(GEDCOMTree owner, GEDCOMDateRange date, GEDCOMParser strTok)
+        public static string ParseRangeDate(GDMTree owner, GDMDateRange date, GEDCOMParser strTok)
         {
             strTok.SkipWhitespaces();
 
@@ -452,7 +452,7 @@ namespace GKCommon.GEDCOM
                 // error!
             }
             string su = strTok.GetWord();
-            int dateType = Algorithms.BinarySearch(GEDCOMCustomDate.GEDCOMDateRangeArray, su, string.CompareOrdinal);
+            int dateType = Algorithms.BinarySearch(GDMCustomDate.GEDCOMDateRangeArray, su, string.CompareOrdinal);
 
             if (dateType == 0) { // "AFT"
                 strTok.Next();
@@ -466,8 +466,8 @@ namespace GKCommon.GEDCOM
                 ParseDate(owner, date.After, strTok);
                 strTok.SkipWhitespaces();
 
-                if (!strTok.RequireWord(GEDCOMCustomDate.GEDCOMDateRangeArray[3])) { // "AND"
-                    throw new GEDCOMDateException(string.Format("The range date '{0}' doesn't contain 'and' token", strTok.GetFullStr()));
+                if (!strTok.RequireWord(GDMCustomDate.GEDCOMDateRangeArray[3])) { // "AND"
+                    throw new GDMDateException(string.Format("The range date '{0}' doesn't contain 'and' token", strTok.GetFullStr()));
                 }
 
                 strTok.Next();
@@ -480,19 +480,19 @@ namespace GKCommon.GEDCOM
         }
 
         // Format: INT DATE (phrase)
-        public static string ParseIntDate(GEDCOMTree owner, GEDCOMDateInterpreted date, string strValue)
+        public static string ParseIntDate(GDMTree owner, GDMDateInterpreted date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
             return ParseIntDate(owner, date, strTok);
         }
 
         // Format: INT DATE (phrase)
-        public static string ParseIntDate(GEDCOMTree owner, GEDCOMDateInterpreted date, GEDCOMParser strTok)
+        public static string ParseIntDate(GDMTree owner, GDMDateInterpreted date, GEDCOMParser strTok)
         {
             strTok.SkipWhitespaces();
 
             if (!strTok.RequireWord(GEDCOMTagType.INT)) {
-                throw new GEDCOMDateException(string.Format("The interpreted date '{0}' doesn't start with a valid ident", strTok.GetFullStr()));
+                throw new GDMDateException(string.Format("The interpreted date '{0}' doesn't start with a valid ident", strTok.GetFullStr()));
             }
             strTok.Next();
             ParseDate(owner, date, strTok);
@@ -515,22 +515,22 @@ namespace GKCommon.GEDCOM
             return strTok.GetRest();
         }
 
-        public static string ParseDate(GEDCOMTree owner, GEDCOMDate date, string strValue)
+        public static string ParseDate(GDMTree owner, GDMDate date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
             return ParseDate(owner, date, strTok);
         }
 
-        public static string ParseDate(GEDCOMTree owner, GEDCOMTag date, GEDCOMParser strTok)
+        public static string ParseDate(GDMTree owner, GDMTag date, GEDCOMParser strTok)
         {
-            return ParseDate(owner, (GEDCOMDate)date, strTok);
+            return ParseDate(owner, (GDMDate)date, strTok);
         }
 
-        public static string ParseDate(GEDCOMTree owner, GEDCOMDate date, GEDCOMParser strTok)
+        public static string ParseDate(GDMTree owner, GDMDate date, GEDCOMParser strTok)
         {
             GEDCOMApproximated approximated = GEDCOMApproximated.daExact;
             GEDCOMCalendar calendar = GEDCOMCalendar.dcGregorian;
-            short year = GEDCOMDate.UNKNOWN_YEAR;
+            short year = GDMDate.UNKNOWN_YEAR;
             bool yearBC = false;
             string yearModifier = string.Empty;
             byte month = 0;
@@ -552,7 +552,7 @@ namespace GKCommon.GEDCOM
             token = strTok.CurrentToken;
             if (token == GEDCOMToken.Word) {
                 string su = InvariantTextInfo.ToUpper(strTok.GetWord());
-                int idx = Algorithms.BinarySearch(GEDCOMCustomDate.GEDCOMDateApproximatedArray, su, string.CompareOrdinal);
+                int idx = Algorithms.BinarySearch(GDMCustomDate.GEDCOMDateApproximatedArray, su, string.CompareOrdinal);
                 if (idx >= 0) {
                     approximated = (GEDCOMApproximated)idx;
                     strTok.Next();
@@ -565,7 +565,7 @@ namespace GKCommon.GEDCOM
             if (token == GEDCOMToken.XRef) {
                 // FIXME: check for errors
                 var escapeStr = "@" + strTok.GetWord() + "@";
-                int idx = Algorithms.IndexOf(GEDCOMCustomDate.GEDCOMDateEscapeArray, escapeStr);
+                int idx = Algorithms.IndexOf(GDMCustomDate.GEDCOMDateEscapeArray, escapeStr);
                 if (idx >= 0) {
                     calendar = (GEDCOMCalendar)idx;
                 }
@@ -596,7 +596,7 @@ namespace GKCommon.GEDCOM
                 // in this case, according to performance test results, BinarySearch is more efficient
                 // than a simple search or even a dictionary search (why?!)
                 string su = InvariantTextInfo.ToUpper(strTok.GetWord());
-                int idx = BinarySearch(GEDCOMCustomDate.GEDCOMMonthValues, su, string.CompareOrdinal);
+                int idx = BinarySearch(GDMCustomDate.GEDCOMMonthValues, su, string.CompareOrdinal);
                 month = (byte)((idx < 0) ? 0 : idx);
 
                 token = strTok.Next();
@@ -679,7 +679,7 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public static string ParseName(string strValue, GEDCOMPersonalName persName)
+        public static string ParseName(string strValue, GDMPersonalName persName)
         {
             string firstPart = string.Empty;
             string surname = string.Empty;
@@ -854,12 +854,12 @@ namespace GKCommon.GEDCOM
         public static string[] PedigreeLinkageTypes = new string[] {
             "", "adopted", "birth", "foster" };
 
-        public static GEDCOMPedigreeLinkageType GetPedigreeLinkageTypeVal(string str)
+        public static GDMPedigreeLinkageType GetPedigreeLinkageTypeVal(string str)
         {
-            return Str2Enum(str, PedigreeLinkageTypes, GEDCOMPedigreeLinkageType.plNone);
+            return Str2Enum(str, PedigreeLinkageTypes, GDMPedigreeLinkageType.plNone);
         }
 
-        public static string GetPedigreeLinkageTypeStr(GEDCOMPedigreeLinkageType value)
+        public static string GetPedigreeLinkageTypeStr(GDMPedigreeLinkageType value)
         {
             return GEDCOMUtils.Enum2Str(value, PedigreeLinkageTypes);
         }
@@ -868,12 +868,12 @@ namespace GKCommon.GEDCOM
         public static string[] ChildLinkageStatuses = new string[] {
             "", "challenged", "disproven", "proven" };
 
-        public static GEDCOMChildLinkageStatus GetChildLinkageStatusVal(string str)
+        public static GDMChildLinkageStatus GetChildLinkageStatusVal(string str)
         {
-            return Str2Enum(str, ChildLinkageStatuses, GEDCOMChildLinkageStatus.clNone);
+            return Str2Enum(str, ChildLinkageStatuses, GDMChildLinkageStatus.clNone);
         }
 
-        public static string GetChildLinkageStatusStr(GEDCOMChildLinkageStatus value)
+        public static string GetChildLinkageStatusStr(GDMChildLinkageStatus value)
         {
             return GEDCOMUtils.Enum2Str(value, ChildLinkageStatuses);
         }
@@ -1162,12 +1162,12 @@ namespace GKCommon.GEDCOM
         public static string[] SpouseSealingDateStatuses = new string[] {
             "", "CANCELED", "COMPLETED", "DNS", "DNS/CAN", "EXCLUDED", "PRE-1970", "SUBMITTED", "UNCLEARED" };
 
-        public static GEDCOMSpouseSealingDateStatus GetSpouseSealingDateStatusVal(string str)
+        public static GDMSpouseSealingDateStatus GetSpouseSealingDateStatusVal(string str)
         {
-            return Str2Enum(str, SpouseSealingDateStatuses, GEDCOMSpouseSealingDateStatus.sdsNone, false);
+            return Str2Enum(str, SpouseSealingDateStatuses, GDMSpouseSealingDateStatus.sdsNone, false);
         }
 
-        public static string GetSpouseSealingDateStatusStr(GEDCOMSpouseSealingDateStatus value)
+        public static string GetSpouseSealingDateStatusStr(GDMSpouseSealingDateStatus value)
         {
             return GEDCOMUtils.Enum2Str(value, SpouseSealingDateStatuses);
         }
@@ -1397,7 +1397,7 @@ namespace GKCommon.GEDCOM
 
         #endregion
 
-        public static string GetSignByRecord(GEDCOMRecord record)
+        public static string GetSignByRecord(GDMRecord record)
         {
             string result = string.Empty;
             if (record == null) return result;
@@ -1528,28 +1528,28 @@ namespace GKCommon.GEDCOM
                 if (ix >= 0) {
                     c1 = (byte)ix;
                 } else {
-                    throw new EGEDCOMException("DecodeBlob");
+                    throw new GDMException("DecodeBlob");
                 }
 
                 ix = validChars.IndexOf(blob[i++]);
                 if (ix >= 0) {
                     c2 = (byte)ix;
                 } else {
-                    throw new EGEDCOMException("DecodeBlob");
+                    throw new GDMException("DecodeBlob");
                 }
 
                 ix = validChars.IndexOf(blob[i++]);
                 if (ix >= 0) {
                     c3 = (byte)ix;
                 } else {
-                    throw new EGEDCOMException("DecodeBlob");
+                    throw new GDMException("DecodeBlob");
                 }
 
                 ix = validChars.IndexOf(blob[i++]);
                 if (ix >= 0) {
                     c4 = (byte)ix;
                 } else {
-                    throw new EGEDCOMException("DecodeBlob");
+                    throw new GDMException("DecodeBlob");
                 }
 
                 // The following decodes Family Historian blobs.

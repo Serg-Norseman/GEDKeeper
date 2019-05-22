@@ -37,25 +37,25 @@ namespace GKCommon.GEDCOM
     }
 
 
-    public sealed class GEDCOMFamilyRecord : GEDCOMRecordWithEvents
+    public sealed class GDMFamilyRecord : GDMRecordWithEvents
     {
-        private GEDCOMList<GEDCOMPointer> fChildren;
+        private GDMList<GDMPointer> fChildren;
         private GDMMarriageStatus fStatus;
 
 
-        public GEDCOMList<GEDCOMPointer> Children
+        public GDMList<GDMPointer> Children
         {
             get { return fChildren; }
         }
 
-        public GEDCOMPointer Husband
+        public GDMPointer Husband
         {
-            get { return GetTag(GEDCOMTagType.HUSB, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag<GDMPointer>(GEDCOMTagType.HUSB, GDMPointer.Create); }
         }
 
-        public GEDCOMPointer Wife
+        public GDMPointer Wife
         {
-            get { return GetTag(GEDCOMTagType.WIFE, GEDCOMPointer.Create) as GEDCOMPointer; }
+            get { return GetTag<GDMPointer>(GEDCOMTagType.WIFE, GDMPointer.Create); }
         }
 
         public GDMMarriageStatus Status
@@ -65,12 +65,12 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMFamilyRecord(GEDCOMObject owner) : base(owner)
+        public GDMFamilyRecord(GDMObject owner) : base(owner)
         {
             SetRecordType(GEDCOMRecordType.rtFamily);
             SetName(GEDCOMTagType.FAM);
 
-            fChildren = new GEDCOMList<GEDCOMPointer>(this);
+            fChildren = new GDMList<GDMPointer>(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -81,19 +81,19 @@ namespace GKCommon.GEDCOM
             base.Dispose(disposing);
         }
 
-        public GEDCOMIndividualRecord GetHusband()
+        public GDMIndividualRecord GetHusband()
         {
-            return Husband.Value as GEDCOMIndividualRecord;
+            return Husband.Value as GDMIndividualRecord;
         }
 
-        public GEDCOMIndividualRecord GetWife()
+        public GDMIndividualRecord GetWife()
         {
-            return Wife.Value as GEDCOMIndividualRecord;
+            return Wife.Value as GDMIndividualRecord;
         }
 
-        public override GEDCOMCustomEvent AddEvent(GEDCOMCustomEvent evt)
+        public override GDMCustomEvent AddEvent(GDMCustomEvent evt)
         {
-            var famEvent = evt as GEDCOMFamilyEvent;
+            var famEvent = evt as GDMFamilyEvent;
             if (famEvent != null) {
                 Events.Add(evt);
             } else {
@@ -112,7 +112,7 @@ namespace GKCommon.GEDCOM
 
             int num = fChildren.Count;
             for (int i = 0; i < num; i++) {
-                GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)fChildren[i].Value;
+                GDMIndividualRecord child = (GDMIndividualRecord)fChildren[i].Value;
                 child.DeleteChildToFamilyLink(this);
             }
             fChildren.Clear();
@@ -126,7 +126,7 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && (fChildren.Count == 0);
         }
 
-        public void DeleteChild(GEDCOMRecord childRec)
+        public void DeleteChild(GDMRecord childRec)
         {
             for (int i = fChildren.Count - 1; i >= 0; i--) {
                 if (fChildren[i].Value == childRec) {
@@ -136,7 +136,7 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public int IndexOfChild(GEDCOMRecord childRec)
+        public int IndexOfChild(GDMRecord childRec)
         {
             int result = -1;
 
@@ -150,9 +150,9 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public override void Assign(GEDCOMTag source)
+        public override void Assign(GDMTag source)
         {
-            GEDCOMFamilyRecord sourceRec = source as GEDCOMFamilyRecord;
+            GDMFamilyRecord sourceRec = source as GDMFamilyRecord;
             if (sourceRec == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
@@ -161,9 +161,9 @@ namespace GKCommon.GEDCOM
             fStatus = sourceRec.fStatus;
         }
 
-        public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
+        public override void MoveTo(GDMRecord targetRecord, bool clearDest)
         {
-            GEDCOMFamilyRecord targetFamily = targetRecord as GEDCOMFamilyRecord;
+            GDMFamilyRecord targetFamily = targetRecord as GDMFamilyRecord;
             if (targetFamily == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
 
@@ -172,7 +172,7 @@ namespace GKCommon.GEDCOM
             targetFamily.Status = fStatus;
 
             while (fChildren.Count > 0) {
-                GEDCOMPointer obj = fChildren.Extract(0);
+                GDMPointer obj = fChildren.Extract(0);
                 obj.ResetOwner(targetFamily);
                 targetFamily.Children.Add(obj);
             }
@@ -215,7 +215,7 @@ namespace GKCommon.GEDCOM
         {
             string result = "";
 
-            GEDCOMIndividualRecord spouse = GetHusband();
+            GDMIndividualRecord spouse = GetHusband();
             result += (spouse == null) ? "?" : spouse.GetPrimaryFullName();
             result += " - ";
             spouse = GetWife();
@@ -224,21 +224,19 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
+        public override float IsMatch(GDMTag tag, MatchParams matchParams)
         {
-            GEDCOMFamilyRecord otherFam = tag as GEDCOMFamilyRecord;
+            GDMFamilyRecord otherFam = tag as GDMFamilyRecord;
             if (otherFam == null) return 0.0f;
 
             float match = GetStrMatch(GetFamilyString(), otherFam.GetFamilyString(), matchParams);
             return match;
         }
 
-        #region Auxiliary
-
-        private static int EventsCompare(GEDCOMPointer cp1, GEDCOMPointer cp2)
+        private static int EventsCompare(GDMPointer cp1, GDMPointer cp2)
         {
-            UDN udn1 = ((GEDCOMIndividualRecord)cp1.Value).GetUDN(GEDCOMTagType.BIRT);
-            UDN udn2 = ((GEDCOMIndividualRecord)cp2.Value).GetUDN(GEDCOMTagType.BIRT);
+            UDN udn1 = ((GDMIndividualRecord)cp1.Value).GetUDN(GEDCOMTagType.BIRT);
+            UDN udn2 = ((GDMIndividualRecord)cp2.Value).GetUDN(GEDCOMTagType.BIRT);
             return udn1.CompareTo(udn2);
         }
 
@@ -247,15 +245,15 @@ namespace GKCommon.GEDCOM
             fChildren.Sort(EventsCompare);
         }
 
-        public GEDCOMIndividualRecord GetSpouseBy(GEDCOMIndividualRecord spouse)
+        public GDMIndividualRecord GetSpouseBy(GDMIndividualRecord spouse)
         {
-            GEDCOMIndividualRecord husb = GetHusband();
-            GEDCOMIndividualRecord wife = GetWife();
+            GDMIndividualRecord husb = GetHusband();
+            GDMIndividualRecord wife = GetWife();
 
             return (spouse == husb) ? wife : husb;
         }
 
-        public bool AddSpouse(GEDCOMIndividualRecord spouse)
+        public bool AddSpouse(GDMIndividualRecord spouse)
         {
             if (spouse == null) {
                 return false;
@@ -276,14 +274,14 @@ namespace GKCommon.GEDCOM
                     break;
             }
 
-            GEDCOMSpouseToFamilyLink spLink = new GEDCOMSpouseToFamilyLink(spouse);
+            GDMSpouseToFamilyLink spLink = new GDMSpouseToFamilyLink(spouse);
             spLink.Family = this;
             spouse.SpouseToFamilyLinks.Add(spLink);
 
             return true;
         }
 
-        public void RemoveSpouse(GEDCOMIndividualRecord spouse)
+        public void RemoveSpouse(GDMIndividualRecord spouse)
         {
             if (spouse == null) return;
 
@@ -300,22 +298,22 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public bool AddChild(GEDCOMIndividualRecord child)
+        public bool AddChild(GDMIndividualRecord child)
         {
             if (child == null) return false;
 
-            GEDCOMPointer ptr = new GEDCOMPointer(this);
+            GDMPointer ptr = new GDMPointer(this);
             ptr.SetNameValue(GEDCOMTagType.CHIL, child);
             fChildren.Add(ptr);
 
-            GEDCOMChildToFamilyLink chLink = new GEDCOMChildToFamilyLink(child);
+            GDMChildToFamilyLink chLink = new GDMChildToFamilyLink(child);
             chLink.Family = this;
             child.ChildToFamilyLinks.Add(chLink);
 
             return true;
         }
 
-        public bool RemoveChild(GEDCOMIndividualRecord child)
+        public bool RemoveChild(GDMIndividualRecord child)
         {
             if (child == null) return false;
 
@@ -324,7 +322,5 @@ namespace GKCommon.GEDCOM
 
             return true;
         }
-
-        #endregion
     }
 }

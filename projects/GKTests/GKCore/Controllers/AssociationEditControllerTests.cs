@@ -33,7 +33,7 @@ namespace GKCore.Controllers
     [TestFixture]
     public class AssociationEditControllerTests
     {
-        private GEDCOMAssociation fAssociation;
+        private GDMAssociation fAssociation;
         private IBaseWindow fBase;
 
         [TestFixtureSetUp]
@@ -42,7 +42,7 @@ namespace GKCore.Controllers
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fAssociation = new GEDCOMAssociation(null);
+            fAssociation = new GDMAssociation(null);
         }
 
         [Test]

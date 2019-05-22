@@ -37,7 +37,7 @@ namespace GKCore.Export
         protected readonly IBaseWindow fBase;
         protected GlobalOptions fOptions;
         protected string fPath;
-        protected GEDCOMTree fTree;
+        protected GDMTree fTree;
         protected CustomWriter fWriter;
 
         public GlobalOptions Options

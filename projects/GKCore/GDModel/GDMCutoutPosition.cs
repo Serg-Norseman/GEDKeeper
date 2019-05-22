@@ -22,7 +22,7 @@ using BSLib;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMCutoutPosition : GEDCOMTag
+    public sealed class GDMCutoutPosition : GDMTag
     {
         private int fX1;
         private int fY1;
@@ -67,19 +67,19 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMCutoutPosition(GEDCOMObject owner) : base(owner)
+        public GDMCutoutPosition(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType._POSITION);
         }
 
-        public GEDCOMCutoutPosition(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMCutoutPosition(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMCutoutPosition(owner, tagName, tagValue);
+            return new GDMCutoutPosition(owner, tagName, tagValue);
         }
 
         protected override string GetStringValue()

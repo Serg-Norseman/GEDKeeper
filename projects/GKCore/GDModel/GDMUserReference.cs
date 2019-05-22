@@ -23,7 +23,7 @@ using System.IO;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMUserReference : GEDCOMTag
+    public sealed class GDMUserReference : GDMTag
     {
         private string fReferenceType;
 
@@ -34,19 +34,19 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public GEDCOMUserReference(GEDCOMObject owner) : base(owner)
+        public GDMUserReference(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.REFN);
         }
 
-        public GEDCOMUserReference(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMUserReference(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMUserReference(owner, tagName, tagValue);
+            return new GDMUserReference(owner, tagName, tagValue);
         }
 
         public override void Clear()
@@ -66,9 +66,9 @@ namespace GKCommon.GEDCOM
             WriteTagLine(stream, ++level, GEDCOMTagType.TYPE, fReferenceType, true);
         }
 
-        public override void Assign(GEDCOMTag source)
+        public override void Assign(GDMTag source)
         {
-            GEDCOMUserReference srcUserRef = (source as GEDCOMUserReference);
+            GDMUserReference srcUserRef = (source as GDMUserReference);
             if (srcUserRef == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 

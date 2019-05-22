@@ -24,12 +24,12 @@ using BSLib;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMAddress : GEDCOMTag
+    public sealed class GDMAddress : GDMTag
     {
-        private GEDCOMList<GEDCOMTag> fPhoneList;
-        private GEDCOMList<GEDCOMTag> fEmailList;
-        private GEDCOMList<GEDCOMTag> fFaxList;
-        private GEDCOMList<GEDCOMTag> fWWWList;
+        private GDMList<GDMTag> fPhoneList;
+        private GDMList<GDMTag> fEmailList;
+        private GDMList<GDMTag> fFaxList;
+        private GDMList<GDMTag> fWWWList;
 
 
         public StringList Address
@@ -80,43 +80,43 @@ namespace GKCommon.GEDCOM
             set { SetTagStringValue(GEDCOMTagType.CTRY, value); }
         }
 
-        public GEDCOMList<GEDCOMTag> PhoneNumbers
+        public GDMList<GDMTag> PhoneNumbers
         {
             get { return fPhoneList; }
         }
 
-        public GEDCOMList<GEDCOMTag> EmailAddresses
+        public GDMList<GDMTag> EmailAddresses
         {
             get { return fEmailList; }
         }
 
-        public GEDCOMList<GEDCOMTag> FaxNumbers
+        public GDMList<GDMTag> FaxNumbers
         {
             get { return fFaxList; }
         }
 
-        public GEDCOMList<GEDCOMTag> WebPages
+        public GDMList<GDMTag> WebPages
         {
             get { return fWWWList; }
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMAddress(owner, tagName, tagValue);
+            return new GDMAddress(owner, tagName, tagValue);
         }
 
-        public GEDCOMAddress(GEDCOMObject owner) : base(owner)
+        public GDMAddress(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.ADDR);
 
-            fPhoneList = new GEDCOMList<GEDCOMTag>(this);
-            fEmailList = new GEDCOMList<GEDCOMTag>(this);
-            fFaxList = new GEDCOMList<GEDCOMTag>(this);
-            fWWWList = new GEDCOMList<GEDCOMTag>(this);
+            fPhoneList = new GDMList<GDMTag>(this);
+            fEmailList = new GDMList<GDMTag>(this);
+            fFaxList = new GDMList<GDMTag>(this);
+            fWWWList = new GDMList<GDMTag>(this);
         }
 
-        public GEDCOMAddress(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMAddress(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -146,9 +146,9 @@ namespace GKCommon.GEDCOM
             fWWWList.SaveToStream(stream, level);
         }
 
-        public override void Assign(GEDCOMTag source)
+        public override void Assign(GDMTag source)
         {
-            GEDCOMAddress otherAddr = source as GEDCOMAddress;
+            GDMAddress otherAddr = source as GDMAddress;
             if (otherAddr == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
@@ -174,24 +174,24 @@ namespace GKCommon.GEDCOM
             return base.IsEmpty() && fPhoneList.Count == 0 && fEmailList.Count == 0 && fFaxList.Count == 0 && fWWWList.Count == 0;
         }
 
-        public GEDCOMTag AddEmailAddress(string value)
+        public GDMTag AddEmailAddress(string value)
         {
-            return fEmailList.Add(new GEDCOMTag(this, GEDCOMTagType.EMAIL, value));
+            return fEmailList.Add(new GDMTag(this, GEDCOMTagType.EMAIL, value));
         }
 
-        public GEDCOMTag AddFaxNumber(string value)
+        public GDMTag AddFaxNumber(string value)
         {
-            return fFaxList.Add(new GEDCOMTag(this, GEDCOMTagType.FAX, value));
+            return fFaxList.Add(new GDMTag(this, GEDCOMTagType.FAX, value));
         }
 
-        public GEDCOMTag AddPhoneNumber(string value)
+        public GDMTag AddPhoneNumber(string value)
         {
-            return fPhoneList.Add(new GEDCOMTag(this, GEDCOMTagType.PHON, value));
+            return fPhoneList.Add(new GDMTag(this, GEDCOMTagType.PHON, value));
         }
 
-        public GEDCOMTag AddWebPage(string value)
+        public GDMTag AddWebPage(string value)
         {
-            return fWWWList.Add(new GEDCOMTag(this, GEDCOMTagType.WWW, value));
+            return fWWWList.Add(new GDMTag(this, GEDCOMTagType.WWW, value));
         }
 
         public void SetAddressText(string value)

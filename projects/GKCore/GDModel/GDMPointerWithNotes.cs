@@ -20,19 +20,19 @@
 
 namespace GKCommon.GEDCOM
 {
-    public class GEDCOMPointerWithNotes : GEDCOMPointer
+    public class GDMPointerWithNotes : GDMPointer
     {
-        private GEDCOMList<GEDCOMNotes> fNotes;
+        private GDMList<GDMNotes> fNotes;
 
-        public GEDCOMList<GEDCOMNotes> Notes
+        public GDMList<GDMNotes> Notes
         {
             get { return fNotes; }
         }
 
 
-        public GEDCOMPointerWithNotes(GEDCOMObject owner) : base(owner)
+        public GDMPointerWithNotes(GDMObject owner) : base(owner)
         {
-            fNotes = new GEDCOMList<GEDCOMNotes>(this);
+            fNotes = new GDMList<GDMNotes>(this);
         }
 
         protected override void Dispose(bool disposing)

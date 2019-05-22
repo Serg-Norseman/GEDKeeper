@@ -37,7 +37,7 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class MultimediaListMan : ListManager
     {
-        private GEDCOMMultimediaRecord fRec;
+        private GDMMultimediaRecord fRec;
 
 
         public MultimediaListMan(IBaseContext baseContext) :
@@ -60,7 +60,7 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            GEDCOMFileReferenceWithTitle fileRef = fRec.FileReferences[0];
+            GDMFileReferenceWithTitle fileRef = fRec.FileReferences[0];
 
             bool res = (QuickFilter == "*" || IsMatchesMask(fileRef.Title, QuickFilter));
 
@@ -69,14 +69,14 @@ namespace GKCore.Lists
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMMultimediaRecord);
+            fRec = (aRec as GDMMultimediaRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
-            GEDCOMFileReferenceWithTitle fileRef = fRec.FileReferences[0];
+            GDMFileReferenceWithTitle fileRef = fRec.FileReferences[0];
             if (fileRef == null) {
                 return null;
             }

@@ -230,7 +230,7 @@ namespace GKCore
             }
         }
 
-        public void ImportNames(GEDCOMIndividualRecord iRec)
+        public void ImportNames(GDMIndividualRecord iRec)
         {
             if (iRec == null) return;
 
@@ -243,8 +243,8 @@ namespace GKCore
                 GEDCOMSex iSex = iRec.Sex;
                 SetNameSex(childName, iSex);
 
-                GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
-                GEDCOMIndividualRecord father = (fam == null) ? null : fam.GetHusband();
+                GDMFamilyRecord fam = iRec.GetParentsFamily();
+                GDMIndividualRecord father = (fam == null) ? null : fam.GetHusband();
 
                 if (father != null) {
                     string fatherName;

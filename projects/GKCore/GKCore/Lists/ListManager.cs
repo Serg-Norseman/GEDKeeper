@@ -113,10 +113,10 @@ namespace GKCore.Lists
     {
         public sealed class ValItem
         {
-            public readonly GEDCOMRecord Record;
+            public readonly GDMRecord Record;
             public object ColumnValue;
 
-            public ValItem(GEDCOMRecord record)
+            public ValItem(GDMRecord record)
             {
                 Record = record;
                 ColumnValue = null;
@@ -209,9 +209,9 @@ namespace GKCore.Lists
             return true;
         }
 
-        public abstract void Fetch(GEDCOMRecord aRec);
+        public abstract void Fetch(GDMRecord aRec);
 
-        protected static object GetDateValue(GEDCOMCustomEvent evt, bool isVisible)
+        protected static object GetDateValue(GDMCustomEvent evt, bool isVisible)
         {
             if (evt == null) {
                 return (isVisible) ? null : (object)UDN.CreateEmpty();
@@ -220,7 +220,7 @@ namespace GKCore.Lists
             return GetDateValue(evt.Date.Value, isVisible);
         }
 
-        protected static object GetDateValue(GEDCOMCustomDate date, bool isVisible)
+        protected static object GetDateValue(GDMCustomDate date, bool isVisible)
         {
             object result;
 
@@ -256,7 +256,7 @@ namespace GKCore.Lists
 
         public virtual object[] GetItemData(object rowData)
         {
-            GEDCOMRecord rec = rowData as GEDCOMRecord;
+            GDMRecord rec = rowData as GDMRecord;
             if (rec == null) return null;
 
             Fetch(rec);
@@ -285,7 +285,7 @@ namespace GKCore.Lists
 
         public virtual void UpdateItem(int itemIndex, IListItem item, object rowData)
         {
-            GEDCOMRecord rec = rowData as GEDCOMRecord;
+            GDMRecord rec = rowData as GDMRecord;
             if (item == null || rec == null) return;
 
             Fetch(rec);
@@ -386,7 +386,7 @@ namespace GKCore.Lists
                     return DateTime.Parse(val);
 
                 case DataType.dtGEDCOMDate:
-                    return GEDCOMDate.GetUDNByFormattedStr(val, GEDCOMCalendar.dcGregorian);
+                    return GDMDate.GetUDNByFormattedStr(val, GEDCOMCalendar.dcGregorian);
             }
 
             return val;
@@ -475,7 +475,7 @@ namespace GKCore.Lists
             return res;
         }
 
-        protected bool CheckExternalFilter(GEDCOMRecord rec)
+        protected bool CheckExternalFilter(GDMRecord rec)
         {
             bool res = true;
             if (fExternalFilter != null) {
@@ -549,7 +549,7 @@ namespace GKCore.Lists
                 int num = fContentList.Count;
                 for (int i = 0; i < num; i++) {
                     ValItem valItem = fContentList[i];
-                    GEDCOMRecord rec = valItem.Record;
+                    GDMRecord rec = valItem.Record;
 
                     if (sortColumn == 0) {
                         valItem.ColumnValue = rec.GetId();
@@ -578,7 +578,7 @@ namespace GKCore.Lists
             fContentList.Capacity = contentSize;
 
             for (int i = 0; i < contentSize; i++) {
-                GEDCOMRecord rec = fBaseContext.Tree[i];
+                GDMRecord rec = fBaseContext.Tree[i];
 
                 if (rec.RecordType == fRecordType) {
                     fTotalCount++;
@@ -591,10 +591,10 @@ namespace GKCore.Lists
             }
         }
 
-        public List<GEDCOMRecord> GetRecordsList()
+        public List<GDMRecord> GetRecordsList()
         {
             int size = fContentList.Count;
-            var result = new List<GEDCOMRecord>(size);
+            var result = new List<GDMRecord>(size);
 
             for (int i = 0; i < size; i++) {
                 result.Add(fContentList[i].Record);
@@ -605,15 +605,15 @@ namespace GKCore.Lists
 
         public IListItem CreateListItem(object rowData, CreateListItemHandler handler)
         {
-            GEDCOMRecord record = rowData as GEDCOMRecord;
+            GDMRecord record = rowData as GDMRecord;
             if (record == null || handler == null) return null;
 
             return handler(record.GetXRefNum(), record);
         }
 
-        public GEDCOMRecord GetContentItem(int itemIndex)
+        public GDMRecord GetContentItem(int itemIndex)
         {
-            GEDCOMRecord result;
+            GDMRecord result;
             if (itemIndex < 0 || itemIndex >= fContentList.Count) {
                 result = null;
             } else {

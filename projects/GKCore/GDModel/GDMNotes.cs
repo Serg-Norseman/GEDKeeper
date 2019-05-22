@@ -22,7 +22,7 @@ using BSLib;
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMNotes : GEDCOMPointer
+    public sealed class GDMNotes : GDMPointer
     {
         public StringList Notes
         {
@@ -31,7 +31,7 @@ namespace GKCommon.GEDCOM
                 if (!IsPointer) {
                     notes = GetTagStrings(this);
                 } else {
-                    GEDCOMNoteRecord notesRecord = Value as GEDCOMNoteRecord;
+                    GDMNoteRecord notesRecord = Value as GDMNoteRecord;
                     notes = (notesRecord != null) ? notesRecord.Note : new StringList();
                 }
                 return notes;
@@ -43,17 +43,17 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMNotes(owner, tagName, tagValue);
+            return new GDMNotes(owner, tagName, tagValue);
         }
 
-        public GEDCOMNotes(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMNotes(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public GEDCOMNotes(GEDCOMObject owner) : base(owner)
+        public GDMNotes(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.NOTE);
         }

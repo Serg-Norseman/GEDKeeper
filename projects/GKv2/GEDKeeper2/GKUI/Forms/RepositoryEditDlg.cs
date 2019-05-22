@@ -38,7 +38,7 @@ namespace GKUI.Forms
 
         private readonly GKSheetList fNotesList;
 
-        public GEDCOMRepositoryRecord Repository
+        public GDMRepositoryRecord Repository
         {
             get { return fController.Repository; }
             set { fController.Repository = value; }

@@ -292,26 +292,26 @@ namespace GKCore
 
         public int gt_get_record_type(object recPtr)
         {
-            GEDCOMRecord rec = recPtr as GEDCOMRecord;
+            GDMRecord rec = recPtr as GDMRecord;
             return (rec == null) ? (int)GEDCOMRecordType.rtNone : (int)rec.RecordType;
         }
 
         public bool gt_delete_record(object recPtr)
         {
-            GEDCOMRecord rec = recPtr as GEDCOMRecord;
+            GDMRecord rec = recPtr as GDMRecord;
             bool res = BaseController.DeleteRecord(fBase, rec, false);
             return res;
         }
 
         public string gt_get_record_xref(object recPtr)
         {
-            GEDCOMRecord rec = recPtr as GEDCOMRecord;
+            GDMRecord rec = recPtr as GDMRecord;
             return (rec == null) ? string.Empty : rec.XRef;
         }
 
         public string gt_get_record_uid(object recPtr)
         {
-            GEDCOMRecord rec = recPtr as GEDCOMRecord;
+            GDMRecord rec = recPtr as GDMRecord;
             return (rec == null) ? string.Empty : rec.UID;
         }
 
@@ -324,52 +324,52 @@ namespace GKCore
 
         public bool gt_record_is_filtered(object recPtr)
         {
-            GEDCOMRecord rec = recPtr as GEDCOMRecord;
+            GDMRecord rec = recPtr as GDMRecord;
             return fBase.RecordIsFiltered(rec);
         }
 
         public object gt_select_record(int recType)
         {
-            GEDCOMRecord rec = fBase.Context.SelectRecord((GEDCOMRecordType)recType, null);
+            GDMRecord rec = fBase.Context.SelectRecord((GEDCOMRecordType)recType, null);
             return rec;
         }
 
         public string gt_get_person_name(object recPtr)
         {
-            GEDCOMIndividualRecord iRec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             return ((iRec == null) ? "" : GKUtils.GetNameString(iRec, true, false));
         }
 
         public int gt_get_person_associations_count(object recPtr)
         {
-            GEDCOMIndividualRecord iRec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             return (iRec == null) ? 0 : iRec.Associations.Count;
         }
 
         public object gt_get_person_association(object recPtr, int idx)
         {
-            GEDCOMIndividualRecord iRec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             if (iRec == null) return null;
 
-            GEDCOMAssociation asso = iRec.Associations[idx];
+            GDMAssociation asso = iRec.Associations[idx];
             return asso;
         }
 
         public object gt_add_person_association(object recPtr, string rel, object assoPtr)
         {
-            GEDCOMIndividualRecord iRec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             if (iRec == null) return null;
 
-            GEDCOMIndividualRecord assoRec = assoPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord assoRec = assoPtr as GDMIndividualRecord;
             if (assoRec == null) return null;
 
-            GEDCOMAssociation asso = iRec.AddAssociation(rel, assoRec);
+            GDMAssociation asso = iRec.AddAssociation(rel, assoRec);
             return asso;
         }
 
         public void gt_delete_person_association(object recPtr, int idx)
         {
-            GEDCOMIndividualRecord iRec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             if (iRec == null) return;
 
             iRec.Associations.DeleteAt(idx);
@@ -377,31 +377,31 @@ namespace GKCore
 
         public int gt_get_person_events_count(object recPtr)
         {
-            GEDCOMIndividualRecord iRec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             return (iRec == null) ? 0 : iRec.Events.Count;
         }
 
         public object gt_get_person_event(object recPtr, int idx)
         {
-            GEDCOMIndividualRecord iRec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             if (iRec == null) return null;
 
-            GEDCOMCustomEvent evt = iRec.Events[idx];
+            GDMCustomEvent evt = iRec.Events[idx];
             return evt;
         }
 
         public object gt_get_person_event_ex(object recPtr, string sign)
         {
-            GEDCOMIndividualRecord iRec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             if (iRec == null) return null;
 
-            GEDCOMCustomEvent evt = iRec.FindEvent(sign);
+            GDMCustomEvent evt = iRec.FindEvent(sign);
             return evt;
         }
 
         public void gt_delete_person_event(object recPtr, int idx)
         {
-            GEDCOMIndividualRecord iRec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             if (iRec == null) return;
 
             iRec.Events.DeleteAt(idx);
@@ -409,17 +409,17 @@ namespace GKCore
 
         public string gt_get_event_date(object evPtr)
         {
-            GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
+            GDMCustomEvent evt = evPtr as GDMCustomEvent;
             return (GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false));
         }
 
         // TODO: checking this function, its incorrect logic
         public int gt_get_event_year(object evPtr)
         {
-            GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
+            GDMCustomEvent evt = evPtr as GDMCustomEvent;
             if (evt == null) return 0;
 
-            GEDCOMDate date = evt.Date.Value as GEDCOMDate;
+            GDMDate date = evt.Date.Value as GDMDate;
             return (date == null) ? 0 : date.Year;
         }
 
@@ -427,7 +427,7 @@ namespace GKCore
         {
             try
             {
-                GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
+                GDMCustomEvent evt = evPtr as GDMCustomEvent;
                 if (evt != null && date != "")
                 {
                     evt.Date.ParseString(date);
@@ -441,19 +441,19 @@ namespace GKCore
 
         public string gt_get_event_value(object evPtr)
         {
-            GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
+            GDMCustomEvent evt = evPtr as GDMCustomEvent;
             return (evt == null) ? string.Empty : evt.StringValue;
         }
 
         public string gt_get_event_place(object evPtr)
         {
-            GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
+            GDMCustomEvent evt = evPtr as GDMCustomEvent;
             return (evt == null) ? string.Empty : evt.Place.StringValue;
         }
 
         public void gt_set_event_value(object evPtr, string value)
         {
-            GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
+            GDMCustomEvent evt = evPtr as GDMCustomEvent;
             if (evt == null) return;
 
             evt.StringValue = value;
@@ -461,7 +461,7 @@ namespace GKCore
 
         public void gt_set_event_place(object evPtr, string place)
         {
-            GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
+            GDMCustomEvent evt = evPtr as GDMCustomEvent;
             if (evt == null) return;
 
             evt.Place.StringValue = place;
@@ -469,19 +469,19 @@ namespace GKCore
 
         public string gt_get_event_name(object evPtr)
         {
-            GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
+            GDMCustomEvent evt = evPtr as GDMCustomEvent;
             return (evt == null) ? string.Empty : evt.Name;
         }
 
         public string gt_get_person_sex(object recPtr)
         {
-            GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             return (rec == null) ? string.Empty : GKData.SexData[(int)rec.Sex].Sign;
         }
 
         public void gt_set_person_sex(object recPtr, string strSex)
         {
-            GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             if (rec == null) return;
 
             GEDCOMSex sex = (strSex.Length == 1) ? GKUtils.GetSexBySign(strSex[0]) : GEDCOMSex.svNone;
@@ -492,48 +492,48 @@ namespace GKCore
         {
             GEDCOMSex sex = (strSex.Length == 1) ? GKUtils.GetSexBySign(strSex[0]) : GEDCOMSex.svNone;
 
-            GEDCOMIndividualRecord iRec = fBase.Context.CreatePersonEx(name, patronymic, surname, sex, false);
+            GDMIndividualRecord iRec = fBase.Context.CreatePersonEx(name, patronymic, surname, sex, false);
             return iRec;
         }
 
         public object gt_create_family()
         {
-            GEDCOMFamilyRecord fRec = fBase.Context.Tree.CreateFamily();
+            GDMFamilyRecord fRec = fBase.Context.Tree.CreateFamily();
             return fRec;
         }
 
         public object gt_create_note()
         {
-            GEDCOMNoteRecord nRec = fBase.Context.Tree.CreateNote();
+            GDMNoteRecord nRec = fBase.Context.Tree.CreateNote();
             return nRec;
         }
 
         public object gt_create_source(string name)
         {
-            GEDCOMSourceRecord srcRec = fBase.Context.Tree.CreateSource();
+            GDMSourceRecord srcRec = fBase.Context.Tree.CreateSource();
             srcRec.ShortTitle = name;
             return srcRec;
         }
 
         public object gt_create_group(string name)
         {
-            GEDCOMGroupRecord grpRec = fBase.Context.Tree.CreateGroup();
+            GDMGroupRecord grpRec = fBase.Context.Tree.CreateGroup();
             grpRec.GroupName = name;
             return grpRec;
         }
 
         public void gt_bind_group_member(object groupPtr, object personPtr)
         {
-            GEDCOMGroupRecord grp = groupPtr as GEDCOMGroupRecord;
+            GDMGroupRecord grp = groupPtr as GDMGroupRecord;
             if (grp == null) return;
 
-            GEDCOMIndividualRecord person = personPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord person = personPtr as GDMIndividualRecord;
             grp.AddMember(person);
         }
 
         public void gt_add_note_text(object notePtr, string txt)
         {
-            GEDCOMNoteRecord nRec = notePtr as GEDCOMNoteRecord;
+            GDMNoteRecord nRec = notePtr as GDMNoteRecord;
             if (nRec == null) return;
 
             nRec.AddNoteText(txt);
@@ -541,37 +541,37 @@ namespace GKCore
 
         public void gt_bind_record_note(object recPtr, object notePtr)
         {
-            GEDCOMRecord rec = recPtr as GEDCOMRecord;
+            GDMRecord rec = recPtr as GDMRecord;
             if (rec == null) return;
 
-            GEDCOMNoteRecord noteRec = notePtr as GEDCOMNoteRecord;
+            GDMNoteRecord noteRec = notePtr as GDMNoteRecord;
             rec.AddNote(noteRec);
         }
 
         public void gt_bind_record_source(object recPtr, object srcPtr, string page, int quality)
         {
-            GEDCOMRecord rec = recPtr as GEDCOMRecord;
+            GDMRecord rec = recPtr as GDMRecord;
             if (rec == null) return;
 
-            GEDCOMSourceRecord srcRec = srcPtr as GEDCOMSourceRecord;
+            GDMSourceRecord srcRec = srcPtr as GDMSourceRecord;
             rec.AddSource(srcRec, page, quality);
         }
 
         public void gt_bind_family_spouse(object familyPtr, object spousePtr)
         {
-            GEDCOMFamilyRecord fRec = familyPtr as GEDCOMFamilyRecord;
+            GDMFamilyRecord fRec = familyPtr as GDMFamilyRecord;
             if (fRec == null) return;
             
-            GEDCOMIndividualRecord spRec = spousePtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord spRec = spousePtr as GDMIndividualRecord;
             fRec.AddSpouse(spRec);
         }
 
         public void gt_bind_family_child(object familyPtr, object childPtr)
         {
-            GEDCOMFamilyRecord fRec = familyPtr as GEDCOMFamilyRecord;
+            GDMFamilyRecord fRec = familyPtr as GDMFamilyRecord;
             if (fRec == null) return;
 
-            GEDCOMIndividualRecord chRec = childPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord chRec = childPtr as GDMIndividualRecord;
             fRec.AddChild(chRec);
         }
 
@@ -584,14 +584,14 @@ namespace GKCore
 
         public object gt_find_source(string name)
         {
-            GEDCOMSourceRecord srcRec = fBase.Context.FindSource(name);
+            GDMSourceRecord srcRec = fBase.Context.FindSource(name);
             return srcRec;
         }
 
         public object gt_create_event(object recPtr, string sign)
         {
-            GEDCOMRecordWithEvents rec = recPtr as GEDCOMRecordWithEvents;
-            GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(rec, sign, "", "");
+            GDMRecordWithEvents rec = recPtr as GDMRecordWithEvents;
+            GDMCustomEvent evt = fBase.Context.CreateEventEx(rec, sign, "", "");
 
             return evt;
         }
@@ -606,57 +606,57 @@ namespace GKCore
 
         public object gt_get_person_parents_family(object recPtr)
         {
-            GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             if (rec == null) return null;
 
-            GEDCOMFamilyRecord fam = rec.GetParentsFamily();
+            GDMFamilyRecord fam = rec.GetParentsFamily();
             return fam;
         }
 
         public int gt_get_person_spouses_count(object recPtr)
         {
-            GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             return (rec == null) ? 0 : rec.SpouseToFamilyLinks.Count;
         }
 
         public object gt_get_person_spouse_family(object recPtr, int spIdx)
         {
-            GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             if (rec == null) return null;
 
-            GEDCOMFamilyRecord fam = rec.SpouseToFamilyLinks[spIdx].Family;
+            GDMFamilyRecord fam = rec.SpouseToFamilyLinks[spIdx].Family;
             return fam;
         }
 
         public object gt_get_family_husband(object recPtr)
         {
-            GEDCOMFamilyRecord fam = recPtr as GEDCOMFamilyRecord;
+            GDMFamilyRecord fam = recPtr as GDMFamilyRecord;
             recPtr = (fam == null) ? null : fam.Husband.Value;
             return recPtr;
         }
 
         public object gt_get_family_wife(object recPtr)
         {
-            GEDCOMFamilyRecord fam = recPtr as GEDCOMFamilyRecord;
+            GDMFamilyRecord fam = recPtr as GDMFamilyRecord;
             recPtr = (fam == null) ? null : fam.Wife.Value;
             return recPtr;
         }
 
         public int gt_get_family_childs_count(object recPtr)
         {
-            GEDCOMFamilyRecord fam = recPtr as GEDCOMFamilyRecord;
+            GDMFamilyRecord fam = recPtr as GDMFamilyRecord;
             return (fam == null) ? -1 : fam.Children.Count;
         }
 
         public object gt_get_family_child(object recPtr, int childIndex)
         {
-            GEDCOMFamilyRecord fam = recPtr as GEDCOMFamilyRecord;
+            GDMFamilyRecord fam = recPtr as GDMFamilyRecord;
             return (fam == null) ? null : fam.Children[childIndex].Value;
         }
 
         public int gt_get_location_usages(object recPtr)
         {
-            GEDCOMLocationRecord loc = recPtr as GEDCOMLocationRecord;
+            GDMLocationRecord loc = recPtr as GDMLocationRecord;
             if (loc == null) return -1;
 
             int usages;
@@ -677,28 +677,28 @@ namespace GKCore
 
         public int gt_get_record_notes_count(object recPtr)
         {
-            GEDCOMRecord rec = recPtr as GEDCOMRecord;
+            GDMRecord rec = recPtr as GDMRecord;
             return (rec == null) ? -1 : rec.Notes.Count;
         }
 
         public int gt_get_person_groups_count(object recPtr)
         {
-            GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             return (rec == null) ? -1 : rec.Groups.Count;
         }
 
         public object gt_get_person_group(object recPtr, int grIdx)
         {
-            GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
+            GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             if (rec == null) return null;
 
-            GEDCOMGroupRecord grp = rec.Groups[grIdx].Value as GEDCOMGroupRecord;
+            GDMGroupRecord grp = rec.Groups[grIdx].Value as GDMGroupRecord;
             return grp;
         }
 
         public string gt_get_group_name(object recPtr)
         {
-            GEDCOMGroupRecord grp = recPtr as GEDCOMGroupRecord;
+            GDMGroupRecord grp = recPtr as GDMGroupRecord;
             return (grp == null) ? "" : grp.GroupName;
         }
 

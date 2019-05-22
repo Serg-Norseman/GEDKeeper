@@ -20,25 +20,25 @@
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMDateStatus : GEDCOMTag
+    public sealed class GDMDateStatus : GDMTag
     {
-        public GEDCOMDate ChangeDate
+        public GDMDate ChangeDate
         {
-            get { return GetTag(GEDCOMTagType.DATE, GEDCOMDate.Create) as GEDCOMDate; }
+            get { return GetTag<GDMDate>(GEDCOMTagType.DATE, GDMDate.Create); }
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMDateStatus(owner, tagName, tagValue);
+            return new GDMDateStatus(owner, tagName, tagValue);
         }
 
-        public GEDCOMDateStatus(GEDCOMObject owner) : base(owner)
+        public GDMDateStatus(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.STAT);
         }
 
-        public GEDCOMDateStatus(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMDateStatus(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

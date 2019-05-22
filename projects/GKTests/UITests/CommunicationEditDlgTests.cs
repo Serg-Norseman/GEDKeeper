@@ -40,7 +40,7 @@ namespace GKUI.Forms
     public class CommunicationEditDlgTests : CustomWindowTest
     {
         private IBaseContext fContext;
-        private GEDCOMCommunicationRecord fCommunicationRecord;
+        private GDMCommunicationRecord fCommunicationRecord;
         private IBaseWindow fBase;
         private CommunicationEditDlg fDialog;
 
@@ -50,7 +50,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
             fContext = fBase.Context;
-            fCommunicationRecord = new GEDCOMCommunicationRecord(fContext.Tree);
+            fCommunicationRecord = new GDMCommunicationRecord(fContext.Tree);
 
             fDialog = new CommunicationEditDlg(fBase);
             fDialog.Communication = fCommunicationRecord;

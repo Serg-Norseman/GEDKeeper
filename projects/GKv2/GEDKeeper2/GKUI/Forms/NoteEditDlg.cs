@@ -35,7 +35,7 @@ namespace GKUI.Forms
     {
         private readonly NoteEditDlgController fController;
 
-        public GEDCOMNoteRecord NoteRecord
+        public GDMNoteRecord NoteRecord
         {
             get { return fController.NoteRecord; }
             set { fController.NoteRecord = value; }

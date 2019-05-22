@@ -40,7 +40,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class ResearchEditDlgTests : CustomWindowTest
     {
-        private GEDCOMResearchRecord fResearchRecord;
+        private GDMResearchRecord fResearchRecord;
         private IBaseWindow fBase;
         private ResearchEditDlg fDialog;
 
@@ -49,7 +49,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fResearchRecord = new GEDCOMResearchRecord(fBase.Context.Tree);
+            fResearchRecord = new GDMResearchRecord(fBase.Context.Tree);
 
             fDialog = new ResearchEditDlg(fBase);
             fDialog.Research = fResearchRecord;
@@ -116,7 +116,7 @@ namespace GKUI.Forms
 
         public static void ResearchEditDlg_Handler(ResearchEditDlg dlg)
         {
-            GEDCOMResearchRecord resRecord = dlg.Research;
+            GDMResearchRecord resRecord = dlg.Research;
 
             // tasks
             SelectTab("tabsData", dlg, 0);
@@ -158,7 +158,7 @@ namespace GKUI.Forms
             RecordSelectDlgTests.SetCreateItemHandler(fFormTest, GroupEditDlgTests.GroupAdd_Mini_Handler);
             ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, resRecord.Groups.Count);
-            Assert.AreEqual("sample group", ((GEDCOMGroupRecord)resRecord.Groups[0].Value).GroupName);
+            Assert.AreEqual("sample group", ((GDMGroupRecord)resRecord.Groups[0].Value).GroupName);
 
             SelectSheetListItem("fGroupsList", dlg, 0);
             SetModalFormHandler(fFormTest, GroupEditDlgTests.GroupAdd_Mini_Handler);

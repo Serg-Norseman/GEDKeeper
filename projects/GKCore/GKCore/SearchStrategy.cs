@@ -28,9 +28,9 @@ namespace GKCore
 {
     public class SearchResult : ISearchResult
     {
-        public readonly GEDCOMObject Result;
+        public readonly GDMObject Result;
 
-        public SearchResult(GEDCOMObject result)
+        public SearchResult(GDMObject result)
         {
             Result = result;
         }

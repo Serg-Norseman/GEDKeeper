@@ -20,20 +20,20 @@
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMFamilyEvent : GEDCOMCustomEvent
+    public sealed class GDMFamilyEvent : GDMCustomEvent
     {
-        public GEDCOMFamilyEvent(GEDCOMObject owner) : base(owner)
+        public GDMFamilyEvent(GDMObject owner) : base(owner)
         {
         }
 
-        public GEDCOMFamilyEvent(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMFamilyEvent(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMFamilyEvent(owner, tagName, tagValue);
+            return new GDMFamilyEvent(owner, tagName, tagValue);
         }
     }
 }

@@ -20,7 +20,7 @@
 
 namespace GKCommon.GEDCOM
 {
-    public class GEDCOMPointer : GEDCOMTag
+    public class GDMPointer : GDMTag
     {
         private string fXRef;
 
@@ -31,7 +31,7 @@ namespace GKCommon.GEDCOM
         }
 
         // TODO: need to do a protection test on the proper records (with XRef)
-        public GEDCOMRecord Value
+        public GDMRecord Value
         {
             get {
                 return FindRecord(XRef);
@@ -56,17 +56,17 @@ namespace GKCommon.GEDCOM
         }
 
 
-        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMPointer(owner, tagName, tagValue);
+            return new GDMPointer(owner, tagName, tagValue);
         }
 
-        public GEDCOMPointer(GEDCOMObject owner) : base(owner)
+        public GDMPointer(GDMObject owner) : base(owner)
         {
             fXRef = string.Empty;
         }
 
-        public GEDCOMPointer(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMPointer(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }
@@ -92,7 +92,7 @@ namespace GKCommon.GEDCOM
             XRef = map.FindNewXRef(XRef);
         }
 
-        public void SetNameValue(string name, GEDCOMRecord record)
+        public void SetNameValue(string name, GDMRecord record)
         {
             SetName(name);
             Value = record;

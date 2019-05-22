@@ -56,7 +56,7 @@ namespace GKCore
         [Test]
         public void Test_DateItems_IConvertible()
         {
-            var dtx1 = new GEDCOMDateValue(null, "", "05 JAN 2013");
+            var dtx1 = new GDMDateValue(null, "", "05 JAN 2013");
             var dtItem1 = new GEDCOMDateItem(dtx1);
 
             Assert.AreEqual(TypeCode.Object, ((IConvertible)dtItem1).GetTypeCode());
@@ -81,11 +81,11 @@ namespace GKCore
         [Test]
         public void Test_DateItems()
         {
-            var dtx1 = new GEDCOMDateValue(null, "", "05 JAN 2013");
+            var dtx1 = new GDMDateValue(null, "", "05 JAN 2013");
             var dtItem1 = new GEDCOMDateItem(dtx1);
             Assert.AreEqual("05.01.2013", dtItem1.ToString());
 
-            var dtx2 = new GEDCOMDateValue(null, "", "17 FEB 2013");
+            var dtx2 = new GDMDateValue(null, "", "17 FEB 2013");
             var dtItem2 = new GEDCOMDateItem(dtx2);
             Assert.AreEqual("17.02.2013", dtItem2.ToString());
 
@@ -146,7 +146,7 @@ namespace GKCore
             public void SetSortColumn(int sortColumn, bool checkOrder = true) {}
         }
 
-        private bool ExtFilterHandler(GEDCOMRecord record)
+        private bool ExtFilterHandler(GDMRecord record)
         {
             return true;
         }
@@ -175,7 +175,7 @@ namespace GKCore
             listManager = new GroupListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GEDCOMGroupRecord grpRec = fContext.Tree.XRefIndex_Find("G1") as GEDCOMGroupRecord;
+            GDMGroupRecord grpRec = fContext.Tree.XRefIndex_Find("G1") as GDMGroupRecord;
             listManager.Fetch(grpRec);
 
             listManager.QuickFilter = "*";
@@ -228,7 +228,7 @@ namespace GKCore
             listManager.ExternalFilter = null;
             Assert.IsNull(listManager.ExternalFilter);
 
-            GEDCOMCommunicationRecord commRec = fContext.Tree.XRefIndex_Find("CM1") as GEDCOMCommunicationRecord;
+            GDMCommunicationRecord commRec = fContext.Tree.XRefIndex_Find("CM1") as GDMCommunicationRecord;
             listManager.Fetch(commRec);
 
             listManager.QuickFilter = "*";
@@ -250,7 +250,7 @@ namespace GKCore
             var listManager = new FamilyListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GEDCOMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GEDCOMFamilyRecord;
+            GDMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
             listManager.Fetch(famRec);
 
             listManager.QuickFilter = "*";
@@ -272,7 +272,7 @@ namespace GKCore
             var listManager = new IndividualListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GEDCOMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
+            GDMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
             listManager.Fetch(indRec);
 
             listManager.QuickFilter = "*";
@@ -311,7 +311,7 @@ namespace GKCore
             var listManager = new LocationListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GEDCOMLocationRecord locRec = fContext.Tree.XRefIndex_Find("L1") as GEDCOMLocationRecord;
+            GDMLocationRecord locRec = fContext.Tree.XRefIndex_Find("L1") as GDMLocationRecord;
             listManager.Fetch(locRec);
 
             listManager.QuickFilter = "*";
@@ -333,7 +333,7 @@ namespace GKCore
             var listManager = new MultimediaListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GEDCOMMultimediaRecord mediaRec = fContext.Tree.XRefIndex_Find("O1") as GEDCOMMultimediaRecord;
+            GDMMultimediaRecord mediaRec = fContext.Tree.XRefIndex_Find("O1") as GDMMultimediaRecord;
             listManager.Fetch(mediaRec);
 
             listManager.QuickFilter = "*";
@@ -355,7 +355,7 @@ namespace GKCore
             var listManager = new NoteListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GEDCOMNoteRecord noteRec = new GEDCOMNoteRecord(null);
+            GDMNoteRecord noteRec = new GDMNoteRecord(null);
             noteRec.AddNoteText("Test text");
             listManager.Fetch(noteRec);
 
@@ -380,7 +380,7 @@ namespace GKCore
             var listManager = new RepositoryListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GEDCOMRepositoryRecord repoRec = fContext.Tree.XRefIndex_Find("R1") as GEDCOMRepositoryRecord;
+            GDMRepositoryRecord repoRec = fContext.Tree.XRefIndex_Find("R1") as GDMRepositoryRecord;
             listManager.Fetch(repoRec);
 
             listManager.QuickFilter = "*";
@@ -402,7 +402,7 @@ namespace GKCore
             var listManager = new ResearchListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GEDCOMResearchRecord resRec = fContext.Tree.XRefIndex_Find("RS1") as GEDCOMResearchRecord;
+            GDMResearchRecord resRec = fContext.Tree.XRefIndex_Find("RS1") as GDMResearchRecord;
             listManager.Fetch(resRec);
 
             listManager.QuickFilter = "*";
@@ -424,7 +424,7 @@ namespace GKCore
             var listManager = new SourceListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GEDCOMSourceRecord srcRec = fContext.Tree.XRefIndex_Find("S1") as GEDCOMSourceRecord;
+            GDMSourceRecord srcRec = fContext.Tree.XRefIndex_Find("S1") as GDMSourceRecord;
             listManager.Fetch(srcRec);
 
             listManager.QuickFilter = "*";
@@ -446,7 +446,7 @@ namespace GKCore
             var listManager = new TaskListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GEDCOMTaskRecord tskRec = fContext.Tree.XRefIndex_Find("TK1") as GEDCOMTaskRecord;
+            GDMTaskRecord tskRec = fContext.Tree.XRefIndex_Find("TK1") as GDMTaskRecord;
             listManager.Fetch(tskRec);
 
             listManager.QuickFilter = "*";

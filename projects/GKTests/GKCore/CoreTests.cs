@@ -73,7 +73,7 @@ namespace GKCore
             Assert.IsNotNull(pgNode);
         }
 
-        private bool TestExternalFilterHandler(GEDCOMRecord record)
+        private bool TestExternalFilterHandler(GDMRecord record)
         {
             return false;
         }
@@ -178,9 +178,9 @@ namespace GKCore
             Assert.IsNotNull(statsItem);
             Assert.AreEqual("test2", statsItem.ToString());
 
-            List<GEDCOMRecord> selectedRecords = new List<GEDCOMRecord>();
+            List<GDMRecord> selectedRecords = new List<GDMRecord>();
             IGEDCOMTreeEnumerator iEnum = fContext.Tree.GetEnumerator(GEDCOMRecordType.rtIndividual);
-            GEDCOMRecord current;
+            GDMRecord current;
             while (iEnum.MoveNext(out current)) {
                 selectedRecords.Add(current);
             }
@@ -314,7 +314,7 @@ namespace GKCore
                 sex = namesTable.GetSexByName("Anna");
                 Assert.AreEqual(GEDCOMSex.svFemale, sex);
 
-                GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+                GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec);
                 namesTable.ImportNames(iRec);
 

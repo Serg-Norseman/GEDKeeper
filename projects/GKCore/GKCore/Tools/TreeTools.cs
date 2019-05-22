@@ -38,7 +38,7 @@ namespace GKCore.Tools
     {
         #region Patriarchs Search
 
-        public static bool PL_SearchAnc(GEDCOMIndividualRecord descendant, GEDCOMIndividualRecord searchRec, bool onlyMaleLine)
+        public static bool PL_SearchAnc(GDMIndividualRecord descendant, GDMIndividualRecord searchRec, bool onlyMaleLine)
         {
             if (descendant == null) return false;
 
@@ -46,9 +46,9 @@ namespace GKCore.Tools
 
             if (!res && descendant.ChildToFamilyLinks.Count > 0)
             {
-                GEDCOMFamilyRecord family = descendant.ChildToFamilyLinks[0].Family;
+                GDMFamilyRecord family = descendant.ChildToFamilyLinks[0].Family;
 
-                GEDCOMIndividualRecord ancestor = family.GetHusband();
+                GDMIndividualRecord ancestor = family.GetHusband();
                 if (ancestor != null) {
                     res = PL_SearchAnc(ancestor, searchRec, onlyMaleLine);
                     if (res) return true;
@@ -72,15 +72,15 @@ namespace GKCore.Tools
         /// <param name="ancestorRec"></param>
         /// <param name="searchRec"></param>
         /// <returns>crossing of two individuals</returns>
-        public static GEDCOMIndividualRecord PL_SearchDesc(GEDCOMIndividualRecord ancestorRec, GEDCOMIndividualRecord searchRec)
+        public static GDMIndividualRecord PL_SearchDesc(GDMIndividualRecord ancestorRec, GDMIndividualRecord searchRec)
         {
-            GEDCOMIndividualRecord cross = null;
+            GDMIndividualRecord cross = null;
 
             int num = ancestorRec.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMFamilyRecord family = ancestorRec.SpouseToFamilyLinks[i].Family;
-                GEDCOMIndividualRecord spouse = family.GetSpouseBy(ancestorRec);
+                GDMFamilyRecord family = ancestorRec.SpouseToFamilyLinks[i].Family;
+                GDMIndividualRecord spouse = family.GetSpouseBy(ancestorRec);
 
                 bool res;
                 if (spouse != null)
@@ -96,7 +96,7 @@ namespace GKCore.Tools
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
                     {
-                        GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
+                        GDMIndividualRecord child = family.Children[j].Value as GDMIndividualRecord;
 
                         cross = PL_SearchDesc(child, searchRec);
                         if (cross != null) return cross;
@@ -107,13 +107,13 @@ namespace GKCore.Tools
             return null;
         }
 
-        public static GEDCOMFamilyRecord PL_SearchIntersection(GEDCOMIndividualRecord ancestor, GEDCOMIndividualRecord searchRec)
+        public static GDMFamilyRecord PL_SearchIntersection(GDMIndividualRecord ancestor, GDMIndividualRecord searchRec)
         {
             int num = ancestor.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMFamilyRecord family = ancestor.SpouseToFamilyLinks[i].Family;
-                GEDCOMIndividualRecord spouse = family.GetSpouseBy(ancestor);
+                GDMFamilyRecord family = ancestor.SpouseToFamilyLinks[i].Family;
+                GDMIndividualRecord spouse = family.GetSpouseBy(ancestor);
 
                 if (spouse != null)
                 {
@@ -126,9 +126,9 @@ namespace GKCore.Tools
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
                     {
-                        GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
+                        GDMIndividualRecord child = family.Children[j].Value as GDMIndividualRecord;
 
-                        GEDCOMFamilyRecord res = PL_SearchIntersection(child, searchRec);
+                        GDMFamilyRecord res = PL_SearchIntersection(child, searchRec);
                         if (res != null) return res;
                     }
                 }
@@ -175,24 +175,24 @@ namespace GKCore.Tools
 
         #region GEDCOM Format Verification
 
-        private static void ReformNote(GEDCOMTree tree, GEDCOMNotes note)
+        private static void ReformNote(GDMTree tree, GDMNotes note)
         {
-            GEDCOMNoteRecord noteRec = tree.CreateNote();
+            GDMNoteRecord noteRec = tree.CreateNote();
             noteRec.Note = note.Notes;
 
             note.Clear();
             note.Value = noteRec;
         }
 
-        private static void ReformMultimediaLink(GEDCOMTree tree, GEDCOMMultimediaLink mmLink)
+        private static void ReformMultimediaLink(GDMTree tree, GDMMultimediaLink mmLink)
         {
             string title = mmLink.Title;
-            GEDCOMMultimediaRecord mmRec = tree.CreateMultimedia();
+            GDMMultimediaRecord mmRec = tree.CreateMultimedia();
 
             int num = mmLink.FileReferences.Count;
             for (int i = 0; i < num; i++) {
-                GEDCOMFileReference srcFileRef = mmLink.FileReferences[i];
-                GEDCOMFileReferenceWithTitle tgtFileRef = new GEDCOMFileReferenceWithTitle(mmRec);
+                GDMFileReference srcFileRef = mmLink.FileReferences[i];
+                GDMFileReferenceWithTitle tgtFileRef = new GDMFileReferenceWithTitle(mmRec);
 
                 tgtFileRef.LinkFile(srcFileRef.StringValue);
 
@@ -211,9 +211,9 @@ namespace GKCore.Tools
             mmLink.Value = mmRec;
         }
 
-        private static void ReformSourceCitation(GEDCOMTree tree, GEDCOMSourceCitation sourCit)
+        private static void ReformSourceCitation(GDMTree tree, GDMSourceCitation sourCit)
         {
-            GEDCOMSourceRecord sourRec = tree.CreateSource();
+            GDMSourceRecord sourRec = tree.CreateSource();
 
             StringList description = sourCit.Description;
             string page = sourCit.Page;
@@ -227,61 +227,61 @@ namespace GKCore.Tools
             sourCit.CertaintyAssessment = certaintyAssessment;
         }
 
-        private static void CheckRecord_PrepareTag(GEDCOMTree tree, GEDCOMFormat format, GEDCOMTagWithLists tag)
+        private static void CheckRecord_PrepareTag(GDMTree tree, GEDCOMFormat format, GDMTagWithLists tag)
         {
             int num = tag.MultimediaLinks.Count;
             for (int i = 0; i < num; i++) {
-                GEDCOMMultimediaLink mmLink = tag.MultimediaLinks[i];
+                GDMMultimediaLink mmLink = tag.MultimediaLinks[i];
                 if (!mmLink.IsPointer) ReformMultimediaLink(tree, mmLink);
             }
 
             num = tag.Notes.Count;
             for (int i = 0; i < num; i++) {
-                GEDCOMNotes note = tag.Notes[i];
+                GDMNotes note = tag.Notes[i];
                 if (!note.IsPointer) ReformNote(tree, note);
             }
 
             num = tag.SourceCitations.Count;
             for (int i = 0; i < num; i++) {
-                GEDCOMSourceCitation sourCit = tag.SourceCitations[i];
+                GDMSourceCitation sourCit = tag.SourceCitations[i];
                 if (!sourCit.IsPointer) ReformSourceCitation(tree, sourCit);
             }
         }
 
-        private static void CheckRecord_RepairTag(GEDCOMTree tree, GEDCOMFormat format, GEDCOMTagWithLists tag)
+        private static void CheckRecord_RepairTag(GDMTree tree, GEDCOMFormat format, GDMTagWithLists tag)
         {
             for (int i = tag.MultimediaLinks.Count - 1; i >= 0; i--) {
-                GEDCOMMultimediaLink mmLink = tag.MultimediaLinks[i];
+                GDMMultimediaLink mmLink = tag.MultimediaLinks[i];
                 if (mmLink.IsPointer && mmLink.Value == null) tag.MultimediaLinks.DeleteAt(i);
             }
 
             for (int i = tag.Notes.Count - 1; i >= 0; i--) {
-                GEDCOMNotes note = tag.Notes[i];
+                GDMNotes note = tag.Notes[i];
                 if (note.IsPointer && note.Value == null) tag.Notes.DeleteAt(i);
             }
 
             for (int i = tag.SourceCitations.Count - 1; i >= 0; i--) {
-                GEDCOMSourceCitation sourCit = tag.SourceCitations[i];
+                GDMSourceCitation sourCit = tag.SourceCitations[i];
                 if (sourCit.IsPointer && sourCit.Value == null) tag.SourceCitations.DeleteAt(i);
             }
         }
 
-        private static void CheckRecord_PreparePtr(GEDCOMTree tree, GEDCOMFormat format, GEDCOMPointerWithNotes ptr)
+        private static void CheckRecord_PreparePtr(GDMTree tree, GEDCOMFormat format, GDMPointerWithNotes ptr)
         {
             // TODO: checkit!
-            GEDCOMRecord val = ptr.Value;
+            GDMRecord val = ptr.Value;
             if (!string.IsNullOrEmpty(ptr.XRef) && val == null) {
                 ptr.Value = null;
             }
 
             int num = ptr.Notes.Count;
             for (int i = 0; i < num; i++) {
-                GEDCOMNotes note = ptr.Notes[i];
+                GDMNotes note = ptr.Notes[i];
                 if (!note.IsPointer) ReformNote(tree, note);
             }
         }
 
-        private static void CheckRecord_IndiEvent(GEDCOMCustomEvent evt, GEDCOMFormat format)
+        private static void CheckRecord_IndiEvent(GDMCustomEvent evt, GEDCOMFormat format)
         {
             // Fix for Family Tree Maker 2008 which exports occupation as generic EVEN events
             if (format == GEDCOMFormat.gf_FamilyTreeMaker) {
@@ -293,12 +293,12 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRecord_EventPlace(GEDCOMCustomEvent aEvent)
+        private static void CheckRecord_EventPlace(GDMCustomEvent aEvent)
         {
-            GEDCOMPlace place = aEvent.FindTag(GEDCOMTagType.PLAC, 0) as GEDCOMPlace;
+            GDMPlace place = aEvent.FindTag(GEDCOMTagType.PLAC, 0) as GDMPlace;
             if (place == null) return;
 
-            GEDCOMPointer placeLocation = place.FindTag(GEDCOMTagType._LOC, 0) as GEDCOMPointer;
+            GDMPointer placeLocation = place.FindTag(GEDCOMTagType._LOC, 0) as GDMPointer;
             if (placeLocation == null) return;
 
             if (placeLocation.XRef != "" && placeLocation.Value == null) {
@@ -306,32 +306,32 @@ namespace GKCore.Tools
             }
 
             if (place.StringValue != "") {
-                GEDCOMLocationRecord loc = placeLocation.Value as GEDCOMLocationRecord;
+                GDMLocationRecord loc = placeLocation.Value as GDMLocationRecord;
                 if (loc != null && place.StringValue != loc.LocationName) {
                     place.StringValue = loc.LocationName;
                 }
             }
         }
 
-        private static void CheckRecord_AttrCompatible(GEDCOMTree tree, GEDCOMFormat format, GEDCOMIndividualRecord iRec, GEDCOMCustomEvent aEvent)
+        private static void CheckRecord_AttrCompatible(GDMTree tree, GEDCOMFormat format, GDMIndividualRecord iRec, GDMCustomEvent aEvent)
         {
         }
 
-        private static void CheckRecord_URefCompatible(GEDCOMIndividualRecord iRec, GEDCOMUserReference userRef)
+        private static void CheckRecord_URefCompatible(GDMIndividualRecord iRec, GDMUserReference userRef)
         {
         }
 
-        private static void CheckRecord_Name(GEDCOMIndividualRecord iRec, GEDCOMPersonalName persName, IBaseContext baseContext)
+        private static void CheckRecord_Name(GDMIndividualRecord iRec, GDMPersonalName persName, IBaseContext baseContext)
         {
             baseContext.CollectNameLangs(persName);
         }
 
-        private static void CheckRecord_Individual(IBaseContext baseContext, GEDCOMTree tree, GEDCOMFormat format,
-                                                   GEDCOMIndividualRecord iRec)
+        private static void CheckRecord_Individual(IBaseContext baseContext, GDMTree tree, GEDCOMFormat format,
+                                                   GDMIndividualRecord iRec)
         {
             if (format == GEDCOMFormat.gf_Native) {
                 for (int i = 0, num = iRec.Events.Count; i < num; i++) {
-                    GEDCOMCustomEvent evt = iRec.Events[i];
+                    GDMCustomEvent evt = iRec.Events[i];
 
                     CheckRecord_EventPlace(evt);
                     CheckRecord_AttrCompatible(tree, format, iRec, evt);
@@ -349,7 +349,7 @@ namespace GKCore.Tools
                 }
             } else {
                 for (int i = 0, num = iRec.Events.Count; i < num; i++) {
-                    GEDCOMCustomEvent evt = iRec.Events[i];
+                    GDMCustomEvent evt = iRec.Events[i];
 
                     CheckRecord_IndiEvent(evt, format);
                     CheckRecord_PrepareTag(tree, format, evt);
@@ -381,8 +381,8 @@ namespace GKCore.Tools
             baseContext.ImportNames(iRec);
         }
 
-        private static void CheckRecord_Family(IBaseContext baseContext, GEDCOMTree tree, GEDCOMFormat format,
-                                               GEDCOMFamilyRecord fam)
+        private static void CheckRecord_Family(IBaseContext baseContext, GDMTree tree, GEDCOMFormat format,
+                                               GDMFamilyRecord fam)
         {
             if (format == GEDCOMFormat.gf_Native) {
                 int num = fam.Events.Count;
@@ -401,7 +401,7 @@ namespace GKCore.Tools
                     fam.Children.DeleteAt(i);
             }
 
-            GEDCOMRecord val = fam.Husband.Value;
+            GDMRecord val = fam.Husband.Value;
             if (!string.IsNullOrEmpty(fam.Husband.XRef) && val == null) {
                 fam.Husband.Value = null;
             }
@@ -412,12 +412,12 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRecord_Group(GEDCOMGroupRecord group)
+        private static void CheckRecord_Group(GDMGroupRecord group)
         {
             for (int i = group.Members.Count - 1; i >= 0; i--)
             {
-                GEDCOMPointer ptr = group.Members[i];
-                GEDCOMIndividualRecord irec = ptr.Value as GEDCOMIndividualRecord;
+                GDMPointer ptr = group.Members[i];
+                GDMIndividualRecord irec = ptr.Value as GDMIndividualRecord;
                 if (irec == null)
                 {
                     group.Members.DeleteAt(i);
@@ -432,25 +432,25 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRecord_Source(GEDCOMSourceRecord src)
+        private static void CheckRecord_Source(GDMSourceRecord src)
         {
             for (int i = src.RepositoryCitations.Count - 1; i >= 0; i--) {
-                GEDCOMRecord val = src.RepositoryCitations[i].Value;
+                GDMRecord val = src.RepositoryCitations[i].Value;
                 if (val == null) {
                     src.RepositoryCitations.DeleteAt(i);
                 }
             }
         }
 
-        private static void CheckRecord_Multimedia(GEDCOMMultimediaRecord mmRec, GEDCOMFormat format, int fileVer)
+        private static void CheckRecord_Multimedia(GDMMultimediaRecord mmRec, GEDCOMFormat format, int fileVer)
         {
             for (int i = 0; i < mmRec.FileReferences.Count; i++) {
-                GEDCOMFileReferenceWithTitle fileRef = mmRec.FileReferences[i];
+                GDMFileReferenceWithTitle fileRef = mmRec.FileReferences[i];
 
                 GEDCOMMultimediaFormat mmFormat = fileRef.MultimediaFormat;
                 if (mmFormat == GEDCOMMultimediaFormat.mfUnknown || mmFormat == GEDCOMMultimediaFormat.mfNone) {
                     // tag 'FORM' can be corrupted or GEDCOMCore in past not recognize format attempt recovery
-                    fileRef.MultimediaFormat = GEDCOMFileReference.RecognizeFormat(fileRef.StringValue);
+                    fileRef.MultimediaFormat = GDMFileReference.RecognizeFormat(fileRef.StringValue);
                 }
 
                 if (format == GEDCOMFormat.gf_Native && fileVer == 39) {
@@ -465,53 +465,53 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRecord(IBaseContext baseContext, GEDCOMTree tree, GEDCOMRecord rec,
+        private static void CheckRecord(IBaseContext baseContext, GDMTree tree, GDMRecord rec,
                                         GEDCOMFormat format, int fileVer)
         {
             if (format != GEDCOMFormat.gf_Native) {
                 int num = rec.MultimediaLinks.Count;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMMultimediaLink mmLink = rec.MultimediaLinks[i];
+                    GDMMultimediaLink mmLink = rec.MultimediaLinks[i];
                     if (!mmLink.IsPointer) ReformMultimediaLink(tree, mmLink);
                 }
 
                 num = rec.Notes.Count;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMNotes note = rec.Notes[i];
+                    GDMNotes note = rec.Notes[i];
                     if (!note.IsPointer) ReformNote(tree, note);
                 }
 
                 num = rec.SourceCitations.Count;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMSourceCitation sourCit = rec.SourceCitations[i];
+                    GDMSourceCitation sourCit = rec.SourceCitations[i];
                     if (!sourCit.IsPointer) ReformSourceCitation(tree, sourCit);
                 }
             }
 
             switch (rec.RecordType) {
                 case GEDCOMRecordType.rtIndividual:
-                    CheckRecord_Individual(baseContext, tree, format, rec as GEDCOMIndividualRecord);
+                    CheckRecord_Individual(baseContext, tree, format, rec as GDMIndividualRecord);
                     break;
 
                 case GEDCOMRecordType.rtFamily:
-                    CheckRecord_Family(baseContext, tree, format, rec as GEDCOMFamilyRecord);
+                    CheckRecord_Family(baseContext, tree, format, rec as GDMFamilyRecord);
                     break;
 
                 case GEDCOMRecordType.rtGroup:
-                    CheckRecord_Group(rec as GEDCOMGroupRecord);
+                    CheckRecord_Group(rec as GDMGroupRecord);
                     break;
 
                 case GEDCOMRecordType.rtSource:
-                    CheckRecord_Source(rec as GEDCOMSourceRecord);
+                    CheckRecord_Source(rec as GDMSourceRecord);
                     break;
 
                 case GEDCOMRecordType.rtMultimedia:
-                    CheckRecord_Multimedia(rec as GEDCOMMultimediaRecord, format, fileVer);
+                    CheckRecord_Multimedia(rec as GDMMultimediaRecord, format, fileVer);
                     break;
             }
         }
 
-        private static bool CheckRecordXRef(GEDCOMRecord record)
+        private static bool CheckRecordXRef(GDMRecord record)
         {
             string stdSign = GEDCOMUtils.GetSignByRecord(record);
             string xrefNum = record.GetXRefNum();
@@ -520,14 +520,14 @@ namespace GKCore.Tools
             return ((recXRef == stdSign + xrefNum) && record.GetId() > 0);
         }
 
-        private static void CorrectIds(GEDCOMTree tree, IProgressController pc)
+        private static void CorrectIds(GDMTree tree, IProgressController pc)
         {
             pc.ProgressInit(LangMan.LS(LSID.LSID_IDsCorrect), tree.RecordsCount);
             XRefReplacer repMap = new XRefReplacer();
             try {
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMRecord rec = tree[i];
+                    GDMRecord rec = tree[i];
                     if (!CheckRecordXRef(rec)) {
                         string newXRef = tree.XRefIndex_NewXRef(rec);
                         repMap.AddXRef(rec, rec.XRef, newXRef);
@@ -541,7 +541,7 @@ namespace GKCore.Tools
 
                 int num2 = repMap.Count;
                 for (int i = 0; i < num2; i++) {
-                    GEDCOMRecord rec = repMap[i].Rec;
+                    GDMRecord rec = repMap[i].Rec;
                     rec.ReplaceXRefs(repMap);
                     pc.ProgressStep();
                 }
@@ -551,7 +551,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static bool CheckGEDCOMFormat(GEDCOMTree tree, IBaseContext baseContext, IProgressController pc)
+        public static bool CheckGEDCOMFormat(GDMTree tree, IBaseContext baseContext, IProgressController pc)
         {
             if (tree == null)
                 throw new ArgumentNullException("tree");
@@ -573,7 +573,7 @@ namespace GKCore.Tools
                     // remove a deprecated features
                     if (format == GEDCOMFormat.gf_Native) {
                         GEDCOMHeader header = tree.Header;
-                        GEDCOMTag tag;
+                        GDMTag tag;
 
                         tag = header.FindTag("_ADVANCED", 0);
                         if (tag != null) header.DeleteTag("_ADVANCED");
@@ -591,7 +591,7 @@ namespace GKCore.Tools
                     int progress = 0;
                     int num = tree.RecordsCount;
                     for (int i = 0; i < num; i++) {
-                        GEDCOMRecord rec = tree[i];
+                        GDMRecord rec = tree[i];
                         CheckRecord(baseContext, tree, rec, format, fileVer);
 
                         if (format != GEDCOMFormat.gf_Native && xrefValid && !CheckRecordXRef(rec)) {
@@ -635,9 +635,9 @@ namespace GKCore.Tools
             twmNone
         }
 
-        public delegate bool WalkProc(GEDCOMIndividualRecord iRec, TreeWalkMode mode, object extData);
+        public delegate bool WalkProc(GDMIndividualRecord iRec, TreeWalkMode mode, object extData);
 
-        public static void WalkTree(GEDCOMIndividualRecord iRec, TreeWalkMode mode, WalkProc walkProc, object extData)
+        public static void WalkTree(GDMIndividualRecord iRec, TreeWalkMode mode, WalkProc walkProc, object extData)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
@@ -651,7 +651,7 @@ namespace GKCore.Tools
             WalkTreeInt(iRec, mode, walkProc, extData);
         }
 
-        public static void WalkTree(GEDCOMIndividualRecord iRec, TreeWalkMode mode, List<GEDCOMRecord> walkList)
+        public static void WalkTree(GDMIndividualRecord iRec, TreeWalkMode mode, List<GDMRecord> walkList)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
@@ -662,9 +662,9 @@ namespace GKCore.Tools
             WalkTreeInt(iRec, mode, DefaultWalkProc, walkList);
         }
 
-        private static bool DefaultWalkProc(GEDCOMIndividualRecord iRec, TreeWalkMode mode, object extData)
+        private static bool DefaultWalkProc(GDMIndividualRecord iRec, TreeWalkMode mode, object extData)
         {
-            List<GEDCOMRecord> walkList = (List<GEDCOMRecord>)extData;
+            List<GDMRecord> walkList = (List<GDMRecord>)extData;
             bool resContinue = (iRec != null && !walkList.Contains(iRec));
             if (resContinue) {
                 walkList.Add(iRec);
@@ -672,16 +672,16 @@ namespace GKCore.Tools
             return resContinue;
         }
 
-        private static void WalkTreeInt(GEDCOMIndividualRecord iRec, TreeWalkMode mode, WalkProc walkProc, object extData)
+        private static void WalkTreeInt(GDMIndividualRecord iRec, TreeWalkMode mode, WalkProc walkProc, object extData)
         {
             if (!walkProc(iRec, mode, extData)) return;
 
             if (mode == TreeWalkMode.twmNone) return;
 
             if (mode == TreeWalkMode.twmAll || mode == TreeWalkMode.twmAncestors) {
-                GEDCOMFamilyRecord family = iRec.GetParentsFamily();
+                GDMFamilyRecord family = iRec.GetParentsFamily();
                 if (family != null) {
-                    GEDCOMIndividualRecord father, mother;
+                    GDMIndividualRecord father, mother;
                     father = family.GetHusband();
                     mother = family.GetWife();
 
@@ -694,8 +694,8 @@ namespace GKCore.Tools
             if (mode < TreeWalkMode.twmAncestors || mode == TreeWalkMode.twmDescendants) {
                 int num = iRec.SpouseToFamilyLinks.Count;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
-                    GEDCOMIndividualRecord spouse = ((iRec.Sex == GEDCOMSex.svMale) ? family.GetWife() : family.GetHusband());
+                    GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                    GDMIndividualRecord spouse = ((iRec.Sex == GEDCOMSex.svMale) ? family.GetWife() : family.GetHusband());
 
                     TreeWalkMode intMode = ((mode == TreeWalkMode.twmAll) ? TreeWalkMode.twmAll : TreeWalkMode.twmNone);
                     WalkTreeInt(spouse, intMode, walkProc, extData);
@@ -716,7 +716,7 @@ namespace GKCore.Tools
 
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++) {
-                        GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)family.Children[j].Value;
+                        GDMIndividualRecord child = (GDMIndividualRecord)family.Children[j].Value;
                         WalkTreeInt(child, intMode, walkProc, extData);
                     }
                 }
@@ -729,7 +729,7 @@ namespace GKCore.Tools
 
         private enum DCFlag { dcfAncWalk, dcfDescWalk }
 
-        private static void SetIndiFlag(GEDCOMIndividualRecord iRec, DCFlag flag)
+        private static void SetIndiFlag(GDMIndividualRecord iRec, DCFlag flag)
         {
             object data = iRec.ExtData;
             if (data != null) {
@@ -739,7 +739,7 @@ namespace GKCore.Tools
             }
         }
 
-        private static bool HasIndiFlag(GEDCOMIndividualRecord iRec, DCFlag flag)
+        private static bool HasIndiFlag(GDMIndividualRecord iRec, DCFlag flag)
         {
             object data = iRec.ExtData;
             if (data != null) {
@@ -750,7 +750,7 @@ namespace GKCore.Tools
             }
         }
 
-        private static GEDCOMIndividualRecord DetectCycleAncestors(GEDCOMIndividualRecord iRec, Stack<GEDCOMIndividualRecord> stack)
+        private static GDMIndividualRecord DetectCycleAncestors(GDMIndividualRecord iRec, Stack<GDMIndividualRecord> stack)
         {
             if (iRec == null) return null;
 
@@ -760,7 +760,7 @@ namespace GKCore.Tools
 
             stack.Push(iRec);
 
-            GEDCOMFamilyRecord family = iRec.GetParentsFamily();
+            GDMFamilyRecord family = iRec.GetParentsFamily();
             if (family != null) {
                 var res = DetectCycleAncestors(family.GetHusband(), stack);
                 if (res != null) return res;
@@ -773,7 +773,7 @@ namespace GKCore.Tools
             return null;
         }
 
-        private static GEDCOMIndividualRecord DetectCycleDescendants(GEDCOMIndividualRecord iRec, Stack<GEDCOMIndividualRecord> stack)
+        private static GDMIndividualRecord DetectCycleDescendants(GDMIndividualRecord iRec, Stack<GDMIndividualRecord> stack)
         {
             if (iRec == null) return null;
 
@@ -785,11 +785,11 @@ namespace GKCore.Tools
 
             int num = iRec.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
-                GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
                 int num2 = family.Children.Count;
                 for (int j = 0; j < num2; j++) {
-                    GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)family.Children[j].Value;
+                    GDMIndividualRecord child = (GDMIndividualRecord)family.Children[j].Value;
                     var res = DetectCycleDescendants(child, stack);
                     if (res != null) return res;
                 }
@@ -799,9 +799,9 @@ namespace GKCore.Tools
             return null;
         }
 
-        public static string DetectCycle(GEDCOMIndividualRecord iRec)
+        public static string DetectCycle(GDMIndividualRecord iRec)
         {
-            var stack = new Stack<GEDCOMIndividualRecord>();
+            var stack = new Stack<GDMIndividualRecord>();
 
             var hasCycle = DetectCycleAncestors(iRec, stack);
             if (hasCycle != null) {
@@ -820,10 +820,10 @@ namespace GKCore.Tools
             return string.Empty;
         }
 
-        private static string CheckCycle(GEDCOMIndividualRecord iRec)
+        private static string CheckCycle(GDMIndividualRecord iRec)
         {
-            var stack = new Stack<GEDCOMIndividualRecord>();
-            GEDCOMIndividualRecord hasCycle = null;
+            var stack = new Stack<GDMIndividualRecord>();
+            GDMIndividualRecord hasCycle = null;
 
             if (!HasIndiFlag(iRec, DCFlag.dcfAncWalk)) {
                 hasCycle = DetectCycleAncestors(iRec, stack);
@@ -849,7 +849,7 @@ namespace GKCore.Tools
 
         #region Merge trees and records
 
-        public static void MergeTree(GEDCOMTree mainTree, GEDCOMTree extTree, ITextBoxHandler logBox, bool selfTest = false)
+        public static void MergeTree(GDMTree mainTree, GDMTree extTree, ITextBoxHandler logBox, bool selfTest = false)
         {
             if (mainTree == null)
                 throw new ArgumentNullException("mainTree");
@@ -878,7 +878,7 @@ namespace GKCore.Tools
             using (var repMap = new XRefReplacer()) {
                 extTree.Header.Clear();
                 while (extTree.RecordsCount > 0) {
-                    GEDCOMRecord rec = extTree.Extract(0);
+                    GDMRecord rec = extTree.Extract(0);
                     string newXRef = mainTree.XRefIndex_NewXRef(rec);
                     repMap.AddXRef(rec, rec.XRef, newXRef);
                     rec.XRef = newXRef;
@@ -888,7 +888,7 @@ namespace GKCore.Tools
 
                 int num = repMap.Count;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMRecord rec = repMap[i].Rec;
+                    GDMRecord rec = repMap[i].Rec;
                     rec.ReplaceXRefs(repMap);
                 }
 
@@ -919,7 +919,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void MergeTreeFile(GEDCOMTree mainTree, string fileName, ITextBoxHandler logBox, bool selfTest = false)
+        public static void MergeTreeFile(GDMTree mainTree, string fileName, ITextBoxHandler logBox, bool selfTest = false)
         {
             if (mainTree == null)
                 throw new ArgumentNullException("mainTree");
@@ -927,7 +927,7 @@ namespace GKCore.Tools
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException("fileName");
 
-            using (var extTree = new GEDCOMTree()) {
+            using (var extTree = new GDMTree()) {
                 var gedcomProvider = new GEDCOMProvider(extTree);
                 gedcomProvider.LoadFromFile(fileName);
 
@@ -935,7 +935,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void MergeRecord(IBaseWindow baseWin, GEDCOMRecord targetRec, GEDCOMRecord sourceRec, bool bookmark)
+        public static void MergeRecord(IBaseWindow baseWin, GDMRecord targetRec, GDMRecord sourceRec, bool bookmark)
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
@@ -949,7 +949,7 @@ namespace GKCore.Tools
             using (var repMap = new XRefReplacer()) {
                 repMap.AddXRef(sourceRec, sourceRec.XRef, targetRec.XRef);
 
-                GEDCOMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseWin.Context.Tree;
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
                     tree[i].ReplaceXRefs(repMap);
@@ -959,7 +959,7 @@ namespace GKCore.Tools
                 bool res = baseWin.Context.DeleteRecord(sourceRec);
 
                 if (targetRec.RecordType == GEDCOMRecordType.rtIndividual && bookmark) {
-                    ((GEDCOMIndividualRecord)targetRec).Bookmark = true;
+                    ((GDMIndividualRecord)targetRec).Bookmark = true;
                 }
 
                 baseWin.NotifyRecord(targetRec, RecordAction.raEdit);
@@ -999,10 +999,10 @@ namespace GKCore.Tools
         {
             public string Comment;
             public CheckDiag Diag;
-            public GEDCOMRecord Rec;
+            public GDMRecord Rec;
             public CheckSolve Solve;
 
-            public CheckObj(GEDCOMRecord rec, CheckDiag diag, CheckSolve solve)
+            public CheckObj(GDMRecord rec, CheckDiag diag, CheckSolve solve)
             {
                 Rec = rec;
                 Diag = diag;
@@ -1016,11 +1016,11 @@ namespace GKCore.Tools
                 switch (Rec.RecordType)
                 {
                     case GEDCOMRecordType.rtIndividual:
-                        result = result + GKUtils.GetNameString(((GEDCOMIndividualRecord)Rec), true, false);
+                        result = result + GKUtils.GetNameString(((GDMIndividualRecord)Rec), true, false);
                         break;
 
                     case GEDCOMRecordType.rtFamily:
-                        result = result + GKUtils.GetFamilyString((GEDCOMFamilyRecord)Rec);
+                        result = result + GKUtils.GetFamilyString((GDMFamilyRecord)Rec);
                         break;
                 }
 
@@ -1028,13 +1028,13 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRecordWithEvents(GEDCOMRecordWithEvents rec, List<CheckObj> checksList)
+        private static void CheckRecordWithEvents(GDMRecordWithEvents rec, List<CheckObj> checksList)
         {
             var dateZero = new DateTime(0);
 
             int num = rec.Events.Count;
             for (int i = 0; i < num; i++) {
-                GEDCOMCustomEvent evt = rec.Events[i];
+                GDMCustomEvent evt = rec.Events[i];
 
                 bool invalid = false;
                 try {
@@ -1055,7 +1055,7 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckIndividualRecord(GEDCOMIndividualRecord iRec, List<CheckObj> checksList)
+        private static void CheckIndividualRecord(GDMIndividualRecord iRec, List<CheckObj> checksList)
         {
             CheckRecordWithEvents(iRec, checksList);
 
@@ -1115,12 +1115,12 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckFamilyRecord(GEDCOMFamilyRecord fRec, List<CheckObj> checksList)
+        private static void CheckFamilyRecord(GDMFamilyRecord fRec, List<CheckObj> checksList)
         {
             CheckRecordWithEvents(fRec, checksList);
 
-            GEDCOMRecord husb = fRec.Husband.Value;
-            GEDCOMRecord wife = fRec.Wife.Value;
+            GDMRecord husb = fRec.Husband.Value;
+            GDMRecord wife = fRec.Wife.Value;
 
             bool empty = (fRec.Notes.Count == 0 && fRec.SourceCitations.Count == 0 && fRec.MultimediaLinks.Count == 0 && fRec.UserReferences.Count == 0);
             empty = empty && (fRec.Events.Count == 0 && fRec.Children.Count == 0);
@@ -1174,7 +1174,7 @@ namespace GKCore.Tools
 
             IProgressController progress = AppHost.Progress;
             try {
-                GEDCOMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseWin.Context.Tree;
                 progress.ProgressInit(LangMan.LS(LSID.LSID_ToolOp_7), tree.RecordsCount);
                 checksList.Clear();
                 GKUtils.InitExtCounts(tree, 0);
@@ -1183,15 +1183,15 @@ namespace GKCore.Tools
                 for (int i = 0; i < num; i++) {
                     progress.ProgressStep();
 
-                    GEDCOMRecord rec = tree[i];
+                    GDMRecord rec = tree[i];
 
                     switch (rec.RecordType) {
                         case GEDCOMRecordType.rtIndividual:
-                            CheckIndividualRecord(rec as GEDCOMIndividualRecord, checksList);
+                            CheckIndividualRecord(rec as GDMIndividualRecord, checksList);
                             break;
 
                         case GEDCOMRecordType.rtFamily:
-                            CheckFamilyRecord(rec as GEDCOMFamilyRecord, checksList);
+                            CheckFamilyRecord(rec as GDMFamilyRecord, checksList);
                             break;
                     }
                 }
@@ -1208,18 +1208,18 @@ namespace GKCore.Tools
             if (checkObj == null)
                 throw new ArgumentNullException("checkObj");
 
-            GEDCOMTree tree = baseWin.Context.Tree;
-            GEDCOMIndividualRecord iRec;
+            GDMTree tree = baseWin.Context.Tree;
+            GDMIndividualRecord iRec;
 
             switch (checkObj.Diag) {
                 case CheckDiag.cdPersonLonglived:
-                    iRec = checkObj.Rec as GEDCOMIndividualRecord;
+                    iRec = checkObj.Rec as GDMIndividualRecord;
                     baseWin.Context.CreateEventEx(iRec, GEDCOMTagType.DEAT, "", "");
                     baseWin.NotifyRecord(iRec, RecordAction.raEdit);
                     break;
 
                 case CheckDiag.cdPersonSexless:
-                    iRec = checkObj.Rec as GEDCOMIndividualRecord;
+                    iRec = checkObj.Rec as GDMIndividualRecord;
                     baseWin.Context.CheckPersonSex(iRec);
                     baseWin.NotifyRecord(iRec, RecordAction.raEdit);
                     break;
@@ -1230,14 +1230,14 @@ namespace GKCore.Tools
 
                 case CheckDiag.cdFatherAsChild:
                     {
-                        var fRec = ((GEDCOMFamilyRecord)checkObj.Rec);
+                        var fRec = ((GDMFamilyRecord)checkObj.Rec);
                         fRec.DeleteChild(fRec.Husband.Value);
                     }
                     break;
 
                 case CheckDiag.cdMotherAsChild:
                     {
-                        var fRec = ((GEDCOMFamilyRecord)checkObj.Rec);
+                        var fRec = ((GDMFamilyRecord)checkObj.Rec);
                         fRec.DeleteChild(fRec.Wife.Value);
                     }
                     break;
@@ -1260,7 +1260,7 @@ namespace GKCore.Tools
 
         #region Tree Split
 
-        private static void CheckRelations_AddRel(List<GEDCOMRecord> splitList, GEDCOMRecord aRec)
+        private static void CheckRelations_AddRel(List<GDMRecord> splitList, GDMRecord aRec)
         {
             if (splitList.IndexOf(aRec) < 0)
             {
@@ -1268,7 +1268,7 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRelations_CheckRecord(List<GEDCOMRecord> splitList, GEDCOMRecord rec)
+        private static void CheckRelations_CheckRecord(List<GDMRecord> splitList, GDMRecord rec)
         {
             int num = rec.MultimediaLinks.Count;
             for (int i = 0; i < num; i++)
@@ -1289,7 +1289,7 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRelations_CheckTag(List<GEDCOMRecord> splitList, GEDCOMTagWithLists tag)
+        private static void CheckRelations_CheckTag(List<GDMRecord> splitList, GDMTagWithLists tag)
         {
             int num = tag.MultimediaLinks.Count;
             for (int i = 0; i < num; i++)
@@ -1310,7 +1310,7 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRelations_CheckIndividual(List<GEDCOMRecord> splitList, GEDCOMIndividualRecord iRec)
+        private static void CheckRelations_CheckIndividual(List<GDMRecord> splitList, GDMIndividualRecord iRec)
         {
             CheckRelations_CheckRecord(splitList, iRec);
 
@@ -1357,7 +1357,7 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRelations_CheckFamily(List<GEDCOMRecord> splitList, GEDCOMFamilyRecord fRec)
+        private static void CheckRelations_CheckFamily(List<GDMRecord> splitList, GDMFamilyRecord fRec)
         {
             CheckRelations_CheckRecord(splitList, fRec);
 
@@ -1374,7 +1374,7 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRelations_CheckSource(List<GEDCOMRecord> splitList, GEDCOMSourceRecord sRec)
+        private static void CheckRelations_CheckSource(List<GDMRecord> splitList, GDMSourceRecord sRec)
         {
             CheckRelations_CheckRecord(splitList, sRec);
 
@@ -1384,7 +1384,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void CheckRelations(List<GEDCOMRecord> splitList)
+        public static void CheckRelations(List<GDMRecord> splitList)
         {
             if (splitList == null)
                 throw new ArgumentNullException("splitList");
@@ -1392,15 +1392,15 @@ namespace GKCore.Tools
             int num = splitList.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = splitList[i];
+                GDMRecord rec = splitList[i];
                 switch (rec.RecordType)
                 {
                     case GEDCOMRecordType.rtIndividual:
-                        CheckRelations_CheckIndividual(splitList, rec as GEDCOMIndividualRecord);
+                        CheckRelations_CheckIndividual(splitList, rec as GDMIndividualRecord);
                         break;
 
                     case GEDCOMRecordType.rtFamily:
-                        CheckRelations_CheckFamily(splitList, rec as GEDCOMFamilyRecord);
+                        CheckRelations_CheckFamily(splitList, rec as GDMFamilyRecord);
                         break;
 
                     case GEDCOMRecordType.rtNote:
@@ -1412,7 +1412,7 @@ namespace GKCore.Tools
                         break;
 
                     case GEDCOMRecordType.rtSource:
-                        CheckRelations_CheckSource(splitList, rec as GEDCOMSourceRecord);
+                        CheckRelations_CheckSource(splitList, rec as GDMSourceRecord);
                         break;
 
                     case GEDCOMRecordType.rtRepository:
@@ -1441,7 +1441,7 @@ namespace GKCore.Tools
         public class ULIndividual
         {
             public string Family;
-            public GEDCOMIndividualRecord IRec;
+            public GDMIndividualRecord IRec;
         }
 
         public static List<ULIndividual> GetUnlinkedNamesakes(IBaseWindow baseWin)
@@ -1449,11 +1449,11 @@ namespace GKCore.Tools
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
 
-            GEDCOMTree tree = baseWin.Context.Tree;
+            GDMTree tree = baseWin.Context.Tree;
 
             List<ULIndividual> result = new List<ULIndividual>();
 
-            Dictionary<string, List<GEDCOMIndividualRecord>> families = new Dictionary<string, List<GEDCOMIndividualRecord>>();
+            Dictionary<string, List<GDMIndividualRecord>> families = new Dictionary<string, List<GDMIndividualRecord>>();
 
             IProgressController progress = AppHost.Progress;
             progress.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "1", tree.RecordsCount);
@@ -1462,11 +1462,11 @@ namespace GKCore.Tools
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = tree[i];
+                GDMRecord rec = tree[i];
 
                 if (rec.RecordType == GEDCOMRecordType.rtIndividual)
                 {
-                    GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
+                    GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
 
                     string[] fams = baseWin.Context.Culture.GetSurnames(iRec);
 
@@ -1475,9 +1475,9 @@ namespace GKCore.Tools
                         string f = fams[k];
                         if (f.Length > 1)
                         {
-                            List<GEDCOMIndividualRecord> ps;
+                            List<GDMIndividualRecord> ps;
                             if (!families.TryGetValue(f, out ps)) {
-                                ps = new List<GEDCOMIndividualRecord>();
+                                ps = new List<GDMIndividualRecord>();
                                 families.Add(f, ps);
                             }
                             ps.Add(iRec);
@@ -1491,23 +1491,23 @@ namespace GKCore.Tools
             progress.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "2", families.Count);
 
             // find all persons of one surname, not related by ties of kinship
-            foreach (KeyValuePair<string, List<GEDCOMIndividualRecord>> entry in families)
+            foreach (KeyValuePair<string, List<GDMIndividualRecord>> entry in families)
             {
                 string fam = entry.Key;
-                List<GEDCOMIndividualRecord> ps = entry.Value;
+                List<GDMIndividualRecord> ps = entry.Value;
 
                 int i = 0;
                 while (i < ps.Count)
                 {
-                    GEDCOMIndividualRecord iRec = ps[i];
+                    GDMIndividualRecord iRec = ps[i];
 
-                    List<GEDCOMRecord> lst = new List<GEDCOMRecord>();
+                    List<GDMRecord> lst = new List<GDMRecord>();
                     WalkTree(iRec, TreeWalkMode.twmAll, lst);
 
                     int num3 = lst.Count;
                     for (int k = 0; k < num3; k++)
                     {
-                        GEDCOMIndividualRecord item = lst[k] as GEDCOMIndividualRecord;
+                        GDMIndividualRecord item = lst[k] as GDMIndividualRecord;
 
                         int idx = ps.IndexOf(item);
                         if (item != iRec && idx >= 0 && idx > i) ps.RemoveAt(idx);
@@ -1534,9 +1534,9 @@ namespace GKCore.Tools
             return result;
         }
 
-        public delegate void DuplicateFoundFunc(GEDCOMIndividualRecord indivA, GEDCOMIndividualRecord indivB);
+        public delegate void DuplicateFoundFunc(GDMIndividualRecord indivA, GDMIndividualRecord indivB);
 
-        public static void FindDuplicates(GEDCOMTree treeA, GEDCOMTree treeB, float matchThreshold,
+        public static void FindDuplicates(GDMTree treeA, GDMTree treeB, float matchThreshold,
                                           DuplicateFoundFunc foundFunc, IProgressController pc)
         {
             if (treeA == null)
@@ -1562,13 +1562,13 @@ namespace GKCore.Tools
             try
             {
                 for (int i = 0; i < treeA.RecordsCount; i++) {
-                    GEDCOMRecord recA = treeA[i];
+                    GDMRecord recA = treeA[i];
                     if (recA.RecordType == GEDCOMRecordType.rtIndividual) {
                         for (int k = 0; k < treeB.RecordsCount; k++) {
-                            GEDCOMRecord recB = treeB[k];
+                            GDMRecord recB = treeB[k];
                             if (recB.RecordType == GEDCOMRecordType.rtIndividual) {
-                                GEDCOMIndividualRecord indivA = (GEDCOMIndividualRecord) recA;
-                                GEDCOMIndividualRecord indivB = (GEDCOMIndividualRecord) recB;
+                                GDMIndividualRecord indivA = (GDMIndividualRecord) recA;
+                                GDMIndividualRecord indivB = (GDMIndividualRecord) recB;
 
                                 if (indivA != indivB && indivA.IsMatch(indivB, mParams) >= matchThreshold)
                                 {
@@ -1596,8 +1596,8 @@ namespace GKCore.Tools
             if (logBox == null)
                 throw new ArgumentNullException("logBox");
 
-            GEDCOMTree mainTree = context.Tree;
-            GEDCOMTree tempTree = new GEDCOMTree();
+            GDMTree mainTree = context.Tree;
+            GDMTree tempTree = new GDMTree();
 
             var gedcomProvider = new GEDCOMProvider(tempTree);
             gedcomProvider.LoadFromFile(fileName);
@@ -1612,13 +1612,13 @@ namespace GKCore.Tools
                 int num = mainTree.RecordsCount;
                 for (int i = 0; i < num; i++)
                 {
-                    GEDCOMRecord rec = mainTree[i];
+                    GDMRecord rec = mainTree[i];
                     if (rec.RecordType == GEDCOMRecordType.rtIndividual)
                     {
-                        GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
+                        GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
 
-                        int idx = names.AddObject(GKUtils.GetNameString(iRec, true, false), new ExtList<GEDCOMIndividualRecord>());
-                        ((ExtList<GEDCOMIndividualRecord>)names.GetObject(idx)).Add(iRec);
+                        int idx = names.AddObject(GKUtils.GetNameString(iRec, true, false), new ExtList<GDMIndividualRecord>());
+                        ((ExtList<GDMIndividualRecord>)names.GetObject(idx)).Add(iRec);
 
                         var parts = GKUtils.GetNameParts(iRec);
                         fams.AddObject(context.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GEDCOMSex.svFemale), null);
@@ -1628,16 +1628,16 @@ namespace GKCore.Tools
                 int num2 = tempTree.RecordsCount;
                 for (int i = 0; i < num2; i++)
                 {
-                    GEDCOMRecord rec = tempTree[i];
+                    GDMRecord rec = tempTree[i];
                     if (rec.RecordType == GEDCOMRecordType.rtIndividual)
                     {
-                        GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)tempTree[i];
+                        GDMIndividualRecord iRec = (GDMIndividualRecord)tempTree[i];
 
                         string tm = GKUtils.GetNameString(iRec, true, false);
                         int idx = names.IndexOf(tm);
                         if (idx >= 0)
                         {
-                            ((ExtList<GEDCOMIndividualRecord>)names.GetObject(idx)).Add(iRec);
+                            ((ExtList<GDMIndividualRecord>)names.GetObject(idx)).Add(iRec);
                         }
 
                         var parts = GKUtils.GetNameParts(iRec);
@@ -1658,7 +1658,7 @@ namespace GKCore.Tools
 
                 for (int i = names.Count - 1; i >= 0; i--)
                 {
-                    ExtList<GEDCOMIndividualRecord> lst = (ExtList<GEDCOMIndividualRecord>)names.GetObject(i);
+                    ExtList<GDMIndividualRecord> lst = (ExtList<GDMIndividualRecord>)names.GetObject(i);
 
                     if (lst.Count == 1)
                     {
@@ -1686,12 +1686,12 @@ namespace GKCore.Tools
                     for (int i = 0; i < num4; i++)
                     {
                         logBox.AppendText("    " + names[i] + "\r\n");
-                        ExtList<GEDCOMIndividualRecord> lst = (ExtList<GEDCOMIndividualRecord>)names.GetObject(i);
+                        ExtList<GDMIndividualRecord> lst = (ExtList<GDMIndividualRecord>)names.GetObject(i);
 
                         int num5 = lst.Count;
                         for (int j = 0; j < num5; j++)
                         {
-                            GEDCOMIndividualRecord iRec = lst[j];
+                            GDMIndividualRecord iRec = lst[j];
                             logBox.AppendText("      * " + GKUtils.GetNameString(iRec, true, false) + " " + GKUtils.GetLifeStr(iRec) + "\r\n");
                         }
                     }
@@ -1726,12 +1726,12 @@ namespace GKCore.Tools
             placesList.Clear();
         }
 
-        private static void SearchPlaces_CheckEventPlace(StringList placesList, GEDCOMCustomEvent evt)
+        private static void SearchPlaces_CheckEventPlace(StringList placesList, GDMCustomEvent evt)
         {
             string placeStr = evt.Place.StringValue;
             if (string.IsNullOrEmpty(placeStr)) return;
 
-            GEDCOMLocationRecord loc = evt.Place.Location.Value as GEDCOMLocationRecord;
+            GDMLocationRecord loc = evt.Place.Location.Value as GDMLocationRecord;
             if (loc != null) {
                 placeStr = "[*] " + placeStr;
             }
@@ -1748,7 +1748,7 @@ namespace GKCore.Tools
             placeObj.Facts.Add(evt);
         }
 
-        public static void SearchPlaces(GEDCOMTree tree, StringList placesList, IProgressController pc)
+        public static void SearchPlaces(GDMTree tree, StringList placesList, IProgressController pc)
         {
             if (tree == null)
                 throw new ArgumentNullException("tree");
@@ -1769,11 +1769,11 @@ namespace GKCore.Tools
                 for (int i = 0; i < recsCount; i++) {
                     pc.ProgressStep();
 
-                    var evsRec = tree[i] as GEDCOMRecordWithEvents;
+                    var evsRec = tree[i] as GDMRecordWithEvents;
                     if (evsRec != null) {
                         int num2 = evsRec.Events.Count;
                         for (int j = 0; j < num2; j++) {
-                            GEDCOMCustomEvent evt = evsRec.Events[j];
+                            GDMCustomEvent evt = evsRec.Events[j];
 
                             SearchPlaces_CheckEventPlace(placesList, evt);
                         }
@@ -1788,22 +1788,22 @@ namespace GKCore.Tools
 
         #region Tree fragments
 
-        public static List<List<GEDCOMRecord>> SearchTreeFragments(GEDCOMTree tree, IProgressController progress)
+        public static List<List<GDMRecord>> SearchTreeFragments(GDMTree tree, IProgressController progress)
         {
-            List<List<GEDCOMRecord>> result = new List<List<GEDCOMRecord>>();
+            List<List<GDMRecord>> result = new List<List<GDMRecord>>();
 
             if (progress != null) {
                 progress.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), tree.RecordsCount);
             }
 
-            List<GEDCOMRecord> prepared = new List<GEDCOMRecord>();
+            List<GDMRecord> prepared = new List<GDMRecord>();
             try {
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMIndividualRecord iRec = tree[i] as GEDCOMIndividualRecord;
+                    GDMIndividualRecord iRec = tree[i] as GDMIndividualRecord;
                     if (iRec != null) {
                         if (prepared.IndexOf(iRec) < 0) {
-                            var groupRecords = new List<GEDCOMRecord>();
+                            var groupRecords = new List<GDMRecord>();
                             TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, groupRecords);
                             result.Add(groupRecords);
                             prepared.AddRange(groupRecords);
