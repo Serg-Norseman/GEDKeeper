@@ -20,11 +20,11 @@
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMData : GEDCOMTagWithLists
+    public sealed class GDMSourceData : GEDCOMTagWithLists
     {
-        private GEDCOMList<GEDCOMEvent> fEvents;
+        private GEDCOMList<GDMSourceEvent> fEvents;
 
-        public GEDCOMList<GEDCOMEvent> Events
+        public GEDCOMList<GDMSourceEvent> Events
         {
             get { return fEvents; }
         }
@@ -38,17 +38,17 @@ namespace GKCommon.GEDCOM
 
         public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMData(owner, tagName, tagValue);
+            return new GDMSourceData(owner, tagName, tagValue);
         }
 
-        public GEDCOMData(GEDCOMObject owner) : base(owner)
+        public GDMSourceData(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.DATA);
 
-            fEvents = new GEDCOMList<GEDCOMEvent>(this);
+            fEvents = new GEDCOMList<GDMSourceEvent>(this);
         }
 
-        public GEDCOMData(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMSourceData(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

@@ -29,9 +29,9 @@ namespace GKCommon.GEDCOM
     {
         private GEDCOMList<GEDCOMRepositoryCitation> fRepositoryCitations;
 
-        public GEDCOMData Data
+        public GDMSourceData Data
         {
-            get { return GetTag(GEDCOMTagType.DATA, GEDCOMData.Create) as GEDCOMData; }
+            get { return GetTag(GEDCOMTagType.DATA, GDMSourceData.Create) as GDMSourceData; }
         }
 
         public StringList Originator

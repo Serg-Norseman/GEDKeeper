@@ -20,7 +20,7 @@
 
 namespace GKCommon.GEDCOM
 {
-    public sealed class GEDCOMEvent : GEDCOMTag
+    public sealed class GDMSourceEvent : GEDCOMTag
     {
         public GEDCOMDatePeriod Date
         {
@@ -35,15 +35,15 @@ namespace GKCommon.GEDCOM
 
         public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
         {
-            return new GEDCOMEvent(owner, tagName, tagValue);
+            return new GDMSourceEvent(owner, tagName, tagValue);
         }
 
-        public GEDCOMEvent(GEDCOMObject owner) : base(owner)
+        public GDMSourceEvent(GEDCOMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.EVEN);
         }
 
-        public GEDCOMEvent(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMSourceEvent(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
         }

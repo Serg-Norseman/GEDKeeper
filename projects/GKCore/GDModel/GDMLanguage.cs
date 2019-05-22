@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
  *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
@@ -17,6 +17,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+using System;
 
 namespace GKCommon.GEDCOM
 {
@@ -122,5 +124,68 @@ namespace GKCommon.GEDCOM
         Vietnamese,
         Wendic,
         Yiddish,
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class GEDCOMLanguage : GEDCOMTag
+    {
+        private GEDCOMLanguageID fValue;
+
+        public GEDCOMLanguageID Value
+        {
+            get { return fValue; }
+            set { fValue = value; }
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+            fValue = GEDCOMLanguageID.Unknown;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && (fValue == GEDCOMLanguageID.Unknown);
+        }
+
+        public override void Assign(GEDCOMTag source)
+        {
+            GEDCOMLanguage srcLang = (source as GEDCOMLanguage);
+            if (srcLang == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(source);
+
+            fValue = srcLang.fValue;
+        }
+
+        public override string ParseString(string strValue)
+        {
+            fValue = GEDCOMUtils.GetLanguageVal(strValue);
+            return string.Empty;
+        }
+
+        protected override string GetStringValue()
+        {
+            return GEDCOMUtils.GetLanguageStr(fValue);
+        }
+
+        public GEDCOMLanguage(GEDCOMObject owner) : base(owner)
+        {
+            SetName(GEDCOMTagType.LANG);
+        }
+
+        public GEDCOMLanguage(GEDCOMObject owner, string tagName, string tagValue) : this(owner)
+        {
+            SetNameValue(tagName, tagValue);
+        }
+
+        public new static GEDCOMTag Create(GEDCOMObject owner, string tagName, string tagValue)
+        {
+            return new GEDCOMLanguage(owner, tagName, tagValue);
+        }
     }
 }

@@ -144,16 +144,16 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GEDCOMData()
         {
-            using (GEDCOMData data = GEDCOMData.Create(null, "", "") as GEDCOMData) {
+            using (GDMSourceData data = GDMSourceData.Create(null, "", "") as GDMSourceData) {
                 Assert.IsNotNull(data);
                 
                 data.Agency = "test agency";
                 Assert.AreEqual("test agency", data.Agency);
                 
-                GEDCOMTag evenTag = data.Events.Add(new GEDCOMEvent(data, GEDCOMTagType.EVEN, ""));
+                GEDCOMTag evenTag = data.Events.Add(new GDMSourceEvent(data, GEDCOMTagType.EVEN, ""));
                 Assert.IsNotNull(evenTag);
                 
-                GEDCOMEvent evt = data.Events[0];
+                GDMSourceEvent evt = data.Events[0];
                 Assert.AreEqual(evenTag, evt);
                 
                 data.Clear();
@@ -164,7 +164,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GEDCOMEvent()
         {
-            using (GEDCOMEvent evt = GEDCOMEvent.Create(null, "", "") as GEDCOMEvent)
+            using (GDMSourceEvent evt = GDMSourceEvent.Create(null, "", "") as GDMSourceEvent)
             {
                 Assert.IsNotNull(evt);
                 

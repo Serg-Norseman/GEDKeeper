@@ -24,7 +24,7 @@ using System.Text;
 using BSLib;
 using GKCommon.GEDCOM;
 
-namespace GKCore
+namespace GDModel.Providers
 {
     public delegate StackTuple AddTagHandler(GEDCOMObject owner, int tagLevel, string tagName, string tagValue);
 

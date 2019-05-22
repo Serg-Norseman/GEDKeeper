@@ -24,6 +24,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using BSLib;
+using GDModel.Providers;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 
@@ -587,7 +588,7 @@ namespace GKCommon.GEDCOM
             if (tagName == GEDCOMTagType.REPO) {
                 curTag = sourRec.RepositoryCitations.Add(new GEDCOMRepositoryCitation(sourRec, tagName, tagValue));
             } else if (tagName == GEDCOMTagType.DATA) {
-                curTag = sourRec.AddTag(new GEDCOMData(sourRec, tagName, tagValue));
+                curTag = sourRec.AddTag(new GDMSourceData(sourRec, tagName, tagValue));
                 addHandler = AddDataTag;
             } else {
                 return AddRecordTag(owner, tagLevel, tagName, tagValue);
@@ -850,12 +851,12 @@ namespace GKCommon.GEDCOM
 
         private static StackTuple AddDataTag(GEDCOMObject owner, int tagLevel, string tagName, string tagValue)
         {
-            GEDCOMData data = (GEDCOMData)owner;
+            GDMSourceData data = (GDMSourceData)owner;
             GEDCOMTag curTag = null;
             AddTagHandler addHandler = null;
 
             if (tagName == GEDCOMTagType.EVEN) {
-                curTag = data.Events.Add(new GEDCOMEvent(data, tagName, tagValue));
+                curTag = data.Events.Add(new GDMSourceEvent(data, tagName, tagValue));
                 addHandler = AddDataEventTag;
             } else {
                 return AddTagWithListsTag(owner, tagLevel, tagName, tagValue);
@@ -881,7 +882,7 @@ namespace GKCommon.GEDCOM
 
         private static StackTuple AddDataEventTag(GEDCOMObject owner, int tagLevel, string tagName, string tagValue)
         {
-            GEDCOMEvent dataEvent = (GEDCOMEvent)owner;
+            GDMSourceEvent dataEvent = (GDMSourceEvent)owner;
             GEDCOMTag curTag = null;
             AddTagHandler addHandler = null;
 

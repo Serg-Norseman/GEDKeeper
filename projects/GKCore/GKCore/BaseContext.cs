@@ -28,6 +28,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using BSLib;
+using GDModel.Providers;
 using GDModel.Providers.GedML;
 using GKCommon.GEDCOM;
 using GKCore.Cultures;
