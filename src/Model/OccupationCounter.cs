@@ -22,7 +22,7 @@
  *
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GEDmill.Model
 {
@@ -33,10 +33,10 @@ namespace GEDmill.Model
     public class OccupationCounter
     {
         public string Name;
-        public GEDCOMDateValue Date;
+        public GDMDateValue Date;
 
 
-        public OccupationCounter(string name, GEDCOMDateValue date)
+        public OccupationCounter(string name, GDMDateValue date)
         {
             Name = name;
             Date = date;

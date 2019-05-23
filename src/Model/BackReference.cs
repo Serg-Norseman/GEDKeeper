@@ -23,7 +23,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GEDmill.Model
 {
@@ -33,7 +33,7 @@ namespace GEDmill.Model
     public class BackReference
     {
         // The record sType (individual, family, note)
-        public GEDCOMRecordType RecordType;
+        public GDMRecordType RecordType;
 
         // The xref of the record being referenced
         public string XRef;
@@ -43,7 +43,7 @@ namespace GEDmill.Model
         public string EventType;
         
 
-        public BackReference(GEDCOMRecordType recordType, string xref, string eventType)
+        public BackReference(GDMRecordType recordType, string xref, string eventType)
         {
             RecordType = recordType;
             XRef = xref;

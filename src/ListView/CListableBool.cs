@@ -24,7 +24,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GEDmill.ListView
 {
@@ -32,14 +32,14 @@ namespace GEDmill.ListView
     public class CListableBool : ListViewItem
     {
         // The record associated with this list item
-        protected GEDCOMRecord fRecord;
+        protected GDMRecord fRecord;
 
         // True if this list item has a check box
         protected bool fCheckBox;
 
 
         // Constructor from record
-        public CListableBool(GEDCOMRecord ir, bool checkBox)
+        public CListableBool(GDMRecord ir, bool checkBox)
         {
             fRecord = ir;
             fCheckBox = checkBox;
@@ -81,7 +81,7 @@ namespace GEDmill.ListView
             fRecord.SetVisibility(!value);
         }
 
-        public GEDCOMRecord Record
+        public GDMRecord Record
         {
             get { return fRecord; }
         }

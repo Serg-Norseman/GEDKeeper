@@ -25,7 +25,7 @@
 using System;
 using System.IO;
 using GEDmill.Model;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -37,7 +37,7 @@ namespace GEDmill.HTML
     {
         private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CreatorHelpPage).Name);
 
-        public CreatorHelpPage(GEDCOMTree gedcom, IProgressCallback progress, string w3cfile) : base(gedcom, progress, w3cfile)
+        public CreatorHelpPage(GDMTree gedcom, IProgressCallback progress, string w3cfile) : base(gedcom, progress, w3cfile)
         {
         }
 

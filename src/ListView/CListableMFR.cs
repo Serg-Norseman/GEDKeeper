@@ -23,7 +23,7 @@
  */
 
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GEDmill.ListView
 {
@@ -31,10 +31,10 @@ namespace GEDmill.ListView
     public class CListableMFR : ListViewItem
     {
         // The MFR that this list item represents
-        private GEDCOMFileReferenceWithTitle m_mfr;
+        private GDMFileReferenceWithTitle m_mfr;
 
         // Constructor
-        public CListableMFR(GEDCOMFileReferenceWithTitle mfr)
+        public CListableMFR(GDMFileReferenceWithTitle mfr)
         {
             m_mfr = mfr;
 
@@ -64,7 +64,7 @@ namespace GEDmill.ListView
         }
 
         // Accessor
-        public GEDCOMFileReference MultimediaFileReference
+        public GDMFileReference MultimediaFileReference
         {
             get {
                 return m_mfr;

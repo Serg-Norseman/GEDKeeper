@@ -28,12 +28,13 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using GDModel.Providers.GEDCOM;
 using GEDmill.Exceptions;
 using GEDmill.HTML;
 using GEDmill.ListView;
 using GEDmill.MiniTree;
 using GEDmill.Model;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Logging;
 using GKUI.Components;
 
@@ -48,7 +49,7 @@ namespace GEDmill
 
 
         // Stores and parses data from GEDCOM files
-        private GEDCOMTree fTree;
+        private GDMTree fTree;
 
         // Specifies which panel of the wizard the user is viewing (i.e. which stage in the app they are at)
         private int fCurrentPanel;
@@ -85,10 +86,10 @@ namespace GEDmill
         private Color m_colorConfigMiniTreeIndiLink;
         private Color m_colorConfigMiniTreeBackground;
 
-        // Public so GEDCOMTree can change it. Should really refactor so that it's a member of GEDCOMTree.
+        // Public so GDMTree can change it. Should really refactor so that it's a member of GEDCOMTree.
         public int PruneExcluded;
 
-        // Public so GEDCOMTree can change it. Should really refactor so that it's a member of GEDCOMTree.
+        // Public so GDMTree can change it. Should really refactor so that it's a member of GEDCOMTree.
         public int PruneIncluded;
 
         // Indicates user has made changes to data from GEDCOM file
@@ -124,7 +125,7 @@ namespace GEDmill
             m_labelWelcomeVersion.Text = "version " + CConfig.SoftwareVersion;
             m_helpProvider.HelpNamespace = CConfig.Instance.ApplicationPath + "\\" + CConfig.HelpFilename;
 
-            fTree = new GEDCOMTree();
+            fTree = new GDMTree();
             fCurrentPanel = 1;
             fConfigPanelOn = false;
             PruneExcluded = 0;
@@ -397,7 +398,7 @@ namespace GEDmill
                 return;
             }
 
-            GEDCOMIndividualRecord ir = individualBrowserDialog.FirstSelectedIndividual;
+            GDMIndividualRecord ir = individualBrowserDialog.FirstSelectedIndividual;
 
             // Ensure they are only added once
             bool bAlreadyAdded = false;
@@ -696,12 +697,12 @@ namespace GEDmill
 
         private void pruneIndividualsContextMenuDetails_Click(Object sender, System.EventArgs e)
         {
-            GEDCOMIndividualRecord ir = null;
+            GDMIndividualRecord ir = null;
             CListableBool lb = null;
 
             if (lvPruneIndividuals.SelectedItems.Count == 1) {
                 lb = (CListableBool)lvPruneIndividuals.SelectedItems[0];
-                ir = (GEDCOMIndividualRecord)lb.Record;
+                ir = (GDMIndividualRecord)lb.Record;
             }
 
             ShowIndividualDetailsDialog(this, lb, ir, true, true);
@@ -709,12 +710,12 @@ namespace GEDmill
 
         private void pruneSourcesContextMenuDetails_Click(Object sender, System.EventArgs e)
         {
-            GEDCOMSourceRecord sr = null;
+            GDMSourceRecord sr = null;
             ListViewItem lvi = null;
 
             if (lvPruneSources.SelectedItems.Count == 1) {
                 lvi = lvPruneSources.SelectedItems[0];
-                sr = (GEDCOMSourceRecord)((CListableBool)lvi).Record;
+                sr = (GDMSourceRecord)((CListableBool)lvi).Record;
             }
 
             ShowSourceDetailsDialog(this, ((CListableBool)lvi), sr, true, true);
@@ -729,11 +730,11 @@ namespace GEDmill
             PruneIncluded = 0;
 
             try {
-                var marks = new List<GEDCOMRecord>();
+                var marks = new List<GDMRecord>();
                 // exclude all individuals unless connected in any way to this person through non-excluded people
                 foreach (ListViewItem lvi in lvPruneIndividuals.SelectedItems) {
                     if (lvi is CListableBool) {
-                        GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
+                        GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
                             // First mark as visited all possible relations of irSubject, not following restricted people
                             // Adds to visited list
@@ -769,7 +770,7 @@ namespace GEDmill
                 if (lvPruneIndividuals.SelectedItems.Count == 1) {
                     ListViewItem lvi = lvPruneIndividuals.SelectedItems[0];
                     if (lvi is CListableBool) {
-                        GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
+                        GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
                             fTree.PruneDescendants(ir, false);
                         }
@@ -801,7 +802,7 @@ namespace GEDmill
                 if (lvPruneIndividuals.SelectedItems.Count == 1) {
                     ListViewItem lvi = lvPruneIndividuals.SelectedItems[0];
                     if (lvi is CListableBool) {
-                        GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
+                        GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
                             fTree.PruneDescendants(ir, true);
                         }
@@ -833,7 +834,7 @@ namespace GEDmill
                 if (lvPruneIndividuals.SelectedItems.Count == 1) {
                     ListViewItem lvi = lvPruneIndividuals.SelectedItems[0];
                     if (lvi is CListableBool) {
-                        GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
+                        GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
                             fTree.PruneAncestors(ir, false);
                         }
@@ -865,7 +866,7 @@ namespace GEDmill
                 if (lvPruneIndividuals.SelectedItems.Count == 1) {
                     ListViewItem lvi = lvPruneIndividuals.SelectedItems[0];
                     if (lvi is CListableBool) {
-                        GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
+                        GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
                             fTree.PruneAncestors(ir, true);
                         }
@@ -893,7 +894,7 @@ namespace GEDmill
             PruneIncluded = 0;
             foreach (ListViewItem lvi in lvPruneIndividuals.Items) {
                 if (lvi is CListableBool) {
-                    GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
+                    GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                     if (!ir.GetVisibility()) {
                         ++PruneIncluded;
                         ir.SetVisibility(true);
@@ -919,7 +920,7 @@ namespace GEDmill
             int nHidden = 0;
             foreach (ListViewItem lvi in lvPruneSources.SelectedItems) {
                 if (lvi is CListableBool) {
-                    GEDCOMSourceRecord sr = (GEDCOMSourceRecord)((CListableBool)lvi).Record;
+                    GDMSourceRecord sr = (GDMSourceRecord)((CListableBool)lvi).Record;
                     if (sr != null) {
                         int nHiddenThisTime = sr.SetAllMFRsVisible(false);
                         nHidden += nHiddenThisTime;
@@ -954,7 +955,7 @@ namespace GEDmill
 
             foreach (ListViewItem lvi in lvPruneIndividuals.Items) {
                 if (lvi is CListableBool) {
-                    GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
+                    GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                     if (ir.GetVisibility()) {
                         PruneExcluded++;
                         ir.SetVisibility(false);
@@ -981,7 +982,7 @@ namespace GEDmill
 
             foreach (ListViewItem lvi in lvPruneSources.Items) {
                 if (lvi is CListableBool) {
-                    GEDCOMSourceRecord sr = (GEDCOMSourceRecord)((CListableBool)lvi).Record;
+                    GDMSourceRecord sr = (GDMSourceRecord)((CListableBool)lvi).Record;
                     if (!sr.GetVisibility()) {
                         PruneIncluded++;
                         sr.SetVisibility(true);
@@ -1008,7 +1009,7 @@ namespace GEDmill
 
             foreach (ListViewItem lvi in lvPruneSources.Items) {
                 if (lvi is CListableBool) {
-                    GEDCOMSourceRecord sr = (GEDCOMSourceRecord)((CListableBool)lvi).Record;
+                    GDMSourceRecord sr = (GDMSourceRecord)((CListableBool)lvi).Record;
                     if (sr.GetVisibility()) {
                         PruneExcluded++;
                         sr.SetVisibility(false);
@@ -1037,7 +1038,7 @@ namespace GEDmill
             try {
                 foreach (ListViewItem lvi in lvPruneIndividuals.Items) {
                     if (lvi is CListableBool) {
-                        GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)((CListableBool)lvi).Record;
+                        GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null && ir.IsLive() && ir.GetVisibility()) {
                             PruneExcluded++;
                             ir.SetVisibility(false);
@@ -1130,7 +1131,7 @@ namespace GEDmill
         #endregion
 
         // Brings up a CRecordDetailsForm for the given individual
-        public void ShowIndividualDetailsDialog(Form formParent, CListableBool lbItem, GEDCOMIndividualRecord ir, bool bCanEditPictures, bool bCheckBoxes)
+        public void ShowIndividualDetailsDialog(Form formParent, CListableBool lbItem, GDMIndividualRecord ir, bool bCanEditPictures, bool bCheckBoxes)
         {
         }
 
@@ -1446,7 +1447,7 @@ namespace GEDmill
                             }
                             // Already done on click event: ((CListableBool)li).SetRestricted( !bChecked );
                             if (!isChecked) {
-                                fTree.RestrictAssociatedSources((GEDCOMIndividualRecord)((CListableBool)li).Record);
+                                fTree.RestrictAssociatedSources((GDMIndividualRecord)((CListableBool)li).Record);
                             }
                         }
 
@@ -1522,7 +1523,7 @@ namespace GEDmill
         // Populates the list of individuals records for inclusion/exclusion in the website
         private void FillIndividualsList()
         {
-            var indiRecs = fTree.GetRecords<GEDCOMIndividualRecord>();
+            var indiRecs = fTree.GetRecords<GDMIndividualRecord>();
             fLogger.WriteInfo("FillIndividualsList() : " + indiRecs.Count.ToString());
 
             fDisablePrunepanelCheckEvent = true;
@@ -1547,7 +1548,7 @@ namespace GEDmill
             ListViewItem[] temporaryItemsList = new ListViewItem[indiRecs.Count];
 
             int nItem = 0;
-            foreach (GEDCOMIndividualRecord ir in indiRecs) {
+            foreach (GDMIndividualRecord ir in indiRecs) {
                 // Only allow fully unrestricted individuals.
                 /*if (excludeRestricted && !ir.GetVisibility(EVisibility.Visible)) {
                     continue;
@@ -1572,7 +1573,7 @@ namespace GEDmill
         }
 
         // Attaches sub-items to a list item (before the list item is added to the list)
-        private void SetIndividualSubItems(CListableBool lbItem, GEDCOMIndividualRecord ir, bool checkBoxes)
+        private void SetIndividualSubItems(CListableBool lbItem, GDMIndividualRecord ir, bool checkBoxes)
         {
             // Save checkbox state because SubItems.Clear() clears item.Text and item.Checked as well, so replace old value after calling Clear().
             bool bWasChecked = lbItem.Checked;
@@ -1615,7 +1616,7 @@ namespace GEDmill
         // Populates the list of source records for inclusion/exclusion in the website
         private void FillSourcesList()
         {
-            var sources = fTree.GetRecords<GEDCOMSourceRecord>();
+            var sources = fTree.GetRecords<GDMSourceRecord>();
             fLogger.WriteInfo("FillSourcesList() : " + sources.Count.ToString());
 
             fDisablePrunepanelCheckEvent = true; // call to item.Checked below invokes event handler.
@@ -1640,7 +1641,7 @@ namespace GEDmill
 
             ListViewItem[] temporaryItemsList = new ListViewItem[sources.Count];
             int nItem = 0;
-            foreach (GEDCOMSourceRecord sr in sources) {
+            foreach (GDMSourceRecord sr in sources) {
                 CListableBool item = new CListableBool(sr, true);
                 SetSourceSubItems(item, sr, true);
                 item.Checked = sr.GetVisibility();
@@ -1659,7 +1660,7 @@ namespace GEDmill
         }
 
         // Attaches sub-items to a list item (before the list item is added to the list)
-        private void SetSourceSubItems(CListableBool lbItem, GEDCOMSourceRecord sr, bool firstColumnIsCheckbox)
+        private void SetSourceSubItems(CListableBool lbItem, GDMSourceRecord sr, bool firstColumnIsCheckbox)
         {
             // Store checkbox value because SubItems.Clear() clears item.Text and item.Checked as well!
             bool wasChecked = lbItem.Checked;
@@ -1672,8 +1673,8 @@ namespace GEDmill
             }
 
             string repositories = "";
-            foreach (GEDCOMRepositoryCitation src in sr.RepositoryCitations) {
-                GEDCOMRepositoryRecord rr = src.Value as GEDCOMRepositoryRecord;
+            foreach (GDMRepositoryCitation src in sr.RepositoryCitations) {
+                GDMRepositoryRecord rr = src.Value as GDMRepositoryRecord;
                 if (rr != null) {
                     if (!string.IsNullOrEmpty(rr.RepositoryName)) {
                         if (repositories != "") {
@@ -1712,16 +1713,16 @@ namespace GEDmill
                             break;
                         default:
                             switch (br.RecordType) {
-                                case GEDCOMRecordType.rtIndividual:
+                                case GDMRecordType.rtIndividual:
                                     nCitations++;
                                     nIndis++;
                                     break;
-                                case GEDCOMRecordType.rtFamily:
+                                case GDMRecordType.rtFamily:
                                     // Strictly this should be plus 2 if husb & wife both known, otherwise 1 or 0.
                                     nCitations++;
                                     nFamilies++;
                                     break;
-                                case GEDCOMRecordType.rtNote:
+                                case GDMRecordType.rtNote:
                                     nNotes++;
                                     break;
                                 default:
@@ -1836,7 +1837,7 @@ namespace GEDmill
         }
 
         // Displays useful information about a source record in a dialog box
-        private void ShowSourceDetailsDialog(Form formParent, CListableBool lbItem, GEDCOMSourceRecord sr, bool bCanEditPictures, bool bFirstColumnIsCheckbox)
+        private void ShowSourceDetailsDialog(Form formParent, CListableBool lbItem, GDMSourceRecord sr, bool bCanEditPictures, bool bFirstColumnIsCheckbox)
         {
         }
 
@@ -2253,7 +2254,7 @@ namespace GEDmill
 
             if (CConfig.Instance.KeyIndividuals != null) {
                 foreach (string xref in CConfig.Instance.KeyIndividuals) {
-                    GEDCOMIndividualRecord irKey = fTree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
+                    GDMIndividualRecord irKey = fTree.XRefIndex_Find(xref) as GDMIndividualRecord;
                     if (irKey != null && irKey.GetVisibility()) {
                         sFirstName = "";
                         sSurname = "";

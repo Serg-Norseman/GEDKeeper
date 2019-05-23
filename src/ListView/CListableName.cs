@@ -24,7 +24,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GEDmill.ListView
 {
@@ -40,10 +40,10 @@ namespace GEDmill.ListView
         private string fFirstName;
 
         // The record that this item represents
-        private GEDCOMIndividualRecord fRecord;
+        private GDMIndividualRecord fRecord;
 
 
-        public CListableName(GEDCOMIndividualRecord ir, string surname, string firstname)
+        public CListableName(GDMIndividualRecord ir, string surname, string firstname)
         {
             fRecord = ir;
             fSurname = surname;

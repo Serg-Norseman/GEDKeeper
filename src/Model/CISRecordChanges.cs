@@ -23,7 +23,7 @@
  */
 
 using System.Collections.Generic;
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GEDmill.Model
 {
@@ -37,10 +37,10 @@ namespace GEDmill.Model
         public bool IncludeInWebsite;
 
         // Helper for parser
-        public GEDCOMFileReferenceWithTitle CurrentMFR;
+        public GDMFileReferenceWithTitle CurrentMFR;
 
         // The multimedia file references
-        public List<GEDCOMFileReferenceWithTitle> MFRList;
+        public List<GDMFileReferenceWithTitle> MFRList;
 
         public bool Visibility;
 
@@ -48,7 +48,7 @@ namespace GEDmill.Model
         public CISRecordChanges(bool includeInWebsite)
         {
             IncludeInWebsite = includeInWebsite;
-            MFRList = new List<GEDCOMFileReferenceWithTitle>();
+            MFRList = new List<GDMFileReferenceWithTitle>();
             CurrentMFR = null;
             Visibility = true;
         }

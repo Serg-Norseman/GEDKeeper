@@ -26,7 +26,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using GEDmill.Model;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -45,7 +45,7 @@ namespace GEDmill.HTML
         private string fBackgroundImageFilename;
 
 
-        public CreatorStylesheet(GEDCOMTree gedcom, IProgressCallback progress, string sW3cfile, string sCssFilename, string sBackgroundImageFilename) : base(gedcom, progress, sW3cfile)
+        public CreatorStylesheet(GDMTree gedcom, IProgressCallback progress, string sW3cfile, string sCssFilename, string sBackgroundImageFilename) : base(gedcom, progress, sW3cfile)
         {
             fCssFilename = sCssFilename;
             fBackgroundImageFilename = sBackgroundImageFilename;

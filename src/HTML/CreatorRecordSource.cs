@@ -27,7 +27,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using GEDmill.Model;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -40,10 +40,10 @@ namespace GEDmill.HTML
         private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CreatorRecordSource).Name);
 
         // The source record that we are creating the page for.
-        private GEDCOMSourceRecord fSourceRecord;
+        private GDMSourceRecord fSourceRecord;
 
 
-        public CreatorRecordSource(GEDCOMTree gedcom, IProgressCallback progress, string w3cfile, GEDCOMSourceRecord sr) : base(gedcom, progress, w3cfile)
+        public CreatorRecordSource(GDMTree gedcom, IProgressCallback progress, string w3cfile, GDMSourceRecord sr) : base(gedcom, progress, w3cfile)
         {
             fSourceRecord = sr;
         }
@@ -83,7 +83,7 @@ namespace GEDmill.HTML
                     sourName = "Source ";
                     bool gotSourceName = false;
                     // Try user reference number
-                    foreach (GEDCOMUserReference urn in fSourceRecord.UserReferences) {
+                    foreach (GDMUserReference urn in fSourceRecord.UserReferences) {
                         if (urn.StringValue != "") {
                             sourName += urn.StringValue;
                             gotSourceName = true;
@@ -99,14 +99,14 @@ namespace GEDmill.HTML
                 f.WriteLine("<h1>{0}</h1>", EscapeHTML(sourName, false));
 
                 // Add repository information
-                foreach (GEDCOMRepositoryCitation src in fSourceRecord.RepositoryCitations) {
-                    GEDCOMRepositoryRecord rr = src.Value as GEDCOMRepositoryRecord;
+                foreach (GDMRepositoryCitation src in fSourceRecord.RepositoryCitations) {
+                    GDMRepositoryRecord rr = src.Value as GDMRepositoryRecord;
                     if (rr != null) {
                         if (!string.IsNullOrEmpty(rr.RepositoryName)) {
                             f.WriteLine("<h2>{0}</h2>", EscapeHTML(rr.RepositoryName, false));
                         }
 
-                        foreach (GEDCOMNotes ns in rr.Notes) {
+                        foreach (GDMNotes ns in rr.Notes) {
                             string noteText;
                             if (CConfig.Instance.ObfuscateEmails) {
                                 noteText = ObfuscateEmail(ns.Notes.Text);
@@ -118,7 +118,7 @@ namespace GEDmill.HTML
                     }
 
                     if (src.Notes != null && src.Notes.Count > 0) {
-                        foreach (GEDCOMNotes ns in src.Notes) {
+                        foreach (GDMNotes ns in src.Notes) {
                             string noteText;
                             if (CConfig.Instance.ObfuscateEmails) {
                                 noteText = ObfuscateEmail(ns.Notes.Text);
@@ -182,7 +182,7 @@ namespace GEDmill.HTML
                     var htBackrefs = fSourceRecord.MakeBackReferences();
                     IDictionaryEnumerator enumerator = htBackrefs.GetEnumerator();
                     while (enumerator.MoveNext()) {
-                        GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)(enumerator.Value);
+                        GDMIndividualRecord ir = (GDMIndividualRecord)(enumerator.Value);
                         if (ir != null && ir.GetVisibility()) {
                             string link = MakeLink(ir);
                             if (link != "") {

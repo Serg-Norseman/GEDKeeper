@@ -28,7 +28,7 @@ using System.IO;
 using GEDmill.Exceptions;
 using GEDmill.MiniTree;
 using GEDmill.Model;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -43,13 +43,13 @@ namespace GEDmill.HTML
         private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(Website).Name);
 
         // The raw data that we are turning into a website.
-        protected GEDCOMTree fTree;
+        protected GDMTree fTree;
 
         // Pointer to the window showing the progress bar, so that web page creation progress can be shown to user.
         protected IProgressCallback fProgressWindow;
 
 
-        public Website(GEDCOMTree gedcom, IProgressCallback progress)
+        public Website(GDMTree gedcom, IProgressCallback progress)
         {
             fTree = gedcom;
             fProgressWindow = progress;
@@ -75,9 +75,9 @@ namespace GEDmill.HTML
                   + 1  // W3C Sticker
                   + 1  // Background image
                   + 1  // Style sheet
-                  + gfstats[(int)GEDCOMRecordType.rtIndividual]
+                  + gfstats[(int)GDMRecordType.rtIndividual]
                   + 1  // Individuals Index
-                  + gfstats[(int)GEDCOMRecordType.rtSource]
+                  + gfstats[(int)GDMRecordType.rtSource]
                   + 1  // Front page
                   + 1  // Help page
                   + 1  // CD ROM (Doesn't matter here that CD ROM autorun might not be included.)
@@ -143,8 +143,8 @@ namespace GEDmill.HTML
 
                 // Create the pages for the individual records.
                 fProgressWindow.SetText("Creating individual pages");
-                var indiList = fTree.GetRecords<GEDCOMIndividualRecord>();
-                foreach (GEDCOMIndividualRecord ir in indiList) {
+                var indiList = fTree.GetRecords<GDMIndividualRecord>();
+                foreach (GDMIndividualRecord ir in indiList) {
                     CreatorRecordIndividual ipc = new CreatorRecordIndividual(fTree, fProgressWindow, sW3CFilename, ir, indiIndexCreator, paintbox);
                     if (ipc.Create(stats)) {
                         stats.Individuals++;
@@ -171,8 +171,8 @@ namespace GEDmill.HTML
 
                 // Create the pages for the source records.
                 fProgressWindow.SetText("Creating source pages");
-                var sourList = fTree.GetRecords<GEDCOMSourceRecord>();
-                foreach (GEDCOMSourceRecord sr in sourList) {
+                var sourList = fTree.GetRecords<GDMSourceRecord>();
+                foreach (GDMSourceRecord sr in sourList) {
                     CreatorRecordSource spc = new CreatorRecordSource(fTree, fProgressWindow, sW3CFilename, sr);
                     if (spc.Create(stats)) {
                         stats.Sources++;

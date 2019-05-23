@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Logging;
 
 namespace GEDmill.MiniTree
@@ -74,7 +74,7 @@ namespace GEDmill.MiniTree
             public bool Concealed;
 
 
-            public CBoxText(GEDCOMIndividualRecord ir)
+            public CBoxText(GDMIndividualRecord ir)
             {
                 FirstName = "";
                 Surname = "";
@@ -104,7 +104,7 @@ namespace GEDmill.MiniTree
         protected SizeF fSizeTotal;
 
         // Reference to the global gedcom data
-        protected GEDCOMTree fTree;
+        protected GDMTree fTree;
 
 
         // Returns the height of the whole tree diagram.
@@ -114,7 +114,7 @@ namespace GEDmill.MiniTree
         }
 
 
-        public TreeDrawer(GEDCOMTree tree)
+        public TreeDrawer(GDMTree tree)
         {
             fTree = tree;
         }
@@ -122,7 +122,7 @@ namespace GEDmill.MiniTree
         // This is the main tree drawing method.
         // irSubject is the individual for whom the tree is based. 
         // nTargeWidth is the width below which the layout is free to use up space to produce a nice tree.
-        public List<MiniTreeMap> CreateMiniTree(Paintbox paintbox, GEDCOMIndividualRecord ir, string fileName, int targetWidth, ImageFormat imageFormat)
+        public List<MiniTreeMap> CreateMiniTree(Paintbox paintbox, GDMIndividualRecord ir, string fileName, int targetWidth, ImageFormat imageFormat)
         {
             // First calculate size required for tree, by iterating through individuals and building a data structure
             MiniTreeGroup mtgParent = CreateDataStructure(ir);
@@ -272,10 +272,10 @@ namespace GEDmill.MiniTree
         }
 
         // Calculate size required for tree by iterating through individuals and building a data structure.
-        protected MiniTreeGroup CreateDataStructure(GEDCOMIndividualRecord irSubject)
+        protected MiniTreeGroup CreateDataStructure(GDMIndividualRecord irSubject)
         {
             // Add subject's frParents
-            GEDCOMFamilyRecord frParents = irSubject.GetParentsFamily(false);
+            GDMFamilyRecord frParents = irSubject.GetParentsFamily(false);
             MiniTreeGroup mtgParents = new MiniTreeGroup();
             MiniTreeIndividual mtiFather = null;
             if (frParents != null) {
@@ -297,7 +297,7 @@ namespace GEDmill.MiniTree
             // For each sibling (including the subject)
             while (true)
             {
-                GEDCOMIndividualRecord irSibling = GetChild(frParents, nSiblings, irSubject);
+                GDMIndividualRecord irSibling = GetChild(frParents, nSiblings, irSubject);
                 if (irSibling == null) {
                     break;
                 }
@@ -310,8 +310,8 @@ namespace GEDmill.MiniTree
                     MiniTreeGroup.ECrossbar ecbCrossbar = MiniTreeGroup.ECrossbar.Solid;
                     var alFamily = irSubject.GetFamilyList();
 
-                    foreach (GEDCOMFamilyRecord fr in alFamily) {
-                        GEDCOMIndividualRecord irSpouse = fr.GetSpouseBy(irSubject);
+                    foreach (GDMFamilyRecord fr in alFamily) {
+                        GDMIndividualRecord irSpouse = fr.GetSpouseBy(irSubject);
 
                         if (fr.GetHusband() != irSubject) {
                             mtiRightmostSibling = AddToGroup(irSpouse, mtgSiblings);
@@ -328,7 +328,7 @@ namespace GEDmill.MiniTree
                         }
 
                         int nGrandchildren = 0;
-                        GEDCOMIndividualRecord irGrandchild = null;
+                        GDMIndividualRecord irGrandchild = null;
 
                         // If we have already added an offspring box (from previous marriage) need connect this box to it as its right box.
                         if (mtgOffspring != null) {
@@ -421,17 +421,17 @@ namespace GEDmill.MiniTree
         }
 
         // Gets the n'th child in the fr, or returns the default individual if first child requested and no fr.
-        private static GEDCOMIndividualRecord GetChild(GEDCOMFamilyRecord fr, int nChild, GEDCOMIndividualRecord irDefault)
+        private static GDMIndividualRecord GetChild(GDMFamilyRecord fr, int nChild, GDMIndividualRecord irDefault)
         {
-            GEDCOMIndividualRecord irChild = null;
+            GDMIndividualRecord irChild = null;
             if (fr != null && nChild < fr.Children.Count) {
                 // The ordering of children in the tree can be selected to be the same as it is in the GEDCOM file. This 
                 // is because the file should be ordered as the user chose to order the fr when entering the data in 
                 // their fr history app, regardless of actual birth dates. 
                 if (CConfig.Instance.KeepSiblingOrder) {
-                    irChild = fr.Children[nChild].Value as GEDCOMIndividualRecord;
+                    irChild = fr.Children[nChild].Value as GDMIndividualRecord;
                 } else {
-                    irChild = fr.Children[nChild].Value as GEDCOMIndividualRecord;
+                    irChild = fr.Children[nChild].Value as GDMIndividualRecord;
                 }
             } else {
                 // Return the default individual as first and only child of fr.
@@ -443,7 +443,7 @@ namespace GEDmill.MiniTree
         }
 
         // Add a box for the individual to the specified group.
-        private static MiniTreeIndividual AddToGroup(GEDCOMIndividualRecord ir, MiniTreeGroup mtg)
+        private static MiniTreeIndividual AddToGroup(GDMIndividualRecord ir, MiniTreeGroup mtg)
         {
             MiniTreeIndividual mti = null;
             if (Exists(ir)) {
@@ -456,7 +456,7 @@ namespace GEDmill.MiniTree
         }
 
         // Returns true if the supplied record is valid for inclusion in the tree
-        private static bool Exists(GEDCOMIndividualRecord ir)
+        private static bool Exists(GDMIndividualRecord ir)
         {
             return (ir != null && ir.GetVisibility());
         }

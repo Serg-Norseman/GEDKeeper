@@ -25,7 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GEDmill.MiniTree
 {
@@ -51,7 +51,7 @@ namespace GEDmill.MiniTree
         private const float PADDING_VERT = 4.0f;
 
         // The individual that this box represents
-        private GEDCOMIndividualRecord fIndiRec;
+        private GDMIndividualRecord fIndiRec;
 
         // Whether this box can be clicked to link to the individual record page
         private bool fLinkable;
@@ -173,7 +173,7 @@ namespace GEDmill.MiniTree
         }
 
 
-        public MiniTreeIndividual(GEDCOMIndividualRecord ir, string firstNames, string surname, string date,
+        public MiniTreeIndividual(GDMIndividualRecord ir, string firstNames, string surname, string date,
                                   bool createLink, bool createStalk, bool highlight, bool concealed, bool shade,
                                   bool conserveWidth)
         {

@@ -22,7 +22,7 @@
  *
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GEDmill.Model
 {
@@ -35,14 +35,14 @@ namespace GEDmill.Model
     {
         public string Name;
         public string SourceHtml;
-        public GEDCOMList<GEDCOMSourceCitation> Sources;
+        public GDMList<GDMSourceCitation> Sources;
 
 
         public NameAndSource(string name)
         {
             Name = name;
             SourceHtml = "";
-            Sources = new GEDCOMList<GEDCOMSourceCitation>(null);
+            Sources = new GDMList<GDMSourceCitation>(null);
         }
     }
 }

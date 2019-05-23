@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using GEDmill.Model;
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GEDmill.HTML
 {
@@ -40,20 +40,20 @@ namespace GEDmill.HTML
         protected List<Multimedia> fMultimediaList;
 
 
-        protected CreatorRecord(GEDCOMTree gedcom, IProgressCallback progress, string w3cfile) : base(gedcom, progress, w3cfile)
+        protected CreatorRecord(GDMTree gedcom, IProgressCallback progress, string w3cfile) : base(gedcom, progress, w3cfile)
         {
             fMultimediaList = new List<Multimedia>();
         }
 
         // Adds the given multimedia links to the given multimedia list.
-        protected void AddMultimedia(GEDCOMList<GEDCOMMultimediaLink> multimediaLinks, string mmPrefix,
+        protected void AddMultimedia(GDMList<GDMMultimediaLink> multimediaLinks, string mmPrefix,
                                      string mmLargePrefix, uint maxWidth, uint maxHeight, Stats stats)
         {
             // TODO: ml.GetFileReferences();
-            var fileRefs = new List<GEDCOMFileReference>();
+            var fileRefs = new List<GDMFileReference>();
             foreach (var mmLink in multimediaLinks) {
                 if (mmLink.IsPointer) {
-                    var mmRec = mmLink.Value as GEDCOMMultimediaRecord;
+                    var mmRec = mmLink.Value as GDMMultimediaRecord;
                     if (!mmRec.GetVisibility()) {
                         // user chose not to show this picture
                         continue;
@@ -76,14 +76,14 @@ namespace GEDmill.HTML
         }
 
         // Adds an HTML page footer (Record date, W3C sticker, GEDmill credit etc.)
-        protected void OutputFooter(HTMLFile f, GEDCOMRecord r)
+        protected void OutputFooter(HTMLFile f, GDMRecord r)
         {
             f.WriteLine("      <div id=\"footer\">");
             if ((r.UserReferences.Count > 0)
               || (!string.IsNullOrEmpty(r.AutomatedRecordID))
               || (r.ChangeDate != null)
               || (CConfig.Instance.CustomFooter != "")) {
-                foreach (GEDCOMUserReference urn in r.UserReferences) {
+                foreach (GDMUserReference urn in r.UserReferences) {
                     string idType = EscapeHTML(urn.ReferenceType, false);
                     if (idType == "") {
                         idType = "User reference number";
@@ -96,7 +96,7 @@ namespace GEDmill.HTML
                 }
 
                 if (r.ChangeDate != null) {
-                    GEDCOMChangeDate changeDate = r.ChangeDate;
+                    GDMChangeDate changeDate = r.ChangeDate;
                     string dtx = r.ChangeDate.ToString();
                     if (changeDate != null && dtx != null) {
                         if (dtx != "") {
@@ -124,7 +124,7 @@ namespace GEDmill.HTML
         }
 
         // Adds the given list of file references to the multimedia list.
-        private void AddMultimediaFileReferences(List<GEDCOMFileReference> fileRefs, string mmPrefix,
+        private void AddMultimediaFileReferences(List<GDMFileReference> fileRefs, string mmPrefix,
                                                  string mmLargePrefix, uint maxWidth, uint maxHeight, Stats stats)
         {
             if (fileRefs == null) {
@@ -132,7 +132,7 @@ namespace GEDmill.HTML
             }
 
             for (int i = 0; i < fileRefs.Count; i++) {
-                GEDCOMFileReferenceWithTitle mfr = fileRefs[i] as GEDCOMFileReferenceWithTitle;
+                GDMFileReferenceWithTitle mfr = fileRefs[i] as GDMFileReferenceWithTitle;
                 string copyFilename = "";
                 int nMmOrdering = i;
                 string mmTitle = mfr.Title;
@@ -228,13 +228,13 @@ namespace GEDmill.HTML
         }
 
         // Outputs the HTML for the Notes section of the page
-        protected static void OutputNotes(HTMLFile f, GEDCOMList<GEDCOMNotes> notes)
+        protected static void OutputNotes(HTMLFile f, GDMList<GDMNotes> notes)
         {
             if (notes.Count > 0) {
                 // Generate notes list into a local array before adding header title. This is to cope with the case where all notes are nothing but blanks.
                 var note_strings = new List<string>(notes.Count);
 
-                foreach (GEDCOMNotes ns in notes) {
+                foreach (GDMNotes ns in notes) {
                     string noteText = CConfig.Instance.ObfuscateEmails ? ObfuscateEmail(ns.Notes.Text) : ns.Notes.Text;
                     note_strings.Add(string.Concat("<li>", EscapeHTML(noteText, false), "</li>"));
                 }

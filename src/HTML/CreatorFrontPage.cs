@@ -28,7 +28,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using GEDmill.Model;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -44,7 +44,7 @@ namespace GEDmill.HTML
         private Stats fStats;
 
 
-        public CreatorFrontPage(GEDCOMTree gedcom, IProgressCallback progress, string w3cfile, Stats stats) : base(gedcom, progress, w3cfile)
+        public CreatorFrontPage(GDMTree gedcom, IProgressCallback progress, string w3cfile, Stats stats) : base(gedcom, progress, w3cfile)
         {
             fStats = stats;
         }
@@ -111,7 +111,7 @@ namespace GEDmill.HTML
                     var censoredKeyIndividuals = new List<string>(CConfig.Instance.KeyIndividuals.Count);
 
                     foreach (string keyXref in CConfig.Instance.KeyIndividuals) {
-                        GEDCOMIndividualRecord air = fTree.XRefIndex_Find(keyXref) as GEDCOMIndividualRecord;
+                        GDMIndividualRecord air = fTree.XRefIndex_Find(keyXref) as GDMIndividualRecord;
                         if (air != null) {
                             censoredKeyIndividuals.Add(MakeLink(air));
                         }

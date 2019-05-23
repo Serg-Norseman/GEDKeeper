@@ -22,7 +22,7 @@
  *
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GEDmill.Model
 {
@@ -39,21 +39,21 @@ namespace GEDmill.Model
     /// <summary>
     /// Class used to find the best date to use for an individual's birth or death.
     /// Naturally an actual birth record would be best, but if this is missing, we can use the Christening date etc..
-    /// See also GEDCOMDateValue.
+    /// See also GDMDateValue.
     /// </summary>
     public class QualifiedDate
     {
         public DateQualification Qualification;
-        public GEDCOMDateValue Date;
+        public GDMDateValue Date;
 
 
-        public QualifiedDate(GEDCOMDateValue date, DateQualification qualification)
+        public QualifiedDate(GDMDateValue date, DateQualification qualification)
         {
             Date = date;
             Qualification = qualification;
         }
 
-        // Just delegates to GEDCOMDateValue::ToString()
+        // Just delegates to GDMDateValue::ToString()
         public override string ToString()
         {
             if (Date != null) {

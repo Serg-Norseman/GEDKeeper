@@ -22,7 +22,7 @@
  *
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GEDmill.MiniTree
 {
@@ -48,13 +48,13 @@ namespace GEDmill.MiniTree
         public int Y2;
 
         // The individual record reached by clicking this box. Used for HREF.
-        public GEDCOMIndividualRecord IndiRec;
+        public GDMIndividualRecord IndiRec;
 
         // Whether this individual should be a clickable region on the alMap.
         public bool Linkable;
 
 
-        public MiniTreeMap(string name, GEDCOMIndividualRecord ir, bool linkable, int x1, int y1, int x2, int y2)
+        public MiniTreeMap(string name, GDMIndividualRecord ir, bool linkable, int x1, int y1, int x2, int y2)
         {
             X1 = x1;
             Y1 = y1;

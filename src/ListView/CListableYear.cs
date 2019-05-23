@@ -24,7 +24,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Types;
 
 namespace GEDmill.ListView
@@ -35,9 +35,9 @@ namespace GEDmill.ListView
     public class CListableYear : ListViewItem.ListViewSubItem, IComparable, IComparable<CListableYear>
     {
         // Date holds the year
-        private GEDCOMDateValue fDate;
+        private GDMDateValue fDate;
 
-        public CListableYear(GEDCOMDateValue date)
+        public CListableYear(GDMDateValue date)
         {
             fDate = date;
             base.Text = ToString();

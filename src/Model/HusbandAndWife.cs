@@ -22,7 +22,7 @@
  *
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GEDmill.Model
 {
@@ -32,11 +32,11 @@ namespace GEDmill.Model
     /// </summary>
     public class HusbandAndWife
     {
-        public GEDCOMIndividualRecord Husband;
-        public GEDCOMIndividualRecord Wife;
+        public GDMIndividualRecord Husband;
+        public GDMIndividualRecord Wife;
 
 
-        public HusbandAndWife(GEDCOMIndividualRecord husband, GEDCOMIndividualRecord wife)
+        public HusbandAndWife(GDMIndividualRecord husband, GDMIndividualRecord wife)
         {
             Husband = husband;
             Wife = wife;

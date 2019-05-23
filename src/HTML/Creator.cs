@@ -30,7 +30,7 @@ using System.IO;
 using System.Text;
 using GEDmill.Exceptions;
 using GEDmill.Model;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -45,7 +45,7 @@ namespace GEDmill.HTML
         protected const string PageDescription = "GEDmill GEDCOM to HTML family history website";
 
         // The raw data that we are turning into a website.
-        protected GEDCOMTree fTree;
+        protected GDMTree fTree;
 
         // Pointer to the window showing the progress bar, so that web page creation progress can be shown to user.
         private IProgressCallback fProgressWindow;
@@ -58,7 +58,7 @@ namespace GEDmill.HTML
         private string fW3CFile;
 
 
-        protected Creator(GEDCOMTree gedcom, IProgressCallback progress, string sW3cfile)
+        protected Creator(GDMTree gedcom, IProgressCallback progress, string sW3cfile)
         {
             fTree = gedcom;
             fProgressWindow = progress;
@@ -559,7 +559,7 @@ namespace GEDmill.HTML
         }
 
         // Creates link HTML for the individual e.g. <a href="indiI1.html">Fred Bloggs</a>
-        protected static string MakeLink(GEDCOMIndividualRecord ir)
+        protected static string MakeLink(GDMIndividualRecord ir)
         {
             string name = ir.GetPrimaryFullName();
             string dummy = "";
@@ -574,7 +574,7 @@ namespace GEDmill.HTML
         }
 
         // Creates link HTML for the individual e.g. <a href="indiI1.html">Next Child</a>. Uses name provided by caller.
-        protected static string MakeLink(GEDCOMIndividualRecord ir, string name)
+        protected static string MakeLink(GDMIndividualRecord ir, string name)
         {
             string link;
             if (!ir.GetVisibility()) {
@@ -588,12 +588,12 @@ namespace GEDmill.HTML
 
         // Returns a string to use as a sFilename for this individual's HTML page.
         // The string is just the sFilename, not a fully qualified path.
-        protected static string GetIndividualHTMLFilename(GEDCOMIndividualRecord ir)
+        protected static string GetIndividualHTMLFilename(GDMIndividualRecord ir)
         {
             string relativeFilename = string.Concat("indi", ir.XRef, ".", CConfig.Instance.HtmlExtension);
             if (CConfig.Instance.UserRecFilename) {
                 if (ir.UserReferences.Count > 0) {
-                    GEDCOMUserReference urn = ir.UserReferences[0];
+                    GDMUserReference urn = ir.UserReferences[0];
                     string filenameUserRef = EscapeFilename(urn.StringValue);
                     if (filenameUserRef.Length > 0) {
                         relativeFilename = string.Concat("indi", filenameUserRef, ".", CConfig.Instance.HtmlExtension);

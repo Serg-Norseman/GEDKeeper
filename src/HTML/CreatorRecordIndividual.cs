@@ -29,7 +29,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using GEDmill.MiniTree;
 using GEDmill.Model;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Logging;
 using GKCore.Types;
 
@@ -40,7 +40,7 @@ namespace GEDmill.HTML
         private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CreatorRecordIndividual).Name);
 
         // The individual record that we are creating the page for.
-        private GEDCOMIndividualRecord fIndiRec;
+        private GDMIndividualRecord fIndiRec;
 
         // Indicates that this individual should have most of the record data excluded from the website for privacy.
         private bool fConcealed;
@@ -52,7 +52,7 @@ namespace GEDmill.HTML
         private List<Event> fAttributeList;
 
         // List of sources referenced by this page.
-        private List<GEDCOMSourceCitation> fReferenceList;
+        private List<GDMSourceCitation> fReferenceList;
 
         // List of occupations known for the individual
         private List<OccupationCounter> fOccupations;
@@ -70,13 +70,13 @@ namespace GEDmill.HTML
         private QualifiedDate fInferredBirthday;
 
         // The individual's date of birth
-        private GEDCOMDateValue fActualBirthday;
+        private GDMDateValue fActualBirthday;
 
         // A date inferred for the individual's date of death, with associated quality so that it can be rejected in favour of more certain information.
         private QualifiedDate fInferredDeathday;
 
         // The individual's date of death
-        private GEDCOMDateValue fActualDeathday;
+        private GDMDateValue fActualDeathday;
 
         // Records first occurrence of one-off events, so that they may be marked as "preferred"
         private Dictionary<string, Event> fFirstFoundEvent;
@@ -130,7 +130,7 @@ namespace GEDmill.HTML
         private Paintbox fPaintbox;
 
 
-        public CreatorRecordIndividual(GEDCOMTree gedcom, IProgressCallback progress, string w3cfile, GEDCOMIndividualRecord ir, CreatorIndexIndividuals indiIndexCreator, Paintbox paintbox) : base(gedcom, progress, w3cfile)
+        public CreatorRecordIndividual(GDMTree gedcom, IProgressCallback progress, string w3cfile, GDMIndividualRecord ir, CreatorIndexIndividuals indiIndexCreator, Paintbox paintbox) : base(gedcom, progress, w3cfile)
         {
             fIndiRec = ir;
             fIndiIndexCreator = indiIndexCreator;
@@ -148,7 +148,7 @@ namespace GEDmill.HTML
             fConcealed = !fIndiRec.GetVisibility();
             fEventList = new List<Event>();
             fAttributeList = new List<Event>();
-            fReferenceList = new List<GEDCOMSourceCitation>();
+            fReferenceList = new List<GDMSourceCitation>();
             fOccupations = new List<OccupationCounter>();
             fPreviousChildLink = "";
             fNextChildLink = "";
@@ -188,16 +188,16 @@ namespace GEDmill.HTML
 
             ConstructName();
 
-            GEDCOMDateValue age30;
+            GDMDateValue age30;
             if (fInferredBirthday != null) {
-                age30 = new GEDCOMDateValue(null);
+                age30 = new GDMDateValue(null);
                 age30.Assign(fInferredBirthday.Date);
             } else {
-                age30 = new GEDCOMDateValue(null);
+                age30 = new GDMDateValue(null);
                 age30.SetDateTime(DateTime.Now);
             }
             try {
-                ((GEDCOMDate)age30.Value).Year += (short)CConfig.Instance.AgeForOccupation;
+                ((GDMDate)age30.Value).Year += (short)CConfig.Instance.AgeForOccupation;
             } catch { }
 
             // We should have birthday and deathday by now, so find longest occupation
@@ -207,11 +207,11 @@ namespace GEDmill.HTML
 
             // Go through all families this person was a irSubject to
             if (!fConcealed) {
-                foreach (GEDCOMSpouseToFamilyLink sfl in fIndiRec.SpouseToFamilyLinks) {
-                    GEDCOMFamilyRecord fr = (sfl.Value as GEDCOMFamilyRecord);
+                foreach (GDMSpouseToFamilyLink sfl in fIndiRec.SpouseToFamilyLinks) {
+                    GDMFamilyRecord fr = (sfl.Value as GDMFamilyRecord);
                     if (fr != null) {
                         // Find the irSubject's name
-                        GEDCOMIndividualRecord spouse = null;
+                        GDMIndividualRecord spouse = null;
                         string spouseLink = "";
                         spouse = fr.GetSpouseBy(fIndiRec);
                         if (spouse != null && spouse.GetVisibility()) {
@@ -219,7 +219,7 @@ namespace GEDmill.HTML
                         }
 
                         // Add fr events as events connected to this individual
-                        foreach (GEDCOMFamilyEvent fes in fr.Events) {
+                        foreach (GDMFamilyEvent fes in fr.Events) {
                             ProcessEvent(fes, spouseLink);
                         }
 
@@ -259,13 +259,13 @@ namespace GEDmill.HTML
         }
 
         // Adds the marriage associated with the fr record to the list of events. Also adds irSubject death if within this person's lifetime.
-        private void AddMarriage(GEDCOMIndividualRecord spouse, string spouseLink, GEDCOMFamilyRecord fr)
+        private void AddMarriage(GDMIndividualRecord spouse, string spouseLink, GDMFamilyRecord fr)
         {
             // Find wedding date
             if (spouse != null) {
                 string sourceRefs = AddSpouseDeath(spouse, spouseLink);
 
-                GEDCOMDateValue marriageDate;
+                GDMDateValue marriageDate;
                 string marriageNote;
                 string marriagePlace;
                 sourceRefs = AddMarriageEvent(fr, sourceRefs, out marriageDate, out marriageNote, out marriagePlace);
@@ -273,7 +273,7 @@ namespace GEDmill.HTML
                 marriageNote = BuildMaritalStatusNote(fr, marriageNote);
 
                 // Add fr record notes to marriage event
-                foreach (GEDCOMNotes ns in fr.Notes) {
+                foreach (GDMNotes ns in fr.Notes) {
                     if (marriageNote != "") {
                         marriageNote += "\n";
                     }
@@ -307,21 +307,21 @@ namespace GEDmill.HTML
             DateTime dtNow = DateTime.Now;
 
             // Go through all families this person was a irSibling in
-            foreach (GEDCOMChildToFamilyLink cfl in fIndiRec.ChildToFamilyLinks) {
-                GEDCOMFamilyRecord fr = (cfl.Value as GEDCOMFamilyRecord);
+            foreach (GDMChildToFamilyLink cfl in fIndiRec.ChildToFamilyLinks) {
+                GDMFamilyRecord fr = (cfl.Value as GDMFamilyRecord);
                 if (fr != null) {
-                    GEDCOMIndividualRecord husband = fr.GetHusband();
-                    GEDCOMIndividualRecord wife = fr.GetWife();
+                    GDMIndividualRecord husband = fr.GetHusband();
+                    GDMIndividualRecord wife = fr.GetWife();
 
                     if (husband != null || wife != null) {
                         fParents.Add(new HusbandAndWife(husband, wife));
                     }
 
                     // Get all the children in order, to find previous and next irSibling
-                    GEDCOMDateValue testBirthday = (fInferredBirthday != null) ? fInferredBirthday.Date : null;
+                    GDMDateValue testBirthday = (fInferredBirthday != null) ? fInferredBirthday.Date : null;
 
                     if (testBirthday == null) {
-                        testBirthday = new GEDCOMDateValue(null);
+                        testBirthday = new GDMDateValue(null);
                         testBirthday.SetDateTime(dtNow);
                     }
 
@@ -332,12 +332,12 @@ namespace GEDmill.HTML
                         if (ch.XRef == fIndiRec.XRef)
                             continue;
 
-                        GEDCOMIndividualRecord child = ch.Value as GEDCOMIndividualRecord;
+                        GDMIndividualRecord child = ch.Value as GDMIndividualRecord;
                         if (child != null) {
                             if (!child.GetVisibility())
                                 continue;
 
-                            GEDCOMCustomEvent childBirthday = child.FindEvent("BIRT");
+                            GDMCustomEvent childBirthday = child.FindEvent("BIRT");
                             if (childBirthday == null) {
                                 childBirthday = child.FindEvent("CHR");
                             }
@@ -345,11 +345,11 @@ namespace GEDmill.HTML
                                 childBirthday = child.FindEvent("BAPM");
                             }
 
-                            GEDCOMDateValue childBirthdate = null;
+                            GDMDateValue childBirthdate = null;
                             if (childBirthday != null)
                                 childBirthdate = childBirthday.Date;
                             if (childBirthdate == null) {
-                                childBirthdate = new GEDCOMDateValue(null);
+                                childBirthdate = new GDMDateValue(null);
                                 childBirthdate.SetDateTime(dtNow);
                             }
 
@@ -380,7 +380,7 @@ namespace GEDmill.HTML
             // Create some strings to use in index entry
             string sUserRef = "";
             if (fIndiRec.UserReferences.Count > 0) {
-                GEDCOMUserReference urn = fIndiRec.UserReferences[0];
+                GDMUserReference urn = fIndiRec.UserReferences[0];
                 sUserRef = EscapeHTML(urn.StringValue, false);
                 if (sUserRef.Length > 0) {
                     sUserRef = string.Concat(" [", sUserRef, "]");
@@ -417,14 +417,14 @@ namespace GEDmill.HTML
         }
 
         // Extracts the data from the MARR event for the fr record.
-        private string AddMarriageEvent(GEDCOMFamilyRecord fr, string sourceRefs, out GEDCOMDateValue marriageDate, out string marriageNote, out string marriagePlace)
+        private string AddMarriageEvent(GDMFamilyRecord fr, string sourceRefs, out GDMDateValue marriageDate, out string marriageNote, out string marriagePlace)
         {
             // Find out when they were married
             marriageDate = null;
             marriagePlace = "";
             sourceRefs = "";
             marriageNote = "";
-            foreach (GEDCOMFamilyEvent fes in fr.Events) {
+            foreach (GDMFamilyEvent fes in fr.Events) {
                 if (fes.Name == "MARR") {
                     {
                         marriageDate = fes.Date;
@@ -437,7 +437,7 @@ namespace GEDmill.HTML
                         sourceRefs = AddSources(ref fReferenceList, fes.SourceCitations);
 
                         if (fes.Notes != null) {
-                            foreach (GEDCOMNotes ns in fes.Notes) {
+                            foreach (GDMNotes ns in fes.Notes) {
                                 if (marriageNote != "") {
                                     marriageNote += "\n";
                                 }
@@ -457,14 +457,14 @@ namespace GEDmill.HTML
         }
 
         // Extracts the data from the DEAT event for the given individual and adds it if it was an event in the current individual's lifetime.
-        private string AddSpouseDeath(GEDCOMIndividualRecord spouse, string spouseLink)
+        private string AddSpouseDeath(GDMIndividualRecord spouse, string spouseLink)
         {
             string sourceRefs = "";
             string place = "";
             if (spouse.GetVisibility()) {
                 // Record death of irSubject if within this person's lifetime
-                GEDCOMDateValue spouseDeathDate = null;
-                foreach (GEDCOMCustomEvent ies in spouse.Events) {
+                GDMDateValue spouseDeathDate = null;
+                foreach (GDMCustomEvent ies in spouse.Events) {
                     if (ies.Name == "DEAT") {
                         {
                             spouseDeathDate = ies.Date;
@@ -495,20 +495,20 @@ namespace GEDmill.HTML
         }
 
         // Adds birth, baptism, death etc of the children in the given fr.
-        private void AddChildrensEvents(GEDCOMFamilyRecord fr)
+        private void AddChildrensEvents(GDMFamilyRecord fr)
         {
             // Find out all the children.
             foreach (var ch in fr.Children) {
-                GEDCOMIndividualRecord child = ch.Value as GEDCOMIndividualRecord;
+                GDMIndividualRecord child = ch.Value as GDMIndividualRecord;
 
                 if (child != null) {
                     bool childConcealed = !child.GetVisibility();
 
                     string childSex = "child";
                     if (!childConcealed) {
-                        if (child.Sex == GEDCOMSex.svMale) {
+                        if (child.Sex == GDMSex.svMale) {
                             childSex = "son";
-                        } else if (child.Sex == GEDCOMSex.svFemale) {
+                        } else if (child.Sex == GDMSex.svFemale) {
                             childSex = "daughter";
                         }
                     }
@@ -519,7 +519,7 @@ namespace GEDmill.HTML
                     if (!childConcealed) {
                         // Add death of children if happened in irSubject's lifetime.
                         // Note this is done before birth because the way the subsequent sort works it will put death after birth.
-                        GEDCOMCustomEvent childDeathday = child.FindEvent("DEAT");
+                        GDMCustomEvent childDeathday = child.FindEvent("DEAT");
                         if (childDeathday == null) {
                             childDeathday = child.FindEvent("BURI");
                         }
@@ -528,7 +528,7 @@ namespace GEDmill.HTML
                         }
 
                         string deathPlace = "";
-                        GEDCOMDateValue childDeathdate = null;
+                        GDMDateValue childDeathdate = null;
 
                         if (childDeathday != null) {
                             childDeathdate = childDeathday.Date;
@@ -549,7 +549,7 @@ namespace GEDmill.HTML
 
                     // Add birth of children.
                     // Note this is done after deaths because the way the subsequent sort works it will put death after birth.
-                    GEDCOMCustomEvent childBirthday = child.FindEvent("BIRT");
+                    GDMCustomEvent childBirthday = child.FindEvent("BIRT");
                     if (childBirthday == null) {
                         childBirthday = child.FindEvent("CHR");
                     }
@@ -558,7 +558,7 @@ namespace GEDmill.HTML
                     }
 
                     string birthPlace = "";
-                    GEDCOMDateValue childBirthdate = null;
+                    GDMDateValue childBirthdate = null;
                     sourceRefs = "";
 
                     if (childBirthday != null && !childConcealed) {
@@ -587,7 +587,7 @@ namespace GEDmill.HTML
         private void AddEvents()
         {
             if (fIndiRec.Events != null && !fConcealed) {
-                foreach (GEDCOMCustomEvent ies in fIndiRec.Events) {
+                foreach (GDMCustomEvent ies in fIndiRec.Events) {
                     ProcessEvent(ies, null);
                     if (ies.Name == "TITL") {
                         if (fNameTitle.Length > 0) {
@@ -730,10 +730,10 @@ namespace GEDmill.HTML
                 f.WriteLine("          <ul>");
 
                 for (uint i = 0; i < fReferenceList.Count; i++) {
-                    GEDCOMSourceCitation sc = fReferenceList[(int)i];
+                    GDMSourceCitation sc = fReferenceList[(int)i];
 
                     string extraInfo = "";
-                    GEDCOMSourceRecord sr = sc.Value as GEDCOMSourceRecord;
+                    GDMSourceRecord sr = sc.Value as GDMSourceRecord;
 
                     // Publication facts
                     if (sr != null && sr.Publication.Text != null && sr.Publication.Text != "") {
@@ -864,9 +864,9 @@ namespace GEDmill.HTML
                 f.WriteLine("          <h1>Parents</h1>");
 
                 string sChild = "Child";
-                if (fIndiRec.Sex == GEDCOMSex.svMale) {
+                if (fIndiRec.Sex == GDMSex.svMale) {
                     sChild = "Son";
-                } else if (fIndiRec.Sex == GEDCOMSex.svFemale) {
+                } else if (fIndiRec.Sex == GDMSex.svFemale) {
                     sChild = "Daughter";
                 }
 
@@ -1093,7 +1093,7 @@ namespace GEDmill.HTML
         // Does specific processing if appropriate to the event.
         // linkToOtherParty is an href link to the other party concerned in the event. Typically this is for fr events such as engagement, marriage etc where
         // the other party would be the partner.
-        private void ProcessEvent(GEDCOMCustomEvent es, string linkToOtherParty)
+        private void ProcessEvent(GDMCustomEvent es, string linkToOtherParty)
         {
             fLogger.WriteInfo(string.Format("ProcessEvent( {0}, {1} )", es.Name, es.StringValue));
 
@@ -1109,7 +1109,7 @@ namespace GEDmill.HTML
             }
 
             // Useful holder vars
-            GEDCOMDateValue date;
+            GDMDateValue date;
             string place;
             string escapedDescription = "";
             string address = "";
@@ -1605,7 +1605,7 @@ namespace GEDmill.HTML
                 }
             }
 
-            foreach (GEDCOMNotes ns in es.Notes) {
+            foreach (GDMNotes ns in es.Notes) {
                 if (eventNote != "") {
                     eventNote += "\n";
                 }
@@ -1648,10 +1648,10 @@ namespace GEDmill.HTML
         }
 
         // Adds the given source citations to the given list of referenced sources, and returns an HTML link string.
-        private static string AddSources(ref List<GEDCOMSourceCitation> referenceList, GEDCOMList<GEDCOMSourceCitation> sourceCitations)
+        private static string AddSources(ref List<GDMSourceCitation> referenceList, GDMList<GDMSourceCitation> sourceCitations)
         {
             string sourceRefs = "";
-            foreach (GEDCOMSourceCitation sc in sourceCitations) {
+            foreach (GDMSourceCitation sc in sourceCitations) {
                 int sourceNumber = -1;
 
                 // Is source already in list?
@@ -1678,8 +1678,8 @@ namespace GEDmill.HTML
         }
 
         // Picks the individual's occupation closest to the given date, within the given limits.
-        private static string BestOccupation(List<OccupationCounter> occupations, GEDCOMDateValue givenDate,
-                                             GEDCOMDateValue lowerLimit, GEDCOMDateValue upperLimit)
+        private static string BestOccupation(List<OccupationCounter> occupations, GDMDateValue givenDate,
+                                             GDMDateValue lowerLimit, GDMDateValue upperLimit)
         {
             int minDifference;
             if (lowerLimit == null || upperLimit == null) {
@@ -1716,7 +1716,7 @@ namespace GEDmill.HTML
         }
 
         // Creates a string describing the marital status of the given fr. Prepends the string provided in marriageNote.    
-        private static string BuildMaritalStatusNote(GEDCOMFamilyRecord fr, string marriageNote)
+        private static string BuildMaritalStatusNote(GDMFamilyRecord fr, string marriageNote)
         {
             if (marriageNote != "") {
                 marriageNote += "\n";

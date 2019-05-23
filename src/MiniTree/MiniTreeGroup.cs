@@ -24,7 +24,7 @@
 
 using System.Collections.Generic;
 using System.Drawing;
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GEDmill.MiniTree
 {
@@ -106,7 +106,7 @@ namespace GEDmill.MiniTree
         // Creates a CMiniTreeIndividual for the individual specified and adds it to the group.
         // Informs neighbouring boxes about this box.
         // bCreateLink decides whether to make this box a clickable link in the HTML.
-        public MiniTreeIndividual AddIndividual(GEDCOMIndividualRecord ir, string firstnames, string surname,
+        public MiniTreeIndividual AddIndividual(GDMIndividualRecord ir, string firstnames, string surname,
                                                  string date, bool createLink, bool createStalk, bool highlight,
                                                  bool concealed, bool shade)
         {

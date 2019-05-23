@@ -25,7 +25,7 @@
 using System;
 using System.Collections.Generic;
 using GEDmill.Model;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Tools;
 using GKCore.Types;
@@ -36,7 +36,7 @@ namespace GEDmill
     {
         private static readonly Dictionary<string, CISRecordChanges> recX = new Dictionary<string, CISRecordChanges>();
 
-        public static void SetVisibility(this GEDCOMRecord record, bool value)
+        public static void SetVisibility(this GDMRecord record, bool value)
         {
             if (record == null) return;
 
@@ -49,7 +49,7 @@ namespace GEDmill
             changes.Visibility = value;
         }
 
-        public static bool GetVisibility(this GEDCOMRecord record)
+        public static bool GetVisibility(this GDMRecord record)
         {
             if (record == null) return true;
 
@@ -61,30 +61,30 @@ namespace GEDmill
             return changes.Visibility;
         }
 
-        public static Dictionary<object, GEDCOMIndividualRecord> MakeBackReferences(this GEDCOMRecord record)
+        public static Dictionary<object, GDMIndividualRecord> MakeBackReferences(this GDMRecord record)
         {
-            var result = new Dictionary<object, GEDCOMIndividualRecord>();
+            var result = new Dictionary<object, GDMIndividualRecord>();
             return result;
         }
 
         // Returns the n'th name and associated sources
-        public static NameAndSource GetNameAndSource(this GEDCOMIndividualRecord record, int n)
+        public static NameAndSource GetNameAndSource(this GDMIndividualRecord record, int n)
         {
             if (record.PersonalNames.Count <= n || n < 0) {
                 return null;
             }
-            GEDCOMPersonalName pns = record.PersonalNames[n];
+            GDMPersonalName pns = record.PersonalNames[n];
             NameAndSource nas = new NameAndSource(pns.StringValue);
             nas.Sources.AddRange(pns.Pieces.SourceCitations);
             return nas;
         }
 
-        public static List<GEDCOMFamilyRecord> GetFamilyList(this GEDCOMIndividualRecord record)
+        public static List<GDMFamilyRecord> GetFamilyList(this GDMIndividualRecord record)
         {
-            var result = new List<GEDCOMFamilyRecord>();
+            var result = new List<GDMFamilyRecord>();
 
             foreach (var link in record.SpouseToFamilyLinks) {
-                var family = link.Value as GEDCOMFamilyRecord;
+                var family = link.Value as GDMFamilyRecord;
                 if (family != null) {
                     result.Add(family);
                 }
@@ -93,13 +93,13 @@ namespace GEDmill
             return result;
         }
 
-        public static List<BackReference> GetBackReferences(this GEDCOMSourceRecord record)
+        public static List<BackReference> GetBackReferences(this GDMSourceRecord record)
         {
             var result = new List<BackReference>();
             return result;
         }
 
-        public static string GetLifeDatesStr(this GEDCOMIndividualRecord record)
+        public static string GetLifeDatesStr(this GDMIndividualRecord record)
         {
             var lifeDates = record.GetLifeDates();
             //TODO
@@ -112,45 +112,45 @@ namespace GEDmill
             return birthDate + " - " + deathDate;
         }
 
-        public static bool IsPictureFormat(this GEDCOMFileReferenceWithTitle fileRef)
+        public static bool IsPictureFormat(this GDMFileReferenceWithTitle fileRef)
         {
             MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
             return (mmKind == MultimediaKind.mkImage);
         }
 
-        private static bool PruneProc(GEDCOMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
+        private static bool PruneProc(GDMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
         {
             bool visible = (bool)extData;
             iRec.SetVisibility(visible);
             return true;
         }
 
-        public static void PruneAncestors(this GEDCOMTree tree, GEDCOMIndividualRecord iRec, bool visible)
+        public static void PruneAncestors(this GDMTree tree, GDMIndividualRecord iRec, bool visible)
         {
             TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAncestors, PruneProc, ((object)visible));
         }
 
-        public static void PruneDescendants(this GEDCOMTree tree, GEDCOMIndividualRecord iRec, bool visible)
+        public static void PruneDescendants(this GDMTree tree, GDMIndividualRecord iRec, bool visible)
         {
             TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmDescendants, PruneProc, ((object)visible));
         }
 
-        private static bool PruneMarkProc(GEDCOMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
+        private static bool PruneMarkProc(GDMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
         {
-            var marks = (List<GEDCOMRecord>)extData;
+            var marks = (List<GDMRecord>)extData;
             marks.Add(iRec);
             return true;
         }
 
-        public static void PruneMarkConnected(this GEDCOMTree tree, GEDCOMIndividualRecord iRec, List<GEDCOMRecord> marks)
+        public static void PruneMarkConnected(this GDMTree tree, GDMIndividualRecord iRec, List<GDMRecord> marks)
         {
             TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, PruneMarkProc, marks);
         }
 
-        public static void PruneUnmarked(this GEDCOMTree tree, List<GEDCOMRecord> marks)
+        public static void PruneUnmarked(this GDMTree tree, List<GDMRecord> marks)
         {
-            var treeEnum = tree.GetEnumerator(GEDCOMRecordType.rtIndividual);
-            GEDCOMRecord record;
+            var treeEnum = tree.GetEnumerator(GDMRecordType.rtIndividual);
+            GDMRecord record;
             while (treeEnum.MoveNext(out record)) {
                 if (marks.IndexOf(record) < 0) {
                     record.SetVisibility(false);
@@ -158,64 +158,64 @@ namespace GEDmill
             }
         }
 
-        public static string MakeLinkNumber(this GEDCOMSourceCitation sourCit, uint uSourceCount, bool bComma)
+        public static string MakeLinkNumber(this GDMSourceCitation sourCit, uint uSourceCount, bool bComma)
         {
             string sComma = bComma ? "," : "";
             return string.Concat("<span class=\"reference\">", sComma, uSourceCount.ToString(), "</span>");
         }
 
         // Returns a string to use in the list of references at the bottom of the page
-        public static string MakeLinkText(this GEDCOMSourceCitation sourCit, uint uSourceCount)
+        public static string MakeLinkText(this GDMSourceCitation sourCit, uint uSourceCount)
         {
-            var sourRec = sourCit.Value as GEDCOMSourceRecord;
+            var sourRec = sourCit.Value as GDMSourceRecord;
             return string.Concat(uSourceCount.ToString(), ". ", /*m_sSourceDescription*/sourRec.ShortTitle);
         }
 
-        public static void RestrictAssociatedSources(this GEDCOMTree tree, GEDCOMIndividualRecord iRec)
+        public static void RestrictAssociatedSources(this GDMTree tree, GDMIndividualRecord iRec)
         {
             // Restrict sources connected with individual directly
-            foreach (GEDCOMSourceCitation sc in iRec.SourceCitations) {
+            foreach (GDMSourceCitation sc in iRec.SourceCitations) {
                 RestrictSource(sc, true);
             }
 
             // Restrict sources connected with name
-            foreach (GEDCOMPersonalName pns in iRec.PersonalNames) {
-                foreach (GEDCOMSourceCitation sc in pns.Pieces.SourceCitations) {
+            foreach (GDMPersonalName pns in iRec.PersonalNames) {
+                foreach (GDMSourceCitation sc in pns.Pieces.SourceCitations) {
                     RestrictSource(sc, true);
                 }
             }
 
             // Restrict sources connected with events
-            foreach (GEDCOMCustomEvent ies in iRec.Events) {
-                foreach (GEDCOMSourceCitation sc in ies.SourceCitations) {
+            foreach (GDMCustomEvent ies in iRec.Events) {
+                foreach (GDMSourceCitation sc in ies.SourceCitations) {
                     RestrictSource(sc, true);
                 }
             }
 
             // Restrict sources connected with m_associationStructures
-            foreach (GEDCOMAssociation ass in iRec.Associations) {
-                foreach (GEDCOMSourceCitation sc in ass.SourceCitations) {
+            foreach (GDMAssociation ass in iRec.Associations) {
+                foreach (GDMSourceCitation sc in ass.SourceCitations) {
                     RestrictSource(sc, true);
                 }
             }
         }
 
         // Marks the given source citation as (un)restricted
-        public static void RestrictSource(GEDCOMSourceCitation sc, bool visible)
+        public static void RestrictSource(GDMSourceCitation sc, bool visible)
         {
             if (sc != null) {
-                GEDCOMSourceRecord sr = sc.Value as GEDCOMSourceRecord;
+                GDMSourceRecord sr = sc.Value as GDMSourceRecord;
                 if (sr != null) {
                     sr.SetVisibility(visible);
                 }
             }
         }
 
-        public static int SetAllMFRsVisible(this GEDCOMRecord record, bool visible)
+        public static int SetAllMFRsVisible(this GDMRecord record, bool visible)
         {
             int nChanged = 0;
-            foreach (GEDCOMMultimediaLink mfr in record.MultimediaLinks) {
-                var mmRec = mfr.Value as GEDCOMMultimediaRecord;
+            foreach (GDMMultimediaLink mfr in record.MultimediaLinks) {
+                var mmRec = mfr.Value as GDMMultimediaRecord;
                 if (mmRec != null && mmRec.GetVisibility() != visible) {
                     mmRec.SetVisibility(visible);
                     nChanged++;
@@ -224,37 +224,37 @@ namespace GEDmill
             return nChanged;
         }
 
-        public static int CountVisibleMFRs(this GEDCOMSourceRecord sourRec)
+        public static int CountVisibleMFRs(this GDMSourceRecord sourRec)
         {
             return 0;
         }
 
-        public static int CountAllMFRs(this GEDCOMSourceRecord sourRec)
+        public static int CountAllMFRs(this GDMSourceRecord sourRec)
         {
             return 0;
         }
 
-        public static int CountVisibleMFRs(this GEDCOMIndividualRecord iRec)
+        public static int CountVisibleMFRs(this GDMIndividualRecord iRec)
         {
             return 0;
         }
 
-        public static int CountAllMFRs(this GEDCOMIndividualRecord iRec)
+        public static int CountAllMFRs(this GDMIndividualRecord iRec)
         {
             return 0;
         }
 
-        public static string GetName(this GEDCOMIndividualRecord iRec, int i)
+        public static string GetName(this GDMIndividualRecord iRec, int i)
         {
             return (i >= 0 && i < iRec.PersonalNames.Count) ? iRec.PersonalNames[i].StringValue : "";
         }
 
-        public static int GetChronologicalYear(GEDCOMDateValue dateVal)
+        public static int GetChronologicalYear(GDMDateValue dateVal)
         {
             return (dateVal == null) ? 0 : dateVal.GetChronologicalYear();
         }
 
-        public static int GetEventsYearsDiff(GEDCOMDateValue ev1, GEDCOMDateValue ev2, bool currentEnd = true)
+        public static int GetEventsYearsDiff(GDMDateValue ev1, GDMDateValue ev2, bool currentEnd = true)
         {
             int result = -1;
 

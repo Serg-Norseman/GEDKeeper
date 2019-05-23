@@ -23,7 +23,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Types;
 
 namespace GEDmill.Model
@@ -42,7 +42,7 @@ namespace GEDmill.Model
     public class Event : IComparable<Event>
     {
         // Date or date range for the event
-        private GEDCOMDateValue fDate;
+        private GDMDateValue fDate;
 
         // If the event is important
         private bool fImportant;
@@ -97,7 +97,7 @@ namespace GEDmill.Model
         }
 
 
-        public Event(GEDCOMDateValue date, string evType, string description, string overview, string note,
+        public Event(GDMDateValue date, string evType, string description, string overview, string note,
             bool important, bool capitalise)
         {
             fPreference = EventPreference.Unknown;

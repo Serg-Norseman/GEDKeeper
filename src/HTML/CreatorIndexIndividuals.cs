@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using GEDmill.Model;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -44,7 +44,7 @@ namespace GEDmill.HTML
         private List<StringTuple> fIndividualIndex;
 
 
-        public CreatorIndexIndividuals(GEDCOMTree gedcom, IProgressCallback progress, string sW3cfile) : base(gedcom, progress, sW3cfile)
+        public CreatorIndexIndividuals(GDMTree gedcom, IProgressCallback progress, string sW3cfile) : base(gedcom, progress, sW3cfile)
         {
             fIndividualIndex = new List<StringTuple>();
         }
@@ -220,7 +220,7 @@ namespace GEDmill.HTML
         }
 
         // Generates the HTML file for the given page of the index.
-        private void OutputIndividualsIndexPage(GEDCOMTree gedcom, string headingsLinks, IndexPage indexPage)
+        private void OutputIndividualsIndexPage(GDMTree gedcom, string headingsLinks, IndexPage indexPage)
         {
             fLogger.WriteInfo("OutputIndividualsIndexPage()");
 
