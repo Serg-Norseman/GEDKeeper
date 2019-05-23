@@ -378,23 +378,23 @@ namespace GDModel.Providers.GEDCOM
                 string su = strTok.GetWord();
                 idx = Algorithms.BinarySearch(GDMCustomDate.GEDCOMDateTypes, su, string.CompareOrdinal);
             }
-            var dateType = (idx < 0) ? GEDCOMDateType.SIMP : (GEDCOMDateType)idx;
+            var dateType = (idx < 0) ? GDMDateType.SIMP : (GDMDateType)idx;
 
             string result;
             GDMCustomDate date;
             switch (dateType) {
-                case GEDCOMDateType.AFT:
-                case GEDCOMDateType.BEF:
-                case GEDCOMDateType.BET:
+                case GDMDateType.AFT:
+                case GDMDateType.BEF:
+                case GDMDateType.BET:
                     date = new GDMDateRange(dateValue);
                     result = GEDCOMUtils.ParseRangeDate(owner, (GDMDateRange)date, strTok);
                     break;
-                case GEDCOMDateType.INT:
+                case GDMDateType.INT:
                     date = new GDMDateInterpreted(dateValue);
                     result = GEDCOMUtils.ParseIntDate(owner, (GDMDateInterpreted)date, strTok);
                     break;
-                case GEDCOMDateType.FROM:
-                case GEDCOMDateType.TO:
+                case GDMDateType.FROM:
+                case GDMDateType.TO:
                     date = new GDMDatePeriod(dateValue);
                     result = GEDCOMUtils.ParsePeriodDate(owner, (GDMDatePeriod)date, strTok);
                     break;
@@ -528,14 +528,14 @@ namespace GDModel.Providers.GEDCOM
 
         public static string ParseDate(GDMTree owner, GDMDate date, GEDCOMParser strTok)
         {
-            GEDCOMApproximated approximated = GEDCOMApproximated.daExact;
-            GEDCOMCalendar calendar = GEDCOMCalendar.dcGregorian;
+            GDMApproximated approximated = GDMApproximated.daExact;
+            GDMCalendar calendar = GDMCalendar.dcGregorian;
             short year = GDMDate.UNKNOWN_YEAR;
             bool yearBC = false;
             string yearModifier = string.Empty;
             byte month = 0;
             byte day = 0;
-            GEDCOMDateFormat dateFormat = GEDCOMDateFormat.dfGEDCOMStd;
+            GDMDateFormat dateFormat = GDMDateFormat.dfGEDCOMStd;
 
             strTok.SkipWhitespaces();
 
@@ -554,7 +554,7 @@ namespace GDModel.Providers.GEDCOM
                 string su = InvariantTextInfo.ToUpper(strTok.GetWord());
                 int idx = Algorithms.BinarySearch(GDMCustomDate.GEDCOMDateApproximatedArray, su, string.CompareOrdinal);
                 if (idx >= 0) {
-                    approximated = (GEDCOMApproximated)idx;
+                    approximated = (GDMApproximated)idx;
                     strTok.Next();
                     strTok.SkipWhitespaces();
                 }
@@ -567,7 +567,7 @@ namespace GDModel.Providers.GEDCOM
                 var escapeStr = "@" + strTok.GetWord() + "@";
                 int idx = Algorithms.IndexOf(GDMCustomDate.GEDCOMDateEscapeArray, escapeStr);
                 if (idx >= 0) {
-                    calendar = (GEDCOMCalendar)idx;
+                    calendar = (GDMCalendar)idx;
                 }
 
                 strTok.Next();
@@ -584,10 +584,10 @@ namespace GDModel.Providers.GEDCOM
 
             // extract delimiter
             if (token == GEDCOMToken.Whitespace && strTok.GetSymbol() == ' ') {
-                dateFormat = GEDCOMDateFormat.dfGEDCOMStd;
+                dateFormat = GDMDateFormat.dfGEDCOMStd;
                 token = strTok.Next();
             } else if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '.') {
-                dateFormat = GEDCOMDateFormat.dfSystem;
+                dateFormat = GDMDateFormat.dfSystem;
                 token = strTok.Next();
             }
 
@@ -600,14 +600,14 @@ namespace GDModel.Providers.GEDCOM
                 month = (byte)((idx < 0) ? 0 : idx);
 
                 token = strTok.Next();
-            } else if (dateFormat == GEDCOMDateFormat.dfSystem && token == GEDCOMToken.Number) {
+            } else if (dateFormat == GDMDateFormat.dfSystem && token == GEDCOMToken.Number) {
                 month = (byte)strTok.GetNumber();
 
                 token = strTok.Next();
             }
 
             // extract delimiter
-            if (dateFormat == GEDCOMDateFormat.dfSystem) {
+            if (dateFormat == GDMDateFormat.dfSystem) {
                 if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '.') {
                     token = strTok.Next();
                 }
@@ -806,39 +806,39 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static GEDCOMRestriction GetRestrictionVal(string str)
+        public static GDMRestriction GetRestrictionVal(string str)
         {
-            if (string.IsNullOrEmpty(str)) return GEDCOMRestriction.rnNone;
+            if (string.IsNullOrEmpty(str)) return GDMRestriction.rnNone;
 
-            GEDCOMRestriction res;
+            GDMRestriction res;
             str = str.Trim().ToLowerInvariant();
             
             if (str == "confidential") {
-                res = GEDCOMRestriction.rnConfidential;
+                res = GDMRestriction.rnConfidential;
             } else if (str == "locked") {
-                res = GEDCOMRestriction.rnLocked;
+                res = GDMRestriction.rnLocked;
             } else if (str == "privacy") {
-                res = GEDCOMRestriction.rnPrivacy;
+                res = GDMRestriction.rnPrivacy;
             } else {
-                res = GEDCOMRestriction.rnNone;
+                res = GDMRestriction.rnNone;
             }
             return res;
         }
 
-        public static string GetRestrictionStr(GEDCOMRestriction value)
+        public static string GetRestrictionStr(GDMRestriction value)
         {
             string s;
 
             switch (value) {
-                case GEDCOMRestriction.rnConfidential:
+                case GDMRestriction.rnConfidential:
                     s = "confidential";
                     break;
 
-                case GEDCOMRestriction.rnLocked:
+                case GDMRestriction.rnLocked:
                     s = "locked";
                     break;
 
-                case GEDCOMRestriction.rnPrivacy:
+                case GDMRestriction.rnPrivacy:
                     s = "privacy";
                     break;
 
@@ -893,146 +893,146 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static GEDCOMMultimediaFormat GetMultimediaFormatVal(string str)
+        public static GDMMultimediaFormat GetMultimediaFormatVal(string str)
         {
-            if (string.IsNullOrEmpty(str)) return GEDCOMMultimediaFormat.mfNone;
+            if (string.IsNullOrEmpty(str)) return GDMMultimediaFormat.mfNone;
 
-            GEDCOMMultimediaFormat result;
+            GDMMultimediaFormat result;
             str = str.Trim().ToLowerInvariant();
             
             if (str == "bmp") {
-                result = GEDCOMMultimediaFormat.mfBMP;
+                result = GDMMultimediaFormat.mfBMP;
             } else if (str == "gif") {
-                result = GEDCOMMultimediaFormat.mfGIF;
+                result = GDMMultimediaFormat.mfGIF;
             } else if (str == "jpg" || str == "jpeg") {
-                result = GEDCOMMultimediaFormat.mfJPG;
+                result = GDMMultimediaFormat.mfJPG;
             } else if (str == "ole") {
-                result = GEDCOMMultimediaFormat.mfOLE;
+                result = GDMMultimediaFormat.mfOLE;
             } else if (str == "pcx") {
-                result = GEDCOMMultimediaFormat.mfPCX;
+                result = GDMMultimediaFormat.mfPCX;
             } else if (str == "tif" || str == "tiff") {
-                result = GEDCOMMultimediaFormat.mfTIF;
+                result = GDMMultimediaFormat.mfTIF;
             } else if (str == "wav") {
-                result = GEDCOMMultimediaFormat.mfWAV;
+                result = GDMMultimediaFormat.mfWAV;
             } else if (str == "txt") {
-                result = GEDCOMMultimediaFormat.mfTXT;
+                result = GDMMultimediaFormat.mfTXT;
             } else if (str == "rtf") {
-                result = GEDCOMMultimediaFormat.mfRTF;
+                result = GDMMultimediaFormat.mfRTF;
             } else if (str == "avi") {
-                result = GEDCOMMultimediaFormat.mfAVI;
+                result = GDMMultimediaFormat.mfAVI;
             } else if (str == "tga") {
-                result = GEDCOMMultimediaFormat.mfTGA;
+                result = GDMMultimediaFormat.mfTGA;
             } else if (str == "png") {
-                result = GEDCOMMultimediaFormat.mfPNG;
+                result = GDMMultimediaFormat.mfPNG;
             } else if (str == "mpg" || str == "mpeg") {
-                result = GEDCOMMultimediaFormat.mfMPG;
+                result = GDMMultimediaFormat.mfMPG;
             } else if (str == "htm" || str == "html") {
-                result = GEDCOMMultimediaFormat.mfHTM;
+                result = GDMMultimediaFormat.mfHTM;
             } else if (str == "raw") {
-                result = GEDCOMMultimediaFormat.mfRAW;
+                result = GDMMultimediaFormat.mfRAW;
             } else if (str == "mp3") {
-                result = GEDCOMMultimediaFormat.mfMP3;
+                result = GDMMultimediaFormat.mfMP3;
             } else if (str == "wma") {
-                result = GEDCOMMultimediaFormat.mfWMA;
+                result = GDMMultimediaFormat.mfWMA;
             } else if (str == "psd") {
-                result = GEDCOMMultimediaFormat.mfPSD;
+                result = GDMMultimediaFormat.mfPSD;
             } else if (str == "pdf") {
-                result = GEDCOMMultimediaFormat.mfPDF;
+                result = GDMMultimediaFormat.mfPDF;
             } else if (str == "mp4") {
-                result = GEDCOMMultimediaFormat.mfMP4;
+                result = GDMMultimediaFormat.mfMP4;
             } else if (str == "ogv") {
-                result = GEDCOMMultimediaFormat.mfOGV;
+                result = GDMMultimediaFormat.mfOGV;
             } else if (str == "mka") {
-                result = GEDCOMMultimediaFormat.mfMKA;
+                result = GDMMultimediaFormat.mfMKA;
             } else if (str == "wmv") {
-                result = GEDCOMMultimediaFormat.mfWMV;
+                result = GDMMultimediaFormat.mfWMV;
             } else if (str == "mkv") {
-                result = GEDCOMMultimediaFormat.mfMKV;
+                result = GDMMultimediaFormat.mfMKV;
             } else if (str == "mov") {
-                result = GEDCOMMultimediaFormat.mfMOV;
+                result = GDMMultimediaFormat.mfMOV;
             } else {
-                result = GEDCOMMultimediaFormat.mfUnknown;
+                result = GDMMultimediaFormat.mfUnknown;
             }
             return result;
         }
 
-        public static string GetMultimediaFormatStr(GEDCOMMultimediaFormat value)
+        public static string GetMultimediaFormatStr(GDMMultimediaFormat value)
         {
             string s;
             switch (value) {
-                case GEDCOMMultimediaFormat.mfBMP:
+                case GDMMultimediaFormat.mfBMP:
                     s = "bmp";
                     break;
-                case GEDCOMMultimediaFormat.mfGIF:
+                case GDMMultimediaFormat.mfGIF:
                     s = "gif";
                     break;
-                case GEDCOMMultimediaFormat.mfJPG:
+                case GDMMultimediaFormat.mfJPG:
                     s = "jpg";
                     break;
-                case GEDCOMMultimediaFormat.mfOLE:
+                case GDMMultimediaFormat.mfOLE:
                     s = "ole";
                     break;
-                case GEDCOMMultimediaFormat.mfPCX:
+                case GDMMultimediaFormat.mfPCX:
                     s = "pcx";
                     break;
-                case GEDCOMMultimediaFormat.mfTIF:
+                case GDMMultimediaFormat.mfTIF:
                     s = "tif";
                     break;
-                case GEDCOMMultimediaFormat.mfWAV:
+                case GDMMultimediaFormat.mfWAV:
                     s = "wav";
                     break;
-                case GEDCOMMultimediaFormat.mfTXT:
+                case GDMMultimediaFormat.mfTXT:
                     s = "txt";
                     break;
-                case GEDCOMMultimediaFormat.mfRTF:
+                case GDMMultimediaFormat.mfRTF:
                     s = "rtf";
                     break;
-                case GEDCOMMultimediaFormat.mfAVI:
+                case GDMMultimediaFormat.mfAVI:
                     s = "avi";
                     break;
-                case GEDCOMMultimediaFormat.mfTGA:
+                case GDMMultimediaFormat.mfTGA:
                     s = "tga";
                     break;
-                case GEDCOMMultimediaFormat.mfPNG:
+                case GDMMultimediaFormat.mfPNG:
                     s = "png";
                     break;
-                case GEDCOMMultimediaFormat.mfMPG:
+                case GDMMultimediaFormat.mfMPG:
                     s = "mpg";
                     break;
-                case GEDCOMMultimediaFormat.mfHTM:
+                case GDMMultimediaFormat.mfHTM:
                     s = "htm";
                     break;
-                case GEDCOMMultimediaFormat.mfRAW:
+                case GDMMultimediaFormat.mfRAW:
                     s = "raw";
                     break;
-                case GEDCOMMultimediaFormat.mfMP3:
+                case GDMMultimediaFormat.mfMP3:
                     s = "mp3";
                     break;
-                case GEDCOMMultimediaFormat.mfWMA:
+                case GDMMultimediaFormat.mfWMA:
                     s = "wma";
                     break;
-                case GEDCOMMultimediaFormat.mfPSD:
+                case GDMMultimediaFormat.mfPSD:
                     s = "psd";
                     break;
-                case GEDCOMMultimediaFormat.mfPDF:
+                case GDMMultimediaFormat.mfPDF:
                     s = "pdf";
                     break;
-                case GEDCOMMultimediaFormat.mfMP4:
+                case GDMMultimediaFormat.mfMP4:
                     s = "mp4";
                     break;
-                case GEDCOMMultimediaFormat.mfOGV:
+                case GDMMultimediaFormat.mfOGV:
                     s = "ogv";
                     break;
-                case GEDCOMMultimediaFormat.mfMKA:
+                case GDMMultimediaFormat.mfMKA:
                     s = "mka";
                     break;
-                case GEDCOMMultimediaFormat.mfWMV:
+                case GDMMultimediaFormat.mfWMV:
                     s = "wmv";
                     break;
-                case GEDCOMMultimediaFormat.mfMKV:
+                case GDMMultimediaFormat.mfMKV:
                     s = "mkv";
                     break;
-                case GEDCOMMultimediaFormat.mfMOV:
+                case GDMMultimediaFormat.mfMOV:
                     s = "mov";
                     break;
                 default:
@@ -1047,12 +1047,12 @@ namespace GDModel.Providers.GEDCOM
             "", "audio", "book", "card", "electronic", "fiche", "film", "magazine",
             "manuscript", "map", "newspaper", "photo", "tombstone", "video", "z" };
 
-        public static GEDCOMMediaType GetMediaTypeVal(string str)
+        public static GDMMediaType GetMediaTypeVal(string str)
         {
-            return Str2Enum(str, MediaTypes, GEDCOMMediaType.mtUnknown);
+            return Str2Enum(str, MediaTypes, GDMMediaType.mtUnknown);
         }
 
-        public static string GetMediaTypeStr(GEDCOMMediaType value)
+        public static string GetMediaTypeStr(GDMMediaType value)
         {
             return GEDCOMUtils.Enum2Str(value, MediaTypes);
         }
@@ -1084,12 +1084,12 @@ namespace GDModel.Providers.GEDCOM
             "Yiddish",
         };
 
-        public static GEDCOMLanguageID GetLanguageVal(string str)
+        public static GDMLanguageID GetLanguageVal(string str)
         {
-            return Str2Enum(str, LangNames, GEDCOMLanguageID.Unknown, false);
+            return Str2Enum(str, LangNames, GDMLanguageID.Unknown, false);
         }
 
-        public static string GetLanguageStr(GEDCOMLanguageID value)
+        public static string GetLanguageStr(GDMLanguageID value)
         {
             return GEDCOMUtils.Enum2Str(value, LangNames);
         }
@@ -1098,12 +1098,12 @@ namespace GDModel.Providers.GEDCOM
         public static string[] NameTypes = new string[] {
             "", "aka", "birth", "immigrant", "maiden", "married" };
 
-        public static GEDCOMNameType GetNameTypeVal(string str)
+        public static GDMNameType GetNameTypeVal(string str)
         {
-            return Str2Enum(str, NameTypes, GEDCOMNameType.ntNone);
+            return Str2Enum(str, NameTypes, GDMNameType.ntNone);
         }
 
-        public static string GetNameTypeStr(GEDCOMNameType value)
+        public static string GetNameTypeStr(GDMNameType value)
         {
             return GEDCOMUtils.Enum2Str(value, NameTypes);
         }
@@ -1173,34 +1173,34 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static GEDCOMOrdinanceProcessFlag GetOrdinanceProcessFlagVal(string su)
+        public static GDMOrdinanceProcessFlag GetOrdinanceProcessFlagVal(string su)
         {
-            if (string.IsNullOrEmpty(su)) return GEDCOMOrdinanceProcessFlag.opNone;
+            if (string.IsNullOrEmpty(su)) return GDMOrdinanceProcessFlag.opNone;
 
-            GEDCOMOrdinanceProcessFlag result;
+            GDMOrdinanceProcessFlag result;
             su = NormalizeUp(su);
             
             if (su == "YES") {
-                result = GEDCOMOrdinanceProcessFlag.opYes;
+                result = GDMOrdinanceProcessFlag.opYes;
             } else if (su == "NO") {
-                result = GEDCOMOrdinanceProcessFlag.opNo;
+                result = GDMOrdinanceProcessFlag.opNo;
             } else {
-                result = GEDCOMOrdinanceProcessFlag.opNone;
+                result = GDMOrdinanceProcessFlag.opNone;
             }
             return result;
         }
 
-        public static string GetOrdinanceProcessFlagStr(GEDCOMOrdinanceProcessFlag value)
+        public static string GetOrdinanceProcessFlagStr(GDMOrdinanceProcessFlag value)
         {
             string str = "";
             switch (value) {
-                case GEDCOMOrdinanceProcessFlag.opNone:
+                case GDMOrdinanceProcessFlag.opNone:
                     str = "";
                     break;
-                case GEDCOMOrdinanceProcessFlag.opYes:
+                case GDMOrdinanceProcessFlag.opYes:
                     str = "yes";
                     break;
-                case GEDCOMOrdinanceProcessFlag.opNo:
+                case GDMOrdinanceProcessFlag.opNo:
                     str = "no";
                     break;
             }
@@ -1297,38 +1297,38 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static GEDCOMSex GetSexVal(string str)
+        public static GDMSex GetSexVal(string str)
         {
             str = NormalizeUp(str);
-            if (str.Length != 1) return GEDCOMSex.svNone;
+            if (str.Length != 1) return GDMSex.svNone;
 
             char sl = str[0];
 
-            GEDCOMSex result;
+            GDMSex result;
             if (sl == 'M') {
-                result = GEDCOMSex.svMale;
+                result = GDMSex.svMale;
             } else if (sl == 'F') {
-                result = GEDCOMSex.svFemale;
+                result = GDMSex.svFemale;
             } else if (sl == 'U') {
-                result = GEDCOMSex.svUndetermined;
+                result = GDMSex.svUndetermined;
             } else {
-                result = GEDCOMSex.svNone;
+                result = GDMSex.svNone;
             }
             return result;
         }
 
-        public static string GetSexStr(GEDCOMSex value)
+        public static string GetSexStr(GDMSex value)
         {
             string str;
             
             switch (value) {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     str = "M";
                     break;
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     str = "F";
                     break;
-                case GEDCOMSex.svUndetermined:
+                case GDMSex.svUndetermined:
                     str = "U";
                     break;
                 default:
@@ -1343,12 +1343,12 @@ namespace GDModel.Providers.GEDCOM
         public static string[] BaptismDateStatuses = new string[] {
             "", "CHILD", "COMPLETED", "EXCLUDED", "PRE-1970", "STILLBORN", "SUBMITTED", "UNCLEARED" };
 
-        public static GEDCOMBaptismDateStatus GetBaptismDateStatusVal(string str)
+        public static GDMBaptismDateStatus GetBaptismDateStatusVal(string str)
         {
-            return Str2Enum(str, BaptismDateStatuses, GEDCOMBaptismDateStatus.bdsNone, false);
+            return Str2Enum(str, BaptismDateStatuses, GDMBaptismDateStatus.bdsNone, false);
         }
 
-        public static string GetBaptismDateStatusStr(GEDCOMBaptismDateStatus value)
+        public static string GetBaptismDateStatusStr(GDMBaptismDateStatus value)
         {
             return GEDCOMUtils.Enum2Str(value, BaptismDateStatuses);
         }
@@ -1357,12 +1357,12 @@ namespace GDModel.Providers.GEDCOM
         public static string[] EndowmentDateStatuses = new string[] {
             "", "CHILD", "COMPLETED", "EXCLUDED", "INFANT", "PRE-1970", "STILLBORN", "SUBMITTED", "UNCLEARED" };
 
-        public static GEDCOMEndowmentDateStatus GetEndowmentDateStatusVal(string str)
+        public static GDMEndowmentDateStatus GetEndowmentDateStatusVal(string str)
         {
-            return Str2Enum(str, EndowmentDateStatuses, GEDCOMEndowmentDateStatus.edsNone, false);
+            return Str2Enum(str, EndowmentDateStatuses, GDMEndowmentDateStatus.edsNone, false);
         }
 
-        public static string GetEndowmentDateStatusStr(GEDCOMEndowmentDateStatus value)
+        public static string GetEndowmentDateStatusStr(GDMEndowmentDateStatus value)
         {
             return GEDCOMUtils.Enum2Str(value, EndowmentDateStatuses);
         }
@@ -1371,12 +1371,12 @@ namespace GDModel.Providers.GEDCOM
         public static string[] ChildSealingDateStatuses = new string[] {
             "", "BIC", "EXCLUDED", "PRE-1970", "STILLBORN", "SUBMITTED", "UNCLEARED" };
 
-        public static GEDCOMChildSealingDateStatus GetChildSealingDateStatusVal(string str)
+        public static GDMChildSealingDateStatus GetChildSealingDateStatusVal(string str)
         {
-            return Str2Enum(str, ChildSealingDateStatuses, GEDCOMChildSealingDateStatus.cdsNone, false);
+            return Str2Enum(str, ChildSealingDateStatuses, GDMChildSealingDateStatus.cdsNone, false);
         }
 
-        public static string GetChildSealingDateStatusStr(GEDCOMChildSealingDateStatus value)
+        public static string GetChildSealingDateStatusStr(GDMChildSealingDateStatus value)
         {
             return GEDCOMUtils.Enum2Str(value, ChildSealingDateStatuses);
         }
@@ -1404,43 +1404,43 @@ namespace GDModel.Providers.GEDCOM
 
             switch (record.RecordType)
             {
-                case GEDCOMRecordType.rtIndividual:
+                case GDMRecordType.rtIndividual:
                     result = "I";
                     break;
-                case GEDCOMRecordType.rtFamily:
+                case GDMRecordType.rtFamily:
                     result = "F";
                     break;
-                case GEDCOMRecordType.rtNote:
+                case GDMRecordType.rtNote:
                     result = "N";
                     break;
-                case GEDCOMRecordType.rtMultimedia:
+                case GDMRecordType.rtMultimedia:
                     result = "O";
                     break;
-                case GEDCOMRecordType.rtSource:
+                case GDMRecordType.rtSource:
                     result = "S";
                     break;
-                case GEDCOMRecordType.rtRepository:
+                case GDMRecordType.rtRepository:
                     result = "R";
                     break;
-                case GEDCOMRecordType.rtGroup:
+                case GDMRecordType.rtGroup:
                     result = "G";
                     break;
-                case GEDCOMRecordType.rtResearch:
+                case GDMRecordType.rtResearch:
                     result = "RS";
                     break;
-                case GEDCOMRecordType.rtTask:
+                case GDMRecordType.rtTask:
                     result = "TK";
                     break;
-                case GEDCOMRecordType.rtCommunication:
+                case GDMRecordType.rtCommunication:
                     result = "CM";
                     break;
-                case GEDCOMRecordType.rtLocation:
+                case GDMRecordType.rtLocation:
                     result = "L";
                     break;
-                case GEDCOMRecordType.rtSubmission:
+                case GDMRecordType.rtSubmission:
                     result = "????";
                     break;
-                case GEDCOMRecordType.rtSubmitter:
+                case GDMRecordType.rtSubmitter:
                     result = "SUB";
                     break;
             }

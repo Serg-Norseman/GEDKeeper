@@ -73,7 +73,7 @@ namespace GKCore.Lists
         public string Name;
         public bool PatriarchOnly;
         public string Residence;
-        public GEDCOMSex Sex;
+        public GDMSex Sex;
         public FilterGroupMode SourceMode;
         public string SourceRef;
         public string EventVal;
@@ -99,7 +99,7 @@ namespace GKCore.Lists
             AliveBeforeDate = "";
             PatriarchOnly = false;
             Residence = "*";
-            Sex = GEDCOMSex.svNone;
+            Sex = GDMSex.svNone;
             SourceMode = FilterGroupMode.All;
             SourceRef = "";
             EventVal = "*";
@@ -114,7 +114,7 @@ namespace GKCore.Lists
         private GDMSourceRecord filter_source;
 
         public IndividualListMan(IBaseContext baseContext) :
-            base(baseContext, CreateIndividualListColumns(), GEDCOMRecordType.rtIndividual)
+            base(baseContext, CreateIndividualListColumns(), GDMRecordType.rtIndividual)
         {
         }
 
@@ -214,7 +214,7 @@ namespace GKCore.Lists
 
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
-            if ((iFilter.Sex == GEDCOMSex.svNone || fRec.Sex == iFilter.Sex)
+            if ((iFilter.Sex == GDMSex.svNone || fRec.Sex == iFilter.Sex)
                 && (iFilter.Name == "*" || IsMatchesMask(buf_fullname, iFilter.Name))
                 && (iFilter.Residence == "*" || HasPlace())
                 && (iFilter.EventVal == "*" || HasEventVal())
@@ -456,7 +456,7 @@ namespace GKCore.Lists
         {
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
-            filter_abd = GDMDate.GetUDNByFormattedStr(iFilter.AliveBeforeDate, GEDCOMCalendar.dcGregorian);
+            filter_abd = GDMDate.GetUDNByFormattedStr(iFilter.AliveBeforeDate, GDMCalendar.dcGregorian);
 
             if (iFilter.GroupRef == "") {
                 filter_grp = null;
@@ -687,7 +687,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    groupRec = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtGroup, null) as GDMGroupRecord;
+                    groupRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtGroup, null) as GDMGroupRecord;
                     result = (groupRec != null);
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, groupRec, iRec);
@@ -946,7 +946,7 @@ namespace GKCore.Lists
                     GDMIndividualRecord relPerson;
                     string relName;
 
-                    if (iRec.Sex == GEDCOMSex.svMale) {
+                    if (iRec.Sex == GDMSex.svMale) {
                         relPerson = family.GetWife();
                         relName = LangMan.LS(LSID.LSID_UnkFemale);
                     } else {

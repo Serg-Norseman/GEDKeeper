@@ -441,7 +441,7 @@ namespace GKCore
         {
             baseWin.Context.ImportNames(indivRec);
 
-            IListManager listMan = baseWin.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
+            IListManager listMan = baseWin.GetRecordsListManByType(GDMRecordType.rtIndividual);
             if (listMan == null) return;
 
             IndividualListFilter iFilter = (IndividualListFilter)listMan.Filter;
@@ -466,7 +466,7 @@ namespace GKCore
         }
 
         public static bool ModifyIndividual(IBaseWindow baseWin, ref GDMIndividualRecord indivRec,
-                                     GDMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex)
+                                     GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex)
         {
             bool result;
 
@@ -490,7 +490,7 @@ namespace GKCore
                         dlg.Person = indivRec;
 
                         if (targetMode != TargetMode.tmNone) {
-                            if (needSex == GEDCOMSex.svMale || needSex == GEDCOMSex.svFemale) {
+                            if (needSex == GDMSex.svMale || needSex == GDMSex.svFemale) {
                                 dlg.SetNeedSex(needSex);
                             }
                             dlg.TargetMode = targetMode;
@@ -530,8 +530,8 @@ namespace GKCore
                 GDMTree tree = baseWin.Context.Tree;
 
                 if (targetType == TargetMode.tmFamilySpouse && target != null) {
-                    GEDCOMSex sex = target.Sex;
-                    if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined) {
+                    GDMSex sex = target.Sex;
+                    if (sex < GDMSex.svMale || sex >= GDMSex.svUndetermined) {
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
                         return false;
                     }
@@ -616,14 +616,14 @@ namespace GKCore
 
         #region Data modification functions for UI
 
-        public static GDMRecord AddRecord(IBaseWindow baseWin, GEDCOMRecordType rt, Target target)
+        public static GDMRecord AddRecord(IBaseWindow baseWin, GDMRecordType rt, Target target)
         {
             bool result = false;
             GDMRecord rec = null;
 
             switch (rt)
             {
-                case GEDCOMRecordType.rtIndividual:
+                case GDMRecordType.rtIndividual:
                     {
                         // FIXME: legacy code, checkit
                         if (target == null) {
@@ -637,7 +637,7 @@ namespace GKCore
                         break;
                     }
 
-                case GEDCOMRecordType.rtFamily:
+                case GDMRecordType.rtFamily:
                     {
                         if (target == null) {
                             target = new Target();
@@ -650,63 +650,63 @@ namespace GKCore
                         rec = fam;
                         break;
                     }
-                case GEDCOMRecordType.rtNote:
+                case GDMRecordType.rtNote:
                     {
                         GDMNoteRecord note = null;
                         result = ModifyNote(baseWin, ref note);
                         rec = note;
                         break;
                     }
-                case GEDCOMRecordType.rtMultimedia:
+                case GDMRecordType.rtMultimedia:
                     {
                         GDMMultimediaRecord mmRec = null;
                         result = ModifyMedia(baseWin, ref mmRec);
                         rec = mmRec;
                         break;
                     }
-                case GEDCOMRecordType.rtSource:
+                case GDMRecordType.rtSource:
                     {
                         GDMSourceRecord src = null;
                         result = ModifySource(baseWin, ref src);
                         rec = src;
                         break;
                     }
-                case GEDCOMRecordType.rtRepository:
+                case GDMRecordType.rtRepository:
                     {
                         GDMRepositoryRecord rep = null;
                         result = ModifyRepository(baseWin, ref rep);
                         rec = rep;
                         break;
                     }
-                case GEDCOMRecordType.rtGroup:
+                case GDMRecordType.rtGroup:
                     {
                         GDMGroupRecord grp = null;
                         result = ModifyGroup(baseWin, ref grp);
                         rec = grp;
                         break;
                     }
-                case GEDCOMRecordType.rtResearch:
+                case GDMRecordType.rtResearch:
                     {
                         GDMResearchRecord rsr = null;
                         result = ModifyResearch(baseWin, ref rsr);
                         rec = rsr;
                         break;
                     }
-                case GEDCOMRecordType.rtTask:
+                case GDMRecordType.rtTask:
                     {
                         GDMTaskRecord tsk = null;
                         result = ModifyTask(baseWin, ref tsk);
                         rec = tsk;
                         break;
                     }
-                case GEDCOMRecordType.rtCommunication:
+                case GDMRecordType.rtCommunication:
                     {
                         GDMCommunicationRecord comm = null;
                         result = ModifyCommunication(baseWin, ref comm);
                         rec = comm;
                         break;
                     }
-                case GEDCOMRecordType.rtLocation:
+                case GDMRecordType.rtLocation:
                     {
                         GDMLocationRecord loc = null;
                         result = ModifyLocation(baseWin, ref loc);
@@ -723,57 +723,57 @@ namespace GKCore
             bool result = false;
 
             switch (rec.RecordType) {
-                case GEDCOMRecordType.rtIndividual:
+                case GDMRecordType.rtIndividual:
                     GDMIndividualRecord ind = rec as GDMIndividualRecord;
-                    result = ModifyIndividual(baseWin, ref ind, null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    result = ModifyIndividual(baseWin, ref ind, null, TargetMode.tmNone, GDMSex.svNone);
                     break;
 
-                case GEDCOMRecordType.rtFamily:
+                case GDMRecordType.rtFamily:
                     GDMFamilyRecord fam = rec as GDMFamilyRecord;
                     result = ModifyFamily(baseWin, ref fam, TargetMode.tmNone, null);
                     break;
 
-                case GEDCOMRecordType.rtNote:
+                case GDMRecordType.rtNote:
                     GDMNoteRecord note = rec as GDMNoteRecord;
                     result = ModifyNote(baseWin, ref note);
                     break;
 
-                case GEDCOMRecordType.rtMultimedia:
+                case GDMRecordType.rtMultimedia:
                     GDMMultimediaRecord mmRec = rec as GDMMultimediaRecord;
                     result = ModifyMedia(baseWin, ref mmRec);
                     break;
 
-                case GEDCOMRecordType.rtSource:
+                case GDMRecordType.rtSource:
                     GDMSourceRecord src = rec as GDMSourceRecord;
                     result = ModifySource(baseWin, ref src);
                     break;
 
-                case GEDCOMRecordType.rtRepository:
+                case GDMRecordType.rtRepository:
                     GDMRepositoryRecord rep = rec as GDMRepositoryRecord;
                     result = ModifyRepository(baseWin, ref rep);
                     break;
 
-                case GEDCOMRecordType.rtGroup:
+                case GDMRecordType.rtGroup:
                     GDMGroupRecord grp = rec as GDMGroupRecord;
                     result = ModifyGroup(baseWin, ref grp);
                     break;
 
-                case GEDCOMRecordType.rtResearch:
+                case GDMRecordType.rtResearch:
                     GDMResearchRecord rsr = rec as GDMResearchRecord;
                     result = ModifyResearch(baseWin, ref rsr);
                     break;
 
-                case GEDCOMRecordType.rtTask:
+                case GDMRecordType.rtTask:
                     GDMTaskRecord tsk = rec as GDMTaskRecord;
                     result = ModifyTask(baseWin, ref tsk);
                     break;
 
-                case GEDCOMRecordType.rtCommunication:
+                case GDMRecordType.rtCommunication:
                     GDMCommunicationRecord comm = rec as GDMCommunicationRecord;
                     result = ModifyCommunication(baseWin, ref comm);
                     break;
 
-                case GEDCOMRecordType.rtLocation:
+                case GDMRecordType.rtLocation:
                     GDMLocationRecord loc = rec as GDMLocationRecord;
                     result = ModifyLocation(baseWin, ref loc);
                     break;
@@ -791,15 +791,15 @@ namespace GKCore
                 string msg = "";
                 switch (record.RecordType)
                 {
-                    case GEDCOMRecordType.rtIndividual:
+                    case GDMRecordType.rtIndividual:
                         msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), GKUtils.GetNameString(((GDMIndividualRecord)record), true, false));
                         break;
 
-                    case GEDCOMRecordType.rtFamily:
+                    case GDMRecordType.rtFamily:
                         msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString((GDMFamilyRecord)record));
                         break;
 
-                    case GEDCOMRecordType.rtNote:
+                    case GDMRecordType.rtNote:
                         {
                             string value = GKUtils.TruncateStrings(((GDMNoteRecord) (record)).Note, GKData.NOTE_NAME_MAX_LENGTH);
                             if (string.IsNullOrEmpty(value))
@@ -810,35 +810,35 @@ namespace GKCore
                             break;
                         }
 
-                    case GEDCOMRecordType.rtMultimedia:
+                    case GDMRecordType.rtMultimedia:
                         msg = string.Format(LangMan.LS(LSID.LSID_MediaDeleteQuery), ((GDMMultimediaRecord)record).GetFileTitle());
                         break;
 
-                    case GEDCOMRecordType.rtSource:
+                    case GDMRecordType.rtSource:
                         msg = string.Format(LangMan.LS(LSID.LSID_SourceDeleteQuery), ((GDMSourceRecord)record).ShortTitle);
                         break;
 
-                    case GEDCOMRecordType.rtRepository:
+                    case GDMRecordType.rtRepository:
                         msg = string.Format(LangMan.LS(LSID.LSID_RepositoryDeleteQuery), ((GDMRepositoryRecord)record).RepositoryName);
                         break;
 
-                    case GEDCOMRecordType.rtGroup:
+                    case GDMRecordType.rtGroup:
                         msg = string.Format(LangMan.LS(LSID.LSID_GroupDeleteQuery), ((GDMGroupRecord)record).GroupName);
                         break;
 
-                    case GEDCOMRecordType.rtResearch:
+                    case GDMRecordType.rtResearch:
                         msg = string.Format(LangMan.LS(LSID.LSID_ResearchDeleteQuery), ((GDMResearchRecord)record).ResearchName);
                         break;
 
-                    case GEDCOMRecordType.rtTask:
+                    case GDMRecordType.rtTask:
                         msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery), GKUtils.GetTaskGoalStr((GDMTaskRecord)record));
                         break;
 
-                    case GEDCOMRecordType.rtCommunication:
+                    case GDMRecordType.rtCommunication:
                         msg = string.Format(LangMan.LS(LSID.LSID_CommunicationDeleteQuery), ((GDMCommunicationRecord)record).CommName);
                         break;
 
-                    case GEDCOMRecordType.rtLocation:
+                    case GDMRecordType.rtLocation:
                         msg = string.Format(LangMan.LS(LSID.LSID_LocationDeleteQuery), ((GDMLocationRecord)record).LocationName);
                         break;
                 }
@@ -855,7 +855,7 @@ namespace GKCore
         {
             bool result = false;
 
-            GDMIndividualRecord father = baseWin.Context.SelectPerson(person, TargetMode.tmChild, GEDCOMSex.svMale);
+            GDMIndividualRecord father = baseWin.Context.SelectPerson(person, TargetMode.tmChild, GDMSex.svMale);
             if (father != null)
             {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, father);
@@ -896,7 +896,7 @@ namespace GKCore
         {
             bool result = false;
 
-            GDMIndividualRecord mother = baseWin.Context.SelectPerson(person, TargetMode.tmChild, GEDCOMSex.svFemale);
+            GDMIndividualRecord mother = baseWin.Context.SelectPerson(person, TargetMode.tmChild, GDMSex.svFemale);
             if (mother != null) {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, mother);
                 if (family != null) {
@@ -936,7 +936,7 @@ namespace GKCore
         {
             bool result = false;
 
-            GDMIndividualRecord husband = baseWin.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svMale);
+            GDMIndividualRecord husband = baseWin.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svMale);
             if (husband != null && family.Husband.StringValue == "")
             {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, husband);
@@ -964,7 +964,7 @@ namespace GKCore
         {
             bool result = false;
 
-            GDMIndividualRecord wife = baseWin.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svFemale);
+            GDMIndividualRecord wife = baseWin.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svFemale);
             if (wife != null && family.Wife.StringValue == "")
             {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, wife);
@@ -992,7 +992,7 @@ namespace GKCore
         {
             bool result = false;
 
-            GDMMultimediaRecord mmRec = baseWin.Context.SelectRecord(GEDCOMRecordType.rtMultimedia, null) as GDMMultimediaRecord;
+            GDMMultimediaRecord mmRec = baseWin.Context.SelectRecord(GDMRecordType.rtMultimedia, null) as GDMMultimediaRecord;
             if (mmRec == null) return false;
 
             // remove previous portrait link

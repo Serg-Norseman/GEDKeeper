@@ -48,7 +48,7 @@ namespace GKCore.Controllers
 
         public FamilyEditDlgController(IFamilyEditDlg view) : base(view)
         {
-            for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnLast; res++) {
+            for (GDMRestriction res = GDMRestriction.rnNone; res <= GDMRestriction.rnLast; res++) {
                 fView.Restriction.Add(LangMan.LS(GKData.Restrictions[(int)res]));
             }
 
@@ -75,7 +75,7 @@ namespace GKCore.Controllers
         {
             try {
                 fFamily.Status = (GDMMarriageStatus)fView.MarriageStatus.SelectedIndex;
-                fFamily.Restriction = (GEDCOMRestriction)fView.Restriction.SelectedIndex;
+                fFamily.Restriction = (GDMRestriction)fView.Restriction.SelectedIndex;
 
                 fBase.Context.ProcessFamily(fFamily);
 
@@ -128,7 +128,7 @@ namespace GKCore.Controllers
                 husband = fFamily.GetHusband();
                 wife = fFamily.GetWife();
 
-                fView.LockEditor(fFamily.Restriction == GEDCOMRestriction.rnLocked);
+                fView.LockEditor(fFamily.Restriction == GDMRestriction.rnLocked);
             }
 
             fView.SetHusband((husband != null) ? GKUtils.GetNameString(husband, true, false) : null);

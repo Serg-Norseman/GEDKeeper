@@ -81,7 +81,7 @@ namespace GKCore.Lists
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    mmRec = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtMultimedia, new object[0]) as GDMMultimediaRecord;
+                    mmRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtMultimedia, new object[0]) as GDMMultimediaRecord;
                     if (mmRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GDMObject)dataOwner, mmRec);
                     }

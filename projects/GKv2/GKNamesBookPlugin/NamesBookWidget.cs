@@ -40,7 +40,7 @@ namespace GKNamesBookPlugin
         {
             public string Name;
             public string Desc;
-            public GEDCOMSex Sex;
+            public GDMSex Sex;
             public int ChIndex;
         }
 
@@ -118,10 +118,10 @@ namespace GKNamesBookPlugin
             StringList lst;
             switch (rec.Sex)
             {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     lst = fChurchMNames;
                     break;
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     lst = fChurchFNames;
                     break;
                 default:
@@ -184,10 +184,10 @@ namespace GKNamesBookPlugin
                                     switch (c)
                                     {
                                         case 'f':
-                                            rec.Sex = GEDCOMSex.svFemale;
+                                            rec.Sex = GDMSex.svFemale;
                                             break;
                                         case 'm':
-                                            rec.Sex = GEDCOMSex.svMale;
+                                            rec.Sex = GDMSex.svMale;
                                             break;
                                     }
                                 }
@@ -241,10 +241,10 @@ namespace GKNamesBookPlugin
                     StringList lst;
                     switch (rec.Sex)
                     {
-                        case GEDCOMSex.svMale:
+                        case GDMSex.svMale:
                             lst = fChurchMNames;
                             break;
-                        case GEDCOMSex.svFemale:
+                        case GDMSex.svFemale:
                             lst = fChurchFNames;
                             break;
                         default:

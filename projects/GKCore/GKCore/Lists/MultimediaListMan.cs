@@ -41,7 +41,7 @@ namespace GKCore.Lists
 
 
         public MultimediaListMan(IBaseContext baseContext) :
-            base(baseContext, CreateMultimediaListColumns(), GEDCOMRecordType.rtMultimedia)
+            base(baseContext, CreateMultimediaListColumns(), GDMRecordType.rtMultimedia)
         {
         }
 

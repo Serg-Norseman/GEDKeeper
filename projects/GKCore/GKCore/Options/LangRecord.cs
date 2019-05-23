@@ -31,7 +31,7 @@ namespace GKCore.Options
         public readonly string Sign;
         public readonly string Name;
         public readonly string FileName;
-        public readonly GEDCOMLanguageID LangID;
+        public readonly GDMLanguageID LangID;
 
         public LangRecord(int code, string sign, string name, string fileName)
         {

@@ -29,7 +29,7 @@ namespace GKCore.Cultures
     /// </summary>
     public abstract class DefaultCulture : ICulture
     {
-        public GEDCOMLanguageID Language { get; set; }
+        public GDMLanguageID Language { get; set; }
 
         protected DefaultCulture()
         {
@@ -48,9 +48,9 @@ namespace GKCore.Cultures
             return husbSurname;
         }
 
-        public virtual GEDCOMSex GetSex(string iName, string iPat, bool canQuery)
+        public virtual GDMSex GetSex(string iName, string iPat, bool canQuery)
         {
-            return GEDCOMSex.svUndetermined;
+            return GDMSex.svUndetermined;
         }
 
         public virtual string[] GetSurnames(string surname, bool female)
@@ -66,7 +66,7 @@ namespace GKCore.Cultures
                 throw new ArgumentNullException("iRec");
 
             var parts = GKUtils.GetNameParts(iRec);
-            bool female = (iRec.Sex == GEDCOMSex.svFemale);
+            bool female = (iRec.Sex == GDMSex.svFemale);
 
             return GetSurnames(parts.Surname, female);
         }

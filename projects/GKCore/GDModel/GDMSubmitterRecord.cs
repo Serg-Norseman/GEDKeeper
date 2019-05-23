@@ -61,7 +61,7 @@ namespace GDModel
 
         public GDMSubmitterRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GEDCOMRecordType.rtSubmitter);
+            SetRecordType(GDMRecordType.rtSubmitter);
             SetName(GEDCOMTagType.SUBM);
 
             fLanguages = new GDMList<GDMLanguage>(this);

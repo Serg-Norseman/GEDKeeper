@@ -65,12 +65,12 @@ namespace GDModel
             GDMDateValue dtVal1, dtVal2;
 
             ind1 = tree.CreateIndividual();
-            ind1.Sex = GEDCOMSex.svMale;
+            ind1.Sex = GDMSex.svMale;
             GDMPersonalName pn = ind1.AddPersonalName(new GDMPersonalName(ind1, "", ""));
             pn.SetNameParts("Ivan Ivanov", "Fedoroff", "");
 
             ind2 = tree.CreateIndividual();
-            ind2.Sex = GEDCOMSex.svMale;
+            ind2.Sex = GDMSex.svMale;
             pn = ind2.AddPersonalName(new GDMPersonalName(ind2, "", ""));
             pn.SetNameParts("Ivan Ivanovich", "Fedoroff", "");
 
@@ -210,16 +210,16 @@ namespace GDModel
                 iOrd.Place.StringValue = "test place";
                 Assert.AreEqual("test place", iOrd.Place.StringValue);
                 
-                iOrd.BaptismDateStatus = GEDCOMBaptismDateStatus.bdsCompleted;
-                Assert.AreEqual(GEDCOMBaptismDateStatus.bdsCompleted, iOrd.BaptismDateStatus);
+                iOrd.BaptismDateStatus = GDMBaptismDateStatus.bdsCompleted;
+                Assert.AreEqual(GDMBaptismDateStatus.bdsCompleted, iOrd.BaptismDateStatus);
 
-                iOrd.EndowmentDateStatus = GEDCOMEndowmentDateStatus.edsExcluded;
-                Assert.AreEqual(GEDCOMEndowmentDateStatus.edsExcluded, iOrd.EndowmentDateStatus);
+                iOrd.EndowmentDateStatus = GDMEndowmentDateStatus.edsExcluded;
+                Assert.AreEqual(GDMEndowmentDateStatus.edsExcluded, iOrd.EndowmentDateStatus);
                 
                 Assert.IsNotNull(iOrd.Family);
                 
-                iOrd.ChildSealingDateStatus = GEDCOMChildSealingDateStatus.cdsPre1970;
-                Assert.AreEqual(GEDCOMChildSealingDateStatus.cdsPre1970, iOrd.ChildSealingDateStatus);
+                iOrd.ChildSealingDateStatus = GDMChildSealingDateStatus.cdsPre1970;
+                Assert.AreEqual(GDMChildSealingDateStatus.cdsPre1970, iOrd.ChildSealingDateStatus);
                 
                 Assert.IsNotNull(iOrd.DateStatus);
             }
@@ -254,7 +254,7 @@ namespace GDModel
             {
                 Assert.IsNotNull(replacer);
 
-                GDMIndividualRecord iRec = fContext.CreatePersonEx("ivan", "ivanovich", "ivanov", GEDCOMSex.svMale, false);
+                GDMIndividualRecord iRec = fContext.CreatePersonEx("ivan", "ivanovich", "ivanov", GDMSex.svMale, false);
                 replacer.AddXRef(iRec, "I210", iRec.XRef);
 
                 string newXRef = replacer.FindNewXRef("I210");
@@ -282,7 +282,7 @@ namespace GDModel
             UDN testUDN = iRec.GetUDN(GEDCOMTagType.BIRT);
             Assert.AreEqual("1990/12/28", testUDN.ToString());
 
-            testUDN = GDMDate.GetUDNByFormattedStr("28/12/1990", GEDCOMCalendar.dcGregorian);
+            testUDN = GDMDate.GetUDNByFormattedStr("28/12/1990", GDMCalendar.dcGregorian);
             Assert.AreEqual("1990/12/28", testUDN.ToString());
 
             using (GDMDateValue dateVal = new GDMDateValue(null, "", "")) {
@@ -413,7 +413,7 @@ namespace GDModel
                 Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
 
                 //dtx1.DateCalendar = GEDCOMCalendar.dcFrench;
-                Assert.AreEqual(GEDCOMCalendar.dcGregorian, dtx1.DateCalendar);
+                Assert.AreEqual(GDMCalendar.dcGregorian, dtx1.DateCalendar);
 
                 dtx1.Day = 21;
                 Assert.AreEqual(21, dtx1.Day);
@@ -443,7 +443,7 @@ namespace GDModel
                 // gregorian
 
                 dtx1.SetGregorian(1, 1, 1980);
-                Assert.AreEqual(GEDCOMCalendar.dcGregorian, dtx1.DateCalendar);
+                Assert.AreEqual(GDMCalendar.dcGregorian, dtx1.DateCalendar);
                 Assert.AreEqual("01 JAN 1980", dtx1.StringValue);
 
                 Assert.Throws(typeof(GDMDateException), () => { dtx1.SetGregorian(1, "X", 1980, "", false); });
@@ -451,10 +451,10 @@ namespace GDModel
                 // julian
 
                 dtx1.SetJulian(1, "JAN", 1980, false);
-                Assert.AreEqual(GEDCOMCalendar.dcJulian, dtx1.DateCalendar);
+                Assert.AreEqual(GDMCalendar.dcJulian, dtx1.DateCalendar);
 
                 dtx1.SetJulian(1, 3, 1980);
-                Assert.AreEqual(GEDCOMCalendar.dcJulian, dtx1.DateCalendar);
+                Assert.AreEqual(GDMCalendar.dcJulian, dtx1.DateCalendar);
                 Assert.AreEqual("@#DJULIAN@ 01 MAR 1980", dtx1.StringValue);
                 dtx1.ParseString("@#DJULIAN@ 01 MAR 1980");
                 Assert.AreEqual("@#DJULIAN@ 01 MAR 1980", dtx1.StringValue);
@@ -479,10 +479,10 @@ namespace GDModel
                 // hebrew
 
                 dtx1.SetHebrew(1, "TSH", 1980, false);
-                Assert.AreEqual(GEDCOMCalendar.dcHebrew, dtx1.DateCalendar);
+                Assert.AreEqual(GDMCalendar.dcHebrew, dtx1.DateCalendar);
 
                 dtx1.SetHebrew(1, 2, 1980);
-                Assert.AreEqual(GEDCOMCalendar.dcHebrew, dtx1.DateCalendar);
+                Assert.AreEqual(GDMCalendar.dcHebrew, dtx1.DateCalendar);
                 Assert.AreEqual("@#DHEBREW@ 01 CSH 1980", dtx1.StringValue);
                 dtx1.ParseString("@#DHEBREW@ 01 CSH 1980");
                 Assert.AreEqual("@#DHEBREW@ 01 CSH 1980", dtx1.StringValue);
@@ -492,10 +492,10 @@ namespace GDModel
                 // french
 
                 dtx1.SetFrench(1, "VEND", 1980, false);
-                Assert.AreEqual(GEDCOMCalendar.dcFrench, dtx1.DateCalendar);
+                Assert.AreEqual(GDMCalendar.dcFrench, dtx1.DateCalendar);
 
                 dtx1.SetFrench(1, 2, 1980);
-                Assert.AreEqual(GEDCOMCalendar.dcFrench, dtx1.DateCalendar);
+                Assert.AreEqual(GDMCalendar.dcFrench, dtx1.DateCalendar);
                 Assert.AreEqual("@#DFRENCH R@ 01 BRUM 1980", dtx1.StringValue);
                 dtx1.ParseString("@#DFRENCH R@ 01 BRUM 1980");
                 Assert.AreEqual("@#DFRENCH R@ 01 BRUM 1980", dtx1.StringValue);
@@ -505,10 +505,10 @@ namespace GDModel
                 // roman
 
                 dtx1.SetRoman(1, "JAN", 1980, false);
-                Assert.AreEqual(GEDCOMCalendar.dcRoman, dtx1.DateCalendar);
+                Assert.AreEqual(GDMCalendar.dcRoman, dtx1.DateCalendar);
 
                 dtx1.SetUnknown(1, "JAN", 1980, false);
-                Assert.AreEqual(GEDCOMCalendar.dcUnknown, dtx1.DateCalendar);
+                Assert.AreEqual(GDMCalendar.dcUnknown, dtx1.DateCalendar);
             }
         }
 
@@ -667,24 +667,24 @@ namespace GDModel
                 dtx1.ParseString(st);
                 Assert.IsTrue(dtx1.Date.Equals(dt));
                 Assert.AreEqual(st, dtx1.StringValue);
-                Assert.AreEqual(GEDCOMApproximated.daAbout, ((GDMDate)dtx1.Value).Approximated);
+                Assert.AreEqual(GDMApproximated.daAbout, ((GDMDate)dtx1.Value).Approximated);
                 
                 st = "CAL 20 JAN 2013";
                 dtx1.ParseString(st);
                 Assert.AreEqual(dtx1.Date, dt);
                 Assert.AreEqual(st, dtx1.StringValue);
-                Assert.AreEqual(GEDCOMApproximated.daCalculated, ((GDMDate)dtx1.Value).Approximated);
+                Assert.AreEqual(GDMApproximated.daCalculated, ((GDMDate)dtx1.Value).Approximated);
                 
                 st = "EST 20 DEC 2013";
                 dtx1.ParseString(st);
                 Assert.AreEqual(dtx1.Date, TestUtils.ParseDT("20.12.2013"));
                 Assert.AreEqual(st, dtx1.StringValue);
-                Assert.AreEqual(GEDCOMApproximated.daEstimated, ((GDMDate)dtx1.Value).Approximated);
+                Assert.AreEqual(GDMApproximated.daEstimated, ((GDMDate)dtx1.Value).Approximated);
 
-                ((GDMDate)dtx1.Value).Approximated = GEDCOMApproximated.daCalculated;
+                ((GDMDate)dtx1.Value).Approximated = GDMApproximated.daCalculated;
                 Assert.AreEqual("CAL 20 DEC 2013", dtx1.StringValue);
 
-                ((GDMDate)dtx1.Value).Approximated = GEDCOMApproximated.daExact;
+                ((GDMDate)dtx1.Value).Approximated = GDMApproximated.daExact;
                 Assert.AreEqual("20 DEC 2013", dtx1.StringValue);
 
                 using (GDMDateValue dtx2 = new GDMDateValue(null, "", "19 JAN 2013"))
@@ -756,11 +756,11 @@ namespace GDModel
 
                 // stream test
                 string buf = TestUtils.GetTagStreamText(addr, 0);
-                Assert.AreEqual(buf, "0 ADDR This\r\n"+"1 CONT address\r\n"+"1 CONT test\r\n"
+                Assert.AreEqual("0 ADDR This\r\n"+"1 CONT address\r\n"+"1 CONT test\r\n"
                                 +"0 PHON 8 911 101 99 99\r\n"
                                 +"0 EMAIL test@mail.com\r\n"
                                 +"0 FAX abrakadabra\r\n"
-                                +"0 WWW http://test.com\r\n");
+                                +"0 WWW http://test.com\r\n", buf);
 
                 addr.AddPhoneNumber("8 911 101 33 33");
                 Assert.AreEqual("8 911 101 33 33", addr.PhoneNumbers[1].StringValue);
@@ -989,7 +989,7 @@ namespace GDModel
 
 
             int size = 0;
-            var enum1 = tree.GetEnumerator(GEDCOMRecordType.rtNone);
+            var enum1 = tree.GetEnumerator(GDMRecordType.rtNone);
             GDMRecord rec1;
             enum1.Reset();
             while (enum1.MoveNext(out rec1)) {
@@ -1054,8 +1054,8 @@ namespace GDModel
             Assert.AreEqual(0, tree.RecordsCount);
             Assert.IsTrue(tree.IsEmpty);
 
-            tree.State = GEDCOMState.osReady;
-            Assert.AreEqual(GEDCOMState.osReady, tree.State);
+            tree.State = GDMTreeState.osReady;
+            Assert.AreEqual(GDMTreeState.osReady, tree.State);
 
 
             // Tests of GEDCOMTree.Extract()
@@ -1076,7 +1076,7 @@ namespace GDModel
         [Test]
         public void Test_GEDCOMHeader()
         {
-            GEDCOMHeader headRec = fContext.Tree.Header;
+            GDMHeader headRec = fContext.Tree.Header;
 
             headRec.Notes = new StringList("This notes test");
             Assert.AreEqual("This notes test", headRec.Notes[0]);
@@ -1096,7 +1096,7 @@ namespace GDModel
             headRec.ReceivingSystemName = "GEDKeeper";
             Assert.AreEqual("GEDKeeper", headRec.ReceivingSystemName);
 
-            headRec.Language.Value = GEDCOMLanguageID.Russian;
+            headRec.Language.Value = GDMLanguageID.Russian;
             Assert.AreEqual("Russian", headRec.Language.StringValue);
 
             headRec.GEDCOMVersion = "5.5";
@@ -1201,11 +1201,11 @@ namespace GDModel
             Assert.IsNull(father);
             Assert.IsNull(mother);
 
-            indiRec.Sex = GEDCOMSex.svMale;
-            Assert.AreEqual(GEDCOMSex.svMale, indiRec.Sex);
+            indiRec.Sex = GDMSex.svMale;
+            Assert.AreEqual(GDMSex.svMale, indiRec.Sex);
 
-            indiRec.Restriction = GEDCOMRestriction.rnLocked;
-            Assert.AreEqual(GEDCOMRestriction.rnLocked, indiRec.Restriction);
+            indiRec.Restriction = GDMRestriction.rnLocked;
+            Assert.AreEqual(GDMRestriction.rnLocked, indiRec.Restriction);
 
             indiRec.Patriarch = true;
             Assert.AreEqual(true, indiRec.Patriarch);
@@ -1342,8 +1342,8 @@ namespace GDModel
             iRec.AddPersonalName(persName);
 
             persName = iRec.PersonalNames[0];
-            persName.NameType = GEDCOMNameType.ntBirth;
-            Assert.AreEqual(GEDCOMNameType.ntBirth, persName.NameType);
+            persName.NameType = GDMNameType.ntBirth;
+            Assert.AreEqual(GDMNameType.ntBirth, persName.NameType);
 
             //
 
@@ -1403,13 +1403,13 @@ namespace GDModel
 
             //
 
-            Assert.AreEqual(GEDCOMLanguageID.Unknown, persName.Language.Value);
-            persName.Language.Value = GEDCOMLanguageID.English;
-            Assert.AreEqual(GEDCOMLanguageID.English, persName.Language.Value);
-            persName.Language.Value = GEDCOMLanguageID.Unknown;
-            Assert.AreEqual(GEDCOMLanguageID.Unknown, persName.Language.Value);
-            persName.Language.Value = GEDCOMLanguageID.Polish;
-            Assert.AreEqual(GEDCOMLanguageID.Polish, persName.Language.Value);
+            Assert.AreEqual(GDMLanguageID.Unknown, persName.Language.Value);
+            persName.Language.Value = GDMLanguageID.English;
+            Assert.AreEqual(GDMLanguageID.English, persName.Language.Value);
+            persName.Language.Value = GDMLanguageID.Unknown;
+            Assert.AreEqual(GDMLanguageID.Unknown, persName.Language.Value);
+            persName.Language.Value = GDMLanguageID.Polish;
+            Assert.AreEqual(GDMLanguageID.Polish, persName.Language.Value);
 
             //
 
@@ -1428,7 +1428,7 @@ namespace GDModel
                             "2 _RELN ReligiousName\r\n"+
                             "2 _CENN CensusName\r\n", buf);
 
-            persName.Language.Value = GEDCOMLanguageID.Unknown;
+            persName.Language.Value = GDMLanguageID.Unknown;
             persName.Pack();
 
             using (GDMPersonalName nameCopy = new GDMPersonalName(iRec, "", "")) {
@@ -1488,30 +1488,30 @@ namespace GDModel
         public void Test_GEDCOMFileReference()
         {
             using (GDMFileReference fileRef = new GDMFileReference(null, "", "")) {
-                fileRef.MediaType = GEDCOMMediaType.mtAudio;
-                Assert.AreEqual(GEDCOMMediaType.mtAudio, fileRef.MediaType);
+                fileRef.MediaType = GDMMediaType.mtAudio;
+                Assert.AreEqual(GDMMediaType.mtAudio, fileRef.MediaType);
             }
 
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfUnknown, GDMFileReference.RecognizeFormat(""));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfUnknown, GDMFileReference.RecognizeFormat("sample.xxx"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfBMP, GDMFileReference.RecognizeFormat("sample.BMP"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfGIF, GDMFileReference.RecognizeFormat("sample.Gif"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfJPG, GDMFileReference.RecognizeFormat("sample.jpg"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfJPG, GDMFileReference.RecognizeFormat("sample.Jpeg"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfOLE, GDMFileReference.RecognizeFormat("sample.ole"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfPCX, GDMFileReference.RecognizeFormat("sample.pCx"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfTIF, GDMFileReference.RecognizeFormat("sample.TiF"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfTIF, GDMFileReference.RecognizeFormat("sample.tiff"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfWAV, GDMFileReference.RecognizeFormat("sample.wav"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfTXT, GDMFileReference.RecognizeFormat("sample.txt"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfRTF, GDMFileReference.RecognizeFormat("sample.rtf"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfAVI, GDMFileReference.RecognizeFormat("sample.AvI"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfTGA, GDMFileReference.RecognizeFormat("sample.TGA"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfPNG, GDMFileReference.RecognizeFormat("sample.png"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfMPG, GDMFileReference.RecognizeFormat("sample.mpg"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfMPG, GDMFileReference.RecognizeFormat("sample.mpeg"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfHTM, GDMFileReference.RecognizeFormat("sample.htm"));
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfHTM, GDMFileReference.RecognizeFormat("sample.html"));
+            Assert.AreEqual(GDMMultimediaFormat.mfUnknown, GDMFileReference.RecognizeFormat(""));
+            Assert.AreEqual(GDMMultimediaFormat.mfUnknown, GDMFileReference.RecognizeFormat("sample.xxx"));
+            Assert.AreEqual(GDMMultimediaFormat.mfBMP, GDMFileReference.RecognizeFormat("sample.BMP"));
+            Assert.AreEqual(GDMMultimediaFormat.mfGIF, GDMFileReference.RecognizeFormat("sample.Gif"));
+            Assert.AreEqual(GDMMultimediaFormat.mfJPG, GDMFileReference.RecognizeFormat("sample.jpg"));
+            Assert.AreEqual(GDMMultimediaFormat.mfJPG, GDMFileReference.RecognizeFormat("sample.Jpeg"));
+            Assert.AreEqual(GDMMultimediaFormat.mfOLE, GDMFileReference.RecognizeFormat("sample.ole"));
+            Assert.AreEqual(GDMMultimediaFormat.mfPCX, GDMFileReference.RecognizeFormat("sample.pCx"));
+            Assert.AreEqual(GDMMultimediaFormat.mfTIF, GDMFileReference.RecognizeFormat("sample.TiF"));
+            Assert.AreEqual(GDMMultimediaFormat.mfTIF, GDMFileReference.RecognizeFormat("sample.tiff"));
+            Assert.AreEqual(GDMMultimediaFormat.mfWAV, GDMFileReference.RecognizeFormat("sample.wav"));
+            Assert.AreEqual(GDMMultimediaFormat.mfTXT, GDMFileReference.RecognizeFormat("sample.txt"));
+            Assert.AreEqual(GDMMultimediaFormat.mfRTF, GDMFileReference.RecognizeFormat("sample.rtf"));
+            Assert.AreEqual(GDMMultimediaFormat.mfAVI, GDMFileReference.RecognizeFormat("sample.AvI"));
+            Assert.AreEqual(GDMMultimediaFormat.mfTGA, GDMFileReference.RecognizeFormat("sample.TGA"));
+            Assert.AreEqual(GDMMultimediaFormat.mfPNG, GDMFileReference.RecognizeFormat("sample.png"));
+            Assert.AreEqual(GDMMultimediaFormat.mfMPG, GDMFileReference.RecognizeFormat("sample.mpg"));
+            Assert.AreEqual(GDMMultimediaFormat.mfMPG, GDMFileReference.RecognizeFormat("sample.mpeg"));
+            Assert.AreEqual(GDMMultimediaFormat.mfHTM, GDMFileReference.RecognizeFormat("sample.htm"));
+            Assert.AreEqual(GDMMultimediaFormat.mfHTM, GDMFileReference.RecognizeFormat("sample.html"));
         }
 
         [Test]
@@ -1520,8 +1520,8 @@ namespace GDModel
             using (GDMLanguage langTag = GDMLanguage.Create(null, "", "") as GDMLanguage) {
                 Assert.IsTrue(langTag.IsEmpty());
 
-                langTag.Value = GEDCOMLanguageID.AngloSaxon;
-                Assert.AreEqual(GEDCOMLanguageID.AngloSaxon, langTag.Value);
+                langTag.Value = GDMLanguageID.AngloSaxon;
+                Assert.AreEqual(GDMLanguageID.AngloSaxon, langTag.Value);
 
                 langTag.ParseString("Spanish");
                 Assert.AreEqual("Spanish", langTag.StringValue);
@@ -1721,8 +1721,8 @@ namespace GDModel
             detail.ReligiousAffilation = "test aff";
             Assert.AreEqual("test aff", detail.ReligiousAffilation);
 
-            detail.Restriction = GEDCOMRestriction.rnLocked;
-            Assert.AreEqual(GEDCOMRestriction.rnLocked, detail.Restriction);
+            detail.Restriction = GDMRestriction.rnLocked;
+            Assert.AreEqual(GDMRestriction.rnLocked, detail.Restriction);
         }
 
         [Test]
@@ -1740,7 +1740,7 @@ namespace GDModel
             rec.AutomatedRecordID = "test11";
             Assert.AreEqual("test11", rec.AutomatedRecordID);
 
-            Assert.AreEqual(GEDCOMRecordType.rtIndividual, rec.RecordType);
+            Assert.AreEqual(GDMRecordType.rtIndividual, rec.RecordType);
 
             Assert.AreEqual(4, rec.GetId());
             Assert.AreEqual("4", rec.GetXRefNum());
@@ -1759,7 +1759,7 @@ namespace GDModel
                 Assert.IsNotNull(famRec);
 
                 GDMIndividualRecord unkInd = new GDMIndividualRecord(null);
-                unkInd.Sex = GEDCOMSex.svUndetermined;
+                unkInd.Sex = GDMSex.svUndetermined;
                 Assert.IsFalse(famRec.AddSpouse(unkInd));
 
                 GDMIndividualRecord child1 = fContext.Tree.CreateIndividual(); // for pointer need a proper object
@@ -1808,8 +1808,8 @@ namespace GDModel
         {
             Assert.IsNotNull(famRec.Submittors);
 
-            famRec.Restriction = GEDCOMRestriction.rnLocked;
-            Assert.AreEqual(GEDCOMRestriction.rnLocked, famRec.Restriction);
+            famRec.Restriction = GDMRestriction.rnLocked;
+            Assert.AreEqual(GDMRestriction.rnLocked, famRec.Restriction);
 
             famRec.AddChild(indiv);
             Assert.AreEqual(0, famRec.IndexOfChild(indiv));
@@ -1847,14 +1847,14 @@ namespace GDModel
 
             //
 
-            indiv.Sex = GEDCOMSex.svMale;
+            indiv.Sex = GDMSex.svMale;
             famRec.AddSpouse(indiv);
             Assert.AreEqual(0, indiv.IndexOfSpouse(famRec));
             GEDCOMSpouseToFamilyLinkTest(indiv.SpouseToFamilyLinks[0]);
             Assert.IsNull(famRec.GetSpouseBy(indiv));
             famRec.RemoveSpouse(indiv);
 
-            indiv.Sex = GEDCOMSex.svFemale;
+            indiv.Sex = GDMSex.svFemale;
             famRec.AddSpouse(indiv);
             Assert.AreEqual(0, indiv.IndexOfSpouse(famRec));
             GEDCOMSpouseToFamilyLinkTest(indiv.SpouseToFamilyLinks[0]);
@@ -2186,10 +2186,10 @@ namespace GDModel
             Assert.AreEqual("File Title 2", fileRef.Title);
 
             fileRef.LinkFile("sample.png");
-            fileRef.MediaType = GEDCOMMediaType.mtManuscript;
+            fileRef.MediaType = GDMMediaType.mtManuscript;
             Assert.AreEqual("sample.png", fileRef.StringValue);
-            Assert.AreEqual(GEDCOMMultimediaFormat.mfPNG, fileRef.MultimediaFormat);
-            Assert.AreEqual(GEDCOMMediaType.mtManuscript, fileRef.MediaType);
+            Assert.AreEqual(GDMMultimediaFormat.mfPNG, fileRef.MultimediaFormat);
+            Assert.AreEqual(GDMMediaType.mtManuscript, fileRef.MediaType);
 
             string title = mediaRec.GetFileTitle();
             Assert.AreEqual("File Title 2", title);
@@ -2299,8 +2299,8 @@ namespace GDModel
             submRec.GenerationsOfDescendants = 77;
             Assert.AreEqual(77, submRec.GenerationsOfDescendants);
 
-            submRec.OrdinanceProcessFlag = GEDCOMOrdinanceProcessFlag.opYes;
-            Assert.AreEqual(GEDCOMOrdinanceProcessFlag.opYes, submRec.OrdinanceProcessFlag);
+            submRec.OrdinanceProcessFlag = GDMOrdinanceProcessFlag.opYes;
+            Assert.AreEqual(GDMOrdinanceProcessFlag.opYes, submRec.OrdinanceProcessFlag);
             
             submRec.Submitter.XRef = submitterXRef;
             GDMSubmitterRecord subr = submRec.Submitter.Value as GDMSubmitterRecord;

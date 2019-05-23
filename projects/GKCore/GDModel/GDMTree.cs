@@ -28,7 +28,7 @@ namespace GDModel
     public delegate void ProgressEventHandler(object sender, int progress);
 
 
-    public enum GEDCOMState
+    public enum GDMTreeState
     {
         osLoading,
         osReady
@@ -45,11 +45,11 @@ namespace GDModel
         private struct TreeEnumerator : IGEDCOMTreeEnumerator
         {
             private readonly GDMTree fTree;
-            private readonly GEDCOMRecordType fRecType;
+            private readonly GDMRecordType fRecType;
             private readonly int fEndIndex;
             private int fIndex;
 
-            public TreeEnumerator(GDMTree tree, GEDCOMRecordType recType)
+            public TreeEnumerator(GDMTree tree, GDMRecordType recType)
             {
                 fTree = tree;
                 fIndex = -1;
@@ -59,7 +59,7 @@ namespace GDModel
 
             public bool MoveNext(out GDMRecord current)
             {
-                if (fRecType == GEDCOMRecordType.rtNone)
+                if (fRecType == GDMRecordType.rtNone)
                 {
                     if (fIndex < fEndIndex)
                     {
@@ -93,7 +93,7 @@ namespace GDModel
         #endregion
 
 
-        private readonly GEDCOMHeader fHeader;
+        private readonly GDMHeader fHeader;
         private readonly GDMList<GDMRecord> fRecords;
         private readonly Dictionary<string, GDMCustomRecord> fXRefIndex;
 
@@ -102,7 +102,7 @@ namespace GDModel
         private EventHandler fOnChange;
         private EventHandler fOnChanging;
         private ProgressEventHandler fOnProgressEvent;
-        private GEDCOMState fState;
+        private GDMTreeState fState;
         private int fUpdateCount;
 
 
@@ -112,7 +112,7 @@ namespace GDModel
             internal set { fFormat = value; }
         }
 
-        public GEDCOMHeader Header
+        public GDMHeader Header
         {
             get { return fHeader; }
         }
@@ -132,7 +132,7 @@ namespace GDModel
             get { return fRecords[index]; }
         }
 
-        public GEDCOMState State
+        public GDMTreeState State
         {
             get { return fState; }
             set { fState = value; }
@@ -161,7 +161,7 @@ namespace GDModel
         {
             fXRefIndex = new Dictionary<string, GDMCustomRecord>();
             fRecords = new GDMList<GDMRecord>(this);
-            fHeader = new GEDCOMHeader(this);
+            fHeader = new GDMHeader(this);
 
             ResetLastIDs();
         }
@@ -214,7 +214,7 @@ namespace GDModel
 
         private void ResetLastIDs()
         {
-            fLastIDs = new int[(int)GEDCOMRecordType.rtLast + 1];
+            fLastIDs = new int[(int)GDMRecordType.rtLast + 1];
         }
 
         public string XRefIndex_NewXRef(GDMRecord record)
@@ -263,7 +263,7 @@ namespace GDModel
             return result;
         }
 
-        public IGEDCOMTreeEnumerator GetEnumerator(GEDCOMRecordType recType)
+        public IGEDCOMTreeEnumerator GetEnumerator(GDMRecordType recType)
         {
             return new TreeEnumerator(this, recType);
         }
@@ -332,7 +332,7 @@ namespace GDModel
 
         public int[] GetRecordStats()
         {
-            int[] stats = new int[((int)GEDCOMRecordType.rtLast)];
+            int[] stats = new int[((int)GDMRecordType.rtLast)];
 
             int num = RecordsCount;
             for (int i = 0; i < num; i++)
@@ -549,7 +549,7 @@ namespace GDModel
             for (int i = 0; i < num; i++)
             {
                 GDMRecord rec = this[i];
-                if (rec.RecordType == GEDCOMRecordType.rtSource)
+                if (rec.RecordType == GDMRecordType.rtSource)
                 {
                     GDMSourceRecord srcRec = (GDMSourceRecord) rec;
                     for (int j = srcRec.RepositoryCitations.Count - 1; j >= 0; j--)
@@ -603,7 +603,7 @@ namespace GDModel
             for (int i = 0; i < num; i++)
             {
                 GDMRecord rec = this[i];
-                if (rec.RecordType == GEDCOMRecordType.rtResearch)
+                if (rec.RecordType == GDMRecordType.rtResearch)
                 {
                     GDMResearchRecord resRec = (GDMResearchRecord) rec;
                     for (int j = resRec.Tasks.Count - 1; j >= 0; j--)
@@ -628,7 +628,7 @@ namespace GDModel
             for (int i = 0; i < num; i++)
             {
                 GDMRecord rec = this[i];
-                if (rec.RecordType == GEDCOMRecordType.rtResearch)
+                if (rec.RecordType == GDMRecordType.rtResearch)
                 {
                     GDMResearchRecord resRec = (GDMResearchRecord) rec;
                     for (int j = resRec.Communications.Count - 1; j >= 0; j--)

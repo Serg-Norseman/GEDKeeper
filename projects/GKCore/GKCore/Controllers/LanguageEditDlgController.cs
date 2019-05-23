@@ -31,9 +31,9 @@ namespace GKCore.Controllers
     /// </summary>
     public class LanguageEditDlgController : DialogController<ILanguageEditDlg>
     {
-        private GEDCOMLanguageID fLanguageID;
+        private GDMLanguageID fLanguageID;
 
-        public GEDCOMLanguageID LanguageID
+        public GDMLanguageID LanguageID
         {
             get { return fLanguageID; }
             set {
@@ -46,7 +46,7 @@ namespace GKCore.Controllers
 
         public LanguageEditDlgController(ILanguageEditDlg view) : base(view)
         {
-            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageID.Yiddish; lid++) {
+            for (var lid = GDMLanguageID.Unknown; lid < GDMLanguageID.Yiddish; lid++) {
                 fView.LanguageCombo.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
             }
         }
@@ -54,7 +54,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fLanguageID = (GEDCOMLanguageID)fView.LanguageCombo.SelectedTag;
+                fLanguageID = (GDMLanguageID)fView.LanguageCombo.SelectedTag;
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("LanguageEditDlgController.Accept(): " + ex.Message);

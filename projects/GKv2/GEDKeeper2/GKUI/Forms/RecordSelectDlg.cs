@@ -43,7 +43,7 @@ namespace GKUI.Forms
             set { txtFastFilter.Text = value; }
         }
 
-        public GEDCOMSex NeedSex
+        public GDMSex NeedSex
         {
             get { return fController.Target.NeedSex; }
             set { fController.Target.NeedSex = value; }
@@ -73,7 +73,7 @@ namespace GKUI.Forms
         #endregion
 
 
-        public RecordSelectDlg(IBaseWindow baseWin, GEDCOMRecordType recType)
+        public RecordSelectDlg(IBaseWindow baseWin, GDMRecordType recType)
         {
             InitializeComponent();
 

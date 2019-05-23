@@ -212,7 +212,7 @@ namespace GKCore.MVP.Controls
     public interface IMergeControl : IBaseControl
     {
         IBaseWindow Base { get; set; }
-        GEDCOMRecordType MergeMode { get; set; }
+        GDMRecordType MergeMode { get; set; }
         GDMRecord Rec1 { get; }
         GDMRecord Rec2 { get; }
 

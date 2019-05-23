@@ -63,7 +63,7 @@ namespace GKCore
             Assert.IsFalse(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GEDCOMSex.svUndetermined, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUndetermined, culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -84,7 +84,7 @@ namespace GKCore
             Assert.IsFalse(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GEDCOMSex.svUndetermined, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUndetermined, culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -105,7 +105,7 @@ namespace GKCore
             Assert.IsTrue(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GEDCOMSex.svUndetermined, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUndetermined, culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -126,7 +126,7 @@ namespace GKCore
             Assert.IsTrue(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GEDCOMSex.svUndetermined, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUndetermined, culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -184,13 +184,13 @@ namespace GKCore
             Assert.AreEqual("Бельский", snms[0]);
 
 
-            GEDCOMSex sx = rusCulture.GetSex("Мария", "Петровна", false);
-            Assert.AreEqual(GEDCOMSex.svFemale, sx);
+            GDMSex sx = rusCulture.GetSex("Мария", "Петровна", false);
+            Assert.AreEqual(GDMSex.svFemale, sx);
 
             sx = rusCulture.GetSex("Иван", "Петрович", false);
-            Assert.AreEqual(GEDCOMSex.svMale, sx);
+            Assert.AreEqual(GDMSex.svMale, sx);
 
-            Assert.AreEqual(GEDCOMSex.svNone, rusCulture.GetSex("", "", false));
+            Assert.AreEqual(GDMSex.svNone, rusCulture.GetSex("", "", false));
 
             Assert.AreEqual("Иванова Ивана Ивановича", rusCulture.GetPossessiveName("Иванов Иван Иванович"));
         }

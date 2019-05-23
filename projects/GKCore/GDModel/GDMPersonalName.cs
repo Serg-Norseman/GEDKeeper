@@ -19,12 +19,11 @@
  */
 
 using System;
-using System.IO;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public enum GEDCOMNameType
+    public enum GDMNameType
     {
         ntNone,
         ntAka,
@@ -83,7 +82,7 @@ namespace GDModel
             get { return fPieces; }
         }
 
-        public GEDCOMNameType NameType
+        public GDMNameType NameType
         {
             get { return GEDCOMUtils.GetNameTypeVal(GetTagStringValue(GEDCOMTagType.TYPE)); }
             set { SetTagStringValue(GEDCOMTagType.TYPE, GEDCOMUtils.GetNameTypeStr(value)); }
@@ -193,12 +192,6 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
             fPieces.ReplaceXRefs(map);
-        }
-
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            base.SaveToStream(stream, level);
-            fPieces.SaveToStream(stream, level); // same level
         }
 
         private static bool IsUnknown(string str)

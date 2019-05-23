@@ -72,7 +72,7 @@ namespace GDModel
 
         public GDMCommunicationRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GEDCOMRecordType.rtCommunication);
+            SetRecordType(GDMRecordType.rtCommunication);
             SetName(GEDCOMTagType._COMM);
         }
         

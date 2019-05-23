@@ -48,7 +48,7 @@ namespace GKTests
             Assert.IsNull(evt);
 
             // first individual (I1)
-            GDMIndividualRecord iRec = context.CreatePersonEx("Ivan", "Ivanovich", "Ivanov", GEDCOMSex.svMale, true);
+            GDMIndividualRecord iRec = context.CreatePersonEx("Ivan", "Ivanovich", "Ivanov", GDMSex.svMale, true);
             Assert.IsNotNull(iRec);
 
             evt = iRec.FindEvent(GEDCOMTagType.BIRT);
@@ -60,7 +60,7 @@ namespace GKTests
             Assert.IsNotNull(evtd);
 
             // second individual, wife (I2)
-            GDMIndividualRecord iRec2 = context.CreatePersonEx("Maria", "Petrovna", "Ivanova", GEDCOMSex.svFemale, true);
+            GDMIndividualRecord iRec2 = context.CreatePersonEx("Maria", "Petrovna", "Ivanova", GDMSex.svFemale, true);
             evt = iRec2.FindEvent(GEDCOMTagType.BIRT);
             Assert.IsNotNull(evt);
             evt.Date.ParseString("17 MAR 1991");
@@ -69,7 +69,7 @@ namespace GKTests
             iRec.AddAssociation("spouse", iRec2);
 
             // third individual, child (I3)
-            GDMIndividualRecord iRec3 = context.CreatePersonEx("Anna", "Ivanovna", "Ivanova", GEDCOMSex.svFemale, true);
+            GDMIndividualRecord iRec3 = context.CreatePersonEx("Anna", "Ivanovna", "Ivanova", GDMSex.svFemale, true);
             evt = iRec3.FindEvent(GEDCOMTagType.BIRT);
             Assert.IsNotNull(evt);
             evt.Date.ParseString("11 FEB 2010");
@@ -85,7 +85,7 @@ namespace GKTests
             context.CreateEventEx(famRec, GEDCOMTagType.MARR, "01 JAN 2000", "unknown");
 
             // individual outside the family (I4)
-            GDMIndividualRecord iRec4 = context.CreatePersonEx("Alex", "", "Petrov", GEDCOMSex.svMale, true);
+            GDMIndividualRecord iRec4 = context.CreatePersonEx("Alex", "", "Petrov", GDMSex.svMale, true);
             evt = iRec4.FindEvent(GEDCOMTagType.BIRT);
             Assert.IsNotNull(evt);
             evt.Date.ParseString("15 JUN 1989");
@@ -95,11 +95,11 @@ namespace GKTests
             Assert.IsNotNull(evt);
 
             // fifth (I5)
-            GDMIndividualRecord iRec5 = context.CreatePersonEx("Anna", "", "Jones", GEDCOMSex.svFemale, false);
+            GDMIndividualRecord iRec5 = context.CreatePersonEx("Anna", "", "Jones", GDMSex.svFemale, false);
             Assert.IsNotNull(iRec5);
 
             // sixth (I6)
-            GDMIndividualRecord iRec6 = context.CreatePersonEx("Mary", "", "Jones", GEDCOMSex.svFemale, false);
+            GDMIndividualRecord iRec6 = context.CreatePersonEx("Mary", "", "Jones", GDMSex.svFemale, false);
             Assert.IsNotNull(iRec6);
             evt = context.CreateEventEx(iRec6, GEDCOMTagType.BIRT, "12 FEB 1650", "Far Forest");
 
@@ -168,10 +168,21 @@ namespace GKTests
 
         public static string GetTagStreamText(GDMTag tag, int level)
         {
+            GEDCOMProvider.SkipUID = true;
+
+            // FIXME: very bad code after refactoring of GEDCOMProvider!
             string result;
             using (MemoryStream stm = new MemoryStream()) {
                 using (StreamWriter fs = new StreamWriter(stm)) {
-                    tag.SaveToStream(fs, level);
+                    if (tag is GDMRecord) {
+                        GEDCOMProvider.WriteRecordEx(fs, tag as GDMRecord);
+                    } else {
+                        if (tag is GDMPersonalName) {
+                            GEDCOMProvider.WritePersonalName(fs, 1, tag as GDMPersonalName);
+                        } else {
+                            GEDCOMProvider.WriteTag(fs, level, tag);
+                        }
+                    }
 
                     fs.Flush();
 

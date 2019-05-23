@@ -602,9 +602,9 @@ namespace GKCore.Operations
 
             if (redo) {
                 fOldVal = iRec.Sex;
-                iRec.Sex = (GEDCOMSex) fNewVal;
+                iRec.Sex = (GDMSex) fNewVal;
             } else {
-                iRec.Sex = (GEDCOMSex) fOldVal;
+                iRec.Sex = (GDMSex) fOldVal;
             }
             return true;
         }

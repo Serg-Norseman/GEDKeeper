@@ -43,7 +43,7 @@ namespace GKCore.Controllers
             int num = fBase.Context.Tree.RecordsCount;
             for (int i = 0; i < num; i++) {
                 GDMRecord rec = fBase.Context.Tree[i];
-                if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
+                if (rec.RecordType != GDMRecordType.rtIndividual) continue;
 
                 GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
                 string nm = GKUtils.GetNameString(iRec, true, false);

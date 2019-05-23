@@ -36,7 +36,7 @@ namespace GKCore.Interfaces
         ShieldState ShieldState { get; set; }
         bool Modified { get; set; }
         IBaseWindow Viewer { get; }
-        List<GEDCOMLanguageID> LangsList { get; }
+        List<GDMLanguageID> LangsList { get; }
 
         bool IsUnknown();
         void Clear();
@@ -48,9 +48,9 @@ namespace GKCore.Interfaces
         // Data manipulation
         GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, string evDate, string evPlace);
         GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, GDMCustomDate evDate, string evPlace);
-        GDMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex, bool birthEvent);
+        GDMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GDMSex iSex, bool birthEvent);
         bool DeleteRecord(GDMRecord record);
-        bool IsRecordAccess(GEDCOMRestriction restriction);
+        bool IsRecordAccess(GDMRestriction restriction);
 
         // Individual utils
         bool IsChildless(GDMIndividualRecord iRec);
@@ -60,7 +60,7 @@ namespace GKCore.Interfaces
         void CollectNameLangs(GDMPersonalName persName);
         void CollectTips(StringList tipsList);
         void ImportNames(GDMIndividualRecord iRec);
-        IList<ISearchResult> FindAll(GEDCOMRecordType recordType, string searchPattern);
+        IList<ISearchResult> FindAll(GDMRecordType recordType, string searchPattern);
 
         // Multimedia support
         bool CheckBasePath();
@@ -93,19 +93,19 @@ namespace GKCore.Interfaces
         GDMSourceRecord FindSource(string sourceName);
         void GetSourcesList(StringList sources);
 
-        string DefinePatronymic(string name, GEDCOMSex sex, bool confirm);
-        GEDCOMSex DefineSex(string iName, string iPatr);
+        string DefinePatronymic(string name, GDMSex sex, bool confirm);
+        GDMSex DefineSex(string iName, string iPatr);
         void CheckPersonSex(GDMIndividualRecord iRec);
 
         GDMFamilyRecord SelectFamily(GDMIndividualRecord target);
         GDMIndividualRecord SelectPerson(GDMIndividualRecord target,
-                                            TargetMode targetMode, GEDCOMSex needSex);
-        GDMRecord SelectRecord(GEDCOMRecordType mode, params object[] args);
+                                            TargetMode targetMode, GDMSex needSex);
+        GDMRecord SelectRecord(GDMRecordType mode, params object[] args);
         GDMFamilyRecord GetChildFamily(GDMIndividualRecord iChild,
                                           bool canCreate,
                                           GDMIndividualRecord newParent);
         GDMFamilyRecord AddFamilyForSpouse(GDMIndividualRecord spouse);
-        GDMIndividualRecord AddChildForParent(GDMIndividualRecord parent, GEDCOMSex needSex);
+        GDMIndividualRecord AddChildForParent(GDMIndividualRecord parent, GDMSex needSex);
         GDMIndividualRecord SelectSpouseFor(GDMIndividualRecord iRec);
 
         void ProcessFamily(GDMFamilyRecord famRec);

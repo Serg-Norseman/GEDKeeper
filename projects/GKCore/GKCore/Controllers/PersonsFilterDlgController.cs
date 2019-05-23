@@ -74,7 +74,7 @@ namespace GKCore.Controllers
                     }
                 }
 
-                iFilter.Sex = (GEDCOMSex)fView.GetSexRadio();
+                iFilter.Sex = (GDMSex)fView.GetSexRadio();
 
                 if (fView.NameCombo.Text == "") fView.NameCombo.Text = @"*";
                 iFilter.Name = fView.NameCombo.Text;

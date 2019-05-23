@@ -195,17 +195,6 @@ namespace GDModel
         }
 
         [Test]
-        public void Test_SaveTagsToStream()
-        {
-            GDMAddress instance = new GDMAddress(null);
-
-            StreamWriter stream = null;
-            Assert.Throws(typeof(NullReferenceException), () => {
-                instance.SaveToStream(stream, 0);
-            });
-        }
-
-        [Test]
         public void Test_Assign()
         {
             GDMTag source = null;

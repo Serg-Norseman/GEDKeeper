@@ -40,7 +40,7 @@ namespace GKCore.Lists
 
 
         public FamilyListMan(IBaseContext baseContext) :
-            base(baseContext, CreateFamilyListColumns(), GEDCOMRecordType.rtFamily)
+            base(baseContext, CreateFamilyListColumns(), GDMRecordType.rtFamily)
         {
         }
 

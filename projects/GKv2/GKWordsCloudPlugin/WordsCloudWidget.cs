@@ -112,7 +112,7 @@ namespace GKWordsCloudPlugin
 
                 if (fBase != null) {
                     List<StatsItem> vals = new List<StatsItem>();
-                    TreeStats treeStats = new TreeStats(fBase.Context, fBase.GetContentList(GEDCOMRecordType.rtIndividual));
+                    TreeStats treeStats = new TreeStats(fBase.Context, fBase.GetContentList(GDMRecordType.rtIndividual));
                     treeStats.GetSpecStats(fMode, vals);
 
                     fWords.Capacity = vals.Count;

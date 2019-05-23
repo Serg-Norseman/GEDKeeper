@@ -42,7 +42,7 @@ namespace GKCore.Lists
 
 
         public LocationListMan(IBaseContext baseContext) :
-            base(baseContext, CreateLocationListColumns(), GEDCOMRecordType.rtLocation)
+            base(baseContext, CreateLocationListColumns(), GDMRecordType.rtLocation)
         {
         }
 

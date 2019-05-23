@@ -39,7 +39,7 @@ namespace GDModel
 
         public GDMLocationRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GEDCOMRecordType.rtLocation);
+            SetRecordType(GDMRecordType.rtLocation);
             SetName(GEDCOMTagType._LOC);
         }
 

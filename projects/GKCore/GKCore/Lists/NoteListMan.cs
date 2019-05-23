@@ -39,7 +39,7 @@ namespace GKCore.Lists
 
 
         public NoteListMan(IBaseContext baseContext) :
-            base(baseContext, CreateNoteListColumns(), GEDCOMRecordType.rtNote)
+            base(baseContext, CreateNoteListColumns(), GDMRecordType.rtNote)
         {
         }
 

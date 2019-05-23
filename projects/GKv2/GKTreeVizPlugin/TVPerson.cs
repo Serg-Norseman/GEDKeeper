@@ -45,7 +45,7 @@ namespace GKTreeVizPlugin
         public TVPersonType Type;
 
         public readonly GDMIndividualRecord IRec;
-        public readonly GEDCOMSex Sex;
+        public readonly GDMSex Sex;
         public readonly List<TVPerson> Spouses;
         public readonly List<TVPerson> Childs;
 

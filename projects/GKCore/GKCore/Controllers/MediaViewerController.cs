@@ -84,21 +84,21 @@ namespace GKCore.Controllers
                             bool disposeStream = (fs != null);
 
                             switch (fFileRef.MultimediaFormat) {
-                                case GEDCOMMultimediaFormat.mfTXT:
+                                case GDMMultimediaFormat.mfTXT:
                                     using (StreamReader strd = new StreamReader(fs)) {
                                         string text = strd.ReadToEnd();
                                         fView.SetViewText(text);
                                     }
                                     break;
 
-                                case GEDCOMMultimediaFormat.mfRTF:
+                                case GDMMultimediaFormat.mfRTF:
                                     using (StreamReader strd = new StreamReader(fs)) {
                                         string text = strd.ReadToEnd();
                                         fView.SetViewRTF(text);
                                     }
                                     break;
 
-                                case GEDCOMMultimediaFormat.mfHTM:
+                                case GDMMultimediaFormat.mfHTM:
                                     disposeStream = false;
                                     fView.SetViewHTML(fs);
                                     break;

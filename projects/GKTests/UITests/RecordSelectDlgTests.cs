@@ -49,7 +49,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
 
-            fDialog = new RecordSelectDlg(fBase, GEDCOMRecordType.rtIndividual);
+            fDialog = new RecordSelectDlg(fBase, GDMRecordType.rtIndividual);
             fDialog.Show();
         }
 

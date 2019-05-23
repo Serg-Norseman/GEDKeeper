@@ -49,11 +49,11 @@ namespace GKCore.Controllers
 
         public PersonalNameEditDlgController(IPersonalNameEditDlg view) : base(view)
         {
-            for (GEDCOMNameType nt = GEDCOMNameType.ntNone; nt <= GEDCOMNameType.ntMarried; nt++) {
+            for (GDMNameType nt = GDMNameType.ntNone; nt <= GDMNameType.ntMarried; nt++) {
                 fView.NameType.Add(LangMan.LS(GKData.NameTypes[(int)nt]));
             }
 
-            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageID.Yiddish; lid++) {
+            for (var lid = GDMLanguageID.Unknown; lid < GDMLanguageID.Yiddish; lid++) {
                 fView.Language.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
             }
             fView.Language.SortItems();
@@ -70,8 +70,8 @@ namespace GKCore.Controllers
                 pieces.SurnamePrefix = fView.SurnamePrefix.Text;
                 pieces.Suffix = fView.NameSuffix.Text;
 
-                fPersonalName.NameType = (GEDCOMNameType)fView.NameType.SelectedIndex;
-                fPersonalName.Language.Value = (GEDCOMLanguageID)fView.Language.SelectedTag;
+                fPersonalName.NameType = (GDMNameType)fView.NameType.SelectedIndex;
+                fPersonalName.Language.Value = (GDMLanguageID)fView.Language.SelectedTag;
 
                 fBase.Context.CollectNameLangs(fPersonalName);
 
@@ -87,7 +87,7 @@ namespace GKCore.Controllers
             GDMIndividualRecord iRec = fPersonalName.Owner as GDMIndividualRecord;
 
             bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
-                (iRec.Sex == GEDCOMSex.svFemale);
+                (iRec.Sex == GDMSex.svFemale);
             return result;
         }
 
@@ -121,7 +121,7 @@ namespace GKCore.Controllers
             fView.Surname.Enabled = fView.Surname.Enabled && culture.HasSurname();
             fView.Patronymic.Enabled = fView.Patronymic.Enabled && culture.HasPatronymic();
 
-            GEDCOMLanguageID langID = fPersonalName.Language.Value;
+            GDMLanguageID langID = fPersonalName.Language.Value;
             fView.Language.Text = GEDCOMUtils.GetLanguageStr(langID);
         }
     }

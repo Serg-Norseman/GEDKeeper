@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.IO;
 using BSLib.Calendar;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
@@ -68,7 +67,7 @@ namespace GDModel
 
         public GDMFamilyRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GEDCOMRecordType.rtFamily);
+            SetRecordType(GDMRecordType.rtFamily);
             SetName(GEDCOMTagType.FAM);
 
             fChildren = new GDMList<GDMPointer>(this);
@@ -201,17 +200,6 @@ namespace GDModel
             fChildren.ReplaceXRefs(map);
         }
 
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            base.SaveToStream(stream, level);
-
-            level += 1;
-            WriteTagLine(stream, level, GEDCOMTagType._STAT, GEDCOMUtils.GetMarriageStatusStr(fStatus), true);
-
-            fChildren.SaveToStream(stream, level);
-            Events.SaveToStream(stream, level); // for files content compatibility
-        }
-
         private string GetFamilyString()
         {
             string result = "";
@@ -260,17 +248,17 @@ namespace GDModel
                 return false;
             }
 
-            GEDCOMSex sex = spouse.Sex;
-            if (sex == GEDCOMSex.svNone || sex == GEDCOMSex.svUndetermined) {
+            GDMSex sex = spouse.Sex;
+            if (sex == GDMSex.svNone || sex == GDMSex.svUndetermined) {
                 return false;
             }
 
             switch (sex) {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     Husband.Value = spouse;
                     break;
 
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     Wife.Value = spouse;
                     break;
             }
@@ -289,11 +277,11 @@ namespace GDModel
             spouse.DeleteSpouseToFamilyLink(this);
 
             switch (spouse.Sex) {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     Husband.Value = null;
                     break;
 
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     Wife.Value = null;
                     break;
             }

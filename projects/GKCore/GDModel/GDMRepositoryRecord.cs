@@ -39,7 +39,7 @@ namespace GDModel
 
         public GDMRepositoryRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GEDCOMRecordType.rtRepository);
+            SetRecordType(GDMRecordType.rtRepository);
             SetName(GEDCOMTagType.REPO);
         }
 

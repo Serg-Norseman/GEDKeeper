@@ -52,7 +52,7 @@ namespace GKStdReports
             int yBirth = (dates.BirthEvent == null) ? 0 : dates.BirthEvent.GetChronologicalYear();
             int yDeath = (dates.DeathEvent == null) ? 0 : dates.DeathEvent.GetChronologicalYear();
 
-            int provedLife = (iRec.Sex == GEDCOMSex.svMale) ? (int)fStats.life.MaleVal : (int)fStats.life.FemaleVal;
+            int provedLife = (iRec.Sex == GDMSex.svMale) ? (int)fStats.life.MaleVal : (int)fStats.life.FemaleVal;
             
             if ((yBirth != 0) && (yDeath == 0)) {
                 yDeath = yBirth + provedLife; //GKData.PROVED_LIFE_LENGTH;
@@ -80,7 +80,7 @@ namespace GKStdReports
             fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
             fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
-            var stats = new TreeStats(fBase.Context, fBase.GetContentList(GEDCOMRecordType.rtIndividual));
+            var stats = new TreeStats(fBase.Context, fBase.GetContentList(GDMRecordType.rtIndividual));
             fStats = stats.GetCommonStats();
 
             fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taLeft);
@@ -90,7 +90,7 @@ namespace GKStdReports
             
             fWriter.BeginList();
 
-            var enumer = fBase.Context.Tree.GetEnumerator(GEDCOMRecordType.rtIndividual);
+            var enumer = fBase.Context.Tree.GetEnumerator(GDMRecordType.rtIndividual);
             GDMRecord record;
             while (enumer.MoveNext(out record)) {
                 var iRec = record as GDMIndividualRecord;

@@ -26,6 +26,6 @@ namespace GKCore.Types
     {
         public GDMIndividualRecord TargetIndividual;
         public TargetMode TargetMode;
-        public GEDCOMSex NeedSex;
+        public GDMSex NeedSex;
     }
 }

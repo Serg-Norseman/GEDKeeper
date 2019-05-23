@@ -71,7 +71,7 @@ namespace GKCore.Lists
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    noteRec = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtNote, null) as GDMNoteRecord;
+                    noteRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtNote, null) as GDMNoteRecord;
                     if (noteRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GDMObject)dataOwner, noteRec);
                     }

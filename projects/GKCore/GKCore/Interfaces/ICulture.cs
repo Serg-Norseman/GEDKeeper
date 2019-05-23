@@ -33,14 +33,14 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface ICulture
     {
-        GEDCOMLanguageID Language { get; set; }
+        GDMLanguageID Language { get; set; }
 
         bool HasPatronymic();
         bool HasSurname();
 
         string NormalizeSurname(string sn, bool aFemale);
         string GetMarriedSurname(string husbSurname);
-        GEDCOMSex GetSex(string iName, string iPat, bool canQuery);
+        GDMSex GetSex(string iName, string iPat, bool canQuery);
 
         string[] GetSurnames(string surname, bool female);
         string[] GetSurnames(GDMIndividualRecord iRec);

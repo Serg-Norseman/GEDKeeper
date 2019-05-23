@@ -84,7 +84,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    child = fBaseWin.Context.SelectPerson(family.GetHusband(), TargetMode.tmParent, GEDCOMSex.svNone);
+                    child = fBaseWin.Context.SelectPerson(family.GetHusband(), TargetMode.tmParent, GDMSex.svNone);
                     result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);
@@ -92,7 +92,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raEdit:
-                    result = (BaseController.ModifyIndividual(fBaseWin, ref child, null, TargetMode.tmNone, GEDCOMSex.svNone));
+                    result = (BaseController.ModifyIndividual(fBaseWin, ref child, null, TargetMode.tmNone, GDMSex.svNone));
                     break;
 
                 case RecordAction.raDelete:

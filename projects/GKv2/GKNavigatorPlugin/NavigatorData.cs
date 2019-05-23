@@ -29,14 +29,14 @@ namespace GKNavigatorPlugin
 {
     public sealed class RecordInfo
     {
-        public readonly GEDCOMRecordType Type;
+        public readonly GDMRecordType Type;
         public readonly RecordAction Action;
         public readonly string XRef;
         public readonly string Name;
         public readonly GDMRecord Record; // null for deleted records
         public readonly DateTime Time;
 
-        public RecordInfo(RecordAction action, string xref, string name, GEDCOMRecordType type, GDMRecord record)
+        public RecordInfo(RecordAction action, string xref, string name, GDMRecordType type, GDMRecord record)
         {
             Action = action;
             XRef = xref;

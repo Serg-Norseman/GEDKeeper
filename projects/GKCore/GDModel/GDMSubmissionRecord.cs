@@ -22,7 +22,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public enum GEDCOMOrdinanceProcessFlag
+    public enum GDMOrdinanceProcessFlag
     {
         opNone,
         opYes,
@@ -56,7 +56,7 @@ namespace GDModel
             set { SetTagIntegerValue(GEDCOMTagType.DESC, value); }
         }
 
-        public GEDCOMOrdinanceProcessFlag OrdinanceProcessFlag
+        public GDMOrdinanceProcessFlag OrdinanceProcessFlag
         {
             get { return GEDCOMUtils.GetOrdinanceProcessFlagVal(GetTagStringValue(GEDCOMTagType.ORDI)); }
             set { SetTagStringValue(GEDCOMTagType.ORDI, GEDCOMUtils.GetOrdinanceProcessFlagStr(value)); }
@@ -70,7 +70,7 @@ namespace GDModel
 
         public GDMSubmissionRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GEDCOMRecordType.rtSubmission);
+            SetRecordType(GDMRecordType.rtSubmission);
             SetName(GEDCOMTagType.SUBN);
         }
     }

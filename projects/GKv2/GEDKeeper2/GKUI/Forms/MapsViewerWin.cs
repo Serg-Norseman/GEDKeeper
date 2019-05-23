@@ -145,7 +145,7 @@ namespace GKUI.Forms
             fMapBrowser.Dock = DockStyle.Fill;
             Panel1.Controls.Add(fMapBrowser);
 
-            fController = new MapsViewerWinController(this, baseWin.GetContentList(GEDCOMRecordType.rtIndividual));
+            fController = new MapsViewerWinController(this, baseWin.GetContentList(GDMRecordType.rtIndividual));
             fController.Init(baseWin);
 
             radTotal.Checked = true;

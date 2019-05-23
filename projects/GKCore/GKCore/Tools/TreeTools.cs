@@ -85,14 +85,14 @@ namespace GKCore.Tools
                 bool res;
                 if (spouse != null)
                 {
-                    res = PL_SearchAnc(spouse, searchRec, (ancestorRec.Sex == GEDCOMSex.svFemale));
+                    res = PL_SearchAnc(spouse, searchRec, (ancestorRec.Sex == GDMSex.svFemale));
                     if (res) {
                         cross = ancestorRec;
                         return cross;
                     }
                 }
 
-                if (ancestorRec.Sex == GEDCOMSex.svMale) {
+                if (ancestorRec.Sex == GDMSex.svMale) {
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
                     {
@@ -117,11 +117,11 @@ namespace GKCore.Tools
 
                 if (spouse != null)
                 {
-                    bool res = PL_SearchAnc(spouse, searchRec, (ancestor.Sex == GEDCOMSex.svFemale));
+                    bool res = PL_SearchAnc(spouse, searchRec, (ancestor.Sex == GDMSex.svFemale));
                     if (res) return family;
                 }
 
-                if (ancestor.Sex == GEDCOMSex.svMale)
+                if (ancestor.Sex == GDMSex.svMale)
                 {
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
@@ -152,7 +152,7 @@ namespace GKCore.Tools
                     PatriarchObj pObj = patList[i];
 
                     if (!loneSuppress || pObj.HasLinks) {
-                        string color = (pObj.IRec.Sex == GEDCOMSex.svFemale) ? "pink" : "blue";
+                        string color = (pObj.IRec.Sex == GDMSex.svFemale) ? "pink" : "blue";
                         gvw.WriteNode(pObj.IRec.XRef, GKUtils.GetNameString(pObj.IRec, true, false), "filled", color, "box");
                     }
                 }
@@ -196,10 +196,10 @@ namespace GKCore.Tools
 
                 tgtFileRef.LinkFile(srcFileRef.StringValue);
 
-                if (srcFileRef.MultimediaFormat != GEDCOMMultimediaFormat.mfNone) {
+                if (srcFileRef.MultimediaFormat != GDMMultimediaFormat.mfNone) {
                     tgtFileRef.MultimediaFormat = srcFileRef.MultimediaFormat;
                 }
-                if (srcFileRef.MediaType != GEDCOMMediaType.mtUnknown) {
+                if (srcFileRef.MediaType != GDMMediaType.mtUnknown) {
                     tgtFileRef.MediaType = srcFileRef.MediaType;
                 }
                 tgtFileRef.Title = title;
@@ -447,8 +447,8 @@ namespace GKCore.Tools
             for (int i = 0; i < mmRec.FileReferences.Count; i++) {
                 GDMFileReferenceWithTitle fileRef = mmRec.FileReferences[i];
 
-                GEDCOMMultimediaFormat mmFormat = fileRef.MultimediaFormat;
-                if (mmFormat == GEDCOMMultimediaFormat.mfUnknown || mmFormat == GEDCOMMultimediaFormat.mfNone) {
+                GDMMultimediaFormat mmFormat = fileRef.MultimediaFormat;
+                if (mmFormat == GDMMultimediaFormat.mfUnknown || mmFormat == GDMMultimediaFormat.mfNone) {
                     // tag 'FORM' can be corrupted or GEDCOMCore in past not recognize format attempt recovery
                     fileRef.MultimediaFormat = GDMFileReference.RecognizeFormat(fileRef.StringValue);
                 }
@@ -489,23 +489,23 @@ namespace GKCore.Tools
             }
 
             switch (rec.RecordType) {
-                case GEDCOMRecordType.rtIndividual:
+                case GDMRecordType.rtIndividual:
                     CheckRecord_Individual(baseContext, tree, format, rec as GDMIndividualRecord);
                     break;
 
-                case GEDCOMRecordType.rtFamily:
+                case GDMRecordType.rtFamily:
                     CheckRecord_Family(baseContext, tree, format, rec as GDMFamilyRecord);
                     break;
 
-                case GEDCOMRecordType.rtGroup:
+                case GDMRecordType.rtGroup:
                     CheckRecord_Group(rec as GDMGroupRecord);
                     break;
 
-                case GEDCOMRecordType.rtSource:
+                case GDMRecordType.rtSource:
                     CheckRecord_Source(rec as GDMSourceRecord);
                     break;
 
-                case GEDCOMRecordType.rtMultimedia:
+                case GDMRecordType.rtMultimedia:
                     CheckRecord_Multimedia(rec as GDMMultimediaRecord, format, fileVer);
                     break;
             }
@@ -572,7 +572,7 @@ namespace GKCore.Tools
 
                     // remove a deprecated features
                     if (format == GEDCOMFormat.gf_Native) {
-                        GEDCOMHeader header = tree.Header;
+                        GDMHeader header = tree.Header;
                         GDMTag tag;
 
                         tag = header.FindTag("_ADVANCED", 0);
@@ -695,7 +695,7 @@ namespace GKCore.Tools
                 int num = iRec.SpouseToFamilyLinks.Count;
                 for (int i = 0; i < num; i++) {
                     GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
-                    GDMIndividualRecord spouse = ((iRec.Sex == GEDCOMSex.svMale) ? family.GetWife() : family.GetHusband());
+                    GDMIndividualRecord spouse = ((iRec.Sex == GDMSex.svMale) ? family.GetWife() : family.GetHusband());
 
                     TreeWalkMode intMode = ((mode == TreeWalkMode.twmAll) ? TreeWalkMode.twmAll : TreeWalkMode.twmNone);
                     WalkTreeInt(spouse, intMode, walkProc, extData);
@@ -958,7 +958,7 @@ namespace GKCore.Tools
                 sourceRec.MoveTo(targetRec, false);
                 bool res = baseWin.Context.DeleteRecord(sourceRec);
 
-                if (targetRec.RecordType == GEDCOMRecordType.rtIndividual && bookmark) {
+                if (targetRec.RecordType == GDMRecordType.rtIndividual && bookmark) {
                     ((GDMIndividualRecord)targetRec).Bookmark = true;
                 }
 
@@ -1015,11 +1015,11 @@ namespace GKCore.Tools
 
                 switch (Rec.RecordType)
                 {
-                    case GEDCOMRecordType.rtIndividual:
+                    case GDMRecordType.rtIndividual:
                         result = result + GKUtils.GetNameString(((GDMIndividualRecord)Rec), true, false);
                         break;
 
-                    case GEDCOMRecordType.rtFamily:
+                    case GDMRecordType.rtFamily:
                         result = result + GKUtils.GetFamilyString((GDMFamilyRecord)Rec);
                         break;
                 }
@@ -1071,8 +1071,8 @@ namespace GKCore.Tools
                 }
             }
 
-            GEDCOMSex sex = iRec.Sex;
-            if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined)
+            GDMSex sex = iRec.Sex;
+            if (sex < GDMSex.svMale || sex >= GDMSex.svUndetermined)
             {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdPersonSexless, CheckSolve.csDefineSex);
                 checkObj.Comment = LangMan.LS(LSID.LSID_PersonSexless);
@@ -1186,11 +1186,11 @@ namespace GKCore.Tools
                     GDMRecord rec = tree[i];
 
                     switch (rec.RecordType) {
-                        case GEDCOMRecordType.rtIndividual:
+                        case GDMRecordType.rtIndividual:
                             CheckIndividualRecord(rec as GDMIndividualRecord, checksList);
                             break;
 
-                        case GEDCOMRecordType.rtFamily:
+                        case GDMRecordType.rtFamily:
                             CheckFamilyRecord(rec as GDMFamilyRecord, checksList);
                             break;
                     }
@@ -1395,31 +1395,31 @@ namespace GKCore.Tools
                 GDMRecord rec = splitList[i];
                 switch (rec.RecordType)
                 {
-                    case GEDCOMRecordType.rtIndividual:
+                    case GDMRecordType.rtIndividual:
                         CheckRelations_CheckIndividual(splitList, rec as GDMIndividualRecord);
                         break;
 
-                    case GEDCOMRecordType.rtFamily:
+                    case GDMRecordType.rtFamily:
                         CheckRelations_CheckFamily(splitList, rec as GDMFamilyRecord);
                         break;
 
-                    case GEDCOMRecordType.rtNote:
+                    case GDMRecordType.rtNote:
                         CheckRelations_CheckRecord(splitList, rec);
                         break;
 
-                    case GEDCOMRecordType.rtMultimedia:
+                    case GDMRecordType.rtMultimedia:
                         CheckRelations_CheckRecord(splitList, rec);
                         break;
 
-                    case GEDCOMRecordType.rtSource:
+                    case GDMRecordType.rtSource:
                         CheckRelations_CheckSource(splitList, rec as GDMSourceRecord);
                         break;
 
-                    case GEDCOMRecordType.rtRepository:
+                    case GDMRecordType.rtRepository:
                         CheckRelations_CheckRecord(splitList, rec);
                         break;
 
-                    case GEDCOMRecordType.rtSubmitter:
+                    case GDMRecordType.rtSubmitter:
                         CheckRelations_CheckRecord(splitList, rec);
                         break;
                 }
@@ -1464,7 +1464,7 @@ namespace GKCore.Tools
             {
                 GDMRecord rec = tree[i];
 
-                if (rec.RecordType == GEDCOMRecordType.rtIndividual)
+                if (rec.RecordType == GDMRecordType.rtIndividual)
                 {
                     GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
 
@@ -1563,10 +1563,10 @@ namespace GKCore.Tools
             {
                 for (int i = 0; i < treeA.RecordsCount; i++) {
                     GDMRecord recA = treeA[i];
-                    if (recA.RecordType == GEDCOMRecordType.rtIndividual) {
+                    if (recA.RecordType == GDMRecordType.rtIndividual) {
                         for (int k = 0; k < treeB.RecordsCount; k++) {
                             GDMRecord recB = treeB[k];
-                            if (recB.RecordType == GEDCOMRecordType.rtIndividual) {
+                            if (recB.RecordType == GDMRecordType.rtIndividual) {
                                 GDMIndividualRecord indivA = (GDMIndividualRecord) recA;
                                 GDMIndividualRecord indivB = (GDMIndividualRecord) recB;
 
@@ -1613,7 +1613,7 @@ namespace GKCore.Tools
                 for (int i = 0; i < num; i++)
                 {
                     GDMRecord rec = mainTree[i];
-                    if (rec.RecordType == GEDCOMRecordType.rtIndividual)
+                    if (rec.RecordType == GDMRecordType.rtIndividual)
                     {
                         GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
 
@@ -1621,7 +1621,7 @@ namespace GKCore.Tools
                         ((ExtList<GDMIndividualRecord>)names.GetObject(idx)).Add(iRec);
 
                         var parts = GKUtils.GetNameParts(iRec);
-                        fams.AddObject(context.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GEDCOMSex.svFemale), null);
+                        fams.AddObject(context.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GDMSex.svFemale), null);
                     }
                 }
 
@@ -1629,7 +1629,7 @@ namespace GKCore.Tools
                 for (int i = 0; i < num2; i++)
                 {
                     GDMRecord rec = tempTree[i];
-                    if (rec.RecordType == GEDCOMRecordType.rtIndividual)
+                    if (rec.RecordType == GDMRecordType.rtIndividual)
                     {
                         GDMIndividualRecord iRec = (GDMIndividualRecord)tempTree[i];
 
@@ -1641,7 +1641,7 @@ namespace GKCore.Tools
                         }
 
                         var parts = GKUtils.GetNameParts(iRec);
-                        tm = context.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GEDCOMSex.svFemale);
+                        tm = context.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GDMSex.svFemale);
                         idx = fams.IndexOf(tm);
                         if (idx >= 0)
                         {

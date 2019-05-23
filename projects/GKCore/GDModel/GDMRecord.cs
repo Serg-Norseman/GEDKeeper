@@ -19,12 +19,11 @@
  */
 
 using System;
-using System.IO;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public enum GEDCOMRecordType
+    public enum GDMRecordType
     {
         rtNone,
         rtIndividual,
@@ -51,7 +50,7 @@ namespace GDModel
     public class GDMRecord : GDMCustomRecord, IGEDCOMStructWithLists
     {
         private object fExtData;
-        private GEDCOMRecordType fRecordType;
+        private GDMRecordType fRecordType;
         private string fUID;
 
         private GDMList<GDMMultimediaLink> fMultimediaLinks;
@@ -87,7 +86,7 @@ namespace GDModel
             get { return fNotes; }
         }
 
-        public GEDCOMRecordType RecordType
+        public GDMRecordType RecordType
         {
             get { return fRecordType; }
         }
@@ -133,7 +132,7 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
-        protected void SetRecordType(GEDCOMRecordType type)
+        protected void SetRecordType(GDMRecordType type)
         {
             fRecordType = type;
         }
@@ -245,19 +244,6 @@ namespace GDModel
             fSourceCitations.ReplaceXRefs(map);
             fMultimediaLinks.ReplaceXRefs(map);
             fUserReferences.ReplaceXRefs(map);
-        }
-
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            base.SaveToStream(stream, level);
-
-            level += 1;
-            WriteTagLine(stream, level, GEDCOMTagType._UID, fUID, true);
-
-            fNotes.SaveToStream(stream, level);
-            fSourceCitations.SaveToStream(stream, level);
-            fMultimediaLinks.SaveToStream(stream, level);
-            fUserReferences.SaveToStream(stream, level);
         }
 
         public override void Clear()

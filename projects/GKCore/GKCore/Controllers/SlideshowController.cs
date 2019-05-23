@@ -55,7 +55,7 @@ namespace GKCore.Controllers
         public void LoadList()
         {
             GDMRecord record;
-            var enumerator = fBase.Context.Tree.GetEnumerator(GEDCOMRecordType.rtMultimedia);
+            var enumerator = fBase.Context.Tree.GetEnumerator(GDMRecordType.rtMultimedia);
             while (enumerator.MoveNext(out record)) {
                 GDMMultimediaRecord mediaRec = (GDMMultimediaRecord)record;
                 GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];

@@ -55,27 +55,27 @@ namespace GKFoldersPlugin
             }
         }
 
-        public static bool HasFolderSupport(GEDCOMRecordType recType)
+        public static bool HasFolderSupport(GDMRecordType recType)
         {
             bool result = false;
 
             switch (recType) {
-                case GEDCOMRecordType.rtNone:
-                case GEDCOMRecordType.rtNote:
-                case GEDCOMRecordType.rtMultimedia:
-                case GEDCOMRecordType.rtSource:
-                case GEDCOMRecordType.rtRepository:
-                case GEDCOMRecordType.rtLocation:
-                case GEDCOMRecordType.rtSubmission:
-                case GEDCOMRecordType.rtSubmitter:
+                case GDMRecordType.rtNone:
+                case GDMRecordType.rtNote:
+                case GDMRecordType.rtMultimedia:
+                case GDMRecordType.rtSource:
+                case GDMRecordType.rtRepository:
+                case GDMRecordType.rtLocation:
+                case GDMRecordType.rtSubmission:
+                case GDMRecordType.rtSubmitter:
                     break;
 
-                case GEDCOMRecordType.rtIndividual:
-                case GEDCOMRecordType.rtFamily:
-                case GEDCOMRecordType.rtGroup:
-                case GEDCOMRecordType.rtResearch:
-                case GEDCOMRecordType.rtTask:
-                case GEDCOMRecordType.rtCommunication:
+                case GDMRecordType.rtIndividual:
+                case GDMRecordType.rtFamily:
+                case GDMRecordType.rtGroup:
+                case GDMRecordType.rtResearch:
+                case GDMRecordType.rtTask:
+                case GDMRecordType.rtCommunication:
                     result = true;
                     break;
             }

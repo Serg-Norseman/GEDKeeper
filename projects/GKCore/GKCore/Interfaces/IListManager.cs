@@ -49,7 +49,7 @@ namespace GKCore.Interfaces
         IListFilter Filter { get; }
         int FilteredCount { get; }
         string QuickFilter { get; set; }
-        GEDCOMRecordType RecordType { get; }
+        GDMRecordType RecordType { get; }
         int TotalCount { get; }
 
         void AddCondition(byte columnId, ConditionKind condition, string value);

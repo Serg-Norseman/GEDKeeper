@@ -186,7 +186,7 @@ namespace GKCore.MVP.Views
 
     public interface ILanguageEditDlg : ICommonDialog, IView
     {
-        GEDCOMLanguageID LanguageID { get; set; }
+        GDMLanguageID LanguageID { get; set; }
 
         IComboBoxHandler LanguageCombo { get; }
     }
@@ -341,7 +341,7 @@ namespace GKCore.MVP.Views
         GDMIndividualRecord Person { get; set; }
         GDMIndividualRecord Target { get; set; }
         TargetMode TargetMode { get; set; }
-        void SetNeedSex(GEDCOMSex needSex);
+        void SetNeedSex(GDMSex needSex);
 
         ISheetList EventsList { get; }
         ISheetList SpousesList { get; }
@@ -423,7 +423,7 @@ namespace GKCore.MVP.Views
         string FastFilter { get; set; }
         TargetMode TargetMode { get; set; }
         GDMIndividualRecord TargetIndividual { get; set; }
-        GEDCOMSex NeedSex { get; set; }
+        GDMSex NeedSex { get; set; }
         GDMRecord ResultRecord { get; set; }
 
         IListView RecordsList { get; }
@@ -482,7 +482,7 @@ namespace GKCore.MVP.Views
     public interface ISexCheckDlg : ICommonDialog, IView
     {
         string IndividualName { get; set; }
-        GEDCOMSex Sex { get; set; }
+        GDMSex Sex { get; set; }
     }
 
 

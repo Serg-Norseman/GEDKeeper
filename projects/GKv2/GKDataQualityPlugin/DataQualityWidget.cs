@@ -95,7 +95,7 @@ namespace GKDataQualityPlugin
                 for (int i = 0; i < num; i++) {
                     GDMRecord rec = tree[i];
 
-                    if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
+                    if (rec.RecordType == GDMRecordType.rtIndividual) {
                         GDMIndividualRecord iRec = rec as GDMIndividualRecord;
                         if (prepared.IndexOf(iRec) < 0) {
                             groupNum++;

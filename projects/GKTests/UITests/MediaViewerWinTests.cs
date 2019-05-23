@@ -59,7 +59,7 @@ namespace GKUI.Forms
 
             fileRef.Title = "File Title 2";
             fileRef.LinkFile("shaytan_plant.jpg");
-            fileRef.MediaType = GEDCOMMediaType.mtPhoto;
+            fileRef.MediaType = GDMMediaType.mtPhoto;
 
             fDialog = new MediaViewerWin(fBase);
             fDialog.Show();
@@ -165,8 +165,8 @@ namespace GKUI.Forms
 
             fileRefV.Title = "File Title 2";
             fileRefV.LinkFile(targetName);
-            fileRefV.MediaType = GEDCOMMediaType.mtVideo;
-            fileRefV.MultimediaFormat = GEDCOMMultimediaFormat.mfMKV;
+            fileRefV.MediaType = GDMMediaType.mtVideo;
+            fileRefV.MultimediaFormat = GDMMultimediaFormat.mfMKV;
 
             fDialog.FileRef = fileRefV;
             Assert.AreEqual(fileRefV, fDialog.FileRef);

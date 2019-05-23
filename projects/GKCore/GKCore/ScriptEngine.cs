@@ -117,20 +117,20 @@ namespace GKCore
             lua_register(lvm, "gk_update_view");
             lua_register(lvm, "gk_select_file");
 
-            lvm["rtNone"] = (int)GEDCOMRecordType.rtNone;
-            lvm["rtIndividual"] = (int)GEDCOMRecordType.rtIndividual;
-            lvm["rtFamily"] = (int)GEDCOMRecordType.rtFamily;
-            lvm["rtNote"] = (int)GEDCOMRecordType.rtNote;
-            lvm["rtMultimedia"] = (int)GEDCOMRecordType.rtMultimedia;
-            lvm["rtSource"] = (int)GEDCOMRecordType.rtSource;
-            lvm["rtRepository"] = (int)GEDCOMRecordType.rtRepository;
-            lvm["rtGroup"] = (int)GEDCOMRecordType.rtGroup;
-            lvm["rtResearch"] = (int)GEDCOMRecordType.rtResearch;
-            lvm["rtTask"] = (int)GEDCOMRecordType.rtTask;
-            lvm["rtCommunication"] = (int)GEDCOMRecordType.rtCommunication;
-            lvm["rtLocation"] = (int)GEDCOMRecordType.rtLocation;
-            lvm["rtSubmission"] = (int)GEDCOMRecordType.rtSubmission;
-            lvm["rtSubmitter"] = (int)GEDCOMRecordType.rtSubmitter;
+            lvm["rtNone"] = (int)GDMRecordType.rtNone;
+            lvm["rtIndividual"] = (int)GDMRecordType.rtIndividual;
+            lvm["rtFamily"] = (int)GDMRecordType.rtFamily;
+            lvm["rtNote"] = (int)GDMRecordType.rtNote;
+            lvm["rtMultimedia"] = (int)GDMRecordType.rtMultimedia;
+            lvm["rtSource"] = (int)GDMRecordType.rtSource;
+            lvm["rtRepository"] = (int)GDMRecordType.rtRepository;
+            lvm["rtGroup"] = (int)GDMRecordType.rtGroup;
+            lvm["rtResearch"] = (int)GDMRecordType.rtResearch;
+            lvm["rtTask"] = (int)GDMRecordType.rtTask;
+            lvm["rtCommunication"] = (int)GDMRecordType.rtCommunication;
+            lvm["rtLocation"] = (int)GDMRecordType.rtLocation;
+            lvm["rtSubmission"] = (int)GDMRecordType.rtSubmission;
+            lvm["rtSubmitter"] = (int)GDMRecordType.rtSubmitter;
 
             lua_register(lvm, "gt_get_records_count");
             lua_register(lvm, "gt_get_record");
@@ -292,7 +292,7 @@ namespace GKCore
         public int gt_get_record_type(object recPtr)
         {
             GDMRecord rec = recPtr as GDMRecord;
-            return (rec == null) ? (int)GEDCOMRecordType.rtNone : (int)rec.RecordType;
+            return (rec == null) ? (int)GDMRecordType.rtNone : (int)rec.RecordType;
         }
 
         public bool gt_delete_record(object recPtr)
@@ -316,7 +316,7 @@ namespace GKCore
 
         public string gt_get_record_type_name(int recType)
         {
-            GEDCOMRecordType rt = (GEDCOMRecordType)recType;
+            GDMRecordType rt = (GDMRecordType)recType;
             string rtName = rt.ToString();
             return rtName;
         }
@@ -329,7 +329,7 @@ namespace GKCore
 
         public object gt_select_record(int recType)
         {
-            GDMRecord rec = fBase.Context.SelectRecord((GEDCOMRecordType)recType, null);
+            GDMRecord rec = fBase.Context.SelectRecord((GDMRecordType)recType, null);
             return rec;
         }
 
@@ -483,13 +483,13 @@ namespace GKCore
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             if (rec == null) return;
 
-            GEDCOMSex sex = (strSex.Length == 1) ? GKUtils.GetSexBySign(strSex[0]) : GEDCOMSex.svNone;
+            GDMSex sex = (strSex.Length == 1) ? GKUtils.GetSexBySign(strSex[0]) : GDMSex.svNone;
             rec.Sex = sex;
         }
 
         public object gt_create_person(string name, string patronymic, string surname, string strSex)
         {
-            GEDCOMSex sex = (strSex.Length == 1) ? GKUtils.GetSexBySign(strSex[0]) : GEDCOMSex.svNone;
+            GDMSex sex = (strSex.Length == 1) ? GKUtils.GetSexBySign(strSex[0]) : GDMSex.svNone;
 
             GDMIndividualRecord iRec = fBase.Context.CreatePersonEx(name, patronymic, surname, sex, false);
             return iRec;
@@ -576,7 +576,7 @@ namespace GKCore
 
         public string gt_define_sex(string name, string patr)
         {
-            GEDCOMSex sx = fBase.Context.DefineSex(name, patr);
+            GDMSex sx = fBase.Context.DefineSex(name, patr);
 
             return (GKData.SexData[(int)sx].Sign);
         }
@@ -597,7 +597,7 @@ namespace GKCore
 
         public string gt_define_patronymic(string fatherName, string childSex, bool confirm)
         {
-            GEDCOMSex sex = (childSex.Length == 1) ? GKUtils.GetSexBySign(childSex[0]) : GEDCOMSex.svNone;
+            GDMSex sex = (childSex.Length == 1) ? GKUtils.GetSexBySign(childSex[0]) : GDMSex.svNone;
 
             string childPatronymic = fBase.Context.DefinePatronymic(fatherName, sex, confirm);
             return childPatronymic;

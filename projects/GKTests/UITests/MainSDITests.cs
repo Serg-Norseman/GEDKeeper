@@ -180,7 +180,7 @@ namespace GKUI.Forms
 
 
             // Stage 7: call to QuickFind
-            ((BaseWinSDI)fCurBase).ShowRecordsTab(GEDCOMRecordType.rtIndividual);
+            ((BaseWinSDI)fCurBase).ShowRecordsTab(GDMRecordType.rtIndividual);
             QuickSearchDlgTests.QuickSearch_Test(fMainWin);
 
 
@@ -335,7 +335,7 @@ namespace GKUI.Forms
         private void BaseWin_Tests(IBaseWindow baseWin, string stage)
         {
             // Stage 5: calls to the different Editors
-            for (GEDCOMRecordType rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
+            for (GDMRecordType rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
                 Assert.IsNotNull(((BaseWinSDI)baseWin).GetHyperViewByType(rt), stage + ".1");
 
                 baseWin.ShowRecordsTab(rt);
@@ -363,7 +363,7 @@ namespace GKUI.Forms
 
             Assert.IsTrue(baseWin.Context.IsUnknown(), stage + ".2");
 
-            baseWin.ShowRecordsTab(GEDCOMRecordType.rtIndividual);
+            baseWin.ShowRecordsTab(GDMRecordType.rtIndividual);
             baseWin.SelectRecordByXRef("I1");
 
             GDMRecord record = ((BaseWinSDI)baseWin).GetSelectedRecordEx();
@@ -383,7 +383,7 @@ namespace GKUI.Forms
             Assert.AreEqual(1, search.Count);
 
             Assert.AreEqual(null, baseWin.Context.GetChildFamily(null, false, null));
-            Assert.AreEqual(null, baseWin.Context.AddChildForParent(null, GEDCOMSex.svNone));
+            Assert.AreEqual(null, baseWin.Context.AddChildForParent(null, GDMSex.svNone));
             Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.AddFamilyForSpouse(null); });
 
             Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.CollectTips(null); });
@@ -396,12 +396,12 @@ namespace GKUI.Forms
             baseWin.ApplyFilter();
 
             // default lang for tests is English
-            string patr = baseWin.Context.DefinePatronymic("Ivan", GEDCOMSex.svMale, false);
+            string patr = baseWin.Context.DefinePatronymic("Ivan", GDMSex.svMale, false);
             Assert.AreEqual("", patr);
 
             ModalFormHandler = SexCheckDlgTests.SexCheckDlgTests_AcceptM_Handler;
-            GEDCOMSex sex = baseWin.Context.DefineSex("Ivan", "Ivanovich");
-            Assert.AreEqual(GEDCOMSex.svMale, sex);
+            GDMSex sex = baseWin.Context.DefineSex("Ivan", "Ivanovich");
+            Assert.AreEqual(GDMSex.svMale, sex);
         }
 
         #region Exports tests
@@ -556,13 +556,13 @@ namespace GKUI.Forms
             GKSheetListTester sheetTester;
 
             // father
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GEDCOMSex.svMale);
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svMale);
             ClickButton("btnHusbandAdd", dlg);
             ModalFormHandler = MessageBox_YesHandler;
             ClickButton("btnHusbandDelete", dlg);
 
             // mother
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GEDCOMSex.svFemale);
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svFemale);
             ClickButton("btnWifeAdd", dlg);
             ModalFormHandler = MessageBox_YesHandler;
             ClickButton("btnWifeDelete", dlg);
@@ -570,7 +570,7 @@ namespace GKUI.Forms
             // childs
             Assert.AreEqual(0, familyRecord.Children.Count);
             tabs.SelectTab(0);
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GEDCOMSex.svFemale);
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svFemale);
             ClickToolStripButton("fChildsList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, familyRecord.Children.Count);
 
@@ -631,13 +631,13 @@ namespace GKUI.Forms
             ClickButton("btnParentsDelete", dlg);
 
             // father
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GEDCOMSex.svMale);
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svMale);
             ClickButton("btnFatherAdd", dlg);
             ModalFormHandler = MessageBox_YesHandler;
             ClickButton("btnFatherDelete", dlg);
 
             // mother
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GEDCOMSex.svFemale);
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svFemale);
             ClickButton("btnMotherAdd", dlg);
             ModalFormHandler = MessageBox_YesHandler;
             ClickButton("btnMotherDelete", dlg);

@@ -56,7 +56,7 @@ namespace GDModel.Providers.GedML
 
         protected override void LoadFromReader(Stream fileStream, StreamReader reader, string streamCharset = null)
         {
-            fTree.State = GEDCOMState.osLoading;
+            fTree.State = GDMTreeState.osLoading;
             try {
                 ProgressEventHandler progressHandler = fTree.OnProgress;
 
@@ -130,7 +130,7 @@ namespace GDModel.Providers.GedML
 
                 stack.Clear();
             } finally {
-                fTree.State = GEDCOMState.osReady;
+                fTree.State = GDMTreeState.osReady;
             }
         }
     }

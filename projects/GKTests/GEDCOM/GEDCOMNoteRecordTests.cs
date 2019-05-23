@@ -38,7 +38,7 @@ namespace GDModel
         public void Test_Common()
         {
             using (GDMNoteRecord noteRec = new GDMNoteRecord(null)) {
-                Assert.AreEqual(GEDCOMRecordType.rtNote, noteRec.RecordType);
+                Assert.AreEqual(GDMRecordType.rtNote, noteRec.RecordType);
 
                 noteRec.AddNoteText("text");
                 Assert.AreEqual("text", noteRec.Note.Text.Trim());

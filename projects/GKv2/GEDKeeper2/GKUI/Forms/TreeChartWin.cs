@@ -387,8 +387,8 @@ namespace GKUI.Forms
 
         private void MenuPerson_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            miFatherAdd.Enabled = fController.ParentIsRequired(GEDCOMSex.svMale);
-            miMotherAdd.Enabled = fController.ParentIsRequired(GEDCOMSex.svFemale);
+            miFatherAdd.Enabled = fController.ParentIsRequired(GDMSex.svMale);
+            miMotherAdd.Enabled = fController.ParentIsRequired(GDMSex.svFemale);
         }
 
         private void tbDocPreview_Click(object sender, EventArgs e)

@@ -51,7 +51,7 @@ namespace GKCore.Stats
             FemaleCount = 0;
         }
 
-        public void TakeVal(float val, GEDCOMSex sex, bool ignoreZero)
+        public void TakeVal(float val, GDMSex sex, bool ignoreZero)
         {
             if (val == 0.0f && ignoreZero) return;
 
@@ -59,19 +59,19 @@ namespace GKCore.Stats
             CommonCount++;
             
             switch (sex) {
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     FemaleSum += val;
                     FemaleCount++;
                     break;
 
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     MaleSum += val;
                     MaleCount++;
                     break;
             }
         }
 
-        public void TakeVal(string val, GEDCOMSex sex, bool ignoreZero)
+        public void TakeVal(string val, GDMSex sex, bool ignoreZero)
         {
             int tmp;
             if (int.TryParse(val, out tmp))

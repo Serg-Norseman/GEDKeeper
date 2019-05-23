@@ -116,7 +116,7 @@ namespace GKCore.Controllers
 
         public void SetPerson()
         {
-            fTempInd = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+            fTempInd = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svNone);
             fView.Corresponder.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, true, false));
         }
     }

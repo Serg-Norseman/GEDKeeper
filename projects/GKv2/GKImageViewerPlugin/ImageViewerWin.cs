@@ -89,19 +89,19 @@ namespace GKImageViewerPlugin
             Control ctl = null;
             fImageCtl = null;
 
-            GEDCOMMultimediaFormat fmt = GDMFileReference.RecognizeFormat(fileName);
+            GDMMultimediaFormat fmt = GDMFileReference.RecognizeFormat(fileName);
 
             try
             {
                 switch (fmt)
                 {
-                    case GEDCOMMultimediaFormat.mfBMP:
-                    case GEDCOMMultimediaFormat.mfGIF:
-                    case GEDCOMMultimediaFormat.mfJPG:
-                    case GEDCOMMultimediaFormat.mfPCX:
-                    case GEDCOMMultimediaFormat.mfTIF:
-                    case GEDCOMMultimediaFormat.mfTGA:
-                    case GEDCOMMultimediaFormat.mfPNG:
+                    case GDMMultimediaFormat.mfBMP:
+                    case GDMMultimediaFormat.mfGIF:
+                    case GDMMultimediaFormat.mfJPG:
+                    case GDMMultimediaFormat.mfPCX:
+                    case GDMMultimediaFormat.mfTIF:
+                    case GDMMultimediaFormat.mfTGA:
+                    case GDMMultimediaFormat.mfPNG:
                         {
                             fImageCtl = new ImageView();
 
@@ -118,12 +118,12 @@ namespace GKImageViewerPlugin
                         }
                         break;
 
-                    case GEDCOMMultimediaFormat.mfWAV:
-                    case GEDCOMMultimediaFormat.mfAVI:
-                    case GEDCOMMultimediaFormat.mfMPG:
+                    case GDMMultimediaFormat.mfWAV:
+                    case GDMMultimediaFormat.mfAVI:
+                    case GDMMultimediaFormat.mfMPG:
                         break;
 
-                    case GEDCOMMultimediaFormat.mfTXT:
+                    case GDMMultimediaFormat.mfTXT:
                         {
                             TextBox txtBox = new TextBox();
                             txtBox.Multiline = true;
@@ -146,7 +146,7 @@ namespace GKImageViewerPlugin
                         }
                         break;
 
-                    case GEDCOMMultimediaFormat.mfRTF:
+                    case GDMMultimediaFormat.mfRTF:
                         {
                             RichTextBox rtfBox = new RichTextBox();
                             rtfBox.ReadOnly = true;
@@ -167,7 +167,7 @@ namespace GKImageViewerPlugin
                         }
                         break;
 
-                    case GEDCOMMultimediaFormat.mfHTM:
+                    case GDMMultimediaFormat.mfHTM:
                         {
                             var browser = new WebBrowser();
                             try {

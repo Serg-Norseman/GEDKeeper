@@ -174,7 +174,7 @@ namespace GKUI.Components
             }
         }
 
-        public static GKListView CreateRecordsView(Control parent, IBaseContext baseContext, GEDCOMRecordType recType)
+        public static GKListView CreateRecordsView(Control parent, IBaseContext baseContext, GDMRecordType recType)
         {
             if (parent == null)
                 throw new ArgumentNullException("parent");

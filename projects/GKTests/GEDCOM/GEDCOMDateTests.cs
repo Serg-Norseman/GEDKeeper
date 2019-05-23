@@ -48,15 +48,15 @@ namespace GDModel
         public void Test_GetApproximated()
         {
             GDMDate instance = new GDMDate(null, "", "");
-            GEDCOMApproximated expResult = GEDCOMApproximated.daExact;
-            GEDCOMApproximated result = instance.Approximated;
+            GDMApproximated expResult = GDMApproximated.daExact;
+            GDMApproximated result = instance.Approximated;
             Assert.AreEqual(expResult, result);
         }
 
         [Test]
         public void Test_SetApproximated()
         {
-            GEDCOMApproximated value = GEDCOMApproximated.daAbout;
+            GDMApproximated value = GDMApproximated.daAbout;
             GDMDate instance = new GDMDate(null, "", "");
             instance.Approximated = value;
             Assert.AreEqual(value, instance.Approximated);
@@ -66,11 +66,11 @@ namespace GDModel
         public void Test_GetDateCalendar()
         {
             GDMDate instance = GDMDate.CreateByFormattedStr("20/12/1980", false);
-            GEDCOMCalendar result = instance.DateCalendar;
-            Assert.AreEqual(GEDCOMCalendar.dcGregorian, result);
-            instance = GDMDate.CreateByFormattedStr("20/12/1980", GEDCOMCalendar.dcJulian, false);
+            GDMCalendar result = instance.DateCalendar;
+            Assert.AreEqual(GDMCalendar.dcGregorian, result);
+            instance = GDMDate.CreateByFormattedStr("20/12/1980", GDMCalendar.dcJulian, false);
             result = instance.DateCalendar;
-            Assert.AreEqual(GEDCOMCalendar.dcJulian, result);
+            Assert.AreEqual(GDMCalendar.dcJulian, result);
         }
 
         [Test]
@@ -303,7 +303,7 @@ namespace GDModel
         {
             string strValue = "@#DUNKNOWN@ 20 DEC 1980";
             GDMDate instance = new GDMDate(null, "", "");
-            instance.SetDate(GEDCOMCalendar.dcIslamic, 0, 0, 0);
+            instance.SetDate(GDMCalendar.dcIslamic, 0, 0, 0);
             Assert.AreEqual(string.Empty, instance.ParseString(strValue));
             Assert.AreEqual("@#DUNKNOWN@ 20 DEC 1980", instance.StringValue);
         }
@@ -328,7 +328,7 @@ namespace GDModel
         [Test]
         public void Test_SetDate()
         {
-            GEDCOMCalendar calendar = GEDCOMCalendar.dcGregorian;
+            GDMCalendar calendar = GDMCalendar.dcGregorian;
             int day = 20;
             int month = 12;
             int year = 1980;
@@ -342,7 +342,7 @@ namespace GDModel
         [Test]
         public void Test_SetDateJulian()
         {
-            GEDCOMCalendar calendar = GEDCOMCalendar.dcJulian;
+            GDMCalendar calendar = GDMCalendar.dcJulian;
             int day = 20;
             int month = 12;
             int year = 1980;
@@ -356,7 +356,7 @@ namespace GDModel
         [Test]
         public void Test_SetDateFrench()
         {
-            GEDCOMCalendar calendar = GEDCOMCalendar.dcFrench;
+            GDMCalendar calendar = GDMCalendar.dcFrench;
             int day = 20;
             int month = 12;
             int year = 1980;
@@ -370,7 +370,7 @@ namespace GDModel
         [Test]
         public void Test_SetDateHebrew()
         {
-            GEDCOMCalendar calendar = GEDCOMCalendar.dcHebrew;
+            GDMCalendar calendar = GDMCalendar.dcHebrew;
             int day = 20;
             int month = 12;
             int year = 1980;
@@ -468,7 +468,7 @@ namespace GDModel
             int year = 1980;
             GDMDate instance = new GDMDate(null, "", "");
             instance.SetHebrew(day, month, year);
-            Assert.AreEqual(GEDCOMCalendar.dcHebrew, instance.DateCalendar);
+            Assert.AreEqual(GDMCalendar.dcHebrew, instance.DateCalendar);
             Assert.AreEqual("@#DHEBREW@ 01 CSH 1980", instance.StringValue);
         }
 
@@ -481,12 +481,12 @@ namespace GDModel
             bool yearBC = false;
             GDMDate instance = new GDMDate(null, "", "");
             instance.SetHebrew(day, month, year, yearBC);
-            Assert.AreEqual(GEDCOMCalendar.dcHebrew, instance.DateCalendar);
+            Assert.AreEqual(GDMCalendar.dcHebrew, instance.DateCalendar);
             Assert.AreEqual("@#DHEBREW@ 01 TSH 1980", instance.StringValue);
 
             // Code coverage
             instance.SetHebrew(day, "", year, yearBC);
-            Assert.AreEqual(GEDCOMCalendar.dcHebrew, instance.DateCalendar);
+            Assert.AreEqual(GDMCalendar.dcHebrew, instance.DateCalendar);
         }
 
         [Test]
@@ -497,7 +497,7 @@ namespace GDModel
             int year = 1980;
             GDMDate instance = new GDMDate(null, "", "");
             instance.SetFrench(day, month, year);
-            Assert.AreEqual(GEDCOMCalendar.dcFrench, instance.DateCalendar);
+            Assert.AreEqual(GDMCalendar.dcFrench, instance.DateCalendar);
             Assert.AreEqual("@#DFRENCH R@ 01 BRUM 1980", instance.StringValue);
         }
 
@@ -510,12 +510,12 @@ namespace GDModel
             bool yearBC = false;
             GDMDate instance = new GDMDate(null, "", "");
             instance.SetFrench(day, month, year, yearBC);
-            Assert.AreEqual(GEDCOMCalendar.dcFrench, instance.DateCalendar);
+            Assert.AreEqual(GDMCalendar.dcFrench, instance.DateCalendar);
             Assert.AreEqual("@#DFRENCH R@ 01 VEND 1980", instance.StringValue);
 
             // Code coverage
             instance.SetHebrew(day, "", year, yearBC);
-            Assert.AreEqual(GEDCOMCalendar.dcHebrew, instance.DateCalendar);
+            Assert.AreEqual(GDMCalendar.dcHebrew, instance.DateCalendar);
         }
 
         [Test]
@@ -527,7 +527,7 @@ namespace GDModel
             bool yearBC = false;
             GDMDate instance = new GDMDate(null, "", "");
             instance.SetRoman(day, month, year, yearBC);
-            Assert.AreEqual(GEDCOMCalendar.dcRoman, instance.DateCalendar);
+            Assert.AreEqual(GDMCalendar.dcRoman, instance.DateCalendar);
         }
 
         [Test]
@@ -539,7 +539,7 @@ namespace GDModel
             bool yearBC = false;
             GDMDate instance = new GDMDate(null, "", "");
             instance.SetUnknown(day, month, year, yearBC);
-            Assert.AreEqual(GEDCOMCalendar.dcUnknown, instance.DateCalendar);
+            Assert.AreEqual(GDMCalendar.dcUnknown, instance.DateCalendar);
         }
 
         [Test]
@@ -575,10 +575,10 @@ namespace GDModel
         [Test]
         public void Test_CreateByFormattedStr_3args()
         {
-            Assert.AreEqual(null, GDMDate.CreateByFormattedStr(null, GEDCOMCalendar.dcGregorian, false));
-            Assert.AreEqual("20 DEC 1980", GDMDate.CreateByFormattedStr("20/12/1980", GEDCOMCalendar.dcGregorian, false).StringValue);
-            Assert.AreEqual("DEC 1980", GDMDate.CreateByFormattedStr("__/12/1980", GEDCOMCalendar.dcGregorian, false).StringValue);
-            Assert.AreEqual(null, GDMDate.CreateByFormattedStr("1980", GEDCOMCalendar.dcGregorian, false));
+            Assert.AreEqual(null, GDMDate.CreateByFormattedStr(null, GDMCalendar.dcGregorian, false));
+            Assert.AreEqual("20 DEC 1980", GDMDate.CreateByFormattedStr("20/12/1980", GDMCalendar.dcGregorian, false).StringValue);
+            Assert.AreEqual("DEC 1980", GDMDate.CreateByFormattedStr("__/12/1980", GDMCalendar.dcGregorian, false).StringValue);
+            Assert.AreEqual(null, GDMDate.CreateByFormattedStr("1980", GDMCalendar.dcGregorian, false));
             //Assert.Throws(typeof(GEDCOMDateException), () => { GEDCOMDate.createByFormattedStr("1980", GEDCOMCalendar.dcGregorian, true); });
         }
 
@@ -587,7 +587,7 @@ namespace GDModel
         {
             string dateStr = "";
             UDN expResult = UDN.CreateEmpty();
-            UDN result = GDMDate.GetUDNByFormattedStr(dateStr, GEDCOMCalendar.dcGregorian);
+            UDN result = GDMDate.GetUDNByFormattedStr(dateStr, GDMCalendar.dcGregorian);
             Assert.AreEqual(expResult, result);
         }
 
@@ -650,7 +650,7 @@ namespace GDModel
             string result = instance.GetDisplayStringExt(format, sign, showCalendar);
             Assert.AreEqual(expResult, result);
 
-            instance.Approximated = GEDCOMApproximated.daEstimated;
+            instance.Approximated = GDMApproximated.daEstimated;
             expResult = "~ BC 1980.12.20 [J]";
             result = instance.GetDisplayStringExt(format, sign, showCalendar);
             Assert.AreEqual(expResult, result);
@@ -668,7 +668,7 @@ namespace GDModel
         public void Test_getUDNByFormattedStr2()
         {
             //Assert.Throws(typeof(GEDCOMDateException), () => {
-            var dtx = GDMDate.GetUDNByFormattedStr("20-12-1980", GEDCOMCalendar.dcGregorian, true);
+            var dtx = GDMDate.GetUDNByFormattedStr("20-12-1980", GDMCalendar.dcGregorian, true);
             Assert.AreEqual("1980/12/20", dtx.ToString());
             //});
         }

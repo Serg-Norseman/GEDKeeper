@@ -31,11 +31,11 @@ namespace GKCore.Controllers
     /// </summary>
     public class RecMergeController : DialogController<IRecMergeDlg>
     {
-        private GEDCOMRecordType fRMMode;
+        private GDMRecordType fRMMode;
         private readonly StringList fRMSkip;
         private int fRMIndex;
 
-        public GEDCOMRecordType RMMode
+        public GDMRecordType RMMode
         {
             get { return fRMMode; }
             set { fRMMode = value; }
@@ -44,7 +44,7 @@ namespace GKCore.Controllers
         public RecMergeController(IRecMergeDlg view) : base(view)
         {
             fRMSkip = new StringList();
-            fRMMode = GEDCOMRecordType.rtIndividual;
+            fRMMode = GDMRecordType.rtIndividual;
         }
 
         public override void UpdateView()
@@ -115,7 +115,7 @@ namespace GKCore.Controllers
 
                         res = iRec.IsMatch(kRec, mParams) >= 100.0f;
 
-                        if (res && fRMMode == GEDCOMRecordType.rtIndividual) {
+                        if (res && fRMMode == GDMRecordType.rtIndividual) {
                             res = CheckPersonsEx((GDMIndividualRecord)iRec, (GDMIndividualRecord)kRec);
                         }
 

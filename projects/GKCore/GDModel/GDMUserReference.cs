@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.IO;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -59,12 +58,6 @@ namespace GDModel
         public override bool IsEmpty()
         {
             return base.IsEmpty() && string.IsNullOrEmpty(fReferenceType);
-        }
-
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            base.SaveToStream(stream, level);
-            WriteTagLine(stream, ++level, GEDCOMTagType.TYPE, fReferenceType, true);
         }
 
         public override void Assign(GDMTag source)

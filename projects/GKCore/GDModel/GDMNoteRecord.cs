@@ -36,7 +36,7 @@ namespace GDModel
 
         public GDMNoteRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GEDCOMRecordType.rtNote);
+            SetRecordType(GDMRecordType.rtNote);
             SetName(GEDCOMTagType.NOTE);
         }
 

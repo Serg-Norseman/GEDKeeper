@@ -79,7 +79,7 @@ namespace GKCore.Controllers
             UpdateChart();
         }
 
-        private void InternalChildAdd(GEDCOMSex needSex)
+        private void InternalChildAdd(GDMSex needSex)
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
@@ -92,12 +92,12 @@ namespace GKCore.Controllers
 
         public void AddSon()
         {
-            InternalChildAdd(GEDCOMSex.svMale);
+            InternalChildAdd(GDMSex.svMale);
         }
 
         public void AddDaughter()
         {
-            InternalChildAdd(GEDCOMSex.svFemale);
+            InternalChildAdd(GDMSex.svFemale);
         }
 
         public void AddSpouse()
@@ -115,7 +115,7 @@ namespace GKCore.Controllers
             UpdateChart();
         }
 
-        private void ParentAdd(GEDCOMSex needSex)
+        private void ParentAdd(GDMSex needSex)
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
@@ -134,8 +134,8 @@ namespace GKCore.Controllers
                     mother = fam.GetWife();
                 }
 
-                needParent = (father == null && needSex == GEDCOMSex.svMale) ||
-                    (mother == null && needSex == GEDCOMSex.svFemale);
+                needParent = (father == null && needSex == GDMSex.svMale) ||
+                    (mother == null && needSex == GDMSex.svFemale);
             }
 
             if (!familyExist || needParent) {
@@ -154,12 +154,12 @@ namespace GKCore.Controllers
 
         public void AddFather()
         {
-            ParentAdd(GEDCOMSex.svMale);
+            ParentAdd(GDMSex.svMale);
         }
 
         public void AddMother()
         {
-            ParentAdd(GEDCOMSex.svFemale);
+            ParentAdd(GDMSex.svFemale);
         }
 
         public void Edit()
@@ -168,7 +168,7 @@ namespace GKCore.Controllers
             if (p == null || p.Rec == null) return;
 
             GDMIndividualRecord iRec = p.Rec;
-            if (BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone)) {
+            if (BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GDMSex.svNone)) {
                 UpdateChart();
             }
         }
@@ -190,7 +190,7 @@ namespace GKCore.Controllers
 
             if (person.Rec != null) {
                 GDMIndividualRecord iRec = person.Rec;
-                modified = BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GEDCOMSex.svNone);
+                modified = BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GDMSex.svNone);
             } else {
                 // this is "stub" person, only in descendant tree
                 // key properties = BaseSpouse & BaseFamily
@@ -211,7 +211,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public bool ParentIsRequired(GEDCOMSex needSex)
+        public bool ParentIsRequired(GDMSex needSex)
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return false;
@@ -229,8 +229,8 @@ namespace GKCore.Controllers
                 mother = fam.GetWife();
             }
 
-            bool needParent = (father == null && needSex == GEDCOMSex.svMale) ||
-                (mother == null && needSex == GEDCOMSex.svFemale);
+            bool needParent = (father == null && needSex == GDMSex.svMale) ||
+                (mother == null && needSex == GDMSex.svFemale);
             return needParent;
         }
 

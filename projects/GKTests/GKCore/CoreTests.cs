@@ -154,17 +154,17 @@ namespace GKCore
         {
             CompositeItem compositeItem = new CompositeItem();
             Assert.IsNotNull(compositeItem);
-            compositeItem.TakeVal(0.0f, GEDCOMSex.svMale, true);
+            compositeItem.TakeVal(0.0f, GDMSex.svMale, true);
             Assert.AreEqual(0, compositeItem.CommonVal);
             Assert.AreEqual(0, compositeItem.MaleVal);
             Assert.AreEqual(0, compositeItem.FemaleVal);
-            compositeItem.TakeVal(1f, GEDCOMSex.svFemale, true);
-            compositeItem.TakeVal(1f, GEDCOMSex.svMale, true);
+            compositeItem.TakeVal(1f, GDMSex.svFemale, true);
+            compositeItem.TakeVal(1f, GDMSex.svMale, true);
             Assert.AreEqual(1, compositeItem.CommonVal);
             Assert.AreEqual(1, compositeItem.MaleVal);
             Assert.AreEqual(1, compositeItem.FemaleVal);
-            compositeItem.TakeVal("1", GEDCOMSex.svFemale, true);
-            compositeItem.TakeVal("1", GEDCOMSex.svMale, true);
+            compositeItem.TakeVal("1", GDMSex.svFemale, true);
+            compositeItem.TakeVal("1", GDMSex.svMale, true);
             Assert.AreEqual(1, compositeItem.CommonVal);
             Assert.AreEqual(1, compositeItem.MaleVal);
             Assert.AreEqual(1, compositeItem.FemaleVal);
@@ -178,7 +178,7 @@ namespace GKCore
             Assert.AreEqual("test2", statsItem.ToString());
 
             List<GDMRecord> selectedRecords = new List<GDMRecord>();
-            IGEDCOMTreeEnumerator iEnum = fContext.Tree.GetEnumerator(GEDCOMRecordType.rtIndividual);
+            IGEDCOMTreeEnumerator iEnum = fContext.Tree.GetEnumerator(GDMRecordType.rtIndividual);
             GDMRecord current;
             while (iEnum.MoveNext(out current)) {
                 selectedRecords.Add(current);
@@ -278,22 +278,22 @@ namespace GKCore
                 nameEntry = namesTable.FindName("Ivan");
                 Assert.IsNotNull(nameEntry);
 
-                string pat = namesTable.GetPatronymicByName("Ivan", GEDCOMSex.svMale);
+                string pat = namesTable.GetPatronymicByName("Ivan", GDMSex.svMale);
                 Assert.IsNull(pat);
 
                 string name = namesTable.GetNameByPatronymic("Ivanovich");
                 Assert.AreEqual("", name);
 
-                GEDCOMSex sex = namesTable.GetSexByName("Ivan");
-                Assert.AreEqual(GEDCOMSex.svNone, sex);
+                GDMSex sex = namesTable.GetSexByName("Ivan");
+                Assert.AreEqual(GDMSex.svNone, sex);
                 
-                namesTable.SetName("Ivan", "Ivanovich", GEDCOMSex.svMale);
-                namesTable.SetName("Ivan", "Ivanovna", GEDCOMSex.svFemale);
+                namesTable.SetName("Ivan", "Ivanovich", GDMSex.svMale);
+                namesTable.SetName("Ivan", "Ivanovna", GDMSex.svFemale);
 
-                pat = namesTable.GetPatronymicByName("Ivan", GEDCOMSex.svMale);
+                pat = namesTable.GetPatronymicByName("Ivan", GDMSex.svMale);
                 Assert.AreEqual("Ivanovich", pat);
 
-                pat = namesTable.GetPatronymicByName("Ivan", GEDCOMSex.svFemale);
+                pat = namesTable.GetPatronymicByName("Ivan", GDMSex.svFemale);
                 Assert.AreEqual("Ivanovna", pat);
 
                 name = namesTable.GetNameByPatronymic("Ivanovich");
@@ -302,16 +302,16 @@ namespace GKCore
                 name = namesTable.GetNameByPatronymic("Ivanovna");
                 Assert.AreEqual("Ivan", name);
 
-                namesTable.SetNameSex("Maria", GEDCOMSex.svFemale);
+                namesTable.SetNameSex("Maria", GDMSex.svFemale);
                 sex = namesTable.GetSexByName("Maria");
-                Assert.AreEqual(GEDCOMSex.svFemale, sex);
+                Assert.AreEqual(GDMSex.svFemale, sex);
 
-                namesTable.SetName("", "", GEDCOMSex.svNone);
-                namesTable.SetNameSex("", GEDCOMSex.svNone);
+                namesTable.SetName("", "", GDMSex.svNone);
+                namesTable.SetNameSex("", GDMSex.svNone);
 
-                namesTable.SetName("Anna", "Ivanovna", GEDCOMSex.svFemale);
+                namesTable.SetName("Anna", "Ivanovna", GDMSex.svFemale);
                 sex = namesTable.GetSexByName("Anna");
-                Assert.AreEqual(GEDCOMSex.svFemale, sex);
+                Assert.AreEqual(GDMSex.svFemale, sex);
 
                 GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec);
@@ -320,7 +320,7 @@ namespace GKCore
                 namesTable.ImportNames(null);
 
                 sex = namesTable.GetSexByName("Anna");
-                Assert.AreEqual(GEDCOMSex.svFemale, sex);
+                Assert.AreEqual(GDMSex.svFemale, sex);
 
                 string namesFile = TestUtils.GetTempFilePath("names.txt");
                 namesTable.SaveToFile(namesFile);

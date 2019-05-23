@@ -42,7 +42,7 @@ namespace GKCore.Lists
 
 
         public CommunicationListMan(IBaseContext baseContext) :
-            base(baseContext, CreateCommunicationListColumns(), GEDCOMRecordType.rtCommunication)
+            base(baseContext, CreateCommunicationListColumns(), GDMRecordType.rtCommunication)
         {
         }
 

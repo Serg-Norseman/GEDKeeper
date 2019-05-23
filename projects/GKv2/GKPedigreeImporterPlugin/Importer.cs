@@ -170,10 +170,10 @@ namespace GKPedigreeImporterPlugin
         private GDMFamilyRecord GetFamilyByNum(GDMIndividualRecord parent, int marrNum)
         {
             // it's source of ERRORS! but without this - bad! (AddSpouse() not linking parent to family)
-            GEDCOMSex sex = parent.Sex;
-            if (sex == GEDCOMSex.svNone || sex == GEDCOMSex.svUndetermined)
+            GDMSex sex = parent.Sex;
+            if (sex == GDMSex.svNone || sex == GDMSex.svUndetermined)
             {
-                parent.Sex = GEDCOMSex.svMale;
+                parent.Sex = GDMSex.svMale;
             }
 
             while (parent.SpouseToFamilyLinks.Count < marrNum)
@@ -450,13 +450,13 @@ namespace GKPedigreeImporterPlugin
             }
         }
 
-        private GDMIndividualRecord DefinePerson(string str, GEDCOMSex proposeSex)
+        private GDMIndividualRecord DefinePerson(string str, GDMSex proposeSex)
         {
             var persName = DefinePersonName(str);
 
             GDMIndividualRecord result = fBase.Context.CreatePersonEx(persName.Name, persName.Patr, persName.Surname, proposeSex, false);
 
-            if (proposeSex == GEDCOMSex.svNone || proposeSex == GEDCOMSex.svUndetermined) {
+            if (proposeSex == GDMSex.svNone || proposeSex == GDMSex.svUndetermined) {
                 fBase.Context.CheckPersonSex(result);
             }
 
@@ -495,7 +495,7 @@ namespace GKPedigreeImporterPlugin
 
                 str = str.Substring(pid_end).Trim();
 
-                GEDCOMSex proposeSex = GetProposeSex(buffer);
+                GDMSex proposeSex = GetProposeSex(buffer);
 
                 GDMIndividualRecord result = DefinePerson(str, proposeSex);
 
@@ -520,9 +520,9 @@ namespace GKPedigreeImporterPlugin
             }
         }
 
-        private GEDCOMSex GetProposeSex(StringList buffer)
+        private GDMSex GetProposeSex(StringList buffer)
         {
-            GEDCOMSex result = GEDCOMSex.svNone;
+            GDMSex result = GDMSex.svNone;
             if (buffer == null) return result;
 
             try
@@ -537,14 +537,14 @@ namespace GKPedigreeImporterPlugin
                     char c2 = line[1];
                     if ((c1 == 'М' || c1 == 'Ж') && ((c2 == ' ') || (c2 >= '1' && c2 <= '9'))) {
                         // define sex (if spouse is male, then result = female, else result = male)
-                        GEDCOMSex res = (c1 == 'М') ? GEDCOMSex.svFemale : GEDCOMSex.svMale;
+                        GDMSex res = (c1 == 'М') ? GDMSex.svFemale : GDMSex.svMale;
 
-                        if (result == GEDCOMSex.svNone) {
+                        if (result == GDMSex.svNone) {
                             result = res;
                         } else {
                             if (result != res) {
                                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_SpousesInfoConflict));
-                                return GEDCOMSex.svNone;
+                                return GDMSex.svNone;
                             } else {
                                 // matched, checked
                             }
@@ -575,7 +575,7 @@ namespace GKPedigreeImporterPlugin
                     {
                         // define sex
                         string spSex = slRet.Spouse;
-                        GEDCOMSex sx = (spSex[0] == 'М') ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
+                        GDMSex sx = (spSex[0] == 'М') ? GDMSex.svMale : GDMSex.svFemale;
 
                         // extract name
                         line = line.Substring(slRet.Pos).Trim();

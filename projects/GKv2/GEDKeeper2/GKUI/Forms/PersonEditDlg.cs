@@ -287,11 +287,11 @@ namespace GKUI.Forms
             if (eArgs.Action == RecordAction.raJump && family != null) {
                 GDMIndividualRecord spouse = null;
                 switch (fController.Person.Sex) {
-                    case GEDCOMSex.svMale:
+                    case GDMSex.svMale:
                         spouse = family.GetWife();
                         break;
 
-                    case GEDCOMSex.svFemale:
+                    case GDMSex.svFemale:
                         spouse = family.GetHusband();
                         break;
                 }
@@ -393,7 +393,7 @@ namespace GKUI.Forms
             }
         }
 
-        public void SetNeedSex(GEDCOMSex needSex)
+        public void SetNeedSex(GDMSex needSex)
         {
             cmbSex.SelectedIndex = (int)needSex;
         }

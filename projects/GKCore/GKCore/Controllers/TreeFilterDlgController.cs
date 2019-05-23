@@ -87,7 +87,7 @@ namespace GKCore.Controllers
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {
                 GDMRecord rec = tree[i];
-                if (rec.RecordType == GEDCOMRecordType.rtSource) {
+                if (rec.RecordType == GDMRecordType.rtSource) {
                     values.AddObject((rec as GDMSourceRecord).ShortTitle, rec);
                 }
             }
@@ -133,7 +133,7 @@ namespace GKCore.Controllers
 
             switch (action) {
                 case RecordAction.raAdd:
-                    iRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    iRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svNone);
                     if (iRec != null) {
                         fTemp = fTemp + iRec.XRef + ";";
                     }

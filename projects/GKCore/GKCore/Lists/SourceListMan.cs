@@ -45,7 +45,7 @@ namespace GKCore.Lists
 
 
         public SourceListMan(IBaseContext baseContext) :
-            base(baseContext, CreateSourceListColumns(), GEDCOMRecordType.rtSource)
+            base(baseContext, CreateSourceListColumns(), GDMRecordType.rtSource)
         {
         }
 
@@ -152,7 +152,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    GDMRepositoryRecord rep = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtRepository, null) as GDMRepositoryRecord;
+                    GDMRepositoryRecord rep = fBaseWin.Context.SelectRecord(GDMRecordType.rtRepository, null) as GDMRepositoryRecord;
                     if (rep != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, source, rep);
                     }

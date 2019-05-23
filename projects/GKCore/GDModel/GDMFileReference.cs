@@ -23,7 +23,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public enum GEDCOMMediaType
+    public enum GDMMediaType
     {
         mtUnknown,
 
@@ -46,7 +46,7 @@ namespace GDModel
 
 
     // TODO: doc/docx/odt, xls/xlsx/ods, ppt/pptx/odp
-    public enum GEDCOMMultimediaFormat
+    public enum GDMMultimediaFormat
     {
         mfNone,
 
@@ -85,13 +85,13 @@ namespace GDModel
 
     public class GDMFileReference : GDMTag
     {
-        public GEDCOMMultimediaFormat MultimediaFormat
+        public GDMMultimediaFormat MultimediaFormat
         {
             get { return GEDCOMUtils.GetMultimediaFormatVal(GetTagStringValue(GEDCOMTagType.FORM)); }
             set { SetTagStringValue(GEDCOMTagType.FORM, GEDCOMUtils.GetMultimediaFormatStr(value)); }
         }
 
-        public GEDCOMMediaType MediaType
+        public GDMMediaType MediaType
         {
             get { return GEDCOMUtils.GetMediaTypeVal(GetTagStringValue(MediaTypeTagName())); }
             set { SetTagStringValue(MediaTypeTagName(), GEDCOMUtils.GetMediaTypeStr(value)); }
@@ -119,16 +119,16 @@ namespace GDModel
             MultimediaFormat = RecognizeFormat(fileName);
         }
 
-        public static GEDCOMMultimediaFormat RecognizeFormat(string fileName)
+        public static GDMMultimediaFormat RecognizeFormat(string fileName)
         {
-            if (string.IsNullOrEmpty(fileName)) return GEDCOMMultimediaFormat.mfUnknown;
+            if (string.IsNullOrEmpty(fileName)) return GDMMultimediaFormat.mfUnknown;
 
             string ext = FileHelper.GetFileExtension(fileName);
             if (!string.IsNullOrEmpty(ext) && ext[0] == '.') {
                 ext = ext.Remove(0, 1);
             }
 
-            GEDCOMMultimediaFormat result = GEDCOMUtils.GetMultimediaFormatVal(ext);
+            GDMMultimediaFormat result = GEDCOMUtils.GetMultimediaFormatVal(ext);
             return result;
         }
     }

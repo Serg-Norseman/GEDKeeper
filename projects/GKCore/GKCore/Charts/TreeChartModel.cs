@@ -572,14 +572,14 @@ namespace GKCore.Charts
                         bool skipUnk = false;
 
                         switch (person.Sex) {
-                            case GEDCOMSex.svFemale:
+                            case GDMSex.svFemale:
                                 {
                                     GDMIndividualRecord sp = family.GetHusband();
                                     skipUnk = skipUnkSpouses && (sp == null);
 
                                     if (!skipUnk) {
                                         resParent = AddDescPerson(null, sp, true, level);
-                                        resParent.Sex = GEDCOMSex.svMale;
+                                        resParent.Sex = GDMSex.svMale;
                                         resParent.SetFlag(PersonFlag.pfSpouse);
 
                                         ft = resParent;
@@ -598,14 +598,14 @@ namespace GKCore.Charts
                                     break;
                                 }
 
-                            case GEDCOMSex.svMale:
+                            case GDMSex.svMale:
                                 {
                                     GDMIndividualRecord sp = family.GetWife();
                                     skipUnk = skipUnkSpouses && (sp == null);
 
                                     if (!skipUnk) {
                                         resParent = AddDescPerson(null, sp, true, level);
-                                        resParent.Sex = GEDCOMSex.svFemale;
+                                        resParent.Sex = GDMSex.svFemale;
                                         resParent.SetFlag(PersonFlag.pfSpouse);
 
                                         ft = result;
@@ -983,7 +983,7 @@ namespace GKCore.Charts
             }
 
             bool res = true;
-            if (person.BaseSpouse != null && (person.BaseSpouse.Sex == GEDCOMSex.svFemale || person.BaseSpouse.GetSpousesCount() == 1)) {
+            if (person.BaseSpouse != null && (person.BaseSpouse.Sex == GDMSex.svFemale || person.BaseSpouse.GetSpousesCount() == 1)) {
                 res = ShiftDesc(person.BaseSpouse, offset, isSingle, verify);
                 if (!res) return false;
             } else {
@@ -1022,11 +1022,11 @@ namespace GKCore.Charts
 
             if (alignPair) {
                 switch (person.Sex) {
-                    case GEDCOMSex.svMale:
+                    case GDMSex.svMale:
                         centX = (person.Rect.Right + person.BaseSpouse.Rect.Left) / 2;
                         break;
 
-                    case GEDCOMSex.svFemale:
+                    case GDMSex.svFemale:
                         centX = (person.BaseSpouse.Rect.Right + person.Rect.Left) / 2;
                         break;
                 }
@@ -1070,7 +1070,7 @@ namespace GKCore.Charts
             if (alignPair) {
                 int offset;
                 switch (person.Sex) {
-                    case GEDCOMSex.svMale:
+                    case GDMSex.svMale:
                         // fix #189
                         offset = curX - (fBranchDistance + person.Width) / 2 + 1 - person.PtX;
                         if (person.Rect.Left + offset < fEdges[person.Generation]) {
@@ -1081,7 +1081,7 @@ namespace GKCore.Charts
                         ShiftDesc(person.BaseSpouse, curX + (fBranchDistance + person.BaseSpouse.Width) / 2 - person.BaseSpouse.PtX, true);
                         break;
 
-                    case GEDCOMSex.svFemale:
+                    case GDMSex.svFemale:
                         // fix #189
                         offset = curX - (fBranchDistance + person.BaseSpouse.Width) / 2 + 1 - person.BaseSpouse.PtX;
                         if (person.BaseSpouse.Rect.Left + offset < fEdges[person.BaseSpouse.Generation]) {
@@ -1113,7 +1113,7 @@ namespace GKCore.Charts
                 ShiftDesc(person, bound - person.Rect.Left, true);
             }
 
-            if (person.Sex == GEDCOMSex.svMale) {
+            if (person.Sex == GDMSex.svMale) {
                 RecalcDescChilds(person);
                 fEdges[gen] = person.Rect.Right;
             }
@@ -1129,11 +1129,11 @@ namespace GKCore.Charts
                     int spX = 0;
 
                     switch (person.Sex) {
-                        case GEDCOMSex.svMale:
+                        case GDMSex.svMale:
                             spX = prev.Rect.Right + spOffset;
                             break;
 
-                        case GEDCOMSex.svFemale:
+                        case GDMSex.svFemale:
                             spX = prev.Rect.Left - spOffset;
                             break;
                     }
@@ -1143,26 +1143,26 @@ namespace GKCore.Charts
                     // spouses arranged from first to last from left to right
                     // therefore for several wifes of one man, the previous node is the previous wife
                     // however, for several husbands of one woman, the previous node is a woman
-                    if (sp.Sex != GEDCOMSex.svMale) {
+                    if (sp.Sex != GDMSex.svMale) {
                         prev = sp;
                     }
                 }
             }
 
-            if (person.Sex == GEDCOMSex.svFemale) {
+            if (person.Sex == GDMSex.svFemale) {
                 RecalcDescChilds(person);
                 fEdges[gen] = person.Rect.Right;
             }
 
             // FIXME: Temporary hack: if this person does not specify a particular sex,
             // then breaks the normal sequence of formation of coordinates.
-            if (person.Sex == GEDCOMSex.svNone || person.Sex == GEDCOMSex.svUndetermined) {
+            if (person.Sex == GDMSex.svNone || person.Sex == GDMSex.svUndetermined) {
                 fEdges[gen] = person.Rect.Right;
             }
 
             // Fix of long-distance displacement of male nodes in the presence of more than 
             // one marriage and a large tree of descendants from the first wife
-            if (person.Sex == GEDCOMSex.svMale && spousesCount >= 2) {
+            if (person.Sex == GDMSex.svMale && spousesCount >= 2) {
                 var firstWife = person.GetSpouse(0);
                 if (firstWife.GetChildsCount() > 0) {
                     int d = firstWife.Rect.Left - person.Rect.Right;
@@ -1386,7 +1386,7 @@ namespace GKCore.Charts
                 bColor = bColor.Lighter(HIGHLIGHTED_VAL);
             }
 
-            if (person.Sex == GEDCOMSex.svFemale) {
+            if (person.Sex == GDMSex.svFemale) {
                 fRenderer.DrawRoundedRectangle(xpen, bColor, rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight(), 6);
             } else {
                 fRenderer.DrawRectangle(xpen, bColor, rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight());
@@ -1541,7 +1541,7 @@ namespace GKCore.Charts
             int spbOfs = (person.Height - 10) / (spousesCount + 1);
             int spbBeg = person.PtY + (person.Height - spbOfs * (spousesCount - 1)) / 2;
             switch (person.Sex) {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     for (int i = 0; i < spousesCount; i++) {
                         TreeChartPerson spouse = person.GetSpouse(i);
 
@@ -1555,7 +1555,7 @@ namespace GKCore.Charts
                     }
                     break;
 
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     for (int i = 0; i < spousesCount; i++) {
                         TreeChartPerson spouse = person.GetSpouse(i);
 
@@ -1595,11 +1595,11 @@ namespace GKCore.Charts
                     spbBeg = person.PtY + person.Height - 1;
                 } else {
                     switch (person.Sex) {
-                        case GEDCOMSex.svMale:
+                        case GDMSex.svMale:
                             cx = (person.Rect.Right + person.BaseSpouse.Rect.Left) / 2;
                             break;
 
-                        case GEDCOMSex.svFemale:
+                        case GDMSex.svFemale:
                             cx = (person.BaseSpouse.Rect.Right + person.Rect.Left) / 2;
                             break;
                     }

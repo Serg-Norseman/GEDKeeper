@@ -58,7 +58,7 @@ namespace GKCore.Controllers
                 fView.EventDateType.Add(LangMan.LS(GKData.DateKinds[i].Name));
             }
 
-            for (GEDCOMCalendar gc = GEDCOMCalendar.dcGregorian; gc <= GEDCOMCalendar.dcLast; gc++) {
+            for (GDMCalendar gc = GDMCalendar.dcGregorian; gc <= GDMCalendar.dcLast; gc++) {
                 GKData.CalendarStruct cdr = GKData.DateCalendars[(int)gc];
                 if (!cdr.HasSupport) continue;
 
@@ -76,8 +76,8 @@ namespace GKCore.Controllers
         {
             GDMCustomDate result = null;
 
-            GEDCOMCalendar cal1 = (GEDCOMCalendar)fView.Date1Calendar.SelectedTag;
-            GEDCOMCalendar cal2 = (GEDCOMCalendar)fView.Date2Calendar.SelectedTag;
+            GDMCalendar cal1 = (GDMCalendar)fView.Date1Calendar.SelectedTag;
+            GDMCalendar cal2 = (GDMCalendar)fView.Date2Calendar.SelectedTag;
 
             GDMDate gcd1 = GDMDate.CreateByFormattedStr(fView.Date1.NormalizeDate, cal1, true);
             if (gcd1 == null) throw new ArgumentNullException("gcd1");
@@ -118,15 +118,15 @@ namespace GKCore.Controllers
                     break;
 
                 case 7: // ABT gcd1
-                    result = GDMCustomDate.CreateApproximated(null, gcd1, GEDCOMApproximated.daAbout);
+                    result = GDMCustomDate.CreateApproximated(null, gcd1, GDMApproximated.daAbout);
                     break;
 
                 case 8: // CAL gcd1
-                    result = GDMCustomDate.CreateApproximated(null, gcd1, GEDCOMApproximated.daCalculated);
+                    result = GDMCustomDate.CreateApproximated(null, gcd1, GDMApproximated.daCalculated);
                     break;
 
                 case 9: // EST gcd1
-                    result = GDMCustomDate.CreateApproximated(null, gcd1, GEDCOMApproximated.daEstimated);
+                    result = GDMCustomDate.CreateApproximated(null, gcd1, GDMApproximated.daEstimated);
                     break;
             }
 
@@ -247,19 +247,19 @@ namespace GKCore.Controllers
                 fView.Date1BC.Checked = dtPeriod.DateFrom.YearBC;
                 fView.Date2BC.Checked = dtPeriod.DateTo.YearBC;
             } else if (date is GDMDate) {
-                GEDCOMApproximated approximated = (date as GDMDate).Approximated;
+                GDMApproximated approximated = (date as GDMDate).Approximated;
 
                 switch (approximated) {
-                    case GEDCOMApproximated.daExact:
+                    case GDMApproximated.daExact:
                         fView.EventDateType.SelectedIndex = 0;
                         break;
-                    case GEDCOMApproximated.daAbout:
+                    case GDMApproximated.daAbout:
                         fView.EventDateType.SelectedIndex = 7;
                         break;
-                    case GEDCOMApproximated.daCalculated:
+                    case GDMApproximated.daCalculated:
                         fView.EventDateType.SelectedIndex = 8;
                         break;
-                    case GEDCOMApproximated.daEstimated:
+                    case GDMApproximated.daEstimated:
                         fView.EventDateType.SelectedIndex = 9;
                         break;
                 }
@@ -270,7 +270,7 @@ namespace GKCore.Controllers
             } else {
                 fView.EventDateType.SelectedIndex = 0;
                 fView.Date1.NormalizeDate = "";
-                fView.Date1Calendar.SelectedTag = GEDCOMCalendar.dcGregorian;
+                fView.Date1Calendar.SelectedTag = GDMCalendar.dcGregorian;
                 fView.Date1BC.Checked = false;
             }
 
@@ -300,7 +300,7 @@ namespace GKCore.Controllers
 
         public void AddPlace()
         {
-            fTempLocation = (fBase.Context.SelectRecord(GEDCOMRecordType.rtLocation, null) as GDMLocationRecord);
+            fTempLocation = (fBase.Context.SelectRecord(GDMRecordType.rtLocation, null) as GDMLocationRecord);
             UpdatePlace();
         }
 

@@ -946,14 +946,14 @@ namespace GKTreeVizPlugin
             return Math.Sqrt(dx * dx + dy * dy);
         }
 
-        private static void SetLineColor(GEDCOMSex sex)
+        private static void SetLineColor(GDMSex sex)
         {
             switch (sex) {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     OpenGL.glColor3f(0.1F, 0.3F, 0.9F);
                     break;
 
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     OpenGL.glColor3f(0.9F, 0.3F, 0.1F);
                     break;
             }

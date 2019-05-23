@@ -451,13 +451,13 @@ namespace GKCore
         [Test]
         public void Test_GetSexBySign()
         {
-            GEDCOMSex sex;
+            GDMSex sex;
             sex = GKUtils.GetSexBySign('F');
-            Assert.AreEqual(GEDCOMSex.svFemale, sex);
+            Assert.AreEqual(GDMSex.svFemale, sex);
             sex = GKUtils.GetSexBySign('M');
-            Assert.AreEqual(GEDCOMSex.svMale, sex);
+            Assert.AreEqual(GDMSex.svMale, sex);
             sex = GKUtils.GetSexBySign('U');
-            Assert.AreEqual(GEDCOMSex.svUndetermined, sex);
+            Assert.AreEqual(GDMSex.svUndetermined, sex);
         }
 
         [Test]
@@ -496,12 +496,12 @@ namespace GKCore
         [Test]
         public void Test_GetMultimediaKind()
         {
-            Assert.AreEqual(MultimediaKind.mkNone, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfNone));
-            Assert.AreEqual(MultimediaKind.mkImage, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfBMP));
-            Assert.AreEqual(MultimediaKind.mkText, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfTXT));
-            Assert.AreEqual(MultimediaKind.mkAudio, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfWAV));
-            Assert.AreEqual(MultimediaKind.mkVideo, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfAVI));
-            Assert.AreEqual(MultimediaKind.mkNone, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfOLE));
+            Assert.AreEqual(MultimediaKind.mkNone, GKUtils.GetMultimediaKind(GDMMultimediaFormat.mfNone));
+            Assert.AreEqual(MultimediaKind.mkImage, GKUtils.GetMultimediaKind(GDMMultimediaFormat.mfBMP));
+            Assert.AreEqual(MultimediaKind.mkText, GKUtils.GetMultimediaKind(GDMMultimediaFormat.mfTXT));
+            Assert.AreEqual(MultimediaKind.mkAudio, GKUtils.GetMultimediaKind(GDMMultimediaFormat.mfWAV));
+            Assert.AreEqual(MultimediaKind.mkVideo, GKUtils.GetMultimediaKind(GDMMultimediaFormat.mfAVI));
+            Assert.AreEqual(MultimediaKind.mkNone, GKUtils.GetMultimediaKind(GDMMultimediaFormat.mfOLE));
         }
 
         [Test]

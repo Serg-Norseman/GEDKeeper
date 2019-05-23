@@ -42,7 +42,7 @@ namespace GKCore.Lists
 
 
         public TaskListMan(IBaseContext baseContext) :
-            base(baseContext, CreateTaskListColumns(), GEDCOMRecordType.rtTask)
+            base(baseContext, CreateTaskListColumns(), GDMRecordType.rtTask)
         {
         }
 

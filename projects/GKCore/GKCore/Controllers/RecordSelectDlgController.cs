@@ -33,7 +33,7 @@ namespace GKCore.Controllers
     public sealed class RecordSelectDlgController : DialogController<IRecordSelectDialog>
     {
         private string fFilter;
-        private GEDCOMRecordType fRecType;
+        private GDMRecordType fRecType;
         private readonly Target fTarget;
 
 
@@ -52,7 +52,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public GEDCOMRecordType RecType
+        public GDMRecordType RecType
         {
             get { return fRecType; }
             set { fRecType = value; }
@@ -75,7 +75,7 @@ namespace GKCore.Controllers
             recordsList.ListMan.Filter.Clear();
             recordsList.ListMan.QuickFilter = fFilter;
 
-            if (fRecType == GEDCOMRecordType.rtIndividual) {
+            if (fRecType == GDMRecordType.rtIndividual) {
                 IndividualListFilter iFilter = (IndividualListFilter)recordsList.ListMan.Filter;
                 iFilter.Sex = fTarget.NeedSex;
 

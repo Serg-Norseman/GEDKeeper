@@ -248,7 +248,7 @@ namespace GKCore.Export
 
                     GDMPointer sp;
                     string unk;
-                    if (person.IRec.Sex == GEDCOMSex.svMale) {
+                    if (person.IRec.Sex == GDMSex.svMale) {
                         sp = family.Wife;
                         st = LangMan.LS(LSID.LSID_Wife) + ": ";
                         unk = LangMan.LS(LSID.LSID_UnkFemale);
@@ -323,7 +323,7 @@ namespace GKCore.Export
                     GDMPointer sp;
                     string st;
                     string unk;
-                    if (person.IRec.Sex == GEDCOMSex.svMale)
+                    if (person.IRec.Sex == GDMSex.svMale)
                     {
                         sp = family.Wife;
                         st = LangMan.LS(LSID.LSID_WifeSign);
@@ -404,7 +404,7 @@ namespace GKCore.Export
                 } else {
                     string dt = (evt == null) ? "?" : GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
 
-                    string st = (evObj.IRec.Sex == GEDCOMSex.svMale) ? LangMan.LS(LSID.LSID_HeWasBorn) : LangMan.LS(LSID.LSID_SheWasBorn);
+                    string st = (evObj.IRec.Sex == GDMSex.svMale) ? LangMan.LS(LSID.LSID_HeWasBorn) : LangMan.LS(LSID.LSID_SheWasBorn);
 
                     li = string.Format("{0}: {1} {2}", dt, st, GKUtils.GetNameString(evObj.IRec, true, false));
                     PedigreePerson prs = FindPerson(evObj.IRec);

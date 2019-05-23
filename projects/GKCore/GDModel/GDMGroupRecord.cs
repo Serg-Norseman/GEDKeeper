@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.IO;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
@@ -42,7 +41,7 @@ namespace GDModel
 
         public GDMGroupRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GEDCOMRecordType.rtGroup);
+            SetRecordType(GDMRecordType.rtGroup);
             SetName(GEDCOMTagType._GROUP);
 
             fMembers = new GDMList<GDMPointer>(this);
@@ -71,12 +70,6 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
             fMembers.ReplaceXRefs(map);
-        }
-
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            base.SaveToStream(stream, level);
-            fMembers.SaveToStream(stream, ++level);
         }
 
         // TODO: connect to use

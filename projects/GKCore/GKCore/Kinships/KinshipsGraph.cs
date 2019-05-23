@@ -193,10 +193,10 @@ namespace GKCore.Kinships
                 case RelationKind.rkParent:
                     switch (xTo.Sex)
                     {
-                        case GEDCOMSex.svMale:
+                        case GDMSex.svMale:
                             resRel = RelationKind.rkFather;
                             break;
-                        case GEDCOMSex.svFemale:
+                        case GDMSex.svFemale:
                             resRel = RelationKind.rkMother;
                             break;
                     }
@@ -205,10 +205,10 @@ namespace GKCore.Kinships
                 case RelationKind.rkSpouse:
                     switch (xTo.Sex)
                     {
-                        case GEDCOMSex.svMale:
+                        case GDMSex.svMale:
                             resRel = RelationKind.rkHusband;
                             break;
-                        case GEDCOMSex.svFemale:
+                        case GDMSex.svFemale:
                             resRel = RelationKind.rkWife;
                             break;
                     }
@@ -217,10 +217,10 @@ namespace GKCore.Kinships
                 case RelationKind.rkChild:
                     switch (xTo.Sex)
                     {
-                        case GEDCOMSex.svMale:
+                        case GDMSex.svMale:
                             resRel = RelationKind.rkSon;
                             break;
-                        case GEDCOMSex.svFemale:
+                        case GDMSex.svFemale:
                             resRel = RelationKind.rkDaughter;
                             break;
                     }
@@ -331,7 +331,7 @@ namespace GKCore.Kinships
             int num = iRec.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
                 GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
-                GDMIndividualRecord spouse = ((iRec.Sex == GEDCOMSex.svMale) ? family.GetWife() : family.GetHusband());
+                GDMIndividualRecord spouse = ((iRec.Sex == GDMSex.svMale) ? family.GetWife() : family.GetHusband());
 
                 SearchKGInt(currNode, spouse, graph, RelationKind.rkSpouse, RelationKind.rkSpouse);
 

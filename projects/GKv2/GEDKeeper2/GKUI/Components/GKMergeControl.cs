@@ -41,7 +41,7 @@ namespace GKUI.Components
         private readonly HyperView fView2;
 
         private IBaseWindow fBase;
-        private GEDCOMRecordType fMergeMode;
+        private GDMRecordType fMergeMode;
         private bool fBookmark;
 
         public IBaseWindow Base
@@ -56,7 +56,7 @@ namespace GKUI.Components
             set { fBookmark = value; }
         }
 
-        public GEDCOMRecordType MergeMode
+        public GDMRecordType MergeMode
         {
             get { return fMergeMode; }
             set { fMergeMode = value; }

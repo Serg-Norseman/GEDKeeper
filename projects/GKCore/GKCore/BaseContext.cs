@@ -61,7 +61,7 @@ namespace GKCore
         private bool fModified;
         private ShieldState fShieldState;
 
-        private readonly List<GEDCOMLanguageID> fLangsList;
+        private readonly List<GDMLanguageID> fLangsList;
         private readonly List<GDMRecord> fLockedRecords;
         private readonly GDMTree fTree;
         private readonly ValuesCollection fValuesCollection;
@@ -75,7 +75,7 @@ namespace GKCore
         public ICulture Culture
         {
             get {
-                GEDCOMLanguageID langID = fTree.Header.Language.Value;
+                GDMLanguageID langID = fTree.Header.Language.Value;
                 if (fCulture == null || fCulture.Language != langID) {
                     fCulture = GetCultureByLang(langID);
                 }
@@ -88,7 +88,7 @@ namespace GKCore
             get { return fFileName; }
         }
 
-        public List<GEDCOMLanguageID> LangsList
+        public List<GDMLanguageID> LangsList
         {
             get { return fLangsList; }
         }
@@ -156,7 +156,7 @@ namespace GKCore
             fUndoman = new ChangeTracker(fTree);
             fValuesCollection = new ValuesCollection();
             fLockedRecords = new List<GDMRecord>();
-            fLangsList = new List<GEDCOMLanguageID>();
+            fLangsList = new List<GDMLanguageID>();
         }
 
         protected override void Dispose(bool disposing)
@@ -190,8 +190,8 @@ namespace GKCore
             GDMLanguage lang = persName.FindTag("_LANG", 0) as GDMLanguage;
             if (lang == null) return;
 
-            GEDCOMLanguageID langId = lang.Value;
-            if (langId != GEDCOMLanguageID.Unknown && !fLangsList.Contains(langId)) {
+            GDMLanguageID langId = lang.Value;
+            if (langId != GDMLanguageID.Unknown && !fLangsList.Contains(langId)) {
                 fLangsList.Add(langId);
             }
         }
@@ -241,7 +241,7 @@ namespace GKCore
             return result;
         }
 
-        public GDMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex, bool birthEvent)
+        public GDMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GDMSex iSex, bool birthEvent)
         {
             GDMIndividualRecord iRec = fTree.CreateIndividual();
             iRec.Sex = iSex;
@@ -270,47 +270,47 @@ namespace GKCore
 
                 switch (record.RecordType)
                 {
-                    case GEDCOMRecordType.rtIndividual:
+                    case GDMRecordType.rtIndividual:
                         result = fTree.DeleteIndividualRecord(record as GDMIndividualRecord);
                         break;
 
-                    case GEDCOMRecordType.rtFamily:
+                    case GDMRecordType.rtFamily:
                         result = fTree.DeleteFamilyRecord(record as GDMFamilyRecord);
                         break;
 
-                    case GEDCOMRecordType.rtNote:
+                    case GDMRecordType.rtNote:
                         result = fTree.DeleteNoteRecord(record as GDMNoteRecord);
                         break;
 
-                    case GEDCOMRecordType.rtMultimedia:
+                    case GDMRecordType.rtMultimedia:
                         result = fTree.DeleteMediaRecord(record as GDMMultimediaRecord);
                         break;
 
-                    case GEDCOMRecordType.rtSource:
+                    case GDMRecordType.rtSource:
                         result = fTree.DeleteSourceRecord(record as GDMSourceRecord);
                         break;
 
-                    case GEDCOMRecordType.rtRepository:
+                    case GDMRecordType.rtRepository:
                         result = fTree.DeleteRepositoryRecord(record as GDMRepositoryRecord);
                         break;
 
-                    case GEDCOMRecordType.rtGroup:
+                    case GDMRecordType.rtGroup:
                         result = fTree.DeleteGroupRecord(record as GDMGroupRecord);
                         break;
 
-                    case GEDCOMRecordType.rtResearch:
+                    case GDMRecordType.rtResearch:
                         result = fTree.DeleteResearchRecord(record as GDMResearchRecord);
                         break;
 
-                    case GEDCOMRecordType.rtTask:
+                    case GDMRecordType.rtTask:
                         result = fTree.DeleteTaskRecord(record as GDMTaskRecord);
                         break;
 
-                    case GEDCOMRecordType.rtCommunication:
+                    case GDMRecordType.rtCommunication:
                         result = fTree.DeleteCommunicationRecord(record as GDMCommunicationRecord);
                         break;
 
-                    case GEDCOMRecordType.rtLocation:
+                    case GDMRecordType.rtLocation:
                         result = fTree.DeleteLocationRecord(record as GDMLocationRecord);
                         break;
                 }
@@ -326,7 +326,7 @@ namespace GKCore
             return result;
         }
 
-        public IList<ISearchResult> FindAll(GEDCOMRecordType recordType, string searchPattern)
+        public IList<ISearchResult> FindAll(GDMRecordType recordType, string searchPattern)
         {
             List<ISearchResult> result = new List<ISearchResult>();
 
@@ -346,17 +346,17 @@ namespace GKCore
             return result;
         }
 
-        public bool IsRecordAccess(GEDCOMRestriction restriction)
+        public bool IsRecordAccess(GDMRestriction restriction)
         {
             bool result = false;
 
             switch (fShieldState) {
                 case ShieldState.Maximum:
-                    result = (restriction != GEDCOMRestriction.rnConfidential && restriction != GEDCOMRestriction.rnPrivacy);
+                    result = (restriction != GDMRestriction.rnConfidential && restriction != GDMRestriction.rnPrivacy);
                     break;
 
                 case ShieldState.Middle:
-                    result = (restriction != GEDCOMRestriction.rnPrivacy);
+                    result = (restriction != GDMRestriction.rnPrivacy);
                     break;
 
                 case ShieldState.None:
@@ -380,7 +380,7 @@ namespace GKCore
             {
                 GDMRecord rec = fTree[i];
 
-                if (rec.RecordType == GEDCOMRecordType.rtSource && ((GDMSourceRecord) rec).ShortTitle == sourceName)
+                if (rec.RecordType == GDMRecordType.rtSource && ((GDMSourceRecord) rec).ShortTitle == sourceName)
                 {
                     result = (rec as GDMSourceRecord);
                     break;
@@ -490,7 +490,7 @@ namespace GKCore
                     int num = fTree.RecordsCount;
                     for (int i = 0; i < num; i++) {
                         GDMRecord rec = fTree[i];
-                        if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
+                        if (rec.RecordType != GDMRecordType.rtIndividual) continue;
 
                         GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
 
@@ -532,54 +532,54 @@ namespace GKCore
 
         #region Name and sex functions
 
-        public static ICulture GetCultureByLang(GEDCOMLanguageID langID)
+        public static ICulture GetCultureByLang(GDMLanguageID langID)
         {
             ICulture culture;
             switch (langID) {
-                case GEDCOMLanguageID.Russian:
-                case GEDCOMLanguageID.Ukrainian:
-                case GEDCOMLanguageID.Kazakh:
+                case GDMLanguageID.Russian:
+                case GDMLanguageID.Ukrainian:
+                case GDMLanguageID.Kazakh:
                     culture = new RussianCulture();
                     break;
 
-                case GEDCOMLanguageID.Polish:
+                case GDMLanguageID.Polish:
                     culture = new PolishCulture();
                     break;
 
-                case GEDCOMLanguageID.German:
+                case GDMLanguageID.German:
                     culture = new GermanCulture();
                     break;
 
-                case GEDCOMLanguageID.Swedish:
+                case GDMLanguageID.Swedish:
                     culture = new SwedishCulture();
                     break;
 
-                case GEDCOMLanguageID.Icelandic:
+                case GDMLanguageID.Icelandic:
                     culture = new IcelandCulture();
                     break;
 
-                case GEDCOMLanguageID.Armenian:
+                case GDMLanguageID.Armenian:
                     culture = new ArmenianCulture();
                     break;
 
-                case GEDCOMLanguageID.Turkish:
+                case GDMLanguageID.Turkish:
                     culture = new TurkishCulture();
                     break;
 
-                case GEDCOMLanguageID.French:
+                case GDMLanguageID.French:
                     culture = new FrenchCulture();
                     break;
 
-                case GEDCOMLanguageID.Italian:
+                case GDMLanguageID.Italian:
                     culture = new ItalianCulture();
                     break;
 
-                case GEDCOMLanguageID.Cantonese:
-                case GEDCOMLanguageID.Mandrin:
+                case GDMLanguageID.Cantonese:
+                case GDMLanguageID.Mandrin:
                     culture = new ChineseCulture();
                     break;
 
-                case GEDCOMLanguageID.English:
+                case GDMLanguageID.English:
                 default:
                     culture = new BritishCulture();
                     break;
@@ -589,7 +589,7 @@ namespace GKCore
             return culture;
         }
 
-        public string DefinePatronymic(string name, GEDCOMSex sex, bool confirm)
+        public string DefinePatronymic(string name, GDMSex sex, bool confirm)
         {
             ICulture culture = this.Culture;
             if (!culture.HasPatronymic()) return string.Empty;
@@ -609,11 +609,11 @@ namespace GKCore
 
             switch (sex)
             {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     result = n.M_Patronymic;
                     break;
 
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     result = n.F_Patronymic;
                     break;
             }
@@ -628,11 +628,11 @@ namespace GKCore
 
             switch (sex)
             {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     result = n.M_Patronymic;
                     break;
 
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     result = n.F_Patronymic;
                     break;
             }
@@ -640,13 +640,13 @@ namespace GKCore
             return result;
         }
 
-        public GEDCOMSex DefineSex(string iName, string iPatr)
+        public GDMSex DefineSex(string iName, string iPatr)
         {
             INamesTable namesTable = AppHost.NamesTable;
 
-            GEDCOMSex result = namesTable.GetSexByName(iName);
+            GDMSex result = namesTable.GetSexByName(iName);
 
-            if (result == GEDCOMSex.svNone)
+            if (result == GDMSex.svNone)
             {
                 using (var dlg = AppHost.ResolveDialog<ISexCheckDlg>())
                 {
@@ -658,7 +658,7 @@ namespace GKCore
                     {
                         result = dlg.Sex;
 
-                        if (result != GEDCOMSex.svNone)
+                        if (result != GDMSex.svNone)
                         {
                             namesTable.SetNameSex(iName, result);
                         }
@@ -677,7 +677,7 @@ namespace GKCore
             try {
                 BeginUpdate();
 
-                if (iRec.Sex == GEDCOMSex.svNone || iRec.Sex == GEDCOMSex.svUndetermined)
+                if (iRec.Sex == GDMSex.svNone || iRec.Sex == GDMSex.svUndetermined)
                 {
                     var parts = GKUtils.GetNameParts(iRec);
                     iRec.Sex = DefineSex(parts.Name, parts.Patronymic);
@@ -1458,9 +1458,9 @@ namespace GKCore
             GDMFamilyRecord result;
 
             try {
-                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GEDCOMRecordType.rtFamily)) {
+                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtFamily)) {
                     dlg.TargetIndividual = target;
-                    dlg.NeedSex = GEDCOMSex.svNone;
+                    dlg.NeedSex = GDMSex.svNone;
                     dlg.TargetMode = TargetMode.tmFamilyChild;
                     dlg.FastFilter = "*";
 
@@ -1479,12 +1479,12 @@ namespace GKCore
         }
 
         public GDMIndividualRecord SelectPerson(GDMIndividualRecord target,
-                                                   TargetMode targetMode, GEDCOMSex needSex)
+                                                   TargetMode targetMode, GDMSex needSex)
         {
             GDMIndividualRecord result;
 
             try {
-                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GEDCOMRecordType.rtIndividual)) {
+                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtIndividual)) {
                     dlg.TargetIndividual = target;
                     dlg.NeedSex = needSex;
                     dlg.TargetMode = targetMode;
@@ -1504,7 +1504,7 @@ namespace GKCore
             return result;
         }
 
-        public GDMRecord SelectRecord(GEDCOMRecordType mode, params object[] args)
+        public GDMRecord SelectRecord(GDMRecordType mode, params object[] args)
         {
             GDMRecord result;
 
@@ -1543,7 +1543,7 @@ namespace GKCore
             {
                 GDMRecord rec = fTree[i];
 
-                if (rec.RecordType == GEDCOMRecordType.rtFamily)
+                if (rec.RecordType == GDMRecordType.rtFamily)
                 {
                     GDMFamilyRecord fam = (GDMFamilyRecord) rec;
                     GDMIndividualRecord husb = fam.GetHusband();
@@ -1591,8 +1591,8 @@ namespace GKCore
             if (spouse == null)
                 throw new ArgumentNullException(@"spouse");
 
-            GEDCOMSex sex = spouse.Sex;
-            if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined) {
+            GDMSex sex = spouse.Sex;
+            if (sex < GDMSex.svMale || sex >= GDMSex.svUndetermined) {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
                 return null;
             }
@@ -1602,7 +1602,7 @@ namespace GKCore
             return family;
         }
 
-        public GDMIndividualRecord AddChildForParent(GDMIndividualRecord parent, GEDCOMSex needSex)
+        public GDMIndividualRecord AddChildForParent(GDMIndividualRecord parent, GDMSex needSex)
         {
             GDMIndividualRecord resultChild = null;
 
@@ -1641,14 +1641,14 @@ namespace GKCore
             if (iRec == null)
                 throw new ArgumentNullException(@"iRec");
 
-            GEDCOMSex needSex;
+            GDMSex needSex;
             switch (iRec.Sex) {
-                case GEDCOMSex.svMale:
-                    needSex = GEDCOMSex.svFemale;
+                case GDMSex.svMale:
+                    needSex = GDMSex.svFemale;
                     break;
 
-                case GEDCOMSex.svFemale:
-                    needSex = GEDCOMSex.svMale;
+                case GDMSex.svFemale:
+                    needSex = GDMSex.svMale;
                     break;
 
                 default:
@@ -1658,7 +1658,7 @@ namespace GKCore
 
             GDMIndividualRecord target = null;
             TargetMode targetMode = TargetMode.tmNone;
-            if (needSex == GEDCOMSex.svFemale) {
+            if (needSex == GDMSex.svFemale) {
                 target = iRec;
                 targetMode = TargetMode.tmWife;
             }

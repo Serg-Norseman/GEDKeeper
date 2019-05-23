@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.IO;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -88,15 +87,6 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
             fSourceCitations.ReplaceXRefs(map);
-        }
-
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            base.SaveToStream(stream, level);
-
-            level += 1;
-            WriteTagLine(stream, level, GEDCOMTagType.RELA, fRelation, true);
-            fSourceCitations.SaveToStream(stream, level);
         }
 
         public override void Assign(GDMTag source)

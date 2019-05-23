@@ -126,7 +126,7 @@ namespace GKCore.Lists
         protected ExternalFilterHandler fExternalFilter;
 
         private readonly List<ValItem> fContentList;
-        private readonly GEDCOMRecordType fRecordType;
+        private readonly GDMRecordType fRecordType;
         private int fXSortFactor;
         private int fTotalCount;
         private string fQuickFilter = "*";
@@ -153,7 +153,7 @@ namespace GKCore.Lists
             get { return fContentList.Count; }
         }
 
-        public GEDCOMRecordType RecordType
+        public GDMRecordType RecordType
         {
             get { return fRecordType; }
         }
@@ -170,7 +170,7 @@ namespace GKCore.Lists
         }
 
 
-        protected ListManager(IBaseContext baseContext, ListColumns defaultListColumns, GEDCOMRecordType recordType) :
+        protected ListManager(IBaseContext baseContext, ListColumns defaultListColumns, GDMRecordType recordType) :
             base(baseContext, defaultListColumns)
         {
             fContentList = new List<ValItem>();
@@ -385,7 +385,7 @@ namespace GKCore.Lists
                     return DateTime.Parse(val);
 
                 case DataType.dtGEDCOMDate:
-                    return GDMDate.GetUDNByFormattedStr(val, GEDCOMCalendar.dcGregorian);
+                    return GDMDate.GetUDNByFormattedStr(val, GDMCalendar.dcGregorian);
             }
 
             return val;
@@ -646,60 +646,60 @@ namespace GKCore.Lists
             return false;
         }
 
-        public static ListManager Create(IBaseContext baseContext, GEDCOMRecordType recType)
+        public static ListManager Create(IBaseContext baseContext, GDMRecordType recType)
         {
             ListManager result = null;
 
             switch (recType) {
-                case GEDCOMRecordType.rtIndividual:
+                case GDMRecordType.rtIndividual:
                     result = new IndividualListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtFamily:
+                case GDMRecordType.rtFamily:
                     result = new FamilyListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtNote:
+                case GDMRecordType.rtNote:
                     result = new NoteListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtMultimedia:
+                case GDMRecordType.rtMultimedia:
                     result = new MultimediaListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtSource:
+                case GDMRecordType.rtSource:
                     result = new SourceListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtRepository:
+                case GDMRecordType.rtRepository:
                     result = new RepositoryListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtGroup:
+                case GDMRecordType.rtGroup:
                     result = new GroupListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtResearch:
+                case GDMRecordType.rtResearch:
                     result = new ResearchListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtTask:
+                case GDMRecordType.rtTask:
                     result = new TaskListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtCommunication:
+                case GDMRecordType.rtCommunication:
                     result = new CommunicationListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtLocation:
+                case GDMRecordType.rtLocation:
                     result = new LocationListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtSubmission:
+                case GDMRecordType.rtSubmission:
                     result = null;
                     break;
 
-                case GEDCOMRecordType.rtSubmitter:
+                case GDMRecordType.rtSubmitter:
                     result = null;
                     break;
             }

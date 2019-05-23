@@ -54,12 +54,12 @@ namespace GKStdReports
             surnames.DuplicateSolve = DuplicateSolve.Ignore;
 
             GDMTree tree = fBase.Context.Tree;
-            var enumer = tree.GetEnumerator(GEDCOMRecordType.rtIndividual);
+            var enumer = tree.GetEnumerator(GDMRecordType.rtIndividual);
             GDMRecord record;
             while (enumer.MoveNext(out record)) {
                 var iRec = record as GDMIndividualRecord;
                 var nameParts = GKUtils.GetNameParts(iRec, false);
-                string surname = fBase.Context.Culture.NormalizeSurname(nameParts.Surname, iRec.Sex == GEDCOMSex.svFemale);
+                string surname = fBase.Context.Culture.NormalizeSurname(nameParts.Surname, iRec.Sex == GDMSex.svFemale);
                 surnames.Add(surname);
             }
 

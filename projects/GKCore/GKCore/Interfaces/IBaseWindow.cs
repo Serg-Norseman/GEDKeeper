@@ -39,21 +39,21 @@ namespace GKCore.Interfaces
         void NotifyRecord(GDMRecord record, RecordAction action);
         bool RecordIsFiltered(GDMRecord record);
         void RefreshLists(bool columnsChanged);
-        void RefreshRecordsView(GEDCOMRecordType recType);
+        void RefreshRecordsView(GDMRecordType recType);
         void SaveFile(string fileName);
         void SaveFileEx(bool saveAs);
         void SelectRecordByXRef(string xref);
         void ShowMedia(GDMMultimediaRecord mediaRec, bool modal);
-        void ShowRecordsTab(GEDCOMRecordType recType);
+        void ShowRecordsTab(GDMRecordType recType);
         void UpdateControls(bool forceDeactivate, bool blockDependent = false);
 
-        void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone);
-        List<GDMRecord> GetContentList(GEDCOMRecordType recType);
+        void ApplyFilter(GDMRecordType recType = GDMRecordType.rtNone);
+        List<GDMRecord> GetContentList(GDMRecordType recType);
         StringList GetRecordContent(GDMRecord record);
-        IListManager GetRecordsListManByType(GEDCOMRecordType recType);
+        IListManager GetRecordsListManByType(GDMRecordType recType);
         GDMIndividualRecord GetSelectedPerson();
-        GEDCOMRecordType GetSelectedRecordType();
+        GDMRecordType GetSelectedRecordType();
         GDMRecord GetSelectedRecordEx();
-        void SetExternalFilter(ExternalFilterHandler filterHandler, GEDCOMRecordType recType = GEDCOMRecordType.rtNone);
+        void SetExternalFilter(ExternalFilterHandler filterHandler, GDMRecordType recType = GDMRecordType.rtNone);
     }
 }

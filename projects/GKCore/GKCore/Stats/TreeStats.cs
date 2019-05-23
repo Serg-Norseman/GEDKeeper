@@ -57,13 +57,13 @@ namespace GKCore.Stats
             for (int i = 0; i < num; i++)
             {
                 GDMRecord rec = fSelectedRecords[i];
-                if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
+                if (rec.RecordType != GDMRecordType.rtIndividual) continue;
 
                 GDMIndividualRecord ind = (GDMIndividualRecord) rec;
                 stats.persons++;
 
                 switch (ind.Sex) {
-                    case GEDCOMSex.svFemale:
+                    case GDMSex.svFemale:
                         stats.persons_f++;
                         if (ind.IsLive()) {
                             stats.lives_f++;
@@ -71,7 +71,7 @@ namespace GKCore.Stats
                         }
                         break;
 
-                    case GEDCOMSex.svMale:
+                    case GDMSex.svMale:
                         stats.persons_m++;
                         if (ind.IsLive()) {
                             stats.lives_m++;
@@ -105,9 +105,9 @@ namespace GKCore.Stats
             return stats;
         }
 
-        private static void CheckVal(List<StatsItem> valsList, string val, GEDCOMSex sex = GEDCOMSex.svUndetermined)
+        private static void CheckVal(List<StatsItem> valsList, string val, GDMSex sex = GDMSex.svUndetermined)
         {
-            if (sex == GEDCOMSex.svUndetermined) {
+            if (sex == GDMSex.svUndetermined) {
                 if (val == "-1" || val == "" || val == "0") {
                     val = "?";
                 }
@@ -117,7 +117,7 @@ namespace GKCore.Stats
 
             StatsItem lvi;
             if (vIdx == -1) {
-                lvi = new StatsItem(val, sex != GEDCOMSex.svUndetermined);
+                lvi = new StatsItem(val, sex != GDMSex.svUndetermined);
                 valsList.Add(lvi);
             } else {
                 lvi = valsList[vIdx];
@@ -125,15 +125,15 @@ namespace GKCore.Stats
             
             switch (sex)
             {
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     lvi.ValF = lvi.ValF + 1;
                     break;
 
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     lvi.ValM = lvi.ValM + 1;
                     break;
 
-                case GEDCOMSex.svUndetermined:
+                case GDMSex.svUndetermined:
                     lvi.Value = lvi.Value + 1;
                     break;
             }
@@ -175,7 +175,7 @@ namespace GKCore.Stats
 
             switch (mode) {
                 case StatsMode.smSurnames:
-                    v = fContext.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GEDCOMSex.svFemale);
+                    v = fContext.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GDMSex.svFemale);
                     break;
 
                 case StatsMode.smNames:
@@ -346,7 +346,7 @@ namespace GKCore.Stats
             {
                 GDMRecord rec = fTree[i];
 
-                if (rec.RecordType == GEDCOMRecordType.rtIndividual && mode != StatsMode.smSpousesDiff && fSelectedRecords.Contains(rec))
+                if (rec.RecordType == GDMRecordType.rtIndividual && mode != StatsMode.smSpousesDiff && fSelectedRecords.Contains(rec))
                 {
                     GDMIndividualRecord iRec = rec as GDMIndividualRecord;
 
@@ -397,7 +397,7 @@ namespace GKCore.Stats
                         }
                     }
                 }
-                else if (rec.RecordType == GEDCOMRecordType.rtFamily && mode == StatsMode.smSpousesDiff)
+                else if (rec.RecordType == GDMRecordType.rtFamily && mode == StatsMode.smSpousesDiff)
                 {
                     GDMFamilyRecord fRec = rec as GDMFamilyRecord;
 

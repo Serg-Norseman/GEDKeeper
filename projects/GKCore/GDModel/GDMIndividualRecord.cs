@@ -19,14 +19,13 @@
  */
 
 using System;
-using System.IO;
 using BSLib.Calendar;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
 namespace GDModel
 {
-    public enum GEDCOMSex
+    public enum GDMSex
     {
         svNone,
         svMale,
@@ -45,7 +44,7 @@ namespace GDModel
         private GDMList<GDMPointer> fGroups;
         private GDMList<GDMPersonalName> fPersonalNames;
         private GDMList<GDMSpouseToFamilyLink> fSpouseToFamilyLinks;
-        private GEDCOMSex fSex;
+        private GDMSex fSex;
 
 
         public GDMList<GDMAlias> Aliases
@@ -117,7 +116,7 @@ namespace GDModel
             get { return fPersonalNames; }
         }
 
-        public GEDCOMSex Sex
+        public GDMSex Sex
         {
             get { return fSex; }
             set { fSex = value; }
@@ -131,7 +130,7 @@ namespace GDModel
 
         public GDMIndividualRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GEDCOMRecordType.rtIndividual);
+            SetRecordType(GDMRecordType.rtIndividual);
             SetName(GEDCOMTagType.INDI);
 
             fAliasses = new GDMList<GDMAlias>(this);
@@ -180,7 +179,7 @@ namespace GDModel
         {
             base.Clear();
 
-            fSex = GEDCOMSex.svNone;
+            fSex = GDMSex.svNone;
 
             for (int i = fChildToFamilyLinks.Count - 1; i >= 0; i--) {
                 GDMFamilyRecord family = fChildToFamilyLinks[i].Family;
@@ -207,7 +206,7 @@ namespace GDModel
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fSex == GEDCOMSex.svNone) && fPersonalNames.Count == 0
+            return base.IsEmpty() && (fSex == GDMSex.svNone) && fPersonalNames.Count == 0
                 && fChildToFamilyLinks.Count == 0 && fSpouseToFamilyLinks.Count == 0
                 && fAssociations.Count == 0 && fAliasses.Count == 0 && fGroups.Count == 0;
         }
@@ -387,22 +386,6 @@ namespace GDModel
             fSpouseToFamilyLinks.ReplaceXRefs(map);
         }
 
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            base.SaveToStream(stream, level);
-
-            level += 1;
-            WriteTagLine(stream, level, GEDCOMTagType.SEX, GEDCOMUtils.GetSexStr(fSex), true);
-
-            fPersonalNames.SaveToStream(stream, level);
-            fChildToFamilyLinks.SaveToStream(stream, level);
-            fSpouseToFamilyLinks.SaveToStream(stream, level);
-            Events.SaveToStream(stream, level); // for files content compatibility
-            fAssociations.SaveToStream(stream, level);
-            fAliasses.SaveToStream(stream, level);
-            fGroups.SaveToStream(stream, level);
-        }
-
         public sealed class LifeDatesRet
         {
             public readonly GDMCustomEvent BirthEvent;
@@ -501,7 +484,7 @@ namespace GDModel
 
             if (Sex != indi.Sex) return 0.0f;
 
-            bool womanMode = (Sex == GEDCOMSex.svFemale);
+            bool womanMode = (Sex == GDMSex.svFemale);
 
             float matchesCount = 0.0f;
             float nameMatch = 0.0f;

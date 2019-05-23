@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.IO;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -35,7 +34,7 @@ namespace GDModel
 
         public GDMMultimediaRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GEDCOMRecordType.rtMultimedia);
+            SetRecordType(GDMRecordType.rtMultimedia);
             SetName(GEDCOMTagType.OBJE);
 
             fFileReferences = new GDMList<GDMFileReferenceWithTitle>(this);
@@ -70,12 +69,6 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
             fFileReferences.ReplaceXRefs(map);
-        }
-
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            base.SaveToStream(stream, level);
-            fFileReferences.SaveToStream(stream, ++level);
         }
 
         public string GetFileTitle()

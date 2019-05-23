@@ -18,9 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.IO;
-using GDModel.Providers.GEDCOM;
-
 namespace GDModel
 {
     public abstract class GDMCustomRecord : GDMTag
@@ -39,24 +36,6 @@ namespace GDModel
                     owner.SetXRef(oldXRef, this);
                 }
             }
-        }
-
-        protected override void SaveValueToStream(StreamWriter stream, int level)
-        {
-            string str = level.ToString();
-
-            if (!string.IsNullOrEmpty(fXRef)) {
-                str = str + " @" + fXRef + "@";
-            }
-
-            str = str + " " + Name;
-
-            string strValue = StringValue;
-            if (!string.IsNullOrEmpty(strValue)) {
-                str = str + " " + strValue;
-            }
-
-            stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
         }
 
         public override GDMTree GetTree()

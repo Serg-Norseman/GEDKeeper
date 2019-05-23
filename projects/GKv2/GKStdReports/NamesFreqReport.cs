@@ -65,7 +65,7 @@ namespace GKStdReports
             var surnames = new List<NameItem>();
 
             GDMTree tree = fBase.Context.Tree;
-            var enumer = tree.GetEnumerator(GEDCOMRecordType.rtIndividual);
+            var enumer = tree.GetEnumerator(GDMRecordType.rtIndividual);
             GDMRecord record;
             while (enumer.MoveNext(out record)) {
                 var iRec = record as GDMIndividualRecord;

@@ -57,14 +57,14 @@ namespace GKUI.Forms
             fDialog.IndividualName = "test name";
             Assert.AreEqual("test name", fDialog.IndividualName);
 
-            fDialog.Sex = GEDCOMSex.svMale;
-            Assert.AreEqual(GEDCOMSex.svMale, fDialog.Sex);
+            fDialog.Sex = GDMSex.svMale;
+            Assert.AreEqual(GDMSex.svMale, fDialog.Sex);
 
-            fDialog.Sex = GEDCOMSex.svFemale;
-            Assert.AreEqual(GEDCOMSex.svFemale, fDialog.Sex);
+            fDialog.Sex = GDMSex.svFemale;
+            Assert.AreEqual(GDMSex.svFemale, fDialog.Sex);
 
-            fDialog.Sex = GEDCOMSex.svNone;
-            Assert.AreEqual(GEDCOMSex.svNone, fDialog.Sex);
+            fDialog.Sex = GDMSex.svNone;
+            Assert.AreEqual(GDMSex.svNone, fDialog.Sex);
 
             ClickButton("btnCancel", fDialog);
         }

@@ -111,18 +111,18 @@ namespace GDModel
         public void Test_GetNameType()
         {
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
-            GEDCOMNameType expResult = GEDCOMNameType.ntNone;
-            GEDCOMNameType result = instance.NameType;
+            GDMNameType expResult = GDMNameType.ntNone;
+            GDMNameType result = instance.NameType;
             Assert.AreEqual(expResult, result);
         }
 
         [Test]
         public void Test_SetNameType()
         {
-            GEDCOMNameType value = GEDCOMNameType.ntBirth;
+            GDMNameType value = GDMNameType.ntBirth;
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
             instance.NameType = value;
-            GEDCOMNameType result = instance.NameType;
+            GDMNameType result = instance.NameType;
             Assert.AreEqual(value, result);
         }
 
@@ -183,8 +183,8 @@ namespace GDModel
         public void Test_NameType()
         {
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
-            instance.NameType = GEDCOMNameType.ntImmigrant;
-            Assert.AreEqual(GEDCOMNameType.ntImmigrant, instance.NameType);
+            instance.NameType = GDMNameType.ntImmigrant;
+            Assert.AreEqual(GDMNameType.ntImmigrant, instance.NameType);
         }
 
         [Test]
@@ -237,17 +237,6 @@ namespace GDModel
             GDMXRefReplacer map = null;
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
             instance.ReplaceXRefs(map);
-        }
-
-        [Test]
-        public void Test_SaveToStream()
-        {
-            StreamWriter stream = null;
-            GDMPersonalName instance = new GDMPersonalName(null, "", "");
-
-            Assert.Throws(typeof(NullReferenceException), () => {
-                instance.SaveToStream(stream, 0);
-            });
         }
 
         /**

@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.IO;
 using BSLib;
 using GDModel.Providers.GEDCOM;
 using GKCore;
@@ -123,14 +122,6 @@ namespace GDModel
             return base.ParseString(strValue);
         }
 
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            base.SaveToStream(stream, level);
-            fFileReferences.SaveToStream(stream, ++level);
-        }
-
-        #region Utilities
-
         public string GetUID()
         {
             string result = null;
@@ -152,7 +143,5 @@ namespace GDModel
             }
             return result;
         }
-
-        #endregion
     }
 }

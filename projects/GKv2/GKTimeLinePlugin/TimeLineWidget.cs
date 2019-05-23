@@ -71,13 +71,13 @@ namespace GKTimeLinePlugin
                 // restore filter's default state
                 if (fBase != null)
                 {
-                    IListManager listMan = fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
+                    IListManager listMan = fBase.GetRecordsListManByType(GDMRecordType.rtIndividual);
                     if (listMan != null) {
                         listMan.ExternalFilter = null;
                         ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmAll;
                     }
 
-                    fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
+                    fBase.ApplyFilter(GDMRecordType.rtIndividual);
                 }
 
                 fBase = baseWin;
@@ -87,7 +87,7 @@ namespace GKTimeLinePlugin
 
                 if (fBase != null)
                 {
-                    IListManager listMan = fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
+                    IListManager listMan = fBase.GetRecordsListManByType(GDMRecordType.rtIndividual);
 
                     if (listMan != null)
                     {
@@ -96,7 +96,7 @@ namespace GKTimeLinePlugin
 
                         CollectData();
 
-                        fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
+                        fBase.ApplyFilter(GDMRecordType.rtIndividual);
                     }
                 }
 
@@ -110,7 +110,7 @@ namespace GKTimeLinePlugin
             for (int i = 0; i < num; i++)
             {
                 GDMRecord rec = fBase.Context.Tree[i];
-                if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
+                if (rec.RecordType != GDMRecordType.rtIndividual) continue;
 
                 GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
 
@@ -134,7 +134,7 @@ namespace GKTimeLinePlugin
         {
             if (fBase != null) {
                 fYearCurrent = tbTimeLine.Value;
-                fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
+                fBase.ApplyFilter(GDMRecordType.rtIndividual);
             }
             StatusUpdate();
         }

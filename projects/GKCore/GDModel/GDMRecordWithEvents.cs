@@ -19,13 +19,12 @@
  */
 
 using System;
-using System.IO;
 using BSLib.Calendar;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public enum GEDCOMRestriction
+    public enum GDMRestriction
     {
         rnNone,
         rnLocked,
@@ -39,7 +38,7 @@ namespace GDModel
     public abstract class GDMRecordWithEvents : GDMRecord, IGEDCOMRecordWithEvents
     {
         private GDMList<GDMCustomEvent> fEvents;
-        private GEDCOMRestriction fRestriction;
+        private GDMRestriction fRestriction;
         private GDMList<GDMPointer> fSubmittors;
 
 
@@ -48,7 +47,7 @@ namespace GDModel
             get { return fEvents; }
         }
 
-        public GEDCOMRestriction Restriction
+        public GDMRestriction Restriction
         {
             get { return fRestriction; }
             set { fRestriction = value; }
@@ -80,7 +79,7 @@ namespace GDModel
             base.Clear();
 
             fEvents.Clear();
-            fRestriction = GEDCOMRestriction.rnNone;
+            fRestriction = GDMRestriction.rnNone;
             fSubmittors.Clear();
         }
 
@@ -142,15 +141,6 @@ namespace GDModel
             base.ReplaceXRefs(map);
             fEvents.ReplaceXRefs(map);
             fSubmittors.ReplaceXRefs(map);
-        }
-
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            base.SaveToStream(stream, level);
-
-            level += 1;
-            WriteTagLine(stream, level, GEDCOMTagType.RESN, GEDCOMUtils.GetRestrictionStr(fRestriction), true);
-            fSubmittors.SaveToStream(stream, level);
         }
 
         public GDMCustomEvent FindEvent(string eventName)

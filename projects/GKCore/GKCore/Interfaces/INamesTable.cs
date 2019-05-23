@@ -27,11 +27,11 @@ namespace GKCore.Interfaces
     {
         NameEntry AddName(string name);
         NameEntry FindName(string name);
-        string GetPatronymicByName(string name, GEDCOMSex sex);
+        string GetPatronymicByName(string name, GDMSex sex);
         string GetNameByPatronymic(string patronymic);
-        GEDCOMSex GetSexByName(string name);
-        void SetName(string name, string patronymic, GEDCOMSex sex);
-        void SetNameSex(string name, GEDCOMSex sex);
+        GDMSex GetSexByName(string name);
+        void SetName(string name, string patronymic, GDMSex sex);
+        void SetNameSex(string name, GDMSex sex);
         void ImportNames(GDMIndividualRecord iRec);
         void LoadFromFile(string fileName);
         void SaveToFile(string fileName);

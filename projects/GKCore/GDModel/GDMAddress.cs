@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.IO;
 using BSLib;
 using GDModel.Providers.GEDCOM;
 
@@ -131,20 +130,6 @@ namespace GDModel
                 fWWWList.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            SaveValueToStream(stream, level);
-
-            int lev = level + 1;
-            SaveTagsToStream(stream, lev);
-
-            // same level
-            fPhoneList.SaveToStream(stream, level);
-            fEmailList.SaveToStream(stream, level);
-            fFaxList.SaveToStream(stream, level);
-            fWWWList.SaveToStream(stream, level);
         }
 
         public override void Assign(GDMTag source)

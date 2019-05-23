@@ -24,6 +24,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
+    // TODO: remove and work with string idents
     public enum GEDCOMCharacterSet
     {
         csASCII,
@@ -36,7 +37,7 @@ namespace GDModel
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GEDCOMHeader : GDMCustomRecord
+    public sealed class GDMHeader : GDMCustomRecord
     {
         public GEDCOMCharacterSet CharacterSet
         {
@@ -168,7 +169,7 @@ namespace GDModel
         }
 
 
-        public GEDCOMHeader(GDMObject owner) : base(owner)
+        public GDMHeader(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.HEAD);
         }

@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.IO;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -109,7 +108,7 @@ namespace GDModel
 
         public GDMResearchRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GEDCOMRecordType.rtResearch);
+            SetRecordType(GDMRecordType.rtResearch);
             SetName(GEDCOMTagType._RESEARCH);
 
             fTasks = new GDMList<GDMPointer>(this);
@@ -148,16 +147,6 @@ namespace GDModel
             fTasks.ReplaceXRefs(map);
             fCommunications.ReplaceXRefs(map);
             fGroups.ReplaceXRefs(map);
-        }
-
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            base.SaveToStream(stream, level);
-
-            level += 1;
-            fTasks.SaveToStream(stream, level);
-            fCommunications.SaveToStream(stream, level);
-            fGroups.SaveToStream(stream, level);
         }
 
         public bool AddTask(GDMTaskRecord taskRecord)

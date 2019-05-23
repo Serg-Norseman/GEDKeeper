@@ -59,7 +59,7 @@ namespace GKCore
                         int descGens = GKUtils.GetDescGenerations(iRec);
 
                         bool res = (iRec.ChildToFamilyLinks.Count == 0);
-                        res = (res && iRec.Sex == GEDCOMSex.svMale);
+                        res = (res && iRec.Sex == GDMSex.svMale);
                         res = (res && /*nf != "" && nf != "?" &&*/ parts.Name != "" && parts.Name != "?");
                         res = (res && descGens >= gensMin);
 
@@ -115,7 +115,7 @@ namespace GKCore
                             patr.HasLinks = true;
                             patr2.HasLinks = true;
 
-                            if (cross.Sex == GEDCOMSex.svFemale) {
+                            if (cross.Sex == GDMSex.svFemale) {
                                 patr.Links.Add(patr2);
                             } else {
                                 patr2.Links.Add(patr);

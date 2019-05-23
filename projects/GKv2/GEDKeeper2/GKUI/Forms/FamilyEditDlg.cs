@@ -197,7 +197,7 @@ namespace GKUI.Forms
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LockEditor(cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+            LockEditor(cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
         }
 
         private void ModifyChildrenSheet(object sender, ModifyEventArgs eArgs)

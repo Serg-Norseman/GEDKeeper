@@ -65,7 +65,7 @@ namespace GDModel
             get { return GetTag<GDMDateValue>(GEDCOMTagType.DATE, GDMDateValue.Create); }
         }
 
-        public GEDCOMRestriction Restriction
+        public GDMRestriction Restriction
         {
             get { return GEDCOMUtils.GetRestrictionVal(GetTagStringValue(GEDCOMTagType.RESN)); }
             set { SetTagStringValue(GEDCOMTagType.RESN, GEDCOMUtils.GetRestrictionStr(value)); }

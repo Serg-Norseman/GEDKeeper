@@ -165,7 +165,7 @@ namespace GKStdReports
                                 fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", fTextFont);
                             }
                         } else if (evObj.Type == EventType.Child) {
-                            if (iRec.Sex == GEDCOMSex.svMale) {
+                            if (iRec.Sex == GDMSex.svMale) {
                                 st = LangMan.LS(LSID.LSID_RK_Son) + ": ";
                             } else {
                                 st = LangMan.LS(LSID.LSID_RK_Daughter) + ": ";
@@ -179,7 +179,7 @@ namespace GKStdReports
 
                     GDMIndividualRecord sp;
                     string unk;
-                    if (fPerson.Sex == GEDCOMSex.svMale) {
+                    if (fPerson.Sex == GDMSex.svMale) {
                         sp = famRec.GetWife();
                         st = LangMan.LS(LSID.LSID_Wife) + ": ";
                         unk = LangMan.LS(LSID.LSID_UnkFemale);

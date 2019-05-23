@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.IO;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -89,16 +88,6 @@ namespace GDModel
             set { SetTagStringValue(GEDCOMTagType._CENN, value); }
         }
 
-
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            // without NameValue
-            int lev = level + 1;
-            SaveTagsToStream(stream, lev);
-
-            fNotes.SaveToStream(stream, level);
-            fSourceCitations.SaveToStream(stream, level);
-        }
 
         public GDMPersonalNamePieces(GDMObject owner) : base(owner)
         {

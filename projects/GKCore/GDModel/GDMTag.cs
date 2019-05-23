@@ -21,10 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using BSLib;
 using GDModel.Providers.GEDCOM;
-using GKCore;
 using GKCore.Types;
 
 namespace GDModel
@@ -112,7 +110,7 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
-        protected GDMList<GDMTag> GetTagList()
+        internal GDMList<GDMTag> GetTagList()
         {
             return fTags;
         }
@@ -185,21 +183,17 @@ namespace GDModel
         internal GDMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
         {
             GDMTag tag = null;
-            try {
-                if (tagConstructor != null) {
-                    tag = tagConstructor(this, tagName, tagValue);
-                } else {
-                    tag = GEDCOMFactory.GetInstance().CreateTag(this, tagName, tagValue);
-                    if (tag == null) {
-                        tag = new GDMTag(this, tagName, tagValue);
-                    }
-                }
 
-                AddTag(tag);
-            } catch (Exception ex) {
-                Logger.LogWrite("GEDCOMTag.AddTag(): " + ex.Message);
+            if (tagConstructor != null) {
+                tag = tagConstructor(this, tagName, tagValue);
+            } else {
+                tag = GEDCOMFactory.GetInstance().CreateTag(this, tagName, tagValue);
+                if (tag == null) {
+                    tag = new GDMTag(this, tagName, tagValue);
+                }
             }
-            return tag;
+
+            return AddTag(tag);
         }
 
         /// <summary>
@@ -579,53 +573,6 @@ namespace GDModel
         public void ResetOwner(GDMObject owner)
         {
             fOwner = owner;
-        }
-
-        #endregion
-
-        #region Stream management
-
-        protected void SaveTagsToStream(StreamWriter stream, int level)
-        {
-            int subtagsCount = fTags.Count;
-            if (subtagsCount > 0) {
-                for (int i = 0; i < subtagsCount; i++) {
-                    GDMTag subtag = fTags[i];
-                    if (subtag.Name == GEDCOMTagType.CONC || subtag.Name == GEDCOMTagType.CONT) {
-                        subtag.SaveToStream(stream, level);
-                    }
-                }
-
-                for (int i = 0; i < subtagsCount; i++) {
-                    GDMTag subtag = fTags[i];
-                    if (subtag.Name != GEDCOMTagType.CONT && subtag.Name != GEDCOMTagType.CONC) {
-                        subtag.SaveToStream(stream, level);
-                    }
-                }
-            }
-        }
-
-        protected static void WriteTagLine(StreamWriter stream, int level, string tagName, string tagValue, bool skipEmpty = false)
-        {
-            bool isEmpty = string.IsNullOrEmpty(tagValue);
-            if (isEmpty && skipEmpty) return;
-
-            string str = level + " " + tagName;
-            if (!string.IsNullOrEmpty(tagValue)) {
-                str = str + " " + tagValue;
-            }
-            stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
-        }
-
-        protected virtual void SaveValueToStream(StreamWriter stream, int level)
-        {
-            WriteTagLine(stream, level, fName, StringValue);
-        }
-
-        public virtual void SaveToStream(StreamWriter stream, int level)
-        {
-            SaveValueToStream(stream, level);
-            SaveTagsToStream(stream, ++level);
         }
 
         #endregion

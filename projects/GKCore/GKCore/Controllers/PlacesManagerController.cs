@@ -76,7 +76,7 @@ namespace GKCore.Controllers
             if (pObj.Name.IndexOf("[*]") == 0) {
                 AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_PlaceAlreadyInBook));
             } else {
-                GDMLocationRecord loc = fBase.Context.SelectRecord(GEDCOMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
+                GDMLocationRecord loc = fBase.Context.SelectRecord(GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
                 if (loc == null) return;
 
                 int num = pObj.Facts.Count;

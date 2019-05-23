@@ -50,7 +50,7 @@ namespace GKCore.Controllers
 
         public MediaEditDlgController(IMediaEditDlg view) : base(view)
         {
-            for (GEDCOMMediaType mt = GEDCOMMediaType.mtUnknown; mt <= GEDCOMMediaType.mtLast; mt++) {
+            for (GDMMediaType mt = GDMMediaType.mtUnknown; mt <= GDMMediaType.mtLast; mt++) {
                 fView.MediaType.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
             }
 
@@ -76,7 +76,7 @@ namespace GKCore.Controllers
                     }
                 }
 
-                fileRef.MediaType = (GEDCOMMediaType)fView.MediaType.SelectedIndex;
+                fileRef.MediaType = (GDMMediaType)fView.MediaType.SelectedIndex;
                 fileRef.Title = fView.Name.Text;
 
                 UpdateControls();

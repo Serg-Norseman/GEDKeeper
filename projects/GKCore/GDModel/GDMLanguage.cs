@@ -23,7 +23,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public enum GEDCOMLanguageID
+    public enum GDMLanguageID
     {
         Unknown,
 
@@ -133,9 +133,9 @@ namespace GDModel
     /// </summary>
     public sealed class GDMLanguage : GDMTag
     {
-        private GEDCOMLanguageID fValue;
+        private GDMLanguageID fValue;
 
-        public GEDCOMLanguageID Value
+        public GDMLanguageID Value
         {
             get { return fValue; }
             set { fValue = value; }
@@ -144,12 +144,12 @@ namespace GDModel
         public override void Clear()
         {
             base.Clear();
-            fValue = GEDCOMLanguageID.Unknown;
+            fValue = GDMLanguageID.Unknown;
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fValue == GEDCOMLanguageID.Unknown);
+            return base.IsEmpty() && (fValue == GDMLanguageID.Unknown);
         }
 
         public override void Assign(GDMTag source)

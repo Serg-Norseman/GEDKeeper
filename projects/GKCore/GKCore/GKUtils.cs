@@ -90,30 +90,30 @@ namespace GKCore
             #endif
         }
 
-        public static string SexChar(GEDCOMSex sex)
+        public static string SexChar(GDMSex sex)
         {
             string ss = SexStr(sex);
             return string.IsNullOrEmpty(ss) ? "?" : new string(ss[0], 1);
         }
 
-        public static string SexStr(GEDCOMSex sex)
+        public static string SexStr(GDMSex sex)
         {
             return LangMan.LS(GKData.SexData[(int)sex].NameId);
         }
 
-        public static GEDCOMSex GetSexBySign(char sexSign)
+        public static GDMSex GetSexBySign(char sexSign)
         {
-            GEDCOMSex result = GEDCOMSex.svNone;
+            GDMSex result = GDMSex.svNone;
             
             switch (sexSign) {
                 case 'F':
-                    result = GEDCOMSex.svFemale;
+                    result = GDMSex.svFemale;
                     break;
                 case 'M':
-                    result = GEDCOMSex.svMale;
+                    result = GDMSex.svMale;
                     break;
                 case 'U':
-                    result = GEDCOMSex.svUndetermined;
+                    result = GDMSex.svUndetermined;
                     break;
             }
 
@@ -204,9 +204,9 @@ namespace GKCore
                 string sign = "";
 
                 if (signed) {
-                    GEDCOMRecordType recordType = record.RecordType;
-                    if (recordType != GEDCOMRecordType.rtIndividual) {
-                        if (recordType == GEDCOMRecordType.rtFamily || (byte)recordType - (byte)GEDCOMRecordType.rtMultimedia < (byte)GEDCOMRecordType.rtResearch)
+                    GDMRecordType recordType = record.RecordType;
+                    if (recordType != GDMRecordType.rtIndividual) {
+                        if (recordType == GDMRecordType.rtFamily || (byte)recordType - (byte)GDMRecordType.rtMultimedia < (byte)GDMRecordType.rtResearch)
                         {
                             sign = LangMan.LS(GKData.RecordTypes[(int)record.RecordType]) + ": ";
                         }
@@ -217,37 +217,37 @@ namespace GKCore
 
                 string st;
                 switch (record.RecordType) {
-                    case GEDCOMRecordType.rtIndividual:
+                    case GDMRecordType.rtIndividual:
                         st = GetNameString(((GDMIndividualRecord)record), true, false);
                         break;
-                    case GEDCOMRecordType.rtFamily:
+                    case GDMRecordType.rtFamily:
                         st = GetFamilyString((GDMFamilyRecord)record);
                         break;
-                    case GEDCOMRecordType.rtNote:
+                    case GDMRecordType.rtNote:
                         st = ((GDMNoteRecord)record).Note[0]; // TODO: bad solution?!
                         break;
-                    case GEDCOMRecordType.rtMultimedia:
+                    case GDMRecordType.rtMultimedia:
                         st = ((GDMMultimediaRecord)record).FileReferences[0].Title;
                         break;
-                    case GEDCOMRecordType.rtSource:
+                    case GDMRecordType.rtSource:
                         st = ((GDMSourceRecord)record).ShortTitle;
                         break;
-                    case GEDCOMRecordType.rtRepository:
+                    case GDMRecordType.rtRepository:
                         st = ((GDMRepositoryRecord)record).RepositoryName;
                         break;
-                    case GEDCOMRecordType.rtGroup:
+                    case GDMRecordType.rtGroup:
                         st = ((GDMGroupRecord)record).GroupName;
                         break;
-                    case GEDCOMRecordType.rtResearch:
+                    case GDMRecordType.rtResearch:
                         st = ((GDMResearchRecord)record).ResearchName;
                         break;
-                    case GEDCOMRecordType.rtTask:
+                    case GDMRecordType.rtTask:
                         st = GetTaskGoalStr((GDMTaskRecord)record);
                         break;
-                    case GEDCOMRecordType.rtCommunication:
+                    case GDMRecordType.rtCommunication:
                         st = ((GDMCommunicationRecord)record).CommName;
                         break;
-                    case GEDCOMRecordType.rtLocation:
+                    case GDMRecordType.rtLocation:
                         st = ((GDMLocationRecord)record).LocationName;
                         break;
                     default:
@@ -1317,11 +1317,11 @@ namespace GKCore
 
         public static void PrepareHeader(GDMTree tree, string fileName, GEDCOMCharacterSet charSet, bool zeroRev)
         {
-            GEDCOMHeader header = tree.Header;
+            GDMHeader header = tree.Header;
 
             string subm = header.GetTagStringValue(GEDCOMTagType.SUBM);
             int oldRev = header.FileRevision;
-            GEDCOMLanguageID langId = header.Language.Value;
+            GDMLanguageID langId = header.Language.Value;
 
             header.Clear();
             header.Source = "GEDKeeper";
@@ -1706,7 +1706,7 @@ namespace GKCore
             try {
                 int num;
                 switch (searchRec.RecordType) {
-                    case GEDCOMRecordType.rtNote:
+                    case GDMRecordType.rtNote:
                         num = inRecord.Notes.Count;
                         for (int i = 0; i < num; i++) {
                             var notes = inRecord.Notes[i];
@@ -1716,7 +1716,7 @@ namespace GKCore
                         }
                         break;
 
-                    case GEDCOMRecordType.rtMultimedia:
+                    case GDMRecordType.rtMultimedia:
                         num = inRecord.MultimediaLinks.Count;
                         for (int i = 0; i < num; i++) {
                             var mmLink = inRecord.MultimediaLinks[i];
@@ -1726,7 +1726,7 @@ namespace GKCore
                         }
                         break;
 
-                    case GEDCOMRecordType.rtSource:
+                    case GDMRecordType.rtSource:
                         num = inRecord.SourceCitations.Count;
                         for (int i = 0; i < num; i++) {
                             var sourCit = inRecord.SourceCitations[i];
@@ -2213,7 +2213,7 @@ namespace GKCore
                                 string st;
                                 GDMPointer sp;
                                 string unk;
-                                if (iRec.Sex == GEDCOMSex.svMale) {
+                                if (iRec.Sex == GDMSex.svMale) {
                                     sp = family.Wife;
                                     st = LangMan.LS(LSID.LSID_Wife) + ": ";
                                     unk = LangMan.LS(LSID.LSID_UnkFemale);
@@ -2375,7 +2375,7 @@ namespace GKCore
                         {
                             GDMRecord rec = tree[i];
 
-                            if (rec.RecordType == GEDCOMRecordType.rtSource)
+                            if (rec.RecordType == GDMRecordType.rtSource)
                             {
                                 GDMSourceRecord srcRec = (GDMSourceRecord) rec;
 
@@ -2609,47 +2609,47 @@ namespace GKCore
                 {
                     switch (record.RecordType)
                     {
-                        case GEDCOMRecordType.rtIndividual:
+                        case GDMRecordType.rtIndividual:
                             GKUtils.ShowPersonInfo(baseContext, record as GDMIndividualRecord, ctx);
                             break;
 
-                        case GEDCOMRecordType.rtFamily:
+                        case GDMRecordType.rtFamily:
                             GKUtils.ShowFamilyInfo(baseContext, record as GDMFamilyRecord, ctx);
                             break;
 
-                        case GEDCOMRecordType.rtNote:
+                        case GDMRecordType.rtNote:
                             GKUtils.ShowNoteInfo(record as GDMNoteRecord, ctx);
                             break;
 
-                        case GEDCOMRecordType.rtMultimedia:
+                        case GDMRecordType.rtMultimedia:
                             GKUtils.ShowMultimediaInfo(record as GDMMultimediaRecord, ctx);
                             break;
 
-                        case GEDCOMRecordType.rtSource:
+                        case GDMRecordType.rtSource:
                             GKUtils.ShowSourceInfo(record as GDMSourceRecord, ctx);
                             break;
 
-                        case GEDCOMRecordType.rtRepository:
+                        case GDMRecordType.rtRepository:
                             GKUtils.ShowRepositoryInfo(record as GDMRepositoryRecord, ctx);
                             break;
 
-                        case GEDCOMRecordType.rtGroup:
+                        case GDMRecordType.rtGroup:
                             GKUtils.ShowGroupInfo(record as GDMGroupRecord, ctx);
                             break;
 
-                        case GEDCOMRecordType.rtResearch:
+                        case GDMRecordType.rtResearch:
                             GKUtils.ShowResearchInfo(record as GDMResearchRecord, ctx);
                             break;
 
-                        case GEDCOMRecordType.rtTask:
+                        case GDMRecordType.rtTask:
                             GKUtils.ShowTaskInfo(record as GDMTaskRecord, ctx);
                             break;
 
-                        case GEDCOMRecordType.rtCommunication:
+                        case GDMRecordType.rtCommunication:
                             GKUtils.ShowCommunicationInfo(record as GDMCommunicationRecord, ctx);
                             break;
 
-                        case GEDCOMRecordType.rtLocation:
+                        case GDMRecordType.rtLocation:
                             GKUtils.ShowLocationInfo(record as GDMLocationRecord, ctx);
                             break;
                     }
@@ -2693,47 +2693,47 @@ namespace GKCore
             return result + Path.DirectorySeparatorChar;
         }
 
-        public static MultimediaKind GetMultimediaKind(GEDCOMMultimediaFormat format)
+        public static MultimediaKind GetMultimediaKind(GDMMultimediaFormat format)
         {
             switch (format)
             {
-                case GEDCOMMultimediaFormat.mfNone:
+                case GDMMultimediaFormat.mfNone:
                     return MultimediaKind.mkNone;
 
-                case GEDCOMMultimediaFormat.mfBMP:
-                case GEDCOMMultimediaFormat.mfGIF:
-                case GEDCOMMultimediaFormat.mfJPG:
-                case GEDCOMMultimediaFormat.mfPCX:
-                case GEDCOMMultimediaFormat.mfTIF:
-                case GEDCOMMultimediaFormat.mfTGA:
-                case GEDCOMMultimediaFormat.mfPNG:
-                case GEDCOMMultimediaFormat.mfRAW:
-                case GEDCOMMultimediaFormat.mfPSD:
+                case GDMMultimediaFormat.mfBMP:
+                case GDMMultimediaFormat.mfGIF:
+                case GDMMultimediaFormat.mfJPG:
+                case GDMMultimediaFormat.mfPCX:
+                case GDMMultimediaFormat.mfTIF:
+                case GDMMultimediaFormat.mfTGA:
+                case GDMMultimediaFormat.mfPNG:
+                case GDMMultimediaFormat.mfRAW:
+                case GDMMultimediaFormat.mfPSD:
                     return MultimediaKind.mkImage;
 
-                case GEDCOMMultimediaFormat.mfTXT:
-                case GEDCOMMultimediaFormat.mfRTF:
-                case GEDCOMMultimediaFormat.mfHTM:
-                case GEDCOMMultimediaFormat.mfPDF:
+                case GDMMultimediaFormat.mfTXT:
+                case GDMMultimediaFormat.mfRTF:
+                case GDMMultimediaFormat.mfHTM:
+                case GDMMultimediaFormat.mfPDF:
                     return MultimediaKind.mkText;
 
-                case GEDCOMMultimediaFormat.mfWAV:
-                case GEDCOMMultimediaFormat.mfMP3:
-                case GEDCOMMultimediaFormat.mfWMA:
-                case GEDCOMMultimediaFormat.mfMKA:
+                case GDMMultimediaFormat.mfWAV:
+                case GDMMultimediaFormat.mfMP3:
+                case GDMMultimediaFormat.mfWMA:
+                case GDMMultimediaFormat.mfMKA:
                     return MultimediaKind.mkAudio;
 
-                case GEDCOMMultimediaFormat.mfAVI:
-                case GEDCOMMultimediaFormat.mfMPG:
-                case GEDCOMMultimediaFormat.mfMP4:
-                case GEDCOMMultimediaFormat.mfOGV:
-                case GEDCOMMultimediaFormat.mfWMV:
-                case GEDCOMMultimediaFormat.mfMKV:
-                case GEDCOMMultimediaFormat.mfMOV:
+                case GDMMultimediaFormat.mfAVI:
+                case GDMMultimediaFormat.mfMPG:
+                case GDMMultimediaFormat.mfMP4:
+                case GDMMultimediaFormat.mfOGV:
+                case GDMMultimediaFormat.mfWMV:
+                case GDMMultimediaFormat.mfMKV:
+                case GDMMultimediaFormat.mfMOV:
                     return MultimediaKind.mkVideo;
 
-                case GEDCOMMultimediaFormat.mfOLE:
-                case GEDCOMMultimediaFormat.mfUnknown:
+                case GDMMultimediaFormat.mfOLE:
+                case GDMMultimediaFormat.mfUnknown:
                 default:
                     return MultimediaKind.mkNone;
             }
@@ -2789,7 +2789,7 @@ namespace GKCore
 
         public static bool FileCanBeArchived(string fileName)
         {
-            GEDCOMMultimediaFormat fileFmt = GDMFileReference.RecognizeFormat(fileName);
+            GDMMultimediaFormat fileFmt = GDMFileReference.RecognizeFormat(fileName);
 
             FileInfo info = new FileInfo(fileName);
             double fileSize = (((double)info.Length / 1024) / 1024); // mb
@@ -2874,7 +2874,7 @@ namespace GKCore
             string result;
 
             WomanSurnameFormat wsFmt = GlobalOptions.Instance.WomanSurnameFormat;
-            if (iRec.Sex == GEDCOMSex.svFemale && wsFmt != WomanSurnameFormat.wsfNotExtend) {
+            if (iRec.Sex == GDMSex.svFemale && wsFmt != WomanSurnameFormat.wsfNotExtend) {
                 switch (wsFmt) {
                     case WomanSurnameFormat.wsfMaiden_Married:
                         result = defSurname;

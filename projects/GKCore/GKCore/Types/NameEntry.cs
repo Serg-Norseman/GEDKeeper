@@ -30,6 +30,6 @@ namespace GKCore.Types
         public string Name;
         public string F_Patronymic;
         public string M_Patronymic;
-        public GEDCOMSex Sex;
+        public GDMSex Sex;
     }
 }

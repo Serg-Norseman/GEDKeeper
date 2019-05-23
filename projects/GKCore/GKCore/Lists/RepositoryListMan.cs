@@ -39,7 +39,7 @@ namespace GKCore.Lists
 
 
         public RepositoryListMan(IBaseContext baseContext) :
-            base(baseContext, CreateRepositoryListColumns(), GEDCOMRecordType.rtRepository)
+            base(baseContext, CreateRepositoryListColumns(), GDMRecordType.rtRepository)
         {
         }
 

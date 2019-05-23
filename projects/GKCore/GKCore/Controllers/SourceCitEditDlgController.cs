@@ -91,7 +91,7 @@ namespace GKCore.Controllers
         public void AddSource()
         {
             object[] anArgs = new object[0];
-            GDMSourceRecord src = fBase.Context.SelectRecord(GEDCOMRecordType.rtSource, anArgs) as GDMSourceRecord;
+            GDMSourceRecord src = fBase.Context.SelectRecord(GDMRecordType.rtSource, anArgs) as GDMSourceRecord;
             if (src == null) return;
 
             fBase.Context.GetSourcesList(fSourcesList);

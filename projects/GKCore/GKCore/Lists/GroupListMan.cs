@@ -43,7 +43,7 @@ namespace GKCore.Lists
 
 
         public GroupListMan(IBaseContext baseContext) :
-            base(baseContext, CreateGroupListColumns(), GEDCOMRecordType.rtGroup)
+            base(baseContext, CreateGroupListColumns(), GDMRecordType.rtGroup)
         {
         }
 
@@ -140,7 +140,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    member = fBaseWin.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    member = fBaseWin.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svNone);
                     result = (member != null);
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, grp, member);

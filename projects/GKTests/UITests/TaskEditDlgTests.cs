@@ -128,7 +128,7 @@ namespace GKUI.Forms
             ClickButton("btnGoalSelect", dlg);
 
             SelectCombo("cmbGoalType", dlg, 0);
-            PersonEditDlgTests.SetCreateIndividualHandler(fFormTest, GEDCOMSex.svMale);
+            PersonEditDlgTests.SetCreateIndividualHandler(fFormTest, GDMSex.svMale);
             ClickButton("btnGoalSelect", dlg);
 
             ClickButton("btnAccept", dlg);

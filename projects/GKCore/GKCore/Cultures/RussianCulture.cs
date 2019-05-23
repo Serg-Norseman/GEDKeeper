@@ -110,9 +110,9 @@ namespace GKCore.Cultures
             return str.IndexOf(c) >= 0;
         }
 
-        public override GEDCOMSex GetSex(string iName, string iPat, bool canQuery)
+        public override GDMSex GetSex(string iName, string iPat, bool canQuery)
         {
-            GEDCOMSex result = GEDCOMSex.svNone;
+            GDMSex result = GDMSex.svNone;
             if (string.IsNullOrEmpty(iName)) return result;
 
             char nc = iName[iName.Length - 1];
@@ -122,19 +122,19 @@ namespace GKCore.Cultures
                     char pc = iPat[iPat.Length - 1];
 
                     if (StrContains(FEM_ENDINGS, pc)) {
-                        result = GEDCOMSex.svFemale;
+                        result = GDMSex.svFemale;
                     } else if (StrContains(MALE_ENDINGS, pc)) {
-                        result = GEDCOMSex.svMale;
+                        result = GDMSex.svMale;
                     }
                 }
             } else if (StrContains(MALE_ENDINGS, nc)) {
-                result = GEDCOMSex.svMale;
+                result = GDMSex.svMale;
             }
 
-            if (result == GEDCOMSex.svNone && canQuery) {
+            if (result == GDMSex.svNone && canQuery) {
                 string fn = iName + " " + iPat;
                 bool res = AppHost.StdDialogs.ShowQuestionYN(string.Format(LangMan.LS(LSID.LSID_NotDeterminedPersonSex), fn));
-                result = res ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
+                result = res ? GDMSex.svMale : GDMSex.svFemale;
             }
 
             return result;
@@ -176,7 +176,7 @@ namespace GKCore.Cultures
                 throw new ArgumentNullException("iRec");
 
             var parts = GKUtils.GetNameParts(iRec);
-            bool female = (iRec.Sex == GEDCOMSex.svFemale);
+            bool female = (iRec.Sex == GDMSex.svFemale);
 
             return GetSurnames(parts.Surname, female);
         }

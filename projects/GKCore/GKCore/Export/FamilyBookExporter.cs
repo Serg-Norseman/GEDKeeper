@@ -239,7 +239,7 @@ namespace GKCore.Export
             
             GDMRecord rec;
 
-            var iEnum = fTree.GetEnumerator(GEDCOMRecordType.rtIndividual);
+            var iEnum = fTree.GetEnumerator(GDMRecordType.rtIndividual);
             while (iEnum.MoveNext(out rec)) {
                 GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
                 string text = GKUtils.GetNameString(iRec, true, false);

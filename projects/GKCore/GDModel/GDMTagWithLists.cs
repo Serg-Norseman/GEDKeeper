@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.IO;
-
 namespace GDModel
 {
     public class GDMTagWithLists : GDMTag, IGEDCOMStructWithLists
@@ -78,16 +76,6 @@ namespace GDModel
             fNotes.ReplaceXRefs(map);
             fSourceCitations.ReplaceXRefs(map);
             fMultimediaLinks.ReplaceXRefs(map);
-        }
-
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            base.SaveToStream(stream, level);
-
-            level += 1;
-            fNotes.SaveToStream(stream, level);
-            fSourceCitations.SaveToStream(stream, level);
-            fMultimediaLinks.SaveToStream(stream, level);
         }
 
         public override void Clear()

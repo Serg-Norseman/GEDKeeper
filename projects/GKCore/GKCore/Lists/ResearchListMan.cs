@@ -48,7 +48,7 @@ namespace GKCore.Lists
 
 
         public ResearchListMan(IBaseContext baseContext) :
-            base(baseContext, CreateResearchListColumns(), GEDCOMRecordType.rtResearch)
+            base(baseContext, CreateResearchListColumns(), GDMRecordType.rtResearch)
         {
         }
 
@@ -177,7 +177,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    task = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtTask, null) as GDMTaskRecord;
+                    task = fBaseWin.Context.SelectRecord(GDMRecordType.rtTask, null) as GDMTaskRecord;
                     result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskAdd, research, task);
                     break;
 
@@ -258,7 +258,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    comm = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtCommunication, null) as GDMCommunicationRecord;
+                    comm = fBaseWin.Context.SelectRecord(GDMRecordType.rtCommunication, null) as GDMCommunicationRecord;
                     result = fUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationAdd, research, comm);
                     break;
 
@@ -333,7 +333,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    group = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtGroup, null) as GDMGroupRecord;
+                    group = fBaseWin.Context.SelectRecord(GDMRecordType.rtGroup, null) as GDMGroupRecord;
                     result = fUndoman.DoOrdinaryOperation(OperationType.otResearchGroupAdd, research, group);
                     break;
 

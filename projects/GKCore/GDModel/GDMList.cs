@@ -21,7 +21,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using BSLib;
 using GDModel.Providers.GEDCOM;
 
@@ -219,19 +218,6 @@ namespace GDModel
                 return item;
             } else {
                 return default(T);
-            }
-        }
-
-        public void SaveToStream(StreamWriter stream, int level)
-        {
-            if (fDataList == null) return;
-
-            int num = fDataList.Count;
-            for (int i = 0; i < num; i++) {
-                var item = fDataList[i];
-                if (item != null) {
-                    item.SaveToStream(stream, level);
-                }
             }
         }
 

@@ -65,7 +65,7 @@ namespace GKFlowInputPlugin
         private readonly IBaseWindow fBase;
         private readonly StringList fSourcesList;
         
-        private GEDCOMSex fSimpleTempSex = GEDCOMSex.svMale;
+        private GDMSex fSimpleTempSex = GDMSex.svMale;
 
         #region Instance control
         
@@ -204,7 +204,7 @@ namespace GKFlowInputPlugin
             CheckDeath.Checked = false;
             MemoNote.Text = "";
 
-            fSimpleTempSex = GEDCOMSex.svMale;
+            fSimpleTempSex = GDMSex.svMale;
             btnMale.Text = new string(fLangMan.LS(FLS.LSID_SexM)[0], 1);
         }
 
@@ -373,7 +373,7 @@ namespace GKFlowInputPlugin
                     PersonLink link = GetLinkByName(lnk);
                     if (link == PersonLink.plNone) continue;
 
-                    GEDCOMSex sx = fBase.Context.DefineSex(nm, pt);
+                    GDMSex sx = fBase.Context.DefineSex(nm, pt);
                     GDMIndividualRecord iRec = fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
 
                     if (!string.IsNullOrEmpty(age) && ConvertHelper.IsDigits(age)) {
@@ -491,13 +491,13 @@ namespace GKFlowInputPlugin
         private void BtnMaleClick(object sender, EventArgs e)
         {
             switch (fSimpleTempSex) {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     btnMale.Text = new string(fLangMan.LS(FLS.LSID_SexF)[0], 1);
-                    fSimpleTempSex = GEDCOMSex.svFemale;
+                    fSimpleTempSex = GDMSex.svFemale;
                     break;
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     btnMale.Text = new string(fLangMan.LS(FLS.LSID_SexM)[0], 1);
-                    fSimpleTempSex = GEDCOMSex.svMale;
+                    fSimpleTempSex = GDMSex.svMale;
                     break;
             }
         }

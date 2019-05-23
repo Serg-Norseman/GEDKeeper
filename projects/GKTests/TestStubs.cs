@@ -93,7 +93,7 @@ namespace GKTests.Stubs
         public ValuesCollection ValuesCollection { get { return null; } }
 
         public void AddRecord() { }
-        public void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone) { }
+        public void ApplyFilter(GDMRecordType recType = GDMRecordType.rtNone) { }
         public void ChangeRecord(GDMRecord record) { }
         public void CheckAutosave() { }
         public void CreateNewFile() { }
@@ -111,18 +111,18 @@ namespace GKTests.Stubs
         public void Show() { }
         public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal) { }
 
-        public List<GDMRecord> GetContentList(GEDCOMRecordType recType) { return null; }
+        public List<GDMRecord> GetContentList(GDMRecordType recType) { return null; }
         public StringList GetRecordContent(GDMRecord record) { return null; }
         public string GetRecordName(GDMRecord record, bool signed) { return string.Empty; }
-        public IListManager GetRecordsListManByType(GEDCOMRecordType recType) { return null; }
+        public IListManager GetRecordsListManByType(GDMRecordType recType) { return null; }
         public GDMIndividualRecord GetSelectedPerson() { return null; }
-        public GEDCOMRecordType GetSelectedRecordType() { return GEDCOMRecordType.rtIndividual; }
+        public GDMRecordType GetSelectedRecordType() { return GDMRecordType.rtIndividual; }
         public void RefreshLists(bool columnsChanged) { }
-        public void RefreshRecordsView(GEDCOMRecordType recType) { }
-        public void ShowRecordsTab(GEDCOMRecordType recType) { }
+        public void RefreshRecordsView(GDMRecordType recType) { }
+        public void ShowRecordsTab(GDMRecordType recType) { }
         public void UpdateControls(bool forceDeactivate, bool blockDependent = false) { }
         public void SetExternalFilter(ExternalFilterHandler filterHandler, 
-                                      GEDCOMRecordType recType = GEDCOMRecordType.rtNone) { }
+                                      GDMRecordType recType = GDMRecordType.rtNone) { }
         public GDMRecord GetSelectedRecordEx() { return null; }
     }
 

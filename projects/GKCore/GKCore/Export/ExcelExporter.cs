@@ -38,7 +38,7 @@ namespace GKCore.Export
 
         public ExcelExporter(IBaseWindow baseWin) : base(baseWin)
         {
-            fSelectedRecords = baseWin.GetContentList(GEDCOMRecordType.rtIndividual);
+            fSelectedRecords = baseWin.GetContentList(GDMRecordType.rtIndividual);
         }
 
         public override void Generate(bool show)
@@ -73,7 +73,7 @@ namespace GKCore.Export
                 for (int i = 0; i < num; i++)
                 {
                     GDMRecord rec = fTree[i];
-                    if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
+                    if (rec.RecordType == GDMRecordType.rtIndividual) {
                         GDMIndividualRecord ind = (GDMIndividualRecord)rec;
 
                         if (fSelectedRecords == null || fSelectedRecords.IndexOf(rec) >= 0) {

@@ -25,7 +25,7 @@ using GKCore.Types;
 
 namespace GDModel
 {
-    public enum GEDCOMCalendar
+    public enum GDMCalendar
     {
         dcGregorian,
         dcJulian,
@@ -39,14 +39,14 @@ namespace GDModel
     }
 
 
-    public enum GEDCOMDateFormat
+    public enum GDMDateFormat
     {
         dfGEDCOMStd,
         dfSystem
     }
 
 
-    public enum GEDCOMApproximated
+    public enum GDMApproximated
     {
         daExact,
         daAbout,
@@ -55,7 +55,7 @@ namespace GDModel
     }
 
 
-    public enum GEDCOMRange
+    public enum GDMRange
     {
         drAfter,
         drBefore,
@@ -64,7 +64,7 @@ namespace GDModel
     }
 
 
-    public enum GEDCOMDateType
+    public enum GDMDateType
     {
         SIMP, ABT, AFT, BEF, BET, CAL, EST, FROM, INT, TO
     }
@@ -276,7 +276,7 @@ namespace GDModel
             return string.Empty;
         }
 
-        public static GDMDate CreateApproximated(GDMObject owner, GDMDate date, GEDCOMApproximated approximated)
+        public static GDMDate CreateApproximated(GDMObject owner, GDMDate date, GDMApproximated approximated)
         {
             GDMDate result = new GDMDate(owner);
             result.Assign(date);

@@ -22,7 +22,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public enum GEDCOMBaptismDateStatus
+    public enum GDMBaptismDateStatus
     {
         bdsNone,
         bdsChild,
@@ -35,7 +35,7 @@ namespace GDModel
     }
 
 
-    public enum GEDCOMEndowmentDateStatus
+    public enum GDMEndowmentDateStatus
     {
         edsNone,
         edsChild,
@@ -49,7 +49,7 @@ namespace GDModel
     }
 
 
-    public enum GEDCOMChildSealingDateStatus
+    public enum GDMChildSealingDateStatus
     {
         cdsNone,
         cdsBIC,
@@ -79,13 +79,13 @@ namespace GDModel
             get { return GetTag<GDMPlace>(GEDCOMTagType.PLAC, GDMPlace.Create); }
         }
 
-        public GEDCOMBaptismDateStatus BaptismDateStatus
+        public GDMBaptismDateStatus BaptismDateStatus
         {
             get { return GEDCOMUtils.GetBaptismDateStatusVal(DateStatus.StringValue); }
             set { DateStatus.StringValue = GEDCOMUtils.GetBaptismDateStatusStr(value); }
         }
 
-        public GEDCOMEndowmentDateStatus EndowmentDateStatus
+        public GDMEndowmentDateStatus EndowmentDateStatus
         {
             get { return GEDCOMUtils.GetEndowmentDateStatusVal(DateStatus.StringValue); }
             set { DateStatus.StringValue = GEDCOMUtils.GetEndowmentDateStatusStr(value); }
@@ -96,7 +96,7 @@ namespace GDModel
             get { return GetTag<GDMPointer>(GEDCOMTagType.FAMC, GDMPointer.Create); }
         }
 
-        public GEDCOMChildSealingDateStatus ChildSealingDateStatus
+        public GDMChildSealingDateStatus ChildSealingDateStatus
         {
             get { return GEDCOMUtils.GetChildSealingDateStatusVal(DateStatus.StringValue); }
             set { DateStatus.StringValue = GEDCOMUtils.GetChildSealingDateStatusStr(value); }

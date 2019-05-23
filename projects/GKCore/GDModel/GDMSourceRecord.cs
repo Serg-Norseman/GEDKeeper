@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.IO;
 using BSLib;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
@@ -74,7 +73,7 @@ namespace GDModel
 
         public GDMSourceRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GEDCOMRecordType.rtSource);
+            SetRecordType(GDMRecordType.rtSource);
             SetName(GEDCOMTagType.SOUR);
 
             fRepositoryCitations = new GDMList<GDMRepositoryCitation>(this);
@@ -151,12 +150,6 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
             fRepositoryCitations.ReplaceXRefs(map);
-        }
-
-        public override void SaveToStream(StreamWriter stream, int level)
-        {
-            base.SaveToStream(stream, level);
-            fRepositoryCitations.SaveToStream(stream, ++level);
         }
 
 

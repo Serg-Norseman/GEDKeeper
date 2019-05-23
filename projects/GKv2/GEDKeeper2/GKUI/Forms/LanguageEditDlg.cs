@@ -33,7 +33,7 @@ namespace GKUI.Forms
     {
         private readonly LanguageEditDlgController fController;
 
-        public GEDCOMLanguageID LanguageID
+        public GDMLanguageID LanguageID
         {
             get { return fController.LanguageID; }
             set { fController.LanguageID = value; }

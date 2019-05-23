@@ -61,7 +61,7 @@ namespace GKCore.Options
 
         public int SortColumn { get; set; }
 
-        public ListOptions(GEDCOMRecordType recType)
+        public ListOptions(GDMRecordType recType)
         {
             fName = RecordTypeNames[(int)recType] + "List";
 
@@ -101,7 +101,7 @@ namespace GKCore.Options
     {
         private ListOptions[] fOptions;
 
-        public ListOptions this[GEDCOMRecordType rt]
+        public ListOptions this[GDMRecordType rt]
         {
             get {
                 // TODO: conditions...
@@ -111,8 +111,8 @@ namespace GKCore.Options
 
         public ListOptionsCollection()
         {
-            fOptions = new ListOptions[(int)GEDCOMRecordType.rtLast + 1];
-            for (var rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
+            fOptions = new ListOptions[(int)GDMRecordType.rtLast + 1];
+            for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
                 fOptions[(int)rt] = new ListOptions(rt);
             }
         }
@@ -122,7 +122,7 @@ namespace GKCore.Options
             if (iniFile == null)
                 throw new ArgumentNullException("iniFile");
 
-            for (var rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
+            for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
                 fOptions[(int)rt].LoadFromFile(iniFile);
             }
         }
@@ -132,7 +132,7 @@ namespace GKCore.Options
             if (iniFile == null)
                 throw new ArgumentNullException("iniFile");
 
-            for (var rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
+            for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
                 fOptions[(int)rt].SaveToFile(iniFile);
             }
         }
