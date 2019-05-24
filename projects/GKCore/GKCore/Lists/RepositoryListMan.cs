@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 
 namespace GKCore.Lists
@@ -35,11 +35,11 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class RepositoryListMan : ListManager
     {
-        private GEDCOMRepositoryRecord fRec;
+        private GDMRepositoryRecord fRec;
 
 
         public RepositoryListMan(IBaseContext baseContext) :
-            base(baseContext, CreateRepositoryListColumns(), GEDCOMRecordType.rtRepository)
+            base(baseContext, CreateRepositoryListColumns(), GDMRecordType.rtRepository)
         {
         }
 
@@ -63,9 +63,9 @@ namespace GKCore.Lists
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMRepositoryRecord);
+            fRec = (aRec as GDMRepositoryRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

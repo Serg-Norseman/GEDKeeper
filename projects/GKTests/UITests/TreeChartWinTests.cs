@@ -23,7 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -65,7 +65,7 @@ namespace GKUI.Forms
 
             Assert.Throws(typeof(ArgumentNullException), () => { tcWin.SelectByRec(null); });
 
-            GEDCOMIndividualRecord iRec = curBase.GetSelectedPerson();
+            GDMIndividualRecord iRec = curBase.GetSelectedPerson();
             Assert.AreEqual(checkXRef, iRec.XRef);
             tcWin.SelectByRec(iRec);
 

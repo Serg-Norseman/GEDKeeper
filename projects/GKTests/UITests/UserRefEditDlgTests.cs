@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -39,7 +39,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class UserRefEditDlgTests : CustomWindowTest
     {
-        private GEDCOMUserReference fUserRef;
+        private GDMUserReference fUserRef;
         private IBaseWindow fBase;
         private UserRefEditDlg fDialog;
 
@@ -48,7 +48,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fUserRef = new GEDCOMUserReference(null);
+            fUserRef = new GDMUserReference(null);
 
             fDialog = new UserRefEditDlg(fBase);
             fDialog.UserRef = fUserRef;

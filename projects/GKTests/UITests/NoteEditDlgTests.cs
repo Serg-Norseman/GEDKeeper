@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -39,7 +39,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class NoteEditDlgTests : CustomWindowTest
     {
-        private GEDCOMNoteRecord fNoteRecord;
+        private GDMNoteRecord fNoteRecord;
         private IBaseWindow fBase;
         private NoteEditDlg fDialog;
 
@@ -50,7 +50,7 @@ namespace GKUI.Forms
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fNoteRecord = new GEDCOMNoteRecord(fBase.Context.Tree);
+            fNoteRecord = new GDMNoteRecord(fBase.Context.Tree);
 
             fDialog = new NoteEditDlg(fBase);
             fDialog.NoteRecord = fNoteRecord;

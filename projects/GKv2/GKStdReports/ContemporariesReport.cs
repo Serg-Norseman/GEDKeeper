@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
@@ -34,25 +34,25 @@ namespace GKStdReports
     /// </summary>
     public class ContemporariesReport : ReportExporter
     {
-        private readonly GEDCOMIndividualRecord fPerson;
+        private readonly GDMIndividualRecord fPerson;
         private IFont fTitleFont, fChapFont, fTextFont;
         private CommonStats fStats;
 
-        public ContemporariesReport(IBaseWindow baseWin, GEDCOMIndividualRecord selectedPerson)
+        public ContemporariesReport(IBaseWindow baseWin, GDMIndividualRecord selectedPerson)
             : base(baseWin, false)
         {
             fTitle = SRLangMan.LS(RLS.LSID_Contemporaries_Title);
             fPerson = selectedPerson;
         }
 
-        private Range<int> GetIndividualDates(GEDCOMIndividualRecord iRec)
+        private Range<int> GetIndividualDates(GDMIndividualRecord iRec)
         {
             var dates = iRec.GetLifeDates();
 
             int yBirth = (dates.BirthEvent == null) ? 0 : dates.BirthEvent.GetChronologicalYear();
             int yDeath = (dates.DeathEvent == null) ? 0 : dates.DeathEvent.GetChronologicalYear();
 
-            int provedLife = (iRec.Sex == GEDCOMSex.svMale) ? (int)fStats.life.MaleVal : (int)fStats.life.FemaleVal;
+            int provedLife = (iRec.Sex == GDMSex.svMale) ? (int)fStats.life.MaleVal : (int)fStats.life.FemaleVal;
             
             if ((yBirth != 0) && (yDeath == 0)) {
                 yDeath = yBirth + provedLife; //GKData.PROVED_LIFE_LENGTH;
@@ -66,7 +66,7 @@ namespace GKStdReports
             return range;
         }
 
-        private static string GetPersonalInfo(GEDCOMIndividualRecord iRec)
+        private static string GetPersonalInfo(GDMIndividualRecord iRec)
         {
             return GKUtils.GetNameString(iRec, true, false) + GKUtils.GetLifeStr(iRec);
         }
@@ -80,7 +80,7 @@ namespace GKStdReports
             fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
             fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
-            var stats = new TreeStats(fBase.Context, fBase.GetContentList(GEDCOMRecordType.rtIndividual));
+            var stats = new TreeStats(fBase.Context, fBase.GetContentList(GDMRecordType.rtIndividual));
             fStats = stats.GetCommonStats();
 
             fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taLeft);
@@ -90,10 +90,10 @@ namespace GKStdReports
             
             fWriter.BeginList();
 
-            var enumer = fBase.Context.Tree.GetEnumerator(GEDCOMRecordType.rtIndividual);
-            GEDCOMRecord record;
+            var enumer = fBase.Context.Tree.GetEnumerator(GDMRecordType.rtIndividual);
+            GDMRecord record;
             while (enumer.MoveNext(out record)) {
-                var iRec = record as GEDCOMIndividualRecord;
+                var iRec = record as GDMIndividualRecord;
                 var indRange = GetIndividualDates(iRec);
                 try {
                     if (personRange.IsOverlapped(indRange)) {

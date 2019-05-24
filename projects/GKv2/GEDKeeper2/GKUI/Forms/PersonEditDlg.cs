@@ -21,9 +21,8 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -50,13 +49,13 @@ namespace GKUI.Forms
         private readonly GKSheetList fNamesList;
         private readonly GKSheetList fParentsList;
 
-        public GEDCOMIndividualRecord Person
+        public GDMIndividualRecord Person
         {
             get { return fController.Person; }
             set { fController.Person = value; }
         }
 
-        public GEDCOMIndividualRecord Target
+        public GDMIndividualRecord Target
         {
             get { return fController.Target; }
             set { fController.Target = value; }
@@ -269,7 +268,7 @@ namespace GKUI.Forms
 
         private void ModifyAssociationsSheet(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMAssociation ast = eArgs.ItemData as GEDCOMAssociation;
+            GDMAssociation ast = eArgs.ItemData as GDMAssociation;
             if (eArgs.Action == RecordAction.raJump && ast != null) {
                 fController.JumpToRecord(ast.Individual);
             }
@@ -284,15 +283,15 @@ namespace GKUI.Forms
 
         private void ModifySpousesSheet(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMFamilyRecord family = eArgs.ItemData as GEDCOMFamilyRecord;
+            GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
             if (eArgs.Action == RecordAction.raJump && family != null) {
-                GEDCOMIndividualRecord spouse = null;
+                GDMIndividualRecord spouse = null;
                 switch (fController.Person.Sex) {
-                    case GEDCOMSex.svMale:
+                    case GDMSex.svMale:
                         spouse = family.GetWife();
                         break;
 
-                    case GEDCOMSex.svFemale:
+                    case GDMSex.svFemale:
                         spouse = family.GetHusband();
                         break;
                 }
@@ -309,7 +308,7 @@ namespace GKUI.Forms
         private void ModifyGroupsSheet(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GEDCOMGroupRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMGroupRecord);
             }
         }
 
@@ -394,7 +393,7 @@ namespace GKUI.Forms
             }
         }
 
-        public void SetNeedSex(GEDCOMSex needSex)
+        public void SetNeedSex(GDMSex needSex)
         {
             cmbSex.SelectedIndex = (int)needSex;
         }

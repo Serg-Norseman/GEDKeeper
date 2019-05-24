@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.ControlTesters;
@@ -40,7 +40,7 @@ namespace GKUI.Forms
     public class CommunicationEditDlgTests : CustomWindowTest
     {
         private IBaseContext fContext;
-        private GEDCOMCommunicationRecord fCommunicationRecord;
+        private GDMCommunicationRecord fCommunicationRecord;
         private IBaseWindow fBase;
         private CommunicationEditDlg fDialog;
 
@@ -50,7 +50,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
             fContext = fBase.Context;
-            fCommunicationRecord = new GEDCOMCommunicationRecord(fContext.Tree);
+            fCommunicationRecord = new GDMCommunicationRecord(fContext.Tree);
 
             fDialog = new CommunicationEditDlg(fBase);
             fDialog.Communication = fCommunicationRecord;
@@ -79,7 +79,7 @@ namespace GKUI.Forms
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fCommunicationRecord.CommName);
-            Assert.AreEqual(GKCommunicationType.ctEMail, fCommunicationRecord.CommunicationType);
+            Assert.AreEqual(GDMCommunicationType.ctEMail, fCommunicationRecord.CommunicationType);
             Assert.AreEqual("", fCommunicationRecord.Date.StringValue);
         }
 
@@ -107,7 +107,7 @@ namespace GKUI.Forms
 
         public static void CommunicationEditDlg_Handler(CommunicationEditDlg dlg)
         {
-            PersonEditDlgTests.SetCreateIndividualHandler(fFormTest, GEDCOMSex.svMale);
+            PersonEditDlgTests.SetCreateIndividualHandler(fFormTest, GDMSex.svMale);
             ClickButton("btnPersonAdd", dlg);
 
             ClickButton("btnAccept", dlg);

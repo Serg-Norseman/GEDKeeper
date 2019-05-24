@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Operations;
@@ -32,9 +32,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class FamilyEditDlgController : DialogController<IFamilyEditDlg>
     {
-        private GEDCOMFamilyRecord fFamily;
+        private GDMFamilyRecord fFamily;
 
-        public GEDCOMFamilyRecord Family
+        public GDMFamilyRecord Family
         {
             get { return fFamily; }
             set {
@@ -48,7 +48,7 @@ namespace GKCore.Controllers
 
         public FamilyEditDlgController(IFamilyEditDlg view) : base(view)
         {
-            for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnLast; res++) {
+            for (GDMRestriction res = GDMRestriction.rnNone; res <= GDMRestriction.rnLast; res++) {
                 fView.Restriction.Add(LangMan.LS(GKData.Restrictions[(int)res]));
             }
 
@@ -57,7 +57,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void SetTarget(TargetMode targetType, GEDCOMIndividualRecord target)
+        public void SetTarget(TargetMode targetType, GDMIndividualRecord target)
         {
             if (targetType == TargetMode.tmNone || target == null) return;
 
@@ -74,8 +74,8 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fFamily.Status = (GKMarriageStatus)fView.MarriageStatus.SelectedIndex;
-                fFamily.Restriction = (GEDCOMRestriction)fView.Restriction.SelectedIndex;
+                fFamily.Status = (GDMMarriageStatus)fView.MarriageStatus.SelectedIndex;
+                fFamily.Restriction = (GDMRestriction)fView.Restriction.SelectedIndex;
 
                 fBase.Context.ProcessFamily(fFamily);
 
@@ -117,7 +117,7 @@ namespace GKCore.Controllers
 
         private void UpdateControls()
         {
-            GEDCOMIndividualRecord husband, wife;
+            GDMIndividualRecord husband, wife;
 
             if (fFamily == null) {
                 husband = null;
@@ -128,7 +128,7 @@ namespace GKCore.Controllers
                 husband = fFamily.GetHusband();
                 wife = fFamily.GetWife();
 
-                fView.LockEditor(fFamily.Restriction == GEDCOMRestriction.rnLocked);
+                fView.LockEditor(fFamily.Restriction == GDMRestriction.rnLocked);
             }
 
             fView.SetHusband((husband != null) ? GKUtils.GetNameString(husband, true, false) : null);
@@ -169,7 +169,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void JumpToRecord(GEDCOMRecord record)
+        public void JumpToRecord(GDMRecord record)
         {
             if (record != null && Accept()) {
                 fBase.SelectRecordByXRef(record.XRef);

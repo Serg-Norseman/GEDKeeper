@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Maps;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -34,9 +34,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class LocationEditDlgController : DialogController<ILocationEditDlg>
     {
-        private GEDCOMLocationRecord fLocationRecord;
+        private GDMLocationRecord fLocationRecord;
 
-        public GEDCOMLocationRecord LocationRecord
+        public GDMLocationRecord LocationRecord
         {
             get { return fLocationRecord; }
             set {

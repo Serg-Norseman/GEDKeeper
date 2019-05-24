@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GKCore.Operations
 {
@@ -28,19 +28,19 @@ namespace GKCore.Operations
     /// </summary>
     public sealed class ChangeTracker : UndoManager
     {
-        private readonly GEDCOMTree fTree;
+        private readonly GDMTree fTree;
 
-        public GEDCOMTree Tree
+        public GDMTree Tree
         {
             get { return fTree; }
         }
 
-        public ChangeTracker(GEDCOMTree tree)
+        public ChangeTracker(GDMTree tree)
         {
             fTree = tree;
         }
 
-        public bool DoOrdinaryOperation(OperationType type, GEDCOMObject obj, object newVal)
+        public bool DoOrdinaryOperation(OperationType type, GDMObject obj, object newVal)
         {
             if (obj == null)
                 throw new ArgumentNullException("obj");
@@ -51,7 +51,7 @@ namespace GKCore.Operations
             return DoOperation(new OrdinaryOperation(this, type, obj, newVal));
         }
 
-        public bool DoIndividualNameChange(GEDCOMIndividualRecord iRec, string surname, string name, string patronymic)
+        public bool DoIndividualNameChange(GDMIndividualRecord iRec, string surname, string name, string patronymic)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");

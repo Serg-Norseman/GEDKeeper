@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKTests;
@@ -49,7 +49,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
 
-            fDialog = new RecordSelectDlg(fBase, GEDCOMRecordType.rtIndividual);
+            fDialog = new RecordSelectDlg(fBase, GDMRecordType.rtIndividual);
             fDialog.Show();
         }
 

@@ -20,8 +20,7 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -146,7 +145,7 @@ namespace GKUI.Forms
             fMapBrowser.Dock = DockStyle.Fill;
             Panel1.Controls.Add(fMapBrowser);
 
-            fController = new MapsViewerWinController(this, baseWin.GetContentList(GEDCOMRecordType.rtIndividual));
+            fController = new MapsViewerWinController(this, baseWin.GetContentList(GDMRecordType.rtIndividual));
             fController.Init(baseWin);
 
             radTotal.Checked = true;

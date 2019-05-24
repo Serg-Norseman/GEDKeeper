@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKTests;
@@ -39,7 +39,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class PersonEditDlgTests : CustomWindowTest
     {
-        private GEDCOMIndividualRecord fIndividualRecord;
+        private GDMIndividualRecord fIndividualRecord;
         private IBaseWindow fBase;
         private PersonEditDlg fDialog;
 
@@ -48,7 +48,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fIndividualRecord = fBase.Context.CreatePersonEx("Ivan", "", "Smith", GEDCOMSex.svMale, true);
+            fIndividualRecord = fBase.Context.CreatePersonEx("Ivan", "", "Smith", GDMSex.svMale, true);
 
             fDialog = new PersonEditDlg(fBase);
             fDialog.Person = fIndividualRecord;
@@ -83,7 +83,7 @@ namespace GKUI.Forms
 
         #region Handlers for external tests
 
-        private static GEDCOMSex fNeedIndividualSex;
+        private static GDMSex fNeedIndividualSex;
 
         private static void IndividualAdd_Mini_Handler(string name, IntPtr ptr, Form form)
         {
@@ -93,7 +93,7 @@ namespace GKUI.Forms
             ClickButton("btnAccept", form);
         }
 
-        public static void SetCreateIndividualHandler(NUnitFormTest formTest, GEDCOMSex needIndividualSex)
+        public static void SetCreateIndividualHandler(NUnitFormTest formTest, GDMSex needIndividualSex)
         {
             fNeedIndividualSex = needIndividualSex;
             RecordSelectDlgTests.SetCreateItemHandler(formTest, IndividualAdd_Mini_Handler);

@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -38,7 +38,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class SourceCitEditDlgTests : CustomWindowTest
     {
-        private GEDCOMSourceCitation fSourceCitation;
+        private GDMSourceCitation fSourceCitation;
         private IBaseWindow fBase;
         private SourceCitEditDlg fDialog;
 
@@ -47,7 +47,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fSourceCitation = new GEDCOMSourceCitation(null);
+            fSourceCitation = new GDMSourceCitation(null);
 
             fDialog = new SourceCitEditDlg(fBase);
             fDialog.SourceCitation = fSourceCitation;

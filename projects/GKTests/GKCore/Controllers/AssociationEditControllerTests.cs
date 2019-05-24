@@ -19,10 +19,8 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
-using GKCore.Controllers;
+using GDModel;
 using GKCore.Interfaces;
-using GKCore.MVP.Views;
 using GKTests.Stubs;
 using GKUI.Providers;
 //using NSubstitute;
@@ -33,7 +31,7 @@ namespace GKCore.Controllers
     [TestFixture]
     public class AssociationEditControllerTests
     {
-        private GEDCOMAssociation fAssociation;
+        private GDMAssociation fAssociation;
         private IBaseWindow fBase;
 
         [TestFixtureSetUp]
@@ -42,7 +40,7 @@ namespace GKCore.Controllers
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fAssociation = new GEDCOMAssociation(null);
+            fAssociation = new GDMAssociation(null);
         }
 
         [Test]

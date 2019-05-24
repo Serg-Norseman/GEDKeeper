@@ -21,8 +21,8 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -71,13 +71,13 @@ namespace GKTimeLinePlugin
                 // restore filter's default state
                 if (fBase != null)
                 {
-                    IListManager listMan = fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
+                    IListManager listMan = fBase.GetRecordsListManByType(GDMRecordType.rtIndividual);
                     if (listMan != null) {
                         listMan.ExternalFilter = null;
                         ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmAll;
                     }
 
-                    fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
+                    fBase.ApplyFilter(GDMRecordType.rtIndividual);
                 }
 
                 fBase = baseWin;
@@ -87,7 +87,7 @@ namespace GKTimeLinePlugin
 
                 if (fBase != null)
                 {
-                    IListManager listMan = fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
+                    IListManager listMan = fBase.GetRecordsListManByType(GDMRecordType.rtIndividual);
 
                     if (listMan != null)
                     {
@@ -96,7 +96,7 @@ namespace GKTimeLinePlugin
 
                         CollectData();
 
-                        fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
+                        fBase.ApplyFilter(GDMRecordType.rtIndividual);
                     }
                 }
 
@@ -109,15 +109,15 @@ namespace GKTimeLinePlugin
             int num = fBase.Context.Tree.RecordsCount;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = fBase.Context.Tree[i];
-                if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
+                GDMRecord rec = fBase.Context.Tree[i];
+                if (rec.RecordType != GDMRecordType.rtIndividual) continue;
 
-                GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
+                GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
 
                 int num2 = iRec.Events.Count;
                 for (int k = 0; k < num2; k++)
                 {
-                    GEDCOMCustomEvent ev = iRec.Events[k];
+                    GDMCustomEvent ev = iRec.Events[k];
 
                     if (ev.Name == GEDCOMTagType.BIRT || ev.Name == GEDCOMTagType.DEAT) {
                         int year = ev.GetChronologicalYear();
@@ -134,7 +134,7 @@ namespace GKTimeLinePlugin
         {
             if (fBase != null) {
                 fYearCurrent = tbTimeLine.Value;
-                fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
+                fBase.ApplyFilter(GDMRecordType.rtIndividual);
             }
             StatusUpdate();
         }
@@ -173,13 +173,13 @@ namespace GKTimeLinePlugin
         }
 
         // FIXME: perhaps it is necessary to define the maximum age by statistics
-        private bool FilterHandler(GEDCOMRecord record)
+        private bool FilterHandler(GDMRecord record)
         {
             bool result = true;
 
             try
             {
-                GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)record;
+                GDMIndividualRecord iRec = (GDMIndividualRecord)record;
                 int bdy = iRec.GetChronologicalYear(GEDCOMTagType.BIRT);
                 int ddy = iRec.GetChronologicalYear(GEDCOMTagType.DEAT);
 

@@ -19,9 +19,8 @@
  */
 
 using System.Collections.Generic;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Types;
 
 namespace GKCore.Interfaces
@@ -37,24 +36,24 @@ namespace GKCore.Interfaces
         void DuplicateRecord();
         void EditRecord();
         void LoadFile(string fileName);
-        void NotifyRecord(GEDCOMRecord record, RecordAction action);
-        bool RecordIsFiltered(GEDCOMRecord record);
+        void NotifyRecord(GDMRecord record, RecordAction action);
+        bool RecordIsFiltered(GDMRecord record);
         void RefreshLists(bool columnsChanged);
-        void RefreshRecordsView(GEDCOMRecordType recType);
+        void RefreshRecordsView(GDMRecordType recType);
         void SaveFile(string fileName);
         void SaveFileEx(bool saveAs);
         void SelectRecordByXRef(string xref);
-        void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal);
-        void ShowRecordsTab(GEDCOMRecordType recType);
+        void ShowMedia(GDMMultimediaRecord mediaRec, bool modal);
+        void ShowRecordsTab(GDMRecordType recType);
         void UpdateControls(bool forceDeactivate, bool blockDependent = false);
 
-        void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone);
-        List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType);
-        StringList GetRecordContent(GEDCOMRecord record);
-        IListManager GetRecordsListManByType(GEDCOMRecordType recType);
-        GEDCOMIndividualRecord GetSelectedPerson();
-        GEDCOMRecordType GetSelectedRecordType();
-        GEDCOMRecord GetSelectedRecordEx();
-        void SetExternalFilter(ExternalFilterHandler filterHandler, GEDCOMRecordType recType = GEDCOMRecordType.rtNone);
+        void ApplyFilter(GDMRecordType recType = GDMRecordType.rtNone);
+        List<GDMRecord> GetContentList(GDMRecordType recType);
+        StringList GetRecordContent(GDMRecord record);
+        IListManager GetRecordsListManByType(GDMRecordType recType);
+        GDMIndividualRecord GetSelectedPerson();
+        GDMRecordType GetSelectedRecordType();
+        GDMRecord GetSelectedRecordEx();
+        void SetExternalFilter(ExternalFilterHandler filterHandler, GDMRecordType recType = GDMRecordType.rtNone);
     }
 }

@@ -22,7 +22,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
@@ -114,9 +114,9 @@ namespace GKCore
                 tcPerson.Selected = true;
                 Assert.AreEqual(true, tcPerson.Selected);
 
-                Assert.AreEqual(GEDCOMSex.svNone, tcPerson.Sex);
-                tcPerson.Sex = GEDCOMSex.svMale;
-                Assert.AreEqual(GEDCOMSex.svMale, tcPerson.Sex);
+                Assert.AreEqual(GDMSex.svNone, tcPerson.Sex);
+                tcPerson.Sex = GDMSex.svMale;
+                Assert.AreEqual(GDMSex.svMale, tcPerson.Sex);
 
                 EnumSet<SpecialUserRef> enums = tcPerson.Signs;
                 Assert.IsTrue(enums.IsEmpty());
@@ -145,15 +145,15 @@ namespace GKCore
                 ExtRect psnRt = tcPerson.Rect;
                 Assert.IsTrue(psnRt.IsEmpty());
 
-                tcPerson.Sex = GEDCOMSex.svMale;
+                tcPerson.Sex = GDMSex.svMale;
                 var color = ((ColorHandler)tcPerson.GetSelectedColor()).Handle;
                 Assert.AreEqual(Color.FromArgb(255, Color.Blue), color);
 
-                tcPerson.Sex = GEDCOMSex.svFemale;
+                tcPerson.Sex = GDMSex.svFemale;
                 color = ((ColorHandler)tcPerson.GetSelectedColor()).Handle;
                 Assert.AreEqual(Color.FromArgb(255, Color.Red), color);
 
-                tcPerson.Sex = GEDCOMSex.svUndetermined;
+                tcPerson.Sex = GDMSex.svUndetermined;
                 color = ((ColorHandler)tcPerson.GetSelectedColor()).Handle;
                 Assert.AreEqual(Color.FromArgb(255, Color.Black), color);
             }

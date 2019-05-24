@@ -20,9 +20,9 @@
 
 using System;
 using System.Windows.Forms;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Components;
@@ -65,7 +65,7 @@ namespace GKFlowInputPlugin
         private readonly IBaseWindow fBase;
         private readonly StringList fSourcesList;
         
-        private GEDCOMSex fSimpleTempSex = GEDCOMSex.svMale;
+        private GDMSex fSimpleTempSex = GDMSex.svMale;
 
         #region Instance control
         
@@ -204,7 +204,7 @@ namespace GKFlowInputPlugin
             CheckDeath.Checked = false;
             MemoNote.Text = "";
 
-            fSimpleTempSex = GEDCOMSex.svMale;
+            fSimpleTempSex = GDMSex.svMale;
             btnMale.Text = new string(fLangMan.LS(FLS.LSID_SexM)[0], 1);
         }
 
@@ -308,17 +308,17 @@ namespace GKFlowInputPlugin
             string nam = ConvertHelper.UniformName(tokens[1]);
             string pat = ConvertHelper.UniformName(tokens[2]);
 
-            GEDCOMIndividualRecord iRec = fBase.Context.CreatePersonEx(nam, pat, fam, fSimpleTempSex, false);
+            GDMIndividualRecord iRec = fBase.Context.CreatePersonEx(nam, pat, fam, fSimpleTempSex, false);
             if (CheckBirth.Checked) {
-                fBase.Context.CreateEventEx(iRec, GEDCOMTagType.BIRT, GEDCOMDate.CreateByFormattedStr(EditBirthDate.Text, true), EditBirthPlace.Text);
+                fBase.Context.CreateEventEx(iRec, GEDCOMTagType.BIRT, GDMDate.CreateByFormattedStr(EditBirthDate.Text, true), EditBirthPlace.Text);
             }
 
             if (CheckDeath.Checked) {
-                fBase.Context.CreateEventEx(iRec, GEDCOMTagType.DEAT, GEDCOMDate.CreateByFormattedStr(EditDeathDate.Text, true), EditDeathPlace.Text);
+                fBase.Context.CreateEventEx(iRec, GEDCOMTagType.DEAT, GDMDate.CreateByFormattedStr(EditDeathDate.Text, true), EditDeathPlace.Text);
             }
 
             if (!string.IsNullOrEmpty(MemoNote.Text)) {
-                GEDCOMNoteRecord noteRec = fBase.Context.Tree.CreateNote();
+                GDMNoteRecord noteRec = fBase.Context.Tree.CreateNote();
                 noteRec.SetNoteText(MemoNote.Text);
                 iRec.AddNote(noteRec);
             }
@@ -346,7 +346,7 @@ namespace GKFlowInputPlugin
             string srcPage = edPage.Text;
             string place = edPlace.Text;
 
-            GEDCOMSourceRecord srcRec = null;
+            GDMSourceRecord srcRec = null;
             if (!string.IsNullOrEmpty(srcName)) {
                 srcRec = fBase.Context.FindSource(srcName);
                 if (srcRec == null) {
@@ -355,7 +355,7 @@ namespace GKFlowInputPlugin
                 }
             }
 
-            GEDCOMIndividualRecord iMain = null;
+            GDMIndividualRecord iMain = null;
 
             int num = dataGridView1.Rows.Count;
             for (int r = 0; r < num; r++)
@@ -373,8 +373,8 @@ namespace GKFlowInputPlugin
                     PersonLink link = GetLinkByName(lnk);
                     if (link == PersonLink.plNone) continue;
 
-                    GEDCOMSex sx = fBase.Context.DefineSex(nm, pt);
-                    GEDCOMIndividualRecord iRec = fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
+                    GDMSex sx = fBase.Context.DefineSex(nm, pt);
+                    GDMIndividualRecord iRec = fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
 
                     if (!string.IsNullOrEmpty(age) && ConvertHelper.IsDigits(age)) {
                         int birthYear = srcYear - int.Parse(age);
@@ -382,12 +382,12 @@ namespace GKFlowInputPlugin
                     }
 
                     if (!string.IsNullOrEmpty(place)) {
-                        GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(iRec, GEDCOMTagType.RESI, "", "");
+                        GDMCustomEvent evt = fBase.Context.CreateEventEx(iRec, GEDCOMTagType.RESI, "", "");
                         evt.Place.StringValue = place;
                     }
 
                     if (!string.IsNullOrEmpty(comment)) {
-                        GEDCOMNoteRecord noteRec = fBase.Context.Tree.CreateNote();
+                        GDMNoteRecord noteRec = fBase.Context.Tree.CreateNote();
                         noteRec.SetNoteText(comment);
                         iRec.AddNote(noteRec);
                     }
@@ -398,7 +398,7 @@ namespace GKFlowInputPlugin
 
                     fBase.NotifyRecord(iRec, RecordAction.raAdd);
 
-                    GEDCOMFamilyRecord family = null;
+                    GDMFamilyRecord family = null;
 
                     if (link == PersonLink.plPerson) {
 
@@ -420,11 +420,11 @@ namespace GKFlowInputPlugin
                         }
 
                         if (evName == GEDCOMTagType.BIRT || evName == GEDCOMTagType.DEAT) {
-                            GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(iRec, evName, GEDCOMDate.CreateByFormattedStr(edEventDate.Text, false), "");
+                            GDMCustomEvent evt = fBase.Context.CreateEventEx(iRec, evName, GDMDate.CreateByFormattedStr(edEventDate.Text, false), "");
                             evt.Place.StringValue = place;
                         } else if (evName == GEDCOMTagType.MARR) {
                             family = iRec.GetMarriageFamily(true);
-                            GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(family, evName, GEDCOMDate.CreateByFormattedStr(edEventDate.Text, false), "");
+                            GDMCustomEvent evt = fBase.Context.CreateEventEx(family, evName, GDMDate.CreateByFormattedStr(edEventDate.Text, false), "");
                             evt.Place.StringValue = place;
                         }
 
@@ -491,13 +491,13 @@ namespace GKFlowInputPlugin
         private void BtnMaleClick(object sender, EventArgs e)
         {
             switch (fSimpleTempSex) {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     btnMale.Text = new string(fLangMan.LS(FLS.LSID_SexF)[0], 1);
-                    fSimpleTempSex = GEDCOMSex.svFemale;
+                    fSimpleTempSex = GDMSex.svFemale;
                     break;
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     btnMale.Text = new string(fLangMan.LS(FLS.LSID_SexM)[0], 1);
-                    fSimpleTempSex = GEDCOMSex.svMale;
+                    fSimpleTempSex = GDMSex.svMale;
                     break;
             }
         }

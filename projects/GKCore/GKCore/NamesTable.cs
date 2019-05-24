@@ -22,9 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -145,7 +144,7 @@ namespace GKCore
             return result;
         }
 
-        public string GetPatronymicByName(string name, GEDCOMSex sex)
+        public string GetPatronymicByName(string name, GDMSex sex)
         {
             string result = "";
 
@@ -154,11 +153,11 @@ namespace GKCore
             {
                 switch (sex)
                 {
-                    case GEDCOMSex.svMale:
+                    case GDMSex.svMale:
                         result = nm.M_Patronymic;
                         break;
 
-                    case GEDCOMSex.svFemale:
+                    case GDMSex.svFemale:
                         result = nm.F_Patronymic;
                         break;
                 }
@@ -186,13 +185,13 @@ namespace GKCore
             return result;
         }
 
-        public GEDCOMSex GetSexByName(string name)
+        public GDMSex GetSexByName(string name)
         {
             NameEntry nm = FindName(name);
-            return ((nm == null) ? GEDCOMSex.svNone : nm.Sex);
+            return ((nm == null) ? GDMSex.svNone : nm.Sex);
         }
 
-        public void SetName(string name, string patronymic, GEDCOMSex sex)
+        public void SetName(string name, string patronymic, GDMSex sex)
         {
             if (string.IsNullOrEmpty(name)) return;
 
@@ -204,19 +203,19 @@ namespace GKCore
 
             switch (sex)
             {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     if (string.IsNullOrEmpty(nm.M_Patronymic))
                         nm.M_Patronymic = patronymic;
                     break;
 
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     if (string.IsNullOrEmpty(nm.F_Patronymic))
                         nm.F_Patronymic = patronymic;
                     break;
             }
         }
 
-        public void SetNameSex(string name, GEDCOMSex sex)
+        public void SetNameSex(string name, GDMSex sex)
         {
             if (string.IsNullOrEmpty(name)) return;
 
@@ -224,13 +223,13 @@ namespace GKCore
             if (nm == null)
                 nm = AddName(name);
 
-            if (nm.Sex == GEDCOMSex.svNone && sex >= GEDCOMSex.svMale && sex < GEDCOMSex.svUndetermined)
+            if (nm.Sex == GDMSex.svNone && sex >= GDMSex.svMale && sex < GDMSex.svUndetermined)
             {
                 nm.Sex = sex;
             }
         }
 
-        public void ImportNames(GEDCOMIndividualRecord iRec)
+        public void ImportNames(GDMIndividualRecord iRec)
         {
             if (iRec == null) return;
 
@@ -240,11 +239,11 @@ namespace GKCore
                 childName = parts.Name;
                 childPat = parts.Patronymic;
 
-                GEDCOMSex iSex = iRec.Sex;
+                GDMSex iSex = iRec.Sex;
                 SetNameSex(childName, iSex);
 
-                GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
-                GEDCOMIndividualRecord father = (fam == null) ? null : fam.GetHusband();
+                GDMFamilyRecord fam = iRec.GetParentsFamily();
+                GDMIndividualRecord father = (fam == null) ? null : fam.GetHusband();
 
                 if (father != null) {
                     string fatherName;

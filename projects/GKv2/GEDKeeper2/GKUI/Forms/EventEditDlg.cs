@@ -21,8 +21,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -41,7 +40,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fSourcesList;
 
-        public GEDCOMCustomEvent Event
+        public GDMCustomEvent Event
         {
             get { return fController.Event; }
             set { fController.Event = value; }

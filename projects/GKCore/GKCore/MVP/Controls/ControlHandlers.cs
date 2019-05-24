@@ -20,7 +20,7 @@
 
 using System.Collections.Generic;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.Stats;
@@ -212,12 +212,12 @@ namespace GKCore.MVP.Controls
     public interface IMergeControl : IBaseControl
     {
         IBaseWindow Base { get; set; }
-        GEDCOMRecordType MergeMode { get; set; }
-        GEDCOMRecord Rec1 { get; }
-        GEDCOMRecord Rec2 { get; }
+        GDMRecordType MergeMode { get; set; }
+        GDMRecord Rec1 { get; }
+        GDMRecord Rec2 { get; }
 
-        void SetRec1(GEDCOMRecord value);
-        void SetRec2(GEDCOMRecord value);
+        void SetRec1(GDMRecord value);
+        void SetRec2(GDMRecord value);
     }
 
 

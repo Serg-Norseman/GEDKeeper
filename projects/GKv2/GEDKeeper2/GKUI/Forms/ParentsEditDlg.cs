@@ -20,8 +20,7 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -35,13 +34,13 @@ namespace GKUI.Forms
     {
         private readonly ParentsEditDlgController fController;
 
-        public GEDCOMChildToFamilyLink Link
+        public GDMChildToFamilyLink Link
         {
             get { return fController.Link; }
             set { fController.Link = value; }
         }
 
-        public GEDCOMIndividualRecord Person
+        public GDMIndividualRecord Person
         {
             get { return fController.Person; }
             set { fController.Person = value; }

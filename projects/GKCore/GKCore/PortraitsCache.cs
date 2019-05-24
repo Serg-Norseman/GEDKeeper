@@ -21,9 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 
 namespace GKCore
@@ -66,7 +65,7 @@ namespace GKCore
             return AppHost.GetCachePath() + imageUID + ".bmp";
         }
 
-        public IImage GetImage(IBaseContext context, GEDCOMIndividualRecord iRec)
+        public IImage GetImage(IBaseContext context, GDMIndividualRecord iRec)
         {
             if (context == null || iRec == null) return null;
 
@@ -110,7 +109,7 @@ namespace GKCore
             return result;
         }
 
-        public void RemoveObsolete(GEDCOMMultimediaLink mmLink)
+        public void RemoveObsolete(GDMMultimediaLink mmLink)
         {
             if (mmLink == null) return;
 

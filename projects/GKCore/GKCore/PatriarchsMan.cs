@@ -21,7 +21,7 @@
 using System;
 using BSLib;
 using BSLib.SmartGraph;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Tools;
 using GKCore.Types;
@@ -47,11 +47,11 @@ namespace GKCore
                 int num = context.Tree.RecordsCount;
                 for (int i = 0; i < num; i++)
                 {
-                    GEDCOMRecord rec = context.Tree[i];
+                    GDMRecord rec = context.Tree[i];
 
-                    if (rec is GEDCOMIndividualRecord)
+                    if (rec is GDMIndividualRecord)
                     {
-                        GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+                        GDMIndividualRecord iRec = rec as GDMIndividualRecord;
 
                         var parts = GKUtils.GetNameParts(iRec);
 
@@ -59,7 +59,7 @@ namespace GKCore
                         int descGens = GKUtils.GetDescGenerations(iRec);
 
                         bool res = (iRec.ChildToFamilyLinks.Count == 0);
-                        res = (res && iRec.Sex == GEDCOMSex.svMale);
+                        res = (res && iRec.Sex == GDMSex.svMale);
                         res = (res && /*nf != "" && nf != "?" &&*/ parts.Name != "" && parts.Name != "?");
                         res = (res && descGens >= gensMin);
 
@@ -109,13 +109,13 @@ namespace GKCore
                     {
                         PatriarchObj patr2 = patList[j];
 
-                        GEDCOMIndividualRecord cross = TreeTools.PL_SearchDesc(patr.IRec, patr2.IRec);
+                        GDMIndividualRecord cross = TreeTools.PL_SearchDesc(patr.IRec, patr2.IRec);
                         if (cross != null)
                         {
                             patr.HasLinks = true;
                             patr2.HasLinks = true;
 
-                            if (cross.Sex == GEDCOMSex.svFemale) {
+                            if (cross.Sex == GDMSex.svFemale) {
                                 patr.Links.Add(patr2);
                             } else {
                                 patr2.Links.Add(patr);
@@ -144,11 +144,11 @@ namespace GKCore
             return patList;
         }
 
-        private static void PL_WalkDescLinks(Graph graph, PGNode prevNode, GEDCOMIndividualRecord ancestor)
+        private static void PL_WalkDescLinks(Graph graph, PGNode prevNode, GDMIndividualRecord ancestor)
         {
             for (int i = 0, count = ancestor.SpouseToFamilyLinks.Count; i < count; i++)
             {
-                GEDCOMFamilyRecord family = ancestor.SpouseToFamilyLinks[i].Family;
+                GDMFamilyRecord family = ancestor.SpouseToFamilyLinks[i].Family;
                 PGNode node = family.ExtData as PGNode;
 
                 if (node != null && node.Type != PGNodeType.Default)
@@ -169,7 +169,7 @@ namespace GKCore
 
                 for (int k = 0, count2 = family.Children.Count; k < count2; k++)
                 {
-                    GEDCOMIndividualRecord child = family.Children[k].Value as GEDCOMIndividualRecord;
+                    GDMIndividualRecord child = family.Children[k].Value as GDMIndividualRecord;
                     PL_WalkDescLinks(graph, prevNode, child);
                 }
             }
@@ -192,12 +192,12 @@ namespace GKCore
                     for (int i = 0; i < count; i++)
                     {
                         PatriarchObj patNode = patList[i];
-                        GEDCOMIndividualRecord iRec = patNode.IRec;
+                        GDMIndividualRecord iRec = patNode.IRec;
 
                         int count2 = iRec.SpouseToFamilyLinks.Count;
                         for (int k = 0; k < count2; k++)
                         {
-                            GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[k].Family;
+                            GDMFamilyRecord family = iRec.SpouseToFamilyLinks[k].Family;
                             family.ExtData = new PGNode(family.XRef, PGNodeType.Patriarch, patNode.DescGenerations);
                         }
                     }
@@ -216,7 +216,7 @@ namespace GKCore
                             {
                                 PatriarchObj patr2 = patList[j];
 
-                                GEDCOMFamilyRecord cross = TreeTools.PL_SearchIntersection(patr.IRec, patr2.IRec);
+                                GDMFamilyRecord cross = TreeTools.PL_SearchIntersection(patr.IRec, patr2.IRec);
 
                                 if (cross != null)
                                 {

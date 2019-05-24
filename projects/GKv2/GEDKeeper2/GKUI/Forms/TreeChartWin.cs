@@ -22,8 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Controllers;
@@ -43,7 +42,7 @@ namespace GKUI.Forms
         private readonly TreeChartBox fTreeBox;
 
         private TreeChartKind fChartKind;
-        private GEDCOMIndividualRecord fPerson;
+        private GDMIndividualRecord fPerson;
 
 
         public IBaseWindow Base
@@ -69,7 +68,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public TreeChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson)
+        public TreeChartWin(IBaseWindow baseWin, GDMIndividualRecord startPerson)
         {
             InitializeComponent();
 
@@ -388,8 +387,8 @@ namespace GKUI.Forms
 
         private void MenuPerson_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            miFatherAdd.Enabled = fController.ParentIsRequired(GEDCOMSex.svMale);
-            miMotherAdd.Enabled = fController.ParentIsRequired(GEDCOMSex.svFemale);
+            miFatherAdd.Enabled = fController.ParentIsRequired(GDMSex.svMale);
+            miMotherAdd.Enabled = fController.ParentIsRequired(GDMSex.svFemale);
         }
 
         private void tbDocPreview_Click(object sender, EventArgs e)
@@ -520,9 +519,9 @@ namespace GKUI.Forms
             return fTreeBox.Model.FindAll(searchPattern);
         }
 
-        public void SelectByRec(GEDCOMRecord record)
+        public void SelectByRec(GDMRecord record)
         {
-            GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = record as GDMIndividualRecord;
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 

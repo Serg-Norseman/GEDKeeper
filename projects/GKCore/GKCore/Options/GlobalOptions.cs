@@ -22,9 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
@@ -484,13 +483,13 @@ namespace GKCore.Options
         }
 
         // TODO: rework it
-        public GEDCOMLanguageID GetCurrentItfLang()
+        public GDMLanguageID GetCurrentItfLang()
         {
             if (InterfaceLang == LangMan.LS_DEF_CODE) {
-                return GEDCOMLanguageID.English;
+                return GDMLanguageID.English;
             } else {
                 LangRecord langRec = GetLangByCode(InterfaceLang);
-                return (langRec == null) ? GEDCOMLanguageID.English : langRec.LangID;
+                return (langRec == null) ? GDMLanguageID.English : langRec.LangID;
             }
         }
 

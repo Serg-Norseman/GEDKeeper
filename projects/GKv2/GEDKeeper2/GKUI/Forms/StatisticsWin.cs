@@ -22,8 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -67,7 +66,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public StatisticsWin(IBaseWindow baseWin, List<GEDCOMRecord> selectedRecords)
+        public StatisticsWin(IBaseWindow baseWin, List<GDMRecord> selectedRecords)
         {
             InitializeComponent();
 

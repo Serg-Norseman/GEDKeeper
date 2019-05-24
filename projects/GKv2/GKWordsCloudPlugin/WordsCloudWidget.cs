@@ -21,8 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Stats;
 using GKUI.Components;
@@ -113,7 +112,7 @@ namespace GKWordsCloudPlugin
 
                 if (fBase != null) {
                     List<StatsItem> vals = new List<StatsItem>();
-                    TreeStats treeStats = new TreeStats(fBase.Context, fBase.GetContentList(GEDCOMRecordType.rtIndividual));
+                    TreeStats treeStats = new TreeStats(fBase.Context, fBase.GetContentList(GDMRecordType.rtIndividual));
                     treeStats.GetSpecStats(fMode, vals);
 
                     fWords.Capacity = vals.Count;

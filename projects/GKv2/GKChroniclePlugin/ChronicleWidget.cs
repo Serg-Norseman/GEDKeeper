@@ -21,9 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
 using BSLib.Calendar;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -32,10 +31,10 @@ namespace GKChroniclePlugin
 {
     internal class EventRecord
     {
-        public readonly GEDCOMCustomEvent Event;
-        public readonly GEDCOMRecordWithEvents Record;
+        public readonly GDMCustomEvent Event;
+        public readonly GDMRecordWithEvents Record;
 
-        public EventRecord(GEDCOMCustomEvent evt, GEDCOMRecordWithEvents record)
+        public EventRecord(GDMCustomEvent evt, GDMRecordWithEvents record)
         {
             Event = evt;
             Record = record;
@@ -95,13 +94,13 @@ namespace GKChroniclePlugin
             int num = fBase.Context.Tree.RecordsCount;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecordWithEvents rec = fBase.Context.Tree[i] as GEDCOMRecordWithEvents;
+                GDMRecordWithEvents rec = fBase.Context.Tree[i] as GDMRecordWithEvents;
                 if (rec == null) continue;
 
                 int eventsCount = rec.Events.Count;
                 for (int k = 0; k < eventsCount; k++)
                 {
-                    GEDCOMCustomEvent evt = rec.Events[k];
+                    GDMCustomEvent evt = rec.Events[k];
                     UDN udn = evt.Date.GetUDN();
                     if (!udn.IsEmpty()) {
                         fEvents.Add(new EventRecord(evt, rec));
@@ -126,7 +125,7 @@ namespace GKChroniclePlugin
                 for (int i = 0; i < fEvents.Count; i++)
                 {
                     EventRecord eventRec = fEvents[i];
-                    GEDCOMCustomEvent evt = eventRec.Event;
+                    GDMCustomEvent evt = eventRec.Event;
 
                     lvEvents.AddItem(eventRec, new object[] { new GEDCOMDateItem(evt.Date.Value),
                                          GKUtils.GetEventName(evt),

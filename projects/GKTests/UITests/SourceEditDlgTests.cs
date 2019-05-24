@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -38,7 +38,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class SourceEditDlgTests : CustomWindowTest
     {
-        private GEDCOMSourceRecord fSourceRecord;
+        private GDMSourceRecord fSourceRecord;
         private IBaseWindow fBase;
         private SourceEditDlg fDialog;
 
@@ -47,7 +47,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fSourceRecord = new GEDCOMSourceRecord(fBase.Context.Tree);
+            fSourceRecord = new GDMSourceRecord(fBase.Context.Tree);
 
             fDialog = new SourceEditDlg(fBase);
             fDialog.Model = fSourceRecord;
@@ -96,7 +96,7 @@ namespace GKUI.Forms
 
         public static void SourceEditDlg_Handler(SourceEditDlg dlg)
         {
-            GEDCOMSourceRecord srcRecord = dlg.Model;
+            GDMSourceRecord srcRecord = dlg.Model;
             SelectTab("tabsData", dlg, 2);
 
             // repositories

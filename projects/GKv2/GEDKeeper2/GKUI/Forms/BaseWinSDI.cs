@@ -24,9 +24,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Security.Permissions;
 using System.Windows.Forms;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Controllers;
@@ -112,17 +111,17 @@ namespace GKUI.Forms
             fContext = fController.Context;
             ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
 
-            CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GEDCOMRecordType.rtIndividual);
-            CreatePage(LangMan.LS(LSID.LSID_RPFamilies), GEDCOMRecordType.rtFamily);
-            CreatePage(LangMan.LS(LSID.LSID_RPNotes), GEDCOMRecordType.rtNote);
-            CreatePage(LangMan.LS(LSID.LSID_RPMultimedia), GEDCOMRecordType.rtMultimedia);
-            CreatePage(LangMan.LS(LSID.LSID_RPSources), GEDCOMRecordType.rtSource);
-            CreatePage(LangMan.LS(LSID.LSID_RPRepositories), GEDCOMRecordType.rtRepository);
-            CreatePage(LangMan.LS(LSID.LSID_RPGroups), GEDCOMRecordType.rtGroup);
-            CreatePage(LangMan.LS(LSID.LSID_RPResearches), GEDCOMRecordType.rtResearch);
-            CreatePage(LangMan.LS(LSID.LSID_RPTasks), GEDCOMRecordType.rtTask);
-            CreatePage(LangMan.LS(LSID.LSID_RPCommunications), GEDCOMRecordType.rtCommunication);
-            CreatePage(LangMan.LS(LSID.LSID_RPLocations), GEDCOMRecordType.rtLocation);
+            CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GDMRecordType.rtIndividual);
+            CreatePage(LangMan.LS(LSID.LSID_RPFamilies), GDMRecordType.rtFamily);
+            CreatePage(LangMan.LS(LSID.LSID_RPNotes), GDMRecordType.rtNote);
+            CreatePage(LangMan.LS(LSID.LSID_RPMultimedia), GDMRecordType.rtMultimedia);
+            CreatePage(LangMan.LS(LSID.LSID_RPSources), GDMRecordType.rtSource);
+            CreatePage(LangMan.LS(LSID.LSID_RPRepositories), GDMRecordType.rtRepository);
+            CreatePage(LangMan.LS(LSID.LSID_RPGroups), GDMRecordType.rtGroup);
+            CreatePage(LangMan.LS(LSID.LSID_RPResearches), GDMRecordType.rtResearch);
+            CreatePage(LangMan.LS(LSID.LSID_RPTasks), GDMRecordType.rtTask);
+            CreatePage(LangMan.LS(LSID.LSID_RPCommunications), GDMRecordType.rtCommunication);
+            CreatePage(LangMan.LS(LSID.LSID_RPLocations), GDMRecordType.rtLocation);
             tabsRecords.SelectedIndex = 0;
 
             SetLang();
@@ -139,7 +138,7 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
-        private void CreatePage(string pageText, GEDCOMRecordType recType)
+        private void CreatePage(string pageText, GDMRecordType recType)
         {
             tabsRecords.SuspendLayout();
             TabPage sheet = new TabPage(pageText);
@@ -267,7 +266,7 @@ namespace GKUI.Forms
         {
             IListView recView = contextMenu.SourceControl as GKListView;
 
-            miRecordDuplicate.Enabled = (recView == fController.GetRecordsViewByType(GEDCOMRecordType.rtIndividual));
+            miRecordDuplicate.Enabled = (recView == fController.GetRecordsViewByType(GDMRecordType.rtIndividual));
         }
 
         private void miRecordAdd_Click(object sender, EventArgs e)
@@ -313,48 +312,48 @@ namespace GKUI.Forms
 
         #region Basic function
 
-        public GEDCOMRecordType GetSelectedRecordType()
+        public GDMRecordType GetSelectedRecordType()
         {
             return fController.GetSelectedRecordType();
         }
 
-        public IListView GetRecordsViewByType(GEDCOMRecordType recType)
+        public IListView GetRecordsViewByType(GDMRecordType recType)
         {
             return fController.GetRecordsViewByType(recType);
         }
 
-        public IHyperView GetHyperViewByType(GEDCOMRecordType recType)
+        public IHyperView GetHyperViewByType(GDMRecordType recType)
         {
             return fController.GetHyperViewByType(recType);
         }
 
-        public IListManager GetRecordsListManByType(GEDCOMRecordType recType)
+        public IListManager GetRecordsListManByType(GDMRecordType recType)
         {
             return fController.GetRecordsListManByType(recType);
         }
 
-        public GEDCOMRecord GetSelectedRecordEx()
+        public GDMRecord GetSelectedRecordEx()
         {
             return fController.GetSelectedRecordEx();
         }
 
-        public GEDCOMIndividualRecord GetSelectedPerson()
+        public GDMIndividualRecord GetSelectedPerson()
         {
             return fController.GetSelectedPerson();
         }
 
-        public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType)
+        public List<GDMRecord> GetContentList(GDMRecordType recType)
         {
             return fController.GetContentList(recType);
         }
 
-        public void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone)
+        public void ApplyFilter(GDMRecordType recType = GDMRecordType.rtNone)
         {
             fController.ApplyFilter(recType);
         }
 
         public void SetExternalFilter(ExternalFilterHandler filterHandler, 
-                                      GEDCOMRecordType recType = GEDCOMRecordType.rtNone)
+                                      GDMRecordType recType = GDMRecordType.rtNone)
         {
             fController.SetExternalFilter(filterHandler, recType);
         }
@@ -414,17 +413,17 @@ namespace GKUI.Forms
             fController.RefreshLists(columnsChanged);
         }
 
-        public void RefreshRecordsView(GEDCOMRecordType recType)
+        public void RefreshRecordsView(GDMRecordType recType)
         {
             fController.RefreshRecordsView(recType);
         }
 
-        public void UpdateChangedRecords(GEDCOMRecord select = null)
+        public void UpdateChangedRecords(GDMRecord select = null)
         {
             fController.UpdateChangedRecords(select);
         }
 
-        public void NotifyRecord(GEDCOMRecord record, RecordAction action)
+        public void NotifyRecord(GDMRecord record, RecordAction action)
         {
             fController.NotifyRecord(record, action);
         }
@@ -439,12 +438,12 @@ namespace GKUI.Forms
             fController.SetFilter();
         }
 
-        public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal)
+        public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal)
         {
             if (mediaRec == null)
                 throw new ArgumentNullException("mediaRec");
 
-            GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
+            GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
             if (fileRef == null) return;
 
             MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
@@ -606,7 +605,7 @@ namespace GKUI.Forms
         void IWorkWindow.UpdateControls()
         {
             string statusLine = "";
-            GEDCOMRecordType recType = GetSelectedRecordType();
+            GDMRecordType recType = GetSelectedRecordType();
             IListView rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 var listMan = rView.ListMan;
@@ -652,7 +651,7 @@ namespace GKUI.Forms
             return fController.FindAll(searchPattern);
         }
 
-        void IWorkWindow.SelectByRec(GEDCOMRecord record)
+        void IWorkWindow.SelectByRec(GDMRecord record)
         {
             fController.SelectByRec(record);
         }
@@ -693,7 +692,7 @@ namespace GKUI.Forms
             fController.DeleteRecord();
         }
 
-        public void ShowRecordsTab(GEDCOMRecordType recType)
+        public void ShowRecordsTab(GDMRecordType recType)
         {
             tabsRecords.SelectedIndex = (int)recType - 1;
             tabsRecords_SelectedIndexChanged(null, null);
@@ -704,12 +703,12 @@ namespace GKUI.Forms
             fController.SelectRecordByXRef(xref);
         }
 
-        public StringList GetRecordContent(GEDCOMRecord record)
+        public StringList GetRecordContent(GDMRecord record)
         {
             return fController.GetRecordContent(record);
         }
 
-        public bool RecordIsFiltered(GEDCOMRecord record)
+        public bool RecordIsFiltered(GDMRecord record)
         {
             return fController.RecordIsFiltered(record);
         }
@@ -838,8 +837,8 @@ namespace GKUI.Forms
                 IBaseWindow curBase = ((forceDeactivate) ? null : AppHost.Instance.GetCurrentFile());
                 IChartWindow curChart = ((workWin is IChartWindow) ? ((IChartWindow) workWin) : null);
 
-                GEDCOMRecordType rt = (curBase == null) ? GEDCOMRecordType.rtNone : curBase.GetSelectedRecordType();
-                bool baseEn = (rt != GEDCOMRecordType.rtNone);
+                GDMRecordType rt = (curBase == null) ? GDMRecordType.rtNone : curBase.GetSelectedRecordType();
+                bool baseEn = (rt != GDMRecordType.rtNone);
 
                 miFileSave.Enabled = baseEn || (curChart != null);
                 miFileSaveAs.Enabled = miFileSave.Enabled;
@@ -872,7 +871,7 @@ namespace GKUI.Forms
                 miSlideshow.Enabled = baseEn;
                 miScripts.Enabled = baseEn;
 
-                bool indivEn = baseEn && rt == GEDCOMRecordType.rtIndividual;
+                bool indivEn = baseEn && rt == GDMRecordType.rtIndividual;
 
                 miTreeAncestors.Enabled = indivEn;
                 tbTreeAncestors.Enabled = miTreeAncestors.Enabled;

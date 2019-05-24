@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -38,8 +38,8 @@ namespace GKUI.Forms
     [TestFixture]
     public class PersonalNameEditDlgTests : CustomWindowTest
     {
-        private GEDCOMIndividualRecord fPerson;
-        private GEDCOMPersonalName fPersonalName;
+        private GDMIndividualRecord fPerson;
+        private GDMPersonalName fPersonalName;
         private IBaseWindow fBase;
         private PersonalNameEditDlg fDialog;
 
@@ -48,8 +48,8 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fPerson = new GEDCOMIndividualRecord(fBase.Context.Tree);
-            fPersonalName = new GEDCOMPersonalName(fPerson);
+            fPerson = new GDMIndividualRecord(fBase.Context.Tree);
+            fPersonalName = new GDMPersonalName(fPerson);
 
             fDialog = new PersonalNameEditDlg(fBase);
             fDialog.PersonalName = fPersonalName;

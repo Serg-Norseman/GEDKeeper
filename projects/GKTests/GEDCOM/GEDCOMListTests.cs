@@ -18,13 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKTests;
 using GKUI.Providers;
 using NUnit.Framework;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     [TestFixture]
     public class GEDCOMListTests
@@ -50,7 +50,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_Common()
         {
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             for (int k = 0; k < REP_COUNT; k++) {
@@ -64,49 +64,49 @@ namespace GKCommon.GEDCOM
 
         private const int REP_COUNT = 1000; // 1000000; // for profile tests
 
-        private static void GEDCOMListTest11(GEDCOMIndividualRecord iRec)
+        private static void GEDCOMListTest11(GDMIndividualRecord iRec)
         {
             int hash;
-            foreach (GEDCOMCustomEvent evt1 in iRec.Events) {
+            foreach (GDMCustomEvent evt1 in iRec.Events) {
                 hash = evt1.GetHashCode();
             }
         }
 
-        private static void GEDCOMListTest12(GEDCOMIndividualRecord iRec)
+        private static void GEDCOMListTest12(GDMIndividualRecord iRec)
         {
             int hash;
-            IGEDCOMListEnumerator<GEDCOMCustomEvent> enumer = iRec.Events.GetEnumerator();
+            IGEDCOMListEnumerator<GDMCustomEvent> enumer = iRec.Events.GetEnumerator();
             enumer.Reset();
             while (enumer.MoveNext()) {
-                GEDCOMCustomEvent evt1 = enumer.Current;
+                GDMCustomEvent evt1 = enumer.Current;
                 hash = evt1.GetHashCode();
             }
         }
 
-        private static void GEDCOMListTest21(GEDCOMIndividualRecord iRec)
+        private static void GEDCOMListTest21(GDMIndividualRecord iRec)
         {
             int hash;
             for (int i = 0; i < iRec.Events.Count; i++) {
-                GEDCOMCustomEvent evt1 = iRec.Events[i];
+                GDMCustomEvent evt1 = iRec.Events[i];
                 hash = evt1.GetHashCode();
             }
         }
 
-        private static void GEDCOMListTest22(GEDCOMIndividualRecord iRec)
+        private static void GEDCOMListTest22(GDMIndividualRecord iRec)
         {
             int hash;
             for (int i = 0, num = iRec.Events.Count; i < num; i++) {
-                GEDCOMCustomEvent evt1 = iRec.Events[i];
+                GDMCustomEvent evt1 = iRec.Events[i];
                 hash = evt1.GetHashCode();
             }
         }
 
-        private static void GEDCOMListTest23(GEDCOMIndividualRecord iRec)
+        private static void GEDCOMListTest23(GDMIndividualRecord iRec)
         {
             int hash;
-            GEDCOMList<GEDCOMCustomEvent> events = iRec.Events;
+            GDMList<GDMCustomEvent> events = iRec.Events;
             for (int i = 0, num = events.Count; i < num; i++) {
-                GEDCOMCustomEvent evt1 = events[i];
+                GDMCustomEvent evt1 = events[i];
                 hash = evt1.GetHashCode();
             }
         }

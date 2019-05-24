@@ -26,10 +26,11 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-
 using BSLib;
-using GKCommon.GEDCOM;
-using GKCommon.GedML;
+using GDModel;
+using GDModel.Providers;
+using GDModel.Providers.GEDCOM;
+using GDModel.Providers.GedML;
 using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -60,9 +61,9 @@ namespace GKCore
         private bool fModified;
         private ShieldState fShieldState;
 
-        private readonly List<GEDCOMLanguageID> fLangsList;
-        private readonly List<GEDCOMRecord> fLockedRecords;
-        private readonly GEDCOMTree fTree;
+        private readonly List<GDMLanguageID> fLangsList;
+        private readonly List<GDMRecord> fLockedRecords;
+        private readonly GDMTree fTree;
         private readonly ValuesCollection fValuesCollection;
         private readonly IBaseWindow fViewer;
         private readonly ChangeTracker fUndoman;
@@ -74,7 +75,7 @@ namespace GKCore
         public ICulture Culture
         {
             get {
-                GEDCOMLanguageID langID = fTree.Header.Language.Value;
+                GDMLanguageID langID = fTree.Header.Language.Value;
                 if (fCulture == null || fCulture.Language != langID) {
                     fCulture = GetCultureByLang(langID);
                 }
@@ -87,7 +88,7 @@ namespace GKCore
             get { return fFileName; }
         }
 
-        public List<GEDCOMLanguageID> LangsList
+        public List<GDMLanguageID> LangsList
         {
             get { return fLangsList; }
         }
@@ -105,7 +106,7 @@ namespace GKCore
             }
         }
 
-        public GEDCOMTree Tree
+        public GDMTree Tree
         {
             get { return fTree; }
         }
@@ -150,12 +151,12 @@ namespace GKCore
         public BaseContext(IBaseWindow viewer)
         {
             fFileName = "";
-            fTree = new GEDCOMTree();
+            fTree = new GDMTree();
             fViewer = viewer;
             fUndoman = new ChangeTracker(fTree);
             fValuesCollection = new ValuesCollection();
-            fLockedRecords = new List<GEDCOMRecord>();
-            fLangsList = new List<GEDCOMLanguageID>();
+            fLockedRecords = new List<GDMRecord>();
+            fLangsList = new List<GDMLanguageID>();
         }
 
         protected override void Dispose(bool disposing)
@@ -171,7 +172,7 @@ namespace GKCore
 
         #region Data Manipulation
 
-        public void CollectEventValues(GEDCOMCustomEvent evt)
+        public void CollectEventValues(GDMCustomEvent evt)
         {
             if (evt == null) return;
 
@@ -182,45 +183,45 @@ namespace GKCore
             }
         }
 
-        public void CollectNameLangs(GEDCOMPersonalName persName)
+        public void CollectNameLangs(GDMPersonalName persName)
         {
             if (persName == null) return;
 
-            GEDCOMLanguage lang = persName.FindTag("_LANG", 0) as GEDCOMLanguage;
+            GDMLanguage lang = persName.FindTag("_LANG", 0) as GDMLanguage;
             if (lang == null) return;
 
-            GEDCOMLanguageID langId = lang.Value;
-            if (langId != GEDCOMLanguageID.Unknown && !fLangsList.Contains(langId)) {
+            GDMLanguageID langId = lang.Value;
+            if (langId != GDMLanguageID.Unknown && !fLangsList.Contains(langId)) {
                 fLangsList.Add(langId);
             }
         }
 
-        public void ImportNames(GEDCOMIndividualRecord iRec)
+        public void ImportNames(GDMIndividualRecord iRec)
         {
             if (Culture is RussianCulture) {
                 AppHost.NamesTable.ImportNames(iRec);
             }
         }
 
-        public GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, GEDCOMCustomDate evDate, string evPlace)
+        public GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, GDMCustomDate evDate, string evPlace)
         {
             return CreateEventEx(aRec, evSign, evDate.StringValue, evPlace);
         }
 
-        public GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, string evDate, string evPlace)
+        public GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, string evDate, string evPlace)
         {
             if (aRec == null) return null;
 
-            GEDCOMCustomEvent result;
+            GDMCustomEvent result;
 
-            if (aRec is GEDCOMIndividualRecord) {
+            if (aRec is GDMIndividualRecord) {
                 if (GKUtils.GetPersonEventKindBySign(evSign) == PersonEventKind.ekEvent) {
-                    result = new GEDCOMIndividualEvent(aRec);
+                    result = new GDMIndividualEvent(aRec);
                 } else {
-                    result = new GEDCOMIndividualAttribute(aRec);
+                    result = new GDMIndividualAttribute(aRec);
                 }
-            } else if (aRec is GEDCOMFamilyRecord) {
-                result = new GEDCOMFamilyEvent(aRec);
+            } else if (aRec is GDMFamilyRecord) {
+                result = new GDMFamilyEvent(aRec);
             } else {
                 return null;
             }
@@ -240,12 +241,12 @@ namespace GKCore
             return result;
         }
 
-        public GEDCOMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex, bool birthEvent)
+        public GDMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GDMSex iSex, bool birthEvent)
         {
-            GEDCOMIndividualRecord iRec = fTree.CreateIndividual();
+            GDMIndividualRecord iRec = fTree.CreateIndividual();
             iRec.Sex = iSex;
 
-            GEDCOMPersonalName pName = iRec.AddPersonalName(new GEDCOMPersonalName(iRec));
+            GDMPersonalName pName = iRec.AddPersonalName(new GDMPersonalName(iRec));
             GKUtils.SetNameParts(pName, iSurname, iName, iPatronymic);
 
             if (birthEvent) CreateEventEx(iRec, GEDCOMTagType.BIRT, "", "");
@@ -253,7 +254,7 @@ namespace GKCore
             return iRec;
         }
 
-        public bool DeleteRecord(GEDCOMRecord record)
+        public bool DeleteRecord(GDMRecord record)
         {
             bool result = false;
             if (record == null) return result;
@@ -269,48 +270,48 @@ namespace GKCore
 
                 switch (record.RecordType)
                 {
-                    case GEDCOMRecordType.rtIndividual:
-                        result = fTree.DeleteIndividualRecord(record as GEDCOMIndividualRecord);
+                    case GDMRecordType.rtIndividual:
+                        result = fTree.DeleteIndividualRecord(record as GDMIndividualRecord);
                         break;
 
-                    case GEDCOMRecordType.rtFamily:
-                        result = fTree.DeleteFamilyRecord(record as GEDCOMFamilyRecord);
+                    case GDMRecordType.rtFamily:
+                        result = fTree.DeleteFamilyRecord(record as GDMFamilyRecord);
                         break;
 
-                    case GEDCOMRecordType.rtNote:
-                        result = fTree.DeleteNoteRecord(record as GEDCOMNoteRecord);
+                    case GDMRecordType.rtNote:
+                        result = fTree.DeleteNoteRecord(record as GDMNoteRecord);
                         break;
 
-                    case GEDCOMRecordType.rtMultimedia:
-                        result = fTree.DeleteMediaRecord(record as GEDCOMMultimediaRecord);
+                    case GDMRecordType.rtMultimedia:
+                        result = fTree.DeleteMediaRecord(record as GDMMultimediaRecord);
                         break;
 
-                    case GEDCOMRecordType.rtSource:
-                        result = fTree.DeleteSourceRecord(record as GEDCOMSourceRecord);
+                    case GDMRecordType.rtSource:
+                        result = fTree.DeleteSourceRecord(record as GDMSourceRecord);
                         break;
 
-                    case GEDCOMRecordType.rtRepository:
-                        result = fTree.DeleteRepositoryRecord(record as GEDCOMRepositoryRecord);
+                    case GDMRecordType.rtRepository:
+                        result = fTree.DeleteRepositoryRecord(record as GDMRepositoryRecord);
                         break;
 
-                    case GEDCOMRecordType.rtGroup:
-                        result = fTree.DeleteGroupRecord(record as GEDCOMGroupRecord);
+                    case GDMRecordType.rtGroup:
+                        result = fTree.DeleteGroupRecord(record as GDMGroupRecord);
                         break;
 
-                    case GEDCOMRecordType.rtResearch:
-                        result = fTree.DeleteResearchRecord(record as GEDCOMResearchRecord);
+                    case GDMRecordType.rtResearch:
+                        result = fTree.DeleteResearchRecord(record as GDMResearchRecord);
                         break;
 
-                    case GEDCOMRecordType.rtTask:
-                        result = fTree.DeleteTaskRecord(record as GEDCOMTaskRecord);
+                    case GDMRecordType.rtTask:
+                        result = fTree.DeleteTaskRecord(record as GDMTaskRecord);
                         break;
 
-                    case GEDCOMRecordType.rtCommunication:
-                        result = fTree.DeleteCommunicationRecord(record as GEDCOMCommunicationRecord);
+                    case GDMRecordType.rtCommunication:
+                        result = fTree.DeleteCommunicationRecord(record as GDMCommunicationRecord);
                         break;
 
-                    case GEDCOMRecordType.rtLocation:
-                        result = fTree.DeleteLocationRecord(record as GEDCOMLocationRecord);
+                    case GDMRecordType.rtLocation:
+                        result = fTree.DeleteLocationRecord(record as GDMLocationRecord);
                         break;
                 }
             } finally {
@@ -325,7 +326,7 @@ namespace GKCore
             return result;
         }
 
-        public IList<ISearchResult> FindAll(GEDCOMRecordType recordType, string searchPattern)
+        public IList<ISearchResult> FindAll(GDMRecordType recordType, string searchPattern)
         {
             List<ISearchResult> result = new List<ISearchResult>();
 
@@ -333,7 +334,7 @@ namespace GKCore
 
             int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++) {
-                GEDCOMRecord rec = fTree[i];
+                GDMRecord rec = fTree[i];
                 if (rec.RecordType != recordType) continue;
 
                 string recName = GKUtils.GetRecordName(rec, false);
@@ -345,17 +346,17 @@ namespace GKCore
             return result;
         }
 
-        public bool IsRecordAccess(GEDCOMRestriction restriction)
+        public bool IsRecordAccess(GDMRestriction restriction)
         {
             bool result = false;
 
             switch (fShieldState) {
                 case ShieldState.Maximum:
-                    result = (restriction != GEDCOMRestriction.rnConfidential && restriction != GEDCOMRestriction.rnPrivacy);
+                    result = (restriction != GDMRestriction.rnConfidential && restriction != GDMRestriction.rnPrivacy);
                     break;
 
                 case ShieldState.Middle:
-                    result = (restriction != GEDCOMRestriction.rnPrivacy);
+                    result = (restriction != GDMRestriction.rnPrivacy);
                     break;
 
                 case ShieldState.None:
@@ -370,18 +371,18 @@ namespace GKCore
 
         #region Data search
 
-        public GEDCOMSourceRecord FindSource(string sourceName)
+        public GDMSourceRecord FindSource(string sourceName)
         {
-            GEDCOMSourceRecord result = null;
+            GDMSourceRecord result = null;
 
             int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = fTree[i];
+                GDMRecord rec = fTree[i];
 
-                if (rec.RecordType == GEDCOMRecordType.rtSource && ((GEDCOMSourceRecord) rec).ShortTitle == sourceName)
+                if (rec.RecordType == GDMRecordType.rtSource && ((GDMSourceRecord) rec).ShortTitle == sourceName)
                 {
-                    result = (rec as GEDCOMSourceRecord);
+                    result = (rec as GDMSourceRecord);
                     break;
                 }
             }
@@ -398,10 +399,10 @@ namespace GKCore
             int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = fTree[i];
-                if (rec is GEDCOMSourceRecord)
+                GDMRecord rec = fTree[i];
+                if (rec is GDMSourceRecord)
                 {
-                    sources.AddObject((rec as GEDCOMSourceRecord).ShortTitle, rec);
+                    sources.AddObject((rec as GDMSourceRecord).ShortTitle, rec);
                 }
             }
         }
@@ -410,13 +411,13 @@ namespace GKCore
 
         #region Individual utils
 
-        public bool IsChildless(GEDCOMIndividualRecord iRec)
+        public bool IsChildless(GDMIndividualRecord iRec)
         {
             int exp = GKUtils.GetLifeExpectancy(iRec);
             return (exp != -1 && exp < 15);
         }
 
-        public int FindBirthYear(GEDCOMIndividualRecord iRec)
+        public int FindBirthYear(GDMIndividualRecord iRec)
         {
             if (iRec != null) {
                 int birthDate = iRec.GetChronologicalYear(GEDCOMTagType.BIRT);
@@ -427,12 +428,12 @@ namespace GKCore
                 int num = iRec.SpouseToFamilyLinks.Count;
                 for (int i = 0; i < num; i++)
                 {
-                    GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                    GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
                     {
-                        GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
+                        GDMIndividualRecord child = family.Children[j].Value as GDMIndividualRecord;
                         birthDate = FindBirthYear(child);
                         if (birthDate != 0) {
                             return birthDate - 20;
@@ -444,7 +445,7 @@ namespace GKCore
             return 0;
         }
 
-        public int FindDeathYear(GEDCOMIndividualRecord iRec)
+        public int FindDeathYear(GDMIndividualRecord iRec)
         {
             if (iRec != null) {
                 int deathDate = iRec.GetChronologicalYear(GEDCOMTagType.DEAT);
@@ -456,12 +457,12 @@ namespace GKCore
                 int num = iRec.SpouseToFamilyLinks.Count;
                 for (int i = 0; i < num; i++)
                 {
-                    GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                    GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++)
                     {
-                        GEDCOMIndividualRecord child = family.Children[j].Value as GEDCOMIndividualRecord;
+                        GDMIndividualRecord child = family.Children[j].Value as GDMIndividualRecord;
 
                         int chbDate = FindBirthYear(child);
                         if (chbDate != 0 && maxBirth < chbDate) {
@@ -488,10 +489,10 @@ namespace GKCore
                     bool firstTip = true;
                     int num = fTree.RecordsCount;
                     for (int i = 0; i < num; i++) {
-                        GEDCOMRecord rec = fTree[i];
-                        if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
+                        GDMRecord rec = fTree[i];
+                        if (rec.RecordType != GDMRecordType.rtIndividual) continue;
 
-                        GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
+                        GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
 
                         int days = GKUtils.GetDaysForBirth(iRec);
                         if (days >= 0 && days < 3) {
@@ -531,54 +532,54 @@ namespace GKCore
 
         #region Name and sex functions
 
-        public static ICulture GetCultureByLang(GEDCOMLanguageID langID)
+        public static ICulture GetCultureByLang(GDMLanguageID langID)
         {
             ICulture culture;
             switch (langID) {
-                case GEDCOMLanguageID.Russian:
-                case GEDCOMLanguageID.Ukrainian:
-                case GEDCOMLanguageID.Kazakh:
+                case GDMLanguageID.Russian:
+                case GDMLanguageID.Ukrainian:
+                case GDMLanguageID.Kazakh:
                     culture = new RussianCulture();
                     break;
 
-                case GEDCOMLanguageID.Polish:
+                case GDMLanguageID.Polish:
                     culture = new PolishCulture();
                     break;
 
-                case GEDCOMLanguageID.German:
+                case GDMLanguageID.German:
                     culture = new GermanCulture();
                     break;
 
-                case GEDCOMLanguageID.Swedish:
+                case GDMLanguageID.Swedish:
                     culture = new SwedishCulture();
                     break;
 
-                case GEDCOMLanguageID.Icelandic:
+                case GDMLanguageID.Icelandic:
                     culture = new IcelandCulture();
                     break;
 
-                case GEDCOMLanguageID.Armenian:
+                case GDMLanguageID.Armenian:
                     culture = new ArmenianCulture();
                     break;
 
-                case GEDCOMLanguageID.Turkish:
+                case GDMLanguageID.Turkish:
                     culture = new TurkishCulture();
                     break;
 
-                case GEDCOMLanguageID.French:
+                case GDMLanguageID.French:
                     culture = new FrenchCulture();
                     break;
 
-                case GEDCOMLanguageID.Italian:
+                case GDMLanguageID.Italian:
                     culture = new ItalianCulture();
                     break;
 
-                case GEDCOMLanguageID.Cantonese:
-                case GEDCOMLanguageID.Mandrin:
+                case GDMLanguageID.Cantonese:
+                case GDMLanguageID.Mandrin:
                     culture = new ChineseCulture();
                     break;
 
-                case GEDCOMLanguageID.English:
+                case GDMLanguageID.English:
                 default:
                     culture = new BritishCulture();
                     break;
@@ -588,7 +589,7 @@ namespace GKCore
             return culture;
         }
 
-        public string DefinePatronymic(string name, GEDCOMSex sex, bool confirm)
+        public string DefinePatronymic(string name, GDMSex sex, bool confirm)
         {
             ICulture culture = this.Culture;
             if (!culture.HasPatronymic()) return string.Empty;
@@ -608,11 +609,11 @@ namespace GKCore
 
             switch (sex)
             {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     result = n.M_Patronymic;
                     break;
 
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     result = n.F_Patronymic;
                     break;
             }
@@ -627,11 +628,11 @@ namespace GKCore
 
             switch (sex)
             {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     result = n.M_Patronymic;
                     break;
 
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     result = n.F_Patronymic;
                     break;
             }
@@ -639,13 +640,13 @@ namespace GKCore
             return result;
         }
 
-        public GEDCOMSex DefineSex(string iName, string iPatr)
+        public GDMSex DefineSex(string iName, string iPatr)
         {
             INamesTable namesTable = AppHost.NamesTable;
 
-            GEDCOMSex result = namesTable.GetSexByName(iName);
+            GDMSex result = namesTable.GetSexByName(iName);
 
-            if (result == GEDCOMSex.svNone)
+            if (result == GDMSex.svNone)
             {
                 using (var dlg = AppHost.ResolveDialog<ISexCheckDlg>())
                 {
@@ -657,7 +658,7 @@ namespace GKCore
                     {
                         result = dlg.Sex;
 
-                        if (result != GEDCOMSex.svNone)
+                        if (result != GDMSex.svNone)
                         {
                             namesTable.SetNameSex(iName, result);
                         }
@@ -668,7 +669,7 @@ namespace GKCore
             return result;
         }
 
-        public void CheckPersonSex(GEDCOMIndividualRecord iRec)
+        public void CheckPersonSex(GDMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
@@ -676,7 +677,7 @@ namespace GKCore
             try {
                 BeginUpdate();
 
-                if (iRec.Sex == GEDCOMSex.svNone || iRec.Sex == GEDCOMSex.svUndetermined)
+                if (iRec.Sex == GDMSex.svNone || iRec.Sex == GDMSex.svUndetermined)
                 {
                     var parts = GKUtils.GetNameParts(iRec);
                     iRec.Sex = DefineSex(parts.Name, parts.Patronymic);
@@ -790,12 +791,12 @@ namespace GKCore
             return result;
         }
 
-        public MediaStore GetStoreType(GEDCOMFileReference fileReference)
+        public MediaStore GetStoreType(GDMFileReference fileReference)
         {
             return GKUtils.GetStoreType(fileReference);
         }
 
-        public Stream MediaLoad(GEDCOMFileReference fileReference, bool throwException)
+        public Stream MediaLoad(GDMFileReference fileReference, bool throwException)
         {
             Stream stream = null;
             if (fileReference == null) return null;
@@ -841,7 +842,7 @@ namespace GKCore
             return stream;
         }
 
-        public string MediaLoad(GEDCOMFileReference fileReference)
+        public string MediaLoad(GDMFileReference fileReference)
         {
             string fileName = string.Empty;
             if (fileReference == null) return string.Empty;
@@ -891,7 +892,7 @@ namespace GKCore
         }
 
         // TODO: check existing of file
-        public bool MediaSave(GEDCOMFileReference fileReference, string fileName, MediaStoreType storeType)
+        public bool MediaSave(GDMFileReference fileReference, string fileName, MediaStoreType storeType)
         {
             if (fileReference == null) return false;
 
@@ -901,7 +902,7 @@ namespace GKCore
             string storePath = "";
             string refPath = "";
 
-            storePath = GKUtils.GetStoreFolder(GKUtils.GetMultimediaKind(GEDCOMFileReference.RecognizeFormat(fileName)));
+            storePath = GKUtils.GetStoreFolder(GKUtils.GetMultimediaKind(GDMFileReference.RecognizeFormat(fileName)));
 
             switch (storeType) {
                 case MediaStoreType.mstReference:
@@ -958,7 +959,7 @@ namespace GKCore
             #endif
         }
 
-        public IImage LoadMediaImage(GEDCOMFileReference fileReference, bool throwException)
+        public IImage LoadMediaImage(GDMFileReference fileReference, bool throwException)
         {
             if (fileReference == null) return null;
 
@@ -983,7 +984,7 @@ namespace GKCore
             return result;
         }
 
-        public IImage LoadMediaImage(GEDCOMFileReference fileReference, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException)
+        public IImage LoadMediaImage(GDMFileReference fileReference, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException)
         {
             if (fileReference == null) return null;
 
@@ -1008,13 +1009,13 @@ namespace GKCore
             return result;
         }
 
-        public IImage GetPrimaryBitmap(GEDCOMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException)
+        public IImage GetPrimaryBitmap(GDMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException)
         {
             if (iRec == null) return null;
 
             IImage result = null;
             try {
-                GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
+                GDMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
                 if (mmLink != null && mmLink.Value != null) {
                     ExtRect cutoutArea;
                     if (mmLink.IsPrimaryCutout) {
@@ -1023,7 +1024,7 @@ namespace GKCore
                         cutoutArea = ExtRect.CreateEmpty();
                     }
 
-                    GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)mmLink.Value;
+                    GDMMultimediaRecord mmRec = (GDMMultimediaRecord)mmLink.Value;
                     result = LoadMediaImage(mmRec.FileReferences[0], thumbWidth, thumbHeight, cutoutArea, throwException);
                 }
             } catch (MediaFileNotFoundException) {
@@ -1035,13 +1036,13 @@ namespace GKCore
             return result;
         }
 
-        public string GetPrimaryBitmapUID(GEDCOMIndividualRecord iRec)
+        public string GetPrimaryBitmapUID(GDMIndividualRecord iRec)
         {
             if (iRec == null) return null;
 
             string result = null;
             try {
-                GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
+                GDMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
                 result = (mmLink == null) ? null : mmLink.GetUID();
             } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.GetPrimaryBitmapUID(): " + ex.Message);
@@ -1426,17 +1427,17 @@ namespace GKCore
         /// must take on a methods that controls the dialog.
         /// </summary>
         /// <param name="record"></param>
-        public void LockRecord(GEDCOMRecord record)
+        public void LockRecord(GDMRecord record)
         {
             fLockedRecords.Add(record);
         }
 
-        public void UnlockRecord(GEDCOMRecord record)
+        public void UnlockRecord(GDMRecord record)
         {
             fLockedRecords.Remove(record);
         }
 
-        public bool IsAvailableRecord(GEDCOMRecord record)
+        public bool IsAvailableRecord(GDMRecord record)
         {
             bool result = fLockedRecords.IndexOf(record) < 0;
 
@@ -1452,19 +1453,19 @@ namespace GKCore
 
         #region UI control functions
 
-        public GEDCOMFamilyRecord SelectFamily(GEDCOMIndividualRecord target)
+        public GDMFamilyRecord SelectFamily(GDMIndividualRecord target)
         {
-            GEDCOMFamilyRecord result;
+            GDMFamilyRecord result;
 
             try {
-                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GEDCOMRecordType.rtFamily)) {
+                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtFamily)) {
                     dlg.TargetIndividual = target;
-                    dlg.NeedSex = GEDCOMSex.svNone;
+                    dlg.NeedSex = GDMSex.svNone;
                     dlg.TargetMode = TargetMode.tmFamilyChild;
                     dlg.FastFilter = "*";
 
                     if (AppHost.Instance.ShowModalX(dlg, false)) {
-                        result = (dlg.ResultRecord as GEDCOMFamilyRecord);
+                        result = (dlg.ResultRecord as GDMFamilyRecord);
                     } else {
                         result = null;
                     }
@@ -1477,20 +1478,20 @@ namespace GKCore
             return result;
         }
 
-        public GEDCOMIndividualRecord SelectPerson(GEDCOMIndividualRecord target,
-                                                   TargetMode targetMode, GEDCOMSex needSex)
+        public GDMIndividualRecord SelectPerson(GDMIndividualRecord target,
+                                                   TargetMode targetMode, GDMSex needSex)
         {
-            GEDCOMIndividualRecord result;
+            GDMIndividualRecord result;
 
             try {
-                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GEDCOMRecordType.rtIndividual)) {
+                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtIndividual)) {
                     dlg.TargetIndividual = target;
                     dlg.NeedSex = needSex;
                     dlg.TargetMode = targetMode;
                     dlg.FastFilter = "*";
 
                     if (AppHost.Instance.ShowModalX(dlg, false)) {
-                        result = (dlg.ResultRecord as GEDCOMIndividualRecord);
+                        result = (dlg.ResultRecord as GDMIndividualRecord);
                     } else {
                         result = null;
                     }
@@ -1503,9 +1504,9 @@ namespace GKCore
             return result;
         }
 
-        public GEDCOMRecord SelectRecord(GEDCOMRecordType mode, params object[] args)
+        public GDMRecord SelectRecord(GDMRecordType mode, params object[] args)
         {
-            GEDCOMRecord result;
+            GDMRecord result;
 
             try {
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, mode)) {
@@ -1533,20 +1534,20 @@ namespace GKCore
 
         #region Data modification functions
 
-        private GEDCOMFamilyRecord GetFamilyBySpouse(GEDCOMIndividualRecord newParent)
+        private GDMFamilyRecord GetFamilyBySpouse(GDMIndividualRecord newParent)
         {
-            GEDCOMFamilyRecord result = null;
+            GDMFamilyRecord result = null;
 
             int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = fTree[i];
+                GDMRecord rec = fTree[i];
 
-                if (rec.RecordType == GEDCOMRecordType.rtFamily)
+                if (rec.RecordType == GDMRecordType.rtFamily)
                 {
-                    GEDCOMFamilyRecord fam = (GEDCOMFamilyRecord) rec;
-                    GEDCOMIndividualRecord husb = fam.GetHusband();
-                    GEDCOMIndividualRecord wife = fam.GetWife();
+                    GDMFamilyRecord fam = (GDMFamilyRecord) rec;
+                    GDMIndividualRecord husb = fam.GetHusband();
+                    GDMIndividualRecord wife = fam.GetWife();
                     if (husb == newParent || wife == newParent)
                     {
                         string msg = string.Format(LangMan.LS(LSID.LSID_ParentsQuery), GKUtils.GetFamilyString(fam));
@@ -1562,17 +1563,17 @@ namespace GKCore
             return result;
         }
 
-        public GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild, bool canCreate,
-                                                 GEDCOMIndividualRecord newParent)
+        public GDMFamilyRecord GetChildFamily(GDMIndividualRecord iChild, bool canCreate,
+                                                 GDMIndividualRecord newParent)
         {
-            GEDCOMFamilyRecord result = null;
+            GDMFamilyRecord result = null;
 
             if (iChild != null) {
                 if (iChild.ChildToFamilyLinks.Count != 0) {
                     result = iChild.ChildToFamilyLinks[0].Family;
                 } else {
                     if (canCreate) {
-                        GEDCOMFamilyRecord fam = GetFamilyBySpouse(newParent);
+                        GDMFamilyRecord fam = GetFamilyBySpouse(newParent);
                         if (fam == null) {
                             fam = fTree.CreateFamily();
                         }
@@ -1585,31 +1586,31 @@ namespace GKCore
             return result;
         }
 
-        public GEDCOMFamilyRecord AddFamilyForSpouse(GEDCOMIndividualRecord spouse)
+        public GDMFamilyRecord AddFamilyForSpouse(GDMIndividualRecord spouse)
         {
             if (spouse == null)
                 throw new ArgumentNullException(@"spouse");
 
-            GEDCOMSex sex = spouse.Sex;
-            if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined) {
+            GDMSex sex = spouse.Sex;
+            if (sex < GDMSex.svMale || sex >= GDMSex.svUndetermined) {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
                 return null;
             }
 
-            GEDCOMFamilyRecord family = fTree.CreateFamily();
+            GDMFamilyRecord family = fTree.CreateFamily();
             family.AddSpouse(spouse);
             return family;
         }
 
-        public GEDCOMIndividualRecord AddChildForParent(GEDCOMIndividualRecord parent, GEDCOMSex needSex)
+        public GDMIndividualRecord AddChildForParent(GDMIndividualRecord parent, GDMSex needSex)
         {
-            GEDCOMIndividualRecord resultChild = null;
+            GDMIndividualRecord resultChild = null;
 
             if (parent != null) {
                 if (parent.SpouseToFamilyLinks.Count > 1) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ThisPersonHasSeveralFamilies));
                 } else {
-                    GEDCOMFamilyRecord family;
+                    GDMFamilyRecord family;
 
                     if (parent.SpouseToFamilyLinks.Count == 0) {
                         family = AddFamilyForSpouse(parent);
@@ -1620,7 +1621,7 @@ namespace GKCore
                         family = parent.SpouseToFamilyLinks[0].Family;
                     }
 
-                    GEDCOMIndividualRecord child = SelectPerson(family.GetHusband(), TargetMode.tmParent, needSex);
+                    GDMIndividualRecord child = SelectPerson(family.GetHusband(), TargetMode.tmParent, needSex);
 
                     if (child != null && family.AddChild(child)) {
                         // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
@@ -1635,19 +1636,19 @@ namespace GKCore
             return resultChild;
         }
 
-        public GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec)
+        public GDMIndividualRecord SelectSpouseFor(GDMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException(@"iRec");
 
-            GEDCOMSex needSex;
+            GDMSex needSex;
             switch (iRec.Sex) {
-                case GEDCOMSex.svMale:
-                    needSex = GEDCOMSex.svFemale;
+                case GDMSex.svMale:
+                    needSex = GDMSex.svFemale;
                     break;
 
-                case GEDCOMSex.svFemale:
-                    needSex = GEDCOMSex.svMale;
+                case GDMSex.svFemale:
+                    needSex = GDMSex.svMale;
                     break;
 
                 default:
@@ -1655,18 +1656,18 @@ namespace GKCore
                     return null;
             }
 
-            GEDCOMIndividualRecord target = null;
+            GDMIndividualRecord target = null;
             TargetMode targetMode = TargetMode.tmNone;
-            if (needSex == GEDCOMSex.svFemale) {
+            if (needSex == GDMSex.svFemale) {
                 target = iRec;
                 targetMode = TargetMode.tmWife;
             }
 
-            GEDCOMIndividualRecord result = SelectPerson(target, targetMode, needSex);
+            GDMIndividualRecord result = SelectPerson(target, targetMode, needSex);
             return result;
         }
 
-        public void ProcessFamily(GEDCOMFamilyRecord famRec)
+        public void ProcessFamily(GDMFamilyRecord famRec)
         {
             if (famRec == null) return;
 
@@ -1675,7 +1676,7 @@ namespace GKCore
             }
         }
 
-        public void ProcessIndividual(GEDCOMIndividualRecord indiRec)
+        public void ProcessIndividual(GDMIndividualRecord indiRec)
         {
             if (indiRec == null) return;
 

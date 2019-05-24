@@ -19,7 +19,8 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 
 namespace GKFoldersPlugin
 {
@@ -28,13 +29,13 @@ namespace GKFoldersPlugin
     /// </summary>
     public static class FoldersHelper
     {
-        public static string GetFolder(GEDCOMRecord record)
+        public static string GetFolder(GDMRecord record)
         {
             var folderTag = record.FindTag(GEDCOMTagType._FOLDER, 0);
             return (folderTag == null) ? "" : folderTag.StringValue;
         }
 
-        public static void SetFolder(GEDCOMRecord record, string value)
+        public static void SetFolder(GDMRecord record, string value)
         {
             if (!HasFolderSupport(record.RecordType)) {
                 return;
@@ -43,7 +44,7 @@ namespace GKFoldersPlugin
             var folderTag = record.FindTag(GEDCOMTagType._FOLDER, 0);
             if (!string.IsNullOrEmpty(value)) {
                 if (folderTag == null) {
-                    record.AddTag(new GEDCOMTag(record, GEDCOMTagType._FOLDER, value));
+                    record.AddTag(new GDMTag(record, GEDCOMTagType._FOLDER, value));
                 } else {
                     folderTag.StringValue = value;
                 }
@@ -54,27 +55,27 @@ namespace GKFoldersPlugin
             }
         }
 
-        public static bool HasFolderSupport(GEDCOMRecordType recType)
+        public static bool HasFolderSupport(GDMRecordType recType)
         {
             bool result = false;
 
             switch (recType) {
-                case GEDCOMRecordType.rtNone:
-                case GEDCOMRecordType.rtNote:
-                case GEDCOMRecordType.rtMultimedia:
-                case GEDCOMRecordType.rtSource:
-                case GEDCOMRecordType.rtRepository:
-                case GEDCOMRecordType.rtLocation:
-                case GEDCOMRecordType.rtSubmission:
-                case GEDCOMRecordType.rtSubmitter:
+                case GDMRecordType.rtNone:
+                case GDMRecordType.rtNote:
+                case GDMRecordType.rtMultimedia:
+                case GDMRecordType.rtSource:
+                case GDMRecordType.rtRepository:
+                case GDMRecordType.rtLocation:
+                case GDMRecordType.rtSubmission:
+                case GDMRecordType.rtSubmitter:
                     break;
 
-                case GEDCOMRecordType.rtIndividual:
-                case GEDCOMRecordType.rtFamily:
-                case GEDCOMRecordType.rtGroup:
-                case GEDCOMRecordType.rtResearch:
-                case GEDCOMRecordType.rtTask:
-                case GEDCOMRecordType.rtCommunication:
+                case GDMRecordType.rtIndividual:
+                case GDMRecordType.rtFamily:
+                case GDMRecordType.rtGroup:
+                case GDMRecordType.rtResearch:
+                case GDMRecordType.rtTask:
+                case GDMRecordType.rtCommunication:
                     result = true;
                     break;
             }

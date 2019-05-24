@@ -23,7 +23,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.IoC;
@@ -73,7 +74,7 @@ namespace GKCore
         [Test]
         public void Test_SearchTreeFragments_MergeTree()
         {
-            List<List<GEDCOMRecord>> treeFragments;
+            List<List<GDMRecord>> treeFragments;
             Assembly assembly = typeof(CoreTests).Assembly;
 
             using (var ctx1 = new BaseContext(null)) {
@@ -109,10 +110,10 @@ namespace GKCore
                     Assert.AreEqual(15, treeFragments[2].Count);
                     Assert.AreEqual(1, treeFragments[3].Count);
 
-                    GEDCOMIndividualRecord iRec1 = ctx1.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                    GDMIndividualRecord iRec1 = ctx1.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                     Assert.IsNotNull(iRec1);
 
-                    GEDCOMIndividualRecord iRec2 = ctx1.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+                    GDMIndividualRecord iRec2 = ctx1.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
                     Assert.IsNotNull(iRec2);
 
                     TreeTools.MergeRecord(baseWin, iRec1, iRec2, true);
@@ -165,10 +166,10 @@ namespace GKCore
         [Test]
         public void Test_WalkTree()
         {
-            GEDCOMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
-            List<GEDCOMRecord> walkList = new List<GEDCOMRecord>();
+            List<GDMRecord> walkList = new List<GDMRecord>();
             TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, walkList);
             Assert.AreEqual(5, walkList.Count, "TreeTools.TreeWalk(twmAll)"); // 3 linked from 4 total
 
@@ -216,12 +217,12 @@ namespace GKCore
         [Test]
         public void Test_CheckRelations()
         {
-            GEDCOMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckRelations(null); });
 
-            List<GEDCOMRecord> splitList = new List<GEDCOMRecord>();
+            List<GDMRecord> splitList = new List<GDMRecord>();
             splitList.Add(iRec);
             TreeTools.CheckRelations(splitList);
         }

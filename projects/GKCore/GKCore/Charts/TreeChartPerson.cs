@@ -21,7 +21,7 @@
 using System;
 using BSLib;
 using BSLib.SmartGraph;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -64,9 +64,9 @@ namespace GKCore.Charts
         private string fNick;
         private string fPatronymic;
         private string fSurname;
-        private GEDCOMIndividualRecord fRec;
+        private GDMIndividualRecord fRec;
         private EnumSet<SpecialUserRef> fSigns;
-        private GEDCOMSex fSex;
+        private GDMSex fSex;
         private PersonList fChilds;
         private PersonList fSpouses;
         private IImage fPortrait;
@@ -79,7 +79,7 @@ namespace GKCore.Charts
         private int fWidth;
 
         // without property controlling
-        public GEDCOMFamilyRecord BaseFamily;
+        public GDMFamilyRecord BaseFamily;
         public TreeChartPerson BaseSpouse;
         public float CertaintyAssessment;
         public TreeChartPerson Father;
@@ -168,7 +168,7 @@ namespace GKCore.Charts
             set { fPtY = value; }
         }
 
-        public GEDCOMIndividualRecord Rec
+        public GDMIndividualRecord Rec
         {
             get { return fRec; }
         }
@@ -199,7 +199,7 @@ namespace GKCore.Charts
             }
         }
 
-        public GEDCOMSex Sex
+        public GDMSex Sex
         {
             get { return fSex; }
             set { fSex = value; }
@@ -289,7 +289,7 @@ namespace GKCore.Charts
             fSpouses.Add(spouse);
         }
 
-        public void BuildBy(GEDCOMIndividualRecord iRec)
+        public void BuildBy(GDMIndividualRecord iRec)
         {
             try {
                 fRec = iRec;
@@ -367,7 +367,7 @@ namespace GKCore.Charts
                             fPortrait = PortraitsCache.Instance.GetImage(fModel.Base.Context, iRec);
 
                             if (fPortrait == null && options.DefaultPortraits) {
-                                string resName = (fSex == GEDCOMSex.svFemale) ? "pi_female_140.png" : "pi_male_140.png";
+                                string resName = (fSex == GDMSex.svFemale) ? "pi_female_140.png" : "pi_male_140.png";
                                 fPortrait = AppHost.GfxProvider.LoadResourceImage(resName, false);
                             }
                         } catch (MediaFileNotFoundException) {
@@ -387,7 +387,7 @@ namespace GKCore.Charts
                     fBirthDate = "";
                     fDeathDate = "";
                     IsDead = false;
-                    fSex = GEDCOMSex.svNone;
+                    fSex = GDMSex.svNone;
                     fSigns = EnumSet<SpecialUserRef>.Create();
 
                     CertaintyAssessment = 0.0f;
@@ -523,11 +523,11 @@ namespace GKCore.Charts
             int result;
 
             switch (fSex) {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     result = ChartRenderer.Blue;
                     break;
 
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     result = ChartRenderer.Red;
                     break;
 
@@ -560,11 +560,11 @@ namespace GKCore.Charts
             IColor result;
             TreeChartOptions options = fModel.Options;
             switch (fSex) {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     result = Divorced ? options.UnHusbandColor : options.MaleColor;
                     break;
 
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     result = Divorced ? options.UnWifeColor : options.FemaleColor;
                     break;
 

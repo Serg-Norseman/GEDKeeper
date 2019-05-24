@@ -20,22 +20,21 @@
 
 using System;
 using System.Collections.Generic;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Options;
 
 namespace GKCore.Charts
 {
-    public delegate void ARootChangedEventHandler(object sender, GEDCOMIndividualRecord person);
+    public delegate void ARootChangedEventHandler(object sender, GDMIndividualRecord person);
 
     public enum CircleChartType { Ancestors, Descendants }
 
     public abstract class CircleSegment : BaseObject
     {
         public int Gen;
-        public GEDCOMIndividualRecord IRec;
+        public GDMIndividualRecord IRec;
         public IGfxPath Path;
 
         public float Rad; // ?
@@ -106,7 +105,7 @@ namespace GKCore.Charts
         private int fIndividualsCount;
         private CircleChartOptions fOptions;
         private IPen fPen;
-        private GEDCOMIndividualRecord fRootPerson;
+        private GDMIndividualRecord fRootPerson;
         private readonly List<CircleSegment> fSegments;
         private CircleSegment fSelected;
         private int fVisibleGenerations;
@@ -175,7 +174,7 @@ namespace GKCore.Charts
             get { return fPen.Width; }
         }
 
-        public GEDCOMIndividualRecord RootPerson
+        public GDMIndividualRecord RootPerson
         {
             get {
                 return fRootPerson;
@@ -273,7 +272,7 @@ namespace GKCore.Charts
             fImageWidth = (int)(fBounds.GetWidth() + fPen.Width * 2);
         }
 
-        public CircleSegment FindSegmentByRec(GEDCOMIndividualRecord iRec)
+        public CircleSegment FindSegmentByRec(GDMIndividualRecord iRec)
         {
             CircleSegment result = null;
 
@@ -328,7 +327,7 @@ namespace GKCore.Charts
         private void DrawPersonName(CircleSegment segment)
         {
             int gen = segment.Gen;
-            GEDCOMIndividualRecord iRec = segment.IRec;
+            GDMIndividualRecord iRec = segment.IRec;
 
             string surn, givn;
             if (iRec == null) {
@@ -533,8 +532,8 @@ namespace GKCore.Charts
 
             rootSegment.WedgeAngle = 360.0f;
 
-            GEDCOMIndividualRecord father = null, mother = null;
-            GEDCOMFamilyRecord fam = fRootPerson.GetParentsFamily();
+            GDMIndividualRecord father = null, mother = null;
+            GDMFamilyRecord fam = fRootPerson.GetParentsFamily();
             if (fam != null && fBase.Context.IsRecordAccess(fam.Restriction)) {
                 father = fam.GetHusband();
                 mother = fam.GetWife();
@@ -549,7 +548,7 @@ namespace GKCore.Charts
             }
         }
 
-        private AncPersonSegment SetSegmentParams(int index, GEDCOMIndividualRecord rec, float rad, int groupIndex)
+        private AncPersonSegment SetSegmentParams(int index, GDMIndividualRecord rec, float rad, int groupIndex)
         {
             if (index < 0 || index >= fSegments.Count) {
                 return null;
@@ -562,7 +561,7 @@ namespace GKCore.Charts
             return segment;
         }
 
-        private AncPersonSegment TraverseAncestors(GEDCOMIndividualRecord iRec, float v, int gen, float rad, float ro, int prevSteps, int groupIndex)
+        private AncPersonSegment TraverseAncestors(GDMIndividualRecord iRec, float v, int gen, float rad, float ro, int prevSteps, int groupIndex)
         {
             try
             {
@@ -591,8 +590,8 @@ namespace GKCore.Charts
                     segment.IntRad = inRad - 50;
                     segment.ExtRad = extRad - 50;
 
-                    GEDCOMIndividualRecord father = null, mother = null;
-                    GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
+                    GDMIndividualRecord father = null, mother = null;
+                    GDMFamilyRecord fam = iRec.GetParentsFamily();
                     if (fam != null && fBase.Context.IsRecordAccess(fam.Restriction)) {
                         father = fam.GetHusband();
                         mother = fam.GetWife();
@@ -702,7 +701,7 @@ namespace GKCore.Charts
             }
         }
 
-        private DescPersonSegment TraverseDescendants(GEDCOMIndividualRecord iRec, int gen)
+        private DescPersonSegment TraverseDescendants(GDMIndividualRecord iRec, int gen)
         {
             if (iRec == null) return null;
             
@@ -719,14 +718,14 @@ namespace GKCore.Charts
                     int numberOfFamilyLinks = iRec.SpouseToFamilyLinks.Count;
                     for (int j = 0; j < numberOfFamilyLinks; j++)
                     {
-                        GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
+                        GDMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
                         if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
                         fBase.Context.ProcessFamily(family);
 
                         int numberOfChildren = family.Children.Count;
                         for (int i = 0; i < numberOfChildren; i++) {
-                            GEDCOMIndividualRecord child = family.Children[i].Value as GEDCOMIndividualRecord;
+                            GDMIndividualRecord child = family.Children[i].Value as GDMIndividualRecord;
                             DescPersonSegment childSegment = TraverseDescendants(child, gen + 1);
 
                             int size = Math.Max(1, childSegment.TotalSubSegments);

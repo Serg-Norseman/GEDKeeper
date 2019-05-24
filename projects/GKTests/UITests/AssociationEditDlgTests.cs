@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -38,7 +38,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class AssociationEditDlgTests : CustomWindowTest
     {
-        private GEDCOMAssociation fAssociation;
+        private GDMAssociation fAssociation;
         private IBaseWindow fBase;
         private AssociationEditDlg fDialog;
 
@@ -47,7 +47,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fAssociation = new GEDCOMAssociation(null);
+            fAssociation = new GDMAssociation(null);
 
             fDialog = new AssociationEditDlg(fBase);
             fDialog.Association = fAssociation;

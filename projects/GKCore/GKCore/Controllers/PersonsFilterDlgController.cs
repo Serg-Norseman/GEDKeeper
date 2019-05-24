@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP;
@@ -74,7 +74,7 @@ namespace GKCore.Controllers
                     }
                 }
 
-                iFilter.Sex = (GEDCOMSex)fView.GetSexRadio();
+                iFilter.Sex = (GDMSex)fView.GetSexRadio();
 
                 if (fView.NameCombo.Text == "") fView.NameCombo.Text = @"*";
                 iFilter.Name = fView.NameCombo.Text;
@@ -90,7 +90,7 @@ namespace GKCore.Controllers
                     iFilter.FilterGroupMode = (FilterGroupMode)fView.GroupCombo.SelectedIndex;
                     iFilter.GroupRef = "";
                 } else {
-                    GEDCOMRecord rec = fView.GroupCombo.SelectedTag as GEDCOMRecord;
+                    GDMRecord rec = fView.GroupCombo.SelectedTag as GDMRecord;
                     if (rec != null) {
                         iFilter.FilterGroupMode = FilterGroupMode.Selected;
                         iFilter.GroupRef = rec.XRef;
@@ -105,7 +105,7 @@ namespace GKCore.Controllers
                     iFilter.SourceMode = (FilterGroupMode)fView.SourceCombo.SelectedIndex;
                     iFilter.SourceRef = "";
                 } else {
-                    GEDCOMRecord rec = fView.SourceCombo.SelectedTag as GEDCOMRecord;
+                    GDMRecord rec = fView.SourceCombo.SelectedTag as GDMRecord;
                     if (rec != null) {
                         iFilter.SourceMode = FilterGroupMode.Selected;
                         iFilter.SourceRef = rec.XRef;
@@ -157,15 +157,15 @@ namespace GKCore.Controllers
             fView.EventValCombo.Text = iFilter.EventVal;
             fView.OnlyPatriarchsCheck.Checked = iFilter.PatriarchOnly;
 
-            GEDCOMTree tree = Base.Context.Tree;
+            GDMTree tree = Base.Context.Tree;
 
             var values = new StringList();
             fView.GroupCombo.Clear();
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {
-                GEDCOMRecord rec = tree[i];
-                if (rec is GEDCOMGroupRecord) {
-                    values.AddObject((rec as GEDCOMGroupRecord).GroupName, rec);
+                GDMRecord rec = tree[i];
+                if (rec is GDMGroupRecord) {
+                    values.AddObject((rec as GDMGroupRecord).GroupName, rec);
                 }
             }
             values.Sort();
@@ -176,16 +176,16 @@ namespace GKCore.Controllers
             if (iFilter.FilterGroupMode != FilterGroupMode.Selected) {
                 fView.GroupCombo.SelectedIndex = (int)iFilter.FilterGroupMode;
             } else {
-                GEDCOMGroupRecord groupRec = tree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
+                GDMGroupRecord groupRec = tree.XRefIndex_Find(iFilter.GroupRef) as GDMGroupRecord;
                 if (groupRec != null) fView.GroupCombo.Text = groupRec.GroupName;
             }
 
             values = new StringList();
             fView.SourceCombo.Clear();
             for (int i = 0; i < tree.RecordsCount; i++) {
-                GEDCOMRecord rec = tree[i];
-                if (rec is GEDCOMSourceRecord) {
-                    values.AddObject((rec as GEDCOMSourceRecord).ShortTitle, rec);
+                GDMRecord rec = tree[i];
+                if (rec is GDMSourceRecord) {
+                    values.AddObject((rec as GDMSourceRecord).ShortTitle, rec);
                 }
             }
             values.Sort();
@@ -196,7 +196,7 @@ namespace GKCore.Controllers
             if (iFilter.SourceMode != FilterGroupMode.Selected) {
                 fView.SourceCombo.SelectedIndex = (int)iFilter.SourceMode;
             } else {
-                GEDCOMSourceRecord sourceRec = tree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
+                GDMSourceRecord sourceRec = tree.XRefIndex_Find(iFilter.SourceRef) as GDMSourceRecord;
                 if (sourceRec != null) fView.SourceCombo.Text = sourceRec.ShortTitle;
             }
         }

@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Export;
 using GKCore.Options;
@@ -56,7 +56,7 @@ namespace GKCore
         public void Test_PedigreeExporter()
         {
             BaseWindowStub baseWin = new BaseWindowStub();
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             baseWin.Context.ShieldState = ShieldState.None;
 
             Assert.Throws(typeof(ArgumentNullException), () => { new PedigreeExporter(null, null); });
@@ -98,7 +98,7 @@ namespace GKCore
         public void Test_ExcelExporter()
         {
             BaseWindowStub baseWin = new BaseWindowStub();
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             baseWin.Context.ShieldState = ShieldState.None;
 
             Assert.Throws(typeof(ArgumentNullException), () => { new ExcelExporter(null); });
@@ -112,7 +112,7 @@ namespace GKCore
         public void Test_FamilyBookExporter()
         {
             BaseWindowStub baseWin = new BaseWindowStub();
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             baseWin.Context.ShieldState = ShieldState.None;
 
             Assert.Throws(typeof(ArgumentNullException), () => { new FamilyBookExporter(null); });
@@ -126,7 +126,7 @@ namespace GKCore
         public void Test_TreesAlbumExporter()
         {
             BaseWindowStub baseWin = new BaseWindowStub();
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             baseWin.Context.ShieldState = ShieldState.None;
 
             Assert.Throws(typeof(ArgumentNullException), () => { new TreesAlbumExporter(null); });

@@ -21,9 +21,9 @@
 using System;
 using System.IO;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 
-namespace GKCommon.GKCore
+namespace GKCore
 {
     public class WebTree
     {
@@ -32,7 +32,6 @@ namespace GKCommon.GKCore
             ckSpace,
             ckLine,
             ckPerson
-
         }
 
         private class TreeCell
@@ -41,14 +40,15 @@ namespace GKCommon.GKCore
             public CellKind Kind;
             public int ColIndex;
             public ExtList<TreeCell> Row;
-            public GEDCOMIndividualRecord Rec;
+            public GDMIndividualRecord Rec;
         }
+
 
         public WebTree()
         {
         }
 
-        private static TreeCell AddCell(ExtList<TreeCell> row, GEDCOMIndividualRecord iRec, CellKind cellKind)
+        private static TreeCell AddCell(ExtList<TreeCell> row, GDMIndividualRecord iRec, CellKind cellKind)
         {
             TreeCell result = new TreeCell();
             result.ColIndex = row.Add(result);
@@ -86,7 +86,7 @@ namespace GKCommon.GKCore
         }
 
         private void Step(ExtList<ExtList<TreeCell>> table, int rowIndex, int colIndex,
-            TreeCell prev, GEDCOMIndividualRecord cur, int gen)
+            TreeCell prev, GDMIndividualRecord cur, int gen)
         {
             if (cur == null)
                 return;
@@ -107,9 +107,9 @@ namespace GKCommon.GKCore
 
             TreeCell curCell = AddCell(row, cur, CellKind.ckPerson);
             if (cur.ChildToFamilyLinks.Count > 0 && gen < 5) {
-                GEDCOMFamilyRecord family = cur.ChildToFamilyLinks[0].Family;
-                GEDCOMIndividualRecord iFather = family.Husband.Value as GEDCOMIndividualRecord;
-                GEDCOMIndividualRecord iMother = family.Wife.Value as GEDCOMIndividualRecord;
+                GDMFamilyRecord family = cur.ChildToFamilyLinks[0].Family;
+                GDMIndividualRecord iFather = family.Husband.Value as GDMIndividualRecord;
+                GDMIndividualRecord iMother = family.Wife.Value as GDMIndividualRecord;
                 if (iFather != null || iMother != null) {
                     AddCell(row, null, CellKind.ckLine);
                     AddCell(row, null, CellKind.ckSpace);
@@ -141,7 +141,7 @@ namespace GKCommon.GKCore
             }
         }
 
-        public void GenTree(StreamWriter writer, GEDCOMIndividualRecord iRec)
+        public void GenTree(StreamWriter writer, GDMIndividualRecord iRec)
         {
             try {
                 var tableRows = new ExtList<ExtList<TreeCell>>(true);

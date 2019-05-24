@@ -23,7 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -48,7 +48,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
 
-            fDialog = new StatisticsWin(fBase, new List<GEDCOMRecord>());
+            fDialog = new StatisticsWin(fBase, new List<GDMRecord>());
             fDialog.Show();
         }
 

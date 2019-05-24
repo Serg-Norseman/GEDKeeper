@@ -20,9 +20,8 @@
 
 using System;
 using System.Collections.Generic;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
@@ -50,7 +49,7 @@ namespace GKTests.Stubs
         public bool AllowQuickSearch() { return false; }
         public IList<ISearchResult> FindAll(string searchPattern) { return new List<ISearchResult>(); }
         public void QuickSearch() {}
-        public void SelectByRec(GEDCOMRecord record) {}
+        public void SelectByRec(GDMRecord record) {}
         public bool AllowFilter() { return false; }
         public void SetFilter() {}
         public void SetLang() {}
@@ -70,7 +69,7 @@ namespace GKTests.Stubs
         private static IHost fHost = new HostStub();
 
         private readonly IBaseContext fContext;
-        private readonly GEDCOMTree fTree;
+        private readonly GDMTree fTree;
 
         public BaseWindowStub(bool fill = true)
         {
@@ -90,12 +89,12 @@ namespace GKTests.Stubs
         public IBaseContext Context { get { return fContext; } }
         public IHost Host { get { return fHost; } }
         public bool Modified { get { return false; } set {} }
-        public GEDCOMTree Tree { get { return fTree; } }
+        public GDMTree Tree { get { return fTree; } }
         public ValuesCollection ValuesCollection { get { return null; } }
 
         public void AddRecord() { }
-        public void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone) { }
-        public void ChangeRecord(GEDCOMRecord record) { }
+        public void ApplyFilter(GDMRecordType recType = GDMRecordType.rtNone) { }
+        public void ChangeRecord(GDMRecord record) { }
         public void CheckAutosave() { }
         public void CreateNewFile() { }
         public void CriticalSave() { }
@@ -104,27 +103,27 @@ namespace GKTests.Stubs
         public void EditRecord() { }
         public bool IsUnknown() { return false; }
         public void LoadFile(string fileName) { }
-        public void NotifyRecord(GEDCOMRecord record, RecordAction action) { }
-        public bool RecordIsFiltered(GEDCOMRecord record) { return false; }
+        public void NotifyRecord(GDMRecord record, RecordAction action) { }
+        public bool RecordIsFiltered(GDMRecord record) { return false; }
         public void SaveFile(string fileName) { }
         public void SaveFileEx(bool saveAs) { }
         public void SelectRecordByXRef(string xref) { }
         public void Show() { }
-        public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal) { }
+        public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal) { }
 
-        public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType) { return null; }
-        public StringList GetRecordContent(GEDCOMRecord record) { return null; }
-        public string GetRecordName(GEDCOMRecord record, bool signed) { return string.Empty; }
-        public IListManager GetRecordsListManByType(GEDCOMRecordType recType) { return null; }
-        public GEDCOMIndividualRecord GetSelectedPerson() { return null; }
-        public GEDCOMRecordType GetSelectedRecordType() { return GEDCOMRecordType.rtIndividual; }
+        public List<GDMRecord> GetContentList(GDMRecordType recType) { return null; }
+        public StringList GetRecordContent(GDMRecord record) { return null; }
+        public string GetRecordName(GDMRecord record, bool signed) { return string.Empty; }
+        public IListManager GetRecordsListManByType(GDMRecordType recType) { return null; }
+        public GDMIndividualRecord GetSelectedPerson() { return null; }
+        public GDMRecordType GetSelectedRecordType() { return GDMRecordType.rtIndividual; }
         public void RefreshLists(bool columnsChanged) { }
-        public void RefreshRecordsView(GEDCOMRecordType recType) { }
-        public void ShowRecordsTab(GEDCOMRecordType recType) { }
+        public void RefreshRecordsView(GDMRecordType recType) { }
+        public void ShowRecordsTab(GDMRecordType recType) { }
         public void UpdateControls(bool forceDeactivate, bool blockDependent = false) { }
         public void SetExternalFilter(ExternalFilterHandler filterHandler, 
-                                      GEDCOMRecordType recType = GEDCOMRecordType.rtNone) { }
-        public GEDCOMRecord GetSelectedRecordEx() { return null; }
+                                      GDMRecordType recType = GDMRecordType.rtNone) { }
+        public GDMRecord GetSelectedRecordEx() { return null; }
     }
 
     public class HostStub : IHost

@@ -21,9 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using Xapian;
@@ -51,9 +50,9 @@ namespace GKTextSearchPlugin
             return Path.GetFileNameWithoutExtension(baseWin.Context.FileName);
         }
 
-        private static bool IsIndexedRecord(GEDCOMRecord rec)
+        private static bool IsIndexedRecord(GDMRecord rec)
         {
-            return !((rec is GEDCOMLocationRecord || rec is GEDCOMGroupRecord));
+            return !((rec is GDMLocationRecord || rec is GDMGroupRecord));
         }
 
         private static void SetDBLastChange(IBaseWindow baseWin, WritableDatabase database)
@@ -86,7 +85,7 @@ namespace GKTextSearchPlugin
             return result;
         }
 
-        private static bool SetDocumentContext(IBaseWindow baseWin, Document doc, TermGenerator indexer, GEDCOMRecord rec)
+        private static bool SetDocumentContext(IBaseWindow baseWin, Document doc, TermGenerator indexer, GDMRecord rec)
         {
             StringList ctx = baseWin.GetRecordContent(rec);
             if (ctx == null) return false;
@@ -105,7 +104,7 @@ namespace GKTextSearchPlugin
             return true;
         }
 
-        private static void ReindexRecord(IBaseWindow baseWin, WritableDatabase database, TermGenerator indexer, GEDCOMRecord record)
+        private static void ReindexRecord(IBaseWindow baseWin, WritableDatabase database, TermGenerator indexer, GDMRecord record)
         {
             uint docid = FindDocId(baseWin, database, record.XRef);
 
@@ -157,7 +156,7 @@ namespace GKTextSearchPlugin
                         int num = baseWin.Context.Tree.RecordsCount;
                         for (int i = 0; i < num; i++)
                         {
-                            GEDCOMRecord record = baseWin.Context.Tree[i];
+                            GDMRecord record = baseWin.Context.Tree[i];
                             if (IsIndexedRecord(record)) ReindexRecord(baseWin, database, indexer, record);
 
                             progress.ProgressStep();
@@ -174,7 +173,7 @@ namespace GKTextSearchPlugin
             }
         }
 
-        public void UpdateRecord(IBaseWindow baseWin, GEDCOMRecord record)
+        public void UpdateRecord(IBaseWindow baseWin, GDMRecord record)
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");

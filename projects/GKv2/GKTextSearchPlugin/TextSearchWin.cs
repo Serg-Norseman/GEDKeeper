@@ -23,9 +23,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKUI.Components;
 
@@ -96,7 +95,7 @@ namespace GKTextSearchPlugin
                     Write(string.Format("[b][u][size=+1]{0}: {1}%[/u] [url={2}] {2} [/url][/b][/size]",
                                         entry.Rank, entry.Percent, entry.XRef));
 
-                    GEDCOMRecord rec = fBase.Context.Tree.XRefIndex_Find(entry.XRef);
+                    GDMRecord rec = fBase.Context.Tree.XRefIndex_Find(entry.XRef);
                     StringList ctx = fBase.GetRecordContent(rec);
                     fResultsText.Lines.AddStrings(ctx);
                     Write("");

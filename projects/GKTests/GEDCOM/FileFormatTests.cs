@@ -21,7 +21,8 @@
 using System;
 using System.IO;
 using System.Reflection;
-using GKCommon.GedML;
+using GDModel.Providers.GEDCOM;
+using GDModel.Providers.GedML;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Tools;
@@ -29,7 +30,7 @@ using GKTests;
 using GKTests.Stubs;
 using NUnit.Framework;
 
-namespace GKCommon.GEDCOM
+namespace GDModel.Providers
 {
     [TestFixture]
     public class FileFormatTests
@@ -39,18 +40,18 @@ namespace GKCommon.GEDCOM
         {
             Assembly assembly = typeof(CoreTests).Assembly;
             using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources.TGC55CLF.GED")) {
-                using (GEDCOMTree tree = new GEDCOMTree()) {
+                using (GDMTree tree = new GDMTree()) {
                     var gedcomProvider = new GEDCOMProvider(tree);
                     gedcomProvider.LoadFromStreamExt(inStream, inStream);
 
                     Assert.AreEqual(GEDCOMFormat.gf_Unknown, tree.Format);
 
-                    GEDCOMMultimediaRecord mmRec1 = tree.XRefIndex_Find("M1") as GEDCOMMultimediaRecord;
+                    GDMMultimediaRecord mmRec1 = tree.XRefIndex_Find("M1") as GDMMultimediaRecord;
                     Assert.IsNotNull(mmRec1);
 
-                    GEDCOMTag blobTag = mmRec1.FindTag("BLOB", 0);
+                    GDMTag blobTag = mmRec1.FindTag("BLOB", 0);
                     Assert.IsNotNull(blobTag);
-                    var strBlob = GEDCOMTag.GetTagStrings(blobTag).Text;
+                    var strBlob = GDMTag.GetTagStrings(blobTag).Text;
                     Assert.IsNotNull(strBlob);
                     MemoryStream blobStream = GEDCOMUtils.DecodeBlob(strBlob.Replace("\r\n", ""));
                     Assert.IsNotNull(blobStream);
@@ -84,7 +85,7 @@ namespace GKCommon.GEDCOM
 
                     Assert.AreEqual(GEDCOMFormat.gf_Native, ctx.Tree.Format);
 
-                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                    GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                     Assert.IsNotNull(iRec1);
 
                     Assert.AreEqual("Иван Иванович Иванов", iRec1.GetPrimaryFullName());
@@ -107,7 +108,7 @@ namespace GKCommon.GEDCOM
 
                     Assert.AreEqual(GEDCOMFormat.gf_Ahnenblatt, ctx.Tree.Format);
 
-                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                    GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                     Assert.IsNotNull(iRec1);
 
                     Assert.AreEqual("Stanisław Nowak", iRec1.GetPrimaryFullName());
@@ -130,7 +131,7 @@ namespace GKCommon.GEDCOM
 
                     Assert.AreEqual(GEDCOMFormat.gf_ALTREE, ctx.Tree.Format);
 
-                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                    GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                     Assert.IsNotNull(iRec1);
 
                     Assert.AreEqual("Иван ОВЕЧКИН", iRec1.GetPrimaryFullName());
@@ -153,7 +154,7 @@ namespace GKCommon.GEDCOM
 
                     Assert.AreEqual(GEDCOMFormat.gf_FTB, ctx.Tree.Format);
 
-                    GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                    GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                     Assert.IsNotNull(iRec1);
 
                     Assert.AreEqual("Иван Васильевич Петров", iRec1.GetPrimaryFullName());
@@ -167,11 +168,11 @@ namespace GKCommon.GEDCOM
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_stdgedcom_notes.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Native, ctx.Tree.Format);
 
-                GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
+                GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
                 Assert.AreEqual("Test1\r\ntest2\r\ntest3", noteRec1.Note.Text);
 
-                GEDCOMNoteRecord noteRec2 = ctx.Tree.XRefIndex_Find("N2") as GEDCOMNoteRecord;
+                GDMNoteRecord noteRec2 = ctx.Tree.XRefIndex_Find("N2") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec2);
                 Assert.AreEqual("Test\r\ntest2\r\ntest3", noteRec2.Note.Text);
             }
@@ -201,7 +202,7 @@ namespace GKCommon.GEDCOM
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ftb_badline.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_FTB, ctx.Tree.Format);
 
-                GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
+                GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
                 Assert.AreEqual("Test1\r\ntest2\r\ntest3 badline badline badline badline", noteRec1.Note.Text);
             }
@@ -213,7 +214,7 @@ namespace GKCommon.GEDCOM
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_min_indented.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
 
-                var subm = ctx.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+                var subm = ctx.Tree.Header.Submitter.Value as GDMSubmitterRecord;
                 Assert.IsNotNull(subm);
                 Assert.AreEqual("John Doe", subm.Name.FullName);
             }
@@ -225,11 +226,11 @@ namespace GKCommon.GEDCOM
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_empty_lines.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
 
-                GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I001") as GEDCOMIndividualRecord;
+                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I001") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
                 Assert.AreEqual("John Doe", iRec1.GetPrimaryFullName());
 
-                GEDCOMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I002") as GEDCOMIndividualRecord;
+                GDMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I002") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec2);
                 Assert.AreEqual("Jane Doe", iRec2.GetPrimaryFullName());
             }
@@ -243,7 +244,7 @@ namespace GKCommon.GEDCOM
 
                 Assert.AreEqual(GEDCOMFormat.gf_FamilyHistorian, ctx.Tree.Format);
 
-                GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
                 Assert.AreEqual("Tom Thompson", iRec1.GetPrimaryFullName());
             }
@@ -258,7 +259,7 @@ namespace GKCommon.GEDCOM
 
                 TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
 
-                GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
                 Assert.AreEqual("John Smith", iRec1.GetPrimaryFullName());
 
@@ -275,7 +276,7 @@ namespace GKCommon.GEDCOM
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_longline.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
 
-                GEDCOMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
+                GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
                 string str = noteRec1.Note.Text;
                 Assert.IsTrue(str.EndsWith("non-standard GEDCOM files."));
@@ -343,11 +344,11 @@ namespace GKCommon.GEDCOM
                     gedmlProvider.LoadFromStreamExt(stmGed1, stmGed1);
                 }
 
-                GEDCOMSubmitterRecord submRec = ctx.Tree.XRefIndex_Find("SUB1") as GEDCOMSubmitterRecord;
+                GDMSubmitterRecord submRec = ctx.Tree.XRefIndex_Find("SUB1") as GDMSubmitterRecord;
                 Assert.IsNotNull(submRec);
                 Assert.AreEqual("Michael Kay", submRec.Name.FullName);
 
-                GEDCOMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
                 //Assert.AreEqual("John Smith", iRec1.GetPrimaryFullName());
             }

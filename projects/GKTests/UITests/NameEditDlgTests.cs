@@ -20,7 +20,7 @@
 
 #if !__MonoCS__
 
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKTests;
@@ -81,7 +81,7 @@ namespace GKUI.Forms
             Assert.AreEqual("Ivan", fNameEntry.Name);
             Assert.AreEqual("Ivanovich", fNameEntry.M_Patronymic);
             Assert.AreEqual("Ivanovna", fNameEntry.F_Patronymic);
-            Assert.AreEqual(GEDCOMSex.svMale, fNameEntry.Sex);
+            Assert.AreEqual(GDMSex.svMale, fNameEntry.Sex);
         }
 
         #region Handlers for external tests

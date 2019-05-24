@@ -20,10 +20,11 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GKCore.Types;
 using NUnit.Framework;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     /**
      *
@@ -36,8 +37,8 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_Common()
         {
-            using (GEDCOMNoteRecord noteRec = new GEDCOMNoteRecord(null)) {
-                Assert.AreEqual(GEDCOMRecordType.rtNote, noteRec.RecordType);
+            using (GDMNoteRecord noteRec = new GDMNoteRecord(null)) {
+                Assert.AreEqual(GDMRecordType.rtNote, noteRec.RecordType);
 
                 noteRec.AddNoteText("text");
                 Assert.AreEqual("text", noteRec.Note.Text.Trim());
@@ -48,7 +49,7 @@ namespace GKCommon.GEDCOM
                 noteRec.SetNoteText("Test text");
                 Assert.AreEqual("Test text", noteRec.Note.Text.Trim());
 
-                using (GEDCOMNoteRecord noteRec2 = new GEDCOMNoteRecord(null)) {
+                using (GDMNoteRecord noteRec2 = new GDMNoteRecord(null)) {
                     noteRec2.SetNoteText("Test text");
                     Assert.AreEqual("Test text", noteRec2.Note.Text.Trim());
 
@@ -66,7 +67,7 @@ namespace GKCommon.GEDCOM
                 Assert.Throws(typeof(ArgumentException), () => {
                     noteRec.MoveTo(null, false);
                 });
-                using (GEDCOMNoteRecord noteRec3 = new GEDCOMNoteRecord(null)) {
+                using (GDMNoteRecord noteRec3 = new GDMNoteRecord(null)) {
                     noteRec3.SetNoteText("Test text 3");
                     Assert.AreEqual("Test text 3", noteRec3.Note.Text.Trim());
 
@@ -80,7 +81,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_GetNote()
         {
-            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null);
+            GDMNoteRecord instance = new GDMNoteRecord(null);
             instance.ParseString("This is a test");
             StringList expResult = new StringList("This is a test");
             Assert.AreEqual(expResult.Text, instance.Note.Text);
@@ -96,7 +97,7 @@ namespace GKCommon.GEDCOM
             };
             
             StringList value = new StringList(lines);
-            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null);
+            GDMNoteRecord instance = new GDMNoteRecord(null);
             instance.Note = value;
             Assert.AreEqual(value.Text, instance.Note.Text);
         }
@@ -104,8 +105,8 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_MoveTo1()
         {
-            GEDCOMRecord other = new GEDCOMLocationRecord(null);
-            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null);
+            GDMRecord other = new GDMLocationRecord(null);
+            GDMNoteRecord instance = new GDMNoteRecord(null);
             bool clearDest = false;
             
             Assert.Throws(typeof(ArgumentException), () => {
@@ -123,9 +124,9 @@ namespace GKCommon.GEDCOM
             };
             
             string text = "This is a test";
-            GEDCOMNoteRecord instance1 = new GEDCOMNoteRecord(null);
+            GDMNoteRecord instance1 = new GDMNoteRecord(null);
             instance1.ParseString(text);
-            GEDCOMNoteRecord instance2 = new GEDCOMNoteRecord(null);
+            GDMNoteRecord instance2 = new GDMNoteRecord(null);
             instance2.SetNotesArray(lines);
             bool clearDest = false;
             
@@ -140,8 +141,8 @@ namespace GKCommon.GEDCOM
         public void Test_IsMatch()
         {
             var matchParams = new MatchParams();
-            GEDCOMTag other = new GEDCOMAddress(null);
-            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null);
+            GDMTag other = new GDMAddress(null);
+            GDMNoteRecord instance = new GDMNoteRecord(null);
             float result = instance.IsMatch(other, matchParams); // TODO matchParams is not used
             Assert.AreEqual(0.0F, result, 0.0);
         }
@@ -151,10 +152,10 @@ namespace GKCommon.GEDCOM
         {
             var matchParams = new MatchParams();
 
-            GEDCOMNoteRecord instance1 = new GEDCOMNoteRecord(null);
+            GDMNoteRecord instance1 = new GDMNoteRecord(null);
             instance1.ParseString("This is a test");
 
-            GEDCOMNoteRecord instance2 = new GEDCOMNoteRecord(null);
+            GDMNoteRecord instance2 = new GDMNoteRecord(null);
             instance2.ParseString("tHiS iS nOt A tEsT");
 
             float result = instance1.IsMatch(instance2, matchParams); // TODO matchParams is not used
@@ -166,10 +167,10 @@ namespace GKCommon.GEDCOM
         {
             var matchParams = new MatchParams();
 
-            GEDCOMNoteRecord instance1 = new GEDCOMNoteRecord(null);
+            GDMNoteRecord instance1 = new GDMNoteRecord(null);
             instance1.ParseString("This is a test");
 
-            GEDCOMNoteRecord instance2 = new GEDCOMNoteRecord(null);
+            GDMNoteRecord instance2 = new GDMNoteRecord(null);
             instance2.ParseString("This is a test");
 
             float result = instance1.IsMatch(instance2, matchParams); // TODO matchParams is not used
@@ -185,7 +186,7 @@ namespace GKCommon.GEDCOM
                 "This is a test line 3"
             };
             
-            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null);
+            GDMNoteRecord instance = new GDMNoteRecord(null);
             instance.SetNotesArray(lines);
             
             StringList value = new StringList(lines);
@@ -196,7 +197,7 @@ namespace GKCommon.GEDCOM
         public void Test_AddNoteText1()
         {
             string text = "This is a test";
-            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null);
+            GDMNoteRecord instance = new GDMNoteRecord(null);
             instance.AddNoteText(text);
 
             StringList value = new StringList(text);
@@ -209,7 +210,7 @@ namespace GKCommon.GEDCOM
             string text1 = "This is a test";
             string text2 = "This is another test";
 
-            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null);
+            GDMNoteRecord instance = new GDMNoteRecord(null);
             instance.ParseString(text1);
 
             instance.AddNoteText(text2);
@@ -223,7 +224,7 @@ namespace GKCommon.GEDCOM
         public void Test_SetNoteText1()
         {
             string text = "Yet another test";
-            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null);
+            GDMNoteRecord instance = new GDMNoteRecord(null);
             instance.SetNoteText(text);
             
             StringList value = new StringList(text);
@@ -236,7 +237,7 @@ namespace GKCommon.GEDCOM
             string text = "Yet another test";
             string text0 = "Initial text";
 
-            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null);
+            GDMNoteRecord instance = new GDMNoteRecord(null);
             instance.ParseString(text0);
             instance.SetNoteText(text);
             
@@ -247,7 +248,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_SetNoteText3()
         {
-            GEDCOMNoteRecord instance = new GEDCOMNoteRecord(null);
+            GDMNoteRecord instance = new GDMNoteRecord(null);
             Assert.Throws(typeof(ArgumentNullException), () => {
                 instance.SetNoteText(null);
             });

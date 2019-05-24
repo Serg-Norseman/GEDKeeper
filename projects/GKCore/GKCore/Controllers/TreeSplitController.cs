@@ -20,7 +20,8 @@
 
 using System.Collections.Generic;
 using System.IO;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Options;
@@ -33,11 +34,11 @@ namespace GKCore.Controllers
     /// </summary>
     public class TreeSplitController : DialogController<ITreeSplitDlg>
     {
-        private readonly List<GEDCOMRecord> fSplitList;
+        private readonly List<GDMRecord> fSplitList;
 
         public TreeSplitController(ITreeSplitDlg view) : base(view)
         {
-            fSplitList = new List<GEDCOMRecord>();
+            fSplitList = new List<GDMRecord>();
         }
 
         public override void UpdateView()
@@ -51,10 +52,10 @@ namespace GKCore.Controllers
                 int cnt = 0;
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMRecord rec = tree[i];
-                    if (rec is GEDCOMIndividualRecord) {
+                    GDMRecord rec = tree[i];
+                    if (rec is GDMIndividualRecord) {
                         cnt++;
-                        GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+                        GDMIndividualRecord iRec = rec as GDMIndividualRecord;
                         string st = iRec.XRef + " / " + GKUtils.GetNameString(iRec, true, false);
 
                         if (fSplitList.IndexOf(iRec) < 0) {
@@ -76,7 +77,7 @@ namespace GKCore.Controllers
             Select(fBase.GetSelectedPerson(), walkMode);
         }
 
-        public void Select(GEDCOMIndividualRecord startPerson, TreeTools.TreeWalkMode walkMode)
+        public void Select(GDMIndividualRecord startPerson, TreeTools.TreeWalkMode walkMode)
         {
             fSplitList.Clear();
 
@@ -97,8 +98,8 @@ namespace GKCore.Controllers
             for (int i = 0; i < num; i++) {
                 object obj = fSplitList[i];
 
-                if (obj is GEDCOMIndividualRecord) {
-                    BaseController.DeleteRecord(fBase, obj as GEDCOMIndividualRecord, false);
+                if (obj is GDMIndividualRecord) {
+                    BaseController.DeleteRecord(fBase, obj as GDMIndividualRecord, false);
                 }
             }
 

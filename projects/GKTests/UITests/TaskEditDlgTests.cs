@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.ControlTesters;
@@ -39,7 +39,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class TaskEditDlgTests : CustomWindowTest
     {
-        private GEDCOMTaskRecord fTaskRecord;
+        private GDMTaskRecord fTaskRecord;
         private IBaseWindow fBase;
         private TaskEditDlg fDialog;
 
@@ -48,7 +48,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fTaskRecord = new GEDCOMTaskRecord(fBase.Context.Tree);
+            fTaskRecord = new GDMTaskRecord(fBase.Context.Tree);
 
             fDialog = new TaskEditDlg(fBase);
             fDialog.Task = fTaskRecord;
@@ -74,13 +74,13 @@ namespace GKUI.Forms
 
             SelectCombo("txtPriority", fDialog, 1);
 
-            for (GKGoalType gt = GKGoalType.gtIndividual; gt <= GKGoalType.gtOther; gt++) {
+            for (GDMGoalType gt = GDMGoalType.gtIndividual; gt <= GDMGoalType.gtOther; gt++) {
                 SelectCombo("cmbGoalType", fDialog, (int)gt);
             }
 
             ClickButton("btnAccept", fDialog);
 
-            Assert.AreEqual(GKResearchPriority.rpLow, fTaskRecord.Priority);
+            Assert.AreEqual(GDMResearchPriority.rpLow, fTaskRecord.Priority);
             Assert.AreEqual("", fTaskRecord.StartDate.StringValue);
             Assert.AreEqual("", fTaskRecord.StopDate.StringValue);
         }
@@ -94,13 +94,13 @@ namespace GKUI.Forms
             EnterMaskedText("txtStartDate", fDialog, "01.01.2000");
             EnterMaskedText("txtStopDate", fDialog, "20.02.2000");
 
-            for (GKGoalType gt = GKGoalType.gtIndividual; gt <= GKGoalType.gtOther; gt++) {
+            for (GDMGoalType gt = GDMGoalType.gtIndividual; gt <= GDMGoalType.gtOther; gt++) {
                 SelectCombo("cmbGoalType", fDialog, (int)gt);
             }
 
             ClickButton("btnAccept", fDialog);
 
-            Assert.AreEqual(GKResearchPriority.rpLow, fTaskRecord.Priority);
+            Assert.AreEqual(GDMResearchPriority.rpLow, fTaskRecord.Priority);
             Assert.AreEqual("01 JAN 2000", fTaskRecord.StartDate.StringValue);
             Assert.AreEqual("20 FEB 2000", fTaskRecord.StopDate.StringValue);
         }
@@ -128,7 +128,7 @@ namespace GKUI.Forms
             ClickButton("btnGoalSelect", dlg);
 
             SelectCombo("cmbGoalType", dlg, 0);
-            PersonEditDlgTests.SetCreateIndividualHandler(fFormTest, GEDCOMSex.svMale);
+            PersonEditDlgTests.SetCreateIndividualHandler(fFormTest, GDMSex.svMale);
             ClickButton("btnGoalSelect", dlg);
 
             ClickButton("btnAccept", dlg);

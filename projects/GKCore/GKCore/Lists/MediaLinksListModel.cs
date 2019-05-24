@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -49,14 +49,14 @@ namespace GKCore.Lists
             {
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMMultimediaLink mmLink in dataOwner.MultimediaLinks)
+                foreach (GDMMultimediaLink mmLink in dataOwner.MultimediaLinks)
                 {
-                    GEDCOMMultimediaRecord mmRec = mmLink.Value as GEDCOMMultimediaRecord;
+                    GDMMultimediaRecord mmRec = mmLink.Value as GDMMultimediaRecord;
                     if (mmRec == null) continue;
 
                     if (mmRec.FileReferences.Count == 0) continue;
 
-                    GEDCOMFileReferenceWithTitle fileRef = mmRec.FileReferences[0];
+                    GDMFileReferenceWithTitle fileRef = mmRec.FileReferences[0];
 
                     fSheetList.AddItem(mmLink, new object[] { fileRef.Title,
                                            LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]) });
@@ -73,24 +73,24 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGEDCOMStructWithLists;
             if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
-            GEDCOMMultimediaLink mmLink = eArgs.ItemData as GEDCOMMultimediaLink;
+            GDMMultimediaLink mmLink = eArgs.ItemData as GDMMultimediaLink;
 
             bool result = false;
 
-            GEDCOMMultimediaRecord mmRec;
+            GDMMultimediaRecord mmRec;
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    mmRec = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtMultimedia, new object[0]) as GEDCOMMultimediaRecord;
+                    mmRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtMultimedia, new object[0]) as GDMMultimediaRecord;
                     if (mmRec != null) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GEDCOMObject)dataOwner, mmRec);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GDMObject)dataOwner, mmRec);
                     }
                     break;
 
                 case RecordAction.raEdit:
                     if (mmLink != null)
                     {
-                        mmRec = mmLink.Value as GEDCOMMultimediaRecord;
+                        mmRec = mmLink.Value as GDMMultimediaRecord;
                         result = BaseController.ModifyMedia(fBaseWin, ref mmRec);
                     }
                     break;
@@ -98,7 +98,7 @@ namespace GKCore.Lists
                 case RecordAction.raDelete:
                     if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMultimediaQuery)))
                     {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaRemove, (GEDCOMObject)dataOwner, mmLink);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaRemove, (GDMObject)dataOwner, mmLink);
                     }
                     break;
 

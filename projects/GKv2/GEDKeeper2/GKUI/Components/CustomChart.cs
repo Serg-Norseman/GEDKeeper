@@ -22,9 +22,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
@@ -36,7 +35,7 @@ namespace GKUI.Components
         private static readonly object EventNavRefresh;
 
 
-        private readonly NavigationStack<GEDCOMRecord> fNavman;
+        private readonly NavigationStack<GDMRecord> fNavman;
         protected ChartRenderer fRenderer;
 
 
@@ -54,7 +53,7 @@ namespace GKUI.Components
 
         protected CustomChart() : base()
         {
-            fNavman = new NavigationStack<GEDCOMRecord>();
+            fNavman = new NavigationStack<GDMRecord>();
         }
 
         protected override void Dispose(bool disposing)
@@ -314,7 +313,7 @@ namespace GKUI.Components
         public bool NavAdd(object obj)
         {
             if (obj != null && !fNavman.Busy) {
-                fNavman.Current = (GEDCOMRecord)obj;
+                fNavman.Current = (GDMRecord)obj;
                 return true;
             }
             return false;

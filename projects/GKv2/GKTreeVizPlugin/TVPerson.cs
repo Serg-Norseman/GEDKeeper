@@ -21,8 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GKTreeVizPlugin
 {
@@ -45,8 +44,8 @@ namespace GKTreeVizPlugin
         public int DescGenerations;
         public TVPersonType Type;
 
-        public readonly GEDCOMIndividualRecord IRec;
-        public readonly GEDCOMSex Sex;
+        public readonly GDMIndividualRecord IRec;
+        public readonly GDMSex Sex;
         public readonly List<TVPerson> Spouses;
         public readonly List<TVPerson> Childs;
 
@@ -60,7 +59,7 @@ namespace GKTreeVizPlugin
         
         public TVStem Stem;
 
-        public TVPerson(TVPerson parent, GEDCOMIndividualRecord iRec)
+        public TVPerson(TVPerson parent, GDMIndividualRecord iRec)
         {
             Idx = NextIdx++;
 

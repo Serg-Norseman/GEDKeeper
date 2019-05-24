@@ -24,7 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Export;
@@ -180,7 +180,7 @@ namespace GKUI.Forms
 
 
             // Stage 7: call to QuickFind
-            ((BaseWinSDI)fCurBase).ShowRecordsTab(GEDCOMRecordType.rtIndividual);
+            ((BaseWinSDI)fCurBase).ShowRecordsTab(GDMRecordType.rtIndividual);
             QuickSearchDlgTests.QuickSearch_Test(fMainWin);
 
 
@@ -335,7 +335,7 @@ namespace GKUI.Forms
         private void BaseWin_Tests(IBaseWindow baseWin, string stage)
         {
             // Stage 5: calls to the different Editors
-            for (GEDCOMRecordType rt = GEDCOMRecordType.rtIndividual; rt <= GEDCOMRecordType.rtLocation; rt++) {
+            for (GDMRecordType rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
                 Assert.IsNotNull(((BaseWinSDI)baseWin).GetHyperViewByType(rt), stage + ".1");
 
                 baseWin.ShowRecordsTab(rt);
@@ -363,10 +363,10 @@ namespace GKUI.Forms
 
             Assert.IsTrue(baseWin.Context.IsUnknown(), stage + ".2");
 
-            baseWin.ShowRecordsTab(GEDCOMRecordType.rtIndividual);
+            baseWin.ShowRecordsTab(GDMRecordType.rtIndividual);
             baseWin.SelectRecordByXRef("I1");
 
-            GEDCOMRecord record = ((BaseWinSDI)baseWin).GetSelectedRecordEx();
+            GDMRecord record = ((BaseWinSDI)baseWin).GetSelectedRecordEx();
             Assert.IsNotNull(record, stage + ".4");
 
             StringList recordContent = baseWin.GetRecordContent(record);
@@ -383,7 +383,7 @@ namespace GKUI.Forms
             Assert.AreEqual(1, search.Count);
 
             Assert.AreEqual(null, baseWin.Context.GetChildFamily(null, false, null));
-            Assert.AreEqual(null, baseWin.Context.AddChildForParent(null, GEDCOMSex.svNone));
+            Assert.AreEqual(null, baseWin.Context.AddChildForParent(null, GDMSex.svNone));
             Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.AddFamilyForSpouse(null); });
 
             Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.CollectTips(null); });
@@ -396,12 +396,12 @@ namespace GKUI.Forms
             baseWin.ApplyFilter();
 
             // default lang for tests is English
-            string patr = baseWin.Context.DefinePatronymic("Ivan", GEDCOMSex.svMale, false);
+            string patr = baseWin.Context.DefinePatronymic("Ivan", GDMSex.svMale, false);
             Assert.AreEqual("", patr);
 
             ModalFormHandler = SexCheckDlgTests.SexCheckDlgTests_AcceptM_Handler;
-            GEDCOMSex sex = baseWin.Context.DefineSex("Ivan", "Ivanovich");
-            Assert.AreEqual(GEDCOMSex.svMale, sex);
+            GDMSex sex = baseWin.Context.DefineSex("Ivan", "Ivanovich");
+            Assert.AreEqual(GDMSex.svMale, sex);
         }
 
         #region Exports tests
@@ -496,7 +496,7 @@ namespace GKUI.Forms
             }
         }
 
-        private void StructsDlg_Handler(GEDCOMRecordWithEvents record, Form dlg, TabControlTester tabs, int[] tabIndexes)
+        private void StructsDlg_Handler(GDMRecordWithEvents record, Form dlg, TabControlTester tabs, int[] tabIndexes)
         {
             GKSheetListTester sheetTester;
 
@@ -551,18 +551,18 @@ namespace GKUI.Forms
 
         private void FamilyEditDlg_Handler(FamilyEditDlg dlg)
         {
-            GEDCOMFamilyRecord familyRecord = dlg.Family;
+            GDMFamilyRecord familyRecord = dlg.Family;
             var tabs = new TabControlTester("tabsFamilyData", dlg);
             GKSheetListTester sheetTester;
 
             // father
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GEDCOMSex.svMale);
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svMale);
             ClickButton("btnHusbandAdd", dlg);
             ModalFormHandler = MessageBox_YesHandler;
             ClickButton("btnHusbandDelete", dlg);
 
             // mother
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GEDCOMSex.svFemale);
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svFemale);
             ClickButton("btnWifeAdd", dlg);
             ModalFormHandler = MessageBox_YesHandler;
             ClickButton("btnWifeDelete", dlg);
@@ -570,7 +570,7 @@ namespace GKUI.Forms
             // childs
             Assert.AreEqual(0, familyRecord.Children.Count);
             tabs.SelectTab(0);
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GEDCOMSex.svFemale);
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svFemale);
             ClickToolStripButton("fChildsList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, familyRecord.Children.Count);
 
@@ -608,7 +608,7 @@ namespace GKUI.Forms
 
         private void PersonEditDlg_Handler(PersonEditDlg dlg)
         {
-            GEDCOMIndividualRecord indiRecord = dlg.Person;
+            GDMIndividualRecord indiRecord = dlg.Person;
 
             SelectCombo("cmbSex", dlg, 1); // male
 
@@ -631,13 +631,13 @@ namespace GKUI.Forms
             ClickButton("btnParentsDelete", dlg);
 
             // father
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GEDCOMSex.svMale);
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svMale);
             ClickButton("btnFatherAdd", dlg);
             ModalFormHandler = MessageBox_YesHandler;
             ClickButton("btnFatherDelete", dlg);
 
             // mother
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GEDCOMSex.svFemale);
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svFemale);
             ClickButton("btnMotherAdd", dlg);
             ModalFormHandler = MessageBox_YesHandler;
             ClickButton("btnMotherDelete", dlg);
@@ -716,7 +716,7 @@ namespace GKUI.Forms
             RecordSelectDlgTests.SetCreateItemHandler(this, GroupEditDlgTests.GroupAdd_Mini_Handler);
             ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, indiRecord.Groups.Count);
-            Assert.AreEqual("sample group", ((GEDCOMGroupRecord)indiRecord.Groups[0].Value).GroupName);
+            Assert.AreEqual("sample group", ((GDMGroupRecord)indiRecord.Groups[0].Value).GroupName);
 
             ModalFormHandler = MessageBox_YesHandler;
             SelectSheetListItem("fGroupsList", dlg, 0);

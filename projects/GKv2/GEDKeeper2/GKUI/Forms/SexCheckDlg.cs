@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.MVP.Views;
 using GKUI.Components;
@@ -49,29 +49,29 @@ namespace GKUI.Forms
             set { txtName.Text = value; }
         }
 
-        public GEDCOMSex Sex
+        public GDMSex Sex
         {
             get {
                 if (rbMale.Checked) {
-                    return GEDCOMSex.svMale;
+                    return GDMSex.svMale;
                 }
                 if (rbFemale.Checked) {
-                    return GEDCOMSex.svFemale;
+                    return GDMSex.svFemale;
                 }
-                return GEDCOMSex.svNone;
+                return GDMSex.svNone;
             }
             set {
                 switch (value) {
-                    case GEDCOMSex.svNone:
-                    case GEDCOMSex.svUndetermined:
+                    case GDMSex.svNone:
+                    case GDMSex.svUndetermined:
                         rbNone.Checked = true;
                         break;
 
-                    case GEDCOMSex.svMale:
+                    case GDMSex.svMale:
                         rbMale.Checked = true;
                         break;
 
-                    case GEDCOMSex.svFemale:
+                    case GDMSex.svFemale:
                         rbFemale.Checked = true;
                         break;
                 }

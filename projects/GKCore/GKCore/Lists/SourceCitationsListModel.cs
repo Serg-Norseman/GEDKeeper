@@ -20,7 +20,8 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -50,8 +51,8 @@ namespace GKCore.Lists
             try {
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMSourceCitation cit in dataOwner.SourceCitations) {
-                    GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
+                foreach (GDMSourceCitation cit in dataOwner.SourceCitations) {
+                    GDMSourceRecord sourceRec = cit.Value as GDMSourceRecord;
                     if (sourceRec == null) continue;
 
                     int ca = GEDCOMUtils.GetValidCertaintyAssessment(cit.CertaintyAssessment);
@@ -73,7 +74,7 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGEDCOMStructWithLists;
             if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
-            GEDCOMSourceCitation aCit = eArgs.ItemData as GEDCOMSourceCitation;
+            GDMSourceCitation aCit = eArgs.ItemData as GDMSourceCitation;
 
             bool result = false;
 

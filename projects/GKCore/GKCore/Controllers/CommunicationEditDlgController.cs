@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -31,10 +31,10 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class CommunicationEditDlgController : DialogController<ICommunicationEditDlg>
     {
-        private GEDCOMCommunicationRecord fCommunication;
-        private GEDCOMIndividualRecord fTempInd;
+        private GDMCommunicationRecord fCommunication;
+        private GDMIndividualRecord fTempInd;
 
-        public GEDCOMCommunicationRecord Communication
+        public GDMCommunicationRecord Communication
         {
             get { return fCommunication; }
             set {
@@ -50,7 +50,7 @@ namespace GKCore.Controllers
         {
             fTempInd = null;
 
-            for (GKCommunicationType ct = GKCommunicationType.ctCall; ct <= GKCommunicationType.ctLast; ct++) {
+            for (GDMCommunicationType ct = GDMCommunicationType.ctCall; ct <= GDMCommunicationType.ctLast; ct++) {
                 fView.CorrType.Add(LangMan.LS(GKData.CommunicationNames[(int)ct]));
             }
 
@@ -66,9 +66,9 @@ namespace GKCore.Controllers
         {
             try {
                 fCommunication.CommName = fView.Name.Text;
-                fCommunication.CommunicationType = (GKCommunicationType)fView.CorrType.SelectedIndex;
-                fCommunication.Date.Assign(GEDCOMDate.CreateByFormattedStr(fView.Date.Text, true));
-                fCommunication.SetCorresponder((GKCommunicationDir)fView.Dir.SelectedIndex, fTempInd);
+                fCommunication.CommunicationType = (GDMCommunicationType)fView.CorrType.SelectedIndex;
+                fCommunication.Date.Assign(GDMDate.CreateByFormattedStr(fView.Date.Text, true));
+                fCommunication.SetCorresponder((GDMCommunicationDir)fView.Dir.SelectedIndex, fTempInd);
 
                 fBase.NotifyRecord(fCommunication, RecordAction.raEdit);
 
@@ -116,7 +116,7 @@ namespace GKCore.Controllers
 
         public void SetPerson()
         {
-            fTempInd = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+            fTempInd = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svNone);
             fView.Corresponder.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, true, false));
         }
     }

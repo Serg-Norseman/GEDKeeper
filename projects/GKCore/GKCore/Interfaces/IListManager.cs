@@ -20,14 +20,13 @@
 
 using System;
 using System.Collections.Generic;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
-    public delegate bool ExternalFilterHandler(GEDCOMRecord record);
+    public delegate bool ExternalFilterHandler(GDMRecord record);
 
     public delegate IListItem CreateListItemHandler(object itemValue, object data);
 
@@ -50,7 +49,7 @@ namespace GKCore.Interfaces
         IListFilter Filter { get; }
         int FilteredCount { get; }
         string QuickFilter { get; set; }
-        GEDCOMRecordType RecordType { get; }
+        GDMRecordType RecordType { get; }
         int TotalCount { get; }
 
         void AddCondition(byte columnId, ConditionKind condition, string value);
@@ -60,9 +59,9 @@ namespace GKCore.Interfaces
         void ChangeColumnWidth(int colIndex, int colWidth);
         IListItem CreateListItem(object rowData, CreateListItemHandler handler);
         bool DeleteRecord(object data);
-        GEDCOMRecord GetContentItem(int itemIndex);
+        GDMRecord GetContentItem(int itemIndex);
         object[] GetItemData(object rowData);
-        List<GEDCOMRecord> GetRecordsList();
+        List<GDMRecord> GetRecordsList();
         int IndexOfRecord(object data);
         bool IsColumnAutosize(int colIndex);
         void SortContents(int sortColumn, bool sortAscending);

@@ -19,7 +19,7 @@
  */
 
 using System.Globalization;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 
 namespace GKCore.Lists
@@ -38,11 +38,11 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class LocationListMan : ListManager
     {
-        private GEDCOMLocationRecord fRec;
+        private GDMLocationRecord fRec;
 
 
         public LocationListMan(IBaseContext baseContext) :
-            base(baseContext, CreateLocationListColumns(), GEDCOMRecordType.rtLocation)
+            base(baseContext, CreateLocationListColumns(), GDMRecordType.rtLocation)
         {
         }
 
@@ -71,9 +71,9 @@ namespace GKCore.Lists
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMLocationRecord);
+            fRec = (aRec as GDMLocationRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

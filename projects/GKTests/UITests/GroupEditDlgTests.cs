@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.ControlTesters;
@@ -39,7 +39,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class GroupEditDlgTests : CustomWindowTest
     {
-        private GEDCOMGroupRecord fGroupRecord;
+        private GDMGroupRecord fGroupRecord;
         private IBaseWindow fBase;
         private GroupEditDlg fDialog;
 
@@ -48,7 +48,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fGroupRecord = new GEDCOMGroupRecord(fBase.Context.Tree);
+            fGroupRecord = new GDMGroupRecord(fBase.Context.Tree);
 
             fDialog = new GroupEditDlg(fBase);
             fDialog.Group = fGroupRecord;
@@ -95,7 +95,7 @@ namespace GKUI.Forms
 
         public static void GroupEditDlg_Handler(GroupEditDlg dlg)
         {
-            GEDCOMGroupRecord groupRecord = dlg.Group;
+            GDMGroupRecord groupRecord = dlg.Group;
 
             // members
             Assert.AreEqual(0, groupRecord.Members.Count);

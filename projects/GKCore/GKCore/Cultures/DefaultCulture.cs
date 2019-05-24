@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 
 namespace GKCore.Cultures
@@ -29,7 +29,7 @@ namespace GKCore.Cultures
     /// </summary>
     public abstract class DefaultCulture : ICulture
     {
-        public GEDCOMLanguageID Language { get; set; }
+        public GDMLanguageID Language { get; set; }
 
         protected DefaultCulture()
         {
@@ -48,9 +48,9 @@ namespace GKCore.Cultures
             return husbSurname;
         }
 
-        public virtual GEDCOMSex GetSex(string iName, string iPat, bool canQuery)
+        public virtual GDMSex GetSex(string iName, string iPat, bool canQuery)
         {
-            return GEDCOMSex.svUndetermined;
+            return GDMSex.svUndetermined;
         }
 
         public virtual string[] GetSurnames(string surname, bool female)
@@ -60,13 +60,13 @@ namespace GKCore.Cultures
             return result;
         }
 
-        public virtual string[] GetSurnames(GEDCOMIndividualRecord iRec)
+        public virtual string[] GetSurnames(GDMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
             var parts = GKUtils.GetNameParts(iRec);
-            bool female = (iRec.Sex == GEDCOMSex.svFemale);
+            bool female = (iRec.Sex == GDMSex.svFemale);
 
             return GetSurnames(parts.Surname, female);
         }
@@ -76,7 +76,7 @@ namespace GKCore.Cultures
             return name;
         }
 
-        public virtual string GetPossessiveName(GEDCOMIndividualRecord iRec)
+        public virtual string GetPossessiveName(GDMIndividualRecord iRec)
         {
             string nm = GKUtils.GetNameString(iRec, true, false);
             nm = GetPossessiveName(nm);

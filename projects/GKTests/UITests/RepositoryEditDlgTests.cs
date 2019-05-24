@@ -20,7 +20,7 @@
 
 #if !__MonoCS__
 
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -35,7 +35,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class RepositoryEditDlgTests : CustomWindowTest
     {
-        private GEDCOMRepositoryRecord fRepositoryRecord;
+        private GDMRepositoryRecord fRepositoryRecord;
         private IBaseWindow fBase;
         private RepositoryEditDlg fDialog;
 
@@ -44,7 +44,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fRepositoryRecord = new GEDCOMRepositoryRecord(fBase.Context.Tree);
+            fRepositoryRecord = new GDMRepositoryRecord(fBase.Context.Tree);
 
             fDialog = new RepositoryEditDlg(fBase);
             fDialog.Repository = fRepositoryRecord;

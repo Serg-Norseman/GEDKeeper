@@ -22,9 +22,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 
 namespace GKCore.Stats
@@ -39,10 +39,10 @@ namespace GKCore.Stats
     public sealed class TreeStats
     {
         private readonly IBaseContext fContext;
-        private readonly GEDCOMTree fTree;
-        private readonly List<GEDCOMRecord> fSelectedRecords;
+        private readonly GDMTree fTree;
+        private readonly List<GDMRecord> fSelectedRecords;
         
-        public TreeStats(IBaseContext context, List<GEDCOMRecord> selectedRecords)
+        public TreeStats(IBaseContext context, List<GDMRecord> selectedRecords)
         {
             fContext = context;
             fTree = context.Tree;
@@ -56,14 +56,14 @@ namespace GKCore.Stats
             int num = fSelectedRecords.Count;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = fSelectedRecords[i];
-                if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
+                GDMRecord rec = fSelectedRecords[i];
+                if (rec.RecordType != GDMRecordType.rtIndividual) continue;
 
-                GEDCOMIndividualRecord ind = (GEDCOMIndividualRecord) rec;
+                GDMIndividualRecord ind = (GDMIndividualRecord) rec;
                 stats.persons++;
 
                 switch (ind.Sex) {
-                    case GEDCOMSex.svFemale:
+                    case GDMSex.svFemale:
                         stats.persons_f++;
                         if (ind.IsLive()) {
                             stats.lives_f++;
@@ -71,7 +71,7 @@ namespace GKCore.Stats
                         }
                         break;
 
-                    case GEDCOMSex.svMale:
+                    case GDMSex.svMale:
                         stats.persons_m++;
                         if (ind.IsLive()) {
                             stats.lives_m++;
@@ -105,9 +105,9 @@ namespace GKCore.Stats
             return stats;
         }
 
-        private static void CheckVal(List<StatsItem> valsList, string val, GEDCOMSex sex = GEDCOMSex.svUndetermined)
+        private static void CheckVal(List<StatsItem> valsList, string val, GDMSex sex = GDMSex.svUndetermined)
         {
-            if (sex == GEDCOMSex.svUndetermined) {
+            if (sex == GDMSex.svUndetermined) {
                 if (val == "-1" || val == "" || val == "0") {
                     val = "?";
                 }
@@ -117,7 +117,7 @@ namespace GKCore.Stats
 
             StatsItem lvi;
             if (vIdx == -1) {
-                lvi = new StatsItem(val, sex != GEDCOMSex.svUndetermined);
+                lvi = new StatsItem(val, sex != GDMSex.svUndetermined);
                 valsList.Add(lvi);
             } else {
                 lvi = valsList[vIdx];
@@ -125,24 +125,24 @@ namespace GKCore.Stats
             
             switch (sex)
             {
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     lvi.ValF = lvi.ValF + 1;
                     break;
 
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     lvi.ValM = lvi.ValM + 1;
                     break;
 
-                case GEDCOMSex.svUndetermined:
+                case GDMSex.svUndetermined:
                     lvi.Value = lvi.Value + 1;
                     break;
             }
         }
 
-        private void GetEventField(StatsMode mode, List<StatsItem> values, GEDCOMIndividualRecord iRec, string evtName)
+        private void GetEventField(StatsMode mode, List<StatsItem> values, GDMIndividualRecord iRec, string evtName)
         {
             string v = "?";
-            GEDCOMCustomEvent evt = iRec.FindEvent(evtName);
+            GDMCustomEvent evt = iRec.FindEvent(evtName);
             if (evt == null) return;
 
             int dtY = evt.GetChronologicalYear();
@@ -168,14 +168,14 @@ namespace GKCore.Stats
             CheckVal(values, v);
         }
 
-        private void GetIndiName(StatsMode mode, List<StatsItem> values, GEDCOMIndividualRecord iRec)
+        private void GetIndiName(StatsMode mode, List<StatsItem> values, GDMIndividualRecord iRec)
         {
             string v = "";
             var parts = GKUtils.GetNameParts(iRec);
 
             switch (mode) {
                 case StatsMode.smSurnames:
-                    v = fContext.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GEDCOMSex.svFemale);
+                    v = fContext.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GDMSex.svFemale);
                     break;
 
                 case StatsMode.smNames:
@@ -190,7 +190,7 @@ namespace GKCore.Stats
             CheckVal(values, v);
         }
 
-        private void GetSimplePersonStat(StatsMode mode, List<StatsItem> values, GEDCOMIndividualRecord iRec)
+        private void GetSimplePersonStat(StatsMode mode, List<StatsItem> values, GDMIndividualRecord iRec)
         {
             string iName = GKUtils.GetNameString(iRec, true, false);
 
@@ -307,9 +307,9 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smBirthByMonth:
-                    GEDCOMCustomEvent ev = iRec.FindEvent(GEDCOMTagType.BIRT);
+                    GDMCustomEvent ev = iRec.FindEvent(GEDCOMTagType.BIRT);
                     if (ev != null) {
-                        var dtx = ev.Date.Value as GEDCOMDate;
+                        var dtx = ev.Date.Value as GDMDate;
                         if (dtx != null && dtx.Month > 0) {
                             CheckVal(values, dtx.Month.ToString());
                         }
@@ -344,11 +344,11 @@ namespace GKCore.Stats
             int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++)
             {
-                GEDCOMRecord rec = fTree[i];
+                GDMRecord rec = fTree[i];
 
-                if (rec.RecordType == GEDCOMRecordType.rtIndividual && mode != StatsMode.smSpousesDiff && fSelectedRecords.Contains(rec))
+                if (rec.RecordType == GDMRecordType.rtIndividual && mode != StatsMode.smSpousesDiff && fSelectedRecords.Contains(rec))
                 {
-                    GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+                    GDMIndividualRecord iRec = rec as GDMIndividualRecord;
 
                     if (mode != StatsMode.smAAF_1 && mode != StatsMode.smAAF_2)
                     {
@@ -356,7 +356,7 @@ namespace GKCore.Stats
                     }
                     else
                     {
-                        GEDCOMIndividualRecord iChild = GKUtils.GetFirstborn(iRec);
+                        GDMIndividualRecord iChild = GKUtils.GetFirstborn(iRec);
                         int fba = GKUtils.GetFirstbornAge(iRec, iChild);
                         if (fba > 0 && iChild != null) {
                             string key;
@@ -397,9 +397,9 @@ namespace GKCore.Stats
                         }
                     }
                 }
-                else if (rec.RecordType == GEDCOMRecordType.rtFamily && mode == StatsMode.smSpousesDiff)
+                else if (rec.RecordType == GDMRecordType.rtFamily && mode == StatsMode.smSpousesDiff)
                 {
-                    GEDCOMFamilyRecord fRec = rec as GEDCOMFamilyRecord;
+                    GDMFamilyRecord fRec = rec as GDMFamilyRecord;
 
                     int diff = GKUtils.GetSpousesDiff(fRec);
                     if (diff != -1) {

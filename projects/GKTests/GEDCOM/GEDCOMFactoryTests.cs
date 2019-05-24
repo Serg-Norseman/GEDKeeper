@@ -18,19 +18,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
-using GKCore;
-using GKTests;
-using GKUI.Providers;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using NUnit.Framework;
 
-namespace GKCommon.GEDCOM
+namespace GDModel
 {
     [TestFixture]
     public class GEDCOMFactoryTests
     {
 
-        private GEDCOMTag TagConstructorTest(GEDCOMObject owner, string tagName, string tagValue)
+        private GDMTag TagConstructorTest(GDMObject owner, string tagName, string tagValue)
         {
             return null;
         }
@@ -46,9 +44,9 @@ namespace GKCommon.GEDCOM
             GEDCOMFactory f = GEDCOMFactory.GetInstance();
             Assert.IsNotNull(f, "f != null");
 
-            f.RegisterTag(GEDCOMTagType.DATE, GEDCOMDateValue.Create);
+            f.RegisterTag(GEDCOMTagType.DATE, GDMDateValue.Create);
 
-            GEDCOMTag tag = f.CreateTag(null, GEDCOMTagType.DATE, "");
+            GDMTag tag = f.CreateTag(null, GEDCOMTagType.DATE, "");
             Assert.IsNotNull(tag, "tag != null");
 
             tag = f.CreateTag(null, "TEST", "");
@@ -58,7 +56,7 @@ namespace GKCommon.GEDCOM
         [Test]
         public void Test_CtorDyn()
         {
-            var uref = GEDCOMFactory.CreateTagEx<GEDCOMUserReference>(null, "", "test 12345");
+            var uref = GEDCOMFactory.CreateTagEx<GDMUserReference>(null, "", "test 12345");
             Assert.IsNotNull(uref);
             Assert.AreEqual("test 12345", uref.StringValue);
         }

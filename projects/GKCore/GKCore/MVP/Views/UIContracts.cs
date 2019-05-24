@@ -20,7 +20,7 @@
 
 using System.IO;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -37,7 +37,7 @@ namespace GKCore.MVP.Views
 
     public interface IAddressEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMAddress Address { get; set; }
+        GDMAddress Address { get; set; }
 
         ITextBoxHandler Country { get; }
         ITextBoxHandler State { get; }
@@ -53,7 +53,7 @@ namespace GKCore.MVP.Views
 
     public interface IAssociationEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMAssociation Association { get; set; }
+        GDMAssociation Association { get; set; }
 
         ITextBoxHandler Person { get; }
         IComboBoxHandler Relation { get; }
@@ -84,7 +84,7 @@ namespace GKCore.MVP.Views
 
     public interface ICommunicationEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMCommunicationRecord Communication { get; set; }
+        GDMCommunicationRecord Communication { get; set; }
 
         ITextBoxHandler Corresponder { get; }
         IComboBoxHandler CorrType { get; }
@@ -111,7 +111,7 @@ namespace GKCore.MVP.Views
 
     public interface IEventEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMCustomEvent Event { get; set; }
+        GDMCustomEvent Event { get; set; }
 
         IComboBoxHandler EventType { get; }
         IComboBoxHandler EventDateType { get; }
@@ -141,9 +141,9 @@ namespace GKCore.MVP.Views
 
     public interface IFamilyEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMFamilyRecord Family { get; set; }
+        GDMFamilyRecord Family { get; set; }
 
-        void SetTarget(TargetMode targetType, GEDCOMIndividualRecord target);
+        void SetTarget(TargetMode targetType, GDMIndividualRecord target);
         void LockEditor(bool locked);
         void SetHusband(string value);
         void SetWife(string value);
@@ -174,7 +174,7 @@ namespace GKCore.MVP.Views
 
     public interface IGroupEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMGroupRecord Group { get; set; }
+        GDMGroupRecord Group { get; set; }
 
         ITextBoxHandler Name { get; }
 
@@ -186,7 +186,7 @@ namespace GKCore.MVP.Views
 
     public interface ILanguageEditDlg : ICommonDialog, IView
     {
-        GEDCOMLanguageID LanguageID { get; set; }
+        GDMLanguageID LanguageID { get; set; }
 
         IComboBoxHandler LanguageCombo { get; }
     }
@@ -202,7 +202,7 @@ namespace GKCore.MVP.Views
 
     public interface ILocationEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMLocationRecord LocationRecord { get; set; }
+        GDMLocationRecord LocationRecord { get; set; }
 
         IMapBrowser MapBrowser { get; }
         ISheetList MediaList { get; }
@@ -233,7 +233,7 @@ namespace GKCore.MVP.Views
 
     public interface IMediaEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMMultimediaRecord MediaRec { get; set; }
+        GDMMultimediaRecord MediaRec { get; set; }
 
         ISheetList NotesList { get; }
         ISheetList SourcesList { get; }
@@ -248,9 +248,9 @@ namespace GKCore.MVP.Views
 
     public interface IMediaViewerWin : IWindow, IView
     {
-        GEDCOMFileReferenceWithTitle FileRef { get; set; }
+        GDMFileReferenceWithTitle FileRef { get; set; }
 
-        void SetViewImage(IImage img, GEDCOMFileReferenceWithTitle fileRef);
+        void SetViewImage(IImage img, GDMFileReferenceWithTitle fileRef);
         void SetViewMedia(string mediaFile);
         void SetViewText(string text);
         void SetViewRTF(string text);
@@ -272,7 +272,7 @@ namespace GKCore.MVP.Views
 
     public interface INoteEdit : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMNoteRecord NoteRecord { get; set; }
+        GDMNoteRecord NoteRecord { get; set; }
 
         ITextBoxHandler Note { get; }
     }
@@ -304,8 +304,8 @@ namespace GKCore.MVP.Views
 
     public interface IParentsEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMChildToFamilyLink Link { get; set; }
-        GEDCOMIndividualRecord Person { get; set; }
+        GDMChildToFamilyLink Link { get; set; }
+        GDMIndividualRecord Person { get; set; }
 
         ITextBoxHandler Father { get; }
         ITextBoxHandler Mother { get; }
@@ -320,7 +320,7 @@ namespace GKCore.MVP.Views
 
     public interface IPersonalNameEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMPersonalName PersonalName { get; set; }
+        GDMPersonalName PersonalName { get; set; }
 
         ILabelHandler SurnameLabel { get; }
         ITextBoxHandler Surname { get; }
@@ -338,10 +338,10 @@ namespace GKCore.MVP.Views
 
     public interface IPersonEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMIndividualRecord Person { get; set; }
-        GEDCOMIndividualRecord Target { get; set; }
+        GDMIndividualRecord Person { get; set; }
+        GDMIndividualRecord Target { get; set; }
         TargetMode TargetMode { get; set; }
-        void SetNeedSex(GEDCOMSex needSex);
+        void SetNeedSex(GDMSex needSex);
 
         ISheetList EventsList { get; }
         ISheetList SpousesList { get; }
@@ -403,7 +403,7 @@ namespace GKCore.MVP.Views
 
     public interface IPortraitSelectDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMMultimediaLink MultimediaLink { get; set; }
+        GDMMultimediaLink MultimediaLink { get; set; }
 
         IImageView ImageCtl { get; }
     }
@@ -422,9 +422,9 @@ namespace GKCore.MVP.Views
     {
         string FastFilter { get; set; }
         TargetMode TargetMode { get; set; }
-        GEDCOMIndividualRecord TargetIndividual { get; set; }
-        GEDCOMSex NeedSex { get; set; }
-        GEDCOMRecord ResultRecord { get; set; }
+        GDMIndividualRecord TargetIndividual { get; set; }
+        GDMSex NeedSex { get; set; }
+        GDMRecord ResultRecord { get; set; }
 
         IListView RecordsList { get; }
     }
@@ -442,7 +442,7 @@ namespace GKCore.MVP.Views
 
     public interface IRepositoryEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMRepositoryRecord Repository { get; set; }
+        GDMRepositoryRecord Repository { get; set; }
 
         ISheetList NotesList { get; }
         ITextBoxHandler Name { get; }
@@ -451,7 +451,7 @@ namespace GKCore.MVP.Views
 
     public interface IResearchEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMResearchRecord Research { get; set; }
+        GDMResearchRecord Research { get; set; }
 
         ISheetList TasksList { get; }
         ISheetList CommunicationsList { get; }
@@ -482,7 +482,7 @@ namespace GKCore.MVP.Views
     public interface ISexCheckDlg : ICommonDialog, IView
     {
         string IndividualName { get; set; }
-        GEDCOMSex Sex { get; set; }
+        GDMSex Sex { get; set; }
     }
 
 
@@ -495,7 +495,7 @@ namespace GKCore.MVP.Views
 
     public interface ISourceCitEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMSourceCitation SourceCitation { get; set; }
+        GDMSourceCitation SourceCitation { get; set; }
 
         ITextBoxHandler Page { get; }
         IComboBoxHandler Certainty { get; }
@@ -503,7 +503,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface ISourceEditDlg : ICommonDialog, IBaseEditor, IView<GEDCOMSourceRecord, ISourceEditDlg>
+    public interface ISourceEditDlg : ICommonDialog, IBaseEditor, IView<GDMSourceRecord, ISourceEditDlg>
     {
         ISheetList NotesList { get; }
         ISheetList MediaList { get; }
@@ -528,7 +528,7 @@ namespace GKCore.MVP.Views
 
     public interface ITaskEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMTaskRecord Task { get; set; }
+        GDMTaskRecord Task { get; set; }
 
         ISheetList NotesList { get; }
         IComboBoxHandler Priority { get; }
@@ -562,7 +562,7 @@ namespace GKCore.MVP.Views
 
     public interface IUserRefEditDlg : ICommonDialog, IBaseEditor, IView
     {
-        GEDCOMUserReference UserRef { get; set; }
+        GDMUserReference UserRef { get; set; }
 
         IComboBoxHandler Ref { get; }
         IComboBoxHandler RefType { get; }

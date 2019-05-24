@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 
 namespace GKCore.Lists
@@ -35,11 +35,11 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class NoteListMan : ListManager
     {
-        private GEDCOMNoteRecord fRec;
+        private GDMNoteRecord fRec;
 
 
         public NoteListMan(IBaseContext baseContext) :
-            base(baseContext, CreateNoteListColumns(), GEDCOMRecordType.rtNote)
+            base(baseContext, CreateNoteListColumns(), GDMRecordType.rtNote)
         {
         }
 
@@ -63,9 +63,9 @@ namespace GKCore.Lists
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMNoteRecord);
+            fRec = (aRec as GDMNoteRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

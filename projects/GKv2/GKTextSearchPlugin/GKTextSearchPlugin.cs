@@ -34,7 +34,7 @@ using GKCore.Types;
 
 namespace GKTextSearchPlugin
 {
-    using GKCommon.GEDCOM;
+    using GDModel;
 
     public enum TLS
     {
@@ -132,11 +132,11 @@ namespace GKTextSearchPlugin
 
             switch (action) {
                 case RecordAction.raEdit:
-                    fSearchMan.UpdateRecord(baseWin, (GEDCOMRecord)record);
+                    fSearchMan.UpdateRecord(baseWin, (GDMRecord)record);
                     break;
 
                 case RecordAction.raDelete:
-                    fSearchMan.DeleteRecord(baseWin, ((GEDCOMRecord)record).XRef);
+                    fSearchMan.DeleteRecord(baseWin, ((GDMRecord)record).XRef);
                     break;
             }
             #endif

@@ -22,9 +22,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -175,7 +174,7 @@ namespace GKUI.Components
             }
         }
 
-        public static GKListView CreateRecordsView(Control parent, IBaseContext baseContext, GEDCOMRecordType recType)
+        public static GKListView CreateRecordsView(Control parent, IBaseContext baseContext, GDMRecordType recType)
         {
             if (parent == null)
                 throw new ArgumentNullException("parent");

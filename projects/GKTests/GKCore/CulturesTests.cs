@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Cultures;
 using GKCore.Interfaces;
@@ -54,7 +54,7 @@ namespace GKCore
         [Test]
         public void Test_AncientCulture()
         {
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             var culture = new AncientCulture();
@@ -63,7 +63,7 @@ namespace GKCore
             Assert.IsFalse(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GEDCOMSex.svUndetermined, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUndetermined, culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -75,7 +75,7 @@ namespace GKCore
         [Test]
         public void Test_IcelandCulture()
         {
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             var culture = new IcelandCulture();
@@ -84,7 +84,7 @@ namespace GKCore
             Assert.IsFalse(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GEDCOMSex.svUndetermined, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUndetermined, culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -96,7 +96,7 @@ namespace GKCore
         [Test]
         public void Test_BritishCulture()
         {
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             var culture = new BritishCulture();
@@ -105,7 +105,7 @@ namespace GKCore
             Assert.IsTrue(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GEDCOMSex.svUndetermined, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUndetermined, culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -117,7 +117,7 @@ namespace GKCore
         [Test]
         public void Test_SwedishCulture()
         {
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             var culture = new SwedishCulture();
@@ -126,7 +126,7 @@ namespace GKCore
             Assert.IsTrue(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GEDCOMSex.svUndetermined, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUndetermined, culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -138,7 +138,7 @@ namespace GKCore
         [Test]
         public void Test_RussianCulture()
         {
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             ICulture rusCulture = new RussianCulture();
@@ -184,13 +184,13 @@ namespace GKCore
             Assert.AreEqual("Бельский", snms[0]);
 
 
-            GEDCOMSex sx = rusCulture.GetSex("Мария", "Петровна", false);
-            Assert.AreEqual(GEDCOMSex.svFemale, sx);
+            GDMSex sx = rusCulture.GetSex("Мария", "Петровна", false);
+            Assert.AreEqual(GDMSex.svFemale, sx);
 
             sx = rusCulture.GetSex("Иван", "Петрович", false);
-            Assert.AreEqual(GEDCOMSex.svMale, sx);
+            Assert.AreEqual(GDMSex.svMale, sx);
 
-            Assert.AreEqual(GEDCOMSex.svNone, rusCulture.GetSex("", "", false));
+            Assert.AreEqual(GDMSex.svNone, rusCulture.GetSex("", "", false));
 
             Assert.AreEqual("Иванова Ивана Ивановича", rusCulture.GetPossessiveName("Иванов Иван Иванович"));
         }

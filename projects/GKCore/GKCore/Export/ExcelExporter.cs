@@ -19,7 +19,7 @@
  */
 
 using System.Collections.Generic;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -34,11 +34,11 @@ namespace GKCore.Export
     /// </summary>
     public sealed class ExcelExporter : Exporter
     {
-        private readonly List<GEDCOMRecord> fSelectedRecords;
+        private readonly List<GDMRecord> fSelectedRecords;
 
         public ExcelExporter(IBaseWindow baseWin) : base(baseWin)
         {
-            fSelectedRecords = baseWin.GetContentList(GEDCOMRecordType.rtIndividual);
+            fSelectedRecords = baseWin.GetContentList(GDMRecordType.rtIndividual);
         }
 
         public override void Generate(bool show)
@@ -72,9 +72,9 @@ namespace GKCore.Export
                 int num = fTree.RecordsCount;
                 for (int i = 0; i < num; i++)
                 {
-                    GEDCOMRecord rec = fTree[i];
-                    if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
-                        GEDCOMIndividualRecord ind = (GEDCOMIndividualRecord)rec;
+                    GDMRecord rec = fTree[i];
+                    if (rec.RecordType == GDMRecordType.rtIndividual) {
+                        GDMIndividualRecord ind = (GDMIndividualRecord)rec;
 
                         if (fSelectedRecords == null || fSelectedRecords.IndexOf(rec) >= 0) {
                             var parts = GKUtils.GetNameParts(ind);

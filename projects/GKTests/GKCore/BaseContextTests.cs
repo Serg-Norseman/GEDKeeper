@@ -22,7 +22,8 @@ using System;
 using System.IO;
 using System.Reflection;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Cultures;
 using GKCore.Interfaces;
@@ -83,7 +84,7 @@ namespace GKCore
             Assert.AreEqual(ShieldState.Maximum, fContext.ShieldState, "BaseContext.ShieldState.4");
 
 
-            GEDCOMSourceRecord srcRec = fContext.FindSource("test source");
+            GDMSourceRecord srcRec = fContext.FindSource("test source");
             Assert.IsNull(srcRec);
 
             StringList sources = new StringList();
@@ -92,7 +93,7 @@ namespace GKCore
 
             Assert.IsNotNull(fContext.ValuesCollection);
 
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             fContext.LockRecord(iRec);
@@ -103,7 +104,7 @@ namespace GKCore
             Assert.IsNotNull(fContext.LangsList);
             Assert.AreEqual(0, fContext.LangsList.Count);
             fContext.CollectNameLangs(null);
-            iRec.PersonalNames[0].Language.Value = GEDCOMLanguageID.AncientGreek;
+            iRec.PersonalNames[0].Language.Value = GDMLanguageID.AncientGreek;
             fContext.CollectNameLangs(iRec.PersonalNames[0]);
             Assert.AreEqual(1, fContext.LangsList.Count);
             
@@ -128,11 +129,11 @@ namespace GKCore
             Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateLocation()));
 
             Assert.Throws(typeof(ArgumentNullException), () => { fContext.GetStoreType(null); });
-            var mediaStore = fContext.GetStoreType(new GEDCOMFileReference(null, "", "file.txt"));
+            var mediaStore = fContext.GetStoreType(new GDMFileReference(null, "", "file.txt"));
             Assert.AreEqual(MediaStoreType.mstReference, mediaStore.StoreType);
-            mediaStore = fContext.GetStoreType(new GEDCOMFileReference(null, "", "stg:file.txt"));
+            mediaStore = fContext.GetStoreType(new GDMFileReference(null, "", "stg:file.txt"));
             Assert.AreEqual(MediaStoreType.mstStorage, mediaStore.StoreType);
-            mediaStore = fContext.GetStoreType(new GEDCOMFileReference(null, "", "arc:file.txt"));
+            mediaStore = fContext.GetStoreType(new GDMFileReference(null, "", "arc:file.txt"));
             Assert.AreEqual(MediaStoreType.mstArchive, mediaStore.StoreType);
 
             fContext.CollectEventValues(null);
@@ -156,7 +157,7 @@ namespace GKCore
             var evt = fContext.CreateEventEx(iRec, GEDCOMTagType.FACT, "17 JAN 2013", "Ivanovo");
             Assert.IsNotNull(evt);
 
-            GEDCOMFamilyRecord fRec = fContext.Tree.CreateFamily();
+            GDMFamilyRecord fRec = fContext.Tree.CreateFamily();
             Assert.IsNotNull(fRec);
 
             evt = fContext.CreateEventEx(fRec, GEDCOMTagType.MARR, "28 DEC 2013", "Ivanovo");
@@ -206,20 +207,20 @@ namespace GKCore
                 ctx.FileSave(gedFile);
                 Assert.AreEqual(true, ctx.CheckBasePath()); // need path for archive and storage
 
-                var mmRecR = new GEDCOMMultimediaRecord(ctx.Tree);
-                mmRecR.FileReferences.Add(new GEDCOMFileReferenceWithTitle(mmRecR));
+                var mmRecR = new GDMMultimediaRecord(ctx.Tree);
+                mmRecR.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecR));
                 Assert.AreEqual(true, ctx.MediaSave(mmRecR.FileReferences[0], sourFile, MediaStoreType.mstReference));
                 Assert.IsNotNull(ctx.LoadMediaImage(mmRecR.FileReferences[0], false));
                 Assert.IsNotNull(ctx.MediaLoad(mmRecR.FileReferences[0]));
 
-                var mmRecA = new GEDCOMMultimediaRecord(ctx.Tree);
-                mmRecA.FileReferences.Add(new GEDCOMFileReferenceWithTitle(mmRecA));
+                var mmRecA = new GDMMultimediaRecord(ctx.Tree);
+                mmRecA.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecA));
                 Assert.AreEqual(true, ctx.MediaSave(mmRecA.FileReferences[0], sourFile, MediaStoreType.mstArchive));
                 Assert.IsNotNull(ctx.LoadMediaImage(mmRecA.FileReferences[0], false));
                 Assert.IsNotNull(ctx.MediaLoad(mmRecA.FileReferences[0]));
 
-                var mmRecS = new GEDCOMMultimediaRecord(ctx.Tree);
-                mmRecS.FileReferences.Add(new GEDCOMFileReferenceWithTitle(mmRecS));
+                var mmRecS = new GDMMultimediaRecord(ctx.Tree);
+                mmRecS.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecS));
                 Assert.AreEqual(true, ctx.MediaSave(mmRecS.FileReferences[0], sourFile, MediaStoreType.mstStorage));
                 Assert.IsNotNull(ctx.LoadMediaImage(mmRecS.FileReferences[0], false));
                 Assert.IsNotNull(ctx.MediaLoad(mmRecS.FileReferences[0]));
@@ -249,62 +250,62 @@ namespace GKCore
         public void Test_IsRecordAccess()
         {
             fContext.ShieldState = ShieldState.None;
-            Assert.IsTrue(fContext.IsRecordAccess(GEDCOMRestriction.rnNone));
-            Assert.IsTrue(fContext.IsRecordAccess(GEDCOMRestriction.rnConfidential));
-            Assert.IsTrue(fContext.IsRecordAccess(GEDCOMRestriction.rnPrivacy));
+            Assert.IsTrue(fContext.IsRecordAccess(GDMRestriction.rnNone));
+            Assert.IsTrue(fContext.IsRecordAccess(GDMRestriction.rnConfidential));
+            Assert.IsTrue(fContext.IsRecordAccess(GDMRestriction.rnPrivacy));
 
             fContext.ShieldState = ShieldState.Middle;
-            Assert.IsTrue(fContext.IsRecordAccess(GEDCOMRestriction.rnNone));
-            Assert.IsTrue(fContext.IsRecordAccess(GEDCOMRestriction.rnConfidential));
-            Assert.IsFalse(fContext.IsRecordAccess(GEDCOMRestriction.rnPrivacy));
+            Assert.IsTrue(fContext.IsRecordAccess(GDMRestriction.rnNone));
+            Assert.IsTrue(fContext.IsRecordAccess(GDMRestriction.rnConfidential));
+            Assert.IsFalse(fContext.IsRecordAccess(GDMRestriction.rnPrivacy));
 
             fContext.ShieldState = ShieldState.Maximum;
-            Assert.IsTrue(fContext.IsRecordAccess(GEDCOMRestriction.rnNone));
-            Assert.IsFalse(fContext.IsRecordAccess(GEDCOMRestriction.rnConfidential));
-            Assert.IsFalse(fContext.IsRecordAccess(GEDCOMRestriction.rnPrivacy));
+            Assert.IsTrue(fContext.IsRecordAccess(GDMRestriction.rnNone));
+            Assert.IsFalse(fContext.IsRecordAccess(GDMRestriction.rnConfidential));
+            Assert.IsFalse(fContext.IsRecordAccess(GDMRestriction.rnPrivacy));
         }
 
         [Test]
         public void Test_Culture()
         {
-            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.German;
+            fContext.Tree.Header.Language.Value = GDMLanguageID.German;
             Assert.IsInstanceOf(typeof(GermanCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Polish;
+            fContext.Tree.Header.Language.Value = GDMLanguageID.Polish;
             Assert.IsInstanceOf(typeof(PolishCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Swedish;
+            fContext.Tree.Header.Language.Value = GDMLanguageID.Swedish;
             Assert.IsInstanceOf(typeof(SwedishCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Icelandic;
+            fContext.Tree.Header.Language.Value = GDMLanguageID.Icelandic;
             Assert.IsInstanceOf(typeof(IcelandCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Russian;
+            fContext.Tree.Header.Language.Value = GDMLanguageID.Russian;
             Assert.IsInstanceOf(typeof(RussianCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Ukrainian;
+            fContext.Tree.Header.Language.Value = GDMLanguageID.Ukrainian;
             Assert.IsInstanceOf(typeof(RussianCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Armenian;
+            fContext.Tree.Header.Language.Value = GDMLanguageID.Armenian;
             Assert.IsInstanceOf(typeof(ArmenianCulture), fContext.Culture);
             Assert.IsTrue(fContext.Culture.HasPatronymic());
             Assert.IsTrue(fContext.Culture.HasSurname());
 
-            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Turkish;
+            fContext.Tree.Header.Language.Value = GDMLanguageID.Turkish;
             Assert.IsInstanceOf(typeof(TurkishCulture), fContext.Culture);
             Assert.IsFalse(fContext.Culture.HasPatronymic());
             Assert.IsTrue(fContext.Culture.HasSurname());
 
-            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.French;
+            fContext.Tree.Header.Language.Value = GDMLanguageID.French;
             Assert.IsInstanceOf(typeof(FrenchCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Italian;
+            fContext.Tree.Header.Language.Value = GDMLanguageID.Italian;
             Assert.IsInstanceOf(typeof(ItalianCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Cantonese;
+            fContext.Tree.Header.Language.Value = GDMLanguageID.Cantonese;
             Assert.IsInstanceOf(typeof(ChineseCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GEDCOMLanguageID.Mandrin;
+            fContext.Tree.Header.Language.Value = GDMLanguageID.Mandrin;
             Assert.IsInstanceOf(typeof(ChineseCulture), fContext.Culture);
             Assert.IsFalse(fContext.Culture.HasPatronymic());
             Assert.IsTrue(fContext.Culture.HasSurname());
@@ -358,7 +359,7 @@ namespace GKCore
 
             fContext.Undoman.Clear();
 
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             Assert.Throws(typeof(ArgumentNullException), () => {
@@ -385,47 +386,47 @@ namespace GKCore
             Assert.IsFalse(iRec.Patriarch);
             Assert.IsFalse(fContext.Undoman.CanUndo());
 
-            iRec.Sex = GEDCOMSex.svUndetermined;
-            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, iRec, GEDCOMSex.svMale);
-            Assert.AreEqual(GEDCOMSex.svMale, iRec.Sex);
+            iRec.Sex = GDMSex.svUndetermined;
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, iRec, GDMSex.svMale);
+            Assert.AreEqual(GDMSex.svMale, iRec.Sex);
             Assert.IsTrue(fContext.Undoman.CanUndo());
             fContext.Undoman.Undo();
-            Assert.AreEqual(GEDCOMSex.svUndetermined, iRec.Sex);
+            Assert.AreEqual(GDMSex.svUndetermined, iRec.Sex);
             Assert.IsFalse(fContext.Undoman.CanUndo());
 
             Assert.IsTrue(fContext.Undoman.CanRedo());
             fContext.Undoman.Redo();
-            Assert.AreEqual(GEDCOMSex.svMale, iRec.Sex);
+            Assert.AreEqual(GDMSex.svMale, iRec.Sex);
             Assert.IsTrue(fContext.Undoman.CanUndo());
 
             fContext.Undoman.Clear();
 
             iRec.Bookmark = false;
             iRec.Patriarch = false;
-            iRec.Sex = GEDCOMSex.svUndetermined;
+            iRec.Sex = GDMSex.svUndetermined;
 
             fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualBookmarkChange, iRec, true);
             fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualPatriarchChange, iRec, true);
-            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, iRec, GEDCOMSex.svMale);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, iRec, GDMSex.svMale);
             fContext.Undoman.Commit();
             Assert.IsTrue(iRec.Bookmark);
             Assert.IsTrue(iRec.Patriarch);
-            Assert.AreEqual(GEDCOMSex.svMale, iRec.Sex);
+            Assert.AreEqual(GDMSex.svMale, iRec.Sex);
             Assert.IsTrue(fContext.Undoman.CanUndo());
             fContext.Undoman.Undo();
             Assert.IsFalse(iRec.Bookmark);
             Assert.IsFalse(iRec.Patriarch);
-            Assert.AreEqual(GEDCOMSex.svUndetermined, iRec.Sex);
+            Assert.AreEqual(GDMSex.svUndetermined, iRec.Sex);
             Assert.IsFalse(fContext.Undoman.CanUndo());
 
 
             fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualBookmarkChange, iRec, true);
             fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualPatriarchChange, iRec, true);
-            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, iRec, GEDCOMSex.svMale);
+            fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, iRec, GDMSex.svMale);
             fContext.Undoman.Rollback();
             Assert.IsFalse(iRec.Bookmark);
             Assert.IsFalse(iRec.Patriarch);
-            Assert.AreEqual(GEDCOMSex.svUndetermined, iRec.Sex);
+            Assert.AreEqual(GDMSex.svUndetermined, iRec.Sex);
             Assert.IsFalse(fContext.Undoman.CanUndo());
 
             fContext.Undoman.OnTransaction -= TransactionEventHandler;

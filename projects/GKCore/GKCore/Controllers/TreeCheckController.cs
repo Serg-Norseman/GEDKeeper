@@ -19,7 +19,7 @@
  */
 
 using System.Collections.Generic;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -84,7 +84,7 @@ namespace GKCore.Controllers
 
         public void SelectRecord()
         {
-            GEDCOMRecord rec = ((TreeTools.CheckObj)fView.ChecksList.GetSelectedData()).Rec;
+            GDMRecord rec = ((TreeTools.CheckObj)fView.ChecksList.GetSelectedData()).Rec;
             if (rec == null) return;
 
             fBase.SelectRecordByXRef(rec.XRef);

@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -31,9 +31,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class UserRefEditDlgController : DialogController<IUserRefEditDlg>
     {
-        private GEDCOMUserReference fUserRef;
+        private GDMUserReference fUserRef;
 
-        public GEDCOMUserReference UserRef
+        public GDMUserReference UserRef
         {
             get { return fUserRef; }
             set {

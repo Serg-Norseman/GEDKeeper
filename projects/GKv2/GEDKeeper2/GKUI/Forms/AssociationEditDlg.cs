@@ -20,8 +20,7 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -35,7 +34,7 @@ namespace GKUI.Forms
     {
         private readonly AssociationEditDlgController fController;
 
-        public GEDCOMAssociation Association
+        public GDMAssociation Association
         {
             get { return fController.Association; }
             set { fController.Association = value; }

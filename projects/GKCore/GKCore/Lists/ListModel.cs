@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.Operations;
@@ -109,10 +109,10 @@ namespace GKCore.Lists
         protected ISheetList fSheetList;
         protected readonly IBaseWindow fBaseWin;
         protected readonly ChangeTracker fUndoman;
-        protected GEDCOMObject fDataOwner;
+        protected GDMObject fDataOwner;
 
 
-        public GEDCOMObject DataOwner
+        public GDMObject DataOwner
         {
             get {
                 return fDataOwner;
