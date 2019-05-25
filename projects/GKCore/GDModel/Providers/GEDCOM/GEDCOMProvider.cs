@@ -454,6 +454,11 @@ namespace GDModel.Providers.GEDCOM
                 curTag = tree.AddRecord(new GDMLocationRecord(tree));
                 addHandler = AddLocationRecordTag;
 
+            } else if ((tagName == GEDCOMTagType._PLAC) && (tree.Format == GEDCOMFormat.gf_FamilyHistorian)) {
+                curTag = tree.AddRecord(new GDMLocationRecord(tree));
+                ((GDMLocationRecord)curTag).LocationName = tagValue;
+                addHandler = AddLocationRecordTag;
+
             } else if (tagName == GEDCOMTagType.HEAD) {
                 curTag = tree.Header;
                 addHandler = AddHeaderTag;
@@ -482,6 +487,7 @@ namespace GDModel.Providers.GEDCOM
                     addHandler = AddCustomEventTag;
                 } else if (curTag is GDMChildToFamilyLink) {
                     curTag = indiRec.ChildToFamilyLinks.Add(curTag as GDMChildToFamilyLink);
+                    addHandler = AddChildToFamilyLinkTag;
                 } else if (curTag is GDMSpouseToFamilyLink) {
                     curTag = indiRec.SpouseToFamilyLinks.Add(curTag as GDMSpouseToFamilyLink);
                 } else if (curTag is GDMPersonalName) {
@@ -817,6 +823,25 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
+        private static StackTuple AddChildToFamilyLinkTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GDMChildToFamilyLink cfl = (GDMChildToFamilyLink)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            if (tagName == GEDCOMTagType.STAT) {
+                cfl.ChildLinkageStatus = GEDCOMUtils.GetChildLinkageStatusVal(tagValue);
+                curTag = null;
+            } else if (tagName == GEDCOMTagType.PEDI) {
+                cfl.PedigreeLinkageType = GEDCOMUtils.GetPedigreeLinkageTypeVal(tagValue);
+                curTag = null;
+            } else {
+                return AddPointerWithNotesTag(owner, tagLevel, tagName, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
         private static StackTuple AddChangeDateTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
             GDMChangeDate changeDate = (GDMChangeDate)owner;
@@ -935,7 +960,11 @@ namespace GDModel.Providers.GEDCOM
             GDMTag curTag = null;
             AddTagHandler addHandler = null;
 
-            if (tagName == GEDCOMTagType.TYPE || tagName == GEDCOMTagType.FONE || tagName == GEDCOMTagType.ROMN || tagName == "_LANG") {
+            if (tagName == GEDCOMTagType.TYPE) {
+                persName.NameType = GEDCOMUtils.GetNameTypeVal(tagValue);
+            } else if (tagName == GEDCOMTagType._LANG || tagName == GEDCOMTagType.LANG) {
+                persName.Language = GEDCOMUtils.GetLanguageVal(tagValue);
+            } else if (tagName == GEDCOMTagType.FONE || tagName == GEDCOMTagType.ROMN) {
                 return AddBaseTag(owner, tagLevel, tagName, tagValue);
             } else {
                 curTag = persName.Pieces.AddTag(tagName, tagValue, null);
@@ -1111,7 +1140,7 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMProvider.WriteTagLine(stream, level, GEDCOMTagType.SEX, GEDCOMUtils.GetSexStr(indiRec.Sex), true);
 
             WriteList(stream, level, indiRec.PersonalNames, WritePersonalName);
-            WriteList(stream, level, indiRec.ChildToFamilyLinks, WriteTag);
+            WriteList(stream, level, indiRec.ChildToFamilyLinks, WriteChildToFamilyLink);
             WriteList(stream, level, indiRec.SpouseToFamilyLinks, WriteTag);
             WriteList(stream, level, indiRec.Events, WriteTagWithLists); // for files content compatibility
             WriteList(stream, level, indiRec.Associations, WriteAssociation);
@@ -1148,6 +1177,9 @@ namespace GDModel.Providers.GEDCOM
             GDMPersonalName persName = (GDMPersonalName)tag;
 
             WriteTag(stream, level, persName);
+            int lev = level + 1;
+            WriteTagLine(stream, lev, GEDCOMTagType.LANG, GEDCOMUtils.GetLanguageStr(persName.Language), true);
+            WriteTagLine(stream, lev, GEDCOMTagType.TYPE, GEDCOMUtils.GetNameTypeStr(persName.NameType), true);
             WritePersonalNamePieces(stream, level, persName.Pieces); // same level
         }
 
@@ -1161,6 +1193,17 @@ namespace GDModel.Providers.GEDCOM
 
             WriteList(stream, level, persNamePieces.Notes, WriteTag);
             WriteList(stream, level, persNamePieces.SourceCitations, WriteTag);
+        }
+
+        internal static void WriteChildToFamilyLink(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMChildToFamilyLink cfl = (GDMChildToFamilyLink)tag;
+
+            WriteTag(stream, level, cfl);
+
+            level += 1;
+            WriteTagLine(stream, level, GEDCOMTagType.STAT, GEDCOMUtils.GetChildLinkageStatusStr(cfl.ChildLinkageStatus), true);
+            WriteTagLine(stream, level, GEDCOMTagType.PEDI, GEDCOMUtils.GetPedigreeLinkageTypeStr(cfl.PedigreeLinkageType), true);
         }
 
         internal static void WriteAssociation(StreamWriter stream, int level, GDMTag tag)
@@ -1273,7 +1316,7 @@ namespace GDModel.Providers.GEDCOM
 
         internal static void WriteSubTags(StreamWriter stream, int level, GDMTag tag)
         {
-            GDMList<GDMTag> subTags = tag.GetTagList();
+            var subTags = tag.SubTags;
 
             int subtagsCount = subTags.Count;
             if (subtagsCount > 0) {
@@ -1487,20 +1530,18 @@ namespace GDModel.Providers.GEDCOM
             f.RegisterTag(GEDCOMTagType.SLGS, GDMSpouseSealing.Create, AddIndividualOrdinanceTag);
             f.RegisterTag(GEDCOMTagType.TIME, GDMTime.Create, AddBaseTag);
 
-            f.RegisterTag("_LANG", GDMLanguage.Create, AddBaseTag);
+            f.RegisterTag(GEDCOMTagType._LANG, GDMLanguage.Create, AddBaseTag);
             f.RegisterTag(GEDCOMTagType._LOC, GDMPointer.Create, AddBaseTag);
             f.RegisterTag(GEDCOMTagType._POSITION, GDMCutoutPosition.Create, AddBaseTag);
 
             f = new GEDCOMFactory();
             fIndividualTags = f;
 
-            f.RegisterTag(GEDCOMTagType.NAME, GDMPersonalName.Create, AddPersonalNameTag);
-            f.RegisterTag(GEDCOMTagType.FAMC, GDMChildToFamilyLink.Create, AddPointerWithNotesTag);
-            f.RegisterTag(GEDCOMTagType.FAMS, GDMSpouseToFamilyLink.Create, AddPointerWithNotesTag);
-            f.RegisterTag(GEDCOMTagType.ASSO, GDMAssociation.Create, AddAssociationTag);
-            f.RegisterTag(GEDCOMTagType.ALIA, GDMAlias.Create, AddBaseTag);
+            f.RegisterTag(GEDCOMTagType.NAME, GDMPersonalName.Create, AddPersonalNameTag); // INDI.NAME!
 
             f.RegisterTag(GEDCOMTagType.ADOP, GDMIndividualEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.ALIA, GDMAlias.Create, AddBaseTag);
+            f.RegisterTag(GEDCOMTagType.ASSO, GDMAssociation.Create, AddAssociationTag);
             f.RegisterTag(GEDCOMTagType.BAPM, GDMIndividualEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.BARM, GDMIndividualEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.BASM, GDMIndividualEvent.Create, AddCustomEventTag);
@@ -1515,6 +1556,8 @@ namespace GDModel.Providers.GEDCOM
             f.RegisterTag(GEDCOMTagType.DEAT, GDMIndividualEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.EVEN, GDMIndividualEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.EMIG, GDMIndividualEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.FAMC, GDMChildToFamilyLink.Create, AddChildToFamilyLinkTag);
+            f.RegisterTag(GEDCOMTagType.FAMS, GDMSpouseToFamilyLink.Create, AddPointerWithNotesTag);
             f.RegisterTag(GEDCOMTagType.FCOM, GDMIndividualEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.GRAD, GDMIndividualEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.IMMI, GDMIndividualEvent.Create, AddCustomEventTag);
@@ -1539,25 +1582,23 @@ namespace GDModel.Providers.GEDCOM
             f.RegisterTag(GEDCOMTagType.SSN, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.TITL, GDMIndividualAttribute.Create, AddCustomEventTag);
 
-            f.RegisterTag(GEDCOMTagType._TRAVEL, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType._HOBBY, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType._AWARD, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType._MILI, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType._MILI_IND, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType._MILI_DIS, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType._MILI_RANK, GDMIndividualAttribute.Create, AddCustomEventTag);
-
             f.RegisterTag(GEDCOMTagType._BGRO, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType._EYES, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType._HAIR, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType._HOBBY, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType._MDNA, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType._MILI, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType._MILI_DIS, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType._MILI_IND, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType._MILI_RANK, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType._TRAVEL, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType._YDNA, GDMIndividualAttribute.Create, AddCustomEventTag);
 
             f = new GEDCOMFactory();
             fFamilyTags = f;
 
             f.RegisterTag(GEDCOMTagType.ANUL, GDMFamilyEvent.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.CENS, GDMFamilyEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.DIV, GDMFamilyEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.DIVF, GDMFamilyEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.ENGA, GDMFamilyEvent.Create, AddCustomEventTag);
@@ -1566,6 +1607,9 @@ namespace GDModel.Providers.GEDCOM
             f.RegisterTag(GEDCOMTagType.MARR, GDMFamilyEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.MARL, GDMFamilyEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.MARS, GDMFamilyEvent.Create, AddCustomEventTag);
+
+            // both indi & fam records
+            f.RegisterTag(GEDCOMTagType.CENS, GDMFamilyEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.RESI, GDMFamilyEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.EVEN, GDMFamilyEvent.Create, AddCustomEventTag);
         }
@@ -1578,33 +1622,33 @@ namespace GDModel.Providers.GEDCOM
 
             result.Add(GEDCOMTagType.ADDR, new TagProperties(GEDCOMTagType.ADDR, true, false));
             result.Add(GEDCOMTagType.AGNC, new TagProperties(GEDCOMTagType.AGNC, true, false));
+            result.Add(GEDCOMTagType.ALIA, new TagProperties(GEDCOMTagType.ALIA, true, false));
             result.Add(GEDCOMTagType.AUTH, new TagProperties(GEDCOMTagType.AUTH, true, false));
             result.Add(GEDCOMTagType.CAUS, new TagProperties(GEDCOMTagType.CAUS, true, false));
             result.Add(GEDCOMTagType.CHAN, new TagProperties(GEDCOMTagType.CHAN, true, false));
             result.Add(GEDCOMTagType.CITY, new TagProperties(GEDCOMTagType.CITY, true, false));
             result.Add(GEDCOMTagType.CTRY, new TagProperties(GEDCOMTagType.CTRY, true, false));
             result.Add(GEDCOMTagType.DATE, new TagProperties(GEDCOMTagType.DATE, true, false));
+            result.Add(GEDCOMTagType.GIVN, new TagProperties(GEDCOMTagType.GIVN, true, false));
+            result.Add(GEDCOMTagType.HUSB, new TagProperties(GEDCOMTagType.HUSB, true, false));
+            result.Add(GEDCOMTagType.LANG, new TagProperties(GEDCOMTagType.LANG, true, false));
+            result.Add(GEDCOMTagType.NICK, new TagProperties(GEDCOMTagType.NICK, true, false));
+            result.Add(GEDCOMTagType.NPFX, new TagProperties(GEDCOMTagType.NPFX, true, false));
+            result.Add(GEDCOMTagType.NSFX, new TagProperties(GEDCOMTagType.NSFX, true, false));
             result.Add(GEDCOMTagType.PAGE, new TagProperties(GEDCOMTagType.PAGE, true, false));
             result.Add(GEDCOMTagType.PHON, new TagProperties(GEDCOMTagType.PHON, true, false));
             result.Add(GEDCOMTagType.PLAC, new TagProperties(GEDCOMTagType.PLAC, true, false));
             result.Add(GEDCOMTagType.POST, new TagProperties(GEDCOMTagType.POST, true, false));
             result.Add(GEDCOMTagType.PUBL, new TagProperties(GEDCOMTagType.PUBL, true, false));
             result.Add(GEDCOMTagType.RESN, new TagProperties(GEDCOMTagType.RESN, true, false));
+            result.Add(GEDCOMTagType.SPFX, new TagProperties(GEDCOMTagType.SPFX, true, false));
             result.Add(GEDCOMTagType.STAE, new TagProperties(GEDCOMTagType.STAE, true, false));
+            result.Add(GEDCOMTagType.SUBM, new TagProperties(GEDCOMTagType.SUBM, true, false));
+            result.Add(GEDCOMTagType.SURN, new TagProperties(GEDCOMTagType.SURN, true, false));
             result.Add(GEDCOMTagType.TEXT, new TagProperties(GEDCOMTagType.TEXT, true, false));
             result.Add(GEDCOMTagType.TIME, new TagProperties(GEDCOMTagType.TIME, true, false));
             result.Add(GEDCOMTagType.TYPE, new TagProperties(GEDCOMTagType.TYPE, true, false));
-            result.Add(GEDCOMTagType.SUBM, new TagProperties(GEDCOMTagType.SUBM, true, false));
             result.Add(GEDCOMTagType.VERS, new TagProperties(GEDCOMTagType.VERS, true, false));
-            result.Add(GEDCOMTagType.LANG, new TagProperties(GEDCOMTagType.LANG, true, false));
-            result.Add(GEDCOMTagType.NPFX, new TagProperties(GEDCOMTagType.NPFX, true, false));
-            result.Add(GEDCOMTagType.GIVN, new TagProperties(GEDCOMTagType.GIVN, true, false));
-            result.Add(GEDCOMTagType.NICK, new TagProperties(GEDCOMTagType.NICK, true, false));
-            result.Add(GEDCOMTagType.SPFX, new TagProperties(GEDCOMTagType.SPFX, true, false));
-            result.Add(GEDCOMTagType.SURN, new TagProperties(GEDCOMTagType.SURN, true, false));
-            result.Add(GEDCOMTagType.NSFX, new TagProperties(GEDCOMTagType.NSFX, true, false));
-            result.Add(GEDCOMTagType.ALIA, new TagProperties(GEDCOMTagType.ALIA, true, false));
-            result.Add(GEDCOMTagType.HUSB, new TagProperties(GEDCOMTagType.HUSB, true, false));
             result.Add(GEDCOMTagType.WIFE, new TagProperties(GEDCOMTagType.WIFE, true, false));
 
             // extensions

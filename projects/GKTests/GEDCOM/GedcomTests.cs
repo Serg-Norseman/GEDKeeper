@@ -1403,20 +1403,20 @@ namespace GDModel
 
             //
 
-            Assert.AreEqual(GDMLanguageID.Unknown, persName.Language.Value);
-            persName.Language.Value = GDMLanguageID.English;
-            Assert.AreEqual(GDMLanguageID.English, persName.Language.Value);
-            persName.Language.Value = GDMLanguageID.Unknown;
-            Assert.AreEqual(GDMLanguageID.Unknown, persName.Language.Value);
-            persName.Language.Value = GDMLanguageID.Polish;
-            Assert.AreEqual(GDMLanguageID.Polish, persName.Language.Value);
+            Assert.AreEqual(GDMLanguageID.Unknown, persName.Language);
+            persName.Language = GDMLanguageID.English;
+            Assert.AreEqual(GDMLanguageID.English, persName.Language);
+            persName.Language = GDMLanguageID.Unknown;
+            Assert.AreEqual(GDMLanguageID.Unknown, persName.Language);
+            persName.Language = GDMLanguageID.Polish;
+            Assert.AreEqual(GDMLanguageID.Polish, persName.Language);
 
             //
 
             string buf = TestUtils.GetTagStreamText(persName, 1);
             Assert.AreEqual("1 NAME Petr /Test/ Fedoroff\r\n"+
+                            "2 LANG Polish\r\n"+ // extension
                             "2 TYPE birth\r\n"+
-                            "2 _LANG Polish\r\n"+ // extension
                             "2 SURN Surname\r\n"+
                             "2 GIVN Given\r\n"+
                             "2 _PATN PatronymicName\r\n"+
@@ -1428,7 +1428,7 @@ namespace GDModel
                             "2 _RELN ReligiousName\r\n"+
                             "2 _CENN CensusName\r\n", buf);
 
-            persName.Language.Value = GDMLanguageID.Unknown;
+            persName.Language = GDMLanguageID.Unknown;
             persName.Pack();
 
             using (GDMPersonalName nameCopy = new GDMPersonalName(iRec, "", "")) {
@@ -1729,7 +1729,7 @@ namespace GDModel
         public void Test_GEDCOMTag()
         {
             using (GDMTag tag = GDMTag.Create(null, "", "")) {
-                Assert.AreEqual(-1, tag.IndexOfTag(null));
+                Assert.AreEqual(-1, tag.SubTags.IndexOf(null));
             }
         }
 
@@ -1889,6 +1889,15 @@ namespace GDModel
 
                 childLink.PedigreeLinkageType = GDMPedigreeLinkageType.plFoster;
                 Assert.AreEqual(GDMPedigreeLinkageType.plFoster, childLink.PedigreeLinkageType);
+
+                using (GDMChildToFamilyLink childLink2 = new GDMChildToFamilyLink(null, "", "")) {
+                    Assert.IsNotNull(childLink2);
+
+                    childLink2.Assign(childLink);
+
+                    Assert.AreEqual(GDMChildLinkageStatus.clChallenged, childLink2.ChildLinkageStatus);
+                    Assert.AreEqual(GDMPedigreeLinkageType.plFoster, childLink2.PedigreeLinkageType);
+                }
             }
         }
 

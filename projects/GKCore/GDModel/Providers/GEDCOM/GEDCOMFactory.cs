@@ -174,6 +174,7 @@ namespace GDModel.Providers.GEDCOM
         public const string _LOC = "_LOC"; // [GEDCOM 5.5EL]
         public const string _MARN = "_MARN"; // Married Surname [BKW6]
         public const string _PATN = "_PATN"; // Patronymic Name
+        public const string _PLAC = "_PLAC"; // Place/Location record [Family Historian]
         public const string _POSITION = "_POSITION";
         public const string _PRIM = "_PRIM"; // [PhpGedView, AQ3, PAF5, FO7]
         public const string _PRIM_CUTOUT = "_PRIM_CUTOUT"; // [FTB]
@@ -191,6 +192,7 @@ namespace GDModel.Providers.GEDCOM
         public const string _FOLDER = "_FOLDER";
         public const string _GOAL = "_GOAL";
         public const string _GROUP = "_GROUP";
+        public const string _LANG = "_LANG"; // [GK], outdated, replaced by LANG
         public const string _MEMBER = "_MEMBER";
         public const string _MILI = "_MILI";
         public const string _MILI_IND = "_MILI_IND";

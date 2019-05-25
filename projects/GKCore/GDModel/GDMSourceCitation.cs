@@ -83,7 +83,7 @@ namespace GDModel
             if (IsPointer) {
                 result = base.IsEmpty();
             } else {
-                result = (string.IsNullOrEmpty(fStringValue) && Count == 0);
+                result = (string.IsNullOrEmpty(fStringValue) && SubTags.Count == 0);
             }
             return result;
         }

@@ -187,10 +187,7 @@ namespace GKCore
         {
             if (persName == null) return;
 
-            GDMLanguage lang = persName.FindTag("_LANG", 0) as GDMLanguage;
-            if (lang == null) return;
-
-            GDMLanguageID langId = lang.Value;
+            GDMLanguageID langId = persName.Language;
             if (langId != GDMLanguageID.Unknown && !fLangsList.Contains(langId)) {
                 fLangsList.Add(langId);
             }

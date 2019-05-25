@@ -737,7 +737,7 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMPersonalName pn in iRec.PersonalNames) {
-                    string lang = GEDCOMUtils.GetLanguageStr(pn.Language.Value);
+                    string lang = GEDCOMUtils.GetLanguageStr(pn.Language);
                     fSheetList.AddItem(pn, new object[] { GKUtils.GetNameString(iRec, pn, true, false),
                                                           LangMan.LS(GKData.NameTypes[(int)pn.NameType]), lang });
                 }

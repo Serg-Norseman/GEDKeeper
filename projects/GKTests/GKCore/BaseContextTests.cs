@@ -104,7 +104,7 @@ namespace GKCore
             Assert.IsNotNull(fContext.LangsList);
             Assert.AreEqual(0, fContext.LangsList.Count);
             fContext.CollectNameLangs(null);
-            iRec.PersonalNames[0].Language.Value = GDMLanguageID.AncientGreek;
+            iRec.PersonalNames[0].Language = GDMLanguageID.AncientGreek;
             fContext.CollectNameLangs(iRec.PersonalNames[0]);
             Assert.AreEqual(1, fContext.LangsList.Count);
             

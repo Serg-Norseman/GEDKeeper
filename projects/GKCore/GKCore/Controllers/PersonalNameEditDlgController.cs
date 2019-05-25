@@ -71,7 +71,7 @@ namespace GKCore.Controllers
                 pieces.Suffix = fView.NameSuffix.Text;
 
                 fPersonalName.NameType = (GDMNameType)fView.NameType.SelectedIndex;
-                fPersonalName.Language.Value = (GDMLanguageID)fView.Language.SelectedTag;
+                fPersonalName.Language = (GDMLanguageID)fView.Language.SelectedTag;
 
                 fBase.Context.CollectNameLangs(fPersonalName);
 
@@ -121,7 +121,7 @@ namespace GKCore.Controllers
             fView.Surname.Enabled = fView.Surname.Enabled && culture.HasSurname();
             fView.Patronymic.Enabled = fView.Patronymic.Enabled && culture.HasPatronymic();
 
-            GDMLanguageID langID = fPersonalName.Language.Value;
+            GDMLanguageID langID = fPersonalName.Language;
             fView.Language.Text = GEDCOMUtils.GetLanguageStr(langID);
         }
     }
