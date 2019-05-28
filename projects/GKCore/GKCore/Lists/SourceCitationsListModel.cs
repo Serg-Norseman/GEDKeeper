@@ -55,7 +55,7 @@ namespace GKCore.Lists
                     GDMSourceRecord sourceRec = cit.Value as GDMSourceRecord;
                     if (sourceRec == null) continue;
 
-                    int ca = GEDCOMUtils.GetValidCertaintyAssessment(cit.CertaintyAssessment);
+                    int ca = cit.GetValidCertaintyAssessment();
 
                     fSheetList.AddItem(cit, new object[] { sourceRec.Originator.Text.Trim(),
                         sourceRec.ShortTitle, cit.Page,

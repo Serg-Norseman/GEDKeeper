@@ -30,7 +30,7 @@ namespace GDModel
      * @author Kevin Routley (KBR) aka fire-eggs
      */
     [TestFixture]
-    public class GEDCOMPersonalNameTests
+    public class GDMPersonalNameTests
     {
         [Test]
         public void Test_GetFullName()

@@ -78,9 +78,6 @@ namespace GDModel.Providers.GEDCOM
     /// </summary>
     public class GEDCOMProvider : FileProvider
     {
-        private static readonly GEDCOMFactory fIndividualTags;
-        private static readonly GEDCOMFactory fFamilyTags;
-
         public const char GEDCOM_DELIMITER = ' ';
         public const char GEDCOM_YEAR_MODIFIER_SEPARATOR = '/';
         public const char GEDCOM_NAME_SEPARATOR = '/';
@@ -393,8 +390,6 @@ namespace GDModel.Providers.GEDCOM
             return curTag;
         }
 
-        #region AddTag Handlers
-
         internal static StackTuple AddTreeTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
             GDMTree tree = (GDMTree)owner;
@@ -474,44 +469,171 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
+        #endregion
+
+        #region Saving functions
+
+        public void SaveToFile(string fileName, GEDCOMCharacterSet charSet)
+        {
+            // Attention: processing of Header moved to BaseContext!
+
+            using (FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
+                SaveToStreamExt(fileStream, charSet);
+            }
+        }
+
+        public void SaveToStreamExt(Stream outputStream, GEDCOMCharacterSet charSet)
+        {
+            // Attention: processing of Header moved to BaseContext!
+
+            fTree.Pack();
+            using (StreamWriter writer = new StreamWriter(outputStream, GEDCOMUtils.GetEncodingByCharacterSet(charSet))) {
+                IList<GDMRecord> records = fTree.GetRecords().GetList();
+                SaveToStream(writer, records);
+
+                writer.Flush();
+            }
+
+            fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
+        }
+
+        public void SaveToStream(StreamWriter writer, IList<GDMRecord> list)
+        {
+            // write header
+            WriteBaseTag(writer, 0, fTree.Header);
+
+            if (list != null) {
+                int num = list.Count;
+                for (int i = 0; i < num; i++) {
+                    GDMRecord record = list[i];
+                    WriteRecordEx(writer, record);
+                }
+            }
+
+            // write footer
+            WriteTagLine(writer, 0, GEDCOMTagType.TRLR, string.Empty);
+        }
+
+        public static void WriteRecordEx(StreamWriter writer, GDMRecord record)
+        {
+            switch (record.RecordType) {
+                case GDMRecordType.rtIndividual:
+                    WriteIndividualRecord(writer, 0, record);
+                    break;
+
+                case GDMRecordType.rtFamily:
+                    WriteFamilyRecord(writer, 0, record);
+                    break;
+
+                case GDMRecordType.rtNote:
+                    WriteNoteRecord(writer, 0, record);
+                    break;
+
+                case GDMRecordType.rtMultimedia:
+                    WriteMultimediaRecord(writer, 0, record);
+                    break;
+
+                case GDMRecordType.rtSource:
+                    WriteSourceRecord(writer, 0, record);
+                    break;
+
+                case GDMRecordType.rtRepository:
+                    WriteRepositoryRecord(writer, 0, record);
+                    break;
+
+                case GDMRecordType.rtGroup:
+                    WriteGroupRecord(writer, 0, record);
+                    break;
+
+                case GDMRecordType.rtResearch:
+                    WriteResearchRecord(writer, 0, record);
+                    break;
+
+                case GDMRecordType.rtTask:
+                    WriteTaskRecord(writer, 0, record);
+                    break;
+
+                case GDMRecordType.rtCommunication:
+                    WriteCommunicationRecord(writer, 0, record);
+                    break;
+
+                case GDMRecordType.rtLocation:
+                    WriteLocationRecord(writer, 0, record);
+                    break;
+
+                case GDMRecordType.rtSubmission:
+                    WriteSubmissionRecord(writer, 0, record);
+                    break;
+
+                case GDMRecordType.rtSubmitter:
+                    WriteSubmitterRecord(writer, 0, record);
+                    break;
+
+                default:
+                    WriteRecord(writer, 0, record);
+                    break;
+            }
+        }
+
+        #endregion
+
+        #region Unified read/write functions
+
         private static StackTuple AddIndividualRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
             GDMIndividualRecord indiRec = (GDMIndividualRecord)owner;
             GDMTag curTag = null;
             AddTagHandler addHandler = null;
 
-            curTag = fIndividualTags.CreateTag(indiRec, tagName, tagValue);
-            if (curTag != null) {
-                if (curTag is GDMCustomEvent) {
-                    curTag = indiRec.AddEvent(curTag as GDMCustomEvent);
-                    addHandler = AddCustomEventTag;
-                } else if (curTag is GDMChildToFamilyLink) {
-                    curTag = indiRec.ChildToFamilyLinks.Add(curTag as GDMChildToFamilyLink);
-                    addHandler = AddChildToFamilyLinkTag;
-                } else if (curTag is GDMSpouseToFamilyLink) {
-                    curTag = indiRec.SpouseToFamilyLinks.Add(curTag as GDMSpouseToFamilyLink);
-                } else if (curTag is GDMPersonalName) {
-                    curTag = indiRec.AddPersonalName(curTag as GDMPersonalName);
-                    addHandler = AddPersonalNameTag;
-                } else if (curTag is GDMAssociation) {
-                    curTag = indiRec.Associations.Add(curTag as GDMAssociation);
-                    addHandler = AddAssociationTag;
-                } else if (curTag is GDMAlias) {
-                    curTag = indiRec.Aliases.Add(curTag as GDMAlias);
-                }
+            if (tagName == GEDCOMTagType.FAMC) {
+                curTag = indiRec.ChildToFamilyLinks.Add(new GDMChildToFamilyLink(indiRec, tagName, tagValue));
+                addHandler = AddChildToFamilyLinkTag;
+            } else if (tagName == GEDCOMTagType.FAMS) {
+                curTag = indiRec.SpouseToFamilyLinks.Add(new GDMSpouseToFamilyLink(indiRec, tagName, tagValue));
+            } else if (tagName == GEDCOMTagType.NAME) {
+                curTag = indiRec.AddPersonalName(new GDMPersonalName(indiRec, tagName, tagValue));
+                addHandler = AddPersonalNameTag;
+            } else if (tagName == GEDCOMTagType.ASSO) {
+                curTag = indiRec.Associations.Add(new GDMAssociation(indiRec, tagName, tagValue));
+                addHandler = AddAssociationTag;
+            } else if (tagName == GEDCOMTagType.ALIA) {
+                curTag = indiRec.Aliases.Add(new GDMAlias(indiRec, tagName, tagValue));
+            } else if (GEDCOMUtils.IsIndiEvent(tagName)) {
+                curTag = indiRec.AddEvent(new GDMIndividualEvent(indiRec, tagName, tagValue));
+                addHandler = AddCustomEventTag;
+            } else if (GEDCOMUtils.IsIndiAttr(tagName)) {
+                curTag = indiRec.AddEvent(new GDMIndividualAttribute(indiRec, tagName, tagValue));
+                addHandler = AddCustomEventTag;
+            } else if (tagName == GEDCOMTagType._GROUP) {
+                curTag = indiRec.Groups.Add(new GDMPointer(indiRec, tagName, tagValue));
+            } else if (tagName == GEDCOMTagType.SEX) {
+                indiRec.Sex = GEDCOMUtils.GetSexVal(tagValue);
+                curTag = null;
             } else {
-                if (tagName == GEDCOMTagType._GROUP) {
-                    curTag = indiRec.Groups.Add(new GDMPointer(indiRec, tagName, tagValue));
-                } else if (tagName == GEDCOMTagType.SEX) {
-                    indiRec.Sex = GEDCOMUtils.GetSexVal(tagValue);
-                    curTag = null;
-                } else {
-                    return AddRecordWithEventsTag(owner, tagLevel, tagName, tagValue);
-                }
+                return AddRecordWithEventsTag(owner, tagLevel, tagName, tagValue);
             }
 
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
+
+        private static void WriteIndividualRecord(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMIndividualRecord indiRec = (GDMIndividualRecord)tag;
+
+            WriteRecordWithEvents(stream, level, indiRec);
+
+            level += 1;
+            GEDCOMProvider.WriteTagLine(stream, level, GEDCOMTagType.SEX, GEDCOMUtils.GetSexStr(indiRec.Sex), true);
+
+            WriteList(stream, level, indiRec.PersonalNames, WritePersonalName);
+            WriteList(stream, level, indiRec.ChildToFamilyLinks, WriteChildToFamilyLink);
+            WriteList(stream, level, indiRec.SpouseToFamilyLinks, WriteTagEx);
+            WriteList(stream, level, indiRec.Events, WriteTagWithLists);
+            WriteList(stream, level, indiRec.Associations, WriteAssociation);
+            WriteList(stream, level, indiRec.Aliases, WriteTagEx);
+            WriteList(stream, level, indiRec.Groups, WriteTagEx);
+        }
+
 
         private static StackTuple AddFamilyRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
@@ -526,21 +648,29 @@ namespace GDModel.Providers.GEDCOM
             } else if (tagName == GEDCOMTagType._STAT) {
                 famRec.Status = GEDCOMUtils.GetMarriageStatusVal(tagValue);
                 curTag = null;
+            } else if (GEDCOMUtils.IsFamEvent(tagName)) {
+                curTag = famRec.AddEvent(new GDMFamilyEvent(famRec, tagName, tagValue));
+                addHandler = AddCustomEventTag;
             } else {
-                curTag = fFamilyTags.CreateTag(famRec, tagName, tagValue);
-
-                if (curTag != null) {
-                    if (curTag is GDMFamilyEvent) {
-                        curTag = famRec.AddEvent(curTag as GDMFamilyEvent);
-                        addHandler = AddCustomEventTag;
-                    }
-                } else {
-                    return AddRecordWithEventsTag(owner, tagLevel, tagName, tagValue);
-                }
+                return AddRecordWithEventsTag(owner, tagLevel, tagName, tagValue);
             }
 
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
+
+        private static void WriteFamilyRecord(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMFamilyRecord famRec = (GDMFamilyRecord)tag;
+
+            WriteRecordWithEvents(stream, level, famRec);
+
+            level += 1;
+            WriteTagLine(stream, level, GEDCOMTagType._STAT, GEDCOMUtils.GetMarriageStatusStr(famRec.Status), true);
+
+            WriteList(stream, level, famRec.Children, WriteTagEx);
+            WriteList(stream, level, famRec.Events, WriteTagWithLists);
+        }
+
 
         private static StackTuple AddRecordWithEventsTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
@@ -560,16 +690,43 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static StackTuple AddNoteRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        private static void WriteRecordWithEvents(StreamWriter stream, int level, GDMTag tag)
         {
-            /*GEDCOMNoteRecord noteRec = (GEDCOMNoteRecord)owner;
-            GEDCOMTag curTag = null;
-            AddTagHandler addHandler = null;*/
+            GDMRecordWithEvents recWE = (GDMRecordWithEvents)tag;
 
-            return AddRecordTag(owner, tagLevel, tagName, tagValue);
+            WriteRecord(stream, level, recWE);
 
-            /*return CreateReaderStackTuple(tagLevel, curTag, addHandler);*/
+            level += 1;
+            WriteTagLine(stream, level, GEDCOMTagType.RESN, GEDCOMUtils.GetRestrictionStr(recWE.Restriction), true);
+            WriteList(stream, level, recWE.Submittors, WriteTagEx);
         }
+
+
+        private static StackTuple AddGroupRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GDMGroupRecord groupRec = (GDMGroupRecord)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            if (tagName == GEDCOMTagType.NAME) {
+                curTag = groupRec.AddTag(tagName, tagValue, null);
+            } else if (tagName == GEDCOMTagType._MEMBER) {
+                curTag = groupRec.Members.Add(new GDMPointer(groupRec, tagName, tagValue));
+            } else {
+                return AddRecordTag(owner, tagLevel, tagName, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static void WriteGroupRecord(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMGroupRecord groupRec = (GDMGroupRecord)tag;
+
+            WriteRecord(stream, level, groupRec);
+            WriteList(stream, ++level, groupRec.Members, WriteTagEx);
+        }
+
 
         private static StackTuple AddMultimediaRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
@@ -585,6 +742,15 @@ namespace GDModel.Providers.GEDCOM
 
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
+
+        private static void WriteMultimediaRecord(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMMultimediaRecord mmRec = (GDMMultimediaRecord)tag;
+
+            WriteRecord(stream, level, mmRec);
+            WriteList(stream, ++level, mmRec.FileReferences, WriteTagEx);
+        }
+
 
         private static StackTuple AddSourceRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
@@ -604,38 +770,14 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static StackTuple AddRepositoryRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        private static void WriteSourceRecord(StreamWriter stream, int level, GDMTag tag)
         {
-            GDMRepositoryRecord repoRec = (GDMRepositoryRecord)owner;
-            GDMTag curTag = null;
-            AddTagHandler addHandler = null;
+            GDMSourceRecord sourRec = (GDMSourceRecord)tag;
 
-            if (tagName == GEDCOMTagType.PHON || tagName == GEDCOMTagType.EMAIL || tagName == GEDCOMTagType.FAX || tagName == GEDCOMTagType.WWW) {
-                return AddAddressTag(repoRec.Address, tagLevel, tagName, tagValue);
-            } else {
-                // 'ADDR' defines by default
-                return AddRecordTag(owner, tagLevel, tagName, tagValue);
-            }
-
-            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+            WriteRecord(stream, level, sourRec);
+            WriteList(stream, ++level, sourRec.RepositoryCitations, WriteTagEx);
         }
 
-        private static StackTuple AddGroupRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
-        {
-            GDMGroupRecord groupRec = (GDMGroupRecord)owner;
-            GDMTag curTag = null;
-            AddTagHandler addHandler = null;
-
-            if (tagName == GEDCOMTagType.NAME) {
-                curTag = groupRec.AddTag(tagName, tagValue, null);
-            } else if (tagName == GEDCOMTagType._MEMBER) {
-                curTag = groupRec.Members.Add(new GDMPointer(groupRec, tagName, tagValue));
-            } else {
-                return AddRecordTag(owner, tagLevel, tagName, tagValue);
-            }
-
-            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
-        }
 
         private static StackTuple AddResearchRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
@@ -660,6 +802,71 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
+        private static void WriteResearchRecord(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMResearchRecord resRec = (GDMResearchRecord)tag;
+
+            WriteRecord(stream, level, resRec);
+
+            level += 1;
+            WriteList(stream, level, resRec.Tasks, WriteTagEx);
+            WriteList(stream, level, resRec.Communications, WriteTagEx);
+            WriteList(stream, level, resRec.Groups, WriteTagEx);
+        }
+
+
+        private static StackTuple AddNoteRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            /*GDMNoteRecord noteRec = (GDMNoteRecord)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;*/
+
+            return AddRecordTag(owner, tagLevel, tagName, tagValue);
+
+            /*return CreateReaderStackTuple(tagLevel, curTag, addHandler);*/
+        }
+
+        private static void WriteNoteRecord(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMNoteRecord noteRec = (GDMNoteRecord)tag;
+
+            WriteRecord(stream, level, noteRec);
+        }
+
+
+        private static StackTuple AddRepositoryRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GDMRepositoryRecord repoRec = (GDMRepositoryRecord)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            if (tagName == GEDCOMTagType.NAME) {
+                repoRec.RepositoryName = tagValue;
+                curTag = null;
+            } else if (tagName == GEDCOMTagType.ADDR) {
+                curTag = repoRec.Address;
+                addHandler = AddAddressTag;
+            } else if (tagName == GEDCOMTagType.PHON || tagName == GEDCOMTagType.EMAIL || tagName == GEDCOMTagType.FAX || tagName == GEDCOMTagType.WWW) {
+                return AddAddressTag(repoRec.Address, tagLevel, tagName, tagValue);
+            } else {
+                return AddRecordTag(owner, tagLevel, tagName, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static void WriteRepositoryRecord(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMRepositoryRecord repoRec = (GDMRepositoryRecord)tag;
+
+            WriteRecord(stream, level, repoRec);
+
+            level += 1;
+            WriteTagLine(stream, level, GEDCOMTagType.NAME, repoRec.RepositoryName, true);
+            WriteAddress(stream, level, repoRec.Address);
+        }
+
+
         private static StackTuple AddTaskRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
             GDMTaskRecord taskRec = (GDMTaskRecord)owner;
@@ -675,6 +882,14 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
+        private static void WriteTaskRecord(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMTaskRecord taskRec = (GDMTaskRecord)tag;
+
+            WriteRecord(stream, level, taskRec);
+        }
+
+
         private static StackTuple AddCommunicationRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
             GDMCommunicationRecord commRec = (GDMCommunicationRecord)owner;
@@ -682,9 +897,13 @@ namespace GDModel.Providers.GEDCOM
             AddTagHandler addHandler = null;
 
             if (tagName == GEDCOMTagType.NAME) {
-                curTag = commRec.AddTag(tagName, tagValue, null);
+                commRec.CommName = tagValue;
+                curTag = null;
+            } else if (tagName == GEDCOMTagType.TYPE) {
+                commRec.CommunicationType = GEDCOMUtils.GetCommunicationTypeVal(tagValue);
+                curTag = null;
             } else if (tagName == GEDCOMTagType.DATE) {
-                curTag = commRec.AddTag(new GDMDate(commRec, tagName, tagValue));
+                curTag = commRec.Date;
             } else {
                 return AddRecordTag(owner, tagLevel, tagName, tagValue);
             }
@@ -692,16 +911,18 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static StackTuple AddLocationRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        private static void WriteCommunicationRecord(StreamWriter stream, int level, GDMTag tag)
         {
-            /*GEDCOMLocationRecord locRec = (GEDCOMLocationRecord)owner;
-            GEDCOMTag curTag = null;
-            AddTagHandler addHandler = null;*/
+            GDMCommunicationRecord commRec = (GDMCommunicationRecord)tag;
 
-            return AddRecordTag(owner, tagLevel, tagName, tagValue);
+            WriteRecord(stream, level, commRec);
 
-            /*return CreateReaderStackTuple(tagLevel, curTag, addHandler);*/
+            level += 1;
+            WriteBaseTag(stream, level, commRec.Date);
+            WriteTagLine(stream, level, GEDCOMTagType.NAME, commRec.CommName, true);
+            WriteTagLine(stream, level, GEDCOMTagType.TYPE, GEDCOMUtils.GetCommunicationTypeStr(commRec.CommunicationType), true);
         }
+
 
         private static StackTuple AddSubmissionRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
@@ -717,6 +938,14 @@ namespace GDModel.Providers.GEDCOM
 
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
+
+        private static void WriteSubmissionRecord(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMSubmissionRecord submnRec = (GDMSubmissionRecord)tag;
+
+            WriteRecord(stream, level, submnRec);
+        }
+
 
         private static StackTuple AddSubmitterRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
@@ -738,6 +967,14 @@ namespace GDModel.Providers.GEDCOM
 
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
+
+        private static void WriteSubmitterRecord(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMSubmitterRecord submrRec = (GDMSubmitterRecord)tag;
+
+            WriteRecord(stream, level, submrRec);
+        }
+
 
         private static StackTuple AddRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
@@ -765,6 +1002,24 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
+        private static void WriteRecord(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMRecord record = (GDMRecord)tag;
+
+            WriteRecordValue(stream, level, record);
+
+            level += 1;
+            WriteSubTags(stream, level, tag);
+
+            WriteTagLine(stream, level, GEDCOMTagType._UID, record.UID, true);
+
+            WriteList(stream, level, record.Notes, WriteTagEx);
+            WriteList(stream, level, record.SourceCitations, WriteTagEx);
+            WriteList(stream, level, record.MultimediaLinks, WriteMultimediaLink);
+            WriteList(stream, level, record.UserReferences, WriteUserReference);
+        }
+
+
         private static StackTuple AddHeaderTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
             GDMHeader header = (GDMHeader)owner;
@@ -779,64 +1034,6 @@ namespace GDModel.Providers.GEDCOM
                 curTag = header.AddTag(new GDMPointer(header, tagName, tagValue));
             } else {
                 return AddBaseTag(owner, tagLevel, tagName, tagValue);
-            }
-
-            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
-        }
-
-        private static StackTuple AddAddressTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
-        {
-            GDMAddress addr = (GDMAddress)owner;
-            GDMTag curTag = null;
-            AddTagHandler addHandler = null;
-
-            if (tagName == GEDCOMTagType.PHON) {
-                curTag = addr.AddPhoneNumber(tagValue);
-            } else if (tagName == GEDCOMTagType.EMAIL) {
-                curTag = addr.AddEmailAddress(tagValue);
-            } else if (tagName == GEDCOMTagType.FAX) {
-                curTag = addr.AddFaxNumber(tagValue);
-            } else if (tagName == GEDCOMTagType.WWW) {
-                curTag = addr.AddWebPage(tagValue);
-            } else {
-                return AddBaseTag(owner, tagLevel, tagName, tagValue);
-            }
-
-            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
-        }
-
-        private static StackTuple AddAssociationTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
-        {
-            GDMAssociation asso = (GDMAssociation)owner;
-            GDMTag curTag = null;
-            AddTagHandler addHandler = null;
-
-            if (tagName == GEDCOMTagType.RELA) {
-                asso.Relation = tagValue;
-                curTag = null;
-            } else if (tagName == GEDCOMTagType.SOUR) {
-                curTag = asso.SourceCitations.Add(new GDMSourceCitation(asso, tagName, tagValue));
-            } else {
-                return AddPointerWithNotesTag(owner, tagLevel, tagName, tagValue);
-            }
-
-            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
-        }
-
-        private static StackTuple AddChildToFamilyLinkTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
-        {
-            GDMChildToFamilyLink cfl = (GDMChildToFamilyLink)owner;
-            GDMTag curTag = null;
-            AddTagHandler addHandler = null;
-
-            if (tagName == GEDCOMTagType.STAT) {
-                cfl.ChildLinkageStatus = GEDCOMUtils.GetChildLinkageStatusVal(tagValue);
-                curTag = null;
-            } else if (tagName == GEDCOMTagType.PEDI) {
-                cfl.PedigreeLinkageType = GEDCOMUtils.GetPedigreeLinkageTypeVal(tagValue);
-                curTag = null;
-            } else {
-                return AddPointerWithNotesTag(owner, tagLevel, tagName, tagValue);
             }
 
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
@@ -939,40 +1136,6 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static StackTuple AddMultimediaLinkTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
-        {
-            GDMMultimediaLink mmLink = (GDMMultimediaLink)owner;
-            GDMTag curTag = null;
-            AddTagHandler addHandler = null;
-
-            if (tagName == GEDCOMTagType.FILE) {
-                curTag = mmLink.FileReferences.Add(new GDMFileReference(mmLink, tagName, tagValue));
-            } else {
-                return AddBaseTag(owner, tagLevel, tagName, tagValue);
-            }
-
-            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
-        }
-
-        private static StackTuple AddPersonalNameTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
-        {
-            GDMPersonalName persName = (GDMPersonalName)owner;
-            GDMTag curTag = null;
-            AddTagHandler addHandler = null;
-
-            if (tagName == GEDCOMTagType.TYPE) {
-                persName.NameType = GEDCOMUtils.GetNameTypeVal(tagValue);
-            } else if (tagName == GEDCOMTagType._LANG || tagName == GEDCOMTagType.LANG) {
-                persName.Language = GEDCOMUtils.GetLanguageVal(tagValue);
-            } else if (tagName == GEDCOMTagType.FONE || tagName == GEDCOMTagType.ROMN) {
-                return AddBaseTag(owner, tagLevel, tagName, tagValue);
-            } else {
-                curTag = persName.Pieces.AddTag(tagName, tagValue, null);
-            }
-
-            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
-        }
-
         private static StackTuple AddPointerWithNotesTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
             GDMPointerWithNotes ptrWN = (GDMPointerWithNotes)owner;
@@ -987,6 +1150,7 @@ namespace GDModel.Providers.GEDCOM
 
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
+
 
         private static StackTuple AddTagWithListsTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
@@ -1008,313 +1172,20 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static StackTuple AddUserReferenceTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
-        {
-            GDMUserReference userRef = (GDMUserReference)owner;
-            GDMTag curTag = null;
-            AddTagHandler addHandler = null;
-
-            if (tagName == GEDCOMTagType.TYPE) {
-                userRef.ReferenceType = tagValue;
-                curTag = null;
-            } else {
-                return AddBaseTag(owner, tagLevel, tagName, tagValue);
-            }
-
-            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
-        }
-
-        internal static StackTuple AddBaseTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
-        {
-            GDMTag ownerTag = (GDMTag)owner;
-            GDMTag curTag = null;
-            AddTagHandler addHandler = null;
-
-            curTag = ownerTag.AddTag(tagName, tagValue, null);
-
-            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
-        }
-
-        private static StackTuple CreateReaderStackTuple(int level, GDMTag tag, AddTagHandler addHandler)
-        {
-            if (tag == null) {
-                return null;
-            } else {
-                if (addHandler == null) {
-                    addHandler = GEDCOMFactory.GetInstance().GetAddHandler(tag.Name);
-                }
-                return new StackTuple(level, tag, addHandler);
-            }
-        }
-
-        #endregion
-
-        #endregion
-
-        #region Saving functions
-
-        public void SaveToFile(string fileName, GEDCOMCharacterSet charSet)
-        {
-            // Attention: processing of Header moved to BaseContext!
-
-            using (FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
-                SaveToStreamExt(fileStream, charSet);
-            }
-        }
-
-        public void SaveToStreamExt(Stream outputStream, GEDCOMCharacterSet charSet)
-        {
-            // Attention: processing of Header moved to BaseContext!
-
-            fTree.Pack();
-            using (StreamWriter writer = new StreamWriter(outputStream, GEDCOMUtils.GetEncodingByCharacterSet(charSet))) {
-                IList<GDMRecord> records = fTree.GetRecords().GetList();
-                SaveToStream(writer, records);
-
-                writer.Flush();
-            }
-
-            fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
-        }
-
-        public void SaveToStream(StreamWriter writer, IList<GDMRecord> list)
-        {
-            // write header
-            WriteTag(writer, 0, fTree.Header);
-
-            if (list != null) {
-                int num = list.Count;
-                for (int i = 0; i < num; i++) {
-                    GDMRecord record = list[i];
-                    WriteRecordEx(writer, record);
-                }
-            }
-
-            // write footer
-            const string str = "0 TRLR";
-            writer.Write(str + GEDCOM_NEWLINE);
-        }
-
-        #region Write handlers
-
-        public static void WriteRecordEx(StreamWriter writer, GDMRecord record)
-        {
-            switch (record.RecordType) {
-                case GDMRecordType.rtIndividual:
-                    WriteIndividualRecord(writer, 0, record);
-                    break;
-
-                case GDMRecordType.rtFamily:
-                    WriteFamilyRecord(writer, 0, record);
-                    break;
-
-                case GDMRecordType.rtMultimedia:
-                    WriteMultimediaRecord(writer, 0, record);
-                    break;
-
-                case GDMRecordType.rtSource:
-                    WriteSourceRecord(writer, 0, record);
-                    break;
-
-                case GDMRecordType.rtGroup:
-                    WriteGroupRecord(writer, 0, record);
-                    break;
-
-                case GDMRecordType.rtResearch:
-                    WriteResearchRecord(writer, 0, record);
-                    break;
-
-                default:
-                    WriteRecord(writer, 0, record);
-                    break;
-            }
-        }
-
-        internal static void WriteIndividualRecord(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMIndividualRecord indiRec = (GDMIndividualRecord)tag;
-
-            WriteRecordWithEvents(stream, level, indiRec);
-
-            level += 1;
-            GEDCOMProvider.WriteTagLine(stream, level, GEDCOMTagType.SEX, GEDCOMUtils.GetSexStr(indiRec.Sex), true);
-
-            WriteList(stream, level, indiRec.PersonalNames, WritePersonalName);
-            WriteList(stream, level, indiRec.ChildToFamilyLinks, WriteChildToFamilyLink);
-            WriteList(stream, level, indiRec.SpouseToFamilyLinks, WriteTag);
-            WriteList(stream, level, indiRec.Events, WriteTagWithLists); // for files content compatibility
-            WriteList(stream, level, indiRec.Associations, WriteAssociation);
-            WriteList(stream, level, indiRec.Aliases, WriteTag);
-            WriteList(stream, level, indiRec.Groups, WriteTag);
-        }
-
-        internal static void WriteFamilyRecord(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMFamilyRecord famRec = (GDMFamilyRecord)tag;
-
-            WriteRecordWithEvents(stream, level, famRec);
-
-            level += 1;
-            WriteTagLine(stream, level, GEDCOMTagType._STAT, GEDCOMUtils.GetMarriageStatusStr(famRec.Status), true);
-
-            WriteList(stream, level, famRec.Children, WriteTag);
-            WriteList(stream, level, famRec.Events, WriteTagWithLists); // for files content compatibility
-        }
-
-        internal static void WriteRecordWithEvents(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMRecordWithEvents recWE = (GDMRecordWithEvents)tag;
-
-            WriteRecord(stream, level, recWE);
-
-            level += 1;
-            WriteTagLine(stream, level, GEDCOMTagType.RESN, GEDCOMUtils.GetRestrictionStr(recWE.Restriction), true);
-            WriteList(stream, level, recWE.Submittors, WriteTag);
-        }
-
-        public static void WritePersonalName(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMPersonalName persName = (GDMPersonalName)tag;
-
-            WriteTag(stream, level, persName);
-            int lev = level + 1;
-            WriteTagLine(stream, lev, GEDCOMTagType.LANG, GEDCOMUtils.GetLanguageStr(persName.Language), true);
-            WriteTagLine(stream, lev, GEDCOMTagType.TYPE, GEDCOMUtils.GetNameTypeStr(persName.NameType), true);
-            WritePersonalNamePieces(stream, level, persName.Pieces); // same level
-        }
-
-        internal static void WritePersonalNamePieces(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMPersonalNamePieces persNamePieces = (GDMPersonalNamePieces)tag;
-
-            // without NameValue
-            int lev = level + 1;
-            WriteSubTags(stream, lev, persNamePieces);
-
-            WriteList(stream, level, persNamePieces.Notes, WriteTag);
-            WriteList(stream, level, persNamePieces.SourceCitations, WriteTag);
-        }
-
-        internal static void WriteChildToFamilyLink(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMChildToFamilyLink cfl = (GDMChildToFamilyLink)tag;
-
-            WriteTag(stream, level, cfl);
-
-            level += 1;
-            WriteTagLine(stream, level, GEDCOMTagType.STAT, GEDCOMUtils.GetChildLinkageStatusStr(cfl.ChildLinkageStatus), true);
-            WriteTagLine(stream, level, GEDCOMTagType.PEDI, GEDCOMUtils.GetPedigreeLinkageTypeStr(cfl.PedigreeLinkageType), true);
-        }
-
-        internal static void WriteAssociation(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMAssociation asso = (GDMAssociation)tag;
-
-            WriteTag(stream, level, asso);
-
-            level += 1;
-            WriteTagLine(stream, level, GEDCOMTagType.RELA, asso.Relation, true);
-            WriteList(stream, level, asso.SourceCitations, WriteTag);
-        }
-
-        internal static void WriteUserReference(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMUserReference userRef = (GDMUserReference)tag;
-
-            WriteTag(stream, level, userRef);
-            GEDCOMProvider.WriteTagLine(stream, ++level, GEDCOMTagType.TYPE, userRef.ReferenceType, true);
-        }
-
-        internal static void WriteGroupRecord(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMGroupRecord groupRec = (GDMGroupRecord)tag;
-
-            WriteRecord(stream, level, groupRec);
-            WriteList(stream, ++level, groupRec.Members, WriteTag);
-        }
-
-        internal static void WriteMultimediaRecord(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMMultimediaRecord mmRec = (GDMMultimediaRecord)tag;
-
-            WriteRecord(stream, level, mmRec);
-            WriteList(stream, ++level, mmRec.FileReferences, WriteTag);
-        }
-
-        internal static void WriteMultimediaLink(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMMultimediaLink mmLink = (GDMMultimediaLink)tag;
-
-            WriteTag(stream, level, mmLink);
-            WriteList(stream, ++level, mmLink.FileReferences, WriteTag);
-        }
-
-        internal static void WriteSourceRecord(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMSourceRecord sourRec = (GDMSourceRecord)tag;
-
-            WriteRecord(stream, level, sourRec);
-            WriteList(stream, ++level, sourRec.RepositoryCitations, WriteTag);
-        }
-
-        internal static void WriteResearchRecord(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMResearchRecord resRec = (GDMResearchRecord)tag;
-
-            WriteRecord(stream, level, resRec);
-
-            level += 1;
-            WriteList(stream, level, resRec.Tasks, WriteTag);
-            WriteList(stream, level, resRec.Communications, WriteTag);
-            WriteList(stream, level, resRec.Groups, WriteTag);
-        }
-
-        internal static void WriteRecord(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMRecord record = (GDMRecord)tag;
-
-            WriteRecordValue(stream, level, record);
-
-            level += 1;
-            WriteSubTags(stream, level, tag);
-
-            WriteTagLine(stream, level, GEDCOMTagType._UID, record.UID, true);
-
-            WriteList(stream, level, record.Notes, WriteTag);
-            WriteList(stream, level, record.SourceCitations, WriteTag);
-            WriteList(stream, level, record.MultimediaLinks, WriteMultimediaLink);
-            WriteList(stream, level, record.UserReferences, WriteUserReference);
-        }
-
-        internal static void WriteAddress(StreamWriter stream, int level, GDMTag tag)
-        {
-            GDMAddress addr = (GDMAddress)tag;
-
-            WriteTagValue(stream, level, addr);
-
-            int lev = level + 1;
-            WriteSubTags(stream, lev, addr);
-
-            // same level
-            WriteList(stream, level, addr.PhoneNumbers, WriteTag);
-            WriteList(stream, level, addr.EmailAddresses, WriteTag);
-            WriteList(stream, level, addr.FaxNumbers, WriteTag);
-            WriteList(stream, level, addr.WebPages, WriteTag);
-        }
-
-        internal static void WriteTagWithLists(StreamWriter stream, int level, GDMTag tag)
+        private static void WriteTagWithLists(StreamWriter stream, int level, GDMTag tag)
         {
             GDMTagWithLists tagWL = (GDMTagWithLists)tag;
 
-            WriteTag(stream, level, tagWL);
+            WriteBaseTag(stream, level, tagWL);
 
             level += 1;
-            WriteList(stream, level, tagWL.Notes, WriteTag);
-            WriteList(stream, level, tagWL.SourceCitations, WriteTag);
+            WriteList(stream, level, tagWL.Notes, WriteTagEx);
+            WriteList(stream, level, tagWL.SourceCitations, WriteTagEx);
             WriteList(stream, level, tagWL.MultimediaLinks, WriteMultimediaLink);
         }
 
-        internal static void WriteSubTags(StreamWriter stream, int level, GDMTag tag)
+
+        private static void WriteSubTags(StreamWriter stream, int level, GDMTag tag)
         {
             var subTags = tag.SubTags;
 
@@ -1323,7 +1194,7 @@ namespace GDModel.Providers.GEDCOM
                 for (int i = 0; i < subtagsCount; i++) {
                     GDMTag subtag = subTags[i];
                     if (subtag.Name == GEDCOMTagType.CONC || subtag.Name == GEDCOMTagType.CONT) {
-                        WriteTag(stream, level, subtag);
+                        WriteBaseTag(stream, level, subtag);
                     }
                 }
 
@@ -1331,13 +1202,13 @@ namespace GDModel.Providers.GEDCOM
                     GDMTag subtag = subTags[i];
                     string tagName = subtag.Name;
                     if (tagName != GEDCOMTagType.CONT && tagName != GEDCOMTagType.CONC) {
-                        WriteTag(stream, level, subtag);
+                        WriteTagEx(stream, level, subtag);
                     }
                 }
             }
         }
 
-        internal static void WriteRecordValue(StreamWriter stream, int level, GDMRecord record)
+        private static void WriteRecordValue(StreamWriter stream, int level, GDMRecord record)
         {
             string str = level.ToString();
 
@@ -1355,23 +1226,44 @@ namespace GDModel.Providers.GEDCOM
             stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
         }
 
-        internal static void WriteTagValue(StreamWriter stream, int level, GDMTag tag)
+        private static void WriteTagValue(StreamWriter stream, int level, GDMTag tag)
         {
             WriteTagLine(stream, level, tag.Name, tag.StringValue);
         }
 
-        public static void WriteTag(StreamWriter stream, int level, GDMTag tag)
+        public static void WriteTagEx(StreamWriter stream, int level, GDMTag tag)
         {
-            if (tag.Name == GEDCOMTagType.ADDR) {
-                WriteAddress(stream, level, tag);
-                return;
+            TagInfo tagInfo = GEDCOMFactory.GetInstance().GetTagInfo(tag.Name);
+            if (tagInfo == null) {
+                WriteBaseTag(stream, level, tag);
+            } else {
+                SaveTagHandler saveHandler = tagInfo.SaveHandler;
+                if (saveHandler == null) {
+                    WriteBaseTag(stream, level, tag);
+                } else {
+                    saveHandler(stream, level, tag);
+                }
             }
+        }
 
+        internal static StackTuple AddBaseTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GDMTag ownerTag = (GDMTag)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            curTag = ownerTag.AddTag(tagName, tagValue, null);
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static void WriteBaseTag(StreamWriter stream, int level, GDMTag tag)
+        {
             WriteTagValue(stream, level, tag);
             WriteSubTags(stream, ++level, tag);
         }
 
-        internal static void WriteList<T>(StreamWriter stream, int level, GDMList<T> list, SaveTagHandler tagHandler) where T : GDMTag
+        private static void WriteList<T>(StreamWriter stream, int level, GDMList<T> list, SaveTagHandler tagHandler) where T : GDMTag
         {
             if (tagHandler == null) throw new ArgumentException("tagHandler");
 
@@ -1390,7 +1282,7 @@ namespace GDModel.Providers.GEDCOM
         // debug field
         public static bool SkipUID = false;
 
-        internal static void WriteTagLine(StreamWriter stream, int level, string tagName, string tagValue, bool skipEmpty = false)
+        private static void WriteTagLine(StreamWriter stream, int level, string tagName, string tagValue, bool skipEmpty = false)
         {
             if (tagName == GEDCOMTagType._UID && SkipUID) return;
 
@@ -1404,7 +1296,299 @@ namespace GDModel.Providers.GEDCOM
             stream.Write(str + GEDCOM_NEWLINE);
         }
 
-        #endregion
+        private static StackTuple CreateReaderStackTuple(int level, GDMTag tag, AddTagHandler addHandler)
+        {
+            if (tag == null) {
+                return null;
+            } else {
+                if (addHandler == null) {
+                    addHandler = GEDCOMFactory.GetInstance().GetAddHandler(tag.Name);
+                }
+                return new StackTuple(level, tag, addHandler);
+            }
+        }
+
+
+        private static StackTuple AddLocationRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GDMLocationRecord locRec = (GDMLocationRecord)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            if (tagName == GEDCOMTagType.NAME) {
+                locRec.LocationName = tagValue;
+                curTag = null;
+            } else if (tagName == GEDCOMTagType.MAP) {
+                curTag = locRec.Map;
+                addHandler = AddMapTag;
+            } else {
+                return AddRecordTag(owner, tagLevel, tagName, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static void WriteLocationRecord(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMLocationRecord locRec = (GDMLocationRecord)tag;
+
+            WriteRecord(stream, level, locRec);
+
+            level += 1;
+            WriteTagLine(stream, level, GEDCOMTagType.NAME, locRec.LocationName, true);
+            WriteMap(stream, level, locRec.Map);
+        }
+
+
+        private static StackTuple AddPlaceTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GDMPlace place = (GDMPlace)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            if (tagName == GEDCOMTagType.MAP) {
+                curTag = place.Map;
+                addHandler = AddMapTag;
+            } else {
+                return AddTagWithListsTag(owner, tagLevel, tagName, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static void WritePlace(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMPlace place = (GDMPlace)tag;
+
+            WriteTagWithLists(stream, level, tag);
+
+            level += 1;
+            WriteMap(stream, level, place.Map);
+        }
+
+
+        private static StackTuple AddMapTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GDMMap map = (GDMMap)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            if (tagName == GEDCOMTagType.LATI) {
+                map.Lati = GEDCOMUtils.GetGeoCoord(tagValue, GeoCoord.Lati);
+                curTag = null;
+            } else if (tagName == GEDCOMTagType.LONG) {
+                map.Long = GEDCOMUtils.GetGeoCoord(tagValue, GeoCoord.Long);
+                curTag = null;
+            } else {
+                return AddBaseTag(owner, tagLevel, tagName, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static void WriteMap(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMMap map = (GDMMap)tag;
+
+            if (map.Lati != 0.0d || map.Long != 0.0d) {
+                WriteTagValue(stream, level, tag);
+
+                level += 1;
+                WriteTagLine(stream, level, GEDCOMTagType.LATI, GEDCOMUtils.GetFloatStr(map.Lati), true);
+                WriteTagLine(stream, level, GEDCOMTagType.LONG, GEDCOMUtils.GetFloatStr(map.Long), true);
+            }
+        }
+
+
+        private static StackTuple AddUserReferenceTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GDMUserReference userRef = (GDMUserReference)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            if (tagName == GEDCOMTagType.TYPE) {
+                userRef.ReferenceType = tagValue;
+                curTag = null;
+            } else {
+                return AddBaseTag(owner, tagLevel, tagName, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static void WriteUserReference(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMUserReference userRef = (GDMUserReference)tag;
+
+            WriteBaseTag(stream, level, userRef);
+            GEDCOMProvider.WriteTagLine(stream, ++level, GEDCOMTagType.TYPE, userRef.ReferenceType, true);
+        }
+
+
+        private static StackTuple AddMultimediaLinkTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GDMMultimediaLink mmLink = (GDMMultimediaLink)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            if (tagName == GEDCOMTagType.FILE) {
+                curTag = mmLink.FileReferences.Add(new GDMFileReference(mmLink, tagName, tagValue));
+            } else {
+                return AddBaseTag(owner, tagLevel, tagName, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static void WriteMultimediaLink(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMMultimediaLink mmLink = (GDMMultimediaLink)tag;
+
+            WriteBaseTag(stream, level, mmLink);
+            WriteList(stream, ++level, mmLink.FileReferences, WriteTagEx);
+        }
+
+
+        private static StackTuple AddAssociationTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GDMAssociation asso = (GDMAssociation)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            if (tagName == GEDCOMTagType.RELA) {
+                asso.Relation = tagValue;
+                curTag = null;
+            } else if (tagName == GEDCOMTagType.SOUR) {
+                curTag = asso.SourceCitations.Add(new GDMSourceCitation(asso, tagName, tagValue));
+            } else {
+                return AddPointerWithNotesTag(owner, tagLevel, tagName, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static void WriteAssociation(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMAssociation asso = (GDMAssociation)tag;
+
+            WriteBaseTag(stream, level, asso);
+
+            level += 1;
+            WriteTagLine(stream, level, GEDCOMTagType.RELA, asso.Relation, true);
+            WriteList(stream, level, asso.SourceCitations, WriteTagEx);
+        }
+
+
+        private static StackTuple AddAddressTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GDMAddress addr = (GDMAddress)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            if (tagName == GEDCOMTagType.PHON) {
+                curTag = addr.AddPhoneNumber(tagValue);
+            } else if (tagName == GEDCOMTagType.EMAIL) {
+                curTag = addr.AddEmailAddress(tagValue);
+            } else if (tagName == GEDCOMTagType.FAX) {
+                curTag = addr.AddFaxNumber(tagValue);
+            } else if (tagName == GEDCOMTagType.WWW) {
+                curTag = addr.AddWebPage(tagValue);
+            } else {
+                return AddBaseTag(owner, tagLevel, tagName, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static void WriteAddress(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMAddress addr = (GDMAddress)tag;
+
+            WriteTagValue(stream, level, addr);
+
+            int lev = level + 1;
+            WriteSubTags(stream, lev, addr);
+
+            // same level
+            WriteList(stream, level, addr.PhoneNumbers, WriteTagEx);
+            WriteList(stream, level, addr.EmailAddresses, WriteTagEx);
+            WriteList(stream, level, addr.FaxNumbers, WriteTagEx);
+            WriteList(stream, level, addr.WebPages, WriteTagEx);
+        }
+
+
+        private static StackTuple AddChildToFamilyLinkTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GDMChildToFamilyLink cfl = (GDMChildToFamilyLink)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            if (tagName == GEDCOMTagType.STAT) {
+                cfl.ChildLinkageStatus = GEDCOMUtils.GetChildLinkageStatusVal(tagValue);
+                curTag = null;
+            } else if (tagName == GEDCOMTagType.PEDI) {
+                cfl.PedigreeLinkageType = GEDCOMUtils.GetPedigreeLinkageTypeVal(tagValue);
+                curTag = null;
+            } else {
+                return AddPointerWithNotesTag(owner, tagLevel, tagName, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static void WriteChildToFamilyLink(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMChildToFamilyLink cfl = (GDMChildToFamilyLink)tag;
+
+            WriteBaseTag(stream, level, cfl);
+
+            level += 1;
+            WriteTagLine(stream, level, GEDCOMTagType.STAT, GEDCOMUtils.GetChildLinkageStatusStr(cfl.ChildLinkageStatus), true);
+            WriteTagLine(stream, level, GEDCOMTagType.PEDI, GEDCOMUtils.GetPedigreeLinkageTypeStr(cfl.PedigreeLinkageType), true);
+        }
+
+
+        private static StackTuple AddPersonalNameTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GDMPersonalName persName = (GDMPersonalName)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            if (tagName == GEDCOMTagType.TYPE) {
+                persName.NameType = GEDCOMUtils.GetNameTypeVal(tagValue);
+            } else if (tagName == GEDCOMTagType._LANG || tagName == GEDCOMTagType.LANG) {
+                persName.Language = GEDCOMUtils.GetLanguageVal(tagValue);
+            } else if (tagName == GEDCOMTagType.FONE || tagName == GEDCOMTagType.ROMN) {
+                return AddBaseTag(owner, tagLevel, tagName, tagValue);
+            } else {
+                curTag = persName.Pieces.AddTag(tagName, tagValue, null);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        public static void WritePersonalName(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMPersonalName persName = (GDMPersonalName)tag;
+
+            WriteBaseTag(stream, level, persName);
+            int lev = level + 1;
+            WriteTagLine(stream, lev, GEDCOMTagType.LANG, GEDCOMUtils.GetLanguageStr(persName.Language), true);
+            WriteTagLine(stream, lev, GEDCOMTagType.TYPE, GEDCOMUtils.GetNameTypeStr(persName.NameType), true);
+            WritePersonalNamePieces(stream, level, persName.Pieces); // same level
+        }
+
+        private static void WritePersonalNamePieces(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMPersonalNamePieces persNamePieces = (GDMPersonalNamePieces)tag;
+
+            // without NameValue
+            int lev = level + 1;
+            WriteSubTags(stream, lev, persNamePieces);
+
+            WriteList(stream, level, persNamePieces.Notes, WriteTagEx);
+            WriteList(stream, level, persNamePieces.SourceCitations, WriteTagEx);
+        }
 
         #endregion
 
@@ -1510,181 +1694,151 @@ namespace GDModel.Providers.GEDCOM
                 new GEDCOMAppFormat(GEDCOMFormat.gf_GENJ, "GENJ", "GENJ", -1),
             };
 
-            fTagsBase = CreatePropertiesDict();
-
             GEDCOMFactory f = GEDCOMFactory.GetInstance();
 
-            f.RegisterTag(GEDCOMTagType.ADDR, GDMAddress.Create, AddAddressTag);
-            f.RegisterTag(GEDCOMTagType.ANCI, GDMPointer.Create, AddBaseTag);
-            f.RegisterTag(GEDCOMTagType.BAPL, GDMIndividualOrdinance.Create, AddIndividualOrdinanceTag);
-            f.RegisterTag(GEDCOMTagType.CHAN, GDMChangeDate.Create, AddChangeDateTag);
-            f.RegisterTag(GEDCOMTagType.CONL, GDMIndividualOrdinance.Create, AddIndividualOrdinanceTag);
-            f.RegisterTag(GEDCOMTagType.DATE, GDMDateValue.Create, AddBaseTag);
-            f.RegisterTag(GEDCOMTagType.DESI, GDMPointer.Create, AddBaseTag);
-            f.RegisterTag(GEDCOMTagType.ENDL, GDMIndividualOrdinance.Create, AddIndividualOrdinanceTag);
-            f.RegisterTag(GEDCOMTagType.FAMC, GDMPointer.Create, AddBaseTag);
-            f.RegisterTag(GEDCOMTagType.LANG, GDMLanguage.Create, AddBaseTag);
-            f.RegisterTag(GEDCOMTagType.MAP, GDMMap.Create, AddBaseTag);
-            f.RegisterTag(GEDCOMTagType.PLAC, GDMPlace.Create, AddTagWithListsTag);
-            f.RegisterTag(GEDCOMTagType.SLGC, GDMIndividualOrdinance.Create, AddIndividualOrdinanceTag);
-            f.RegisterTag(GEDCOMTagType.SLGS, GDMSpouseSealing.Create, AddIndividualOrdinanceTag);
-            f.RegisterTag(GEDCOMTagType.TIME, GDMTime.Create, AddBaseTag);
-
-            f.RegisterTag(GEDCOMTagType._LANG, GDMLanguage.Create, AddBaseTag);
-            f.RegisterTag(GEDCOMTagType._LOC, GDMPointer.Create, AddBaseTag);
-            f.RegisterTag(GEDCOMTagType._POSITION, GDMCutoutPosition.Create, AddBaseTag);
-
-            f = new GEDCOMFactory();
-            fIndividualTags = f;
-
-            f.RegisterTag(GEDCOMTagType.NAME, GDMPersonalName.Create, AddPersonalNameTag); // INDI.NAME!
-
+            f.RegisterTag(GEDCOMTagType.ADDR, GDMAddress.Create, AddAddressTag, WriteAddress, true, false);
             f.RegisterTag(GEDCOMTagType.ADOP, GDMIndividualEvent.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.ALIA, GDMAlias.Create, AddBaseTag);
+            f.RegisterTag(GEDCOMTagType.AGNC, null, null, null, true, false);
+            f.RegisterTag(GEDCOMTagType.ALIA, GDMAlias.Create, AddBaseTag, null, true, false);
+            f.RegisterTag(GEDCOMTagType.ANCI, GDMPointer.Create, AddBaseTag);
+            f.RegisterTag(GEDCOMTagType.ANUL, GDMFamilyEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.ASSO, GDMAssociation.Create, AddAssociationTag);
+            f.RegisterTag(GEDCOMTagType.AUTH, null, null, null, true, false);
+
+            f.RegisterTag(GEDCOMTagType.BAPL, GDMIndividualOrdinance.Create, AddIndividualOrdinanceTag);
             f.RegisterTag(GEDCOMTagType.BAPM, GDMIndividualEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.BARM, GDMIndividualEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.BASM, GDMIndividualEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.BIRT, GDMIndividualEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.BLES, GDMIndividualEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.BURI, GDMIndividualEvent.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.CENS, GDMIndividualEvent.Create, AddCustomEventTag);
+
+            f.RegisterTag(GEDCOMTagType.CAST, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.CAUS, null, null, null, true, false);
+            f.RegisterTag(GEDCOMTagType.CHAN, GDMChangeDate.Create, AddChangeDateTag, WriteBaseTag, true, false);
             f.RegisterTag(GEDCOMTagType.CHR, GDMIndividualEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.CHRA, GDMIndividualEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.CITY, null, null, null, true, false);
             f.RegisterTag(GEDCOMTagType.CONF, GDMIndividualEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.CONL, GDMIndividualOrdinance.Create, AddIndividualOrdinanceTag);
             f.RegisterTag(GEDCOMTagType.CREM, GDMIndividualEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.CTRY, null, null, null, true, false);
+
+            f.RegisterTag(GEDCOMTagType.DATE, GDMDateValue.Create, AddBaseTag, WriteBaseTag, true, false);
             f.RegisterTag(GEDCOMTagType.DEAT, GDMIndividualEvent.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.EVEN, GDMIndividualEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.DESI, GDMPointer.Create, AddBaseTag);
+            f.RegisterTag(GEDCOMTagType.DIV, GDMFamilyEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.DIVF, GDMFamilyEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.DSCR, GDMIndividualAttribute.Create, AddCustomEventTag);
+
+            f.RegisterTag(GEDCOMTagType.EDUC, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.EMIG, GDMIndividualEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.ENDL, GDMIndividualOrdinance.Create, AddIndividualOrdinanceTag);
+            f.RegisterTag(GEDCOMTagType.ENGA, GDMFamilyEvent.Create, AddCustomEventTag);
+
+            f.RegisterTag(GEDCOMTagType.FACT, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.FAMC, GDMChildToFamilyLink.Create, AddChildToFamilyLinkTag);
             f.RegisterTag(GEDCOMTagType.FAMS, GDMSpouseToFamilyLink.Create, AddPointerWithNotesTag);
             f.RegisterTag(GEDCOMTagType.FCOM, GDMIndividualEvent.Create, AddCustomEventTag);
+
+            f.RegisterTag(GEDCOMTagType.GIVN, null, null, null, true, false);
             f.RegisterTag(GEDCOMTagType.GRAD, GDMIndividualEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.HUSB, null, null, null, true, false);
+            f.RegisterTag(GEDCOMTagType.IDNO, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.IMMI, GDMIndividualEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.LANG, GDMLanguage.Create, AddBaseTag, WriteBaseTag, true, false);
+
+            f.RegisterTag(GEDCOMTagType.MAP, GDMMap.Create, AddMapTag, WriteMap, true, false);
+            f.RegisterTag(GEDCOMTagType.MARB, GDMFamilyEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.MARC, GDMFamilyEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.MARL, GDMFamilyEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.MARR, GDMFamilyEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.MARS, GDMFamilyEvent.Create, AddCustomEventTag);
+
+            f.RegisterTag(GEDCOMTagType.NATI, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.NATU, GDMIndividualEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.NCHI, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.NICK, null, null, null, true, false);
+            f.RegisterTag(GEDCOMTagType.NMR, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.NPFX, null, null, null, true, false);
+            f.RegisterTag(GEDCOMTagType.NSFX, null, null, null, true, false);
+
+            f.RegisterTag(GEDCOMTagType.OCCU, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.ORDN, GDMIndividualEvent.Create, AddCustomEventTag);
+
+            f.RegisterTag(GEDCOMTagType.PAGE, null, null, null, true, false);
+            f.RegisterTag(GEDCOMTagType.PHON, null, null, null, true, false);
+            f.RegisterTag(GEDCOMTagType.PLAC, GDMPlace.Create, AddPlaceTag, WritePlace, true, false);
+            f.RegisterTag(GEDCOMTagType.POST, null, null, null, true, false);
             f.RegisterTag(GEDCOMTagType.PROB, GDMIndividualEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.PROP, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.PUBL, null, null, null, true, false);
+
+            f.RegisterTag(GEDCOMTagType.RELI, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.RESN, null, null, null, true, false);
             f.RegisterTag(GEDCOMTagType.RETI, GDMIndividualEvent.Create, AddCustomEventTag);
+
+            f.RegisterTag(GEDCOMTagType.SLGC, GDMIndividualOrdinance.Create, AddIndividualOrdinanceTag);
+            f.RegisterTag(GEDCOMTagType.SLGS, GDMSpouseSealing.Create, AddIndividualOrdinanceTag);
+            f.RegisterTag(GEDCOMTagType.SPFX, null, null, null, true, false);
+            f.RegisterTag(GEDCOMTagType.SSN, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.STAE, null, null, null, true, false);
+            f.RegisterTag(GEDCOMTagType.SUBM, null, null, null, true, false);
+            f.RegisterTag(GEDCOMTagType.SURN, null, null, null, true, false);
+
+            f.RegisterTag(GEDCOMTagType.TEXT, null, null, null, true, false);
+            f.RegisterTag(GEDCOMTagType.TIME, GDMTime.Create, AddBaseTag, WriteBaseTag, true, false);
+            f.RegisterTag(GEDCOMTagType.TITL, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.TYPE, null, null, null, true, false);
+
+            f.RegisterTag(GEDCOMTagType.VERS, null, null, null, true, false);
+            f.RegisterTag(GEDCOMTagType.WIFE, null, null, null, true, false);
             f.RegisterTag(GEDCOMTagType.WILL, GDMIndividualEvent.Create, AddCustomEventTag);
 
-            f.RegisterTag(GEDCOMTagType.CAST, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.DSCR, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.EDUC, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.FACT, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.IDNO, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.NATI, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.NCHI, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.NMR, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.OCCU, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.PROP, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.RELI, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.RESI, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.SSN, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.TITL, GDMIndividualAttribute.Create, AddCustomEventTag);
-
+            // extensions
             f.RegisterTag(GEDCOMTagType._AWARD, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType._BGRO, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType._EYES, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType._HAIR, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType._BGRO, GDMIndividualAttribute.Create, AddCustomEventTag, null, true, true);
+            f.RegisterTag(GEDCOMTagType._CENN, null, null, null, true, true);
+            f.RegisterTag(GEDCOMTagType._EYES, GDMIndividualAttribute.Create, AddCustomEventTag, null, true, true);
+            f.RegisterTag(GEDCOMTagType._HAIR, GDMIndividualAttribute.Create, AddCustomEventTag, null, true, true);
             f.RegisterTag(GEDCOMTagType._HOBBY, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType._MDNA, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType._LANG, GDMLanguage.Create, AddBaseTag, WriteBaseTag, true, true);
+            f.RegisterTag(GEDCOMTagType._LOC, GDMPointer.Create, AddBaseTag, WriteBaseTag, true, true);
+            f.RegisterTag(GEDCOMTagType._MARN, null, null, null, true, true);
+            f.RegisterTag(GEDCOMTagType._MDNA, GDMIndividualAttribute.Create, AddCustomEventTag, null, true, true);
             f.RegisterTag(GEDCOMTagType._MILI, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType._MILI_DIS, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType._MILI_IND, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType._MILI_RANK, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType._PATN, null, null, null, true, true);
+            f.RegisterTag(GEDCOMTagType._POSITION, GDMCutoutPosition.Create, AddBaseTag, WriteBaseTag, true, true);
+            f.RegisterTag(GEDCOMTagType._RELN, null, null, null, true, true);
             f.RegisterTag(GEDCOMTagType._TRAVEL, GDMIndividualAttribute.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType._YDNA, GDMIndividualAttribute.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType._YDNA, GDMIndividualAttribute.Create, AddCustomEventTag, null, true, true);
 
-            f = new GEDCOMFactory();
-            fFamilyTags = f;
+            f.RegisterTag(GEDCOMTagType.NAME, GDMPersonalName.Create, AddPersonalNameTag, WritePersonalName); // INDI.NAME!
 
-            f.RegisterTag(GEDCOMTagType.ANUL, GDMFamilyEvent.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.DIV, GDMFamilyEvent.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.DIVF, GDMFamilyEvent.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.ENGA, GDMFamilyEvent.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.MARB, GDMFamilyEvent.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.MARC, GDMFamilyEvent.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.MARR, GDMFamilyEvent.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.MARL, GDMFamilyEvent.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.MARS, GDMFamilyEvent.Create, AddCustomEventTag);
+            // FIXME
+            // indi
+            f.RegisterTag(GEDCOMTagType.CENS, GDMIndividualEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.EVEN, GDMIndividualEvent.Create, AddCustomEventTag);
+            f.RegisterTag(GEDCOMTagType.RESI, GDMIndividualAttribute.Create, AddCustomEventTag);
 
-            // both indi & fam records
+            // fam records
             f.RegisterTag(GEDCOMTagType.CENS, GDMFamilyEvent.Create, AddCustomEventTag);
-            f.RegisterTag(GEDCOMTagType.RESI, GDMFamilyEvent.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.EVEN, GDMFamilyEvent.Create, AddCustomEventTag);
-        }
-
-        private static readonly Dictionary<string, TagProperties> fTagsBase;
-
-        private static Dictionary<string, TagProperties> CreatePropertiesDict()
-        {
-            var result = new Dictionary<string, TagProperties>();
-
-            result.Add(GEDCOMTagType.ADDR, new TagProperties(GEDCOMTagType.ADDR, true, false));
-            result.Add(GEDCOMTagType.AGNC, new TagProperties(GEDCOMTagType.AGNC, true, false));
-            result.Add(GEDCOMTagType.ALIA, new TagProperties(GEDCOMTagType.ALIA, true, false));
-            result.Add(GEDCOMTagType.AUTH, new TagProperties(GEDCOMTagType.AUTH, true, false));
-            result.Add(GEDCOMTagType.CAUS, new TagProperties(GEDCOMTagType.CAUS, true, false));
-            result.Add(GEDCOMTagType.CHAN, new TagProperties(GEDCOMTagType.CHAN, true, false));
-            result.Add(GEDCOMTagType.CITY, new TagProperties(GEDCOMTagType.CITY, true, false));
-            result.Add(GEDCOMTagType.CTRY, new TagProperties(GEDCOMTagType.CTRY, true, false));
-            result.Add(GEDCOMTagType.DATE, new TagProperties(GEDCOMTagType.DATE, true, false));
-            result.Add(GEDCOMTagType.GIVN, new TagProperties(GEDCOMTagType.GIVN, true, false));
-            result.Add(GEDCOMTagType.HUSB, new TagProperties(GEDCOMTagType.HUSB, true, false));
-            result.Add(GEDCOMTagType.LANG, new TagProperties(GEDCOMTagType.LANG, true, false));
-            result.Add(GEDCOMTagType.NICK, new TagProperties(GEDCOMTagType.NICK, true, false));
-            result.Add(GEDCOMTagType.NPFX, new TagProperties(GEDCOMTagType.NPFX, true, false));
-            result.Add(GEDCOMTagType.NSFX, new TagProperties(GEDCOMTagType.NSFX, true, false));
-            result.Add(GEDCOMTagType.PAGE, new TagProperties(GEDCOMTagType.PAGE, true, false));
-            result.Add(GEDCOMTagType.PHON, new TagProperties(GEDCOMTagType.PHON, true, false));
-            result.Add(GEDCOMTagType.PLAC, new TagProperties(GEDCOMTagType.PLAC, true, false));
-            result.Add(GEDCOMTagType.POST, new TagProperties(GEDCOMTagType.POST, true, false));
-            result.Add(GEDCOMTagType.PUBL, new TagProperties(GEDCOMTagType.PUBL, true, false));
-            result.Add(GEDCOMTagType.RESN, new TagProperties(GEDCOMTagType.RESN, true, false));
-            result.Add(GEDCOMTagType.SPFX, new TagProperties(GEDCOMTagType.SPFX, true, false));
-            result.Add(GEDCOMTagType.STAE, new TagProperties(GEDCOMTagType.STAE, true, false));
-            result.Add(GEDCOMTagType.SUBM, new TagProperties(GEDCOMTagType.SUBM, true, false));
-            result.Add(GEDCOMTagType.SURN, new TagProperties(GEDCOMTagType.SURN, true, false));
-            result.Add(GEDCOMTagType.TEXT, new TagProperties(GEDCOMTagType.TEXT, true, false));
-            result.Add(GEDCOMTagType.TIME, new TagProperties(GEDCOMTagType.TIME, true, false));
-            result.Add(GEDCOMTagType.TYPE, new TagProperties(GEDCOMTagType.TYPE, true, false));
-            result.Add(GEDCOMTagType.VERS, new TagProperties(GEDCOMTagType.VERS, true, false));
-            result.Add(GEDCOMTagType.WIFE, new TagProperties(GEDCOMTagType.WIFE, true, false));
-
-            // extensions
-            result.Add(GEDCOMTagType._PATN, new TagProperties(GEDCOMTagType._PATN, true, true));
-            result.Add(GEDCOMTagType._MARN, new TagProperties(GEDCOMTagType._MARN, true, true));
-            result.Add(GEDCOMTagType._RELN, new TagProperties(GEDCOMTagType._RELN, true, true));
-            result.Add(GEDCOMTagType._CENN, new TagProperties(GEDCOMTagType._CENN, true, true));
-            result.Add(GEDCOMTagType._LOC, new TagProperties(GEDCOMTagType._LOC, true,  true));
-            result.Add(GEDCOMTagType._POSITION, new TagProperties(GEDCOMTagType._POSITION, true,  true));
-            result.Add(GEDCOMTagType._BGRO, new TagProperties(GEDCOMTagType._BGRO, true,  true));
-            result.Add(GEDCOMTagType._HAIR, new TagProperties(GEDCOMTagType._HAIR, true,  true));
-            result.Add(GEDCOMTagType._EYES, new TagProperties(GEDCOMTagType._EYES, true,  true));
-            result.Add(GEDCOMTagType._MDNA, new TagProperties(GEDCOMTagType._MDNA, true,  true));
-            result.Add(GEDCOMTagType._YDNA, new TagProperties(GEDCOMTagType._YDNA, true,  true));
-
-            result.Add("_LANG", new TagProperties("_LANG", true,  true));
+            f.RegisterTag(GEDCOMTagType.RESI, GDMFamilyEvent.Create, AddCustomEventTag);
 
             // TODO
-            //result.Add("_OBIT", new TagProperties("_OBIT", true,  true)); // Obituary
-            //result.Add("_ELEC", new TagProperties("_ELEC", true,  true)); // Election
-            //result.Add("_MDCL", new TagProperties("_MDCL", true,  true)); // Medical condition
-            //result.Add("_EXCM", new TagProperties("_EXCM", true,  true)); // Excommunication!
-
-            return result;
-        }
-
-        public static TagProperties GetTagProps(string tagName)
-        {
-            TagProperties result;
-            fTagsBase.TryGetValue(tagName, out result);
-            return result;
+            //f.RegisterTag("_OBIT", true,  true); // Obituary
+            //f.RegisterTag("_ELEC", true,  true); // Election
+            //f.RegisterTag("_MDCL", true,  true); // Medical condition
+            //f.RegisterTag("_EXCM", true,  true); // Excommunication!
         }
 
         public static bool SkipEmptyTag(string tagName)
         {
-            TagProperties props = GEDCOMProvider.GetTagProps(tagName);
+            TagInfo props = GEDCOMFactory.GetInstance().GetTagInfo(tagName);
             return (props != null && props.SkipEmpty);
         }
 

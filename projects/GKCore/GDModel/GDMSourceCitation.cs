@@ -105,5 +105,15 @@ namespace GDModel
             }
             return result;
         }
+
+        /// <summary>
+        /// Strange values were found, possibly from other genealogical programs.
+        /// </summary>
+        /// <returns>Checked value of CertaintyAssessment</returns>
+        public int GetValidCertaintyAssessment()
+        {
+            int val = CertaintyAssessment;
+            return (val >= 0 && val <= 3) ? val : 0;
+        }
     }
 }

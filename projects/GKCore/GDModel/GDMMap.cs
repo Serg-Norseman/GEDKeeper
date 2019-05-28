@@ -18,26 +18,27 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib;
+using System;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
     public sealed class GDMMap : GDMTag
     {
-        private enum GeoCoord { Lati, Long }
+        private double fLati;
+        private double fLong;
 
 
         public double Lati
         {
-            get { return GetGeoCoord(GetTagStringValue(GEDCOMTagType.LATI), GeoCoord.Lati); }
-            set { SetTagFloatValue(GEDCOMTagType.LATI, value); }
+            get { return fLati; }
+            set { fLati = value; }
         }
 
         public double Long
         {
-            get { return GetGeoCoord(GetTagStringValue(GEDCOMTagType.LONG), GeoCoord.Long); }
-            set { SetTagFloatValue(GEDCOMTagType.LONG, value); }
+            get { return fLong; }
+            set { fLong = value; }
         }
 
 
@@ -56,36 +57,29 @@ namespace GDModel
             return new GDMMap(owner, tagName, tagValue);
         }
 
-        /// <summary>
-        /// It is agreed to follow the requirements of the GEDCOM standard:
-        /// PLACE_LATITUDE must be represented as [Ngg.nnnnnn (+) | Sgg.nnnnnn (-)]
-        /// PLACE_LONGITUDE must be represented as [Wgg.nnnnnn (-) | Egg.nnnnnn (+)]
-        /// </summary>
-        private static double GetGeoCoord(string value, GeoCoord coordType)
+        public override void Assign(GDMTag source)
         {
-            if (string.IsNullOrEmpty(value)) {
-                return 0.0;
-            }
+            GDMMap otherMap = (source as GDMMap);
+            if (otherMap == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
 
-            int sign = 1;
-            char firstChr = value[0];
-            if ("NSWE".IndexOf(firstChr) >= 0) {
-                switch (firstChr) {
-                    case 'N':
-                    case 'E':
-                        sign = +1;
-                        break;
+            base.Assign(otherMap);
 
-                    case 'S':
-                    case 'W':
-                        sign = -1;
-                        break;
-                }
-                value = value.Substring(1);
-            }
+            fLati = otherMap.fLati;
+            fLong = otherMap.fLong;
+        }
 
-            double result = ConvertHelper.ParseFloat(value, 0.0);
-            return result * sign;
+        public override void Clear()
+        {
+            base.Clear();
+
+            fLati = 0.0d;
+            fLong = 0.0d;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && (fLati == 0.0d && fLong == 0.0d);
         }
     }
 }

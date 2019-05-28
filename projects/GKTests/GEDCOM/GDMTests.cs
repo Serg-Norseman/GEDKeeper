@@ -32,7 +32,7 @@ using NUnit.Framework;
 namespace GDModel
 {
     [TestFixture]
-    public class GedcomTests
+    public class GDMTests
     {
         private BaseContext fContext;
 
@@ -1557,8 +1557,6 @@ namespace GDModel
                 groupRec.GroupName = "Test Group";
                 Assert.AreEqual("Test Group", groupRec.GroupName);
 
-                groupRec.UID = string.Empty;
-                groupRec.DeleteTag(GEDCOMTagType.CHAN);
                 string buf = TestUtils.GetTagStreamText(groupRec, 0);
                 Assert.AreEqual("0 @G2@ _GROUP\r\n1 NAME Test Group\r\n", buf);
 
@@ -1650,6 +1648,7 @@ namespace GDModel
                 customEvent.SetName(GEDCOMTagType.BIRT);
                 customEvent.Date.ParseString("20 SEP 1970");
                 customEvent.Place.StringValue = "test place";
+
                 string buf = TestUtils.GetTagStreamText(customEvent, 0);
                 Assert.AreEqual("0 BIRT\r\n"+
                                 "1 DATE 20 SEP 1970\r\n"+
@@ -2022,8 +2021,6 @@ namespace GDModel
             GEDCOMSourceCitationTest(sourRec, indiv);
             GEDCOMRepositoryCitationTest(sourRec, repRec);
 
-            sourRec.UID = string.Empty;
-            sourRec.DeleteTag(GEDCOMTagType.CHAN);
             string buf = TestUtils.GetTagStreamText(sourRec, 0);
             Assert.AreEqual("0 @S1@ SOUR\r\n"+
                             "1 DATA\r\n"+
@@ -2114,8 +2111,6 @@ namespace GDModel
             resRec.Percent = 33;
             Assert.AreEqual(33, resRec.Percent);
 
-            resRec.UID = string.Empty;
-            resRec.DeleteTag(GEDCOMTagType.CHAN);
             string buf = TestUtils.GetTagStreamText(resRec, 0);
             Assert.AreEqual("0 @RS1@ _RESEARCH\r\n"+
                             "1 NAME Test Research\r\n"+
@@ -2148,8 +2143,7 @@ namespace GDModel
         [Test]
         public void Test_GEDCOMRepositoryRecord()
         {
-            using (GDMRepositoryRecord repoRec = new GDMRepositoryRecord(fContext.Tree))
-            {
+            using (GDMRepositoryRecord repoRec = new GDMRepositoryRecord(fContext.Tree)) {
                 Assert.IsNotNull(repoRec);
 
                 repoRec.InitNew();
@@ -2157,13 +2151,13 @@ namespace GDModel
                 Assert.AreEqual("Test Repository", repoRec.RepositoryName);
 
                 Assert.IsNotNull(repoRec.Address);
+                repoRec.Address.AddressLine1 = "AdrLine1";
 
-                repoRec.UID = string.Empty;
-                repoRec.DeleteTag(GEDCOMTagType.CHAN);
                 string buf = TestUtils.GetTagStreamText(repoRec, 0);
-                Assert.AreEqual("0 @R2@ REPO\r\n"+
-                                "1 NAME Test Repository\r\n"+
-                                "1 ADDR\r\n", buf);
+                Assert.AreEqual("0 @R2@ REPO\r\n" +
+                                "1 NAME Test Repository\r\n" +
+                                "1 ADDR\r\n" +
+                                "2 ADR1 AdrLine1\r\n", buf);
 
                 Assert.IsFalse(repoRec.IsEmpty());
                 repoRec.Clear();
@@ -2203,8 +2197,6 @@ namespace GDModel
             string title = mediaRec.GetFileTitle();
             Assert.AreEqual("File Title 2", title);
 
-            mediaRec.UID = string.Empty;
-            mediaRec.DeleteTag(GEDCOMTagType.CHAN);
             string buf = TestUtils.GetTagStreamText(mediaRec, 0);
             Assert.AreEqual("0 @O1@ OBJE\r\n"+
                             "1 FILE sample.png\r\n"+
@@ -2378,6 +2370,14 @@ namespace GDModel
                 corr = comRec.GetCorresponder();
                 Assert.AreEqual(GDMCommunicationDir.cdTo, corr.CommDir);
                 Assert.AreEqual(iRec, corr.Corresponder);
+
+                comRec.InitNew();
+                string buf = TestUtils.GetTagStreamText(comRec, 0);
+                Assert.AreEqual("0 @CM2@ _COMM\r\n" +
+                                "1 TO @I1@\r\n" +
+                                "1 DATE 23 JAN 2013\r\n" +
+                                "1 NAME Test Communication\r\n" +
+                                "1 TYPE fax\r\n", buf);
 
                 Assert.IsFalse(comRec.IsEmpty());
                 comRec.Clear();

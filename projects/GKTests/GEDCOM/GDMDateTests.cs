@@ -42,7 +42,7 @@ namespace GDModel
      * Modified by Kevin Routley (KBR) aka fire-eggs
      */
     [TestFixture]
-    public class GEDCOMDateTests
+    public class GDMDateTests
     {
         [Test]
         public void Test_GetApproximated()

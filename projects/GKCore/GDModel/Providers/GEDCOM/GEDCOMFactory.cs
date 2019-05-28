@@ -20,8 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Reflection.Emit;
 using GDModel;
 using GDModel.Providers;
 
@@ -195,8 +193,8 @@ namespace GDModel.Providers.GEDCOM
         public const string _LANG = "_LANG"; // [GK], outdated, replaced by LANG
         public const string _MEMBER = "_MEMBER";
         public const string _MILI = "_MILI";
-        public const string _MILI_IND = "_MILI_IND";
         public const string _MILI_DIS = "_MILI_DIS";
+        public const string _MILI_IND = "_MILI_IND";
         public const string _MILI_RANK = "_MILI_RANK";
         public const string _PATRIARCH = "_PATRIARCH";
         public const string _PERCENT = "_PERCENT";
@@ -216,6 +214,7 @@ namespace GDModel.Providers.GEDCOM
     {
         public readonly TagConstructor Constructor;
         public readonly AddTagHandler AddHandler;
+        public SaveTagHandler SaveHandler;
         public readonly bool SkipEmpty;
         public readonly bool GKExtend;
 
@@ -227,25 +226,11 @@ namespace GDModel.Providers.GEDCOM
             GKExtend = false;
         }
 
-        public TagInfo(TagConstructor constructor, AddTagHandler addHandler, bool skipEmpty, bool extend)
+        public TagInfo(TagConstructor constructor, AddTagHandler addHandler, SaveTagHandler saveHandler, bool skipEmpty, bool extend)
         {
             Constructor = constructor;
             AddHandler = addHandler;
-            SkipEmpty = skipEmpty;
-            GKExtend = extend;
-        }
-    }
-
-
-    public sealed class TagProperties
-    {
-        public readonly string Name;
-        public readonly bool SkipEmpty;
-        public readonly bool GKExtend;
-
-        public TagProperties(string name, bool skipEmpty, bool extend)
-        {
-            Name = name;
+            SaveHandler = saveHandler;
             SkipEmpty = skipEmpty;
             GKExtend = extend;
         }
@@ -269,11 +254,11 @@ namespace GDModel.Providers.GEDCOM
         }
 
         public void RegisterTag(string tagName, TagConstructor constructor, AddTagHandler addHandler = null,
-                                bool skipEmpty = false, bool extend = false)
+                                SaveTagHandler saveHandler = null, bool skipEmpty = false, bool extend = false)
         {
             TagInfo tagInfo;
             if (!fTags.TryGetValue(tagName, out tagInfo)) {
-                tagInfo = new TagInfo(constructor, addHandler, skipEmpty, extend);
+                tagInfo = new TagInfo(constructor, addHandler, saveHandler, skipEmpty, extend);
                 fTags.Add(tagName, tagInfo);
             } else {
                 //tagInfo.Constructor = constructor;
@@ -285,7 +270,8 @@ namespace GDModel.Providers.GEDCOM
         {
             TagInfo tagInfo;
             if (fTags.TryGetValue(tagName, out tagInfo)) {
-                return tagInfo.Constructor(owner, tagName, tagValue);
+                TagConstructor ctor = tagInfo.Constructor;
+                return (ctor == null) ? new GDMTag(owner, tagName, tagValue) : ctor(owner, tagName, tagValue);
             }
             return null;
         }
@@ -305,30 +291,5 @@ namespace GDModel.Providers.GEDCOM
             }
             return GEDCOMProvider.AddBaseTag;
         }
-
-        #if !NETSTANDARD
-
-        public static T CreateTagEx<T>(GDMObject owner, string tagName, string tagValue) where T : GDMTag
-        {
-            ConstructorInfo ctorInfo = typeof(T).GetConstructor(new[] {
-                typeof(GDMObject), typeof(string), typeof(string)
-            });
-
-            DynamicMethod dm = new DynamicMethod("Create", typeof(T), new Type[] {
-                typeof(GDMObject), typeof(string), typeof(string)
-            }, typeof(T), true);
-
-            ILGenerator il = dm.GetILGenerator();
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Ldarg_1);
-            il.Emit(OpCodes.Ldarg_2);
-            il.Emit(OpCodes.Newobj, ctorInfo);
-            il.Emit(OpCodes.Ret);
-
-            TagConstructor ctor = (TagConstructor)dm.CreateDelegate(typeof(TagConstructor));
-            return (T)ctor(owner, tagName, tagValue);
-        }
-
-        #endif
     }
 }

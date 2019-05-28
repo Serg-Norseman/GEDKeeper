@@ -27,7 +27,7 @@ using NUnit.Framework;
 namespace GDModel
 {
     [TestFixture]
-    public class GEDCOMListTests
+    public class GDMListTests
     {
         private BaseContext fContext;
 

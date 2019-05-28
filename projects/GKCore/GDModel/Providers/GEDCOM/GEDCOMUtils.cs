@@ -46,6 +46,9 @@ namespace GDModel.Providers.GEDCOM
     }
 
 
+    public enum GeoCoord { Lati, Long }
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -185,6 +188,45 @@ namespace GDModel.Providers.GEDCOM
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// It is agreed to follow the requirements of the GEDCOM standard:
+        /// PLACE_LATITUDE must be represented as [Ngg.nnnnnn (+) | Sgg.nnnnnn (-)]
+        /// PLACE_LONGITUDE must be represented as [Wgg.nnnnnn (-) | Egg.nnnnnn (+)]
+        /// </summary>
+        public static double GetGeoCoord(string value, GeoCoord coordType)
+        {
+            if (string.IsNullOrEmpty(value)) {
+                return 0.0;
+            }
+
+            int sign = 1;
+            char firstChr = value[0];
+            if ("NSWE".IndexOf(firstChr) >= 0) {
+                switch (firstChr) {
+                    case 'N':
+                    case 'E':
+                        sign = +1;
+                        break;
+
+                    case 'S':
+                    case 'W':
+                        sign = -1;
+                        break;
+                }
+                value = value.Substring(1);
+            }
+
+            double result = ConvertHelper.ParseFloat(value, 0.0);
+            return result * sign;
+        }
+
+        public static string GetFloatStr(double value)
+        {
+            NumberFormatInfo nfi = new NumberFormatInfo();
+            nfi.NumberDecimalSeparator = ".";
+            return value.ToString(nfi);
         }
 
         #endregion
@@ -728,6 +770,66 @@ namespace GDModel.Providers.GEDCOM
             return string.Empty;
         }
 
+        /// <summary>
+        /// Decode the blob string (for multimedia embedded in the GEDCOM file)
+        /// </summary>
+        public static MemoryStream DecodeBlob(string blob)
+        {
+            const string validChars = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+            var stream = new MemoryStream();
+
+            int i = 0;
+            int length = blob.Length - 3;
+            while (i < length) {
+                byte c1, c2, c3, c4, b1, b2, b3;
+
+                int ix = validChars.IndexOf(blob[i++]);
+                if (ix >= 0) {
+                    c1 = (byte)ix;
+                } else {
+                    throw new GDMException("DecodeBlob");
+                }
+
+                ix = validChars.IndexOf(blob[i++]);
+                if (ix >= 0) {
+                    c2 = (byte)ix;
+                } else {
+                    throw new GDMException("DecodeBlob");
+                }
+
+                ix = validChars.IndexOf(blob[i++]);
+                if (ix >= 0) {
+                    c3 = (byte)ix;
+                } else {
+                    throw new GDMException("DecodeBlob");
+                }
+
+                ix = validChars.IndexOf(blob[i++]);
+                if (ix >= 0) {
+                    c4 = (byte)ix;
+                } else {
+                    throw new GDMException("DecodeBlob");
+                }
+
+                // The following decodes Family Historian blobs.
+                // This might differ from the GEDCOM 5.5 spec in terms of bit ordering.
+                /*b1 = (byte)((c2 & 0x03) << 6 | (c1 & 0x3f));
+                b2 = (byte)((c3 & 0x0f) << 4 | (c2 & 0x3c) >> 2);
+                b3 = (byte)((c4 & 0x3f) << 2 | (c3 & 0x30) >> 4);*/
+                uint group = (uint)((c4 & 0x3f) | (c3 & 0x3f) << 6 | (c2 & 0x3f) << 12 | (c1 & 0x3f) << 18);
+                b3 = (byte)(group & 0xff);
+                b2 = (byte)((group >> 8) & 0xff);
+                b1 = (byte)((group >> 16) & 0xff);
+
+                stream.WriteByte(b1);
+                stream.WriteByte(b2);
+                stream.WriteByte(b3);
+            }
+
+            return stream;
+        }
+
         #endregion
 
         #region GEDCOM Enums Parse
@@ -774,6 +876,29 @@ namespace GDModel.Providers.GEDCOM
             } else {
                 return defVal;
             }
+        }
+
+        public static int BinarySearch(EnumTuple[] array, string key, Comparison<string> comparer)
+        {
+            int i = 0;
+            int num = array.Length - 1;
+            while (i <= num) {
+                int num2 = i + (num - i >> 1);
+
+                EnumTuple ekv = array[num2];
+                int num3 = comparer(ekv.Key, key);
+
+                if (num3 == 0) {
+                    return ekv.Value;
+                }
+                if (num3 < 0) {
+                    i = num2 + 1;
+                }
+                else {
+                    num = num2 - 1;
+                }
+            }
+            return ~i;
         }
 
         #endregion
@@ -1397,6 +1522,8 @@ namespace GDModel.Providers.GEDCOM
 
         #endregion
 
+        #region Aux functions
+
         public static string GetSignByRecord(GDMRecord record)
         {
             string result = string.Empty;
@@ -1448,16 +1575,6 @@ namespace GDModel.Providers.GEDCOM
             return result;
         }
 
-        /// <summary>
-        /// Strange values were found, possibly from other genealogical programs.
-        /// </summary>
-        /// <param name="value">Input value of CertaintyAssessment</param>
-        /// <returns>Checked value</returns>
-        public static int GetValidCertaintyAssessment(int value)
-        {
-            return (value >= 0 && value <= 3) ? value : 0;
-        }
-
         public static string EncodeUID(byte[] binaryKey)
         {
             var invNFI = GEDCOMUtils.InvariantNumberFormatInfo;
@@ -1487,87 +1604,54 @@ namespace GDModel.Providers.GEDCOM
             return result;
         }
 
-        public static int BinarySearch(EnumTuple[] array, string key, Comparison<string> comparer)
+        #endregion
+
+        #region Event type detection
+
+        public static string[] IndiEvents = new string[] {
+            GEDCOMTagType.ADOP, GEDCOMTagType.BAPM, GEDCOMTagType.BARM, GEDCOMTagType.BASM, GEDCOMTagType.BIRT,
+            GEDCOMTagType.BLES, GEDCOMTagType.BURI, GEDCOMTagType.CENS, GEDCOMTagType.CHR, GEDCOMTagType.CHRA,
+            GEDCOMTagType.CONF, GEDCOMTagType.CREM, GEDCOMTagType.DEAT, GEDCOMTagType.EMIG, GEDCOMTagType.EVEN,
+            GEDCOMTagType.FCOM, GEDCOMTagType.GRAD, GEDCOMTagType.IMMI, GEDCOMTagType.NATU, GEDCOMTagType.ORDN,
+            GEDCOMTagType.PROB, GEDCOMTagType.RETI, GEDCOMTagType.WILL, 
+        };
+
+        public static bool IsIndiEvent(string tagName)
         {
-            int i = 0;
-            int num = array.Length - 1;
-            while (i <= num) {
-                int num2 = i + (num - i >> 1);
-
-                EnumTuple ekv = array[num2];
-                int num3 = comparer(ekv.Key, key);
-
-                if (num3 == 0) {
-                    return ekv.Value;
-                }
-                if (num3 < 0) {
-                    i = num2 + 1;
-                }
-                else {
-                    num = num2 - 1;
-                }
-            }
-            return ~i;
+            int idx = Algorithms.BinarySearch<string>(IndiEvents, tagName, string.CompareOrdinal);
+            return idx >= 0;
         }
 
-        /// <summary>
-        /// Decode the blob string (for multimedia embedded in the GEDCOM file)
-        /// </summary>
-        public static MemoryStream DecodeBlob(string blob)
+
+        public static string[] IndiAttrs = new string[] {
+            GEDCOMTagType.CAST, GEDCOMTagType.DSCR, GEDCOMTagType.EDUC, GEDCOMTagType.FACT, GEDCOMTagType.IDNO,
+            GEDCOMTagType.NATI, GEDCOMTagType.NCHI, GEDCOMTagType.NMR, GEDCOMTagType.OCCU, GEDCOMTagType.PROP,
+            GEDCOMTagType.RELI, GEDCOMTagType.RESI, GEDCOMTagType.SSN, GEDCOMTagType.TITL,
+
+            GEDCOMTagType._AWARD, GEDCOMTagType._BGRO, GEDCOMTagType._EYES, GEDCOMTagType._HAIR, GEDCOMTagType._HOBBY,
+            GEDCOMTagType._MDNA, GEDCOMTagType._MILI, GEDCOMTagType._MILI_DIS, GEDCOMTagType._MILI_IND,
+            GEDCOMTagType._MILI_RANK, GEDCOMTagType._TRAVEL, GEDCOMTagType._YDNA,
+        };
+
+        public static bool IsIndiAttr(string tagName)
         {
-            const string validChars = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
-            var stream = new MemoryStream();
-
-            int i = 0;
-            int length = blob.Length - 3;
-            while (i < length) {
-                byte c1, c2, c3, c4, b1, b2, b3;
-
-                int ix = validChars.IndexOf(blob[i++]);
-                if (ix >= 0) {
-                    c1 = (byte)ix;
-                } else {
-                    throw new GDMException("DecodeBlob");
-                }
-
-                ix = validChars.IndexOf(blob[i++]);
-                if (ix >= 0) {
-                    c2 = (byte)ix;
-                } else {
-                    throw new GDMException("DecodeBlob");
-                }
-
-                ix = validChars.IndexOf(blob[i++]);
-                if (ix >= 0) {
-                    c3 = (byte)ix;
-                } else {
-                    throw new GDMException("DecodeBlob");
-                }
-
-                ix = validChars.IndexOf(blob[i++]);
-                if (ix >= 0) {
-                    c4 = (byte)ix;
-                } else {
-                    throw new GDMException("DecodeBlob");
-                }
-
-                // The following decodes Family Historian blobs.
-                // This might differ from the GEDCOM 5.5 spec in terms of bit ordering.
-                /*b1 = (byte)((c2 & 0x03) << 6 | (c1 & 0x3f));
-                b2 = (byte)((c3 & 0x0f) << 4 | (c2 & 0x3c) >> 2);
-                b3 = (byte)((c4 & 0x3f) << 2 | (c3 & 0x30) >> 4);*/
-                uint group = (uint)((c4 & 0x3f) | (c3 & 0x3f) << 6 | (c2 & 0x3f) << 12 | (c1 & 0x3f) << 18);
-                b3 = (byte)(group & 0xff);
-                b2 = (byte)((group >> 8) & 0xff);
-                b1 = (byte)((group >> 16) & 0xff);
-
-                stream.WriteByte(b1);
-                stream.WriteByte(b2);
-                stream.WriteByte(b3);
-            }
-
-            return stream;
+            int idx = Algorithms.BinarySearch<string>(IndiAttrs, tagName, string.CompareOrdinal);
+            return idx >= 0;
         }
+
+
+        public static string[] FamEvents = new string[] {
+            GEDCOMTagType.ANUL, GEDCOMTagType.CENS, GEDCOMTagType.DIV, GEDCOMTagType.DIVF, GEDCOMTagType.ENGA,
+            GEDCOMTagType.EVEN, GEDCOMTagType.MARB, GEDCOMTagType.MARC, GEDCOMTagType.MARL, GEDCOMTagType.MARR,
+            GEDCOMTagType.MARS, GEDCOMTagType.RESI,
+        };
+
+        public static bool IsFamEvent(string tagName)
+        {
+            int idx = Algorithms.BinarySearch<string>(FamEvents, tagName, string.CompareOrdinal);
+            return idx >= 0;
+        }
+
+        #endregion
     }
 }
