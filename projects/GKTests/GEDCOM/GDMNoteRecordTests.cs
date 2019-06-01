@@ -32,7 +32,7 @@ namespace GDModel
      * Modified by Kevin Routley (KBR) aka fire-eggs
      */
     [TestFixture]
-    public class GEDCOMNoteRecordTests
+    public class GDMNoteRecordTests
     {
         [Test]
         public void Test_Common()

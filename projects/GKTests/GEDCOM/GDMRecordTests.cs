@@ -18,23 +18,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel;
 using NUnit.Framework;
 
-namespace GDModel.Providers.GEDCOM
+namespace GDModel
 {
     [TestFixture]
-    public class GEDCOMProviderTests
+    public class GDMRecordTests
     {
         [Test]
-        public void Test_GetGEDCOMFormat()
+        public void Test_ExtData()
         {
-            GDMTree tree = new GDMTree();
-
-            // Tests of determine GEDCOM-format
-            Assert.AreEqual(GEDCOMFormat.gf_Unknown, GEDCOMProvider.GetGEDCOMFormat(tree));
-            tree.Header.Source = "GENBOX";
-            Assert.AreEqual(GEDCOMFormat.gf_GENBOX, GEDCOMProvider.GetGEDCOMFormat(tree));
+            GDMRecord obj = new GDMRecord(null);
+            obj.ExtData = this;
+            Assert.AreEqual(this, obj.ExtData);
+            obj.Dispose();
         }
     }
 }

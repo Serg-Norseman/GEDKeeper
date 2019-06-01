@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
@@ -25,15 +26,19 @@ namespace GDModel
 {
     public sealed class GDMRepositoryRecord : GDMRecord
     {
+        private GDMAddress fAddress;
+        private string fRepositoryName;
+
+
         public GDMAddress Address
         {
-            get { return GetTag<GDMAddress>(GEDCOMTagType.ADDR, GDMAddress.Create); }
+            get { return fAddress; }
         }
 
         public string RepositoryName
         {
-            get { return GetTagStringValue(GEDCOMTagType.NAME); }
-            set { SetTagStringValue(GEDCOMTagType.NAME, value); }
+            get { return fRepositoryName; }
+            set { fRepositoryName = value; }
         }
 
 
@@ -41,6 +46,33 @@ namespace GDModel
         {
             SetRecordType(GDMRecordType.rtRepository);
             SetName(GEDCOMTagType.REPO);
+
+            fAddress = new GDMAddress(this);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMRepositoryRecord otherRepo = (source as GDMRepositoryRecord);
+            if (otherRepo == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(otherRepo);
+
+            fAddress.Assign(otherRepo.fAddress);
+            fRepositoryName = otherRepo.fRepositoryName;
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            fAddress.Clear();
+            fRepositoryName = string.Empty;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && fAddress.IsEmpty() && string.IsNullOrEmpty(fRepositoryName);
         }
 
         // TODO: connect to use

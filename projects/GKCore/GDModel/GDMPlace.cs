@@ -18,12 +18,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
     public sealed class GDMPlace : GDMTagWithLists
     {
+        private GDMMap fMap;
+
+
         public string Form
         {
             get { return GetTagStringValue(GEDCOMTagType.FORM); }
@@ -37,13 +41,15 @@ namespace GDModel
 
         public GDMMap Map
         {
-            get { return GetTag<GDMMap>(GEDCOMTagType.MAP, GDMMap.Create); }
+            get { return fMap; }
         }
 
 
         public GDMPlace(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.PLAC);
+
+            fMap = new GDMMap(this);
         }
 
         public GDMPlace(GDMObject owner, string tagName, string tagValue) : this(owner)
@@ -54,6 +60,29 @@ namespace GDModel
         public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
             return new GDMPlace(owner, tagName, tagValue);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMPlace otherPlace = (source as GDMPlace);
+            if (otherPlace == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(otherPlace);
+
+            fMap.Assign(otherPlace.fMap);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            fMap.Clear();
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && fMap.IsEmpty();
         }
     }
 }

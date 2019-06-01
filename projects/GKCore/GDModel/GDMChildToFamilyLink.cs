@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -42,16 +43,20 @@ namespace GDModel
 
     public sealed class GDMChildToFamilyLink : GDMPointerWithNotes
     {
+        private GDMChildLinkageStatus fChildLinkageStatus;
+        private GDMPedigreeLinkageType fPedigreeLinkageType;
+
+
         public GDMChildLinkageStatus ChildLinkageStatus
         {
-            get { return GEDCOMUtils.GetChildLinkageStatusVal(GetTagStringValue(GEDCOMTagType.STAT)); }
-            set { SetTagStringValue(GEDCOMTagType.STAT, GEDCOMUtils.GetChildLinkageStatusStr(value)); }
+            get { return fChildLinkageStatus; }
+            set { fChildLinkageStatus = value; }
         }
 
         public GDMPedigreeLinkageType PedigreeLinkageType
         {
-            get { return GEDCOMUtils.GetPedigreeLinkageTypeVal(GetTagStringValue(GEDCOMTagType.PEDI)); }
-            set { SetTagStringValue(GEDCOMTagType.PEDI, GEDCOMUtils.GetPedigreeLinkageTypeStr(value)); }
+            get { return fPedigreeLinkageType; }
+            set { fPedigreeLinkageType = value; }
         }
 
         public GDMFamilyRecord Family
@@ -74,6 +79,18 @@ namespace GDModel
         public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
         {
             return new GDMChildToFamilyLink(owner, tagName, tagValue);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMChildToFamilyLink srcCFL = source as GDMChildToFamilyLink;
+            if (srcCFL == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(source);
+
+            fChildLinkageStatus = srcCFL.fChildLinkageStatus;
+            fPedigreeLinkageType = srcCFL.fPedigreeLinkageType;
         }
     }
 }

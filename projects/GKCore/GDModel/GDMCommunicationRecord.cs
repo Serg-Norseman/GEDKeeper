@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -52,21 +53,26 @@ namespace GDModel
     {
         public static readonly string[] CommunicationTags = new string[] { GEDCOMTagType.FROM, GEDCOMTagType.TO };
 
+        private string fCommName;
+        private GDMCommunicationType fCommunicationType;
+        private GDMDate fDate;
+
+
         public GDMDate Date
         {
-            get { return GetTag<GDMDate>(GEDCOMTagType.DATE, GDMDate.Create); }
+            get { return fDate; }
         }
 
         public string CommName
         {
-            get { return GetTagStringValue(GEDCOMTagType.NAME); }
-            set { SetTagStringValue(GEDCOMTagType.NAME, value); }
+            get { return fCommName; }
+            set { fCommName = value; }
         }
 
         public GDMCommunicationType CommunicationType
         {
-            get { return GEDCOMUtils.GetCommunicationTypeVal(GetTagStringValue(GEDCOMTagType.TYPE)); }
-            set { SetTagStringValue(GEDCOMTagType.TYPE, GEDCOMUtils.GetCommunicationTypeStr(value)); }
+            get { return fCommunicationType; }
+            set { fCommunicationType = value; }
         }
 
 
@@ -74,8 +80,38 @@ namespace GDModel
         {
             SetRecordType(GDMRecordType.rtCommunication);
             SetName(GEDCOMTagType._COMM);
+
+            fDate = new GDMDate(this);
         }
-        
+
+        public override void Assign(GDMTag source)
+        {
+            GDMCommunicationRecord otherComm = (source as GDMCommunicationRecord);
+            if (otherComm == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(otherComm);
+
+            fCommName = otherComm.fCommName;
+            fCommunicationType = otherComm.fCommunicationType;
+            fDate.Assign(otherComm.fDate);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            fCommName = string.Empty;
+            fCommunicationType = GDMCommunicationType.ctCall;
+            fDate.Clear();
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && string.IsNullOrEmpty(fCommName) && fDate.IsEmpty();
+        }
+
+
         public sealed class CorresponderRet
         {
             public readonly GDMCommunicationDir CommDir;

@@ -105,7 +105,7 @@ namespace GDModel
             if (IsPointer) {
                 result = base.IsEmpty();
             } else {
-                result = (Count == 0 && (fFileReferences.Count == 0));
+                result = (SubTags.Count == 0 && (fFileReferences.Count == 0));
             }
             return result;
         }

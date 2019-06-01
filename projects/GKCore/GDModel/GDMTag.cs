@@ -46,22 +46,6 @@ namespace GDModel
 
         #region Public properties
 
-        /// <summary>
-        /// The number of nested sub-tags.
-        /// </summary>
-        public int Count
-        {
-            get { return fTags.Count; }
-        }
-
-        /// <summary>
-        /// Access to items of nested sub-tags.
-        /// </summary>
-        public GDMTag this[int index]
-        {
-            get { return fTags[index]; }
-        }
-
         public string Name
         {
             get { return fName; }
@@ -76,6 +60,14 @@ namespace GDModel
         {
             get { return GetStringValue(); }
             set { ParseString(value); }
+        }
+
+        /// <summary>
+        /// Access to items of nested sub-tags.
+        /// </summary>
+        public GDMList<GDMTag> SubTags
+        {
+            get { return fTags; }
         }
 
         #endregion
@@ -108,11 +100,6 @@ namespace GDModel
                 }
             }
             base.Dispose(disposing);
-        }
-
-        internal GDMList<GDMTag> GetTagList()
-        {
-            return fTags;
         }
 
         public void SetNameValue(string tagName, string tagValue)
@@ -226,11 +213,6 @@ namespace GDModel
             fStringValue = string.Empty;
         }
 
-        public void Delete(int index)
-        {
-            fTags.DeleteAt(index);
-        }
-
         public void DeleteTag(string tagName)
         {
             GDMTag tag = FindTag(tagName, 0);
@@ -304,11 +286,6 @@ namespace GDModel
             }
 
             return result as T;
-        }
-
-        public int IndexOfTag(GDMTag tag)
-        {
-            return fTags.IndexOf(tag);
         }
 
         public virtual bool IsEmpty()
@@ -439,9 +416,10 @@ namespace GDModel
                     strings.Add(strTag.StringValue);
                 }
 
-                int num = strTag.Count;
+                var subTags = strTag.SubTags;
+                int num = subTags.Count;
                 for (int i = 0; i < num; i++) {
-                    GDMTag tag = strTag[i];
+                    GDMTag tag = subTags[i];
 
                     if (tag.Name == GEDCOMTagType.CONC) {
                         if (strings.Count > 0) {
@@ -465,10 +443,11 @@ namespace GDModel
             if (tag == null) return;
 
             tag.StringValue = "";
-            for (int i = tag.Count - 1; i >= 0; i--) {
-                string subtag = tag[i].Name;
+            var subTags = tag.SubTags;
+            for (int i = subTags.Count - 1; i >= 0; i--) {
+                string subtag = subTags[i].Name;
                 if (subtag == GEDCOMTagType.CONT || subtag == GEDCOMTagType.CONC) {
-                    tag.Delete(i);
+                    subTags.DeleteAt(i);
                 }
             }
 
@@ -503,10 +482,11 @@ namespace GDModel
             if (tag == null) return;
 
             tag.StringValue = "";
-            for (int i = tag.Count - 1; i >= 0; i--) {
-                string subtag = tag[i].Name;
+            var subTags = tag.SubTags;
+            for (int i = subTags.Count - 1; i >= 0; i--) {
+                string subtag = subTags[i].Name;
                 if (subtag == GEDCOMTagType.CONT || subtag == GEDCOMTagType.CONC) {
-                    tag.Delete(i);
+                    subTags.DeleteAt(i);
                 }
             }
 

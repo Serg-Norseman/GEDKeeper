@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
@@ -25,15 +26,19 @@ namespace GDModel
 {
     public sealed class GDMLocationRecord : GDMRecord
     {
-        public GDMMap Map
-        {
-            get { return GetTag<GDMMap>(GEDCOMTagType.MAP, GDMMap.Create); }
-        }
+        private string fLocationName;
+        private GDMMap fMap;
+
 
         public string LocationName
         {
-            get { return GetTagStringValue(GEDCOMTagType.NAME); }
-            set { SetTagStringValue(GEDCOMTagType.NAME, value); }
+            get { return fLocationName; }
+            set { fLocationName = value; }
+        }
+
+        public GDMMap Map
+        {
+            get { return fMap; }
         }
 
 
@@ -41,6 +46,33 @@ namespace GDModel
         {
             SetRecordType(GDMRecordType.rtLocation);
             SetName(GEDCOMTagType._LOC);
+
+            fMap = new GDMMap(this);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMLocationRecord otherLoc = (source as GDMLocationRecord);
+            if (otherLoc == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(otherLoc);
+
+            fLocationName = otherLoc.fLocationName;
+            fMap.Assign(otherLoc.fMap);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            fLocationName = string.Empty;
+            fMap.Clear();
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && string.IsNullOrEmpty(fLocationName) && fMap.IsEmpty();
         }
 
         // TODO: connect to use

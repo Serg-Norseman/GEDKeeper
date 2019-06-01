@@ -54,11 +54,14 @@ namespace GDModel
         }
 
         [Test]
-        public void Test_CtorDyn()
+        public void Test_GetTagProps()
         {
-            var uref = GEDCOMFactory.CreateTagEx<GDMUserReference>(null, "", "test 12345");
-            Assert.IsNotNull(uref);
-            Assert.AreEqual("test 12345", uref.StringValue);
+            TagInfo props = GEDCOMFactory.GetInstance().GetTagInfo(GEDCOMTagType.ADDR);
+            Assert.IsNotNull(props);
+            Assert.IsTrue(props.SkipEmpty);
+
+            props = GEDCOMFactory.GetInstance().GetTagInfo("test");
+            Assert.IsNull(props);
         }
     }
 }

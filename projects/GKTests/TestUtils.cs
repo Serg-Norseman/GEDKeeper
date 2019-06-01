@@ -170,6 +170,12 @@ namespace GKTests
         {
             GEDCOMProvider.SkipUID = true;
 
+            if (tag is GDMRecord) {
+                var record = tag as GDMRecord;
+                record.UID = string.Empty;
+                record.DeleteTag(GEDCOMTagType.CHAN);
+            }
+
             // FIXME: very bad code after refactoring of GEDCOMProvider!
             string result;
             using (MemoryStream stm = new MemoryStream()) {
@@ -180,7 +186,7 @@ namespace GKTests
                         if (tag is GDMPersonalName) {
                             GEDCOMProvider.WritePersonalName(fs, 1, tag as GDMPersonalName);
                         } else {
-                            GEDCOMProvider.WriteTag(fs, level, tag);
+                            GEDCOMProvider.WriteTagEx(fs, level, tag);
                         }
                     }
 

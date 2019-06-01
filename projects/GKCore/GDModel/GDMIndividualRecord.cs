@@ -25,6 +25,8 @@ using GKCore.Types;
 
 namespace GDModel
 {
+    // Standard: M/F/U (gedcom-5.5.1, p.61)
+    // FIXME: remove None
     public enum GDMSex
     {
         svNone,

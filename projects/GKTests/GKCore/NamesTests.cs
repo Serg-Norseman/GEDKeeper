@@ -25,7 +25,7 @@ using GKTests;
 using GKUI.Providers;
 using NUnit.Framework;
 
-namespace GDModel
+namespace GKCore
 {
     [TestFixture]
     public class NamesTests

@@ -26,8 +26,15 @@ using NUnit.Framework;
 namespace GDModel
 {
     [TestFixture]
-    public class GEDCOMTagTests
+    public class GDMTagTests
     {
+        [Test]
+        public void Test_GEDCOMObject()
+        {
+            GDMObject obj = new GDMObject();
+            obj.Dispose();
+        }
+
         [Test]
         public void Test_SetTagStringsA()
         {

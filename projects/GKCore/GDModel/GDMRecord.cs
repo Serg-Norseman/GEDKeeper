@@ -190,9 +190,9 @@ namespace GDModel
                 targetRecord.Clear();
             }
 
-            var subtags = GetTagList();
-            while (subtags.Count > 0) {
-                GDMTag tag = subtags.Extract(0);
+            var subTags = SubTags;
+            while (subTags.Count > 0) {
+                GDMTag tag = subTags.Extract(0);
                 if (tag.Name == GEDCOMTagType.CHAN && !clearDest) {
                     tag.Dispose();
                 } else {

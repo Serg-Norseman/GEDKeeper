@@ -83,7 +83,7 @@ namespace GDModel
             if (IsPointer) {
                 result = base.IsEmpty();
             } else {
-                result = (string.IsNullOrEmpty(fStringValue) && Count == 0);
+                result = (string.IsNullOrEmpty(fStringValue) && SubTags.Count == 0);
             }
             return result;
         }
@@ -104,6 +104,16 @@ namespace GDModel
                 fStringValue = string.Empty;
             }
             return result;
+        }
+
+        /// <summary>
+        /// Strange values were found, possibly from other genealogical programs.
+        /// </summary>
+        /// <returns>Checked value of CertaintyAssessment</returns>
+        public int GetValidCertaintyAssessment()
+        {
+            int val = CertaintyAssessment;
+            return (val >= 0 && val <= 3) ? val : 0;
         }
     }
 }

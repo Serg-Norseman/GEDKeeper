@@ -177,7 +177,7 @@ namespace GDModel
                 for (int k = 0; k < num2; k++) {
                     GDMSourceCitation cit = evt.SourceCitations[k];
 
-                    int ca = GEDCOMUtils.GetValidCertaintyAssessment(cit.CertaintyAssessment);
+                    int ca = cit.GetValidCertaintyAssessment();
                     int weight = (ca + 1);
 
                     result += (CA_VALUES[ca] * weight);
@@ -189,7 +189,7 @@ namespace GDModel
             for (int i = 0; i < num3; i++) {
                 GDMSourceCitation cit = SourceCitations[i];
 
-                int ca = GEDCOMUtils.GetValidCertaintyAssessment(cit.CertaintyAssessment);
+                int ca = cit.GetValidCertaintyAssessment();
                 int weight = (ca + 1);
 
                 result += (CA_VALUES[ca] * weight);

@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.IO;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -32,7 +31,7 @@ namespace GDModel
      * @author Kevin Routley
      */
     [TestFixture]
-    public class GEDCOMAddressTests
+    public class GDMAddressTests
     {
         [Test]
         public void Test_Create()

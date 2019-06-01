@@ -42,6 +42,9 @@ namespace GDModel
         private string fFirstPart;
         private string fSurname;
         private string fLastPart;
+
+        private GDMLanguageID fLanguage;
+        private GDMNameType fNameType;
         private GDMPersonalNamePieces fPieces;
 
 
@@ -77,20 +80,21 @@ namespace GDModel
             set { fLastPart = GEDCOMUtils.Trim(value); }
         }
 
-        public GDMPersonalNamePieces Pieces
+        public GDMLanguageID Language
         {
-            get { return fPieces; }
+            get { return fLanguage; }
+            set { fLanguage = value; }
         }
 
         public GDMNameType NameType
         {
-            get { return GEDCOMUtils.GetNameTypeVal(GetTagStringValue(GEDCOMTagType.TYPE)); }
-            set { SetTagStringValue(GEDCOMTagType.TYPE, GEDCOMUtils.GetNameTypeStr(value)); }
+            get { return fNameType; }
+            set { fNameType = value; }
         }
 
-        public GDMLanguage Language
+        public GDMPersonalNamePieces Pieces
         {
-            get { return GetTag<GDMLanguage>("_LANG", GDMLanguage.Create); }
+            get { return fPieces; }
         }
 
 
@@ -160,6 +164,9 @@ namespace GDModel
             fSurname = otherName.fSurname;
             fLastPart = otherName.fLastPart;
 
+            fLanguage = otherName.fLanguage;
+            fNameType = otherName.fNameType;
+
             fPieces.Assign(otherName.Pieces);
         }
 
@@ -171,6 +178,9 @@ namespace GDModel
             fSurname = string.Empty;
             fLastPart = string.Empty;
 
+            fLanguage = GDMLanguageID.Unknown;
+            fNameType = GDMNameType.ntNone;
+
             if (fPieces != null)
                 fPieces.Clear();
         }
@@ -179,7 +189,7 @@ namespace GDModel
         {
             return base.IsEmpty()
                 && string.IsNullOrEmpty(fFirstPart) && string.IsNullOrEmpty(fSurname) && string.IsNullOrEmpty(fLastPart)
-                && fPieces.IsEmpty();
+                && fPieces.IsEmpty() && (fLanguage == GDMLanguageID.Unknown) && (fNameType == GDMNameType.ntNone);
         }
 
         public override void Pack()
