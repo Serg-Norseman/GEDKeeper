@@ -73,6 +73,14 @@ namespace GDModel.Providers.GEDCOM
     }
 
 
+    public class GEDCOMEmptyFileException : GDMException
+    {
+        public GEDCOMEmptyFileException(string message) : base(message)
+        {
+        }
+    }
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -351,6 +359,10 @@ namespace GDModel.Providers.GEDCOM
                 }
 
                 stack.Clear();
+
+                if (lineNum == 0) {
+                    throw new GEDCOMEmptyFileException("GEDCOM file is empty");
+                }
             } finally {
                 fTree.State = GDMTreeState.osReady;
             }

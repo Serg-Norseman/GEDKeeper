@@ -333,6 +333,15 @@ namespace GDModel.Providers
             }
         }
 
+        [Test]
+        public void Test_EmptyFile()
+        {
+            Assert.Throws(typeof(GEDCOMEmptyFileException), () => {
+                using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_empty.ged")) {
+                }
+            });
+        }
+
 
         [Test]
         public void Test_GedML()
