@@ -129,13 +129,6 @@ namespace GDModel
             }
         }
 
-        public override void Pack()
-        {
-            base.Pack();
-            fEvents.Pack();
-            fSubmittors.Pack();
-        }
-
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);

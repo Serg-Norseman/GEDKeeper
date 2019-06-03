@@ -21,10 +21,9 @@
 using System;
 using System.Text;
 using GDModel;
-using GDModel.Providers.GEDCOM;
 using NUnit.Framework;
 
-namespace GDModel
+namespace GDModel.Providers.GEDCOM
 {
     [TestFixture]
     public class GEDCOMUtilsTests

@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel.Providers.GEDCOM;
+using System;
 
 namespace GDModel
 {
@@ -27,75 +27,141 @@ namespace GDModel
     /// </summary>
     public sealed class GDMPersonalNamePieces : GDMTagWithLists
     {
+        private string fPrefix;
+        private string fGiven;
+        private string fNickname;
+        private string fSurnamePrefix;
+        private string fSurname;
+        private string fSuffix;
+        private string fPatronymicName;
+        private string fMarriedName;
+        private string fReligiousName;
+        private string fCensusName;
+
+
         public string Prefix
         {
-            get { return GetTagStringValue(GEDCOMTagType.NPFX); }
-            set { SetTagStringValue(GEDCOMTagType.NPFX, value); }
+            get { return fPrefix; }
+            set { fPrefix = value; }
         }
 
         public string Given
         {
-            get { return GetTagStringValue(GEDCOMTagType.GIVN); }
-            set { SetTagStringValue(GEDCOMTagType.GIVN, value); }
+            get { return fGiven; }
+            set { fGiven = value; }
         }
 
         public string Nickname
         {
-            get { return GetTagStringValue(GEDCOMTagType.NICK); }
-            set { SetTagStringValue(GEDCOMTagType.NICK, value); }
+            get { return fNickname; }
+            set { fNickname = value; }
         }
 
         public string SurnamePrefix
         {
-            get { return GetTagStringValue(GEDCOMTagType.SPFX); }
-            set { SetTagStringValue(GEDCOMTagType.SPFX, value); }
+            get { return fSurnamePrefix; }
+            set { fSurnamePrefix = value; }
         }
 
         public string Surname
         {
-            get { return GetTagStringValue(GEDCOMTagType.SURN); }
-            set { SetTagStringValue(GEDCOMTagType.SURN, value); }
+            get { return fSurname; }
+            set { fSurname = value; }
         }
 
         public string Suffix
         {
-            get { return GetTagStringValue(GEDCOMTagType.NSFX); }
-            set { SetTagStringValue(GEDCOMTagType.NSFX, value); }
+            get { return fSuffix; }
+            set { fSuffix = value; }
         }
-
 
         public string PatronymicName
         {
-            get { return GetTagStringValue(GEDCOMTagType._PATN); }
-            set { SetTagStringValue(GEDCOMTagType._PATN, value); }
+            get { return fPatronymicName; }
+            set { fPatronymicName = value; }
         }
 
         public string MarriedName
         {
-            get { return GetTagStringValue(GEDCOMTagType._MARN); }
-            set { SetTagStringValue(GEDCOMTagType._MARN, value); }
+            get { return fMarriedName; }
+            set { fMarriedName = value; }
         }
 
         public string ReligiousName
         {
-            get { return GetTagStringValue(GEDCOMTagType._RELN); }
-            set { SetTagStringValue(GEDCOMTagType._RELN, value); }
+            get { return fReligiousName; }
+            set { fReligiousName = value; }
         }
 
         public string CensusName
         {
-            get { return GetTagStringValue(GEDCOMTagType._CENN); }
-            set { SetTagStringValue(GEDCOMTagType._CENN, value); }
+            get { return fCensusName; }
+            set { fCensusName = value; }
         }
 
 
         public GDMPersonalNamePieces(GDMObject owner) : base(owner)
         {
+            fPrefix = string.Empty;
+            fGiven = string.Empty;
+            fNickname = string.Empty;
+            fSurnamePrefix = string.Empty;
+            fSurname = string.Empty;
+            fSuffix = string.Empty;
+            fPatronymicName = string.Empty;
+            fMarriedName = string.Empty;
+            fReligiousName = string.Empty;
+            fCensusName = string.Empty;
         }
 
         public GDMPersonalNamePieces(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMPersonalNamePieces otherPNP = (source as GDMPersonalNamePieces);
+            if (otherPNP == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(otherPNP);
+
+            fPrefix = otherPNP.fPrefix;
+            fGiven = otherPNP.fGiven;
+            fNickname = otherPNP.fNickname;
+            fSurnamePrefix = otherPNP.fSurnamePrefix;
+            fSurname = otherPNP.fSurname;
+            fSuffix = otherPNP.fSuffix;
+            fPatronymicName = otherPNP.fPatronymicName;
+            fMarriedName = otherPNP.fMarriedName;
+            fReligiousName = otherPNP.fReligiousName;
+            fCensusName = otherPNP.fCensusName;
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            fPrefix = string.Empty;
+            fGiven = string.Empty;
+            fNickname = string.Empty;
+            fSurnamePrefix = string.Empty;
+            fSurname = string.Empty;
+            fSuffix = string.Empty;
+            fPatronymicName = string.Empty;
+            fMarriedName = string.Empty;
+            fReligiousName = string.Empty;
+            fCensusName = string.Empty;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && 
+                string.IsNullOrEmpty(fPrefix) && string.IsNullOrEmpty(fGiven) && string.IsNullOrEmpty(fNickname) && 
+                string.IsNullOrEmpty(fSurnamePrefix) && string.IsNullOrEmpty(fSurname) && string.IsNullOrEmpty(fSuffix) && 
+                string.IsNullOrEmpty(fPatronymicName) && string.IsNullOrEmpty(fMarriedName) && string.IsNullOrEmpty(fReligiousName) && 
+                string.IsNullOrEmpty(fCensusName);
         }
     }
 }

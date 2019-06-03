@@ -226,7 +226,7 @@ namespace GDModel.Providers.GEDCOM
         {
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
-            return value.ToString(nfi);
+            return value.ToString("0.000000", nfi);
         }
 
         #endregion
@@ -341,10 +341,23 @@ namespace GDModel.Providers.GEDCOM
         // Time format: hour:minutes:seconds.fraction
         public static string ParseTime(string strValue, GDMTime time)
         {
-            byte hour = 0;
-            byte minutes = 0;
-            byte seconds = 0;
-            short fraction = 0;
+            byte hour;
+            byte minutes;
+            byte seconds;
+            short fraction;
+
+            strValue = ParseTime(strValue, out hour, out minutes, out seconds, out fraction);
+            time.SetRawData(hour, minutes, seconds, fraction);
+            return strValue;
+        }
+
+        // Time format: hour:minutes:seconds.fraction
+        public static string ParseTime(string strValue, out byte hour, out byte minutes, out byte seconds, out short fraction)
+        {
+            hour = 0;
+            minutes = 0;
+            seconds = 0;
+            fraction = 0;
 
             if (!string.IsNullOrEmpty(strValue)) {
                 var strTok = new GEDCOMParser(strValue, true);
@@ -366,7 +379,7 @@ namespace GDModel.Providers.GEDCOM
                 strValue = strTok.GetRest();
             }
 
-            time.SetRawData(hour, minutes, seconds, fraction);
+            //time.SetRawData(hour, minutes, seconds, fraction);
 
             return strValue;
         }
@@ -570,14 +583,35 @@ namespace GDModel.Providers.GEDCOM
 
         public static string ParseDate(GDMTree owner, GDMDate date, GEDCOMParser strTok)
         {
-            GDMApproximated approximated = GDMApproximated.daExact;
-            GDMCalendar calendar = GDMCalendar.dcGregorian;
-            short year = GDMDate.UNKNOWN_YEAR;
-            bool yearBC = false;
-            string yearModifier = string.Empty;
-            byte month = 0;
-            byte day = 0;
-            GDMDateFormat dateFormat = GDMDateFormat.dfGEDCOMStd;
+            GDMApproximated approximated;
+            GDMCalendar calendar;
+            short year;
+            bool yearBC;
+            string yearModifier;
+            byte month;
+            byte day;
+            GDMDateFormat dateFormat;
+
+            string result = ParseDate(owner, strTok, out approximated, out calendar, out year, out yearBC, out yearModifier, 
+                                      out month, out day, out dateFormat);
+
+            date.SetRawData(approximated, calendar, year, yearBC, yearModifier, month, day, dateFormat);
+
+            return result;
+        }
+
+        public static string ParseDate(GDMTree owner, GEDCOMParser strTok, out GDMApproximated approximated,
+                                       out GDMCalendar calendar, out short year, out bool yearBC, out string yearModifier, 
+                                       out byte month, out byte day, out GDMDateFormat dateFormat)
+        {
+            approximated = GDMApproximated.daExact;
+            calendar = GDMCalendar.dcGregorian;
+            year = GDMDate.UNKNOWN_YEAR;
+            yearBC = false;
+            yearModifier = string.Empty;
+            month = 0;
+            day = 0;
+            dateFormat = GDMDateFormat.dfGEDCOMStd;
 
             strTok.SkipWhitespaces();
 
@@ -699,7 +733,7 @@ namespace GDModel.Providers.GEDCOM
                 token = strTok.Next();
             }
 
-            date.SetRawData(approximated, calendar, year, yearBC, yearModifier, month, day, dateFormat);
+            //date.SetRawData(approximated, calendar, year, yearBC, yearModifier, month, day, dateFormat);
             string result = strTok.GetRest();
             return result;
         }
@@ -828,6 +862,64 @@ namespace GDModel.Providers.GEDCOM
             }
 
             return stream;
+        }
+
+        public static string ParseDate(GDMTree owner, string strValue, out DateTime date)
+        {
+            GDMApproximated approximated;
+            GDMCalendar calendar;
+            short year;
+            bool yearBC;
+            string yearModifier;
+            byte month;
+            byte day;
+            GDMDateFormat dateFormat;
+
+            var strTok = new GEDCOMParser(strValue, false);
+            string result = ParseDate(owner, strTok, out approximated, out calendar, out year, out yearBC, out yearModifier, 
+                                      out month, out day, out dateFormat);
+
+            date = new DateTime(year, month, day);
+
+            return result;
+        }
+
+        public static string GetDateStr(DateTime date)
+        {
+            string result;
+            result = string.Format("{0:00} {1} {2:0000}", new object[] { date.Day, GDMCustomDate.GEDCOMMonthArray[date.Month-1], date.Year });
+            return result;
+        }
+
+        public static string GetTimeStr(TimeSpan time)
+        {
+            byte hour = (byte)time.Hours;
+            byte minutes = (byte)time.Minutes;
+            byte seconds = (byte)time.Seconds;
+            short fraction = (short)Math.Truncate(time.Milliseconds / 100.0);
+
+            string result;
+            if (hour == 0 && minutes == 0 && seconds == 0) {
+                result = "";
+            } else {
+                result = string.Format("{0:00}:{1:00}:{2:00}", new object[] { hour, minutes, seconds });
+                if (fraction > 0) {
+                    result = result + "." + fraction.ToString();
+                }
+            }
+            return result;
+        }
+
+        public static string ParseTime(string strValue, out TimeSpan time)
+        {
+            byte hour;
+            byte minutes;
+            byte seconds;
+            short fraction;
+
+            strValue = ParseTime(strValue, out hour, out minutes, out seconds, out fraction);
+            time = new TimeSpan(0, hour, minutes, seconds, (int)(100u * fraction));
+            return strValue;
         }
 
         #endregion

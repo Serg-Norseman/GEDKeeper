@@ -95,20 +95,48 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Externals\ExternalsTests.cs" />
-    <Compile Include="GEDCOM\AnselEncodingTests.cs" />
-    <Compile Include="GEDCOM\FileFormatTests.cs" />
-    <Compile Include="GEDCOM\GDMRecordTests.cs" />
-    <Compile Include="GEDCOM\GDMAddressTests.cs" />
-    <Compile Include="GEDCOM\GDMDateTests.cs" />
-    <Compile Include="GEDCOM\GEDCOMFactoryTests.cs" />
-    <Compile Include="GEDCOM\GDMListTests.cs" />
-    <Compile Include="GEDCOM\GDMNoteRecordTests.cs" />
-    <Compile Include="GEDCOM\GEDCOMParserTests.cs" />
-    <Compile Include="GEDCOM\GDMPersonalNameTests.cs" />
-    <Compile Include="GEDCOM\GEDCOMProviderTests.cs" />
-    <Compile Include="GEDCOM\GDMTagTests.cs" />
-    <Compile Include="GEDCOM\GDMTests.cs" />
-    <Compile Include="GEDCOM\GEDCOMUtilsTests.cs" />
+    <Compile Include="GDModel\GDMAddressTests.cs" />
+    <Compile Include="GDModel\GDMChangeDateTests.cs" />
+    <Compile Include="GDModel\GDMChildToFamilyLinkTests.cs" />
+    <Compile Include="GDModel\GDMCommunicationRecordTests.cs" />
+    <Compile Include="GDModel\GDMCustomEventTests.cs" />
+    <Compile Include="GDModel\GDMDatePeriodTests.cs" />
+    <Compile Include="GDModel\GDMDateRangeTests.cs" />
+    <Compile Include="GDModel\GDMDateStatusTests.cs" />
+    <Compile Include="GDModel\GDMDateTests.cs" />
+    <Compile Include="GDModel\GDMDateValueTests.cs" />
+    <Compile Include="GDModel\GDMFamilyRecordTests.cs" />
+    <Compile Include="GDModel\GDMFileReferenceTests.cs" />
+    <Compile Include="GDModel\GDMGroupRecordTests.cs" />
+    <Compile Include="GDModel\GDMHeaderTests.cs" />
+    <Compile Include="GDModel\GDMIndividualOrdinanceTests.cs" />
+    <Compile Include="GDModel\GDMIndividualRecordTests.cs" />
+    <Compile Include="GDModel\GDMListTests.cs" />
+    <Compile Include="GDModel\GDMLocationRecordTests.cs" />
+    <Compile Include="GDModel\GDMMultimediaLinkTests.cs" />
+    <Compile Include="GDModel\GDMMultimediaRecordTests.cs" />
+    <Compile Include="GDModel\GDMNoteRecordTests.cs" />
+    <Compile Include="GDModel\GDMPersonalNameTests.cs" />
+    <Compile Include="GDModel\GDMRecordTests.cs" />
+    <Compile Include="GDModel\GDMRepositoryRecordTests.cs" />
+    <Compile Include="GDModel\GDMResearchRecordTests.cs" />
+    <Compile Include="GDModel\GDMSourceDataTests.cs" />
+    <Compile Include="GDModel\GDMSourceRecordTests.cs" />
+    <Compile Include="GDModel\GDMSpouseSealingTests.cs" />
+    <Compile Include="GDModel\GDMSubmissionRecordTests.cs" />
+    <Compile Include="GDModel\GDMSubmitterRecordTests.cs" />
+    <Compile Include="GDModel\GDMTagTests.cs" />
+    <Compile Include="GDModel\GDMTagWithListsTests.cs" />
+    <Compile Include="GDModel\GDMTaskRecordTests.cs" />
+    <Compile Include="GDModel\GDMTimeTests.cs" />
+    <Compile Include="GDModel\GDMTreeTests.cs" />
+    <Compile Include="GDModel\GDMXRefReplacerTests.cs" />
+    <Compile Include="GDModel\Providers\FileFormatTests.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\AnselEncodingTests.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMFactoryTests.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParserTests.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMProviderTests.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMUtilsTests.cs" />
     <Compile Include="Externals\SmartGraphTests.cs" />
     <Compile Include="GKComponents\CircleChartTests.cs" />
     <Compile Include="GKComponents\GKListItemTests.cs" />
@@ -250,6 +278,11 @@
     <EmbeddedResource Include="Resources\test_easytree.ged" />
     <EmbeddedResource Include="Resources\test_genney.ged" />
     <EmbeddedResource Include="Resources\test_gedml.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GDModel" />
+    <Folder Include="GDModel\Providers" />
+    <Folder Include="GDModel\Providers\GEDCOM" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

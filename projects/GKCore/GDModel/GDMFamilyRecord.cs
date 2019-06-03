@@ -40,6 +40,8 @@ namespace GDModel
     public sealed class GDMFamilyRecord : GDMRecordWithEvents
     {
         private GDMList<GDMPointer> fChildren;
+        private GDMPointer fHusband;
+        private GDMPointer fWife;
         private GDMMarriageStatus fStatus;
 
 
@@ -50,12 +52,12 @@ namespace GDModel
 
         public GDMPointer Husband
         {
-            get { return GetTag<GDMPointer>(GEDCOMTagType.HUSB, GDMPointer.Create); }
+            get { return fHusband; }
         }
 
         public GDMPointer Wife
         {
-            get { return GetTag<GDMPointer>(GEDCOMTagType.WIFE, GDMPointer.Create); }
+            get { return fWife; }
         }
 
         public GDMMarriageStatus Status
@@ -70,6 +72,8 @@ namespace GDModel
             SetRecordType(GDMRecordType.rtFamily);
             SetName(GEDCOMTagType.FAM);
 
+            fHusband = new GDMPointer(this, GEDCOMTagType.HUSB, string.Empty);
+            fWife = new GDMPointer(this, GEDCOMTagType.WIFE, string.Empty);
             fChildren = new GDMList<GDMPointer>(this);
         }
 
@@ -83,12 +87,12 @@ namespace GDModel
 
         public GDMIndividualRecord GetHusband()
         {
-            return Husband.Value as GDMIndividualRecord;
+            return fHusband.Value as GDMIndividualRecord;
         }
 
         public GDMIndividualRecord GetWife()
         {
-            return Wife.Value as GDMIndividualRecord;
+            return fWife.Value as GDMIndividualRecord;
         }
 
         public override GDMCustomEvent AddEvent(GDMCustomEvent evt)
@@ -107,8 +111,8 @@ namespace GDModel
         {
             base.Clear();
 
-            // Special cleaning of Husband and Wife is not necessary,
-            // because these are sub-tags and they will be cleared in the call base.Clear()
+            RemoveSpouse(GetHusband());
+            RemoveSpouse(GetWife());
 
             int num = fChildren.Count;
             for (int i = 0; i < num; i++) {
@@ -123,7 +127,7 @@ namespace GDModel
         public override bool IsEmpty()
         {
             // Status are not checked because they are not important if other fields are empty.
-            return base.IsEmpty() && (fChildren.Count == 0);
+            return base.IsEmpty() && (fChildren.Count == 0) && fHusband.IsEmpty() && fWife.IsEmpty();
         }
 
         public void DeleteChild(GDMRecord childRec)
@@ -158,6 +162,8 @@ namespace GDModel
 
             base.Assign(source);
 
+            fHusband.Assign(sourceRec.fHusband);
+            fWife.Assign(sourceRec.fWife);
             fStatus = sourceRec.fStatus;
         }
 
@@ -169,6 +175,8 @@ namespace GDModel
 
             base.MoveTo(targetRecord, clearDest);
 
+            targetFamily.Husband.XRef = fHusband.XRef;
+            targetFamily.Wife.XRef = fWife.XRef;
             targetFamily.Status = fStatus;
 
             while (fChildren.Count > 0) {
@@ -178,24 +186,12 @@ namespace GDModel
             }
         }
 
-        public override void Pack()
-        {
-            base.Pack();
-
-            fChildren.Pack();
-        }
-
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
 
-            if (Husband != null) {
-                Husband.StringValue = GEDCOMUtils.EncloseXRef(map.FindNewXRef(Husband.StringValue));
-            }
-
-            if (Wife != null) {
-                Wife.StringValue = GEDCOMUtils.EncloseXRef(map.FindNewXRef(Wife.StringValue));
-            }
+            fHusband.StringValue = GEDCOMUtils.EncloseXRef(map.FindNewXRef(fHusband.StringValue));
+            fWife.StringValue = GEDCOMUtils.EncloseXRef(map.FindNewXRef(fWife.StringValue));
 
             fChildren.ReplaceXRefs(map);
         }
@@ -255,11 +251,11 @@ namespace GDModel
 
             switch (sex) {
                 case GDMSex.svMale:
-                    Husband.Value = spouse;
+                    fHusband.Value = spouse;
                     break;
 
                 case GDMSex.svFemale:
-                    Wife.Value = spouse;
+                    fWife.Value = spouse;
                     break;
             }
 
@@ -278,11 +274,11 @@ namespace GDModel
 
             switch (spouse.Sex) {
                 case GDMSex.svMale:
-                    Husband.Value = null;
+                    fHusband.Value = null;
                     break;
 
                 case GDMSex.svFemale:
-                    Wife.Value = null;
+                    fWife.Value = null;
                     break;
             }
         }

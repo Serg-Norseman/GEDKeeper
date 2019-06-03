@@ -168,7 +168,7 @@ namespace GKTests
 
         public static string GetTagStreamText(GDMTag tag, int level)
         {
-            GEDCOMProvider.SkipUID = true;
+            GEDCOMProvider.DebugWrite = true;
 
             if (tag is GDMRecord) {
                 var record = tag as GDMRecord;

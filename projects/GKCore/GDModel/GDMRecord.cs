@@ -49,6 +49,7 @@ namespace GDModel
     /// </summary>
     public class GDMRecord : GDMCustomRecord, IGEDCOMStructWithLists
     {
+        private GDMChangeDate fChangeDate;
         private object fExtData;
         private GDMRecordType fRecordType;
         private string fUID;
@@ -67,7 +68,7 @@ namespace GDModel
 
         public GDMChangeDate ChangeDate
         {
-            get { return GetTag<GDMChangeDate>(GEDCOMTagType.CHAN, GDMChangeDate.Create); }
+            get { return fChangeDate; }
         }
 
         public object ExtData
@@ -115,6 +116,7 @@ namespace GDModel
 
         public GDMRecord(GDMObject owner) : base(owner)
         {
+            fChangeDate = new GDMChangeDate(this);
             fNotes = new GDMList<GDMNotes>(this);
             fSourceCitations = new GDMList<GDMSourceCitation>(this);
             fMultimediaLinks = new GDMList<GDMMultimediaLink>(this);
@@ -226,16 +228,6 @@ namespace GDModel
             }
         }
 
-        public override void Pack()
-        {
-            base.Pack();
-
-            fNotes.Pack();
-            fSourceCitations.Pack();
-            fMultimediaLinks.Pack();
-            fUserReferences.Pack();
-        }
-
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
@@ -250,6 +242,7 @@ namespace GDModel
         {
             base.Clear();
 
+            fChangeDate.Clear();
             fNotes.Clear();
             fSourceCitations.Clear();
             fMultimediaLinks.Clear();

@@ -29,7 +29,7 @@ namespace GDModel.Providers
 {
     public delegate StackTuple AddTagHandler(GDMObject owner, int tagLevel, string tagName, string tagValue);
 
-    public delegate void SaveTagHandler(StreamWriter stream, int level, GDMTag tag);
+    public delegate bool SaveTagHandler(StreamWriter stream, int level, GDMTag tag);
 
     public sealed class StackTuple
     {

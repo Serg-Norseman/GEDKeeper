@@ -74,5 +74,11 @@ namespace GDModel
         {
             return base.IsEmpty() && (fEvents.Count == 0);
         }
+
+        public override void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            base.ReplaceXRefs(map);
+            fEvents.ReplaceXRefs(map);
+        }
     }
 }

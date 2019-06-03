@@ -181,8 +181,7 @@ namespace GDModel
             fLanguage = GDMLanguageID.Unknown;
             fNameType = GDMNameType.ntNone;
 
-            if (fPieces != null)
-                fPieces.Clear();
+            fPieces.Clear();
         }
 
         public override bool IsEmpty()
@@ -190,12 +189,6 @@ namespace GDModel
             return base.IsEmpty()
                 && string.IsNullOrEmpty(fFirstPart) && string.IsNullOrEmpty(fSurname) && string.IsNullOrEmpty(fLastPart)
                 && fPieces.IsEmpty() && (fLanguage == GDMLanguageID.Unknown) && (fNameType == GDMNameType.ntNone);
-        }
-
-        public override void Pack()
-        {
-            base.Pack();
-            fPieces.Pack();
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)

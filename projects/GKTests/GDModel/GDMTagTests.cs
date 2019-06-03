@@ -92,5 +92,13 @@ namespace GDModel
             subTags = tag.FindTags(GEDCOMTagType._FOLDER);
             Assert.AreEqual(0, subTags.Count);
         }
+
+        [Test]
+        public void Test_IndexOf()
+        {
+            using (GDMTag tag = GDMTag.Create(null, "", "")) {
+                Assert.AreEqual(-1, tag.SubTags.IndexOf(null));
+            }
+        }
     }
 }

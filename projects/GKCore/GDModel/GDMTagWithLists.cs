@@ -60,15 +60,6 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
-        public override void Pack()
-        {
-            base.Pack();
-
-            fNotes.Pack();
-            fSourceCitations.Pack();
-            fMultimediaLinks.Pack();
-        }
-
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);

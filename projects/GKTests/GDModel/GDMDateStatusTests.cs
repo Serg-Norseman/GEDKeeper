@@ -19,12 +19,21 @@
  */
 
 using System;
+using GDModel;
 using NUnit.Framework;
 
 namespace GDModel
 {
-    /*[TestFixture]
-    public class GEDCOMParserTests
+    [TestFixture]
+    public class GDMDateStatusTests
     {
-    }*/
+        [Test]
+        public void Test_Common()
+        {
+            using (GDMDateStatus dateStatus = GDMDateStatus.Create(null, "", "") as GDMDateStatus) {
+                Assert.IsNotNull(dateStatus);
+                Assert.IsNotNull(dateStatus.ChangeDate);
+            }
+        }
+    }
 }

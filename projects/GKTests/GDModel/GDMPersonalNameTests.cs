@@ -19,8 +19,9 @@
  */
 
 using System;
-using System.IO;
 using GDModel;
+using GKCore;
+using GKTests;
 using NUnit.Framework;
 
 namespace GDModel
@@ -32,6 +33,183 @@ namespace GDModel
     [TestFixture]
     public class GDMPersonalNameTests
     {
+        private BaseContext fContext;
+
+        [TestFixtureSetUp]
+        public void SetUp()
+        {
+            fContext = TestUtils.CreateContext();
+            TestUtils.FillContext(fContext);
+        }
+
+        [Test]
+        public void Test_Common()
+        {
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+
+            GDMPersonalName pName = iRec.PersonalNames[0];
+            Assert.AreEqual("Ivanov", pName.Surname);
+            Assert.AreEqual("Ivan Ivanovich", pName.FirstPart);
+
+            pName.SetNameParts("Ivan Ivanovich", "Ivanov", "testLastPart");
+            Assert.AreEqual("Ivanov", pName.Surname);
+            Assert.AreEqual("Ivan Ivanovich", pName.FirstPart);
+            Assert.AreEqual("testLastPart", pName.LastPart);
+
+//            GEDCOMPersonalNamePieces pieces = pName.Pieces;
+//            Assert.AreEqual(pieces.Surname, "surname");
+//            Assert.AreEqual(pieces.Name, "name");
+//            Assert.AreEqual(pieces.PatronymicName, "patr");
+
+            var parts = GKUtils.GetNameParts(iRec);
+            Assert.AreEqual("Ivanov", parts.Surname);
+            Assert.AreEqual("Ivan", parts.Name);
+            Assert.AreEqual("Ivanovich", parts.Patronymic);
+
+
+            GDMPersonalName persName = GDMPersonalName.Create(iRec, "", "") as GDMPersonalName;
+            iRec.AddPersonalName(persName);
+
+            persName = iRec.PersonalNames[0];
+            persName.NameType = GDMNameType.ntBirth;
+            Assert.AreEqual(GDMNameType.ntBirth, persName.NameType);
+
+            //
+
+            persName.SetNameParts("Petr", "Ivanov", "Fedoroff");
+
+            //persName.Surname = "Ivanov";
+            Assert.AreEqual("Petr", persName.FirstPart);
+            Assert.AreEqual("Ivanov", persName.Surname);
+            Assert.AreEqual("Fedoroff", persName.LastPart);
+
+            Assert.AreEqual("Petr Ivanov Fedoroff", persName.FullName);
+
+            persName.FirstPart = "Petr";
+            Assert.AreEqual("Petr", persName.FirstPart);
+
+            persName.Surname = "Test";
+            Assert.AreEqual("Test", persName.Surname);
+
+            persName.LastPart = "Fedoroff";
+            Assert.AreEqual("Fedoroff", persName.LastPart);
+
+            //
+
+            GDMPersonalNamePieces pnPieces = persName.Pieces;
+            
+            pnPieces.Prefix = "Prefix";
+            Assert.AreEqual("Prefix", pnPieces.Prefix);
+
+            pnPieces.Given = "Given";
+            Assert.AreEqual("Given", pnPieces.Given);
+
+            pnPieces.Nickname = "Nickname";
+            Assert.AreEqual("Nickname", pnPieces.Nickname);
+
+            pnPieces.SurnamePrefix = "SurnamePrefix";
+            Assert.AreEqual("SurnamePrefix", pnPieces.SurnamePrefix);
+
+            pnPieces.Surname = "Surname";
+            Assert.AreEqual("Surname", pnPieces.Surname);
+
+            pnPieces.Suffix = "Suffix";
+            Assert.AreEqual("Suffix", pnPieces.Suffix);
+
+            pnPieces.PatronymicName = "PatronymicName";
+            Assert.AreEqual("PatronymicName", pnPieces.PatronymicName);
+
+            pnPieces.MarriedName = "MarriedName";
+            Assert.AreEqual("MarriedName", pnPieces.MarriedName);
+
+            pnPieces.ReligiousName = "ReligiousName";
+            Assert.AreEqual("ReligiousName", pnPieces.ReligiousName);
+
+            pnPieces.CensusName = "CensusName";
+            Assert.AreEqual("CensusName", pnPieces.CensusName);
+
+            //
+
+            Assert.AreEqual(GDMLanguageID.Unknown, persName.Language);
+            persName.Language = GDMLanguageID.English;
+            Assert.AreEqual(GDMLanguageID.English, persName.Language);
+            persName.Language = GDMLanguageID.Unknown;
+            Assert.AreEqual(GDMLanguageID.Unknown, persName.Language);
+            persName.Language = GDMLanguageID.Polish;
+            Assert.AreEqual(GDMLanguageID.Polish, persName.Language);
+
+            //
+
+            string buf = TestUtils.GetTagStreamText(persName, 1);
+            Assert.AreEqual("1 NAME Petr /Test/ Fedoroff\r\n"+
+                            "2 LANG Polish\r\n"+ // extension
+                            "2 TYPE birth\r\n"+
+                            "2 SURN Surname\r\n"+
+                            "2 GIVN Given\r\n"+
+                            "2 _PATN PatronymicName\r\n"+
+                            "2 NPFX Prefix\r\n"+
+                            "2 NICK Nickname\r\n"+
+                            "2 SPFX SurnamePrefix\r\n"+
+                            "2 NSFX Suffix\r\n"+
+                            "2 _MARN MarriedName\r\n"+
+                            "2 _RELN ReligiousName\r\n"+
+                            "2 _CENN CensusName\r\n", buf);
+
+            persName.Language = GDMLanguageID.Unknown;
+
+            using (GDMPersonalName nameCopy = new GDMPersonalName(iRec, "", "")) {
+                Assert.Throws(typeof(ArgumentException), () => { nameCopy.Assign(null); });
+
+                iRec.AddPersonalName(nameCopy);
+                nameCopy.Assign(persName);
+
+                string buf2 = TestUtils.GetTagStreamText(nameCopy, 1);
+                Assert.AreEqual("1 NAME Petr /Test/ Fedoroff\r\n"+
+                                "2 TYPE birth\r\n"+
+                                "2 SURN Surname\r\n"+
+                                "2 GIVN Given\r\n"+
+                                "2 _PATN PatronymicName\r\n"+
+                                "2 NPFX Prefix\r\n"+
+                                "2 NICK Nickname\r\n"+
+                                "2 SPFX SurnamePrefix\r\n"+
+                                "2 NSFX Suffix\r\n"+
+                                "2 _MARN MarriedName\r\n"+
+                                "2 _RELN ReligiousName\r\n"+
+                                "2 _CENN CensusName\r\n", buf2);
+
+                iRec.PersonalNames.Delete(nameCopy);
+            }
+
+            using (GDMPersonalName name1 = new GDMPersonalName(null, "", "")) {
+                Assert.AreEqual("", name1.FirstPart);
+                Assert.AreEqual("", name1.Surname);
+
+                Assert.AreEqual(0.0f, name1.IsMatch(null, false));
+
+                using (GDMPersonalName name2 = new GDMPersonalName(null, "", "")) {
+                    Assert.AreEqual(0.0f, name1.IsMatch(name2, false));
+
+                    name1.SetNameParts("Ivan", "Dub", "");
+                    name2.SetNameParts("Ivan", "Dub", "");
+                    Assert.AreEqual(100.0f, name1.IsMatch(name2, false));
+
+                    name1.SetNameParts("Ivan", "Dub", "");
+                    name2.SetNameParts("Ivan", "Dub2", "");
+                    Assert.AreEqual(12.5f, name1.IsMatch(name2, false));
+
+                    name1.SetNameParts("Ivan", "Dub", "");
+                    name2.SetNameParts("Ivan2", "Dub", "");
+                    Assert.AreEqual(50.0f, name1.IsMatch(name2, false));
+                }
+            }
+
+            persName.ResetOwner(fContext.Tree);
+            Assert.AreEqual(fContext.Tree, persName.GetTree());
+
+            persName.Clear();
+            Assert.IsTrue(persName.IsEmpty());
+        }
+
         [Test]
         public void Test_GetFullName()
         {
@@ -227,7 +405,6 @@ namespace GDModel
         {
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
             instance.AddTag(new GDMTag(instance, "BLECH", null));
-            instance.Pack();
             Assert.IsNotNull(instance.FindTag("BLECH", 0));
         }
 

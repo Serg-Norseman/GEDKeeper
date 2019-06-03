@@ -59,12 +59,6 @@ namespace GDModel
             return base.IsEmpty() && fFileReferences.Count == 0;
         }
 
-        public override void Pack()
-        {
-            base.Pack();
-            fFileReferences.Pack();
-        }
-
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);

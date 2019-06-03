@@ -171,6 +171,7 @@ namespace GDModel.Providers.GEDCOM
         public const string _HOBBY = "_HOBBY";
         public const string _LOC = "_LOC"; // [GEDCOM 5.5EL]
         public const string _MARN = "_MARN"; // Married Surname [BKW6]
+        public const string _MDNA = "_MDNA"; // [MyFamilyTree]
         public const string _PATN = "_PATN"; // Patronymic Name
         public const string _PLAC = "_PLAC"; // Place/Location record [Family Historian]
         public const string _POSITION = "_POSITION";
@@ -180,8 +181,6 @@ namespace GDModel.Providers.GEDCOM
         public const string _STAT = "_STAT";
         public const string _TRAVEL = "_TRAVEL";
         public const string _UID = "_UID"; // 
-
-        public const string _MDNA = "_MDNA"; // [MyFamilyTree]
         public const string _YDNA = "_YDNA"; // [MyFamilyTree]
 
         // non-standard extended tags (GEDKeeper)

@@ -84,5 +84,11 @@ namespace GDModel
             float match = GetStrMatch(RepositoryName, otherRep.RepositoryName, matchParams);
             return match;
         }
+
+        public override void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            base.ReplaceXRefs(map);
+            fAddress.ReplaceXRefs(map);
+        }
     }
 }

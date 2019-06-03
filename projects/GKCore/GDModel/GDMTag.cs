@@ -102,6 +102,16 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        public void ResetOwner(GDMObject owner)
+        {
+            fOwner = owner;
+        }
+
+        public virtual void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            fTags.ReplaceXRefs(map);
+        }
+
         public void SetNameValue(string tagName, string tagValue)
         {
             if (!string.IsNullOrEmpty(tagName)) {
@@ -138,12 +148,6 @@ namespace GDModel
             }
 
             return owner;
-        }
-
-        protected GDMRecord FindRecord(string xref)
-        {
-            GDMTree tree = GetTree();
-            return (tree == null) ? null : tree.XRefIndex_Find(xref);
         }
 
         public void SetName(string value)
@@ -187,7 +191,7 @@ namespace GDModel
         /// Copying the sub-tags from the source to the current tag.
         /// </summary>
         /// <param name="source">A source tag.</param>
-        public virtual void Assign(GDMTag source/*, string[] skipList = null*/)
+        public virtual void Assign(GDMTag source)
         {
             if (source == null) return;
 
@@ -534,25 +538,6 @@ namespace GDModel
             } else {
                 DeleteTag(tagName);
             }
-        }
-
-        #endregion
-
-        #region Tree management
-
-        public virtual void Pack()
-        {
-            fTags.Pack();
-        }
-
-        public virtual void ReplaceXRefs(GDMXRefReplacer map)
-        {
-            fTags.ReplaceXRefs(map);
-        }
-
-        public void ResetOwner(GDMObject owner)
-        {
-            fOwner = owner;
         }
 
         #endregion

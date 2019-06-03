@@ -22,7 +22,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using BSLib;
-using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
@@ -230,21 +229,6 @@ namespace GDModel
                 var item = fDataList[i];
                 if (item != null) {
                     item.ReplaceXRefs(map);
-                }
-            }
-        }
-
-        public void Pack()
-        {
-            if (fDataList == null) return;
-
-            for (int i = fDataList.Count - 1; i >= 0; i--) {
-                var item = fDataList[i];
-                if (item != null) {
-                    item.Pack();
-                    if (item.IsEmpty() && GEDCOMProvider.SkipEmptyTag(item.Name)) {
-                        DeleteAt(i);
-                    }
                 }
             }
         }

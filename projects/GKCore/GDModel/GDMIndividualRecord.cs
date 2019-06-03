@@ -364,18 +364,6 @@ namespace GDModel
             }
         }
 
-        public override void Pack()
-        {
-            base.Pack();
-
-            fAliasses.Pack();
-            fAssociations.Pack();
-            fChildToFamilyLinks.Pack();
-            fGroups.Pack();
-            fPersonalNames.Pack();
-            fSpouseToFamilyLinks.Pack();
-        }
-
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);

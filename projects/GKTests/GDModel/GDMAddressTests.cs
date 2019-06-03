@@ -22,17 +22,122 @@ using System;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKTests;
 using NUnit.Framework;
 
 namespace GDModel
 {
-    /**
-     *
-     * @author Kevin Routley
-     */
     [TestFixture]
     public class GDMAddressTests
     {
+        [Test]
+        public void Test_Common()
+        {
+            using (GDMAddress addr = GDMAddress.Create(null, GEDCOMTagType.ADDR, "") as GDMAddress) {
+                Assert.IsNotNull(addr, "addr != null");
+
+                addr.SetAddressText("test");
+                Assert.AreEqual("test", addr.Address.Text.Trim());
+
+                addr.Address = new StringList("This\r\naddress\r\ntest");
+                Assert.AreEqual("This\r\naddress\r\ntest", addr.Address.Text.Trim());
+                Assert.AreEqual("This", addr.Address[0]);
+                Assert.AreEqual("address", addr.Address[1]);
+                Assert.AreEqual("test", addr.Address[2]);
+
+                addr.AddPhoneNumber("8 911 101 99 99");
+                Assert.AreEqual("8 911 101 99 99", addr.PhoneNumbers[0].StringValue);
+
+                addr.AddEmailAddress("test@mail.com");
+                Assert.AreEqual("test@mail.com", addr.EmailAddresses[0].StringValue);
+
+                addr.AddFaxNumber("abrakadabra");
+                Assert.AreEqual("abrakadabra", addr.FaxNumbers[0].StringValue);
+
+                addr.AddWebPage("http://test.com");
+                Assert.AreEqual("http://test.com", addr.WebPages[0].StringValue);
+
+                // stream test
+                string buf = TestUtils.GetTagStreamText(addr, 0);
+                Assert.AreEqual("0 ADDR This\r\n" +
+                                "1 CONT address\r\n" +
+                                "1 CONT test\r\n" +
+                                "0 PHON 8 911 101 99 99\r\n" +
+                                "0 EMAIL test@mail.com\r\n" +
+                                "0 FAX abrakadabra\r\n" +
+                                "0 WWW http://test.com\r\n", buf);
+
+                addr.AddPhoneNumber("8 911 101 33 33");
+                Assert.AreEqual("8 911 101 33 33", addr.PhoneNumbers[1].StringValue);
+
+                addr.AddEmailAddress("test@mail.ru");
+                Assert.AreEqual("test@mail.ru", addr.EmailAddresses[1].StringValue);
+
+                addr.AddFaxNumber("abrakadabra");
+                Assert.AreEqual("abrakadabra", addr.FaxNumbers[1].StringValue);
+
+                addr.AddWebPage("http://test.ru");
+                Assert.AreEqual("http://test.ru", addr.WebPages[1].StringValue);
+
+                //
+
+                addr.AddressLine1 = "test1";
+                Assert.AreEqual("test1", addr.AddressLine1);
+
+                addr.AddressLine2 = "test2";
+                Assert.AreEqual("test2", addr.AddressLine2);
+
+                addr.AddressLine3 = "test3";
+                Assert.AreEqual("test3", addr.AddressLine3);
+
+                addr.AddressCity = "test4";
+                Assert.AreEqual("test4", addr.AddressCity);
+
+                addr.AddressState = "test5";
+                Assert.AreEqual("test5", addr.AddressState);
+
+                addr.AddressCountry = "test6";
+                Assert.AreEqual("test6", addr.AddressCountry);
+
+                addr.AddressPostalCode = "test7";
+                Assert.AreEqual("test7", addr.AddressPostalCode);
+
+                using (GDMAddress addr2 = GDMAddress.Create(null, GEDCOMTagType.ADDR, "") as GDMAddress) {
+                    Assert.Throws(typeof(ArgumentException), () => {
+                        addr2.Assign(null);
+                    });
+
+                    addr2.Assign(addr);
+
+                    Assert.AreEqual("This\r\naddress\r\ntest", addr2.Address.Text.Trim());
+                    Assert.AreEqual("8 911 101 99 99", addr2.PhoneNumbers[0].StringValue);
+                    Assert.AreEqual("test@mail.com", addr2.EmailAddresses[0].StringValue);
+                    Assert.AreEqual("abrakadabra", addr2.FaxNumbers[0].StringValue);
+                    Assert.AreEqual("http://test.com", addr2.WebPages[0].StringValue);
+                    Assert.AreEqual("8 911 101 33 33", addr2.PhoneNumbers[1].StringValue);
+                    Assert.AreEqual("test@mail.ru", addr2.EmailAddresses[1].StringValue);
+                    Assert.AreEqual("abrakadabra", addr2.FaxNumbers[1].StringValue);
+                    Assert.AreEqual("http://test.ru", addr2.WebPages[1].StringValue);
+                    Assert.AreEqual("test1", addr2.AddressLine1);
+                    Assert.AreEqual("test2", addr2.AddressLine2);
+                    Assert.AreEqual("test3", addr2.AddressLine3);
+                    Assert.AreEqual("test4", addr2.AddressCity);
+                    Assert.AreEqual("test5", addr2.AddressState);
+                    Assert.AreEqual("test6", addr2.AddressCountry);
+                    Assert.AreEqual("test7", addr2.AddressPostalCode);
+                }
+
+                addr.SetAddressArray(new string[] { "test11", "test21", "test31" });
+                Assert.AreEqual("test11", addr.Address[0]);
+                Assert.AreEqual("test21", addr.Address[1]);
+                Assert.AreEqual("test31", addr.Address[2]);
+
+                Assert.IsFalse(addr.IsEmpty());
+                addr.Clear();
+                Assert.IsTrue(addr.IsEmpty());
+            }
+        }
+
         [Test]
         public void Test_Create()
         {

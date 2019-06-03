@@ -320,14 +320,6 @@ namespace GDModel
             return null;
         }
 
-        public void Pack()
-        {
-            int num = fRecords.Count;
-            for (int i = 0; i < num; i++) {
-                fRecords[i].Pack();
-            }
-        }
-
         #endregion
 
         public int[] GetRecordStats()

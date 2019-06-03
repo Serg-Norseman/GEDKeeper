@@ -140,12 +140,6 @@ namespace GDModel
             }
         }
 
-        public override void Pack()
-        {
-            base.Pack();
-            fRepositoryCitations.Pack();
-        }
-
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);

@@ -143,5 +143,11 @@ namespace GDModel
             }
             return result;
         }
+
+        public override void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            base.ReplaceXRefs(map);
+            fFileReferences.ReplaceXRefs(map);
+        }
     }
 }

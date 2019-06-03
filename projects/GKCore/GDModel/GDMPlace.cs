@@ -84,5 +84,11 @@ namespace GDModel
         {
             return base.IsEmpty() && fMap.IsEmpty();
         }
+
+        public override void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            base.ReplaceXRefs(map);
+            fMap.ReplaceXRefs(map);
+        }
     }
 }

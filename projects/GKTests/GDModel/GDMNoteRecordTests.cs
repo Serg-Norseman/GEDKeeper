@@ -21,19 +21,25 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore;
 using GKCore.Types;
+using GKTests;
 using NUnit.Framework;
 
 namespace GDModel
 {
-    /**
-     *
-     * @author Sergey V. Zhdanovskih
-     * Modified by Kevin Routley (KBR) aka fire-eggs
-     */
     [TestFixture]
     public class GDMNoteRecordTests
     {
+        private BaseContext fContext;
+
+        [TestFixtureSetUp]
+        public void SetUp()
+        {
+            fContext = TestUtils.CreateContext();
+            TestUtils.FillContext(fContext);
+        }
+
         [Test]
         public void Test_Common()
         {
@@ -46,6 +52,7 @@ namespace GDModel
                 Assert.Throws(typeof(ArgumentNullException), () => {
                     noteRec.SetNoteText(null);
                 });
+
                 noteRec.SetNoteText("Test text");
                 Assert.AreEqual("Test text", noteRec.Note.Text.Trim());
 
@@ -67,6 +74,7 @@ namespace GDModel
                 Assert.Throws(typeof(ArgumentException), () => {
                     noteRec.MoveTo(null, false);
                 });
+
                 using (GDMNoteRecord noteRec3 = new GDMNoteRecord(null)) {
                     noteRec3.SetNoteText("Test text 3");
                     Assert.AreEqual("Test text 3", noteRec3.Note.Text.Trim());
@@ -77,6 +85,103 @@ namespace GDModel
                 }
             }
         }
+
+        [Test]
+        public void Test_Common2()
+        {
+            using (GDMNoteRecord noteRec = new GDMNoteRecord(null)) {
+                noteRec.AddNoteText("text");
+                Assert.AreEqual("text", noteRec.Note.Text.Trim());
+
+                Assert.Throws(typeof(ArgumentNullException), () => { noteRec.SetNoteText(null); });
+
+                noteRec.SetNoteText("Test text");
+                Assert.AreEqual("Test text", noteRec.Note.Text.Trim());
+
+                using (GDMNoteRecord noteRec2 = new GDMNoteRecord(null)) {
+                    noteRec2.SetNoteText("Test text");
+                    Assert.AreEqual("Test text", noteRec2.Note.Text.Trim());
+
+                    Assert.AreEqual(100.0f, noteRec.IsMatch(noteRec2, new MatchParams()));
+
+                    Assert.IsFalse(noteRec2.IsEmpty());
+                    noteRec2.Clear();
+                    Assert.IsTrue(noteRec2.IsEmpty());
+
+                    Assert.AreEqual(0.0f, noteRec.IsMatch(noteRec2, new MatchParams()));
+
+                    Assert.AreEqual(0.0f, noteRec.IsMatch(null, new MatchParams()));
+                }
+
+                Assert.Throws(typeof(ArgumentException), () => { noteRec.MoveTo(null, false); });
+
+                using (GDMNoteRecord noteRec3 = new GDMNoteRecord(null)) {
+                    noteRec3.SetNoteText("Test text 3");
+                    Assert.AreEqual("Test text 3", noteRec3.Note.Text.Trim());
+
+                    noteRec.MoveTo(noteRec3, false);
+
+                    Assert.AreEqual("Test text 3", noteRec3.Note.Text.Trim());
+                }
+            }
+        }
+
+        [Test]
+        public void Test_Common3()
+        {
+            GDMNoteRecord noteRec = fContext.Tree.CreateNote();
+            GDMIndividualRecord indiv = fContext.Tree.CreateIndividual();
+
+            noteRec.SetNotesArray(new string[] { "This", "notes", "test" });
+
+            string ctx = GKUtils.MergeStrings(noteRec.Note);
+            Assert.AreEqual("This notes test", ctx);
+
+            noteRec.Note = new StringList("This\r\nnotes2\r\ntest2");
+            Assert.AreEqual("This", noteRec.Note[0]);
+            Assert.AreEqual("notes2", noteRec.Note[1]);
+            Assert.AreEqual("test2", noteRec.Note[2]);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.MergeStrings(null); });
+
+            ctx = GKUtils.MergeStrings(noteRec.Note);
+            Assert.AreEqual("This notes2 test2", ctx);
+
+            noteRec.Clear();
+            noteRec.AddNoteText("Test text");
+            Assert.AreEqual("Test text", noteRec.Note.Text.Trim());
+
+            GEDCOMNotesTest(noteRec, indiv);
+
+            Assert.IsFalse(noteRec.IsEmpty());
+            noteRec.Clear();
+            Assert.IsTrue(noteRec.IsEmpty());
+        }
+
+        private static void GEDCOMNotesTest(GDMNoteRecord noteRec, GDMIndividualRecord indiv)
+        {
+            GDMNotes notes = indiv.AddNote(noteRec);
+
+            Assert.AreEqual(notes.Notes.Text, noteRec.Note.Text);
+
+            Assert.IsTrue(notes.IsPointer, "notes.IsPointer");
+
+            Assert.IsFalse(notes.IsEmpty()); // its pointer
+
+            notes.Clear();
+        }
+
+        [Test]
+        public void Test_GEDCOMNotes()
+        {
+            using (GDMNotes notes = GDMNotes.Create(null, "", "") as GDMNotes) {
+                Assert.IsTrue(notes.IsEmpty());
+                notes.Notes = new StringList("Test note");
+                Assert.IsFalse(notes.IsEmpty());
+                Assert.AreEqual("Test note", notes.Notes.Text);
+            }
+        }
+
 
         [Test]
         public void Test_GetNote()

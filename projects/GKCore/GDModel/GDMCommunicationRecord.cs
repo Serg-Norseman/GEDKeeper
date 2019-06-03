@@ -115,11 +115,13 @@ namespace GDModel
         public sealed class CorresponderRet
         {
             public readonly GDMCommunicationDir CommDir;
+            public readonly string CorresponderXRef;
             public readonly GDMIndividualRecord Corresponder;
 
-            public CorresponderRet(GDMCommunicationDir commDir, GDMIndividualRecord corresponder)
+            public CorresponderRet(GDMCommunicationDir commDir, string corresponderXRef, GDMIndividualRecord corresponder)
             {
                 CommDir = commDir;
+                CorresponderXRef = corresponderXRef;
                 Corresponder = corresponder;
             }
         }
@@ -128,6 +130,7 @@ namespace GDModel
         {
             GDMCommunicationDir commDir = GDMCommunicationDir.cdFrom;
             GDMIndividualRecord corresponder = null;
+            string corresponderXRef = string.Empty;
 
             GDMTag corrTag = FindTag(GEDCOMTagType.FROM, 0);
             if (corrTag == null) {
@@ -135,7 +138,8 @@ namespace GDModel
             }
 
             if (corrTag != null) {
-                corresponder = (GetTree().XRefIndex_Find(GEDCOMUtils.CleanXRef(corrTag.StringValue)) as GDMIndividualRecord);
+                corresponderXRef = GEDCOMUtils.CleanXRef(corrTag.StringValue);
+                corresponder = (GetTree().XRefIndex_Find(corresponderXRef) as GDMIndividualRecord);
 
                 if (corrTag.Name == GEDCOMTagType.FROM) {
                     commDir = GDMCommunicationDir.cdFrom;
@@ -144,16 +148,33 @@ namespace GDModel
                 }
             }
 
-            return new CorresponderRet(commDir, corresponder);
+            return new CorresponderRet(commDir, corresponderXRef, corresponder);
         }
 
-        public void SetCorresponder(GDMCommunicationDir commDir, GDMIndividualRecord corresponder)
+        public void SetCorresponder(GDMCommunicationDir commDir, string corresponderXRef)
         {
             DeleteTag(GEDCOMTagType.FROM);
             DeleteTag(GEDCOMTagType.TO);
 
+            if (!string.IsNullOrEmpty(corresponderXRef)) {
+                AddTag(CommunicationTags[(int)commDir], GEDCOMUtils.EncloseXRef(corresponderXRef), null);
+            }
+        }
+
+        public void SetCorresponder(GDMCommunicationDir commDir, GDMIndividualRecord corresponder)
+        {
             if (corresponder != null) {
-                AddTag(CommunicationTags[(int)commDir], GEDCOMUtils.EncloseXRef(corresponder.XRef), null);
+                SetCorresponder(commDir, corresponder.XRef);
+            }
+        }
+
+        public override void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            base.ReplaceXRefs(map);
+
+            CorresponderRet corrRet = GetCorresponder();
+            if (corrRet.Corresponder != null) {
+                SetCorresponder(corrRet.CommDir, map.FindNewXRef(corrRet.CorresponderXRef));
             }
         }
     }

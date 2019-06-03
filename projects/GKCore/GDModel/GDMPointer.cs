@@ -36,7 +36,8 @@ namespace GDModel
         public GDMRecord Value
         {
             get {
-                return FindRecord(XRef);
+                GDMTree tree = GetTree();
+                return (tree == null) ? null : tree.XRefIndex_Find(XRef);
             }
             set {
                 fXRef = string.Empty;
@@ -71,6 +72,12 @@ namespace GDModel
         public GDMPointer(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+            fXRef = string.Empty;
         }
 
         public override bool IsEmpty()

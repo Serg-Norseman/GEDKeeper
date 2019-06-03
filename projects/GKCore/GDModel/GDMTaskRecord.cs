@@ -68,11 +68,13 @@ namespace GDModel
         public sealed class TaskGoalRet
         {
             public readonly GDMGoalType GoalType;
+            public readonly string GoalXRef;
             public readonly GDMRecord GoalRec;
 
-            public TaskGoalRet(GDMGoalType goalType, GDMRecord goalRec)
+            public TaskGoalRet(GDMGoalType goalType, string goalXRef, GDMRecord goalRec)
             {
                 GoalType = goalType;
+                GoalXRef = goalXRef;
                 GoalRec = goalRec;
             }
         }
@@ -80,6 +82,7 @@ namespace GDModel
         public TaskGoalRet GetTaskGoal()
         {
             GDMTree tree = GetTree();
+            string goalXRef = string.Empty;
             GDMRecord goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(Goal));
 
             GDMGoalType goalType;
@@ -93,7 +96,17 @@ namespace GDModel
                 goalType = GDMGoalType.gtOther;
             }
 
-            return new TaskGoalRet(goalType, goalRec);
+            return new TaskGoalRet(goalType, goalXRef, goalRec);
+        }
+
+        public override void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            base.ReplaceXRefs(map);
+
+            TaskGoalRet goalRet = GetTaskGoal();
+            if (goalRet.GoalType != GDMGoalType.gtOther) {
+                Goal = GEDCOMUtils.EncloseXRef(map.FindNewXRef(GEDCOMUtils.CleanXRef(Goal)));
+            }
         }
     }
 }
