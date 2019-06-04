@@ -286,7 +286,7 @@ namespace GDModel.Providers.GEDCOM
 
                 InitBuffers();
                 var strTok = new GEDCOMParser(false);
-                GDMCustomRecord curRecord = null;
+                GDMTag curRecord = null;
                 GDMTag curTag = null;
                 var stack = new Stack<StackTuple>(9);
 
@@ -334,9 +334,9 @@ namespace GDModel.Providers.GEDCOM
                             stack.Clear();
                             stack.Push(stackTuple);
 
-                            curRecord = (GDMCustomRecord)stackTuple.Tag;
+                            curRecord = stackTuple.Tag;
                             if (!string.IsNullOrEmpty(tagXRef)) {
-                                curRecord.XRef = tagXRef;
+                                ((GDMRecord)curRecord).XRef = tagXRef;
                             }
                             curTag = null;
                         } else {
@@ -1734,7 +1734,7 @@ namespace GDModel.Providers.GEDCOM
         /// <summary>
         /// Fix of line errors that are in the files of FamilyTreeBuilder.
         /// </summary>
-        private static void FixFTBLine(GDMCustomRecord curRecord, GDMTag curTag, int lineNum, string str)
+        private static void FixFTBLine(GDMTag curRecord, GDMTag curTag, int lineNum, string str)
         {
             try {
                 if (curTag.Name == GEDCOMTagType.CONT) {
@@ -1890,6 +1890,7 @@ namespace GDModel.Providers.GEDCOM
             f.RegisterTag(GEDCOMTagType.PROP, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.PUBL, null, null, null, true, false);
 
+            f.RegisterTag(GEDCOMTagType.REFN, GDMUserReference.Create, AddUserReferenceTag, WriteUserReference);
             f.RegisterTag(GEDCOMTagType.RELI, GDMIndividualAttribute.Create, AddCustomEventTag);
             f.RegisterTag(GEDCOMTagType.RESN, null, null, null, true, false);
             f.RegisterTag(GEDCOMTagType.RETI, GDMIndividualEvent.Create, AddCustomEventTag);

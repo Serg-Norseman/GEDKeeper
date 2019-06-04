@@ -23,8 +23,25 @@ using NUnit.Framework;
 
 namespace GDModel.Providers.GEDCOM
 {
-    /*[TestFixture]
+    [TestFixture]
     public class GEDCOMParserTests
     {
-    }*/
+        [Test]
+        public void Test_CtorStrNull()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                string data = null;
+                new GEDCOMParser(data, false);
+            });
+        }
+
+        [Test]
+        public void Test_CtorCharArrNull()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                char[] data = null;
+                new GEDCOMParser(data, 0, 0, false);
+            });
+        }
+    }
 }

@@ -21,6 +21,7 @@
 using System;
 using GDModel;
 using GKCore;
+using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
 
@@ -54,8 +55,18 @@ namespace GDModel
                 groupRec.GroupName = "Test Group";
                 Assert.AreEqual("Test Group", groupRec.GroupName);
 
-                string buf = TestUtils.GetTagStreamText(groupRec, 0);
-                Assert.AreEqual("0 @G2@ _GROUP\r\n1 NAME Test Group\r\n", buf);
+                using (GDMGroupRecord group3 = fContext.Tree.CreateGroup()) {
+                    var matchParams = new MatchParams();
+                    matchParams.NamesIndistinctThreshold = 100.0f;
+
+                    Assert.AreEqual(0.0f, groupRec.IsMatch(null, matchParams));
+
+                    group3.GroupName = "Test group";
+                    Assert.AreEqual(100.0f, groupRec.IsMatch(group3, matchParams));
+
+                    group3.GroupName = "test";
+                    Assert.AreEqual(0.0f, groupRec.IsMatch(group3, matchParams));
+                }
 
                 bool res = groupRec.AddMember(null);
                 Assert.IsFalse(res);
@@ -68,8 +79,13 @@ namespace GDModel
                 groupRec.AddMember(member);
                 Assert.AreEqual(0, groupRec.IndexOfMember(member));
 
+                string buf = TestUtils.GetTagStreamText(groupRec, 0);
+                Assert.AreEqual("0 @G2@ _GROUP\r\n1 NAME Test Group\r\n1 _MEMBER @I1@\r\n", buf);
+
                 groupRec.RemoveMember(member);
                 Assert.AreEqual(-1, groupRec.IndexOfMember(member));
+
+                groupRec.ReplaceXRefs(new GDMXRefReplacer());
 
                 Assert.IsFalse(groupRec.IsEmpty());
                 groupRec.Clear();

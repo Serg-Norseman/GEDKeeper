@@ -36,6 +36,14 @@ namespace GDModel
         }
 
         [Test]
+        public void Test_AssignNull()
+        {
+            GDMTag tag = new GDMTag(null);
+            tag.Assign(null); // nothing
+            tag.Dispose();
+        }
+
+        [Test]
         public void Test_SetTagStringsA()
         {
             var tag = new GDMTag(null, "TEST", "");

@@ -29,6 +29,18 @@ namespace GDModel.Providers.GEDCOM
     public class GEDCOMUtilsTests
     {
         [Test]
+        public void Test_GetSignByRecord()
+        {
+            Assert.AreEqual(string.Empty, GEDCOMUtils.GetSignByRecord(null));
+        }
+
+        [Test]
+        public void Test_GetXRefNumber()
+        {
+            Assert.AreEqual(-1, GEDCOMUtils.GetXRefNumber(""));
+        }
+
+        [Test]
         public void Test_Trim()
         {
             string str;
@@ -57,14 +69,15 @@ namespace GDModel.Providers.GEDCOM
         {
             Assert.AreEqual("M", GEDCOMUtils.GetSexStr(GDMSex.svMale), "GetSexStr(svMale)");
             Assert.AreEqual("F", GEDCOMUtils.GetSexStr(GDMSex.svFemale), "GetSexStr(svFemale)");
-            Assert.AreEqual("U", GEDCOMUtils.GetSexStr(GDMSex.svUndetermined), "GetSexStr(svUndetermined)");
-            Assert.AreEqual("", GEDCOMUtils.GetSexStr(GDMSex.svNone), "GetSexStr(svNone)");
+            Assert.AreEqual("U", GEDCOMUtils.GetSexStr(GDMSex.svUnknown), "GetSexStr(svUndetermined)");
+            Assert.AreEqual("X", GEDCOMUtils.GetSexStr(GDMSex.svIntersex), "GetSexStr(svIntersex)");
 
             Assert.AreEqual(GDMSex.svMale, GEDCOMUtils.GetSexVal("M"), "GetSexVal(svMale)");
             Assert.AreEqual(GDMSex.svFemale, GEDCOMUtils.GetSexVal("F"), "GetSexVal(svFemale)");
-            Assert.AreEqual(GDMSex.svUndetermined, GEDCOMUtils.GetSexVal("U"), "GetSexVal(svUndetermined)");
-            Assert.AreEqual(GDMSex.svNone, GEDCOMUtils.GetSexVal(""), "GetSexVal(svNone)");
-            Assert.AreEqual(GDMSex.svNone, GEDCOMUtils.GetSexVal("unk"), "GetSexVal(unk)");
+            Assert.AreEqual(GDMSex.svUnknown, GEDCOMUtils.GetSexVal("U"), "GetSexVal(svUndetermined)");
+            Assert.AreEqual(GDMSex.svUnknown, GEDCOMUtils.GetSexVal(""), "GetSexVal(svNone)");
+            Assert.AreEqual(GDMSex.svUnknown, GEDCOMUtils.GetSexVal("unk"), "GetSexVal(unk)");
+            Assert.AreEqual(GDMSex.svIntersex, GEDCOMUtils.GetSexVal("X"));
         }
 
         [Test]
@@ -314,6 +327,15 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual(GDMChildSealingDateStatus.cdsStillborn, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GDMChildSealingDateStatus.cdsStillborn)));
             Assert.AreEqual(GDMChildSealingDateStatus.cdsSubmitted, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GDMChildSealingDateStatus.cdsSubmitted)));
             Assert.AreEqual(GDMChildSealingDateStatus.cdsUncleared, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GDMChildSealingDateStatus.cdsUncleared)));
+        }
+
+        [Test]
+        public void Test_GEDCOMEnumMarriageStatus()
+        {
+            Assert.AreEqual(GDMMarriageStatus.Unknown, GEDCOMUtils.GetMarriageStatusVal("unk"));
+            Assert.AreEqual(GDMMarriageStatus.MarrRegistered, GEDCOMUtils.GetMarriageStatusVal(GEDCOMUtils.GetMarriageStatusStr(GDMMarriageStatus.MarrRegistered)));
+            Assert.AreEqual(GDMMarriageStatus.MarrNotRegistered, GEDCOMUtils.GetMarriageStatusVal(GEDCOMUtils.GetMarriageStatusStr(GDMMarriageStatus.MarrNotRegistered)));
+            Assert.AreEqual(GDMMarriageStatus.MarrDivorced, GEDCOMUtils.GetMarriageStatusVal(GEDCOMUtils.GetMarriageStatusStr(GDMMarriageStatus.MarrDivorced)));
         }
 
         [Test]

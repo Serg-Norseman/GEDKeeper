@@ -43,7 +43,7 @@ namespace GDModel
             GDMIndividualRecord iRec = fContext.Tree.CreateIndividual();
             Assert.IsNotNull(iRec);
 
-            using (GDMCommunicationRecord comRec = new GDMCommunicationRecord(fContext.Tree)) {
+            using (GDMCommunicationRecord comRec = fContext.Tree.CreateCommunication()) {
                 comRec.CommName = "Test Communication";
                 Assert.AreEqual("Test Communication", comRec.CommName);
 
@@ -64,13 +64,22 @@ namespace GDModel
                 Assert.AreEqual(GDMCommunicationDir.cdTo, corr.CommDir);
                 Assert.AreEqual(iRec, corr.Corresponder);
 
-                comRec.InitNew();
-                string buf = TestUtils.GetTagStreamText(comRec, 0);
-                Assert.AreEqual("0 @CM1@ _COMM\r\n" +
-                                "1 TO @I1@\r\n" +
-                                "1 DATE 23 JAN 2013\r\n" +
-                                "1 NAME Test Communication\r\n" +
-                                "1 TYPE fax\r\n", buf);
+                using (GDMCommunicationRecord comm2 = fContext.Tree.CreateCommunication()) {
+                    Assert.Throws(typeof(ArgumentException), () => {
+                        comm2.Assign(null);
+                    });
+
+                    comm2.Assign(comRec);
+
+                    string buf = TestUtils.GetTagStreamText(comm2, 0);
+                    Assert.AreEqual("0 @CM2@ _COMM\r\n" +
+                                    "1 TO @I1@\r\n" +
+                                    "1 DATE 23 JAN 2013\r\n" +
+                                    "1 NAME Test Communication\r\n" +
+                                    "1 TYPE fax\r\n", buf);
+                }
+
+                comRec.ReplaceXRefs(new GDMXRefReplacer());
 
                 Assert.IsFalse(comRec.IsEmpty());
                 comRec.Clear();

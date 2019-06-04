@@ -103,8 +103,7 @@ namespace GKCore
 
         public static GDMSex GetSexBySign(char sexSign)
         {
-            GDMSex result = GDMSex.svNone;
-            
+            GDMSex result = GDMSex.svUnknown;
             switch (sexSign) {
                 case 'F':
                     result = GDMSex.svFemale;
@@ -113,10 +112,12 @@ namespace GKCore
                     result = GDMSex.svMale;
                     break;
                 case 'U':
-                    result = GDMSex.svUndetermined;
+                    result = GDMSex.svUnknown;
+                    break;
+                case 'X':
+                    result = GDMSex.svIntersex;
                     break;
             }
-
             return result;
         }
 

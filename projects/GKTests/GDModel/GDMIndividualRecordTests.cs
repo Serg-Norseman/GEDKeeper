@@ -59,6 +59,8 @@ namespace GDModel
             evtd = iRec.FindEvent(GEDCOMTagType.DEAT);
             Assert.IsNotNull(evtd);
 
+            Assert.IsFalse(iRec.IsLive());
+
             GDMIndividualRecord ind3 = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(ind3.GetParentsFamily());
 
@@ -217,6 +219,8 @@ namespace GDModel
                 indi.ResetOwner(fContext.Tree);
                 Assert.AreEqual(fContext.Tree, indi.GetTree());
             }
+
+            indiRec.ReplaceXRefs(new GDMXRefReplacer());
         }
 
         private static void GEDCOMRecordTest(GDMRecord rec)
@@ -330,43 +334,6 @@ namespace GDModel
         {
             using (GDMAlias alias = GDMAlias.Create(null, GEDCOMTagType.ALIA, "") as GDMAlias) {
                 Assert.IsNotNull(alias, "alias != null");
-            }
-        }
-
-        [Test]
-        public void Test_GEDCOMAssociation()
-        {
-            using (GDMAssociation association = GDMAssociation.Create(null, GEDCOMTagType.ASSO, "") as GDMAssociation) {
-                Assert.IsNotNull(association);
-
-                Assert.IsNotNull(association.SourceCitations);
-                
-                Assert.IsNotNull(association.Notes); // for GEDCOMPointerWithNotes
-                
-                association.Relation = "This is test relation";
-                Assert.AreEqual("This is test relation", association.Relation);
-
-                association.Individual = null;
-                Assert.IsNull(association.Individual);
-
-                GDMTag tag = association.SourceCitations.Add(new GDMSourceCitation(association, GEDCOMTagType.SOUR, "xxx"));
-                Assert.IsNotNull(tag);
-                Assert.IsTrue(tag is GDMSourceCitation);
-
-                Assert.IsFalse(association.IsEmpty());
-                association.Clear();
-                Assert.IsTrue(association.IsEmpty());
-            }
-        }
-
-        [Test]
-        public void Test_GEDCOMUserRef()
-        {
-            using (GDMUserReference userRef = GDMUserReference.Create(null, GEDCOMTagType.REFN, "") as GDMUserReference) {
-                Assert.IsNotNull(userRef);
-
-                userRef.ReferenceType = "test";
-                Assert.AreEqual("test", userRef.ReferenceType);
             }
         }
     }

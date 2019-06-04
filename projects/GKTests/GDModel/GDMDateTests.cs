@@ -46,6 +46,7 @@ namespace GDModel
 
                 DateTime dt = TestUtils.ParseDT("20.01.2013");
                 Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
+                Assert.AreEqual(2013, dtx1.GetChronologicalYear());
 
                 //dtx1.DateCalendar = GEDCOMCalendar.dcFrench;
                 Assert.AreEqual(GDMCalendar.dcGregorian, dtx1.DateCalendar);
@@ -152,6 +153,24 @@ namespace GDModel
                 dtx1.SetUnknown(1, "JAN", 1980, false);
                 Assert.AreEqual(GDMCalendar.dcUnknown, dtx1.DateCalendar);
             }
+        }
+
+        [Test]
+        public void Test_Misc()
+        {
+            GDMDate dtx1 = new GDMDate(null, "", "20 JAN 2013");
+            GDMDate dtx2 = new GDMDate(null, "", "20 JAN 2014");
+
+            var dtA = GDMCustomDate.CreateApproximated(null, dtx1, GDMApproximated.daCalculated);
+            Assert.IsNotNull(dtA);
+            Assert.AreEqual(GDMApproximated.daCalculated, dtA.Approximated);
+            dtA.GetHashCode();
+
+            var dtP = GDMCustomDate.CreatePeriod(null, dtx1, dtx2);
+            Assert.IsNotNull(dtP);
+
+            var dtR = GDMCustomDate.CreateRange(null, dtx1, dtx2);
+            Assert.IsNotNull(dtR);
         }
 
         [Test]

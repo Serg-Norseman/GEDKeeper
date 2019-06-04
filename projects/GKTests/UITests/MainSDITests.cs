@@ -383,7 +383,7 @@ namespace GKUI.Forms
             Assert.AreEqual(1, search.Count);
 
             Assert.AreEqual(null, baseWin.Context.GetChildFamily(null, false, null));
-            Assert.AreEqual(null, baseWin.Context.AddChildForParent(null, GDMSex.svNone));
+            Assert.AreEqual(null, baseWin.Context.AddChildForParent(null, GDMSex.svUnknown));
             Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.AddFamilyForSpouse(null); });
 
             Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.CollectTips(null); });

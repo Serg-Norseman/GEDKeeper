@@ -386,12 +386,12 @@ namespace GKCore
             Assert.IsFalse(iRec.Patriarch);
             Assert.IsFalse(fContext.Undoman.CanUndo());
 
-            iRec.Sex = GDMSex.svUndetermined;
+            iRec.Sex = GDMSex.svUnknown;
             fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, iRec, GDMSex.svMale);
             Assert.AreEqual(GDMSex.svMale, iRec.Sex);
             Assert.IsTrue(fContext.Undoman.CanUndo());
             fContext.Undoman.Undo();
-            Assert.AreEqual(GDMSex.svUndetermined, iRec.Sex);
+            Assert.AreEqual(GDMSex.svUnknown, iRec.Sex);
             Assert.IsFalse(fContext.Undoman.CanUndo());
 
             Assert.IsTrue(fContext.Undoman.CanRedo());
@@ -403,7 +403,7 @@ namespace GKCore
 
             iRec.Bookmark = false;
             iRec.Patriarch = false;
-            iRec.Sex = GDMSex.svUndetermined;
+            iRec.Sex = GDMSex.svUnknown;
 
             fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualBookmarkChange, iRec, true);
             fContext.Undoman.DoOrdinaryOperation(OperationType.otIndividualPatriarchChange, iRec, true);
@@ -416,7 +416,7 @@ namespace GKCore
             fContext.Undoman.Undo();
             Assert.IsFalse(iRec.Bookmark);
             Assert.IsFalse(iRec.Patriarch);
-            Assert.AreEqual(GDMSex.svUndetermined, iRec.Sex);
+            Assert.AreEqual(GDMSex.svUnknown, iRec.Sex);
             Assert.IsFalse(fContext.Undoman.CanUndo());
 
 
@@ -426,7 +426,7 @@ namespace GKCore
             fContext.Undoman.Rollback();
             Assert.IsFalse(iRec.Bookmark);
             Assert.IsFalse(iRec.Patriarch);
-            Assert.AreEqual(GDMSex.svUndetermined, iRec.Sex);
+            Assert.AreEqual(GDMSex.svUnknown, iRec.Sex);
             Assert.IsFalse(fContext.Undoman.CanUndo());
 
             fContext.Undoman.OnTransaction -= TransactionEventHandler;

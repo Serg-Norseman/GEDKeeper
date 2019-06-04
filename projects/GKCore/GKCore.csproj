@@ -126,7 +126,6 @@
     <Compile Include="GDModel\GDMCommunicationRecord.cs" />
     <Compile Include="GDModel\GDMCustomDate.cs" />
     <Compile Include="GDModel\GDMCustomEvent.cs" />
-    <Compile Include="GDModel\GDMCustomRecord.cs" />
     <Compile Include="GDModel\GDMCutoutPosition.cs" />
     <Compile Include="GDModel\GDMSourceData.cs" />
     <Compile Include="GDModel\GDMDate.cs" />

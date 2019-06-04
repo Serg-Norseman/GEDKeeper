@@ -71,7 +71,7 @@ namespace GKCore.Controllers
                 fView.RestrictionCombo.Add(LangMan.LS(GKData.Restrictions[(int)res]));
             }
 
-            for (GDMSex sx = GDMSex.svNone; sx <= GDMSex.svUndetermined; sx++) {
+            for (GDMSex sx = GDMSex.svUnknown; sx <= GDMSex.svLast; sx++) {
                 string name = GKUtils.SexStr(sx);
                 IImage image = null;
                 #if SEX_SYMBOLS

@@ -483,13 +483,13 @@ namespace GKCore
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             if (rec == null) return;
 
-            GDMSex sex = (strSex.Length == 1) ? GKUtils.GetSexBySign(strSex[0]) : GDMSex.svNone;
+            GDMSex sex = (strSex.Length == 1) ? GKUtils.GetSexBySign(strSex[0]) : GDMSex.svUnknown;
             rec.Sex = sex;
         }
 
         public object gt_create_person(string name, string patronymic, string surname, string strSex)
         {
-            GDMSex sex = (strSex.Length == 1) ? GKUtils.GetSexBySign(strSex[0]) : GDMSex.svNone;
+            GDMSex sex = (strSex.Length == 1) ? GKUtils.GetSexBySign(strSex[0]) : GDMSex.svUnknown;
 
             GDMIndividualRecord iRec = fBase.Context.CreatePersonEx(name, patronymic, surname, sex, false);
             return iRec;
@@ -597,7 +597,7 @@ namespace GKCore
 
         public string gt_define_patronymic(string fatherName, string childSex, bool confirm)
         {
-            GDMSex sex = (childSex.Length == 1) ? GKUtils.GetSexBySign(childSex[0]) : GDMSex.svNone;
+            GDMSex sex = (childSex.Length == 1) ? GKUtils.GetSexBySign(childSex[0]) : GDMSex.svUnknown;
 
             string childPatronymic = fBase.Context.DefinePatronymic(fatherName, sex, confirm);
             return childPatronymic;

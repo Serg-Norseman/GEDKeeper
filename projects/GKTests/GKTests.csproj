@@ -96,6 +96,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Externals\ExternalsTests.cs" />
     <Compile Include="GDModel\GDMAddressTests.cs" />
+    <Compile Include="GDModel\GDMAssociationTests.cs" />
     <Compile Include="GDModel\GDMChangeDateTests.cs" />
     <Compile Include="GDModel\GDMChildToFamilyLinkTests.cs" />
     <Compile Include="GDModel\GDMCommunicationRecordTests.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="GDModel\GDMTaskRecordTests.cs" />
     <Compile Include="GDModel\GDMTimeTests.cs" />
     <Compile Include="GDModel\GDMTreeTests.cs" />
+    <Compile Include="GDModel\GDMUserReferenceTests.cs" />
     <Compile Include="GDModel\GDMXRefReplacerTests.cs" />
     <Compile Include="GDModel\Providers\FileFormatTests.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\AnselEncodingTests.cs" />

@@ -1156,7 +1156,7 @@ namespace GKCore.Charts
 
             // FIXME: Temporary hack: if this person does not specify a particular sex,
             // then breaks the normal sequence of formation of coordinates.
-            if (person.Sex == GDMSex.svNone || person.Sex == GDMSex.svUndetermined) {
+            if (person.Sex == GDMSex.svUnknown || person.Sex == GDMSex.svIntersex) {
                 fEdges[gen] = person.Rect.Right;
             }
 

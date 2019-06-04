@@ -76,6 +76,8 @@ namespace GDModel
                                 "2 FORM png\r\n" +
                                 "3 TYPE manuscript\r\n", buf);
 
+                mediaRec.ReplaceXRefs(new GDMXRefReplacer());
+
                 GEDCOMMultimediaLinkTest(mediaRec, indiv);
 
                 Assert.IsFalse(mediaRec.IsEmpty());
@@ -96,6 +98,8 @@ namespace GDModel
             string buf = TestUtils.GetTagStreamText(mmLink, 1);
             Assert.AreEqual("1 OBJE @O2@\r\n"+
                             "2 TITL Title1\r\n", buf);
+
+            mmLink.ReplaceXRefs(new GDMXRefReplacer());
 
             Assert.IsTrue(mmLink.IsPointer, "mmLink.IsPointer");
 

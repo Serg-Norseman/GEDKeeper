@@ -87,6 +87,8 @@ namespace GDModel
                 Assert.AreEqual("test publ", src1.Publication.Text);
                 Assert.AreEqual("test text", src1.Text.Text);
 
+                src1.ReplaceXRefs(new GDMXRefReplacer());
+
                 GDMRepositoryRecord repRec = fContext.Tree.CreateRepository();
                 repRec.RepositoryName = "test repository";
                 src1.AddRepository(repRec);

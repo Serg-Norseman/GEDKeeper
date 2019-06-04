@@ -42,6 +42,9 @@ namespace GDModel
                 GDMSourceEvent evt = data.Events[0];
                 Assert.AreEqual(evenTag, evt);
 
+                data.ReplaceXRefs(new GDMXRefReplacer());
+
+                Assert.IsFalse(data.IsEmpty());
                 data.Clear();
                 Assert.IsTrue(data.IsEmpty());
             }

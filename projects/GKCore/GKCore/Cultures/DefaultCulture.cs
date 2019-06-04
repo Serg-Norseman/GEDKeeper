@@ -50,7 +50,7 @@ namespace GKCore.Cultures
 
         public virtual GDMSex GetSex(string iName, string iPat, bool canQuery)
         {
-            return GDMSex.svUndetermined;
+            return GDMSex.svUnknown;
         }
 
         public virtual string[] GetSurnames(string surname, bool female)

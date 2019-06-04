@@ -387,7 +387,7 @@ namespace GKCore.Charts
                     fBirthDate = "";
                     fDeathDate = "";
                     IsDead = false;
-                    fSex = GDMSex.svNone;
+                    fSex = GDMSex.svUnknown;
                     fSigns = EnumSet<SpecialUserRef>.Create();
 
                     CertaintyAssessment = 0.0f;

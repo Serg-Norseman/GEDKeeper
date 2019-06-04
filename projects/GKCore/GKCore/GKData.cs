@@ -36,7 +36,7 @@ namespace GKCore
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 
         public const int APP_FORMAT_DEFVER = 39; // don't change it!
-        public const int APP_FORMAT_CURVER = 40;
+        public const int APP_FORMAT_CURVER = 41;
 
         public const string GEDCOM_EXT = "ged";
         public const string GEDCOM_SEC_EXT = "geds";
@@ -494,10 +494,10 @@ namespace GKCore
 
             SexData = new SexStruct[]
             {
-                new SexStruct(LSID.LSID_SexN, "N"),
+                new SexStruct(LSID.LSID_SexU, "U"),
                 new SexStruct(LSID.LSID_SexM, "M"),
                 new SexStruct(LSID.LSID_SexF, "F"),
-                new SexStruct(LSID.LSID_SexU, "U")
+                new SexStruct(LSID.LSID_SexX, "X")
             };
 
 

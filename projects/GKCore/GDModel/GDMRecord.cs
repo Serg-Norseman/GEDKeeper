@@ -47,12 +47,13 @@ namespace GDModel
     /// <summary>
     /// 
     /// </summary>
-    public class GDMRecord : GDMCustomRecord, IGEDCOMStructWithLists
+    public class GDMRecord : GDMTag, IGEDCOMStructWithLists
     {
         private GDMChangeDate fChangeDate;
         private object fExtData;
         private GDMRecordType fRecordType;
         private string fUID;
+        private string fXRef;
 
         private GDMList<GDMMultimediaLink> fMultimediaLinks;
         private GDMList<GDMNotes> fNotes;
@@ -113,6 +114,20 @@ namespace GDModel
             get { return fUserReferences; }
         }
 
+        public string XRef
+        {
+            get { return fXRef; }
+            set {
+                string oldXRef = fXRef;
+                fXRef = value;
+
+                var owner = GetTree();
+                if (owner != null) {
+                    owner.SetXRef(oldXRef, this);
+                }
+            }
+        }
+
 
         public GDMRecord(GDMObject owner) : base(owner)
         {
@@ -137,6 +152,11 @@ namespace GDModel
         protected void SetRecordType(GDMRecordType type)
         {
             fRecordType = type;
+        }
+
+        public override GDMTree GetTree()
+        {
+            return (Owner as GDMTree);
         }
 
         public int IndexOfSource(GDMSourceRecord sourceRec)

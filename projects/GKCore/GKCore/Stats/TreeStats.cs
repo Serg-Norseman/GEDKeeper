@@ -105,9 +105,9 @@ namespace GKCore.Stats
             return stats;
         }
 
-        private static void CheckVal(List<StatsItem> valsList, string val, GDMSex sex = GDMSex.svUndetermined)
+        private static void CheckVal(List<StatsItem> valsList, string val, GDMSex sex = GDMSex.svUnknown)
         {
-            if (sex == GDMSex.svUndetermined) {
+            if (sex == GDMSex.svUnknown) {
                 if (val == "-1" || val == "" || val == "0") {
                     val = "?";
                 }
@@ -117,14 +117,13 @@ namespace GKCore.Stats
 
             StatsItem lvi;
             if (vIdx == -1) {
-                lvi = new StatsItem(val, sex != GDMSex.svUndetermined);
+                lvi = new StatsItem(val, sex != GDMSex.svUnknown);
                 valsList.Add(lvi);
             } else {
                 lvi = valsList[vIdx];
             }
             
-            switch (sex)
-            {
+            switch (sex) {
                 case GDMSex.svFemale:
                     lvi.ValF = lvi.ValF + 1;
                     break;
@@ -133,7 +132,8 @@ namespace GKCore.Stats
                     lvi.ValM = lvi.ValM + 1;
                     break;
 
-                case GDMSex.svUndetermined:
+                case GDMSex.svUnknown:
+                case GDMSex.svIntersex:
                     lvi.Value = lvi.Value + 1;
                     break;
             }

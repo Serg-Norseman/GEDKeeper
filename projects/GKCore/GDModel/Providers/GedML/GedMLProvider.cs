@@ -65,7 +65,7 @@ namespace GDModel.Providers.GedML
                 var invariantText = GEDCOMUtils.InvariantTextInfo;
 
                 var strTok = new GEDCOMParser(false);
-                GDMCustomRecord curRecord = null;
+                GDMTag curRecord = null;
                 GDMTag curTag = null;
                 var stack = new Stack<StackTuple>(9);
 
@@ -96,9 +96,10 @@ namespace GDModel.Providers.GedML
                                 if (stackTuple != null) {
                                     stack.Clear();
                                     stack.Push(stackTuple);
-                                    curRecord = (GDMCustomRecord)stackTuple.Tag;
+
+                                    curRecord = stackTuple.Tag;
                                     if (!string.IsNullOrEmpty(tagId)) {
-                                        curRecord.XRef = tagId;
+                                        ((GDMRecord)curRecord).XRef = tagId;
                                     }
                                 }
                             } else if (tagLevel > 0) {

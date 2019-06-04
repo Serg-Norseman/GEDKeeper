@@ -531,7 +531,7 @@ namespace GKCore
 
                 if (targetType == TargetMode.tmFamilySpouse && target != null) {
                     GDMSex sex = target.Sex;
-                    if (sex < GDMSex.svMale || sex >= GDMSex.svUndetermined) {
+                    if (sex < GDMSex.svMale || sex > GDMSex.svFemale) {
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
                         return false;
                     }
@@ -725,7 +725,7 @@ namespace GKCore
             switch (rec.RecordType) {
                 case GDMRecordType.rtIndividual:
                     GDMIndividualRecord ind = rec as GDMIndividualRecord;
-                    result = ModifyIndividual(baseWin, ref ind, null, TargetMode.tmNone, GDMSex.svNone);
+                    result = ModifyIndividual(baseWin, ref ind, null, TargetMode.tmNone, GDMSex.svUnknown);
                     break;
 
                 case GDMRecordType.rtFamily:

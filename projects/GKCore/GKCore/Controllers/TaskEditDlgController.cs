@@ -131,7 +131,7 @@ namespace GKCore.Controllers
             GDMGoalType gt = (GDMGoalType)fView.GoalType.SelectedIndex;
             switch (gt) {
                 case GDMGoalType.gtIndividual:
-                    fTempRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svNone);
+                    fTempRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
                     fView.Goal.Text = GKUtils.GetGoalStr(gt, fTempRec);
                     break;
 

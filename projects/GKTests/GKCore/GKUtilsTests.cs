@@ -457,7 +457,7 @@ namespace GKCore
             sex = GKUtils.GetSexBySign('M');
             Assert.AreEqual(GDMSex.svMale, sex);
             sex = GKUtils.GetSexBySign('U');
-            Assert.AreEqual(GDMSex.svUndetermined, sex);
+            Assert.AreEqual(GDMSex.svUnknown, sex);
         }
 
         [Test]

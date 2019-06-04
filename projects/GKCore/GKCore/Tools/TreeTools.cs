@@ -1059,12 +1059,10 @@ namespace GKCore.Tools
         {
             CheckRecordWithEvents(iRec, checksList);
 
-            if (iRec.FindEvent(GEDCOMTagType.DEAT) == null)
-            {
+            if (iRec.FindEvent(GEDCOMTagType.DEAT) == null) {
                 int age = GKUtils.GetAge(iRec, -1);
 
-                if (age != -1 && age >= GKData.PROVED_LIFE_LENGTH)
-                {
+                if (age != -1 && age >= GKData.PROVED_LIFE_LENGTH) {
                     CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdPersonLonglived, CheckSolve.csSetIsDead);
                     checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonLonglived), age);
                     checksList.Add(checkObj);
@@ -1072,8 +1070,7 @@ namespace GKCore.Tools
             }
 
             GDMSex sex = iRec.Sex;
-            if (sex < GDMSex.svMale || sex >= GDMSex.svUndetermined)
-            {
+            if (sex < GDMSex.svMale || sex > GDMSex.svFemale) {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdPersonSexless, CheckSolve.csDefineSex);
                 checkObj.Comment = LangMan.LS(LSID.LSID_PersonSexless);
                 checksList.Add(checkObj);
@@ -1081,8 +1078,7 @@ namespace GKCore.Tools
 
             int yBirth = iRec.GetChronologicalYear(GEDCOMTagType.BIRT);
             int yDeath = iRec.GetChronologicalYear(GEDCOMTagType.DEAT);
-            if (yBirth != 0 && yDeath != 0)
-            {
+            if (yBirth != 0 && yDeath != 0) {
                 int delta = (yDeath - yBirth);
                 if (delta < 0) {
                     CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdLiveYearsInvalid, CheckSolve.csSkip);
@@ -1092,16 +1088,14 @@ namespace GKCore.Tools
             }
 
             int iAge = GKUtils.GetMarriageAge(iRec);
-            if (iAge > 0 && (iAge <= 13 || iAge >= 50))
-            {
+            if (iAge > 0 && (iAge <= 13 || iAge >= 50)) {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdStrangeSpouse, CheckSolve.csSkip);
                 checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_StrangeSpouse), iAge.ToString());
                 checksList.Add(checkObj);
             }
 
             iAge = GKUtils.GetFirstbornAge(iRec, GKUtils.GetFirstborn(iRec));
-            if (iAge > 0 && (iAge <= 13 || iAge >= 50))
-            {
+            if (iAge > 0 && (iAge <= 13 || iAge >= 50)) {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdStrangeParent, CheckSolve.csSkip);
                 checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_StrangeParent), iAge.ToString());
                 checksList.Add(checkObj);

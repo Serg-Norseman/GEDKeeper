@@ -171,13 +171,11 @@ namespace GKPedigreeImporterPlugin
         {
             // it's source of ERRORS! but without this - bad! (AddSpouse() not linking parent to family)
             GDMSex sex = parent.Sex;
-            if (sex == GDMSex.svNone || sex == GDMSex.svUndetermined)
-            {
+            if (sex == GDMSex.svUnknown || sex == GDMSex.svIntersex) {
                 parent.Sex = GDMSex.svMale;
             }
 
-            while (parent.SpouseToFamilyLinks.Count < marrNum)
-            {
+            while (parent.SpouseToFamilyLinks.Count < marrNum) {
                 GDMFamilyRecord fam = fTree.CreateFamily();
                 fam.AddSpouse(parent);
             }
@@ -456,7 +454,7 @@ namespace GKPedigreeImporterPlugin
 
             GDMIndividualRecord result = fBase.Context.CreatePersonEx(persName.Name, persName.Patr, persName.Surname, proposeSex, false);
 
-            if (proposeSex == GDMSex.svNone || proposeSex == GDMSex.svUndetermined) {
+            if (proposeSex == GDMSex.svUnknown || proposeSex == GDMSex.svIntersex) {
                 fBase.Context.CheckPersonSex(result);
             }
 
@@ -522,7 +520,7 @@ namespace GKPedigreeImporterPlugin
 
         private GDMSex GetProposeSex(StringList buffer)
         {
-            GDMSex result = GDMSex.svNone;
+            GDMSex result = GDMSex.svUnknown;
             if (buffer == null) return result;
 
             try
@@ -539,12 +537,12 @@ namespace GKPedigreeImporterPlugin
                         // define sex (if spouse is male, then result = female, else result = male)
                         GDMSex res = (c1 == 'М') ? GDMSex.svFemale : GDMSex.svMale;
 
-                        if (result == GDMSex.svNone) {
+                        if (result == GDMSex.svUnknown) {
                             result = res;
                         } else {
                             if (result != res) {
                                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_SpousesInfoConflict));
-                                return GDMSex.svNone;
+                                return GDMSex.svUnknown;
                             } else {
                                 // matched, checked
                             }

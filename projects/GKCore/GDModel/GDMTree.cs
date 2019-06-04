@@ -95,7 +95,7 @@ namespace GDModel
 
         private readonly GDMHeader fHeader;
         private readonly GDMList<GDMRecord> fRecords;
-        private readonly Dictionary<string, GDMCustomRecord> fXRefIndex;
+        private readonly Dictionary<string, GDMRecord> fXRefIndex;
 
         private GEDCOMFormat fFormat;
         private int[] fLastIDs;
@@ -159,7 +159,7 @@ namespace GDModel
 
         public GDMTree()
         {
-            fXRefIndex = new Dictionary<string, GDMCustomRecord>();
+            fXRefIndex = new Dictionary<string, GDMRecord>();
             fRecords = new GDMList<GDMRecord>(this);
             fHeader = new GDMHeader(this);
 
@@ -186,7 +186,7 @@ namespace GDModel
 
         #region XRef Search
 
-        private void XRefIndex_AddRecord(GDMCustomRecord record)
+        private void XRefIndex_AddRecord(GDMRecord record)
         {
             if (record == null || string.IsNullOrEmpty(record.XRef)) return;
 
@@ -204,9 +204,9 @@ namespace GDModel
         {
             if (string.IsNullOrEmpty(xref)) return null;
 
-            GDMCustomRecord record;
+            GDMRecord record;
             if (fXRefIndex.TryGetValue(xref, out record)) {
-                return (record as GDMRecord);
+                return record;
             } else {
                 return null;
             }
@@ -235,7 +235,7 @@ namespace GDModel
             return xref;
         }
 
-        public void SetXRef(string oldXRef, GDMCustomRecord record)
+        public void SetXRef(string oldXRef, GDMRecord record)
         {
             if (!string.IsNullOrEmpty(oldXRef)) {
                 bool exists = fXRefIndex.ContainsKey(oldXRef);
@@ -672,8 +672,7 @@ namespace GDModel
 
         public void BeginUpdate()
         {
-            if (fUpdateCount == 0)
-            {
+            if (fUpdateCount == 0) {
                 SetUpdateState(true);
             }
             fUpdateCount++;
@@ -682,36 +681,30 @@ namespace GDModel
         public void EndUpdate()
         {
             fUpdateCount--;
-            if (fUpdateCount == 0)
-            {
+            if (fUpdateCount == 0) {
                 SetUpdateState(false);
             }
         }
 
         private void SetUpdateState(bool updating)
         {
-            if (updating)
-            {
+            if (updating) {
                 Changing();
-            }
-            else
-            {
+            } else {
                 Changed();
             }
         }
 
         private void Changed()
         {
-            if (fUpdateCount == 0 && fOnChange != null)
-            {
+            if (fUpdateCount == 0 && fOnChange != null) {
                 fOnChange(this, new EventArgs());
             }
         }
 
         private void Changing()
         {
-            if (fUpdateCount == 0 && fOnChanging != null)
-            {
+            if (fUpdateCount == 0 && fOnChanging != null) {
                 fOnChanging(this, new EventArgs());
             }
         }

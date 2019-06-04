@@ -1517,7 +1517,7 @@ namespace GDModel.Providers.GEDCOM
         public static GDMSex GetSexVal(string str)
         {
             str = NormalizeUp(str);
-            if (str.Length != 1) return GDMSex.svNone;
+            if (str.Length != 1) return GDMSex.svUnknown;
 
             char sl = str[0];
 
@@ -1526,10 +1526,10 @@ namespace GDModel.Providers.GEDCOM
                 result = GDMSex.svMale;
             } else if (sl == 'F') {
                 result = GDMSex.svFemale;
-            } else if (sl == 'U') {
-                result = GDMSex.svUndetermined;
+            } else if (sl == 'X') {
+                result = GDMSex.svIntersex;
             } else {
-                result = GDMSex.svNone;
+                result = GDMSex.svUnknown;
             }
             return result;
         }
@@ -1537,7 +1537,6 @@ namespace GDModel.Providers.GEDCOM
         public static string GetSexStr(GDMSex value)
         {
             string str;
-            
             switch (value) {
                 case GDMSex.svMale:
                     str = "M";
@@ -1545,14 +1544,13 @@ namespace GDModel.Providers.GEDCOM
                 case GDMSex.svFemale:
                     str = "F";
                     break;
-                case GDMSex.svUndetermined:
-                    str = "U";
+                case GDMSex.svIntersex:
+                    str = "X";
                     break;
                 default:
-                    str = "";
+                    str = "U";
                     break;
             }
-            
             return str;
         }
 
@@ -1657,7 +1655,7 @@ namespace GDModel.Providers.GEDCOM
                     result = "L";
                     break;
                 case GDMRecordType.rtSubmission:
-                    result = "????";
+                    result = "????"; // FIXME: to standard
                     break;
                 case GDMRecordType.rtSubmitter:
                     result = "SUB";

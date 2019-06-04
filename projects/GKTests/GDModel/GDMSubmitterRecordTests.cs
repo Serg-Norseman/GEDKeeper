@@ -58,6 +58,8 @@ namespace GDModel
 
                 Assert.IsNotNull(subrRec.Address);
 
+                subrRec.ReplaceXRefs(new GDMXRefReplacer());
+
 
                 Assert.IsFalse(subrRec.IsEmpty());
                 subrRec.Clear();
@@ -67,6 +69,18 @@ namespace GDModel
                 subrRec.ResetOwner(fContext.Tree);
                 Assert.AreEqual(fContext.Tree, subrRec.GetTree());
             }
+        }
+
+        [Test]
+        public void Test_SetLanguage()
+        {
+            var inst = new GDMSubmitterRecord(fContext.Tree);
+
+            inst.SetLanguage(-1, "nothing test");
+            Assert.AreEqual(0, inst.Languages.Count);
+
+            inst.SetLanguage(0, "test");
+            Assert.AreEqual(1, inst.Languages.Count);
         }
     }
 }

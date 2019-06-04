@@ -99,7 +99,7 @@ namespace GKCore.Lists
             AliveBeforeDate = "";
             PatriarchOnly = false;
             Residence = "*";
-            Sex = GDMSex.svNone;
+            Sex = GDMSex.svUnknown;
             SourceMode = FilterGroupMode.All;
             SourceRef = "";
             EventVal = "*";
@@ -214,7 +214,7 @@ namespace GKCore.Lists
 
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
-            if ((iFilter.Sex == GDMSex.svNone || fRec.Sex == iFilter.Sex)
+            if ((iFilter.Sex == GDMSex.svUnknown || fRec.Sex == iFilter.Sex)
                 && (iFilter.Name == "*" || IsMatchesMask(buf_fullname, iFilter.Name))
                 && (iFilter.Residence == "*" || HasPlace())
                 && (iFilter.EventVal == "*" || HasEventVal())

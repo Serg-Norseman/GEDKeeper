@@ -643,20 +643,16 @@ namespace GKCore
 
             GDMSex result = namesTable.GetSexByName(iName);
 
-            if (result == GDMSex.svNone)
-            {
-                using (var dlg = AppHost.ResolveDialog<ISexCheckDlg>())
-                {
+            if (result == GDMSex.svUnknown) {
+                using (var dlg = AppHost.ResolveDialog<ISexCheckDlg>()) {
                     dlg.IndividualName = iName + " " + iPatr;
                     result = this.Culture.GetSex(iName, iPatr, false);
 
                     dlg.Sex = result;
-                    if (AppHost.Instance.ShowModalX(dlg, false))
-                    {
+                    if (AppHost.Instance.ShowModalX(dlg, false)) {
                         result = dlg.Sex;
 
-                        if (result != GDMSex.svNone)
-                        {
+                        if (result != GDMSex.svUnknown) {
                             namesTable.SetNameSex(iName, result);
                         }
                     }
@@ -674,8 +670,7 @@ namespace GKCore
             try {
                 BeginUpdate();
 
-                if (iRec.Sex == GDMSex.svNone || iRec.Sex == GDMSex.svUndetermined)
-                {
+                if (iRec.Sex != GDMSex.svMale && iRec.Sex != GDMSex.svFemale) {
                     var parts = GKUtils.GetNameParts(iRec);
                     iRec.Sex = DefineSex(parts.Name, parts.Patronymic);
                 }
@@ -1457,7 +1452,7 @@ namespace GKCore
             try {
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtFamily)) {
                     dlg.TargetIndividual = target;
-                    dlg.NeedSex = GDMSex.svNone;
+                    dlg.NeedSex = GDMSex.svUnknown;
                     dlg.TargetMode = TargetMode.tmFamilyChild;
                     dlg.FastFilter = "*";
 
@@ -1589,7 +1584,7 @@ namespace GKCore
                 throw new ArgumentNullException(@"spouse");
 
             GDMSex sex = spouse.Sex;
-            if (sex < GDMSex.svMale || sex >= GDMSex.svUndetermined) {
+            if (sex < GDMSex.svMale || sex > GDMSex.svFemale) {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
                 return null;
             }

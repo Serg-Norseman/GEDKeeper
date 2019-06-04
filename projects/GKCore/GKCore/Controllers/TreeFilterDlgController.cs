@@ -133,7 +133,7 @@ namespace GKCore.Controllers
 
             switch (action) {
                 case RecordAction.raAdd:
-                    iRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svNone);
+                    iRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
                     if (iRec != null) {
                         fTemp = fTemp + iRec.XRef + ";";
                     }

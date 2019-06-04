@@ -21,33 +21,41 @@
 using System;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKTests;
 using NUnit.Framework;
 
 namespace GDModel
 {
     [TestFixture]
-    public class GDMTimeTests
+    public class GDMUserReferenceTests
     {
         [Test]
         public void Test_Common()
         {
-            using (GDMTime time = new GDMTime(null, "", "20:20:20.100")) {
-                Assert.IsNotNull(time, "time != null");
-                Assert.AreEqual(GEDCOMTagType.TIME, time.Name);
+            using (GDMUserReference userRef = GDMUserReference.Create(null, GEDCOMTagType.REFN, "") as GDMUserReference) {
+                Assert.IsNotNull(userRef);
 
-                Assert.AreEqual(20, time.Hour);
-                Assert.AreEqual(20, time.Minutes);
-                Assert.AreEqual(20, time.Seconds);
-                Assert.AreEqual(100, time.Fraction);
+                userRef.StringValue = "ref";
 
-                time.Fraction = 200;
-                Assert.AreEqual(200, time.Fraction);
+                userRef.ReferenceType = "test";
+                Assert.AreEqual("test", userRef.ReferenceType);
 
-                Assert.AreEqual("20:20:20.200", time.StringValue);
-                Assert.IsFalse(time.IsEmpty());
-                time.Clear();
-                Assert.IsTrue(time.IsEmpty());
-                Assert.AreEqual("", time.StringValue);
+                using (GDMUserReference uref2 = new GDMUserReference(null)) {
+                    Assert.IsNotNull(uref2);
+
+                    Assert.Throws(typeof(ArgumentException), () => {
+                        uref2.Assign(null);
+                    });
+
+                    uref2.Assign(userRef);
+
+                    string buf = TestUtils.GetTagStreamText(uref2, 1);
+                    Assert.AreEqual("1 REFN ref\r\n2 TYPE test\r\n", buf);
+                }
+
+                Assert.IsFalse(userRef.IsEmpty());
+                userRef.Clear();
+                Assert.IsTrue(userRef.IsEmpty());
             }
         }
     }

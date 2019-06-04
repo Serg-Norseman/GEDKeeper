@@ -168,7 +168,7 @@ namespace GKCore.Controllers
             if (p == null || p.Rec == null) return;
 
             GDMIndividualRecord iRec = p.Rec;
-            if (BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GDMSex.svNone)) {
+            if (BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GDMSex.svUnknown)) {
                 UpdateChart();
             }
         }
@@ -190,7 +190,7 @@ namespace GKCore.Controllers
 
             if (person.Rec != null) {
                 GDMIndividualRecord iRec = person.Rec;
-                modified = BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GDMSex.svNone);
+                modified = BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GDMSex.svUnknown);
             } else {
                 // this is "stub" person, only in descendant tree
                 // key properties = BaseSpouse & BaseFamily

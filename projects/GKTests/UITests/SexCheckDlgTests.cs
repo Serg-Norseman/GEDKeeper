@@ -63,8 +63,8 @@ namespace GKUI.Forms
             fDialog.Sex = GDMSex.svFemale;
             Assert.AreEqual(GDMSex.svFemale, fDialog.Sex);
 
-            fDialog.Sex = GDMSex.svNone;
-            Assert.AreEqual(GDMSex.svNone, fDialog.Sex);
+            fDialog.Sex = GDMSex.svUnknown;
+            Assert.AreEqual(GDMSex.svUnknown, fDialog.Sex);
 
             ClickButton("btnCancel", fDialog);
         }

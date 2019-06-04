@@ -40,7 +40,9 @@ namespace GDModel
                 Assert.AreEqual(GDMPedigreeLinkageType.plFoster, childLink.PedigreeLinkageType);
 
                 using (GDMChildToFamilyLink childLink2 = new GDMChildToFamilyLink(null, "", "")) {
-                    Assert.IsNotNull(childLink2);
+                    Assert.Throws(typeof(ArgumentException), () => {
+                        childLink2.Assign(null);
+                    });
 
                     childLink2.Assign(childLink);
 

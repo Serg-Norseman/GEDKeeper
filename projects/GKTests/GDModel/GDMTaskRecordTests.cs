@@ -83,6 +83,8 @@ namespace GDModel
                 Assert.AreEqual(GDMGoalType.gtSource, goal.GoalType);
                 Assert.AreEqual(srcRec, goal.GoalRec);
 
+                taskRec.ReplaceXRefs(new GDMXRefReplacer());
+
                 Assert.IsFalse(taskRec.IsEmpty());
                 taskRec.Clear();
                 Assert.IsTrue(taskRec.IsEmpty());

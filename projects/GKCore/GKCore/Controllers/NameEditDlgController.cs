@@ -47,7 +47,7 @@ namespace GKCore.Controllers
 
         public NameEditDlgController(INameEditDlg view) : base(view)
         {
-            for (GDMSex sx = GDMSex.svNone; sx <= GDMSex.svLast; sx++) {
+            for (GDMSex sx = GDMSex.svUnknown; sx <= GDMSex.svLast; sx++) {
                 fView.SexCombo.Add(GKUtils.SexStr(sx));
             }
         }

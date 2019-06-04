@@ -51,11 +51,18 @@ namespace GDModel
             famRec.AddChild(indiv);
             Assert.AreEqual(0, famRec.IndexOfChild(indiv));
 
-            // stream test
-            string buf = TestUtils.GetTagStreamText(famRec, 0);
-            Assert.AreEqual("0 @F1@ FAM\r\n" +
-                            "1 RESN locked\r\n" +
-                            "1 CHIL @I1@\r\n", buf);
+            using (GDMFamilyRecord fam2 = tree.CreateFamily()) {
+                Assert.Throws(typeof(ArgumentException), () => {
+                    fam2.Assign(null);
+                });
+
+                fam2.Assign(famRec);
+
+                string buf = TestUtils.GetTagStreamText(fam2, 0);
+                Assert.AreEqual("0 @F2@ FAM\r\n" +
+                                "1 RESN locked\r\n" +
+                                "1 CHIL @I1@\r\n", buf);
+            }
 
             // Integrity test
             GDMChildToFamilyLink childLink = indiv.ChildToFamilyLinks[0];
@@ -69,6 +76,8 @@ namespace GDModel
             Assert.Throws(typeof(ArgumentException), () => {
                 famRec.AddEvent(GDMIndividualEvent.Create(null, "", "") as GDMCustomEvent);
             });
+
+            famRec.ReplaceXRefs(new GDMXRefReplacer());
 
             //
 
@@ -135,7 +144,7 @@ namespace GDModel
                 Assert.IsNotNull(famRec);
 
                 GDMIndividualRecord unkInd = new GDMIndividualRecord(null);
-                unkInd.Sex = GDMSex.svUndetermined;
+                unkInd.Sex = GDMSex.svUnknown;
                 Assert.IsFalse(famRec.AddSpouse(unkInd));
 
                 GDMIndividualRecord child1 = tree.CreateIndividual(); // for pointer need a proper object

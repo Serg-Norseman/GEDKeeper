@@ -50,25 +50,15 @@ namespace GDModel
             GDMTree tree = new GDMTree();
             Assert.IsNotNull(tree);
 
+            Assert.IsNotNull(tree.GetSubmitter());
 
             // Tests of event handlers
             tree.OnChange += OnTreeChange;
-            //Assert.AreEqual(OnTreeChange, tree.OnChange);
-            tree.OnChange -= OnTreeChange;
-            //Assert.AreEqual(null, tree.OnChange);
             tree.OnChanging += OnTreeChanging;
-            //Assert.AreEqual(OnTreeChanging, tree.OnChanging);
-            tree.OnChanging -= OnTreeChanging;
-            //Assert.AreEqual(null, tree.OnChanging);
             tree.OnProgress += OnTreeProgress;
-            //Assert.AreEqual(OnTreeProgress, tree.OnProgress);
-            tree.OnProgress -= OnTreeProgress;
-            //Assert.AreEqual(null, tree.OnProgress);
 
-
-            //
-
-            Assert.IsNotNull(tree.GetSubmitter());
+            tree.BeginUpdate();
+            Assert.IsTrue(tree.IsUpdated());
 
             GDMRecord rec;
 
@@ -139,6 +129,12 @@ namespace GDModel
             GDMLocationRecord locRec = tree.CreateLocation();
             Assert.IsNotNull(locRec, "CreateLocation() != null");
 
+            tree.EndUpdate();
+            Assert.IsFalse(tree.IsUpdated());
+
+            tree.OnChange -= OnTreeChange;
+            tree.OnChanging -= OnTreeChanging;
+            tree.OnProgress -= OnTreeProgress;
 
             int size = 0;
             var enum1 = tree.GetEnumerator(GDMRecordType.rtNone);
@@ -166,7 +162,15 @@ namespace GDModel
                 int idx = tree.IndexOf(rec2);
                 Assert.AreEqual(i, idx);
             }
-            
+
+            var recordsX = tree.GetRecords<GDMIndividualRecord>();
+            Assert.IsNotNull(recordsX);
+            Assert.AreEqual(1, recordsX.Count);
+
+            int[] stats = tree.GetRecordStats();
+            Assert.IsNotNull(stats);
+            Assert.AreEqual(14, stats.Length);
+
             Assert.IsFalse(tree.IsEmpty);
 
             Assert.IsFalse(tree.DeleteFamilyRecord(null));

@@ -100,6 +100,8 @@ namespace GDModel
                 resRec.RemoveGroup(groupRec);
                 resRec.RemoveGroup(null);
 
+                resRec.ReplaceXRefs(new GDMXRefReplacer());
+
                 Assert.IsFalse(resRec.IsEmpty());
                 resRec.Clear();
                 Assert.IsTrue(resRec.IsEmpty());

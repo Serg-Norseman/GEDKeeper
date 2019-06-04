@@ -217,14 +217,6 @@ namespace GDModel.Providers.GEDCOM
         public readonly bool SkipEmpty;
         public readonly bool GKExtend;
 
-        public TagInfo(TagConstructor constructor, AddTagHandler addHandler)
-        {
-            Constructor = constructor;
-            AddHandler = addHandler;
-            SkipEmpty = false;
-            GKExtend = false;
-        }
-
         public TagInfo(TagConstructor constructor, AddTagHandler addHandler, SaveTagHandler saveHandler, bool skipEmpty, bool extend)
         {
             Constructor = constructor;

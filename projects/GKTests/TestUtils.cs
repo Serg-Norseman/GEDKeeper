@@ -203,6 +203,11 @@ namespace GKTests
             return DateTime.ParseExact(dtx, "dd.MM.yyyy", CultureInfo.InvariantCulture);
         }
 
+        public static DateTime ParseDTX(string dtx)
+        {
+            return DateTime.ParseExact(dtx, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+        }
+
         public static string GetTempFilePath(string fileName)
         {
             #if !__MonoCS__

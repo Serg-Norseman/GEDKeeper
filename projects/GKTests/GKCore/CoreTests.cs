@@ -285,7 +285,7 @@ namespace GKCore
                 Assert.AreEqual("", name);
 
                 GDMSex sex = namesTable.GetSexByName("Ivan");
-                Assert.AreEqual(GDMSex.svNone, sex);
+                Assert.AreEqual(GDMSex.svUnknown, sex);
                 
                 namesTable.SetName("Ivan", "Ivanovich", GDMSex.svMale);
                 namesTable.SetName("Ivan", "Ivanovna", GDMSex.svFemale);
@@ -306,8 +306,8 @@ namespace GKCore
                 sex = namesTable.GetSexByName("Maria");
                 Assert.AreEqual(GDMSex.svFemale, sex);
 
-                namesTable.SetName("", "", GDMSex.svNone);
-                namesTable.SetNameSex("", GDMSex.svNone);
+                namesTable.SetName("", "", GDMSex.svUnknown);
+                namesTable.SetNameSex("", GDMSex.svUnknown);
 
                 namesTable.SetName("Anna", "Ivanovna", GDMSex.svFemale);
                 sex = namesTable.GetSexByName("Anna");

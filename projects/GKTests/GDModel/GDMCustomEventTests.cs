@@ -52,6 +52,7 @@ namespace GDModel
                 customEvent.Date.ParseString("28 DEC 1990");
                 string dateTest = "28.12.1990";
                 Assert.AreEqual(TestUtils.ParseDT(dateTest), customEvent.Date.GetDateTime());
+                Assert.AreEqual(1990, customEvent.GetChronologicalYear());
 
                 Assert.AreEqual(TestUtils.ParseDT(dateTest), customEvent.Date.Date);
                 customEvent.Place.ParseString("Ivanovo");

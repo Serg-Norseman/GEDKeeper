@@ -21,6 +21,7 @@
 using System;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKTests;
 using NUnit.Framework;
 
 namespace GDModel
@@ -34,8 +35,6 @@ namespace GDModel
             using (GDMChangeDate cd = GDMChangeDate.Create(null, GEDCOMTagType.CHAN, "") as GDMChangeDate) {
                 Assert.IsNotNull(cd);
 
-                Assert.IsNotNull(cd.Notes);
-
                 DateTime dtNow = DateTime.Now;
                 dtNow = dtNow.AddTicks(-dtNow.Ticks % 10000000);
                 cd.ChangeDateTime = dtNow;
@@ -44,6 +43,22 @@ namespace GDModel
                 Assert.AreEqual(dtNow, dtx);
 
                 Assert.AreEqual(dtNow.ToString("yyyy.MM.dd HH:mm:ss"), cd.ToString());
+
+                cd.ChangeDateTime = TestUtils.ParseDTX("04.01.2013 11:12");
+                using (GDMChangeDate chd2 = new GDMChangeDate(null)) {
+                    Assert.IsNotNull(chd2);
+
+                    Assert.Throws(typeof(ArgumentException), () => {
+                        chd2.Assign(null);
+                    });
+
+                    chd2.Assign(cd);
+
+                    string buf = TestUtils.GetTagStreamText(chd2, 1);
+                    Assert.AreEqual("1 CHAN\r\n2 DATE 04 JAN 2013\r\n3 TIME 11:12:00\r\n", buf);
+                }
+
+                Assert.IsNotNull(cd.Notes);
 
                 Assert.IsFalse(cd.IsEmpty());
                 cd.Clear();

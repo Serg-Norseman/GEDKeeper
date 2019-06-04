@@ -18,7 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel;
+using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
 
@@ -42,11 +44,38 @@ namespace GDModel
                 Assert.IsNotNull(repoRec.Address);
                 repoRec.Address.AddressLine1 = "AdrLine1";
 
-                string buf = TestUtils.GetTagStreamText(repoRec, 0);
-                Assert.AreEqual("0 @R1@ REPO\r\n" +
-                                "1 NAME Test Repository\r\n" +
-                                "1 ADDR\r\n" +
-                                "2 ADR1 AdrLine1\r\n", buf);
+                using (GDMRepositoryRecord repo2 = new GDMRepositoryRecord(tree)) {
+                    repo2.InitNew();
+
+                    Assert.Throws(typeof(ArgumentException), () => {
+                        repo2.Assign(null);
+                    });
+
+                    repo2.Assign(repoRec);
+
+                    string buf = TestUtils.GetTagStreamText(repo2, 0);
+                    Assert.AreEqual("0 @R2@ REPO\r\n" +
+                                    "1 NAME Test Repository\r\n" +
+                                    "1 ADDR\r\n" +
+                                    "2 ADR1 AdrLine1\r\n", buf);
+                }
+
+                using (GDMRepositoryRecord repo3 = new GDMRepositoryRecord(tree)) {
+                    repo3.InitNew();
+
+                    var matchParams = new MatchParams();
+                    matchParams.NamesIndistinctThreshold = 100.0f;
+
+                    Assert.AreEqual(0.0f, repoRec.IsMatch(null, matchParams));
+
+                    repo3.RepositoryName = "Test Repository";
+                    Assert.AreEqual(100.0f, repoRec.IsMatch(repo3, matchParams));
+
+                    repo3.RepositoryName = "test";
+                    Assert.AreEqual(0.0f, repoRec.IsMatch(repo3, matchParams));
+                }
+
+                repoRec.ReplaceXRefs(new GDMXRefReplacer());
 
                 Assert.IsFalse(repoRec.IsEmpty());
                 repoRec.Clear();

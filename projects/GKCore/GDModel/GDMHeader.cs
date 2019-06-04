@@ -37,7 +37,7 @@ namespace GDModel
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GDMHeader : GDMCustomRecord
+    public sealed class GDMHeader : GDMTag
     {
         public GEDCOMCharacterSet CharacterSet
         {

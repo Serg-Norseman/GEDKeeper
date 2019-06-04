@@ -58,12 +58,12 @@ namespace GKUI.Forms
                 if (rbFemale.Checked) {
                     return GDMSex.svFemale;
                 }
-                return GDMSex.svNone;
+                return GDMSex.svUnknown;
             }
             set {
                 switch (value) {
-                    case GDMSex.svNone:
-                    case GDMSex.svUndetermined:
+                    case GDMSex.svUnknown:
+                    case GDMSex.svIntersex:
                         rbNone.Checked = true;
                         break;
 

@@ -165,6 +165,13 @@ namespace GDModel
             fHusband.Assign(sourceRec.fHusband);
             fWife.Assign(sourceRec.fWife);
             fStatus = sourceRec.fStatus;
+
+            // TODO: validate this logic!
+            foreach (GDMPointer srcChild in sourceRec.fChildren) {
+                GDMPointer copyChild = new GDMPointer(this);
+                copyChild.Assign(srcChild);
+                fChildren.Add(copyChild);
+            }
         }
 
         public override void MoveTo(GDMRecord targetRecord, bool clearDest)
@@ -245,7 +252,7 @@ namespace GDModel
             }
 
             GDMSex sex = spouse.Sex;
-            if (sex == GDMSex.svNone || sex == GDMSex.svUndetermined) {
+            if (sex == GDMSex.svUnknown || sex == GDMSex.svIntersex) {
                 return false;
             }
 

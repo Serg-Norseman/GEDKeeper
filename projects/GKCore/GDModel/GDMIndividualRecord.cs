@@ -25,16 +25,16 @@ using GKCore.Types;
 
 namespace GDModel
 {
-    // Standard: M/F/U (gedcom-5.5.1, p.61)
-    // FIXME: remove None
+    // Standard: [M]Male / [F]Female / [U]Unknown (gedcom-5.5.1, p.61)
+    // Tamura Jones: +[X]Intersex (GEDCOM 5.5.1 Specification Annotated Edition)
     public enum GDMSex
     {
-        svNone,
+        svUnknown,
         svMale,
         svFemale,
-        svUndetermined,
+        svIntersex,
 
-        svLast = svUndetermined
+        svLast = svFemale
     }
 
 
@@ -181,7 +181,7 @@ namespace GDModel
         {
             base.Clear();
 
-            fSex = GDMSex.svNone;
+            fSex = GDMSex.svUnknown;
 
             for (int i = fChildToFamilyLinks.Count - 1; i >= 0; i--) {
                 GDMFamilyRecord family = fChildToFamilyLinks[i].Family;
@@ -208,7 +208,7 @@ namespace GDModel
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fSex == GDMSex.svNone) && fPersonalNames.Count == 0
+            return base.IsEmpty() && (fSex == GDMSex.svUnknown) && fPersonalNames.Count == 0
                 && fChildToFamilyLinks.Count == 0 && fSpouseToFamilyLinks.Count == 0
                 && fAssociations.Count == 0 && fAliasses.Count == 0 && fGroups.Count == 0;
         }
