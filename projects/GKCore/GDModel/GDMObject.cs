@@ -25,7 +25,7 @@ namespace GDModel
     /// <summary>
     /// Base class for all GEDCOM objects like tags, and tree and xref replacer.
     /// </summary>
-    public class GDMObject : IDisposable
+    public class GDMObject : IDisposable, IGDMObject
     {
         private bool fDisposed;
 

@@ -25,7 +25,6 @@ using GDModel.Providers.GEDCOM;
 using GDModel.Providers.GedML;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.Tools;
 using GKTests;
 using GKTests.Stubs;
 using NUnit.Framework;
@@ -240,7 +239,7 @@ namespace GDModel.Providers
         public void Test_FamilyHistorian()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_famhist.ged")) {
-                TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
+                GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
 
                 Assert.AreEqual(GEDCOMFormat.gf_FamilyHistorian, ctx.Tree.Format);
 
@@ -257,7 +256,7 @@ namespace GDModel.Providers
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ftm2008.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_FamilyTreeMaker, ctx.Tree.Format);
 
-                TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
+                GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
 
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);

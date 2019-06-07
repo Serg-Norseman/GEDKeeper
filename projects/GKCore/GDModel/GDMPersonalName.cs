@@ -239,7 +239,7 @@ namespace GDModel
                 surnameMatched = true;
             }
 
-            if (!(string.IsNullOrEmpty(otherName.Pieces.Nickname) && string.IsNullOrEmpty(fPieces.Nickname))) {
+            if (!string.IsNullOrEmpty(otherName.Pieces.Nickname) && !string.IsNullOrEmpty(fPieces.Nickname)) {
                 parts++;
                 if (otherName.Pieces.Nickname == fPieces.Nickname)
                     matches++;

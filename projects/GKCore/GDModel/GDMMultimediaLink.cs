@@ -138,7 +138,7 @@ namespace GDModel
                     result = mmRec.UID + "-" + GKUtils.GetRectUID(cutoutArea.Left, cutoutArea.Top, cutoutArea.Right, cutoutArea.Bottom);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GEDCOMMultimediaLink.GetUID(): " + ex.Message);
+                Logger.LogWrite("GDMMultimediaLink.GetUID(): " + ex.Message);
                 result = null;
             }
             return result;

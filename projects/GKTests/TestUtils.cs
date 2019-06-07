@@ -170,12 +170,6 @@ namespace GKTests
         {
             GEDCOMProvider.DebugWrite = true;
 
-            if (tag is GDMRecord) {
-                var record = tag as GDMRecord;
-                record.UID = string.Empty;
-                record.DeleteTag(GEDCOMTagType.CHAN);
-            }
-
             // FIXME: very bad code after refactoring of GEDCOMProvider!
             string result;
             using (MemoryStream stm = new MemoryStream()) {

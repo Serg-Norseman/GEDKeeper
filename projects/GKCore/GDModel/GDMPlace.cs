@@ -25,13 +25,14 @@ namespace GDModel
 {
     public sealed class GDMPlace : GDMTagWithLists
     {
+        private string fForm;
         private GDMMap fMap;
 
 
         public string Form
         {
-            get { return GetTagStringValue(GEDCOMTagType.FORM); }
-            set { SetTagStringValue(GEDCOMTagType.FORM, value); }
+            get { return fForm; }
+            set { fForm = value; }
         }
 
         public GDMPointer Location
@@ -49,6 +50,7 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.PLAC);
 
+            fForm = string.Empty;
             fMap = new GDMMap(this);
         }
 
@@ -70,6 +72,7 @@ namespace GDModel
 
             base.Assign(otherPlace);
 
+            fForm = otherPlace.fForm;
             fMap.Assign(otherPlace.fMap);
         }
 
@@ -77,12 +80,13 @@ namespace GDModel
         {
             base.Clear();
 
+            fForm = string.Empty;
             fMap.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fMap.IsEmpty();
+            return base.IsEmpty() && fMap.IsEmpty() && string.IsNullOrEmpty(fForm);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)

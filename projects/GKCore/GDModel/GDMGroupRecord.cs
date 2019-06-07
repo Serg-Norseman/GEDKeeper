@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
@@ -25,17 +26,19 @@ namespace GDModel
 {
     public sealed class GDMGroupRecord : GDMRecord
     {
+        private string fGroupName;
         private GDMList<GDMPointer> fMembers;
+
+
+        public string GroupName
+        {
+            get { return fGroupName; }
+            set { fGroupName = value; }
+        }
 
         public GDMList<GDMPointer> Members
         {
             get { return fMembers; }
-        }
-
-        public string GroupName
-        {
-            get { return GetTagStringValue(GEDCOMTagType.NAME); }
-            set { SetTagStringValue(GEDCOMTagType.NAME, value); }
         }
 
 
@@ -44,6 +47,7 @@ namespace GDModel
             SetRecordType(GDMRecordType.rtGroup);
             SetName(GEDCOMTagType._GROUP);
 
+            fGroupName = string.Empty;
             fMembers = new GDMList<GDMPointer>(this);
         }
 
@@ -55,15 +59,34 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        public override void Assign(GDMTag source)
+        {
+            GDMGroupRecord otherGroup = (source as GDMGroupRecord);
+            if (otherGroup == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(otherGroup);
+
+            GroupName = otherGroup.GroupName;
+
+            // TODO: validate this logic!
+            foreach (GDMPointer srcMbr in otherGroup.Members) {
+                GDMPointer copyMbr = new GDMPointer(this);
+                copyMbr.Assign(srcMbr);
+                fMembers.Add(copyMbr);
+            }
+        }
+
         public override void Clear()
         {
             base.Clear();
+            fGroupName = string.Empty;
             fMembers.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fMembers.Count == 0;
+            return base.IsEmpty() && (fMembers.Count == 0) && (string.IsNullOrEmpty(fGroupName));
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)

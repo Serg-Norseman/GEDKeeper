@@ -57,16 +57,6 @@ namespace GDModel
                 addr.AddWebPage("http://test.com");
                 Assert.AreEqual("http://test.com", addr.WebPages[0].StringValue);
 
-                // stream test
-                string buf = TestUtils.GetTagStreamText(addr, 0);
-                Assert.AreEqual("0 ADDR This\r\n" +
-                                "1 CONT address\r\n" +
-                                "1 CONT test\r\n" +
-                                "0 PHON 8 911 101 99 99\r\n" +
-                                "0 EMAIL test@mail.com\r\n" +
-                                "0 FAX abrakadabra\r\n" +
-                                "0 WWW http://test.com\r\n", buf);
-
                 addr.AddPhoneNumber("8 911 101 33 33");
                 Assert.AreEqual("8 911 101 33 33", addr.PhoneNumbers[1].StringValue);
 
@@ -108,6 +98,26 @@ namespace GDModel
                     });
 
                     addr2.Assign(addr);
+
+                    string buf = TestUtils.GetTagStreamText(addr, 0);
+                    Assert.AreEqual("0 ADDR This\r\n" +
+                                    "1 CONT address\r\n" +
+                                    "1 CONT test\r\n" +
+                                    "1 ADR1 test1\r\n" +
+                                    "1 ADR2 test2\r\n" +
+                                    "1 ADR3 test3\r\n" +
+                                    "1 CITY test4\r\n" +
+                                    "1 STAE test5\r\n" +
+                                    "1 CTRY test6\r\n" +
+                                    "1 POST test7\r\n" +
+                                    "0 PHON 8 911 101 99 99\r\n" +
+                                    "0 PHON 8 911 101 33 33\r\n" +
+                                    "0 EMAIL test@mail.com\r\n" +
+                                    "0 EMAIL test@mail.ru\r\n" +
+                                    "0 FAX abrakadabra\r\n" +
+                                    "0 FAX abrakadabra\r\n" +
+                                    "0 WWW http://test.com\r\n" +
+                                    "0 WWW http://test.ru\r\n", buf);
 
                     Assert.AreEqual("This\r\naddress\r\ntest", addr2.Address.Text.Trim());
                     Assert.AreEqual("8 911 101 99 99", addr2.PhoneNumbers[0].StringValue);

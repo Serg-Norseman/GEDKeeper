@@ -210,6 +210,7 @@ namespace GDModel
             Assert.IsTrue(persName.IsEmpty());
         }
 
+
         [Test]
         public void Test_GetFullName()
         {
@@ -240,9 +241,7 @@ namespace GDModel
         {
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
             instance.ParseString("Ivan/Fedoroff/");
-            string expResult = "Fedoroff";
-            string result = instance.Surname;
-            Assert.AreEqual(expResult, result);
+            Assert.AreEqual("Fedoroff", instance.Surname);
         }
 
         [Test]
@@ -250,11 +249,8 @@ namespace GDModel
         {
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
             instance.ParseString("Ivan/Fedoroff/");
-            string value = "Yaga";
-            instance.Surname = value;
-            string result = instance.FullName;
-            string expResult = "Ivan Yaga";
-            Assert.AreEqual(expResult, result);
+            instance.Surname = "Yaga";
+            Assert.AreEqual("Ivan Yaga", instance.FullName);
         }
 
         [Test]
@@ -262,9 +258,7 @@ namespace GDModel
         {
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
             instance.ParseString("Ivan/Fedoroff/ Esquire");
-            string expResult = "Esquire";
-            string result = instance.LastPart;
-            Assert.AreEqual(expResult, result);
+            Assert.AreEqual("Esquire", instance.LastPart);
         }
 
         [Test]
@@ -274,8 +268,7 @@ namespace GDModel
             instance.ParseString("Ivan/Fedoroff/ Esquire");
             string value = "the III";
             instance.LastPart = value;
-            string result = instance.LastPart;
-            Assert.AreEqual(value, result);
+            Assert.AreEqual(value, instance.LastPart);
         }
 
         [Test]
@@ -289,19 +282,15 @@ namespace GDModel
         public void Test_GetNameType()
         {
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
-            GDMNameType expResult = GDMNameType.ntNone;
-            GDMNameType result = instance.NameType;
-            Assert.AreEqual(expResult, result);
+            Assert.AreEqual(GDMNameType.ntNone, instance.NameType);
         }
 
         [Test]
         public void Test_SetNameType()
         {
-            GDMNameType value = GDMNameType.ntBirth;
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
-            instance.NameType = value;
-            GDMNameType result = instance.NameType;
-            Assert.AreEqual(value, result);
+            instance.NameType = GDMNameType.ntBirth;
+            Assert.AreEqual(GDMNameType.ntBirth, instance.NameType);
         }
 
         [Test]
@@ -309,18 +298,15 @@ namespace GDModel
         {
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
             instance.ParseString(" Ivan Ivanoff / Fedoroff / Esquire ");
-
-            string expResult = "Ivan Ivanoff /Fedoroff/ Esquire";
-            Assert.AreEqual(expResult, instance.StringValue);
+            Assert.AreEqual("Ivan Ivanoff /Fedoroff/ Esquire", instance.StringValue);
         }
 
         [Test]
         public void Test_ParseString()
         {
             // TODO BUG return value from parsestring has no meaning (all codepaths return same)
-            string strValue = "";
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
-            Assert.AreEqual("", instance.ParseString(strValue));
+            Assert.AreEqual("", instance.ParseString(""));
         }
 
         /**
@@ -329,31 +315,24 @@ namespace GDModel
         [Test]
         public void Test_ParseString2()
         {
-            string strValue = "Pytor /the great";
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
-            instance.ParseString(strValue);
+            instance.ParseString("Pytor /the great");
             Assert.AreEqual("Pytor", instance.FullName);
         }
         
         [Test]
         public void Test_SetNameParts()
         {
-            string firstPart = "Ivan Ivanoff";
-            string surname = "Fedoroff";
-            string lastPart = "Esquire";
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
-            instance.SetNameParts(firstPart, surname, lastPart);
+            instance.SetNameParts("Ivan Ivanoff", "Fedoroff", "Esquire");
             Assert.AreEqual("Ivan Ivanoff Fedoroff Esquire", instance.FullName);
         }
 
         [Test]
         public void Test_SetNamePartsNull()
         {
-            string firstPart = "Ivan Ivanoff";
-            string surname = "Fedoroff";
-            string lastPart = null;
             GDMPersonalName instance = new GDMPersonalName(null, "", "");
-            instance.SetNameParts(firstPart, surname, lastPart);
+            instance.SetNameParts("Ivan Ivanoff", "Fedoroff", null);
             Assert.AreEqual("Ivan Ivanoff Fedoroff", instance.FullName);
         }
 
@@ -428,8 +407,7 @@ namespace GDModel
             GDMPersonalName instance2 = new GDMPersonalName(null, "", "");
             instance2.ParseString("Ivan Ivanoff");
 
-            float result = instance1.IsMatch(instance2, true);
-            Assert.AreEqual(100.0f, result, 0.0);
+            Assert.AreEqual(100.0f, instance1.IsMatch(instance2, true), 0.0);
         }
 
         /**
@@ -440,10 +418,11 @@ namespace GDModel
         {
             GDMPersonalName instance1 = new GDMPersonalName(null, "", "");
             instance1.ParseString("Ivan Ivanoff /Fedoroff/");
+
             GDMPersonalName instance2 = new GDMPersonalName(null, "", "");
             instance2.ParseString("Pyotr Ivanoff");
-            float result = instance1.IsMatch(instance2, true);
-            Assert.AreEqual(0.0F, result, 0.0);
+
+            Assert.AreEqual(0.0F, instance1.IsMatch(instance2, true), 0.0);
         }
 
         /**
@@ -454,10 +433,11 @@ namespace GDModel
         {
             GDMPersonalName instance1 = new GDMPersonalName(null, "", "");
             instance1.ParseString("Ivan Ivanoff /Fedoroff/");
+
             GDMPersonalName instance2 = new GDMPersonalName(null, "", "");
             instance2.SetNameParts("Ivan Ivanoff", "Fedoroff", "");
-            float result = instance1.IsMatch(instance2, false);
-            Assert.AreEqual(100.0F, result, 0.0);
+
+            Assert.AreEqual(100.0F, instance1.IsMatch(instance2, false), 0.0);
         }
 
         /**
@@ -468,10 +448,11 @@ namespace GDModel
         {
             GDMPersonalName instance1 = new GDMPersonalName(null, "", "");
             instance1.ParseString("Ivan Ivanoff /Fedoroff/");
+
             GDMPersonalName instance2 = new GDMPersonalName(null, "", "");
             instance2.SetNameParts("Pyotr", "Fedoroff", "Esquire");
-            float result = instance1.IsMatch(instance2, false);
-            Assert.AreNotEqual(100.0F, result);
+
+            Assert.AreNotEqual(100.0F, instance1.IsMatch(instance2, false));
         }
 
         /**
@@ -482,8 +463,8 @@ namespace GDModel
         {
             GDMPersonalName instance1 = new GDMPersonalName(null, "", "");
             instance1.ParseString("Ivan Ivanoff /Fedoroff/");
-            float result = instance1.IsMatch(null, false);
-            Assert.AreEqual(0.0F, result, 0.0);
+
+            Assert.AreEqual(0.0F, instance1.IsMatch(null, false), 0.0);
         }
         
         /**
@@ -494,10 +475,11 @@ namespace GDModel
         {
             GDMPersonalName instance1 = new GDMPersonalName(null, "", "");
             instance1.ParseString("Ivan Ivanoff /?/");
+
             GDMPersonalName instance2 = new GDMPersonalName(null, "", "");
             instance2.SetNameParts("Ivan Ivanoff", "?", "");
-            float result = instance1.IsMatch(instance2, false);
-            Assert.AreEqual(100.0F, result, 0.0);
+
+            Assert.AreEqual(100.0F, instance1.IsMatch(instance2, false), 0.0);
         }
 
         /**
@@ -508,10 +490,11 @@ namespace GDModel
         {
             GDMPersonalName instance1 = new GDMPersonalName(null, "", "");
             instance1.ParseString("/Federoff/");
+
             GDMPersonalName instance2 = new GDMPersonalName(null, "", "");
             instance2.SetNameParts("", "Federoff", "");
-            float result = instance1.IsMatch(instance2, false);
-            Assert.AreEqual(100.0F, result, 0.0);
+
+            Assert.AreEqual(100.0F, instance1.IsMatch(instance2, false), 0.0);
         }
 
         /**
@@ -526,8 +509,7 @@ namespace GDModel
             GDMPersonalName instance2 = new GDMPersonalName(null, "", "");
             instance2.SetNameParts("Ivan Ivanoff", "Unknown", "");
 
-            float result = instance1.IsMatch(instance2, false);
-            Assert.AreEqual(100.0f, result, 0.0);
+            Assert.AreEqual(100.0f, instance1.IsMatch(instance2, false), 0.0);
         }
 
         /**
@@ -538,10 +520,11 @@ namespace GDModel
         {
             GDMPersonalName instance1 = new GDMPersonalName(null, "", "");
             instance1.ParseString("Vasiliy Pupkin");
+
             GDMPersonalName instance2 = new GDMPersonalName(null, "", "");
             instance2.SetNameParts("Vasiliy Pupkin", "", "");
-            float result = instance1.IsMatch(instance2, false);
-            Assert.AreEqual(100.0F, result, 0.0);
+
+            Assert.AreEqual(100.0F, instance1.IsMatch(instance2, false), 0.0);
         }
 
         [Test]

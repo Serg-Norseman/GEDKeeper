@@ -51,6 +51,9 @@ namespace GDModel
             famRec.AddChild(indiv);
             Assert.AreEqual(0, famRec.IndexOfChild(indiv));
 
+            famRec.Husband.Value = tree.CreateIndividual();
+            famRec.Wife.Value = tree.CreateIndividual();
+
             using (GDMFamilyRecord fam2 = tree.CreateFamily()) {
                 Assert.Throws(typeof(ArgumentException), () => {
                     fam2.Assign(null);
@@ -61,6 +64,8 @@ namespace GDModel
                 string buf = TestUtils.GetTagStreamText(fam2, 0);
                 Assert.AreEqual("0 @F2@ FAM\r\n" +
                                 "1 RESN locked\r\n" +
+                                "1 HUSB @I2@\r\n" +
+                                "1 WIFE @I3@\r\n" +
                                 "1 CHIL @I1@\r\n", buf);
             }
 

@@ -162,6 +162,8 @@ namespace GDModel
             if (srcDate == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
+            SetName(source.Name);
+
             fApproximated = srcDate.fApproximated;
             fCalendar = srcDate.fCalendar;
             fYear = srcDate.fYear;
@@ -262,15 +264,11 @@ namespace GDModel
             // An empty string is a valid identifier for an unknown month
             if (string.IsNullOrEmpty(str)) return string.Empty;
 
-            if (str.Length == 3)
-            {
+            if (str.Length == 3) {
                 str = str.ToUpperInvariant();
-
-                for (int m = 1; m <= 12; m++)
-                {
-                    if (GEDCOMMonthArray[m - 1] == str)
-                    {
-                        return GEDCOMMonthArray[m - 1];
+                for (int m = 1; m <= 12; m++) {
+                    if (GEDCOMMonthArray[m - 1] == str) {
+                        return str;
                     }
                 }
             }
@@ -283,15 +281,11 @@ namespace GDModel
             // An empty string is a valid identifier for an unknown month
             if (string.IsNullOrEmpty(str)) return string.Empty;
 
-            if (str.Length == 4)
-            {
+            if (str.Length == 4) {
                 str = str.ToUpperInvariant();
-
-                for (int m = 1; m <= 13; m++)
-                {
-                    if (GEDCOMMonthFrenchArray[m - 1] == str)
-                    {
-                        return GEDCOMMonthFrenchArray[m - 1];
+                for (int m = 1; m <= 13; m++) {
+                    if (GEDCOMMonthFrenchArray[m - 1] == str) {
+                        return str;
                     }
                 }
             }
@@ -304,15 +298,11 @@ namespace GDModel
             // An empty string is a valid identifier for an unknown month
             if (string.IsNullOrEmpty(str)) return string.Empty;
 
-            if (str.Length == 3)
-            {
+            if (str.Length == 3) {
                 str = str.ToUpperInvariant();
-
-                for (int m = 1; m <= 13; m++)
-                {
-                    if (GEDCOMMonthHebrewArray[m - 1] == str)
-                    {
-                        return GEDCOMMonthHebrewArray[m - 1];
+                for (int m = 1; m <= 13; m++) {
+                    if (GEDCOMMonthHebrewArray[m - 1] == str) {
+                        return str;
                     }
                 }
             }
@@ -401,6 +391,7 @@ namespace GDModel
             return (byte)(month + 1);
         }
 
+        // TODO: to remove
         public void SetDate(GDMCalendar calendar, int day, int month, int year, bool yearBC = false)
         {
             switch (calendar) {

@@ -70,6 +70,8 @@ namespace GKCore
             Assert.AreEqual("Ivanova", surnames[0]);
             Assert.Throws(typeof(ArgumentNullException), () => { culture.GetSurnames(null); });
             Assert.AreEqual("Ivanov Ivan", culture.GetPossessiveName("Ivanov Ivan"));
+
+            Assert.AreEqual("Ivanova Anna Ivanovna", culture.GetPossessiveName(iRec));
         }
 
         [Test]

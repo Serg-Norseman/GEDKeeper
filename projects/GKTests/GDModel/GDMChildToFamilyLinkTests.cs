@@ -20,6 +20,7 @@
 
 using System;
 using GDModel;
+using GKTests;
 using NUnit.Framework;
 
 namespace GDModel
@@ -46,8 +47,10 @@ namespace GDModel
 
                     childLink2.Assign(childLink);
 
-                    Assert.AreEqual(GDMChildLinkageStatus.clChallenged, childLink2.ChildLinkageStatus);
-                    Assert.AreEqual(GDMPedigreeLinkageType.plFoster, childLink2.PedigreeLinkageType);
+                    string buf = TestUtils.GetTagStreamText(childLink2, 1);
+                    Assert.AreEqual("1 FAMC\r\n" +
+                                    "2 STAT challenged\r\n" +
+                                    "2 PEDI foster\r\n", buf);
                 }
             }
         }

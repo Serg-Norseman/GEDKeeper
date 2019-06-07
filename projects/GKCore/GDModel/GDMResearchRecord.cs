@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -124,6 +125,19 @@ namespace GDModel
                 fGroups.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMResearchRecord sourceObj = (source as GDMResearchRecord);
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+
+            AssignList(sourceObj.fTasks, fTasks);
+            AssignList(sourceObj.fCommunications, fCommunications);
+            AssignList(sourceObj.fGroups, fGroups);
         }
 
         public override void Clear()

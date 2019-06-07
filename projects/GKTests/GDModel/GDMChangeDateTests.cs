@@ -55,7 +55,9 @@ namespace GDModel
                     chd2.Assign(cd);
 
                     string buf = TestUtils.GetTagStreamText(chd2, 1);
-                    Assert.AreEqual("1 CHAN\r\n2 DATE 04 JAN 2013\r\n3 TIME 11:12:00\r\n", buf);
+                    Assert.AreEqual("1 CHAN\r\n" +
+                                    "2 DATE 04 JAN 2013\r\n" +
+                                    "3 TIME 11:12:00\r\n", buf);
                 }
 
                 Assert.IsNotNull(cd.Notes);

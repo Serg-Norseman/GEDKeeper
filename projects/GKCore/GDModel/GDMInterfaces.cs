@@ -19,9 +19,21 @@
  */
 
 using System.Collections.Generic;
+using BSLib;
 
 namespace GDModel
 {
+    public interface IGDMObject
+    {
+    }
+
+
+    public interface IGDMTextObject
+    {
+        StringList Lines { get; }
+    }
+
+
     public interface IGEDCOMListEnumerator<T> : IEnumerator<T>
     {
     }
@@ -34,7 +46,7 @@ namespace GDModel
     }
 
 
-    public interface IGEDCOMStructWithLists
+    public interface IGEDCOMStructWithLists : IGDMObject
     {
         GDMList<GDMNotes> Notes { get; }
         GDMList<GDMSourceCitation> SourceCitations { get; }
@@ -46,7 +58,7 @@ namespace GDModel
     }
 
 
-    public interface IGEDCOMRecordWithEvents
+    public interface IGEDCOMRecordWithEvents : IGDMObject
     {
         GDMList<GDMCustomEvent> Events { get; }
         

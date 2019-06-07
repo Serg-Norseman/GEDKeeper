@@ -91,11 +91,12 @@ namespace GDModel
                 customEvent.SetName(GEDCOMTagType.BIRT);
                 customEvent.Date.ParseString("20 SEP 1970");
                 customEvent.Place.StringValue = "test place";
-
-                string buf = TestUtils.GetTagStreamText(customEvent, 0);
-                Assert.AreEqual("0 BIRT\r\n" +
-                                "1 DATE 20 SEP 1970\r\n" +
-                                "1 PLAC test place\r\n", buf);
+                customEvent.Agency = "Agency";
+                customEvent.Classification = "custom";
+                customEvent.ReligiousAffilation = "rel_aff";
+                customEvent.Cause = "Cause";
+                customEvent.Address.AddressLine1 = "adr1";
+                customEvent.Restriction = GDMRestriction.rnConfidential;
 
                 using (GDMIndividualEvent copyEvent = GDMIndividualEvent.Create(null, "", "") as GDMIndividualEvent) {
                     Assert.IsNotNull(copyEvent);
@@ -103,8 +104,15 @@ namespace GDModel
 
                     string buf1 = TestUtils.GetTagStreamText(copyEvent, 0);
                     Assert.AreEqual("0 BIRT\r\n" +
+                                    "1 TYPE custom\r\n" +
                                     "1 DATE 20 SEP 1970\r\n" +
-                                    "1 PLAC test place\r\n", buf1);
+                                    "1 PLAC test place\r\n" +
+                                    "1 ADDR\r\n" +
+                                    "2 ADR1 adr1\r\n" +
+                                    "1 CAUS Cause\r\n" +
+                                    "1 AGNC Agency\r\n" +
+                                    "1 RELI rel_aff\r\n" +
+                                    "1 RESN confidential\r\n", buf1);
                 }
 
                 customEvent.Address.AddEmailAddress("email");

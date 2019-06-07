@@ -261,7 +261,7 @@ namespace GKCore.Export
 
                         st = src.ShortTitle;
                         if (string.IsNullOrEmpty(st))
-                            st = src.Title.Text;
+                            st = src.Title.Lines.Text;
                         PrepareSpecIndex(sourcesIndex, st, iRec);
                     }
 
@@ -306,7 +306,7 @@ namespace GKCore.Export
 
                     st = src.ShortTitle;
                     if (string.IsNullOrEmpty(st))
-                        st = src.Title.Text;
+                        st = src.Title.Lines.Text;
                     PrepareSpecIndex(sourcesIndex, st, iRec);
                 }
             }

@@ -1115,7 +1115,7 @@ namespace GKCore
                     FileLoad(fileProvider, fileName, pw);
 
                     if (checkValidation) {
-                        TreeTools.CheckGEDCOMFormat(fTree, this, progress);
+                        GEDCOMChecker.CheckGEDCOMFormat(fTree, this, progress);
                     }
 
                     result = true;

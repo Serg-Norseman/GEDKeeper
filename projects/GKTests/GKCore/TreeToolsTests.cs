@@ -189,10 +189,10 @@ namespace GKCore
         [Test]
         public void Test_CheckGEDCOMFormat()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(null, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(fBaseWin.Context.Tree, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(fBaseWin.Context.Tree, fBaseWin.Context, null); });
-            TreeTools.CheckGEDCOMFormat(fBaseWin.Context.Tree, fBaseWin.Context, fProgress);
+            Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(null, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context.Tree, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context.Tree, fBaseWin.Context, null); });
+            GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context.Tree, fBaseWin.Context, fProgress);
         }
 
         [Test]

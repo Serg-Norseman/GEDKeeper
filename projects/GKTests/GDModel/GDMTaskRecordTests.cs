@@ -83,6 +83,22 @@ namespace GDModel
                 Assert.AreEqual(GDMGoalType.gtSource, goal.GoalType);
                 Assert.AreEqual(srcRec, goal.GoalRec);
 
+                using (GDMTaskRecord task2 = fContext.Tree.CreateTask()) {
+                    Assert.Throws(typeof(ArgumentException), () => {
+                        task2.Assign(null);
+                    });
+
+                    task2.Assign(taskRec);
+
+                    // FIXME: goal format invalid!
+                    string buf = TestUtils.GetTagStreamText(task2, 0);
+                    Assert.AreEqual("0 @TK2@ _TASK\r\n"+
+                                    "1 _PRIORITY normal\r\n"+
+                                    "1 _STARTDATE 20 JAN 2013\r\n"+
+                                    "1 _STOPDATE 21 JAN 2013\r\n"+
+                                    "1 _GOAL S1\r\n", buf);
+                }
+
                 taskRec.ReplaceXRefs(new GDMXRefReplacer());
 
                 Assert.IsFalse(taskRec.IsEmpty());

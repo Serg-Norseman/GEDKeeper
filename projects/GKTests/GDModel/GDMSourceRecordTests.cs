@@ -76,16 +76,16 @@ namespace GDModel
 
                 // fill the record
                 src1.ShortTitle = "test source";
-                src1.Title = new StringList("test title");
-                src1.Originator = new StringList("test author");
-                src1.Publication = new StringList("test publ");
-                src1.Text = new StringList("test text");
+                src1.Title.Lines.Text = ("test title");
+                src1.Originator.Lines.Text = ("test author");
+                src1.Publication.Lines.Text = ("test publ");
+                src1.Text.Lines.Text = ("test text");
 
                 Assert.AreEqual("test source", src1.ShortTitle);
-                Assert.AreEqual("test title", src1.Title.Text);
-                Assert.AreEqual("test author", src1.Originator.Text);
-                Assert.AreEqual("test publ", src1.Publication.Text);
-                Assert.AreEqual("test text", src1.Text.Text);
+                Assert.AreEqual("test title", src1.Title.Lines.Text);
+                Assert.AreEqual("test author", src1.Originator.Lines.Text);
+                Assert.AreEqual("test publ", src1.Publication.Lines.Text);
+                Assert.AreEqual("test text", src1.Text.Lines.Text);
 
                 src1.ReplaceXRefs(new GDMXRefReplacer());
 
@@ -103,10 +103,10 @@ namespace GDModel
 
                     Assert.AreEqual("test source 2", src2.ShortTitle);
 
-                    Assert.AreEqual("test title", src2.Title.Text);
-                    Assert.AreEqual("test author", src2.Originator.Text);
-                    Assert.AreEqual("test publ", src2.Publication.Text);
-                    Assert.AreEqual("test text", src2.Text.Text);
+                    Assert.AreEqual("test title", src2.Title.Lines.Text);
+                    Assert.AreEqual("test author", src2.Originator.Lines.Text);
+                    Assert.AreEqual("test publ", src2.Publication.Lines.Text);
+                    Assert.AreEqual("test text", src2.Text.Lines.Text);
 
                     Assert.AreEqual(1, src2.RepositoryCitations.Count);
                 }
@@ -127,6 +127,7 @@ namespace GDModel
 
                 Assert.AreEqual("p2", srcCit.Page);
                 Assert.AreEqual(3, srcCit.CertaintyAssessment);
+                Assert.AreEqual(3, srcCit.GetValidCertaintyAssessment());
 
                 Assert.IsTrue(srcCit.IsPointer, "srcCit.IsPointer");
 
@@ -158,45 +159,56 @@ namespace GDModel
             Assert.AreEqual("This is test source", sourRec.ShortTitle);
 
             //
-            sourRec.Originator = new StringList("author");
-            Assert.AreEqual("author", sourRec.Originator.Text.Trim());
+            sourRec.Originator.Lines.Text = ("author");
+            Assert.AreEqual("author", sourRec.Originator.Lines.Text);
 
-            sourRec.Title = new StringList("title");
-            Assert.AreEqual("title", sourRec.Title.Text.Trim());
+            sourRec.Title.Lines.Text = ("title");
+            Assert.AreEqual("title", sourRec.Title.Lines.Text);
 
-            sourRec.Publication = new StringList("publication");
-            Assert.AreEqual("publication", sourRec.Publication.Text.Trim());
+            sourRec.Publication.Lines.Text = ("publication");
+            Assert.AreEqual("publication", sourRec.Publication.Lines.Text);
 
-            sourRec.Text = new StringList("sample");
-            Assert.AreEqual("sample", sourRec.Text.Text.Trim());
+            sourRec.Text.Lines.Text = ("sample");
+            Assert.AreEqual("sample", sourRec.Text.Lines.Text);
 
             //
-            sourRec.SetOriginatorArray(new string[] {"author"});
-            Assert.AreEqual("author", sourRec.Originator.Text.Trim());
+            sourRec.SetOriginatorArray(new string[] {"author1", "author2", "author3", "author4"});
+            Assert.AreEqual("author1\r\nauthor2\r\nauthor3\r\nauthor4", sourRec.Originator.Lines.Text);
 
             sourRec.SetTitleArray(new string[] {"title"});
-            Assert.AreEqual("title", sourRec.Title.Text.Trim());
+            Assert.AreEqual("title", sourRec.Title.Lines.Text);
 
             sourRec.SetPublicationArray(new string[] {"publication"});
-            Assert.AreEqual("publication", sourRec.Publication.Text.Trim());
+            Assert.AreEqual("publication", sourRec.Publication.Lines.Text);
 
             sourRec.SetTextArray(new string[] {"sample"});
-            Assert.AreEqual("sample", sourRec.Text.Text.Trim());
+            Assert.AreEqual("sample", sourRec.Text.Lines.Text);
 
             //
             GEDCOMRepositoryCitationTest(sourRec, repRec);
 
-            string buf = TestUtils.GetTagStreamText(sourRec, 0);
-            Assert.AreEqual("0 @S1@ SOUR\r\n"+
-                            "1 DATA\r\n"+
-                            "1 ABBR This is test source\r\n"+
-                            "1 AUTH author\r\n"+
-                            "1 TITL title\r\n"+
-                            "1 PUBL publication\r\n"+
-                            "1 TEXT sample\r\n"+
-                            "1 REPO @R2@\r\n", buf);
+            using (GDMSourceRecord sour2 = fContext.Tree.CreateSource()) {
+                Assert.Throws(typeof(ArgumentException), () => {
+                    sour2.Assign(null);
+                });
 
-            //
+                sour2.Assign(sourRec);
+
+                string buf = TestUtils.GetTagStreamText(sour2, 0);
+                Assert.AreEqual("0 @S2@ SOUR\r\n" +
+                                "1 TITL title\r\n" +
+                                "1 PUBL publication\r\n" +
+                                "1 ABBR This is test source\r\n" +
+                                "1 REPO @R2@\r\n" +
+                                "1 AUTH author1\r\n" +
+                                "2 CONT author2\r\n" +
+                                "2 CONT author3\r\n" +
+                                "2 CONT author4\r\n" +
+                                "1 TEXT sample\r\n", buf);
+            }
+
+            sourRec.ReplaceXRefs(new GDMXRefReplacer());
+
             Assert.IsFalse(sourRec.IsEmpty());
             sourRec.Clear();
             Assert.IsTrue(sourRec.IsEmpty());

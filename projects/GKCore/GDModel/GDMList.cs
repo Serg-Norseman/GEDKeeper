@@ -235,9 +235,9 @@ namespace GDModel
 
         public void Sort(Comparison<T> comparer)
         {
-            if (fDataList == null) return;
-
-            ListTimSort<T>.Sort(fDataList, comparer);
+            if (fDataList != null) {
+                ListTimSort<T>.Sort(fDataList, comparer);
+            }
         }
     }
 }

@@ -107,6 +107,7 @@ namespace GDModel.Providers.GEDCOM
         public const string MARL = "MARL";
         public const string MARS = "MARS";
         public const string MARR = "MARR";
+        public const string MEDI = "MEDI";
         public const string NAME = "NAME";
         public const string NATI = "NATI";
         public const string NATU = "NATU";

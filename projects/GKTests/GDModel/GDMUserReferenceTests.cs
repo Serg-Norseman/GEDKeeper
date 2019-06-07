@@ -50,7 +50,8 @@ namespace GDModel
                     uref2.Assign(userRef);
 
                     string buf = TestUtils.GetTagStreamText(uref2, 1);
-                    Assert.AreEqual("1 REFN ref\r\n2 TYPE test\r\n", buf);
+                    Assert.AreEqual("1 REFN ref\r\n"+
+                                    "2 TYPE test\r\n", buf);
                 }
 
                 Assert.IsFalse(userRef.IsEmpty());

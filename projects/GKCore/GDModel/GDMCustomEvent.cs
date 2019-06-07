@@ -18,62 +18,123 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using BSLib.Calendar;
-using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
 namespace GDModel
 {
     public abstract class GDMCustomEvent : GDMTagWithLists
     {
-        public string Classification
+        private GDMAddress fAddress;
+        private string fAgency;
+        private string fCause;
+        private string fClassification;
+        private GDMDateValue fDate;
+        private GDMPlace fPlace;
+        private string fReligiousAffilation;
+        private GDMRestriction fRestriction;
+
+
+        public GDMAddress Address
         {
-            get { return GetTagStringValue(GEDCOMTagType.TYPE); }
-            set { SetTagStringValue(GEDCOMTagType.TYPE, value); }
+            get { return fAddress; }
         }
 
         public string Agency
         {
-            get { return GetTagStringValue(GEDCOMTagType.AGNC); }
-            set { SetTagStringValue(GEDCOMTagType.AGNC, value); }
-        }
-
-        public string ReligiousAffilation
-        {
-            get { return GetTagStringValue(GEDCOMTagType.RELI); }
-            set { SetTagStringValue(GEDCOMTagType.RELI, value); }
+            get { return fAgency; }
+            set { fAgency = value; }
         }
 
         public string Cause
         {
-            get { return GetTagStringValue(GEDCOMTagType.CAUS); }
-            set { SetTagStringValue(GEDCOMTagType.CAUS, value); }
+            get { return fCause; }
+            set { fCause = value; }
         }
 
-        public GDMPlace Place
+        public string Classification
         {
-            get { return GetTag<GDMPlace>(GEDCOMTagType.PLAC, GDMPlace.Create); }
-        }
-
-        public GDMAddress Address
-        {
-            get { return GetTag<GDMAddress>(GEDCOMTagType.ADDR, GDMAddress.Create); }
+            get { return fClassification; }
+            set { fClassification = value; }
         }
 
         public GDMDateValue Date
         {
-            get { return GetTag<GDMDateValue>(GEDCOMTagType.DATE, GDMDateValue.Create); }
+            get { return fDate; }
+        }
+
+        public GDMPlace Place
+        {
+            get { return fPlace; }
+        }
+
+        public string ReligiousAffilation
+        {
+            get { return fReligiousAffilation; }
+            set { fReligiousAffilation = value; }
         }
 
         public GDMRestriction Restriction
         {
-            get { return GEDCOMUtils.GetRestrictionVal(GetTagStringValue(GEDCOMTagType.RESN)); }
-            set { SetTagStringValue(GEDCOMTagType.RESN, GEDCOMUtils.GetRestrictionStr(value)); }
+            get { return fRestriction; }
+            set { fRestriction = value; }
         }
 
 
         protected GDMCustomEvent(GDMObject owner) : base(owner)
         {
+            fAddress = new GDMAddress(this);
+            fDate = new GDMDateValue(this);
+            fPlace = new GDMPlace(this);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMCustomEvent sourceObj = (source as GDMCustomEvent);
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+
+            fAddress.Assign(sourceObj.fAddress);
+            fAgency = sourceObj.fAgency;
+            fCause = sourceObj.fCause;
+            fClassification = sourceObj.fClassification;
+            fDate.Assign(sourceObj.fDate);
+            fPlace.Assign(sourceObj.fPlace);
+            fReligiousAffilation = sourceObj.fReligiousAffilation;
+            fRestriction = sourceObj.fRestriction;
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            fAddress.Clear();
+            fAgency = string.Empty;
+            fCause = string.Empty;
+            fClassification = string.Empty;
+            fDate.Clear();
+            fPlace.Clear();
+            fReligiousAffilation = string.Empty;
+            fRestriction = GDMRestriction.rnNone;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && fAddress.IsEmpty() && string.IsNullOrEmpty(fAgency) && string.IsNullOrEmpty(fCause)
+                && string.IsNullOrEmpty(fClassification) && fDate.IsEmpty() && fPlace.IsEmpty()
+                && string.IsNullOrEmpty(fReligiousAffilation) && fRestriction == GDMRestriction.rnNone;
+        }
+
+        public override void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            base.ReplaceXRefs(map);
+
+            fAddress.ReplaceXRefs(map);
+            fDate.ReplaceXRefs(map);
+            fPlace.ReplaceXRefs(map);
         }
 
         public override float IsMatch(GDMTag tag, MatchParams matchParams)

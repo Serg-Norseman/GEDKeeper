@@ -71,7 +71,8 @@ namespace GDModel
                     asso2.Assign(association);
 
                     string buf = TestUtils.GetTagStreamText(asso2, 1);
-                    Assert.AreEqual("1 ASSO @I1@\r\n", buf);
+                    Assert.AreEqual("1 ASSO @I1@\r\n" +
+                                    "2 RELA This is test relation\r\n", buf);
                 }
 
                 association.ReplaceXRefs(new GDMXRefReplacer());

@@ -282,16 +282,14 @@ namespace GKCore
                 throw new ArgumentNullException("commRec");
 
             string result = "";
-            var corr = commRec.GetCorresponder();
+            var corr = commRec.Corresponder.Value as GDMIndividualRecord;
 
-            if (corr.Corresponder != null)
-            {
-                string nm = GetNameString(corr.Corresponder, true, false);
-                if (aLink)
-                {
-                    nm = HyperLink(corr.Corresponder.XRef, nm, 0);
+            if (corr != null) {
+                string nm = GetNameString(corr, true, false);
+                if (aLink) {
+                    nm = HyperLink(corr.XRef, nm, 0);
                 }
-                result = "[ " + LangMan.LS(GKData.CommunicationDirs[(int)corr.CommDir]) + " ] " + nm;
+                result = "[ " + LangMan.LS(GKData.CommunicationDirs[(int)commRec.CommDirection]) + " ] " + nm;
             }
             return result;
         }
@@ -600,10 +598,8 @@ namespace GKCore
 
             string result = evt.Cause;
 
-            if (evt.Agency != "")
-            {
-                if (result != "")
-                {
+            if (!string.IsNullOrEmpty(evt.Agency)) {
+                if (result != "") {
                     result += " ";
                 }
                 result = result + "[" + evt.Agency + "]";
@@ -2295,9 +2291,9 @@ namespace GKCore
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + sourceRec.ShortTitle + "[/size][/b][/u]");
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Author) + ": " + sourceRec.Originator.Text.Trim());
-                        summary.Add(LangMan.LS(LSID.LSID_Title) + ": \"" + sourceRec.Title.Text.Trim() + "\"");
-                        summary.Add(LangMan.LS(LSID.LSID_Publication) + ": \"" + sourceRec.Publication.Text.Trim() + "\"");
+                        summary.Add(LangMan.LS(LSID.LSID_Author) + ": " + sourceRec.Originator.Lines.Text.Trim());
+                        summary.Add(LangMan.LS(LSID.LSID_Title) + ": \"" + sourceRec.Title.Lines.Text.Trim() + "\"");
+                        summary.Add(LangMan.LS(LSID.LSID_Publication) + ": \"" + sourceRec.Publication.Lines.Text.Trim() + "\"");
 
                         if (sourceRec.RepositoryCitations.Count > 0)
                         {

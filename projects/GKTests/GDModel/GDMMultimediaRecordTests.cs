@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
@@ -45,7 +44,7 @@ namespace GDModel
         {
             GDMIndividualRecord indiv = fContext.Tree.CreateIndividual();
 
-            using (var mediaRec = fContext.Tree.CreateMultimedia()) {
+            using (GDMMultimediaRecord mediaRec = fContext.Tree.CreateMultimedia()) {
                 Assert.IsNotNull(mediaRec);
 
                 mediaRec.ResetOwner(fContext.Tree);
@@ -69,12 +68,20 @@ namespace GDModel
                 string title = mediaRec.GetFileTitle();
                 Assert.AreEqual("File Title 2", title);
 
-                string buf = TestUtils.GetTagStreamText(mediaRec, 0);
-                Assert.AreEqual("0 @O2@ OBJE\r\n" +
-                                "1 FILE sample.png\r\n" +
-                                "2 TITL File Title 2\r\n" +
-                                "2 FORM png\r\n" +
-                                "3 TYPE manuscript\r\n", buf);
+                using (GDMMultimediaRecord media2 = fContext.Tree.CreateMultimedia()) {
+                    Assert.Throws(typeof(ArgumentException), () => {
+                        media2.Assign(null);
+                    });
+
+                    media2.Assign(mediaRec);
+
+                    string buf = TestUtils.GetTagStreamText(media2, 0);
+                    Assert.AreEqual("0 @O3@ OBJE\r\n" +
+                                    "1 FILE sample.png\r\n" +
+                                    "2 FORM png\r\n" +
+                                    "3 TYPE manuscript\r\n" +
+                                    "2 TITL File Title 2\r\n", buf);
+                }
 
                 mediaRec.ReplaceXRefs(new GDMXRefReplacer());
 

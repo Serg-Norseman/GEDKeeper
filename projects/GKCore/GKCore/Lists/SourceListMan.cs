@@ -86,11 +86,11 @@ namespace GKCore.Lists
                     break;
 
                 case SourceColumnType.ctAuthor:
-                    result = fRec.Originator.Text.Trim();
+                    result = fRec.Originator.Lines.Text.Trim();
                     break;
 
                 case SourceColumnType.ctTitle:
-                    result = fRec.Title.Text.Trim();
+                    result = fRec.Title.Lines.Text.Trim();
                     break;
 
                 case SourceColumnType.ctChangeDate:

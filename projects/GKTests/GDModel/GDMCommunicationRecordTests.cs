@@ -54,15 +54,12 @@ namespace GDModel
                 Assert.AreEqual(TestUtils.ParseDT("23.01.2013"), comRec.Date.Date);
 
                 comRec.SetCorresponder(GDMCommunicationDir.cdFrom, iRec);
-
-                var corr = comRec.GetCorresponder();
-                Assert.AreEqual(GDMCommunicationDir.cdFrom, corr.CommDir);
-                Assert.AreEqual(iRec, corr.Corresponder);
+                Assert.AreEqual(GDMCommunicationDir.cdFrom, comRec.CommDirection);
+                Assert.AreEqual(iRec, comRec.Corresponder.Value);
 
                 comRec.SetCorresponder(GDMCommunicationDir.cdTo, iRec);
-                corr = comRec.GetCorresponder();
-                Assert.AreEqual(GDMCommunicationDir.cdTo, corr.CommDir);
-                Assert.AreEqual(iRec, corr.Corresponder);
+                Assert.AreEqual(GDMCommunicationDir.cdTo, comRec.CommDirection);
+                Assert.AreEqual(iRec, comRec.Corresponder.Value);
 
                 using (GDMCommunicationRecord comm2 = fContext.Tree.CreateCommunication()) {
                     Assert.Throws(typeof(ArgumentException), () => {
@@ -73,10 +70,10 @@ namespace GDModel
 
                     string buf = TestUtils.GetTagStreamText(comm2, 0);
                     Assert.AreEqual("0 @CM2@ _COMM\r\n" +
-                                    "1 TO @I1@\r\n" +
                                     "1 DATE 23 JAN 2013\r\n" +
                                     "1 NAME Test Communication\r\n" +
-                                    "1 TYPE fax\r\n", buf);
+                                    "1 TYPE fax\r\n" +
+                                    "1 TO @I1@\r\n", buf);
                 }
 
                 comRec.ReplaceXRefs(new GDMXRefReplacer());

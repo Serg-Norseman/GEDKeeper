@@ -201,12 +201,11 @@ namespace GDModel
             AssignList(source.fTags, this.fTags);
         }
 
-        protected void AssignList(GDMList<GDMTag> srcList, GDMList<GDMTag> destList)
+        protected void AssignList<T>(GDMList<T> srcList, GDMList<T> destList) where T : GDMTag
         {
             foreach (GDMTag sourceTag in srcList) {
-                GDMTag copyTag = (GDMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { this, string.Empty, string.Empty });
+                T copyTag = (T)Activator.CreateInstance(sourceTag.GetType(), new object[] { this, string.Empty, string.Empty });
                 copyTag.Assign(sourceTag);
-
                 destList.Add(copyTag);
             }
         }
@@ -346,21 +345,6 @@ namespace GDModel
         public void SetTagIntegerValue(string tagName, int value)
         {
             SetTagStringValue(tagName, value.ToString());
-        }
-
-
-        public double GetTagFloatValue(string tagName, double defValue)
-        {
-            string str = GetTagStringValue(tagName);
-            double result = ((str == "") ? defValue : ConvertHelper.ParseFloat(str, defValue));
-            return result;
-        }
-
-        public void SetTagFloatValue(string tagName, double value)
-        {
-            NumberFormatInfo nfi = new NumberFormatInfo();
-            nfi.NumberDecimalSeparator = ".";
-            SetTagStringValue(tagName, value.ToString(nfi));
         }
 
 

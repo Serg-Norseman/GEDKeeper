@@ -437,7 +437,7 @@ namespace GKCore.Export
                     GDMSourceRecord sourceRec = iRec.SourceCitations[i].Value as GDMSourceRecord;
                     if (sourceRec == null) continue;
 
-                    string srcName = GKUtils.MergeStrings(sourceRec.Title);
+                    string srcName = GKUtils.MergeStrings(sourceRec.Title.Lines);
                     if (srcName == "") {
                         srcName = sourceRec.ShortTitle;
                     }

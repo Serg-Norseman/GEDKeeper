@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -46,6 +47,22 @@ namespace GDModel
                 fFileReferences.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMMultimediaRecord otherMedia = (source as GDMMultimediaRecord);
+            if (otherMedia == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(otherMedia);
+
+            // TODO: validate this logic!
+            foreach (GDMFileReferenceWithTitle srcFileRef in otherMedia.fFileReferences) {
+                GDMFileReferenceWithTitle copyFileRef = new GDMFileReferenceWithTitle(this);
+                copyFileRef.Assign(srcFileRef);
+                fFileReferences.Add(copyFileRef);
+            }
         }
 
         public override void Clear()

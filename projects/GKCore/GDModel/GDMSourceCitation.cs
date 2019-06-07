@@ -35,7 +35,7 @@ namespace GDModel
                 } else {
                     GDMSourceRecord sourceRecord = Value as GDMSourceRecord;
                     if (sourceRecord != null) {
-                        description = sourceRecord.Title;
+                        description = sourceRecord.Title.Lines;
                     } else {
                         description = new StringList();
                     }

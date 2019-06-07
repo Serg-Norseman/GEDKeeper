@@ -27,36 +27,28 @@ namespace GDModel
 {
     public sealed class GDMSourceRecord : GDMRecord
     {
+        private GDMSourceData fData;
+        private GDMTextTag fOriginator;
+        private GDMTextTag fPublication;
         private GDMList<GDMRepositoryCitation> fRepositoryCitations;
+        private string fShortTitle;
+        private GDMTextTag fText;
+        private GDMTextTag fTitle;
 
 
         public GDMSourceData Data
         {
-            get { return GetTag<GDMSourceData>(GEDCOMTagType.DATA, GDMSourceData.Create); }
+            get { return fData; }
         }
 
-        public StringList Originator
+        public GDMTextTag Originator
         {
-            get { return GetTagStrings(GetTag<GDMTag>(GEDCOMTagType.AUTH, GDMTag.Create)); }
-            set { SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.AUTH, GDMTag.Create), value); }
+            get { return fOriginator; }
         }
 
-        public StringList Title
+        public GDMTextTag Publication
         {
-            get { return GetTagStrings(GetTag<GDMTag>(GEDCOMTagType.TITL, GDMTag.Create)); }
-            set { SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.TITL, GDMTag.Create), value); }
-        }
-
-        public string ShortTitle
-        {
-            get { return GetTagStringValue(GEDCOMTagType.ABBR); }
-            set { SetTagStringValue(GEDCOMTagType.ABBR, value); }
-        }
-
-        public StringList Publication
-        {
-            get { return GetTagStrings(GetTag<GDMTag>(GEDCOMTagType.PUBL, GDMTag.Create)); }
-            set { SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.PUBL, GDMTag.Create), value); }
+            get { return fPublication; }
         }
 
         public GDMList<GDMRepositoryCitation> RepositoryCitations
@@ -64,10 +56,20 @@ namespace GDModel
             get { return fRepositoryCitations; }
         }
 
-        public StringList Text
+        public string ShortTitle
         {
-            get { return GetTagStrings(GetTag<GDMTag>(GEDCOMTagType.TEXT, GDMTag.Create)); }
-            set { SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.TEXT, GDMTag.Create), value); }
+            get { return fShortTitle; }
+            set { fShortTitle = value; }
+        }
+
+        public GDMTextTag Text
+        {
+            get { return fText; }
+        }
+
+        public GDMTextTag Title
+        {
+            get { return fTitle; }
         }
 
 
@@ -76,7 +78,13 @@ namespace GDModel
             SetRecordType(GDMRecordType.rtSource);
             SetName(GEDCOMTagType.SOUR);
 
+            fData = new GDMSourceData(this);
+            fOriginator = new GDMTextTag(this, GEDCOMTagType.AUTH, string.Empty);
+            fPublication = new GDMTextTag(this, GEDCOMTagType.PUBL, string.Empty);
             fRepositoryCitations = new GDMList<GDMRepositoryCitation>(this);
+            fShortTitle = string.Empty;
+            fText = new GDMTextTag(this, GEDCOMTagType.TEXT, string.Empty);
+            fTitle = new GDMTextTag(this, GEDCOMTagType.TITL, string.Empty);
         }
 
         protected override void Dispose(bool disposing)
@@ -85,6 +93,29 @@ namespace GDModel
                 fRepositoryCitations.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMSourceRecord otherSource = (source as GDMSourceRecord);
+            if (otherSource == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(otherSource);
+
+            fData.Assign(otherSource.fData);
+            fOriginator.Assign(otherSource.fOriginator);
+            fPublication.Assign(otherSource.fPublication);
+            fShortTitle = otherSource.fShortTitle;
+            fText.Assign(otherSource.fText);
+            fTitle.Assign(otherSource.fTitle);
+
+            // TODO: validate this logic!
+            foreach (GDMRepositoryCitation srcRepCit in otherSource.fRepositoryCitations) {
+                GDMRepositoryCitation copyRepCit = new GDMRepositoryCitation(this);
+                copyRepCit.Assign(srcRepCit);
+                fRepositoryCitations.Add(copyRepCit);
+            }
         }
 
         public override void Clear()
@@ -109,10 +140,10 @@ namespace GDModel
             StringList publ = new StringList();
             StringList text = new StringList();
             try {
-                titl.Text = (targetSource.Title.Text + "\n" + Title.Text).Trim();
-                orig.Text = (targetSource.Originator.Text + "\n" + Originator.Text).Trim();
-                publ.Text = (targetSource.Publication.Text + "\n" + Publication.Text).Trim();
-                text.Text = (targetSource.Text.Text + "\n" + Text.Text).Trim();
+                titl.Text = (targetSource.Title.Lines.Text + "\n" + Title.Lines.Text).Trim();
+                orig.Text = (targetSource.Originator.Lines.Text + "\n" + Originator.Lines.Text).Trim();
+                publ.Text = (targetSource.Publication.Lines.Text + "\n" + Publication.Lines.Text).Trim();
+                text.Text = (targetSource.Text.Lines.Text + "\n" + Text.Lines.Text).Trim();
 
                 DeleteTag(GEDCOMTagType.TITL);
                 DeleteTag(GEDCOMTagType.TEXT);
@@ -122,10 +153,10 @@ namespace GDModel
 
                 base.MoveTo(targetRecord, clearDest);
 
-                targetSource.Title = titl;
-                targetSource.Originator = orig;
-                targetSource.Publication = publ;
-                targetSource.Text = text;
+                targetSource.Title.Lines.Assign(titl);
+                targetSource.Originator.Lines.Assign(orig);
+                targetSource.Publication.Lines.Assign(publ);
+                targetSource.Text.Lines.Assign(text);
 
                 while (fRepositoryCitations.Count > 0) {
                     GDMRepositoryCitation obj = fRepositoryCitations.Extract(0);
@@ -149,22 +180,26 @@ namespace GDModel
 
         public void SetOriginatorArray(params string[] value)
         {
-            SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.AUTH, GDMTag.Create), value);
+            fOriginator.Lines.Clear();
+            fOriginator.Lines.AddStrings(value);
         }
 
         public void SetTitleArray(params string[] value)
         {
-            SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.TITL, GDMTag.Create), value);
+            fTitle.Lines.Clear();
+            fTitle.Lines.AddStrings(value);
         }
 
         public void SetPublicationArray(params string[] value)
         {
-            SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.PUBL, GDMTag.Create), value);
+            fPublication.Lines.Clear();
+            fPublication.Lines.AddStrings(value);
         }
 
         public void SetTextArray(params string[] value)
         {
-            SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.TEXT, GDMTag.Create), value);
+            fText.Lines.Clear();
+            fText.Lines.AddStrings(value);
         }
 
         public override float IsMatch(GDMTag tag, MatchParams matchParams)

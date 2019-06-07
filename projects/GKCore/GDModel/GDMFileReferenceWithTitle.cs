@@ -18,16 +18,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel.Providers.GEDCOM;
+using System;
 
 namespace GDModel
 {
     public sealed class GDMFileReferenceWithTitle : GDMFileReference
     {
+        private string fTitle;
+
         public string Title
         {
-            get { return GetTagStringValue(GEDCOMTagType.TITL); }
-            set { SetTagStringValue(GEDCOMTagType.TITL, value); }
+            get { return fTitle; }
+            set { fTitle = value; }
         }
 
         protected override string MediaTypeTagName()
@@ -42,6 +44,28 @@ namespace GDModel
         public GDMFileReferenceWithTitle(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMFileReferenceWithTitle srcObj = (source as GDMFileReferenceWithTitle);
+            if (srcObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(source);
+
+            fTitle = srcObj.fTitle;
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+            fTitle = string.Empty;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && string.IsNullOrEmpty(fTitle);
         }
     }
 }

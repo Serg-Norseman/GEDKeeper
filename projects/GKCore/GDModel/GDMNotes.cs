@@ -18,11 +18,62 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using BSLib;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
+    public sealed class GDMTextTag : GDMTag
+    {
+        private StringList fLines;
+
+        public StringList Lines
+        {
+            get { return fLines; }
+        }
+
+
+        public GDMTextTag(GDMObject owner, string tagName, string tagValue) : this(owner)
+        {
+            SetNameValue(tagName, tagValue);
+        }
+
+        public GDMTextTag(GDMObject owner) : base(owner)
+        {
+            fLines = new StringList();
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMTextTag sourceObj = (source as GDMTextTag);
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+
+            fLines.Assign(sourceObj.fLines);
+        }
+
+        public override bool IsEmpty()
+        {
+            return fLines.IsEmpty();
+        }
+
+        protected override string GetStringValue()
+        {
+            return fLines.Text;
+        }
+
+        public override string ParseString(string strValue)
+        {
+            fLines.Clear();
+            fLines.Add(strValue);
+            return string.Empty;
+        }
+    }
+
+
     public sealed class GDMNotes : GDMPointer
     {
         public StringList Notes
