@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using BSLib;
 using GDModel.Providers.GEDCOM;
 
@@ -25,6 +26,10 @@ namespace GDModel
 {
     public sealed class GDMSourceCitation : GDMPointer
     {
+        private int fCertaintyAssessment;
+        private string fPage;
+
+
         public StringList Description
         {
             get {
@@ -51,14 +56,14 @@ namespace GDModel
 
         public string Page
         {
-            get { return GetTagStringValue(GEDCOMTagType.PAGE); }
-            set { SetTagStringValue(GEDCOMTagType.PAGE, value); }
+            get { return fPage; }
+            set { fPage = value; }
         }
 
         public int CertaintyAssessment
         {
-            get { return GetTagIntegerValue(GEDCOMTagType.QUAY, 0); }
-            set { SetTagIntegerValue(GEDCOMTagType.QUAY, value); }
+            get { return fCertaintyAssessment; }
+            set { fCertaintyAssessment = value; }
         }
 
 
@@ -70,11 +75,34 @@ namespace GDModel
         public GDMSourceCitation(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.SOUR);
+
+            fCertaintyAssessment = -1;
+            fPage = string.Empty;
         }
 
         public GDMSourceCitation(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMSourceCitation sourceObj = (source as GDMSourceCitation);
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+
+            fCertaintyAssessment = sourceObj.fCertaintyAssessment;
+            fPage = sourceObj.fPage;
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            fCertaintyAssessment = -1;
+            fPage = string.Empty;
         }
 
         public override bool IsEmpty()
@@ -83,7 +111,7 @@ namespace GDModel
             if (IsPointer) {
                 result = base.IsEmpty();
             } else {
-                result = (string.IsNullOrEmpty(fStringValue) && SubTags.Count == 0);
+                result = string.IsNullOrEmpty(fStringValue) && (SubTags.Count == 0) && string.IsNullOrEmpty(fPage);
             }
             return result;
         }
@@ -112,7 +140,7 @@ namespace GDModel
         /// <returns>Checked value of CertaintyAssessment</returns>
         public int GetValidCertaintyAssessment()
         {
-            int val = CertaintyAssessment;
+            int val = fCertaintyAssessment;
             return (val >= 0 && val <= 3) ? val : 0;
         }
     }

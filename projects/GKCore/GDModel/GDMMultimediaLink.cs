@@ -27,18 +27,21 @@ namespace GDModel
 {
     public sealed class GDMMultimediaLink : GDMPointer
     {
+        private GDMCutoutPosition fCutoutPosition;
         private GDMList<GDMFileReference> fFileReferences;
+        private bool fIsPrimary;
+        private bool fIsPrimaryCutout;
+        private string fTitle;
 
+
+        public GDMCutoutPosition CutoutPosition
+        {
+            get { return fCutoutPosition; }
+        }
 
         public GDMList<GDMFileReference> FileReferences
         {
             get { return fFileReferences; }
-        }
-
-        public string Title
-        {
-            get { return GetTagStringValue(GEDCOMTagType.TITL); }
-            set { SetTagStringValue(GEDCOMTagType.TITL, value); }
         }
 
         /// <summary>
@@ -48,8 +51,8 @@ namespace GDModel
         /// </summary>
         public bool IsPrimary
         {
-            get { return GetTagYNValue(GEDCOMTagType._PRIM); }
-            set { SetTagYNValue(GEDCOMTagType._PRIM, value); }
+            get { return fIsPrimary; }
+            set { fIsPrimary = value; }
         }
 
         /// <summary>
@@ -59,13 +62,14 @@ namespace GDModel
         /// </summary>
         public bool IsPrimaryCutout
         {
-            get { return GetTagYNValue(GEDCOMTagType._PRIM_CUTOUT); }
-            set { SetTagYNValue(GEDCOMTagType._PRIM_CUTOUT, value); }
+            get { return fIsPrimaryCutout; }
+            set { fIsPrimaryCutout = value; }
         }
 
-        public GDMCutoutPosition CutoutPosition
+        public string Title
         {
-            get { return GetTag<GDMCutoutPosition>(GEDCOMTagType._POSITION, GDMCutoutPosition.Create); }
+            get { return fTitle; }
+            set { fTitle = value; }
         }
 
 
@@ -77,7 +81,12 @@ namespace GDModel
         public GDMMultimediaLink(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.OBJE);
+
+            fCutoutPosition = new GDMCutoutPosition(this);
             fFileReferences = new GDMList<GDMFileReference>(this);
+            fIsPrimary = false;
+            fIsPrimaryCutout = false;
+            fTitle = string.Empty;
         }
 
         public GDMMultimediaLink(GDMObject owner, string tagName, string tagValue) : this(owner)
@@ -93,10 +102,30 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        public override void Assign(GDMTag source)
+        {
+            GDMMultimediaLink sourceObj = (source as GDMMultimediaLink);
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+
+            fCutoutPosition = sourceObj.fCutoutPosition;
+            AssignList(sourceObj.fFileReferences, fFileReferences);
+            fIsPrimary = sourceObj.fIsPrimary;
+            fIsPrimaryCutout = sourceObj.fIsPrimaryCutout;
+            fTitle = sourceObj.fTitle;
+        }
+
         public override void Clear()
         {
             base.Clear();
+
+            fCutoutPosition.Clear();
             fFileReferences.Clear();
+            fIsPrimary = false;
+            fIsPrimaryCutout = false;
+            fTitle = string.Empty;
         }
 
         public override bool IsEmpty()
@@ -105,7 +134,7 @@ namespace GDModel
             if (IsPointer) {
                 result = base.IsEmpty();
             } else {
-                result = (SubTags.Count == 0 && (fFileReferences.Count == 0));
+                result = (SubTags.Count == 0 && (fFileReferences.Count == 0) && string.IsNullOrEmpty(fTitle) && fCutoutPosition.IsEmpty());
             }
             return result;
         }

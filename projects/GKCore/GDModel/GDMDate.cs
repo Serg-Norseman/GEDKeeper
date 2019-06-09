@@ -162,8 +162,6 @@ namespace GDModel
             if (srcDate == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
-            SetName(source.Name);
-
             fApproximated = srcDate.fApproximated;
             fCalendar = srcDate.fCalendar;
             fYear = srcDate.fYear;

@@ -49,6 +49,7 @@ namespace GDModel
     /// </summary>
     public class GDMRecord : GDMTag, IGEDCOMStructWithLists
     {
+        private string fAutomatedRecordID;
         private GDMChangeDate fChangeDate;
         private object fExtData;
         private GDMRecordType fRecordType;
@@ -63,8 +64,8 @@ namespace GDModel
 
         public string AutomatedRecordID
         {
-            get { return GetTagStringValue(GEDCOMTagType.RIN); }
-            set { SetTagStringValue(GEDCOMTagType.RIN, value); }
+            get { return fAutomatedRecordID; }
+            set { fAutomatedRecordID = value; }
         }
 
         public GDMChangeDate ChangeDate
@@ -131,6 +132,7 @@ namespace GDModel
 
         public GDMRecord(GDMObject owner) : base(owner)
         {
+            fAutomatedRecordID = string.Empty;
             fChangeDate = new GDMChangeDate(this);
             fNotes = new GDMList<GDMNotes>(this);
             fSourceCitations = new GDMList<GDMSourceCitation>(this);
@@ -262,6 +264,7 @@ namespace GDModel
         {
             base.Clear();
 
+            fAutomatedRecordID = string.Empty;
             fChangeDate.Clear();
             fNotes.Clear();
             fSourceCitations.Clear();
@@ -272,7 +275,9 @@ namespace GDModel
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fNotes.Count == 0 && fSourceCitations.Count == 0 && fMultimediaLinks.Count == 0 && fUserReferences.Count == 0;
+            return base.IsEmpty() && string.IsNullOrEmpty(fAutomatedRecordID) && fChangeDate.IsEmpty() &&
+                (fNotes.Count == 0) && (fSourceCitations.Count == 0) && 
+                (fMultimediaLinks.Count == 0) && (fUserReferences.Count == 0);
         }
 
         public string NewXRef()

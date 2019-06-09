@@ -20,7 +20,6 @@
 
 using System;
 using BSLib.Calendar;
-using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {

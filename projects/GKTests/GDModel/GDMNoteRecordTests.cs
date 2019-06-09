@@ -212,10 +212,9 @@ namespace GDModel
         {
             GDMRecord other = new GDMLocationRecord(null);
             GDMNoteRecord instance = new GDMNoteRecord(null);
-            bool clearDest = false;
-            
+
             Assert.Throws(typeof(ArgumentException), () => {
-                instance.MoveTo(other, clearDest);
+                instance.MoveTo(other, false);
             });
         }
 
@@ -227,21 +226,22 @@ namespace GDModel
                 "This is a test line 2",
                 "This is a test line 3"
             };
-            
+
             string text = "This is a test";
+
             GDMNoteRecord instance1 = new GDMNoteRecord(null);
             instance1.ParseString(text);
+
             GDMNoteRecord instance2 = new GDMNoteRecord(null);
             instance2.SetNotesArray(lines);
-            bool clearDest = false;
-            
-            instance1.MoveTo(instance2, clearDest);
+
+            instance1.MoveTo(instance2, false);
 
             // moveTo preserved existing note text
             StringList value = new StringList(lines);
             Assert.AreEqual(value.Text, instance2.Note.Text);
         }
-        
+
         [Test]
         public void Test_IsMatch()
         {

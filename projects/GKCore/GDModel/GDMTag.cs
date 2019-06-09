@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using BSLib;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
@@ -501,26 +500,6 @@ namespace GDModel
                         str = str.Remove(0, len);
                     }
                 }
-            }
-        }
-
-
-        public bool GetTagYNValue(string tagName)
-        {
-            GDMTag tag = FindTag(tagName, 0);
-            return (tag != null) && (tag.StringValue == "Y");
-        }
-
-        public void SetTagYNValue(string tagName, bool value)
-        {
-            if (value) {
-                GDMTag tag = FindTag(tagName, 0);
-                if (tag == null) {
-                    tag = AddTag(tagName, "", null);
-                }
-                tag.StringValue = "Y";
-            } else {
-                DeleteTag(tagName);
             }
         }
 

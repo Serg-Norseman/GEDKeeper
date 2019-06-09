@@ -48,6 +48,7 @@ namespace GDModel
             SetName(GEDCOMTagType.REPO);
 
             fAddress = new GDMAddress(this);
+            fRepositoryName = string.Empty;
         }
 
         public override void Assign(GDMTag source)

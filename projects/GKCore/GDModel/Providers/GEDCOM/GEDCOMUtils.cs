@@ -1376,6 +1376,31 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
+        public static int GetIntVal(string str, int defValue = 0)
+        {
+            int result = (string.IsNullOrEmpty(str) ? defValue : ConvertHelper.ParseInt(str, defValue));
+            return result;
+        }
+
+        public static string GetIntStr(int value, int emptyValue = -1)
+        {
+            string result = (value == emptyValue) ? string.Empty : value.ToString();
+            return result;
+        }
+
+
+        public static bool GetBoolVal(string str, bool defValue = false)
+        {
+            bool result = string.IsNullOrEmpty(str) ? defValue : ((str == "Y") ? true : false);
+            return result;
+        }
+
+        public static string GetBoolStr(bool value)
+        {
+            return (value) ? "Y" : "N";
+        }
+
+
         public static string[] SpouseSealingDateStatuses = new string[] {
             "", "CANCELED", "COMPLETED", "DNS", "DNS/CAN", "EXCLUDED", "PRE-1970", "SUBMITTED", "UNCLEARED" };
 

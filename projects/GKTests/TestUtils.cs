@@ -178,7 +178,11 @@ namespace GKTests
                         GEDCOMProvider.WriteRecordEx(fs, tag as GDMRecord);
                     } else {
                         if (tag is GDMPersonalName) {
-                            GEDCOMProvider.WritePersonalName(fs, 1, tag as GDMPersonalName);
+                            GEDCOMProvider.WritePersonalName(fs, 1, tag);
+                        } else if (tag is GDMMultimediaLink) {
+                            GEDCOMProvider.WriteMultimediaLink(fs, 1, tag);
+                        } else if (tag is GDMSourceCitation) {
+                            GEDCOMProvider.WriteSourceCitation(fs, 1, tag);
                         } else {
                             GEDCOMProvider.WriteTagEx(fs, level, tag);
                         }

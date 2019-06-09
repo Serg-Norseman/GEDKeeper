@@ -78,11 +78,11 @@ namespace GDModel
 
                 string buf = TestUtils.GetTagStreamText(resRec, 0);
                 Assert.AreEqual("0 @RS2@ _RESEARCH\r\n" +
+                                "1 _STARTDATE 20 JAN 2013\r\n" +
+                                "1 _STOPDATE 21 JAN 2013\r\n" +
                                 "1 NAME Test Research\r\n" +
                                 "1 _PRIORITY normal\r\n" +
                                 "1 _STATUS onhold\r\n" +
-                                "1 _STARTDATE 20 JAN 2013\r\n" +
-                                "1 _STOPDATE 21 JAN 2013\r\n" +
                                 "1 _PERCENT 33\r\n", buf);
 
                 Assert.AreEqual(-1, resRec.IndexOfCommunication(null));
