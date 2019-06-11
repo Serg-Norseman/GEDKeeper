@@ -435,7 +435,7 @@ namespace GDModel.Providers.GEDCOM
                         tag = header.FindTag("_EXT_NAME", 0);
                         if (tag != null) header.DeleteTag("_EXT_NAME");
 
-                        fileVer = ConvertHelper.ParseInt(header.SourceVersion, GKData.APP_FORMAT_DEFVER);
+                        fileVer = ConvertHelper.ParseInt(header.Source.Version, GKData.APP_FORMAT_DEFVER);
                     } else {
                         fileVer = -1;
                     }

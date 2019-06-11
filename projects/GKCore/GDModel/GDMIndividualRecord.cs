@@ -40,10 +40,12 @@ namespace GDModel
 
     public sealed class GDMIndividualRecord : GDMRecordWithEvents
     {
+        private string fAncestralFileNumber;
         private GDMList<GDMAlias> fAliasses;
         private GDMList<GDMAssociation> fAssociations;
         private GDMList<GDMChildToFamilyLink> fChildToFamilyLinks;
         private GDMList<GDMPointer> fGroups;
+        private string fPermanentRecordFileNumber;
         private GDMList<GDMPersonalName> fPersonalNames;
         private GDMList<GDMSpouseToFamilyLink> fSpouseToFamilyLinks;
         private GDMSex fSex;
@@ -56,8 +58,8 @@ namespace GDModel
 
         public string AncestralFileNumber
         {
-            get { return GetTagStringValue(GEDCOMTagType.AFN); }
-            set { SetTagStringValue(GEDCOMTagType.AFN, value); }
+            get { return fAncestralFileNumber; }
+            set { fAncestralFileNumber = value; }
         }
 
         public GDMList<GDMAssociation> Associations
@@ -109,8 +111,8 @@ namespace GDModel
 
         public string PermanentRecordFileNumber
         {
-            get { return GetTagStringValue(GEDCOMTagType.RFN); }
-            set { SetTagStringValue(GEDCOMTagType.RFN, value); }
+            get { return fPermanentRecordFileNumber; }
+            set { fPermanentRecordFileNumber = value; }
         }
 
         public GDMList<GDMPersonalName> PersonalNames
@@ -135,10 +137,12 @@ namespace GDModel
             SetRecordType(GDMRecordType.rtIndividual);
             SetName(GEDCOMTagType.INDI);
 
+            fAncestralFileNumber = string.Empty;
             fAliasses = new GDMList<GDMAlias>(this);
             fAssociations = new GDMList<GDMAssociation>(this);
             fChildToFamilyLinks = new GDMList<GDMChildToFamilyLink>(this);
             fGroups = new GDMList<GDMPointer>(this);
+            fPermanentRecordFileNumber = string.Empty;
             fPersonalNames = new GDMList<GDMPersonalName>(this);
             fSpouseToFamilyLinks = new GDMList<GDMSpouseToFamilyLink>(this);
         }

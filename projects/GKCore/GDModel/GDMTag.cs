@@ -333,67 +333,6 @@ namespace GDModel
             return string.Empty;
         }
 
-
-        public int GetTagIntegerValue(string tagName, int defValue)
-        {
-            string str = GetTagStringValue(tagName);
-            int result = ((str == "") ? defValue : ConvertHelper.ParseInt(str, defValue));
-            return result;
-        }
-
-        public void SetTagIntegerValue(string tagName, int value)
-        {
-            SetTagStringValue(tagName, value.ToString());
-        }
-
-
-        public string GetTagStringValue(string tagName)
-        {
-            GDMTag tag = FindTag(tagName, 0);
-            string result = ((tag == null) ? "" : tag.StringValue);
-            return result;
-        }
-
-        public void SetTagStringValue(string tagName, string value)
-        {
-            string su = tagName;
-
-            GDMTag P = FindTag(su, 0);
-
-            if (P != null) {
-                P.StringValue = value;
-            } else {
-                GDMTag O = this;
-                while (su != "") {
-                    string S;
-
-                    int index = su.IndexOf('\\');
-                    if (index >= 0) {
-                        S = su.Substring(0, index);
-                        su = su.Substring(index + 1);
-                    } else {
-                        S = su;
-                        su = "";
-                    }
-
-                    P = O.FindTag(S, 0);
-                    if (P == null) {
-                        if (su == "") {
-                            P = O.AddTag(S, value, null);
-                        } else {
-                            P = O.AddTag(S, "", null);
-                        }
-                    } else {
-                        if (su == "") {
-                            P.StringValue = value;
-                        }
-                    }
-                    O = P;
-                }
-            }
-        }
-
-
         public static StringList GetTagStrings(GDMTag strTag)
         {
             StringList strings = new StringList();

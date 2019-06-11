@@ -62,6 +62,7 @@ namespace GDModel.Providers.GEDCOM
         public const string CONL = "CONL";
         public const string CONT = "CONT";
         public const string COPR = "COPR";
+        public const string CORP = "CORP";
         public const string CREM = "CREM";
         public const string CTRY = "CTRY";
         public const string DATA = "DATA";
@@ -90,6 +91,7 @@ namespace GDModel.Providers.GEDCOM
         public const string FONE = "FONE";
         public const string FORM = "FORM";
         public const string FROM = "FROM";
+        public const string GEDC = "GEDC";
         public const string GIVN = "GIVN";
         public const string GRAD = "GRAD";
         public const string HEAD = "HEAD";
@@ -200,6 +202,7 @@ namespace GDModel.Providers.GEDCOM
         public const string _PERCENT = "_PERCENT";
         public const string _PRIORITY = "_PRIORITY";
         public const string _RESEARCH = "_RESEARCH";
+        public const string _REV = "_REV";
         public const string _STARTDATE = "_STARTDATE";
         public const string _STOPDATE = "_STOPDATE";
         public const string _STATUS = "_STATUS";

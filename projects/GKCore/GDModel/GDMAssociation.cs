@@ -47,11 +47,6 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMAssociation(owner, tagName, tagValue);
-        }
-
         public GDMAssociation(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.ASSO);

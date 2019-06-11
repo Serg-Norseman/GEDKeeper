@@ -103,14 +103,12 @@
     <Compile Include="GDModel\GDMCustomEventTests.cs" />
     <Compile Include="GDModel\GDMDatePeriodTests.cs" />
     <Compile Include="GDModel\GDMDateRangeTests.cs" />
-    <Compile Include="GDModel\GDMDateStatusTests.cs" />
     <Compile Include="GDModel\GDMDateTests.cs" />
     <Compile Include="GDModel\GDMDateValueTests.cs" />
     <Compile Include="GDModel\GDMFamilyRecordTests.cs" />
     <Compile Include="GDModel\GDMFileReferenceTests.cs" />
     <Compile Include="GDModel\GDMGroupRecordTests.cs" />
     <Compile Include="GDModel\GDMHeaderTests.cs" />
-    <Compile Include="GDModel\GDMIndividualOrdinanceTests.cs" />
     <Compile Include="GDModel\GDMIndividualRecordTests.cs" />
     <Compile Include="GDModel\GDMListTests.cs" />
     <Compile Include="GDModel\GDMLocationRecordTests.cs" />
@@ -123,7 +121,6 @@
     <Compile Include="GDModel\GDMResearchRecordTests.cs" />
     <Compile Include="GDModel\GDMSourceDataTests.cs" />
     <Compile Include="GDModel\GDMSourceRecordTests.cs" />
-    <Compile Include="GDModel\GDMSpouseSealingTests.cs" />
     <Compile Include="GDModel\GDMSubmissionRecordTests.cs" />
     <Compile Include="GDModel\GDMSubmitterRecordTests.cs" />
     <Compile Include="GDModel\GDMTagTests.cs" />
@@ -281,6 +278,9 @@
     <EmbeddedResource Include="Resources\test_genney.ged" />
     <EmbeddedResource Include="Resources\test_gedml.xml" />
     <EmbeddedResource Include="Resources\test_empty.ged" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\test_native.ged" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

@@ -201,10 +201,10 @@ namespace GKCore
         public void Test_PrepareHeader()
         {
             GKUtils.PrepareHeader(fContext.Tree, "c:\\test.ged", GEDCOMCharacterSet.csUTF8, true);
-            Assert.AreEqual(0, fContext.Tree.Header.FileRevision);
+            Assert.AreEqual(0, fContext.Tree.Header.File.Revision);
 
             GKUtils.PrepareHeader(fContext.Tree, "c:\\test.ged", GEDCOMCharacterSet.csUTF8, false);
-            Assert.AreEqual(1, fContext.Tree.Header.FileRevision);
+            Assert.AreEqual(1, fContext.Tree.Header.File.Revision);
         }
 
         [Test]

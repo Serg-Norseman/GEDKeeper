@@ -32,11 +32,6 @@ namespace GDModel
             set { fTitle = value; }
         }
 
-        protected override string MediaTypeTagName()
-        {
-            return @"FORM\TYPE";
-        }
-
         public GDMFileReferenceWithTitle(GDMObject owner) : base(owner)
         {
         }

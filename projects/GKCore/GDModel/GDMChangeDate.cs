@@ -25,7 +25,7 @@ namespace GDModel
 {
     public sealed class GDMChangeDate : GDMTag
     {
-        private static readonly DateTime ZeroDateTime = new DateTime(0);
+        internal static readonly DateTime ZeroDateTime = new DateTime(0);
 
         private DateTime fChangeDateTime;
 

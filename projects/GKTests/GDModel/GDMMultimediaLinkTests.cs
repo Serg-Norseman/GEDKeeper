@@ -77,6 +77,10 @@ namespace GDModel
                 Assert.IsFalse(mmLink.CutoutPosition.IsEmpty());
                 Assert.AreEqual("11 15 576 611", mmLink.CutoutPosition.StringValue);
 
+                Assert.Throws(typeof(ArgumentException), () => {
+                    mmLink.Assign(null);
+                });
+
                 using (var mmRec = new GDMMultimediaRecord(fContext.Tree)) {
                     Assert.IsNull(mmLink.GetUID());
 

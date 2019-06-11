@@ -21,6 +21,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using GDModel.Providers.GEDCOM;
 using GDModel.Providers.GedML;
 using GKCore;
@@ -34,6 +35,37 @@ namespace GDModel.Providers
     [TestFixture]
     public class FileFormatTests
     {
+        [Test]
+        public void Test_NativeFormat()
+        {
+            GEDCOMProvider.DebugWrite = false;
+            Assembly assembly = typeof(CoreTests).Assembly;
+            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources.test_native.ged")) {
+                using (GDMTree tree = new GDMTree()) {
+                    byte[] inArray;
+                    using (MemoryStream inMem = new MemoryStream()) {
+                        inStream.CopyTo(inMem);
+                        inStream.Position = 0;
+                        inArray = inMem.ToArray();
+                    }
+
+                    var gedcomProvider = new GEDCOMProvider(tree);
+                    gedcomProvider.LoadFromStreamExt(inStream, inStream);
+
+                    using (MemoryStream outStream = new MemoryStream()) {
+                        gedcomProvider = new GEDCOMProvider(tree);
+                        gedcomProvider.SaveToStreamExt(outStream, GEDCOMCharacterSet.csUTF8);
+
+                        outStream.Position = 0;
+                        byte[] outArray;
+                        outArray = outStream.ToArray();
+
+                        Assert.AreEqual(Encoding.ASCII.GetString(inArray), Encoding.ASCII.GetString(outArray));
+                    }
+                }
+            }
+        }
+
         [Test]
         public void Test_Standart()
         {

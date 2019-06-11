@@ -132,7 +132,6 @@
     <Compile Include="GDModel\GDMDateInterpreted.cs" />
     <Compile Include="GDModel\GDMDatePeriod.cs" />
     <Compile Include="GDModel\GDMDateRange.cs" />
-    <Compile Include="GDModel\GDMDateStatus.cs" />
     <Compile Include="GDModel\GDMDateValue.cs" />
     <Compile Include="GDModel\GDMSourceEvent.cs" />
     <Compile Include="GDModel\GDMFamilyEvent.cs" />
@@ -154,7 +153,6 @@
     <Compile Include="GDModel\GDMInterfaces.cs" />
     <Compile Include="GDModel\GDMIndividualAttribute.cs" />
     <Compile Include="GDModel\GDMIndividualEvent.cs" />
-    <Compile Include="GDModel\GDMIndividualOrdinance.cs" />
     <Compile Include="GDModel\GDMIndividualRecord.cs" />
     <Compile Include="GDModel\GDMLanguage.cs" />
     <Compile Include="GDModel\GDMLocationRecord.cs" />
@@ -174,7 +172,6 @@
     <Compile Include="GDModel\GDMResearchRecord.cs" />
     <Compile Include="GDModel\GDMSourceCitation.cs" />
     <Compile Include="GDModel\GDMSourceRecord.cs" />
-    <Compile Include="GDModel\GDMSpouseSealing.cs" />
     <Compile Include="GDModel\GDMSpouseToFamilyLink.cs" />
     <Compile Include="GDModel\GDMSubmissionRecord.cs" />
     <Compile Include="GDModel\GDMSubmitterRecord.cs" />

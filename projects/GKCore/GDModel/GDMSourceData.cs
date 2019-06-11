@@ -24,18 +24,19 @@ namespace GDModel
 {
     public sealed class GDMSourceData : GDMTagWithLists
     {
+        private string fAgency;
         private GDMList<GDMSourceEvent> fEvents;
 
+
+        public string Agency
+        {
+            get { return fAgency; }
+            set { fAgency = value; }
+        }
 
         public GDMList<GDMSourceEvent> Events
         {
             get { return fEvents; }
-        }
-
-        public string Agency
-        {
-            get { return GetTagStringValue(GEDCOMTagType.AGNC); }
-            set { SetTagStringValue(GEDCOMTagType.AGNC, value); }
         }
 
 
@@ -48,6 +49,7 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.DATA);
 
+            fAgency = string.Empty;
             fEvents = new GDMList<GDMSourceEvent>(this);
         }
 
@@ -67,12 +69,13 @@ namespace GDModel
         public override void Clear()
         {
             base.Clear();
+            fAgency = string.Empty;
             fEvents.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fEvents.Count == 0);
+            return base.IsEmpty() && (fEvents.Count == 0) && string.IsNullOrEmpty(fAgency);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)

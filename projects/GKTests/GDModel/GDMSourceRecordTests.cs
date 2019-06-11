@@ -133,6 +133,10 @@ namespace GDModel
 
                 Assert.IsFalse(srcCit.IsEmpty(), "srcCit.IsEmpty()"); // its pointer
 
+                Assert.Throws(typeof(ArgumentException), () => {
+                    srcCit.Assign(null);
+                });
+
                 srcCit.Clear();
                 srcCit.Value = null;
 

@@ -24,7 +24,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMTextTag : GDMTag
+    public sealed class GDMTextTag : GDMTag, IGDMTextObject
     {
         private StringList fLines;
 
@@ -53,6 +53,12 @@ namespace GDModel
             base.Assign(sourceObj);
 
             fLines.Assign(sourceObj.fLines);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+            fLines.Clear();
         }
 
         public override bool IsEmpty()

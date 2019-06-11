@@ -37,13 +37,13 @@ namespace GDModel
                 Assert.IsNotNull(addr, "addr != null");
 
                 addr.SetAddressText("test");
-                Assert.AreEqual("test", addr.Address.Text.Trim());
+                Assert.AreEqual("test", addr.Lines.Text.Trim());
 
-                addr.Address = new StringList("This\r\naddress\r\ntest");
-                Assert.AreEqual("This\r\naddress\r\ntest", addr.Address.Text.Trim());
-                Assert.AreEqual("This", addr.Address[0]);
-                Assert.AreEqual("address", addr.Address[1]);
-                Assert.AreEqual("test", addr.Address[2]);
+                addr.Lines.Text = "This\r\naddress\r\ntest";
+                Assert.AreEqual("This\r\naddress\r\ntest", addr.Lines.Text.Trim());
+                Assert.AreEqual("This", addr.Lines[0]);
+                Assert.AreEqual("address", addr.Lines[1]);
+                Assert.AreEqual("test", addr.Lines[2]);
 
                 addr.AddPhoneNumber("8 911 101 99 99");
                 Assert.AreEqual("8 911 101 99 99", addr.PhoneNumbers[0].StringValue);
@@ -119,7 +119,7 @@ namespace GDModel
                                     "0 WWW http://test.com\r\n" +
                                     "0 WWW http://test.ru\r\n", buf);
 
-                    Assert.AreEqual("This\r\naddress\r\ntest", addr2.Address.Text.Trim());
+                    Assert.AreEqual("This\r\naddress\r\ntest", addr2.Lines.Text.Trim());
                     Assert.AreEqual("8 911 101 99 99", addr2.PhoneNumbers[0].StringValue);
                     Assert.AreEqual("test@mail.com", addr2.EmailAddresses[0].StringValue);
                     Assert.AreEqual("abrakadabra", addr2.FaxNumbers[0].StringValue);
@@ -138,9 +138,9 @@ namespace GDModel
                 }
 
                 addr.SetAddressArray(new string[] { "test11", "test21", "test31" });
-                Assert.AreEqual("test11", addr.Address[0]);
-                Assert.AreEqual("test21", addr.Address[1]);
-                Assert.AreEqual("test31", addr.Address[2]);
+                Assert.AreEqual("test11", addr.Lines[0]);
+                Assert.AreEqual("test21", addr.Lines[1]);
+                Assert.AreEqual("test31", addr.Lines[2]);
 
                 Assert.IsFalse(addr.IsEmpty());
                 addr.Clear();
@@ -164,8 +164,8 @@ namespace GDModel
             };
             StringList value = new StringList(vals);
             GDMAddress instance = new GDMAddress(null);
-            instance.Address = value;
-            Assert.AreEqual(value.Text, instance.Address.Text);
+            instance.Lines.AddStrings(value);
+            Assert.AreEqual(value.Text, instance.Lines.Text);
         }
 
         [Test]
@@ -353,7 +353,7 @@ namespace GDModel
             GDMAddress instance = new GDMAddress(null);
             instance.SetAddressText(value);
             StringList val2 = new StringList(value);
-            Assert.AreEqual(val2.Text, instance.Address.Text);
+            Assert.AreEqual(val2.Text, instance.Lines.Text);
         }
 
         [Test]
@@ -370,7 +370,7 @@ namespace GDModel
             };
             GDMAddress instance = new GDMAddress(null);
             instance.SetAddressArray(value);
-            Assert.AreEqual(new StringList(value).Text, instance.Address.Text);
+            Assert.AreEqual(new StringList(value).Text, instance.Lines.Text);
         }
 
         // Support function. Parse GEDCOM string, returns ADDR object found
@@ -408,7 +408,7 @@ namespace GDModel
         {
             string text = "0 @I1@ INDI\n1 FACT\n2 ADDR Institute for Higher\n3 CONT Learning\n3 CONT Novozavodskaya ul., 10\n3 CITY Moskva\n3 CTRY Russia\n3 POST 121309";
             GDMAddress res = AddrParse(text);
-            Assert.AreEqual("Institute for Higher\r\nLearning\r\nNovozavodskaya ul., 10", res.Address.Text);
+            Assert.AreEqual("Institute for Higher\r\nLearning\r\nNovozavodskaya ul., 10", res.Lines.Text);
         }
 
         [Test]
@@ -430,7 +430,7 @@ namespace GDModel
             string text = "0 @I1@ INDI\n1 FACT\n2 ADDR Institute for Higher\n3 CONT Learning\n2 PHON +7 499 277-71-00\n2 PHON +7 495 967-77-76\n";
             GDMAddress res = AddrParse(text);
             Assert.AreEqual(2, res.PhoneNumbers.Count);
-            Assert.AreEqual("Institute for Higher\r\nLearning", res.Address.Text);
+            Assert.AreEqual("Institute for Higher\r\nLearning", res.Lines.Text);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace GDModel.Providers.GEDCOM
 
             // Tests of determine GEDCOM-format
             Assert.AreEqual(GEDCOMFormat.gf_Unknown, GEDCOMProvider.GetGEDCOMFormat(tree));
-            tree.Header.Source = "GENBOX";
+            tree.Header.Source.StringValue = "GENBOX";
             Assert.AreEqual(GEDCOMFormat.gf_GENBOX, GEDCOMProvider.GetGEDCOMFormat(tree));
         }
     }

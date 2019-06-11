@@ -66,6 +66,8 @@ namespace GDModel
             Assert.IsNotNull(subr);
 
 
+            submRec.ReplaceXRefs(new GDMXRefReplacer());
+
             Assert.IsFalse(submRec.IsEmpty());
             submRec.Clear();
             Assert.IsTrue(submRec.IsEmpty());

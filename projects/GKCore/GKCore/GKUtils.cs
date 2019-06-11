@@ -1018,7 +1018,7 @@ namespace GKCore
             if (includeAddress)
             {
                 string resi = evt.StringValue;
-                string addr = evt.Address.Address.Text.Trim();
+                string addr = evt.Address.Lines.Text.Trim();
                 if (resi != "" && addr != "")
                 {
                     resi += ", ";
@@ -1316,30 +1316,30 @@ namespace GKCore
         {
             GDMHeader header = tree.Header;
 
-            string subm = header.GetTagStringValue(GEDCOMTagType.SUBM);
-            int oldRev = header.FileRevision;
-            GDMLanguageID langId = header.Language.Value;
+            string subm = header.Submitter.XRef;
+            int oldRev = header.File.Revision;
+            GDMLanguageID langId = header.Language;
 
             header.Clear();
-            header.Source = "GEDKeeper";
+            header.Source.StringValue = "GEDKeeper";
             header.ReceivingSystemName = "GEDKeeper";
-            header.CharacterSet = charSet;
-            header.Language.Value = langId;
-            header.GEDCOMVersion = "5.5.1";
-            header.GEDCOMForm = "LINEAGE-LINKED";
-            header.FileName = Path.GetFileName(fileName);
+            header.CharacterSet.Value = charSet;
+            header.Language = langId;
+            header.GEDCOM.Version = "5.5.1";
+            header.GEDCOM.Form = "LINEAGE-LINKED";
+            header.File.StringValue = Path.GetFileName(fileName);
             header.TransmissionDateTime = DateTime.Now;
 
-            header.SourceVersion = GKData.APP_FORMAT_CURVER.ToString();
+            header.Source.Version = GKData.APP_FORMAT_CURVER.ToString();
 
             if (zeroRev) {
-                header.FileRevision = 0;
+                header.File.Revision = 0;
             } else {
-                header.FileRevision = oldRev + 1;
+                header.File.Revision = oldRev + 1;
             }
 
-            if (subm != "") {
-                header.SetTagStringValue(GEDCOMTagType.SUBM, subm);
+            if (!string.IsNullOrEmpty(subm)) {
+                header.Submitter.XRef = subm;
             }
         }
 
@@ -1471,9 +1471,9 @@ namespace GKCore
                 {
                     ts = ts + address.AddressPostalCode + ", ";
                 }
-                if (address.Address.Text.Trim() != "")
+                if (address.Lines.Text.Trim() != "")
                 {
-                    ts += address.Address.Text.Trim();
+                    ts += address.Lines.Text.Trim();
                 }
                 if (ts != "")
                 {

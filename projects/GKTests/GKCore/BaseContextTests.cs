@@ -268,44 +268,44 @@ namespace GKCore
         [Test]
         public void Test_Culture()
         {
-            fContext.Tree.Header.Language.Value = GDMLanguageID.German;
+            fContext.Tree.Header.Language = GDMLanguageID.German;
             Assert.IsInstanceOf(typeof(GermanCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GDMLanguageID.Polish;
+            fContext.Tree.Header.Language = GDMLanguageID.Polish;
             Assert.IsInstanceOf(typeof(PolishCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GDMLanguageID.Swedish;
+            fContext.Tree.Header.Language = GDMLanguageID.Swedish;
             Assert.IsInstanceOf(typeof(SwedishCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GDMLanguageID.Icelandic;
+            fContext.Tree.Header.Language = GDMLanguageID.Icelandic;
             Assert.IsInstanceOf(typeof(IcelandCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GDMLanguageID.Russian;
+            fContext.Tree.Header.Language = GDMLanguageID.Russian;
             Assert.IsInstanceOf(typeof(RussianCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GDMLanguageID.Ukrainian;
+            fContext.Tree.Header.Language = GDMLanguageID.Ukrainian;
             Assert.IsInstanceOf(typeof(RussianCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GDMLanguageID.Armenian;
+            fContext.Tree.Header.Language = GDMLanguageID.Armenian;
             Assert.IsInstanceOf(typeof(ArmenianCulture), fContext.Culture);
             Assert.IsTrue(fContext.Culture.HasPatronymic());
             Assert.IsTrue(fContext.Culture.HasSurname());
 
-            fContext.Tree.Header.Language.Value = GDMLanguageID.Turkish;
+            fContext.Tree.Header.Language = GDMLanguageID.Turkish;
             Assert.IsInstanceOf(typeof(TurkishCulture), fContext.Culture);
             Assert.IsFalse(fContext.Culture.HasPatronymic());
             Assert.IsTrue(fContext.Culture.HasSurname());
 
-            fContext.Tree.Header.Language.Value = GDMLanguageID.French;
+            fContext.Tree.Header.Language = GDMLanguageID.French;
             Assert.IsInstanceOf(typeof(FrenchCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GDMLanguageID.Italian;
+            fContext.Tree.Header.Language = GDMLanguageID.Italian;
             Assert.IsInstanceOf(typeof(ItalianCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GDMLanguageID.Cantonese;
+            fContext.Tree.Header.Language = GDMLanguageID.Cantonese;
             Assert.IsInstanceOf(typeof(ChineseCulture), fContext.Culture);
 
-            fContext.Tree.Header.Language.Value = GDMLanguageID.Mandrin;
+            fContext.Tree.Header.Language = GDMLanguageID.Mandrin;
             Assert.IsInstanceOf(typeof(ChineseCulture), fContext.Culture);
             Assert.IsFalse(fContext.Culture.HasPatronymic());
             Assert.IsTrue(fContext.Culture.HasSurname());

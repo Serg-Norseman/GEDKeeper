@@ -32,39 +32,46 @@ namespace GDModel
 
     public sealed class GDMSubmissionRecord : GDMRecord
     {
+        private string fFamilyFileName;
+        private string fTempleCode;
+        private int fGenerationsOfAncestors;
+        private int fGenerationsOfDescendants;
+        private GDMOrdinanceProcessFlag fOrdinanceProcessFlag;
+        private GDMPointer fSubmitter;
+
         public string FamilyFileName
         {
-            get { return GetTagStringValue(GEDCOMTagType.FAMF); }
-            set { SetTagStringValue(GEDCOMTagType.FAMF, value); }
+            get { return fFamilyFileName; }
+            set { fFamilyFileName = value; }
         }
 
         public string TempleCode
         {
-            get { return GetTagStringValue(GEDCOMTagType.TEMP); }
-            set { SetTagStringValue(GEDCOMTagType.TEMP, value); }
+            get { return fTempleCode; }
+            set { fTempleCode = value; }
         }
 
         public int GenerationsOfAncestors
         {
-            get { return GetTagIntegerValue(GEDCOMTagType.ANCE, 0); }
-            set { SetTagIntegerValue(GEDCOMTagType.ANCE, value); }
+            get { return fGenerationsOfAncestors; }
+            set { fGenerationsOfAncestors = value; }
         }
 
         public int GenerationsOfDescendants
         {
-            get { return GetTagIntegerValue(GEDCOMTagType.DESC, 0); }
-            set { SetTagIntegerValue(GEDCOMTagType.DESC, value); }
+            get { return fGenerationsOfDescendants; }
+            set { fGenerationsOfDescendants = value; }
         }
 
         public GDMOrdinanceProcessFlag OrdinanceProcessFlag
         {
-            get { return GEDCOMUtils.GetOrdinanceProcessFlagVal(GetTagStringValue(GEDCOMTagType.ORDI)); }
-            set { SetTagStringValue(GEDCOMTagType.ORDI, GEDCOMUtils.GetOrdinanceProcessFlagStr(value)); }
+            get { return fOrdinanceProcessFlag; }
+            set { fOrdinanceProcessFlag = value; }
         }
 
         public GDMPointer Submitter
         {
-            get { return GetTag<GDMPointer>(GEDCOMTagType.SUBM, GDMPointer.Create); }
+            get { return fSubmitter; }
         }
 
 
@@ -72,6 +79,39 @@ namespace GDModel
         {
             SetRecordType(GDMRecordType.rtSubmission);
             SetName(GEDCOMTagType.SUBN);
+
+            fFamilyFileName = string.Empty;
+            fTempleCode = string.Empty;
+            fGenerationsOfAncestors = -1;
+            fGenerationsOfDescendants = -1;
+            fOrdinanceProcessFlag = GDMOrdinanceProcessFlag.opNone;
+            fSubmitter = new GDMPointer(this, GEDCOMTagType.SUBM, string.Empty);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            fFamilyFileName = string.Empty;
+            fTempleCode = string.Empty;
+            fGenerationsOfAncestors = -1;
+            fGenerationsOfDescendants = -1;
+            fOrdinanceProcessFlag = GDMOrdinanceProcessFlag.opNone;
+            fSubmitter.Clear();
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && string.IsNullOrEmpty(fFamilyFileName) && string.IsNullOrEmpty(fTempleCode) &&
+                (fGenerationsOfAncestors == -1) && (fGenerationsOfDescendants == -1) &&
+                (fOrdinanceProcessFlag == GDMOrdinanceProcessFlag.opNone) && (fSubmitter.IsEmpty());
+        }
+
+        public override void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            base.ReplaceXRefs(map);
+
+            fSubmitter.ReplaceXRefs(map);
         }
     }
 }

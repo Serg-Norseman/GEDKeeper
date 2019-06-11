@@ -59,6 +59,12 @@ namespace GDModel
                 Assert.IsNotNull(evt.Date);
 
                 Assert.IsNotNull(evt.Place);
+
+                evt.Place.StringValue = "test";
+
+                Assert.IsFalse(evt.IsEmpty());
+                evt.Clear();
+                Assert.IsTrue(evt.IsEmpty());
             }
         }
     }

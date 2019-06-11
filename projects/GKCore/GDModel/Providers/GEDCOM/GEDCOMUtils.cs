@@ -1401,20 +1401,6 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static string[] SpouseSealingDateStatuses = new string[] {
-            "", "CANCELED", "COMPLETED", "DNS", "DNS/CAN", "EXCLUDED", "PRE-1970", "SUBMITTED", "UNCLEARED" };
-
-        public static GDMSpouseSealingDateStatus GetSpouseSealingDateStatusVal(string str)
-        {
-            return Str2Enum(str, SpouseSealingDateStatuses, GDMSpouseSealingDateStatus.sdsNone, false);
-        }
-
-        public static string GetSpouseSealingDateStatusStr(GDMSpouseSealingDateStatus value)
-        {
-            return GEDCOMUtils.Enum2Str(value, SpouseSealingDateStatuses);
-        }
-
-
         public static GDMOrdinanceProcessFlag GetOrdinanceProcessFlagVal(string su)
         {
             if (string.IsNullOrEmpty(su)) return GDMOrdinanceProcessFlag.opNone;
@@ -1577,48 +1563,6 @@ namespace GDModel.Providers.GEDCOM
                     break;
             }
             return str;
-        }
-
-
-        public static string[] BaptismDateStatuses = new string[] {
-            "", "CHILD", "COMPLETED", "EXCLUDED", "PRE-1970", "STILLBORN", "SUBMITTED", "UNCLEARED" };
-
-        public static GDMBaptismDateStatus GetBaptismDateStatusVal(string str)
-        {
-            return Str2Enum(str, BaptismDateStatuses, GDMBaptismDateStatus.bdsNone, false);
-        }
-
-        public static string GetBaptismDateStatusStr(GDMBaptismDateStatus value)
-        {
-            return GEDCOMUtils.Enum2Str(value, BaptismDateStatuses);
-        }
-
-
-        public static string[] EndowmentDateStatuses = new string[] {
-            "", "CHILD", "COMPLETED", "EXCLUDED", "INFANT", "PRE-1970", "STILLBORN", "SUBMITTED", "UNCLEARED" };
-
-        public static GDMEndowmentDateStatus GetEndowmentDateStatusVal(string str)
-        {
-            return Str2Enum(str, EndowmentDateStatuses, GDMEndowmentDateStatus.edsNone, false);
-        }
-
-        public static string GetEndowmentDateStatusStr(GDMEndowmentDateStatus value)
-        {
-            return GEDCOMUtils.Enum2Str(value, EndowmentDateStatuses);
-        }
-
-
-        public static string[] ChildSealingDateStatuses = new string[] {
-            "", "BIC", "EXCLUDED", "PRE-1970", "STILLBORN", "SUBMITTED", "UNCLEARED" };
-
-        public static GDMChildSealingDateStatus GetChildSealingDateStatusVal(string str)
-        {
-            return Str2Enum(str, ChildSealingDateStatuses, GDMChildSealingDateStatus.cdsNone, false);
-        }
-
-        public static string GetChildSealingDateStatusStr(GDMChildSealingDateStatus value)
-        {
-            return GEDCOMUtils.Enum2Str(value, ChildSealingDateStatuses);
         }
 
 

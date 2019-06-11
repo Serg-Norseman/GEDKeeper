@@ -75,7 +75,7 @@ namespace GKCore
         public ICulture Culture
         {
             get {
-                GDMLanguageID langID = fTree.Header.Language.Value;
+                GDMLanguageID langID = fTree.Header.Language;
                 if (fCulture == null || fCulture.Language != langID) {
                     fCulture = GetCultureByLang(langID);
                 }
@@ -1197,7 +1197,7 @@ namespace GKCore
 
                 case FileBackup.fbEachRevision:
                     if (File.Exists(fileName)) {
-                        int rev = fTree.Header.FileRevision;
+                        int rev = fTree.Header.File.Revision;
                         string bakPath = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar + "__history" + Path.DirectorySeparatorChar;
                         string bakFile = Path.GetFileName(fileName) + "." + ConvertHelper.AdjustNumber(rev, 3);
 

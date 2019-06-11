@@ -339,7 +339,7 @@ namespace GDModel
                 submitter = new GDMSubmitterRecord(this);
                 submitter.InitNew();
                 AddRecord(submitter);
-                fHeader.SetTagStringValue(GEDCOMTagType.SUBM, "@" + submitter.XRef + "@");
+                fHeader.Submitter.Value = submitter;
             }
             return submitter;
         }

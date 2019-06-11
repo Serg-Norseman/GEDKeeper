@@ -28,7 +28,14 @@ namespace GDModel
     }
 
 
-    public interface IGDMTextObject
+    public interface IGDMTag : IGDMObject
+    {
+        string Name { get; }
+        bool IsEmpty();
+    }
+
+
+    public interface IGDMTextObject : IGDMTag
     {
         StringList Lines { get; }
     }

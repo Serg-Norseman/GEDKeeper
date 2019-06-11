@@ -76,6 +76,10 @@ namespace GDModel
                 resRec.Percent = 33;
                 Assert.AreEqual(33, resRec.Percent);
 
+                Assert.Throws(typeof(ArgumentException), () => {
+                    resRec.Assign(null);
+                });
+
                 string buf = TestUtils.GetTagStreamText(resRec, 0);
                 Assert.AreEqual("0 @RS2@ _RESEARCH\r\n" +
                                 "1 _STARTDATE 20 JAN 2013\r\n" +

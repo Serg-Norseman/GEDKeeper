@@ -128,6 +128,10 @@ namespace GDModel
             pnPieces.CensusName = "CensusName";
             Assert.AreEqual("CensusName", pnPieces.CensusName);
 
+            Assert.Throws(typeof(ArgumentException), () => {
+                pnPieces.Assign(null);
+            });
+
             //
 
             Assert.AreEqual(GDMLanguageID.Unknown, persName.Language);

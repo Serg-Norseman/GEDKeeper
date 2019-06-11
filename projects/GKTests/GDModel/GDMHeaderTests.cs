@@ -34,57 +34,57 @@ namespace GDModel
             GDMTree tree = new GDMTree();
             GDMHeader headRec = tree.Header;
 
-            headRec.Notes = new StringList("This notes test");
-            Assert.AreEqual("This notes test", headRec.Notes[0]);
+            headRec.Note.Lines.Text = "This notes test";
+            Assert.AreEqual("This notes test", headRec.Note.Lines.Text);
 
-            headRec.CharacterSet = GEDCOMCharacterSet.csASCII;
-            Assert.AreEqual(GEDCOMCharacterSet.csASCII, headRec.CharacterSet);
+            headRec.CharacterSet.Value = GEDCOMCharacterSet.csASCII;
+            Assert.AreEqual(GEDCOMCharacterSet.csASCII, headRec.CharacterSet.Value);
 
-            headRec.CharacterSetVersion = "1x";
-            Assert.AreEqual("1x", headRec.CharacterSetVersion);
+            headRec.CharacterSet.Version = "1x";
+            Assert.AreEqual("1x", headRec.CharacterSet.Version);
 
             headRec.Copyright = "copyright";
             Assert.AreEqual("copyright", headRec.Copyright);
 
-            headRec.Source = "GEDKeeper";
-            Assert.AreEqual("GEDKeeper", headRec.Source);
+            headRec.Source.StringValue = "GEDKeeper";
+            Assert.AreEqual("GEDKeeper", headRec.Source.StringValue);
 
             headRec.ReceivingSystemName = "GEDKeeper";
             Assert.AreEqual("GEDKeeper", headRec.ReceivingSystemName);
 
-            headRec.Language.Value = GDMLanguageID.Russian;
-            Assert.AreEqual("Russian", headRec.Language.StringValue);
+            headRec.Language = GDMLanguageID.Russian;
+            Assert.AreEqual(GDMLanguageID.Russian, headRec.Language);
 
-            headRec.GEDCOMVersion = "5.5";
-            Assert.AreEqual("5.5", headRec.GEDCOMVersion);
+            headRec.GEDCOM.Version = "5.5";
+            Assert.AreEqual("5.5", headRec.GEDCOM.Version);
 
-            headRec.GEDCOMForm = "LINEAGE-LINKED";
-            Assert.AreEqual("LINEAGE-LINKED", headRec.GEDCOMForm);
+            headRec.GEDCOM.Form = "LINEAGE-LINKED";
+            Assert.AreEqual("LINEAGE-LINKED", headRec.GEDCOM.Form);
 
-            headRec.FileName = "testfile.ged";
-            Assert.AreEqual("testfile.ged", headRec.FileName);
+            headRec.File.StringValue = "testfile.ged";
+            Assert.AreEqual("testfile.ged", headRec.File.StringValue);
 
             DateTime dtx = DateTime.Now;
             dtx = dtx.AddTicks(-dtx.Ticks % 10000000);
             headRec.TransmissionDateTime = dtx;
             Assert.AreEqual(dtx, headRec.TransmissionDateTime);
 
-            headRec.FileRevision = 113;
-            Assert.AreEqual(113, headRec.FileRevision);
+            headRec.File.Revision = 113;
+            Assert.AreEqual(113, headRec.File.Revision);
 
-            headRec.PlaceHierarchy = "test11";
-            Assert.AreEqual("test11", headRec.PlaceHierarchy);
+            headRec.Place.Form = "test11";
+            Assert.AreEqual("test11", headRec.Place.Form);
 
-            Assert.IsNotNull(headRec.SourceBusinessAddress);
+            /*Assert.IsNotNull(headRec.Source.BusinessAddress);
 
-            headRec.SourceBusinessName = "test23";
-            Assert.AreEqual("test23", headRec.SourceBusinessName);
+            headRec.Source.BusinessName = "test23";
+            Assert.AreEqual("test23", headRec.Source.BusinessName);*/
 
-            headRec.SourceProductName = "test33";
-            Assert.AreEqual("test33", headRec.SourceProductName);
+            headRec.Source.ProductName = "test33";
+            Assert.AreEqual("test33", headRec.Source.ProductName);
 
-            headRec.SourceVersion = "test44";
-            Assert.AreEqual("test44", headRec.SourceVersion);
+            headRec.Source.Version = "test44";
+            Assert.AreEqual("test44", headRec.Source.Version);
 
             Assert.IsNotNull(headRec.Submission);
 

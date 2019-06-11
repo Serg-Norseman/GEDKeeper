@@ -114,11 +114,6 @@ namespace GDModel
             fCensusName = string.Empty;
         }
 
-        public GDMPersonalNamePieces(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
-        }
-
         public override void Assign(GDMTag source)
         {
             GDMPersonalNamePieces otherPNP = (source as GDMPersonalNamePieces);

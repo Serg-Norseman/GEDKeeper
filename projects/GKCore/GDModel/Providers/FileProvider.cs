@@ -92,7 +92,6 @@ namespace GDModel.Providers
                 fTree.Clear();
                 string streamCharset = DetectCharset(inputStream, charsetDetection);
                 LoadFromReader(fileStream, reader, streamCharset);
-                fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
             }
         }
 

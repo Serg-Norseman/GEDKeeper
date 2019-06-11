@@ -73,16 +73,6 @@ namespace GDModel
             SetName(GEDCOMTagType._POSITION);
         }
 
-        public GDMCutoutPosition(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
-        }
-
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMCutoutPosition(owner, tagName, tagValue);
-        }
-
         protected override string GetStringValue()
         {
             string result;

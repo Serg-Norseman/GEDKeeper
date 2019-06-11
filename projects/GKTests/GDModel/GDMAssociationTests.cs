@@ -42,7 +42,7 @@ namespace GDModel
         [Test]
         public void Test_GEDCOMAssociation()
         {
-            using (GDMAssociation association = GDMAssociation.Create(fContext.Tree, GEDCOMTagType.ASSO, "") as GDMAssociation) {
+            using (GDMAssociation association = new GDMAssociation(fContext.Tree)) {
                 Assert.IsNotNull(association);
 
                 Assert.IsNotNull(association.SourceCitations);
