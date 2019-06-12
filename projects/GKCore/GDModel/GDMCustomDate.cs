@@ -271,11 +271,6 @@ namespace GDModel
             return abs1.Equals(abs2);
         }
 
-        internal virtual string ParseContext(GEDCOMParser context)
-        {
-            return string.Empty;
-        }
-
         public static GDMDate CreateApproximated(GDMObject owner, GDMDate date, GDMApproximated approximated)
         {
             GDMDate result = new GDMDate(owner);

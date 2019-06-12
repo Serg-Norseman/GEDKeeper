@@ -801,7 +801,7 @@ namespace GKCore
 
                     case GDMRecordType.rtNote:
                         {
-                            string value = GKUtils.TruncateStrings(((GDMNoteRecord) (record)).Note, GKData.NOTE_NAME_MAX_LENGTH);
+                            string value = GKUtils.TruncateStrings(((GDMNoteRecord) (record)).Lines, GKData.NOTE_NAME_MAX_LENGTH);
                             if (string.IsNullOrEmpty(value))
                             {
                                 value = string.Format("#{0}", record.GetId().ToString());

@@ -89,7 +89,7 @@ namespace GKUI.Forms
 
             ClickButton("btnAccept", fDialog);
 
-            Assert.AreEqual("sample text", fNoteRecord.Note.Text);
+            Assert.AreEqual("sample text", fNoteRecord.Lines.Text);
         }
     }
 }

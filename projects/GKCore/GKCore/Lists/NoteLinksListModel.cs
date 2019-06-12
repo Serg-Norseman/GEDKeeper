@@ -49,7 +49,7 @@ namespace GKCore.Lists
 
                 foreach (GDMNotes note in dataOwner.Notes)
                 {
-                    fSheetList.AddItem(note, new object[] { note.Notes.Text.Trim() });
+                    fSheetList.AddItem(note, new object[] { note.Lines.Text.Trim() });
                 }
             }
             catch (Exception ex)

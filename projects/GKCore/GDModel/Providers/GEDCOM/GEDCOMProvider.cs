@@ -894,13 +894,17 @@ namespace GDModel.Providers.GEDCOM
 
         private static StackTuple AddNoteRecordTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
-            /*GDMNoteRecord noteRec = (GDMNoteRecord)owner;
+            GDMNoteRecord noteRec = (GDMNoteRecord)owner;
             GDMTag curTag = null;
-            AddTagHandler addHandler = null;*/
+            AddTagHandler addHandler = null;
 
-            return AddRecordTag(owner, tagLevel, tagName, tagValue);
+            if (IsTextTag(tagName)) {
+                return AddTextTag(noteRec, tagLevel, tagName, tagValue);
+            } else {
+                return AddRecordTag(owner, tagLevel, tagName, tagValue);
+            }
 
-            /*return CreateReaderStackTuple(tagLevel, curTag, addHandler);*/
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
         private static void WriteNoteRecord(StreamWriter stream, int level, GDMTag tag)
@@ -909,6 +913,7 @@ namespace GDModel.Providers.GEDCOM
 
             WriteRecordValue(stream, level, noteRec);
             level += 1;
+            WriteText(stream, level, noteRec, true);
             WriteSubTags(stream, level, tag);
             if (!DebugWrite) {
                 WriteTagLine(stream, level, GEDCOMTagType._UID, noteRec.UID, true);
@@ -1126,6 +1131,7 @@ namespace GDModel.Providers.GEDCOM
 
             if (tagName == GEDCOMTagType.NOTE) {
                 curTag = record.Notes.Add(new GDMNotes(record, tagName, tagValue));
+                addHandler = AddNoteTag;
             } else if (tagName == GEDCOMTagType.SOUR) {
                 curTag = record.SourceCitations.Add(new GDMSourceCitation(record, tagName, tagValue));
                 addHandler = AddSourceCitationTag;
@@ -1165,7 +1171,7 @@ namespace GDModel.Providers.GEDCOM
             WriteSubTags(stream, level, tag);
 
             WriteTagLine(stream, level, GEDCOMTagType.RIN, record.AutomatedRecordID, true);
-            WriteList(stream, level, record.Notes, WriteTagEx);
+            WriteList(stream, level, record.Notes, WriteNote);
             WriteList(stream, level, record.SourceCitations, WriteSourceCitation);
             WriteList(stream, level, record.MultimediaLinks, WriteMultimediaLink);
             WriteList(stream, level, record.UserReferences, WriteUserReference);
@@ -1444,7 +1450,6 @@ namespace GDModel.Providers.GEDCOM
             } else if (tagName == GEDCOMTagType.PHON || tagName == GEDCOMTagType.EMAIL || tagName == GEDCOMTagType.FAX || tagName == GEDCOMTagType.WWW) {
                 return AddAddressTag(custEvent.Address, tagLevel, tagName, tagValue);
             } else {
-                // define 'PLAC', 'ADDR', 'DATE' by default
                 return AddTagWithListsTag(owner, tagLevel, tagName, tagValue);
             }
 
@@ -1467,7 +1472,7 @@ namespace GDModel.Providers.GEDCOM
             WriteTagLine(stream, level, GEDCOMTagType.RELI, custEvent.ReligiousAffilation, true);
             WriteTagLine(stream, level, GEDCOMTagType.RESN, GEDCOMUtils.GetRestrictionStr(custEvent.Restriction), true);
 
-            WriteList(stream, level, custEvent.Notes, WriteTagEx);
+            WriteList(stream, level, custEvent.Notes, WriteNote);
             WriteList(stream, level, custEvent.SourceCitations, WriteSourceCitation);
             WriteList(stream, level, custEvent.MultimediaLinks, WriteMultimediaLink);
             return true;
@@ -1561,6 +1566,7 @@ namespace GDModel.Providers.GEDCOM
 
             if (tagName == GEDCOMTagType.NOTE) {
                 curTag = tagWL.Notes.Add(new GDMNotes(tagWL, tagName, tagValue));
+                addHandler = AddNoteTag;
             } else if (tagName == GEDCOMTagType.SOUR) {
                 curTag = tagWL.SourceCitations.Add(new GDMSourceCitation(tagWL, tagName, tagValue));
                 addHandler = AddSourceCitationTag;
@@ -1581,18 +1587,21 @@ namespace GDModel.Providers.GEDCOM
             if (!WriteBaseTag(stream, level, tagWL)) return false;
 
             level += 1;
-            WriteList(stream, level, tagWL.Notes, WriteTagEx);
+            WriteList(stream, level, tagWL.Notes, WriteNote);
             WriteList(stream, level, tagWL.SourceCitations, WriteSourceCitation);
             WriteList(stream, level, tagWL.MultimediaLinks, WriteMultimediaLink);
             return true;
         }
 
 
+        private static bool IsTextTag(string tagName)
+        {
+            return (tagName == GEDCOMTagType.CONT || tagName == GEDCOMTagType.CONC);
+        }
+
         private static StackTuple AddTextTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
-            GDMTextTag textTag = (GDMTextTag)owner;
-            GDMTag curTag = null;
-            AddTagHandler addHandler = null;
+            IGDMTextObject textTag = (IGDMTextObject)owner;
 
             var strings = textTag.Lines;
             if (tagName == GEDCOMTagType.CONC) {
@@ -1606,10 +1615,10 @@ namespace GDModel.Providers.GEDCOM
                 strings.Add(tagValue);
             }
 
-            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+            return CreateReaderStackTuple(tagLevel, null, null);
         }
 
-        private static bool WriteText(StreamWriter stream, int level, IGDMTextObject textTag)
+        private static bool WriteText(StreamWriter stream, int level, IGDMTextObject textTag, bool skipTag = false)
         {
             if (textTag.IsEmpty()) return false;
 
@@ -1622,7 +1631,7 @@ namespace GDModel.Providers.GEDCOM
                 string sub = str.Substring(0, len);
                 str = str.Remove(0, len);
 
-                if (i == 0/* && !isRecordTag*/) {
+                if (i == 0 && !skipTag) {
                     WriteTagLine(stream, level, textTag.Name, sub);
                     level += 1;
                 } else {
@@ -1980,8 +1989,10 @@ namespace GDModel.Providers.GEDCOM
                 mmLink.IsPrimaryCutout = GEDCOMUtils.GetBoolVal(tagValue);
             } else if (tagName == GEDCOMTagType._POSITION) {
                 curTag = mmLink.CutoutPosition;
+                curTag.ParseString(tagValue);
             } else if (tagName == GEDCOMTagType.FILE) {
                 curTag = mmLink.FileReferences.Add(new GDMFileReference(mmLink, tagName, tagValue));
+                addHandler = AddFileReferenceTag;
             } else {
                 return AddBaseTag(owner, tagLevel, tagName, tagValue);
             }
@@ -2005,13 +2016,42 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
+        private static StackTuple AddNoteTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
+        {
+            GDMNotes note = (GDMNotes)owner;
+
+            if (IsTextTag(tagName)) {
+                return AddTextTag(note, tagLevel, tagName, tagValue);
+            } else {
+                return AddBaseTag(note, tagLevel, tagName, tagValue);
+            }
+        }
+
+        private static bool WriteNote(StreamWriter stream, int level, GDMTag tag)
+        {
+            if (tag.IsEmpty() && GEDCOMProvider.SkipEmptyTag(tag.Name)) return false;
+
+            GDMNotes note = (GDMNotes)tag;
+            if (note.IsPointer) {
+                WriteTagValue(stream, level, note);
+            } else {
+                WriteText(stream, level, note);
+            }
+            WriteSubTags(stream, ++level, note);
+
+            return true;
+        }
+
+
         private static StackTuple AddSourceCitationTag(GDMObject owner, int tagLevel, string tagName, string tagValue)
         {
             GDMSourceCitation sourCit = (GDMSourceCitation)owner;
             GDMTag curTag = null;
             AddTagHandler addHandler = null;
 
-            if (tagName == GEDCOMTagType.QUAY) {
+            if (IsTextTag(tagName)) {
+                return AddTextTag(sourCit, tagLevel, tagName, tagValue);
+            } else if (tagName == GEDCOMTagType.QUAY) {
                 sourCit.CertaintyAssessment = GEDCOMUtils.GetIntVal(tagValue);
             } else if (tagName == GEDCOMTagType.PAGE) {
                 sourCit.Page = tagValue;
@@ -2024,11 +2064,17 @@ namespace GDModel.Providers.GEDCOM
 
         public static bool WriteSourceCitation(StreamWriter stream, int level, GDMTag tag)
         {
+            if (tag.IsEmpty() && GEDCOMProvider.SkipEmptyTag(tag.Name)) return false;
+
             GDMSourceCitation sourCit = (GDMSourceCitation)tag;
-
-            if (!WriteBaseTag(stream, level, sourCit)) return false;
-
+            if (sourCit.IsPointer) {
+                WriteTagValue(stream, level, sourCit);
+            } else {
+                WriteText(stream, level, sourCit);
+            }
             level += 1;
+            WriteSubTags(stream, level, sourCit);
+
             WriteTagLine(stream, level, GEDCOMTagType.PAGE, sourCit.Page, true);
             WriteTagLine(stream, level, GEDCOMTagType.QUAY, GEDCOMUtils.GetIntStr(sourCit.CertaintyAssessment), true);
             return true;
@@ -2228,7 +2274,7 @@ namespace GDModel.Providers.GEDCOM
             } else if (tagName == GEDCOMTagType._CENN) {
                 persNamePieces.CensusName = tagValue;
             } else {
-                return AddBaseTag(owner, tagLevel, tagName, tagValue);
+                return AddTagWithListsTag(owner, tagLevel, tagName, tagValue);
             }
 
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
@@ -2242,7 +2288,7 @@ namespace GDModel.Providers.GEDCOM
             int lev = level + 1;
             WriteSubTags(stream, lev, persNamePieces);
 
-            WriteList(stream, level, persNamePieces.Notes, WriteTagEx);
+            WriteList(stream, level, persNamePieces.Notes, WriteNote);
             WriteList(stream, level, persNamePieces.SourceCitations, WriteSourceCitation);
 
             WriteTagLine(stream, lev, GEDCOMTagType.SURN, persNamePieces.Surname, true);
@@ -2300,12 +2346,22 @@ namespace GDModel.Providers.GEDCOM
         private static void FixFTBLine(GDMTag curRecord, GDMTag curTag, int lineNum, string str)
         {
             try {
-                if (curTag.Name == GEDCOMTagType.CONT) {
-                    curTag.StringValue += " " + str;
-                } else if (curTag is GDMNotes) {
-                    curTag.AddTag(GEDCOMTagType.CONT, str, null);
-                } else {
-                    if (curRecord != null) {
+                if (curTag != null) {
+                    if (curTag is IGDMTextObject) {
+                        str = " " + str;
+                        AddTextTag(curTag, 0, GEDCOMTagType.CONC, str);
+                    } else if (curTag.Name == GEDCOMTagType.CONT) {
+                        curTag.StringValue += str;
+                    } else if (curTag is GDMNotes) {
+                        curTag.AddTag(GEDCOMTagType.CONT, str, null);
+                    } else {
+                        curTag.AddTag(GEDCOMTagType.NOTE, str, null);
+                    }
+                } else if (curRecord != null) {
+                    if (curRecord is IGDMTextObject) {
+                        str = " " + str;
+                        AddTextTag(curRecord, 0, GEDCOMTagType.CONC, str);
+                    } else {
                         curRecord.AddTag(GEDCOMTagType.NOTE, str, null);
                     }
                 }

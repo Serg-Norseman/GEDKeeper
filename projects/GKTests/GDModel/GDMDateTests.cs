@@ -553,15 +553,9 @@ namespace GDModel
         [Test]
         public void Test_SetGregorian_5argsBC()
         {
-            int day = 20;
-            string month = "Dec";
-            int year = 1980;
-            string yearModifier = "";
-            bool yearBC = true;
             GDMDate instance = new GDMDate(null, "", "");
-            instance.SetGregorian(day, month, year, yearModifier, yearBC);
-            string result = instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, false);
-            Assert.AreEqual("BC 1980.12.20", result);
+            instance.SetGregorian(20, "Dec", 1980, "", true);
+            Assert.AreEqual("BC 1980.12.20", instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, false));
         }
 
         [Test]

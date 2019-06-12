@@ -56,7 +56,7 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.Note.Text, QuickFilter));
+            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.Lines.Text, QuickFilter));
 
             res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
 
@@ -74,7 +74,7 @@ namespace GKCore.Lists
             switch ((NoteColumnType)colType)
             {
                 case NoteColumnType.ctText:
-                    string noteText = GKUtils.MergeStrings(fRec.Note);
+                    string noteText = GKUtils.MergeStrings(fRec.Lines);
                     //string noteText = GKUtils.TruncateStrings(fRec.Note, GKData.NOTE_NAME_MAX_LENGTH);
                     result = noteText;
                     break;

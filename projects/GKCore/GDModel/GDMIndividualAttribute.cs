@@ -24,6 +24,7 @@ namespace GDModel
 {
     public class GDMIndividualAttribute : GDMCustomEvent
     {
+        // TODO: eliminate this functionality
         public StringList PhysicalDescription
         {
             get { return GetTagStrings(this); }

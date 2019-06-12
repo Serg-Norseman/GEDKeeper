@@ -80,19 +80,21 @@ namespace GDModel
     }
 
 
-    public sealed class GDMNotes : GDMPointer
+    public sealed class GDMNotes : GDMPointer, IGDMTextObject
     {
-        public StringList Notes
+        private StringList fLines;
+
+        public StringList Lines
         {
             get {
-                StringList notes;
+                StringList lines;
                 if (!IsPointer) {
-                    notes = GetTagStrings(this);
+                    lines = fLines;
                 } else {
                     GDMNoteRecord notesRecord = Value as GDMNoteRecord;
-                    notes = (notesRecord != null) ? notesRecord.Note : new StringList();
+                    lines = (notesRecord != null) ? notesRecord.Lines : new StringList();
                 }
-                return notes;
+                return lines;
             }
             set {
                 Clear();
@@ -114,6 +116,8 @@ namespace GDModel
         public GDMNotes(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.NOTE);
+
+            fLines = new StringList();
         }
 
         public override bool IsEmpty()
@@ -122,14 +126,14 @@ namespace GDModel
             if (IsPointer) {
                 result = base.IsEmpty();
             } else {
-                result = (string.IsNullOrEmpty(fStringValue) && SubTags.Count == 0);
+                result = (fLines.IsEmpty() && SubTags.Count == 0);
             }
             return result;
         }
 
         protected override string GetStringValue()
         {
-            string result = IsPointer ? base.GetStringValue() : fStringValue;
+            string result = IsPointer ? base.GetStringValue() : ((fLines.Count > 0) ? fLines[0] : string.Empty);
             return result;
         }
 
@@ -137,7 +141,10 @@ namespace GDModel
         {
             string result = base.ParseString(strValue);
             if (!IsPointer) {
-                fStringValue = result;
+                fLines.Clear();
+                if (!string.IsNullOrEmpty(result)) {
+                    fLines.Add(result);
+                }
                 result = string.Empty;
             } else {
                 fStringValue = string.Empty;

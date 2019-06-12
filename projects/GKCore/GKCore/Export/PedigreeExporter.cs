@@ -293,7 +293,7 @@ namespace GKCore.Export
                 for (int i = 0; i < notesCount; i++)
                 {
                     GDMNotes note = person.IRec.Notes[i];
-                    fWriter.AddListItem(" " + GKUtils.MergeStrings(note.Notes), fTextFont);
+                    fWriter.AddListItem(" " + GKUtils.MergeStrings(note.Lines), fTextFont);
                 }
                 
                 fWriter.EndList();
@@ -308,7 +308,7 @@ namespace GKCore.Export
                 for (int i = 0; i < num; i++)
                 {
                     GDMNotes note = person.IRec.Notes[i];
-                    fWriter.AddParagraph(GKUtils.MergeStrings(note.Notes), fTextFont);
+                    fWriter.AddParagraph(GKUtils.MergeStrings(note.Lines), fTextFont);
                 }
             }
 

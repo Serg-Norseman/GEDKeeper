@@ -225,7 +225,7 @@ namespace GKCore
                         st = GetFamilyString((GDMFamilyRecord)record);
                         break;
                     case GDMRecordType.rtNote:
-                        st = ((GDMNoteRecord)record).Note[0]; // TODO: bad solution?!
+                        st = ((GDMNoteRecord)record).Lines[0]; // TODO: bad solution?!
                         break;
                     case GDMRecordType.rtMultimedia:
                         st = ((GDMMultimediaRecord)record).FileReferences[0].Title;
@@ -1806,10 +1806,10 @@ namespace GKCore
 
                         GDMNotes note = record.Notes[i];
 
-                        int num2 = note.Notes.Count;
+                        int num2 = note.Lines.Count;
                         for (int k = 0; k < num2; k++)
                         {
-                            string st = note.Notes[k];
+                            string st = note.Lines[k];
                             summary.Add(st);
                         }
                     }
@@ -2136,7 +2136,7 @@ namespace GKCore
                     if (noteRec != null)
                     {
                         summary.Add("");
-                        summary.AddStrings(noteRec.Note);
+                        summary.AddStrings(noteRec.Lines);
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
 

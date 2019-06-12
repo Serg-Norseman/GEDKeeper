@@ -403,45 +403,6 @@ namespace GDModel
             }
         }
 
-        public static void SetTagStrings(GDMTag tag, string[] strings)
-        {
-            if (tag == null) return;
-
-            tag.StringValue = "";
-            var subTags = tag.SubTags;
-            for (int i = subTags.Count - 1; i >= 0; i--) {
-                string subtag = subTags[i].Name;
-                if (subtag == GEDCOMTagType.CONT || subtag == GEDCOMTagType.CONC) {
-                    subTags.DeleteAt(i);
-                }
-            }
-
-            if (strings != null) {
-                bool isRecordTag = (tag is GDMRecord);
-
-                int num = strings.Length;
-                for (int i = 0; i < num; i++) {
-                    string str = strings[i];
-
-                    int len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
-                    string sub = str.Substring(0, len);
-                    str = str.Remove(0, len);
-
-                    if (i == 0 && !isRecordTag) {
-                        tag.StringValue = sub;
-                    } else {
-                        tag.AddTag(GEDCOMTagType.CONT, sub, null);
-                    }
-
-                    while (str.Length > 0) {
-                        len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
-                        tag.AddTag(GEDCOMTagType.CONC, str.Substring(0, len), null);
-                        str = str.Remove(0, len);
-                    }
-                }
-            }
-        }
-
         #endregion
     }
 }

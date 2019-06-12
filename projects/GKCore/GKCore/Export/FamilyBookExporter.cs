@@ -381,7 +381,7 @@ namespace GKCore.Export
                 int num = iRec.Notes.Count;
                 for (int i = 0; i < num; i++) {
                     GDMNotes note = iRec.Notes[i];
-                    fWriter.AddParagraph(GKUtils.MergeStrings(note.Notes), fTextFont);
+                    fWriter.AddParagraph(GKUtils.MergeStrings(note.Lines), fTextFont);
                 }
             }
         }

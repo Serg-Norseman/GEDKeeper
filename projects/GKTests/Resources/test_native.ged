@@ -13,9 +13,15 @@
 2 TIME 14:07:31.6
 1 COPR John Doe
 1 SUBM @SUB1@
+1 NOTE Header Note Sample
+2 CONT Note Sample Line 1
+2 CONT Note Sample Line 2
+2 CONT Note Sample Line 3
+2 CONT Note Sample Line 4
 0 @SUB1@ SUBM
 1 _UID 737671C745BFE8448DF21530DF4CCD0E1BC4
 1 CHAN
+2 _CHAN_CUSTOM CHAN_CUSTOM_TAG
 2 DATE 03 MAR 2010
 3 TIME 10:18:18.4
 1 NAME John Doe
@@ -25,12 +31,30 @@
 2 NOTE ChangeDateNote test
 2 DATE 07 NOV 2015
 3 TIME 23:46:45.7
+1 RIN 123456
+1 NOTE @N1@
+1 SOUR Source Citation Sample
+2 CONT Source Citation Sample Line 1
+2 CONT Source Citation Sample Line 2
+2 CONT Source Citation Sample Line 3
 1 SEX M
 1 AFN 12345
 1 RFN 23456
 1 NAME John /Doe/
+2 FONE Phonetic
+2 ROMN Romanized name
 2 LANG English
 2 TYPE birth
+2 SURN Doe
+2 GIVN John
+2 _PATN Patronymic
+2 NPFX Name Prefix
+2 NICK Nick
+2 SPFX Surname Prefix
+2 NSFX Name Suffix
+2 _MARN Married Name
+2 _RELN Religious Name
+2 _CENN Census Name
 1 FAMC @F2@
 2 STAT challenged
 2 PEDI adopted
@@ -39,6 +63,10 @@
 2 DATE 01 MAR 1810
 2 PLAC London
 3 _LOC @L1@
+2 CAUS Cause
+2 AGNC Agency
+2 RELI Religious Affilation
+2 RESN confidential
 2 SOUR @S1@
 3 PAGE p44
 3 QUAY 3
@@ -99,9 +127,12 @@
 1 OBJE @O1@
 1 OBJE
 2 FILE X
+3 FORM bmp
+4 MEDI photo
 2 TITL Media Sample
 2 _PRIM Y
 2 _PRIM_CUTOUT Y
+2 _POSITION 100 100 500 500
 1 REFN UserReference 1
 2 TYPE YYYYY
 1 NAME Government Archive
@@ -111,8 +142,12 @@
 2 ADR3 Line 3
 2 CITY London
 2 STAE X
+2 CTRY United Kingdom
 2 POST 123456
 1 PHON (555) 5555555
+1 EMAIL sample@sample.com
+1 FAX 111 1111111
+1 WWW http://sample.com
 0 @G1@ _GROUP
 1 _UID EACCA3720D04E74AB56AF465E62424671AA2
 1 CHAN
@@ -155,6 +190,15 @@
 1 NAME Travel
 1 TYPE visit
 1 TO @I1@
+0 @CM2@ _COMM
+1 _UID 6B8FF016C6B54042877E2E7C1C9970D2A347
+1 CHAN
+2 DATE 24 MAR 2010
+3 TIME 14:34:02
+1 DATE 24 MAR 2010
+1 NAME Travel
+1 TYPE visit
+1 FROM @I1@
 0 @RS1@ _RESEARCH
 1 _UID 6D530F05FC96164C9194DC1F0D223FCF25C8
 1 CHAN

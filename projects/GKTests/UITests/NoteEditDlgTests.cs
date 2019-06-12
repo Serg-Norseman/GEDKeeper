@@ -77,7 +77,7 @@ namespace GKUI.Forms
             EnterText("txtNote", fDialog, "sample text");
             ClickButton("btnAccept", fDialog);
 
-            Assert.AreEqual("sample text", fNoteRecord.Note.Text);
+            Assert.AreEqual("sample text", fNoteRecord.Lines.Text);
         }
 
         #region Handlers for external tests
@@ -87,7 +87,7 @@ namespace GKUI.Forms
             EnterText("txtNote", dlg, "sample text");
             ClickButton("btnAccept", dlg);
 
-            Assert.AreEqual("sample text", dlg.NoteRecord.Note.Text);
+            Assert.AreEqual("sample text", dlg.NoteRecord.Lines.Text);
         }
 
         public static void NoteAdd_Mini_Handler(string name, IntPtr ptr, Form form)

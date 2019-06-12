@@ -24,11 +24,18 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMSourceCitation : GDMPointer
+    public sealed class GDMSourceCitation : GDMPointer, IGDMTextObject
     {
         private int fCertaintyAssessment;
+        private StringList fDescription;
         private string fPage;
 
+
+        public int CertaintyAssessment
+        {
+            get { return fCertaintyAssessment; }
+            set { fCertaintyAssessment = value; }
+        }
 
         public StringList Description
         {
@@ -36,7 +43,7 @@ namespace GDModel
                 StringList description;
 
                 if (!IsPointer) {
-                    description = GetTagStrings(this);
+                    description = fDescription;
                 } else {
                     GDMSourceRecord sourceRecord = Value as GDMSourceRecord;
                     if (sourceRecord != null) {
@@ -60,10 +67,9 @@ namespace GDModel
             set { fPage = value; }
         }
 
-        public int CertaintyAssessment
+        StringList IGDMTextObject.Lines
         {
-            get { return fCertaintyAssessment; }
-            set { fCertaintyAssessment = value; }
+            get { return fDescription; }
         }
 
 
@@ -77,6 +83,7 @@ namespace GDModel
             SetName(GEDCOMTagType.SOUR);
 
             fCertaintyAssessment = -1;
+            fDescription = new StringList();
             fPage = string.Empty;
         }
 
@@ -95,6 +102,7 @@ namespace GDModel
 
             fCertaintyAssessment = sourceObj.fCertaintyAssessment;
             fPage = sourceObj.fPage;
+            fDescription.Assign(sourceObj.fDescription);
         }
 
         public override void Clear()
@@ -102,6 +110,7 @@ namespace GDModel
             base.Clear();
 
             fCertaintyAssessment = -1;
+            fDescription.Clear();
             fPage = string.Empty;
         }
 
@@ -111,14 +120,14 @@ namespace GDModel
             if (IsPointer) {
                 result = base.IsEmpty();
             } else {
-                result = string.IsNullOrEmpty(fStringValue) && (SubTags.Count == 0) && string.IsNullOrEmpty(fPage);
+                result = fDescription.IsEmpty() && (SubTags.Count == 0) && string.IsNullOrEmpty(fPage);
             }
             return result;
         }
 
         protected override string GetStringValue()
         {
-            string result = IsPointer ? base.GetStringValue() : fStringValue;
+            string result = IsPointer ? base.GetStringValue() : ((fDescription.Count > 0) ? fDescription[0] : string.Empty);
             return result;
         }
 
@@ -126,7 +135,10 @@ namespace GDModel
         {
             string result = base.ParseString(strValue);
             if (!IsPointer) {
-                fStringValue = result;
+                fDescription.Clear();
+                if (!string.IsNullOrEmpty(result)) {
+                    fDescription.Add(result);
+                }
                 result = string.Empty;
             } else {
                 fStringValue = string.Empty;

@@ -615,7 +615,7 @@ namespace GKPedigreeImporterPlugin
             }
 
             GDMNoteRecord noteRec = fTree.CreateNote();
-            noteRec.Note = buffer;
+            noteRec.Lines.Assign(buffer);
             if (curPerson != null) curPerson.AddNote(noteRec);
 
             buffer.Clear();

@@ -44,24 +44,6 @@ namespace GDModel
         }
 
         [Test]
-        public void Test_SetTagStringsA()
-        {
-            var tag = new GDMTag(null, "TEST", "");
-            Assert.IsNotNull(tag);
-
-            // very long string, 248"A" and " BBB BBBB"
-            var strings = new string[] { "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA BBB BBBB" };
-            GDMTag.SetTagStrings(tag, strings);
-
-            Assert.AreEqual(248, tag.StringValue.Length);
-
-            var strList = GDMTag.GetTagStrings(tag);
-            Assert.IsNotNull(strList);
-            Assert.AreEqual(1, strList.Count);
-            Assert.AreEqual(strings[0], strList.Text);
-        }
-
-        [Test]
         public void Test_SetTagStringsL()
         {
             var tag = new GDMTag(null, "TEST", "");

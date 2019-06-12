@@ -36,7 +36,7 @@ namespace GDModel.Providers.GEDCOM
         private static void TransformNote(GDMTree tree, GDMNotes note)
         {
             GDMNoteRecord noteRec = tree.CreateNote();
-            noteRec.Note = note.Notes;
+            noteRec.Lines.Assign(note.Lines);
 
             note.Clear();
             note.Value = noteRec;

@@ -201,11 +201,11 @@ namespace GDModel.Providers
 
                 GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
-                Assert.AreEqual("Test1\r\ntest2\r\ntest3", noteRec1.Note.Text);
+                Assert.AreEqual("Test1\r\ntest2\r\ntest3", noteRec1.Lines.Text);
 
                 GDMNoteRecord noteRec2 = ctx.Tree.XRefIndex_Find("N2") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec2);
-                Assert.AreEqual("Test\r\ntest2\r\ntest3", noteRec2.Note.Text);
+                Assert.AreEqual("Test\r\ntest2\r\ntest3", noteRec2.Lines.Text);
             }
         }
 
@@ -235,7 +235,7 @@ namespace GDModel.Providers
 
                 GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
-                Assert.AreEqual("Test1\r\ntest2\r\ntest3 badline badline badline badline", noteRec1.Note.Text);
+                Assert.AreEqual("Test1\r\ntest2\r\ntest3 badline badline badline badline", noteRec1.Lines.Text);
             }
         }
 
@@ -309,7 +309,7 @@ namespace GDModel.Providers
 
                 GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
-                string str = noteRec1.Note.Text;
+                string str = noteRec1.Lines.Text;
                 Assert.IsTrue(str.EndsWith("non-standard GEDCOM files."));
             }
         }

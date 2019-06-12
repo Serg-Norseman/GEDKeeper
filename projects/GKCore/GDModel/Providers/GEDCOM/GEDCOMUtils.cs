@@ -900,7 +900,7 @@ namespace GDModel.Providers.GEDCOM
 
             string result;
             if (hour == 0 && minutes == 0 && seconds == 0) {
-                result = "";
+                result = string.Empty;
             } else {
                 result = string.Format("{0:00}:{1:00}:{2:00}", new object[] { hour, minutes, seconds });
                 if (fraction > 0) {
