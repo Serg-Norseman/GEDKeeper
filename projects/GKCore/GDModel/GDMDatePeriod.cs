@@ -41,20 +41,10 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMDatePeriod(owner, tagName, tagValue);
-        }
-
         public GDMDatePeriod(GDMObject owner) : base(owner)
         {
             fDateFrom = new GDMDate(this);
             fDateTo = new GDMDate(this);
-        }
-
-        public GDMDatePeriod(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
         }
 
         protected override string GetStringValue()

@@ -1,8 +1,10 @@
 ﻿0 HEAD
 1 SOUR GEDKeeper
 2 VERS 41
+2 NAME GEDKeeper
 1 DEST GEDKeeper
 1 CHAR UTF-8
+2 VERS BOM
 1 LANG Russian
 1 GEDC
 2 VERS 5.5.1
@@ -12,6 +14,7 @@
 1 DATE 11 JUN 2019
 2 TIME 14:07:31.6
 1 COPR John Doe
+1 PLAC London
 1 SUBM @SUB1@
 1 NOTE Header Note Sample
 2 CONT Note Sample Line 1
@@ -25,6 +28,13 @@
 2 DATE 03 MAR 2010
 3 TIME 10:18:18.4
 1 NAME John Doe
+1 LANG English
+1 ADDR London
+1 PHON 555 5555555
+1 EMAIL sample@sample.com
+1 FAX 123456
+1 WWW http://sample.com
+1 RFN 12345
 0 @I1@ INDI
 1 _UID D4E395AD5A796D438D427D83BFE811444751
 1 CHAN
@@ -37,6 +47,8 @@
 2 CONT Source Citation Sample Line 1
 2 CONT Source Citation Sample Line 2
 2 CONT Source Citation Sample Line 3
+1 RESN confidential
+1 SUBM @SUB1@
 1 SEX M
 1 AFN 12345
 1 RFN 23456
@@ -60,9 +72,11 @@
 2 PEDI adopted
 1 FAMS @F1@
 1 BIRT
+2 TYPE Birth classification tag
 2 DATE 01 MAR 1810
 2 PLAC London
 3 _LOC @L1@
+2 ADDR 2nd Street
 2 CAUS Cause
 2 AGNC Agency
 2 RELI Religious Affilation
@@ -110,6 +124,7 @@
 2 DATE 25 FEB 2010
 3 TIME 21:31:14.4
 1 TITL Book 1943-45 y
+1 PUBL Publication
 1 ABBR Book 1943-45 y
 1 REPO @R1@
 1 DATA
@@ -117,6 +132,8 @@
 2 EVEN
 3 DATE FROM 1780 TO 1850
 3 PLAC Sample Place
+1 AUTH Author
+1 TEXT text
 0 @R1@ REPO
 1 _UID 8968F040E06472408A8BB8D3A44C7F6D93F3
 1 CHAN
@@ -137,6 +154,7 @@
 2 TYPE YYYYY
 1 NAME Government Archive
 1 ADDR 1st Street
+2 CONT continuation line
 2 ADR1 Line 1
 2 ADR2 Line 2
 2 ADR3 Line 3
@@ -218,6 +236,7 @@
 1 CHAN
 2 DATE 22 SEP 2009
 3 TIME 13:02:01.3
+1 SUBM @SUB1@
 1 FAMF A
 1 TEMP Temple
 1 ANCE 1

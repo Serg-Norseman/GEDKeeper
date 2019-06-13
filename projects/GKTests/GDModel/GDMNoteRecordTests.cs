@@ -176,7 +176,7 @@ namespace GDModel
         {
             using (GDMNotes notes = GDMNotes.Create(null, "", "") as GDMNotes) {
                 Assert.IsTrue(notes.IsEmpty());
-                notes.Lines = new StringList("Test note");
+                notes.Lines.Text = "Test note";
                 Assert.IsFalse(notes.IsEmpty());
                 Assert.AreEqual("Test note", notes.Lines.Text);
             }

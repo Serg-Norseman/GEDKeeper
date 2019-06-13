@@ -567,6 +567,12 @@ Section "Uninstall"
     Delete $INSTDIR\nVLC.dll
     Delete $INSTDIR\YamlSerializer.dll
 
+    Delete $INSTDIR\BSLib.dll
+    Delete $INSTDIR\BSLib.Linguistics.dll
+    Delete $INSTDIR\BSLib.SmartGraph.dll
+    Delete $INSTDIR\GMap.NET.Core.dll
+    Delete $INSTDIR\GMap.NET.WindowsForms.dll
+
     Delete $INSTDIR\ArborGVT.dll
     Delete $INSTDIR\DotNetRtfWriter.dll
     Delete $INSTDIR\ExcelLibrary.dll

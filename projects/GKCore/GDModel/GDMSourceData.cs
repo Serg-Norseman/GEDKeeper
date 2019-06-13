@@ -40,22 +40,12 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMSourceData(owner, tagName, tagValue);
-        }
-
         public GDMSourceData(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.DATA);
 
             fAgency = string.Empty;
             fEvents = new GDMList<GDMSourceEvent>(this);
-        }
-
-        public GDMSourceData(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
         }
 
         protected override void Dispose(bool disposing)

@@ -33,7 +33,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMAddress addr = GDMAddress.Create(null, GEDCOMTagType.ADDR, "") as GDMAddress) {
+            using (GDMAddress addr = new GDMAddress(null)) {
                 Assert.IsNotNull(addr, "addr != null");
 
                 addr.SetAddressText("test");
@@ -92,7 +92,7 @@ namespace GDModel
                 addr.AddressPostalCode = "test7";
                 Assert.AreEqual("test7", addr.AddressPostalCode);
 
-                using (GDMAddress addr2 = GDMAddress.Create(null, GEDCOMTagType.ADDR, "") as GDMAddress) {
+                using (GDMAddress addr2 = new GDMAddress(null)) {
                     Assert.Throws(typeof(ArgumentException), () => {
                         addr2.Assign(null);
                     });
@@ -151,7 +151,7 @@ namespace GDModel
         [Test]
         public void Test_Create()
         {
-            GDMAddress instance = (GDMAddress)GDMAddress.Create(null, "", "");
+            GDMAddress instance = new GDMAddress(null);
             Assert.IsNotNull(instance);
         }
 

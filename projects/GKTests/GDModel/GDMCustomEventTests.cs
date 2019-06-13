@@ -44,7 +44,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMIndividualAttribute customEvent = GDMIndividualAttribute.Create(null, "", "") as GDMIndividualAttribute) {
+            using (GDMIndividualAttribute customEvent = new GDMIndividualAttribute(null)) {
                 Assert.IsNotNull(customEvent);
 
                 Assert.IsNotNull(customEvent.Address);
@@ -84,7 +84,7 @@ namespace GDModel
                 Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
             }
 
-            using (GDMIndividualEvent customEvent = GDMIndividualEvent.Create(null, "", "") as GDMIndividualEvent) {
+            using (GDMIndividualEvent customEvent = new GDMIndividualEvent(null)) {
                 Assert.IsNotNull(customEvent);
 
                 // stream test
@@ -98,7 +98,7 @@ namespace GDModel
                 customEvent.Address.AddressLine1 = "adr1";
                 customEvent.Restriction = GDMRestriction.rnConfidential;
 
-                using (GDMIndividualEvent copyEvent = GDMIndividualEvent.Create(null, "", "") as GDMIndividualEvent) {
+                using (GDMIndividualEvent copyEvent = new GDMIndividualEvent(null)) {
                     Assert.IsNotNull(copyEvent);
                     copyEvent.Assign(customEvent);
 
@@ -119,7 +119,7 @@ namespace GDModel
                 Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
             }
 
-            using (GDMFamilyEvent customEvent = GDMFamilyEvent.Create(null, "", "") as GDMFamilyEvent) {
+            using (GDMFamilyEvent customEvent = new GDMFamilyEvent(null)) {
                 Assert.IsNotNull(customEvent);
 
                 customEvent.Address.AddEmailAddress("email");
@@ -128,9 +128,25 @@ namespace GDModel
         }
 
         [Test]
-        public void Test_GEDCOMIndividualEvent()
+        public void Test_Assign()
         {
-            using (GDMIndividualEvent iEvent = GDMIndividualEvent.Create(null, "", "") as GDMIndividualEvent) {
+            var instance = new GDMIndividualEvent(null);
+            Assert.Throws(typeof(ArgumentException), () => {
+                instance.Assign(null);
+            });
+        }
+
+        [Test]
+        public void Test_Clear()
+        {
+            var instance = new GDMIndividualEvent(null);
+            instance.Clear();
+        }
+
+        [Test]
+        public void Test_GDMIndividualEvent()
+        {
+            using (GDMIndividualEvent iEvent = new GDMIndividualEvent(null)) {
                 Assert.IsNotNull(iEvent);
                 Assert.IsNotNull(iEvent.Family);
             }

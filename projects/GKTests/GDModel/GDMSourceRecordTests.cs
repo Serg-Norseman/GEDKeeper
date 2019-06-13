@@ -142,11 +142,8 @@ namespace GDModel
 
                 Assert.IsTrue(srcCit.IsEmpty(), "srcCit.IsEmpty()"); // its pointer
 
-                StringList strs = new StringList("test");
-                srcCit.Description = strs;
-
-                strs = srcCit.Description;
-                Assert.AreEqual("test", strs.Text);
+                srcCit.Description.Text = "test";
+                Assert.AreEqual("test", srcCit.Description.Text);
             }
         }
 

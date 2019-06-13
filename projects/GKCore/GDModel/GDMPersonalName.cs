@@ -98,50 +98,14 @@ namespace GDModel
         }
 
 
-        // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
-        protected override string GetStringValue()
-        {
-            string result = fFirstPart;
-            if (!string.IsNullOrEmpty(fSurname)) {
-                result += " /" + fSurname + "/";
-                if (!string.IsNullOrEmpty(fLastPart)) {
-                    result += " " + fLastPart;
-                }
-            }
-            return result;
-        }
-
-        public override string ParseString(string strValue)
-        {
-            return GEDCOMUtils.ParseName(strValue, this);
-        }
-
-        public void SetNameParts(string firstPart, string surname, string lastPart)
-        {
-            fFirstPart = GEDCOMUtils.Trim(firstPart);
-            fSurname = GEDCOMUtils.Trim(surname);
-            fLastPart = GEDCOMUtils.Trim(lastPart);
-        }
-
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMPersonalName(owner, tagName, tagValue);
-        }
-
         public GDMPersonalName(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.NAME);
 
             fPieces = new GDMPersonalNamePieces(this);
-
             fFirstPart = string.Empty;
             fSurname = string.Empty;
             fLastPart = string.Empty;
-        }
-
-        public GDMPersonalName(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
         }
 
         protected override void Dispose(bool disposing)
@@ -195,6 +159,31 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
             fPieces.ReplaceXRefs(map);
+        }
+
+        // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
+        protected override string GetStringValue()
+        {
+            string result = fFirstPart;
+            if (!string.IsNullOrEmpty(fSurname)) {
+                result += " /" + fSurname + "/";
+                if (!string.IsNullOrEmpty(fLastPart)) {
+                    result += " " + fLastPart;
+                }
+            }
+            return result;
+        }
+
+        public override string ParseString(string strValue)
+        {
+            return GEDCOMUtils.ParseName(strValue, this);
+        }
+
+        public void SetNameParts(string firstPart, string surname, string lastPart)
+        {
+            fFirstPart = GEDCOMUtils.Trim(firstPart);
+            fSurname = GEDCOMUtils.Trim(surname);
+            fLastPart = GEDCOMUtils.Trim(lastPart);
         }
 
         private static bool IsUnknown(string str)

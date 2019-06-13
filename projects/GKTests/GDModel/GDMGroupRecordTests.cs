@@ -79,10 +79,18 @@ namespace GDModel
                 groupRec.AddMember(member);
                 Assert.AreEqual(0, groupRec.IndexOfMember(member));
 
-                string buf = TestUtils.GetTagStreamText(groupRec, 0);
-                Assert.AreEqual("0 @G2@ _GROUP\r\n" +
-                                "1 NAME Test Group\r\n" +
-                                "1 _MEMBER @I1@\r\n", buf);
+                using (var group2 = fContext.Tree.CreateGroup()) {
+                    Assert.Throws(typeof(ArgumentException), () => {
+                        group2.Assign(null);
+                    });
+
+                    group2.Assign(groupRec);
+
+                    string buf = TestUtils.GetTagStreamText(group2, 0);
+                    Assert.AreEqual("0 @G4@ _GROUP\r\n" +
+                                    "1 NAME Test Group\r\n" +
+                                    "1 _MEMBER @I1@\r\n", buf);
+                }
 
                 groupRec.RemoveMember(member);
                 Assert.AreEqual(-1, groupRec.IndexOfMember(member));

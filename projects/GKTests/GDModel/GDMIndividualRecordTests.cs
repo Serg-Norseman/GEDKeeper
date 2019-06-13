@@ -94,7 +94,9 @@ namespace GDModel
             Assert.IsNotNull(indiRec.Submittors);
             Assert.IsNotNull(indiRec.UserReferences); // for GEDCOMRecord
 
-            Assert.Throws(typeof(ArgumentException), () => { indiRec.AddEvent(GDMFamilyEvent.Create(null, "", "") as GDMCustomEvent); });
+            Assert.Throws(typeof(ArgumentException), () => {
+                indiRec.AddEvent(new GDMFamilyEvent(null));
+            });
 
             GDMIndividualRecord father, mother;
             GDMFamilyRecord fam = indiRec.GetParentsFamily();
@@ -177,7 +179,7 @@ namespace GDModel
                 Assert.AreEqual("", parts.Name);
                 Assert.AreEqual("", parts.Patronymic);
 
-                indi.AddPersonalName(new GDMPersonalName(indi, "", "")); // test with empty Name
+                indi.AddPersonalName(new GDMPersonalName(indi)); // test with empty Name
                 parts = GKUtils.GetNameParts(indi);
                 Assert.AreEqual("", parts.Surname);
                 Assert.AreEqual("", parts.Name);
@@ -206,7 +208,7 @@ namespace GDModel
                 GDMIndividualRecord ind = fContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
 
                 indi.AddAssociation("test", ind);
-                indi.Aliases.Add(new GDMAlias(indi, "", ""));
+                indi.Aliases.Add(new GDMAlias(indi));
                 indi.Submittors.Add(new GDMPointer(indi, "", ""));
 
                 using (GDMIndividualRecord indi3 = new GDMIndividualRecord(fContext.Tree)) {
@@ -253,12 +255,12 @@ namespace GDModel
 
             ind1 = tree.CreateIndividual();
             ind1.Sex = GDMSex.svMale;
-            GDMPersonalName pn = ind1.AddPersonalName(new GDMPersonalName(ind1, "", ""));
+            GDMPersonalName pn = ind1.AddPersonalName(new GDMPersonalName(ind1));
             pn.SetNameParts("Ivan Ivanov", "Fedoroff", "");
 
             ind2 = tree.CreateIndividual();
             ind2.Sex = GDMSex.svMale;
-            pn = ind2.AddPersonalName(new GDMPersonalName(ind2, "", ""));
+            pn = ind2.AddPersonalName(new GDMPersonalName(ind2));
             pn.SetNameParts("Ivan Ivanovich", "Fedoroff", "");
 
             ev1 = new GDMIndividualEvent(ind1, GEDCOMTagType.BIRT, "");
@@ -332,7 +334,7 @@ namespace GDModel
         [Test]
         public void Test_GDMAlias()
         {
-            using (GDMAlias alias = GDMAlias.Create(null, GEDCOMTagType.ALIA, "") as GDMAlias) {
+            using (GDMAlias alias = new GDMAlias(null)) {
                 Assert.IsNotNull(alias, "alias != null");
             }
         }

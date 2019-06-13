@@ -30,13 +30,13 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMSourceData data = GDMSourceData.Create(null, "", "") as GDMSourceData) {
+            using (GDMSourceData data = new GDMSourceData(null)) {
                 Assert.IsNotNull(data);
 
                 data.Agency = "test agency";
                 Assert.AreEqual("test agency", data.Agency);
 
-                GDMTag evenTag = data.Events.Add(new GDMSourceEvent(data, GEDCOMTagType.EVEN, ""));
+                GDMTag evenTag = data.Events.Add(new GDMSourceEvent(data));
                 Assert.IsNotNull(evenTag);
 
                 GDMSourceEvent evt = data.Events[0];
@@ -53,7 +53,7 @@ namespace GDModel
         [Test]
         public void Test_SourceEvent()
         {
-            using (GDMSourceEvent evt = GDMSourceEvent.Create(null, "", "") as GDMSourceEvent) {
+            using (GDMSourceEvent evt = new GDMSourceEvent(null)) {
                 Assert.IsNotNull(evt);
 
                 Assert.IsNotNull(evt.Date);

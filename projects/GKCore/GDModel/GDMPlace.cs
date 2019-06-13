@@ -26,6 +26,7 @@ namespace GDModel
     public sealed class GDMPlace : GDMTagWithLists
     {
         private string fForm;
+        private GDMPointer fLocation;
         private GDMMap fMap;
 
 
@@ -37,7 +38,7 @@ namespace GDModel
 
         public GDMPointer Location
         {
-            get { return GetTag<GDMPointer>(GEDCOMTagType._LOC, GDMPointer.Create); }
+            get { return fLocation; }
         }
 
         public GDMMap Map
@@ -51,6 +52,7 @@ namespace GDModel
             SetName(GEDCOMTagType.PLAC);
 
             fForm = string.Empty;
+            fLocation = new GDMPointer(this, GEDCOMTagType._LOC, string.Empty);
             fMap = new GDMMap(this);
         }
 
@@ -73,6 +75,7 @@ namespace GDModel
             base.Assign(otherPlace);
 
             fForm = otherPlace.fForm;
+            fLocation.Assign(otherPlace.fLocation);
             fMap.Assign(otherPlace.fMap);
         }
 
@@ -81,17 +84,19 @@ namespace GDModel
             base.Clear();
 
             fForm = string.Empty;
+            fLocation.Clear();
             fMap.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fMap.IsEmpty() && string.IsNullOrEmpty(fForm);
+            return base.IsEmpty() && fLocation.IsEmpty() && fMap.IsEmpty() && string.IsNullOrEmpty(fForm);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
+            fLocation.ReplaceXRefs(map);
             fMap.ReplaceXRefs(map);
         }
     }

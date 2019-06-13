@@ -56,5 +56,21 @@ namespace GDModel
             Assert.AreEqual(GDMMultimediaFormat.mfHTM, GDMFileReference.RecognizeFormat("sample.htm"));
             Assert.AreEqual(GDMMultimediaFormat.mfHTM, GDMFileReference.RecognizeFormat("sample.html"));
         }
+
+        [Test]
+        public void Test_Assign()
+        {
+            var instance = new GDMFileReferenceWithTitle(null);
+            Assert.Throws(typeof(ArgumentException), () => {
+                instance.Assign(null);
+            });
+        }
+
+        [Test]
+        public void Test_Clear()
+        {
+            var instance = new GDMFileReferenceWithTitle(null);
+            instance.Clear();
+        }
     }
 }

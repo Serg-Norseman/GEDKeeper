@@ -79,7 +79,7 @@ namespace GDModel
             //
 
             Assert.Throws(typeof(ArgumentException), () => {
-                famRec.AddEvent(GDMIndividualEvent.Create(null, "", "") as GDMCustomEvent);
+                famRec.AddEvent(new GDMIndividualEvent(null));
             });
 
             famRec.ReplaceXRefs(new GDMXRefReplacer());
@@ -135,7 +135,7 @@ namespace GDModel
         {
             Assert.IsNotNull(spouseLink.Family);
 
-            using (spouseLink = GDMSpouseToFamilyLink.Create(null, "", "") as GDMSpouseToFamilyLink) {
+            using (spouseLink = new GDMSpouseToFamilyLink(null)) {
                 Assert.IsNotNull(spouseLink);
             }
         }

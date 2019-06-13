@@ -55,10 +55,6 @@ namespace GDModel
 
                 return description;
             }
-            set {
-                Clear();
-                SetTagStrings(this, value);
-            }
         }
 
         public string Page
@@ -72,11 +68,6 @@ namespace GDModel
             get { return fDescription; }
         }
 
-
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMSourceCitation(owner, tagName, tagValue);
-        }
 
         public GDMSourceCitation(GDMObject owner) : base(owner)
         {

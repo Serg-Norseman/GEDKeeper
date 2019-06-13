@@ -28,15 +28,5 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.ALIA);
         }
-
-        public GDMAlias(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
-        }
-
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMAlias(owner, tagName, tagValue);
-        }
     }
 }

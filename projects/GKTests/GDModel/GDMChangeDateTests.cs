@@ -32,7 +32,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMChangeDate cd = GDMChangeDate.Create(null, GEDCOMTagType.CHAN, "") as GDMChangeDate) {
+            using (GDMChangeDate cd = new GDMChangeDate(null)) {
                 Assert.IsNotNull(cd);
 
                 DateTime dtNow = DateTime.Now;

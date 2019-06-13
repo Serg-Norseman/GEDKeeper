@@ -39,22 +39,12 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMSourceEvent(owner, tagName, tagValue);
-        }
-
         public GDMSourceEvent(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.EVEN);
 
-            fDate = new GDMDatePeriod(this, GEDCOMTagType.DATE, string.Empty);
+            fDate = new GDMDatePeriod(this);
             fPlace = new GDMPlace(this);
-        }
-
-        public GDMSourceEvent(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
         }
 
         public override void Clear()

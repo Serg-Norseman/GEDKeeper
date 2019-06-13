@@ -31,7 +31,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMChildToFamilyLink childLink = GDMChildToFamilyLink.Create(null, "", "") as GDMChildToFamilyLink) {
+            using (GDMChildToFamilyLink childLink = new GDMChildToFamilyLink(null)) {
                 Assert.IsNotNull(childLink);
 
                 childLink.ChildLinkageStatus = GDMChildLinkageStatus.clChallenged;
@@ -40,7 +40,7 @@ namespace GDModel
                 childLink.PedigreeLinkageType = GDMPedigreeLinkageType.plFoster;
                 Assert.AreEqual(GDMPedigreeLinkageType.plFoster, childLink.PedigreeLinkageType);
 
-                using (GDMChildToFamilyLink childLink2 = new GDMChildToFamilyLink(null, "", "")) {
+                using (GDMChildToFamilyLink childLink2 = new GDMChildToFamilyLink(null)) {
                     Assert.Throws(typeof(ArgumentException), () => {
                         childLink2.Assign(null);
                     });

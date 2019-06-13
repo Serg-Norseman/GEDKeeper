@@ -108,11 +108,6 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMAddress(owner, tagName, tagValue);
-        }
-
         public GDMAddress(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.ADDR);
@@ -135,6 +130,11 @@ namespace GDModel
         public GDMAddress(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
+        }
+
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
+        {
+            return new GDMAddress(owner, tagName, tagValue);
         }
 
         protected override void Dispose(bool disposing)

@@ -599,18 +599,23 @@ namespace GDModel.Providers.GEDCOM
             AddTagHandler addHandler = null;
 
             if (tagName == GEDCOMTagType.FAMC) {
-                curTag = indiRec.ChildToFamilyLinks.Add(new GDMChildToFamilyLink(indiRec, tagName, tagValue));
+                curTag = indiRec.ChildToFamilyLinks.Add(new GDMChildToFamilyLink(indiRec));
+                curTag.ParseString(tagValue);
                 addHandler = AddChildToFamilyLinkTag;
             } else if (tagName == GEDCOMTagType.FAMS) {
-                curTag = indiRec.SpouseToFamilyLinks.Add(new GDMSpouseToFamilyLink(indiRec, tagName, tagValue));
+                curTag = indiRec.SpouseToFamilyLinks.Add(new GDMSpouseToFamilyLink(indiRec));
+                curTag.ParseString(tagValue);
             } else if (tagName == GEDCOMTagType.NAME) {
-                curTag = indiRec.AddPersonalName(new GDMPersonalName(indiRec, tagName, tagValue));
+                curTag = indiRec.AddPersonalName(new GDMPersonalName(indiRec));
+                curTag.ParseString(tagValue);
                 addHandler = AddPersonalNameTag;
             } else if (tagName == GEDCOMTagType.ASSO) {
-                curTag = indiRec.Associations.Add(new GDMAssociation(indiRec, tagName, tagValue));
+                curTag = indiRec.Associations.Add(new GDMAssociation(indiRec));
+                curTag.ParseString(tagValue);
                 addHandler = AddAssociationTag;
             } else if (tagName == GEDCOMTagType.ALIA) {
-                curTag = indiRec.Aliases.Add(new GDMAlias(indiRec, tagName, tagValue));
+                curTag = indiRec.Aliases.Add(new GDMAlias(indiRec));
+                curTag.ParseString(tagValue);
             } else if (GEDCOMUtils.IsIndiEvent(tagName)) {
                 curTag = indiRec.AddEvent(new GDMIndividualEvent(indiRec, tagName, tagValue));
                 addHandler = AddCustomEventTag;
@@ -1118,6 +1123,7 @@ namespace GDModel.Providers.GEDCOM
 
             level += 1;
             WritePersonalName(stream, level, submrRec.Name);
+            WriteList(stream, level, submrRec.Languages, WriteTagEx);
             WriteAddress(stream, level, submrRec.Address);
             WriteTagLine(stream, level, GEDCOMTagType.RFN, submrRec.RegisteredReference, true);
         }
@@ -1486,7 +1492,8 @@ namespace GDModel.Providers.GEDCOM
             AddTagHandler addHandler = null;
 
             if (tagName == GEDCOMTagType.EVEN) {
-                curTag = sourData.Events.Add(new GDMSourceEvent(sourData, tagName, tagValue));
+                curTag = sourData.Events.Add(new GDMSourceEvent(sourData));
+                curTag.ParseString(tagValue);
                 addHandler = AddSourceDataEventTag;
             } else if (tagName == GEDCOMTagType.AGNC) {
                 sourData.Agency = tagValue;
@@ -1736,8 +1743,6 @@ namespace GDModel.Providers.GEDCOM
 
         private static void WriteList<T>(StreamWriter stream, int level, GDMList<T> list, SaveTagHandler tagHandler) where T : GDMTag
         {
-            if (tagHandler == null) throw new ArgumentException("tagHandler");
-
             IList<T> internalList = list.GetList();
             if (internalList == null) return;
 
@@ -1821,6 +1826,9 @@ namespace GDModel.Providers.GEDCOM
             } else if (tagName == GEDCOMTagType.MAP) {
                 curTag = place.Map;
                 addHandler = AddMapTag;
+            } else if (tagName == GEDCOMTagType._LOC) {
+                curTag = place.Location;
+                curTag.ParseString(tagValue);
             } else {
                 return AddTagWithListsTag(owner, tagLevel, tagName, tagValue);
             }
@@ -1835,6 +1843,7 @@ namespace GDModel.Providers.GEDCOM
             if (!WriteTagWithLists(stream, level, tag)) return false;
 
             level += 1;
+            WriteBaseTag(stream, level, place.Location);
             WriteMap(stream, level, place.Map);
             WriteTagLine(stream, level, GEDCOMTagType.FORM, place.Form, true);
             return true;
@@ -2173,7 +2182,6 @@ namespace GDModel.Providers.GEDCOM
             WriteTagLine(stream, lev, GEDCOMTagType.CTRY, addr.AddressCountry, true);
             WriteTagLine(stream, lev, GEDCOMTagType.POST, addr.AddressPostalCode, true);
 
-            // same level
             WriteList(stream, level, addr.PhoneNumbers, WriteTagEx);
             WriteList(stream, level, addr.EmailAddresses, WriteTagEx);
             WriteList(stream, level, addr.FaxNumbers, WriteTagEx);
@@ -2284,10 +2292,8 @@ namespace GDModel.Providers.GEDCOM
         {
             GDMPersonalNamePieces persNamePieces = (GDMPersonalNamePieces)tag;
 
-            // without NameValue
             int lev = level + 1;
             WriteSubTags(stream, lev, persNamePieces);
-
             WriteList(stream, level, persNamePieces.Notes, WriteNote);
             WriteList(stream, level, persNamePieces.SourceCitations, WriteSourceCitation);
 
@@ -2301,18 +2307,6 @@ namespace GDModel.Providers.GEDCOM
             WriteTagLine(stream, lev, GEDCOMTagType._MARN, persNamePieces.MarriedName, true);
             WriteTagLine(stream, lev, GEDCOMTagType._RELN, persNamePieces.ReligiousName, true);
             WriteTagLine(stream, lev, GEDCOMTagType._CENN, persNamePieces.CensusName, true);
-
-            // FIXME: transfer to this order in future
-            /*WriteTagLine(stream, level, GEDCOMTagType.NPFX, persNamePieces.Prefix, true);
-            WriteTagLine(stream, level, GEDCOMTagType.GIVN, persNamePieces.Given, true);
-            WriteTagLine(stream, level, GEDCOMTagType.NICK, persNamePieces.Nickname, true);
-            WriteTagLine(stream, level, GEDCOMTagType.SPFX, persNamePieces.SurnamePrefix, true);
-            WriteTagLine(stream, level, GEDCOMTagType.SURN, persNamePieces.Surname, true);
-            WriteTagLine(stream, level, GEDCOMTagType.NSFX, persNamePieces.Suffix, true);
-            WriteTagLine(stream, level, GEDCOMTagType._PATN, persNamePieces.PatronymicName, true);
-            WriteTagLine(stream, level, GEDCOMTagType._MARN, persNamePieces.MarriedName, true);
-            WriteTagLine(stream, level, GEDCOMTagType._RELN, persNamePieces.ReligiousName, true);
-            WriteTagLine(stream, level, GEDCOMTagType._CENN, persNamePieces.CensusName, true);*/
         }
 
         #endregion
@@ -2440,7 +2434,7 @@ namespace GDModel.Providers.GEDCOM
             f.RegisterTag(GEDCOMTagType.ADDR, GDMAddress.Create, AddAddressTag, WriteAddress, true, false);
             f.RegisterTag(GEDCOMTagType.ADOP, GDMIndividualEvent.Create, AddCustomEventTag, WriteCustomEvent);
             f.RegisterTag(GEDCOMTagType.AGNC, null, null, null, true, false);
-            f.RegisterTag(GEDCOMTagType.ALIA, GDMAlias.Create, AddBaseTag, null, true, false);
+            f.RegisterTag(GEDCOMTagType.ALIA, null, AddBaseTag, null, true, false);
             f.RegisterTag(GEDCOMTagType.ANCI, GDMPointer.Create, AddBaseTag);
             f.RegisterTag(GEDCOMTagType.ANUL, GDMFamilyEvent.Create, AddCustomEventTag, WriteCustomEvent);
             f.RegisterTag(GEDCOMTagType.ASSO, null, AddAssociationTag, WriteAssociation, true, false);
@@ -2455,7 +2449,7 @@ namespace GDModel.Providers.GEDCOM
 
             f.RegisterTag(GEDCOMTagType.CAST, GDMIndividualAttribute.Create, AddCustomEventTag, WriteCustomEvent);
             f.RegisterTag(GEDCOMTagType.CAUS, null, null, null, true, false);
-            f.RegisterTag(GEDCOMTagType.CHAN, GDMChangeDate.Create, AddChangeDateTag, WriteChangeDate, true, false);
+            f.RegisterTag(GEDCOMTagType.CHAN, null, AddChangeDateTag, WriteChangeDate, true, false);
             f.RegisterTag(GEDCOMTagType.CHR, GDMIndividualEvent.Create, AddCustomEventTag, WriteCustomEvent);
             f.RegisterTag(GEDCOMTagType.CHRA, GDMIndividualEvent.Create, AddCustomEventTag, WriteCustomEvent);
             f.RegisterTag(GEDCOMTagType.CITY, null, null, null, true, false);
@@ -2477,7 +2471,7 @@ namespace GDModel.Providers.GEDCOM
 
             f.RegisterTag(GEDCOMTagType.FACT, GDMIndividualAttribute.Create, AddCustomEventTag, WriteCustomEvent);
             f.RegisterTag(GEDCOMTagType.FAMC, GDMChildToFamilyLink.Create, AddChildToFamilyLinkTag, WriteChildToFamilyLink);
-            f.RegisterTag(GEDCOMTagType.FAMS, GDMSpouseToFamilyLink.Create, AddPointerWithNotesTag);
+            f.RegisterTag(GEDCOMTagType.FAMS, null, AddPointerWithNotesTag);
             f.RegisterTag(GEDCOMTagType.FCOM, GDMIndividualEvent.Create, AddCustomEventTag, WriteCustomEvent);
 
             f.RegisterTag(GEDCOMTagType.GIVN, null, null, null, true, false);
@@ -2513,7 +2507,7 @@ namespace GDModel.Providers.GEDCOM
             f.RegisterTag(GEDCOMTagType.PROP, GDMIndividualAttribute.Create, AddCustomEventTag, WriteCustomEvent);
             f.RegisterTag(GEDCOMTagType.PUBL, null, null, null, true, false);
 
-            f.RegisterTag(GEDCOMTagType.REFN, GDMUserReference.Create, AddUserReferenceTag, WriteUserReference);
+            f.RegisterTag(GEDCOMTagType.REFN, null, AddUserReferenceTag, WriteUserReference);
             f.RegisterTag(GEDCOMTagType.RELI, GDMIndividualAttribute.Create, AddCustomEventTag, WriteCustomEvent);
             f.RegisterTag(GEDCOMTagType.RESN, null, null, null, true, false);
             f.RegisterTag(GEDCOMTagType.RETI, GDMIndividualEvent.Create, AddCustomEventTag, WriteCustomEvent);
@@ -2555,7 +2549,7 @@ namespace GDModel.Providers.GEDCOM
             f.RegisterTag(GEDCOMTagType._TRAVEL, GDMIndividualAttribute.Create, AddCustomEventTag, WriteCustomEvent);
             f.RegisterTag(GEDCOMTagType._YDNA, GDMIndividualAttribute.Create, AddCustomEventTag, WriteCustomEvent, true, true);
 
-            f.RegisterTag(GEDCOMTagType.NAME, GDMPersonalName.Create, AddPersonalNameTag, WritePersonalName); // INDI.NAME!
+            f.RegisterTag(GEDCOMTagType.NAME, null, AddPersonalNameTag, WritePersonalName); // INDI.NAME!
 
             // FIXME
             // indi

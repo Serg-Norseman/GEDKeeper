@@ -53,11 +53,6 @@ namespace GDModel
             fSourceCitations = new GDMList<GDMSourceCitation>(this);
         }
 
-        public GDMAssociation(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing) {

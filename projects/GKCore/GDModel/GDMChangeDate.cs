@@ -42,19 +42,9 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMChangeDate(owner, tagName, tagValue);
-        }
-
         public GDMChangeDate(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.CHAN);
-        }
-
-        public GDMChangeDate(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
         }
 
         public override string ToString()

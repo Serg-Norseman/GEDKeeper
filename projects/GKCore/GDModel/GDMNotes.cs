@@ -96,10 +96,6 @@ namespace GDModel
                 }
                 return lines;
             }
-            set {
-                Clear();
-                SetTagStrings(this, value);
-            }
         }
 
 

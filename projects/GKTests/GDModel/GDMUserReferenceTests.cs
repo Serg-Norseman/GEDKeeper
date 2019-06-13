@@ -32,7 +32,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMUserReference userRef = GDMUserReference.Create(null, GEDCOMTagType.REFN, "") as GDMUserReference) {
+            using (GDMUserReference userRef = new GDMUserReference(null)) {
                 Assert.IsNotNull(userRef);
 
                 userRef.StringValue = "ref";

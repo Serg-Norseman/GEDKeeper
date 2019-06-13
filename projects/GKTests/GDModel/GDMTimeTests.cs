@@ -31,10 +31,16 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMTime time = new GDMTime(null, "", "20:20:20.100")) {
+            var tms = new TimeSpan(20, 20, 20);
+
+            using (GDMTime time = new GDMTime(null, "", "")) {
                 Assert.IsNotNull(time, "time != null");
                 Assert.AreEqual(GEDCOMTagType.TIME, time.Name);
 
+                time.Value = tms;
+                Assert.AreEqual(tms, time.Value);
+
+                time.ParseString("20:20:20.100");
                 Assert.AreEqual(20, time.Hour);
                 Assert.AreEqual(20, time.Minutes);
                 Assert.AreEqual(20, time.Seconds);
