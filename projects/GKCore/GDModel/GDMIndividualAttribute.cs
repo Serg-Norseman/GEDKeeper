@@ -19,6 +19,7 @@
  */
 
 using BSLib;
+using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
@@ -27,8 +28,8 @@ namespace GDModel
         // TODO: eliminate this functionality
         public StringList PhysicalDescription
         {
-            get { return GetTagStrings(this); }
-            set { SetTagStrings(this, value); }
+            get { return GEDCOMUtils.GetTagStrings(this); }
+            set { GEDCOMUtils.SetTagStrings(this, value); }
         }
 
 

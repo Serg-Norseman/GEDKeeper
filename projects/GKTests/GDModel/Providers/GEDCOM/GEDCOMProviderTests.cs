@@ -36,5 +36,36 @@ namespace GDModel.Providers.GEDCOM
             tree.Header.Source.StringValue = "GENBOX";
             Assert.AreEqual(GEDCOMFormat.gf_GENBOX, GEDCOMProvider.GetGEDCOMFormat(tree));
         }
+
+        private GDMTag TagConstructorTest(GDMObject owner, string tagName, string tagValue)
+        {
+            return null;
+        }
+
+        [Test]
+        public void Test_GEDCOMFactory()
+        {
+            TagConstructor tagConst = TagConstructorTest;
+            Assert.AreEqual(null, tagConst.Invoke(null, "x", "x"));
+
+            //
+
+            GDMTag tag = GEDCOMProvider.CreateTag(null, GEDCOMTagType.DATE, "");
+            Assert.IsNotNull(tag, "tag != null");
+
+            tag = GEDCOMProvider.CreateTag(null, "TEST", "");
+            Assert.IsNull(tag, "tag == null");
+        }
+
+        [Test]
+        public void Test_GetTagProps()
+        {
+            TagInfo props = GEDCOMProvider.GetTagInfo(GEDCOMTagType.ADDR);
+            Assert.IsNotNull(props);
+            Assert.IsTrue(props.SkipEmpty);
+
+            props = GEDCOMProvider.GetTagInfo("test");
+            Assert.IsNull(props);
+        }
     }
 }

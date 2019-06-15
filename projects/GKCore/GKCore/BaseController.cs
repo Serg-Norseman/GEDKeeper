@@ -884,7 +884,7 @@ namespace GKCore
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
                 if (family != null)
                 {
-                    GDMIndividualRecord father = family.GetHusband();
+                    GDMIndividualRecord father = family.Husband.Individual;
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, father);
                 }
             }
@@ -923,7 +923,7 @@ namespace GKCore
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
                 if (family != null)
                 {
-                    GDMIndividualRecord mother = family.GetWife();
+                    GDMIndividualRecord mother = family.Wife.Individual;
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, mother);
                 }
             }
@@ -949,11 +949,10 @@ namespace GKCore
         {
             bool result = false;
 
-            GDMIndividualRecord husband = family.GetHusband();
+            GDMIndividualRecord husband = family.Husband.Individual;
             if (!baseWin.Context.IsAvailableRecord(husband)) return false;
 
-            if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachHusbandQuery)))
-            {
+            if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachHusbandQuery))) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, husband);
             }
 
@@ -977,11 +976,10 @@ namespace GKCore
         {
             bool result = false;
 
-            GDMIndividualRecord wife = family.GetWife();
+            GDMIndividualRecord wife = family.Wife.Individual;
             if (!baseWin.Context.IsAvailableRecord(wife)) return false;
 
-            if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachWifeQuery)))
-            {
+            if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachWifeQuery))) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, wife);
             }
 

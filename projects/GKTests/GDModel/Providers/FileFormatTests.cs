@@ -82,7 +82,7 @@ namespace GDModel.Providers
 
                     GDMTag blobTag = mmRec1.FindTag("BLOB", 0);
                     Assert.IsNotNull(blobTag);
-                    var strBlob = GDMTag.GetTagStrings(blobTag).Text;
+                    var strBlob = GEDCOMUtils.GetTagStrings(blobTag).Text;
                     Assert.IsNotNull(strBlob);
                     MemoryStream blobStream = GEDCOMUtils.DecodeBlob(strBlob.Replace("\r\n", ""));
                     Assert.IsNotNull(blobStream);

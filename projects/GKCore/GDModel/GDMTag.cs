@@ -164,29 +164,6 @@ namespace GDModel
         }
 
         /// <summary>
-        /// Adding nested sub-tags.
-        /// </summary>
-        /// <param name="tagName">A name of sub-tag.</param>
-        /// <param name="tagValue">A string value of sub-tag.</param>
-        /// <param name="tagConstructor">The default constructor of sub-tag.</param>
-        /// <returns></returns>
-        internal GDMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
-        {
-            GDMTag tag = null;
-
-            if (tagConstructor != null) {
-                tag = tagConstructor(this, tagName, tagValue);
-            } else {
-                tag = GEDCOMFactory.GetInstance().CreateTag(this, tagName, tagValue);
-                if (tag == null) {
-                    tag = new GDMTag(this, tagName, tagValue);
-                }
-            }
-
-            return AddTag(tag);
-        }
-
-        /// <summary>
         /// Copying the sub-tags from the source to the current tag.
         /// </summary>
         /// <param name="source">A source tag.</param>
@@ -203,7 +180,7 @@ namespace GDModel
         protected void AssignList<T>(GDMList<T> srcList, GDMList<T> destList) where T : GDMTag
         {
             foreach (GDMTag sourceTag in srcList) {
-                T copyTag = (T)Activator.CreateInstance(sourceTag.GetType(), new object[] { this, string.Empty, string.Empty });
+                T copyTag = (T)Activator.CreateInstance(sourceTag.GetType(), new object[] { this });
                 copyTag.Assign(sourceTag);
                 destList.Add(copyTag);
             }
@@ -275,21 +252,6 @@ namespace GDModel
             return result;
         }
 
-        /// <summary>
-        /// Get an existing or create a new subtag. Can use the creation of known and unknown tags 
-        /// with the default constructor or specify the specific constructor.
-        /// </summary>
-        internal T GetTag<T>(string tagName, TagConstructor tagConstructor) where T : GDMTag
-        {
-            GDMTag result = FindTag(tagName, 0);
-
-            if (result == null) {
-                result = AddTag(tagName, "", tagConstructor);
-            }
-
-            return result as T;
-        }
-
         public virtual bool IsEmpty()
         {
             return (string.IsNullOrEmpty(fStringValue) && (fTags.Count == 0));
@@ -318,10 +280,6 @@ namespace GDModel
             return match;
         }
 
-        #endregion
-
-        #region Values management
-
         protected virtual string GetStringValue()
         {
             return fStringValue;
@@ -331,76 +289,6 @@ namespace GDModel
         {
             fStringValue = strValue;
             return string.Empty;
-        }
-
-        public static StringList GetTagStrings(GDMTag strTag)
-        {
-            StringList strings = new StringList();
-
-            if (strTag != null) {
-                if (strTag.StringValue != "") {
-                    strings.Add(strTag.StringValue);
-                }
-
-                var subTags = strTag.SubTags;
-                int num = subTags.Count;
-                for (int i = 0; i < num; i++) {
-                    GDMTag tag = subTags[i];
-
-                    if (tag.Name == GEDCOMTagType.CONC) {
-                        if (strings.Count > 0) {
-                            strings[strings.Count - 1] = strings[strings.Count - 1] + tag.StringValue;
-                        } else {
-                            strings.Add(tag.StringValue);
-                        }
-                    } else {
-                        if (tag.Name == GEDCOMTagType.CONT) {
-                            strings.Add(tag.StringValue);
-                        }
-                    }
-                }
-            }
-
-            return strings;
-        }
-
-        public static void SetTagStrings(GDMTag tag, StringList strings)
-        {
-            if (tag == null) return;
-
-            tag.StringValue = "";
-            var subTags = tag.SubTags;
-            for (int i = subTags.Count - 1; i >= 0; i--) {
-                string subtag = subTags[i].Name;
-                if (subtag == GEDCOMTagType.CONT || subtag == GEDCOMTagType.CONC) {
-                    subTags.DeleteAt(i);
-                }
-            }
-
-            if (strings != null) {
-                bool isRecordTag = (tag is GDMRecord);
-
-                int num = strings.Count;
-                for (int i = 0; i < num; i++) {
-                    string str = strings[i];
-
-                    int len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
-                    string sub = str.Substring(0, len);
-                    str = str.Remove(0, len);
-
-                    if (i == 0 && !isRecordTag) {
-                        tag.StringValue = sub;
-                    } else {
-                        tag.AddTag(GEDCOMTagType.CONT, sub, null);
-                    }
-
-                    while (str.Length > 0) {
-                        len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
-                        tag.AddTag(GEDCOMTagType.CONC, str.Substring(0, len), null);
-                        str = str.Remove(0, len);
-                    }
-                }
-            }
         }
 
         #endregion

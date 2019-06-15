@@ -234,7 +234,7 @@ namespace GKCore
                 SetNameSex(childName, iSex);
 
                 GDMFamilyRecord fam = iRec.GetParentsFamily();
-                GDMIndividualRecord father = (fam == null) ? null : fam.GetHusband();
+                GDMIndividualRecord father = (fam == null) ? null : fam.Husband.Individual;
 
                 if (father != null) {
                     string fatherName;

@@ -23,40 +23,9 @@ using System.IO;
 using System.Text;
 using BSLib;
 using GDModel;
-using GDModel.Providers.GEDCOM;
 
 namespace GDModel.Providers
 {
-    public delegate StackTuple AddTagHandler(GDMObject owner, int tagLevel, string tagName, string tagValue);
-
-    public delegate bool SaveTagHandler(StreamWriter stream, int level, GDMTag tag);
-
-    public sealed class StackTuple
-    {
-        public int Level;
-        public GDMTag Tag;
-        public AddTagHandler AddHandler;
-
-        public StackTuple(int level, GDMTag tag)
-        {
-            Level = level;
-            Tag = tag;
-            AddHandler = null;
-        }
-
-        public StackTuple(int level, GDMTag tag, AddTagHandler addHandler)
-        {
-            Level = level;
-            Tag = tag;
-            if (addHandler != null) {
-                AddHandler = addHandler;
-            } else {
-                AddHandler = GEDCOMFactory.GetInstance().GetAddHandler(tag.Name);
-            }
-        }
-    }
-
-
     /// <summary>
     /// Abstract class of generalized provider of files read / write operations.
     /// </summary>

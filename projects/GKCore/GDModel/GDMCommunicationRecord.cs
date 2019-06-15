@@ -55,7 +55,7 @@ namespace GDModel
         private GDMCommunicationType fCommunicationType;
         private GDMDate fDate;
         private GDMCommunicationDir fCommDirection;
-        private GDMPointer fCorresponder;
+        private GDMIndividualLink fCorresponder;
 
 
         public GDMDate Date
@@ -91,7 +91,7 @@ namespace GDModel
             }
         }
 
-        public GDMPointer Corresponder
+        public GDMIndividualLink Corresponder
         {
             get { return fCorresponder; }
         }
@@ -103,7 +103,7 @@ namespace GDModel
             SetName(GEDCOMTagType._COMM);
 
             fDate = new GDMDate(this);
-            fCorresponder = new GDMPointer(this);
+            fCorresponder = new GDMIndividualLink(this);
         }
 
         public override void Assign(GDMTag source)

@@ -27,7 +27,7 @@ namespace GDModel
     public sealed class GDMGroupRecord : GDMRecord
     {
         private string fGroupName;
-        private GDMList<GDMPointer> fMembers;
+        private GDMList<GDMIndividualLink> fMembers;
 
 
         public string GroupName
@@ -36,7 +36,7 @@ namespace GDModel
             set { fGroupName = value; }
         }
 
-        public GDMList<GDMPointer> Members
+        public GDMList<GDMIndividualLink> Members
         {
             get { return fMembers; }
         }
@@ -48,7 +48,7 @@ namespace GDModel
             SetName(GEDCOMTagType._GROUP);
 
             fGroupName = string.Empty;
-            fMembers = new GDMList<GDMPointer>(this);
+            fMembers = new GDMList<GDMIndividualLink>(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -61,20 +61,14 @@ namespace GDModel
 
         public override void Assign(GDMTag source)
         {
-            GDMGroupRecord otherGroup = (source as GDMGroupRecord);
-            if (otherGroup == null)
+            GDMGroupRecord sourceObj = source as GDMGroupRecord;
+            if (sourceObj == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
-            base.Assign(otherGroup);
+            base.Assign(sourceObj);
 
-            GroupName = otherGroup.GroupName;
-
-            // TODO: validate this logic!
-            foreach (GDMPointer srcMbr in otherGroup.Members) {
-                GDMPointer copyMbr = new GDMPointer(this);
-                copyMbr.Assign(srcMbr);
-                fMembers.Add(copyMbr);
-            }
+            GroupName = sourceObj.GroupName;
+            AssignList(sourceObj.Members, fMembers);
         }
 
         public override void Clear()
@@ -126,11 +120,11 @@ namespace GDModel
         {
             if (member == null) return false;
 
-            GDMPointer ptr = new GDMPointer(this);
-            ptr.SetNameValue(GEDCOMTagType._MEMBER, member);
-            fMembers.Add(ptr);
+            GDMIndividualLink mbrLink = new GDMIndividualLink(this, GEDCOMTagType._MEMBER, string.Empty);
+            mbrLink.Individual = member;
+            fMembers.Add(mbrLink);
 
-            ptr = new GDMPointer(member);
+            var ptr = new GDMPointer(member);
             ptr.SetNameValue(GEDCOMTagType._GROUP, this);
             member.Groups.Add(ptr);
 

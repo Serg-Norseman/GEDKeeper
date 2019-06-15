@@ -947,10 +947,10 @@ namespace GKCore.Lists
                     string relName;
 
                     if (iRec.Sex == GDMSex.svMale) {
-                        relPerson = family.GetWife();
+                        relPerson = family.Wife.Individual;
                         relName = LangMan.LS(LSID.LSID_UnkFemale);
                     } else {
-                        relPerson = family.GetHusband();
+                        relPerson = family.Husband.Individual;
                         relName = LangMan.LS(LSID.LSID_UnkMale);
                     }
 

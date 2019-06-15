@@ -181,7 +181,7 @@ namespace GKCore.Controllers
                 GDMFamilyRecord family = fPerson.ChildToFamilyLinks[0].Family;
                 fView.SetParentsAvl(true, locked);
 
-                GDMIndividualRecord relPerson = family.GetHusband();
+                GDMIndividualRecord relPerson = family.Husband.Individual;
                 if (relPerson != null) {
                     fView.SetFatherAvl(true, locked);
                     fView.Father.Text = GKUtils.GetNameString(relPerson, true, false);
@@ -190,7 +190,7 @@ namespace GKCore.Controllers
                     fView.Father.Text = "";
                 }
 
-                relPerson = family.GetWife();
+                relPerson = family.Wife.Individual;
                 if (relPerson != null) {
                     fView.SetMotherAvl(true, locked);
                     fView.Mother.Text = GKUtils.GetNameString(relPerson, true, false);
@@ -479,7 +479,7 @@ namespace GKCore.Controllers
             GDMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
             if (family == null) return;
 
-            JumpToRecord(family.GetHusband());
+            JumpToRecord(family.Husband.Individual);
         }
 
         public void JumpToMother()
@@ -487,7 +487,7 @@ namespace GKCore.Controllers
             GDMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
             if (family == null) return;
 
-            JumpToRecord(family.GetWife());
+            JumpToRecord(family.Wife.Individual);
         }
     }
 }

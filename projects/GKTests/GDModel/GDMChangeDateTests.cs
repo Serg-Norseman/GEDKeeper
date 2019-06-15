@@ -60,8 +60,6 @@ namespace GDModel
                                     "3 TIME 11:12:00\r\n", buf);
                 }
 
-                Assert.IsNotNull(cd.Notes);
-
                 Assert.IsFalse(cd.IsEmpty());
                 cd.Clear();
                 Assert.IsTrue(cd.IsEmpty());

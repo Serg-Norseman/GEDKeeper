@@ -77,7 +77,7 @@ namespace GDModel
 
                 association.ReplaceXRefs(new GDMXRefReplacer());
 
-                GDMTag tag = association.SourceCitations.Add(new GDMSourceCitation(association, GEDCOMTagType.SOUR, "xxx"));
+                GDMTag tag = association.SourceCitations.Add(new GDMSourceCitation(association));
                 Assert.IsNotNull(tag);
                 Assert.IsTrue(tag is GDMSourceCitation);
 

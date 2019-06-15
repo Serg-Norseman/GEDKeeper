@@ -32,13 +32,9 @@ namespace GDModel
             set { fTitle = value; }
         }
 
+
         public GDMFileReferenceWithTitle(GDMObject owner) : base(owner)
         {
-        }
-
-        public GDMFileReferenceWithTitle(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
         }
 
         public override void Assign(GDMTag source)

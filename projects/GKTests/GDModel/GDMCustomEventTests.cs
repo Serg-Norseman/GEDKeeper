@@ -148,7 +148,6 @@ namespace GDModel
         {
             using (GDMIndividualEvent iEvent = new GDMIndividualEvent(null)) {
                 Assert.IsNotNull(iEvent);
-                Assert.IsNotNull(iEvent.Family);
             }
         }
 

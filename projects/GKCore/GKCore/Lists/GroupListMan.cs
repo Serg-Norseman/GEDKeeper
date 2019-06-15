@@ -114,8 +114,8 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GDMPointer ptrMember in grp.Members) {
-                    GDMIndividualRecord member = ptrMember.Value as GDMIndividualRecord;
+                foreach (GDMIndividualLink ptrMember in grp.Members) {
+                    GDMIndividualRecord member = ptrMember.Individual;
                     if (member == null) continue;
 
                     fSheetList.AddItem(member, new object[] { GKUtils.GetNameString(member, true, false) });

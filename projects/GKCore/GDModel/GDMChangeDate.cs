@@ -36,11 +36,6 @@ namespace GDModel
             set { fChangeDateTime = value; }
         }
 
-        public GDMNotes Notes
-        {
-            get { return GetTag<GDMNotes>(GEDCOMTagType.NOTE, GDMNotes.Create); }
-        }
-
 
         public GDMChangeDate(GDMObject owner) : base(owner)
         {

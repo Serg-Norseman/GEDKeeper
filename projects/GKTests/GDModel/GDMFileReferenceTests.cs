@@ -30,7 +30,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMFileReference fileRef = new GDMFileReference(null, "", "")) {
+            using (GDMFileReference fileRef = new GDMFileReference(null)) {
                 fileRef.MediaType = GDMMediaType.mtAudio;
                 Assert.AreEqual(GDMMediaType.mtAudio, fileRef.MediaType);
             }

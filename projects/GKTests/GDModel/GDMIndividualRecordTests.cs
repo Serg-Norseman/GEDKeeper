@@ -104,8 +104,8 @@ namespace GDModel
                 father = null;
                 mother = null;
             } else {
-                father = fam.GetHusband();
-                mother = fam.GetWife();
+                father = fam.Husband.Individual;
+                mother = fam.Wife.Individual;
             }
 
             Assert.IsNull(father);

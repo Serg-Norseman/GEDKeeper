@@ -18,15 +18,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel.Providers.GEDCOM;
+using System;
 
 namespace GDModel
 {
-    public sealed class GDMRepositoryCitation : GDMPointerWithNotes
-    {
-        public GDMRepositoryCitation(GDMObject owner) : base(owner)
-        {
-            SetName(GEDCOMTagType.REPO);
-        }
-    }
+	public sealed class GDMIndividualLink : GDMPointer
+	{
+		public GDMIndividualRecord Individual
+		{
+		    get { return (GDMIndividualRecord)base.Value; }
+			set { base.Value = value; }
+		}
+
+		public GDMIndividualLink(GDMObject owner) : base(owner)
+		{
+		}
+
+		public GDMIndividualLink(GDMObject owner, string tagName, string tagValue) : this(owner)
+		{
+			SetNameValue(tagName, tagValue);
+		}
+	}
 }

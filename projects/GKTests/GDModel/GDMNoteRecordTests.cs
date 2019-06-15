@@ -174,7 +174,7 @@ namespace GDModel
         [Test]
         public void Test_GEDCOMNotes()
         {
-            using (GDMNotes notes = GDMNotes.Create(null, "", "") as GDMNotes) {
+            using (GDMNotes notes = new GDMNotes(null)) {
                 Assert.IsTrue(notes.IsEmpty());
                 notes.Lines.Text = "Test note";
                 Assert.IsFalse(notes.IsEmpty());

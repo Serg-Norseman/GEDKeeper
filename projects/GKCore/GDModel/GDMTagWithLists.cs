@@ -90,7 +90,7 @@ namespace GDModel
             if (noteRec != null) {
                 note = new GDMNotes(this);
                 note.Value = noteRec;
-                Notes.Add(note);
+                fNotes.Add(note);
             }
             
             return note;
@@ -105,7 +105,7 @@ namespace GDModel
                 cit.Value = sourceRec;
                 cit.Page = page;
                 cit.CertaintyAssessment = quality;
-                SourceCitations.Add(cit);
+                fSourceCitations.Add(cit);
             }
             
             return cit;
@@ -118,7 +118,7 @@ namespace GDModel
             if (mediaRec != null) {
                 result = new GDMMultimediaLink(this);
                 result.Value = mediaRec;
-                MultimediaLinks.Add(result);
+                fMultimediaLinks.Add(result);
             }
 
             return result;

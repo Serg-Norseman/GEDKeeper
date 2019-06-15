@@ -130,8 +130,8 @@ namespace GKCore.Controllers
                     father = null;
                     mother = null;
                 } else {
-                    father = fam.GetHusband();
-                    mother = fam.GetWife();
+                    father = fam.Husband.Individual;
+                    mother = fam.Wife.Individual;
                 }
 
                 needParent = (father == null && needSex == GDMSex.svMale) ||
@@ -225,8 +225,8 @@ namespace GKCore.Controllers
                 father = null;
                 mother = null;
             } else {
-                father = fam.GetHusband();
-                mother = fam.GetWife();
+                father = fam.Husband.Individual;
+                mother = fam.Wife.Individual;
             }
 
             bool needParent = (father == null && needSex == GDMSex.svMale) ||

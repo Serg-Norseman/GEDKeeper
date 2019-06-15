@@ -362,31 +362,21 @@ namespace GKPedigreeImporterPlugin
         {
             int[] val = new int[3];
             GDMCustomEvent evt = fBase.Context.CreateEventEx(record, evName, "", "");
-            try
-            {
+            try {
                 string prefix = "";
-                if (date.IndexOf("п.") == 0)
-                {
+                if (date.IndexOf("п.") == 0) {
                     prefix = "AFT ";
                     date = date.Remove(0, 2);
-                }
-                else if (date.IndexOf("после") == 0)
-                {
+                } else if (date.IndexOf("после") == 0) {
                     prefix = "AFT ";
                     date = date.Remove(0, 5);
-                }
-                else if (date.IndexOf("до") == 0)
-                {
+                } else if (date.IndexOf("до") == 0) {
                     prefix = "BEF ";
                     date = date.Remove(0, 2);
-                }
-                else if (date.IndexOf("ок.") == 0)
-                {
+                } else if (date.IndexOf("ок.") == 0) {
                     prefix = "ABT ";
                     date = date.Remove(0, 3);
-                }
-                else if (date.IndexOf("около") == 0)
-                {
+                } else if (date.IndexOf("около") == 0) {
                     prefix = "ABT ";
                     date = date.Remove(0, 5);
                 }
@@ -395,19 +385,16 @@ namespace GKPedigreeImporterPlugin
                 
                 string tmp = "";
                 string[] toks = date.Split('.');
-                if (toks.Length > 3)
-                {
+                if (toks.Length > 3) {
                     throw new ImporterException("date failed");
                 }
                 string ym = "";
 
-                for (int i = 0; i < toks.Length; i++)
-                {
+                for (int i = 0; i < toks.Length; i++) {
                     tmp = toks[i];
 
                     int x = tmp.IndexOf("/");
-                    if (x >= 0)
-                    {
+                    if (x >= 0) {
                         ym = tmp.Substring(x + 1, tmp.Length - x - 1);
                         tmp = tmp.Remove(x, ym.Length + 1);
                     }
@@ -415,35 +402,25 @@ namespace GKPedigreeImporterPlugin
                     val[i] = int.Parse(tmp);
                 }
 
-                if (toks.Length != 1)
-                {
-                    if (toks.Length != 2)
-                    {
-                        if (toks.Length == 3)
-                        {
+                if (toks.Length != 1) {
+                    if (toks.Length != 2) {
+                        if (toks.Length == 3) {
                             tmp = val[0].ToString() + " " + GDMCustomDate.GEDCOMMonthArray[val[1] - 1] + " " + val[2].ToString();
                         }
-                    }
-                    else
-                    {
+                    } else {
                         tmp = GDMCustomDate.GEDCOMMonthArray[val[0] - 1] + " " + val[1].ToString();
                     }
-                }
-                else
-                {
+                } else {
                     tmp = val[0].ToString();
                 }
 
                 tmp = prefix + tmp;
-                if (ym != "")
-                {
+                if (ym != "") {
                     tmp = tmp + "/" + ym;
                 }
 
                 evt.Date.ParseString(tmp);
-            }
-            catch (Exception)
-            {
+            } catch (Exception) {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_DateInvalid) + " \"" + date + "\"");
             }
         }

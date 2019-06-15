@@ -87,13 +87,13 @@ namespace GDModel
             //
 
             famRec.Husband.Value = indiv;
-            Assert.AreEqual(indiv, famRec.GetHusband());
+            Assert.AreEqual(indiv, famRec.Husband.Individual);
             famRec.Husband.Value = null;
 
             //
 
             famRec.Wife.Value = indiv;
-            Assert.AreEqual(indiv, famRec.GetWife());
+            Assert.AreEqual(indiv, famRec.Wife.Individual);
             famRec.Wife.Value = null;
 
             //

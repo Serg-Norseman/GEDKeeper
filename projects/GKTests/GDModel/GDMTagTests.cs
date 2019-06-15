@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using NUnit.Framework;
@@ -41,27 +40,6 @@ namespace GDModel
             GDMTag tag = new GDMTag(null);
             tag.Assign(null); // nothing
             tag.Dispose();
-        }
-
-        [Test]
-        public void Test_SetTagStringsL()
-        {
-            var tag = new GDMTag(null, "TEST", "");
-            Assert.IsNotNull(tag);
-
-            // very long string, 248"A" and " BBB BBBB"
-            var strings = new StringList( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA BBB BBBB" );
-
-            GDMTag.SetTagStrings(null, strings);
-
-            GDMTag.SetTagStrings(tag, strings);
-
-            Assert.AreEqual(248, tag.StringValue.Length);
-
-            var strList = GDMTag.GetTagStrings(tag);
-            Assert.IsNotNull(strList);
-            Assert.AreEqual(1, strList.Count);
-            Assert.AreEqual(strings.Text, strList.Text);
         }
 
         [Test]

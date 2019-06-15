@@ -132,7 +132,6 @@
     <Compile Include="GDModel\GDMXRefReplacerTests.cs" />
     <Compile Include="GDModel\Providers\FileFormatTests.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\AnselEncodingTests.cs" />
-    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMFactoryTests.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParserTests.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMProviderTests.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMUtilsTests.cs" />

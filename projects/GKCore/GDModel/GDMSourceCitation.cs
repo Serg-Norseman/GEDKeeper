@@ -78,11 +78,6 @@ namespace GDModel
             fPage = string.Empty;
         }
 
-        public GDMSourceCitation(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
-        }
-
         public override void Assign(GDMTag source)
         {
             GDMSourceCitation sourceObj = (source as GDMSourceCitation);

@@ -109,13 +109,7 @@ namespace GDModel
             fShortTitle = otherSource.fShortTitle;
             fText.Assign(otherSource.fText);
             fTitle.Assign(otherSource.fTitle);
-
-            // TODO: validate this logic!
-            foreach (GDMRepositoryCitation srcRepCit in otherSource.fRepositoryCitations) {
-                GDMRepositoryCitation copyRepCit = new GDMRepositoryCitation(this);
-                copyRepCit.Assign(srcRepCit);
-                fRepositoryCitations.Add(copyRepCit);
-            }
+            AssignList(otherSource.fRepositoryCitations, fRepositoryCitations);
         }
 
         public override void Clear()

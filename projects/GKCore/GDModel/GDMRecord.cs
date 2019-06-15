@@ -183,29 +183,10 @@ namespace GDModel
 
             base.Assign(source);
 
-            foreach (GDMNotes sourceNote in sourceRec.fNotes) {
-                GDMNotes copy = new GDMNotes(this);
-                copy.Assign(sourceNote);
-                Notes.Add(copy);
-            }
-
-            foreach (GDMMultimediaLink sourceMediaLink in sourceRec.fMultimediaLinks) {
-                GDMMultimediaLink copy = new GDMMultimediaLink(this);
-                copy.Assign(sourceMediaLink);
-                MultimediaLinks.Add(copy);
-            }
-
-            foreach (GDMSourceCitation sourceSrcCit in sourceRec.fSourceCitations) {
-                GDMSourceCitation copy = new GDMSourceCitation(this);
-                copy.Assign(sourceSrcCit);
-                SourceCitations.Add(copy);
-            }
-
-            foreach (GDMUserReference sourceUserRef in sourceRec.fUserReferences) {
-                GDMUserReference copy = new GDMUserReference(this);
-                copy.Assign(sourceUserRef);
-                UserReferences.Add(copy);
-            }
+            AssignList(sourceRec.fNotes, fNotes);
+            AssignList(sourceRec.fMultimediaLinks, fMultimediaLinks);
+            AssignList(sourceRec.fSourceCitations, fSourceCitations);
+            AssignList(sourceRec.fUserReferences, fUserReferences);
         }
 
         public virtual void MoveTo(GDMRecord targetRecord, bool clearDest)
@@ -318,7 +299,7 @@ namespace GDModel
             if (noteRec != null) {
                 note = new GDMNotes(this);
                 note.Value = noteRec;
-                Notes.Add(note);
+                fNotes.Add(note);
             }
 
             return note;
@@ -333,7 +314,7 @@ namespace GDModel
                 cit.Value = sourceRec;
                 cit.Page = page;
                 cit.CertaintyAssessment = quality;
-                SourceCitations.Add(cit);
+                fSourceCitations.Add(cit);
             }
 
             return cit;
@@ -346,7 +327,7 @@ namespace GDModel
             if (mediaRec != null) {
                 mmLink = new GDMMultimediaLink(this);
                 mmLink.Value = mediaRec;
-                MultimediaLinks.Add(mmLink);
+                fMultimediaLinks.Add(mmLink);
             }
 
             return mmLink;
@@ -356,7 +337,7 @@ namespace GDModel
         {
             GDMUserReference uRef = new GDMUserReference(this);
             uRef.StringValue = reference;
-            UserReferences.Add(uRef);
+            fUserReferences.Add(uRef);
         }
     }
 }

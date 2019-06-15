@@ -48,27 +48,23 @@ namespace GKCore.Lists
             var family = fDataOwner as GDMFamilyRecord;
             if (fSheetList == null || family == null) return;
 
-            try
-            {
+            try {
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
                 int idx = 0;
-                foreach (GDMPointer ptr in family.Children)
-                {
+                foreach (GDMIndividualLink ptr in family.Children) {
                     idx += 1;
-
-                    GDMIndividualRecord child = (GDMIndividualRecord)ptr.Value;
+                    GDMIndividualRecord child = ptr.Individual;
 
                     fSheetList.AddItem(child, new object[] {
-                                           idx, GKUtils.GetNameString(child, true, false),
-                                           new GEDCOMDateItem(GKUtils.GetBirthDate(child)) });
+                        idx, GKUtils.GetNameString(child, true, false),
+                        new GEDCOMDateItem(GKUtils.GetBirthDate(child))
+                    });
                 }
 
                 fSheetList.EndUpdate();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("ChildrenListModel.UpdateContents(): " + ex.Message);
             }
         }
@@ -84,7 +80,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    child = fBaseWin.Context.SelectPerson(family.GetHusband(), TargetMode.tmParent, GDMSex.svUnknown);
+                    child = fBaseWin.Context.SelectPerson(family.Husband.Individual, TargetMode.tmParent, GDMSex.svUnknown);
                     result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);

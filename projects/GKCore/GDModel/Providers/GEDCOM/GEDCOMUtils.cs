@@ -49,13 +49,34 @@ namespace GDModel.Providers.GEDCOM
     public enum GeoCoord { Lati, Long }
 
 
+    public enum GDMDateFormat
+    {
+        dfGEDCOMStd,
+        dfSystem
+    }
+
+
+    public enum GDMDateType
+    {
+        SIMP, ABT, AFT, BEF, BET, CAL, EST, FROM, INT, TO
+    }
+
+
     /// <summary>
     /// 
     /// </summary>
     public static class GEDCOMUtils
     {
+        public static readonly string[] GEDCOMDateTypes;
+
         public static readonly TextInfo InvariantTextInfo = CultureInfo.InvariantCulture.TextInfo;
         public static readonly NumberFormatInfo InvariantNumberFormatInfo = NumberFormatInfo.InvariantInfo;
+
+
+        static GEDCOMUtils()
+        {
+            GEDCOMDateTypes = new string[] { "", "ABT", "AFT", "BEF", "BET", "CAL", "EST", "FROM", "INT", "TO" };
+        }
 
 
         #region Parse functions
@@ -431,7 +452,7 @@ namespace GDModel.Providers.GEDCOM
             var token = strTok.CurrentToken;
             if (token == GEDCOMToken.Word) {
                 string su = strTok.GetWord();
-                idx = Algorithms.BinarySearch(GDMCustomDate.GEDCOMDateTypes, su, string.CompareOrdinal);
+                idx = Algorithms.BinarySearch(GEDCOMDateTypes, su, string.CompareOrdinal);
             }
             var dateType = (idx < 0) ? GDMDateType.SIMP : (GDMDateType)idx;
 
@@ -590,19 +611,18 @@ namespace GDModel.Providers.GEDCOM
             string yearModifier;
             byte month;
             byte day;
-            GDMDateFormat dateFormat;
 
-            string result = ParseDate(owner, strTok, out approximated, out calendar, out year, out yearBC, out yearModifier, 
-                                      out month, out day, out dateFormat);
+            string result = ParseDate(owner, strTok, out approximated, out calendar, out year, out yearBC, 
+                                      out yearModifier, out month, out day);
 
-            date.SetRawData(approximated, calendar, year, yearBC, yearModifier, month, day, dateFormat);
+            date.SetRawData(approximated, calendar, year, yearBC, yearModifier, month, day);
 
             return result;
         }
 
         public static string ParseDate(GDMTree owner, GEDCOMParser strTok, out GDMApproximated approximated,
-                                       out GDMCalendar calendar, out short year, out bool yearBC, out string yearModifier, 
-                                       out byte month, out byte day, out GDMDateFormat dateFormat)
+                                       out GDMCalendar calendar, out short year, out bool yearBC,
+                                       out string yearModifier, out byte month, out byte day)
         {
             approximated = GDMApproximated.daExact;
             calendar = GDMCalendar.dcGregorian;
@@ -611,7 +631,7 @@ namespace GDModel.Providers.GEDCOM
             yearModifier = string.Empty;
             month = 0;
             day = 0;
-            dateFormat = GDMDateFormat.dfGEDCOMStd;
+            GDMDateFormat dateFormat = GDMDateFormat.dfGEDCOMStd;
 
             strTok.SkipWhitespaces();
 
@@ -873,11 +893,10 @@ namespace GDModel.Providers.GEDCOM
             string yearModifier;
             byte month;
             byte day;
-            GDMDateFormat dateFormat;
 
             var strTok = new GEDCOMParser(strValue, false);
-            string result = ParseDate(owner, strTok, out approximated, out calendar, out year, out yearBC, out yearModifier, 
-                                      out month, out day, out dateFormat);
+            string result = ParseDate(owner, strTok, out approximated, out calendar, out year, out yearBC,
+                                      out yearModifier, out month, out day);
 
             date = new DateTime(year, month, day);
 
@@ -1591,10 +1610,10 @@ namespace GDModel.Providers.GEDCOM
             switch (record.RecordType)
             {
                 case GDMRecordType.rtIndividual:
-                    result = "I";
+                    result = "I"; // Std, p24
                     break;
                 case GDMRecordType.rtFamily:
-                    result = "F";
+                    result = "F"; // Std, p24
                     break;
                 case GDMRecordType.rtNote:
                     result = "N";
@@ -1603,10 +1622,10 @@ namespace GDModel.Providers.GEDCOM
                     result = "O";
                     break;
                 case GDMRecordType.rtSource:
-                    result = "S";
+                    result = "S"; // Std, p24
                     break;
                 case GDMRecordType.rtRepository:
-                    result = "R";
+                    result = "R"; // Std, p24
                     break;
                 case GDMRecordType.rtGroup:
                     result = "G";
@@ -1709,6 +1728,76 @@ namespace GDModel.Providers.GEDCOM
         {
             int idx = Algorithms.BinarySearch<string>(FamEvents, tagName, string.CompareOrdinal);
             return idx >= 0;
+        }
+
+        public static StringList GetTagStrings(GDMTag strTag)
+        {
+            StringList strings = new StringList();
+
+            if (strTag != null) {
+                if (strTag.StringValue != "") {
+                    strings.Add(strTag.StringValue);
+                }
+
+                var subTags = strTag.SubTags;
+                int num = subTags.Count;
+                for (int i = 0; i < num; i++) {
+                    GDMTag tag = subTags[i];
+
+                    if (tag.Name == GEDCOMTagType.CONC) {
+                        if (strings.Count > 0) {
+                            strings[strings.Count - 1] = strings[strings.Count - 1] + tag.StringValue;
+                        } else {
+                            strings.Add(tag.StringValue);
+                        }
+                    } else {
+                        if (tag.Name == GEDCOMTagType.CONT) {
+                            strings.Add(tag.StringValue);
+                        }
+                    }
+                }
+            }
+
+            return strings;
+        }
+
+        public static void SetTagStrings(GDMTag tag, StringList strings)
+        {
+            if (tag == null) return;
+
+            tag.StringValue = "";
+            var subTags = tag.SubTags;
+            for (int i = subTags.Count - 1; i >= 0; i--) {
+                string subtag = subTags[i].Name;
+                if (subtag == GEDCOMTagType.CONT || subtag == GEDCOMTagType.CONC) {
+                    subTags.DeleteAt(i);
+                }
+            }
+
+            if (strings != null) {
+                bool isRecordTag = (tag is GDMRecord);
+
+                int num = strings.Count;
+                for (int i = 0; i < num; i++) {
+                    string str = strings[i];
+
+                    int len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
+                    string sub = str.Substring(0, len);
+                    str = str.Remove(0, len);
+
+                    if (i == 0 && !isRecordTag) {
+                        tag.StringValue = sub;
+                    } else {
+                        GEDCOMProvider.AddBaseTag(tag, 0, GEDCOMTagType.CONT, sub);
+                    }
+
+                    while (str.Length > 0) {
+                        len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
+                        GEDCOMProvider.AddBaseTag(tag, 0, GEDCOMTagType.CONC, str.Substring(0, len));
+                        str = str.Remove(0, len);
+                    }
+                }
+            }
         }
 
         #endregion

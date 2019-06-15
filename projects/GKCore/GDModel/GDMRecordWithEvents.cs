@@ -97,7 +97,7 @@ namespace GDModel
             base.Assign(source);
 
             foreach (GDMCustomEvent sourceEvent in sourceRec.fEvents) {
-                GDMCustomEvent copy = (GDMCustomEvent)Activator.CreateInstance(sourceEvent.GetType(), new object[] { this, "", "" });
+                GDMCustomEvent copy = (GDMCustomEvent)Activator.CreateInstance(sourceEvent.GetType(), new object[] { this });
                 copy.Assign(sourceEvent);
                 AddEvent(copy);
             }

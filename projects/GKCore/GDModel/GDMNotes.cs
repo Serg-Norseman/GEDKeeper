@@ -34,14 +34,14 @@ namespace GDModel
         }
 
 
-        public GDMTextTag(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
-        }
-
         public GDMTextTag(GDMObject owner) : base(owner)
         {
             fLines = new StringList();
+        }
+
+        public GDMTextTag(GDMObject owner, string tagName, string tagValue) : this(owner)
+        {
+            SetNameValue(tagName, tagValue);
         }
 
         public override void Assign(GDMTag source)
@@ -98,16 +98,6 @@ namespace GDModel
             }
         }
 
-
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMNotes(owner, tagName, tagValue);
-        }
-
-        public GDMNotes(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
-        }
 
         public GDMNotes(GDMObject owner) : base(owner)
         {

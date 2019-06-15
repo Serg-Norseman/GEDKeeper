@@ -51,18 +51,13 @@ namespace GDModel
 
         public override void Assign(GDMTag source)
         {
-            GDMMultimediaRecord otherMedia = (source as GDMMultimediaRecord);
-            if (otherMedia == null)
+            GDMMultimediaRecord sourceObj = source as GDMMultimediaRecord;
+            if (sourceObj == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
-            base.Assign(otherMedia);
+            base.Assign(sourceObj);
 
-            // TODO: validate this logic!
-            foreach (GDMFileReferenceWithTitle srcFileRef in otherMedia.fFileReferences) {
-                GDMFileReferenceWithTitle copyFileRef = new GDMFileReferenceWithTitle(this);
-                copyFileRef.Assign(srcFileRef);
-                fFileReferences.Add(copyFileRef);
-            }
+            AssignList(sourceObj.fFileReferences, fFileReferences);
         }
 
         public override void Clear()

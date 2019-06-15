@@ -282,7 +282,7 @@ namespace GKCore
                 throw new ArgumentNullException("commRec");
 
             string result = "";
-            var corr = commRec.Corresponder.Value as GDMIndividualRecord;
+            var corr = commRec.Corresponder.Individual;
 
             if (corr != null) {
                 string nm = GetNameString(corr, true, false);
@@ -1051,10 +1051,10 @@ namespace GKCore
                     if (family != null) {
                         GDMIndividualRecord anc;
 
-                        anc = family.GetHusband();
+                        anc = family.Husband.Individual;
                         val += GetAncestorsCount(anc);
 
-                        anc = family.GetWife();
+                        anc = family.Wife.Individual;
                         val += GetAncestorsCount(anc);
                     }
 
@@ -1071,23 +1071,19 @@ namespace GKCore
         {
             int result = 0;
 
-            if (iRec != null)
-            {
+            if (iRec != null) {
                 int val = (int)iRec.ExtData;
-                if (val < 0)
-                {
+                if (val < 0) {
                     val = 1;
 
                     int num = iRec.SpouseToFamilyLinks.Count;
-                    for (int i = 0; i < num; i++)
-                    {
+                    for (int i = 0; i < num; i++) {
                         GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
                         int num2 = family.Children.Count;
-                        for (int j = 0; j < num2; j++)
-                        {
-                            GDMIndividualRecord iChild = family.Children[j].Value as GDMIndividualRecord;
-                            val += GetDescendantsCount(iChild);
+                        for (int j = 0; j < num2; j++) {
+                            GDMIndividualRecord child = family.Children[j].Individual;
+                            val += GetDescendantsCount(child);
                         }
                     }
                     iRec.ExtData = val;
@@ -1102,22 +1098,18 @@ namespace GKCore
         {
             int result = 0;
 
-            if (iRec != null)
-            {
+            if (iRec != null) {
                 int max = 0;
 
                 int num = iRec.SpouseToFamilyLinks.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
                     int num2 = family.Children.Count;
-                    for (int j = 0; j < num2; j++)
-                    {
-                        GDMIndividualRecord iChild = family.Children[j].Value as GDMIndividualRecord;
-                        int res = GetDescGens_Recursive(iChild);
-                        if (max < res)
-                        {
+                    for (int j = 0; j < num2; j++) {
+                        GDMIndividualRecord child = family.Children[j].Individual;
+                        int res = GetDescGens_Recursive(child);
+                        if (max < res) {
                             max = res;
                         }
                     }
@@ -1143,23 +1135,19 @@ namespace GKCore
         {
             int result = -1;
 
-            try
-            {
+            try {
                 if (fRec != null) {
-                    GDMIndividualRecord husb = fRec.GetHusband();
-                    GDMIndividualRecord wife = fRec.GetWife();
+                    GDMIndividualRecord husb = fRec.Husband.Individual;
+                    GDMIndividualRecord wife = fRec.Wife.Individual;
 
-                    if (husb != null && wife != null)
-                    {
+                    if (husb != null && wife != null) {
                         GDMCustomEvent evH = husb.FindEvent(GEDCOMTagType.BIRT);
                         GDMCustomEvent evW = wife.FindEvent(GEDCOMTagType.BIRT);
 
                         result = GetEventsYearsDiff(evH, evW, false);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKUtils.GetSpousesDiff(): " + ex.Message);
             }
 
@@ -1171,19 +1159,16 @@ namespace GKCore
             GDMIndividualRecord iChild = null;
             if (iRec == null) return iChild;
 
-            try
-            {
+            try {
                 int firstYear = 0;
 
                 int num = iRec.SpouseToFamilyLinks.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
                     int num2 = family.Children.Count;
-                    for (int j = 0; j < num2; j++)
-                    {
-                        GDMIndividualRecord child = family.Children[j].Value as GDMIndividualRecord;
+                    for (int j = 0; j < num2; j++) {
+                        GDMIndividualRecord child = family.Children[j].Individual;
                         if (child == null) continue;
 
                         GDMCustomEvent evt = child.FindEvent(GEDCOMTagType.BIRT);
@@ -1202,9 +1187,7 @@ namespace GKCore
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKUtils.GetFirstborn(): " + ex.Message);
             }
             return iChild;
@@ -1983,36 +1966,30 @@ namespace GKCore
         {
             if (summary == null) return;
 
-            try
-            {
+            try {
                 summary.BeginUpdate();
-                try
-                {
+                try {
                     summary.Clear();
-                    if (familyRec != null)
-                    {
+                    if (familyRec != null) {
                         summary.Add("");
 
-                        GDMIndividualRecord irec = familyRec.GetHusband();
-                        string st = ((irec == null) ? LangMan.LS(LSID.LSID_UnkMale) : HyperLink(irec.XRef, GetNameString(irec, true, false), 0));
-                        summary.Add(LangMan.LS(LSID.LSID_Husband) + ": " + st + GetLifeStr(irec));
+                        GDMIndividualRecord spRec = familyRec.Husband.Individual;
+                        string st = ((spRec == null) ? LangMan.LS(LSID.LSID_UnkMale) : HyperLink(spRec.XRef, GetNameString(spRec, true, false), 0));
+                        summary.Add(LangMan.LS(LSID.LSID_Husband) + ": " + st + GetLifeStr(spRec));
 
-                        irec = familyRec.GetWife();
-                        st = ((irec == null) ? LangMan.LS(LSID.LSID_UnkFemale) : HyperLink(irec.XRef, GetNameString(irec, true, false), 0));
-                        summary.Add(LangMan.LS(LSID.LSID_Wife) + ": " + st + GetLifeStr(irec));
+                        spRec = familyRec.Wife.Individual;
+                        st = ((spRec == null) ? LangMan.LS(LSID.LSID_UnkFemale) : HyperLink(spRec.XRef, GetNameString(spRec, true, false), 0));
+                        summary.Add(LangMan.LS(LSID.LSID_Wife) + ": " + st + GetLifeStr(spRec));
 
                         summary.Add("");
-                        if (familyRec.Children.Count != 0)
-                        {
+                        if (familyRec.Children.Count != 0) {
                             summary.Add(LangMan.LS(LSID.LSID_Childs) + ":");
                         }
 
                         int num = familyRec.Children.Count;
-                        for (int i = 0; i < num; i++)
-                        {
-                            irec = (GDMIndividualRecord)familyRec.Children[i].Value;
-                            
-                            summary.Add("    " + HyperLink(irec.XRef, GetNameString(irec, true, false), 0) + GetLifeStr(irec));
+                        for (int i = 0; i < num; i++) {
+                            var child = familyRec.Children[i].Individual;
+                            summary.Add("    " + HyperLink(child.XRef, GetNameString(child, true, false), 0) + GetLifeStr(child));
                         }
                         summary.Add("");
 
@@ -2021,14 +1998,10 @@ namespace GKCore
                         RecListMediaRefresh(familyRec, summary);
                         RecListSourcesRefresh(familyRec, summary);
                     }
-                }
-                finally
-                {
+                } finally {
                     summary.EndUpdate();
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKUtils.ShowFamilyInfo(): " + ex.Message);
             }
         }
@@ -2180,8 +2153,8 @@ namespace GKCore
                                 father = null;
                                 mother = null;
                             } else {
-                                father = fam.GetHusband();
-                                mother = fam.GetWife();
+                                father = fam.Husband.Individual;
+                                mother = fam.Wife.Individual;
                             }
 
                             if (father != null || mother != null) {
@@ -2208,14 +2181,14 @@ namespace GKCore
                                 if (!baseContext.IsRecordAccess(family.Restriction)) continue;
 
                                 string st;
-                                GDMPointer sp;
+                                GDMIndividualRecord spRec;
                                 string unk;
                                 if (iRec.Sex == GDMSex.svMale) {
-                                    sp = family.Wife;
+                                    spRec = family.Wife.Individual;
                                     st = LangMan.LS(LSID.LSID_Wife) + ": ";
                                     unk = LangMan.LS(LSID.LSID_UnkFemale);
                                 } else {
-                                    sp = family.Husband;
+                                    spRec = family.Husband.Individual;
                                     st = LangMan.LS(LSID.LSID_Husband) + ": ";
                                     unk = LangMan.LS(LSID.LSID_UnkMale);
                                 }
@@ -2226,11 +2199,9 @@ namespace GKCore
                                     marr = LangMan.LS(LSID.LSID_LFamily);
                                 }
 
-                                GDMIndividualRecord relPerson = (sp == null) ? null : (sp.Value as GDMIndividualRecord);
-
                                 summary.Add("");
-                                if (relPerson != null) {
-                                    st = st + HyperLink(relPerson.XRef, GetNameString(relPerson, true, false), 0) + " (" + HyperLink(family.XRef, marr, 0) + ")";
+                                if (spRec != null) {
+                                    st = st + HyperLink(spRec.XRef, GetNameString(spRec, true, false), 0) + " (" + HyperLink(family.XRef, marr, 0) + ")";
                                 } else {
                                     st = st + unk + " (" + HyperLink(family.XRef, marr, 0) + ")";
                                 }
@@ -2242,10 +2213,10 @@ namespace GKCore
                                     summary.Add(LangMan.LS(LSID.LSID_Childs) + ":");
 
                                     for (int k = 0; k < chNum; k++) {
-                                        relPerson = (GDMIndividualRecord)family.Children[k].Value;
-                                        if (relPerson == null) continue;
+                                        GDMIndividualRecord child = family.Children[k].Individual;
+                                        if (child == null) continue;
 
-                                        summary.Add("    " + HyperLink(relPerson.XRef, GetNameString(relPerson, true, false), 0) + GetLifeStr(relPerson));
+                                        summary.Add("    " + HyperLink(child.XRef, GetNameString(child, true, false), 0) + GetLifeStr(child));
                                     }
                                 }
                             }
@@ -2814,27 +2785,21 @@ namespace GKCore
 
             string result = "";
 
-            GDMIndividualRecord spouse = family.GetHusband();
-            if (spouse == null)
-            {
+            GDMIndividualRecord spouse = family.Husband.Individual;
+            if (spouse == null) {
                 if (unkHusband == null) unkHusband = "?";
                 result += unkHusband;
-            }
-            else
-            {
+            } else {
                 result += GetNameString(spouse, true, false);
             }
 
             result += " - ";
 
-            spouse = family.GetWife();
-            if (spouse == null)
-            {
+            spouse = family.Wife.Individual;
+            if (spouse == null) {
                 if (unkWife == null) unkWife = "?";
                 result += unkWife;
-            }
-            else
-            {
+            } else {
                 result += GetNameString(spouse, true, false);
             }
 

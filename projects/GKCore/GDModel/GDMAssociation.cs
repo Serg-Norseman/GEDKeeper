@@ -81,13 +81,14 @@ namespace GDModel
 
         public override void Assign(GDMTag source)
         {
-            GDMAssociation srcAsso = (source as GDMAssociation);
-            if (srcAsso == null)
+            GDMAssociation sourceObj = (source as GDMAssociation);
+            if (sourceObj == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
-            base.Assign(source);
+            base.Assign(sourceObj);
 
-            fRelation = srcAsso.fRelation;
+            fRelation = sourceObj.fRelation;
+            AssignList(sourceObj.fSourceCitations, fSourceCitations);
         }
     }
 }

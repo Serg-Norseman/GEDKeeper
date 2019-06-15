@@ -61,8 +61,8 @@ namespace GDModel
 
         public GDMFamilyRecord Family
         {
-            get { return (Value as GDMFamilyRecord); }
-            set { Value = value; }
+            get { return (GDMFamilyRecord)base.Value; }
+            set { base.Value = value; }
         }
 
 

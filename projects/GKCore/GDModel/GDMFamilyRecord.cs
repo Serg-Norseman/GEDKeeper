@@ -39,23 +39,23 @@ namespace GDModel
 
     public sealed class GDMFamilyRecord : GDMRecordWithEvents
     {
-        private GDMList<GDMPointer> fChildren;
-        private GDMPointer fHusband;
-        private GDMPointer fWife;
+        private GDMList<GDMIndividualLink> fChildren;
+        private GDMIndividualLink fHusband;
+        private GDMIndividualLink fWife;
         private GDMMarriageStatus fStatus;
 
 
-        public GDMList<GDMPointer> Children
+        public GDMList<GDMIndividualLink> Children
         {
             get { return fChildren; }
         }
 
-        public GDMPointer Husband
+        public GDMIndividualLink Husband
         {
             get { return fHusband; }
         }
 
-        public GDMPointer Wife
+        public GDMIndividualLink Wife
         {
             get { return fWife; }
         }
@@ -72,9 +72,9 @@ namespace GDModel
             SetRecordType(GDMRecordType.rtFamily);
             SetName(GEDCOMTagType.FAM);
 
-            fHusband = new GDMPointer(this, GEDCOMTagType.HUSB, string.Empty);
-            fWife = new GDMPointer(this, GEDCOMTagType.WIFE, string.Empty);
-            fChildren = new GDMList<GDMPointer>(this);
+            fHusband = new GDMIndividualLink(this, GEDCOMTagType.HUSB, string.Empty);
+            fWife = new GDMIndividualLink(this, GEDCOMTagType.WIFE, string.Empty);
+            fChildren = new GDMList<GDMIndividualLink>(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -83,16 +83,6 @@ namespace GDModel
                 fChildren.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public GDMIndividualRecord GetHusband()
-        {
-            return fHusband.Value as GDMIndividualRecord;
-        }
-
-        public GDMIndividualRecord GetWife()
-        {
-            return fWife.Value as GDMIndividualRecord;
         }
 
         public override GDMCustomEvent AddEvent(GDMCustomEvent evt)
@@ -111,12 +101,12 @@ namespace GDModel
         {
             base.Clear();
 
-            RemoveSpouse(GetHusband());
-            RemoveSpouse(GetWife());
+            RemoveSpouse(fHusband.Individual);
+            RemoveSpouse(fWife.Individual);
 
             int num = fChildren.Count;
             for (int i = 0; i < num; i++) {
-                GDMIndividualRecord child = (GDMIndividualRecord)fChildren[i].Value;
+                GDMIndividualRecord child = fChildren[i].Individual;
                 child.DeleteChildToFamilyLink(this);
             }
             fChildren.Clear();
@@ -165,13 +155,7 @@ namespace GDModel
             fHusband.Assign(sourceRec.fHusband);
             fWife.Assign(sourceRec.fWife);
             fStatus = sourceRec.fStatus;
-
-            // TODO: validate this logic!
-            foreach (GDMPointer srcChild in sourceRec.fChildren) {
-                GDMPointer copyChild = new GDMPointer(this);
-                copyChild.Assign(srcChild);
-                fChildren.Add(copyChild);
-            }
+            AssignList(sourceRec.fChildren, fChildren);
         }
 
         public override void MoveTo(GDMRecord targetRecord, bool clearDest)
@@ -187,7 +171,7 @@ namespace GDModel
             targetFamily.Status = fStatus;
 
             while (fChildren.Count > 0) {
-                GDMPointer obj = fChildren.Extract(0);
+                GDMIndividualLink obj = fChildren.Extract(0);
                 obj.ResetOwner(targetFamily);
                 targetFamily.Children.Add(obj);
             }
@@ -197,9 +181,8 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
 
-            fHusband.StringValue = GEDCOMUtils.EncloseXRef(map.FindNewXRef(fHusband.StringValue));
-            fWife.StringValue = GEDCOMUtils.EncloseXRef(map.FindNewXRef(fWife.StringValue));
-
+            fHusband.ReplaceXRefs(map);
+            fWife.ReplaceXRefs(map);
             fChildren.ReplaceXRefs(map);
         }
 
@@ -207,10 +190,10 @@ namespace GDModel
         {
             string result = "";
 
-            GDMIndividualRecord spouse = GetHusband();
+            GDMIndividualRecord spouse = fHusband.Individual;
             result += (spouse == null) ? "?" : spouse.GetPrimaryFullName();
             result += " - ";
-            spouse = GetWife();
+            spouse = fWife.Individual;
             result += (spouse == null) ? "?" : spouse.GetPrimaryFullName();
 
             return result;
@@ -239,8 +222,8 @@ namespace GDModel
 
         public GDMIndividualRecord GetSpouseBy(GDMIndividualRecord spouse)
         {
-            GDMIndividualRecord husb = GetHusband();
-            GDMIndividualRecord wife = GetWife();
+            GDMIndividualRecord husb = fHusband.Individual;
+            GDMIndividualRecord wife = fWife.Individual;
 
             return (spouse == husb) ? wife : husb;
         }
@@ -294,8 +277,8 @@ namespace GDModel
         {
             if (child == null) return false;
 
-            GDMPointer ptr = new GDMPointer(this);
-            ptr.SetNameValue(GEDCOMTagType.CHIL, child);
+            GDMIndividualLink ptr = new GDMIndividualLink(this, GEDCOMTagType.CHIL, string.Empty);
+            ptr.Individual = child;
             fChildren.Add(ptr);
 
             GDMChildToFamilyLink chLink = new GDMChildToFamilyLink(child);

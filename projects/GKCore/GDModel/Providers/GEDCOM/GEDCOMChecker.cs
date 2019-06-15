@@ -274,12 +274,11 @@ namespace GDModel.Providers.GEDCOM
         private static void CheckGroupRecord(GDMGroupRecord group)
         {
             for (int i = group.Members.Count - 1; i >= 0; i--) {
-                GDMPointer ptr = group.Members[i];
-                GDMIndividualRecord irec = ptr.Value as GDMIndividualRecord;
-                if (irec == null) {
+                GDMIndividualRecord mbr = group.Members[i].Individual;
+                if (mbr == null) {
                     group.Members.DeleteAt(i);
                 } else {
-                    if (irec.IndexOfGroup(group) < 0) {
+                    if (mbr.IndexOfGroup(group) < 0) {
                         group.Members.DeleteAt(i);
                     }
                 }

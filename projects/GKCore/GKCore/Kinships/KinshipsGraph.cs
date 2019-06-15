@@ -320,8 +320,8 @@ namespace GKCore.Kinships
                 GDMFamilyRecord fam = iRec.GetParentsFamily();
                 if (fam != null) {
                     GDMIndividualRecord father, mother;
-                    father = fam.GetHusband();
-                    mother = fam.GetWife();
+                    father = fam.Husband.Individual;
+                    mother = fam.Wife.Individual;
 
                     SearchKGInt(currNode, father, graph, RelationKind.rkParent, RelationKind.rkChild);
                     SearchKGInt(currNode, mother, graph, RelationKind.rkParent, RelationKind.rkChild);
@@ -331,13 +331,13 @@ namespace GKCore.Kinships
             int num = iRec.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
                 GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
-                GDMIndividualRecord spouse = ((iRec.Sex == GDMSex.svMale) ? family.GetWife() : family.GetHusband());
+                GDMIndividualRecord spouse = ((iRec.Sex == GDMSex.svMale) ? family.Wife.Individual : family.Husband.Individual);
 
                 SearchKGInt(currNode, spouse, graph, RelationKind.rkSpouse, RelationKind.rkSpouse);
 
                 int num2 = family.Children.Count;
                 for (int j = 0; j < num2; j++) {
-                    GDMIndividualRecord child = (GDMIndividualRecord)family.Children[j].Value;
+                    GDMIndividualRecord child = family.Children[j].Individual;
                     SearchKGInt(currNode, child, graph, RelationKind.rkChild, RelationKind.rkParent);
                 }
             }

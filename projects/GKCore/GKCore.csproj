@@ -127,6 +127,7 @@
     <Compile Include="GDModel\GDMCustomDate.cs" />
     <Compile Include="GDModel\GDMCustomEvent.cs" />
     <Compile Include="GDModel\GDMCutoutPosition.cs" />
+    <Compile Include="GDModel\GDMIndividualLink.cs" />
     <Compile Include="GDModel\GDMSourceData.cs" />
     <Compile Include="GDModel\GDMDate.cs" />
     <Compile Include="GDModel\GDMDateInterpreted.cs" />
@@ -142,9 +143,9 @@
     <Compile Include="GDModel\GDMHeader.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\AnselEncoding.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMChecker.cs" />
-    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMFactory.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParser.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMProvider.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMTagType.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMUtils.cs" />
     <Compile Include="GDModel\Providers\GedML\GedMLProvider.cs" />
     <Compile Include="GDModel\GDMList.cs" />

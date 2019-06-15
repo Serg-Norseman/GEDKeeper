@@ -52,7 +52,7 @@ namespace GDModel
 
                 Assert.AreEqual("", mediaRec.GetFileTitle());
 
-                mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle(mediaRec, GEDCOMTagType.FILE, ""));
+                mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle(mediaRec));
                 GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
                 Assert.IsNotNull(fileRef);
 

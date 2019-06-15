@@ -129,11 +129,18 @@ namespace GKCore
             Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateLocation()));
 
             Assert.Throws(typeof(ArgumentNullException), () => { fContext.GetStoreType(null); });
-            var mediaStore = fContext.GetStoreType(new GDMFileReference(null, "", "file.txt"));
+
+            var fileRef = new GDMFileReference(null);
+            fileRef.ParseString("file.txt");
+            var mediaStore = fContext.GetStoreType(fileRef);
             Assert.AreEqual(MediaStoreType.mstReference, mediaStore.StoreType);
-            mediaStore = fContext.GetStoreType(new GDMFileReference(null, "", "stg:file.txt"));
+
+            fileRef.ParseString("stg:file.txt");
+            mediaStore = fContext.GetStoreType(fileRef);
             Assert.AreEqual(MediaStoreType.mstStorage, mediaStore.StoreType);
-            mediaStore = fContext.GetStoreType(new GDMFileReference(null, "", "arc:file.txt"));
+
+            fileRef.ParseString("arc:file.txt");
+            mediaStore = fContext.GetStoreType(fileRef);
             Assert.AreEqual(MediaStoreType.mstArchive, mediaStore.StoreType);
 
             fContext.CollectEventValues(null);

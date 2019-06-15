@@ -102,8 +102,8 @@ namespace GKStdReports
             if (fPerson.ChildToFamilyLinks.Count > 0) {
                 GDMFamilyRecord family = fPerson.ChildToFamilyLinks[0].Family;
                 if (fBase.Context.IsRecordAccess(family.Restriction)) {
-                    father = family.GetHusband();
-                    mother = family.GetWife();
+                    father = family.Husband.Individual;
+                    mother = family.Wife.Individual;
                 }
             }
 
@@ -119,7 +119,7 @@ namespace GKStdReports
 
                 int num3 = family.Children.Count;
                 for (int i = 0; i < num3; i++) {
-                    GDMIndividualRecord child = family.Children[i].Value as GDMIndividualRecord;
+                    GDMIndividualRecord child = family.Children[i].Individual;
                     GDMCustomEvent evt = child.FindEvent(GEDCOMTagType.BIRT);
                     if (evt != null && evt.GetChronologicalYear() != 0) {
                         evList.Add(new PersonalEvent(EventType.Child, child, evt));
@@ -180,11 +180,11 @@ namespace GKStdReports
                     GDMIndividualRecord sp;
                     string unk;
                     if (fPerson.Sex == GDMSex.svMale) {
-                        sp = famRec.GetWife();
+                        sp = famRec.Wife.Individual;
                         st = LangMan.LS(LSID.LSID_Wife) + ": ";
                         unk = LangMan.LS(LSID.LSID_UnkFemale);
                     } else {
-                        sp = famRec.GetHusband();
+                        sp = famRec.Husband.Individual;
                         st = LangMan.LS(LSID.LSID_Husband) + ": ";
                         unk = LangMan.LS(LSID.LSID_UnkMale);
                     }

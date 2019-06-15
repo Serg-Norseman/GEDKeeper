@@ -75,7 +75,7 @@ namespace GDModel
             set {
                 if (value) {
                     if (FindTag(GEDCOMTagType._BOOKMARK, 0) == null) {
-                        AddTag(GEDCOMTagType._BOOKMARK, "", null);
+                        AddTag(new GDMTag(this, GEDCOMTagType._BOOKMARK, ""));
                     }
                 } else {
                     DeleteTag(GEDCOMTagType._BOOKMARK);
@@ -101,7 +101,7 @@ namespace GDModel
             set {
                 if (value) {
                     if (FindTag(GEDCOMTagType._PATRIARCH, 0) == null) {
-                        AddTag(GEDCOMTagType._PATRIARCH, "", null);
+                        AddTag(new GDMTag(this, GEDCOMTagType._PATRIARCH, ""));
                     }
                 } else {
                     DeleteTag(GEDCOMTagType._PATRIARCH);
@@ -436,7 +436,7 @@ namespace GDModel
         /// <returns></returns>
         public GDMFamilyRecord GetParentsFamily(bool canCreate = false)
         {
-            GDMFamilyRecord result = (fChildToFamilyLinks.Count < 1) ? null : fChildToFamilyLinks[0].Value as GDMFamilyRecord;
+            GDMFamilyRecord result = (fChildToFamilyLinks.Count < 1) ? null : fChildToFamilyLinks[0].Family;
 
             if (result == null && canCreate) {
                 result = GetTree().CreateFamily();

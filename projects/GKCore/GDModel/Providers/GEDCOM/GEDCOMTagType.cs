@@ -19,9 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using GDModel;
-using GDModel.Providers;
 
 namespace GDModel.Providers.GEDCOM
 {
@@ -207,84 +204,5 @@ namespace GDModel.Providers.GEDCOM
         public const string _STOPDATE = "_STOPDATE";
         public const string _STATUS = "_STATUS";
         public const string _TASK = "_TASK";
-    }
-
-
-    public delegate GDMTag TagConstructor(GDMObject owner, string tagName, string tagValue);
-
-
-    public sealed class TagInfo
-    {
-        public readonly TagConstructor Constructor;
-        public readonly AddTagHandler AddHandler;
-        public SaveTagHandler SaveHandler;
-        public readonly bool SkipEmpty;
-        public readonly bool GKExtend;
-
-        public TagInfo(TagConstructor constructor, AddTagHandler addHandler, SaveTagHandler saveHandler, bool skipEmpty, bool extend)
-        {
-            Constructor = constructor;
-            AddHandler = addHandler;
-            SaveHandler = saveHandler;
-            SkipEmpty = skipEmpty;
-            GKExtend = extend;
-        }
-    }
-
-
-    public sealed class GEDCOMFactory
-    {
-        private static GEDCOMFactory fInstance;
-        private readonly Dictionary<string, TagInfo> fTags;
-
-        public static GEDCOMFactory GetInstance()
-        {
-            if (fInstance == null) fInstance = new GEDCOMFactory();
-            return fInstance;
-        }
-
-        public GEDCOMFactory()
-        {
-            fTags = new Dictionary<string, TagInfo>();
-        }
-
-        public void RegisterTag(string tagName, TagConstructor constructor, AddTagHandler addHandler = null,
-                                SaveTagHandler saveHandler = null, bool skipEmpty = false, bool extend = false)
-        {
-            TagInfo tagInfo;
-            if (!fTags.TryGetValue(tagName, out tagInfo)) {
-                tagInfo = new TagInfo(constructor, addHandler, saveHandler, skipEmpty, extend);
-                fTags.Add(tagName, tagInfo);
-            } else {
-                //tagInfo.Constructor = constructor;
-                //tagInfo.AddHandler = addHandler;
-            }
-        }
-
-        public GDMTag CreateTag(GDMObject owner, string tagName, string tagValue)
-        {
-            TagInfo tagInfo;
-            if (fTags.TryGetValue(tagName, out tagInfo)) {
-                TagConstructor ctor = tagInfo.Constructor;
-                return (ctor == null) ? new GDMTag(owner, tagName, tagValue) : ctor(owner, tagName, tagValue);
-            }
-            return null;
-        }
-
-        public TagInfo GetTagInfo(string tagName)
-        {
-            TagInfo result;
-            fTags.TryGetValue(tagName, out result);
-            return result;
-        }
-
-        public AddTagHandler GetAddHandler(string tagName)
-        {
-            TagInfo tagInfo;
-            if (fTags.TryGetValue(tagName, out tagInfo)) {
-                return tagInfo.AddHandler;
-            }
-            return GEDCOMProvider.AddBaseTag;
-        }
     }
 }

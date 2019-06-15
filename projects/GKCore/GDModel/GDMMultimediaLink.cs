@@ -73,11 +73,6 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMMultimediaLink(owner, tagName, tagValue);
-        }
-
         public GDMMultimediaLink(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.OBJE);
@@ -87,11 +82,6 @@ namespace GDModel
             fIsPrimary = false;
             fIsPrimaryCutout = false;
             fTitle = string.Empty;
-        }
-
-        public GDMMultimediaLink(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
         }
 
         protected override void Dispose(bool disposing)

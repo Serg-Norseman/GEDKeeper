@@ -535,8 +535,8 @@ namespace GKCore.Charts
             GDMIndividualRecord father = null, mother = null;
             GDMFamilyRecord fam = fRootPerson.GetParentsFamily();
             if (fam != null && fBase.Context.IsRecordAccess(fam.Restriction)) {
-                father = fam.GetHusband();
-                mother = fam.GetWife();
+                father = fam.Husband.Individual;
+                mother = fam.Wife.Individual;
             }
 
             if (mother != null) {
@@ -593,8 +593,8 @@ namespace GKCore.Charts
                     GDMIndividualRecord father = null, mother = null;
                     GDMFamilyRecord fam = iRec.GetParentsFamily();
                     if (fam != null && fBase.Context.IsRecordAccess(fam.Restriction)) {
-                        father = fam.GetHusband();
-                        mother = fam.GetWife();
+                        father = fam.Husband.Individual;
+                        mother = fam.Wife.Individual;
                     }
 
                     int ps = prevSteps + genSize;
@@ -705,19 +705,16 @@ namespace GKCore.Charts
         {
             if (iRec == null) return null;
             
-            try
-            {
+            try {
                 fIndividualsCount++;
 
                 DescPersonSegment resultSegment = new DescPersonSegment(gen);
                 resultSegment.IRec = iRec;
                 fSegments.Add(resultSegment);
 
-                if (gen < fVisibleGenerations)
-                {
+                if (gen < fVisibleGenerations) {
                     int numberOfFamilyLinks = iRec.SpouseToFamilyLinks.Count;
-                    for (int j = 0; j < numberOfFamilyLinks; j++)
-                    {
+                    for (int j = 0; j < numberOfFamilyLinks; j++) {
                         GDMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
                         if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
@@ -725,7 +722,7 @@ namespace GKCore.Charts
 
                         int numberOfChildren = family.Children.Count;
                         for (int i = 0; i < numberOfChildren; i++) {
-                            GDMIndividualRecord child = family.Children[i].Value as GDMIndividualRecord;
+                            GDMIndividualRecord child = family.Children[i].Individual;
                             DescPersonSegment childSegment = TraverseDescendants(child, gen + 1);
 
                             int size = Math.Max(1, childSegment.TotalSubSegments);
@@ -737,9 +734,7 @@ namespace GKCore.Charts
                 }
 
                 return resultSegment;
-            }
-            catch
-            {
+            } catch {
                 return null;
             }
         }

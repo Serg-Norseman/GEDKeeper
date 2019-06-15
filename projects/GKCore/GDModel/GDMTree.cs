@@ -479,7 +479,7 @@ namespace GDModel
             if (groupRec == null) return false;
 
             for (int i = groupRec.Members.Count - 1; i >= 0; i--) {
-                GDMIndividualRecord member = groupRec.Members[i].Value as GDMIndividualRecord;
+                GDMIndividualRecord member = groupRec.Members[i].Individual;
                 groupRec.RemoveMember(member);
             }
 

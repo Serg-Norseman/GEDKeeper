@@ -20,6 +20,7 @@
 
 using System;
 using System.Text;
+using BSLib;
 using GDModel;
 using NUnit.Framework;
 
@@ -402,6 +403,27 @@ namespace GDModel.Providers.GEDCOM
             str = "";
             res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(-2, res2);
+        }
+
+        [Test]
+        public void Test_SetTagStringsL()
+        {
+            var tag = new GDMTag(null, "TEST", "");
+            Assert.IsNotNull(tag);
+
+            // very long string, 248"A" and " BBB BBBB"
+            var strings = new StringList( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA BBB BBBB" );
+
+            GEDCOMUtils.SetTagStrings(null, strings);
+
+            GEDCOMUtils.SetTagStrings(tag, strings);
+
+            Assert.AreEqual(248, tag.StringValue.Length);
+
+            var strList = GEDCOMUtils.GetTagStrings(tag);
+            Assert.IsNotNull(strList);
+            Assert.AreEqual(1, strList.Count);
+            Assert.AreEqual(strings.Text, strList.Text);
         }
     }
 }

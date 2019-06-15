@@ -108,8 +108,8 @@ namespace GKCore
             TreeCell curCell = AddCell(row, cur, CellKind.ckPerson);
             if (cur.ChildToFamilyLinks.Count > 0 && gen < 5) {
                 GDMFamilyRecord family = cur.ChildToFamilyLinks[0].Family;
-                GDMIndividualRecord iFather = family.Husband.Value as GDMIndividualRecord;
-                GDMIndividualRecord iMother = family.Wife.Value as GDMIndividualRecord;
+                GDMIndividualRecord iFather = family.Husband.Individual;
+                GDMIndividualRecord iMother = family.Wife.Individual;
                 if (iFather != null || iMother != null) {
                     AddCell(row, null, CellKind.ckLine);
                     AddCell(row, null, CellKind.ckSpace);

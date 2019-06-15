@@ -39,11 +39,6 @@ namespace GDModel
             SetName(GEDCOMTagType.REFN);
         }
 
-        public GDMUserReference(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
-        }
-
         public override void Clear()
         {
             base.Clear();

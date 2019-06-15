@@ -423,14 +423,12 @@ namespace GKCore
                 }
 
                 int num = iRec.SpouseToFamilyLinks.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
                     int num2 = family.Children.Count;
-                    for (int j = 0; j < num2; j++)
-                    {
-                        GDMIndividualRecord child = family.Children[j].Value as GDMIndividualRecord;
+                    for (int j = 0; j < num2; j++) {
+                        GDMIndividualRecord child = family.Children[j].Individual;
                         birthDate = FindBirthYear(child);
                         if (birthDate != 0) {
                             return birthDate - 20;
@@ -452,14 +450,12 @@ namespace GKCore
 
                 int maxBirth = 0;
                 int num = iRec.SpouseToFamilyLinks.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
                     int num2 = family.Children.Count;
-                    for (int j = 0; j < num2; j++)
-                    {
-                        GDMIndividualRecord child = family.Children[j].Value as GDMIndividualRecord;
+                    for (int j = 0; j < num2; j++) {
+                        GDMIndividualRecord child = family.Children[j].Individual;
 
                         int chbDate = FindBirthYear(child);
                         if (chbDate != 0 && maxBirth < chbDate) {
@@ -1538,8 +1534,8 @@ namespace GKCore
                 if (rec.RecordType == GDMRecordType.rtFamily)
                 {
                     GDMFamilyRecord fam = (GDMFamilyRecord) rec;
-                    GDMIndividualRecord husb = fam.GetHusband();
-                    GDMIndividualRecord wife = fam.GetWife();
+                    GDMIndividualRecord husb = fam.Husband.Individual;
+                    GDMIndividualRecord wife = fam.Wife.Individual;
                     if (husb == newParent || wife == newParent)
                     {
                         string msg = string.Format(LangMan.LS(LSID.LSID_ParentsQuery), GKUtils.GetFamilyString(fam));
@@ -1613,7 +1609,7 @@ namespace GKCore
                         family = parent.SpouseToFamilyLinks[0].Family;
                     }
 
-                    GDMIndividualRecord child = SelectPerson(family.GetHusband(), TargetMode.tmParent, needSex);
+                    GDMIndividualRecord child = SelectPerson(family.Husband.Individual, TargetMode.tmParent, needSex);
 
                     if (child != null && family.AddChild(child)) {
                         // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,

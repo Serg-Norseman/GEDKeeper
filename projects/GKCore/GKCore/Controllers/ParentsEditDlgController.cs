@@ -93,7 +93,7 @@ namespace GKCore.Controllers
                 GDMFamilyRecord family = fLink.Family;
                 fView.SetParentsAvl(true);
 
-                GDMIndividualRecord relPerson = family.GetHusband();
+                GDMIndividualRecord relPerson = family.Husband.Individual;
                 if (relPerson != null) {
                     fView.SetFatherAvl(true);
                     fView.Father.Text = GKUtils.GetNameString(relPerson, true, false);
@@ -102,7 +102,7 @@ namespace GKCore.Controllers
                     fView.Father.Text = "";
                 }
 
-                relPerson = family.GetWife();
+                relPerson = family.Wife.Individual;
                 if (relPerson != null) {
                     fView.SetMotherAvl(true);
                     fView.Mother.Text = GKUtils.GetNameString(relPerson, true, false);
