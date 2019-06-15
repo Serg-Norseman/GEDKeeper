@@ -1,5 +1,4 @@
-﻿/* Extensions.cs
- * 
+﻿/* 
  * Copyright 2019 Serg V. Zhdanovskih
  * This file is part of GEDmill - A family history website creator
  * 
@@ -15,17 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * History:  
- * 29Mar19 ZSV      Created for conversion to GKCore
- *
  */
 
 using System;
 using System.Collections.Generic;
-using GEDmill.Model;
 using GDModel;
+using GEDmill.Model;
 using GKCore;
 using GKCore.Tools;
 using GKCore.Types;

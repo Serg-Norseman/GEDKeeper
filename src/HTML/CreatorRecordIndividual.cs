@@ -1,5 +1,4 @@
-/* CCreatorRecordIndividual.cs
- * 
+/* 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
  * 
@@ -15,11 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * History:  
- * 10Dec08 AlexC          Migrated from GEDmill 1.10
- *
  */
 
 using System;
@@ -27,9 +21,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using GDModel;
 using GEDmill.MiniTree;
 using GEDmill.Model;
-using GDModel;
 using GKCore.Logging;
 using GKCore.Types;
 
@@ -130,7 +124,7 @@ namespace GEDmill.HTML
         private Paintbox fPaintbox;
 
 
-        public CreatorRecordIndividual(GDMTree gedcom, IProgressCallback progress, string w3cfile, GDMIndividualRecord ir, CreatorIndexIndividuals indiIndexCreator, Paintbox paintbox) : base(gedcom, progress, w3cfile)
+        public CreatorRecordIndividual(GDMTree tree, IProgressCallback progress, string w3cfile, GDMIndividualRecord ir, CreatorIndexIndividuals indiIndexCreator, Paintbox paintbox) : base(tree, progress, w3cfile)
         {
             fIndiRec = ir;
             fIndiIndexCreator = indiIndexCreator;
@@ -278,9 +272,9 @@ namespace GEDmill.HTML
                         marriageNote += "\n";
                     }
                     if (CConfig.Instance.ObfuscateEmails) {
-                        marriageNote += ObfuscateEmail(ns.Notes.Text);
+                        marriageNote += ObfuscateEmail(ns.Lines.Text);
                     } else {
-                        marriageNote += ns.Notes.Text;
+                        marriageNote += ns.Lines.Text;
                     }
                 }
 
@@ -310,8 +304,8 @@ namespace GEDmill.HTML
             foreach (GDMChildToFamilyLink cfl in fIndiRec.ChildToFamilyLinks) {
                 GDMFamilyRecord fr = (cfl.Value as GDMFamilyRecord);
                 if (fr != null) {
-                    GDMIndividualRecord husband = fr.GetHusband();
-                    GDMIndividualRecord wife = fr.GetWife();
+                    GDMIndividualRecord husband = fr.Husband.Individual;
+                    GDMIndividualRecord wife = fr.Wife.Individual;
 
                     if (husband != null || wife != null) {
                         fParents.Add(new HusbandAndWife(husband, wife));
@@ -443,9 +437,9 @@ namespace GEDmill.HTML
                                 }
 
                                 if (CConfig.Instance.ObfuscateEmails) {
-                                    marriageNote += ObfuscateEmail(ns.Notes.Text);
+                                    marriageNote += ObfuscateEmail(ns.Lines.Text);
                                 } else {
-                                    marriageNote += ns.Notes.Text;
+                                    marriageNote += ns.Lines.Text;
                                 }
                             }
                         }
@@ -736,12 +730,12 @@ namespace GEDmill.HTML
                     GDMSourceRecord sr = sc.Value as GDMSourceRecord;
 
                     // Publication facts
-                    if (sr != null && sr.Publication.Text != null && sr.Publication.Text != "") {
+                    if (sr != null && sr.Publication.Lines.Text != null && sr.Publication.Lines.Text != "") {
                         string pubFacts;
                         if (CConfig.Instance.ObfuscateEmails) {
-                            pubFacts = ObfuscateEmail(sr.Publication.Text);
+                            pubFacts = ObfuscateEmail(sr.Publication.Lines.Text);
                         } else {
-                            pubFacts = sr.Publication.Text;
+                            pubFacts = sr.Publication.Lines.Text;
                         }
 
                         if (pubFacts.Length > 7 && pubFacts.ToUpper().Substring(0, 7) == "HTTP://") {
@@ -1129,7 +1123,7 @@ namespace GEDmill.HTML
                 }
 
                 if (es.Address != null) {
-                    address = es.Address.Address.Text;
+                    address = es.Address.Lines.Text;
                     if (es.Address.WebPages.Count > 0)
                         url = es.Address.WebPages[0].StringValue;
                 }
@@ -1610,9 +1604,9 @@ namespace GEDmill.HTML
                     eventNote += "\n";
                 }
                 if (CConfig.Instance.ObfuscateEmails) {
-                    eventNote += ObfuscateEmail(ns.Notes.Text);
+                    eventNote += ObfuscateEmail(ns.Lines.Text);
                 } else {
-                    eventNote += ns.Notes.Text;
+                    eventNote += ns.Lines.Text;
                 }
             }
 

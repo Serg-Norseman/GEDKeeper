@@ -1,5 +1,4 @@
-/* CCreatorRecordSource.cs
- * 
+/* 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
  * 
@@ -15,19 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * History:  
- * 10Dec08 AlexC          Migrated from GEDmill 1.10
- *
  */
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using GEDmill.Model;
 using GDModel;
+using GEDmill.Model;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -43,7 +37,7 @@ namespace GEDmill.HTML
         private GDMSourceRecord fSourceRecord;
 
 
-        public CreatorRecordSource(GDMTree gedcom, IProgressCallback progress, string w3cfile, GDMSourceRecord sr) : base(gedcom, progress, w3cfile)
+        public CreatorRecordSource(GDMTree tree, IProgressCallback progress, string w3cfile, GDMSourceRecord sr) : base(tree, progress, w3cfile)
         {
             fSourceRecord = sr;
         }
@@ -109,9 +103,9 @@ namespace GEDmill.HTML
                         foreach (GDMNotes ns in rr.Notes) {
                             string noteText;
                             if (CConfig.Instance.ObfuscateEmails) {
-                                noteText = ObfuscateEmail(ns.Notes.Text);
+                                noteText = ObfuscateEmail(ns.Lines.Text);
                             } else {
-                                noteText = ns.Notes.Text;
+                                noteText = ns.Lines.Text;
                             }
                             f.WriteLine("<p>{0}</p>", EscapeHTML(noteText, false));
                         }
@@ -121,9 +115,9 @@ namespace GEDmill.HTML
                         foreach (GDMNotes ns in src.Notes) {
                             string noteText;
                             if (CConfig.Instance.ObfuscateEmails) {
-                                noteText = ObfuscateEmail(ns.Notes.Text);
+                                noteText = ObfuscateEmail(ns.Lines.Text);
                             } else {
-                                noteText = ns.Notes.Text;
+                                noteText = ns.Lines.Text;
                             }
                             f.WriteLine("<p>{0}</p>", EscapeHTML(noteText, false));
                         }
@@ -133,9 +127,9 @@ namespace GEDmill.HTML
                 // Add Publication Information
                 string pubFacts;
                 if (CConfig.Instance.ObfuscateEmails) {
-                    pubFacts = ObfuscateEmail(fSourceRecord.Publication.Text);
+                    pubFacts = ObfuscateEmail(fSourceRecord.Publication.Lines.Text);
                 } else {
-                    pubFacts = fSourceRecord.Publication.Text;
+                    pubFacts = fSourceRecord.Publication.Lines.Text;
                 }
                 if (!string.IsNullOrEmpty(pubFacts)) {
                     if (pubFacts.Length > 7 && pubFacts.ToUpper().Substring(0, 7) == "HTTP://") {
@@ -158,7 +152,7 @@ namespace GEDmill.HTML
                 OutputMultimedia(f);
 
                 // Add textFromSource
-                string cleanText = fSourceRecord.Text.Text;
+                string cleanText = fSourceRecord.Text.Lines.Text;
                 if (CConfig.Instance.ObfuscateEmails) {
                     cleanText = ObfuscateEmail(cleanText);
                 }

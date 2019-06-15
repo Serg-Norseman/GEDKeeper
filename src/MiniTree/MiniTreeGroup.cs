@@ -1,5 +1,4 @@
-/* CMiniTreeGroup.cs
- * 
+/* 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
  * 
@@ -15,11 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * History:  
- * 10Dec08 AlexC          Migrated from GEDmill 1.10
- *
  */
 
 using System.Collections.Generic;
@@ -107,11 +101,11 @@ namespace GEDmill.MiniTree
         // Informs neighbouring boxes about this box.
         // bCreateLink decides whether to make this box a clickable link in the HTML.
         public MiniTreeIndividual AddIndividual(GDMIndividualRecord ir, string firstnames, string surname,
-                                                 string date, bool createLink, bool createStalk, bool highlight,
-                                                 bool concealed, bool shade)
+                                                string date, bool createLink, bool createStalk, bool highlight,
+                                                bool concealed, bool shade)
         {
             MiniTreeIndividual mti = new MiniTreeIndividual(ir, firstnames, surname, date, createLink, createStalk,
-                                                              highlight, concealed, shade, CConfig.Instance.ConserveTreeWidth);
+                                                            highlight, concealed, shade, CConfig.Instance.ConserveTreeWidth);
 
             if (fMembers == null) {
                 fMembers = new List<MiniTreeObject>();

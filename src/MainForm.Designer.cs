@@ -1,6 +1,5 @@
 ﻿
 using System.Windows.Forms;
-using GEDmill.ListView;
 using GKUI.Components;
 
 namespace GEDmill
@@ -72,7 +71,6 @@ namespace GEDmill
         private CheckBox m_checkboxConfigCapEvents;
         private CheckBox m_checkboxConfigHideEmails;
         private CheckBox m_checkboxConfigOccupationHeadline;
-        private CheckBox m_checkboxConfigAllowTrailingSpaces;
         private CheckBox m_checkboxConfigShowWithheldRecords;
         private Label m_labelConfigTabSpaces;
         private TextBox m_textboxConfigTabSpaces;
@@ -217,7 +215,6 @@ namespace GEDmill
             m_checkboxConfigCapEvents = new CheckBox();
             m_checkboxConfigHideEmails = new CheckBox();
             m_checkboxConfigOccupationHeadline = new CheckBox();
-            m_checkboxConfigAllowTrailingSpaces = new CheckBox();
             m_checkboxConfigShowWithheldRecords = new CheckBox(); ;
             m_labelConfigTabSpaces = new Label();
             m_textboxConfigTabSpaces = new TextBox();
@@ -1285,15 +1282,6 @@ namespace GEDmill
             m_checkboxConfigOccupationHeadline.Text = "Show occupation in pa&ge heading";
 
             //
-            // configPanel_AllowTrailingSpaces_CheckBox (GEDCOM)
-            // 
-            m_checkboxConfigAllowTrailingSpaces.Location = new System.Drawing.Point(266, 110);
-            m_checkboxConfigAllowTrailingSpaces.Name = "m_checkboxConfigAllowTrailingSpaces";
-            m_checkboxConfigAllowTrailingSpaces.Size = new System.Drawing.Size(260, 20);
-            m_checkboxConfigAllowTrailingSpaces.TabIndex = 14;
-            m_checkboxConfigAllowTrailingSpaces.Text = "Preserve t&railing spaces in GEDCOM";
-
-            //
             // configPanel_TreeDiagrams_CheckBox (Tree Diagrams)
             // 
             m_checkboxConfigTreeDiagrams.Location = new System.Drawing.Point(8, 8);
@@ -1741,7 +1729,6 @@ namespace GEDmill
             tabPageSettingsGedcom.Controls.Add(m_checkboxConfigCapEvents);
             tabPageSettingsGedcom.Controls.Add(m_checkboxConfigHideEmails);
             tabPageSettingsGedcom.Controls.Add(m_checkboxConfigOccupationHeadline);
-            tabPageSettingsGedcom.Controls.Add(m_checkboxConfigAllowTrailingSpaces);
             tabPageSettingsGedcom.Controls.Add(m_checkboxConfigShowWithheldRecords);
             tabPageSettingsGedcom.Controls.Add(m_labelConfigTabSpaces);
             tabPageSettingsGedcom.Controls.Add(m_textboxConfigTabSpaces);

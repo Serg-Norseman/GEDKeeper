@@ -1,5 +1,4 @@
-/* CCreatorStylesheet.cs
- * 
+/* 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
  * 
@@ -15,18 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * History:  
- * 10Dec08 AlexC          Migrated from GEDmill 1.10
- *
  */
 
 using System;
 using System.Globalization;
 using System.IO;
-using GEDmill.Model;
 using GDModel;
+using GEDmill.Model;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -45,7 +39,7 @@ namespace GEDmill.HTML
         private string fBackgroundImageFilename;
 
 
-        public CreatorStylesheet(GDMTree gedcom, IProgressCallback progress, string sW3cfile, string sCssFilename, string sBackgroundImageFilename) : base(gedcom, progress, sW3cfile)
+        public CreatorStylesheet(GDMTree tree, IProgressCallback progress, string sW3cfile, string sCssFilename, string sBackgroundImageFilename) : base(tree, progress, sW3cfile)
         {
             fCssFilename = sCssFilename;
             fBackgroundImageFilename = sBackgroundImageFilename;

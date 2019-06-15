@@ -1,5 +1,4 @@
-/* MainForm.cs
- * 
+/* 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
  * 
@@ -15,11 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * History:  
- * 10Dec08 AlexC          Migrated from GEDmill 1.10
- *
  */
 
 using System;
@@ -28,13 +22,13 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using GDModel;
 using GDModel.Providers.GEDCOM;
 using GEDmill.Exceptions;
 using GEDmill.HTML;
 using GEDmill.ListView;
 using GEDmill.MiniTree;
 using GEDmill.Model;
-using GDModel;
 using GKCore.Logging;
 using GKUI.Components;
 
@@ -1911,8 +1905,6 @@ namespace GEDmill
             m_checkboxConfigCapEvents.Checked = CConfig.Instance.CapitaliseEventDescriptions;
             m_checkboxConfigHideEmails.Checked = CConfig.Instance.ObfuscateEmails;
             m_checkboxConfigOccupationHeadline.Checked = CConfig.Instance.OccupationHeadline;
-            m_checkboxConfigAllowTrailingSpaces.Checked = CConfig.Instance.DataMayEndWithWhitespace;
-            m_checkboxConfigAllowTrailingSpaces.Enabled = fCurrentPanel < 3; // Only enable this setting if we haven't loaded any GEDCOM yet.
             m_checkboxConfigShowWithheldRecords.Checked = CConfig.Instance.OnlyConceal;
             m_textboxConfigTabSpaces.Text = CConfig.Instance.TabSpaces.ToString();
             m_textboxConfigCommentary.Text = CConfig.Instance.CommentaryText;
@@ -2140,7 +2132,6 @@ namespace GEDmill
             CConfig.Instance.CapitaliseEventDescriptions = m_checkboxConfigCapEvents.Checked;
             CConfig.Instance.ObfuscateEmails = m_checkboxConfigHideEmails.Checked;
             CConfig.Instance.OccupationHeadline = m_checkboxConfigOccupationHeadline.Checked;
-            CConfig.Instance.DataMayEndWithWhitespace = m_checkboxConfigAllowTrailingSpaces.Checked;
             CConfig.Instance.OnlyConceal = m_checkboxConfigShowWithheldRecords.Checked;
 
             try {

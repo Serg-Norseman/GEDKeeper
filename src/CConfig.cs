@@ -1,5 +1,4 @@
-/* CConfig.cs
- * 
+/* 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
  * 
@@ -15,11 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * History:  
- * 10Dec08 AlexC          Migrated from GEDmill 1.10
- *
  */
 
 using System;
@@ -150,12 +144,6 @@ namespace GEDmill
 
         // String to use (in index) for names with no surname
         public string NoSurname;
-
-        // True and parser won't strip leading whitespace from gedcomLine value fields.
-        public bool DataMayStartWithWhitespace;
-
-        // True and parser won't strip trailing whitespace from gedcomLine value fields.
-        public bool DataMayEndWithWhitespace;
 
         // True if all sources mentioned by a restricted individual should also be restricted (i.e. omitted from website)
         public bool RestrictAssociatedSources;
@@ -322,7 +310,7 @@ namespace GEDmill
         // If true, withheld records will use the indivdual's name in minitrees, rather than m_concealedName.
         public bool UseWithheldNames;
 
-        // If true, first names are put on a different gedcomLine to surnames in minitree individual boxes.
+        // If true, first names are put on a different line to surnames in minitree individual boxes.
         public bool ConserveTreeWidth;
 
         // If true, the mini tree has siblings of the selected individuals ordered as they are in the GEDCOM. False means sort them by date. Significant when some siblings have no recorded birth date
@@ -387,7 +375,6 @@ namespace GEDmill
             TabSpaces = 8;
             PlaceWord = "in";
             CapitaliseEventDescriptions = true;
-            DataMayStartWithWhitespace = true;
             RestrictAssociatedSources = true;
             RenameMultimedia = true;
             IndexLetterPerPage = false;
@@ -522,7 +509,6 @@ namespace GEDmill
                 formatter.Serialize(stream, TabSpaces);
                 formatter.Serialize(stream, PlaceWord);
                 formatter.Serialize(stream, CapitaliseEventDescriptions);
-                formatter.Serialize(stream, DataMayStartWithWhitespace);
                 formatter.Serialize(stream, RestrictAssociatedSources);
                 formatter.Serialize(stream, RenameMultimedia);
                 formatter.Serialize(stream, IndexLetterPerPage);
@@ -599,7 +585,6 @@ namespace GEDmill
                 formatter.Serialize(stream, ConserveTreeWidth);
                 formatter.Serialize(stream, AllowMultimedia);
                 formatter.Serialize(stream, SupressBackreferences);
-                formatter.Serialize(stream, DataMayEndWithWhitespace);
                 formatter.Serialize(stream, KeepSiblingOrder);
                 formatter.Serialize(stream, IncludeHelpPage);
             } catch (Exception e) {
@@ -657,7 +642,6 @@ namespace GEDmill
                 TabSpaces = (uint)formatter.Deserialize(stream);
                 PlaceWord = (string)formatter.Deserialize(stream);
                 CapitaliseEventDescriptions = (bool)formatter.Deserialize(stream);
-                DataMayStartWithWhitespace = (bool)formatter.Deserialize(stream);
                 RestrictAssociatedSources = (bool)formatter.Deserialize(stream);
                 RenameMultimedia = (bool)formatter.Deserialize(stream);
                 IndexLetterPerPage = (bool)formatter.Deserialize(stream);
@@ -729,7 +713,6 @@ namespace GEDmill
                 ConserveTreeWidth = (bool)formatter.Deserialize(stream);
                 AllowMultimedia = (bool)formatter.Deserialize(stream);
                 SupressBackreferences = (bool)formatter.Deserialize(stream);
-                DataMayEndWithWhitespace = (bool)formatter.Deserialize(stream);
                 KeepSiblingOrder = (bool)formatter.Deserialize(stream);
                 IncludeHelpPage = (bool)formatter.Deserialize(stream);
             } catch (Exception e) {
@@ -803,7 +786,6 @@ namespace GEDmill
             KeepSiblingOrder = false;
             AllowMultimedia = true;
             SupressBackreferences = false;
-            DataMayEndWithWhitespace = false;
             IncludeHelpPage = true;
         }
     }

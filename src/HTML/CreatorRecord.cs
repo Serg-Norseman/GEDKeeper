@@ -1,5 +1,4 @@
-/* CCreatorRecord.cs
- * 
+/* 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
  * 
@@ -15,19 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * History:  
- * 10Dec08 AlexC          Migrated from GEDmill 1.10
- *
  */
 
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using GEDmill.Model;
 using GDModel;
+using GEDmill.Model;
 
 namespace GEDmill.HTML
 {
@@ -40,7 +34,7 @@ namespace GEDmill.HTML
         protected List<Multimedia> fMultimediaList;
 
 
-        protected CreatorRecord(GDMTree gedcom, IProgressCallback progress, string w3cfile) : base(gedcom, progress, w3cfile)
+        protected CreatorRecord(GDMTree tree, IProgressCallback progress, string w3cfile) : base(tree, progress, w3cfile)
         {
             fMultimediaList = new List<Multimedia>();
         }
@@ -235,7 +229,7 @@ namespace GEDmill.HTML
                 var note_strings = new List<string>(notes.Count);
 
                 foreach (GDMNotes ns in notes) {
-                    string noteText = CConfig.Instance.ObfuscateEmails ? ObfuscateEmail(ns.Notes.Text) : ns.Notes.Text;
+                    string noteText = CConfig.Instance.ObfuscateEmails ? ObfuscateEmail(ns.Lines.Text) : ns.Lines.Text;
                     note_strings.Add(string.Concat("<li>", EscapeHTML(noteText, false), "</li>"));
                 }
 

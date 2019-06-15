@@ -1,5 +1,4 @@
-/* CCreatorFrontPage.cs
- * 
+/* 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
  * 
@@ -15,11 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * History:  
- * 10Dec08 AlexC          Migrated from GEDmill 1.10
- *
  */
 
 using System;
@@ -27,8 +21,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using GEDmill.Model;
 using GDModel;
+using GEDmill.Model;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -44,7 +38,7 @@ namespace GEDmill.HTML
         private Stats fStats;
 
 
-        public CreatorFrontPage(GDMTree gedcom, IProgressCallback progress, string w3cfile, Stats stats) : base(gedcom, progress, w3cfile)
+        public CreatorFrontPage(GDMTree tree, IProgressCallback progress, string w3cfile, Stats stats) : base(tree, progress, w3cfile)
         {
             fStats = stats;
         }

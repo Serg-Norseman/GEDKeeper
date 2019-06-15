@@ -1,7 +1,4 @@
-using System;
-
-/* AssemblyInfo.cs
- * 
+/* 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
  * 
@@ -17,13 +14,9 @@ using System;
  *
  * You should have received a copy of the GNU General Public License
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * History:  
- * 10Dec08 AlexC          Migrated from GEDmill 1.10
- *
  */
 
+using System;
 using System.Reflection;
 
 [assembly: AssemblyTitle ("GEDmill")]
