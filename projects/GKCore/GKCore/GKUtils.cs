@@ -2671,12 +2671,12 @@ namespace GKCore
                 case GDMMultimediaFormat.mfBMP:
                 case GDMMultimediaFormat.mfGIF:
                 case GDMMultimediaFormat.mfJPG:
-                case GDMMultimediaFormat.mfPCX:
+                case GDMMultimediaFormat.mfPCX: // .net isn't supports
                 case GDMMultimediaFormat.mfTIF:
-                case GDMMultimediaFormat.mfTGA:
+                case GDMMultimediaFormat.mfTGA: // .net isn't supports
                 case GDMMultimediaFormat.mfPNG:
-                case GDMMultimediaFormat.mfRAW:
-                case GDMMultimediaFormat.mfPSD:
+                case GDMMultimediaFormat.mfRAW: // .net isn't supports
+                case GDMMultimediaFormat.mfPSD: // .net isn't supports
                     return MultimediaKind.mkImage;
 
                 case GDMMultimediaFormat.mfTXT:
@@ -2738,6 +2738,29 @@ namespace GKCore
             }
 
             return new MediaStore(storeType, fileName);
+        }
+
+        public static bool UseEmbeddedViewer(GDMMultimediaFormat format)
+        {
+            MultimediaKind mmKind = GKUtils.GetMultimediaKind(format);
+
+            switch (mmKind) {
+                case MultimediaKind.mkImage:
+                    return !(format == GDMMultimediaFormat.mfPCX || format == GDMMultimediaFormat.mfTGA ||
+                             format == GDMMultimediaFormat.mfRAW || format == GDMMultimediaFormat.mfPSD);
+
+                case MultimediaKind.mkVideo:
+                case MultimediaKind.mkAudio:
+                    return GlobalOptions.Instance.EmbeddedMediaPlayer;
+
+                case MultimediaKind.mkText:
+                    return (format == GDMMultimediaFormat.mfTXT || format == GDMMultimediaFormat.mfRTF ||
+                            format == GDMMultimediaFormat.mfHTM);
+
+                case MultimediaKind.mkNone:
+                default:
+                    return false;
+            }
         }
 
         #endregion
