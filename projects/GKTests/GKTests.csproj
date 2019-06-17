@@ -281,5 +281,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\test_native.ged" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\test_windsor.familyx" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

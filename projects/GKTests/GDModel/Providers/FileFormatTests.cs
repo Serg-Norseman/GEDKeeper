@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using GDModel.Providers.FamilyShow;
 using GDModel.Providers.GEDCOM;
 using GDModel.Providers.GedML;
 using GKCore;
@@ -391,6 +392,18 @@ namespace GDModel.Providers
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
                 //Assert.AreEqual("John Smith", iRec1.GetPrimaryFullName());
+            }
+        }
+
+        [Test]
+        public void Test_FamilyShow()
+        {
+            Assembly assembly = typeof(CoreTests).Assembly;
+            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources.test_windsor.familyx")) {
+                using (GDMTree tree = new GDMTree()) {
+                    var fxProvider = new FamilyXProvider(tree);
+                    fxProvider.LoadFromStreamExt(inStream, inStream);
+                }
             }
         }
     }

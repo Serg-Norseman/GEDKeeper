@@ -55,7 +55,7 @@ namespace GDModel.Providers
             }
         }
 
-        public void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        public virtual void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
         {
             using (StreamReader reader = FileHelper.OpenStreamReader(inputStream, GetDefaultEncoding())) {
                 fTree.Clear();

@@ -2250,30 +2250,26 @@ namespace GKCore
         {
             if (summary == null) return;
 
-            try
-            {
+            try {
                 summary.BeginUpdate();
                 StringList linkList = new StringList();
-                try
-                {
+                try {
                     summary.Clear();
-                    if (sourceRec != null)
-                    {
+                    if (sourceRec != null) {
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + sourceRec.ShortTitle + "[/size][/b][/u]");
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Author) + ": " + sourceRec.Originator.Lines.Text.Trim());
-                        summary.Add(LangMan.LS(LSID.LSID_Title) + ": \"" + sourceRec.Title.Lines.Text.Trim() + "\"");
-                        summary.Add(LangMan.LS(LSID.LSID_Publication) + ": \"" + sourceRec.Publication.Lines.Text.Trim() + "\"");
+                        summary.AddMultiline(LangMan.LS(LSID.LSID_Author) + ": " + sourceRec.Originator.Lines.Text.Trim());
+                        summary.AddMultiline(LangMan.LS(LSID.LSID_Title) + ": \"" + sourceRec.Title.Lines.Text.Trim() + "\"");
+                        summary.AddMultiline(LangMan.LS(LSID.LSID_Publication) + ": \"" + sourceRec.Publication.Lines.Text.Trim() + "\"");
+                        summary.AddMultiline(LangMan.LS(LSID.LSID_Text) + ": \"" + sourceRec.Text.Lines.Text.Trim() + "\"");
 
-                        if (sourceRec.RepositoryCitations.Count > 0)
-                        {
+                        if (sourceRec.RepositoryCitations.Count > 0) {
                             summary.Add("");
                             summary.Add(LangMan.LS(LSID.LSID_RPRepositories) + ":");
 
                             int num = sourceRec.RepositoryCitations.Count;
-                            for (int i = 0; i < num; i++)
-                            {
+                            for (int i = 0; i < num; i++) {
                                 GDMRepositoryRecord rep = (GDMRepositoryRecord)sourceRec.RepositoryCitations[i].Value;
 
                                 summary.Add("    " + HyperLink(rep.XRef, rep.RepositoryName, 0));
@@ -2286,31 +2282,25 @@ namespace GKCore
                         GDMTree tree = sourceRec.GetTree();
 
                         int num2 = tree.RecordsCount;
-                        for (int j = 0; j < num2; j++)
-                        {
+                        for (int j = 0; j < num2; j++) {
                             ShowSubjectLinks(tree[j], sourceRec, linkList);
                         }
 
                         linkList.Sort();
 
                         int num3 = linkList.Count;
-                        for (int j = 0; j < num3; j++)
-                        {
+                        for (int j = 0; j < num3; j++) {
                             summary.Add(linkList[j]);
                         }
 
                         RecListNotesRefresh(sourceRec, summary);
                         RecListMediaRefresh(sourceRec, summary);
                     }
-                }
-                finally
-                {
+                } finally {
                     linkList.Dispose();
                     summary.EndUpdate();
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKUtils.ShowSourceInfo(): " + ex.Message);
             }
         }

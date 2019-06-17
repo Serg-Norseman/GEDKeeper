@@ -100,11 +100,5 @@ namespace GDModel
             base.ReplaceXRefs(map);
             XRef = map.FindNewXRef(XRef);
         }
-
-        public void SetNameValue(string name, GDMRecord record)
-        {
-            SetName(name);
-            Value = record;
-        }
     }
 }

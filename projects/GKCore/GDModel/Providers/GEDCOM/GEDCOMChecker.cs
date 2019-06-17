@@ -418,28 +418,28 @@ namespace GDModel.Providers.GEDCOM
             bool result = false;
 
             try {
+                GEDCOMFormat format = GEDCOMProvider.GetGEDCOMFormat(tree);
+                int fileVer;
+                // remove a deprecated features
+                if (format == GEDCOMFormat.gf_Native) {
+                    GDMHeader header = tree.Header;
+                    GDMTag tag;
+
+                    tag = header.FindTag("_ADVANCED", 0);
+                    if (tag != null) header.DeleteTag("_ADVANCED");
+
+                    tag = header.FindTag("_EXT_NAME", 0);
+                    if (tag != null) header.DeleteTag("_EXT_NAME");
+
+                    fileVer = ConvertHelper.ParseInt(header.Source.Version, GKData.APP_FORMAT_DEFVER);
+                } else {
+                    fileVer = -1;
+                }
+
                 pc.ProgressInit(LangMan.LS(LSID.LSID_FormatCheck), 100);
                 try {
-                    GEDCOMFormat format = GEDCOMProvider.GetGEDCOMFormat(tree);
-                    int fileVer;
-
-                    // remove a deprecated features
-                    if (format == GEDCOMFormat.gf_Native) {
-                        GDMHeader header = tree.Header;
-                        GDMTag tag;
-
-                        tag = header.FindTag("_ADVANCED", 0);
-                        if (tag != null) header.DeleteTag("_ADVANCED");
-
-                        tag = header.FindTag("_EXT_NAME", 0);
-                        if (tag != null) header.DeleteTag("_EXT_NAME");
-
-                        fileVer = ConvertHelper.ParseInt(header.Source.Version, GKData.APP_FORMAT_DEFVER);
-                    } else {
-                        fileVer = -1;
-                    }
-
                     bool xrefValid = true;
+                    bool isExtraneous = (format != GEDCOMFormat.gf_Native);
 
                     int progress = 0;
                     int num = tree.RecordsCount;
@@ -447,7 +447,7 @@ namespace GDModel.Providers.GEDCOM
                         GDMRecord rec = tree[i];
                         CheckRecord(baseContext, tree, rec, format, fileVer);
 
-                        if (format != GEDCOMFormat.gf_Native && xrefValid && !CheckRecordXRef(rec)) {
+                        if (isExtraneous && xrefValid && !CheckRecordXRef(rec)) {
                             xrefValid = false;
                         }
 

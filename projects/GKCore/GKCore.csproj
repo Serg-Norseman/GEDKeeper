@@ -108,6 +108,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
     <Reference Include="Ude">
       <HintPath>..\libs\Ude.dll</HintPath>
     </Reference>
@@ -141,6 +142,8 @@
     <Compile Include="GDModel\GDMFileReferenceWithTitle.cs" />
     <Compile Include="GDModel\GDMGroupRecord.cs" />
     <Compile Include="GDModel\GDMHeader.cs" />
+    <Compile Include="GDModel\Providers\FamilyShow\FamilyXProvider.cs" />
+    <Compile Include="GDModel\Providers\FamilyShow\OPCUtility.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\AnselEncoding.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMChecker.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParser.cs" />

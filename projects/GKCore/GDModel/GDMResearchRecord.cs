@@ -193,8 +193,8 @@ namespace GDModel
             bool result = false;
 
             if (taskRecord != null) {
-                GDMPointer ptr = new GDMPointer(this);
-                ptr.SetNameValue(GEDCOMTagType._TASK, taskRecord);
+                GDMPointer ptr = new GDMPointer(this, GEDCOMTagType._TASK, string.Empty);
+                ptr.Value = taskRecord;
                 fTasks.Add(ptr);
                 result = true;
             }
@@ -231,8 +231,8 @@ namespace GDModel
             bool result = false;
 
             if (groupRecord != null) {
-                GDMPointer ptr = new GDMPointer(this);
-                ptr.SetNameValue(GEDCOMTagType._GROUP, groupRecord);
+                GDMPointer ptr = new GDMPointer(this, GEDCOMTagType._GROUP, string.Empty);
+                ptr.Value = groupRecord;
                 fGroups.Add(ptr);
                 result = true;
             }
@@ -269,8 +269,8 @@ namespace GDModel
             bool result = false;
 
             if (commRecord != null) {
-                GDMPointer ptr = new GDMPointer(this);
-                ptr.SetNameValue(GEDCOMTagType._COMM, commRecord);
+                GDMPointer ptr = new GDMPointer(this, GEDCOMTagType._COMM, string.Empty);
+                ptr.Value = commRecord;
                 fCommunications.Add(ptr);
                 result = true;
             }

@@ -211,6 +211,7 @@ namespace GKCore
             StringTokenizer strTok = new StringTokenizer(text);
             strTok.IgnoreWhiteSpace = false;
             strTok.RecognizeDecimals = false;
+            strTok.RecognizeQuotedStrings = false;
 
             Token tok = strTok.Next();
             while (tok.Kind != TokenKind.EOF) {

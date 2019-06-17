@@ -124,8 +124,8 @@ namespace GDModel
             mbrLink.Individual = member;
             fMembers.Add(mbrLink);
 
-            var ptr = new GDMPointer(member);
-            ptr.SetNameValue(GEDCOMTagType._GROUP, this);
+            var ptr = new GDMPointer(member, GEDCOMTagType._GROUP, string.Empty);
+            ptr.Value = this;
             member.Groups.Add(ptr);
 
             return true;
