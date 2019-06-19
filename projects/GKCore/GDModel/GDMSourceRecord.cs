@@ -79,12 +79,12 @@ namespace GDModel
             SetName(GEDCOMTagType.SOUR);
 
             fData = new GDMSourceData(this);
-            fOriginator = new GDMTextTag(this, GEDCOMTagType.AUTH, string.Empty);
-            fPublication = new GDMTextTag(this, GEDCOMTagType.PUBL, string.Empty);
+            fOriginator = new GDMTextTag(this, GEDCOMTagType.AUTH);
+            fPublication = new GDMTextTag(this, GEDCOMTagType.PUBL);
             fRepositoryCitations = new GDMList<GDMRepositoryCitation>(this);
             fShortTitle = string.Empty;
-            fText = new GDMTextTag(this, GEDCOMTagType.TEXT, string.Empty);
-            fTitle = new GDMTextTag(this, GEDCOMTagType.TITL, string.Empty);
+            fText = new GDMTextTag(this, GEDCOMTagType.TEXT);
+            fTitle = new GDMTextTag(this, GEDCOMTagType.TITL);
         }
 
         protected override void Dispose(bool disposing)

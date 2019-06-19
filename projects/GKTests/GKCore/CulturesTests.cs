@@ -195,6 +195,13 @@ namespace GKCore
             Assert.AreEqual(GDMSex.svUnknown, rusCulture.GetSex("", "", false));
 
             Assert.AreEqual("Иванова Ивана Ивановича", rusCulture.GetPossessiveName("Иванов Иван Иванович"));
+
+            GDMIndividualRecord iRec2 = fContext.Tree.CreateIndividual();
+            GDMPersonalName persName = new GDMPersonalName(iRec2);
+            persName.SetNameParts("Иван Иванович", "Иванов", "");
+            iRec2.PersonalNames.Add(persName);
+
+            Assert.AreEqual("Иванова Ивана Ивановича", rusCulture.GetPossessiveName(iRec2));
         }
     }
 }

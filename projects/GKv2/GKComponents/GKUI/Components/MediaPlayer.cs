@@ -168,13 +168,13 @@ namespace GKUI.Components
             fPlayer.Mute = false;
             fPlayer.Volume = trkVolume.Value;
 
-            if (100 >= fPlayer.Volume && fPlayer.Volume > 50) {
+            if (fPlayer.Volume <= 100 && fPlayer.Volume > 50) {
                 btnMute.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_volume_max.png");
             }
-            if (50 >= fPlayer.Volume && fPlayer.Volume > 5) {
+            if (fPlayer.Volume <= 50 && fPlayer.Volume > 5) {
                 btnMute.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_volume_middle.png");
             }
-            if (5 >= fPlayer.Volume && fPlayer.Volume > 0) {
+            if (fPlayer.Volume <= 5 && fPlayer.Volume > 0) {
                 btnMute.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_volume_min.png");
             }
             if (fPlayer.Volume == 0) {

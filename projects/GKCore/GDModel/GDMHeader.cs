@@ -230,7 +230,7 @@ namespace GDModel
             fCharacterSet = new GDMHeaderCharSet(this);
             fFile = new GDMHeaderFile(this);
             fGEDCOM = new GDMHeaderGEDCOM(this);
-            fNote = new GDMTextTag(this, GEDCOMTagType.NOTE, string.Empty);
+            fNote = new GDMTextTag(this, GEDCOMTagType.NOTE);
             fPlace = new GDMPlace(this);
             fSource = new GDMHeaderSource(this);
             fSubmission = new GDMPointer(this, GEDCOMTagType.SUBN, string.Empty);

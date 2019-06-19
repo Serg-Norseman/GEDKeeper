@@ -425,5 +425,11 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual(1, strList.Count);
             Assert.AreEqual(strings.Text, strList.Text);
         }
+
+        [Test]
+        public void Test_GetGeoCoord()
+        {
+            Assert.AreEqual(0.0, GEDCOMUtils.GetGeoCoord(null, GeoCoord.Lati));
+        }
     }
 }

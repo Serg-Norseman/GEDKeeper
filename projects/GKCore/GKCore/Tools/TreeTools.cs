@@ -554,8 +554,7 @@ namespace GKCore.Tools
             {
                 string result = "[" + Rec.XRef + "] ";
 
-                switch (Rec.RecordType)
-                {
+                switch (Rec.RecordType) {
                     case GDMRecordType.rtIndividual:
                         result = result + GKUtils.GetNameString(((GDMIndividualRecord)Rec), true, false);
                         break;
@@ -714,12 +713,10 @@ namespace GKCore.Tools
                 checksList.Clear();
                 GKUtils.InitExtCounts(tree, 0);
 
-                int num = tree.RecordsCount;
-                for (int i = 0; i < num; i++) {
+                for (int i = 0, num = tree.RecordsCount; i < num; i++) {
                     progress.ProgressStep();
 
                     GDMRecord rec = tree[i];
-
                     switch (rec.RecordType) {
                         case GDMRecordType.rtIndividual:
                             CheckIndividualRecord(rec as GDMIndividualRecord, checksList);
@@ -795,52 +792,39 @@ namespace GKCore.Tools
 
         #region Tree Split
 
-        private static void CheckRelations_AddRel(List<GDMRecord> splitList, GDMRecord aRec)
+        private static void CheckRelations_AddRel(List<GDMRecord> splitList, GDMRecord rec)
         {
-            if (splitList.IndexOf(aRec) < 0)
-            {
-                splitList.Add(aRec);
+            if (rec != null && splitList.IndexOf(rec) < 0) {
+                splitList.Add(rec);
             }
         }
 
         private static void CheckRelations_CheckRecord(List<GDMRecord> splitList, GDMRecord rec)
         {
-            int num = rec.MultimediaLinks.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0, num = rec.MultimediaLinks.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, rec.MultimediaLinks[i].Value);
             }
 
-            int num2 = rec.Notes.Count;
-            for (int i = 0; i < num2; i++)
-            {
+            for (int i = 0, num = rec.Notes.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, rec.Notes[i].Value);
             }
 
-            int num3 = rec.SourceCitations.Count;
-            for (int i = 0; i < num3; i++)
-            {
+            for (int i = 0, num = rec.SourceCitations.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, rec.SourceCitations[i].Value);
             }
         }
 
         private static void CheckRelations_CheckTag(List<GDMRecord> splitList, GDMTagWithLists tag)
         {
-            int num = tag.MultimediaLinks.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0, num = tag.MultimediaLinks.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, tag.MultimediaLinks[i].Value);
             }
 
-            int num2 = tag.Notes.Count;
-            for (int i = 0; i < num2; i++)
-            {
+            for (int i = 0, num = tag.Notes.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, tag.Notes[i].Value);
             }
 
-            int num3 = tag.SourceCitations.Count;
-            for (int i = 0; i < num3; i++)
-            {
+            for (int i = 0, num = tag.SourceCitations.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, tag.SourceCitations[i].Value);
             }
         }
@@ -849,45 +833,31 @@ namespace GKCore.Tools
         {
             CheckRelations_CheckRecord(splitList, iRec);
 
-            int num = iRec.ChildToFamilyLinks.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0, num = iRec.ChildToFamilyLinks.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, iRec.ChildToFamilyLinks[i].Family);
             }
 
-            int num2 = iRec.SpouseToFamilyLinks.Count;
-            for (int i = 0; i < num2; i++)
-            {
+            for (int i = 0, num = iRec.SpouseToFamilyLinks.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, iRec.SpouseToFamilyLinks[i].Family);
             }
 
-            int num3 = iRec.Events.Count;
-            for (int i = 0; i < num3; i++)
-            {
+            for (int i = 0, num = iRec.Events.Count; i < num; i++) {
                 CheckRelations_CheckTag(splitList, iRec.Events[i]);
             }
 
-            int num5 = iRec.Submittors.Count;
-            for (int i = 0; i < num5; i++)
-            {
+            for (int i = 0, num = iRec.Submittors.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, iRec.Submittors[i].Value);
             }
 
-            int num6 = iRec.Associations.Count;
-            for (int i = 0; i < num6; i++)
-            {
+            for (int i = 0, num = iRec.Associations.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, iRec.Associations[i].Value);
             }
 
-            int num7 = iRec.Aliases.Count;
-            for (int i = 0; i < num7; i++)
-            {
+            for (int i = 0, num = iRec.Aliases.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, iRec.Aliases[i].Value);
             }
 
-            int num10 = iRec.Groups.Count;
-            for (int i = 0; i < num10; i++)
-            {
+            for (int i = 0, num = iRec.Groups.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, iRec.Groups[i].Value);
             }
         }
@@ -896,15 +866,11 @@ namespace GKCore.Tools
         {
             CheckRelations_CheckRecord(splitList, fRec);
 
-            int num = fRec.Events.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0, num = fRec.Events.Count; i < num; i++) {
                 CheckRelations_CheckTag(splitList, fRec.Events[i]);
             }
 
-            int num5 = fRec.Submittors.Count;
-            for (int i = 0; i < num5; i++)
-            {
+            for (int i = 0, num = fRec.Submittors.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, fRec.Submittors[i].Value);
             }
         }
@@ -913,8 +879,7 @@ namespace GKCore.Tools
         {
             CheckRelations_CheckRecord(splitList, sRec);
 
-            int num = sRec.RepositoryCitations.Count;
-            for (int i = 0; i < num; i++) {
+            for (int i = 0, num = sRec.RepositoryCitations.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, sRec.RepositoryCitations[i].Value);
             }
         }
@@ -925,11 +890,9 @@ namespace GKCore.Tools
                 throw new ArgumentNullException("splitList");
 
             int num = splitList.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMRecord rec = splitList[i];
-                switch (rec.RecordType)
-                {
+                switch (rec.RecordType) {
                     case GDMRecordType.rtIndividual:
                         CheckRelations_CheckIndividual(splitList, rec as GDMIndividualRecord);
                         break;
@@ -1131,25 +1094,37 @@ namespace GKCore.Tools
             if (logBox == null)
                 throw new ArgumentNullException("logBox");
 
-            GDMTree mainTree = context.Tree;
-            GDMTree tempTree = new GDMTree();
+            using (var tempTree = new GDMTree()) {
+                var gedcomProvider = new GEDCOMProvider(tempTree);
+                gedcomProvider.LoadFromFile(fileName);
 
-            var gedcomProvider = new GEDCOMProvider(tempTree);
-            gedcomProvider.LoadFromFile(fileName);
+                CompareTree(context, tempTree, logBox);
+            }
+        }
+
+        public static void CompareTree(IBaseContext context, GDMTree tempTree, ITextBoxHandler logBox)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            if (tempTree == null)
+                throw new ArgumentNullException("tempTree");
+
+            if (logBox == null)
+                throw new ArgumentNullException("logBox");
+
+            GDMTree mainTree = context.Tree;
 
             StringList fams = new StringList();
             StringList names = new StringList();
 
-            try
-            {
+            try {
                 logBox.AppendText(LangMan.LS(LSID.LSID_SearchMatches) + "\r\n");
 
-                int num = mainTree.RecordsCount;
-                for (int i = 0; i < num; i++)
-                {
+                int mainCount = mainTree.RecordsCount;
+                for (int i = 0; i < mainCount; i++) {
                     GDMRecord rec = mainTree[i];
-                    if (rec.RecordType == GDMRecordType.rtIndividual)
-                    {
+                    if (rec.RecordType == GDMRecordType.rtIndividual) {
                         GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
 
                         int idx = names.AddObject(GKUtils.GetNameString(iRec, true, false), new ExtList<GDMIndividualRecord>());
@@ -1160,91 +1135,72 @@ namespace GKCore.Tools
                     }
                 }
 
-                int num2 = tempTree.RecordsCount;
-                for (int i = 0; i < num2; i++)
-                {
+                int tempCount = tempTree.RecordsCount;
+                for (int i = 0; i < tempCount; i++) {
                     GDMRecord rec = tempTree[i];
-                    if (rec.RecordType == GDMRecordType.rtIndividual)
-                    {
+                    if (rec.RecordType == GDMRecordType.rtIndividual) {
                         GDMIndividualRecord iRec = (GDMIndividualRecord)tempTree[i];
 
                         string tm = GKUtils.GetNameString(iRec, true, false);
                         int idx = names.IndexOf(tm);
-                        if (idx >= 0)
-                        {
+                        if (idx >= 0) {
                             ((ExtList<GDMIndividualRecord>)names.GetObject(idx)).Add(iRec);
                         }
 
                         var parts = GKUtils.GetNameParts(iRec);
                         tm = context.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GDMSex.svFemale);
                         idx = fams.IndexOf(tm);
-                        if (idx >= 0)
-                        {
+                        if (idx >= 0) {
                             fams.SetObject(idx, 1);
                         }
                     }
                 }
 
-                for (int i = fams.Count - 1; i >= 0; i--)
-                {
+                for (int i = fams.Count - 1; i >= 0; i--) {
                     if (fams.GetObject(i) == null || fams[i] == "?")
                         fams.Delete(i);
                 }
 
-                for (int i = names.Count - 1; i >= 0; i--)
-                {
+                for (int i = names.Count - 1; i >= 0; i--) {
                     ExtList<GDMIndividualRecord> lst = (ExtList<GDMIndividualRecord>)names.GetObject(i);
 
-                    if (lst.Count == 1)
-                    {
+                    if (lst.Count == 1) {
                         lst.Dispose();
                         names.Delete(i);
                     }
                 }
 
-                if (fams.Count != 0)
-                {
+                int famsCount = fams.Count;
+                if (famsCount != 0) {
                     logBox.AppendText(LangMan.LS(LSID.LSID_SimilarSurnames) + "\r\n");
-
-                    int num3 = fams.Count;
-                    for (int i = 0; i < num3; i++)
-                    {
+                    for (int i = 0; i < famsCount; i++) {
                         logBox.AppendText("    " + fams[i] + "\r\n");
                     }
                 }
 
-                if (names.Count != 0)
-                {
+                int namesCount = names.Count;
+                if (namesCount != 0) {
                     logBox.AppendText(LangMan.LS(LSID.LSID_SimilarNames) + "\r\n");
-
-                    int num4 = names.Count;
-                    for (int i = 0; i < num4; i++)
-                    {
+                    for (int i = 0; i < namesCount; i++) {
                         logBox.AppendText("    " + names[i] + "\r\n");
                         ExtList<GDMIndividualRecord> lst = (ExtList<GDMIndividualRecord>)names.GetObject(i);
 
                         int num5 = lst.Count;
-                        for (int j = 0; j < num5; j++)
-                        {
+                        for (int j = 0; j < num5; j++) {
                             GDMIndividualRecord iRec = lst[j];
                             logBox.AppendText("      * " + GKUtils.GetNameString(iRec, true, false) + " " + GKUtils.GetLifeStr(iRec) + "\r\n");
                         }
                     }
                 }
-            }
-            finally
-            {
-                int num6 = names.Count;
-                for (int i = 0; i < num6; i++)
-                {
+            } finally {
+                int namesCount = names.Count;
+                for (int i = 0; i < namesCount; i++) {
                     IDisposable inst = names.GetObject(i) as IDisposable;
                     if (inst != null) inst.Dispose();
                 }
-
                 names.Dispose();
-                fams.Dispose();
 
-                tempTree.Dispose();
+                fams.Dispose();
             }
         }
 

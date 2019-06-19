@@ -29,6 +29,7 @@ using GKCore.Maps;
 using GKCore.MVP.Controls;
 using GKCore.Plugins;
 using GKCore.Types;
+using GKUI.Providers;
 
 namespace GKTests.Stubs
 {
@@ -250,6 +251,61 @@ namespace GKTests.Stubs
         }
 
         public override void Execute()
+        {
+        }
+    }
+
+    public sealed class TextBoxStub : BaseControlHandler<System.Windows.Forms.TextBox, TextBoxStub>, ITextBoxHandler
+    {
+        private StringList fStrings;
+
+        public TextBoxStub(System.Windows.Forms.TextBox control) : base(control)
+        {
+            fStrings = new StringList();
+        }
+
+        public string[] Lines
+        {
+            get { return fStrings.ToArray(); }
+            set {
+                fStrings.Clear();
+                fStrings.AddStrings(value);
+            }
+        }
+
+        public bool ReadOnly
+        {
+            get { return false; }
+            set {  }
+        }
+
+        public string SelectedText
+        {
+            get { return string.Empty; }
+            set {  }
+        }
+
+        public string Text
+        {
+            get { return string.Empty; }
+            set {  }
+        }
+
+        public void AppendText(string text)
+        {
+            fStrings.Add(text);
+        }
+
+        public void Clear()
+        {
+            fStrings.Clear();
+        }
+
+        public void Copy()
+        {
+        }
+
+        public void SelectAll()
         {
         }
     }
