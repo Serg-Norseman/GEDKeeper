@@ -18,24 +18,36 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using BSLib;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMSourceCitation : GDMPointer
+    public sealed class GDMSourceCitation : GDMPointer, IGDMTextObject
     {
+        private int fCertaintyAssessment;
+        private StringList fDescription;
+        private string fPage;
+
+
+        public int CertaintyAssessment
+        {
+            get { return fCertaintyAssessment; }
+            set { fCertaintyAssessment = value; }
+        }
+
         public StringList Description
         {
             get {
                 StringList description;
 
                 if (!IsPointer) {
-                    description = GetTagStrings(this);
+                    description = fDescription;
                 } else {
                     GDMSourceRecord sourceRecord = Value as GDMSourceRecord;
                     if (sourceRecord != null) {
-                        description = sourceRecord.Title;
+                        description = sourceRecord.Title.Lines;
                     } else {
                         description = new StringList();
                     }
@@ -43,38 +55,49 @@ namespace GDModel
 
                 return description;
             }
-            set {
-                Clear();
-                SetTagStrings(this, value);
-            }
         }
 
         public string Page
         {
-            get { return GetTagStringValue(GEDCOMTagType.PAGE); }
-            set { SetTagStringValue(GEDCOMTagType.PAGE, value); }
+            get { return fPage; }
+            set { fPage = value; }
         }
 
-        public int CertaintyAssessment
+        StringList IGDMTextObject.Lines
         {
-            get { return GetTagIntegerValue(GEDCOMTagType.QUAY, 0); }
-            set { SetTagIntegerValue(GEDCOMTagType.QUAY, value); }
+            get { return fDescription; }
         }
 
-
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMSourceCitation(owner, tagName, tagValue);
-        }
 
         public GDMSourceCitation(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.SOUR);
+
+            fCertaintyAssessment = -1;
+            fDescription = new StringList();
+            fPage = string.Empty;
         }
 
-        public GDMSourceCitation(GDMObject owner, string tagName, string tagValue) : this(owner)
+        public override void Assign(GDMTag source)
         {
-            SetNameValue(tagName, tagValue);
+            GDMSourceCitation sourceObj = (source as GDMSourceCitation);
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+
+            fCertaintyAssessment = sourceObj.fCertaintyAssessment;
+            fPage = sourceObj.fPage;
+            fDescription.Assign(sourceObj.fDescription);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            fCertaintyAssessment = -1;
+            fDescription.Clear();
+            fPage = string.Empty;
         }
 
         public override bool IsEmpty()
@@ -83,14 +106,14 @@ namespace GDModel
             if (IsPointer) {
                 result = base.IsEmpty();
             } else {
-                result = (string.IsNullOrEmpty(fStringValue) && SubTags.Count == 0);
+                result = fDescription.IsEmpty() && (SubTags.Count == 0) && string.IsNullOrEmpty(fPage);
             }
             return result;
         }
 
         protected override string GetStringValue()
         {
-            string result = IsPointer ? base.GetStringValue() : fStringValue;
+            string result = IsPointer ? base.GetStringValue() : ((fDescription.Count > 0) ? fDescription[0] : string.Empty);
             return result;
         }
 
@@ -98,7 +121,10 @@ namespace GDModel
         {
             string result = base.ParseString(strValue);
             if (!IsPointer) {
-                fStringValue = result;
+                fDescription.Clear();
+                if (!string.IsNullOrEmpty(result)) {
+                    fDescription.Add(result);
+                }
                 result = string.Empty;
             } else {
                 fStringValue = string.Empty;
@@ -112,7 +138,7 @@ namespace GDModel
         /// <returns>Checked value of CertaintyAssessment</returns>
         public int GetValidCertaintyAssessment()
         {
-            int val = CertaintyAssessment;
+            int val = fCertaintyAssessment;
             return (val >= 0 && val <= 3) ? val : 0;
         }
     }

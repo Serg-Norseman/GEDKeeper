@@ -342,7 +342,7 @@ namespace GKUI.Components
                 case Keys.Left:
                     if (fChartType == CircleChartType.Ancestors && fModel.RootPerson != null) {
                         GDMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
-                        var father = (fam == null) ? null : fam.GetHusband();
+                        var father = (fam == null) ? null : fam.Husband.Individual;
                         if (father != null) {
                             RootPerson = father;
                         }
@@ -352,7 +352,7 @@ namespace GKUI.Components
                 case Keys.Right:
                     if (fChartType == CircleChartType.Ancestors && fModel.RootPerson != null) {
                         GDMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
-                        var mother = (fam == null) ? null : fam.GetWife();
+                        var mother = (fam == null) ? null : fam.Wife.Individual;
                         if (mother != null) {
                             RootPerson = mother;
                         }

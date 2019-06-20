@@ -24,12 +24,15 @@ namespace GDModel
 {
     public sealed class GDMSubmitterRecord : GDMRecord
     {
+        private GDMAddress fAddress;
         private GDMList<GDMLanguage> fLanguages;
+        private GDMPersonalName fName;
+        private string fRegisteredReference;
 
 
         public GDMAddress Address
         {
-            get { return GetTag<GDMAddress>(GEDCOMTagType.ADDR, GDMAddress.Create); }
+            get { return fAddress; }
         }
 
         public GDMList<GDMLanguage> Languages
@@ -39,32 +42,25 @@ namespace GDModel
 
         public new GDMPersonalName Name
         {
-            get { return GetTag<GDMPersonalName>(GEDCOMTagType.NAME, GDMPersonalName.Create); }
+            get { return fName; }
         }
 
         public string RegisteredReference
         {
-            get { return GetTagStringValue(GEDCOMTagType.RFN); }
-            set { SetTagStringValue(GEDCOMTagType.RFN, value); }
+            get { return fRegisteredReference; }
+            set { fRegisteredReference = value; }
         }
 
-
-        public void SetLanguage(int index, string value)
-        {
-            if (index < 0) return;
-
-            while (index >= fLanguages.Count) {
-                fLanguages.Add(new GDMLanguage(this, GEDCOMTagType.LANG, ""));
-            }
-            fLanguages[index].StringValue = value;
-        }
 
         public GDMSubmitterRecord(GDMObject owner) : base(owner)
         {
             SetRecordType(GDMRecordType.rtSubmitter);
             SetName(GEDCOMTagType.SUBM);
 
+            fAddress = new GDMAddress(this);
             fLanguages = new GDMList<GDMLanguage>(this);
+            fName = new GDMPersonalName(this);
+            fRegisteredReference = string.Empty;
         }
 
         protected override void Dispose(bool disposing)
@@ -75,27 +71,45 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        public override void Clear()
+        {
+            base.Clear();
+
+            fAddress.Clear();
+            fLanguages.Clear();
+            fName.Clear();
+            fRegisteredReference = string.Empty;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && fAddress.IsEmpty() && (fLanguages.Count == 0) && fName.IsEmpty() &&
+                string.IsNullOrEmpty(fRegisteredReference);
+        }
+
+        public override void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            base.ReplaceXRefs(map);
+
+            fAddress.ReplaceXRefs(map);
+            fLanguages.ReplaceXRefs(map);
+            fName.ReplaceXRefs(map);
+        }
+
         public GDMLanguage AddLanguage(GDMLanguage value)
         {
             fLanguages.Add(value);
             return value;
         }
 
-        public override void Clear()
+        public void SetLanguage(int index, string value)
         {
-            base.Clear();
-            fLanguages.Clear();
-        }
+            if (index < 0) return;
 
-        public override bool IsEmpty()
-        {
-            return base.IsEmpty() && (fLanguages.Count == 0);
-        }
-
-        public override void ReplaceXRefs(GDMXRefReplacer map)
-        {
-            base.ReplaceXRefs(map);
-            fLanguages.ReplaceXRefs(map);
+            while (index >= fLanguages.Count) {
+                fLanguages.Add(new GDMLanguage(this, GEDCOMTagType.LANG, ""));
+            }
+            fLanguages[index].StringValue = value;
         }
     }
 }

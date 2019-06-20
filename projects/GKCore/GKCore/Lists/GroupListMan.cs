@@ -114,8 +114,8 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GDMPointer ptrMember in grp.Members) {
-                    GDMIndividualRecord member = ptrMember.Value as GDMIndividualRecord;
+                foreach (GDMIndividualLink ptrMember in grp.Members) {
+                    GDMIndividualRecord member = ptrMember.Individual;
                     if (member == null) continue;
 
                     fSheetList.AddItem(member, new object[] { GKUtils.GetNameString(member, true, false) });
@@ -140,7 +140,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    member = fBaseWin.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svNone);
+                    member = fBaseWin.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
                     result = (member != null);
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, grp, member);

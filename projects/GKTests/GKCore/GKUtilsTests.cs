@@ -201,10 +201,10 @@ namespace GKCore
         public void Test_PrepareHeader()
         {
             GKUtils.PrepareHeader(fContext.Tree, "c:\\test.ged", GEDCOMCharacterSet.csUTF8, true);
-            Assert.AreEqual(0, fContext.Tree.Header.FileRevision);
+            Assert.AreEqual(0, fContext.Tree.Header.File.Revision);
 
             GKUtils.PrepareHeader(fContext.Tree, "c:\\test.ged", GEDCOMCharacterSet.csUTF8, false);
-            Assert.AreEqual(1, fContext.Tree.Header.FileRevision);
+            Assert.AreEqual(1, fContext.Tree.Header.File.Revision);
         }
 
         [Test]
@@ -408,12 +408,9 @@ namespace GKCore
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
-            string st3;
-            st3 = GKUtils.GetBirthDate(null, DateFormat.dfDD_MM_YYYY, true);
-            Assert.AreEqual("", st3);
+            Assert.AreEqual("", GKUtils.GetBirthDate(null, DateFormat.dfDD_MM_YYYY, true));
 
-            st3 = GKUtils.GetBirthDate(iRec, DateFormat.dfDD_MM_YYYY, true);
-            Assert.AreEqual("28.12.1990", st3);
+            Assert.AreEqual("28.12.1990", GKUtils.GetBirthDate(iRec, DateFormat.dfDD_MM_YYYY, true));
         }
 
         [Test]
@@ -421,12 +418,9 @@ namespace GKCore
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
-            string st3;
-            st3 = GKUtils.GetDeathDate(null, DateFormat.dfDD_MM_YYYY, true);
-            Assert.AreEqual("", st3);
+            Assert.AreEqual("", GKUtils.GetDeathDate(null, DateFormat.dfDD_MM_YYYY, true));
             
-            st3 = GKUtils.GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, true);
-            Assert.AreEqual("28.12.2010", st3);
+            Assert.AreEqual("28.12.2010", GKUtils.GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, true));
         }
 
         [Test]
@@ -436,9 +430,7 @@ namespace GKCore
 
             Assert.AreEqual("", GKUtils.GetLifeStr(null));
 
-            string st3;
-            st3 = GKUtils.GetLifeStr(iRec);
-            Assert.AreEqual(" (28.12.1990 - 28.12.2010)", st3);
+            Assert.AreEqual(" (28.12.1990 - 28.12.2010)", GKUtils.GetLifeStr(iRec));
         }
 
         [Test]
@@ -451,13 +443,9 @@ namespace GKCore
         [Test]
         public void Test_GetSexBySign()
         {
-            GDMSex sex;
-            sex = GKUtils.GetSexBySign('F');
-            Assert.AreEqual(GDMSex.svFemale, sex);
-            sex = GKUtils.GetSexBySign('M');
-            Assert.AreEqual(GDMSex.svMale, sex);
-            sex = GKUtils.GetSexBySign('U');
-            Assert.AreEqual(GDMSex.svUndetermined, sex);
+            Assert.AreEqual(GDMSex.svFemale, GKUtils.GetSexBySign('F'));
+            Assert.AreEqual(GDMSex.svMale, GKUtils.GetSexBySign('M'));
+            Assert.AreEqual(GDMSex.svUnknown, GKUtils.GetSexBySign('U'));
         }
 
         [Test]

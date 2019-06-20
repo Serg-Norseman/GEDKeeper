@@ -25,56 +25,51 @@ namespace GDModel
 {
     public sealed class GDMChangeDate : GDMTag
     {
-        public GDMDate ChangeDate
-        {
-            get { return GetTag<GDMDate>(GEDCOMTagType.DATE, GDMDate.Create); }
-        }
+        internal static readonly DateTime ZeroDateTime = new DateTime(0);
 
-        public GDMTime ChangeTime
-        {
-            get {
-                GDMTag dateTag = ChangeDate;
-                return dateTag.GetTag<GDMTime>(GEDCOMTagType.TIME, GDMTime.Create);
-            }
-        }
+        private DateTime fChangeDateTime;
+
 
         public DateTime ChangeDateTime
         {
-            get {
-                return ChangeDate.Date + ChangeTime.Value;
-            }
-            set {
-                ChangeDate.Date = value.Date;
-                ChangeTime.Value = value.TimeOfDay;
-            }
+            get { return fChangeDateTime; }
+            set { fChangeDateTime = value; }
         }
 
-        public GDMNotes Notes
-        {
-            get { return GetTag<GDMNotes>(GEDCOMTagType.NOTE, GDMNotes.Create); }
-        }
-
-
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMChangeDate(owner, tagName, tagValue);
-        }
 
         public GDMChangeDate(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.CHAN);
         }
 
-        public GDMChangeDate(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
-        }
-
         public override string ToString()
         {
-            DateTime cdt = ChangeDateTime;
+            DateTime cdt = fChangeDateTime;
             string result = ((cdt.Ticks == 0) ? "" : cdt.ToString("yyyy.MM.dd HH:mm:ss", null));
             return result;
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMChangeDate otherChnDate = (source as GDMChangeDate);
+            if (otherChnDate == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(otherChnDate);
+
+            fChangeDateTime = otherChnDate.fChangeDateTime;
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            fChangeDateTime = new DateTime(0);
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && (fChangeDateTime.Equals(ZeroDateTime));
         }
     }
 }

@@ -63,10 +63,10 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             fView.ShortTitle.Text = fModel.ShortTitle;
-            fView.Author.Text = fModel.Originator.Text.Trim();
-            fView.Title.Text = fModel.Title.Text.Trim();
-            fView.Publication.Text = fModel.Publication.Text.Trim();
-            fView.Text.Text = fModel.Text.Text.Trim();
+            fView.Author.Text = fModel.Originator.Lines.Text.Trim();
+            fView.Title.Text = fModel.Title.Lines.Text.Trim();
+            fView.Publication.Text = fModel.Publication.Lines.Text.Trim();
+            fView.Text.Text = fModel.Text.Lines.Text.Trim();
 
             fView.RepositoriesList.ListModel.DataOwner = fModel;
             fView.NotesList.ListModel.DataOwner = fModel;

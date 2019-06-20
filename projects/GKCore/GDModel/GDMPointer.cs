@@ -36,7 +36,8 @@ namespace GDModel
         public GDMRecord Value
         {
             get {
-                return FindRecord(XRef);
+                GDMTree tree = GetTree();
+                return (tree == null) ? null : tree.XRefIndex_Find(XRef);
             }
             set {
                 fXRef = string.Empty;
@@ -73,6 +74,12 @@ namespace GDModel
             SetNameValue(tagName, tagValue);
         }
 
+        public override void Clear()
+        {
+            base.Clear();
+            fXRef = string.Empty;
+        }
+
         public override bool IsEmpty()
         {
             return (base.IsEmpty() && string.IsNullOrEmpty(fXRef));
@@ -92,12 +99,6 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
             XRef = map.FindNewXRef(XRef);
-        }
-
-        public void SetNameValue(string name, GDMRecord record)
-        {
-            SetName(name);
-            Value = record;
         }
     }
 }

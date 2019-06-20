@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using BSLib;
 using GDModel.Providers.GEDCOM;
 
@@ -85,32 +86,54 @@ namespace GDModel
 
     public class GDMFileReference : GDMTag
     {
+        private GDMMultimediaFormat fMultimediaFormat;
+        private GDMMediaType fMediaType;
+
+
         public GDMMultimediaFormat MultimediaFormat
         {
-            get { return GEDCOMUtils.GetMultimediaFormatVal(GetTagStringValue(GEDCOMTagType.FORM)); }
-            set { SetTagStringValue(GEDCOMTagType.FORM, GEDCOMUtils.GetMultimediaFormatStr(value)); }
+            get { return fMultimediaFormat; }
+            set { fMultimediaFormat = value; }
         }
 
         public GDMMediaType MediaType
         {
-            get { return GEDCOMUtils.GetMediaTypeVal(GetTagStringValue(MediaTypeTagName())); }
-            set { SetTagStringValue(MediaTypeTagName(), GEDCOMUtils.GetMediaTypeStr(value)); }
+            get { return fMediaType; }
+            set { fMediaType = value; }
         }
 
 
         public GDMFileReference(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.FILE);
+
+            fMultimediaFormat = GDMMultimediaFormat.mfNone;
+            fMediaType = GDMMediaType.mtUnknown;
         }
 
-        public GDMFileReference(GDMObject owner, string tagName, string tagValue) : this(owner)
+        public override void Assign(GDMTag source)
         {
-            SetNameValue(tagName, tagValue);
+            GDMFileReference sourceObj = (source as GDMFileReference);
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+
+            fMultimediaFormat = sourceObj.fMultimediaFormat;
+            fMediaType = sourceObj.fMediaType;
         }
 
-        protected virtual string MediaTypeTagName()
+        public override void Clear()
         {
-            return @"FORM\MEDI";
+            base.Clear();
+
+            fMultimediaFormat = GDMMultimediaFormat.mfNone;
+            fMediaType = GDMMediaType.mtUnknown;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && (fMultimediaFormat == GDMMultimediaFormat.mfNone) && (fMediaType == GDMMediaType.mtUnknown);
         }
 
         public void LinkFile(string fileName)

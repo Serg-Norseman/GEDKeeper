@@ -25,25 +25,27 @@ using GKCore.Types;
 
 namespace GDModel
 {
-    // Standard: M/F/U (gedcom-5.5.1, p.61)
-    // FIXME: remove None
+    // Standard: [M]Male / [F]Female / [U]Unknown (gedcom-5.5.1, p.61)
+    // Tamura Jones: +[X]Intersex (GEDCOM 5.5.1 Specification Annotated Edition)
     public enum GDMSex
     {
-        svNone,
+        svUnknown,
         svMale,
         svFemale,
-        svUndetermined,
+        svIntersex,
 
-        svLast = svUndetermined
+        svLast = svFemale
     }
 
 
     public sealed class GDMIndividualRecord : GDMRecordWithEvents
     {
+        private string fAncestralFileNumber;
         private GDMList<GDMAlias> fAliasses;
         private GDMList<GDMAssociation> fAssociations;
         private GDMList<GDMChildToFamilyLink> fChildToFamilyLinks;
         private GDMList<GDMPointer> fGroups;
+        private string fPermanentRecordFileNumber;
         private GDMList<GDMPersonalName> fPersonalNames;
         private GDMList<GDMSpouseToFamilyLink> fSpouseToFamilyLinks;
         private GDMSex fSex;
@@ -56,8 +58,8 @@ namespace GDModel
 
         public string AncestralFileNumber
         {
-            get { return GetTagStringValue(GEDCOMTagType.AFN); }
-            set { SetTagStringValue(GEDCOMTagType.AFN, value); }
+            get { return fAncestralFileNumber; }
+            set { fAncestralFileNumber = value; }
         }
 
         public GDMList<GDMAssociation> Associations
@@ -73,7 +75,7 @@ namespace GDModel
             set {
                 if (value) {
                     if (FindTag(GEDCOMTagType._BOOKMARK, 0) == null) {
-                        AddTag(GEDCOMTagType._BOOKMARK, "", null);
+                        AddTag(new GDMTag(this, GEDCOMTagType._BOOKMARK, ""));
                     }
                 } else {
                     DeleteTag(GEDCOMTagType._BOOKMARK);
@@ -99,7 +101,7 @@ namespace GDModel
             set {
                 if (value) {
                     if (FindTag(GEDCOMTagType._PATRIARCH, 0) == null) {
-                        AddTag(GEDCOMTagType._PATRIARCH, "", null);
+                        AddTag(new GDMTag(this, GEDCOMTagType._PATRIARCH, ""));
                     }
                 } else {
                     DeleteTag(GEDCOMTagType._PATRIARCH);
@@ -109,8 +111,8 @@ namespace GDModel
 
         public string PermanentRecordFileNumber
         {
-            get { return GetTagStringValue(GEDCOMTagType.RFN); }
-            set { SetTagStringValue(GEDCOMTagType.RFN, value); }
+            get { return fPermanentRecordFileNumber; }
+            set { fPermanentRecordFileNumber = value; }
         }
 
         public GDMList<GDMPersonalName> PersonalNames
@@ -135,10 +137,12 @@ namespace GDModel
             SetRecordType(GDMRecordType.rtIndividual);
             SetName(GEDCOMTagType.INDI);
 
+            fAncestralFileNumber = string.Empty;
             fAliasses = new GDMList<GDMAlias>(this);
             fAssociations = new GDMList<GDMAssociation>(this);
             fChildToFamilyLinks = new GDMList<GDMChildToFamilyLink>(this);
             fGroups = new GDMList<GDMPointer>(this);
+            fPermanentRecordFileNumber = string.Empty;
             fPersonalNames = new GDMList<GDMPersonalName>(this);
             fSpouseToFamilyLinks = new GDMList<GDMSpouseToFamilyLink>(this);
         }
@@ -181,7 +185,7 @@ namespace GDModel
         {
             base.Clear();
 
-            fSex = GDMSex.svNone;
+            fSex = GDMSex.svUnknown;
 
             for (int i = fChildToFamilyLinks.Count - 1; i >= 0; i--) {
                 GDMFamilyRecord family = fChildToFamilyLinks[i].Family;
@@ -208,7 +212,7 @@ namespace GDModel
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fSex == GDMSex.svNone) && fPersonalNames.Count == 0
+            return base.IsEmpty() && (fSex == GDMSex.svUnknown) && fPersonalNames.Count == 0
                 && fChildToFamilyLinks.Count == 0 && fSpouseToFamilyLinks.Count == 0
                 && fAssociations.Count == 0 && fAliasses.Count == 0 && fGroups.Count == 0;
         }
@@ -364,18 +368,6 @@ namespace GDModel
             }
         }
 
-        public override void Pack()
-        {
-            base.Pack();
-
-            fAliasses.Pack();
-            fAssociations.Pack();
-            fChildToFamilyLinks.Pack();
-            fGroups.Pack();
-            fPersonalNames.Pack();
-            fSpouseToFamilyLinks.Pack();
-        }
-
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
@@ -444,7 +436,7 @@ namespace GDModel
         /// <returns></returns>
         public GDMFamilyRecord GetParentsFamily(bool canCreate = false)
         {
-            GDMFamilyRecord result = (fChildToFamilyLinks.Count < 1) ? null : fChildToFamilyLinks[0].Value as GDMFamilyRecord;
+            GDMFamilyRecord result = (fChildToFamilyLinks.Count < 1) ? null : fChildToFamilyLinks[0].Family;
 
             if (result == null && canCreate) {
                 result = GetTree().CreateFamily();

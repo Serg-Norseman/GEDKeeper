@@ -241,11 +241,6 @@ namespace GDModel.Providers.GEDCOM
             return (fPos >= fLength) ? string.Empty : new string(fData, fPos, fLength - fPos);
         }
 
-        public string GetSaveRest()
-        {
-            return (fSavePos >= fLength) ? string.Empty : new string(fData, fSavePos, fLength - fSavePos);
-        }
-
         public string GetFullStr()
         {
             return new string(fData, 0, fLength);

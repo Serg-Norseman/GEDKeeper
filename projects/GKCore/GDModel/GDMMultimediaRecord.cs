@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -48,6 +49,17 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        public override void Assign(GDMTag source)
+        {
+            GDMMultimediaRecord sourceObj = source as GDMMultimediaRecord;
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+
+            AssignList(sourceObj.fFileReferences, fFileReferences);
+        }
+
         public override void Clear()
         {
             base.Clear();
@@ -57,12 +69,6 @@ namespace GDModel
         public override bool IsEmpty()
         {
             return base.IsEmpty() && fFileReferences.Count == 0;
-        }
-
-        public override void Pack()
-        {
-            base.Pack();
-            fFileReferences.Pack();
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)

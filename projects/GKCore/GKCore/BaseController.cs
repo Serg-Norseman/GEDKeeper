@@ -531,7 +531,7 @@ namespace GKCore
 
                 if (targetType == TargetMode.tmFamilySpouse && target != null) {
                     GDMSex sex = target.Sex;
-                    if (sex < GDMSex.svMale || sex >= GDMSex.svUndetermined) {
+                    if (sex < GDMSex.svMale || sex > GDMSex.svFemale) {
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
                         return false;
                     }
@@ -725,7 +725,7 @@ namespace GKCore
             switch (rec.RecordType) {
                 case GDMRecordType.rtIndividual:
                     GDMIndividualRecord ind = rec as GDMIndividualRecord;
-                    result = ModifyIndividual(baseWin, ref ind, null, TargetMode.tmNone, GDMSex.svNone);
+                    result = ModifyIndividual(baseWin, ref ind, null, TargetMode.tmNone, GDMSex.svUnknown);
                     break;
 
                 case GDMRecordType.rtFamily:
@@ -801,7 +801,7 @@ namespace GKCore
 
                     case GDMRecordType.rtNote:
                         {
-                            string value = GKUtils.TruncateStrings(((GDMNoteRecord) (record)).Note, GKData.NOTE_NAME_MAX_LENGTH);
+                            string value = GKUtils.TruncateStrings(((GDMNoteRecord) (record)).Lines, GKData.NOTE_NAME_MAX_LENGTH);
                             if (string.IsNullOrEmpty(value))
                             {
                                 value = string.Format("#{0}", record.GetId().ToString());
@@ -884,7 +884,7 @@ namespace GKCore
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
                 if (family != null)
                 {
-                    GDMIndividualRecord father = family.GetHusband();
+                    GDMIndividualRecord father = family.Husband.Individual;
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, father);
                 }
             }
@@ -923,7 +923,7 @@ namespace GKCore
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
                 if (family != null)
                 {
-                    GDMIndividualRecord mother = family.GetWife();
+                    GDMIndividualRecord mother = family.Wife.Individual;
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, mother);
                 }
             }
@@ -949,11 +949,10 @@ namespace GKCore
         {
             bool result = false;
 
-            GDMIndividualRecord husband = family.GetHusband();
+            GDMIndividualRecord husband = family.Husband.Individual;
             if (!baseWin.Context.IsAvailableRecord(husband)) return false;
 
-            if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachHusbandQuery)))
-            {
+            if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachHusbandQuery))) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, husband);
             }
 
@@ -977,11 +976,10 @@ namespace GKCore
         {
             bool result = false;
 
-            GDMIndividualRecord wife = family.GetWife();
+            GDMIndividualRecord wife = family.Wife.Individual;
             if (!baseWin.Context.IsAvailableRecord(wife)) return false;
 
-            if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachWifeQuery)))
-            {
+            if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachWifeQuery))) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, wife);
             }
 

@@ -50,6 +50,45 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
+            GDMTag obj1 = new GDMTag(null);
+            GDMTag obj2 = new GDMTag(null);
+
+            using (GDMList<GDMTag> list = new GDMList<GDMTag>(null)) {
+                // internal list is null (all routines instant returned)
+                list.Delete(null);
+                list.Exchange(0, 1);
+                Assert.IsNull(list.Extract(0));
+                Assert.IsNull(list.Extract(null));
+
+                // normal checks
+                list.Add(obj1);
+                list.Add(obj2);
+                Assert.AreEqual(0, list.IndexOf(obj1));
+                Assert.AreEqual(1, list.IndexOf(obj2));
+
+                list.Delete(obj1);
+                Assert.AreEqual(-1, list.IndexOf(obj1));
+                Assert.AreEqual(0, list.IndexOf(obj2));
+
+                list.Add(obj1);
+                Assert.AreEqual(1, list.IndexOf(obj1));
+                Assert.AreEqual(0, list.IndexOf(obj2));
+                list.Exchange(0, 1);
+                Assert.AreEqual(0, list.IndexOf(obj1));
+                Assert.AreEqual(1, list.IndexOf(obj2));
+
+                Assert.AreEqual(null, list.Extract(null));
+                list.Add(obj1);
+                Assert.AreEqual(obj1, list.Extract(obj1));
+
+                foreach (GDMObject obj in list) {
+                }
+            }
+        }
+
+        [Test]
+        public void Test_PerfCommon()
+        {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 

@@ -49,13 +49,34 @@ namespace GDModel.Providers.GEDCOM
     public enum GeoCoord { Lati, Long }
 
 
+    public enum GDMDateFormat
+    {
+        dfGEDCOMStd,
+        dfSystem
+    }
+
+
+    public enum GDMDateType
+    {
+        SIMP, ABT, AFT, BEF, BET, CAL, EST, FROM, INT, TO
+    }
+
+
     /// <summary>
     /// 
     /// </summary>
     public static class GEDCOMUtils
     {
+        public static readonly string[] GEDCOMDateTypes;
+
         public static readonly TextInfo InvariantTextInfo = CultureInfo.InvariantCulture.TextInfo;
         public static readonly NumberFormatInfo InvariantNumberFormatInfo = NumberFormatInfo.InvariantInfo;
+
+
+        static GEDCOMUtils()
+        {
+            GEDCOMDateTypes = new string[] { "", "ABT", "AFT", "BEF", "BET", "CAL", "EST", "FROM", "INT", "TO" };
+        }
 
 
         #region Parse functions
@@ -226,7 +247,7 @@ namespace GDModel.Providers.GEDCOM
         {
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
-            return value.ToString(nfi);
+            return value.ToString("0.000000", nfi);
         }
 
         #endregion
@@ -341,10 +362,23 @@ namespace GDModel.Providers.GEDCOM
         // Time format: hour:minutes:seconds.fraction
         public static string ParseTime(string strValue, GDMTime time)
         {
-            byte hour = 0;
-            byte minutes = 0;
-            byte seconds = 0;
-            short fraction = 0;
+            byte hour;
+            byte minutes;
+            byte seconds;
+            short fraction;
+
+            strValue = ParseTime(strValue, out hour, out minutes, out seconds, out fraction);
+            time.SetRawData(hour, minutes, seconds, fraction);
+            return strValue;
+        }
+
+        // Time format: hour:minutes:seconds.fraction
+        public static string ParseTime(string strValue, out byte hour, out byte minutes, out byte seconds, out short fraction)
+        {
+            hour = 0;
+            minutes = 0;
+            seconds = 0;
+            fraction = 0;
 
             if (!string.IsNullOrEmpty(strValue)) {
                 var strTok = new GEDCOMParser(strValue, true);
@@ -366,7 +400,7 @@ namespace GDModel.Providers.GEDCOM
                 strValue = strTok.GetRest();
             }
 
-            time.SetRawData(hour, minutes, seconds, fraction);
+            //time.SetRawData(hour, minutes, seconds, fraction);
 
             return strValue;
         }
@@ -418,7 +452,7 @@ namespace GDModel.Providers.GEDCOM
             var token = strTok.CurrentToken;
             if (token == GEDCOMToken.Word) {
                 string su = strTok.GetWord();
-                idx = Algorithms.BinarySearch(GDMCustomDate.GEDCOMDateTypes, su, string.CompareOrdinal);
+                idx = Algorithms.BinarySearch(GEDCOMDateTypes, su, string.CompareOrdinal);
             }
             var dateType = (idx < 0) ? GDMDateType.SIMP : (GDMDateType)idx;
 
@@ -570,13 +604,33 @@ namespace GDModel.Providers.GEDCOM
 
         public static string ParseDate(GDMTree owner, GDMDate date, GEDCOMParser strTok)
         {
-            GDMApproximated approximated = GDMApproximated.daExact;
-            GDMCalendar calendar = GDMCalendar.dcGregorian;
-            short year = GDMDate.UNKNOWN_YEAR;
-            bool yearBC = false;
-            string yearModifier = string.Empty;
-            byte month = 0;
-            byte day = 0;
+            GDMApproximated approximated;
+            GDMCalendar calendar;
+            short year;
+            bool yearBC;
+            string yearModifier;
+            byte month;
+            byte day;
+
+            string result = ParseDate(owner, strTok, out approximated, out calendar, out year, out yearBC, 
+                                      out yearModifier, out month, out day);
+
+            date.SetRawData(approximated, calendar, year, yearBC, yearModifier, month, day);
+
+            return result;
+        }
+
+        public static string ParseDate(GDMTree owner, GEDCOMParser strTok, out GDMApproximated approximated,
+                                       out GDMCalendar calendar, out short year, out bool yearBC,
+                                       out string yearModifier, out byte month, out byte day)
+        {
+            approximated = GDMApproximated.daExact;
+            calendar = GDMCalendar.dcGregorian;
+            year = GDMDate.UNKNOWN_YEAR;
+            yearBC = false;
+            yearModifier = string.Empty;
+            month = 0;
+            day = 0;
             GDMDateFormat dateFormat = GDMDateFormat.dfGEDCOMStd;
 
             strTok.SkipWhitespaces();
@@ -699,7 +753,7 @@ namespace GDModel.Providers.GEDCOM
                 token = strTok.Next();
             }
 
-            date.SetRawData(approximated, calendar, year, yearBC, yearModifier, month, day, dateFormat);
+            //date.SetRawData(approximated, calendar, year, yearBC, yearModifier, month, day, dateFormat);
             string result = strTok.GetRest();
             return result;
         }
@@ -828,6 +882,63 @@ namespace GDModel.Providers.GEDCOM
             }
 
             return stream;
+        }
+
+        public static string ParseDate(GDMTree owner, string strValue, out DateTime date)
+        {
+            GDMApproximated approximated;
+            GDMCalendar calendar;
+            short year;
+            bool yearBC;
+            string yearModifier;
+            byte month;
+            byte day;
+
+            var strTok = new GEDCOMParser(strValue, false);
+            string result = ParseDate(owner, strTok, out approximated, out calendar, out year, out yearBC,
+                                      out yearModifier, out month, out day);
+
+            date = new DateTime(year, month, day);
+
+            return result;
+        }
+
+        public static string GetDateStr(DateTime date)
+        {
+            string result;
+            result = string.Format("{0:00} {1} {2:0000}", new object[] { date.Day, GDMCustomDate.GEDCOMMonthArray[date.Month-1], date.Year });
+            return result;
+        }
+
+        public static string GetTimeStr(TimeSpan time)
+        {
+            byte hour = (byte)time.Hours;
+            byte minutes = (byte)time.Minutes;
+            byte seconds = (byte)time.Seconds;
+            short fraction = (short)Math.Truncate(time.Milliseconds / 100.0);
+
+            string result;
+            if (hour == 0 && minutes == 0 && seconds == 0) {
+                result = string.Empty;
+            } else {
+                result = string.Format("{0:00}:{1:00}:{2:00}", new object[] { hour, minutes, seconds });
+                if (fraction > 0) {
+                    result = result + "." + fraction.ToString();
+                }
+            }
+            return result;
+        }
+
+        public static string ParseTime(string strValue, out TimeSpan time)
+        {
+            byte hour;
+            byte minutes;
+            byte seconds;
+            short fraction;
+
+            strValue = ParseTime(strValue, out hour, out minutes, out seconds, out fraction);
+            time = new TimeSpan(0, hour, minutes, seconds, (int)(100u * fraction));
+            return strValue;
         }
 
         #endregion
@@ -1284,17 +1395,28 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static string[] SpouseSealingDateStatuses = new string[] {
-            "", "CANCELED", "COMPLETED", "DNS", "DNS/CAN", "EXCLUDED", "PRE-1970", "SUBMITTED", "UNCLEARED" };
-
-        public static GDMSpouseSealingDateStatus GetSpouseSealingDateStatusVal(string str)
+        public static int GetIntVal(string str, int defValue = 0)
         {
-            return Str2Enum(str, SpouseSealingDateStatuses, GDMSpouseSealingDateStatus.sdsNone, false);
+            int result = (string.IsNullOrEmpty(str) ? defValue : ConvertHelper.ParseInt(str, defValue));
+            return result;
         }
 
-        public static string GetSpouseSealingDateStatusStr(GDMSpouseSealingDateStatus value)
+        public static string GetIntStr(int value, int emptyValue = -1)
         {
-            return GEDCOMUtils.Enum2Str(value, SpouseSealingDateStatuses);
+            string result = (value == emptyValue) ? string.Empty : value.ToString();
+            return result;
+        }
+
+
+        public static bool GetBoolVal(string str, bool defValue = false)
+        {
+            bool result = string.IsNullOrEmpty(str) ? defValue : ((str == "Y") ? true : false);
+            return result;
+        }
+
+        public static string GetBoolStr(bool value)
+        {
+            return (value) ? "Y" : "N";
         }
 
 
@@ -1425,7 +1547,7 @@ namespace GDModel.Providers.GEDCOM
         public static GDMSex GetSexVal(string str)
         {
             str = NormalizeUp(str);
-            if (str.Length != 1) return GDMSex.svNone;
+            if (str.Length != 1) return GDMSex.svUnknown;
 
             char sl = str[0];
 
@@ -1434,10 +1556,10 @@ namespace GDModel.Providers.GEDCOM
                 result = GDMSex.svMale;
             } else if (sl == 'F') {
                 result = GDMSex.svFemale;
-            } else if (sl == 'U') {
-                result = GDMSex.svUndetermined;
+            } else if (sl == 'X') {
+                result = GDMSex.svIntersex;
             } else {
-                result = GDMSex.svNone;
+                result = GDMSex.svUnknown;
             }
             return result;
         }
@@ -1445,7 +1567,6 @@ namespace GDModel.Providers.GEDCOM
         public static string GetSexStr(GDMSex value)
         {
             string str;
-            
             switch (value) {
                 case GDMSex.svMale:
                     str = "M";
@@ -1453,57 +1574,14 @@ namespace GDModel.Providers.GEDCOM
                 case GDMSex.svFemale:
                     str = "F";
                     break;
-                case GDMSex.svUndetermined:
-                    str = "U";
+                case GDMSex.svIntersex:
+                    str = "X";
                     break;
                 default:
-                    str = "";
+                    str = "U";
                     break;
             }
-            
             return str;
-        }
-
-
-        public static string[] BaptismDateStatuses = new string[] {
-            "", "CHILD", "COMPLETED", "EXCLUDED", "PRE-1970", "STILLBORN", "SUBMITTED", "UNCLEARED" };
-
-        public static GDMBaptismDateStatus GetBaptismDateStatusVal(string str)
-        {
-            return Str2Enum(str, BaptismDateStatuses, GDMBaptismDateStatus.bdsNone, false);
-        }
-
-        public static string GetBaptismDateStatusStr(GDMBaptismDateStatus value)
-        {
-            return GEDCOMUtils.Enum2Str(value, BaptismDateStatuses);
-        }
-
-
-        public static string[] EndowmentDateStatuses = new string[] {
-            "", "CHILD", "COMPLETED", "EXCLUDED", "INFANT", "PRE-1970", "STILLBORN", "SUBMITTED", "UNCLEARED" };
-
-        public static GDMEndowmentDateStatus GetEndowmentDateStatusVal(string str)
-        {
-            return Str2Enum(str, EndowmentDateStatuses, GDMEndowmentDateStatus.edsNone, false);
-        }
-
-        public static string GetEndowmentDateStatusStr(GDMEndowmentDateStatus value)
-        {
-            return GEDCOMUtils.Enum2Str(value, EndowmentDateStatuses);
-        }
-
-
-        public static string[] ChildSealingDateStatuses = new string[] {
-            "", "BIC", "EXCLUDED", "PRE-1970", "STILLBORN", "SUBMITTED", "UNCLEARED" };
-
-        public static GDMChildSealingDateStatus GetChildSealingDateStatusVal(string str)
-        {
-            return Str2Enum(str, ChildSealingDateStatuses, GDMChildSealingDateStatus.cdsNone, false);
-        }
-
-        public static string GetChildSealingDateStatusStr(GDMChildSealingDateStatus value)
-        {
-            return GEDCOMUtils.Enum2Str(value, ChildSealingDateStatuses);
         }
 
 
@@ -1532,10 +1610,10 @@ namespace GDModel.Providers.GEDCOM
             switch (record.RecordType)
             {
                 case GDMRecordType.rtIndividual:
-                    result = "I";
+                    result = "I"; // Std, p24
                     break;
                 case GDMRecordType.rtFamily:
-                    result = "F";
+                    result = "F"; // Std, p24
                     break;
                 case GDMRecordType.rtNote:
                     result = "N";
@@ -1544,10 +1622,10 @@ namespace GDModel.Providers.GEDCOM
                     result = "O";
                     break;
                 case GDMRecordType.rtSource:
-                    result = "S";
+                    result = "S"; // Std, p24
                     break;
                 case GDMRecordType.rtRepository:
-                    result = "R";
+                    result = "R"; // Std, p24
                     break;
                 case GDMRecordType.rtGroup:
                     result = "G";
@@ -1565,7 +1643,7 @@ namespace GDModel.Providers.GEDCOM
                     result = "L";
                     break;
                 case GDMRecordType.rtSubmission:
-                    result = "????";
+                    result = "????"; // FIXME: to standard
                     break;
                 case GDMRecordType.rtSubmitter:
                     result = "SUB";
@@ -1650,6 +1728,76 @@ namespace GDModel.Providers.GEDCOM
         {
             int idx = Algorithms.BinarySearch<string>(FamEvents, tagName, string.CompareOrdinal);
             return idx >= 0;
+        }
+
+        public static StringList GetTagStrings(GDMTag strTag)
+        {
+            StringList strings = new StringList();
+
+            if (strTag != null) {
+                if (strTag.StringValue != "") {
+                    strings.Add(strTag.StringValue);
+                }
+
+                var subTags = strTag.SubTags;
+                int num = subTags.Count;
+                for (int i = 0; i < num; i++) {
+                    GDMTag tag = subTags[i];
+
+                    if (tag.Name == GEDCOMTagType.CONC) {
+                        if (strings.Count > 0) {
+                            strings[strings.Count - 1] = strings[strings.Count - 1] + tag.StringValue;
+                        } else {
+                            strings.Add(tag.StringValue);
+                        }
+                    } else {
+                        if (tag.Name == GEDCOMTagType.CONT) {
+                            strings.Add(tag.StringValue);
+                        }
+                    }
+                }
+            }
+
+            return strings;
+        }
+
+        public static void SetTagStrings(GDMTag tag, StringList strings)
+        {
+            if (tag == null) return;
+
+            tag.StringValue = "";
+            var subTags = tag.SubTags;
+            for (int i = subTags.Count - 1; i >= 0; i--) {
+                string subtag = subTags[i].Name;
+                if (subtag == GEDCOMTagType.CONT || subtag == GEDCOMTagType.CONC) {
+                    subTags.DeleteAt(i);
+                }
+            }
+
+            if (strings != null) {
+                bool isRecordTag = (tag is GDMRecord);
+
+                int num = strings.Count;
+                for (int i = 0; i < num; i++) {
+                    string str = strings[i];
+
+                    int len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
+                    string sub = str.Substring(0, len);
+                    str = str.Remove(0, len);
+
+                    if (i == 0 && !isRecordTag) {
+                        tag.StringValue = sub;
+                    } else {
+                        GEDCOMProvider.AddBaseTag(tag, 0, GEDCOMTagType.CONT, sub);
+                    }
+
+                    while (str.Length > 0) {
+                        len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
+                        GEDCOMProvider.AddBaseTag(tag, 0, GEDCOMTagType.CONC, str.Substring(0, len));
+                        str = str.Remove(0, len);
+                    }
+                }
+            }
         }
 
         #endregion

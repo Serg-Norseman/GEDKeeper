@@ -133,14 +133,12 @@ namespace GKUI.Components
 
         private void ArrangeText()
         {
-            try
-            {
+            try {
                 fAcceptFontChange = false;
                 fHeights.Clear();
 
                 Graphics gfx = CreateGraphics();
-                try
-                {
+                try {
                     int xPos = 0;
                     int yPos = 0;
                     int xMax = 0;
@@ -157,8 +155,7 @@ namespace GKUI.Components
 
                     int line = -1;
                     int chunksCount = fChunks.Count;
-                    for (int k = 0; k < chunksCount; k++)
-                    {
+                    for (int k = 0; k < chunksCount; k++) {
                         BBTextChunk chunk = fChunks[k];
 
                         if (line != chunk.Line) {
@@ -188,16 +185,12 @@ namespace GKUI.Components
                     }
 
                     fTextSize = new ExtSize(xMax + 2 * fBorderWidth, yPos + 2 * fBorderWidth);
-                }
-                finally
-                {
+                } finally {
                     gfx.Dispose();
                     fAcceptFontChange = true;
                     AdjustViewport(fTextSize);
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("HyperView.ArrangeText(): " + ex.Message);
             }
         }

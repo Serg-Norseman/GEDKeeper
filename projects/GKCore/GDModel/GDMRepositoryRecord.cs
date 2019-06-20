@@ -48,6 +48,7 @@ namespace GDModel
             SetName(GEDCOMTagType.REPO);
 
             fAddress = new GDMAddress(this);
+            fRepositoryName = string.Empty;
         }
 
         public override void Assign(GDMTag source)
@@ -83,6 +84,12 @@ namespace GDModel
 
             float match = GetStrMatch(RepositoryName, otherRep.RepositoryName, matchParams);
             return match;
+        }
+
+        public override void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            base.ReplaceXRefs(map);
+            fAddress.ReplaceXRefs(map);
         }
     }
 }

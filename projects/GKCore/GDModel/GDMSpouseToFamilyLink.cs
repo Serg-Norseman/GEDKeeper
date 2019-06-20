@@ -26,24 +26,14 @@ namespace GDModel
     {
         public GDMFamilyRecord Family
         {
-            get { return (Value as GDMFamilyRecord); }
-            set { Value = value; }
+            get { return (GDMFamilyRecord)base.Value; }
+            set { base.Value = value; }
         }
 
 
         public GDMSpouseToFamilyLink(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.FAMS);
-        }
-
-        public GDMSpouseToFamilyLink(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
-        }
-
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMSpouseToFamilyLink(owner, tagName, tagValue);
         }
     }
 }

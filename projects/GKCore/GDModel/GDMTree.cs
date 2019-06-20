@@ -59,17 +59,14 @@ namespace GDModel
 
             public bool MoveNext(out GDMRecord current)
             {
-                if (fRecType == GDMRecordType.rtNone)
-                {
-                    if (fIndex < fEndIndex)
-                    {
+                if (fRecType == GDMRecordType.rtNone) {
+                    if (fIndex < fEndIndex) {
                         fIndex++;
                         current = fTree[fIndex];
                         return true;
                     }
                 } else {
-                    while (fIndex < fEndIndex)
-                    {
+                    while (fIndex < fEndIndex) {
                         fIndex++;
                         GDMRecord rec = fTree[fIndex];
                         if (rec.RecordType == fRecType) {
@@ -95,7 +92,7 @@ namespace GDModel
 
         private readonly GDMHeader fHeader;
         private readonly GDMList<GDMRecord> fRecords;
-        private readonly Dictionary<string, GDMCustomRecord> fXRefIndex;
+        private readonly Dictionary<string, GDMRecord> fXRefIndex;
 
         private GEDCOMFormat fFormat;
         private int[] fLastIDs;
@@ -159,7 +156,7 @@ namespace GDModel
 
         public GDMTree()
         {
-            fXRefIndex = new Dictionary<string, GDMCustomRecord>();
+            fXRefIndex = new Dictionary<string, GDMRecord>();
             fRecords = new GDMList<GDMRecord>(this);
             fHeader = new GDMHeader(this);
 
@@ -186,7 +183,7 @@ namespace GDModel
 
         #region XRef Search
 
-        private void XRefIndex_AddRecord(GDMCustomRecord record)
+        private void XRefIndex_AddRecord(GDMRecord record)
         {
             if (record == null || string.IsNullOrEmpty(record.XRef)) return;
 
@@ -204,9 +201,9 @@ namespace GDModel
         {
             if (string.IsNullOrEmpty(xref)) return null;
 
-            GDMCustomRecord record;
+            GDMRecord record;
             if (fXRefIndex.TryGetValue(xref, out record)) {
-                return (record as GDMRecord);
+                return record;
             } else {
                 return null;
             }
@@ -235,7 +232,7 @@ namespace GDModel
             return xref;
         }
 
-        public void SetXRef(string oldXRef, GDMCustomRecord record)
+        public void SetXRef(string oldXRef, GDMRecord record)
         {
             if (!string.IsNullOrEmpty(oldXRef)) {
                 bool exists = fXRefIndex.ContainsKey(oldXRef);
@@ -283,11 +280,11 @@ namespace GDModel
             return record;
         }
 
-        /*public void Delete(int index)
+        public void Delete(int index)
         {
             XRefIndex_DeleteRecord(fRecords[index]);
             fRecords.DeleteAt(index);
-        }*/
+        }
 
         public void DeleteRecord(GDMRecord record)
         {
@@ -309,8 +306,7 @@ namespace GDModel
         public GDMRecord FindUID(string uid)
         {
             int num = fRecords.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMRecord rec = fRecords[i];
                 if (rec.UID == uid) {
                     return rec;
@@ -320,24 +316,15 @@ namespace GDModel
             return null;
         }
 
-        public void Pack()
-        {
-            int num = fRecords.Count;
-            for (int i = 0; i < num; i++) {
-                fRecords[i].Pack();
-            }
-        }
-
         #endregion
 
         public int[] GetRecordStats()
         {
             int[] stats = new int[((int)GDMRecordType.rtLast)];
 
-            int num = RecordsCount;
-            for (int i = 0; i < num; i++)
-            {
-                GDMRecord rec = this[i];
+            int num = fRecords.Count;
+            for (int i = 0; i < num; i++) {
+                GDMRecord rec = fRecords[i];
                 int index = (int)rec.RecordType;
                 stats[index] += 1;
             }
@@ -352,7 +339,7 @@ namespace GDModel
                 submitter = new GDMSubmitterRecord(this);
                 submitter.InitNew();
                 AddRecord(submitter);
-                fHeader.SetTagStringValue(GEDCOMTagType.SUBM, "@" + submitter.XRef + "@");
+                fHeader.Submitter.Value = submitter;
             }
             return submitter;
         }
@@ -491,9 +478,8 @@ namespace GDModel
         {
             if (groupRec == null) return false;
 
-            for (int i = groupRec.Members.Count - 1; i >= 0; i--)
-            {
-                GDMIndividualRecord member = groupRec.Members[i].Value as GDMIndividualRecord;
+            for (int i = groupRec.Members.Count - 1; i >= 0; i--) {
+                GDMIndividualRecord member = groupRec.Members[i].Individual;
                 groupRec.RemoveMember(member);
             }
 
@@ -506,13 +492,10 @@ namespace GDModel
             if (mRec == null) return false;
 
             int num = fRecords.Count;
-            for (int i = 0; i < num; i++)
-            {
-                GDMRecord rec = this[i];
-                for (int j = rec.MultimediaLinks.Count - 1; j >= 0; j--)
-                {
-                    if (rec.MultimediaLinks[j].Value == mRec)
-                    {
+            for (int i = 0; i < num; i++) {
+                GDMRecord rec = fRecords[i];
+                for (int j = rec.MultimediaLinks.Count - 1; j >= 0; j--) {
+                    if (rec.MultimediaLinks[j].Value == mRec) {
                         rec.MultimediaLinks.DeleteAt(j);
                     }
                 }
@@ -527,11 +510,9 @@ namespace GDModel
             if (nRec == null) return false;
 
             int num = fRecords.Count;
-            for (int i = 0; i < num; i++)
-            {
-                GDMRecord rec = this[i];
-                for (int j = rec.Notes.Count - 1; j >= 0; j--)
-                {
+            for (int i = 0; i < num; i++) {
+                GDMRecord rec = fRecords[i];
+                for (int j = rec.Notes.Count - 1; j >= 0; j--) {
                     if (rec.Notes[j].Value == nRec)
                         rec.Notes.DeleteAt(j);
                 }
@@ -546,17 +527,13 @@ namespace GDModel
             if (repRec == null) return false;
 
             int num = fRecords.Count;
-            for (int i = 0; i < num; i++)
-            {
-                GDMRecord rec = this[i];
-                if (rec.RecordType == GDMRecordType.rtSource)
-                {
-                    GDMSourceRecord srcRec = (GDMSourceRecord) rec;
-                    for (int j = srcRec.RepositoryCitations.Count - 1; j >= 0; j--)
-                    {
-                        if (srcRec.RepositoryCitations[j].Value == repRec)
-                        {
-                            srcRec.RepositoryCitations.Delete(srcRec.RepositoryCitations[j]);
+            for (int i = 0; i < num; i++) {
+                GDMRecord rec = fRecords[i];
+                if (rec.RecordType == GDMRecordType.rtSource) {
+                    GDMSourceRecord srcRec = (GDMSourceRecord)rec;
+                    for (int j = srcRec.RepositoryCitations.Count - 1; j >= 0; j--) {
+                        if (srcRec.RepositoryCitations[j].Value == repRec) {
+                            srcRec.RepositoryCitations.DeleteAt(j);
                         }
                     }
                 }
@@ -579,13 +556,10 @@ namespace GDModel
             if (srcRec == null) return false;
 
             int num = fRecords.Count;
-            for (int i = 0; i < num; i++)
-            {
-                GDMRecord rec = this[i];
-                for (int j = rec.SourceCitations.Count - 1; j >= 0; j--)
-                {
-                    if (rec.SourceCitations[j].Value == srcRec)
-                    {
+            for (int i = 0; i < num; i++) {
+                GDMRecord rec = fRecords[i];
+                for (int j = rec.SourceCitations.Count - 1; j >= 0; j--) {
+                    if (rec.SourceCitations[j].Value == srcRec) {
                         rec.SourceCitations.DeleteAt(j);
                     }
                 }
@@ -600,16 +574,12 @@ namespace GDModel
             if (taskRec == null) return false;
 
             int num = fRecords.Count;
-            for (int i = 0; i < num; i++)
-            {
-                GDMRecord rec = this[i];
-                if (rec.RecordType == GDMRecordType.rtResearch)
-                {
-                    GDMResearchRecord resRec = (GDMResearchRecord) rec;
-                    for (int j = resRec.Tasks.Count - 1; j >= 0; j--)
-                    {
-                        if (resRec.Tasks[j].Value == taskRec)
-                        {
+            for (int i = 0; i < num; i++) {
+                GDMRecord rec = fRecords[i];
+                if (rec.RecordType == GDMRecordType.rtResearch) {
+                    GDMResearchRecord resRec = (GDMResearchRecord)rec;
+                    for (int j = resRec.Tasks.Count - 1; j >= 0; j--) {
+                        if (resRec.Tasks[j].Value == taskRec) {
                             resRec.Tasks.DeleteAt(j);
                         }
                     }
@@ -625,16 +595,12 @@ namespace GDModel
             if (commRec == null) return false;
 
             int num = fRecords.Count;
-            for (int i = 0; i < num; i++)
-            {
-                GDMRecord rec = this[i];
-                if (rec.RecordType == GDMRecordType.rtResearch)
-                {
-                    GDMResearchRecord resRec = (GDMResearchRecord) rec;
-                    for (int j = resRec.Communications.Count - 1; j >= 0; j--)
-                    {
-                        if (resRec.Communications[j].Value == commRec)
-                        {
+            for (int i = 0; i < num; i++) {
+                GDMRecord rec = fRecords[i];
+                if (rec.RecordType == GDMRecordType.rtResearch) {
+                    GDMResearchRecord resRec = (GDMResearchRecord)rec;
+                    for (int j = resRec.Communications.Count - 1; j >= 0; j--) {
+                        if (resRec.Communications[j].Value == commRec) {
                             resRec.Communications.DeleteAt(j);
                         }
                     }
@@ -651,7 +617,7 @@ namespace GDModel
 
             int num = fRecords.Count;
             for (int i = 0; i < num; i++) {
-                var evsRec = this[i] as GDMRecordWithEvents;
+                var evsRec = fRecords[i] as GDMRecordWithEvents;
                 if (evsRec != null) {
                     for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
                         GDMCustomEvent ev = evsRec.Events[j];
@@ -680,8 +646,7 @@ namespace GDModel
 
         public void BeginUpdate()
         {
-            if (fUpdateCount == 0)
-            {
+            if (fUpdateCount == 0) {
                 SetUpdateState(true);
             }
             fUpdateCount++;
@@ -690,36 +655,30 @@ namespace GDModel
         public void EndUpdate()
         {
             fUpdateCount--;
-            if (fUpdateCount == 0)
-            {
+            if (fUpdateCount == 0) {
                 SetUpdateState(false);
             }
         }
 
         private void SetUpdateState(bool updating)
         {
-            if (updating)
-            {
+            if (updating) {
                 Changing();
-            }
-            else
-            {
+            } else {
                 Changed();
             }
         }
 
         private void Changed()
         {
-            if (fUpdateCount == 0 && fOnChange != null)
-            {
+            if (fUpdateCount == 0 && fOnChange != null) {
                 fOnChange(this, new EventArgs());
             }
         }
 
         private void Changing()
         {
-            if (fUpdateCount == 0 && fOnChanging != null)
-            {
+            if (fUpdateCount == 0 && fOnChanging != null) {
                 fOnChanging(this, new EventArgs());
             }
         }

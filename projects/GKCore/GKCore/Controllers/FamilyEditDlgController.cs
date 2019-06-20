@@ -125,8 +125,8 @@ namespace GKCore.Controllers
 
                 fView.LockEditor(true);
             } else {
-                husband = fFamily.GetHusband();
-                wife = fFamily.GetWife();
+                husband = fFamily.Husband.Individual;
+                wife = fFamily.Wife.Individual;
 
                 fView.LockEditor(fFamily.Restriction == GDMRestriction.rnLocked);
             }
@@ -179,12 +179,12 @@ namespace GKCore.Controllers
 
         public void JumpToHusband()
         {
-            JumpToRecord(fFamily.GetHusband());
+            JumpToRecord(fFamily.Husband.Individual);
         }
 
         public void JumpToWife()
         {
-            JumpToRecord(fFamily.GetWife());
+            JumpToRecord(fFamily.Wife.Individual);
         }
     }
 }

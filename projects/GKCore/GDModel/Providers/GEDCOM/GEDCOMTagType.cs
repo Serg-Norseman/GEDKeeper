@@ -19,9 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using GDModel;
-using GDModel.Providers;
 
 namespace GDModel.Providers.GEDCOM
 {
@@ -62,6 +59,7 @@ namespace GDModel.Providers.GEDCOM
         public const string CONL = "CONL";
         public const string CONT = "CONT";
         public const string COPR = "COPR";
+        public const string CORP = "CORP";
         public const string CREM = "CREM";
         public const string CTRY = "CTRY";
         public const string DATA = "DATA";
@@ -90,6 +88,7 @@ namespace GDModel.Providers.GEDCOM
         public const string FONE = "FONE";
         public const string FORM = "FORM";
         public const string FROM = "FROM";
+        public const string GEDC = "GEDC";
         public const string GIVN = "GIVN";
         public const string GRAD = "GRAD";
         public const string HEAD = "HEAD";
@@ -107,6 +106,7 @@ namespace GDModel.Providers.GEDCOM
         public const string MARL = "MARL";
         public const string MARS = "MARS";
         public const string MARR = "MARR";
+        public const string MEDI = "MEDI";
         public const string NAME = "NAME";
         public const string NATI = "NATI";
         public const string NATU = "NATU";
@@ -171,6 +171,7 @@ namespace GDModel.Providers.GEDCOM
         public const string _HOBBY = "_HOBBY";
         public const string _LOC = "_LOC"; // [GEDCOM 5.5EL]
         public const string _MARN = "_MARN"; // Married Surname [BKW6]
+        public const string _MDNA = "_MDNA"; // [MyFamilyTree]
         public const string _PATN = "_PATN"; // Patronymic Name
         public const string _PLAC = "_PLAC"; // Place/Location record [Family Historian]
         public const string _POSITION = "_POSITION";
@@ -180,8 +181,6 @@ namespace GDModel.Providers.GEDCOM
         public const string _STAT = "_STAT";
         public const string _TRAVEL = "_TRAVEL";
         public const string _UID = "_UID"; // 
-
-        public const string _MDNA = "_MDNA"; // [MyFamilyTree]
         public const string _YDNA = "_YDNA"; // [MyFamilyTree]
 
         // non-standard extended tags (GEDKeeper)
@@ -200,96 +199,10 @@ namespace GDModel.Providers.GEDCOM
         public const string _PERCENT = "_PERCENT";
         public const string _PRIORITY = "_PRIORITY";
         public const string _RESEARCH = "_RESEARCH";
+        public const string _REV = "_REV";
         public const string _STARTDATE = "_STARTDATE";
         public const string _STOPDATE = "_STOPDATE";
         public const string _STATUS = "_STATUS";
         public const string _TASK = "_TASK";
-    }
-
-
-    public delegate GDMTag TagConstructor(GDMObject owner, string tagName, string tagValue);
-
-
-    public sealed class TagInfo
-    {
-        public readonly TagConstructor Constructor;
-        public readonly AddTagHandler AddHandler;
-        public SaveTagHandler SaveHandler;
-        public readonly bool SkipEmpty;
-        public readonly bool GKExtend;
-
-        public TagInfo(TagConstructor constructor, AddTagHandler addHandler)
-        {
-            Constructor = constructor;
-            AddHandler = addHandler;
-            SkipEmpty = false;
-            GKExtend = false;
-        }
-
-        public TagInfo(TagConstructor constructor, AddTagHandler addHandler, SaveTagHandler saveHandler, bool skipEmpty, bool extend)
-        {
-            Constructor = constructor;
-            AddHandler = addHandler;
-            SaveHandler = saveHandler;
-            SkipEmpty = skipEmpty;
-            GKExtend = extend;
-        }
-    }
-
-
-    public sealed class GEDCOMFactory
-    {
-        private static GEDCOMFactory fInstance;
-        private readonly Dictionary<string, TagInfo> fTags;
-
-        public static GEDCOMFactory GetInstance()
-        {
-            if (fInstance == null) fInstance = new GEDCOMFactory();
-            return fInstance;
-        }
-
-        public GEDCOMFactory()
-        {
-            fTags = new Dictionary<string, TagInfo>();
-        }
-
-        public void RegisterTag(string tagName, TagConstructor constructor, AddTagHandler addHandler = null,
-                                SaveTagHandler saveHandler = null, bool skipEmpty = false, bool extend = false)
-        {
-            TagInfo tagInfo;
-            if (!fTags.TryGetValue(tagName, out tagInfo)) {
-                tagInfo = new TagInfo(constructor, addHandler, saveHandler, skipEmpty, extend);
-                fTags.Add(tagName, tagInfo);
-            } else {
-                //tagInfo.Constructor = constructor;
-                //tagInfo.AddHandler = addHandler;
-            }
-        }
-
-        public GDMTag CreateTag(GDMObject owner, string tagName, string tagValue)
-        {
-            TagInfo tagInfo;
-            if (fTags.TryGetValue(tagName, out tagInfo)) {
-                TagConstructor ctor = tagInfo.Constructor;
-                return (ctor == null) ? new GDMTag(owner, tagName, tagValue) : ctor(owner, tagName, tagValue);
-            }
-            return null;
-        }
-
-        public TagInfo GetTagInfo(string tagName)
-        {
-            TagInfo result;
-            fTags.TryGetValue(tagName, out result);
-            return result;
-        }
-
-        public AddTagHandler GetAddHandler(string tagName)
-        {
-            TagInfo tagInfo;
-            if (fTags.TryGetValue(tagName, out tagInfo)) {
-                return tagInfo.AddHandler;
-            }
-            return GEDCOMProvider.AddBaseTag;
-        }
     }
 }

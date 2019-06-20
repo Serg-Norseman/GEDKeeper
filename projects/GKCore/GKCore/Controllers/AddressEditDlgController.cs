@@ -71,7 +71,7 @@ namespace GKCore.Controllers
             fView.State.Text = fAddress.AddressState;
             fView.City.Text = fAddress.AddressCity;
             fView.PostalCode.Text = fAddress.AddressPostalCode;
-            fView.AddressLine.Text = fAddress.Address.Text.Trim();
+            fView.AddressLine.Text = fAddress.Lines.Text.Trim();
 
             UpdateLists();
         }

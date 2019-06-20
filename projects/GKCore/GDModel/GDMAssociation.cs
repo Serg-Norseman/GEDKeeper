@@ -47,20 +47,10 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMAssociation(owner, tagName, tagValue);
-        }
-
         public GDMAssociation(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.ASSO);
             fSourceCitations = new GDMList<GDMSourceCitation>(this);
-        }
-
-        public GDMAssociation(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
         }
 
         protected override void Dispose(bool disposing)
@@ -91,13 +81,14 @@ namespace GDModel
 
         public override void Assign(GDMTag source)
         {
-            GDMAssociation srcAsso = (source as GDMAssociation);
-            if (srcAsso == null)
+            GDMAssociation sourceObj = (source as GDMAssociation);
+            if (sourceObj == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
-            base.Assign(source);
+            base.Assign(sourceObj);
 
-            fRelation = srcAsso.fRelation;
+            fRelation = sourceObj.fRelation;
+            AssignList(sourceObj.fSourceCitations, fSourceCitations);
         }
     }
 }

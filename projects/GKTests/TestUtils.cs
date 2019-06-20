@@ -152,7 +152,7 @@ namespace GKTests
 
             // media for tests
             GDMMultimediaRecord mediaRec = context.Tree.CreateMultimedia();
-            mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle(mediaRec, GEDCOMTagType.FILE, ""));
+            mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle(mediaRec));
             GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
 
             fileRef.Title = "Test multimedia";
@@ -168,13 +168,7 @@ namespace GKTests
 
         public static string GetTagStreamText(GDMTag tag, int level)
         {
-            GEDCOMProvider.SkipUID = true;
-
-            if (tag is GDMRecord) {
-                var record = tag as GDMRecord;
-                record.UID = string.Empty;
-                record.DeleteTag(GEDCOMTagType.CHAN);
-            }
+            GEDCOMProvider.DebugWrite = true;
 
             // FIXME: very bad code after refactoring of GEDCOMProvider!
             string result;
@@ -184,7 +178,11 @@ namespace GKTests
                         GEDCOMProvider.WriteRecordEx(fs, tag as GDMRecord);
                     } else {
                         if (tag is GDMPersonalName) {
-                            GEDCOMProvider.WritePersonalName(fs, 1, tag as GDMPersonalName);
+                            GEDCOMProvider.WritePersonalName(fs, 1, tag);
+                        } else if (tag is GDMMultimediaLink) {
+                            GEDCOMProvider.WriteMultimediaLink(fs, 1, tag);
+                        } else if (tag is GDMSourceCitation) {
+                            GEDCOMProvider.WriteSourceCitation(fs, 1, tag);
                         } else {
                             GEDCOMProvider.WriteTagEx(fs, level, tag);
                         }
@@ -201,6 +199,11 @@ namespace GKTests
         public static DateTime ParseDT(string dtx)
         {
             return DateTime.ParseExact(dtx, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+        }
+
+        public static DateTime ParseDTX(string dtx)
+        {
+            return DateTime.ParseExact(dtx, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
         }
 
         public static string GetTempFilePath(string fileName)

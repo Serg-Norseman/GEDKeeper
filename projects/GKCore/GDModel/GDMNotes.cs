@@ -18,45 +18,92 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using BSLib;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMNotes : GDMPointer
+    public sealed class GDMTextTag : GDMTag, IGDMTextObject
     {
-        public StringList Notes
+        private StringList fLines;
+
+        public StringList Lines
+        {
+            get { return fLines; }
+        }
+
+
+        public GDMTextTag(GDMObject owner) : base(owner)
+        {
+            fLines = new StringList();
+        }
+
+        public GDMTextTag(GDMObject owner, string tagName) : this(owner)
+        {
+            SetName(tagName);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMTextTag sourceObj = (source as GDMTextTag);
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+
+            fLines.Assign(sourceObj.fLines);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+            fLines.Clear();
+        }
+
+        public override bool IsEmpty()
+        {
+            return fLines.IsEmpty();
+        }
+
+        protected override string GetStringValue()
+        {
+            return fLines.Text;
+        }
+
+        public override string ParseString(string strValue)
+        {
+            fLines.Clear();
+            fLines.Add(strValue);
+            return string.Empty;
+        }
+    }
+
+
+    public sealed class GDMNotes : GDMPointer, IGDMTextObject
+    {
+        private StringList fLines;
+
+        public StringList Lines
         {
             get {
-                StringList notes;
+                StringList lines;
                 if (!IsPointer) {
-                    notes = GetTagStrings(this);
+                    lines = fLines;
                 } else {
                     GDMNoteRecord notesRecord = Value as GDMNoteRecord;
-                    notes = (notesRecord != null) ? notesRecord.Note : new StringList();
+                    lines = (notesRecord != null) ? notesRecord.Lines : new StringList();
                 }
-                return notes;
-            }
-            set {
-                Clear();
-                SetTagStrings(this, value);
+                return lines;
             }
         }
 
-
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMNotes(owner, tagName, tagValue);
-        }
-
-        public GDMNotes(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
-        }
 
         public GDMNotes(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.NOTE);
+
+            fLines = new StringList();
         }
 
         public override bool IsEmpty()
@@ -65,14 +112,14 @@ namespace GDModel
             if (IsPointer) {
                 result = base.IsEmpty();
             } else {
-                result = (string.IsNullOrEmpty(fStringValue) && SubTags.Count == 0);
+                result = (fLines.IsEmpty() && SubTags.Count == 0);
             }
             return result;
         }
 
         protected override string GetStringValue()
         {
-            string result = IsPointer ? base.GetStringValue() : fStringValue;
+            string result = IsPointer ? base.GetStringValue() : ((fLines.Count > 0) ? fLines[0] : string.Empty);
             return result;
         }
 
@@ -80,7 +127,10 @@ namespace GDModel
         {
             string result = base.ParseString(strValue);
             if (!IsPointer) {
-                fStringValue = result;
+                fLines.Clear();
+                if (!string.IsNullOrEmpty(result)) {
+                    fLines.Add(result);
+                }
                 result = string.Empty;
             } else {
                 fStringValue = string.Empty;

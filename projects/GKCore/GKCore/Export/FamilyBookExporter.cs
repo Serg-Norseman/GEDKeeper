@@ -261,7 +261,7 @@ namespace GKCore.Export
 
                         st = src.ShortTitle;
                         if (string.IsNullOrEmpty(st))
-                            st = src.Title.Text;
+                            st = src.Title.Lines.Text;
                         PrepareSpecIndex(sourcesIndex, st, iRec);
                     }
 
@@ -306,7 +306,7 @@ namespace GKCore.Export
 
                     st = src.ShortTitle;
                     if (string.IsNullOrEmpty(st))
-                        st = src.Title.Text;
+                        st = src.Title.Lines.Text;
                     PrepareSpecIndex(sourcesIndex, st, iRec);
                 }
             }
@@ -339,8 +339,8 @@ namespace GKCore.Export
                 father = null;
                 mother = null;
             } else {
-                father = fam.GetHusband();
-                mother = fam.GetWife();
+                father = fam.Husband.Individual;
+                mother = fam.Wife.Individual;
             }
 
             if (father != null) {
@@ -381,7 +381,7 @@ namespace GKCore.Export
                 int num = iRec.Notes.Count;
                 for (int i = 0; i < num; i++) {
                     GDMNotes note = iRec.Notes[i];
-                    fWriter.AddParagraph(GKUtils.MergeStrings(note.Notes), fTextFont);
+                    fWriter.AddParagraph(GKUtils.MergeStrings(note.Lines), fTextFont);
                 }
             }
         }

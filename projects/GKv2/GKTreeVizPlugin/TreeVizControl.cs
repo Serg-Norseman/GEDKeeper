@@ -571,9 +571,9 @@ namespace GKTreeVizPlugin
                     if (!alreadyPrepared)
                     {
                         // processing children of the current family
-                        foreach (GDMPointer childPtr in famRec.Children)
+                        foreach (GDMIndividualLink childPtr in famRec.Children)
                         {
-                            GDMIndividualRecord child = (GDMIndividualRecord)childPtr.Value;
+                            GDMIndividualRecord child = childPtr.Individual;
 
                             // exclude childless branches
                             if (EXCLUDE_CHILDLESS && (fBase.Context.IsChildless(child) || child.GetTotalChildsCount() < 1)) continue;

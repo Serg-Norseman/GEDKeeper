@@ -39,23 +39,25 @@ namespace GDModel
 
     public sealed class GDMFamilyRecord : GDMRecordWithEvents
     {
-        private GDMList<GDMPointer> fChildren;
+        private GDMList<GDMIndividualLink> fChildren;
+        private GDMIndividualLink fHusband;
+        private GDMIndividualLink fWife;
         private GDMMarriageStatus fStatus;
 
 
-        public GDMList<GDMPointer> Children
+        public GDMList<GDMIndividualLink> Children
         {
             get { return fChildren; }
         }
 
-        public GDMPointer Husband
+        public GDMIndividualLink Husband
         {
-            get { return GetTag<GDMPointer>(GEDCOMTagType.HUSB, GDMPointer.Create); }
+            get { return fHusband; }
         }
 
-        public GDMPointer Wife
+        public GDMIndividualLink Wife
         {
-            get { return GetTag<GDMPointer>(GEDCOMTagType.WIFE, GDMPointer.Create); }
+            get { return fWife; }
         }
 
         public GDMMarriageStatus Status
@@ -70,7 +72,9 @@ namespace GDModel
             SetRecordType(GDMRecordType.rtFamily);
             SetName(GEDCOMTagType.FAM);
 
-            fChildren = new GDMList<GDMPointer>(this);
+            fHusband = new GDMIndividualLink(this, GEDCOMTagType.HUSB, string.Empty);
+            fWife = new GDMIndividualLink(this, GEDCOMTagType.WIFE, string.Empty);
+            fChildren = new GDMList<GDMIndividualLink>(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -79,16 +83,6 @@ namespace GDModel
                 fChildren.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public GDMIndividualRecord GetHusband()
-        {
-            return Husband.Value as GDMIndividualRecord;
-        }
-
-        public GDMIndividualRecord GetWife()
-        {
-            return Wife.Value as GDMIndividualRecord;
         }
 
         public override GDMCustomEvent AddEvent(GDMCustomEvent evt)
@@ -107,12 +101,12 @@ namespace GDModel
         {
             base.Clear();
 
-            // Special cleaning of Husband and Wife is not necessary,
-            // because these are sub-tags and they will be cleared in the call base.Clear()
+            RemoveSpouse(fHusband.Individual);
+            RemoveSpouse(fWife.Individual);
 
             int num = fChildren.Count;
             for (int i = 0; i < num; i++) {
-                GDMIndividualRecord child = (GDMIndividualRecord)fChildren[i].Value;
+                GDMIndividualRecord child = fChildren[i].Individual;
                 child.DeleteChildToFamilyLink(this);
             }
             fChildren.Clear();
@@ -123,7 +117,7 @@ namespace GDModel
         public override bool IsEmpty()
         {
             // Status are not checked because they are not important if other fields are empty.
-            return base.IsEmpty() && (fChildren.Count == 0);
+            return base.IsEmpty() && (fChildren.Count == 0) && fHusband.IsEmpty() && fWife.IsEmpty();
         }
 
         public void DeleteChild(GDMRecord childRec)
@@ -158,7 +152,10 @@ namespace GDModel
 
             base.Assign(source);
 
+            fHusband.Assign(sourceRec.fHusband);
+            fWife.Assign(sourceRec.fWife);
             fStatus = sourceRec.fStatus;
+            AssignList(sourceRec.fChildren, fChildren);
         }
 
         public override void MoveTo(GDMRecord targetRecord, bool clearDest)
@@ -169,34 +166,23 @@ namespace GDModel
 
             base.MoveTo(targetRecord, clearDest);
 
+            targetFamily.Husband.XRef = fHusband.XRef;
+            targetFamily.Wife.XRef = fWife.XRef;
             targetFamily.Status = fStatus;
 
             while (fChildren.Count > 0) {
-                GDMPointer obj = fChildren.Extract(0);
+                GDMIndividualLink obj = fChildren.Extract(0);
                 obj.ResetOwner(targetFamily);
                 targetFamily.Children.Add(obj);
             }
-        }
-
-        public override void Pack()
-        {
-            base.Pack();
-
-            fChildren.Pack();
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
 
-            if (Husband != null) {
-                Husband.StringValue = GEDCOMUtils.EncloseXRef(map.FindNewXRef(Husband.StringValue));
-            }
-
-            if (Wife != null) {
-                Wife.StringValue = GEDCOMUtils.EncloseXRef(map.FindNewXRef(Wife.StringValue));
-            }
-
+            fHusband.ReplaceXRefs(map);
+            fWife.ReplaceXRefs(map);
             fChildren.ReplaceXRefs(map);
         }
 
@@ -204,10 +190,10 @@ namespace GDModel
         {
             string result = "";
 
-            GDMIndividualRecord spouse = GetHusband();
+            GDMIndividualRecord spouse = fHusband.Individual;
             result += (spouse == null) ? "?" : spouse.GetPrimaryFullName();
             result += " - ";
-            spouse = GetWife();
+            spouse = fWife.Individual;
             result += (spouse == null) ? "?" : spouse.GetPrimaryFullName();
 
             return result;
@@ -236,8 +222,8 @@ namespace GDModel
 
         public GDMIndividualRecord GetSpouseBy(GDMIndividualRecord spouse)
         {
-            GDMIndividualRecord husb = GetHusband();
-            GDMIndividualRecord wife = GetWife();
+            GDMIndividualRecord husb = fHusband.Individual;
+            GDMIndividualRecord wife = fWife.Individual;
 
             return (spouse == husb) ? wife : husb;
         }
@@ -249,17 +235,17 @@ namespace GDModel
             }
 
             GDMSex sex = spouse.Sex;
-            if (sex == GDMSex.svNone || sex == GDMSex.svUndetermined) {
+            if (sex == GDMSex.svUnknown || sex == GDMSex.svIntersex) {
                 return false;
             }
 
             switch (sex) {
                 case GDMSex.svMale:
-                    Husband.Value = spouse;
+                    fHusband.Value = spouse;
                     break;
 
                 case GDMSex.svFemale:
-                    Wife.Value = spouse;
+                    fWife.Value = spouse;
                     break;
             }
 
@@ -278,11 +264,11 @@ namespace GDModel
 
             switch (spouse.Sex) {
                 case GDMSex.svMale:
-                    Husband.Value = null;
+                    fHusband.Value = null;
                     break;
 
                 case GDMSex.svFemale:
-                    Wife.Value = null;
+                    fWife.Value = null;
                     break;
             }
         }
@@ -291,8 +277,8 @@ namespace GDModel
         {
             if (child == null) return false;
 
-            GDMPointer ptr = new GDMPointer(this);
-            ptr.SetNameValue(GEDCOMTagType.CHIL, child);
+            GDMIndividualLink ptr = new GDMIndividualLink(this, GEDCOMTagType.CHIL, string.Empty);
+            ptr.Individual = child;
             fChildren.Add(ptr);
 
             GDMChildToFamilyLink chLink = new GDMChildToFamilyLink(child);

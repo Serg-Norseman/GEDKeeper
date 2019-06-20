@@ -22,7 +22,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using BSLib;
-using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
@@ -234,26 +233,11 @@ namespace GDModel
             }
         }
 
-        public void Pack()
-        {
-            if (fDataList == null) return;
-
-            for (int i = fDataList.Count - 1; i >= 0; i--) {
-                var item = fDataList[i];
-                if (item != null) {
-                    item.Pack();
-                    if (item.IsEmpty() && GEDCOMProvider.SkipEmptyTag(item.Name)) {
-                        DeleteAt(i);
-                    }
-                }
-            }
-        }
-
         public void Sort(Comparison<T> comparer)
         {
-            if (fDataList == null) return;
-
-            ListTimSort<T>.Sort(fDataList, comparer);
+            if (fDataList != null) {
+                ListTimSort<T>.Sort(fDataList, comparer);
+            }
         }
     }
 }

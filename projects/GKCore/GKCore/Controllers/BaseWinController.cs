@@ -101,7 +101,7 @@ namespace GKCore.Controllers
             RefreshLists(false);
             ClearSummaries();
             fContext.SetFileName(LangMan.LS(LSID.LSID_Unknown));
-            fContext.Tree.Header.Language.Value = GlobalOptions.Instance.GetCurrentItfLang();
+            fContext.Tree.Header.Language = GlobalOptions.Instance.GetCurrentItfLang();
             fContext.Modified = false;
         }
 

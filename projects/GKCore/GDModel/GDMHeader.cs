@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -34,144 +33,234 @@ namespace GDModel
     }
 
 
+    public sealed class GDMHeaderSource : GDMTag
+    {
+        public string Version { get; set; }
+        public string ProductName { get; set; }
+
+
+        public GDMHeaderSource(GDMObject owner) : base(owner)
+        {
+            SetName(GEDCOMTagType.SOUR);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            Version = string.Empty;
+            ProductName = string.Empty;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && string.IsNullOrEmpty(Version) && string.IsNullOrEmpty(ProductName);
+        }
+    }
+
+
+    public sealed class GDMHeaderGEDCOM : GDMTag
+    {
+        public string Version { get; set; }
+        public string Form { get; set; }
+
+
+        public GDMHeaderGEDCOM(GDMObject owner) : base(owner)
+        {
+            SetName(GEDCOMTagType.GEDC);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            Version = string.Empty;
+            Form = string.Empty;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && string.IsNullOrEmpty(Version) && string.IsNullOrEmpty(Form);
+        }
+    }
+
+
+    public sealed class GDMHeaderCharSet : GDMTag
+    {
+        public GEDCOMCharacterSet Value
+        {
+            get { return GEDCOMUtils.GetCharacterSetVal(StringValue); }
+            set { StringValue = GEDCOMUtils.GetCharacterSetStr(value); }
+        }
+
+        public string Version { get; set; }
+
+
+        public GDMHeaderCharSet(GDMObject owner) : base(owner)
+        {
+            SetName(GEDCOMTagType.CHAR);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            Version = string.Empty;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && string.IsNullOrEmpty(Version);
+        }
+    }
+
+
+    public sealed class GDMHeaderFile : GDMTag
+    {
+        public int Revision { get; set; }
+
+
+        public GDMHeaderFile(GDMObject owner) : base(owner)
+        {
+            SetName(GEDCOMTagType.FILE);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            Revision = 0;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && (Revision == 0);
+        }
+    }
+
+
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GDMHeader : GDMCustomRecord
+    public sealed class GDMHeader : GDMTag
     {
-        public GEDCOMCharacterSet CharacterSet
-        {
-            get { return GEDCOMUtils.GetCharacterSetVal(GetTagStringValue(GEDCOMTagType.CHAR)); }
-            set { SetTagStringValue(GEDCOMTagType.CHAR, GEDCOMUtils.GetCharacterSetStr(value)); }
-        }
+        private GDMHeaderCharSet fCharacterSet;
+        private string fCopyright;
+        private GDMHeaderFile fFile;
+        private GDMHeaderGEDCOM fGEDCOM;
+        private GDMLanguageID fLanguage;
+        private GDMTextTag fNote;
+        private GDMPlace fPlace;
+        private string fReceivingSystemName;
+        private GDMHeaderSource fSource;
+        private GDMPointer fSubmission;
+        private GDMPointer fSubmitter;
+        private DateTime fTransmissionDateTime;
 
-        public StringList Notes
-        {
-            get { return GetTagStrings(FindTag(GEDCOMTagType.NOTE, 0)); }
-            set { SetTagStrings(GetTag<GDMTag>(GEDCOMTagType.NOTE, GDMNotes.Create), value); }
-        }
 
-        public string Source
+        public GDMHeaderCharSet CharacterSet
         {
-            get { return GetTagStringValue(GEDCOMTagType.SOUR); }
-            set { SetTagStringValue(GEDCOMTagType.SOUR, value); }
-        }
-
-        public string SourceVersion
-        {
-            get { return GetTagStringValue(@"SOUR\VERS"); }
-            set { SetTagStringValue(@"SOUR\VERS", value); }
-        }
-
-        public string SourceProductName
-        {
-            get { return GetTagStringValue(@"SOUR\NAME"); }
-            set { SetTagStringValue(@"SOUR\NAME", value); }
-        }
-
-        public string SourceBusinessName
-        {
-            get { return GetTagStringValue(@"SOUR\CORP"); }
-            set { SetTagStringValue(@"SOUR\CORP", value); }
-        }
-
-        public GDMAddress SourceBusinessAddress
-        {
-            get {
-                GDMTag corpTag = GetTag<GDMTag>(@"SOUR\CORP", Create);
-                return corpTag.GetTag<GDMAddress>(GEDCOMTagType.ADDR, GDMAddress.Create);
-            }
-        }
-
-        public string ReceivingSystemName
-        {
-            get { return GetTagStringValue(GEDCOMTagType.DEST); }
-            set { SetTagStringValue(GEDCOMTagType.DEST, value); }
-        }
-
-        public string FileName
-        {
-            get { return GetTagStringValue(GEDCOMTagType.FILE); }
-            set { SetTagStringValue(GEDCOMTagType.FILE, value); }
+            get { return fCharacterSet; }
         }
 
         public string Copyright
         {
-            get { return GetTagStringValue(GEDCOMTagType.COPR); }
-            set { SetTagStringValue(GEDCOMTagType.COPR, value); }
+            get { return fCopyright; }
+            set { fCopyright = value; }
         }
 
-        public string GEDCOMVersion
+        public GDMHeaderFile File
         {
-            get { return GetTagStringValue(@"GEDC\VERS"); }
-            set { SetTagStringValue(@"GEDC\VERS", value); }
+            get { return fFile; }
         }
 
-        public string GEDCOMForm
+        public GDMHeaderGEDCOM GEDCOM
         {
-            get { return GetTagStringValue(@"GEDC\FORM"); }
-            set { SetTagStringValue(@"GEDC\FORM", value); }
+            get { return fGEDCOM; }
         }
 
-        public string CharacterSetVersion
+        public GDMLanguageID Language
         {
-            get { return GetTagStringValue(@"CHAR\VERS"); }
-            set { SetTagStringValue(@"CHAR\VERS", value); }
+            get { return fLanguage; }
+            set { fLanguage = value; }
         }
 
-        public GDMLanguage Language
+        public GDMTextTag Note
         {
-            get { return GetTag<GDMLanguage>(GEDCOMTagType.LANG, GDMLanguage.Create); }
+            get { return fNote; }
         }
 
-        public string PlaceHierarchy
+        public GDMPlace Place
         {
-            get { return GetTagStringValue(@"PLAC\FORM"); }
-            set { SetTagStringValue(@"PLAC\FORM", value); }
+            get { return fPlace; }
+        }
+
+        public string ReceivingSystemName
+        {
+            get { return fReceivingSystemName; }
+            set { fReceivingSystemName = value; }
+        }
+
+        public GDMHeaderSource Source
+        {
+            get { return fSource; }
         }
 
         public GDMPointer Submission
         {
-            get { return GetTag<GDMPointer>(GEDCOMTagType.SUBN, GDMPointer.Create); }
+            get { return fSubmission; }
         }
 
         public GDMPointer Submitter
         {
-            get { return GetTag<GDMPointer>(GEDCOMTagType.SUBM, GDMPointer.Create); }
-        }
-
-        public GDMDate TransmissionDate
-        {
-            get { return GetTag<GDMDate>(GEDCOMTagType.DATE, GDMDate.Create); }
-        }
-
-        public GDMTime TransmissionTime
-        {
-            get { return TransmissionDate.GetTag<GDMTime>(GEDCOMTagType.TIME, GDMTime.Create); }
+            get { return fSubmitter; }
         }
 
         public DateTime TransmissionDateTime
         {
-            get {
-                return TransmissionDate.Date.Add(TransmissionTime.Value);
-            }
-            set {
-                TransmissionDate.Date = value.Date;
-                TransmissionTime.Value = value.TimeOfDay;
-            }
-        }
-
-        // new property (not standard)
-        public int FileRevision
-        {
-            get { return GetTagIntegerValue(@"FILE\_REV", 0); }
-            set { SetTagIntegerValue(@"FILE\_REV", value); }
+            get { return fTransmissionDateTime; }
+            set { fTransmissionDateTime = value; }
         }
 
 
         public GDMHeader(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.HEAD);
+
+            fCharacterSet = new GDMHeaderCharSet(this);
+            fFile = new GDMHeaderFile(this);
+            fGEDCOM = new GDMHeaderGEDCOM(this);
+            fNote = new GDMTextTag(this, GEDCOMTagType.NOTE);
+            fPlace = new GDMPlace(this);
+            fSource = new GDMHeaderSource(this);
+            fSubmission = new GDMPointer(this, GEDCOMTagType.SUBN, string.Empty);
+            fSubmitter = new GDMPointer(this, GEDCOMTagType.SUBM, string.Empty);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            fCharacterSet.Clear();
+            fCopyright = string.Empty;
+            fFile.Clear();
+            fGEDCOM.Clear();
+            fLanguage = GDMLanguageID.Unknown;
+            fNote.Clear();
+            fPlace.Clear();
+            fReceivingSystemName = string.Empty;
+            fSource.Clear();
+            fSubmission.Clear();
+            fSubmitter.Clear();
+            fTransmissionDateTime = new DateTime(0);
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && fCharacterSet.IsEmpty() && string.IsNullOrEmpty(fCopyright) && fFile.IsEmpty() &&
+                fGEDCOM.IsEmpty() && (fLanguage == GDMLanguageID.Unknown) && fNote.IsEmpty() && fPlace.IsEmpty() && 
+                string.IsNullOrEmpty(fReceivingSystemName) && fSource.IsEmpty() && fSubmission.IsEmpty() &&
+                fSubmitter.IsEmpty() && (fTransmissionDateTime.Equals(GDMChangeDate.ZeroDateTime));
         }
     }
 }

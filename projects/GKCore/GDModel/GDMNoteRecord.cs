@@ -25,12 +25,13 @@ using GKCore.Types;
 
 namespace GDModel
 {
-    public sealed class GDMNoteRecord : GDMRecord
+    public sealed class GDMNoteRecord : GDMRecord, IGDMTextObject
     {
-        public StringList Note
+        private StringList fLines;
+
+        public StringList Lines
         {
-            get { return GetTagStrings(this); }
-            set { SetTagStrings(this, value); }
+            get { return fLines; }
         }
 
 
@@ -38,6 +39,44 @@ namespace GDModel
         {
             SetRecordType(GDMRecordType.rtNote);
             SetName(GEDCOMTagType.NOTE);
+
+            fLines = new StringList();
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMNoteRecord sourceObj = (source as GDMNoteRecord);
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+
+            fLines.Assign(sourceObj.fLines);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+            fLines.Clear();
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && fLines.IsEmpty();
+        }
+
+        protected override string GetStringValue()
+        {
+            return string.Empty;
+        }
+
+        public override string ParseString(string strValue)
+        {
+            fLines.Clear();
+            if (!string.IsNullOrEmpty(strValue)) {
+                fLines.Add(strValue);
+            }
+            return string.Empty;
         }
 
         /// <summary>
@@ -51,11 +90,9 @@ namespace GDModel
             if (targetNote == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
 
-            using (StringList cont = new StringList()) {
-                cont.Text = targetNote.Note.Text;
-                base.MoveTo(targetRecord, clearDest);
-                targetNote.Note = cont;
-            }
+            string targetText = targetNote.Lines.Text;
+            base.MoveTo(targetRecord, clearDest);
+            targetNote.Lines.Text = targetText;
         }
 
         public override float IsMatch(GDMTag tag, MatchParams matchParams)
@@ -65,7 +102,7 @@ namespace GDModel
 
             float match = 0.0f;
 
-            if (string.Compare(Note.Text, note.Note.Text, true) == 0) {
+            if (string.Compare(fLines.Text, note.Lines.Text, true) == 0) {
                 match = 100.0f;
             }
 
@@ -74,16 +111,13 @@ namespace GDModel
 
         public void SetNotesArray(params string[] value)
         {
-            SetTagStrings(this, value);
+            fLines.Clear();
+            fLines.AddStrings(value);
         }
 
         public void AddNoteText(string text)
         {
-            using (StringList strData = new StringList()) {
-                strData.Text = Note.Text.Trim();
-                strData.Add(text);
-                Note = strData;
-            }
+            fLines.Add(text);
         }
 
         public void SetNoteText(string text)
@@ -91,9 +125,7 @@ namespace GDModel
             if (text == null)
                 throw new ArgumentNullException("text");
 
-            using (StringList strData = new StringList(text)) {
-                Note = strData;
-            }
+            fLines.Text = text;
         }
     }
 }

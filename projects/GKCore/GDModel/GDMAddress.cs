@@ -26,58 +26,65 @@ namespace GDModel
 {
     public sealed class GDMAddress : GDMTag
     {
+        private StringList fLines;
+        private string fAddressLine1;
+        private string fAddressLine2;
+        private string fAddressLine3;
+        private string fAddressCity;
+        private string fAddressState;
+        private string fAddressPostalCode;
+        private string fAddressCountry;
         private GDMList<GDMTag> fPhoneList;
         private GDMList<GDMTag> fEmailList;
         private GDMList<GDMTag> fFaxList;
         private GDMList<GDMTag> fWWWList;
 
 
-        public StringList Address
+        public StringList Lines
         {
-            get { return GetTagStrings(this); }
-            set { SetTagStrings(this, value); }
+            get { return fLines; }
         }
 
         public string AddressLine1
         {
-            get { return GetTagStringValue(GEDCOMTagType.ADR1); }
-            set { SetTagStringValue(GEDCOMTagType.ADR1, value); }
+            get { return fAddressLine1; }
+            set { fAddressLine1 = value; }
         }
 
         public string AddressLine2
         {
-            get { return GetTagStringValue(GEDCOMTagType.ADR2); }
-            set { SetTagStringValue(GEDCOMTagType.ADR2, value); }
+            get { return fAddressLine2; }
+            set { fAddressLine2 = value; }
         }
 
         public string AddressLine3
         {
-            get { return GetTagStringValue(GEDCOMTagType.ADR3); }
-            set { SetTagStringValue(GEDCOMTagType.ADR3, value); }
+            get { return fAddressLine3; }
+            set { fAddressLine3 = value; }
         }
 
         public string AddressCity
         {
-            get { return GetTagStringValue(GEDCOMTagType.CITY); }
-            set { SetTagStringValue(GEDCOMTagType.CITY, value); }
+            get { return fAddressCity; }
+            set { fAddressCity = value; }
         }
 
         public string AddressState
         {
-            get { return GetTagStringValue(GEDCOMTagType.STAE); }
-            set { SetTagStringValue(GEDCOMTagType.STAE, value); }
+            get { return fAddressState; }
+            set { fAddressState = value; }
         }
 
         public string AddressPostalCode
         {
-            get { return GetTagStringValue(GEDCOMTagType.POST); }
-            set { SetTagStringValue(GEDCOMTagType.POST, value); }
+            get { return fAddressPostalCode; }
+            set { fAddressPostalCode = value; }
         }
 
         public string AddressCountry
         {
-            get { return GetTagStringValue(GEDCOMTagType.CTRY); }
-            set { SetTagStringValue(GEDCOMTagType.CTRY, value); }
+            get { return fAddressCountry; }
+            set { fAddressCountry = value; }
         }
 
         public GDMList<GDMTag> PhoneNumbers
@@ -101,14 +108,18 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMAddress(owner, tagName, tagValue);
-        }
-
         public GDMAddress(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.ADDR);
+
+            fLines = new StringList();
+            fAddressLine1 = string.Empty;
+            fAddressLine2 = string.Empty;
+            fAddressLine3 = string.Empty;
+            fAddressCity = string.Empty;
+            fAddressState = string.Empty;
+            fAddressPostalCode = string.Empty;
+            fAddressCountry = string.Empty;
 
             fPhoneList = new GDMList<GDMTag>(this);
             fEmailList = new GDMList<GDMTag>(this);
@@ -119,6 +130,11 @@ namespace GDModel
         public GDMAddress(GDMObject owner, string tagName, string tagValue) : this(owner)
         {
             SetNameValue(tagName, tagValue);
+        }
+
+        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
+        {
+            return new GDMAddress(owner, tagName, tagValue);
         }
 
         protected override void Dispose(bool disposing)
@@ -140,6 +156,15 @@ namespace GDModel
 
             base.Assign(source);
 
+            fLines.Assign(otherAddr.fLines);
+            fAddressLine1 = otherAddr.fAddressLine1;
+            fAddressLine2 = otherAddr.fAddressLine2;
+            fAddressLine3 = otherAddr.fAddressLine3;
+            fAddressCity = otherAddr.fAddressCity;
+            fAddressState = otherAddr.fAddressState;
+            fAddressPostalCode = otherAddr.fAddressPostalCode;
+            fAddressCountry = otherAddr.fAddressCountry;
+
             AssignList(otherAddr.fPhoneList, fPhoneList);
             AssignList(otherAddr.fEmailList, fEmailList);
             AssignList(otherAddr.fFaxList, fFaxList);
@@ -149,6 +174,16 @@ namespace GDModel
         public override void Clear()
         {
             base.Clear();
+
+            fLines.Clear();
+            fAddressLine1 = string.Empty;
+            fAddressLine2 = string.Empty;
+            fAddressLine3 = string.Empty;
+            fAddressCity = string.Empty;
+            fAddressState = string.Empty;
+            fAddressPostalCode = string.Empty;
+            fAddressCountry = string.Empty;
+
             fPhoneList.Clear();
             fEmailList.Clear();
             fFaxList.Clear();
@@ -157,7 +192,22 @@ namespace GDModel
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fPhoneList.Count == 0 && fEmailList.Count == 0 && fFaxList.Count == 0 && fWWWList.Count == 0;
+            return base.IsEmpty() && fLines.IsEmpty() &&
+                string.IsNullOrEmpty(fAddressLine1) && string.IsNullOrEmpty(fAddressLine2) && string.IsNullOrEmpty(fAddressLine3) && 
+                string.IsNullOrEmpty(fAddressCity) && string.IsNullOrEmpty(fAddressState) && string.IsNullOrEmpty(fAddressCountry) && 
+                string.IsNullOrEmpty(fAddressPostalCode) &&
+                fPhoneList.Count == 0 && fEmailList.Count == 0 && fFaxList.Count == 0 && fWWWList.Count == 0;
+        }
+
+        protected override string GetStringValue()
+        {
+            return (fLines.Count > 0) ? fLines[0] : string.Empty;
+        }
+
+        public override string ParseString(string strValue)
+        {
+            fLines.Text = strValue;
+            return string.Empty;
         }
 
         public GDMTag AddEmailAddress(string value)
@@ -182,14 +232,13 @@ namespace GDModel
 
         public void SetAddressText(string value)
         {
-            using (StringList sl = new StringList(value)) {
-                Address = sl;
-            }
+            fLines.Text = value;
         }
 
         public void SetAddressArray(string[] value)
         {
-            SetTagStrings(this, value);
+            fLines.Clear();
+            fLines.AddStrings(value);
         }
     }
 }

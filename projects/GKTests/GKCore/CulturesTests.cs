@@ -63,13 +63,15 @@ namespace GKCore
             Assert.IsFalse(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GDMSex.svUndetermined, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUnknown, culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
             Assert.AreEqual("Ivanova", surnames[0]);
             Assert.Throws(typeof(ArgumentNullException), () => { culture.GetSurnames(null); });
             Assert.AreEqual("Ivanov Ivan", culture.GetPossessiveName("Ivanov Ivan"));
+
+            Assert.AreEqual("Ivanova Anna Ivanovna", culture.GetPossessiveName(iRec));
         }
 
         [Test]
@@ -84,7 +86,7 @@ namespace GKCore
             Assert.IsFalse(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GDMSex.svUndetermined, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUnknown, culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -105,7 +107,7 @@ namespace GKCore
             Assert.IsTrue(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GDMSex.svUndetermined, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUnknown, culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -126,7 +128,7 @@ namespace GKCore
             Assert.IsTrue(culture.HasSurname());
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GDMSex.svUndetermined, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUnknown, culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -190,9 +192,16 @@ namespace GKCore
             sx = rusCulture.GetSex("Иван", "Петрович", false);
             Assert.AreEqual(GDMSex.svMale, sx);
 
-            Assert.AreEqual(GDMSex.svNone, rusCulture.GetSex("", "", false));
+            Assert.AreEqual(GDMSex.svUnknown, rusCulture.GetSex("", "", false));
 
             Assert.AreEqual("Иванова Ивана Ивановича", rusCulture.GetPossessiveName("Иванов Иван Иванович"));
+
+            GDMIndividualRecord iRec2 = fContext.Tree.CreateIndividual();
+            GDMPersonalName persName = new GDMPersonalName(iRec2);
+            persName.SetNameParts("Иван Иванович", "Иванов", "");
+            iRec2.PersonalNames.Add(persName);
+
+            Assert.AreEqual("Иванова Ивана Ивановича", rusCulture.GetPossessiveName(iRec2));
         }
     }
 }

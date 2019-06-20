@@ -71,7 +71,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Note.Text = fNoteRecord.Note.Text.Trim();
+            fView.Note.Text = fNoteRecord.Lines.Text.Trim();
         }
 
         public void SetBold()

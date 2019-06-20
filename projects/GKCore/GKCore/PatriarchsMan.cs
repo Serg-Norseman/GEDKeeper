@@ -146,30 +146,25 @@ namespace GKCore
 
         private static void PL_WalkDescLinks(Graph graph, PGNode prevNode, GDMIndividualRecord ancestor)
         {
-            for (int i = 0, count = ancestor.SpouseToFamilyLinks.Count; i < count; i++)
-            {
+            for (int i = 0, count = ancestor.SpouseToFamilyLinks.Count; i < count; i++) {
                 GDMFamilyRecord family = ancestor.SpouseToFamilyLinks[i].Family;
                 PGNode node = family.ExtData as PGNode;
 
-                if (node != null && node.Type != PGNodeType.Default)
-                {
+                if (node != null && node.Type != PGNodeType.Default) {
                     Vertex vtx = graph.FindVertex(node.FamilyXRef);
-                    if (vtx == null)
-                    {
+                    if (vtx == null) {
                         vtx = graph.AddVertex(node.FamilyXRef, node);
                     }
 
-                    if (prevNode != null)
-                    {
+                    if (prevNode != null) {
                         graph.AddDirectedEdge(prevNode.FamilyXRef, node.FamilyXRef, 1, null);
                     }
 
                     prevNode = node;
                 }
 
-                for (int k = 0, count2 = family.Children.Count; k < count2; k++)
-                {
-                    GDMIndividualRecord child = family.Children[k].Value as GDMIndividualRecord;
+                for (int k = 0, count2 = family.Children.Count; k < count2; k++) {
+                    GDMIndividualRecord child = family.Children[k].Individual;
                     PL_WalkDescLinks(graph, prevNode, child);
                 }
             }
@@ -225,7 +220,7 @@ namespace GKCore
                                     if (node != null && node.Type == PGNodeType.Patriarch) {
                                         // dummy
                                     } else {
-                                        int size = GKUtils.GetDescGenerations(cross.GetHusband());
+                                        int size = GKUtils.GetDescGenerations(cross.Husband.Individual);
                                         if (size == 0) size = 1;
                                         cross.ExtData = new PGNode(cross.XRef, PGNodeType.Intersection, size);
                                     }

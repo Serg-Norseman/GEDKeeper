@@ -47,11 +47,14 @@ namespace GDModel
     /// <summary>
     /// 
     /// </summary>
-    public class GDMRecord : GDMCustomRecord, IGEDCOMStructWithLists
+    public class GDMRecord : GDMTag, IGEDCOMStructWithLists
     {
+        private string fAutomatedRecordID;
+        private GDMChangeDate fChangeDate;
         private object fExtData;
         private GDMRecordType fRecordType;
         private string fUID;
+        private string fXRef;
 
         private GDMList<GDMMultimediaLink> fMultimediaLinks;
         private GDMList<GDMNotes> fNotes;
@@ -61,13 +64,13 @@ namespace GDModel
 
         public string AutomatedRecordID
         {
-            get { return GetTagStringValue(GEDCOMTagType.RIN); }
-            set { SetTagStringValue(GEDCOMTagType.RIN, value); }
+            get { return fAutomatedRecordID; }
+            set { fAutomatedRecordID = value; }
         }
 
         public GDMChangeDate ChangeDate
         {
-            get { return GetTag<GDMChangeDate>(GEDCOMTagType.CHAN, GDMChangeDate.Create); }
+            get { return fChangeDate; }
         }
 
         public object ExtData
@@ -112,9 +115,25 @@ namespace GDModel
             get { return fUserReferences; }
         }
 
+        public string XRef
+        {
+            get { return fXRef; }
+            set {
+                string oldXRef = fXRef;
+                fXRef = value;
+
+                var owner = GetTree();
+                if (owner != null) {
+                    owner.SetXRef(oldXRef, this);
+                }
+            }
+        }
+
 
         public GDMRecord(GDMObject owner) : base(owner)
         {
+            fAutomatedRecordID = string.Empty;
+            fChangeDate = new GDMChangeDate(this);
             fNotes = new GDMList<GDMNotes>(this);
             fSourceCitations = new GDMList<GDMSourceCitation>(this);
             fMultimediaLinks = new GDMList<GDMMultimediaLink>(this);
@@ -135,6 +154,11 @@ namespace GDModel
         protected void SetRecordType(GDMRecordType type)
         {
             fRecordType = type;
+        }
+
+        public override GDMTree GetTree()
+        {
+            return (Owner as GDMTree);
         }
 
         public int IndexOfSource(GDMSourceRecord sourceRec)
@@ -159,29 +183,10 @@ namespace GDModel
 
             base.Assign(source);
 
-            foreach (GDMNotes sourceNote in sourceRec.fNotes) {
-                GDMNotes copy = new GDMNotes(this);
-                copy.Assign(sourceNote);
-                Notes.Add(copy);
-            }
-
-            foreach (GDMMultimediaLink sourceMediaLink in sourceRec.fMultimediaLinks) {
-                GDMMultimediaLink copy = new GDMMultimediaLink(this);
-                copy.Assign(sourceMediaLink);
-                MultimediaLinks.Add(copy);
-            }
-
-            foreach (GDMSourceCitation sourceSrcCit in sourceRec.fSourceCitations) {
-                GDMSourceCitation copy = new GDMSourceCitation(this);
-                copy.Assign(sourceSrcCit);
-                SourceCitations.Add(copy);
-            }
-
-            foreach (GDMUserReference sourceUserRef in sourceRec.fUserReferences) {
-                GDMUserReference copy = new GDMUserReference(this);
-                copy.Assign(sourceUserRef);
-                UserReferences.Add(copy);
-            }
+            AssignList(sourceRec.fNotes, fNotes);
+            AssignList(sourceRec.fMultimediaLinks, fMultimediaLinks);
+            AssignList(sourceRec.fSourceCitations, fSourceCitations);
+            AssignList(sourceRec.fUserReferences, fUserReferences);
         }
 
         public virtual void MoveTo(GDMRecord targetRecord, bool clearDest)
@@ -226,16 +231,6 @@ namespace GDModel
             }
         }
 
-        public override void Pack()
-        {
-            base.Pack();
-
-            fNotes.Pack();
-            fSourceCitations.Pack();
-            fMultimediaLinks.Pack();
-            fUserReferences.Pack();
-        }
-
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
@@ -250,6 +245,8 @@ namespace GDModel
         {
             base.Clear();
 
+            fAutomatedRecordID = string.Empty;
+            fChangeDate.Clear();
             fNotes.Clear();
             fSourceCitations.Clear();
             fMultimediaLinks.Clear();
@@ -259,7 +256,9 @@ namespace GDModel
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fNotes.Count == 0 && fSourceCitations.Count == 0 && fMultimediaLinks.Count == 0 && fUserReferences.Count == 0;
+            return base.IsEmpty() && string.IsNullOrEmpty(fAutomatedRecordID) && fChangeDate.IsEmpty() &&
+                (fNotes.Count == 0) && (fSourceCitations.Count == 0) && 
+                (fMultimediaLinks.Count == 0) && (fUserReferences.Count == 0);
         }
 
         public string NewXRef()
@@ -300,7 +299,7 @@ namespace GDModel
             if (noteRec != null) {
                 note = new GDMNotes(this);
                 note.Value = noteRec;
-                Notes.Add(note);
+                fNotes.Add(note);
             }
 
             return note;
@@ -315,7 +314,7 @@ namespace GDModel
                 cit.Value = sourceRec;
                 cit.Page = page;
                 cit.CertaintyAssessment = quality;
-                SourceCitations.Add(cit);
+                fSourceCitations.Add(cit);
             }
 
             return cit;
@@ -328,7 +327,7 @@ namespace GDModel
             if (mediaRec != null) {
                 mmLink = new GDMMultimediaLink(this);
                 mmLink.Value = mediaRec;
-                MultimediaLinks.Add(mmLink);
+                fMultimediaLinks.Add(mmLink);
             }
 
             return mmLink;
@@ -338,7 +337,7 @@ namespace GDModel
         {
             GDMUserReference uRef = new GDMUserReference(this);
             uRef.StringValue = reference;
-            UserReferences.Add(uRef);
+            fUserReferences.Add(uRef);
         }
     }
 }

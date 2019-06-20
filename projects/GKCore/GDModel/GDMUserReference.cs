@@ -39,16 +39,6 @@ namespace GDModel
             SetName(GEDCOMTagType.REFN);
         }
 
-        public GDMUserReference(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
-        }
-
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMUserReference(owner, tagName, tagValue);
-        }
-
         public override void Clear()
         {
             base.Clear();

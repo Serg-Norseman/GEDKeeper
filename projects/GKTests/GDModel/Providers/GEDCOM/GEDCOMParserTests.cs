@@ -18,33 +18,30 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GDModel
+using System;
+using NUnit.Framework;
+
+namespace GDModel.Providers.GEDCOM
 {
-    public abstract class GDMCustomRecord : GDMTag
+    [TestFixture]
+    public class GEDCOMParserTests
     {
-        private string fXRef;
-
-        public string XRef
+        [Test]
+        public void Test_CtorStrNull()
         {
-            get { return fXRef; }
-            set {
-                string oldXRef = fXRef;
-                fXRef = value;
-
-                var owner = GetTree();
-                if (owner != null) {
-                    owner.SetXRef(oldXRef, this);
-                }
-            }
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                string data = null;
+                new GEDCOMParser(data, false);
+            });
         }
 
-        public override GDMTree GetTree()
+        [Test]
+        public void Test_CtorCharArrNull()
         {
-            return (Owner as GDMTree);
-        }
-
-        protected GDMCustomRecord(GDMObject owner) : base(owner)
-        {
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                char[] data = null;
+                new GEDCOMParser(data, 0, 0, false);
+            });
         }
     }
 }

@@ -120,11 +120,9 @@ namespace GKCore.Controllers
             var tree = fBase.Context.Tree;
             GKUtils.PrepareHeader(tree, fileName, GlobalOptions.Instance.DefCharacterSet, true);
 
-            using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(tree.Header.CharacterSet))) {
+            using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(tree.Header.CharacterSet.Value))) {
                 var gedcomProvider = new GEDCOMProvider(tree);
                 gedcomProvider.SaveToStream(fs, fSplitList);
-
-                tree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
             }
         }
     }

@@ -28,10 +28,5 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.REPO);
         }
-
-        public GDMRepositoryCitation(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
-        }
     }
 }

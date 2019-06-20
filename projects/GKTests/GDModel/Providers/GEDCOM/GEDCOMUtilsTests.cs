@@ -20,15 +20,27 @@
 
 using System;
 using System.Text;
+using BSLib;
 using GDModel;
-using GDModel.Providers.GEDCOM;
 using NUnit.Framework;
 
-namespace GDModel
+namespace GDModel.Providers.GEDCOM
 {
     [TestFixture]
     public class GEDCOMUtilsTests
     {
+        [Test]
+        public void Test_GetSignByRecord()
+        {
+            Assert.AreEqual(string.Empty, GEDCOMUtils.GetSignByRecord(null));
+        }
+
+        [Test]
+        public void Test_GetXRefNumber()
+        {
+            Assert.AreEqual(-1, GEDCOMUtils.GetXRefNumber(""));
+        }
+
         [Test]
         public void Test_Trim()
         {
@@ -58,14 +70,15 @@ namespace GDModel
         {
             Assert.AreEqual("M", GEDCOMUtils.GetSexStr(GDMSex.svMale), "GetSexStr(svMale)");
             Assert.AreEqual("F", GEDCOMUtils.GetSexStr(GDMSex.svFemale), "GetSexStr(svFemale)");
-            Assert.AreEqual("U", GEDCOMUtils.GetSexStr(GDMSex.svUndetermined), "GetSexStr(svUndetermined)");
-            Assert.AreEqual("", GEDCOMUtils.GetSexStr(GDMSex.svNone), "GetSexStr(svNone)");
+            Assert.AreEqual("U", GEDCOMUtils.GetSexStr(GDMSex.svUnknown), "GetSexStr(svUndetermined)");
+            Assert.AreEqual("X", GEDCOMUtils.GetSexStr(GDMSex.svIntersex), "GetSexStr(svIntersex)");
 
             Assert.AreEqual(GDMSex.svMale, GEDCOMUtils.GetSexVal("M"), "GetSexVal(svMale)");
             Assert.AreEqual(GDMSex.svFemale, GEDCOMUtils.GetSexVal("F"), "GetSexVal(svFemale)");
-            Assert.AreEqual(GDMSex.svUndetermined, GEDCOMUtils.GetSexVal("U"), "GetSexVal(svUndetermined)");
-            Assert.AreEqual(GDMSex.svNone, GEDCOMUtils.GetSexVal(""), "GetSexVal(svNone)");
-            Assert.AreEqual(GDMSex.svNone, GEDCOMUtils.GetSexVal("unk"), "GetSexVal(unk)");
+            Assert.AreEqual(GDMSex.svUnknown, GEDCOMUtils.GetSexVal("U"), "GetSexVal(svUndetermined)");
+            Assert.AreEqual(GDMSex.svUnknown, GEDCOMUtils.GetSexVal(""), "GetSexVal(svNone)");
+            Assert.AreEqual(GDMSex.svUnknown, GEDCOMUtils.GetSexVal("unk"), "GetSexVal(unk)");
+            Assert.AreEqual(GDMSex.svIntersex, GEDCOMUtils.GetSexVal("X"));
         }
 
         [Test]
@@ -261,60 +274,12 @@ namespace GDModel
         }
 
         [Test]
-        public void Test_GEDCOMEnumSSDS()
+        public void Test_GEDCOMEnumMarriageStatus()
         {
-            Assert.AreEqual(GDMSpouseSealingDateStatus.sdsNone, GEDCOMUtils.GetSpouseSealingDateStatusVal("unk"));
-            Assert.AreEqual(GDMSpouseSealingDateStatus.sdsNone, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GDMSpouseSealingDateStatus.sdsNone)));
-            Assert.AreEqual(GDMSpouseSealingDateStatus.sdsCanceled, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GDMSpouseSealingDateStatus.sdsCanceled)));
-            Assert.AreEqual(GDMSpouseSealingDateStatus.sdsCompleted, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GDMSpouseSealingDateStatus.sdsCompleted)));
-            Assert.AreEqual(GDMSpouseSealingDateStatus.sdsExcluded, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GDMSpouseSealingDateStatus.sdsExcluded)));
-            Assert.AreEqual(GDMSpouseSealingDateStatus.sdsDNS, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GDMSpouseSealingDateStatus.sdsDNS)));
-            Assert.AreEqual(GDMSpouseSealingDateStatus.sdsDNSCAN, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GDMSpouseSealingDateStatus.sdsDNSCAN)));
-            Assert.AreEqual(GDMSpouseSealingDateStatus.sdsPre1970, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GDMSpouseSealingDateStatus.sdsPre1970)));
-            Assert.AreEqual(GDMSpouseSealingDateStatus.sdsSubmitted, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GDMSpouseSealingDateStatus.sdsSubmitted)));
-            Assert.AreEqual(GDMSpouseSealingDateStatus.sdsUncleared, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GDMSpouseSealingDateStatus.sdsUncleared)));
-        }
-
-        [Test]
-        public void Test_GEDCOMEnumBDS()
-        {
-            Assert.AreEqual(GDMBaptismDateStatus.bdsNone, GEDCOMUtils.GetBaptismDateStatusVal(GEDCOMUtils.GetBaptismDateStatusStr(GDMBaptismDateStatus.bdsNone)));
-            Assert.AreEqual(GDMBaptismDateStatus.bdsChild, GEDCOMUtils.GetBaptismDateStatusVal(GEDCOMUtils.GetBaptismDateStatusStr(GDMBaptismDateStatus.bdsChild)));
-            Assert.AreEqual(GDMBaptismDateStatus.bdsCompleted, GEDCOMUtils.GetBaptismDateStatusVal(GEDCOMUtils.GetBaptismDateStatusStr(GDMBaptismDateStatus.bdsCompleted)));
-            Assert.AreEqual(GDMBaptismDateStatus.bdsExcluded, GEDCOMUtils.GetBaptismDateStatusVal(GEDCOMUtils.GetBaptismDateStatusStr(GDMBaptismDateStatus.bdsExcluded)));
-            Assert.AreEqual(GDMBaptismDateStatus.bdsPre1970, GEDCOMUtils.GetBaptismDateStatusVal(GEDCOMUtils.GetBaptismDateStatusStr(GDMBaptismDateStatus.bdsPre1970)));
-            Assert.AreEqual(GDMBaptismDateStatus.bdsStillborn, GEDCOMUtils.GetBaptismDateStatusVal(GEDCOMUtils.GetBaptismDateStatusStr(GDMBaptismDateStatus.bdsStillborn)));
-            Assert.AreEqual(GDMBaptismDateStatus.bdsSubmitted, GEDCOMUtils.GetBaptismDateStatusVal(GEDCOMUtils.GetBaptismDateStatusStr(GDMBaptismDateStatus.bdsSubmitted)));
-            Assert.AreEqual(GDMBaptismDateStatus.bdsUncleared, GEDCOMUtils.GetBaptismDateStatusVal(GEDCOMUtils.GetBaptismDateStatusStr(GDMBaptismDateStatus.bdsUncleared)));
-            Assert.AreEqual(GDMBaptismDateStatus.bdsNone, GEDCOMUtils.GetBaptismDateStatusVal("unk"));
-        }
-
-        [Test]
-        public void Test_GEDCOMEnumEDS()
-        {
-            Assert.AreEqual(GDMEndowmentDateStatus.edsNone, GEDCOMUtils.GetEndowmentDateStatusVal("unk"));
-            Assert.AreEqual(GDMEndowmentDateStatus.edsNone, GEDCOMUtils.GetEndowmentDateStatusVal(GEDCOMUtils.GetEndowmentDateStatusStr(GDMEndowmentDateStatus.edsNone)));
-            Assert.AreEqual(GDMEndowmentDateStatus.edsChild, GEDCOMUtils.GetEndowmentDateStatusVal(GEDCOMUtils.GetEndowmentDateStatusStr(GDMEndowmentDateStatus.edsChild)));
-            Assert.AreEqual(GDMEndowmentDateStatus.edsCompleted, GEDCOMUtils.GetEndowmentDateStatusVal(GEDCOMUtils.GetEndowmentDateStatusStr(GDMEndowmentDateStatus.edsCompleted)));
-            Assert.AreEqual(GDMEndowmentDateStatus.edsExcluded, GEDCOMUtils.GetEndowmentDateStatusVal(GEDCOMUtils.GetEndowmentDateStatusStr(GDMEndowmentDateStatus.edsExcluded)));
-            Assert.AreEqual(GDMEndowmentDateStatus.edsInfant, GEDCOMUtils.GetEndowmentDateStatusVal(GEDCOMUtils.GetEndowmentDateStatusStr(GDMEndowmentDateStatus.edsInfant)));
-            Assert.AreEqual(GDMEndowmentDateStatus.edsPre1970, GEDCOMUtils.GetEndowmentDateStatusVal(GEDCOMUtils.GetEndowmentDateStatusStr(GDMEndowmentDateStatus.edsPre1970)));
-            Assert.AreEqual(GDMEndowmentDateStatus.edsStillborn, GEDCOMUtils.GetEndowmentDateStatusVal(GEDCOMUtils.GetEndowmentDateStatusStr(GDMEndowmentDateStatus.edsStillborn)));
-            Assert.AreEqual(GDMEndowmentDateStatus.edsSubmitted, GEDCOMUtils.GetEndowmentDateStatusVal(GEDCOMUtils.GetEndowmentDateStatusStr(GDMEndowmentDateStatus.edsSubmitted)));
-            Assert.AreEqual(GDMEndowmentDateStatus.edsUncleared, GEDCOMUtils.GetEndowmentDateStatusVal(GEDCOMUtils.GetEndowmentDateStatusStr(GDMEndowmentDateStatus.edsUncleared)));
-        }
-
-        [Test]
-        public void Test_GEDCOMEnumCSDS()
-        {
-            Assert.AreEqual(GDMChildSealingDateStatus.cdsNone, GEDCOMUtils.GetChildSealingDateStatusVal("unk"));
-            Assert.AreEqual(GDMChildSealingDateStatus.cdsNone, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GDMChildSealingDateStatus.cdsNone)));
-            Assert.AreEqual(GDMChildSealingDateStatus.cdsBIC, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GDMChildSealingDateStatus.cdsBIC)));
-            Assert.AreEqual(GDMChildSealingDateStatus.cdsExcluded, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GDMChildSealingDateStatus.cdsExcluded)));
-            Assert.AreEqual(GDMChildSealingDateStatus.cdsPre1970, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GDMChildSealingDateStatus.cdsPre1970)));
-            Assert.AreEqual(GDMChildSealingDateStatus.cdsStillborn, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GDMChildSealingDateStatus.cdsStillborn)));
-            Assert.AreEqual(GDMChildSealingDateStatus.cdsSubmitted, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GDMChildSealingDateStatus.cdsSubmitted)));
-            Assert.AreEqual(GDMChildSealingDateStatus.cdsUncleared, GEDCOMUtils.GetChildSealingDateStatusVal(GEDCOMUtils.GetChildSealingDateStatusStr(GDMChildSealingDateStatus.cdsUncleared)));
+            Assert.AreEqual(GDMMarriageStatus.Unknown, GEDCOMUtils.GetMarriageStatusVal("unk"));
+            Assert.AreEqual(GDMMarriageStatus.MarrRegistered, GEDCOMUtils.GetMarriageStatusVal(GEDCOMUtils.GetMarriageStatusStr(GDMMarriageStatus.MarrRegistered)));
+            Assert.AreEqual(GDMMarriageStatus.MarrNotRegistered, GEDCOMUtils.GetMarriageStatusVal(GEDCOMUtils.GetMarriageStatusStr(GDMMarriageStatus.MarrNotRegistered)));
+            Assert.AreEqual(GDMMarriageStatus.MarrDivorced, GEDCOMUtils.GetMarriageStatusVal(GEDCOMUtils.GetMarriageStatusStr(GDMMarriageStatus.MarrDivorced)));
         }
 
         [Test]
@@ -438,6 +403,33 @@ namespace GDModel
             str = "";
             res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(-2, res2);
+        }
+
+        [Test]
+        public void Test_SetTagStringsL()
+        {
+            var tag = new GDMTag(null, "TEST", "");
+            Assert.IsNotNull(tag);
+
+            // very long string, 248"A" and " BBB BBBB"
+            var strings = new StringList( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA BBB BBBB" );
+
+            GEDCOMUtils.SetTagStrings(null, strings);
+
+            GEDCOMUtils.SetTagStrings(tag, strings);
+
+            Assert.AreEqual(248, tag.StringValue.Length);
+
+            var strList = GEDCOMUtils.GetTagStrings(tag);
+            Assert.IsNotNull(strList);
+            Assert.AreEqual(1, strList.Count);
+            Assert.AreEqual(strings.Text, strList.Text);
+        }
+
+        [Test]
+        public void Test_GetGeoCoord()
+        {
+            Assert.AreEqual(0.0, GEDCOMUtils.GetGeoCoord(null, GeoCoord.Lati));
         }
     }
 }

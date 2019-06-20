@@ -425,8 +425,8 @@ namespace GKCore.Charts
 
                         if (fBase.Context.IsRecordAccess(family.Restriction))
                         {
-                            GDMIndividualRecord iFather = family.GetHusband();
-                            GDMIndividualRecord iMother = family.GetWife();
+                            GDMIndividualRecord iFather = family.Husband.Individual;
+                            GDMIndividualRecord iMother = family.Wife.Individual;
 
                             bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
 
@@ -574,7 +574,7 @@ namespace GKCore.Charts
                         switch (person.Sex) {
                             case GDMSex.svFemale:
                                 {
-                                    GDMIndividualRecord sp = family.GetHusband();
+                                    GDMIndividualRecord sp = family.Husband.Individual;
                                     skipUnk = skipUnkSpouses && (sp == null);
 
                                     if (!skipUnk) {
@@ -600,7 +600,7 @@ namespace GKCore.Charts
 
                             case GDMSex.svMale:
                                 {
-                                    GDMIndividualRecord sp = family.GetWife();
+                                    GDMIndividualRecord sp = family.Wife.Individual;
                                     skipUnk = skipUnkSpouses && (sp == null);
 
                                     if (!skipUnk) {
@@ -668,7 +668,7 @@ namespace GKCore.Charts
                             int num2 = family.Children.Count;
                             for (int j = 0; j < num2; j++)
                             {
-                                var childRec = family.Children[j].Value as GDMIndividualRecord;
+                                var childRec = family.Children[j].Individual;
 
                                 // protection against invalid third-party files
                                 if (childRec == null) {
@@ -1156,7 +1156,7 @@ namespace GKCore.Charts
 
             // FIXME: Temporary hack: if this person does not specify a particular sex,
             // then breaks the normal sequence of formation of coordinates.
-            if (person.Sex == GDMSex.svNone || person.Sex == GDMSex.svUndetermined) {
+            if (person.Sex == GDMSex.svUnknown || person.Sex == GDMSex.svIntersex) {
                 fEdges[gen] = person.Rect.Right;
             }
 
@@ -1215,14 +1215,12 @@ namespace GKCore.Charts
             }
 
             int num = person.SpouseToFamilyLinks.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
 
                 int num2 = family.Children.Count;
-                for (int j = 0; j < num2; j++)
-                {
-                    GDMIndividualRecord child = family.Children[j].Value as GDMIndividualRecord;
+                for (int j = 0; j < num2; j++) {
+                    GDMIndividualRecord child = family.Children[j].Individual;
                     bool resChild = DoDescendantsFilter(child);
                     result |= resChild;
                 }

@@ -281,11 +281,11 @@ namespace GKSamplePlugin
                 GDMIndividualRecord spouse = null;
                 switch (fController.Person.Sex) {
                     case GDMSex.svMale:
-                        spouse = family.GetWife();
+                        spouse = family.Wife.Individual;
                         break;
 
                     case GDMSex.svFemale:
-                        spouse = family.GetHusband();
+                        spouse = family.Husband.Individual;
                         break;
                 }
 

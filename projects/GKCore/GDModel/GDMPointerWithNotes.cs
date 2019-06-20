@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+
 namespace GDModel
 {
     public class GDMPointerWithNotes : GDMPointer
@@ -41,6 +43,17 @@ namespace GDModel
                 fNotes.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMPointerWithNotes sourceObj = source as GDMPointerWithNotes;
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(source);
+
+            AssignList(sourceObj.fNotes, fNotes);
         }
 
         public override void Clear()

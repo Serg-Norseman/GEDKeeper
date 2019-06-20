@@ -114,7 +114,7 @@ namespace GKCore
                 tcPerson.Selected = true;
                 Assert.AreEqual(true, tcPerson.Selected);
 
-                Assert.AreEqual(GDMSex.svNone, tcPerson.Sex);
+                Assert.AreEqual(GDMSex.svUnknown, tcPerson.Sex);
                 tcPerson.Sex = GDMSex.svMale;
                 Assert.AreEqual(GDMSex.svMale, tcPerson.Sex);
 
@@ -153,7 +153,7 @@ namespace GKCore
                 color = ((ColorHandler)tcPerson.GetSelectedColor()).Handle;
                 Assert.AreEqual(Color.FromArgb(255, Color.Red), color);
 
-                tcPerson.Sex = GDMSex.svUndetermined;
+                tcPerson.Sex = GDMSex.svUnknown;
                 color = ((ColorHandler)tcPerson.GetSelectedColor()).Handle;
                 Assert.AreEqual(Color.FromArgb(255, Color.Black), color);
             }

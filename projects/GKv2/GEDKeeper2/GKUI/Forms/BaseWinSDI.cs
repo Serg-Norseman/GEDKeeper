@@ -446,15 +446,7 @@ namespace GKUI.Forms
             GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
             if (fileRef == null) return;
 
-            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
-            if (mmKind == MultimediaKind.mkNone) {
-                return;
-            }
-
-            bool externalViewer = !GlobalOptions.Instance.EmbeddedMediaPlayer &&
-                ((mmKind == MultimediaKind.mkAudio || mmKind == MultimediaKind.mkVideo));
-
-            if (externalViewer) {
+            if (!GKUtils.UseEmbeddedViewer(fileRef.MultimediaFormat)) {
                 string targetFile = fContext.MediaLoad(fileRef);
                 GKUtils.LoadExtFile(targetFile);
             } else {

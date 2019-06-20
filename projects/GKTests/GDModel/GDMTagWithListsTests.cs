@@ -18,23 +18,34 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel;
 using NUnit.Framework;
 
-namespace GDModel.Providers.GEDCOM
+namespace GDModel
 {
     [TestFixture]
-    public class GEDCOMProviderTests
+    public class GDMTagWithListsTests
     {
         [Test]
-        public void Test_GetGEDCOMFormat()
+        public void Test_GEDCOMTagWithLists()
         {
-            GDMTree tree = new GDMTree();
+            // GDMTagWithLists protected class, derived - GDMPlace
+            using (GDMPlace tag = GDMPlace.Create(null, "", "") as GDMPlace) {
+                Assert.IsNotNull(tag);
 
-            // Tests of determine GEDCOM-format
-            Assert.AreEqual(GEDCOMFormat.gf_Unknown, GEDCOMProvider.GetGEDCOMFormat(tree));
-            tree.Header.Source = "GENBOX";
-            Assert.AreEqual(GEDCOMFormat.gf_GENBOX, GEDCOMProvider.GetGEDCOMFormat(tree));
+                Assert.IsNotNull(tag.Notes);
+                Assert.IsNotNull(tag.SourceCitations);
+                Assert.IsNotNull(tag.MultimediaLinks);
+
+                Assert.IsNull(tag.AddNote(null));
+                Assert.IsNull(tag.AddSource(null, "page", 1));
+                Assert.IsNull(tag.AddMultimedia(null));
+
+                Assert.IsNotNull(tag.AddNote(new GDMNoteRecord(null)));
+                Assert.IsNotNull(tag.AddSource(new GDMSourceRecord(null), "page", 1));
+                Assert.IsNotNull(tag.AddMultimedia(new GDMMultimediaRecord(null)));
+            }
         }
     }
 }

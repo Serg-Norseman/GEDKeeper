@@ -18,19 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel.Providers.GEDCOM;
-
 namespace GDModel
 {
     public sealed class GDMIndividualEvent : GDMCustomEvent
     {
-        public GDMPointer Family
-        {
-            // define 'FAMC' tag constructor by default (GEDCOMTree.cctor) for AddTag()
-            get { return GetTag<GDMPointer>(GEDCOMTagType.FAMC, GDMPointer.Create); }
-        }
-
-
         public GDMIndividualEvent(GDMObject owner) : base(owner)
         {
         }

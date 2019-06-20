@@ -46,7 +46,6 @@ namespace GDModel
 
         private GDMApproximated fApproximated;
         private GDMCalendar fCalendar;
-        private GDMDateFormat fDateFormat;
         private byte fDay;
         private byte fMonth;
         private short fYear;
@@ -123,7 +122,6 @@ namespace GDModel
             fYearModifier = string.Empty;
             fMonth = 0;
             fDay = 0;
-            fDateFormat = GDMDateFormat.dfGEDCOMStd;
         }
 
         public GDMDate(GDMObject owner, string tagName, string tagValue) : this(owner)
@@ -208,8 +206,7 @@ namespace GDModel
         /// Internal helper method for parser
         /// </summary>
         internal void SetRawData(GDMApproximated approximated, GDMCalendar calendar, 
-                                 short year, bool yearBC, string yearModifier, byte month, byte day,
-                                 GDMDateFormat dateFormat)
+                                 short year, bool yearBC, string yearModifier, byte month, byte day)
         {
             fApproximated = approximated;
             fCalendar = calendar;
@@ -218,7 +215,6 @@ namespace GDModel
             fYearModifier = yearModifier;
             fMonth = month;
             fDay = day;
-            fDateFormat = dateFormat;
 
             DateChanged();
         }
@@ -262,15 +258,11 @@ namespace GDModel
             // An empty string is a valid identifier for an unknown month
             if (string.IsNullOrEmpty(str)) return string.Empty;
 
-            if (str.Length == 3)
-            {
+            if (str.Length == 3) {
                 str = str.ToUpperInvariant();
-
-                for (int m = 1; m <= 12; m++)
-                {
-                    if (GEDCOMMonthArray[m - 1] == str)
-                    {
-                        return GEDCOMMonthArray[m - 1];
+                for (int m = 1; m <= 12; m++) {
+                    if (GEDCOMMonthArray[m - 1] == str) {
+                        return str;
                     }
                 }
             }
@@ -283,15 +275,11 @@ namespace GDModel
             // An empty string is a valid identifier for an unknown month
             if (string.IsNullOrEmpty(str)) return string.Empty;
 
-            if (str.Length == 4)
-            {
+            if (str.Length == 4) {
                 str = str.ToUpperInvariant();
-
-                for (int m = 1; m <= 13; m++)
-                {
-                    if (GEDCOMMonthFrenchArray[m - 1] == str)
-                    {
-                        return GEDCOMMonthFrenchArray[m - 1];
+                for (int m = 1; m <= 13; m++) {
+                    if (GEDCOMMonthFrenchArray[m - 1] == str) {
+                        return str;
                     }
                 }
             }
@@ -304,15 +292,11 @@ namespace GDModel
             // An empty string is a valid identifier for an unknown month
             if (string.IsNullOrEmpty(str)) return string.Empty;
 
-            if (str.Length == 3)
-            {
+            if (str.Length == 3) {
                 str = str.ToUpperInvariant();
-
-                for (int m = 1; m <= 13; m++)
-                {
-                    if (GEDCOMMonthHebrewArray[m - 1] == str)
-                    {
-                        return GEDCOMMonthHebrewArray[m - 1];
+                for (int m = 1; m <= 13; m++) {
+                    if (GEDCOMMonthHebrewArray[m - 1] == str) {
+                        return str;
                     }
                 }
             }
@@ -463,7 +447,7 @@ namespace GDModel
 
         public void SetJulian(int day, int month, int year)
         {
-            SetJulian(day, IntToGEDCOMMonth(month), year, false);
+            SetDateInternal(GDMCalendar.dcJulian, day, month, year, "", false);
         }
 
         public void SetJulian(int day, string month, int year, bool yearBC)
@@ -473,7 +457,7 @@ namespace GDModel
 
         public void SetHebrew(int day, int month, int year)
         {
-            SetHebrew(day, IntToGEDCOMMonthHebrew(month), year, false);
+            SetDateInternal(GDMCalendar.dcHebrew, day, month, year, "", false);
         }
 
         public void SetHebrew(int day, string month, int year, bool yearBC)
@@ -483,7 +467,7 @@ namespace GDModel
 
         public void SetFrench(int day, int month, int year)
         {
-            SetFrench(day, IntToGEDCOMMonthFrench(month), year, false);
+            SetDateInternal(GDMCalendar.dcFrench, day, month, year, "", false);
         }
 
         public void SetFrench(int day, string month, int year, bool yearBC)
@@ -494,7 +478,7 @@ namespace GDModel
         // TODO: not implemented yet
         public void SetRoman(int day, int month, int year, bool yearBC)
         {
-            SetRoman(day, IntToGEDCOMMonth(month), year, yearBC);
+            SetDateInternal(GDMCalendar.dcRoman, day, month, year, "", yearBC);
         }
 
         // TODO: not implemented yet
@@ -506,7 +490,7 @@ namespace GDModel
         // TODO: not implemented yet
         public void SetUnknown(int day, int month, int year, bool yearBC)
         {
-            SetUnknown(day, IntToGEDCOMMonth(month), year, yearBC);
+            SetDateInternal(GDMCalendar.dcUnknown, day, month, year, "", yearBC);
         }
 
         // TODO: not implemented yet
@@ -518,7 +502,7 @@ namespace GDModel
         // TODO: not implemented yet
         public void SetIslamic(int day, int month, int year)
         {
-            SetIslamic(day, IntToGEDCOMMonth(month), year);
+            SetDateInternal(GDMCalendar.dcIslamic, day, month, year, "", false);
         }
 
         // TODO: not implemented yet
@@ -584,8 +568,7 @@ namespace GDModel
             if (dateStr.IndexOf("_") >= 0) dateStr = dateStr.Replace("_", " ");
 
             string[] dtParts = dateStr.Split('.');
-            if (dtParts.Length < 3)
-            {
+            if (dtParts.Length < 3) {
                 if (aException) {
                     throw new GDMDateException(string.Format("GEDCOMDate.CreateByFormattedStr(): date format is invalid {0}", dateStr));
                 }
@@ -621,8 +604,7 @@ namespace GDModel
             int day = fDay;
             bool ybc = fYearBC;
 
-            if (year > 0 || month > 0 || day > 0)
-            {
+            if (year > 0 || month > 0 || day > 0) {
                 switch (format) {
                     case DateFormat.dfDD_MM_YYYY:
                         result += day > 0 ? ConvertHelper.AdjustNumber(day, 2) + "." : "__.";
@@ -644,8 +626,7 @@ namespace GDModel
                 }
             }
 
-            if (includeBC && ybc)
-            {
+            if (includeBC && ybc) {
                 switch (format) {
                     case DateFormat.dfDD_MM_YYYY:
                         result = result + " BC";
@@ -659,8 +640,7 @@ namespace GDModel
                 }
             }
 
-            if (showCalendar)
-            {
+            if (showCalendar) {
                 result = result + GKData.DateCalendars[(int)fCalendar].Sign;
             }
 

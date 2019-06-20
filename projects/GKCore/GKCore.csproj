@@ -108,6 +108,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
     <Reference Include="Ude">
       <HintPath>..\libs\Ude.dll</HintPath>
     </Reference>
@@ -126,14 +127,13 @@
     <Compile Include="GDModel\GDMCommunicationRecord.cs" />
     <Compile Include="GDModel\GDMCustomDate.cs" />
     <Compile Include="GDModel\GDMCustomEvent.cs" />
-    <Compile Include="GDModel\GDMCustomRecord.cs" />
     <Compile Include="GDModel\GDMCutoutPosition.cs" />
+    <Compile Include="GDModel\GDMIndividualLink.cs" />
     <Compile Include="GDModel\GDMSourceData.cs" />
     <Compile Include="GDModel\GDMDate.cs" />
     <Compile Include="GDModel\GDMDateInterpreted.cs" />
     <Compile Include="GDModel\GDMDatePeriod.cs" />
     <Compile Include="GDModel\GDMDateRange.cs" />
-    <Compile Include="GDModel\GDMDateStatus.cs" />
     <Compile Include="GDModel\GDMDateValue.cs" />
     <Compile Include="GDModel\GDMSourceEvent.cs" />
     <Compile Include="GDModel\GDMFamilyEvent.cs" />
@@ -142,10 +142,13 @@
     <Compile Include="GDModel\GDMFileReferenceWithTitle.cs" />
     <Compile Include="GDModel\GDMGroupRecord.cs" />
     <Compile Include="GDModel\GDMHeader.cs" />
+    <Compile Include="GDModel\Providers\FamilyShow\FamilyXProvider.cs" />
+    <Compile Include="GDModel\Providers\FamilyShow\OPCUtility.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\AnselEncoding.cs" />
-    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMFactory.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMChecker.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParser.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMProvider.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMTagType.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMUtils.cs" />
     <Compile Include="GDModel\Providers\GedML\GedMLProvider.cs" />
     <Compile Include="GDModel\GDMList.cs" />
@@ -154,7 +157,6 @@
     <Compile Include="GDModel\GDMInterfaces.cs" />
     <Compile Include="GDModel\GDMIndividualAttribute.cs" />
     <Compile Include="GDModel\GDMIndividualEvent.cs" />
-    <Compile Include="GDModel\GDMIndividualOrdinance.cs" />
     <Compile Include="GDModel\GDMIndividualRecord.cs" />
     <Compile Include="GDModel\GDMLanguage.cs" />
     <Compile Include="GDModel\GDMLocationRecord.cs" />
@@ -174,7 +176,6 @@
     <Compile Include="GDModel\GDMResearchRecord.cs" />
     <Compile Include="GDModel\GDMSourceCitation.cs" />
     <Compile Include="GDModel\GDMSourceRecord.cs" />
-    <Compile Include="GDModel\GDMSpouseSealing.cs" />
     <Compile Include="GDModel\GDMSpouseToFamilyLink.cs" />
     <Compile Include="GDModel\GDMSubmissionRecord.cs" />
     <Compile Include="GDModel\GDMSubmitterRecord.cs" />

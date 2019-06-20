@@ -116,10 +116,8 @@ namespace GKCore
 
         public void SaveToFile(string fileName)
         {
-            using (var strd = new StreamWriter(fileName, false, Encoding.UTF8))
-            {
-                foreach (KeyValuePair<string, NameEntry> de in fNames)
-                {
+            using (var strd = new StreamWriter(fileName, false, Encoding.UTF8)) {
+                foreach (KeyValuePair<string, NameEntry> de in fNames) {
                     NameEntry nm = de.Value;
                     string st = nm.Name + ";" + nm.F_Patronymic + ";" + nm.M_Patronymic + ";" + GKData.SexData[(int)nm.Sex].Sign;
                     strd.WriteLine(st);
@@ -149,10 +147,8 @@ namespace GKCore
             string result = "";
 
             NameEntry nm = FindName(name);
-            if (nm != null)
-            {
-                switch (sex)
-                {
+            if (nm != null) {
+                switch (sex) {
                     case GDMSex.svMale:
                         result = nm.M_Patronymic;
                         break;
@@ -170,12 +166,9 @@ namespace GKCore
         {
             string result = "";
 
-            if (!string.IsNullOrEmpty(patronymic))
-            {
-                foreach (NameEntry nm in fNames.Values)
-                {
-                    if (nm.F_Patronymic == patronymic || nm.M_Patronymic == patronymic)
-                    {
+            if (!string.IsNullOrEmpty(patronymic)) {
+                foreach (NameEntry nm in fNames.Values) {
+                    if (nm.F_Patronymic == patronymic || nm.M_Patronymic == patronymic) {
                         result = nm.Name;
                         break;
                     }
@@ -188,7 +181,7 @@ namespace GKCore
         public GDMSex GetSexByName(string name)
         {
             NameEntry nm = FindName(name);
-            return ((nm == null) ? GDMSex.svNone : nm.Sex);
+            return ((nm == null) ? GDMSex.svUnknown : nm.Sex);
         }
 
         public void SetName(string name, string patronymic, GDMSex sex)
@@ -201,8 +194,7 @@ namespace GKCore
                 nm.Sex = sex;
             }
 
-            switch (sex)
-            {
+            switch (sex) {
                 case GDMSex.svMale:
                     if (string.IsNullOrEmpty(nm.M_Patronymic))
                         nm.M_Patronymic = patronymic;
@@ -223,8 +215,7 @@ namespace GKCore
             if (nm == null)
                 nm = AddName(name);
 
-            if (nm.Sex == GDMSex.svNone && sex >= GDMSex.svMale && sex < GDMSex.svUndetermined)
-            {
+            if (nm.Sex == GDMSex.svUnknown && (sex == GDMSex.svMale || sex == GDMSex.svFemale)) {
                 nm.Sex = sex;
             }
         }
@@ -243,7 +234,7 @@ namespace GKCore
                 SetNameSex(childName, iSex);
 
                 GDMFamilyRecord fam = iRec.GetParentsFamily();
-                GDMIndividualRecord father = (fam == null) ? null : fam.GetHusband();
+                GDMIndividualRecord father = (fam == null) ? null : fam.Husband.Individual;
 
                 if (father != null) {
                     string fatherName;

@@ -9,7 +9,7 @@
 
 Unicode true
 Name "GEDKeeper"
-OutFile "gedkeeper_2.15.0_winsetup.exe"
+OutFile "gedkeeper_2.16.0_winsetup.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
 
 CRCCheck on
@@ -44,6 +44,7 @@ LangString gkp_cloud ${LANG_ENGLISH} "Words Cloud"
 LangString gkp_dqlt ${LANG_ENGLISH} "Data Quality"
 LangString gkp_histdata ${LANG_ENGLISH} "History Data (links)"
 LangString gkp_stdreports ${LANG_ENGLISH} "Standard Reports"
+LangString gk_shellopen ${LANG_ENGLISH} "Open"
 
 !insertmacro MUI_LANGUAGE "Russian"
 LangString gkreq ${LANG_RUSSIAN} "GEDKeeper2 (необходимо)"
@@ -66,6 +67,7 @@ LangString gkp_cloud ${LANG_RUSSIAN} "Облако слов/тэгов"
 LangString gkp_dqlt ${LANG_RUSSIAN} "Качество данных"
 LangString gkp_histdata ${LANG_RUSSIAN} "Исторические данные (ссылки)"
 LangString gkp_stdreports ${LANG_RUSSIAN} "Стандартные отчеты"
+LangString gk_shellopen ${LANG_RUSSIAN} "Открыть"
 
 !insertmacro MUI_LANGUAGE "Ukrainian"
 LangString gkreq ${LANG_UKRAINIAN} "GEDKeeper2 (потрібний)"
@@ -88,6 +90,7 @@ LangString gkp_cloud ${LANG_UKRAINIAN} "Слова хмара"
 LangString gkp_dqlt ${LANG_UKRAINIAN} "Якість даних"
 LangString gkp_histdata ${LANG_UKRAINIAN} "Історія даних (посилання)"
 LangString gkp_stdreports ${LANG_UKRAINIAN} "Стандартні звіти"
+LangString gk_shellopen ${LANG_UKRAINIAN} "Відкрити"
 
 !insertmacro MUI_LANGUAGE "Polish"
 LangString gkreq ${LANG_POLISH} "GEDKeeper2 (właściwy)"
@@ -110,6 +113,7 @@ LangString gkp_cloud ${LANG_POLISH} "Chmura słów"
 LangString gkp_dqlt ${LANG_POLISH} "Jakość danych"
 LangString gkp_histdata ${LANG_POLISH} "Dane historyczne (linki)"
 LangString gkp_stdreports ${LANG_POLISH} "Raporty standardowe"
+LangString gk_shellopen ${LANG_POLISH} "Otworz"
 
 !insertmacro MUI_LANGUAGE "French"
 LangString gkreq ${LANG_FRENCH} "GEDKeeper2 (obligatoire)"
@@ -132,6 +136,7 @@ LangString gkp_cloud ${LANG_FRENCH} "Nuage de mots"
 LangString gkp_dqlt ${LANG_FRENCH} "Qualité des données"
 LangString gkp_histdata ${LANG_FRENCH} "Données historiques (liens)"
 LangString gkp_stdreports ${LANG_FRENCH} "Rapports standards"
+LangString gk_shellopen ${LANG_FRENCH} "Ouvrir"
 
 !insertmacro MUI_LANGUAGE "Italian"
 LangString gkreq ${LANG_ITALIAN} "GEDKeeper2 (necessario)"
@@ -154,6 +159,7 @@ LangString gkp_cloud ${LANG_ITALIAN} "Nuvola di parole"
 LangString gkp_dqlt ${LANG_ITALIAN} "Qualità dei dati"
 LangString gkp_histdata ${LANG_ITALIAN} "Dati storici (collegamenti)"
 LangString gkp_stdreports ${LANG_ITALIAN} "Rapporti standard"
+LangString gk_shellopen ${LANG_ITALIAN} "Apri"
 
 !insertmacro MUI_LANGUAGE "German"
 LangString gkreq ${LANG_GERMAN} "GEDKeeper2 (benötigt)"
@@ -176,6 +182,7 @@ LangString gkp_cloud ${LANG_GERMAN} "Wörter Wolke"
 LangString gkp_dqlt ${LANG_GERMAN} "Datenqualität"
 LangString gkp_histdata ${LANG_GERMAN} "Verlaufsdaten (Links)"
 LangString gkp_stdreports ${LANG_GERMAN} "Standardberichte"
+LangString gk_shellopen ${LANG_GERMAN} "Datei öffnen"
 
 !insertmacro MUI_LANGUAGE "SimpChinese"
 LangString gkreq ${LANG_SIMPCHINESE} "GEDKeeper2 (必装)"
@@ -198,6 +205,7 @@ LangString gkp_cloud ${LANG_SIMPCHINESE} "词云"
 LangString gkp_dqlt ${LANG_SIMPCHINESE} "数据质量"
 LangString gkp_histdata ${LANG_SIMPCHINESE} "历史数据（链接）"
 LangString gkp_stdreports ${LANG_SIMPCHINESE} "标准报告"
+LangString gk_shellopen ${LANG_SIMPCHINESE} "打开文件"
 
 !insertmacro MUI_LANGUAGE "Czech"
 LangString gkreq ${LANG_CZECH} "GEDKeeper2 (požadováno)"
@@ -220,6 +228,7 @@ LangString gkp_cloud ${LANG_CZECH} "Slova Cloud"
 LangString gkp_dqlt ${LANG_CZECH} "Kvalita dat"
 LangString gkp_histdata ${LANG_CZECH} "Historie dat (odkazů)"
 LangString gkp_stdreports ${LANG_CZECH} "Standardní přehledy"
+LangString gk_shellopen ${LANG_CZECH} "Otevřete"
 
 
 ; Registry key to check for directory (so if you install again, it will 
@@ -283,13 +292,7 @@ Section "$(gkreq)"
 
     CreateDirectory "$SMPROGRAMS\GEDKeeper2"
     CreateShortCut "$SMPROGRAMS\GEDKeeper2\GEDKeeper2.lnk" "$INSTDIR\GEDKeeper2.exe" "" "$INSTDIR\GEDKeeper2.exe" 0
-    CreateShortCut "$SMPROGRAMS\GEDKeeper2\Help (English).lnk" "$INSTDIR\locales\help_enu\GEDKeeper2.html" "" "$INSTDIR\locales\help_enu\GEDKeeper2.html" 0
     CreateShortCut "$SMPROGRAMS\GEDKeeper2\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
-
-    CreateShortCut "$SMPROGRAMS\GEDKeeper2\Bach family (sample).lnk" "$INSTDIR\samples\Bach_Family.ged" "" "$INSTDIR\samples\Bach_Family.ged" 0
-    CreateShortCut "$SMPROGRAMS\GEDKeeper2\Nehru-Ghandi family (sample).lnk" "$INSTDIR\samples\Nehru-Ghandi_Family.ged" "" "$INSTDIR\samples\Nehru-Ghandi_Family.ged" 0
-    CreateShortCut "$SMPROGRAMS\GEDKeeper2\Human Mitochondria DNA Haplogroups (sample).lnk" "$INSTDIR\samples\Human_Mitochondria_DNA_Haplogroups.ged" "" "$INSTDIR\samples\Human_Mitochondria_DNA_Haplogroups.ged" 0
-    CreateShortCut "$SMPROGRAMS\GEDKeeper2\Human Y-chromosome DNA Haplogroups (sample).lnk" "$INSTDIR\samples\Human_Y-chromosome_DNA_Haplogroups.ged" "" "$INSTDIR\samples\Human_Y-chromosome_DNA_Haplogroups.ged" 0
 
     ; Write the installation path into the registry
     WriteRegStr HKLM SOFTWARE\GEDKeeper2 "Install_Dir" "$INSTDIR"
@@ -319,7 +322,7 @@ Section "$(gkreg)"
     WriteRegStr HKCR "GEDCOM.File" "" "GEDCOM File"
     WriteRegStr HKCR "GEDCOM.File\DefaultIcon" "" "$INSTDIR\GEDKeeper2.exe,0"
     WriteRegStr HKCR "GEDCOM.File\shell" "" "open"
-    WriteRegStr HKCR "GEDCOM.File\shell\open" "" "&Открыть"
+    WriteRegStr HKCR "GEDCOM.File\shell\open" "" "$(gk_shellopen)"
     WriteRegStr HKCR "GEDCOM.File\shell\open\command" "" '$INSTDIR\GEDKeeper2.exe "%1"'
 SectionEnd
 
@@ -338,6 +341,12 @@ SectionGroup /e "$(gklang)"
         CreateDirectory "$INSTDIR\locales\help_enu\images"
         SetOutPath "$INSTDIR\locales\help_enu\images"
         File "..\locales\help_enu\images\*.*"
+
+        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Manual (English).lnk" "$INSTDIR\locales\help_enu\GEDKeeper2.html" "" "$INSTDIR\locales\help_enu\GEDKeeper2.html" 0
+        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Bach family (sample).lnk" "$INSTDIR\samples\Bach_Family.ged" "" "$INSTDIR\samples\Bach_Family.ged" 0
+        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Nehru-Ghandi family (sample).lnk" "$INSTDIR\samples\Nehru-Ghandi_Family.ged" "" "$INSTDIR\samples\Nehru-Ghandi_Family.ged" 0
+        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Human Mitochondria DNA Haplogroups (sample).lnk" "$INSTDIR\samples\Human_Mitochondria_DNA_Haplogroups.ged" "" "$INSTDIR\samples\Human_Mitochondria_DNA_Haplogroups.ged" 0
+        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Human Y-chromosome DNA Haplogroups (sample).lnk" "$INSTDIR\samples\Human_Y-chromosome_DNA_Haplogroups.ged" "" "$INSTDIR\samples\Human_Y-chromosome_DNA_Haplogroups.ged" 0
     SectionEnd
 
     Section "Русский"
@@ -557,6 +566,12 @@ Section "Uninstall"
     Delete $INSTDIR\NLog.dll
     Delete $INSTDIR\nVLC.dll
     Delete $INSTDIR\YamlSerializer.dll
+
+    Delete $INSTDIR\BSLib.dll
+    Delete $INSTDIR\BSLib.Linguistics.dll
+    Delete $INSTDIR\BSLib.SmartGraph.dll
+    Delete $INSTDIR\GMap.NET.Core.dll
+    Delete $INSTDIR\GMap.NET.WindowsForms.dll
 
     Delete $INSTDIR\ArborGVT.dll
     Delete $INSTDIR\DotNetRtfWriter.dll

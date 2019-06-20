@@ -75,7 +75,7 @@ namespace GKCore
         public ICulture Culture
         {
             get {
-                GDMLanguageID langID = fTree.Header.Language.Value;
+                GDMLanguageID langID = fTree.Header.Language;
                 if (fCulture == null || fCulture.Language != langID) {
                     fCulture = GetCultureByLang(langID);
                 }
@@ -423,14 +423,12 @@ namespace GKCore
                 }
 
                 int num = iRec.SpouseToFamilyLinks.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
                     int num2 = family.Children.Count;
-                    for (int j = 0; j < num2; j++)
-                    {
-                        GDMIndividualRecord child = family.Children[j].Value as GDMIndividualRecord;
+                    for (int j = 0; j < num2; j++) {
+                        GDMIndividualRecord child = family.Children[j].Individual;
                         birthDate = FindBirthYear(child);
                         if (birthDate != 0) {
                             return birthDate - 20;
@@ -452,14 +450,12 @@ namespace GKCore
 
                 int maxBirth = 0;
                 int num = iRec.SpouseToFamilyLinks.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
                     int num2 = family.Children.Count;
-                    for (int j = 0; j < num2; j++)
-                    {
-                        GDMIndividualRecord child = family.Children[j].Value as GDMIndividualRecord;
+                    for (int j = 0; j < num2; j++) {
+                        GDMIndividualRecord child = family.Children[j].Individual;
 
                         int chbDate = FindBirthYear(child);
                         if (chbDate != 0 && maxBirth < chbDate) {
@@ -643,20 +639,16 @@ namespace GKCore
 
             GDMSex result = namesTable.GetSexByName(iName);
 
-            if (result == GDMSex.svNone)
-            {
-                using (var dlg = AppHost.ResolveDialog<ISexCheckDlg>())
-                {
+            if (result == GDMSex.svUnknown) {
+                using (var dlg = AppHost.ResolveDialog<ISexCheckDlg>()) {
                     dlg.IndividualName = iName + " " + iPatr;
                     result = this.Culture.GetSex(iName, iPatr, false);
 
                     dlg.Sex = result;
-                    if (AppHost.Instance.ShowModalX(dlg, false))
-                    {
+                    if (AppHost.Instance.ShowModalX(dlg, false)) {
                         result = dlg.Sex;
 
-                        if (result != GDMSex.svNone)
-                        {
+                        if (result != GDMSex.svUnknown) {
                             namesTable.SetNameSex(iName, result);
                         }
                     }
@@ -674,8 +666,7 @@ namespace GKCore
             try {
                 BeginUpdate();
 
-                if (iRec.Sex == GDMSex.svNone || iRec.Sex == GDMSex.svUndetermined)
-                {
+                if (iRec.Sex != GDMSex.svMale && iRec.Sex != GDMSex.svFemale) {
                     var parts = GKUtils.GetNameParts(iRec);
                     iRec.Sex = DefineSex(parts.Name, parts.Patronymic);
                 }
@@ -1120,7 +1111,7 @@ namespace GKCore
                     FileLoad(fileProvider, fileName, pw);
 
                     if (checkValidation) {
-                        TreeTools.CheckGEDCOMFormat(fTree, this, progress);
+                        GEDCOMChecker.CheckGEDCOMFormat(fTree, this, progress);
                     }
 
                     result = true;
@@ -1202,7 +1193,7 @@ namespace GKCore
 
                 case FileBackup.fbEachRevision:
                     if (File.Exists(fileName)) {
-                        int rev = fTree.Header.FileRevision;
+                        int rev = fTree.Header.File.Revision;
                         string bakPath = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar + "__history" + Path.DirectorySeparatorChar;
                         string bakFile = Path.GetFileName(fileName) + "." + ConvertHelper.AdjustNumber(rev, 3);
 
@@ -1457,7 +1448,7 @@ namespace GKCore
             try {
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtFamily)) {
                     dlg.TargetIndividual = target;
-                    dlg.NeedSex = GDMSex.svNone;
+                    dlg.NeedSex = GDMSex.svUnknown;
                     dlg.TargetMode = TargetMode.tmFamilyChild;
                     dlg.FastFilter = "*";
 
@@ -1543,8 +1534,8 @@ namespace GKCore
                 if (rec.RecordType == GDMRecordType.rtFamily)
                 {
                     GDMFamilyRecord fam = (GDMFamilyRecord) rec;
-                    GDMIndividualRecord husb = fam.GetHusband();
-                    GDMIndividualRecord wife = fam.GetWife();
+                    GDMIndividualRecord husb = fam.Husband.Individual;
+                    GDMIndividualRecord wife = fam.Wife.Individual;
                     if (husb == newParent || wife == newParent)
                     {
                         string msg = string.Format(LangMan.LS(LSID.LSID_ParentsQuery), GKUtils.GetFamilyString(fam));
@@ -1589,7 +1580,7 @@ namespace GKCore
                 throw new ArgumentNullException(@"spouse");
 
             GDMSex sex = spouse.Sex;
-            if (sex < GDMSex.svMale || sex >= GDMSex.svUndetermined) {
+            if (sex < GDMSex.svMale || sex > GDMSex.svFemale) {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
                 return null;
             }
@@ -1618,7 +1609,7 @@ namespace GKCore
                         family = parent.SpouseToFamilyLinks[0].Family;
                     }
 
-                    GDMIndividualRecord child = SelectPerson(family.GetHusband(), TargetMode.tmParent, needSex);
+                    GDMIndividualRecord child = SelectPerson(family.Husband.Individual, TargetMode.tmParent, needSex);
 
                     if (child != null && family.AddChild(child)) {
                         // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,

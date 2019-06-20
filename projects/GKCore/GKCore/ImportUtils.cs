@@ -31,13 +31,33 @@ namespace GKCore
         /// Text modules used to refer to events in the pedigree documents.
         /// </summary>
         public const string STD_BIRTH_SIGN = "*";
+        public const string STD_ILLEGALLY_BIRTH_SIGN = "(*)";
         public const string STD_DEATH_SIGN = "+";
         public const string STD_BAPTISM_SIGN = "~";
         public const string STD_BURIED_SIGN = "[]";
+        public const string STD_KILLED_IN_ACTION_SIGN = "x";
+        public const string STD_ENGAGED_SIGN = "o";
         public const string STD_MARRIED_SIGN = "oo";
-        public const string STD_MARRIED2_SIGN = "o-o";
+        public const string STD_UNMARRIED_SIGN = "o-o";
         public const string STD_DIVORCED_SIGN = "o|o";
+        public const string STD_DIVORCED2_SIGN = "o/o";
 
+
+        public const string STD_MALE_SIGN_U = "♂";
+        public const string STD_FEMALE_SIGN_U = "♀";
+        public const string STD_INTERSEX_SIGN_U = "⚥";
+        public const string STD_NEUTER_SIGN_U = "⚲";
+        public const string STD_BIRTH_SIGN_U = "*";
+        public const string STD_ILLEGALLY_BIRTH_SIGN_U = "⊛";
+        public const string STD_DEATH_SIGN_U = "✝︎";
+        public const string STD_BAPTISM_SIGN_U = "~";
+        public const string STD_BURIED_SIGN_U = "⚰︎";
+        public const string STD_CREMATION_SIGN_U = "⚱︎";
+        public const string STD_KILLED_IN_ACTION_SIGN_U = "⚔︎";
+        public const string STD_ENGAGED_SIGN_U = "⚬";
+        public const string STD_MARRIED_SIGN_U = "⚭";
+        public const string STD_UNMARRIED_SIGN_U = "⚯";
+        public const string STD_DIVORCED_SIGN_U = "⚮";
 
         private const string ROME_CHARS = "IVXLCDM";
 

@@ -18,31 +18,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel.Providers.GEDCOM;
+using System;
 
 namespace GDModel
 {
-    public sealed class GDMDateStatus : GDMTag
-    {
-        public GDMDate ChangeDate
-        {
-            get { return GetTag<GDMDate>(GEDCOMTagType.DATE, GDMDate.Create); }
-        }
+	public sealed class GDMIndividualLink : GDMPointer
+	{
+		public GDMIndividualRecord Individual
+		{
+		    get { return (GDMIndividualRecord)base.Value; }
+			set { base.Value = value; }
+		}
 
+		public GDMIndividualLink(GDMObject owner) : base(owner)
+		{
+		}
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMDateStatus(owner, tagName, tagValue);
-        }
-
-        public GDMDateStatus(GDMObject owner) : base(owner)
-        {
-            SetName(GEDCOMTagType.STAT);
-        }
-
-        public GDMDateStatus(GDMObject owner, string tagName, string tagValue) : this(owner)
-        {
-            SetNameValue(tagName, tagValue);
-        }
-    }
+		public GDMIndividualLink(GDMObject owner, string tagName, string tagValue) : this(owner)
+		{
+			SetNameValue(tagName, tagValue);
+		}
+	}
 }

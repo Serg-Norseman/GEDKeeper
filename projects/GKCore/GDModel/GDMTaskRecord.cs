@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -36,26 +37,32 @@ namespace GDModel
 
     public sealed class GDMTaskRecord : GDMRecord
     {
+        private string fGoal;
+        private GDMResearchPriority fPriority;
+        private GDMDate fStartDate;
+        private GDMDate fStopDate;
+
+
         public string Goal
         {
-            get { return GetTagStringValue(GEDCOMTagType._GOAL); }
-            set { SetTagStringValue(GEDCOMTagType._GOAL, value); }
+            get { return fGoal; }
+            set { fGoal = value; }
         }
 
         public GDMResearchPriority Priority
         {
-            get { return GEDCOMUtils.GetPriorityVal(GetTagStringValue(GEDCOMTagType._PRIORITY)); }
-            set { SetTagStringValue(GEDCOMTagType._PRIORITY, GEDCOMUtils.GetPriorityStr(value)); }
+            get { return fPriority; }
+            set { fPriority = value; }
         }
 
         public GDMDate StartDate
         {
-            get { return GetTag<GDMDate>(GEDCOMTagType._STARTDATE, GDMDate.Create); }
+            get { return fStartDate; }
         }
 
         public GDMDate StopDate
         {
-            get { return GetTag<GDMDate>(GEDCOMTagType._STOPDATE, GDMDate.Create); }
+            get { return fStopDate; }
         }
 
 
@@ -63,16 +70,51 @@ namespace GDModel
         {
             SetRecordType(GDMRecordType.rtTask);
             SetName(GEDCOMTagType._TASK);
+
+            fStartDate = new GDMDate(this, GEDCOMTagType._STARTDATE, string.Empty);
+            fStopDate = new GDMDate(this, GEDCOMTagType._STOPDATE, string.Empty);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMTaskRecord sourceObj = (source as GDMTaskRecord);
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+
+            fGoal = sourceObj.fGoal;
+            fPriority = sourceObj.fPriority;
+            fStartDate.Assign(sourceObj.fStartDate);
+            fStopDate.Assign(sourceObj.fStopDate);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            fGoal = string.Empty;
+            fPriority = GDMResearchPriority.rpNone;
+            fStartDate.Clear();
+            fStopDate.Clear();
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && string.IsNullOrEmpty(fGoal) && (fPriority == GDMResearchPriority.rpNone) &&
+                fStartDate.IsEmpty() && (fStopDate.IsEmpty());
         }
 
         public sealed class TaskGoalRet
         {
             public readonly GDMGoalType GoalType;
+            public readonly string GoalXRef;
             public readonly GDMRecord GoalRec;
 
-            public TaskGoalRet(GDMGoalType goalType, GDMRecord goalRec)
+            public TaskGoalRet(GDMGoalType goalType, string goalXRef, GDMRecord goalRec)
             {
                 GoalType = goalType;
+                GoalXRef = goalXRef;
                 GoalRec = goalRec;
             }
         }
@@ -80,6 +122,7 @@ namespace GDModel
         public TaskGoalRet GetTaskGoal()
         {
             GDMTree tree = GetTree();
+            string goalXRef = string.Empty;
             GDMRecord goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(Goal));
 
             GDMGoalType goalType;
@@ -93,7 +136,17 @@ namespace GDModel
                 goalType = GDMGoalType.gtOther;
             }
 
-            return new TaskGoalRet(goalType, goalRec);
+            return new TaskGoalRet(goalType, goalXRef, goalRec);
+        }
+
+        public override void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            base.ReplaceXRefs(map);
+
+            TaskGoalRet goalRet = GetTaskGoal();
+            if (goalRet.GoalType != GDMGoalType.gtOther) {
+                Goal = GEDCOMUtils.EncloseXRef(map.FindNewXRef(GEDCOMUtils.CleanXRef(Goal)));
+            }
         }
     }
 }

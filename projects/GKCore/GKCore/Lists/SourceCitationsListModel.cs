@@ -57,7 +57,7 @@ namespace GKCore.Lists
 
                     int ca = cit.GetValidCertaintyAssessment();
 
-                    fSheetList.AddItem(cit, new object[] { sourceRec.Originator.Text.Trim(),
+                    fSheetList.AddItem(cit, new object[] { sourceRec.Originator.Lines.Text.Trim(),
                         sourceRec.ShortTitle, cit.Page,
                         LangMan.LS(GKData.CertaintyAssessments[ca])
                     });

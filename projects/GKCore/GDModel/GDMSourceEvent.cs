@@ -24,30 +24,46 @@ namespace GDModel
 {
     public sealed class GDMSourceEvent : GDMTag
     {
+        private GDMDatePeriod fDate;
+        private GDMPlace fPlace;
+
+
         public GDMDatePeriod Date
         {
-            get { return GetTag<GDMDatePeriod>(GEDCOMTagType.DATE, GDMDatePeriod.Create); }
+            get { return fDate; }
         }
 
         public GDMPlace Place
         {
-            get { return GetTag<GDMPlace>(GEDCOMTagType.PLAC, GDMPlace.Create); }
+            get { return fPlace; }
         }
 
-
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
-        {
-            return new GDMSourceEvent(owner, tagName, tagValue);
-        }
 
         public GDMSourceEvent(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.EVEN);
+
+            fDate = new GDMDatePeriod(this);
+            fPlace = new GDMPlace(this);
         }
 
-        public GDMSourceEvent(GDMObject owner, string tagName, string tagValue) : this(owner)
+        public override void Clear()
         {
-            SetNameValue(tagName, tagValue);
+            base.Clear();
+
+            fDate.Clear();
+            fPlace.Clear();
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && fDate.IsEmpty() && fPlace.IsEmpty();
+        }
+
+        public override void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            base.ReplaceXRefs(map);
+            fPlace.ReplaceXRefs(map);
         }
     }
 }

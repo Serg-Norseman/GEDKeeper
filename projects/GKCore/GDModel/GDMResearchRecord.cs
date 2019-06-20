@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -51,6 +52,12 @@ namespace GDModel
 
     public sealed class GDMResearchRecord : GDMRecord
     {
+        private string fResearchName;
+        private GDMResearchPriority fPriority;
+        private GDMResearchStatus fStatus;
+        private GDMDate fStartDate;
+        private GDMDate fStopDate;
+        private int fPercent;
         private GDMList<GDMPointer> fTasks;
         private GDMList<GDMPointer> fCommunications;
         private GDMList<GDMPointer> fGroups;
@@ -58,36 +65,36 @@ namespace GDModel
 
         public string ResearchName
         {
-            get { return GetTagStringValue(GEDCOMTagType.NAME); }
-            set { SetTagStringValue(GEDCOMTagType.NAME, value); }
+            get { return fResearchName; }
+            set { fResearchName = value; }
         }
 
         public GDMResearchPriority Priority
         {
-            get { return GEDCOMUtils.GetPriorityVal(GetTagStringValue(GEDCOMTagType._PRIORITY)); }
-            set { SetTagStringValue(GEDCOMTagType._PRIORITY, GEDCOMUtils.GetPriorityStr(value)); }
+            get { return fPriority; }
+            set { fPriority = value; }
         }
 
         public GDMResearchStatus Status
         {
-            get { return GEDCOMUtils.GetStatusVal(GetTagStringValue(GEDCOMTagType._STATUS)); }
-            set { SetTagStringValue(GEDCOMTagType._STATUS, GEDCOMUtils.GetStatusStr(value)); }
+            get { return fStatus; }
+            set { fStatus = value; }
         }
 
         public GDMDate StartDate
         {
-            get { return GetTag<GDMDate>(GEDCOMTagType._STARTDATE, GDMDate.Create); }
+            get { return fStartDate; }
         }
 
         public GDMDate StopDate
         {
-            get { return GetTag<GDMDate>(GEDCOMTagType._STOPDATE, GDMDate.Create); }
+            get { return fStopDate; }
         }
 
         public int Percent
         {
-            get { return GetTagIntegerValue(GEDCOMTagType._PERCENT, 0); }
-            set { SetTagIntegerValue(GEDCOMTagType._PERCENT, value); }
+            get { return fPercent; }
+            set { fPercent = value; }
         }
 
         public GDMList<GDMPointer> Tasks
@@ -111,6 +118,9 @@ namespace GDModel
             SetRecordType(GDMRecordType.rtResearch);
             SetName(GEDCOMTagType._RESEARCH);
 
+            fStartDate = new GDMDate(this, GEDCOMTagType._STARTDATE, string.Empty);
+            fStopDate = new GDMDate(this, GEDCOMTagType._STOPDATE, string.Empty);
+
             fTasks = new GDMList<GDMPointer>(this);
             fCommunications = new GDMList<GDMPointer>(this);
             fGroups = new GDMList<GDMPointer>(this);
@@ -126,9 +136,36 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        public override void Assign(GDMTag source)
+        {
+            GDMResearchRecord sourceObj = (source as GDMResearchRecord);
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+
+            fResearchName = sourceObj.fResearchName;
+            fPriority = sourceObj.fPriority;
+            fStatus = sourceObj.fStatus;
+            fStartDate.Assign(sourceObj.fStartDate);
+            fStopDate.Assign(sourceObj.fStopDate);
+            fPercent = sourceObj.fPercent;
+
+            AssignList(sourceObj.fTasks, fTasks);
+            AssignList(sourceObj.fCommunications, fCommunications);
+            AssignList(sourceObj.fGroups, fGroups);
+        }
+
         public override void Clear()
         {
             base.Clear();
+
+            fResearchName = string.Empty;
+            fPriority = GDMResearchPriority.rpNone;
+            fStatus = GDMResearchStatus.rsDefined;
+            fStartDate.Clear();
+            fStopDate.Clear();
+            fPercent = 0;
 
             fTasks.Clear();
             fCommunications.Clear();
@@ -137,7 +174,9 @@ namespace GDModel
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fTasks.Count == 0 && fCommunications.Count == 0 && fGroups.Count == 0;
+            return base.IsEmpty() && (fTasks.Count == 0) && (fCommunications.Count == 0) && (fGroups.Count == 0) &&
+                string.IsNullOrEmpty(fResearchName) && (fPriority == GDMResearchPriority.rpNone) &&
+                (fStatus == GDMResearchStatus.rsDefined) && fStartDate.IsEmpty() && (fStopDate.IsEmpty()) && (fPercent == 0);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
@@ -154,8 +193,8 @@ namespace GDModel
             bool result = false;
 
             if (taskRecord != null) {
-                GDMPointer ptr = new GDMPointer(this);
-                ptr.SetNameValue(GEDCOMTagType._TASK, taskRecord);
+                GDMPointer ptr = new GDMPointer(this, GEDCOMTagType._TASK, string.Empty);
+                ptr.Value = taskRecord;
                 fTasks.Add(ptr);
                 result = true;
             }
@@ -192,8 +231,8 @@ namespace GDModel
             bool result = false;
 
             if (groupRecord != null) {
-                GDMPointer ptr = new GDMPointer(this);
-                ptr.SetNameValue(GEDCOMTagType._GROUP, groupRecord);
+                GDMPointer ptr = new GDMPointer(this, GEDCOMTagType._GROUP, string.Empty);
+                ptr.Value = groupRecord;
                 fGroups.Add(ptr);
                 result = true;
             }
@@ -230,8 +269,8 @@ namespace GDModel
             bool result = false;
 
             if (commRecord != null) {
-                GDMPointer ptr = new GDMPointer(this);
-                ptr.SetNameValue(GEDCOMTagType._COMM, commRecord);
+                GDMPointer ptr = new GDMPointer(this, GEDCOMTagType._COMM, string.Empty);
+                ptr.Value = commRecord;
                 fCommunications.Add(ptr);
                 result = true;
             }

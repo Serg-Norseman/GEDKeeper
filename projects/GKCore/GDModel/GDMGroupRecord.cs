@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
@@ -25,17 +26,19 @@ namespace GDModel
 {
     public sealed class GDMGroupRecord : GDMRecord
     {
-        private GDMList<GDMPointer> fMembers;
+        private string fGroupName;
+        private GDMList<GDMIndividualLink> fMembers;
 
-        public GDMList<GDMPointer> Members
-        {
-            get { return fMembers; }
-        }
 
         public string GroupName
         {
-            get { return GetTagStringValue(GEDCOMTagType.NAME); }
-            set { SetTagStringValue(GEDCOMTagType.NAME, value); }
+            get { return fGroupName; }
+            set { fGroupName = value; }
+        }
+
+        public GDMList<GDMIndividualLink> Members
+        {
+            get { return fMembers; }
         }
 
 
@@ -44,7 +47,8 @@ namespace GDModel
             SetRecordType(GDMRecordType.rtGroup);
             SetName(GEDCOMTagType._GROUP);
 
-            fMembers = new GDMList<GDMPointer>(this);
+            fGroupName = string.Empty;
+            fMembers = new GDMList<GDMIndividualLink>(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -55,15 +59,28 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        public override void Assign(GDMTag source)
+        {
+            GDMGroupRecord sourceObj = source as GDMGroupRecord;
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+
+            GroupName = sourceObj.GroupName;
+            AssignList(sourceObj.Members, fMembers);
+        }
+
         public override void Clear()
         {
             base.Clear();
+            fGroupName = string.Empty;
             fMembers.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fMembers.Count == 0;
+            return base.IsEmpty() && (fMembers.Count == 0) && (string.IsNullOrEmpty(fGroupName));
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
@@ -103,12 +120,12 @@ namespace GDModel
         {
             if (member == null) return false;
 
-            GDMPointer ptr = new GDMPointer(this);
-            ptr.SetNameValue(GEDCOMTagType._MEMBER, member);
-            fMembers.Add(ptr);
+            GDMIndividualLink mbrLink = new GDMIndividualLink(this, GEDCOMTagType._MEMBER, string.Empty);
+            mbrLink.Individual = member;
+            fMembers.Add(mbrLink);
 
-            ptr = new GDMPointer(member);
-            ptr.SetNameValue(GEDCOMTagType._GROUP, this);
+            var ptr = new GDMPointer(member, GEDCOMTagType._GROUP, string.Empty);
+            ptr.Value = this;
             member.Groups.Add(ptr);
 
             return true;

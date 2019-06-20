@@ -21,11 +21,12 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
+using GDModel.Providers.FamilyShow;
 using GDModel.Providers.GEDCOM;
 using GDModel.Providers.GedML;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.Tools;
 using GKTests;
 using GKTests.Stubs;
 using NUnit.Framework;
@@ -35,6 +36,37 @@ namespace GDModel.Providers
     [TestFixture]
     public class FileFormatTests
     {
+        [Test]
+        public void Test_NativeFormat()
+        {
+            GEDCOMProvider.DebugWrite = false;
+            Assembly assembly = typeof(CoreTests).Assembly;
+            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources.test_native.ged")) {
+                using (GDMTree tree = new GDMTree()) {
+                    byte[] inArray;
+                    using (MemoryStream inMem = new MemoryStream()) {
+                        inStream.CopyTo(inMem);
+                        inStream.Position = 0;
+                        inArray = inMem.ToArray();
+                    }
+
+                    var gedcomProvider = new GEDCOMProvider(tree);
+                    gedcomProvider.LoadFromStreamExt(inStream, inStream);
+
+                    using (MemoryStream outStream = new MemoryStream()) {
+                        gedcomProvider = new GEDCOMProvider(tree);
+                        gedcomProvider.SaveToStreamExt(outStream, GEDCOMCharacterSet.csUTF8);
+
+                        outStream.Position = 0;
+                        byte[] outArray;
+                        outArray = outStream.ToArray();
+
+                        Assert.AreEqual(Encoding.ASCII.GetString(inArray), Encoding.ASCII.GetString(outArray));
+                    }
+                }
+            }
+        }
+
         [Test]
         public void Test_Standart()
         {
@@ -51,7 +83,7 @@ namespace GDModel.Providers
 
                     GDMTag blobTag = mmRec1.FindTag("BLOB", 0);
                     Assert.IsNotNull(blobTag);
-                    var strBlob = GDMTag.GetTagStrings(blobTag).Text;
+                    var strBlob = GEDCOMUtils.GetTagStrings(blobTag).Text;
                     Assert.IsNotNull(strBlob);
                     MemoryStream blobStream = GEDCOMUtils.DecodeBlob(strBlob.Replace("\r\n", ""));
                     Assert.IsNotNull(blobStream);
@@ -170,11 +202,11 @@ namespace GDModel.Providers
 
                 GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
-                Assert.AreEqual("Test1\r\ntest2\r\ntest3", noteRec1.Note.Text);
+                Assert.AreEqual("Test1\r\ntest2\r\ntest3", noteRec1.Lines.Text);
 
                 GDMNoteRecord noteRec2 = ctx.Tree.XRefIndex_Find("N2") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec2);
-                Assert.AreEqual("Test\r\ntest2\r\ntest3", noteRec2.Note.Text);
+                Assert.AreEqual("Test\r\ntest2\r\ntest3", noteRec2.Lines.Text);
             }
         }
 
@@ -204,7 +236,7 @@ namespace GDModel.Providers
 
                 GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
-                Assert.AreEqual("Test1\r\ntest2\r\ntest3 badline badline badline badline", noteRec1.Note.Text);
+                Assert.AreEqual("Test1\r\ntest2\r\ntest3 badline badline badline badline", noteRec1.Lines.Text);
             }
         }
 
@@ -240,7 +272,7 @@ namespace GDModel.Providers
         public void Test_FamilyHistorian()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_famhist.ged")) {
-                TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
+                GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
 
                 Assert.AreEqual(GEDCOMFormat.gf_FamilyHistorian, ctx.Tree.Format);
 
@@ -257,7 +289,7 @@ namespace GDModel.Providers
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ftm2008.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_FamilyTreeMaker, ctx.Tree.Format);
 
-                TreeTools.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
+                GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
 
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
@@ -278,7 +310,7 @@ namespace GDModel.Providers
 
                 GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
-                string str = noteRec1.Note.Text;
+                string str = noteRec1.Lines.Text;
                 Assert.IsTrue(str.EndsWith("non-standard GEDCOM files."));
             }
         }
@@ -333,6 +365,15 @@ namespace GDModel.Providers
             }
         }
 
+        [Test]
+        public void Test_EmptyFile()
+        {
+            Assert.Throws(typeof(GEDCOMEmptyFileException), () => {
+                using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_empty.ged")) {
+                }
+            });
+        }
+
 
         [Test]
         public void Test_GedML()
@@ -351,6 +392,18 @@ namespace GDModel.Providers
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
                 //Assert.AreEqual("John Smith", iRec1.GetPrimaryFullName());
+            }
+        }
+
+        [Test]
+        public void Test_FamilyShow()
+        {
+            Assembly assembly = typeof(CoreTests).Assembly;
+            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources.test_windsor.familyx")) {
+                using (GDMTree tree = new GDMTree()) {
+                    var fxProvider = new FamilyXProvider(tree);
+                    fxProvider.LoadFromStreamExt(inStream, inStream);
+                }
             }
         }
     }

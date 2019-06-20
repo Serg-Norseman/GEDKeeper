@@ -39,13 +39,6 @@ namespace GDModel
     }
 
 
-    public enum GDMDateFormat
-    {
-        dfGEDCOMStd,
-        dfSystem
-    }
-
-
     public enum GDMApproximated
     {
         daExact,
@@ -55,39 +48,21 @@ namespace GDModel
     }
 
 
-    public enum GDMRange
-    {
-        drAfter,
-        drBefore,
-        drBetween,
-        drAnd
-    }
-
-
-    public enum GDMDateType
-    {
-        SIMP, ABT, AFT, BEF, BET, CAL, EST, FROM, INT, TO
-    }
-
-
     public abstract class GDMCustomDate : GDMTag, IComparable, IEquatable<GDMCustomDate>
     {
-        public static readonly string[] GEDCOMDateTypes;
-        public static readonly string[] GEDCOMDateApproximatedArray;
-        public static readonly string[] GEDCOMDateRangeArray;
-        public static readonly string[] GEDCOMDateEscapeArray;
+        internal static readonly string[] GEDCOMDateApproximatedArray;
+        internal static readonly string[] GEDCOMDateRangeArray;
+        internal static readonly string[] GEDCOMDateEscapeArray;
 
         public static readonly string[] GEDCOMMonthArray;
-        public static readonly string[] GEDCOMMonthHebrewArray;
-        public static readonly string[] GEDCOMMonthFrenchArray;
-        public static readonly string[] GEDCOMMonthSysArray;
+        internal static readonly string[] GEDCOMMonthHebrewArray;
+        internal static readonly string[] GEDCOMMonthFrenchArray;
+        internal static readonly string[] GEDCOMMonthSysArray;
 
-        public static readonly EnumTuple[] GEDCOMMonthValues;
+        internal static readonly EnumTuple[] GEDCOMMonthValues;
 
         static GDMCustomDate()
         {
-            GEDCOMDateTypes = new string[] { "", "ABT", "AFT", "BEF", "BET", "CAL", "EST", "FROM", "INT", "TO" };
-
             GEDCOMDateApproximatedArray = new string[] { "", "ABT", "CAL", "EST" };
             GEDCOMDateRangeArray = new string[] { "AFT", "BEF", "BET", "AND" };
 
@@ -97,7 +72,6 @@ namespace GDModel
                 "@#DISLAMIC@", // GK+ (nonstandard)
                 "@#DUNKNOWN@"
             };
-
 
             GEDCOMMonthArray = new string[]
             {
@@ -269,11 +243,6 @@ namespace GDModel
             UDN abs1 = GetUDN();
             UDN abs2 = other.GetUDN();
             return abs1.Equals(abs2);
-        }
-
-        internal virtual string ParseContext(GEDCOMParser context)
-        {
-            return string.Empty;
         }
 
         public static GDMDate CreateApproximated(GDMObject owner, GDMDate date, GDMApproximated approximated)

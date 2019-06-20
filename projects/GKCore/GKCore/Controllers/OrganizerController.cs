@@ -68,7 +68,7 @@ namespace GKCore.Controllers
             GDMAddress addr = ev.Address;
             if (addr == null) return;
 
-            string addrStr = addr.Address.Text.Trim();
+            string addrStr = addr.Lines.Text.Trim();
             if (addrStr != "") {
                 string city = addr.AddressCity;
                 if (city != "") {
