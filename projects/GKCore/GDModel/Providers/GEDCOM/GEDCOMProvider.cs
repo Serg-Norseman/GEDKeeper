@@ -504,6 +504,10 @@ namespace GDModel.Providers.GEDCOM
                 curTag = tree.AddRecord(new GDMGroupRecord(tree));
                 addHandler = AddGroupRecordTag;
 
+            } else if ((tagName == GEDCOMTagType._GRP) && (tree.Format == GEDCOMFormat.gf_Genney)) {
+                curTag = tree.AddRecord(new GDMGroupRecord(tree));
+                addHandler = AddGroupRecordTag;
+
             } else if (tagName == GEDCOMTagType._RESEARCH) {
                 curTag = tree.AddRecord(new GDMResearchRecord(tree));
                 addHandler = AddResearchRecordTag;
@@ -523,6 +527,10 @@ namespace GDModel.Providers.GEDCOM
             } else if ((tagName == GEDCOMTagType._PLAC) && (tree.Format == GEDCOMFormat.gf_FamilyHistorian)) {
                 curTag = tree.AddRecord(new GDMLocationRecord(tree));
                 ((GDMLocationRecord)curTag).LocationName = tagValue;
+                addHandler = AddLocationRecordTag;
+
+            } else if ((tagName == GEDCOMTagType._PLC) && (tree.Format == GEDCOMFormat.gf_Genney)) {
+                curTag = tree.AddRecord(new GDMLocationRecord(tree));
                 addHandler = AddLocationRecordTag;
 
             } else if (tagName == GEDCOMTagType.HEAD) {
@@ -2623,12 +2631,10 @@ namespace GDModel.Providers.GEDCOM
             RegisterTag(GEDCOMTagType._TRAVEL, GDMIndividualAttribute.Create, AddCustomEventTag, WriteCustomEvent);
             RegisterTag(GEDCOMTagType._YDNA, GDMIndividualAttribute.Create, AddCustomEventTag, WriteCustomEvent, true, true);
 
-
-            // TODO
-            //RegisterTag("_OBIT", true,  true); // Obituary
-            //RegisterTag("_ELEC", true,  true); // Election
-            //RegisterTag("_MDCL", true,  true); // Medical condition
-            //RegisterTag("_EXCM", true,  true); // Excommunication!
+            RegisterTag(GEDCOMTagType._OBIT, GDMIndividualAttribute.Create, null, null, true, true);
+            RegisterTag(GEDCOMTagType._ELEC, GDMIndividualAttribute.Create, null, null, true, true);
+            RegisterTag(GEDCOMTagType._MDCL, GDMIndividualAttribute.Create, null, null, true, true);
+            RegisterTag(GEDCOMTagType._EXCM, GDMIndividualAttribute.Create, null, null, true, true);
         }
 
         public static void RegisterTag(string tagName, TagConstructor constructor, AddTagHandler addHandler = null,

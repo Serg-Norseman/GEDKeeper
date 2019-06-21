@@ -1654,7 +1654,7 @@ namespace GKCore.Charts
 
         private void InternalDraw(ChartDrawMode drawMode, BackgroundMode background, int fSPX, int fSPY)
         {
-            // FIXME: dummy
+            // dummy
         }
 
         #endregion

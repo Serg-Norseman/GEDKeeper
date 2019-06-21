@@ -68,7 +68,6 @@ namespace GKCore
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
-            // FIXME: move to other tests
             Assert.AreEqual(1990, iRec.GetChronologicalYear(GEDCOMTagType.BIRT));
 
             Assert.AreEqual(1990, fContext.FindBirthYear(iRec));

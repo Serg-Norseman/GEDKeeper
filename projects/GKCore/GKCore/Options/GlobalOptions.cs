@@ -244,7 +244,7 @@ namespace GKCore.Options
         }
 
         // TODO: Need to make a decision on additional types of names:
-        // religious and according to the census (see GEDCOMPersonalNamePieces)
+        // religious and according to the census (see GDMPersonalNamePieces)
         public bool ExtendedNames
         {
             get { return fExtendedNames; }
@@ -482,7 +482,6 @@ namespace GKCore.Options
             return lngSign;
         }
 
-        // TODO: rework it
         public GDMLanguageID GetCurrentItfLang()
         {
             if (InterfaceLang == LangMan.LS_DEF_CODE) {

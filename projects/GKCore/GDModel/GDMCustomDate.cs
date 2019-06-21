@@ -56,6 +56,7 @@ namespace GDModel
 
         public static readonly string[] GEDCOMMonthArray;
         internal static readonly string[] GEDCOMMonthHebrewArray;
+        internal static readonly string[] GEDCOMMonthIslamicArray;
         internal static readonly string[] GEDCOMMonthFrenchArray;
         internal static readonly string[] GEDCOMMonthSysArray;
 
@@ -83,6 +84,13 @@ namespace GDModel
             {
                 "TSH", "CSH", "KSL", "TVT", "SHV", "ADR",
                 "ADS", "NSN", "IYR", "SVN", "TMZ", "AAV", "ELL"
+            };
+
+            // TODO: not implemented yet
+            GEDCOMMonthIslamicArray = new string[]
+            {
+                "", "", "", "", "", "",
+                "", "", "", "", "", ""
             };
 
             GEDCOMMonthFrenchArray = new string[]

@@ -359,7 +359,6 @@ namespace GDModel.Providers
         [Test]
         public void Test_Genney()
         {
-            // TODO: interest feature - use _GRP & _PLC records! OBJE._PRIM
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_genney.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Genney, ctx.Tree.Format);
             }

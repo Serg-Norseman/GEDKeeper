@@ -128,7 +128,7 @@ namespace GKUI.Providers
                 img = (Bitmap)img.Clone();
 
                 #if __MonoCS__
-                img.MakeTransparent(); // FIXME: don't work
+                img.MakeTransparent();
                 #else
                 img.MakeTransparent(img.GetPixel(0, 0));
                 #endif

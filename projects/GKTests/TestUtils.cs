@@ -170,7 +170,6 @@ namespace GKTests
         {
             GEDCOMProvider.DebugWrite = true;
 
-            // FIXME: very bad code after refactoring of GEDCOMProvider!
             string result;
             using (MemoryStream stm = new MemoryStream()) {
                 using (StreamWriter fs = new StreamWriter(stm)) {
@@ -187,9 +186,7 @@ namespace GKTests
                             GEDCOMProvider.WriteTagEx(fs, level, tag);
                         }
                     }
-
                     fs.Flush();
-
                     result = Encoding.ASCII.GetString(stm.ToArray());
                 }
             }
@@ -245,6 +242,23 @@ namespace GKTests
             }
 
             return ctx;
+        }
+
+        /// <summary>
+        /// Support function. Parse GEDCOM string.
+        /// </summary>
+        public static GDMIndividualRecord ParseIndiRec(string text)
+        {
+            GDMTree tree = new GDMTree();
+            GEDCOMProvider gp = new GEDCOMProvider(tree);
+            try {
+                gp.LoadFromString(text);
+            } catch (Exception) {
+            }
+            Assert.AreEqual(1, tree.RecordsCount);
+            GDMIndividualRecord rec = tree[0] as GDMIndividualRecord;
+            Assert.IsNotNull(rec);
+            return rec;
         }
     }
 }

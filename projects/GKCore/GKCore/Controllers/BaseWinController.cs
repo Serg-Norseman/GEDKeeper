@@ -147,13 +147,19 @@ namespace GKCore.Controllers
 
         public void SaveFileEx(bool saveAs)
         {
-            if (!fContext.IsUnknown() && !saveAs) {
-                SaveFile(fContext.FileName);
+            string oldFileName = fContext.FileName;
+            bool isUnknown = fContext.IsUnknown();
+
+            if (!isUnknown && !saveAs) {
+                SaveFile(oldFileName);
             } else {
-                string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(fContext.FileName));
-                string fileName = AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, fContext.FileName, false);
-                if (!string.IsNullOrEmpty(fileName)) {
-                    SaveFile(fileName);
+                string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(oldFileName));
+                string newFileName = AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, oldFileName, false);
+                if (!string.IsNullOrEmpty(newFileName)) {
+                    SaveFile(newFileName);
+                    if (!isUnknown && !string.Equals(oldFileName, newFileName)) {
+                        AppHost.Instance.BaseRenamed(fView, oldFileName, newFileName);
+                    }
                 }
             }
         }

@@ -21,7 +21,6 @@
 using System;
 using BSLib;
 using GDModel;
-using GDModel.Providers.GEDCOM;
 using GKTests;
 using NUnit.Framework;
 
@@ -373,21 +372,12 @@ namespace GDModel
             Assert.AreEqual(new StringList(value).Text, instance.Lines.Text);
         }
 
-        // Support function. Parse GEDCOM string, returns ADDR object found
-        private GDMAddress AddrParse(string text)
+        /// <summary>
+        /// Support function. Parse GEDCOM string, returns ADDR object found.
+        /// </summary>
+        private static GDMAddress AddrParse(string text)
         {
-            // TODO should go into general utility class
-            GDMTree tree = new GDMTree();
-            GEDCOMProvider gp = new GEDCOMProvider(tree);
-            try {
-                gp.LoadFromString(text);
-            } catch (Exception) {
-            }
-            Assert.AreEqual(1, tree.RecordsCount);
-            GDMRecord rec = tree[0];
-            Assert.IsTrue(rec is GDMIndividualRecord);
-            GDMIndividualRecord rec2 = (GDMIndividualRecord)rec;
-            // end for utility class
+            GDMIndividualRecord rec2 = TestUtils.ParseIndiRec(text);
 
             GDMList<GDMCustomEvent> events = rec2.Events;
             Assert.AreEqual(1, events.Count);
@@ -425,9 +415,7 @@ namespace GDModel
         [Test]
         public void Test_PhoneParse()
         {
-            // TODO The standard should be the second version of the input line, but in the future we can work out the first
-            //string text = "0 @I1@ INDI\n1 FACT\n2 PHON +7 499 277-71-00\n2 ADDR Institute for Higher\n3 CONT Learning\n2 PHON +7 495 967-77-76\n";
-            string text = "0 @I1@ INDI\n1 FACT\n2 ADDR Institute for Higher\n3 CONT Learning\n2 PHON +7 499 277-71-00\n2 PHON +7 495 967-77-76\n";
+            string text = "0 @I1@ INDI\n1 FACT\n2 PHON +7 499 277-71-00\n2 ADDR Institute for Higher\n3 CONT Learning\n2 PHON +7 495 967-77-76\n";
             GDMAddress res = AddrParse(text);
             Assert.AreEqual(2, res.PhoneNumbers.Count);
             Assert.AreEqual("Institute for Higher\r\nLearning", res.Lines.Text);

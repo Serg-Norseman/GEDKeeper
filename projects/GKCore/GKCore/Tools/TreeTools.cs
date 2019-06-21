@@ -439,24 +439,24 @@ namespace GKCore.Tools
             }
 
             if (selfTest) {
-                // FIXME: error reporting refactoring
                 var tmpFrags = TreeTools.SearchTreeFragments(mainTree, null);
                 if (fragments.Count != tmpFrags.Count) {
-                    if (logBox != null) {
-                        logBox.AppendText("The number of fragments is not as expected.\r\n");
-                    } else {
-                        throw new Exception("The number of fragments is not as expected.");
-                    }
+                    ThrowError(logBox, "The number of fragments is not as expected.");
                 }
                 for (int i = 0; i < tmpFrags.Count; i++) {
                     if (fragments[i] != tmpFrags[i].Count) {
-                        if (logBox != null) {
-                            logBox.AppendText("The number of persons in the fragment is not as expected.\r\n");
-                        } else {
-                            throw new Exception("The number of persons in the fragment is not as expected.");
-                        }
+                        ThrowError(logBox, "The number of persons in the fragment is not as expected.");
                     }
                 }
+            }
+        }
+
+        private static void ThrowError(ITextBoxHandler logBox, string message)
+        {
+            if (logBox != null) {
+                logBox.AppendText(message + "\r\n");
+            } else {
+                throw new Exception(message);
             }
         }
 

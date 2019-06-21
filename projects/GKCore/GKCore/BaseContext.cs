@@ -1220,13 +1220,14 @@ namespace GKCore
 
         public void CriticalSave()
         {
-            try
-            {
+            try {
                 string rfn = Path.ChangeExtension(fFileName, ".restore");
-                // TODO: PrepareHeader or not?
+
+                GEDCOMCharacterSet charSet = GlobalOptions.Instance.DefCharacterSet;
+                GKUtils.PrepareHeader(fTree, rfn, charSet, false);
 
                 var gedcomProvider = new GEDCOMProvider(fTree);
-                gedcomProvider.SaveToFile(rfn, GlobalOptions.Instance.DefCharacterSet);
+                gedcomProvider.SaveToFile(rfn, charSet);
             } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.CriticalSave(): " + ex.Message);
             }

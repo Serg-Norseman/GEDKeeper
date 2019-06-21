@@ -103,10 +103,7 @@ namespace GKCore.Options
 
         public ListOptions this[GDMRecordType rt]
         {
-            get {
-                // TODO: conditions...
-                return fOptions[(int)rt];
-            }
+            get { return fOptions[(int)rt]; }
         }
 
         public ListOptionsCollection()
