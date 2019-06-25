@@ -33,7 +33,6 @@ using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
 

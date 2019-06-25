@@ -176,8 +176,7 @@ namespace GKUI.Forms
 
         private void TreeChartWin_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
-            {
+            switch (e.KeyCode) {
                 case Keys.F5:
                     GenChart();
                     break;
@@ -197,6 +196,12 @@ namespace GKUI.Forms
                 case Keys.F:
                     if (e.Control) {
                         QuickSearch();
+                    }
+                    break;
+
+                case Keys.S:
+                    if (e.Control) {
+                        fBase.SaveFileEx(false);
                     }
                     break;
             }
