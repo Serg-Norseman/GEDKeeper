@@ -427,8 +427,7 @@ namespace GKCore.Tools
                     mainTree.AddRecord(rec);
                 }
 
-                int num = repMap.Count;
-                for (int i = 0; i < num; i++) {
+                for (int i = 0, num = repMap.Count; i < num; i++) {
                     GDMRecord rec = repMap[i].Rec;
                     rec.ReplaceXRefs(repMap);
                 }
