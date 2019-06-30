@@ -133,3 +133,4 @@ build_sonarqube.cmd
 
 /projects/GKv3/GKTestsE/bin/
 /projects/GKv3/GKTestsE/obj/
+/LuaInterface.dll.config
