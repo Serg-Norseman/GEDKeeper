@@ -1669,9 +1669,9 @@ namespace GKCore
             /* 787 */ "Was born",
             /* 788 */ "GedML files (*.xml)|*.xml",
             /* 789 */ "Child detected without parents",
+            /* 790 */ "Family record detected without family",
 
-            /* 790 */ "", // reserved begin
-            /* 791 */ "",
+            /* 791 */ "", // reserved begin
             /* 792 */ "",
             /* 793 */ "",
             /* 794 */ "",
