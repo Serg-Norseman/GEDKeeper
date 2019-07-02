@@ -523,7 +523,9 @@ namespace GKCore.Tools
             cdMotherAsChild,
             cdDuplicateChildren,
             csDateInvalid,
-            csCycle
+            csCycle,
+            cdChildWithoutParents,
+            cdFamilyRecordWithoutFamily
         }
 
         public enum CheckSolve
@@ -664,20 +666,35 @@ namespace GKCore.Tools
                 checkObj.Comment = LangMan.LS(LSID.LSID_EmptyFamily);
                 checksList.Add(checkObj);
             } else {
-                if (fRec.IndexOfChild(husb) >= 0) {
-                    CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdFatherAsChild, CheckSolve.csRemove);
-                    checkObj.Comment = LangMan.LS(LSID.LSID_FatherAsChild);
-                    checksList.Add(checkObj);
-                }
+                int chNum = fRec.Children.Count;
 
-                if (fRec.IndexOfChild(wife) >= 0) {
-                    CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdMotherAsChild, CheckSolve.csRemove);
-                    checkObj.Comment = LangMan.LS(LSID.LSID_MotherAsChild);
-                    checksList.Add(checkObj);
+                if (husb == null && wife == null) {
+                    if (chNum > 0) {
+                        CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdChildWithoutParents, CheckSolve.csSkip);
+                        checkObj.Comment = LangMan.LS(LSID.LSID_ChildWithoutParents);
+                        checksList.Add(checkObj);
+                    }
+                    else {
+                        CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdFamilyRecordWithoutFamily, CheckSolve.csSkip);
+                        checkObj.Comment = LangMan.LS(LSID.LSID_FamilyRecordWithoutFamily);
+                        checksList.Add(checkObj);
+                    }
+                }
+                else {
+                    if (fRec.IndexOfChild(husb) >= 0) {
+                        CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdFatherAsChild, CheckSolve.csRemove);
+                        checkObj.Comment = LangMan.LS(LSID.LSID_FatherAsChild);
+                        checksList.Add(checkObj);
+                    }
+
+                    if (fRec.IndexOfChild(wife) >= 0) {
+                        CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdMotherAsChild, CheckSolve.csRemove);
+                        checkObj.Comment = LangMan.LS(LSID.LSID_MotherAsChild);
+                        checksList.Add(checkObj);
+                    }
                 }
 
                 bool hasDup = false;
-                int chNum = fRec.Children.Count;
                 for (int i = 0; i < chNum; i++) {
                     var child1 = fRec.Children[i].Value;
                     for (int k = i + 1; k < chNum; k++) {
