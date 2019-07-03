@@ -16,6 +16,7 @@
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="WindowsBase" />
 
     <Reference Include="DotNetRtfWriter">
       <HintPath>..\libs\DotNetRtfWriter.dll</HintPath>

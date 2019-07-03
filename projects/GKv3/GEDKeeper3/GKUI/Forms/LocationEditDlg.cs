@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -40,7 +39,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fNotesList;
 
-        public GEDCOMLocationRecord LocationRecord
+        public GDMLocationRecord LocationRecord
         {
             get { return fController.LocationRecord; }
             set { fController.LocationRecord = value; }

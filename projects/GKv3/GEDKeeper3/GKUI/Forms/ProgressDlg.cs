@@ -22,8 +22,6 @@ using System;
 using System.ComponentModel;
 using System.Threading;
 using Eto.Forms;
-
-using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 

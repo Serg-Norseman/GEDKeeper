@@ -898,8 +898,7 @@ namespace GKCore.Controllers
 
             if (TreeChartModel.CheckTreeChartSize(fContext.Tree, selPerson, chartKind)) {
                 var fmChart = AppHost.Container.Resolve<ITreeChartWin>(fView, selPerson);
-                fmChart.ChartKind = chartKind;
-                fmChart.GenChart();
+                fmChart.GenChart(chartKind);
                 AppHost.Instance.ShowWindow(fmChart);
             }
         }

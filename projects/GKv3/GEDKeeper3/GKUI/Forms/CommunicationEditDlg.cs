@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -39,7 +38,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
 
-        public GEDCOMCommunicationRecord Communication
+        public GDMCommunicationRecord Communication
         {
             get { return fController.Communication; }
             set { fController.Communication = value; }

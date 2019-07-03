@@ -41,7 +41,6 @@ namespace GKUI.Forms
         private readonly IBaseWindow fBase;
         private readonly TreeChartBox fTreeBox;
 
-        private TreeChartKind fChartKind;
         private GDMIndividualRecord fPerson;
 
 
@@ -51,15 +50,6 @@ namespace GKUI.Forms
         }
 
         #region View Interface
-
-        public TreeChartKind ChartKind
-        {
-            get { return fChartKind; }
-            set {
-                fChartKind = value;
-                UpdateModesMenu();
-            }
-        }
 
         ITreeChartBox ITreeChartWin.TreeBox
         {
@@ -158,8 +148,7 @@ namespace GKUI.Forms
             miModeAncestors.Checked = false;
             miModeDescendants.Checked = false;
 
-            switch (fChartKind)
-            {
+            switch (fTreeBox.Model.Kind) {
                 case TreeChartKind.ckAncestors:
                     miModeAncestors.Checked = true;
                     break;
@@ -322,7 +311,7 @@ namespace GKUI.Forms
         private void miTraceSelected_Click(object sender, EventArgs e)
         {
             miTraceSelected.Checked = !miTraceSelected.Checked;
-            
+
             fTreeBox.Options.TraceSelected = miTraceSelected.Checked;
             fTreeBox.TraceSelected = miTraceSelected.Checked;
         }
@@ -336,7 +325,7 @@ namespace GKUI.Forms
         private void miCertaintyIndex_Click(object sender, EventArgs e)
         {
             miCertaintyIndex.Checked = !miCertaintyIndex.Checked;
-            
+
             fTreeBox.Options.CertaintyIndexVisible = miCertaintyIndex.Checked;
             fTreeBox.CertaintyIndex = miCertaintyIndex.Checked;
         }
@@ -366,10 +355,9 @@ namespace GKUI.Forms
         private void miModeItem_Click(object sender, EventArgs e)
         {
             TreeChartKind newMode = (TreeChartKind)((ToolStripMenuItem)sender).Tag;
-            if (fChartKind == newMode) return;
+            if (fTreeBox.Model.Kind == newMode) return;
 
-            ChartKind = newMode;
-            GenChart();
+            GenChart(newMode);
         }
 
         private void miRebuildTree_Click(object sender, EventArgs e)
@@ -417,11 +405,16 @@ namespace GKUI.Forms
 
         public void GenChart()
         {
+            GenChart(fTreeBox.Model.Kind);
+        }
+
+        public void GenChart(TreeChartKind chartKind)
+        {
             try {
                 if (fPerson == null) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
                 } else {
-                    fTreeBox.GenChart(fPerson, fChartKind, true);
+                    fTreeBox.GenChart(fPerson, chartKind, true);
                     UpdateControls();
                 }
             } catch (Exception ex) {
@@ -475,6 +468,7 @@ namespace GKUI.Forms
         {
             try {
                 fController.UpdateTitle();
+                UpdateModesMenu();
 
                 StatusLines[0] = string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fTreeBox.IndividualsCount);
                 var imageSize = fTreeBox.GetImageSize();
