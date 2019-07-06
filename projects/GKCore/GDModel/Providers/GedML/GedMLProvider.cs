@@ -73,40 +73,42 @@ namespace GDModel.Providers.GedML
                 settings.DtdProcessing = DtdProcessing.Ignore;
 
                 int tagLevel = -1;
-                string tagXRef, tagName = null, tagValue = null, tagId;
+                string xrefPtr, tagName = null, tagValue = null, xrefId;
+                int tagId = 0; // Unknown
                 bool tagOpened = false;
 
                 using (XmlReader xr = XmlReader.Create(reader, settings)) {
                     while (xr.Read()) {
                         if (xr.NodeType == XmlNodeType.Element) {
                             if (tagOpened) {
-                                curTag = GEDCOMProvider.ProcessTag(stack, tagLevel, tagName, tagValue);
+                                curTag = GEDCOMProvider.ProcessTag(stack, tagLevel, tagId, tagValue);
                                 tagOpened = false;
                             }
 
                             tagName = invariantText.ToUpper(xr.Name); // the name of the current element
+                            tagId = GEDCOMTagsTable.Lookup(tagName);
                             tagLevel = xr.Depth - 1;
                             // GEDML only has 2 attributes - REF and ID.
-                            tagXRef = xr.GetAttribute("REF");
-                            tagId = xr.GetAttribute("ID");
+                            xrefPtr = xr.GetAttribute("REF");
+                            xrefId = xr.GetAttribute("ID");
                             tagValue = string.Empty;
 
                             if (tagLevel == 0) {
-                                StackTuple stackTuple = GEDCOMProvider.AddTreeTag(fTree, tagLevel, tagName, string.Empty);
+                                StackTuple stackTuple = GEDCOMProvider.AddTreeTag(fTree, tagLevel, tagId, string.Empty);
                                 if (stackTuple != null) {
                                     stack.Clear();
                                     stack.Push(stackTuple);
 
                                     curRecord = stackTuple.Tag;
-                                    if (!string.IsNullOrEmpty(tagId)) {
-                                        ((GDMRecord)curRecord).XRef = tagId;
+                                    if (!string.IsNullOrEmpty(xrefId)) {
+                                        ((GDMRecord)curRecord).XRef = xrefId;
                                     }
                                 }
                             } else if (tagLevel > 0) {
-                                if (!string.IsNullOrEmpty(tagXRef)) {
+                                if (!string.IsNullOrEmpty(xrefPtr)) {
                                     // since the default method of the GEDCOM provider is used, 
                                     // a standard character `@` is expected
-                                    curTag = GEDCOMProvider.ProcessTag(stack, tagLevel, tagName, "@" + tagXRef + "@");
+                                    curTag = GEDCOMProvider.ProcessTag(stack, tagLevel, tagId, "@" + xrefPtr + "@");
                                 } else {
                                     tagOpened = true;
                                 }
@@ -115,7 +117,7 @@ namespace GDModel.Providers.GedML
                             tagValue = xr.Value;
 
                             if (tagLevel > 0 && curRecord != null) {
-                                curTag = GEDCOMProvider.ProcessTag(stack, tagLevel, tagName, tagValue);
+                                curTag = GEDCOMProvider.ProcessTag(stack, tagLevel, tagId, tagValue);
                             }
                         }
 

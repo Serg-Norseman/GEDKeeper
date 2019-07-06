@@ -1205,7 +1205,7 @@ namespace GKCore.Charts
             ChartFilter.BranchCutType branchCut = fFilter.BranchCut;
             switch (branchCut) {
                 case ChartFilter.BranchCutType.Years:
-                    int birthYear = person.GetChronologicalYear(GEDCOMTagType.BIRT);
+                    int birthYear = person.GetChronologicalYear(GEDCOMTagName.BIRT);
                     result = (birthYear != 0 && birthYear >= fFilter.BranchYear);
                     break;
 

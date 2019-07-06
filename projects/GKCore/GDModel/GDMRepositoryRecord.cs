@@ -44,7 +44,6 @@ namespace GDModel
 
         public GDMRepositoryRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GDMRecordType.rtRepository);
             SetName(GEDCOMTagType.REPO);
 
             fAddress = new GDMAddress(this);

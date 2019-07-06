@@ -617,8 +617,8 @@ namespace GKCore.Tools
                 checksList.Add(checkObj);
             }
 
-            int yBirth = iRec.GetChronologicalYear(GEDCOMTagType.BIRT);
-            int yDeath = iRec.GetChronologicalYear(GEDCOMTagType.DEAT);
+            int yBirth = iRec.GetChronologicalYear(GEDCOMTagName.BIRT);
+            int yDeath = iRec.GetChronologicalYear(GEDCOMTagName.DEAT);
             if (yBirth != 0 && yDeath != 0) {
                 int delta = (yDeath - yBirth);
                 if (delta < 0) {
@@ -762,7 +762,7 @@ namespace GKCore.Tools
             switch (checkObj.Diag) {
                 case CheckDiag.cdPersonLonglived:
                     iRec = checkObj.Rec as GDMIndividualRecord;
-                    baseWin.Context.CreateEventEx(iRec, GEDCOMTagType.DEAT, "", "");
+                    baseWin.Context.CreateEventEx(iRec, GEDCOMTagName.DEAT, "", "");
                     baseWin.NotifyRecord(iRec, RecordAction.raEdit);
                     break;
 

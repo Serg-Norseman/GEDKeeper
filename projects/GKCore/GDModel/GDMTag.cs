@@ -36,7 +36,7 @@ namespace GDModel
     {
         #region Protected fields
 
-        private string fName;
+        private int fId;
         private GDMObject fOwner;
         protected string fStringValue;
         private GDMList<GDMTag> fTags;
@@ -45,9 +45,9 @@ namespace GDModel
 
         #region Public properties
 
-        public string Name
+        public int Id
         {
-            get { return fName; }
+            get { return fId; }
         }
 
         public GDMObject Owner
@@ -73,21 +73,22 @@ namespace GDModel
 
         #region Object management
 
-        public static GDMTag Create(GDMObject owner, string tagName, string tagValue)
+        public static GDMTag Create(GDMObject owner, int tagId, string tagValue)
         {
-            return new GDMTag(owner, tagName, tagValue);
+            return new GDMTag(owner, tagId, tagValue);
         }
 
         public GDMTag(GDMObject owner)
         {
+            fId = 0; // Unknown
             fOwner = owner;
             fTags = new GDMList<GDMTag>(this);
             fStringValue = string.Empty;
         }
 
-        public GDMTag(GDMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMTag(GDMObject owner, int tagId, string tagValue) : this(owner)
         {
-            SetNameValue(tagName, tagValue);
+            SetNameValue(tagId, tagValue);
         }
 
         protected override void Dispose(bool disposing)
@@ -111,10 +112,10 @@ namespace GDModel
             fTags.ReplaceXRefs(map);
         }
 
-        public void SetNameValue(string tagName, string tagValue)
+        public void SetNameValue(int tagId, string tagValue)
         {
-            if (!string.IsNullOrEmpty(tagName)) {
-                SetName(tagName);
+            if (tagId != 0) {
+                SetName(tagId);
             }
 
             if (!string.IsNullOrEmpty(tagValue)) {
@@ -149,12 +150,14 @@ namespace GDModel
             return owner;
         }
 
-        public void SetName(string value)
+        public void SetName(int tagId)
         {
-            if (value != null) {
-                value = string.Intern(value);
-            }
-            fName = value;
+            fId = tagId;
+        }
+
+        public void SetName(GEDCOMTagType tag)
+        {
+            SetName((int)tag);
         }
 
         public GDMTag AddTag(GDMTag tag)
@@ -171,7 +174,7 @@ namespace GDModel
         {
             if (source == null) return;
 
-            SetName(source.Name);
+            SetName(source.fId);
             ParseString(source.StringValue);
 
             AssignList(source.fTags, this.fTags);
@@ -217,7 +220,7 @@ namespace GDModel
 
                 GDMList<GDMTag> tempSubTags = tempTag.fTags;
                 int tempSubCount = tempSubTags.Count;
-                while (index < tempSubCount && tempSubTags[index].Name != S) index++;
+                while (index < tempSubCount && tempSubTags[index].GetTagName() != S) index++;
                 if (index >= tempSubCount) break;
                 tempTag = tempSubTags[index];
 

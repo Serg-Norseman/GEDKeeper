@@ -75,16 +75,15 @@ namespace GDModel
 
         public GDMSourceRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GDMRecordType.rtSource);
             SetName(GEDCOMTagType.SOUR);
 
             fData = new GDMSourceData(this);
-            fOriginator = new GDMTextTag(this, GEDCOMTagType.AUTH);
-            fPublication = new GDMTextTag(this, GEDCOMTagType.PUBL);
+            fOriginator = new GDMTextTag(this, (int)GEDCOMTagType.AUTH);
+            fPublication = new GDMTextTag(this, (int)GEDCOMTagType.PUBL);
             fRepositoryCitations = new GDMList<GDMRepositoryCitation>(this);
             fShortTitle = string.Empty;
-            fText = new GDMTextTag(this, GEDCOMTagType.TEXT);
-            fTitle = new GDMTextTag(this, GEDCOMTagType.TITL);
+            fText = new GDMTextTag(this, (int)GEDCOMTagType.TEXT);
+            fTitle = new GDMTextTag(this, (int)GEDCOMTagType.TITL);
         }
 
         protected override void Dispose(bool disposing)
@@ -138,12 +137,6 @@ namespace GDModel
                 orig.Text = (targetSource.Originator.Lines.Text + "\n" + Originator.Lines.Text).Trim();
                 publ.Text = (targetSource.Publication.Lines.Text + "\n" + Publication.Lines.Text).Trim();
                 text.Text = (targetSource.Text.Lines.Text + "\n" + Text.Lines.Text).Trim();
-
-                DeleteTag(GEDCOMTagType.TITL);
-                DeleteTag(GEDCOMTagType.TEXT);
-                DeleteTag(GEDCOMTagType.ABBR);
-                DeleteTag(GEDCOMTagType.PUBL);
-                DeleteTag(GEDCOMTagType.AUTH);
 
                 base.MoveTo(targetRecord, clearDest);
 

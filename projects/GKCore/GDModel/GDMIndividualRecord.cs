@@ -70,15 +70,15 @@ namespace GDModel
         public bool Bookmark
         {
             get {
-                return FindTag(GEDCOMTagType._BOOKMARK, 0) != null;
+                return FindTag(GEDCOMTagName._BOOKMARK, 0) != null;
             }
             set {
                 if (value) {
-                    if (FindTag(GEDCOMTagType._BOOKMARK, 0) == null) {
-                        AddTag(new GDMTag(this, GEDCOMTagType._BOOKMARK, ""));
+                    if (FindTag(GEDCOMTagName._BOOKMARK, 0) == null) {
+                        AddTag(new GDMTag(this, (int)GEDCOMTagType._BOOKMARK, ""));
                     }
                 } else {
-                    DeleteTag(GEDCOMTagType._BOOKMARK);
+                    DeleteTag(GEDCOMTagName._BOOKMARK);
                 }
             }
         }
@@ -96,15 +96,15 @@ namespace GDModel
         public bool Patriarch
         {
             get {
-                return FindTag(GEDCOMTagType._PATRIARCH, 0) != null;
+                return FindTag(GEDCOMTagName._PATRIARCH, 0) != null;
             }
             set {
                 if (value) {
-                    if (FindTag(GEDCOMTagType._PATRIARCH, 0) == null) {
-                        AddTag(new GDMTag(this, GEDCOMTagType._PATRIARCH, ""));
+                    if (FindTag(GEDCOMTagName._PATRIARCH, 0) == null) {
+                        AddTag(new GDMTag(this, (int)GEDCOMTagType._PATRIARCH, ""));
                     }
                 } else {
-                    DeleteTag(GEDCOMTagType._PATRIARCH);
+                    DeleteTag(GEDCOMTagName._PATRIARCH);
                 }
             }
         }
@@ -134,7 +134,6 @@ namespace GDModel
 
         public GDMIndividualRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GDMRecordType.rtIndividual);
             SetName(GEDCOMTagType.INDI);
 
             fAncestralFileNumber = string.Empty;
@@ -398,13 +397,13 @@ namespace GDModel
             GDMCustomEvent deathEvent = null;
 
             int num = Events.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMCustomEvent evt = Events[i];
+                var evtType = evt.GetTagType();
 
-                if (evt.Name == GEDCOMTagType.BIRT && birthEvent == null) {
+                if (evtType == GEDCOMTagType.BIRT && birthEvent == null) {
                     birthEvent = evt;
-                } else if (evt.Name == GEDCOMTagType.DEAT && deathEvent == null) {
+                } else if (evtType == GEDCOMTagType.DEAT && deathEvent == null) {
                     deathEvent = evt;
                 }
             }
@@ -597,8 +596,8 @@ namespace GDModel
 
         private static int EventsCompare(GDMPointer cp1, GDMPointer cp2)
         {
-            UDN udn1 = ((GDMFamilyRecord)cp1.Value).GetUDN(GEDCOMTagType.MARR);
-            UDN udn2 = ((GDMFamilyRecord)cp2.Value).GetUDN(GEDCOMTagType.MARR);
+            UDN udn1 = ((GDMFamilyRecord)cp1.Value).GetUDN(GEDCOMTagName.MARR);
+            UDN udn2 = ((GDMFamilyRecord)cp2.Value).GetUDN(GEDCOMTagName.MARR);
             return udn1.CompareTo(udn2);
         }
 

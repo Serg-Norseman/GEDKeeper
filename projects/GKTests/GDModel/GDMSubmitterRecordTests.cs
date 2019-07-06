@@ -48,7 +48,9 @@ namespace GDModel
                 subrRec.RegisteredReference = "regref";
                 Assert.AreEqual("regref", subrRec.RegisteredReference);
 
-                subrRec.Languages.Add(new GDMLanguage(subrRec, "", "Russian"));
+                var lang = new GDMLanguage(subrRec);
+                lang.ParseString("Russian");
+                subrRec.Languages.Add(lang);
                 Assert.AreEqual("Russian", subrRec.Languages[0].StringValue);
 
                 subrRec.SetLanguage(0, "nothing"); // return without exceptions

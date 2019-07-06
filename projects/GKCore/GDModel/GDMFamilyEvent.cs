@@ -26,14 +26,14 @@ namespace GDModel
         {
         }
 
-        public GDMFamilyEvent(GDMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMFamilyEvent(GDMObject owner, int tagId, string tagValue) : this(owner)
         {
-            SetNameValue(tagName, tagValue);
+            SetNameValue(tagId, tagValue);
         }
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
         {
-            return new GDMFamilyEvent(owner, tagName, tagValue);
+            return new GDMFamilyEvent(owner, tagId, tagValue);
         }
     }
 }

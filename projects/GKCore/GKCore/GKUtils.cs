@@ -513,22 +513,20 @@ namespace GKCore
 
             string result = "";
 
-            if (evt is GDMIndividualEvent || evt is GDMIndividualAttribute)
-            {
-                int ev = GetPersonEventIndex(evt.Name);
+            var evtName = evt.GetTagName();
+            if (evt is GDMIndividualEvent || evt is GDMIndividualAttribute) {
+                int ev = GetPersonEventIndex(evtName);
                 if (ev == 0) {
                     result = evt.Classification;
                 } else {
-                    result = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evt.Name;
+                    result = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evtName;
                 }
-            }
-            else if (evt is GDMFamilyEvent)
-            {
-                int ev = GetFamilyEventIndex(evt.Name);
+            } else if (evt is GDMFamilyEvent) {
+                int ev = GetFamilyEventIndex(evtName);
                 if (ev == 0) {
                     result = evt.Classification;
                 } else {
-                    result = (ev > 0) ? LangMan.LS(GKData.FamilyEvents[ev].Name) : evt.Name;
+                    result = (ev > 0) ? LangMan.LS(GKData.FamilyEvents[ev].Name) : evtName;
                 }
             }
 
@@ -540,20 +538,17 @@ namespace GKCore
             if (iAttr == null)
                 throw new ArgumentNullException("iAttr");
 
-            int idx = GetPersonEventIndex(iAttr.Name);
+            var attrName = iAttr.GetTagName();
+            int idx = GetPersonEventIndex(attrName);
             string st;
-            if (idx == 0)
-            {
+            if (idx == 0) {
                 st = iAttr.Classification;
-            }
-            else
-            {
-                st = (idx > 0) ? LangMan.LS(GKData.PersonEvents[idx].Name) : iAttr.Name;
+            } else {
+                st = (idx > 0) ? LangMan.LS(GKData.PersonEvents[idx].Name) : attrName;
             }
 
             string place = iAttr.Place.StringValue;
-            if (place != "")
-            {
+            if (place != "") {
                 place = " [" + place + "]";
             }
             return st + ": " + iAttr.StringValue + place;
@@ -801,7 +796,7 @@ namespace GKCore
                     {
                         string ds, ps;
 
-                        GetEventDatePlace(iRec, GEDCOMTagType.BIRT, DateFormat.dfDD_MM_YYYY, true, true, out ds, out ps);
+                        GetEventDatePlace(iRec, GEDCOMTagName.BIRT, DateFormat.dfDD_MM_YYYY, true, true, out ds, out ps);
                         if (ps != "") {
                             if (ds != "") {
                                 ds += ", ";
@@ -813,7 +808,7 @@ namespace GKCore
                         }
                         result += ds;
 
-                        GetEventDatePlace(iRec, GEDCOMTagType.DEAT, DateFormat.dfDD_MM_YYYY, true, true, out ds, out ps);
+                        GetEventDatePlace(iRec, GEDCOMTagName.DEAT, DateFormat.dfDD_MM_YYYY, true, true, out ds, out ps);
                         if (ps != "") {
                             if (ds != "") {
                                 ds += ", ";

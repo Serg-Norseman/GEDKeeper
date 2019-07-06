@@ -176,7 +176,7 @@ namespace GDModel
                     famRec.MoveTo(null, false);
                 });
 
-                GDMCustomEvent evt = famRec.AddEvent(new GDMFamilyEvent(famRec, GEDCOMTagType.MARR, "01 SEP 1981"));
+                GDMCustomEvent evt = famRec.AddEvent(new GDMFamilyEvent(famRec, (int)GEDCOMTagType.MARR, "01 SEP 1981"));
                 Assert.AreEqual(1, famRec.Events.Count);
                 Assert.AreEqual(evt, famRec.FindEvent(GEDCOMTagType.MARR));
 

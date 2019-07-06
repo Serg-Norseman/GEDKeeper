@@ -20,6 +20,7 @@
 
 using System;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKTests;
 using NUnit.Framework;
@@ -387,7 +388,7 @@ namespace GDModel
         public void Test_Pack()
         {
             GDMPersonalName instance = new GDMPersonalName(null);
-            instance.AddTag(new GDMTag(instance, "BLECH", null));
+            instance.AddTag(new GDMTag(instance, GEDCOMTagsTable.Lookup("BLECH"), null));
             Assert.IsNotNull(instance.FindTag("BLECH", 0));
         }
 

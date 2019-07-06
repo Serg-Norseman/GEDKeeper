@@ -44,7 +44,7 @@ namespace GKTests
         public static void FillContext(IBaseContext context)
         {
             // a null result if the record is not defined
-            GDMCustomEvent evt = context.CreateEventEx(null, GEDCOMTagType.BIRT, "xxxxx", "xxxxx");
+            GDMCustomEvent evt = context.CreateEventEx(null, GEDCOMTagName.BIRT, "xxxxx", "xxxxx");
             Assert.IsNull(evt);
 
             // first individual (I1)
@@ -56,7 +56,7 @@ namespace GKTests
             evt.Date.ParseString("28 DEC 1990");
             evt.Place.StringValue = "Ivanovo";
 
-            GDMCustomEvent evtd = context.CreateEventEx(iRec, GEDCOMTagType.DEAT, "28 DEC 2010", "Ivanovo");
+            GDMCustomEvent evtd = context.CreateEventEx(iRec, GEDCOMTagName.DEAT, "28 DEC 2010", "Ivanovo");
             Assert.IsNotNull(evtd);
 
             // second individual, wife (I2)
@@ -82,7 +82,7 @@ namespace GKTests
             famRec.AddSpouse(iRec2);
             famRec.AddChild(iRec3);
 
-            context.CreateEventEx(famRec, GEDCOMTagType.MARR, "01 JAN 2000", "unknown");
+            context.CreateEventEx(famRec, GEDCOMTagName.MARR, "01 JAN 2000", "unknown");
 
             // individual outside the family (I4)
             GDMIndividualRecord iRec4 = context.CreatePersonEx("Alex", "", "Petrov", GDMSex.svMale, true);
@@ -91,7 +91,7 @@ namespace GKTests
             evt.Date.ParseString("15 JUN 1989");
             evt.Place.StringValue = "Far Forest";
 
-            evt = context.CreateEventEx(iRec4, GEDCOMTagType.RESI, "12 FEB", "Far Forest");
+            evt = context.CreateEventEx(iRec4, GEDCOMTagName.RESI, "12 FEB", "Far Forest");
             Assert.IsNotNull(evt);
 
             // fifth (I5)
@@ -101,7 +101,7 @@ namespace GKTests
             // sixth (I6)
             GDMIndividualRecord iRec6 = context.CreatePersonEx("Mary", "", "Jones", GDMSex.svFemale, false);
             Assert.IsNotNull(iRec6);
-            evt = context.CreateEventEx(iRec6, GEDCOMTagType.BIRT, "12 FEB 1650", "Far Forest");
+            evt = context.CreateEventEx(iRec6, GEDCOMTagName.BIRT, "12 FEB 1650", "Far Forest");
 
             GDMFamilyRecord famRec2 = context.Tree.CreateFamily();
             Assert.IsNotNull(famRec2);

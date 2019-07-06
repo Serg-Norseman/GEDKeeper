@@ -50,6 +50,9 @@ namespace GKCore
 
             LangMan.DefInit();
 
+            // for static initialization
+            GEDCOMProvider.SkipEmptyTag((int)GEDCOMTagType._AWARD);
+
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
         }
@@ -68,7 +71,7 @@ namespace GKCore
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
-            Assert.AreEqual(1990, iRec.GetChronologicalYear(GEDCOMTagType.BIRT));
+            Assert.AreEqual(1990, iRec.GetChronologicalYear(GEDCOMTagName.BIRT));
 
             Assert.AreEqual(1990, fContext.FindBirthYear(iRec));
             Assert.AreEqual(2010, fContext.FindDeathYear(iRec));
@@ -120,13 +123,13 @@ namespace GKCore
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             
-            var evt = fContext.CreateEventEx(iRec, GEDCOMTagType.FACT, "17 JAN 2013", "Ivanovo");
+            var evt = fContext.CreateEventEx(iRec, GEDCOMTagName.FACT, "17 JAN 2013", "Ivanovo");
             Assert.IsNotNull(evt);
 
             GDMFamilyRecord fRec = fContext.Tree.CreateFamily();
             Assert.IsNotNull(fRec);
 
-            evt = fContext.CreateEventEx(fRec, GEDCOMTagType.MARR, "28 DEC 2013", "Ivanovo");
+            evt = fContext.CreateEventEx(fRec, GEDCOMTagName.MARR, "28 DEC 2013", "Ivanovo");
             Assert.IsNotNull(evt);
         }
 
@@ -228,7 +231,7 @@ namespace GKCore
             Assert.AreEqual(0, fContext.ValuesCollection.Count);
 
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
-            var evt = new GDMIndividualAttribute(iRec, GEDCOMTagType._AWARD, "Congressional Gold Medal");
+            var evt = new GDMIndividualAttribute(iRec, (int)GEDCOMTagType._AWARD, "Congressional Gold Medal");
 
             fContext.CollectEventValues(evt);
             Assert.AreEqual(1, fContext.ValuesCollection.Count);

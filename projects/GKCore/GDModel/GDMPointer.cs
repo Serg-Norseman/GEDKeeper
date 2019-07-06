@@ -59,9 +59,9 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
         {
-            return new GDMPointer(owner, tagName, tagValue);
+            return new GDMPointer(owner, tagId, tagValue);
         }
 
         public GDMPointer(GDMObject owner) : base(owner)
@@ -69,9 +69,9 @@ namespace GDModel
             fXRef = string.Empty;
         }
 
-        public GDMPointer(GDMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMPointer(GDMObject owner, int tagId, string tagValue) : this(owner)
         {
-            SetNameValue(tagName, tagValue);
+            SetNameValue(tagId, tagValue);
         }
 
         public override void Clear()

@@ -360,9 +360,11 @@ namespace GKCore.Export
             for (int i = 0; i < evtNum; i++) {
                 GDMCustomEvent evt = evList[i].Event;
                 if (evt != null && Equals(evList[i].IRec, person.IRec)) {
-                    if (evt.Name == GEDCOMTagType.BIRT) {
+                    var evtType = evt.GetTagType();
+
+                    if (evtType == GEDCOMTagType.BIRT) {
                         evList.Exchange(i, 0);
-                    } else if (evt.Name == GEDCOMTagType.DEAT) {
+                    } else if (evtType == GEDCOMTagType.DEAT) {
                         evList.Exchange(i, evtNum - 1);
                     }
                 }
@@ -376,12 +378,13 @@ namespace GKCore.Export
                 string li;
 
                 if (evObj.IRec == person.IRec) {
-                    int ev = GKUtils.GetPersonEventIndex(evt.Name);
+                    var evtName = evt.GetTagName();
+                    int ev = GKUtils.GetPersonEventIndex(evtName);
                     string st;
                     if (ev == 0) {
                         st = evt.Classification;
                     } else {
-                        st = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evt.Name;
+                        st = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evtName;
                     }
 
                     string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);

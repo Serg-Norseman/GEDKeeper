@@ -179,14 +179,14 @@ namespace GDModel
             SetName(GEDCOMTagType.LANG);
         }
 
-        public GDMLanguage(GDMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMLanguage(GDMObject owner, int tagId, string tagValue) : this(owner)
         {
-            SetNameValue(tagName, tagValue);
+            SetNameValue(tagId, tagValue);
         }
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
         {
-            return new GDMLanguage(owner, tagName, tagValue);
+            return new GDMLanguage(owner, tagId, tagValue);
         }
     }
 }

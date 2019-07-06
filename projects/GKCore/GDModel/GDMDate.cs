@@ -108,9 +108,9 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
         {
-            return new GDMDate(owner, tagName, tagValue);
+            return new GDMDate(owner, tagId, tagValue);
         }
 
         public GDMDate(GDMObject owner) : base(owner)
@@ -124,9 +124,9 @@ namespace GDModel
             fDay = 0;
         }
 
-        public GDMDate(GDMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMDate(GDMObject owner, int tagId, string tagValue) : this(owner)
         {
-            SetNameValue(tagName, tagValue);
+            SetNameValue(tagId, tagValue);
         }
 
         public override void Clear()

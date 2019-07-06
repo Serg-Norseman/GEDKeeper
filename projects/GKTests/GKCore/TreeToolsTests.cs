@@ -53,6 +53,9 @@ namespace GKCore
 
             AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
             fProgress = new ProgressStub();
+
+            // for static initialization
+            GEDCOMProvider.SkipEmptyTag((int)GEDCOMTagType._AWARD);
         }
 
         [TestFixtureTearDown]

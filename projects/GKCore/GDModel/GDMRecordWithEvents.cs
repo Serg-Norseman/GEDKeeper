@@ -20,6 +20,7 @@
 
 using System;
 using BSLib.Calendar;
+using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
@@ -143,7 +144,25 @@ namespace GDModel
             for (int i = 0; i < num; i++) {
                 GDMCustomEvent evt = fEvents[i];
 
-                if (evt.Name == eventName) {
+                if (evt.GetTagName() == eventName) {
+                    result = evt;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        public GDMCustomEvent FindEvent(GEDCOMTagType eventType)
+        {
+            GDMCustomEvent result = null;
+
+            int evtType = (int)eventType;
+            int num = fEvents.Count;
+            for (int i = 0; i < num; i++) {
+                GDMCustomEvent evt = fEvents[i];
+
+                if (evt.Id == evtType) {
                     result = evt;
                     break;
                 }

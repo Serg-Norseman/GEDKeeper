@@ -68,11 +68,10 @@ namespace GDModel
 
         public GDMTaskRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GDMRecordType.rtTask);
             SetName(GEDCOMTagType._TASK);
 
-            fStartDate = new GDMDate(this, GEDCOMTagType._STARTDATE, string.Empty);
-            fStopDate = new GDMDate(this, GEDCOMTagType._STOPDATE, string.Empty);
+            fStartDate = new GDMDate(this, (int)GEDCOMTagType._STARTDATE, string.Empty);
+            fStopDate = new GDMDate(this, (int)GEDCOMTagType._STOPDATE, string.Empty);
         }
 
         public override void Assign(GDMTag source)

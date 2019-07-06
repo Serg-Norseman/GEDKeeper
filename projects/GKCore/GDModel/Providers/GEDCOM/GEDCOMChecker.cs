@@ -144,8 +144,8 @@ namespace GDModel.Providers.GEDCOM
         {
             // Fix for Family Tree Maker 2008 which exports occupation as generic EVEN events
             if (format == GEDCOMFormat.gf_FamilyTreeMaker) {
-                string subtype = evt.Classification;
-                if (evt.Name == GEDCOMTagType.EVEN && subtype.ToLower() == "occupation") {
+                string subtype = evt.Classification.ToLower();
+                if (evt.Id == (int)GEDCOMTagType.EVEN && subtype == "occupation") {
                     evt.SetName(GEDCOMTagType.OCCU);
                     evt.Classification = string.Empty;
                 }
@@ -154,10 +154,10 @@ namespace GDModel.Providers.GEDCOM
 
         private static void CheckEventPlace(GDMCustomEvent aEvent)
         {
-            GDMPlace place = aEvent.FindTag(GEDCOMTagType.PLAC, 0) as GDMPlace;
+            GDMPlace place = aEvent.FindTag(GEDCOMTagName.PLAC, 0) as GDMPlace;
             if (place == null) return;
 
-            GDMPointer placeLocation = place.FindTag(GEDCOMTagType._LOC, 0) as GDMPointer;
+            GDMPointer placeLocation = place.FindTag(GEDCOMTagName._LOC, 0) as GDMPointer;
             if (placeLocation == null) return;
 
             if (placeLocation.XRef != "" && placeLocation.Value == null) {

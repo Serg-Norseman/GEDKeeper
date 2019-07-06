@@ -31,7 +31,7 @@ namespace GKFoldersPlugin
     {
         public static string GetFolder(GDMRecord record)
         {
-            var folderTag = record.FindTag(GEDCOMTagType._FOLDER, 0);
+            var folderTag = record.FindTag(GEDCOMTagName._FOLDER, 0);
             return (folderTag == null) ? "" : folderTag.StringValue;
         }
 
@@ -41,16 +41,16 @@ namespace GKFoldersPlugin
                 return;
             }
 
-            var folderTag = record.FindTag(GEDCOMTagType._FOLDER, 0);
+            var folderTag = record.FindTag(GEDCOMTagName._FOLDER, 0);
             if (!string.IsNullOrEmpty(value)) {
                 if (folderTag == null) {
-                    record.AddTag(new GDMTag(record, GEDCOMTagType._FOLDER, value));
+                    record.AddTag(new GDMTag(record, (int)GEDCOMTagType._FOLDER, value));
                 } else {
                     folderTag.StringValue = value;
                 }
             } else {
                 if (folderTag != null) {
-                    record.DeleteTag(GEDCOMTagType._FOLDER);
+                    record.DeleteTag(GEDCOMTagName._FOLDER);
                 }
             }
         }
