@@ -43,8 +43,6 @@ namespace GDModel
             GDMFamilyRecord famRec = tree.CreateFamily();
             Assert.IsNotNull(famRec);
 
-            Assert.IsNotNull(famRec.Submittors);
-
             famRec.Restriction = GDMRestriction.rnLocked;
             Assert.AreEqual(GDMRestriction.rnLocked, famRec.Restriction);
 

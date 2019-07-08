@@ -40,12 +40,10 @@ namespace GDModel
 
     public sealed class GDMIndividualRecord : GDMRecordWithEvents
     {
-        private string fAncestralFileNumber;
-        private GDMList<GDMAlias> fAliasses;
+        private GDMList<GDMAlias> fAliases;
         private GDMList<GDMAssociation> fAssociations;
         private GDMList<GDMChildToFamilyLink> fChildToFamilyLinks;
         private GDMList<GDMPointer> fGroups;
-        private string fPermanentRecordFileNumber;
         private GDMList<GDMPersonalName> fPersonalNames;
         private GDMList<GDMSpouseToFamilyLink> fSpouseToFamilyLinks;
         private GDMSex fSex;
@@ -53,13 +51,7 @@ namespace GDModel
 
         public GDMList<GDMAlias> Aliases
         {
-            get { return fAliasses; }
-        }
-
-        public string AncestralFileNumber
-        {
-            get { return fAncestralFileNumber; }
-            set { fAncestralFileNumber = value; }
+            get { return fAliases; }
         }
 
         public GDMList<GDMAssociation> Associations
@@ -109,12 +101,6 @@ namespace GDModel
             }
         }
 
-        public string PermanentRecordFileNumber
-        {
-            get { return fPermanentRecordFileNumber; }
-            set { fPermanentRecordFileNumber = value; }
-        }
-
         public GDMList<GDMPersonalName> PersonalNames
         {
             get { return fPersonalNames; }
@@ -136,12 +122,10 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.INDI);
 
-            fAncestralFileNumber = string.Empty;
-            fAliasses = new GDMList<GDMAlias>(this);
+            fAliases = new GDMList<GDMAlias>(this);
             fAssociations = new GDMList<GDMAssociation>(this);
             fChildToFamilyLinks = new GDMList<GDMChildToFamilyLink>(this);
             fGroups = new GDMList<GDMPointer>(this);
-            fPermanentRecordFileNumber = string.Empty;
             fPersonalNames = new GDMList<GDMPersonalName>(this);
             fSpouseToFamilyLinks = new GDMList<GDMSpouseToFamilyLink>(this);
         }
@@ -149,7 +133,7 @@ namespace GDModel
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fAliasses.Dispose();
+                fAliases.Dispose();
                 fAssociations.Dispose();
                 fChildToFamilyLinks.Dispose();
                 fGroups.Dispose();
@@ -204,7 +188,7 @@ namespace GDModel
             }
             fGroups.Clear();
 
-            fAliasses.Clear();
+            fAliases.Clear();
             fAssociations.Clear();
             fPersonalNames.Clear();
         }
@@ -213,7 +197,7 @@ namespace GDModel
         {
             return base.IsEmpty() && (fSex == GDMSex.svUnknown) && fPersonalNames.Count == 0
                 && fChildToFamilyLinks.Count == 0 && fSpouseToFamilyLinks.Count == 0
-                && fAssociations.Count == 0 && fAliasses.Count == 0 && fGroups.Count == 0;
+                && fAssociations.Count == 0 && fAliases.Count == 0 && fGroups.Count == 0;
         }
 
         public int IndexOfGroup(GDMGroupRecord groupRec)
@@ -354,8 +338,8 @@ namespace GDModel
                 targetIndi.Associations.Add(obj);
             }
 
-            while (fAliasses.Count > 0) {
-                GDMAlias obj = fAliasses.Extract(0);
+            while (fAliases.Count > 0) {
+                GDMAlias obj = fAliases.Extract(0);
                 obj.ResetOwner(targetIndi);
                 targetIndi.Aliases.Add(obj);
             }
@@ -371,7 +355,7 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
 
-            fAliasses.ReplaceXRefs(map);
+            fAliases.ReplaceXRefs(map);
             fAssociations.ReplaceXRefs(map);
             fChildToFamilyLinks.ReplaceXRefs(map);
             fGroups.ReplaceXRefs(map);

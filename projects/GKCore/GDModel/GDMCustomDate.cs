@@ -264,16 +264,16 @@ namespace GDModel
         public static GDMDatePeriod CreatePeriod(GDMObject owner, GDMDate dateFrom, GDMDate dateTo)
         {
             GDMDatePeriod result = new GDMDatePeriod(owner);
-            result.DateFrom.Assign(dateFrom);
-            result.DateTo.Assign(dateTo);
+            if (dateFrom != null) result.DateFrom.Assign(dateFrom);
+            if (dateTo != null) result.DateTo.Assign(dateTo);
             return result;
         }
 
         public static GDMDateRange CreateRange(GDMObject owner, GDMDate dateAfter, GDMDate dateBefore)
         {
             GDMDateRange result = new GDMDateRange(owner);
-            result.After.Assign(dateAfter);
-            result.Before.Assign(dateBefore);
+            if (dateAfter != null) result.After.Assign(dateAfter);
+            if (dateBefore != null) result.Before.Assign(dateBefore);
             return result;
         }
     }

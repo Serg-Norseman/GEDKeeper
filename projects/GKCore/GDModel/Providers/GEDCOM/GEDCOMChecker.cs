@@ -471,5 +471,12 @@ namespace GDModel.Providers.GEDCOM
 
             return result;
         }
+
+        public static void ClearGEDCOMFormat(GDMTree tree, IBaseContext baseContext, IProgressController pc)
+        {
+            // TODO
+            // INDI: remove AFN, RFN
+            // INDI,FAM: remove SUBM
+        }
     }
 }

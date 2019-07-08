@@ -861,10 +861,6 @@ namespace GKCore.Tools
                 CheckRelations_CheckTag(splitList, iRec.Events[i]);
             }
 
-            for (int i = 0, num = iRec.Submittors.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, iRec.Submittors[i].Value);
-            }
-
             for (int i = 0, num = iRec.Associations.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, iRec.Associations[i].Value);
             }
@@ -884,10 +880,6 @@ namespace GKCore.Tools
 
             for (int i = 0, num = fRec.Events.Count; i < num; i++) {
                 CheckRelations_CheckTag(splitList, fRec.Events[i]);
-            }
-
-            for (int i = 0, num = fRec.Submittors.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, fRec.Submittors[i].Value);
             }
         }
 

@@ -666,10 +666,6 @@ namespace GDModel.Providers.GEDCOM
                 curTag = indiRec.Groups.Add(new GDMPointer(indiRec, tagId, tagValue));
             } else if (tagType == GEDCOMTagType.SEX) {
                 indiRec.Sex = GEDCOMUtils.GetSexVal(tagValue);
-            } else if (tagType == GEDCOMTagType.AFN) {
-                indiRec.AncestralFileNumber = tagValue;
-            } else if (tagType == GEDCOMTagType.RFN) {
-                indiRec.PermanentRecordFileNumber = tagValue;
             } else {
                 return AddRecordWithEventsTag(owner, tagLevel, tagId, tagValue);
             }
@@ -685,8 +681,6 @@ namespace GDModel.Providers.GEDCOM
 
             level += 1;
             GEDCOMProvider.WriteTagLine(stream, level, GEDCOMTagName.SEX, GEDCOMUtils.GetSexStr(indiRec.Sex), true);
-            GEDCOMProvider.WriteTagLine(stream, level, GEDCOMTagName.AFN, indiRec.AncestralFileNumber, true);
-            GEDCOMProvider.WriteTagLine(stream, level, GEDCOMTagName.RFN, indiRec.PermanentRecordFileNumber, true);
 
             WriteList(stream, level, indiRec.PersonalNames, WritePersonalName);
             WriteList(stream, level, indiRec.ChildToFamilyLinks, WriteChildToFamilyLink);
@@ -750,8 +744,6 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
             if (tagType == GEDCOMTagType.RESN) {
                 evtRec.Restriction = GEDCOMUtils.GetRestrictionVal(tagValue);
-            } else if (tagType == GEDCOMTagType.SUBM) {
-                curTag = evtRec.Submittors.Add(new GDMPointer(evtRec, tagId, tagValue));
             } else {
                 return AddRecordTag(owner, tagLevel, tagId, tagValue);
             }
@@ -767,7 +759,6 @@ namespace GDModel.Providers.GEDCOM
 
             level += 1;
             WriteTagLine(stream, level, GEDCOMTagName.RESN, GEDCOMUtils.GetRestrictionStr(recWE.Restriction), true);
-            WriteList(stream, level, recWE.Submittors, WriteTagEx);
         }
 
 

@@ -39,7 +39,6 @@ namespace GDModel
     {
         private GDMList<GDMCustomEvent> fEvents;
         private GDMRestriction fRestriction;
-        private GDMList<GDMPointer> fSubmittors;
 
 
         public GDMList<GDMCustomEvent> Events
@@ -53,23 +52,16 @@ namespace GDModel
             set { fRestriction = value; }
         }
 
-        public GDMList<GDMPointer> Submittors
-        {
-            get { return fSubmittors; }
-        }
-
 
         protected GDMRecordWithEvents(GDMObject owner) : base(owner)
         {
             fEvents = new GDMList<GDMCustomEvent>(this);
-            fSubmittors = new GDMList<GDMPointer>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
                 fEvents.Dispose();
-                fSubmittors.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -80,13 +72,12 @@ namespace GDModel
 
             fEvents.Clear();
             fRestriction = GDMRestriction.rnNone;
-            fSubmittors.Clear();
         }
 
         public override bool IsEmpty()
         {
             // Restrictions are not checked because they are not important if other fields are empty.
-            return base.IsEmpty() && (fEvents.Count == 0) && (fSubmittors.Count == 0);
+            return base.IsEmpty() && (fEvents.Count == 0);
         }
 
         public override void Assign(GDMTag source)
@@ -121,19 +112,12 @@ namespace GDModel
             }
 
             target.Restriction = fRestriction;
-
-            while (fSubmittors.Count > 0) {
-                GDMPointer obj = fSubmittors.Extract(0);
-                obj.ResetOwner(target);
-                target.Submittors.Add(obj);
-            }
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
             fEvents.ReplaceXRefs(map);
-            fSubmittors.ReplaceXRefs(map);
         }
 
         public GDMCustomEvent FindEvent(string eventName)
