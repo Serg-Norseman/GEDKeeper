@@ -21,7 +21,6 @@
 using System;
 using System.Collections.ObjectModel;
 using Eto.Forms;
-
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;

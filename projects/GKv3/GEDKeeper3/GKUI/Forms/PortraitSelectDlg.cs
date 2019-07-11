@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -37,7 +36,7 @@ namespace GKUI.Forms
 
         private ITimer fTimer;
 
-        public GEDCOMMultimediaLink MultimediaLink
+        public GDMMultimediaLink MultimediaLink
         {
             get { return fController.MultimediaLink; }
             set { fController.MultimediaLink = value; }

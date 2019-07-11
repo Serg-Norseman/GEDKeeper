@@ -31,7 +31,7 @@ namespace GDModel
         public void Test_GEDCOMTagWithLists()
         {
             // GDMTagWithLists protected class, derived - GDMPlace
-            using (GDMPlace tag = GDMPlace.Create(null, "", "") as GDMPlace) {
+            using (GDMPlace tag = new GDMPlace(null)) {
                 Assert.IsNotNull(tag);
 
                 Assert.IsNotNull(tag.Notes);

@@ -144,8 +144,8 @@ namespace GDModel.Providers.GEDCOM
         {
             // Fix for Family Tree Maker 2008 which exports occupation as generic EVEN events
             if (format == GEDCOMFormat.gf_FamilyTreeMaker) {
-                string subtype = evt.Classification;
-                if (evt.Name == GEDCOMTagType.EVEN && subtype.ToLower() == "occupation") {
+                string subtype = evt.Classification.ToLower();
+                if (evt.Id == (int)GEDCOMTagType.EVEN && subtype == "occupation") {
                     evt.SetName(GEDCOMTagType.OCCU);
                     evt.Classification = string.Empty;
                 }
@@ -154,10 +154,10 @@ namespace GDModel.Providers.GEDCOM
 
         private static void CheckEventPlace(GDMCustomEvent aEvent)
         {
-            GDMPlace place = aEvent.FindTag(GEDCOMTagType.PLAC, 0) as GDMPlace;
+            GDMPlace place = aEvent.FindTag(GEDCOMTagName.PLAC, 0) as GDMPlace;
             if (place == null) return;
 
-            GDMPointer placeLocation = place.FindTag(GEDCOMTagType._LOC, 0) as GDMPointer;
+            GDMPointer placeLocation = place.FindTag(GEDCOMTagName._LOC, 0) as GDMPointer;
             if (placeLocation == null) return;
 
             if (placeLocation.XRef != "" && placeLocation.Value == null) {
@@ -370,16 +370,16 @@ namespace GDModel.Providers.GEDCOM
             string xrefNum = record.GetXRefNum();
             string recXRef = record.XRef;
 
-            return ((recXRef == stdSign + xrefNum) && record.GetId() > 0);
+            return ((recXRef == stdSign + xrefNum) && record.GetId() >= 0);
         }
 
         private static void ConvertIdentifiers(GDMTree tree, IProgressController pc)
         {
-            pc.ProgressInit(LangMan.LS(LSID.LSID_IDsCorrect), tree.RecordsCount);
+            pc.ProgressInit(LangMan.LS(LSID.LSID_IDsCorrect), tree.RecordsCount * 2);
             GDMXRefReplacer repMap = new GDMXRefReplacer();
             try {
-                int num = tree.RecordsCount;
-                for (int i = 0; i < num; i++) {
+                int recsCount = tree.RecordsCount;
+                for (int i = 0; i < recsCount; i++) {
                     GDMRecord rec = tree[i];
                     if (!CheckRecordXRef(rec)) {
                         string newXRef = tree.XRefIndex_NewXRef(rec);
@@ -390,11 +390,8 @@ namespace GDModel.Providers.GEDCOM
                 }
 
                 tree.Header.ReplaceXRefs(repMap);
-                pc.ProgressInit(LangMan.LS(LSID.LSID_IDsCorrect), repMap.Count);
-
-                int mapSize = repMap.Count;
-                for (int i = 0; i < mapSize; i++) {
-                    GDMRecord rec = repMap[i].Rec;
+                for (int i = 0; i < recsCount; i++) {
+                    GDMRecord rec = tree[i];
                     rec.ReplaceXRefs(repMap);
                     pc.ProgressStep();
                 }
@@ -473,6 +470,13 @@ namespace GDModel.Providers.GEDCOM
             }
 
             return result;
+        }
+
+        public static void ClearGEDCOMFormat(GDMTree tree, IBaseContext baseContext, IProgressController pc)
+        {
+            // TODO
+            // INDI: remove AFN, RFN
+            // INDI,FAM: remove SUBM
         }
     }
 }

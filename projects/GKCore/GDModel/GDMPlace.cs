@@ -52,18 +52,18 @@ namespace GDModel
             SetName(GEDCOMTagType.PLAC);
 
             fForm = string.Empty;
-            fLocation = new GDMPointer(this, GEDCOMTagType._LOC, string.Empty);
+            fLocation = new GDMPointer(this, (int)GEDCOMTagType._LOC, string.Empty);
             fMap = new GDMMap(this);
         }
 
-        public GDMPlace(GDMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMPlace(GDMObject owner, int tagId, string tagValue) : this(owner)
         {
-            SetNameValue(tagName, tagValue);
+            SetNameValue(tagId, tagValue);
         }
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
         {
-            return new GDMPlace(owner, tagName, tagValue);
+            return new GDMPlace(owner, tagId, tagValue);
         }
 
         public override void Assign(GDMTag source)

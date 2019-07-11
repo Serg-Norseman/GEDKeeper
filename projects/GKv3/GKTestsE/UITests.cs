@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Eto;
 using Eto.Forms;
-using GKCommon;
 using NUnit.Framework;
 
 namespace GKUI.Forms

@@ -54,7 +54,6 @@ namespace GDModel
 
         public GDMSubmitterRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GDMRecordType.rtSubmitter);
             SetName(GEDCOMTagType.SUBM);
 
             fAddress = new GDMAddress(this);
@@ -107,7 +106,7 @@ namespace GDModel
             if (index < 0) return;
 
             while (index >= fLanguages.Count) {
-                fLanguages.Add(new GDMLanguage(this, GEDCOMTagType.LANG, ""));
+                fLanguages.Add(new GDMLanguage(this, (int)GEDCOMTagType.LANG, ""));
             }
             fLanguages[index].StringValue = value;
         }

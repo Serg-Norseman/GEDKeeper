@@ -23,8 +23,7 @@ using System.ComponentModel;
 using System.IO;
 using Eto.Drawing;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -39,7 +38,7 @@ namespace GKUI.Forms
         private ITimer fTimer;
         private Control fViewer;
 
-        public GEDCOMFileReferenceWithTitle FileRef
+        public GDMFileReferenceWithTitle FileRef
         {
             get { return fController.FileRef; }
             set { fController.FileRef = value; }
@@ -92,7 +91,7 @@ namespace GKUI.Forms
             SetViewControl(mediaPlayer);
         }
 
-        public void SetViewImage(IImage img, GEDCOMFileReferenceWithTitle fileRef)
+        public void SetViewImage(IImage img, GDMFileReferenceWithTitle fileRef)
         {
             var imageCtl = new GKUI.Components.ImageView();
             imageCtl.OpenImage(img);

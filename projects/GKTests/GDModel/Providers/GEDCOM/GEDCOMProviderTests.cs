@@ -37,7 +37,7 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual(GEDCOMFormat.gf_GENBOX, GEDCOMProvider.GetGEDCOMFormat(tree));
         }
 
-        private GDMTag TagConstructorTest(GDMObject owner, string tagName, string tagValue)
+        private GDMTag TagConstructorTest(GDMObject owner, int tagId, string tagValue)
         {
             return null;
         }
@@ -46,25 +46,26 @@ namespace GDModel.Providers.GEDCOM
         public void Test_GEDCOMFactory()
         {
             TagConstructor tagConst = TagConstructorTest;
-            Assert.AreEqual(null, tagConst.Invoke(null, "x", "x"));
+            Assert.AreEqual(null, tagConst.Invoke(null, 0, "x"));
 
             //
 
-            GDMTag tag = GEDCOMProvider.CreateTag(null, GEDCOMTagType.DATE, "");
-            Assert.IsNotNull(tag, "tag != null");
+            GDMTag tag = GEDCOMProvider.CreateTag(null, (int)GEDCOMTagType.DATE, "");
+            Assert.IsNotNull(tag);
 
-            tag = GEDCOMProvider.CreateTag(null, "TEST", "");
-            Assert.IsNull(tag, "tag == null");
+            tag = GEDCOMProvider.CreateTag(null, GEDCOMTagsTable.Lookup("TEST"), "");
+            Assert.IsNotNull(tag);
+            Assert.AreEqual("TEST", tag.GetTagName());
         }
 
         [Test]
         public void Test_GetTagProps()
         {
-            TagInfo props = GEDCOMProvider.GetTagInfo(GEDCOMTagType.ADDR);
+            GEDCOMTagProps props = GEDCOMTagsTable.GetTagProps(GEDCOMTagName.ADDR);
             Assert.IsNotNull(props);
             Assert.IsTrue(props.SkipEmpty);
 
-            props = GEDCOMProvider.GetTagInfo("test");
+            props = GEDCOMTagsTable.GetTagProps("test");
             Assert.IsNull(props);
         }
     }

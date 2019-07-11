@@ -435,8 +435,8 @@ namespace GKPedigreeImporterPlugin
                 fBase.Context.CheckPersonSex(result);
             }
 
-            if (persName.BirthDate != "") SetEvent(result, GEDCOMTagType.BIRT, persName.BirthDate);
-            if (persName.DeathDate != "") SetEvent(result, GEDCOMTagType.DEAT, persName.DeathDate);
+            if (persName.BirthDate != "") SetEvent(result, GEDCOMTagName.BIRT, persName.BirthDate);
+            if (persName.DeathDate != "") SetEvent(result, GEDCOMTagName.DEAT, persName.DeathDate);
 
             return result;
         }
@@ -569,7 +569,7 @@ namespace GKPedigreeImporterPlugin
                                     string marrDate = slRet.ExtData.Substring(1, slRet.ExtData.Length - 2).Trim();
 
                                     if (marrDate != "")
-                                        SetEvent(family, GEDCOMTagType.MARR, marrDate);
+                                        SetEvent(family, GEDCOMTagName.MARR, marrDate);
                                 }
                             }
                         }

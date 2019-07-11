@@ -91,7 +91,6 @@ namespace GDModel
             //
             Assert.IsNotNull(indiRec.Aliases);
             Assert.IsNotNull(indiRec.Associations);
-            Assert.IsNotNull(indiRec.Submittors);
             Assert.IsNotNull(indiRec.UserReferences); // for GEDCOMRecord
 
             Assert.Throws(typeof(ArgumentException), () => {
@@ -126,12 +125,6 @@ namespace GDModel
             Assert.AreEqual(true, indiRec.Bookmark);
             indiRec.Bookmark = false;
             Assert.AreEqual(false, indiRec.Bookmark);
-
-            indiRec.AncestralFileNumber = "test11";
-            Assert.AreEqual("test11", indiRec.AncestralFileNumber);
-
-            indiRec.PermanentRecordFileNumber = "test22";
-            Assert.AreEqual("test22", indiRec.PermanentRecordFileNumber);
 
             Assert.Throws(typeof(ArgumentException), () => { indiRec.MoveTo(null, false); });
 
@@ -209,7 +202,6 @@ namespace GDModel
 
                 indi.AddAssociation("test", ind);
                 indi.Aliases.Add(new GDMAlias(indi));
-                indi.Submittors.Add(new GDMPointer(indi, "", ""));
 
                 using (GDMIndividualRecord indi3 = new GDMIndividualRecord(fContext.Tree)) {
                     indi.MoveTo(indi3, false);
@@ -263,11 +255,11 @@ namespace GDModel
             pn = ind2.AddPersonalName(new GDMPersonalName(ind2));
             pn.SetNameParts("Ivan Ivanovich", "Fedoroff", "");
 
-            ev1 = new GDMIndividualEvent(ind1, GEDCOMTagType.BIRT, "");
+            ev1 = new GDMIndividualEvent(ind1, (int)GEDCOMTagType.BIRT, "");
             dtVal1 = ev1.Date;
             ind1.AddEvent(ev1);
 
-            ev2 = new GDMIndividualEvent(ind2, GEDCOMTagType.BIRT, "");
+            ev2 = new GDMIndividualEvent(ind2, (int)GEDCOMTagType.BIRT, "");
             dtVal2 = ev2.Date;
             ind2.AddEvent(ev2);
 

@@ -36,9 +36,9 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
         {
-            return new GDMDateValue(owner, tagName, tagValue);
+            return new GDMDateValue(owner, tagId, tagValue);
         }
 
         public GDMDateValue(GDMObject owner) : base(owner)
@@ -46,9 +46,9 @@ namespace GDModel
             fValue = null;
         }
 
-        public GDMDateValue(GDMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMDateValue(GDMObject owner, int tagId, string tagValue) : this(owner)
         {
-            SetNameValue(tagName, tagValue);
+            SetNameValue(tagId, tagValue);
         }
 
         protected override void Dispose(bool disposing)

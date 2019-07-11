@@ -230,11 +230,11 @@ namespace GDModel
             fCharacterSet = new GDMHeaderCharSet(this);
             fFile = new GDMHeaderFile(this);
             fGEDCOM = new GDMHeaderGEDCOM(this);
-            fNote = new GDMTextTag(this, GEDCOMTagType.NOTE);
+            fNote = new GDMTextTag(this, (int)GEDCOMTagType.NOTE);
             fPlace = new GDMPlace(this);
             fSource = new GDMHeaderSource(this);
-            fSubmission = new GDMPointer(this, GEDCOMTagType.SUBN, string.Empty);
-            fSubmitter = new GDMPointer(this, GEDCOMTagType.SUBM, string.Empty);
+            fSubmission = new GDMPointer(this, (int)GEDCOMTagType.SUBN, string.Empty);
+            fSubmitter = new GDMPointer(this, (int)GEDCOMTagType.SUBM, string.Empty);
         }
 
         public override void Clear()

@@ -285,7 +285,7 @@ namespace GDModel.Providers.GEDCOM
         [Test]
         public void Test_ParseGEDCOMPointer()
         {
-            using (var ptr = new GDMPointer(null, "", "")) {
+            using (var ptr = new GDMPointer(null)) {
                 string remainder = ptr.ParseString("  @I1111@ test");
                 Assert.AreEqual("I1111", ptr.XRef);
                 Assert.AreEqual(" test", remainder);
@@ -311,8 +311,9 @@ namespace GDModel.Providers.GEDCOM
         [Test]
         public void Test_ParseGEDCOMTime()
         {
-            using (GDMTime time = new GDMTime(null, "", "20:20:20.100")) {
+            using (GDMTime time = new GDMTime(null)) {
                 Assert.IsNotNull(time, "time != null");
+                time.ParseString("20:20:20.100");
 
                 Assert.AreEqual(20, time.Hour);
                 Assert.AreEqual(20, time.Minutes);
@@ -382,7 +383,7 @@ namespace GDModel.Providers.GEDCOM
             res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(2, tagLevel2);
             Assert.AreEqual("", tagXRef2);
-            Assert.AreEqual(GEDCOMTagType.DATE, tagName2);
+            Assert.AreEqual(GEDCOMTagName.DATE, tagName2);
             Assert.AreEqual("FROM 20 JAN 1979 TO 15 MAY 2012", tagValue2);
             Assert.AreEqual(3, res2);
 
@@ -408,7 +409,7 @@ namespace GDModel.Providers.GEDCOM
         [Test]
         public void Test_SetTagStringsL()
         {
-            var tag = new GDMTag(null, "TEST", "");
+            var tag = new GDMTag(null, GEDCOMTagsTable.Lookup("TEST"), "");
             Assert.IsNotNull(tag);
 
             // very long string, 248"A" and " BBB BBBB"

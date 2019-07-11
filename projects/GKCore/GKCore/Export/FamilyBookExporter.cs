@@ -266,16 +266,17 @@ namespace GKCore.Export
                     }
 
                     // The analysis places
-                    //						st = ev.Detail.Place.StringValue;
-                    //						if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(places, st, iRec);
+                    // st = ev.Detail.Place.StringValue;
+                    // if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(places, st, iRec);
 
-                    if (evt.Name == GEDCOMTagType.BIRT) {
+                    var evtType = evt.GetTagType();
+                    if (evtType == GEDCOMTagType.BIRT) {
                         // Analysis on births
                         PrepareEventYear(byIndex, evt, iRec);
                         st = GKUtils.GetPlaceStr(evt, false);
                         if (!string.IsNullOrEmpty(st))
                             PrepareSpecIndex(bpIndex, st, iRec);
-                    } else if (evt.Name == GEDCOMTagType.DEAT) {
+                    } else if (evtType == GEDCOMTagType.DEAT) {
                         // Analysis by causes of death
                         PrepareEventYear(dyIndex, evt, iRec);
                         st = GKUtils.GetPlaceStr(evt, false);
@@ -285,12 +286,12 @@ namespace GKCore.Export
                         st = evt.Cause;
                         if (!string.IsNullOrEmpty(st))
                             PrepareSpecIndex(deathCauses, st, iRec);
-                    } else if (evt.Name == GEDCOMTagType.OCCU) {
+                    } else if (evtType == GEDCOMTagType.OCCU) {
                         // Analysis by occupation
                         st = evt.StringValue;
                         if (!string.IsNullOrEmpty(st))
                             PrepareSpecIndex(occuIndex, st, iRec);
-                    } else if (evt.Name == GEDCOMTagType.RELI) {
+                    } else if (evtType == GEDCOMTagType.RELI) {
                         // Analysis by religion
                         st = evt.StringValue;
                         if (!string.IsNullOrEmpty(st))
@@ -361,7 +362,8 @@ namespace GKCore.Export
                 int num = iRec.Events.Count;
                 for (int i = 0; i < num; i++) {
                     GDMCustomEvent evt = iRec.Events[i];
-                    if (evt.Name == GEDCOMTagType.BIRT || evt.Name == GEDCOMTagType.DEAT)
+                    var evtType = evt.GetTagType();
+                    if (evtType == GEDCOMTagType.BIRT || evtType == GEDCOMTagType.DEAT)
                         continue;
                     
                     string evtName = GKUtils.GetEventName(evt);

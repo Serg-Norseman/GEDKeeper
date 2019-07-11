@@ -543,7 +543,8 @@ namespace GKCore.MVP.Views
     public interface ITreeChartWin : IChartWindow, IView
     {
         ITreeChartBox TreeBox { get; }
-        TreeChartKind ChartKind { get; set; }
+
+        void GenChart(TreeChartKind chartKind);
     }
 
 

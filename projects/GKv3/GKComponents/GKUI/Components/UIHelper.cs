@@ -22,7 +22,7 @@ using System;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -254,7 +254,7 @@ namespace GKUI.Components
             }
         }
 
-        public static GKListView CreateRecordsView(Panel parent, IBaseContext baseContext, GEDCOMRecordType recType)
+        public static GKListView CreateRecordsView(Panel parent, IBaseContext baseContext, GDMRecordType recType)
         {
             if (parent == null)
                 throw new ArgumentNullException("parent");

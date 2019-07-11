@@ -35,7 +35,6 @@ namespace GDModel
 
         public GDMMultimediaRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GDMRecordType.rtMultimedia);
             SetName(GEDCOMTagType.OBJE);
 
             fFileReferences = new GDMList<GDMFileReferenceWithTitle>(this);

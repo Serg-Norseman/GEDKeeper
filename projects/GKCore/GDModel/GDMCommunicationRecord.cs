@@ -81,7 +81,7 @@ namespace GDModel
             set {
                 fCommDirection = value;
 
-                string tagName = string.Empty;
+                GEDCOMTagType tagName = GEDCOMTagType.Unknown;
                 if (fCommDirection == GDMCommunicationDir.cdFrom) {
                     tagName = GEDCOMTagType.FROM;
                 } else if (fCommDirection == GDMCommunicationDir.cdTo) {
@@ -99,7 +99,6 @@ namespace GDModel
 
         public GDMCommunicationRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GDMRecordType.rtCommunication);
             SetName(GEDCOMTagType._COMM);
 
             fDate = new GDMDate(this);

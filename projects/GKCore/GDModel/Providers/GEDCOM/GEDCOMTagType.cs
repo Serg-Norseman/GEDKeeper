@@ -22,7 +22,200 @@ using System;
 
 namespace GDModel.Providers.GEDCOM
 {
-    public static class GEDCOMTagType
+    public enum GEDCOMTagType
+    {
+        Unknown,
+
+        // Record's tags (don't change the order of the items, because its used to cast)
+        INDI, // Individual [std]
+        FAM, // Family [std]
+        NOTE, // Note [std]
+        OBJE, // Multimedia [std]
+        SOUR, // Source [std]
+        REPO, // Repository [std]
+        _GROUP, // Group [GK]
+        _RESEARCH, // Research [GK]
+        _TASK, // Task [GK]
+        _COMM, // Communication [GK]
+        _LOC, // Location [GEDCOM 5.5EL]
+        SUBN, // Submission [std]
+        SUBM, // Submitter [std]
+
+        // Other tags
+        ABBR,
+        ADDR,
+        ADOP,
+        ADR1,
+        ADR2,
+        ADR3,
+        AFN, // AncestralFileNumber
+        AGNC,
+        ALIA,
+        ANCE,
+        ANCI,
+        ANUL,
+        ASSO,
+        AUTH,
+        BAPL,
+        BAPM,
+        BARM,
+        BASM,
+        BIRT,
+        BLES,
+        BURI,
+        CAST,
+        CAUS,
+        CENS,
+        CHAN,
+        CHAR,
+        CHIL,
+        CHR,
+        CHRA,
+        CITY,
+        CONC,
+        CONF,
+        CONL,
+        CONT,
+        COPR,
+        CORP,
+        CREM,
+        CTRY,
+        DATA,
+        DATE,
+        DEAT,
+        DESC,
+        DESI,
+        DEST,
+        DIV,
+        DIVF,
+        DSCR,
+        EDUC,
+        ENDL,
+        EVEN,
+        EMAIL,
+        EMIG,
+        ENGA,
+        FACT,
+        FAMC,
+        FAMF,
+        FAMS,
+        FAX,
+        FCOM,
+        FILE,
+        FONE,
+        FORM,
+        FROM,
+        GEDC,
+        GIVN,
+        GRAD,
+        HEAD,
+        HUSB,
+        IDNO,
+        IMMI,
+        INT,
+        LANG,
+        LATI,
+        LONG,
+        MAP,
+        MARB,
+        MARC,
+        MARL,
+        MARR,
+        MARS,
+        MEDI,
+        NAME,
+        NATI,
+        NATU,
+        NCHI,
+        NICK,
+        NMR,
+        NPFX,
+        NSFX,
+        OCCU,
+        ORDI,
+        ORDN,
+        PAGE,
+        PEDI,
+        PHON,
+        PLAC,
+        POST,
+        PROB,
+        PROP,
+        PUBL,
+        QUAY,
+        REFN,
+        RELA,
+        RELI,
+        RESI,
+        RESN, // Restriction
+        RETI,
+        RFN, // PermanentRecordFileNumber
+        RIN, // AutomatedRecordID
+        ROMN,
+        SEX,
+        SLGC,
+        SLGS,
+        SPFX,
+        SSN,
+        STAE,
+        STAT,
+        SURN,
+        TEMP,
+        TEXT,
+        TIME,
+        TITL,
+        TO,
+        TRLR,
+        TYPE,
+        VERS,
+        WIFE,
+        WILL,
+        WWW,
+
+        // non-standard extended tags
+        _AWARD,
+        _BGRO, // [MyFamilyTree]
+        _BOOKMARK, // [GK]
+        _CENN, // Census Name [BKW6]
+        _ELEC, // Election [???]
+        _EXCM, // Excommunication [???]
+        _EYES, // [Gen]
+        _FOLDER, // [GK]
+        _GOAL, // [GK]
+        _GRP, // Group record [Genney]
+        _HAIR, // [BKW6, PAF]
+        _HOBBY,
+        _LANG, // [GK], outdated, replaced by LANG
+        _MARN, // Married Surname [BKW6]
+        _MDCL, // Medical condition [???]
+        _MDNA, // [MyFamilyTree]
+        _MEMBER, // [GK]
+        _MILI, // [GK]
+        _MILI_DIS, // [GK]
+        _MILI_IND, // [GK]
+        _MILI_RANK, // [GK]
+        _OBIT, // Obituary [???]
+        _PATN, // Patronymic Name
+        _PATRIARCH, // [GK]
+        _PERCENT, // [GK]
+        _PLAC, // Place/Location record [Family Historian]
+        _PLC, // Place/Location record [Genney]
+        _POSITION,
+        _PRIM, // [PhpGedView, AQ3, PAF5, FO7]
+        _PRIM_CUTOUT, // [FTB]
+        _PRIORITY, // [GK]
+        _RELN, // Religious Name [BKW6]
+        _REV, // [GK]
+        _STARTDATE, // [GK]
+        _STAT,
+        _STATUS, // [GK]
+        _STOPDATE, // [GK]
+        _TRAVEL,
+        _UID, // 
+        _YDNA, // [MyFamilyTree]
+    }
+
+    public static class GEDCOMTagName
     {
         public const string ABBR = "ABBR";
         public const string ADDR = "ADDR";
@@ -104,8 +297,8 @@ namespace GDModel.Providers.GEDCOM
         public const string MARB = "MARB";
         public const string MARC = "MARC";
         public const string MARL = "MARL";
-        public const string MARS = "MARS";
         public const string MARR = "MARR";
+        public const string MARS = "MARS";
         public const string MEDI = "MEDI";
         public const string NAME = "NAME";
         public const string NATI = "NATI";
@@ -166,14 +359,20 @@ namespace GDModel.Providers.GEDCOM
         public const string _AWARD = "_AWARD";
         public const string _BGRO = "_BGRO"; // [MyFamilyTree]
         public const string _CENN = "_CENN"; // Census Name [BKW6]
+        public const string _ELEC = "_ELEC"; // Election [???]
+        public const string _EXCM = "_EXCM"; // Excommunication [???]
         public const string _EYES = "_EYES"; // [Gen]
+        public const string _GRP = "_GRP"; // Group record [Genney]
         public const string _HAIR = "_HAIR"; // [BKW6, PAF]
         public const string _HOBBY = "_HOBBY";
         public const string _LOC = "_LOC"; // [GEDCOM 5.5EL]
         public const string _MARN = "_MARN"; // Married Surname [BKW6]
+        public const string _MDCL = "_MDCL"; // Medical condition [???]
         public const string _MDNA = "_MDNA"; // [MyFamilyTree]
+        public const string _OBIT = "_OBIT"; // Obituary [???]
         public const string _PATN = "_PATN"; // Patronymic Name
         public const string _PLAC = "_PLAC"; // Place/Location record [Family Historian]
+        public const string _PLC = "_PLC"; // Place/Location record [Genney]
         public const string _POSITION = "_POSITION";
         public const string _PRIM = "_PRIM"; // [PhpGedView, AQ3, PAF5, FO7]
         public const string _PRIM_CUTOUT = "_PRIM_CUTOUT"; // [FTB]

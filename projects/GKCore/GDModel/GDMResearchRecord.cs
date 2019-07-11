@@ -115,11 +115,10 @@ namespace GDModel
 
         public GDMResearchRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GDMRecordType.rtResearch);
             SetName(GEDCOMTagType._RESEARCH);
 
-            fStartDate = new GDMDate(this, GEDCOMTagType._STARTDATE, string.Empty);
-            fStopDate = new GDMDate(this, GEDCOMTagType._STOPDATE, string.Empty);
+            fStartDate = new GDMDate(this, (int)GEDCOMTagType._STARTDATE, string.Empty);
+            fStopDate = new GDMDate(this, (int)GEDCOMTagType._STOPDATE, string.Empty);
 
             fTasks = new GDMList<GDMPointer>(this);
             fCommunications = new GDMList<GDMPointer>(this);
@@ -193,7 +192,7 @@ namespace GDModel
             bool result = false;
 
             if (taskRecord != null) {
-                GDMPointer ptr = new GDMPointer(this, GEDCOMTagType._TASK, string.Empty);
+                GDMPointer ptr = new GDMPointer(this, (int)GEDCOMTagType._TASK, string.Empty);
                 ptr.Value = taskRecord;
                 fTasks.Add(ptr);
                 result = true;
@@ -231,7 +230,7 @@ namespace GDModel
             bool result = false;
 
             if (groupRecord != null) {
-                GDMPointer ptr = new GDMPointer(this, GEDCOMTagType._GROUP, string.Empty);
+                GDMPointer ptr = new GDMPointer(this, (int)GEDCOMTagType._GROUP, string.Empty);
                 ptr.Value = groupRecord;
                 fGroups.Add(ptr);
                 result = true;
@@ -269,7 +268,7 @@ namespace GDModel
             bool result = false;
 
             if (commRecord != null) {
-                GDMPointer ptr = new GDMPointer(this, GEDCOMTagType._COMM, string.Empty);
+                GDMPointer ptr = new GDMPointer(this, (int)GEDCOMTagType._COMM, string.Empty);
                 ptr.Value = commRecord;
                 fCommunications.Add(ptr);
                 result = true;

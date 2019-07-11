@@ -73,6 +73,7 @@ namespace GKCore.Plugins
         public void Load(IHost host, string path)
         {
             if (!Directory.Exists(path)) return;
+            Logger.LogWrite("Plugins load path: " + path);
 
             try {
                 #if !NETSTANDARD

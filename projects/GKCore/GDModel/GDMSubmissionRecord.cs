@@ -77,7 +77,6 @@ namespace GDModel
 
         public GDMSubmissionRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GDMRecordType.rtSubmission);
             SetName(GEDCOMTagType.SUBN);
 
             fFamilyFileName = string.Empty;
@@ -85,7 +84,7 @@ namespace GDModel
             fGenerationsOfAncestors = -1;
             fGenerationsOfDescendants = -1;
             fOrdinanceProcessFlag = GDMOrdinanceProcessFlag.opNone;
-            fSubmitter = new GDMPointer(this, GEDCOMTagType.SUBM, string.Empty);
+            fSubmitter = new GDMPointer(this, (int)GEDCOMTagType.SUBM, string.Empty);
         }
 
         public override void Clear()

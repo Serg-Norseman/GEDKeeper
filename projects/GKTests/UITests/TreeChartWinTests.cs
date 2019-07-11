@@ -32,6 +32,7 @@ using GKUI.Components;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 using GKCore.Charts;
+using GKCore.MVP.Views;
 
 namespace GKUI.Forms
 {
@@ -53,7 +54,7 @@ namespace GKUI.Forms
             IBaseWindow curBase = tcWin.Base;
             Assert.IsNotNull(curBase);
 
-            Assert.AreEqual(kind, tcWin.ChartKind);
+            Assert.AreEqual(kind, ((ITreeChartWin)tcWin).TreeBox.Model.Kind);
             tcWin.UpdateSettings();
 
             Assert.IsTrue(tcWin.AllowFilter());

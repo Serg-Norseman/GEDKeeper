@@ -39,9 +39,9 @@ namespace GDModel
             fLines = new StringList();
         }
 
-        public GDMTextTag(GDMObject owner, string tagName) : this(owner)
+        public GDMTextTag(GDMObject owner, int tagId) : this(owner)
         {
-            SetName(tagName);
+            SetName(tagId);
         }
 
         public override void Assign(GDMTag source)

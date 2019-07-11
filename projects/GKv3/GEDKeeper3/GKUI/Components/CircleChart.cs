@@ -19,11 +19,10 @@
  */
 
 using System;
+using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-
-using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
@@ -111,7 +110,7 @@ namespace GKUI.Components
 
         public event EventHandler ZoomChanged;
 
-        public GEDCOMIndividualRecord RootPerson
+        public GDMIndividualRecord RootPerson
         {
             get {
                 return fModel.RootPerson;
@@ -176,7 +175,7 @@ namespace GKUI.Components
             SetImageSize(boundary);
         }
 
-        private void DoRootChanged(GEDCOMIndividualRecord person)
+        private void DoRootChanged(GDMIndividualRecord person)
         {
             var eventHandler = (ARootChangedEventHandler)RootChanged;
             if (eventHandler != null)
@@ -199,6 +198,8 @@ namespace GKUI.Components
         /// <returns>Center point of this chart.</returns>
         private PointF GetCenter(RenderTarget target)
         {
+            var bounds = fModel.Bounds;
+
             fOffsetX = 0;
             fOffsetY = 0;
 
@@ -214,8 +215,6 @@ namespace GKUI.Components
                 return center;
 
             } else {
-
-                var bounds = fModel.Bounds;
 
                 // Returns the center point of this chart relative to the upper left
                 // corner/point of printing canvas.
@@ -238,7 +237,7 @@ namespace GKUI.Components
 
         protected override void SetNavObject(object obj)
         {
-            RootPerson = obj as GEDCOMIndividualRecord;
+            RootPerson = obj as GDMIndividualRecord;
         }
 
         protected override void OnMouseDoubleClick(MouseEventArgs e)
@@ -301,8 +300,8 @@ namespace GKUI.Components
 
                 case Keys.Left:
                     if (fChartType == CircleChartType.Ancestors && fModel.RootPerson != null) {
-                        GEDCOMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
-                        var father = (fam == null) ? null : fam.GetHusband();
+                        GDMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
+                        var father = (fam == null) ? null : fam.Husband.Individual;
                         if (father != null) {
                             RootPerson = father;
                         }
@@ -311,8 +310,8 @@ namespace GKUI.Components
 
                 case Keys.Right:
                     if (fChartType == CircleChartType.Ancestors && fModel.RootPerson != null) {
-                        GEDCOMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
-                        var mother = (fam == null) ? null : fam.GetWife();
+                        GDMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
+                        var mother = (fam == null) ? null : fam.Wife.Individual;
                         if (mother != null) {
                             RootPerson = mother;
                         }
@@ -428,6 +427,7 @@ namespace GKUI.Components
         /// associated with the target.
         /// </summary>
         /// <param name="target">Rendering target.</param>
+        /// <param name="forciblyCentered"></param>
         public override void RenderImage(RenderTarget target, bool forciblyCentered = false)
         {
             PointF center = GetCenter(target);

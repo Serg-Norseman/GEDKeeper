@@ -19,12 +19,11 @@
  */
 
 using System;
-using Eto.Drawing;
-using Eto.Forms;
-
 using ArborGVT;
 using BSLib.SmartGraph;
-using GKCommon.GEDCOM;
+using Eto.Drawing;
+using Eto.Forms;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -99,7 +98,7 @@ namespace GKUI.Forms
             } else {
                 if (!fTipShow) {
                     string xref = resNode.Sign;
-                    GEDCOMFamilyRecord famRec = fBase.Context.Tree.XRefIndex_Find(xref) as GEDCOMFamilyRecord;
+                    GDMFamilyRecord famRec = fBase.Context.Tree.XRefIndex_Find(xref) as GDMFamilyRecord;
                     string txt = GKUtils.GetFamilyString(famRec) + " [" + xref + "] "/* + resNode.Mass.ToString()*/;
 
                     //fTip.Show(txt, arborViewer1, mpt.X + 24, mpt.Y);

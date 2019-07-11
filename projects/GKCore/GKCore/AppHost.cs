@@ -232,7 +232,6 @@ namespace GKCore
 
         public virtual void Quit()
         {
-            // FIXME: Controversial issue...
             AppHost.Instance.SaveLastBases();
         }
 
@@ -379,14 +378,14 @@ namespace GKCore
             }
         }
 
-        public void WidgetsEnable()
+        public virtual void WidgetsEnable()
         {
             foreach (WidgetInfo widgetInfo in fActiveWidgets) {
                 widgetInfo.Widget.WidgetEnable();
             }
         }
 
-        public void BaseChanged(IBaseWindow baseWin)
+        public virtual void BaseChanged(IBaseWindow baseWin)
         {
             bool forceDeactivate = (baseWin == null);
             AppHost.Instance.UpdateControls(forceDeactivate);
@@ -410,9 +409,11 @@ namespace GKCore
             }
         }
 
-        public void BaseRenamed(IBaseWindow baseWin, string oldName, string newName)
+        public virtual void BaseRenamed(IBaseWindow baseWin, string oldName, string newName)
         {
-            // TODO: implementation of Base.SaveAs
+            foreach (WidgetInfo widgetInfo in fActiveWidgets) {
+                widgetInfo.Widget.BaseRenamed(baseWin, oldName, newName);
+            }
         }
 
         public virtual void SelectedIndexChanged(IBaseWindow baseWin)
@@ -659,7 +660,7 @@ namespace GKCore
 
         public void Restore()
         {
-            // FIXME!
+            // dummy
         }
 
         public static ushort RequestLanguage()
@@ -813,12 +814,10 @@ namespace GKCore
 
         #region ISingleInstanceEnforcer implementation
 
-        // FIXME!
         void ISingleInstanceEnforcer.OnMessageReceived(MessageEventArgs e)
         {
             OnMessageReceivedInvoker invoker = delegate(MessageEventArgs eventArgs) {
-                try
-                {
+                try {
                     string msg = eventArgs.Message as string;
 
                     if (!string.IsNullOrEmpty(msg) && msg == "restore") {
@@ -828,7 +827,6 @@ namespace GKCore
                         if (args != null) {
                             // A obligatory recovery of window, otherwise it will fail to load
                             Restore();
-
                             SetArgs(args);
                             LoadArgs();
                         }

@@ -69,11 +69,10 @@ namespace GDModel
 
         public GDMFamilyRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GDMRecordType.rtFamily);
             SetName(GEDCOMTagType.FAM);
 
-            fHusband = new GDMIndividualLink(this, GEDCOMTagType.HUSB, string.Empty);
-            fWife = new GDMIndividualLink(this, GEDCOMTagType.WIFE, string.Empty);
+            fHusband = new GDMIndividualLink(this, (int)GEDCOMTagType.HUSB, string.Empty);
+            fWife = new GDMIndividualLink(this, (int)GEDCOMTagType.WIFE, string.Empty);
             fChildren = new GDMList<GDMIndividualLink>(this);
         }
 
@@ -210,8 +209,8 @@ namespace GDModel
 
         private static int EventsCompare(GDMPointer cp1, GDMPointer cp2)
         {
-            UDN udn1 = ((GDMIndividualRecord)cp1.Value).GetUDN(GEDCOMTagType.BIRT);
-            UDN udn2 = ((GDMIndividualRecord)cp2.Value).GetUDN(GEDCOMTagType.BIRT);
+            UDN udn1 = ((GDMIndividualRecord)cp1.Value).GetUDN(GEDCOMTagName.BIRT);
+            UDN udn2 = ((GDMIndividualRecord)cp2.Value).GetUDN(GEDCOMTagName.BIRT);
             return udn1.CompareTo(udn2);
         }
 
@@ -277,7 +276,7 @@ namespace GDModel
         {
             if (child == null) return false;
 
-            GDMIndividualLink ptr = new GDMIndividualLink(this, GEDCOMTagType.CHIL, string.Empty);
+            GDMIndividualLink ptr = new GDMIndividualLink(this, (int)GEDCOMTagType.CHIL, string.Empty);
             ptr.Individual = child;
             fChildren.Add(ptr);
 

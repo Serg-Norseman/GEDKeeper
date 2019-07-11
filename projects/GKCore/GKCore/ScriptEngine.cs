@@ -29,6 +29,7 @@ using System.Reflection;
 using System.Text;
 using BSLib;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.Types;
@@ -469,7 +470,7 @@ namespace GKCore
         public string gt_get_event_name(object evPtr)
         {
             GDMCustomEvent evt = evPtr as GDMCustomEvent;
-            return (evt == null) ? string.Empty : evt.Name;
+            return (evt == null) ? string.Empty : evt.GetTagName();
         }
 
         public string gt_get_person_sex(object recPtr)

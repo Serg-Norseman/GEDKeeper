@@ -91,14 +91,14 @@ namespace GDModel
         [Test]
         public void Test_GDMPlace()
         {
-            using (GDMPlace place = GDMPlace.Create(null, "", "") as GDMPlace) {
+            using (GDMPlace place = new GDMPlace(null)) {
                 place.Form = "abrakadabra";
                 Assert.AreEqual("abrakadabra", place.Form);
 
                 Assert.IsNotNull(place.Map);
                 Assert.IsNotNull(place.Location);
 
-                using (GDMPlace place2 = GDMPlace.Create(null, "", "") as GDMPlace) {
+                using (GDMPlace place2 = new GDMPlace(null)) {
                     Assert.Throws(typeof(ArgumentException), () => {
                         place2.Assign(null);
                     });
@@ -121,14 +121,14 @@ namespace GDModel
         [Test]
         public void Test_GDMMap()
         {
-            using (GDMMap map = GDMMap.Create(null, "", "") as GDMMap) {
+            using (GDMMap map = new GDMMap(null)) {
                 map.Lati = 5.111111;
                 Assert.AreEqual(5.111111, map.Lati);
 
                 map.Long = 7.999999;
                 Assert.AreEqual(7.999999, map.Long);
 
-                using (GDMMap map2 = GDMMap.Create(null, "", "") as GDMMap) {
+                using (GDMMap map2 = new GDMMap(null)) {
                     Assert.Throws(typeof(ArgumentException), () => {
                         map2.Assign(null);
                     });

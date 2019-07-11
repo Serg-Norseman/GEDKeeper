@@ -20,6 +20,7 @@
 
 using System;
 using BSLib.Calendar;
+using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
 namespace GDModel
@@ -185,6 +186,12 @@ namespace GDModel
         public int GetChronologicalYear()
         {
             return Date.GetChronologicalYear();
+        }
+
+        public void SetName(string tagName)
+        {
+            int tagId = GEDCOMTagsTable.Lookup(tagName);
+            SetName(tagId);
         }
     }
 }

@@ -37,14 +37,14 @@ namespace GDModel
         {
         }
 
-        public GDMIndividualAttribute(GDMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMIndividualAttribute(GDMObject owner, int tagId, string tagValue) : this(owner)
         {
-            SetNameValue(tagName, tagValue);
+            SetNameValue(tagId, tagValue);
         }
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
         {
-            return new GDMIndividualAttribute(owner, tagName, tagValue);
+            return new GDMIndividualAttribute(owner, tagId, tagValue);
         }
     }
 }

@@ -44,7 +44,6 @@ namespace GDModel
 
         public GDMGroupRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GDMRecordType.rtGroup);
             SetName(GEDCOMTagType._GROUP);
 
             fGroupName = string.Empty;
@@ -120,11 +119,11 @@ namespace GDModel
         {
             if (member == null) return false;
 
-            GDMIndividualLink mbrLink = new GDMIndividualLink(this, GEDCOMTagType._MEMBER, string.Empty);
+            GDMIndividualLink mbrLink = new GDMIndividualLink(this, (int)GEDCOMTagType._MEMBER, string.Empty);
             mbrLink.Individual = member;
             fMembers.Add(mbrLink);
 
-            var ptr = new GDMPointer(member, GEDCOMTagType._GROUP, string.Empty);
+            var ptr = new GDMPointer(member, (int)GEDCOMTagType._GROUP, string.Empty);
             ptr.Value = this;
             member.Groups.Add(ptr);
 

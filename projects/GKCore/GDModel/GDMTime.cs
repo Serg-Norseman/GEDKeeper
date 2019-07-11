@@ -69,9 +69,9 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
         {
-            return new GDMTime(owner, tagName, tagValue);
+            return new GDMTime(owner, tagId, tagValue);
         }
 
         public GDMTime(GDMObject owner) : base(owner)
@@ -79,9 +79,9 @@ namespace GDModel
             SetName(GEDCOMTagType.TIME);
         }
 
-        public GDMTime(GDMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMTime(GDMObject owner, int tagId, string tagValue) : this(owner)
         {
-            SetNameValue(tagName, tagValue);
+            SetNameValue(tagId, tagValue);
         }
 
         protected override string GetStringValue()

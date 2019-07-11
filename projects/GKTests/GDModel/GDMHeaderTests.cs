@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib;
 using GDModel;
 using NUnit.Framework;
 
@@ -96,7 +95,7 @@ namespace GDModel
         [Test]
         public void Test_GDMLanguage()
         {
-            using (GDMLanguage langTag = GDMLanguage.Create(null, "", "") as GDMLanguage) {
+            using (GDMLanguage langTag = new GDMLanguage(null)) {
                 Assert.IsTrue(langTag.IsEmpty());
 
                 langTag.Value = GDMLanguageID.AngloSaxon;
@@ -105,7 +104,7 @@ namespace GDModel
                 langTag.ParseString("Spanish");
                 Assert.AreEqual("Spanish", langTag.StringValue);
 
-                using (GDMLanguage langTag2 = GDMLanguage.Create(null, "", "") as GDMLanguage) {
+                using (GDMLanguage langTag2 = new GDMLanguage(null)) {
                     Assert.IsTrue(langTag2.IsEmpty());
 
                     Assert.Throws(typeof(ArgumentException), () => { langTag2.Assign(null); });

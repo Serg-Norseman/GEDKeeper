@@ -510,60 +510,35 @@ namespace GKCore.Lists
             GlobalOptions gOptions = GlobalOptions.Instance;
 
             int num = fRec.Events.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMCustomEvent ev = fRec.Events[i];
+                GEDCOMTagType evtType = ev.GetTagType();
 
-                if (ev.Name == GEDCOMTagType.BIRT && buf_bd == null)
-                {
+                if (evtType == GEDCOMTagType.BIRT && buf_bd == null) {
                     buf_bd = ev;
-                }
-                else if (ev.Name == GEDCOMTagType.DEAT && buf_dd == null)
-                {
+                } else if (evtType == GEDCOMTagType.DEAT && buf_dd == null) {
                     buf_dd = ev;
-                }
-                else if (ev.Name == GEDCOMTagType.RESI && buf_residence == "")
-                {
+                } else if (evtType == GEDCOMTagType.RESI && buf_residence == "") {
                     buf_residence = GKUtils.GetPlaceStr(ev, gOptions.PlacesWithAddress);
-                }
-                else if (ev.Name == GEDCOMTagType.RELI && buf_religion == "")
-                {
+                } else if (evtType == GEDCOMTagType.RELI && buf_religion == "") {
                     buf_religion = ev.StringValue;
-                }
-                else if (ev.Name == GEDCOMTagType.NATI && buf_nationality == "")
-                {
+                } else if (evtType == GEDCOMTagType.NATI && buf_nationality == "") {
                     buf_nationality = ev.StringValue;
-                }
-                else if (ev.Name == GEDCOMTagType.EDUC && buf_education == "")
-                {
+                } else if (evtType == GEDCOMTagType.EDUC && buf_education == "") {
                     buf_education = ev.StringValue;
-                }
-                else if (ev.Name == GEDCOMTagType.OCCU && buf_occupation == "")
-                {
+                } else if (evtType == GEDCOMTagType.OCCU && buf_occupation == "") {
                     buf_occupation = ev.StringValue;
-                }
-                else if (ev.Name == GEDCOMTagType.CAST && buf_caste == "")
-                {
+                } else if (evtType == GEDCOMTagType.CAST && buf_caste == "") {
                     buf_caste = ev.StringValue;
-                }
-                else if (ev.Name == GEDCOMTagType._MILI && buf_mili == "")
-                {
+                } else if (evtType == GEDCOMTagType._MILI && buf_mili == "") {
                     buf_mili = ev.StringValue;
-                }
-                else if (ev.Name == GEDCOMTagType._MILI_IND && buf_mili_ind == "")
-                {
+                } else if (evtType == GEDCOMTagType._MILI_IND && buf_mili_ind == "") {
                     buf_mili_ind = ev.StringValue;
-                }
-                else if (ev.Name == GEDCOMTagType._MILI_DIS && buf_mili_dis == "")
-                {
+                } else if (evtType == GEDCOMTagType._MILI_DIS && buf_mili_dis == "") {
                     buf_mili_dis = ev.StringValue;
-                }
-                else if (ev.Name == GEDCOMTagType._MILI_RANK && buf_mili_rank == "")
-                {
+                } else if (evtType == GEDCOMTagType._MILI_RANK && buf_mili_rank == "") {
                     buf_mili_rank = ev.StringValue;
-                }
-                else if (ev.Name == GEDCOMTagType.TITL && buf_title == "")
-                {
+                } else if (evtType == GEDCOMTagType.TITL && buf_title == "") {
                     buf_title = ev.StringValue;
                 }
             }
@@ -575,12 +550,9 @@ namespace GKCore.Lists
 
             GlobalOptions gOptions = GlobalOptions.Instance;
 
-            if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons))
-            {
+            if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons)) {
                 item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnparentedColor));
-            }
-            else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons))
-            {
+            } else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons)) {
                 item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnmarriedColor));
             }
         }
@@ -589,12 +561,9 @@ namespace GKCore.Lists
         {
             GlobalOptions gOptions = GlobalOptions.Instance;
 
-            if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons))
-            {
+            if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons)) {
                 item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnparentedColor));
-            }
-            else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons))
-            {
+            } else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons)) {
                 item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnmarriedColor));
             }
         }
@@ -608,16 +577,14 @@ namespace GKCore.Lists
             ListColumns columns = (ListColumns)this.ListColumns;
 
             int num = columns.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 ListColumn columnProps = columns.OrderedColumns[i];
                 if (!columnProps.CurActive) continue;
 
                 const bool asz = false;
                 byte bColType = columnProps.Id;
                 if (bColType == (byte)PersonColumnType.ctName && defNameFormat != NameFormat.nfFNP) {
-                    switch (defNameFormat)
-                    {
+                    switch (defNameFormat) {
                         case NameFormat.nfF_N_P:
                             AddColumn(listView, LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
                             AddColumn(listView, LangMan.LS(LSID.LSID_Name), 100, asz, bColType, 1);

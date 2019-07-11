@@ -44,7 +44,6 @@ namespace GDModel
 
         public GDMLocationRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GDMRecordType.rtLocation);
             SetName(GEDCOMTagType._LOC);
 
             fMap = new GDMMap(this);

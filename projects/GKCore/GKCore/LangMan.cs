@@ -844,10 +844,10 @@ namespace GKCore
         /* 786 */ LSID_HeWasBorn,
         /* 787 */ LSID_SheWasBorn,
         /* 788 */ LSID_GedMLFilter,
+        /* 789 */ LSID_ChildWithoutParents,
+        /* 790 */ LSID_FamilyRecordWithoutFamily,
 
-        /* 789 */ // reserved begin
-        /* 790 */
-        /* 791 */
+        /* 791 */ // reserved begin
         /* 792 */
         /* 793 */
         /* 794 */
@@ -1668,10 +1668,10 @@ namespace GKCore
             /* 786 */ "Was born",
             /* 787 */ "Was born",
             /* 788 */ "GedML files (*.xml)|*.xml",
+            /* 789 */ "Child detected without parents",
+            /* 790 */ "Family record detected without family",
 
-            /* 789 */ "", // reserved begin
-            /* 790 */ "",
-            /* 791 */ "",
+            /* 791 */ "", // reserved begin
             /* 792 */ "",
             /* 793 */ "",
             /* 794 */ "",

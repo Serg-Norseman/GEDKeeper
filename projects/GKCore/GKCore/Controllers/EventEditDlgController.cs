@@ -192,14 +192,15 @@ namespace GKCore.Controllers
             fView.MediaList.ListModel.DataOwner = fEvent;
             fView.SourcesList.ListModel.DataOwner = fEvent;
 
+            var evtName = fEvent.GetTagName();
             if (fEvent is GDMFamilyEvent) {
                 SetEventTypes(GKData.FamilyEvents);
-                int idx = GKUtils.GetFamilyEventIndex(fEvent.Name);
+                int idx = GKUtils.GetFamilyEventIndex(evtName);
                 if (idx < 0) idx = 0;
                 fView.EventType.SelectedIndex = idx;
             } else {
                 SetEventTypes(GKData.PersonEvents);
-                int idx = GKUtils.GetPersonEventIndex(fEvent.Name);
+                int idx = GKUtils.GetPersonEventIndex(evtName);
                 if (idx < 0) idx = 0;
                 fView.EventType.SelectedIndex = idx;
 
@@ -372,7 +373,7 @@ namespace GKCore.Controllers
             string[] vals;
             bool canbeSorted, userInput;
 
-            if (evName == GEDCOMTagType._BGRO) {
+            if (evName == GEDCOMTagName._BGRO) {
                 vals = GKData.BloodGroups.Split('|');
                 canbeSorted = false;
                 userInput = false;

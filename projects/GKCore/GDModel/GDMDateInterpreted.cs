@@ -60,7 +60,7 @@ namespace GDModel
 
         protected override string GetStringValue()
         {
-            return string.Format("{0} {1} ({2})", GEDCOMTagType.INT, base.GetStringValue(), fDatePhrase);
+            return string.Format("{0} {1} ({2})", GEDCOMTagName.INT, base.GetStringValue(), fDatePhrase);
         }
 
         public override string ParseString(string strValue)
