@@ -172,49 +172,47 @@ namespace GDModel.Providers.GEDCOM
         WILL,
         WWW,
 
-        // non-standard extended tags (other applications)
+        // non-standard extended tags
         _AWARD,
         _BGRO, // [MyFamilyTree]
+        _BOOKMARK, // [GK]
         _CENN, // Census Name [BKW6]
         _ELEC, // Election [???]
         _EXCM, // Excommunication [???]
         _EYES, // [Gen]
+        _FOLDER, // [GK]
+        _GOAL, // [GK]
         _GRP, // Group record [Genney]
         _HAIR, // [BKW6, PAF]
         _HOBBY,
+        _LANG, // [GK], outdated, replaced by LANG
         _MARN, // Married Surname [BKW6]
         _MDCL, // Medical condition [???]
         _MDNA, // [MyFamilyTree]
+        _MEMBER, // [GK]
+        _MILI, // [GK]
+        _MILI_DIS, // [GK]
+        _MILI_IND, // [GK]
+        _MILI_RANK, // [GK]
         _OBIT, // Obituary [???]
         _PATN, // Patronymic Name
+        _PATRIARCH, // [GK]
+        _PERCENT, // [GK]
         _PLAC, // Place/Location record [Family Historian]
         _PLC, // Place/Location record [Genney]
         _POSITION,
         _PRIM, // [PhpGedView, AQ3, PAF5, FO7]
         _PRIM_CUTOUT, // [FTB]
+        _PRIORITY, // [GK]
         _RELN, // Religious Name [BKW6]
+        _REV, // [GK]
+        _STARTDATE, // [GK]
         _STAT,
+        _STATUS, // [GK]
+        _STOPDATE, // [GK]
         _TRAVEL,
         _UID, // 
         _YDNA, // [MyFamilyTree]
-
-        // non-standard extended tags (GEDKeeper)
-        _BOOKMARK,
-        _FOLDER,
-        _GOAL,
-        _LANG, // [GK], outdated, replaced by LANG
-        _MEMBER,
-        _MILI,
-        _MILI_DIS,
-        _MILI_IND,
-        _MILI_RANK,
-        _PATRIARCH,
-        _PERCENT,
-        _PRIORITY,
-        _REV,
-        _STARTDATE,
-        _STOPDATE,
-        _STATUS,
     }
 
     public static class GEDCOMTagName
