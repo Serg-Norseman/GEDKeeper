@@ -55,6 +55,7 @@ namespace GKCore.Controllers
     {
         private readonly List<GDMRecord> fChangedRecords;
         private readonly IBaseContext fContext;
+        private GDMRecord fDelayedTransitionRecord;
         private readonly NavigationStack<GDMRecord> fNavman;
         private readonly TabParts[] fTabParts;
 
@@ -340,11 +341,21 @@ namespace GKCore.Controllers
             SelectRecordByXRef(record.XRef);
         }
 
-        public void SelectRecordByXRef(string xref)
+        public void SelectRecordByXRef(string xref, bool delayedTransition = false)
         {
             GDMRecord record = fContext.Tree.XRefIndex_Find(xref);
-            IListView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
 
+            if (delayedTransition) {
+                fDelayedTransitionRecord = record;
+                return;
+            }
+
+            if (fDelayedTransitionRecord != null) {
+                record = fDelayedTransitionRecord;
+                fDelayedTransitionRecord = null;
+            }
+
+            IListView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
             if (rView != null) {
                 fView.ShowRecordsTab(record.RecordType);
                 rView.Activate();

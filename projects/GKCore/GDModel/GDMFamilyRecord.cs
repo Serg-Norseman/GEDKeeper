@@ -165,8 +165,12 @@ namespace GDModel
 
             base.MoveTo(targetRecord, clearDest);
 
+            targetFamily.RemoveSpouse(targetFamily.Husband.Individual);
             targetFamily.Husband.XRef = fHusband.XRef;
+
+            targetFamily.RemoveSpouse(targetFamily.Wife.Individual);
             targetFamily.Wife.XRef = fWife.XRef;
+
             targetFamily.Status = fStatus;
 
             while (fChildren.Count > 0) {

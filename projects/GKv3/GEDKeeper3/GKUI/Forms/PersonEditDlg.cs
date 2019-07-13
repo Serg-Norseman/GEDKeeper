@@ -411,11 +411,11 @@ namespace GKUI.Forms
             btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
             btnParentsDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
             btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            btnFatherSel.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnFatherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
             btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            btnMotherSel.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnMotherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
             btnNameCopy.Image = UIHelper.LoadResourceImage("Resources.btn_copy.gif");
 
             fEventsList = new GKSheetList(pageEvents);

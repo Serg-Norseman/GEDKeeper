@@ -108,7 +108,7 @@ namespace GKTests.Stubs
         public bool RecordIsFiltered(GDMRecord record) { return false; }
         public void SaveFile(string fileName) { }
         public void SaveFileEx(bool saveAs) { }
-        public void SelectRecordByXRef(string xref) { }
+        public void SelectRecordByXRef(string xref, bool delayedTransition = false) { }
         public void Show() { }
         public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal) { }
 

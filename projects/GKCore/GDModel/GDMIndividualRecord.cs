@@ -299,16 +299,19 @@ namespace GDModel
                 targetIndi.AddPersonalName(obj);
             }
 
-            if (targetIndi.ChildToFamilyLinks.Count == 0 && ChildToFamilyLinks.Count != 0 && fChildToFamilyLinks != null) {
+            string currentXRef = this.XRef;
+            string targetXRef = targetRecord.XRef;
+
+            while (fChildToFamilyLinks.Count > 0) {
                 GDMChildToFamilyLink ctfLink = fChildToFamilyLinks.Extract(0);
                 GDMFamilyRecord family = ctfLink.Family;
 
                 int num = family.Children.Count;
                 for (int i = 0; i < num; i++) {
-                    GDMPointer childPtr = family.Children[i];
+                    GDMIndividualLink childPtr = family.Children[i];
 
-                    if (childPtr.StringValue == "@" + XRef + "@") {
-                        childPtr.StringValue = "@" + targetRecord.XRef + "@";
+                    if (childPtr.XRef == currentXRef) {
+                        childPtr.XRef = targetXRef;
                     }
                 }
 
@@ -320,12 +323,10 @@ namespace GDModel
                 GDMSpouseToFamilyLink stfLink = fSpouseToFamilyLinks.Extract(0);
                 GDMFamilyRecord family = stfLink.Family;
 
-                string targetXRef = "@" + targetRecord.XRef + "@";
-
-                if (family.Husband.StringValue == "@" + XRef + "@") {
-                    family.Husband.StringValue = targetXRef;
-                } else if (family.Wife.StringValue == "@" + XRef + "@") {
-                    family.Wife.StringValue = targetXRef;
+                if (family.Husband.XRef == currentXRef) {
+                    family.Husband.XRef = targetXRef;
+                } else if (family.Wife.XRef == currentXRef) {
+                    family.Wife.XRef = targetXRef;
                 }
 
                 stfLink.ResetOwner(targetIndi);
