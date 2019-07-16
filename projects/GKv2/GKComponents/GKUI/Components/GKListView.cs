@@ -385,14 +385,18 @@ namespace GKUI.Components
                 Rectangle rt = e.Bounds;
 
                 #if !__MonoCS__
-                VisualStyleElement element = VisualStyleElement.Header.Item.Normal;
-                if ((e.State & ListViewItemStates.Hot) == ListViewItemStates.Hot)
-                    element = VisualStyleElement.Header.Item.Hot;
-                if ((e.State & ListViewItemStates.Selected) == ListViewItemStates.Selected)
-                    element = VisualStyleElement.Header.Item.Pressed;
+                if (VisualStyleRenderer.IsSupported) {
+                    VisualStyleElement element = VisualStyleElement.Header.Item.Normal;
+                    if ((e.State & ListViewItemStates.Hot) == ListViewItemStates.Hot)
+                        element = VisualStyleElement.Header.Item.Hot;
+                    if ((e.State & ListViewItemStates.Selected) == ListViewItemStates.Selected)
+                        element = VisualStyleElement.Header.Item.Pressed;
 
-                var visualStyleRenderer = new VisualStyleRenderer(element);
-                visualStyleRenderer.DrawBackground(gfx, rt);
+                    var visualStyleRenderer = new VisualStyleRenderer(element);
+                    visualStyleRenderer.DrawBackground(gfx, rt);
+                } else {
+                    e.DrawBackground();
+                }
                 #else
                 e.DrawBackground();
                 #endif
