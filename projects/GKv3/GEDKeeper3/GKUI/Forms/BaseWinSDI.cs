@@ -672,9 +672,9 @@ namespace GKUI.Forms
             tabsRecords.SelectedIndex = (int)recType - 1;
         }
 
-        public void SelectRecordByXRef(string xref)
+        public void SelectRecordByXRef(string xref, bool delayedTransition = false)
         {
-            fController.SelectRecordByXRef(xref);
+            fController.SelectRecordByXRef(xref, delayedTransition);
         }
 
         public StringList GetRecordContent(GDMRecord record)
