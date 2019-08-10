@@ -1,0 +1,16 @@
+**/.vs/
+**/[Bb]in/
+**/[Oo]bj/
+**/ProfilingSessions/
+*.suo
+*.userprefs
+*.DotSettings.user
+
+*.exe*
+*.dll
+*.pdb
+*.mdb
+*.log
+
+/libs
+/temp

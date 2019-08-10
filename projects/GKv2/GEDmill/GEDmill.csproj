@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{658AE6DC-A4FA-4042-A26F-E5B6CC7EF56B}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>res\gedmill.ico</ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>GEDmill</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>False</DelaySign>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>GEDmill</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <SignAssembly>False</SignAssembly>
+    <RunCodeAnalysis>False</RunCodeAnalysis>
+    <SourceAnalysisOverrideSettingsFile>C:\Users\Norseman\AppData\Roaming\ICSharpCode\SharpDevelop5\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <StartupObject>GEDmill.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>.\</OutputPath>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE;PRO_VERSION;ALLOW_NON_PICTURES</DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>False</NoStdLib>
+    <Optimize>False</Optimize>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>Full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>.\</OutputPath>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>False</NoStdLib>
+    <Optimize>True</Optimize>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>None</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BSLib">
+      <HintPath>libs\BSLib.dll</HintPath>
+    </Reference>
+    <Reference Include="GKComponents">
+      <HintPath>libs\GKComponents.dll</HintPath>
+    </Reference>
+    <Reference Include="GKCore">
+      <HintPath>libs\GKCore.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>libs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="src\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Extensions.cs" />
+    <Compile Include="src\GMHelper.cs" />
+    <Compile Include="src\ListView\CListableMFR.cs" />
+    <Compile Include="src\ListView\CListableNumber.cs" />
+    <Compile Include="src\Exceptions\BlobException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Exceptions\HTMLException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\ListView\CListableBool.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\ListView\CListableName.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\ListView\CListableString.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\ListView\CListableYear.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Logging\ILogger.cs" />
+    <Compile Include="src\Logging\Log4NetHelper.cs" />
+    <Compile Include="src\Logging\LogManager.cs" />
+    <Compile Include="src\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\Model\BackReference.cs" />
+    <Compile Include="src\Program.cs" />
+    <Compile Include="src\ProgressWindow.Designer.cs">
+      <DependentUpon>ProgressWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\HTML\Creator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTML\CreatorFrontPage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTML\CreatorHelpPage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTML\CreatorIndexIndividuals.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTML\CreatorRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTML\CreatorRecordIndividual.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTML\CreatorRecordSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTML\CreatorStylesheet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTML\HTMLFile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTML\Website.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\MiniTree\MiniTreeGroup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\MiniTree\MiniTreeIndividual.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\MiniTree\MiniTreeMap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\MiniTree\MiniTreeObject.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\MiniTree\Paintbox.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\MiniTree\TreeDrawer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\ProgressWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Model\AlphabetComparer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\CISRecordChanges.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\Event.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\FilenameAndSize.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\HusbandAndWife.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\IndexLetter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\IndexPage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\IProgressCallback.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\Multimedia.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\NameAndSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\NameXRefPair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\OccupationCounter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\QualifiedDate.cs" />
+    <Compile Include="src\Model\Stats.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\StringTuple.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Model\ThreadError.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="src\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\ProgressWindow.resx">
+      <DependentUpon>ProgressWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\Logging" />
+    <Folder Include="src\Model" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+</Project>
