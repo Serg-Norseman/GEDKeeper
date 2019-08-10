@@ -26,6 +26,7 @@ using GEDmill.MiniTree;
 using GEDmill.Model;
 using GKCore.Logging;
 using GKCore.Types;
+using GDModel.Providers.GEDCOM;
 
 namespace GEDmill.HTML
 {
@@ -419,7 +420,7 @@ namespace GEDmill.HTML
             sourceRefs = "";
             marriageNote = "";
             foreach (GDMFamilyEvent fes in fr.Events) {
-                if (fes.Name == "MARR") {
+                if (fes.GetTagName() == "MARR") {
                     {
                         marriageDate = fes.Date;
 
@@ -459,7 +460,7 @@ namespace GEDmill.HTML
                 // Record death of irSubject if within this person's lifetime
                 GDMDateValue spouseDeathDate = null;
                 foreach (GDMCustomEvent ies in spouse.Events) {
-                    if (ies.Name == "DEAT") {
+                    if (ies.GetTagName() == "DEAT") {
                         {
                             spouseDeathDate = ies.Date;
                             if (spouseDeathDate != null) {
@@ -583,7 +584,7 @@ namespace GEDmill.HTML
             if (fIndiRec.Events != null && !fConcealed) {
                 foreach (GDMCustomEvent ies in fIndiRec.Events) {
                     ProcessEvent(ies, null);
-                    if (ies.Name == "TITL") {
+                    if (ies.GetTagName() == "TITL") {
                         if (fNameTitle.Length > 0) {
                             fNameTitle += " ";
                         }
@@ -1089,12 +1090,12 @@ namespace GEDmill.HTML
         // the other party would be the partner.
         private void ProcessEvent(GDMCustomEvent es, string linkToOtherParty)
         {
-            fLogger.WriteInfo(string.Format("ProcessEvent( {0}, {1} )", es.Name, es.StringValue));
+            fLogger.WriteInfo(string.Format("ProcessEvent( {0}, {1} )", es.GetTagName(), es.StringValue));
 
-            if (es.Name == null) {
+            if (es.GetTagName() == null) {
                 return;
             }
-            string utype = es.Name.ToUpper();
+            string utype = es.GetTagName().ToUpper();
             string subtype = es.StringValue;
 
             // Strip trailing _ that FTM seems sometimes to include
@@ -1131,7 +1132,7 @@ namespace GEDmill.HTML
             }
 
             string sourceRefs = "";
-            if (es.Name != "MARR" && es.Name != "TITL") {
+            if (es.GetTagName() != "MARR" && es.GetTagName() != "TITL") {
                 // Marriage handled separately later.
                 sourceRefs = AddSources(ref fReferenceList, es.SourceCitations);
             }
