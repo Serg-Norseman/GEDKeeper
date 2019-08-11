@@ -10,12 +10,12 @@
     <ApplicationIcon>res\gedmill.ico</ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>GEDmill</AssemblyName>
+    <AssemblyName>GEDmillPlugin</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>False</DelaySign>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>GEDmill</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <FileUpgradeFlags>
@@ -30,7 +30,6 @@
     <SignAssembly>False</SignAssembly>
     <RunCodeAnalysis>False</RunCodeAnalysis>
     <SourceAnalysisOverrideSettingsFile>C:\Users\Norseman\AppData\Roaming\ICSharpCode\SharpDevelop5\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
-    <StartupObject>GEDmill.Program</StartupObject>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <NoStdLib>False</NoStdLib>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
@@ -76,6 +75,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GEDmillPlugin.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="src\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -112,10 +112,6 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\Model\BackReference.cs" />
-    <Compile Include="src\Program.cs" />
-    <Compile Include="src\ProgressWindow.Designer.cs">
-      <DependentUpon>ProgressWindow.cs</DependentUpon>
-    </Compile>
     <Compile Include="src\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -167,9 +163,6 @@
     <Compile Include="src\MiniTree\TreeDrawer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\ProgressWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="src\Model\AlphabetComparer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -216,17 +209,25 @@
     <Compile Include="src\Model\ThreadError.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\ProgressWindow.cs" />
+    <Compile Include="src\ProgressWindow.Designer.cs">
+      <DependentUpon>ProgressWindow.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="src\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="src\ProgressWindow.resx">
       <DependentUpon>ProgressWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="GEDmillPlugin.enu">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GEDmillPlugin.rus">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\Logging" />

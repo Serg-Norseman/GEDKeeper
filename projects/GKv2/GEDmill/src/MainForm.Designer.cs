@@ -111,7 +111,6 @@ namespace GEDmill
         private Label m_labelWelcomeSubtitle;
         private PictureBox m_picturebox;
         private Label m_labelChooseGedcomInstructions;
-        private Button m_buttonChooseGedcomBrowse;
         private Label m_labelChooseGedcom;
         private TextBox m_textboxChooseGedcom;
         private TextBox m_textboxChooseOutput;
@@ -256,7 +255,6 @@ namespace GEDmill
             m_labelWelcomeSubtitle = new Label();
             m_picturebox = new PictureBox();
             m_panelChooseGedcom = new Panel();
-            m_buttonChooseGedcomBrowse = new Button();
             m_labelChooseGedcom = new Label();
             m_labelChooseGedcomInstructions = new Label();
             m_textboxChooseGedcom = new TextBox();
@@ -427,7 +425,6 @@ namespace GEDmill
             // 
             // Choose Gedcom 
             // 
-            m_panelChooseGedcom.Controls.Add(m_buttonChooseGedcomBrowse);
             m_panelChooseGedcom.Controls.Add(m_labelChooseGedcom);
             m_panelChooseGedcom.Controls.Add(m_labelChooseGedcomInstructions);
             m_panelChooseGedcom.Controls.Add(m_textboxChooseGedcom);
@@ -435,15 +432,6 @@ namespace GEDmill
             m_panelChooseGedcom.Name = "m_panelChooseGedcom";
             m_panelChooseGedcom.Size = new System.Drawing.Size(280, 272);
             m_panelChooseGedcom.TabIndex = 6;
-
-            // 
-            // Choose Gedcom BrowseButton
-            // 
-            m_buttonChooseGedcomBrowse.Location = new System.Drawing.Point(200, 120);
-            m_buttonChooseGedcomBrowse.Name = "m_buttonChooseGedcomBrowse";
-            m_buttonChooseGedcomBrowse.TabIndex = 4;
-            m_buttonChooseGedcomBrowse.Text = "B&rowse...";
-            m_buttonChooseGedcomBrowse.Click += new System.EventHandler(buttonChooseGedcomBrowse_click);
 
             // 
             // Choose Gedcom EditLabel
@@ -470,7 +458,7 @@ namespace GEDmill
             // 
             m_textboxChooseGedcom.Location = new System.Drawing.Point(0, 120);
             m_textboxChooseGedcom.Name = "m_textboxChooseGedcom";
-            m_textboxChooseGedcom.Size = new System.Drawing.Size(192, 20);
+            m_textboxChooseGedcom.Size = new System.Drawing.Size(260, 20);
             m_textboxChooseGedcom.TabIndex = 1;
             m_textboxChooseGedcom.Text = "";
             m_textboxChooseGedcom.TextChanged += new System.EventHandler(textboxChooseGedcom_textChanged);
@@ -1790,10 +1778,15 @@ namespace GEDmill
             Controls.Add(m_picturebox);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = ((System.Drawing.Icon)(resources.GetObject("$Icon")));
+            MaximizeBox = false;
             MaximumSize = new System.Drawing.Size(512, 355);
+            MinimizeBox = false;
             MinimumSize = new System.Drawing.Size(512, 355);
             Name = "MainForm";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "GEDmill";
+            this.Closed += new System.EventHandler(this.Widget_Closed);
+            this.Load += new System.EventHandler(this.Widget_Load);
 
             m_panelWelcome.ResumeLayout(false);
             m_panelChooseGedcom.ResumeLayout(false);

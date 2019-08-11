@@ -29,6 +29,8 @@ using GEDmill.HTML;
 using GEDmill.ListView;
 using GEDmill.MiniTree;
 using GEDmill.Model;
+using GKCore;
+using GKCore.Interfaces;
 using GKCore.Logging;
 using GKUI.Components;
 
@@ -37,13 +39,12 @@ namespace GEDmill
     /// <summary>
     /// The main from from which the application is operated. Contains the GUI controls and the control handlers.
     /// </summary>
-    public partial class MainForm : Form
+    public partial class MainForm : Form, ILocalization
     {
-        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(MainForm).Name);
+        private static readonly GKCore.Logging.ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(MainForm).Name);
 
-
-        // Stores and parses data from GEDCOM files
-        private GDMTree fTree;
+        private readonly Plugin fPlugin;
+        private IBaseWindow fBase;
 
         // Specifies which panel of the wizard the user is viewing (i.e. which stage in the app they are at)
         private int fCurrentPanel;
@@ -58,10 +59,10 @@ namespace GEDmill
         private string m_sConfigButtonTextOff = "&OK";
 
         // Scales the size of the main GUI
-        private System.Drawing.Point fDefaultButtonSize;
+        private Point fDefaultButtonSize;
 
         // Scales the size of the config panels GUI
-        private System.Drawing.Point fConfigButtonSize;
+        private Point fConfigButtonSize;
 
         // Check event gets called when program builds the list. Don't want to enable buttons in that case.
         private bool fDisablePrunepanelCheckEvent;
@@ -119,7 +120,6 @@ namespace GEDmill
             m_labelWelcomeVersion.Text = "version " + CConfig.SoftwareVersion;
             m_helpProvider.HelpNamespace = CConfig.Instance.ApplicationPath + "\\" + CConfig.HelpFilename;
 
-            fTree = new GDMTree();
             fCurrentPanel = 1;
             fConfigPanelOn = false;
             PruneExcluded = 0;
@@ -131,19 +131,53 @@ namespace GEDmill
             ShowCurrentPanel();
         }
 
+        public MainForm(Plugin plugin) : this()
+        {
+            fPlugin = plugin;
+
+            SetLang();
+        }
+
         // Clean up any resources being used.
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                if (fTree != null) {
-                    fTree.Dispose();
-                }
                 if (components != null) {
                     components.Dispose();
                 }
+                fPlugin.CloseForm();
             }
             base.Dispose(disposing);
         }
+
+        private void Widget_Load(object sender, EventArgs e)
+        {
+            fPlugin.Host.WidgetShow(fPlugin);
+            BaseChanged(fPlugin.Host.GetCurrentFile());
+        }
+
+        private void Widget_Closed(object sender, EventArgs e)
+        {
+            BaseChanged(null);
+            fPlugin.Host.WidgetClose(fPlugin);
+        }
+
+        public void BaseChanged(IBaseWindow baseWin)
+        {
+            if (fBase != baseWin) {
+                fBase = baseWin;
+                //UpdateForm();
+            }
+        }
+
+        #region ILocalization support
+
+        public void SetLang()
+        {
+            Text = fPlugin.LangMan.LS(PLS.LSID_Title);
+        }
+
+        #endregion
 
         #region Event handlers
 
@@ -240,7 +274,7 @@ namespace GEDmill
                 }
 
                 CConfig.Instance.StoreSettings();
-                Application.Exit();
+                Close();
             }
         }
 
@@ -329,41 +363,6 @@ namespace GEDmill
 
         private void buttonPruneRecordsLoad_click(object sender, System.EventArgs e)
         {
-        }
-
-        private void buttonChooseGedcomBrowse_click(object sender, System.EventArgs e)
-        {
-            fLogger.WriteInfo("Panel 2 browse button clicked.");
-
-            using (var openFileDialog = new OpenFileDialog()) {
-                if (Directory.Exists(InputFile)) {
-                    openFileDialog.InitialDirectory = InputFile;
-                } else {
-                    string sPath = InputFile;
-                    int nLastFolder = sPath.LastIndexOf('\\'); // Try parent folder
-                    if (nLastFolder >= 0) {
-                        sPath = sPath.Substring(0, nLastFolder);
-                    }
-                    if (Directory.Exists(sPath)) {
-                        openFileDialog.InitialDirectory = sPath;
-                    } else {
-                        openFileDialog.InitialDirectory = Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-                    }
-                }
-
-                openFileDialog.FileName = InputFile;
-                openFileDialog.Filter = "GEDCOM files (*.ged)|*.ged|All files (*.*)|*.*";
-                openFileDialog.FilterIndex = 1;
-                openFileDialog.RestoreDirectory = true;
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                    InputFile = openFileDialog.FileName;
-                    m_textboxChooseGedcom.SelectionStart = InputFile.Length;
-                    m_textboxChooseGedcom.SelectionLength = InputFile.Length;
-                }
-            }
-
-            fLogger.WriteInfo("Selected file : " + InputFile);
         }
 
         private void textboxChooseGedcom_textChanged(object sender, System.EventArgs e)
@@ -732,12 +731,12 @@ namespace GEDmill
                         if (ir != null) {
                             // First mark as visited all possible relations of irSubject, not following restricted people
                             // Adds to visited list
-                            fTree.PruneMarkConnected(ir, marks);
+                            fBase.Context.Tree.PruneMarkConnected(ir, marks);
                         }
                     }
                 }
                 // Then exclude all unmarked individuals (i.e. not in visited list)
-                fTree.PruneUnmarked(marks);
+                fBase.Context.Tree.PruneUnmarked(marks);
             } catch (Exception ex) {
                 ReportPruneError(ex);
             }
@@ -766,7 +765,7 @@ namespace GEDmill
                     if (lvi is CListableBool) {
                         GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
-                            fTree.PruneDescendants(ir, false);
+                            fBase.Context.Tree.PruneDescendants(ir, false);
                         }
                     }
                 }
@@ -798,7 +797,7 @@ namespace GEDmill
                     if (lvi is CListableBool) {
                         GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
-                            fTree.PruneDescendants(ir, true);
+                            fBase.Context.Tree.PruneDescendants(ir, true);
                         }
                     }
                 }
@@ -830,7 +829,7 @@ namespace GEDmill
                     if (lvi is CListableBool) {
                         GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
-                            fTree.PruneAncestors(ir, false);
+                            fBase.Context.Tree.PruneAncestors(ir, false);
                         }
                     }
                 }
@@ -862,7 +861,7 @@ namespace GEDmill
                     if (lvi is CListableBool) {
                         GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
-                            fTree.PruneAncestors(ir, true);
+                            fBase.Context.Tree.PruneAncestors(ir, true);
                         }
                     }
                 }
@@ -1367,24 +1366,17 @@ namespace GEDmill
             // Loop gives user the option to retry folder creation. Use return to exit.
             while (true) {
                 switch (fCurrentPanel) {
+                    case 1:
+                        CConfig.Instance.InputFilename = fBase.Context.FileName;
+                        fLogger.WriteInfo("Selected file : " + CConfig.Instance.InputFilename);
+                        return true;
+
                     case 2:
-                        if (File.Exists(InputFile) == false) {
-                            fLogger.WriteInfo("File not found.");
-
-                            MessageBox.Show(this, "The file you have selected could not be found.", "File Not Found",
-                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-                            fLogger.WriteInfo("File not found. Returning. ");
-                            return false;
-                        }
-
-                        ProgressWindow progressWindow = new ProgressWindow();
-                        progressWindow.Text = "Reading GEDCOM file";
-
                         if (CConfig.Instance.OutputFolder == "" || CConfig.Instance.InputFilename != InputFile) {
                             CConfig.Instance.OutputFolder = Path.GetDirectoryName(InputFile);
                             CConfig.Instance.OutputFolder += "\\GEDmill_Output";
                         }
+
                         if (CConfig.Instance.InputFilename != InputFile) {
                             CConfig.Instance.InputFilename = InputFile;
                             CConfig.Instance.FirstRecordXRef = "";
@@ -1394,41 +1386,9 @@ namespace GEDmill
                             CConfig.Instance.FirstRecordXRef = "";
                         }
 
-                        var provider = new GEDCOMProvider(fTree);
-                        provider.LoadFromFile(InputFile);
-                        //m_gedcom.ProgressCallback = progressWindow;
-
-                        fLogger.WriteInfo("Reading GEDCOM file " + InputFile);
-
-                        //ThreadStart threadStart = new ThreadStart(m_gedcom.ParseFile);
-                        //Thread threadWorker = new Thread(threadStart);
-
-                        fLogger.WriteInfo("Starting thread");
-
-                        //threadWorker.Start();
-                        //result = progressWindow.ShowDialog(this);
-                        //threadWorker.Join();
-
-                        //LogFile.TheLogFile.WriteLine(LogFile.DT_APP.Info("Thread finished, result=" + result.ToString());
-
-                        if (result == DialogResult.Abort) // Abort means abnormal failure (ie. not user pressing cancel)
-                        {
-                            // Abort means there were file IO errors
-                            MessageBox.Show(this, string.Format("A problem was encountered while reading the GEDCOM file"), CConfig.SoftwareName,
-                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        } else if (result == DialogResult.Retry) // Something went wrong, let user retry
-                          {
-                            // Currently the only thing this can be is "file already open"
-                            MessageBox.Show(this, "A problem was encountered while reading the GEDCOM file.\r\n\r\nPerhaps the file is already open elsewhere.", CConfig.SoftwareName,
-                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        }
-                        if (result != DialogResult.OK) {
-                            return false; // Go back and let user retry loading file.
-                        }
                         PrunepanelDataChanged = false; // A fresh file, no user changes yet.
                         FillIndividualsList();
                         FillSourcesList();
-
                         return true;
 
                     case 3:
@@ -1441,7 +1401,7 @@ namespace GEDmill
                             }
                             // Already done on click event: ((CListableBool)li).SetRestricted( !bChecked );
                             if (!isChecked) {
-                                fTree.RestrictAssociatedSources((GDMIndividualRecord)((CListableBool)li).Record);
+                                fBase.Context.Tree.RestrictAssociatedSources((GDMIndividualRecord)((CListableBool)li).Record);
                             }
                         }
 
@@ -1517,7 +1477,7 @@ namespace GEDmill
         // Populates the list of individuals records for inclusion/exclusion in the website
         private void FillIndividualsList()
         {
-            var indiRecs = fTree.GetRecords<GDMIndividualRecord>();
+            var indiRecs = fBase.Context.Tree.GetRecords<GDMIndividualRecord>();
             fLogger.WriteInfo("FillIndividualsList() : " + indiRecs.Count.ToString());
 
             fDisablePrunepanelCheckEvent = true;
@@ -1610,7 +1570,7 @@ namespace GEDmill
         // Populates the list of source records for inclusion/exclusion in the website
         private void FillSourcesList()
         {
-            var sources = fTree.GetRecords<GDMSourceRecord>();
+            var sources = fBase.Context.Tree.GetRecords<GDMSourceRecord>();
             fLogger.WriteInfo("FillSourcesList() : " + sources.Count.ToString());
 
             fDisablePrunepanelCheckEvent = true; // call to item.Checked below invokes event handler.
@@ -1768,7 +1728,7 @@ namespace GEDmill
             ProgressWindow progressWindow = new ProgressWindow();
             progressWindow.Text = "Creating web pages";
 
-            Website website = new Website(fTree, progressWindow);
+            Website website = new Website(fBase.Context.Tree, progressWindow);
 
             ThreadStart threadStart = new ThreadStart(website.Create);
             Thread threadWorker = new Thread(threadStart);
@@ -2245,7 +2205,7 @@ namespace GEDmill
 
             if (CConfig.Instance.KeyIndividuals != null) {
                 foreach (string xref in CConfig.Instance.KeyIndividuals) {
-                    GDMIndividualRecord irKey = fTree.XRefIndex_Find(xref) as GDMIndividualRecord;
+                    GDMIndividualRecord irKey = fBase.Context.Tree.XRefIndex_Find(xref) as GDMIndividualRecord;
                     if (irKey != null && irKey.GetVisibility()) {
                         sFirstName = "";
                         sSurname = "";
