@@ -110,11 +110,13 @@ namespace GKCore.Controllers
             fView.File.Text = fileRef.StringValue;
 
             if (fIsNew) {
-                RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, true, MediaStoreType.mstReference);
+                RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, true, GlobalOptions.Instance.AllowMediaStoreRelativeReferences, MediaStoreType.mstReference);
             } else {
                 MediaStore mediaStore = fBase.Context.GetStoreType(fileRef);
                 RefreshStoreTypes((mediaStore.StoreType == MediaStoreType.mstReference),
-                                  (mediaStore.StoreType == MediaStoreType.mstArchive), mediaStore.StoreType);
+                                  (mediaStore.StoreType == MediaStoreType.mstArchive),
+                                  (mediaStore.StoreType == MediaStoreType.mstRelativeReference),
+                                  mediaStore.StoreType);
             }
 
             fView.FileSelectButton.Enabled = fIsNew;
@@ -124,7 +126,7 @@ namespace GKCore.Controllers
             fView.SourcesList.UpdateSheet();
         }
 
-        private void RefreshStoreTypes(bool allowRef, bool allowArc, MediaStoreType selectType)
+        private void RefreshStoreTypes(bool allowRef, bool allowArc, bool allowRel, MediaStoreType selectType)
         {
             fView.StoreType.Clear();
 
@@ -139,6 +141,11 @@ namespace GKCore.Controllers
             if (allowArc) {
                 fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name),
                     MediaStoreType.mstArchive);
+            }
+
+            if (allowRel) {
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstRelativeReference].Name),
+                    MediaStoreType.mstRelativeReference);
             }
 
             fView.StoreType.SelectedTag = selectType;
@@ -157,7 +164,7 @@ namespace GKCore.Controllers
 
             fView.File.Text = fileName;
             bool canArc = GKUtils.FileCanBeArchived(fileName);
-            RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, canArc, MediaStoreType.mstReference);
+            RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, canArc, GlobalOptions.Instance.AllowMediaStoreRelativeReferences, MediaStoreType.mstReference);
             fView.StoreType.Enabled = true;
         }
 

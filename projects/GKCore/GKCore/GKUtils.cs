@@ -1416,6 +1416,19 @@ namespace GKCore
             return assembly.GetManifestResourceStream(resName);
         }
 
+        public static string GetRelativePath(string fromFileName, string toFileName)
+        {
+            var fromPath = Path.GetDirectoryName(fromFileName)+ Path.DirectorySeparatorChar;
+
+            var fromUri = new Uri(fromPath);
+            var toUri = new Uri(toFileName);
+
+            var relativeUri = fromUri.MakeRelativeUri(toUri);
+            var relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+
+            return relativePath.Replace('/', Path.DirectorySeparatorChar);
+        }
+
         #endregion
 
         #region Show information summary
@@ -2704,6 +2717,8 @@ namespace GKCore
                 result = MediaStoreType.mstArchive;
             } else if (fileRef.IndexOf(GKData.GKStoreTypes[1].Sign) == 0) {
                 result = MediaStoreType.mstStorage;
+            } else if (fileRef.IndexOf(GKData.GKStoreTypes[3].Sign) == 0) {
+                result = MediaStoreType.mstRelativeReference;
             } else {
                 result = MediaStoreType.mstReference;
             }
