@@ -79,6 +79,7 @@ namespace GKCore.Options
         private bool fEmbeddedMediaPlayer;
         private bool fAllowMediaStoreReferences;
         private bool fAllowMediaStoreRelativeReferences;
+        private int  fMediaStoreDefault;
         private bool fUseExtendedNotes;
 
         private bool fAutoCheckUpdates;
@@ -271,7 +272,11 @@ namespace GKCore.Options
             get { return fAllowMediaStoreRelativeReferences; }
             set { fAllowMediaStoreRelativeReferences = value; }
         }
-
+        public int MediaStoreDefault
+        {
+            get { return fMediaStoreDefault; }
+            set { fMediaStoreDefault = value; }
+        }
 
         public bool AutoCheckUpdates
         {
@@ -367,6 +372,7 @@ namespace GKCore.Options
             fEmbeddedMediaPlayer = true;
             fAllowMediaStoreReferences = false;
             fAllowMediaStoreRelativeReferences = true;
+            fMediaStoreDefault = 0;
             fUseExtendedNotes = false;
 
             fAutoCheckUpdates = true;
@@ -605,6 +611,7 @@ namespace GKCore.Options
             fEmbeddedMediaPlayer = ini.ReadBool("Common", "EmbeddedMediaPlayer", true);
             fAllowMediaStoreReferences = ini.ReadBool("Common", "AllowMediaStoreReferences", false);
             fAllowMediaStoreRelativeReferences = ini.ReadBool("Common", "AllowMediaStoreRelativeReferences", true); // only when AllowMediaStoreReferences is true
+            fMediaStoreDefault = (ushort)ini.ReadInteger("Common", "MediaStoreDefault", 0); // (int)MediaStoreType.mstReference
             fAutoCheckUpdates = ini.ReadBool("Common", "AutoCheckUpdates", true);
             fAutoSortChildren = ini.ReadBool("Common", "AutoSortChildren", true);
             fAutoSortSpouses = ini.ReadBool("Common", "AutoSortSpouses", false);
@@ -716,6 +723,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "EmbeddedMediaPlayer", fEmbeddedMediaPlayer);
             ini.WriteBool("Common", "AllowMediaStoreReferences", fAllowMediaStoreReferences);
             ini.WriteBool("Common", "AllowMediaStoreRelativeReferences", fAllowMediaStoreRelativeReferences);
+            ini.WriteInteger("Common", "MediaStoreDefault", fMediaStoreDefault);
             ini.WriteBool("Common", "AutoCheckUpdates", fAutoCheckUpdates);
             ini.WriteBool("Common", "AutoSortChildren", fAutoSortChildren);
             ini.WriteBool("Common", "AutoSortSpouses", fAutoSortSpouses);
