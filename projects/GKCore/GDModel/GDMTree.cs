@@ -620,10 +620,10 @@ namespace GDModel
                 var evsRec = fRecords[i] as GDMRecordWithEvents;
                 if (evsRec != null) {
                     for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
-                        GDMCustomEvent ev = evsRec.Events[j];
+                        GDMPointer evLocation = evsRec.Events[j].Place.Location;
 
-                        if (ev.Place.Location.Value == locRec) {
-                            ev.Place.DeleteTag(GEDCOMTagName._LOC);
+                        if (evLocation.Value == locRec) {
+                            evLocation.Value = null;
                         }
                     }
                 }
@@ -631,6 +631,25 @@ namespace GDModel
 
             DeleteRecord(locRec);
             return true;
+        }
+
+        public void RenameLocationRecord(GDMLocationRecord locRec)
+        {
+            if (locRec == null) return;
+
+            int num = fRecords.Count;
+            for (int i = 0; i < num; i++) {
+                var evsRec = fRecords[i] as GDMRecordWithEvents;
+                if (evsRec != null) {
+                    for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
+                        GDMPlace evPlace = evsRec.Events[j].Place;
+
+                        if (evPlace.Location.Value == locRec) {
+                            evPlace.StringValue = locRec.LocationName;
+                        }
+                    }
+                }
+            }
         }
 
         #region Utilities
