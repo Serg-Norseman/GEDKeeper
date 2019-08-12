@@ -256,12 +256,6 @@ namespace GKCore
             if (record == null) return result;
 
             try {
-                // `Viewer` (BaseWin) is notified about deletion of the record
-                // before the fact of deletion
-                if (fViewer != null) {
-                    fViewer.NotifyRecord(record, RecordAction.raDelete);
-                }
-
                 BeginUpdate();
 
                 switch (record.RecordType)
@@ -279,7 +273,7 @@ namespace GKCore
                         break;
 
                     case GDMRecordType.rtMultimedia:
-                        result = fTree.DeleteMediaRecord(record as GDMMultimediaRecord);
+                        result = DeleteMediaRecord(record as GDMMultimediaRecord);
                         break;
 
                     case GDMRecordType.rtSource:
@@ -317,9 +311,29 @@ namespace GKCore
             if (result) {
                 fTree.Header.TransmissionDateTime = DateTime.Now;
                 Modified = true;
+
+                if (fViewer != null) {
+                    fViewer.NotifyRecord(record, RecordAction.raDelete);
+                }
             }
 
             return result;
+        }
+
+        public bool DeleteMediaRecord(GDMMultimediaRecord mRec)
+        {
+            if (mRec == null)
+                throw new ArgumentNullException("mRec");
+
+            if (mRec.FileReferences.Count > 0) {
+                bool fileDeleted = MediaDelete(mRec.FileReferences[0]);
+                if (!fileDeleted) {
+                    // message?
+                    return false;
+                }
+            }
+
+            return fTree.DeleteMediaRecord(mRec);
         }
 
         public IList<ISearchResult> FindAll(GDMRecordType recordType, string searchPattern)
@@ -699,14 +713,17 @@ namespace GKCore
         }
 
         // TODO: Controlling the version of the GK GEDCOM file to determine the zip archive encoding!
-        private void ArcFileLoad(string targetFn, Stream toStream)
+        private Encoding GetZipEncoding()
         {
             int treeVer = 0;
-            Encoding zipCharset = (treeVer == 0) ? Encoding.GetEncoding("CP866") : Encoding.UTF8;
+            return (treeVer == 0) ? Encoding.GetEncoding("CP866") : Encoding.UTF8;
+        }
 
+        private void ArcFileLoad(string targetFn, Stream toStream)
+        {
             targetFn = FileHelper.NormalizeFilename(targetFn);
 
-            using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read, zipCharset)) {
+            using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read, GetZipEncoding())) {
                 ZipStorer.ZipFileEntry entry = zip.FindFile(targetFn);
                 if (entry != null) {
                     zip.ExtractStream(entry, toStream);
@@ -714,24 +731,45 @@ namespace GKCore
             }
         }
 
-        // TODO: Controlling the version of the GK GEDCOM file to determine the zip archive encoding!
         private void ArcFileSave(string fileName, string sfn)
         {
-            int treeVer = 0;
-            Encoding zipCharset = (treeVer == 0) ? Encoding.GetEncoding("CP866") : Encoding.UTF8;
-
             string arcFn = GetArcFileName();
             ZipStorer zip = null;
 
             try {
                 if (File.Exists(arcFn)) {
-                    zip = ZipStorer.Open(arcFn, FileAccess.ReadWrite, zipCharset);
+                    zip = ZipStorer.Open(arcFn, FileAccess.ReadWrite, GetZipEncoding());
                 } else {
                     zip = ZipStorer.Create(arcFn, "");
                 }
                 zip.AddFile(ZipStorer.Compression.Deflate, fileName, sfn, null);
             } finally {
                 if (zip != null) zip.Dispose();
+            }
+        }
+
+        private void ArcFileDelete(string targetFn)
+        {
+            targetFn = FileHelper.NormalizeFilename(targetFn);
+
+            using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read, GetZipEncoding())) {
+                ZipStorer.ZipFileEntry entry = zip.FindFile(targetFn);
+                if (entry != null) {
+                    var zfes = new List<ZipStorer.ZipFileEntry>();
+                    zfes.Add(entry);
+                    // TODO: optimize this method!
+                    ZipStorer.RemoveEntries(zip, zfes);
+                }
+            }
+        }
+
+        private bool ArcFileExists(string targetFn)
+        {
+            targetFn = FileHelper.NormalizeFilename(targetFn);
+
+            using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read, GetZipEncoding())) {
+                ZipStorer.ZipFileEntry entry = zip.FindFile(targetFn);
+                return (entry != null);
             }
         }
 
@@ -919,6 +957,119 @@ namespace GKCore
             if (result) {
                 refPath = FileHelper.NormalizeFilename(refPath);
                 fileReference.LinkFile(refPath);
+            }
+
+            return result;
+        }
+
+        public bool MediaDelete(GDMFileReference fileReference, bool needConfirmation = true)
+        {
+            if (fileReference == null) return false;
+
+            try {
+                MediaStore mediaStore = GetStoreType(fileReference);
+                string fileName = mediaStore.FileName;
+
+                // TODO: may be Yes/No/Cancel?
+                if (needConfirmation) {
+                    string msg = string.Format(LangMan.LS(LSID.LSID_MediaFileDeleteQuery));
+                    if (!AppHost.StdDialogs.ShowQuestionYN(msg)) {
+                        return false;
+                    }
+                }
+
+                MediaStoreStatus storeStatus = VerifyMediaFile(fileReference, out fileName);
+                bool result = false;
+
+                switch (storeStatus) {
+                    case MediaStoreStatus.mssExists:
+                        if (mediaStore.StoreType == MediaStoreType.mstArchive) {
+                            ArcFileDelete(fileName);
+                        } else {
+                            File.Delete(fileName);
+                        }
+                        result = true;
+                        break;
+
+                    case MediaStoreStatus.mssFileNotFound:
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileNotFound));
+                        break;
+
+                    case MediaStoreStatus.mssStgNotFound:
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_StgNotFound));
+                        break;
+
+                    case MediaStoreStatus.mssArcNotFound:
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        break;
+
+                    case MediaStoreStatus.mssBadData:
+                        // can be deleted
+                        result = true;
+                        break;
+                }
+
+                return result;
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseContext.MediaDelete(): " + ex.Message);
+                return false;
+            }
+        }
+
+        public MediaStoreStatus VerifyMediaFile(GDMFileReference fileReference, out string fileName)
+        {
+            if (fileReference == null)
+                throw new ArgumentNullException("fileReference");
+
+            MediaStoreStatus result = MediaStoreStatus.mssBadData;
+
+            try {
+                MediaStore mediaStore = GetStoreType(fileReference);
+                fileName = mediaStore.FileName;
+
+                switch (mediaStore.StoreType) {
+                    case MediaStoreType.mstStorage:
+                        string stgPath = GetStgFolder(false);
+                        if (!Directory.Exists(stgPath)) {
+                            result = MediaStoreStatus.mssStgNotFound;
+                        } else {
+                            fileName = stgPath + fileName;
+                            if (!File.Exists(fileName)) {
+                                result = MediaStoreStatus.mssFileNotFound;
+                            } else {
+                                result = MediaStoreStatus.mssExists;
+                            }
+                        }
+                        break;
+
+                    case MediaStoreType.mstArchive:
+                        if (!File.Exists(GetArcFileName())) {
+                            result = MediaStoreStatus.mssArcNotFound;
+                        } else {
+                            if (!ArcFileExists(fileName)) {
+                                result = MediaStoreStatus.mssFileNotFound;
+                            } else {
+                                result = MediaStoreStatus.mssExists;
+                            }
+                        }
+                        break;
+
+                    case MediaStoreType.mstReference:
+                        if (!File.Exists(fileName)) {
+                            fileName = AppHost.PathReplacer.TryReplacePath(fileName);
+                            if (string.IsNullOrEmpty(fileName)) {
+                                result = MediaStoreStatus.mssFileNotFound;
+                            } else {
+                                result = MediaStoreStatus.mssExists;
+                            }
+                        } else {
+                            result = MediaStoreStatus.mssExists;
+                        }
+                        break;
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseContext.VerifyMediaFile(): " + ex.Message);
+                fileName = string.Empty;
             }
 
             return result;

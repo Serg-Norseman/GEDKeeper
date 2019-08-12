@@ -846,11 +846,11 @@ namespace GKCore
         /* 788 */ LSID_GedMLFilter,
         /* 789 */ LSID_ChildWithoutParents,
         /* 790 */ LSID_FamilyRecordWithoutFamily,
+        /* 791 */ LSID_MediaFileDeleteQuery,
+        /* 792 */ LSID_StgNotFound,
+        /* 793 */ LSID_FileNotFound,
 
-        /* 791 */ // reserved begin
-        /* 792 */
-        /* 793 */
-        /* 794 */
+        /* 794 */ // reserved begin
         /* 795 */
         /* 796 */
         /* 797 */
@@ -1670,11 +1670,11 @@ namespace GKCore
             /* 788 */ "GedML files (*.xml)|*.xml",
             /* 789 */ "Child detected without parents",
             /* 790 */ "Family record detected without family",
+            /* 791 */ "Are you sure you want to remove multimedia file?",
+            /* 792 */ "Storage not found",
+            /* 793 */ "File not found",
 
-            /* 791 */ "", // reserved begin
-            /* 792 */ "",
-            /* 793 */ "",
-            /* 794 */ "",
+            /* 794 */ "", // reserved begin
             /* 795 */ "",
             /* 796 */ "",
             /* 797 */ "",
