@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using BSLib;
 using GDModel;
@@ -55,9 +57,11 @@ namespace GKCore.MVP.Controls
 
     public interface IComboBoxHandler : IBaseControl
     {
+        IList Items { get; }
         bool ReadOnly { get; set; }
         int SelectedIndex { get; set; }
         object SelectedItem { get; set; }
+        [Obsolete]
         object SelectedTag { get; set; }
         string Text { get; set; }
 
@@ -69,6 +73,9 @@ namespace GKCore.MVP.Controls
         void Clear();
         void EndUpdate();
         void SortItems();
+
+        T GetSelectedTag<T>();
+        void SetSelectedTag<T>(T tagValue);
     }
 
 

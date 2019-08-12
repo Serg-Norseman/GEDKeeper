@@ -63,7 +63,7 @@ namespace GKCore.Controllers
                 GDMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
 
                 if (fIsNew) {
-                    MediaStoreType gst = (MediaStoreType)fView.StoreType.SelectedTag;
+                    MediaStoreType gst = fView.StoreType.GetSelectedTag<MediaStoreType>();
 
                     if ((gst == MediaStoreType.mstArchive || gst == MediaStoreType.mstStorage) && !fBase.Context.CheckBasePath()) {
                         return false;
@@ -141,7 +141,7 @@ namespace GKCore.Controllers
                     MediaStoreType.mstArchive);
             }
 
-            fView.StoreType.SelectedTag = selectType;
+            fView.StoreType.SetSelectedTag<MediaStoreType>(selectType);
         }
 
         public void SelectFile()
