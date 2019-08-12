@@ -623,7 +623,7 @@ namespace GDModel
                         GDMCustomEvent ev = evsRec.Events[j];
 
                         if (ev.Place.Location.Value == locRec) {
-                            ev.Place.DeleteTag(GEDCOMTagType._LOC);
+                            ev.Place.DeleteTag(GEDCOMTagName._LOC);
                         }
                     }
                 }

@@ -61,7 +61,8 @@ namespace GDModel.Providers
                         byte[] outArray;
                         outArray = outStream.ToArray();
 
-                        Assert.AreEqual(Encoding.ASCII.GetString(inArray), Encoding.ASCII.GetString(outArray));
+                        string outStr = Encoding.ASCII.GetString(outArray);
+                        Assert.AreEqual(Encoding.ASCII.GetString(inArray), outStr);
                     }
                 }
             }
@@ -296,7 +297,7 @@ namespace GDModel.Providers
                 Assert.AreEqual("John Smith", iRec1.GetPrimaryFullName());
 
                 // test of conversion
-                var occuEvent = iRec1.FindEvent("OCCU");
+                var occuEvent = iRec1.FindEvent(GEDCOMTagType.OCCU);
                 Assert.IsNotNull(occuEvent);
                 Assert.AreEqual("test occupation", occuEvent.StringValue);
             }
@@ -359,7 +360,6 @@ namespace GDModel.Providers
         [Test]
         public void Test_Genney()
         {
-            // TODO: interest feature - use _GRP & _PLC records! OBJE._PRIM
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_genney.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Genney, ctx.Tree.Format);
             }

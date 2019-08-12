@@ -44,7 +44,7 @@ namespace GKCore.Controllers
         public void UpdateTitle()
         {
             string kindName = "";
-            switch (fView.ChartKind) {
+            switch (fView.TreeBox.Model.Kind) {
                 case TreeChartKind.ckAncestors:
                     kindName = LangMan.LS(LSID.LSID_MITreeAncestors);
                     break;

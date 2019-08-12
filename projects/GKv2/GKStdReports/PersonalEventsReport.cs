@@ -156,7 +156,7 @@ namespace GKStdReports
                 if (evObj.Rec is GDMIndividualRecord) {
                     GDMIndividualRecord iRec = evObj.Rec as GDMIndividualRecord;
 
-                    if (evt.Name == GEDCOMTagType.BIRT) {
+                    if (evt.GetTagType() == GEDCOMTagType.BIRT) {
                         if (evObj.Type == EventType.Personal) {
                             if (father != null) {
                                 fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", fTextFont);

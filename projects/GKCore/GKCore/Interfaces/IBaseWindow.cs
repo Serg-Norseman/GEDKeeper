@@ -42,7 +42,7 @@ namespace GKCore.Interfaces
         void RefreshRecordsView(GDMRecordType recType);
         void SaveFile(string fileName);
         void SaveFileEx(bool saveAs);
-        void SelectRecordByXRef(string xref);
+        void SelectRecordByXRef(string xref, bool delayedTransition = false);
         void ShowMedia(GDMMultimediaRecord mediaRec, bool modal);
         void ShowRecordsTab(GDMRecordType recType);
         void UpdateControls(bool forceDeactivate, bool blockDependent = false);

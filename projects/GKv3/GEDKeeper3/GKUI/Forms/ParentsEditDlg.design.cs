@@ -45,7 +45,7 @@ namespace GKUI.Forms
         private TextBox txtNameSuffix;
         private Label lblNickname;
         private TextBox txtNickname;
-        private GKUI.Components.GKPortrait imgPortrait;
+        private GKPortrait imgPortrait;
         private Button btnNameCopy;
         private Button btnPortraitAdd;
         private Button btnPortraitDelete;

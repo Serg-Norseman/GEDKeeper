@@ -57,8 +57,7 @@ namespace GKCore
 
                 extTree.Header.Clear();
 
-                int num = extTree.RecordsCount;
-                for (int i = 0; i < num; i++) {
+                for (int i = 0, num = extTree.RecordsCount; i < num; i++) {
                     GDMRecord rec = extTree[i];
                     syncList.Add(new SyncRecord {
                         MasterRecord = null,
@@ -69,8 +68,7 @@ namespace GKCore
                     });
                 }
 
-                int num2 = syncList.Count;
-                for (int i = 0; i < num2; i++) {
+                for (int i = 0, num = syncList.Count; i < num; i++) {
                     SyncRecord syncRec = syncList[i];
 
                     GDMRecord rec = mainTree.FindUID(syncRec.UpdateRecord.UID);
@@ -89,20 +87,17 @@ namespace GKCore
                     }
                 }
 
-                int num3 = repMap.Count;
-                for (int i = 0; i < num3; i++) {
+                for (int i = 0, num = repMap.Count; i < num; i++) {
                     GDMRecord rec = repMap[i].Rec;
                     rec.ReplaceXRefs(repMap);
                 }
 
-                int num4 = extTree.RecordsCount;
-                for (int i = 0; i < num4; i++) {
+                for (int i = 0, num = extTree.RecordsCount; i < num; i++) {
                     GDMRecord rec = extTree[i];
                     rec.ReplaceXRefs(repMap);
                 }
 
-                int num5 = syncList.Count;
-                for (int i = 0; i < num5; i++) {
+                for (int i = 0, num = syncList.Count; i < num; i++) {
                     SyncRecord syncRec = syncList[i];
                     if (syncRec.State == SyncState.ssHasMaster) {
                         GDMRecord rec = extTree.Extract(extTree.IndexOf(syncRec.UpdateRecord));

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -56,7 +56,8 @@ namespace GKCore
         [Test]
         public void Test_DateItems_IConvertible()
         {
-            var dtx1 = new GDMDateValue(null, "", "05 JAN 2013");
+            var dtx1 = new GDMDateValue(null);
+            dtx1.ParseString("05 JAN 2013");
             var dtItem1 = new GEDCOMDateItem(dtx1);
 
             Assert.AreEqual(TypeCode.Object, ((IConvertible)dtItem1).GetTypeCode());
@@ -81,11 +82,13 @@ namespace GKCore
         [Test]
         public void Test_DateItems()
         {
-            var dtx1 = new GDMDateValue(null, "", "05 JAN 2013");
+            var dtx1 = new GDMDateValue(null);
+            dtx1.ParseString("05 JAN 2013");
             var dtItem1 = new GEDCOMDateItem(dtx1);
             Assert.AreEqual("05.01.2013", dtItem1.ToString());
 
-            var dtx2 = new GDMDateValue(null, "", "17 FEB 2013");
+            var dtx2 = new GDMDateValue(null);
+            dtx2.ParseString("17 FEB 2013");
             var dtItem2 = new GEDCOMDateItem(dtx2);
             Assert.AreEqual("17.02.2013", dtItem2.ToString());
 

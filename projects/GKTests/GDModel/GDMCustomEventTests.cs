@@ -88,7 +88,7 @@ namespace GDModel
                 Assert.IsNotNull(customEvent);
 
                 // stream test
-                customEvent.SetName(GEDCOMTagType.BIRT);
+                customEvent.SetName(GEDCOMTagName.BIRT);
                 customEvent.Date.ParseString("20 SEP 1970");
                 customEvent.Place.StringValue = "test place";
                 customEvent.Agency = "Agency";
@@ -160,13 +160,13 @@ namespace GDModel
             // BIRT: "28 DEC 1990"
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
-            UDN testUDN = iRec.GetUDN(GEDCOMTagType.BIRT);
+            UDN testUDN = iRec.GetUDN(GEDCOMTagName.BIRT);
             Assert.AreEqual("1990/12/28", testUDN.ToString());
 
             testUDN = GDMDate.GetUDNByFormattedStr("28/12/1990", GDMCalendar.dcGregorian);
             Assert.AreEqual("1990/12/28", testUDN.ToString());
 
-            using (GDMDateValue dateVal = new GDMDateValue(null, "", "")) {
+            using (GDMDateValue dateVal = new GDMDateValue(null)) {
                 dateVal.ParseString("28 DEC 1990");
                 testUDN = dateVal.GetUDN();
                 Assert.AreEqual("1990/12/28", testUDN.ToString());

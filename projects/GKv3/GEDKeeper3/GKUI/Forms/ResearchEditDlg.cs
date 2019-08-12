@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -42,7 +41,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fGroupsList;
         private readonly GKSheetList fNotesList;
 
-        public GEDCOMResearchRecord Research
+        public GDMResearchRecord Research
         {
             get { return fController.Research; }
             set { fController.Research = value; }
@@ -152,21 +151,21 @@ namespace GKUI.Forms
         private void ListTasksModify(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GEDCOMTaskRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMTaskRecord);
             }
         }
 
         private void ListCommunicationsModify(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GEDCOMCommunicationRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMCommunicationRecord);
             }
         }
 
         private void ListGroupsModify(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GEDCOMGroupRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMGroupRecord);
             }
         }
 

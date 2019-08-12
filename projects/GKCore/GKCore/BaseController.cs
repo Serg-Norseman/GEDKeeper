@@ -481,7 +481,7 @@ namespace GKCore
                         indivRec.InitNew();
 
                         indivRec.AddPersonalName(new GDMPersonalName(indivRec));
-                        baseWin.Context.CreateEventEx(indivRec, GEDCOMTagType.BIRT, "", "");
+                        baseWin.Context.CreateEventEx(indivRec, GEDCOMTagName.BIRT, "", "");
                     }
 
                     try {

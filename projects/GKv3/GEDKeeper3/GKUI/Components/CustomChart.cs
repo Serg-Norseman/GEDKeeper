@@ -19,11 +19,10 @@
  */
 
 using System;
+using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-
-using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
@@ -32,7 +31,7 @@ namespace GKUI.Components
 {
     public abstract class CustomChart : CustomPanel, IPrintable
     {
-        private readonly NavigationStack<GEDCOMRecord> fNavman;
+        private readonly NavigationStack<GDMRecord> fNavman;
         protected ChartRenderer fRenderer;
 
 
@@ -43,7 +42,7 @@ namespace GKUI.Components
         {
             CenteredImage = true;
 
-            fNavman = new NavigationStack<GEDCOMRecord>();
+            fNavman = new NavigationStack<GDMRecord>();
         }
 
         protected override void Dispose(bool disposing)
@@ -236,7 +235,7 @@ namespace GKUI.Components
         public bool NavAdd(object obj)
         {
             if (obj != null && !fNavman.Busy) {
-                fNavman.Current = (GEDCOMRecord)obj;
+                fNavman.Current = (GDMRecord)obj;
                 return true;
             }
             return false;

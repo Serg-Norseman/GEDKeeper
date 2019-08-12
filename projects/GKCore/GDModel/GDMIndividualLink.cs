@@ -22,21 +22,21 @@ using System;
 
 namespace GDModel
 {
-	public sealed class GDMIndividualLink : GDMPointer
-	{
-		public GDMIndividualRecord Individual
-		{
-		    get { return (GDMIndividualRecord)base.Value; }
-			set { base.Value = value; }
-		}
+    public sealed class GDMIndividualLink : GDMPointer
+    {
+        public GDMIndividualRecord Individual
+        {
+            get { return (GDMIndividualRecord)base.Value; }
+            set { base.Value = value; }
+        }
 
-		public GDMIndividualLink(GDMObject owner) : base(owner)
-		{
-		}
+        public GDMIndividualLink(GDMObject owner) : base(owner)
+        {
+        }
 
-		public GDMIndividualLink(GDMObject owner, string tagName, string tagValue) : this(owner)
-		{
-			SetNameValue(tagName, tagValue);
-		}
-	}
+        public GDMIndividualLink(GDMObject owner, int tagId, string tagValue) : this(owner)
+        {
+            SetNameValue(tagId, tagValue);
+        }
+    }
 }

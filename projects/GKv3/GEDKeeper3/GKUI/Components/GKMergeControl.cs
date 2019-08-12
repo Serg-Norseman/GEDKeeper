@@ -21,8 +21,7 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -35,14 +34,14 @@ namespace GKUI.Components
     /// </summary>
     public class GKMergeControl : Panel, IMergeControl
     {
-        private GEDCOMRecord fRec1;
-        private GEDCOMRecord fRec2;
+        private GDMRecord fRec1;
+        private GDMRecord fRec2;
 
         private HyperView fView1;
         private HyperView fView2;
 
         private IBaseWindow fBase;
-        private GEDCOMRecordType fMergeMode;
+        private GDMRecordType fMergeMode;
         private bool fBookmark;
 
         public IBaseWindow Base
@@ -57,18 +56,18 @@ namespace GKUI.Components
             set { fBookmark = value; }
         }
 
-        public GEDCOMRecordType MergeMode
+        public GDMRecordType MergeMode
         {
             get { return fMergeMode; }
             set { fMergeMode = value; }
         }
 
-        public GEDCOMRecord Rec1
+        public GDMRecord Rec1
         {
             get { return fRec1; }
         }
 
-        public GEDCOMRecord Rec2
+        public GDMRecord Rec2
         {
             get { return fRec2; }
         }
@@ -95,7 +94,7 @@ namespace GKUI.Components
             Focus();
         }
 
-        public void SetRec1(GEDCOMRecord value)
+        public void SetRec1(GDMRecord value)
         {
             fRec1 = value;
             UpdateMergeButtons();
@@ -111,7 +110,7 @@ namespace GKUI.Components
             }
         }
 
-        public void SetRec2(GEDCOMRecord value)
+        public void SetRec2(GDMRecord value)
         {
             fRec2 = value;
             UpdateMergeButtons();
@@ -129,13 +128,13 @@ namespace GKUI.Components
 
         private void btnRec1Select_Click(object sender, EventArgs e)
         {
-            GEDCOMRecord irec = fBase.Context.SelectRecord(fMergeMode, null);
+            GDMRecord irec = fBase.Context.SelectRecord(fMergeMode, null);
             if (irec != null) SetRec1(irec);
         }
 
         private void btnRec2Select_Click(object sender, EventArgs e)
         {
-            GEDCOMRecord irec = fBase.Context.SelectRecord(fMergeMode, null);
+            GDMRecord irec = fBase.Context.SelectRecord(fMergeMode, null);
             if (irec != null) SetRec2(irec);
         }
 

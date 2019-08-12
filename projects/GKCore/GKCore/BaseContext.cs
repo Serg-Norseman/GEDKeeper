@@ -36,7 +36,6 @@ using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKCore.Operations;
 using GKCore.Options;
-using GKCore.Tools;
 using GKCore.Types;
 
 namespace GKCore
@@ -176,7 +175,7 @@ namespace GKCore
         {
             if (evt == null) return;
 
-            string evName = evt.Name;
+            string evName = evt.GetTagName();
             string evVal = evt.StringValue;
             if (!string.IsNullOrEmpty(evName) && !string.IsNullOrEmpty(evVal)) {
                 fValuesCollection.Add(evName, evVal, true);
@@ -246,7 +245,7 @@ namespace GKCore
             GDMPersonalName pName = iRec.AddPersonalName(new GDMPersonalName(iRec));
             GKUtils.SetNameParts(pName, iSurname, iName, iPatronymic);
 
-            if (birthEvent) CreateEventEx(iRec, GEDCOMTagType.BIRT, "", "");
+            if (birthEvent) CreateEventEx(iRec, GEDCOMTagName.BIRT, "", "");
 
             return iRec;
         }
@@ -417,7 +416,7 @@ namespace GKCore
         public int FindBirthYear(GDMIndividualRecord iRec)
         {
             if (iRec != null) {
-                int birthDate = iRec.GetChronologicalYear(GEDCOMTagType.BIRT);
+                int birthDate = iRec.GetChronologicalYear(GEDCOMTagName.BIRT);
                 if (birthDate != 0) {
                     return birthDate;
                 }
@@ -443,7 +442,7 @@ namespace GKCore
         public int FindDeathYear(GDMIndividualRecord iRec)
         {
             if (iRec != null) {
-                int deathDate = iRec.GetChronologicalYear(GEDCOMTagType.DEAT);
+                int deathDate = iRec.GetChronologicalYear(GEDCOMTagName.DEAT);
                 if (deathDate != 0) {
                     return deathDate;
                 }
@@ -1220,13 +1219,14 @@ namespace GKCore
 
         public void CriticalSave()
         {
-            try
-            {
+            try {
                 string rfn = Path.ChangeExtension(fFileName, ".restore");
-                // TODO: PrepareHeader or not?
+
+                GEDCOMCharacterSet charSet = GlobalOptions.Instance.DefCharacterSet;
+                GKUtils.PrepareHeader(fTree, rfn, charSet, false);
 
                 var gedcomProvider = new GEDCOMProvider(fTree);
-                gedcomProvider.SaveToFile(rfn, GlobalOptions.Instance.DefCharacterSet);
+                gedcomProvider.SaveToFile(rfn, charSet);
             } catch (Exception ex) {
                 Logger.LogWrite("BaseContext.CriticalSave(): " + ex.Message);
             }

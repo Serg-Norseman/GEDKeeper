@@ -30,7 +30,6 @@ namespace GDModel
 
     public interface IGDMTag : IGDMObject
     {
-        string Name { get; }
         bool IsEmpty();
     }
 

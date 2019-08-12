@@ -172,7 +172,7 @@ namespace GKCore.Controllers
         public void JumpToRecord(GDMRecord record)
         {
             if (record != null && Accept()) {
-                fBase.SelectRecordByXRef(record.XRef);
+                fBase.SelectRecordByXRef(record.XRef, true);
                 fView.Close();
             }
         }

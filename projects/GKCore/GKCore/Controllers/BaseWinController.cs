@@ -55,6 +55,7 @@ namespace GKCore.Controllers
     {
         private readonly List<GDMRecord> fChangedRecords;
         private readonly IBaseContext fContext;
+        private GDMRecord fDelayedTransitionRecord;
         private readonly NavigationStack<GDMRecord> fNavman;
         private readonly TabParts[] fTabParts;
 
@@ -147,13 +148,19 @@ namespace GKCore.Controllers
 
         public void SaveFileEx(bool saveAs)
         {
-            if (!fContext.IsUnknown() && !saveAs) {
-                SaveFile(fContext.FileName);
+            string oldFileName = fContext.FileName;
+            bool isUnknown = fContext.IsUnknown();
+
+            if (!isUnknown && !saveAs) {
+                SaveFile(oldFileName);
             } else {
-                string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(fContext.FileName));
-                string fileName = AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, fContext.FileName, false);
-                if (!string.IsNullOrEmpty(fileName)) {
-                    SaveFile(fileName);
+                string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(oldFileName));
+                string newFileName = AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, oldFileName, false);
+                if (!string.IsNullOrEmpty(newFileName)) {
+                    SaveFile(newFileName);
+                    if (!isUnknown && !string.Equals(oldFileName, newFileName)) {
+                        AppHost.Instance.BaseRenamed(fView, oldFileName, newFileName);
+                    }
                 }
             }
         }
@@ -334,11 +341,21 @@ namespace GKCore.Controllers
             SelectRecordByXRef(record.XRef);
         }
 
-        public void SelectRecordByXRef(string xref)
+        public void SelectRecordByXRef(string xref, bool delayedTransition = false)
         {
             GDMRecord record = fContext.Tree.XRefIndex_Find(xref);
-            IListView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
 
+            if (delayedTransition) {
+                fDelayedTransitionRecord = record;
+                return;
+            }
+
+            if (fDelayedTransitionRecord != null) {
+                record = fDelayedTransitionRecord;
+                fDelayedTransitionRecord = null;
+            }
+
+            IListView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
             if (rView != null) {
                 fView.ShowRecordsTab(record.RecordType);
                 rView.Activate();
@@ -892,8 +909,7 @@ namespace GKCore.Controllers
 
             if (TreeChartModel.CheckTreeChartSize(fContext.Tree, selPerson, chartKind)) {
                 var fmChart = AppHost.Container.Resolve<ITreeChartWin>(fView, selPerson);
-                fmChart.ChartKind = chartKind;
-                fmChart.GenChart();
+                fmChart.GenChart(chartKind);
                 AppHost.Instance.ShowWindow(fmChart);
             }
         }

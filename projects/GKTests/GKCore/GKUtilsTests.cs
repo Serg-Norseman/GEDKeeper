@@ -39,6 +39,9 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
+            // for static initialization
+            GEDCOMProvider.SkipEmptyTag((int)GEDCOMTagType._AWARD);
+
             WFAppHost.ConfigureBootstrap(false);
 
             LangMan.DefInit();
@@ -67,8 +70,8 @@ namespace GKCore
         [Test]
         public void Test_GetXIndex()
         {
-            Assert.AreEqual(1, GKUtils.GetPersonEventIndex(GEDCOMTagType.BIRT));
-            Assert.AreEqual(2, GKUtils.GetFamilyEventIndex(GEDCOMTagType.MARR));
+            Assert.AreEqual(1, GKUtils.GetPersonEventIndex(GEDCOMTagName.BIRT));
+            Assert.AreEqual(2, GKUtils.GetFamilyEventIndex(GEDCOMTagName.MARR));
         }
 
         [Test]
@@ -76,10 +79,10 @@ namespace GKCore
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
-            string st1 = GKUtils.GetAttributeValue(null, GEDCOMTagType.BIRT);
+            string st1 = GKUtils.GetAttributeValue(null, GEDCOMTagName.BIRT);
             Assert.AreEqual("", st1);
 
-            st1 = GKUtils.GetAttributeValue(iRec, GEDCOMTagType.BIRT);
+            st1 = GKUtils.GetAttributeValue(iRec, GEDCOMTagName.BIRT);
             Assert.AreEqual("", st1);
         }
 

@@ -47,14 +47,14 @@ namespace GDModel
             SetName(GEDCOMTagType.MAP);
         }
 
-        public GDMMap(GDMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMMap(GDMObject owner, int tagId, string tagValue) : this(owner)
         {
-            SetNameValue(tagName, tagValue);
+            SetNameValue(tagId, tagValue);
         }
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
         {
-            return new GDMMap(owner, tagName, tagValue);
+            return new GDMMap(owner, tagId, tagValue);
         }
 
         public override void Assign(GDMTag source)

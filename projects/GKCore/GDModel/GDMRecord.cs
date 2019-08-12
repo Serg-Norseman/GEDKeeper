@@ -25,7 +25,8 @@ namespace GDModel
 {
     public enum GDMRecordType
     {
-        rtNone,
+        rtNone, // may be rename to Unknown?
+
         rtIndividual,
         rtFamily,
         rtNote,
@@ -52,7 +53,6 @@ namespace GDModel
         private string fAutomatedRecordID;
         private GDMChangeDate fChangeDate;
         private object fExtData;
-        private GDMRecordType fRecordType;
         private string fUID;
         private string fXRef;
 
@@ -91,7 +91,7 @@ namespace GDModel
 
         public GDMRecordType RecordType
         {
-            get { return fRecordType; }
+            get { return (GDMRecordType)base.Id; }
         }
 
         public GDMList<GDMSourceCitation> SourceCitations
@@ -151,11 +151,6 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
-        protected void SetRecordType(GDMRecordType type)
-        {
-            fRecordType = type;
-        }
-
         public override GDMTree GetTree()
         {
             return (Owner as GDMTree);
@@ -198,7 +193,7 @@ namespace GDModel
             var subTags = SubTags;
             while (subTags.Count > 0) {
                 GDMTag tag = subTags.Extract(0);
-                if (tag.Name == GEDCOMTagType.CHAN && !clearDest) {
+                if (tag.GetTagType() == GEDCOMTagType.CHAN && !clearDest) {
                     tag.Dispose();
                 } else {
                     tag.ResetOwner(targetRecord);

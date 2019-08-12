@@ -108,9 +108,9 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, string tagName, string tagValue)
+        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
         {
-            return new GDMDate(owner, tagName, tagValue);
+            return new GDMDate(owner, tagId, tagValue);
         }
 
         public GDMDate(GDMObject owner) : base(owner)
@@ -124,9 +124,9 @@ namespace GDModel
             fDay = 0;
         }
 
-        public GDMDate(GDMObject owner, string tagName, string tagValue) : this(owner)
+        public GDMDate(GDMObject owner, int tagId, string tagValue) : this(owner)
         {
-            SetNameValue(tagName, tagValue);
+            SetNameValue(tagId, tagValue);
         }
 
         public override void Clear()
@@ -144,6 +144,10 @@ namespace GDModel
             DateChanged();
         }
 
+        /// <summary>
+        /// This function is intended only for checking the completeness of parts of the date 
+        /// (year, month and day are defined, are not unknown).
+        /// </summary>
         public bool IsValidDate()
         {
             return (fYear > 0 && fMonth > 0 && fDay > 0);
@@ -221,7 +225,6 @@ namespace GDModel
 
         #region Private methods of parsing of the input format
 
-        // FIXME
         public static string[] GetMonthNames(GDMCalendar calendar)
         {
             string[] monthes;
@@ -242,7 +245,7 @@ namespace GDModel
                     break;
 
                 case GDMCalendar.dcIslamic:
-                    monthes = GEDCOMMonthArray;
+                    monthes = GEDCOMMonthIslamicArray;
                     break;
 
                 case GDMCalendar.dcUnknown:
@@ -253,55 +256,20 @@ namespace GDModel
             return monthes;
         }
 
-        private static string CheckGEDCOMMonth(string str)
+        private static string CheckGEDCOMMonth(GDMCalendar calendar, string str)
         {
             // An empty string is a valid identifier for an unknown month
             if (string.IsNullOrEmpty(str)) return string.Empty;
 
-            if (str.Length == 3) {
-                str = str.ToUpperInvariant();
-                for (int m = 1; m <= 12; m++) {
-                    if (GEDCOMMonthArray[m - 1] == str) {
-                        return str;
-                    }
+            string[] monthes = GDMDate.GetMonthNames(calendar);
+            str = str.ToUpperInvariant();
+            for (int m = 0; m < monthes.Length; m++) {
+                if (monthes[m] == str) {
+                    return str;
                 }
             }
 
-            throw new GDMDateException(string.Format("The string {0} is not a valid month identifier", str));
-        }
-
-        private static string CheckGEDCOMMonthFrench(string str)
-        {
-            // An empty string is a valid identifier for an unknown month
-            if (string.IsNullOrEmpty(str)) return string.Empty;
-
-            if (str.Length == 4) {
-                str = str.ToUpperInvariant();
-                for (int m = 1; m <= 13; m++) {
-                    if (GEDCOMMonthFrenchArray[m - 1] == str) {
-                        return str;
-                    }
-                }
-            }
-
-            throw new GDMDateException(string.Format("The string {0} is not a valid French month identifier", str));
-        }
-
-        private static string CheckGEDCOMMonthHebrew(string str)
-        {
-            // An empty string is a valid identifier for an unknown month
-            if (string.IsNullOrEmpty(str)) return string.Empty;
-
-            if (str.Length == 3) {
-                str = str.ToUpperInvariant();
-                for (int m = 1; m <= 13; m++) {
-                    if (GEDCOMMonthHebrewArray[m - 1] == str) {
-                        return str;
-                    }
-                }
-            }
-
-            throw new GDMDateException(string.Format("The string {0} is not a valid Hebrew month identifier", str));
+            throw new GDMDateException(string.Format("The string {0} is not a valid {1} month identifier", str, calendar.ToString()));
         }
 
         private static string IntToGEDCOMMonth(int m)
@@ -442,7 +410,7 @@ namespace GDModel
 
         public void SetGregorian(int day, string month, int year, string yearModifier, bool yearBC)
         {
-            SetDateInternal(GDMCalendar.dcGregorian, day, CheckGEDCOMMonth(month), year, yearModifier, yearBC);
+            SetDateInternal(GDMCalendar.dcGregorian, day, CheckGEDCOMMonth(GDMCalendar.dcGregorian, month), year, yearModifier, yearBC);
         }
 
         public void SetJulian(int day, int month, int year)
@@ -452,7 +420,7 @@ namespace GDModel
 
         public void SetJulian(int day, string month, int year, bool yearBC)
         {
-            SetDateInternal(GDMCalendar.dcJulian, day, CheckGEDCOMMonth(month), year, "", yearBC);
+            SetDateInternal(GDMCalendar.dcJulian, day, CheckGEDCOMMonth(GDMCalendar.dcJulian, month), year, "", yearBC);
         }
 
         public void SetHebrew(int day, int month, int year)
@@ -462,7 +430,7 @@ namespace GDModel
 
         public void SetHebrew(int day, string month, int year, bool yearBC)
         {
-            SetDateInternal(GDMCalendar.dcHebrew, day, CheckGEDCOMMonthHebrew(month), year, "", yearBC);
+            SetDateInternal(GDMCalendar.dcHebrew, day, CheckGEDCOMMonth(GDMCalendar.dcHebrew, month), year, "", yearBC);
         }
 
         public void SetFrench(int day, int month, int year)
@@ -472,43 +440,37 @@ namespace GDModel
 
         public void SetFrench(int day, string month, int year, bool yearBC)
         {
-            SetDateInternal(GDMCalendar.dcFrench, day, CheckGEDCOMMonthFrench(month), year, "", yearBC);
+            SetDateInternal(GDMCalendar.dcFrench, day, CheckGEDCOMMonth(GDMCalendar.dcFrench, month), year, "", yearBC);
         }
 
-        // TODO: not implemented yet
         public void SetRoman(int day, int month, int year, bool yearBC)
         {
             SetDateInternal(GDMCalendar.dcRoman, day, month, year, "", yearBC);
         }
 
-        // TODO: not implemented yet
         public void SetRoman(int day, string month, int year, bool yearBC)
         {
-            SetDateInternal(GDMCalendar.dcRoman, day, CheckGEDCOMMonth(month), year, "", yearBC);
+            SetDateInternal(GDMCalendar.dcRoman, day, CheckGEDCOMMonth(GDMCalendar.dcRoman, month), year, "", yearBC);
         }
 
-        // TODO: not implemented yet
         public void SetUnknown(int day, int month, int year, bool yearBC)
         {
             SetDateInternal(GDMCalendar.dcUnknown, day, month, year, "", yearBC);
         }
 
-        // TODO: not implemented yet
         public void SetUnknown(int day, string month, int year, bool yearBC)
         {
-            SetDateInternal(GDMCalendar.dcUnknown, day, CheckGEDCOMMonth(month), year, "", yearBC);
+            SetDateInternal(GDMCalendar.dcUnknown, day, CheckGEDCOMMonth(GDMCalendar.dcUnknown, month), year, "", yearBC);
         }
 
-        // TODO: not implemented yet
         public void SetIslamic(int day, int month, int year)
         {
             SetDateInternal(GDMCalendar.dcIslamic, day, month, year, "", false);
         }
 
-        // TODO: not implemented yet
         public void SetIslamic(int day, string month, int year)
         {
-            SetDateInternal(GDMCalendar.dcIslamic, day, CheckGEDCOMMonth(month), year, "", false);
+            SetDateInternal(GDMCalendar.dcIslamic, day, CheckGEDCOMMonth(GDMCalendar.dcIslamic, month), year, "", false);
         }
 
         #region UDN processing
@@ -554,11 +516,8 @@ namespace GDModel
         /// <summary>
         /// This function transforms the string into a date. All components of
         /// the date's string must be given by numbers in order of day / month / year.
+        /// This function is intended only for use with the date entry controls (fixed format of date's string).
         /// </summary>
-        /// <param name="strDate"></param>
-        /// <param name="calendar"></param>
-        /// <param name="aException"></param>
-        /// <returns></returns>
         public static GDMDate CreateByFormattedStr(string dateStr, GDMCalendar calendar, bool aException)
         {
             if (string.IsNullOrEmpty(dateStr)) return null;

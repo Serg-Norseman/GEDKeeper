@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Packaging;
 using System.Text;
 using System.Xml;
 using GDModel;
@@ -30,12 +29,16 @@ using GKCore;
 
 namespace GDModel.Providers.FamilyShow
 {
+#if !NETSTANDARD
+    using System.IO.Packaging;
+#endif
+
     /// <summary>
     /// 
     /// </summary>
     public class FamilyXProvider : FileProvider
     {
-        private string OPCContentFileName = "content.xml";
+        private const string OPCContentFileName = "content.xml";
 
 
         public FamilyXProvider(GDMTree tree) : base(tree)
@@ -60,6 +63,7 @@ namespace GDModel.Providers.FamilyShow
 
         public override void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
         {
+#if !NETSTANDARD
             using (Package package = Package.Open(inputStream, FileMode.Open, FileAccess.Read)) {
                 PackagePart documentPart = package.GetPart(new Uri("/" + OPCContentFileName, UriKind.Relative));
                 using (MemoryStream memStream = new MemoryStream()) {
@@ -72,6 +76,7 @@ namespace GDModel.Providers.FamilyShow
                     }
                 }
             }
+#endif
         }
 
         protected override void LoadFromReader(Stream fileStream, StreamReader reader, string streamCharset = null)

@@ -427,8 +427,7 @@ namespace GKCore.Tools
                     mainTree.AddRecord(rec);
                 }
 
-                int num = repMap.Count;
-                for (int i = 0; i < num; i++) {
+                for (int i = 0, num = repMap.Count; i < num; i++) {
                     GDMRecord rec = repMap[i].Rec;
                     rec.ReplaceXRefs(repMap);
                 }
@@ -439,24 +438,24 @@ namespace GKCore.Tools
             }
 
             if (selfTest) {
-                // FIXME: error reporting refactoring
                 var tmpFrags = TreeTools.SearchTreeFragments(mainTree, null);
                 if (fragments.Count != tmpFrags.Count) {
-                    if (logBox != null) {
-                        logBox.AppendText("The number of fragments is not as expected.\r\n");
-                    } else {
-                        throw new Exception("The number of fragments is not as expected.");
-                    }
+                    ThrowError(logBox, "The number of fragments is not as expected.");
                 }
                 for (int i = 0; i < tmpFrags.Count; i++) {
                     if (fragments[i] != tmpFrags[i].Count) {
-                        if (logBox != null) {
-                            logBox.AppendText("The number of persons in the fragment is not as expected.\r\n");
-                        } else {
-                            throw new Exception("The number of persons in the fragment is not as expected.");
-                        }
+                        ThrowError(logBox, "The number of persons in the fragment is not as expected.");
                     }
                 }
+            }
+        }
+
+        private static void ThrowError(ITextBoxHandler logBox, string message)
+        {
+            if (logBox != null) {
+                logBox.AppendText(message + "\r\n");
+            } else {
+                throw new Exception(message);
             }
         }
 
@@ -524,7 +523,9 @@ namespace GKCore.Tools
             cdMotherAsChild,
             cdDuplicateChildren,
             csDateInvalid,
-            csCycle
+            csCycle,
+            cdChildWithoutParents,
+            cdFamilyRecordWithoutFamily
         }
 
         public enum CheckSolve
@@ -616,8 +617,8 @@ namespace GKCore.Tools
                 checksList.Add(checkObj);
             }
 
-            int yBirth = iRec.GetChronologicalYear(GEDCOMTagType.BIRT);
-            int yDeath = iRec.GetChronologicalYear(GEDCOMTagType.DEAT);
+            int yBirth = iRec.GetChronologicalYear(GEDCOMTagName.BIRT);
+            int yDeath = iRec.GetChronologicalYear(GEDCOMTagName.DEAT);
             if (yBirth != 0 && yDeath != 0) {
                 int delta = (yDeath - yBirth);
                 if (delta < 0) {
@@ -665,20 +666,35 @@ namespace GKCore.Tools
                 checkObj.Comment = LangMan.LS(LSID.LSID_EmptyFamily);
                 checksList.Add(checkObj);
             } else {
-                if (fRec.IndexOfChild(husb) >= 0) {
-                    CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdFatherAsChild, CheckSolve.csRemove);
-                    checkObj.Comment = LangMan.LS(LSID.LSID_FatherAsChild);
-                    checksList.Add(checkObj);
-                }
+                int chNum = fRec.Children.Count;
 
-                if (fRec.IndexOfChild(wife) >= 0) {
-                    CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdMotherAsChild, CheckSolve.csRemove);
-                    checkObj.Comment = LangMan.LS(LSID.LSID_MotherAsChild);
-                    checksList.Add(checkObj);
+                if (husb == null && wife == null) {
+                    if (chNum > 0) {
+                        CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdChildWithoutParents, CheckSolve.csSkip);
+                        checkObj.Comment = LangMan.LS(LSID.LSID_ChildWithoutParents);
+                        checksList.Add(checkObj);
+                    }
+                    else {
+                        CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdFamilyRecordWithoutFamily, CheckSolve.csSkip);
+                        checkObj.Comment = LangMan.LS(LSID.LSID_FamilyRecordWithoutFamily);
+                        checksList.Add(checkObj);
+                    }
+                }
+                else {
+                    if (fRec.IndexOfChild(husb) >= 0) {
+                        CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdFatherAsChild, CheckSolve.csRemove);
+                        checkObj.Comment = LangMan.LS(LSID.LSID_FatherAsChild);
+                        checksList.Add(checkObj);
+                    }
+
+                    if (fRec.IndexOfChild(wife) >= 0) {
+                        CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdMotherAsChild, CheckSolve.csRemove);
+                        checkObj.Comment = LangMan.LS(LSID.LSID_MotherAsChild);
+                        checksList.Add(checkObj);
+                    }
                 }
 
                 bool hasDup = false;
-                int chNum = fRec.Children.Count;
                 for (int i = 0; i < chNum; i++) {
                     var child1 = fRec.Children[i].Value;
                     for (int k = i + 1; k < chNum; k++) {
@@ -746,7 +762,7 @@ namespace GKCore.Tools
             switch (checkObj.Diag) {
                 case CheckDiag.cdPersonLonglived:
                     iRec = checkObj.Rec as GDMIndividualRecord;
-                    baseWin.Context.CreateEventEx(iRec, GEDCOMTagType.DEAT, "", "");
+                    baseWin.Context.CreateEventEx(iRec, GEDCOMTagName.DEAT, "", "");
                     baseWin.NotifyRecord(iRec, RecordAction.raEdit);
                     break;
 
@@ -845,10 +861,6 @@ namespace GKCore.Tools
                 CheckRelations_CheckTag(splitList, iRec.Events[i]);
             }
 
-            for (int i = 0, num = iRec.Submittors.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, iRec.Submittors[i].Value);
-            }
-
             for (int i = 0, num = iRec.Associations.Count; i < num; i++) {
                 CheckRelations_AddRel(splitList, iRec.Associations[i].Value);
             }
@@ -868,10 +880,6 @@ namespace GKCore.Tools
 
             for (int i = 0, num = fRec.Events.Count; i < num; i++) {
                 CheckRelations_CheckTag(splitList, fRec.Events[i]);
-            }
-
-            for (int i = 0, num = fRec.Submittors.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, fRec.Submittors[i].Value);
             }
         }
 

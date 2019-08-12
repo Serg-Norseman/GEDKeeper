@@ -786,6 +786,9 @@
 785=Tipo di relazione
 786=Was born
 787=Was born
+788=GedML files (*.xml)|*.xml
+789=Bambino rilevato senza genitori
+790=Rilevato record familiare senza genitori o figli
 
 801=RI:George Knight
 802=USSR:WWII:Combatant

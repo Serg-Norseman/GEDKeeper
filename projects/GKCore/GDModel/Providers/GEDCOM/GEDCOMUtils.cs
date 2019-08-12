@@ -62,6 +62,21 @@ namespace GDModel.Providers.GEDCOM
     }
 
 
+    public static class GEDCOMExtensions
+    {
+        public static GEDCOMTagType GetTagType(this GDMTag tag)
+        {
+            return (GEDCOMTagType)tag.Id;
+        }
+
+        public static string GetTagName(this GDMTag tag)
+        {
+            GEDCOMTagProps tagProps = GEDCOMTagsTable.GetTagProps(tag.Id);
+            return tagProps != null ? tagProps.TagName : string.Empty;
+        }
+    }
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -496,13 +511,13 @@ namespace GDModel.Providers.GEDCOM
         {
             strTok.SkipWhitespaces();
 
-            if (strTok.RequireWord(GEDCOMTagType.FROM)) {
+            if (strTok.RequireWord(GEDCOMTagName.FROM)) {
                 strTok.Next();
                 ParseDate(owner, date.DateFrom, strTok);
                 strTok.SkipWhitespaces();
             }
 
-            if (strTok.RequireWord(GEDCOMTagType.TO)) {
+            if (strTok.RequireWord(GEDCOMTagName.TO)) {
                 strTok.Next();
                 ParseDate(owner, date.DateTo, strTok);
                 strTok.SkipWhitespaces();
@@ -567,7 +582,7 @@ namespace GDModel.Providers.GEDCOM
         {
             strTok.SkipWhitespaces();
 
-            if (!strTok.RequireWord(GEDCOMTagType.INT)) {
+            if (!strTok.RequireWord(GEDCOMTagName.INT)) {
                 throw new GDMDateException(string.Format("The interpreted date '{0}' doesn't start with a valid ident", strTok.GetFullStr()));
             }
             strTok.Next();
@@ -1686,7 +1701,12 @@ namespace GDModel.Providers.GEDCOM
 
         #region Event type detection
 
-        public static string[] IndiEvents = new string[] {
+        public static int CompareGEDCOMTag(GEDCOMTagType tagA, GEDCOMTagType tagB)
+        {
+            return tagA.CompareTo(tagB);
+        }
+
+        public static GEDCOMTagType[] IndiEvents = new GEDCOMTagType[] {
             GEDCOMTagType.ADOP, GEDCOMTagType.BAPM, GEDCOMTagType.BARM, GEDCOMTagType.BASM, GEDCOMTagType.BIRT,
             GEDCOMTagType.BLES, GEDCOMTagType.BURI, GEDCOMTagType.CENS, GEDCOMTagType.CHR, GEDCOMTagType.CHRA,
             GEDCOMTagType.CONF, GEDCOMTagType.CREM, GEDCOMTagType.DEAT, GEDCOMTagType.EMIG, GEDCOMTagType.EVEN,
@@ -1694,14 +1714,14 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagType.PROB, GEDCOMTagType.RETI, GEDCOMTagType.WILL, 
         };
 
-        public static bool IsIndiEvent(string tagName)
+        public static bool IsIndiEvent(GEDCOMTagType tag)
         {
-            int idx = Algorithms.BinarySearch<string>(IndiEvents, tagName, string.CompareOrdinal);
+            int idx = Algorithms.BinarySearch<GEDCOMTagType>(IndiEvents, tag, CompareGEDCOMTag);
             return idx >= 0;
         }
 
 
-        public static string[] IndiAttrs = new string[] {
+        public static GEDCOMTagType[] IndiAttrs = new GEDCOMTagType[] {
             GEDCOMTagType.CAST, GEDCOMTagType.DSCR, GEDCOMTagType.EDUC, GEDCOMTagType.FACT, GEDCOMTagType.IDNO,
             GEDCOMTagType.NATI, GEDCOMTagType.NCHI, GEDCOMTagType.NMR, GEDCOMTagType.OCCU, GEDCOMTagType.PROP,
             GEDCOMTagType.RELI, GEDCOMTagType.RESI, GEDCOMTagType.SSN, GEDCOMTagType.TITL,
@@ -1711,24 +1731,25 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagType._MILI_RANK, GEDCOMTagType._TRAVEL, GEDCOMTagType._YDNA,
         };
 
-        public static bool IsIndiAttr(string tagName)
+        public static bool IsIndiAttr(GEDCOMTagType tag)
         {
-            int idx = Algorithms.BinarySearch<string>(IndiAttrs, tagName, string.CompareOrdinal);
+            int idx = Algorithms.BinarySearch<GEDCOMTagType>(IndiAttrs, tag, CompareGEDCOMTag);
             return idx >= 0;
         }
 
 
-        public static string[] FamEvents = new string[] {
+        public static GEDCOMTagType[] FamEvents = new GEDCOMTagType[] {
             GEDCOMTagType.ANUL, GEDCOMTagType.CENS, GEDCOMTagType.DIV, GEDCOMTagType.DIVF, GEDCOMTagType.ENGA,
             GEDCOMTagType.EVEN, GEDCOMTagType.MARB, GEDCOMTagType.MARC, GEDCOMTagType.MARL, GEDCOMTagType.MARR,
             GEDCOMTagType.MARS, GEDCOMTagType.RESI,
         };
 
-        public static bool IsFamEvent(string tagName)
+        public static bool IsFamEvent(GEDCOMTagType tag)
         {
-            int idx = Algorithms.BinarySearch<string>(FamEvents, tagName, string.CompareOrdinal);
+            int idx = Algorithms.BinarySearch<GEDCOMTagType>(FamEvents, tag, CompareGEDCOMTag);
             return idx >= 0;
         }
+
 
         public static StringList GetTagStrings(GDMTag strTag)
         {
@@ -1743,15 +1764,16 @@ namespace GDModel.Providers.GEDCOM
                 int num = subTags.Count;
                 for (int i = 0; i < num; i++) {
                     GDMTag tag = subTags[i];
+                    var tagType = tag.GetTagType();
 
-                    if (tag.Name == GEDCOMTagType.CONC) {
+                    if (tagType == GEDCOMTagType.CONC) {
                         if (strings.Count > 0) {
                             strings[strings.Count - 1] = strings[strings.Count - 1] + tag.StringValue;
                         } else {
                             strings.Add(tag.StringValue);
                         }
                     } else {
-                        if (tag.Name == GEDCOMTagType.CONT) {
+                        if (tagType == GEDCOMTagType.CONT) {
                             strings.Add(tag.StringValue);
                         }
                     }
@@ -1768,8 +1790,10 @@ namespace GDModel.Providers.GEDCOM
             tag.StringValue = "";
             var subTags = tag.SubTags;
             for (int i = subTags.Count - 1; i >= 0; i--) {
-                string subtag = subTags[i].Name;
-                if (subtag == GEDCOMTagType.CONT || subtag == GEDCOMTagType.CONC) {
+                GDMTag subtag = subTags[i];
+                var tagType = subtag.GetTagType();
+
+                if (tagType == GEDCOMTagType.CONT || tagType == GEDCOMTagType.CONC) {
                     subTags.DeleteAt(i);
                 }
             }
@@ -1788,12 +1812,12 @@ namespace GDModel.Providers.GEDCOM
                     if (i == 0 && !isRecordTag) {
                         tag.StringValue = sub;
                     } else {
-                        GEDCOMProvider.AddBaseTag(tag, 0, GEDCOMTagType.CONT, sub);
+                        GEDCOMProvider.AddBaseTag(tag, 0, (int)GEDCOMTagType.CONT, sub);
                     }
 
                     while (str.Length > 0) {
                         len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
-                        GEDCOMProvider.AddBaseTag(tag, 0, GEDCOMTagType.CONC, str.Substring(0, len));
+                        GEDCOMProvider.AddBaseTag(tag, 0, (int)GEDCOMTagType.CONC, str.Substring(0, len));
                         str = str.Remove(0, len);
                     }
                 }

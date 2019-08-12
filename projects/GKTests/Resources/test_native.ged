@@ -41,6 +41,9 @@
 2 NOTE ChangeDateNote test
 2 DATE 07 NOV 2015
 3 TIME 23:46:45.7
+1 SUBM @SUB1@
+1 AFN 12345
+1 RFN 23456
 1 RIN 123456
 1 NOTE @N1@
 1 SOUR Source Citation Sample
@@ -48,10 +51,7 @@
 2 CONT Source Citation Sample Line 2
 2 CONT Source Citation Sample Line 3
 1 RESN confidential
-1 SUBM @SUB1@
 1 SEX M
-1 AFN 12345
-1 RFN 23456
 1 NAME John /Doe/
 2 FONE Phonetic
 2 ROMN Romanized name

@@ -45,6 +45,9 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
+            // for static initialization
+            GEDCOMProvider.SkipEmptyTag((int)GEDCOMTagType._AWARD);
+
             WFAppHost.ConfigureBootstrap(false);
 
             LangMan.DefInit();
@@ -152,10 +155,56 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_MergeRecord()
+        public void Test_MergeRecord_Null()
         {
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.MergeRecord(null, null, null, false); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.MergeRecord(fBaseWin, null, null, false); });
+        }
+
+        [Test]
+        public void Test_MergeRecord_Indi()
+        {
+            Assembly assembly = typeof(CoreTests).Assembly;
+
+            using (var ctx1 = new BaseContext(null)) {
+                IBaseWindow baseWin = new BaseWindowStub(ctx1);
+
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_mergerec.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                }
+
+                GDMIndividualRecord iRec1 = ctx1.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+
+                GDMIndividualRecord iRec2 = ctx1.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec2);
+
+                TreeTools.MergeRecord(baseWin, iRec1, iRec2, true);
+            }
+        }
+
+        [Test]
+        public void Test_MergeRecord_Fam()
+        {
+            Assembly assembly = typeof(CoreTests).Assembly;
+
+            using (var ctx1 = new BaseContext(null)) {
+                IBaseWindow baseWin = new BaseWindowStub(ctx1);
+
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_mergerec.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                }
+
+                GDMFamilyRecord famRec1 = ctx1.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
+                Assert.IsNotNull(famRec1);
+
+                GDMFamilyRecord famRec2 = ctx1.Tree.XRefIndex_Find("F2") as GDMFamilyRecord;
+                Assert.IsNotNull(famRec2);
+
+                TreeTools.MergeRecord(baseWin, famRec1, famRec2, true);
+            }
         }
 
         [Test]

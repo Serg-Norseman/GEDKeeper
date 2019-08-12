@@ -40,12 +40,10 @@ namespace GDModel
 
     public sealed class GDMIndividualRecord : GDMRecordWithEvents
     {
-        private string fAncestralFileNumber;
-        private GDMList<GDMAlias> fAliasses;
+        private GDMList<GDMAlias> fAliases;
         private GDMList<GDMAssociation> fAssociations;
         private GDMList<GDMChildToFamilyLink> fChildToFamilyLinks;
         private GDMList<GDMPointer> fGroups;
-        private string fPermanentRecordFileNumber;
         private GDMList<GDMPersonalName> fPersonalNames;
         private GDMList<GDMSpouseToFamilyLink> fSpouseToFamilyLinks;
         private GDMSex fSex;
@@ -53,13 +51,7 @@ namespace GDModel
 
         public GDMList<GDMAlias> Aliases
         {
-            get { return fAliasses; }
-        }
-
-        public string AncestralFileNumber
-        {
-            get { return fAncestralFileNumber; }
-            set { fAncestralFileNumber = value; }
+            get { return fAliases; }
         }
 
         public GDMList<GDMAssociation> Associations
@@ -70,15 +62,15 @@ namespace GDModel
         public bool Bookmark
         {
             get {
-                return FindTag(GEDCOMTagType._BOOKMARK, 0) != null;
+                return FindTag(GEDCOMTagName._BOOKMARK, 0) != null;
             }
             set {
                 if (value) {
-                    if (FindTag(GEDCOMTagType._BOOKMARK, 0) == null) {
-                        AddTag(new GDMTag(this, GEDCOMTagType._BOOKMARK, ""));
+                    if (FindTag(GEDCOMTagName._BOOKMARK, 0) == null) {
+                        AddTag(new GDMTag(this, (int)GEDCOMTagType._BOOKMARK, ""));
                     }
                 } else {
-                    DeleteTag(GEDCOMTagType._BOOKMARK);
+                    DeleteTag(GEDCOMTagName._BOOKMARK);
                 }
             }
         }
@@ -96,23 +88,17 @@ namespace GDModel
         public bool Patriarch
         {
             get {
-                return FindTag(GEDCOMTagType._PATRIARCH, 0) != null;
+                return FindTag(GEDCOMTagName._PATRIARCH, 0) != null;
             }
             set {
                 if (value) {
-                    if (FindTag(GEDCOMTagType._PATRIARCH, 0) == null) {
-                        AddTag(new GDMTag(this, GEDCOMTagType._PATRIARCH, ""));
+                    if (FindTag(GEDCOMTagName._PATRIARCH, 0) == null) {
+                        AddTag(new GDMTag(this, (int)GEDCOMTagType._PATRIARCH, ""));
                     }
                 } else {
-                    DeleteTag(GEDCOMTagType._PATRIARCH);
+                    DeleteTag(GEDCOMTagName._PATRIARCH);
                 }
             }
-        }
-
-        public string PermanentRecordFileNumber
-        {
-            get { return fPermanentRecordFileNumber; }
-            set { fPermanentRecordFileNumber = value; }
         }
 
         public GDMList<GDMPersonalName> PersonalNames
@@ -134,15 +120,12 @@ namespace GDModel
 
         public GDMIndividualRecord(GDMObject owner) : base(owner)
         {
-            SetRecordType(GDMRecordType.rtIndividual);
             SetName(GEDCOMTagType.INDI);
 
-            fAncestralFileNumber = string.Empty;
-            fAliasses = new GDMList<GDMAlias>(this);
+            fAliases = new GDMList<GDMAlias>(this);
             fAssociations = new GDMList<GDMAssociation>(this);
             fChildToFamilyLinks = new GDMList<GDMChildToFamilyLink>(this);
             fGroups = new GDMList<GDMPointer>(this);
-            fPermanentRecordFileNumber = string.Empty;
             fPersonalNames = new GDMList<GDMPersonalName>(this);
             fSpouseToFamilyLinks = new GDMList<GDMSpouseToFamilyLink>(this);
         }
@@ -150,7 +133,7 @@ namespace GDModel
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fAliasses.Dispose();
+                fAliases.Dispose();
                 fAssociations.Dispose();
                 fChildToFamilyLinks.Dispose();
                 fGroups.Dispose();
@@ -205,7 +188,7 @@ namespace GDModel
             }
             fGroups.Clear();
 
-            fAliasses.Clear();
+            fAliases.Clear();
             fAssociations.Clear();
             fPersonalNames.Clear();
         }
@@ -214,7 +197,7 @@ namespace GDModel
         {
             return base.IsEmpty() && (fSex == GDMSex.svUnknown) && fPersonalNames.Count == 0
                 && fChildToFamilyLinks.Count == 0 && fSpouseToFamilyLinks.Count == 0
-                && fAssociations.Count == 0 && fAliasses.Count == 0 && fGroups.Count == 0;
+                && fAssociations.Count == 0 && fAliases.Count == 0 && fGroups.Count == 0;
         }
 
         public int IndexOfGroup(GDMGroupRecord groupRec)
@@ -316,16 +299,19 @@ namespace GDModel
                 targetIndi.AddPersonalName(obj);
             }
 
-            if (targetIndi.ChildToFamilyLinks.Count == 0 && ChildToFamilyLinks.Count != 0 && fChildToFamilyLinks != null) {
+            string currentXRef = this.XRef;
+            string targetXRef = targetRecord.XRef;
+
+            while (fChildToFamilyLinks.Count > 0) {
                 GDMChildToFamilyLink ctfLink = fChildToFamilyLinks.Extract(0);
                 GDMFamilyRecord family = ctfLink.Family;
 
                 int num = family.Children.Count;
                 for (int i = 0; i < num; i++) {
-                    GDMPointer childPtr = family.Children[i];
+                    GDMIndividualLink childPtr = family.Children[i];
 
-                    if (childPtr.StringValue == "@" + XRef + "@") {
-                        childPtr.StringValue = "@" + targetRecord.XRef + "@";
+                    if (childPtr.XRef == currentXRef) {
+                        childPtr.XRef = targetXRef;
                     }
                 }
 
@@ -337,12 +323,10 @@ namespace GDModel
                 GDMSpouseToFamilyLink stfLink = fSpouseToFamilyLinks.Extract(0);
                 GDMFamilyRecord family = stfLink.Family;
 
-                string targetXRef = "@" + targetRecord.XRef + "@";
-
-                if (family.Husband.StringValue == "@" + XRef + "@") {
-                    family.Husband.StringValue = targetXRef;
-                } else if (family.Wife.StringValue == "@" + XRef + "@") {
-                    family.Wife.StringValue = targetXRef;
+                if (family.Husband.XRef == currentXRef) {
+                    family.Husband.XRef = targetXRef;
+                } else if (family.Wife.XRef == currentXRef) {
+                    family.Wife.XRef = targetXRef;
                 }
 
                 stfLink.ResetOwner(targetIndi);
@@ -355,8 +339,8 @@ namespace GDModel
                 targetIndi.Associations.Add(obj);
             }
 
-            while (fAliasses.Count > 0) {
-                GDMAlias obj = fAliasses.Extract(0);
+            while (fAliases.Count > 0) {
+                GDMAlias obj = fAliases.Extract(0);
                 obj.ResetOwner(targetIndi);
                 targetIndi.Aliases.Add(obj);
             }
@@ -372,7 +356,7 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
 
-            fAliasses.ReplaceXRefs(map);
+            fAliases.ReplaceXRefs(map);
             fAssociations.ReplaceXRefs(map);
             fChildToFamilyLinks.ReplaceXRefs(map);
             fGroups.ReplaceXRefs(map);
@@ -398,13 +382,13 @@ namespace GDModel
             GDMCustomEvent deathEvent = null;
 
             int num = Events.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMCustomEvent evt = Events[i];
+                var evtType = evt.GetTagType();
 
-                if (evt.Name == GEDCOMTagType.BIRT && birthEvent == null) {
+                if (evtType == GEDCOMTagType.BIRT && birthEvent == null) {
                     birthEvent = evt;
-                } else if (evt.Name == GEDCOMTagType.DEAT && deathEvent == null) {
+                } else if (evtType == GEDCOMTagType.DEAT && deathEvent == null) {
                     deathEvent = evt;
                 }
             }
@@ -597,8 +581,8 @@ namespace GDModel
 
         private static int EventsCompare(GDMPointer cp1, GDMPointer cp2)
         {
-            UDN udn1 = ((GDMFamilyRecord)cp1.Value).GetUDN(GEDCOMTagType.MARR);
-            UDN udn2 = ((GDMFamilyRecord)cp2.Value).GetUDN(GEDCOMTagType.MARR);
+            UDN udn1 = ((GDMFamilyRecord)cp1.Value).GetUDN(GEDCOMTagName.MARR);
+            UDN udn2 = ((GDMFamilyRecord)cp2.Value).GetUDN(GEDCOMTagName.MARR);
             return udn1.CompareTo(udn2);
         }
 
