@@ -9,60 +9,338 @@
 <body>
 
 <h1>Options</h1>
+    <a href="#Common">Common</a>,&nbsp;<a href="#Multimedia">Multimedia</a>,&nbsp;<a href="#Charts">Charts</a>,&nbsp;<a href="#Interface">Interface</a>,&nbsp;<a href="#Pedigrees">Pedigrees</a>,&nbsp;<a href="#Plugins">Plugins</a>
 
-<h2>Common</h2>
+    <h2 id="Common">Common</h2>
+    <img src="images/dlgOptions-Common.gif" alt="[Common options dialog]" />
+    <ol>
+        <li>Internet
+            <br/>Set up these settings when you access the Internet via a proxy.
+            <ul>
+                <li>Use proxy
+                    <br />Check this if using a proxy to access the Internet
+                </li>
+                <li>Server
+                    <br/>This is the name of the server.
+                </li>
+                <li>Port
+                    <br />This is the port number to use.
+                </li>
+                <li>Login
+                    <br/>This is the login name.
+                </li>
+                <li>Password
+                    <br />The password needed to access the proxy server.
+                </li>
+            </ul>
+        </li>
+        <li>Files backup
+            <br />Controls if backups of the current database are performed.
+            <ul>
+                <li>not
+                    <br />If selected then no backups of the database is performed.
+                </li>
+                <li>only previous file
+                    <br />If selected then only a single backup is made each time the database is saved.
+                </li>
+                <li>backup each file revision
+                    <br />If selected then every time the database is saved a new backup is created.
+                </li>
+            </ul>
+        </li>
+        <li>Autosave every
+            <br />If checked then the database is saved every <i>N</i> minutes.
+        </li>
+        <li>Other
+            <br />Here are miscellaneous options that control how the startup process is handled.
+            <ul>
+                <li>Show tips on startup
+                    <br />If checked then useful tips will be shown at startup such as birthday reminders.
+                </li>
+                <li>Load at startup recent opened files
+                    <br />If checked then the last file used is automatically opened.
+                </li>
+                <li>Automatically check for updates
+                    <br />If checked then GEDKeeper will check to see if a new version is available. If found then a message is displayed.
+                </li>
+            </ul>
+        </li>
+        <li>Language
+            <br />Controls which language will be used in the interface. Restarting is not required, but you must click &quot;Apply&quot; for this to take effect.
+        </li>
+        <li>Geocoder
+            <br />Controls which mapping system is used for maps generated.
+        </li>
+    </ol>
 
-<h3>Use proxy when downloading from the Internet</h3>
+    <h2 id="Multimedia">Multimedia</h2>
+    <img src="images/dlgOptions-Multimedia.gif" alt="[Multimedia options dialog]" />
+    <ol>
+        <li>Warn when adding media files from removable media.
+            <br/>If checked then a warning will be shown if a media file is on removable media such as a CD, DVD, or USB stick.
+         </li>
+        <li>Use embedded MediaPlayer
+            <br />If checked then GEDKeeper's media player will be used. If unchecked then the system default view for media is used.
+        </li>
+        <li>Allow direct references to media files
+            <br />If checked then media files are not copied to the subdirectory where the database is kept. Instead a direct reference to where the media is located is used. Note: this could make transferring your database to another location more difficult.
+        </li>
+    </ol>
 
-<p>Set up these settings when you access the Internet via a proxy.</p>
+    <h2 id="Charts">Charts</h2>
+        <h3>Trees</h3>
+        Controls characteristics of tree charts.
+        <br /><img src="images/dlgOptions-Charts-Trees.gif" alt="[Tree chart options dialog]" />
+        <ol>
+            <li>Show individuals in tree
+                <br />Specifies characters for any tree charts.
+                <ul>
+                    <li>Surname
+                        <br />If checked then blah, blah, blah
+                    </li>
+                    <li>Name
+                        <br />If checked then blah, blah, blah
+                    </li>
+                    <li>Patronymic
+                        <br />If checked then blah, blah, blah
+                    </li>
+                    <li>Separate lines
+                        <br />If checked then blah, blah, blah
+                    </li>
+                    <li>Birth date
+                        <br />If checked then blah, blah, blah
+                    </li>
+                    <li>Death Date
+                        <br />If checked then blah, blah, blah. If checked then you can choose to only show the years.
+                    </li>
+                    <li>Date of marriages
+                        <br />If checked then blah, blah, blah
+                    </li>
+                    <li>Kinship
+                        <br />If checked then blah, blah, blah
+                    </li>
+                    <li>Additional symbols
+                        <br />If checked then blah, blah, blah
+                    </li>
+                    <li>Tree decorative
+                        <br />If checked then blah, blah, blah
+                    </li>
+                    <li>Show portraits
+                        <br />If checked then blah, blah, blah. If checked you can also choose to use a default portrait.
+                    </li>
+                    <li>Inverted tree
+                        <br />If checked then blah, blah, blah
+                    </li>
+                    <li>Hide died in childhood
+                        <br />If checked then blah, blah, blah
+                    </li>
+                    <li>Show places
+                        <br />If checked then blah, blah, blah
+                    </li>
+                    <li>Hide unknown spouses
+                        <br />If checked then blah, blah, blah
+                    </li>
+                    <li>Check tree size allowed
+                        <br />If checked then blah, blah, blah
+                    </li>
+                </ul>
+            </li>
+            <li>Decor
+                <br />Controls what colors and font are used for generated charts.
+                <ul>
+                    <li>Man
+                        </br>Click here to choose the color for a person identified as a man.
+                    </li>
+                    <li>Woman
+                        <br />Click here to choose the color for a  person identified as a woman.
+                    </li>
+                    <li>Unknown sex
+                        <br />If a sex was not identified, then this color will be used.
+                    </li>
+                    <li>Divorcee husband
+                        <br />A divorced husband (man) will be shown with this color.
+                    </li>
+                    <li>Divorcee wife
+                        <br />If the person is a divorced wife (woman) then this color will be used.
+                    </li>
+                    <li>Font
+                        <br />Controls which font is used for generated charts. Click here and a list of all available fonts on you system is shown.
+                    </li>
+                </ul>
+            </li>
+            <li>Spacings
+                <br />Controls a set of spacings on the charts in points (dots)
+                <ul>
+                    <li>Margins
+                        <br />Specifies the margins on each side of the chart.
+                    </li>
+                    <li>Branch distance
+                        <br />Blah, blah, blah
+                    </li>
+                    <li>Generation distance
+                        <br/>Blah, blah, blah
+                    </li>
+                    <li>Spouse distance
+                        <br />Blah, blah, blah
+                    </li>
+                </ul>
+            </li>
+        </ol>
+        <h3>Ancestors Circle</h3>
+            Controls blah, blah, blah.
+            <br /><img src="images/dlgOptions-Charts-AncestorsCircle.gif" alt="[Ancesstors Circle chart options dialog]" />
+            <ul>
+                <li>Circle 0
+                    <br />Controls the color for the first circle.
+                </li>
+                <li>Circle 1
+                    <br />Controls the color for the second circle.
+                </li>
+                <li>Circle 2
+                    <br />Controls the color for the third circle.
+                </li>
+                <li>Circle 3
+                    <br />Controls the color for the fourth circle.
+                </li>
+                <li>Circle 4
+                    <br />Controls the color for the fifth circle.
+                </li>
+                <li>Circle 5
+                    <br />Controls the color for the sixth circle.
+                </li>
+                <li>Circle 6
+                    <br />Controls the color for the seventh circle.
+                </li>
+                <li>Circle 7
+                    <br />Controls the color for the eigth circle.
+                </li>
+                <li>Text color
+                    <br />Specifies the color of the text. Be sure it is not the same as &quot;Back color&quot;.
+                </li>
+                <li>Back color
+                    <br />Specifies the background color for the text. Be sure it is not the same as &quot;Text color&quot;.
+                </li>
+                <li>Lines color
+                    <br />Sets the color for all the lines that are drawn.
+                </li>
+                <li>Hide empty segments
+                    <br />Blah, blah, blah
+                </li>
+                <li>Arc text
+                    <br />If checked then the text is shown in an arc fashion instead of completely horizontal.
+                </li>
+            </ul>
 
-<h3>Show tips on startup</h3>
+    <h2 id="Interface">Interface</h2>
+        Controls characteristics of the user interface.
+        <h3>All lists</h3>
+            Controls characteristics for every list that is shown.
+            <br /><img src="images/dlgOptions-Interface-AllLists.gif" alt="[Interface All Lists options dialog]" />
+            <ol>
+                <li>Name format in lists
+                    <ul>
+                        <li>Surname_Name_Patronymic
+                            <br />Blah, blah, blah
+                        </li>
+                        <li>Surname; Name_Patronymic
+                            <br />Blah, blah, blah
+                        </li>
+                        <li>Surname; Name; Patronymic
+                            <br />Blah, blah, blah
+                        </li>
+                    </ul>
+                </li>
+                <li>Date formats in lists
+                    <ul>
+                        <li>DD.MM.YYYY
+                            <br />Dates will be shown in the following order: day, month, then year. Each segment is separated by a period.
+                        </li>
+                        <li>YYYY.MM.DD
+                            <br />Dates will be shown in the following order: year, month, then day. Each segment is separated by a period.
+                        </li>
+                    </ul>
+                </li>
+                <li>Show calendar near dates
+                    <br />Blah, blah, blah
+                </li>
+                <li>Show date type
+                    <br />Displays the type of date being used such as Gregorian, Jewish, etc.
+                </li>
+                <li>Additional names
+                    <ul>
+                        <li>Extended women's surnames
+                            <br />Controls how women's names are displayed if they are married. As an example, we will use the name Jane whose maiden name is Smith and is now Johnson.
+                            <ul>
+                                <li>Format &quot;Maiden (Married)&quot;
+                                    <br />Example: Jane Smith (Johnson)
+                                </li>
+                                <li>Format &quot;Married (Maiden)&quot;
+                                    <br />Example: Jane Johnson (Smith)
+                                </li>
+                                <li>Format &quot;Maiden&quot;
+                                    <br />Example: Jane Smith
+                                </li>
+                                <li>Format &quot;Married&quot;
+                                    <br />Example: Jane Johnson
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>Include address into place text
+                    <br />If checked then the complete address of a place is shown (if available).
+                </li>
+                <li>Highlight unparented
+                    <br />If checked then persons who do not have parents will be highlighted.
+                </li>
+                <li>Highlight unmarried
+                    <br />If checked then persons who are not married are highlighted.
+                </li>
+                <li>Autosort children
+                    <br />If checked then when children are shown they will be automatically sorted by birth date.
+                </li>
+                <li>Autosort spouses
+                    <br />If checked then spouses are automatically sorted by marriage date.
+                </li>
+            </ol>
+        <h3>List of individuals</h3>
+            Controls what person characteristics are shown and the order in which they are shown. To change the order, simply selected a characteristic and use the up and down arrows.
+            <br /><img src="images/dlgOptions-Interface-ListOfIndividuals.gif" alt="[Interface List of Individuals options dialog]" />
 
-<p>Currently this shows birthday reminders on application startup.</p>
+    <h2 id="Pedigrees">Pedigrees</h2>
+        <img src="images/dlgOptions-Pedigrees.gif" alt="[Pedigree options dialog]" />
+        <ol>
+            <li>Pedigree generation
+                <ul>
+                    <li>Include attributes of individuals
+                        <br />Blah, blah, blah
+                    </li>
+                    <li>Include notes
+                        <br />If notes were associated with the pedigree then they will be shown.
+                    </li>
+                    <li>Includes sources
+                        <br />If one or more sources were identified then they will be shown.
+                    </li>
+                    <li>Include number of generations
+                        <br />Blah, blah, blah
+                    </li>
+                    <li>Pedigree format
+                        <ul>
+                            <li>Excess
+                                <br />If selected then the pedigrees will show verbose information.
+                            </li>
+                            <li>Compact
+                                <br />If selected then blah, blah, blah
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ol>
 
-<h2>Interface</h2>
-
-<h3>Highlight person with no parents or family</h3>
-
-<p>Highlighting persons with no parents or family improves navigation through the list. The following color scheme is 
-applied: a white background is used for persons with family and parents, flaxen background for persons without family, and
-light red for persons without parents. Background colors do not prevent getting information.</p>
-
-<a name="tree"><h2>Family tree</h2></a>
-
-<p>There are two setting groups for family tree generation: how persons are represented in the tree and how the tree 
-appears on a render target.</p>
-
-<h3>Person representation in the tree</h3>
-
-<p>Here you define what data you will see in the tree: last name, first name and surname, birthday and obit, and what part of 
-dates.</p>
-
-<p>When the &quot;Kinship&quot; option is on, every person has a visible relation degree&#151;which is calculated on each 
-tree rebuild relative to the central person in the tree.</p>
-
-<p>&quot;Additional symbols&quot; shows special symbols for some categories of people. There are special icons for 
-veterans of the World War II, died, veterans of Labor, cavalier of Cross of St. George, and repressed. These categories are 
-defined in the <a href="gkhRec_UserRefs.html">user-defined reference</a> section in the person editor.</p>
-
-<p>&quot;Tree decorative&quot; controls some additional graphical elements and shadows.</p>
-
-<p>The &quot;Hide died in childhood&quot; option becomes helpful when you handle several sources, because it 
-can reduce the number of visible persons and make your task much simpler.</p>
-
-<h3>Decor (color and font)</h3>
-
-<p>This setting group defines colors and the main font used in tree rendering.</p>
-
-<a name="pedigree"><h2>Pedigrees</h2></a>
-
-<p>Here you set up pedigree generation. &quot;Include attributes of individuals&quot; checks if a person&#39;s life events will be 
-included in the pedigree. The &quot;Include notes&quot; option checks if text notes from a person&#39;s biography will be included 
-in the pedigree. The &quot;Include sources&quot; option determines if the pedigree includes source numbers that reference a person&#151;there
-is a source list at the bottom of the pedigree. The &quot;Format&quot; option has two possible values: 
-&quot;Excess&quot; and &quot;Compact&quot;. These control the level of details for a person description printed in the pedigree. 
-Usually, you would use the Compact format, because the Excess one may contain too much unnecessary 
-information.</p>
+    <h2 id="Plugins">Plugins</h2>
+        This is a list of the plugins that are in use by GEDKeeper. This is for your reference only.
+        <br /><img src="images/dlgOptions-Plugins.gif" alt="[Plugins options dialog]" />
 
 </body>
 </html>
