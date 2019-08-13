@@ -789,6 +789,9 @@
 788=GedML files (*.xml)|*.xml
 789=Bambino rilevato senza genitori
 790=Rilevato record familiare senza genitori o figli
+791=Are you sure you want to remove multimedia file?
+792=Storage not found
+793=File not found
 
 801=RI:George Knight
 802=USSR:WWII:Combatant
