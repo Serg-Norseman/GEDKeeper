@@ -143,6 +143,12 @@ namespace GKCore.Controllers
                     MediaStoreType.mstArchive);
             }
 
+            if (allowRel) {
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstRelativeReference].Name),
+                    MediaStoreType.mstRelativeReference);
+            }
+
+            fView.StoreType.SetSelectedTag<MediaStoreType>(selectType);
         }
 
         public void SelectFile()
