@@ -517,7 +517,7 @@ namespace GKCore
             if (evt is GDMIndividualEvent || evt is GDMIndividualAttribute) {
                 int ev = GetPersonEventIndex(evtName);
                 if (ev == 0) {
-                    result = evt.Classification;
+                    result = !string.IsNullOrEmpty(evt.Classification) ? evt.Classification : LangMan.LS(GKData.PersonEvents[ev].Name);
                 } else {
                     result = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evtName;
                 }

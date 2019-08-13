@@ -63,7 +63,7 @@ namespace GKCore.Controllers
                 GDMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
 
                 if (fIsNew) {
-                    MediaStoreType gst = (MediaStoreType)fView.StoreType.SelectedTag;
+                    MediaStoreType gst = fView.StoreType.GetSelectedTag<MediaStoreType>();
 
                     if ((gst == MediaStoreType.mstArchive || gst == MediaStoreType.mstStorage) && !fBase.Context.CheckBasePath()) {
                         return false;
@@ -129,44 +129,20 @@ namespace GKCore.Controllers
         private void RefreshStoreTypes(bool allowRef, bool allowArc, bool allowRel, MediaStoreType selectType)
         {
             fView.StoreType.Clear();
-            int selectedIndex = 0;
-            int currentIndex = -1;
 
             if (allowRef) {
                 fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name),
                     MediaStoreType.mstReference);
-                currentIndex++;
-                if (selectType == MediaStoreType.mstReference) {
-                    selectedIndex = currentIndex;
-                }
             }
 
             fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstStorage].Name),
                 MediaStoreType.mstStorage);
-            currentIndex++;
-            if (selectType == MediaStoreType.mstStorage) {
-                selectedIndex = currentIndex;
-            }
 
             if (allowArc) {
                 fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name),
                     MediaStoreType.mstArchive);
-                currentIndex++;
-                if (selectType == MediaStoreType.mstArchive) {
-                    selectedIndex = currentIndex;
-                }
             }
 
-            if (allowRel) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstRelativeReference].Name),
-                    MediaStoreType.mstRelativeReference);
-                currentIndex++;
-                if (selectType == MediaStoreType.mstRelativeReference) {
-                    selectedIndex = currentIndex;
-                }
-            }
-        
-            fView.StoreType.SelectedIndex = selectedIndex;
         }
 
         public void SelectFile()

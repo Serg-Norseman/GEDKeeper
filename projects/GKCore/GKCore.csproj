@@ -303,6 +303,7 @@
     <Compile Include="GKCore\Types\FilterLifeMode.cs" />
     <Compile Include="GKCore\Types\MatchParams.cs" />
     <Compile Include="GKCore\Types\MediaStore.cs" />
+    <Compile Include="GKCore\Types\MediaStoreStatus.cs" />
     <Compile Include="GKCore\Types\MediaStoreType.cs" />
     <Compile Include="GKCore\Types\MultimediaKind.cs" />
     <Compile Include="GKCore\Types\NameEntry.cs" />
