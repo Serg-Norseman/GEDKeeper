@@ -859,6 +859,12 @@ namespace GKCore
                     }
                     break;
 
+                case MediaStoreType.mstRelativeReference:
+                    string treeName = fFileName;
+                    targetFn = GetTreePath(treeName) + targetFn;
+                    stream = new FileStream(targetFn, FileMode.Open);
+                    break;
+
                 case MediaStoreType.mstReference:
                     stream = new FileStream(targetFn, FileMode.Open);
                     break;
@@ -894,6 +900,11 @@ namespace GKCore
                             fs.Close();
                             fs.Dispose();
                         }
+                        break;
+
+                    case MediaStoreType.mstRelativeReference:
+                        string treeName = fFileName;
+                        fileName = GetTreePath(treeName) + targetFn;
                         break;
 
                     case MediaStoreType.mstReference:
@@ -932,6 +943,11 @@ namespace GKCore
             switch (storeType) {
                 case MediaStoreType.mstReference:
                     refPath = fileName;
+                    break;
+
+                case MediaStoreType.mstRelativeReference:
+                    string treeName = fFileName;
+                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + GKUtils.GetRelativePath(GetTreePath(treeName), fileName);
                     break;
 
                 case MediaStoreType.mstArchive:

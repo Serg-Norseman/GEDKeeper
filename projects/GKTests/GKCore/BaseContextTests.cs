@@ -209,6 +209,10 @@ namespace GKCore
             fileRef.ParseString("arc:file.txt");
             mediaStore = fContext.GetStoreType(fileRef);
             Assert.AreEqual(MediaStoreType.mstArchive, mediaStore.StoreType);
+
+            fileRef.ParseString("rel:file.txt");
+            mediaStore = fContext.GetStoreType(fileRef);
+            Assert.AreEqual(MediaStoreType.mstRelativeReference, mediaStore.StoreType);
         }
 
         [Test]
@@ -286,6 +290,12 @@ namespace GKCore
                 Assert.AreEqual(true, ctx.MediaSave(mmRecS.FileReferences[0], sourFile, MediaStoreType.mstStorage));
                 Assert.IsNotNull(ctx.LoadMediaImage(mmRecS.FileReferences[0], false));
                 Assert.IsNotNull(ctx.MediaLoad(mmRecS.FileReferences[0]));
+
+                var mmRecRl = new GDMMultimediaRecord(ctx.Tree);
+                mmRecRl.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecRl));
+                Assert.AreEqual(true, ctx.MediaSave(mmRecRl.FileReferences[0], sourFile, MediaStoreType.mstRelativeReference));
+                Assert.IsNotNull(ctx.LoadMediaImage(mmRecRl.FileReferences[0], false));
+                Assert.IsNotNull(ctx.MediaLoad(mmRecRl.FileReferences[0]));
             }
         }
 

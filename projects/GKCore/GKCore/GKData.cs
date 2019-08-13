@@ -390,7 +390,8 @@ namespace GKCore
             {
                 new StoreTypeRec(LSID.LSID_STRef, ""),
                 new StoreTypeRec(LSID.LSID_STStg, "stg:"),
-                new StoreTypeRec(LSID.LSID_STArc, "arc:")
+                new StoreTypeRec(LSID.LSID_STArc, "arc:"),
+                new StoreTypeRec(LSID.LSID_STRel, "rel:")
             };
 
 

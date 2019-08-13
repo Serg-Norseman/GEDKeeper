@@ -868,7 +868,10 @@ namespace GKCore
         /* 808 */ LSID_Religion_Orthodoxy,
         /* 809 */ LSID_Religion_TheOldBelievers,
 
-        /* 000 */ LSID_Last = LSID_Religion_TheOldBelievers
+        /* 810 */ LSID_STRel,
+
+        /* 000 */
+        LSID_Last = LSID_STRel
     }
 
 
@@ -1691,6 +1694,7 @@ namespace GKCore
             /* 807 */ "Religion:Catholicism",
             /* 808 */ "Religion:Orthodoxy",
             /* 809 */ "Religion:The Old Believers",
+            /* 810 */ "Relative link to file",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
