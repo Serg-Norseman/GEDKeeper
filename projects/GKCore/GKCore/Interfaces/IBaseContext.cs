@@ -68,6 +68,7 @@ namespace GKCore.Interfaces
         Stream MediaLoad(GDMFileReference fileReference, bool throwException);
         string MediaLoad(GDMFileReference fileReference);
         bool MediaSave(GDMFileReference fileReference, string fileName, MediaStoreType storeType);
+        MediaStoreStatus VerifyMediaFile(GDMFileReference fileReference, out string fileName);
 
         // Used only in MediaViewer and Slideshow
         IImage LoadMediaImage(GDMFileReference fileReference, bool throwException);

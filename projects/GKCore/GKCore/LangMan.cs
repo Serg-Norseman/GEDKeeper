@@ -526,7 +526,7 @@ namespace GKCore
         /* 474 */ LSID_SyncFin,
         /* 475 */ LSID_PatSearch,
         /* 476 */ LSID_LinksSearch,
-        /* 477 */ LSID_ArcNotFound,
+        /* 477 */ LSID_MediaFileNotLoaded,
         /* 478 */ LSID_Scale,
         /* 479 */ LSID_GEDCOMFilter,
         /* 480 */ LSID_AllFilter,
@@ -854,9 +854,8 @@ namespace GKCore
         /* 796 */ LSID_AllowDeleteMediaFileFromStgArc,
         /* 797 */ LSID_AllowDeleteMediaFileFromRefs,
         /* 798 */ LSID_DeleteMediaFileWithoutConfirm,
-
-        /* 799 */ // reserved begin
-        /* 800 */ // reserved end
+        /* 799 */ LSID_MediaRecordWithoutFiles,
+        /* 800 */ LSID_ArcNotFound,
 
         /* 801 */ LSID_RI_GeorgeKnight = 801,
         /* 802 */ LSID_USSR_WWII_Combatant,
@@ -1681,9 +1680,8 @@ namespace GKCore
             /* 796 */ "Allow delete media files from storage and archive",
             /* 797 */ "Allow delete media files by direct and relative references",
             /* 798 */ "Delete media files without confirm",
-
-            /* 799 */ "", // reserved begin
-            /* 800 */ "", // reserved end
+            /* 799 */ "Media record without files",
+            /* 800 */ "Archive not found",
 
             /* 801 */ "RI:GeorgeKnight",
             /* 802 */ "USSR:WWII:Combatant",

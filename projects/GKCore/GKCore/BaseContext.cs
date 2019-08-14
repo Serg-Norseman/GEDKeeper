@@ -838,7 +838,7 @@ namespace GKCore
                             throw new MediaFileNotFoundException(targetFn);
                         }
 
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
                     } else {
                         stream = new FileStream(targetFn, FileMode.Open);
                     }
@@ -852,7 +852,7 @@ namespace GKCore
                             throw new MediaFileNotFoundException(arcFile);
                         }
 
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
                     } else {
                         ArcFileLoad(targetFn, stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -892,7 +892,7 @@ namespace GKCore
                         FileStream fs = new FileStream(fileName, FileMode.Create);
                         try {
                             if (!File.Exists(GetArcFileName())) {
-                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
                             } else {
                                 ArcFileLoad(targetFn, fs);
                             }
@@ -1086,11 +1086,12 @@ namespace GKCore
 
                     case MediaStoreType.mstReference:
                         if (!File.Exists(fileName)) {
-                            fileName = AppHost.PathReplacer.TryReplacePath(fileName);
-                            if (string.IsNullOrEmpty(fileName)) {
+                            string xFileName = AppHost.PathReplacer.TryReplacePath(fileName);
+                            if (string.IsNullOrEmpty(xFileName)) {
                                 result = MediaStoreStatus.mssFileNotFound;
                             } else {
                                 result = MediaStoreStatus.mssExists;
+                                fileName = xFileName;
                             }
                         } else {
                             result = MediaStoreStatus.mssExists;

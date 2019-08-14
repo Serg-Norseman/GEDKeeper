@@ -797,6 +797,8 @@
 796=Allow delete media files from storage and archive
 797=Allow delete media files by direct and relative references
 798=Delete media files without confirm
+799=Media record without files
+800=Archive not found
 
 801=RI:George Knight
 802=USSR:WWII:Combatant
