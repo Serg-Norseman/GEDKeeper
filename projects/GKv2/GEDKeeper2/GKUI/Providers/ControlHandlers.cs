@@ -214,25 +214,12 @@ namespace GKUI.Providers
 
         public T GetSelectedTag<T>()
         {
-            object selectedItem = Control.SelectedItem;
-            GKComboItem comboItem = (GKComboItem)selectedItem;
-            T itemTag = (T)comboItem.Tag;
-            return itemTag;
+            return UIHelper.GetSelectedTag<T>(Control);
         }
 
         public void SetSelectedTag<T>(T tagValue)
         {
-            var ctl = Control;
-            foreach (object item in ctl.Items) {
-                GKComboItem comboItem = (GKComboItem)item;
-                T itemTag = (T)comboItem.Tag;
-
-                if (tagValue.Equals(itemTag)) {
-                    ctl.SelectedItem = item;
-                    return;
-                }
-            }
-            ctl.SelectedIndex = 0;
+            UIHelper.SetSelectedTag<T>(Control, tagValue);
         }
     }
 

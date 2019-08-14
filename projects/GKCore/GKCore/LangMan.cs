@@ -849,13 +849,13 @@ namespace GKCore
         /* 791 */ LSID_MediaFileDeleteQuery,
         /* 792 */ LSID_StgNotFound,
         /* 793 */ LSID_FileNotFound,
+        /* 794 */ LSID_AllowMediaRelativeReferences,
+        /* 795 */ LSID_MediaStoreDefault,
+        /* 796 */ LSID_AllowDeleteMediaFileFromStgArc,
+        /* 797 */ LSID_AllowDeleteMediaFileFromRefs,
+        /* 798 */ LSID_DeleteMediaFileWithoutConfirm,
 
-        /* 794 */ // reserved begin
-        /* 795 */
-        /* 796 */
-        /* 797 */
-        /* 798 */
-        /* 799 */
+        /* 799 */ // reserved begin
         /* 800 */ // reserved end
 
         /* 801 */ LSID_RI_GeorgeKnight = 801,
@@ -1676,13 +1676,13 @@ namespace GKCore
             /* 791 */ "Are you sure you want to remove multimedia file?",
             /* 792 */ "Storage not found",
             /* 793 */ "File not found",
+            /* 794 */ "Allow relative references to media files",
+            /* 795 */ "Default media storage type",
+            /* 796 */ "Allow delete media files from storage and archive",
+            /* 797 */ "Allow delete media files by direct and relative references",
+            /* 798 */ "Delete media files without confirm",
 
-            /* 794 */ "", // reserved begin
-            /* 795 */ "",
-            /* 796 */ "",
-            /* 797 */ "",
-            /* 798 */ "",
-            /* 799 */ "",
+            /* 799 */ "", // reserved begin
             /* 800 */ "", // reserved end
 
             /* 801 */ "RI:GeorgeKnight",

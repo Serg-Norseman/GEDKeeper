@@ -80,6 +80,9 @@ namespace GKCore.Options
         private bool fAllowMediaStoreReferences;
         private bool fAllowMediaStoreRelativeReferences;
         private int  fMediaStoreDefault;
+        private bool fAllowDeleteMediaFileFromStgArc;
+        private bool fAllowDeleteMediaFileFromRefs;
+        private bool fDeleteMediaFileWithoutConfirm;
         private bool fUseExtendedNotes;
 
         private bool fAutoCheckUpdates;
@@ -272,10 +275,29 @@ namespace GKCore.Options
             get { return fAllowMediaStoreRelativeReferences; }
             set { fAllowMediaStoreRelativeReferences = value; }
         }
+
         public int MediaStoreDefault
         {
             get { return fMediaStoreDefault; }
             set { fMediaStoreDefault = value; }
+        }
+
+        public bool AllowDeleteMediaFileFromStgArc
+        {
+            get { return fAllowDeleteMediaFileFromStgArc; }
+            set { fAllowDeleteMediaFileFromStgArc = value; }
+        }
+
+        public bool AllowDeleteMediaFileFromRefs
+        {
+            get { return fAllowDeleteMediaFileFromRefs; }
+            set { fAllowDeleteMediaFileFromRefs = value; }
+        }
+
+        public bool DeleteMediaFileWithoutConfirm
+        {
+            get { return fDeleteMediaFileWithoutConfirm; }
+            set { fDeleteMediaFileWithoutConfirm = value; }
         }
 
         public bool AutoCheckUpdates
@@ -373,6 +395,9 @@ namespace GKCore.Options
             fAllowMediaStoreReferences = false;
             fAllowMediaStoreRelativeReferences = true;
             fMediaStoreDefault = 0;
+            fAllowDeleteMediaFileFromStgArc = true;
+            fAllowDeleteMediaFileFromRefs = false;
+            fDeleteMediaFileWithoutConfirm = false;
             fUseExtendedNotes = false;
 
             fAutoCheckUpdates = true;
@@ -612,6 +637,9 @@ namespace GKCore.Options
             fAllowMediaStoreReferences = ini.ReadBool("Common", "AllowMediaStoreReferences", false);
             fAllowMediaStoreRelativeReferences = ini.ReadBool("Common", "AllowMediaStoreRelativeReferences", true); // only when AllowMediaStoreReferences is true
             fMediaStoreDefault = (ushort)ini.ReadInteger("Common", "MediaStoreDefault", 0); // (int)MediaStoreType.mstReference
+            fAllowDeleteMediaFileFromStgArc = ini.ReadBool("Common", "AllowDeleteMediaFileFromStgArc", true);
+            fAllowDeleteMediaFileFromRefs = ini.ReadBool("Common", "AllowDeleteMediaFileFromRefs", false);
+            fDeleteMediaFileWithoutConfirm = ini.ReadBool("Common", "DeleteMediaFileWithoutConfirm", false);
             fAutoCheckUpdates = ini.ReadBool("Common", "AutoCheckUpdates", true);
             fAutoSortChildren = ini.ReadBool("Common", "AutoSortChildren", true);
             fAutoSortSpouses = ini.ReadBool("Common", "AutoSortSpouses", false);
@@ -724,6 +752,9 @@ namespace GKCore.Options
             ini.WriteBool("Common", "AllowMediaStoreReferences", fAllowMediaStoreReferences);
             ini.WriteBool("Common", "AllowMediaStoreRelativeReferences", fAllowMediaStoreRelativeReferences);
             ini.WriteInteger("Common", "MediaStoreDefault", fMediaStoreDefault);
+            ini.WriteBool("Common", "AllowDeleteMediaFileFromStgArc", fAllowDeleteMediaFileFromStgArc);
+            ini.WriteBool("Common", "AllowDeleteMediaFileFromRefs", fAllowDeleteMediaFileFromRefs);
+            ini.WriteBool("Common", "DeleteMediaFileWithoutConfirm", fDeleteMediaFileWithoutConfirm);
             ini.WriteBool("Common", "AutoCheckUpdates", fAutoCheckUpdates);
             ini.WriteBool("Common", "AutoSortChildren", fAutoSortChildren);
             ini.WriteBool("Common", "AutoSortSpouses", fAutoSortSpouses);

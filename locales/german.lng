@@ -792,6 +792,11 @@
 791=Are you sure you want to remove multimedia file?
 792=Storage not found
 793=File not found
+794=Allow relative references to media files
+795=Default media storage type
+796=Allow delete media files from storage and archive
+797=Allow delete media files by direct and relative references
+798=Delete media files without confirm
 
 801=RI:George Knight
 802=USSR:WWII:Combatant

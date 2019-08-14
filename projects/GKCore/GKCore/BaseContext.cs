@@ -978,7 +978,7 @@ namespace GKCore
             return result;
         }
 
-        public bool MediaDelete(GDMFileReference fileReference, bool needConfirmation = true)
+        public bool MediaDelete(GDMFileReference fileReference)
         {
             if (fileReference == null) return false;
 
@@ -986,25 +986,39 @@ namespace GKCore
                 MediaStore mediaStore = GetStoreType(fileReference);
                 string fileName = mediaStore.FileName;
 
-                // TODO: may be Yes/No/Cancel?
-                if (needConfirmation) {
-                    string msg = string.Format(LangMan.LS(LSID.LSID_MediaFileDeleteQuery));
-                    if (!AppHost.StdDialogs.ShowQuestionYN(msg)) {
-                        return false;
-                    }
-                }
-
                 MediaStoreStatus storeStatus = VerifyMediaFile(fileReference, out fileName);
                 bool result = false;
 
                 switch (storeStatus) {
                     case MediaStoreStatus.mssExists:
-                        if (mediaStore.StoreType == MediaStoreType.mstArchive) {
-                            ArcFileDelete(fileName);
-                        } else {
-                            File.Delete(fileName);
+                        {
+                            if (mediaStore.StoreType == MediaStoreType.mstArchive || mediaStore.StoreType == MediaStoreType.mstStorage) {
+                                if (!GlobalOptions.Instance.AllowDeleteMediaFileFromStgArc) {
+                                    return true;
+                                }
+                            }
+
+                            if (mediaStore.StoreType == MediaStoreType.mstReference || mediaStore.StoreType == MediaStoreType.mstRelativeReference) {
+                                if (!GlobalOptions.Instance.AllowDeleteMediaFileFromRefs) {
+                                    return true;
+                                }
+                            }
+
+                            if (!GlobalOptions.Instance.DeleteMediaFileWithoutConfirm) {
+                                string msg = string.Format(LangMan.LS(LSID.LSID_MediaFileDeleteQuery));
+                                // TODO: may be Yes/No/Cancel?
+                                if (!AppHost.StdDialogs.ShowQuestionYN(msg)) {
+                                    return false;
+                                }
+                            }
+
+                            if (mediaStore.StoreType == MediaStoreType.mstArchive) {
+                                ArcFileDelete(fileName);
+                            } else {
+                                File.Delete(fileName);
+                            }
+                            result = true;
                         }
-                        result = true;
                         break;
 
                     case MediaStoreStatus.mssFileNotFound:
