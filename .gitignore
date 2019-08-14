@@ -2,8 +2,6 @@
 **/[Bb]in/
 **/[Oo]bj/
 **/ProfilingSessions/
-**/OpenCover/
-**/PartCover/
 
 /plugins/*.*
 /*.exe*
@@ -33,4 +31,6 @@ build_sonarqube.cmd
 /projects/GKvX/
 /projects/GKvU/
 
+/projects/GKTests/OpenCover/
+/projects/GKTests/PartCover/
 /LuaInterface.dll.config
