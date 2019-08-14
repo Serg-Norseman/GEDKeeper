@@ -23,6 +23,20 @@
   * Proofreading of the English manual
   * Debugging and bug reports
 
+* **[Milan Kosina](https://github.com/m-kosina)**
+
+  * Debugging and bug reports
+  * Development of new features
+
+* **[Kevin Routley](https://github.com/fire-eggs)**
+
+  * Debugging, bug reports and bug fixes
+  * Development of some tests
+
+* **[Alexander Curtis](https://github.com/alexandercurtis)**
+
+  * Author of GEDmill (Family History Website Generator), now it is external plugin
+
 
 ## External components
 
