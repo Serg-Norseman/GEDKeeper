@@ -696,7 +696,7 @@
 695=Quelledatensatz auswählen oder eintragen
 696=Zieldatensatz auswählen
 697=Für die Abspeicherntypen "Archiv" und "Repositur" eine neuen Datenbank soll vorher gespeichert werden
-698=Es gibt jetzt Datei mit diesem Namen im Repositur
+698=Es gibt jetzt Datei mit diesem Namen
 699=Das ist nicht GEDSEC-kompatibel Datei
 700=Diese Person ist Mitglied der einigen Famielien. Man soll die Kinder über ihre Eltern zusetzen.
 701=Fehler bei der Datenexportierung nach Excel
@@ -809,3 +809,5 @@
 807=Religion:Catholicism
 808=Religion:Orthodoxy
 809=Religion:The Old Believers
+
+810=Relative link to file

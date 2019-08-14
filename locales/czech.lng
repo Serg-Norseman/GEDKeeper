@@ -696,7 +696,7 @@
 695=Zvolte nebo přidejte záznam zdroje
 696=Vyberte cílový záznam
 697=Pokud používáte typ úložiště typu "soubor" nebo "uložit", musíte před pokračováním uložit nový databázový soubor
-698=Soubor se stejným názvem již existuje v úložišti
+698=Soubor se stejným názvem již existuje
 699=Nejedná se o soubor kompatibilní s GEDSEC
 700=Tento jedinec má několik rodin. Děti by měly být přidávány prostřednictvím manželů.
 701=Export do aplikace Excel se nezdařil
@@ -809,3 +809,5 @@
 807=Náboženství: Katolicismus
 808=Náboženství: Pravoslaví
 809=Náboženství: Starí věřící 
+
+810=Relative link to file

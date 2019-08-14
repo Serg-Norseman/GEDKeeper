@@ -696,7 +696,7 @@
 695=Selezionare o aggiungere una registrazione della fonte
 696=Selezionare la destinazione della scheda
 697=Se utilizzate “file*” o schede, dovete salvare il file – nuova base di dati – prima di continuare
-698=Un file con lo stesso nome esiste già nell’archivio
+698=Un file con lo stesso nome esiste già
 699=Non è un archivio compatibile GEDSEC
 700=Questo individuo ha diverse mogli?. I figli devono essre aggiunti passando dalle mogli?
 701=Esportazione verso Excel fallita
@@ -809,3 +809,5 @@
 807=Religion:Catholicism
 808=Religion:Orthodoxy
 809=Religion:The Old Believers
+
+810=Relative link to file

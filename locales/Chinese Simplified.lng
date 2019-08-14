@@ -696,7 +696,7 @@
 695=选择或增加条目来源
 696=选择目标条目
 697=若使用 "文件" 或 "储存" 存储, 在保存新数据库文件后才能继续
-698=资源库内已有同名文件
+698=已存在具有相同名称的文件。
 699=非 GEDSEC-compatible 兼容文件
 700=此成员有新家庭. 应通过该夫妻添加孩子们.
 701=导出为 Excel 失败
@@ -809,3 +809,5 @@
 807=Religion:Catholicism
 808=Religion:Orthodoxy
 809=Religion:The Old Believers
+
+810=Relative link to file

@@ -696,7 +696,7 @@
 695=Wybierz lub Dodaj rekord źródła
 696=Wybierz rekord docelowy
 697=Jeśli używasz "plik" lub "przechowywać" typ magazynu, musisz zapisać nowy plik bazy danych aby kontynuować
-698=Plik o tej samej nazwie już istnieje w repozytorium
+698=Plik o tej samej nazwie już istnieje
 699=Nie jest to zgodne z GEDSEC plik
 700=Osoba ta ma kilka rodzin. Dzieci powinny zostać dodane przez małżonków.
 701=Eksport do programu Excel nie powiódł się
@@ -809,3 +809,5 @@
 807=Religion:Catholicism
 808=Religion:Orthodoxy
 809=Religion:The Old Believers
+
+810=Relative link to file

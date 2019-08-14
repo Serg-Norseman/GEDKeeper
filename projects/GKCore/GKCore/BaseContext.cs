@@ -927,19 +927,17 @@ namespace GKCore
             return fileName;
         }
 
-        // TODO: check existing of file
         public bool MediaSave(GDMFileReference fileReference, string fileName, MediaStoreType storeType)
         {
             if (fileReference == null) return false;
 
-            bool result = true;
-
             string storeFile = Path.GetFileName(fileName);
-            string storePath = "";
-            string refPath = "";
+            string storePath = GKUtils.GetStoreFolder(GKUtils.GetMultimediaKind(GDMFileReference.RecognizeFormat(fileName)));
 
-            storePath = GKUtils.GetStoreFolder(GKUtils.GetMultimediaKind(GDMFileReference.RecognizeFormat(fileName)));
+            string refPath = string.Empty;
+            string targetFile = string.Empty;
 
+            // set paths and links
             switch (storeType) {
                 case MediaStoreType.mstReference:
                     refPath = fileName;
@@ -947,16 +945,38 @@ namespace GKCore
 
                 case MediaStoreType.mstRelativeReference:
                     string treeName = fFileName;
-                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + GKUtils.GetRelativePath(GetTreePath(treeName), fileName);
+                    targetFile = GKUtils.GetRelativePath(GetTreePath(treeName), fileName);
+                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + targetFile;
                     break;
 
                 case MediaStoreType.mstArchive:
-                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + storePath + storeFile;
-                    ArcFileSave(fileName, storePath + storeFile);
+                    targetFile = storePath + storeFile;
+                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + targetFile;
                     break;
 
                 case MediaStoreType.mstStorage:
-                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + storePath + storeFile;
+                    targetFile = storePath + storeFile;
+                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + targetFile;
+                    break;
+            }
+
+            // verify existence
+            refPath = FileHelper.NormalizeFilename(refPath);
+            bool alreadyExists = MediaExists(refPath);
+            if (alreadyExists) {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExists));
+                return false;
+            }
+
+            bool result = true;
+
+            // save a copy to archive or storage
+            switch (storeType) {
+                case MediaStoreType.mstArchive:
+                    ArcFileSave(fileName, targetFile);
+                    break;
+
+                case MediaStoreType.mstStorage:
                     try {
                         string targetDir = GetStgFolder(true) + storePath;
                         if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
@@ -964,14 +984,13 @@ namespace GKCore
                         string targetFn = targetDir + storeFile;
                         CopyFile(fileName, targetFn);
                     } catch (IOException) {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExistsInStorage));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExists));
                         result = false;
                     }
                     break;
             }
 
             if (result) {
-                refPath = FileHelper.NormalizeFilename(refPath);
                 fileReference.LinkFile(refPath);
             }
 
@@ -1104,6 +1123,23 @@ namespace GKCore
             }
 
             return result;
+        }
+
+        public bool MediaExists(string refPath)
+        {
+            if (string.IsNullOrEmpty(refPath)) return false;
+
+            int num = fTree.RecordsCount;
+            for (int i = 0; i < num; i++) {
+                GDMMultimediaRecord rec = fTree[i] as GDMMultimediaRecord;
+                if (rec != null && rec.FileReferences.Count > 0) {
+                    if (string.Compare(rec.FileReferences[0].StringValue, refPath, true) == 0) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private void CopyFile(string sourceFileName, string destFileName)

@@ -752,7 +752,7 @@ namespace GKCore
         /* 695 */ LSID_SourceAddTip,
         /* 696 */ LSID_GoalSelectTip,
         /* 697 */ LSID_NewDBFileNeedToSave,
-        /* 698 */ LSID_FileWithSameNameAlreadyExistsInStorage,
+        /* 698 */ LSID_FileWithSameNameAlreadyExists,
         /* 699 */ LSID_ItsNotGEDSECCompatibleFile,
         /* 700 */ LSID_ThisPersonHasSeveralFamilies,
 
@@ -869,8 +869,7 @@ namespace GKCore
 
         /* 810 */ LSID_STRel,
 
-        /* 000 */
-        LSID_Last = LSID_STRel
+        /* 000 */ LSID_Last = LSID_STRel
     }
 
 
@@ -1579,7 +1578,7 @@ namespace GKCore
             /* 695 */ "Select or add a record of source",
             /* 696 */ "Select the target record",
             /* 697 */ "If you use \"file\" or \"store\" storage type, you have to save new database file before continue",
-            /* 698 */ "A file with the same name already exists in the repository",
+            /* 698 */ "A file with the same name already exists",
             /* 699 */ "It's not a GEDSEC-compatible file",
             /* 700 */ "This individual has a few families. Children should be added via the spouses.",
             /* 701 */ "Export to Excel failed",
@@ -1692,6 +1691,7 @@ namespace GKCore
             /* 807 */ "Religion:Catholicism",
             /* 808 */ "Religion:Orthodoxy",
             /* 809 */ "Religion:The Old Believers",
+
             /* 810 */ "Relative link to file",
         };
 

@@ -61,9 +61,11 @@ namespace GKCore.MVP.Controls
         bool ReadOnly { get; set; }
         int SelectedIndex { get; set; }
         object SelectedItem { get; set; }
+        string Text { get; set; }
+
+        // TODO: remove it!
         [Obsolete]
         object SelectedTag { get; set; }
-        string Text { get; set; }
 
         void Add(object item);
         void AddItem(string caption, object tag, IImage image = null);
