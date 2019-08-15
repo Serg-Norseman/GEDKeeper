@@ -343,7 +343,7 @@ namespace GKCore
             }
 
             // eof
-            lastChunk = SetChunkText(tok.Line, null, EMPTY_CHUNK);
+            lastChunk = SetChunkText(tok.Line + 1, null, EMPTY_CHUNK);
         }
     }
 }

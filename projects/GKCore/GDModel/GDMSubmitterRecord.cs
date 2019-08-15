@@ -40,7 +40,7 @@ namespace GDModel
             get { return fLanguages; }
         }
 
-        public new GDMPersonalName Name
+        public GDMPersonalName Name
         {
             get { return fName; }
         }

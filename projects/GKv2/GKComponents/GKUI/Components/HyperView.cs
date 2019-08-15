@@ -137,6 +137,7 @@ namespace GKUI.Components
                 fAcceptFontChange = false;
                 fHeights.Clear();
 
+                StringFormat sf = new StringFormat(StringFormatFlags.MeasureTrailingSpaces | StringFormatFlags.NoWrap | StringFormatFlags.LineLimit);
                 Graphics gfx = CreateGraphics();
                 try {
                     int xPos = 0;
@@ -146,10 +147,10 @@ namespace GKUI.Components
 
                     string text = fLines.Text;
                     Font defFont = this.Font;
+                    SizeF csz = this.ClientSize;
 
                     var parser = new BBTextParser(AppHost.GfxProvider, defFont.SizeInPoints,
-                                                  new ColorHandler(fLinkColor),
-                                                  new ColorHandler(ForeColor));
+                                                  new ColorHandler(fLinkColor), new ColorHandler(ForeColor));
 
                     parser.ParseText(fChunks, text);
 
@@ -172,7 +173,7 @@ namespace GKUI.Components
 
                         if (!string.IsNullOrEmpty(chunk.Text)) {
                             using (var font = new Font(defFont.Name, chunk.Size, (sdFontStyle)chunk.Style, defFont.Unit)) {
-                                SizeF strSize = gfx.MeasureString(chunk.Text, font);
+                                SizeF strSize = gfx.MeasureString(chunk.Text, font, csz, sf);
                                 chunk.Width = (int)strSize.Width;
 
                                 xPos += chunk.Width;
@@ -187,6 +188,7 @@ namespace GKUI.Components
                     fTextSize = new ExtSize(xMax + 2 * fBorderWidth, yPos + 2 * fBorderWidth);
                 } finally {
                     gfx.Dispose();
+                    sf.Dispose();
                     fAcceptFontChange = true;
                     AdjustViewport(fTextSize);
                 }

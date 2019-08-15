@@ -1491,8 +1491,7 @@ namespace GKCore
         private static void ShowDetailCause(GDMCustomEvent evt, StringList summary)
         {
             string cause = GetEventCause(evt);
-            if (summary != null && cause != "")
-            {
+            if (summary != null && !string.IsNullOrEmpty(cause)) {
                 summary.Add("    " + cause);
             }
         }
@@ -1502,23 +1501,20 @@ namespace GKCore
             if (eventDetail == null)
                 throw new ArgumentNullException("eventDetail");
 
-            if (summary != null && eventDetail.SourceCitations.Count != 0)
-            {
-                summary.Add("    " + LangMan.LS(LSID.LSID_RPSources) + " (" + eventDetail.SourceCitations.Count.ToString() + "):");
+            if (summary != null && eventDetail.SourceCitations.Count != 0) {
+                summary.Add("   " + LangMan.LS(LSID.LSID_RPSources) + " (" + eventDetail.SourceCitations.Count.ToString() + "):");
 
                 int num = eventDetail.SourceCitations.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GDMSourceCitation cit = eventDetail.SourceCitations[i];
                     GDMSourceRecord sourceRec = cit.Value as GDMSourceRecord;
                     if (sourceRec == null) continue;
 
                     string nm = "\"" + sourceRec.ShortTitle + "\"";
-                    if (cit.Page != "")
-                    {
+                    if (!string.IsNullOrEmpty(cit.Page)) {
                         nm = nm + ", " + cit.Page;
                     }
-                    summary.Add("      " + HyperLink(sourceRec.XRef, nm, 0));
+                    summary.Add("     " + HyperLink(sourceRec.XRef, nm, 0));
                 }
             }
         }
@@ -1878,34 +1874,30 @@ namespace GKCore
         {
             if (record == null || summary == null) return;
 
-            try
-            {
-                if (record.Events.Count != 0)
-                {
+            try {
+                if (record.Events.Count != 0) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.LSID_Events) + ":");
 
                     int num = record.Events.Count;
-                    for (int i = 0; i < num; i++)
-                    {
+                    for (int i = 0; i < num; i++) {
+                        summary.Add("");
+
                         GDMCustomEvent evt = record.Events[i];
                         string st = GetEventName(evt);
 
                         string sv = "";
-                        if (evt.StringValue != "")
-                        {
+                        if (evt.StringValue != "") {
                             sv = evt.StringValue + ", ";
                         }
-                        summary.Add(st + ": " + sv + GetEventDesc(evt));
+                        summary.Add("  " + st + ": " + sv + GetEventDesc(evt));
 
                         ShowDetailCause(evt, summary);
                         ShowAddressSummary(evt.Address, summary);
                         ShowEventDetailInfo(evt, summary);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKUtils.RecListIndividualEventsRefresh(): " + ex.Message);
             }
         }
@@ -1914,28 +1906,25 @@ namespace GKCore
         {
             if (record == null || summary == null) return;
 
-            try
-            {
-                if (record.Events.Count != 0)
-                {
+            try {
+                if (record.Events.Count != 0) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.LSID_Events) + ":");
 
                     int num = record.Events.Count;
-                    for (int i = 0; i < num; i++)
-                    {
+                    for (int i = 0; i < num; i++) {
+                        summary.Add("");
+
                         GDMFamilyEvent evt = (GDMFamilyEvent)record.Events[i];
 
                         string st = GetEventName(evt);
-                        summary.Add(st + ": " + GetEventDesc(evt));
+                        summary.Add("  " + st + ": " + GetEventDesc(evt));
 
                         ShowDetailCause(evt, summary);
                         ShowEventDetailInfo(evt, summary);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("GKUtils.RecListFamilyEventsRefresh(): " + ex.Message);
             }
         }

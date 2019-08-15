@@ -143,25 +143,6 @@ namespace GKUI.Providers
             set { Control.SelectedItem = value; }
         }
 
-        [Obsolete]
-        public object SelectedTag
-        {
-            get {
-                return ((GKComboItem)Control.SelectedItem).Tag;
-            }
-            set {
-                var ctl = Control;
-                foreach (object item in ctl.Items) {
-                    GKComboItem comboItem = (GKComboItem)item;
-                    if (comboItem.Tag == value) {
-                        ctl.SelectedItem = item;
-                        return;
-                    }
-                }
-                ctl.SelectedIndex = 0;
-            }
-        }
-
         public string Text
         {
             get { return Control.Text; }
@@ -256,25 +237,6 @@ namespace GKUI.Providers
         {
             get { return Control.SelectedItem; }
             set { Control.SelectedItem = value; }
-        }
-
-        [Obsolete]
-        public object SelectedTag
-        {
-            get {
-                return ((GKComboItem)Control.SelectedItem).Tag;
-            }
-            set {
-                var ctl = Control;
-                foreach (object item in ctl.Items) {
-                    GKComboItem comboItem = (GKComboItem)item;
-                    if (comboItem.Tag == value) {
-                        ctl.SelectedItem = item;
-                        return;
-                    }
-                }
-                ctl.SelectedIndex = 0;
-            }
         }
 
         public string Text

@@ -63,10 +63,6 @@ namespace GKCore.MVP.Controls
         object SelectedItem { get; set; }
         string Text { get; set; }
 
-        // TODO: remove it!
-        [Obsolete]
-        object SelectedTag { get; set; }
-
         void Add(object item);
         void AddItem(string caption, object tag, IImage image = null);
         void AddRange(object[] items, bool sorted = false);
