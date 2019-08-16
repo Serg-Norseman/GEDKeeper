@@ -32,7 +32,8 @@ namespace GKCore.Lists
         public NoteLinksListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
-                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
+                RecordAction.raMoveUp, RecordAction.raMoveDown);
 
             fListColumns.AddColumn(LSID.LSID_Note, 500, false);
             fListColumns.ResetDefaults();
@@ -64,6 +65,7 @@ namespace GKCore.Lists
             if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
             GDMNotes notes = eArgs.ItemData as GDMNotes;
+            GDMRecordWithEvents record = dataOwner as GDMRecordWithEvents;
 
             bool result = false;
 
@@ -89,6 +91,22 @@ namespace GKCore.Lists
                     if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachNoteQuery)))
                     {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GDMObject)dataOwner, notes);
+                    }
+                    break;
+
+                case RecordAction.raMoveUp:
+                case RecordAction.raMoveDown: {
+                        int idx = record.Notes.IndexOf(notes);
+                        switch (eArgs.Action) {
+                            case RecordAction.raMoveUp:
+                                record.Notes.Exchange(idx - 1, idx);
+                                break;
+
+                            case RecordAction.raMoveDown:
+                                record.Notes.Exchange(idx, idx + 1);
+                                break;
+                        }
+                        result = true;
                     }
                     break;
             }
