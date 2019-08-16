@@ -44,17 +44,13 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGEDCOMStructWithLists;
             if (fSheetList == null || dataOwner == null) return;
 
-            try
-            {
+            try {
                 fSheetList.ClearItems();
 
-                foreach (GDMNotes note in dataOwner.Notes)
-                {
+                foreach (GDMNotes note in dataOwner.Notes) {
                     fSheetList.AddItem(note, new object[] { note.Lines.Text.Trim() });
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("NoteLinksListModel.UpdateContents(): " + ex.Message);
             }
         }
@@ -65,13 +61,11 @@ namespace GKCore.Lists
             if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
             GDMNotes notes = eArgs.ItemData as GDMNotes;
-            GDMRecordWithEvents record = dataOwner as GDMRecordWithEvents;
 
             bool result = false;
 
             GDMNoteRecord noteRec;
-            switch (eArgs.Action)
-            {
+            switch (eArgs.Action) {
                 case RecordAction.raAdd:
                     noteRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtNote, null) as GDMNoteRecord;
                     if (noteRec != null) {
@@ -80,30 +74,29 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raEdit:
-                    if (notes != null)
-                    {
+                    if (notes != null) {
                         noteRec = notes.Value as GDMNoteRecord;
                         result = BaseController.ModifyNote(fBaseWin, ref noteRec);
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachNoteQuery)))
-                    {
+                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachNoteQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GDMObject)dataOwner, notes);
                     }
                     break;
 
                 case RecordAction.raMoveUp:
-                case RecordAction.raMoveDown: {
-                        int idx = record.Notes.IndexOf(notes);
+                case RecordAction.raMoveDown:
+                    {
+                        int idx = dataOwner.Notes.IndexOf(notes);
                         switch (eArgs.Action) {
                             case RecordAction.raMoveUp:
-                                record.Notes.Exchange(idx - 1, idx);
+                                dataOwner.Notes.Exchange(idx - 1, idx);
                                 break;
 
                             case RecordAction.raMoveDown:
-                                record.Notes.Exchange(idx, idx + 1);
+                                dataOwner.Notes.Exchange(idx, idx + 1);
                                 break;
                         }
                         result = true;

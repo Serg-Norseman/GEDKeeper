@@ -21,7 +21,6 @@
 using System;
 using BSLib;
 using GDModel;
-using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -78,16 +77,14 @@ namespace GKCore.Lists
 
             bool result = false;
 
-            switch (eArgs.Action)
-            {
+            switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
                     result = BaseController.ModifySourceCitation(fBaseWin, fUndoman, dataOwner, ref aCit);
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSourceQuery)))
-                    {
+                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSourceQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, fDataOwner, aCit);
                     }
                     break;
@@ -96,9 +93,7 @@ namespace GKCore.Lists
                 case RecordAction.raMoveDown:
                     {
                         int idx = dataOwner.SourceCitations.IndexOf(aCit);
-
-                        switch (eArgs.Action)
-                        {
+                        switch (eArgs.Action) {
                             case RecordAction.raMoveUp:
                                 dataOwner.SourceCitations.Exchange(idx - 1, idx);
                                 break;
@@ -107,7 +102,6 @@ namespace GKCore.Lists
                                 dataOwner.SourceCitations.Exchange(idx, idx + 1);
                                 break;
                         }
-
                         result = true;
                     }
                     break;

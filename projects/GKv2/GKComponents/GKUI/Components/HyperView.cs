@@ -21,8 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Windows.Forms;
-
 using BSLib;
 using GKCore;
 using GKCore.MVP.Controls;
@@ -47,6 +47,8 @@ namespace GKUI.Components
         private ExtSize fTextSize;
         private BBTextChunk fCurrentLink;
         private Color fLinkColor;
+        private StringFormat fStrFormat;
+        private bool fWordWrap;
 
         private static readonly object EventLink;
 
@@ -88,6 +90,12 @@ namespace GKUI.Components
             }
         }
 
+        public bool WordWrap
+        {
+            get { return fWordWrap; }
+            set { fWordWrap = value; }
+        }
+
 
         public HyperView() : base()
         {
@@ -107,15 +115,17 @@ namespace GKUI.Components
             fLines.OnChange += LinesChanged;
             fLinkColor = Color.Blue;
             fTextSize = ExtSize.Empty;
+            fStrFormat = new StringFormat(StringFormatFlags.MeasureTrailingSpaces | StringFormatFlags.NoWrap | StringFormatFlags.NoClip);
+            fWordWrap = true;
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fChunks.Clear();
                 fHeights.Clear();
                 fLines.Dispose();
+                fStrFormat.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -137,8 +147,8 @@ namespace GKUI.Components
                 fAcceptFontChange = false;
                 fHeights.Clear();
 
-                StringFormat sf = new StringFormat(StringFormatFlags.MeasureTrailingSpaces | StringFormatFlags.NoWrap | StringFormatFlags.LineLimit);
                 Graphics gfx = CreateGraphics();
+                gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
                 try {
                     int xPos = 0;
                     int yPos = 0;
@@ -148,6 +158,7 @@ namespace GKUI.Components
                     string text = fLines.Text;
                     Font defFont = this.Font;
                     SizeF csz = this.ClientSize;
+                    SizeF zerosz = new SizeF(0f, 0f);
 
                     var parser = new BBTextParser(AppHost.GfxProvider, defFont.SizeInPoints,
                                                   new ColorHandler(fLinkColor), new ColorHandler(ForeColor));
@@ -156,7 +167,8 @@ namespace GKUI.Components
 
                     int line = -1;
                     int chunksCount = fChunks.Count;
-                    for (int k = 0; k < chunksCount; k++) {
+                    int k = 0;
+                    while (k < chunksCount) {
                         BBTextChunk chunk = fChunks[k];
 
                         if (line != chunk.Line) {
@@ -171,9 +183,47 @@ namespace GKUI.Components
                             lineHeight = 0;
                         }
 
-                        if (!string.IsNullOrEmpty(chunk.Text)) {
+                        string chunkStr = chunk.Text;
+                        if (!string.IsNullOrEmpty(chunkStr)) {
                             using (var font = new Font(defFont.Name, chunk.Size, (sdFontStyle)chunk.Style, defFont.Unit)) {
-                                SizeF strSize = gfx.MeasureString(chunk.Text, font, csz, sf);
+                                SizeF strSize = gfx.MeasureString(chunkStr, font, zerosz, fStrFormat);
+
+                                if (fWordWrap) {
+                                    int wBound = xPos + 2 * fBorderWidth;
+                                    if (wBound + strSize.Width > csz.Width) {
+                                        int lastIndex = chunkStr.Length - 1;
+                                        while (true) {
+                                            int spPos = chunkStr.LastIndexOf(' ', lastIndex);
+                                            if (spPos <= 0) {
+                                                chunk.Text = chunkStr.Substring(0, lastIndex + 1);
+                                                strSize = gfx.MeasureString(chunkStr, font, zerosz, fStrFormat);
+                                                break;
+                                            }
+
+                                            string newChunk = chunkStr.Substring(0, spPos);
+                                            strSize = gfx.MeasureString(newChunk, font, zerosz, fStrFormat);
+                                            if (wBound + strSize.Width < csz.Width) {
+                                                var secondPart = chunk.Clone();
+                                                secondPart.Text = chunkStr.Substring(spPos + 1);
+                                                secondPart.Line += 1;
+                                                fChunks.Insert(k + 1, secondPart);
+                                                chunksCount += 1;
+
+                                                // shift next chunks
+                                                for (int m = k + 2; m < chunksCount; m++) {
+                                                    BBTextChunk mChunk = fChunks[m];
+                                                    mChunk.Line += 1;
+                                                }
+
+                                                chunk.Text = newChunk;
+                                                break;
+                                            } else {
+                                                lastIndex = spPos - 1;
+                                            }
+                                        }
+                                    }
+                                }
+
                                 chunk.Width = (int)strSize.Width;
 
                                 xPos += chunk.Width;
@@ -183,12 +233,13 @@ namespace GKUI.Components
                                 if (lineHeight < h) lineHeight = h;
                             }
                         }
+
+                        k++;
                     }
 
                     fTextSize = new ExtSize(xMax + 2 * fBorderWidth, yPos + 2 * fBorderWidth);
                 } finally {
                     gfx.Dispose();
-                    sf.Dispose();
                     fAcceptFontChange = true;
                     AdjustViewport(fTextSize);
                 }
@@ -199,14 +250,14 @@ namespace GKUI.Components
 
         private void DoPaint(Graphics gfx)
         {
-            try
-            {
+            try {
+                gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
                 fAcceptFontChange = false;
-                try
-                {
+                SolidBrush brush = new SolidBrush(this.ForeColor);
+                Font font = null;
+                try {
                     Rectangle clientRect = ClientRectangle;
                     gfx.FillRectangle(new SolidBrush(BackColor), clientRect);
-                    Font defFont = this.Font;
 
                     int xOffset = fBorderWidth - -AutoScrollPosition.X;
                     int yOffset = fBorderWidth - -AutoScrollPosition.Y;
@@ -214,8 +265,7 @@ namespace GKUI.Components
 
                     int line = -1;
                     int chunksCount = fChunks.Count;
-                    for (int k = 0; k < chunksCount; k++)
-                    {
+                    for (int k = 0; k < chunksCount; k++) {
                         BBTextChunk chunk = fChunks[k];
 
                         if (line != chunk.Line) {
@@ -235,12 +285,9 @@ namespace GKUI.Components
 
                         string ct = chunk.Text;
                         if (!string.IsNullOrEmpty(ct)) {
-                            var chunkColor = ((ColorHandler)chunk.Color).Handle;
-                            using (var brush = new SolidBrush(chunkColor)) {
-                                using (var font = new Font(defFont.Name, chunk.Size, (sdFontStyle)chunk.Style, defFont.Unit)) {
-                                    gfx.DrawString(ct, font, brush, xOffset, yOffset);
-                                }
-                            }
+                            brush.Color = ((ColorHandler)chunk.Color).Handle;
+                            font = ProcessFont(font, chunk.Size, (sdFontStyle)chunk.Style);
+                            gfx.DrawString(ct, font, brush, xOffset, yOffset, fStrFormat);
 
                             xOffset += chunk.Width;
 
@@ -249,16 +296,31 @@ namespace GKUI.Components
                             }
                         }
                     }
-                }
-                finally
-                {
+                } finally {
                     fAcceptFontChange = true;
+                    if (brush != null) brush.Dispose();
+                    if (font != null) font.Dispose();
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("HyperView.DoPaint(): " + ex.Message);
             }
+        }
+
+        private Font ProcessFont(Font prevFont, float emSize, FontStyle style)
+        {
+            Font result;
+            if (prevFont == null) {
+                var defFont = this.Font;
+                result = new Font(defFont.Name, emSize, style, defFont.Unit);
+            } else {
+                if (prevFont.Size == emSize && prevFont.Style == style) {
+                    result = prevFont;
+                } else {
+                    result = new Font(prevFont.Name, emSize, style, prevFont.Unit);
+                    prevFont.Dispose();
+                }
+            }
+            return result;
         }
 
         private void DoLink(string linkName)
@@ -276,6 +338,13 @@ namespace GKUI.Components
             }
 
             base.OnFontChanged(e);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            ArrangeText();
+
+            base.OnResize(e);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
