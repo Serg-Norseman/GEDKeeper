@@ -44,10 +44,10 @@ namespace GKUI.Components
 
         private bool fAcceptFontChange;
         private int fBorderWidth;
-        private ExtSize fTextSize;
         private BBTextChunk fCurrentLink;
         private Color fLinkColor;
         private StringFormat fStrFormat;
+        private ExtSize fTextSize;
         private bool fWordWrap;
 
         private static readonly object EventLink;
@@ -137,7 +137,7 @@ namespace GKUI.Components
 
         private void LinesChanged(object sender)
         {
-            AutoScrollPosition = new Point(0, 0);
+            UpdateScrollPosition(0, 0);
             ArrangeText();
         }
 
@@ -170,6 +170,7 @@ namespace GKUI.Components
                     int k = 0;
                     while (k < chunksCount) {
                         BBTextChunk chunk = fChunks[k];
+                        bool recalcChunk = false;
 
                         if (line != chunk.Line) {
                             line = chunk.Line;
@@ -183,6 +184,9 @@ namespace GKUI.Components
                             lineHeight = 0;
                         }
 
+                        int prevX = xPos;
+                        int prevY = yPos;
+
                         string chunkStr = chunk.Text;
                         if (!string.IsNullOrEmpty(chunkStr)) {
                             using (var font = new Font(defFont.Name, chunk.Size, (sdFontStyle)chunk.Style, defFont.Unit)) {
@@ -195,8 +199,19 @@ namespace GKUI.Components
                                         while (true) {
                                             int spPos = chunkStr.LastIndexOf(' ', lastIndex);
                                             if (spPos <= 0) {
+                                                // the beginning of the chunk is reached and there are no more words to carry
                                                 chunk.Text = chunkStr.Substring(0, lastIndex + 1);
                                                 strSize = gfx.MeasureString(chunkStr, font, zerosz, fStrFormat);
+                                                // the current chunk still does not fit into the area
+                                                if (wBound + strSize.Width > csz.Width) {
+                                                    // this is not the only chunk on this line
+                                                    if (k > 0 && fChunks[k - 1].Line == chunk.Line) {
+                                                        // transfer the current chunk to the next line 
+                                                        // and recount it again at the next iteration
+                                                        ShiftChunks(k, chunksCount);
+                                                        recalcChunk = true;
+                                                    }
+                                                }
                                                 break;
                                             }
 
@@ -210,10 +225,7 @@ namespace GKUI.Components
                                                 chunksCount += 1;
 
                                                 // shift next chunks
-                                                for (int m = k + 2; m < chunksCount; m++) {
-                                                    BBTextChunk mChunk = fChunks[m];
-                                                    mChunk.Line += 1;
-                                                }
+                                                ShiftChunks(k + 2, chunksCount);
 
                                                 chunk.Text = newChunk;
                                                 break;
@@ -232,9 +244,15 @@ namespace GKUI.Components
                                 int h = (int)strSize.Height;
                                 if (lineHeight < h) lineHeight = h;
                             }
+
+                            if (!string.IsNullOrEmpty(chunk.URL)) {
+                                chunk.LinkRect = ExtRect.CreateBounds(prevX, prevY, xPos - prevX, lineHeight);
+                            }
                         }
 
-                        k++;
+                        if (!recalcChunk) {
+                            k++;
+                        }
                     }
 
                     fTextSize = new ExtSize(xMax + 2 * fBorderWidth, yPos + 2 * fBorderWidth);
@@ -245,6 +263,14 @@ namespace GKUI.Components
                 }
             } catch (Exception ex) {
                 Logger.LogWrite("HyperView.ArrangeText(): " + ex.Message);
+            }
+        }
+
+        private void ShiftChunks(int startIndex, int chunksCount)
+        {
+            for (int m = startIndex; m < chunksCount; m++) {
+                BBTextChunk mChunk = fChunks[m];
+                mChunk.Line += 1;
             }
         }
 
@@ -280,9 +306,6 @@ namespace GKUI.Components
                             }
                         }
 
-                        int prevX = xOffset;
-                        int prevY = yOffset;
-
                         string ct = chunk.Text;
                         if (!string.IsNullOrEmpty(ct)) {
                             brush.Color = ((ColorHandler)chunk.Color).Handle;
@@ -290,10 +313,6 @@ namespace GKUI.Components
                             gfx.DrawString(ct, font, brush, xOffset, yOffset, fStrFormat);
 
                             xOffset += chunk.Width;
-
-                            if (!string.IsNullOrEmpty(chunk.URL)) {
-                                chunk.LinkRect = ExtRect.CreateBounds(prevX, prevY, xOffset - prevX, lineHeight);
-                            }
                         }
                     }
                 } finally {
@@ -413,18 +432,16 @@ namespace GKUI.Components
         {
             base.OnMouseMove(e);
 
-            int xOffset = (fBorderWidth - -AutoScrollPosition.X);
-            int yOffset = (fBorderWidth - -AutoScrollPosition.Y);
+            Point mpt = GetImageRelativeLocation(e.Location);
+            mpt.Offset(-fBorderWidth, -fBorderWidth);
             fCurrentLink = null;
 
             int num = fChunks.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 BBTextChunk chunk = fChunks[i];
                 if (string.IsNullOrEmpty(chunk.URL)) continue;
 
-                if (chunk.HasCoord(e.X, e.Y, xOffset, yOffset))
-                {
+                if (chunk.HasCoord(mpt.X, mpt.Y)) {
                     fCurrentLink = chunk;
                     break;
                 }

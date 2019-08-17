@@ -53,12 +53,6 @@ namespace GKCore
             Style = fontStyle;
         }
 
-        public bool HasCoord(int x, int y, int xOffset, int yOffset)
-        {
-            return x >= LinkRect.Left + xOffset && x <= LinkRect.Right + xOffset
-                && y >= LinkRect.Top + yOffset && y <= LinkRect.Bottom + yOffset;
-        }
-
         public bool HasCoord(int x, int y)
         {
             return x >= LinkRect.Left && x <= LinkRect.Right

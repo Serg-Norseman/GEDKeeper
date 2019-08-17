@@ -18,10 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections;
+using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-
-using BSLib;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Controls;
@@ -129,6 +129,11 @@ namespace GKUI.Providers
             }
         }
 
+        public IList Items
+        {
+            get { return Control.Items; }
+        }
+
         public bool ReadOnly
         {
             get { return Control.ReadOnly; }
@@ -218,6 +223,16 @@ namespace GKUI.Providers
         public void SortItems()
         {
             Control.SortItems();
+        }
+
+        public T GetSelectedTag<T>()
+        {
+            return UIHelper.GetSelectedTag<T>(Control);
+        }
+
+        public void SetSelectedTag<T>(T tagValue)
+        {
+            UIHelper.SetSelectedTag<T>(Control, tagValue);
         }
     }
 
