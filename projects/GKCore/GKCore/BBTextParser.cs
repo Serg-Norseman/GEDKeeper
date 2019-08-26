@@ -38,6 +38,10 @@ namespace GKCore
         public string URL;
         public ExtRect LinkRect;
 
+        private BBTextChunk()
+        {
+        }
+
         public BBTextChunk(int tokenLine, float fontSize, ExtFontStyle fontStyle, IColor color)
         {
             Line = tokenLine - 1;
@@ -49,16 +53,30 @@ namespace GKCore
             Style = fontStyle;
         }
 
-        public bool HasCoord(int x, int y, int xOffset, int yOffset)
-        {
-            return x >= LinkRect.Left + xOffset && x <= LinkRect.Right + xOffset
-                && y >= LinkRect.Top + yOffset && y <= LinkRect.Bottom + yOffset;
-        }
-
         public bool HasCoord(int x, int y)
         {
             return x >= LinkRect.Left && x <= LinkRect.Right
                 && y >= LinkRect.Top && y <= LinkRect.Bottom;
+        }
+
+        public BBTextChunk Clone()
+        {
+            BBTextChunk result = new BBTextChunk();
+
+            result.Line = Line;
+            result.Text = Text;
+            result.Width = Width;
+            result.Color = Color;
+            result.Size = Size;
+            result.Style = Style;
+            result.URL = URL;
+
+            return result;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("[BBTextChunk Line={0}, Text={1}, Size={2}]", Line, Text, Size);
         }
     }
 
@@ -343,7 +361,7 @@ namespace GKCore
             }
 
             // eof
-            lastChunk = SetChunkText(tok.Line, null, EMPTY_CHUNK);
+            lastChunk = SetChunkText(tok.Line + 1, null, EMPTY_CHUNK);
         }
     }
 }

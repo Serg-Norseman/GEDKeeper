@@ -61,7 +61,7 @@ namespace GKCore.Controllers
                     fFilter.SourceMode = (FilterGroupMode)fView.SourceCombo.SelectedIndex;
                     fFilter.SourceRef = "";
                 } else {
-                    GDMRecord rec = fView.SourceCombo.SelectedTag as GDMRecord;
+                    GDMRecord rec = fView.SourceCombo.GetSelectedTag<GDMRecord>();
                     if (rec != null) {
                         fFilter.SourceMode = FilterGroupMode.Selected;
                         fFilter.SourceRef = rec.XRef;

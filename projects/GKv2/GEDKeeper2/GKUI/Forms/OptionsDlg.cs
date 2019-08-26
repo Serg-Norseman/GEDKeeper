@@ -138,6 +138,12 @@ namespace GKUI.Forms
             chkAllowMediaDirectRefs.Checked = fOptions.AllowMediaStoreReferences;
             chkAutoCheckUpdates.Checked = fOptions.AutoCheckUpdates;
 
+            chkAllowMediaStoreRelativeReferences.Checked = fOptions.AllowMediaStoreRelativeReferences;
+            UIHelper.SetSelectedTag<MediaStoreType>(cmbMediaStoreDefault, (MediaStoreType)fOptions.MediaStoreDefault);
+            chkAllowDeleteMediaFileFromStgArc.Checked = fOptions.AllowDeleteMediaFileFromStgArc;
+            chkAllowDeleteMediaFileFromRefs.Checked = fOptions.AllowDeleteMediaFileFromRefs;
+            chkDeleteMediaFileWithoutConfirm.Checked = fOptions.DeleteMediaFileWithoutConfirm;
+
             chkSurname.Checked = fOptions.TreeChartOptions.FamilyVisible;
             chkName.Checked = fOptions.TreeChartOptions.NameVisible;
             chkPatronymic.Checked = fOptions.TreeChartOptions.PatronymicVisible;
@@ -352,6 +358,12 @@ namespace GKUI.Forms
             fOptions.EmbeddedMediaPlayer = chkEmbeddedMediaPlayer.Checked;
             fOptions.AllowMediaStoreReferences = chkAllowMediaDirectRefs.Checked;
             fOptions.AutoCheckUpdates = chkAutoCheckUpdates.Checked;
+
+            fOptions.AllowMediaStoreRelativeReferences = chkAllowMediaStoreRelativeReferences.Checked;
+            fOptions.MediaStoreDefault = (int)UIHelper.GetSelectedTag<MediaStoreType>(cmbMediaStoreDefault);
+            fOptions.AllowDeleteMediaFileFromStgArc = chkAllowDeleteMediaFileFromStgArc.Checked;
+            fOptions.AllowDeleteMediaFileFromRefs = chkAllowDeleteMediaFileFromRefs.Checked;
+            fOptions.DeleteMediaFileWithoutConfirm = chkDeleteMediaFileWithoutConfirm.Checked;
 
             fOptions.TreeChartOptions.FamilyVisible = chkSurname.Checked;
             fOptions.TreeChartOptions.NameVisible = chkName.Checked;
@@ -612,6 +624,17 @@ namespace GKUI.Forms
             chkAutoSortSpouses.Text = LangMan.LS(LSID.LSID_AutoSortSpouses);
             chkCheckTreeSize.Text = LangMan.LS(LSID.LSID_CheckTreeSize);
             chkCharsetDetection.Text = LangMan.LS(LSID.LSID_CharsetDetection);
+
+            chkAllowMediaStoreRelativeReferences.Text = LangMan.LS(LSID.LSID_AllowMediaRelativeReferences);
+            lblMediaStoreDefault.Text = LangMan.LS(LSID.LSID_MediaStoreDefault);
+            chkAllowDeleteMediaFileFromStgArc.Text = LangMan.LS(LSID.LSID_AllowDeleteMediaFileFromStgArc);
+            chkAllowDeleteMediaFileFromRefs.Text = LangMan.LS(LSID.LSID_AllowDeleteMediaFileFromRefs);
+            chkDeleteMediaFileWithoutConfirm.Text = LangMan.LS(LSID.LSID_DeleteMediaFileWithoutConfirm);
+
+            cmbMediaStoreDefault.Items.Clear();
+            for (MediaStoreType mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstRelativeReference; mst++) {
+                cmbMediaStoreDefault.Items.Add(new GKComboItem(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst));
+            }
         }
     }
 }

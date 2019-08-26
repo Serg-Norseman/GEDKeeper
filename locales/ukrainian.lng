@@ -696,7 +696,7 @@
 695=Вибрати або додати запис джерела
 696=Вибрати запис цілі
 697=Для типів зберігання "архів" і "сховище" новий файл БД потрібно попередньо зберегти
-698=Файл з таким ім'ям вже є у сховищі
+698=Файл з таким ім'ям вже є
 699=Це не GEDSEC-сумісний файл
 700=У даної персони кілька сімей. Дітей слід додавати через подружжя.
 701=Помилка вивантаження в Excel
@@ -789,6 +789,16 @@
 788=GedML файли (*.xml)|*.xml
 789=Дитину виявили без батьків
 790=Сімейний запис виявлено без батьків або дітей
+791=Are you sure you want to remove multimedia file?
+792=Storage not found
+793=File not found
+794=Allow relative references to media files
+795=Default media storage type
+796=Allow delete media files from storage and archive
+797=Allow delete media files by direct and relative references
+798=Delete media files without confirm
+799=Media record without files
+800=Archive not found
 
 801=RI:George Knight
 802=USSR:WWII:Combatant
@@ -799,3 +809,5 @@
 807=Religion:Catholicism
 808=Religion:Orthodoxy
 809=Religion:The Old Believers
+
+810=Relative link to file

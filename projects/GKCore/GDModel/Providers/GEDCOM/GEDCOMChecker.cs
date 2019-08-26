@@ -152,22 +152,19 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        private static void CheckEventPlace(GDMCustomEvent aEvent)
+        private static void CheckEventPlace(GDMCustomEvent evt)
         {
-            GDMPlace place = aEvent.FindTag(GEDCOMTagName.PLAC, 0) as GDMPlace;
-            if (place == null) return;
-
-            GDMPointer placeLocation = place.FindTag(GEDCOMTagName._LOC, 0) as GDMPointer;
-            if (placeLocation == null) return;
+            GDMPlace place = evt.Place;
+            GDMPointer placeLocation = place.Location;
 
             if (placeLocation.XRef != "" && placeLocation.Value == null) {
                 placeLocation.XRef = "";
             }
 
             if (place.StringValue != "") {
-                GDMLocationRecord loc = placeLocation.Value as GDMLocationRecord;
-                if (loc != null && place.StringValue != loc.LocationName) {
-                    place.StringValue = loc.LocationName;
+                GDMLocationRecord locRec = placeLocation.Value as GDMLocationRecord;
+                if (locRec != null && place.StringValue != locRec.LocationName) {
+                    place.StringValue = locRec.LocationName;
                 }
             }
         }
@@ -308,10 +305,11 @@ namespace GDModel.Providers.GEDCOM
 
                 if (format == GEDCOMFormat.gf_Native && fileVer == 39) {
                     // the transition to normalized names after GKv39
-                    // only for not direct references (platform specific paths)
+                    // only for not direct references AND not relative references (platform specific paths)
 
                     var mediaStore = GKUtils.GetStoreType(fileRef);
-                    if (mediaStore.StoreType != MediaStoreType.mstReference) {
+                    if (mediaStore.StoreType != MediaStoreType.mstReference
+                        && mediaStore.StoreType != MediaStoreType.mstRelativeReference) {
                         fileRef.StringValue = FileHelper.NormalizeFilename(fileRef.StringValue);
                     }
                 }

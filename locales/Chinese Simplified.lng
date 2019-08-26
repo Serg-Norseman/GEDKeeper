@@ -696,7 +696,7 @@
 695=选择或增加条目来源
 696=选择目标条目
 697=若使用 "文件" 或 "储存" 存储, 在保存新数据库文件后才能继续
-698=资源库内已有同名文件
+698=已存在具有相同名称的文件。
 699=非 GEDSEC-compatible 兼容文件
 700=此成员有新家庭. 应通过该夫妻添加孩子们.
 701=导出为 Excel 失败
@@ -789,6 +789,16 @@
 788=GedML files (*.xml)|*.xml
 789=未经父母检测到儿童
 790=没有父母或孩子的家庭记录
+791=Are you sure you want to remove multimedia file?
+792=Storage not found
+793=File not found
+794=Allow relative references to media files
+795=Default media storage type
+796=Allow delete media files from storage and archive
+797=Allow delete media files by direct and relative references
+798=Delete media files without confirm
+799=Media record without files
+800=Archive not found
 
 801=RI:George Knight
 802=USSR:WWII:Combatant
@@ -799,3 +809,5 @@
 807=Religion:Catholicism
 808=Religion:Orthodoxy
 809=Religion:The Old Believers
+
+810=Relative link to file

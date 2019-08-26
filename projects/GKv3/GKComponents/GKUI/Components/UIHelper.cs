@@ -222,6 +222,28 @@ namespace GKUI.Components
             }
         }
 
+        public static T GetSelectedTag<T>(ComboBox comboBox)
+        {
+            object selectedItem = comboBox.SelectedValue;
+            GKComboItem comboItem = (GKComboItem)selectedItem;
+            T itemTag = (T)comboItem.Tag;
+            return itemTag;
+        }
+
+        public static void SetSelectedTag<T>(ComboBox comboBox, T tagValue)
+        {
+            foreach (object item in comboBox.Items) {
+                GKComboItem comboItem = (GKComboItem)item;
+                T itemTag = (T)comboItem.Tag;
+
+                if (tagValue.Equals(itemTag)) {
+                    comboBox.SelectedValue = item;
+                    return;
+                }
+            }
+            comboBox.SelectedIndex = 0;
+        }
+
         public static void SelectComboItem(ComboBox comboBox, object tag, bool allowDefault)
         {
             for (int i = 0; i < comboBox.Items.Count; i++) {

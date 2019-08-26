@@ -9,7 +9,7 @@
 [![tickets](https://img.shields.io/badge/view-tickets-blackgray.svg)](https://sourceforge.net/p/gedkeeper/tickets/)
 [![donate](https://img.shields.io/badge/make%20a-donation-greenblue.svg)](https://sourceforge.net/p/gedkeeper/donate/)
 
-[![Semver](http://img.shields.io/SemVer/2.0.0.png)](http://semver.org/spec/v2.0.0.html)
+[![Semver](https://img.shields.io/badge/semver-2.0.0-blue)](http://semver.org/spec/v2.0.0.html)
 [![License: GPL v3](https://img.shields.io/github/license/Serg-Norseman/GEDKeeper.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![GitHub release](https://img.shields.io/github/release/Serg-Norseman/GEDKeeper.svg?label=Latest&maxAge=60)](https://github.com/Serg-Norseman/GEDKeeper/releases/latest)
 [![Download GEDKeeper](https://img.shields.io/sourceforge/dm/gedkeeper.svg)](https://sourceforge.net/projects/gedkeeper/files/latest/download)

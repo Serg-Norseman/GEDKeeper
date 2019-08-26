@@ -54,7 +54,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fLanguageID = (GDMLanguageID)fView.LanguageCombo.SelectedTag;
+                fLanguageID = fView.LanguageCombo.GetSelectedTag<GDMLanguageID>();
                 return true;
             } catch (Exception ex) {
                 Logger.LogWrite("LanguageEditDlgController.Accept(): " + ex.Message);

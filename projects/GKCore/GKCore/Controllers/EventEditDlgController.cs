@@ -76,8 +76,8 @@ namespace GKCore.Controllers
         {
             GDMCustomDate result = null;
 
-            GDMCalendar cal1 = (GDMCalendar)fView.Date1Calendar.SelectedTag;
-            GDMCalendar cal2 = (GDMCalendar)fView.Date2Calendar.SelectedTag;
+            GDMCalendar cal1 = fView.Date1Calendar.GetSelectedTag<GDMCalendar>();
+            GDMCalendar cal2 = fView.Date2Calendar.GetSelectedTag<GDMCalendar>();
 
             GDMDate gcd1 = GDMDate.CreateByFormattedStr(fView.Date1.NormalizeDate, cal1, true);
             if (gcd1 == null) throw new ArgumentNullException("gcd1");
@@ -226,8 +226,8 @@ namespace GKCore.Controllers
 
                 fView.Date1.NormalizeDate = dtRange.After.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                 fView.Date2.NormalizeDate = dtRange.Before.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.Date1Calendar.SelectedTag = dtRange.After.DateCalendar;
-                fView.Date2Calendar.SelectedTag = dtRange.Before.DateCalendar;
+                fView.Date1Calendar.SetSelectedTag<GDMCalendar>(dtRange.After.DateCalendar);
+                fView.Date2Calendar.SetSelectedTag<GDMCalendar>(dtRange.Before.DateCalendar);
                 fView.Date1BC.Checked = dtRange.After.YearBC;
                 fView.Date2BC.Checked = dtRange.Before.YearBC;
             } else if (date is GDMDatePeriod) {
@@ -243,8 +243,8 @@ namespace GKCore.Controllers
 
                 fView.Date1.NormalizeDate = dtPeriod.DateFrom.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                 fView.Date2.NormalizeDate = dtPeriod.DateTo.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.Date1Calendar.SelectedTag = dtPeriod.DateFrom.DateCalendar;
-                fView.Date2Calendar.SelectedTag = dtPeriod.DateTo.DateCalendar;
+                fView.Date1Calendar.SetSelectedTag<GDMCalendar>(dtPeriod.DateFrom.DateCalendar);
+                fView.Date2Calendar.SetSelectedTag<GDMCalendar>(dtPeriod.DateTo.DateCalendar);
                 fView.Date1BC.Checked = dtPeriod.DateFrom.YearBC;
                 fView.Date2BC.Checked = dtPeriod.DateTo.YearBC;
             } else if (date is GDMDate) {
@@ -266,12 +266,12 @@ namespace GKCore.Controllers
                 }
 
                 fView.Date1.NormalizeDate = (date as GDMDate).GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.Date1Calendar.SelectedTag = (date as GDMDate).DateCalendar;
+                fView.Date1Calendar.SetSelectedTag<GDMCalendar>((date as GDMDate).DateCalendar);
                 fView.Date1BC.Checked = (date as GDMDate).YearBC;
             } else {
                 fView.EventDateType.SelectedIndex = 0;
                 fView.Date1.NormalizeDate = "";
-                fView.Date1Calendar.SelectedTag = GDMCalendar.dcGregorian;
+                fView.Date1Calendar.SetSelectedTag<GDMCalendar>(GDMCalendar.dcGregorian);
                 fView.Date1BC.Checked = false;
             }
 

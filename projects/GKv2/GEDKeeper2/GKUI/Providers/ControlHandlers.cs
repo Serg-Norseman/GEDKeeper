@@ -18,8 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.Collections;
 using System.Windows.Forms;
-
 using BSLib;
 using GKCore.Interfaces;
 using GKCore.MVP;
@@ -119,6 +120,11 @@ namespace GKUI.Providers
         {
         }
 
+        public IList Items
+        {
+            get { return Control.Items; }
+        }
+
         public bool ReadOnly
         {
             get { return (Control.DropDownStyle == ComboBoxStyle.DropDownList); }
@@ -135,24 +141,6 @@ namespace GKUI.Providers
         {
             get { return Control.SelectedItem; }
             set { Control.SelectedItem = value; }
-        }
-
-        public object SelectedTag
-        {
-            get {
-                return ((GKComboItem)Control.SelectedItem).Tag;
-            }
-            set {
-                var ctl = Control;
-                foreach (object item in ctl.Items) {
-                    GKComboItem comboItem = (GKComboItem)item;
-                    if (comboItem.Tag == value) {
-                        ctl.SelectedItem = item;
-                        return;
-                    }
-                }
-                ctl.SelectedIndex = 0;
-            }
         }
 
         public string Text
@@ -204,6 +192,16 @@ namespace GKUI.Providers
         public void SortItems()
         {
         }
+
+        public T GetSelectedTag<T>()
+        {
+            return UIHelper.GetSelectedTag<T>(Control);
+        }
+
+        public void SetSelectedTag<T>(T tagValue)
+        {
+            UIHelper.SetSelectedTag<T>(Control, tagValue);
+        }
     }
 
     public sealed class ToolStripComboBoxHandler : ControlHandler<ToolStripComboBox, ToolStripComboBoxHandler>, IComboBoxHandler
@@ -216,6 +214,11 @@ namespace GKUI.Providers
         {
             get { return Control.Enabled; }
             set { Control.Enabled = value; }
+        }
+
+        public IList Items
+        {
+            get { return Control.Items; }
         }
 
         public bool ReadOnly
@@ -234,24 +237,6 @@ namespace GKUI.Providers
         {
             get { return Control.SelectedItem; }
             set { Control.SelectedItem = value; }
-        }
-
-        public object SelectedTag
-        {
-            get {
-                return ((GKComboItem)Control.SelectedItem).Tag;
-            }
-            set {
-                var ctl = Control;
-                foreach (object item in ctl.Items) {
-                    GKComboItem comboItem = (GKComboItem)item;
-                    if (comboItem.Tag == value) {
-                        ctl.SelectedItem = item;
-                        return;
-                    }
-                }
-                ctl.SelectedIndex = 0;
-            }
         }
 
         public string Text
@@ -307,6 +292,29 @@ namespace GKUI.Providers
 
         public void SortItems()
         {
+        }
+
+        public T GetSelectedTag<T>()
+        {
+            object selectedItem = Control.SelectedItem;
+            GKComboItem comboItem = (GKComboItem)selectedItem;
+            T itemTag = (T)comboItem.Tag;
+            return itemTag;
+        }
+
+        public void SetSelectedTag<T>(T tagValue)
+        {
+            var ctl = Control;
+            foreach (object item in ctl.Items) {
+                GKComboItem comboItem = (GKComboItem)item;
+                T itemTag = (T)comboItem.Tag;
+
+                if (tagValue.Equals(itemTag)) {
+                    ctl.SelectedItem = item;
+                    return;
+                }
+            }
+            ctl.SelectedIndex = 0;
         }
     }
 

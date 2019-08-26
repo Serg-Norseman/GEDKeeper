@@ -696,7 +696,7 @@
 695=Zvolte nebo přidejte záznam zdroje
 696=Vyberte cílový záznam
 697=Pokud používáte typ úložiště typu "soubor" nebo "uložit", musíte před pokračováním uložit nový databázový soubor
-698=Soubor se stejným názvem již existuje v úložišti
+698=Soubor se stejným názvem již existuje
 699=Nejedná se o soubor kompatibilní s GEDSEC
 700=Tento jedinec má několik rodin. Děti by měly být přidávány prostřednictvím manželů.
 701=Export do aplikace Excel se nezdařil
@@ -789,6 +789,16 @@
 788=GedML files (*.xml)|*.xml
 789=Dítě bylo zjištěno bez rodičů
 790=Záznam rodiny byl zjištěn bez rodičů nebo dětí
+791=Are you sure you want to remove multimedia file?
+792=Storage not found
+793=File not found
+794=Allow relative references to media files
+795=Default media storage type
+796=Allow delete media files from storage and archive
+797=Allow delete media files by direct and relative references
+798=Delete media files without confirm
+799=Media record without files
+800=Archive not found
 
 801=RI: George Knight
 802=SSSR: Druhá světová válka: Bitvy
@@ -799,3 +809,5 @@
 807=Náboženství: Katolicismus
 808=Náboženství: Pravoslaví
 809=Náboženství: Starí věřící 
+
+810=Relative link to file

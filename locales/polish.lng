@@ -696,7 +696,7 @@
 695=Wybierz lub Dodaj rekord źródła
 696=Wybierz rekord docelowy
 697=Jeśli używasz "plik" lub "przechowywać" typ magazynu, musisz zapisać nowy plik bazy danych aby kontynuować
-698=Plik o tej samej nazwie już istnieje w repozytorium
+698=Plik o tej samej nazwie już istnieje
 699=Nie jest to zgodne z GEDSEC plik
 700=Osoba ta ma kilka rodzin. Dzieci powinny zostać dodane przez małżonków.
 701=Eksport do programu Excel nie powiódł się
@@ -789,6 +789,16 @@
 788=Pliki GedML (*.xml)|*.xml
 789=Dziecko wykryte bez rodziców
 790=Rekord rodzinny wykryty bez rodziców lub dzieci
+791=Are you sure you want to remove multimedia file?
+792=Storage not found
+793=File not found
+794=Allow relative references to media files
+795=Default media storage type
+796=Allow delete media files from storage and archive
+797=Allow delete media files by direct and relative references
+798=Delete media files without confirm
+799=Media record without files
+800=Archive not found
 
 801=RI:George Knight
 802=USSR:WWII:Combatant
@@ -799,3 +809,5 @@
 807=Religion:Catholicism
 808=Religion:Orthodoxy
 809=Religion:The Old Believers
+
+810=Relative link to file

@@ -321,6 +321,11 @@ namespace GKCore.Controllers
 
         public void SelectSummaryLink(string linkName)
         {
+            if (linkName.StartsWith("http")) {
+                GKUtils.LoadExtFile(linkName);
+                return;
+            }
+
             if (linkName.StartsWith("view_")) {
                 string xref = linkName.Remove(0, 5);
                 GDMMultimediaRecord mmRec = fContext.Tree.XRefIndex_Find(xref) as GDMMultimediaRecord;

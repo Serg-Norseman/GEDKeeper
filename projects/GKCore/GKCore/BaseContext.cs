@@ -256,12 +256,6 @@ namespace GKCore
             if (record == null) return result;
 
             try {
-                // `Viewer` (BaseWin) is notified about deletion of the record
-                // before the fact of deletion
-                if (fViewer != null) {
-                    fViewer.NotifyRecord(record, RecordAction.raDelete);
-                }
-
                 BeginUpdate();
 
                 switch (record.RecordType)
@@ -279,7 +273,7 @@ namespace GKCore
                         break;
 
                     case GDMRecordType.rtMultimedia:
-                        result = fTree.DeleteMediaRecord(record as GDMMultimediaRecord);
+                        result = DeleteMediaRecord(record as GDMMultimediaRecord);
                         break;
 
                     case GDMRecordType.rtSource:
@@ -317,9 +311,29 @@ namespace GKCore
             if (result) {
                 fTree.Header.TransmissionDateTime = DateTime.Now;
                 Modified = true;
+
+                if (fViewer != null) {
+                    fViewer.NotifyRecord(record, RecordAction.raDelete);
+                }
             }
 
             return result;
+        }
+
+        public bool DeleteMediaRecord(GDMMultimediaRecord mRec)
+        {
+            if (mRec == null)
+                throw new ArgumentNullException("mRec");
+
+            if (mRec.FileReferences.Count > 0) {
+                bool fileDeleted = MediaDelete(mRec.FileReferences[0]);
+                if (!fileDeleted) {
+                    // message?
+                    return false;
+                }
+            }
+
+            return fTree.DeleteMediaRecord(mRec);
         }
 
         public IList<ISearchResult> FindAll(GDMRecordType recordType, string searchPattern)
@@ -699,14 +713,17 @@ namespace GKCore
         }
 
         // TODO: Controlling the version of the GK GEDCOM file to determine the zip archive encoding!
-        private void ArcFileLoad(string targetFn, Stream toStream)
+        private Encoding GetZipEncoding()
         {
             int treeVer = 0;
-            Encoding zipCharset = (treeVer == 0) ? Encoding.GetEncoding("CP866") : Encoding.UTF8;
+            return (treeVer == 0) ? Encoding.GetEncoding("CP866") : Encoding.UTF8;
+        }
 
+        private void ArcFileLoad(string targetFn, Stream toStream)
+        {
             targetFn = FileHelper.NormalizeFilename(targetFn);
 
-            using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read, zipCharset)) {
+            using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read, GetZipEncoding())) {
                 ZipStorer.ZipFileEntry entry = zip.FindFile(targetFn);
                 if (entry != null) {
                     zip.ExtractStream(entry, toStream);
@@ -714,24 +731,45 @@ namespace GKCore
             }
         }
 
-        // TODO: Controlling the version of the GK GEDCOM file to determine the zip archive encoding!
         private void ArcFileSave(string fileName, string sfn)
         {
-            int treeVer = 0;
-            Encoding zipCharset = (treeVer == 0) ? Encoding.GetEncoding("CP866") : Encoding.UTF8;
-
             string arcFn = GetArcFileName();
             ZipStorer zip = null;
 
             try {
                 if (File.Exists(arcFn)) {
-                    zip = ZipStorer.Open(arcFn, FileAccess.ReadWrite, zipCharset);
+                    zip = ZipStorer.Open(arcFn, FileAccess.ReadWrite, GetZipEncoding());
                 } else {
                     zip = ZipStorer.Create(arcFn, "");
                 }
                 zip.AddFile(ZipStorer.Compression.Deflate, fileName, sfn, null);
             } finally {
                 if (zip != null) zip.Dispose();
+            }
+        }
+
+        private void ArcFileDelete(string targetFn)
+        {
+            targetFn = FileHelper.NormalizeFilename(targetFn);
+
+            using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read, GetZipEncoding())) {
+                ZipStorer.ZipFileEntry entry = zip.FindFile(targetFn);
+                if (entry != null) {
+                    var zfes = new List<ZipStorer.ZipFileEntry>();
+                    zfes.Add(entry);
+                    // TODO: optimize this method!
+                    ZipStorer.RemoveEntries(zip, zfes);
+                }
+            }
+        }
+
+        private bool ArcFileExists(string targetFn)
+        {
+            targetFn = FileHelper.NormalizeFilename(targetFn);
+
+            using (ZipStorer zip = ZipStorer.Open(GetArcFileName(), FileAccess.Read, GetZipEncoding())) {
+                ZipStorer.ZipFileEntry entry = zip.FindFile(targetFn);
+                return (entry != null);
             }
         }
 
@@ -800,7 +838,7 @@ namespace GKCore
                             throw new MediaFileNotFoundException(targetFn);
                         }
 
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
                     } else {
                         stream = new FileStream(targetFn, FileMode.Open);
                     }
@@ -814,11 +852,17 @@ namespace GKCore
                             throw new MediaFileNotFoundException(arcFile);
                         }
 
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
                     } else {
                         ArcFileLoad(targetFn, stream);
                         stream.Seek(0, SeekOrigin.Begin);
                     }
+                    break;
+
+                case MediaStoreType.mstRelativeReference:
+                    string treeName = fFileName;
+                    targetFn = GetTreePath(treeName) + targetFn;
+                    stream = new FileStream(targetFn, FileMode.Open);
                     break;
 
                 case MediaStoreType.mstReference:
@@ -848,7 +892,7 @@ namespace GKCore
                         FileStream fs = new FileStream(fileName, FileMode.Create);
                         try {
                             if (!File.Exists(GetArcFileName())) {
-                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
                             } else {
                                 ArcFileLoad(targetFn, fs);
                             }
@@ -856,6 +900,11 @@ namespace GKCore
                             fs.Close();
                             fs.Dispose();
                         }
+                        break;
+
+                    case MediaStoreType.mstRelativeReference:
+                        string treeName = fFileName;
+                        fileName = GetTreePath(treeName) + targetFn;
                         break;
 
                     case MediaStoreType.mstReference:
@@ -878,31 +927,56 @@ namespace GKCore
             return fileName;
         }
 
-        // TODO: check existing of file
         public bool MediaSave(GDMFileReference fileReference, string fileName, MediaStoreType storeType)
         {
             if (fileReference == null) return false;
 
-            bool result = true;
-
             string storeFile = Path.GetFileName(fileName);
-            string storePath = "";
-            string refPath = "";
+            string storePath = GKUtils.GetStoreFolder(GKUtils.GetMultimediaKind(GDMFileReference.RecognizeFormat(fileName)));
 
-            storePath = GKUtils.GetStoreFolder(GKUtils.GetMultimediaKind(GDMFileReference.RecognizeFormat(fileName)));
+            string refPath = string.Empty;
+            string targetFile = string.Empty;
 
+            // set paths and links
             switch (storeType) {
                 case MediaStoreType.mstReference:
                     refPath = fileName;
                     break;
 
+                case MediaStoreType.mstRelativeReference:
+                    string treeName = fFileName;
+                    targetFile = GKUtils.GetRelativePath(GetTreePath(treeName), fileName);
+                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + targetFile;
+                    break;
+
                 case MediaStoreType.mstArchive:
-                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + storePath + storeFile;
-                    ArcFileSave(fileName, storePath + storeFile);
+                    targetFile = storePath + storeFile;
+                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + targetFile;
                     break;
 
                 case MediaStoreType.mstStorage:
-                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + storePath + storeFile;
+                    targetFile = storePath + storeFile;
+                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + targetFile;
+                    break;
+            }
+
+            // verify existence
+            refPath = FileHelper.NormalizeFilename(refPath);
+            bool alreadyExists = MediaExists(refPath);
+            if (alreadyExists) {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExists));
+                return false;
+            }
+
+            bool result = true;
+
+            // save a copy to archive or storage
+            switch (storeType) {
+                case MediaStoreType.mstArchive:
+                    ArcFileSave(fileName, targetFile);
+                    break;
+
+                case MediaStoreType.mstStorage:
                     try {
                         string targetDir = GetStgFolder(true) + storePath;
                         if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
@@ -910,18 +984,162 @@ namespace GKCore
                         string targetFn = targetDir + storeFile;
                         CopyFile(fileName, targetFn);
                     } catch (IOException) {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExistsInStorage));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExists));
                         result = false;
                     }
                     break;
             }
 
             if (result) {
-                refPath = FileHelper.NormalizeFilename(refPath);
                 fileReference.LinkFile(refPath);
             }
 
             return result;
+        }
+
+        public bool MediaDelete(GDMFileReference fileReference)
+        {
+            if (fileReference == null) return false;
+
+            try {
+                MediaStore mediaStore = GetStoreType(fileReference);
+                string fileName = mediaStore.FileName;
+
+                MediaStoreStatus storeStatus = VerifyMediaFile(fileReference, out fileName);
+                bool result = false;
+
+                switch (storeStatus) {
+                    case MediaStoreStatus.mssExists:
+                        {
+                            if (mediaStore.StoreType == MediaStoreType.mstArchive || mediaStore.StoreType == MediaStoreType.mstStorage) {
+                                if (!GlobalOptions.Instance.AllowDeleteMediaFileFromStgArc) {
+                                    return true;
+                                }
+                            }
+
+                            if (mediaStore.StoreType == MediaStoreType.mstReference || mediaStore.StoreType == MediaStoreType.mstRelativeReference) {
+                                if (!GlobalOptions.Instance.AllowDeleteMediaFileFromRefs) {
+                                    return true;
+                                }
+                            }
+
+                            if (!GlobalOptions.Instance.DeleteMediaFileWithoutConfirm) {
+                                string msg = string.Format(LangMan.LS(LSID.LSID_MediaFileDeleteQuery));
+                                // TODO: may be Yes/No/Cancel?
+                                if (!AppHost.StdDialogs.ShowQuestionYN(msg)) {
+                                    return false;
+                                }
+                            }
+
+                            if (mediaStore.StoreType == MediaStoreType.mstArchive) {
+                                ArcFileDelete(fileName);
+                            } else {
+                                File.Delete(fileName);
+                            }
+                            result = true;
+                        }
+                        break;
+
+                    case MediaStoreStatus.mssFileNotFound:
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileNotFound));
+                        break;
+
+                    case MediaStoreStatus.mssStgNotFound:
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_StgNotFound));
+                        break;
+
+                    case MediaStoreStatus.mssArcNotFound:
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        break;
+
+                    case MediaStoreStatus.mssBadData:
+                        // can be deleted
+                        result = true;
+                        break;
+                }
+
+                return result;
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseContext.MediaDelete(): " + ex.Message);
+                return false;
+            }
+        }
+
+        public MediaStoreStatus VerifyMediaFile(GDMFileReference fileReference, out string fileName)
+        {
+            if (fileReference == null)
+                throw new ArgumentNullException("fileReference");
+
+            MediaStoreStatus result = MediaStoreStatus.mssBadData;
+
+            try {
+                MediaStore mediaStore = GetStoreType(fileReference);
+                fileName = mediaStore.FileName;
+
+                switch (mediaStore.StoreType) {
+                    case MediaStoreType.mstStorage:
+                        string stgPath = GetStgFolder(false);
+                        if (!Directory.Exists(stgPath)) {
+                            result = MediaStoreStatus.mssStgNotFound;
+                        } else {
+                            fileName = stgPath + fileName;
+                            if (!File.Exists(fileName)) {
+                                result = MediaStoreStatus.mssFileNotFound;
+                            } else {
+                                result = MediaStoreStatus.mssExists;
+                            }
+                        }
+                        break;
+
+                    case MediaStoreType.mstArchive:
+                        if (!File.Exists(GetArcFileName())) {
+                            result = MediaStoreStatus.mssArcNotFound;
+                        } else {
+                            if (!ArcFileExists(fileName)) {
+                                result = MediaStoreStatus.mssFileNotFound;
+                            } else {
+                                result = MediaStoreStatus.mssExists;
+                            }
+                        }
+                        break;
+
+                    case MediaStoreType.mstReference:
+                        if (!File.Exists(fileName)) {
+                            string xFileName = AppHost.PathReplacer.TryReplacePath(fileName);
+                            if (string.IsNullOrEmpty(xFileName)) {
+                                result = MediaStoreStatus.mssFileNotFound;
+                            } else {
+                                result = MediaStoreStatus.mssExists;
+                                fileName = xFileName;
+                            }
+                        } else {
+                            result = MediaStoreStatus.mssExists;
+                        }
+                        break;
+                }
+            } catch (Exception ex) {
+                Logger.LogWrite("BaseContext.VerifyMediaFile(): " + ex.Message);
+                fileName = string.Empty;
+            }
+
+            return result;
+        }
+
+        public bool MediaExists(string refPath)
+        {
+            if (string.IsNullOrEmpty(refPath)) return false;
+
+            int num = fTree.RecordsCount;
+            for (int i = 0; i < num; i++) {
+                GDMMultimediaRecord rec = fTree[i] as GDMMultimediaRecord;
+                if (rec != null && rec.FileReferences.Count > 0) {
+                    if (string.Compare(rec.FileReferences[0].StringValue, refPath, true) == 0) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private void CopyFile(string sourceFileName, string destFileName)

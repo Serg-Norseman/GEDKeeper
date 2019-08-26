@@ -18,6 +18,25 @@
   * Improvement of UI features
   * Design solutions (MediaPlayer and portraits)
 
+* **[Kevin D. Sandal](https://github.com/Dreamer451)**
+
+  * Proofreading of the English manual
+  * Debugging and bug reports
+
+* **[Milan Kosina](https://github.com/m-kosina)**
+
+  * Debugging and bug reports
+  * Development of new features
+
+* **[Kevin Routley](https://github.com/fire-eggs)**
+
+  * Debugging, bug reports and bug fixes
+  * Development of some tests
+
+* **[Alexander Curtis](https://github.com/alexandercurtis)**
+
+  * Author of GEDmill (Family History Website Generator), now it is external plugin
+
 
 ## External components
 
@@ -58,6 +77,12 @@ ExpCalculator
     Licensed under <unknown>
     (C) Ivlev M.Dmitry, Sergey Pedora
     (C) 2011 by Serg V. Zhdanovskih  (fork to C#)
+
+
+GEDmill (Family History Website Generator)
+    Licensed under GPLv3.
+    Copyright 2009 Alexander Curtis
+    https://github.com/alexandercurtis/GEDmill
 
 
 GMap.NET

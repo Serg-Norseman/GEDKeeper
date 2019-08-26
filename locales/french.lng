@@ -696,7 +696,7 @@
 695=Sélectionner ou ajouter un enregistrement de source
 696=Sélectionner l'enregistrement cible
 697=Si vous utilisez "fichier" ou "stockage" type de stockage, vous devez enregistrer le fichier nouvelle base de données avant de continuer
-698=Un fichier portant le même nom existe déjà dans le référentiel
+698=Un fichier portant le même nom existe déjà
 699=Ce n'est pas un fichier compatible GEDSEC
 700=Cet individu a quelques familles. Les enfants doivent être ajoutés par l'intermédiaire des conjoints.
 701=Échec de l'exportation vers Excel
@@ -789,6 +789,16 @@
 788=Fichiers GedML (*.xml)|*.xml
 789=Enfant détecté sans parents
 790=Fiche familiale détectée sans parents ni enfants
+791=Are you sure you want to remove multimedia file?
+792=Storage not found
+793=File not found
+794=Allow relative references to media files
+795=Default media storage type
+796=Allow delete media files from storage and archive
+797=Allow delete media files by direct and relative references
+798=Delete media files without confirm
+799=Media record without files
+800=Archive not found
 
 801=RI:George Knight
 802=USSR:WWII:Combatant
@@ -799,3 +809,5 @@
 807=Religion:Catholicism
 808=Religion:Orthodoxy
 809=Religion:The Old Believers
+
+810=Relative link to file

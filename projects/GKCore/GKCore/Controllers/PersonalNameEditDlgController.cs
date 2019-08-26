@@ -71,7 +71,7 @@ namespace GKCore.Controllers
                 pieces.Suffix = fView.NameSuffix.Text;
 
                 fPersonalName.NameType = (GDMNameType)fView.NameType.SelectedIndex;
-                fPersonalName.Language = (GDMLanguageID)fView.Language.SelectedTag;
+                fPersonalName.Language = fView.Language.GetSelectedTag<GDMLanguageID>();
 
                 fBase.Context.CollectNameLangs(fPersonalName);
 

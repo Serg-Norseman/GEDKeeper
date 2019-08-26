@@ -90,7 +90,7 @@ namespace GKCore.Controllers
                     iFilter.FilterGroupMode = (FilterGroupMode)fView.GroupCombo.SelectedIndex;
                     iFilter.GroupRef = "";
                 } else {
-                    GDMRecord rec = fView.GroupCombo.SelectedTag as GDMRecord;
+                    GDMRecord rec = fView.GroupCombo.GetSelectedTag<GDMRecord>();
                     if (rec != null) {
                         iFilter.FilterGroupMode = FilterGroupMode.Selected;
                         iFilter.GroupRef = rec.XRef;
@@ -105,7 +105,7 @@ namespace GKCore.Controllers
                     iFilter.SourceMode = (FilterGroupMode)fView.SourceCombo.SelectedIndex;
                     iFilter.SourceRef = "";
                 } else {
-                    GDMRecord rec = fView.SourceCombo.SelectedTag as GDMRecord;
+                    GDMRecord rec = fView.SourceCombo.GetSelectedTag<GDMRecord>();
                     if (rec != null) {
                         iFilter.SourceMode = FilterGroupMode.Selected;
                         iFilter.SourceRef = rec.XRef;

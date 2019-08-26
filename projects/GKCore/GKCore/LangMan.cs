@@ -526,7 +526,7 @@ namespace GKCore
         /* 474 */ LSID_SyncFin,
         /* 475 */ LSID_PatSearch,
         /* 476 */ LSID_LinksSearch,
-        /* 477 */ LSID_ArcNotFound,
+        /* 477 */ LSID_MediaFileNotLoaded,
         /* 478 */ LSID_Scale,
         /* 479 */ LSID_GEDCOMFilter,
         /* 480 */ LSID_AllFilter,
@@ -752,7 +752,7 @@ namespace GKCore
         /* 695 */ LSID_SourceAddTip,
         /* 696 */ LSID_GoalSelectTip,
         /* 697 */ LSID_NewDBFileNeedToSave,
-        /* 698 */ LSID_FileWithSameNameAlreadyExistsInStorage,
+        /* 698 */ LSID_FileWithSameNameAlreadyExists,
         /* 699 */ LSID_ItsNotGEDSECCompatibleFile,
         /* 700 */ LSID_ThisPersonHasSeveralFamilies,
 
@@ -846,17 +846,16 @@ namespace GKCore
         /* 788 */ LSID_GedMLFilter,
         /* 789 */ LSID_ChildWithoutParents,
         /* 790 */ LSID_FamilyRecordWithoutFamily,
-
-        /* 791 */ // reserved begin
-        /* 792 */
-        /* 793 */
-        /* 794 */
-        /* 795 */
-        /* 796 */
-        /* 797 */
-        /* 798 */
-        /* 799 */
-        /* 800 */ // reserved end
+        /* 791 */ LSID_MediaFileDeleteQuery,
+        /* 792 */ LSID_StgNotFound,
+        /* 793 */ LSID_FileNotFound,
+        /* 794 */ LSID_AllowMediaRelativeReferences,
+        /* 795 */ LSID_MediaStoreDefault,
+        /* 796 */ LSID_AllowDeleteMediaFileFromStgArc,
+        /* 797 */ LSID_AllowDeleteMediaFileFromRefs,
+        /* 798 */ LSID_DeleteMediaFileWithoutConfirm,
+        /* 799 */ LSID_MediaRecordWithoutFiles,
+        /* 800 */ LSID_ArcNotFound,
 
         /* 801 */ LSID_RI_GeorgeKnight = 801,
         /* 802 */ LSID_USSR_WWII_Combatant,
@@ -868,7 +867,9 @@ namespace GKCore
         /* 808 */ LSID_Religion_Orthodoxy,
         /* 809 */ LSID_Religion_TheOldBelievers,
 
-        /* 000 */ LSID_Last = LSID_Religion_TheOldBelievers
+        /* 810 */ LSID_STRel,
+
+        /* 000 */ LSID_Last = LSID_STRel
     }
 
 
@@ -1577,7 +1578,7 @@ namespace GKCore
             /* 695 */ "Select or add a record of source",
             /* 696 */ "Select the target record",
             /* 697 */ "If you use \"file\" or \"store\" storage type, you have to save new database file before continue",
-            /* 698 */ "A file with the same name already exists in the repository",
+            /* 698 */ "A file with the same name already exists",
             /* 699 */ "It's not a GEDSEC-compatible file",
             /* 700 */ "This individual has a few families. Children should be added via the spouses.",
             /* 701 */ "Export to Excel failed",
@@ -1670,17 +1671,16 @@ namespace GKCore
             /* 788 */ "GedML files (*.xml)|*.xml",
             /* 789 */ "Child detected without parents",
             /* 790 */ "Family record detected without family",
-
-            /* 791 */ "", // reserved begin
-            /* 792 */ "",
-            /* 793 */ "",
-            /* 794 */ "",
-            /* 795 */ "",
-            /* 796 */ "",
-            /* 797 */ "",
-            /* 798 */ "",
-            /* 799 */ "",
-            /* 800 */ "", // reserved end
+            /* 791 */ "Are you sure you want to remove multimedia file?",
+            /* 792 */ "Storage not found",
+            /* 793 */ "File not found",
+            /* 794 */ "Allow relative references to media files",
+            /* 795 */ "Default media storage type",
+            /* 796 */ "Allow delete media files from storage and archive",
+            /* 797 */ "Allow delete media files by direct and relative references",
+            /* 798 */ "Delete media files without confirm",
+            /* 799 */ "Media record without files",
+            /* 800 */ "Archive not found",
 
             /* 801 */ "RI:GeorgeKnight",
             /* 802 */ "USSR:WWII:Combatant",
@@ -1691,6 +1691,8 @@ namespace GKCore
             /* 807 */ "Religion:Catholicism",
             /* 808 */ "Religion:Orthodoxy",
             /* 809 */ "Religion:The Old Believers",
+
+            /* 810 */ "Relative link to file",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

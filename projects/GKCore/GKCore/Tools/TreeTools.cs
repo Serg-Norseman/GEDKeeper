@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using BSLib;
 using BSLib.SmartGraph;
@@ -525,7 +526,11 @@ namespace GKCore.Tools
             csDateInvalid,
             csCycle,
             cdChildWithoutParents,
-            cdFamilyRecordWithoutFamily
+            cdFamilyRecordWithoutFamily,
+            cdMediaRecordWithoutFiles,
+            cdStgNotFound,
+            cdArcNotFound,
+            cdFileNotFound,
         }
 
         public enum CheckSolve
@@ -714,6 +719,56 @@ namespace GKCore.Tools
             }
         }
 
+        private static bool StgNotFound;
+        private static bool ArcNotFound;
+
+        private static void CheckMultimediaRecord(IBaseContext baseContext, GDMMultimediaRecord mmRec, List<CheckObj> checksList)
+        {
+            if (mmRec.FileReferences.Count <= 0) {
+                CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdMediaRecordWithoutFiles, CheckSolve.csRemove);
+                checkObj.Comment = LangMan.LS(LSID.LSID_MediaRecordWithoutFiles);
+                checksList.Add(checkObj);
+            }
+
+            string fileName;
+            MediaStoreStatus storeStatus = baseContext.VerifyMediaFile(mmRec.FileReferences[0], out fileName);
+
+            switch (storeStatus) {
+                case MediaStoreStatus.mssExists:
+                    break;
+
+                case MediaStoreStatus.mssFileNotFound:
+                    {
+                        CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdFileNotFound, CheckSolve.csSkip);
+                        checkObj.Comment = LangMan.LS(LSID.LSID_FileNotFound) + " " + fileName;
+                        checksList.Add(checkObj);
+                    }
+                    break;
+
+                case MediaStoreStatus.mssStgNotFound:
+                    if (!StgNotFound) {
+                        CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdStgNotFound, CheckSolve.csSkip);
+                        checkObj.Comment = LangMan.LS(LSID.LSID_StgNotFound);
+                        checksList.Add(checkObj);
+                        StgNotFound = true;
+                    }
+                    break;
+
+                case MediaStoreStatus.mssArcNotFound:
+                    if (!ArcNotFound) {
+                        CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdArcNotFound, CheckSolve.csSkip);
+                        checkObj.Comment = LangMan.LS(LSID.LSID_ArcNotFound);
+                        checksList.Add(checkObj);
+                        ArcNotFound = true;
+                    }
+                    break;
+
+                case MediaStoreStatus.mssBadData:
+                    // TODO: can be deleted?
+                    break;
+            }
+        }
+
         public static void CheckBase(IBaseWindow baseWin, List<CheckObj> checksList)
         {
             if (baseWin == null)
@@ -721,6 +776,9 @@ namespace GKCore.Tools
 
             if (checksList == null)
                 throw new ArgumentNullException("checksList");
+
+            StgNotFound = false;
+            ArcNotFound = false;
 
             IProgressController progress = AppHost.Progress;
             try {
@@ -740,6 +798,10 @@ namespace GKCore.Tools
 
                         case GDMRecordType.rtFamily:
                             CheckFamilyRecord(rec as GDMFamilyRecord, checksList);
+                            break;
+
+                        case GDMRecordType.rtMultimedia:
+                            CheckMultimediaRecord(baseWin.Context, rec as GDMMultimediaRecord, checksList);
                             break;
                     }
                 }

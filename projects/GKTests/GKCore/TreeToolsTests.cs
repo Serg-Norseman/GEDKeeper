@@ -269,8 +269,9 @@ namespace GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(null, checksList); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(fBaseWin, null); });
 
+            // three records with errors + multimedia with a nonexistent file
             TreeTools.CheckBase(fBaseWin, checksList);
-            Assert.AreEqual(3, checksList.Count);
+            Assert.AreEqual(3 + 1, checksList.Count);
 
             Assert.AreEqual(TreeTools.CheckDiag.cdStrangeSpouse, checksList[0].Diag);
             Assert.AreEqual(TreeTools.CheckDiag.cdPersonLonglived, checksList[2].Diag);

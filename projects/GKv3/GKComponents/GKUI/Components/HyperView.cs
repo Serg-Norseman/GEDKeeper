@@ -47,6 +47,7 @@ namespace GKUI.Components
         private BBTextChunk fCurrentLink;
         private Color fLinkColor;
         private ExtSize fTextSize;
+        private bool fWordWrap;
 
         public event LinkEventHandler OnLink;
 
@@ -77,6 +78,12 @@ namespace GKUI.Components
             }
         }
 
+        public bool WordWrap
+        {
+            get { return fWordWrap; }
+            set { fWordWrap = value; }
+        }
+
 
         public HyperView() : base()
         {
@@ -90,12 +97,12 @@ namespace GKUI.Components
             fLines.OnChange += LinesChanged;
             fLinkColor = Colors.Blue;
             fTextSize = ExtSize.Empty;
+            fWordWrap = true;
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fChunks.Clear();
                 fHeights.Clear();
                 fLines.Dispose();
@@ -116,13 +123,11 @@ namespace GKUI.Components
 
         private void ArrangeText()
         {
-            try
-            {
+            try {
                 fAcceptFontChange = false;
                 fHeights.Clear();
 
-                try
-                {
+                try {
                     int xPos = 0;
                     int yPos = 0;
                     int xMax = 0;
@@ -132,8 +137,7 @@ namespace GKUI.Components
                     if (!string.IsNullOrEmpty(text)) {
                         Font defFont = this.Font;
                         var parser = new BBTextParser(AppHost.GfxProvider, defFont.Size,
-                                                      new ColorHandler(fLinkColor),
-                                                      new ColorHandler(TextColor));
+                                                      new ColorHandler(fLinkColor), new ColorHandler(TextColor));
 
                         parser.ParseText(fChunks, text);
 
@@ -178,26 +182,22 @@ namespace GKUI.Components
                     }
 
                     fTextSize = new ExtSize(xMax + 2 * fBorderWidth, yPos + 2 * fBorderWidth);
-                }
-                finally
-                {
+                } finally {
                     fAcceptFontChange = true;
                     SetImageSize(fTextSize);
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("HyperView.ArrangeText(): " + ex.Message);
             }
         }
 
         private void DoPaint(Graphics gfx)
         {
-            try
-            {
+            try {
                 fAcceptFontChange = false;
-                try
-                {
+                SolidBrush brush = new SolidBrush(this.TextColor);
+                Font font = null;
+                try {
                     gfx.FillRectangle(new SolidBrush(BackgroundColor), Viewport);
                     Font defFont = this.Font;
 
@@ -207,8 +207,7 @@ namespace GKUI.Components
 
                     int line = -1;
                     int chunksCount = fChunks.Count;
-                    for (int k = 0; k < chunksCount; k++)
-                    {
+                    for (int k = 0; k < chunksCount; k++) {
                         BBTextChunk chunk = fChunks[k];
 
                         if (line != chunk.Line) {
@@ -228,25 +227,38 @@ namespace GKUI.Components
                             // FIXME: null?!
                             IColor clr = chunk.Color;
                             var chunkColor = (clr == null) ? TextColor : ((ColorHandler)chunk.Color).Handle;
-                            using (var brush = new SolidBrush(chunkColor)) {
-                                using (var font = new Font(defFont.FamilyName, chunk.Size, (sdFontStyle)chunk.Style)) {
-                                    gfx.DrawText(font, brush, xOffset, yOffset, ct);
-                                }
-                            }
+                            brush.Color = chunkColor;
+                            font = ProcessFont(font, chunk.Size, (sdFontStyle)chunk.Style);
+                            gfx.DrawText(font, brush, xOffset, yOffset, ct);
 
                             xOffset += chunk.Width;
                         }
                     }
-                }
-                finally
-                {
+                } finally {
                     fAcceptFontChange = true;
+                    if (brush != null) brush.Dispose();
+                    if (font != null) font.Dispose();
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("HyperView.DoPaint(): " + ex.Message);
             }
+        }
+
+        private Font ProcessFont(Font prevFont, float emSize, FontStyle style)
+        {
+            Font result;
+            if (prevFont == null) {
+                var defFont = this.Font;
+                result = new Font(defFont.FamilyName, emSize, style);
+            } else {
+                if (prevFont.Size == emSize && prevFont.FontStyle == style) {
+                    result = prevFont;
+                } else {
+                    result = new Font(prevFont.FamilyName, emSize, style);
+                    prevFont.Dispose();
+                }
+            }
+            return result;
         }
 
         private void DoLink(string linkName)
@@ -264,6 +276,13 @@ namespace GKUI.Components
             }
 
             base.OnFontChanged(e);
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            ArrangeText();
+
+            base.OnSizeChanged(e);
         }
 
         // FIXME: move call to fCanvas handler
@@ -323,13 +342,11 @@ namespace GKUI.Components
             fCurrentLink = null;
 
             int num = fChunks.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 BBTextChunk chunk = fChunks[i];
                 if (string.IsNullOrEmpty(chunk.URL)) continue;
 
-                if (chunk.HasCoord(mpt.X, mpt.Y))
-                {
+                if (chunk.HasCoord(mpt.X, mpt.Y)) {
                     fCurrentLink = chunk;
                     break;
                 }

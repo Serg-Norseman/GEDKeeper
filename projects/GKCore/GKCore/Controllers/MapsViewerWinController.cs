@@ -186,7 +186,7 @@ namespace GKCore.Controllers
                 condDeath = fView.DeathCheck.Checked;
                 condResidence = fView.ResidenceCheck.Checked;
             } else if (fView.SelectedRadio.Checked && (fView.PersonsCombo.SelectedIndex >= 0)) {
-                ind = (fView.PersonsCombo.SelectedTag as GDMIndividualRecord);
+                ind = (fView.PersonsCombo.GetSelectedTag<GDMIndividualRecord>());
             }
 
             fView.MapBrowser.ShowLines = (ind != null && fView.LinesVisibleCheck.Checked);
