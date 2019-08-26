@@ -49,13 +49,13 @@
             </ul>
         </li>
         <li>Autosave every
-            <br />If checked then the database is automatically saved in the identified minutes.
+            <br />If checked then the database is automatically saved every <i>N</i> minutes.
         </li>
         <li>Other
             <br />Here are miscellaneous options that control how the startup process is handled.
             <ul>
                 <li>Show tips on startup
-                    <br />Currently this shows birthday reminders on application startup.
+                    <br />If checked then useful tips will be shown at startup such as birthday reminders.
                 </li>
                 <li>Load at startup recent opened files
                     <br />If checked then the last file used is automatically opened.
@@ -105,7 +105,7 @@
                         <br />If checked then the patronymic, if available, will be rendered.
                     </li>
                     <li>Separate lines
-                        <br />If checked then each line of text is separated by vertical space.
+                        <br />If checked then the first name, and patronymic if any, are rendered on separate lines. Otherwise they are on a single line separated by a space.
                     </li>
                     <li>Birth date
                         <br />If checked then the date of birth, if available, will be rendered.
@@ -141,7 +141,7 @@
                         <br />If checked, and the spouse is not known, then the spouse placeholder is not rendered.
                     </li>
                     <li>Check tree size allowed
-                        <br /><b><i>TODO: NEED INFORMATION</i></b>
+                        <br />If checked, then the maximum number of persons in the tree and the maximum image resolution are checked. This is usually unchecked as GEDKeeper no longer has any such restrictions.
                     </li>
                 </ul>
             </li>
@@ -187,7 +187,7 @@
             </li>
         </ol>
         <h3>Ancestors Circle</h3>
-            Controls visual characteristics of the Ancestors Circle pedigree.
+            Controls visual characteristics of the Ancestors Circle chart.
             <br /><img src="images/dlgOptions_Charts_AncestorsCircle.gif" alt="[Ancesstors Circle chart options dialog]" />
             <ul>
                 <li>Circle 0
@@ -240,13 +240,13 @@
                 <li>Name format in lists
                     <ul>
                         <li>Surname_Name_Patronymic
-                            <br />The surname, name, and patronymic are separated by an underscore.
+                            <br />The surname, first name, and patronymic (or middle name) if present, are displayed in one common column.
                         </li>
                         <li>Surname; Name_Patronymic
-                            <br />The surname and name are separated by a semi-colon. The name and patronymic are separated by an underscore.
+                            <br />The surname is displayed in a separate column, and the first and patronymic are displayed in a common column.
                         </li>
                         <li>Surname; Name; Patronymic
-                            <br />The surname, name, and patronymic are separated by a semi-colon.
+                            <br />The surname, name, and patronymic are displayed in separate columns.
                         </li>
                     </ul>
                 </li>
@@ -261,10 +261,10 @@
                     </ul>
                 </li>
                 <li>Show calendar near dates
-                    <br />Displays the type of date being used: Gregorian or Julian.
+                    <br />Displays a calendar marker for the type of date being used: Gregorian, Jewish, or Julian.
                 </li>
                 <li>Show date type
-                    <br /><b><i>TODO: NEED MORE INFORMATION</i></b> Displays special symbols next to the date: &quot;&lt;&quot; (before), &quot;&gt;&quot; (after), &quot;~&quot; (about), &quot;-&quot; (between), etc.
+                    <br />Displays a symbol next to the date to indicate if it is relative, calculated (or evaluated), before, after, or a range.
                 </li>
                 <li>Additional names
                     <ul>
@@ -322,7 +322,7 @@
                         <br />Determines if the pedigree includes source numbers that reference a person&#151;there is a source list at the bottom of the pedigree.
                     </li>
                     <li>Including number of generations
-                        <br /><b><i>TODO: NEED INFORMATION</i></b>
+                        <br />Sets whether to display additional subheadings of the type "Generation&nbsp;1", "Generation&nbsp;2", and so forth. Otherwise the generation's texts follow without a visual breakdown.
                     </li>
                     <li>Pedigree format
                         <br />These control the level of details for a person description printed in the pedigree. Usually, you would use the Compact format, because the Excess one may contain too much unnecessary information.
