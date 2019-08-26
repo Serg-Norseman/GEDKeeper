@@ -559,7 +559,7 @@ namespace GKCore
             if (evt == null)
                 throw new ArgumentNullException("evt");
 
-            string dt = GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
+            string dt = GEDCOMEventToDateStr(evt, GlobalOptions.Instance.DefDateFormat, false);
             string place = evt.Place.StringValue;
             GDMLocationRecord location = evt.Place.Location.Value as GDMLocationRecord;
 
@@ -712,14 +712,14 @@ namespace GKCore
 
             string result = " (";
 
-            string ds = GetBirthDate(iRec, DateFormat.dfDD_MM_YYYY, false);
+            string ds = GetBirthDate(iRec, GlobalOptions.Instance.DefDateFormat, false);
             if (ds == "")
             {
                 ds = "?";
             }
             result += ds;
 
-            ds = GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, false);
+            ds = GetDeathDate(iRec, GlobalOptions.Instance.DefDateFormat, false);
             if (ds == "")
             {
                 GDMCustomEvent ev = iRec.FindEvent(GEDCOMTagType.DEAT);
@@ -770,13 +770,13 @@ namespace GKCore
             switch (fmt) {
                 case PedigreeFormat.Excess:
                     {
-                        string ds = GetBirthDate(iRec, DateFormat.dfDD_MM_YYYY, true);
+                        string ds = GetBirthDate(iRec, GlobalOptions.Instance.DefDateFormat, true);
                         if (ds == "")
                         {
                             ds = "?";
                         }
                         result += ds;
-                        ds = GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, true);
+                        ds = GetDeathDate(iRec, GlobalOptions.Instance.DefDateFormat, true);
                         if (ds == "")
                         {
                             GDMCustomEvent ev = iRec.FindEvent(GEDCOMTagType.DEAT);
@@ -796,7 +796,7 @@ namespace GKCore
                     {
                         string ds, ps;
 
-                        GetEventDatePlace(iRec, GEDCOMTagName.BIRT, DateFormat.dfDD_MM_YYYY, true, true, out ds, out ps);
+                        GetEventDatePlace(iRec, GEDCOMTagName.BIRT, GlobalOptions.Instance.DefDateFormat, true, true, out ds, out ps);
                         if (ps != "") {
                             if (ds != "") {
                                 ds += ", ";
@@ -808,7 +808,7 @@ namespace GKCore
                         }
                         result += ds;
 
-                        GetEventDatePlace(iRec, GEDCOMTagName.DEAT, DateFormat.dfDD_MM_YYYY, true, true, out ds, out ps);
+                        GetEventDatePlace(iRec, GEDCOMTagName.DEAT, GlobalOptions.Instance.DefDateFormat, true, true, out ds, out ps);
                         if (ps != "") {
                             if (ds != "") {
                                 ds += ", ";
@@ -2189,7 +2189,7 @@ namespace GKCore
                                     st = LangMan.LS(LSID.LSID_Husband) + ": ";
                                     unk = LangMan.LS(LSID.LSID_UnkMale);
                                 }
-                                string marr = GetMarriageDateStr(family, DateFormat.dfDD_MM_YYYY);
+                                string marr = GetMarriageDateStr(family, GlobalOptions.Instance.DefDateFormat);
                                 if (marr != "") {
                                     marr = LangMan.LS(LSID.LSID_LMarriage) + " " + marr;
                                 } else {
@@ -2376,8 +2376,8 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)researchRec.Priority]));
                         summary.Add(LangMan.LS(LSID.LSID_Status) + ": " + LangMan.LS(GKData.StatusNames[(int)researchRec.Status]) + " (" + researchRec.Percent.ToString() + "%)");
-                        summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + researchRec.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY));
-                        summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + researchRec.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY));
+                        summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + researchRec.StartDate.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
+                        summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + researchRec.StopDate.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
 
                         if (researchRec.Tasks.Count > 0)
                         {
@@ -2449,8 +2449,8 @@ namespace GKCore
                         summary.Add(LangMan.LS(LSID.LSID_Goal) + ": [u][b][size=+1]" + GetTaskGoalStr(taskRec) + "[/size][/b][/u]");
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)taskRec.Priority]));
-                        summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + taskRec.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY));
-                        summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + taskRec.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY));
+                        summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + taskRec.StartDate.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
+                        summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + taskRec.StopDate.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
 
                         RecListNotesRefresh(taskRec, summary);
                     }
@@ -2485,7 +2485,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Corresponder) + ": " + GetCorresponderStr(tree, commRec, true));
                         summary.Add(LangMan.LS(LSID.LSID_Type) + ": " + LangMan.LS(GKData.CommunicationNames[(int)commRec.CommunicationType]));
-                        summary.Add(LangMan.LS(LSID.LSID_Date) + ": " + commRec.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY));
+                        summary.Add(LangMan.LS(LSID.LSID_Date) + ": " + commRec.Date.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
 
                         RecListNotesRefresh(commRec, summary);
                         RecListMediaRefresh(commRec, summary);

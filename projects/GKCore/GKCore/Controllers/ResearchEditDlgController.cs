@@ -22,6 +22,7 @@ using System;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Controllers
@@ -31,6 +32,7 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class ResearchEditDlgController : DialogController<IResearchEditDlg>
     {
+        private GlobalOptions globalOptions = GlobalOptions.Instance;
         private GDMResearchRecord fResearch;
 
         public GDMResearchRecord Research
@@ -90,8 +92,8 @@ namespace GKCore.Controllers
                 fView.Name.Text = fResearch.ResearchName;
                 fView.Priority.SelectedIndex = (int)fResearch.Priority;
                 fView.Status.SelectedIndex = (int)fResearch.Status;
-                fView.StartDate.Text = fResearch.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.StopDate.Text = fResearch.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.StartDate.Text = fResearch.StartDate.GetDisplayString(globalOptions.DefDateFormat);
+                fView.StopDate.Text = fResearch.StopDate.GetDisplayString(globalOptions.DefDateFormat);
                 fView.Percent.Value = fResearch.Percent;
             }
 

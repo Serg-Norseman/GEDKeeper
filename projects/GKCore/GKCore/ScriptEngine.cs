@@ -32,6 +32,7 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore
@@ -40,7 +41,7 @@ namespace GKCore
     using LuaInterface;
     #else
     using NLua;
-    #endif
+    #endif    
 
     public class ScriptException : Exception
     {
@@ -409,8 +410,10 @@ namespace GKCore
 
         public string gt_get_event_date(object evPtr)
         {
+            GlobalOptions globalOptions = GlobalOptions.Instance;
+
             GDMCustomEvent evt = evPtr as GDMCustomEvent;
-            return (GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false));
+            return (GKUtils.GEDCOMEventToDateStr(evt, globalOptions.DefDateFormat, false));
         }
 
         // TODO: checking this function, its incorrect logic

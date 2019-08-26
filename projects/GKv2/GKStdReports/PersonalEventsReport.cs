@@ -137,7 +137,7 @@ namespace GKStdReports
 
                 GDMCustomEvent evt = evObj.Event;
                 string st = GKUtils.GetEventName(evt);
-                string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
+                string dt = GKUtils.GEDCOMEventToDateStr(evt, GlobalOptions.Instance.DefDateFormat, false);
 
                 if (ShowAges) {
                     int year = evt.GetChronologicalYear();

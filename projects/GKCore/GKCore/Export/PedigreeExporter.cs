@@ -25,6 +25,7 @@ using BSLib.Calendar;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Export
@@ -34,6 +35,8 @@ namespace GKCore.Export
     /// </summary>
     public sealed class PedigreeExporter : ReportExporter
     {
+        private GlobalOptions globalOptions = GlobalOptions.Instance;
+
         private class PedigreePerson
         {
             public PedigreePerson Parent;
@@ -387,7 +390,7 @@ namespace GKCore.Export
                         st = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evtName;
                     }
 
-                    string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
+                    string dt = GKUtils.GEDCOMEventToDateStr(evt, globalOptions.DefDateFormat, false);
                     li = dt + ": " + st + ".";
                     if (evt.Place.StringValue != "") {
                         li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
@@ -395,7 +398,7 @@ namespace GKCore.Export
 
                     fWriter.AddListItem(" " + li, fTextFont);
                 } else {
-                    string dt = (evt == null) ? "?" : GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
+                    string dt = (evt == null) ? "?" : GKUtils.GEDCOMEventToDateStr(evt, globalOptions.DefDateFormat, false);
 
                     string st = (evObj.IRec.Sex == GDMSex.svMale) ? LangMan.LS(LSID.LSID_HeWasBorn) : LangMan.LS(LSID.LSID_SheWasBorn);
 
