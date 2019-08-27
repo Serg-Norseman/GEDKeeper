@@ -18,7 +18,7 @@ On Windows
 GEDKeeper is cross-platform and can be run on Linux and Windows. 
 In particular, it supports the following platforms:
 
-- Windows XP (or later) and .NET 4.5 (or later)
+- Windows XP (or later) and .NET 4.0 (or later)
 - Linux (Debian/Ubuntu) and Mono 4.5 (or later)
 
 We currently do not support iOS and Android, although it is possible it could 
