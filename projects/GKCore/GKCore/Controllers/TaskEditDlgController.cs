@@ -23,7 +23,6 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.MVP;
 using GKCore.MVP.Views;
-using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Controllers
@@ -33,7 +32,6 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class TaskEditDlgController : DialogController<ITaskEditDlg>
     {
-        private GlobalOptions globalOptions = GlobalOptions.Instance;
         private GDMTaskRecord fTask;
         private GDMRecord fTempRec;
 
@@ -103,8 +101,8 @@ namespace GKCore.Controllers
                 fView.Goal.Text = "";
             } else {
                 fView.Priority.SelectedIndex = (sbyte)fTask.Priority;
-                fView.StartDate.Text = fTask.StartDate.GetDisplayString(globalOptions.DefDateFormat);
-                fView.StopDate.Text = fTask.StopDate.GetDisplayString(globalOptions.DefDateFormat);
+                fView.StartDate.Text = fTask.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.StopDate.Text = fTask.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
                 var goal = fTask.GetTaskGoal();
                 fTempRec = goal.GoalRec;
