@@ -27,6 +27,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKStdReports
