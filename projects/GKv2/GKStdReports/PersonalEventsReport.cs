@@ -27,6 +27,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKStdReports
@@ -137,7 +138,7 @@ namespace GKStdReports
 
                 GDMCustomEvent evt = evObj.Event;
                 string st = GKUtils.GetEventName(evt);
-                string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
+                string dt = GKUtils.GEDCOMEventToDateStr(evt, GlobalOptions.Instance.DefDateFormat, false);
 
                 if (ShowAges) {
                     int year = evt.GetChronologicalYear();

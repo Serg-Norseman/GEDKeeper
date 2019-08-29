@@ -21,6 +21,7 @@
 using System.Collections.Generic;
 using GDModel;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Export
@@ -53,6 +54,7 @@ namespace GKCore.Export
             IProgressController progress = AppHost.Progress;
             progress.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", fTree.RecordsCount);
 
+            var dateFormat = GlobalOptions.Instance.DefDateFormat;
             try
             {
                 worksheet.Cells[1,  1] = new Cell("№");
@@ -87,8 +89,8 @@ namespace GKCore.Export
                             worksheet.Cells[row, 3] = new Cell(parts.Name);
                             worksheet.Cells[row, 4] = new Cell(parts.Patronymic);
                             worksheet.Cells[row, 5] = new Cell(sx);
-                            worksheet.Cells[row, 6] = new Cell(GKUtils.GetBirthDate(ind, DateFormat.dfDD_MM_YYYY, false));
-                            worksheet.Cells[row, 7] = new Cell(GKUtils.GetDeathDate(ind, DateFormat.dfDD_MM_YYYY, false));
+                            worksheet.Cells[row, 6] = new Cell(GKUtils.GetBirthDate(ind, dateFormat, false));
+                            worksheet.Cells[row, 7] = new Cell(GKUtils.GetDeathDate(ind, dateFormat, false));
                             worksheet.Cells[row, 8] = new Cell(GKUtils.GetBirthPlace(ind));
                             worksheet.Cells[row, 9] = new Cell(GKUtils.GetDeathPlace(ind));
                             worksheet.Cells[row,10] = new Cell(GKUtils.GetResidencePlace(ind, fOptions.PlacesWithAddress));

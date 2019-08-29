@@ -27,25 +27,29 @@
 
 
 ## English
-**GEDKeeper** program is developed for work with personal genealogical database.
+The **GEDKeeper** program is for working with personal genealogical databases.
 
-The program is designed for extremely simple and intuitive interface. 
-The program is very easy to install on the computer, fully supports the GEDCOM 
-format, has no restrictions on the number of persons and generations, allows 
-you to generate pedigrees, building several tree species, as well as print and 
-save their images, provides fast navigation, filtering, searching and adding 
-multimedia materials. In addition there is an output of geographic data on 
-Google maps (© Google).
+The program is designed with an extremely simple and intuitive interface. 
+It is very easy to install on your computer and provides many features including,
+but not limited to, the following:
+* Full support of the GEDCOM 5.5.1 standard.
+* No restrictions on the number of persons and generations.
+* Allows pedigree generation.
+* Can build several tree species, as well as print and save their images.
+* Provides fast navigation, filtering, and searching.
+* Able to add multimedia materials.
+* An output of geographic data using [Google© maps](https://maps.google.com).
 
-The aim of the program is as quick and effective means of conducting personal 
-genealogical database.
+The aim of this program is to be a quick and effective means of conducting personal 
+genealogical database development.
 
-To enhance the capabilities of the program supports scripts on Lua and plug-ins.
+To enhance the capabilities of the program it supports scripts using [Lua](https://www.lua.org/)
+and plug-ins written in [.NET](https://dotnet.microsoft.com/).
 
 The latest releases can be downloaded from [releases](https://github.com/serg-norseman/gedkeeper/releases) 
 or from the homepage site on [GitHub.io](https://gedkeeper.github.io/). 
-Alternatively why not try the [Sourceforge](https://sourceforge.net/projects/gedkeeper/) 
-site (this is the most popular).
+Alternatively, why not try the [Sourceforge](https://sourceforge.net/projects/gedkeeper/) 
+site (this is very popular).
 
 Project's main site: [http://en.gedkeeper.net/](http://en.gedkeeper.net/)
 
@@ -53,17 +57,18 @@ Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/forum
 
 ### Support
 
-The project is fully free, I do not impose any restrictions on its use. I'm, just like to do useful things. 
-If you have a desire to help, tell friends about the project or donate. Thanks!
+The project is completely free--no restrictions are imposed on its use. I just like to do useful things. 
+If you have a desire to help, tell friends about the project or [donate](https://sourceforge.net/p/gedkeeper/donate/).
+Thanks!
 
 ### Contributing
 
-All contributions are welcomed. Contributions may close an issue, fix a bug (reported or not reported), add new design blocks, 
-improve the existing code, add new feature, and so on.
+All contributions are welcomed. Contributions may close an issue, fix a bug (reported or not), add new design blocks, 
+improve the existing code, add a new feature, and so on.
 
 ### Bugs and feature requests
 
-Have a bug or a feature request? Please first search for existing and closed issues. 
+Have a bug or a feature request? Please first search for existing and closed [issues](https://github.com/Serg-Norseman/GEDKeeper/issues).
 If your problem or idea is not addressed yet, please open a new issue.
 
 

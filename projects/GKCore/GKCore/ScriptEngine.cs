@@ -32,6 +32,7 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore
@@ -410,7 +411,7 @@ namespace GKCore
         public string gt_get_event_date(object evPtr)
         {
             GDMCustomEvent evt = evPtr as GDMCustomEvent;
-            return (GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false));
+            return (GKUtils.GEDCOMEventToDateStr(evt, GlobalOptions.Instance.DefDateFormat, false));
         }
 
         // TODO: checking this function, its incorrect logic

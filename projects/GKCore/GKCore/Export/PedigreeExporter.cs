@@ -25,6 +25,7 @@ using BSLib.Calendar;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Export
@@ -372,6 +373,7 @@ namespace GKCore.Export
 
             fWriter.BeginList();
 
+            var dateFormat = GlobalOptions.Instance.DefDateFormat;
             for (int i = 0; i < evtNum; i++) {
                 PedigreeEvent evObj = evList[i];
                 GDMCustomEvent evt = evObj.Event;
@@ -387,7 +389,7 @@ namespace GKCore.Export
                         st = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evtName;
                     }
 
-                    string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
+                    string dt = GKUtils.GEDCOMEventToDateStr(evt, dateFormat, false);
                     li = dt + ": " + st + ".";
                     if (evt.Place.StringValue != "") {
                         li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
@@ -395,7 +397,7 @@ namespace GKCore.Export
 
                     fWriter.AddListItem(" " + li, fTextFont);
                 } else {
-                    string dt = (evt == null) ? "?" : GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
+                    string dt = (evt == null) ? "?" : GKUtils.GEDCOMEventToDateStr(evt, dateFormat, false);
 
                     string st = (evObj.IRec.Sex == GDMSex.svMale) ? LangMan.LS(LSID.LSID_HeWasBorn) : LangMan.LS(LSID.LSID_SheWasBorn);
 
