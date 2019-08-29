@@ -22,7 +22,6 @@ using System;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
-using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Controllers
@@ -32,7 +31,6 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class CommunicationEditDlgController : DialogController<ICommunicationEditDlg>
     {
-        private GlobalOptions globalOptions = GlobalOptions.Instance;
         private GDMCommunicationRecord fCommunication;
         private GDMIndividualRecord fTempInd;
 
@@ -98,7 +96,7 @@ namespace GKCore.Controllers
                 } else {
                     fView.Name.Text = fCommunication.CommName;
                     fView.CorrType.SelectedIndex = (int)fCommunication.CommunicationType;
-                    fView.Date.Text = fCommunication.Date.GetDisplayString(globalOptions.DefDateFormat);
+                    fView.Date.Text = fCommunication.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
                     fTempInd = fCommunication.Corresponder.Individual;
 
