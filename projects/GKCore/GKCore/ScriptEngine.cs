@@ -41,7 +41,7 @@ namespace GKCore
     using LuaInterface;
     #else
     using NLua;
-    #endif    
+    #endif
 
     public class ScriptException : Exception
     {
@@ -410,10 +410,8 @@ namespace GKCore
 
         public string gt_get_event_date(object evPtr)
         {
-            GlobalOptions globalOptions = GlobalOptions.Instance;
-
             GDMCustomEvent evt = evPtr as GDMCustomEvent;
-            return (GKUtils.GEDCOMEventToDateStr(evt, globalOptions.DefDateFormat, false));
+            return (GKUtils.GEDCOMEventToDateStr(evt, GlobalOptions.Instance.DefDateFormat, false));
         }
 
         // TODO: checking this function, its incorrect logic
