@@ -328,10 +328,13 @@ namespace GKCore.Tools
             int num = iRec.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
                 GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                if (family == null) continue;
 
                 int num2 = family.Children.Count;
                 for (int j = 0; j < num2; j++) {
                     GDMIndividualRecord child = family.Children[j].Individual;
+                    if (child == null) continue;
+
                     var res = DetectCycleDescendants(child, stack);
                     if (res != null) return res;
                 }

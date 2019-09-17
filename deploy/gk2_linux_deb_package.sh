@@ -3,13 +3,13 @@ APP="GEDKeeper2"
 EXT="ged"
 COMMENT="Personal genealogical database editor"
 # APP_PATH=/usr/bin/
-APP_VER="2.16.0"
+APP_VER="2.16.2"
 DEV_PATH="/home/norseman/share/gkdev/GEDKeeper"
 PACK_PATH="gedkeeper-$APP_VER"
 LIB_PATH="$PACK_PATH/usr/lib/gedkeeper"
 BIN_PATH="$PACK_PATH/usr/bin"
 
-rm -f ~/gedkeeper_2.16.0-1_all.deb
+rm -f ~/gedkeeper_2.16.2-1_all.deb
 rm -rf ~/$PACK_PATH
 
 # Create directories if missing

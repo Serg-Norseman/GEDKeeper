@@ -122,7 +122,7 @@ namespace GKUI.Components
             }
 
             if (fValue is string && otherItem.fValue is string) {
-                return GKUtils.StrCompareEx((string)fValue, (string)otherItem.fValue);
+                return GKListView.StrCompareEx((string)fValue, (string)otherItem.fValue);
             }
 
             IComparable cv1 = fValue as IComparable;
@@ -199,7 +199,7 @@ namespace GKUI.Components
                             IComparable eitem2 = (IComparable)y;
                             result = eitem1.CompareTo(eitem2);
                         } else {
-                            result = GKUtils.StrCompareEx(item1.Text, item2.Text);
+                            result = GKListView.StrCompareEx(item1.Text, item2.Text);
                         }
                     } else if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count) {
                         ListViewItem.ListViewSubItem subitem1 = item1.SubItems[sortColumn];
@@ -210,7 +210,7 @@ namespace GKUI.Components
                             IComparable sub2 = (IComparable)subitem2;
                             result = sub1.CompareTo(sub2);
                         } else {
-                            result = GKUtils.StrCompareEx(subitem1.Text, subitem2.Text);
+                            result = GKListView.StrCompareEx(subitem1.Text, subitem2.Text);
                         }
                     }
 
@@ -741,6 +741,36 @@ namespace GKUI.Components
             } catch (Exception ex) {
                 Logger.LogWrite("GKListView.SelectItem(): " + ex.Message);
             }
+        }
+
+        #endregion
+
+        #region Internal functions
+
+        internal static int StrCompareEx(string str1, string str2)
+        {
+            double val1, val2;
+            bool v1 = double.TryParse(str1, out val1);
+            bool v2 = double.TryParse(str2, out val2);
+
+            int result;
+            if (v1 && v2) {
+                if (val1 < val2) {
+                    result = -1;
+                } else if (val1 > val2) {
+                    result = +1;
+                } else {
+                    result = 0;
+                }
+            } else {
+                result = string.Compare(str1, str2, false);
+                if (str1 != "" && str2 == "") {
+                    result = -1;
+                } else if (str1 == "" && str2 != "") {
+                    result = +1;
+                }
+            }
+            return result;
         }
 
         #endregion
