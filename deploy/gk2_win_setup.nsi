@@ -275,6 +275,7 @@ Section "$(gkreq)"
     File "..\LuaInterface.dll"
     File "..\NLog.dll"
     File "..\nVLC.dll"
+    File "..\Ude.dll"
     File "..\YamlSerializer.dll"
     File "..\ZedGraph.dll"
 

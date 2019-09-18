@@ -51,6 +51,7 @@ cp $DEV_PATH/KopiLua.dll ~/$LIB_PATH
 cp $DEV_PATH/NLua.dll ~/$LIB_PATH
 cp $DEV_PATH/NLog.dll ~/$LIB_PATH
 cp $DEV_PATH/nVLC.dll ~/$LIB_PATH
+cp $DEV_PATH/Ude.dll ~/$LIB_PATH
 cp $DEV_PATH/YamlSerializer.dll ~/$LIB_PATH
 cp $DEV_PATH/ZedGraph.dll ~/$LIB_PATH
 

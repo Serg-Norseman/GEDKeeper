@@ -33,6 +33,7 @@ echo "..\lua51.dll" >> %lstfile%
 echo "..\LuaInterface.dll" >> %lstfile%
 echo "..\NLog.dll" >> %lstfile%
 echo "..\nVLC.dll" >> %lstfile%
+echo "..\Ude.dll" >> %lstfile%
 echo "..\YamlSerializer.dll" >> %lstfile%
 echo "..\ZedGraph.dll" >> %lstfile%
 
