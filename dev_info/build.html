@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+
+<link rel="stylesheet" href="../locales/help_enu/styles.css" type="text/css" />
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Build GEDKeeper</title>
+</head>
+<body>
+    <h1>How to build GEDKeeper</h1>
+    <h2>Microsoft Windows</h2>
+    <h3>Method 1</h3>
+    <p>Run the executable <kbd>build_all_mswin.x86.cmd</kbd> from the command line.</p>
+    <h3>Method 2</h3>
+    <p>Having the following toolchains is a prerequisite for building GEDKeeper on a Windows host:</p>
+    <ul>
+        <li>
+            MSYS2/MINGW shell.<br><em>
+                It MAYBE is enough to use the Windows
+                10's (Ubuntu's) BASH shell. I didn't test that.
+            </em>
+        </li>
+        <li>GNU make package installed in the MSYLS2/MINGW shell.</li>
+    </ul>
+    <p>
+        To begin, change to the directory where the GEDKeeper project is located:
+        <br><kbd>$ cd /d/vsp/gedkeeper</kbd>
+    </p>
+    <p>
+        Then simply run the <kbd>make</kbd> utility:
+        <br><kbd>$ make</kbd>
+    </p>
+
+    <p>The default target (&quot;all&quot;) builds all binaries (GEDKeeper itself and all available plug-ins).</p>
+
+    <p>
+        All subprojects also have their makefiles. However, those makefiles' default target (&quot;all&quot;) only builds a release and doesn't install it. Use
+        the &quot;install&quot; option to install a specific project's binaries.
+    </p>
+
+    <p>The following variables are supported by all make files:</p>
+    <ul>
+        <li>
+            hardwareplatform<br>
+            Target hardware platform. Possible values are &quot;any&quot;, &quot;x86-64&quot; and &quot;x86&quot;. &quot;any&quot; is the default.
+        </li>
+
+        <li>
+            softwareplatform<br>
+            Target software implementation on the hardware platform. Possible values are &quot;windows&quot; and &quot;linux&quot;. &quot;windows&quot; is the default.
+        </li>
+
+        <li>
+            releasetype<br>
+            Release type. Possible values are &quot;debug&quot; and &quot;release&quot;. &quot;release&quot; is the default.
+        </li>
+
+        <li>
+            dotnet<br>
+            Determines the .NET framework to use. Possible values are &quot;dotnet20&quot; and &quot;dotnet46&quot;. &quot;dotnet20&quot; is the default.
+        </li>
+    </ul>
+    <p>
+        Therefore, the following calls are equivalent:
+        <br>
+        <kbd>$ make</kbd><br>
+        <kbd>$ make hardwareplatform=any softwareplatform=windows releasetype=release dotnet=dotnet20</kbd>
+    </p>
+
+    <p>
+        The currently supported targets are:
+        <ul>
+            <li>
+                all<br>
+                Builds a project and all its dependencies. On the root makefile it also installs GEDKeeper and all available plug-ins.
+            </li>
+
+            <li>
+                install<br>
+                Available only for a specific project. This goal builds, if necessary, the project and its dependencies and then installs all binaries into the GEDKeeper's directory.
+            </li>
+
+            <li>
+                clean<br>
+                Remove all files made by &quot;all&quot; or &quot;install&quot; target.
+            </li>
+        </ul>
+    </p>
+
+    <h2>Linux</h2>
+    <p>Sorry, not yet implemented.</p>
+    <p>Make it!</p>
+
+</body>
+</html>
