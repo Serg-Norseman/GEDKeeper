@@ -1380,6 +1380,30 @@ namespace GKCore
             return result;
         }
 
+        private void RemoveOldestBackups(string fileName, string bakPath)
+        {
+            string backupFiles = Path.GetFileName(fileName) + ".*";
+            DirectoryInfo bakPathInfo = new DirectoryInfo(bakPath);
+            FileInfo[] bakFiles = bakPathInfo.GetFiles(backupFiles);
+            if (bakFiles.Length > GlobalOptions.Instance.FileBackupEachRevisionMaxCount) {
+                List<Tuple<string, int>> tuples = new List<Tuple<string, int>>();
+                foreach (var bak in bakFiles) {
+                    try {
+                        int bakVersion = Convert.ToInt32(bak.Extension.Substring(1));
+                        tuples.Add(new Tuple<string, int>(bak.FullName, bakVersion));
+                    } catch (Exception) {
+                    }
+                }
+                tuples.Sort((a, b) => b.Item2.CompareTo(a.Item2));
+                for (int i = GlobalOptions.Instance.FileBackupEachRevisionMaxCount; i < tuples.Count; i++) {
+                    try {
+                        File.Delete(tuples[i].Item1);
+                    } catch (Exception) {
+                    }
+                }
+            }
+        }
+
         private void FileSave(string fileName, string password)
         {
             string oldFileName = fFileName;
@@ -1408,29 +1432,7 @@ namespace GKCore
                         if (!Directory.Exists(bakPath)) Directory.CreateDirectory(bakPath);
                         File.Move(fileName, bakPath + bakFile);
 
-                        // and remove the oldest till maxBackups
-                        if (GlobalOptions.Instance.FileBackupEachRevisionMaxCount > 0) {
-                            string backupFiles = Path.GetFileName(fileName) + ".*";
-                            DirectoryInfo bakPathInfo = new DirectoryInfo(bakPath);
-                            FileInfo[] bakFiles = bakPathInfo.GetFiles(backupFiles);
-                            if (bakFiles.Length > GlobalOptions.Instance.FileBackupEachRevisionMaxCount) {
-                                List<Tuple<string, int>> tuples = new List<Tuple<string, int>>();
-                                foreach (var bak in bakFiles) {
-                                    try {
-                                        int bakVersion = Convert.ToInt32(bak.Extension.Substring(1));
-                                        tuples.Add(new Tuple<string, int>(bak.FullName, bakVersion));
-                                    } catch (Exception) {
-                                    }
-                                }
-                                tuples.Sort((a, b) => b.Item2.CompareTo(a.Item2));
-                                for (int i = GlobalOptions.Instance.FileBackupEachRevisionMaxCount; i < tuples.Count; i++) {
-                                    try {
-                                        File.Delete(tuples[i].Item1);
-                                    } catch (Exception) {
-                                    }
-                                }
-                            }
-                        }
+                        if (GlobalOptions.Instance.FileBackupEachRevisionMaxCount > 0) RemoveOldestBackups(fileName, bakPath);
                     }
                     break;
             }
