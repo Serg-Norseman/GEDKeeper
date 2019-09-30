@@ -73,7 +73,8 @@ namespace GKCore
 
         public ICulture Culture
         {
-            get {
+            get
+            {
                 GDMLanguageID langID = fTree.Header.Language;
                 if (fCulture == null || fCulture.Language != langID) {
                     fCulture = GetCultureByLang(langID);
@@ -94,10 +95,12 @@ namespace GKCore
 
         public bool Modified
         {
-            get {
+            get
+            {
                 return fModified;
             }
-            set {
+            set
+            {
                 fModified = value;
 
                 var eventHandler = ModifiedChanged;
@@ -127,10 +130,12 @@ namespace GKCore
 
         public ShieldState ShieldState
         {
-            get {
+            get
+            {
                 return fShieldState;
             }
-            set {
+            set
+            {
                 if (fShieldState != value) {
                     fShieldState = value;
 
@@ -258,8 +263,7 @@ namespace GKCore
             try {
                 BeginUpdate();
 
-                switch (record.RecordType)
-                {
+                switch (record.RecordType) {
                     case GDMRecordType.rtIndividual:
                         result = fTree.DeleteIndividualRecord(record as GDMIndividualRecord);
                         break;
@@ -386,12 +390,10 @@ namespace GKCore
             GDMSourceRecord result = null;
 
             int num = fTree.RecordsCount;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMRecord rec = fTree[i];
 
-                if (rec.RecordType == GDMRecordType.rtSource && ((GDMSourceRecord) rec).ShortTitle == sourceName)
-                {
+                if (rec.RecordType == GDMRecordType.rtSource && ((GDMSourceRecord)rec).ShortTitle == sourceName) {
                     result = (rec as GDMSourceRecord);
                     break;
                 }
@@ -407,11 +409,9 @@ namespace GKCore
             sources.Clear();
 
             int num = fTree.RecordsCount;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMRecord rec = fTree[i];
-                if (rec is GDMSourceRecord)
-                {
+                if (rec is GDMSourceRecord) {
                     sources.AddObject((rec as GDMSourceRecord).ShortTitle, rec);
                 }
             }
@@ -613,8 +613,7 @@ namespace GKCore
                 n = namesTable.AddName(name);
             }
 
-            switch (sex)
-            {
+            switch (sex) {
                 case GDMSex.svMale:
                     result = n.M_Patronymic;
                     break;
@@ -632,8 +631,7 @@ namespace GKCore
                 BaseController.ModifyName(this, ref n);
             }
 
-            switch (sex)
-            {
+            switch (sex) {
                 case GDMSex.svMale:
                     result = n.M_Patronymic;
                     break;
@@ -907,8 +905,7 @@ namespace GKCore
                         fileName = GetTreePath(treeName) + targetFn;
                         break;
 
-                    case MediaStoreType.mstReference:
-                        {
+                    case MediaStoreType.mstReference: {
                             fileName = targetFn;
                             if (!File.Exists(fileName)) {
                                 string newPath = AppHost.PathReplacer.TryReplacePath(fileName);
@@ -1009,8 +1006,7 @@ namespace GKCore
                 bool result = false;
 
                 switch (storeStatus) {
-                    case MediaStoreStatus.mssExists:
-                        {
+                    case MediaStoreStatus.mssExists: {
                             if (mediaStore.StoreType == MediaStoreType.mstArchive || mediaStore.StoreType == MediaStoreType.mstStorage) {
                                 if (!GlobalOptions.Instance.AllowDeleteMediaFileFromStgArc) {
                                     return true;
@@ -1144,7 +1140,7 @@ namespace GKCore
 
         private void CopyFile(string sourceFileName, string destFileName)
         {
-            #if FILECOPY_EX
+#if FILECOPY_EX
 
             IProgressController progress = AppHost.Progress;
             try {
@@ -1157,11 +1153,11 @@ namespace GKCore
                 progress.ProgressDone();
             }
 
-            #else
+#else
 
             File.Copy(sourceFileName, destFileName, false);
 
-            #endif
+#endif
         }
 
         public IImage LoadMediaImage(GDMFileReference fileReference, bool throwException)
@@ -1364,8 +1360,7 @@ namespace GKCore
         {
             bool result = false;
 
-            try
-            {
+            try {
                 string pw = null;
                 string ext = FileHelper.GetFileExtension(fileName);
                 if (ext == ".geds" && !AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
@@ -1375,13 +1370,9 @@ namespace GKCore
 
                 FileSave(fileName, pw);
                 result = true;
-            }
-            catch (UnauthorizedAccessException)
-            {
+            } catch (UnauthorizedAccessException) {
                 AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, ": access denied" }));
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, "" }));
                 Logger.LogWrite("BaseContext.FileSave(): " + ex.Message);
             }
@@ -1416,6 +1407,30 @@ namespace GKCore
 
                         if (!Directory.Exists(bakPath)) Directory.CreateDirectory(bakPath);
                         File.Move(fileName, bakPath + bakFile);
+
+                        // and remove the oldest till maxBackups
+                        if (GlobalOptions.Instance.FileBackupEachRevisionMaxCount > 0) {
+                            string backupFiles = Path.GetFileName(fileName) + ".*";
+                            DirectoryInfo bakPathInfo = new DirectoryInfo(bakPath);
+                            FileInfo[] bakFiles = bakPathInfo.GetFiles(backupFiles);
+                            if (bakFiles.Length > GlobalOptions.Instance.FileBackupEachRevisionMaxCount) {
+                                List<Tuple<string, int>> tuples = new List<Tuple<string, int>>();
+                                foreach (var bak in bakFiles) {
+                                    try {
+                                        int bakVersion = Convert.ToInt32(bak.Extension.Substring(1));
+                                        tuples.Add(new Tuple<string, int>(bak.FullName, bakVersion));
+                                    } catch (Exception) {
+                                    }
+                                }
+                                tuples.Sort((a, b) => b.Item2.CompareTo(a.Item2));
+                                for (int i = GlobalOptions.Instance.FileBackupEachRevisionMaxCount; i < tuples.Count; i++) {
+                                    try {
+                                        File.Delete(tuples[i].Item1);
+                                    } catch (Exception) {
+                                    }
+                                }
+                            }
+                        }
                     }
                     break;
             }
@@ -1462,8 +1477,7 @@ namespace GKCore
                 byte[] pwd = Encoding.Unicode.GetBytes(password);
 
                 switch (minorVer) {
-                    case 1:
-                        {
+                    case 1: {
                             byte[] salt = SCCrypt.CreateRandomSalt(7);
                             csp = new DESCryptoServiceProvider();
                             var pdb = new PasswordDeriveBytes(pwd, salt);
@@ -1477,8 +1491,7 @@ namespace GKCore
                         }
                         break;
 
-                    case 2:
-                        {
+                    case 2: {
                             var keyBytes = new byte[32];
                             Array.Copy(pwd, keyBytes, Math.Min(keyBytes.Length, pwd.Length));
                             csp = new RijndaelManaged();
@@ -1745,20 +1758,16 @@ namespace GKCore
             GDMFamilyRecord result = null;
 
             int num = fTree.RecordsCount;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMRecord rec = fTree[i];
 
-                if (rec.RecordType == GDMRecordType.rtFamily)
-                {
-                    GDMFamilyRecord fam = (GDMFamilyRecord) rec;
+                if (rec.RecordType == GDMRecordType.rtFamily) {
+                    GDMFamilyRecord fam = (GDMFamilyRecord)rec;
                     GDMIndividualRecord husb = fam.Husband.Individual;
                     GDMIndividualRecord wife = fam.Wife.Individual;
-                    if (husb == newParent || wife == newParent)
-                    {
+                    if (husb == newParent || wife == newParent) {
                         string msg = string.Format(LangMan.LS(LSID.LSID_ParentsQuery), GKUtils.GetFamilyString(fam));
-                        if (AppHost.StdDialogs.ShowQuestionYN(msg))
-                        {
+                        if (AppHost.StdDialogs.ShowQuestionYN(msg)) {
                             result = fam;
                             break;
                         }
