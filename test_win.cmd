@@ -49,5 +49,5 @@ goto End
 
 :: Do any cleanup and quit.
 :end
-if exist "%ERRFILE%" %ComSpec% /k "%ERRFILE%"
+if exist "%ERRFILE%" call "%ERRFILE%"
 exit /b %EXIT_CODE%
