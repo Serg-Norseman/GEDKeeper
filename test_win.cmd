@@ -1,56 +1,53 @@
-@ECHO OFF
+@echo off
 
-@ECHO/
-@ECHO ***************************************
-@ECHO ** Run the NUnit tests for GEDKeeper **
-@ECHO ***************************************
-@ECHO/
+@echo/
+@echo ***************************************
+@echo ** Run the NUnit tests for GEDKeeper **
+@echo ***************************************
+@echo/
 
 :: Set up our environment.
-SET Nunit_Console="c:\Program Files (x86)\nunit 2.6.4\bin\nunit-console-x86.exe"
-SET Test_DLL=projects\GKTests\bin\Debug\GKTests.dll
+set NUNIT_CONSOLE="c:\Program Files (x86)\nunit 2.6.4\bin\nunit-console-x86.exe"
+set TEST_DLL=projects\GKTests\bin\Debug\GKTests.dll
 
 :: Set up our log files.
-SET LogFile=%Temp%\GEDKeeper_NUNIT_Output.log
-SET ErrFile=%Temp%\GEDKeeper_NUNIT_Error.log
-@ECHO Log file:   %LogFile%
-@ECHO Error file: %ErrFile%
-IF EXIST "%LogFile%" Del /f "%LogFile%"
-IF EXIST "%ErrFile%" Del /f "%ErrFile%"
+set LOGFILE=%TEMP%\GEDKeeper_NUNIT_Output.log
+set ERRFILE=%TEMP%\GEDKeeper_NUNIT_Error.log
+@echo Log file:   %LOGFILE%
+@echo Error file: %ERRFILE%
+if exist "%LOGFILE%" del /f "%LOGFILE%"
+if exist "%ERRFILE%" del /f "%ERRFILE%"
 
 :: This will be the exit code we return to the caller.
-SET Exit_Code=0
+set EXIT_CODE=0
 
 :: Check for our dependencies.
-IF NOT EXIST %Nunit_Console% GOTO Err_Nunit
-IF NOT EXIST %Test_DLL% GOTO Err_DLL
+if not exist %NUNIT_CONSOLE% goto err_nunit
+if not exist %TEST_DLL% goto err_dll
 
 :: Run the tests.
-@ECHO/
-%Nunit_Console% %Test_DLL% /output="%LogFile%" /err="%ErrFile%"
+@echo/
+%NUNIT_CONSOLE% %TEST_DLL% /output="%LOGFILE%" /err="%ERRFILE%"
 
-SET Exit_Code=%ERRORLEVEL%
-IF %Exit_Code%==0 GOTO End
-@ECHO/
-@ECHO Error encounted: %Exit_Code%
-:: PAUSE
-GOTO End
+set EXIT_CODE=%ERRORLEVEL%
+IF %EXIT_CODE%==0 goto end
+@echo/
+@echo Error encounted: %EXIT_CODE%
+goto End
 
-:Err_DLL
-    @ECHO/
-    @ECHO Could not find %Test_DLL%
-    SET Exit_Code=100
-::    PAUSE
-    GOTO End
+:err_dll
+@echo/
+@echo Could not find %TEST_DLL%
+set EXIT_CODE=100
+goto End
 
-:Err_Nunit
-    @ECHO/
-    @ECHO Could not find %Nunit_Console%
-    SET Exit_Code=101
-::    PAUSE
-    GOTO End
+:err_nunit
+@echo/
+@echo Could not find %NUNIT_CONSOLE%
+set EXIT_CODE=101
+goto End
 
 :: Do any cleanup and quit.
-:End
-    IF EXIST "%ErrFile%" %ComSpec% /k "%ErrFile%"
-    exit /b %Exit_Code%
+:end
+if exist "%ERRFILE%" %ComSpec% /k "%ERRFILE%"
+exit /b %EXIT_CODE%
