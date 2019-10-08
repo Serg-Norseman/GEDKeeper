@@ -1,71 +1,29 @@
-﻿    How to build `GEDKeeper' with make
+﻿****************************
+** How to build GEDKeeper **
+****************************
 
-    Windows
+Microsoft Windows
+    Dependencies
+        Building
+            - Microsoft .NET Framework 4.0.30319
+            - Microsoft Visual Studio 2017 or later
 
-Having the following toolchains is a prerequisite for building
-`GEDKeeper' on Windows host:
+        Testing
+            - NUnit 2.6.4 (unit testing framework for .NET)
 
-  1. MSYS2/MINGW shell.
-     MAY BE it's enough to have Windows 10's (Ubuntu's) BASH shell. I
-     didn't test that.
+        Packaging
+            - 7-zip
+            - Nullsoft Scriptable Install System (NSIS) 3.04
 
-  2. GNU make package installed in the shell from above.
+    Execution
+        Run the executable "build_all_mswin.x86.cmd" from the command line.
 
-    Linux
+        Optionally pass the "release" option to the script to build without
+        debugging information. By default the script builds the executable with
+        embedded debugging information. The script skips testing for non-debug
+        builds.
 
-Sorry, not yet implemented.
+Linux
+    Sorry, not yet implemented.
 
     Make it!
-
-To begin change directory to one, where GEDKeeper project is located.
-
-$ /d/vsp/gedkeeper
-
-Then simply run 'make' utility:
-
-$ make
-
-Default target ('all') builds and installs all binaries (GEDKeeper
-itself and all available plug-ins).
-
-All subprojects also have their makefiles. But those makefiles' default
-target ('all') only builds a release and doesn't install it. Use
-'install' goal to install specific project's binaries.
-
-The following variables are supported by all makefiles:
-
-  * `hardwareplatform`
-    Target hardware platform. Possible values are `any`, `x86-64` and
-    `x86`. `any` is default.
-
-  * `softwareplatform`
-    Target software implementation on the hardware platform. Possible
-    values are `windows` and `linux`. `windows` is default.
-
-  * `releasetype`
-    Release type. Possible values are `debug` and `release`. `release`
-    is default.
-
-  * `dotnet`
-    Determines .NET framework to use. Possible values are `dotnet20`
-    and `dotnet46`. `dotnet20` is default.
-
-Therefore, the following calls are equivalent:
-
-$ make
-$ make hardwareplatform=any softwareplatform=windows
-  releasetype=release dotnet=dotnet20
-
-Currently supported targets:
-
-  * `all`
-    Builds a project and all its dependencies. On the root makefile it
-    also installs GEDKeeper and all available plug-ins.
-
-  * `install`
-    Available only for a specific project. This goal builds, if
-    necessary, the project and its dependencies and then installs all
-    binaries into the GEDKeeper's directory.
-
-  * `clean`
-    Remove all files made by `all` or `install` target.
