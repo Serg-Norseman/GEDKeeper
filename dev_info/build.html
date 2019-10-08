@@ -10,15 +10,20 @@
 <h1>How to build GEDKeeper</h1>
 <h2>Microsoft Windows</h2>
 <h3>Dependencies</h3>
-<p>The following is a list of required software to build and test:
+<h4>Building</h4>
 <ul>
 <li>Microsoft <a href="https://dotnet.microsoft.com/">.NET Framework</a> 4.0.30319</li>
 <li>Microsoft <a href="https://visualstudio.microsoft.com/">Visual Studio</a> 2017 or later</li>
-<li>Nullsoft Scriptable Install System (<a href="https://sourceforge.net/projects/nsis/">NSIS</a>) 3.04</li>
-<li><a href="https://sourceforge.net/projects/sevenzip/">7-zip</a></li>
+</ul>
+<h4>Testing</h4>
+<ul>
 <li><a href="https://github.com/nunit">NUnit</a> 2.6.4 (unit testing framework for .NET)</li>
 </ul>
-</p>
+<h4>Packaging</h4>
+<ul>
+<li><a href="https://sourceforge.net/projects/sevenzip/">7-zip</a></li>
+<li>Nullsoft Scriptable Install System (<a href="https://sourceforge.net/projects/nsis/">NSIS</a>) 3.04</li>
+</ul>
 <h3>Execution</h3>
 <p>Run the executable <kbd>build_all_mswin.x86.cmd</kbd> from the command line.</p>
 <p>Optionally use the parameter &quot;Release&quot; for a release build (the default is a debug build). Testing is not done with a release build.</p>
