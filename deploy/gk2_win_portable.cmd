@@ -13,7 +13,7 @@ set ZIPR=%PROGRAMFILES%\7-zip\7z.exe
 if exist "%ZIPR%" goto check_ged_exe
 @echo/
 @echo ERROR: Cannot find the file "%ZIPR%".
-@echo        Consult the file build.html for more information.
+@echo        Consult the BUILD.md file for more information.
 pause
 exit /b 100
 
@@ -22,7 +22,7 @@ exit /b 100
 if exist ..\GEDKeeper2.exe goto MakePortable
 @echo/
 @echo ERROR: You must first create the GEDKeeper executable before running this script.
-@echo        Consult the file build.html for more information.
+@echo        Consult the BUILD.md file for more information.
 pause
 exit /b 101
 
