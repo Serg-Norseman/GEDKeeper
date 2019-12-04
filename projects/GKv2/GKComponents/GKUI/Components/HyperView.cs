@@ -148,7 +148,7 @@ namespace GKUI.Components
                 fHeights.Clear();
 
                 Graphics gfx = CreateGraphics();
-                gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
+                //gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
                 try {
                     int xPos = 0;
                     int yPos = 0;
@@ -277,7 +277,7 @@ namespace GKUI.Components
         private void DoPaint(Graphics gfx)
         {
             try {
-                gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
+                //gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
                 fAcceptFontChange = false;
                 SolidBrush brush = new SolidBrush(this.ForeColor);
                 Font font = null;
@@ -285,8 +285,9 @@ namespace GKUI.Components
                     Rectangle clientRect = ClientRectangle;
                     gfx.FillRectangle(new SolidBrush(BackColor), clientRect);
 
-                    int xOffset = fBorderWidth - -AutoScrollPosition.X;
-                    int yOffset = fBorderWidth - -AutoScrollPosition.Y;
+                    var scrollPos = AutoScrollPosition;
+                    int xOffset = fBorderWidth + scrollPos.X;
+                    int yOffset = fBorderWidth + scrollPos.Y;
                     int lineHeight = 0;
 
                     int line = -1;
@@ -297,7 +298,7 @@ namespace GKUI.Components
                         if (line != chunk.Line) {
                             line = chunk.Line;
 
-                            xOffset = fBorderWidth - -AutoScrollPosition.X;
+                            xOffset = fBorderWidth + scrollPos.X;
                             yOffset += lineHeight;
 
                             // this condition is dirty hack
