@@ -255,7 +255,7 @@ namespace GKSamplePlugin
             try {
                 fController.Cancel();
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlg.btnCancel_Click(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

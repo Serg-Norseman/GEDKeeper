@@ -70,7 +70,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("ParentsEditDlgController.Accept(): " + ex.Message);
+                Logger.LogException(ex);
                 return false;
             }
         }
@@ -83,7 +83,7 @@ namespace GKCore.Controllers
 
                 UpdateControls();
             } catch (Exception ex) {
-                Logger.LogWrite("ParentsEditDlgController.UpdateView(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

@@ -72,7 +72,7 @@ namespace GKUI.Forms
             try {
                 fController.Cancel();
             } catch (Exception ex) {
-                Logger.LogWrite("RepositoryEditDlg.btnCancel_Click(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

@@ -137,7 +137,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("SourceRepositoriesSublistModel.UpdateContents(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

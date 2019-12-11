@@ -100,7 +100,7 @@ namespace GKStdReports
                         fWriter.AddListItem(" " + GetPersonalInfo(iRec), fTextFont);
                     }
                 } catch (Exception ex) {
-                    Logger.LogWrite("ContemporariesReport.InternalGenerate(): " + ex.Message);
+                    Logger.LogException(ex);
                 }
             }
 

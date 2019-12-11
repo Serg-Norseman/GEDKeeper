@@ -64,7 +64,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("MediaLinksListModel.UpdateContents(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

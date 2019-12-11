@@ -103,8 +103,7 @@ namespace GKUI
 
         private static void ExExceptionHandler(object sender, ThreadExceptionEventArgs args)
         {
-            Logger.LogWrite("GK.ExExceptionHandler(): " + args.Exception.Message);
-            Logger.LogWrite("GK.ExExceptionHandler(): " + args.Exception.StackTrace);
+            Logger.LogException(args.Exception);
         }
 
         private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args)
@@ -113,8 +112,7 @@ namespace GKUI
             AppHost.Instance.CriticalSave();
 
             Exception e = (Exception) args.ExceptionObject;
-            Logger.LogWrite("GK.UnhandledExceptionsHandler(): " + e.Message);
-            Logger.LogWrite("GK.ExExceptionHandler(): " + e.StackTrace);
+            Logger.LogException(e);
         }
     }
 }

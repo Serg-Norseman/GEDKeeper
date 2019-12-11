@@ -61,7 +61,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("AssociationsListModel.UpdateContents(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

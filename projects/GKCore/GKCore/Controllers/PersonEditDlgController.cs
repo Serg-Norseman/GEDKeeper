@@ -136,7 +136,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlgController.Accept(): " + ex.Message);
+                Logger.LogException(ex);
                 return false;
             }
         }
@@ -169,7 +169,7 @@ namespace GKCore.Controllers
 
                 UpdateControls(true);
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlgController.UpdateView(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -360,7 +360,8 @@ namespace GKCore.Controllers
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + "): " + ex.Message);
+                Logger.LogWrite("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + "): ");
+                Logger.LogException(ex);
             }
         }
 

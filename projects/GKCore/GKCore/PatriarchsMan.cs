@@ -256,7 +256,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("PatriarchsMan.GetPatriarchsGraph(): " + ex.Message);
+                Logger.LogException(ex);
             }
 
             return graph;

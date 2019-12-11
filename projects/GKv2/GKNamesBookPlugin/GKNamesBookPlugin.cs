@@ -77,7 +77,7 @@ namespace GKNamesBookPlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogWrite("GKNamesBookPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
     }

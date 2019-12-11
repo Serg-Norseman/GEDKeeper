@@ -88,7 +88,7 @@ namespace GKDataQualityPlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogWrite("GKDataQualityPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -98,7 +98,7 @@ namespace GKDataQualityPlugin
             try {
                 CloseForm();
             } catch (Exception ex) {
-                Logger.LogWrite("GKDataQualityPlugin.Shutdown(): " + ex.Message);
+                Logger.LogException(ex);
                 result = false;
             }
             return result;

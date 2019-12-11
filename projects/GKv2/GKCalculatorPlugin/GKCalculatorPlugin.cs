@@ -81,7 +81,7 @@ namespace GKCalculatorPlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogWrite("GKCalculatorPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -95,7 +95,7 @@ namespace GKCalculatorPlugin
                     fIcon = new ImageHandler(bmp);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKCalculatorPlugin.Startup(): " + ex.Message);
+                Logger.LogException(ex);
                 result = false;
             }
             return result;

@@ -88,7 +88,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("EventsListModel.UpdateContents(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -170,7 +170,7 @@ namespace GKCore.Lists
                         break;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("EventsListModel.Modify(): " + ex.Message);
+                Logger.LogException(ex);
                 result = false;
             }
 

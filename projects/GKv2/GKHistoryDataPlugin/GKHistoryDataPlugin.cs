@@ -83,7 +83,7 @@ namespace GKHistoryDataPlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogWrite("GKHistoryDataPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -93,7 +93,7 @@ namespace GKHistoryDataPlugin
             try {
                 CloseForm();
             } catch (Exception ex) {
-                Logger.LogWrite("GKHistoryDataPlugin.Shutdown(): " + ex.Message);
+                Logger.LogException(ex);
                 result = false;
             }
             return result;

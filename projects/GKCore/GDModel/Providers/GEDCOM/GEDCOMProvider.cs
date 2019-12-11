@@ -2432,7 +2432,8 @@ namespace GDModel.Providers.GEDCOM
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GEDCOMProvider.FixFTBLine(): Line " + lineNum.ToString() + " failed correct: " + ex.Message);
+                Logger.LogWrite("GEDCOMProvider.FixFTBLine(): Line " + lineNum.ToString());
+                Logger.LogException(ex);
             }
         }
 

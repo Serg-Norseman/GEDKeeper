@@ -93,7 +93,7 @@ namespace GKUI.Forms
             try {
                 fController.Cancel();
             } catch (Exception ex) {
-                Logger.LogWrite("MediaEditDlg.btnCancel_Click(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

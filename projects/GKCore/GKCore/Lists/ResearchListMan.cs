@@ -162,7 +162,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("ResTasksSublistModel.UpdateContents(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -243,7 +243,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("ResCommunicationsSublistModel.UpdateContents(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -318,7 +318,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("ResGroupsSublistModel.UpdateContents(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

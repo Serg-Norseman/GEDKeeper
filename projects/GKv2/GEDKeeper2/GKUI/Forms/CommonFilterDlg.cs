@@ -95,7 +95,7 @@ namespace GKUI.Forms
                 AcceptChanges();
                 DialogResult = DialogResult.OK;
             } catch (Exception ex) {
-                Logger.LogWrite("CommonFilterDlg.btnAccept_Click(): " + ex.Message);
+                Logger.LogException(ex);
                 DialogResult = DialogResult.None;
             }
         }

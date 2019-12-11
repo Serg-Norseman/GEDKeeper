@@ -111,7 +111,7 @@ namespace GKImageViewerPlugin
                                     fImageCtl.OpenImage(new Bitmap(fs));
                                 }
                             } catch (Exception ex) {
-                                Logger.LogWrite("ImageViewerWin.SetFileRef.0(): " + ex.Message);
+                                Logger.LogException(ex);
                             }
 
                             ctl = fImageCtl;
@@ -139,7 +139,7 @@ namespace GKImageViewerPlugin
                                     }
                                 }
                             } catch (Exception ex) {
-                                Logger.LogWrite("ImageViewerWin.SetFileRef.1(): " + ex.Message);
+                                Logger.LogException(ex);
                             }
 
                             ctl = txtBox;
@@ -160,7 +160,7 @@ namespace GKImageViewerPlugin
                                     }
                                 }
                             } catch (Exception ex) {
-                                Logger.LogWrite("ImageViewerWin.SetFileRef.2(): " + ex.Message);
+                                Logger.LogException(ex);
                             }
 
                             ctl = rtfBox;
@@ -176,7 +176,7 @@ namespace GKImageViewerPlugin
                                     browser.DocumentStream = fs;
                                 }
                             } catch (Exception ex) {
-                                Logger.LogWrite("ImageViewerWin.SetFileRef.2(): " + ex.Message);
+                                Logger.LogException(ex);
                             }
                             ctl = browser;
                         }
@@ -200,7 +200,7 @@ namespace GKImageViewerPlugin
             {
                 if (ctl != null) ctl.Dispose();
 
-                Logger.LogWrite("ImageViewerWin.SetFileRef()" + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

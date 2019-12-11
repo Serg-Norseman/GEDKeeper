@@ -262,7 +262,7 @@ namespace GKUI.Components
                     AdjustViewport(fTextSize);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("HyperView.ArrangeText(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -322,7 +322,7 @@ namespace GKUI.Components
                     if (font != null) font.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("HyperView.DoPaint(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

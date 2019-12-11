@@ -54,13 +54,6 @@ namespace GKTreeVizPlugin
         private const double FAR_CLIPPING_PLANE = 1000.0f;  // GLU's Distance From The Viewer To The Far Clipping Plane (Always Positive).
         private const double FOV_Y = 45.0f;         // GLU's Field Of View Angle, In Degrees, In The Y Direction.
 
-        // unused
-        //private float[] LightAmbient = {0.5f, 0.5f, 0.5f, 1.0f};
-        //private float[] LightDiffuse = {1.0f, 1.0f, 1.0f, 1.0f};
-        //private float[] LightPosition = {0.0f, 0.0f, 2.0f, 1.0f};
-        //private int filter = 0;									// Which Filter To Use
-        //private uint[] texture = new uint[3];						// Storage For 3 Textures
-
         // rendering
         private float xrot;
         private float yrot;
@@ -413,7 +406,7 @@ namespace GKTreeVizPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeVizControl.glDraw(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -457,7 +450,7 @@ namespace GKTreeVizPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeVizControl.CreateArborGraph(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -530,7 +523,7 @@ namespace GKTreeVizPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeVizControl.onArborStop(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -598,7 +591,7 @@ namespace GKTreeVizPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeVizControl.PrepareDescendants(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -640,7 +633,7 @@ namespace GKTreeVizPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeVizControl.recalcDescendants.2(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -658,7 +651,7 @@ namespace GKTreeVizPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeVizControl.recalcDescendants.1(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -690,7 +683,7 @@ namespace GKTreeVizPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeVizControl.ProcessPersonStem(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -741,7 +734,7 @@ namespace GKTreeVizPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeVizControl.PreparePerson(): " + ex.Message);
+                Logger.LogException(ex);
                 return null;
             }
         }
@@ -780,7 +773,7 @@ namespace GKTreeVizPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeVizControl.DrawArborSystem(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -845,7 +838,7 @@ namespace GKTreeVizPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeVizControl.DrawPerson(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -870,7 +863,7 @@ namespace GKTreeVizPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeVizControl.UpdateTV(): " + ex.Message);
+                Logger.LogException(ex);
             }
             fBusy = false;
         }

@@ -86,7 +86,7 @@ namespace GKStdReports
             try {
                 SRLangMan.Instance = Host.CreateLangMan(this);
             } catch (Exception ex) {
-                Logger.LogWrite("NFRPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
     }
@@ -120,7 +120,7 @@ namespace GKStdReports
             try {
                 SRLangMan.Instance = Host.CreateLangMan(this);
             } catch (Exception ex) {
-                Logger.LogWrite("PERPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
     }
@@ -147,7 +147,7 @@ namespace GKStdReports
             try {
                 SRLangMan.Instance = Host.CreateLangMan(this);
             } catch (Exception ex) {
-                Logger.LogWrite("PhonPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
     }
@@ -181,7 +181,7 @@ namespace GKStdReports
             try {
                 SRLangMan.Instance = Host.CreateLangMan(this);
             } catch (Exception ex) {
-                Logger.LogWrite("ContempPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
     }

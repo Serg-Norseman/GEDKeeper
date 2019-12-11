@@ -75,7 +75,7 @@ namespace GKCore.Maps
 
                 pointsList.AddRange(cachedPoints);
             } catch (Exception ex) {
-                Logger.LogWrite("PlacesCache.GetPlacePoints(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

@@ -210,7 +210,7 @@ namespace GKUI.Forms
                 UpdateMRU();
                 UpdateControls(false);
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.Form_Load(): " + ex.Message);
+                Logger.LogException(ex); ;
             }
         }
 
@@ -461,11 +461,13 @@ namespace GKUI.Forms
                             mediaViewer.Show();
                         }
                     } finally {
-                        if (modal) mediaViewer.Dispose();
+                        if (modal)
+                            mediaViewer.Dispose();
                     }
                 } catch (Exception ex) {
-                    if (mediaViewer != null) mediaViewer.Dispose();
-                    Logger.LogWrite("BaseWinSDI.ShowMedia(): " + ex.Message);
+                    if (mediaViewer != null)
+                        mediaViewer.Dispose();
+                    Logger.LogException(ex);
                 }
             }
         }
@@ -752,7 +754,7 @@ namespace GKUI.Forms
                     AppHost.Instance.EndLoading();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.Form_DragDrop(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -803,7 +805,7 @@ namespace GKUI.Forms
                     MenuMRU.Items.Add(tsmi);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.UpdateMRU(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -816,7 +818,7 @@ namespace GKUI.Forms
                 tbPrev.Enabled = (workWin != null && workWin.NavCanBackward());
                 tbNext.Enabled = (workWin != null && workWin.NavCanForward());
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.UpdateNavControls(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -881,7 +883,7 @@ namespace GKUI.Forms
                     workWin.UpdateControls();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.UpdateControls(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

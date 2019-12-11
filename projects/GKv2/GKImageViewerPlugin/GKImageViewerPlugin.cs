@@ -67,7 +67,7 @@ namespace GKImageViewerPlugin
                 fForm = new ImageViewerWin(this);
                 Host.ShowWindow(fForm);
             } catch (Exception ex) {
-                Logger.LogWrite("GKImageViewerPlugin.Execute(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -80,7 +80,7 @@ namespace GKImageViewerPlugin
                 if (fForm != null)
                     fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogWrite("GKImageViewerPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
     }

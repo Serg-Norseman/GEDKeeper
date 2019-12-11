@@ -577,7 +577,7 @@ namespace GKUI.Components
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("GKListView.UpdateContents(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -619,7 +619,7 @@ namespace GKUI.Components
 
                 return result;
             } catch (Exception ex) {
-                Logger.LogWrite("GKListView.GetSelectedData(): " + ex.Message);
+                Logger.LogException(ex);
                 return null;
             }
         }
@@ -657,7 +657,7 @@ namespace GKUI.Components
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKListView.ResizeColumn(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -739,7 +739,7 @@ namespace GKUI.Components
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKListView.SelectItem(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
