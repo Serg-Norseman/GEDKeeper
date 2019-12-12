@@ -242,7 +242,7 @@ namespace GKCore.Export
             var iEnum = fTree.GetEnumerator(GDMRecordType.rtIndividual);
             while (iEnum.MoveNext(out rec)) {
                 GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
-                string text = GKUtils.GetNameString(iRec, true, false);
+                string text = iRec.GetNameString(true, false);
                 string st;
 
                 mainIndex.AddObject(text, iRec);
@@ -347,14 +347,14 @@ namespace GKCore.Export
             if (father != null) {
                 fWriter.BeginParagraph(TextAlignment.taLeft, 0, 0, 0);
                 fWriter.AddParagraphChunk(LangMan.LS(LSID.LSID_Father) + ": ", fTextFont);
-                fWriter.AddParagraphChunkLink(GKUtils.GetNameString(father, true, false), fLinkFont, father.XRef);
+                fWriter.AddParagraphChunkLink(father.GetNameString(true, false), fLinkFont, father.XRef);
                 fWriter.EndParagraph();
             }
 
             if (mother != null) {
                 fWriter.BeginParagraph(TextAlignment.taLeft, 0, 0, 0);
                 fWriter.AddParagraphChunk(LangMan.LS(LSID.LSID_Mother) + ": ", fTextFont);
-                fWriter.AddParagraphChunkLink(GKUtils.GetNameString(mother, true, false), fLinkFont, mother.XRef);
+                fWriter.AddParagraphChunkLink(mother.GetNameString(true, false), fLinkFont, mother.XRef);
                 fWriter.EndParagraph();
             }
 
@@ -442,7 +442,7 @@ namespace GKCore.Export
             }
 
             if (persons.IndexOfObject(iRec) < 0) {
-                persons.AddObject(GKUtils.GetNameString(iRec, true, false), iRec);
+                persons.AddObject(iRec.GetNameString(true, false), iRec);
             }
         }
 

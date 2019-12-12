@@ -358,7 +358,7 @@ namespace GKSamplePlugin
 
         private void btnNameCopy_Click(object sender, EventArgs e)
         {
-            UIHelper.SetClipboardText(GKUtils.GetNameString(fController.Person, true, false));
+            UIHelper.SetClipboardText(fController.Person, true, false));
         }
 
         private void btnPortraitAdd_Click(object sender, EventArgs e)

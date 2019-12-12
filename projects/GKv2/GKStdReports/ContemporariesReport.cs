@@ -68,7 +68,7 @@ namespace GKStdReports
 
         private static string GetPersonalInfo(GDMIndividualRecord iRec)
         {
-            return GKUtils.GetNameString(iRec, true, false) + GKUtils.GetLifeStr(iRec);
+            return iRec.GetNameString(true, false) + GKUtils.GetLifeStr(iRec);
         }
 
         protected override void InternalGenerate()

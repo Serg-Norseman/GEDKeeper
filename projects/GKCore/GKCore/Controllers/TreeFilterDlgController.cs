@@ -115,7 +115,7 @@ namespace GKCore.Controllers
                 for (int i = 0; i < num; i++) {
                     string xref = tmpRefs[i];
                     GDMIndividualRecord p = fBase.Context.Tree.XRefIndex_Find(xref) as GDMIndividualRecord;
-                    if (p != null) fView.PersonsList.AddItem(p, GKUtils.GetNameString(p, true, false));
+                    if (p != null) fView.PersonsList.AddItem(p, p.GetNameString(true, false));
                 }
             }
 

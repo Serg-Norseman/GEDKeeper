@@ -107,7 +107,9 @@ namespace GKCore.Controllers
                             break;
                         }
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 fView.DisposeViewControl();
                 Logger.LogException(ex); ;
             }
@@ -123,9 +125,9 @@ namespace GKCore.Controllers
             bool showRegions = false;
             foreach (var link in linksList) {
                 var mmLink = link as GDMMultimediaLink;
-                if (mmLink != null && mmLink.IsPrimary) {
+                if (mmLink?.IsPrimary == true) {
                     var indiRec = mmLink.Owner as GDMIndividualRecord;
-                    string indiName = GKUtils.GetNameString(indiRec, true, false);
+                    string indiName = indiRec.GetNameString(true, false);
                     var region = mmLink.CutoutPosition.Value;
 
                     imageCtl.AddNamedRegion(indiName, region);

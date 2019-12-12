@@ -180,7 +180,7 @@ namespace GDModel
                 indi.PersonalNames.Clear();
 
                 string st;
-                Assert.AreEqual("", GKUtils.GetNameString(indi, true, false));
+                Assert.AreEqual("", indi.GetNameString(true, false));
                 Assert.AreEqual("", GKUtils.GetNickString(indi));
 
                 GDMPersonalName pName = new GDMPersonalName(indi);
@@ -188,9 +188,9 @@ namespace GDModel
                 pName.Pieces.Nickname = "BigHead";
                 pName.SetNameParts("Ivan", "Petrov", "");
 
-                st = GKUtils.GetNameString(indi, true, true);
+                st = indi.GetNameString(true, true);
                 Assert.AreEqual("Petrov Ivan [BigHead]", st);
-                st = GKUtils.GetNameString(indi, false, true);
+                st = indi.GetNameString(false, true);
                 Assert.AreEqual("Ivan Petrov [BigHead]", st);
                 Assert.AreEqual("BigHead", GKUtils.GetNickString(indi));
 
@@ -206,7 +206,7 @@ namespace GDModel
                 using (GDMIndividualRecord indi3 = new GDMIndividualRecord(fContext.Tree)) {
                     indi.MoveTo(indi3, false);
 
-                    st = GKUtils.GetNameString(indi3, true, true);
+                    st = indi3.GetNameString(true, true);
                     Assert.AreEqual("Petrov Ivan [BigHead]", st);
                 }
 

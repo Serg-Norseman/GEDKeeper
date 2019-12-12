@@ -54,7 +54,7 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMAssociation ast in person.Associations) {
-                    string nm = ((ast.Individual == null) ? "" : GKUtils.GetNameString(ast.Individual, true, false));
+                    string nm = ast.Individual?.GetNameString(true, false);
 
                     fSheetList.AddItem(ast, new object[] { ast.Relation, nm });
                 }

@@ -91,9 +91,8 @@ namespace GKCore
                     message += "\n" + tag + e.Data[key];
             }
             message += "\n" + tag + "StackTrace:";
-            message += "\n" + tag + e.StackTrace;            
-            if (e.InnerException != null)
-                message += BuildExceptionMessage(e.InnerException, tag);
+            message += "\n" + tag + e.StackTrace?.Replace("\n","\n" + tag);            
+            message += BuildExceptionMessage(e.InnerException, tag);
             return message;
         }
     }

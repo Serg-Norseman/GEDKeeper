@@ -365,7 +365,7 @@ namespace GKUI.Forms
 
         private void btnNameCopy_Click(object sender, EventArgs e)
         {
-            UIHelper.SetClipboardText(GKUtils.GetNameString(fController.Person, true, false));
+            UIHelper.SetClipboardText(fController.Person.GetNameString(true, false));
         }
 
         private void btnPortraitAdd_Click(object sender, EventArgs e)

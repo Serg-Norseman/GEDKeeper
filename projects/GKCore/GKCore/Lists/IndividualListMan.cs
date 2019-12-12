@@ -299,14 +299,14 @@ namespace GKCore.Lists
             object result = null;
 
             if (colSubtype == -1) {
-                result = GKUtils.GetNameString(fRec, true, false);
+                result = fRec.GetNameString(true, false);
             } else {
                 NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
                 GKUtils.NamePartsRet parts;
 
                 switch (defNameFormat) {
                     case NameFormat.nfFNP:
-                        result = GKUtils.GetNameString(fRec, true, false);
+                        result = fRec.GetNameString(true, false);
                         break;
 
                     case NameFormat.nfF_NP:
@@ -490,9 +490,10 @@ namespace GKCore.Lists
         public override void Fetch(GDMRecord aRec)
         {
             fRec = (aRec as GDMIndividualRecord);
-            if (fRec == null) return;
+            if (fRec == null)
+                return;
 
-            buf_fullname = GKUtils.GetNameString(fRec, true, false);
+            buf_fullname = fRec.GetNameString(true, false);
             buf_bd = null;
             buf_dd = null;
             buf_residence = "";
@@ -705,12 +706,14 @@ namespace GKCore.Lists
 
                 foreach (GDMPersonalName pn in iRec.PersonalNames) {
                     string lang = GEDCOMUtils.GetLanguageStr(pn.Language);
-                    fSheetList.AddItem(pn, new object[] { GKUtils.GetNameString(iRec, pn, true, false),
+                    fSheetList.AddItem(pn, new object[] { iRec.GetNameString(pn, true, false),
                                                           LangMan.LS(GKData.NameTypes[(int)pn.NameType]), lang });
                 }
 
                 fSheetList.EndUpdate();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Logger.LogException(ex);
             }
         }
@@ -922,7 +925,7 @@ namespace GKCore.Lists
                     }
 
                     if (relPerson != null) {
-                        relName = GKUtils.GetNameString(relPerson, true, false);
+                        relName = relPerson.GetNameString(true, false);
                     }
 
                     fSheetList.AddItem(family, new object[] { idx,

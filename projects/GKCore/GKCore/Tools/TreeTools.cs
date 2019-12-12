@@ -26,6 +26,7 @@ using BSLib;
 using BSLib.SmartGraph;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.Types;
@@ -146,7 +147,7 @@ namespace GKCore.Tools
 
                     if (!loneSuppress || pObj.HasLinks) {
                         string color = (pObj.IRec.Sex == GDMSex.svFemale) ? "pink" : "blue";
-                        gvw.WriteNode(pObj.IRec.XRef, GKUtils.GetNameString(pObj.IRec, true, false), "filled", color, "box");
+                        gvw.WriteNode(pObj.IRec.XRef, pObj.IRec.GetNameString(true, false), "filled", color, "box");
                     }
                 }
 
@@ -565,7 +566,7 @@ namespace GKCore.Tools
 
                 switch (Rec.RecordType) {
                     case GDMRecordType.rtIndividual:
-                        result = result + GKUtils.GetNameString(((GDMIndividualRecord)Rec), true, false);
+                        result = result + ((GDMIndividualRecord)Rec).GetNameString(true, false);
                         break;
 
                     case GDMRecordType.rtFamily:
@@ -1162,10 +1163,10 @@ namespace GKCore.Tools
         public static void CompareTree(IBaseContext context, string fileName, ITextBoxHandler logBox)
         {
             if (context == null)
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
 
             if (logBox == null)
-                throw new ArgumentNullException("logBox");
+                throw new ArgumentNullException(nameof(logBox));
 
             using (var tempTree = new GDMTree()) {
                 var gedcomProvider = new GEDCOMProvider(tempTree);
@@ -1178,13 +1179,13 @@ namespace GKCore.Tools
         public static void CompareTree(IBaseContext context, GDMTree tempTree, ITextBoxHandler logBox)
         {
             if (context == null)
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
 
             if (tempTree == null)
-                throw new ArgumentNullException("tempTree");
+                throw new ArgumentNullException(nameof(tempTree));
 
             if (logBox == null)
-                throw new ArgumentNullException("logBox");
+                throw new ArgumentNullException(nameof(logBox));
 
             GDMTree mainTree = context.Tree;
 
@@ -1200,7 +1201,7 @@ namespace GKCore.Tools
                     if (rec.RecordType == GDMRecordType.rtIndividual) {
                         GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
 
-                        int idx = names.AddObject(GKUtils.GetNameString(iRec, true, false), new ExtList<GDMIndividualRecord>());
+                        int idx = names.AddObject(iRec.GetNameString(true, false), new ExtList<GDMIndividualRecord>());
                         ((ExtList<GDMIndividualRecord>)names.GetObject(idx)).Add(iRec);
 
                         var parts = GKUtils.GetNameParts(iRec);
@@ -1214,7 +1215,7 @@ namespace GKCore.Tools
                     if (rec.RecordType == GDMRecordType.rtIndividual) {
                         GDMIndividualRecord iRec = (GDMIndividualRecord)tempTree[i];
 
-                        string tm = GKUtils.GetNameString(iRec, true, false);
+                        string tm = iRec.GetNameString(true, false);
                         int idx = names.IndexOf(tm);
                         if (idx >= 0) {
                             ((ExtList<GDMIndividualRecord>)names.GetObject(idx)).Add(iRec);
@@ -1261,7 +1262,7 @@ namespace GKCore.Tools
                         int num5 = lst.Count;
                         for (int j = 0; j < num5; j++) {
                             GDMIndividualRecord iRec = lst[j];
-                            logBox.AppendText("      * " + GKUtils.GetNameString(iRec, true, false) + " " + GKUtils.GetLifeStr(iRec) + "\r\n");
+                            logBox.AppendText("      * " + iRec.GetNameString(true, false) + " " + GKUtils.GetLifeStr(iRec) + "\r\n");
                         }
                     }
                 }

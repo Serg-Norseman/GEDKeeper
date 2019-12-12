@@ -389,7 +389,7 @@ namespace GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null, "", ""); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNickString(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNameString(null, false, false); });
+            Assert.Throws(typeof(ArgumentNullException), () => { (null as GDMIndividualRecord)?.GetNameString(false, false); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SetMarriedSurname(null, ""); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetStoreType(null); });
         }
@@ -454,10 +454,10 @@ namespace GKCore
         [Test]
         public void Test_HyperLink()
         {
-            string st1 = GKUtils.HyperLink("@X001@", "test", 0);
+            string st1 = GKUtils.HyperLink("@X001@", "test");
             Assert.AreEqual("[url=" + "@X001@" + "]" + "test" + "[/url]", st1);
 
-            st1 = GKUtils.HyperLink("@X001@", "", 0);
+            st1 = GKUtils.HyperLink("@X001@", "");
             Assert.AreEqual("[url=" + "@X001@" + "]" + "???" + "[/url]", st1);
         }
 
@@ -563,21 +563,21 @@ namespace GKCore
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I5") as GDMIndividualRecord;
 
             GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
-            Assert.AreEqual("Jones Anna", GKUtils.GetNameString(iRec, true, false));
+            Assert.AreEqual("Jones Anna", iRec.GetNameString(true, false));
 
             GKUtils.SetMarriedSurname(iRec, "Smith");
 
             GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden;
-            Assert.AreEqual("Jones Anna", GKUtils.GetNameString(iRec, true, false));
+            Assert.AreEqual("Jones Anna", iRec.GetNameString(true, false));
 
             GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfMarried;
-            Assert.AreEqual("Smith Anna", GKUtils.GetNameString(iRec, true, false));
+            Assert.AreEqual("Smith Anna", iRec.GetNameString(true, false));
 
             GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden_Married;
-            Assert.AreEqual("Jones (Smith) Anna", GKUtils.GetNameString(iRec, true, false));
+            Assert.AreEqual("Jones (Smith) Anna", iRec.GetNameString(true, false));
 
             GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfMarried_Maiden;
-            Assert.AreEqual("Smith (Jones) Anna", GKUtils.GetNameString(iRec, true, false));
+            Assert.AreEqual("Smith (Jones) Anna", iRec.GetNameString(true, false));
 
             GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
         }

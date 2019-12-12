@@ -46,7 +46,7 @@ namespace GKCore.Controllers
                 if (rec.RecordType != GDMRecordType.rtIndividual) continue;
 
                 GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
-                string nm = GKUtils.GetNameString(iRec, true, false);
+                string nm = iRec.GetNameString(true, false);
 
                 foreach (GDMCustomEvent evt in iRec.Events) {
                     PrepareEvent(nm, evt);

@@ -102,13 +102,15 @@ namespace GKCore.Controllers
 
                     if (fTempInd != null) {
                         fView.Dir.SelectedIndex = (int)fCommunication.CommDirection;
-                        fView.Corresponder.Text = GKUtils.GetNameString(fTempInd, true, false);
+                        fView.Corresponder.Text = fTempInd?.GetNameString(true, false);
                     } else {
                         fView.Dir.SelectedIndex = 0;
                         fView.Corresponder.Text = "";
                     }
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Logger.LogException(ex);
             }
         }
@@ -116,7 +118,7 @@ namespace GKCore.Controllers
         public void SetPerson()
         {
             fTempInd = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
-            fView.Corresponder.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, true, false));
+            fView.Corresponder.Text = fTempInd?.GetNameString(true, false);
         }
     }
 }

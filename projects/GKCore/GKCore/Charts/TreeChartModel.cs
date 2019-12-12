@@ -1242,7 +1242,7 @@ namespace GKCore.Charts
                 GDMIndividualRecord iRec = person.Rec;
                 if (iRec == null) continue;
 
-                string fullname = GKUtils.GetNameString(iRec, true, false);
+                string fullname = iRec.GetNameString(true, false);
                 if (GKUtils.MatchesRegex(fullname, regex)) {
                     result.Add(new SearchResult(iRec));
                 }

@@ -67,7 +67,7 @@ namespace GKCore.Controllers
                     PatriarchObj pObj = lst[i];
                     string pSign = ((pObj.IRec.Patriarch) ? "[*] " : "");
 
-                    fView.PatriarchsList.AddItem(pObj.IRec, new object[] { pSign + GKUtils.GetNameString(pObj.IRec, true, false),
+                    fView.PatriarchsList.AddItem(pObj.IRec, new object[] { pSign + pObj.IRec.GetNameString(true, false),
                         pObj.BirthYear, pObj.DescendantsCount, pObj.DescGenerations
                     });
                 }

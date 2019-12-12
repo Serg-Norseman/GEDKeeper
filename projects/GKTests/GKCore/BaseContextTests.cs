@@ -508,11 +508,11 @@ namespace GKCore
 
             Assert.Throws(typeof(ArgumentNullException), () => {
                               fContext.Undoman.DoIndividualNameChange(null, "", "", ""); });
-            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetNameString(iRec, true, false));
+            Assert.AreEqual("Ivanov Ivan Ivanovich", iRec.GetNameString(true, false));
             fContext.Undoman.DoIndividualNameChange(iRec, "Petrov", "Alex", "Ivanovich");
-            Assert.AreEqual("Petrov Alex Ivanovich", GKUtils.GetNameString(iRec, true, false));
+            Assert.AreEqual("Petrov Alex Ivanovich", iRec.GetNameString(true, false));
             fContext.Undoman.Rollback();
-            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetNameString(iRec, true, false));
+            Assert.AreEqual("Ivanov Ivan Ivanovich", iRec.GetNameString(true, false));
         }
     }
 }

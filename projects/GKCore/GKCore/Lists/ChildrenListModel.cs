@@ -58,7 +58,7 @@ namespace GKCore.Lists
                     GDMIndividualRecord child = ptr.Individual;
 
                     fSheetList.AddItem(child, new object[] {
-                        idx, GKUtils.GetNameString(child, true, false),
+                        idx, child.GetNameString(true, false),
                         new GEDCOMDateItem(GKUtils.GetBirthDate(child))
                     });
                 }

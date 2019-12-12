@@ -118,7 +118,7 @@ namespace GKCore.Lists
                     GDMIndividualRecord member = ptrMember.Individual;
                     if (member == null) continue;
 
-                    fSheetList.AddItem(member, new object[] { GKUtils.GetNameString(member, true, false) });
+                    fSheetList.AddItem(member, new object[] { member.GetNameString(true, false) });
                 }
 
                 fSheetList.EndUpdate();

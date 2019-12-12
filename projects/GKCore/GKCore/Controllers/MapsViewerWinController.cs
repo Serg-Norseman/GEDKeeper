@@ -97,17 +97,17 @@ namespace GKCore.Controllers
                             GDMIndividualRecord ind = rec as GDMIndividualRecord;
                             int pCnt = 0;
 
-                            int num2 = ind.Events.Count;
+                            int num2 = ind?.Events.Count ?? 0;
                             for (int j = 0; j < num2; j++) {
                                 GDMCustomEvent ev = ind.Events[j];
-                                if (ev.Place.StringValue != "") {
+                                if (!string.IsNullOrEmpty(ev.Place.StringValue)) {
                                     AddPlace(ev.Place, ev);
                                     pCnt++;
                                 }
                             }
 
                             if (pCnt > 0) {
-                                personValues.AddObject(GKUtils.GetNameString(ind, true, false) + " [" + pCnt.ToString() + "]", ind);
+                                personValues.AddObject($"{ind.GetNameString(true, false)} [{pCnt}]", ind);
                             }
                         }
 

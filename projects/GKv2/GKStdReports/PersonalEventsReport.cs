@@ -94,7 +94,7 @@ namespace GKStdReports
             fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
             //fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taLeft);
-            fWriter.AddParagraph(GKUtils.GetNameString(fPerson, true, false), fTitleFont, TextAlignment.taLeft);
+            fWriter.AddParagraph(fPerson.GetNameString(true, false), fTitleFont, TextAlignment.taLeft);
             fWriter.NewLine();
 
             var evList = new List<PersonalEvent>();
@@ -160,10 +160,10 @@ namespace GKStdReports
                     if (evt.GetTagType() == GEDCOMTagType.BIRT) {
                         if (evObj.Type == EventType.Personal) {
                             if (father != null) {
-                                fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", fTextFont);
+                                fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Father) + ": " + father.GetNameString(true, false) + " ", fTextFont);
                             }
                             if (mother != null) {
-                                fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", fTextFont);
+                                fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Mother) + ": " + mother.GetNameString(true, false) + " ", fTextFont);
                             }
                         } else if (evObj.Type == EventType.Child) {
                             if (iRec.Sex == GDMSex.svMale) {
@@ -171,7 +171,7 @@ namespace GKStdReports
                             } else {
                                 st = LangMan.LS(LSID.LSID_RK_Daughter) + ": ";
                             }
-                            st = ConvertHelper.UniformName(st) + GKUtils.GetNameString(iRec, true, false);
+                            st = ConvertHelper.UniformName(st) + iRec.GetNameString(true, false);
                             fWriter.AddListItem("   " + "   " + st, fTextFont);
                         }
                     }
@@ -192,7 +192,7 @@ namespace GKStdReports
 
                     string sps;
                     if (sp != null) {
-                        sps = st + GKUtils.GetNameString(sp, true, false)/* + GKUtils.GetPedigreeLifeStr(sp, fOptions.PedigreeOptions.Format)*/;
+                        sps = st + sp.GetNameString(true, false)/* + GKUtils.GetPedigreeLifeStr(sp, fOptions.PedigreeOptions.Format)*/;
                     } else {
                         sps = st + unk;
                     }

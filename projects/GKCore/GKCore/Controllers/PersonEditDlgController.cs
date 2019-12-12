@@ -135,7 +135,9 @@ namespace GKCore.Controllers
                 fBase.NotifyRecord(fPerson, RecordAction.raEdit);
 
                 return true;
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Logger.LogException(ex);
                 return false;
             }
@@ -168,7 +170,9 @@ namespace GKCore.Controllers
                 fView.ParentsList.ListModel.DataOwner = fPerson;
 
                 UpdateControls(true);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Logger.LogException(ex);
             }
         }
@@ -184,7 +188,7 @@ namespace GKCore.Controllers
                 GDMIndividualRecord relPerson = family.Husband.Individual;
                 if (relPerson != null) {
                     fView.SetFatherAvl(true, locked);
-                    fView.Father.Text = GKUtils.GetNameString(relPerson, true, false);
+                    fView.Father.Text = relPerson.GetNameString(true, false);
                 } else {
                     fView.SetFatherAvl(false, locked);
                     fView.Father.Text = "";
@@ -193,7 +197,7 @@ namespace GKCore.Controllers
                 relPerson = family.Wife.Individual;
                 if (relPerson != null) {
                     fView.SetMotherAvl(true, locked);
-                    fView.Mother.Text = GKUtils.GetNameString(relPerson, true, false);
+                    fView.Mother.Text = relPerson.GetNameString(true, false);
                 } else {
                     fView.SetMotherAvl(false, locked);
                     fView.Mother.Text = "";

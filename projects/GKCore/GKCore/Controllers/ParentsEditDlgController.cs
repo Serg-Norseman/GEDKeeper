@@ -78,11 +78,13 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             try {
-                fView.ChildName.Text = GKUtils.GetNameString(fPerson, true, false);
+                fView.ChildName.Text = fPerson.GetNameString(true, false);
                 fView.LinkageTypeCombo.SelectedIndex = (sbyte)fLink.PedigreeLinkageType;
 
                 UpdateControls();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Logger.LogException(ex);
             }
         }
@@ -96,7 +98,7 @@ namespace GKCore.Controllers
                 GDMIndividualRecord relPerson = family.Husband.Individual;
                 if (relPerson != null) {
                     fView.SetFatherAvl(true);
-                    fView.Father.Text = GKUtils.GetNameString(relPerson, true, false);
+                    fView.Father.Text = relPerson.GetNameString(true, false);
                 } else {
                     fView.SetFatherAvl(false);
                     fView.Father.Text = "";
@@ -105,7 +107,7 @@ namespace GKCore.Controllers
                 relPerson = family.Wife.Individual;
                 if (relPerson != null) {
                     fView.SetMotherAvl(true);
-                    fView.Mother.Text = GKUtils.GetNameString(relPerson, true, false);
+                    fView.Mother.Text = relPerson.GetNameString(true, false);
                 } else {
                     fView.SetMotherAvl(false);
                     fView.Mother.Text = "";

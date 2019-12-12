@@ -792,7 +792,7 @@ namespace GKCore
                 switch (record.RecordType)
                 {
                     case GDMRecordType.rtIndividual:
-                        msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), GKUtils.GetNameString(((GDMIndividualRecord)record), true, false));
+                        msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), ((GDMIndividualRecord)record).GetNameString(true, false));
                         break;
 
                     case GDMRecordType.rtFamily:

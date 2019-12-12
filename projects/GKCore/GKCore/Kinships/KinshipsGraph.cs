@@ -178,7 +178,7 @@ namespace GKCore.Kinships
 
             string rel = FixRelation(ind2, xrel, great);
             string name1 = fContext.Culture.GetPossessiveName(ind1);
-            string name2 = GKUtils.GetNameString(ind2, true, false);
+            string name2 = ind2.GetNameString(true, false);
 
             rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), name2, rel, name1);
             return rel;

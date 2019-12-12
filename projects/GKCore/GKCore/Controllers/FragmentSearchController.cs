@@ -63,7 +63,7 @@ namespace GKCore.Controllers
                     for (int j = 0; j < cnt; j++) {
                         var iRec = (GDMIndividualRecord)groupRecords[j];
 
-                        string pn = GKUtils.GetNameString(iRec, true, false);
+                        string pn = iRec.GetNameString(true, false);
                         if (iRec.Patriarch) {
                             pn = "(*) " + pn;
                         }

@@ -55,9 +55,10 @@ namespace GKCore.Controllers
 
         public override bool Accept()
         {
-            try {
+            try
+            {
                 string rel = fView.Relation.Text.Trim();
-                if (rel != "" && GlobalOptions.Instance.Relations.IndexOf(rel) < 0) {
+                if (!string.IsNullOrEmpty(rel) && GlobalOptions.Instance.Relations.IndexOf(rel) < 0) {
                     GlobalOptions.Instance.Relations.Add(rel);
                 }
 
@@ -65,7 +66,9 @@ namespace GKCore.Controllers
                 fAssociation.Individual = fTempPerson;
 
                 return true;
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Logger.LogException(ex);
                 return false;
             }
@@ -74,13 +77,13 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             fView.Relation.Text = fAssociation.Relation;
-            fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, true, false);
+            fView.Person.Text = fTempPerson?.GetNameString(true, false);
         }
 
         public void SetPerson()
         {
             fTempPerson = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
-            fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, true, false);
+            fView.Person.Text = fTempPerson?.GetNameString(true, false);
         }
     }
 }

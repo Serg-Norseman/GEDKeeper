@@ -39,10 +39,11 @@ namespace GKCore
 {
     #if !NLUA
     using LuaInterface;
-    #else
+    using System.Runtime.Serialization;
+#else
     using NLua;
-    #endif
-
+#endif
+    [Serializable]
     public class ScriptException : Exception
     {
         public ScriptException()
@@ -50,6 +51,9 @@ namespace GKCore
         }
 
         public ScriptException(string message) : base(message)
+        {
+        }
+        protected ScriptException(SerializationInfo info, StreamingContext context) : base (info, context)
         {
         }
     }
@@ -338,7 +342,7 @@ namespace GKCore
         public string gt_get_person_name(object recPtr)
         {
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
-            return ((iRec == null) ? "" : GKUtils.GetNameString(iRec, true, false));
+            return iRec?.GetNameString(true, false);
         }
 
         public int gt_get_person_associations_count(object recPtr)

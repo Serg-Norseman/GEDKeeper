@@ -403,8 +403,7 @@ namespace GKUI.Components
                             fModel.Selected = selected;
 
                             if (selected != null && selected.IRec != null) {
-                                string name = GKUtils.GetNameString(selected.IRec, true, false);
-                                hint = /*selected.Gen.ToString() + ", " + */name;
+                                hint = selected.IRec.GetNameString(true, false);
                             }
 
                             Invalidate();
