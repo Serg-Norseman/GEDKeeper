@@ -94,7 +94,7 @@ namespace GDModel.Providers.GedML
                             tagValue = string.Empty;
 
                             if (tagLevel == 0) {
-                                StackTuple stackTuple = GEDCOMProvider.AddTreeTag(fTree, tagLevel, tagId, string.Empty);
+                                StackTuple stackTuple = StackTuple.AddTreeTag(fTree, tagLevel, tagId, string.Empty);
                                 if (stackTuple != null) {
                                     stack.Clear();
                                     stack.Push(stackTuple);

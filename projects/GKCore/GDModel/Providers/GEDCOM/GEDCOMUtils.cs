@@ -558,7 +558,7 @@ namespace GDModel.Providers.GEDCOM
                 strTok.SkipWhitespaces();
 
                 if (!strTok.RequireWord(GDMCustomDate.GEDCOMDateRangeArray[3])) { // "AND"
-                    throw new GDMDateException(string.Format("The range date '{0}' doesn't contain 'and' token", strTok.GetFullStr()));
+                    throw new GDMDateException(strTok.GetFullStr());
                 }
 
                 strTok.Next();
@@ -583,7 +583,7 @@ namespace GDModel.Providers.GEDCOM
             strTok.SkipWhitespaces();
 
             if (!strTok.RequireWord(GEDCOMTagName.INT)) {
-                throw new GDMDateException(string.Format("The interpreted date '{0}' doesn't start with a valid ident", strTok.GetFullStr()));
+                throw new GDMDateIdentException(strTok.GetFullStr());
             }
             strTok.Next();
             ParseDate(owner, date, strTok);
@@ -857,28 +857,28 @@ namespace GDModel.Providers.GEDCOM
                 if (ix >= 0) {
                     c1 = (byte)ix;
                 } else {
-                    throw new GDMException("DecodeBlob");
+                    throw new GDMBlobDecodeException();
                 }
 
                 ix = validChars.IndexOf(blob[i++]);
                 if (ix >= 0) {
                     c2 = (byte)ix;
                 } else {
-                    throw new GDMException("DecodeBlob");
+                    throw new GDMBlobDecodeException();
                 }
 
                 ix = validChars.IndexOf(blob[i++]);
                 if (ix >= 0) {
                     c3 = (byte)ix;
                 } else {
-                    throw new GDMException("DecodeBlob");
+                    throw new GDMBlobDecodeException();
                 }
 
                 ix = validChars.IndexOf(blob[i++]);
                 if (ix >= 0) {
                     c4 = (byte)ix;
                 } else {
-                    throw new GDMException("DecodeBlob");
+                    throw new GDMBlobDecodeException();
                 }
 
                 // The following decodes Family Historian blobs.
@@ -1812,12 +1812,12 @@ namespace GDModel.Providers.GEDCOM
                     if (i == 0 && !isRecordTag) {
                         tag.StringValue = sub;
                     } else {
-                        GEDCOMProvider.AddBaseTag(tag, 0, (int)GEDCOMTagType.CONT, sub);
+                        StackTuple.AddBaseTag(tag, 0, (int)GEDCOMTagType.CONT, sub);
                     }
 
                     while (str.Length > 0) {
                         len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
-                        GEDCOMProvider.AddBaseTag(tag, 0, (int)GEDCOMTagType.CONC, str.Substring(0, len));
+                        StackTuple.AddBaseTag(tag, 0, (int)GEDCOMTagType.CONC, str.Substring(0, len));
                         str = str.Remove(0, len);
                     }
                 }

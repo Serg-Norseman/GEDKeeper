@@ -27,13 +27,6 @@ using GKCore.Types;
 
 namespace GDModel
 {
-    public class GDMDateException : GDMException
-    {
-        public GDMDateException(string message) : base(message)
-        {
-        }
-    }
-
     /// <summary>
     /// Class to hold simple standard GEDCOM dates.
     /// Note: Year cannot be used externally with negative values even for "BC",

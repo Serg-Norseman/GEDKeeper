@@ -185,10 +185,12 @@ namespace GDModel
 
         private void XRefIndex_AddRecord(GDMRecord record)
         {
-            if (record == null || string.IsNullOrEmpty(record.XRef)) return;
+            if (record == null || string.IsNullOrEmpty(record.XRef))
+                return;
 
             bool exists = fXRefIndex.ContainsKey(record.XRef);
-            if (!exists) fXRefIndex.Add(record.XRef, record);
+            if (!exists)
+                fXRefIndex.Add(record.XRef, record);
         }
 
         private void XRefIndex_DeleteRecord(GDMRecord record)

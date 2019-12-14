@@ -145,12 +145,14 @@
     <Compile Include="GDModel\Providers\FamilyShow\FamilyXProvider.cs" />
     <Compile Include="GDModel\Providers\FamilyShow\OPCUtility.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\AnselEncoding.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMAppFormat.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMChecker.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParser.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMProvider.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMTagsTable.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMTagType.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMUtils.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\StackTuple.cs" />
     <Compile Include="GDModel\Providers\GedML\GedMLProvider.cs" />
     <Compile Include="GDModel\GDMList.cs" />
     <Compile Include="GDModel\GDMObject.cs" />
@@ -430,8 +432,17 @@
     <Compile Include="GKCore\MVP\IView.cs" />
     <Compile Include="GKCore\MVP\IControl.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">
       <LogicalName>Resources.fonts.FreeSans.ttf</LogicalName>
     </EmbeddedResource>

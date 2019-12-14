@@ -22,10 +22,82 @@ using System;
 
 namespace GDModel
 {
+#pragma warning disable CA2229 // Implement serialization constructors
+    /// <summary>
+    /// Base application exception class
+    /// </summary>
+    [Serializable]
     public class GDMException : Exception
     {
         public GDMException(string message) : base(message)
         {
         }
+
+        public GDMException()
+        {
+        }
+
+        public GDMException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
     }
+
+    [Serializable]
+    public class GDMBlobDecodeException : GDMException
+    {
+        public GDMBlobDecodeException() : base("Blob decoding error catched")
+        {
+        }
+    }
+
+    #region DGMDateExeptions
+    [Serializable]
+    public class GDMDateException : GDMException
+    {
+        public GDMDateException(string message) : base(message)
+        {
+        }
+    }
+
+    [Serializable]
+    public class GDMDateIdentException : GDMDateException
+    {
+        public GDMDateIdentException(string ident) : base(string.Format("The interpreted date '{0}' doesn't start with a valid ident", ident))
+        {
+        }
+    }
+
+    [Serializable]
+    public class GDMDateNotContainsTokenException : GDMDateException
+    {
+        public GDMDateNotContainsTokenException(string token) : base(string.Format("The range date '{0}' doesn't contain 'and' token",token))
+        {
+        }
+    }
+    #endregion
+
+    /// <summary>
+    /// Invalid data format exception
+    /// </summary>
+    [Serializable]
+
+    public class GDMInvalidFormatException : GDMException
+
+    {
+        public GDMInvalidFormatException(int lineNumber) : base(string.Format("The string {0} doesn't start with a valid number", lineNumber))
+        {
+
+        }
+    }
+
+    [Serializable]
+    public class GEDCOMEmptyFileException : GDMException
+    {
+        public GEDCOMEmptyFileException() : base("GEDCOM file is empty")
+        {
+        }
+    }
+
+#pragma warning restore CA2229 // Implement serialization constructors
 }
