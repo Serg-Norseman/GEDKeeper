@@ -225,6 +225,7 @@
     <Compile Include="GKCore\Controllers\PortraitSelectDlgController.cs" />
     <Compile Include="GKCore\Controllers\QuickSearchDlgController.cs" />
     <Compile Include="GKCore\Controllers\RecMergeController.cs" />
+    <Compile Include="GKCore\Controllers\RecordInfoDlgController.cs" />
     <Compile Include="GKCore\Controllers\RecordSelectDlgController.cs" />
     <Compile Include="GKCore\Controllers\RelationshipCalculatorDlgController.cs" />
     <Compile Include="GKCore\Controllers\RepositoryEditDlgController.cs" />
@@ -515,7 +516,7 @@
     <EmbeddedResource Include="Resources\btn_volume_min.png" />
     <EmbeddedResource Include="Resources\btn_volume_mute.png" />
     <EmbeddedResource Include="Resources\pnl_video.png" />
+    <EmbeddedResource Include="Resources\btn_info.gif" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

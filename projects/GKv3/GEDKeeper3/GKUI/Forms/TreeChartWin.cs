@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -84,6 +84,7 @@ namespace GKUI.Forms
             //fTreeBox.DragOver += ImageTree_DragOver;
             fTreeBox.PersonModify += ImageTree_PersonModify;
             fTreeBox.RootChanged += ImageTree_RootChanged;
+            fTreeBox.InfoRequest += ImageTree_InfoRequest;
             fTreeBox.PersonProperties += ImageTree_PersonProperties;
             fTreeBox.Options = GlobalOptions.Instance.TreeChartOptions;
             fTreeBox.NavRefresh += ImageTree_NavRefresh;
@@ -227,6 +228,13 @@ namespace GKUI.Forms
         private void ImageTree_PersonModify(object sender, PersonModifyEventArgs eArgs)
         {
             fController.ModifyPerson(eArgs.Person);
+        }
+
+        private void ImageTree_InfoRequest(object sender, TreeChartPerson person)
+        {
+            if (person != null && person.Rec != null) {
+                fController.RequestInfo(person);
+            }
         }
 
         private void miGens9_Click(object sender, EventArgs e)

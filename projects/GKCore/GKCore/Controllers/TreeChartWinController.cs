@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -208,6 +208,20 @@ namespace GKCore.Controllers
 
             if (modified) {
                 UpdateChart();
+            }
+        }
+
+        public void RequestInfo(TreeChartPerson person)
+        {
+            if (person == null) return;
+
+            if (person.Rec != null) {
+                GDMIndividualRecord iRec = person.Rec;
+
+                using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(fBase)) {
+                    dlg.Record = iRec;
+                    AppHost.Instance.ShowModalX(dlg, false);
+                }
             }
         }
 

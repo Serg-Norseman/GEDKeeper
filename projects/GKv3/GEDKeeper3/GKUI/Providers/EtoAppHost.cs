@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -314,6 +314,7 @@ namespace GKUI.Providers
             container.Register<ITreeMergeDlg, TTTreeMergeDlg>(LifeCycle.Transient);
             container.Register<ITreeSplitDlg, TTTreeSplitDlg>(LifeCycle.Transient);
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
+            container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));

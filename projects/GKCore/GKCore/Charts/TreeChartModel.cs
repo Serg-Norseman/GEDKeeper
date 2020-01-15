@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,6 +34,8 @@ namespace GKCore.Charts
     public delegate void PersonModifyEventHandler(object sender, PersonModifyEventArgs eArgs);
 
     public delegate void RootChangedEventHandler(object sender, TreeChartPerson person);
+
+    public delegate void InfoRequestEventHandler(object sender, TreeChartPerson person);
 
     /// <summary>
     /// 
@@ -79,6 +81,7 @@ namespace GKCore.Charts
         private IFont fDrawFont;
         private int[] fEdges;
         private IImage fExpPic;
+        private IImage fInfoPic;
         private IImage fPersExpPic;
         private KinshipsGraph fGraph;
         private bool fHasMediaFail;
@@ -283,6 +286,7 @@ namespace GKCore.Charts
 
                 fExpPic = PrepareImage("btn_expand.gif", true);
                 fPersExpPic = PrepareImage("btn_expand2.gif", true);
+                fInfoPic = PrepareImage("btn_info.gif", true);
             } catch (Exception ex) {
                 Logger.LogWrite("TreeChartModel.InitSigns(): " + ex.Message);
             }
@@ -304,6 +308,7 @@ namespace GKCore.Charts
             fDrawFont = sourceModel.fDrawFont;
             fExpPic = sourceModel.fExpPic;
             fPersExpPic = sourceModel.fPersExpPic;
+            fInfoPic = sourceModel.fInfoPic;
             //fKind = sourceModel.fKind;
             //fKinRoot = sourceModel.fKinRoot;
             fLevelDistance = sourceModel.fLevelDistance;
@@ -465,6 +470,18 @@ namespace GKCore.Charts
                             if (result.Father != null && result.Mother != null && fOptions.Kinship)
                             {
                                 fGraph.AddRelation(result.Father.Node, result.Mother.Node, RelationKind.rkSpouse, RelationKind.rkSpouse);
+                            }
+
+                            if (fOptions.MarriagesDates) {
+                                DateFormat dateFormat = DateFormat.dfYYYY;
+                                var marDate = GKUtils.GetMarriageDateStr(family, dateFormat);
+                                if (!string.IsNullOrEmpty(marDate)) {
+                                    if (result.Father != null) {
+                                        result.Father.MarriageDate = marDate;
+                                    } else if (result.Mother != null) {
+                                        result.Mother.MarriageDate = marDate;
+                                    }
+                                }
                             }
                         }
                     } else {
@@ -1322,6 +1339,12 @@ namespace GKCore.Charts
             return expRt;
         }
 
+        public static ExtRect GetInfoRect(ExtRect personRect)
+        {
+            ExtRect expRt = ExtRect.Create(personRect.Right - 16, personRect.Top - 18, personRect.Right, personRect.Top - 2);
+            return expRt;
+        }
+
         public static ExtRect GetPersonExpandRect(ExtRect personRect)
         {
             int x = personRect.Left + (personRect.GetWidth() - 16) / 2;
@@ -1463,6 +1486,11 @@ namespace GKCore.Charts
                         fRenderer.DrawImage(fPersExpPic, expRt.Left, expRt.Top);
                     }
 
+                    if (person.Selected) {
+                        ExtRect infoRt = GetInfoRect(brt);
+                        fRenderer.DrawImage(fInfoPic, infoRt.Left, infoRt.Top);
+                    }
+
                     // draw CI only for existing individuals
                     if (fCertaintyIndex && person.Rec != null) {
                         string cas = string.Format("{0:0.00}", person.CertaintyAssessment);
@@ -1494,14 +1522,29 @@ namespace GKCore.Charts
 
             DrawLine(person.PtX, crY, person.PtX, person.PtY); // v
 
+            string marrDate = null;
+
             if (person.Father != null) {
                 DrawLine(person.Father.PtX, crY, person.PtX, crY); // h
                 DrawLine(person.Father.PtX, parY, person.Father.PtX, crY); // v
+
+                if (!string.IsNullOrEmpty(person.Father.MarriageDate) && marrDate == null) {
+                    marrDate = person.Father.MarriageDate;
+                }
             }
 
             if (person.Mother != null) {
                 DrawLine(person.PtX, crY, person.Mother.PtX, crY); // h
                 DrawLine(person.Mother.PtX, parY, person.Mother.PtX, crY); // v
+
+                if (!string.IsNullOrEmpty(person.Mother.MarriageDate) && marrDate == null) {
+                    marrDate = person.Mother.MarriageDate;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(marrDate)) {
+                int q = (!fOptions.InvertedTree) ? 1 : 2;
+                DrawText(marrDate, person.PtX, crY, q);
             }
         }
 

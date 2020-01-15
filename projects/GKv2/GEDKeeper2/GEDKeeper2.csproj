@@ -313,6 +313,10 @@
     <Compile Include="GKUI\Forms\QuickSearchDlg.Designer.cs">
       <DependentUpon>QuickSearchDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\RecordInfoDlg.cs" />
+    <Compile Include="GKUI\Forms\RecordInfoDlg.Designer.cs">
+      <DependentUpon>RecordInfoDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Forms\RecordSelectDlg.cs">
       <SubType>Form</SubType>
     </Compile>

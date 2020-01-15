@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -637,5 +637,13 @@ namespace GKCore.MVP.Views
     {
         IListView SelectedList { get; }
         IListView SkippedList { get; }
+    }
+
+
+    public interface IRecordInfoDlg : ICommonDialog, IBaseEditor, IView
+    {
+        GDMRecord Record { get; set; }
+
+        IHyperView HyperView { get; }
     }
 }

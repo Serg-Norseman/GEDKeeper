@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -63,6 +63,7 @@ namespace GKUI.Components
         private static readonly object EventRootChanged;
         private static readonly object EventPersonProperties;
         private static readonly object EventZoomChanged;
+        private static readonly object EventInfoRequest;
 
         #endregion
 
@@ -90,6 +91,12 @@ namespace GKUI.Components
         {
             add { Events.AddHandler(EventZoomChanged, value); }
             remove { Events.RemoveHandler(EventZoomChanged, value); }
+        }
+
+        public event InfoRequestEventHandler InfoRequest
+        {
+            add { Events.AddHandler(EventInfoRequest, value); }
+            remove { Events.RemoveHandler(EventInfoRequest, value); }
         }
 
         public IBaseWindow Base
@@ -175,6 +182,7 @@ namespace GKUI.Components
             EventRootChanged = new object();
             EventPersonProperties = new object();
             EventZoomChanged = new object();
+            EventInfoRequest = new object();
         }
 
         public TreeChartBox()
@@ -528,6 +536,13 @@ namespace GKUI.Components
                 eventHandler(this, person);
         }
 
+        private void DoInfoRequest(TreeChartPerson person)
+        {
+            var eventHandler = (InfoRequestEventHandler)Events[EventInfoRequest];
+            if (eventHandler != null)
+                eventHandler(this, person);
+        }
+
         private void DoPersonProperties(MouseEventArgs eArgs)
         {
             var eventHandler = (MouseEventHandler)Events[EventPersonProperties];
@@ -668,6 +683,13 @@ namespace GKUI.Components
                     action = MouseAction.maPersonExpand;
                     break;
                 }
+
+                ExtRect infoRt = TreeChartModel.GetInfoRect(persRt);
+                if ((e.Button == MouseButtons.Left && mouseEvent == MouseEvent.meUp) && infoRt.Contains(aX, aY)) {
+                    person = p;
+                    action = MouseAction.maInfo;
+                    break;
+                }
             }
 
             if (action == MouseAction.maNone && person == null) {
@@ -785,6 +807,10 @@ namespace GKUI.Components
 
                         case MouseAction.maPersonExpand:
                             ToggleCollapse(mAct.Person);
+                            break;
+
+                        case MouseAction.maInfo:
+                            DoInfoRequest(mAct.Person);
                             break;
                     }
                     break;
