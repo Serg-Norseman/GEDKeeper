@@ -29,7 +29,7 @@ namespace GEDmill.MiniTree
     /// </summary>
     public class Paintbox : BaseObject
     {
-        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(Paintbox).Name);
+        private static readonly GKCore.Logging.ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(Paintbox).Name);
 
         public SolidBrush BrushBg;
         public SolidBrush BrushBox;

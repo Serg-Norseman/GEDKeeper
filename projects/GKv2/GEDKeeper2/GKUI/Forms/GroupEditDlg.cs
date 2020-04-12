@@ -20,12 +20,12 @@
 
 using System;
 using System.Windows.Forms;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;

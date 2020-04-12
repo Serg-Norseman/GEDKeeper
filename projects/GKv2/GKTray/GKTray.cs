@@ -27,7 +27,7 @@ using System.Windows.Forms;
 using BSLib;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.IoC;
+using BSLib.Design.IoC;
 using GKCore.Options;
 using GKUI.Components;
 using GKUI.Providers;

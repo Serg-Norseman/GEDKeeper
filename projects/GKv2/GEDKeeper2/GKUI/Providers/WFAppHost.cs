@@ -20,14 +20,12 @@
 
 using System;
 using System.Globalization;
-using System.Reflection;
 using System.Windows.Forms;
-
+using BSLib.Design.IoC;
+using BSLib.Design.MVP;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
-using GKCore.IoC;
-using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Options;
 using GKUI.Components;
@@ -317,11 +315,8 @@ namespace GKUI.Providers
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
-            ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
-            ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
             ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler));
-            ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler));
@@ -329,8 +324,11 @@ namespace GKUI.Providers
             ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(ToolStripMenuItem), typeof(MenuItemHandler));
-
             ControlsManager.RegisterHandlerType(typeof(ToolStripComboBox), typeof(ToolStripComboBoxHandler));
+
+            ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
         }
 
         #endregion

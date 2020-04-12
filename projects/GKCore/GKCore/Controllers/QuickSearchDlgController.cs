@@ -19,9 +19,9 @@
  */
 
 using System;
+using BSLib.Design.MVP;
 using GDModel;
 using GKCore.Interfaces;
-using GKCore.MVP;
 using GKCore.MVP.Views;
 
 namespace GKCore.Controllers

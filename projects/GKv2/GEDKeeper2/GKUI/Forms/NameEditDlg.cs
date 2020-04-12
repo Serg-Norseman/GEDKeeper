@@ -20,7 +20,7 @@
 
 using System;
 using System.Windows.Forms;
-
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.MVP.Controls;

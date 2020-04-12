@@ -20,14 +20,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using BSLib.SmartGraph;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.Types;
 
 namespace GKCore.Tools

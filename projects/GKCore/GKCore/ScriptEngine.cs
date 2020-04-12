@@ -28,12 +28,11 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.Options;
-using GKCore.Types;
 
 namespace GKCore
 {

@@ -19,9 +19,10 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.MVP;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Maps;
@@ -29,65 +30,9 @@ using GKCore.Stats;
 
 namespace GKCore.MVP.Controls
 {
-    public interface ILabelHandler : IBaseControl
+    public interface IComboBoxHandlerEx : IComboBoxHandler
     {
-        string Text { get; set; }
-    }
-
-
-    public interface IButtonHandler : IBaseControl
-    {
-        string Text { get; set; }
-    }
-
-
-    public interface ICheckBoxHandler : IBaseControl
-    {
-        bool Checked { get; set; }
-        string Text { get; set; }
-    }
-
-
-    public interface IRadioButtonHandler : IBaseControl
-    {
-        bool Checked { get; set; }
-        string Text { get; set; }
-    }
-
-
-    public interface IComboBoxHandler : IBaseControl
-    {
-        IList Items { get; }
-        bool ReadOnly { get; set; }
-        int SelectedIndex { get; set; }
-        object SelectedItem { get; set; }
-        string Text { get; set; }
-
-        void Add(object item);
-        void AddItem(string caption, object tag, IImage image = null);
-        void AddRange(object[] items, bool sorted = false);
-        void AddStrings(StringList strings);
-        void BeginUpdate();
-        void Clear();
-        void EndUpdate();
-        void SortItems();
-
-        T GetSelectedTag<T>();
-        void SetSelectedTag<T>(T tagValue);
-    }
-
-
-    public interface ITextBoxHandler : IBaseControl
-    {
-        string[] Lines { get; set; }
-        bool ReadOnly { get; set; }
-        string SelectedText { get; set; }
-        string Text { get; set; }
-
-        void AppendText(string text);
-        void Clear();
-        void Copy();
-        void SelectAll();
+        void AddItem(string caption, object tag, IImage image);
     }
 
 
@@ -101,40 +46,6 @@ namespace GKCore.MVP.Controls
         void Clear();
         void Copy();
         void SelectAll();
-    }
-
-
-    public interface INumericBoxHandler : IBaseControl
-    {
-        bool ReadOnly { get; set; }
-        string Text { get; set; }
-        double Value { get; set; }
-    }
-
-
-    public interface ITVNode
-    {
-        object Tag { get; set; }
-    }
-
-    public interface ITreeViewHandler : IBaseControl
-    {
-        ITVNode AddNode(ITVNode parent, string name, object tag);
-        void BeginUpdate();
-        void Clear();
-        void EndUpdate();
-        void Expand(ITVNode node);
-        object GetSelectedData();
-    }
-
-
-    public interface IProgressBarHandler : IBaseControl
-    {
-        int Minimum { get; set; }
-        int Maximum { get; set; }
-        int Value { get; set; }
-
-        void Increment(int value);
     }
 
 
@@ -245,15 +156,6 @@ namespace GKCore.MVP.Controls
 
         void AddNamedRegion(string name, ExtRect region);
         void OpenImage(IImage image);
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface ITabControl : IBaseControl
-    {
-        int SelectedIndex { get; set; }
     }
 
 

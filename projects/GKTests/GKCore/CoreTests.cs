@@ -22,9 +22,10 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using BSLib;
+using BSLib.Design.IoC;
 using GDModel;
 using GKCore.Interfaces;
-using GKCore.IoC;
 using GKCore.Lists;
 using GKCore.Stats;
 using GKCore.Types;
@@ -237,18 +238,12 @@ namespace GKCore
         [Test]
         public void Test_NavStack()
         {
-            using (var navStack = new NavigationStack<object>())
+            var navStack = new NavigationStack<object>();
             {
                 Assert.IsNotNull(navStack);
-                Assert.AreEqual(false, navStack.Busy);
                 Assert.AreEqual(null, navStack.Current);
                 navStack.Clear();
                 Assert.AreEqual(null, navStack.Current);
-
-                navStack.BeginNav();
-                Assert.AreEqual(true, navStack.Busy);
-                navStack.EndNav();
-                Assert.AreEqual(false, navStack.Busy);
 
                 Assert.AreEqual(false, navStack.CanBackward());
                 Assert.AreEqual(false, navStack.CanForward());

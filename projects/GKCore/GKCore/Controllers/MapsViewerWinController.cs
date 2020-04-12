@@ -21,12 +21,12 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.MVP;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 
 namespace GKCore.Controllers

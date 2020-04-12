@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib.Design.MVP;
 using GKCore.Interfaces;
 using GKCore.Operations;
 

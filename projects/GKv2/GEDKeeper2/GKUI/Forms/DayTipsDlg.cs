@@ -19,11 +19,10 @@
  */
 
 using System;
-
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 

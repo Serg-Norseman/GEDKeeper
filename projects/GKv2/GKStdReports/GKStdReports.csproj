@@ -54,6 +54,9 @@
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\..\libs\BSLib.Design.dll</HintPath>
+    </Reference>
     <Reference Include="BSLib.Linguistics">
       <HintPath>..\..\libs\BSLib.Linguistics.dll</HintPath>
     </Reference>

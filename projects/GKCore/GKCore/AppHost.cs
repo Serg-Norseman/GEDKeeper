@@ -23,10 +23,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
-
 using BSLib;
+using BSLib.Design.IoC;
 using GKCore.Interfaces;
-using GKCore.IoC;
 using GKCore.Maps;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;

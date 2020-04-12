@@ -78,6 +78,9 @@
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\..\libs\BSLib.Design.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\..\libs\NLog.dll</HintPath>
     </Reference>

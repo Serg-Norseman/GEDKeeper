@@ -74,6 +74,9 @@
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\libs\BSLib.Design.dll</HintPath>
+    </Reference>
     <Reference Include="BSLib.Linguistics">
       <HintPath>..\libs\BSLib.Linguistics.dll</HintPath>
     </Reference>
@@ -153,7 +156,6 @@
     <Compile Include="GKCore\GKUtilsTests.cs" />
     <Compile Include="GKCore\HolidaysTests.cs" />
     <Compile Include="GKCore\ImportUtilsTests.cs" />
-    <Compile Include="GKCore\IocContainerTests.cs" />
     <Compile Include="GKCore\KinshipsTests.cs" />
     <Compile Include="GKCore\ListsTests.cs" />
     <Compile Include="GKCore\NamesTests.cs" />

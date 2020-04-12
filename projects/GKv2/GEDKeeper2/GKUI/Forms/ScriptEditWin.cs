@@ -22,11 +22,10 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
-
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 

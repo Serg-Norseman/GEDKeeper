@@ -20,7 +20,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCore.MVP.Controls;
+using BSLib.Design.MVP.Controls;
 
 namespace GKUI.Components
 {

@@ -24,11 +24,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using BSLib;
+using BSLib.Design.MVP;
 using GDModel;
 using GKCore.Charts;
 using GKCore.Export;
 using GKCore.Interfaces;
-using GKCore.MVP;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Options;
@@ -81,7 +81,7 @@ namespace GKCore.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fNavman.Dispose();
+                //fNavman.Dispose();
                 fContext.Dispose();
             }
             base.Dispose(disposing);
@@ -547,7 +547,7 @@ namespace GKCore.Controllers
 
         public void NavAdd(GDMRecord aRec)
         {
-            if (aRec == null || fNavman.Busy) return;
+            if (aRec == null) return;
 
             fNavman.Current = aRec;
             AppHost.Instance.UpdateControls(false);
@@ -555,7 +555,6 @@ namespace GKCore.Controllers
 
         public void NavNext()
         {
-            fNavman.BeginNav();
             try {
                 GDMRecord rec = fNavman.Next() as GDMRecord;
                 if (rec != null) {
@@ -563,13 +562,11 @@ namespace GKCore.Controllers
                     AppHost.Instance.UpdateControls(false);
                 }
             } finally {
-                fNavman.EndNav();
             }
         }
 
         public void NavPrev()
         {
-            fNavman.BeginNav();
             try {
                 GDMRecord rec = fNavman.Back() as GDMRecord;
                 if (rec != null) {
@@ -577,7 +574,6 @@ namespace GKCore.Controllers
                     AppHost.Instance.UpdateControls(false);
                 }
             } finally {
-                fNavman.EndNav();
             }
         }
 

@@ -102,6 +102,9 @@
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\..\libs\BSLib.Design.dll</HintPath>
+    </Reference>
     <Reference Include="BSLib.SmartGraph">
       <HintPath>..\..\libs\BSLib.SmartGraph.dll</HintPath>
     </Reference>

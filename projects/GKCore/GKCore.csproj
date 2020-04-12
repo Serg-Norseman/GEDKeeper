@@ -88,6 +88,9 @@
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\libs\BSLib.Design.dll</HintPath>
+    </Reference>
     <Reference Include="BSLib.Linguistics">
       <HintPath>..\libs\BSLib.Linguistics.dll</HintPath>
     </Reference>
@@ -278,7 +281,6 @@
     <Compile Include="GKCore\Interfaces\IUndoManager.cs" />
     <Compile Include="GKCore\Interfaces\IWidget.cs" />
     <Compile Include="GKCore\Interfaces\IWorkWindow.cs" />
-    <Compile Include="GKCore\IocContainer.cs" />
     <Compile Include="GKCore\Logger.cs" />
     <Compile Include="GKCore\Maps\GeoPoint.cs" />
     <Compile Include="GKCore\Maps\GoogleGeocoder.cs" />
@@ -286,10 +288,8 @@
     <Compile Include="GKCore\Maps\OSMGeocoder.cs" />
     <Compile Include="GKCore\Maps\PlacesCache.cs" />
     <Compile Include="GKCore\Maps\YandexGeocoder.cs" />
-    <Compile Include="GKCore\MVP\Controller.cs" />
     <Compile Include="GKCore\MVP\DialogController.cs" />
     <Compile Include="GKCore\MVP\EditorController.cs" />
-    <Compile Include="GKCore\MVP\IController.cs" />
     <Compile Include="GKCore\MVP\Views\IStatusForm.cs" />
     <Compile Include="GKCore\MVP\Views\IStdDialogs.cs" />
     <Compile Include="GKCore\Options\ListOptions.cs" />
@@ -383,7 +383,6 @@
     <Compile Include="GKCore\Lists\TaskListMan.cs" />
     <Compile Include="GKCore\Maps\PlacesLoader.cs" />
     <Compile Include="GKCore\NamesTable.cs" />
-    <Compile Include="GKCore\NavigationStack.cs" />
     <Compile Include="GKCore\Operations\ChangeTracker.cs" />
     <Compile Include="GKCore\Operations\CustomOperation.cs" />
     <Compile Include="GKCore\Operations\IndividualNameChange.cs" />
@@ -425,11 +424,7 @@
     <Compile Include="GKCore\MVP\Views\UIContracts.cs" />
     <Compile Include="GKCore\ValuesCollection.cs" />
     <Compile Include="GKCore\YamlHelper.cs" />
-    <Compile Include="GKCore\MVP\ControlHandler.cs" />
-    <Compile Include="GKCore\MVP\ControlsManager.cs" />
     <Compile Include="GKCore\MVP\FormController.cs" />
-    <Compile Include="GKCore\MVP\IView.cs" />
-    <Compile Include="GKCore\MVP\IControl.cs" />
     <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -20,14 +20,13 @@
 
 using System;
 using System.Windows.Forms;
-
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 

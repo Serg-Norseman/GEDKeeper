@@ -22,8 +22,9 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design.MVP;
+using BSLib.Design.MVP.Controls;
 using GKCore.Interfaces;
-using GKCore.MVP;
 using GKCore.MVP.Controls;
 using GKUI.Components;
 
@@ -114,7 +115,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class ComboBoxHandler : BaseControlHandler<ComboBox, ComboBoxHandler>, IComboBoxHandler
+    public sealed class ComboBoxHandler : BaseControlHandler<ComboBox, ComboBoxHandler>, IComboBoxHandlerEx
     {
         public ComboBoxHandler(ComboBox control) : base(control)
         {
@@ -154,7 +155,12 @@ namespace GKUI.Providers
             Control.Items.Add(item);
         }
 
-        public void AddItem(string caption, object tag, IImage image = null)
+        public void AddItem(string caption, object tag)
+        {
+            Control.Items.Add(new GKComboItem(caption, tag));
+        }
+
+        public void AddItem(string caption, object tag, IImage image)
         {
             Control.Items.Add(new GKComboItem(caption, tag, image));
         }
@@ -204,7 +210,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class ToolStripComboBoxHandler : ControlHandler<ToolStripComboBox, ToolStripComboBoxHandler>, IComboBoxHandler
+    public sealed class ToolStripComboBoxHandler : ControlHandler<ToolStripComboBox, ToolStripComboBoxHandler>, IComboBoxHandlerEx
     {
         public ToolStripComboBoxHandler(ToolStripComboBox control) : base(control)
         {
@@ -250,7 +256,12 @@ namespace GKUI.Providers
             Control.Items.Add(item);
         }
 
-        public void AddItem(string caption, object tag, IImage image = null)
+        public void AddItem(string caption, object tag)
+        {
+            Control.Items.Add(new GKComboItem(caption, tag));
+        }
+
+        public void AddItem(string caption, object tag, IImage image)
         {
             Control.Items.Add(new GKComboItem(caption, tag, image));
         }

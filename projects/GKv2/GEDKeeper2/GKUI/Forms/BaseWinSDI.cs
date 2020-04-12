@@ -25,6 +25,7 @@ using System.Drawing;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Charts;

@@ -20,6 +20,8 @@
 
 using System.IO;
 using BSLib;
+using BSLib.Design.MVP;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Charts;
 using GKCore.Interfaces;
@@ -368,7 +370,7 @@ namespace GKCore.MVP.Views
 
         ILabelHandler SurnameLabel { get; }
         IComboBoxHandler RestrictionCombo { get; }
-        IComboBoxHandler SexCombo { get; }
+        IComboBoxHandlerEx SexCombo { get; }
 
         ICheckBoxHandler Patriarch { get; }
         ICheckBoxHandler Bookmark { get; }
