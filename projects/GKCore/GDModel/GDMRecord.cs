@@ -132,6 +132,7 @@ namespace GDModel
 
         public GDMRecord(GDMObject owner) : base(owner)
         {
+            fXRef = string.Empty;
             fAutomatedRecordID = string.Empty;
             fChangeDate = new GDMChangeDate(this);
             fNotes = new GDMList<GDMNotes>(this);
