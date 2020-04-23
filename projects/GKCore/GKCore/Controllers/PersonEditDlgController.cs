@@ -21,6 +21,7 @@
 #define SEX_SYMBOLS
 
 using System;
+using BSLib.Design.Graphics;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;

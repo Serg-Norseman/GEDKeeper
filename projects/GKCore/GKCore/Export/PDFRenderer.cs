@@ -22,8 +22,8 @@
 
 using System;
 using BSLib;
+using BSLib.Design.Graphics;
 using GKCore.Charts;
-using GKCore.Interfaces;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 

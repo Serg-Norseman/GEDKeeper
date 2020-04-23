@@ -169,9 +169,9 @@ namespace GKCore.Controllers
                 }
             }
             values.Sort();
-            fView.GroupCombo.AddItem(LangMan.LS(LSID.LSID_SrcAll), null);
-            fView.GroupCombo.AddItem(LangMan.LS(LSID.LSID_SrcNot), null);
-            fView.GroupCombo.AddItem(LangMan.LS(LSID.LSID_SrcAny), null);
+            fView.GroupCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAll), null);
+            fView.GroupCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcNot), null);
+            fView.GroupCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAny), null);
             fView.GroupCombo.AddStrings(values);
             if (iFilter.FilterGroupMode != FilterGroupMode.Selected) {
                 fView.GroupCombo.SelectedIndex = (int)iFilter.FilterGroupMode;
@@ -189,9 +189,9 @@ namespace GKCore.Controllers
                 }
             }
             values.Sort();
-            fView.SourceCombo.AddItem(LangMan.LS(LSID.LSID_SrcAll), null);
-            fView.SourceCombo.AddItem(LangMan.LS(LSID.LSID_SrcNot), null);
-            fView.SourceCombo.AddItem(LangMan.LS(LSID.LSID_SrcAny), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAll), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcNot), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAny), null);
             fView.SourceCombo.AddStrings(values);
             if (iFilter.SourceMode != FilterGroupMode.Selected) {
                 fView.SourceCombo.SelectedIndex = (int)iFilter.SourceMode;

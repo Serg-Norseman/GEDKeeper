@@ -853,7 +853,7 @@ namespace GKCore
         private static readonly IocContainer fIocContainer;
 
         private static IStdDialogs fStdDialogs;
-        private static IGraphicsProvider fGfxProvider;
+        private static IGraphicsProviderEx fGfxProvider;
         private static PathReplacer fPathReplacer;
         private static INamesTable fNamesTable;
         private static IProgressController fProgressController;
@@ -926,11 +926,11 @@ namespace GKCore
             }
         }
 
-        public static IGraphicsProvider GfxProvider
+        public static IGraphicsProviderEx GfxProvider
         {
             get {
                 if (fGfxProvider == null) {
-                    fGfxProvider = fIocContainer.Resolve<IGraphicsProvider>();
+                    fGfxProvider = fIocContainer.Resolve<IGraphicsProviderEx>();
                 }
                 return fGfxProvider;
             }

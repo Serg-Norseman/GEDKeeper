@@ -393,7 +393,7 @@ namespace GKCore.Tools
 
         #region Merge trees and records
 
-        public static void MergeTree(GDMTree mainTree, GDMTree extTree, ITextBoxHandler logBox, bool selfTest = false)
+        public static void MergeTree(GDMTree mainTree, GDMTree extTree, ITextBox logBox, bool selfTest = false)
         {
             if (mainTree == null)
                 throw new ArgumentNullException("mainTree");
@@ -453,7 +453,7 @@ namespace GKCore.Tools
             }
         }
 
-        private static void ThrowError(ITextBoxHandler logBox, string message)
+        private static void ThrowError(ITextBox logBox, string message)
         {
             if (logBox != null) {
                 logBox.AppendText(message + "\r\n");
@@ -462,7 +462,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void MergeTreeFile(GDMTree mainTree, string fileName, ITextBoxHandler logBox, bool selfTest = false)
+        public static void MergeTreeFile(GDMTree mainTree, string fileName, ITextBox logBox, bool selfTest = false)
         {
             if (mainTree == null)
                 throw new ArgumentNullException("mainTree");
@@ -1158,7 +1158,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void CompareTree(IBaseContext context, string fileName, ITextBoxHandler logBox)
+        public static void CompareTree(IBaseContext context, string fileName, ITextBox logBox)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -1174,7 +1174,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void CompareTree(IBaseContext context, GDMTree tempTree, ITextBoxHandler logBox)
+        public static void CompareTree(IBaseContext context, GDMTree tempTree, ITextBox logBox)
         {
             if (context == null)
                 throw new ArgumentNullException("context");

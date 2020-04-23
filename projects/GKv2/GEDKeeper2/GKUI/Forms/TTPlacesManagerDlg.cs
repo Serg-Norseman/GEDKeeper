@@ -36,7 +36,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IListView IPlacesManagerDlg.PlacesList
+        IListViewEx IPlacesManagerDlg.PlacesList
         {
             get { return ListPlaces; }
         }

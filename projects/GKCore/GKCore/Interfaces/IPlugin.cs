@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.Graphics;
 
 namespace GKCore.Interfaces
 {

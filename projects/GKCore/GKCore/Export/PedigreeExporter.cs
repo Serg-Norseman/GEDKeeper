@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using BSLib;
 using BSLib.Calendar;
+using BSLib.Design.Graphics;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;

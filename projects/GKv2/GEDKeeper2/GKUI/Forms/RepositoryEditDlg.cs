@@ -50,9 +50,9 @@ namespace GKUI.Forms
             get { return fNotesList; }
         }
 
-        ITextBoxHandler IRepositoryEditDlg.Name
+        ITextBox IRepositoryEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
         #endregion

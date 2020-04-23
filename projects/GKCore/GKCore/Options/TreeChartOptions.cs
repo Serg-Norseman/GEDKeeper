@@ -20,8 +20,12 @@
 
 using System;
 using BSLib;
+using BSLib.Design;
+using BSLib.Design.Graphics;
 using GKCore.Charts;
 using GKCore.Interfaces;
+
+using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Options
 {
@@ -75,7 +79,7 @@ namespace GKCore.Options
         public string DefFontName;
         public int DefFontSize;
         public IColor DefFontColor;
-        public ExtFontStyle DefFontStyle;
+        public BSDTypes.FontStyle DefFontStyle;
 
         public int BranchDistance;
         public int LevelDistance;
@@ -119,8 +123,8 @@ namespace GKCore.Options
 
             DefFontName = AppHost.GfxProvider.GetDefaultFontName();
             DefFontSize = 8;
-            DefFontColor = ChartRenderer.GetColor(ChartRenderer.Black);
-            DefFontStyle = ExtFontStyle.None;
+            DefFontColor = ChartRenderer.GetColor(BSDColors.Black);
+            DefFontStyle = BSDTypes.FontStyle.None;
 
             BranchDistance = TreeChartModel.DEF_BRANCH_DISTANCE;
             LevelDistance = TreeChartModel.DEF_LEVEL_DISTANCE;
@@ -206,8 +210,8 @@ namespace GKCore.Options
 
             DefFontName = iniFile.ReadString("Chart", "FontName", AppHost.GfxProvider.GetDefaultFontName());
             DefFontSize = iniFile.ReadInteger("Chart", "FontSize", 8);
-            DefFontColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FontColor", ChartRenderer.Black));
-            DefFontStyle = (ExtFontStyle)iniFile.ReadInteger("Chart", "FontStyle", 0);
+            DefFontColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FontColor", BSDColors.Black));
+            DefFontStyle = (BSDTypes.FontStyle)iniFile.ReadInteger("Chart", "FontStyle", 0);
 
             BranchDistance = iniFile.ReadInteger("Chart", "BranchDistance", TreeChartModel.DEF_BRANCH_DISTANCE);
             LevelDistance = iniFile.ReadInteger("Chart", "LevelDistance", TreeChartModel.DEF_LEVEL_DISTANCE);

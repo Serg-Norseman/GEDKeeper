@@ -49,24 +49,24 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler IParentsEditDlg.Father
+        ITextBox IParentsEditDlg.Father
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtFather); }
+            get { return GetControlHandler<ITextBox>(txtFather); }
         }
 
-        ITextBoxHandler IParentsEditDlg.Mother
+        ITextBox IParentsEditDlg.Mother
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtMother); }
+            get { return GetControlHandler<ITextBox>(txtMother); }
         }
 
-        ITextBoxHandler IParentsEditDlg.ChildName
+        ITextBox IParentsEditDlg.ChildName
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtChildName); }
+            get { return GetControlHandler<ITextBox>(txtChildName); }
         }
 
-        IComboBoxHandler IParentsEditDlg.LinkageTypeCombo
+        IComboBox IParentsEditDlg.LinkageTypeCombo
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbLinkageType); }
+            get { return GetControlHandler<IComboBox>(cmbLinkageType); }
         }
 
         #endregion

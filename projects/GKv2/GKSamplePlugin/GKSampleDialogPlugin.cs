@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.Graphics;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;

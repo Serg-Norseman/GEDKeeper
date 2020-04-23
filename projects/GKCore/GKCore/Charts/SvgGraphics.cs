@@ -22,9 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-
 using BSLib;
-using GKCore.Interfaces;
+using BSLib.Design.Graphics;
 
 namespace GKCore.Charts
 {

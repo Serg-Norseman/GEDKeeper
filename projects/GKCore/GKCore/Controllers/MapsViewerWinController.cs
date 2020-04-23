@@ -118,7 +118,7 @@ namespace GKCore.Controllers
 
                     personValues.Sort();
                     fView.PersonsCombo.Clear();
-                    fView.PersonsCombo.AddItem(LangMan.LS(LSID.LSID_NotSelected), null);
+                    fView.PersonsCombo.AddItem<GDMIndividualRecord>(LangMan.LS(LSID.LSID_NotSelected), null);
                     fView.PersonsCombo.AddStrings(personValues);
 
                     fView.SelectPlacesBtn.Enabled = true;

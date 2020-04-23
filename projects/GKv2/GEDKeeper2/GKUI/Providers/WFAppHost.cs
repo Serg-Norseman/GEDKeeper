@@ -255,7 +255,7 @@ namespace GKUI.Providers
 
             // controls and other
             container.Register<IStdDialogs, WFStdDialogs>(LifeCycle.Singleton);
-            container.Register<IGraphicsProvider, WFGfxProvider>(LifeCycle.Singleton);
+            container.Register<IGraphicsProviderEx, WFGfxProvider>(LifeCycle.Singleton);
             container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
             container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
 

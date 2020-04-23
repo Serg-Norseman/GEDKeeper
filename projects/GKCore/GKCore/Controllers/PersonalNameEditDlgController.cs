@@ -56,7 +56,7 @@ namespace GKCore.Controllers
             for (var lid = GDMLanguageID.Unknown; lid < GDMLanguageID.Yiddish; lid++) {
                 fView.Language.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
             }
-            fView.Language.SortItems();
+            fView.Language.Sort();
         }
 
         public override bool Accept()

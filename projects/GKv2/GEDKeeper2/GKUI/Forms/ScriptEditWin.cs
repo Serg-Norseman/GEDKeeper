@@ -62,14 +62,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler IScriptEditWin.ScriptText
+        ITextBox IScriptEditWin.ScriptText
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtScriptText); }
+            get { return GetControlHandler<ITextBox>(txtScriptText); }
         }
 
-        ITextBoxHandler IScriptEditWin.DebugOutput
+        ITextBox IScriptEditWin.DebugOutput
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtDebugOutput); }
+            get { return GetControlHandler<ITextBox>(txtDebugOutput); }
         }
 
         #endregion

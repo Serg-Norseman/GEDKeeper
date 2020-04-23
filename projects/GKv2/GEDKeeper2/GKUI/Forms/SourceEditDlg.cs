@@ -63,29 +63,29 @@ namespace GKUI.Forms
             get { return fRepositoriesList; }
         }
 
-        ITextBoxHandler ISourceEditDlg.ShortTitle
+        ITextBox ISourceEditDlg.ShortTitle
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtShortTitle); }
+            get { return GetControlHandler<ITextBox>(txtShortTitle); }
         }
 
-        ITextBoxHandler ISourceEditDlg.Author
+        ITextBox ISourceEditDlg.Author
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtAuthor); }
+            get { return GetControlHandler<ITextBox>(txtAuthor); }
         }
 
-        ITextBoxHandler ISourceEditDlg.Title
+        ITextBox ISourceEditDlg.Title
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtTitle); }
+            get { return GetControlHandler<ITextBox>(txtTitle); }
         }
 
-        ITextBoxHandler ISourceEditDlg.Publication
+        ITextBox ISourceEditDlg.Publication
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtPublication); }
+            get { return GetControlHandler<ITextBox>(txtPublication); }
         }
 
-        ITextBoxHandler ISourceEditDlg.Text
+        ITextBox ISourceEditDlg.Text
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtText); }
+            get { return GetControlHandler<ITextBox>(txtText); }
         }
 
         #endregion

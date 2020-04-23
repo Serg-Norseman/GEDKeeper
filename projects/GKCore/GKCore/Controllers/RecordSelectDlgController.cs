@@ -71,7 +71,7 @@ namespace GKCore.Controllers
 
         private void UpdateFilter()
         {
-            IListView recordsList = fView.RecordsList;
+            IListViewEx recordsList = fView.RecordsList;
             recordsList.ListMan.Filter.Clear();
             recordsList.ListMan.QuickFilter = fFilter;
 

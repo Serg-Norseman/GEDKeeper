@@ -25,6 +25,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using BSLib.Design.Graphics;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;

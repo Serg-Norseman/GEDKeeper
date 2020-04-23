@@ -25,12 +25,15 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design.Graphics;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKUI.Providers;
+
+using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKUI.Components
 {
@@ -454,8 +457,8 @@ namespace GKUI.Components
 
                         case DeepMode.Foreground:
                             fRenderer.SetTranslucent(0.25f);
-                            IPen xpen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Black), 2.0f);
-                            IColor bColor = ChartRenderer.GetColor(ChartRenderer.White);
+                            IPen xpen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 2.0f);
+                            IColor bColor = ChartRenderer.GetColor(BSDColors.White);
                             fRenderer.DrawRoundedRectangle(xpen, bColor, dmX, dmY, deepModel.ImageWidth, deepModel.ImageHeight, 6);
                             fRenderer.SetTranslucent(0.00f);
                             break;

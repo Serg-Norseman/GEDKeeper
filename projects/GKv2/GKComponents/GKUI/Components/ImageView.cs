@@ -22,8 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-
 using BSLib;
+using BSLib.Design.Graphics;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;

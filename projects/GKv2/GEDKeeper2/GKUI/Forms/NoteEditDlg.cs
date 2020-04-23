@@ -42,9 +42,9 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler INoteEdit.Note
+        ITextBox INoteEdit.Note
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNote); }
+            get { return GetControlHandler<ITextBox>(txtNote); }
         }
 
         #endregion

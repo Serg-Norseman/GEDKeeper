@@ -23,8 +23,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-
 using BSLib;
+using BSLib.Design.Graphics;
 using GKCore.Interfaces;
 using GKUI.Components;
 
@@ -33,7 +33,7 @@ namespace GKUI.Providers
     /// <summary>
     /// 
     /// </summary>
-    public class WFGfxProvider : IGraphicsProvider
+    public class WFGfxProvider : IGraphicsProviderEx
     {
         public WFGfxProvider()
         {

@@ -18,39 +18,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.IO;
-using BSLib;
+using BSLib.Design.Graphics;
 
 namespace GKCore.Interfaces
 {
     /// <summary>
     /// Interface for platform-independent graphics rendering providers.
     /// </summary>
-    public interface IGraphicsProvider
+    public interface IGraphicsProviderEx : IGraphicsProvider
     {
-        IColor CreateColor(int argb);
-        IColor CreateColor(int r, int g, int b);
-        IColor CreateColor(int a, int r, int g, int b);
         IColor CreateColor(string signature);
-        IFont CreateFont(string fontName, float size, bool bold);
-        IImage CreateImage(Stream stream);
-        IImage CreateImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea);
 
-        IGfxPath CreatePath();
         IGfxPath CreateCirclePath(float x, float y, float width, float height);
         IGfxPath CreateCircleSegmentPath(float inRad, float extRad, float wedgeAngle, float ang1, float ang2);
         IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
                                      float ang1, float ang2);
 
-        IPen CreatePen(IColor color, float width);
-        IBrush CreateSolidBrush(IColor color);
-
         IImage LoadResourceImage(string resName, bool makeTransp);
-        IImage LoadImage(string fileName);
-        void SaveImage(IImage image, string fileName);
-
-        ExtSizeF GetTextSize(string text, IFont font, object target);
-
-        string GetDefaultFontName();
     }
 }

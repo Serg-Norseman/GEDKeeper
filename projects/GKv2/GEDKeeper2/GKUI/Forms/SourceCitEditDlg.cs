@@ -43,19 +43,19 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler ISourceCitEditDlg.Page
+        ITextBox ISourceCitEditDlg.Page
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtPage); }
+            get { return GetControlHandler<ITextBox>(txtPage); }
         }
 
-        IComboBoxHandler ISourceCitEditDlg.Certainty
+        IComboBox ISourceCitEditDlg.Certainty
         {
-            get { return GetControlHandler<IComboBoxHandler>(txtCertainty); }
+            get { return GetControlHandler<IComboBox>(txtCertainty); }
         }
 
-        IComboBoxHandler ISourceCitEditDlg.Source
+        IComboBox ISourceCitEditDlg.Source
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbSource); }
+            get { return GetControlHandler<IComboBox>(cmbSource); }
         }
 
         #endregion

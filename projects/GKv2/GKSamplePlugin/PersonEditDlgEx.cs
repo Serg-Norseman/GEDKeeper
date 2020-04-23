@@ -22,6 +22,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design.Graphics;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
@@ -126,79 +127,79 @@ namespace GKSamplePlugin
             get { return imgPortrait; }
         }
 
-        ITextBoxHandler IPersonEditDlg.Father
+        ITextBox IPersonEditDlg.Father
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtFather); }
+            get { return GetControlHandler<ITextBox>(txtFather); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Mother
+        ITextBox IPersonEditDlg.Mother
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtMother); }
+            get { return GetControlHandler<ITextBox>(txtMother); }
         }
 
-        ILabelHandler IPersonEditDlg.SurnameLabel
+        ILabel IPersonEditDlg.SurnameLabel
         {
-            get { return GetControlHandler<ILabelHandler>(lblSurname); }
+            get { return GetControlHandler<ILabel>(lblSurname); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Surname
+        ITextBox IPersonEditDlg.Surname
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtSurname); }
+            get { return GetControlHandler<ITextBox>(txtSurname); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Name
+        ITextBox IPersonEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        IComboBoxHandler IPersonEditDlg.Patronymic
+        IComboBox IPersonEditDlg.Patronymic
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbPatronymic); }
+            get { return GetControlHandler<IComboBox>(cmbPatronymic); }
         }
 
-        ITextBoxHandler IPersonEditDlg.NamePrefix
+        ITextBox IPersonEditDlg.NamePrefix
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNamePrefix); }
+            get { return GetControlHandler<ITextBox>(txtNamePrefix); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Nickname
+        ITextBox IPersonEditDlg.Nickname
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNickname); }
+            get { return GetControlHandler<ITextBox>(txtNickname); }
         }
 
-        ITextBoxHandler IPersonEditDlg.SurnamePrefix
+        ITextBox IPersonEditDlg.SurnamePrefix
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtSurnamePrefix); }
+            get { return GetControlHandler<ITextBox>(txtSurnamePrefix); }
         }
 
-        ITextBoxHandler IPersonEditDlg.NameSuffix
+        ITextBox IPersonEditDlg.NameSuffix
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNameSuffix); }
+            get { return GetControlHandler<ITextBox>(txtNameSuffix); }
         }
 
-        ITextBoxHandler IPersonEditDlg.MarriedSurname
+        ITextBox IPersonEditDlg.MarriedSurname
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtMarriedSurname); }
+            get { return GetControlHandler<ITextBox>(txtMarriedSurname); }
         }
 
-        IComboBoxHandler IPersonEditDlg.RestrictionCombo
+        IComboBox IPersonEditDlg.RestrictionCombo
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRestriction); }
+            get { return GetControlHandler<IComboBox>(cmbRestriction); }
         }
 
-        IComboBoxHandlerEx IPersonEditDlg.SexCombo
+        IComboBoxEx IPersonEditDlg.SexCombo
         {
-            get { return GetControlHandler<IComboBoxHandlerEx>(cmbSex); }
+            get { return GetControlHandler<IComboBoxEx>(cmbSex); }
         }
 
-        ICheckBoxHandler IPersonEditDlg.Patriarch
+        ICheckBox IPersonEditDlg.Patriarch
         {
-            get { return GetControlHandler<ICheckBoxHandler>(chkPatriarch); }
+            get { return GetControlHandler<ICheckBox>(chkPatriarch); }
         }
 
-        ICheckBoxHandler IPersonEditDlg.Bookmark
+        ICheckBox IPersonEditDlg.Bookmark
         {
-            get { return GetControlHandler<ICheckBoxHandler>(chkBookmark); }
+            get { return GetControlHandler<ICheckBox>(chkBookmark); }
         }
 
         #endregion

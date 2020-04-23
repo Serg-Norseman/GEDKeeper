@@ -27,6 +27,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using BSLib;
+using BSLib.Design.Graphics;
 using GDModel;
 using GDModel.Providers;
 using GDModel.Providers.GEDCOM;

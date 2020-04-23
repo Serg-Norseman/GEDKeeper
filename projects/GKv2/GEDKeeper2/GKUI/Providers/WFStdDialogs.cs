@@ -20,9 +20,8 @@
 
 using System.Drawing;
 using System.Windows.Forms;
-
+using BSLib.Design.Graphics;
 using GKCore;
-using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKUI.Components;
 

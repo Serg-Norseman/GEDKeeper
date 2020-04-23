@@ -63,9 +63,9 @@ namespace GKUI.Forms
             get { return fMembersList; }
         }
 
-        ITextBoxHandler IGroupEditDlg.Name
+        ITextBox IGroupEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(edName); }
+            get { return GetControlHandler<ITextBox>(edName); }
         }
 
         #endregion

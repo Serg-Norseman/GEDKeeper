@@ -64,29 +64,29 @@ namespace GKUI.Forms
         }
 
 
-        ITextBoxHandler IAddressEditDlg.Country
+        ITextBox IAddressEditDlg.Country
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtCountry); }
+            get { return GetControlHandler<ITextBox>(txtCountry); }
         }
 
-        ITextBoxHandler IAddressEditDlg.State
+        ITextBox IAddressEditDlg.State
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtState); }
+            get { return GetControlHandler<ITextBox>(txtState); }
         }
 
-        ITextBoxHandler IAddressEditDlg.City
+        ITextBox IAddressEditDlg.City
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtCity); }
+            get { return GetControlHandler<ITextBox>(txtCity); }
         }
 
-        ITextBoxHandler IAddressEditDlg.PostalCode
+        ITextBox IAddressEditDlg.PostalCode
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtPostalCode); }
+            get { return GetControlHandler<ITextBox>(txtPostalCode); }
         }
 
-        ITextBoxHandler IAddressEditDlg.AddressLine
+        ITextBox IAddressEditDlg.AddressLine
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtAddress); }
+            get { return GetControlHandler<ITextBox>(txtAddress); }
         }
 
         #endregion

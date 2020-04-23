@@ -1731,7 +1731,7 @@
             this.lvPlugins.Margin = new System.Windows.Forms.Padding(2);
             this.lvPlugins.MultiSelect = false;
             this.lvPlugins.Name = "lvPlugins";
-            this.lvPlugins.Order = System.Windows.Forms.SortOrder.None;
+            this.lvPlugins.Order = BSLib.Design.BSDTypes.SortOrder.None;
             this.lvPlugins.OwnerDraw = true;
             this.lvPlugins.Size = new System.Drawing.Size(721, 564);
             this.lvPlugins.SortColumn = 0;
@@ -1788,7 +1788,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.Caption = "OptionsDlg";
+            this.Title = "OptionsDlg";
             this.ClientSize = new System.Drawing.Size(749, 662);
             this.Controls.Add(this.PageControl1);
             this.Controls.Add(this.btnAccept);

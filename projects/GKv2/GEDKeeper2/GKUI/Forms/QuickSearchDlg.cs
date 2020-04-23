@@ -35,9 +35,9 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler IQuickSearchDlg.SearchPattern
+        ITextBox IQuickSearchDlg.SearchPattern
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtSearchPattern); }
+            get { return GetControlHandler<ITextBox>(txtSearchPattern); }
         }
 
         #endregion

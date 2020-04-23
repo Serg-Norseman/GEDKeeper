@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using BSLib;
+using BSLib.Design.Graphics;
 using BSLib.Design.MVP;
 using GDModel;
 using GKCore.Charts;
@@ -38,10 +39,10 @@ namespace GKCore.Controllers
 {
     public sealed class TabParts
     {
-        public readonly IListView ListView;
+        public readonly IListViewEx ListView;
         public readonly IHyperView Summary;
 
-        public TabParts(IListView listView, IHyperView summary)
+        public TabParts(IListViewEx listView, IHyperView summary)
         {
             ListView = listView;
             Summary = summary;
@@ -191,7 +192,7 @@ namespace GKCore.Controllers
             for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
                 if (recType != GDMRecordType.rtNone && recType != rt) continue;
 
-                IListView listview = fTabParts[(int)rt].ListView;
+                IListViewEx listview = fTabParts[(int)rt].ListView;
                 if (listview != null) {
                     listview.ListMan.ExternalFilter = filterHandler;
                 }
@@ -215,7 +216,7 @@ namespace GKCore.Controllers
                     {
                         CheckChangedRecord(record, false);
 
-                        IListView rView = GetRecordsViewByType(record.RecordType);
+                        IListViewEx rView = GetRecordsViewByType(record.RecordType);
                         if (rView != null) {
                             rView.DeleteRecord(record);
 
@@ -310,7 +311,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void ChangeListItem(IListView sender)
+        public void ChangeListItem(IListViewEx sender)
         {
             GDMRecord rec = sender.GetSelectedData() as GDMRecord;
             if (rec != null) {
@@ -360,7 +361,7 @@ namespace GKCore.Controllers
                 fDelayedTransitionRecord = null;
             }
 
-            IListView rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
+            IListViewEx rView = (record == null) ? null : GetRecordsViewByType(record.RecordType);
             if (rView != null) {
                 fView.ShowRecordsTab(record.RecordType);
                 rView.Activate();
@@ -379,7 +380,7 @@ namespace GKCore.Controllers
         {
             bool result = false;
             if (record != null) {
-                IListView rView = GetRecordsViewByType(record.RecordType);
+                IListViewEx rView = GetRecordsViewByType(record.RecordType);
                 result = (rView != null && rView.ListMan.IndexOfRecord(record) >= 0);
             }
             return result;
@@ -399,7 +400,7 @@ namespace GKCore.Controllers
 
         #region UI
 
-        public void SetTabPart(GDMRecordType recType, IListView listView, IHyperView summary)
+        public void SetTabPart(GDMRecordType recType, IListViewEx listView, IHyperView summary)
         {
             fTabParts[(int)recType] = new TabParts(listView, summary);
         }
@@ -409,7 +410,7 @@ namespace GKCore.Controllers
             return (GDMRecordType)(fView.RecordTabs.SelectedIndex + 1);
         }
 
-        public IListView GetRecordsViewByType(GDMRecordType recType)
+        public IListViewEx GetRecordsViewByType(GDMRecordType recType)
         {
             int rt = (int)recType;
             TabParts tabPart = (rt < 0 || rt >= fTabParts.Length) ? null : fTabParts[rt];
@@ -430,14 +431,14 @@ namespace GKCore.Controllers
 
         public IListManager GetRecordsListManByType(GDMRecordType recType)
         {
-            IListView rView = GetRecordsViewByType(recType);
+            IListViewEx rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : (IListManager)rView.ListMan;
         }
 
         public GDMRecord GetSelectedRecordEx()
         {
             GDMRecordType recType = GetSelectedRecordType();
-            IListView rView = GetRecordsViewByType(recType);
+            IListViewEx rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : (rView.GetSelectedData() as GDMRecord);
         }
 
@@ -459,7 +460,7 @@ namespace GKCore.Controllers
         public void RefreshLists(bool columnsChanged)
         {
             for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
-                IListView listview = fTabParts[(int)rt].ListView;
+                IListViewEx listview = fTabParts[(int)rt].ListView;
                 if (listview != null) {
                     listview.UpdateContents(columnsChanged);
                 }
@@ -470,7 +471,7 @@ namespace GKCore.Controllers
 
         public List<GDMRecord> GetContentList(GDMRecordType recType)
         {
-            IListView rView = GetRecordsViewByType(recType);
+            IListViewEx rView = GetRecordsViewByType(recType);
             return (rView == null) ? null : rView.ListMan.GetRecordsList();
         }
 
@@ -478,7 +479,7 @@ namespace GKCore.Controllers
         {
             var globOptions = GlobalOptions.Instance;
             for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
-                IListView rView = fTabParts[(int)rt].ListView;
+                IListViewEx rView = fTabParts[(int)rt].ListView;
                 if (rView != null) {
                     rView.SetSortColumn(globOptions.ListOptions[rt].SortColumn, false);
                     if (rt == GDMRecordType.rtIndividual) {
@@ -492,7 +493,7 @@ namespace GKCore.Controllers
         {
             var globOptions = GlobalOptions.Instance;
             for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
-                IListView rView = fTabParts[(int)rt].ListView;
+                IListViewEx rView = fTabParts[(int)rt].ListView;
                 if (rView != null) {
                     globOptions.ListOptions[rt].SortColumn = rView.SortColumn;
                     if (rt == GDMRecordType.rtIndividual) {
@@ -504,7 +505,7 @@ namespace GKCore.Controllers
 
         public void RefreshRecordsView(GDMRecordType recType)
         {
-            IListView rView = GetRecordsViewByType(recType);
+            IListViewEx rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 rView.UpdateContents();
 
@@ -593,7 +594,7 @@ namespace GKCore.Controllers
             if (fContext.Modified) {
                 caption = @"* " + caption;
             }
-            fView.Caption = caption;
+            fView.Title = caption;
         }
 
         public void ChangeFileName()

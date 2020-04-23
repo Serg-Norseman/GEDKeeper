@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using BSLib;
+using BSLib.Design.Graphics;
 using GDModel;
 using GKCore.Types;
 

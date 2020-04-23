@@ -22,11 +22,14 @@ using System;
 using System.Collections.Generic;
 using BSLib;
 using BSLib.Calendar;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
+
+using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Lists
 {
@@ -86,7 +89,7 @@ namespace GKCore.Lists
             fListColumns = defaultListColumns;
         }
 
-        protected void AddColumn(IListView list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
+        protected void AddColumn(IListViewEx list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
         {
             if (list == null)
                 throw new ArgumentNullException("list");
@@ -100,7 +103,7 @@ namespace GKCore.Lists
             fColumnsMap.Clear();
         }
 
-        public abstract void UpdateColumns(IListView listView);
+        public abstract void UpdateColumns(IListViewEx listView);
 
         public abstract void UpdateContents();
     }
@@ -303,11 +306,11 @@ namespace GKCore.Lists
             }
 
             if (GlobalOptions.Instance.ReadabilityHighlightRows && MathHelper.IsOdd(itemIndex)) {
-                item.SetBackColor(ChartRenderer.GetColor(ChartRenderer.LightGray));
+                item.SetBackColor(ChartRenderer.GetColor(BSDColors.LightGray));
             }
         }
 
-        public override void UpdateColumns(IListView listView)
+        public override void UpdateColumns(IListViewEx listView)
         {
             if (listView == null) return;
 

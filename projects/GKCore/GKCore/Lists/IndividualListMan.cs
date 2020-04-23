@@ -22,6 +22,7 @@ using System;
 using System.Text;
 using BSLib;
 using BSLib.Calendar;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Charts;
@@ -568,7 +569,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void UpdateColumns(IListView listView)
+        public override void UpdateColumns(IListViewEx listView)
         {
             ColumnsMap_Clear();
             AddColumn(listView, "№", 50, false, 0, 0);

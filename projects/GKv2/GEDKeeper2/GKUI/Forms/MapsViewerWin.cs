@@ -45,49 +45,49 @@ namespace GKUI.Forms
             get { return fMapBrowser; }
         }
 
-        IComboBoxHandler IMapsViewerWin.PersonsCombo
+        IComboBox IMapsViewerWin.PersonsCombo
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbPersons); }
+            get { return GetControlHandler<IComboBox>(cmbPersons); }
         }
 
-        ITreeViewHandler IMapsViewerWin.PlacesTree
+        ITreeView IMapsViewerWin.PlacesTree
         {
-            get { return GetControlHandler<ITreeViewHandler>(tvPlaces); }
+            get { return GetControlHandler<ITreeView>(tvPlaces); }
         }
 
-        IButtonHandler IMapsViewerWin.SelectPlacesBtn
+        IButton IMapsViewerWin.SelectPlacesBtn
         {
-            get { return GetControlHandler<IButtonHandler>(btnSelectPlaces); }
+            get { return GetControlHandler<IButton>(btnSelectPlaces); }
         }
 
-        ICheckBoxHandler IMapsViewerWin.BirthCheck
+        ICheckBox IMapsViewerWin.BirthCheck
         {
-            get { return GetControlHandler<ICheckBoxHandler>(chkBirth); }
+            get { return GetControlHandler<ICheckBox>(chkBirth); }
         }
 
-        ICheckBoxHandler IMapsViewerWin.DeathCheck
+        ICheckBox IMapsViewerWin.DeathCheck
         {
-            get { return GetControlHandler<ICheckBoxHandler>(chkDeath); }
+            get { return GetControlHandler<ICheckBox>(chkDeath); }
         }
 
-        ICheckBoxHandler IMapsViewerWin.ResidenceCheck
+        ICheckBox IMapsViewerWin.ResidenceCheck
         {
-            get { return GetControlHandler<ICheckBoxHandler>(chkResidence); }
+            get { return GetControlHandler<ICheckBox>(chkResidence); }
         }
 
-        ICheckBoxHandler IMapsViewerWin.LinesVisibleCheck
+        ICheckBox IMapsViewerWin.LinesVisibleCheck
         {
-            get { return GetControlHandler<ICheckBoxHandler>(chkLinesVisible); }
+            get { return GetControlHandler<ICheckBox>(chkLinesVisible); }
         }
 
-        IRadioButtonHandler IMapsViewerWin.TotalRadio
+        IRadioButton IMapsViewerWin.TotalRadio
         {
-            get { return GetControlHandler<IRadioButtonHandler>(radTotal); }
+            get { return GetControlHandler<IRadioButton>(radTotal); }
         }
 
-        IRadioButtonHandler IMapsViewerWin.SelectedRadio
+        IRadioButton IMapsViewerWin.SelectedRadio
         {
-            get { return GetControlHandler<IRadioButtonHandler>(radSelected); }
+            get { return GetControlHandler<IRadioButton>(radSelected); }
         }
 
         #endregion

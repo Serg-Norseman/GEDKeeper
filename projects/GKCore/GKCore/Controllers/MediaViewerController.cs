@@ -21,8 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using BSLib.Design.Graphics;
 using GDModel;
-using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
@@ -55,7 +55,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Caption = fFileRef.Title;
+            fView.Title = fFileRef.Title;
 
             MultimediaKind mmKind = GKUtils.GetMultimediaKind(fFileRef.MultimediaFormat);
 

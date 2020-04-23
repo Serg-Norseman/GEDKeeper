@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.Graphics;
 using BSLib.Design.MVP;
 using BSLib.Design.MVP.Controls;
 using GDModel;
@@ -30,7 +31,7 @@ using GKCore.Stats;
 
 namespace GKCore.MVP.Controls
 {
-    public interface IComboBoxHandlerEx : IComboBoxHandler
+    public interface IComboBoxEx : IComboBox
     {
         void AddItem(string caption, object tag, IImage image);
     }

@@ -34,14 +34,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler ITreeMergeDlg.UpdateBase
+        ITextBox ITreeMergeDlg.UpdateBase
         {
-            get { return GetControlHandler<ITextBoxHandler>(edUpdateBase); }
+            get { return GetControlHandler<ITextBox>(edUpdateBase); }
         }
 
-        ITextBoxHandler ITreeMergeDlg.SyncLog
+        ITextBox ITreeMergeDlg.SyncLog
         {
-            get { return GetControlHandler<ITextBoxHandler>(mSyncRes); }
+            get { return GetControlHandler<ITextBox>(mSyncRes); }
         }
 
         #endregion

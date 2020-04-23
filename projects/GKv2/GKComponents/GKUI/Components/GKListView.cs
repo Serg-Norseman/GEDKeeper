@@ -26,9 +26,14 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
-
+using BSLib.Design;
+using BSLib.Design.Graphics;
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Interfaces;
+
+using MVPSortOrder = BSLib.Design.BSDTypes.SortOrder;
+using WFSortOrder = System.Windows.Forms.SortOrder;
 
 namespace GKUI.Components
 {
@@ -94,6 +99,14 @@ namespace GKUI.Components
             var colorHandler = color as ColorHandler;
             if (colorHandler != null) {
                 BackColor = colorHandler.Handle;
+            }
+        }
+
+        public void SetForeColor(IColor color)
+        {
+            var colorHandler = color as ColorHandler;
+            if (colorHandler != null) {
+                ForeColor = colorHandler.Handle;
             }
         }
     }
@@ -171,7 +184,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class GKListView : ListView, IListView
+    public class GKListView : ListView, IListViewEx
     {
         private class LVColumnSorter : IComparer
         {
@@ -187,9 +200,9 @@ namespace GKUI.Components
                 int result = 0;
 
                 int sortColumn = fOwner.fSortColumn;
-                SortOrder sortOrder = fOwner.fSortOrder;
+                MVPSortOrder sortOrder = fOwner.fSortOrder;
 
-                if (sortOrder != SortOrder.None && sortColumn >= 0) {
+                if (sortOrder != MVPSortOrder.None && sortColumn >= 0) {
                     ListViewItem item1 = (ListViewItem)x;
                     ListViewItem item2 = (ListViewItem)y;
 
@@ -214,7 +227,7 @@ namespace GKUI.Components
                         }
                     }
 
-                    if (sortOrder == SortOrder.Descending) {
+                    if (sortOrder == MVPSortOrder.Descending) {
                         result = -result;
                     }
                 }
@@ -227,7 +240,7 @@ namespace GKUI.Components
         private readonly GKListViewItems fItemsAccessor;
 
         protected int fSortColumn;
-        protected SortOrder fSortOrder;
+        protected MVPSortOrder fSortOrder;
         protected int fUpdateCount;
 
         // Virtual fields
@@ -242,7 +255,7 @@ namespace GKUI.Components
             set { fSortColumn = value; }
         }
 
-        public SortOrder Order
+        public MVPSortOrder Order
         {
             get { return fSortOrder; }
             set { fSortOrder = value; }
@@ -267,7 +280,7 @@ namespace GKUI.Components
                     if (fListMan != null) {
                         VirtualMode = true;
                         fSortColumn = 0;
-                        fSortOrder = SortOrder.Ascending;
+                        fSortOrder = MVPSortOrder.Ascending;
                     } else {
                         VirtualMode = false;
                     }
@@ -292,7 +305,7 @@ namespace GKUI.Components
             View = View.Details;
 
             fSortColumn = 0;
-            fSortOrder = SortOrder.None;
+            fSortOrder = MVPSortOrder.None;
             fColumnSorter = new LVColumnSorter(this);
             fItemsAccessor = new GKListViewItems(this);
 
@@ -344,21 +357,27 @@ namespace GKUI.Components
             }
         }
 
-        protected SortOrder GetColumnSortOrder(int columnIndex)
+        protected MVPSortOrder GetColumnSortOrder(int columnIndex)
         {
-            return (fSortColumn == columnIndex) ? fSortOrder : SortOrder.None;
+            return (fSortColumn == columnIndex) ? fSortOrder : MVPSortOrder.None;
         }
 
         public void SetSortColumn(int sortColumn, bool checkOrder = true)
         {
             int prevColumn = fSortColumn;
             if (prevColumn == sortColumn && checkOrder) {
-                SortOrder prevOrder = GetColumnSortOrder(sortColumn);
-                fSortOrder = (prevOrder == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending;
+                MVPSortOrder prevOrder = GetColumnSortOrder(sortColumn);
+                fSortOrder = (prevOrder == MVPSortOrder.Ascending) ? MVPSortOrder.Descending : MVPSortOrder.Ascending;
             }
 
             fSortColumn = sortColumn;
             SortContents(true);
+        }
+
+        public void Sort(int sortColumn, MVPSortOrder sortOrder)
+        {
+            fSortOrder = sortOrder;
+            SetSortColumn(sortColumn, false);
         }
 
         protected override void OnColumnClick(ColumnClickEventArgs e)
@@ -427,10 +446,10 @@ namespace GKUI.Components
 
                 string arrow = "";
                 switch (GetColumnSortOrder(e.ColumnIndex)) {
-                    case SortOrder.Ascending:
+                    case MVPSortOrder.Ascending:
                         arrow = "▲";
                         break;
-                    case SortOrder.Descending:
+                    case MVPSortOrder.Descending:
                         arrow = "▼";
                         break;
                 }
@@ -467,7 +486,7 @@ namespace GKUI.Components
             if (fListMan != null) {
                 object rec = (restoreSelected) ? GetSelectedData() : null;
 
-                fListMan.SortContents(fSortColumn, fSortOrder == SortOrder.Ascending);
+                fListMan.SortContents(fSortColumn, fSortOrder == MVPSortOrder.Ascending);
                 ResetCache();
 
                 if (restoreSelected) SelectItem(rec);
@@ -637,6 +656,12 @@ namespace GKUI.Components
         {
             if (autoSize) width = -1;
             Columns.Add(caption, width, HorizontalAlignment.Left);
+        }
+
+        public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)
+        {
+            if (autoSize) width = -1;
+            Columns.Add(caption, width, (HorizontalAlignment)textAlign);
         }
 
         public void SetColumnCaption(int index, string caption)

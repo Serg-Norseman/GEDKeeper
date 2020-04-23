@@ -34,39 +34,39 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler IPersonsFilterDlg.SourceCombo
+        IComboBox IPersonsFilterDlg.SourceCombo
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbSource); }
+            get { return GetControlHandler<IComboBox>(cmbSource); }
         }
 
-        IComboBoxHandler IPersonsFilterDlg.GroupCombo
+        IComboBox IPersonsFilterDlg.GroupCombo
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbGroup); }
+            get { return GetControlHandler<IComboBox>(cmbGroup); }
         }
 
-        ITextBoxHandler IPersonsFilterDlg.AliveBeforeDate
+        ITextBox IPersonsFilterDlg.AliveBeforeDate
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtAliveBeforeDate); }
+            get { return GetControlHandler<ITextBox>(txtAliveBeforeDate); }
         }
 
-        ICheckBoxHandler IPersonsFilterDlg.OnlyPatriarchsCheck
+        ICheckBox IPersonsFilterDlg.OnlyPatriarchsCheck
         {
-            get { return GetControlHandler<ICheckBoxHandler>(chkOnlyPatriarchs); }
+            get { return GetControlHandler<ICheckBox>(chkOnlyPatriarchs); }
         }
 
-        IComboBoxHandler IPersonsFilterDlg.EventValCombo
+        IComboBox IPersonsFilterDlg.EventValCombo
         {
-            get { return  GetControlHandler<IComboBoxHandler>(cmbEventVal); }
+            get { return  GetControlHandler<IComboBox>(cmbEventVal); }
         }
 
-        IComboBoxHandler IPersonsFilterDlg.ResidenceCombo
+        IComboBox IPersonsFilterDlg.ResidenceCombo
         {
-            get { return  GetControlHandler<IComboBoxHandler>(cmbResidence); }
+            get { return  GetControlHandler<IComboBox>(cmbResidence); }
         }
 
-        IComboBoxHandler IPersonsFilterDlg.NameCombo
+        IComboBox IPersonsFilterDlg.NameCombo
         {
-            get { return  GetControlHandler<IComboBoxHandler>(txtName); }
+            get { return  GetControlHandler<IComboBox>(txtName); }
         }
 
         void IPersonsFilterDlg.SetLifeRadio(int lifeSel)

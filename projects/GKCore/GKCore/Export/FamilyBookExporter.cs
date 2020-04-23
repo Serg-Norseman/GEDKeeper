@@ -20,6 +20,7 @@
 
 using System;
 using BSLib;
+using BSLib.Design.Graphics;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;

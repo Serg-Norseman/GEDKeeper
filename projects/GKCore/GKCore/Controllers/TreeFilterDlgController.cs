@@ -92,9 +92,9 @@ namespace GKCore.Controllers
                 }
             }
             values.Sort();
-            fView.SourceCombo.AddItem(LangMan.LS(LSID.LSID_SrcAll), null);
-            fView.SourceCombo.AddItem(LangMan.LS(LSID.LSID_SrcNot), null);
-            fView.SourceCombo.AddItem(LangMan.LS(LSID.LSID_SrcAny), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAll), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcNot), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAny), null);
             fView.SourceCombo.AddStrings(values);
 
             UpdateControls();

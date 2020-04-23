@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design.Graphics;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;

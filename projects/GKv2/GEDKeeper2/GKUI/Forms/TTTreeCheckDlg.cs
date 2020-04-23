@@ -36,7 +36,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IListView ITreeCheckDlg.ChecksList
+        IListViewEx ITreeCheckDlg.ChecksList
         {
             get { return ListChecks; }
         }

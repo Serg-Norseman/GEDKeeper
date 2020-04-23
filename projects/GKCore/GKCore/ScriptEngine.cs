@@ -58,7 +58,7 @@ namespace GKCore
     /// </summary>
     public class ScriptEngine : BaseObject
     {
-        private ITextBoxHandler fDebugOutput;
+        private ITextBox fDebugOutput;
         private IBaseWindow fBase;
 
         protected override void Dispose(bool disposing)
@@ -70,7 +70,7 @@ namespace GKCore
             base.Dispose(disposing);
         }
 
-        public void lua_run(string script, IBaseWindow baseWin, ITextBoxHandler debugOutput)
+        public void lua_run(string script, IBaseWindow baseWin, ITextBox debugOutput)
         {
             fDebugOutput = debugOutput;
             fBase = baseWin;

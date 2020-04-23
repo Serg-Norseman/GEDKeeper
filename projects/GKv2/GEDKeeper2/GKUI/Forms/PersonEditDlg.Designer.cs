@@ -680,7 +680,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.Caption = "PersonEditDlg";
+            this.Title = "PersonEditDlg";
             this.ClientSize = new System.Drawing.Size(699, 563);
             this.Controls.Add(this.tabsPersonData);
             this.Controls.Add(this.lblRestriction);

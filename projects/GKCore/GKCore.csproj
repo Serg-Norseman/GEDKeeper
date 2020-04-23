@@ -258,13 +258,11 @@
     <Compile Include="GKCore\Interfaces\ICustomFilter.cs" />
     <Compile Include="GKCore\Interfaces\IDialogReplacement.cs" />
     <Compile Include="GKCore\Interfaces\IExporter.cs" />
-    <Compile Include="GKCore\Interfaces\IGraphics.cs" />
     <Compile Include="GKCore\Interfaces\IHost.cs" />
     <Compile Include="GKCore\Interfaces\ILangMan.cs" />
     <Compile Include="GKCore\Interfaces\IListFilter.cs" />
-    <Compile Include="GKCore\Interfaces\IListItem.cs" />
     <Compile Include="GKCore\Interfaces\IListManager.cs" />
-    <Compile Include="GKCore\Interfaces\IListView.cs" />
+    <Compile Include="GKCore\Interfaces\IListViewEx.cs" />
     <Compile Include="GKCore\Interfaces\ILocalization.cs" />
     <Compile Include="GKCore\Interfaces\ILogger.cs" />
     <Compile Include="GKCore\Interfaces\INamesTable.cs" />
@@ -273,7 +271,6 @@
     <Compile Include="GKCore\Interfaces\IGraphicsProvider.cs" />
     <Compile Include="GKCore\Interfaces\IOptionsSection.cs" />
     <Compile Include="GKCore\Interfaces\IPlugin.cs" />
-    <Compile Include="GKCore\Interfaces\IPrintable.cs" />
     <Compile Include="GKCore\Interfaces\IProgressController.cs" />
     <Compile Include="GKCore\Interfaces\ISearchStrategy.cs" />
     <Compile Include="GKCore\Interfaces\ISubscriber.cs" />

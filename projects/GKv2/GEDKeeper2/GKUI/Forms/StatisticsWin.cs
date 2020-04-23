@@ -60,9 +60,9 @@ namespace GKUI.Forms
             get { return lvSummary; }
         }
 
-        IComboBoxHandler IStatisticsWin.StatsType
+        IComboBox IStatisticsWin.StatsType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cbType); }
+            get { return GetControlHandler<IComboBox>(cbType); }
         }
 
         #endregion
@@ -113,7 +113,7 @@ namespace GKUI.Forms
             fController.CalcStats(fCurrentMode);
 
             fListStats.SortColumn = -1;
-            fListStats.Sorting = SortOrder.None;
+            fListStats.Sorting = System.Windows.Forms.SortOrder.None;
         }
 
         private void StatisticsWin_Load(object sender, EventArgs e)

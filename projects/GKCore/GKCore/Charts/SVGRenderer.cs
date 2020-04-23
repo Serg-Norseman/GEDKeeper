@@ -21,10 +21,8 @@
 using System;
 using System.IO;
 using System.Text;
-
 using BSLib;
-using GKCore.Charts;
-using GKCore.Interfaces;
+using BSLib.Design.Graphics;
 
 namespace GKCore.Charts
 {

@@ -22,12 +22,15 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using BSLib;
+using BSLib.Design.Graphics;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Options;
 using GKCore.Types;
+
+using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Charts
 {
@@ -1321,9 +1324,9 @@ namespace GKCore.Charts
         {
             DoneGraphics();
 
-            fLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Black), 1f);
-            fDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Silver), 1f);
-            fSolidBlack = fRenderer.CreateSolidBrush(ChartRenderer.GetColor(ChartRenderer.Black));
+            fLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 1f);
+            fDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Silver), 1f);
+            fSolidBlack = fRenderer.CreateSolidBrush(ChartRenderer.GetColor(BSDColors.Black));
         }
 
         private void DoneGraphics()
@@ -1434,7 +1437,7 @@ namespace GKCore.Charts
                         IColor penColor = person.GetSelectedColor();
                         xpen = fRenderer.CreatePen(penColor, 2.0f);
                     } else {
-                        xpen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Black), 1.0f);
+                        xpen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 1.0f);
                     }
 
                     DrawBorder(xpen, prt, false, person);

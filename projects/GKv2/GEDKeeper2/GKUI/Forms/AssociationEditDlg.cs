@@ -43,14 +43,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler IAssociationEditDlg.Relation
+        IComboBox IAssociationEditDlg.Relation
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRelation); }
+            get { return GetControlHandler<IComboBox>(cmbRelation); }
         }
 
-        ITextBoxHandler IAssociationEditDlg.Person
+        ITextBox IAssociationEditDlg.Person
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtPerson); }
+            get { return GetControlHandler<ITextBox>(txtPerson); }
         }
 
         #endregion

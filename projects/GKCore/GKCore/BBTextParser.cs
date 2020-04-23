@@ -22,6 +22,8 @@
 
 using System.Collections.Generic;
 using BSLib;
+using BSLib.Design;
+using BSLib.Design.Graphics;
 using GKCore.Interfaces;
 
 namespace GKCore
@@ -33,7 +35,7 @@ namespace GKCore
         public int Width;
         public IColor Color;
         public float Size;
-        public ExtFontStyle Style;
+        public BSDTypes.FontStyle Style;
 
         public string URL;
         public ExtRect LinkRect;
@@ -42,7 +44,7 @@ namespace GKCore
         {
         }
 
-        public BBTextChunk(int tokenLine, float fontSize, ExtFontStyle fontStyle, IColor color)
+        public BBTextChunk(int tokenLine, float fontSize, BSDTypes.FontStyle fontStyle, IColor color)
         {
             Line = tokenLine - 1;
             Text = string.Empty;
@@ -109,11 +111,11 @@ namespace GKCore
 
         private List<BBTextChunk> fChunks;
         private readonly float fDefaultFontSize;
-        private readonly IGraphicsProvider fGfxProvider;
+        private readonly IGraphicsProviderEx fGfxProvider;
         private readonly IColor fLinkColor;
         private readonly IColor fTextColor;
 
-        public BBTextParser(IGraphicsProvider gfxProvider, float defaultFontSize,
+        public BBTextParser(IGraphicsProviderEx gfxProvider, float defaultFontSize,
                             IColor linkColor, IColor textColor)
         {
             fGfxProvider = gfxProvider;
@@ -126,13 +128,13 @@ namespace GKCore
         private BBTextChunk SetChunkColor(int tokenLine, BBTextChunk chunk, IColor color)
         {
             float fntSize;
-            ExtFontStyle fntStyle;
+            BSDTypes.FontStyle fntStyle;
             if (chunk != null) {
                 fntSize = chunk.Size;
                 fntStyle = chunk.Style;
             } else {
                 fntSize = fDefaultFontSize;
-                fntStyle = ExtFontStyle.None;
+                fntStyle = BSDTypes.FontStyle.None;
             }
 
             if (chunk == null || chunk.Text.Length != 0) {
@@ -147,7 +149,7 @@ namespace GKCore
 
         private BBTextChunk SetChunkFontSize(int tokenLine, BBTextChunk chunk, float newSize)
         {
-            ExtFontStyle fntStyle = (chunk != null) ? chunk.Style : ExtFontStyle.None;
+            BSDTypes.FontStyle fntStyle = (chunk != null) ? chunk.Style : BSDTypes.FontStyle.None;
 
             if (chunk == null || chunk.Text.Length != 0) {
                 chunk = new BBTextChunk(tokenLine, newSize, fntStyle, fTextColor);
@@ -159,16 +161,16 @@ namespace GKCore
             return chunk;
         }
 
-        private BBTextChunk SetChunkFontStyle(int tokenLine, BBTextChunk chunk, ExtFontStyle style, bool active)
+        private BBTextChunk SetChunkFontStyle(int tokenLine, BBTextChunk chunk, BSDTypes.FontStyle style, bool active)
         {
             float fntSize;
-            ExtFontStyle fntStyle;
+            BSDTypes.FontStyle fntStyle;
             if (chunk != null) {
                 fntSize = chunk.Size;
                 fntStyle = chunk.Style;
             } else {
                 fntSize = fDefaultFontSize;
-                fntStyle = ExtFontStyle.None;
+                fntStyle = BSDTypes.FontStyle.None;
             }
 
             if (active) {
@@ -190,13 +192,13 @@ namespace GKCore
         private BBTextChunk SetChunkText(int tokenLine, BBTextChunk chunk, string text)
         {
             float fntSize;
-            ExtFontStyle fntStyle;
+            BSDTypes.FontStyle fntStyle;
             if (chunk != null) {
                 fntSize = chunk.Size;
                 fntStyle = chunk.Style;
             } else {
                 fntSize = fDefaultFontSize;
-                fntStyle = ExtFontStyle.None;
+                fntStyle = BSDTypes.FontStyle.None;
             }
 
             if (chunk == null) {
@@ -303,19 +305,19 @@ namespace GKCore
                         }
                         else if (tag == "b") {
                             // [b][/b]
-                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, ExtFontStyle.Bold, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, BSDTypes.FontStyle.Bold, !closedTag);
                         }
                         else if (tag == "i") {
                             // [i][/i]
-                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, ExtFontStyle.Italic, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, BSDTypes.FontStyle.Italic, !closedTag);
                         }
                         else if (tag == "s") {
                             // [s][/s]
-                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, ExtFontStyle.Strikeout, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, BSDTypes.FontStyle.Strikeout, !closedTag);
                         }
                         else if (tag == "u") {
                             // [u][/u]
-                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, ExtFontStyle.Underline, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, BSDTypes.FontStyle.Underline, !closedTag);
                         }
                         else if (tag == "url") {
                             // bad impementation
@@ -333,7 +335,7 @@ namespace GKCore
                                 //
                             }
 
-                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, ExtFontStyle.Underline, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, BSDTypes.FontStyle.Underline, !closedTag);
                             IColor color = (closedTag) ? fTextColor : fLinkColor;
                             lastChunk = SetChunkColor(tok.Line, lastChunk, color);
                             if (!closedTag) {

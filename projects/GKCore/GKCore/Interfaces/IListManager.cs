@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Types;
 
@@ -38,7 +39,7 @@ namespace GKCore.Interfaces
         bool ColumnsHaveBeenChanged { get; set; }
         IListColumns ListColumns { get; }
 
-        void UpdateColumns(IListView listView);
+        void UpdateColumns(IListViewEx listView);
         void UpdateContents();
     }
 

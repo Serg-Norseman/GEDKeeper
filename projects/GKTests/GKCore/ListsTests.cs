@@ -19,6 +19,8 @@
  */
 
 using System;
+using BSLib.Design;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
@@ -110,7 +112,7 @@ namespace GKCore
             Assert.AreEqual(0, dtItem1.CompareTo(dtItem2));
         }
 
-        private class ListViewMock : IListView
+        private class ListViewMock : IListViewEx
         {
             IListViewItems IListView.Items
             {
@@ -136,8 +138,11 @@ namespace GKCore
             }
 
             public void AddColumn(string caption, int width, bool autoSize) {}
+            public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign) {}
             public IListItem AddItem(object rowData, params object[] columnValues) { return null; }
             public void BeginUpdate() {}
+            public void Clear() {}
+            public void ClearColumns() {}
             public void ClearItems() {}
             public void DeleteRecord(object data) {}
             public void EndUpdate() {}
@@ -147,6 +152,7 @@ namespace GKCore
             public void UpdateContents(bool columnsChanged = false) {}
             public void Activate() {}
             public void SetSortColumn(int sortColumn, bool checkOrder = true) {}
+            public void Sort(int sortColumn, BSDTypes.SortOrder sortOrder) {}
         }
 
         private bool ExtFilterHandler(GDMRecord record)

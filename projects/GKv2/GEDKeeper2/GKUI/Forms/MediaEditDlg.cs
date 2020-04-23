@@ -57,29 +57,29 @@ namespace GKUI.Forms
             get { return fSourcesList; }
         }
 
-        IComboBoxHandler IMediaEditDlg.MediaType
+        IComboBox IMediaEditDlg.MediaType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbMediaType); }
+            get { return GetControlHandler<IComboBox>(cmbMediaType); }
         }
 
-        IComboBoxHandler IMediaEditDlg.StoreType
+        IComboBox IMediaEditDlg.StoreType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbStoreType); }
+            get { return GetControlHandler<IComboBox>(cmbStoreType); }
         }
 
-        ITextBoxHandler IMediaEditDlg.Name
+        ITextBox IMediaEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        ITextBoxHandler IMediaEditDlg.File
+        ITextBox IMediaEditDlg.File
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtFile); }
+            get { return GetControlHandler<ITextBox>(txtFile); }
         }
 
-        IButtonHandler IMediaEditDlg.FileSelectButton
+        IButton IMediaEditDlg.FileSelectButton
         {
-            get { return GetControlHandler<IButtonHandler>(btnFileSelect); }
+            get { return GetControlHandler<IButton>(btnFileSelect); }
         }
 
         #endregion

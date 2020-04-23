@@ -42,14 +42,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler IUserRefEditDlg.Ref
+        IComboBox IUserRefEditDlg.Ref
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRef); }
+            get { return GetControlHandler<IComboBox>(cmbRef); }
         }
 
-        IComboBoxHandler IUserRefEditDlg.RefType
+        IComboBox IUserRefEditDlg.RefType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRefType); }
+            get { return GetControlHandler<IComboBox>(cmbRefType); }
         }
 
         #endregion

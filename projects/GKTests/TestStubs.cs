@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.Graphics;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
@@ -36,7 +37,7 @@ namespace GKTests.Stubs
 {
     internal class WorkWindowStub : BaseObject, IWorkWindow
     {
-        public string Caption { get; set; }
+        public string Title { get; set; }
         public bool Enabled { get; set; }
 
         public void Activate() {}
@@ -176,7 +177,7 @@ namespace GKTests.Stubs
         public override void EnablePageNumbers() { }
         public override void NewPage() { }
         public override void NewLine(float spacingBefore = 0.0f, float spacingAfter = 0.0f) { }
-        public override void AddParagraph(string text, IFont font, TextAlignment alignment) { }
+        public override void AddParagraph(string text, IFont font, GKCore.Export.TextAlignment alignment) { }
         public override void AddParagraph(string text, IFont font) { }
         public override void AddParagraphAnchor(string text, IFont font, string anchor) { }
         public override void AddParagraphLink(string text, IFont font, string link) { }
@@ -186,7 +187,7 @@ namespace GKTests.Stubs
         public override void EndList() { }
         public override void AddListItem(string text, IFont font) { }
         public override void AddListItemLink(string text, IFont font, string link, IFont linkFont) { }
-        public override void BeginParagraph(TextAlignment alignment,
+        public override void BeginParagraph(GKCore.Export.TextAlignment alignment,
                                             float spacingBefore, float spacingAfter,
                                             float indent = 0.0f, bool keepTogether = false) { }
         public override void EndParagraph() { }
@@ -256,7 +257,7 @@ namespace GKTests.Stubs
         }
     }
 
-    public sealed class TextBoxStub : BaseControlHandler<System.Windows.Forms.TextBox, TextBoxStub>, ITextBoxHandler
+    public sealed class TextBoxStub : BaseControlHandler<System.Windows.Forms.TextBox, TextBoxStub>, ITextBox
     {
         private StringList fStrings;
 

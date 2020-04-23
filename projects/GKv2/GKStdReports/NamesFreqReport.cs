@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.Graphics;
 using GDModel;
 using GKCore;
 using GKCore.Export;

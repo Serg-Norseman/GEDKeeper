@@ -40,7 +40,7 @@ namespace GKImageViewerPlugin
 
         #region View Interface
 
-        public string Caption
+        public string Title
         {
             get { return base.Text; }
             set { base.Text = value; }

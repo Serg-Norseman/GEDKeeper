@@ -41,9 +41,9 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler ILanguageEditDlg.LanguageCombo
+        IComboBox ILanguageEditDlg.LanguageCombo
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbLanguage); }
+            get { return GetControlHandler<IComboBox>(cmbLanguage); }
         }
 
         #endregion

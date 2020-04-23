@@ -23,10 +23,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-
 using BSLib;
+using BSLib.Design.Graphics;
 using GKCore.Charts;
-using GKCore.Interfaces;
 using GKUI.Components;
 
 namespace GKUI.Providers

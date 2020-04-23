@@ -76,24 +76,24 @@ namespace GKUI.Forms
             get { return fEventsList; }
         }
 
-        IComboBoxHandler IFamilyEditDlg.MarriageStatus
+        IComboBox IFamilyEditDlg.MarriageStatus
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbMarriageStatus); }
+            get { return GetControlHandler<IComboBox>(cmbMarriageStatus); }
         }
 
-        IComboBoxHandler IFamilyEditDlg.Restriction
+        IComboBox IFamilyEditDlg.Restriction
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRestriction); }
+            get { return GetControlHandler<IComboBox>(cmbRestriction); }
         }
 
-        ITextBoxHandler IFamilyEditDlg.Husband
+        ITextBox IFamilyEditDlg.Husband
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtHusband); }
+            get { return GetControlHandler<ITextBox>(txtHusband); }
         }
 
-        ITextBoxHandler IFamilyEditDlg.Wife
+        ITextBox IFamilyEditDlg.Wife
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtWife); }
+            get { return GetControlHandler<ITextBox>(txtWife); }
         }
 
         #endregion

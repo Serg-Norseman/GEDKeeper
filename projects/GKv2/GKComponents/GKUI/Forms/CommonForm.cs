@@ -38,7 +38,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        public string Caption
+        public string Title
         {
             get { return base.Text; }
             set { base.Text = value; }
@@ -75,7 +75,7 @@ namespace GKUI.Forms
             }
         }
 
-        protected T GetControlHandler<T>(object control) where T : IControl
+        protected T GetControlHandler<T>(object control) where T : class, IControl
         {
             return fControlsManager.GetControlHandler<T>(control);
         }

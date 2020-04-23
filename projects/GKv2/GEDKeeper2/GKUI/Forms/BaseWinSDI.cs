@@ -292,7 +292,7 @@ namespace GKUI.Forms
         private void List_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (sender != null) {
-                fController.ChangeListItem((IListView)sender);
+                fController.ChangeListItem((IListViewEx)sender);
                 AppHost.Instance.SelectedIndexChanged(this);
             }
         }
@@ -317,7 +317,7 @@ namespace GKUI.Forms
             return fController.GetSelectedRecordType();
         }
 
-        public IListView GetRecordsViewByType(GDMRecordType recType)
+        public IListViewEx GetRecordsViewByType(GDMRecordType recType)
         {
             return fController.GetRecordsViewByType(recType);
         }
@@ -598,7 +598,7 @@ namespace GKUI.Forms
         {
             string statusLine = "";
             GDMRecordType recType = GetSelectedRecordType();
-            IListView rView = GetRecordsViewByType(recType);
+            IListViewEx rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 var listMan = rView.ListMan;
                 statusLine = LangMan.LS(LSID.LSID_SBRecords) + ": " + listMan.TotalCount.ToString();

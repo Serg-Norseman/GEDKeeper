@@ -64,7 +64,7 @@ namespace GKTray
         public GKTray()
         {
             // for GlobalOptions initialization
-            AppHost.Container.Register<IGraphicsProvider, WFGfxProvider>(LifeCycle.Singleton);
+            AppHost.Container.Register<IGraphicsProviderEx, WFGfxProvider>(LifeCycle.Singleton);
 
             fMRUFiles = new List<MRUFile>();
 

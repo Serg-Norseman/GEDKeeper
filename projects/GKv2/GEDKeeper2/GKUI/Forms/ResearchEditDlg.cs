@@ -71,34 +71,34 @@ namespace GKUI.Forms
         }
 
 
-        ITextBoxHandler IResearchEditDlg.Name
+        ITextBox IResearchEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        IComboBoxHandler IResearchEditDlg.Priority
+        IComboBox IResearchEditDlg.Priority
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbPriority); }
+            get { return GetControlHandler<IComboBox>(cmbPriority); }
         }
 
-        IComboBoxHandler IResearchEditDlg.Status
+        IComboBox IResearchEditDlg.Status
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbStatus); }
+            get { return GetControlHandler<IComboBox>(cmbStatus); }
         }
 
-        ITextBoxHandler IResearchEditDlg.StartDate
+        ITextBox IResearchEditDlg.StartDate
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtStartDate); }
+            get { return GetControlHandler<ITextBox>(txtStartDate); }
         }
 
-        ITextBoxHandler IResearchEditDlg.StopDate
+        ITextBox IResearchEditDlg.StopDate
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtStopDate); }
+            get { return GetControlHandler<ITextBox>(txtStopDate); }
         }
 
-        INumericBoxHandler IResearchEditDlg.Percent
+        INumericBox IResearchEditDlg.Percent
         {
-            get { return GetControlHandler<INumericBoxHandler>(nudPercent); }
+            get { return GetControlHandler<INumericBox>(nudPercent); }
         }
 
         #endregion
