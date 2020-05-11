@@ -1,47 +1,54 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="styles.css" type="text/css" />
-<title>Storing multimedia content files</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Storing multimedia content files</title>
 </head>
 <body>
-<h1>Storing multimedia content files</h1>
-<p>There are three ways to store multimedia content within GEDKeeper:
-store the file in its' original place and use an absolute pathname as a
-reference, use file &quot;storage&quot; (a directory), or use a file
-archive (ZIP). Each method has its own advantages.
-</p>
-<ul>
-<li>&quot;Using absolute pathnames&quot;. When this method is applied, the database
-stores only the pathname. When your system reads this file, it is opened using
-that pathname. Such a file is completely independent from the GEDKeeper
-database, so once you have moved the database to another system, it is
-necessary to fix all broken pathnames.</li>
+    <h1>Storing multimedia content files</h1>
+    <p>
+        There are three ways to store multimedia content within GEDKeeper:
+        store the file in its' original place and use an absolute pathname as a
+        reference, use file &quot;storage&quot; (a directory), or use a file
+        archive (ZIP). Each method has its own advantages.
+    </p>
+    <ul>
+        <li>
+            &quot;Using absolute pathnames&quot;. When this method is applied, the database
+            stores only the pathname. When your system reads this file, it is opened using
+            that pathname. Such a file is completely independent from the GEDKeeper
+            database, so once you have moved the database to another system, it is
+            necessary to fix all broken pathnames.
+        </li>
 
-<li>&quot;Saving to the store&quot;. In this case, GEDKeeper creates a new
-directory near your database file (in the same directory with the database
-filename). The new directory has the same name as your database
-filename. When you add a multimedia file to the database, this file is
-copied into this directory. Thus, you got a centralized files storage
-linked to your database, which is very easy to be moved to another
-system&#151;you just copy the database file and its sibling directory of the same
-name.</li>
+        <li>
+            &quot;Saving to the store&quot;. In this case, GEDKeeper creates a new
+            directory near your database file (in the same directory with the database
+            filename). The new directory has the same name as your database
+            filename. When you add a multimedia file to the database, this file is
+            copied into this directory. Thus, you got a centralized files storage
+            linked to your database, which is very easy to be moved to another
+            system&#151;you just copy the database file and its sibling directory of the same
+            name.
+        </li>
 
-<!-- Be sure this listitem goes last since it references the above. -->
-<li>&quot;Saving to the archive&quot;. GEDKeeper creates a ZIP archive having the same
-name as your database and sharing the same directory.
-Most multimedia files you have added to the database are copied into
-this archive. This method has several advantages. One of which is
-having single data storage for all files in the database. It is also
-very easy to move such a database to another system. You just need to
-move the database itself and the ZIP archive of the same name. You cannot
-add large files (video, music, and photos) into an archive&#151;it is
-disallowed by GEDKeeper. Large non-text (binary) files have very low compression rates,
-that is why there is no sense to add such files into an archive.
-Such files are treated in the &quot;Saving to the store&quot; method.</li>
-</ul>
-<p>You can use any or all these methods freely.</p>
+        <!-- Be sure this listitem goes last since it references the above. -->
+        <li>
+            &quot;Saving to the archive&quot;. GEDKeeper creates a ZIP archive having the same
+            name as your database and sharing the same directory.
+            Most multimedia files you have added to the database are copied into
+            this archive. This method has several advantages. One of which is
+            having single data storage for all files in the database. It is also
+            very easy to move such a database to another system. You just need to
+            move the database itself and the ZIP archive of the same name. You cannot
+            add large files (video, music, and photos) into an archive&#151;it is
+            disallowed by GEDKeeper. Large non-text (binary) files have very low compression rates,
+            that is why there is no sense to add such files into an archive.
+            Such files are treated in the &quot;Saving to the store&quot; method.
+        </li>
+    </ul>
+    <p>You can use any or all these methods freely.</p>
 </body>
 </html>

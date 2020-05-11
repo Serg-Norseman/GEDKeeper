@@ -1,74 +1,91 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="styles.css" type="text/css" />
-<title>Options</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Options</title>
 </head>
 <body>
 
-<h1>Options</h1>
+    <h1>Options</h1>
     <a href="#Common">Common</a>,&nbsp;<a href="#Multimedia">Multimedia</a>,&nbsp;<a href="#Charts">Charts</a>,&nbsp;<a href="#Interface">Interface</a>,&nbsp;<a href="#Pedigrees">Pedigrees</a>,&nbsp;<a href="#Plugins">Plugins</a>
 
     <h2 id="Common">Common</h2>
     <img src="images/dlgOptions_Common.gif" alt="[Common options dialog]" />
     <ol>
-        <li>Internet
-            <br/>Set up these settings when you access the Internet via a proxy.
+        <li>
+            Internet
+            <br />Set up these settings when you access the Internet via a proxy.
             <ul>
-                <li>Use proxy
+                <li>
+                    Use proxy
                     <br />Check this if using a proxy to access the Internet.
                 </li>
-                <li>Server
-                    <br/>This is the name of the server.
+                <li>
+                    Server
+                    <br />This is the name of the server.
                 </li>
-                <li>Port
+                <li>
+                    Port
                     <br />This is the port number to use.
                 </li>
-                <li>Login
-                    <br/>This is the login name.
+                <li>
+                    Login
+                    <br />This is the login name.
                 </li>
-                <li>Password
+                <li>
+                    Password
                     <br />The password needed to access the proxy server.
                 </li>
             </ul>
         </li>
-        <li>Files backup
+        <li>
+            Files backup
             <br />Controls if backups of the current database are performed.
             <ul>
-                <li>not
+                <li>
+                    not
                     <br />If selected then no backups of the database is performed.
                 </li>
-                <li>only previous file
+                <li>
+                    only previous file
                     <br />If selected then only a single backup is made each time the database is saved.
                 </li>
-                <li>backup each file revision
+                <li>
+                    backup each file revision
                     <br />If selected then every time the database is saved a new backup is created.
                 </li>
             </ul>
         </li>
-        <li>Autosave every
+        <li>
+            Autosave every
             <br />If checked then the database is automatically saved every <i>N</i> minutes.
         </li>
-        <li>Other
+        <li>
+            Other
             <br />Here are miscellaneous options that control how the startup process is handled.
             <ul>
-                <li>Show tips on startup
+                <li>
+                    Show tips on startup
                     <br />If checked then useful tips will be shown at startup such as birthday reminders.
                 </li>
-                <li>Load at startup recent opened files
+                <li>
+                    Load at startup recent opened files
                     <br />If checked then the last file used is automatically opened.
                 </li>
-                <li>Automatically check for updates
+                <li>
+                    Automatically check for updates
                     <br />If checked then GEDKeeper will check to see if a new version is available. If found, then a message is displayed.
                 </li>
             </ul>
         </li>
-        <li>Language
+        <li>
+            Language
             <br />Controls which language will be used in the interface. Restarting is not required, but you must click &quot;Apply&quot; for this to take effect.
         </li>
-        <li>Geocoder
+        <li>
+            Geocoder
             <br />Controls which mapping system is used for maps generated.
         </li>
     </ol>
@@ -76,272 +93,345 @@
     <h2 id="Multimedia">Multimedia</h2>
     <img src="images/dlgOptions_Multimedia.gif" alt="[Multimedia options dialog]" />
     <ol>
-        <li>Warn when adding media files from removable media.
-            <br/>If checked then a warning will be shown if a media file is on removable media such as a CD, DVD, or USB stick.
-         </li>
-        <li>Use embedded MediaPlayer
+        <li>
+            Warn when adding media files from removable media.
+            <br />If checked then a warning will be shown if a media file is on removable media such as a CD, DVD, or USB stick.
+        </li>
+        <li>
+            Use embedded MediaPlayer
             <br />If checked then GEDKeeper's media player will be used. If unchecked, then the system default viewer for media is used.
         </li>
-        <li>Allow direct references to media files
+        <li>
+            Allow direct references to media files
             <br />If checked then media files are not copied to the subdirectory where the database is kept. Instead a direct reference to where the media is located is used. Note: this could make transferring your database to another location more difficult.
         </li>
     </ol>
 
     <h2 id="Charts">Charts</h2>
-        <h3>Trees</h3>
-        There are two setting groups for family tree generation: how persons are represented in the tree and how the tree appears on a render target.
-        <br /><img src="images/dlgOptions_Charts_Trees.gif" alt="[Tree chart options dialog]" />
-        <ol>
-            <li>Show individuals in tree
-                <br />Here you define what data you will see in the tree: last name, first name and surname, birthday and obit, and what part of dates.                                
-                <ul>
-                    <li>Surname
-                        <br />If checked then the surname, if available, will be rendered.
-                    </li>
-                    <li>Name
-                        <br />If checked then the first  name, if available, will be rendered.
-                    </li>
-                    <li>Patronymic
-                        <br />If checked then the patronymic, if available, will be rendered.
-                    </li>
-                    <li>Separate lines
-                        <br />If checked then the first name, and patronymic if any, are rendered on separate lines. Otherwise they are on a single line separated by a space.
-                    </li>
-                    <li>Birth date
-                        <br />If checked then the date of birth, if available, will be rendered.
-                    </li>
-                    <li>Death date
-                        <br />If checked then the date of death, if available, will be rendered. If checked then you can choose to only show the years.
-                    </li>
-                    <li>Date of marriages
-                        <br />If checked then any dates of marriage will be rendered.
-                    </li>
-                    <li>Kinship
-                        <br />When this option is on, every person has a visible relation degree&#151;which is calculated on each tree rebuild relative to the central person in the tree.
-                    </li>
-                    <li>Additional symbols
-                        <br />This renders special symbols for some categories of people. There are special icons for veterans of the World War II, died, veterans of Labor, cavalier of Cross of St. George, and repressed. These categories are defined in the user-defined reference section in the person editor.
-                    </li>
-                    <li>Tree decorative
-                        <br />Controls some additional graphical elements and shadows.
-                    </li>
-                    <li>Show portraits
-                        <br />If checked then the person's portrait, if available, is shown. If checked, you can also choose to use a default portrait.
-                    </li>
-                    <li>Inverted tree
-                        <br />If checked then the top-level of the tree is located at the bottom.
-                    </li>
-                    <li>Hide died in childhood
-                        <br /><p>This option becomes helpful when you handle several sources, because it can reduce the number of visible persons and make your task much simpler.
-                    </li>
-                    <li>Show places
-                        <br />If checked, and one or more places were provided, then they are rendered.
-                    </li>
-                    <li>Hide unknown spouses
-                        <br />If checked, and the spouse is not known, then the spouse placeholder is not rendered.
-                    </li>
-                    <li>Check tree size allowed
-                        <br />If checked, then the maximum number of persons in the tree and the maximum image resolution are checked. This is usually unchecked as GEDKeeper no longer has any such restrictions.
-                    </li>
-                </ul>
-            </li>
-            <li>Decor
-                <br />This setting group defines colors and the main font used in tree rendering.
-                <ul>
-                    <li>Man
-                        <br />Click here to choose the color for a person identified as a man.
-                    </li>
-                    <li>Woman
-                        <br />Click here to choose the color for a person identified as a woman.
-                    </li>
-                    <li>Unknown sex
-                        <br />If a sex was not identified, then this color will be used.
-                    </li>
-                    <li>Divorcee husband
-                        <br />A divorced husband (man) will be shown with this color.
-                    </li>
-                    <li>Divorcee wife
-                        <br />If the person is a divorced wife (woman) then this color will be used.
-                    </li>
-                    <li>Font
-                        <br />Controls which font is used for generated charts. Click here and a list of all available fonts on your system is shown.
-                    </li>
-                </ul>
-            </li>
-            <li>Spacings
-                <br />Controls a set of spacings on the charts in points (dots).
-                <ul>
-                    <li>Margins
-                        <br />Specifies the margins on each side of the chart.
-                    </li>
-                    <li>Branch distance
-                        <br />The distance between each branch on the chart.
-                    </li>
-                    <li>Generation distance
-                        <br/>The vertical distance between each generation.
-                    </li>
-                    <li>Spouse distance
-                        <br />The horizontal spacing between the spouses.
-                    </li>
-                </ul>
-            </li>
-        </ol>
-        <h3>Ancestors Circle</h3>
-            Controls visual characteristics of the Ancestors Circle chart.
-            <br /><img src="images/dlgOptions_Charts_AncestorsCircle.gif" alt="[Ancesstors Circle chart options dialog]" />
+    <h3>Trees</h3>
+    There are two setting groups for family tree generation: how persons are represented in the tree and how the tree appears on a render target.
+    <br /><img src="images/dlgOptions_Charts_Trees.gif" alt="[Tree chart options dialog]" />
+    <ol>
+        <li>
+            Show individuals in tree
+            <br />Here you define what data you will see in the tree: last name, first name and surname, birthday and obit, and what part of dates.
             <ul>
-                <li>Circle 0
-                    <br />Controls the color for the first (innermost) circle.
+                <li>
+                    Surname
+                    <br />If checked then the surname, if available, will be rendered.
                 </li>
-                <li>Circle 1
-                    <br />Controls the color for the second circle.
+                <li>
+                    Name
+                    <br />If checked then the first  name, if available, will be rendered.
                 </li>
-                <li>Circle 2
-                    <br />Controls the color for the third circle.
+                <li>
+                    Patronymic
+                    <br />If checked then the patronymic, if available, will be rendered.
                 </li>
-                <li>Circle 3
-                    <br />Controls the color for the fourth circle.
+                <li>
+                    Separate lines
+                    <br />If checked then the first name, and patronymic if any, are rendered on separate lines. Otherwise they are on a single line separated by a space.
                 </li>
-                <li>Circle 4
-                    <br />Controls the color for the fifth circle.
+                <li>
+                    Birth date
+                    <br />If checked then the date of birth, if available, will be rendered.
                 </li>
-                <li>Circle 5
-                    <br />Controls the color for the sixth circle.
+                <li>
+                    Death date
+                    <br />If checked then the date of death, if available, will be rendered. If checked then you can choose to only show the years.
                 </li>
-                <li>Circle 6
-                    <br />Controls the color for the seventh circle.
+                <li>
+                    Date of marriages
+                    <br />If checked then any dates of marriage will be rendered.
                 </li>
-                <li>Circle 7
-                    <br />Controls the color for the eighth circle.
+                <li>
+                    Kinship
+                    <br />When this option is on, every person has a visible relation degree&#151;which is calculated on each tree rebuild relative to the central person in the tree.
                 </li>
-                <li>Text color
-                    <br />Specifies the color of the text. Be sure it is not the same as &quot;Back color&quot;.
+                <li>
+                    Additional symbols
+                    <br />This renders special symbols for some categories of people. There are special icons for veterans of the World War II, died, veterans of Labor, cavalier of Cross of St. George, and repressed. These categories are defined in the user-defined reference section in the person editor.
                 </li>
-                <li>Back color
-                    <br />Specifies the background color for the text. Be sure it is not the same as &quot;Text color&quot;.
+                <li>
+                    Tree decorative
+                    <br />Controls some additional graphical elements and shadows.
                 </li>
-                <li>Lines color
-                    <br />Sets the color for the lines between circle segments.
+                <li>
+                    Show portraits
+                    <br />If checked then the person's portrait, if available, is shown. If checked, you can also choose to use a default portrait.
                 </li>
-                <li>Hide empty segments
-                    <br />Segments without data are not rendered.
+                <li>
+                    Inverted tree
+                    <br />If checked then the top-level of the tree is located at the bottom.
                 </li>
-                <li>Arc text
-                    <br />If checked then the text is shown in an arc fashion to follow the curvature of a segment. Otherwise text is drawn completely horizontal or vertical.
+                <li>
+                    Hide died in childhood
+                    <br /><p>This option becomes helpful when you handle several sources, because it can reduce the number of visible persons and make your task much simpler.
+                </li>
+                <li>
+                    Show places
+                    <br />If checked, and one or more places were provided, then they are rendered.
+                </li>
+                <li>
+                    Hide unknown spouses
+                    <br />If checked, and the spouse is not known, then the spouse placeholder is not rendered.
+                </li>
+                <li>
+                    Check tree size allowed
+                    <br />If checked, then the maximum number of persons in the tree and the maximum image resolution are checked. This is usually unchecked as GEDKeeper no longer has any such restrictions.
                 </li>
             </ul>
+        </li>
+        <li>
+            Decor
+            <br />This setting group defines colors and the main font used in tree rendering.
+            <ul>
+                <li>
+                    Man
+                    <br />Click here to choose the color for a person identified as a man.
+                </li>
+                <li>
+                    Woman
+                    <br />Click here to choose the color for a person identified as a woman.
+                </li>
+                <li>
+                    Unknown sex
+                    <br />If a sex was not identified, then this color will be used.
+                </li>
+                <li>
+                    Divorcee husband
+                    <br />A divorced husband (man) will be shown with this color.
+                </li>
+                <li>
+                    Divorcee wife
+                    <br />If the person is a divorced wife (woman) then this color will be used.
+                </li>
+                <li>
+                    Font
+                    <br />Controls which font is used for generated charts. Click here and a list of all available fonts on your system is shown.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Spacings
+            <br />Controls a set of spacings on the charts in points (dots).
+            <ul>
+                <li>
+                    Margins
+                    <br />Specifies the margins on each side of the chart.
+                </li>
+                <li>
+                    Branch distance
+                    <br />The distance between each branch on the chart.
+                </li>
+                <li>
+                    Generation distance
+                    <br />The vertical distance between each generation.
+                </li>
+                <li>
+                    Spouse distance
+                    <br />The horizontal spacing between the spouses.
+                </li>
+            </ul>
+        </li>
+    </ol>
+    <h3>Ancestors Circle</h3>
+    Controls visual characteristics of the Ancestors Circle chart.
+    <br /><img src="images/dlgOptions_Charts_AncestorsCircle.gif" alt="[Ancesstors Circle chart options dialog]" />
+    <ul>
+        <li>
+            Circle 0
+            <br />Controls the color for the first (innermost) circle.
+        </li>
+        <li>
+            Circle 1
+            <br />Controls the color for the second circle.
+        </li>
+        <li>
+            Circle 2
+            <br />Controls the color for the third circle.
+        </li>
+        <li>
+            Circle 3
+            <br />Controls the color for the fourth circle.
+        </li>
+        <li>
+            Circle 4
+            <br />Controls the color for the fifth circle.
+        </li>
+        <li>
+            Circle 5
+            <br />Controls the color for the sixth circle.
+        </li>
+        <li>
+            Circle 6
+            <br />Controls the color for the seventh circle.
+        </li>
+        <li>
+            Circle 7
+            <br />Controls the color for the eighth circle.
+        </li>
+        <li>
+            Text color
+            <br />Specifies the color of the text. Be sure it is not the same as &quot;Back color&quot;.
+        </li>
+        <li>
+            Back color
+            <br />Specifies the background color for the text. Be sure it is not the same as &quot;Text color&quot;.
+        </li>
+        <li>
+            Lines color
+            <br />Sets the color for the lines between circle segments.
+        </li>
+        <li>
+            Hide empty segments
+            <br />Segments without data are not rendered.
+        </li>
+        <li>
+            Arc text
+            <br />If checked then the text is shown in an arc fashion to follow the curvature of a segment. Otherwise text is drawn completely horizontal or vertical.
+        </li>
+    </ul>
 
     <h2 id="Interface">Interface</h2>
-        Controls characteristics of the user interface.
-        <h3>All lists</h3>
-            Controls characteristics for every list that is shown.
-            <br /><img src="images/dlgOptions_Interface_AllLists.gif" alt="[Interface All Lists options dialog]" />
-            <ol>
-                <li>Name format in lists
+    Controls characteristics of the user interface.
+    <h3>All lists</h3>
+    Controls characteristics for every list that is shown.
+    <br /><img src="images/dlgOptions_Interface_AllLists.gif" alt="[Interface All Lists options dialog]" />
+    <ol>
+        <li>
+            Name format in lists
+            <ul>
+                <li>
+                    Surname_Name_Patronymic
+                    <br />The surname, first name, and patronymic (or middle name) if present, are displayed in one common column.
+                </li>
+                <li>
+                    Surname; Name_Patronymic
+                    <br />The surname is displayed in a separate column, and the first and patronymic are displayed in a common column.
+                </li>
+                <li>
+                    Surname; Name; Patronymic
+                    <br />The surname, name, and patronymic are displayed in separate columns.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Date formats in lists
+            <ul>
+                <li>
+                    DD.MM.YYYY
+                    <br />Dates will be shown in the following order: day, month, then year. Each segment is separated by a period.
+                </li>
+                <li>
+                    YYYY.MM.DD
+                    <br />Dates will be shown in the following order: year, month, then day. Each segment is separated by a period.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Show calendar near dates
+            <br />Displays a calendar marker for the type of date being used: Gregorian, Jewish, or Julian.
+        </li>
+        <li>
+            Show date type
+            <br />Displays a symbol next to the date to indicate if it is relative, calculated (or evaluated), before, after, or a range.
+        </li>
+        <li>
+            Additional names
+            <ul>
+                <li>
+                    Extended women's surnames
+                    <br />Controls how women's names are displayed if they are married. As an example, we will use the name Jane whose maiden name is Smith and is now Johnson.
                     <ul>
-                        <li>Surname_Name_Patronymic
-                            <br />The surname, first name, and patronymic (or middle name) if present, are displayed in one common column.
+                        <li>
+                            Format &quot;Maiden (Married)&quot;
+                            <br />Example: Jane Smith (Johnson)
                         </li>
-                        <li>Surname; Name_Patronymic
-                            <br />The surname is displayed in a separate column, and the first and patronymic are displayed in a common column.
+                        <li>
+                            Format &quot;Married (Maiden)&quot;
+                            <br />Example: Jane Johnson (Smith)
                         </li>
-                        <li>Surname; Name; Patronymic
-                            <br />The surname, name, and patronymic are displayed in separate columns.
+                        <li>
+                            Format &quot;Maiden&quot;
+                            <br />Example: Jane Smith
+                        </li>
+                        <li>
+                            Format &quot;Married&quot;
+                            <br />Example: Jane Johnson
                         </li>
                     </ul>
                 </li>
-                <li>Date formats in lists
-                    <ul>
-                        <li>DD.MM.YYYY
-                            <br />Dates will be shown in the following order: day, month, then year. Each segment is separated by a period.
-                        </li>
-                        <li>YYYY.MM.DD
-                            <br />Dates will be shown in the following order: year, month, then day. Each segment is separated by a period.
-                        </li>
-                    </ul>
-                </li>
-                <li>Show calendar near dates
-                    <br />Displays a calendar marker for the type of date being used: Gregorian, Jewish, or Julian.
-                </li>
-                <li>Show date type
-                    <br />Displays a symbol next to the date to indicate if it is relative, calculated (or evaluated), before, after, or a range.
-                </li>
-                <li>Additional names
-                    <ul>
-                        <li>Extended women's surnames
-                            <br />Controls how women's names are displayed if they are married. As an example, we will use the name Jane whose maiden name is Smith and is now Johnson.
-                            <ul>
-                                <li>Format &quot;Maiden (Married)&quot;
-                                    <br />Example: Jane Smith (Johnson)
-                                </li>
-                                <li>Format &quot;Married (Maiden)&quot;
-                                    <br />Example: Jane Johnson (Smith)
-                                </li>
-                                <li>Format &quot;Maiden&quot;
-                                    <br />Example: Jane Smith
-                                </li>
-                                <li>Format &quot;Married&quot;
-                                    <br />Example: Jane Johnson
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li>Include address into place text
-                    <br />If checked then the address of a place is shown (if available).
-                </li>
-                <li>Highlight unparented
-                    <br />Highlighting persons with no parents or family improves navigation through the list. The following color scheme is applied: a white background is used for persons with family and parents, flaxen background for persons without family, and light red for persons without parents. Background colors do not prevent getting information.
-                </li>
-                <li>Highlight unmarried
-                    <br />If checked then persons who are not married are highlighted.
-                </li>
-                <li>Autosort children
-                    <br />If checked then when children are shown they will be automatically sorted by birth date.
-                </li>
-                <li>Autosort spouses
-                    <br />If checked then spouses are automatically sorted by marriage date.
-                </li>
-            </ol>
-        <h3>List of individuals</h3>
-            <br />Controls what person characteristics are shown and the order in which they are shown. To change the order, simply selected a characteristic and use the up and down arrows.
-            <br /><img src="images/dlgOptions_Interface_ListOfIndividuals.gif" alt="[Interface List of Individuals options dialog]" />
+            </ul>
+        </li>
+        <li>
+            Include address into place text
+            <br />If checked then the address of a place is shown (if available).
+        </li>
+        <li>
+            Highlight unparented
+            <br />Highlighting persons with no parents or family improves navigation through the list. The following color scheme is applied: a white background is used for persons with family and parents, flaxen background for persons without family, and light red for persons without parents. Background colors do not prevent getting information.
+        </li>
+        <li>
+            Highlight unmarried
+            <br />If checked then persons who are not married are highlighted.
+        </li>
+        <li>
+            Autosort children
+            <br />If checked then when children are shown they will be automatically sorted by birth date.
+        </li>
+        <li>
+            Autosort spouses
+            <br />If checked then spouses are automatically sorted by marriage date.
+        </li>
+    </ol>
+    <h3>List of individuals</h3>
+    <br />Controls what person characteristics are shown and the order in which they are shown. To change the order, simply selected a characteristic and use the up and down arrows.
+    <br /><img src="images/dlgOptions_Interface_ListOfIndividuals.gif" alt="[Interface List of Individuals options dialog]" />
 
     <h2 id="Pedigrees">Pedigrees</h2>
-        <img src="images/dlgOptions_Pedigrees.gif" alt="[Pedigree options dialog]" />
-        <ol>
-            <li>Pedigree generation
-                <ul>
-                    <li>Include attributes of individuals
-                        <br />Checks if a person's life events will be included in the pedigree.
-                    </li>
-                    <li>Include notes
-                        <br />Checks if text notes from a person's biography will be included in the pedigree.
-                    </li>
-                    <li>Includes sources
-                        <br />Determines if the pedigree includes source numbers that reference a person&#151;there is a source list at the bottom of the pedigree.
-                    </li>
-                    <li>Including number of generations
-                        <br />Sets whether to display additional subheadings of the type "Generation&nbsp;1", "Generation&nbsp;2", and so forth. Otherwise the generation's texts follow without a visual breakdown.
-                    </li>
-                    <li>Pedigree format
-                        <br />These control the level of details for a person description printed in the pedigree. Usually, you would use the Compact format, because the Excess one may contain too much unnecessary information.
-                        <ul>
-                            <li>Excess
-                                <br />If selected then the pedigrees will show verbose information.
-                            </li>
-                            <li>Compact
-                                <br />If selected then less information is shown.
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-        </ol>
+    <img src="images/dlgOptions_Pedigrees.gif" alt="[Pedigree options dialog]" />
+    <ol>
+        <li>
+            Pedigree generation
+            <ul>
+                <li>
+                    Include attributes of individuals
+                    <br />Checks if a person's life events will be included in the pedigree.
+                </li>
+                <li>
+                    Include notes
+                    <br />Checks if text notes from a person's biography will be included in the pedigree.
+                </li>
+                <li>
+                    Includes sources
+                    <br />Determines if the pedigree includes source numbers that reference a person&#151;there is a source list at the bottom of the pedigree.
+                </li>
+                <li>
+                    Including number of generations
+                    <br />Sets whether to display additional subheadings of the type "Generation&nbsp;1", "Generation&nbsp;2", and so forth. Otherwise the generation's texts follow without a visual breakdown.
+                </li>
+                <li>
+                    Pedigree format
+                    <br />These control the level of details for a person description printed in the pedigree. Usually, you would use the Compact format, because the Excess one may contain too much unnecessary information.
+                    <ul>
+                        <li>
+                            Excess
+                            <br />If selected then the pedigrees will show verbose information.
+                        </li>
+                        <li>
+                            Compact
+                            <br />If selected then less information is shown.
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ol>
 
     <h2 id="Plugins">Plugins</h2>
-        This is a list of the plugins that are in use by GEDKeeper. This is for reference only.
-        <br /><img src="images/dlgOptions_Plugins.gif" alt="[Plugins options dialog]" />
+    This is a list of the plugins that are in use by GEDKeeper. This is for reference only.
+    <br /><img src="images/dlgOptions_Plugins.gif" alt="[Plugins options dialog]" />
 
 </body>
 </html>
