@@ -19,7 +19,8 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -33,9 +34,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class PersonalNameEditDlgController : DialogController<IPersonalNameEditDlg>
     {
-        private GEDCOMPersonalName fPersonalName;
+        private GDMPersonalName fPersonalName;
 
-        public GEDCOMPersonalName PersonalName
+        public GDMPersonalName PersonalName
         {
             get { return fPersonalName; }
             set {
@@ -48,14 +49,14 @@ namespace GKCore.Controllers
 
         public PersonalNameEditDlgController(IPersonalNameEditDlg view) : base(view)
         {
-            for (GEDCOMNameType nt = GEDCOMNameType.ntNone; nt <= GEDCOMNameType.ntMarried; nt++) {
+            for (GDMNameType nt = GDMNameType.ntNone; nt <= GDMNameType.ntMarried; nt++) {
                 fView.NameType.Add(LangMan.LS(GKData.NameTypes[(int)nt]));
             }
 
-            for (var lid = GEDCOMLanguageID.Unknown; lid < GEDCOMLanguageEnum.LastVal; lid++) {
-                fView.Language.AddItem(GEDCOMLanguageEnum.Instance.GetStrValue(lid), lid);
+            for (var lid = GDMLanguageID.Unknown; lid < GDMLanguageID.Yiddish; lid++) {
+                fView.Language.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
             }
-            fView.Language.SortItems();
+            fView.Language.Sort();
         }
 
         public override bool Accept()
@@ -63,14 +64,14 @@ namespace GKCore.Controllers
             try {
                 GKUtils.SetNameParts(fPersonalName, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
 
-                GEDCOMPersonalNamePieces pieces = fPersonalName.Pieces;
+                GDMPersonalNamePieces pieces = fPersonalName.Pieces;
                 pieces.Nickname = fView.Nickname.Text;
                 pieces.Prefix = fView.NamePrefix.Text;
                 pieces.SurnamePrefix = fView.SurnamePrefix.Text;
                 pieces.Suffix = fView.NameSuffix.Text;
 
-                fPersonalName.NameType = (GEDCOMNameType)fView.NameType.SelectedIndex;
-                fPersonalName.Language.Value = (GEDCOMLanguageID)fView.Language.SelectedTag;
+                fPersonalName.NameType = (GDMNameType)fView.NameType.SelectedIndex;
+                fPersonalName.Language = fView.Language.GetSelectedTag<GDMLanguageID>();
 
                 fBase.Context.CollectNameLangs(fPersonalName);
 
@@ -83,18 +84,18 @@ namespace GKCore.Controllers
 
         private bool IsExtendedWomanSurname()
         {
-            GEDCOMIndividualRecord iRec = fPersonalName.Parent as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fPersonalName.Owner as GDMIndividualRecord;
 
             bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
-                (iRec.Sex == GEDCOMSex.svFemale);
+                (iRec.Sex == GDMSex.svFemale);
             return result;
         }
 
         public override void UpdateView()
         {
-            GEDCOMIndividualRecord iRec = fPersonalName.Parent as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fPersonalName.Owner as GDMIndividualRecord;
 
-            var parts = GKUtils.GetNameParts(iRec, fPersonalName);
+            var parts = GKUtils.GetNameParts(iRec, fPersonalName, false);
 
             fView.Surname.Text = parts.Surname;
             fView.Name.Text = parts.Name;
@@ -120,8 +121,8 @@ namespace GKCore.Controllers
             fView.Surname.Enabled = fView.Surname.Enabled && culture.HasSurname();
             fView.Patronymic.Enabled = fView.Patronymic.Enabled && culture.HasPatronymic();
 
-            GEDCOMLanguageID langID = fPersonalName.Language.Value;
-            fView.Language.Text = GEDCOMLanguageEnum.Instance.GetStrValue(langID);
+            GDMLanguageID langID = fPersonalName.Language;
+            fView.Language.Text = GEDCOMUtils.GetLanguageStr(langID);
         }
     }
 }

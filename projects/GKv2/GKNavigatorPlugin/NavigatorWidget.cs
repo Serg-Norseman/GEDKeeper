@@ -21,12 +21,10 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
-
+using GDModel;
 using GKCore;
-using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
-using GKUI.Components;
 
 namespace GKNavigatorPlugin
 {
@@ -91,17 +89,17 @@ namespace GKNavigatorPlugin
             tnBookmarks = CreateNode(tnRoot, "Bookmarks", DataCategory.Bookmarks);
 
             tnRecords = tnRoot.Nodes.Add("Records");
-            tnRecsIndividual = CreateNode(tnRecords, "Individuals", GEDCOMRecordType.rtIndividual);
-            tnRecsFamily = CreateNode(tnRecords, "Families", GEDCOMRecordType.rtFamily);
-            tnRecsNote = CreateNode(tnRecords, "Notes", GEDCOMRecordType.rtNote);
-            tnRecsMultimedia = CreateNode(tnRecords, "Multimedia", GEDCOMRecordType.rtMultimedia);
-            tnRecsSource = CreateNode(tnRecords, "Sources", GEDCOMRecordType.rtSource);
-            tnRecsRepository = CreateNode(tnRecords, "Repositories", GEDCOMRecordType.rtRepository);
-            tnRecsGroup = CreateNode(tnRecords, "Groups", GEDCOMRecordType.rtGroup);
-            tnRecsResearch = CreateNode(tnRecords, "Researches", GEDCOMRecordType.rtResearch);
-            tnRecsTask = CreateNode(tnRecords, "Tasks", GEDCOMRecordType.rtTask);
-            tnRecsCommunication = CreateNode(tnRecords, "Communications", GEDCOMRecordType.rtCommunication);
-            tnRecsLocation = CreateNode(tnRecords, "Locations", GEDCOMRecordType.rtLocation);
+            tnRecsIndividual = CreateNode(tnRecords, "Individuals", GDMRecordType.rtIndividual);
+            tnRecsFamily = CreateNode(tnRecords, "Families", GDMRecordType.rtFamily);
+            tnRecsNote = CreateNode(tnRecords, "Notes", GDMRecordType.rtNote);
+            tnRecsMultimedia = CreateNode(tnRecords, "Multimedia", GDMRecordType.rtMultimedia);
+            tnRecsSource = CreateNode(tnRecords, "Sources", GDMRecordType.rtSource);
+            tnRecsRepository = CreateNode(tnRecords, "Repositories", GDMRecordType.rtRepository);
+            tnRecsGroup = CreateNode(tnRecords, "Groups", GDMRecordType.rtGroup);
+            tnRecsResearch = CreateNode(tnRecords, "Researches", GDMRecordType.rtResearch);
+            tnRecsTask = CreateNode(tnRecords, "Tasks", GDMRecordType.rtTask);
+            tnRecsCommunication = CreateNode(tnRecords, "Communications", GDMRecordType.rtCommunication);
+            tnRecsLocation = CreateNode(tnRecords, "Locations", GDMRecordType.rtLocation);
         }
 
         #region ILocalization support
@@ -170,7 +168,7 @@ namespace GKNavigatorPlugin
 
                 if (fBase == null) {
                     dbName = "";
-                    stats = new int[((int)GEDCOMRecordType.rtLast)];
+                    stats = new int[((int)GDMRecordType.rtLast)];
                 } else {
                     dbName = fDatabaseName;
                     stats = fBase.Context.Tree.GetRecordStats();
@@ -180,17 +178,17 @@ namespace GKNavigatorPlugin
                     treeView1.BeginUpdate();
 
                     tnRoot.Text = dbName;
-                    tnRecsIndividual.Text = FmtTitle("Individuals", stats[(int)GEDCOMRecordType.rtIndividual]);
-                    tnRecsFamily.Text = FmtTitle("Families", stats[(int)GEDCOMRecordType.rtFamily]);
-                    tnRecsNote.Text = FmtTitle("Notes", stats[(int)GEDCOMRecordType.rtNote]);
-                    tnRecsMultimedia.Text = FmtTitle("Multimedia", stats[(int)GEDCOMRecordType.rtMultimedia]);
-                    tnRecsSource.Text = FmtTitle("Sources", stats[(int)GEDCOMRecordType.rtSource]);
-                    tnRecsRepository.Text = FmtTitle("Repositories", stats[(int)GEDCOMRecordType.rtRepository]);
-                    tnRecsGroup.Text = FmtTitle("Groups", stats[(int)GEDCOMRecordType.rtGroup]);
-                    tnRecsResearch.Text = FmtTitle("Researches", stats[(int)GEDCOMRecordType.rtResearch]);
-                    tnRecsTask.Text = FmtTitle("Tasks", stats[(int)GEDCOMRecordType.rtTask]);
-                    tnRecsCommunication.Text = FmtTitle("Communications", stats[(int)GEDCOMRecordType.rtCommunication]);
-                    tnRecsLocation.Text = FmtTitle("Locations", stats[(int)GEDCOMRecordType.rtLocation]);
+                    tnRecsIndividual.Text = FmtTitle("Individuals", stats[(int)GDMRecordType.rtIndividual]);
+                    tnRecsFamily.Text = FmtTitle("Families", stats[(int)GDMRecordType.rtFamily]);
+                    tnRecsNote.Text = FmtTitle("Notes", stats[(int)GDMRecordType.rtNote]);
+                    tnRecsMultimedia.Text = FmtTitle("Multimedia", stats[(int)GDMRecordType.rtMultimedia]);
+                    tnRecsSource.Text = FmtTitle("Sources", stats[(int)GDMRecordType.rtSource]);
+                    tnRecsRepository.Text = FmtTitle("Repositories", stats[(int)GDMRecordType.rtRepository]);
+                    tnRecsGroup.Text = FmtTitle("Groups", stats[(int)GDMRecordType.rtGroup]);
+                    tnRecsResearch.Text = FmtTitle("Researches", stats[(int)GDMRecordType.rtResearch]);
+                    tnRecsTask.Text = FmtTitle("Tasks", stats[(int)GDMRecordType.rtTask]);
+                    tnRecsCommunication.Text = FmtTitle("Communications", stats[(int)GDMRecordType.rtCommunication]);
+                    tnRecsLocation.Text = FmtTitle("Locations", stats[(int)GDMRecordType.rtLocation]);
 
                     treeView1.ExpandAll();
                 } finally {
@@ -217,14 +215,14 @@ namespace GKNavigatorPlugin
             object tag = e.Node.Tag;
             if (tag == null) return;
 
-            if (tag is GEDCOMRecordType) {
-                ShowData(DataCategory.Records, (GEDCOMRecordType)tag);
+            if (tag is GDMRecordType) {
+                ShowData(DataCategory.Records, (GDMRecordType)tag);
             } else if (tag is DataCategory) {
-                ShowData((DataCategory)tag, GEDCOMRecordType.rtNone);
+                ShowData((DataCategory)tag, GDMRecordType.rtNone);
             }
         }
 
-        private void ShowData(DataCategory category, GEDCOMRecordType recordType)
+        private void ShowData(DataCategory category, GDMRecordType recordType)
         {
             switch (category)
             {
@@ -255,7 +253,7 @@ namespace GKNavigatorPlugin
             }
         }
 
-        private void ShowRecordsData(GEDCOMRecordType recordType)
+        private void ShowRecordsData(GDMRecordType recordType)
         {
             lvData.BeginUpdate();
             try

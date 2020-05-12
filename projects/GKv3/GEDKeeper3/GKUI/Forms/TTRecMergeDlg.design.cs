@@ -37,7 +37,7 @@ namespace GKUI.Forms
             MergeControl = new GKUI.Components.GKMergeControl();
             MergeControl.Base = null;
             MergeControl.Bookmark = false;
-            MergeControl.MergeMode = GKCommon.GEDCOM.GEDCOMRecordType.rtNone;
+            MergeControl.MergeMode = GDModel.GDMRecordType.rtNone;
 
             btnAutoSearch = new Button();
             btnAutoSearch.Size = new Size(130, 26);

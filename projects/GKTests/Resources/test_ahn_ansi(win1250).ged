@@ -1,0 +1,45 @@
+0 HEAD
+1 SOUR AHN
+2 VERS 2.96c
+2 NAME Ahnenblatt
+2 CORP Dirk Boettcher
+1 FILE DEMO.ged
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+1 CHAR ANSI
+2 VERS 1250
+0 @I1@ INDI
+1 NAME Stanis³aw /Nowak/
+2 SURN Nowak
+2 GIVN Stanis³aw
+1 SEX M
+1 BIRT
+2 DATE (28.10.1805)
+2 PLAC Godziszów
+1 OCCU Rolnik
+1 DEAT
+2 DATE (30.03.1879)
+2 PLAC Godziszów
+1 FAMS @F1@
+0 @I2@ INDI
+1 NAME Klara /Mniszek/
+2 SURN Mniszek
+2 GIVN Klara
+2 _MARNM Nowak
+1 SEX F
+1 FAMS @F1@
+1 BIRT
+2 DATE (12.08.1807)
+2 PLAC Godziszów
+1 OCCU Rolnik
+1 DEAT
+2 DATE 1875
+2 PLAC Godziszów
+0 @F1@ FAM
+1 HUSB @I1@
+1 WIFE @I2@
+1 MARR
+2 DATE (18.02.1827)
+2 PLAC Janów Lubelski
+0 TRLR

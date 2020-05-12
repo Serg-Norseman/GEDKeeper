@@ -21,8 +21,7 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -41,7 +40,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fSourcesList;
 
-        public GEDCOMCustomEvent Event
+        public GDMCustomEvent Event
         {
             get { return fController.Event; }
             set { fController.Event = value; }
@@ -94,14 +93,14 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBoxHandler>(cmbDate2Calendar); }
         }
 
-        ITextBoxHandler IEventEditDlg.Date1
+        IDateBoxHandler IEventEditDlg.Date1
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtEventDate1); }
+            get { return GetControlHandler<IDateBoxHandler>(txtEventDate1); }
         }
 
-        ITextBoxHandler IEventEditDlg.Date2
+        IDateBoxHandler IEventEditDlg.Date2
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtEventDate2); }
+            get { return GetControlHandler<IDateBoxHandler>(txtEventDate2); }
         }
 
         IComboBoxHandler IEventEditDlg.Attribute

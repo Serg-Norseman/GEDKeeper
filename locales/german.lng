@@ -696,7 +696,7 @@
 695=Quelledatensatz auswählen oder eintragen
 696=Zieldatensatz auswählen
 697=Für die Abspeicherntypen "Archiv" und "Repositur" eine neuen Datenbank soll vorher gespeichert werden
-698=Es gibt jetzt Datei mit diesem Namen im Repositur
+698=Es gibt jetzt Datei mit diesem Namen
 699=Das ist nicht GEDSEC-kompatibel Datei
 700=Diese Person ist Mitglied der einigen Famielien. Man soll die Kinder über ihre Eltern zusetzen.
 701=Fehler bei der Datenexportierung nach Excel
@@ -775,6 +775,30 @@
 774=Vater wird als Kind aufgeführt
 775=Mutter wird als Kind aufgeführt
 776=Es gibt doppelte Kinder in der Familie
+777=Wähle Farbe
+778=Autosort Kinder
+779=Autosort Ehepartner
+780=Überprüfen Sie die zulässige Baumgröße
+781=Annahme
+782=Geburt
+783=Vormundschaft
+784=Zeichensatzerkennung bei Last
+785=Beziehungstyp
+786=Was born
+787=Was born
+788=GedML-Dateien (*.xml)|*.xml
+789=Kind ohne Eltern erkannt
+790=Familienakte ohne Eltern oder Kinder erkannt
+791=Are you sure you want to remove multimedia file?
+792=Storage not found
+793=File not found
+794=Allow relative references to media files
+795=Default media storage type
+796=Allow delete media files from storage and archive
+797=Allow delete media files by direct and relative references
+798=Delete media files without confirm
+799=Media record without files
+800=Archive not found
 
 801=RI:George Knight
 802=USSR:WWII:Combatant
@@ -785,3 +809,5 @@
 807=Religion:Catholicism
 808=Religion:Orthodoxy
 809=Religion:The Old Believers
+
+810=Relative link to file

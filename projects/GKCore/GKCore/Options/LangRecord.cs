@@ -20,7 +20,8 @@
 
 using System.IO;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 
 namespace GKCore.Options
 {
@@ -30,7 +31,7 @@ namespace GKCore.Options
         public readonly string Sign;
         public readonly string Name;
         public readonly string FileName;
-        public readonly GEDCOMLanguageID LangID;
+        public readonly GDMLanguageID LangID;
 
         public LangRecord(int code, string sign, string name, string fileName)
         {
@@ -40,7 +41,7 @@ namespace GKCore.Options
             FileName = fileName;
 
             string engLangName = ConvertHelper.UniformName(Path.GetFileNameWithoutExtension(fileName));
-            LangID = GEDCOMLanguageEnum.Instance.GetEnumValue(engLangName);
+            LangID = GEDCOMUtils.GetLanguageVal(engLangName);
         }
     }
 }

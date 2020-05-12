@@ -23,9 +23,8 @@
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Windows.Forms;
-
 using BSLib;
-using GKCore.Interfaces;
+using BSLib.Design.Graphics;
 using GKUI.Components;
 
 namespace GKUI.Forms

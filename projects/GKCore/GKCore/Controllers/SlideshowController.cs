@@ -19,8 +19,8 @@
  */
 
 using System.Collections.Generic;
-using GKCommon.GEDCOM;
-using GKCore.Interfaces;
+using BSLib.Design.Graphics;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -32,11 +32,11 @@ namespace GKCore.Controllers
     /// </summary>
     public class SlideshowController : FormController<ISlideshowWin>
     {
-        private readonly List<GEDCOMFileReferenceWithTitle> fFileRefs;
+        private readonly List<GDMFileReferenceWithTitle> fFileRefs;
         private int fCurrentIndex;
         private string fCurrentText;
 
-        public List<GEDCOMFileReferenceWithTitle> FileRefs
+        public List<GDMFileReferenceWithTitle> FileRefs
         {
             get { return fFileRefs; }
         }
@@ -48,17 +48,17 @@ namespace GKCore.Controllers
 
         public SlideshowController(ISlideshowWin view) : base(view)
         {
-            fFileRefs = new List<GEDCOMFileReferenceWithTitle>();
+            fFileRefs = new List<GDMFileReferenceWithTitle>();
             fCurrentIndex = -1;
         }
 
         public void LoadList()
         {
-            GEDCOMRecord record;
-            var enumerator = fBase.Context.Tree.GetEnumerator(GEDCOMRecordType.rtMultimedia);
+            GDMRecord record;
+            var enumerator = fBase.Context.Tree.GetEnumerator(GDMRecordType.rtMultimedia);
             while (enumerator.MoveNext(out record)) {
-                GEDCOMMultimediaRecord mediaRec = (GEDCOMMultimediaRecord)record;
-                GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
+                GDMMultimediaRecord mediaRec = (GDMMultimediaRecord)record;
+                GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
 
                 MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
                 if (mmKind == MultimediaKind.mkImage) {
@@ -78,7 +78,7 @@ namespace GKCore.Controllers
             if (fCurrentIndex < 0 || fCurrentIndex >= fFileRefs.Count) return;
 
             // Only images are in the list
-            GEDCOMFileReferenceWithTitle fileRef = fFileRefs[fCurrentIndex];
+            GDMFileReferenceWithTitle fileRef = fFileRefs[fCurrentIndex];
 
             fCurrentText = fileRef.Title;
 

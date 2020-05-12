@@ -43,7 +43,7 @@ namespace GKCore.Controllers
             if (string.IsNullOrEmpty(fileName)) return;
 
             fView.UpdateBase.Text = fileName;
-            TreeTools.MergeTreeFile(fBase.Context.Tree, fileName, fView.SyncLog);
+            TreeTools.MergeTreeFile(fBase.Context.Tree, fileName, fView.SyncLog, true);
             fBase.RefreshLists(false);
         }
     }

@@ -22,8 +22,8 @@
 
 using System;
 using BSLib;
+using BSLib.Design.Graphics;
 using GKCore.Charts;
-using GKCore.Interfaces;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
@@ -54,6 +54,11 @@ namespace GKCore.Export
                 throw new ArgumentException(@"Argument's type mismatch", "target");
 
             fCanvas = gfx;
+        }
+
+        public override void SetSmoothing(bool value)
+        {
+            // dummy
         }
 
         #region Private methods

@@ -20,13 +20,16 @@
 
 using System;
 using System.Collections.Generic;
-
 using BSLib;
 using BSLib.Calendar;
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
+using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
+
+using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Lists
 {
@@ -86,7 +89,7 @@ namespace GKCore.Lists
             fListColumns = defaultListColumns;
         }
 
-        protected void AddColumn(IListView list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
+        protected void AddColumn(IListViewEx list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
         {
             if (list == null)
                 throw new ArgumentNullException("list");
@@ -100,7 +103,7 @@ namespace GKCore.Lists
             fColumnsMap.Clear();
         }
 
-        public abstract void UpdateColumns(IListView listView);
+        public abstract void UpdateColumns(IListViewEx listView);
 
         public abstract void UpdateContents();
     }
@@ -112,10 +115,10 @@ namespace GKCore.Lists
     {
         public sealed class ValItem
         {
-            public readonly GEDCOMRecord Record;
+            public readonly GDMRecord Record;
             public object ColumnValue;
 
-            public ValItem(GEDCOMRecord record)
+            public ValItem(GDMRecord record)
             {
                 Record = record;
                 ColumnValue = null;
@@ -126,7 +129,7 @@ namespace GKCore.Lists
         protected ExternalFilterHandler fExternalFilter;
 
         private readonly List<ValItem> fContentList;
-        private readonly GEDCOMRecordType fRecordType;
+        private readonly GDMRecordType fRecordType;
         private int fXSortFactor;
         private int fTotalCount;
         private string fQuickFilter = "*";
@@ -153,7 +156,7 @@ namespace GKCore.Lists
             get { return fContentList.Count; }
         }
 
-        public GEDCOMRecordType RecordType
+        public GDMRecordType RecordType
         {
             get { return fRecordType; }
         }
@@ -170,7 +173,7 @@ namespace GKCore.Lists
         }
 
 
-        protected ListManager(IBaseContext baseContext, ListColumns defaultListColumns, GEDCOMRecordType recordType) :
+        protected ListManager(IBaseContext baseContext, ListColumns defaultListColumns, GDMRecordType recordType) :
             base(baseContext, defaultListColumns)
         {
             fContentList = new List<ValItem>();
@@ -197,14 +200,8 @@ namespace GKCore.Lists
             bool result = false;
             if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(mask)) return result;
 
-            string stx = str.ToLower();
-            string[] masks = mask.ToLower().Split('|');
-
-            int num = masks.Length;
-            for (int i = 0; i < num; i++)
-            {
-                result = result || GKUtils.MatchesMask(stx, masks[i]);
-            }
+            // regex supports '|' (or) expression
+            result = GKUtils.MatchesMask(str, mask);
 
             return result;
         }
@@ -214,9 +211,9 @@ namespace GKCore.Lists
             return true;
         }
 
-        public abstract void Fetch(GEDCOMRecord aRec);
+        public abstract void Fetch(GDMRecord aRec);
 
-        protected static object GetDateValue(GEDCOMCustomEvent evt, bool isVisible)
+        protected static object GetDateValue(GDMCustomEvent evt, bool isVisible)
         {
             if (evt == null) {
                 return (isVisible) ? null : (object)UDN.CreateEmpty();
@@ -225,7 +222,7 @@ namespace GKCore.Lists
             return GetDateValue(evt.Date.Value, isVisible);
         }
 
-        protected static object GetDateValue(GEDCOMCustomDate date, bool isVisible)
+        protected static object GetDateValue(GDMCustomDate date, bool isVisible)
         {
             object result;
 
@@ -261,7 +258,7 @@ namespace GKCore.Lists
 
         public virtual object[] GetItemData(object rowData)
         {
-            GEDCOMRecord rec = rowData as GEDCOMRecord;
+            GDMRecord rec = rowData as GDMRecord;
             if (rec == null) return null;
 
             Fetch(rec);
@@ -288,9 +285,9 @@ namespace GKCore.Lists
         {
         }
 
-        public virtual void UpdateItem(IListItem item, object rowData)
+        public virtual void UpdateItem(int itemIndex, IListItem item, object rowData)
         {
-            GEDCOMRecord rec = rowData as GEDCOMRecord;
+            GDMRecord rec = rowData as GDMRecord;
             if (item == null || rec == null) return;
 
             Fetch(rec);
@@ -307,9 +304,13 @@ namespace GKCore.Lists
 
                 item.AddSubItem(res);
             }
+
+            if (GlobalOptions.Instance.ReadabilityHighlightRows && MathHelper.IsOdd(itemIndex)) {
+                item.SetBackColor(ChartRenderer.GetColor(BSDColors.LightGray));
+            }
         }
 
-        public override void UpdateColumns(IListView listView)
+        public override void UpdateColumns(IListViewEx listView)
         {
             if (listView == null) return;
 
@@ -387,7 +388,7 @@ namespace GKCore.Lists
                     return DateTime.Parse(val);
 
                 case DataType.dtGEDCOMDate:
-                    return GEDCOMDate.GetUDNByFormattedStr(val, GEDCOMCalendar.dcGregorian);
+                    return GDMDate.GetUDNByFormattedStr(val, GDMCalendar.dcGregorian);
             }
 
             return val;
@@ -462,20 +463,26 @@ namespace GKCore.Lists
         {
             bool res = true;
 
-            try
-            {
+            try {
                 int num = Filter.Conditions.Count;
                 for (int i = 0; i < num; i++) {
                     FilterCondition fcond = Filter.Conditions[i];
                     res = res && CheckCondition(fcond);
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("ListManager.CheckCommonFilter(): " + ex.Message);
                 res = true;
             }
 
+            return res;
+        }
+
+        protected bool CheckExternalFilter(GDMRecord rec)
+        {
+            bool res = true;
+            if (fExternalFilter != null) {
+                res = res && fExternalFilter(rec);
+            }
             return res;
         }
 
@@ -544,7 +551,7 @@ namespace GKCore.Lists
                 int num = fContentList.Count;
                 for (int i = 0; i < num; i++) {
                     ValItem valItem = fContentList[i];
-                    GEDCOMRecord rec = valItem.Record;
+                    GDMRecord rec = valItem.Record;
 
                     if (sortColumn == 0) {
                         valItem.ColumnValue = rec.GetId();
@@ -573,7 +580,7 @@ namespace GKCore.Lists
             fContentList.Capacity = contentSize;
 
             for (int i = 0; i < contentSize; i++) {
-                GEDCOMRecord rec = fBaseContext.Tree[i];
+                GDMRecord rec = fBaseContext.Tree[i];
 
                 if (rec.RecordType == fRecordType) {
                     fTotalCount++;
@@ -586,10 +593,10 @@ namespace GKCore.Lists
             }
         }
 
-        public List<GEDCOMRecord> GetRecordsList()
+        public List<GDMRecord> GetRecordsList()
         {
             int size = fContentList.Count;
-            var result = new List<GEDCOMRecord>(size);
+            var result = new List<GDMRecord>(size);
 
             for (int i = 0; i < size; i++) {
                 result.Add(fContentList[i].Record);
@@ -600,15 +607,15 @@ namespace GKCore.Lists
 
         public IListItem CreateListItem(object rowData, CreateListItemHandler handler)
         {
-            GEDCOMRecord record = rowData as GEDCOMRecord;
+            GDMRecord record = rowData as GDMRecord;
             if (record == null || handler == null) return null;
 
             return handler(record.GetXRefNum(), record);
         }
 
-        public GEDCOMRecord GetContentItem(int itemIndex)
+        public GDMRecord GetContentItem(int itemIndex)
         {
-            GEDCOMRecord result;
+            GDMRecord result;
             if (itemIndex < 0 || itemIndex >= fContentList.Count) {
                 result = null;
             } else {
@@ -642,60 +649,60 @@ namespace GKCore.Lists
             return false;
         }
 
-        public static ListManager Create(IBaseContext baseContext, GEDCOMRecordType recType)
+        public static ListManager Create(IBaseContext baseContext, GDMRecordType recType)
         {
             ListManager result = null;
 
             switch (recType) {
-                case GEDCOMRecordType.rtIndividual:
+                case GDMRecordType.rtIndividual:
                     result = new IndividualListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtFamily:
+                case GDMRecordType.rtFamily:
                     result = new FamilyListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtNote:
+                case GDMRecordType.rtNote:
                     result = new NoteListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtMultimedia:
+                case GDMRecordType.rtMultimedia:
                     result = new MultimediaListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtSource:
+                case GDMRecordType.rtSource:
                     result = new SourceListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtRepository:
+                case GDMRecordType.rtRepository:
                     result = new RepositoryListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtGroup:
+                case GDMRecordType.rtGroup:
                     result = new GroupListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtResearch:
+                case GDMRecordType.rtResearch:
                     result = new ResearchListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtTask:
+                case GDMRecordType.rtTask:
                     result = new TaskListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtCommunication:
+                case GDMRecordType.rtCommunication:
                     result = new CommunicationListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtLocation:
+                case GDMRecordType.rtLocation:
                     result = new LocationListMan(baseContext);
                     break;
 
-                case GEDCOMRecordType.rtSubmission:
+                case GDMRecordType.rtSubmission:
                     result = null;
                     break;
 
-                case GEDCOMRecordType.rtSubmitter:
+                case GDMRecordType.rtSubmitter:
                     result = null;
                     break;
             }

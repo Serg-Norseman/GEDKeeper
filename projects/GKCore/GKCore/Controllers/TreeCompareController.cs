@@ -19,7 +19,7 @@
  */
 
 using System.Collections.Generic;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Tools;
@@ -50,7 +50,7 @@ namespace GKCore.Controllers
             fView.ExternalBase.Text = fileName;
         }
 
-        private void DuplicateFoundFunc(GEDCOMIndividualRecord indivA, GEDCOMIndividualRecord indivB)
+        private void DuplicateFoundFunc(GDMIndividualRecord indivA, GDMIndividualRecord indivB)
         {
             fView.CompareOutput.AppendText("    * [" + GKUtils.GetNameString(indivA, true, false) + "]\r\n");
             fView.CompareOutput.AppendText("      [" + GKUtils.GetNameString(indivB, true, false) + "]\r\n\r\n");
@@ -69,7 +69,7 @@ namespace GKCore.Controllers
                     break;
 
                 case TreeMatchType.tmtExternal:
-                    TreeTools.CompareTree(fBase.Context, fExternalFile, ((ITreeCompareDlg)this).CompareOutput);
+                    TreeTools.CompareTree(fBase.Context, fExternalFile, ((ITreeCompareDlg)fView).CompareOutput);
                     break;
 
                 case TreeMatchType.tmtAnalysis:

@@ -1,0 +1,120 @@
+0 HEAD
+1 SOUR Legacy
+2 VERS 8.0
+2 NAME Legacy (R)
+2 CORP Millennia Corp.
+3 ADDR PO Box 9410
+4 CONT Surprise, AZ 85374
+1 DEST Legacy
+1 SUBM @S0@
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+1 CHAR UTF-8
+0 @S0@ SUBM
+1 NAME Matt Harrah
+1 ADDR 123 Main St
+2 CONT
+1 PHON 888-555-1212
+1 EMAIL matt@gecom4j.org
+1 WWW http://gedcom4j.org
+0 @I2@ INDI
+1 NAME William /Williams/
+2 GIVN William
+2 SURN Williams
+1 SEX M
+1 BIRT
+2 DATE 9 Sep 1999
+2 PLAC Palo Alto, CA
+2 SOUR @S2@
+3 PAGE 666, It's so detailed!.
+3 QUAY 2
+3 DATE 29 Sep 2016
+3 NOTE I met a man with seven wives
+3 DATA
+4 TEXT On the way to St. Ives
+2 ADDR William Williams
+1 DEAT Y
+2 CAUS Septisemia/Decapitation
+2 ADDR 4144 Elm Street
+1 EVEN Air Force
+2 TYPE Military Service
+2 DATE 2 Feb 2000
+2 PLAC Temecula, California
+2 ADDR 123 Main St
+3 CONT 123 Main Street
+3 CONT San Diego, CA USA
+3 ADR1 123 Main Street
+3 CITY San Diego
+3 STAE CA
+3 CTRY USA
+2 PHON 800-555-1212
+2 EMAIL matt@gedcom4j.org
+2 WWW http://gedcom4j.org
+1 OBJE
+2 FORM jpg
+2 FILE browndavid.jpg
+2 TITL Somebody else
+2 NOTE Dude has a dank moustache
+2 _DATE 4 Apr 2013
+2 _SOUND Alarm01.wav
+2 _SCBK Y
+2 _PRIM Y
+2 _TYPE PHOTO
+1 FAMS @F3@
+1 FAMC @F1@
+1 NOTE @NI2@
+1 NOTE @HI2@
+1 NOTE @MI2@
+0 @NI2@ NOTE
+1 CONC Whatta guy.
+0 @HI2@ NOTE
+1 CONC (Research):My research notes.
+0 @MI2@ NOTE
+1 CONC (Medical):Really bad splinter.
+0 @I3@ INDI
+1 NAME Warren /Williams/
+2 GIVN Warren
+2 SURN Williams
+1 SEX M
+0 @I4@ INDI
+1 NAME Wendy /Warren/
+2 GIVN Wendy
+2 SURN Warren
+1 SEX F
+0 @I6@ INDI
+1 NAME Private //
+2 GIVN Private
+1 SEX F
+1 FAMS @F3@
+0 @F1@ FAM
+1 MARR
+2 DATE 08 OCT 2016
+1 HUSB @I10@
+1 WIFE @I11@
+1 CHIL @I12@
+1 CHIL @I13@
+0 @I10@ INDI
+1 NAME Peter /Peters/
+1 SEX M
+0 @I11@ INDI
+1 NAME Laura /Lawrence/
+1 SEX F
+0 @I12@ INDI
+1 NAME Paul /Peters/
+1 SEX F
+0 @I13@ INDI
+1 NAME Patricia /Peters/
+1 SEX F
+0 @F3@ FAM
+1 HUSB @I2@
+1 WIFE @I6@
+0 @S2@ SOUR
+1 ABBR It's pronounced "wee-jee"
+1 TITL Hall Closet; Don't care," Toy, 3 Mar 1953
+1 AUTH Don't know Howard Howards Jr
+1 DATE 29 Sep 2016
+1 TEXT Amazing
+1 NOTE Astounding
+1 REPO @R1@
+0 TRLR

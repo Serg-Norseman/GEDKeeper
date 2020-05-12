@@ -83,11 +83,10 @@ namespace GKCore
                 geoPoints = geocoder.Geocode("New York", 1);
                 //Assert.IsTrue(geoPoints.Count > 0);
 
-                // FIXME!
-                //geocoder = IGeocoder.Create("OSM");
-                //geoPoints = geocoder.Geocode("New York", 1);
+                geocoder = IGeocoder.Create("OSM");
+                geoPoints = geocoder.Geocode("New York", 1);
                 //Assert.IsTrue(geoPoints.Count > 0);
-            } catch (Exception) {
+            } catch (Exception ex) {
                 Assert.Fail();
             }
         }

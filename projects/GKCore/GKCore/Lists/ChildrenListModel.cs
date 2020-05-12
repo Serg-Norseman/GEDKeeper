@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -45,46 +45,42 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var family = fDataOwner as GEDCOMFamilyRecord;
+            var family = fDataOwner as GDMFamilyRecord;
             if (fSheetList == null || family == null) return;
 
-            try
-            {
+            try {
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
                 int idx = 0;
-                foreach (GEDCOMPointer ptr in family.Children)
-                {
+                foreach (GDMIndividualLink ptr in family.Children) {
                     idx += 1;
-
-                    GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)ptr.Value;
+                    GDMIndividualRecord child = ptr.Individual;
 
                     fSheetList.AddItem(child, new object[] {
-                                           idx, GKUtils.GetNameString(child, true, false),
-                                           new GEDCOMDateItem(GKUtils.GetBirthDate(child)) });
+                        idx, GKUtils.GetNameString(child, true, false),
+                        new GEDCOMDateItem(GKUtils.GetBirthDate(child))
+                    });
                 }
 
                 fSheetList.EndUpdate();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("ChildrenListModel.UpdateContents(): " + ex.Message);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var family = fDataOwner as GEDCOMFamilyRecord;
+            var family = fDataOwner as GDMFamilyRecord;
             if (fBaseWin == null || fSheetList == null || family == null) return;
 
-            GEDCOMIndividualRecord child = eArgs.ItemData as GEDCOMIndividualRecord;
+            GDMIndividualRecord child = eArgs.ItemData as GDMIndividualRecord;
 
             bool result = false;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    child = fBaseWin.Context.SelectPerson(family.GetHusband(), TargetMode.tmParent, GEDCOMSex.svNone);
+                    child = fBaseWin.Context.SelectPerson(family.Husband.Individual, TargetMode.tmParent, GDMSex.svUnknown);
                     result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);
@@ -92,7 +88,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raEdit:
-                    result = (BaseController.ModifyIndividual(fBaseWin, ref child, null, TargetMode.tmNone, GEDCOMSex.svNone));
+                    result = (BaseController.ModifyIndividual(fBaseWin, ref child, null, TargetMode.tmNone, GDMSex.svUnknown));
                     break;
 
                 case RecordAction.raDelete:

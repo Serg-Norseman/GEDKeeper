@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Options;
 using GKCore.Types;
@@ -70,8 +70,8 @@ namespace GKCore
                 GlobalOptions globalOptions = GlobalOptions.Instance;
                 Assert.IsNotNull(globalOptions);
 
-                Assert.IsNotNull(globalOptions.ChartOptions);
-                Assert.IsNotNull(globalOptions.AncestorsCircleOptions);
+                Assert.IsNotNull(globalOptions.TreeChartOptions);
+                Assert.IsNotNull(globalOptions.CircleChartOptions);
 
                 /*globalOptions.DefCharacterSet = GEDCOMCharacterSet.csUNICODE;
                 Assert.AreEqual(GEDCOMCharacterSet.csUNICODE, globalOptions.DefCharacterSet);*/
@@ -196,11 +196,11 @@ namespace GKCore
         public void Test_AncestorsCircleOptions()
         {
             using (IniFile iniFile = new IniFile()) {
-                AncestorsCircleOptions circleOptions = new AncestorsCircleOptions();
+                CircleChartOptions circleOptions = new CircleChartOptions();
                 Assert.IsNotNull(circleOptions);
 
                 circleOptions.Assign(null);
-                circleOptions.Assign(new AncestorsCircleOptions());
+                circleOptions.Assign(new CircleChartOptions());
                 circleOptions.SaveToFile(iniFile);
                 circleOptions.LoadFromFile(iniFile);
 

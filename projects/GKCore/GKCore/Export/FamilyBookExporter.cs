@@ -20,7 +20,9 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using BSLib.Design.Graphics;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -177,9 +179,9 @@ namespace GKCore.Export
                 int num = mainIndex.Count;
                 for (int i = 0; i < num; i++) {
                     string text = mainIndex[i];
-                    GEDCOMIndividualRecord iRec = mainIndex.GetObject(i) as GEDCOMIndividualRecord;
+                    GDMIndividualRecord iRec = mainIndex.GetObject(i) as GDMIndividualRecord;
 
-                    char isym = text[0];
+                    char isym = (string.IsNullOrEmpty(text)) ? '?' : text[0];
                     if ((isym >= 'A' && isym <= 'Z') || (isym >= 'А' && isym <= 'Я')) {
                         if (sym != isym) {
                             fWriter.AddParagraph("" + isym, fSymFont, TextAlignment.taCenter);
@@ -236,11 +238,11 @@ namespace GKCore.Export
             reliIndex = new StringList();
             sourcesIndex = new StringList();
             
-            GEDCOMRecord rec;
+            GDMRecord rec;
 
-            var iEnum = fTree.GetEnumerator(GEDCOMRecordType.rtIndividual);
+            var iEnum = fTree.GetEnumerator(GDMRecordType.rtIndividual);
             while (iEnum.MoveNext(out rec)) {
-                GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
+                GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
                 string text = GKUtils.GetNameString(iRec, true, false);
                 string st;
 
@@ -248,33 +250,34 @@ namespace GKCore.Export
 
                 int evNum = iRec.Events.Count;
                 for (int k = 0; k < evNum; k++) {
-                    GEDCOMCustomEvent evt = iRec.Events[k];
+                    GDMCustomEvent evt = iRec.Events[k];
                     if (evt == null)
                         continue;
 
                     int srcNum2 = evt.SourceCitations.Count;
                     for (int m = 0; m < srcNum2; m++) {
-                        GEDCOMSourceRecord src = evt.SourceCitations[m].Value as GEDCOMSourceRecord;
+                        GDMSourceRecord src = evt.SourceCitations[m].Value as GDMSourceRecord;
                         if (src == null)
                             continue;
 
-                        st = src.FiledByEntry;
+                        st = src.ShortTitle;
                         if (string.IsNullOrEmpty(st))
-                            st = src.Title.Text;
+                            st = src.Title.Lines.Text;
                         PrepareSpecIndex(sourcesIndex, st, iRec);
                     }
 
                     // The analysis places
-                    //						st = ev.Detail.Place.StringValue;
-                    //						if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(places, st, iRec);
+                    // st = ev.Detail.Place.StringValue;
+                    // if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(places, st, iRec);
 
-                    if (evt.Name == "BIRT") {
+                    var evtType = evt.GetTagType();
+                    if (evtType == GEDCOMTagType.BIRT) {
                         // Analysis on births
                         PrepareEventYear(byIndex, evt, iRec);
                         st = GKUtils.GetPlaceStr(evt, false);
                         if (!string.IsNullOrEmpty(st))
                             PrepareSpecIndex(bpIndex, st, iRec);
-                    } else if (evt.Name == "DEAT") {
+                    } else if (evtType == GEDCOMTagType.DEAT) {
                         // Analysis by causes of death
                         PrepareEventYear(dyIndex, evt, iRec);
                         st = GKUtils.GetPlaceStr(evt, false);
@@ -284,12 +287,12 @@ namespace GKCore.Export
                         st = evt.Cause;
                         if (!string.IsNullOrEmpty(st))
                             PrepareSpecIndex(deathCauses, st, iRec);
-                    } else if (evt.Name == "OCCU") {
+                    } else if (evtType == GEDCOMTagType.OCCU) {
                         // Analysis by occupation
                         st = evt.StringValue;
                         if (!string.IsNullOrEmpty(st))
                             PrepareSpecIndex(occuIndex, st, iRec);
-                    } else if (evt.Name == "RELI") {
+                    } else if (evtType == GEDCOMTagType.RELI) {
                         // Analysis by religion
                         st = evt.StringValue;
                         if (!string.IsNullOrEmpty(st))
@@ -299,13 +302,13 @@ namespace GKCore.Export
 
                 int srcNum = iRec.SourceCitations.Count;
                 for (int k = 0; k < srcNum; k++) {
-                    GEDCOMSourceRecord src = iRec.SourceCitations[k].Value as GEDCOMSourceRecord;
+                    GDMSourceRecord src = iRec.SourceCitations[k].Value as GDMSourceRecord;
                     if (src == null)
                         continue;
 
-                    st = src.FiledByEntry;
+                    st = src.ShortTitle;
                     if (string.IsNullOrEmpty(st))
-                        st = src.Title.Text;
+                        st = src.Title.Lines.Text;
                     PrepareSpecIndex(sourcesIndex, st, iRec);
                 }
             }
@@ -322,7 +325,7 @@ namespace GKCore.Export
             BookCatalogs[(int)BookCatalog.Catalog_Sources].Index = sourcesIndex;
         }
 
-        private void ExposePerson(GEDCOMIndividualRecord iRec, string iName)
+        private void ExposePerson(GDMIndividualRecord iRec, string iName)
         {
             fWriter.BeginParagraph(TextAlignment.taLeft, 0, 0, 0, true);
             fWriter.AddParagraphChunkAnchor(iName, fBoldFont, iRec.XRef);
@@ -332,14 +335,14 @@ namespace GKCore.Export
             IImage image = fBase.Context.GetPrimaryBitmap(iRec, 0, 0, false);
             fWriter.AddImage(image);
 
-            GEDCOMIndividualRecord father, mother;
-            GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
+            GDMIndividualRecord father, mother;
+            GDMFamilyRecord fam = iRec.GetParentsFamily();
             if (fam == null) {
                 father = null;
                 mother = null;
             } else {
-                father = fam.GetHusband();
-                mother = fam.GetWife();
+                father = fam.Husband.Individual;
+                mother = fam.Wife.Individual;
             }
 
             if (father != null) {
@@ -359,8 +362,9 @@ namespace GKCore.Export
             if (IncludeEvents && iRec.Events.Count != 0) {
                 int num = iRec.Events.Count;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMCustomEvent evt = iRec.Events[i];
-                    if (evt.Name == "BIRT" || evt.Name == "DEAT")
+                    GDMCustomEvent evt = iRec.Events[i];
+                    var evtType = evt.GetTagType();
+                    if (evtType == GEDCOMTagType.BIRT || evtType == GEDCOMTagType.DEAT)
                         continue;
                     
                     string evtName = GKUtils.GetEventName(evt);
@@ -379,8 +383,8 @@ namespace GKCore.Export
             if (IncludeNotes && iRec.Notes.Count != 0) {
                 int num = iRec.Notes.Count;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMNotes note = iRec.Notes[i];
-                    fWriter.AddParagraph(GKUtils.MergeStrings(note.Notes), fTextFont);
+                    GDMNotes note = iRec.Notes[i];
+                    fWriter.AddParagraph(GKUtils.MergeStrings(note.Lines), fTextFont);
                 }
             }
         }
@@ -409,7 +413,7 @@ namespace GKCore.Export
                 persons.Sort();
                 int num2 = persons.Count;
                 for (int k = 0; k < num2; k++) {
-                    GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)persons.GetObject(k);
+                    GDMIndividualRecord iRec = (GDMIndividualRecord)persons.GetObject(k);
 
                     fWriter.BeginParagraph(TextAlignment.taLeft, 0, 0, 0);
                     fWriter.AddParagraphChunkLink(persons[k], fTextFont, iRec.XRef);
@@ -420,7 +424,7 @@ namespace GKCore.Export
             }
         }
 
-        private static void PrepareSpecIndex(StringList index, string val, GEDCOMIndividualRecord iRec)
+        private static void PrepareSpecIndex(StringList index, string val, GDMIndividualRecord iRec)
         {
             if (index == null)
                 throw new ArgumentNullException("index");
@@ -443,7 +447,7 @@ namespace GKCore.Export
             }
         }
 
-        private static void PrepareEventYear(StringList index, GEDCOMCustomEvent evt, GEDCOMIndividualRecord iRec)
+        private static void PrepareEventYear(StringList index, GDMCustomEvent evt, GDMIndividualRecord iRec)
         {
             if (evt == null)
                 return;

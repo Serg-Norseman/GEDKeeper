@@ -20,10 +20,9 @@
 
 using System;
 using System.Collections.Generic;
-
 using BSLib;
 using BSLib.SmartGraph;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -64,7 +63,7 @@ namespace GKCore.Kinships
             fGraph.Clear();
         }
 
-        public Vertex AddIndividual(GEDCOMIndividualRecord iRec)
+        public Vertex AddIndividual(GDMIndividualRecord iRec)
         {
             return (iRec == null) ? null : fGraph.AddVertex(iRec.XRef, iRec);
         }
@@ -87,7 +86,7 @@ namespace GKCore.Kinships
             return fGraph.AddUndirectedEdge(source, target, 1, (int)tsRel, (int)stRel);
         }
 
-        public void SetTreeRoot(GEDCOMIndividualRecord rootRec)
+        public void SetTreeRoot(GDMIndividualRecord rootRec)
         {
             if (rootRec == null) return;
             Vertex root = fGraph.FindVertex(rootRec.XRef);
@@ -96,7 +95,7 @@ namespace GKCore.Kinships
             fGraph.FindPathTree(root);
         }
 
-        public string GetRelationship(GEDCOMIndividualRecord targetRec, bool fullFormat = false)
+        public string GetRelationship(GDMIndividualRecord targetRec, bool fullFormat = false)
         {
             if (targetRec == null) return "???";
             Vertex target = fGraph.FindVertex(targetRec.XRef);
@@ -111,13 +110,13 @@ namespace GKCore.Kinships
                 RelationKind finRel = RelationKind.rkNone;
                 int great = 0;
 
-                GEDCOMIndividualRecord src = null, tgt = null, prev_tgt = null;
+                GDMIndividualRecord src = null, tgt = null, prev_tgt = null;
                 string part, fullRel = "";
 
                 foreach (Edge edge in edgesPath)
                 {
-                    GEDCOMIndividualRecord xFrom = (GEDCOMIndividualRecord)edge.Source.Value;
-                    GEDCOMIndividualRecord xTo = (GEDCOMIndividualRecord)edge.Target.Value;
+                    GDMIndividualRecord xFrom = (GDMIndividualRecord)edge.Source.Value;
+                    GDMIndividualRecord xTo = (GDMIndividualRecord)edge.Target.Value;
                     RelationKind curRel = FixLink(xFrom, xTo, (RelationKind)((int)edge.Value));
 
                     if (src == null) src = xFrom;
@@ -172,7 +171,7 @@ namespace GKCore.Kinships
             }
         }
 
-        private string GetRelationPart(GEDCOMIndividualRecord ind1, GEDCOMIndividualRecord ind2, RelationKind xrel, int great)
+        private string GetRelationPart(GDMIndividualRecord ind1, GDMIndividualRecord ind2, RelationKind xrel, int great)
         {
             if (ind1 == null || ind2 == null)
                 return "???";
@@ -185,7 +184,7 @@ namespace GKCore.Kinships
             return rel;
         }
 
-        private static RelationKind FixLink(GEDCOMIndividualRecord xFrom, GEDCOMIndividualRecord xTo, RelationKind rel)
+        private static RelationKind FixLink(GDMIndividualRecord xFrom, GDMIndividualRecord xTo, RelationKind rel)
         {
             RelationKind resRel = rel;
 
@@ -194,10 +193,10 @@ namespace GKCore.Kinships
                 case RelationKind.rkParent:
                     switch (xTo.Sex)
                     {
-                        case GEDCOMSex.svMale:
+                        case GDMSex.svMale:
                             resRel = RelationKind.rkFather;
                             break;
-                        case GEDCOMSex.svFemale:
+                        case GDMSex.svFemale:
                             resRel = RelationKind.rkMother;
                             break;
                     }
@@ -206,10 +205,10 @@ namespace GKCore.Kinships
                 case RelationKind.rkSpouse:
                     switch (xTo.Sex)
                     {
-                        case GEDCOMSex.svMale:
+                        case GDMSex.svMale:
                             resRel = RelationKind.rkHusband;
                             break;
-                        case GEDCOMSex.svFemale:
+                        case GDMSex.svFemale:
                             resRel = RelationKind.rkWife;
                             break;
                     }
@@ -218,10 +217,10 @@ namespace GKCore.Kinships
                 case RelationKind.rkChild:
                     switch (xTo.Sex)
                     {
-                        case GEDCOMSex.svMale:
+                        case GDMSex.svMale:
                             resRel = RelationKind.rkSon;
                             break;
-                        case GEDCOMSex.svFemale:
+                        case GDMSex.svFemale:
                             resRel = RelationKind.rkDaughter;
                             break;
                     }
@@ -235,7 +234,7 @@ namespace GKCore.Kinships
             return resRel;
         }
 
-        private static string FixRelation(GEDCOMIndividualRecord target, RelationKind rel, int great)
+        private static string FixRelation(GDMIndividualRecord target, RelationKind rel, int great)
         {
             string tmp = "";
             if (great != 0)
@@ -285,7 +284,7 @@ namespace GKCore.Kinships
 
         #region Search graph
 
-        public static KinshipsGraph SearchGraph(IBaseContext context, GEDCOMIndividualRecord iRec)
+        public static KinshipsGraph SearchGraph(IBaseContext context, GDMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
@@ -297,7 +296,7 @@ namespace GKCore.Kinships
             return graph;
         }
 
-        private static void SearchKGInt(Vertex prevNode, GEDCOMIndividualRecord iRec,
+        private static void SearchKGInt(Vertex prevNode, GDMIndividualRecord iRec,
                                         KinshipsGraph graph, RelationKind relation, RelationKind inverseRelation)
         {
             if (iRec == null) return;
@@ -318,11 +317,11 @@ namespace GKCore.Kinships
             }
 
             if (iRec.ChildToFamilyLinks.Count > 0) {
-                GEDCOMFamilyRecord fam = iRec.GetParentsFamily();
+                GDMFamilyRecord fam = iRec.GetParentsFamily();
                 if (fam != null) {
-                    GEDCOMIndividualRecord father, mother;
-                    father = fam.GetHusband();
-                    mother = fam.GetWife();
+                    GDMIndividualRecord father, mother;
+                    father = fam.Husband.Individual;
+                    mother = fam.Wife.Individual;
 
                     SearchKGInt(currNode, father, graph, RelationKind.rkParent, RelationKind.rkChild);
                     SearchKGInt(currNode, mother, graph, RelationKind.rkParent, RelationKind.rkChild);
@@ -331,14 +330,14 @@ namespace GKCore.Kinships
 
             int num = iRec.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
-                GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
-                GEDCOMIndividualRecord spouse = ((iRec.Sex == GEDCOMSex.svMale) ? family.GetWife() : family.GetHusband());
+                GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                GDMIndividualRecord spouse = ((iRec.Sex == GDMSex.svMale) ? family.Wife.Individual : family.Husband.Individual);
 
                 SearchKGInt(currNode, spouse, graph, RelationKind.rkSpouse, RelationKind.rkSpouse);
 
                 int num2 = family.Children.Count;
                 for (int j = 0; j < num2; j++) {
-                    GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)family.Children[j].Value;
+                    GDMIndividualRecord child = family.Children[j].Individual;
                     SearchKGInt(currNode, child, graph, RelationKind.rkChild, RelationKind.rkParent);
                 }
             }

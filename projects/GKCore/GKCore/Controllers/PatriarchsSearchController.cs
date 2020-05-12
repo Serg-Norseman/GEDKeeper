@@ -19,7 +19,7 @@
  */
 
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -46,7 +46,7 @@ namespace GKCore.Controllers
 
         public void SelectPatriarch()
         {
-            GEDCOMIndividualRecord iRec = fView.PatriarchsList.GetSelectedData() as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fView.PatriarchsList.GetSelectedData() as GDMIndividualRecord;
             if (iRec == null) return;
 
             fBase.SelectRecordByXRef(iRec.XRef);
@@ -80,7 +80,7 @@ namespace GKCore.Controllers
         public void SetPatriarch()
         {
             try {
-                var iRec = fView.PatriarchsList.GetSelectedData() as GEDCOMIndividualRecord;
+                var iRec = fView.PatriarchsList.GetSelectedData() as GDMIndividualRecord;
                 if (iRec != null) {
                     iRec.Patriarch = true;
                 }

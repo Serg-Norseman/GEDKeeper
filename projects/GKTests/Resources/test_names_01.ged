@@ -1,0 +1,18 @@
+0 HEAD
+1 SOUR GEDKeeper
+1 DEST GEDKeeper
+1 CHAR UTF-8
+1 LANG Russian
+1 GEDC
+2 VERS 5.5
+2 FORM LINEAGE-LINKED
+0 @I1@ INDI
+1 NAME Александра Анатольевна /Лазорева (Иванова)/
+2 GIVN Александра Анатольевна
+2 SURN Иванова
+1 SEX F
+0 @I2@ INDI
+1 NAME Петр Константинович /Лазорев/
+2 GIVN Петр Константинович
+1 SEX M
+0 TRLR

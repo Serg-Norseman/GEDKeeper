@@ -1,4 +1,4 @@
-
+﻿
 -- src = gt_select_record(rtSource);
 grp = gt_create_group("Греки");
 
@@ -11,3 +11,4 @@ for i = gt_get_records_count() - 1, 0, -1 do
 end
 
 gk_update_view();
+gk_print("ready");

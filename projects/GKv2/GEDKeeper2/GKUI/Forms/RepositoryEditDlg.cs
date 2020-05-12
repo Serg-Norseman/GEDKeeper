@@ -20,13 +20,12 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -38,7 +37,7 @@ namespace GKUI.Forms
 
         private readonly GKSheetList fNotesList;
 
-        public GEDCOMRepositoryRecord Repository
+        public GDMRepositoryRecord Repository
         {
             get { return fController.Repository; }
             set { fController.Repository = value; }
@@ -51,9 +50,9 @@ namespace GKUI.Forms
             get { return fNotesList; }
         }
 
-        ITextBoxHandler IRepositoryEditDlg.Name
+        ITextBox IRepositoryEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
         #endregion

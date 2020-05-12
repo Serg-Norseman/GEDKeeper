@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 
 namespace GKCore.Lists
@@ -36,11 +36,11 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class FamilyListMan : ListManager
     {
-        private GEDCOMFamilyRecord fRec;
+        private GDMFamilyRecord fRec;
 
 
         public FamilyListMan(IBaseContext baseContext) :
-            base(baseContext, CreateFamilyListColumns(), GEDCOMRecordType.rtFamily)
+            base(baseContext, CreateFamilyListColumns(), GDMRecordType.rtFamily)
         {
         }
 
@@ -61,14 +61,14 @@ namespace GKCore.Lists
             bool res = (fBaseContext.IsRecordAccess(fRec.Restriction)
                         && (QuickFilter == "*" || IsMatchesMask(GKUtils.GetFamilyString(fRec), QuickFilter)));
 
-            res = res && CheckCommonFilter();
+            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
 
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMFamilyRecord);
+            fRec = (aRec as GDMFamilyRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

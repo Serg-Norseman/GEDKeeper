@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -88,16 +88,14 @@ namespace GKUI.Components
 
         private void InputBox_btnAccept_StrHandler(string name, IntPtr ptr, Form form)
         {
-            var txtValue = new TextBoxTester("txtValue", form);
-            txtValue.Enter("input");
+            EnterText("txtValue", form, "input");
 
             ClickButton("btnAccept", form);
         }
 
         private void InputBox_btnAccept_IntHandler(string name, IntPtr ptr, Form form)
         {
-            var txtValue = new TextBoxTester("txtValue", form);
-            txtValue.Enter("123");
+            EnterText("txtValue", form, "123");
 
             ClickButton("btnAccept", form);
         }
@@ -105,9 +103,7 @@ namespace GKUI.Components
         private void InputBox_btnAccept_DblHandler(string name, IntPtr ptr, Form form)
         {
             NumberFormatInfo nfi = (NumberFormatInfo)Thread.CurrentThread.CurrentCulture.NumberFormat.Clone();
-
-            var txtValue = new TextBoxTester("txtValue", form);
-            txtValue.Enter("15"+nfi.NumberDecimalSeparator+"59");
+            EnterText("txtValue", form, "15"+nfi.NumberDecimalSeparator+"59");
 
             ClickButton("btnAccept", form);
         }

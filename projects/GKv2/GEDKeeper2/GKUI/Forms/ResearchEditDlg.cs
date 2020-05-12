@@ -20,8 +20,8 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -42,7 +42,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fGroupsList;
         private readonly GKSheetList fNotesList;
 
-        public GEDCOMResearchRecord Research
+        public GDMResearchRecord Research
         {
             get { return fController.Research; }
             set { fController.Research = value; }
@@ -71,34 +71,34 @@ namespace GKUI.Forms
         }
 
 
-        ITextBoxHandler IResearchEditDlg.Name
+        ITextBox IResearchEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        IComboBoxHandler IResearchEditDlg.Priority
+        IComboBox IResearchEditDlg.Priority
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbPriority); }
+            get { return GetControlHandler<IComboBox>(cmbPriority); }
         }
 
-        IComboBoxHandler IResearchEditDlg.Status
+        IComboBox IResearchEditDlg.Status
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbStatus); }
+            get { return GetControlHandler<IComboBox>(cmbStatus); }
         }
 
-        ITextBoxHandler IResearchEditDlg.StartDate
+        ITextBox IResearchEditDlg.StartDate
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtStartDate); }
+            get { return GetControlHandler<ITextBox>(txtStartDate); }
         }
 
-        ITextBoxHandler IResearchEditDlg.StopDate
+        ITextBox IResearchEditDlg.StopDate
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtStopDate); }
+            get { return GetControlHandler<ITextBox>(txtStopDate); }
         }
 
-        INumericBoxHandler IResearchEditDlg.Percent
+        INumericBox IResearchEditDlg.Percent
         {
-            get { return GetControlHandler<INumericBoxHandler>(nudPercent); }
+            get { return GetControlHandler<INumericBox>(nudPercent); }
         }
 
         #endregion
@@ -155,21 +155,21 @@ namespace GKUI.Forms
         private void ListTasksModify(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GEDCOMTaskRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMTaskRecord);
             }
         }
 
         private void ListCommunicationsModify(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GEDCOMCommunicationRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMCommunicationRecord);
             }
         }
 
         private void ListGroupsModify(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GEDCOMGroupRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMGroupRecord);
             }
         }
 

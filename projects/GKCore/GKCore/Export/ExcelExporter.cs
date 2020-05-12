@@ -19,8 +19,9 @@
  */
 
 using System.Collections.Generic;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Export
@@ -34,11 +35,11 @@ namespace GKCore.Export
     /// </summary>
     public sealed class ExcelExporter : Exporter
     {
-        private readonly List<GEDCOMRecord> fSelectedRecords;
+        private readonly List<GDMRecord> fSelectedRecords;
 
         public ExcelExporter(IBaseWindow baseWin) : base(baseWin)
         {
-            fSelectedRecords = baseWin.GetContentList(GEDCOMRecordType.rtIndividual);
+            fSelectedRecords = baseWin.GetContentList(GDMRecordType.rtIndividual);
         }
 
         public override void Generate(bool show)
@@ -53,6 +54,7 @@ namespace GKCore.Export
             IProgressController progress = AppHost.Progress;
             progress.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", fTree.RecordsCount);
 
+            var dateFormat = GlobalOptions.Instance.DefDateFormat;
             try
             {
                 worksheet.Cells[1,  1] = new Cell("№");
@@ -72,9 +74,9 @@ namespace GKCore.Export
                 int num = fTree.RecordsCount;
                 for (int i = 0; i < num; i++)
                 {
-                    GEDCOMRecord rec = fTree[i];
-                    if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
-                        GEDCOMIndividualRecord ind = (GEDCOMIndividualRecord)rec;
+                    GDMRecord rec = fTree[i];
+                    if (rec.RecordType == GDMRecordType.rtIndividual) {
+                        GDMIndividualRecord ind = (GDMIndividualRecord)rec;
 
                         if (fSelectedRecords == null || fSelectedRecords.IndexOf(rec) >= 0) {
                             var parts = GKUtils.GetNameParts(ind);
@@ -87,8 +89,8 @@ namespace GKCore.Export
                             worksheet.Cells[row, 3] = new Cell(parts.Name);
                             worksheet.Cells[row, 4] = new Cell(parts.Patronymic);
                             worksheet.Cells[row, 5] = new Cell(sx);
-                            worksheet.Cells[row, 6] = new Cell(GKUtils.GetBirthDate(ind, DateFormat.dfDD_MM_YYYY, false));
-                            worksheet.Cells[row, 7] = new Cell(GKUtils.GetDeathDate(ind, DateFormat.dfDD_MM_YYYY, false));
+                            worksheet.Cells[row, 6] = new Cell(GKUtils.GetBirthDate(ind, dateFormat, false));
+                            worksheet.Cells[row, 7] = new Cell(GKUtils.GetDeathDate(ind, dateFormat, false));
                             worksheet.Cells[row, 8] = new Cell(GKUtils.GetBirthPlace(ind));
                             worksheet.Cells[row, 9] = new Cell(GKUtils.GetDeathPlace(ind));
                             worksheet.Cells[row,10] = new Cell(GKUtils.GetResidencePlace(ind, fOptions.PlacesWithAddress));

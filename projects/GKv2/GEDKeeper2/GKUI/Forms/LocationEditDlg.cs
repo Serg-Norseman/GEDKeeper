@@ -20,8 +20,8 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -40,7 +40,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fNotesList;
 
-        public GEDCOMLocationRecord LocationRecord
+        public GDMLocationRecord LocationRecord
         {
             get { return fController.LocationRecord; }
             set { fController.LocationRecord = value; }
@@ -68,19 +68,19 @@ namespace GKUI.Forms
             get { return ListGeoCoords; }
         }
 
-        ITextBoxHandler ILocationEditDlg.Name
+        ITextBox ILocationEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        ITextBoxHandler ILocationEditDlg.Latitude
+        ITextBox ILocationEditDlg.Latitude
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtLatitude); }
+            get { return GetControlHandler<ITextBox>(txtLatitude); }
         }
 
-        ITextBoxHandler ILocationEditDlg.Longitude
+        ITextBox ILocationEditDlg.Longitude
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtLongitude); }
+            get { return GetControlHandler<ITextBox>(txtLongitude); }
         }
 
         #endregion

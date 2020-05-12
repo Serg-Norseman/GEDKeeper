@@ -19,8 +19,8 @@
  */
 
 using System.Collections.Generic;
-using GKCommon.GEDCOM;
-using GKCore.MVP;
+using BSLib.Design.MVP;
+using GDModel;
 
 namespace GKCore.Interfaces
 {
@@ -46,7 +46,7 @@ namespace GKCore.Interfaces
         bool AllowQuickSearch();
         IList<ISearchResult> FindAll(string searchPattern);
         void QuickSearch();
-        void SelectByRec(GEDCOMRecord record);
+        void SelectByRec(GDMRecord record);
 
         bool AllowFilter();
         void SetFilter();

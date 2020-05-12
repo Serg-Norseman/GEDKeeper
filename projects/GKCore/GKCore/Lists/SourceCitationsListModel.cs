@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -47,24 +47,23 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGEDCOMStructWithLists;
             if (fSheetList == null || dataOwner == null) return;
 
-            try
-            {
+            try {
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMSourceCitation cit in dataOwner.SourceCitations)
-                {
-                    GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
+                foreach (GDMSourceCitation cit in dataOwner.SourceCitations) {
+                    GDMSourceRecord sourceRec = cit.Value as GDMSourceRecord;
                     if (sourceRec == null) continue;
 
-                    fSheetList.AddItem(cit, new object[] { sourceRec.Originator.Text.Trim(),
-                                           sourceRec.FiledByEntry, cit.Page,
-                                           LangMan.LS(GKData.CertaintyAssessments[cit.CertaintyAssessment]) } );
+                    int ca = cit.GetValidCertaintyAssessment();
+
+                    fSheetList.AddItem(cit, new object[] { sourceRec.Originator.Lines.Text.Trim(),
+                        sourceRec.ShortTitle, cit.Page,
+                        LangMan.LS(GKData.CertaintyAssessments[ca])
+                    });
                 }
 
                 fSheetList.ResizeColumn(1);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("SourceCitationsListModel.UpdateContents(): " + ex.Message);
             }
         }
@@ -74,20 +73,18 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGEDCOMStructWithLists;
             if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
-            GEDCOMSourceCitation aCit = eArgs.ItemData as GEDCOMSourceCitation;
+            GDMSourceCitation aCit = eArgs.ItemData as GDMSourceCitation;
 
             bool result = false;
 
-            switch (eArgs.Action)
-            {
+            switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
                     result = BaseController.ModifySourceCitation(fBaseWin, fUndoman, dataOwner, ref aCit);
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSourceQuery)))
-                    {
+                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSourceQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, fDataOwner, aCit);
                     }
                     break;
@@ -96,9 +93,7 @@ namespace GKCore.Lists
                 case RecordAction.raMoveDown:
                     {
                         int idx = dataOwner.SourceCitations.IndexOf(aCit);
-
-                        switch (eArgs.Action)
-                        {
+                        switch (eArgs.Action) {
                             case RecordAction.raMoveUp:
                                 dataOwner.SourceCitations.Exchange(idx - 1, idx);
                                 break;
@@ -107,7 +102,6 @@ namespace GKCore.Lists
                                 dataOwner.SourceCitations.Exchange(idx, idx + 1);
                                 break;
                         }
-
                         result = true;
                     }
                     break;

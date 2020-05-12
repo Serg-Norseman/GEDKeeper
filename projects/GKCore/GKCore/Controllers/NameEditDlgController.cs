@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -47,7 +47,7 @@ namespace GKCore.Controllers
 
         public NameEditDlgController(INameEditDlg view) : base(view)
         {
-            for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svLast; sx++) {
+            for (GDMSex sx = GDMSex.svUnknown; sx <= GDMSex.svLast; sx++) {
                 fView.SexCombo.Add(GKUtils.SexStr(sx));
             }
         }
@@ -56,7 +56,7 @@ namespace GKCore.Controllers
         {
             try {
                 fIName.Name = fView.Name.Text;
-                fIName.Sex = (GEDCOMSex)fView.SexCombo.SelectedIndex;
+                fIName.Sex = (GDMSex)fView.SexCombo.SelectedIndex;
                 fIName.F_Patronymic = fView.FPatr.Text;
                 fIName.M_Patronymic = fView.MPatr.Text;
 

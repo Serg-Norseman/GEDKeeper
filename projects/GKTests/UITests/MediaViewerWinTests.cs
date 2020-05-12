@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,7 +25,9 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using BSLib.Design.Graphics;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKTests;
@@ -44,7 +46,7 @@ namespace GKUI.Forms
     {
         private IBaseWindow fBase;
         private MediaViewerWin fDialog;
-        private GEDCOMFileReferenceWithTitle fileRef;
+        private GDMFileReferenceWithTitle fileRef;
 
         public override void Setup()
         {
@@ -52,12 +54,13 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
 
-            GEDCOMMultimediaRecord mmRec = fBase.Context.Tree.CreateMultimedia();
-            mmRec.AddTag("FILE", "", null);
+            GDMMultimediaRecord mmRec = fBase.Context.Tree.CreateMultimedia();
+            mmRec.FileReferences.Add(new GDMFileReferenceWithTitle(mmRec));
             fileRef = mmRec.FileReferences[0];
+
             fileRef.Title = "File Title 2";
             fileRef.LinkFile("shaytan_plant.jpg");
-            fileRef.MediaType = GEDCOMMediaType.mtPhoto;
+            fileRef.MediaType = GDMMediaType.mtPhoto;
 
             fDialog = new MediaViewerWin(fBase);
             fDialog.Show();
@@ -157,13 +160,14 @@ namespace GKUI.Forms
             GKUtils.CopyFile(vidstm, new FileInfo(targetName), null);
             Assert.IsTrue(File.Exists(targetName));
 
-            GEDCOMMultimediaRecord mmRecV = fBase.Context.Tree.CreateMultimedia();
-            mmRecV.AddTag("FILE", "", null);
+            GDMMultimediaRecord mmRecV = fBase.Context.Tree.CreateMultimedia();
+            mmRecV.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecV));
             var fileRefV = mmRecV.FileReferences[0];
+
             fileRefV.Title = "File Title 2";
             fileRefV.LinkFile(targetName);
-            fileRefV.MediaType = GEDCOMMediaType.mtVideo;
-            fileRefV.MultimediaFormat = GEDCOMMultimediaFormat.mfMKV;
+            fileRefV.MediaType = GDMMediaType.mtVideo;
+            fileRefV.MultimediaFormat = GDMMultimediaFormat.mfMKV;
 
             fDialog.FileRef = fileRefV;
             Assert.AreEqual(fileRefV, fDialog.FileRef);

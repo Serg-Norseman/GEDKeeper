@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCore.Interfaces;
+using BSLib.Design.Graphics;
 
 namespace GKCore.Charts
 {
@@ -52,23 +52,6 @@ namespace GKCore.Charts
     /// </summary>
     public abstract class ChartRenderer
     {
-        public const int White = 0xFFFFFF;
-        public const int Black = 0x000000;
-        public const int Silver = 0xC0C0C0;
-        public const int Blue = 0x0000FF;
-        public const int Red = 0xFF0000;
-
-        public const int Coral = 0xFF7F50;
-        public const int CadetBlue = 0x5F9EA0;
-        public const int DarkGray = 0xA9A9A9;
-        public const int Khaki = 0xF0E68C;
-        public const int LawnGreen = 0x7CFC00;
-        public const int HotPink = 0xFF69B4;
-        public const int Ivory = 0xFFFFF0;
-        public const int Moccasin = 0xFFE4B5;
-        public const int PaleGreen = 0x98FB98;
-
-
         // Example of string to measurement the height, where there are chars
         // with the ascent and descent of elements.
         protected internal const string STR_HEIGHT_SAMPLE = "AZqtypdfghjl|[]";
@@ -77,6 +60,8 @@ namespace GKCore.Charts
         protected ChartRenderer()
         {
         }
+
+        public abstract void SetSmoothing(bool value);
 
         public virtual void BeginDrawing()
         {
@@ -129,6 +114,11 @@ namespace GKCore.Charts
             // Not applicable for most areas except exports
         }
 
+        public virtual void DrawArc(IPen pen, float x, float y, float width, float height, float startAngle, float sweepAngle)
+        {
+            // Not applicable for most areas
+        }
+
         public virtual void DrawHyperlink(string text, string anchor, IFont font, IBrush brush, float x, float y)
         {
             // Not applicable for most areas except exports
@@ -151,9 +141,21 @@ namespace GKCore.Charts
             return AppHost.GfxProvider.CreatePen(color, width);
         }
 
+        public IPen CreatePen(int argb, float width = 1.0f)
+        {
+            IColor color = GetColor(argb);
+            return AppHost.GfxProvider.CreatePen(color, width);
+        }
+
         public virtual IBrush CreateSolidBrush(IColor color)
         {
             return AppHost.GfxProvider.CreateSolidBrush(color);
+        }
+
+        public IBrush CreateSolidBrush(int argb)
+        {
+            IColor color = GetColor(argb);
+            return CreateSolidBrush(color);
         }
 
         public virtual IGfxPath CreatePath()

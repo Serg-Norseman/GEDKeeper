@@ -20,11 +20,13 @@
 
 using System;
 using BSLib;
+using BSLib.Design.Graphics;
 using BSLib.SmartGraph;
-using GKCommon.GEDCOM;
-using GKCore.Interfaces;
+using GDModel;
 using GKCore.Options;
 using GKCore.Types;
+
+using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Charts
 {
@@ -46,7 +48,8 @@ namespace GKCore.Charts
         pfDivorced, pfIsDead, pfSelected, pfIsDup, pfSpouse,
         pfDescByFather, pfDescByMother, // descending flags
         pfAncWalk, pfDescWalk, // walk flags
-        pfHasInvAnc, pfHasInvDesc // invisible flags
+        pfHasInvAnc, pfHasInvDesc, // invisible flags
+        pfSpecialMark, // debug flag for special goals
     }
 
     /// <summary>
@@ -63,9 +66,9 @@ namespace GKCore.Charts
         private string fNick;
         private string fPatronymic;
         private string fSurname;
-        private GEDCOMIndividualRecord fRec;
+        private GDMIndividualRecord fRec;
         private EnumSet<SpecialUserRef> fSigns;
-        private GEDCOMSex fSex;
+        private GDMSex fSex;
         private PersonList fChilds;
         private PersonList fSpouses;
         private IImage fPortrait;
@@ -78,7 +81,7 @@ namespace GKCore.Charts
         private int fWidth;
 
         // without property controlling
-        public GEDCOMFamilyRecord BaseFamily;
+        public GDMFamilyRecord BaseFamily;
         public TreeChartPerson BaseSpouse;
         public float CertaintyAssessment;
         public TreeChartPerson Father;
@@ -95,6 +98,7 @@ namespace GKCore.Charts
         public string MarriageDate;
         public bool IsCollapsed;
         public bool IsVisible;
+        public IColor UserColor;
 
 
         public IImage Portrait
@@ -166,7 +170,7 @@ namespace GKCore.Charts
             set { fPtY = value; }
         }
 
-        public GEDCOMIndividualRecord Rec
+        public GDMIndividualRecord Rec
         {
             get { return fRec; }
         }
@@ -197,7 +201,7 @@ namespace GKCore.Charts
             }
         }
 
-        public GEDCOMSex Sex
+        public GDMSex Sex
         {
             get { return fSex; }
             set { fSex = value; }
@@ -220,6 +224,7 @@ namespace GKCore.Charts
             fPortrait = null;
             fSpouses = null;
             fChilds = null;
+            UserColor = null;
         }
 
         protected override void Dispose(bool disposing)
@@ -286,10 +291,9 @@ namespace GKCore.Charts
             fSpouses.Add(spouse);
         }
 
-        public void BuildBy(GEDCOMIndividualRecord iRec)
+        public void BuildBy(GDMIndividualRecord iRec)
         {
-            try
-            {
+            try {
                 fRec = iRec;
 
                 if (iRec != null) {
@@ -313,25 +317,25 @@ namespace GKCore.Charts
                     fBirthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, false);
                     fDeathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, false);
 
-                    if (options.ShowPlaces && options.DiffLines) {
-                        string birthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false);
-                        if (!string.IsNullOrEmpty(birthPlace)) {
-                            if (!string.IsNullOrEmpty(fBirthDate)) {
-                                fBirthDate += ", ";
+                    if (!options.OnlyYears) {
+                        if (options.ShowPlaces) {
+                            string birthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false);
+                            if (!string.IsNullOrEmpty(birthPlace)) {
+                                if (!string.IsNullOrEmpty(fBirthDate)) {
+                                    fBirthDate += ", ";
+                                }
+                                fBirthDate += birthPlace;
                             }
-                            fBirthDate += birthPlace;
+
+                            string deathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false);
+                            if (!string.IsNullOrEmpty(deathPlace)) {
+                                if (!string.IsNullOrEmpty(fDeathDate)) {
+                                    fDeathDate += ", ";
+                                }
+                                fDeathDate += deathPlace;
+                            }
                         }
 
-                        string deathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false);
-                        if (!string.IsNullOrEmpty(deathPlace)) {
-                            if (!string.IsNullOrEmpty(fDeathDate)) {
-                                fDeathDate += ", ";
-                            }
-                            fDeathDate += deathPlace;
-                        }
-                    }
-
-                    if (options.DiffLines) {
                         if (!string.IsNullOrEmpty(fBirthDate)) {
                             fBirthDate = ImportUtils.STD_BIRTH_SIGN + " " + fBirthDate;
                         }
@@ -344,12 +348,10 @@ namespace GKCore.Charts
                         EnumSet<SpecialUserRef> signs = EnumSet<SpecialUserRef>.Create();
 
                         int num = fRec.UserReferences.Count;
-                        for (int i = 0; i < num; i++)
-                        {
+                        for (int i = 0; i < num; i++) {
                             string rs = fRec.UserReferences[i].StringValue;
 
-                            for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++)
-                            {
+                            for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++) {
                                 string sur = LangMan.LS(GKData.SpecialUserRefs[(int)cps].Title);
                                 if (rs == sur) {
                                     signs.Include(cps);
@@ -363,19 +365,16 @@ namespace GKCore.Charts
                     }
 
                     if (options.PortraitsVisible) {
-                        try
-                        {
+                        try {
                             fPortrait = PortraitsCache.Instance.GetImage(fModel.Base.Context, iRec);
 
                             if (fPortrait == null && options.DefaultPortraits) {
-                                string resName = (fSex == GEDCOMSex.svFemale) ? "pi_female_140.png" : "pi_male_140.png";
+                                string resName = (fSex == GDMSex.svFemale) ? "pi_female_140.png" : "pi_male_140.png";
                                 fPortrait = AppHost.GfxProvider.LoadResourceImage(resName, false);
                             }
-                        }
-                        catch (MediaFileNotFoundException)
-                        {
+                        } catch (MediaFileNotFoundException) {
                             if (!fModel.HasMediaFail) {
-                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
                                 fModel.HasMediaFail = true;
                             }
                         }
@@ -390,14 +389,12 @@ namespace GKCore.Charts
                     fBirthDate = "";
                     fDeathDate = "";
                     IsDead = false;
-                    fSex = GEDCOMSex.svNone;
+                    fSex = GDMSex.svUnknown;
                     fSigns = EnumSet<SpecialUserRef>.Create();
 
                     CertaintyAssessment = 0.0f;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeChartPerson.BuildBy(): " + ex.Message);
                 throw;
             }
@@ -407,8 +404,7 @@ namespace GKCore.Charts
         {
             Lines = new string[lines];
 
-            try
-            {
+            try {
                 TreeChartOptions options = fModel.Options;
 
                 // prepare
@@ -467,9 +463,7 @@ namespace GKCore.Charts
                     Lines[idx] = PathDebug;
                     //idx++;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeChartPerson.InitInfo(): " + ex.Message);
             }
         }
@@ -489,8 +483,7 @@ namespace GKCore.Charts
 
         public void CalcBounds(int lines, ChartRenderer renderer)
         {
-            try
-            {
+            try {
                 InitInfo(lines);
                 DefineExpands();
 
@@ -522,9 +515,7 @@ namespace GKCore.Charts
 
                     fWidth += imgW;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeChartPerson.CalcBounds(): " + ex.Message);
             }
         }
@@ -534,16 +525,16 @@ namespace GKCore.Charts
             int result;
 
             switch (fSex) {
-                case GEDCOMSex.svMale:
-                    result = ChartRenderer.Blue;
+                case GDMSex.svMale:
+                    result = BSDColors.Blue;
                     break;
 
-                case GEDCOMSex.svFemale:
-                    result = ChartRenderer.Red;
+                case GDMSex.svFemale:
+                    result = BSDColors.Red;
                     break;
 
                 default:
-                    result = ChartRenderer.Black;
+                    result = BSDColors.Black;
                     break;
             }
 
@@ -552,32 +543,37 @@ namespace GKCore.Charts
 
         public IColor GetFillColor(bool dead)
         {
-            IColor result;
-
-            if (dead) {
-                result = ChartRenderer.GetColor(ChartRenderer.Black);
-            } else {
-                if (IsDup) {
-                    result = ChartRenderer.GetColor(ChartRenderer.Silver);
-                } else {
-                    TreeChartOptions options = fModel.Options;
-
-                    switch (fSex) {
-                        case GEDCOMSex.svMale:
-                            result = Divorced ? options.UnHusbandColor : options.MaleColor;
-                            break;
-
-                        case GEDCOMSex.svFemale:
-                            result = Divorced ? options.UnWifeColor : options.FemaleColor;
-                            break;
-
-                        default:
-                            result = options.UnkSexColor;
-                            break;
-                    }
-                }
+            if (fFlags.Contains(PersonFlag.pfSpecialMark)) {
+                return ChartRenderer.GetColor(BSDColors.Khaki);
             }
 
+            if (dead) {
+                return ChartRenderer.GetColor(BSDColors.Black);
+            }
+
+            if (IsDup) {
+                return ChartRenderer.GetColor(BSDColors.Silver);
+            }
+
+            if (UserColor != null) {
+                return UserColor;
+            }
+
+            IColor result;
+            TreeChartOptions options = fModel.Options;
+            switch (fSex) {
+                case GDMSex.svMale:
+                    result = Divorced ? options.UnHusbandColor : options.MaleColor;
+                    break;
+
+                case GDMSex.svFemale:
+                    result = Divorced ? options.UnWifeColor : options.FemaleColor;
+                    break;
+
+                default:
+                    result = options.UnkSexColor;
+                    break;
+            }
             return result;
         }
     }

@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 
 namespace GKCore.Lists
@@ -35,11 +35,11 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class NoteListMan : ListManager
     {
-        private GEDCOMNoteRecord fRec;
+        private GDMNoteRecord fRec;
 
 
         public NoteListMan(IBaseContext baseContext) :
-            base(baseContext, CreateNoteListColumns(), GEDCOMRecordType.rtNote)
+            base(baseContext, CreateNoteListColumns(), GDMRecordType.rtNote)
         {
         }
 
@@ -56,16 +56,16 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.Note.Text, QuickFilter));
+            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.Lines.Text, QuickFilter));
 
-            res = res && CheckCommonFilter();
+            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
 
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMNoteRecord);
+            fRec = (aRec as GDMNoteRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -74,7 +74,7 @@ namespace GKCore.Lists
             switch ((NoteColumnType)colType)
             {
                 case NoteColumnType.ctText:
-                    string noteText = GKUtils.MergeStrings(fRec.Note);
+                    string noteText = GKUtils.MergeStrings(fRec.Lines);
                     //string noteText = GKUtils.TruncateStrings(fRec.Note, GKData.NOTE_NAME_MAX_LENGTH);
                     result = noteText;
                     break;

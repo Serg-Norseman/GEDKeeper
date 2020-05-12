@@ -1,0 +1,21 @@
+0 HEAD
+1 SOUR FTM
+2 VERS Family Tree Maker (22.2.1)
+2 NAME Family Tree Maker for Mac OS X
+2 CORP Ancestry.com
+3 ADDR 360 W 4800 N
+4 CONT Provo, UT 84604
+3 PHON (801) 705-7000
+1 DEST GED55
+1 DATE 28 MAY 2014
+1 CHAR UTF-8
+1 FILE test_ftm2008.ged
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+0 @I1@ INDI
+1 NAME John /Smith/
+1 SEX M
+1 EVEN test occupation
+2 TYPE occupation
+0 TRLR

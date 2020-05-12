@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -35,7 +34,7 @@ namespace GKUI.Forms
     {
         private readonly SourceCitEditDlgController fController;
 
-        public GEDCOMSourceCitation SourceCitation
+        public GDMSourceCitation SourceCitation
         {
             get { return fController.SourceCitation; }
             set { fController.SourceCitation = value; }

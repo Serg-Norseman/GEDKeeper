@@ -23,10 +23,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using BSLib;
-using GKCommon.GEDCOM;
+using BSLib.Design.IoC;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.IoC;
 using GKCore.Tools;
 using GKTests;
 using GKTests.Stubs;
@@ -44,6 +45,9 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
+            // for static initialization
+            GEDCOMProvider.SkipEmptyTag((int)GEDCOMTagType._AWARD);
+
             WFAppHost.ConfigureBootstrap(false);
 
             LangMan.DefInit();
@@ -73,7 +77,7 @@ namespace GKCore
         [Test]
         public void Test_SearchTreeFragments_MergeTree()
         {
-            List<List<GEDCOMRecord>> treeFragments;
+            List<List<GDMRecord>> treeFragments;
             Assembly assembly = typeof(CoreTests).Assembly;
 
             using (var ctx1 = new BaseContext(null)) {
@@ -109,10 +113,10 @@ namespace GKCore
                     Assert.AreEqual(15, treeFragments[2].Count);
                     Assert.AreEqual(1, treeFragments[3].Count);
 
-                    GEDCOMIndividualRecord iRec1 = ctx1.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+                    GDMIndividualRecord iRec1 = ctx1.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                     Assert.IsNotNull(iRec1);
 
-                    GEDCOMIndividualRecord iRec2 = ctx1.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+                    GDMIndividualRecord iRec2 = ctx1.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
                     Assert.IsNotNull(iRec2);
 
                     TreeTools.MergeRecord(baseWin, iRec1, iRec2, true);
@@ -123,6 +127,83 @@ namespace GKCore
                     Assert.AreEqual(15, treeFragments[1].Count);
                     Assert.AreEqual(1, treeFragments[2].Count);
                 }
+            }
+        }
+
+        [Test]
+        public void Test_MergeTree_SelfTest()
+        {
+            Assembly assembly = typeof(CoreTests).Assembly;
+
+            using (var ctx1 = new BaseContext(null)) {
+                IBaseWindow baseWin = new BaseWindowStub(ctx1);
+
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test1.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                }
+
+                using (var ctx2 = new BaseContext(null)) {
+                    using (Stream stmGed2 = assembly.GetManifestResourceStream("GKTests.Resources.test2.ged")) {
+                        var gedcomProvider = new GEDCOMProvider(ctx2.Tree);
+                        gedcomProvider.LoadFromStreamExt(stmGed2, stmGed2);
+                    }
+
+                    TreeTools.MergeTree(ctx1.Tree, ctx2.Tree, null, true);
+                }
+            }
+        }
+
+        [Test]
+        public void Test_MergeRecord_Null()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.MergeRecord(null, null, null, false); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.MergeRecord(fBaseWin, null, null, false); });
+        }
+
+        [Test]
+        public void Test_MergeRecord_Indi()
+        {
+            Assembly assembly = typeof(CoreTests).Assembly;
+
+            using (var ctx1 = new BaseContext(null)) {
+                IBaseWindow baseWin = new BaseWindowStub(ctx1);
+
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_mergerec.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                }
+
+                GDMIndividualRecord iRec1 = ctx1.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+
+                GDMIndividualRecord iRec2 = ctx1.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec2);
+
+                TreeTools.MergeRecord(baseWin, iRec1, iRec2, true);
+            }
+        }
+
+        [Test]
+        public void Test_MergeRecord_Fam()
+        {
+            Assembly assembly = typeof(CoreTests).Assembly;
+
+            using (var ctx1 = new BaseContext(null)) {
+                IBaseWindow baseWin = new BaseWindowStub(ctx1);
+
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_mergerec.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                }
+
+                GDMFamilyRecord famRec1 = ctx1.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
+                Assert.IsNotNull(famRec1);
+
+                GDMFamilyRecord famRec2 = ctx1.Tree.XRefIndex_Find("F2") as GDMFamilyRecord;
+                Assert.IsNotNull(famRec2);
+
+                TreeTools.MergeRecord(baseWin, famRec1, famRec2, true);
             }
         }
 
@@ -138,18 +219,29 @@ namespace GKCore
             Assert.IsNotNull(placeObj);
         }
 
+        private static bool WalkProc(GDMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
+        {
+            return true;
+        }
+
         [Test]
         public void Test_WalkTree()
         {
-            GEDCOMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
-            List<GEDCOMRecord> walkList = new List<GEDCOMRecord>();
+            List<GDMRecord> walkList = new List<GDMRecord>();
             TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, walkList);
             Assert.AreEqual(5, walkList.Count, "TreeTools.TreeWalk(twmAll)"); // 3 linked from 4 total
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(null, TreeTools.TreeWalkMode.twmAll, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, null); });
+
+
+            object extData = null;
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(null, TreeTools.TreeWalkMode.twmAll, WalkProc, extData); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, null, extData); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, WalkProc, extData); });
         }
 
         [Test]
@@ -164,10 +256,10 @@ namespace GKCore
         [Test]
         public void Test_CheckGEDCOMFormat()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(null, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(fBaseWin.Context.Tree, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(fBaseWin.Context.Tree, fBaseWin.Context, null); });
-            TreeTools.CheckGEDCOMFormat(fBaseWin.Context.Tree, fBaseWin.Context, fProgress);
+            Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(null, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context.Tree, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context.Tree, fBaseWin.Context, null); });
+            GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context.Tree, fBaseWin.Context, fProgress);
         }
 
         [Test]
@@ -177,8 +269,9 @@ namespace GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(null, checksList); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(fBaseWin, null); });
 
+            // three records with errors + multimedia with a nonexistent file
             TreeTools.CheckBase(fBaseWin, checksList);
-            Assert.AreEqual(3, checksList.Count);
+            Assert.AreEqual(3 + 1, checksList.Count);
 
             Assert.AreEqual(TreeTools.CheckDiag.cdStrangeSpouse, checksList[0].Diag);
             Assert.AreEqual(TreeTools.CheckDiag.cdPersonLonglived, checksList[2].Diag);
@@ -192,12 +285,12 @@ namespace GKCore
         [Test]
         public void Test_CheckRelations()
         {
-            GEDCOMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckRelations(null); });
 
-            List<GEDCOMRecord> splitList = new List<GEDCOMRecord>();
+            List<GDMRecord> splitList = new List<GDMRecord>();
             splitList.Add(iRec);
             TreeTools.CheckRelations(splitList);
         }
@@ -222,8 +315,34 @@ namespace GKCore
         [Test]
         public void Test_CompareTree()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CompareTree(null, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CompareTree(fBaseWin.Context, null, null); });
+            string extFile = string.Empty;
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CompareTree(null, extFile, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CompareTree(fBaseWin.Context, extFile, null); });
+
+            GDMTree extTree = null;
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CompareTree(null, extTree, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CompareTree(fBaseWin.Context, extTree, null); });
+
+            var logStub = new TextBoxStub(null);
+
+            Assembly assembly = typeof(CoreTests).Assembly;
+            using (var ctx1 = new BaseContext(null)) {
+                IBaseWindow baseWin = new BaseWindowStub(ctx1);
+
+                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test1.ged")) {
+                    var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                }
+
+                using (var ctx2 = new BaseContext(null)) {
+                    using (Stream stmGed2 = assembly.GetManifestResourceStream("GKTests.Resources.test2.ged")) {
+                        var gedcomProvider = new GEDCOMProvider(ctx2.Tree);
+                        gedcomProvider.LoadFromStreamExt(stmGed2, stmGed2);
+
+                        TreeTools.CompareTree(ctx1, ctx2.Tree, logStub);
+                    }
+                }
+            }
         }
 
         [Test]
@@ -240,12 +359,6 @@ namespace GKCore
             Assert.IsTrue(placesList.IndexOf("Ivanovo") >= 0); // <- TestStubs
             Assert.IsTrue(placesList.IndexOf("unknown") >= 0); // <- TestStubs
             Assert.IsTrue(placesList.IndexOf("Far Forest") >= 0); // <- TestStubs
-        }
-
-        [Test]
-        public void Test_X()
-        {
-            ValuesCollection valuesCollection = new ValuesCollection();
         }
     }
 }

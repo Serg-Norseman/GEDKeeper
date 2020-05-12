@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,9 @@
 
 #if !__MonoCS__
 
-using GKCommon.GEDCOM;
+using System;
+using System.Windows.Forms;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -69,9 +71,29 @@ namespace GKUI.Forms
 
             ClickButton("btnAccept", fDialog);
 
-            GEDCOMSubmitterRecord submitter = fBase.Context.Tree.Header.Submitter.Value as GEDCOMSubmitterRecord;
+            GDMSubmitterRecord submitter = fBase.Context.Tree.Header.Submitter.Value as GDMSubmitterRecord;
             Assert.AreEqual("sample text", submitter.Name.StringValue);
         }
+
+        #region Handlers for external tests
+
+        public static void FilePropertiesDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            FilePropertiesDlg dlg = (FilePropertiesDlg)form;
+            IBaseContext baseContext = dlg.Base.Context;
+
+            EnterText("txtName", form, "sample text");
+
+            SetModalFormHandler(fFormTest, LanguageEditDlgTests.LanguageEditDlg_Handler);
+            ClickButton("btnLangEdit", form);
+
+            ClickButton("btnAccept", form);
+
+            GDMSubmitterRecord submitter = baseContext.Tree.Header.Submitter.Value as GDMSubmitterRecord;
+            Assert.AreEqual("sample text", submitter.Name.StringValue);
+        }
+
+        #endregion
     }
 }
 

@@ -20,8 +20,9 @@
 
 using System;
 using BSLib;
+using BSLib.Design.Graphics;
 using BSLib.Linguistics.Grammar;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
@@ -53,13 +54,13 @@ namespace GKStdReports
             surnames.Sorted = true;
             surnames.DuplicateSolve = DuplicateSolve.Ignore;
 
-            GEDCOMTree tree = fBase.Context.Tree;
-            var enumer = tree.GetEnumerator(GEDCOMRecordType.rtIndividual);
-            GEDCOMRecord record;
+            GDMTree tree = fBase.Context.Tree;
+            var enumer = tree.GetEnumerator(GDMRecordType.rtIndividual);
+            GDMRecord record;
             while (enumer.MoveNext(out record)) {
-                var iRec = record as GEDCOMIndividualRecord;
+                var iRec = record as GDMIndividualRecord;
                 var nameParts = GKUtils.GetNameParts(iRec, false);
-                string surname = fBase.Context.Culture.NormalizeSurname(nameParts.Surname, iRec.Sex == GEDCOMSex.svFemale);
+                string surname = fBase.Context.Culture.NormalizeSurname(nameParts.Surname, iRec.Sex == GDMSex.svFemale);
                 surnames.Add(surname);
             }
 

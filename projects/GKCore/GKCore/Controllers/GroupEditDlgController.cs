@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -31,9 +31,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class GroupEditDlgController : DialogController<IGroupEditDlg>
     {
-        private GEDCOMGroupRecord fGroup;
+        private GDMGroupRecord fGroup;
 
-        public GEDCOMGroupRecord Group
+        public GDMGroupRecord Group
         {
             get { return fGroup; }
             set {
@@ -75,7 +75,7 @@ namespace GKCore.Controllers
             fView.MediaList.ListModel.DataOwner = fGroup;
         }
 
-        public void JumpToRecord(GEDCOMRecord record)
+        public void JumpToRecord(GDMRecord record)
         {
             if (record != null && Accept()) {
                 fBase.SelectRecordByXRef(record.XRef);

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,7 +26,11 @@ using System.Threading;
 using System.Windows.Forms;
 using BSLib;
 using GKCore;
+using GKCore.Interfaces;
+using BSLib.Design.IoC;
 using GKCore.Options;
+using GKUI.Components;
+using GKUI.Providers;
 
 [assembly: AssemblyTitle("GKTray")]
 [assembly: AssemblyDescription("")]
@@ -42,22 +46,42 @@ namespace GKTray
 {
     public sealed class GKTray
     {
+        private class TipInfo
+        {
+            public DateTime LastTime;
+        }
+
         public const string APP_TITLE = "GEDKeeper Tray";
 
-        private ContextMenu fMenu;
-        private NotifyIcon fNotifyIcon;
+        private MenuItem fAutorunItem;
+        private readonly ContextMenu fMenu;
+        private readonly List<MRUFile> fMRUFiles;
+        private readonly NotifyIcon fNotifyIcon;
         private MenuItem fRecentFiles;
+        private readonly StringList fTipsList;
+        private readonly System.Threading.Timer fTipsTimer;
 
         public GKTray()
         {
+            // for GlobalOptions initialization
+            AppHost.Container.Register<IGraphicsProviderEx, WFGfxProvider>(LifeCycle.Singleton);
+
+            fMRUFiles = new List<MRUFile>();
+
             fMenu = new ContextMenu(InitializeMenu());
+            fAutorunItem.Checked = UIHelper.IsStartupItem();
 
             fNotifyIcon = new NotifyIcon();
             fNotifyIcon.DoubleClick += Icon_DoubleClick;
             fNotifyIcon.Icon = new Icon(GKUtils.LoadResourceStream("Resources.icon_gedkeeper.ico"));
             fNotifyIcon.ContextMenu = fMenu;
 
+            fTipsList = new StringList();
+
             LoadSettings();
+            LoadEvents();
+
+            fTipsTimer = new System.Threading.Timer(this.TimerCallback, null, 1000, 1000*60);
         }
 
         private MenuItem[] InitializeMenu()
@@ -66,10 +90,13 @@ namespace GKTray
             appItem.DefaultItem = true;
 
             fRecentFiles = new MenuItem("Recent files");
+            fAutorunItem = new MenuItem("Autorun", miAutorun_Click);
 
             MenuItem[] menu = new MenuItem[] {
                 appItem,
                 fRecentFiles,
+                new MenuItem("-"),
+                fAutorunItem,
                 new MenuItem("-"),
                 new MenuItem("About", miAbout_Click),
                 new MenuItem("Exit", miExit_Click)
@@ -79,13 +106,17 @@ namespace GKTray
 
         private void LoadSettings()
         {
-            List<MRUFile> mruFiles = new List<MRUFile>();
+            fMRUFiles.Clear();
 
             try {
                 string iniPath = AppHost.GetAppDataPathStatic() + "GEDKeeper2.ini";
                 IniFile ini = new IniFile(iniPath);
                 try {
-                    GlobalOptions.LoadMRUFromFile(ini, mruFiles);
+                    int interfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 0);
+                    GlobalOptions.LoadMRUFromFile(ini, fMRUFiles);
+
+                    GlobalOptions.Instance.FindLanguages();
+                    GlobalOptions.Instance.LoadLanguage(interfaceLang);
                 } finally {
                     ini.Dispose();
                 }
@@ -94,9 +125,9 @@ namespace GKTray
             }
 
             fRecentFiles.MenuItems.Clear();
-            int num = mruFiles.Count;
+            int num = fMRUFiles.Count;
             for (int i = 0; i < num; i++) {
-                var mf = mruFiles[i];
+                var mf = fMRUFiles[i];
                 string fn = mf.FileName;
 
                 MenuItem mi = new MenuItem(fn);
@@ -112,6 +143,67 @@ namespace GKTray
             MRUFile mf = (MRUFile)((MenuItem)sender).Tag;
             string appPath = GKUtils.GetAppPath() + "GEDKeeper2.exe";
             GKUtils.LoadExtFile(appPath, mf.FileName);
+        }
+
+        private void LoadEvents()
+        {
+            int num = fMRUFiles.Count;
+            for (int i = 0; i < num; i++) {
+                var mf = fMRUFiles[i];
+                string gedFileName = mf.FileName;
+
+                try {
+                    using (var baseContext = new BaseContext(null)) {
+                        bool isLoaded = baseContext.FileLoad(gedFileName, false, false, false);
+                        if (isLoaded) {
+                            baseContext.CollectTips(fTipsList);
+                        }
+                    }
+                } catch (Exception ex) {
+                    Logger.LogWrite("GKTray.LoadEvents(" + gedFileName + "): " + ex.Message);
+                }
+            }
+
+            for (int i = fTipsList.Count - 1; i >= 0; i--) {
+                string tip = fTipsList[i];
+                if (string.IsNullOrEmpty(tip) || tip[0] == '#') {
+                    fTipsList.Delete(i);
+                } else {
+                    var tipInfo = new TipInfo();
+                    tipInfo.LastTime = DateTime.FromBinary(0);
+
+                    fTipsList.SetObject(i, tipInfo);
+                }
+            }
+        }
+
+        private void TimerCallback(object state)
+        {
+            DateTime timeNow = DateTime.Now;
+
+            for (int i = 0; i < fTipsList.Count; i++) {
+                var tipInfo = fTipsList.GetObject(i) as TipInfo;
+                TimeSpan elapsedSpan = timeNow.Subtract(tipInfo.LastTime);
+                if (elapsedSpan.TotalDays >= 1) {
+                    tipInfo.LastTime = timeNow;
+
+                    fNotifyIcon.BalloonTipText = fTipsList[i];
+                    fNotifyIcon.ShowBalloonTip(5000);
+
+                    break;
+                }
+            }
+        }
+
+        private void miAutorun_Click(object sender, EventArgs e)
+        {
+            if (fAutorunItem.Checked) {
+                UIHelper.UnregisterStartup();
+            } else {
+                UIHelper.RegisterStartup();
+            }
+
+            fAutorunItem.Checked = UIHelper.IsStartupItem();
         }
 
         private void miAbout_Click(object sender, EventArgs e)

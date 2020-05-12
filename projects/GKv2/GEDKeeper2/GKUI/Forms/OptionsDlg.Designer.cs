@@ -128,12 +128,19 @@
             this.txtProxyLogin = new System.Windows.Forms.TextBox();
             this.txtProxyPass = new System.Windows.Forms.TextBox();
             this.grpOther = new System.Windows.Forms.GroupBox();
+            this.chkCharsetDetection = new System.Windows.Forms.CheckBox();
             this.chkAutoCheckUpdates = new System.Windows.Forms.CheckBox();
             this.chkLoadRecentFiles = new System.Windows.Forms.CheckBox();
             this.chkShowOnStart = new System.Windows.Forms.CheckBox();
             this.cmbGeocoder = new System.Windows.Forms.ComboBox();
             this.cmbLanguages = new System.Windows.Forms.ComboBox();
             this.pageMultimedia = new System.Windows.Forms.TabPage();
+            this.cmbMediaStoreDefault = new System.Windows.Forms.ComboBox();
+            this.chkDeleteMediaFileWithoutConfirm = new System.Windows.Forms.CheckBox();
+            this.chkAllowDeleteMediaFileFromRefs = new System.Windows.Forms.CheckBox();
+            this.chkAllowDeleteMediaFileFromStgArc = new System.Windows.Forms.CheckBox();
+            this.lblMediaStoreDefault = new System.Windows.Forms.Label();
+            this.chkAllowMediaStoreRelativeReferences = new System.Windows.Forms.CheckBox();
             this.chkAllowMediaDirectRefs = new System.Windows.Forms.CheckBox();
             this.chkEmbeddedMediaPlayer = new System.Windows.Forms.CheckBox();
             this.chkRemovableMediaWarning = new System.Windows.Forms.CheckBox();
@@ -162,6 +169,7 @@
             this.chkOnlyYears = new System.Windows.Forms.CheckBox();
             this.chkSignsVisible = new System.Windows.Forms.CheckBox();
             this.chkShowPlaces = new System.Windows.Forms.CheckBox();
+            this.chkCheckTreeSize = new System.Windows.Forms.CheckBox();
             this.chkHideUnknownSpouses = new System.Windows.Forms.CheckBox();
             this.chkInvertedTree = new System.Windows.Forms.CheckBox();
             this.chkChildlessExclude = new System.Windows.Forms.CheckBox();
@@ -203,6 +211,8 @@
             this.chkHighlightUnparented = new System.Windows.Forms.CheckBox();
             this.chkShowDatesSigns = new System.Windows.Forms.CheckBox();
             this.chkShowDatesCalendar = new System.Windows.Forms.CheckBox();
+            this.chkAutoSortSpouses = new System.Windows.Forms.CheckBox();
+            this.chkAutoSortChildren = new System.Windows.Forms.CheckBox();
             this.chkHighlightUnmarried = new System.Windows.Forms.CheckBox();
             this.pageViewPersons = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -279,7 +289,7 @@
             this.PageControl1.Margin = new System.Windows.Forms.Padding(2);
             this.PageControl1.Name = "PageControl1";
             this.PageControl1.SelectedIndex = 0;
-            this.PageControl1.Size = new System.Drawing.Size(749, 578);
+            this.PageControl1.Size = new System.Drawing.Size(749, 614);
             this.PageControl1.TabIndex = 0;
             // 
             // pageCommon
@@ -295,7 +305,7 @@
             this.pageCommon.Margin = new System.Windows.Forms.Padding(2);
             this.pageCommon.Name = "pageCommon";
             this.pageCommon.Padding = new System.Windows.Forms.Padding(10);
-            this.pageCommon.Size = new System.Drawing.Size(741, 548);
+            this.pageCommon.Size = new System.Drawing.Size(741, 584);
             this.pageCommon.TabIndex = 0;
             this.pageCommon.Text = "pageCommon";
             // 
@@ -407,7 +417,7 @@
             // lblGeocoder
             // 
             this.lblGeocoder.AutoSize = true;
-            this.lblGeocoder.Location = new System.Drawing.Point(359, 429);
+            this.lblGeocoder.Location = new System.Drawing.Point(359, 451);
             this.lblGeocoder.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblGeocoder.Name = "lblGeocoder";
             this.lblGeocoder.Size = new System.Drawing.Size(79, 17);
@@ -417,7 +427,7 @@
             // lblLanguage
             // 
             this.lblLanguage.AutoSize = true;
-            this.lblLanguage.Location = new System.Drawing.Point(11, 429);
+            this.lblLanguage.Location = new System.Drawing.Point(11, 451);
             this.lblLanguage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblLanguage.Name = "lblLanguage";
             this.lblLanguage.Size = new System.Drawing.Size(80, 17);
@@ -530,6 +540,7 @@
             // 
             // grpOther
             // 
+            this.grpOther.Controls.Add(this.chkCharsetDetection);
             this.grpOther.Controls.Add(this.chkAutoCheckUpdates);
             this.grpOther.Controls.Add(this.chkLoadRecentFiles);
             this.grpOther.Controls.Add(this.chkShowOnStart);
@@ -537,10 +548,20 @@
             this.grpOther.Margin = new System.Windows.Forms.Padding(2);
             this.grpOther.Name = "grpOther";
             this.grpOther.Padding = new System.Windows.Forms.Padding(10);
-            this.grpOther.Size = new System.Drawing.Size(715, 151);
+            this.grpOther.Size = new System.Drawing.Size(715, 181);
             this.grpOther.TabIndex = 2;
             this.grpOther.TabStop = false;
             this.grpOther.Text = "grpOther";
+            // 
+            // chkCharsetDetection
+            // 
+            this.chkCharsetDetection.AutoSize = true;
+            this.chkCharsetDetection.Location = new System.Drawing.Point(20, 130);
+            this.chkCharsetDetection.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
+            this.chkCharsetDetection.Name = "chkCharsetDetection";
+            this.chkCharsetDetection.Size = new System.Drawing.Size(158, 21);
+            this.chkCharsetDetection.TabIndex = 9;
+            this.chkCharsetDetection.Text = "chkCharsetDetection";
             // 
             // chkAutoCheckUpdates
             // 
@@ -579,7 +600,7 @@
             "Google",
             "Yandex",
             "OSM"});
-            this.cmbGeocoder.Location = new System.Drawing.Point(470, 425);
+            this.cmbGeocoder.Location = new System.Drawing.Point(470, 448);
             this.cmbGeocoder.Margin = new System.Windows.Forms.Padding(2);
             this.cmbGeocoder.Name = "cmbGeocoder";
             this.cmbGeocoder.Size = new System.Drawing.Size(230, 25);
@@ -588,7 +609,7 @@
             // cmbLanguages
             // 
             this.cmbLanguages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbLanguages.Location = new System.Drawing.Point(104, 425);
+            this.cmbLanguages.Location = new System.Drawing.Point(104, 448);
             this.cmbLanguages.Margin = new System.Windows.Forms.Padding(2);
             this.cmbLanguages.Name = "cmbLanguages";
             this.cmbLanguages.Size = new System.Drawing.Size(230, 25);
@@ -597,6 +618,12 @@
             // pageMultimedia
             // 
             this.pageMultimedia.BackColor = System.Drawing.SystemColors.Control;
+            this.pageMultimedia.Controls.Add(this.cmbMediaStoreDefault);
+            this.pageMultimedia.Controls.Add(this.chkDeleteMediaFileWithoutConfirm);
+            this.pageMultimedia.Controls.Add(this.chkAllowDeleteMediaFileFromRefs);
+            this.pageMultimedia.Controls.Add(this.chkAllowDeleteMediaFileFromStgArc);
+            this.pageMultimedia.Controls.Add(this.lblMediaStoreDefault);
+            this.pageMultimedia.Controls.Add(this.chkAllowMediaStoreRelativeReferences);
             this.pageMultimedia.Controls.Add(this.chkAllowMediaDirectRefs);
             this.pageMultimedia.Controls.Add(this.chkEmbeddedMediaPlayer);
             this.pageMultimedia.Controls.Add(this.chkRemovableMediaWarning);
@@ -604,9 +631,68 @@
             this.pageMultimedia.Margin = new System.Windows.Forms.Padding(2);
             this.pageMultimedia.Name = "pageMultimedia";
             this.pageMultimedia.Padding = new System.Windows.Forms.Padding(10);
-            this.pageMultimedia.Size = new System.Drawing.Size(741, 548);
+            this.pageMultimedia.Size = new System.Drawing.Size(741, 584);
             this.pageMultimedia.TabIndex = 6;
             this.pageMultimedia.Text = "pageMultimedia";
+            // 
+            // cmbMediaStoreDefault
+            // 
+            this.cmbMediaStoreDefault.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMediaStoreDefault.FormattingEnabled = true;
+            this.cmbMediaStoreDefault.Location = new System.Drawing.Point(383, 181);
+            this.cmbMediaStoreDefault.Name = "cmbMediaStoreDefault";
+            this.cmbMediaStoreDefault.Size = new System.Drawing.Size(218, 25);
+            this.cmbMediaStoreDefault.TabIndex = 12;
+            // 
+            // chkDeleteMediaFileWithoutConfirm
+            // 
+            this.chkDeleteMediaFileWithoutConfirm.AutoSize = true;
+            this.chkDeleteMediaFileWithoutConfirm.Location = new System.Drawing.Point(20, 307);
+            this.chkDeleteMediaFileWithoutConfirm.Margin = new System.Windows.Forms.Padding(10);
+            this.chkDeleteMediaFileWithoutConfirm.Name = "chkDeleteMediaFileWithoutConfirm";
+            this.chkDeleteMediaFileWithoutConfirm.Size = new System.Drawing.Size(240, 21);
+            this.chkDeleteMediaFileWithoutConfirm.TabIndex = 11;
+            this.chkDeleteMediaFileWithoutConfirm.Text = "chkDeleteMediaFileWithoutConfirm";
+            // 
+            // chkAllowDeleteMediaFileFromRefs
+            // 
+            this.chkAllowDeleteMediaFileFromRefs.AutoSize = true;
+            this.chkAllowDeleteMediaFileFromRefs.Location = new System.Drawing.Point(20, 266);
+            this.chkAllowDeleteMediaFileFromRefs.Margin = new System.Windows.Forms.Padding(10);
+            this.chkAllowDeleteMediaFileFromRefs.Name = "chkAllowDeleteMediaFileFromRefs";
+            this.chkAllowDeleteMediaFileFromRefs.Size = new System.Drawing.Size(230, 21);
+            this.chkAllowDeleteMediaFileFromRefs.TabIndex = 11;
+            this.chkAllowDeleteMediaFileFromRefs.Text = "chkAllowDeleteMediaFileFromRefs";
+            // 
+            // chkAllowDeleteMediaFileFromStgArc
+            // 
+            this.chkAllowDeleteMediaFileFromStgArc.AutoSize = true;
+            this.chkAllowDeleteMediaFileFromStgArc.Location = new System.Drawing.Point(20, 225);
+            this.chkAllowDeleteMediaFileFromStgArc.Margin = new System.Windows.Forms.Padding(10);
+            this.chkAllowDeleteMediaFileFromStgArc.Name = "chkAllowDeleteMediaFileFromStgArc";
+            this.chkAllowDeleteMediaFileFromStgArc.Size = new System.Drawing.Size(245, 21);
+            this.chkAllowDeleteMediaFileFromStgArc.TabIndex = 11;
+            this.chkAllowDeleteMediaFileFromStgArc.Text = "chkAllowDeleteMediaFileFromStgArc";
+            // 
+            // lblMediaStoreDefault
+            // 
+            this.lblMediaStoreDefault.AutoSize = true;
+            this.lblMediaStoreDefault.Location = new System.Drawing.Point(20, 184);
+            this.lblMediaStoreDefault.Margin = new System.Windows.Forms.Padding(10);
+            this.lblMediaStoreDefault.Name = "lblMediaStoreDefault";
+            this.lblMediaStoreDefault.Size = new System.Drawing.Size(130, 17);
+            this.lblMediaStoreDefault.TabIndex = 11;
+            this.lblMediaStoreDefault.Text = "lblMediaStoreDefault";
+            // 
+            // chkAllowMediaStoreRelativeReferences
+            // 
+            this.chkAllowMediaStoreRelativeReferences.AutoSize = true;
+            this.chkAllowMediaStoreRelativeReferences.Location = new System.Drawing.Point(20, 143);
+            this.chkAllowMediaStoreRelativeReferences.Margin = new System.Windows.Forms.Padding(10);
+            this.chkAllowMediaStoreRelativeReferences.Name = "chkAllowMediaStoreRelativeReferences";
+            this.chkAllowMediaStoreRelativeReferences.Size = new System.Drawing.Size(263, 21);
+            this.chkAllowMediaStoreRelativeReferences.TabIndex = 11;
+            this.chkAllowMediaStoreRelativeReferences.Text = "chkAllowMediaStoreRelativeReferences";
             // 
             // chkAllowMediaDirectRefs
             // 
@@ -646,7 +732,7 @@
             this.pageCharts.Margin = new System.Windows.Forms.Padding(2);
             this.pageCharts.Name = "pageCharts";
             this.pageCharts.Padding = new System.Windows.Forms.Padding(10);
-            this.pageCharts.Size = new System.Drawing.Size(741, 548);
+            this.pageCharts.Size = new System.Drawing.Size(741, 584);
             this.pageCharts.TabIndex = 4;
             this.pageCharts.Text = "pageCharts";
             // 
@@ -659,7 +745,7 @@
             this.tabsCharts.Margin = new System.Windows.Forms.Padding(2);
             this.tabsCharts.Name = "tabsCharts";
             this.tabsCharts.SelectedIndex = 0;
-            this.tabsCharts.Size = new System.Drawing.Size(721, 528);
+            this.tabsCharts.Size = new System.Drawing.Size(721, 564);
             this.tabsCharts.TabIndex = 0;
             // 
             // pageTreeChart
@@ -672,7 +758,7 @@
             this.pageTreeChart.Margin = new System.Windows.Forms.Padding(2);
             this.pageTreeChart.Name = "pageTreeChart";
             this.pageTreeChart.Padding = new System.Windows.Forms.Padding(10);
-            this.pageTreeChart.Size = new System.Drawing.Size(713, 498);
+            this.pageTreeChart.Size = new System.Drawing.Size(713, 534);
             this.pageTreeChart.TabIndex = 3;
             this.pageTreeChart.Text = "pageTreeChart";
             // 
@@ -687,6 +773,7 @@
             this.grpSpacings.Controls.Add(this.lblBranchDist);
             this.grpSpacings.Controls.Add(this.lblMargins);
             this.grpSpacings.Location = new System.Drawing.Point(414, 271);
+            this.grpSpacings.Margin = new System.Windows.Forms.Padding(2);
             this.grpSpacings.Name = "grpSpacings";
             this.grpSpacings.Padding = new System.Windows.Forms.Padding(10);
             this.grpSpacings.Size = new System.Drawing.Size(286, 214);
@@ -719,7 +806,7 @@
             // 
             // numGenDist
             // 
-            this.numGenDist.Location = new System.Drawing.Point(225, 87);
+            this.numGenDist.Location = new System.Drawing.Point(225, 88);
             this.numGenDist.Margin = new System.Windows.Forms.Padding(4);
             this.numGenDist.Maximum = new decimal(new int[] {
             120,
@@ -765,7 +852,7 @@
             // 
             // numMargins
             // 
-            this.numMargins.Location = new System.Drawing.Point(225, 23);
+            this.numMargins.Location = new System.Drawing.Point(225, 22);
             this.numMargins.Margin = new System.Windows.Forms.Padding(4);
             this.numMargins.Maximum = new decimal(new int[] {
             120,
@@ -809,7 +896,7 @@
             // lblBranchDist
             // 
             this.lblBranchDist.AutoSize = true;
-            this.lblBranchDist.Location = new System.Drawing.Point(20, 57);
+            this.lblBranchDist.Location = new System.Drawing.Point(20, 58);
             this.lblBranchDist.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.lblBranchDist.Name = "lblBranchDist";
             this.lblBranchDist.Size = new System.Drawing.Size(86, 17);
@@ -819,7 +906,7 @@
             // lblMargins
             // 
             this.lblMargins.AutoSize = true;
-            this.lblMargins.Location = new System.Drawing.Point(20, 27);
+            this.lblMargins.Location = new System.Drawing.Point(20, 28);
             this.lblMargins.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.lblMargins.Name = "lblMargins";
             this.lblMargins.Size = new System.Drawing.Size(66, 17);
@@ -840,6 +927,7 @@
             this.grpTreePersons.Controls.Add(this.chkOnlyYears);
             this.grpTreePersons.Controls.Add(this.chkSignsVisible);
             this.grpTreePersons.Controls.Add(this.chkShowPlaces);
+            this.grpTreePersons.Controls.Add(this.chkCheckTreeSize);
             this.grpTreePersons.Controls.Add(this.chkHideUnknownSpouses);
             this.grpTreePersons.Controls.Add(this.chkInvertedTree);
             this.grpTreePersons.Controls.Add(this.chkChildlessExclude);
@@ -849,7 +937,7 @@
             this.grpTreePersons.Margin = new System.Windows.Forms.Padding(10);
             this.grpTreePersons.Name = "grpTreePersons";
             this.grpTreePersons.Padding = new System.Windows.Forms.Padding(10);
-            this.grpTreePersons.Size = new System.Drawing.Size(391, 475);
+            this.grpTreePersons.Size = new System.Drawing.Size(391, 509);
             this.grpTreePersons.TabIndex = 0;
             this.grpTreePersons.TabStop = false;
             this.grpTreePersons.Text = "grpTreePersons";
@@ -961,6 +1049,15 @@
             this.chkShowPlaces.Size = new System.Drawing.Size(349, 21);
             this.chkShowPlaces.TabIndex = 11;
             this.chkShowPlaces.Text = "chkShowPlaces";
+            // 
+            // chkCheckTreeSize
+            // 
+            this.chkCheckTreeSize.Location = new System.Drawing.Point(20, 469);
+            this.chkCheckTreeSize.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkCheckTreeSize.Name = "chkCheckTreeSize";
+            this.chkCheckTreeSize.Size = new System.Drawing.Size(349, 21);
+            this.chkCheckTreeSize.TabIndex = 11;
+            this.chkCheckTreeSize.Text = "chkCheckTreeSize";
             // 
             // chkHideUnknownSpouses
             // 
@@ -1182,7 +1279,7 @@
             this.pageAncCircle.Location = new System.Drawing.Point(4, 26);
             this.pageAncCircle.Margin = new System.Windows.Forms.Padding(2);
             this.pageAncCircle.Name = "pageAncCircle";
-            this.pageAncCircle.Size = new System.Drawing.Size(713, 498);
+            this.pageAncCircle.Size = new System.Drawing.Size(713, 534);
             this.pageAncCircle.TabIndex = 4;
             this.pageAncCircle.Text = "pageAncCircle";
             // 
@@ -1194,7 +1291,7 @@
             this.ancOptionsControl1.Margin = new System.Windows.Forms.Padding(2);
             this.ancOptionsControl1.Name = "ancOptionsControl1";
             this.ancOptionsControl1.Options = null;
-            this.ancOptionsControl1.Size = new System.Drawing.Size(713, 498);
+            this.ancOptionsControl1.Size = new System.Drawing.Size(713, 534);
             this.ancOptionsControl1.TabIndex = 0;
             // 
             // pageUIView
@@ -1204,7 +1301,7 @@
             this.pageUIView.Margin = new System.Windows.Forms.Padding(2);
             this.pageUIView.Name = "pageUIView";
             this.pageUIView.Padding = new System.Windows.Forms.Padding(10);
-            this.pageUIView.Size = new System.Drawing.Size(741, 548);
+            this.pageUIView.Size = new System.Drawing.Size(741, 584);
             this.pageUIView.TabIndex = 1;
             this.pageUIView.Text = "pageUIView";
             // 
@@ -1217,7 +1314,7 @@
             this.PageControl2.Margin = new System.Windows.Forms.Padding(2);
             this.PageControl2.Name = "PageControl2";
             this.PageControl2.SelectedIndex = 0;
-            this.PageControl2.Size = new System.Drawing.Size(721, 528);
+            this.PageControl2.Size = new System.Drawing.Size(721, 564);
             this.PageControl2.TabIndex = 0;
             // 
             // pageViewCommon
@@ -1229,12 +1326,14 @@
             this.pageViewCommon.Controls.Add(this.chkHighlightUnparented);
             this.pageViewCommon.Controls.Add(this.chkShowDatesSigns);
             this.pageViewCommon.Controls.Add(this.chkShowDatesCalendar);
+            this.pageViewCommon.Controls.Add(this.chkAutoSortSpouses);
+            this.pageViewCommon.Controls.Add(this.chkAutoSortChildren);
             this.pageViewCommon.Controls.Add(this.chkHighlightUnmarried);
             this.pageViewCommon.Location = new System.Drawing.Point(4, 26);
             this.pageViewCommon.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewCommon.Name = "pageViewCommon";
             this.pageViewCommon.Padding = new System.Windows.Forms.Padding(10);
-            this.pageViewCommon.Size = new System.Drawing.Size(713, 498);
+            this.pageViewCommon.Size = new System.Drawing.Size(713, 534);
             this.pageViewCommon.TabIndex = 0;
             this.pageViewCommon.Text = "pageViewCommon";
             // 
@@ -1391,7 +1490,7 @@
             this.chkPlacesWithAddress.Location = new System.Drawing.Point(11, 191);
             this.chkPlacesWithAddress.Margin = new System.Windows.Forms.Padding(2);
             this.chkPlacesWithAddress.Name = "chkPlacesWithAddress";
-            this.chkPlacesWithAddress.Size = new System.Drawing.Size(259, 21);
+            this.chkPlacesWithAddress.Size = new System.Drawing.Size(302, 21);
             this.chkPlacesWithAddress.TabIndex = 2;
             this.chkPlacesWithAddress.Text = "chkPlacesWithAddress";
             // 
@@ -1400,7 +1499,7 @@
             this.chkHighlightUnparented.Location = new System.Drawing.Point(11, 220);
             this.chkHighlightUnparented.Margin = new System.Windows.Forms.Padding(2);
             this.chkHighlightUnparented.Name = "chkHighlightUnparented";
-            this.chkHighlightUnparented.Size = new System.Drawing.Size(338, 21);
+            this.chkHighlightUnparented.Size = new System.Drawing.Size(302, 21);
             this.chkHighlightUnparented.TabIndex = 3;
             this.chkHighlightUnparented.Text = "chkHighlightUnparented";
             // 
@@ -1422,12 +1521,30 @@
             this.chkShowDatesCalendar.TabIndex = 4;
             this.chkShowDatesCalendar.Text = "chkShowDatesCalendar";
             // 
+            // chkAutoSortSpouses
+            // 
+            this.chkAutoSortSpouses.Location = new System.Drawing.Point(11, 326);
+            this.chkAutoSortSpouses.Margin = new System.Windows.Forms.Padding(2);
+            this.chkAutoSortSpouses.Name = "chkAutoSortSpouses";
+            this.chkAutoSortSpouses.Size = new System.Drawing.Size(302, 21);
+            this.chkAutoSortSpouses.TabIndex = 4;
+            this.chkAutoSortSpouses.Text = "chkAutoSortSpouses";
+            // 
+            // chkAutoSortChildren
+            // 
+            this.chkAutoSortChildren.Location = new System.Drawing.Point(11, 300);
+            this.chkAutoSortChildren.Margin = new System.Windows.Forms.Padding(2);
+            this.chkAutoSortChildren.Name = "chkAutoSortChildren";
+            this.chkAutoSortChildren.Size = new System.Drawing.Size(302, 21);
+            this.chkAutoSortChildren.TabIndex = 4;
+            this.chkAutoSortChildren.Text = "chkAutoSortChildren";
+            // 
             // chkHighlightUnmarried
             // 
             this.chkHighlightUnmarried.Location = new System.Drawing.Point(11, 249);
             this.chkHighlightUnmarried.Margin = new System.Windows.Forms.Padding(2);
             this.chkHighlightUnmarried.Name = "chkHighlightUnmarried";
-            this.chkHighlightUnmarried.Size = new System.Drawing.Size(338, 21);
+            this.chkHighlightUnmarried.Size = new System.Drawing.Size(302, 21);
             this.chkHighlightUnmarried.TabIndex = 4;
             this.chkHighlightUnmarried.Text = "chkHighlightUnmarried";
             // 
@@ -1440,7 +1557,7 @@
             this.pageViewPersons.Location = new System.Drawing.Point(4, 26);
             this.pageViewPersons.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewPersons.Name = "pageViewPersons";
-            this.pageViewPersons.Size = new System.Drawing.Size(713, 498);
+            this.pageViewPersons.Size = new System.Drawing.Size(713, 534);
             this.pageViewPersons.TabIndex = 1;
             this.pageViewPersons.Text = "pageViewPersons";
             // 
@@ -1452,7 +1569,7 @@
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(10);
-            this.panel1.Size = new System.Drawing.Size(488, 498);
+            this.panel1.Size = new System.Drawing.Size(488, 534);
             this.panel1.TabIndex = 2;
             // 
             // lstPersonColumns
@@ -1461,7 +1578,7 @@
             this.lstPersonColumns.Location = new System.Drawing.Point(10, 10);
             this.lstPersonColumns.Margin = new System.Windows.Forms.Padding(2);
             this.lstPersonColumns.Name = "lstPersonColumns";
-            this.lstPersonColumns.Size = new System.Drawing.Size(468, 478);
+            this.lstPersonColumns.Size = new System.Drawing.Size(468, 514);
             this.lstPersonColumns.TabIndex = 1;
             this.lstPersonColumns.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ListPersonColumns_ItemCheck);
             // 
@@ -1500,7 +1617,7 @@
             this.pagePedigree.Margin = new System.Windows.Forms.Padding(2);
             this.pagePedigree.Name = "pagePedigree";
             this.pagePedigree.Padding = new System.Windows.Forms.Padding(10);
-            this.pagePedigree.Size = new System.Drawing.Size(741, 548);
+            this.pagePedigree.Size = new System.Drawing.Size(741, 584);
             this.pagePedigree.TabIndex = 3;
             this.pagePedigree.Text = "pagePedigree";
             // 
@@ -1595,7 +1712,7 @@
             this.pagePlugins.Margin = new System.Windows.Forms.Padding(0);
             this.pagePlugins.Name = "pagePlugins";
             this.pagePlugins.Padding = new System.Windows.Forms.Padding(10);
-            this.pagePlugins.Size = new System.Drawing.Size(741, 548);
+            this.pagePlugins.Size = new System.Drawing.Size(741, 584);
             this.pagePlugins.TabIndex = 5;
             this.pagePlugins.Text = "pagePlugins";
             // 
@@ -1608,11 +1725,16 @@
             this.columnHeader4});
             this.lvPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvPlugins.FullRowSelect = true;
+            this.lvPlugins.HideSelection = false;
+            this.lvPlugins.ListMan = null;
             this.lvPlugins.Location = new System.Drawing.Point(10, 10);
             this.lvPlugins.Margin = new System.Windows.Forms.Padding(2);
             this.lvPlugins.MultiSelect = false;
             this.lvPlugins.Name = "lvPlugins";
-            this.lvPlugins.Size = new System.Drawing.Size(721, 528);
+            this.lvPlugins.Order = BSLib.Design.BSDTypes.SortOrder.None;
+            this.lvPlugins.OwnerDraw = true;
+            this.lvPlugins.Size = new System.Drawing.Size(721, 564);
+            this.lvPlugins.SortColumn = 0;
             this.lvPlugins.TabIndex = 0;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
             this.lvPlugins.View = System.Windows.Forms.View.Details;
@@ -1639,7 +1761,7 @@
             // btnAccept
             // 
             this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccept.Location = new System.Drawing.Point(494, 598);
+            this.btnAccept.Location = new System.Drawing.Point(491, 619);
             this.btnAccept.Margin = new System.Windows.Forms.Padding(2);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(114, 30);
@@ -1652,7 +1774,7 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(624, 598);
+            this.btnCancel.Location = new System.Drawing.Point(621, 619);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(114, 30);
@@ -1666,7 +1788,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(749, 639);
+            this.Title = "OptionsDlg";
+            this.ClientSize = new System.Drawing.Size(749, 662);
             this.Controls.Add(this.PageControl1);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.btnCancel);
@@ -1748,5 +1871,15 @@
         private System.Windows.Forms.NumericUpDown numGenDist;
         private System.Windows.Forms.NumericUpDown numBranchDist;
         private System.Windows.Forms.NumericUpDown numMargins;
+        private System.Windows.Forms.CheckBox chkAutoSortSpouses;
+        private System.Windows.Forms.CheckBox chkAutoSortChildren;
+        private System.Windows.Forms.CheckBox chkCheckTreeSize;
+        private System.Windows.Forms.CheckBox chkCharsetDetection;
+        private System.Windows.Forms.CheckBox chkAllowDeleteMediaFileFromRefs;
+        private System.Windows.Forms.CheckBox chkAllowDeleteMediaFileFromStgArc;
+        private System.Windows.Forms.Label lblMediaStoreDefault;
+        private System.Windows.Forms.CheckBox chkAllowMediaStoreRelativeReferences;
+        private System.Windows.Forms.ComboBox cmbMediaStoreDefault;
+        private System.Windows.Forms.CheckBox chkDeleteMediaFileWithoutConfirm;
     }
 }

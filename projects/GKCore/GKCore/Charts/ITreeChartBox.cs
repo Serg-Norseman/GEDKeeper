@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Options;
 
@@ -42,7 +42,8 @@ namespace GKCore.Charts
         maDrag,
         maProperties,
         maHighlight,
-        maPersonExpand
+        maPersonExpand,
+        maInfo,
     }
 
     public enum MouseEvent
@@ -64,7 +65,7 @@ namespace GKCore.Charts
         TreeChartPerson Selected { get; set; }
         int Width { get; set; }
 
-        void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
+        void GenChart(GDMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
         ExtRect GetClientRect();
         ExtSize GetImageSize();
         ExtPoint GetOffsets();

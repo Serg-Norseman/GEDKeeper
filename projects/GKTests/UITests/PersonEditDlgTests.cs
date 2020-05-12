@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,13 +20,16 @@
 
 #if !__MonoCS__
 
-using GKCommon.GEDCOM;
+using System;
+using System.Windows.Forms;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
 using GKUI.Forms;
 using NUnit.Framework;
+using NUnit.Extensions.Forms;
 
 namespace GKUI.Forms
 {
@@ -36,7 +39,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class PersonEditDlgTests : CustomWindowTest
     {
-        private GEDCOMIndividualRecord fIndividualRecord;
+        private GDMIndividualRecord fIndividualRecord;
         private IBaseWindow fBase;
         private PersonEditDlg fDialog;
 
@@ -45,7 +48,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fIndividualRecord = fBase.Context.CreatePersonEx("Ivan", "", "Smith", GEDCOMSex.svMale, true);
+            fIndividualRecord = fBase.Context.CreatePersonEx("Ivan", "", "Smith", GDMSex.svMale, true);
 
             fDialog = new PersonEditDlg(fBase);
             fDialog.Person = fIndividualRecord;
@@ -68,17 +71,35 @@ namespace GKUI.Forms
         public void Test_EnterDataAndApply()
         {
             Assert.AreEqual(fIndividualRecord, fDialog.Person);
-
             Assert.AreEqual(null, fDialog.Target);
             Assert.AreEqual(TargetMode.tmNone, fDialog.TargetMode);
 
-            //var txtSurname = new TextBoxTester("txtSurname");
-            //txtSurname.Enter("sample text");
+            //EnterText("txtSurname", "sample text");
 
             ClickButton("btnAccept", fDialog);
 
             //Assert.AreEqual("sample text", fIndividualRecord.PersonalNames[0].Pieces.Surname);
         }
+
+        #region Handlers for external tests
+
+        private static GDMSex fNeedIndividualSex;
+
+        private static void IndividualAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtName", form, "test");
+            SelectCombo("cmbSex", form, (int)fNeedIndividualSex);
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void SetCreateIndividualHandler(NUnitFormTest formTest, GDMSex needIndividualSex)
+        {
+            fNeedIndividualSex = needIndividualSex;
+            RecordSelectDlgTests.SetCreateItemHandler(formTest, IndividualAdd_Mini_Handler);
+        }
+
+        #endregion
     }
 }
 

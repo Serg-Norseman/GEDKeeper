@@ -24,11 +24,10 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Timers;
 using System.Windows.Forms;
-
 using ArborGVT;
 using BSLib;
 using CsGL.OpenGL;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -475,7 +474,7 @@ namespace GKTreeVizPlugin
                 {
                     PatriarchObj patObj = (PatriarchObj)node.Data;
 
-                    GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)fBase.Context.Tree.XRefIndex_Find(node.Sign);
+                    GDMIndividualRecord iRec = (GDMIndividualRecord)fBase.Context.Tree.XRefIndex_Find(node.Sign);
                     int descGens = patObj.DescGenerations;
 
                     TVPerson patr = PreparePerson(null, iRec, TVPersonType.Patriarch);
@@ -544,16 +543,16 @@ namespace GKTreeVizPlugin
                 int gens = (person.DescGenerations <= 0) ? 1 : person.DescGenerations;
                 person.GenSlice = person.BaseRadius / gens; // ?
 
-                GEDCOMIndividualRecord iRec = person.IRec;
+                GDMIndividualRecord iRec = person.IRec;
 
-                foreach (GEDCOMSpouseToFamilyLink spLink in iRec.SpouseToFamilyLinks)
+                foreach (GDMSpouseToFamilyLink spLink in iRec.SpouseToFamilyLinks)
                 {
-                    GEDCOMFamilyRecord famRec = spLink.Family;
+                    GDMFamilyRecord famRec = spLink.Family;
 
                     bool alreadyPrepared = false;
 
                     // processing the spouse of the current person
-                    GEDCOMIndividualRecord spouse = famRec.GetSpouseBy(iRec);
+                    GDMIndividualRecord spouse = famRec.GetSpouseBy(iRec);
                     if (spouse != null) {
                         TVPerson sps = PreparePerson(null, spouse, TVPersonType.Spouse);
                         if (sps == null) {
@@ -572,9 +571,9 @@ namespace GKTreeVizPlugin
                     if (!alreadyPrepared)
                     {
                         // processing children of the current family
-                        foreach (GEDCOMPointer childPtr in famRec.Children)
+                        foreach (GDMIndividualLink childPtr in famRec.Children)
                         {
-                            GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)childPtr.Value;
+                            GDMIndividualRecord child = childPtr.Individual;
 
                             // exclude childless branches
                             if (EXCLUDE_CHILDLESS && (fBase.Context.IsChildless(child) || child.GetTotalChildsCount() < 1)) continue;
@@ -695,7 +694,7 @@ namespace GKTreeVizPlugin
             }
         }
 
-        private TVPerson PreparePerson(TVPerson parent, GEDCOMIndividualRecord iRec, TVPersonType type)
+        private TVPerson PreparePerson(TVPerson parent, GDMIndividualRecord iRec, TVPersonType type)
         {
             try
             {
@@ -947,14 +946,14 @@ namespace GKTreeVizPlugin
             return Math.Sqrt(dx * dx + dy * dy);
         }
 
-        private static void SetLineColor(GEDCOMSex sex)
+        private static void SetLineColor(GDMSex sex)
         {
             switch (sex) {
-                case GEDCOMSex.svMale:
+                case GDMSex.svMale:
                     OpenGL.glColor3f(0.1F, 0.3F, 0.9F);
                     break;
 
-                case GEDCOMSex.svFemale:
+                case GDMSex.svFemale:
                     OpenGL.glColor3f(0.9F, 0.3F, 0.1F);
                     break;
             }

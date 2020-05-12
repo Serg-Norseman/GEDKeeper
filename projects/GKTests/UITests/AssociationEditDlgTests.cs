@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -38,7 +38,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class AssociationEditDlgTests : CustomWindowTest
     {
-        private GEDCOMAssociation fAssociation;
+        private GDMAssociation fAssociation;
         private IBaseWindow fBase;
         private AssociationEditDlg fDialog;
 
@@ -47,7 +47,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fAssociation = new GEDCOMAssociation(fBase.Context.Tree, null, "", "");
+            fAssociation = new GDMAssociation(null);
 
             fDialog = new AssociationEditDlg(fBase);
             fDialog.Association = fAssociation;
@@ -71,12 +71,10 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fAssociation, fDialog.Association);
 
-            var cmbRelation = new ComboBoxTester("cmbRelation");
-            cmbRelation.Enter("sample text");
-            Assert.AreEqual("sample text", cmbRelation.Text);
+            EnterCombo("cmbRelation", fDialog, "sample text");
 
             // TODO: click and select Individual reference
-            //ModalFormHandler = RecordSelectDlg_Cancel_Handler;
+            //ModalFormHandler = RecordSelectDlgTests.RecordSelectDlg_Cancel_Handler;
             //ClickButton("btnPersonAdd", fDialog);
 
             ClickButton("btnAccept", fDialog);
@@ -89,9 +87,7 @@ namespace GKUI.Forms
 
         public static void AcceptModalHandler(string name, IntPtr ptr, Form form)
         {
-            var cmbRelation = new ComboBoxTester("cmbRelation", form);
-            cmbRelation.Enter("sample relation");
-
+            EnterCombo("cmbRelation", form, "sample relation");
             ClickButton("btnAccept", form);
         }
 

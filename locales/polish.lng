@@ -268,7 +268,7 @@
 267=Lista osób
 268=Format nazwy w listach
 269=Nazwisko_Nazwa_Nazwisko rodowe
-270=Nazwisko; Nazwa; Nazwisko_rodowe
+270=Nazwisko; Nazwa_Nazwisko rodowe
 271=Nazwisko; Nazwa; Nazwisko rodowe
 272=Format daty w listach
 273=Dołączyć adres w miejsce tekstu
@@ -577,7 +577,7 @@
 576=Rejestracja w liście lokalizacji
 577=Podobne nazwiska:
 578=Podobne nazwy:
-579=Wybrane osobiste rekordy usunięte 
+579=Wybrane osobiste rekordy usunięte
 580=Rekord
 581=Problem
 582=Rozwiązania
@@ -652,7 +652,7 @@
 651=Uwaga: w przypadku zduplikowania indywidualnego, więzi rodzinne i stowarzyszenia nie są kopiowane
 652=Pokaż typ daty
 653=Utwórz nowy plik
-654=Otwórz plik 
+654=Otwórz plik
 655=Zapisz plik
 656=Dodaj rekord (Ctrl + I)
 657=Edytowanie rekordu (Ctrl + Enter)
@@ -696,7 +696,7 @@
 695=Wybierz lub Dodaj rekord źródła
 696=Wybierz rekord docelowy
 697=Jeśli używasz "plik" lub "przechowywać" typ magazynu, musisz zapisać nowy plik bazy danych aby kontynuować
-698=Plik o tej samej nazwie już istnieje w repozytorium
+698=Plik o tej samej nazwie już istnieje
 699=Nie jest to zgodne z GEDSEC plik
 700=Osoba ta ma kilka rodzin. Dzieci powinny zostać dodane przez małżonków.
 701=Eksport do programu Excel nie powiódł się
@@ -775,6 +775,30 @@
 774=Ojciec jest wymieniony jako dziecko
 775=Matka jest wymieniona jako dziecko
 776=W rodzinie są zduplikowane dzieci
+777=Wybierz kolor
+778=Rozmieść automatycznie dzieci
+779=Rozmieść automatycznie małżonków
+780=Sprawdź dozwolony rozmiar drzewa
+781=Adopcja
+782=Narodziny
+783=Opieka
+784=Wykrywanie zestawu znaków przy obciążeniu
+785=Rodzaj związku
+786=Was born
+787=Was born
+788=Pliki GedML (*.xml)|*.xml
+789=Dziecko wykryte bez rodziców
+790=Rekord rodzinny wykryty bez rodziców lub dzieci
+791=Are you sure you want to remove multimedia file?
+792=Storage not found
+793=File not found
+794=Allow relative references to media files
+795=Default media storage type
+796=Allow delete media files from storage and archive
+797=Allow delete media files by direct and relative references
+798=Delete media files without confirm
+799=Media record without files
+800=Archive not found
 
 801=RI:George Knight
 802=USSR:WWII:Combatant
@@ -785,3 +809,5 @@
 807=Religion:Catholicism
 808=Religion:Orthodoxy
 809=Religion:The Old Believers
+
+810=Relative link to file

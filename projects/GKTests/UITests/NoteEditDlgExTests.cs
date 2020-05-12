@@ -20,7 +20,7 @@
 
 #if !__MonoCS__
 
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -37,7 +37,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class NoteEditDlgExTests : CustomWindowTest
     {
-        private GEDCOMNoteRecord fNoteRecord;
+        private GDMNoteRecord fNoteRecord;
         private IBaseWindow fBase;
         private NoteEditDlgEx fDialog;
 
@@ -48,7 +48,7 @@ namespace GKUI.Forms
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fNoteRecord = new GEDCOMNoteRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fNoteRecord = new GDMNoteRecord(fBase.Context.Tree);
 
             fDialog = new NoteEditDlgEx(fBase);
             fDialog.NoteRecord = fNoteRecord;
@@ -89,7 +89,7 @@ namespace GKUI.Forms
 
             ClickButton("btnAccept", fDialog);
 
-            Assert.AreEqual("sample text", fNoteRecord.Note.Text);
+            Assert.AreEqual("sample text", fNoteRecord.Lines.Text);
         }
     }
 }

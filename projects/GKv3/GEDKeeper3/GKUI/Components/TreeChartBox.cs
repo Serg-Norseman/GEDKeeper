@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,7 +24,7 @@ using System;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
@@ -51,7 +51,7 @@ namespace GKUI.Components
         private int fMouseY;
         private TreeChartOptions fOptions;
         private TreeChartPerson fSelected;
-        private GEDCOMIndividualRecord fSaveSelection;
+        private GDMIndividualRecord fSaveSelection;
         private ITimer fTimer;
         private bool fTraceKinships;
         private bool fTraceSelected;
@@ -67,6 +67,8 @@ namespace GKUI.Components
         public event EventHandler PersonProperties;
 
         public event EventHandler ZoomChanged;
+
+        public event InfoRequestEventHandler InfoRequest;
 
 
         public IBaseWindow Base
@@ -223,7 +225,7 @@ namespace GKUI.Components
             DoZoomChanged();
         }
 
-        public void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
+        public void GenChart(GDMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
         {
             if (iRec == null) return;
 
@@ -248,7 +250,7 @@ namespace GKUI.Components
             try {
                 if (fModel.Root == null) return;
 
-                GEDCOMIndividualRecord rootRec = fModel.Root.Rec;
+                GDMIndividualRecord rootRec = fModel.Root.Rec;
 
                 SaveSelection();
                 GenChart(rootRec, fModel.Kind, false);
@@ -485,6 +487,13 @@ namespace GKUI.Components
                 eventHandler(this, person);
         }
 
+        private void DoInfoRequest(TreeChartPerson person)
+        {
+            var eventHandler = (InfoRequestEventHandler)InfoRequest;
+            if (eventHandler != null)
+                eventHandler(this, person);
+        }
+
         private void DoPersonProperties(MouseEventArgs eArgs)
         {
             var eventHandler = (/*Mouse*/ EventHandler)PersonProperties;
@@ -547,6 +556,7 @@ namespace GKUI.Components
         protected override void OnPaint(PaintEventArgs e)
         {
             fRenderer.SetTarget(e.Graphics);
+
             InternalDraw(ChartDrawMode.dmInteractive, BackgroundMode.bmAny);
 
             // interactive controls
@@ -615,6 +625,13 @@ namespace GKUI.Components
                 if ((e.Buttons == MouseButtons.Primary && mouseEvent == MouseEvent.meUp) && expRt.Contains(aX, aY)) {
                     person = p;
                     result = MouseAction.maPersonExpand;
+                    break;
+                }
+
+                ExtRect infoRt = TreeChartModel.GetInfoRect(persRt);
+                if ((e.Buttons == MouseButtons.Primary && mouseEvent == MouseEvent.meUp) && infoRt.Contains(aX, aY)) {
+                    person = p;
+                    result = MouseAction.maInfo;
                     break;
                 }
             }
@@ -749,6 +766,10 @@ namespace GKUI.Components
                         case MouseAction.maPersonExpand:
                             ToggleCollapse(mPers);
                             break;
+
+                        case MouseAction.maInfo:
+                            DoInfoRequest(mPers);
+                            break;
                     }
                     break;
 
@@ -772,7 +793,7 @@ namespace GKUI.Components
 
         protected override void SetNavObject(object obj)
         {
-            var iRec = obj as GEDCOMIndividualRecord;
+            var iRec = obj as GDMIndividualRecord;
             GenChart(iRec, TreeChartKind.ckBoth, true);
         }
 
@@ -812,7 +833,7 @@ namespace GKUI.Components
             if (needCenter && fTraceSelected) CenterPerson(person);
         }
 
-        public void SelectByRec(GEDCOMIndividualRecord iRec)
+        public void SelectByRec(GDMIndividualRecord iRec)
         {
             if (iRec == null) return;
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,12 +20,15 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKTests;
 using GKTests.Stubs;
 using GKUI.Forms;
 using NUnit.Framework;
+using GKTests.ControlTesters;
 
 namespace GKUI.Forms
 {
@@ -48,9 +51,7 @@ namespace GKUI.Forms
             fContext = fBase.Context;
             fListMan = new IndividualListMan(fContext);
 
-            //ExpectModal("CommonFilterDlg", "DlgHandler");
             fDialog = new CommonFilterDlg(fBase, fListMan);
-            //fDialog.ShowDialog();
             fDialog.Show();
         }
 
@@ -73,19 +74,48 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            /*var cmbRelation = new ComboBoxTester("cmbRelation");
-            cmbRelation.Enter("sample text");
-            Assert.AreEqual("sample text", cmbRelation.Text);*/
-
-            /*var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
-            Assert.AreEqual("sample text", txtAuthor.Text);*/
-
             ClickButton("btnAccept", fDialog);
-
-            //Assert.AreEqual("sample text", fListMan.Relation);
-            //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
         }
+
+        #region Handlers for external tests
+
+        public static void CommonFilterDlg_btnReset_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnReset", form);
+            ClickButton("btnAccept", form);
+        }
+
+        public static void CommonFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            CommonFilterDlg cfDlg = ((CommonFilterDlg)form);
+            Assert.IsNotNull(cfDlg.Base);
+
+            IListManager listMan = cfDlg.ListMan;
+
+            SelectTab("tabsFilters", form, 0);
+
+            var dataGridView1 = new DataGridViewTester("dataGridView1", form);
+            dataGridView1.SelectCell(0, 0);
+            dataGridView1.Properties.BeginEdit(false);
+            dataGridView1.Properties.EndEdit();
+            dataGridView1.SelectCell(0, 1);
+            dataGridView1.Properties.BeginEdit(false);
+            dataGridView1.Properties.EndEdit();
+            dataGridView1.SelectCell(0, 2);
+            dataGridView1.Properties.BeginEdit(false);
+            dataGridView1.Properties.EndEdit();
+
+            // Fail: AmbiguousMatch?!
+            //dataGridView1.FireEvent("Scroll", new ScrollEventArgs(ScrollEventType.SmallIncrement, 1));
+
+            if (form is PersonsFilterDlg) {
+                PersonsFilterDlgTests.PersonsFilterDlg_Handler(form);
+            }
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

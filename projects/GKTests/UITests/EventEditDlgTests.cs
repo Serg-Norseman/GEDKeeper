@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,8 @@
 #if !__MonoCS__
 
 using System;
-using GKCommon.GEDCOM;
+using System.Windows.Forms;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -36,7 +37,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class EventEditDlgTests : CustomWindowTest
     {
-        private GEDCOMCustomEvent fEvent;
+        private GDMCustomEvent fEvent;
         private IBaseWindow fBase;
         private EventEditDlg fDialog;
 
@@ -45,7 +46,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fEvent = new GEDCOMIndividualEvent(fBase.Context.Tree, null, "", "");
+            fEvent = new GDMIndividualEvent(null);
 
             fDialog = new EventEditDlg(fBase);
             fDialog.Event = fEvent;
@@ -182,6 +183,36 @@ namespace GKUI.Forms
 
             ClickButton("btnCancel", fDialog);
         }
+
+        #region Handlers for external tests
+
+        public static void EventEditDlg_Select_Handler(string name, IntPtr ptr, Form form)
+        {
+            EventEditDlg eventDlg = (EventEditDlg) form;
+            Assert.IsNotNull(eventDlg.Event);
+
+            SelectCombo("cmbEventType", form, 1); // Birth(indi) / ?(fam)
+            EnterText("txtEventPlace", form, "test place");
+            SelectCombo("cmbEventDateType", form, 3); // Between
+            EnterMaskedText("txtEventDate1", form, "01.01.1900");
+            EnterMaskedText("txtEventDate2", form, "10.01.1900");
+            SelectCombo("cmbDate1Calendar", form, 1); // Julian
+            SelectCombo("cmbDate2Calendar", form, 1); // Julian
+            EnterText("txtEventCause", form, "test cause");
+            EnterText("txtEventOrg", form, "test agency");
+
+            SetModalFormHandler(fFormTest, AddressEditDlgTests.AddressEditDlg_btnAccept_Handler);
+            ClickButton("btnAddress", form);
+
+            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, LocationEditDlgTests.LocationAdd_Mini_Handler);
+            ClickButton("btnPlaceAdd", form);
+
+            ClickButton("btnPlaceDelete", form);
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

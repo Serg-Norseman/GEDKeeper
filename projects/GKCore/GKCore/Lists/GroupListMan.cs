@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -39,11 +39,11 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class GroupListMan : ListManager
     {
-        private GEDCOMGroupRecord fRec;
+        private GDMGroupRecord fRec;
 
 
         public GroupListMan(IBaseContext baseContext) :
-            base(baseContext, CreateGroupListColumns(), GEDCOMRecordType.rtGroup)
+            base(baseContext, CreateGroupListColumns(), GDMRecordType.rtGroup)
         {
         }
 
@@ -62,14 +62,14 @@ namespace GKCore.Lists
         {
             bool res = (QuickFilter == "*" || IsMatchesMask(fRec.GroupName, QuickFilter));
 
-            res = res && CheckCommonFilter();
+            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
 
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMGroupRecord);
+            fRec = (aRec as GDMGroupRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -106,7 +106,7 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var grp = fDataOwner as GEDCOMGroupRecord;
+            var grp = fDataOwner as GDMGroupRecord;
             if (fSheetList == null || grp == null) return;
 
             try
@@ -114,8 +114,8 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMPointer ptrMember in grp.Members) {
-                    GEDCOMIndividualRecord member = ptrMember.Value as GEDCOMIndividualRecord;
+                foreach (GDMIndividualLink ptrMember in grp.Members) {
+                    GDMIndividualRecord member = ptrMember.Individual;
                     if (member == null) continue;
 
                     fSheetList.AddItem(member, new object[] { GKUtils.GetNameString(member, true, false) });
@@ -131,16 +131,16 @@ namespace GKCore.Lists
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var grp = fDataOwner as GEDCOMGroupRecord;
+            var grp = fDataOwner as GDMGroupRecord;
             if (fBaseWin == null || fSheetList == null || grp == null) return;
 
-            GEDCOMIndividualRecord member = eArgs.ItemData as GEDCOMIndividualRecord;
+            GDMIndividualRecord member = eArgs.ItemData as GDMIndividualRecord;
 
             bool result = false;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    member = fBaseWin.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    member = fBaseWin.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
                     result = (member != null);
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, grp, member);

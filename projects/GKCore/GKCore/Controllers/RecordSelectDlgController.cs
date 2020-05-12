@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP;
@@ -33,7 +33,7 @@ namespace GKCore.Controllers
     public sealed class RecordSelectDlgController : DialogController<IRecordSelectDialog>
     {
         private string fFilter;
-        private GEDCOMRecordType fRecType;
+        private GDMRecordType fRecType;
         private readonly Target fTarget;
 
 
@@ -52,7 +52,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public GEDCOMRecordType RecType
+        public GDMRecordType RecType
         {
             get { return fRecType; }
             set { fRecType = value; }
@@ -71,11 +71,11 @@ namespace GKCore.Controllers
 
         private void UpdateFilter()
         {
-            IListView recordsList = fView.RecordsList;
+            IListViewEx recordsList = fView.RecordsList;
             recordsList.ListMan.Filter.Clear();
             recordsList.ListMan.QuickFilter = fFilter;
 
-            if (fRecType == GEDCOMRecordType.rtIndividual) {
+            if (fRecType == GDMRecordType.rtIndividual) {
                 IndividualListFilter iFilter = (IndividualListFilter)recordsList.ListMan.Filter;
                 iFilter.Sex = fTarget.NeedSex;
 
@@ -87,9 +87,9 @@ namespace GKCore.Controllers
             recordsList.UpdateContents();
         }
 
-        private static bool ChildSelectorHandler(GEDCOMRecord record)
+        private static bool ChildSelectorHandler(GDMRecord record)
         {
-            GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = record as GDMIndividualRecord;
             return (iRec != null && iRec.ChildToFamilyLinks.Count == 0);
         }
 

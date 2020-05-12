@@ -20,8 +20,8 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -35,7 +35,7 @@ namespace GKUI.Forms
     {
         private readonly SourceCitEditDlgController fController;
 
-        public GEDCOMSourceCitation SourceCitation
+        public GDMSourceCitation SourceCitation
         {
             get { return fController.SourceCitation; }
             set { fController.SourceCitation = value; }
@@ -43,19 +43,19 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler ISourceCitEditDlg.Page
+        ITextBox ISourceCitEditDlg.Page
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtPage); }
+            get { return GetControlHandler<ITextBox>(txtPage); }
         }
 
-        IComboBoxHandler ISourceCitEditDlg.Certainty
+        IComboBox ISourceCitEditDlg.Certainty
         {
-            get { return GetControlHandler<IComboBoxHandler>(txtCertainty); }
+            get { return GetControlHandler<IComboBox>(txtCertainty); }
         }
 
-        IComboBoxHandler ISourceCitEditDlg.Source
+        IComboBox ISourceCitEditDlg.Source
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbSource); }
+            get { return GetControlHandler<IComboBox>(cmbSource); }
         }
 
         #endregion

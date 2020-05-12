@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -43,12 +44,16 @@ namespace GKCore.Maps
             return ParseXml(requestUrl);
         }
 
-        private static IList<GeoPoint> ParseXml(string url)
+        private IList<GeoPoint> ParseXml(string url)
         {
             List<GeoPoint> geoObjects = new List<GeoPoint>();
 
-            WebRequest request = WebRequest.Create(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.CreateDefault(new Uri(url));
+            request.ContentType = "application/x-www-form-urlencoded";
             request.Credentials = CredentialCache.DefaultCredentials;
+            request.Proxy = fProxy;
+            request.UserAgent = "GK Geocoder";
+
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()) {
                 using (Stream dataStream = response.GetResponseStream()) {
                     XmlDocument doc = new XmlDocument();
@@ -60,8 +65,7 @@ namespace GKCore.Maps
                     ns.AddNamespace("geocoder", "http://maps.yandex.ru/geocoder/1.x");
 
                     XmlNodeList nodes = doc.SelectNodes("//ns:ymaps/ns:GeoObjectCollection/opengis:featureMember/ns:GeoObject", ns);
-                    foreach (XmlNode node in nodes)
-                    {
+                    foreach (XmlNode node in nodes) {
                         var pointNode = node.SelectSingleNode("opengis:Point/opengis:pos", ns);
                         var metaNode = node.SelectSingleNode("opengis:metaDataProperty/geocoder:GeocoderMetaData", ns);
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,9 @@
 
 #if !__MonoCS__
 
-using GKCommon.GEDCOM;
+using System;
+using System.Windows.Forms;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.ControlTesters;
@@ -38,7 +40,7 @@ namespace GKUI.Forms
     public class CommunicationEditDlgTests : CustomWindowTest
     {
         private IBaseContext fContext;
-        private GEDCOMCommunicationRecord fCommunicationRecord;
+        private GDMCommunicationRecord fCommunicationRecord;
         private IBaseWindow fBase;
         private CommunicationEditDlg fDialog;
 
@@ -48,7 +50,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
             fContext = fBase.Context;
-            fCommunicationRecord = new GEDCOMCommunicationRecord(fContext.Tree, fContext.Tree, "", "");
+            fCommunicationRecord = new GDMCommunicationRecord(fContext.Tree);
 
             fDialog = new CommunicationEditDlg(fBase);
             fDialog.Communication = fCommunicationRecord;
@@ -72,16 +74,12 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fCommunicationRecord, fDialog.Communication);
 
-            var txtName = new TextBoxTester("txtName");
-            txtName.Enter("sample text");
-
-            var cmbCorrType = new ComboBoxTester("cmbCorrType", fDialog);
-            cmbCorrType.Select(1);
-
+            EnterText("txtName", fDialog, "sample text");
+            SelectCombo("cmbCorrType", fDialog, 1);
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fCommunicationRecord.CommName);
-            Assert.AreEqual(GKCommunicationType.ctEMail, fCommunicationRecord.CommunicationType);
+            Assert.AreEqual(GDMCommunicationType.ctEMail, fCommunicationRecord.CommunicationType);
             Assert.AreEqual("", fCommunicationRecord.Date.StringValue);
         }
 
@@ -90,17 +88,32 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fCommunicationRecord, fDialog.Communication);
 
-            var txtName = new TextBoxTester("txtName");
-            txtName.Enter("sample text");
-
-            var txtDate = new MaskedTextBoxTester("txtDate", fDialog);
-            txtDate.Enter("20.02.2000");
-
+            EnterText("txtName", fDialog, "sample text");
+            EnterMaskedText("txtDate", fDialog, "20.02.2000");
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fCommunicationRecord.CommName);
             Assert.AreEqual("20 FEB 2000", fCommunicationRecord.Date.StringValue);
         }
+
+        #region Handlers for external tests
+
+        public static void CommunicationAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //EnterText("edName", form, "sample group");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void CommunicationEditDlg_Handler(CommunicationEditDlg dlg)
+        {
+            PersonEditDlgTests.SetCreateIndividualHandler(fFormTest, GDMSex.svMale);
+            ClickButton("btnPersonAdd", dlg);
+
+            ClickButton("btnAccept", dlg);
+        }
+
+        #endregion
     }
 }
 

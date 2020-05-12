@@ -23,10 +23,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
-
 using BSLib;
+using BSLib.Design.IoC;
 using GKCore.Interfaces;
-using GKCore.IoC;
 using GKCore.Maps;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
@@ -210,7 +209,19 @@ namespace GKCore
 
         protected abstract void UpdateMRU();
 
-        public abstract void SaveLastBases();
+        public void SaveLastBases()
+        {
+            #if !CI_MODE
+            AppHost.Options.ClearLastBases();
+
+            foreach (IWindow win in fRunningForms) {
+                var baseWin = win as IBaseWindow;
+                if (baseWin != null) {
+                    AppHost.Options.AddLastBase(baseWin.Context.FileName);
+                }
+            }
+            #endif
+        }
 
         public abstract int GetKeyLayout();
 
@@ -218,7 +229,10 @@ namespace GKCore
 
         public abstract ITimer CreateTimer(double msInterval, EventHandler elapsedHandler);
 
-        public abstract void Quit();
+        public virtual void Quit()
+        {
+            AppHost.Instance.SaveLastBases();
+        }
 
         #region Executing environment
 
@@ -363,14 +377,14 @@ namespace GKCore
             }
         }
 
-        public void WidgetsEnable()
+        public virtual void WidgetsEnable()
         {
             foreach (WidgetInfo widgetInfo in fActiveWidgets) {
                 widgetInfo.Widget.WidgetEnable();
             }
         }
 
-        public void BaseChanged(IBaseWindow baseWin)
+        public virtual void BaseChanged(IBaseWindow baseWin)
         {
             bool forceDeactivate = (baseWin == null);
             AppHost.Instance.UpdateControls(forceDeactivate);
@@ -394,9 +408,29 @@ namespace GKCore
             }
         }
 
-        public void BaseRenamed(IBaseWindow baseWin, string oldName, string newName)
+        public virtual void BaseRenamed(IBaseWindow baseWin, string oldName, string newName)
         {
-            // TODO: implementation of Base.SaveAs
+            foreach (WidgetInfo widgetInfo in fActiveWidgets) {
+                widgetInfo.Widget.BaseRenamed(baseWin, oldName, newName);
+            }
+        }
+
+        public virtual void SelectedIndexChanged(IBaseWindow baseWin)
+        {
+            if (baseWin == null) return;
+
+            foreach (WidgetInfo widgetInfo in fActiveWidgets) {
+                widgetInfo.Widget.SelectedIndexChanged(baseWin);
+            }
+        }
+
+        public virtual void TabChanged(IBaseWindow baseWin)
+        {
+            if (baseWin == null) return;
+
+            foreach (WidgetInfo widgetInfo in fActiveWidgets) {
+                widgetInfo.Widget.TabChanged(baseWin);
+            }
         }
 
         public virtual bool ShowModalX(ICommonDialog form, bool keepModeless = false)
@@ -438,6 +472,13 @@ namespace GKCore
             return ufPath;
         }
 
+        private void ProcessLoaded(IBaseContext context)
+        {
+            if (GlobalOptions.Instance.ShowTips) {
+                context.CollectTips(fTips);
+            }
+        }
+
         public IBaseWindow CreateBase(string fileName)
         {
             IBaseWindow result = null;
@@ -457,7 +498,7 @@ namespace GKCore
 
                     if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName)) {
                         result.LoadFile(fileName);
-                        result.Context.CollectTips(fTips);
+                        ProcessLoaded(result.Context);
                     } else {
                         result.CreateNewFile();
                     }
@@ -495,7 +536,7 @@ namespace GKCore
 
                     if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName)) {
                         baseWin.LoadFile(fileName);
-                        baseWin.Context.CollectTips(fTips);
+                        ProcessLoaded(baseWin.Context);
                         RestoreWinMRU(baseWin);
                     }
                 } finally {
@@ -618,12 +659,12 @@ namespace GKCore
 
         public void Restore()
         {
-            // FIXME!
+            // dummy
         }
 
         public static ushort RequestLanguage()
         {
-            using (var dlg = AppHost.Container.Resolve<ILanguageSelectDlg>()) {
+            using (var dlg = AppHost.ResolveDialog<ILanguageSelectDlg>()) {
                 if (AppHost.Instance.ShowModalX(dlg, false)) {
                     return (ushort)dlg.SelectedLanguage;
                 }
@@ -639,24 +680,7 @@ namespace GKCore
                     langCode = RequestLanguage();
                 }
 
-                if (langCode != LangMan.LS_DEF_CODE) {
-                    bool loaded = false;
-
-                    foreach (LangRecord langRec in AppHost.Options.Languages) {
-                        if (langRec.Code == langCode) {
-                            loaded = LangMan.LoadFromFile(langRec.FileName);
-                            break;
-                        }
-                    }
-
-                    if (!loaded) langCode = LangMan.LS_DEF_CODE;
-                }
-
-                if (langCode == LangMan.LS_DEF_CODE) {
-                    LangMan.DefInit();
-                }
-
-                AppHost.Options.InterfaceLang = (ushort)langCode;
+                AppHost.Options.LoadLanguage(langCode);
                 AppHost.Plugins.OnLanguageChange();
 
                 UpdateLang();
@@ -681,8 +705,6 @@ namespace GKCore
 
             UpdateMRU();
         }
-
-        public abstract string GetDefaultFontName();
 
         #region Geocoding
 
@@ -727,6 +749,25 @@ namespace GKCore
             }
         }
 
+        public static TTypeToResolve ResolveDialog<TTypeToResolve>(params object[] parameters) where TTypeToResolve : ICommonDialog
+        {
+            Type resolveType = typeof(TTypeToResolve);
+
+            int num = AppHost.Plugins.Count;
+            for (int i = 0; i < num; i++) {
+                var dlgPlugin = AppHost.Plugins[i] as IDialogReplacement;
+
+                if (dlgPlugin != null && dlgPlugin.Category == PluginCategory.DialogReplacement) {
+                    var dlgType = dlgPlugin.GetDialogType();
+                    if (GKUtils.ImplementsInterface(dlgType, resolveType) && dlgPlugin.Enabled) {
+                        return (TTypeToResolve)dlgPlugin.CreateDialog(parameters);
+                    }
+                }
+            }
+
+            return Container.Resolve<TTypeToResolve>(parameters);
+        }
+
         #endregion
 
         public void ShowOptions()
@@ -747,7 +788,7 @@ namespace GKCore
 
         public void ShowOptions(OptionsPage page)
         {
-            using (var dlgOptions = AppHost.Container.Resolve<IOptionsDlg>(AppHost.Instance)) {
+            using (var dlgOptions = AppHost.ResolveDialog<IOptionsDlg>(AppHost.Instance)) {
                 dlgOptions.SetPage(page);
 
                 if (AppHost.Instance.ShowModalX(dlgOptions)) {
@@ -772,12 +813,10 @@ namespace GKCore
 
         #region ISingleInstanceEnforcer implementation
 
-        // FIXME!
         void ISingleInstanceEnforcer.OnMessageReceived(MessageEventArgs e)
         {
             OnMessageReceivedInvoker invoker = delegate(MessageEventArgs eventArgs) {
-                try
-                {
+                try {
                     string msg = eventArgs.Message as string;
 
                     if (!string.IsNullOrEmpty(msg) && msg == "restore") {
@@ -787,7 +826,6 @@ namespace GKCore
                         if (args != null) {
                             // A obligatory recovery of window, otherwise it will fail to load
                             Restore();
-
                             SetArgs(args);
                             LoadArgs();
                         }
@@ -815,7 +853,7 @@ namespace GKCore
         private static readonly IocContainer fIocContainer;
 
         private static IStdDialogs fStdDialogs;
-        private static IGraphicsProvider fGfxProvider;
+        private static IGraphicsProviderEx fGfxProvider;
         private static PathReplacer fPathReplacer;
         private static INamesTable fNamesTable;
         private static IProgressController fProgressController;
@@ -888,11 +926,11 @@ namespace GKCore
             }
         }
 
-        public static IGraphicsProvider GfxProvider
+        public static IGraphicsProviderEx GfxProvider
         {
             get {
                 if (fGfxProvider == null) {
-                    fGfxProvider = fIocContainer.Resolve<IGraphicsProvider>();
+                    fGfxProvider = fIocContainer.Resolve<IGraphicsProviderEx>();
                 }
                 return fGfxProvider;
             }
@@ -939,6 +977,8 @@ namespace GKCore
         {
             Logger.LogInit(GetLogFilename());
 
+            Plugins.Load(AppHost.Instance, GKUtils.GetPluginsPath());
+
             var options = GlobalOptions.Instance;
             options.LoadFromFile(GetAppDataPathStatic() + "GEDKeeper2.ini");
             options.FindLanguages();
@@ -946,8 +986,6 @@ namespace GKCore
             NamesTable.LoadFromFile(GetAppDataPathStatic() + "GEDKeeper2.nms");
 
             PathReplacer.Load(GKUtils.GetAppPath() + "crossplatform.yaml"); // FIXME: path
-
-            Plugins.Load(AppHost.Instance, GKUtils.GetPluginsPath());
         }
 
         public static void DoneSettings()
@@ -959,6 +997,12 @@ namespace GKCore
             var options = GlobalOptions.Instance;
             options.SaveToFile(GetAppDataPathStatic() + "GEDKeeper2.ini");
             options.Dispose();
+        }
+
+        public static void ForceGC()
+        {
+            GC.Collect(2, GCCollectionMode.Forced);
+            GC.WaitForPendingFinalizers();
         }
 
         #endregion

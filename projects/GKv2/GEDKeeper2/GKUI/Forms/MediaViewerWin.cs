@@ -22,8 +22,8 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.Graphics;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -37,7 +37,7 @@ namespace GKUI.Forms
         private readonly MediaViewerController fController;
         private Control fViewer;
 
-        public GEDCOMFileReferenceWithTitle FileRef
+        public GDMFileReferenceWithTitle FileRef
         {
             get { return fController.FileRef; }
             set { fController.FileRef = value; }
@@ -92,7 +92,7 @@ namespace GKUI.Forms
             SetViewControl(mediaPlayer);
         }
 
-        public void SetViewImage(IImage img, GEDCOMFileReferenceWithTitle fileRef)
+        public void SetViewImage(IImage img, GDMFileReferenceWithTitle fileRef)
         {
             var imageCtl = new GKUI.Components.ImageView();
             imageCtl.OpenImage(img);

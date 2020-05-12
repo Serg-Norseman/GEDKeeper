@@ -19,11 +19,10 @@
  */
 
 using System;
-
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -41,19 +40,19 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ILabelHandler IDayTipsDlg.TitleLabel
+        ILabel IDayTipsDlg.TitleLabel
         {
-            get { return GetControlHandler<ILabelHandler>(lblTitle); }
+            get { return GetControlHandler<ILabel>(lblTitle); }
         }
 
-        ITextBoxHandler IDayTipsDlg.TipText
+        ITextBox IDayTipsDlg.TipText
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtTip); }
+            get { return GetControlHandler<ITextBox>(txtTip); }
         }
 
-        IButtonHandler IDayTipsDlg.NextButton
+        IButton IDayTipsDlg.NextButton
         {
-            get { return GetControlHandler<IButtonHandler>(btnNextTip); }
+            get { return GetControlHandler<IButton>(btnNextTip); }
         }
 
         #endregion

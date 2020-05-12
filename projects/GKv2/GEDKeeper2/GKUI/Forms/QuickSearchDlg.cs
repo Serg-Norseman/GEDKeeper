@@ -20,11 +20,10 @@
 
 using System;
 using System.Windows.Forms;
-
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -36,9 +35,9 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler IQuickSearchDlg.SearchPattern
+        ITextBox IQuickSearchDlg.SearchPattern
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtSearchPattern); }
+            get { return GetControlHandler<ITextBox>(txtSearchPattern); }
         }
 
         #endregion

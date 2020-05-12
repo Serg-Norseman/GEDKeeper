@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GKCore.Types
 {
@@ -30,6 +30,6 @@ namespace GKCore.Types
         public string Name;
         public string F_Patronymic;
         public string M_Patronymic;
-        public GEDCOMSex Sex;
+        public GDMSex Sex;
     }
 }

@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKTests;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;
@@ -57,14 +57,14 @@ namespace GKUI.Forms
             fDialog.IndividualName = "test name";
             Assert.AreEqual("test name", fDialog.IndividualName);
 
-            fDialog.Sex = GEDCOMSex.svMale;
-            Assert.AreEqual(GEDCOMSex.svMale, fDialog.Sex);
+            fDialog.Sex = GDMSex.svMale;
+            Assert.AreEqual(GDMSex.svMale, fDialog.Sex);
 
-            fDialog.Sex = GEDCOMSex.svFemale;
-            Assert.AreEqual(GEDCOMSex.svFemale, fDialog.Sex);
+            fDialog.Sex = GDMSex.svFemale;
+            Assert.AreEqual(GDMSex.svFemale, fDialog.Sex);
 
-            fDialog.Sex = GEDCOMSex.svNone;
-            Assert.AreEqual(GEDCOMSex.svNone, fDialog.Sex);
+            fDialog.Sex = GDMSex.svUnknown;
+            Assert.AreEqual(GDMSex.svUnknown, fDialog.Sex);
 
             ClickButton("btnCancel", fDialog);
         }
@@ -77,11 +77,17 @@ namespace GKUI.Forms
 
         #region Handlers for external tests
 
-        public static void SexCheckDlgTests_Accept_Handler(string name, IntPtr ptr, Form form)
+        public static void SexCheckDlgTests_AcceptM_Handler(string name, IntPtr ptr, Form form)
         {
             var rbMale = new RadioButtonTester("rbMale", form);
             rbMale.Properties.Checked = true;
+            ClickButton("btnAccept", form);
+        }
 
+        public static void SexCheckDlgTests_AcceptF_Handler(string name, IntPtr ptr, Form form)
+        {
+            var rbFemale = new RadioButtonTester("rbFemale", form);
+            rbFemale.Properties.Checked = true;
             ClickButton("btnAccept", form);
         }
 

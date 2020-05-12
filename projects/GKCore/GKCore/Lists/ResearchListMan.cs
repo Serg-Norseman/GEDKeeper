@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -44,11 +44,11 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class ResearchListMan : ListManager
     {
-        private GEDCOMResearchRecord fRec;
+        private GDMResearchRecord fRec;
 
 
         public ResearchListMan(IBaseContext baseContext) :
-            base(baseContext, CreateResearchListColumns(), GEDCOMRecordType.rtResearch)
+            base(baseContext, CreateResearchListColumns(), GDMRecordType.rtResearch)
         {
         }
 
@@ -72,14 +72,14 @@ namespace GKCore.Lists
         {
             bool res = (QuickFilter == "*" || IsMatchesMask(fRec.ResearchName, QuickFilter));
 
-            res = res && CheckCommonFilter();
+            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
 
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMResearchRecord);
+            fRec = (aRec as GDMResearchRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -139,7 +139,7 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var research = fDataOwner as GEDCOMResearchRecord;
+            var research = fDataOwner as GDMResearchRecord;
             if (fSheetList == null || research == null) return;
 
             try
@@ -147,9 +147,9 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMPointer taskPtr in research.Tasks)
+                foreach (GDMPointer taskPtr in research.Tasks)
                 {
-                    GEDCOMTaskRecord task = taskPtr.Value as GEDCOMTaskRecord;
+                    GDMTaskRecord task = taskPtr.Value as GDMTaskRecord;
                     if (task == null) continue;
 
                     fSheetList.AddItem(task, new object[] { GKUtils.GetTaskGoalStr(task),
@@ -168,16 +168,16 @@ namespace GKCore.Lists
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var research = fDataOwner as GEDCOMResearchRecord;
+            var research = fDataOwner as GDMResearchRecord;
             if (fBaseWin == null || fSheetList == null || research == null) return;
 
-            GEDCOMTaskRecord task = eArgs.ItemData as GEDCOMTaskRecord;
+            GDMTaskRecord task = eArgs.ItemData as GDMTaskRecord;
 
             bool result = false;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    task = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtTask, null) as GEDCOMTaskRecord;
+                    task = fBaseWin.Context.SelectRecord(GDMRecordType.rtTask, null) as GDMTaskRecord;
                     result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskAdd, research, task);
                     break;
 
@@ -220,7 +220,7 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var research = fDataOwner as GEDCOMResearchRecord;
+            var research = fDataOwner as GDMResearchRecord;
             if (fSheetList == null || research == null) return;
 
             try
@@ -228,9 +228,9 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMPointer commPtr in research.Communications)
+                foreach (GDMPointer commPtr in research.Communications)
                 {
-                    GEDCOMCommunicationRecord corr = commPtr.Value as GEDCOMCommunicationRecord;
+                    GDMCommunicationRecord corr = commPtr.Value as GDMCommunicationRecord;
                     if (corr == null) continue;
 
                     fSheetList.AddItem(corr, new object[] { corr.CommName,
@@ -249,16 +249,16 @@ namespace GKCore.Lists
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var research = fDataOwner as GEDCOMResearchRecord;
+            var research = fDataOwner as GDMResearchRecord;
             if (fBaseWin == null || fSheetList == null || research == null) return;
 
-            GEDCOMCommunicationRecord comm = eArgs.ItemData as GEDCOMCommunicationRecord;
+            GDMCommunicationRecord comm = eArgs.ItemData as GDMCommunicationRecord;
 
             bool result = false;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    comm = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtCommunication, null) as GEDCOMCommunicationRecord;
+                    comm = fBaseWin.Context.SelectRecord(GDMRecordType.rtCommunication, null) as GDMCommunicationRecord;
                     result = fUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationAdd, research, comm);
                     break;
 
@@ -298,7 +298,7 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var research = fDataOwner as GEDCOMResearchRecord;
+            var research = fDataOwner as GDMResearchRecord;
             if (fSheetList == null || research == null) return;
 
             try
@@ -306,9 +306,9 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMPointer groupPtr in research.Groups)
+                foreach (GDMPointer groupPtr in research.Groups)
                 {
-                    GEDCOMGroupRecord grp = groupPtr.Value as GEDCOMGroupRecord;
+                    GDMGroupRecord grp = groupPtr.Value as GDMGroupRecord;
                     if (grp == null) continue;
 
                     fSheetList.AddItem(grp, new object[] { grp.GroupName });
@@ -324,16 +324,16 @@ namespace GKCore.Lists
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var research = fDataOwner as GEDCOMResearchRecord;
+            var research = fDataOwner as GDMResearchRecord;
             if (fBaseWin == null || fSheetList == null || research == null) return;
 
-            GEDCOMGroupRecord group = eArgs.ItemData as GEDCOMGroupRecord;
+            GDMGroupRecord group = eArgs.ItemData as GDMGroupRecord;
 
             bool result = false;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    group = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
+                    group = fBaseWin.Context.SelectRecord(GDMRecordType.rtGroup, null) as GDMGroupRecord;
                     result = fUndoman.DoOrdinaryOperation(OperationType.otResearchGroupAdd, research, group);
                     break;
 

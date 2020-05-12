@@ -23,6 +23,7 @@ using System.Reflection;
 using GKCore.Interfaces;
 using GKCore.Plugins;
 using GKCore.Types;
+using GKTests.Stubs;
 using GKUI.Providers;
 using NUnit.Framework;
 
@@ -31,18 +32,6 @@ namespace GKCore
     [TestFixture]
     public class PluginTests
     {
-        private class TestPlugin : OrdinaryPlugin, IPlugin
-        {
-            public override string DisplayName { get { return "TestPlugin"; } }
-            public override ILangMan LangMan { get { return null; } }
-            public override IImage Icon { get { return null; } }
-            public override PluginCategory Category { get { return PluginCategory.Common; } }
-
-            public override void Execute()
-            {
-            }
-        }
-
         [TestFixtureSetUp]
         public void SetUp()
         {

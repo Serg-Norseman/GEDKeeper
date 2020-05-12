@@ -22,9 +22,9 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using BSLib.Design.Graphics;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -143,6 +143,28 @@ namespace GKUI.Components
             }
         }
 
+        public static T GetSelectedTag<T>(ComboBox comboBox)
+        {
+            object selectedItem = comboBox.SelectedItem;
+            GKComboItem comboItem = (GKComboItem)selectedItem;
+            T itemTag = (T)comboItem.Tag;
+            return itemTag;
+        }
+
+        public static void SetSelectedTag<T>(ComboBox comboBox, T tagValue)
+        {
+            foreach (object item in comboBox.Items) {
+                GKComboItem comboItem = (GKComboItem)item;
+                T itemTag = (T)comboItem.Tag;
+
+                if (tagValue.Equals(itemTag)) {
+                    comboBox.SelectedItem = item;
+                    return;
+                }
+            }
+            comboBox.SelectedIndex = 0;
+        }
+
         public static void SelectComboItem(ComboBox comboBox, object tag, bool allowDefault)
         {
             for (int i = 0; i < comboBox.Items.Count; i++) {
@@ -175,7 +197,7 @@ namespace GKUI.Components
             }
         }
 
-        public static GKListView CreateRecordsView(Control parent, IBaseContext baseContext, GEDCOMRecordType recType)
+        public static GKListView CreateRecordsView(Control parent, IBaseContext baseContext, GDMRecordType recType)
         {
             if (parent == null)
                 throw new ArgumentNullException("parent");

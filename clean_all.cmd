@@ -7,7 +7,9 @@ del .\*.dll
 del .\*.pdb
 del .\*.mdb
 del .\*.xml
+del .\*.log
 del .\plugins\*.* /q
+del .\deploy\*.zip /q
 
 del .\GEDKeeper3.Gtk2.exe.*
 del .\GEDKeeper3.Gtk3.exe.*

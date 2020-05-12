@@ -20,6 +20,7 @@
 
 using System;
 using System.Reflection;
+using BSLib.Design.Graphics;
 using ConwayLife;
 using GKCore;
 using GKCore.Interfaces;

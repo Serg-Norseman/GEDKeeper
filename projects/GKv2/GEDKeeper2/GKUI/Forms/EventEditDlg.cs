@@ -21,8 +21,8 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -41,7 +41,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fSourcesList;
 
-        public GEDCOMCustomEvent Event
+        public GDMCustomEvent Event
         {
             get { return fController.Event; }
             set { fController.Event = value; }
@@ -64,69 +64,69 @@ namespace GKUI.Forms
             get { return fSourcesList; }
         }
 
-        IComboBoxHandler IEventEditDlg.EventType
+        IComboBox IEventEditDlg.EventType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbEventType); }
+            get { return GetControlHandler<IComboBox>(cmbEventType); }
         }
 
-        IComboBoxHandler IEventEditDlg.EventDateType
+        IComboBox IEventEditDlg.EventDateType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbEventDateType); }
+            get { return GetControlHandler<IComboBox>(cmbEventDateType); }
         }
 
-        ICheckBoxHandler IEventEditDlg.Date1BC
+        ICheckBox IEventEditDlg.Date1BC
         {
-            get { return GetControlHandler<ICheckBoxHandler>(btnBC1); }
+            get { return GetControlHandler<ICheckBox>(btnBC1); }
         }
 
-        ICheckBoxHandler IEventEditDlg.Date2BC
+        ICheckBox IEventEditDlg.Date2BC
         {
-            get { return GetControlHandler<ICheckBoxHandler>(btnBC2); }
+            get { return GetControlHandler<ICheckBox>(btnBC2); }
         }
 
-        IComboBoxHandler IEventEditDlg.Date1Calendar
+        IComboBox IEventEditDlg.Date1Calendar
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbDate1Calendar); }
+            get { return GetControlHandler<IComboBox>(cmbDate1Calendar); }
         }
 
-        IComboBoxHandler IEventEditDlg.Date2Calendar
+        IComboBox IEventEditDlg.Date2Calendar
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbDate2Calendar); }
+            get { return GetControlHandler<IComboBox>(cmbDate2Calendar); }
         }
 
-        ITextBoxHandler IEventEditDlg.Date1
+        IDateBoxHandler IEventEditDlg.Date1
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtEventDate1); }
+            get { return GetControlHandler<IDateBoxHandler>(txtEventDate1); }
         }
 
-        ITextBoxHandler IEventEditDlg.Date2
+        IDateBoxHandler IEventEditDlg.Date2
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtEventDate2); }
+            get { return GetControlHandler<IDateBoxHandler>(txtEventDate2); }
         }
 
-        IComboBoxHandler IEventEditDlg.Attribute
+        IComboBox IEventEditDlg.Attribute
         {
-            get { return GetControlHandler<IComboBoxHandler>(txtAttribute); }
+            get { return GetControlHandler<IComboBox>(txtAttribute); }
         }
 
-        ITextBoxHandler IEventEditDlg.Place
+        ITextBox IEventEditDlg.Place
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtEventPlace); }
+            get { return GetControlHandler<ITextBox>(txtEventPlace); }
         }
 
-        ITextBoxHandler IEventEditDlg.EventName
+        ITextBox IEventEditDlg.EventName
         {
-            get { return  GetControlHandler<ITextBoxHandler>(txtEventName); }
+            get { return  GetControlHandler<ITextBox>(txtEventName); }
         }
 
-        ITextBoxHandler IEventEditDlg.Cause
+        ITextBox IEventEditDlg.Cause
         {
-            get { return  GetControlHandler<ITextBoxHandler>(txtEventCause); }
+            get { return  GetControlHandler<ITextBox>(txtEventCause); }
         }
 
-        ITextBoxHandler IEventEditDlg.Agency
+        ITextBox IEventEditDlg.Agency
         {
-            get { return  GetControlHandler<ITextBoxHandler>(txtEventOrg); }
+            get { return  GetControlHandler<ITextBox>(txtEventOrg); }
         }
 
         #endregion
@@ -162,6 +162,9 @@ namespace GKUI.Forms
 
             SetToolTip(btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
             SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
+
+            SetToolTip(txtEventDate1, txtEventDate1.RegionalDatePattern);
+            SetToolTip(txtEventDate2, txtEventDate2.RegionalDatePattern);
 
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);

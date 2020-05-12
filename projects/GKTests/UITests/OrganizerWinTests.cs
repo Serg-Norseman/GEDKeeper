@@ -20,7 +20,9 @@
 
 #if !__MonoCS__
 
-using GKCommon.GEDCOM;
+using System;
+using System.Windows.Forms;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -35,7 +37,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class OrganizerWinTests : CustomWindowTest
     {
-        private GEDCOMAddress fAddress;
+        private GDMAddress fAddress;
         private IBaseWindow fBase;
         private OrganizerWin fDialog;
 
@@ -44,7 +46,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fAddress = new GEDCOMAddress(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fAddress = new GDMAddress(fBase.Context.Tree);
 
             fAddress.AddWebPage("test");
             fAddress.AddPhoneNumber("test");
@@ -65,6 +67,16 @@ namespace GKUI.Forms
         public void Test_Common()
         {
         }
+
+        #region Handlers for external tests
+
+        public static void OrganizerWin_Handler(string name, IntPtr ptr, Form form)
+        {
+            KeyDownForm(form.Name, Keys.Escape);
+            form.Dispose();
+        }
+
+        #endregion
     }
 }
 

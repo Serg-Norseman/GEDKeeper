@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -38,7 +38,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class SourceCitEditDlgTests : CustomWindowTest
     {
-        private GEDCOMSourceCitation fSourceCitation;
+        private GDMSourceCitation fSourceCitation;
         private IBaseWindow fBase;
         private SourceCitEditDlg fDialog;
 
@@ -47,7 +47,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fSourceCitation = new GEDCOMSourceCitation(fBase.Context.Tree, null, "", "");
+            fSourceCitation = new GDMSourceCitation(null);
 
             fDialog = new SourceCitEditDlg(fBase);
             fDialog.SourceCitation = fSourceCitation;
@@ -79,9 +79,7 @@ namespace GKUI.Forms
 
         public static void AcceptModalHandler(string name, IntPtr ptr, Form form)
         {
-            var cmbSource = new ComboBoxTester("cmbSource", form);
-            cmbSource.Select(0);
-
+            SelectCombo("cmbSource", form, 0);
             ClickButton("btnAccept", form);
         }
 

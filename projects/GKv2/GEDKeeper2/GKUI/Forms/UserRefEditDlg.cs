@@ -20,12 +20,11 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -35,7 +34,7 @@ namespace GKUI.Forms
     {
         private readonly UserRefEditDlgController fController;
 
-        public GEDCOMUserReference UserRef
+        public GDMUserReference UserRef
         {
             get { return fController.UserRef; }
             set { fController.UserRef = value; }
@@ -43,14 +42,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler IUserRefEditDlg.Ref
+        IComboBox IUserRefEditDlg.Ref
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRef); }
+            get { return GetControlHandler<IComboBox>(cmbRef); }
         }
 
-        IComboBoxHandler IUserRefEditDlg.RefType
+        IComboBox IUserRefEditDlg.RefType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRefType); }
+            get { return GetControlHandler<IComboBox>(cmbRefType); }
         }
 
         #endregion

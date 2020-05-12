@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,9 @@
 
 #if !__MonoCS__
 
-using GKCommon.GEDCOM;
+using System;
+using System.Windows.Forms;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -37,7 +39,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class NoteEditDlgTests : CustomWindowTest
     {
-        private GEDCOMNoteRecord fNoteRecord;
+        private GDMNoteRecord fNoteRecord;
         private IBaseWindow fBase;
         private NoteEditDlg fDialog;
 
@@ -48,7 +50,7 @@ namespace GKUI.Forms
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fNoteRecord = new GEDCOMNoteRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fNoteRecord = new GDMNoteRecord(fBase.Context.Tree);
 
             fDialog = new NoteEditDlg(fBase);
             fDialog.NoteRecord = fNoteRecord;
@@ -72,14 +74,32 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fNoteRecord, fDialog.NoteRecord);
 
-            var txtNote = new TextBoxTester("txtNote");
+            EnterText("txtNote", fDialog, "sample text");
+            ClickButton("btnAccept", fDialog);
+
+            Assert.AreEqual("sample text", fNoteRecord.Lines.Text);
+        }
+
+        #region Handlers for external tests
+
+        public static void NoteEditDlg_Handler(NoteEditDlg dlg)
+        {
+            EnterText("txtNote", dlg, "sample text");
+            ClickButton("btnAccept", dlg);
+
+            Assert.AreEqual("sample text", dlg.NoteRecord.Lines.Text);
+        }
+
+        public static void NoteAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            var txtNote = new TextBoxTester("txtNote", form);
             txtNote.Enter("sample text");
             Assert.AreEqual("sample text", txtNote.Text);
 
-            ClickButton("btnAccept", fDialog);
-
-            Assert.AreEqual("sample text", fNoteRecord.Note.Text);
+            ClickButton("btnAccept", form);
         }
+
+        #endregion
     }
 }
 

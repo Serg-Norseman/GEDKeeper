@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP;
 
 namespace GKCore.MVP
 {

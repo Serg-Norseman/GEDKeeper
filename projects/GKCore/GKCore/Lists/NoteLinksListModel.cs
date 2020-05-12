@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -32,7 +32,8 @@ namespace GKCore.Lists
         public NoteLinksListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
-                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
+                RecordAction.raMoveUp, RecordAction.raMoveDown);
 
             fListColumns.AddColumn(LSID.LSID_Note, 500, false);
             fListColumns.ResetDefaults();
@@ -43,17 +44,13 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGEDCOMStructWithLists;
             if (fSheetList == null || dataOwner == null) return;
 
-            try
-            {
+            try {
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMNotes note in dataOwner.Notes)
-                {
-                    fSheetList.AddItem(note, new object[] { note.Notes.Text.Trim() });
+                foreach (GDMNotes note in dataOwner.Notes) {
+                    fSheetList.AddItem(note, new object[] { note.Lines.Text.Trim() });
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("NoteLinksListModel.UpdateContents(): " + ex.Message);
             }
         }
@@ -63,32 +60,46 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGEDCOMStructWithLists;
             if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
-            GEDCOMNotes notes = eArgs.ItemData as GEDCOMNotes;
+            GDMNotes notes = eArgs.ItemData as GDMNotes;
 
             bool result = false;
 
-            GEDCOMNoteRecord noteRec;
-            switch (eArgs.Action)
-            {
+            GDMNoteRecord noteRec;
+            switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    noteRec = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtNote, null) as GEDCOMNoteRecord;
+                    noteRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtNote, null) as GDMNoteRecord;
                     if (noteRec != null) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GEDCOMObject)dataOwner, noteRec);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GDMObject)dataOwner, noteRec);
                     }
                     break;
 
                 case RecordAction.raEdit:
-                    if (notes != null)
-                    {
-                        noteRec = notes.Value as GEDCOMNoteRecord;
+                    if (notes != null) {
+                        noteRec = notes.Value as GDMNoteRecord;
                         result = BaseController.ModifyNote(fBaseWin, ref noteRec);
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachNoteQuery)))
+                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachNoteQuery))) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GDMObject)dataOwner, notes);
+                    }
+                    break;
+
+                case RecordAction.raMoveUp:
+                case RecordAction.raMoveDown:
                     {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GEDCOMObject)dataOwner, notes);
+                        int idx = dataOwner.Notes.IndexOf(notes);
+                        switch (eArgs.Action) {
+                            case RecordAction.raMoveUp:
+                                dataOwner.Notes.Exchange(idx - 1, idx);
+                                break;
+
+                            case RecordAction.raMoveDown:
+                                dataOwner.Notes.Exchange(idx, idx + 1);
+                                break;
+                        }
+                        result = true;
                     }
                     break;
             }

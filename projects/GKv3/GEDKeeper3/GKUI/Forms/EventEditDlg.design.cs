@@ -24,8 +24,8 @@ namespace GKUI.Forms
         private TextBox txtEventName;
         private TextBox txtEventPlace;
         private ComboBox cmbEventDateType;
-        private MaskedTextBox txtEventDate1;
-        private MaskedTextBox txtEventDate2;
+        private GKDateBox txtEventDate1;
+        private GKDateBox txtEventDate2;
         private TextBox txtEventCause;
         private TextBox txtEventOrg;
         private ComboBox txtAttribute;
@@ -87,14 +87,12 @@ namespace GKUI.Forms
             cmbEventDateType.ReadOnly = true;
             cmbEventDateType.SelectedIndexChanged += EditEventDateType_SelectedIndexChanged;
 
-            txtEventDate1 = new MaskedTextBox();
-            txtEventDate1.Provider = new FixedMaskedTextProvider("00/00/0000");
+            txtEventDate1 = new GKDateBox();
             //txtEventDate1.AllowDrop = true;
             //txtEventDate1.DragDrop += new DragEventHandler(EditEventDate1_DragDrop);
             //txtEventDate1.DragOver += new DragEventHandler(EditEventDate1_DragOver);
 
-            txtEventDate2 = new MaskedTextBox();
-            txtEventDate2.Provider = new FixedMaskedTextProvider("00/00/0000");
+            txtEventDate2 = new GKDateBox();
             //txtEventDate2.AllowDrop = true;
             //txtEventDate2.DragDrop += new DragEventHandler(EditEventDate1_DragDrop);
             //txtEventDate2.DragOver += new DragEventHandler(EditEventDate1_DragOver);

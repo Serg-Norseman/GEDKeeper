@@ -21,10 +21,8 @@
 using System;
 using System.IO;
 using System.Text;
-
 using BSLib;
-using GKCore.Charts;
-using GKCore.Interfaces;
+using BSLib.Design.Graphics;
 
 namespace GKCore.Charts
 {
@@ -70,6 +68,11 @@ namespace GKCore.Charts
         public override void SetTarget(object target)
         {
             fTarget = target;
+        }
+
+        public override void SetSmoothing(bool value)
+        {
+            // dummy
         }
 
         public override void DrawImage(IImage image, float x, float y, float width, float height)

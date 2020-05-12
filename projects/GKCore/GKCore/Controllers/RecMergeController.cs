@@ -19,9 +19,10 @@
  */
 
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
+using GKCore.Types;
 
 namespace GKCore.Controllers
 {
@@ -30,11 +31,11 @@ namespace GKCore.Controllers
     /// </summary>
     public class RecMergeController : DialogController<IRecMergeDlg>
     {
-        private GEDCOMRecordType fRMMode;
+        private GDMRecordType fRMMode;
         private readonly StringList fRMSkip;
         private int fRMIndex;
 
-        public GEDCOMRecordType RMMode
+        public GDMRecordType RMMode
         {
             get { return fRMMode; }
             set { fRMMode = value; }
@@ -43,17 +44,17 @@ namespace GKCore.Controllers
         public RecMergeController(IRecMergeDlg view) : base(view)
         {
             fRMSkip = new StringList();
-            fRMMode = GEDCOMRecordType.rtIndividual;
+            fRMMode = GDMRecordType.rtIndividual;
         }
 
         public override void UpdateView()
         {
         }
 
-        private static bool CheckPersonsEx(GEDCOMIndividualRecord rec1, GEDCOMIndividualRecord rec2)
+        private static bool CheckPersonsEx(GDMIndividualRecord rec1, GDMIndividualRecord rec2)
         {
-            GEDCOMFamilyRecord fam1 = rec1.GetParentsFamily();
-            GEDCOMFamilyRecord fam2 = rec2.GetParentsFamily();
+            GDMFamilyRecord fam1 = rec1.GetParentsFamily();
+            GDMFamilyRecord fam2 = rec2.GetParentsFamily();
 
             return (!Equals(fam1, fam2));
         }
@@ -102,11 +103,11 @@ namespace GKCore.Controllers
                     fRMIndex = i;
                     fView.ProgressBar.Increment(1);
 
-                    GEDCOMRecord iRec = tree[i];
+                    GDMRecord iRec = tree[i];
                     if (iRec.RecordType != fRMMode) continue;
 
                     for (int j = i + 1; j < recNum; j++) {
-                        GEDCOMRecord kRec = tree[j];
+                        GDMRecord kRec = tree[j];
                         if (kRec.RecordType != fRMMode) continue;
 
                         if (iRec == kRec) continue;
@@ -114,8 +115,8 @@ namespace GKCore.Controllers
 
                         res = iRec.IsMatch(kRec, mParams) >= 100.0f;
 
-                        if (res && fRMMode == GEDCOMRecordType.rtIndividual) {
-                            res = CheckPersonsEx((GEDCOMIndividualRecord)iRec, (GEDCOMIndividualRecord)kRec);
+                        if (res && fRMMode == GDMRecordType.rtIndividual) {
+                            res = CheckPersonsEx((GDMIndividualRecord)iRec, (GDMIndividualRecord)kRec);
                         }
 
                         if (res) {

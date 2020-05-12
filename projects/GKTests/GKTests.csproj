@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>GKTests</RootNamespace>
     <AssemblyName>GKTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -35,6 +35,26 @@
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' " />
   <PropertyGroup Condition="'$(CIMode)'=='true'">
     <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
@@ -54,14 +74,14 @@
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\libs\BSLib.Design.dll</HintPath>
+    </Reference>
     <Reference Include="BSLib.Linguistics">
       <HintPath>..\libs\BSLib.Linguistics.dll</HintPath>
     </Reference>
     <Reference Include="BSLib.SmartGraph">
       <HintPath>..\libs\BSLib.SmartGraph.dll</HintPath>
-    </Reference>
-    <Reference Include="NSubstitute">
-      <HintPath>libs\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>libs\nunit.framework.dll</HintPath>
@@ -71,22 +91,53 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Ude">
+      <HintPath>..\libs\Ude.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Externals\ExternalsTests.cs" />
-    <Compile Include="GEDCOM\AnselEncodingTests.cs" />
-    <Compile Include="GEDCOM\FileFormatTests.cs" />
-    <Compile Include="GEDCOM\GEDCOMAddressTests.cs" />
-    <Compile Include="GEDCOM\GEDCOMDateTests.cs" />
-    <Compile Include="GEDCOM\GEDCOMDateTests2.cs" />
-    <Compile Include="GEDCOM\GEDCOMListTests.cs" />
-    <Compile Include="GEDCOM\GEDCOMNoteRecordTests.cs" />
-    <Compile Include="GEDCOM\GEDCOMPersonalNameTests.cs" />
-    <Compile Include="GEDCOM\GEDCOMProviderTests.cs" />
-    <Compile Include="GEDCOM\GEDCOMTagTests.cs" />
-    <Compile Include="GEDCOM\GedcomTests.cs" />
-    <Compile Include="GEDCOM\GEDCOMUtilsTests.cs" />
+    <Compile Include="GDModel\GDMAddressTests.cs" />
+    <Compile Include="GDModel\GDMAssociationTests.cs" />
+    <Compile Include="GDModel\GDMChangeDateTests.cs" />
+    <Compile Include="GDModel\GDMChildToFamilyLinkTests.cs" />
+    <Compile Include="GDModel\GDMCommunicationRecordTests.cs" />
+    <Compile Include="GDModel\GDMCustomEventTests.cs" />
+    <Compile Include="GDModel\GDMDatePeriodTests.cs" />
+    <Compile Include="GDModel\GDMDateRangeTests.cs" />
+    <Compile Include="GDModel\GDMDateTests.cs" />
+    <Compile Include="GDModel\GDMDateValueTests.cs" />
+    <Compile Include="GDModel\GDMFamilyRecordTests.cs" />
+    <Compile Include="GDModel\GDMFileReferenceTests.cs" />
+    <Compile Include="GDModel\GDMGroupRecordTests.cs" />
+    <Compile Include="GDModel\GDMHeaderTests.cs" />
+    <Compile Include="GDModel\GDMIndividualRecordTests.cs" />
+    <Compile Include="GDModel\GDMListTests.cs" />
+    <Compile Include="GDModel\GDMLocationRecordTests.cs" />
+    <Compile Include="GDModel\GDMMultimediaLinkTests.cs" />
+    <Compile Include="GDModel\GDMMultimediaRecordTests.cs" />
+    <Compile Include="GDModel\GDMNoteRecordTests.cs" />
+    <Compile Include="GDModel\GDMPersonalNameTests.cs" />
+    <Compile Include="GDModel\GDMRecordTests.cs" />
+    <Compile Include="GDModel\GDMRepositoryRecordTests.cs" />
+    <Compile Include="GDModel\GDMResearchRecordTests.cs" />
+    <Compile Include="GDModel\GDMSourceDataTests.cs" />
+    <Compile Include="GDModel\GDMSourceRecordTests.cs" />
+    <Compile Include="GDModel\GDMSubmissionRecordTests.cs" />
+    <Compile Include="GDModel\GDMSubmitterRecordTests.cs" />
+    <Compile Include="GDModel\GDMTagTests.cs" />
+    <Compile Include="GDModel\GDMTagWithListsTests.cs" />
+    <Compile Include="GDModel\GDMTaskRecordTests.cs" />
+    <Compile Include="GDModel\GDMTimeTests.cs" />
+    <Compile Include="GDModel\GDMTreeTests.cs" />
+    <Compile Include="GDModel\GDMUserReferenceTests.cs" />
+    <Compile Include="GDModel\GDMXRefReplacerTests.cs" />
+    <Compile Include="GDModel\Providers\FileFormatTests.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\AnselEncodingTests.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParserTests.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMProviderTests.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMUtilsTests.cs" />
     <Compile Include="Externals\SmartGraphTests.cs" />
     <Compile Include="GKComponents\CircleChartTests.cs" />
     <Compile Include="GKComponents\GKListItemTests.cs" />
@@ -105,9 +156,9 @@
     <Compile Include="GKCore\GKUtilsTests.cs" />
     <Compile Include="GKCore\HolidaysTests.cs" />
     <Compile Include="GKCore\ImportUtilsTests.cs" />
-    <Compile Include="GKCore\IocContainerTests.cs" />
     <Compile Include="GKCore\KinshipsTests.cs" />
     <Compile Include="GKCore\ListsTests.cs" />
+    <Compile Include="GKCore\NamesTests.cs" />
     <Compile Include="GKCore\OptionsTests.cs" />
     <Compile Include="GKCore\PathReplacerTests.cs" />
     <Compile Include="GKCore\PlacesLoaderTests.cs" />
@@ -119,6 +170,8 @@
     <Compile Include="GKCore\TreeToolsTests.cs" />
     <Compile Include="GKCore\ValuesCollectionTests.cs" />
     <Compile Include="GKCore\YamlHelperTests.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Plugins\FlowInputTests.cs" />
     <Compile Include="TestStubs.cs" />
     <Compile Include="ControlTesters\DataGridViewTester.cs" />
     <Compile Include="ControlTesters\GKRecordsViewTester.cs" />
@@ -129,6 +182,7 @@
     <Compile Include="UITests\AboutDlgTests.cs" />
     <Compile Include="UITests\AddressEditDlgTests.cs" />
     <Compile Include="UITests\AssociationEditDlgTests.cs" />
+    <Compile Include="UITests\CircleChartWinTests.cs" />
     <Compile Include="UITests\CommonFilterDlgTests.cs" />
     <Compile Include="UITests\CommonTests.cs" />
     <Compile Include="UITests\CommunicationEditDlgTests.cs" />
@@ -139,7 +193,11 @@
     <Compile Include="UITests\FilePropertiesDlgTests.cs" />
     <Compile Include="UITests\GroupEditDlgTests.cs" />
     <Compile Include="UITests\InputBoxTests.cs" />
+    <Compile Include="UITests\LanguageEditDlgTests.cs" />
+    <Compile Include="UITests\LanguageSelectDlgTests.cs" />
+    <Compile Include="UITests\LocationEditDlgTests.cs" />
     <Compile Include="UITests\MainSDITests.cs" />
+    <Compile Include="UITests\MapsViewerWinTests.cs" />
     <Compile Include="UITests\MediaEditDlgTests.cs" />
     <Compile Include="UITests\MediaViewerWinTests.cs" />
     <Compile Include="UITests\NameEditDlgTests.cs" />
@@ -152,16 +210,21 @@
     <Compile Include="UITests\PersonsFilterDlgTests.cs" />
     <Compile Include="UITests\PortraitSelectDlgTests.cs" />
     <Compile Include="UITests\ProgressDlgTests.cs" />
+    <Compile Include="UITests\QuickSearchDlgTests.cs" />
     <Compile Include="UITests\RecordSelectDlgTests.cs" />
     <Compile Include="UITests\RelationshipCalculatorDlgTests.cs" />
     <Compile Include="UITests\RepositoryEditDlgTests.cs" />
     <Compile Include="UITests\ResearchEditDlgTests.cs" />
+    <Compile Include="UITests\ScriptEditWinTests.cs" />
     <Compile Include="UITests\SexCheckDlgTests.cs" />
+    <Compile Include="UITests\SlideshowWinTests.cs" />
     <Compile Include="UITests\SourceCitEditDlgTests.cs" />
     <Compile Include="UITests\SourceEditDlgTests.cs" />
     <Compile Include="UITests\StatisticsWinTests.cs" />
     <Compile Include="UITests\TaskEditDlgTests.cs" />
+    <Compile Include="UITests\TreeChartWinTests.cs" />
     <Compile Include="UITests\TreeFilterDlgTests.cs" />
+    <Compile Include="UITests\TreeToolsWinTests.cs" />
     <Compile Include="UITests\UserRefEditDlgTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +240,13 @@
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GKv2\GKFlowInputPlugin\GKFlowInputPlugin.csproj">
+      <Project>{66b64b00-c457-404e-aa2b-90f18127e394}</Project>
+      <Name>GKFlowInputPlugin</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\test1.ged" />
@@ -191,12 +261,27 @@
     <EmbeddedResource Include="Resources\test_holidays.yaml" />
     <EmbeddedResource Include="Resources\test_pathreplace.yaml" />
     <EmbeddedResource Include="Resources\lorem_ipsum.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKCore\Controllers" />
+    <EmbeddedResource Include="Resources\test_names_01.ged" />
+    <EmbeddedResource Include="Resources\test_names_02.ged" />
+    <EmbeddedResource Include="Resources\test_ahn_ansi%28win1250%29.ged" />
+    <EmbeddedResource Include="Resources\test_gk_utf8.ged" />
+    <EmbeddedResource Include="Resources\test_ftb_badline.ged" />
+    <EmbeddedResource Include="Resources\test_min_indented.ged" />
+    <EmbeddedResource Include="Resources\test_empty_lines.ged" />
+    <EmbeddedResource Include="Resources\test_famhist.ged" />
+    <EmbeddedResource Include="Resources\test_ftm2008.ged" />
+    <EmbeddedResource Include="Resources\test_longline.ged" />
+    <EmbeddedResource Include="Resources\test_heredis.ged" />
+    <EmbeddedResource Include="Resources\test_aq.ged" />
+    <EmbeddedResource Include="Resources\test_geni.ged" />
+    <EmbeddedResource Include="Resources\test_legacy.ged" />
+    <EmbeddedResource Include="Resources\test_easytree.ged" />
+    <EmbeddedResource Include="Resources\test_genney.ged" />
+    <EmbeddedResource Include="Resources\test_gedml.xml" />
+    <EmbeddedResource Include="Resources\test_empty.ged" />
+    <EmbeddedResource Include="Resources\test_native.ged" />
+    <EmbeddedResource Include="Resources\test_windsor.familyx" />
+    <EmbeddedResource Include="Resources\test_mergerec.ged" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

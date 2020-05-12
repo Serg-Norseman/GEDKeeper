@@ -21,9 +21,8 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
-
 using BSLib;
-using GKCore.Interfaces;
+using BSLib.Design.Graphics;
 
 namespace GKUI.Components
 {

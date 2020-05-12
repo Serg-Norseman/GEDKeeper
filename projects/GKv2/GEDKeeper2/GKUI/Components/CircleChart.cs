@@ -22,9 +22,8 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
@@ -83,7 +82,7 @@ namespace GKUI.Components
             get { return fModel; }
         }
 
-        public AncestorsCircleOptions Options
+        public CircleChartOptions Options
         {
             get { return fModel.Options; }
         }
@@ -125,7 +124,7 @@ namespace GKUI.Components
             remove { Events.RemoveHandler(EventZoomChanged, value); }
         }
 
-        public GEDCOMIndividualRecord RootPerson
+        public GDMIndividualRecord RootPerson
         {
             get {
                 return fModel.RootPerson;
@@ -157,7 +156,7 @@ namespace GKUI.Components
             fRenderer = new WFGfxRenderer();
             fModel = new CircleChartModel();
             fModel.SetRenderer(fRenderer);
-            fModel.Options = new AncestorsCircleOptions();
+            fModel.Options = new CircleChartOptions();
             fModel.Font = AppHost.GfxProvider.CreateFont(this.Font.Name, this.Font.Size, false);
 
             fComponents = new Container();
@@ -205,7 +204,7 @@ namespace GKUI.Components
             AdjustViewport(boundary, false);
         }
 
-        private void DoRootChanged(GEDCOMIndividualRecord person)
+        private void DoRootChanged(GDMIndividualRecord person)
         {
             var eventHandler = (ARootChangedEventHandler)Events[EventRootChanged];
             if (eventHandler != null)
@@ -282,7 +281,7 @@ namespace GKUI.Components
 
         protected override void SetNavObject(object obj)
         {
-            RootPerson = obj as GEDCOMIndividualRecord;
+            RootPerson = obj as GDMIndividualRecord;
         }
 
         protected override void OnDoubleClick(EventArgs e)
@@ -342,8 +341,8 @@ namespace GKUI.Components
 
                 case Keys.Left:
                     if (fChartType == CircleChartType.Ancestors && fModel.RootPerson != null) {
-                        GEDCOMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
-                        var father = (fam == null) ? null : fam.GetHusband();
+                        GDMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
+                        var father = (fam == null) ? null : fam.Husband.Individual;
                         if (father != null) {
                             RootPerson = father;
                         }
@@ -352,8 +351,8 @@ namespace GKUI.Components
 
                 case Keys.Right:
                     if (fChartType == CircleChartType.Ancestors && fModel.RootPerson != null) {
-                        GEDCOMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
-                        var mother = (fam == null) ? null : fam.GetWife();
+                        GDMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
+                        var mother = (fam == null) ? null : fam.Wife.Individual;
                         if (mother != null) {
                             RootPerson = mother;
                         }

@@ -21,8 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.Graphics;
+using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Controllers;
@@ -54,7 +54,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public CircleChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson, CircleChartType type)
+        public CircleChartWin(IBaseWindow baseWin, GDMIndividualRecord startPerson, CircleChartType type)
         {
             InitializeComponent();
 
@@ -75,7 +75,7 @@ namespace GKUI.Forms
             fCircleChart.ZoomChanged += CircleChartWin_NavRefresh;
             fCircleChart.RootChanged += CircleChartWin_RootChanged;
             fCircleChart.RootPerson = startPerson;
-            fCircleChart.Options.Assign(GlobalOptions.Instance.AncestorsCircleOptions);
+            fCircleChart.Options.Assign(GlobalOptions.Instance.CircleChartOptions);
             fCircleChart.Name = "fCircleChart";
             fCircleChart.Dock = DockStyle.Fill;
             Controls.Add(fCircleChart);
@@ -104,7 +104,7 @@ namespace GKUI.Forms
             GenChart();
         }
 
-        private void CircleChartWin_RootChanged(object sender, GEDCOMIndividualRecord person)
+        private void CircleChartWin_RootChanged(object sender, GDMIndividualRecord person)
         {
             GenChart();
         }
@@ -191,7 +191,7 @@ namespace GKUI.Forms
 
         public void UpdateSettings()
         {
-            fCircleChart.Options.Assign(GlobalOptions.Instance.AncestorsCircleOptions);
+            fCircleChart.Options.Assign(GlobalOptions.Instance.CircleChartOptions);
             fCircleChart.Changed();
         }
 
@@ -229,7 +229,7 @@ namespace GKUI.Forms
         {
         }
 
-        public void SelectByRec(GEDCOMRecord record)
+        public void SelectByRec(GDMRecord record)
         {
         }
 

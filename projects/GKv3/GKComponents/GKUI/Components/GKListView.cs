@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -259,21 +259,28 @@ namespace GKUI.Components
             return (fSortColumn == columnIndex) ? fSortOrder : SortOrder.None;
         }
 
+        public void SetSortColumn(int sortColumn, bool checkOrder = true)
+        {
+            int prevColumn = fSortColumn;
+            if (prevColumn == sortColumn && checkOrder) {
+                SortOrder prevOrder = GetColumnSortOrder(sortColumn);
+                fSortOrder = (prevOrder == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending;
+            }
+
+            fSortColumn = sortColumn;
+
+            object rowData = GetSelectedData();
+            SortContents();
+            UpdateItems();
+            if (rowData != null) SelectItem(rowData);
+        }
+
         protected override void OnColumnHeaderClick(GridColumnEventArgs e)
         {
             BeginUpdate();
             try {
                 int columnIndex = this.Columns.IndexOf(e.Column);
-                SortOrder prevOrder = GetColumnSortOrder(columnIndex);
-                fSortOrder = (prevOrder == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending;
-                fSortColumn = columnIndex;
-
-                object rowData = GetSelectedData();
-
-                SortContents();
-                UpdateItems();
-
-                if (rowData != null) SelectItem(rowData);
+                SetSortColumn(columnIndex, false);
             } finally {
                 EndUpdate();
             }

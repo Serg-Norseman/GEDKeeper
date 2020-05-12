@@ -20,13 +20,12 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
@@ -41,7 +40,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fRepositoriesList;
 
-        public GEDCOMSourceRecord Model
+        public GDMSourceRecord Model
         {
             get { return fController.Model; }
             set { fController.Model = value; }
@@ -64,29 +63,29 @@ namespace GKUI.Forms
             get { return fRepositoriesList; }
         }
 
-        ITextBoxHandler ISourceEditDlg.ShortTitle
+        ITextBox ISourceEditDlg.ShortTitle
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtShortTitle); }
+            get { return GetControlHandler<ITextBox>(txtShortTitle); }
         }
 
-        ITextBoxHandler ISourceEditDlg.Author
+        ITextBox ISourceEditDlg.Author
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtAuthor); }
+            get { return GetControlHandler<ITextBox>(txtAuthor); }
         }
 
-        ITextBoxHandler ISourceEditDlg.Title
+        ITextBox ISourceEditDlg.Title
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtTitle); }
+            get { return GetControlHandler<ITextBox>(txtTitle); }
         }
 
-        ITextBoxHandler ISourceEditDlg.Publication
+        ITextBox ISourceEditDlg.Publication
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtPublication); }
+            get { return GetControlHandler<ITextBox>(txtPublication); }
         }
 
-        ITextBoxHandler ISourceEditDlg.Text
+        ITextBox ISourceEditDlg.Text
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtText); }
+            get { return GetControlHandler<ITextBox>(txtText); }
         }
 
         #endregion
@@ -129,7 +128,7 @@ namespace GKUI.Forms
 
         private void ModifyReposSheet(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMRepositoryCitation cit = eArgs.ItemData as GEDCOMRepositoryCitation;
+            GDMRepositoryCitation cit = eArgs.ItemData as GDMRepositoryCitation;
             if (eArgs.Action == RecordAction.raJump && cit != null) {
                 fController.JumpToRecord(cit.Value);
             }

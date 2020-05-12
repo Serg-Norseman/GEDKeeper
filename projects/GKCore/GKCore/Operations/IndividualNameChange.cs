@@ -18,13 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GKCore.Operations
 {
     public sealed class IndividualNameChange : CustomOperation
     {
-        private readonly GEDCOMIndividualRecord fPerson;
+        private readonly GDMIndividualRecord fPerson;
         private readonly string fNewSurname;
         private readonly string fNewName;
         private readonly string fNewPatronymic;
@@ -32,7 +32,7 @@ namespace GKCore.Operations
         private string fOldName;
         private string fOldPatronymic;
 
-        public IndividualNameChange(UndoManager manager, GEDCOMIndividualRecord person,
+        public IndividualNameChange(UndoManager manager, GDMIndividualRecord person,
                                     string surname, string name, string patronymic) : base(manager)
         {
             fPerson = person;
@@ -48,7 +48,7 @@ namespace GKCore.Operations
             if (fPerson == null) {
                 result = false;
             } else {
-                GEDCOMPersonalName np = fPerson.PersonalNames[0];
+                GDMPersonalName np = fPerson.PersonalNames[0];
                 var parts = GKUtils.GetNameParts(fPerson, np);
 
                 fOldSurname = parts.Surname;
@@ -65,7 +65,7 @@ namespace GKCore.Operations
         {
             if (fPerson == null) return;
 
-            GEDCOMPersonalName np = fPerson.PersonalNames[0];
+            GDMPersonalName np = fPerson.PersonalNames[0];
             GKUtils.SetNameParts(np, fOldSurname, fOldName, fOldPatronymic);
         }
     }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using GKCommon.Database;
+using GKCore.Database;
 
 namespace GKSandbox
 {

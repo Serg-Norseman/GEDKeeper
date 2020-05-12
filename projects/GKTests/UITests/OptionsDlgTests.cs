@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,12 +20,16 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCore;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
 using GKUI.Forms;
 using NUnit.Framework;
+using GKCore.Options;
+using NUnit.Extensions.Forms;
 
 namespace GKUI.Forms
 {
@@ -62,12 +66,10 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            /*var cmbRelation = new ComboBoxTester("cmbRelation");
-            cmbRelation.Enter("sample text");
+            /*EnterCombo("cmbRelation", "sample text");
             Assert.AreEqual("sample text", cmbRelation.Text);*/
 
-            /*var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
+            /*EnterText("txtAuthor", "sample text");
             Assert.AreEqual("sample text", txtAuthor.Text);*/
 
             ClickButton("btnAccept", fDialog);
@@ -75,6 +77,36 @@ namespace GKUI.Forms
             //Assert.AreEqual("sample text", fListMan.Relation);
             //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
         }
+
+        #region Handlers for external tests
+
+        public static void OptionsDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            var optDlg = ((OptionsDlg)form);
+            Assert.AreEqual(GlobalOptions.Instance, optDlg.Options);
+
+            optDlg.SetPage(OptionsPage.opCommon);
+
+            optDlg.SetPage(OptionsPage.opTreeChart);
+            CheckBox("chkPortraitsVisible", form, false);
+            CheckBox("chkPortraitsVisible", form, true);
+
+            optDlg.SetPage(OptionsPage.opCircleChart);
+
+            optDlg.SetPage(OptionsPage.opInterface);
+            CheckBox("chkExtendWomanSurnames", form, true);
+            CheckBox("chkExtendWomanSurnames", form, false);
+
+            optDlg.SetPage(OptionsPage.opPedigree);
+
+            ClickButton("btnColumnUp", form);
+            ClickButton("btnColumnDown", form);
+            ClickButton("btnDefList", form);
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

@@ -20,12 +20,11 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -35,7 +34,7 @@ namespace GKUI.Forms
     {
         private readonly NoteEditDlgController fController;
 
-        public GEDCOMNoteRecord NoteRecord
+        public GDMNoteRecord NoteRecord
         {
             get { return fController.NoteRecord; }
             set { fController.NoteRecord = value; }
@@ -43,9 +42,9 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler INoteEdit.Note
+        ITextBox INoteEdit.Note
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNote); }
+            get { return GetControlHandler<ITextBox>(txtNote); }
         }
 
         #endregion

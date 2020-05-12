@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,14 +20,12 @@
 
 using System;
 using System.Globalization;
-using System.Reflection;
 using System.Windows.Forms;
-
+using BSLib.Design.IoC;
+using BSLib.Design.MVP;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
-using GKCore.IoC;
-using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Options;
 using GKUI.Components;
@@ -199,18 +197,6 @@ namespace GKUI.Providers
             }
         }
 
-        public override void SaveLastBases()
-        {
-            AppHost.Options.ClearLastBases();
-
-            foreach (IWindow win in fRunningForms) {
-                var baseWin = win as IBaseWindow;
-                if (baseWin != null) {
-                    AppHost.Options.AddLastBase(baseWin.Context.FileName);
-                }
-            }
-        }
-
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
         {
             var result = new WinUITimer(msInterval, elapsedHandler);
@@ -219,8 +205,7 @@ namespace GKUI.Providers
 
         public override void Quit()
         {
-            // FIXME: Controversial issue...
-            //AppHost.Instance.SaveLastBases();
+            base.Quit();
             Application.Exit();
         }
 
@@ -248,17 +233,6 @@ namespace GKUI.Providers
             }
         }
 
-        public override string GetDefaultFontName()
-        {
-            string fontName;
-            #if __MonoCS__
-            fontName = "Noto Sans";
-            #else
-            fontName = "Verdana"; // "Tahoma";
-            #endif
-            return fontName;
-        }
-
         #endregion
 
         #region Bootstrapper
@@ -281,7 +255,7 @@ namespace GKUI.Providers
 
             // controls and other
             container.Register<IStdDialogs, WFStdDialogs>(LifeCycle.Singleton);
-            container.Register<IGraphicsProvider, WFGfxProvider>(LifeCycle.Singleton);
+            container.Register<IGraphicsProviderEx, WFGfxProvider>(LifeCycle.Singleton);
             container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
             container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
 
@@ -309,6 +283,7 @@ namespace GKUI.Providers
             container.Register<INoteEditDlgEx, NoteEditDlgEx>(LifeCycle.Transient);
             container.Register<IOptionsDlg, OptionsDlg>(LifeCycle.Transient);
             container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
+            container.Register<IParentsEditDlg, ParentsEditDlg>(LifeCycle.Transient);
             container.Register<IPatriarchsSearchDlg, TTPatSearchDlg>(LifeCycle.Transient);
             container.Register<IPatriarchsViewer, PatriarchsViewerWin>(LifeCycle.Transient);
             container.Register<IPersonsFilterDlg, PersonsFilterDlg>(LifeCycle.Transient);
@@ -335,13 +310,12 @@ namespace GKUI.Providers
             container.Register<ITreeMergeDlg, TTTreeMergeDlg>(LifeCycle.Transient);
             container.Register<ITreeSplitDlg, TTTreeSplitDlg>(LifeCycle.Transient);
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
+            container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
-            ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
-            ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
             ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
@@ -350,8 +324,11 @@ namespace GKUI.Providers
             ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(ToolStripMenuItem), typeof(MenuItemHandler));
-
             ControlsManager.RegisterHandlerType(typeof(ToolStripComboBox), typeof(ToolStripComboBoxHandler));
+
+            ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
         }
 
         #endregion
