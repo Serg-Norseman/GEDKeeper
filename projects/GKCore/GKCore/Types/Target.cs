@@ -18,14 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GKCore.Types
 {
     public sealed class Target
     {
-        public GEDCOMIndividualRecord TargetIndividual;
+        public GDMIndividualRecord TargetIndividual;
         public TargetMode TargetMode;
-        public GEDCOMSex NeedSex;
+        public GDMSex NeedSex;
     }
 }

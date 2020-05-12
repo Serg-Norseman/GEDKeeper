@@ -20,7 +20,7 @@
 
 //#define DEBUG_SOLVE
 
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Kinships;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -32,8 +32,8 @@ namespace GKCore.Controllers
     /// </summary>
     public class RelationshipCalculatorDlgController : DialogController<IRelationshipCalculatorDlg>
     {
-        private GEDCOMIndividualRecord fRec1;
-        private GEDCOMIndividualRecord fRec2;
+        private GDMIndividualRecord fRec1;
+        private GDMIndividualRecord fRec2;
         private string fResult;
 
         public RelationshipCalculatorDlgController(IRelationshipCalculatorDlg view) : base(view)
@@ -42,23 +42,23 @@ namespace GKCore.Controllers
 
         public void SelectRec1()
         {
-            GEDCOMIndividualRecord iRec = fBase.Context.SelectRecord(GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fBase.Context.SelectRecord(GDMRecordType.rtIndividual, null) as GDMIndividualRecord;
             if (iRec != null) SetRec1(iRec);
         }
 
         public void SelectRec2()
         {
-            GEDCOMIndividualRecord iRec = fBase.Context.SelectRecord(GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = fBase.Context.SelectRecord(GDMRecordType.rtIndividual, null) as GDMIndividualRecord;
             if (iRec != null) SetRec2(iRec);
         }
 
-        public void SetRec1(GEDCOMIndividualRecord value)
+        public void SetRec1(GDMIndividualRecord value)
         {
             fRec1 = value;
             Solve();
         }
 
-        public void SetRec2(GEDCOMIndividualRecord value)
+        public void SetRec2(GDMIndividualRecord value)
         {
             fRec2 = value;
             Solve();

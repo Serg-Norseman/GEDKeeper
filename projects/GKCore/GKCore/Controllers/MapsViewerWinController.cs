@@ -21,11 +21,12 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.MVP;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 
 namespace GKCore.Controllers
@@ -36,7 +37,7 @@ namespace GKCore.Controllers
     public sealed class MapsViewerWinController : FormController<IMapsViewerWin>
     {
         private readonly ExtList<GeoPoint> fMapPoints;
-        private readonly List<GEDCOMRecord> fSelectedPersons;
+        private readonly List<GDMRecord> fSelectedPersons;
         private readonly ExtList<MapPlace> fPlaces;
 
         private ITVNode fBaseRoot;
@@ -51,7 +52,7 @@ namespace GKCore.Controllers
             get { return fBaseRoot; }
         }
 
-        public MapsViewerWinController(IMapsViewerWin view, List<GEDCOMRecord> selectedPersons) : base(view)
+        public MapsViewerWinController(IMapsViewerWin view, List<GDMRecord> selectedPersons) : base(view)
         {
             fMapPoints = new ExtList<GeoPoint>(true);
             fPlaces = new ExtList<MapPlace>(true);
@@ -62,7 +63,7 @@ namespace GKCore.Controllers
         {
         }
 
-        private bool IsSelected(GEDCOMRecord iRec)
+        private bool IsSelected(GDMRecord iRec)
         {
             bool res = (fSelectedPersons == null || (fSelectedPersons.IndexOf(iRec) >= 0));
             return res;
@@ -74,7 +75,7 @@ namespace GKCore.Controllers
                 PlacesCache.Instance.Load();
 
                 IProgressController progress = AppHost.Progress;
-                GEDCOMTree tree = fBase.Context.Tree;
+                GDMTree tree = fBase.Context.Tree;
 
                 fView.MapBrowser.InitMap();
 
@@ -89,16 +90,16 @@ namespace GKCore.Controllers
 
                     int num = tree.RecordsCount;
                     for (int i = 0; i < num; i++) {
-                        GEDCOMRecord rec = tree[i];
-                        bool res = rec is GEDCOMIndividualRecord && IsSelected(rec);
+                        GDMRecord rec = tree[i];
+                        bool res = rec is GDMIndividualRecord && IsSelected(rec);
 
                         if (res) {
-                            GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
+                            GDMIndividualRecord ind = rec as GDMIndividualRecord;
                             int pCnt = 0;
 
                             int num2 = ind.Events.Count;
                             for (int j = 0; j < num2; j++) {
-                                GEDCOMCustomEvent ev = ind.Events[j];
+                                GDMCustomEvent ev = ind.Events[j];
                                 if (ev.Place.StringValue != "") {
                                     AddPlace(ev.Place, ev);
                                     pCnt++;
@@ -117,7 +118,7 @@ namespace GKCore.Controllers
 
                     personValues.Sort();
                     fView.PersonsCombo.Clear();
-                    fView.PersonsCombo.AddItem(LangMan.LS(LSID.LSID_NotSelected), null);
+                    fView.PersonsCombo.AddItem<GDMIndividualRecord>(LangMan.LS(LSID.LSID_NotSelected), null);
                     fView.PersonsCombo.AddStrings(personValues);
 
                     fView.SelectPlacesBtn.Enabled = true;
@@ -133,10 +134,10 @@ namespace GKCore.Controllers
             }
         }
 
-        private void AddPlace(GEDCOMPlace place, GEDCOMCustomEvent placeEvent)
+        private void AddPlace(GDMPlace place, GDMCustomEvent placeEvent)
         {
             try {
-                GEDCOMLocationRecord locRec = place.Location.Value as GEDCOMLocationRecord;
+                GDMLocationRecord locRec = place.Location.Value as GDMLocationRecord;
                 string placeName = (locRec != null) ? locRec.LocationName : place.StringValue;
 
                 ITVNode node = fView.FindTreeNode(placeName);
@@ -174,7 +175,7 @@ namespace GKCore.Controllers
 
         public void SelectPlaces()
         {
-            GEDCOMIndividualRecord ind = null;
+            GDMIndividualRecord ind = null;
 
             bool condBirth = false;
             bool condDeath = false;
@@ -185,7 +186,7 @@ namespace GKCore.Controllers
                 condDeath = fView.DeathCheck.Checked;
                 condResidence = fView.ResidenceCheck.Checked;
             } else if (fView.SelectedRadio.Checked && (fView.PersonsCombo.SelectedIndex >= 0)) {
-                ind = (fView.PersonsCombo.SelectedTag as GEDCOMIndividualRecord);
+                ind = (fView.PersonsCombo.GetSelectedTag<GDMIndividualRecord>());
             }
 
             fView.MapBrowser.ShowLines = (ind != null && fView.LinesVisibleCheck.Checked);
@@ -198,9 +199,10 @@ namespace GKCore.Controllers
 
                 int num2 = place.PlaceRefs.Count;
                 for (int j = 0; j < num2; j++) {
-                    GEDCOMCustomEvent evt = place.PlaceRefs[j].Event;
+                    GDMCustomEvent evt = place.PlaceRefs[j].Event;
+                    var evtType = evt.GetTagType();
 
-                    if ((ind != null && (evt.Parent == ind)) || (condBirth && evt.Name == "BIRT") || (condDeath && evt.Name == "DEAT") || (condResidence && evt.Name == "RESI")) {
+                    if ((ind != null && (evt.Owner == ind)) || (condBirth && evtType == GEDCOMTagType.BIRT) || (condDeath && evtType == GEDCOMTagType.DEAT) || (condResidence && evtType == GEDCOMTagType.RESI)) {
                         PlacesLoader.AddPoint(fMapPoints, place.Points[0], place.PlaceRefs[j]);
                     }
                 }

@@ -1,87 +1,107 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="styles.css" type="text/css" />
-<title>Dates special features</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Dates Special Features</title>
 </head>
 <body>
 
-<h1>Dates special features</h1>
+    <h1>Dates Special Features</h1>
 
-<p>To modify date of an event you use <a href="gkhRec_Event.html">&quot;Edit events and materials&quot; dialog window</a>.</p>
+    <p>To modify the date of an event you use the <a href="gkhRec_Event.html">&quot;Edit events and facts&quot; dialog window</a>.</p>
 
-<p>GEDKeeper supports the following date subtypes: &quot;Exact&quot;, &quot;Before&quot;, &quot;After&quot;, &quot;Between&quot;, &quot;Period before&quot;, &quot;Period after&quot;,
-&quot;Period between&quot;, &quot;Approximately&quot;, &quot;Calculated&quot;, &quot;Evaluated&quot;.</p>
+    <p>GEDKeeper supports the following date subtypes:</p>
+    <p>
+        <ul>
+            <li>Subtypes &quot;Before&quot;, &quot;After&quot;, &quot;Between&quot;, &quot;Period before&quot;, &quot;Period after&quot;, and &quot;Period between&quot; specify a range of dates.</li>
+            <li>Subtypes &quot;About&quot;, &quot;Calculated&quot;, and &quot;Estimated&quot; specify inaccurate or relative dates.</li>
+            <li>Subtype &quot;Exact&quot; specifies an exact date (though the date may be incomplete).</li>
+        </ul>
+    </p>
+    <p>Dates can be incomplete, i.e. one or more parts of date may be skipped. That is, to the extent that you can define only day number, month only, or year only. Of course, you can combine these parts.</p>
 
-<ul>
-<li>Subtypes &quot;Before&quot;, &quot;After&quot;, &quot;Between&quot;, &quot;Period before&quot;, &quot;Period after&quot;, &quot;Period between&quot; specify range of dates,</li>
-<li>Subtypes &quot;Approximately&quot;, &quot;Calculated&quot;, &quot;Evaluated&quot; specify inaccurate or relative dates.</li>
-</ul>
+    <p>
+        For a date entered you can specify type of calendar and where the date is calculated. GEDKeeper supports Gregorian, Julian, Jewish (Hebrew), French, and Roman calendars.
+        You can also specify a date as a date of Anno Domini period (BC is off) or a date of Before Christ period (BC is on).
+        In order to convert dates of two different calendars you have to use the &quot;Calendar&quot; plugin.
+    </p>
 
-<p>Dates can be incomplete, i.e. one or more parts of date may be skipped. To the extent that you can define only day number, or month only, or year only. Of course, you can combine such parts.</p>
+    <p>
+        There are three operations in the program to handle dates: storing, showing, and processing. Each operation has its
+        own specific purpose and that is why all these operations were separated from each other. These purposes are:
+    </p>
 
-<p>For a date you entered you can specify type of calendar, where the date is calculated. GEDKeeper supports Gregorian, Julian, Jewish, French and Roman calendars.
-You can also specify that date is a date of Anno Domini period (BC is off) and a date of Before Christ period (BC is on). <em>A note for the current version of GEDKeeper:
-in order to convert dates of two different calendars you have to use &quot;Calendar&quot; plug-in</em>.</p>
+    <p>
+        <ul>
+            <li><strong>Storing</strong>. All dates are stored using a special GEDCOM format. This allows you to define incomplete dates in any form.</li>
+            <li>
+                <strong>Showing</strong>. When GEDKeeper needs to show you a date it translates that date in internal form to a string view. This may include special symbols
+                (if they were enabled in the program settings). For example, the date &quot;About 1701, January&quot; will be rendered as &quot;__.01.1701&quot; (when special
+                symbols are off) or as &quot;~ __.01.1701&quot; (when special symbols are on) in columns of general lists. Dates range like &quot;Between 01.01.1700 and 20.01.1700&quot;
+                will be shown as &quot;01.01.1700 - 20.01.1700&quot;. A &quot;Period before 10.10.1800&quot; date will be rendered as &quot;&lt; 10.10.1800&quot; (when special symbols are on).
+            </li>
+            <li>
+                <strong>Processing</strong>. When GEDKeeper processes dates (for example, makes arithmetical operations or
+                compares dates) it translates them into a special internal form (&quot;<a href="https://en.wikipedia.org/wiki/Julian_day" target="_top">Julian day</a>&quot;),
+                that allows code compares and handles incomplete dates of different calendars.
+            </li>
+        </ul>
+    </p>
 
-<p>There are three operations in the program to handle dates: storing, showing and processing. Each operation has its 
-own specific and that is why all these operations were separated from each other.</p>
+    <p>
+        When GEDKeeper shows an incomplete date it replaces unknown parts with the underscore (&quot;_&quot;) symbol. Some users argued against it, but such symbols allow to clearly show
+        what parts of a date are missed. This also guarantees a unified presentation of all dates throughout the program.
+    </p>
 
-<p>
-<ul>
-<li><strong>Storing</strong>. All dates are stored using special GEDCOM format. This allows user to define incomplete dates in any form,</li>
-<li><strong>Showing</strong>. When GEDKeeper needs to show you a date it translates date in internal form to a string view, that may include special symbols
-(if they were enabled in the program settings). For example, &quot;Approximately 1701, January&quot; date will be rendered as &quot;__.01.1701&quot; (when special
-symbols are off) or as &quot;~ __.01.1701&quot; (when special symbols are on) in columns of general lists. Dates range like &quot;Between 01.01.1700 and 20.01.1700&quot;
-will be shown as &quot;01.01.1700 - 20.01.1700&quot;. &quot;Period before 10.10.1800&quot; date will be rendered as &quot;&lt; 10.10.1800&quot; (special symbols are on).</li>
-<li><strong>Processing</strong>. When GEDKeeper processes dates (for example, makes arithmetical operations on dates or 
-compares date) it translates them into special internal form (&quot;<a href="https://en.wikipedia.org/wiki/Julian_day" target="_top">Julian day</a>&quot;), 
-that allows code compares and handles incomplete dates of different calendars.</li>
-</ul>
-</p>
+    <p>
+        Incomplete dates are also allowed in filters on persons for birthdays and obits. Therefore, it is possible to select all people born
+        between 1700 and 1710, without specifying days and months.
+    </p>
 
-<p>When GEDKeeper shows an incomplete date it replaces unknown parts with &quot;_&quot; symbol. Some users opted against it. But such symbols allow to show clearly
-what parts of a date are missed. This also guarantees unified presentation of all dates through the program.</p>
+    <p>
+        To understand specific processing of dates and events, it is necessary to introduce both the topics&#151;as they are handled in the program. A date of an event is
+        just a combination of known day, month, and year within the bounds of some calendar. A date may be empty or incomplete, exact, relative, or be a range. A date does not
+        bear any other (non-calendar) information. An event is a record about certain occurrences which happened in a person's life. Such a record includes type of event, date, place,
+        description, and additional information. A person entry, for example, can have a record about death with an empty date. This means that person died but no one knows when.
+        Therefore, GEDKeeper processes differently persons with records about death and persons without such a record.
+    <p />
 
-<p>Incomplete dates are also allowed in filters on persons for birthdays and obits. Therefore, it is possible to select all men bore
-between 1&nbsp;700 and 1&nbsp;710, without specifying dates and months.</p>
+    <p>
+        Some other software programs do not handle death and birth events like GEDKeeper does. They usually use a &quot;Died&quot; flag and fields that store date and
+        place of death. From the point of view of GEDKeeper all events are the same. Therefore, GEDKeeper processes them the same way and never limits the number of stored events. For
+        purposes of the next research, a single person record is able to store several death and birth events (thus allowing storing several versions).
+        This makes GEDKeeper more flexible since you do not have to write such events into the text notes, or write birth and death events as a range of dates. Moreover, having
+        such an approach allows you to attach sources of information to each event and, later, see all the sources. When a researcher gets reliable information you can delete an incorrect
+        event or mark it as erroneous. The latter allows seeing that some information, even if erroneous, was rechecked and refuted.
+    </p>
 
-<p>To get specific character of processing dates and events, it is necessary to introduce both the topics, as they are handled in the program. Date of an event is
-just a combination of known day, month and year within the bounds of some calendar. Date may be empty or incomplete, exact, relative or be a range. Date does not
-bear some other (non-calendar) information. Event is a record about certain case happened in man&#39;s life. Such a record includes type of event, date, place,
-description and additional information. Person entry, for example, can have a record about death with empty date. This means that man died but no one knows when.
-Therefore, GEDKeeper processes differently persons with record about death and persons without such record.<p/>
+    <p>Number of years in &quot;Age&quot; and &quot;Life span&quot; columns get calculated as follow:</p>
 
-<p>Some other software does not handle death and birth events by list like GEDKeeper does. They usually use &quot;Died&quot; flag and fields that store date and
-place of death. From the point of view of GEDKeeper all events are the same - GEDKeeper processes them the same way and never limits number of stored events. For
-purposes of the next researches, a single person record is able to store several death and birth events simultaneously (thus allowing to store several versions).
-This makes software more flexible: user does not have to write such events into the text notes or write birth and death events as range of dates. Moreover, having
-such approach user can attach source of information to each event and, later, see all the sources. When researcher gets a reliable information he can delete incorrect
-event or mark it as erroneous. The latter allows always to see that some information, even it was erroneous, was rechecked and refuted.</p>
+    <p>
+        <ul>
+            <li>Life span is calculated strictly as the difference between birthday and obit. Therefore, when one of these dates is missing, nothing is done. The result is undefined.</li>
+            <li>
+                The age field is calculated as the differences of dates between birth and death events (when a person died if a death event has a valid date). Age is not calculated
+                when a death event exists but has no date. Age is calculated using the current date when a death event was not recorded (just the event itself, not its date). For example, for
+                if a person was born in 1700 and has no death event, in 2015 GEDKeeper shows its &quot;Age&quot; as 315 years. To avoid this, for people who have died,
+                even if you do not know when this happened, always add a death event with an empty date.
+            </li>
+        </ul>
+    </p>
 
-<p>Number of years in &quot;Age&quot; and &quot;Life span&quot; columns get calculated as follow:</p>
+    <p>
+        To make processing of bulk data more easy (for example, for data taken from a census&#151;having many records without a specified obit) GEDKeeper offers a check
+        database service (accessible from the &quot;Service\Tools\Check database&quot; menu). This service checks all person records and when it finds a
+        record having no death event, with age exceeding the most well-known and scientifically approved limits of a human life, the service suggests an automatic
+        fix for the death event (you must select a suggestion and click the &quot;Fix&quot; button). For GEDKeeper the limit of a human life is 122 years (see the
+        &quot;<a href="https://en.wikipedia.org/wiki/List_of_the_verified_oldest_people" target="_top">List of the verified oldest people</a>&quot; Wikipedia page). It should be noted
+        that the checking function does not set an obit of a person to the maximum value&#151;it just creates an empty death event as an indication.
+    </p>
 
-<p>
-<ul>
-<li>Life span is calculated strictly as difference between birthday and obit. Therefore, when one of these days is missed, nothing is done. Result is undefined.</li>
-<li>Age field calculated as differences of dates between birth and death events (this is an age when a man died if death event has valid date). Age is not calculated
-when death event exists but has no date. Age is calculated using the current date when death event was not recorded (just event itself, not its date). For example, for
-a person was born in 1&nbsp;700 and having no death event, in 2&nbsp;015 GEDKeeper shows its &quot;Age&quot; as 315 years. To avoid this for men have died indeed
-(even if you do not know when this happened), always add death event with empty date.</li>
-</ul>
-</p>
-
-<p>To make processing of data bulk more easily (for example, for data taken from audit tale, having many records without specified obit) GEDKeeper offers check
-database service (accessible from &quot;Service\Tools&quot; menu, &quot;Check database&quot; tab). This service checks all person records and when it finds a
-record having no death event, with age exceeding the most well-known and scientifically approved limits of a human life, the service suggests an automatically
-fix for death event (user must select a suggestion and click &quot;Fix&quot; button). For GEDKeeper limit of a human life is 122 years (see
-&quot;<a href="https://en.wikipedia.org/wiki/List_of_the_verified_oldest_people" target="_top">List of the verified oldest people</a>&quot; Wikipedia page). It should be noted
-that the checking function does not set obit of a person to the maximum value. It just creates an empty death event, just an indication.</p>
-
-<hr/>
-<p>See also: <a href="gkhRec_Event.html">Event</a>.</p>
+    <hr />
+    <p>See also: <a href="gkhRec_Event.html">Event</a>.</p>
 
 </body>
 </html>

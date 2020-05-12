@@ -21,8 +21,7 @@
 using System;
 using System.Collections.Generic;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -33,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class StatisticsWin : CommonWindow, IStatisticsWin
     {
         private readonly StatisticsWinController fController;
@@ -64,12 +60,12 @@ namespace GKUI.Forms
 
         IComboBoxHandler IStatisticsWin.StatsType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cbType); }
+            get { return GetControlHandler<IComboBoxHandler>(cbType); }
         }
 
         #endregion
 
-        public StatisticsWin(IBaseWindow baseWin, List<GEDCOMRecord> selectedRecords)
+        public StatisticsWin(IBaseWindow baseWin, List<GDMRecord> selectedRecords)
         {
             InitializeComponent();
 

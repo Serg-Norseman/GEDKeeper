@@ -33,9 +33,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TreeFilterDlg : EditorDialog, ITreeFilterDlg
     {
         private readonly TreeFilterDlgController fController;
@@ -57,12 +54,12 @@ namespace GKUI.Forms
 
         INumericBoxHandler ITreeFilterDlg.YearNum
         {
-            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(edYear); }
+            get { return GetControlHandler<INumericBoxHandler>(edYear); }
         }
 
         IComboBoxHandler ITreeFilterDlg.SourceCombo
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbSource); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbSource); }
         }
 
         void ITreeFilterDlg.SetCutModeRadio(int cutMode)

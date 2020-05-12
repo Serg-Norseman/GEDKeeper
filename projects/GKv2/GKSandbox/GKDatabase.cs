@@ -4,7 +4,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Reflection;
 
-namespace GKCommon.Database
+namespace GKCore.Database
 {
     public class GKDatabaseException : Exception
     {
@@ -12,6 +12,7 @@ namespace GKCommon.Database
         {
         }
     }
+
 
     /// <summary>
     /// 
@@ -72,13 +73,11 @@ namespace GKCommon.Database
 
             SQLiteConnection.CreateFile(baseName);
 
-            using (SQLiteConnection connection = (SQLiteConnection)SQLiteFactory.Instance.CreateConnection())
-            {
+            using (SQLiteConnection connection = (SQLiteConnection)SQLiteFactory.Instance.CreateConnection()) {
                 connection.ConnectionString = "Data Source = " + baseName;
                 connection.Open();
 
-                using (SQLiteCommand command = new SQLiteCommand(connection))
-                {
+                using (SQLiteCommand command = new SQLiteCommand(connection)) {
                     command.CommandText = @"create table [NamesTable] (
                     [id] integer primary key autoincrement not null,
                     [name] char(100) not null,

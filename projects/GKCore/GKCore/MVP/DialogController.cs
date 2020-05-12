@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib.Design.MVP;
 using GKCore.Interfaces;
 using GKCore.Operations;
 
@@ -26,7 +27,7 @@ namespace GKCore.MVP
     /// <summary>
     /// 
     /// </summary>
-    public abstract class DialogController<T> : FormController<T> where T : IView
+    public abstract class DialogController<TView> : FormController<TView> where TView : IView
     {
         protected ChangeTracker fLocalUndoman;
 
@@ -35,7 +36,7 @@ namespace GKCore.MVP
             get { return fLocalUndoman; }
         }
 
-        protected DialogController(T view) : base(view)
+        protected DialogController(TView view) : base(view)
         {
         }
 

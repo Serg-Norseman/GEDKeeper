@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,9 @@
 
 #if !__MonoCS__
 
-using GKCommon.GEDCOM;
+using System;
+using System.Windows.Forms;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.ControlTesters;
@@ -37,7 +39,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class GroupEditDlgTests : CustomWindowTest
     {
-        private GEDCOMGroupRecord fGroupRecord;
+        private GDMGroupRecord fGroupRecord;
         private IBaseWindow fBase;
         private GroupEditDlg fDialog;
 
@@ -46,7 +48,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fGroupRecord = new GEDCOMGroupRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fGroupRecord = new GDMGroupRecord(fBase.Context.Tree);
 
             fDialog = new GroupEditDlg(fBase);
             fDialog.Group = fGroupRecord;
@@ -75,13 +77,41 @@ namespace GKUI.Forms
             //Assert.IsTrue(buttons.ContainsAll(SheetButton.lbAdd, SheetButton.lbDelete, SheetButton.lbJump));
             Assert.IsFalse(sheetTester.Properties.ReadOnly);
 
-            var edName = new TextBoxTester("edName");
-            edName.Enter("sample text");
+            EnterText("edName", fDialog, "sample text");
 
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fGroupRecord.GroupName);
         }
+
+        #region Handlers for external tests
+
+        public static void GroupAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("edName", form, "sample group");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void GroupEditDlg_Handler(GroupEditDlg dlg)
+        {
+            GDMGroupRecord groupRecord = dlg.Group;
+
+            // members
+            Assert.AreEqual(0, groupRecord.Members.Count);
+            RecordSelectDlgTests.SetSelectItemHandler(fFormTest, 0);
+            ClickToolStripButton("fMembersList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, groupRecord.Members.Count);
+
+            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
+            SelectSheetListItem("fMembersList", dlg, 0);
+            ClickToolStripButton("fMembersList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, groupRecord.Members.Count);
+
+            ClickButton("btnAccept", dlg);
+        }
+
+        #endregion
     }
 }
 

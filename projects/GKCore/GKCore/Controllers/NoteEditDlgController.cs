@@ -20,7 +20,7 @@
 
 using System;
 using System.IO;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -32,9 +32,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class NoteEditDlgController : DialogController<INoteEdit>
     {
-        private GEDCOMNoteRecord fNoteRecord;
+        private GDMNoteRecord fNoteRecord;
 
-        public GEDCOMNoteRecord NoteRecord
+        public GDMNoteRecord NoteRecord
         {
             get { return fNoteRecord; }
             set {
@@ -71,7 +71,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Note.Text = fNoteRecord.Note.Text.Trim();
+            fView.Note.Text = fNoteRecord.Lines.Text.Trim();
         }
 
         public void SetBold()

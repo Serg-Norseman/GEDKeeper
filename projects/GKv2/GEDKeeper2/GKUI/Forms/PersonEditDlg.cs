@@ -21,9 +21,10 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using BSLib.Design.Graphics;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -35,9 +36,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class PersonEditDlg : EditorDialog, IPersonEditDlg
     {
         private readonly PersonEditDlgController fController;
@@ -51,14 +49,15 @@ namespace GKUI.Forms
         private readonly GKSheetList fSourcesList;
         private readonly GKSheetList fUserRefList;
         private readonly GKSheetList fNamesList;
+        private readonly GKSheetList fParentsList;
 
-        public GEDCOMIndividualRecord Person
+        public GDMIndividualRecord Person
         {
             get { return fController.Person; }
             set { fController.Person = value; }
         }
 
-        public GEDCOMIndividualRecord Target
+        public GDMIndividualRecord Target
         {
             get { return fController.Target; }
             set { fController.Target = value; }
@@ -118,84 +117,89 @@ namespace GKUI.Forms
             get { return fSourcesList; }
         }
 
+        ISheetList IPersonEditDlg.ParentsList
+        {
+            get { return fParentsList; }
+        }
+
         IPortraitControl IPersonEditDlg.Portrait
         {
             get { return imgPortrait; }
         }
 
-        ITextBoxHandler IPersonEditDlg.Father
+        ITextBox IPersonEditDlg.Father
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtFather); }
+            get { return GetControlHandler<ITextBox>(txtFather); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Mother
+        ITextBox IPersonEditDlg.Mother
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtMother); }
+            get { return GetControlHandler<ITextBox>(txtMother); }
         }
 
-        ILabelHandler IPersonEditDlg.SurnameLabel
+        ILabel IPersonEditDlg.SurnameLabel
         {
-            get { return fControlsManager.GetControlHandler<ILabelHandler>(lblSurname); }
+            get { return GetControlHandler<ILabel>(lblSurname); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Surname
+        ITextBox IPersonEditDlg.Surname
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtSurname); }
+            get { return GetControlHandler<ITextBox>(txtSurname); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Name
+        ITextBox IPersonEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        IComboBoxHandler IPersonEditDlg.Patronymic
+        IComboBox IPersonEditDlg.Patronymic
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbPatronymic); }
+            get { return GetControlHandler<IComboBox>(cmbPatronymic); }
         }
 
-        ITextBoxHandler IPersonEditDlg.NamePrefix
+        ITextBox IPersonEditDlg.NamePrefix
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtNamePrefix); }
+            get { return GetControlHandler<ITextBox>(txtNamePrefix); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Nickname
+        ITextBox IPersonEditDlg.Nickname
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtNickname); }
+            get { return GetControlHandler<ITextBox>(txtNickname); }
         }
 
-        ITextBoxHandler IPersonEditDlg.SurnamePrefix
+        ITextBox IPersonEditDlg.SurnamePrefix
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtSurnamePrefix); }
+            get { return GetControlHandler<ITextBox>(txtSurnamePrefix); }
         }
 
-        ITextBoxHandler IPersonEditDlg.NameSuffix
+        ITextBox IPersonEditDlg.NameSuffix
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtNameSuffix); }
+            get { return GetControlHandler<ITextBox>(txtNameSuffix); }
         }
 
-        ITextBoxHandler IPersonEditDlg.MarriedSurname
+        ITextBox IPersonEditDlg.MarriedSurname
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtMarriedSurname); }
+            get { return GetControlHandler<ITextBox>(txtMarriedSurname); }
         }
 
-        IComboBoxHandler IPersonEditDlg.RestrictionCombo
+        IComboBox IPersonEditDlg.RestrictionCombo
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRestriction); }
+            get { return GetControlHandler<IComboBox>(cmbRestriction); }
         }
 
-        IComboBoxHandler IPersonEditDlg.SexCombo
+        IComboBoxEx IPersonEditDlg.SexCombo
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbSex); }
+            get { return GetControlHandler<IComboBoxEx>(cmbSex); }
         }
 
-        ICheckBoxHandler IPersonEditDlg.Patriarch
+        ICheckBox IPersonEditDlg.Patriarch
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkPatriarch); }
+            get { return GetControlHandler<ICheckBox>(chkPatriarch); }
         }
 
-        ICheckBoxHandler IPersonEditDlg.Bookmark
+        ICheckBox IPersonEditDlg.Bookmark
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkBookmark); }
+            get { return GetControlHandler<ICheckBox>(chkBookmark); }
         }
 
         #endregion
@@ -266,24 +270,31 @@ namespace GKUI.Forms
 
         private void ModifyAssociationsSheet(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMAssociation ast = eArgs.ItemData as GEDCOMAssociation;
+            GDMAssociation ast = eArgs.ItemData as GDMAssociation;
             if (eArgs.Action == RecordAction.raJump && ast != null) {
                 fController.JumpToRecord(ast.Individual);
             }
         }
 
+        private void BeforeChangeSpousesSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raEdit) {
+                fController.AcceptTempData();
+            }
+        }
+
         private void ModifySpousesSheet(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMFamilyRecord family = eArgs.ItemData as GEDCOMFamilyRecord;
+            GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
             if (eArgs.Action == RecordAction.raJump && family != null) {
-                GEDCOMIndividualRecord spouse = null;
+                GDMIndividualRecord spouse = null;
                 switch (fController.Person.Sex) {
-                    case GEDCOMSex.svMale:
-                        spouse = family.GetWife();
+                    case GDMSex.svMale:
+                        spouse = family.Wife.Individual;
                         break;
 
-                    case GEDCOMSex.svFemale:
-                        spouse = family.GetHusband();
+                    case GDMSex.svFemale:
+                        spouse = family.Husband.Individual;
                         break;
                 }
 
@@ -291,10 +302,15 @@ namespace GKUI.Forms
             }
         }
 
+        private void ModifyParentsSheet(object sender, ModifyEventArgs eArgs)
+        {
+            fController.UpdateParents();
+        }
+
         private void ModifyGroupsSheet(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GEDCOMGroupRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMGroupRecord);
             }
         }
 
@@ -379,7 +395,7 @@ namespace GKUI.Forms
             }
         }
 
-        public void SetNeedSex(GEDCOMSex needSex)
+        public void SetNeedSex(GDMSex needSex)
         {
             cmbSex.SelectedIndex = (int)needSex;
         }
@@ -401,11 +417,11 @@ namespace GKUI.Forms
             btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
             btnParentsDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
             btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            btnFatherSel.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnFatherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
             btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            btnMotherSel.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnMotherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
             btnNameCopy.Image = UIHelper.LoadResourceImage("Resources.btn_copy.gif");
 
             fEventsList = new GKSheetList(pageEvents);
@@ -414,6 +430,7 @@ namespace GKUI.Forms
             fSpousesList = new GKSheetList(pageSpouses);
             fSpousesList.SetControlName("fSpousesList"); // for purpose of tests
             fSpousesList.OnModify += ModifySpousesSheet;
+            fSpousesList.OnBeforeChange += BeforeChangeSpousesSheet;
 
             fNamesList = new GKSheetList(pageNames);
             fNamesList.OnModify += ModifyNamesSheet;
@@ -439,6 +456,10 @@ namespace GKUI.Forms
             fUserRefList = new GKSheetList(pageUserRefs);
             fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
+            fParentsList = new GKSheetList(pageParents);
+            fParentsList.SetControlName("fParentsList"); // for purpose of tests
+            fParentsList.OnModify += ModifyParentsSheet;
+
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
             imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
@@ -458,6 +479,7 @@ namespace GKUI.Forms
             fNamesList.ListModel = new NamesSublistModel(baseWin, fController.LocalUndoman);
             fSpousesList.ListModel = new SpousesSublistModel(baseWin, fController.LocalUndoman);
             fUserRefList.ListModel = new URefsSublistModel(baseWin, fController.LocalUndoman);
+            fParentsList.ListModel = new ParentsSublistModel(baseWin, fController.LocalUndoman);
         }
 
         public void SetLang()
@@ -487,6 +509,7 @@ namespace GKUI.Forms
             pageUserRefs.Text = LangMan.LS(LSID.LSID_UserRefs);
             lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
             pageNames.Text = LangMan.LS(LSID.LSID_Names);
+            pageParents.Text = LangMan.LS(LSID.LSID_Parents);
 
             SetToolTip(btnPortraitAdd, LangMan.LS(LSID.LSID_PortraitAddTip));
             SetToolTip(btnPortraitDelete, LangMan.LS(LSID.LSID_PortraitDeleteTip));

@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>WinExe</OutputType>
     <AssemblyName>GEDKeeper2</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkProfile />
     <SignAssembly>False</SignAssembly>
@@ -102,6 +102,9 @@
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\..\libs\BSLib.Design.dll</HintPath>
+    </Reference>
     <Reference Include="BSLib.SmartGraph">
       <HintPath>..\..\libs\BSLib.SmartGraph.dll</HintPath>
     </Reference>
@@ -129,12 +132,6 @@
     </Compile>
     <Compile Include="GKUI\Components\GKInputBox.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\Components\GKPortrait.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GKUI\Components\GKSheetList.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\NativeMethods.cs" />
     <Compile Include="GKUI\Components\TreeChartBox.cs" />
@@ -174,7 +171,6 @@
     <Compile Include="GKUI\Forms\CommonFilterDlg.Designer.cs">
       <DependentUpon>CommonFilterDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\CommonForm.cs" />
     <Compile Include="GKUI\Forms\CommunicationEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -274,6 +270,10 @@
     <Compile Include="GKUI\Forms\OrganizerWin.Designer.cs">
       <DependentUpon>OrganizerWin.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\ParentsEditDlg.cs" />
+    <Compile Include="GKUI\Forms\ParentsEditDlg.Designer.cs">
+      <DependentUpon>ParentsEditDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Forms\PatriarchsViewerWin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -312,6 +312,13 @@
     </Compile>
     <Compile Include="GKUI\Forms\ProgressDlg.Designer.cs">
       <DependentUpon>ProgressDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\QuickSearchDlg.Designer.cs">
+      <DependentUpon>QuickSearchDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\RecordInfoDlg.cs" />
+    <Compile Include="GKUI\Forms\RecordInfoDlg.Designer.cs">
+      <DependentUpon>RecordInfoDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Forms\RecordSelectDlg.cs">
       <SubType>Form</SubType>
@@ -441,9 +448,9 @@
     </Compile>
     <Compile Include="GKUI\Providers\ControlHandlers.cs" />
     <Compile Include="GKUI\Providers\WFAppHost.cs" />
-    <Compile Include="GKUI\Providers\WFGfxProvider.cs" />
     <Compile Include="GKUI\Providers\WFGfxRenderer.cs" />
     <Compile Include="GKUI\Providers\WFStdDialogs.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -458,9 +465,6 @@
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKUI\Providers" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -29,21 +29,18 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTTreeSplitDlg : CommonDialog, ITreeSplitDlg
     {
         private readonly TreeSplitController fController;
 
         #region View Interface
 
-        IListView ITreeSplitDlg.SelectedList
+        IListViewEx ITreeSplitDlg.SelectedList
         {
             get { return ListSelected; }
         }
 
-        IListView ITreeSplitDlg.SkippedList
+        IListViewEx ITreeSplitDlg.SkippedList
         {
             get { return ListSkipped; }
         }

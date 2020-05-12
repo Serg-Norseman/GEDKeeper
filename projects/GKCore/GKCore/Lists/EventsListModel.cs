@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKCore.Operations;
@@ -53,7 +53,7 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var dataOwner = fDataOwner as GEDCOMRecordWithEvents;
+            var dataOwner = fDataOwner as GDMRecordWithEvents;
             if (fSheetList == null || dataOwner == null) return;
 
             try
@@ -62,7 +62,7 @@ namespace GKCore.Lists
 
                 for (int i = 0; i < dataOwner.Events.Count; i++)
                 {
-                    GEDCOMCustomEvent evt = dataOwner.Events[i];
+                    GDMCustomEvent evt = dataOwner.Events[i];
 
                     object[] itemsData = new object[5];
                     itemsData[0] = (i + 1);
@@ -97,8 +97,8 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGEDCOMStructWithLists;
             if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
-            GEDCOMCustomEvent evt = eArgs.ItemData as GEDCOMCustomEvent;
-            GEDCOMRecordWithEvents record = dataOwner as GEDCOMRecordWithEvents;
+            GDMCustomEvent evt = eArgs.ItemData as GDMCustomEvent;
+            GDMRecordWithEvents record = dataOwner as GDMRecordWithEvents;
 
             bool result = false;
 
@@ -106,17 +106,17 @@ namespace GKCore.Lists
                 switch (eArgs.Action) {
                     case RecordAction.raAdd:
                     case RecordAction.raEdit:
-                        using (var dlgEventEdit = AppHost.Container.Resolve<IEventEditDlg>(fBaseWin)) {
+                        using (var dlgEventEdit = AppHost.ResolveDialog<IEventEditDlg>(fBaseWin)) {
                             bool exists = (evt != null);
 
-                            GEDCOMCustomEvent newEvent;
+                            GDMCustomEvent newEvent;
                             if (evt != null) {
                                 newEvent = evt;
                             } else {
-                                if (record is GEDCOMIndividualRecord) {
-                                    newEvent = new GEDCOMIndividualEvent(fBaseWin.Context.Tree, record, "", "");
+                                if (record is GDMIndividualRecord) {
+                                    newEvent = new GDMIndividualEvent(record);
                                 } else {
-                                    newEvent = new GEDCOMFamilyEvent(fBaseWin.Context.Tree, record, "", "");
+                                    newEvent = new GDMFamilyEvent(record);
                                 }
                             }
 
@@ -133,7 +133,7 @@ namespace GKCore.Lists
                                 if (!exists) {
                                     result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, newEvent);
                                 } else {
-                                    if (record is GEDCOMIndividualRecord && newEvent != evt) {
+                                    if (record is GDMIndividualRecord && newEvent != evt) {
                                         fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, evt);
                                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, newEvent);
                                     }

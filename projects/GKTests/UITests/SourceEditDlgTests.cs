@@ -20,7 +20,9 @@
 
 #if !__MonoCS__
 
-using GKCommon.GEDCOM;
+using System;
+using System.Windows.Forms;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -36,7 +38,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class SourceEditDlgTests : CustomWindowTest
     {
-        private GEDCOMSourceRecord fSourceRecord;
+        private GDMSourceRecord fSourceRecord;
         private IBaseWindow fBase;
         private SourceEditDlg fDialog;
 
@@ -45,7 +47,7 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fSourceRecord = new GEDCOMSourceRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
+            fSourceRecord = new GDMSourceRecord(fBase.Context.Tree);
 
             fDialog = new SourceEditDlg(fBase);
             fDialog.Model = fSourceRecord;
@@ -79,9 +81,39 @@ namespace GKUI.Forms
 
             ClickButton("btnAccept", fDialog);
 
-            Assert.AreEqual("sample text", fSourceRecord.FiledByEntry);
-            Assert.AreEqual("sample text", fSourceRecord.Originator.Text);
+            Assert.AreEqual("sample text", fSourceRecord.ShortTitle);
+            Assert.AreEqual("sample text", fSourceRecord.Originator.Lines.Text);
         }
+
+        #region Handlers for external tests
+
+        public static void SourceAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtShortTitle", form, "sample text");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void SourceEditDlg_Handler(SourceEditDlg dlg)
+        {
+            GDMSourceRecord srcRecord = dlg.Model;
+            SelectTab("tabsData", dlg, 2);
+
+            // repositories
+            Assert.AreEqual(0, srcRecord.RepositoryCitations.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, TaskEditDlgTests.TaskAdd_Mini_Handler);
+            ClickToolStripButton("fRepositoriesList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, srcRecord.RepositoryCitations.Count);
+
+            SelectSheetListItem("fRepositoriesList", dlg, 0);
+            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
+            ClickToolStripButton("fRepositoriesList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, srcRecord.RepositoryCitations.Count);
+
+            ClickButton("btnAccept", dlg);
+        }
+
+        #endregion
     }
 }
 

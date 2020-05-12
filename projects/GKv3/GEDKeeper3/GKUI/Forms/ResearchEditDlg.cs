@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -33,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class ResearchEditDlg : EditorDialog, IResearchEditDlg
     {
         private readonly ResearchEditDlgController fController;
@@ -45,7 +41,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fGroupsList;
         private readonly GKSheetList fNotesList;
 
-        public GEDCOMResearchRecord Research
+        public GDMResearchRecord Research
         {
             get { return fController.Research; }
             set { fController.Research = value; }
@@ -76,32 +72,32 @@ namespace GKUI.Forms
 
         ITextBoxHandler IResearchEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBoxHandler>(txtName); }
         }
 
         IComboBoxHandler IResearchEditDlg.Priority
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbPriority); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbPriority); }
         }
 
         IComboBoxHandler IResearchEditDlg.Status
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbStatus); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbStatus); }
         }
 
         ITextBoxHandler IResearchEditDlg.StartDate
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtStartDate); }
+            get { return GetControlHandler<ITextBoxHandler>(txtStartDate); }
         }
 
         ITextBoxHandler IResearchEditDlg.StopDate
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtStopDate); }
+            get { return GetControlHandler<ITextBoxHandler>(txtStopDate); }
         }
 
         INumericBoxHandler IResearchEditDlg.Percent
         {
-            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(nudPercent); }
+            get { return GetControlHandler<INumericBoxHandler>(nudPercent); }
         }
 
         #endregion
@@ -155,21 +151,21 @@ namespace GKUI.Forms
         private void ListTasksModify(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GEDCOMTaskRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMTaskRecord);
             }
         }
 
         private void ListCommunicationsModify(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GEDCOMCommunicationRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMCommunicationRecord);
             }
         }
 
         private void ListGroupsModify(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GEDCOMGroupRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMGroupRecord);
             }
         }
 

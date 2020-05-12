@@ -22,8 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -34,9 +34,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class StatisticsWin : CommonWindow, IStatisticsWin
     {
         private readonly StatisticsWinController fController;
@@ -63,14 +60,14 @@ namespace GKUI.Forms
             get { return lvSummary; }
         }
 
-        IComboBoxHandler IStatisticsWin.StatsType
+        IComboBox IStatisticsWin.StatsType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cbType); }
+            get { return GetControlHandler<IComboBox>(cbType); }
         }
 
         #endregion
 
-        public StatisticsWin(IBaseWindow baseWin, List<GEDCOMRecord> selectedRecords)
+        public StatisticsWin(IBaseWindow baseWin, List<GDMRecord> selectedRecords)
         {
             InitializeComponent();
 
@@ -116,7 +113,7 @@ namespace GKUI.Forms
             fController.CalcStats(fCurrentMode);
 
             fListStats.SortColumn = -1;
-            fListStats.Sorting = SortOrder.None;
+            fListStats.Sorting = System.Windows.Forms.SortOrder.None;
         }
 
         private void StatisticsWin_Load(object sender, EventArgs e)

@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Options;
@@ -32,10 +32,10 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class AssociationEditDlgController : DialogController<IAssociationEditDlg>
     {
-        private GEDCOMAssociation fAssociation;
-        private GEDCOMIndividualRecord fTempPerson;
+        private GDMAssociation fAssociation;
+        private GDMIndividualRecord fTempPerson;
 
-        public GEDCOMAssociation Association
+        public GDMAssociation Association
         {
             get { return fAssociation; }
             set {
@@ -79,7 +79,7 @@ namespace GKCore.Controllers
 
         public void SetPerson()
         {
-            fTempPerson = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+            fTempPerson = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
             fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, true, false);
         }
     }

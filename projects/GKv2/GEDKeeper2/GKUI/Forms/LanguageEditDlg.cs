@@ -20,24 +20,20 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class LanguageEditDlg : CommonDialog, ILanguageEditDlg
     {
         private readonly LanguageEditDlgController fController;
 
-        public GEDCOMLanguageID LanguageID
+        public GDMLanguageID LanguageID
         {
             get { return fController.LanguageID; }
             set { fController.LanguageID = value; }
@@ -45,9 +41,9 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler ILanguageEditDlg.LanguageCombo
+        IComboBox ILanguageEditDlg.LanguageCombo
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbLanguage); }
+            get { return GetControlHandler<IComboBox>(cmbLanguage); }
         }
 
         #endregion

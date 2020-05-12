@@ -36,16 +36,16 @@
     <Compile Include="GKUI\Components\CustomChart.cs" />
     <Compile Include="GKUI\Components\TreeChartBox.cs" />
     <Compile Include="GKUI\Components\FilterGridView.cs" />
+    <Compile Include="GKUI\Forms\QuickSearchDlg.design.cs">
+      <DependentUpon>QuickSearchDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Providers\ControlHandlers.cs" />
     <Compile Include="GKUI\Providers\EtoGfxRenderer.cs" />
     <Compile Include="GKUI\Components\ACOptionsControl.cs" />
     <Compile Include="GKUI\Components\GKInputBox.cs" />
     <Compile Include="GKUI\Components\GKMapBrowser.cs" />
     <Compile Include="GKUI\Components\GKMergeControl.cs" />
-    <Compile Include="GKUI\Components\GKPortrait.cs" />
-    <Compile Include="GKUI\Components\GKSheetList.cs" />
     <Compile Include="GKUI\Providers\EtoAppHost.cs" />
-    <Compile Include="GKUI\Providers\EtoGfxProvider.cs" />
     <Compile Include="GKUI\Providers\EtoStdDialogs.cs" />
     <Compile Include="GKUI\Forms\AboutDlg.cs" />
     <Compile Include="GKUI\Forms\AboutDlg.design.cs">
@@ -71,7 +71,6 @@
     <Compile Include="GKUI\Forms\CommonFilterDlg.design.cs">
       <DependentUpon>CommonFilterDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\CommonForm.cs" />
     <Compile Include="GKUI\Forms\CommunicationEditDlg.cs" />
     <Compile Include="GKUI\Forms\CommunicationEditDlg.design.cs">
       <DependentUpon>CommunicationEditDlg.cs</DependentUpon>
@@ -145,6 +144,10 @@
     <Compile Include="GKUI\Forms\PersonalNameEditDlg.cs" />
     <Compile Include="GKUI\Forms\PersonalNameEditDlg.design.cs">
       <DependentUpon>PersonalNameEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\ParentsEditDlg.cs" />
+    <Compile Include="GKUI\Forms\ParentsEditDlg.design.cs">
+      <DependentUpon>ParentsEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Forms\PersonEditDlg.cs" />
     <Compile Include="GKUI\Forms\PersonEditDlg.design.cs">
@@ -252,6 +255,10 @@
     <Compile Include="GKUI\Forms\UserRefEditDlg.cs" />
     <Compile Include="GKUI\Forms\UserRefEditDlg.design.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\RecordInfoDlg.cs" />
+    <Compile Include="GKUI\Forms\RecordInfoDlg.design.cs">
+      <DependentUpon>RecordInfoDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>

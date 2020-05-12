@@ -20,6 +20,8 @@
 
 #if !__MonoCS__
 
+using System;
+using System.Windows.Forms;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKTests;
@@ -73,17 +75,23 @@ namespace GKUI.Forms
         {
             Assert.IsNotNull(fDialog.Filter);
 
-            var rbCutPersons = new RadioButtonTester("rbCutPersons", fDialog);
-            rbCutPersons.Click();
+            ClickRadioButton("rbCutPersons", fDialog);
 
-            var rbCutYears = new RadioButtonTester("rbCutYears", fDialog);
-            rbCutYears.Click();
+            ClickRadioButton("rbCutYears", fDialog);
 
-            var rbCutNone = new RadioButtonTester("rbCutNone", fDialog);
-            rbCutNone.Click();
+            ClickRadioButton("rbCutNone", fDialog);
 
             ClickButton("btnAccept", fDialog);
         }
+
+        #region Handlers for external tests
+
+        public static void TreeFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

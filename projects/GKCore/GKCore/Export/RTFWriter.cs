@@ -20,9 +20,9 @@
 
 #if !NETSTANDARD
 
+using BSLib.Design.Graphics;
 using Elistia.DotNetRtfWriter;
 using BSLib;
-using GKCore.Interfaces;
 
 namespace GKCore.Export
 {

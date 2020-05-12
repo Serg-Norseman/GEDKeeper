@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -33,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class SourceEditDlg : EditorDialog, ISourceEditDlg
     {
         private readonly SourceEditDlgController fController;
@@ -44,7 +40,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fRepositoriesList;
 
-        public GEDCOMSourceRecord Model
+        public GDMSourceRecord Model
         {
             get { return fController.Model; }
             set { fController.Model = value; }
@@ -69,27 +65,27 @@ namespace GKUI.Forms
 
         ITextBoxHandler ISourceEditDlg.ShortTitle
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtShortTitle); }
+            get { return GetControlHandler<ITextBoxHandler>(txtShortTitle); }
         }
 
         ITextBoxHandler ISourceEditDlg.Author
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtAuthor); }
+            get { return GetControlHandler<ITextBoxHandler>(txtAuthor); }
         }
 
         ITextBoxHandler ISourceEditDlg.Title
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtTitle); }
+            get { return GetControlHandler<ITextBoxHandler>(txtTitle); }
         }
 
         ITextBoxHandler ISourceEditDlg.Publication
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtPublication); }
+            get { return GetControlHandler<ITextBoxHandler>(txtPublication); }
         }
 
         ITextBoxHandler ISourceEditDlg.Text
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtText); }
+            get { return GetControlHandler<ITextBoxHandler>(txtText); }
         }
 
         #endregion
@@ -131,7 +127,7 @@ namespace GKUI.Forms
 
         private void ModifyReposSheet(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMRepositoryCitation cit = eArgs.ItemData as GEDCOMRepositoryCitation;
+            GDMRepositoryCitation cit = eArgs.ItemData as GDMRepositoryCitation;
             if (eArgs.Action == RecordAction.raJump && cit != null) {
                 fController.JumpToRecord(cit.Value);
             }

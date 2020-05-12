@@ -19,7 +19,7 @@
  */
 
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -42,6 +42,15 @@ namespace GKCore.Controllers
         private static int PatriarchsCompare(object item1, object item2)
         {
             return ((PatriarchObj)item1).BirthYear - ((PatriarchObj)item2).BirthYear;
+        }
+
+        public void SelectPatriarch()
+        {
+            GDMIndividualRecord iRec = fView.PatriarchsList.GetSelectedData() as GDMIndividualRecord;
+            if (iRec == null) return;
+
+            fBase.SelectRecordByXRef(iRec.XRef);
+            fView.Close();
         }
 
         public void Search()
@@ -71,7 +80,7 @@ namespace GKCore.Controllers
         public void SetPatriarch()
         {
             try {
-                var iRec = fView.PatriarchsList.GetSelectedData() as GEDCOMIndividualRecord;
+                var iRec = fView.PatriarchsList.GetSelectedData() as GDMIndividualRecord;
                 if (iRec != null) {
                     iRec.Patriarch = true;
                 }
@@ -80,6 +89,12 @@ namespace GKCore.Controllers
             } finally {
                 Search();
             }
+        }
+
+        public void ShowPatriarchsDiagram()
+        {
+            var wnd = AppHost.Container.Resolve<IPatriarchsViewer>(fBase, (int)fView.MinGensNum.Value);
+            wnd.Show(false);
         }
     }
 }

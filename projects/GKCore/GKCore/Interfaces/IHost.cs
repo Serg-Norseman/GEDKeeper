@@ -38,6 +38,8 @@ namespace GKCore.Interfaces
         void BaseClosed(IBaseWindow baseWin);
         void BaseRenamed(IBaseWindow baseWin, string oldName, string newName);
         void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action);
+        void SelectedIndexChanged(IBaseWindow baseWin);
+        void TabChanged(IBaseWindow baseWin);
 
         void ApplyOptions();
 

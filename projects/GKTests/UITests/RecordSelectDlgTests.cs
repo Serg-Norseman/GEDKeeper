@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,13 +20,17 @@
 
 #if !__MonoCS__
 
-using GKCommon.GEDCOM;
+using System;
+using System.Windows.Forms;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
 using GKUI.Forms;
 using NUnit.Framework;
+using NUnit.Extensions.Forms;
+using GKTests.ControlTesters;
 
 namespace GKUI.Forms
 {
@@ -45,7 +49,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
 
-            fDialog = new RecordSelectDlg(fBase, GEDCOMRecordType.rtIndividual);
+            fDialog = new RecordSelectDlg(fBase, GDMRecordType.rtIndividual);
             fDialog.Show();
         }
 
@@ -65,6 +69,44 @@ namespace GKUI.Forms
         }
 
         #region Handlers for external tests
+
+        public static void RecordSelectDlg_Cancel_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnCancel", form);
+        }
+
+        private static int RSD_ItemIndex;
+
+        private static void RSD_SelectItem_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtFastFilter", form, "*");
+
+            var listRecords = new GKRecordsViewTester("fListRecords", form);
+            listRecords.Properties.SelectItem(RSD_ItemIndex);
+
+            ClickButton("btnSelect", form);
+        }
+
+        public static void SetSelectItemHandler(NUnitFormTest formTest, int itemIndex)
+        {
+            RSD_ItemIndex = itemIndex;
+            SetModalFormHandler(formTest, RSD_SelectItem_Handler);
+        }
+
+        private static ModalFormHandler RSD_SubHandler;
+
+        private static void RSD_CreateItem_Handler(string name, IntPtr ptr, Form form)
+        {
+            SetModalFormHandler(fFormTest, RSD_SubHandler);
+            ClickButton("btnCreate", form);
+        }
+
+        public static void SetCreateItemHandler(NUnitFormTest formTest, ModalFormHandler createHandler)
+        {
+            RSD_SubHandler = createHandler;
+            SetModalFormHandler(formTest, RSD_CreateItem_Handler);
+        }
+
         #endregion
     }
 }

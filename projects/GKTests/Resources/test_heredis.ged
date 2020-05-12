@@ -1,0 +1,31 @@
+0 HEAD
+1 SOUR HEREDIS 12 PC
+2 VERS 12
+2 NAME HEREDIS PC
+2 CORP BSD Concept √
+3 ADDR www.heredis.com
+1 GEDC
+2 VERS 5.5
+2 FORM LINEAGE-LINKED
+1 CHAR ANSEL
+1 PLAC
+2 FORM Town , Area code , County , Region , Country, Subdivision
+0 @I001@ INDI
+1 NAME Dolor·es/./
+2 GIVN Dolor·es
+2 SURN .
+1 SEX F
+0 @I002@ INDI
+1 NAME Therese/VACQU‚E/
+2 GIVN Therese
+2 SURN VACQU‚E
+1 SEX F
+1 EVEN
+2 TYPE lib‚er‚ee
+2 DATE 15 SEP 1944
+2 PLAC No‚e,31410,Haute-Garonne,Midi-Pyr‚en‚ees,FRANCE,
+1 EVEN
+2 TYPE histoire de m‚em‚e
+2 DATE ABT 1969
+2 PLAC Boucau,64340,Pyr‚en‚ees-Atlantiques,Aquitaine,FRANCE,
+0 TRLR

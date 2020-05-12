@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,7 @@
  */
 
 using System;
-
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -28,48 +28,45 @@ using GKCore.MVP.Views;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class PersonsFilterDlg : CommonFilterDlg, IPersonsFilterDlg
     {
         private readonly PersonsFilterDlgController fController;
 
         #region View Interface
 
-        IComboBoxHandler IPersonsFilterDlg.SourceCombo
+        IComboBox IPersonsFilterDlg.SourceCombo
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbSource); }
+            get { return GetControlHandler<IComboBox>(cmbSource); }
         }
 
-        IComboBoxHandler IPersonsFilterDlg.GroupCombo
+        IComboBox IPersonsFilterDlg.GroupCombo
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbGroup); }
+            get { return GetControlHandler<IComboBox>(cmbGroup); }
         }
 
-        ITextBoxHandler IPersonsFilterDlg.AliveBeforeDate
+        ITextBox IPersonsFilterDlg.AliveBeforeDate
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtAliveBeforeDate); }
+            get { return GetControlHandler<ITextBox>(txtAliveBeforeDate); }
         }
 
-        ICheckBoxHandler IPersonsFilterDlg.OnlyPatriarchsCheck
+        ICheckBox IPersonsFilterDlg.OnlyPatriarchsCheck
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkOnlyPatriarchs); }
+            get { return GetControlHandler<ICheckBox>(chkOnlyPatriarchs); }
         }
 
-        IComboBoxHandler IPersonsFilterDlg.EventValCombo
+        IComboBox IPersonsFilterDlg.EventValCombo
         {
-            get { return  fControlsManager.GetControlHandler<IComboBoxHandler>(cmbEventVal); }
+            get { return  GetControlHandler<IComboBox>(cmbEventVal); }
         }
 
-        IComboBoxHandler IPersonsFilterDlg.ResidenceCombo
+        IComboBox IPersonsFilterDlg.ResidenceCombo
         {
-            get { return  fControlsManager.GetControlHandler<IComboBoxHandler>(cmbResidence); }
+            get { return  GetControlHandler<IComboBox>(cmbResidence); }
         }
 
-        IComboBoxHandler IPersonsFilterDlg.NameCombo
+        IComboBox IPersonsFilterDlg.NameCombo
         {
-            get { return  fControlsManager.GetControlHandler<IComboBoxHandler>(txtName); }
+            get { return  GetControlHandler<IComboBox>(txtName); }
         }
 
         void IPersonsFilterDlg.SetLifeRadio(int lifeSel)

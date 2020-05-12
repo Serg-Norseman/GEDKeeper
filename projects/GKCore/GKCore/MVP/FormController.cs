@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib;
+using BSLib.Design.MVP;
 using GKCore.Interfaces;
 
 namespace GKCore.MVP
@@ -26,27 +26,24 @@ namespace GKCore.MVP
     /// <summary>
     /// 
     /// </summary>
-    public abstract class FormController<T> : BaseObject where T : IView
+    public abstract class FormController<TView> : Controller<TView> where TView : IView
     {
-        protected readonly T fView;
         protected IBaseWindow fBase;
 
+        // TODO: remove IBaseWindow to IBaseContext, everywhere!
         public IBaseWindow Base
         {
             get { return fBase; }
         }
 
 
-        protected FormController(T view)
+        protected FormController(TView view) : base(view)
         {
-            fView = view;
         }
 
         public virtual void Init(IBaseWindow baseWin)
         {
             fBase = baseWin;
         }
-
-        public abstract void UpdateView();
     }
 }

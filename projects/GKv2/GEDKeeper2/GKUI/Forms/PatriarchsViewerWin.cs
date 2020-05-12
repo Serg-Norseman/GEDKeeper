@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,18 +20,18 @@
 
 using System.Drawing;
 using System.Windows.Forms;
-
 using ArborGVT;
 using BSLib.SmartGraph;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class PatriarchsViewerWin : CommonForm
+    public partial class PatriarchsViewerWin : CommonWindow, IPatriarchsViewer
     {
         private readonly IBaseWindow fBase;
         private readonly ToolTip fTip;
@@ -78,7 +78,7 @@ namespace GKUI.Forms
             } else {
                 if (!fTipShow) {
                     string xref = resNode.Sign;
-                    GEDCOMFamilyRecord famRec = fBase.Context.Tree.XRefIndex_Find(xref) as GEDCOMFamilyRecord;
+                    GDMFamilyRecord famRec = fBase.Context.Tree.XRefIndex_Find(xref) as GDMFamilyRecord;
                     string txt = GKUtils.GetFamilyString(famRec) + " [" + xref + "] "/* + resNode.Mass.ToString()*/;
 
                     fTip.Show(txt, arborViewer1, e.X + 24, e.Y);

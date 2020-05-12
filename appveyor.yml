@@ -1,14 +1,17 @@
-version: 2.15.0.{build}
+version: 2.16.2.{build}
+configuration: Debug
+platform: x86
+skip_tags: true
+
+branches:
+  only:
+    - master
 
 pull_requests:
   do_not_increment_build_number: true
 
 environment:
   CIMode: true
-
-configuration: Debug
-
-platform: x86
 
 install:
   - cmd: git submodule -q update --init

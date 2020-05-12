@@ -38,6 +38,11 @@ namespace GKCore.Types
         /// <summary>
         /// The archive file (zip) next to the database file.
         /// </summary>
-        mstArchive
+        mstArchive,
+
+        /// <summary>
+        /// File reference relative to the database file.
+        /// </summary>
+        mstRelativeReference
     }
 }

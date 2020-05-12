@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -31,9 +31,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class AddressEditDlgController : DialogController<IAddressEditDlg>
     {
-        private GEDCOMAddress fAddress;
+        private GDMAddress fAddress;
 
-        public GEDCOMAddress Address
+        public GDMAddress Address
         {
             get { return fAddress; }
             set {
@@ -71,7 +71,7 @@ namespace GKCore.Controllers
             fView.State.Text = fAddress.AddressState;
             fView.City.Text = fAddress.AddressCity;
             fView.PostalCode.Text = fAddress.AddressPostalCode;
-            fView.AddressLine.Text = fAddress.Address.Text.Trim();
+            fView.AddressLine.Text = fAddress.Lines.Text.Trim();
 
             UpdateLists();
         }
@@ -79,22 +79,22 @@ namespace GKCore.Controllers
         public void UpdateLists()
         {
             fView.PhonesList.ClearItems();
-            foreach (GEDCOMTag tag in fAddress.PhoneNumbers) {
+            foreach (GDMTag tag in fAddress.PhoneNumbers) {
                 fView.PhonesList.AddItem(tag, tag.StringValue);
             }
 
             fView.MailsList.ClearItems();
-            foreach (GEDCOMTag tag in fAddress.EmailAddresses) {
+            foreach (GDMTag tag in fAddress.EmailAddresses) {
                 fView.MailsList.AddItem(tag, tag.StringValue);
             }
 
             fView.WebsList.ClearItems();
-            foreach (GEDCOMTag tag in fAddress.WebPages) {
+            foreach (GDMTag tag in fAddress.WebPages) {
                 fView.WebsList.AddItem(tag, tag.StringValue);
             }
         }
 
-        public void DoPhonesAction(RecordAction action, GEDCOMTag itemTag)
+        public void DoPhonesAction(RecordAction action, GDMTag itemTag)
         {
             string val;
             switch (action) {
@@ -119,7 +119,7 @@ namespace GKCore.Controllers
             UpdateLists();
         }
 
-        public void DoMailsAction(RecordAction action, GEDCOMTag itemTag)
+        public void DoMailsAction(RecordAction action, GDMTag itemTag)
         {
             string val;
             switch (action) {
@@ -144,7 +144,7 @@ namespace GKCore.Controllers
             UpdateLists();
         }
 
-        public void DoWebsAction(RecordAction action, GEDCOMTag itemTag)
+        public void DoWebsAction(RecordAction action, GDMTag itemTag)
         {
             string val;
             switch (action) {

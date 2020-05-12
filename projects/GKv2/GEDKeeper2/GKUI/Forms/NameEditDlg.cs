@@ -20,7 +20,7 @@
 
 using System;
 using System.Windows.Forms;
-
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.MVP.Controls;
@@ -30,9 +30,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class NameEditDlg : CommonDialog, INameEditDlg
     {
         private readonly NameEditDlgController fController;
@@ -45,24 +42,24 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler INameEditDlg.Name
+        ITextBox INameEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        ITextBoxHandler INameEditDlg.FPatr
+        ITextBox INameEditDlg.FPatr
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtFPatr); }
+            get { return GetControlHandler<ITextBox>(txtFPatr); }
         }
 
-        ITextBoxHandler INameEditDlg.MPatr
+        ITextBox INameEditDlg.MPatr
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtMPatr); }
+            get { return GetControlHandler<ITextBox>(txtMPatr); }
         }
 
-        IComboBoxHandler INameEditDlg.SexCombo
+        IComboBox INameEditDlg.SexCombo
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbSex); }
+            get { return GetControlHandler<IComboBox>(cmbSex); }
         }
 
         #endregion

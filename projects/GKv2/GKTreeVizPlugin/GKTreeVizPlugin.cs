@@ -21,6 +21,7 @@
 using System;
 using System.Reflection;
 using System.Windows.Forms;
+using BSLib.Design.Graphics;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;

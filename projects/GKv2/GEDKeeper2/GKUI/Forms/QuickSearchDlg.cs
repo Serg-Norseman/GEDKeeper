@@ -20,120 +20,53 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
+using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class QuickSearchDlg : CommonForm, ILocalization
+    public sealed partial class QuickSearchDlg : CommonForm, IQuickSearchDlg
     {
-        private readonly IWorkWindow fWorkWindow;
-        private ISearchStrategy fStrategy;
+        private readonly QuickSearchDlgController fController;
 
-        private TextBox txtSearchPattern;
-        private Button btnPrev;
-        private Button btnNext;
+        #region View Interface
+
+        ITextBox IQuickSearchDlg.SearchPattern
+        {
+            get { return GetControlHandler<ITextBox>(txtSearchPattern); }
+        }
+
+        #endregion
 
         public QuickSearchDlg(IWorkWindow workWindow)
         {
             InitializeComponent();
-            fWorkWindow = workWindow;
-            SetLang();
-        }
 
-        private void InitializeComponent()
-        {
-            txtSearchPattern = new TextBox();
-            btnPrev = new Button();
-            btnNext = new Button();
-            SuspendLayout();
-
-            txtSearchPattern.Location = new System.Drawing.Point(3, 3);
-            txtSearchPattern.Width = 150;
-            txtSearchPattern.Height = 24;
-            txtSearchPattern.Margin = new Padding(3, 3, 3, 0);
-            txtSearchPattern.TextChanged += SearchPattern_TextChanged;
-            txtSearchPattern.Name = "txtSearchPattern";
-
-            btnPrev.Location = new System.Drawing.Point(156, 3);
-            btnPrev.Margin = new Padding(3);
-            btnPrev.Height = 24;
-            btnPrev.Width = 24;
-            btnPrev.Click += FindPrev_Click;
             btnPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
-            btnPrev.Name = "btnPrev";
-
-            btnNext.Location = new System.Drawing.Point(156+27, 3);
-            btnNext.Margin = new Padding(3);
-            btnNext.Height = 24;
-            btnNext.Width = 24;
-            btnNext.Click += FindNext_Click;
             btnNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
-            btnNext.Name = "btnNext";
 
-            AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            ClientSize = new System.Drawing.Size(210, 30);
-            Controls.Add(txtSearchPattern);
-            Controls.Add(btnPrev);
-            Controls.Add(btnNext);
-            Font = new System.Drawing.Font("Tahoma", 8.25f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
-            FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            KeyPreview = true;
-            KeyDown += SearchPanel_KeyDown;
-            Name = "QuickSearchDlg";
-            ShowInTaskbar = false;
-            StartPosition = FormStartPosition.Manual;
-            TopMost = true;
+            fController = new QuickSearchDlgController(this, workWindow);
 
-            ResumeLayout(false);
+            SetLang();
         }
 
         private void SearchPattern_TextChanged(object sender, EventArgs e)
         {
-            fStrategy = new SearchStrategy(fWorkWindow, txtSearchPattern.Text);
+            fController.ChangeText();
         }
 
         private void FindNext_Click(object sender, EventArgs e)
         {
-            if (fStrategy == null) return;
-
-            if (!fStrategy.HasResults()) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
-                return;
-            }
-
-            ISearchResult result = fStrategy.FindNext();
-            if (result != null) {
-                SelectResult(result as SearchResult);
-            }
+            fController.FindNext();
         }
 
         private void FindPrev_Click(object sender, EventArgs e)
         {
-            if (fStrategy == null) return;
-
-            if (!fStrategy.HasResults()) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
-                return;
-            }
-
-            ISearchResult result = fStrategy.FindPrev();
-            if (result != null) {
-                SelectResult(result as SearchResult);
-            }
-        }
-
-        private void SelectResult(SearchResult result)
-        {
-            if (result == null || result.Result == null) return;
-
-            fWorkWindow.SelectByRec(result.Result as GEDCOMIndividualRecord);
+            fController.FindPrev();
         }
 
         private void SearchPanel_KeyDown(object sender, KeyEventArgs e)
@@ -142,9 +75,9 @@ namespace GKUI.Forms
                 case Keys.Enter:
                     e.Handled = true;
                     if (e.Shift)
-                        FindPrev_Click(this, null);
+                        fController.FindPrev();
                     else
-                        FindNext_Click(this, null);
+                        fController.FindNext();
                     break;
 
                 case Keys.Escape:

@@ -20,7 +20,9 @@
 
 #if !__MonoCS__
 
-using GKCommon.GEDCOM;
+using System;
+using System.Windows.Forms;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -36,8 +38,8 @@ namespace GKUI.Forms
     [TestFixture]
     public class PersonalNameEditDlgTests : CustomWindowTest
     {
-        private GEDCOMIndividualRecord fPerson;
-        private GEDCOMPersonalName fPersonalName;
+        private GDMIndividualRecord fPerson;
+        private GDMPersonalName fPersonalName;
         private IBaseWindow fBase;
         private PersonalNameEditDlg fDialog;
 
@@ -46,8 +48,8 @@ namespace GKUI.Forms
             base.Setup();
 
             fBase = new BaseWindowStub();
-            fPerson = new GEDCOMIndividualRecord(fBase.Context.Tree, fBase.Context.Tree, "", "");
-            fPersonalName = new GEDCOMPersonalName(fBase.Context.Tree, fPerson, "", "");
+            fPerson = new GDMIndividualRecord(fBase.Context.Tree);
+            fPersonalName = new GDMPersonalName(fPerson);
 
             fDialog = new PersonalNameEditDlg(fBase);
             fDialog.PersonalName = fPersonalName;
@@ -79,6 +81,24 @@ namespace GKUI.Forms
 
             Assert.AreEqual("sample text", fPersonalName.Pieces.Surname);
         }
+
+        #region Handlers for external tests
+
+        public static void NameEditAdd_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtSurname", form, "sample surname");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void NameEditEdit_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtSurname", form, "sample surname2");
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

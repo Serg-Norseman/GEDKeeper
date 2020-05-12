@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -31,9 +30,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
     {
         private readonly RecordSelectDlgController fController;
@@ -47,15 +43,15 @@ namespace GKUI.Forms
             set { txtFastFilter.Text = value; }
         }
 
-        public GEDCOMSex NeedSex
+        public GDMSex NeedSex
         {
             get { return fController.Target.NeedSex; }
             set { fController.Target.NeedSex = value; }
         }
 
-        public GEDCOMRecord ResultRecord { get; set; }
+        public GDMRecord ResultRecord { get; set; }
 
-        public GEDCOMIndividualRecord TargetIndividual
+        public GDMIndividualRecord TargetIndividual
         {
             get { return fController.Target.TargetIndividual; }
             set { fController.Target.TargetIndividual = value; }
@@ -77,7 +73,7 @@ namespace GKUI.Forms
         #endregion
 
 
-        public RecordSelectDlg(IBaseWindow baseWin, GEDCOMRecordType recType)
+        public RecordSelectDlg(IBaseWindow baseWin, GDMRecordType recType)
         {
             InitializeComponent();
 
@@ -118,7 +114,7 @@ namespace GKUI.Forms
         private void btnSelect_Click(object sender, EventArgs e)
         {
             try {
-                ResultRecord = fListRecords.GetSelectedData() as GEDCOMRecord;
+                ResultRecord = fListRecords.GetSelectedData() as GDMRecord;
                 DialogResult = DialogResult.Ok;
             } catch (Exception ex) {
                 Logger.LogWrite("RecordSelectDlg.btnSelect_Click(): " + ex.Message);
@@ -130,7 +126,7 @@ namespace GKUI.Forms
         private void btnCreate_Click(object sender, EventArgs e)
         {
             try {
-                GEDCOMRecord rec = BaseController.AddRecord(fController.Base, fController.RecType, fController.Target);
+                GDMRecord rec = BaseController.AddRecord(fController.Base, fController.RecType, fController.Target);
                 if (rec != null) {
                     ResultRecord = rec;
                     DialogResult = DialogResult.Ok;

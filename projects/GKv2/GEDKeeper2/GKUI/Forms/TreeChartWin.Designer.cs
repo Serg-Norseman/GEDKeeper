@@ -54,6 +54,8 @@
         private System.Windows.Forms.ToolStripButton tbFilter;
         private System.Windows.Forms.ToolStripButton tbPrev;
         private System.Windows.Forms.ToolStripButton tbNext;
+        private System.Windows.Forms.ToolStripSeparator N10;
+        private System.Windows.Forms.ToolStripMenuItem miSelectColor;
 
         private void InitializeComponent()
         {
@@ -109,6 +111,8 @@
             this.miRebuildKinships = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.N10 = new System.Windows.Forms.ToolStripSeparator();
+            this.miSelectColor = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolBar1.SuspendLayout();
             this.MenuGens.SuspendLayout();
             this.MenuModes.SuspendLayout();
@@ -404,7 +408,9 @@
                                                this.miDelete,
                                                this.N3,
                                                this.miRebuildTree,
-                                               this.miRebuildKinships});
+                                               this.miRebuildKinships,
+                                               this.N10,
+                                               this.miSelectColor});
             this.MenuPerson.Name = "MenuPerson";
             this.MenuPerson.Size = new System.Drawing.Size(201, 262);
             this.MenuPerson.Opening += new System.ComponentModel.CancelEventHandler(this.MenuPerson_Opening);
@@ -493,6 +499,18 @@
             this.miRebuildKinships.Size = new System.Drawing.Size(200, 24);
             this.miRebuildKinships.Text = "miRebuildKinships";
             this.miRebuildKinships.Click += new System.EventHandler(this.miRebuildKinships_Click);
+            // 
+            // N10
+            // 
+            this.N10.Name = "N10";
+            this.N10.Size = new System.Drawing.Size(197, 6);
+            // 
+            // miSelectColor
+            // 
+            this.miSelectColor.Name = "miSelectColor";
+            this.miSelectColor.Size = new System.Drawing.Size(200, 24);
+            this.miSelectColor.Text = "miSelectColor";
+            this.miSelectColor.Click += new System.EventHandler(this.miSelectColor_Click);
             // 
             // toolStripSeparator2
             // 

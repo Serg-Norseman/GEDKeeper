@@ -21,8 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using GKCommon.GEDCOM;
-using GKCore.Interfaces;
+using BSLib.Design.Graphics;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
@@ -35,9 +35,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class MediaViewerController : DialogController<IMediaViewerWin>
     {
-        private GEDCOMFileReferenceWithTitle fFileRef;
+        private GDMFileReferenceWithTitle fFileRef;
 
-        public GEDCOMFileReferenceWithTitle FileRef
+        public GDMFileReferenceWithTitle FileRef
         {
             get { return fFileRef; }
             set {
@@ -55,7 +55,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Caption = fFileRef.Title;
+            fView.Title = fFileRef.Title;
 
             MultimediaKind mmKind = GKUtils.GetMultimediaKind(fFileRef.MultimediaFormat);
 
@@ -84,21 +84,21 @@ namespace GKCore.Controllers
                             bool disposeStream = (fs != null);
 
                             switch (fFileRef.MultimediaFormat) {
-                                case GEDCOMMultimediaFormat.mfTXT:
+                                case GDMMultimediaFormat.mfTXT:
                                     using (StreamReader strd = new StreamReader(fs)) {
                                         string text = strd.ReadToEnd();
                                         fView.SetViewText(text);
                                     }
                                     break;
 
-                                case GEDCOMMultimediaFormat.mfRTF:
+                                case GDMMultimediaFormat.mfRTF:
                                     using (StreamReader strd = new StreamReader(fs)) {
                                         string text = strd.ReadToEnd();
                                         fView.SetViewRTF(text);
                                     }
                                     break;
 
-                                case GEDCOMMultimediaFormat.mfHTM:
+                                case GDMMultimediaFormat.mfHTM:
                                     disposeStream = false;
                                     fView.SetViewHTML(fs);
                                     break;
@@ -113,18 +113,18 @@ namespace GKCore.Controllers
             }
         }
 
-        public void ProcessPortraits(IImageView imageCtl, GEDCOMFileReferenceWithTitle fileRef)
+        public void ProcessPortraits(IImageView imageCtl, GDMFileReferenceWithTitle fileRef)
         {
-            var mmRec = fileRef.Parent as GEDCOMMultimediaRecord;
+            var mmRec = fileRef.Owner as GDMMultimediaRecord;
 
-            var linksList = new List<GEDCOMObject>();
-            GKUtils.SearchRecordLinks(linksList, mmRec.Owner, mmRec);
+            var linksList = new List<GDMObject>();
+            GKUtils.SearchRecordLinks(linksList, mmRec.GetTree(), mmRec);
 
             bool showRegions = false;
             foreach (var link in linksList) {
-                var mmLink = link as GEDCOMMultimediaLink;
+                var mmLink = link as GDMMultimediaLink;
                 if (mmLink != null && mmLink.IsPrimary) {
-                    var indiRec = mmLink.Parent as GEDCOMIndividualRecord;
+                    var indiRec = mmLink.Owner as GDMIndividualRecord;
                     string indiName = GKUtils.GetNameString(indiRec, true, false);
                     var region = mmLink.CutoutPosition.Value;
 

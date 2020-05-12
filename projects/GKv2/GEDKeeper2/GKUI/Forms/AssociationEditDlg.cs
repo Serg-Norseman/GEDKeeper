@@ -20,8 +20,8 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -31,14 +31,11 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class AssociationEditDlg : EditorDialog, IAssociationEditDlg
     {
         private readonly AssociationEditDlgController fController;
 
-        public GEDCOMAssociation Association
+        public GDMAssociation Association
         {
             get { return fController.Association; }
             set { fController.Association = value; }
@@ -46,14 +43,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler IAssociationEditDlg.Relation
+        IComboBox IAssociationEditDlg.Relation
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRelation); }
+            get { return GetControlHandler<IComboBox>(cmbRelation); }
         }
 
-        ITextBoxHandler IAssociationEditDlg.Person
+        ITextBox IAssociationEditDlg.Person
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtPerson); }
+            get { return GetControlHandler<ITextBox>(txtPerson); }
         }
 
         #endregion

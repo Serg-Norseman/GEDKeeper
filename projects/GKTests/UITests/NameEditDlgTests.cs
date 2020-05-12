@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 #if !__MonoCS__
 
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKTests;
@@ -71,18 +72,16 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fNameEntry, fDialog.IName);
 
-            /*var cmbRelation = new ComboBoxTester("cmbRelation");
-            cmbRelation.Enter("sample text");
-            Assert.AreEqual("sample text", cmbRelation.Text);*/
-
-            /*var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
-            Assert.AreEqual("sample text", txtAuthor.Text);*/
-
+            SelectCombo("cmbSex", fDialog, 1); // male
+            EnterText("txtName", fDialog, "Ivan");
+            EnterText("txtFPatr", fDialog, "Ivanovna");
+            EnterText("txtMPatr", fDialog, "Ivanovich");
             ClickButton("btnAccept", fDialog);
 
-            //Assert.AreEqual("sample text", fListMan.Relation);
-            //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
+            Assert.AreEqual("Ivan", fNameEntry.Name);
+            Assert.AreEqual("Ivanovich", fNameEntry.M_Patronymic);
+            Assert.AreEqual("Ivanovna", fNameEntry.F_Patronymic);
+            Assert.AreEqual(GDMSex.svMale, fNameEntry.Sex);
         }
 
         #region Handlers for external tests

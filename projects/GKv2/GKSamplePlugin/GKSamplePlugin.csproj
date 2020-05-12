@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GKSamplePlugin</RootNamespace>
     <AssemblyName>GKSamplePlugin</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
     <NoWin32Manifest>False</NoWin32Manifest>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
@@ -44,11 +44,22 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BSLib">
+      <HintPath>..\..\libs\BSLib.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\..\libs\BSLib.Design.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GKSampleDialogPlugin.cs" />
+    <Compile Include="PersonEditDlgEx.cs" />
+    <Compile Include="PersonEditDlgEx.Designer.cs">
+      <DependentUpon>PersonEditDlgEx.cs</DependentUpon>
+    </Compile>
     <Compile Include="PluginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,6 +77,10 @@
     <ProjectReference Include="..\..\GKCore\GKCore.csproj">
       <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
+      <Project>{ef9864c5-4dec-46e8-bc11-a2e5bb9bb9d4}</Project>
+      <Name>GKComponents</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

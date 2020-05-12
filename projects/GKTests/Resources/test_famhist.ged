@@ -1,0 +1,58 @@
+0 HEAD
+1 SOUR FAMILY_HISTORIAN
+2 VERS 6.2.2
+2 NAME Family Historian
+2 CORP Calico Pie Limited
+1 FILE test_famhist.ged
+1 GEDC
+2 VERS 5.5
+2 FORM LINEAGE-LINKED
+1 CHAR UTF-8
+0 @I1@ INDI
+1 NAME Tom /Thompson/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 1940
+2 PLAC Ansted, WV, USA
+3 ROLE Disinterested Observer
+3 NOTE It was sorta awkward
+1 FACT
+2 TYPE Tomato
+1 EMIG
+2 PLAC Liverpool
+1 IMMI
+2 PLAC America
+1 NATI Martian
+2 NOTE asdf
+1 FAMC @F1@
+1 SOUR @S1@
+2 PAGE The whole thing
+2 DATA
+3 DATE 1985
+3 TEXT See this?
+2 QUAY 3
+1 OBJE @O1@
+0 @I2@ INDI
+1 NAME Terry /Thompson/
+1 SEX M
+1 FAMS @F1@
+0 @I3@ INDI
+1 NAME Theresa /Taylor/
+1 SEX F
+1 FAMS @F1@
+0 @F1@ FAM
+1 HUSB @I2@
+1 WIFE @I3@
+1 CHIL @I1@
+0 @O1@ OBJE
+1 FORM jpeg
+1 TITL photo
+1 FILE photo.jpg
+1 NOTE 
+0 @S1@ SOUR
+1 AUTH Diedre
+1 TITL Rumor
+1 ABBR Diedre said
+1 TEXT This is his picture
+1 NOTE Diedre is known not to be very reliable
+0 TRLR

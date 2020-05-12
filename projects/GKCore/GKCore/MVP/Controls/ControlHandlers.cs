@@ -18,104 +18,35 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using BSLib;
-using GKCommon.GEDCOM;
+using BSLib.Design.Graphics;
+using BSLib.Design.MVP;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.Stats;
 
 namespace GKCore.MVP.Controls
 {
-    public interface ILabelHandler : IBaseControl
+    public interface IComboBoxEx : IComboBox
     {
-        string Text { get; set; }
+        void AddItem(string caption, object tag, IImage image);
     }
 
 
-    public interface IButtonHandler : IBaseControl
+    public interface IDateBoxHandler : IBaseControl
     {
-        string Text { get; set; }
-    }
-
-
-    public interface ICheckBoxHandler : IBaseControl
-    {
-        bool Checked { get; set; }
-        string Text { get; set; }
-    }
-
-
-    public interface IRadioButtonHandler : IBaseControl
-    {
-        bool Checked { get; set; }
-        string Text { get; set; }
-    }
-
-
-    public interface IComboBoxHandler : IBaseControl
-    {
-        bool ReadOnly { get; set; }
-        int SelectedIndex { get; set; }
-        object SelectedItem { get; set; }
-        object SelectedTag { get; set; }
-        string Text { get; set; }
-
-        void Add(object item);
-        void AddItem(string caption, object tag, IImage image = null);
-        void AddRange(object[] items, bool sorted = false);
-        void AddStrings(StringList strings);
-        void BeginUpdate();
-        void Clear();
-        void EndUpdate();
-        void SortItems();
-    }
-
-
-    public interface ITextBoxHandler : IBaseControl
-    {
-        string[] Lines { get; set; }
+        string NormalizeDate { get; set; }
         bool ReadOnly { get; set; }
         string SelectedText { get; set; }
         string Text { get; set; }
 
-        void AppendText(string text);
         void Clear();
         void Copy();
         void SelectAll();
-    }
-
-
-    public interface INumericBoxHandler : IBaseControl
-    {
-        bool ReadOnly { get; set; }
-        string Text { get; set; }
-        double Value { get; set; }
-    }
-
-
-    public interface ITVNode
-    {
-        object Tag { get; set; }
-    }
-
-    public interface ITreeViewHandler : IBaseControl
-    {
-        ITVNode AddNode(ITVNode parent, string name, object tag);
-        void BeginUpdate();
-        void Clear();
-        void EndUpdate();
-        void Expand(ITVNode node);
-    }
-
-
-    public interface IProgressBarHandler : IBaseControl
-    {
-        int Minimum { get; set; }
-        int Maximum { get; set; }
-        int Value { get; set; }
-
-        void Increment(int value);
     }
 
 
@@ -198,12 +129,12 @@ namespace GKCore.MVP.Controls
     public interface IMergeControl : IBaseControl
     {
         IBaseWindow Base { get; set; }
-        GEDCOMRecordType MergeMode { get; set; }
-        GEDCOMRecord Rec1 { get; }
-        GEDCOMRecord Rec2 { get; }
+        GDMRecordType MergeMode { get; set; }
+        GDMRecord Rec1 { get; }
+        GDMRecord Rec2 { get; }
 
-        void SetRec1(GEDCOMRecord value);
-        void SetRec2(GEDCOMRecord value);
+        void SetRec1(GDMRecord value);
+        void SetRec2(GDMRecord value);
     }
 
 
@@ -226,15 +157,6 @@ namespace GKCore.MVP.Controls
 
         void AddNamedRegion(string name, ExtRect region);
         void OpenImage(IImage image);
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface ITabControl : IBaseControl
-    {
-        int SelectedIndex { get; set; }
     }
 
 

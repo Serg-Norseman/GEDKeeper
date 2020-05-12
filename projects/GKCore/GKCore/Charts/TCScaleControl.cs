@@ -20,9 +20,9 @@
 
 using System;
 using BSLib;
+using BSLib.Design.Graphics;
 using GKCore;
 using GKCore.Charts;
-using GKCore.Interfaces;
 
 namespace GKCore.Charts
 {

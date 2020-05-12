@@ -19,9 +19,10 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore.Interfaces;
-using GKCore.MVP;
 using GKCore.Operations;
 using GKCore.Types;
 
@@ -109,10 +110,10 @@ namespace GKCore.Lists
         protected ISheetList fSheetList;
         protected readonly IBaseWindow fBaseWin;
         protected readonly ChangeTracker fUndoman;
-        protected GEDCOMObject fDataOwner;
+        protected GDMObject fDataOwner;
 
 
-        public GEDCOMObject DataOwner
+        public GDMObject DataOwner
         {
             get {
                 return fDataOwner;
@@ -142,7 +143,7 @@ namespace GKCore.Lists
             fUndoman = undoman;
         }
 
-        public override void UpdateColumns(IListView listView)
+        public override void UpdateColumns(IListViewEx listView)
         {
             if (listView == null) return;
 

@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.MVP.Controls;
@@ -30,14 +29,11 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class LanguageEditDlg : CommonDialog, ILanguageEditDlg
     {
         private readonly LanguageEditDlgController fController;
 
-        public GEDCOMLanguageID LanguageID
+        public GDMLanguageID LanguageID
         {
             get { return fController.LanguageID; }
             set { fController.LanguageID = value; }
@@ -47,7 +43,7 @@ namespace GKUI.Forms
 
         IComboBoxHandler ILanguageEditDlg.LanguageCombo
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbLanguage); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbLanguage); }
         }
 
         #endregion

@@ -20,22 +20,23 @@
 
 using System;
 using System.Windows.Forms;
-
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class FilePropertiesDlg : CommonDialog, IFilePropertiesDlg
     {
         private readonly FilePropertiesDlgController fController;
+
+        public IBaseWindow Base
+        {
+            get { return fController.Base; }
+        }
 
         #region View Interface
 
@@ -44,24 +45,24 @@ namespace GKUI.Forms
             get { return lvRecordStats; }
         }
 
-        ITextBoxHandler IFilePropertiesDlg.Language
+        ITextBox IFilePropertiesDlg.Language
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtLanguage); }
+            get { return GetControlHandler<ITextBox>(txtLanguage); }
         }
 
-        ITextBoxHandler IFilePropertiesDlg.Name
+        ITextBox IFilePropertiesDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        ITextBoxHandler IFilePropertiesDlg.Address
+        ITextBox IFilePropertiesDlg.Address
         {
-            get { return  fControlsManager.GetControlHandler<ITextBoxHandler>(txtAddress); }
+            get { return  GetControlHandler<ITextBox>(txtAddress); }
         }
 
-        ITextBoxHandler IFilePropertiesDlg.Tel
+        ITextBox IFilePropertiesDlg.Tel
         {
-            get { return  fControlsManager.GetControlHandler<ITextBoxHandler>(txtTel); }
+            get { return  GetControlHandler<ITextBox>(txtTel); }
         }
 
         #endregion

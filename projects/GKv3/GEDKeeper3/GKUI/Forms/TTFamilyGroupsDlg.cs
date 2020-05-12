@@ -21,7 +21,6 @@
 using System;
 using Eto.Forms;
 
-using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -31,9 +30,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTFamilyGroupsDlg : CommonDialog, IFragmentSearchDlg
     {
         private readonly FragmentSearchController fController;
@@ -42,12 +38,12 @@ namespace GKUI.Forms
 
         ITreeViewHandler IFragmentSearchDlg.GroupsTree
         {
-            get { return fControlsManager.GetControlHandler<ITreeViewHandler>(tvGroups); }
+            get { return GetControlHandler<ITreeViewHandler>(tvGroups); }
         }
 
         ILogChart IFragmentSearchDlg.LogChart
         {
-            get { return fControlsManager.GetControlHandler<ILogChart>(gkLogChart1); }
+            get { return GetControlHandler<ILogChart>(gkLogChart1); }
         }
 
         #endregion
@@ -79,14 +75,7 @@ namespace GKUI.Forms
 
         private void tvGroups_DoubleClick(object sender, MouseEventArgs e)
         {
-            GKTreeNode node = tvGroups.SelectedItem as GKTreeNode;
-            if (node == null) return;
-
-            GEDCOMIndividualRecord iRec = node.Tag as GEDCOMIndividualRecord;
-            if (iRec == null) return;
-
-            fController.Base.SelectRecordByXRef(iRec.XRef);
-            Close();
+            fController.SelectPerson();
         }
 
         private void HintRequestEventHandler(object sender, HintRequestEventArgs args)

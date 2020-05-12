@@ -13,6 +13,6 @@ exit /b 1
  
 :installer 
 "C:\Program Files (x86)\NSIS\makensis.exe" .\deploy\gk2_win_setup.nsi
-"c:\Program Files\7-zip\7z.exe" a -tzip -mx5 -scsWIN .\deploy\gedkeeper_2.15.0_win.zip .\deploy\gedkeeper_2.15.0_winsetup.exe
+"c:\Program Files\7-zip\7z.exe" a -tzip -mx5 -scsWIN .\deploy\gedkeeper_2.16.2_win.zip .\deploy\gedkeeper_2.16.2_winsetup.exe
 pause 
 exit /b 0

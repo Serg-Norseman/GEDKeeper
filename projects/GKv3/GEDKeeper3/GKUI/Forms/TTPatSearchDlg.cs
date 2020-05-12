@@ -20,7 +20,6 @@
 
 using System;
 
-using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -30,9 +29,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTPatSearchDlg : CommonDialog, IPatriarchsSearchDlg
     {
         private readonly PatriarchsSearchController fController;
@@ -43,12 +39,12 @@ namespace GKUI.Forms
 
         INumericBoxHandler IPatriarchsSearchDlg.MinGensNum
         {
-            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(edMinGens); }
+            get { return GetControlHandler<INumericBoxHandler>(edMinGens); }
         }
 
         ICheckBoxHandler IPatriarchsSearchDlg.WithoutDatesCheck
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkWithoutDates); }
+            get { return GetControlHandler<ICheckBoxHandler>(chkWithoutDates); }
         }
 
         IListView IPatriarchsSearchDlg.PatriarchsList
@@ -92,11 +88,7 @@ namespace GKUI.Forms
 
         private void ListPatriarchs_DblClick(object sender, EventArgs e)
         {
-            GEDCOMIndividualRecord iRec = ListPatriarchs.GetSelectedData() as GEDCOMIndividualRecord;
-            if (iRec == null) return;
-
-            fController.Base.SelectRecordByXRef(iRec.XRef);
-            Close();
+            fController.SelectPatriarch();
         }
 
         private void btnPatSearch_Click(object sender, EventArgs e)
@@ -111,8 +103,7 @@ namespace GKUI.Forms
 
         private void btnPatriarchsDiagram_Click(object sender, EventArgs e)
         {
-            PatriarchsViewerWin wnd = new PatriarchsViewerWin(fController.Base, (int)(edMinGens.Value));
-            wnd.Show();
+            fController.ShowPatriarchsDiagram();
         }
     }
 }

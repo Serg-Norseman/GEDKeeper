@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,9 +26,14 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
-
+using BSLib.Design;
+using BSLib.Design.Graphics;
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Interfaces;
+
+using MVPSortOrder = BSLib.Design.BSDTypes.SortOrder;
+using WFSortOrder = System.Windows.Forms.SortOrder;
 
 namespace GKUI.Components
 {
@@ -96,6 +101,14 @@ namespace GKUI.Components
                 BackColor = colorHandler.Handle;
             }
         }
+
+        public void SetForeColor(IColor color)
+        {
+            var colorHandler = color as ColorHandler;
+            if (colorHandler != null) {
+                ForeColor = colorHandler.Handle;
+            }
+        }
     }
 
 
@@ -119,6 +132,10 @@ namespace GKUI.Components
             GKListSubItem otherItem = obj as GKListSubItem;
             if (otherItem == null) {
                 return -1;
+            }
+
+            if (fValue is string && otherItem.fValue is string) {
+                return GKListView.StrCompareEx((string)fValue, (string)otherItem.fValue);
             }
 
             IComparable cv1 = fValue as IComparable;
@@ -167,7 +184,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class GKListView : ListView, IListView
+    public class GKListView : ListView, IListViewEx
     {
         private class LVColumnSorter : IComparer
         {
@@ -183,83 +200,47 @@ namespace GKUI.Components
                 int result = 0;
 
                 int sortColumn = fOwner.fSortColumn;
-                SortOrder sortOrder = fOwner.fSortOrder;
+                MVPSortOrder sortOrder = fOwner.fSortOrder;
 
-                if (sortOrder != SortOrder.None && sortColumn >= 0)
-                {
+                if (sortOrder != MVPSortOrder.None && sortColumn >= 0) {
                     ListViewItem item1 = (ListViewItem)x;
                     ListViewItem item2 = (ListViewItem)y;
 
-                    if (item1 is IComparable && item2 is IComparable) {
-                        if (sortColumn == 0) {
+                    if (sortColumn == 0) {
+                        if (item1 is IComparable && item2 is IComparable) {
                             IComparable eitem1 = (IComparable)x;
                             IComparable eitem2 = (IComparable)y;
-
                             result = eitem1.CompareTo(eitem2);
                         } else {
-                            if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count)
-                            {
-                                IComparable sub1 = (IComparable)item1.SubItems[sortColumn];
-                                IComparable sub2 = (IComparable)item2.SubItems[sortColumn];
-
-                                result = sub1.CompareTo(sub2);
-                            }
+                            result = GKListView.StrCompareEx(item1.Text, item2.Text);
                         }
-                    } else {
-                        if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count)
-                        {
-                            result = agCompare(item1.SubItems[sortColumn].Text, item2.SubItems[sortColumn].Text);
+                    } else if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count) {
+                        ListViewItem.ListViewSubItem subitem1 = item1.SubItems[sortColumn];
+                        ListViewItem.ListViewSubItem subitem2 = item2.SubItems[sortColumn];
+
+                        if (subitem1 is IComparable && subitem2 is IComparable) {
+                            IComparable sub1 = (IComparable)subitem1;
+                            IComparable sub2 = (IComparable)subitem2;
+                            result = sub1.CompareTo(sub2);
+                        } else {
+                            result = GKListView.StrCompareEx(subitem1.Text, subitem2.Text);
                         }
                     }
 
-                    if (sortOrder == SortOrder.Descending)
-                    {
+                    if (sortOrder == MVPSortOrder.Descending) {
                         result = -result;
                     }
                 }
 
                 return result;
             }
-
-            #region Private methods
-
-            private static int agCompare(string str1, string str2)
-            {
-                double val1, val2;
-                bool v1 = double.TryParse(str1, out val1);
-                bool v2 = double.TryParse(str2, out val2);
-
-                int result;
-                if (v1 && v2)
-                {
-                    if (val1 < val2) {
-                        result = -1;
-                    } else if (val1 > val2) {
-                        result = +1;
-                    } else {
-                        result = 0;
-                    }
-                }
-                else
-                {
-                    result = string.Compare(str1, str2, false);
-                    if (str1 != "" && str2 == "") {
-                        result = -1;
-                    } else if (str1 == "" && str2 != "") {
-                        result = +1;
-                    }
-                }
-                return result;
-            }
-
-            #endregion
         }
 
         private readonly LVColumnSorter fColumnSorter;
         private readonly GKListViewItems fItemsAccessor;
 
         protected int fSortColumn;
-        protected SortOrder fSortOrder;
+        protected MVPSortOrder fSortOrder;
         protected int fUpdateCount;
 
         // Virtual fields
@@ -274,7 +255,7 @@ namespace GKUI.Components
             set { fSortColumn = value; }
         }
 
-        public SortOrder Order
+        public MVPSortOrder Order
         {
             get { return fSortOrder; }
             set { fSortOrder = value; }
@@ -299,7 +280,7 @@ namespace GKUI.Components
                     if (fListMan != null) {
                         VirtualMode = true;
                         fSortColumn = 0;
-                        fSortOrder = SortOrder.Ascending;
+                        fSortOrder = MVPSortOrder.Ascending;
                     } else {
                         VirtualMode = false;
                     }
@@ -324,7 +305,7 @@ namespace GKUI.Components
             View = View.Details;
 
             fSortColumn = 0;
-            fSortOrder = SortOrder.None;
+            fSortOrder = MVPSortOrder.None;
             fColumnSorter = new LVColumnSorter(this);
             fItemsAccessor = new GKListViewItems(this);
 
@@ -376,18 +357,32 @@ namespace GKUI.Components
             }
         }
 
-        protected SortOrder GetColumnSortOrder(int columnIndex)
+        protected MVPSortOrder GetColumnSortOrder(int columnIndex)
         {
-            return (fSortColumn == columnIndex) ? fSortOrder : SortOrder.None;
+            return (fSortColumn == columnIndex) ? fSortOrder : MVPSortOrder.None;
+        }
+
+        public void SetSortColumn(int sortColumn, bool checkOrder = true)
+        {
+            int prevColumn = fSortColumn;
+            if (prevColumn == sortColumn && checkOrder) {
+                MVPSortOrder prevOrder = GetColumnSortOrder(sortColumn);
+                fSortOrder = (prevOrder == MVPSortOrder.Ascending) ? MVPSortOrder.Descending : MVPSortOrder.Ascending;
+            }
+
+            fSortColumn = sortColumn;
+            SortContents(true);
+        }
+
+        public void Sort(int sortColumn, MVPSortOrder sortOrder)
+        {
+            fSortOrder = sortOrder;
+            SetSortColumn(sortColumn, false);
         }
 
         protected override void OnColumnClick(ColumnClickEventArgs e)
         {
-            SortOrder prevOrder = GetColumnSortOrder(e.Column);
-            fSortOrder = (prevOrder == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending;
-            fSortColumn = e.Column;
-
-            SortContents(true);
+            SetSortColumn(e.Column);
 
             // we use Refresh() because only Invalidate() isn't update header's area
             Refresh();
@@ -409,14 +404,18 @@ namespace GKUI.Components
                 Rectangle rt = e.Bounds;
 
                 #if !__MonoCS__
-                VisualStyleElement element = VisualStyleElement.Header.Item.Normal;
-                if ((e.State & ListViewItemStates.Hot) == ListViewItemStates.Hot)
-                    element = VisualStyleElement.Header.Item.Hot;
-                if ((e.State & ListViewItemStates.Selected) == ListViewItemStates.Selected)
-                    element = VisualStyleElement.Header.Item.Pressed;
+                if (VisualStyleRenderer.IsSupported) {
+                    VisualStyleElement element = VisualStyleElement.Header.Item.Normal;
+                    if ((e.State & ListViewItemStates.Hot) == ListViewItemStates.Hot)
+                        element = VisualStyleElement.Header.Item.Hot;
+                    if ((e.State & ListViewItemStates.Selected) == ListViewItemStates.Selected)
+                        element = VisualStyleElement.Header.Item.Pressed;
 
-                var visualStyleRenderer = new VisualStyleRenderer(element);
-                visualStyleRenderer.DrawBackground(gfx, rt);
+                    var visualStyleRenderer = new VisualStyleRenderer(element);
+                    visualStyleRenderer.DrawBackground(gfx, rt);
+                } else {
+                    e.DrawBackground();
+                }
                 #else
                 e.DrawBackground();
                 #endif
@@ -447,10 +446,10 @@ namespace GKUI.Components
 
                 string arrow = "";
                 switch (GetColumnSortOrder(e.ColumnIndex)) {
-                    case SortOrder.Ascending:
+                    case MVPSortOrder.Ascending:
                         arrow = "▲";
                         break;
-                    case SortOrder.Descending:
+                    case MVPSortOrder.Descending:
                         arrow = "▼";
                         break;
                 }
@@ -487,7 +486,7 @@ namespace GKUI.Components
             if (fListMan != null) {
                 object rec = (restoreSelected) ? GetSelectedData() : null;
 
-                fListMan.SortContents(fSortColumn, fSortOrder == SortOrder.Ascending);
+                fListMan.SortContents(fSortColumn, fSortOrder == MVPSortOrder.Ascending);
                 ResetCache();
 
                 if (restoreSelected) SelectItem(rec);
@@ -512,7 +511,7 @@ namespace GKUI.Components
                 newItem = null;
             } else {
                 newItem = fListMan.CreateListItem(rowData, CreateListItem) as GKListItem;
-                fListMan.UpdateItem(newItem, rowData);
+                fListMan.UpdateItem(itemIndex, newItem, rowData);
             }
 
             return newItem;
@@ -659,6 +658,12 @@ namespace GKUI.Components
             Columns.Add(caption, width, HorizontalAlignment.Left);
         }
 
+        public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)
+        {
+            if (autoSize) width = -1;
+            Columns.Add(caption, width, (HorizontalAlignment)textAlign);
+        }
+
         public void SetColumnCaption(int index, string caption)
         {
             Columns[index].Text = caption;
@@ -761,6 +766,36 @@ namespace GKUI.Components
             } catch (Exception ex) {
                 Logger.LogWrite("GKListView.SelectItem(): " + ex.Message);
             }
+        }
+
+        #endregion
+
+        #region Internal functions
+
+        internal static int StrCompareEx(string str1, string str2)
+        {
+            double val1, val2;
+            bool v1 = double.TryParse(str1, out val1);
+            bool v2 = double.TryParse(str2, out val2);
+
+            int result;
+            if (v1 && v2) {
+                if (val1 < val2) {
+                    result = -1;
+                } else if (val1 > val2) {
+                    result = +1;
+                } else {
+                    result = 0;
+                }
+            } else {
+                result = string.Compare(str1, str2, false);
+                if (str1 != "" && str2 == "") {
+                    result = -1;
+                } else if (str1 == "" && str2 != "") {
+                    result = +1;
+                }
+            }
+            return result;
         }
 
         #endregion

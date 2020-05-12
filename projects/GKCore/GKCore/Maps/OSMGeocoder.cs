@@ -53,7 +53,9 @@ namespace GKCore.Maps
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.CreateDefault(new Uri(url));
             request.ContentType = "application/x-www-form-urlencoded";
+            request.Credentials = CredentialCache.DefaultCredentials;
             request.Proxy = fProxy;
+            request.UserAgent = "GK Geocoder";
 
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()) {
                 using (Stream stream = response.GetResponseStream()) {
@@ -62,20 +64,16 @@ namespace GKCore.Maps
                     xmlDocument.Load(stream);
                     XmlNode node = xmlDocument.DocumentElement;
 
-                    if (node != null && node.ChildNodes.Count > 0)
-                    {
+                    if (node != null && node.ChildNodes.Count > 0) {
                         int num = node.ChildNodes.Count;
-                        for (int i = 0; i < num; i++)
-                        {
+                        for (int i = 0; i < num; i++) {
                             XmlNode xNode = node.ChildNodes[i];
-                            if (xNode.Name == "place")
-                            {
+                            if (xNode.Name == "place") {
                                 string ptHint = xNode.Attributes["display_name"].InnerText;
                                 double ptLongitude = ConvertHelper.ParseFloat(xNode.Attributes["lon"].InnerText, -1.0);
                                 double ptLatitude = ConvertHelper.ParseFloat(xNode.Attributes["lat"].InnerText, -1.0);
 
-                                if (xNode.Attributes["class"].InnerText == "place" && ptLatitude != -1.0 && ptLongitude != -1.0)
-                                {
+                                if (xNode.Attributes["class"].InnerText == "place" && ptLatitude != -1.0 && ptLongitude != -1.0) {
                                     GeoPoint gpt = new GeoPoint(ptLatitude, ptLongitude, ptHint);
                                     geoObjects.Add(gpt);
                                 }

@@ -1,0 +1,77 @@
+﻿0 HEAD
+1 SOUR GEDKeeper
+1 DEST GEDKeeper
+1 CHAR UTF-8
+1 LANG Russian
+1 GEDC
+2 VERS 5.5
+2 FORM LINEAGE-LINKED
+1 FILE тест3.ged
+0 @I1@ INDI
+1 SEX M
+1 SOUR @S1@
+2 PAGE стр. 200
+2 QUAY 0
+1 SOUR @S1@
+2 PAGE стр. 201
+2 QUAY 0
+1 NAME Иван Иванович /Иванов/
+1 FAMS @F1@
+1 FAMS @F2@
+1 BIRT
+2 DATE 1654
+1 ASSO @I3@
+2 RELA восприемник
+1 ASSO @I4@
+2 RELA восприемник
+0 @I2@ INDI
+1 SEX F
+1 NAME Мария Степановна /(Иванова)/
+1 FAMS @F1@
+1 BIRT
+2 DATE ABT 1657
+0 @F1@ FAM
+1 HUSB @I1@
+1 WIFE @I2@
+1 CHIL @I6@
+0 @I3@ INDI
+1 SEX M
+1 NAME Федор Семёнович /Петров/
+1 BIRT
+1 ASSO @I1@
+2 RELA
+0 @I4@ INDI
+1 SEX F
+1 NAME Анна Михайловна /Сидорова/
+1 BIRT
+0 @S2@ SOUR
+1 TITL
+1 ABBR МК Кирсинская волость 1710 г.
+0 @I5@ INDI
+1 SEX F
+1 NAME Елена Петровна /(Иванова)/
+1 FAMS @F2@
+1 BIRT
+2 DATE ABT 1663
+0 @F2@ FAM
+1 HUSB @I1@
+1 WIFE @I5@
+0 @I6@ INDI
+1 SEX M
+1 NAME Антон Иванович /Иванов/
+1 FAMC @F1@
+1 BIRT
+2 DATE ABT 1683
+0 @S1@ SOUR
+1 TITL
+1 ABBR РГАДА ф.248, оп.22, д.1504 (НЗ-1733)
+1 NOTE @N1@
+1 NOTE @N2@
+1 NOTE @N3@
+0 @N1@ NOTE
+1 CONT Цитата-текст 1
+0 @N2@ NOTE
+1 CONT Цитата-текст 2
+0 @N3@ NOTE
+1 CONT Цитата-текст 3
+0 TRLR

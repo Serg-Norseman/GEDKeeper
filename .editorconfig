@@ -1,0 +1,16 @@
+; Top-most http://editorconfig.org/ file
+root = true
+
+[*]
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+; 4-column indentation
+[*.{cs,csproj,xaml,xml,sln,props,targets,resx,config}]
+indent_style = space
+indent_size = 4
+
+[*.{md,yml}]
+indent_style = space
+indent_size = 2

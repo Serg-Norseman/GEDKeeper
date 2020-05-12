@@ -123,6 +123,10 @@ namespace GKUI.Forms
         private NumericUpDown numGenDist;
         private NumericUpDown numBranchDist;
         private NumericUpDown numMargins;
+        private CheckBox chkAutoSortChildren;
+        private CheckBox chkAutoSortSpouses;
+        private CheckBox chkCheckTreeSize;
+        private CheckBox chkCharsetDetection;
 
         private void InitializeComponent()
         {
@@ -246,6 +250,9 @@ namespace GKUI.Forms
             chkAutoCheckUpdates = new CheckBox();
             chkAutoCheckUpdates.Text = "chkAutoCheckUpdates";
 
+            chkCharsetDetection = new CheckBox();
+            chkCharsetDetection.Text = "chkCharsetDetection";
+
             lblGeocoder = new Label();
             lblGeocoder.Text = "lblGeocoder";
 
@@ -273,6 +280,9 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         Cells = { chkAutoCheckUpdates }
+                    },
+                    new TableRow {
+                        Cells = { chkCharsetDetection }
                     },
                     new TableRow {
                         Cells = { lblLanguage, cmbLanguages }
@@ -368,12 +378,15 @@ namespace GKUI.Forms
             chkHideUnknownSpouses = new CheckBox();
             chkHideUnknownSpouses.Text = "chkHideUnknownSpouses";
 
+            chkCheckTreeSize = new CheckBox();
+            chkCheckTreeSize.Text = "chkCheckTreeSize";
+
             grpTreePersons = new GroupBox();
             grpTreePersons.Text = "grpTreePersons";
             grpTreePersons.Content = new VDefStackLayout {
                 Items = { chkSurname, chkName, chkPatronymic, chkDiffLines, chkBirthDate, chkDeathDate, chkOnlyYears,
                     chkMarriagesDates, chkKinship, chkSignsVisible, chkTreeDecorative, chkPortraitsVisible, chkDefaultPortraits,
-                    chkChildlessExclude, chkInvertedTree, chkShowPlaces, chkHideUnknownSpouses }
+                    chkChildlessExclude, chkInvertedTree, chkShowPlaces, chkHideUnknownSpouses, chkCheckTreeSize }
             };
 
             //
@@ -663,6 +676,12 @@ namespace GKUI.Forms
             chkHighlightUnmarried = new CheckBox();
             chkHighlightUnmarried.Text = "chkHighlightUnmarried";
 
+            chkAutoSortChildren = new CheckBox();
+            chkAutoSortChildren.Text = "chkAutoSortChildren";
+
+            chkAutoSortSpouses = new CheckBox();
+            chkAutoSortSpouses.Text = "chkAutoSortSpouses";
+
             //
 
             pageViewCommon = new TabPage();
@@ -674,7 +693,8 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         Cells = { grpAdvancedNames, new VDefStackLayout{
-                                Items = { chkPlacesWithAddress, chkHighlightUnparented, chkHighlightUnmarried }
+                                Items = { chkPlacesWithAddress, chkHighlightUnparented, chkHighlightUnmarried,
+                                          chkAutoSortChildren, chkAutoSortSpouses}
                             }
                         }
                     },

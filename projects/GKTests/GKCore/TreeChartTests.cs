@@ -22,13 +22,12 @@ using System;
 using System.Drawing;
 using System.IO;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests.Stubs;
-using GKUI;
 using GKUI.Components;
 using GKUI.Providers;
 using NUnit.Framework;
@@ -115,9 +114,9 @@ namespace GKCore
                 tcPerson.Selected = true;
                 Assert.AreEqual(true, tcPerson.Selected);
 
-                Assert.AreEqual(GEDCOMSex.svNone, tcPerson.Sex);
-                tcPerson.Sex = GEDCOMSex.svMale;
-                Assert.AreEqual(GEDCOMSex.svMale, tcPerson.Sex);
+                Assert.AreEqual(GDMSex.svUnknown, tcPerson.Sex);
+                tcPerson.Sex = GDMSex.svMale;
+                Assert.AreEqual(GDMSex.svMale, tcPerson.Sex);
 
                 EnumSet<SpecialUserRef> enums = tcPerson.Signs;
                 Assert.IsTrue(enums.IsEmpty());
@@ -146,15 +145,15 @@ namespace GKCore
                 ExtRect psnRt = tcPerson.Rect;
                 Assert.IsTrue(psnRt.IsEmpty());
 
-                tcPerson.Sex = GEDCOMSex.svMale;
+                tcPerson.Sex = GDMSex.svMale;
                 var color = ((ColorHandler)tcPerson.GetSelectedColor()).Handle;
                 Assert.AreEqual(Color.FromArgb(255, Color.Blue), color);
 
-                tcPerson.Sex = GEDCOMSex.svFemale;
+                tcPerson.Sex = GDMSex.svFemale;
                 color = ((ColorHandler)tcPerson.GetSelectedColor()).Handle;
                 Assert.AreEqual(Color.FromArgb(255, Color.Red), color);
 
-                tcPerson.Sex = GEDCOMSex.svUndetermined;
+                tcPerson.Sex = GDMSex.svUnknown;
                 color = ((ColorHandler)tcPerson.GetSelectedColor()).Handle;
                 Assert.AreEqual(Color.FromArgb(255, Color.Black), color);
             }
@@ -169,8 +168,8 @@ namespace GKCore
 
                 Assert.IsNotNull(model.Segments);
 
-                model.Options = GlobalOptions.Instance.AncestorsCircleOptions;
-                Assert.AreEqual(GlobalOptions.Instance.AncestorsCircleOptions, model.Options);
+                model.Options = GlobalOptions.Instance.CircleChartOptions;
+                Assert.AreEqual(GlobalOptions.Instance.CircleChartOptions, model.Options);
 
                 model.Base = fBase;
                 Assert.AreEqual(fBase, model.Base);

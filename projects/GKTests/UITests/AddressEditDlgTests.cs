@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,12 +22,11 @@
 
 using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.ControlTesters;
 using GKTests.Stubs;
-using GKUI;
 using GKUI.Forms;
 using GKUI.Providers;
 using NUnit.Extensions.Forms;
@@ -41,7 +40,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class AddressEditDlgTests : CustomWindowTest
     {
-        private GEDCOMAddress fAddress;
+        private GDMAddress fAddress;
         private IBaseWindow fBase;
         private AddressEditDlg fDialog;
 
@@ -52,7 +51,7 @@ namespace GKUI.Forms
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fAddress = new GEDCOMAddress(fBase.Context.Tree, null, "", "");
+            fAddress = new GDMAddress(null);
 
             fAddress.AddWebPage("test");
             fAddress.AddPhoneNumber("test");
@@ -81,25 +80,17 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fAddress, fDialog.Address);
 
-            var txtCountry = new TextBoxTester("txtCountry");
-            txtCountry.Enter("sample text");
-            Assert.AreEqual("sample text", txtCountry.Text);
-
-            var txtState = new TextBoxTester("txtState");
-            txtState.Enter("sample text");
-            Assert.AreEqual("sample text", txtState.Text);
-
-            var tabs = new TabControlTester("tabsAddrData");
+            EnterText("txtCountry", fDialog, "sample text");
+            EnterText("txtState", fDialog, "sample text");
 
             // Test for adding phone
-            tabs.SelectTab(1);
-            ModalFormHandler = InputBoxAddHandler;
+            SelectTab("tabsAddrData", fDialog, 1);
+            ModalFormHandler = InputBox_Add_Handler;
             ClickToolStripButton("fPhonesList_ToolBar_btnAdd", fDialog);
             Assert.AreEqual("sample add", fAddress.PhoneNumbers[1].StringValue);
 
-            var sheetTester = new GKSheetListTester("fPhonesList");
-            sheetTester.Properties.SelectItem(1);
-            ModalFormHandler = InputBoxEditHandler;
+            SelectSheetListItem("fPhonesList", fDialog, 1);
+            ModalFormHandler = InputBox_Edit_Handler;
             ClickToolStripButton("fPhonesList_ToolBar_btnEdit", fDialog);
             Assert.AreEqual("sample edit", fAddress.PhoneNumbers[1].StringValue);
 
@@ -107,14 +98,13 @@ namespace GKUI.Forms
             ClickToolStripButton("fPhonesList_ToolBar_btnDelete", fDialog);
 
             // Test for adding mail
-            tabs.SelectTab(2);
-            ModalFormHandler = InputBoxAddHandler;
+            SelectTab("tabsAddrData", fDialog, 2);
+            ModalFormHandler = InputBox_Add_Handler;
             ClickToolStripButton("fMailsList_ToolBar_btnAdd", fDialog);
             Assert.AreEqual("sample add", fAddress.EmailAddresses[1].StringValue);
 
-            sheetTester = new GKSheetListTester("fMailsList");
-            sheetTester.Properties.SelectItem(1);
-            ModalFormHandler = InputBoxEditHandler;
+            SelectSheetListItem("fMailsList", fDialog, 1);
+            ModalFormHandler = InputBox_Edit_Handler;
             ClickToolStripButton("fMailsList_ToolBar_btnEdit", fDialog);
             Assert.AreEqual("sample edit", fAddress.EmailAddresses[1].StringValue);
 
@@ -122,14 +112,13 @@ namespace GKUI.Forms
             ClickToolStripButton("fMailsList_ToolBar_btnDelete", fDialog);
 
             // Test for adding webpage
-            tabs.SelectTab(3);
-            ModalFormHandler = InputBoxAddHandler;
+            SelectTab("tabsAddrData", fDialog, 3);
+            ModalFormHandler = InputBox_Add_Handler;
             ClickToolStripButton("fWebsList_ToolBar_btnAdd", fDialog);
             Assert.AreEqual("sample add", fAddress.WebPages[1].StringValue);
 
-            sheetTester = new GKSheetListTester("fWebsList");
-            sheetTester.Properties.SelectItem(1);
-            ModalFormHandler = InputBoxEditHandler;
+            SelectSheetListItem("fWebsList", fDialog, 1);
+            ModalFormHandler = InputBox_Edit_Handler;
             ClickToolStripButton("fWebsList_ToolBar_btnEdit", fDialog);
             Assert.AreEqual("sample edit", fAddress.WebPages[1].StringValue);
 
@@ -143,23 +132,15 @@ namespace GKUI.Forms
             Assert.AreEqual("sample text", fAddress.AddressState);
         }
 
-        private void InputBoxAddHandler(string name, IntPtr ptr, Form form)
-        {
-            var txtValue = new TextBoxTester("txtValue", form);
-            txtValue.Enter("sample add");
-            Assert.AreEqual("sample add", txtValue.Text);
+        #region Handlers for external tests
 
+        public static void AddressEditDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            var addrDlg = (AddressEditDlg)form;
             ClickButton("btnAccept", form);
         }
 
-        private void InputBoxEditHandler(string name, IntPtr ptr, Form form)
-        {
-            var txtValue = new TextBoxTester("txtValue", form);
-            txtValue.Enter("sample edit");
-            Assert.AreEqual("sample edit", txtValue.Text);
-
-            ClickButton("btnAccept", form);
-        }
+        #endregion
     }
 }
 

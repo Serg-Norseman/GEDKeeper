@@ -27,9 +27,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class AboutDlg : CommonDialog, IAboutDlg
     {
         public AboutDlg()

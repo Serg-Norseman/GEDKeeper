@@ -19,12 +19,11 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Kinships;
 using GKCore.Types;
 using GKTests;
-using GKUI;
 using GKUI.Providers;
 using NUnit.Framework;
 
@@ -65,11 +64,11 @@ namespace GKCore
         [Test]
         public void Test_KinshipsGraph()
         {
-            GEDCOMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
-            GEDCOMIndividualRecord chldRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
-            GEDCOMIndividualRecord otherRec = fContext.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
-            GEDCOMIndividualRecord wifeRec = fContext.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
-            GEDCOMIndividualRecord rec5 = fContext.Tree.XRefIndex_Find("I5") as GEDCOMIndividualRecord;
+            GDMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord chldRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+            GDMIndividualRecord otherRec = fContext.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
+            GDMIndividualRecord wifeRec = fContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
+            GDMIndividualRecord rec5 = fContext.Tree.XRefIndex_Find("I5") as GDMIndividualRecord;
 
             Assert.Throws(typeof(ArgumentNullException), () => { KinshipsGraph.SearchGraph(fContext, null); });
 

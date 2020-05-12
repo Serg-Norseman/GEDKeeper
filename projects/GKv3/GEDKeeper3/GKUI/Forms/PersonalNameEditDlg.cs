@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -35,7 +34,7 @@ namespace GKUI.Forms
     {
         private readonly PersonalNameEditDlgController fController;
 
-        public GEDCOMPersonalName PersonalName
+        public GDMPersonalName PersonalName
         {
             get { return fController.PersonalName; }
             set { fController.PersonalName = value; }
@@ -45,57 +44,57 @@ namespace GKUI.Forms
 
         ILabelHandler IPersonalNameEditDlg.SurnameLabel
         {
-            get { return fControlsManager.GetControlHandler<ILabelHandler>(lblSurname); }
+            get { return GetControlHandler<ILabelHandler>(lblSurname); }
         }
 
         ITextBoxHandler IPersonalNameEditDlg.Surname
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtSurname); }
+            get { return GetControlHandler<ITextBoxHandler>(txtSurname); }
         }
 
         ITextBoxHandler IPersonalNameEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBoxHandler>(txtName); }
         }
 
         ITextBoxHandler IPersonalNameEditDlg.Patronymic
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtPatronymic); }
+            get { return GetControlHandler<ITextBoxHandler>(txtPatronymic); }
         }
 
         IComboBoxHandler IPersonalNameEditDlg.NameType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbNameType); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbNameType); }
         }
 
         ITextBoxHandler IPersonalNameEditDlg.NamePrefix
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtNamePrefix); }
+            get { return GetControlHandler<ITextBoxHandler>(txtNamePrefix); }
         }
 
         ITextBoxHandler IPersonalNameEditDlg.Nickname
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtNickname); }
+            get { return GetControlHandler<ITextBoxHandler>(txtNickname); }
         }
 
         ITextBoxHandler IPersonalNameEditDlg.SurnamePrefix
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtSurnamePrefix); }
+            get { return GetControlHandler<ITextBoxHandler>(txtSurnamePrefix); }
         }
 
         ITextBoxHandler IPersonalNameEditDlg.NameSuffix
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtNameSuffix); }
+            get { return GetControlHandler<ITextBoxHandler>(txtNameSuffix); }
         }
 
         ITextBoxHandler IPersonalNameEditDlg.MarriedSurname
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtMarriedSurname); }
+            get { return GetControlHandler<ITextBoxHandler>(txtMarriedSurname); }
         }
 
         IComboBoxHandler IPersonalNameEditDlg.Language
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbLanguage); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbLanguage); }
         }
 
         #endregion

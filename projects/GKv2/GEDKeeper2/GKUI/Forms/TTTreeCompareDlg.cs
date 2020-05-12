@@ -19,33 +19,29 @@
  */
 
 using System;
-
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTTreeCompareDlg : CommonDialog, ITreeCompareDlg
     {
         private readonly TreeCompareController fController;
 
         #region View Interface
 
-        ITextBoxHandler ITreeCompareDlg.ExternalBase
+        ITextBox ITreeCompareDlg.ExternalBase
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtCompareFile); }
+            get { return GetControlHandler<ITextBox>(txtCompareFile); }
         }
 
-        ITextBoxHandler ITreeCompareDlg.CompareOutput
+        ITextBox ITreeCompareDlg.CompareOutput
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(ListCompare); }
+            get { return GetControlHandler<ITextBox>(ListCompare); }
         }
 
         #endregion

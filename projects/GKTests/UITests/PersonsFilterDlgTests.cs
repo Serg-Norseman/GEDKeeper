@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,12 +20,14 @@
 
 #if !__MonoCS__
 
+using System.Windows.Forms;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKTests;
 using GKTests.Stubs;
 using GKUI.Forms;
 using NUnit.Framework;
+using NUnit.Extensions.Forms;
 
 namespace GKUI.Forms
 {
@@ -73,12 +75,10 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fBase, fDialog.Base);
 
-            /*var cmbRelation = new ComboBoxTester("cmbRelation");
-            cmbRelation.Enter("sample text");
+            /*EnterCombo("cmbRelation", "sample text");
             Assert.AreEqual("sample text", cmbRelation.Text);*/
 
-            /*var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
+            /*EnterText("txtAuthor", "sample text");
             Assert.AreEqual("sample text", txtAuthor.Text);*/
 
             ClickButton("btnAccept", fDialog);
@@ -86,6 +86,36 @@ namespace GKUI.Forms
             //Assert.AreEqual("sample text", fListMan.Relation);
             //Assert.AreEqual("sample text\r\n", fTaskRecord.Originator.Text);
         }
+
+        #region Handlers for external tests
+
+        public static void PersonsFilterDlg_Handler(Form form)
+        {
+            PersonsFilterDlg pfDlg = (PersonsFilterDlg)form;
+
+            SelectTab("tabsFilters", form, 1);
+
+            ClickRadioButton("rgLife.rbAliveBefore", form);
+            ClickRadioButton("rgLife.rbAll", form);
+
+            var rbSexMale = new RadioButtonTester("rbSexMale", form);
+            rbSexMale.Properties.Checked = true;
+
+            var rbOnlyLive = new RadioButtonTester("rbOnlyLive", form);
+            rbOnlyLive.Properties.Checked = true;
+
+            EnterCombo("txtName", form, "*Ivan*");
+
+            EnterCombo("cmbResidence", form, "*test place*");
+
+            EnterCombo("cmbEventVal", form, "*test event*");
+
+            EnterCombo("cmbGroup", form, "- any -");
+
+            EnterCombo("cmbSource", form, "- any -");
+        }
+
+        #endregion
     }
 }
 

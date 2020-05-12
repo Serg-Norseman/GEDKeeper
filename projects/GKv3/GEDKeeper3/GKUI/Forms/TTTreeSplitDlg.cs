@@ -29,9 +29,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTTreeSplitDlg : CommonDialog, ITreeSplitDlg
     {
         private readonly TreeSplitController fController;

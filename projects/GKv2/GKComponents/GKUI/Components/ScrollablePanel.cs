@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -83,7 +84,8 @@ namespace GKUI.Components
         /// <summary>
         /// Updates the scroll position.
         /// </summary>
-        /// <param name="position">The position.</param>
+        /// <param name="posX">The X position.</param>
+        /// <param name="posY">The Y position.</param>
         protected void UpdateScrollPosition(int posX, int posY)
         {
             AutoScrollPosition = new Point(posX, posY);
@@ -107,6 +109,11 @@ namespace GKUI.Components
 
             if (!noRedraw)
                 Invalidate();
+        }
+
+        protected Point GetImageRelativeLocation(PointF mpt)
+        {
+            return new Point((int)mpt.X + Math.Abs(AutoScrollPosition.X), (int)mpt.Y + Math.Abs(AutoScrollPosition.Y));
         }
     }
 }

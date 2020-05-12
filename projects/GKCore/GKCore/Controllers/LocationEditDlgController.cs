@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Maps;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -34,9 +34,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class LocationEditDlgController : DialogController<ILocationEditDlg>
     {
-        private GEDCOMLocationRecord fLocationRecord;
+        private GDMLocationRecord fLocationRecord;
 
-        public GEDCOMLocationRecord LocationRecord
+        public GDMLocationRecord LocationRecord
         {
             get { return fLocationRecord; }
             set {
@@ -56,11 +56,17 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
+                bool isRenamed = (fLocationRecord.LocationName != fView.Name.Text);
+
                 fLocationRecord.LocationName = fView.Name.Text;
                 fLocationRecord.Map.Lati = ConvertHelper.ParseFloat(fView.Latitude.Text, 0.0);
                 fLocationRecord.Map.Long = ConvertHelper.ParseFloat(fView.Longitude.Text, 0.0);
 
                 fLocalUndoman.Commit();
+
+                if (isRenamed) {
+                    fBase.Context.Tree.RenameLocationRecord(fLocationRecord);
+                }
 
                 fBase.NotifyRecord(fLocationRecord, RecordAction.raEdit);
 
@@ -144,6 +150,13 @@ namespace GKCore.Controllers
             if (pt == null) return;
 
             fView.MapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+        }
+
+        public void ShowOnMap()
+        {
+            if (fView.Latitude.Text != "" && fView.Longitude.Text != "") {
+                fView.MapBrowser.SetCenter(ConvertHelper.ParseFloat(fView.Latitude.Text, 0), ConvertHelper.ParseFloat(fView.Longitude.Text, 0), -1);
+            }
         }
     }
 }

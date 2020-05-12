@@ -18,10 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections;
+using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-
-using BSLib;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Controls;
@@ -129,6 +129,11 @@ namespace GKUI.Providers
             }
         }
 
+        public IList Items
+        {
+            get { return Control.Items; }
+        }
+
         public bool ReadOnly
         {
             get { return Control.ReadOnly; }
@@ -168,7 +173,11 @@ namespace GKUI.Providers
         public string Text
         {
             get { return Control.Text; }
-            set { Control.Text = value; }
+            set {
+                Control.AutoComplete = true; // FIXME: Wrapper for EtoBug in ComboBox.setText
+                Control.Text = value;
+                Control.AutoComplete = false;
+            }
         }
 
         public void Add(object item)
@@ -214,6 +223,16 @@ namespace GKUI.Providers
         public void SortItems()
         {
             Control.SortItems();
+        }
+
+        public T GetSelectedTag<T>()
+        {
+            return UIHelper.GetSelectedTag<T>(Control);
+        }
+
+        public void SetSelectedTag<T>(T tagValue)
+        {
+            UIHelper.SetSelectedTag<T>(Control, tagValue);
         }
     }
 
@@ -413,6 +432,52 @@ namespace GKUI.Providers
         }
     }
 
+    public sealed class DateBoxHandler : BaseControlHandler<GKDateBox, DateBoxHandler>, IDateBoxHandler
+    {
+        public DateBoxHandler(GKDateBox control) : base(control)
+        {
+        }
+
+        public string NormalizeDate
+        {
+            get { return Control.NormalizeDate; }
+            set { Control.NormalizeDate = value; }
+        }
+
+        public bool ReadOnly
+        {
+            get { return Control.ReadOnly; }
+            set { Control.ReadOnly = value; }
+        }
+
+        public string SelectedText
+        {
+            get { return Control.SelectedText; }
+            set { Control.SelectedText = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+
+        public void Clear()
+        {
+            Control.Text = string.Empty;
+        }
+
+        public void Copy()
+        {
+            UIHelper.SetClipboardText(Control.SelectedText);
+        }
+
+        public void SelectAll()
+        {
+            Control.SelectAll();
+        }
+    }
+
     public sealed class NumericBoxHandler : BaseControlHandler<NumericUpDown, NumericBoxHandler>, INumericBoxHandler
     {
         public NumericBoxHandler(NumericUpDown control) : base(control)
@@ -479,6 +544,12 @@ namespace GKUI.Providers
             if (treeNode != null) {
                 treeNode.Expanded = true;
             }
+        }
+
+        public object GetSelectedData()
+        {
+            GKTreeNode node = Control.SelectedItem as GKTreeNode;
+            return (node == null) ? null : node.Tag;
         }
     }
 

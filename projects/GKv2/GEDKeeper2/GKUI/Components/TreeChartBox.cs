@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,15 +24,16 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using BSLib.Design.Graphics;
+using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKUI.Components;
 using GKUI.Providers;
+
+using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKUI.Components
 {
@@ -56,7 +57,7 @@ namespace GKUI.Components
         private int fMouseY;
         private TreeChartOptions fOptions;
         private TreeChartPerson fSelected;
-        private GEDCOMIndividualRecord fSaveSelection;
+        private GDMIndividualRecord fSaveSelection;
         private Timer fTimer;
         private bool fTraceKinships;
         private bool fTraceSelected;
@@ -65,6 +66,7 @@ namespace GKUI.Components
         private static readonly object EventRootChanged;
         private static readonly object EventPersonProperties;
         private static readonly object EventZoomChanged;
+        private static readonly object EventInfoRequest;
 
         #endregion
 
@@ -92,6 +94,12 @@ namespace GKUI.Components
         {
             add { Events.AddHandler(EventZoomChanged, value); }
             remove { Events.RemoveHandler(EventZoomChanged, value); }
+        }
+
+        public event InfoRequestEventHandler InfoRequest
+        {
+            add { Events.AddHandler(EventInfoRequest, value); }
+            remove { Events.RemoveHandler(EventInfoRequest, value); }
         }
 
         public IBaseWindow Base
@@ -177,6 +185,7 @@ namespace GKUI.Components
             EventRootChanged = new object();
             EventPersonProperties = new object();
             EventZoomChanged = new object();
+            EventInfoRequest = new object();
         }
 
         public TreeChartBox()
@@ -268,7 +277,7 @@ namespace GKUI.Components
             DoZoomChanged();
         }
 
-        public void GenChart(GEDCOMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
+        public void GenChart(GDMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
         {
             if (iRec == null) return;
 
@@ -293,7 +302,7 @@ namespace GKUI.Components
             try {
                 if (fModel.Root == null) return;
 
-                GEDCOMIndividualRecord rootRec = fModel.Root.Rec;
+                GDMIndividualRecord rootRec = fModel.Root.Rec;
 
                 SaveSelection();
                 GenChart(rootRec, fModel.Kind, false);
@@ -389,6 +398,8 @@ namespace GKUI.Components
 
             fModel.SetOffsets(spx, spy);
 
+            fRenderer.SetSmoothing(true);
+
             DrawBackground(background);
 
             #if DEBUG_IMAGE
@@ -408,6 +419,13 @@ namespace GKUI.Components
 
             if (hasDeep && fOptions.DeepMode == DeepMode.Foreground) {
                 DrawDeep(fOptions.DeepMode, spx, spy);
+            }
+
+            if (fOptions.BorderStyle != GfxBorderStyle.None) {
+                fRenderer.SetSmoothing(false);
+                var rt = ExtRect.CreateBounds(spx, spy, fModel.ImageWidth, fModel.ImageHeight);
+                BorderPainter.DrawBorder(fRenderer, rt, fOptions.BorderStyle);
+                fRenderer.SetSmoothing(true);
             }
         }
 
@@ -439,8 +457,8 @@ namespace GKUI.Components
 
                         case DeepMode.Foreground:
                             fRenderer.SetTranslucent(0.25f);
-                            IPen xpen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Black), 2.0f);
-                            IColor bColor = ChartRenderer.GetColor(ChartRenderer.White);
+                            IPen xpen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 2.0f);
+                            IColor bColor = ChartRenderer.GetColor(BSDColors.White);
                             fRenderer.DrawRoundedRectangle(xpen, bColor, dmX, dmY, deepModel.ImageWidth, deepModel.ImageHeight, 6);
                             fRenderer.SetTranslucent(0.00f);
                             break;
@@ -517,6 +535,13 @@ namespace GKUI.Components
         private void DoRootChanged(TreeChartPerson person)
         {
             var eventHandler = (RootChangedEventHandler)Events[EventRootChanged];
+            if (eventHandler != null)
+                eventHandler(this, person);
+        }
+
+        private void DoInfoRequest(TreeChartPerson person)
+        {
+            var eventHandler = (InfoRequestEventHandler)Events[EventInfoRequest];
             if (eventHandler != null)
                 eventHandler(this, person);
         }
@@ -661,6 +686,13 @@ namespace GKUI.Components
                     action = MouseAction.maPersonExpand;
                     break;
                 }
+
+                ExtRect infoRt = TreeChartModel.GetInfoRect(persRt);
+                if ((e.Button == MouseButtons.Left && mouseEvent == MouseEvent.meUp) && infoRt.Contains(aX, aY)) {
+                    person = p;
+                    action = MouseAction.maInfo;
+                    break;
+                }
             }
 
             if (action == MouseAction.maNone && person == null) {
@@ -779,6 +811,10 @@ namespace GKUI.Components
                         case MouseAction.maPersonExpand:
                             ToggleCollapse(mAct.Person);
                             break;
+
+                        case MouseAction.maInfo:
+                            DoInfoRequest(mAct.Person);
+                            break;
                     }
                     break;
 
@@ -801,7 +837,7 @@ namespace GKUI.Components
 
         protected override void SetNavObject(object obj)
         {
-            var iRec = obj as GEDCOMIndividualRecord;
+            var iRec = obj as GDMIndividualRecord;
             GenChart(iRec, TreeChartKind.ckBoth, true);
         }
 
@@ -841,7 +877,7 @@ namespace GKUI.Components
             if (needCenter && fTraceSelected) CenterPerson(person);
         }
 
-        public void SelectByRec(GEDCOMIndividualRecord iRec)
+        public void SelectByRec(GDMIndividualRecord iRec)
         {
             if (iRec == null) return;
 

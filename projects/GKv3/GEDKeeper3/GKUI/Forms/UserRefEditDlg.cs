@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -31,14 +30,11 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class UserRefEditDlg : EditorDialog, IUserRefEditDlg
     {
         private readonly UserRefEditDlgController fController;
 
-        public GEDCOMUserReference UserRef
+        public GDMUserReference UserRef
         {
             get { return fController.UserRef; }
             set { fController.UserRef = value; }
@@ -48,12 +44,12 @@ namespace GKUI.Forms
 
         IComboBoxHandler IUserRefEditDlg.Ref
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRef); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbRef); }
         }
 
         IComboBoxHandler IUserRefEditDlg.RefType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRefType); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbRefType); }
         }
 
         #endregion

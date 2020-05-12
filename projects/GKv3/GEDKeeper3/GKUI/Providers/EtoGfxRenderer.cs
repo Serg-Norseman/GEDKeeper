@@ -40,6 +40,11 @@ namespace GKUI.Providers
         {
         }
 
+        public override void SetSmoothing(bool value)
+        {
+            fCanvas.AntiAlias = value;
+        }
+
         public override void SetTarget(object target)
         {
             Graphics gfx = target as Graphics;
@@ -47,7 +52,6 @@ namespace GKUI.Providers
                 throw new ArgumentException(@"Argument's type mismatch", "target");
 
             fCanvas = gfx;
-            fCanvas.AntiAlias = true;
         }
 
         public override void DrawImage(IImage image, float x, float y,

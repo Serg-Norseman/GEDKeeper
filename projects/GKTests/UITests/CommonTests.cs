@@ -21,9 +21,8 @@
 using System;
 using System.Drawing;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
-using GKUI;
 using GKUI.Components;
 using GKUI.Providers;
 using NUnit.Framework;
@@ -43,7 +42,7 @@ namespace GKUI.Components
         public void Test_UIHelper()
         {
             Assert.Throws(typeof(ArgumentNullException), () => { UIHelper.CreateListView(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { UIHelper.CreateRecordsView(null, null, GEDCOMRecordType.rtIndividual); });
+            Assert.Throws(typeof(ArgumentNullException), () => { UIHelper.CreateRecordsView(null, null, GDMRecordType.rtIndividual); });
         }
 
         [Test]

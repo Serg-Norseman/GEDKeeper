@@ -25,10 +25,12 @@ namespace GKCore.Interfaces
     /// <summary>
     /// 
     /// </summary>
-    public interface IDialogReplacement
+    public interface IDialogReplacement : IPlugin
     {
+        bool Enabled { get; set; }
+
         Type GetDialogType();
 
-        ICommonDialog CreateDialog();
+        ICommonDialog CreateDialog(params object[] parameters);
     }
 }

@@ -22,13 +22,12 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using BSLib.Design.Graphics;
+using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKUI.Components
 {
@@ -37,7 +36,7 @@ namespace GKUI.Components
         private static readonly object EventNavRefresh;
 
 
-        private readonly NavigationStack<GEDCOMRecord> fNavman;
+        private readonly NavigationStack<GDMRecord> fNavman;
         protected ChartRenderer fRenderer;
 
 
@@ -55,13 +54,13 @@ namespace GKUI.Components
 
         protected CustomChart() : base()
         {
-            fNavman = new NavigationStack<GEDCOMRecord>();
+            fNavman = new NavigationStack<GDMRecord>();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                if (fNavman != null) fNavman.Dispose();
+                //if (fNavman != null) fNavman.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -314,8 +313,8 @@ namespace GKUI.Components
 
         public bool NavAdd(object obj)
         {
-            if (obj != null && !fNavman.Busy) {
-                fNavman.Current = (GEDCOMRecord)obj;
+            if (obj != null) {
+                fNavman.Current = (GDMRecord)obj;
                 return true;
             }
             return false;
@@ -335,15 +334,10 @@ namespace GKUI.Components
         {
             if (!fNavman.CanForward()) return;
 
-            fNavman.BeginNav();
-            try
-            {
+            try {
                 SetNavObject(fNavman.Next());
                 DoNavRefresh();
-            }
-            finally
-            {
-                fNavman.EndNav();
+            } finally {
             }
         }
 
@@ -351,15 +345,10 @@ namespace GKUI.Components
         {
             if (!fNavman.CanBackward()) return;
 
-            fNavman.BeginNav();
-            try
-            {
+            try {
                 SetNavObject(fNavman.Back());
                 DoNavRefresh();
-            }
-            finally
-            {
-                fNavman.EndNav();
+            } finally {
             }
         }
 

@@ -1,5 +1,65 @@
 
-## ??.10.2018 [v2.15.0]
+## 18.09.2019 [v2.16.2]
+- Implemented moving notes up and down [Milan Kosina].
+- Implemented line wrapping in the HyperView of information panel.
+- Added check for file existence when creating multimedia records.
+- Added verification of the database for multimedia records (lack of files, archives, storages).
+- Added support for relative paths to media files [Milan Kosina].
+- Fixed the choice of the type of file storage in the multimedia dialog.
+- Implemented the removal of multimedia files when deleting their records.
+- Fixed event output if an additional event type is not specified.
+- Fixed renaming and deleting of location records.
+- Fixed merging family and individual records, transition buttons in editing dialogs, button images.
+- Fixed editing dates of events with periods.
+- Added new diagnostics for data verification: for families without spouses and/or children [Kevin D. Sandal].
+- Added hotkey for saving files from tree diagrams.
+- Fixed support for formats with zero IDs of records.
+- Fixed opening files and OSM geocoder operation.
+- Cleaning and optimization, improved support for two third-party GEDCOM formats.
+- Fixed the script of the portable package.
+- Fixed the work of the "Compare databases" tool.
+- Fixed external viewing of PDF files (and other not supported by the embedded viewer).
+- Proofreading of the English manual [Kevin D. Sandal].
+- Implemented preliminary support for GedML format.
+- Fixed pedigrees localization.
+- Fixed Calendar plugin.
+- Fixed overlapping of neighboring persons in tree diagrams.
+- Fixed incorrect parsing of interpretable dates from Ahnenblatt.
+- Fixed missing substructures in media records from extraneous files.
+- Fixed convert links to sources in source records .
+- Fixed convert media links to media records, and convert non-standard x-references.
+- Fixed reading standard coordinates of the place.
+- Minor improvement of circle chart.
+- Improved support for several GEDCOM file formats.
+- Fix of sorting the columns of some tables.
+- Fix of long-distance displacement of male nodes (tree chart) in the presence of more than 
+one marriage and a large tree of descendants from the first wife.
+- Improved date input in the event dialog with regional format settings.
+- Bugfixes for FlowInput plugin.
+- Added the possibility to create and connect plugins to replace record's edit dialogs.
+- Restored loading recent files.
+- Created a new plugin for managing "folders" in GEDCOM files (to separate work areas in large files).
+- Added option to automatically detect charset of GEDCOM files at load.
+- Fixed execution of Lua scripts.
+- Reduced memory consumption when loading large files (25-42%).
+- Optimized a number of functions, allowing to significantly increase the speed of loading and processing large files 
+(from 30 thousand records to very large files - 91mb, 538 thousand records, load time 25 seconds!).
+
+## 14.02.2019 [v2.15.0]
+- Added control unit for several families of parents and for the type of 
+child/parent linkage (adoption, foster, etc.).
+- Improved handling of parts of names.
+- Added option to disable checking for a valid tree size (in most cases, 
+checking is outdated, but can sometimes be useful).
+- Added saving and restoring selected sorting columns in tables.
+- Added the feature to disable the sorting of children and enable sorting of 
+spouses for family's records.
+- Added the feature to select colors for persons in tree charts.
+- Created the Czech translation [Michal Novák].
+- Added GKTray application (birthdays reminder and recent files manager).
+- Added detection of data loops.
+- Fixed minor bugs.
+- Added new validations of data.
 
 
 ## 10.08.2018 [v2.14.0]

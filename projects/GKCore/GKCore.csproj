@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
     <AssemblyName>GKCore</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -52,6 +52,9 @@
   <PropertyGroup Condition=" '$(Framework)' == 'NET40' ">
     <DefineConstants>NET40</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">
+    <DefineConstants>$(DefineConstants);NET40</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Framework)' == 'NET45' ">
     <DefineConstants>NET45</DefineConstants>
   </PropertyGroup>
@@ -85,6 +88,9 @@
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\libs\BSLib.Design.dll</HintPath>
+    </Reference>
     <Reference Include="BSLib.Linguistics">
       <HintPath>..\libs\BSLib.Linguistics.dll</HintPath>
     </Reference>
@@ -105,82 +111,87 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="Ude">
+      <HintPath>..\libs\Ude.dll</HintPath>
+    </Reference>
     <Reference Include="YamlSerializer">
       <HintPath>..\libs\YamlSerializer.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="GEDCOM\AnselEncoding.cs" />
-    <Compile Include="GEDCOM\GEDCOMCutoutPosition.cs" />
-    <Compile Include="GEDCOM\GEDCOMProvider.cs" />
-    <Compile Include="GEDCOM\EGEDCOMException.cs" />
-    <Compile Include="GEDCOM\GEDCOMEnums.cs" />
-    <Compile Include="GEDCOM\GEDCOMFactory.cs" />
-    <Compile Include="GEDCOM\GEDCOMList.cs" />
-    <Compile Include="GEDCOM\GEDCOMObject.cs" />
-    <Compile Include="GEDCOM\GEDCOMRecordWithEvents.cs" />
-    <Compile Include="GEDCOM\GEDCOMUtils.cs" />
-    <Compile Include="GEDCOM\GEDCOMInterfaces.cs" />
-    <Compile Include="GEDCOM\GEDCOMAddress.cs" />
-    <Compile Include="GEDCOM\GEDCOMAlias.cs" />
-    <Compile Include="GEDCOM\GEDCOMAssociation.cs" />
-    <Compile Include="GEDCOM\GEDCOMChangeDate.cs" />
-    <Compile Include="GEDCOM\GEDCOMChildToFamilyLink.cs" />
-    <Compile Include="GEDCOM\GEDCOMCommunicationRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMCustomDate.cs" />
-    <Compile Include="GEDCOM\GEDCOMCustomEvent.cs" />
-    <Compile Include="GEDCOM\GEDCOMCustomRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMData.cs" />
-    <Compile Include="GEDCOM\GEDCOMDate.cs" />
-    <Compile Include="GEDCOM\GEDCOMDateInterpreted.cs" />
-    <Compile Include="GEDCOM\GEDCOMDatePeriod.cs" />
-    <Compile Include="GEDCOM\GEDCOMDateRange.cs" />
-    <Compile Include="GEDCOM\GEDCOMDateStatus.cs" />
-    <Compile Include="GEDCOM\GEDCOMDateValue.cs" />
-    <Compile Include="GEDCOM\GEDCOMEvent.cs" />
-    <Compile Include="GEDCOM\GEDCOMFamilyEvent.cs" />
-    <Compile Include="GEDCOM\GEDCOMFamilyRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMFileReference.cs" />
-    <Compile Include="GEDCOM\GEDCOMFileReferenceWithTitle.cs" />
-    <Compile Include="GEDCOM\GEDCOMGroupRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMHeader.cs" />
-    <Compile Include="GEDCOM\GEDCOMIndividualAttribute.cs" />
-    <Compile Include="GEDCOM\GEDCOMIndividualEvent.cs" />
-    <Compile Include="GEDCOM\GEDCOMIndividualOrdinance.cs" />
-    <Compile Include="GEDCOM\GEDCOMIndividualRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMLanguage.cs" />
-    <Compile Include="GEDCOM\GEDCOMLocationRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMMap.cs" />
-    <Compile Include="GEDCOM\GEDCOMMultimediaLink.cs" />
-    <Compile Include="GEDCOM\GEDCOMMultimediaRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMNoteRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMNotes.cs" />
-    <Compile Include="GEDCOM\GEDCOMPersonalName.cs" />
-    <Compile Include="GEDCOM\GEDCOMPersonalNamePieces.cs" />
-    <Compile Include="GEDCOM\GEDCOMPlace.cs" />
-    <Compile Include="GEDCOM\GEDCOMPointer.cs" />
-    <Compile Include="GEDCOM\GEDCOMPointerWithNotes.cs" />
-    <Compile Include="GEDCOM\GEDCOMRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMRepositoryCitation.cs" />
-    <Compile Include="GEDCOM\GEDCOMRepositoryRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMResearchRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMSourceCitation.cs" />
-    <Compile Include="GEDCOM\GEDCOMSourceRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMSpouseSealing.cs" />
-    <Compile Include="GEDCOM\GEDCOMSpouseToFamilyLink.cs" />
-    <Compile Include="GEDCOM\GEDCOMSubmissionRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMSubmitterRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMTag.cs" />
-    <Compile Include="GEDCOM\GEDCOMTagWithLists.cs" />
-    <Compile Include="GEDCOM\GEDCOMTaskRecord.cs" />
-    <Compile Include="GEDCOM\GEDCOMTime.cs" />
-    <Compile Include="GEDCOM\GEDCOMTree.cs" />
-    <Compile Include="GEDCOM\GEDCOMUserReference.cs" />
-    <Compile Include="GEDCOM\MatchParams.cs" />
-    <Compile Include="GEDCOM\XRefReplacer.cs" />
-    <Compile Include="GEDCOM\GEDCOMLanguageID.cs" />
+    <Compile Include="GDModel\GDMException.cs" />
+    <Compile Include="GDModel\GDMAddress.cs" />
+    <Compile Include="GDModel\GDMAlias.cs" />
+    <Compile Include="GDModel\GDMAssociation.cs" />
+    <Compile Include="GDModel\GDMChangeDate.cs" />
+    <Compile Include="GDModel\GDMChildToFamilyLink.cs" />
+    <Compile Include="GDModel\GDMCommunicationRecord.cs" />
+    <Compile Include="GDModel\GDMCustomDate.cs" />
+    <Compile Include="GDModel\GDMCustomEvent.cs" />
+    <Compile Include="GDModel\GDMCutoutPosition.cs" />
+    <Compile Include="GDModel\GDMIndividualLink.cs" />
+    <Compile Include="GDModel\GDMSourceData.cs" />
+    <Compile Include="GDModel\GDMDate.cs" />
+    <Compile Include="GDModel\GDMDateInterpreted.cs" />
+    <Compile Include="GDModel\GDMDatePeriod.cs" />
+    <Compile Include="GDModel\GDMDateRange.cs" />
+    <Compile Include="GDModel\GDMDateValue.cs" />
+    <Compile Include="GDModel\GDMSourceEvent.cs" />
+    <Compile Include="GDModel\GDMFamilyEvent.cs" />
+    <Compile Include="GDModel\GDMFamilyRecord.cs" />
+    <Compile Include="GDModel\GDMFileReference.cs" />
+    <Compile Include="GDModel\GDMFileReferenceWithTitle.cs" />
+    <Compile Include="GDModel\GDMGroupRecord.cs" />
+    <Compile Include="GDModel\GDMHeader.cs" />
+    <Compile Include="GDModel\Providers\FamilyShow\FamilyXProvider.cs" />
+    <Compile Include="GDModel\Providers\FamilyShow\OPCUtility.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\AnselEncoding.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMChecker.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParser.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMProvider.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMTagsTable.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMTagType.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMUtils.cs" />
+    <Compile Include="GDModel\Providers\GedML\GedMLProvider.cs" />
+    <Compile Include="GDModel\GDMList.cs" />
+    <Compile Include="GDModel\GDMObject.cs" />
+    <Compile Include="GDModel\GDMRecordWithEvents.cs" />
+    <Compile Include="GDModel\GDMInterfaces.cs" />
+    <Compile Include="GDModel\GDMIndividualAttribute.cs" />
+    <Compile Include="GDModel\GDMIndividualEvent.cs" />
+    <Compile Include="GDModel\GDMIndividualRecord.cs" />
+    <Compile Include="GDModel\GDMLanguage.cs" />
+    <Compile Include="GDModel\GDMLocationRecord.cs" />
+    <Compile Include="GDModel\GDMMap.cs" />
+    <Compile Include="GDModel\GDMMultimediaLink.cs" />
+    <Compile Include="GDModel\GDMMultimediaRecord.cs" />
+    <Compile Include="GDModel\GDMNoteRecord.cs" />
+    <Compile Include="GDModel\GDMNotes.cs" />
+    <Compile Include="GDModel\GDMPersonalName.cs" />
+    <Compile Include="GDModel\GDMPersonalNamePieces.cs" />
+    <Compile Include="GDModel\GDMPlace.cs" />
+    <Compile Include="GDModel\GDMPointer.cs" />
+    <Compile Include="GDModel\GDMPointerWithNotes.cs" />
+    <Compile Include="GDModel\GDMRecord.cs" />
+    <Compile Include="GDModel\GDMRepositoryCitation.cs" />
+    <Compile Include="GDModel\GDMRepositoryRecord.cs" />
+    <Compile Include="GDModel\GDMResearchRecord.cs" />
+    <Compile Include="GDModel\GDMSourceCitation.cs" />
+    <Compile Include="GDModel\GDMSourceRecord.cs" />
+    <Compile Include="GDModel\GDMSpouseToFamilyLink.cs" />
+    <Compile Include="GDModel\GDMSubmissionRecord.cs" />
+    <Compile Include="GDModel\GDMSubmitterRecord.cs" />
+    <Compile Include="GDModel\GDMTag.cs" />
+    <Compile Include="GDModel\GDMTagWithLists.cs" />
+    <Compile Include="GDModel\GDMTaskRecord.cs" />
+    <Compile Include="GDModel\GDMTime.cs" />
+    <Compile Include="GDModel\GDMTree.cs" />
+    <Compile Include="GDModel\GDMUserReference.cs" />
+    <Compile Include="GDModel\GDMXRefReplacer.cs" />
     <Compile Include="GKCore\BBTextParser.cs" />
+    <Compile Include="GKCore\Charts\BorderPainter.cs" />
     <Compile Include="GKCore\Charts\ICircleChart.cs" />
     <Compile Include="GKCore\Charts\SvgGraphics.cs" />
     <Compile Include="GKCore\Charts\SVGRenderer.cs" />
@@ -208,13 +219,16 @@
     <Compile Include="GKCore\Controllers\NameEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\NoteEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\OrganizerController.cs" />
+    <Compile Include="GKCore\Controllers\ParentsEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\PatriarchsSearchController.cs" />
     <Compile Include="GKCore\Controllers\PersonalNameEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\PersonEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\PersonsFilterDlgController.cs" />
     <Compile Include="GKCore\Controllers\PlacesManagerController.cs" />
     <Compile Include="GKCore\Controllers\PortraitSelectDlgController.cs" />
+    <Compile Include="GKCore\Controllers\QuickSearchDlgController.cs" />
     <Compile Include="GKCore\Controllers\RecMergeController.cs" />
+    <Compile Include="GKCore\Controllers\RecordInfoDlgController.cs" />
     <Compile Include="GKCore\Controllers\RecordSelectDlgController.cs" />
     <Compile Include="GKCore\Controllers\RelationshipCalculatorDlgController.cs" />
     <Compile Include="GKCore\Controllers\RepositoryEditDlgController.cs" />
@@ -233,6 +247,7 @@
     <Compile Include="GKCore\Controllers\TreeSplitController.cs" />
     <Compile Include="GKCore\Controllers\UserRefEditDlgController.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
+    <Compile Include="GDModel\Providers\FileProvider.cs" />
     <Compile Include="GKCore\ImportUtils.cs" />
     <Compile Include="GKCore\Interfaces\IBaseContext.cs" />
     <Compile Include="GKCore\Interfaces\IBaseEditor.cs" />
@@ -243,13 +258,11 @@
     <Compile Include="GKCore\Interfaces\ICustomFilter.cs" />
     <Compile Include="GKCore\Interfaces\IDialogReplacement.cs" />
     <Compile Include="GKCore\Interfaces\IExporter.cs" />
-    <Compile Include="GKCore\Interfaces\IGraphics.cs" />
     <Compile Include="GKCore\Interfaces\IHost.cs" />
     <Compile Include="GKCore\Interfaces\ILangMan.cs" />
     <Compile Include="GKCore\Interfaces\IListFilter.cs" />
-    <Compile Include="GKCore\Interfaces\IListItem.cs" />
     <Compile Include="GKCore\Interfaces\IListManager.cs" />
-    <Compile Include="GKCore\Interfaces\IListView.cs" />
+    <Compile Include="GKCore\Interfaces\IListViewEx.cs" />
     <Compile Include="GKCore\Interfaces\ILocalization.cs" />
     <Compile Include="GKCore\Interfaces\ILogger.cs" />
     <Compile Include="GKCore\Interfaces\INamesTable.cs" />
@@ -258,7 +271,6 @@
     <Compile Include="GKCore\Interfaces\IGraphicsProvider.cs" />
     <Compile Include="GKCore\Interfaces\IOptionsSection.cs" />
     <Compile Include="GKCore\Interfaces\IPlugin.cs" />
-    <Compile Include="GKCore\Interfaces\IPrintable.cs" />
     <Compile Include="GKCore\Interfaces\IProgressController.cs" />
     <Compile Include="GKCore\Interfaces\ISearchStrategy.cs" />
     <Compile Include="GKCore\Interfaces\ISubscriber.cs" />
@@ -266,7 +278,6 @@
     <Compile Include="GKCore\Interfaces\IUndoManager.cs" />
     <Compile Include="GKCore\Interfaces\IWidget.cs" />
     <Compile Include="GKCore\Interfaces\IWorkWindow.cs" />
-    <Compile Include="GKCore\IocContainer.cs" />
     <Compile Include="GKCore\Logger.cs" />
     <Compile Include="GKCore\Maps\GeoPoint.cs" />
     <Compile Include="GKCore\Maps\GoogleGeocoder.cs" />
@@ -276,18 +287,21 @@
     <Compile Include="GKCore\Maps\YandexGeocoder.cs" />
     <Compile Include="GKCore\MVP\DialogController.cs" />
     <Compile Include="GKCore\MVP\EditorController.cs" />
-    <Compile Include="GKCore\MVP\IController.cs" />
     <Compile Include="GKCore\MVP\Views\IStatusForm.cs" />
     <Compile Include="GKCore\MVP\Views\IStdDialogs.cs" />
+    <Compile Include="GKCore\Options\ListOptions.cs" />
     <Compile Include="GKCore\Plugins\OrdinaryPlugin.cs" />
     <Compile Include="GKCore\Plugins\WidgetPlugin.cs" />
     <Compile Include="GKCore\SingleInstance\MapiMailMessage.cs" />
     <Compile Include="GKCore\SysUtils.cs" />
+    <Compile Include="GKCore\Types\CharsetResult.cs" />
     <Compile Include="GKCore\Types\DateFormat.cs" />
     <Compile Include="GKCore\Types\FileBackup.cs" />
     <Compile Include="GKCore\Types\FilterGroupMode.cs" />
     <Compile Include="GKCore\Types\FilterLifeMode.cs" />
+    <Compile Include="GKCore\Types\MatchParams.cs" />
     <Compile Include="GKCore\Types\MediaStore.cs" />
+    <Compile Include="GKCore\Types\MediaStoreStatus.cs" />
     <Compile Include="GKCore\Types\MediaStoreType.cs" />
     <Compile Include="GKCore\Types\MultimediaKind.cs" />
     <Compile Include="GKCore\Types\NameEntry.cs" />
@@ -366,13 +380,12 @@
     <Compile Include="GKCore\Lists\TaskListMan.cs" />
     <Compile Include="GKCore\Maps\PlacesLoader.cs" />
     <Compile Include="GKCore\NamesTable.cs" />
-    <Compile Include="GKCore\NavigationStack.cs" />
     <Compile Include="GKCore\Operations\ChangeTracker.cs" />
     <Compile Include="GKCore\Operations\CustomOperation.cs" />
     <Compile Include="GKCore\Operations\IndividualNameChange.cs" />
     <Compile Include="GKCore\Operations\OrdinaryOperation.cs" />
     <Compile Include="GKCore\Operations\UndoManager.cs" />
-    <Compile Include="GKCore\Options\AncestorsCircleOptions.cs" />
+    <Compile Include="GKCore\Options\CircleChartOptions.cs" />
     <Compile Include="GKCore\Options\GlobalOptions.cs" />
     <Compile Include="GKCore\Options\LangRecord.cs" />
     <Compile Include="GKCore\Options\MRUFile.cs" />
@@ -408,11 +421,8 @@
     <Compile Include="GKCore\MVP\Views\UIContracts.cs" />
     <Compile Include="GKCore\ValuesCollection.cs" />
     <Compile Include="GKCore\YamlHelper.cs" />
-    <Compile Include="GKCore\MVP\ControlHandler.cs" />
-    <Compile Include="GKCore\MVP\ControlsManager.cs" />
     <Compile Include="GKCore\MVP\FormController.cs" />
-    <Compile Include="GKCore\MVP\IView.cs" />
-    <Compile Include="GKCore\MVP\IControl.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">
@@ -498,6 +508,7 @@
     <EmbeddedResource Include="Resources\btn_volume_min.png" />
     <EmbeddedResource Include="Resources\btn_volume_mute.png" />
     <EmbeddedResource Include="Resources\pnl_video.png" />
+    <EmbeddedResource Include="Resources\btn_info.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

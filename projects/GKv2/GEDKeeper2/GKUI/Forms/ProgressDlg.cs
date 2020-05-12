@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,9 +29,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class ProgressDlg : Form
     {
         //private readonly ManualResetEvent initEvent = new ManualResetEvent(false);
@@ -50,10 +47,6 @@ namespace GKUI.Forms
         }
 
         #region Private methods
-
-        private delegate void PInit(string title, int max);
-        private delegate void PStep(int value);
-        private delegate void PDone();
 
         private void DoInit(string title, int max)
         {
@@ -90,13 +83,24 @@ namespace GKUI.Forms
             lblPassedVal.Text = TimeSpanToString(passTime);
             lblRemainVal.Text = TimeSpanToString(restTime);
             lblTotalVal.Text = TimeSpanToString(sumTime);
-
-            Update();
         }
 
         private static string TimeSpanToString(TimeSpan ts)
         {
             return string.Format(null, "{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
+        }
+
+        private void InvokeEx(MethodInvoker method)
+        {
+            try {
+                if (InvokeRequired) {
+                    BeginInvoke(method, null);
+                } else {
+                    method();
+                }
+            } catch {
+                // dummy
+            }
         }
 
         #endregion
@@ -120,57 +124,32 @@ namespace GKUI.Forms
         internal void ProgressInit(string title, int max)
         {
             //initEvent.WaitOne();
-
-            try {
-                if (InvokeRequired) {
-                    Invoke(new PInit(DoInit), new object[] { title, max });
-                } else {
-                    DoInit(title, max);
-                }
-            } catch {
-                // dummy
-            }
+            InvokeEx((MethodInvoker)delegate {
+                DoInit(title, max);
+            });
         }
 
         internal void ProgressDone()
         {
-            try {
+            InvokeEx((MethodInvoker)delegate {
                 if (fRequiresClose) {
-                    if (InvokeRequired) {
-                        Invoke(new PDone(DoDone));
-                    } else {
-                        DoDone();
-                    }
+                    DoDone();
                 }
-            } catch {
-                // dummy
-            }
+            });
         }
 
         internal void ProgressStep()
         {
-            try {
-                if (InvokeRequired) {
-                    Invoke(new PStep(DoStep), new object[] { fVal + 1 });
-                } else {
-                    DoStep(fVal + 1);
-                }
-            } catch {
-                // dummy
-            }
+            InvokeEx((MethodInvoker)delegate {
+                DoStep(fVal + 1);
+            });
         }
 
         internal void ProgressStep(int value)
         {
-            try {
-                if (InvokeRequired) {
-                    Invoke(new PStep(DoStep), new object[] { value });
-                } else {
-                    DoStep(value);
-                }
-            } catch {
-                // dummy
-            }
+            InvokeEx((MethodInvoker)delegate {
+                DoStep(value);
+            });
         }
 
         /*public bool IsAborting
@@ -209,7 +188,7 @@ namespace GKUI.Forms
                 fThread.Start();
 
                 while (!fFormLoaded) {
-                    Thread.Sleep(100);
+                    Thread.Sleep(50);
                 }
                 //fMRE.WaitOne();
             }

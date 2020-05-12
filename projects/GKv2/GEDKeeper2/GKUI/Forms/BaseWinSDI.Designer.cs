@@ -26,6 +26,7 @@
         private System.Windows.Forms.ToolStripSeparator TBS8;
         private System.Windows.Forms.ToolStripButton tbDocPrint;
         private System.Windows.Forms.ToolStripButton tbDocPreview;
+        private System.Windows.Forms.ToolStripButton tbSendMail;
         private System.Windows.Forms.MenuStrip MainMenu1;
         private System.Windows.Forms.ToolStripMenuItem miFile;
         private System.Windows.Forms.ToolStripMenuItem miFileNew;
@@ -143,6 +144,7 @@
             this.TBS8 = new System.Windows.Forms.ToolStripSeparator();
             this.tbDocPreview = new System.Windows.Forms.ToolStripButton();
             this.tbDocPrint = new System.Windows.Forms.ToolStripButton();
+            this.tbSendMail = new System.Windows.Forms.ToolStripButton();
             this.MainMenu1 = new System.Windows.Forms.MenuStrip();
             this.miFile = new System.Windows.Forms.ToolStripMenuItem();
             this.miFileNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -278,7 +280,8 @@
                                     this.tbNext,
                                     this.TBS8,
                                     this.tbDocPreview,
-                                    this.tbDocPrint});
+                                    this.tbDocPrint,
+                                    this.tbSendMail});
             this.ToolBar1.Location = new System.Drawing.Point(0, 28);
             this.ToolBar1.Name = "ToolBar1";
             this.ToolBar1.Size = new System.Drawing.Size(976, 25);
@@ -454,6 +457,12 @@
             this.tbDocPrint.Name = "tbDocPrint";
             this.tbDocPrint.Size = new System.Drawing.Size(23, 22);
             this.tbDocPrint.Click += new System.EventHandler(this.tbDocPrint_Click);
+            // 
+            // tbSendMail
+            // 
+            this.tbSendMail.Name = "tbSendMail";
+            this.tbSendMail.Size = new System.Drawing.Size(23, 22);
+            this.tbSendMail.Click += new System.EventHandler(this.tbSendMail_Click);
             // 
             // MainMenu1
             // 

@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCore.MVP;
+using BSLib.Design.MVP;
 
 namespace GKCore.Interfaces
 {

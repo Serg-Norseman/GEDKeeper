@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Charts;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -61,7 +61,7 @@ namespace GKCore.Controllers
                     fFilter.SourceMode = (FilterGroupMode)fView.SourceCombo.SelectedIndex;
                     fFilter.SourceRef = "";
                 } else {
-                    GEDCOMRecord rec = fView.SourceCombo.SelectedTag as GEDCOMRecord;
+                    GDMRecord rec = fView.SourceCombo.GetSelectedTag<GDMRecord>();
                     if (rec != null) {
                         fFilter.SourceMode = FilterGroupMode.Selected;
                         fFilter.SourceRef = rec.XRef;
@@ -80,21 +80,21 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            GEDCOMTree tree = fBase.Context.Tree;
+            GDMTree tree = fBase.Context.Tree;
             fTemp = fFilter.BranchPersons;
 
             var values = new StringList();
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {
-                GEDCOMRecord rec = tree[i];
-                if (rec.RecordType == GEDCOMRecordType.rtSource) {
-                    values.AddObject((rec as GEDCOMSourceRecord).FiledByEntry, rec);
+                GDMRecord rec = tree[i];
+                if (rec.RecordType == GDMRecordType.rtSource) {
+                    values.AddObject((rec as GDMSourceRecord).ShortTitle, rec);
                 }
             }
             values.Sort();
-            fView.SourceCombo.AddItem(LangMan.LS(LSID.LSID_SrcAll), null);
-            fView.SourceCombo.AddItem(LangMan.LS(LSID.LSID_SrcNot), null);
-            fView.SourceCombo.AddItem(LangMan.LS(LSID.LSID_SrcAny), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAll), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcNot), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAny), null);
             fView.SourceCombo.AddStrings(values);
 
             UpdateControls();
@@ -114,7 +114,7 @@ namespace GKCore.Controllers
                 int num = tmpRefs.Length;
                 for (int i = 0; i < num; i++) {
                     string xref = tmpRefs[i];
-                    GEDCOMIndividualRecord p = fBase.Context.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
+                    GDMIndividualRecord p = fBase.Context.Tree.XRefIndex_Find(xref) as GDMIndividualRecord;
                     if (p != null) fView.PersonsList.AddItem(p, GKUtils.GetNameString(p, true, false));
                 }
             }
@@ -122,18 +122,18 @@ namespace GKCore.Controllers
             if (fFilter.SourceMode != FilterGroupMode.Selected) {
                 fView.SourceCombo.SelectedIndex = (sbyte)fFilter.SourceMode;
             } else {
-                GEDCOMSourceRecord srcRec = fBase.Context.Tree.XRefIndex_Find(fFilter.SourceRef) as GEDCOMSourceRecord;
-                if (srcRec != null) fView.SourceCombo.Text = srcRec.FiledByEntry;
+                GDMSourceRecord srcRec = fBase.Context.Tree.XRefIndex_Find(fFilter.SourceRef) as GDMSourceRecord;
+                if (srcRec != null) fView.SourceCombo.Text = srcRec.ShortTitle;
             }
         }
 
         public void ModifyPersons(RecordAction action, object itemData)
         {
-            GEDCOMIndividualRecord iRec = itemData as GEDCOMIndividualRecord;
+            GDMIndividualRecord iRec = itemData as GDMIndividualRecord;
 
             switch (action) {
                 case RecordAction.raAdd:
-                    iRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+                    iRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
                     if (iRec != null) {
                         fTemp = fTemp + iRec.XRef + ";";
                     }

@@ -20,13 +20,13 @@
 
 using System.Collections.Generic;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GKCore.Types
 {
     public sealed class PatriarchObj : BaseObject
     {
-        public GEDCOMIndividualRecord IRec;
+        public GDMIndividualRecord IRec;
         public int BirthYear;
         public int DescendantsCount;
         public int DescGenerations;

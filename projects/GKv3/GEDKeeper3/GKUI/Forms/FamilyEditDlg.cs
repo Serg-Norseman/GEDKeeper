@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -33,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class FamilyEditDlg : EditorDialog, IFamilyEditDlg
     {
         private readonly FamilyEditDlgController fController;
@@ -46,7 +42,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fSourcesList;
 
-        public GEDCOMFamilyRecord Family
+        public GDMFamilyRecord Family
         {
             get { return fController.Family; }
             set { fController.Family = value; }
@@ -81,22 +77,22 @@ namespace GKUI.Forms
 
         IComboBoxHandler IFamilyEditDlg.MarriageStatus
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbMarriageStatus); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbMarriageStatus); }
         }
 
         IComboBoxHandler IFamilyEditDlg.Restriction
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRestriction); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbRestriction); }
         }
 
         ITextBoxHandler IFamilyEditDlg.Husband
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtHusband); }
+            get { return GetControlHandler<ITextBoxHandler>(txtHusband); }
         }
 
         ITextBoxHandler IFamilyEditDlg.Wife
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtWife); }
+            get { return GetControlHandler<ITextBoxHandler>(txtWife); }
         }
 
         #endregion
@@ -196,13 +192,13 @@ namespace GKUI.Forms
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LockEditor(cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+            LockEditor(cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
         }
 
         private void ModifyChildrenSheet(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GEDCOMIndividualRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
             }
         }
 
@@ -221,7 +217,7 @@ namespace GKUI.Forms
             }
         }
 
-        public void SetTarget(TargetMode targetType, GEDCOMIndividualRecord target)
+        public void SetTarget(TargetMode targetType, GDMIndividualRecord target)
         {
             fController.SetTarget(targetType, target);
         }
@@ -238,7 +234,7 @@ namespace GKUI.Forms
 
         private void btnHusbandSelClick(object sender, EventArgs e)
         {
-            fController.JumpToRecord(fController.Family.GetHusband());
+            fController.JumpToHusband();
         }
 
         private void btnWifeAddClick(object sender, EventArgs e)
@@ -253,7 +249,7 @@ namespace GKUI.Forms
 
         private void btnWifeSelClick(object sender, EventArgs e)
         {
-            fController.JumpToRecord(fController.Family.GetWife());
+            fController.JumpToWife();
         }
 
         private void EditSpouse_TextChanged(object sender, EventArgs e)
@@ -263,7 +259,7 @@ namespace GKUI.Forms
 
         private void FamilyEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
         {
-            if (e.Item is GEDCOMRecord && !fController.Base.Context.IsAvailableRecord((GEDCOMRecord)e.Item)) {
+            if (e.Item is GDMRecord && !fController.Base.Context.IsAvailableRecord((GDMRecord)e.Item)) {
                 e.IsAvailable = false;
             } else {
                 e.IsAvailable = true;

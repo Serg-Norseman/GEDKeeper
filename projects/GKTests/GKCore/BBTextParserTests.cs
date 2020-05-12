@@ -20,7 +20,6 @@
 
 using System.Collections.Generic;
 using System.Drawing;
-using GKUI;
 using GKUI.Components;
 using GKUI.Providers;
 using NUnit.Framework;
@@ -49,8 +48,6 @@ namespace GKCore
             List<BBTextChunk> chunksList = new List<BBTextChunk>();
 
             parser.ParseText(chunksList, sample);
-
-            Assert.IsFalse(chunksList[0].HasCoord(5, 5, 0, 0));
 
             Assert.IsFalse(chunksList[0].HasCoord(5, 5));
         }

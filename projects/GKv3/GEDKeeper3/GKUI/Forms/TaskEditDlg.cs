@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -32,16 +31,13 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TaskEditDlg : EditorDialog, ITaskEditDlg
     {
         private readonly TaskEditDlgController fController;
 
         private readonly GKSheetList fNotesList;
 
-        public GEDCOMTaskRecord Task
+        public GDMTaskRecord Task
         {
             get { return fController.Task; }
             set { fController.Task = value; }
@@ -56,32 +52,32 @@ namespace GKUI.Forms
 
         IComboBoxHandler ITaskEditDlg.Priority
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(txtPriority); }
+            get { return GetControlHandler<IComboBoxHandler>(txtPriority); }
         }
 
         ITextBoxHandler ITaskEditDlg.StartDate
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtStartDate); }
+            get { return GetControlHandler<ITextBoxHandler>(txtStartDate); }
         }
 
         ITextBoxHandler ITaskEditDlg.StopDate
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtStopDate); }
+            get { return GetControlHandler<ITextBoxHandler>(txtStopDate); }
         }
 
         IComboBoxHandler ITaskEditDlg.GoalType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbGoalType); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbGoalType); }
         }
 
         ITextBoxHandler ITaskEditDlg.Goal
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtGoal); }
+            get { return GetControlHandler<ITextBoxHandler>(txtGoal); }
         }
 
         IButtonHandler ITaskEditDlg.GoalSelect
         {
-            get { return fControlsManager.GetControlHandler<IButtonHandler>(btnGoalSelect); }
+            get { return GetControlHandler<IButtonHandler>(btnGoalSelect); }
         }
 
         #endregion

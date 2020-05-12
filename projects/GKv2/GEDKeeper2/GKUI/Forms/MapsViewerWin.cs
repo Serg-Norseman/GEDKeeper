@@ -20,8 +20,8 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -32,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class MapsViewerWin : CommonWindow, IMapsViewerWin
     {
         private readonly MapsViewerWinController fController;
@@ -48,49 +45,49 @@ namespace GKUI.Forms
             get { return fMapBrowser; }
         }
 
-        IComboBoxHandler IMapsViewerWin.PersonsCombo
+        IComboBox IMapsViewerWin.PersonsCombo
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbPersons); }
+            get { return GetControlHandler<IComboBox>(cmbPersons); }
         }
 
-        ITreeViewHandler IMapsViewerWin.PlacesTree
+        ITreeView IMapsViewerWin.PlacesTree
         {
-            get { return fControlsManager.GetControlHandler<ITreeViewHandler>(tvPlaces); }
+            get { return GetControlHandler<ITreeView>(tvPlaces); }
         }
 
-        IButtonHandler IMapsViewerWin.SelectPlacesBtn
+        IButton IMapsViewerWin.SelectPlacesBtn
         {
-            get { return fControlsManager.GetControlHandler<IButtonHandler>(btnSelectPlaces); }
+            get { return GetControlHandler<IButton>(btnSelectPlaces); }
         }
 
-        ICheckBoxHandler IMapsViewerWin.BirthCheck
+        ICheckBox IMapsViewerWin.BirthCheck
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkBirth); }
+            get { return GetControlHandler<ICheckBox>(chkBirth); }
         }
 
-        ICheckBoxHandler IMapsViewerWin.DeathCheck
+        ICheckBox IMapsViewerWin.DeathCheck
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkDeath); }
+            get { return GetControlHandler<ICheckBox>(chkDeath); }
         }
 
-        ICheckBoxHandler IMapsViewerWin.ResidenceCheck
+        ICheckBox IMapsViewerWin.ResidenceCheck
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkResidence); }
+            get { return GetControlHandler<ICheckBox>(chkResidence); }
         }
 
-        ICheckBoxHandler IMapsViewerWin.LinesVisibleCheck
+        ICheckBox IMapsViewerWin.LinesVisibleCheck
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkLinesVisible); }
+            get { return GetControlHandler<ICheckBox>(chkLinesVisible); }
         }
 
-        IRadioButtonHandler IMapsViewerWin.TotalRadio
+        IRadioButton IMapsViewerWin.TotalRadio
         {
-            get { return fControlsManager.GetControlHandler<IRadioButtonHandler>(radTotal); }
+            get { return GetControlHandler<IRadioButton>(radTotal); }
         }
 
-        IRadioButtonHandler IMapsViewerWin.SelectedRadio
+        IRadioButton IMapsViewerWin.SelectedRadio
         {
-            get { return fControlsManager.GetControlHandler<IRadioButtonHandler>(radSelected); }
+            get { return GetControlHandler<IRadioButton>(radSelected); }
         }
 
         #endregion
@@ -149,7 +146,7 @@ namespace GKUI.Forms
             fMapBrowser.Dock = DockStyle.Fill;
             Panel1.Controls.Add(fMapBrowser);
 
-            fController = new MapsViewerWinController(this, baseWin.GetContentList(GEDCOMRecordType.rtIndividual));
+            fController = new MapsViewerWinController(this, baseWin.GetContentList(GDMRecordType.rtIndividual));
             fController.Init(baseWin);
 
             radTotal.Checked = true;

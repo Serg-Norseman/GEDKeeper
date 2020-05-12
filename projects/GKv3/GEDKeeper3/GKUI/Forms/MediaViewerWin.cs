@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,8 +23,7 @@ using System.ComponentModel;
 using System.IO;
 using Eto.Drawing;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -33,16 +32,13 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class MediaViewerWin : CommonWindow, IMediaViewerWin
     {
         private readonly MediaViewerController fController;
         private ITimer fTimer;
         private Control fViewer;
 
-        public GEDCOMFileReferenceWithTitle FileRef
+        public GDMFileReferenceWithTitle FileRef
         {
             get { return fController.FileRef; }
             set { fController.FileRef = value; }
@@ -95,7 +91,7 @@ namespace GKUI.Forms
             SetViewControl(mediaPlayer);
         }
 
-        public void SetViewImage(IImage img, GEDCOMFileReferenceWithTitle fileRef)
+        public void SetViewImage(IImage img, GDMFileReferenceWithTitle fileRef)
         {
             var imageCtl = new GKUI.Components.ImageView();
             imageCtl.OpenImage(img);

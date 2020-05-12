@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -41,11 +41,11 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class SourceListMan : ListManager
     {
-        private GEDCOMSourceRecord fRec;
+        private GDMSourceRecord fRec;
 
 
         public SourceListMan(IBaseContext baseContext) :
-            base(baseContext, CreateSourceListColumns(), GEDCOMRecordType.rtSource)
+            base(baseContext, CreateSourceListColumns(), GDMRecordType.rtSource)
         {
         }
 
@@ -64,16 +64,16 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.FiledByEntry, QuickFilter));
+            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.ShortTitle, QuickFilter));
 
-            res = res && CheckCommonFilter();
+            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
 
             return res;
         }
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMSourceRecord);
+            fRec = (aRec as GDMSourceRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -82,15 +82,15 @@ namespace GKCore.Lists
             switch ((SourceColumnType)colType)
             {
                 case SourceColumnType.ctShortName:
-                    result = fRec.FiledByEntry.Trim();
+                    result = fRec.ShortTitle.Trim();
                     break;
 
                 case SourceColumnType.ctAuthor:
-                    result = fRec.Originator.Text.Trim();
+                    result = fRec.Originator.Lines.Text.Trim();
                     break;
 
                 case SourceColumnType.ctTitle:
-                    result = fRec.Title.Text.Trim();
+                    result = fRec.Title.Lines.Text.Trim();
                     break;
 
                 case SourceColumnType.ctChangeDate:
@@ -118,7 +118,7 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var source = fDataOwner as GEDCOMSourceRecord;
+            var source = fDataOwner as GDMSourceRecord;
             if (fSheetList == null || source == null) return;
 
             try
@@ -126,8 +126,8 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMRepositoryCitation repCit in source.RepositoryCitations) {
-                    GEDCOMRepositoryRecord rep = repCit.Value as GEDCOMRepositoryRecord;
+                foreach (GDMRepositoryCitation repCit in source.RepositoryCitations) {
+                    GDMRepositoryRecord rep = repCit.Value as GDMRepositoryRecord;
                     if (rep == null) continue;
 
                     fSheetList.AddItem(repCit, new object[] { rep.RepositoryName });
@@ -143,16 +143,16 @@ namespace GKCore.Lists
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var source = fDataOwner as GEDCOMSourceRecord;
+            var source = fDataOwner as GDMSourceRecord;
             if (fBaseWin == null || fSheetList == null || source == null) return;
 
-            GEDCOMRepositoryCitation cit = eArgs.ItemData as GEDCOMRepositoryCitation;
+            GDMRepositoryCitation cit = eArgs.ItemData as GDMRepositoryCitation;
 
             bool result = false;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    GEDCOMRepositoryRecord rep = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtRepository, null) as GEDCOMRepositoryRecord;
+                    GDMRepositoryRecord rep = fBaseWin.Context.SelectRecord(GDMRecordType.rtRepository, null) as GDMRepositoryRecord;
                     if (rep != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, source, rep);
                     }
@@ -160,7 +160,7 @@ namespace GKCore.Lists
 
                 case RecordAction.raDelete:
                     if (cit != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery))) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, cit.Value as GEDCOMRepositoryRecord);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, cit.Value as GDMRepositoryRecord);
                     }
                     break;
             }

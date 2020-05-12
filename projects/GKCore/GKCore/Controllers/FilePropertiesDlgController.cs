@@ -19,7 +19,8 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -39,9 +40,9 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fBase.Context.Tree.Header.Language.ParseString(fView.Language.Text);
+                fBase.Context.Tree.Header.Language = GEDCOMUtils.GetLanguageVal(fView.Language.Text);
 
-                GEDCOMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
+                GDMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
                 submitter.Name.StringValue = fView.Name.Text;
                 submitter.Address.SetAddressArray(fView.Address.Lines);
 
@@ -62,11 +63,11 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Language.Text = fBase.Context.Tree.Header.Language.StringValue;
+            fView.Language.Text = GEDCOMUtils.GetLanguageStr(fBase.Context.Tree.Header.Language);
 
-            GEDCOMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
+            GDMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
             fView.Name.Text = submitter.Name.FullName;
-            fView.Address.Text = submitter.Address.Address.Text;
+            fView.Address.Text = submitter.Address.Lines.Text;
 
             if (submitter.Address.PhoneNumbers.Count > 0) {
                 fView.Tel.Text = submitter.Address.PhoneNumbers[0].StringValue;
@@ -82,12 +83,12 @@ namespace GKCore.Controllers
 
         public void ChangeLanguage()
         {
-            using (var dlg = AppHost.Container.Resolve<ILanguageEditDlg>()) {
-                dlg.LanguageID = fBase.Context.Tree.Header.Language.Value;
+            using (var dlg = AppHost.ResolveDialog<ILanguageEditDlg>()) {
+                dlg.LanguageID = fBase.Context.Tree.Header.Language;
 
                 if (dlg.ShowModalX(this)) {
                     // Assignment in control, instead of the header's property to work Cancel.
-                    fView.Language.Text = GEDCOMLanguageEnum.Instance.GetStrValue(dlg.LanguageID);
+                    fView.Language.Text = GEDCOMUtils.GetLanguageStr(dlg.LanguageID);
                 }
             }
         }

@@ -28,9 +28,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class LanguageSelectDlg : CommonDialog, ILanguageSelectDlg
     {
         private readonly LanguageSelectDlgController fController;
@@ -43,7 +40,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IListView ILanguageSelectDlg.LanguagesList
+        IListViewEx ILanguageSelectDlg.LanguagesList
         {
             get { return lstLanguages; }
         }

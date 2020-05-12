@@ -20,8 +20,8 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -32,16 +32,13 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TaskEditDlg : EditorDialog, ITaskEditDlg
     {
         private readonly TaskEditDlgController fController;
 
         private readonly GKSheetList fNotesList;
 
-        public GEDCOMTaskRecord Task
+        public GDMTaskRecord Task
         {
             get { return fController.Task; }
             set { fController.Task = value; }
@@ -54,34 +51,34 @@ namespace GKUI.Forms
             get { return fNotesList; }
         }
 
-        IComboBoxHandler ITaskEditDlg.Priority
+        IComboBox ITaskEditDlg.Priority
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(txtPriority); }
+            get { return GetControlHandler<IComboBox>(txtPriority); }
         }
 
-        ITextBoxHandler ITaskEditDlg.StartDate
+        ITextBox ITaskEditDlg.StartDate
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtStartDate); }
+            get { return GetControlHandler<ITextBox>(txtStartDate); }
         }
 
-        ITextBoxHandler ITaskEditDlg.StopDate
+        ITextBox ITaskEditDlg.StopDate
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtStopDate); }
+            get { return GetControlHandler<ITextBox>(txtStopDate); }
         }
 
-        IComboBoxHandler ITaskEditDlg.GoalType
+        IComboBox ITaskEditDlg.GoalType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbGoalType); }
+            get { return GetControlHandler<IComboBox>(cmbGoalType); }
         }
 
-        ITextBoxHandler ITaskEditDlg.Goal
+        ITextBox ITaskEditDlg.Goal
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtGoal); }
+            get { return GetControlHandler<ITextBox>(txtGoal); }
         }
 
-        IButtonHandler ITaskEditDlg.GoalSelect
+        IButton ITaskEditDlg.GoalSelect
         {
-            get { return fControlsManager.GetControlHandler<IButtonHandler>(btnGoalSelect); }
+            get { return GetControlHandler<IButton>(btnGoalSelect); }
         }
 
         #endregion

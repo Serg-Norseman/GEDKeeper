@@ -20,22 +20,18 @@
 
 using System;
 using System.Windows.Forms;
-
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TreeFilterDlg : EditorDialog, ITreeFilterDlg
     {
         private readonly TreeFilterDlgController fController;
@@ -55,14 +51,14 @@ namespace GKUI.Forms
             get { return fPersonsList; }
         }
 
-        INumericBoxHandler ITreeFilterDlg.YearNum
+        INumericBox ITreeFilterDlg.YearNum
         {
-            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(edYear); }
+            get { return GetControlHandler<INumericBox>(edYear); }
         }
 
-        IComboBoxHandler ITreeFilterDlg.SourceCombo
+        IComboBox ITreeFilterDlg.SourceCombo
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbSource); }
+            get { return GetControlHandler<IComboBox>(cmbSource); }
         }
 
         void ITreeFilterDlg.SetCutModeRadio(int cutMode)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,10 +20,11 @@
 
 using System;
 using System.Text;
-
 using BSLib;
 using BSLib.Calendar;
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -73,7 +74,7 @@ namespace GKCore.Lists
         public string Name;
         public bool PatriarchOnly;
         public string Residence;
-        public GEDCOMSex Sex;
+        public GDMSex Sex;
         public FilterGroupMode SourceMode;
         public string SourceRef;
         public string EventVal;
@@ -99,7 +100,7 @@ namespace GKCore.Lists
             AliveBeforeDate = "";
             PatriarchOnly = false;
             Residence = "*";
-            Sex = GEDCOMSex.svNone;
+            Sex = GDMSex.svUnknown;
             SourceMode = FilterGroupMode.All;
             SourceRef = "";
             EventVal = "*";
@@ -108,13 +109,13 @@ namespace GKCore.Lists
 
     public sealed class IndividualListMan : ListManager
     {
-        private GEDCOMIndividualRecord fRec;
-        private GEDCOMGroupRecord filter_grp;
+        private GDMIndividualRecord fRec;
+        private GDMGroupRecord filter_grp;
         private UDN filter_abd;
-        private GEDCOMSourceRecord filter_source;
+        private GDMSourceRecord filter_source;
 
         public IndividualListMan(IBaseContext baseContext) :
-            base(baseContext, CreateIndividualListColumns(), GEDCOMRecordType.rtIndividual)
+            base(baseContext, CreateIndividualListColumns(), GDMRecordType.rtIndividual)
         {
         }
 
@@ -163,7 +164,7 @@ namespace GKCore.Lists
 
             int count = fRec.Groups.Count;
             for (int idx = 0; idx < count; idx++) {
-                GEDCOMGroupRecord grp = fRec.Groups[idx].Value as GEDCOMGroupRecord;
+                GDMGroupRecord grp = fRec.Groups[idx].Value as GDMGroupRecord;
                 if (grp != null) {
                     if (idx > 0) result.Append("; ");
 
@@ -214,7 +215,7 @@ namespace GKCore.Lists
 
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
-            if ((iFilter.Sex == GEDCOMSex.svNone || fRec.Sex == iFilter.Sex)
+            if ((iFilter.Sex == GDMSex.svUnknown || fRec.Sex == iFilter.Sex)
                 && (iFilter.Name == "*" || IsMatchesMask(buf_fullname, iFilter.Name))
                 && (iFilter.Residence == "*" || HasPlace())
                 && (iFilter.EventVal == "*" || HasEventVal())
@@ -289,11 +290,7 @@ namespace GKCore.Lists
             bool res = (fBaseContext.IsRecordAccess(fRec.Restriction)
                         && (QuickFilter == "*" || IsMatchesMask(buf_fullname, QuickFilter)));
 
-            res = res && CheckCommonFilter() && CheckSpecificFilter();
-
-            if (fExternalFilter != null) {
-                res = res && fExternalFilter(fRec);
-            }
+            res = res && CheckCommonFilter() && CheckExternalFilter(fRec) && CheckSpecificFilter();
 
             return res;
         }
@@ -460,23 +457,23 @@ namespace GKCore.Lists
         {
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
-            filter_abd = GEDCOMDate.GetUDNByFormattedStr(iFilter.AliveBeforeDate, GEDCOMCalendar.dcGregorian);
+            filter_abd = GDMDate.GetUDNByFormattedStr(iFilter.AliveBeforeDate, GDMCalendar.dcGregorian);
 
             if (iFilter.GroupRef == "") {
                 filter_grp = null;
             } else {
-                filter_grp = fBaseContext.Tree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
+                filter_grp = fBaseContext.Tree.XRefIndex_Find(iFilter.GroupRef) as GDMGroupRecord;
             }
 
             if (iFilter.SourceRef == "") {
                 filter_source = null;
             } else {
-                filter_source = fBaseContext.Tree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
+                filter_source = fBaseContext.Tree.XRefIndex_Find(iFilter.SourceRef) as GDMSourceRecord;
             }
         }
 
-        private GEDCOMCustomEvent buf_bd;
-        private GEDCOMCustomEvent buf_dd;
+        private GDMCustomEvent buf_bd;
+        private GDMCustomEvent buf_dd;
 
         private string buf_fullname;
         private string buf_residence;
@@ -491,9 +488,9 @@ namespace GKCore.Lists
         private string buf_mili_rank;
         private string buf_title;
 
-        public override void Fetch(GEDCOMRecord aRec)
+        public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GEDCOMIndividualRecord);
+            fRec = (aRec as GDMIndividualRecord);
             if (fRec == null) return;
 
             buf_fullname = GKUtils.GetNameString(fRec, true, false);
@@ -514,77 +511,49 @@ namespace GKCore.Lists
             GlobalOptions gOptions = GlobalOptions.Instance;
 
             int num = fRec.Events.Count;
-            for (int i = 0; i < num; i++)
-            {
-                GEDCOMCustomEvent ev = fRec.Events[i];
+            for (int i = 0; i < num; i++) {
+                GDMCustomEvent ev = fRec.Events[i];
+                GEDCOMTagType evtType = ev.GetTagType();
 
-                if (ev.Name == "BIRT" && buf_bd == null)
-                {
+                if (evtType == GEDCOMTagType.BIRT && buf_bd == null) {
                     buf_bd = ev;
-                }
-                else if (ev.Name == "DEAT" && buf_dd == null)
-                {
+                } else if (evtType == GEDCOMTagType.DEAT && buf_dd == null) {
                     buf_dd = ev;
-                }
-                else if (ev.Name == "RESI" && buf_residence == "")
-                {
+                } else if (evtType == GEDCOMTagType.RESI && buf_residence == "") {
                     buf_residence = GKUtils.GetPlaceStr(ev, gOptions.PlacesWithAddress);
-                }
-                else if (ev.Name == "RELI" && buf_religion == "")
-                {
+                } else if (evtType == GEDCOMTagType.RELI && buf_religion == "") {
                     buf_religion = ev.StringValue;
-                }
-                else if (ev.Name == "NATI" && buf_nationality == "")
-                {
+                } else if (evtType == GEDCOMTagType.NATI && buf_nationality == "") {
                     buf_nationality = ev.StringValue;
-                }
-                else if (ev.Name == "EDUC" && buf_education == "")
-                {
+                } else if (evtType == GEDCOMTagType.EDUC && buf_education == "") {
                     buf_education = ev.StringValue;
-                }
-                else if (ev.Name == "OCCU" && buf_occupation == "")
-                {
+                } else if (evtType == GEDCOMTagType.OCCU && buf_occupation == "") {
                     buf_occupation = ev.StringValue;
-                }
-                else if (ev.Name == "CAST" && buf_caste == "")
-                {
+                } else if (evtType == GEDCOMTagType.CAST && buf_caste == "") {
                     buf_caste = ev.StringValue;
-                }
-                else if (ev.Name == "_MILI" && buf_mili == "")
-                {
+                } else if (evtType == GEDCOMTagType._MILI && buf_mili == "") {
                     buf_mili = ev.StringValue;
-                }
-                else if (ev.Name == "_MILI_IND" && buf_mili_ind == "")
-                {
+                } else if (evtType == GEDCOMTagType._MILI_IND && buf_mili_ind == "") {
                     buf_mili_ind = ev.StringValue;
-                }
-                else if (ev.Name == "_MILI_DIS" && buf_mili_dis == "")
-                {
+                } else if (evtType == GEDCOMTagType._MILI_DIS && buf_mili_dis == "") {
                     buf_mili_dis = ev.StringValue;
-                }
-                else if (ev.Name == "_MILI_RANK" && buf_mili_rank == "")
-                {
+                } else if (evtType == GEDCOMTagType._MILI_RANK && buf_mili_rank == "") {
                     buf_mili_rank = ev.StringValue;
-                }
-                else if (ev.Name == "TITL" && buf_title == "")
-                {
+                } else if (evtType == GEDCOMTagType.TITL && buf_title == "") {
                     buf_title = ev.StringValue;
                 }
             }
         }
 
-        public override void UpdateItem(IListItem item, object rowData)
+        public override void UpdateItem(int itemIndex, IListItem item, object rowData)
         {
-            base.UpdateItem(item, rowData);
+            base.UpdateItem(itemIndex, item, rowData);
 
             GlobalOptions gOptions = GlobalOptions.Instance;
 
-            if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons))
-            {
+            if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons)) {
                 item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnparentedColor));
-            }
-            else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons))
-            {
+            } else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons)) {
                 item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnmarriedColor));
             }
         }
@@ -593,17 +562,14 @@ namespace GKCore.Lists
         {
             GlobalOptions gOptions = GlobalOptions.Instance;
 
-            if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons))
-            {
+            if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons)) {
                 item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnparentedColor));
-            }
-            else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons))
-            {
+            } else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons)) {
                 item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnmarriedColor));
             }
         }
 
-        public override void UpdateColumns(IListView listView)
+        public override void UpdateColumns(IListViewEx listView)
         {
             ColumnsMap_Clear();
             AddColumn(listView, "№", 50, false, 0, 0);
@@ -612,16 +578,14 @@ namespace GKCore.Lists
             ListColumns columns = (ListColumns)this.ListColumns;
 
             int num = columns.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 ListColumn columnProps = columns.OrderedColumns[i];
                 if (!columnProps.CurActive) continue;
 
                 const bool asz = false;
                 byte bColType = columnProps.Id;
                 if (bColType == (byte)PersonColumnType.ctName && defNameFormat != NameFormat.nfFNP) {
-                    switch (defNameFormat)
-                    {
+                    switch (defNameFormat) {
                         case NameFormat.nfF_N_P:
                             AddColumn(listView, LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
                             AddColumn(listView, LangMan.LS(LSID.LSID_Name), 100, asz, bColType, 1);
@@ -657,7 +621,7 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            var iRec = fDataOwner as GDMIndividualRecord;
             if (fSheetList == null || iRec == null) return;
 
             try
@@ -665,8 +629,8 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMPointer ptr in iRec.Groups) {
-                    GEDCOMGroupRecord grp = ptr.Value as GEDCOMGroupRecord;
+                foreach (GDMPointer ptr in iRec.Groups) {
+                    GDMGroupRecord grp = ptr.Value as GDMGroupRecord;
                     if (grp != null) {
                         fSheetList.AddItem(grp, new object[] { grp.GroupName });
                     }
@@ -682,16 +646,16 @@ namespace GKCore.Lists
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || fSheetList == null || iRec == null) return;
 
-            GEDCOMGroupRecord groupRec = eArgs.ItemData as GEDCOMGroupRecord;
+            GDMGroupRecord groupRec = eArgs.ItemData as GDMGroupRecord;
 
             bool result = false;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    groupRec = fBaseWin.Context.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
+                    groupRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtGroup, null) as GDMGroupRecord;
                     result = (groupRec != null);
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, groupRec, iRec);
@@ -733,44 +697,41 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            var iRec = fDataOwner as GDMIndividualRecord;
             if (fSheetList == null || iRec == null) return;
 
-            try
-            {
+            try {
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMPersonalName pn in iRec.PersonalNames)
-                {
-                    string lang = GEDCOMLanguageEnum.Instance.GetStrValue(pn.Language.Value);
-                    fSheetList.AddItem(pn, new object[] { pn.FullName, LangMan.LS(GKData.NameTypes[(int)pn.NameType]), lang } );
+                foreach (GDMPersonalName pn in iRec.PersonalNames) {
+                    string lang = GEDCOMUtils.GetLanguageStr(pn.Language);
+                    fSheetList.AddItem(pn, new object[] { GKUtils.GetNameString(iRec, pn, true, false),
+                                                          LangMan.LS(GKData.NameTypes[(int)pn.NameType]), lang });
                 }
 
                 fSheetList.EndUpdate();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.LogWrite("NamesSublistModel.UpdateContents(): " + ex.Message);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || fSheetList == null || iRec == null) return;
 
-            GEDCOMPersonalName persName = eArgs.ItemData as GEDCOMPersonalName;
+            GDMPersonalName persName = eArgs.ItemData as GDMPersonalName;
 
             bool result = false;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (var dlg = AppHost.Container.Resolve<IPersonalNameEditDlg>(fBaseWin)) {
+                    using (var dlg = AppHost.ResolveDialog<IPersonalNameEditDlg>(fBaseWin)) {
                         bool exists = (persName != null);
                         if (!exists) {
-                            persName = new GEDCOMPersonalName(fBaseWin.Context.Tree, iRec, "", "");
+                            persName = new GDMPersonalName(iRec);
                         }
 
                         dlg.PersonalName = persName;
@@ -824,6 +785,101 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
+    public sealed class ParentsSublistModel : ListModel
+    {
+        public ParentsSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        {
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
+                RecordAction.raMoveDown, RecordAction.raMoveUp);
+
+            fListColumns.AddColumn(LSID.LSID_Name, 350, false);
+            fListColumns.AddColumn(LSID.LSID_Type, 100, false);
+            fListColumns.ResetDefaults();
+        }
+
+        public override void UpdateContents()
+        {
+            var iRec = fDataOwner as GDMIndividualRecord;
+            if (fSheetList == null || iRec == null) return;
+
+            try {
+                fSheetList.BeginUpdate();
+                fSheetList.ClearItems();
+
+                foreach (GDMChildToFamilyLink cfLink in iRec.ChildToFamilyLinks) {
+                    GDMFamilyRecord famRec = cfLink.Family;
+
+                    fSheetList.AddItem(cfLink, new object[] { GKUtils.GetFamilyString(famRec),
+                                                          LangMan.LS(GKData.ParentTypes[(int)cfLink.PedigreeLinkageType]) });
+                }
+
+                fSheetList.EndUpdate();
+            } catch (Exception ex) {
+                Logger.LogWrite("ParentsSublistModel.UpdateContents(): " + ex.Message);
+            }
+        }
+
+        public override void Modify(object sender, ModifyEventArgs eArgs)
+        {
+            var iRec = fDataOwner as GDMIndividualRecord;
+            if (fBaseWin == null || fSheetList == null || iRec == null) return;
+
+            GDMChildToFamilyLink cfLink = eArgs.ItemData as GDMChildToFamilyLink;
+
+            bool result = false;
+
+            switch (eArgs.Action) {
+                case RecordAction.raAdd:
+                    GDMFamilyRecord family = fBaseWin.Context.SelectFamily(iRec);
+                    if (family != null && family.IndexOfChild(iRec) < 0) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, iRec, family);
+                    }
+                    break;
+
+                case RecordAction.raEdit:
+                    if (cfLink != null) {
+                        using (var dlg = AppHost.ResolveDialog<IParentsEditDlg>(fBaseWin)) {
+                            dlg.Person = iRec;
+                            dlg.Link = cfLink;
+                            result = AppHost.Instance.ShowModalX(dlg, false);
+                        }
+                    }
+                    break;
+
+                case RecordAction.raDelete:
+                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery))) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, iRec, cfLink.Family);
+                    }
+                    break;
+
+                case RecordAction.raMoveUp:
+                case RecordAction.raMoveDown:
+                    int idx = iRec.ChildToFamilyLinks.IndexOf(cfLink);
+                    switch (eArgs.Action) {
+                        case RecordAction.raMoveUp:
+                            iRec.ChildToFamilyLinks.Exchange(idx - 1, idx);
+                            break;
+
+                        case RecordAction.raMoveDown:
+                            iRec.ChildToFamilyLinks.Exchange(idx, idx + 1);
+                            break;
+                    }
+                    result = true;
+                    break;
+            }
+
+            if (result) {
+                fBaseWin.Context.Modified = true;
+                eArgs.IsChanged = true;
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class SpousesSublistModel : ListModel
     {
         public SpousesSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
@@ -840,7 +896,7 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            var iRec = fDataOwner as GDMIndividualRecord;
             if (fSheetList == null || iRec == null) return;
 
             try
@@ -849,20 +905,20 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 int idx = 0;
-                foreach (GEDCOMSpouseToFamilyLink spLink in iRec.SpouseToFamilyLinks) {
+                foreach (GDMSpouseToFamilyLink spLink in iRec.SpouseToFamilyLinks) {
                     idx += 1;
 
-                    GEDCOMFamilyRecord family = spLink.Family;
+                    GDMFamilyRecord family = spLink.Family;
                     if (family == null) continue;
 
-                    GEDCOMIndividualRecord relPerson;
+                    GDMIndividualRecord relPerson;
                     string relName;
 
-                    if (iRec.Sex == GEDCOMSex.svMale) {
-                        relPerson = family.GetWife();
+                    if (iRec.Sex == GDMSex.svMale) {
+                        relPerson = family.Wife.Individual;
                         relName = LangMan.LS(LSID.LSID_UnkFemale);
                     } else {
-                        relPerson = family.GetHusband();
+                        relPerson = family.Husband.Individual;
                         relName = LangMan.LS(LSID.LSID_UnkMale);
                     }
 
@@ -884,10 +940,10 @@ namespace GKCore.Lists
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || fSheetList == null || iRec == null) return;
 
-            GEDCOMFamilyRecord family = eArgs.ItemData as GEDCOMFamilyRecord;
+            GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
 
             bool result = false;
 
@@ -956,7 +1012,7 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            var iRec = fDataOwner as GDMIndividualRecord;
             if (fSheetList == null || iRec == null) return;
 
             try
@@ -964,7 +1020,7 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GEDCOMUserReference uref in iRec.UserReferences) {
+                foreach (GDMUserReference uref in iRec.UserReferences) {
                     fSheetList.AddItem(uref, new object[] { uref.StringValue, uref.ReferenceType });
                 }
 
@@ -978,20 +1034,20 @@ namespace GKCore.Lists
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var iRec = fDataOwner as GEDCOMIndividualRecord;
+            var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || fSheetList == null || iRec == null) return;
 
-            GEDCOMUserReference userRef = eArgs.ItemData as GEDCOMUserReference;
+            GDMUserReference userRef = eArgs.ItemData as GDMUserReference;
 
             bool result = false;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    using (var dlg = AppHost.Container.Resolve<IUserRefEditDlg>(fBaseWin)) {
+                    using (var dlg = AppHost.ResolveDialog<IUserRefEditDlg>(fBaseWin)) {
                         bool exists = (userRef != null);
                         if (!exists) {
-                            userRef = new GEDCOMUserReference(fBaseWin.Context.Tree, iRec, "", "");
+                            userRef = new GDMUserReference(iRec);
                         }
 
                         dlg.UserRef = userRef;

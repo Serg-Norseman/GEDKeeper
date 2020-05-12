@@ -21,16 +21,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 
 namespace GKCore
 {
     public class SearchResult : ISearchResult
     {
-        public readonly GEDCOMObject Result;
+        public readonly GDMObject Result;
 
-        public SearchResult(GEDCOMObject result)
+        public SearchResult(GDMObject result)
         {
             Result = result;
         }

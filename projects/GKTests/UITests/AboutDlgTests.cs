@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,8 +21,8 @@
 #if !__MonoCS__
 
 using System;
+using System.Windows.Forms;
 using GKTests;
-using GKUI;
 using GKUI.Forms;
 using GKUI.Providers;
 using NUnit.Framework;
@@ -61,6 +61,15 @@ namespace GKUI.Forms
 
             ClickButton("btnClose", fDialog);
         }
+
+        #region Handlers for external tests
+
+        public static void AboutDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnClose", form);
+        }
+
+        #endregion
     }
 }
 

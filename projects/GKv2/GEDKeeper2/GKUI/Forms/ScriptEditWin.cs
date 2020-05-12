@@ -22,19 +22,15 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
-
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class ScriptEditWin : CommonDialog, IScriptEditWin
     {
         private readonly ScriptEditWinController fController;
@@ -66,14 +62,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler IScriptEditWin.ScriptText
+        ITextBox IScriptEditWin.ScriptText
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtScriptText); }
+            get { return GetControlHandler<ITextBox>(txtScriptText); }
         }
 
-        ITextBoxHandler IScriptEditWin.DebugOutput
+        ITextBox IScriptEditWin.DebugOutput
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtDebugOutput); }
+            get { return GetControlHandler<ITextBox>(txtDebugOutput); }
         }
 
         #endregion

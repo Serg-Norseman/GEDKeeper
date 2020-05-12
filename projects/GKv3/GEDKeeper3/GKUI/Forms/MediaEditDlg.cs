@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -32,9 +31,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class MediaEditDlg : EditorDialog, IMediaEditDlg
     {
         private readonly MediaEditDlgController fController;
@@ -42,7 +38,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fSourcesList;
 
-        public GEDCOMMultimediaRecord MediaRec
+        public GDMMultimediaRecord MediaRec
         {
             get { return fController.MediaRec; }
             set { fController.MediaRec = value; }
@@ -62,27 +58,27 @@ namespace GKUI.Forms
 
         IComboBoxHandler IMediaEditDlg.MediaType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbMediaType); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbMediaType); }
         }
 
         IComboBoxHandler IMediaEditDlg.StoreType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbStoreType); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbStoreType); }
         }
 
         ITextBoxHandler IMediaEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBoxHandler>(txtName); }
         }
 
         ITextBoxHandler IMediaEditDlg.File
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtFile); }
+            get { return GetControlHandler<ITextBoxHandler>(txtFile); }
         }
 
         IButtonHandler IMediaEditDlg.FileSelectButton
         {
-            get { return fControlsManager.GetControlHandler<IButtonHandler>(btnFileSelect); }
+            get { return GetControlHandler<IButtonHandler>(btnFileSelect); }
         }
 
         #endregion

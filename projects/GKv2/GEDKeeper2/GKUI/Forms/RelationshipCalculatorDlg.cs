@@ -19,48 +19,49 @@
  */
 
 using System;
-
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class RelationshipCalculatorDlg : CommonDialog, IRelationshipCalculatorDlg
     {
         private readonly RelationshipCalculatorDlgController fController;
 
+        public IBaseWindow Base
+        {
+            get { return fController.Base; }
+        }
+
         #region View Interface
 
-        ILabelHandler IRelationshipCalculatorDlg.Label1
+        ILabel IRelationshipCalculatorDlg.Label1
         {
-            get { return fControlsManager.GetControlHandler<ILabelHandler>(Lab1); }
+            get { return GetControlHandler<ILabel>(Lab1); }
         }
 
-        ILabelHandler IRelationshipCalculatorDlg.Label2
+        ILabel IRelationshipCalculatorDlg.Label2
         {
-            get { return fControlsManager.GetControlHandler<ILabelHandler>(Lab2); }
+            get { return GetControlHandler<ILabel>(Lab2); }
         }
 
-        ITextBoxHandler IRelationshipCalculatorDlg.Person1
+        ITextBox IRelationshipCalculatorDlg.Person1
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(Edit1); }
+            get { return GetControlHandler<ITextBox>(Edit1); }
         }
 
-        ITextBoxHandler IRelationshipCalculatorDlg.Person2
+        ITextBox IRelationshipCalculatorDlg.Person2
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(Edit2); }
+            get { return GetControlHandler<ITextBox>(Edit2); }
         }
 
-        ITextBoxHandler IRelationshipCalculatorDlg.Result
+        ITextBox IRelationshipCalculatorDlg.Result
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtResult); }
+            get { return GetControlHandler<ITextBox>(txtResult); }
         }
 
         #endregion

@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -29,7 +29,7 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SourceEditDlgController : EditorController<GEDCOMSourceRecord, ISourceEditDlg>
+    public sealed class SourceEditDlgController : EditorController<GDMSourceRecord, ISourceEditDlg>
     {
         public SourceEditDlgController(ISourceEditDlg view) : base(view)
         {
@@ -39,7 +39,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fModel.FiledByEntry = fView.ShortTitle.Text;
+                fModel.ShortTitle = fView.ShortTitle.Text;
                 fModel.Originator.Clear();
                 fModel.SetOriginatorArray(fView.Author.Lines);
                 fModel.Title.Clear();
@@ -62,18 +62,18 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.ShortTitle.Text = fModel.FiledByEntry;
-            fView.Author.Text = fModel.Originator.Text.Trim();
-            fView.Title.Text = fModel.Title.Text.Trim();
-            fView.Publication.Text = fModel.Publication.Text.Trim();
-            fView.Text.Text = fModel.Text.Text.Trim();
+            fView.ShortTitle.Text = fModel.ShortTitle;
+            fView.Author.Text = fModel.Originator.Lines.Text.Trim();
+            fView.Title.Text = fModel.Title.Lines.Text.Trim();
+            fView.Publication.Text = fModel.Publication.Lines.Text.Trim();
+            fView.Text.Text = fModel.Text.Lines.Text.Trim();
 
             fView.RepositoriesList.ListModel.DataOwner = fModel;
             fView.NotesList.ListModel.DataOwner = fModel;
             fView.MediaList.ListModel.DataOwner = fModel;
         }
 
-        public void JumpToRecord(GEDCOMRecord record)
+        public void JumpToRecord(GDMRecord record)
         {
             if (record != null && Accept()) {
                 fBase.SelectRecordByXRef(record.XRef);

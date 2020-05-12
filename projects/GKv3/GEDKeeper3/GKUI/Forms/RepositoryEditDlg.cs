@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -32,16 +31,13 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class RepositoryEditDlg : EditorDialog, IRepositoryEditDlg
     {
         private readonly RepositoryEditDlgController fController;
 
         private readonly GKSheetList fNotesList;
 
-        public GEDCOMRepositoryRecord Repository
+        public GDMRepositoryRecord Repository
         {
             get { return fController.Repository; }
             set { fController.Repository = value; }
@@ -56,7 +52,7 @@ namespace GKUI.Forms
 
         ITextBoxHandler IRepositoryEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBoxHandler>(txtName); }
         }
 
         #endregion

@@ -20,7 +20,8 @@
 
 using System.Collections.Generic;
 using System.IO;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Options;
@@ -33,18 +34,14 @@ namespace GKCore.Controllers
     /// </summary>
     public class TreeSplitController : DialogController<ITreeSplitDlg>
     {
-        private readonly List<GEDCOMRecord> fSplitList;
+        private readonly List<GDMRecord> fSplitList;
 
         public TreeSplitController(ITreeSplitDlg view) : base(view)
         {
-            fSplitList = new List<GEDCOMRecord>();
+            fSplitList = new List<GDMRecord>();
         }
 
         public override void UpdateView()
-        {
-        }
-
-        public void UpdateSplitLists()
         {
             fView.SelectedList.BeginUpdate();
             fView.SelectedList.ClearItems();
@@ -55,10 +52,10 @@ namespace GKCore.Controllers
                 int cnt = 0;
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
-                    GEDCOMRecord rec = tree[i];
-                    if (rec is GEDCOMIndividualRecord) {
+                    GDMRecord rec = tree[i];
+                    if (rec is GDMIndividualRecord) {
                         cnt++;
-                        GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+                        GDMIndividualRecord iRec = rec as GDMIndividualRecord;
                         string st = iRec.XRef + " / " + GKUtils.GetNameString(iRec, true, false);
 
                         if (fSplitList.IndexOf(iRec) < 0) {
@@ -68,7 +65,7 @@ namespace GKCore.Controllers
                         }
                     }
                 }
-                fView.Caption = fSplitList.Count.ToString() + @" / " + cnt.ToString();
+                fView.Title = fSplitList.Count.ToString() + @" / " + cnt.ToString();
             } finally {
                 fView.SelectedList.EndUpdate();
                 fView.SkippedList.EndUpdate();
@@ -80,7 +77,7 @@ namespace GKCore.Controllers
             Select(fBase.GetSelectedPerson(), walkMode);
         }
 
-        public void Select(GEDCOMIndividualRecord startPerson, TreeTools.TreeWalkMode walkMode)
+        public void Select(GDMIndividualRecord startPerson, TreeTools.TreeWalkMode walkMode)
         {
             fSplitList.Clear();
 
@@ -90,7 +87,7 @@ namespace GKCore.Controllers
                 TreeTools.WalkTree(startPerson, walkMode, fSplitList);
             }
 
-            UpdateSplitLists();
+            UpdateView();
         }
 
         public void Delete()
@@ -101,13 +98,13 @@ namespace GKCore.Controllers
             for (int i = 0; i < num; i++) {
                 object obj = fSplitList[i];
 
-                if (obj is GEDCOMIndividualRecord) {
-                    BaseController.DeleteRecord(fBase, obj as GEDCOMIndividualRecord, false);
+                if (obj is GDMIndividualRecord) {
+                    BaseController.DeleteRecord(fBase, obj as GDMIndividualRecord, false);
                 }
             }
 
             fSplitList.Clear();
-            UpdateSplitLists();
+            UpdateView();
             fBase.RefreshLists(false);
 
             AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_RecsDeleted));
@@ -123,11 +120,9 @@ namespace GKCore.Controllers
             var tree = fBase.Context.Tree;
             GKUtils.PrepareHeader(tree, fileName, GlobalOptions.Instance.DefCharacterSet, true);
 
-            using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(tree.Header.CharacterSet))) {
+            using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(tree.Header.CharacterSet.Value))) {
                 var gedcomProvider = new GEDCOMProvider(tree);
                 gedcomProvider.SaveToStream(fs, fSplitList);
-
-                tree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
             }
         }
     }

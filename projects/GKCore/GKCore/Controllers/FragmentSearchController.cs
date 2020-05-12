@@ -19,10 +19,10 @@
  */
 
 using System.Collections.Generic;
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Tools;
 
@@ -44,7 +44,7 @@ namespace GKCore.Controllers
         public void CheckGroups()
         {
             IProgressController progress = AppHost.Progress;
-            List<List<GEDCOMRecord>> treeFragments = TreeTools.SearchTreeFragments(fBase.Context.Tree, progress);
+            List<List<GDMRecord>> treeFragments = TreeTools.SearchTreeFragments(fBase.Context.Tree, progress);
 
             fView.LogChart.Clear();
             fView.GroupsTree.BeginUpdate();
@@ -61,7 +61,7 @@ namespace GKCore.Controllers
                         groupNum.ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + cnt.ToString() + ")", null);
 
                     for (int j = 0; j < cnt; j++) {
-                        var iRec = (GEDCOMIndividualRecord)groupRecords[j];
+                        var iRec = (GDMIndividualRecord)groupRecords[j];
 
                         string pn = GKUtils.GetNameString(iRec, true, false);
                         if (iRec.Patriarch) {
@@ -77,6 +77,15 @@ namespace GKCore.Controllers
                 treeFragments.Clear();
                 fView.GroupsTree.EndUpdate();
             }
+        }
+
+        public void SelectPerson()
+        {
+            GDMIndividualRecord iRec = fView.GroupsTree.GetSelectedData() as GDMIndividualRecord;
+            if (iRec == null) return;
+
+            fBase.SelectRecordByXRef(iRec.XRef);
+            fView.Close();
         }
     }
 }

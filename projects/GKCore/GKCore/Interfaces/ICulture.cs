@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using GDModel;
 
 namespace GKCore.Interfaces
 {
@@ -33,17 +33,19 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface ICulture
     {
+        GDMLanguageID Language { get; set; }
+
         bool HasPatronymic();
         bool HasSurname();
 
         string NormalizeSurname(string sn, bool aFemale);
         string GetMarriedSurname(string husbSurname);
-        GEDCOMSex GetSex(string iName, string iPat, bool canQuery);
+        GDMSex GetSex(string iName, string iPat, bool canQuery);
 
         string[] GetSurnames(string surname, bool female);
-        string[] GetSurnames(GEDCOMIndividualRecord iRec);
+        string[] GetSurnames(GDMIndividualRecord iRec);
 
         string GetPossessiveName(string name);
-        string GetPossessiveName(GEDCOMIndividualRecord iRec);
+        string GetPossessiveName(GDMIndividualRecord iRec);
     }
 }

@@ -20,19 +20,14 @@
 
 using System;
 
-using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKCore.Tools;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTTreeCheckDlg : CommonDialog, ITreeCheckDlg
     {
         private readonly TreeCheckController fController;
@@ -88,11 +83,7 @@ namespace GKUI.Forms
 
         private void ListChecks_DblClick(object sender, EventArgs e)
         {
-            GEDCOMRecord rec = ((TreeTools.CheckObj)ListChecks.GetSelectedData()).Rec;
-            if (rec == null) return;
-
-            fController.Base.SelectRecordByXRef(rec.XRef);
-            Close();
+            fController.SelectRecord();
         }
     }
 }

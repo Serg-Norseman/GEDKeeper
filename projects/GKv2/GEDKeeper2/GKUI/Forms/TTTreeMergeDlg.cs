@@ -19,33 +19,29 @@
  */
 
 using System;
-
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTTreeMergeDlg : CommonDialog, ITreeMergeDlg
     {
         private readonly TreeMergeController fController;
 
         #region View Interface
 
-        ITextBoxHandler ITreeMergeDlg.UpdateBase
+        ITextBox ITreeMergeDlg.UpdateBase
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(edUpdateBase); }
+            get { return GetControlHandler<ITextBox>(edUpdateBase); }
         }
 
-        ITextBoxHandler ITreeMergeDlg.SyncLog
+        ITextBox ITreeMergeDlg.SyncLog
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(mSyncRes); }
+            get { return GetControlHandler<ITextBox>(mSyncRes); }
         }
 
         #endregion

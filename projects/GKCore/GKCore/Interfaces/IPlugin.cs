@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.Graphics;
 
 namespace GKCore.Interfaces
 {
@@ -54,7 +55,12 @@ namespace GKCore.Interfaces
         /// <summary>
         /// Plugin for exporting data to external report files.
         /// </summary>
-        Report
+        Report,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        DialogReplacement
     }
 
     public interface IPlugin

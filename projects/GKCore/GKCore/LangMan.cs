@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -108,10 +108,10 @@ namespace GKCore
 
         /* 064 */ LSID_UnkFemale,
         /* 065 */ LSID_UnkMale,
-        /* 066 */ LSID_SexN,
+        /* 066 */ LSID_SexU,
         /* 067 */ LSID_SexM,
         /* 068 */ LSID_SexF,
-        /* 069 */ LSID_SexU,
+        /* 069 */ LSID_SexX,
         /* 070 */ LSID_FileSaveQuery,
         /* 071 */ LSID_ParentsQuery,
         /* 072 */ LSID_PersonDeleteQuery,
@@ -521,12 +521,12 @@ namespace GKCore
         /* 469 */ LSID_Communication,
         /* 470 */ LSID_IDsCorrect,
         /* 471 */ LSID_FormatCheck,
-        /* 472 */ LSID_IDsCorrectNeed,
+        /* 472 */ LSID_IDsCorrectNeed, // obsolete
         /* 473 */ LSID_MainBaseSize,
         /* 474 */ LSID_SyncFin,
         /* 475 */ LSID_PatSearch,
         /* 476 */ LSID_LinksSearch,
-        /* 477 */ LSID_ArcNotFound,
+        /* 477 */ LSID_MediaFileNotLoaded,
         /* 478 */ LSID_Scale,
         /* 479 */ LSID_GEDCOMFilter,
         /* 480 */ LSID_AllFilter,
@@ -752,7 +752,7 @@ namespace GKCore
         /* 695 */ LSID_SourceAddTip,
         /* 696 */ LSID_GoalSelectTip,
         /* 697 */ LSID_NewDBFileNeedToSave,
-        /* 698 */ LSID_FileWithSameNameAlreadyExistsInStorage,
+        /* 698 */ LSID_FileWithSameNameAlreadyExists,
         /* 699 */ LSID_ItsNotGEDSECCompatibleFile,
         /* 700 */ LSID_ThisPersonHasSeveralFamilies,
 
@@ -832,31 +832,30 @@ namespace GKCore
         /* 774 */ LSID_FatherAsChild,
         /* 775 */ LSID_MotherAsChild,
         /* 776 */ LSID_DuplicateChildrenInFamily,
-
-        /* 777 */ // reserved begin
-        /* 778 */
-        /* 779 */
-        /* 780 */
-        /* 781 */
-        /* 782 */
-        /* 783 */
-        /* 784 */
-        /* 785 */
-        /* 786 */
-        /* 787 */
-        /* 788 */
-        /* 789 */
-        /* 790 */
-        /* 791 */
-        /* 792 */
-        /* 793 */
-        /* 794 */
-        /* 795 */
-        /* 796 */
-        /* 797 */
-        /* 798 */
-        /* 799 */
-        /* 800 */ // reserved end
+        /* 777 */ LSID_SelectColor,
+        /* 778 */ LSID_AutoSortChildren,
+        /* 779 */ LSID_AutoSortSpouses,
+        /* 780 */ LSID_CheckTreeSize,
+        /* 781 */ LSID_PLT_Adopted,
+        /* 782 */ LSID_PLT_Birth,
+        /* 783 */ LSID_PLT_Foster,
+        /* 784 */ LSID_CharsetDetection,
+        /* 785 */ LSID_LinkageType,
+        /* 786 */ LSID_HeWasBorn,
+        /* 787 */ LSID_SheWasBorn,
+        /* 788 */ LSID_GedMLFilter,
+        /* 789 */ LSID_ChildWithoutParents,
+        /* 790 */ LSID_FamilyRecordWithoutFamily,
+        /* 791 */ LSID_MediaFileDeleteQuery,
+        /* 792 */ LSID_StgNotFound,
+        /* 793 */ LSID_FileNotFound,
+        /* 794 */ LSID_AllowMediaRelativeReferences,
+        /* 795 */ LSID_MediaStoreDefault,
+        /* 796 */ LSID_AllowDeleteMediaFileFromStgArc,
+        /* 797 */ LSID_AllowDeleteMediaFileFromRefs,
+        /* 798 */ LSID_DeleteMediaFileWithoutConfirm,
+        /* 799 */ LSID_MediaRecordWithoutFiles,
+        /* 800 */ LSID_ArcNotFound,
 
         /* 801 */ LSID_RI_GeorgeKnight = 801,
         /* 802 */ LSID_USSR_WWII_Combatant,
@@ -868,7 +867,9 @@ namespace GKCore
         /* 808 */ LSID_Religion_Orthodoxy,
         /* 809 */ LSID_Religion_TheOldBelievers,
 
-        /* 000 */ LSID_Last = LSID_Religion_TheOldBelievers
+        /* 810 */ LSID_STRel,
+
+        /* 000 */ LSID_Last = LSID_STRel
     }
 
 
@@ -948,7 +949,7 @@ namespace GKCore
             /* 066 */ "?",
             /* 067 */ "Male",
             /* 068 */ "Female",
-            /* 069 */ "Undetermined",
+            /* 069 */ "Intersex",
             /* 070 */ "Do you want to save changes to the modified file?",
             /* 071 */ "The specified parent has an existed family \"{0}\". Do you want to add the child to that family?",
             /* 072 */ "Are you sure you want to remove individual \"{0}\"?",
@@ -1351,7 +1352,7 @@ namespace GKCore
             /* 469 */ "Correspondence",
             /* 470 */ "Correction IDs",
             /* 471 */ "Check format",
-            /* 472 */ "Correction of identity records is required, continue?",
+            /* 472 */ "Correction of identity records is required, continue?", // obsolete
             /* 473 */ "Number of objects in the master database: {0}",
             /* 474 */ "Synchronization is complete.",
             /* 475 */ "Search the patriarchs",
@@ -1577,7 +1578,7 @@ namespace GKCore
             /* 695 */ "Select or add a record of source",
             /* 696 */ "Select the target record",
             /* 697 */ "If you use \"file\" or \"store\" storage type, you have to save new database file before continue",
-            /* 698 */ "A file with the same name already exists in the repository",
+            /* 698 */ "A file with the same name already exists",
             /* 699 */ "It's not a GEDSEC-compatible file",
             /* 700 */ "This individual has a few families. Children should be added via the spouses.",
             /* 701 */ "Export to Excel failed",
@@ -1656,31 +1657,30 @@ namespace GKCore
             /* 774 */ "Father is listed as a child",
             /* 775 */ "Mother is listed as a child",
             /* 776 */ "There are duplicate children in the family",
-
-            /* 777 */ "", // reserved begin
-            /* 778 */ "",
-            /* 779 */ "",
-            /* 780 */ "",
-            /* 781 */ "",
-            /* 782 */ "",
-            /* 783 */ "",
-            /* 784 */ "",
-            /* 785 */ "",
-            /* 786 */ "",
-            /* 787 */ "",
-            /* 788 */ "",
-            /* 789 */ "",
-            /* 790 */ "",
-            /* 791 */ "",
-            /* 792 */ "",
-            /* 793 */ "",
-            /* 794 */ "",
-            /* 795 */ "",
-            /* 796 */ "",
-            /* 797 */ "",
-            /* 798 */ "",
-            /* 799 */ "",
-            /* 800 */ "", // reserved end
+            /* 777 */ "Select color",
+            /* 778 */ "Autosort children",
+            /* 779 */ "Autosort spouses",
+            /* 780 */ "Check tree size allowed",
+            /* 781 */ "Adopted",
+            /* 782 */ "Birth",
+            /* 783 */ "Foster",
+            /* 784 */ "Charset detection at load",
+            /* 785 */ "Linkage type",
+            /* 786 */ "Was born",
+            /* 787 */ "Was born",
+            /* 788 */ "GedML files (*.xml)|*.xml",
+            /* 789 */ "Child detected without parents",
+            /* 790 */ "Family record detected without family",
+            /* 791 */ "Are you sure you want to remove multimedia file?",
+            /* 792 */ "Storage not found",
+            /* 793 */ "File not found",
+            /* 794 */ "Allow relative references to media files",
+            /* 795 */ "Default media storage type",
+            /* 796 */ "Allow delete media files from storage and archive",
+            /* 797 */ "Allow delete media files by direct and relative references",
+            /* 798 */ "Delete media files without confirm",
+            /* 799 */ "Media record without files",
+            /* 800 */ "Archive not found",
 
             /* 801 */ "RI:GeorgeKnight",
             /* 802 */ "USSR:WWII:Combatant",
@@ -1691,6 +1691,8 @@ namespace GKCore
             /* 807 */ "Religion:Catholicism",
             /* 808 */ "Religion:Orthodoxy",
             /* 809 */ "Religion:The Old Believers",
+
+            /* 810 */ "Relative link to file",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

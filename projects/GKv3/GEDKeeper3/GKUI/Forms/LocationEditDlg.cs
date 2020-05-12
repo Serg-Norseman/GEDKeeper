@@ -20,9 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -33,9 +31,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class LocationEditDlg : EditorDialog, ILocationEditDlg
     {
         private readonly LocationEditDlgController fController;
@@ -44,7 +39,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fNotesList;
 
-        public GEDCOMLocationRecord LocationRecord
+        public GDMLocationRecord LocationRecord
         {
             get { return fController.LocationRecord; }
             set { fController.LocationRecord = value; }
@@ -74,17 +69,17 @@ namespace GKUI.Forms
 
         ITextBoxHandler ILocationEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBoxHandler>(txtName); }
         }
 
         ITextBoxHandler ILocationEditDlg.Latitude
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtLatitude); }
+            get { return GetControlHandler<ITextBoxHandler>(txtLatitude); }
         }
 
         ITextBoxHandler ILocationEditDlg.Longitude
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtLongitude); }
+            get { return GetControlHandler<ITextBoxHandler>(txtLongitude); }
         }
 
         #endregion
@@ -181,9 +176,7 @@ namespace GKUI.Forms
 
         private void btnShowOnMap_Click(object sender, EventArgs e)
         {
-            if (txtLatitude.Text != "" && txtLongitude.Text != "") {
-                fMapBrowser.SetCenter(ConvertHelper.ParseFloat(txtLatitude.Text, 0), ConvertHelper.ParseFloat(txtLongitude.Text, 0), -1);
-            }
+            fController.ShowOnMap();
         }
     }
 }

@@ -19,8 +19,8 @@
  */
 
 using System;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -29,9 +29,6 @@ using GKCore.MVP.Views;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTRecMergeDlg : CommonDialog, IRecMergeDlg
     {
         private readonly RecMergeController fController;
@@ -43,34 +40,34 @@ namespace GKUI.Forms
             get { return MergeControl; }
         }
 
-        IButtonHandler IRecMergeDlg.SkipBtn
+        IButton IRecMergeDlg.SkipBtn
         {
-            get { return fControlsManager.GetControlHandler<IButtonHandler>(btnSkip); }
+            get { return GetControlHandler<IButton>(btnSkip); }
         }
 
-        IProgressBarHandler IRecMergeDlg.ProgressBar
+        IProgressBar IRecMergeDlg.ProgressBar
         {
-            get { return fControlsManager.GetControlHandler<IProgressBarHandler>(ProgressBar1); }
+            get { return GetControlHandler<IProgressBar>(ProgressBar1); }
         }
 
-        ICheckBoxHandler IRecMergeDlg.IndistinctMatchingChk
+        ICheckBox IRecMergeDlg.IndistinctMatchingChk
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkIndistinctMatching); }
+            get { return GetControlHandler<ICheckBox>(chkIndistinctMatching); }
         }
 
-        INumericBoxHandler IRecMergeDlg.NameAccuracyNum
+        INumericBox IRecMergeDlg.NameAccuracyNum
         {
-            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(edNameAccuracy); }
+            get { return GetControlHandler<INumericBox>(edNameAccuracy); }
         }
 
-        ICheckBoxHandler IRecMergeDlg.BirthYearChk
+        ICheckBox IRecMergeDlg.BirthYearChk
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(chkBirthYear); }
+            get { return GetControlHandler<ICheckBox>(chkBirthYear); }
         }
 
-        INumericBoxHandler IRecMergeDlg.YearInaccuracyNum
+        INumericBox IRecMergeDlg.YearInaccuracyNum
         {
-            get { return fControlsManager.GetControlHandler<INumericBoxHandler>(edYearInaccuracy); }
+            get { return GetControlHandler<INumericBox>(edYearInaccuracy); }
         }
 
         #endregion
@@ -111,10 +108,10 @@ namespace GKUI.Forms
 
         private void radMergeMode_Click(object sender, EventArgs e)
         {
-            if (radPersons.Checked) fController.RMMode = GEDCOMRecordType.rtIndividual;
-            if (radNotes.Checked) fController.RMMode = GEDCOMRecordType.rtNote;
-            if (radFamilies.Checked) fController.RMMode = GEDCOMRecordType.rtFamily;
-            if (radSources.Checked) fController.RMMode = GEDCOMRecordType.rtSource;
+            if (radPersons.Checked) fController.RMMode = GDMRecordType.rtIndividual;
+            if (radNotes.Checked) fController.RMMode = GDMRecordType.rtNote;
+            if (radFamilies.Checked) fController.RMMode = GDMRecordType.rtFamily;
+            if (radSources.Checked) fController.RMMode = GDMRecordType.rtSource;
 
             MergeControl.MergeMode = fController.RMMode;
         }

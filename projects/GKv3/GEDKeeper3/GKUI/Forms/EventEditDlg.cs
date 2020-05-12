@@ -21,8 +21,7 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -33,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class EventEditDlg : EditorDialog, IEventEditDlg
     {
         private readonly EventEditDlgController fController;
@@ -44,7 +40,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fSourcesList;
 
-        public GEDCOMCustomEvent Event
+        public GDMCustomEvent Event
         {
             get { return fController.Event; }
             set { fController.Event = value; }
@@ -69,67 +65,67 @@ namespace GKUI.Forms
 
         IComboBoxHandler IEventEditDlg.EventType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbEventType); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbEventType); }
         }
 
         IComboBoxHandler IEventEditDlg.EventDateType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbEventDateType); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbEventDateType); }
         }
 
         ICheckBoxHandler IEventEditDlg.Date1BC
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(btnBC1); }
+            get { return GetControlHandler<ICheckBoxHandler>(btnBC1); }
         }
 
         ICheckBoxHandler IEventEditDlg.Date2BC
         {
-            get { return fControlsManager.GetControlHandler<ICheckBoxHandler>(btnBC2); }
+            get { return GetControlHandler<ICheckBoxHandler>(btnBC2); }
         }
 
         IComboBoxHandler IEventEditDlg.Date1Calendar
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbDate1Calendar); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbDate1Calendar); }
         }
 
         IComboBoxHandler IEventEditDlg.Date2Calendar
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbDate2Calendar); }
+            get { return GetControlHandler<IComboBoxHandler>(cmbDate2Calendar); }
         }
 
-        ITextBoxHandler IEventEditDlg.Date1
+        IDateBoxHandler IEventEditDlg.Date1
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtEventDate1); }
+            get { return GetControlHandler<IDateBoxHandler>(txtEventDate1); }
         }
 
-        ITextBoxHandler IEventEditDlg.Date2
+        IDateBoxHandler IEventEditDlg.Date2
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtEventDate2); }
+            get { return GetControlHandler<IDateBoxHandler>(txtEventDate2); }
         }
 
         IComboBoxHandler IEventEditDlg.Attribute
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(txtAttribute); }
+            get { return GetControlHandler<IComboBoxHandler>(txtAttribute); }
         }
 
         ITextBoxHandler IEventEditDlg.Place
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtEventPlace); }
+            get { return GetControlHandler<ITextBoxHandler>(txtEventPlace); }
         }
 
         ITextBoxHandler IEventEditDlg.EventName
         {
-            get { return  fControlsManager.GetControlHandler<ITextBoxHandler>(txtEventName); }
+            get { return  GetControlHandler<ITextBoxHandler>(txtEventName); }
         }
 
         ITextBoxHandler IEventEditDlg.Cause
         {
-            get { return  fControlsManager.GetControlHandler<ITextBoxHandler>(txtEventCause); }
+            get { return  GetControlHandler<ITextBoxHandler>(txtEventCause); }
         }
 
         ITextBoxHandler IEventEditDlg.Agency
         {
-            get { return  fControlsManager.GetControlHandler<ITextBoxHandler>(txtEventOrg); }
+            get { return  GetControlHandler<ITextBoxHandler>(txtEventOrg); }
         }
 
         #endregion

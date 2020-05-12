@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -32,10 +32,10 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class SourceCitEditDlgController : DialogController<ISourceCitEditDlg>
     {
-        private GEDCOMSourceCitation fSourceCitation;
+        private GDMSourceCitation fSourceCitation;
         private readonly StringList fSourcesList;
 
-        public GEDCOMSourceCitation SourceCitation
+        public GDMSourceCitation SourceCitation
         {
             get { return fSourceCitation; }
             set {
@@ -60,7 +60,7 @@ namespace GKCore.Controllers
         {
             try {
                 int idx = fSourcesList.IndexOf(fView.Source.Text);
-                GEDCOMSourceRecord src = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GEDCOMSourceRecord));
+                GDMSourceRecord src = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GDMSourceRecord));
 
                 if (src == null) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
@@ -81,8 +81,8 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            GEDCOMSourceRecord src = (fSourceCitation.Value as GEDCOMSourceRecord);
-            if (src != null) fView.Source.Text = src.FiledByEntry;
+            GDMSourceRecord src = (fSourceCitation.Value as GDMSourceRecord);
+            if (src != null) fView.Source.Text = src.ShortTitle;
 
             fView.Page.Text = fSourceCitation.Page;
             fView.Certainty.SelectedIndex = fSourceCitation.CertaintyAssessment;
@@ -91,12 +91,12 @@ namespace GKCore.Controllers
         public void AddSource()
         {
             object[] anArgs = new object[0];
-            GEDCOMSourceRecord src = fBase.Context.SelectRecord(GEDCOMRecordType.rtSource, anArgs) as GEDCOMSourceRecord;
+            GDMSourceRecord src = fBase.Context.SelectRecord(GDMRecordType.rtSource, anArgs) as GDMSourceRecord;
             if (src == null) return;
 
             fBase.Context.GetSourcesList(fSourcesList);
             RefreshSourcesList("");
-            fView.Source.Text = src.FiledByEntry;
+            fView.Source.Text = src.ShortTitle;
         }
 
         public override void Init(IBaseWindow baseWin)

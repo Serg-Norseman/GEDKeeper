@@ -20,8 +20,8 @@
 
 using System;
 using System.Windows.Forms;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -32,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class MediaEditDlg : EditorDialog, IMediaEditDlg
     {
         private readonly MediaEditDlgController fController;
@@ -42,7 +39,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fSourcesList;
 
-        public GEDCOMMultimediaRecord MediaRec
+        public GDMMultimediaRecord MediaRec
         {
             get { return fController.MediaRec; }
             set { fController.MediaRec = value; }
@@ -60,29 +57,29 @@ namespace GKUI.Forms
             get { return fSourcesList; }
         }
 
-        IComboBoxHandler IMediaEditDlg.MediaType
+        IComboBox IMediaEditDlg.MediaType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbMediaType); }
+            get { return GetControlHandler<IComboBox>(cmbMediaType); }
         }
 
-        IComboBoxHandler IMediaEditDlg.StoreType
+        IComboBox IMediaEditDlg.StoreType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbStoreType); }
+            get { return GetControlHandler<IComboBox>(cmbStoreType); }
         }
 
-        ITextBoxHandler IMediaEditDlg.Name
+        ITextBox IMediaEditDlg.Name
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        ITextBoxHandler IMediaEditDlg.File
+        ITextBox IMediaEditDlg.File
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtFile); }
+            get { return GetControlHandler<ITextBox>(txtFile); }
         }
 
-        IButtonHandler IMediaEditDlg.FileSelectButton
+        IButton IMediaEditDlg.FileSelectButton
         {
-            get { return fControlsManager.GetControlHandler<IButtonHandler>(btnFileSelect); }
+            get { return GetControlHandler<IButton>(btnFileSelect); }
         }
 
         #endregion

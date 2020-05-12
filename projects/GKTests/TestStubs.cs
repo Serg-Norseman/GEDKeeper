@@ -18,22 +18,26 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using BSLib.Design.Graphics;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.MVP.Controls;
+using GKCore.Plugins;
 using GKCore.Types;
+using GKUI.Providers;
 
 namespace GKTests.Stubs
 {
     internal class WorkWindowStub : BaseObject, IWorkWindow
     {
-        public string Caption { get; set; }
+        public string Title { get; set; }
         public bool Enabled { get; set; }
 
         public void Activate() {}
@@ -48,7 +52,7 @@ namespace GKTests.Stubs
         public bool AllowQuickSearch() { return false; }
         public IList<ISearchResult> FindAll(string searchPattern) { return new List<ISearchResult>(); }
         public void QuickSearch() {}
-        public void SelectByRec(GEDCOMRecord record) {}
+        public void SelectByRec(GDMRecord record) {}
         public bool AllowFilter() { return false; }
         public void SetFilter() {}
         public void SetLang() {}
@@ -68,12 +72,14 @@ namespace GKTests.Stubs
         private static IHost fHost = new HostStub();
 
         private readonly IBaseContext fContext;
-        private readonly GEDCOMTree fTree;
+        private readonly GDMTree fTree;
 
-        public BaseWindowStub()
+        public BaseWindowStub(bool fill = true)
         {
             fContext = TestUtils.CreateContext(/*this*/);
-            TestUtils.FillContext(fContext);
+            if (fill) {
+                TestUtils.FillContext(fContext);
+            }
             fTree = fContext.Tree;
         }
 
@@ -86,12 +92,12 @@ namespace GKTests.Stubs
         public IBaseContext Context { get { return fContext; } }
         public IHost Host { get { return fHost; } }
         public bool Modified { get { return false; } set {} }
-        public GEDCOMTree Tree { get { return fTree; } }
+        public GDMTree Tree { get { return fTree; } }
         public ValuesCollection ValuesCollection { get { return null; } }
 
         public void AddRecord() { }
-        public void ApplyFilter(GEDCOMRecordType recType = GEDCOMRecordType.rtNone) { }
-        public void ChangeRecord(GEDCOMRecord record) { }
+        public void ApplyFilter(GDMRecordType recType = GDMRecordType.rtNone) { }
+        public void ChangeRecord(GDMRecord record) { }
         public void CheckAutosave() { }
         public void CreateNewFile() { }
         public void CriticalSave() { }
@@ -100,24 +106,27 @@ namespace GKTests.Stubs
         public void EditRecord() { }
         public bool IsUnknown() { return false; }
         public void LoadFile(string fileName) { }
-        public void NotifyRecord(GEDCOMRecord record, RecordAction action) { }
-        public bool RecordIsFiltered(GEDCOMRecord record) { return false; }
+        public void NotifyRecord(GDMRecord record, RecordAction action) { }
+        public bool RecordIsFiltered(GDMRecord record) { return false; }
         public void SaveFile(string fileName) { }
         public void SaveFileEx(bool saveAs) { }
-        public void SelectRecordByXRef(string xref) { }
+        public void SelectRecordByXRef(string xref, bool delayedTransition = false) { }
         public void Show() { }
-        public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal) { }
+        public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal) { }
 
-        public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType) { return null; }
-        public StringList GetRecordContent(GEDCOMRecord record) { return null; }
-        public string GetRecordName(GEDCOMRecord record, bool signed) { return string.Empty; }
-        public IListManager GetRecordsListManByType(GEDCOMRecordType recType) { return null; }
-        public GEDCOMIndividualRecord GetSelectedPerson() { return null; }
-        public GEDCOMRecordType GetSelectedRecordType() { return GEDCOMRecordType.rtIndividual; }
+        public List<GDMRecord> GetContentList(GDMRecordType recType) { return null; }
+        public StringList GetRecordContent(GDMRecord record) { return null; }
+        public string GetRecordName(GDMRecord record, bool signed) { return string.Empty; }
+        public IListManager GetRecordsListManByType(GDMRecordType recType) { return null; }
+        public GDMIndividualRecord GetSelectedPerson() { return null; }
+        public GDMRecordType GetSelectedRecordType() { return GDMRecordType.rtIndividual; }
         public void RefreshLists(bool columnsChanged) { }
-        public void RefreshRecordsView(GEDCOMRecordType recType) { }
-        public void ShowRecordsTab(GEDCOMRecordType recType) { }
+        public void RefreshRecordsView(GDMRecordType recType) { }
+        public void ShowRecordsTab(GDMRecordType recType) { }
         public void UpdateControls(bool forceDeactivate, bool blockDependent = false) { }
+        public void SetExternalFilter(ExternalFilterHandler filterHandler, 
+                                      GDMRecordType recType = GDMRecordType.rtNone) { }
+        public GDMRecord GetSelectedRecordEx() { return null; }
     }
 
     public class HostStub : IHost
@@ -135,6 +144,8 @@ namespace GKTests.Stubs
         public void BaseClosed(IBaseWindow baseWin) {}
         public void BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
         public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action) {}
+        public void SelectedIndexChanged(IBaseWindow baseWin) {}
+        public void TabChanged(IBaseWindow baseWin) {}
 
         public void ApplyOptions() { }
         public string GetAppDataPath() { return string.Empty; }
@@ -166,7 +177,7 @@ namespace GKTests.Stubs
         public override void EnablePageNumbers() { }
         public override void NewPage() { }
         public override void NewLine(float spacingBefore = 0.0f, float spacingAfter = 0.0f) { }
-        public override void AddParagraph(string text, IFont font, TextAlignment alignment) { }
+        public override void AddParagraph(string text, IFont font, GKCore.Export.TextAlignment alignment) { }
         public override void AddParagraph(string text, IFont font) { }
         public override void AddParagraphAnchor(string text, IFont font, string anchor) { }
         public override void AddParagraphLink(string text, IFont font, string link) { }
@@ -176,7 +187,7 @@ namespace GKTests.Stubs
         public override void EndList() { }
         public override void AddListItem(string text, IFont font) { }
         public override void AddListItemLink(string text, IFont font, string link, IFont linkFont) { }
-        public override void BeginParagraph(TextAlignment alignment,
+        public override void BeginParagraph(GKCore.Export.TextAlignment alignment,
                                             float spacingBefore, float spacingAfter,
                                             float indent = 0.0f, bool keepTogether = false) { }
         public override void EndParagraph() { }
@@ -207,5 +218,97 @@ namespace GKTests.Stubs
         public void SaveSnapshot(string fileName) { }
         public void SetCenter(double latitude, double longitude, int scale) { }
         public void ZoomToBounds() { }
+    }
+
+    public class TestLangMan : ILangMan
+    {
+        public string LS(Enum lsid)
+        {
+            return "test";
+        }
+
+        public bool LoadFromFile(string fileName, int offset = 0)
+        {
+            return true;
+        }
+    }
+
+    public class TestPlugin : OrdinaryPlugin, IPlugin
+    {
+        private ILangMan fLangMan;
+
+        public override string DisplayName { get { return "TestPlugin"; } }
+        public override ILangMan LangMan { get { return fLangMan; } }
+        public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Common; } }
+
+        public TestPlugin()
+        {
+            fLangMan = null;
+        }
+
+        public TestPlugin(ILangMan langMan)
+        {
+            fLangMan = (langMan != null) ? langMan : new TestLangMan();
+        }
+
+        public override void Execute()
+        {
+        }
+    }
+
+    public sealed class TextBoxStub : BaseControlHandler<System.Windows.Forms.TextBox, TextBoxStub>, ITextBox
+    {
+        private StringList fStrings;
+
+        public TextBoxStub(System.Windows.Forms.TextBox control) : base(control)
+        {
+            fStrings = new StringList();
+        }
+
+        public string[] Lines
+        {
+            get { return fStrings.ToArray(); }
+            set {
+                fStrings.Clear();
+                fStrings.AddStrings(value);
+            }
+        }
+
+        public bool ReadOnly
+        {
+            get { return false; }
+            set {  }
+        }
+
+        public string SelectedText
+        {
+            get { return string.Empty; }
+            set {  }
+        }
+
+        public string Text
+        {
+            get { return string.Empty; }
+            set {  }
+        }
+
+        public void AppendText(string text)
+        {
+            fStrings.Add(text);
+        }
+
+        public void Clear()
+        {
+            fStrings.Clear();
+        }
+
+        public void Copy()
+        {
+        }
+
+        public void SelectAll()
+        {
+        }
     }
 }

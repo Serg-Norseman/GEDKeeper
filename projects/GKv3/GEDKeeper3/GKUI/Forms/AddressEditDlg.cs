@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -33,9 +32,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class AddressEditDlg : EditorDialog, IAddressEditDlg
     {
         private readonly AddressEditDlgController fController;
@@ -44,7 +40,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fMailsList;
         private readonly GKSheetList fWebsList;
 
-        public GEDCOMAddress Address
+        public GDMAddress Address
         {
             get { return fController.Address; }
             set { fController.Address = value; }
@@ -70,34 +66,34 @@ namespace GKUI.Forms
 
         ITextBoxHandler IAddressEditDlg.Country
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtCountry); }
+            get { return GetControlHandler<ITextBoxHandler>(txtCountry); }
         }
 
         ITextBoxHandler IAddressEditDlg.State
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtState); }
+            get { return GetControlHandler<ITextBoxHandler>(txtState); }
         }
 
         ITextBoxHandler IAddressEditDlg.City
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtCity); }
+            get { return GetControlHandler<ITextBoxHandler>(txtCity); }
         }
 
         ITextBoxHandler IAddressEditDlg.PostalCode
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtPostalCode); }
+            get { return GetControlHandler<ITextBoxHandler>(txtPostalCode); }
         }
 
         ITextBoxHandler IAddressEditDlg.AddressLine
         {
-            get { return fControlsManager.GetControlHandler<ITextBoxHandler>(txtAddress); }
+            get { return GetControlHandler<ITextBoxHandler>(txtAddress); }
         }
 
         #endregion
 
         private void ListModify(object sender, ModifyEventArgs eArgs)
         {
-            GEDCOMTag itemTag = eArgs.ItemData as GEDCOMTag;
+            GDMTag itemTag = eArgs.ItemData as GDMTag;
             if ((eArgs.Action == RecordAction.raEdit || eArgs.Action == RecordAction.raDelete) && (itemTag == null)) return;
 
             if (sender == fPhonesList) {

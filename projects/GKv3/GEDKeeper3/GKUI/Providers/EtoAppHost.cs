@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -197,18 +197,6 @@ namespace GKUI.Providers
             }
         }
 
-        public override void SaveLastBases()
-        {
-            AppHost.Options.ClearLastBases();
-
-            foreach (IWindow win in fRunningForms) {
-                var baseWin = win as IBaseWindow;
-                if (baseWin != null) {
-                    AppHost.Options.AddLastBase(baseWin.Context.FileName);
-                }
-            }
-        }
-
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
         {
             var result = new EUITimer(msInterval, elapsedHandler);
@@ -217,8 +205,7 @@ namespace GKUI.Providers
 
         public override void Quit()
         {
-            // FIXME: Controversial issue...
-            //AppHost.Instance.SaveLastBases();
+            base.Quit();
             Application.Instance.Quit();
         }
 
@@ -248,17 +235,6 @@ namespace GKUI.Providers
             } catch (Exception ex) {
                 Logger.LogWrite("EtoFormsAppHost.SetKeyLayout(): " + ex.Message);
             }
-        }
-
-        public override string GetDefaultFontName()
-        {
-            string fontName;
-            if (Application.Instance.Platform.IsGtk) {
-                fontName = "Noto Sans";
-            } else {
-                fontName = "Verdana"; // "Tahoma";
-            }
-            return fontName;
         }
 
         #endregion
@@ -311,7 +287,9 @@ namespace GKUI.Providers
             container.Register<INoteEditDlgEx, NoteEditDlgEx>(LifeCycle.Transient);
             container.Register<IOptionsDlg, OptionsDlg>(LifeCycle.Transient);
             container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
+            container.Register<IParentsEditDlg, ParentsEditDlg>(LifeCycle.Transient);
             container.Register<IPatriarchsSearchDlg, TTPatSearchDlg>(LifeCycle.Transient);
+            container.Register<IPatriarchsViewer, PatriarchsViewerWin>(LifeCycle.Transient);
             container.Register<IPersonsFilterDlg, PersonsFilterDlg>(LifeCycle.Transient);
             container.Register<IPlacesManagerDlg, TTPlacesManagerDlg>(LifeCycle.Transient);
             container.Register<IPersonalNameEditDlg, PersonalNameEditDlg>(LifeCycle.Transient);
@@ -336,6 +314,7 @@ namespace GKUI.Providers
             container.Register<ITreeMergeDlg, TTTreeMergeDlg>(LifeCycle.Transient);
             container.Register<ITreeSplitDlg, TTTreeSplitDlg>(LifeCycle.Transient);
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
+            container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));
@@ -344,6 +323,7 @@ namespace GKUI.Providers
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
             ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler));

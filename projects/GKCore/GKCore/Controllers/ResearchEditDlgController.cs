@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -31,9 +31,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class ResearchEditDlgController : DialogController<IResearchEditDlg>
     {
-        private GEDCOMResearchRecord fResearch;
+        private GDMResearchRecord fResearch;
 
-        public GEDCOMResearchRecord Research
+        public GDMResearchRecord Research
         {
             get { return fResearch; }
             set {
@@ -47,11 +47,11 @@ namespace GKCore.Controllers
 
         public ResearchEditDlgController(IResearchEditDlg view) : base(view)
         {
-            for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++) {
+            for (GDMResearchPriority rp = GDMResearchPriority.rpNone; rp <= GDMResearchPriority.rpTop; rp++) {
                 fView.Priority.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
             }
 
-            for (GKResearchStatus rs = GKResearchStatus.rsDefined; rs <= GKResearchStatus.rsWithdrawn; rs++) {
+            for (GDMResearchStatus rs = GDMResearchStatus.rsDefined; rs <= GDMResearchStatus.rsWithdrawn; rs++) {
                 fView.Status.Add(LangMan.LS(GKData.StatusNames[(int)rs]));
             }
         }
@@ -60,10 +60,10 @@ namespace GKCore.Controllers
         {
             try {
                 fResearch.ResearchName = fView.Name.Text;
-                fResearch.Priority = (GKResearchPriority)fView.Priority.SelectedIndex;
-                fResearch.Status = (GKResearchStatus)fView.Status.SelectedIndex;
-                fResearch.StartDate.Assign(GEDCOMDate.CreateByFormattedStr(fView.StartDate.Text, true));
-                fResearch.StopDate.Assign(GEDCOMDate.CreateByFormattedStr(fView.StopDate.Text, true));
+                fResearch.Priority = (GDMResearchPriority)fView.Priority.SelectedIndex;
+                fResearch.Status = (GDMResearchStatus)fView.Status.SelectedIndex;
+                fResearch.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.Text, true));
+                fResearch.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.Text, true));
                 fResearch.Percent = int.Parse(fView.Percent.Text);
 
                 fLocalUndoman.Commit();
@@ -101,7 +101,7 @@ namespace GKCore.Controllers
             fView.GroupsList.ListModel.DataOwner = fResearch;
         }
 
-        public void JumpToRecord(GEDCOMRecord record)
+        public void JumpToRecord(GDMRecord record)
         {
             if (record != null && Accept()) {
                 fBase.SelectRecordByXRef(record.XRef);

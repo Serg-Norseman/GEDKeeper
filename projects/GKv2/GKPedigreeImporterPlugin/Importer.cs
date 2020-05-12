@@ -30,9 +30,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -118,9 +118,9 @@ namespace GKPedigreeImporterPlugin
         private readonly ILangMan fLangMan;
         private readonly System.Windows.Forms.ListBox.ObjectCollection fLog;
         private readonly StringList fRawContents;
-        private readonly GEDCOMTree fTree;
+        private readonly GDMTree fTree;
 
-        private Dictionary<string, GEDCOMIndividualRecord> fPersonsList;
+        private Dictionary<string, GDMIndividualRecord> fPersonsList;
         private string fFileName;
 
         // settings
@@ -153,7 +153,7 @@ namespace GKPedigreeImporterPlugin
             PersonLineSeparator = (char)0;
             SurnamesNormalize = false;
 
-            fPersonsList = new Dictionary<string, GEDCOMIndividualRecord>();
+            fPersonsList = new Dictionary<string, GDMIndividualRecord>();
             fRawContents = new StringList();
         }
 
@@ -167,32 +167,30 @@ namespace GKPedigreeImporterPlugin
             base.Dispose(disposing);
         }
 
-        private GEDCOMFamilyRecord GetFamilyByNum(GEDCOMIndividualRecord parent, int marrNum)
+        private GDMFamilyRecord GetFamilyByNum(GDMIndividualRecord parent, int marrNum)
         {
             // it's source of ERRORS! but without this - bad! (AddSpouse() not linking parent to family)
-            GEDCOMSex sex = parent.Sex;
-            if (sex == GEDCOMSex.svNone || sex == GEDCOMSex.svUndetermined)
-            {
-                parent.Sex = GEDCOMSex.svMale;
+            GDMSex sex = parent.Sex;
+            if (sex == GDMSex.svUnknown || sex == GDMSex.svIntersex) {
+                parent.Sex = GDMSex.svMale;
             }
 
-            while (parent.SpouseToFamilyLinks.Count < marrNum)
-            {
-                GEDCOMFamilyRecord fam = fTree.CreateFamily();
+            while (parent.SpouseToFamilyLinks.Count < marrNum) {
+                GDMFamilyRecord fam = fTree.CreateFamily();
                 fam.AddSpouse(parent);
             }
 
-            GEDCOMFamilyRecord family = parent.SpouseToFamilyLinks[marrNum - 1].Family;
+            GDMFamilyRecord family = parent.SpouseToFamilyLinks[marrNum - 1].Family;
             return family;
         }
 
-        private void AddChild(GEDCOMIndividualRecord parent, int marrNum, GEDCOMIndividualRecord child)
+        private void AddChild(GDMIndividualRecord parent, int marrNum, GDMIndividualRecord child)
         {
             if (marrNum <= 0) {
                 marrNum = 1;
             }
 
-            GEDCOMFamilyRecord family = GetFamilyByNum(parent, marrNum);
+            GDMFamilyRecord family = GetFamilyByNum(parent, marrNum);
             if (family != null) {
                 family.AddChild(child);
             } else {
@@ -360,35 +358,25 @@ namespace GKPedigreeImporterPlugin
             }
         }
 
-        private void SetEvent(GEDCOMRecordWithEvents record, string evName, string date)
+        private void SetEvent(GDMRecordWithEvents record, string evName, string date)
         {
             int[] val = new int[3];
-            GEDCOMCustomEvent evt = fBase.Context.CreateEventEx(record, evName, "", "");
-            try
-            {
+            GDMCustomEvent evt = fBase.Context.CreateEventEx(record, evName, "", "");
+            try {
                 string prefix = "";
-                if (date.IndexOf("п.") == 0)
-                {
+                if (date.IndexOf("п.") == 0) {
                     prefix = "AFT ";
                     date = date.Remove(0, 2);
-                }
-                else if (date.IndexOf("после") == 0)
-                {
+                } else if (date.IndexOf("после") == 0) {
                     prefix = "AFT ";
                     date = date.Remove(0, 5);
-                }
-                else if (date.IndexOf("до") == 0)
-                {
+                } else if (date.IndexOf("до") == 0) {
                     prefix = "BEF ";
                     date = date.Remove(0, 2);
-                }
-                else if (date.IndexOf("ок.") == 0)
-                {
+                } else if (date.IndexOf("ок.") == 0) {
                     prefix = "ABT ";
                     date = date.Remove(0, 3);
-                }
-                else if (date.IndexOf("около") == 0)
-                {
+                } else if (date.IndexOf("около") == 0) {
                     prefix = "ABT ";
                     date = date.Remove(0, 5);
                 }
@@ -397,19 +385,16 @@ namespace GKPedigreeImporterPlugin
                 
                 string tmp = "";
                 string[] toks = date.Split('.');
-                if (toks.Length > 3)
-                {
+                if (toks.Length > 3) {
                     throw new ImporterException("date failed");
                 }
                 string ym = "";
 
-                for (int i = 0; i < toks.Length; i++)
-                {
+                for (int i = 0; i < toks.Length; i++) {
                     tmp = toks[i];
 
                     int x = tmp.IndexOf("/");
-                    if (x >= 0)
-                    {
+                    if (x >= 0) {
                         ym = tmp.Substring(x + 1, tmp.Length - x - 1);
                         tmp = tmp.Remove(x, ym.Length + 1);
                     }
@@ -417,56 +402,46 @@ namespace GKPedigreeImporterPlugin
                     val[i] = int.Parse(tmp);
                 }
 
-                if (toks.Length != 1)
-                {
-                    if (toks.Length != 2)
-                    {
-                        if (toks.Length == 3)
-                        {
-                            tmp = val[0].ToString() + " " + GEDCOMCustomDate.GEDCOMMonthArray[val[1] - 1] + " " + val[2].ToString();
+                if (toks.Length != 1) {
+                    if (toks.Length != 2) {
+                        if (toks.Length == 3) {
+                            tmp = val[0].ToString() + " " + GDMCustomDate.GEDCOMMonthArray[val[1] - 1] + " " + val[2].ToString();
                         }
+                    } else {
+                        tmp = GDMCustomDate.GEDCOMMonthArray[val[0] - 1] + " " + val[1].ToString();
                     }
-                    else
-                    {
-                        tmp = GEDCOMCustomDate.GEDCOMMonthArray[val[0] - 1] + " " + val[1].ToString();
-                    }
-                }
-                else
-                {
+                } else {
                     tmp = val[0].ToString();
                 }
 
                 tmp = prefix + tmp;
-                if (ym != "")
-                {
+                if (ym != "") {
                     tmp = tmp + "/" + ym;
                 }
 
                 evt.Date.ParseString(tmp);
-            }
-            catch (Exception)
-            {
+            } catch (Exception) {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_DateInvalid) + " \"" + date + "\"");
             }
         }
 
-        private GEDCOMIndividualRecord DefinePerson(string str, GEDCOMSex proposeSex)
+        private GDMIndividualRecord DefinePerson(string str, GDMSex proposeSex)
         {
             var persName = DefinePersonName(str);
 
-            GEDCOMIndividualRecord result = fBase.Context.CreatePersonEx(persName.Name, persName.Patr, persName.Surname, proposeSex, false);
+            GDMIndividualRecord result = fBase.Context.CreatePersonEx(persName.Name, persName.Patr, persName.Surname, proposeSex, false);
 
-            if (proposeSex == GEDCOMSex.svNone || proposeSex == GEDCOMSex.svUndetermined) {
+            if (proposeSex == GDMSex.svUnknown || proposeSex == GDMSex.svIntersex) {
                 fBase.Context.CheckPersonSex(result);
             }
 
-            if (persName.BirthDate != "") SetEvent(result, "BIRT", persName.BirthDate);
-            if (persName.DeathDate != "") SetEvent(result, "DEAT", persName.DeathDate);
+            if (persName.BirthDate != "") SetEvent(result, GEDCOMTagName.BIRT, persName.BirthDate);
+            if (persName.DeathDate != "") SetEvent(result, GEDCOMTagName.DEAT, persName.DeathDate);
 
             return result;
         }
 
-        private GEDCOMIndividualRecord ParsePerson(StringList buffer, string str, ref int selfId)
+        private GDMIndividualRecord ParsePerson(StringList buffer, string str, ref int selfId)
         {
             try
             {
@@ -495,15 +470,15 @@ namespace GKPedigreeImporterPlugin
 
                 str = str.Substring(pid_end).Trim();
 
-                GEDCOMSex proposeSex = GetProposeSex(buffer);
+                GDMSex proposeSex = GetProposeSex(buffer);
 
-                GEDCOMIndividualRecord result = DefinePerson(str, proposeSex);
+                GDMIndividualRecord result = DefinePerson(str, proposeSex);
 
                 fPersonsList.Add(plRet.PersId, result);
 
                 if (!string.IsNullOrEmpty(plRet.ParentId))
                 {
-                    GEDCOMIndividualRecord parent;
+                    GDMIndividualRecord parent;
                     if (fPersonsList.TryGetValue(plRet.ParentId, out parent)) {
                         AddChild(parent, marrNum, result);
                     } else {
@@ -520,9 +495,9 @@ namespace GKPedigreeImporterPlugin
             }
         }
 
-        private GEDCOMSex GetProposeSex(StringList buffer)
+        private GDMSex GetProposeSex(StringList buffer)
         {
-            GEDCOMSex result = GEDCOMSex.svNone;
+            GDMSex result = GDMSex.svUnknown;
             if (buffer == null) return result;
 
             try
@@ -537,14 +512,14 @@ namespace GKPedigreeImporterPlugin
                     char c2 = line[1];
                     if ((c1 == 'М' || c1 == 'Ж') && ((c2 == ' ') || (c2 >= '1' && c2 <= '9'))) {
                         // define sex (if spouse is male, then result = female, else result = male)
-                        GEDCOMSex res = (c1 == 'М') ? GEDCOMSex.svFemale : GEDCOMSex.svMale;
+                        GDMSex res = (c1 == 'М') ? GDMSex.svFemale : GDMSex.svMale;
 
-                        if (result == GEDCOMSex.svNone) {
+                        if (result == GDMSex.svUnknown) {
                             result = res;
                         } else {
                             if (result != res) {
                                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_SpousesInfoConflict));
-                                return GEDCOMSex.svNone;
+                                return GDMSex.svUnknown;
                             } else {
                                 // matched, checked
                             }
@@ -560,7 +535,7 @@ namespace GKPedigreeImporterPlugin
             return result;
         }
 
-        private void CheckSpouses(StringList buffer, GEDCOMIndividualRecord curPerson)
+        private void CheckSpouses(StringList buffer, GDMIndividualRecord curPerson)
         {
             int num2 = buffer.Count;
             for (int i = 0; i < num2; i++)
@@ -575,14 +550,14 @@ namespace GKPedigreeImporterPlugin
                     {
                         // define sex
                         string spSex = slRet.Spouse;
-                        GEDCOMSex sx = (spSex[0] == 'М') ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
+                        GDMSex sx = (spSex[0] == 'М') ? GDMSex.svMale : GDMSex.svFemale;
 
                         // extract name
                         line = line.Substring(slRet.Pos).Trim();
 
                         if (!string.IsNullOrEmpty(line)) {
-                            GEDCOMIndividualRecord spouse = DefinePerson(line, sx);
-                            GEDCOMFamilyRecord family = GetFamilyByNum(curPerson, slRet.MarrNum);
+                            GDMIndividualRecord spouse = DefinePerson(line, sx);
+                            GDMFamilyRecord family = GetFamilyByNum(curPerson, slRet.MarrNum);
 
                             if (spouse == null || family == null) {
                                 // TODO: error to log, reporting causes
@@ -594,7 +569,7 @@ namespace GKPedigreeImporterPlugin
                                     string marrDate = slRet.ExtData.Substring(1, slRet.ExtData.Length - 2).Trim();
 
                                     if (marrDate != "")
-                                        SetEvent(family, "MARR", marrDate);
+                                        SetEvent(family, GEDCOMTagName.MARR, marrDate);
                                 }
                             }
                         }
@@ -607,7 +582,7 @@ namespace GKPedigreeImporterPlugin
             }
         }
 
-        private void CheckBuffer(StringList buffer, GEDCOMIndividualRecord curPerson)
+        private void CheckBuffer(StringList buffer, GDMIndividualRecord curPerson)
         {
             if (buffer.IsEmpty()) return;
 
@@ -616,8 +591,8 @@ namespace GKPedigreeImporterPlugin
                 CheckSpouses(buffer, curPerson);
             }
 
-            GEDCOMNoteRecord noteRec = fTree.CreateNote();
-            noteRec.Note = buffer;
+            GDMNoteRecord noteRec = fTree.CreateNote();
+            noteRec.Lines.Assign(buffer);
             if (curPerson != null) curPerson.AddNote(noteRec);
 
             buffer.Clear();
@@ -646,7 +621,7 @@ namespace GKPedigreeImporterPlugin
                     fLog.Add("> " + fLangMan.LS(ILS.LSID_PersonParsed) + " \"" + personId + "\"");
 
                     int selfId = 0;
-                    GEDCOMIndividualRecord curPerson = ParsePerson(buffer, s, ref selfId);
+                    GDMIndividualRecord curPerson = ParsePerson(buffer, s, ref selfId);
 
                     if (NumbersType == PersonNumbersType.pnKonovalov && selfId - prevId > 1)
                     {

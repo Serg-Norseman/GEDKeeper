@@ -28,9 +28,6 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TTPlacesManagerDlg : CommonDialog, IPlacesManagerDlg
     {
         private readonly PlacesManagerController fController;
@@ -39,7 +36,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IListView IPlacesManagerDlg.PlacesList
+        IListViewEx IPlacesManagerDlg.PlacesList
         {
             get { return ListPlaces; }
         }

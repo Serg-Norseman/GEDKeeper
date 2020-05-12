@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Options;
@@ -33,10 +33,10 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class MediaEditDlgController : DialogController<IMediaEditDlg>
     {
-        private GEDCOMMultimediaRecord fMediaRec;
+        private GDMMultimediaRecord fMediaRec;
         private bool fIsNew;
 
-        public GEDCOMMultimediaRecord MediaRec
+        public GDMMultimediaRecord MediaRec
         {
             get { return fMediaRec; }
             set {
@@ -50,7 +50,7 @@ namespace GKCore.Controllers
 
         public MediaEditDlgController(IMediaEditDlg view) : base(view)
         {
-            for (GEDCOMMediaType mt = GEDCOMMediaType.mtUnknown; mt <= GEDCOMMediaType.mtLast; mt++) {
+            for (GDMMediaType mt = GDMMediaType.mtUnknown; mt <= GDMMediaType.mtLast; mt++) {
                 fView.MediaType.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
             }
 
@@ -60,10 +60,10 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                GEDCOMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
+                GDMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
 
                 if (fIsNew) {
-                    MediaStoreType gst = (MediaStoreType)fView.StoreType.SelectedTag;
+                    MediaStoreType gst = fView.StoreType.GetSelectedTag<MediaStoreType>();
 
                     if ((gst == MediaStoreType.mstArchive || gst == MediaStoreType.mstStorage) && !fBase.Context.CheckBasePath()) {
                         return false;
@@ -76,7 +76,7 @@ namespace GKCore.Controllers
                     }
                 }
 
-                fileRef.MediaType = (GEDCOMMediaType)fView.MediaType.SelectedIndex;
+                fileRef.MediaType = (GDMMediaType)fView.MediaType.SelectedIndex;
                 fileRef.Title = fView.Name.Text;
 
                 UpdateControls();
@@ -101,7 +101,7 @@ namespace GKCore.Controllers
 
         private void UpdateControls()
         {
-            GEDCOMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
+            GDMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
 
             fIsNew = (fileRef.StringValue == "");
 
@@ -110,11 +110,13 @@ namespace GKCore.Controllers
             fView.File.Text = fileRef.StringValue;
 
             if (fIsNew) {
-                RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, true, MediaStoreType.mstReference);
+                RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, true, GlobalOptions.Instance.AllowMediaStoreRelativeReferences, (MediaStoreType)GlobalOptions.Instance.MediaStoreDefault);
             } else {
                 MediaStore mediaStore = fBase.Context.GetStoreType(fileRef);
                 RefreshStoreTypes((mediaStore.StoreType == MediaStoreType.mstReference),
-                                  (mediaStore.StoreType == MediaStoreType.mstArchive), mediaStore.StoreType);
+                                  (mediaStore.StoreType == MediaStoreType.mstArchive),
+                                  (mediaStore.StoreType == MediaStoreType.mstRelativeReference),
+                                  mediaStore.StoreType);
             }
 
             fView.FileSelectButton.Enabled = fIsNew;
@@ -124,7 +126,7 @@ namespace GKCore.Controllers
             fView.SourcesList.UpdateSheet();
         }
 
-        private void RefreshStoreTypes(bool allowRef, bool allowArc, MediaStoreType selectType)
+        private void RefreshStoreTypes(bool allowRef, bool allowArc, bool allowRel, MediaStoreType selectType)
         {
             fView.StoreType.Clear();
 
@@ -141,7 +143,12 @@ namespace GKCore.Controllers
                     MediaStoreType.mstArchive);
             }
 
-            fView.StoreType.SelectedTag = selectType;
+            if (allowRel) {
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstRelativeReference].Name),
+                    MediaStoreType.mstRelativeReference);
+            }
+
+            fView.StoreType.SetSelectedTag<MediaStoreType>(selectType);
         }
 
         public void SelectFile()
@@ -157,7 +164,7 @@ namespace GKCore.Controllers
 
             fView.File.Text = fileName;
             bool canArc = GKUtils.FileCanBeArchived(fileName);
-            RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, canArc, MediaStoreType.mstReference);
+            RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, canArc, GlobalOptions.Instance.AllowMediaStoreRelativeReferences, MediaStoreType.mstReference);
             fView.StoreType.Enabled = true;
         }
 

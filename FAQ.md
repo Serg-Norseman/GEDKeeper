@@ -15,13 +15,13 @@ On Windows
 
 **What platforms are supported?**
 
-GEDKeeper is cross platform, and can be run on Linux and Windows. 
+GEDKeeper is cross-platform and can be run on Linux and Windows. 
 In particular, it supports the following platforms:
 
-- Windows XP (or later) and .NET 3.0 (or later)
+- Windows XP (or later) and .NET 3.5 (or later)
 - Linux (Debian/Ubuntu) and Mono 4.5 (or later)
 
-We currently do not support iOS and Android, although it is possible it could 
+We currently do not support iOS or Android, although it is possible it could 
 be added in the future. 
 
 
@@ -29,8 +29,8 @@ be added in the future.
 
 - First download the source code you want to start with (under the Source Code tab)
 - Start selected IDE, then select File->Open -> Project/Solution 
-- Select `GEDKeeper2.mswin.sln` or `GEDKeeper2.linux.sln` (for Linux) in the open project dialog box
-- Mouse or tab to the solution Explorer Window, right click on the solution and then choose build solution
+- Select `GEDKeeper2.mswin.sln` (for Windows) or `GEDKeeper2.linux.sln` (for Linux) in the open project dialog box
+- Mouse or tab to the solution Explorer Window, right click on the solution and then choose "build solution"
 
 
 **I found a bug - how do I report it?**

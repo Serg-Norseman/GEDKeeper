@@ -53,13 +53,10 @@ namespace GKCore.Maps
             List<GeoPoint> geoObjects = new List<GeoPoint>();
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.CreateDefault(new Uri(url));
-
-            //For the future, if necessary
-            //WebHeaderCollection webHeaders = request.Headers;
-            //webHeaders.Add("Accept-Language:???");
-
             request.ContentType = "application/x-www-form-urlencoded";
+            request.Credentials = CredentialCache.DefaultCredentials;
             request.Proxy = fProxy;
+            request.UserAgent = "GK Geocoder";
 
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()) {
                 using (Stream stream = response.GetResponseStream()) {
@@ -68,26 +65,21 @@ namespace GKCore.Maps
                     xmlDocument.Load(stream);
                     XmlNode node = xmlDocument.DocumentElement;
 
-                    if (node != null && node.ChildNodes.Count > 0)
-                    {
+                    if (node != null && node.ChildNodes.Count > 0) {
                         int num = node.ChildNodes.Count;
-                        for (int i = 0; i < num; i++)
-                        {
+                        for (int i = 0; i < num; i++) {
                             XmlNode xNode = node.ChildNodes[i];
-                            if (xNode.Name == "result")
-                            {
+                            if (xNode.Name == "result") {
                                 XmlNode addressNode = xNode["formatted_address"];
                                 XmlNode geometry = xNode["geometry"];
                                 XmlNode pointNode = geometry["location"];
 
-                                if (addressNode != null && pointNode != null)
-                                {
+                                if (addressNode != null && pointNode != null) {
                                     string ptHint = addressNode.InnerText;
                                     double ptLongitude = ConvertHelper.ParseFloat(pointNode["lng"].InnerText, -1.0);
                                     double ptLatitude = ConvertHelper.ParseFloat(pointNode["lat"].InnerText, -1.0);
 
-                                    if (ptLatitude != -1.0 && ptLongitude != -1.0)
-                                    {
+                                    if (ptLatitude != -1.0 && ptLongitude != -1.0) {
                                         GeoPoint gpt = new GeoPoint(ptLatitude, ptLongitude, ptHint);
                                         geoObjects.Add(gpt);
                                     }

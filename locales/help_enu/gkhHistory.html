@@ -1,885 +1,1153 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="styles.css" type="text/css" />
-<title>Change log</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Change log</title>
 </head>
 <body>
 
-<h1>Change log</h1>
+    <h1>Change log</h1>
 
-<p><b>??.10.2018 [v2.15.0]</b><ul>
-<li>(+) Added detection of data loops.
-<li>(*) Fixed minor bugs.
-<li>(+) Added new validations of data.
-</ul></p>
+    <p>
+        <b>??.??.2020 [v2.17.0]</b><ul>
+            <li>(+) Added display of marriage dates of parents in tree diagrams.
+            <li>(+) Added call quick information about the person in the tree diagrams.
+        </ul>
+    </p>
 
-<p><b>10.08.2018 [v2.14.0]</b><ul>
-<li>(*) Fixed the bug with adding/removing portraits of persons.
-<li>(+) Returned the status bar to the chart's windows and added 
-information about the size of the image.
-<li>(*) Fixed bug of loading FTBv6 files with the encoding Win1251 (ANSI + Rus).
-<li>(*) Improved collapsing tree branches.
-<li>(*) Fixed several minor bugs and simplified development projects.
-<li>(+) Finalized and included the generator of the Tree Album.
-<li>(+) Added the option of circle charts: arc text on/off.
-<li>(+) Added options for tree charts: margins, intervals between branches and 
-intervals between generations.
-<li>(+) Added options for tree charts: hide unknown spouses and show birth and 
-death places.
-<li>(*) Restored the work of the maps module.
-<li>(+) Implemented portable mode of the program.
-</ul></p>
+    <p>
+        <b>18.09.2019 [v2.16.2]</b><ul>
+            <li>(+) Implemented moving notes up and down [Milan Kosina].
+            <li>(+) Implemented line wrapping in the HyperView of information panel.
+            <li>(+) Added check for file existence when creating multimedia records.
+            <li>(+) Added verification of the database for multimedia records (lack of files, archives, storages).
+            <li>(+) Added support for relative paths to media files [Milan Kosina].
+            <li>(*) Fixed the choice of the type of file storage in the multimedia dialog.
+            <li>(+) Implemented the removal of multimedia files when deleting their records.
+            <li>(*) Fixed event output if an additional event type is not specified.
+            <li>(*) Fixed renaming and deleting of location records.
+            <li>(*) Fixed merging family and individual records, transition buttons in editing dialogs, button images.
+            <li>(*) Fixed editing dates of events with periods.
+            <li>(+) Added new diagnostics for data verification: for families without spouses and/or children [Kevin D. Sandal].
+            <li>(+) Added hotkey for saving files from tree diagrams.
+            <li>(*) Fixed support for formats with zero IDs of records.
+            <li>(*) Fixed opening files and OSM geocoder operation.
+            <li>(*) Cleaning and optimization, improved support for two third-party GEDCOM formats.
+            <li>(*) Fixed the script of the portable package.
+            <li>(*) Fixed the work of the "Compare databases" tool.
+            <li>(*) Fixed external viewing of PDF files (and other not supported by the embedded viewer).
+            <li>(*) Proofreading of the English manual [Kevin D. Sandal].
+            <li>(*) Implemented preliminary support for GedML format.
+            <li>(*) Fixed pedigrees localization.
+            <li>(*) Fixed Calendar plugin.
+            <li>(*) Fixed overlapping of neighboring persons in tree diagrams.
+            <li>(*) Fixed incorrect parsing of interpretable dates from Ahnenblatt.
+            <li>(*) Fixed missing substructures in media records from extraneous files.
+            <li>(*) Fixed convert links to sources in source records .
+            <li>(*) Fixed convert media links to media records, and convert non-standard x-references.
+            <li>(*) Fixed reading standard coordinates of the place.
+            <li>(*) Minor improvement of circle chart.
+            <li>(*) Improved support for several GEDCOM file formats.
+            <li>(*) Fix of sorting the columns of some tables.
+            <li>
+                (*) Fix of long-distance displacement of male nodes (tree chart) in the presence of more than
+                one marriage and a large tree of descendants from the first wife.
+            <li>(*) Improved date input in the event dialog with regional format settings.
+            <li>(*) Bugfixes for FlowInput plugin.
+            <li>(+) Added the possibility to create and connect plugins to replace record's edit dialogs.
+            <li>(*) Restored loading recent files.
+            <li>(+) Created a new plugin for managing "folders" in GEDCOM files (to separate work areas in large files).
+            <li>(+) Added option to automatically detect charset of GEDCOM files at load.
+            <li>(*) Fixed execution of Lua scripts.
+            <li>(*) Reduced memory consumption when loading large files (25-42%).
+            <li>
+                (*) Optimized a number of functions, allowing to significantly increase the speed of loading and processing large files
+                (from 30 thousand records to very large files - 91mb, 538 thousand records, load time 25 seconds!).
+        </ul>
+    </p>
 
-<p><b>14.07.2018 [v2.13.2]</b><ul>
-<li>(*) Fixed the bug of reading standard GEDCOM notes.
-</ul></p>
+    <p>
+        <b>14.02.2019 [v2.15.0]</b><ul>
+            <li>(+) Added control unit for several families of parents and for the type of child/parent linkage (adoption, foster, etc.).
+            <li>(*) Improved handling of parts of names.
+            <li>(+) Added option to disable checking for a valid tree size (in most cases, checking is outdated, but can sometimes be useful).
+            <li>(+) Added saving and restoring selected sorting columns in tables.
+            <li>(+) Added the feature to disable the sorting of children and enable sorting of spouses for family's records.
+            <li>(+) Added the feature to select colors for persons in tree charts.
+            <li>(+) Created the Czech translation [Michal Novák].
+            <li>(+) Added GKTray application (birthdays reminder and recent files manager).
+            <li>(+) Added detection of data loops.
+            <li>(*) Fixed minor bugs.
+            <li>(+) Added new validations of data.
+        </ul>
+    </p>
 
-<p><b>28.06.2018 [v2.13.1]</b><ul>
-<li>(+) Implemented the saving of circle charts in SVG.
-<li>(*) Fixed bug in the tree's chart with folding of branches.
-<li>(*) Fixed bug in the plugin "History Data".
-<li>(*) Fixed bug in the plugin "Data quality".
-<li>(+) Added option "Automatically check for updates".
-<li>(*) Fixed bug of loading of files "Agelong Tree" with incorrect encoding ANSEL.
-<li>(*) Fixed a crash in checking for new versions in WinXP.
-</ul></p>
+    <p>
+        <b>10.08.2018 [v2.14.0]</b><ul>
+            <li>(*) Fixed the bug with adding/removing portraits of persons.
+            <li>
+                (+) Returned the status bar to the chart's windows and added
+                information about the size of the image.
+            <li>(*) Fixed bug of loading FTBv6 files with the encoding Win1251 (ANSI + Rus).
+            <li>(*) Improved collapsing tree branches.
+            <li>(*) Fixed several minor bugs and simplified development projects.
+            <li>(+) Finalized and included the generator of the Tree Album.
+            <li>(+) Added the option of circle charts: arc text on/off.
+            <li>
+                (+) Added options for tree charts: margins, intervals between branches and
+                intervals between generations.
+            <li>
+                (+) Added options for tree charts: hide unknown spouses and show birth and
+                death places.
+            <li>(*) Restored the work of the maps module.
+            <li>(+) Implemented portable mode of the program.
+        </ul>
+    </p>
 
-<p><b>08.06.2018 [v2.13.0]</b><ul>
-<li>(+) Added the folding of tree branches.
-<li>(*) The generator "Family Book" has been revised.
-<li>(+) Added option of displaying dates of marriages in tree diagrams.
-<li>(+) Added the inverted tree mode (ancestors at the bottom, descendants at the top).
-<li>(+) Added control keys for the number of generations displayed in circle charts.
-<li>(*) Fixed drawing of background of circle charts when outputting to a file.
-<li>(*) Fixed working of option "Hide empty segments" in circle charts.
-<li>(+) Added reports "Phonetics" and "Contemporaries".
-<li>(+) Created the first reporting plugin (reports "Frequency of names" and
-"Personal events").
-<li>(+) Created the subsystem of external reporting plugins.
-<li>(*) Fixed auto-scrolling of tree diagram when clicking on personal record.
-<li>(+) Added an examples of the databases "The Human Origins" (rus, lat) and 
-"Ancient Kingdoms" (rus).
-<li>(+) Added a new plugin "History Data (links)".
-<li>(+) Added support for editing names in different languages.
-<li>(+) Added support for saving a snapshot of a tree in SVG format.
-<li>(+) Rpm-packages for Fedora / Rosa Linux are added.
-<li>(+) Added a new geocoder (OSM).
-<li>(+) Added a new plugin "Data Quality".
-<li>(+) Added possibility of highlighting portraits on general photos.
-<li>(*) Restored supporting of Ansel GEDCOM encoding.
-<li>(*) Fixed minor translation errors.
-<li>(+) Added a new plugin "WordsCloud".
-<li>(*) Fixed the problem of extra lines in family records while saving
-GEDCOM files, which led to import problems in other programs.
-</ul></p>
+    <p>
+        <b>14.07.2018 [v2.13.2]</b><ul>
+            <li>(*) Fixed the bug of reading standard GEDCOM notes.
+        </ul>
+    </p>
 
-<p><b>17.06.2017 [v2.12.0]</b><ul>
-<li>(+) Created the Chinese translation [Cui Jianquan (崔建全)].
-<li>(+) Created the German translation [Gleb Buzhinsky].
-<li>(!) The way in the interface for working with multiple files is changed 
-from MDI to SDI (preparation for the future full porting).
-<li>(!) Considerable redesign of the program architecture.
-<li>(+) Created the Italian translation of the program [Amalia Boffa].
-<li>(*) Various minor improvements.
-<li>(*) Fixed error sending error log in Ubuntu 1604 LTS (Unity).
-<li>(+) Added a new plugin "Chronicle of events".
-<li>(*) Fixed saving of column widths in the list of individual records.
-<li>(*) Improved checking and excluding the second instance of the program.
-<li>(*) Improved operation of the record lists and processing of the columns.
-<li>(+) Implemented the formatting of text notes.
-<li>(*) Automatic replacement of direct links paths to multimedia files 
-when using the program simultaneously between two operating systems (Windows / Linux);
-you need to manually edit the file of paths.
-<li>(+) Implemented display of progression when adding very large media files.
-<li>(+) Implemented option to disable the ability to add multimedia files with direct links.
-<li>(+) Replacement of absolute paths to multimedia files is realized when using
- the program and databases between Windows and Linux (for advanced users).
-<li>(*) Fixed the cache of portraits in case of two links to one photo.
-</ul></p>
+    <p>
+        <b>28.06.2018 [v2.13.1]</b><ul>
+            <li>(+) Implemented the saving of circle charts in SVG.
+            <li>(*) Fixed bug in the tree's chart with folding of branches.
+            <li>(*) Fixed bug in the plugin "History Data".
+            <li>(*) Fixed bug in the plugin "Data quality".
+            <li>(+) Added option "Automatically check for updates".
+            <li>(*) Fixed bug of loading of files "Agelong Tree" with incorrect encoding ANSEL.
+            <li>(*) Fixed a crash in checking for new versions in WinXP.
+        </ul>
+    </p>
 
-<p><b>28.02.2017 [v2.11.0]</b><ul>
-<li>(+) Added French localization (thanks to Diana Shilnikova).</li>
-<li>(+) Added images cache for portraits. This improves tree chart performance
-with large number of attached portraits.</li>
-<li>(*) Partially fixed the issue with access to media files when user switches
-between two different operating systems - Linux and Microsoft
-Windows (the issue was fixed only for relative paths).</li>
-<li>(+) GEDKeeper is ready to introduce tips with national holidays.</li>
-<li>(*) Updated photo displaying in the media viewer.</li>
-<li>(*) Optimized the lists and added sorting arrow icons.</li>
-<li>(+) Implemented VLC-based internal media player (VLC must be
-installed separately).</li>
-<li>(+) Added a new warning (and option to disable the warning) when
-user adds a media file from removable disk.</li>
-<li>(+) Added a new option to disable reopening of the most recent opened
-databases on the program startup.</li>
-<li>(~) Included YAML-parser implementation to process external databases and
-configurations.</li>
-<li>(+) Added ability to print a circle chart with print preview available.</li>
-<li>(!) Improved charts rendering, zooming, scrolling and navigation inside
-circle and tree charts [ruslangaripov].</li>
-<li>(+) Added new control to manage number of visible generations in a tree
-chart.</li>
-<li>(!) Improved the popup control for tree chart zooming [ruslangaripov].</li>
-<li>(*) Fixed HOME directory processing error occurred after new operating
-system has been installed (both Linux and Microsoft Windows).</li>
-<li>(+) Added generating and exporting of a new document type -- &quot;Album of
-Trees&quot;.</li>
-<li>(!) &quot;GEDKeeper GUI localization manual&quot; was updated and translated
-to English [ruslangaripov].</li>
-<li>(!) GUI improved within tree editor, person portraits management and
-setting up default portraits showing in the tree [IT].</li>
-<li>(*) Made small improvements and optimizations.</li>
-<li>(*) Considered more national language features aware of name
-processing.</li>
-</ul></p>
+    <p>
+        <b>08.06.2018 [v2.13.0]</b><ul>
+            <li>(+) Added the folding of tree branches.
+            <li>(*) The generator "Family Book" has been revised.
+            <li>(+) Added option of displaying dates of marriages in tree diagrams.
+            <li>(+) Added the inverted tree mode (ancestors at the bottom, descendants at the top).
+            <li>(+) Added control keys for the number of generations displayed in circle charts.
+            <li>(*) Fixed drawing of background of circle charts when outputting to a file.
+            <li>(*) Fixed working of option "Hide empty segments" in circle charts.
+            <li>(+) Added reports "Phonetics" and "Contemporaries".
+            <li>
+                (+) Created the first reporting plugin (reports "Frequency of names" and
+                "Personal events").
+            <li>(+) Created the subsystem of external reporting plugins.
+            <li>(*) Fixed auto-scrolling of tree diagram when clicking on personal record.
+            <li>
+                (+) Added an examples of the databases "The Human Origins" (rus, lat) and
+                "Ancient Kingdoms" (rus).
+            <li>(+) Added a new plugin "History Data (links)".
+            <li>(+) Added support for editing names in different languages.
+            <li>(+) Added support for saving a snapshot of a tree in SVG format.
+            <li>(+) Rpm-packages for Fedora / Rosa Linux are added.
+            <li>(+) Added a new geocoder (OSM).
+            <li>(+) Added a new plugin "Data Quality".
+            <li>(+) Added possibility of highlighting portraits on general photos.
+            <li>(*) Restored supporting of Ansel GEDCOM encoding.
+            <li>(*) Fixed minor translation errors.
+            <li>(+) Added a new plugin "WordsCloud".
+            <li>
+                (*) Fixed the problem of extra lines in family records while saving
+                GEDCOM files, which led to import problems in other programs.
+        </ul>
+    </p>
 
-<p><b>26.12.2016 [v2.10.0]</b><ul>
-<li>(+) Added a geocoding engine (Yandex) and their choice in the options (Google/Yandex).
-<li>(*) Restored search for locations in the editor of locations and window of maps (GoogleAPI).
-<li>(+) Added language selection in the properties of the GEDCOM file.
-<li>(-) Save files in any encoding except UTF-8 are deprecated and disabled.
-<li>(+) Added check for updates on the website sourceforge.net.
-</ul></p>
+    <p>
+        <b>17.06.2017 [v2.12.0]</b><ul>
+            <li>(+) Created the Chinese translation [Cui Jianquan (崔建全)].
+            <li>(+) Created the German translation [Gleb Buzhinsky].
+            <li>
+                (!) The way in the interface for working with multiple files is changed
+                from MDI to SDI (preparation for the future full porting).
+            <li>(!) Considerable redesign of the program architecture.
+            <li>(+) Created the Italian translation of the program [Amalia Boffa].
+            <li>(*) Various minor improvements.
+            <li>(*) Fixed error sending error log in Ubuntu 1604 LTS (Unity).
+            <li>(+) Added a new plugin "Chronicle of events".
+            <li>(*) Fixed saving of column widths in the list of individual records.
+            <li>(*) Improved checking and excluding the second instance of the program.
+            <li>(*) Improved operation of the record lists and processing of the columns.
+            <li>(+) Implemented the formatting of text notes.
+            <li>
+                (*) Automatic replacement of direct links paths to multimedia files
+                when using the program simultaneously between two operating systems (Windows / Linux);
+                you need to manually edit the file of paths.
+            <li>(+) Implemented display of progression when adding very large media files.
+            <li>(+) Implemented option to disable the ability to add multimedia files with direct links.
+            <li>
+                (+) Replacement of absolute paths to multimedia files is realized when using
+                the program and databases between Windows and Linux (for advanced users).
+            <li>(*) Fixed the cache of portraits in case of two links to one photo.
+        </ul>
+    </p>
 
-<p><b>18.12.2016 [v2.9.0]</b><ul>
-<li>(+) Added localization for Polish (Jacek).
-<li>(*) Fixed problems with European encodings of GEDCOM files.
-<li>(*) Small adaptation of import from the Ahnenblatt.
-<li>(+) Allow to process and edit maiden and married last names of women. Add several printing formats for such names.
-<li>(+) Improve culture-specific and culture-independent processing of names. Prepare a framework to attach languages to names and store this in a database.
-<li>(+) Create auto-update application sample.
-<li>(+) Combine GUI dialogs &quot;Adding person&quot; and &quot;Edit person&quot;.
-<li>(+) Add new types of facts: blood group, hair color and eyes color.
-<li>(+) Add demo databases for the Bach and Nehru–Gandhi families.
-<li>(+) Add demo databases for mitochondrial and Y-chromosome gaplogroups (for ones who are keen on molecular genealogy).
-<li>(+) To improve modifications safety, GEDKeeper locks a record while user is changing it.
-<li>(+) Implement modifications canceling after changes have been made in editing GUI dialogs.
-<li>(*) Fix application behavior after clicking buttons that change parents or parents’ families while user is changing a person in the GUI editor.
-<li>(*) Improve supporting of multi-monitor configurations.
-<li>(*) Made a static analysis of the source code – fix over 60 possible defects and errors.
-<li>(*) Fix many small issues and improve overall application stability.
-<li>(*) Fix some errors.
-<li>(*) Add coding style guide.
-<li>(*) Use Russian name declination in birthday notifications and calculator of relation degree.
-<li>(*) Improve birthday notifications displaying.
-<li>(*) Fix behavior of child MDI (database) windows.
-<li>(*) Improve calculation of UDN and dates sorting when mixing calendar types.
-<li>(*) Improve English localization.
-<li>(+) Add calculator of relation degree.
-</ul></p>
+    <p>
+        <b>28.02.2017 [v2.11.0]</b><ul>
+            <li>(+) Added French localization (thanks to Diana Shilnikova).</li>
+            <li>
+                (+) Added images cache for portraits. This improves tree chart performance
+                with large number of attached portraits.
+            </li>
+            <li>
+                (*) Partially fixed the issue with access to media files when user switches
+                between two different operating systems - Linux and Microsoft
+                Windows (the issue was fixed only for relative paths).
+            </li>
+            <li>(+) GEDKeeper is ready to introduce tips with national holidays.</li>
+            <li>(*) Updated photo displaying in the media viewer.</li>
+            <li>(*) Optimized the lists and added sorting arrow icons.</li>
+            <li>
+                (+) Implemented VLC-based internal media player (VLC must be
+                installed separately).
+            </li>
+            <li>
+                (+) Added a new warning (and option to disable the warning) when
+                user adds a media file from removable disk.
+            </li>
+            <li>
+                (+) Added a new option to disable reopening of the most recent opened
+                databases on the program startup.
+            </li>
+            <li>
+                (~) Included YAML-parser implementation to process external databases and
+                configurations.
+            </li>
+            <li>(+) Added ability to print a circle chart with print preview available.</li>
+            <li>
+                (!) Improved charts rendering, zooming, scrolling and navigation inside
+                circle and tree charts [ruslangaripov].
+            </li>
+            <li>
+                (+) Added new control to manage number of visible generations in a tree
+                chart.
+            </li>
+            <li>(!) Improved the popup control for tree chart zooming [ruslangaripov].</li>
+            <li>
+                (*) Fixed HOME directory processing error occurred after new operating
+                system has been installed (both Linux and Microsoft Windows).
+            </li>
+            <li>
+                (+) Added generating and exporting of a new document type -- &quot;Album of
+                Trees&quot;.
+            </li>
+            <li>
+                (!) &quot;GEDKeeper GUI localization manual&quot; was updated and translated
+                to English [ruslangaripov].
+            </li>
+            <li>
+                (!) GUI improved within tree editor, person portraits management and
+                setting up default portraits showing in the tree [IT].
+            </li>
+            <li>(*) Made small improvements and optimizations.</li>
+            <li>
+                (*) Considered more national language features aware of name
+                processing.
+            </li>
+        </ul>
+    </p>
 
-<p><b>03.09.2016 [v2.8.1]</b><ul>
-<li>(*) Correct English localization of the user interface.</li>
-<li>(+) Add preliminary version of demonstration database for USA users (President).</li>
-<li>(*) Refine and optimize the source code, fix some errors. GEDKeeper
-successfully passed a stress test processing a database with more than 60,000 people.</li>
-<li>(!) Change default interface language to English to improve further
-internationalization of GEDKeeper.</li>
-<li>(*) Move the question with calendars to a completion state.</li>
-<li>(*) Begin unification of a part of the source code that handles locale-specific processing of people names.</li>
-<li>(+) Add demonstration database for Russian users (Pushkin's family).</li>
-<li>(+) Add prototype of the new plug-in: &quot;Navigator&quot;.</li>
-</ul></p>
+    <p>
+        <b>26.12.2016 [v2.10.0]</b><ul>
+            <li>(+) Added a geocoding engine (Yandex) and their choice in the options (Google/Yandex).
+            <li>(*) Restored search for locations in the editor of locations and window of maps (GoogleAPI).
+            <li>(+) Added language selection in the properties of the GEDCOM file.
+            <li>(-) Save files in any encoding except UTF-8 are deprecated and disabled.
+            <li>(+) Added check for updates on the website sourceforge.net.
+        </ul>
+    </p>
 
-<p><b>14.08.2016 [v2.8.0]</b><ul>
-<li>(+) Clean and optimize code.
-<li>(+) Included are a selection of the interface language at first run after installation.
-<li>(+) Implemented selection of portraits from photos.
-</ul></p>
+    <p>
+        <b>18.12.2016 [v2.9.0]</b><ul>
+            <li>(+) Added localization for Polish (Jacek).
+            <li>(*) Fixed problems with European encodings of GEDCOM files.
+            <li>(*) Small adaptation of import from the Ahnenblatt.
+            <li>(+) Allow to process and edit maiden and married last names of women. Add several printing formats for such names.
+            <li>(+) Improve culture-specific and culture-independent processing of names. Prepare a framework to attach languages to names and store this in a database.
+            <li>(+) Create auto-update application sample.
+            <li>(+) Combine GUI dialogs &quot;Adding person&quot; and &quot;Edit person&quot;.
+            <li>(+) Add new types of facts: blood group, hair color and eyes color.
+            <li>(+) Add demo databases for the Bach and Nehru–Gandhi families.
+            <li>(+) Add demo databases for mitochondrial and Y-chromosome gaplogroups (for ones who are keen on molecular genealogy).
+            <li>(+) To improve modifications safety, GEDKeeper locks a record while user is changing it.
+            <li>(+) Implement modifications canceling after changes have been made in editing GUI dialogs.
+            <li>(*) Fix application behavior after clicking buttons that change parents or parents’ families while user is changing a person in the GUI editor.
+            <li>(*) Improve supporting of multi-monitor configurations.
+            <li>(*) Made a static analysis of the source code – fix over 60 possible defects and errors.
+            <li>(*) Fix many small issues and improve overall application stability.
+            <li>(*) Fix some errors.
+            <li>(*) Add coding style guide.
+            <li>(*) Use Russian name declination in birthday notifications and calculator of relation degree.
+            <li>(*) Improve birthday notifications displaying.
+            <li>(*) Fix behavior of child MDI (database) windows.
+            <li>(*) Improve calculation of UDN and dates sorting when mixing calendar types.
+            <li>(*) Improve English localization.
+            <li>(+) Add calculator of relation degree.
+        </ul>
+    </p>
 
-<p><b>31.07.2016 [v2.7.0]</b><ul>
-<li>(+) Added a diagram of the circle of descendants.
-<li>(*) Improved options of the circle of ancestors.
-<li>(+) Added generation of ascending pedigrees (ancestors).
-<li>(*) Fixed minor bugs.
-<li>(+) Added periodic autosave.
-<li>(*) In the installer for Windows added support for switching languages.
-<li>(+) Added backup of files before saving.
-<li>(*) Fixed display of links in location information.
-</ul></p>
+    <p>
+        <b>03.09.2016 [v2.8.1]</b><ul>
+            <li>(*) Correct English localization of the user interface.</li>
+            <li>(+) Add preliminary version of demonstration database for USA users (President).</li>
+            <li>
+                (*) Refine and optimize the source code, fix some errors. GEDKeeper
+                successfully passed a stress test processing a database with more than 60,000 people.
+            </li>
+            <li>
+                (!) Change default interface language to English to improve further
+                internationalization of GEDKeeper.
+            </li>
+            <li>(*) Move the question with calendars to a completion state.</li>
+            <li>(*) Begin unification of a part of the source code that handles locale-specific processing of people names.</li>
+            <li>(+) Add demonstration database for Russian users (Pushkin's family).</li>
+            <li>(+) Add prototype of the new plug-in: &quot;Navigator&quot;.</li>
+        </ul>
+    </p>
 
-<p><b>20.06.2016 [v2.6.0]</b></p>
-<ul>
-<li>(+) Added English localization of help.
-<li>(+) Export pedigrees to RTF.</li>
-<li>(!) Add package for distribution on Debian/Ubuntu Linux.</li>
-<li>(!) Add Mono-supporting (Linux).</li>
-<li>(!) Add new unique framework for unified encoding and sorting dates
-in any calendar, with any precision.</li>
-<li>(*) Restore html-pedigree generation to be compatible with Linux.</li>
-<li>(*) Simplify help content down to html only to improve Linux
-compatible (help content has no CHM files).</li>
-<li>(+) Add a function to duplicate person entries (for cases when you
-need to share data between two entire namesakes).</li>
-<li>(+) Add context menu to tables in the main work window.</li>
-<li>(+) Show calendar label for a date.</li>
-<li>(-) Remove supporting of Ansel GEDCOM encoding.</li>
-<li>(+) Add ability to edit several names of one person.</li>
-<li>(+) Add new statistics: demography, death-rate estimation for men
-and women on each five years of age.</li>
-<li>(*) Fix incorrect tree output happened in some modes.</li>
-<li>(*) Improve personal records merger.</li>
-<li>(*) Fix notes filtering, when adding into other records.</li>
-<li>(*) Fix small error on displaying person's associations.</li>
-<li>(*) Improve plug-in for 3D rendering of tree, but there is a lot
-more work to do (need a collaborator get used to 3D and dynamic
-transformation programming).</li>
-<li>(*) Implement many small fixes and code improvements (speed, safety
-and stability).</li>
-</ul>
+    <p>
+        <b>14.08.2016 [v2.8.0]</b><ul>
+            <li>(+) Clean and optimize code.
+            <li>(+) Included are a selection of the interface language at first run after installation.
+            <li>(+) Implemented selection of portraits from photos.
+        </ul>
+    </p>
 
-<p><b>01.02.2016 [v2.5.0]</b></p>
-<ul>
-<li>(*) Remake pedigree import.</li>
-<li>(*) Update pedigree import plug-in; it works again.</li>
-<li>(*) Restore Word and Excel documents loading in pedigree import
-plug-in.</li>
-<li>(*) Improve &quot;Ancestors circle&quot; diagram, add ancestors
-list analysis mode.</li>
-<li>(*) Improve scrolling of text summaries and tree diagrams.</li>
-<li>(+) Add slide show used for all images.</li>
-</ul>
-<p><b>17.11.2015 [v2.4.1]</b></p>
-<ul>
-<li>(*) Fix sorting by age and duration of life columns.</li>
-<li>(+) Add export to Excel function to the statistics block.</li>
-<li>(*) Improve sorting on columns in all lists of GEDKeeper.</li>
-<li>(*) Complete storing and loading encrypted files.</li>
-</ul>
-<p><b>08.11.2015 [v2.4.0]</b></p>
-<ul>
-<li>(*) Increase size of help content appreciably.</li>
-<li>(*) Optimize sorting of main lists with records.</li>
-<li>(*) Remove flickering when scrolling main lists with records.</li>
-<li>(*) Print tree diagrams with preview.</li>
-<li>(*) Fix dates handling in filter dialog.</li>
-<li>(*) Completely re-implement dates processing when sorting on
-columns of main lists (sorting now is aware of relative dates; dates
-rendering is completely separated from dates processing and
-sorting).</li>
-<li>(*) Optimize file loading.</li>
-<li>(*) Remove text flickering when output text in record
-summaries.</li>
-<li>(*) Add an experiment: storing and loading encrypted files (it is
-unable to use it on regular basis -- there is no complete specification
-for encrypted file format).</li>
-<li>(*) Update English and Ukrainian localizations.</li>
-<li>(*) Improve locking against modifying of person records and
-families using privacy/protection property.</li>
-<li>(*) Optimize filtering by name of a person record.</li>
-<li>(*) Fix privacy switch for persons and families.</li>
-<li>(*) Improve handling of reopening the same database.</li>
-<li>(*) Fix opening multiple program instances.</li>
-<li>(!) Improve test coverage for GEDCOM code infrastructure up to 70%
-(this allows us to get and fix some new errors introduced by new code,
-before we will make a release).</li>
-<li>(*) Fix navigation in tree diagrams (&quot;Previous record&quot;
-and &quot;Next record&quot; buttons).</li>
-<li>(+) Add four new types of <a
-href="gkhRec_UserRefs.html">user-defined reference</a> for religion:
-Islam, Catholicism, Orthodoxy and Old Belief.</li>
-<li>(*) Completely re-implement algorithms in &quot;Ancestors
-circle&quot; diagram; the plug-in was removed and its code was merged
-into the main code base.</li>
-<li>(*) Fix statistics window when changing GUI language.</li>
-<li>(*) Fix opening of the scripts window.</li>
-<li>(*) Improve the &quot;Life&quot; plug-in.</li>
-<li>(*) Fix drawing in the &quot;Life&quot; plug-in.</li>
-<li>(*) Improve GUI: toolbars in the database main window and in the
-tree diagrams window have the same buttons for filtering and navigation
-(&quot;Previous record&quot; and &quot;Next record&quot; buttons)</li>
-</ul>
-<p><b>18.10.2015 [v2.3.0]</b></p>
-<ul>
-<li>(*) Increase size of help content appreciably.</li>
-<li>(+) Add new type of <a href="gkhRec_UserRefs.html">user-defined
-reference</a>: &quot;Repressed&quot;.</li>
-<li>(+) Add new statistics: men distribution by month of birth.</li>
-<li>(*) Improve family book generation.</li>
-<li>(*) Add <a href="gkhNav_QuickSearch.html">quick search</a> to
-search by name in database main window.</li>
-<li>(*) Implement many code optimizations; code refactoring.</li>
-<li>(+) Add authenticity index estimation and indices distribution
-diagram into the statistics.</li>
-<li>(+) Add new option to tree editor: user can toggle estimated
-authenticity indices visibility (indices are estimated basing on
-confidence factor of information sources).</li>
-<li>(*) Save columns width in the persons list between application
-sessions. Optimize column options.</li>
-<li>(+) Calculate statistics for filtered entries set when filter is
-enabled.</li>
-<li>(+) Add persons search in tree editor by matching a part of
-name.</li>
-<li>(*) Fix ordering of persons list when generate pedigrees.</li>
-<li>(*) Improve tree editor rendering; add scrolling smoothness.</li>
-<li>(+) Improve navigation in tree editor; improve code
-performance.</li>
-<li>(*) Implement small improvements in tree editor.</li>
-<li>(*) Fix small errors; code refactoring and optimizations.</li>
-<li>(+) Add new plug-in to view images in a window sibling peered to
-database window. (this, for example, allows to view scanned image of a
-census and add data simultaneously, without having resort to third
-party image viewers).</li>
-<li>(*) Move &quot;Ancestors circle&quot; diagram into an optional plug-in.</li>
-<li>(*) Restore optional &quot;Life&quot; plug-in -- a game to relax a
-little bit.</li>
-</ul>
-<p><b>18.01.2015 [v2.2.0]</b></p>
-<ul>
-<li>(*) Fix changing e-mails, web sites and phone numbers in addresses.</li>
-<li>(!) Switch to &#39;semver&#39; versioning. There is no more build
-number in version, only: major.minor.patch.</li>
-</ul>
-<p><b>06.10.2014 [v2.1.1]</b></p>
-<ul>
-<li>(*) Fix small errors.</li>
-<li>(*) Improve extensions API for plug-ins. Four code blocks were moved
-out from program to plug-ins.</li>
-</ul>
-<p><b>06.03.2014 [v2.1.0]</b></p>
-<ul>
-<li>(!) Implement emergency save -- save user data when application get
-crashed.</li>
-<li>(!) Improve multimedia content viewing.</li>
-<li>(!) Improve diagram functions and controlling.</li>
-<li>(!) Change output of pedigree generation from HTML to PDF.</li>
-<li>(!) Complete new filters framework on all lists.</li>
-<li>(+) Add prototype of API for extensions (plug-ins).</li>
-<li>(+) Add diagram for viewing patriarchs and their interrelations
-(&quot;Service\Tools&quot).</li>
-<li>(+) Add ability to show nicknames in tree diagrams.</li>
-<li>(+) Improve editing of events and materials.</li>
-<li>(*) Optimize program kernel; pass main tests.</li>
-<li>(*) Fix large number of errors and defects.</li>
-<li>(*) Fix an issue with code pages on export to Excel.</li>
-<li>(*) Improve large database loading (speed up up to 20-30%).</li>
-<li>(-) Remove databases merger by synchronization (it is a dead-end
-siding).</li>
-<li>(-) Remove export to Web (it lacks of prospects).</li>
-<li>(-) Remove Undo/Redo history (it is useless).</li>
-</ul>
-<p><b>28.03.2012 [v2.0.4]</b></p>
-<ul>
-<li>(*) Add ability to change foreground and background colors on trees.</li>
-<li>(*) Fix small errors and defects.</li>
-<li>(*) Replace names fuzzy search in duplicates finding with much
-faster implementation.</li>
-<li>(+) Add prototype for exporting data to PDF.</li>
-<li>(+) Add new diagram: &quot;Ancestors circle&quot;.</li>
-</ul>
-<p><b>25.02.2012 [v2.0.3]</b></p>
-<ul>
-<li>(*) Improve UAC compatibility.</li>
-</ul>
-<p><b>19.02.2012 [v2.0.2]</b></p>
-<ul>
-<li>(*) Fix checking format of input files.</li>
-<li>(*) Add ability to send application log with e-mail.</li>
-</ul>
-<p><b>14.02.2012 [v2.0.1]</b></p>
-<ul>
-<li>(*) Simplify handling of multimedia-storage and
-multimedia-archive.</li>
-<li>(*) Improve processing of multimedia content.</li>
-<li>(*) Fix errors and defects.</li>
-<li>(*) Improve files opening speed, processing and statistics
-calculation.</li>
-<li>(*) Improve lists sorting (up to 75%).</li>
-<li>(*) Improve lists speed on large databases.</li>
-<li>(+) Add search for duplicating families.</li>
-<li>(+) Add new material type: &quot;DNA marker&quot;.</li>
-<li>(+) Improve database checking tool.</li>
-<li>(+) Complete full-text search.</li>
-</ul>
-<p><b>05.08.2011 [v2.0.0]</b></p>
-<ul>
-<li>(+) Add full-text search pre-release.</li>
-<li>(*) Restore maps, statistics, network and archive support.</li>
-<li>(*) Optimize and refactor the code.</li>
-<li>(!) Clean up the code from porting footprints.</li>
-<li>(!) Complete code porting to a new platform and language.</li>
-</ul>
-<p><b>20.07.2011</b></p>
-<ul>
-<li>(!) Complete porting to C#.</li>
-</ul>
-<p><b>15.07.2011</b></p>
-<ul>
-<li>(!) Remove rest of VCL code.</li>
-</ul>
-<p><b>25.06.2011</b></p>
-<ul>
-<li>(!) Complete GUI porting to Windows Forms.</li>
-</ul>
-<p><b>18.06.2011</b></p>
-<ul>
-<li>(!) Discontinue support for PedigreeGen project.</li>
-</ul>
-<p><b>01.06.2011</b></p>
-<ul>
-<li>(!) Start porting to .NET framework.</li>
-</ul>
-<p><b>31.05.2011 [v1.9.1]</b></p>
-<ul>
-<li>(*) Fix defects and optimize.</li>
-</ul>
-<p><b>28.04.2011 [v1.9]</b></p>
-<ul>
-<li>(+) Add person photos and shows it in the tree.</li>
-<li>(+) Support changeable languages for GUI.</li>
-<li>(+) Add English localization.</li>
-<li>(+) Add Ukrainian localizations.</li>
-<li>(+) Add ability to save current workspace.</li>
-<li>(*) Fix multimedia processing.</li>
-</ul>
-<p><b>04.04.2011 [v1.6.3]</b></p>
-<ul>
-<li>(+) Add calendar to the names reference book.</li>
-<li>(+) Add new tree type: combined tree with ancestors and
-descendants.</li>
-<li>(+) Implement new help system.</li>
-<li>(*) Optimize tree generation.</li>
-</ul>
-<p><b>28.03.2011 [v1.6.2]</b></p>
-<ul>
-<li>(+) Add new improved filters on tree diagrams.</li>
-<li>(*) Improve and optimize tree diagram generation.</li>
-<li>(*) Fix errors from the previous release.</li>
-</ul>
-<p><b>14.03.2011 [v1.6.1]</b></p>
-<ul>
-<li>(+) Add complementary export to Excel.</li>
-<li>(*) Optimize file loading (speed up up to 7%) and lists filtering
-(speed up up to 8%).</li>
-<li>(*) Fix small defects in design and functions.</li>
-<li>(*) Output locations on map for selected person: add ordering by
-date.</li>
-<li>(*) Improve lists sorting (up to 50% faster on large data).</li>
-<li>(*) Fix making screenshots on scaled trees.</li>
-<li>(*) Fix rendering of multimedia content.</li>
-<li>(*) Fix and optimize the code.</li>
-</ul>
-<p><b>28.02.2011 [v1.6]</b></p>
-<ul>
-<li>(!) Add Lua scripting support; this makes GEDKeeper more flexible
-and extensible. Add help content pre-release.</li>
-<li>(!) Remake trees output engine. It now supports generation and
-rendering of superdimensioned trees while wasting minimal amount of
-memory resources.</li>
-<li>(+) Add persons filtering by materials' content.</li>
-<li>(+) Add font settings in to tree generation.</li>
-<li>(+) Add support for stream data input from register of births and
-audit tales (beta pre-release).</li>
-<li>(+) Add support for exporting large images of trees into EMF files.</li>
-<li>(*) Improve events dialog -- user can specify calendar for dates.</li>
-<li>(*) Improve statistics calculation speed.</li>
-<li>(*) Add new tests for database checking.</li>
-<li>(*) Improve supporting MyHeritage GEDCOM loading.</li>
-<li>(*) Improve and enable for users: a function to determine relation
-degree in trees.</li>
-</ul>
+    <p>
+        <b>31.07.2016 [v2.7.0]</b><ul>
+            <li>(+) Added a diagram of the circle of descendants.
+            <li>(*) Improved options of the circle of ancestors.
+            <li>(+) Added generation of ascending pedigrees (ancestors).
+            <li>(*) Fixed minor bugs.
+            <li>(+) Added periodic autosave.
+            <li>(*) In the installer for Windows added support for switching languages.
+            <li>(+) Added backup of files before saving.
+            <li>(*) Fixed display of links in location information.
+        </ul>
+    </p>
 
-<p><b>14.12.2010 [v1.5]</b></p>
-<ul>
-<li>(!) Optimize work with very large lists (thousands of personal
-records).</li>
-<li>(+) Add ability to edit a tree with GUI (preliminary
-implementation).</li>
-<li>(+) Add organizer (addresses, phone numbers, mails).</li>
-<li>(+) Import from databases that are ADO compatible (MDB, CSV).</li>
-<li>(+) Add locations management.</li>
-<li>(+) Add database checking to verify conformity of name and sex
-(required when importing large data arrays from exterior sources).</li>
-<li>(+) Add new option for tree generation: show only years of
-life.</li>
-<li>(+) Add options for person highlighting in lists: persons having no
-parents or families.</li>
-<li>(+) Add bookmarks.</li>
-<li>(*) Improve duplicates finder and data filters.</li>
-<li>(*) Improve pedigree generation.</li>
-<li>(*) Optimize tools for databases splitting and merger.</li>
-<li>(*) Improve pedigree import from TXT, DOC and XLS sources.</li>
-<li>(*) Improve maps supporting and add mini-map in locations
-finder.</li>
-</ul>
-<p><b>14.10.2010 [v1.2]</b></p>
-<ul>
-<li>(+) Add new diagram option to exclude children that did not reach
-childbearing age (this can reduce size of large trees).</li>
-<li>(+) Extend nickname showing (the column may be disabled).</li>
-<li>(+) Add locations filter.</li>
-<li>(+) Add diagrams into statistics.</li>
-<li>(+) Add search of patriarchs to the toolset.</li>
-<li>(*) Improve &quot;Time line&quot; mode.</li>
-<li>(*) Modify and improve an algorithm used to save a file.</li>
-<li>(*) Improve Web exporting.</li>
-<li>(*) Modify maps generation: it now considers current filters.</li>
-<li>(*) Improve user interface.</li>
-<li>(*) Improve creation of conventional pedigrees (UIRO format).</li>
-</ul>
-<p><b>14.08.2010 [v1.1]</b></p>
-<ul>
-<li>(+) Implement &quot;Window of time&quot; block.</li>
-<li>(+) Add new type of individual materials.</li>
-<li>(+) Improve compatibility with Windows XP, Windows Vista, Windows
-7.</li>
-<li>(+) Add &quot;Endless calendar&quot;.</li>
-<li>(+) Add names reference book.</li>
-<li>(+) Add expressions calculator.</li>
-<li>(*) Optimize rendering and filtering of lists.</li>
-<li>(*) Optimize maps creation.</li>
-<li>(*) Fix adding and saving addresses.</li>
-<li>(*) Add preliminary implementation of &quot;trusted&quot;
-synchronization of databases.</li>
-<li>(*) Improve lists&#39; information panel.</li>
-<li>(*) Improve delete operation.</li>
-<li>(*) Improve pedigrees import from Excel.</li>
-<li>(*) Add user-defined references.</li>
-<li>(*) Fix large amount of errors.</li>
-</ul>
-<p><b>14.05.2010 [v1.0]</b></p>
-<ul>
-<li>(+) Add groups to research.</li>
-<li>(+) Add access restriction to confidential data.</li>
-<li>(*) Add simple scaling of a tree image.</li>
-<li>(*) Add choose of output format for pedigree generation; modify the
-generation partially according to formats.</li>
-<li>(*) Improve speed of duplicates finding.</li>
-<li>(*) Add hints.</li>
-<li>(*) Improve filtering.</li>
-<li>(*) Optimize lists.</li>
-<li>(*) Improve Excel export.</li>
-<li>(*) Fix some small errors.</li>
-</ul>
-<p><b>28.04.2010 [v0.9]</b></p>
-<ul>
-<li>(+) Increase number of columns in the persons list; improve
-adjustment.</li>
-<li>(+) Add FAQ.</li>
-<li>(*) Fix many errors.</li>
-</ul>
-<p><b>27.04.2010</b></p>
-<ul>
-<li>(*) Save variants of relations in associations.</li>
-<li>(*) Improve user interface.</li>
-<li>(*) Fix lists of references from people and family facts to
-locations.</li>
-<li>(*) Fix task list and correspondence list in researches.</li>
-</ul>
-<p><b>26.04.2010</b></p>
-<ul>
- <li>(*) Add namesake list to information about a person.</li>
-</ul>
-<p><b>23.04.2010</b></p>
-<ul>
-<li>(*) Fix some errors: processing event year number in statistics and
-list updating.</li>
-<li>(*) Improve &quot;Add location&quot; dialog (name copying).</li>
-<li>(*) Fix pedigree import: extent numeration recognition.</li>
-</ul>
-<p><b>22.04.2010</b></p>
-<ul>
-<li>(+) Add Undo&#47;Redo basis.</li>
-<li>(*) Improve performance of lists updating.</li>
-<li>(*) Remake navigation.</li>
-</ul>
-<p><b>14.04.2010</b></p>
-<ul>
-<li>(*) Fix errors and defects.</li>
-<li>(*) Fix and improve web-trees generation.</li>
-<li>(*) Fix web-export.</li>
-</ul>
-<p><b>08.04.2010</b></p>
-<ul>
-<li>(*) Add quick filter.</li>
-</ul>
-<p><b>04.04.2010</b></p>
-<ul>
-<li>(*) Add quality rating for quotes taken from a source.</li>
-<li>(*) Fix researches, tasks and correspondence interface.</li>
-</ul>
-<p><b>02.04.2010</b></p>
-<ul>
-<li>(*) Add new object: locations.</li>
-</ul>
-<p><b>30.03.2010</b></p>
-<ul>
-<li>(*) Implement basis for new objects: research, task and
-correspondence.</li>
-<li>(*) Fix saving proxy settings into the settings file.</li>
-</ul>
-<p><b>11.03.2010</b></p>
-<ul>
-<li>(*) Fix large amount of errors and defects.</li>
-</ul>
-<p><b>26.02.2010</b></p>
-<ul>
-<li>(*) Support archives and storages of multimedia content.</li>
-</ul>
-<p><b>22.02.2010</b></p>
-<ul>
-<li>(*) Add support of multiple document interface (MDI).</li>
-</ul>
-<p><b>05.01.2010</b></p>
-<ul>
-<li>(*) Add preliminary support of multimedia content.</li>
-</ul>
-<p><b>28.01.2010</b></p>
-<ul>
-<li>(*) Refactor and optimize large amount of code; fix small
-defects.</li>
-<li>(*) Support archives according to the standard.</li>
-</ul>
-<p><b>30.12.2009</b></p>
-<ul>
-<li>(*) Add tree navigation.</li>
-</ul>
-<p><b>22.12.2009</b></p>
-<ul>
-<li>(*) Complete import of text pedigrees.</li>
-</ul>
-<p><b>20.12.2009</b></p>
-<ul>
- <li>(*) Improve pedigree import.</li>
-</ul>
-<p><b>08.12.2009</b></p>
-<ul>
-<li>(*) Fix errors and defects.</li>
-<li>(*) Improve source quotation.</li>
-</ul>
-<p><b>06.12.2009</b></p>
-<ul>
-<li>(*) Save filters by name and modified files.</li>
-</ul>
-<p><b>04.12.2009</b></p>
-<ul>
-<li>(*) Improve user interface.</li>
-<li>(*) Optimize updating of lists.</li>
-</ul>
-<p><b>01.12.2009</b></p>
-<ul>
-<li>(*) Develop new navigation style.</li>
-<li>(*) Refactor source code.</li>
-</ul>
-<p><b>30.11.2009</b></p>
-<ul>
-<li>(*) Improve handling of events and attributes.</li>
-<li>(*) Fix code defects.</li>
-<li>(*) Add new navigation functions.</li>
-</ul>
-<p><b>28.11.2009</b></p>
-<ul>
-<li>(*) Add six new non-standard tags: &quot;hobby&quot;,
-&quot;award&quot;, &quot;military service&quot;, &quot;drafted&quot;,
-&quot;demobilized&quot;, &quot;rank&quot;.</li>
-</ul>
-<p><b>26.11.2009</b></p>
-<ul>
-<li>(*) Redesign the entire application.</li>
-<li>(*) Improve output of descending trees.</li>
-<li>(*) Fix generation of descending trees.</li>
-<li>(*) Redesign project architecture.</li>
-</ul>
-<p><b>24.11.2009</b></p>
-<ul>
-<li>(*) Fix errors.</li>
-<li>(*) Improve help content and installer.</li>
-<li>(*) Change project tree.</li>
-</ul>
-<p><b>19.11.2009</b></p>
-<ul>
-<li>(*) Fix some source code defects.</li>
-<li>(*) Optimize performance.</li>
-<li>(*) Refactor list update and filtering.</li>
-<li>(*) Add fuzzy comparison with dates checking into duplicates
-finder.</li>
-</ul>
-<p><b>14.11.2009</b></p>
-<ul>
-<li>(*) Fix output of sources in pedigree generation.</li>
-</ul>
-<p><b>30.09.2009</b></p>
-<ul>
-<li>(*) Show numbers of generations in pedigrees as Roman
-numerals.</li>
-<li>(*) Fix small defects.</li>
-</ul>
-<p><b>19.09.2009</b></p>
-<ul>
-<li>(*) Add Google maps supporting.</li>
-</ul>
-<p><b>24.08.2009</b></p>
-<ul>
-<li>(*) Fix errors and defects.</li>
-</ul>
-<p><b>31.07.2009</b></p>
-<ul>
-<li>(*) Fix errors.</li>
-<li>(*) Improve files comparison.</li>
-</ul>
-<p><b>30.07.2009</b></p>
-<ul>
-<li>(*) Improve design.</li>
-<li>(*) Improve filtering and user interface.</li>
-</ul>
-<p><b>27.07.2009</b></p>
-<ul>
-<li>(*) Modify editor of persons, families, groups and their
-relationships.</li>
-</ul>
-<p><b>26.07.2009</b></p>
-<ul>
-<li>(*) Refactor editor code.</li>
-</ul>
-<p><b>24.07.2009</b></p>
-<ul>
-<li>(*) Add support for groups.</li>
-</ul>
-<p><b>22.07.2009</b></p>
-<ul>
-<li>(*) Improve adding and modifying records.</li>
-</ul>
-<p><b>05.07.2009</b></p>
-<ul>
-<li>(*) Improve Web export.</li>
-</ul>
-<p><b>01.07.2009</b></p>
-<ul>
-<li>(*) Refactor code and resources. Optimize and cut down lines of
-further development.</li>
-<li>(*) Improve cognate linkers and diagrams finder.</li>
-<li>(*) Improve Web export.</li>
-</ul>
-<p><b>30.06.2009</b></p>
-<ul>
-<li>(*) Complete pedigree builder.</li>
-</ul>
-<p><b>26.06.2009</b></p>
-<ul>
-<li>(*) Refactor source code.</li>
-<li>(*) Add export to Excel.</li>
-<li>(*) Add initial code for pedigree builder.</li>
-<li>(*) Add russian last names &quot;processing&quot; for
-statistics.</li>
-</ul>
-<p><b>12.05.2009</b></p>
-<ul>
-<li>(*) Add hypertext survey for a person.</li>
-</ul>
-<p><b>12.02.2009</b></p>
-<ul>
-<li>(*) Fix some errors. Add two editing functions.</li>
-</ul>
-<p><b>06.02.2009</b></p>
-<ul>
-<li>(*) Fix some errors.</li>
-<li>(*) Add a warning before deleting an object.</li>
-</ul>
-<p><b>04.02.2009</b></p>
-<ul>
-<li>(*) Work through database cleaning.</li>
-<li>(*) Fix small errors in dates processing and dates output in
-diagrams.</li>
-</ul>
-<p><b>02.02.2009</b></p>
-<ul>
-<li>(*) Fix defects.</li>
-<li>(*) Improve record list.</li>
-</ul>
-<p><b>28.01.2009</b></p>
-<ul>
-<li>(*) Fix some small defects.</li>
-<li>(*) Add ability to delete person record.</li>
-<li>(*) Fix a fundamental error in tree calculation; now tree with
-descendants and their wives works.</li>
-<li>(*) Improve tree output; fix errors. Add tree picture saving.</li>
-<li>(*) Add statistics types.</li>
-</ul>
-<p><b>22.01.2009</b></p>
-<ul>
-<li>(*) Add preliminary file checking.</li>
-<li>(*) Work through output of tree with ancestors and
-descendants.</li>
-<li>(*) Add statistics for names and number of ancestors.</li>
-<li>(*) Add autocomplete for patronymic name and first name.</li>
-<li>(*) Fix some errors.</li>
-<li>(*) Add application log.</li>
-</ul>
-<p><b>20.01.2009</b></p>
-<ul>
-<li>(*) Fix errors.</li>
-<li>(*) Add first and patronymic names parser, and dictionary.</li>
-<li>(*) Complete descendants tree.</li>
-<li>(*) Add preliminary version of service to check relation
-degree.</li>
-</ul>
-<p><b>18.01.2009</b></p>
-<ul>
-<li>(*) Complete event editing (notes, sources, multimedia).</li>
-<li>(*) Complete ancestors tree.</li>
-</ul>
-<p><b>17.01.2009</b></p>
-<ul>
-<li>(*) Add ability to modify author of a document.</li>
-<li>(*) Improve file headers.</li>
-<li>(*) Improve user interface.</li>
-<li>(*) Complete dates processing.</li>
-</ul>
-<p><b>16.01.2009</b></p>
-<ul>
-<li>(*) Add preliminary version of descendant tree.</li>
-<li>(*) Fix some errors.</li>
-<li>(*) Improve dates processing.</li>
-<li>(*) Fix file headers.</li>
-</ul>
-<p><b>15.01.2009</b></p>
-<ul>
-<li>(*) Add preliminary help content [ElenAlexs].</li>
-<li>(*) Adjust design.</li>
-<li>(*) Add lists sorting.</li>
-<li>(*) Improve event editing.</li>
-</ul>
-<p><b>14.01.2009</b></p>
-<ul>
-<li>(*) Add and remove children from families.</li>
-<li>(*) Add the first tree -- ancestors tree; add setup.</li>
-<li>(*) Add preliminary print preview.</li>
-<li>(*) Save a tree setting between application sessions.</li>
-<li>(*) Add dates processing.</li>
-</ul>
-<p><b>13.01.2009</b></p>
-<ul>
-<li>(*) Refactor and optimize source code.</li>
-<li>(*) Add events, notes, objects and sources to families.</li>
-<li>(*) Add filter by field into the person selector dialog (when it is
-necessary).</li>
-<li>(*) Add &quot;About&quot; window.</li>
-</ul>
-<p><b>12.01.2009</b></p>
-<ul>
-<li>(*) Add events, notes, objects and sources to person records.</li>
-</ul>
-<p><b>11.01.2009</b></p>
-<ul>
-<li>(*) Add event, note, object and source dialogs.</li>
-<li>(*) Add preliminary modify function to change family
-records.</li>
-</ul>
-<p><b>10.01.2009</b></p>
-<ul>
-<li>(*) Add modifying person records.</li>
-</ul>
-<p><b>09.01.2009</b></p>
-<ul>
-<li>(*) Add ability to add new person, to modify and select the parents.</li>
-</ul>
-<p><b>08.01.2009</b></p>
-<ul>
-<li>(!) Start the project up.</li>
-</ul>
+    <p><b>20.06.2016 [v2.6.0]</b></p>
+    <ul>
+        <li>(+) Added English localization of help.
+        <li>(+) Export pedigrees to RTF.</li>
+        <li>(!) Add package for distribution on Debian/Ubuntu Linux.</li>
+        <li>(!) Add Mono-supporting (Linux).</li>
+        <li>
+            (!) Add new unique framework for unified encoding and sorting dates
+            in any calendar, with any precision.
+        </li>
+        <li>(*) Restore html-pedigree generation to be compatible with Linux.</li>
+        <li>
+            (*) Simplify help content down to html only to improve Linux
+            compatible (help content has no CHM files).
+        </li>
+        <li>
+            (+) Add a function to duplicate person entries (for cases when you
+            need to share data between two entire namesakes).
+        </li>
+        <li>(+) Add context menu to tables in the main work window.</li>
+        <li>(+) Show calendar label for a date.</li>
+        <li>(-) Remove supporting of Ansel GEDCOM encoding.</li>
+        <li>(+) Add ability to edit several names of one person.</li>
+        <li>
+            (+) Add new statistics: demography, death-rate estimation for men
+            and women on each five years of age.
+        </li>
+        <li>(*) Fix incorrect tree output happened in some modes.</li>
+        <li>(*) Improve personal records merger.</li>
+        <li>(*) Fix notes filtering, when adding into other records.</li>
+        <li>(*) Fix small error on displaying person's associations.</li>
+        <li>
+            (*) Improve plug-in for 3D rendering of tree, but there is a lot
+            more work to do (need a collaborator get used to 3D and dynamic
+            transformation programming).
+        </li>
+        <li>
+            (*) Implement many small fixes and code improvements (speed, safety
+            and stability).
+        </li>
+    </ul>
+
+    <p><b>01.02.2016 [v2.5.0]</b></p>
+    <ul>
+        <li>(*) Remake pedigree import.</li>
+        <li>(*) Update pedigree import plug-in; it works again.</li>
+        <li>
+            (*) Restore Word and Excel documents loading in pedigree import
+            plug-in.
+        </li>
+        <li>
+            (*) Improve &quot;Ancestors circle&quot; diagram, add ancestors
+            list analysis mode.
+        </li>
+        <li>(*) Improve scrolling of text summaries and tree diagrams.</li>
+        <li>(+) Add slide show used for all images.</li>
+    </ul>
+    <p><b>17.11.2015 [v2.4.1]</b></p>
+    <ul>
+        <li>(*) Fix sorting by age and duration of life columns.</li>
+        <li>(+) Add export to Excel function to the statistics block.</li>
+        <li>(*) Improve sorting on columns in all lists of GEDKeeper.</li>
+        <li>(*) Complete storing and loading encrypted files.</li>
+    </ul>
+    <p><b>08.11.2015 [v2.4.0]</b></p>
+    <ul>
+        <li>(*) Increase size of help content appreciably.</li>
+        <li>(*) Optimize sorting of main lists with records.</li>
+        <li>(*) Remove flickering when scrolling main lists with records.</li>
+        <li>(*) Print tree diagrams with preview.</li>
+        <li>(*) Fix dates handling in filter dialog.</li>
+        <li>
+            (*) Completely re-implement dates processing when sorting on
+            columns of main lists (sorting now is aware of relative dates; dates
+            rendering is completely separated from dates processing and
+            sorting).
+        </li>
+        <li>(*) Optimize file loading.</li>
+        <li>
+            (*) Remove text flickering when output text in record
+            summaries.
+        </li>
+        <li>
+            (*) Add an experiment: storing and loading encrypted files (it is
+            unable to use it on regular basis -- there is no complete specification
+            for encrypted file format).
+        </li>
+        <li>(*) Update English and Ukrainian localizations.</li>
+        <li>
+            (*) Improve locking against modifying of person records and
+            families using privacy/protection property.
+        </li>
+        <li>(*) Optimize filtering by name of a person record.</li>
+        <li>(*) Fix privacy switch for persons and families.</li>
+        <li>(*) Improve handling of reopening the same database.</li>
+        <li>(*) Fix opening multiple program instances.</li>
+        <li>
+            (!) Improve test coverage for GEDCOM code infrastructure up to 70%
+            (this allows us to get and fix some new errors introduced by new code,
+            before we will make a release).
+        </li>
+        <li>
+            (*) Fix navigation in tree diagrams (&quot;Previous record&quot;
+            and &quot;Next record&quot; buttons).
+        </li>
+        <li>
+            (+) Add four new types of <a href="gkhRec_UserRefs.html">user-defined reference</a> for religion:
+            Islam, Catholicism, Orthodoxy and Old Belief.
+        </li>
+        <li>
+            (*) Completely re-implement algorithms in &quot;Ancestors
+            circle&quot; diagram; the plug-in was removed and its code was merged
+            into the main code base.
+        </li>
+        <li>(*) Fix statistics window when changing GUI language.</li>
+        <li>(*) Fix opening of the scripts window.</li>
+        <li>(*) Improve the &quot;Life&quot; plug-in.</li>
+        <li>(*) Fix drawing in the &quot;Life&quot; plug-in.</li>
+        <li>
+            (*) Improve GUI: toolbars in the database main window and in the
+            tree diagrams window have the same buttons for filtering and navigation
+            (&quot;Previous record&quot; and &quot;Next record&quot; buttons)
+        </li>
+    </ul>
+    <p><b>18.10.2015 [v2.3.0]</b></p>
+    <ul>
+        <li>(*) Increase size of help content appreciably.</li>
+        <li>
+            (+) Add new type of <a href="gkhRec_UserRefs.html">
+                user-defined
+                reference
+            </a>: &quot;Repressed&quot;.
+        </li>
+        <li>(+) Add new statistics: men distribution by month of birth.</li>
+        <li>(*) Improve family book generation.</li>
+        <li>
+            (*) Add <a href="gkhNav_QuickSearch.html">quick search</a> to
+            search by name in database main window.
+        </li>
+        <li>(*) Implement many code optimizations; code refactoring.</li>
+        <li>
+            (+) Add authenticity index estimation and indices distribution
+            diagram into the statistics.
+        </li>
+        <li>
+            (+) Add new option to tree editor: user can toggle estimated
+            authenticity indices visibility (indices are estimated basing on
+            confidence factor of information sources).
+        </li>
+        <li>
+            (*) Save columns width in the persons list between application
+            sessions. Optimize column options.
+        </li>
+        <li>
+            (+) Calculate statistics for filtered entries set when filter is
+            enabled.
+        </li>
+        <li>
+            (+) Add persons search in tree editor by matching a part of
+            name.
+        </li>
+        <li>(*) Fix ordering of persons list when generate pedigrees.</li>
+        <li>(*) Improve tree editor rendering; add scrolling smoothness.</li>
+        <li>
+            (+) Improve navigation in tree editor; improve code
+            performance.
+        </li>
+        <li>(*) Implement small improvements in tree editor.</li>
+        <li>(*) Fix small errors; code refactoring and optimizations.</li>
+        <li>
+            (+) Add new plug-in to view images in a window sibling peered to
+            database window. (this, for example, allows to view scanned image of a
+            census and add data simultaneously, without having resort to third
+            party image viewers).
+        </li>
+        <li>(*) Move &quot;Ancestors circle&quot; diagram into an optional plug-in.</li>
+        <li>
+            (*) Restore optional &quot;Life&quot; plug-in -- a game to relax a
+            little bit.
+        </li>
+    </ul>
+    <p><b>18.01.2015 [v2.2.0]</b></p>
+    <ul>
+        <li>(*) Fix changing e-mails, web sites and phone numbers in addresses.</li>
+        <li>
+            (!) Switch to &#39;semver&#39; versioning. There is no more build
+            number in version, only: major.minor.patch.
+        </li>
+    </ul>
+    <p><b>06.10.2014 [v2.1.1]</b></p>
+    <ul>
+        <li>(*) Fix small errors.</li>
+        <li>
+            (*) Improve extensions API for plug-ins. Four code blocks were moved
+            out from program to plug-ins.
+        </li>
+    </ul>
+    <p><b>06.03.2014 [v2.1.0]</b></p>
+    <ul>
+        <li>
+            (!) Implement emergency save -- save user data when application get
+            crashed.
+        </li>
+        <li>(!) Improve multimedia content viewing.</li>
+        <li>(!) Improve diagram functions and controlling.</li>
+        <li>(!) Change output of pedigree generation from HTML to PDF.</li>
+        <li>(!) Complete new filters framework on all lists.</li>
+        <li>(+) Add prototype of API for extensions (plug-ins).</li>
+        <li>
+            (+) Add diagram for viewing patriarchs and their interrelations
+            (&quot;Service\Tools&quot).
+        </li>
+        <li>(+) Add ability to show nicknames in tree diagrams.</li>
+        <li>(+) Improve editing of events and materials.</li>
+        <li>(*) Optimize program kernel; pass main tests.</li>
+        <li>(*) Fix large number of errors and defects.</li>
+        <li>(*) Fix an issue with code pages on export to Excel.</li>
+        <li>(*) Improve large database loading (speed up up to 20-30%).</li>
+        <li>
+            (-) Remove databases merger by synchronization (it is a dead-end
+            siding).
+        </li>
+        <li>(-) Remove export to Web (it lacks of prospects).</li>
+        <li>(-) Remove Undo/Redo history (it is useless).</li>
+    </ul>
+    <p><b>28.03.2012 [v2.0.4]</b></p>
+    <ul>
+        <li>(*) Add ability to change foreground and background colors on trees.</li>
+        <li>(*) Fix small errors and defects.</li>
+        <li>
+            (*) Replace names fuzzy search in duplicates finding with much
+            faster implementation.
+        </li>
+        <li>(+) Add prototype for exporting data to PDF.</li>
+        <li>(+) Add new diagram: &quot;Ancestors circle&quot;.</li>
+    </ul>
+    <p><b>25.02.2012 [v2.0.3]</b></p>
+    <ul>
+        <li>(*) Improve UAC compatibility.</li>
+    </ul>
+    <p><b>19.02.2012 [v2.0.2]</b></p>
+    <ul>
+        <li>(*) Fix checking format of input files.</li>
+        <li>(*) Add ability to send application log with e-mail.</li>
+    </ul>
+    <p><b>14.02.2012 [v2.0.1]</b></p>
+    <ul>
+        <li>
+            (*) Simplify handling of multimedia-storage and
+            multimedia-archive.
+        </li>
+        <li>(*) Improve processing of multimedia content.</li>
+        <li>(*) Fix errors and defects.</li>
+        <li>
+            (*) Improve files opening speed, processing and statistics
+            calculation.
+        </li>
+        <li>(*) Improve lists sorting (up to 75%).</li>
+        <li>(*) Improve lists speed on large databases.</li>
+        <li>(+) Add search for duplicating families.</li>
+        <li>(+) Add new material type: &quot;DNA marker&quot;.</li>
+        <li>(+) Improve database checking tool.</li>
+        <li>(+) Complete full-text search.</li>
+    </ul>
+    <p><b>05.08.2011 [v2.0.0]</b></p>
+    <ul>
+        <li>(+) Add full-text search pre-release.</li>
+        <li>(*) Restore maps, statistics, network and archive support.</li>
+        <li>(*) Optimize and refactor the code.</li>
+        <li>(!) Clean up the code from porting footprints.</li>
+        <li>(!) Complete code porting to a new platform and language.</li>
+    </ul>
+    <p><b>20.07.2011</b></p>
+    <ul>
+        <li>(!) Complete porting to C#.</li>
+    </ul>
+    <p><b>15.07.2011</b></p>
+    <ul>
+        <li>(!) Remove rest of VCL code.</li>
+    </ul>
+    <p><b>25.06.2011</b></p>
+    <ul>
+        <li>(!) Complete GUI porting to Windows Forms.</li>
+    </ul>
+    <p><b>18.06.2011</b></p>
+    <ul>
+        <li>(!) Discontinue support for PedigreeGen project.</li>
+    </ul>
+    <p><b>01.06.2011</b></p>
+    <ul>
+        <li>(!) Start porting to .NET framework.</li>
+    </ul>
+    <p><b>31.05.2011 [v1.9.1]</b></p>
+    <ul>
+        <li>(*) Fix defects and optimize.</li>
+    </ul>
+    <p><b>28.04.2011 [v1.9]</b></p>
+    <ul>
+        <li>(+) Add person photos and shows it in the tree.</li>
+        <li>(+) Support changeable languages for GUI.</li>
+        <li>(+) Add English localization.</li>
+        <li>(+) Add Ukrainian localizations.</li>
+        <li>(+) Add ability to save current workspace.</li>
+        <li>(*) Fix multimedia processing.</li>
+    </ul>
+    <p><b>04.04.2011 [v1.6.3]</b></p>
+    <ul>
+        <li>(+) Add calendar to the names reference book.</li>
+        <li>
+            (+) Add new tree type: combined tree with ancestors and
+            descendants.
+        </li>
+        <li>(+) Implement new help system.</li>
+        <li>(*) Optimize tree generation.</li>
+    </ul>
+    <p><b>28.03.2011 [v1.6.2]</b></p>
+    <ul>
+        <li>(+) Add new improved filters on tree diagrams.</li>
+        <li>(*) Improve and optimize tree diagram generation.</li>
+        <li>(*) Fix errors from the previous release.</li>
+    </ul>
+    <p><b>14.03.2011 [v1.6.1]</b></p>
+    <ul>
+        <li>(+) Add complementary export to Excel.</li>
+        <li>
+            (*) Optimize file loading (speed up up to 7%) and lists filtering
+            (speed up up to 8%).
+        </li>
+        <li>(*) Fix small defects in design and functions.</li>
+        <li>
+            (*) Output locations on map for selected person: add ordering by
+            date.
+        </li>
+        <li>(*) Improve lists sorting (up to 50% faster on large data).</li>
+        <li>(*) Fix making screenshots on scaled trees.</li>
+        <li>(*) Fix rendering of multimedia content.</li>
+        <li>(*) Fix and optimize the code.</li>
+    </ul>
+    <p><b>28.02.2011 [v1.6]</b></p>
+    <ul>
+        <li>
+            (!) Add Lua scripting support; this makes GEDKeeper more flexible
+            and extensible. Add help content pre-release.
+        </li>
+        <li>
+            (!) Remake trees output engine. It now supports generation and
+            rendering of superdimensioned trees while wasting minimal amount of
+            memory resources.
+        </li>
+        <li>(+) Add persons filtering by materials' content.</li>
+        <li>(+) Add font settings in to tree generation.</li>
+        <li>
+            (+) Add support for stream data input from register of births and
+            audit tales (beta pre-release).
+        </li>
+        <li>(+) Add support for exporting large images of trees into EMF files.</li>
+        <li>(*) Improve events dialog -- user can specify calendar for dates.</li>
+        <li>(*) Improve statistics calculation speed.</li>
+        <li>(*) Add new tests for database checking.</li>
+        <li>(*) Improve supporting MyHeritage GEDCOM loading.</li>
+        <li>
+            (*) Improve and enable for users: a function to determine relation
+            degree in trees.
+        </li>
+    </ul>
+
+    <p><b>14.12.2010 [v1.5]</b></p>
+    <ul>
+        <li>
+            (!) Optimize work with very large lists (thousands of personal
+            records).
+        </li>
+        <li>
+            (+) Add ability to edit a tree with GUI (preliminary
+            implementation).
+        </li>
+        <li>(+) Add organizer (addresses, phone numbers, mails).</li>
+        <li>(+) Import from databases that are ADO compatible (MDB, CSV).</li>
+        <li>(+) Add locations management.</li>
+        <li>
+            (+) Add database checking to verify conformity of name and sex
+            (required when importing large data arrays from exterior sources).
+        </li>
+        <li>
+            (+) Add new option for tree generation: show only years of
+            life.
+        </li>
+        <li>
+            (+) Add options for person highlighting in lists: persons having no
+            parents or families.
+        </li>
+        <li>(+) Add bookmarks.</li>
+        <li>(*) Improve duplicates finder and data filters.</li>
+        <li>(*) Improve pedigree generation.</li>
+        <li>(*) Optimize tools for databases splitting and merger.</li>
+        <li>(*) Improve pedigree import from TXT, DOC and XLS sources.</li>
+        <li>
+            (*) Improve maps supporting and add mini-map in locations
+            finder.
+        </li>
+    </ul>
+    <p><b>14.10.2010 [v1.2]</b></p>
+    <ul>
+        <li>
+            (+) Add new diagram option to exclude children that did not reach
+            childbearing age (this can reduce size of large trees).
+        </li>
+        <li>(+) Extend nickname showing (the column may be disabled).</li>
+        <li>(+) Add locations filter.</li>
+        <li>(+) Add diagrams into statistics.</li>
+        <li>(+) Add search of patriarchs to the toolset.</li>
+        <li>(*) Improve &quot;Time line&quot; mode.</li>
+        <li>(*) Modify and improve an algorithm used to save a file.</li>
+        <li>(*) Improve Web exporting.</li>
+        <li>(*) Modify maps generation: it now considers current filters.</li>
+        <li>(*) Improve user interface.</li>
+        <li>(*) Improve creation of conventional pedigrees (UIRO format).</li>
+    </ul>
+    <p><b>14.08.2010 [v1.1]</b></p>
+    <ul>
+        <li>(+) Implement &quot;Window of time&quot; block.</li>
+        <li>(+) Add new type of individual materials.</li>
+        <li>
+            (+) Improve compatibility with Windows XP, Windows Vista, Windows
+            7.
+        </li>
+        <li>(+) Add &quot;Endless calendar&quot;.</li>
+        <li>(+) Add names reference book.</li>
+        <li>(+) Add expressions calculator.</li>
+        <li>(*) Optimize rendering and filtering of lists.</li>
+        <li>(*) Optimize maps creation.</li>
+        <li>(*) Fix adding and saving addresses.</li>
+        <li>
+            (*) Add preliminary implementation of &quot;trusted&quot;
+            synchronization of databases.
+        </li>
+        <li>(*) Improve lists&#39; information panel.</li>
+        <li>(*) Improve delete operation.</li>
+        <li>(*) Improve pedigrees import from Excel.</li>
+        <li>(*) Add user-defined references.</li>
+        <li>(*) Fix large amount of errors.</li>
+    </ul>
+    <p><b>14.05.2010 [v1.0]</b></p>
+    <ul>
+        <li>(+) Add groups to research.</li>
+        <li>(+) Add access restriction to confidential data.</li>
+        <li>(*) Add simple scaling of a tree image.</li>
+        <li>
+            (*) Add choose of output format for pedigree generation; modify the
+            generation partially according to formats.
+        </li>
+        <li>(*) Improve speed of duplicates finding.</li>
+        <li>(*) Add hints.</li>
+        <li>(*) Improve filtering.</li>
+        <li>(*) Optimize lists.</li>
+        <li>(*) Improve Excel export.</li>
+        <li>(*) Fix some small errors.</li>
+    </ul>
+    <p><b>28.04.2010 [v0.9]</b></p>
+    <ul>
+        <li>
+            (+) Increase number of columns in the persons list; improve
+            adjustment.
+        </li>
+        <li>(+) Add FAQ.</li>
+        <li>(*) Fix many errors.</li>
+    </ul>
+    <p><b>27.04.2010</b></p>
+    <ul>
+        <li>(*) Save variants of relations in associations.</li>
+        <li>(*) Improve user interface.</li>
+        <li>
+            (*) Fix lists of references from people and family facts to
+            locations.
+        </li>
+        <li>(*) Fix task list and correspondence list in researches.</li>
+    </ul>
+    <p><b>26.04.2010</b></p>
+    <ul>
+        <li>(*) Add namesake list to information about a person.</li>
+    </ul>
+    <p><b>23.04.2010</b></p>
+    <ul>
+        <li>
+            (*) Fix some errors: processing event year number in statistics and
+            list updating.
+        </li>
+        <li>(*) Improve &quot;Add location&quot; dialog (name copying).</li>
+        <li>(*) Fix pedigree import: extent numeration recognition.</li>
+    </ul>
+    <p><b>22.04.2010</b></p>
+    <ul>
+        <li>(+) Add Undo&#47;Redo basis.</li>
+        <li>(*) Improve performance of lists updating.</li>
+        <li>(*) Remake navigation.</li>
+    </ul>
+    <p><b>14.04.2010</b></p>
+    <ul>
+        <li>(*) Fix errors and defects.</li>
+        <li>(*) Fix and improve web-trees generation.</li>
+        <li>(*) Fix web-export.</li>
+    </ul>
+    <p><b>08.04.2010</b></p>
+    <ul>
+        <li>(*) Add quick filter.</li>
+    </ul>
+    <p><b>04.04.2010</b></p>
+    <ul>
+        <li>(*) Add quality rating for quotes taken from a source.</li>
+        <li>(*) Fix researches, tasks and correspondence interface.</li>
+    </ul>
+    <p><b>02.04.2010</b></p>
+    <ul>
+        <li>(*) Add new object: locations.</li>
+    </ul>
+    <p><b>30.03.2010</b></p>
+    <ul>
+        <li>
+            (*) Implement basis for new objects: research, task and
+            correspondence.
+        </li>
+        <li>(*) Fix saving proxy settings into the settings file.</li>
+    </ul>
+    <p><b>11.03.2010</b></p>
+    <ul>
+        <li>(*) Fix large amount of errors and defects.</li>
+    </ul>
+    <p><b>26.02.2010</b></p>
+    <ul>
+        <li>(*) Support archives and storages of multimedia content.</li>
+    </ul>
+    <p><b>22.02.2010</b></p>
+    <ul>
+        <li>(*) Add support of multiple document interface (MDI).</li>
+    </ul>
+    <p><b>05.01.2010</b></p>
+    <ul>
+        <li>(*) Add preliminary support of multimedia content.</li>
+    </ul>
+    <p><b>28.01.2010</b></p>
+    <ul>
+        <li>
+            (*) Refactor and optimize large amount of code; fix small
+            defects.
+        </li>
+        <li>(*) Support archives according to the standard.</li>
+    </ul>
+    <p><b>30.12.2009</b></p>
+    <ul>
+        <li>(*) Add tree navigation.</li>
+    </ul>
+    <p><b>22.12.2009</b></p>
+    <ul>
+        <li>(*) Complete import of text pedigrees.</li>
+    </ul>
+    <p><b>20.12.2009</b></p>
+    <ul>
+        <li>(*) Improve pedigree import.</li>
+    </ul>
+    <p><b>08.12.2009</b></p>
+    <ul>
+        <li>(*) Fix errors and defects.</li>
+        <li>(*) Improve source quotation.</li>
+    </ul>
+    <p><b>06.12.2009</b></p>
+    <ul>
+        <li>(*) Save filters by name and modified files.</li>
+    </ul>
+    <p><b>04.12.2009</b></p>
+    <ul>
+        <li>(*) Improve user interface.</li>
+        <li>(*) Optimize updating of lists.</li>
+    </ul>
+    <p><b>01.12.2009</b></p>
+    <ul>
+        <li>(*) Develop new navigation style.</li>
+        <li>(*) Refactor source code.</li>
+    </ul>
+    <p><b>30.11.2009</b></p>
+    <ul>
+        <li>(*) Improve handling of events and attributes.</li>
+        <li>(*) Fix code defects.</li>
+        <li>(*) Add new navigation functions.</li>
+    </ul>
+    <p><b>28.11.2009</b></p>
+    <ul>
+        <li>
+            (*) Add six new non-standard tags: &quot;hobby&quot;,
+            &quot;award&quot;, &quot;military service&quot;, &quot;drafted&quot;,
+            &quot;demobilized&quot;, &quot;rank&quot;.
+        </li>
+    </ul>
+    <p><b>26.11.2009</b></p>
+    <ul>
+        <li>(*) Redesign the entire application.</li>
+        <li>(*) Improve output of descending trees.</li>
+        <li>(*) Fix generation of descending trees.</li>
+        <li>(*) Redesign project architecture.</li>
+    </ul>
+    <p><b>24.11.2009</b></p>
+    <ul>
+        <li>(*) Fix errors.</li>
+        <li>(*) Improve help content and installer.</li>
+        <li>(*) Change project tree.</li>
+    </ul>
+    <p><b>19.11.2009</b></p>
+    <ul>
+        <li>(*) Fix some source code defects.</li>
+        <li>(*) Optimize performance.</li>
+        <li>(*) Refactor list update and filtering.</li>
+        <li>
+            (*) Add fuzzy comparison with dates checking into duplicates
+            finder.
+        </li>
+    </ul>
+    <p><b>14.11.2009</b></p>
+    <ul>
+        <li>(*) Fix output of sources in pedigree generation.</li>
+    </ul>
+    <p><b>30.09.2009</b></p>
+    <ul>
+        <li>
+            (*) Show numbers of generations in pedigrees as Roman
+            numerals.
+        </li>
+        <li>(*) Fix small defects.</li>
+    </ul>
+    <p><b>19.09.2009</b></p>
+    <ul>
+        <li>(*) Add Google maps supporting.</li>
+    </ul>
+    <p><b>24.08.2009</b></p>
+    <ul>
+        <li>(*) Fix errors and defects.</li>
+    </ul>
+    <p><b>31.07.2009</b></p>
+    <ul>
+        <li>(*) Fix errors.</li>
+        <li>(*) Improve files comparison.</li>
+    </ul>
+    <p><b>30.07.2009</b></p>
+    <ul>
+        <li>(*) Improve design.</li>
+        <li>(*) Improve filtering and user interface.</li>
+    </ul>
+    <p><b>27.07.2009</b></p>
+    <ul>
+        <li>
+            (*) Modify editor of persons, families, groups and their
+            relationships.
+        </li>
+    </ul>
+    <p><b>26.07.2009</b></p>
+    <ul>
+        <li>(*) Refactor editor code.</li>
+    </ul>
+    <p><b>24.07.2009</b></p>
+    <ul>
+        <li>(*) Add support for groups.</li>
+    </ul>
+    <p><b>22.07.2009</b></p>
+    <ul>
+        <li>(*) Improve adding and modifying records.</li>
+    </ul>
+    <p><b>05.07.2009</b></p>
+    <ul>
+        <li>(*) Improve Web export.</li>
+    </ul>
+    <p><b>01.07.2009</b></p>
+    <ul>
+        <li>
+            (*) Refactor code and resources. Optimize and cut down lines of
+            further development.
+        </li>
+        <li>(*) Improve cognate linkers and diagrams finder.</li>
+        <li>(*) Improve Web export.</li>
+    </ul>
+    <p><b>30.06.2009</b></p>
+    <ul>
+        <li>(*) Complete pedigree builder.</li>
+    </ul>
+    <p><b>26.06.2009</b></p>
+    <ul>
+        <li>(*) Refactor source code.</li>
+        <li>(*) Add export to Excel.</li>
+        <li>(*) Add initial code for pedigree builder.</li>
+        <li>
+            (*) Add russian last names &quot;processing&quot; for
+            statistics.
+        </li>
+    </ul>
+    <p><b>12.05.2009</b></p>
+    <ul>
+        <li>(*) Add hypertext survey for a person.</li>
+    </ul>
+    <p><b>12.02.2009</b></p>
+    <ul>
+        <li>(*) Fix some errors. Add two editing functions.</li>
+    </ul>
+    <p><b>06.02.2009</b></p>
+    <ul>
+        <li>(*) Fix some errors.</li>
+        <li>(*) Add a warning before deleting an object.</li>
+    </ul>
+    <p><b>04.02.2009</b></p>
+    <ul>
+        <li>(*) Work through database cleaning.</li>
+        <li>
+            (*) Fix small errors in dates processing and dates output in
+            diagrams.
+        </li>
+    </ul>
+    <p><b>02.02.2009</b></p>
+    <ul>
+        <li>(*) Fix defects.</li>
+        <li>(*) Improve record list.</li>
+    </ul>
+    <p><b>28.01.2009</b></p>
+    <ul>
+        <li>(*) Fix some small defects.</li>
+        <li>(*) Add ability to delete person record.</li>
+        <li>
+            (*) Fix a fundamental error in tree calculation; now tree with
+            descendants and their wives works.
+        </li>
+        <li>(*) Improve tree output; fix errors. Add tree picture saving.</li>
+        <li>(*) Add statistics types.</li>
+    </ul>
+    <p><b>22.01.2009</b></p>
+    <ul>
+        <li>(*) Add preliminary file checking.</li>
+        <li>
+            (*) Work through output of tree with ancestors and
+            descendants.
+        </li>
+        <li>(*) Add statistics for names and number of ancestors.</li>
+        <li>(*) Add autocomplete for patronymic name and first name.</li>
+        <li>(*) Fix some errors.</li>
+        <li>(*) Add application log.</li>
+    </ul>
+    <p><b>20.01.2009</b></p>
+    <ul>
+        <li>(*) Fix errors.</li>
+        <li>(*) Add first and patronymic names parser, and dictionary.</li>
+        <li>(*) Complete descendants tree.</li>
+        <li>
+            (*) Add preliminary version of service to check relation
+            degree.
+        </li>
+    </ul>
+    <p><b>18.01.2009</b></p>
+    <ul>
+        <li>(*) Complete event editing (notes, sources, multimedia).</li>
+        <li>(*) Complete ancestors tree.</li>
+    </ul>
+    <p><b>17.01.2009</b></p>
+    <ul>
+        <li>(*) Add ability to modify author of a document.</li>
+        <li>(*) Improve file headers.</li>
+        <li>(*) Improve user interface.</li>
+        <li>(*) Complete dates processing.</li>
+    </ul>
+    <p><b>16.01.2009</b></p>
+    <ul>
+        <li>(*) Add preliminary version of descendant tree.</li>
+        <li>(*) Fix some errors.</li>
+        <li>(*) Improve dates processing.</li>
+        <li>(*) Fix file headers.</li>
+    </ul>
+    <p><b>15.01.2009</b></p>
+    <ul>
+        <li>(*) Add preliminary help content [ElenAlexs].</li>
+        <li>(*) Adjust design.</li>
+        <li>(*) Add lists sorting.</li>
+        <li>(*) Improve event editing.</li>
+    </ul>
+    <p><b>14.01.2009</b></p>
+    <ul>
+        <li>(*) Add and remove children from families.</li>
+        <li>(*) Add the first tree -- ancestors tree; add setup.</li>
+        <li>(*) Add preliminary print preview.</li>
+        <li>(*) Save a tree setting between application sessions.</li>
+        <li>(*) Add dates processing.</li>
+    </ul>
+    <p><b>13.01.2009</b></p>
+    <ul>
+        <li>(*) Refactor and optimize source code.</li>
+        <li>(*) Add events, notes, objects and sources to families.</li>
+        <li>
+            (*) Add filter by field into the person selector dialog (when it is
+            necessary).
+        </li>
+        <li>(*) Add &quot;About&quot; window.</li>
+    </ul>
+    <p><b>12.01.2009</b></p>
+    <ul>
+        <li>(*) Add events, notes, objects and sources to person records.</li>
+    </ul>
+    <p><b>11.01.2009</b></p>
+    <ul>
+        <li>(*) Add event, note, object and source dialogs.</li>
+        <li>
+            (*) Add preliminary modify function to change family
+            records.
+        </li>
+    </ul>
+    <p><b>10.01.2009</b></p>
+    <ul>
+        <li>(*) Add modifying person records.</li>
+    </ul>
+    <p><b>09.01.2009</b></p>
+    <ul>
+        <li>(*) Add ability to add new person, to modify and select the parents.</li>
+    </ul>
+    <p><b>08.01.2009</b></p>
+    <ul>
+        <li>(!) Start the project up.</li>
+    </ul>
 </body>
 </html>

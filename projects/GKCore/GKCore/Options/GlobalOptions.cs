@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,9 +22,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
 using BSLib;
-using GKCommon.GEDCOM;
+using GDModel;
+using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 
@@ -44,7 +44,7 @@ namespace GKCore.Options
 
         private static GlobalOptions fInstance = null;
 
-        private readonly TreeChartOptions fChartOptions;
+        private readonly TreeChartOptions fTreeChartOptions;
         private DateFormat fDefDateFormat;
         private bool fShowDatesSign;
         private NameFormat fDefNameFormat;
@@ -68,18 +68,31 @@ namespace GKCore.Options
         private readonly StringList fLastBases;
         private bool fShowDatesCalendar;
         private FileBackup fFileBackup;
+        private int fFileBackupEachRevisionMaxCount;
         private bool fAutosave;
         private int fAutosaveInterval;
         private bool fExtendedNames;
         private WomanSurnameFormat fWomanSurnameFormat;
-        private readonly AncestorsCircleOptions fAncestorsCircleOptions;
+        private readonly CircleChartOptions fCircleChartOptions;
         private string fGeocoder;
         private bool fRemovableMediaWarning;
         private bool fLoadRecentFiles;
         private bool fEmbeddedMediaPlayer;
         private bool fAllowMediaStoreReferences;
+        private bool fAllowMediaStoreRelativeReferences;
+        private int  fMediaStoreDefault;
+        private bool fAllowDeleteMediaFileFromStgArc;
+        private bool fAllowDeleteMediaFileFromRefs;
+        private bool fDeleteMediaFileWithoutConfirm;
         private bool fUseExtendedNotes;
+
         private bool fAutoCheckUpdates;
+        private bool fAutoSortChildren;
+        private bool fAutoSortSpouses;
+        private bool fCheckTreeSize;
+        private readonly ListOptionsCollection fListOptions;
+        private bool fReadabilityHighlightRows;
+        private bool fCharsetDetection;
 
 
         public static GlobalOptions Instance
@@ -91,14 +104,14 @@ namespace GKCore.Options
         }
 
 
-        public TreeChartOptions ChartOptions
+        public TreeChartOptions TreeChartOptions
         {
-            get { return fChartOptions; }
+            get { return fTreeChartOptions; }
         }
 
-        public AncestorsCircleOptions AncestorsCircleOptions
+        public CircleChartOptions CircleChartOptions
         {
-            get { return fAncestorsCircleOptions; }
+            get { return fCircleChartOptions; }
         }
 
         public GEDCOMCharacterSet DefCharacterSet
@@ -195,6 +208,12 @@ namespace GKCore.Options
             set { fFileBackup = value; }
         }
 
+        public int FileBackupEachRevisionMaxCount
+        {
+            get { return fFileBackupEachRevisionMaxCount; }
+            set { fFileBackupEachRevisionMaxCount = value; }
+        }
+
         public bool ShowTips
         {
             get { return fShowTips; }
@@ -224,8 +243,6 @@ namespace GKCore.Options
             set { fShowDatesCalendar = value; }
         }
 
-
-
         public bool Autosave
         {
             get { return fAutosave; }
@@ -238,9 +255,8 @@ namespace GKCore.Options
             set { fAutosaveInterval = value; }
         }
 
-
         // TODO: Need to make a decision on additional types of names:
-        // religious and according to the census (see GEDCOMPersonalNamePieces)
+        // religious and according to the census (see GDMPersonalNamePieces)
         public bool ExtendedNames
         {
             get { return fExtendedNames; }
@@ -253,30 +269,7 @@ namespace GKCore.Options
             set { fWomanSurnameFormat = value; }
         }
 
-        public string Geocoder
-        {
-            get { return fGeocoder; }
-            set { fGeocoder = value; }
-        }
 
-
-        public bool RemovableMediaWarning
-        {
-            get { return fRemovableMediaWarning; }
-            set { fRemovableMediaWarning = value; }
-        }
-
-        public bool LoadRecentFiles
-        {
-            get { return fLoadRecentFiles; }
-            set { fLoadRecentFiles = value; }
-        }
-
-        public bool EmbeddedMediaPlayer
-        {
-            get { return fEmbeddedMediaPlayer; }
-            set { fEmbeddedMediaPlayer = value; }
-        }
 
         public bool AllowMediaStoreReferences
         {
@@ -284,10 +277,34 @@ namespace GKCore.Options
             set { fAllowMediaStoreReferences = value; }
         }
 
-        public bool UseExtendedNotes
+        public bool AllowMediaStoreRelativeReferences
         {
-            get { return fUseExtendedNotes; }
-            set { fUseExtendedNotes = value; }
+            get { return fAllowMediaStoreRelativeReferences; }
+            set { fAllowMediaStoreRelativeReferences = value; }
+        }
+
+        public int MediaStoreDefault
+        {
+            get { return fMediaStoreDefault; }
+            set { fMediaStoreDefault = value; }
+        }
+
+        public bool AllowDeleteMediaFileFromStgArc
+        {
+            get { return fAllowDeleteMediaFileFromStgArc; }
+            set { fAllowDeleteMediaFileFromStgArc = value; }
+        }
+
+        public bool AllowDeleteMediaFileFromRefs
+        {
+            get { return fAllowDeleteMediaFileFromRefs; }
+            set { fAllowDeleteMediaFileFromRefs = value; }
+        }
+
+        public bool DeleteMediaFileWithoutConfirm
+        {
+            get { return fDeleteMediaFileWithoutConfirm; }
+            set { fDeleteMediaFileWithoutConfirm = value; }
         }
 
         public bool AutoCheckUpdates
@@ -296,67 +313,80 @@ namespace GKCore.Options
             set { fAutoCheckUpdates = value; }
         }
 
+        public bool AutoSortChildren
+        {
+            get { return fAutoSortChildren; }
+            set { fAutoSortChildren = value; }
+        }
+
+        public bool AutoSortSpouses
+        {
+            get { return fAutoSortSpouses; }
+            set { fAutoSortSpouses = value; }
+        }
+
+        public bool CharsetDetection
+        {
+            get { return fCharsetDetection; }
+            set { fCharsetDetection = value; }
+        }
+
+        public bool CheckTreeSize
+        {
+            get { return fCheckTreeSize; }
+            set { fCheckTreeSize = value; }
+        }
+
+        public bool EmbeddedMediaPlayer
+        {
+            get { return fEmbeddedMediaPlayer; }
+            set { fEmbeddedMediaPlayer = value; }
+        }
+
+        public string Geocoder
+        {
+            get { return fGeocoder; }
+            set { fGeocoder = value; }
+        }
 
         public IList<LangRecord> Languages
         {
             get { return fLanguages; }
         }
 
-
-        public LangRecord GetLangByCode(int code)
+        public ListOptionsCollection ListOptions
         {
-            foreach (LangRecord lngRec in fLanguages) {
-                if (lngRec.Code == code) {
-                    return lngRec;
-                }
-            }
-
-            return null;
+            get { return fListOptions; }
         }
 
-        public string GetLanguageSign()
+        public bool LoadRecentFiles
         {
-            LangRecord lngrec = GetLangByCode(InterfaceLang);
-            string lngSign = (lngrec == null) ? LangMan.LS_DEF_SIGN : lngrec.Sign;
-            return lngSign;
+            get { return fLoadRecentFiles; }
+            set { fLoadRecentFiles = value; }
         }
 
-        // TODO: rework it
-        public GEDCOMLanguageID GetCurrentItfLang()
+        public bool ReadabilityHighlightRows
         {
-            if (InterfaceLang == LangMan.LS_DEF_CODE) {
-                return GEDCOMLanguageID.English;
-            } else {
-                LangRecord langRec = GetLangByCode(InterfaceLang);
-                return (langRec == null) ? GEDCOMLanguageID.English : langRec.LangID;
-            }
+            get { return fReadabilityHighlightRows; }
+            set { fReadabilityHighlightRows = value; }
         }
 
-        public string GetLastBase(int index)
+        public bool RemovableMediaWarning
         {
-            return fLastBases[index];
+            get { return fRemovableMediaWarning; }
+            set { fRemovableMediaWarning = value; }
         }
 
-        public int GetLastBasesCount()
+        public bool UseExtendedNotes
         {
-            return fLastBases.Count;
+            get { return fUseExtendedNotes; }
+            set { fUseExtendedNotes = value; }
         }
 
-        public int MRUFiles_IndexOf(string fileName)
-        {
-            int num = fMRUFiles.Count;
-            for (int i = 0; i < num; i++) {
-                if (fMRUFiles[i].FileName == fileName) {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
 
         private GlobalOptions()
         {
-            fChartOptions = new TreeChartOptions();
+            fTreeChartOptions = new TreeChartOptions();
             fEventFilters = new StringList();
             fMRUFiles = new List<MRUFile>();
             fNameFilters = new StringList();
@@ -364,14 +394,23 @@ namespace GKCore.Options
             fPedigreeOptions = new PedigreeOptions();
             fProxy = new ProxyOptions();
             fRelations = new StringList();
-            fAncestorsCircleOptions = new AncestorsCircleOptions();
+            fCircleChartOptions = new CircleChartOptions();
             fGeocoder = "Google";
             fRemovableMediaWarning = true;
             fLoadRecentFiles = true;
             fEmbeddedMediaPlayer = true;
             fAllowMediaStoreReferences = false;
+            fAllowMediaStoreRelativeReferences = true;
+            fMediaStoreDefault = 0;
+            fAllowDeleteMediaFileFromStgArc = true;
+            fAllowDeleteMediaFileFromRefs = false;
+            fDeleteMediaFileWithoutConfirm = false;
             fUseExtendedNotes = false;
+
             fAutoCheckUpdates = true;
+            fAutoSortChildren = true;
+            fAutoSortSpouses = false;
+            fCheckTreeSize = true;
 
             fIndividualListColumns = IndividualListMan.CreateIndividualListColumns();
             fIndividualListColumns.ResetDefaults();
@@ -381,6 +420,11 @@ namespace GKCore.Options
 
             fAutosave = false;
             fAutosaveInterval = 10;
+
+            fListOptions = new ListOptionsCollection();
+            fReadabilityHighlightRows = true;
+
+            fCharsetDetection = false;
         }
 
         protected override void Dispose(bool disposing)
@@ -397,7 +441,7 @@ namespace GKCore.Options
 
                 fProxy.Dispose();
                 fPedigreeOptions.Dispose();
-                fChartOptions.Dispose();
+                fTreeChartOptions.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -445,6 +489,78 @@ namespace GKCore.Options
             }
         }
 
+        public void LoadLanguage(int langCode)
+        {
+            if (langCode != LangMan.LS_DEF_CODE) {
+                bool loaded = false;
+
+                foreach (LangRecord langRec in fLanguages) {
+                    if (langRec.Code == langCode) {
+                        loaded = LangMan.LoadFromFile(langRec.FileName);
+                        break;
+                    }
+                }
+
+                if (!loaded) langCode = LangMan.LS_DEF_CODE;
+            }
+
+            if (langCode == LangMan.LS_DEF_CODE) {
+                LangMan.DefInit();
+            }
+
+            fInterfaceLang = (ushort)langCode;
+        }
+
+        public LangRecord GetLangByCode(int code)
+        {
+            foreach (LangRecord lngRec in fLanguages) {
+                if (lngRec.Code == code) {
+                    return lngRec;
+                }
+            }
+
+            return null;
+        }
+
+        public string GetLanguageSign()
+        {
+            LangRecord lngrec = GetLangByCode(InterfaceLang);
+            string lngSign = (lngrec == null) ? LangMan.LS_DEF_SIGN : lngrec.Sign;
+            return lngSign;
+        }
+
+        public GDMLanguageID GetCurrentItfLang()
+        {
+            if (InterfaceLang == LangMan.LS_DEF_CODE) {
+                return GDMLanguageID.English;
+            } else {
+                LangRecord langRec = GetLangByCode(InterfaceLang);
+                return (langRec == null) ? GDMLanguageID.English : langRec.LangID;
+            }
+        }
+
+        public string GetLastBase(int index)
+        {
+            return fLastBases[index];
+        }
+
+        public int GetLastBasesCount()
+        {
+            return fLastBases.Count;
+        }
+
+        public int MRUFiles_IndexOf(string fileName)
+        {
+            int num = fMRUFiles.Count;
+            for (int i = 0; i < num; i++) {
+                if (fMRUFiles[i].FileName == fileName) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
         public void AddLastBase(string fileName)
         {
             fLastBases.Add(fileName);
@@ -472,6 +588,39 @@ namespace GKCore.Options
             }
         }
 
+        public void LoadPluginsFromFile(IniFile ini)
+        {
+            if (ini == null)
+                throw new ArgumentNullException("ini");
+
+            int num = AppHost.Plugins.Count;
+            for (int i = 0; i < num; i++) {
+                var plugin = AppHost.Plugins[i];
+
+                var dlgPlugin = plugin as IDialogReplacement;
+                if (dlgPlugin != null) {
+                    var plgName = plugin.GetType().Name;
+                    dlgPlugin.Enabled = ini.ReadBool("Plugins", plgName + ".Enabled", false);
+                }
+            }
+        }
+
+        public void SavePluginsToFile(IniFile ini)
+        {
+            if (ini == null)
+                throw new ArgumentNullException("ini");
+
+            int num = AppHost.Plugins.Count;
+            for (int i = 0; i < num; i++) {
+                var plugin = AppHost.Plugins[i];
+
+                var dlgPlugin = plugin as IDialogReplacement;
+                if (dlgPlugin != null) {
+                    var plgName = plugin.GetType().Name;
+                    ini.WriteBool("Plugins", plgName + ".Enabled", dlgPlugin.Enabled);
+                }
+            }
+        }
 
         public void LoadFromFile(IniFile ini)
         {
@@ -487,13 +636,22 @@ namespace GKCore.Options
             fShowTips = ini.ReadBool("Common", "ShowTips", true);
             fInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 0);
             fFileBackup = (FileBackup)ini.ReadInteger("Common", "FileBackup", 0);
+            fFileBackupEachRevisionMaxCount = (ushort)ini.ReadInteger("Common", "FileBackupEachRevisionMaxCount", 0);
             fShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
             fShowDatesSign = ini.ReadBool("Common", "ShowDatesSigns", false);
             fRemovableMediaWarning = ini.ReadBool("Common", "RemovableMediaWarning", true);
             fLoadRecentFiles = ini.ReadBool("Common", "LoadRecentFiles", true);
             fEmbeddedMediaPlayer = ini.ReadBool("Common", "EmbeddedMediaPlayer", true);
             fAllowMediaStoreReferences = ini.ReadBool("Common", "AllowMediaStoreReferences", false);
+            fAllowMediaStoreRelativeReferences = ini.ReadBool("Common", "AllowMediaStoreRelativeReferences", true); // only when AllowMediaStoreReferences is true
+            fMediaStoreDefault = (ushort)ini.ReadInteger("Common", "MediaStoreDefault", 0); // (int)MediaStoreType.mstReference
+            fAllowDeleteMediaFileFromStgArc = ini.ReadBool("Common", "AllowDeleteMediaFileFromStgArc", true);
+            fAllowDeleteMediaFileFromRefs = ini.ReadBool("Common", "AllowDeleteMediaFileFromRefs", false);
+            fDeleteMediaFileWithoutConfirm = ini.ReadBool("Common", "DeleteMediaFileWithoutConfirm", false);
             fAutoCheckUpdates = ini.ReadBool("Common", "AutoCheckUpdates", true);
+            fAutoSortChildren = ini.ReadBool("Common", "AutoSortChildren", true);
+            fAutoSortSpouses = ini.ReadBool("Common", "AutoSortSpouses", false);
+            fCharsetDetection = ini.ReadBool("Common", "CharsetDetection", false);
 
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -506,7 +664,7 @@ namespace GKCore.Options
             int kl = ini.ReadInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
             AppHost.Instance.SetKeyLayout(kl);
 
-            fChartOptions.LoadFromFile(ini);
+            fTreeChartOptions.LoadFromFile(ini);
             fPedigreeOptions.LoadFromFile(ini);
             fProxy.LoadFromFile(ini);
 
@@ -555,7 +713,11 @@ namespace GKCore.Options
                 AddLastBase(st);
             }
 
-            fAncestorsCircleOptions.LoadFromFile(ini);
+            fCircleChartOptions.LoadFromFile(ini);
+
+            fListOptions.LoadFromFile(ini);
+
+            LoadPluginsFromFile(ini);
         }
 
         public void LoadFromFile(string fileName)
@@ -590,13 +752,22 @@ namespace GKCore.Options
             ini.WriteBool("Common", "ShowTips", fShowTips);
             ini.WriteInteger("Common", "InterfaceLang", fInterfaceLang);
             ini.WriteInteger("Common", "FileBackup", (int)fFileBackup);
+            ini.WriteInteger("Common", "FileBackupEachRevisionMaxCount", (int)fFileBackupEachRevisionMaxCount);
             ini.WriteBool("Common", "ShowDatesCalendar", fShowDatesCalendar);
             ini.WriteBool("Common", "ShowDatesSigns", fShowDatesSign);
             ini.WriteBool("Common", "RemovableMediaWarning", fRemovableMediaWarning);
             ini.WriteBool("Common", "LoadRecentFiles", fLoadRecentFiles);
             ini.WriteBool("Common", "EmbeddedMediaPlayer", fEmbeddedMediaPlayer);
             ini.WriteBool("Common", "AllowMediaStoreReferences", fAllowMediaStoreReferences);
+            ini.WriteBool("Common", "AllowMediaStoreRelativeReferences", fAllowMediaStoreRelativeReferences);
+            ini.WriteInteger("Common", "MediaStoreDefault", fMediaStoreDefault);
+            ini.WriteBool("Common", "AllowDeleteMediaFileFromStgArc", fAllowDeleteMediaFileFromStgArc);
+            ini.WriteBool("Common", "AllowDeleteMediaFileFromRefs", fAllowDeleteMediaFileFromRefs);
+            ini.WriteBool("Common", "DeleteMediaFileWithoutConfirm", fDeleteMediaFileWithoutConfirm);
             ini.WriteBool("Common", "AutoCheckUpdates", fAutoCheckUpdates);
+            ini.WriteBool("Common", "AutoSortChildren", fAutoSortChildren);
+            ini.WriteBool("Common", "AutoSortSpouses", fAutoSortSpouses);
+            ini.WriteBool("Common", "CharsetDetection", fCharsetDetection);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 
@@ -608,7 +779,7 @@ namespace GKCore.Options
 
             ini.WriteString("Common", "Geocoder", fGeocoder);
 
-            fChartOptions.SaveToFile(ini);
+            fTreeChartOptions.SaveToFile(ini);
             fPedigreeOptions.SaveToFile(ini);
             fProxy.SaveToFile(ini);
 
@@ -673,12 +844,15 @@ namespace GKCore.Options
 
             cnt = fLastBases.Count;
             ini.WriteInteger("LastBases", "Count", cnt);
-            for (int i = 0; i < cnt; i++)
-            {
-                ini.WriteString("LastBases", "LB" + i.ToString(), GetLastBase(i));
+            for (int i = 0; i < cnt; i++) {
+                ini.WriteString("LastBases", "LB" + i.ToString(), fLastBases[i]);
             }
 
-            fAncestorsCircleOptions.SaveToFile(ini);
+            fCircleChartOptions.SaveToFile(ini);
+
+            fListOptions.SaveToFile(ini);
+
+            SavePluginsToFile(ini);
         }
 
         public void SaveToFile(string fileName)
