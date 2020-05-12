@@ -65,7 +65,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IListView IRecordSelectDialog.RecordsList
+        IListViewEx IRecordSelectDialog.RecordsList
         {
             get { return fListRecords; }
         }

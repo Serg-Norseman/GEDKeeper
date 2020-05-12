@@ -12,8 +12,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-
-using ArborGVT;
+using BSLib.DataViz.ArborGVT;
 
 namespace GKUI.Components
 {
@@ -45,7 +44,7 @@ namespace GKUI.Components
 
         protected override void StartTimer()
         {
-            fTimer = new WinUITimer(ParamTimeout/* / 1000*/, TimerElapsed);
+            fTimer = new WinUITimer(TimerInterval/* / 1000*/, TimerElapsed);
             fTimer.Start();
         }
 
@@ -109,7 +108,7 @@ namespace GKUI.Components
 
             // repulsion - отталкивание, stiffness - тугоподвижность, friction - сила трения
             fSys = new ArborSystemEx(10000, 500/*1000*/, 0.1, this);
-            fSys.setScreenSize(Width, Height);
+            fSys.SetViewSize(Width, Height);
             fSys.AutoStop = false;
 
             fEnergyDebug = false;
@@ -142,7 +141,7 @@ namespace GKUI.Components
         {
             base.OnSizeChanged(e);
 
-            fSys.setScreenSize(Width, Height);
+            fSys.SetViewSize(Width, Height);
             Invalidate();
         }
 
@@ -173,13 +172,13 @@ namespace GKUI.Components
                         var srcNode = edge.Source as ArborNodeEx;
                         var tgtNode = edge.Target as ArborNodeEx;
 
-                        ArborPoint pt1 = fSys.toScreen(srcNode.Pt);
-                        ArborPoint pt2 = fSys.toScreen(tgtNode.Pt);
+                        ArborPoint pt1 = fSys.GetViewCoords(srcNode.Pt);
+                        ArborPoint pt2 = fSys.GetViewCoords(tgtNode.Pt);
 
                         ArborPoint tail = intersect_line_box(pt1, pt2, srcNode.Box);
-                        ArborPoint head = (tail.isNull()) ? ArborPoint.Null : intersect_line_box(tail, pt2, tgtNode.Box);
+                        ArborPoint head = (tail.IsNull()) ? ArborPoint.Null : intersect_line_box(tail, pt2, tgtNode.Box);
 
-                        if (!head.isNull() && !tail.isNull())
+                        if (!head.IsNull() && !tail.IsNull())
                         {
                             gfx.DrawLine(grayPen, (int)tail.X, (int)tail.Y, (int)head.X, (int)head.Y);
                         }
@@ -228,23 +227,23 @@ namespace GKUI.Components
             ArborPoint pt;
 
             pt = intersect_line_line(p1, p2, tl, tr);
-            if (!pt.isNull()) return pt;
+            if (!pt.IsNull()) return pt;
 
             pt = intersect_line_line(p1, p2, tr, br);
-            if (!pt.isNull()) return pt;
+            if (!pt.IsNull()) return pt;
 
             pt = intersect_line_line(p1, p2, br, bl);
-            if (!pt.isNull()) return pt;
+            if (!pt.IsNull()) return pt;
 
             pt = intersect_line_line(p1, p2, bl, tl);
-            if (!pt.isNull()) return pt;
+            if (!pt.IsNull()) return pt;
 
             return ArborPoint.Null;
         }
 
         public void start()
         {
-            fSys.start();
+            fSys.Start();
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -254,7 +253,7 @@ namespace GKUI.Components
 
             if (fNodesDragging)
             {
-                fDragged = fSys.nearest(e.Location.X, e.Location.Y);
+                fDragged = fSys.GetNearestNode(e.Location.X, e.Location.Y);
 
                 if (fDragged != null)
                 {
@@ -281,7 +280,7 @@ namespace GKUI.Components
 
             if (fNodesDragging && fDragged != null)
             {
-                fDragged.Pt = fSys.fromScreen(e.Location.X, e.Location.Y);
+                fDragged.Pt = fSys.GetModelCoords(e.Location.X, e.Location.Y);
             }
         }
 
@@ -290,7 +289,7 @@ namespace GKUI.Components
             SizeF tsz = gfx.MeasureString(node.Sign, fDrawFont);
             float w = tsz.Width + 10;
             float h = tsz.Height + 4;
-            ArborPoint pt = fSys.toScreen(node.Pt);
+            ArborPoint pt = fSys.GetViewCoords(node.Pt);
             pt.X = Math.Floor(pt.X);
             pt.Y = Math.Floor(pt.Y);
 
@@ -299,7 +298,7 @@ namespace GKUI.Components
 
         public ArborNode getNodeByCoord(int x, int y)
         {
-            return fSys.nearest(x, y);
+            return fSys.GetNearestNode(x, y);
 
             /*foreach (ArborNode node in fSys.Nodes)
             {

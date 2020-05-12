@@ -19,10 +19,10 @@
  */
 
 using System;
+using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
-using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKUI.Components;
 

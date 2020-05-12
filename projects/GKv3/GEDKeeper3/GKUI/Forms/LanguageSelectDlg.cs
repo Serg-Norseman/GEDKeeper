@@ -20,7 +20,6 @@
 
 using System;
 using Eto.Forms;
-
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -40,7 +39,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IListView ILanguageSelectDlg.LanguagesList
+        IListViewEx ILanguageSelectDlg.LanguagesList
         {
             get { return lstLanguages; }
         }

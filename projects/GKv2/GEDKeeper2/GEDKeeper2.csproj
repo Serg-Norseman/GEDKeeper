@@ -96,17 +96,14 @@
     <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ArborGVT">
-      <HintPath>..\..\libs\ArborGVT.dll</HintPath>
-    </Reference>
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
     </Reference>
     <Reference Include="BSLib.Design">
       <HintPath>..\..\libs\BSLib.Design.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.SmartGraph">
-      <HintPath>..\..\libs\BSLib.SmartGraph.dll</HintPath>
+    <Reference Include="BSLib.DataViz.Model">
+      <HintPath>..\..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Windows.Forms" />

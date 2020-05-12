@@ -20,8 +20,8 @@
 
 using System;
 using BSLib;
+using BSLib.DataViz.SmartGraph;
 using BSLib.Design.Graphics;
-using BSLib.SmartGraph;
 using GDModel;
 using GKCore.Options;
 using GKCore.Types;

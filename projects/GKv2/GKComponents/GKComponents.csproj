@@ -72,11 +72,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="ArborGVT">
-      <HintPath>..\..\libs\ArborGVT.dll</HintPath>
-    </Reference>
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.DataViz.Model">
+      <HintPath>..\..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
     <Reference Include="BSLib.Design">
       <HintPath>..\..\libs\BSLib.Design.dll</HintPath>

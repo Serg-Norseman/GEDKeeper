@@ -19,8 +19,7 @@
  */
 
 using System.Collections.Generic;
-using Eto.Forms;
-using GKCore.Interfaces;
+using BSLib.Design.Graphics;
 
 namespace GKUI.Components
 {

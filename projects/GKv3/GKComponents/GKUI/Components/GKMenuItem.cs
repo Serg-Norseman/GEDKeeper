@@ -19,8 +19,8 @@
  */
 
 using System;
+using BSLib.Design.Graphics;
 using Eto.Forms;
-using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 
 namespace GKUI.Components

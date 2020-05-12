@@ -19,13 +19,13 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
@@ -63,9 +63,9 @@ namespace GKUI.Forms
             get { return fMembersList; }
         }
 
-        ITextBoxHandler IGroupEditDlg.Name
+        ITextBox IGroupEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(edName); }
+            get { return GetControlHandler<ITextBox>(edName); }
         }
 
         #endregion

@@ -24,8 +24,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Timers;
 using System.Windows.Forms;
-using ArborGVT;
 using BSLib;
+using BSLib.DataViz.ArborGVT;
 using CsGL.OpenGL;
 using GDModel;
 using GKCore;
@@ -421,42 +421,36 @@ namespace GKTreeVizPlugin
         {
             fBase = baseWin;
 
-            try
-            {
+            try {
                 fSys = new ArborSystemEx(1000, 1000, 0.1, null); //(10000, 1000, 0.1, this);
-                fSys.setScreenSize(50, 50);
+                fSys.SetViewSize(50, 50);
                 fSys.OnStop += OnArborStop;
 
                 using (ExtList<PatriarchObj> patList = PatriarchsMan.GetPatriarchsLinks(
-                    baseWin.Context, minGens, false, loneSuppress))
-                {
+                                                           baseWin.Context, minGens, false, loneSuppress)) {
                     int num = patList.Count;
                     for (int i = 0; i < num; i++) {
                         PatriarchObj pObj = patList[i];
 
                         if (!loneSuppress || pObj.HasLinks) {
-                            ArborNode node = fSys.addNode(pObj.IRec.XRef);
+                            ArborNode node = fSys.AddNode(pObj.IRec.XRef);
                             node.Data = pObj;
                         }
                     }
 
-                    for (int i = 0; i < num; i++)
-                    {
+                    for (int i = 0; i < num; i++) {
                         PatriarchObj pat1 = patList[i];
 
-                        foreach (PatriarchObj pat2 in pat1.Links)
-                        {
-                            fSys.addEdge(pat1.IRec.XRef, pat2.IRec.XRef);
+                        foreach (PatriarchObj pat2 in pat1.Links) {
+                            fSys.AddEdge(pat1.IRec.XRef, pat2.IRec.XRef);
                         }
                     }
                 }
 
                 z = -50;
 
-                fSys.start();
-            }
-            catch (Exception ex)
-            {
+                fSys.Start();
+            } catch (Exception ex) {
                 Logger.LogWrite("TreeVizControl.CreateArborGraph(): " + ex.Message);
             }
         }

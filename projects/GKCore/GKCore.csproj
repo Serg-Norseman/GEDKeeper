@@ -94,8 +94,8 @@
     <Reference Include="BSLib.Linguistics">
       <HintPath>..\libs\BSLib.Linguistics.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.SmartGraph">
-      <HintPath>..\libs\BSLib.SmartGraph.dll</HintPath>
+    <Reference Include="BSLib.DataViz.Model">
+      <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
     <Reference Include="DotNetRtfWriter">
       <HintPath>..\libs\DotNetRtfWriter.dll</HintPath>
