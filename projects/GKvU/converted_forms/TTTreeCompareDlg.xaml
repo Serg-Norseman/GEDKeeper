@@ -1,0 +1,38 @@
+<local:CommonDialog
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GKUI.Forms"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<TTTreeCompareDlg.Controls>
+		<TabControl Location="9, 8" x:Name="tabsTools" Size="808, 436">
+			<TabControl.Controls>
+				<TabPage Text="Compare databases" x:Name="pageTreeCompare" Size="800, 410">
+					<TabPage.Controls>
+						<Button Text="Compare" Location="699, 10" x:Name="btnMatch">
+						</Button>
+						<GroupBox Text="Type of comparison" Location="9, 3" x:Name="grpMatchType" Size="450, 111">
+							<GroupBox.Controls>
+								<RadioButton Text="Analysis" Location="18, 87" x:Name="radAnalysis" Size="64, 17">
+								</RadioButton>
+								<Label Text="File" Location="18, 64" x:Name="lblFile" Size="23, 13" />
+								<TextBox ReadOnly="True" Location="64, 62" x:Name="txtCompareFile" Size="272, 21" />
+								<Button Text="Select..." Location="340, 58" x:Name="btnFileChoose">
+								</Button>
+								<RadioButton Checked="True" Text="Internal comparing (search for duplicates)" Location="18, 15" x:Name="radMatchInternal" Size="226, 17">
+								</RadioButton>
+								<RadioButton Text="Comparing with another database" Location="18, 39" x:Name="radMathExternal" Size="188, 17">
+								</RadioButton>
+							</GroupBox.Controls>
+						</GroupBox>
+						<TextBox Multiline="True" ScrollBars="Vertical" ReadOnly="True" Location="9, 121" x:Name="ListCompare" Size="782, 226" />
+					</TabPage.Controls>
+				</TabPage>
+			</TabControl.Controls>
+		</TabControl>
+	</TTTreeCompareDlg.Controls>
+</TTTreeCompareDlg>

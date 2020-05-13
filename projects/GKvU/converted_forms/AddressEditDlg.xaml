@@ -1,0 +1,53 @@
+<local:CommonDialog
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GKUI.Forms"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<AddressEditDlg.Controls>
+		<Button Text="Apply" Location="260, 272" x:Name="btnAccept">
+		</Button>
+		<Button Text="Cancel" Location="358, 272" x:Name="btnCancel">
+		</Button>
+		<TabControl Dock="Top" x:Name="tabsAddrData" Size="458, 257">
+			<TabControl.Controls>
+				<TabPage Text="Address" x:Name="pageCommon" Size="450, 231">
+					<TabPage.Controls>
+						<Label Text="Country" Location="9, 8" x:Name="lblCountry" Size="46, 13" />
+						<Label Text="State" Location="242, 8" x:Name="lblState" Size="33, 13" />
+						<Label Text="City" Location="9, 54" x:Name="lblCity" Size="26, 13" />
+						<Label Text="Postal code" Location="242, 54" x:Name="lblPostalCode" Size="62, 13" />
+						<Label Text="Address" Location="9, 101" x:Name="lblAddress" Size="46, 13" />
+						<TextBox Location="9, 23" x:Name="txtCountry" Size="226, 21" />
+						<TextBox Location="242, 23" x:Name="txtState" Size="199, 21" />
+						<TextBox Location="9, 70" x:Name="txtCity" Size="226, 21" />
+						<TextBox Location="242, 70" x:Name="txtPostalCode" Size="199, 21" />
+						<TextBox Location="9, 117" x:Name="txtAddress" Size="432, 21" />
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Telephone numbers" x:Name="pagePhones" Size="450, 231">
+					<TabPage.Controls>
+						<gkuic:GKSheetList ReadOnly="False" x:Name="fPhonesList" Size="450, 231">
+						</gkuic:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Emails" x:Name="pageEmails" Size="450, 231">
+					<TabPage.Controls>
+						<gkuic:GKSheetList ReadOnly="False" x:Name="fMailsList" Size="450, 231">
+						</gkuic:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Web sites" x:Name="pageWebPages" Size="450, 231">
+					<TabPage.Controls>
+						<gkuic:GKSheetList ReadOnly="False" x:Name="fWebsList" Size="450, 231">
+						</gkuic:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+			</TabControl.Controls>
+		</TabControl>
+	</AddressEditDlg.Controls>
+</AddressEditDlg>

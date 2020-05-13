@@ -1,0 +1,42 @@
+<local:CommonDialog
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GKUI.Forms"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<ScriptEditWin.Controls>
+		<SplitContainer Orientation="Horizontal" SplitterDistance="187" SplitterWidth="3" Location="0, 27" x:Name="splitContainer1" Size="570, 320">
+			<SplitContainer.Panel1>
+				<SplitterPanel>
+					<SplitterPanel.Controls>
+						<TextBox Multiline="True" ScrollBars="Both" x:Name="txtScriptText" Size="570, 187" />
+					</SplitterPanel.Controls>
+				</SplitterPanel>
+			</SplitContainer.Panel1>
+			<SplitContainer.Panel2>
+				<SplitterPanel>
+					<SplitterPanel.Controls>
+						<TextBox Multiline="True" ScrollBars="Both" ReadOnly="True" x:Name="txtDebugOutput" Size="570, 130" />
+					</SplitterPanel.Controls>
+				</SplitterPanel>
+			</SplitContainer.Panel2>
+		</SplitContainer>
+		<ToolStrip x:Name="ToolBar1" Size="570, 27">
+			<ToolStrip.Items>
+				<ToolStripButton x:Name="tbNewScript" ToolTipText="Create a new script">
+				</ToolStripButton>
+				<ToolStripButton x:Name="tbLoadScript" ToolTipText="Open a script">
+				</ToolStripButton>
+				<ToolStripButton x:Name="tbSaveScript" ToolTipText="Save script">
+				</ToolStripButton>
+				<ToolStripSeparator x:Name="ToolButton2" />
+				<ToolStripButton x:Name="tbRun" ToolTipText="Execute the script">
+				</ToolStripButton>
+			</ToolStrip.Items>
+		</ToolStrip>
+	</ScriptEditWin.Controls>
+</ScriptEditWin>

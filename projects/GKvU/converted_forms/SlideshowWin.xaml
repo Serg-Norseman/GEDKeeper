@@ -1,0 +1,27 @@
+<local:CommonDialog
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GKUI.Forms"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<SlideshowWin.Controls>
+		<gkuic:ImageBox AllowZoom="True" AutoCenter="True" AutoPan="True" DropShadowSize="3" ImageBorderColor="AliceBlue" ImageBorderStyle="FixedSingleGlowShadow" IsPanning="False" IsSelecting="False" SelectionColor="Highlight" SelectionMode="Zoom" ShowNamedRegionTips="False" SizeToFit="False" Zoom="100" BackColor="ControlDark" Location="0, 27" Margin="4, 4, 4, 4" x:Name="" Size="1366, 660">
+		</gkuic:ImageBox>
+		<StatusBar ShowPanels="True" Location="0, 687" x:Name="" Size="1366, 18" />
+		<ToolStrip x:Name="toolStrip1" Size="1366, 27" Text="toolStrip1">
+			<ToolStrip.Items>
+				<ToolStripButton x:Name="tbStart" Text="tbStart">
+				</ToolStripButton>
+				<ToolStripSeparator x:Name="toolStripSeparator1" />
+				<ToolStripButton x:Name="tbPrev" Text="tbPrev" ToolTipText="Previous record">
+				</ToolStripButton>
+				<ToolStripButton x:Name="tbNext" Text="tbNext" ToolTipText="Next record">
+				</ToolStripButton>
+			</ToolStrip.Items>
+		</ToolStrip>
+	</SlideshowWin.Controls>
+</SlideshowWin>

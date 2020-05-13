@@ -1,0 +1,41 @@
+<local:CommonDialog
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GKUI.Forms"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<OrganizerWin.Controls>
+		<TabControl x:Name="tabsData" Size="628, 431">
+			<TabControl.Controls>
+				<TabPage Text="Addresses" x:Name="pageAddresses" Size="620, 405">
+					<TabPage.Controls>
+						<gkuic:GKSheetList ReadOnly="False" x:Name="" Size="620, 405">
+						</gkuic:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Telephone numbers" x:Name="pageTelephones" Size="620, 405">
+					<TabPage.Controls>
+						<gkuic:GKSheetList ReadOnly="False" x:Name="" Size="620, 405">
+						</gkuic:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Mails" x:Name="pageMails" Size="620, 405">
+					<TabPage.Controls>
+						<gkuic:GKSheetList ReadOnly="False" x:Name="" Size="620, 405">
+						</gkuic:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Webs" x:Name="pageWebs" Size="620, 405">
+					<TabPage.Controls>
+						<gkuic:GKSheetList ReadOnly="False" x:Name="" Size="620, 405">
+						</gkuic:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+			</TabControl.Controls>
+		</TabControl>
+	</OrganizerWin.Controls>
+</OrganizerWin>

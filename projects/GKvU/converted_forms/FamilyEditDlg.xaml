@@ -1,0 +1,77 @@
+<local:CommonDialog
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GKUI.Forms"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<FamilyEditDlg.Controls>
+		<TabControl Dock="Top" Location="0, 126" x:Name="tabsFamilyData" Size="566, 256">
+			<TabControl.Controls>
+				<TabPage Text="Children" x:Name="pageChilds" Size="558, 230">
+					<TabPage.Controls>
+						<gkuic:GKSheetList ReadOnly="False" x:Name="fChildsList" Size="558, 230">
+						</gkuic:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Events" x:Name="pageEvents" Size="558, 230">
+					<TabPage.Controls>
+						<gkuic:GKSheetList ReadOnly="False" x:Name="fEventsList" Size="558, 230">
+						</gkuic:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Notes" x:Name="pageNotes" Size="558, 230">
+					<TabPage.Controls>
+						<gkuic:GKSheetList ReadOnly="False" x:Name="fNotesList" Size="558, 230">
+						</gkuic:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Multimedia" x:Name="pageMultimedia" Size="558, 230">
+					<TabPage.Controls>
+						<gkuic:GKSheetList ReadOnly="False" x:Name="fMediaList" Size="558, 230">
+						</gkuic:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Sources" x:Name="pageSources" Size="558, 230">
+					<TabPage.Controls>
+						<gkuic:GKSheetList ReadOnly="False" x:Name="fSourcesList" Size="558, 230">
+						</gkuic:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+			</TabControl.Controls>
+		</TabControl>
+		<GroupBox Text="Family" Dock="Top" x:Name="GroupBox1" Size="566, 126">
+			<GroupBox.Controls>
+				<Label Text="Husband" Location="4, 28" x:Name="lblHusband" Size="49, 13" />
+				<Button Location="461, 21" x:Name="btnHusbandAdd">
+				</Button>
+				<Button Location="496, 21" x:Name="btnHusbandDelete">
+				</Button>
+				<Button Location="531, 21" x:Name="btnHusbandSel">
+				</Button>
+				<Button Location="531, 50" x:Name="btnWifeSel">
+				</Button>
+				<Button Location="496, 50" x:Name="btnWifeDelete">
+				</Button>
+				<Button Location="461, 50" x:Name="btnWifeAdd">
+				</Button>
+				<Label Text="Wife" Location="4, 57" x:Name="lblWife" Size="29, 13" />
+				<Label Text="Status" Location="4, 89" x:Name="lblStatus" Size="38, 13" />
+				<TextBox Text="unknown" ForeColor="Control" ReadOnly="True" Location="88, 25" x:Name="txtHusband" Size="369, 21" />
+				<TextBox Text="unknown" ForeColor="Control" ReadOnly="True" Location="88, 54" x:Name="txtWife" Size="369, 21" />
+				<ComboBox DropDownStyle="DropDownList" Location="88, 86" x:Name="cmbMarriageStatus" Size="163, 21">
+				</ComboBox>
+			</GroupBox.Controls>
+		</GroupBox>
+		<Button Text="Apply" Location="370, 393" x:Name="btnAccept">
+		</Button>
+		<Button Text="Cancel" Location="466, 393" x:Name="btnCancel">
+		</Button>
+		<Label Text="Security restriction" Location="10, 398" x:Name="lblRestriction" Size="97, 13" />
+		<ComboBox DropDownStyle="DropDownList" Location="179, 396" x:Name="cmbRestriction" Size="163, 21">
+		</ComboBox>
+	</FamilyEditDlg.Controls>
+</FamilyEditDlg>

@@ -1,0 +1,50 @@
+<local:CommonDialog
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GKUI.Forms"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<CommunicationEditDlg.Controls>
+		<TabControl Dock="Top" Location="0, 94" x:Name="tabsData" Size="540, 264">
+			<TabControl.Controls>
+				<TabPage Text="Notes" x:Name="pageNotes" Size="532, 238">
+					<TabPage.Controls>
+						<gkuic:GKSheetList ReadOnly="False" x:Name="" Size="532, 238">
+						</gkuic:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Multimedia" x:Name="pageMultimedia" Size="532, 238">
+					<TabPage.Controls>
+						<gkuic:GKSheetList ReadOnly="False" x:Name="" Size="532, 238">
+						</gkuic:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+			</TabControl.Controls>
+		</TabControl>
+		<GroupBox Dock="Top" x:Name="GroupBox1" Size="540, 94">
+			<GroupBox.Controls>
+				<Label Text="Theme" Location="9, 18" x:Name="lblTheme" Size="39, 13" />
+				<Label Text="Date" Location="258, 65" x:Name="lblDate" Size="30, 13" />
+				<Label Text="Type" Location="9, 65" x:Name="lblType" />
+				<Label Text="Corresponder" Location="9, 42" x:Name="lblCorresponder" Size="73, 13" />
+				<Button Location="502, 36" x:Name="btnPersonAdd" Size="30, 26">
+				</Button>
+				<TextBox Location="107, 15" x:Name="txtName" Size="423, 21" />
+				<MaskedTextBox Mask="00/00/0000" Text="__.__.____" Location="314, 62" x:Name="txtDate" />
+				<ComboBox DropDownStyle="DropDownList" Location="107, 62" x:Name="cmbCorrType" Size="118, 21">
+				</ComboBox>
+				<ComboBox DropDownStyle="DropDownList" Location="107, 39" x:Name="txtDir" Size="74, 21">
+				</ComboBox>
+				<TextBox ForeColor="Control" ReadOnly="True" Location="188, 39" x:Name="txtCorresponder" Size="306, 21" />
+			</GroupBox.Controls>
+		</GroupBox>
+		<Button Text="Apply" Location="341, 373" x:Name="btnAccept">
+		</Button>
+		<Button Text="Cancel" Location="439, 373" x:Name="btnCancel">
+		</Button>
+	</CommunicationEditDlg.Controls>
+</CommunicationEditDlg>

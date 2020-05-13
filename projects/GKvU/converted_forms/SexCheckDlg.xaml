@@ -1,0 +1,28 @@
+<local:CommonDialog
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GKUI.Forms"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<SexCheckDlg.Controls>
+		<TextBox Text="Ivan Ivanovich" ReadOnly="True" Location="9, 8" x:Name="txtName" Size="387, 21" />
+		<GroupBox Text="Sex" Location="9, 34" x:Name="grpSex" Size="386, 47">
+			<GroupBox.Controls>
+				<RadioButton Checked="True" Text="?" Location="9, 15" x:Name="rbNone" Size="30, 17">
+				</RadioButton>
+				<RadioButton Text="Male" Location="134, 15" x:Name="rbMale" Size="47, 17">
+				</RadioButton>
+				<RadioButton Text="Female" Location="258, 15" x:Name="rbFemale" Size="59, 17">
+				</RadioButton>
+			</GroupBox.Controls>
+		</GroupBox>
+		<Button Text="Apply" Location="206, 94" x:Name="btnAccept">
+		</Button>
+		<Button Text="Cancel" Location="305, 94" x:Name="btnCancel">
+		</Button>
+	</SexCheckDlg.Controls>
+</SexCheckDlg>

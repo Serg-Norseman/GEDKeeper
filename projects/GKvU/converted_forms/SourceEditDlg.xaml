@@ -1,0 +1,44 @@
+<local:CommonDialog
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GKUI.Forms"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<SourceEditDlg.Controls>
+		<Button Text="Apply" Location="403, 404" x:Name="btnAccept">
+		</Button>
+		<Button Text="Cancel" Location="502, 404" x:Name="btnCancel">
+		</Button>
+		<TabControl Dock="Top" x:Name="tabsData" Size="602, 390">
+			<TabControl.Controls>
+				<TabPage Text="Common" x:Name="pageCommon">
+					<TabPage.Controls>
+						<Label Text="Short title" Location="9, 8" x:Name="lblShortTitle" Size="54, 13" />
+						<Label Text="Author" Location="9, 31" x:Name="lblAuthor" Size="40, 13" />
+						<Label Text="Title" Location="9, 140" x:Name="lblTitle" Size="27, 13" />
+						<Label Text="Published" Location="9, 249" x:Name="lblPublication" Size="52, 13" />
+						<TextBox Location="126, 8" x:Name="txtShortTitle" Size="262, 21" />
+						<TextBox Multiline="True" ScrollBars="Vertical" Location="126, 31" x:Name="txtAuthor" />
+						<TextBox Multiline="True" ScrollBars="Vertical" Location="126, 140" x:Name="txtTitle" />
+						<TextBox Multiline="True" ScrollBars="Vertical" Location="126, 249" x:Name="txtPublication" />
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Text" x:Name="pageText">
+					<TabPage.Controls>
+						<TextBox Multiline="True" ScrollBars="Both" x:Name="txtText" />
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Repositories" x:Name="pageRepositories">
+				</TabPage>
+				<TabPage Text="Notes" x:Name="pageNotes">
+				</TabPage>
+				<TabPage Text="Multimedia" x:Name="pageMultimedia">
+				</TabPage>
+			</TabControl.Controls>
+		</TabControl>
+	</SourceEditDlg.Controls>
+</SourceEditDlg>

@@ -1,0 +1,50 @@
+<local:CommonDialog
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GKUI.Forms"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<NoteEditDlgEx.Controls>
+		<TabControl Dock="Top" Location="8, 8" x:Name="tabControl1" Size="622, 306">
+			<TabControl.Controls>
+				<TabPage BackColor="Control" Text="Note" x:Name="pageEditor" Size="614, 280">
+					<TabPage.Controls>
+						<TextBox AcceptsReturn="True" Multiline="True" ScrollBars="Both" Location="2, 27" x:Name="txtNote" Size="610, 251" />
+						<ToolStrip Location="2, 2" x:Name="toolStrip1" Size="610, 25" Text="toolStrip1">
+							<ToolStrip.Items>
+								<ToolStripButton DisplayStyle="Text" x:Name="btnBold" Text="B" />
+								<ToolStripButton DisplayStyle="Text" x:Name="btnItalic" Text="I" />
+								<ToolStripButton DisplayStyle="Text" x:Name="btnUnderline" Text="U" />
+								<ToolStripButton DisplayStyle="Text" x:Name="btnURL" Text="URL" />
+								<ToolStripComboBox Size="98, 25" x:Name="cmbSizes">
+								</ToolStripComboBox>
+								<ToolStripSeparator x:Name="toolStripSeparator1" />
+								<ToolStripDropDownButton DisplayStyle="Text" x:Name="ddbtnActions" Text="Actions">
+									<ToolStripDropDownButton.DropDownItems>
+										<ToolStripMenuItem x:Name="miSelectAndCopy" Text="Select and copy" />
+										<ToolStripMenuItem x:Name="miImport" Text="Import" />
+										<ToolStripMenuItem x:Name="miExport" Text="Export" />
+										<ToolStripMenuItem x:Name="miClear" Text="Clear" />
+									</ToolStripDropDownButton.DropDownItems>
+								</ToolStripDropDownButton>
+							</ToolStrip.Items>
+						</ToolStrip>
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage BackColor="Control" Text="Preview" x:Name="pagePreview" Size="614, 280">
+					<TabPage.Controls>
+						<gkuic:HyperView LinkColor="Blue" Location="2, 2" x:Name="hyperView1" Size="610, 276" />
+					</TabPage.Controls>
+				</TabPage>
+			</TabControl.Controls>
+		</TabControl>
+		<Button Text="Apply" Location="452, 325" Margin="8, 8, 8, 8" x:Name="btnAccept">
+		</Button>
+		<Button Text="Cancel" Location="549, 325" Margin="8, 8, 8, 8" x:Name="btnCancel">
+		</Button>
+	</NoteEditDlgEx.Controls>
+</NoteEditDlgEx>

@@ -1,0 +1,74 @@
+<local:CommonDialog
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GKUI.Forms"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<EventEditDlg.Controls>
+		<Button Text="Apply" Location="297, 358" x:Name="btnAccept">
+		</Button>
+		<Button Text="Cancel" Location="395, 358" x:Name="btnCancel">
+		</Button>
+		<TabControl Dock="Top" x:Name="tabsData" Size="496, 343">
+			<TabControl.Controls>
+				<TabPage Text="Common" x:Name="pageCommon" Size="488, 317">
+					<TabPage.Controls>
+						<CheckBox Text="BC" UseVisualStyleBackColor="True" Location="434, 192" x:Name="btnBC2" Size="39, 17">
+						</CheckBox>
+						<CheckBox Text="BC" UseVisualStyleBackColor="True" Location="266, 194" x:Name="btnBC1" Size="39, 17">
+						</CheckBox>
+						<Label Text="Event" Location="9, 8" x:Name="lblEvent" Size="35, 13" />
+						<Label Text="Place" Location="9, 101" x:Name="lblPlace" Size="32, 13" />
+						<Label Text="Date" Location="9, 148" x:Name="lblDate" Size="30, 13" />
+						<Label Text="Cause" Location="9, 226" x:Name="lblCause" Size="37, 13" />
+						<Label Text="Agency" Location="9, 272" x:Name="lblOrg" Size="43, 13" />
+						<Label Text="Value" Location="9, 54" x:Name="lblAttrValue" Size="33, 13" />
+						<Button Location="409, 114" x:Name="btnPlaceAdd">
+						</Button>
+						<Button Location="446, 114" x:Name="btnPlaceDelete">
+						</Button>
+						<ComboBox DropDownStyle="DropDownList" Location="9, 23" x:Name="cmbEventType" Size="208, 21">
+						</ComboBox>
+						<TextBox Location="224, 23" x:Name="txtEventName" Size="254, 21" />
+						<TextBox BackColor="Window" Location="9, 117" x:Name="txtEventPlace" Size="394, 21" />
+						<ComboBox DropDownStyle="DropDownList" Location="9, 163" x:Name="cmbEventDateType" Size="135, 21">
+						</ComboBox>
+						<MaskedTextBox Mask="00/00/0000" Text="__/__/____" BackColor="Window" AllowDrop="True" Location="152, 163" x:Name="txtEventDate1" Size="158, 21" />
+						<MaskedTextBox Mask="00/00/0000" Text="__/__/____" AllowDrop="True" Location="320, 163" x:Name="txtEventDate2" Size="158, 21" />
+						<TextBox Location="9, 241" x:Name="txtEventCause" Size="469, 21" />
+						<TextBox Location="9, 287" x:Name="txtEventOrg" Size="469, 21" />
+						<ComboBox Location="9, 70" x:Name="txtAttribute" Size="469, 21" />
+						<ComboBox DropDownStyle="DropDownList" Location="152, 194" x:Name="cmbDate1Calendar" Size="107, 21">
+						</ComboBox>
+						<ComboBox DropDownStyle="DropDownList" Location="320, 194" x:Name="cmbDate2Calendar" Size="107, 21">
+						</ComboBox>
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Notes" x:Name="pageNotes" Size="488, 317">
+					<TabPage.Controls>
+						<gkuic0:GKSheetList ReadOnly="False" x:Name="">
+						</gkuic0:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Multimedia" x:Name="pageMultimedia" Size="488, 317">
+					<TabPage.Controls>
+						<gkuic0:GKSheetList ReadOnly="False" x:Name="">
+						</gkuic0:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+				<TabPage Text="Sources" x:Name="pageSources" Size="488, 317">
+					<TabPage.Controls>
+						<gkuic0:GKSheetList ReadOnly="False" x:Name="">
+						</gkuic0:GKSheetList>
+					</TabPage.Controls>
+				</TabPage>
+			</TabControl.Controls>
+		</TabControl>
+		<Button Text="Address..." Location="9, 358" x:Name="btnAddress">
+		</Button>
+	</EventEditDlg.Controls>
+</EventEditDlg>

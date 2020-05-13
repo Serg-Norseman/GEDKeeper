@@ -1,4 +1,4 @@
-rem rmdir .\.vs /s /q
+rmdir .\.vs /s /q
 
 rmdir .\GEDKeeperU\bin /s /q
 rmdir .\GEDKeeperU\obj /s /q

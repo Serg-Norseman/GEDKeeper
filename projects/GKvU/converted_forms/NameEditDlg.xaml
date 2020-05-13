@@ -1,0 +1,30 @@
+<local:CommonDialog
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GKUI.Forms"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<NameEditDlg.Controls>
+		<Label Text="?" Location="10, 10" x:Name="lblName" Size="10, 18" />
+		<TextBox Location="81, 8" x:Name="txtName" Size="217, 21" />
+		<Label Text="?" Location="10, 42" x:Name="lblSex" Size="10, 18" />
+		<ComboBox DropDownStyle="DropDownList" Location="81, 39" x:Name="cmbSex" Size="136, 21">
+		</ComboBox>
+		<Button Text="?" Location="107, 163" x:Name="btnAccept">
+		</Button>
+		<Button Text="?" Location="206, 163" x:Name="btnCancel">
+		</Button>
+		<GroupBox Text="?" Location="9, 70" x:Name="grpPatronymics" Size="288, 76">
+			<GroupBox.Controls>
+				<Label Text="?" Location="9, 18" x:Name="lblFemale" Size="10, 18" />
+				<Label Text="?" Location="9, 49" x:Name="lblMale" Size="10, 18" />
+				<TextBox Location="72, 15" x:Name="txtFPatr" Size="208, 21" />
+				<TextBox Location="72, 46" x:Name="txtMPatr" Size="208, 21" />
+			</GroupBox.Controls>
+		</GroupBox>
+	</NameEditDlg.Controls>
+</NameEditDlg>

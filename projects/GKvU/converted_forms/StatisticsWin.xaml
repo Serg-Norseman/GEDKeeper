@@ -1,0 +1,48 @@
+<local:CommonDialog
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GKUI.Forms"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<StatisticsWin.Controls>
+		<Panel Location="0, 214" x:Name="Panel1" Size="714, 246">
+			<Panel.Controls>
+				<gkuic:GKListView View="Details" Location="0, 25" x:Name="" Size="310, 221">
+					<gkuic:GKListView.Columns>
+						<ColumnHeader Text="-" Width="250" />
+						<ColumnHeader Text="-" Width="150" />
+					</gkuic:GKListView.Columns>
+				</gkuic:GKListView>
+				<Splitter Dock="Right" Location="310, 25" x:Name="" Size="4, 221" />
+				<gkuic:ZGraphControl Dock="Right" Location="314, 25" x:Name="" Size="400, 221">
+				</gkuic:ZGraphControl>
+				<ToolStrip x:Name="ToolBar1">
+					<ToolStrip.Items>
+						<ToolStripSeparator x:Name="TBS1" />
+						<ToolStripComboBox DropDownStyle="DropDownList" x:Name="cbType">
+						</ToolStripComboBox>
+						<ToolStripSeparator x:Name="TBS2" />
+						<ToolStripButton x:Name="tbExcelExport" ToolTipText="Export to Excel workbook...">
+						</ToolStripButton>
+					</ToolStrip.Items>
+				</ToolStrip>
+			</Panel.Controls>
+		</Panel>
+		<GroupBox Text="Summary" Dock="Top" x:Name="grpSummary">
+			<GroupBox.Controls>
+				<gkuic:GKListView View="Details" Location="2, 16" x:Name="lvSummary" Size="710, 206">
+					<gkuic:GKListView.Columns>
+						<ColumnHeader Text="Parameter" Width="300" />
+						<ColumnHeader Text="Total" Width="100" />
+						<ColumnHeader Text="Men" Width="100" />
+						<ColumnHeader Text="Women" Width="100" />
+					</gkuic:GKListView.Columns>
+				</gkuic:GKListView>
+			</GroupBox.Controls>
+		</GroupBox>
+	</StatisticsWin.Controls>
+</StatisticsWin>

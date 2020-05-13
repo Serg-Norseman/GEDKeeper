@@ -1,0 +1,33 @@
+<local:CommonDialog
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GKUI.Forms"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<MediaViewerWin.Controls>
+		<gkuic:ImageView ShowNamedRegionTips="False" ShowToolbar="True" SelectionMode="Zoom" x:Name="" Size="100, 100">
+			<gkuic:ImageView.Controls>
+				<gkuic:ImageBox AllowZoom="True" AutoCenter="True" AutoPan="True" DropShadowSize="3" ImageBorderColor="AliceBlue" ImageBorderStyle="FixedSingleGlowShadow" IsPanning="False" IsSelecting="False" SelectionColor="Highlight" SelectionMode="Zoom" ShowNamedRegionTips="False" SizeToFit="False" Zoom="60" AutoScrollMinSize="299, 360" BackColor="ControlDark" Location="0, 27" x:Name="" Size="100, 73">
+				</gkuic:ImageBox>
+				<ToolStrip x:Name="" Size="100, 27">
+					<ToolStrip.Items>
+						<ToolStripButton x:Name="btnSizeToFit" Size="23, 24" Text="Fit window size">
+						</ToolStripButton>
+						<ToolStripButton x:Name="btnZoomIn" Size="23, 24" Text="Zoom in">
+						</ToolStripButton>
+						<ToolStripButton x:Name="btnZoomOut" Size="23, 24" Text="Zoom out">
+						</ToolStripButton>
+						<ToolStripSeparator x:Name="" />
+						<ToolStripComboBox DropDownStyle="DropDownList" Size="140, 23" x:Name="zoomLevelsToolStripComboBox">
+						</ToolStripComboBox>
+						<ToolStripSeparator x:Name="" />
+					</ToolStrip.Items>
+				</ToolStrip>
+			</gkuic:ImageView.Controls>
+		</gkuic:ImageView>
+	</MediaViewerWin.Controls>
+</MediaViewerWin>
