@@ -19,9 +19,11 @@
  */
 
 using System;
+using BSLib.Design.Graphics;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
 using GKCore;
+using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKUI.Components;
 using GKUI.Forms;
@@ -47,13 +49,11 @@ namespace GKUI.Providers
 
             container.Reset();
 
-            /*
             // controls and other
-            container.Register<IStdDialogs, EtoStdDialogs>(LifeCycle.Singleton);
-            container.Register<IGraphicsProvider, EtoGfxProvider>(LifeCycle.Singleton);
-            container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
-            container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
-            */
+            //container.Register<IStdDialogs, EtoStdDialogs>(LifeCycle.Singleton);
+            container.Register<IGraphicsProviderEx, UWPGfxProvider>(LifeCycle.Singleton);
+            //container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
+            //container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
             // dialogs
             container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
             /*

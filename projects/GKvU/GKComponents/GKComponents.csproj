@@ -120,6 +120,8 @@
       <DependentUpon>ImageButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Components\UIHelper.cs" />
+    <Compile Include="GKUI\Components\UWPGraphics.cs" />
+    <Compile Include="GKUI\Providers\UWPGfxProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\GKComponents.rd.xml" />
   </ItemGroup>
