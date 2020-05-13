@@ -19,10 +19,9 @@
  */
 
 using System;
+using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-
-using BSLib;
 using GKCore;
 using GKCore.Lists;
 using GKCore.Types;
@@ -375,7 +374,7 @@ namespace GKUI.Components
             fList.EndUpdate();
         }
 
-        public GKCore.Interfaces.IListItem AddItem(object rowData, params object[] columnValues)
+        public BSLib.Design.MVP.Controls.IListItem AddItem(object rowData, params object[] columnValues)
         {
             return fList.AddItem(rowData, columnValues);
         }

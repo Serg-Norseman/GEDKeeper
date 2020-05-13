@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
-using BSLib.SmartGraph;
+using BSLib.DataViz.SmartGraph;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Types;

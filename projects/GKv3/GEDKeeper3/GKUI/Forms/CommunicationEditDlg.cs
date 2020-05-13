@@ -19,13 +19,13 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -56,29 +56,29 @@ namespace GKUI.Forms
             get { return fMediaList; }
         }
 
-        ITextBoxHandler ICommunicationEditDlg.Corresponder
+        ITextBox ICommunicationEditDlg.Corresponder
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtCorresponder); }
+            get { return GetControlHandler<ITextBox>(txtCorresponder); }
         }
 
-        IComboBoxHandler ICommunicationEditDlg.CorrType
+        IComboBox ICommunicationEditDlg.CorrType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbCorrType); }
+            get { return GetControlHandler<IComboBox>(cmbCorrType); }
         }
 
-        ITextBoxHandler ICommunicationEditDlg.Date
+        ITextBox ICommunicationEditDlg.Date
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtDate); }
+            get { return GetControlHandler<ITextBox>(txtDate); }
         }
 
-        IComboBoxHandler ICommunicationEditDlg.Dir
+        IComboBox ICommunicationEditDlg.Dir
         {
-            get { return GetControlHandler<IComboBoxHandler>(txtDir); }
+            get { return GetControlHandler<IComboBox>(txtDir); }
         }
 
-        ITextBoxHandler ICommunicationEditDlg.Name
+        ITextBox ICommunicationEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
         #endregion

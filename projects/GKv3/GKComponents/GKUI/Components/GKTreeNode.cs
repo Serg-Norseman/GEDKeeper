@@ -18,8 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
-using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {

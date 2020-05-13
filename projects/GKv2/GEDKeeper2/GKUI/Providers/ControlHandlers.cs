@@ -189,6 +189,16 @@ namespace GKUI.Providers
             Control.Sorted = sorted;
         }
 
+        public void AddRange(IEnumerable<object> items, bool sorted = false)
+        {
+            Control.Items.Clear();
+            Control.Sorted = false;
+            foreach (object item in items) {
+                Control.Items.Add(item);
+            }
+            Control.Sorted = sorted;
+        }
+
         public void AddStrings(StringList strings)
         {
             int num = strings.Count;
@@ -292,6 +302,16 @@ namespace GKUI.Providers
         {
             Control.Sorted = false;
             Control.Items.AddRange(items);
+            Control.Sorted = sorted;
+        }
+
+        public void AddRange(IEnumerable<object> items, bool sorted = false)
+        {
+            Control.Items.Clear();
+            Control.Sorted = false;
+            foreach (object item in items) {
+                Control.Items.Add(item);
+            }
             Control.Sorted = sorted;
         }
 

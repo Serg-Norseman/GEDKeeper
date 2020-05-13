@@ -19,8 +19,8 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
-
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -36,9 +36,9 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITreeViewHandler IFragmentSearchDlg.GroupsTree
+        ITreeView IFragmentSearchDlg.GroupsTree
         {
-            get { return GetControlHandler<ITreeViewHandler>(tvGroups); }
+            get { return GetControlHandler<ITreeView>(tvGroups); }
         }
 
         ILogChart IFragmentSearchDlg.LogChart

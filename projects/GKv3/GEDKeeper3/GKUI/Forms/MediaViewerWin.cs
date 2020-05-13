@@ -21,6 +21,7 @@
 using System;
 using System.ComponentModel;
 using System.IO;
+using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
 using GDModel;

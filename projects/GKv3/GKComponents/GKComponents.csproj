@@ -52,11 +52,14 @@
     <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ArborGVT">
-      <HintPath>..\..\libs\ArborGVT.dll</HintPath>
-    </Reference>
     <Reference Include="BSLib">
       <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.DataViz.Model">
+      <HintPath>..\..\libs\BSLib.DataViz.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\..\libs\netstd\BSLib.Design.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>

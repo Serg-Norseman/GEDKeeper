@@ -22,6 +22,8 @@
 
 using System;
 using BSLib;
+using BSLib.Design;
+using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
 using GDModel;
@@ -389,8 +391,8 @@ namespace GKUI.Components
 
                         case DeepMode.Foreground:
                             fRenderer.SetTranslucent(0.25f);
-                            IPen xpen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Black), 2.0f);
-                            IColor bColor = ChartRenderer.GetColor(ChartRenderer.White);
+                            IPen xpen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDConsts.Colors.Black), 2.0f);
+                            IColor bColor = ChartRenderer.GetColor(BSDConsts.Colors.White);
                             fRenderer.DrawRoundedRectangle(xpen, bColor, dmX, dmY, deepModel.ImageWidth, deepModel.ImageHeight, 6);
                             fRenderer.SetTranslucent(0.00f);
                             break;

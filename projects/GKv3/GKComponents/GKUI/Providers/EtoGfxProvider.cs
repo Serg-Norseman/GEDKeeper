@@ -21,9 +21,9 @@
 using System;
 using System.IO;
 using BSLib;
+using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCore.Interfaces;
 using GKUI.Components;
 
 namespace GKUI.Providers

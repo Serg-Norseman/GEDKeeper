@@ -19,11 +19,11 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -41,9 +41,9 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler ILanguageEditDlg.LanguageCombo
+        IComboBox ILanguageEditDlg.LanguageCombo
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbLanguage); }
+            get { return GetControlHandler<IComboBox>(cmbLanguage); }
         }
 
         #endregion

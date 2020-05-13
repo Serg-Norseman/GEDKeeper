@@ -269,8 +269,11 @@
     <Reference Include="BSLib">
       <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.SmartGraph">
-      <HintPath>..\..\libs\netstd\BSLib.SmartGraph.dll</HintPath>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\..\libs\netstd\BSLib.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.DataViz.Model">
+      <HintPath>..\..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
     <Reference Include="Eto, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Eto.Forms.2.3.0\lib\portable-net45+win8+wp8+wpa81+Xamarin.Mac+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Eto.dll</HintPath>

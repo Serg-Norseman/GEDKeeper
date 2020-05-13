@@ -19,10 +19,9 @@
  */
 
 using System;
-using System.Collections.Generic;
+using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;

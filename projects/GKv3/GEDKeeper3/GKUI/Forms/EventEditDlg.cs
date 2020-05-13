@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
 using GDModel;
@@ -63,34 +64,34 @@ namespace GKUI.Forms
             get { return fSourcesList; }
         }
 
-        IComboBoxHandler IEventEditDlg.EventType
+        IComboBox IEventEditDlg.EventType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbEventType); }
+            get { return GetControlHandler<IComboBox>(cmbEventType); }
         }
 
-        IComboBoxHandler IEventEditDlg.EventDateType
+        IComboBox IEventEditDlg.EventDateType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbEventDateType); }
+            get { return GetControlHandler<IComboBox>(cmbEventDateType); }
         }
 
-        ICheckBoxHandler IEventEditDlg.Date1BC
+        ICheckBox IEventEditDlg.Date1BC
         {
-            get { return GetControlHandler<ICheckBoxHandler>(btnBC1); }
+            get { return GetControlHandler<ICheckBox>(btnBC1); }
         }
 
-        ICheckBoxHandler IEventEditDlg.Date2BC
+        ICheckBox IEventEditDlg.Date2BC
         {
-            get { return GetControlHandler<ICheckBoxHandler>(btnBC2); }
+            get { return GetControlHandler<ICheckBox>(btnBC2); }
         }
 
-        IComboBoxHandler IEventEditDlg.Date1Calendar
+        IComboBox IEventEditDlg.Date1Calendar
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbDate1Calendar); }
+            get { return GetControlHandler<IComboBox>(cmbDate1Calendar); }
         }
 
-        IComboBoxHandler IEventEditDlg.Date2Calendar
+        IComboBox IEventEditDlg.Date2Calendar
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbDate2Calendar); }
+            get { return GetControlHandler<IComboBox>(cmbDate2Calendar); }
         }
 
         IDateBoxHandler IEventEditDlg.Date1
@@ -103,29 +104,29 @@ namespace GKUI.Forms
             get { return GetControlHandler<IDateBoxHandler>(txtEventDate2); }
         }
 
-        IComboBoxHandler IEventEditDlg.Attribute
+        IComboBox IEventEditDlg.Attribute
         {
-            get { return GetControlHandler<IComboBoxHandler>(txtAttribute); }
+            get { return GetControlHandler<IComboBox>(txtAttribute); }
         }
 
-        ITextBoxHandler IEventEditDlg.Place
+        ITextBox IEventEditDlg.Place
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtEventPlace); }
+            get { return GetControlHandler<ITextBox>(txtEventPlace); }
         }
 
-        ITextBoxHandler IEventEditDlg.EventName
+        ITextBox IEventEditDlg.EventName
         {
-            get { return  GetControlHandler<ITextBoxHandler>(txtEventName); }
+            get { return  GetControlHandler<ITextBox>(txtEventName); }
         }
 
-        ITextBoxHandler IEventEditDlg.Cause
+        ITextBox IEventEditDlg.Cause
         {
-            get { return  GetControlHandler<ITextBoxHandler>(txtEventCause); }
+            get { return  GetControlHandler<ITextBox>(txtEventCause); }
         }
 
-        ITextBoxHandler IEventEditDlg.Agency
+        ITextBox IEventEditDlg.Agency
         {
-            get { return  GetControlHandler<ITextBoxHandler>(txtEventOrg); }
+            get { return  GetControlHandler<ITextBox>(txtEventOrg); }
         }
 
         #endregion

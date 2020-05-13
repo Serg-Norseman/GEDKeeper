@@ -1,14 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-# SharpDevelop 5.1
-VisualStudioVersion = 15.0.26730.16
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper3", "GEDKeeper3\GEDKeeper3.csproj", "{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper3.Wpf", "GEDKeeper3.Wpf\GEDKeeper3.Wpf.csproj", "{6EFC871A-0EC1-4D3C-8779-8A9CCE3F509C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCore.nstd", "..\GKCore\GKCore.nstd.csproj", "{10D619AF-E1CD-4F4A-9C19-5E434300B48F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKCore.nstd", "..\GKCore\GKCore.nstd.csproj", "{10D619AF-E1CD-4F4A-9C19-5E434300B48F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKComponents", "GKComponents\GKComponents.csproj", "{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}"
 EndProject
