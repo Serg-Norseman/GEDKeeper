@@ -11,7 +11,7 @@
     <AssemblyName>GEDKeeperU</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17134.0</TargetPlatformVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -239,15 +239,14 @@
     <Folder Include="GKUI\Components\" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="ArborGVT">
-      <HintPath>..\..\libs\ArborGVT.dll</HintPath>
-    </Reference>
     <Reference Include="BSLib">
       <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.SmartGraph, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\libs\netstd\BSLib.SmartGraph.dll</HintPath>
+    <Reference Include="BSLib.DataViz.Model">
+      <HintPath>..\..\libs\BSLib.DataViz.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\..\libs\netstd\BSLib.Design.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

@@ -18,11 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using Windows.UI.Xaml;
 
@@ -32,7 +32,7 @@ namespace GKUI.Forms
     {
         private readonly NoteEditDlgController fController;
 
-        public GEDCOMNoteRecord NoteRecord
+        public GDMNoteRecord NoteRecord
         {
             get { return fController.NoteRecord; }
             set { fController.NoteRecord = value; }
@@ -40,9 +40,9 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler INoteEdit.Note
+        ITextBox INoteEdit.Note
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNote); }
+            get { return GetControlHandler<ITextBox>(txtNote); }
         }
 
         #endregion
@@ -66,7 +66,7 @@ namespace GKUI.Forms
             // SetLang()
             btnAccept.Content = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Content = LangMan.LS(LSID.LSID_DlgCancel);
-            Caption = LangMan.LS(LSID.LSID_Note);
+            Title = LangMan.LS(LSID.LSID_Note);
 
             fController = new NoteEditDlgController(this);
             fController.Init(baseWin);

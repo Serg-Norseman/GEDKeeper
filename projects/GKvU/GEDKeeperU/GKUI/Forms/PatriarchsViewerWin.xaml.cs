@@ -18,14 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using ArborGVT;
-using BSLib.SmartGraph;
-//using GKCommon.GEDCOM;
+using BSLib.DataViz.ArborGVT;
+using BSLib.DataViz.SmartGraph;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-//using GKCore.Types;
-//using GKUI.Components;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;

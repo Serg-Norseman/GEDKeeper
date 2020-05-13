@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib.Design.MVP;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using Windows.UI.Xaml;
@@ -31,14 +32,14 @@ namespace GKUI.Forms
     public class CommonForm : Page, IView
     {
         private readonly ControlsManager fControlsManager;
-        private string fCaption;
+        private string fTitle;
 
         #region View Interface
 
-        public string Caption
+        public string Title
         {
-            get { return fCaption; }
-            set { fCaption = value; }
+            get { return fTitle; }
+            set { fTitle = value; }
         }
 
         public bool Enabled
@@ -75,7 +76,7 @@ namespace GKUI.Forms
         {
         }
 
-        protected T GetControlHandler<T>(object control) where T : IControl
+        protected T GetControlHandler<T>(object control) where T : class, IControl
         {
             return fControlsManager.GetControlHandler<T>(control);
         }

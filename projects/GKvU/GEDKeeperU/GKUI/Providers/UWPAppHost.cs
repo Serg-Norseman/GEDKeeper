@@ -19,9 +19,9 @@
  */
 
 using System;
+using BSLib.Design.IoC;
+using BSLib.Design.MVP;
 using GKCore;
-using GKCore.IoC;
-using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKUI.Components;
 using GKUI.Forms;

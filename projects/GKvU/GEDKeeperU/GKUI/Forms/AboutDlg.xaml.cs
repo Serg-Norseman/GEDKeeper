@@ -33,7 +33,7 @@ namespace GKUI.Forms
 
             //btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
-            Caption = LangMan.LS(LSID.LSID_MIAbout);
+            Title = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Content = LangMan.LS(LSID.LSID_DlgClose);
             lblProduct.Text = GKData.APP_TITLE_NEW;
             lblVersion.Text = @"Version " + AppHost.GetAppVersion();

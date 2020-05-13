@@ -18,10 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections;
+using System.Collections.Generic;
 using BSLib;
-using GKCore.Interfaces;
-using GKCore.MVP;
-using GKCore.MVP.Controls;
+using BSLib.Design.Graphics;
+using BSLib.Design.MVP;
+using BSLib.Design.MVP.Controls;
 using GKUI.Components;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -69,7 +71,7 @@ namespace GKUI.Providers
     }
 
 
-    public sealed class LabelHandler : BaseElementHandler<TextBlock, LabelHandler>, ILabelHandler
+    public sealed class LabelHandler : BaseElementHandler<TextBlock, LabelHandler>, ILabel
     {
         public LabelHandler(TextBlock control) : base(control)
         {
@@ -82,7 +84,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class ButtonHandler : BaseControlHandler<Button, ButtonHandler>, IButtonHandler
+    public sealed class ButtonHandler : BaseControlHandler<Button, ButtonHandler>, IButton
     {
         public ButtonHandler(Button control) : base(control)
         {
@@ -95,7 +97,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class CheckBoxHandler : BaseControlHandler<CheckBox, CheckBoxHandler>, ICheckBoxHandler
+    public sealed class CheckBoxHandler : BaseControlHandler<CheckBox, CheckBoxHandler>, ICheckBox
     {
         public CheckBoxHandler(CheckBox control) : base(control)
         {
@@ -114,7 +116,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class RadioButtonHandler : BaseControlHandler<RadioButton, RadioButtonHandler>, IRadioButtonHandler
+    public sealed class RadioButtonHandler : BaseControlHandler<RadioButton, RadioButtonHandler>, IRadioButton
     {
         public RadioButtonHandler(RadioButton control) : base(control)
         {
@@ -133,7 +135,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class ComboBoxHandler : BaseControlHandler<EditableComboBox, ComboBoxHandler>, IComboBoxHandler
+    public sealed class ComboBoxHandler : BaseControlHandler<EditableComboBox, ComboBoxHandler>, IComboBox
     {
         public ComboBoxHandler(EditableComboBox control) : base(control)
         {
@@ -145,6 +147,13 @@ namespace GKUI.Providers
             set {
                 Control.IsEnabled = value;
                 //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
+            }
+        }
+
+        public IList Items
+        {
+            get {
+                return null;
             }
         }
 
@@ -201,7 +210,12 @@ namespace GKUI.Providers
             Control.Items.Add(caption);
         }
 
-        public void AddRange(object[] items, bool sorted = false)
+        public void AddItem<T>(string caption, T tag)
+        {
+            Control.Items.Add(caption);
+        }
+
+        public void AddRange(IEnumerable<object> items, bool sorted = false)
         {
             //Control.Sorted = false;
             //Control.Items.AddRange(GKComboItem.Convert((string[])items));
@@ -235,13 +249,22 @@ namespace GKUI.Providers
             //Control.EndUpdate();
         }
 
-        public void SortItems()
+        public T GetSelectedTag<T>()
+        {
+            return default(T);
+        }
+
+        public void SetSelectedTag<T>(T tagValue)
+        {
+        }
+
+        public void Sort()
         {
             //Control.SortItems();
         }
     }
 
-    public sealed class TextBoxHandler : BaseControlHandler<TextBox, TextBoxHandler>, ITextBoxHandler
+    public sealed class TextBoxHandler : BaseControlHandler<TextBox, TextBoxHandler>, ITextBox
     {
         public TextBoxHandler(TextBox control) : base(control)
         {
@@ -311,7 +334,7 @@ namespace GKUI.Providers
         }
     }
 
-    /*public sealed class MaskedTextBoxHandler : BaseControlHandler<Entry, MaskedTextBoxHandler>, ITextBoxHandler
+    /*public sealed class MaskedTextBoxHandler : BaseControlHandler<Entry, MaskedTextBoxHandler>, ITextBox
     {
         public MaskedTextBoxHandler(Entry control) : base(control)
         {
@@ -440,7 +463,7 @@ namespace GKUI.Providers
         }
     }*/
 
-    public sealed class ProgressBarHandler : BaseControlHandler<ProgressBar, ProgressBarHandler>, IProgressBarHandler
+    public sealed class ProgressBarHandler : BaseControlHandler<ProgressBar, ProgressBarHandler>, IProgressBar
     {
         public ProgressBarHandler(ProgressBar control) : base(control)
         {

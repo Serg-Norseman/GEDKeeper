@@ -18,10 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using Windows.UI.Xaml;
 
@@ -31,7 +31,7 @@ namespace GKUI.Forms
     {
         private readonly LanguageEditDlgController fController;
 
-        public GEDCOMLanguageID LanguageID
+        public GDMLanguageID LanguageID
         {
             get { return fController.LanguageID; }
             set { fController.LanguageID = value; }
@@ -39,9 +39,9 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler ILanguageEditDlg.LanguageCombo
+        IComboBox ILanguageEditDlg.LanguageCombo
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbLanguage); }
+            get { return GetControlHandler<IComboBox>(cmbLanguage); }
         }
 
         #endregion
@@ -56,7 +56,7 @@ namespace GKUI.Forms
             // SetLang()
             btnAccept.Content = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Content = LangMan.LS(LSID.LSID_DlgCancel);
-            Caption = LangMan.LS(LSID.LSID_Language);
+            Title = LangMan.LS(LSID.LSID_Language);
             lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
 
             fController = new LanguageEditDlgController(this);

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2050
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30104.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeperU", "GEDKeeperU\GEDKeeperU.csproj", "{270298F3-8636-4479-9003-A0EC47549891}"
 EndProject
@@ -27,6 +27,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{270298F3-8636-4479-9003-A0EC47549891}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{270298F3-8636-4479-9003-A0EC47549891}.Debug|Any CPU.Build.0 = Debug|x86
+		{270298F3-8636-4479-9003-A0EC47549891}.Debug|Any CPU.Deploy.0 = Debug|x86
 		{270298F3-8636-4479-9003-A0EC47549891}.Debug|ARM.ActiveCfg = Debug|ARM
 		{270298F3-8636-4479-9003-A0EC47549891}.Debug|ARM.Build.0 = Debug|ARM
 		{270298F3-8636-4479-9003-A0EC47549891}.Debug|ARM.Deploy.0 = Debug|ARM

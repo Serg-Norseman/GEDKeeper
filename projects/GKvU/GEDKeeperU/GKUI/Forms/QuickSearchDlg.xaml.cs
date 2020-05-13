@@ -18,14 +18,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+
 using Keys = Windows.System.VirtualKey;
 
 namespace GKUI.Forms
@@ -36,9 +37,9 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler IQuickSearchDlg.SearchPattern
+        ITextBox IQuickSearchDlg.SearchPattern
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtSearchPattern); }
+            get { return GetControlHandler<ITextBox>(txtSearchPattern); }
         }
 
         #endregion
@@ -95,7 +96,7 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Caption = LangMan.LS(LSID.LSID_Search);
+            Title = LangMan.LS(LSID.LSID_Search);
             //txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
             SetToolTip(btnPrev, LangMan.LS(LSID.LSID_FindPrevious));
             SetToolTip(btnNext, LangMan.LS(LSID.LSID_FindNext));

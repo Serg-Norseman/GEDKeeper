@@ -18,11 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using Windows.UI.Xaml;
 
@@ -32,7 +32,7 @@ namespace GKUI.Forms
     {
         private readonly AssociationEditDlgController fController;
 
-        public GEDCOMAssociation Association
+        public GDMAssociation Association
         {
             get { return fController.Association; }
             set { fController.Association = value; }
@@ -40,14 +40,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler IAssociationEditDlg.Relation
+        IComboBox IAssociationEditDlg.Relation
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRelation); }
+            get { return GetControlHandler<IComboBox>(cmbRelation); }
         }
 
-        ITextBoxHandler IAssociationEditDlg.Person
+        ITextBox IAssociationEditDlg.Person
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtPerson); }
+            get { return GetControlHandler<ITextBox>(txtPerson); }
         }
 
         #endregion
@@ -67,7 +67,7 @@ namespace GKUI.Forms
             // SetLang()
             btnAccept.Content = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Content = LangMan.LS(LSID.LSID_DlgCancel);
-            Caption = LangMan.LS(LSID.LSID_Association);
+            Title = LangMan.LS(LSID.LSID_Association);
             lblRelation.Text = LangMan.LS(LSID.LSID_Relation);
             lblPerson.Text = LangMan.LS(LSID.LSID_Person);
 

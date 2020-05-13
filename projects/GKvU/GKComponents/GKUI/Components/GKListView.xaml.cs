@@ -1,9 +1,11 @@
-﻿using GKCore.Interfaces;
+﻿using BSLib.Design;
+using BSLib.Design.MVP.Controls;
+using GKCore.Interfaces;
 using Windows.UI.Xaml.Controls;
 
 namespace GKComponents.GKUI.Components
 {
-    public sealed partial class GKListView : UserControl, IListView
+    public sealed partial class GKListView : UserControl, IListViewEx
     {
         public GKListView()
         {
@@ -25,11 +27,21 @@ namespace GKComponents.GKUI.Components
 
         public bool Enabled { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
+        public int SortColumn
+        {
+            get;
+            set;
+        }
+
         public void Activate()
         {
         }
 
         public void AddColumn(string caption, int width, bool autoSize)
+        {
+        }
+
+        public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)
         {
         }
 
@@ -39,6 +51,14 @@ namespace GKComponents.GKUI.Components
         }
 
         public void BeginUpdate()
+        {
+        }
+
+        public void Clear()
+        {
+        }
+
+        public void ClearColumns()
         {
         }
 
@@ -64,6 +84,14 @@ namespace GKComponents.GKUI.Components
         }
 
         public void SetColumnCaption(int index, string caption)
+        {
+        }
+
+        public void SetSortColumn(int sortColumn, bool checkOrder = true)
+        {
+        }
+
+        public void Sort(int sortColumn, BSDTypes.SortOrder sortOrder)
         {
         }
 
