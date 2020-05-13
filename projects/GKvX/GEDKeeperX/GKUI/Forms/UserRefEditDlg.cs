@@ -19,16 +19,12 @@
  */
 
 using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-
-using GKCommon.GEDCOM;
+using BSLib.Design.MVP.Controls;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -39,7 +35,7 @@ namespace GKUI.Forms
     {
         private readonly UserRefEditDlgController fController;
 
-        public GEDCOMUserReference UserRef
+        public GDMUserReference UserRef
         {
             get { return fController.UserRef; }
             set { fController.UserRef = value; }
@@ -47,14 +43,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler IUserRefEditDlg.Ref
+        IComboBox IUserRefEditDlg.Ref
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRef); }
+            get { return fControlsManager.GetControlHandler<IComboBox>(cmbRef); }
         }
 
-        IComboBoxHandler IUserRefEditDlg.RefType
+        IComboBox IUserRefEditDlg.RefType
         {
-            get { return fControlsManager.GetControlHandler<IComboBoxHandler>(cmbRefType); }
+            get { return fControlsManager.GetControlHandler<IComboBox>(cmbRefType); }
         }
 
         #endregion

@@ -18,13 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using Xamarin.Forms;
-
+using System.Collections;
+using System.Collections.Generic;
 using BSLib;
-using GKCore.Interfaces;
-using GKCore.MVP;
-using GKCore.MVP.Controls;
+using BSLib.Design.Graphics;
+using BSLib.Design.MVP;
+using BSLib.Design.MVP.Controls;
 using GKUI.Components;
+using Xamarin.Forms;
 
 namespace GKUI.Providers
 {
@@ -49,7 +50,7 @@ namespace GKUI.Providers
     }
 
 
-    public sealed class LabelHandler : BaseControlHandler<Label, LabelHandler>, ILabelHandler
+    public sealed class LabelHandler : BaseControlHandler<Label, LabelHandler>, ILabel
     {
         public LabelHandler(Label control) : base(control)
         {
@@ -62,7 +63,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class ButtonHandler : BaseControlHandler<Button, ButtonHandler>, IButtonHandler
+    public sealed class ButtonHandler : BaseControlHandler<Button, ButtonHandler>, IButton
     {
         public ButtonHandler(Button control) : base(control)
         {
@@ -75,7 +76,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class CheckBoxHandler : BaseControlHandler<Switch, CheckBoxHandler>, ICheckBoxHandler
+    public sealed class CheckBoxHandler : BaseControlHandler<Switch, CheckBoxHandler>, ICheckBox
     {
         public CheckBoxHandler(Switch control) : base(control)
         {
@@ -114,7 +115,7 @@ namespace GKUI.Providers
         }
     }*/
 
-    public sealed class ComboBoxHandler : BaseControlHandler<Picker, ComboBoxHandler>, IComboBoxHandler
+    public sealed class ComboBoxHandler : BaseControlHandler<Picker, ComboBoxHandler>, IComboBox
     {
         public ComboBoxHandler(Picker control) : base(control)
         {
@@ -126,6 +127,13 @@ namespace GKUI.Providers
             set {
                 Control.IsEnabled = value;
                 //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
+            }
+        }
+
+        public IList Items
+        {
+            get {
+                return null;
             }
         }
 
@@ -182,7 +190,23 @@ namespace GKUI.Providers
             Control.Items.Add(caption);
         }
 
+        public void AddItem<T>(string caption, T tag)
+        {
+            Control.Items.Add(caption);
+        }
+
         public void AddRange(object[] items, bool sorted = false)
+        {
+            //Control.Sorted = false;
+            //Control.Items.AddRange(GKComboItem.Convert((string[])items));
+            foreach (var itm in items)
+            {
+                Control.Items.Add((string)itm);
+            }
+            //Control.Sorted = sorted;
+        }
+
+        public void AddRange(IEnumerable<object> items, bool sorted = false)
         {
             //Control.Sorted = false;
             //Control.Items.AddRange(GKComboItem.Convert((string[])items));
@@ -216,13 +240,22 @@ namespace GKUI.Providers
             //Control.EndUpdate();
         }
 
-        public void SortItems()
+        public void Sort()
         {
             //Control.SortItems();
         }
+
+        public T GetSelectedTag<T>()
+        {
+            return default(T);
+        }
+
+        public void SetSelectedTag<T>(T tagValue)
+        {
+        }
     }
 
-    /*public sealed class TextBoxHandler : BaseControlHandler<Entry, TextBoxHandler>, ITextBoxHandler
+    /*public sealed class TextBoxHandler : BaseControlHandler<Entry, TextBoxHandler>, ITextBox
     {
         public TextBoxHandler(Entry control) : base(control)
         {
@@ -290,7 +323,7 @@ namespace GKUI.Providers
         }
     }*/
 
-    /*public sealed class TextAreaHandler : BaseControlHandler<Editor, TextAreaHandler>, ITextBoxHandler
+    /*public sealed class TextAreaHandler : BaseControlHandler<Editor, TextAreaHandler>, ITextBox
     {
         public TextAreaHandler(Editor control) : base(control)
         {
@@ -358,7 +391,7 @@ namespace GKUI.Providers
         }
     }*/
 
-    /*public sealed class MaskedTextBoxHandler : BaseControlHandler<Entry, MaskedTextBoxHandler>, ITextBoxHandler
+    /*public sealed class MaskedTextBoxHandler : BaseControlHandler<Entry, MaskedTextBoxHandler>, ITextBox
     {
         public MaskedTextBoxHandler(Entry control) : base(control)
         {

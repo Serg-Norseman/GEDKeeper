@@ -19,11 +19,9 @@
  */
 
 using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+using BSLib.Design.MVP;
 using GKCore.Interfaces;
-using GKCore.MVP;
-//using GKUI.Components;
+using Xamarin.Forms;
 
 namespace GKUI.Forms
 {

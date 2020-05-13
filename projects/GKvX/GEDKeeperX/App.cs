@@ -1,6 +1,6 @@
-﻿using GEDKeeperX.Views;
+﻿using BSLib.Design.MVP;
+using GEDKeeperX.Views;
 using GKCore;
-using GKCore.MVP;
 using GKUI.Providers;
 using Xamarin.Forms;
 

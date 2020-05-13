@@ -19,7 +19,7 @@
  */
 
 using System.Collections.Generic;
-using GKCore.Interfaces;
+using BSLib.Design.Graphics;
 
 namespace GKUI.Components
 {
