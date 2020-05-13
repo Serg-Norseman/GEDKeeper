@@ -20,8 +20,8 @@
 
 //define DEBUG_PRINT
 
+using BSLib.Design.Graphics;
 using Eto.Forms;
-using GKCore.Interfaces;
 
 namespace GKUI.Forms
 {

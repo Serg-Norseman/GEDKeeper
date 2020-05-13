@@ -19,11 +19,10 @@
  */
 
 using System;
-using Eto.Drawing;
-
 using BSLib;
+using BSLib.Design.Graphics;
+using Eto.Drawing;
 using GKCore.Charts;
-using GKCore.Interfaces;
 using GKUI.Components;
 
 namespace GKUI.Providers

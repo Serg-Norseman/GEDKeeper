@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
 using GKCore;
@@ -67,19 +68,19 @@ namespace GKUI.Forms
             get { return ListGeoCoords; }
         }
 
-        ITextBoxHandler ILocationEditDlg.Name
+        ITextBox ILocationEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        ITextBoxHandler ILocationEditDlg.Latitude
+        ITextBox ILocationEditDlg.Latitude
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtLatitude); }
+            get { return GetControlHandler<ITextBox>(txtLatitude); }
         }
 
-        ITextBoxHandler ILocationEditDlg.Longitude
+        ITextBox ILocationEditDlg.Longitude
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtLongitude); }
+            get { return GetControlHandler<ITextBox>(txtLongitude); }
         }
 
         #endregion

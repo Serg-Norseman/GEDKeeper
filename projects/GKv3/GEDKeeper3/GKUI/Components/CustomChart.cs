@@ -20,12 +20,12 @@
 
 using System;
 using BSLib;
+using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
-using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -48,7 +48,6 @@ namespace GKUI.Components
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                if (fNavman != null) fNavman.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -234,7 +233,7 @@ namespace GKUI.Components
 
         public bool NavAdd(object obj)
         {
-            if (obj != null && !fNavman.Busy) {
+            if (obj != null) {
                 fNavman.Current = (GDMRecord)obj;
                 return true;
             }
@@ -255,7 +254,6 @@ namespace GKUI.Components
         {
             if (!fNavman.CanForward()) return;
 
-            fNavman.BeginNav();
             try
             {
                 SetNavObject(fNavman.Next());
@@ -263,7 +261,6 @@ namespace GKUI.Components
             }
             finally
             {
-                fNavman.EndNav();
             }
         }
 
@@ -271,7 +268,6 @@ namespace GKUI.Components
         {
             if (!fNavman.CanBackward()) return;
 
-            fNavman.BeginNav();
             try
             {
                 SetNavObject(fNavman.Back());
@@ -279,7 +275,6 @@ namespace GKUI.Components
             }
             finally
             {
-                fNavman.EndNav();
             }
         }
 

@@ -20,14 +20,13 @@
 
 using System;
 using System.Globalization;
-using System.Reflection;
+using BSLib.Design.Graphics;
+using BSLib.Design.IoC;
+using BSLib.Design.MVP;
 using Eto.Forms;
-
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
-using GKCore.IoC;
-using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Options;
 using GKUI.Components;

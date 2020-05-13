@@ -19,9 +19,9 @@
  */
 
 using System;
+using BSLib.Design.MVP;
 using Eto.Forms;
 using GKCore.Interfaces;
-using GKCore.MVP;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -65,7 +65,7 @@ namespace GKUI.Forms
             Focus();
         }
 
-        protected T GetControlHandler<T>(object control) where T : IControl
+        protected T GetControlHandler<T>(object control) where T : class, IControl
         {
             return fControlsManager.GetControlHandler<T>(control);
         }
@@ -161,7 +161,7 @@ namespace GKUI.Forms
             UIHelper.SetPredefProperties(this, width, height, fontPreset);
         }
 
-        protected T GetControlHandler<T>(object control) where T : IControl
+        protected T GetControlHandler<T>(object control) where T : class, IControl
         {
             return fControlsManager.GetControlHandler<T>(control);
         }

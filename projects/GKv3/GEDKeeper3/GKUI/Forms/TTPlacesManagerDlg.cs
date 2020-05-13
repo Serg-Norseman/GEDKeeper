@@ -19,7 +19,6 @@
  */
 
 using System;
-
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -36,7 +35,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IListView IPlacesManagerDlg.PlacesList
+        IListViewEx IPlacesManagerDlg.PlacesList
         {
             get { return ListPlaces; }
         }

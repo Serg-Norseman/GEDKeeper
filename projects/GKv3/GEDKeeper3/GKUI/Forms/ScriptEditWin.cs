@@ -21,12 +21,11 @@
 using System;
 using System.ComponentModel;
 using System.IO;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
-
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -63,14 +62,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler IScriptEditWin.ScriptText
+        ITextBox IScriptEditWin.ScriptText
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtScriptText); }
+            get { return GetControlHandler<ITextBox>(txtScriptText); }
         }
 
-        ITextBoxHandler IScriptEditWin.DebugOutput
+        ITextBox IScriptEditWin.DebugOutput
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtDebugOutput); }
+            get { return GetControlHandler<ITextBox>(txtDebugOutput); }
         }
 
         #endregion

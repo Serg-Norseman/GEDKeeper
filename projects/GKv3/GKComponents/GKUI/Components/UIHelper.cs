@@ -20,6 +20,7 @@
 
 using System;
 using BSLib;
+using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
 using GDModel;

@@ -19,7 +19,7 @@
  */
 
 using System;
-using BSLib.SmartGraph;
+using BSLib.DataViz.SmartGraph;
 using GKTests;
 using NUnit.Framework;
 

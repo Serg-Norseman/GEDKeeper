@@ -19,12 +19,12 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -42,14 +42,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler IAssociationEditDlg.Relation
+        IComboBox IAssociationEditDlg.Relation
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRelation); }
+            get { return GetControlHandler<IComboBox>(cmbRelation); }
         }
 
-        ITextBoxHandler IAssociationEditDlg.Person
+        ITextBox IAssociationEditDlg.Person
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtPerson); }
+            get { return GetControlHandler<ITextBox>(txtPerson); }
         }
 
         #endregion

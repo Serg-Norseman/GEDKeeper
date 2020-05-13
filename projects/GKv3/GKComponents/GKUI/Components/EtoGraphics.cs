@@ -20,8 +20,8 @@
 
 using System.IO;
 using BSLib;
+using BSLib.Design.Graphics;
 using Eto.Drawing;
-using GKCore.Interfaces;
 
 namespace GKUI.Components
 {

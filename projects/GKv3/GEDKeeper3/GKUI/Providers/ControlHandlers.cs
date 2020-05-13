@@ -19,11 +19,13 @@
  */
 
 using System.Collections;
+using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.Graphics;
+using BSLib.Design.MVP;
+using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCore.Interfaces;
-using GKCore.MVP;
 using GKCore.MVP.Controls;
 using GKUI.Components;
 
@@ -50,7 +52,7 @@ namespace GKUI.Providers
     }
 
 
-    public sealed class LabelHandler : BaseControlHandler<Label, LabelHandler>, ILabelHandler
+    public sealed class LabelHandler : BaseControlHandler<Label, LabelHandler>, ILabel
     {
         public LabelHandler(Label control) : base(control)
         {
@@ -63,7 +65,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class ButtonHandler : BaseControlHandler<Button, ButtonHandler>, IButtonHandler
+    public sealed class ButtonHandler : BaseControlHandler<Button, ButtonHandler>, IButton
     {
         public ButtonHandler(Button control) : base(control)
         {
@@ -76,7 +78,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class CheckBoxHandler : BaseControlHandler<CheckBox, CheckBoxHandler>, ICheckBoxHandler
+    public sealed class CheckBoxHandler : BaseControlHandler<CheckBox, CheckBoxHandler>, ICheckBox
     {
         public CheckBoxHandler(CheckBox control) : base(control)
         {
@@ -95,7 +97,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class RadioButtonHandler : BaseControlHandler<RadioButton, RadioButtonHandler>, IRadioButtonHandler
+    public sealed class RadioButtonHandler : BaseControlHandler<RadioButton, RadioButtonHandler>, IRadioButton
     {
         public RadioButtonHandler(RadioButton control) : base(control)
         {
@@ -114,7 +116,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class ComboBoxHandler : BaseControlHandler<ComboBox, ComboBoxHandler>, IComboBoxHandler
+    public sealed class ComboBoxHandler : BaseControlHandler<ComboBox, ComboBoxHandler>, IComboBoxEx
     {
         public ComboBoxHandler(ComboBox control) : base(control)
         {
@@ -185,6 +187,11 @@ namespace GKUI.Providers
             Control.Items.Add((string)item);
         }
 
+        public void AddItem<T>(string caption, T tag)
+        {
+            Control.Items.Add(new GKComboItem(caption, tag));
+        }
+
         public void AddItem(string caption, object tag, IImage image = null)
         {
             Control.Items.Add(new GKComboItem(caption, tag, image));
@@ -193,6 +200,17 @@ namespace GKUI.Providers
         public void AddRange(object[] items, bool sorted = false)
         {
             //Control.Sorted = false;
+            Control.Items.AddRange(GKComboItem.Convert((string[])items));
+            //Control.Sorted = sorted;
+        }
+
+        public void AddRange(IEnumerable<object> items, bool sorted = false)
+        {
+            Control.Items.Clear();
+            //Control.Sorted = false;
+            /*foreach (var item in items) {
+                Control.Items.Add(item);
+            }*/
             Control.Items.AddRange(GKComboItem.Convert((string[])items));
             //Control.Sorted = sorted;
         }
@@ -220,7 +238,7 @@ namespace GKUI.Providers
             //Control.EndUpdate();
         }
 
-        public void SortItems()
+        public void Sort()
         {
             Control.SortItems();
         }
@@ -236,7 +254,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class TextBoxHandler : BaseControlHandler<TextBox, TextBoxHandler>, ITextBoxHandler
+    public sealed class TextBoxHandler : BaseControlHandler<TextBox, TextBoxHandler>, ITextBox
     {
         public TextBoxHandler(TextBox control) : base(control)
         {
@@ -304,7 +322,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class TextAreaHandler : BaseControlHandler<TextArea, TextAreaHandler>, ITextBoxHandler
+    public sealed class TextAreaHandler : BaseControlHandler<TextArea, TextAreaHandler>, ITextBox
     {
         public TextAreaHandler(TextArea control) : base(control)
         {
@@ -372,7 +390,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class MaskedTextBoxHandler : BaseControlHandler<MaskedTextBox, MaskedTextBoxHandler>, ITextBoxHandler
+    public sealed class MaskedTextBoxHandler : BaseControlHandler<MaskedTextBox, MaskedTextBoxHandler>, ITextBox
     {
         public MaskedTextBoxHandler(MaskedTextBox control) : base(control)
         {
@@ -478,7 +496,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class NumericBoxHandler : BaseControlHandler<NumericUpDown, NumericBoxHandler>, INumericBoxHandler
+    public sealed class NumericBoxHandler : BaseControlHandler<NumericUpDown, NumericBoxHandler>, INumericBox
     {
         public NumericBoxHandler(NumericUpDown control) : base(control)
         {
@@ -503,7 +521,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class TreeViewHandler : BaseControlHandler<TreeView, TreeViewHandler>, ITreeViewHandler
+    public sealed class TreeViewHandler : BaseControlHandler<TreeView, TreeViewHandler>, ITreeView
     {
         private TreeItem fRootNode;
 
@@ -553,7 +571,7 @@ namespace GKUI.Providers
         }
     }
 
-    public sealed class ProgressBarHandler : BaseControlHandler<ProgressBar, ProgressBarHandler>, IProgressBarHandler
+    public sealed class ProgressBarHandler : BaseControlHandler<ProgressBar, ProgressBarHandler>, IProgressBar
     {
         public ProgressBarHandler(ProgressBar control) : base(control)
         {

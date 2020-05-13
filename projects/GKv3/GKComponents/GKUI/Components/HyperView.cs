@@ -21,10 +21,10 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
-using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 
 namespace GKUI.Components

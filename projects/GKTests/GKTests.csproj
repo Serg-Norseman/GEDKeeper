@@ -68,9 +68,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="ArborGVT">
-      <HintPath>..\libs\ArborGVT.dll</HintPath>
-    </Reference>
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
     </Reference>
@@ -80,8 +77,8 @@
     <Reference Include="BSLib.Linguistics">
       <HintPath>..\libs\BSLib.Linguistics.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.SmartGraph">
-      <HintPath>..\libs\BSLib.SmartGraph.dll</HintPath>
+    <Reference Include="BSLib.DataViz.Model">
+      <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>libs\nunit.framework.dll</HintPath>

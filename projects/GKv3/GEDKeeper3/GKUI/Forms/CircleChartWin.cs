@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using BSLib.Design.Graphics;
 using Eto.Forms;
 using GDModel;
 using GKCore;

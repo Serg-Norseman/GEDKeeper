@@ -10,6 +10,7 @@ trim_trailing_whitespace = true
 [*.{cs,csproj,xaml,xml,sln,props,targets,resx,config}]
 indent_style = space
 indent_size = 4
+dotnet_sort_system_directives_first = true
 
 [*.{md,yml}]
 indent_style = space

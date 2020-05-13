@@ -19,12 +19,12 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -42,14 +42,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler IUserRefEditDlg.Ref
+        IComboBox IUserRefEditDlg.Ref
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRef); }
+            get { return GetControlHandler<IComboBox>(cmbRef); }
         }
 
-        IComboBoxHandler IUserRefEditDlg.RefType
+        IComboBox IUserRefEditDlg.RefType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRefType); }
+            get { return GetControlHandler<IComboBox>(cmbRefType); }
         }
 
         #endregion
