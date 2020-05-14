@@ -21,6 +21,7 @@
 using System;
 using BSLib.Calendar;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
@@ -66,7 +67,7 @@ namespace GDModel
                     dtx1.SetDateTime(DateTime.Now);
                 });
 
-                Assert.Throws(typeof(GDMDateException), () => {
+                Assert.Throws(typeof(GEDCOMRangeDateException), () => {
                     dtx1.ParseString("BET 04 JAN 2013 X 25 JAN 2013");
                 });
             }

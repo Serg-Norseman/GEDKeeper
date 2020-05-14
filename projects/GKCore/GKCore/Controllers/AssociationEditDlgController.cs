@@ -57,7 +57,7 @@ namespace GKCore.Controllers
         {
             try {
                 string rel = fView.Relation.Text.Trim();
-                if (rel != "" && GlobalOptions.Instance.Relations.IndexOf(rel) < 0) {
+                if (!string.IsNullOrEmpty(rel) && GlobalOptions.Instance.Relations.IndexOf(rel) < 0) {
                     GlobalOptions.Instance.Relations.Add(rel);
                 }
 

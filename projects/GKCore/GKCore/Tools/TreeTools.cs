@@ -458,7 +458,7 @@ namespace GKCore.Tools
             if (logBox != null) {
                 logBox.AppendText(message + "\r\n");
             } else {
-                throw new Exception(message);
+                throw new GKException(message);
             }
         }
 

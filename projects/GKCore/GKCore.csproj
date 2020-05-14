@@ -149,6 +149,7 @@
     <Compile Include="GDModel\Providers\FamilyShow\OPCUtility.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\AnselEncoding.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMChecker.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMException.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParser.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMProvider.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMTagsTable.cs" />
@@ -248,6 +249,7 @@
     <Compile Include="GKCore\Controllers\UserRefEditDlgController.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GDModel\Providers\FileProvider.cs" />
+    <Compile Include="GKCore\GKException.cs" />
     <Compile Include="GKCore\ImportUtils.cs" />
     <Compile Include="GKCore\Interfaces\IBaseContext.cs" />
     <Compile Include="GKCore\Interfaces\IBaseEditor.cs" />

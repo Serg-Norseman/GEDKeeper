@@ -79,14 +79,6 @@ namespace GDModel.Providers.GEDCOM
     }
 
 
-    public class GEDCOMEmptyFileException : GDMException
-    {
-        public GEDCOMEmptyFileException(string message) : base(message)
-        {
-        }
-    }
-
-
     public delegate GDMTag TagConstructor(GDMObject owner, int tagId, string tagValue);
 
     public delegate StackTuple AddTagHandler(GDMObject owner, int tagLevel, int tagId, string tagValue);
@@ -346,14 +338,16 @@ namespace GDModel.Providers.GEDCOM
                                 FixFTBLine(curRecord, curTag, lineNum, tagValue);
                                 continue;
                             } else {
-                                throw new GDMException(string.Format("The string {0} doesn't start with a valid number", lineNum));
+                                throw new GEDCOMInvalidFormatException(string.Format("The string {0} doesn't start with a valid number", lineNum));
                             }
                         }
 
                         tagName = invariantText.ToUpper(tagName);
                         tagId = GEDCOMTagsTable.Lookup(tagName);
-                    } catch (GDMException ex) {
-                        throw new GDMException("Syntax error in line " + Convert.ToString(lineNum) + ".\r" + ex.Message);
+                    } catch (GEDCOMInvalidFormatException) {
+                        throw;
+                    } catch (Exception ex) {
+                        throw new GEDCOMInvalidFormatException(string.Format("Syntax error in line {0}", lineNum), ex);
                     }
 
                     if (tagLevel == 0) {
@@ -397,7 +391,7 @@ namespace GDModel.Providers.GEDCOM
                 stack.Clear();
 
                 if (lineNum == 0) {
-                    throw new GEDCOMEmptyFileException("GEDCOM file is empty");
+                    throw new GEDCOMEmptyFileException();
                 }
             } finally {
                 fTree.State = GDMTreeState.osReady;

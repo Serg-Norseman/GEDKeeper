@@ -27,13 +27,6 @@ using GKCore.Types;
 
 namespace GDModel
 {
-    public class GDMDateException : GDMException
-    {
-        public GDMDateException(string message) : base(message)
-        {
-        }
-    }
-
     /// <summary>
     /// Class to hold simple standard GEDCOM dates.
     /// Note: Year cannot be used externally with negative values even for "BC",
@@ -269,7 +262,7 @@ namespace GDModel
                 }
             }
 
-            throw new GDMDateException(string.Format("The string {0} is not a valid {1} month identifier", str, calendar.ToString()));
+            throw new GDMDateException("The string {0} is not a valid {1} month identifier", str, calendar.ToString());
         }
 
         private static string IntToGEDCOMMonth(int m)
@@ -529,7 +522,7 @@ namespace GDModel
             string[] dtParts = dateStr.Split('.');
             if (dtParts.Length < 3) {
                 if (aException) {
-                    throw new GDMDateException(string.Format("GEDCOMDate.CreateByFormattedStr(): date format is invalid {0}", dateStr));
+                    throw new GDMDateException("Invalid date format '{0}'", dateStr);
                 }
 
                 return null;

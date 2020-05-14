@@ -67,28 +67,36 @@ namespace GKCore
         public void Test_Geocoding()
         {
             IGeocoder geocoder = IGeocoder.Create("");
-            IList<GeoPoint> geoPoints;
 
             geocoder.SetKey("");
             geocoder.SetProxy(null);
             geocoder.SetLang("");
+        }
 
-            try {
-                geocoder = IGeocoder.Create("Google");
-                geocoder.SetKey(GKData.GAPI_KEY);
-                geoPoints = geocoder.Geocode("New York", 1);
-                //Assert.IsTrue(geoPoints.Count > 0);
+        [Test]
+        public void Test_Geocoding_Google()
+        {
+            var geocoder = IGeocoder.Create("Google");
+            geocoder.SetKey(GKData.GAPI_KEY);
+            var geoPoints = geocoder.Geocode("New York", 1);
+            //Assert.IsTrue(geoPoints.Count > 0);
+        }
 
-                geocoder = IGeocoder.Create("Yandex");
-                geoPoints = geocoder.Geocode("New York", 1);
-                //Assert.IsTrue(geoPoints.Count > 0);
+        [Test]
+        public void Test_Geocoding_Yandex()
+        {
+            // FIXME
+            //var geocoder = IGeocoder.Create("Yandex");
+            //var geoPoints = geocoder.Geocode("New York", 1);
+            //Assert.IsTrue(geoPoints.Count > 0);
+        }
 
-                geocoder = IGeocoder.Create("OSM");
-                geoPoints = geocoder.Geocode("New York", 1);
-                //Assert.IsTrue(geoPoints.Count > 0);
-            } catch (Exception ex) {
-                Assert.Fail();
-            }
+        [Test]
+        public void Test_Geocoding_OSM()
+        {
+            var geocoder = IGeocoder.Create("OSM");
+            var geoPoints = geocoder.Geocode("New York", 1);
+            //Assert.IsTrue(geoPoints.Count > 0);
         }
 
         [Test]

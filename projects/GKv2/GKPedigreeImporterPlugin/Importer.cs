@@ -235,11 +235,11 @@ namespace GKPedigreeImporterPlugin
 
             public PersonNameRet(string name, string patr, string surname, string bd, string dd)
             {
-                this.Name = name;
-                this.Patr = patr;
-                this.Surname = surname;
-                this.BirthDate = bd;
-                this.DeathDate = dd;
+                Name = name;
+                Patr = patr;
+                Surname = surname;
+                BirthDate = bd;
+                DeathDate = dd;
             }
         }
 

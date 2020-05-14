@@ -703,7 +703,7 @@ namespace GDModel
                 dtx1.ParseString("INT 20 JAN 2013 (yesterday)");
                 Assert.AreEqual("INT 20 JAN 2013 (yesterday)", dtx1.StringValue);
 
-                Assert.Throws(typeof(GDMDateException), () => { dtx1.ParseString("10 JAN 2013 (today)"); });
+                Assert.Throws(typeof(GEDCOMIntDateException), () => { dtx1.ParseString("10 JAN 2013 (today)"); });
             }
         }
 

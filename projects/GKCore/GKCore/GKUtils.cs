@@ -1527,7 +1527,7 @@ namespace GKCore
             string prefix;
             if (aSubject is GDMSourceRecord && aExt != null) {
                 GDMSourceCitation cit = (aExt as GDMSourceCitation);
-                if (cit != null && cit.Page != "") {
+                if (cit != null && !string.IsNullOrEmpty(cit.Page)) {
                     prefix = cit.Page + ": ";
                 } else {
                     prefix = "";
