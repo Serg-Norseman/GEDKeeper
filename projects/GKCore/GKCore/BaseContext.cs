@@ -1526,7 +1526,7 @@ namespace GKCore
             string gsh = Encoding.ASCII.GetString(gsHeader);
 
             if (!string.Equals(gsh, GEDSEC_HEADER)) {
-                throw new Exception(LangMan.LS(LSID.LSID_ItsNotGEDSECCompatibleFile));
+                throw new GKException(LangMan.LS(LSID.LSID_ItsNotGEDSECCompatibleFile));
             }
 
             if (gsMajVer < GS_MAJOR_VER || gsMinVer < GS_MINOR_VER) {

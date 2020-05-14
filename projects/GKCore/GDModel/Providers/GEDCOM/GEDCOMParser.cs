@@ -264,7 +264,7 @@ namespace GDModel.Providers.GEDCOM
         public void RequestSymbol(char symbol)
         {
             if (fCurrentToken != GEDCOMToken.Symbol || GetSymbol() != symbol) {
-                throw new Exception("Required symbol not found");
+                throw new GEDCOMParserException("Required symbol not found");
             }
         }
 
@@ -272,14 +272,14 @@ namespace GDModel.Providers.GEDCOM
         {
             var token = Next();
             if (token != GEDCOMToken.Symbol || GetSymbol() != symbol) {
-                throw new Exception("Required symbol not found");
+                throw new GEDCOMParserException("Required symbol not found");
             }
         }
 
         public int RequestInt()
         {
             if (fCurrentToken != GEDCOMToken.Number) {
-                throw new Exception("Required integer not found");
+                throw new GEDCOMParserException("Required integer not found");
             }
             return GetNumber();
         }
@@ -288,7 +288,7 @@ namespace GDModel.Providers.GEDCOM
         {
             var token = Next();
             if (token != GEDCOMToken.Number) {
-                throw new Exception("Required integer not found");
+                throw new GEDCOMParserException("Required integer not found");
             }
             return GetNumber();
         }

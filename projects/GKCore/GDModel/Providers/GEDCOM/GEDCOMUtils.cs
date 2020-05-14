@@ -558,7 +558,7 @@ namespace GDModel.Providers.GEDCOM
                 strTok.SkipWhitespaces();
 
                 if (!strTok.RequireWord(GDMCustomDate.GEDCOMDateRangeArray[3])) { // "AND"
-                    throw new GDMDateException(string.Format("The range date '{0}' doesn't contain 'and' token", strTok.GetFullStr()));
+                    throw new GEDCOMRangeDateException(strTok.GetFullStr());
                 }
 
                 strTok.Next();
@@ -583,7 +583,7 @@ namespace GDModel.Providers.GEDCOM
             strTok.SkipWhitespaces();
 
             if (!strTok.RequireWord(GEDCOMTagName.INT)) {
-                throw new GDMDateException(string.Format("The interpreted date '{0}' doesn't start with a valid ident", strTok.GetFullStr()));
+                throw new GEDCOMIntDateException(strTok.GetFullStr());
             }
             strTok.Next();
             ParseDate(owner, date, strTok);
@@ -857,28 +857,28 @@ namespace GDModel.Providers.GEDCOM
                 if (ix >= 0) {
                     c1 = (byte)ix;
                 } else {
-                    throw new GDMException("DecodeBlob");
+                    throw new GEDCOMBlobDecodeException();
                 }
 
                 ix = validChars.IndexOf(blob[i++]);
                 if (ix >= 0) {
                     c2 = (byte)ix;
                 } else {
-                    throw new GDMException("DecodeBlob");
+                    throw new GEDCOMBlobDecodeException();
                 }
 
                 ix = validChars.IndexOf(blob[i++]);
                 if (ix >= 0) {
                     c3 = (byte)ix;
                 } else {
-                    throw new GDMException("DecodeBlob");
+                    throw new GEDCOMBlobDecodeException();
                 }
 
                 ix = validChars.IndexOf(blob[i++]);
                 if (ix >= 0) {
                     c4 = (byte)ix;
                 } else {
-                    throw new GDMException("DecodeBlob");
+                    throw new GEDCOMBlobDecodeException();
                 }
 
                 // The following decodes Family Historian blobs.

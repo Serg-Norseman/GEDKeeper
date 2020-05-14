@@ -459,7 +459,7 @@ namespace GKCore.Options
                         st = st.Remove(0, 1);
                         string[] lngParams = st.Split(',');
                         if (lngParams.Length < 3)
-                            throw new Exception("Header is incorrect");
+                            throw new GKException("Header is incorrect");
 
                         string lngCode = lngParams[0];
                         string lngSign = lngParams[1];

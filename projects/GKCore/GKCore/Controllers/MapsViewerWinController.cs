@@ -100,7 +100,7 @@ namespace GKCore.Controllers
                             int num2 = ind.Events.Count;
                             for (int j = 0; j < num2; j++) {
                                 GDMCustomEvent ev = ind.Events[j];
-                                if (ev.Place.StringValue != "") {
+                                if (!string.IsNullOrEmpty(ev.Place.StringValue)) {
                                     AddPlace(ev.Place, ev);
                                     pCnt++;
                                 }
