@@ -162,6 +162,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libs\netstd\BSLib.Design.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
