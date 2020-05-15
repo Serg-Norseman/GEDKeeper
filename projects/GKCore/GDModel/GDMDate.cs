@@ -226,24 +226,24 @@ namespace GDModel
                 case GDMCalendar.dcGregorian:
                 case GDMCalendar.dcJulian:
                 case GDMCalendar.dcRoman:
-                    monthes = GEDCOMMonthArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthArray;
                     break;
 
                 case GDMCalendar.dcHebrew:
-                    monthes = GEDCOMMonthHebrewArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthHebrewArray;
                     break;
 
                 case GDMCalendar.dcFrench:
-                    monthes = GEDCOMMonthFrenchArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthFrenchArray;
                     break;
 
                 case GDMCalendar.dcIslamic:
-                    monthes = GEDCOMMonthIslamicArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthIslamicArray;
                     break;
 
                 case GDMCalendar.dcUnknown:
                 default:
-                    monthes = GEDCOMMonthArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthArray;
                     break;
             }
             return monthes;
@@ -267,17 +267,17 @@ namespace GDModel
 
         private static string IntToGEDCOMMonth(int m)
         {
-            return (m == 0) ? string.Empty : GEDCOMMonthArray[m - 1];
+            return (m == 0) ? string.Empty : GEDCOMConsts.GEDCOMMonthArray[m - 1];
         }
 
         private static string IntToGEDCOMMonthFrench(int m)
         {
-            return (m == 0) ? string.Empty : GEDCOMMonthFrenchArray[m - 1];
+            return (m == 0) ? string.Empty : GEDCOMConsts.GEDCOMMonthFrenchArray[m - 1];
         }
 
         private static string IntToGEDCOMMonthHebrew(int m)
         {
-            return (m == 0) ? string.Empty : GEDCOMMonthHebrewArray[m - 1];
+            return (m == 0) ? string.Empty : GEDCOMConsts.GEDCOMMonthHebrewArray[m - 1];
         }
 
         #endregion
@@ -286,12 +286,12 @@ namespace GDModel
         {
             string prefix = string.Empty;
             if (fApproximated != GDMApproximated.daExact) {
-                prefix = GEDCOMDateApproximatedArray[(int)fApproximated] + " ";
+                prefix = GEDCOMConsts.GEDCOMDateApproximatedArray[(int)fApproximated] + " ";
             }
 
             string escapeStr = string.Empty;
             if (fCalendar != GDMCalendar.dcGregorian) {
-                escapeStr = GEDCOMDateEscapeArray[(int)fCalendar] + " ";
+                escapeStr = GEDCOMConsts.GEDCOMDateEscapeArray[(int)fCalendar] + " ";
             }
 
             string dayStr = string.Empty;
@@ -316,7 +316,7 @@ namespace GDModel
                     yearStr = yearStr + "/" + fYearModifier;
                 }
                 if (fYearBC) {
-                    yearStr += GEDCOMProvider.GEDCOM_YEAR_BC;
+                    yearStr += GEDCOMConsts.YearBC;
                 }
             }
 
@@ -331,15 +331,15 @@ namespace GDModel
             int month;
             switch (calendar) {
                 case GDMCalendar.dcHebrew:
-                    month = Algorithms.IndexOf(GEDCOMMonthHebrewArray, su);
+                    month = Algorithms.IndexOf(GEDCOMConsts.GEDCOMMonthHebrewArray, su);
                     break;
 
                 case GDMCalendar.dcFrench:
-                    month = Algorithms.IndexOf(GEDCOMMonthFrenchArray, su);
+                    month = Algorithms.IndexOf(GEDCOMConsts.GEDCOMMonthFrenchArray, su);
                     break;
 
                 default:
-                    month = Algorithms.IndexOf(GEDCOMMonthArray, su);
+                    month = Algorithms.IndexOf(GEDCOMConsts.GEDCOMMonthArray, su);
                     break;
             }
 

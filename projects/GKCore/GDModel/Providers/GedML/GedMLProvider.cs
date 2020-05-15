@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,7 +30,7 @@ using GKCore;
 namespace GDModel.Providers.GedML
 {
     /// <summary>
-    /// 
+    /// Processing the GedML format is one part of the Genealogical Data Model (GDM).
     /// </summary>
     public class GedMLProvider : FileProvider
     {

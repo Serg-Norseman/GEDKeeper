@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,6 +36,10 @@ namespace GDModel.Providers.GEDCOM
     /// <summary>
     /// GEDCOMParser tokenized string into tokens.
     /// </summary>
+    /// <remarks>
+    /// This class has been heavily refactored under profiling. Any alterations must take into account the factor 
+    /// of performance degradation when changing the approach, even in small things.
+    /// </remarks>
     public sealed class GEDCOMParser
     {
         private const char EOL = (char)0;

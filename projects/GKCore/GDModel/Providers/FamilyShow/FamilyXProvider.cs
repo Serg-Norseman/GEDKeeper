@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,7 +34,7 @@ namespace GDModel.Providers.FamilyShow
 #endif
 
     /// <summary>
-    /// 
+    /// Processing the FamilyX format is one part of the Genealogical Data Model (GDM).
     /// </summary>
     public class FamilyXProvider : FileProvider
     {

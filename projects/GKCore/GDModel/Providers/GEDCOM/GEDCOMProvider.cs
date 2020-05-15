@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,38 +30,6 @@ using GKCore;
 
 namespace GDModel.Providers.GEDCOM
 {
-    public enum GEDCOMFormat
-    {
-        gf_Unknown,
-        gf_Native,
-        gf_Genealogy_RusOld,
-
-        gf_Ahnenblatt,
-        gf_AncestQuest,
-        gf_AGES,
-        gf_ALTREE,
-        gf_EasyTree,
-        gf_FamilyHistorian,
-        gf_FamilyTreeMaker,
-        gf_FTB,
-        gf_GeneWeb,
-        gf_Geni,
-        gf_Genney,
-        gf_GenoPro,
-        gf_Gramps,
-        gf_GENBOX,
-        gf_GENJ,
-        gf_Heredis,
-        gf_Legacy,
-        gf_Lifelines,
-        gf_PAF,
-        gf_Reunion,
-        gf_RootsMagic,
-
-        gf_Last = gf_RootsMagic
-    }
-
-
     public sealed class GEDCOMAppFormat
     {
         public readonly GEDCOMFormat Format;
@@ -108,25 +76,14 @@ namespace GDModel.Providers.GEDCOM
 
 
     /// <summary>
-    /// 
+    /// Processing the GEDCOM format is one part of the Genealogical Data Model (GDM).
     /// </summary>
+    /// <remarks>
+    /// This class has been heavily refactored under profiling. Any alterations must take into account the factor 
+    /// of performance degradation when changing the approach, even in small things.
+    /// </remarks>
     public class GEDCOMProvider : FileProvider
     {
-        public const char GEDCOM_DELIMITER = ' ';
-        public const char GEDCOM_YEAR_MODIFIER_SEPARATOR = '/';
-        public const char GEDCOM_NAME_SEPARATOR = '/';
-        public const string GEDCOM_YEAR_BC = "B.C.";
-        public const char GEDCOM_POINTER_DELIMITER = '@';
-        public const string GEDCOM_NEWLINE = "\r\n";
-        public const int MAX_LINE_LENGTH = 248;
-
-        // deprecated
-        //public const byte GEDCOMMaxPhoneNumbers = 3;
-        //public const byte GEDCOMMaxEmailAddresses = 3;
-        //public const byte GEDCOMMaxFaxNumbers = 3;
-        //public const byte GEDCOMMaxWebPages = 3;
-        //public const byte GEDCOMMaxLanguages = 3;
-
         public static readonly GEDCOMAppFormat[] GEDCOMFormats;
 
 
@@ -1688,7 +1645,7 @@ namespace GDModel.Providers.GEDCOM
             for (int i = 0; i < strCount; i++) {
                 string str = strings[i];
 
-                int len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
+                int len = Math.Min(str.Length, GEDCOMConsts.MaxLineLength);
                 string sub = str.Substring(0, len);
                 str = str.Remove(0, len);
 
@@ -1700,7 +1657,7 @@ namespace GDModel.Providers.GEDCOM
                 }
 
                 while (str.Length > 0) {
-                    len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
+                    len = Math.Min(str.Length, GEDCOMConsts.MaxLineLength);
 
                     WriteTagLine(stream, level, GEDCOMTagName.CONC, str.Substring(0, len));
 
@@ -1753,7 +1710,7 @@ namespace GDModel.Providers.GEDCOM
                 str = str + " " + strValue;
             }
 
-            stream.Write(str + GEDCOMProvider.GEDCOM_NEWLINE);
+            stream.Write(str + GEDCOMConsts.NewLine);
         }
 
         private static void WriteTagValue(StreamWriter stream, int level, GDMTag tag)
@@ -1828,7 +1785,7 @@ namespace GDModel.Providers.GEDCOM
             if (!string.IsNullOrEmpty(tagValue)) {
                 str = str + " " + tagValue;
             }
-            stream.Write(str + GEDCOM_NEWLINE);
+            stream.Write(str + GEDCOMConsts.NewLine);
         }
 
         private static StackTuple CreateReaderStackTuple(int level, GDMTag tag, AddTagHandler addHandler)
@@ -1919,9 +1876,9 @@ namespace GDModel.Providers.GEDCOM
 
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
             if (tagType == GEDCOMTagType.LATI) {
-                map.Lati = GEDCOMUtils.GetGeoCoord(tagValue, GeoCoord.Lati);
+                map.Lati = GEDCOMUtils.GetGeoCoord(tagValue, GEDCOMGeoCoord.Lati);
             } else if (tagType == GEDCOMTagType.LONG) {
-                map.Long = GEDCOMUtils.GetGeoCoord(tagValue, GeoCoord.Long);
+                map.Long = GEDCOMUtils.GetGeoCoord(tagValue, GEDCOMGeoCoord.Long);
             } else {
                 return AddBaseTag(owner, tagLevel, tagId, tagValue);
             }
@@ -2389,11 +2346,11 @@ namespace GDModel.Providers.GEDCOM
             string result = str;
             string su = result.Substring(0, 3).ToUpperInvariant();
 
-            if (su == GDMCustomDate.GEDCOMDateRangeArray[0] ||
-                su == GDMCustomDate.GEDCOMDateRangeArray[1] ||
-                su == GDMCustomDate.GEDCOMDateApproximatedArray[1] ||
-                su == GDMCustomDate.GEDCOMDateApproximatedArray[2] ||
-                su == GDMCustomDate.GEDCOMDateApproximatedArray[3])
+            if (su == GEDCOMConsts.GEDCOMDateRangeArray[0] ||
+                su == GEDCOMConsts.GEDCOMDateRangeArray[1] ||
+                su == GEDCOMConsts.GEDCOMDateApproximatedArray[1] ||
+                su == GEDCOMConsts.GEDCOMDateApproximatedArray[2] ||
+                su == GEDCOMConsts.GEDCOMDateApproximatedArray[3])
             {
                 result = result.Remove(0, 4);
             }

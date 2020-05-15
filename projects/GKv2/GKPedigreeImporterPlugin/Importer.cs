@@ -405,10 +405,10 @@ namespace GKPedigreeImporterPlugin
                 if (toks.Length != 1) {
                     if (toks.Length != 2) {
                         if (toks.Length == 3) {
-                            tmp = val[0].ToString() + " " + GDMCustomDate.GEDCOMMonthArray[val[1] - 1] + " " + val[2].ToString();
+                            tmp = val[0].ToString() + " " + GEDCOMConsts.GEDCOMMonthArray[val[1] - 1] + " " + val[2].ToString();
                         }
                     } else {
-                        tmp = GDMCustomDate.GEDCOMMonthArray[val[0] - 1] + " " + val[1].ToString();
+                        tmp = GEDCOMConsts.GEDCOMMonthArray[val[0] - 1] + " " + val[1].ToString();
                     }
                 } else {
                     tmp = val[0].ToString();

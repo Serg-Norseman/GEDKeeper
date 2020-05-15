@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,6 +24,7 @@ namespace GDModel.Providers.GEDCOM
 {
     /// <summary>
     /// This hierarchy of exception classes should only serve the needs of error handling in the GEDCOM format.
+    /// Processing the GEDCOM format is one part of the Genealogical Data Model (GDM).
     /// </summary>
     public class GEDCOMException : GDMException
     {

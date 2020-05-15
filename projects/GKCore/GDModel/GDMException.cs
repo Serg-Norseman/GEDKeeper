@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,10 @@ using System;
 
 namespace GDModel
 {
+    /// <summary>
+    /// This hierarchy of exception classes should only serve the needs of error handling 
+    /// in the Genealogical Data Model (GDM subsystem of GEDKeeper's Core).
+    /// </summary>
     public class GDMException : Exception
     {
         public GDMException()

@@ -149,7 +149,9 @@
     <Compile Include="GDModel\Providers\FamilyShow\OPCUtility.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\AnselEncoding.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMChecker.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMConsts.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMException.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMFormat.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParser.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMProvider.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMTagsTable.cs" />
