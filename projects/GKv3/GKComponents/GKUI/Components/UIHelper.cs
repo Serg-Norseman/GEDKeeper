@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,14 +32,8 @@ namespace GKUI.Components
 {
     public class DefStackLayout : StackLayout
     {
-        public DefStackLayout() : this(10, 10)
+        public DefStackLayout(Orientation orientation) : this(10, 10, orientation)
         {
-        }
-
-        public DefStackLayout(int padding, int spacing)
-        {
-            Padding = new Padding(padding);
-            Spacing = spacing;
         }
 
         public DefStackLayout(int padding, int spacing, Orientation orientation)
@@ -56,32 +50,9 @@ namespace GKUI.Components
             Spacing = spacing;
             foreach (var item in items) Items.Add(item);
         }
-    }
 
-    public class HDefStackLayout : DefStackLayout
-    {
-        public HDefStackLayout() : base()
+        public DefStackLayout(params Control[] items) : this(Orientation.Vertical, 0, items)
         {
-            Orientation = Orientation.Horizontal;
-        }
-    }
-
-    public class VDefStackLayout : DefStackLayout
-    {
-        public VDefStackLayout() : base()
-        {
-            Orientation = Orientation.Vertical;
-        }
-    }
-
-    public class VSDefStackLayout : StackLayout
-    {
-        public VSDefStackLayout(params Control[] items)
-        {
-            Orientation = Orientation.Vertical;
-            Padding = new Padding(0);
-            Spacing = 0;
-            foreach (var item in items) Items.Add(item);
         }
     }
 
@@ -225,55 +196,25 @@ namespace GKUI.Components
 
         public static T GetSelectedTag<T>(ComboBox comboBox)
         {
-            object selectedItem = comboBox.SelectedValue;
-            GKComboItem comboItem = (GKComboItem)selectedItem;
+            GKComboItem comboItem = (GKComboItem)comboBox.SelectedValue;
             T itemTag = (T)comboItem.Tag;
             return itemTag;
         }
 
-        public static void SetSelectedTag<T>(ComboBox comboBox, T tagValue)
+        public static void SetSelectedTag<T>(ComboBox comboBox, T tagValue, bool allowDefault = true)
         {
             foreach (object item in comboBox.Items) {
                 GKComboItem comboItem = (GKComboItem)item;
                 T itemTag = (T)comboItem.Tag;
 
-                if (tagValue.Equals(itemTag)) {
+                if (object.Equals(itemTag, tagValue)) {
                     comboBox.SelectedValue = item;
-                    return;
-                }
-            }
-            comboBox.SelectedIndex = 0;
-        }
-
-        public static void SelectComboItem(ComboBox comboBox, object tag, bool allowDefault)
-        {
-            for (int i = 0; i < comboBox.Items.Count; i++) {
-                GKComboItem item = comboBox.Items[i] as GKComboItem;
-
-                if (item != null && object.Equals(item.Tag, tag)) {
-                    comboBox.SelectedIndex = i;
                     return;
                 }
             }
 
             if (allowDefault) {
                 comboBox.SelectedIndex = 0;
-            }
-        }
-
-        public static void SelectComboItem(ListBox listBox, object tag, bool allowDefault)
-        {
-            for (int i = 0; i < listBox.Items.Count; i++) {
-                GKComboItem item = listBox.Items[i] as GKComboItem;
-
-                if (item != null && object.Equals(item.Tag, tag)) {
-                    listBox.SelectedIndex = i;
-                    return;
-                }
-            }
-
-            if (allowDefault) {
-                listBox.SelectedIndex = 0;
             }
         }
 
@@ -301,84 +242,6 @@ namespace GKUI.Components
             parent.Content = listView;
 
             return listView;
-        }
-
-        public static void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
-                                               float inRad, float extRad, float wedgeAngle,
-                                               float ang1, float ang2)
-        {
-            float angCos, angSin;
-
-            float angval1 = (float)(ang1 * Math.PI / 180.0f);
-            angCos = (float)Math.Cos(angval1);
-            angSin = (float)Math.Sin(angval1);
-            float px1 = ctX + (inRad * angCos);
-            float py1 = ctY + (inRad * angSin);
-            float px2 = ctX + (extRad * angCos);
-            float py2 = ctY + (extRad * angSin);
-
-            float angval2 = (float)(ang2 * Math.PI / 180.0f);
-            angCos = (float)Math.Cos(angval2);
-            angSin = (float)Math.Sin(angval2);
-            float nx1 = ctX + (inRad * angCos);
-            float ny1 = ctY + (inRad * angSin);
-            float nx2 = ctX + (extRad * angCos);
-            float ny2 = ctY + (extRad * angSin);
-
-            float ir2 = inRad * 2.0f;
-            float er2 = extRad * 2.0f;
-
-            path.StartFigure();
-            path.AddLine(px2, py2, px1, py1);
-            if (ir2 > 0) path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
-            path.AddLine(nx1, ny1, nx2, ny2);
-            path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
-            path.CloseFigure();
-        }
-
-        public static GraphicsPath CreateRectangle(float x, float y, float width, float height)
-        {
-            float xw = x + width;
-            float yh = y + height;
-
-            GraphicsPath p = new GraphicsPath();
-            p.StartFigure();
-
-            p.AddLine(x, y, xw, y); // Top Edge
-            p.AddLine(xw, y, xw, yh); // Right Edge
-            p.AddLine(xw, yh, x, yh); // Bottom Edge
-            p.AddLine(x, yh, x, y); // Left Edge
-
-            p.CloseFigure();
-            return p;
-        }
-
-        public static GraphicsPath CreateRoundedRectangle(float x, float y, float width, float height, float radius)
-        {
-            float xw = x + width;
-            float yh = y + height;
-            float xwr = xw - radius;
-            float yhr = yh - radius;
-            float xr = x + radius;
-            float yr = y + radius;
-            float r2 = radius * 2;
-            float xwr2 = xw - r2;
-            float yhr2 = yh - r2;
-
-            GraphicsPath p = new GraphicsPath();
-            p.StartFigure();
-
-            p.AddArc(x, y, r2, r2, 180, 90); // Top Left Corner
-            p.AddLine(xr, y, xwr, y); // Top Edge
-            p.AddArc(xwr2, y, r2, r2, 270, 90); // Top Right Corner
-            p.AddLine(xw, yr, xw, yhr); // Right Edge
-            p.AddArc(xwr2, yhr2, r2, r2, 0, 90); // Bottom Right Corner
-            p.AddLine(xwr, yh, xr, yh); // Bottom Edge
-            p.AddArc(x, yhr2, r2, r2, 90, 90); // Bottom Left Corner
-            p.AddLine(x, yhr, x, yr); // Left Edge
-
-            p.CloseFigure();
-            return p;
         }
 
         public static IColor ConvertColor(Color color)
@@ -513,31 +376,6 @@ namespace GKUI.Components
             };
         }
 
-        /// <summary>
-        /// Create stack for row cell (RCS).
-        /// </summary>
-        /// <param name="items"></param>
-        /// <returns></returns>
-        public static StackLayout CreateRCS(params StackLayoutItem[] items)
-        {
-            return CreateStackLayout(Orientation.Horizontal, 0, 10, items);
-        }
-
-        public static StackLayout CreateStackLayout(Orientation orientation,
-                                                    int padding, int spacing,
-                                                    params StackLayoutItem[] items)
-        {
-            var res = new DefStackLayout();
-            res.Orientation = orientation;
-            res.Padding = new Padding(padding);
-            res.Spacing = spacing;
-            foreach (var itm in items) {
-                //itm.VerticalAlignment = VerticalAlignment.Center;
-                res.Items.Add(itm);
-            }
-            return res;
-        }
-
         public static void ConvertFileDialogFilters(FileDialog fileDlg, string filter)
         {
             if (fileDlg == null)
@@ -553,11 +391,6 @@ namespace GKUI.Components
 
                 fileDlg.Filters.Add(new FileDialogFilter(name, extensions));
             }
-        }
-
-        public static void SortItems(this ComboBox comboBox)
-        {
-            comboBox.Items.Sort((x, y) => string.Compare(x.Text, y.Text, StringComparison.CurrentCulture));
         }
 
         public static void SetControlEnabled(Control ctl, bool enabled)

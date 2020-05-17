@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -154,8 +154,8 @@ namespace GKCore.Lists
 
                     fSheetList.AddItem(task, new object[] { GKUtils.GetTaskGoalStr(task),
                                            LangMan.LS(GKData.PriorityNames[(int)task.Priority]),
-                                           new GEDCOMDateItem(task.StartDate),
-                                           new GEDCOMDateItem(task.StopDate) });
+                                           new GDMDateItem(task.StartDate),
+                                           new GDMDateItem(task.StopDate) });
                 }
 
                 fSheetList.EndUpdate();
@@ -236,7 +236,7 @@ namespace GKCore.Lists
                     fSheetList.AddItem(corr, new object[] { corr.CommName,
                                            GKUtils.GetCorresponderStr(fBaseWin.Context.Tree, corr, false),
                                            LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]),
-                                           new GEDCOMDateItem(corr.Date) });
+                                           new GDMDateItem(corr.Date) });
                 }
 
                 fSheetList.EndUpdate();

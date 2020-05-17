@@ -3,7 +3,7 @@ using System.Reflection;
 using Eto;
 using Eto.Forms;
 using GKCore;
-using GKUI.Providers;
+using GKUI;
 using Eto.Wpf.Forms.ToolBar;
 using Eto.Wpf.Forms.Controls;
 

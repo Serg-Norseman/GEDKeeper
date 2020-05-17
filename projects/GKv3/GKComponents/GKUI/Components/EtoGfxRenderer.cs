@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,9 +23,8 @@ using BSLib;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
 using GKCore.Charts;
-using GKUI.Components;
 
-namespace GKUI.Providers
+namespace GKUI.Components
 {
     /// <summary>
     /// 
@@ -93,12 +92,29 @@ namespace GKUI.Providers
             fCanvas.DrawLine(sdPen, x1, y1, x2, y2);
         }
 
+        private static GraphicsPath CreateRectangle(float x, float y, float width, float height)
+        {
+            float xw = x + width;
+            float yh = y + height;
+
+            GraphicsPath p = new GraphicsPath();
+            p.StartFigure();
+
+            p.AddLine(x, y, xw, y); // Top Edge
+            p.AddLine(xw, y, xw, yh); // Right Edge
+            p.AddLine(xw, yh, x, yh); // Bottom Edge
+            p.AddLine(x, yh, x, y); // Left Edge
+
+            p.CloseFigure();
+            return p;
+        }
+
         public override void DrawRectangle(IPen pen, IColor fillColor,
                                            float x, float y, float width, float height)
         {
             Color sdFillColor = ((ColorHandler)fillColor).Handle;
 
-            using (GraphicsPath path = UIHelper.CreateRectangle(x, y, width, height)) {
+            using (GraphicsPath path = CreateRectangle(x, y, width, height)) {
                 if (sdFillColor != Colors.Transparent) {
                     sdFillColor = PrepareColor(sdFillColor);
 
@@ -112,12 +128,40 @@ namespace GKUI.Providers
             }
         }
 
+        private static GraphicsPath CreateRoundedRectangle(float x, float y, float width, float height, float radius)
+        {
+            float xw = x + width;
+            float yh = y + height;
+            float xwr = xw - radius;
+            float yhr = yh - radius;
+            float xr = x + radius;
+            float yr = y + radius;
+            float r2 = radius * 2;
+            float xwr2 = xw - r2;
+            float yhr2 = yh - r2;
+
+            GraphicsPath p = new GraphicsPath();
+            p.StartFigure();
+
+            p.AddArc(x, y, r2, r2, 180, 90); // Top Left Corner
+            p.AddLine(xr, y, xwr, y); // Top Edge
+            p.AddArc(xwr2, y, r2, r2, 270, 90); // Top Right Corner
+            p.AddLine(xw, yr, xw, yhr); // Right Edge
+            p.AddArc(xwr2, yhr2, r2, r2, 0, 90); // Bottom Right Corner
+            p.AddLine(xwr, yh, xr, yh); // Bottom Edge
+            p.AddArc(x, yhr2, r2, r2, 90, 90); // Bottom Left Corner
+            p.AddLine(x, yhr, x, yr); // Left Edge
+
+            p.CloseFigure();
+            return p;
+        }
+
         public override void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
                                                   float width, float height, float radius)
         {
             Color sdFillColor = ((ColorHandler)fillColor).Handle;
 
-            using (GraphicsPath path = UIHelper.CreateRoundedRectangle(x, y, width, height, radius)) {
+            using (GraphicsPath path = CreateRoundedRectangle(x, y, width, height, radius)) {
                 if (sdFillColor != Colors.Transparent) {
                     sdFillColor = PrepareColor(sdFillColor);
 

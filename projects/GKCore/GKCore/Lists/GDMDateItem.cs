@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,13 +25,13 @@ using GKCore.Options;
 namespace GKCore.Lists
 {
     /// <summary>
-    /// This class is wrapper for the GEDCOM dates to a ListView items.
+    /// This class is wrapper for the GDM dates to a ListView items.
     /// </summary>
-    public class GEDCOMDateItem : IComparable, IConvertible
+    public class GDMDateItem : IComparable, IConvertible
     {
         private readonly GDMCustomDate fDate;
 
-        public GEDCOMDateItem(GDMCustomDate date)
+        public GDMDateItem(GDMCustomDate date)
         {
             fDate = date;
         }
@@ -52,7 +52,7 @@ namespace GKCore.Lists
 
         public int CompareTo(object obj)
         {
-            GEDCOMDateItem otherItem = obj as GEDCOMDateItem;
+            GDMDateItem otherItem = obj as GDMDateItem;
             if (otherItem == null) {
                 return -1;
             }
@@ -79,6 +79,12 @@ namespace GKCore.Lists
         {
             return TypeCode.Object;
         }
+
+        string IConvertible.ToString(IFormatProvider provider)
+        {
+            return ToString();
+        }
+
 
         bool IConvertible.ToBoolean(IFormatProvider provider)
         {
@@ -148,11 +154,6 @@ namespace GKCore.Lists
         DateTime IConvertible.ToDateTime(IFormatProvider provider)
         {
             throw new NotImplementedException();
-        }
-
-        string IConvertible.ToString(IFormatProvider provider)
-        {
-            return ToString();
         }
 
         object IConvertible.ToType(Type conversionType, IFormatProvider provider)

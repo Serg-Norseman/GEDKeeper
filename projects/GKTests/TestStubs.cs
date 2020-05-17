@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,7 +31,7 @@ using GKCore.Maps;
 using GKCore.MVP.Controls;
 using GKCore.Plugins;
 using GKCore.Types;
-using GKUI.Providers;
+using GKUI.Components;
 
 namespace GKTests.Stubs
 {

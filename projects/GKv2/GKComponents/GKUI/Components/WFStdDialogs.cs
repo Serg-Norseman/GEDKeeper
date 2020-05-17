@@ -25,7 +25,7 @@ using GKCore;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
-namespace GKUI.Providers
+namespace GKUI.Components
 {
     /// <summary>
     /// The implementation of the contract for working with WinForms dialogs.

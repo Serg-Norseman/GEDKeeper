@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using BSLib;
@@ -27,9 +28,8 @@ using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore.MVP.Controls;
-using GKUI.Components;
 
-namespace GKUI.Providers
+namespace GKUI.Components
 {
     public abstract class BaseControlHandler<T, TThis> : ControlHandler<T, TThis>, IBaseControl
         where T : Control
@@ -240,7 +240,7 @@ namespace GKUI.Providers
 
         public void Sort()
         {
-            Control.SortItems();
+            Control.Items.Sort((x, y) => string.Compare(x.Text, y.Text, StringComparison.CurrentCulture));
         }
 
         public T GetSelectedTag<T>()

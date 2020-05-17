@@ -137,21 +137,21 @@ namespace GKUI.Forms
             var personLayout = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblSurname, txtSurname),
-                                  new VSDefStackLayout(lblSurnamePrefix, txtSurnamePrefix), null }
+                        Cells = { new DefStackLayout(lblSurname, txtSurname),
+                                  new DefStackLayout(lblSurnamePrefix, txtSurnamePrefix), null }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblMarriedSurname, txtMarriedSurname),
-                                  new VSDefStackLayout(lblNamePrefix, txtNamePrefix), null }
+                        Cells = { new DefStackLayout(lblMarriedSurname, txtMarriedSurname),
+                                  new DefStackLayout(lblNamePrefix, txtNamePrefix), null }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblName, txtName),
-                                  new VSDefStackLayout(lblNameSuffix, txtNameSuffix),
-                                  new VSDefStackLayout(lblSex, cmbSex) }
+                        Cells = { new DefStackLayout(lblName, txtName),
+                                  new DefStackLayout(lblNameSuffix, txtNameSuffix),
+                                  new DefStackLayout(lblSex, cmbSex) }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblPatronymic, cmbPatronymic),
-                                  new VSDefStackLayout(lblNickname, txtNickname),
+                        Cells = { new DefStackLayout(lblPatronymic, cmbPatronymic),
+                                  new DefStackLayout(lblNickname, txtNickname),
                                   TableLayout.Horizontal(10, chkBookmark, chkPatriarch) }
                     }
                 }

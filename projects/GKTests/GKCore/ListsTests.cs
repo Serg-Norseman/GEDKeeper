@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,8 +28,8 @@ using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests;
+using GKUI;
 using GKUI.Components;
-using GKUI.Providers;
 using NUnit.Framework;
 
 namespace GKCore
@@ -60,7 +60,7 @@ namespace GKCore
         {
             var dtx1 = new GDMDateValue(null);
             dtx1.ParseString("05 JAN 2013");
-            var dtItem1 = new GEDCOMDateItem(dtx1);
+            var dtItem1 = new GDMDateItem(dtx1);
 
             Assert.AreEqual(TypeCode.Object, ((IConvertible)dtItem1).GetTypeCode());
             Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToBoolean(null); });
@@ -86,12 +86,12 @@ namespace GKCore
         {
             var dtx1 = new GDMDateValue(null);
             dtx1.ParseString("05 JAN 2013");
-            var dtItem1 = new GEDCOMDateItem(dtx1);
+            var dtItem1 = new GDMDateItem(dtx1);
             Assert.AreEqual("05.01.2013", dtItem1.ToString());
 
             var dtx2 = new GDMDateValue(null);
             dtx2.ParseString("17 FEB 2013");
-            var dtItem2 = new GEDCOMDateItem(dtx2);
+            var dtItem2 = new GDMDateItem(dtx2);
             Assert.AreEqual("17.02.2013", dtItem2.ToString());
 
             Assert.AreEqual(0, dtItem1.CompareTo(dtItem1));
@@ -99,16 +99,16 @@ namespace GKCore
             Assert.AreEqual(-1, dtItem1.CompareTo(null));
             Assert.AreEqual(+1, dtItem2.CompareTo(dtItem1));
 
-            dtItem1 = new GEDCOMDateItem(dtx1);
-            dtItem2 = new GEDCOMDateItem(null);
+            dtItem1 = new GDMDateItem(dtx1);
+            dtItem2 = new GDMDateItem(null);
             Assert.AreEqual(-1, dtItem1.CompareTo(dtItem2));
 
-            dtItem1 = new GEDCOMDateItem(null);
-            dtItem2 = new GEDCOMDateItem(dtx2);
+            dtItem1 = new GDMDateItem(null);
+            dtItem2 = new GDMDateItem(dtx2);
             Assert.AreEqual(+1, dtItem1.CompareTo(dtItem2));
 
-            dtItem1 = new GEDCOMDateItem(null);
-            dtItem2 = new GEDCOMDateItem(null);
+            dtItem1 = new GDMDateItem(null);
+            dtItem2 = new GDMDateItem(null);
             Assert.AreEqual(0, dtItem1.CompareTo(dtItem2));
         }
 

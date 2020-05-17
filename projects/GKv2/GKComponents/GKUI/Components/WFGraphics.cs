@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -280,9 +280,7 @@ namespace GKUI.Components
 
         public byte[] GetBytes()
         {
-            //Handle.get
-            using (var stream = new MemoryStream())
-            {
+            using (var stream = new MemoryStream()) {
                 Handle.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
                 return stream.ToArray();
             }

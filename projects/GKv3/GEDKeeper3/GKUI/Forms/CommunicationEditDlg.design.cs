@@ -68,7 +68,9 @@ namespace GKUI.Forms
                         //Cells = { lblCorresponder, TableLayout.Horizontal(10, new TableCell(txtDir, false), new TableCell(txtCorresponder, true), btnPersonAdd) }
                         Cells = {
                             lblCorresponder,
-                            UIHelper.CreateRCS(txtDir, new StackLayoutItem(txtCorresponder, true), btnPersonAdd)
+                            new DefStackLayout(0, 10, Orientation.Horizontal) {
+                                Items = { txtDir, new StackLayoutItem(txtCorresponder, true), btnPersonAdd }
+                            }
                         }
                     },
                     new TableRow {

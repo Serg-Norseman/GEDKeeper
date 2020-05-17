@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,23 +19,20 @@
  */
 
 using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using BSLib;
 using BSLib.Design.Graphics;
-using GKCore.Interfaces;
-using GKUI.Components;
+using Eto.Drawing;
+using Eto.Forms;
 
-namespace GKUI.Providers
+namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    /// The main implementation of the platform-specific graphics provider for EtoForms.
     /// </summary>
-    public class WFGfxProvider : IGraphicsProviderEx
+    public class EtoGfxProvider : IGraphicsProvider
     {
-        public WFGfxProvider()
+        public EtoGfxProvider()
         {
         }
 
@@ -62,7 +59,7 @@ namespace GKUI.Providers
             if (fileName == null)
                 throw new ArgumentNullException("fileName");
 
-            ((ImageHandler)image).Handle.Save(fileName, ImageFormat.Bmp);
+            ((Bitmap)((ImageHandler)image).Handle).Save(fileName, ImageFormat.Bitmap);
         }
 
         public IImage CreateImage(Stream stream)
@@ -98,21 +95,19 @@ namespace GKUI.Providers
                 }
 
                 Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
-                using (Graphics graphic = Graphics.FromImage(newImage)) {
-                    graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    graphic.SmoothingMode = SmoothingMode.HighQuality;
-                    graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                    graphic.CompositingQuality = CompositingQuality.HighQuality;
+                using (Graphics graphic = new Graphics(newImage)) {
+                    graphic.AntiAlias = true;
+                    graphic.ImageInterpolation = ImageInterpolation.High;
+                    graphic.PixelOffsetMode = PixelOffsetMode.Half;
 
                     if (cutoutIsEmpty) {
                         graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
                     } else {
-                        Rectangle destRect = new Rectangle(0, 0, imgWidth, imgHeight);
-                        //Rectangle srcRect = cutoutArea.ToRectangle();
-                        graphic.DrawImage(bmp, destRect,
-                                          cutoutArea.Left, cutoutArea.Top,
-                                          cutoutArea.GetWidth(), cutoutArea.GetHeight(),
-                                          GraphicsUnit.Pixel);
+                        RectangleF sourRect = new RectangleF(cutoutArea.Left, cutoutArea.Top,
+                                                             cutoutArea.GetWidth(), cutoutArea.GetHeight());
+                        RectangleF destRect = new RectangleF(0, 0, imgWidth, imgHeight);
+
+                        graphic.DrawImage(bmp, sourRect, destRect);
                     }
                 }
 
@@ -120,18 +115,31 @@ namespace GKUI.Providers
             }
         }
 
-        public IImage LoadResourceImage(string resName, bool makeTransp)
+        public IImage GetResourceImage(string resName, bool makeTransp)
         {
-            Bitmap img = (Bitmap)UIHelper.LoadResourceImage("Resources." + resName);
+            Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
 
             if (makeTransp) {
-                img = (Bitmap)img.Clone();
+                // only for 24, 32 bit images
+                /*Color pixColor = img.GetPixel(0, 0);
+                if (pixColor != Colors.Transparent) {
+                    img = (Bitmap)img.Clone();
 
-                #if __MonoCS__
-                img.MakeTransparent();
-                #else
-                img.MakeTransparent(img.GetPixel(0, 0));
-                #endif
+                    using (Graphics gfx = new Graphics(img)) {
+                        gfx.Clear(pixColor);
+                    }
+                }*/
+            }
+
+            return new ImageHandler(img);
+        }
+
+        // TODO: Temp version, on future
+        public IImage LoadResourceImage(string resName, bool makeTransp)
+        {
+            Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
+
+            if (makeTransp) {
             }
 
             return new ImageHandler(img);
@@ -159,6 +167,39 @@ namespace GKUI.Providers
             return result;
         }
 
+        private static void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
+                                               float inRad, float extRad, float wedgeAngle,
+                                               float ang1, float ang2)
+        {
+            float angCos, angSin;
+
+            float angval1 = (float)(ang1 * Math.PI / 180.0f);
+            angCos = (float)Math.Cos(angval1);
+            angSin = (float)Math.Sin(angval1);
+            float px1 = ctX + (inRad * angCos);
+            float py1 = ctY + (inRad * angSin);
+            float px2 = ctX + (extRad * angCos);
+            float py2 = ctY + (extRad * angSin);
+
+            float angval2 = (float)(ang2 * Math.PI / 180.0f);
+            angCos = (float)Math.Cos(angval2);
+            angSin = (float)Math.Sin(angval2);
+            float nx1 = ctX + (inRad * angCos);
+            float ny1 = ctY + (inRad * angSin);
+            float nx2 = ctX + (extRad * angCos);
+            float ny2 = ctY + (extRad * angSin);
+
+            float ir2 = inRad * 2.0f;
+            float er2 = extRad * 2.0f;
+
+            path.StartFigure();
+            path.AddLine(px2, py2, px1, py1);
+            if (ir2 > 0) path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
+            path.AddLine(nx1, ny1, nx2, ny2);
+            path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
+            path.CloseFigure();
+        }
+
         public IGfxPath CreateCircleSegmentPath(float inRad, float extRad, float wedgeAngle, float ang1, float ang2)
         {
             var path = new GraphicsPath();
@@ -170,7 +211,7 @@ namespace GKUI.Providers
             result.Ang1 = ang1;
             result.Ang2 = ang2;
 
-            UIHelper.CreateCircleSegment(path, 0, 0, inRad, extRad, wedgeAngle, ang1, ang2);
+            CreateCircleSegment(path, 0, 0, inRad, extRad, wedgeAngle, ang1, ang2);
 
             return result;
         }
@@ -187,21 +228,21 @@ namespace GKUI.Providers
             result.Ang1 = ang1;
             result.Ang2 = ang2;
 
-            UIHelper.CreateCircleSegment(path, ctX, ctY, inRad, extRad, wedgeAngle, ang1, ang2);
+            CreateCircleSegment(path, ctX, ctY, inRad, extRad, wedgeAngle, ang1, ang2);
 
             return result;
         }
 
         public IFont CreateFont(string fontName, float size, bool bold)
         {
-            FontStyle style = (!bold) ? FontStyle.Regular : FontStyle.Bold;
-            var sdFont = new Font(fontName, size, style, GraphicsUnit.Point);
+            FontStyle style = (!bold) ? FontStyle.None : FontStyle.Bold;
+            var sdFont = new Font(fontName, size, style);
             return new FontHandler(sdFont);
         }
 
         public IColor CreateColor(int argb)
         {
-            // Dirty hack!
+            // FIXME: Dirty hack!
             //argb = (int)unchecked((long)argb & (long)((ulong)-1));
             //argb = (int)unchecked((ulong)argb & (uint)0xFF000000);
             int red = (argb >> 16) & 0xFF;
@@ -220,7 +261,7 @@ namespace GKUI.Providers
 
         public IColor CreateColor(int a, int r, int g, int b)
         {
-            Color color = Color.FromArgb(a, r, g, b);
+            Color color = Color.FromArgb(r, g, b, a);
             return new ColorHandler(color);
         }
 
@@ -245,10 +286,10 @@ namespace GKUI.Providers
 
         public ExtSizeF GetTextSize(string text, IFont font, object target)
         {
-            Graphics gfx = target as Graphics;
-            if (gfx != null && font != null) {
+            //Graphics gfx = target as Graphics;
+            if (/*gfx != null && */font != null) {
                 Font sdFnt = ((FontHandler)font).Handle;
-                var size = gfx.MeasureString(text, sdFnt);
+                var size = sdFnt.MeasureString(text);
                 return new ExtSizeF(size.Width, size.Height);
             } else {
                 return new ExtSizeF();
@@ -258,11 +299,11 @@ namespace GKUI.Providers
         public string GetDefaultFontName()
         {
             string fontName;
-            #if __MonoCS__
-            fontName = "Noto Sans";
-            #else
-            fontName = "Verdana"; // "Tahoma";
-            #endif
+            if (Application.Instance.Platform.IsGtk) {
+                fontName = "Noto Sans";
+            } else {
+                fontName = "Verdana"; // "Tahoma";
+            }
             return fontName;
         }
     }

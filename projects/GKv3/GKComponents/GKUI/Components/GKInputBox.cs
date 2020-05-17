@@ -19,10 +19,9 @@
  */
 
 using System;
-using Eto.Forms;
 using Eto.Drawing;
+using Eto.Forms;
 using GKCore;
-using GKUI.Forms;
 
 namespace GKUI.Components
 {

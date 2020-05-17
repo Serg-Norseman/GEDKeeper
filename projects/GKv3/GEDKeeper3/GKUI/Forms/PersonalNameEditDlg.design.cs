@@ -120,26 +120,26 @@ namespace GKUI.Forms
                 Spacing = new Size(10, 10),
                 Rows = {
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblSurname, txtSurname),
-                                  new VSDefStackLayout(lblSurnamePrefix, txtSurnamePrefix) }
+                        Cells = { new DefStackLayout(lblSurname, txtSurname),
+                                  new DefStackLayout(lblSurnamePrefix, txtSurnamePrefix) }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblMarriedSurname, txtMarriedSurname),
-                                  new VSDefStackLayout(lblNamePrefix, txtNamePrefix) }
+                        Cells = { new DefStackLayout(lblMarriedSurname, txtMarriedSurname),
+                                  new DefStackLayout(lblNamePrefix, txtNamePrefix) }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblName, txtName),
-                                  new VSDefStackLayout(lblNameSuffix, txtNameSuffix) }
+                        Cells = { new DefStackLayout(lblName, txtName),
+                                  new DefStackLayout(lblNameSuffix, txtNameSuffix) }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblPatronymic, txtPatronymic),
-                                  new VSDefStackLayout(lblNickname, txtNickname) }
+                        Cells = { new DefStackLayout(lblPatronymic, txtPatronymic),
+                                  new DefStackLayout(lblNickname, txtNickname) }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblType, cmbNameType), null }
+                        Cells = { new DefStackLayout(lblType, cmbNameType), null }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblLanguage, cmbLanguage), null }
+                        Cells = { new DefStackLayout(lblLanguage, cmbLanguage), null }
                     },
                     null
                 }

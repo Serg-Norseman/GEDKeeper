@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -97,7 +97,7 @@ namespace GKUI.Forms
                     cmbLanguages.Items.Add(new GKComboItem(lngRec.Name, lngRec.Code));
                 }
             }
-            UIHelper.SelectComboItem(cmbLanguages, fOptions.InterfaceLang, true);
+            UIHelper.SetSelectedTag(cmbLanguages, fOptions.InterfaceLang, true);
         }
 
         private void UpdateForm()

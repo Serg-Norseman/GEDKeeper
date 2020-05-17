@@ -30,7 +30,6 @@ using GKCore.Interfaces;
 using BSLib.Design.IoC;
 using GKCore.Options;
 using GKUI.Components;
-using GKUI.Providers;
 
 [assembly: AssemblyTitle("GKTray")]
 [assembly: AssemblyDescription("")]

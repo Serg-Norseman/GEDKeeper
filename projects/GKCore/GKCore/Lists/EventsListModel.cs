@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -67,7 +67,7 @@ namespace GKCore.Lists
                     object[] itemsData = new object[5];
                     itemsData[0] = (i + 1);
                     itemsData[1] = GKUtils.GetEventName(evt);
-                    itemsData[2] = new GEDCOMDateItem(evt.Date.Value);
+                    itemsData[2] = new GDMDateItem(evt.Date.Value);
                     if (fPersonsMode) {
                         string st = evt.Place.StringValue;
                         if (evt.StringValue != "") {

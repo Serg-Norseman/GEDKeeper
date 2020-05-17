@@ -178,7 +178,7 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         Cells = {
-                            new HDefStackLayout {
+                            new DefStackLayout(Orientation.Horizontal) {
                                 Items = { chkAutosave, numASMin, lblMinutes }
                             }
                         }
@@ -320,7 +320,7 @@ namespace GKUI.Forms
 
             pageMultimedia = new TabPage();
             pageMultimedia.Text = "pageMultimedia";
-            pageMultimedia.Content = new VDefStackLayout {
+            pageMultimedia.Content = new DefStackLayout(Orientation.Vertical) {
                 Items = { chkRemovableMediaWarning, chkEmbeddedMediaPlayer, chkAllowMediaDirectRefs }
             };
 
@@ -383,7 +383,7 @@ namespace GKUI.Forms
 
             grpTreePersons = new GroupBox();
             grpTreePersons.Text = "grpTreePersons";
-            grpTreePersons.Content = new VDefStackLayout {
+            grpTreePersons.Content = new DefStackLayout(Orientation.Vertical) {
                 Items = { chkSurname, chkName, chkPatronymic, chkDiffLines, chkBirthDate, chkDeathDate, chkOnlyYears,
                     chkMarriagesDates, chkKinship, chkSignsVisible, chkTreeDecorative, chkPortraitsVisible, chkDefaultPortraits,
                     chkChildlessExclude, chkInvertedTree, chkShowPlaces, chkHideUnknownSpouses, chkCheckTreeSize }
@@ -549,10 +549,10 @@ namespace GKUI.Forms
 
             pageTreeChart = new TabPage();
             pageTreeChart.Text = "pageTreeChart";
-            pageTreeChart.Content = new HDefStackLayout {
+            pageTreeChart.Content = new DefStackLayout(Orientation.Horizontal) {
                 Items = {
                     grpTreePersons,
-                    new VDefStackLayout { Items = { grpTreeDecor, grpSpacings } }
+                    new DefStackLayout(Orientation.Vertical) { Items = { grpTreeDecor, grpSpacings } }
                 }
             };
 
@@ -596,7 +596,7 @@ namespace GKUI.Forms
 
             panel1 = new Panel();
             panel1.Width = 210;
-            panel1.Content = new VDefStackLayout {
+            panel1.Content = new DefStackLayout(Orientation.Vertical) {
                 Items = { btnColumnUp, btnColumnDown, null, btnDefList }
             };
 
@@ -617,7 +617,8 @@ namespace GKUI.Forms
 
             rgFNPFormat = new GroupBox();
             rgFNPFormat.Text = "rgFNPFormat";
-            rgFNPFormat.Content = new VDefStackLayout {
+            rgFNPFormat.Content = new DefStackLayout(Orientation.Vertical)
+            {
                 Items = { radS_N_P, radS_NP, radSNP }
             };
 
@@ -637,7 +638,8 @@ namespace GKUI.Forms
 
             grpDateFormat = new GroupBox();
             grpDateFormat.Text = "grpDateFormat";
-            grpDateFormat.Content = new VDefStackLayout {
+            grpDateFormat.Content = new DefStackLayout(Orientation.Vertical)
+            {
                 Items = { radDMY, radYMD, null, chkShowDatesSigns, chkShowDatesCalendar }
             };
 
@@ -661,7 +663,8 @@ namespace GKUI.Forms
 
             grpAdvancedNames = new GroupBox();
             grpAdvancedNames.Text = "AdvancedNames";
-            grpAdvancedNames.Content = new VDefStackLayout {
+            grpAdvancedNames.Content = new DefStackLayout(Orientation.Vertical)
+            {
                 Items = { chkExtendWomanSurnames, radMaiden_Married, radMarried_Maiden, radMaiden, radMarried }
             };
 
@@ -692,7 +695,7 @@ namespace GKUI.Forms
                         Cells = { rgFNPFormat, grpDateFormat }
                     },
                     new TableRow {
-                        Cells = { grpAdvancedNames, new VDefStackLayout{
+                        Cells = { grpAdvancedNames, new DefStackLayout(Orientation.Vertical) {
                                 Items = { chkPlacesWithAddress, chkHighlightUnparented, chkHighlightUnmarried,
                                           chkAutoSortChildren, chkAutoSortSpouses}
                             }
@@ -722,7 +725,8 @@ namespace GKUI.Forms
 
             grpPedigreeFormat = new GroupBox();
             grpPedigreeFormat.Text = "grpPedigreeFormat";
-            grpPedigreeFormat.Content = new VDefStackLayout {
+            grpPedigreeFormat.Content = new DefStackLayout(Orientation.Vertical)
+            {
                 Items = { radExcess, radCompact }
             };
 
@@ -742,7 +746,8 @@ namespace GKUI.Forms
 
             grpPedigree = new GroupBox();
             grpPedigree.Text = "grpPedigree";
-            grpPedigree.Content = new VDefStackLayout {
+            grpPedigree.Content = new DefStackLayout(Orientation.Vertical)
+            {
                 Items = { chkAttributes, chkNotes, chkSources, chkGenerations, grpPedigreeFormat }
             };
 
