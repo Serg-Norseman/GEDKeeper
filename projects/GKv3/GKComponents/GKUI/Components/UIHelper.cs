@@ -335,27 +335,6 @@ namespace GKUI.Components
             return strList.ToArray();
         }
 
-        public static GridColumn CreateTextColumn(string colName, string headerText, int width)
-        {
-            var col = new GridColumn(); //DataGridViewTextBoxColumn();
-            if (!string.IsNullOrEmpty(colName)) col.ID = colName;
-            col.HeaderText = headerText;
-            col.DataCell = new TextBoxCell();
-            col.Width = width;
-            return col;
-        }
-
-        public static GridColumn CreateComboColumn(string colName, string headerText, object[] items, int width)
-        {
-            var col = new GridColumn(); //DataGridViewComboBoxColumn();
-            if (!string.IsNullOrEmpty(colName)) col.ID = colName;
-            col.HeaderText = headerText;
-            col.DataCell = new ComboBoxCell();
-            col.Width = width;
-            //col.Items.AddRange(items);
-            return col;
-        }
-
         // FIXME: replace to TableLayout.Horizontal(), same
         public static TableRow MakeDialogFooter(params TableCell[] cells)
         {
