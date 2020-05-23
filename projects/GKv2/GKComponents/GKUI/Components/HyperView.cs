@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.MVP.Controls;
 

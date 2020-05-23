@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
@@ -187,9 +188,9 @@ namespace GKSamplePlugin
             get { return GetControlHandler<IComboBox>(cmbRestriction); }
         }
 
-        IComboBoxEx IPersonEditDlg.SexCombo
+        IComboBox IPersonEditDlg.SexCombo
         {
-            get { return GetControlHandler<IComboBoxEx>(cmbSex); }
+            get { return GetControlHandler<IComboBox>(cmbSex); }
         }
 
         ICheckBox IPersonEditDlg.Patriarch

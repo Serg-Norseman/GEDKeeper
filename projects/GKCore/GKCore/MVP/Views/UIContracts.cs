@@ -371,7 +371,7 @@ namespace GKCore.MVP.Views
 
         ILabel SurnameLabel { get; }
         IComboBox RestrictionCombo { get; }
-        IComboBoxEx SexCombo { get; }
+        IComboBox SexCombo { get; }
 
         ICheckBox Patriarch { get; }
         ICheckBox Bookmark { get; }

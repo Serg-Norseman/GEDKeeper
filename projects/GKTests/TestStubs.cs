@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using BSLib;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
@@ -31,7 +32,6 @@ using GKCore.Maps;
 using GKCore.MVP.Controls;
 using GKCore.Plugins;
 using GKCore.Types;
-using GKUI.Components;
 
 namespace GKTests.Stubs
 {

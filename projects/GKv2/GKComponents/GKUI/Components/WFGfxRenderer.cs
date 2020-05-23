@@ -25,6 +25,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using BSLib;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using GKCore.Charts;
 using GKUI.Components;
 

@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.MVP;
-using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Maps;
@@ -31,12 +30,6 @@ using GKCore.Stats;
 
 namespace GKCore.MVP.Controls
 {
-    public interface IComboBoxEx : IComboBox
-    {
-        void AddItem(string caption, object tag, IImage image);
-    }
-
-
     public interface IDateBoxHandler : IBaseControl
     {
         string NormalizeDate { get; set; }
@@ -76,23 +69,6 @@ namespace GKCore.MVP.Controls
         void SaveSnapshot(string fileName);
         void SetCenter(double latitude, double longitude, int scale);
         void ZoomToBounds();
-    }
-
-
-    public delegate void ItemAction(IMenuItem sender);
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IMenuItem : IControl
-    {
-        bool Checked { get; set; }
-        bool Enabled { get; set; }
-        int ItemsCount { get; }
-        object Tag { get; set; }
-
-        IMenuItem AddItem(string text, object tag, IImage image, ItemAction action);
-        void ClearItems();
     }
 
 

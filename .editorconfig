@@ -11,6 +11,15 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 dotnet_sort_system_directives_first = true
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:always
+csharp_preserve_single_line_statements = false
+csharp_preserve_single_line_blocks = true
+dotnet_style_coalesce_expression = false
+dotnet_style_null_propagation = false
+csharp_new_line_before_open_brace = methods, properties, events, indexers, types
+csharp_new_line_before_else = false
+csharp_new_line_before_catch = false
+csharp_new_line_before_finally = false
 
 [*.{md,yml}]
 indent_style = space

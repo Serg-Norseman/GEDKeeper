@@ -28,6 +28,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using BSLib.Design;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Interfaces;

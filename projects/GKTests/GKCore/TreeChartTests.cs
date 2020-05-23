@@ -22,6 +22,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using BSLib;
+using BSLib.Design.Handlers;
 using GDModel;
 using GKCore.Charts;
 using GKCore.Interfaces;

@@ -20,6 +20,8 @@
 
 using System;
 using System.Windows.Forms;
+using BSLib.Design;
+using BSLib.Design.Handlers;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
@@ -81,9 +83,9 @@ namespace GKUI.Forms
 
         private void FillSizes()
         {
-            cmbSizes.Items.Add(new GKComboItem("", 0));
+            cmbSizes.Items.Add(new ComboItem<int>("", 0));
             for (int i = 1; i <= 7; i++) {
-                cmbSizes.Items.Add(new GKComboItem(i.ToString(), i));
+                cmbSizes.Items.Add(new ComboItem<int>(i.ToString(), i));
             }
             cmbSizes.SelectedIndex = 0;
         }
@@ -137,8 +139,8 @@ namespace GKUI.Forms
 
         private void cmbSizes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var item = cmbSizes.SelectedItem as GKComboItem;
-            if (item == null || item.Caption == "") return;
+            var item = cmbSizes.SelectedItem as ComboItem<int>;
+            if (item == null || item.Text == "") return;
 
             string value = item.Tag.ToString();
             fController.SetSize(value);

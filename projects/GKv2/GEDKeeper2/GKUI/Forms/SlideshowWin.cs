@@ -22,6 +22,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;

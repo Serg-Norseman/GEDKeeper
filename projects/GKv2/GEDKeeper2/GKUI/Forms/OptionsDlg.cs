@@ -20,7 +20,9 @@
 
 using System;
 using System.Windows.Forms;
+using BSLib.Design;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -91,10 +93,10 @@ namespace GKUI.Forms
         private void UpdateLangs()
         {
             cmbLanguages.Items.Clear();
-            cmbLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
+            cmbLanguages.Items.Add(new ComboItem<int>(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
             foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
                 if (lngRec.Code != LangMan.LS_DEF_CODE) {
-                    cmbLanguages.Items.Add(new GKComboItem(lngRec.Name, lngRec.Code));
+                    cmbLanguages.Items.Add(new ComboItem<int>(lngRec.Name, lngRec.Code));
                 }
             }
             UIHelper.SetSelectedTag(cmbLanguages, fOptions.InterfaceLang, true);
@@ -421,7 +423,7 @@ namespace GKUI.Forms
                 fOptions.FileBackup = FileBackup.fbEachRevision;
             }
 
-            GKComboItem item = cmbLanguages.Items[cmbLanguages.SelectedIndex] as GKComboItem;
+            var item = cmbLanguages.SelectedItem as ComboItem<int>;
             if (item != null) {
                 AppHost.Instance.LoadLanguage((int)item.Tag);
             }
@@ -633,7 +635,7 @@ namespace GKUI.Forms
 
             cmbMediaStoreDefault.Items.Clear();
             for (MediaStoreType mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstRelativeReference; mst++) {
-                cmbMediaStoreDefault.Items.Add(new GKComboItem(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst));
+                cmbMediaStoreDefault.Items.Add(new ComboItem<MediaStoreType>(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst));
             }
         }
     }

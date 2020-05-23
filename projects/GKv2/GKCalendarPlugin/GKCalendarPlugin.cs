@@ -23,6 +23,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;

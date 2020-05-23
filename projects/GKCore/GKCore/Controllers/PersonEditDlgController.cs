@@ -85,14 +85,15 @@ namespace GKCore.Controllers
                         break;
                 }
                 #endif
-                fView.SexCombo.AddItem(name, null, image);
+                fView.SexCombo.AddItem(name, sx, image);
             }
         }
 
         private bool IsExtendedWomanSurname()
         {
+            var selectedSex = fView.SexCombo.GetSelectedTag<GDMSex>();
             bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
-                (fView.SexCombo.SelectedIndex == (sbyte)GDMSex.svFemale);
+                (selectedSex == GDMSex.svFemale);
             return result;
         }
 

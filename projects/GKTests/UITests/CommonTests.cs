@@ -21,6 +21,7 @@
 using System;
 using System.Drawing;
 using BSLib;
+using BSLib.Design.Handlers;
 using GDModel;
 using GKCore;
 using GKUI.Components;

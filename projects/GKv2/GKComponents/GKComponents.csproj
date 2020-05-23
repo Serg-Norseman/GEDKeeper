@@ -81,6 +81,9 @@
     <Reference Include="BSLib.Design">
       <HintPath>..\..\libs\BSLib.Design.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design.WFHandlers">
+      <HintPath>..\..\libs\BSLib.Design.WFHandlers.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\..\libs\NLog.dll</HintPath>
     </Reference>
@@ -98,16 +101,12 @@
     <Compile Include="GKUI\Components\GKComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\GKComboItem.cs" />
     <Compile Include="GKUI\Components\GKDateBox.cs" />
     <Compile Include="GKUI\Components\GKInputBox.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GKUI\Components\GKListView.cs" />
     <Compile Include="GKUI\Components\GKMapBrowser.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Components\GKMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\GKPortrait.cs">
@@ -121,7 +120,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\ScrollablePanel.cs" />
-    <Compile Include="GKUI\Components\GKTreeNode.cs" />
     <Compile Include="GKUI\Components\HyperView.cs" />
     <Compile Include="GKUI\Components\ImageBox.cs" />
     <Compile Include="GKUI\Components\ImageView.cs" />
@@ -137,7 +135,6 @@
     <Compile Include="GKUI\Components\UIHelper.cs" />
     <Compile Include="GKUI\Components\WFGfxProvider.cs" />
     <Compile Include="GKUI\Components\WFGfxRenderer.cs" />
-    <Compile Include="GKUI\Components\WFGraphics.cs" />
     <Compile Include="GKUI\Components\WFStdDialogs.cs" />
     <Compile Include="GKUI\Components\WinUITimer.cs" />
     <Compile Include="GKUI\Components\WizardPages.cs" />

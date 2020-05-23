@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using BSLib;
+using BSLib.Design;
+using BSLib.Design.Handlers;
 using BSLib.Design.IoC;
 using GDModel;
 using GKCore.Interfaces;
@@ -326,7 +328,7 @@ namespace GKCore
         [Test]
         public void Test_UIControls()
         {
-            GKComboItem comboItem = new GKComboItem("Test", null);
+            ComboItem<object> comboItem = new ComboItem<object>("Test", null);
             Assert.IsNotNull(comboItem);
             Assert.AreEqual("Test", comboItem.ToString());
 
@@ -340,7 +342,7 @@ namespace GKCore
             MenuItemEx tsMenuItem = new MenuItemEx("Test", null);
             Assert.IsNotNull(tsMenuItem);
 
-            GKTreeNode treeNode = new GKTreeNode("Test", null);
+            TreeNodeEx treeNode = new TreeNodeEx("Test", null);
             Assert.IsNotNull(treeNode);
 
             ModifyEventArgs args = new ModifyEventArgs(RecordAction.raAdd, null);

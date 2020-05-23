@@ -24,6 +24,7 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using BSLib;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using GDModel;
 using GKCore;
 using GKCore.Charts;

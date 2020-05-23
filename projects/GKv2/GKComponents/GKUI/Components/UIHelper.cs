@@ -22,7 +22,9 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
@@ -145,18 +147,17 @@ namespace GKUI.Components
         public static T GetSelectedTag<T>(ComboBox comboBox)
         {
             object selectedItem = comboBox.SelectedItem;
-            GKComboItem comboItem = (GKComboItem)selectedItem;
-            T itemTag = (T)comboItem.Tag;
+            ComboItem<T> comboItem = selectedItem as ComboItem<T>;
+            T itemTag = (comboItem != null) ? comboItem.Tag : default(T);
             return itemTag;
         }
 
         public static void SetSelectedTag<T>(ComboBox comboBox, T tagValue, bool allowDefault = true)
         {
             foreach (object item in comboBox.Items) {
-                GKComboItem comboItem = (GKComboItem)item;
-                T itemTag = (T)comboItem.Tag;
+                ComboItem<T> comboItem = item as ComboItem<T>;
 
-                if (object.Equals(itemTag, tagValue)) {
+                if (comboItem != null && object.Equals(comboItem.Tag, tagValue)) {
                     comboBox.SelectedItem = item;
                     return;
                 }

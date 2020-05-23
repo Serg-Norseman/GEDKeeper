@@ -26,6 +26,7 @@ using System.IO;
 using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.MVP;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Charts;
 using GKCore.Export;

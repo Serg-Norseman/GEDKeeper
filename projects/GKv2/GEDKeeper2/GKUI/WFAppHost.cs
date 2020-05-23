@@ -21,6 +21,7 @@
 using System;
 using System.Globalization;
 using System.Windows.Forms;
+using BSLib.Design.Handlers;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
 using GKCore;

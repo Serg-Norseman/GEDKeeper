@@ -74,6 +74,9 @@
     <Reference Include="BSLib.Design">
       <HintPath>..\libs\BSLib.Design.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design.WFHandlers">
+      <HintPath>..\libs\BSLib.Design.WFHandlers.dll</HintPath>
+    </Reference>
     <Reference Include="BSLib.Linguistics">
       <HintPath>..\libs\BSLib.Linguistics.dll</HintPath>
     </Reference>
