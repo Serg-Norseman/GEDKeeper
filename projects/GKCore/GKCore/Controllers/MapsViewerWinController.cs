@@ -130,7 +130,7 @@ namespace GKCore.Controllers
                     PlacesCache.Instance.Save();
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("MapsViewerWin.PlacesLoad(): " + ex.Message);
             }
         }
 
@@ -169,7 +169,7 @@ namespace GKCore.Controllers
 
                 mapPlace.PlaceRefs.Add(new PlaceRef(placeEvent));
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("MapsViewerWin.AddPlace(): " + ex.Message);
             }
         }
 

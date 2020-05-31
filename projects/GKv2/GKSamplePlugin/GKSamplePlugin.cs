@@ -64,7 +64,7 @@ namespace GKSamplePlugin
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKSamplePlugin1.OnLanguageChange(): " + ex.Message);
             }
         }
 
@@ -78,7 +78,7 @@ namespace GKSamplePlugin
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKSamplePlugin1.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -93,7 +93,7 @@ namespace GKSamplePlugin
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKSamplePlugin1.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

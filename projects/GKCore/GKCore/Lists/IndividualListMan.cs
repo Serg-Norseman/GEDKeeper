@@ -640,7 +640,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GroupsSublistModel.UpdateContent(): " + ex.Message);
             }
         }
 
@@ -818,7 +818,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("ParentsSublistModel.UpdateContents(): " + ex.Message);
             }
         }
 
@@ -936,7 +936,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("SpousesSublistModel.UpdateContents(): " + ex.Message);
             }
         }
 
@@ -1030,7 +1030,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("URefsSublistModel.UpdateContents(): " + ex.Message);
             }
         }
 

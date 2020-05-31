@@ -364,8 +364,7 @@ namespace GKCore.Controllers
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + "): ");
-                Logger.LogException(ex);
+                Logger.LogWrite("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + "): " + ex.Message);
             }
         }
 

@@ -125,7 +125,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GroupMembersSublistModel.UpdateContents(): " + ex.Message);
             }
         }
 

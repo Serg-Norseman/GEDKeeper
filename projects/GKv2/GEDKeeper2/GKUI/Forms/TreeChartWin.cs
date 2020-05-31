@@ -369,7 +369,7 @@ namespace GKUI.Forms
                 fPerson = p.Rec;
                 GenChart();
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("TreeChartWin.miRebuildTree_Click(): " + ex.Message);
             }
         }
 
@@ -418,7 +418,7 @@ namespace GKUI.Forms
                     UpdateControls();
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("TreeChartWin.GenChart(): " + ex.Message);
             }
         }
 
@@ -479,7 +479,7 @@ namespace GKUI.Forms
 
                 AppHost.Instance.UpdateControls(false, true);
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("TreeChartWin.UpdateControls(): " + ex.Message);
             }
         }
 

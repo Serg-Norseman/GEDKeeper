@@ -54,7 +54,7 @@ namespace GKSamplePlugin
             try {
                 fLangMan = Host.CreateLangMan(this);
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("PersonDialogPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 

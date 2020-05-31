@@ -74,7 +74,7 @@ namespace GKCore.Controllers
                     return true;
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("SourceCitEditDlgController.Accept(): " + ex.Message);
                 return false;
             }
         }

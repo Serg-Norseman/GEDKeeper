@@ -90,7 +90,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("SysUtils.SendMail(): " + ex.Message);
             }
         }
 

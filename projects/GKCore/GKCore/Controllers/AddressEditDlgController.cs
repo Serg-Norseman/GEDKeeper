@@ -60,7 +60,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("AddressEditController.Accept(): " + ex.Message);
                 return false;
             }
         }

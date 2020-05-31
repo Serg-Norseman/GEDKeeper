@@ -828,7 +828,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.GetEventsYearsDiff(): " + ex.Message);
             }
 
             return result;
@@ -852,7 +852,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.GetLifeExpectancy(): " + ex.Message);
             }
 
             return result;
@@ -884,7 +884,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.GetAge(): " + ex.Message);
             }
 
             return result;
@@ -952,7 +952,7 @@ namespace GKCore
                         }
                     }
                 } catch (Exception ex) {
-                    Logger.LogException(ex);
+                    Logger.LogWrite("GKUtils.GetDaysForBirth(): " + ex.Message);
                 }
             }
 
@@ -1117,7 +1117,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.GetSpousesDiff(): " + ex.Message);
             }
 
             return result;
@@ -1158,7 +1158,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.GetFirstborn(): " + ex.Message);
             }
             return iChild;
         }
@@ -1184,7 +1184,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.GetFirstbornAge(): " + ex.Message);
             }
             return result;
         }
@@ -1230,7 +1230,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.GetMarriageAge(): " + ex.Message);
             }
             return result;
         }
@@ -1613,7 +1613,7 @@ namespace GKCore
                 }
             }
             catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.ShowPersonNamesakes(): " + ex.Message);
             }
         }
 
@@ -1658,7 +1658,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.ShowSubjectLinks(): " + ex.Message);
             }
         }
 
@@ -1697,8 +1697,18 @@ namespace GKCore
                         }
                         break;
                 }
+
+                /*var recordWithEvents = aInRecord as GEDCOMRecordWithEvents;
+                if (recordWithEvents != null) {
+                    GEDCOMRecordWithEvents evsRec = recordWithEvents;
+
+                    num = evsRec.Events.Count;
+                    for (int i = 0; i < num; i++) {
+                        ShowEvent(subject, linksList, evsRec, evsRec.Events[i]);
+                    }
+                }*/
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.SearchRecordLinks(): " + ex.Message);
             }
         }
 
@@ -1736,7 +1746,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.RecListMediaRefresh(): " + ex.Message);
             }
         }
 
@@ -1771,7 +1781,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.RecListNotesRefresh(): " + ex.Message);
             }
         }
 
@@ -1834,7 +1844,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.RecListAssociationsRefresh(): " + ex.Message);
             }
         }
 
@@ -1866,7 +1876,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.RecListIndividualEventsRefresh(): " + ex.Message);
             }
         }
 
@@ -1893,7 +1903,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.RecListFamilyEventsRefresh(): " + ex.Message);
             }
         }
 
@@ -1921,7 +1931,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.RecListGroupsRefresh(): " + ex.Message);
             }
         }
 
@@ -1967,7 +1977,7 @@ namespace GKCore
                     summary.EndUpdate();
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.ShowFamilyInfo(): " + ex.Message);
             }
         }
         
@@ -2019,7 +2029,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.ShowGroupInfo(): " + ex.Message);
             }
         }
 
@@ -2057,7 +2067,7 @@ namespace GKCore
                     summary.EndUpdate();
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.ShowMultimediaInfo(): " + ex.Message);
             }
         }
 
@@ -2093,7 +2103,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.ShowNoteInfo(): " + ex.Message);
             }
         }
 
@@ -2135,7 +2145,7 @@ namespace GKCore
                                 summary.Add("  " + LangMan.LS(LSID.LSID_Mother) + ": " + st + GetLifeStr(mother));
                             }
                         } catch (Exception ex) {
-                            Logger.LogException(ex);
+                            Logger.LogWrite("GKUtils.ShowPersonInfo().Parents(): " + ex.Message);
                         }
 
                         try {
@@ -2186,7 +2196,7 @@ namespace GKCore
                                 }
                             }
                         } catch (Exception ex) {
-                            Logger.LogException(ex);
+                            Logger.LogWrite("GKUtils.ShowPersonInfo().Families(): " + ex.Message);
                         }
 
                         RecListIndividualEventsRefresh(iRec, summary);
@@ -2207,7 +2217,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.ShowPersonInfo(): " + ex.Message);
             }
         }
 
@@ -2266,7 +2276,7 @@ namespace GKCore
                     summary.EndUpdate();
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.ShowSourceInfo(): " + ex.Message);
             }
         }
 
@@ -2323,7 +2333,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.ShowRepositoryInfo(): " + ex.Message);
             }
         }
 
@@ -2397,7 +2407,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.ShowResearchInfo(): " + ex.Message);
             }
         }
 
@@ -2430,7 +2440,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.ShowTaskInfo(): " + ex.Message);
             }
         }
 
@@ -2466,7 +2476,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.ShowCommunicationInfo(): " + ex.Message);
             }
         }
 
@@ -2520,7 +2530,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.ShowLocationInfo(): " + ex.Message);
             }
         }
 
@@ -2579,7 +2589,7 @@ namespace GKCore
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogException(ex);
+                    Logger.LogWrite("GKUtils.GetRecordContext(): " + ex.Message);
                 }
             }
         }

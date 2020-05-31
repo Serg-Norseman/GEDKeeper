@@ -197,7 +197,7 @@ namespace GKNavigatorPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKNavigatorPlugin.UpdateControls(): " + ex.Message);
             }
         }
 

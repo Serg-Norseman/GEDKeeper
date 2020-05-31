@@ -195,7 +195,7 @@ namespace GKTimeLinePlugin
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("TimeLineWidget.FilterHandler(): " + ex.Message);
             }
 
             return result;

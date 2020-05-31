@@ -59,7 +59,8 @@ namespace GKCore.Export
                     fWriter.EndWrite();
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("ReportExporter.Generate(): " + ex.Message);
+                Logger.LogWrite("ReportExporter.Generate(): " + ex.StackTrace);
             }
 
             return result;

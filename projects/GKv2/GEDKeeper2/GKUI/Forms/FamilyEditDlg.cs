@@ -217,7 +217,7 @@ namespace GKUI.Forms
             try {
                 fController.Cancel();
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("FamilyEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 

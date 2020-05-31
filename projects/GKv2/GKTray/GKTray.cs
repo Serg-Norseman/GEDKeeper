@@ -121,7 +121,7 @@ namespace GKTray
                     ini.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKTray.LoadSettings(): " + ex.Message);
             }
 
             fRecentFiles.MenuItems.Clear();
@@ -160,7 +160,7 @@ namespace GKTray
                         }
                     }
                 } catch (Exception ex) {
-                    Logger.LogException(ex);
+                    Logger.LogWrite("GKTray.LoadEvents(" + gedFileName + "): " + ex.Message);
                 }
             }
 

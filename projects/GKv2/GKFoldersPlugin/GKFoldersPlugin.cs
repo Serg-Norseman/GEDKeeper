@@ -77,7 +77,7 @@ namespace GKFoldersPlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKFoldersPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 

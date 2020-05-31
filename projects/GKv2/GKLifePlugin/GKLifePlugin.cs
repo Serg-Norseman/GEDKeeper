@@ -78,7 +78,7 @@ namespace GKLifePlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(PLS.LSID_LifeGame);
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKLifePlugin.OnLanguageChange(): " + ex.Message);
             }
         }
     }

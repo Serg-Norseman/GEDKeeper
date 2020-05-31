@@ -144,7 +144,7 @@ namespace GKUI.Forms
             try {
                 fController.Cancel();
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("SourceEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 

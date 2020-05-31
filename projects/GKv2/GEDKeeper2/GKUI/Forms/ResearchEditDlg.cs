@@ -182,7 +182,7 @@ namespace GKUI.Forms
             try {
                 fController.Cancel();
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("ResearchEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
     }

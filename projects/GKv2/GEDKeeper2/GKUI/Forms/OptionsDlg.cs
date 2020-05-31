@@ -323,7 +323,7 @@ namespace GKUI.Forms
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("OptionsDlg.btnAccept_Click(): " + ex.Message);
                 DialogResult = DialogResult.None;
             }
         }

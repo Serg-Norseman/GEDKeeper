@@ -231,7 +231,7 @@ namespace GKUI.Providers
                 InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
                 InputLanguage.CurrentInputLanguage = currentLang;
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("WinFormsAppHost.SetKeyLayout(): " + ex.Message);
             }
         }
 

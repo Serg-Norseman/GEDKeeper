@@ -463,7 +463,7 @@ namespace GDModel.Providers.GEDCOM
                     pc.ProgressDone();
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GEDCOMChecker.CheckGEDCOMFormat(): " + ex.Message);
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
             }
 

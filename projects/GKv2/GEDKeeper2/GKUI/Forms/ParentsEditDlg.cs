@@ -97,7 +97,7 @@ namespace GKUI.Forms
             try {
                 fController.Cancel();
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("ParentsEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 

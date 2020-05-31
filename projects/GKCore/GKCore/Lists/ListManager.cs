@@ -449,7 +449,7 @@ namespace GKCore.Lists
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("ListManager.CheckCondition(): " + ex.Message);
                 res = true;
             }
 
@@ -467,7 +467,7 @@ namespace GKCore.Lists
                     res = res && CheckCondition(fcond);
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("ListManager.CheckCommonFilter(): " + ex.Message);
                 res = true;
             }
 
@@ -561,7 +561,7 @@ namespace GKCore.Lists
                 fXSortFactor = (sortAscending ? 1 : -1);
                 ListTimSort<ValItem>.Sort(fContentList, CompareItems);
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("ListManager.SortContents(): " + ex.Message);
             }
         }
 

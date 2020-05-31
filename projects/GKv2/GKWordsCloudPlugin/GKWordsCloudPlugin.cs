@@ -89,7 +89,7 @@ namespace GKWordsCloudPlugin
                 if (fForm != null)
                     fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKWordsCloudPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 
@@ -99,7 +99,7 @@ namespace GKWordsCloudPlugin
             try {
                 CloseForm();
             } catch (Exception ex) {
-                Logger.LogException(e);
+                Logger.LogWrite("GKWordsCloudPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

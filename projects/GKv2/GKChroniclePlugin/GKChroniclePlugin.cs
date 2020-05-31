@@ -88,7 +88,7 @@ namespace GKChroniclePlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKChroniclePlugin.OnLanguageChange(): " + ex.Message);
             }
         }
 
@@ -98,7 +98,7 @@ namespace GKChroniclePlugin
             try {
                 CloseForm();
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKChroniclePlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

@@ -467,8 +467,7 @@ namespace GKCore.Options
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("GlobalOptions.LngPrepareProc("+fileName+"): ");
-                Logger.LogException(ex);
+                Logger.LogWrite("GlobalOptions.LngPrepareProc("+fileName+"): " + ex.Message);
             }
         }
 
@@ -478,8 +477,8 @@ namespace GKCore.Options
                 string path = GKUtils.GetLangsPath();
                 string[] langFiles = Directory.GetFiles(path, "*.lng", SearchOption.TopDirectoryOnly);
                 for (int i = 0; i < langFiles.Length; i++) LngPrepareProc(langFiles[i]);
-            } catch (Exception ex) {                
-                Logger.LogException(ex);
+            } catch (Exception ex) {
+                Logger.LogWrite("GlobalOptions.FindLanguages(): " + ex.Message);
             }
         }
 
@@ -726,7 +725,7 @@ namespace GKCore.Options
                     ini.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GlobalOptions.LoadFromFile(): " + ex.Message);
             }
         }
 
@@ -861,7 +860,7 @@ namespace GKCore.Options
                     ini.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GlobalOptions.SaveToFile(): " + ex.Message);
             }
         }
     }

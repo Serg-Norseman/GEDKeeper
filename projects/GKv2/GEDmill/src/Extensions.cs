@@ -264,7 +264,7 @@ namespace GEDmill
                     result = Math.Abs(dt2 - dt1);
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKUtils.GetEventsYearsDiff(): " + ex.Message);
             }
 
             return result;

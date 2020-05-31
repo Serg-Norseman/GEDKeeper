@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -29,7 +28,6 @@ namespace GKCore
     {
         private static readonly object fLock = new object();
         private static string fLogFilename;
-        private static readonly string EventLogSource = "Application";
 
         public static void LogInit(string fileName)
         {

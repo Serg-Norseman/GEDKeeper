@@ -166,7 +166,7 @@ namespace GKCore.Kinships
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogWrite("KinshipsGraph.GetRelationship(): " + ex.Message);
                 return "";
             }
         }

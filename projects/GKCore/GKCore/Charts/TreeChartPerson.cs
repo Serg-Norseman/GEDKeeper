@@ -393,7 +393,7 @@ namespace GKCore.Charts
                     CertaintyAssessment = 0.0f;
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("TreeChartPerson.BuildBy(): " + ex.Message);
                 throw;
             }
         }
@@ -462,7 +462,7 @@ namespace GKCore.Charts
                     //idx++;
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("TreeChartPerson.InitInfo(): " + ex.Message);
             }
         }
 
@@ -514,7 +514,7 @@ namespace GKCore.Charts
                     fWidth += imgW;
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("TreeChartPerson.CalcBounds(): " + ex.Message);
             }
         }
 

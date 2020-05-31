@@ -198,7 +198,7 @@ namespace GKUI.Forms
             try {
                 fController.Cancel();
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("EventEditDlg.btnCancel_Click(): " + ex.Message);
             }
         }
 
@@ -241,7 +241,7 @@ namespace GKUI.Forms
                     txtBox.Text = dt[0] + "/" + dt[1] + "/" + txt.PadLeft(4, '_');
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("EventEditDlg.DragDrop(): " + ex.Message);
             }
         }
 

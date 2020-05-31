@@ -57,7 +57,7 @@ namespace GKCore.Controllers
                 fLanguageID = fView.LanguageCombo.GetSelectedTag<GDMLanguageID>();
                 return true;
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("LanguageEditDlgController.Accept(): " + ex.Message);
                 return false;
             }
         }

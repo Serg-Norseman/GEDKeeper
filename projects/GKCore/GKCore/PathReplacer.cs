@@ -64,7 +64,7 @@ namespace GKCore
                     fPathsMappings = rawData[0] as PathsMappingsList;
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("PathReplacer.Load(): " + ex.Message);
             }
         }
 
@@ -85,7 +85,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("PathReplacer.TryReplacePath(): " + ex.Message);
             }
 
             return string.Empty;

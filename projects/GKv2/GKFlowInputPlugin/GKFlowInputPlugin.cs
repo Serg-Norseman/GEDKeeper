@@ -111,7 +111,7 @@ namespace GKFlowInputPlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(FLS.LSID_PluginTitle);
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("GKFlowInputPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
     }

@@ -72,7 +72,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("ResearchEditDlgController.Accept(): " + ex.Message);
                 return false;
             }
         }

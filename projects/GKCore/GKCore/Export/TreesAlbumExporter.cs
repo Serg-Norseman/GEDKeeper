@@ -107,7 +107,7 @@ namespace GKCore.Export
                 }
                 #endif
             } catch (Exception ex) {
-                Logger.LogException(ex);
+                Logger.LogWrite("TreesAlbumExporter.InternalGenerate(): " + ex.Message);
                 throw;
             }
         }
