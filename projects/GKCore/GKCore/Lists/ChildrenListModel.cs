@@ -65,7 +65,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.LogWrite("ChildrenListModel.UpdateContents(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

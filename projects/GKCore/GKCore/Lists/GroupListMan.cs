@@ -123,9 +123,8 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GroupMembersSublistModel.UpdateContents(): " + ex.Message);
+            catch (Exception ex){
+                Logger.LogException(ex);
             }
         }
 

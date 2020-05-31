@@ -244,19 +244,11 @@ namespace GKCore
                     }
 
                     // clear
-                    GKUtils.InitExtData(context.Tree);
-
-                    /*if (gpl_params.aLoneSuppress) {
-				for (int i = aList.Count - 1; i >= 0; i--) {
-					PatriarchObj patr = aList[i] as PatriarchObj;
-					if (patr.ILinks.Count == 0) aList.Delete(i);
-				}
-				aList.Pack();*/
+                    GKUtils.InitExtData(context.Tree);                    
                 }
             }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("PatriarchsMan.GetPatriarchsGraph(): " + ex.Message);
+            catch (Exception ex){
+                Logger.LogException(ex);
             }
 
             return graph;

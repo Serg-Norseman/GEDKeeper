@@ -218,7 +218,7 @@ namespace GKCore.Export
 
                 fWriter.EndMulticolumns();
             } catch (Exception ex) {
-                Logger.LogWrite("FamilyBookExporter.InternalGenerate(): " + ex.Message);
+                Logger.LogException(ex);
                 throw;
             }
         }

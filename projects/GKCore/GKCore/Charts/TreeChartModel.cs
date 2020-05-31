@@ -261,7 +261,7 @@ namespace GKCore.Charts
                 var result = AppHost.GfxProvider.LoadResourceImage(name, makeTransp);
                 return result;
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartModel.PrepareImage(): " + ex.Message);
+                Logger.LogException(ex);
                 return null;
             }
         }
@@ -284,7 +284,7 @@ namespace GKCore.Charts
                 fExpPic = PrepareImage("btn_expand.gif", true);
                 fPersExpPic = PrepareImage("btn_expand2.gif", true);
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartModel.InitSigns(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -375,9 +375,8 @@ namespace GKCore.Charts
 
                 return result;
             }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("TreeChartModel.AddDescPerson(): " + ex.Message);
+            catch (Exception ex){
+                Logger.LogException(ex);
                 throw;
             }
         }
@@ -480,9 +479,8 @@ namespace GKCore.Charts
 
                 return result;
             }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("TreeChartModel.DoAncestorsStep(): " + ex.Message);
+            catch (Exception ex){
+                Logger.LogException(ex);
                 throw;
             }
         }
@@ -709,9 +707,8 @@ namespace GKCore.Charts
 
                 return result;
             }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("TreeChartModel.DoDescendantsStep(): " + ex.Message);
+            catch (Exception ex){
+                Logger.LogException(ex);
                 throw;
             }
         }
@@ -1470,7 +1467,7 @@ namespace GKCore.Charts
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartModel.DrawPerson(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

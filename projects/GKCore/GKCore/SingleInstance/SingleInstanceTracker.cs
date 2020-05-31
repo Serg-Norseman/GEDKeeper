@@ -187,7 +187,7 @@ namespace GKCore.SingleInstance
                 throw new SingleInstancingException("Failed to send message to the first instance of the application. The first instance might have terminated.", ex);
             }
 
-            #else
+#else
 
             try {
                 string[] args = message as string[];
@@ -197,10 +197,11 @@ namespace GKCore.SingleInstance
                     IpcFake.SendMessage(IpcFake.CmdSendArgs, args);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("SingleInstanceTracker.SendMessageToFirstInstance.2(): " + ex.Message);
+                Logger.LogWrite("SingleInstanceTracker.SendMessageToFirstInstance.2(): ");
+                Logger.LogException(ex);
             }
 
-            #endif
+#endif
         }
     }
 }

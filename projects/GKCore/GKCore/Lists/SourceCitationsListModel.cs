@@ -64,7 +64,7 @@ namespace GKCore.Lists
 
                 fSheetList.ResizeColumn(1);
             } catch (Exception ex) {
-                Logger.LogWrite("SourceCitationsListModel.UpdateContents(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

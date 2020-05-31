@@ -160,9 +160,8 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("ResTasksSublistModel.UpdateContents(): " + ex.Message);
+            catch (Exception ex){
+                Logger.LogException(ex);
             }
         }
 
@@ -241,9 +240,8 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("ResCommunicationsSublistModel.UpdateContents(): " + ex.Message);
+            catch (Exception ex){
+                Logger.LogException(ex);
             }
         }
 
@@ -316,9 +314,8 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("ResGroupsSublistModel.UpdateContents(): " + ex.Message);
+            catch (Exception ex){
+                Logger.LogException(ex);
             }
         }
 

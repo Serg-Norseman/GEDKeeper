@@ -95,7 +95,7 @@ namespace GKCore.Plugins
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PluginsMan.Load(" + path + "): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -106,7 +106,7 @@ namespace GKCore.Plugins
                     plugin.Shutdown();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PluginsMan.Unload(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -117,7 +117,7 @@ namespace GKCore.Plugins
                     plugin.OnLanguageChange();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PluginsMan.OnLanguageChange(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 
@@ -132,7 +132,7 @@ namespace GKCore.Plugins
                 try {
                     subscriber.NotifyRecord(baseWin, record, action);
                 } catch (Exception ex) {
-                    Logger.LogWrite("PluginsMan.NotifyRecord(): " + ex.Message);
+                    Logger.LogException(ex);
                 }
             }
         }

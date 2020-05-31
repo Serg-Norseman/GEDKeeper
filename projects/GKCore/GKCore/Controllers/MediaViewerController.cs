@@ -111,7 +111,7 @@ namespace GKCore.Controllers
             catch (Exception ex)
             {
                 fView.DisposeViewControl();
-                Logger.LogWrite("MediaViewerController.UpdateView(): " + ex.Message);
+                Logger.LogException(ex);
             }
         }
 

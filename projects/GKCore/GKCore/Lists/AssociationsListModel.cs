@@ -59,9 +59,8 @@ namespace GKCore.Lists
                     fSheetList.AddItem(ast, new object[] { ast.Relation, nm });
                 }
             }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("AssociationsListModel.UpdateContents(): " + ex.Message);
+            catch (Exception ex){
+                Logger.LogException(ex);
             }
         }
 

@@ -62,9 +62,8 @@ namespace GKCore.Lists
                                            LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]) });
                 }
             }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("MediaLinksListModel.UpdateContents(): " + ex.Message);
+            catch (Exception ex){
+                Logger.LogException(ex);
             }
         }
 
