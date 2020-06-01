@@ -116,7 +116,7 @@ namespace GKUI.Components
         }
     }
 
-    public sealed class ComboBoxHandler : BaseControlHandler<ComboBox, ComboBoxHandler>, IComboBoxEx
+    public sealed class ComboBoxHandler : BaseControlHandler<ComboBox, ComboBoxHandler>, IComboBox
     {
         public ComboBoxHandler(ComboBox control) : base(control)
         {
@@ -154,24 +154,6 @@ namespace GKUI.Components
             set { Control.SelectedValue = value; }
         }
 
-        public object SelectedTag
-        {
-            get {
-                return ((GKComboItem)Control.SelectedValue).Tag;
-            }
-            set {
-                var ctl = Control;
-                foreach (object item in ctl.Items) {
-                    GKComboItem comboItem = (GKComboItem)item;
-                    if (comboItem.Tag == value) {
-                        ctl.SelectedValue = item;
-                        return;
-                    }
-                }
-                ctl.SelectedIndex = 0;
-            }
-        }
-
         public string Text
         {
             get { return Control.Text; }
@@ -187,31 +169,18 @@ namespace GKUI.Components
             Control.Items.Add((string)item);
         }
 
-        public void AddItem<T>(string caption, T tag)
+        public void AddItem<T>(string caption, T tag, IImage image = null)
         {
-            Control.Items.Add(new GKComboItem(caption, tag));
-        }
-
-        public void AddItem(string caption, object tag, IImage image = null)
-        {
-            Control.Items.Add(new GKComboItem(caption, tag, image));
-        }
-
-        public void AddRange(object[] items, bool sorted = false)
-        {
-            //Control.Sorted = false;
-            Control.Items.AddRange(GKComboItem.Convert((string[])items));
-            //Control.Sorted = sorted;
+            Control.Items.Add(new GKComboItem<T>(caption, tag, image));
         }
 
         public void AddRange(IEnumerable<object> items, bool sorted = false)
         {
             Control.Items.Clear();
             //Control.Sorted = false;
-            /*foreach (var item in items) {
-                Control.Items.Add(item);
-            }*/
-            Control.Items.AddRange(GKComboItem.Convert((string[])items));
+            foreach (var item in items) {
+                Control.Items.Add(new GKComboItem<object>(item.ToString(), item));
+            }
             //Control.Sorted = sorted;
         }
 
@@ -245,12 +214,26 @@ namespace GKUI.Components
 
         public T GetSelectedTag<T>()
         {
-            return UIHelper.GetSelectedTag<T>(Control);
+            object selectedItem = Control.SelectedValue;
+            GKComboItem<T> comboItem = selectedItem as GKComboItem<T>;
+            T itemTag = (comboItem != null) ? comboItem.Tag : default(T);
+            return itemTag;
         }
 
-        public void SetSelectedTag<T>(T tagValue)
+        public void SetSelectedTag<T>(T tagValue, bool allowDefault = true)
         {
-            UIHelper.SetSelectedTag<T>(Control, tagValue);
+            foreach (object item in Control.Items) {
+                GKComboItem<T> comboItem = item as GKComboItem<T>;
+
+                if (comboItem != null && object.Equals(comboItem.Tag, tagValue)) {
+                    Control.SelectedValue = item;
+                    return;
+                }
+            }
+
+            if (allowDefault) {
+                Control.SelectedIndex = 0;
+            }
         }
     }
 

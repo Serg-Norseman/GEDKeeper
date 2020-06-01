@@ -100,10 +100,10 @@ namespace GKUI.Forms
         private void UpdateLangs()
         {
             cmbLanguages.Items.Clear();
-            cmbLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
+            cmbLanguages.Items.Add(new GKComboItem<int>(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
             foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
                 if (lngRec.Code != LangMan.LS_DEF_CODE) {
-                    cmbLanguages.Items.Add(new GKComboItem(lngRec.Name, lngRec.Code));
+                    cmbLanguages.Items.Add(new GKComboItem<int>(lngRec.Name, lngRec.Code));
                 }
             }
             UIHelper.SetSelectedTag(cmbLanguages, fOptions.InterfaceLang, true);
@@ -419,7 +419,7 @@ namespace GKUI.Forms
                 fOptions.FileBackup = FileBackup.fbEachRevision;
             }
 
-            GKComboItem item = cmbLanguages.Items[cmbLanguages.SelectedIndex] as GKComboItem;
+            GKComboItem<int> item = cmbLanguages.Items[cmbLanguages.SelectedIndex] as GKComboItem<int>;
             if (item != null) {
                 AppHost.Instance.LoadLanguage((int)item.Tag);
             }

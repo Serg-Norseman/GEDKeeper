@@ -196,7 +196,7 @@ namespace GKUI.Components
 
         public static T GetSelectedTag<T>(ComboBox comboBox)
         {
-            GKComboItem comboItem = (GKComboItem)comboBox.SelectedValue;
+            GKComboItem<T> comboItem = (GKComboItem<T>)comboBox.SelectedValue;
             T itemTag = (T)comboItem.Tag;
             return itemTag;
         }
@@ -204,7 +204,7 @@ namespace GKUI.Components
         public static void SetSelectedTag<T>(ComboBox comboBox, T tagValue, bool allowDefault = true)
         {
             foreach (object item in comboBox.Items) {
-                GKComboItem comboItem = (GKComboItem)item;
+                GKComboItem<T> comboItem = (GKComboItem<T>)item;
                 T itemTag = (T)comboItem.Tag;
 
                 if (object.Equals(itemTag, tagValue)) {

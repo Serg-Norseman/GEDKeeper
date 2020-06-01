@@ -187,9 +187,9 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbRestriction); }
         }
 
-        IComboBoxEx IPersonEditDlg.SexCombo
+        IComboBox IPersonEditDlg.SexCombo
         {
-            get { return GetControlHandler<IComboBoxEx>(cmbSex); }
+            get { return GetControlHandler<IComboBox>(cmbSex); }
         }
 
         ICheckBox IPersonEditDlg.Patriarch
