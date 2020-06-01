@@ -2298,7 +2298,7 @@ namespace GDModel.Providers.GEDCOM
                 persNamePieces.Suffix = tagValue;
             } else if (tagType == GEDCOMTagType._PATN) {
                 persNamePieces.PatronymicName = tagValue;
-            } else if (tagType == GEDCOMTagType._MARN) {
+            } else if (tagType == GEDCOMTagType._MARN || tagType == GEDCOMTagType._MARNM) {
                 persNamePieces.MarriedName = tagValue;
             } else if (tagType == GEDCOMTagType._RELN) {
                 persNamePieces.ReligiousName = tagValue;
@@ -2617,6 +2617,9 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._TRAVEL, GEDCOMTagName._TRAVEL, GDMIndividualAttribute.Create, AddCustomEventTag, WriteCustomEvent);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._UID, GEDCOMTagName._UID);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._YDNA, GEDCOMTagName._YDNA, GDMIndividualAttribute.Create, AddCustomEventTag, WriteCustomEvent, true);
+
+            // import only
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MARNM, GEDCOMTagName._MARNM);
 
             // non-standard extended tags (GEDKeeper)
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._BOOKMARK, GEDCOMTagName._BOOKMARK);

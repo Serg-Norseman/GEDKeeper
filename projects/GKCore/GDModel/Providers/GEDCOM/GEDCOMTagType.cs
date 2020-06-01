@@ -187,6 +187,7 @@ namespace GDModel.Providers.GEDCOM
         _HOBBY,
         _LANG, // [GK], outdated, replaced by LANG
         _MARN, // Married Surname [BKW6]
+        _MARNM, // Married Surname [AQ3, PAF5, Geni]
         _MDCL, // Medical condition [???]
         _MDNA, // [MyFamilyTree]
         _MEMBER, // [GK]
@@ -381,6 +382,9 @@ namespace GDModel.Providers.GEDCOM
         public const string _TRAVEL = "_TRAVEL";
         public const string _UID = "_UID"; // 
         public const string _YDNA = "_YDNA"; // [MyFamilyTree]
+
+        // import only
+        public const string _MARNM = "_MARNM"; // Married Surname [AQ3, PAF5, Geni]
 
         // non-standard extended tags (GEDKeeper)
         public const string _BOOKMARK = "_BOOKMARK";
