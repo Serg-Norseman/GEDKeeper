@@ -26,7 +26,7 @@ namespace GDModel
     {
         public GDMIndividualRecord Individual
         {
-            get { return (GDMIndividualRecord)base.Value; }
+            get { return base.Value as GDMIndividualRecord; }//return (GDMIndividualRecord)base.Value;
             set { base.Value = value; }
         }
 
