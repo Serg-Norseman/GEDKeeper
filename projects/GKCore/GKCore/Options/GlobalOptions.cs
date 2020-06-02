@@ -636,7 +636,7 @@ namespace GKCore.Options
             fShowTips = ini.ReadBool("Common", "ShowTips", true);
             fInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 0);
             fFileBackup = (FileBackup)ini.ReadInteger("Common", "FileBackup", 0);
-            fFileBackupEachRevisionMaxCount = (ushort)ini.ReadInteger("Common", "FileBackupEachRevisionMaxCount", 0);
+            fFileBackupEachRevisionMaxCount = ini.ReadInteger("Common", "FileBackupEachRevisionMaxCount", 0);
             fShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
             fShowDatesSign = ini.ReadBool("Common", "ShowDatesSigns", false);
             fRemovableMediaWarning = ini.ReadBool("Common", "RemovableMediaWarning", true);
@@ -752,7 +752,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "ShowTips", fShowTips);
             ini.WriteInteger("Common", "InterfaceLang", fInterfaceLang);
             ini.WriteInteger("Common", "FileBackup", (int)fFileBackup);
-            ini.WriteInteger("Common", "FileBackupEachRevisionMaxCount", (int)fFileBackupEachRevisionMaxCount);
+            ini.WriteInteger("Common", "FileBackupEachRevisionMaxCount", fFileBackupEachRevisionMaxCount);
             ini.WriteBool("Common", "ShowDatesCalendar", fShowDatesCalendar);
             ini.WriteBool("Common", "ShowDatesSigns", fShowDatesSign);
             ini.WriteBool("Common", "RemovableMediaWarning", fRemovableMediaWarning);

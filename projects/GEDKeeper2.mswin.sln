@@ -58,6 +58,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKComponents", "GKv2\GKComp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTray", "GKv2\GKTray\GKTray.csproj", "{A7004127-46AD-4CA5-AEBC-5D70E64AD68A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{4AF8EEE8-8592-420C-B5C5-E6DDBA389BA1}"
+	ProjectSection(SolutionItems) = preProject
+		..\locales\Chinese Simplified.lng = ..\locales\Chinese Simplified.lng
+		..\locales\czech.lng = ..\locales\czech.lng
+		..\locales\English.lng = ..\locales\English.lng
+		..\locales\french.lng = ..\locales\french.lng
+		..\locales\german.lng = ..\locales\german.lng
+		..\locales\italian.lng = ..\locales\italian.lng
+		..\locales\polish.lng = ..\locales\polish.lng
+		..\locales\russian.lng = ..\locales\russian.lng
+		..\locales\ukrainian.lng = ..\locales\ukrainian.lng
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86

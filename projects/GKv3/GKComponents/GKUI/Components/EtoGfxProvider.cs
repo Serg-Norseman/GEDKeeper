@@ -24,13 +24,14 @@ using BSLib;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// The main implementation of the platform-specific graphics provider for EtoForms.
     /// </summary>
-    public class EtoGfxProvider : IGraphicsProvider
+    public class EtoGfxProvider : IGraphicsProviderEx
     {
         public EtoGfxProvider()
         {

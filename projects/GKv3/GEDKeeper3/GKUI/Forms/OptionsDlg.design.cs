@@ -127,6 +127,14 @@ namespace GKUI.Forms
         private CheckBox chkAutoSortSpouses;
         private CheckBox chkCheckTreeSize;
         private CheckBox chkCharsetDetection;
+        private Label lblBackupRevisionsMaxCount;
+        private NumericUpDown numBackupRevisionsMaxCount;
+        private CheckBox chkAllowMediaStoreRelativeReferences;
+        private Label lblMediaStoreDefault;
+        private ComboBox cmbMediaStoreDefault;
+        private CheckBox chkAllowDeleteMediaFileFromStgArc;
+        private CheckBox chkAllowDeleteMediaFileFromRefs;
+        private CheckBox chkDeleteMediaFileWithoutConfirm;
 
         private void InitializeComponent()
         {
@@ -169,6 +177,15 @@ namespace GKUI.Forms
                 }
             };
 
+            lblBackupRevisionsMaxCount = new Label();
+            lblBackupRevisionsMaxCount.Text = "lblBackupRevisionsMaxCount";
+
+            numBackupRevisionsMaxCount = new NumericUpDown();
+            numBackupRevisionsMaxCount.MaxValue = 1000;
+            numBackupRevisionsMaxCount.MinValue = 0;
+            numBackupRevisionsMaxCount.Width = 80;
+            numBackupRevisionsMaxCount.Value = 0;
+
             groupBox1 = new GroupBox();
             groupBox1.Content = new DefTableLayout {
                 Rows = {
@@ -180,6 +197,13 @@ namespace GKUI.Forms
                         Cells = {
                             new DefStackLayout(Orientation.Horizontal) {
                                 Items = { chkAutosave, numASMin, lblMinutes }
+                            }
+                        }
+                    },
+                    new TableRow {
+                        Cells = {
+                            new DefStackLayout(Orientation.Horizontal) {
+                                Items = { lblBackupRevisionsMaxCount, numBackupRevisionsMaxCount }
                             }
                         }
                     }
@@ -318,10 +342,38 @@ namespace GKUI.Forms
             chkRemovableMediaWarning = new CheckBox();
             chkRemovableMediaWarning.Text = "chkRemovableMediaWarning";
 
+            chkAllowMediaStoreRelativeReferences = new CheckBox();
+            chkAllowMediaStoreRelativeReferences.Text = "chkAllowMediaStoreRelativeReferences";
+
+            lblMediaStoreDefault = new Label();
+            lblMediaStoreDefault.Text = "lblMediaStoreDefault";
+
+            cmbMediaStoreDefault = new ComboBox();
+
+            chkAllowDeleteMediaFileFromStgArc = new CheckBox();
+            chkAllowDeleteMediaFileFromStgArc.Text = "chkAllowDeleteMediaFileFromStgArc";
+
+            chkAllowDeleteMediaFileFromRefs = new CheckBox();
+            chkAllowDeleteMediaFileFromRefs.Text = "chkAllowDeleteMediaFileFromRefs";
+
+            chkDeleteMediaFileWithoutConfirm = new CheckBox();
+            chkDeleteMediaFileWithoutConfirm.Text = "chkDeleteMediaFileWithoutConfirm";
+
             pageMultimedia = new TabPage();
             pageMultimedia.Text = "pageMultimedia";
             pageMultimedia.Content = new DefStackLayout(Orientation.Vertical) {
-                Items = { chkRemovableMediaWarning, chkEmbeddedMediaPlayer, chkAllowMediaDirectRefs }
+                Items = {
+                    chkRemovableMediaWarning,
+                    chkEmbeddedMediaPlayer,
+                    chkAllowMediaDirectRefs,
+                    chkAllowMediaStoreRelativeReferences,
+                    new DefStackLayout(Orientation.Horizontal) {
+                                Items = { lblMediaStoreDefault, cmbMediaStoreDefault }
+                            },
+                    chkAllowDeleteMediaFileFromStgArc,
+                    chkAllowDeleteMediaFileFromRefs,
+                    chkDeleteMediaFileWithoutConfirm
+                }
             };
 
             //

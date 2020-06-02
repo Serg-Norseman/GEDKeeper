@@ -868,8 +868,9 @@ namespace GKCore
         /* 809 */ LSID_Religion_TheOldBelievers,
 
         /* 810 */ LSID_STRel,
+        /* 811 */ LSID_BackupRevisionsMaxCount,
 
-        /* 000 */ LSID_Last = LSID_STRel
+        /* 000 */ LSID_Last = LSID_BackupRevisionsMaxCount
     }
 
 
@@ -1693,6 +1694,7 @@ namespace GKCore
             /* 809 */ "Religion:The Old Believers",
 
             /* 810 */ "Relative link to file",
+            /* 811 */ "Maximum number of backup revisions",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

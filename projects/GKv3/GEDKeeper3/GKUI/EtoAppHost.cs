@@ -258,7 +258,7 @@ namespace GKUI
 
             // controls and other
             container.Register<IStdDialogs, EtoStdDialogs>(LifeCycle.Singleton);
-            container.Register<IGraphicsProvider, EtoGfxProvider>(LifeCycle.Singleton);
+            container.Register<IGraphicsProviderEx, EtoGfxProvider>(LifeCycle.Singleton);
             container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
             container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
 
