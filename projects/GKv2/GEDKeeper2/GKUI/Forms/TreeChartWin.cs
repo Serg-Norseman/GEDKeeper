@@ -109,12 +109,15 @@ namespace GKUI.Forms
 
             fController = new TreeChartWinController(this);
             fController.Init(baseWin);
+
+            miGens9_InitialSetup();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                if (components != null) components.Dispose();
+                if (components != null)
+                    components.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -256,21 +259,66 @@ namespace GKUI.Forms
             ((ToolStripMenuItem)sender).Checked = true;
 
             int depth = -1;
-            if (sender == miGensInf) depth = -1;
-            if (sender == miGens1) depth = 1;
-            if (sender == miGens2) depth = 2;
-            if (sender == miGens3) depth = 3;
-            if (sender == miGens4) depth = 4;
-            if (sender == miGens5) depth = 5;
-            if (sender == miGens6) depth = 6;
-            if (sender == miGens7) depth = 7;
-            if (sender == miGens8) depth = 8;
-            if (sender == miGens9) depth = 9;
+            if (sender == miGensInf)
+                depth = -1;
+            if (sender == miGens1)
+                depth = 1;
+            if (sender == miGens2)
+                depth = 2;
+            if (sender == miGens3)
+                depth = 3;
+            if (sender == miGens4)
+                depth = 4;
+            if (sender == miGens5)
+                depth = 5;
+            if (sender == miGens6)
+                depth = 6;
+            if (sender == miGens7)
+                depth = 7;
+            if (sender == miGens8)
+                depth = 8;
+            if (sender == miGens9)
+                depth = 9;
             fTreeBox.DepthLimit = depth;
 
             GenChart();
         }
+        private void miGens9_InitialSetup()
+        {
 
+            switch (GlobalOptions.Instance.DepthLimit) {
+                case 1:
+                    miGens1.PerformClick();
+                    break;
+                case 2:
+                    miGens2.PerformClick();
+                    break;
+                case 3:
+                    miGens3.PerformClick();
+                    break;
+                case 4:
+                    miGens4.PerformClick();
+                    break;
+                case 5:
+                    miGens5.PerformClick();
+                    break;
+                case 6:
+                    miGens6.PerformClick();
+                    break;
+                case 7:
+                    miGens7.PerformClick();
+                    break;
+                case 8:
+                    miGens8.PerformClick();
+                    break;
+                case 9:
+                    miGens9.PerformClick();
+                    break;
+                default:
+                    miGensInf.PerformClick();
+                    break;
+            }
+        }
         private void miEdit_Click(object sender, EventArgs e)
         {
             fController.Edit();
@@ -341,7 +389,8 @@ namespace GKUI.Forms
         private void miFillColor_Click(object sender, EventArgs e)
         {
             using (var colorDialog1 = new ColorDialog()) {
-                if (colorDialog1.ShowDialog() != DialogResult.OK) return;
+                if (colorDialog1.ShowDialog() != DialogResult.OK)
+                    return;
 
                 fTreeBox.BackgroundImage = null;
                 fTreeBox.BackColor = colorDialog1.Color;
@@ -352,7 +401,8 @@ namespace GKUI.Forms
         private void miFillImage_Click(object sender, EventArgs e)
         {
             string fileName = AppHost.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
-            if (string.IsNullOrEmpty(fileName)) return;
+            if (string.IsNullOrEmpty(fileName))
+                return;
 
             Image img = new Bitmap(fileName);
             fTreeBox.BackgroundImage = img;
@@ -363,7 +413,8 @@ namespace GKUI.Forms
         private void miModeItem_Click(object sender, EventArgs e)
         {
             TreeChartKind newMode = (TreeChartKind)((ToolStripMenuItem)sender).Tag;
-            if (fTreeBox.Model.Kind == newMode) return;
+            if (fTreeBox.Model.Kind == newMode)
+                return;
 
             GenChart(newMode);
         }
@@ -372,7 +423,8 @@ namespace GKUI.Forms
         {
             try {
                 TreeChartPerson p = fTreeBox.Selected;
-                if (p == null || p.Rec == null) return;
+                if (p == null || p.Rec == null)
+                    return;
 
                 fPerson = p.Rec;
                 GenChart();
@@ -439,7 +491,7 @@ namespace GKUI.Forms
             tbGens.Text = LangMan.LS(LSID.LSID_Generations);
 
             miGensInf.Text = LangMan.LS(LSID.LSID_Unlimited);
-            miGensInf.Checked = true;
+            //miGensInf.Checked = true;
             miModeBoth.Text = LangMan.LS(LSID.LSID_TM_Both);
             miModeAncestors.Text = LangMan.LS(LSID.LSID_TM_Ancestors);
             miModeDescendants.Text = LangMan.LS(LSID.LSID_TM_Descendants);
