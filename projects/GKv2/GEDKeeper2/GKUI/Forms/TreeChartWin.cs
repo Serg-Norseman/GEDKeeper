@@ -109,6 +109,8 @@ namespace GKUI.Forms
 
             fController = new TreeChartWinController(this);
             fController.Init(baseWin);
+
+            SetupDepth();
         }
 
         protected override void Dispose(bool disposing)
@@ -270,6 +272,23 @@ namespace GKUI.Forms
 
             GenChart();
         }
+
+        private void SetupDepth()
+        {
+            switch (GlobalOptions.Instance.DepthLimit) {
+                case 1: miGens1.PerformClick(); break;
+                case 2: miGens2.PerformClick(); break;
+                case 3: miGens3.PerformClick(); break;
+                case 4: miGens4.PerformClick(); break;
+                case 5: miGens5.PerformClick(); break;
+                case 6: miGens6.PerformClick(); break;
+                case 7: miGens7.PerformClick(); break;
+                case 8: miGens8.PerformClick(); break;
+                case 9: miGens9.PerformClick(); break;
+                default: miGensInf.PerformClick(); break;
+            }
+        }
+
 
         private void miEdit_Click(object sender, EventArgs e)
         {
