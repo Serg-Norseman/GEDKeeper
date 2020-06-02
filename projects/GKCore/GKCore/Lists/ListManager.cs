@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using BSLib;
 using BSLib.Calendar;
 using BSLib.Design.MVP.Controls;
@@ -133,6 +134,8 @@ namespace GKCore.Lists
         private int fXSortFactor;
         private int fTotalCount;
         private string fQuickFilter = "*";
+        private string fMask;
+        private Regex fMaskRegex;
 
 
         public List<ValItem> ContentList
@@ -195,13 +198,19 @@ namespace GKCore.Lists
             fFilter = new ListFilter();
         }
 
-        protected static bool IsMatchesMask(string str, string mask)
+        protected bool IsMatchesMask(string str, string mask)
         {
             bool result = false;
             if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(mask)) return result;
 
+            // regex has caching, but here cached also PrepareMask(...)
+            if (fMaskRegex == null || fMask != mask) {
+                fMask = mask;
+                fMaskRegex = GKUtils.InitMaskRegex(fMask);
+            }
+
             // regex supports '|' (or) expression
-            result = GKUtils.MatchesMask(str, mask);
+            result = GKUtils.MatchesRegex(str, fMaskRegex);
 
             return result;
         }

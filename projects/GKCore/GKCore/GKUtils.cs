@@ -367,6 +367,9 @@ namespace GKCore
             string regexStr = "";
 
             if (!string.IsNullOrEmpty(mask)) {
+                // double star evokes monstrous lags
+                mask = mask.Replace("**", "*").Replace("??", "?");
+
                 int curPos = 0;
                 int len = mask.Length;
 
