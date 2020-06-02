@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -869,8 +869,9 @@ namespace GKCore
 
         /* 810 */ LSID_STRel,
         /* 811 */ LSID_BackupRevisionsMaxCount,
+        /* 812 */ LSID_FirstCapitalLetterInNames,
 
-        /* 000 */ LSID_Last = LSID_BackupRevisionsMaxCount
+        /* 000 */ LSID_Last = LSID_FirstCapitalLetterInNames
     }
 
 
@@ -1695,6 +1696,7 @@ namespace GKCore
 
             /* 810 */ "Relative link to file",
             /* 811 */ "Maximum number of backup revisions",
+            /* 812 */ "First capital letter in names",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

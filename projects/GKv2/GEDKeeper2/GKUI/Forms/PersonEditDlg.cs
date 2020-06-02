@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,6 +32,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
 
@@ -381,12 +382,16 @@ namespace GKUI.Forms
             fController.DeletePortrait();
         }
 
-        private void edSurname_KeyDown(object sender, KeyEventArgs e)
+        private void txtXName_KeyDown(object sender, KeyEventArgs e)
         {
-            TextBox tb = (sender as TextBox);
-            if (tb != null && e.KeyCode == Keys.Down && e.Control) {
-                tb.Text = ConvertHelper.UniformName(tb.Text);
+            if (e.KeyCode == Keys.Down && e.Control) {
+                UIHelper.ProcessName(sender);
             }
+        }
+
+        private void txtXName_Leave(object sender, EventArgs e)
+        {
+            UIHelper.ProcessName(sender);
         }
 
         private void edSurname_KeyPress(object sender, KeyPressEventArgs e)

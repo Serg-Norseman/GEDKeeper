@@ -231,6 +231,7 @@ namespace GKUI.Forms
             chkCharsetDetection.Checked = fOptions.CharsetDetection;
 
             numBackupRevisionsMaxCount.Value = fOptions.FileBackupEachRevisionMaxCount;
+            chkFirstCapitalLetterInNames.Checked = fOptions.FirstCapitalLetterInNames;
         }
 
         private void UpdateWomanSurnameFormat()
@@ -454,6 +455,7 @@ namespace GKUI.Forms
             fOptions.CharsetDetection = chkCharsetDetection.Checked;
 
             fOptions.FileBackupEachRevisionMaxCount = (int)numBackupRevisionsMaxCount.Value;
+            fOptions.FirstCapitalLetterInNames = chkFirstCapitalLetterInNames.Checked;
 
             DialogResult = DialogResult.OK;
         }
@@ -643,6 +645,7 @@ namespace GKUI.Forms
             }
 
             lblBackupRevisionsMaxCount.Text = LangMan.LS(LSID.LSID_BackupRevisionsMaxCount);
+            chkFirstCapitalLetterInNames.Text = LangMan.LS(LSID.LSID_FirstCapitalLetterInNames);
         }
     }
 }

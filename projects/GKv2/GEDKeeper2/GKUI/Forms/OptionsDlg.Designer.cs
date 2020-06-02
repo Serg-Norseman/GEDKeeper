@@ -239,6 +239,7 @@
             this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.chkFirstCapitalLetterInNames = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -1355,6 +1356,7 @@
             this.pageViewCommon.Controls.Add(this.chkHighlightUnparented);
             this.pageViewCommon.Controls.Add(this.chkShowDatesSigns);
             this.pageViewCommon.Controls.Add(this.chkShowDatesCalendar);
+            this.pageViewCommon.Controls.Add(this.chkFirstCapitalLetterInNames);
             this.pageViewCommon.Controls.Add(this.chkAutoSortSpouses);
             this.pageViewCommon.Controls.Add(this.chkAutoSortChildren);
             this.pageViewCommon.Controls.Add(this.chkHighlightUnmarried);
@@ -1811,6 +1813,15 @@
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // chkFirstCapitalLetterInNames
+            // 
+            this.chkFirstCapitalLetterInNames.Location = new System.Drawing.Point(9, 282);
+            this.chkFirstCapitalLetterInNames.Margin = new System.Windows.Forms.Padding(2);
+            this.chkFirstCapitalLetterInNames.Name = "chkFirstCapitalLetterInNames";
+            this.chkFirstCapitalLetterInNames.Size = new System.Drawing.Size(242, 17);
+            this.chkFirstCapitalLetterInNames.TabIndex = 4;
+            this.chkFirstCapitalLetterInNames.Text = "chkFirstCapitalLetterInNames";
+            // 
             // OptionsDlg
             // 
             this.AcceptButton = this.btnAccept;
@@ -1913,5 +1924,6 @@
         private System.Windows.Forms.CheckBox chkDeleteMediaFileWithoutConfirm;
         private System.Windows.Forms.Label lblBackupRevisionsMaxCount;
         private System.Windows.Forms.NumericUpDown numBackupRevisionsMaxCount;
+        private System.Windows.Forms.CheckBox chkFirstCapitalLetterInNames;
     }
 }

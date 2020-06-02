@@ -101,9 +101,16 @@ namespace GKUI.Forms
 
         private void edName_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyChar == '/') {
+            if (e.Key == Keys.Down && e.Control) {
+                UIHelper.ProcessName(sender);
+            } else if (e.KeyChar == '/') {
                 e.Handled = true;
             }
+        }
+
+        private void txtXName_Leave(object sender, EventArgs e)
+        {
+            UIHelper.ProcessName(sender);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

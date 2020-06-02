@@ -381,14 +381,18 @@ namespace GKUI.Forms
             fController.DeletePortrait();
         }
 
-        private void edNameX_KeyDown(object sender, KeyEventArgs e)
+        private void txtXName_KeyDown(object sender, KeyEventArgs e)
         {
-            TextBox tb = (sender as TextBox);
-            if (tb != null && e.Key == Keys.Down && e.Control) {
-                tb.Text = ConvertHelper.UniformName(tb.Text);
+            if (e.Key == Keys.Down && e.Control) {
+                UIHelper.ProcessName(sender);
             } else if (e.KeyChar == '/') {
                 e.Handled = true;
             }
+        }
+
+        private void txtXName_Leave(object sender, EventArgs e)
+        {
+            UIHelper.ProcessName(sender);
         }
 
         public void SetNeedSex(GDMSex needSex)

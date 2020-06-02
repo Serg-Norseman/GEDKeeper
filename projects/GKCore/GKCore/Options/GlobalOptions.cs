@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -89,10 +89,11 @@ namespace GKCore.Options
         private bool fAutoCheckUpdates;
         private bool fAutoSortChildren;
         private bool fAutoSortSpouses;
+        private bool fCharsetDetection;
         private bool fCheckTreeSize;
+        private bool fFirstCapitalLetterInNames;
         private readonly ListOptionsCollection fListOptions;
         private bool fReadabilityHighlightRows;
-        private bool fCharsetDetection;
 
 
         public static GlobalOptions Instance
@@ -343,6 +344,12 @@ namespace GKCore.Options
             set { fEmbeddedMediaPlayer = value; }
         }
 
+        public bool FirstCapitalLetterInNames
+        {
+            get { return fFirstCapitalLetterInNames; }
+            set { fFirstCapitalLetterInNames = value; }
+        }
+
         public string Geocoder
         {
             get { return fGeocoder; }
@@ -425,6 +432,7 @@ namespace GKCore.Options
             fReadabilityHighlightRows = true;
 
             fCharsetDetection = false;
+            fFirstCapitalLetterInNames = false;
         }
 
         protected override void Dispose(bool disposing)
@@ -652,6 +660,7 @@ namespace GKCore.Options
             fAutoSortChildren = ini.ReadBool("Common", "AutoSortChildren", true);
             fAutoSortSpouses = ini.ReadBool("Common", "AutoSortSpouses", false);
             fCharsetDetection = ini.ReadBool("Common", "CharsetDetection", false);
+            fFirstCapitalLetterInNames = ini.ReadBool("Common", "FirstCapitalLetterInNames", false);
 
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -768,6 +777,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "AutoSortChildren", fAutoSortChildren);
             ini.WriteBool("Common", "AutoSortSpouses", fAutoSortSpouses);
             ini.WriteBool("Common", "CharsetDetection", fCharsetDetection);
+            ini.WriteBool("Common", "FirstCapitalLetterInNames", fFirstCapitalLetterInNames);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 

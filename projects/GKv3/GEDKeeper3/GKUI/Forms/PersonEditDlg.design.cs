@@ -93,19 +93,23 @@ namespace GKUI.Forms
 
             txtMarriedSurname = new TextBox();
             txtMarriedSurname.Size = new Size(180, 22);
-            txtMarriedSurname.KeyDown += edNameX_KeyDown;
+            txtMarriedSurname.KeyDown += txtXName_KeyDown;
+            txtMarriedSurname.LostFocus += txtXName_Leave;
 
             txtSurname = new TextBox();
             txtSurname.Size = new Size(180, 22);
-            txtSurname.KeyDown += edNameX_KeyDown;
+            txtSurname.KeyDown += txtXName_KeyDown;
+            txtSurname.LostFocus += txtXName_Leave;
 
             txtName = new TextBox();
             txtName.Size = new Size(180, 22);
-            txtName.KeyDown += edNameX_KeyDown;
+            txtName.KeyDown += txtXName_KeyDown;
+            txtName.LostFocus += txtXName_Leave;
 
             cmbPatronymic = new ComboBox();
             cmbPatronymic.Size = new Size(180, 22);
-            cmbPatronymic.KeyDown += edNameX_KeyDown;
+            cmbPatronymic.KeyDown += txtXName_KeyDown;
+            cmbPatronymic.LostFocus += txtXName_Leave;
 
             cmbSex = new ComboBox();
             cmbSex.ReadOnly = true;
@@ -120,19 +124,19 @@ namespace GKUI.Forms
 
             txtSurnamePrefix = new TextBox();
             txtSurnamePrefix.Size = new Size(180, 22);
-            txtSurnamePrefix.KeyDown += edNameX_KeyDown;
+            txtSurnamePrefix.KeyDown += txtXName_KeyDown;
 
             txtNamePrefix = new TextBox();
             txtNamePrefix.Size = new Size(180, 22);
-            txtNamePrefix.KeyDown += edNameX_KeyDown;
+            txtNamePrefix.KeyDown += txtXName_KeyDown;
 
             txtNameSuffix = new TextBox();
             txtNameSuffix.Size = new Size(180, 22);
-            txtNameSuffix.KeyDown += edNameX_KeyDown;
+            txtNameSuffix.KeyDown += txtXName_KeyDown;
 
             txtNickname = new TextBox();
             txtNickname.Size = new Size(180, 22);
-            txtNickname.KeyDown += edNameX_KeyDown;
+            txtNickname.KeyDown += txtXName_KeyDown;
 
             var personLayout = new DefTableLayout {
                 Rows = {

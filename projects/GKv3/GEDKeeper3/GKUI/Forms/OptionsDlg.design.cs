@@ -135,6 +135,7 @@ namespace GKUI.Forms
         private CheckBox chkAllowDeleteMediaFileFromStgArc;
         private CheckBox chkAllowDeleteMediaFileFromRefs;
         private CheckBox chkDeleteMediaFileWithoutConfirm;
+        private CheckBox chkFirstCapitalLetterInNames;
 
         private void InitializeComponent()
         {
@@ -737,6 +738,9 @@ namespace GKUI.Forms
             chkAutoSortSpouses = new CheckBox();
             chkAutoSortSpouses.Text = "chkAutoSortSpouses";
 
+            chkFirstCapitalLetterInNames = new CheckBox();
+            chkFirstCapitalLetterInNames.Text = "chkFirstCapitalLetterInNames";
+
             //
 
             pageViewCommon = new TabPage();
@@ -749,7 +753,7 @@ namespace GKUI.Forms
                     new TableRow {
                         Cells = { grpAdvancedNames, new DefStackLayout(Orientation.Vertical) {
                                 Items = { chkPlacesWithAddress, chkHighlightUnparented, chkHighlightUnmarried,
-                                          chkAutoSortChildren, chkAutoSortSpouses}
+                                          chkAutoSortChildren, chkAutoSortSpouses, chkFirstCapitalLetterInNames }
                             }
                         }
                     },

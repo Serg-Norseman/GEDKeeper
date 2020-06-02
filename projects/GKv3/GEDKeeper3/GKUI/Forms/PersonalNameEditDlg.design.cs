@@ -39,6 +39,7 @@ namespace GKUI.Forms
             txtSurname = new TextBox();
             txtSurname.Size = new Size(180, 22);
             txtSurname.KeyDown += edName_KeyDown;
+            txtSurname.LostFocus += txtXName_Leave;
 
             lblSurnamePrefix = new Label();
             lblSurnamePrefix.Text = "lblSurnamePrefix";
@@ -53,6 +54,7 @@ namespace GKUI.Forms
             txtMarriedSurname = new TextBox();
             txtMarriedSurname.Size = new Size(180, 22);
             txtMarriedSurname.KeyDown += edName_KeyDown;
+            txtMarriedSurname.LostFocus += txtXName_Leave;
 
             lblNamePrefix = new Label();
             lblNamePrefix.Text = "lblNamePrefix";
@@ -67,6 +69,7 @@ namespace GKUI.Forms
             txtName = new TextBox();
             txtName.Size = new Size(180, 22);
             txtName.KeyDown += edName_KeyDown;
+            txtName.LostFocus += txtXName_Leave;
 
             lblNameSuffix = new Label();
             lblNameSuffix.Text = "lblNameSuffix";
@@ -81,6 +84,7 @@ namespace GKUI.Forms
             txtPatronymic = new TextBox();
             txtPatronymic.Size = new Size(180, 22);
             txtPatronymic.KeyDown += edName_KeyDown;
+            txtPatronymic.LostFocus += txtXName_Leave;
 
             lblNickname = new Label();
             lblNickname.Text = "lblNickname";

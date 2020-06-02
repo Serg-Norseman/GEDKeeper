@@ -29,6 +29,7 @@ using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Options;
 
 namespace GKUI.Components
 {
@@ -247,6 +248,18 @@ namespace GKUI.Components
             Clipboard.SetDataObject(text);
         }
 
+        public static void ProcessName(object sender)
+        {
+            TextBox tb = (sender as TextBox);
+            if (tb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
+                tb.Text = ConvertHelper.UniformName(tb.Text);
+            }
+
+            ComboBox cmb = (sender as ComboBox);
+            if (cmb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
+                cmb.Text = ConvertHelper.UniformName(cmb.Text);
+            }
+        }
 
         #region Application's autorun
         #if !__MonoCS__

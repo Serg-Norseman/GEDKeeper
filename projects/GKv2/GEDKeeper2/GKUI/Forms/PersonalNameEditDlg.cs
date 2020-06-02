@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,13 +20,14 @@
 
 using System;
 using System.Windows.Forms;
+using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
+using GKCore.Options;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -133,6 +134,18 @@ namespace GKUI.Forms
             lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
             lblType.Text = LangMan.LS(LSID.LSID_Type);
             lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
+        }
+
+        private void txtXName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Down && e.Control) {
+                UIHelper.ProcessName(sender);
+            }
+        }
+
+        private void txtXName_Leave(object sender, EventArgs e)
+        {
+            UIHelper.ProcessName(sender);
         }
     }
 }
