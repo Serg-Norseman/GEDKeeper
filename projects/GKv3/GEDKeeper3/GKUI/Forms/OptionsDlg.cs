@@ -239,6 +239,8 @@ namespace GKUI.Forms
 
             numBackupRevisionsMaxCount.Value = fOptions.FileBackupEachRevisionMaxCount;
             chkFirstCapitalLetterInNames.Checked = fOptions.FirstCapitalLetterInNames;
+
+            numDefaultDepth.Value = fOptions.TreeChartOptions.DepthLimit;
         }
 
         private void UpdateWomanSurnameFormat()
@@ -464,6 +466,8 @@ namespace GKUI.Forms
             fOptions.FileBackupEachRevisionMaxCount = (int)numBackupRevisionsMaxCount.Value;
             fOptions.FirstCapitalLetterInNames = chkFirstCapitalLetterInNames.Checked.GetValueOrDefault();
 
+            fOptions.TreeChartOptions.DepthLimit = (int)numDefaultDepth.Value;
+
             DialogResult = DialogResult.Ok;
         }
 
@@ -652,6 +656,7 @@ namespace GKUI.Forms
 
             lblBackupRevisionsMaxCount.Text = LangMan.LS(LSID.LSID_BackupRevisionsMaxCount);
             chkFirstCapitalLetterInNames.Text = LangMan.LS(LSID.LSID_FirstCapitalLetterInNames);
+            lblDefaultDepth.Text = LangMan.LS(LSID.LSID_DefaultDepth);
         }
     }
 }

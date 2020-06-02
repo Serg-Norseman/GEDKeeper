@@ -870,8 +870,9 @@ namespace GKCore
         /* 810 */ LSID_STRel,
         /* 811 */ LSID_BackupRevisionsMaxCount,
         /* 812 */ LSID_FirstCapitalLetterInNames,
+        /* 813 */ LSID_DefaultDepth,
 
-        /* 000 */ LSID_Last = LSID_FirstCapitalLetterInNames
+        /* 000 */ LSID_Last = LSID_DefaultDepth
     }
 
 
@@ -1697,6 +1698,7 @@ namespace GKCore
             /* 810 */ "Relative link to file",
             /* 811 */ "Maximum number of backup revisions",
             /* 812 */ "First capital letter in names",
+            /* 813 */ "Default depth",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

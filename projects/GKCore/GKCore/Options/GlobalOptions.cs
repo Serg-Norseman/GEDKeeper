@@ -69,7 +69,6 @@ namespace GKCore.Options
         private bool fShowDatesCalendar;
         private FileBackup fFileBackup;
         private int fFileBackupEachRevisionMaxCount;
-        private int fDepthLimit;
         private bool fAutosave;
         private int fAutosaveInterval;
         private bool fExtendedNames;
@@ -214,12 +213,6 @@ namespace GKCore.Options
         {
             get { return fFileBackupEachRevisionMaxCount; }
             set { fFileBackupEachRevisionMaxCount = value; }
-        }
-
-        public int DepthLimit
-        {
-            get { return fDepthLimit; }
-            set { fDepthLimit = value; }
         }
 
         public bool ShowTips
@@ -652,7 +645,6 @@ namespace GKCore.Options
             fInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 0);
             fFileBackup = (FileBackup)ini.ReadInteger("Common", "FileBackup", 0);
             fFileBackupEachRevisionMaxCount = ini.ReadInteger("Common", "FileBackupEachRevisionMaxCount", 0);
-            fDepthLimit = (short)ini.ReadInteger("Common", "DepthLimit", -1);
             fShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
             fShowDatesSign = ini.ReadBool("Common", "ShowDatesSigns", false);
             fRemovableMediaWarning = ini.ReadBool("Common", "RemovableMediaWarning", true);
@@ -770,7 +762,6 @@ namespace GKCore.Options
             ini.WriteInteger("Common", "InterfaceLang", fInterfaceLang);
             ini.WriteInteger("Common", "FileBackup", (int)fFileBackup);
             ini.WriteInteger("Common", "FileBackupEachRevisionMaxCount", fFileBackupEachRevisionMaxCount);
-            ini.WriteInteger("Common", "DepthLimit", (int)fDepthLimit);
             ini.WriteBool("Common", "ShowDatesCalendar", fShowDatesCalendar);
             ini.WriteBool("Common", "ShowDatesSigns", fShowDatesSign);
             ini.WriteBool("Common", "RemovableMediaWarning", fRemovableMediaWarning);

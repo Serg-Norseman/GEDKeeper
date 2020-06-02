@@ -275,7 +275,7 @@ namespace GKUI.Forms
 
         private void SetupDepth()
         {
-            switch (GlobalOptions.Instance.DepthLimit) {
+            switch (GlobalOptions.Instance.TreeChartOptions.DepthLimit) {
                 case 1: miGens1.PerformClick(); break;
                 case 2: miGens2.PerformClick(); break;
                 case 3: miGens3.PerformClick(); break;
@@ -288,7 +288,6 @@ namespace GKUI.Forms
                 default: miGensInf.PerformClick(); break;
             }
         }
-
 
         private void miEdit_Click(object sender, EventArgs e)
         {

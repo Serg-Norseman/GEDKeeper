@@ -136,6 +136,8 @@ namespace GKUI.Forms
         private CheckBox chkAllowDeleteMediaFileFromRefs;
         private CheckBox chkDeleteMediaFileWithoutConfirm;
         private CheckBox chkFirstCapitalLetterInNames;
+        private Label lblDefaultDepth;
+        private NumericUpDown numDefaultDepth;
 
         private void InitializeComponent()
         {
@@ -600,12 +602,27 @@ namespace GKUI.Forms
 
             //
 
+            lblDefaultDepth = new Label();
+            lblDefaultDepth.Text = "lblDefaultDepth";
+
+            numDefaultDepth = new NumericUpDown();
+            numDefaultDepth.MaxValue = 9;
+            numDefaultDepth.MinValue = -1;
+            numDefaultDepth.Width = 60;
+            numDefaultDepth.Value = -1;
+
             pageTreeChart = new TabPage();
             pageTreeChart.Text = "pageTreeChart";
             pageTreeChart.Content = new DefStackLayout(Orientation.Horizontal) {
                 Items = {
                     grpTreePersons,
-                    new DefStackLayout(Orientation.Vertical) { Items = { grpTreeDecor, grpSpacings } }
+                    new DefStackLayout(Orientation.Vertical) {
+                        Items = {
+                            grpTreeDecor,
+                            grpSpacings,
+                            new DefStackLayout(Orientation.Horizontal) { Items = { lblDefaultDepth, numDefaultDepth } }
+                        }
+                    }
                 }
             };
 

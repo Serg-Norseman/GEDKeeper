@@ -213,6 +213,7 @@
             this.chkHighlightUnparented = new System.Windows.Forms.CheckBox();
             this.chkShowDatesSigns = new System.Windows.Forms.CheckBox();
             this.chkShowDatesCalendar = new System.Windows.Forms.CheckBox();
+            this.chkFirstCapitalLetterInNames = new System.Windows.Forms.CheckBox();
             this.chkAutoSortSpouses = new System.Windows.Forms.CheckBox();
             this.chkAutoSortChildren = new System.Windows.Forms.CheckBox();
             this.chkHighlightUnmarried = new System.Windows.Forms.CheckBox();
@@ -239,7 +240,8 @@
             this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.chkFirstCapitalLetterInNames = new System.Windows.Forms.CheckBox();
+            this.numDefaultDepth = new System.Windows.Forms.NumericUpDown();
+            this.lblDefaultDepth = new System.Windows.Forms.Label();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -278,6 +280,7 @@
             this.grpPedigree.SuspendLayout();
             this.grpPedigreeFormat.SuspendLayout();
             this.pagePlugins.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepth)).BeginInit();
             this.SuspendLayout();
             // 
             // PageControl1
@@ -785,6 +788,8 @@
             // pageTreeChart
             // 
             this.pageTreeChart.BackColor = System.Drawing.SystemColors.Control;
+            this.pageTreeChart.Controls.Add(this.numDefaultDepth);
+            this.pageTreeChart.Controls.Add(this.lblDefaultDepth);
             this.pageTreeChart.Controls.Add(this.grpSpacings);
             this.pageTreeChart.Controls.Add(this.grpTreePersons);
             this.pageTreeChart.Controls.Add(this.grpTreeDecor);
@@ -810,7 +815,7 @@
             this.grpSpacings.Margin = new System.Windows.Forms.Padding(2);
             this.grpSpacings.Name = "grpSpacings";
             this.grpSpacings.Padding = new System.Windows.Forms.Padding(8);
-            this.grpSpacings.Size = new System.Drawing.Size(229, 171);
+            this.grpSpacings.Size = new System.Drawing.Size(229, 128);
             this.grpSpacings.TabIndex = 2;
             this.grpSpacings.TabStop = false;
             this.grpSpacings.Text = "grpSpacings";
@@ -1552,6 +1557,15 @@
             this.chkShowDatesCalendar.TabIndex = 4;
             this.chkShowDatesCalendar.Text = "chkShowDatesCalendar";
             // 
+            // chkFirstCapitalLetterInNames
+            // 
+            this.chkFirstCapitalLetterInNames.Location = new System.Drawing.Point(9, 282);
+            this.chkFirstCapitalLetterInNames.Margin = new System.Windows.Forms.Padding(2);
+            this.chkFirstCapitalLetterInNames.Name = "chkFirstCapitalLetterInNames";
+            this.chkFirstCapitalLetterInNames.Size = new System.Drawing.Size(242, 17);
+            this.chkFirstCapitalLetterInNames.TabIndex = 4;
+            this.chkFirstCapitalLetterInNames.Text = "chkFirstCapitalLetterInNames";
+            // 
             // chkAutoSortSpouses
             // 
             this.chkAutoSortSpouses.Location = new System.Drawing.Point(9, 261);
@@ -1813,14 +1827,37 @@
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // chkFirstCapitalLetterInNames
+            // numDefaultDepth
             // 
-            this.chkFirstCapitalLetterInNames.Location = new System.Drawing.Point(9, 282);
-            this.chkFirstCapitalLetterInNames.Margin = new System.Windows.Forms.Padding(2);
-            this.chkFirstCapitalLetterInNames.Name = "chkFirstCapitalLetterInNames";
-            this.chkFirstCapitalLetterInNames.Size = new System.Drawing.Size(242, 17);
-            this.chkFirstCapitalLetterInNames.TabIndex = 4;
-            this.chkFirstCapitalLetterInNames.Text = "chkFirstCapitalLetterInNames";
+            this.numDefaultDepth.Location = new System.Drawing.Point(511, 358);
+            this.numDefaultDepth.Maximum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.numDefaultDepth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.numDefaultDepth.Name = "numDefaultDepth";
+            this.numDefaultDepth.Size = new System.Drawing.Size(39, 21);
+            this.numDefaultDepth.TabIndex = 11;
+            this.numDefaultDepth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            // 
+            // lblDefaultDepth
+            // 
+            this.lblDefaultDepth.AutoSize = true;
+            this.lblDefaultDepth.Location = new System.Drawing.Point(347, 360);
+            this.lblDefaultDepth.Margin = new System.Windows.Forms.Padding(8, 0, 0, 4);
+            this.lblDefaultDepth.Name = "lblDefaultDepth";
+            this.lblDefaultDepth.Size = new System.Drawing.Size(81, 13);
+            this.lblDefaultDepth.TabIndex = 10;
+            this.lblDefaultDepth.Text = "lblDefaultDepth";
             // 
             // OptionsDlg
             // 
@@ -1859,6 +1896,7 @@
             this.pageCharts.ResumeLayout(false);
             this.tabsCharts.ResumeLayout(false);
             this.pageTreeChart.ResumeLayout(false);
+            this.pageTreeChart.PerformLayout();
             this.grpSpacings.ResumeLayout(false);
             this.grpSpacings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSpouseDist)).EndInit();
@@ -1887,6 +1925,7 @@
             this.grpPedigree.ResumeLayout(false);
             this.grpPedigreeFormat.ResumeLayout(false);
             this.pagePlugins.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepth)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1925,5 +1964,7 @@
         private System.Windows.Forms.Label lblBackupRevisionsMaxCount;
         private System.Windows.Forms.NumericUpDown numBackupRevisionsMaxCount;
         private System.Windows.Forms.CheckBox chkFirstCapitalLetterInNames;
+        private System.Windows.Forms.NumericUpDown numDefaultDepth;
+        private System.Windows.Forms.Label lblDefaultDepth;
     }
 }
