@@ -1700,8 +1700,7 @@ namespace GKCore
             return result;
         }
 
-        public GDMIndividualRecord SelectPerson(GDMIndividualRecord target,
-                                                   TargetMode targetMode, GDMSex needSex)
+        public GDMIndividualRecord SelectPerson(GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex)
         {
             GDMIndividualRecord result;
 
@@ -1874,15 +1873,7 @@ namespace GKCore
                     return null;
             }
 
-            GDMIndividualRecord target = null;
-            TargetMode targetMode = TargetMode.tmNone;
-            if (needSex == GDMSex.svFemale) {
-                target = iRec;
-                targetMode = TargetMode.tmWife;
-            }
-
-            GDMIndividualRecord result = SelectPerson(target, targetMode, needSex);
-            return result;
+            return SelectPerson(iRec, TargetMode.tmSpouse, needSex);
         }
 
         public void ProcessFamily(GDMFamilyRecord famRec)

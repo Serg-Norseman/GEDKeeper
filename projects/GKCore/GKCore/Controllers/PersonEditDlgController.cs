@@ -356,8 +356,10 @@ namespace GKCore.Controllers
                             }
                             break;
 
-                        case TargetMode.tmWife:
-                            SetMarriedSurname(parts.Surname);
+                        case TargetMode.tmSpouse:
+                            if (sx == GDMSex.svFemale) {
+                                SetMarriedSurname(parts.Surname);
+                            }
                             break;
                     }
                 }

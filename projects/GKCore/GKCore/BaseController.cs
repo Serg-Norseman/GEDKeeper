@@ -529,7 +529,7 @@ namespace GKCore
                 baseWin.Context.BeginUpdate();
                 GDMTree tree = baseWin.Context.Tree;
 
-                if (targetType == TargetMode.tmFamilySpouse && target != null) {
+                if (targetType == TargetMode.tmSpouse && target != null) {
                     GDMSex sex = target.Sex;
                     if (sex < GDMSex.svMale || sex > GDMSex.svFemale) {
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
@@ -548,10 +548,7 @@ namespace GKCore
                         baseWin.Context.LockRecord(familyRec);
 
                         dlg.Family = familyRec;
-
-                        if (targetType != TargetMode.tmNone && target != null) {
-                            dlg.SetTarget(targetType, target);
-                        }
+                        dlg.SetTarget(targetType, target);
 
                         result = (AppHost.Instance.ShowModalX(dlg, false));
                     } finally {
@@ -936,9 +933,8 @@ namespace GKCore
         {
             bool result = false;
 
-            GDMIndividualRecord husband = baseWin.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svMale);
-            if (husband != null && family.Husband.StringValue == "")
-            {
+            GDMIndividualRecord husband = baseWin.Context.SelectPerson(family.Wife.Individual, TargetMode.tmSpouse, GDMSex.svMale);
+            if (husband != null && family.Husband.IsEmpty()) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, husband);
             }
 
@@ -963,9 +959,8 @@ namespace GKCore
         {
             bool result = false;
 
-            GDMIndividualRecord wife = baseWin.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svFemale);
-            if (wife != null && family.Wife.StringValue == "")
-            {
+            GDMIndividualRecord wife = baseWin.Context.SelectPerson(family.Husband.Individual, TargetMode.tmSpouse, GDMSex.svFemale);
+            if (wife != null && family.Wife.IsEmpty()) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, wife);
             }
 

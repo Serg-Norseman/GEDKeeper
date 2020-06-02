@@ -146,7 +146,12 @@ namespace GKUI.Forms
             chkEmbeddedMediaPlayer.Checked = fOptions.EmbeddedMediaPlayer;
             chkAllowMediaDirectRefs.Checked = fOptions.AllowMediaStoreReferences;
             chkAutoCheckUpdates.Checked = fOptions.AutoCheckUpdates;
-            chkCharsetDetection.Checked = fOptions.CharsetDetection;
+
+            chkAllowMediaStoreRelativeReferences.Checked = fOptions.AllowMediaStoreRelativeReferences;
+            UIHelper.SetSelectedTag<MediaStoreType>(cmbMediaStoreDefault, (MediaStoreType)fOptions.MediaStoreDefault);
+            chkAllowDeleteMediaFileFromStgArc.Checked = fOptions.AllowDeleteMediaFileFromStgArc;
+            chkAllowDeleteMediaFileFromRefs.Checked = fOptions.AllowDeleteMediaFileFromRefs;
+            chkDeleteMediaFileWithoutConfirm.Checked = fOptions.DeleteMediaFileWithoutConfirm;
 
             chkSurname.Checked = fOptions.TreeChartOptions.FamilyVisible;
             chkName.Checked = fOptions.TreeChartOptions.NameVisible;
@@ -230,6 +235,9 @@ namespace GKUI.Forms
             chkAutoSortChildren.Checked = fOptions.AutoSortChildren;
             chkAutoSortSpouses.Checked = fOptions.AutoSortSpouses;
             chkCheckTreeSize.Checked = fOptions.CheckTreeSize;
+            chkCharsetDetection.Checked = fOptions.CharsetDetection;
+
+            numBackupRevisionsMaxCount.Value = fOptions.FileBackupEachRevisionMaxCount;
         }
 
         private void UpdateWomanSurnameFormat()
@@ -361,7 +369,12 @@ namespace GKUI.Forms
             fOptions.EmbeddedMediaPlayer = chkEmbeddedMediaPlayer.Checked.GetValueOrDefault();
             fOptions.AllowMediaStoreReferences = chkAllowMediaDirectRefs.Checked.GetValueOrDefault();
             fOptions.AutoCheckUpdates = chkAutoCheckUpdates.Checked.GetValueOrDefault();
-            fOptions.CharsetDetection = chkCharsetDetection.Checked.GetValueOrDefault();
+
+            fOptions.AllowMediaStoreRelativeReferences = chkAllowMediaStoreRelativeReferences.Checked.GetValueOrDefault();
+            fOptions.MediaStoreDefault = (int)UIHelper.GetSelectedTag<MediaStoreType>(cmbMediaStoreDefault);
+            fOptions.AllowDeleteMediaFileFromStgArc = chkAllowDeleteMediaFileFromStgArc.Checked.GetValueOrDefault();
+            fOptions.AllowDeleteMediaFileFromRefs = chkAllowDeleteMediaFileFromRefs.Checked.GetValueOrDefault();
+            fOptions.DeleteMediaFileWithoutConfirm = chkDeleteMediaFileWithoutConfirm.Checked.GetValueOrDefault();
 
             fOptions.TreeChartOptions.FamilyVisible = chkSurname.Checked.GetValueOrDefault();
             fOptions.TreeChartOptions.NameVisible = chkName.Checked.GetValueOrDefault();
@@ -445,6 +458,9 @@ namespace GKUI.Forms
             fOptions.AutoSortChildren = chkAutoSortChildren.Checked.GetValueOrDefault();
             fOptions.AutoSortSpouses = chkAutoSortSpouses.Checked.GetValueOrDefault();
             fOptions.CheckTreeSize = chkCheckTreeSize.Checked.GetValueOrDefault();
+            fOptions.CharsetDetection = chkCharsetDetection.Checked.GetValueOrDefault();
+
+            fOptions.FileBackupEachRevisionMaxCount = (int)numBackupRevisionsMaxCount.Value;
 
             DialogResult = DialogResult.Ok;
         }
@@ -609,7 +625,6 @@ namespace GKUI.Forms
             pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
             chkAllowMediaDirectRefs.Text = LangMan.LS(LSID.LSID_AllowMediaDirectReferences);
             chkAutoCheckUpdates.Text = LangMan.LS(LSID.LSID_AutoCheckUpdates);
-            chkCharsetDetection.Text = LangMan.LS(LSID.LSID_CharsetDetection);
 
             grpSpacings.Text = LangMan.LS(LSID.LSID_Spacings);
             lblMargins.Text = LangMan.LS(LSID.LSID_Margins);
@@ -620,6 +635,20 @@ namespace GKUI.Forms
             chkAutoSortChildren.Text = LangMan.LS(LSID.LSID_AutoSortChildren);
             chkAutoSortSpouses.Text = LangMan.LS(LSID.LSID_AutoSortSpouses);
             chkCheckTreeSize.Text = LangMan.LS(LSID.LSID_CheckTreeSize);
+            chkCharsetDetection.Text = LangMan.LS(LSID.LSID_CharsetDetection);
+
+            chkAllowMediaStoreRelativeReferences.Text = LangMan.LS(LSID.LSID_AllowMediaRelativeReferences);
+            lblMediaStoreDefault.Text = LangMan.LS(LSID.LSID_MediaStoreDefault);
+            chkAllowDeleteMediaFileFromStgArc.Text = LangMan.LS(LSID.LSID_AllowDeleteMediaFileFromStgArc);
+            chkAllowDeleteMediaFileFromRefs.Text = LangMan.LS(LSID.LSID_AllowDeleteMediaFileFromRefs);
+            chkDeleteMediaFileWithoutConfirm.Text = LangMan.LS(LSID.LSID_DeleteMediaFileWithoutConfirm);
+
+            cmbMediaStoreDefault.Items.Clear();
+            for (MediaStoreType mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstRelativeReference; mst++) {
+                cmbMediaStoreDefault.Items.Add(new GKComboItem<MediaStoreType>(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst));
+            }
+
+            lblBackupRevisionsMaxCount.Text = LangMan.LS(LSID.LSID_BackupRevisionsMaxCount);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -89,8 +89,8 @@ namespace GKUI.Forms
             fController = new RecordSelectDlgController(this);
             fController.Init(baseWin);
             fController.RecType = recType;
+
             UpdateRecordsView();
-            FastFilter = "*";
         }
 
         protected override void Dispose(bool disposing)

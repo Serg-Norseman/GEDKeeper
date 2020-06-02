@@ -229,6 +229,8 @@ namespace GKUI.Forms
             chkAutoSortSpouses.Checked = fOptions.AutoSortSpouses;
             chkCheckTreeSize.Checked = fOptions.CheckTreeSize;
             chkCharsetDetection.Checked = fOptions.CharsetDetection;
+
+            numBackupRevisionsMaxCount.Value = fOptions.FileBackupEachRevisionMaxCount;
         }
 
         private void UpdateWomanSurnameFormat()
@@ -451,6 +453,8 @@ namespace GKUI.Forms
             fOptions.CheckTreeSize = chkCheckTreeSize.Checked;
             fOptions.CharsetDetection = chkCharsetDetection.Checked;
 
+            fOptions.FileBackupEachRevisionMaxCount = (int)numBackupRevisionsMaxCount.Value;
+
             DialogResult = DialogResult.OK;
         }
 
@@ -637,6 +641,8 @@ namespace GKUI.Forms
             for (MediaStoreType mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstRelativeReference; mst++) {
                 cmbMediaStoreDefault.Items.Add(new ComboItem<MediaStoreType>(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst));
             }
+
+            lblBackupRevisionsMaxCount.Text = LangMan.LS(LSID.LSID_BackupRevisionsMaxCount);
         }
     }
 }
