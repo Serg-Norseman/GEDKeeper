@@ -62,10 +62,13 @@ namespace GKCore.Controllers
             if (targetType == TargetMode.tmNone || target == null) return;
 
             bool result = false;
-            if (targetType == TargetMode.tmFamilySpouse) {
-                result = fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, fFamily, target);
-            } else if (targetType == TargetMode.tmFamilyChild) {
-                result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, target, fFamily);
+            switch (targetType) {
+                case TargetMode.tmSpouse:
+                    result = fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, fFamily, target);
+                    break;
+                case TargetMode.tmFamilyChild:
+                    result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, target, fFamily);
+                    break;
             }
 
             if (result) UpdateControls();

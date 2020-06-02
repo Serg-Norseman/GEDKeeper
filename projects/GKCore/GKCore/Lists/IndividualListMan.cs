@@ -949,7 +949,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    result = (BaseController.ModifyFamily(fBaseWin, ref family, TargetMode.tmFamilySpouse, iRec));
+                    result = (BaseController.ModifyFamily(fBaseWin, ref family, TargetMode.tmSpouse, iRec));
                     if (result) {
                         eArgs.ItemData = family;
                     }
