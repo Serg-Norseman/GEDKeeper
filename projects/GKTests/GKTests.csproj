@@ -282,6 +282,7 @@
     <EmbeddedResource Include="Resources\test_native.ged" />
     <EmbeddedResource Include="Resources\test_windsor.familyx" />
     <EmbeddedResource Include="Resources\test_mergerec.ged" />
+    <EmbeddedResource Include="Resources\test_names_03.ged" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

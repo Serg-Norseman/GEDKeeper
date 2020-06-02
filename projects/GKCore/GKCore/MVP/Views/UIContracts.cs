@@ -424,12 +424,11 @@ namespace GKCore.MVP.Views
     public interface IRecordSelectDialog : ICommonDialog, IBaseEditor, IView
     {
         string FastFilter { get; set; }
-        TargetMode TargetMode { get; set; }
-        GDMIndividualRecord TargetIndividual { get; set; }
-        GDMSex NeedSex { get; set; }
         GDMRecord ResultRecord { get; set; }
 
         IListViewEx RecordsList { get; }
+
+        void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex);
     }
 
 

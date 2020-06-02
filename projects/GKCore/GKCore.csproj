@@ -249,6 +249,7 @@
     <Compile Include="GKCore\Controllers\TreeMergeController.cs" />
     <Compile Include="GKCore\Controllers\TreeSplitController.cs" />
     <Compile Include="GKCore\Controllers\UserRefEditDlgController.cs" />
+    <Compile Include="GKCore\Cultures\CulturesPool.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GDModel\Providers\FileProvider.cs" />
     <Compile Include="GKCore\GKException.cs" />
@@ -310,6 +311,7 @@
     <Compile Include="GKCore\Types\MultimediaKind.cs" />
     <Compile Include="GKCore\Types\NameEntry.cs" />
     <Compile Include="GKCore\Types\NameFormat.cs" />
+    <Compile Include="GKCore\Types\NamePartsRet.cs" />
     <Compile Include="GKCore\Types\PatriarchObj.cs" />
     <Compile Include="GKCore\Types\PedigreeFormat.cs" />
     <Compile Include="GKCore\Types\PersonEventKind.cs" />

@@ -303,7 +303,7 @@ namespace GKCore.Lists
                 result = GKUtils.GetNameString(fRec, true, false);
             } else {
                 NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
-                GKUtils.NamePartsRet parts;
+                NamePartsRet parts;
 
                 switch (defNameFormat) {
                     case NameFormat.nfFNP:

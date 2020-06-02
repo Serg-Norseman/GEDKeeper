@@ -87,6 +87,14 @@ namespace GKCore.Controllers
             recordsList.UpdateContents();
         }
 
+        public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex)
+        {
+            fTarget.TargetMode = mode;
+            fTarget.TargetIndividual = target;
+            fTarget.NeedSex = needSex;
+            UpdateFilter();
+        }
+
         private static bool ChildSelectorHandler(GDMRecord record)
         {
             GDMIndividualRecord iRec = record as GDMIndividualRecord;

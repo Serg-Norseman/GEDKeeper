@@ -28,6 +28,7 @@ using System.Text.RegularExpressions;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -2937,42 +2938,15 @@ namespace GKCore
 
         public static NamePartsRet GetNameParts(GDMIndividualRecord iRec, GDMPersonalName personalName, bool formatted = true)
         {
-            if (personalName == null)
-                throw new ArgumentNullException("personalName");
+            ICulture culture = DefineCulture(iRec, personalName);
 
-            // extracting standard parts
-            string stdSurname, stdName, stdPatronymic;
-            string firstPart = personalName.FirstPart;
-            stdSurname = personalName.Surname;
-            string[] parts = firstPart.Split(' ');
-            if (parts.Length > 1) {
-                stdName = parts[0];
-                stdPatronymic = parts[1];
-            } else {
-                stdName = firstPart;
-                stdPatronymic = "";
-            }
-
-            // extracting sub-tags parts (high priority if any)
-            string surname = personalName.Pieces.Surname;
-            string name = personalName.Pieces.Given;
-            string patronymic = personalName.Pieces.PatronymicName;
-            string marriedSurname = personalName.Pieces.MarriedName;
-            parts = name.Split(' ');
-            if (!string.IsNullOrEmpty(name) && string.IsNullOrEmpty(patronymic) && parts.Length > 1) {
-                name = parts[0];
-                patronymic = parts[1];
-            }
-
-            surname = !string.IsNullOrEmpty(surname) ? surname : stdSurname;
-            name = !string.IsNullOrEmpty(name) ? name : stdName;
-            patronymic = !string.IsNullOrEmpty(patronymic) ? patronymic : stdPatronymic;
+            NamePartsRet nameParts = culture.GetNameParts(personalName);
 
             if (formatted) {
-                surname = GetFmtSurname(iRec, personalName, surname);
+                nameParts.Surname = GetFmtSurname(iRec, personalName, nameParts.Surname);
             }
 
-            return new NamePartsRet(surname, marriedSurname, name, patronymic);
+            return nameParts;
         }
 
         public static NamePartsRet GetNameParts(GDMIndividualRecord iRec, bool formatted = true)
@@ -2983,34 +2957,30 @@ namespace GKCore
             if (iRec.PersonalNames.Count > 0) {
                 return GetNameParts(iRec, iRec.PersonalNames[0], formatted);
             } else {
-                return new NamePartsRet("", "", "");
+                return new NamePartsRet();
             }
         }
 
-        public sealed class NamePartsRet
+        public static ICulture DefineCulture(GDMIndividualRecord iRec, GDMPersonalName personalName)
         {
-            // Simple or maiden surname
-            public string Surname;
+            GDMLanguageID langID;
 
-            public string Name;
-            public string Patronymic;
-
-            public string MarriedSurname;
-
-            public NamePartsRet(string surname, string name, string patronymic)
-            {
-                Surname = surname;
-                Name = name;
-                Patronymic = patronymic;
+            // first priority - local langID from name
+            if (personalName != null) {
+                langID = personalName.Language;
+            } else {
+                langID = GDMLanguageID.Unknown;
             }
 
-            public NamePartsRet(string maidenSurname, string marriedSurname, string name, string patronymic)
-            {
-                Surname = maidenSurname;
-                MarriedSurname = marriedSurname;
-                Name = name;
-                Patronymic = patronymic;
+            // second priority - global langID from tree
+            if (langID == GDMLanguageID.Unknown && iRec != null) {
+                GDMTree tree = iRec.GetTree();
+                if (tree != null) {
+                    langID = tree.Header.Language;
+                }
             }
+
+            return CulturesPool.DefineCulture(langID);
         }
 
         #endregion

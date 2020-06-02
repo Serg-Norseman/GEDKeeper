@@ -88,5 +88,20 @@ namespace GKCore
                 Assert.AreEqual("Федоровна", parts.Patronymic);
             }
         }
+
+        [Test]
+        public void Test_Names_03()
+        {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_names_03.ged")) {
+                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+                Assert.AreEqual("MaleName1 MaleName2 MaleSurname", iRec1.GetPrimaryFullName());
+                // std-surn exists and double, and sub-surn same
+                // sub-givn and sub-patn exists
+                var parts = GKUtils.GetNameParts(iRec1);
+                Assert.AreEqual("MaleSurname", parts.Surname);
+                Assert.AreEqual("MaleName1 MaleName2", parts.Name);
+            }
+        }
     }
 }

@@ -43,25 +43,7 @@ namespace GKUI.Forms
             set { txtFastFilter.Text = value; }
         }
 
-        public GDMSex NeedSex
-        {
-            get { return fController.Target.NeedSex; }
-            set { fController.Target.NeedSex = value; }
-        }
-
         public GDMRecord ResultRecord { get; set; }
-
-        public GDMIndividualRecord TargetIndividual
-        {
-            get { return fController.Target.TargetIndividual; }
-            set { fController.Target.TargetIndividual = value; }
-        }
-
-        public TargetMode TargetMode
-        {
-            get { return fController.Target.TargetMode; }
-            set { fController.Target.TargetMode = value; }
-        }
 
         #region View Interface
 
@@ -91,6 +73,7 @@ namespace GKUI.Forms
             fController.RecType = recType;
 
             UpdateRecordsView();
+            FastFilter = "*";
         }
 
         protected override void Dispose(bool disposing)
@@ -142,6 +125,11 @@ namespace GKUI.Forms
         private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
             fController.Filter = txtFastFilter.Text;
+        }
+
+        public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex)
+        {
+            fController.SetTarget(mode, target, needSex);
         }
     }
 }

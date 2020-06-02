@@ -78,7 +78,7 @@ namespace GKCore
             {
                 GDMLanguageID langID = fTree.Header.Language;
                 if (fCulture == null || fCulture.Language != langID) {
-                    fCulture = GetCultureByLang(langID);
+                    fCulture = CulturesPool.DefineCulture(langID);
                 }
                 return fCulture;
             }
@@ -538,63 +538,6 @@ namespace GKCore
         #endregion
 
         #region Name and sex functions
-
-        public static ICulture GetCultureByLang(GDMLanguageID langID)
-        {
-            ICulture culture;
-            switch (langID) {
-                case GDMLanguageID.Russian:
-                case GDMLanguageID.Ukrainian:
-                case GDMLanguageID.Kazakh:
-                    culture = new RussianCulture();
-                    break;
-
-                case GDMLanguageID.Polish:
-                    culture = new PolishCulture();
-                    break;
-
-                case GDMLanguageID.German:
-                    culture = new GermanCulture();
-                    break;
-
-                case GDMLanguageID.Swedish:
-                    culture = new SwedishCulture();
-                    break;
-
-                case GDMLanguageID.Icelandic:
-                    culture = new IcelandCulture();
-                    break;
-
-                case GDMLanguageID.Armenian:
-                    culture = new ArmenianCulture();
-                    break;
-
-                case GDMLanguageID.Turkish:
-                    culture = new TurkishCulture();
-                    break;
-
-                case GDMLanguageID.French:
-                    culture = new FrenchCulture();
-                    break;
-
-                case GDMLanguageID.Italian:
-                    culture = new ItalianCulture();
-                    break;
-
-                case GDMLanguageID.Cantonese:
-                case GDMLanguageID.Mandrin:
-                    culture = new ChineseCulture();
-                    break;
-
-                case GDMLanguageID.English:
-                default:
-                    culture = new BritishCulture();
-                    break;
-            }
-
-            culture.Language = langID;
-            return culture;
-        }
 
         public string DefinePatronymic(string name, GDMSex sex, bool confirm)
         {
@@ -1681,9 +1624,7 @@ namespace GKCore
 
             try {
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtFamily)) {
-                    dlg.TargetIndividual = target;
-                    dlg.NeedSex = GDMSex.svUnknown;
-                    dlg.TargetMode = TargetMode.tmFamilyChild;
+                    dlg.SetTarget(TargetMode.tmFamilyChild, target, GDMSex.svUnknown);
                     dlg.FastFilter = "*";
 
                     if (AppHost.Instance.ShowModalX(dlg, false)) {
@@ -1706,9 +1647,7 @@ namespace GKCore
 
             try {
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtIndividual)) {
-                    dlg.TargetIndividual = target;
-                    dlg.NeedSex = needSex;
-                    dlg.TargetMode = targetMode;
+                    dlg.SetTarget(targetMode, target, needSex);
                     dlg.FastFilter = "*";
 
                     if (AppHost.Instance.ShowModalX(dlg, false)) {

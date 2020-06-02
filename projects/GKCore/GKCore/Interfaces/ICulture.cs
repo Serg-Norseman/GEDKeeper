@@ -19,6 +19,7 @@
  */
 
 using GDModel;
+using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
@@ -47,5 +48,7 @@ namespace GKCore.Interfaces
 
         string GetPossessiveName(string name);
         string GetPossessiveName(GDMIndividualRecord iRec);
+
+        NamePartsRet GetNameParts(GDMPersonalName personalName);
     }
 }
