@@ -130,6 +130,7 @@
             this.txtProxyLogin = new System.Windows.Forms.TextBox();
             this.txtProxyPass = new System.Windows.Forms.TextBox();
             this.grpOther = new System.Windows.Forms.GroupBox();
+            this.chkDialogClosingWarn = new System.Windows.Forms.CheckBox();
             this.chkCharsetDetection = new System.Windows.Forms.CheckBox();
             this.chkAutoCheckUpdates = new System.Windows.Forms.CheckBox();
             this.chkLoadRecentFiles = new System.Windows.Forms.CheckBox();
@@ -149,6 +150,8 @@
             this.pageCharts = new System.Windows.Forms.TabPage();
             this.tabsCharts = new System.Windows.Forms.TabControl();
             this.pageTreeChart = new System.Windows.Forms.TabPage();
+            this.numDefaultDepth = new System.Windows.Forms.NumericUpDown();
+            this.lblDefaultDepth = new System.Windows.Forms.Label();
             this.grpSpacings = new System.Windows.Forms.GroupBox();
             this.numSpouseDist = new System.Windows.Forms.NumericUpDown();
             this.numGenDist = new System.Windows.Forms.NumericUpDown();
@@ -240,8 +243,6 @@
             this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.numDefaultDepth = new System.Windows.Forms.NumericUpDown();
-            this.lblDefaultDepth = new System.Windows.Forms.Label();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -254,6 +255,7 @@
             this.pageCharts.SuspendLayout();
             this.tabsCharts.SuspendLayout();
             this.pageTreeChart.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepth)).BeginInit();
             this.grpSpacings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSpouseDist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGenDist)).BeginInit();
@@ -280,7 +282,6 @@
             this.grpPedigree.SuspendLayout();
             this.grpPedigreeFormat.SuspendLayout();
             this.pagePlugins.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepth)).BeginInit();
             this.SuspendLayout();
             // 
             // PageControl1
@@ -453,7 +454,7 @@
             // lblGeocoder
             // 
             this.lblGeocoder.AutoSize = true;
-            this.lblGeocoder.Location = new System.Drawing.Point(287, 392);
+            this.lblGeocoder.Location = new System.Drawing.Point(287, 413);
             this.lblGeocoder.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblGeocoder.Name = "lblGeocoder";
             this.lblGeocoder.Size = new System.Drawing.Size(63, 13);
@@ -463,7 +464,7 @@
             // lblLanguage
             // 
             this.lblLanguage.AutoSize = true;
-            this.lblLanguage.Location = new System.Drawing.Point(9, 392);
+            this.lblLanguage.Location = new System.Drawing.Point(9, 413);
             this.lblLanguage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblLanguage.Name = "lblLanguage";
             this.lblLanguage.Size = new System.Drawing.Size(64, 13);
@@ -576,6 +577,7 @@
             // 
             // grpOther
             // 
+            this.grpOther.Controls.Add(this.chkDialogClosingWarn);
             this.grpOther.Controls.Add(this.chkCharsetDetection);
             this.grpOther.Controls.Add(this.chkAutoCheckUpdates);
             this.grpOther.Controls.Add(this.chkLoadRecentFiles);
@@ -584,10 +586,20 @@
             this.grpOther.Margin = new System.Windows.Forms.Padding(2);
             this.grpOther.Name = "grpOther";
             this.grpOther.Padding = new System.Windows.Forms.Padding(8);
-            this.grpOther.Size = new System.Drawing.Size(572, 145);
+            this.grpOther.Size = new System.Drawing.Size(572, 162);
             this.grpOther.TabIndex = 2;
             this.grpOther.TabStop = false;
             this.grpOther.Text = "grpOther";
+            // 
+            // chkDialogClosingWarn
+            // 
+            this.chkDialogClosingWarn.AutoSize = true;
+            this.chkDialogClosingWarn.Location = new System.Drawing.Point(16, 129);
+            this.chkDialogClosingWarn.Margin = new System.Windows.Forms.Padding(8, 8, 8, 0);
+            this.chkDialogClosingWarn.Name = "chkDialogClosingWarn";
+            this.chkDialogClosingWarn.Size = new System.Drawing.Size(131, 17);
+            this.chkDialogClosingWarn.TabIndex = 9;
+            this.chkDialogClosingWarn.Text = "chkDialogClosingWarn";
             // 
             // chkCharsetDetection
             // 
@@ -636,7 +648,7 @@
             "Google",
             "Yandex",
             "OSM"});
-            this.cmbGeocoder.Location = new System.Drawing.Point(376, 389);
+            this.cmbGeocoder.Location = new System.Drawing.Point(376, 410);
             this.cmbGeocoder.Margin = new System.Windows.Forms.Padding(2);
             this.cmbGeocoder.Name = "cmbGeocoder";
             this.cmbGeocoder.Size = new System.Drawing.Size(185, 21);
@@ -645,7 +657,7 @@
             // cmbLanguages
             // 
             this.cmbLanguages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbLanguages.Location = new System.Drawing.Point(83, 389);
+            this.cmbLanguages.Location = new System.Drawing.Point(83, 410);
             this.cmbLanguages.Margin = new System.Windows.Forms.Padding(2);
             this.cmbLanguages.Name = "cmbLanguages";
             this.cmbLanguages.Size = new System.Drawing.Size(185, 21);
@@ -800,6 +812,38 @@
             this.pageTreeChart.Size = new System.Drawing.Size(567, 423);
             this.pageTreeChart.TabIndex = 3;
             this.pageTreeChart.Text = "pageTreeChart";
+            // 
+            // numDefaultDepth
+            // 
+            this.numDefaultDepth.Location = new System.Drawing.Point(511, 358);
+            this.numDefaultDepth.Maximum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.numDefaultDepth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.numDefaultDepth.Name = "numDefaultDepth";
+            this.numDefaultDepth.Size = new System.Drawing.Size(39, 21);
+            this.numDefaultDepth.TabIndex = 11;
+            this.numDefaultDepth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            // 
+            // lblDefaultDepth
+            // 
+            this.lblDefaultDepth.AutoSize = true;
+            this.lblDefaultDepth.Location = new System.Drawing.Point(347, 360);
+            this.lblDefaultDepth.Margin = new System.Windows.Forms.Padding(8, 0, 0, 4);
+            this.lblDefaultDepth.Name = "lblDefaultDepth";
+            this.lblDefaultDepth.Size = new System.Drawing.Size(81, 13);
+            this.lblDefaultDepth.TabIndex = 10;
+            this.lblDefaultDepth.Text = "lblDefaultDepth";
             // 
             // grpSpacings
             // 
@@ -1827,38 +1871,6 @@
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // numDefaultDepth
-            // 
-            this.numDefaultDepth.Location = new System.Drawing.Point(511, 358);
-            this.numDefaultDepth.Maximum = new decimal(new int[] {
-            9,
-            0,
-            0,
-            0});
-            this.numDefaultDepth.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
-            this.numDefaultDepth.Name = "numDefaultDepth";
-            this.numDefaultDepth.Size = new System.Drawing.Size(39, 21);
-            this.numDefaultDepth.TabIndex = 11;
-            this.numDefaultDepth.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
-            // 
-            // lblDefaultDepth
-            // 
-            this.lblDefaultDepth.AutoSize = true;
-            this.lblDefaultDepth.Location = new System.Drawing.Point(347, 360);
-            this.lblDefaultDepth.Margin = new System.Windows.Forms.Padding(8, 0, 0, 4);
-            this.lblDefaultDepth.Name = "lblDefaultDepth";
-            this.lblDefaultDepth.Size = new System.Drawing.Size(81, 13);
-            this.lblDefaultDepth.TabIndex = 10;
-            this.lblDefaultDepth.Text = "lblDefaultDepth";
-            // 
             // OptionsDlg
             // 
             this.AcceptButton = this.btnAccept;
@@ -1897,6 +1909,7 @@
             this.tabsCharts.ResumeLayout(false);
             this.pageTreeChart.ResumeLayout(false);
             this.pageTreeChart.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepth)).EndInit();
             this.grpSpacings.ResumeLayout(false);
             this.grpSpacings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSpouseDist)).EndInit();
@@ -1925,7 +1938,6 @@
             this.grpPedigree.ResumeLayout(false);
             this.grpPedigreeFormat.ResumeLayout(false);
             this.pagePlugins.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepth)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1966,5 +1978,6 @@
         private System.Windows.Forms.CheckBox chkFirstCapitalLetterInNames;
         private System.Windows.Forms.NumericUpDown numDefaultDepth;
         private System.Windows.Forms.Label lblDefaultDepth;
+        private System.Windows.Forms.CheckBox chkDialogClosingWarn;
     }
 }

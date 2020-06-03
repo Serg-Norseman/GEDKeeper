@@ -26,7 +26,6 @@ using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
@@ -215,11 +214,13 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("FamilyEditDlg.btnCancel_Click(): " + ex.Message);
-            }
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
 
         public void SetTarget(TargetMode targetType, GDMIndividualRecord target)

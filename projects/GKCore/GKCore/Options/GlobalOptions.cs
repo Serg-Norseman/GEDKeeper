@@ -91,6 +91,7 @@ namespace GKCore.Options
         private bool fAutoSortSpouses;
         private bool fCharsetDetection;
         private bool fCheckTreeSize;
+        private bool fDialogClosingWarn;
         private bool fFirstCapitalLetterInNames;
         private readonly ListOptionsCollection fListOptions;
         private bool fReadabilityHighlightRows;
@@ -105,9 +106,70 @@ namespace GKCore.Options
         }
 
 
-        public TreeChartOptions TreeChartOptions
+        public bool AllowDeleteMediaFileFromStgArc
         {
-            get { return fTreeChartOptions; }
+            get { return fAllowDeleteMediaFileFromStgArc; }
+            set { fAllowDeleteMediaFileFromStgArc = value; }
+        }
+
+        public bool AllowDeleteMediaFileFromRefs
+        {
+            get { return fAllowDeleteMediaFileFromRefs; }
+            set { fAllowDeleteMediaFileFromRefs = value; }
+        }
+
+        public bool AllowMediaStoreReferences
+        {
+            get { return fAllowMediaStoreReferences; }
+            set { fAllowMediaStoreReferences = value; }
+        }
+
+        public bool AllowMediaStoreRelativeReferences
+        {
+            get { return fAllowMediaStoreRelativeReferences; }
+            set { fAllowMediaStoreRelativeReferences = value; }
+        }
+
+        public bool AutoCheckUpdates
+        {
+            get { return fAutoCheckUpdates; }
+            set { fAutoCheckUpdates = value; }
+        }
+
+        public bool Autosave
+        {
+            get { return fAutosave; }
+            set { fAutosave = value; }
+        }
+
+        public int AutosaveInterval
+        {
+            get { return fAutosaveInterval; }
+            set { fAutosaveInterval = value; }
+        }
+
+        public bool AutoSortChildren
+        {
+            get { return fAutoSortChildren; }
+            set { fAutoSortChildren = value; }
+        }
+
+        public bool AutoSortSpouses
+        {
+            get { return fAutoSortSpouses; }
+            set { fAutoSortSpouses = value; }
+        }
+
+        public bool CharsetDetection
+        {
+            get { return fCharsetDetection; }
+            set { fCharsetDetection = value; }
+        }
+
+        public bool CheckTreeSize
+        {
+            get { return fCheckTreeSize; }
+            set { fCheckTreeSize = value; }
         }
 
         public CircleChartOptions CircleChartOptions
@@ -126,21 +188,70 @@ namespace GKCore.Options
             set { fDefDateFormat = value; }
         }
 
-        public bool ShowDatesSign
-        {
-            get { return fShowDatesSign; }
-            set { fShowDatesSign = value; }
-        }
-
         public NameFormat DefNameFormat
         {
             get { return fDefNameFormat; }
             set { fDefNameFormat = value; }
         }
 
+        public bool DeleteMediaFileWithoutConfirm
+        {
+            get { return fDeleteMediaFileWithoutConfirm; }
+            set { fDeleteMediaFileWithoutConfirm = value; }
+        }
+
+        public bool DialogClosingWarn
+        {
+            get { return fDialogClosingWarn; }
+            set { fDialogClosingWarn = value; }
+        }
+
+        public bool EmbeddedMediaPlayer
+        {
+            get { return fEmbeddedMediaPlayer; }
+            set { fEmbeddedMediaPlayer = value; }
+        }
+
         public StringList EventFilters
         {
             get { return fEventFilters; }
+        }
+
+        // TODO: Need to make a decision on additional types of names:
+        // religious and according to the census (see GDMPersonalNamePieces)
+        public bool ExtendedNames
+        {
+            get { return fExtendedNames; }
+            set { fExtendedNames = value; }
+        }
+
+        public FileBackup FileBackup
+        {
+            get { return fFileBackup; }
+            set { fFileBackup = value; }
+        }
+
+        public int FileBackupEachRevisionMaxCount
+        {
+            get { return fFileBackupEachRevisionMaxCount; }
+            set { fFileBackupEachRevisionMaxCount = value; }
+        }
+
+        public bool FirstCapitalLetterInNames
+        {
+            get { return fFirstCapitalLetterInNames; }
+            set { fFirstCapitalLetterInNames = value; }
+        }
+
+        public string Geocoder
+        {
+            get { return fGeocoder; }
+            set { fGeocoder = value; }
+        }
+
+        public ListColumns IndividualListColumns
+        {
+            get { return fIndividualListColumns; }
         }
 
         public int InterfaceLang
@@ -149,10 +260,44 @@ namespace GKCore.Options
             set { fInterfaceLang = value; }
         }
 
+        public IList<LangRecord> Languages
+        {
+            get { return fLanguages; }
+        }
+
         public string LastDir
         {
             get { return fLastDir; }
             set { fLastDir = value; }
+        }
+
+        public bool ListHighlightUnmarriedPersons
+        {
+            get { return fListHighlightUnmarriedPersons; }
+            set { fListHighlightUnmarriedPersons = value; }
+        }
+
+        public bool ListHighlightUnparentedPersons
+        {
+            get { return fListHighlightUnparentedPersons; }
+            set { fListHighlightUnparentedPersons = value; }
+        }
+
+        public ListOptionsCollection ListOptions
+        {
+            get { return fListOptions; }
+        }
+
+        public bool LoadRecentFiles
+        {
+            get { return fLoadRecentFiles; }
+            set { fLoadRecentFiles = value; }
+        }
+
+        public int MediaStoreDefault
+        {
+            get { return fMediaStoreDefault; }
+            set { fMediaStoreDefault = value; }
         }
 
         public List<MRUFile> MRUFiles
@@ -193,189 +338,15 @@ namespace GKCore.Options
             get { return fProxy; }
         }
 
-        public StringList Relations
-        {
-            get { return fRelations; }
-        }
-
-        public StringList ResidenceFilters
-        {
-            get { return fResidenceFilters; }
-        }
-
-        public FileBackup FileBackup
-        {
-            get { return fFileBackup; }
-            set { fFileBackup = value; }
-        }
-
-        public int FileBackupEachRevisionMaxCount
-        {
-            get { return fFileBackupEachRevisionMaxCount; }
-            set { fFileBackupEachRevisionMaxCount = value; }
-        }
-
-        public bool ShowTips
-        {
-            get { return fShowTips; }
-            set { fShowTips = value; }
-        }
-
-        public bool ListHighlightUnmarriedPersons
-        {
-            get { return fListHighlightUnmarriedPersons; }
-            set { fListHighlightUnmarriedPersons = value; }
-        }
-
-        public bool ListHighlightUnparentedPersons
-        {
-            get { return fListHighlightUnparentedPersons; }
-            set { fListHighlightUnparentedPersons = value; }
-        }
-
-        public ListColumns IndividualListColumns
-        {
-            get { return fIndividualListColumns; }
-        }
-
-        public bool ShowDatesCalendar
-        {
-            get { return fShowDatesCalendar; }
-            set { fShowDatesCalendar = value; }
-        }
-
-        public bool Autosave
-        {
-            get { return fAutosave; }
-            set { fAutosave = value; }
-        }
-
-        public int AutosaveInterval
-        {
-            get { return fAutosaveInterval; }
-            set { fAutosaveInterval = value; }
-        }
-
-        // TODO: Need to make a decision on additional types of names:
-        // religious and according to the census (see GDMPersonalNamePieces)
-        public bool ExtendedNames
-        {
-            get { return fExtendedNames; }
-            set { fExtendedNames = value; }
-        }
-
-        public WomanSurnameFormat WomanSurnameFormat
-        {
-            get { return fWomanSurnameFormat; }
-            set { fWomanSurnameFormat = value; }
-        }
-
-
-
-        public bool AllowMediaStoreReferences
-        {
-            get { return fAllowMediaStoreReferences; }
-            set { fAllowMediaStoreReferences = value; }
-        }
-
-        public bool AllowMediaStoreRelativeReferences
-        {
-            get { return fAllowMediaStoreRelativeReferences; }
-            set { fAllowMediaStoreRelativeReferences = value; }
-        }
-
-        public int MediaStoreDefault
-        {
-            get { return fMediaStoreDefault; }
-            set { fMediaStoreDefault = value; }
-        }
-
-        public bool AllowDeleteMediaFileFromStgArc
-        {
-            get { return fAllowDeleteMediaFileFromStgArc; }
-            set { fAllowDeleteMediaFileFromStgArc = value; }
-        }
-
-        public bool AllowDeleteMediaFileFromRefs
-        {
-            get { return fAllowDeleteMediaFileFromRefs; }
-            set { fAllowDeleteMediaFileFromRefs = value; }
-        }
-
-        public bool DeleteMediaFileWithoutConfirm
-        {
-            get { return fDeleteMediaFileWithoutConfirm; }
-            set { fDeleteMediaFileWithoutConfirm = value; }
-        }
-
-        public bool AutoCheckUpdates
-        {
-            get { return fAutoCheckUpdates; }
-            set { fAutoCheckUpdates = value; }
-        }
-
-        public bool AutoSortChildren
-        {
-            get { return fAutoSortChildren; }
-            set { fAutoSortChildren = value; }
-        }
-
-        public bool AutoSortSpouses
-        {
-            get { return fAutoSortSpouses; }
-            set { fAutoSortSpouses = value; }
-        }
-
-        public bool CharsetDetection
-        {
-            get { return fCharsetDetection; }
-            set { fCharsetDetection = value; }
-        }
-
-        public bool CheckTreeSize
-        {
-            get { return fCheckTreeSize; }
-            set { fCheckTreeSize = value; }
-        }
-
-        public bool EmbeddedMediaPlayer
-        {
-            get { return fEmbeddedMediaPlayer; }
-            set { fEmbeddedMediaPlayer = value; }
-        }
-
-        public bool FirstCapitalLetterInNames
-        {
-            get { return fFirstCapitalLetterInNames; }
-            set { fFirstCapitalLetterInNames = value; }
-        }
-
-        public string Geocoder
-        {
-            get { return fGeocoder; }
-            set { fGeocoder = value; }
-        }
-
-        public IList<LangRecord> Languages
-        {
-            get { return fLanguages; }
-        }
-
-        public ListOptionsCollection ListOptions
-        {
-            get { return fListOptions; }
-        }
-
-        public bool LoadRecentFiles
-        {
-            get { return fLoadRecentFiles; }
-            set { fLoadRecentFiles = value; }
-        }
-
         public bool ReadabilityHighlightRows
         {
             get { return fReadabilityHighlightRows; }
             set { fReadabilityHighlightRows = value; }
+        }
+
+        public StringList Relations
+        {
+            get { return fRelations; }
         }
 
         public bool RemovableMediaWarning
@@ -384,10 +355,44 @@ namespace GKCore.Options
             set { fRemovableMediaWarning = value; }
         }
 
+        public StringList ResidenceFilters
+        {
+            get { return fResidenceFilters; }
+        }
+
+        public bool ShowDatesCalendar
+        {
+            get { return fShowDatesCalendar; }
+            set { fShowDatesCalendar = value; }
+        }
+
+        public bool ShowDatesSign
+        {
+            get { return fShowDatesSign; }
+            set { fShowDatesSign = value; }
+        }
+
+        public bool ShowTips
+        {
+            get { return fShowTips; }
+            set { fShowTips = value; }
+        }
+
+        public TreeChartOptions TreeChartOptions
+        {
+            get { return fTreeChartOptions; }
+        }
+
         public bool UseExtendedNotes
         {
             get { return fUseExtendedNotes; }
             set { fUseExtendedNotes = value; }
+        }
+
+        public WomanSurnameFormat WomanSurnameFormat
+        {
+            get { return fWomanSurnameFormat; }
+            set { fWomanSurnameFormat = value; }
         }
 
 
@@ -661,6 +666,7 @@ namespace GKCore.Options
             fAutoSortSpouses = ini.ReadBool("Common", "AutoSortSpouses", false);
             fCharsetDetection = ini.ReadBool("Common", "CharsetDetection", false);
             fFirstCapitalLetterInNames = ini.ReadBool("Common", "FirstCapitalLetterInNames", false);
+            fDialogClosingWarn = ini.ReadBool("Common", "DialogClosingWarn", false);
 
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -778,6 +784,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "AutoSortSpouses", fAutoSortSpouses);
             ini.WriteBool("Common", "CharsetDetection", fCharsetDetection);
             ini.WriteBool("Common", "FirstCapitalLetterInNames", fFirstCapitalLetterInNames);
+            ini.WriteBool("Common", "DialogClosingWarn", fDialogClosingWarn);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 

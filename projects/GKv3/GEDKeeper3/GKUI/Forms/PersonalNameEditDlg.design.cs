@@ -117,7 +117,7 @@ namespace GKUI.Forms
             btnCancel.ImagePosition = ButtonImagePosition.Left;
             btnCancel.Size = UIHelper.LongButtonSize;
             btnCancel.Text = "btnCancel";
-            btnCancel.Click += CancelClickHandler;
+            btnCancel.Click += btnCancel_Click;
 
             var panel = new TableLayout {
                 Padding = new Padding(0),

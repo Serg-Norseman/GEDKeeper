@@ -239,6 +239,7 @@ namespace GKUI.Forms
 
             numBackupRevisionsMaxCount.Value = fOptions.FileBackupEachRevisionMaxCount;
             chkFirstCapitalLetterInNames.Checked = fOptions.FirstCapitalLetterInNames;
+            chkDialogClosingWarn.Checked = fOptions.DialogClosingWarn;
 
             numDefaultDepth.Value = fOptions.TreeChartOptions.DepthLimit;
         }
@@ -465,6 +466,7 @@ namespace GKUI.Forms
 
             fOptions.FileBackupEachRevisionMaxCount = (int)numBackupRevisionsMaxCount.Value;
             fOptions.FirstCapitalLetterInNames = chkFirstCapitalLetterInNames.Checked.GetValueOrDefault();
+            fOptions.DialogClosingWarn = chkDialogClosingWarn.Checked.GetValueOrDefault();
 
             fOptions.TreeChartOptions.DepthLimit = (int)numDefaultDepth.Value;
 
@@ -657,6 +659,7 @@ namespace GKUI.Forms
             lblBackupRevisionsMaxCount.Text = LangMan.LS(LSID.LSID_BackupRevisionsMaxCount);
             chkFirstCapitalLetterInNames.Text = LangMan.LS(LSID.LSID_FirstCapitalLetterInNames);
             lblDefaultDepth.Text = LangMan.LS(LSID.LSID_DefaultDepth);
+            chkDialogClosingWarn.Text = LangMan.LS(LSID.LSID_WarnForClosingDialog);
         }
     }
 }

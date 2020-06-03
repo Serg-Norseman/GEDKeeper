@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
@@ -99,25 +100,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        private void edName_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Keys.Down && e.Control) {
-                UIHelper.ProcessName(sender);
-            } else if (e.KeyChar == '/') {
-                e.Handled = true;
-            }
-        }
-
-        private void txtXName_Leave(object sender, EventArgs e)
-        {
-            UIHelper.ProcessName(sender);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
         public PersonalNameEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
@@ -146,6 +128,36 @@ namespace GKUI.Forms
             lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
             lblType.Text = LangMan.LS(LSID.LSID_Type);
             lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
+        }
+
+        private void edName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Keys.Down && e.Control) {
+                UIHelper.ProcessName(sender);
+            } else if (e.KeyChar == '/') {
+                e.Handled = true;
+            }
+        }
+
+        private void txtXName_Leave(object sender, EventArgs e)
+        {
+            UIHelper.ProcessName(sender);
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

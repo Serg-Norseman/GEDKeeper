@@ -138,6 +138,7 @@ namespace GKUI.Forms
         private CheckBox chkFirstCapitalLetterInNames;
         private Label lblDefaultDepth;
         private NumericUpDown numDefaultDepth;
+        private CheckBox chkDialogClosingWarn;
 
         private void InitializeComponent()
         {
@@ -295,6 +296,9 @@ namespace GKUI.Forms
             cmbLanguages = new ComboBox();
             cmbLanguages.ReadOnly = true;
 
+            chkDialogClosingWarn = new CheckBox();
+            chkDialogClosingWarn.Text = "chkDialogClosingWarn";
+
             grpOther = new GroupBox();
             grpOther.Text = "grpOther";
             grpOther.Content = new DefTableLayout {
@@ -310,6 +314,9 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         Cells = { chkCharsetDetection }
+                    },
+                    new TableRow {
+                        Cells = { chkDialogClosingWarn }
                     },
                     new TableRow {
                         Cells = { lblLanguage, cmbLanguages }

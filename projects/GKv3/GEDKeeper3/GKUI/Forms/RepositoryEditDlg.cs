@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
@@ -57,26 +58,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        private void btnAddress_Click(object sender, EventArgs e)
-        {
-            fController.ModifyAddress();
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            try {
-                fController.Cancel();
-                CancelClickHandler(sender, e);
-            } catch (Exception ex) {
-                Logger.LogWrite("RepositoryEditDlg.btnCancel_Click(): " + ex.Message);
-            }
-        }
-
         public RepositoryEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
@@ -98,6 +79,27 @@ namespace GKUI.Forms
             fController.Init(baseWin);
 
             fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
+        }
+
+        private void btnAddress_Click(object sender, EventArgs e)
+        {
+            fController.ModifyAddress();
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

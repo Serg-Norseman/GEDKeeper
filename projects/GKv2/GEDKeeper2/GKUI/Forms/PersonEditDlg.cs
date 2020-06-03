@@ -206,6 +206,131 @@ namespace GKUI.Forms
 
         #endregion
 
+        public PersonEditDlg(IBaseWindow baseWin)
+        {
+            InitializeComponent();
+
+            txtMarriedSurname.TextChanged += Names_TextChanged;
+            txtSurname.TextChanged += Names_TextChanged;
+            txtName.TextChanged += Names_TextChanged;
+            cmbPatronymic.TextChanged += Names_TextChanged;
+
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            btnPortraitAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnPortraitDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnParentsAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
+            btnParentsDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnFatherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
+            btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnMotherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
+            btnNameCopy.Image = UIHelper.LoadResourceImage("Resources.btn_copy.gif");
+
+            fEventsList = new GKSheetList(pageEvents);
+            fEventsList.SetControlName("fEventsList"); // for purpose of tests
+
+            fSpousesList = new GKSheetList(pageSpouses);
+            fSpousesList.SetControlName("fSpousesList"); // for purpose of tests
+            fSpousesList.OnModify += ModifySpousesSheet;
+            fSpousesList.OnBeforeChange += BeforeChangeSpousesSheet;
+
+            fNamesList = new GKSheetList(pageNames);
+            fNamesList.OnModify += ModifyNamesSheet;
+            fNamesList.SetControlName("fNamesList"); // for purpose of tests
+
+            fAssociationsList = new GKSheetList(pageAssociations);
+            fAssociationsList.OnModify += ModifyAssociationsSheet;
+            fAssociationsList.SetControlName("fAssociationsList"); // for purpose of tests
+
+            fGroupsList = new GKSheetList(pageGroups);
+            fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
+            fGroupsList.OnModify += ModifyGroupsSheet;
+
+            fNotesList = new GKSheetList(pageNotes);
+            fNotesList.SetControlName("fNotesList"); // for purpose of tests
+
+            fMediaList = new GKSheetList(pageMultimedia);
+            fMediaList.SetControlName("fMediaList"); // for purpose of tests
+
+            fSourcesList = new GKSheetList(pageSources);
+            fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
+
+            fUserRefList = new GKSheetList(pageUserRefs);
+            fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
+
+            fParentsList = new GKSheetList(pageParents);
+            fParentsList.SetControlName("fParentsList"); // for purpose of tests
+            fParentsList.OnModify += ModifyParentsSheet;
+
+            imgPortrait.AddButton(btnPortraitAdd);
+            imgPortrait.AddButton(btnPortraitDelete);
+            imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
+
+            SetLang();
+
+            fController = new PersonEditDlgController(this);
+            fController.Init(baseWin);
+
+            fEventsList.ListModel = new EventsListModel(baseWin, fController.LocalUndoman, true);
+            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
+            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
+            fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
+            fAssociationsList.ListModel = new AssociationsListModel(baseWin, fController.LocalUndoman);
+
+            fGroupsList.ListModel = new GroupsSublistModel(baseWin, fController.LocalUndoman);
+            fNamesList.ListModel = new NamesSublistModel(baseWin, fController.LocalUndoman);
+            fSpousesList.ListModel = new SpousesSublistModel(baseWin, fController.LocalUndoman);
+            fUserRefList.ListModel = new URefsSublistModel(baseWin, fController.LocalUndoman);
+            fParentsList.ListModel = new ParentsSublistModel(baseWin, fController.LocalUndoman);
+        }
+
+        public void SetLang()
+        {
+            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            Text = LangMan.LS(LSID.LSID_WinPersonEdit);
+            lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
+            lblMarriedSurname.Text = LangMan.LS(LSID.LSID_MarriedSurname);
+            lblName.Text = LangMan.LS(LSID.LSID_Name);
+            lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
+            lblSex.Text = LangMan.LS(LSID.LSID_Sex);
+            lblNickname.Text = LangMan.LS(LSID.LSID_Nickname);
+            lblSurnamePrefix.Text = LangMan.LS(LSID.LSID_SurnamePrefix);
+            lblNamePrefix.Text = LangMan.LS(LSID.LSID_NamePrefix);
+            lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
+            chkPatriarch.Text = LangMan.LS(LSID.LSID_Patriarch);
+            chkBookmark.Text = LangMan.LS(LSID.LSID_Bookmark);
+            lblParents.Text = LangMan.LS(LSID.LSID_Parents);
+            pageEvents.Text = LangMan.LS(LSID.LSID_Events);
+            pageSpouses.Text = LangMan.LS(LSID.LSID_Spouses);
+            pageAssociations.Text = LangMan.LS(LSID.LSID_Associations);
+            pageGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
+            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
+            pageUserRefs.Text = LangMan.LS(LSID.LSID_UserRefs);
+            lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
+            pageNames.Text = LangMan.LS(LSID.LSID_Names);
+            pageParents.Text = LangMan.LS(LSID.LSID_Parents);
+
+            SetToolTip(btnPortraitAdd, LangMan.LS(LSID.LSID_PortraitAddTip));
+            SetToolTip(btnPortraitDelete, LangMan.LS(LSID.LSID_PortraitDeleteTip));
+            SetToolTip(btnParentsAdd, LangMan.LS(LSID.LSID_ParentsAddTip));
+            SetToolTip(btnParentsEdit, LangMan.LS(LSID.LSID_ParentsEditTip));
+            SetToolTip(btnParentsDelete, LangMan.LS(LSID.LSID_ParentsDeleteTip));
+            SetToolTip(btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
+            SetToolTip(btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
+            SetToolTip(btnFatherSel, LangMan.LS(LSID.LSID_FatherSelTip));
+            SetToolTip(btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
+            SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
+            SetToolTip(btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
+            SetToolTip(btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
+        }
+
         private void cbSex_SelectedIndexChanged(object sender, EventArgs e)
         {
             fController.ChangeSex();
@@ -256,11 +381,13 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlg.btnCancel_Click(): " + ex.Message);
-            }
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
@@ -404,131 +531,6 @@ namespace GKUI.Forms
         public void SetNeedSex(GDMSex needSex)
         {
             cmbSex.SelectedIndex = (int)needSex;
-        }
-
-        public PersonEditDlg(IBaseWindow baseWin)
-        {
-            InitializeComponent();
-
-            txtMarriedSurname.TextChanged += Names_TextChanged;
-            txtSurname.TextChanged += Names_TextChanged;
-            txtName.TextChanged += Names_TextChanged;
-            cmbPatronymic.TextChanged += Names_TextChanged;
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnPortraitAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnPortraitDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnParentsAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            btnParentsDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnFatherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnMotherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            btnNameCopy.Image = UIHelper.LoadResourceImage("Resources.btn_copy.gif");
-
-            fEventsList = new GKSheetList(pageEvents);
-            fEventsList.SetControlName("fEventsList"); // for purpose of tests
-
-            fSpousesList = new GKSheetList(pageSpouses);
-            fSpousesList.SetControlName("fSpousesList"); // for purpose of tests
-            fSpousesList.OnModify += ModifySpousesSheet;
-            fSpousesList.OnBeforeChange += BeforeChangeSpousesSheet;
-
-            fNamesList = new GKSheetList(pageNames);
-            fNamesList.OnModify += ModifyNamesSheet;
-            fNamesList.SetControlName("fNamesList"); // for purpose of tests
-
-            fAssociationsList = new GKSheetList(pageAssociations);
-            fAssociationsList.OnModify += ModifyAssociationsSheet;
-            fAssociationsList.SetControlName("fAssociationsList"); // for purpose of tests
-
-            fGroupsList = new GKSheetList(pageGroups);
-            fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
-            fGroupsList.OnModify += ModifyGroupsSheet;
-
-            fNotesList = new GKSheetList(pageNotes);
-            fNotesList.SetControlName("fNotesList"); // for purpose of tests
-
-            fMediaList = new GKSheetList(pageMultimedia);
-            fMediaList.SetControlName("fMediaList"); // for purpose of tests
-
-            fSourcesList = new GKSheetList(pageSources);
-            fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
-
-            fUserRefList = new GKSheetList(pageUserRefs);
-            fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
-
-            fParentsList = new GKSheetList(pageParents);
-            fParentsList.SetControlName("fParentsList"); // for purpose of tests
-            fParentsList.OnModify += ModifyParentsSheet;
-
-            imgPortrait.AddButton(btnPortraitAdd);
-            imgPortrait.AddButton(btnPortraitDelete);
-            imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
-
-            SetLang();
-
-            fController = new PersonEditDlgController(this);
-            fController.Init(baseWin);
-
-            fEventsList.ListModel = new EventsListModel(baseWin, fController.LocalUndoman, true);
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
-            fAssociationsList.ListModel = new AssociationsListModel(baseWin, fController.LocalUndoman);
-
-            fGroupsList.ListModel = new GroupsSublistModel(baseWin, fController.LocalUndoman);
-            fNamesList.ListModel = new NamesSublistModel(baseWin, fController.LocalUndoman);
-            fSpousesList.ListModel = new SpousesSublistModel(baseWin, fController.LocalUndoman);
-            fUserRefList.ListModel = new URefsSublistModel(baseWin, fController.LocalUndoman);
-            fParentsList.ListModel = new ParentsSublistModel(baseWin, fController.LocalUndoman);
-        }
-
-        public void SetLang()
-        {
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_WinPersonEdit);
-            lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
-            lblMarriedSurname.Text = LangMan.LS(LSID.LSID_MarriedSurname);
-            lblName.Text = LangMan.LS(LSID.LSID_Name);
-            lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
-            lblSex.Text = LangMan.LS(LSID.LSID_Sex);
-            lblNickname.Text = LangMan.LS(LSID.LSID_Nickname);
-            lblSurnamePrefix.Text = LangMan.LS(LSID.LSID_SurnamePrefix);
-            lblNamePrefix.Text = LangMan.LS(LSID.LSID_NamePrefix);
-            lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
-            chkPatriarch.Text = LangMan.LS(LSID.LSID_Patriarch);
-            chkBookmark.Text = LangMan.LS(LSID.LSID_Bookmark);
-            lblParents.Text = LangMan.LS(LSID.LSID_Parents);
-            pageEvents.Text = LangMan.LS(LSID.LSID_Events);
-            pageSpouses.Text = LangMan.LS(LSID.LSID_Spouses);
-            pageAssociations.Text = LangMan.LS(LSID.LSID_Associations);
-            pageGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            pageUserRefs.Text = LangMan.LS(LSID.LSID_UserRefs);
-            lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
-            pageNames.Text = LangMan.LS(LSID.LSID_Names);
-            pageParents.Text = LangMan.LS(LSID.LSID_Parents);
-
-            SetToolTip(btnPortraitAdd, LangMan.LS(LSID.LSID_PortraitAddTip));
-            SetToolTip(btnPortraitDelete, LangMan.LS(LSID.LSID_PortraitDeleteTip));
-            SetToolTip(btnParentsAdd, LangMan.LS(LSID.LSID_ParentsAddTip));
-            SetToolTip(btnParentsEdit, LangMan.LS(LSID.LSID_ParentsEditTip));
-            SetToolTip(btnParentsDelete, LangMan.LS(LSID.LSID_ParentsDeleteTip));
-            SetToolTip(btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
-            SetToolTip(btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
-            SetToolTip(btnFatherSel, LangMan.LS(LSID.LSID_FatherSelTip));
-            SetToolTip(btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
-            SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
-            SetToolTip(btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
-            SetToolTip(btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
         }
     }
 }

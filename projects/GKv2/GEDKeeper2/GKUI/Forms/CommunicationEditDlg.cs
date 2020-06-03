@@ -26,7 +26,6 @@ using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -84,25 +83,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("CommunicationEditDlg.btnCancel_Click(): " + ex.Message);
-            }
-        }
-
-        private void btnPersonAdd_Click(object sender, EventArgs e)
-        {
-            fController.SetPerson();
-        }
-
         public CommunicationEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
@@ -132,6 +112,27 @@ namespace GKUI.Forms
 
             fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
             fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }
+
+        private void btnPersonAdd_Click(object sender, EventArgs e)
+        {
+            fController.SetPerson();
         }
     }
 }

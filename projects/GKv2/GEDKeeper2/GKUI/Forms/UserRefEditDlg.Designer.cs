@@ -40,6 +40,7 @@
 			this.btnCancel.TabIndex = 5;
 			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 			// 
 			// lblReference
 			// 

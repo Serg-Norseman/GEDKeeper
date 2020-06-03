@@ -45,14 +45,11 @@ namespace GKCore.Operations
 
         public event TransactionEventHandler OnTransaction
         {
-            add
-            {
+            add {
                 fOnTransaction = value;
             }
-            remove
-            {
-                if (fOnTransaction == value)
-                {
+            remove {
+                if (fOnTransaction == value) {
                     fOnTransaction = null;
                 }
             }
@@ -64,7 +61,7 @@ namespace GKCore.Operations
             fList = new List<IOperation>();
             fCurrentIndex = -1;
 
-            IntPush(TRANS_DELIMITER);
+            PushInternal(TRANS_DELIMITER);
         }
 
         protected override void Dispose(bool disposing)
@@ -79,13 +76,12 @@ namespace GKCore.Operations
 
         private void Transaction(TransactionType type)
         {
-            if (fOnTransaction != null)
-            {
+            if (fOnTransaction != null) {
                 fOnTransaction(this, type);
             }
         }
 
-        private IOperation IntPeek()
+        private IOperation PeekInternal()
         {
             if (fCurrentIndex < 0 || fCurrentIndex >= fList.Count)
                 return null;
@@ -93,7 +89,7 @@ namespace GKCore.Operations
             return fList[fCurrentIndex];
         }
 
-        private void IntPush(IOperation op)
+        private void PushInternal(IOperation op)
         {
             fList.Add(op);
             fCurrentIndex++;
@@ -106,7 +102,7 @@ namespace GKCore.Operations
             fList.Clear();
             fCurrentIndex = -1;
 
-            IntPush(TRANS_DELIMITER);
+            PushInternal(TRANS_DELIMITER);
         }
 
         public bool DoOperation(IOperation operation)
@@ -115,20 +111,17 @@ namespace GKCore.Operations
 
             bool result;
 
-            if (!operation.Redo())
-            {
+            if (!operation.Redo()) {
                 Rollback();
                 result = false;
-            }
-            else
-            {
+            } else {
                 // cut off redo-items
                 int index = fCurrentIndex + 1;
                 if (index < fList.Count)
                     fList.RemoveRange(index, fList.Count - index);
 
                 // add new operation
-                IntPush(operation);
+                PushInternal(operation);
 
                 result = true;
             }
@@ -138,15 +131,12 @@ namespace GKCore.Operations
 
         public void Undo()
         {
-            if (fCurrentIndex >= 1)
-            {
-                if (IntPeek() == TRANS_DELIMITER)
-                {
+            if (fCurrentIndex >= 1) {
+                if (PeekInternal() == TRANS_DELIMITER) {
                     fCurrentIndex--;
                 }
 
-                while (IntPeek() != TRANS_DELIMITER)
-                {
+                while (PeekInternal() != TRANS_DELIMITER) {
                     IOperation cmd = fList[fCurrentIndex];
                     fCurrentIndex--;
                     cmd.Undo();
@@ -158,20 +148,16 @@ namespace GKCore.Operations
 
         public void Redo()
         {
-            if (fCurrentIndex < fList.Count - 1)
-            {
-                if (fList[fCurrentIndex] == TRANS_DELIMITER)
-                {
+            if (fCurrentIndex < fList.Count - 1) {
+                if (fList[fCurrentIndex] == TRANS_DELIMITER) {
                     fCurrentIndex++;
                 }
 
-                while (IntPeek() != TRANS_DELIMITER)
-                {
+                while (PeekInternal() != TRANS_DELIMITER) {
                     IOperation cmd = fList[fCurrentIndex];
                     fCurrentIndex++;
 
-                    if (!cmd.Redo())
-                    {
+                    if (!cmd.Redo()) {
                         Rollback();
                         return;
                     }
@@ -183,27 +169,30 @@ namespace GKCore.Operations
 
         public bool CanUndo()
         {
-            return fCurrentIndex > 0;
+            return (fCurrentIndex > 0);
         }
 
         public bool CanRedo()
         {
-            return fList.Count > 0 && fCurrentIndex < fList.Count - 1;
+            return (fList.Count > 0) && (fCurrentIndex < fList.Count - 1);
+        }
+
+        public bool HasChanges()
+        {
+            return (fCurrentIndex > 0) && (PeekInternal() != TRANS_DELIMITER);
         }
 
         public void Commit()
         {
-            if (IntPeek() != TRANS_DELIMITER)
-            {
-                IntPush(TRANS_DELIMITER);
+            if (PeekInternal() != TRANS_DELIMITER) {
+                PushInternal(TRANS_DELIMITER);
                 Transaction(TransactionType.taCommit);
             }
         }
 
         public void Rollback()
         {
-            while (IntPeek() != TRANS_DELIMITER)
-            {
+            while (PeekInternal() != TRANS_DELIMITER) {
                 IOperation cmd = fList[fCurrentIndex];
                 fCurrentIndex--;
                 cmd.Undo();

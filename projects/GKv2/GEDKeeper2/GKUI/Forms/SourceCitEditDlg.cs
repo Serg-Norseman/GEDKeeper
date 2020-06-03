@@ -25,7 +25,6 @@ using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -60,27 +59,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnSourceAdd_Click(object sender, EventArgs e)
-        {
-            fController.AddSource();
-        }
-
-        private void cbSource_KeyDown(object sender, KeyEventArgs e)
-        {
-            // dummy
-        }
-
-        private void cbSource_KeyUp(object sender, KeyEventArgs e)
-        {
-            fController.RefreshSourcesList(cmbSource.Text);
-            cmbSource.SelectionStart = cmbSource.Text.Length;
-        }
-
         public SourceCitEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
@@ -101,6 +79,38 @@ namespace GKUI.Forms
 
             fController = new SourceCitEditDlgController(this);
             fController.Init(baseWin);
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }
+
+        private void btnSourceAdd_Click(object sender, EventArgs e)
+        {
+            fController.AddSource();
+        }
+
+        private void cbSource_KeyDown(object sender, KeyEventArgs e)
+        {
+            // dummy
+        }
+
+        private void cbSource_KeyUp(object sender, KeyEventArgs e)
+        {
+            fController.RefreshSourcesList(cmbSource.Text);
+            cmbSource.SelectionStart = cmbSource.Text.Length;
         }
     }
 }
