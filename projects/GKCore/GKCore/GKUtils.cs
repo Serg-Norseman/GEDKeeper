@@ -592,6 +592,14 @@ namespace GKCore
 
         #region Date functions
 
+        /// <summary>
+        /// The result of the function is a "normalized date", delimited by '.' and fixed order of parts: "dd.mm.yyyy". 
+        /// The pattern and regional date contain the delimiter '/'. 
+        /// The pattern defines the position of the parts in a regional date format.
+        /// </summary>
+        /// <param name="regionalDate">date similar "01/20/1970"</param>
+        /// <param name="pattern">pattern similar "mm/dd/yyyy"</param>
+        /// <returns>normalized date as "dd.mm.yyyy"</returns>
         public static string GetNormalizeDate(string regionalDate, string pattern)
         {
             if (string.IsNullOrEmpty(regionalDate)) return string.Empty;
@@ -621,6 +629,14 @@ namespace GKCore
             return result;
         }
 
+        /// <summary>
+        /// The result of the function is a "regional date", delimited by '/' and regional order of parts: "mm/dd/yyyy" 
+        /// or any other. The pattern and regional date contain the delimiter '/'. 
+        /// The pattern defines the position of the parts in a regional date format.
+        /// </summary>
+        /// <param name="normalizeDate">date with format "dd.mm.yyyy"</param>
+        /// <param name="pattern">pattern similar "mm/dd/yyyy"</param>
+        /// <returns>regional date as "mm/dd/yyyy"</returns>
         public static string GetRegionalDate(string normalizeDate, string pattern)
         {
             if (string.IsNullOrEmpty(normalizeDate)) return string.Empty;

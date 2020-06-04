@@ -15,7 +15,7 @@ namespace GKUI.Forms
         private Label lblTheme;
         private TextBox txtName;
         private Label lblDate;
-        private MaskedTextBox txtDate;
+        private GKDateBox txtDate;
         private Label lblType;
         private ComboBox cmbCorrType;
         private ComboBox txtDir;
@@ -45,7 +45,7 @@ namespace GKUI.Forms
 
             txtName = new TextBox();
 
-            txtDate = new MaskedTextBox();
+            txtDate = new GKDateBox();
             txtDate.Provider = new FixedMaskedTextProvider("00/00/0000");
 
             cmbCorrType = new ComboBox();

@@ -27,6 +27,7 @@ using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -67,9 +68,9 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbCorrType); }
         }
 
-        ITextBox ICommunicationEditDlg.Date
+        IDateBox ICommunicationEditDlg.Date
         {
-            get { return GetControlHandler<ITextBox>(txtDate); }
+            get { return GetControlHandler<IDateBox>(txtDate); }
         }
 
         IComboBox ICommunicationEditDlg.Dir

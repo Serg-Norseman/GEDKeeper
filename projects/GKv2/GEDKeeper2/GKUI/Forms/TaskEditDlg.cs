@@ -26,6 +26,7 @@ using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -55,14 +56,14 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(txtPriority); }
         }
 
-        ITextBox ITaskEditDlg.StartDate
+        IDateBox ITaskEditDlg.StartDate
         {
-            get { return GetControlHandler<ITextBox>(txtStartDate); }
+            get { return GetControlHandler<IDateBox>(txtStartDate); }
         }
 
-        ITextBox ITaskEditDlg.StopDate
+        IDateBox ITaskEditDlg.StopDate
         {
-            get { return GetControlHandler<ITextBox>(txtStopDate); }
+            get { return GetControlHandler<IDateBox>(txtStopDate); }
         }
 
         IComboBox ITaskEditDlg.GoalType

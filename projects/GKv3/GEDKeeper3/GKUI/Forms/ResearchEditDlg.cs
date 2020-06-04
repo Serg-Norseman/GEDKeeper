@@ -27,6 +27,7 @@ using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
@@ -86,14 +87,14 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbStatus); }
         }
 
-        ITextBox IResearchEditDlg.StartDate
+        IDateBox IResearchEditDlg.StartDate
         {
-            get { return GetControlHandler<ITextBox>(txtStartDate); }
+            get { return GetControlHandler<IDateBox>(txtStartDate); }
         }
 
-        ITextBox IResearchEditDlg.StopDate
+        IDateBox IResearchEditDlg.StopDate
         {
-            get { return GetControlHandler<ITextBox>(txtStopDate); }
+            get { return GetControlHandler<IDateBox>(txtStopDate); }
         }
 
         INumericBox IResearchEditDlg.Percent

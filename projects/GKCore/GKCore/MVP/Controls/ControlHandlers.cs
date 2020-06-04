@@ -30,7 +30,7 @@ using GKCore.Stats;
 
 namespace GKCore.MVP.Controls
 {
-    public interface IDateBoxHandler : IBaseControl
+    public interface IDateBox : IBaseControl
     {
         string NormalizeDate { get; set; }
         bool ReadOnly { get; set; }

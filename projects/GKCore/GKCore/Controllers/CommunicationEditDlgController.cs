@@ -67,7 +67,7 @@ namespace GKCore.Controllers
             try {
                 fCommunication.CommName = fView.Name.Text;
                 fCommunication.CommunicationType = (GDMCommunicationType)fView.CorrType.SelectedIndex;
-                fCommunication.Date.Assign(GDMDate.CreateByFormattedStr(fView.Date.Text, true));
+                fCommunication.Date.Assign(GDMDate.CreateByFormattedStr(fView.Date.NormalizeDate, true));
                 fCommunication.SetCorresponder((GDMCommunicationDir)fView.Dir.SelectedIndex, fTempInd);
 
                 fBase.NotifyRecord(fCommunication, RecordAction.raEdit);
@@ -96,7 +96,7 @@ namespace GKCore.Controllers
                 } else {
                     fView.Name.Text = fCommunication.CommName;
                     fView.CorrType.SelectedIndex = (int)fCommunication.CommunicationType;
-                    fView.Date.Text = fCommunication.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                    fView.Date.NormalizeDate = fCommunication.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
                     fTempInd = fCommunication.Corresponder.Individual;
 

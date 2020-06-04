@@ -25,7 +25,7 @@ using GKUI.Components;
 
 namespace GKUI.Components
 {
-    public sealed class DateBoxHandler : BaseControlHandler<GKDateBox, DateBoxHandler>, IDateBoxHandler
+    public sealed class DateBoxHandler : BaseControlHandler<GKDateBox, DateBoxHandler>, IDateBox
     {
         public DateBoxHandler(GKDateBox control) : base(control)
         {
