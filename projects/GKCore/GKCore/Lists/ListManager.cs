@@ -134,8 +134,10 @@ namespace GKCore.Lists
         private int fXSortFactor;
         private int fTotalCount;
         private string fQuickFilter = "*";
+
         private string fMask;
-        private Regex fMaskRegex;
+        private Regex fRegexMask;
+        private string fSimpleMask;
 
 
         public List<ValItem> ContentList
@@ -208,14 +210,19 @@ namespace GKCore.Lists
                 return true;
             }
 
-            // regex has caching, but here cached also PrepareMask(...)
-            if (fMaskRegex == null || fMask != mask) {
+            if (fMask != mask) {
                 fMask = mask;
-                fMaskRegex = new Regex(GKUtils.PrepareMask(fMask), GKUtils.RegexOpts);
+                fSimpleMask = GetSimpleMask(fMask);
+                if (fSimpleMask == null) {
+                    fRegexMask = new Regex(GKUtils.PrepareMask(fMask), GKUtils.RegexOpts);
+                }
             }
 
-            // regex supports '|' (or) expression
-            return fMaskRegex.IsMatch(str, 0);
+            if (fSimpleMask != null) {
+                return str.IndexOf(fSimpleMask, StringComparison.OrdinalIgnoreCase) >= 0;
+            } else {
+                return fRegexMask.IsMatch(str, 0);
+            }
         }
 
         protected bool IsMatchesMask(StringList strList, string mask)
@@ -228,19 +235,41 @@ namespace GKCore.Lists
                 return true;
             }
 
-            // regex has caching, but here cached also PrepareMask(...)
-            if (fMaskRegex == null || fMask != mask) {
+            if (fMask != mask) {
                 fMask = mask;
-                fMaskRegex = new Regex(GKUtils.PrepareMask(fMask), GKUtils.RegexOpts);
+                fSimpleMask = GetSimpleMask(fMask);
+                if (fSimpleMask == null) {
+                    fRegexMask = new Regex(GKUtils.PrepareMask(fMask), GKUtils.RegexOpts);
+                }
             }
 
             for (int i = 0; i < strList.Count; i++) {
-                // regex supports '|' (or) expression
-                bool res = fMaskRegex.IsMatch(strList[i], 0);
+                string str = strList[i];
+
+                bool res;
+                if (fSimpleMask != null) {
+                    res = str.IndexOf(fSimpleMask, StringComparison.OrdinalIgnoreCase) >= 0;
+                } else {
+                    res = fRegexMask.IsMatch(str, 0);
+                }
+
                 if (res) return true;
             }
 
             return false;
+        }
+
+        private readonly static char[] SpecialChars = new char[] { '*', '?', '|' };
+
+        private static string GetSimpleMask(string mask)
+        {
+            int len = mask.Length;
+            if (len > 2 && mask[0] == '*' && mask[len - 1] == '*') {
+                string subStr = mask.Substring(1, len - 2);
+                return (subStr.IndexOfAny(SpecialChars) >= 0) ? null : subStr;
+            } else {
+                return null;
+            }
         }
 
         public virtual bool CheckFilter()
