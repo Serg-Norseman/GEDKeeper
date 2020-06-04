@@ -58,8 +58,7 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = (fBaseContext.IsRecordAccess(fRec.Restriction)
-                        && (QuickFilter == "*" || IsMatchesMask(GKUtils.GetFamilyString(fRec), QuickFilter)));
+            bool res = (fBaseContext.IsRecordAccess(fRec.Restriction) && IsMatchesMask(GKUtils.GetFamilyString(fRec), QuickFilter));
 
             res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
 

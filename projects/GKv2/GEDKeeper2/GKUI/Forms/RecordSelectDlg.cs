@@ -140,7 +140,7 @@ namespace GKUI.Forms
         private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
             if (fChangeTimer == null) {
-                fChangeTimer = new System.Timers.Timer(1000);
+                fChangeTimer = new System.Timers.Timer(500);
                 fChangeTimer.AutoReset = false;
                 fChangeTimer.Elapsed += (sdr, args) => { BeginInvoke(new UpdateDelegate(fController.UpdateView)); };
             } else {

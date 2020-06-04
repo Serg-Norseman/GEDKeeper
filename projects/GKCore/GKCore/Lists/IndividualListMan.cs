@@ -216,7 +216,7 @@ namespace GKCore.Lists
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
             if ((iFilter.Sex == GDMSex.svUnknown || fRec.Sex == iFilter.Sex)
-                && (iFilter.Name == "*" || IsMatchesMask(buf_fullname, iFilter.Name))
+                && (IsMatchesMask(buf_fullname, iFilter.Name))
                 && (iFilter.Residence == "*" || HasPlace())
                 && (iFilter.EventVal == "*" || HasEventVal())
                 && (!iFilter.PatriarchOnly || fRec.Patriarch))
@@ -287,8 +287,7 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = (fBaseContext.IsRecordAccess(fRec.Restriction)
-                        && (QuickFilter == "*" || IsMatchesMask(buf_fullname, QuickFilter)));
+            bool res = (fBaseContext.IsRecordAccess(fRec.Restriction) && IsMatchesMask(buf_fullname, QuickFilter));
 
             res = res && CheckCommonFilter() && CheckExternalFilter(fRec) && CheckSpecificFilter();
 

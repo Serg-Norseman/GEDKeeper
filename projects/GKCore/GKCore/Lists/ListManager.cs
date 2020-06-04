@@ -218,6 +218,31 @@ namespace GKCore.Lists
             return fMaskRegex.IsMatch(str, 0);
         }
 
+        protected bool IsMatchesMask(StringList strList, string mask)
+        {
+            if (strList == null || strList.IsEmpty() || string.IsNullOrEmpty(mask)) {
+                return false;
+            }
+
+            if (mask == "*") {
+                return true;
+            }
+
+            // regex has caching, but here cached also PrepareMask(...)
+            if (fMaskRegex == null || fMask != mask) {
+                fMask = mask;
+                fMaskRegex = new Regex(GKUtils.PrepareMask(fMask), GKUtils.RegexOpts);
+            }
+
+            for (int i = 0; i < strList.Count; i++) {
+                // regex supports '|' (or) expression
+                bool res = fMaskRegex.IsMatch(strList[i], 0);
+                if (res) return true;
+            }
+
+            return false;
+        }
+
         public virtual bool CheckFilter()
         {
             return true;
