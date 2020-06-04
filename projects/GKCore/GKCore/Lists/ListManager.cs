@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -200,19 +200,22 @@ namespace GKCore.Lists
 
         protected bool IsMatchesMask(string str, string mask)
         {
-            bool result = false;
-            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(mask)) return result;
+            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(mask)) {
+                return false;
+            }
+
+            if (mask == "*") {
+                return true;
+            }
 
             // regex has caching, but here cached also PrepareMask(...)
             if (fMaskRegex == null || fMask != mask) {
                 fMask = mask;
-                fMaskRegex = GKUtils.InitMaskRegex(fMask);
+                fMaskRegex = new Regex(GKUtils.PrepareMask(fMask), GKUtils.RegexOpts);
             }
 
             // regex supports '|' (or) expression
-            result = GKUtils.MatchesRegex(str, fMaskRegex);
-
-            return result;
+            return fMaskRegex.IsMatch(str, 0);
         }
 
         public virtual bool CheckFilter()

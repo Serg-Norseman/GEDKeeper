@@ -20,6 +20,7 @@
 
 using System;
 using System.Windows.Forms;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -32,6 +33,8 @@ namespace GKUI.Forms
 {
     public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
     {
+        public delegate void UpdateDelegate();
+
         private readonly RecordSelectDlgController fController;
 
         private GKListView fListRecords;
@@ -46,6 +49,11 @@ namespace GKUI.Forms
         public GDMRecord ResultRecord { get; set; }
 
         #region View Interface
+
+        ITextBox IRecordSelectDialog.FilterBox
+        {
+            get { return GetControlHandler<ITextBox>(txtFastFilter); }
+        }
 
         IListViewEx IRecordSelectDialog.RecordsList
         {
@@ -80,6 +88,11 @@ namespace GKUI.Forms
         {
             if (disposing) {
                 // dummy
+                if (fChangeTimer != null) {
+                    fChangeTimer.Stop();
+                    fChangeTimer.Dispose();
+                    fChangeTimer = null;
+                }
             }
             base.Dispose(disposing);
         }
@@ -122,9 +135,18 @@ namespace GKUI.Forms
             }
         }
 
+        private System.Timers.Timer fChangeTimer;
+
         private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
-            fController.Filter = txtFastFilter.Text;
+            if (fChangeTimer == null) {
+                fChangeTimer = new System.Timers.Timer(1000);
+                fChangeTimer.AutoReset = false;
+                fChangeTimer.Elapsed += (sdr, args) => { BeginInvoke(new UpdateDelegate(fController.UpdateView)); };
+            } else {
+                fChangeTimer.Stop();
+            }
+            fChangeTimer.Start();
         }
 
         public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex)

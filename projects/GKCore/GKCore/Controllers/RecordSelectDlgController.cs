@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,25 +32,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class RecordSelectDlgController : DialogController<IRecordSelectDialog>
     {
-        private string fFilter;
         private GDMRecordType fRecType;
         private readonly Target fTarget;
 
-
-        public string Filter
-        {
-            get { return fFilter; }
-            set {
-                string flt = value;
-                if (flt == "") {
-                    flt = "*";
-                } else if (flt != "*") {
-                    flt = "*" + flt + "*";
-                }
-                fFilter = flt;
-                UpdateFilter();
-            }
-        }
 
         public GDMRecordType RecType
         {
@@ -69,11 +53,32 @@ namespace GKCore.Controllers
             fTarget = new Target();
         }
 
-        private void UpdateFilter()
+        public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex)
         {
+            fTarget.TargetMode = mode;
+            fTarget.TargetIndividual = target;
+            fTarget.NeedSex = needSex;
+            UpdateView();
+        }
+
+        private static bool ChildSelectorHandler(GDMRecord record)
+        {
+            GDMIndividualRecord iRec = record as GDMIndividualRecord;
+            return (iRec != null && iRec.ChildToFamilyLinks.Count == 0);
+        }
+
+        public override void UpdateView()
+        {
+            string flt = fView.FilterBox.Text;
+            if (string.IsNullOrEmpty(flt)) {
+                flt = "*";
+            } else if (flt != "*") {
+                flt = "*" + flt + "*";
+            }
+
             IListViewEx recordsList = fView.RecordsList;
             recordsList.ListMan.Filter.Clear();
-            recordsList.ListMan.QuickFilter = fFilter;
+            recordsList.ListMan.QuickFilter = flt;
 
             if (fRecType == GDMRecordType.rtIndividual) {
                 IndividualListFilter iFilter = (IndividualListFilter)recordsList.ListMan.Filter;
@@ -85,24 +90,6 @@ namespace GKCore.Controllers
             }
 
             recordsList.UpdateContents();
-        }
-
-        public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex)
-        {
-            fTarget.TargetMode = mode;
-            fTarget.TargetIndividual = target;
-            fTarget.NeedSex = needSex;
-            UpdateFilter();
-        }
-
-        private static bool ChildSelectorHandler(GDMRecord record)
-        {
-            GDMIndividualRecord iRec = record as GDMIndividualRecord;
-            return (iRec != null && iRec.ChildToFamilyLinks.Count == 0);
-        }
-
-        public override void UpdateView()
-        {
         }
     }
 }

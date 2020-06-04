@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
 using GKCore;
@@ -46,6 +47,11 @@ namespace GKUI.Forms
         public GDMRecord ResultRecord { get; set; }
 
         #region View Interface
+
+        ITextBox IRecordSelectDialog.FilterBox
+        {
+            get { return GetControlHandler<ITextBox>(txtFastFilter); }
+        }
 
         IListViewEx IRecordSelectDialog.RecordsList
         {
@@ -123,7 +129,7 @@ namespace GKUI.Forms
 
         private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
-            fController.Filter = txtFastFilter.Text;
+            fController.UpdateView();
         }
 
         public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex)

@@ -426,6 +426,7 @@ namespace GKCore.MVP.Views
         string FastFilter { get; set; }
         GDMRecord ResultRecord { get; set; }
 
+        ITextBox FilterBox { get; }
         IListViewEx RecordsList { get; }
 
         void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex);

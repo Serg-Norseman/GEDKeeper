@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -362,7 +362,7 @@ namespace GKCore
 
         #region Match functions
 
-        private static string PrepareMask(string mask)
+        public static string PrepareMask(string mask)
         {
             string regexStr = "";
 
@@ -407,8 +407,7 @@ namespace GKCore
             return regexStr;
         }
 
-        private const RegexOptions RegexOpts = RegexOptions.Singleline | RegexOptions.Compiled |
-                                               RegexOptions.IgnoreCase | RegexOptions.CultureInvariant;
+        public const RegexOptions RegexOpts = RegexOptions.Compiled | RegexOptions.IgnoreCase;
 
         public static Regex InitMaskRegex(string mask)
         {
@@ -429,6 +428,14 @@ namespace GKCore
 
         public static bool MatchesMask(string str, string mask)
         {
+            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(mask)) {
+                return false;
+            }
+
+            if (mask == "*") {
+                return true;
+            }
+
             // Regex.IsMatch() has caching
             return Regex.IsMatch(str, PrepareMask(mask), RegexOpts);
         }
