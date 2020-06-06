@@ -26,6 +26,7 @@ using BSLib.Design.MVP.Controls;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Charts;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKCore.Operations;
@@ -623,8 +624,7 @@ namespace GKCore.Lists
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fSheetList == null || iRec == null) return;
 
-            try
-            {
+            try {
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
@@ -636,10 +636,8 @@ namespace GKCore.Lists
                 }
 
                 fSheetList.EndUpdate();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GroupsSublistModel.UpdateContent(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GroupsSublistModel.UpdateContent(): ", ex);
             }
         }
 
@@ -711,7 +709,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.LogWrite("NamesSublistModel.UpdateContents(): " + ex.Message);
+                Logger.WriteError("NamesSublistModel.UpdateContents(): ", ex);
             }
         }
 
@@ -815,7 +813,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.LogWrite("ParentsSublistModel.UpdateContents(): " + ex.Message);
+                Logger.WriteError("ParentsSublistModel.UpdateContents(): ", ex);
             }
         }
 
@@ -898,8 +896,7 @@ namespace GKCore.Lists
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fSheetList == null || iRec == null) return;
 
-            try
-            {
+            try {
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
@@ -930,10 +927,8 @@ namespace GKCore.Lists
                 }
 
                 fSheetList.EndUpdate();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("SpousesSublistModel.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("SpousesSublistModel.UpdateContents(): ", ex);
             }
         }
 
@@ -1014,8 +1009,7 @@ namespace GKCore.Lists
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fSheetList == null || iRec == null) return;
 
-            try
-            {
+            try {
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
@@ -1024,10 +1018,8 @@ namespace GKCore.Lists
                 }
 
                 fSheetList.EndUpdate();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("URefsSublistModel.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("URefsSublistModel.UpdateContents(): ", ex);
             }
         }
 

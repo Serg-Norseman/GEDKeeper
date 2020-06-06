@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,18 +18,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.Linq;
 using GDModel;
+using GKCore.Interfaces;
 
-namespace GKCore.Types
+namespace GKCore.Search
 {
-    /// <summary>
-    /// Entry of auto-updated book of names.
-    /// </summary>
-    public class NameEntry
+    public class SearchResult : ISearchResult
     {
-        public string Name;
-        public string F_Patronymic;
-        public string M_Patronymic;
-        public GDMSex Sex;
+        public readonly GDMObject Result;
+
+        public SearchResult(GDMObject result)
+        {
+            Result = result;
+        }
     }
 }

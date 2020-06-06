@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,6 +29,7 @@ using BSLib.Design.MVP.Controls;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.MVP.Views;
+using GKCore.Names;
 using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.SingleInstance;
@@ -102,7 +103,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("AppHost.AutosaveTimer_Tick(): " + ex.Message);
+                Logger.WriteError("AppHost.AutosaveTimer_Tick(): ", ex);
             }
         }
 
@@ -138,7 +139,7 @@ namespace GKCore
                     UpdateMan.CheckUpdate();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("AppHost.StartupWork(): " + ex.Message);
+                Logger.WriteError("AppHost.StartupWork(): ", ex);
             }
         }
 
@@ -508,7 +509,7 @@ namespace GKCore
                     EndLoading();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("AppHost.CreateBase(): " + ex.Message);
+                Logger.WriteError("AppHost.CreateBase(): ", ex);
             }
 
             return null;
@@ -543,7 +544,7 @@ namespace GKCore
                     EndLoading();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("AppHost.LoadBase(): " + ex.Message);
+                Logger.WriteError("AppHost.LoadBase(): ", ex);
             }
         }
 
@@ -576,7 +577,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("AppHost.CriticalSave(): " + ex.Message);
+                Logger.WriteError("AppHost.CriticalSave(): ", ex);
             }
         }
 
@@ -642,7 +643,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("AppHost.ProcessHolidays(): " + ex.Message);
+                Logger.WriteError("AppHost.ProcessHolidays(): ", ex);
             }
         }
 
@@ -685,7 +686,7 @@ namespace GKCore
 
                 UpdateLang();
             } catch (Exception ex) {
-                Logger.LogWrite("AppHost.LoadLanguage(): " + ex.Message);
+                Logger.WriteError("AppHost.LoadLanguage(): ", ex);
             }
         }
 
@@ -745,7 +746,7 @@ namespace GKCore
                     pointsList.Add(pt);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("AppHost.RequestGeoCoords(): " + ex.Message);
+                Logger.WriteError("AppHost.RequestGeoCoords(): ", ex);
             }
         }
 
@@ -831,7 +832,7 @@ namespace GKCore
                         }
                     }
                 } catch (Exception ex) {
-                    Logger.LogWrite("AppHost.OnMessageReceived(): " + ex.Message);
+                    Logger.WriteError("AppHost.OnMessageReceived(): ", ex);
                 }
             };
 
@@ -975,7 +976,7 @@ namespace GKCore
 
         public static void InitSettings()
         {
-            Logger.LogInit(GetLogFilename());
+            Logger.Init(GetLogFilename());
 
             Plugins.Load(AppHost.Instance, GKUtils.GetPluginsPath());
 

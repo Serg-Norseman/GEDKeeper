@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -126,7 +126,7 @@ namespace GKCore
                     File.Delete(cachedFile);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PortraitsCache.RemoveObsolete(): " + ex.Message);
+                Logger.WriteError("PortraitsCache.RemoveObsolete(): ", ex);
             }
         }
     }

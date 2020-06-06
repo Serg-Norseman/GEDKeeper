@@ -22,6 +22,7 @@
 
 using GDModel;
 using GKCore.Interfaces;
+using GKCore.Names;
 using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;

@@ -27,6 +27,7 @@ using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
+using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Components;
 

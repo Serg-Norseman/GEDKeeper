@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,21 +21,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GDModel;
 using GKCore.Interfaces;
 
-namespace GKCore
+namespace GKCore.Search
 {
-    public class SearchResult : ISearchResult
-    {
-        public readonly GDMObject Result;
-
-        public SearchResult(GDMObject result)
-        {
-            Result = result;
-        }
-    }
-
     public class SearchStrategy : ISearchStrategy
     {
         private readonly string fSearchPattern;

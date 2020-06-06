@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -59,27 +59,21 @@ namespace GKSamplePlugin
 
         public void OnLanguageChange()
         {
-            try
-            {
+            try {
                 fLangMan = fHost.CreateLangMan(this);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKSamplePlugin1.OnLanguageChange(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKSamplePlugin1.OnLanguageChange(): ", ex);
             }
         }
 
         public bool Startup(IHost host)
         {
             bool result = true;
-            try
-            {
+            try {
                 fHost = host;
                 // Implement any startup code here
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKSamplePlugin1.Startup(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKSamplePlugin1.Startup(): ", ex);
                 result = false;
             }
             return result;
@@ -88,13 +82,10 @@ namespace GKSamplePlugin
         public bool Shutdown()
         {
             bool result = true;
-            try
-            {
+            try {
                 // Implement any shutdown code here
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKSamplePlugin1.Shutdown(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKSamplePlugin1.Shutdown(): ", ex);
                 result = false;
             }
             return result;

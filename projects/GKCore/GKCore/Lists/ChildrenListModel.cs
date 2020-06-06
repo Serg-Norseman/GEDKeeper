@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -65,7 +66,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.LogWrite("ChildrenListModel.UpdateContents(): " + ex.Message);
+                Logger.WriteError("ChildrenListModel.UpdateContents(): ", ex);
             }
         }
 

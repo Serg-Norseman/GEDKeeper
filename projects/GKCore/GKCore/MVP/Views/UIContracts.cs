@@ -28,6 +28,7 @@ using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP.Controls;
+using GKCore.Names;
 using GKCore.Options;
 using GKCore.Types;
 
@@ -545,7 +546,7 @@ namespace GKCore.MVP.Views
 
     public interface ITreeChartWin : IChartWindow, IView
     {
-        ITreeChartBox TreeBox { get; }
+        ITreeChart TreeBox { get; }
 
         void GenChart(TreeChartKind chartKind);
     }

@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -51,7 +52,7 @@ namespace GKCore.Lists
                     fSheetList.AddItem(note, new object[] { note.Lines.Text.Trim() });
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("NoteLinksListModel.UpdateContents(): " + ex.Message);
+                Logger.WriteError("NoteLinksListModel.UpdateContents(): ", ex);
             }
         }
 

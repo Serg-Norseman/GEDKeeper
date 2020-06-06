@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -59,8 +59,7 @@ namespace GKCore.Export
                     fWriter.EndWrite();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("ReportExporter.Generate(): " + ex.Message);
-                Logger.LogWrite("ReportExporter.Generate(): " + ex.StackTrace);
+                Logger.WriteError("ReportExporter.Generate(): ", ex);
             }
 
             return result;

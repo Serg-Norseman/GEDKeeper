@@ -20,7 +20,7 @@
 
 using BSLib;
 
-namespace GKCore
+namespace GKCore.Import
 {
     /// <summary>
     /// 
@@ -91,8 +91,7 @@ namespace GKCore
             strTok.RecognizeDecimals = false;
 
             Token token, prev = null;
-            do
-            {
+            do {
                 token = strTok.Next();
 
                 if (token.Kind == TokenKind.Symbol && token.Value == ".") {
@@ -111,8 +110,8 @@ namespace GKCore
             } while (token.Kind != TokenKind.EOF);
 
             // TODO: testing and transfer to parse!
-            if ((prev == null || prev.Kind != TokenKind.Symbol || prev.Value != ".")/* || (token.Kind != TokenKind.WhiteSpace || token.Value != " ")*/)
-            {
+            if ((prev == null || prev.Kind != TokenKind.Symbol || prev.Value != ".")
+                /* || (token.Kind != TokenKind.WhiteSpace || token.Value != " ")*/) {
                 return null;
             }
 
@@ -133,8 +132,7 @@ namespace GKCore
             strTok.RecognizeDecimals = false;
 
             Token token, prev = null;
-            do
-            {
+            do {
                 token = strTok.Next();
 
                 if (token.Kind == TokenKind.Symbol && token.Value == ".") {
@@ -338,8 +336,7 @@ namespace GKCore
             public string ExtData;
             public int Pos;
 
-            internal PersonLineRet(string persId, string parentId, string marNum,
-                                   string extData, int pos)
+            internal PersonLineRet(string persId, string parentId, string marNum, string extData, int pos)
             {
                 PersId = persId;
                 ParentId = parentId;

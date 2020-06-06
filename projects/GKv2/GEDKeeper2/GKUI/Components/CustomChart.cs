@@ -28,7 +28,6 @@ using BSLib.Design.Handlers;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
-using GKCore.Interfaces;
 
 namespace GKUI.Components
 {

@@ -56,12 +56,10 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as GDMRecordWithEvents;
             if (fSheetList == null || dataOwner == null) return;
 
-            try
-            {
+            try {
                 fSheetList.ClearItems();
 
-                for (int i = 0; i < dataOwner.Events.Count; i++)
-                {
+                for (int i = 0; i < dataOwner.Events.Count; i++) {
                     GDMCustomEvent evt = dataOwner.Events[i];
 
                     object[] itemsData = new object[5];
@@ -85,10 +83,8 @@ namespace GKCore.Lists
                 fSheetList.ResizeColumn(1);
                 fSheetList.ResizeColumn(2);
                 fSheetList.ResizeColumn(3);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("EventsListModel.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("EventsListModel.UpdateContents(): ", ex);
             }
         }
 
@@ -170,7 +166,7 @@ namespace GKCore.Lists
                         break;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("EventsListModel.Modify(): " + ex.Message);
+                Logger.WriteError("EventsListModel.Modify(): ", ex);
                 result = false;
             }
 

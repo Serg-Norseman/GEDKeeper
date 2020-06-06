@@ -324,14 +324,11 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 AcceptChanges();
                 DialogResult = DialogResult.OK;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("OptionsDlg.btnAccept_Click(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("OptionsDlg.btnAccept_Click(): ", ex);
                 DialogResult = DialogResult.None;
             }
         }

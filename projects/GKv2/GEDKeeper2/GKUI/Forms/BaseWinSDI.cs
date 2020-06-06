@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -204,15 +204,14 @@ namespace GKUI.Forms
 
         private void Form_Load(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 ((IWorkWindow)this).UpdateSettings();
 
                 fController.UpdatePluginsItems();
                 UpdateMRU();
                 UpdateControls(false);
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.Form_Load(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.Form_Load(): ", ex);
             }
         }
 
@@ -467,7 +466,7 @@ namespace GKUI.Forms
                     }
                 } catch (Exception ex) {
                     if (mediaViewer != null) mediaViewer.Dispose();
-                    Logger.LogWrite("BaseWinSDI.ShowMedia(): " + ex.Message);
+                    Logger.WriteError("BaseWinSDI.ShowMedia(): ", ex);
                 }
             }
         }
@@ -754,7 +753,7 @@ namespace GKUI.Forms
                     AppHost.Instance.EndLoading();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.Form_DragDrop(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.Form_DragDrop(): ", ex);
             }
         }
 
@@ -805,27 +804,25 @@ namespace GKUI.Forms
                     MenuMRU.Items.Add(tsmi);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.UpdateMRU(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.UpdateMRU(): ", ex);
             }
         }
 
         public void UpdateNavControls()
         {
-            try
-            {
+            try {
                 IWorkWindow workWin = this as IWorkWindow;
 
                 tbPrev.Enabled = (workWin != null && workWin.NavCanBackward());
                 tbNext.Enabled = (workWin != null && workWin.NavCanForward());
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.UpdateNavControls(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.UpdateNavControls(): ", ex);
             }
         }
 
         public void UpdateControls(bool forceDeactivate, bool blockDependent = false)
         {
-            try
-            {
+            try {
                 IWorkWindow workWin = AppHost.Instance.GetWorkWindow();
                 IBaseWindow curBase = ((forceDeactivate) ? null : AppHost.Instance.GetCurrentFile());
                 IChartWindow curChart = ((workWin is IChartWindow) ? ((IChartWindow) workWin) : null);
@@ -883,7 +880,7 @@ namespace GKUI.Forms
                     workWin.UpdateControls();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.UpdateControls(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.UpdateControls(): ", ex);
             }
         }
 

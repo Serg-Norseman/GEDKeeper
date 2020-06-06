@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -520,8 +520,7 @@ namespace GKUI.Components
         {
             if (fListMan == null) return;
 
-            try
-            {
+            try {
                 if (fListMan.ColumnsHaveBeenChanged != columnsChanged && columnsChanged) {
                     fListMan.ColumnsHaveBeenChanged = columnsChanged;
                 }
@@ -529,8 +528,7 @@ namespace GKUI.Components
                 object tempRec = GetSelectedData();
 
                 BeginUpdate();
-                try
-                {
+                try {
                     if (columnsChanged || Columns.Count == 0 || fListMan.ColumnsHaveBeenChanged) {
                         Columns.Clear();
                         fListMan.UpdateColumns(this);
@@ -541,17 +539,13 @@ namespace GKUI.Components
                     UpdateItems();
 
                     ResizeColumns();
-                }
-                finally
-                {
+                } finally {
                     EndUpdate();
                 }
 
                 if (tempRec != null) SelectItem(tempRec);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKListView.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKListView.UpdateContents(): ", ex);
             }
         }
 
@@ -663,7 +657,7 @@ namespace GKUI.Components
                     }
                 }*/
             } catch (Exception ex) {
-                Logger.LogWrite("GKListView.ResizeColumn(): " + ex.Message);
+                Logger.WriteError("GKListView.ResizeColumn(): ", ex);
             }
         }
 
@@ -748,7 +742,7 @@ namespace GKUI.Components
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKListView.SelectItem(): " + ex.Message);
+                Logger.WriteError("GKListView.SelectItem(): ", ex);
             }
         }
 

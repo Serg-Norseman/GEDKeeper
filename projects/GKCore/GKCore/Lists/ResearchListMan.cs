@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -142,27 +143,24 @@ namespace GKCore.Lists
             var research = fDataOwner as GDMResearchRecord;
             if (fSheetList == null || research == null) return;
 
-            try
-            {
+            try {
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GDMPointer taskPtr in research.Tasks)
-                {
+                foreach (GDMPointer taskPtr in research.Tasks) {
                     GDMTaskRecord task = taskPtr.Value as GDMTaskRecord;
                     if (task == null) continue;
 
                     fSheetList.AddItem(task, new object[] { GKUtils.GetTaskGoalStr(task),
-                                           LangMan.LS(GKData.PriorityNames[(int)task.Priority]),
-                                           new GDMDateItem(task.StartDate),
-                                           new GDMDateItem(task.StopDate) });
+                        LangMan.LS(GKData.PriorityNames[(int)task.Priority]),
+                        new GDMDateItem(task.StartDate),
+                        new GDMDateItem(task.StopDate)
+                    });
                 }
 
                 fSheetList.EndUpdate();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("ResTasksSublistModel.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("ResTasksSublistModel.UpdateContents(): ", ex);
             }
         }
 
@@ -223,27 +221,24 @@ namespace GKCore.Lists
             var research = fDataOwner as GDMResearchRecord;
             if (fSheetList == null || research == null) return;
 
-            try
-            {
+            try {
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GDMPointer commPtr in research.Communications)
-                {
+                foreach (GDMPointer commPtr in research.Communications) {
                     GDMCommunicationRecord corr = commPtr.Value as GDMCommunicationRecord;
                     if (corr == null) continue;
 
                     fSheetList.AddItem(corr, new object[] { corr.CommName,
-                                           GKUtils.GetCorresponderStr(fBaseWin.Context.Tree, corr, false),
-                                           LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]),
-                                           new GDMDateItem(corr.Date) });
+                        GKUtils.GetCorresponderStr(fBaseWin.Context.Tree, corr, false),
+                        LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]),
+                        new GDMDateItem(corr.Date)
+                    });
                 }
 
                 fSheetList.EndUpdate();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("ResCommunicationsSublistModel.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("ResCommunicationsSublistModel.UpdateContents(): ", ex);
             }
         }
 
@@ -301,13 +296,11 @@ namespace GKCore.Lists
             var research = fDataOwner as GDMResearchRecord;
             if (fSheetList == null || research == null) return;
 
-            try
-            {
+            try {
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GDMPointer groupPtr in research.Groups)
-                {
+                foreach (GDMPointer groupPtr in research.Groups) {
                     GDMGroupRecord grp = groupPtr.Value as GDMGroupRecord;
                     if (grp == null) continue;
 
@@ -315,10 +308,8 @@ namespace GKCore.Lists
                 }
 
                 fSheetList.EndUpdate();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("ResGroupsSublistModel.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("ResGroupsSublistModel.UpdateContents(): ", ex);
             }
         }
 

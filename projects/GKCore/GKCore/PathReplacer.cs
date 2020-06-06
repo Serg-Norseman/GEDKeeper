@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -64,7 +64,7 @@ namespace GKCore
                     fPathsMappings = rawData[0] as PathsMappingsList;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PathReplacer.Load(): " + ex.Message);
+                Logger.WriteError("PathReplacer.Load(): ", ex);
             }
         }
 
@@ -85,7 +85,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PathReplacer.TryReplacePath(): " + ex.Message);
+                Logger.WriteError("PathReplacer.TryReplacePath(): ", ex);
             }
 
             return string.Empty;

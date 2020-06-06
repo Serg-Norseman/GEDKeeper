@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -157,7 +157,7 @@ namespace GDModel
                     result = mmRec.UID + "-" + GKUtils.GetRectUID(cutoutArea.Left, cutoutArea.Top, cutoutArea.Right, cutoutArea.Bottom);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GDMMultimediaLink.GetUID(): " + ex.Message);
+                Logger.WriteError("GDMMultimediaLink.GetUID(): ", ex);
                 result = null;
             }
             return result;

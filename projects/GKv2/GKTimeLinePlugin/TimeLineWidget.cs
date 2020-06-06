@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -175,8 +175,7 @@ namespace GKTimeLinePlugin
         {
             bool result = true;
 
-            try
-            {
+            try {
                 GDMIndividualRecord iRec = (GDMIndividualRecord)record;
                 int bdy = iRec.GetChronologicalYear(GEDCOMTagName.BIRT);
                 int ddy = iRec.GetChronologicalYear(GEDCOMTagName.DEAT);
@@ -192,10 +191,8 @@ namespace GKTimeLinePlugin
                 if (fYearCurrent > 0) {
                     result = (fYearCurrent >= bdy && fYearCurrent <= ddy);
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("TimeLineWidget.FilterHandler(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("TimeLineWidget.FilterHandler(): ", ex);
             }
 
             return result;

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,10 +24,9 @@ using System.IO;
 using System.Text;
 using BSLib;
 using GDModel;
-using GKCore.Interfaces;
 using GKCore.Types;
 
-namespace GKCore
+namespace GKCore.Names
 {
     /// <summary>
     /// 
@@ -95,7 +94,7 @@ namespace GKCore
                             string nameKey = data[0];
 
                             if (fNames.ContainsKey(nameKey)) {
-                                Logger.LogWrite(string.Format("NamesTable.LoadFromFile.1(): Duplicate name in the table \"{0}\"", nameKey));
+                                Logger.WriteError(string.Format("NamesTable.LoadFromFile.1(): Duplicate name in the table \"{0}\"", nameKey));
                             } else {
                                 NameEntry nm = new NameEntry();
                                 nm.Name = nameKey;
@@ -110,7 +109,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("NamesTable.LoadFromFile(): " + ex.Message);
+                Logger.WriteError("NamesTable.LoadFromFile(): ", ex);
             }
         }
 
@@ -246,7 +245,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("NamesTable.ImportName(): " + ex.Message);
+                Logger.WriteError("NamesTable.ImportName(): ", ex);
             }
         }
     }

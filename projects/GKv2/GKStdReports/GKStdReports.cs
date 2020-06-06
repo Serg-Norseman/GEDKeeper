@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -87,7 +87,7 @@ namespace GKStdReports
             try {
                 SRLangMan.Instance = Host.CreateLangMan(this);
             } catch (Exception ex) {
-                Logger.LogWrite("NFRPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("NFRPlugin.OnLanguageChange(): ", ex);
             }
         }
     }
@@ -121,7 +121,7 @@ namespace GKStdReports
             try {
                 SRLangMan.Instance = Host.CreateLangMan(this);
             } catch (Exception ex) {
-                Logger.LogWrite("PERPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("PERPlugin.OnLanguageChange(): ", ex);
             }
         }
     }
@@ -148,7 +148,7 @@ namespace GKStdReports
             try {
                 SRLangMan.Instance = Host.CreateLangMan(this);
             } catch (Exception ex) {
-                Logger.LogWrite("PhonPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("PhonPlugin.OnLanguageChange(): ", ex);
             }
         }
     }
@@ -182,7 +182,7 @@ namespace GKStdReports
             try {
                 SRLangMan.Instance = Host.CreateLangMan(this);
             } catch (Exception ex) {
-                Logger.LogWrite("ContempPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("ContempPlugin.OnLanguageChange(): ", ex);
             }
         }
     }

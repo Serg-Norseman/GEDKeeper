@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,6 +30,7 @@ using CsGL.OpenGL;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Components;
 
@@ -378,8 +379,7 @@ namespace GKTreeVizPlugin
 
         public override void glDraw()
         {
-            try
-            {
+            try {
                 OpenGL.glClear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
                 OpenGL.glLoadIdentity();
 
@@ -405,15 +405,12 @@ namespace GKTreeVizPlugin
                 DrawArborSystem();
 
                 int num = fPersons.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     TVPerson prs = fPersons[i];
                     DrawPerson(prs);
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("TreeVizControl.glDraw(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("TreeVizControl.glDraw(): ", ex);
             }
         }
 
@@ -451,7 +448,7 @@ namespace GKTreeVizPlugin
 
                 fSys.Start();
             } catch (Exception ex) {
-                Logger.LogWrite("TreeVizControl.CreateArborGraph(): " + ex.Message);
+                Logger.WriteError("TreeVizControl.CreateArborGraph(): ", ex);
             }
         }
 
@@ -461,11 +458,9 @@ namespace GKTreeVizPlugin
 
             fMinYear = 0;
 
-            try
-            {
+            try {
                 // load from ArborSystem points and signatures of the patriarchs
-                foreach (ArborNode node in fSys.Nodes)
-                {
+                foreach (ArborNode node in fSys.Nodes) {
                     PatriarchObj patObj = (PatriarchObj)node.Data;
 
                     GDMIndividualRecord iRec = (GDMIndividualRecord)fBase.Context.Tree.XRefIndex_Find(node.Sign);
@@ -488,8 +483,7 @@ namespace GKTreeVizPlugin
                 }
 
                 // prepare the radii of the bases of the patriarchs
-                foreach (ArborEdge edge in fSys.Edges)
-                {
+                foreach (ArborEdge edge in fSys.Edges) {
                     TVPerson srcPers = FindPersonByXRef(edge.Source.Sign);
                     TVPerson tgtPers = FindPersonByXRef(edge.Target.Sign);
                     if (srcPers == null || tgtPers == null) continue;
@@ -508,23 +502,19 @@ namespace GKTreeVizPlugin
 
                 // prepare tree, the base number - only the patriarchs
                 int count = fPersons.Count;
-                for (int i = 0; i < count; i++)
-                {
+                for (int i = 0; i < count; i++) {
                     TVPerson prs = fPersons[i];
                     PrepareDescendants(prs);
                 }
 
-                for (int i = 0; i < fStems.Count; i++)
-                {
+                for (int i = 0; i < fStems.Count; i++) {
                     TVStem stem = fStems[i];
                     stem.Update();
                 }
 
                 StartTimer();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("TreeVizControl.onArborStop(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("TreeVizControl.onArborStop(): ", ex);
             }
         }
 
@@ -532,15 +522,13 @@ namespace GKTreeVizPlugin
         {
             if (person == null) return;
 
-            try
-            {
+            try {
                 int gens = (person.DescGenerations <= 0) ? 1 : person.DescGenerations;
                 person.GenSlice = person.BaseRadius / gens; // ?
 
                 GDMIndividualRecord iRec = person.IRec;
 
-                foreach (GDMSpouseToFamilyLink spLink in iRec.SpouseToFamilyLinks)
-                {
+                foreach (GDMSpouseToFamilyLink spLink in iRec.SpouseToFamilyLinks) {
                     GDMFamilyRecord famRec = spLink.Family;
 
                     bool alreadyPrepared = false;
@@ -553,7 +541,7 @@ namespace GKTreeVizPlugin
                             // this can occur only when processing of the patriarchs later than those already processed,
                             // i.e. if the at first was already processed the patriarch, born in 1710, was processed his childrens
                             // and one of theirs spouses being a patriarch of new branches!
-                            Logger.LogWrite("TreeVizControl.PrepareDescendants(): an unexpected collision");
+                            Logger.WriteError("TreeVizControl.PrepareDescendants(): an unexpected collision");
                             alreadyPrepared = true;
                         } else {
                             ProcessPersonStem(sps, person, TVPersonType.Spouse);
@@ -562,11 +550,9 @@ namespace GKTreeVizPlugin
                         }
                     }
 
-                    if (!alreadyPrepared)
-                    {
+                    if (!alreadyPrepared) {
                         // processing children of the current family
-                        foreach (GDMIndividualLink childPtr in famRec.Children)
-                        {
+                        foreach (GDMIndividualLink childPtr in famRec.Children) {
                             GDMIndividualRecord child = childPtr.Individual;
 
                             // exclude childless branches
@@ -575,7 +561,7 @@ namespace GKTreeVizPlugin
                             TVPerson chp = PreparePerson(person, child, TVPersonType.Child);
                             if (chp == null) {
                                 // this is someone spouse and already prepared, intersection of branches
-                                Logger.LogWrite("TreeVizControl.PrepareDescendants(): intersection");
+                                Logger.WriteError("TreeVizControl.PrepareDescendants(): intersection");
                             } else {
                                 chp.BaseRadius = (float)((person.BaseRadius / 2) * 0.95);
                                 chp.DescGenerations = person.DescGenerations - 1;
@@ -589,22 +575,18 @@ namespace GKTreeVizPlugin
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("TreeVizControl.PrepareDescendants(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("TreeVizControl.PrepareDescendants(): ", ex);
             }
         }
 
         private void RecalcDescendants(TVPerson person)
         {
-            try
-            {
+            try {
                 // recalculate the coordinates of the spouses, because the coordinates of this person could change
                 // "genSlice / 3" - it's radius of spouses
                 PointF[] pts = GetCirclePoints(person.BeautySpouses, person.Pt, person.Spouses.Count, person.GenSlice / 3);
-                for (int i = 0, count = person.Spouses.Count; i < count; i++)
-                {
+                for (int i = 0, count = person.Spouses.Count; i < count; i++) {
                     TVPerson spp = person.Spouses[i];
                     if (IsVisible(spp)) {
                         spp.IsVisible = true;
@@ -614,16 +596,14 @@ namespace GKTreeVizPlugin
 
                 // recalculate of coordinates of visible children
                 pts = GetCirclePoints(person.BeautyChilds, person.Pt, person.Childs.Count, person.BaseRadius / 2);
-                for (int i = 0, count = person.Childs.Count; i < count; i++)
-                {
+                for (int i = 0, count = person.Childs.Count; i < count; i++) {
                     TVPerson chp = person.Childs[i];
 
                     if (!chp.IsVisible && IsVisible(chp)) {
                         chp.IsVisible = true;
                     }
 
-                    if (chp.IsVisible)
-                    {
+                    if (chp.IsVisible) {
                         chp.Pt = pts[i];
                         chp.BaseRadius = (float)((person.BaseRadius / 2) * 0.95);
                         chp.DescGenerations = person.DescGenerations - 1;
@@ -631,45 +611,36 @@ namespace GKTreeVizPlugin
                         RecalcDescendants(chp);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("TreeVizControl.recalcDescendants.2(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("TreeVizControl.recalcDescendants.2(): ", ex);
             }
         }
 
         private void RecalcDescendants()
         {
-            try
-            {
-                foreach (TVPerson prs in fPersons)
-                {
+            try {
+                foreach (TVPerson prs in fPersons) {
                     if (prs.Type != TVPersonType.Patriarch || !IsVisible(prs)) continue;
 
                     prs.IsVisible = true;
                     RecalcDescendants(prs);
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("TreeVizControl.recalcDescendants.1(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("TreeVizControl.recalcDescendants.1(): ", ex);
             }
         }
 
         private void ProcessPersonStem(TVPerson person, TVPerson relative, TVPersonType type)
         {
-            try
-            {
+            try {
                 if (person == null) return;
 
-                if (person.Stem == null && (type == TVPersonType.Patriarch || type == TVPersonType.Child))
-                {
+                if (person.Stem == null && (type == TVPersonType.Patriarch || type == TVPersonType.Child)) {
                     person.Stem = new TVStem();
                     fStems.Add(person.Stem);
                 }
 
-                switch (type)
-                {
+                switch (type) {
                     case TVPersonType.Spouse:
                         relative.Stem.AddSpouse(person);
                         break;
@@ -681,31 +652,24 @@ namespace GKTreeVizPlugin
                     case TVPersonType.Patriarch:
                         break;
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("TreeVizControl.ProcessPersonStem(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("TreeVizControl.ProcessPersonStem(): ", ex);
             }
         }
 
         private TVPerson PreparePerson(TVPerson parent, GDMIndividualRecord iRec, TVPersonType type)
         {
-            try
-            {
+            try {
                 TVPerson result;
 
-                if (fPersonsIndex.TryGetValue(iRec.XRef, out result))
-                {
+                if (fPersonsIndex.TryGetValue(iRec.XRef, out result)) {
                     // the person is already in the general index; so this is someone's spouse in another tree previously processed
 
-                    if (parent == null)
-                    {
+                    if (parent == null) {
                         // parent == null, if this is patriarch or someone's spouse without his parents
                         // if it's a spouse and is already in the index - therefore,
                         // this person was married with the delegates of two different genera that are processed through their patriarchs?
-                    }
-                    else
-                    {
+                    } else {
                         result.Parent = parent;
                         PointF prevPt = result.Stem.Pt;
                         PointF parentPt = parent.Pt;
@@ -715,9 +679,7 @@ namespace GKTreeVizPlugin
                     }
 
                     return null;
-                }
-                else
-                {
+                } else {
                     result = new TVPerson(parent, iRec);
                     result.Type = type;
 
@@ -732,10 +694,8 @@ namespace GKTreeVizPlugin
                 }
 
                 return result;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("TreeVizControl.PreparePerson(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("TreeVizControl.PreparePerson(): ", ex);
                 return null;
             }
         }
@@ -745,10 +705,8 @@ namespace GKTreeVizPlugin
             if (fSys == null) return;
             if (!fDebug) return;
 
-            try
-            {
-                foreach (ArborNode node in fSys.Nodes)
-                {
+            try {
+                foreach (ArborNode node in fSys.Nodes) {
                     ArborPoint pt = node.Pt;
 
                     OpenGL.glPushMatrix();
@@ -758,8 +716,7 @@ namespace GKTreeVizPlugin
                     OpenGL.glPopMatrix();
                 }
 
-                foreach (ArborEdge edge in fSys.Edges)
-                {
+                foreach (ArborEdge edge in fSys.Edges) {
                     ArborPoint pt1 = edge.Source.Pt;
                     ArborPoint pt2 = edge.Target.Pt;
 
@@ -771,10 +728,8 @@ namespace GKTreeVizPlugin
                     OpenGL.glEnd();
                     OpenGL.glPopMatrix();
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("TreeVizControl.DrawArborSystem(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("TreeVizControl.DrawArborSystem(): ", ex);
             }
         }
 
@@ -791,8 +746,7 @@ namespace GKTreeVizPlugin
         {
             if (person == null || !person.IsVisible) return;
 
-            try
-            {
+            try {
                 int endYear = (fCurYear < person.DeathYear) ? fCurYear : person.DeathYear;
 
                 float zBirth, zDeath;
@@ -836,10 +790,8 @@ namespace GKTreeVizPlugin
 
                     OpenGL.glPopMatrix();
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("TreeVizControl.DrawPerson(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("TreeVizControl.DrawPerson(): ", ex);
             }
         }
 
@@ -847,24 +799,20 @@ namespace GKTreeVizPlugin
         {
             if (fBusy) return;
             fBusy = true;
-            try
-            {
+            try {
                 if (!FreeRotate) {
                     zrot -= 0.3f;
                 }
 
                 fTick += 1;
 
-                if (!TimeStop && (fTick % 5 == 0) && fCurYear < fMaxYear)
-                {
+                if (!TimeStop && (fTick % 5 == 0) && fCurYear < fMaxYear) {
                     fCurYear += 1;
 
                     RecalcDescendants();
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("TreeVizControl.UpdateTV(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("TreeVizControl.UpdateTV(): ", ex);
             }
             fBusy = false;
         }

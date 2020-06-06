@@ -28,6 +28,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Options;
+using GKCore.Search;
 using GKCore.Types;
 
 using BSDColors = BSLib.Design.BSDConsts.Colors;
@@ -267,7 +268,7 @@ namespace GKCore.Charts
                 var result = AppHost.GfxProvider.LoadResourceImage(name, makeTransp);
                 return result;
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartModel.PrepareImage(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.PrepareImage(): ", ex);
                 return null;
             }
         }
@@ -291,7 +292,7 @@ namespace GKCore.Charts
                 fPersExpPic = PrepareImage("btn_expand2.gif", true);
                 fInfoPic = PrepareImage("btn_info.gif", true);
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartModel.InitSigns(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.InitSigns(): ", ex);
             }
         }
 
@@ -385,7 +386,7 @@ namespace GKCore.Charts
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeChartModel.AddDescPerson(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.AddDescPerson(): ", ex);
                 throw;
             }
         }
@@ -502,7 +503,7 @@ namespace GKCore.Charts
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeChartModel.DoAncestorsStep(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.DoAncestorsStep(): ", ex);
                 throw;
             }
         }
@@ -575,7 +576,7 @@ namespace GKCore.Charts
 
                         // protection against invalid third-party files
                         if (family == null) {
-                            Logger.LogWrite("TreeChartModel.DoDescendantsStep(): null pointer to family");
+                            Logger.WriteError("TreeChartModel.DoDescendantsStep(): null pointer to family");
                             continue;
                         }
 
@@ -646,7 +647,7 @@ namespace GKCore.Charts
 
                             default:
                                 invalidSpouse = true;
-                                Logger.LogWrite("TreeChartModel.DoDescendantsStep(): sex of spouse is undetermined");
+                                Logger.WriteError("TreeChartModel.DoDescendantsStep(): sex of spouse is undetermined");
                                 break;
                         }
 
@@ -692,7 +693,7 @@ namespace GKCore.Charts
 
                                 // protection against invalid third-party files
                                 if (childRec == null) {
-                                    Logger.LogWrite("TreeChartModel.DoDescendantsStep(): null pointer to child");
+                                    Logger.WriteError("TreeChartModel.DoDescendantsStep(): null pointer to child");
                                     continue;
                                 }
 
@@ -731,7 +732,7 @@ namespace GKCore.Charts
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeChartModel.DoDescendantsStep(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.DoDescendantsStep(): ", ex);
                 throw;
             }
         }
@@ -1501,7 +1502,7 @@ namespace GKCore.Charts
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartModel.DrawPerson(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.DrawPerson(): ", ex);
             }
         }
 

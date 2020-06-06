@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2019-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -85,7 +85,7 @@ namespace GEDmill
                 if (fForm != null)
                     fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogWrite("GEDmillPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("GEDmillPlugin.OnLanguageChange(): ", ex);
             }
         }
 
@@ -95,7 +95,7 @@ namespace GEDmill
             try {
                 CloseForm();
             } catch (Exception ex) {
-                Logger.LogWrite("GEDmillPlugin.Shutdown(): " + ex.Message);
+                Logger.WriteError("GEDmillPlugin.Shutdown(): ", ex);
                 result = false;
             }
             return result;

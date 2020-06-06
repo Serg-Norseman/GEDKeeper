@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -68,7 +68,7 @@ namespace GKImageViewerPlugin
                 fForm = new ImageViewerWin(this);
                 Host.ShowWindow(fForm);
             } catch (Exception ex) {
-                Logger.LogWrite("GKImageViewerPlugin.Execute(): " + ex.Message);
+                Logger.WriteError("GKImageViewerPlugin.Execute(): ", ex);
             }
         }
 
@@ -81,7 +81,7 @@ namespace GKImageViewerPlugin
                 if (fForm != null)
                     fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogWrite("GKImageViewerPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("GKImageViewerPlugin.OnLanguageChange(): ", ex);
             }
         }
     }

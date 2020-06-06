@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -55,7 +55,7 @@ namespace GKSamplePlugin
             try {
                 fLangMan = Host.CreateLangMan(this);
             } catch (Exception ex) {
-                Logger.LogWrite("PersonDialogPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("PersonDialogPlugin.OnLanguageChange(): ", ex);
             }
         }
 

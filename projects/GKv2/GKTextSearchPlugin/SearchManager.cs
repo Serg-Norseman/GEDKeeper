@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -141,10 +141,8 @@ namespace GKTextSearchPlugin
         {
             if (baseWin == null) return;
 
-            try
-            {
-                lock (fLock)
-                {
+            try {
+                lock (fLock) {
                     using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN))
                         using (TermGenerator indexer = new TermGenerator())
                             using (Stem stemmer = new Stem("russian"))
@@ -166,10 +164,8 @@ namespace GKTextSearchPlugin
                         SetDBLastChange(baseWin, database);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("SearchManager.ReindexBase(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("SearchManager.ReindexBase(): ", ex);
             }
         }
 
@@ -180,24 +176,19 @@ namespace GKTextSearchPlugin
 
             if (record == null || !IsIndexedRecord(record)) return;
 
-            try
-            {
-                lock (fLock)
-                {
+            try {
+                lock (fLock) {
                     using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN))
-                        using (TermGenerator indexer = new TermGenerator())
-                            using (Stem stemmer = new Stem("russian"))
-                    {
+                    using (TermGenerator indexer = new TermGenerator())
+                    using (Stem stemmer = new Stem("russian")) {
                         indexer.SetStemmer(stemmer);
 
                         ReindexRecord(baseWin, database, indexer, record);
                         SetDBLastChange(baseWin, database);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("SearchManager.UpdateRecord(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("SearchManager.UpdateRecord(): ", ex);
             }
         }
 
@@ -206,12 +197,9 @@ namespace GKTextSearchPlugin
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
 
-            try
-            {
-                lock (fLock)
-                {
-                    using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN))
-                    {
+            try {
+                lock (fLock) {
+                    using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN)) {
                         uint docid = FindDocId(baseWin, database, xref);
                         if (docid != 0) {
                             database.DeleteDocument(docid);
@@ -219,10 +207,8 @@ namespace GKTextSearchPlugin
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("SearchManager.DeleteRecord(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("SearchManager.DeleteRecord(): ", ex);
             }
         }
 
@@ -239,20 +225,17 @@ namespace GKTextSearchPlugin
                 throw new ArgumentNullException("baseWin");
 
             const uint flags = (uint)(QueryParser.feature_flag.FLAG_PARTIAL | QueryParser.feature_flag.FLAG_WILDCARD |
-                                      QueryParser.feature_flag.FLAG_PHRASE | QueryParser.feature_flag.FLAG_BOOLEAN |
-                                      QueryParser.feature_flag.FLAG_LOVEHATE);
-            
+                               QueryParser.feature_flag.FLAG_PHRASE | QueryParser.feature_flag.FLAG_BOOLEAN |
+                               QueryParser.feature_flag.FLAG_LOVEHATE);
+
             List<SearchEntry> res = new List<SearchEntry>();
 
-            try
-            {
-                lock (fLock)
-                {
+            try {
+                lock (fLock) {
                     using (Database database = new Database(GetXDBFolder()))
-                        using (Enquire enquire = new Enquire(database))
-                            using (Stem stemmer = new Stem("russian"))
-                                using (QueryParser qp = new QueryParser())
-                    {
+                    using (Enquire enquire = new Enquire(database))
+                    using (Stem stemmer = new Stem("russian"))
+                    using (QueryParser qp = new QueryParser()) {
                         qp.SetStemmer(stemmer);
                         qp.SetDatabase(database);
                         qp.SetDefaultOp(Query.op.OP_AND);
@@ -261,28 +244,22 @@ namespace GKTextSearchPlugin
                         string qs = searchText + " ged:" + GetSign(baseWin);
                         qp.AddBooleanPrefix("ged", "GDB");
 
-                        using (Query query = qp.ParseQuery(qs, flags))
-                        {
+                        using (Query query = qp.ParseQuery(qs, flags)) {
                             enquire.SetQuery(query);
 
-                            using (MSet matches = enquire.GetMSet(0, 100))
-                            {
+                            using (MSet matches = enquire.GetMSet(0, 100)) {
                                 MSetIterator m = matches.Begin();
-                                while (m != matches.End())
-                                {
-                                    try
-                                    {
+                                while (m != matches.End()) {
+                                    try {
                                         using (Document mDoc = m.GetDocument()) {
                                             SearchEntry entry = new SearchEntry();
                                             entry.XRef = mDoc.GetData();
-                                            entry.Rank = m.GetRank()+1;
+                                            entry.Rank = m.GetRank() + 1;
                                             entry.Percent = m.GetPercent();
                                             res.Add(entry);
                                         }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Logger.LogWrite("SearchManager.Search(): " + ex.Message);
+                                    } catch (Exception ex) {
+                                        Logger.WriteError("SearchManager.Search(): ", ex);
                                     }
 
                                     m = m.Next();
@@ -291,10 +268,8 @@ namespace GKTextSearchPlugin
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("SearchManager.Search(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("SearchManager.Search(): ", ex);
             }
 
             return res;

@@ -26,62 +26,8 @@ using BSLib.Design;
 using BSLib.Design.Graphics;
 using GKCore.Interfaces;
 
-namespace GKCore
+namespace GKCore.BBText
 {
-    public sealed class BBTextChunk
-    {
-        public int Line;
-        public string Text;
-        public int Width;
-        public IColor Color;
-        public float Size;
-        public BSDTypes.FontStyle Style;
-
-        public string URL;
-        public ExtRect LinkRect;
-
-        private BBTextChunk()
-        {
-        }
-
-        public BBTextChunk(int tokenLine, float fontSize, BSDTypes.FontStyle fontStyle, IColor color)
-        {
-            Line = tokenLine - 1;
-            Text = string.Empty;
-            URL = string.Empty;
-
-            Color = color;
-            Size = fontSize;
-            Style = fontStyle;
-        }
-
-        public bool HasCoord(int x, int y)
-        {
-            return x >= LinkRect.Left && x <= LinkRect.Right
-                && y >= LinkRect.Top && y <= LinkRect.Bottom;
-        }
-
-        public BBTextChunk Clone()
-        {
-            BBTextChunk result = new BBTextChunk();
-
-            result.Line = Line;
-            result.Text = Text;
-            result.Width = Width;
-            result.Color = Color;
-            result.Size = Size;
-            result.Style = Style;
-            result.URL = URL;
-
-            return result;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("[BBTextChunk Line={0}, Text={1}, Size={2}]", Line, Text, Size);
-        }
-    }
-
     /// <summary>
     /// The parser of BB-markup text.
     /// 

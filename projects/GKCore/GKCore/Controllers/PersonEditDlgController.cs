@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,6 +26,7 @@ using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
+using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
@@ -138,7 +139,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("PersonEditDlgController.Accept(): ", ex);
                 return false;
             }
         }
@@ -171,7 +172,7 @@ namespace GKCore.Controllers
 
                 UpdateControls(true);
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlgController.UpdateView(): " + ex.Message);
+                Logger.WriteError("PersonEditDlgController.UpdateView(): ", ex);
             }
         }
 
@@ -364,7 +365,7 @@ namespace GKCore.Controllers
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + "): " + ex.Message);
+                Logger.WriteError("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + "): ", ex);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -120,7 +120,7 @@ namespace GKTray
                     ini.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKTray.LoadSettings(): " + ex.Message);
+                Logger.WriteError("GKTray.LoadSettings(): ", ex);
             }
 
             fRecentFiles.MenuItems.Clear();
@@ -159,7 +159,7 @@ namespace GKTray
                         }
                     }
                 } catch (Exception ex) {
-                    Logger.LogWrite("GKTray.LoadEvents(" + gedFileName + "): " + ex.Message);
+                    Logger.WriteError("GKTray.LoadEvents(" + gedFileName + ")", ex);
                 }
             }
 

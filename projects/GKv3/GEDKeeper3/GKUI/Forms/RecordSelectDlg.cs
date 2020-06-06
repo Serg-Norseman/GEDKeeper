@@ -106,7 +106,7 @@ namespace GKUI.Forms
                 ResultRecord = fListRecords.GetSelectedData() as GDMRecord;
                 DialogResult = DialogResult.Ok;
             } catch (Exception ex) {
-                Logger.LogWrite("RecordSelectDlg.btnSelect_Click(): " + ex.Message);
+                Logger.WriteError("RecordSelectDlg.btnSelect_Click(): ", ex);
                 ResultRecord = null;
                 DialogResult = DialogResult.None;
             }
@@ -121,7 +121,7 @@ namespace GKUI.Forms
                     DialogResult = DialogResult.Ok;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("RecordSelectDlg.btnCreate_Click(): " + ex.Message);
+                Logger.WriteError("RecordSelectDlg.btnCreate_Click(): ", ex);
                 ResultRecord = null;
                 DialogResult = DialogResult.None;
             }

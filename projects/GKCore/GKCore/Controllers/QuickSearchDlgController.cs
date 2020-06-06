@@ -23,6 +23,7 @@ using BSLib.Design.MVP;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
+using GKCore.Search;
 
 namespace GKCore.Controllers
 {

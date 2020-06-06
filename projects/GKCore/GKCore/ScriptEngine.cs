@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,6 +31,7 @@ using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Options;
 
@@ -100,10 +101,8 @@ namespace GKCore
             MethodInfo mInfo = GetType().GetMethod(funcName);
             if (mInfo != null) {
                 lvm.RegisterFunction(funcName, this, mInfo);
-            }
-            else
-            {
-                Logger.LogWrite("ScriptEngine.lua_register(" + funcName + "): fail");
+            } else {
+                Logger.WriteError("ScriptEngine.lua_register(" + funcName + "): fail");
             }
         }
 

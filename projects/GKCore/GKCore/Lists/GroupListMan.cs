@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -109,8 +109,7 @@ namespace GKCore.Lists
             var grp = fDataOwner as GDMGroupRecord;
             if (fSheetList == null || grp == null) return;
 
-            try
-            {
+            try {
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
@@ -122,10 +121,8 @@ namespace GKCore.Lists
                 }
 
                 fSheetList.EndUpdate();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GroupMembersSublistModel.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GroupMembersSublistModel.UpdateContents(): ", ex);
             }
         }
 

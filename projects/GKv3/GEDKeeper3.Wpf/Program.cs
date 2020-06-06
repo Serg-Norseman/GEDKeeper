@@ -29,8 +29,8 @@ namespace GEDKeeper3.Wpf
 
                 // There should be no links to the application infrastructure
                 Assembly execAssembly = Assembly.GetExecutingAssembly();
-                Logger.LogWrite("CLR Version: " + execAssembly.ImageRuntimeVersion);
-                Logger.LogWrite("GK Version: " + execAssembly.GetName().Version.ToString());
+                Logger.WriteInfo("CLR Version: " + execAssembly.ImageRuntimeVersion);
+                Logger.WriteInfo("GK Version: " + execAssembly.GetName().Version.ToString());
             }
             catch { }
         }
@@ -43,7 +43,7 @@ namespace GEDKeeper3.Wpf
 
             EtoAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
-            Logger.LogInit(EtoAppHost.GetLogFilename());
+            Logger.Init(EtoAppHost.GetLogFilename());
             LogSysInfo();
 
             var application = new Application(Platforms.Wpf);

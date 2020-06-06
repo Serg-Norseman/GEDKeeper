@@ -472,8 +472,7 @@ namespace GKCore.Lists
         {
             bool res = true;
 
-            try
-            {
+            try {
                 object dataval = GetColumnValueEx(fcond.ColumnIndex, -1, false);
                 if (dataval == null) return true;
 
@@ -515,10 +514,8 @@ namespace GKCore.Lists
                         res = !GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
                         break;
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("ListManager.CheckCondition(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("ListManager.CheckCondition(): ", ex);
                 res = true;
             }
 
@@ -536,7 +533,7 @@ namespace GKCore.Lists
                     res = res && CheckCondition(fcond);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("ListManager.CheckCommonFilter(): " + ex.Message);
+                Logger.WriteError("ListManager.CheckCommonFilter(): ", ex);
                 res = true;
             }
 
@@ -630,7 +627,7 @@ namespace GKCore.Lists
                 fXSortFactor = (sortAscending ? 1 : -1);
                 ListTimSort<ValItem>.Sort(fContentList, CompareItems);
             } catch (Exception ex) {
-                Logger.LogWrite("ListManager.SortContents(): " + ex.Message);
+                Logger.WriteError("ListManager.SortContents(): ", ex);
             }
         }
 

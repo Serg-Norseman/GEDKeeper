@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -308,7 +308,7 @@ namespace GKCore.Controllers
                     GKUtils.GetRecordContent(fContext, record, hyperView.Lines);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.ShowRecordInfo(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.ShowRecordInfo(): ", ex);
             }
         }
 
@@ -991,7 +991,7 @@ namespace GKCore.Controllers
                 fView.ReportsItem.Enabled = (fView.ReportsItem.ItemsCount > 0);
                 fView.PluginsItem.Enabled = (fView.PluginsItem.ItemsCount > 0);
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinController.UpdatePluginsItems(): " + ex.Message);
+                Logger.WriteError("BaseWinController.UpdatePluginsItems(): ", ex);
             }
         }
 

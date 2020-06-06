@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -104,7 +104,7 @@ namespace GKCalendarPlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogWrite("GKCalendarPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("GKCalendarPlugin.OnLanguageChange(): ", ex);
             }
         }
 
@@ -118,7 +118,7 @@ namespace GKCalendarPlugin
                     fIcon = new ImageHandler(bmp);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKCalendarPlugin.Startup(): " + ex.Message);
+                Logger.WriteError("GKCalendarPlugin.Startup(): ", ex);
                 result = false;
             }
             return result;

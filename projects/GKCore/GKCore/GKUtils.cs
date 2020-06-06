@@ -29,6 +29,7 @@ using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Cultures;
+using GKCore.Import;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -838,24 +839,19 @@ namespace GKCore
         {
             int result = -1;
 
-            try
-            {
+            try {
                 int dt1 = GetChronologicalYear(ev1);
                 int dt2 = GetChronologicalYear(ev2);
 
-                if (currentEnd && dt2 == 0)
-                {
+                if (currentEnd && dt2 == 0) {
                     dt2 = DateTime.Now.Year;
                 }
 
-                if (dt1 != 0 && dt2 != 0)
-                {
+                if (dt1 != 0 && dt2 != 0) {
                     result = Math.Abs(dt2 - dt1);
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.GetEventsYearsDiff(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.GetEventsYearsDiff(): ", ex);
             }
 
             return result;
@@ -872,14 +868,11 @@ namespace GKCore
             int result = -1;
             if (iRec == null) return result;
 
-            try
-            {
+            try {
                 var lifeDates = iRec.GetLifeDates();
                 result = GetEventsYearsDiff(lifeDates.BirthEvent, lifeDates.DeathEvent, false);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.GetLifeExpectancy(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.GetLifeExpectancy(): ", ex);
             }
 
             return result;
@@ -896,8 +889,7 @@ namespace GKCore
             int result = -1;
             if (iRec == null) return result;
 
-            try
-            {
+            try {
                 var lifeDates = iRec.GetLifeDates();
 
                 if (toYear == -1) {
@@ -908,10 +900,8 @@ namespace GKCore
                         result = toYear - birthYear;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.GetAge(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.GetAge(): ", ex);
             }
 
             return result;
@@ -979,7 +969,7 @@ namespace GKCore
                         }
                     }
                 } catch (Exception ex) {
-                    Logger.LogWrite("GKUtils.GetDaysForBirth(): " + ex.Message);
+                    Logger.WriteError("GKUtils.GetDaysForBirth(): ", ex);
                 }
             }
 
@@ -1144,7 +1134,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKUtils.GetSpousesDiff(): " + ex.Message);
+                Logger.WriteError("GKUtils.GetSpousesDiff(): ", ex);
             }
 
             return result;
@@ -1185,7 +1175,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKUtils.GetFirstborn(): " + ex.Message);
+                Logger.WriteError("GKUtils.GetFirstborn(): ", ex);
             }
             return iChild;
         }
@@ -1195,8 +1185,7 @@ namespace GKCore
             int result = 0;
             if (iRec == null || iChild == null) return result;
 
-            try
-            {
+            try {
                 GDMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.BIRT);
                 if (evt == null) return result;
                 int parentYear = evt.GetChronologicalYear();
@@ -1208,10 +1197,8 @@ namespace GKCore
                 if (parentYear != 0 && childYear != 0) {
                     result = (childYear - parentYear);
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.GetFirstbornAge(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.GetFirstbornAge(): ", ex);
             }
             return result;
         }
@@ -1221,18 +1208,15 @@ namespace GKCore
             int result = 0;
             if (iRec == null) return result;
 
-            try
-            {
+            try {
                 int firstYear = 0;
 
                 GDMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.BIRT);
-                if (evt != null)
-                {
+                if (evt != null) {
                     int mainYear = evt.GetChronologicalYear();
 
                     int num = iRec.SpouseToFamilyLinks.Count;
-                    for (int i = 0; i < num; i++)
-                    {
+                    for (int i = 0; i < num; i++) {
                         GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
                         if (family == null) continue;
 
@@ -1254,10 +1238,8 @@ namespace GKCore
                         result = (firstYear - mainYear);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.GetMarriageAge(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.GetMarriageAge(): ", ex);
             }
             return result;
         }
@@ -1610,8 +1592,7 @@ namespace GKCore
                     for (int i = 0; i < num3; i++) {
                         GDMRecord rec = tree[i];
 
-                        if (rec is GDMIndividualRecord && rec != iRec)
-                        {
+                        if (rec is GDMIndividualRecord && rec != iRec) {
                             GDMIndividualRecord relPerson = (GDMIndividualRecord) rec;
 
                             string unk = GetNameString(relPerson, true, false);
@@ -1626,8 +1607,7 @@ namespace GKCore
                         summary.Add(LangMan.LS(LSID.LSID_Namesakes) + ":");
 
                         int num4 = namesakes.Count;
-                        for (int i = 0; i < num4; i++)
-                        {
+                        for (int i = 0; i < num4; i++) {
                             GDMIndividualRecord relPerson = (GDMIndividualRecord)namesakes.GetObject(i);
                             
                             summary.Add("    " + HyperLink(relPerson.XRef, namesakes[i], 0));
@@ -1637,16 +1617,14 @@ namespace GKCore
                 finally {
                     namesakes.Dispose();
                 }
-            }
-            catch (Exception ex) {
-                Logger.LogWrite("GKUtils.ShowPersonNamesakes(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.ShowPersonNamesakes(): ", ex);
             }
         }
 
         private static void ShowSubjectLinks(GDMRecord aInRecord, GDMRecord subject, StringList aToList)
         {
-            try
-            {
+            try {
                 int num;
 
                 if (subject is GDMNoteRecord) {
@@ -1681,10 +1659,8 @@ namespace GKCore
                         ShowEvent(subject, aToList, evsRec, evsRec.Events[i]);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.ShowSubjectLinks(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.ShowSubjectLinks(): ", ex);
             }
         }
 
@@ -1734,7 +1710,7 @@ namespace GKCore
                     }
                 }*/
             } catch (Exception ex) {
-                Logger.LogWrite("GKUtils.SearchRecordLinks(): " + ex.Message);
+                Logger.WriteError("GKUtils.SearchRecordLinks(): ", ex);
             }
         }
 
@@ -1750,16 +1726,13 @@ namespace GKCore
         {
             if (record == null || summary == null) return;
 
-            try
-            {
-                if (record.MultimediaLinks.Count != 0)
-                {
+            try {
+                if (record.MultimediaLinks.Count != 0) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.LSID_RPMultimedia) + " (" + record.MultimediaLinks.Count.ToString() + "):");
 
                     int num = record.MultimediaLinks.Count;
-                    for (int i = 0; i < num; i++)
-                    {
+                    for (int i = 0; i < num; i++) {
                         GDMMultimediaLink mmLink = record.MultimediaLinks[i];
                         GDMMultimediaRecord mmRec = mmLink.Value as GDMMultimediaRecord;
                         if (mmRec == null || mmRec.FileReferences.Count == 0) continue;
@@ -1769,10 +1742,8 @@ namespace GKCore
                                     HyperLink("view_" + mmRec.XRef, LangMan.LS(LSID.LSID_MediaView), 0) + ")");
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.RecListMediaRefresh(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.RecListMediaRefresh(): ", ex);
             }
         }
 
@@ -1780,16 +1751,13 @@ namespace GKCore
         {
             if (record == null || summary == null) return;
 
-            try
-            {
-                if (record.Notes.Count != 0)
-                {
+            try {
+                if (record.Notes.Count != 0) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.LSID_RPNotes) + " (" + record.Notes.Count.ToString() + "):");
 
                     int num = record.Notes.Count;
-                    for (int i = 0; i < num; i++)
-                    {
+                    for (int i = 0; i < num; i++) {
                         if (i > 0) {
                             summary.Add("");
                         }
@@ -1797,17 +1765,14 @@ namespace GKCore
                         GDMNotes note = record.Notes[i];
 
                         int num2 = note.Lines.Count;
-                        for (int k = 0; k < num2; k++)
-                        {
+                        for (int k = 0; k < num2; k++) {
                             string st = note.Lines[k];
                             summary.Add(st);
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.RecListNotesRefresh(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.RecListNotesRefresh(): ", ex);
             }
         }
 
@@ -1815,16 +1780,13 @@ namespace GKCore
         {
             if (record == null || summary == null) return;
 
-            try
-            {
-                if (record.SourceCitations.Count != 0)
-                {
+            try {
+                if (record.SourceCitations.Count != 0) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.LSID_RPSources) + " (" + record.SourceCitations.Count.ToString() + "):");
 
                     int num = record.SourceCitations.Count;
-                    for (int i = 0; i < num; i++)
-                    {
+                    for (int i = 0; i < num; i++) {
                         GDMSourceCitation cit = record.SourceCitations[i];
                         GDMSourceRecord sourceRec = cit.Value as GDMSourceRecord;
                         if (sourceRec == null) continue;
@@ -1838,10 +1800,8 @@ namespace GKCore
                         summary.Add("  " + HyperLink(sourceRec.XRef, nm, 0));
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.RecListSourcesRefresh(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.RecListSourcesRefresh(): ", ex);
             }
         }
 
@@ -1849,16 +1809,13 @@ namespace GKCore
         {
             if (record == null || summary == null) return;
 
-            try
-            {
-                if (record.Associations.Count != 0)
-                {
+            try {
+                if (record.Associations.Count != 0) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.LSID_Associations) + ":");
 
                     int num = record.Associations.Count;
-                    for (int i = 0; i < num; i++)
-                    {
+                    for (int i = 0; i < num; i++) {
                         GDMAssociation ast = record.Associations[i];
                         string nm = ((ast.Individual == null) ? "" : GetNameString(ast.Individual, true, false));
                         string xref = ((ast.Individual == null) ? "" : ast.Individual.XRef);
@@ -1866,10 +1823,8 @@ namespace GKCore
                         summary.Add("    " + ast.Relation + " " + HyperLink(xref, nm, 0));
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.RecListAssociationsRefresh(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.RecListAssociationsRefresh(): ", ex);
             }
         }
 
@@ -1901,7 +1856,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKUtils.RecListIndividualEventsRefresh(): " + ex.Message);
+                Logger.WriteError("GKUtils.RecListIndividualEventsRefresh(): ", ex);
             }
         }
 
@@ -1928,7 +1883,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKUtils.RecListFamilyEventsRefresh(): " + ex.Message);
+                Logger.WriteError("GKUtils.RecListFamilyEventsRefresh(): ", ex);
             }
         }
 
@@ -1936,16 +1891,13 @@ namespace GKCore
         {
             if (record == null || summary == null) return;
 
-            try
-            {
-                if (record.Groups.Count != 0)
-                {
+            try {
+                if (record.Groups.Count != 0) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.LSID_RPGroups) + ":");
 
                     int num = record.Groups.Count;
-                    for (int i = 0; i < num; i++)
-                    {
+                    for (int i = 0; i < num; i++) {
                         GDMPointer ptr = record.Groups[i];
                         GDMGroupRecord grp = ptr.Value as GDMGroupRecord;
                         if (grp == null) continue;
@@ -1953,10 +1905,8 @@ namespace GKCore
                         summary.Add("    " + HyperLink(grp.XRef, grp.GroupName, 0));
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.RecListGroupsRefresh(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.RecListGroupsRefresh(): ", ex);
             }
         }
 
@@ -2002,59 +1952,50 @@ namespace GKCore
                     summary.EndUpdate();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKUtils.ShowFamilyInfo(): " + ex.Message);
+                Logger.WriteError("GKUtils.ShowFamilyInfo(): " , ex);
             }
         }
-        
+
         public static void ShowGroupInfo(GDMGroupRecord groupRec, StringList summary)
         {
             if (summary == null) return;
 
-            try
-            {
+            try {
                 StringList mbrList = new StringList();
                 summary.BeginUpdate();
-                try
-                {
+                try {
                     summary.Clear();
-                    if (groupRec != null)
-                    {
+                    if (groupRec != null) {
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + groupRec.GroupName + "[/size][/b][/u]");
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Members) + " (" + groupRec.Members.Count.ToString() + "):");
 
                         int num = groupRec.Members.Count;
-                        for (int i = 0; i < num; i++)
-                        {
+                        for (int i = 0; i < num; i++) {
                             GDMPointer ptr = groupRec.Members[i];
                             GDMIndividualRecord member = (GDMIndividualRecord)ptr.Value;
-                            
+
                             mbrList.AddObject(GetNameString(member, true, false), member);
                         }
                         mbrList.Sort();
 
                         int num2 = mbrList.Count;
-                        for (int i = 0; i < num2; i++)
-                        {
+                        for (int i = 0; i < num2; i++) {
                             GDMIndividualRecord member = (GDMIndividualRecord)mbrList.GetObject(i);
-                            
+
                             summary.Add("    " + HyperLink(member.XRef, mbrList[i], i + 1));
                         }
 
                         RecListNotesRefresh(groupRec, summary);
                         RecListMediaRefresh(groupRec, summary);
                     }
-                }
-                finally
-                {
+                } finally {
                     summary.EndUpdate();
                     mbrList.Dispose();
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.ShowGroupInfo(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.ShowGroupInfo(): ", ex);
             }
         }
 
@@ -2092,7 +2033,7 @@ namespace GKCore
                     summary.EndUpdate();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKUtils.ShowMultimediaInfo(): " + ex.Message);
+                Logger.WriteError("GKUtils.ShowMultimediaInfo(): ", ex);
             }
         }
 
@@ -2100,14 +2041,11 @@ namespace GKCore
         {
             if (summary == null) return;
 
-            try
-            {
+            try {
                 summary.BeginUpdate();
-                try
-                {
+                try {
                     summary.Clear();
-                    if (noteRec != null)
-                    {
+                    if (noteRec != null) {
                         summary.Add("");
                         summary.AddStrings(noteRec.Lines);
                         summary.Add("");
@@ -2115,20 +2053,15 @@ namespace GKCore
 
                         GDMTree tree = noteRec.GetTree();
                         int num = tree.RecordsCount;
-                        for (int i = 0; i < num; i++)
-                        {
+                        for (int i = 0; i < num; i++) {
                             ShowSubjectLinks(tree[i], noteRec, summary);
                         }
                     }
-                }
-                finally
-                {
+                } finally {
                     summary.EndUpdate();
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.ShowNoteInfo(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.ShowNoteInfo(): ", ex);
             }
         }
 
@@ -2170,7 +2103,7 @@ namespace GKCore
                                 summary.Add("  " + LangMan.LS(LSID.LSID_Mother) + ": " + st + GetLifeStr(mother));
                             }
                         } catch (Exception ex) {
-                            Logger.LogWrite("GKUtils.ShowPersonInfo().Parents(): " + ex.Message);
+                            Logger.WriteError("GKUtils.ShowPersonInfo().Parents()", ex);
                         }
 
                         try {
@@ -2221,7 +2154,7 @@ namespace GKCore
                                 }
                             }
                         } catch (Exception ex) {
-                            Logger.LogWrite("GKUtils.ShowPersonInfo().Families(): " + ex.Message);
+                            Logger.WriteError("GKUtils.ShowPersonInfo().Families()", ex);
                         }
 
                         RecListIndividualEventsRefresh(iRec, summary);
@@ -2234,15 +2167,11 @@ namespace GKCore
                         ShowPersonNamesakes(tree, iRec, summary);
                         ShowPersonExtInfo(tree, iRec, summary);
                     }
-                }
-                finally
-                {
+                } finally {
                     summary.EndUpdate();
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.ShowPersonInfo(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.ShowPersonInfo(): ", ex);
             }
         }
 
@@ -2301,7 +2230,7 @@ namespace GKCore
                     summary.EndUpdate();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKUtils.ShowSourceInfo(): " + ex.Message);
+                Logger.WriteError("GKUtils.ShowSourceInfo(): ", ex);
             }
         }
 
@@ -2309,14 +2238,11 @@ namespace GKCore
         {
             if (summary == null) return;
 
-            try
-            {
+            try {
                 summary.BeginUpdate();
-                try
-                {
+                try {
                     summary.Clear();
-                    if (repositoryRec != null)
-                    {
+                    if (repositoryRec != null) {
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + repositoryRec.RepositoryName.Trim() + "[/size][/b][/u]");
                         summary.Add("");
@@ -2329,19 +2255,15 @@ namespace GKCore
                         GDMTree tree = repositoryRec.GetTree();
 
                         int num = tree.RecordsCount;
-                        for (int i = 0; i < num; i++)
-                        {
+                        for (int i = 0; i < num; i++) {
                             GDMRecord rec = tree[i];
 
-                            if (rec.RecordType == GDMRecordType.rtSource)
-                            {
+                            if (rec.RecordType == GDMRecordType.rtSource) {
                                 GDMSourceRecord srcRec = (GDMSourceRecord) rec;
 
                                 int num2 = srcRec.RepositoryCitations.Count;
-                                for (int j = 0; j < num2; j++)
-                                {
-                                    if (srcRec.RepositoryCitations[j].Value == repositoryRec)
-                                    {
+                                for (int j = 0; j < num2; j++) {
+                                    if (srcRec.RepositoryCitations[j].Value == repositoryRec) {
                                         summary.Add("    " + GenRecordLink(srcRec, false));
                                     }
                                 }
@@ -2350,15 +2272,11 @@ namespace GKCore
 
                         RecListNotesRefresh(repositoryRec, summary);
                     }
-                }
-                finally
-                {
+                } finally {
                     summary.EndUpdate();
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.ShowRepositoryInfo(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.ShowRepositoryInfo(): ", ex);
             }
         }
 
@@ -2366,14 +2284,11 @@ namespace GKCore
         {
             if (summary == null) return;
 
-            try
-            {
+            try {
                 summary.BeginUpdate();
-                try
-                {
+                try {
                     summary.Clear();
-                    if (researchRec != null)
-                    {
+                    if (researchRec != null) {
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Title) + ": [u][b][size=+1]\"" + researchRec.ResearchName.Trim() + "\"[/size][/b][/u]");
                         summary.Add("");
@@ -2382,40 +2297,34 @@ namespace GKCore
                         summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + researchRec.StartDate.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
                         summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + researchRec.StopDate.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
 
-                        if (researchRec.Tasks.Count > 0)
-                        {
+                        if (researchRec.Tasks.Count > 0) {
                             summary.Add("");
                             summary.Add(LangMan.LS(LSID.LSID_RPTasks) + ":");
 
                             int num = researchRec.Tasks.Count;
-                            for (int i = 0; i < num; i++)
-                            {
+                            for (int i = 0; i < num; i++) {
                                 GDMTaskRecord taskRec = researchRec.Tasks[i].Value as GDMTaskRecord;
                                 summary.Add("    " + GenRecordLink(taskRec, false));
                             }
                         }
 
-                        if (researchRec.Communications.Count > 0)
-                        {
+                        if (researchRec.Communications.Count > 0) {
                             summary.Add("");
                             summary.Add(LangMan.LS(LSID.LSID_RPCommunications) + ":");
 
                             int num2 = researchRec.Communications.Count;
-                            for (int i = 0; i < num2; i++)
-                            {
+                            for (int i = 0; i < num2; i++) {
                                 GDMCommunicationRecord corrRec = researchRec.Communications[i].Value as GDMCommunicationRecord;
                                 summary.Add("    " + GenRecordLink(corrRec, false));
                             }
                         }
 
-                        if (researchRec.Groups.Count != 0)
-                        {
+                        if (researchRec.Groups.Count != 0) {
                             summary.Add("");
                             summary.Add(LangMan.LS(LSID.LSID_RPGroups) + ":");
 
                             int num3 = researchRec.Groups.Count;
-                            for (int i = 0; i < num3; i++)
-                            {
+                            for (int i = 0; i < num3; i++) {
                                 GDMGroupRecord grp = (GDMGroupRecord)researchRec.Groups[i].Value;
 
                                 summary.Add("    " + HyperLink(grp.XRef, grp.GroupName, 0));
@@ -2424,15 +2333,11 @@ namespace GKCore
 
                         RecListNotesRefresh(researchRec, summary);
                     }
-                }
-                finally
-                {
+                } finally {
                     summary.EndUpdate();
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.ShowResearchInfo(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.ShowResearchInfo(): ", ex);
             }
         }
 
@@ -2440,14 +2345,11 @@ namespace GKCore
         {
             if (summary == null) return;
 
-            try
-            {
+            try {
                 summary.BeginUpdate();
-                try
-                {
+                try {
                     summary.Clear();
-                    if (taskRec != null)
-                    {
+                    if (taskRec != null) {
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Goal) + ": [u][b][size=+1]" + GetTaskGoalStr(taskRec) + "[/size][/b][/u]");
                         summary.Add("");
@@ -2457,15 +2359,11 @@ namespace GKCore
 
                         RecListNotesRefresh(taskRec, summary);
                     }
-                }
-                finally
-                {
+                } finally {
                     summary.EndUpdate();
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.ShowTaskInfo(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.ShowTaskInfo(): ", ex);
             }
         }
 
@@ -2473,14 +2371,11 @@ namespace GKCore
         {
             if (summary == null) return;
 
-            try
-            {
+            try {
                 summary.BeginUpdate();
-                try
-                {
+                try {
                     summary.Clear();
-                    if (commRec != null)
-                    {
+                    if (commRec != null) {
                         GDMTree tree = commRec.GetTree();
 
                         summary.Add("");
@@ -2493,15 +2388,11 @@ namespace GKCore
                         RecListNotesRefresh(commRec, summary);
                         RecListMediaRefresh(commRec, summary);
                     }
-                }
-                finally
-                {
+                } finally {
                     summary.EndUpdate();
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.ShowCommunicationInfo(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.ShowCommunicationInfo(): ", ex);
             }
         }
 
@@ -2509,15 +2400,12 @@ namespace GKCore
         {
             if (summary == null) return;
 
-            try
-            {
+            try {
                 summary.BeginUpdate();
                 StringList linkList = null;
-                try
-                {
+                try {
                     summary.Clear();
-                    if (locRec != null)
-                    {
+                    if (locRec != null) {
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + locRec.LocationName.Trim() + "[/size][/b][/u]");
                         summary.Add("");
@@ -2528,16 +2416,14 @@ namespace GKCore
 
                         linkList = GetLocationLinks(tree, locRec);
 
-                        if (linkList.Count > 0)
-                        {
+                        if (linkList.Count > 0) {
                             linkList.Sort();
 
                             summary.Add("");
                             summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
 
                             int num = linkList.Count;
-                            for (int i = 0; i < num; i++)
-                            {
+                            for (int i = 0; i < num; i++) {
                                 GDMRecord rec = linkList.GetObject(i) as GDMRecord;
                                 summary.Add("    " + HyperLink(rec.XRef, linkList[i], 0));
                             }
@@ -2546,27 +2432,20 @@ namespace GKCore
                         RecListNotesRefresh(locRec, summary);
                         RecListMediaRefresh(locRec, summary);
                     }
-                }
-                finally
-                {
+                } finally {
                     if (linkList != null) linkList.Dispose();
                     summary.EndUpdate();
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKUtils.ShowLocationInfo(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.ShowLocationInfo(): ", ex);
             }
         }
 
         public static void GetRecordContent(IBaseContext baseContext, GDMRecord record, StringList ctx)
         {
-            if (record != null && ctx != null)
-            {
-                try
-                {
-                    switch (record.RecordType)
-                    {
+            if (record != null && ctx != null) {
+                try {
+                    switch (record.RecordType) {
                         case GDMRecordType.rtIndividual:
                             GKUtils.ShowPersonInfo(baseContext, record as GDMIndividualRecord, ctx);
                             break;
@@ -2611,10 +2490,8 @@ namespace GKCore
                             GKUtils.ShowLocationInfo(record as GDMLocationRecord, ctx);
                             break;
                     }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogWrite("GKUtils.GetRecordContext(): " + ex.Message);
+                } catch (Exception ex) {
+                    Logger.WriteError("GKUtils.GetRecordContext(): ", ex);
                 }
             }
         }

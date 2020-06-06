@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,12 +23,13 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP.Views;
+using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
 
-namespace GKCore
+namespace GKCore.Controllers
 {
     /// <summary>
     /// 
@@ -446,20 +447,16 @@ namespace GKCore
 
             IndividualListFilter iFilter = (IndividualListFilter)listMan.Filter;
 
-            if (iFilter.SourceMode == FilterGroupMode.Selected)
-            {
+            if (iFilter.SourceMode == FilterGroupMode.Selected) {
                 GDMSourceRecord src = baseWin.Context.Tree.XRefIndex_Find(iFilter.SourceRef) as GDMSourceRecord;
-                if (src != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedSourceFilter)))
-                {
+                if (src != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedSourceFilter))) {
                     indivRec.AddSource(src, "", 0);
                 }
             }
 
-            if (iFilter.FilterGroupMode == FilterGroupMode.Selected)
-            {
+            if (iFilter.FilterGroupMode == FilterGroupMode.Selected) {
                 GDMGroupRecord grp = baseWin.Context.Tree.XRefIndex_Find(iFilter.GroupRef) as GDMGroupRecord;
-                if (grp != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedGroupFilter)))
-                {
+                if (grp != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedGroupFilter))) {
                     grp.AddMember(indivRec);
                 }
             }
@@ -618,8 +615,7 @@ namespace GKCore
             bool result = false;
             GDMRecord rec = null;
 
-            switch (rt)
-            {
+            switch (rt) {
                 case GDMRecordType.rtIndividual:
                     {
                         // FIXME: legacy code, checkit
@@ -647,6 +643,7 @@ namespace GKCore
                         rec = fam;
                         break;
                     }
+
                 case GDMRecordType.rtNote:
                     {
                         GDMNoteRecord note = null;
@@ -654,6 +651,7 @@ namespace GKCore
                         rec = note;
                         break;
                     }
+
                 case GDMRecordType.rtMultimedia:
                     {
                         GDMMultimediaRecord mmRec = null;
@@ -661,6 +659,7 @@ namespace GKCore
                         rec = mmRec;
                         break;
                     }
+
                 case GDMRecordType.rtSource:
                     {
                         GDMSourceRecord src = null;
@@ -668,6 +667,7 @@ namespace GKCore
                         rec = src;
                         break;
                     }
+
                 case GDMRecordType.rtRepository:
                     {
                         GDMRepositoryRecord rep = null;
@@ -675,6 +675,7 @@ namespace GKCore
                         rec = rep;
                         break;
                     }
+
                 case GDMRecordType.rtGroup:
                     {
                         GDMGroupRecord grp = null;
@@ -682,6 +683,7 @@ namespace GKCore
                         rec = grp;
                         break;
                     }
+
                 case GDMRecordType.rtResearch:
                     {
                         GDMResearchRecord rsr = null;
@@ -689,6 +691,7 @@ namespace GKCore
                         rec = rsr;
                         break;
                     }
+
                 case GDMRecordType.rtTask:
                     {
                         GDMTaskRecord tsk = null;
@@ -696,6 +699,7 @@ namespace GKCore
                         rec = tsk;
                         break;
                     }
+
                 case GDMRecordType.rtCommunication:
                     {
                         GDMCommunicationRecord comm = null;
@@ -703,6 +707,7 @@ namespace GKCore
                         rec = comm;
                         break;
                     }
+
                 case GDMRecordType.rtLocation:
                     {
                         GDMLocationRecord loc = null;
@@ -783,11 +788,9 @@ namespace GKCore
         {
             bool result = false;
 
-            if (record != null)
-            {
+            if (record != null) {
                 string msg = "";
-                switch (record.RecordType)
-                {
+                switch (record.RecordType) {
                     case GDMRecordType.rtIndividual:
                         msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), GKUtils.GetNameString(((GDMIndividualRecord)record), true, false));
                         break;
@@ -853,17 +856,15 @@ namespace GKCore
             bool result = false;
 
             GDMIndividualRecord father = baseWin.Context.SelectPerson(person, TargetMode.tmChild, GDMSex.svMale);
-            if (father != null)
-            {
+            if (father != null) {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, father);
-                if (family != null)
-                {
+                if (family != null) {
                     if (family.Husband.Value == null) {
                         // new family
                         result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, father);
                     } else {
                         // selected family with husband
-                        Logger.LogWrite("BaseController.AddFather(): fail, because family already has father");
+                        Logger.WriteError("BaseController.AddFather(): fail, because family already has father");
                         result = true;
                     }
                 }
@@ -876,11 +877,9 @@ namespace GKCore
         {
             bool result = false;
 
-            if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachFatherQuery)))
-            {
+            if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachFatherQuery))) {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
-                if (family != null)
-                {
+                if (family != null) {
                     GDMIndividualRecord father = family.Husband.Individual;
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, father);
                 }
@@ -902,7 +901,7 @@ namespace GKCore
                         result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, mother);
                     } else {
                         // selected family with wife
-                        Logger.LogWrite("BaseController.AddMother(): fail, because family already has mother");
+                        Logger.WriteError("BaseController.AddMother(): fail, because family already has mother");
                         result = true;
                     }
                 }
@@ -915,11 +914,9 @@ namespace GKCore
         {
             bool result = false;
 
-            if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMotherQuery)))
-            {
+            if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMotherQuery))) {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
-                if (family != null)
-                {
+                if (family != null) {
                     GDMIndividualRecord mother = family.Wife.Individual;
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, mother);
                 }

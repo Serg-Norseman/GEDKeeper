@@ -62,7 +62,7 @@ namespace GKCore.Charts
             get { return fDestRect.Width; }
         }
 
-        public TCGenerationsControl(ITreeChartBox chart) : base(chart)
+        public TCGenerationsControl(ITreeChart chart) : base(chart)
         {
             fBlankColor = AppHost.GfxProvider.CreateColor(191, 191, 191);
             fSelectColor = AppHost.GfxProvider.CreateColor(128, 128, 128);

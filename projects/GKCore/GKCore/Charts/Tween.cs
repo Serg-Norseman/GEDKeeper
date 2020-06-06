@@ -22,7 +22,7 @@ using System;
 using BSLib;
 using GKCore.Interfaces;
 
-namespace GKCore
+namespace GKCore.Charts
 {
     public enum TweenAnimation
     {
@@ -71,8 +71,7 @@ namespace GKCore
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (fTimer != null) fTimer.Dispose();
             }
             base.Dispose(disposing);
@@ -142,11 +141,11 @@ namespace GKCore
                 case TweenAnimation.EaseInQuad:
                     // quadratic (t^2) easing in - accelerating from zero velocity
                     return (int)(c*(t/=d)*t + b);
-                    
+
                 case TweenAnimation.EaseOutQuad:
                     // quadratic (t^2) easing out - decelerating to zero velocity
                     return (int)(-c*(t=t/d)*(t-2)+b);
-                    
+
                 case TweenAnimation.EaseInOutQuad:
                     // quadratic easing in/out - acceleration until halfway, then deceleration
                     if ((t/=d/2)<1) return (int)(c/2*t*t+b);
@@ -159,7 +158,7 @@ namespace GKCore
                 case TweenAnimation.EaseOutCubic:
                     // cubic easing in - accelerating from zero velocity
                     return (int)(c*((t=t/d-1)*t*t + 1) + b);
-                    
+
                 case TweenAnimation.EaseInOutCubic:
                     // cubic easing in - accelerating from zero velocity
                     if ((t/=d/2) < 1) return (int)(c/2*t*t*t+b);

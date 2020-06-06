@@ -461,14 +461,11 @@ namespace GKCore.Options
 
         private void LngPrepareProc(string fileName)
         {
-            try
-            {
-                using (StreamReader lngFile = new StreamReader(fileName, Encoding.UTF8))
-                {
+            try {
+                using (StreamReader lngFile = new StreamReader(fileName, Encoding.UTF8)) {
                     string st = lngFile.ReadLine(); // header
 
-                    if (!string.IsNullOrEmpty(st) && st[0] == ';')
-                    {
+                    if (!string.IsNullOrEmpty(st) && st[0] == ';') {
                         st = st.Remove(0, 1);
                         string[] lngParams = st.Split(',');
                         if (lngParams.Length < 3)
@@ -484,10 +481,8 @@ namespace GKCore.Options
                         fLanguages.Add(lngRec);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GlobalOptions.LngPrepareProc("+fileName+"): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GlobalOptions.LngPrepareProc(" + fileName + ")", ex);
             }
         }
 
@@ -498,7 +493,7 @@ namespace GKCore.Options
                 string[] langFiles = Directory.GetFiles(path, "*.lng", SearchOption.TopDirectoryOnly);
                 for (int i = 0; i < langFiles.Length; i++) LngPrepareProc(langFiles[i]);
             } catch (Exception ex) {
-                Logger.LogWrite("GlobalOptions.FindLanguages(): " + ex.Message);
+                Logger.WriteError("GlobalOptions.FindLanguages(): ", ex);
             }
         }
 
@@ -748,7 +743,7 @@ namespace GKCore.Options
                     ini.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GlobalOptions.LoadFromFile(): " + ex.Message);
+                Logger.WriteError("GlobalOptions.LoadFromFile(): ", ex);
             }
         }
 
@@ -886,7 +881,7 @@ namespace GKCore.Options
                     ini.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GlobalOptions.SaveToFile(): " + ex.Message);
+                Logger.WriteError("GlobalOptions.SaveToFile(): ", ex);
             }
         }
     }

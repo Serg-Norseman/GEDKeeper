@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -102,7 +102,7 @@ namespace GDModel
 
                 return string.IsNullOrEmpty(strValue) ? string.Empty : GEDCOMUtils.ParseDateValue(GetTree(), this, strValue);
             } catch (Exception ex) {
-                Logger.LogWrite("GEDCOMDateValue.ParseString(\"" + strValue + "\"): " + ex.Message);
+                Logger.WriteError("GDMDateValue.ParseString(\"" + strValue + "\"): ", ex);
                 return strValue;
             }
         }

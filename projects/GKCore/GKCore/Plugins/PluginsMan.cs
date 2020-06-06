@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -73,7 +73,7 @@ namespace GKCore.Plugins
         public void Load(IHost host, string path)
         {
             if (!Directory.Exists(path)) return;
-            Logger.LogWrite("Plugins load path: " + path);
+            Logger.WriteInfo("Plugins load path: " + path);
 
             try {
                 #if !NETSTANDARD
@@ -95,7 +95,7 @@ namespace GKCore.Plugins
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PluginsMan.Load(" + path + "): " + ex.Message);
+                Logger.WriteError("PluginsMan.Load(" + path + ")", ex);
             }
         }
 
@@ -106,7 +106,7 @@ namespace GKCore.Plugins
                     plugin.Shutdown();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PluginsMan.Unload(): " + ex.Message);
+                Logger.WriteError("PluginsMan.Unload(): ", ex);
             }
         }
 
@@ -117,7 +117,7 @@ namespace GKCore.Plugins
                     plugin.OnLanguageChange();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PluginsMan.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("PluginsMan.OnLanguageChange(): ", ex);
             }
         }
 
@@ -132,7 +132,7 @@ namespace GKCore.Plugins
                 try {
                     subscriber.NotifyRecord(baseWin, record, action);
                 } catch (Exception ex) {
-                    Logger.LogWrite("PluginsMan.NotifyRecord(): " + ex.Message);
+                    Logger.WriteError("PluginsMan.NotifyRecord(): ", ex);
                 }
             }
         }

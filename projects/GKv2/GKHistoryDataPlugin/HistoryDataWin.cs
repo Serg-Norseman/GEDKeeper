@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -100,7 +100,7 @@ namespace GKHistoryDataPlugin
                     cbDataFiles.Items.Add(Path.GetFileName(cf));
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("HistoryDataWin.LoadFiles(): " + ex.Message);
+                Logger.WriteError("HistoryDataWin.LoadFiles(): ", ex);
             }
         }
 
@@ -168,7 +168,7 @@ namespace GKHistoryDataPlugin
                 worker.IsBackground = true;
                 worker.Start();
             } catch (Exception ex) {
-                Logger.LogWrite("HistoryDataWin.btnCheck_Click(): " + ex.Message);
+                Logger.WriteError("HistoryDataWin.btnCheck_Click(): ", ex);
             }
         }
 
@@ -231,7 +231,7 @@ namespace GKHistoryDataPlugin
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("HistoryDataWin.WorkerMethod(): " + ex.Message);
+                Logger.WriteError("HistoryDataWin.WorkerMethod(): ", ex);
             }
         }
     }
