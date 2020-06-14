@@ -102,22 +102,24 @@ namespace GKCore.Plugins
         public void Unload()
         {
             try {
-                foreach (IPlugin plugin in fPlugins) {
+                for (int i = 0, count = fPlugins.Count; i < count; i++) {
+                    IPlugin plugin = fPlugins[i];
                     plugin.Shutdown();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("PluginsMan.Unload(): ", ex);
+                Logger.WriteError("PluginsMan.Unload()", ex);
             }
         }
 
         public void OnLanguageChange()
         {
             try {
-                foreach (IPlugin plugin in fPlugins) {
+                for (int i = 0, count = fPlugins.Count; i < count; i++) {
+                    IPlugin plugin = fPlugins[i];
                     plugin.OnLanguageChange();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("PluginsMan.OnLanguageChange(): ", ex);
+                Logger.WriteError("PluginsMan.OnLanguageChange()", ex);
             }
         }
 
@@ -125,14 +127,14 @@ namespace GKCore.Plugins
         {
             if (baseWin == null || record == null) return;
 
-            foreach (IPlugin plugin in fPlugins) {
-                ISubscriber subscriber = (plugin as ISubscriber);
-                if (subscriber == null) continue;
-
+            for (int i = 0, count = fPlugins.Count; i < count; i++) {
                 try {
-                    subscriber.NotifyRecord(baseWin, record, action);
+                    ISubscriber subscriber = (fPlugins[i] as ISubscriber);
+                    if (subscriber != null) {
+                        subscriber.NotifyRecord(baseWin, record, action);
+                    }
                 } catch (Exception ex) {
-                    Logger.WriteError("PluginsMan.NotifyRecord(): ", ex);
+                    Logger.WriteError("PluginsMan.NotifyRecord()", ex);
                 }
             }
         }

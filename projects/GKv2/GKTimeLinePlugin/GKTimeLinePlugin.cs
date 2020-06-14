@@ -80,7 +80,7 @@ namespace GKTimeLinePlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.WriteError("GKTimeLinePlugin.OnLanguageChange(): ", ex);
+                Logger.WriteError("GKTimeLinePlugin.OnLanguageChange()", ex);
             }
         }
 

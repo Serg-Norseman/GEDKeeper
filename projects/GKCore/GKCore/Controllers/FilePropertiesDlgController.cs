@@ -56,7 +56,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("FilePropertiesDlgController.Accept(): ", ex);
+                Logger.WriteError("FilePropertiesDlgController.Accept()", ex);
                 return false;
             }
         }

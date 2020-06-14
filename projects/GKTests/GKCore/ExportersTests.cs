@@ -73,8 +73,8 @@ namespace GKCore
                 exporter.Options.PedigreeOptions.IncludeSources = true;
                 exporter.Options.PedigreeOptions.IncludeGenerations = true;
 
-                exporter.Kind = PedigreeExporter.PedigreeKind.pkDescend_Konovalov;
-                Assert.AreEqual(PedigreeExporter.PedigreeKind.pkDescend_Konovalov, exporter.Kind);
+                exporter.Kind = PedigreeExporter.PedigreeKind.Descend_Konovalov;
+                Assert.AreEqual(PedigreeExporter.PedigreeKind.Descend_Konovalov, exporter.Kind);
 
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
                 Assert.IsTrue(exporter.Generate(new WriterStub()));
@@ -83,12 +83,12 @@ namespace GKCore
                 Assert.IsTrue(exporter.Generate(new WriterStub()));
 
 
-                exporter.Kind = PedigreeExporter.PedigreeKind.pkDescend_dAboville;
+                exporter.Kind = PedigreeExporter.PedigreeKind.Descend_dAboville;
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
                 Assert.IsTrue(exporter.Generate(new WriterStub()));
 
 
-                exporter.Kind = PedigreeExporter.PedigreeKind.pkAscend;
+                exporter.Kind = PedigreeExporter.PedigreeKind.Ascend;
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
                 Assert.IsTrue(exporter.Generate(new WriterStub()));
             }

@@ -52,7 +52,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("CommonFilterDlgController.Accept(): ", ex);
+                Logger.WriteError("CommonFilterDlgController.Accept()", ex);
                 return false;
             }
         }

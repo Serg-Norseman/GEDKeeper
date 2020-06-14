@@ -126,7 +126,7 @@ namespace GKCore
                     File.Delete(cachedFile);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("PortraitsCache.RemoveObsolete(): ", ex);
+                Logger.WriteError("PortraitsCache.RemoveObsolete()", ex);
             }
         }
     }

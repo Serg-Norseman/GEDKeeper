@@ -86,7 +86,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("MediaEditDlgController.Accept(): ", ex);
+                Logger.WriteError("MediaEditDlgController.Accept()", ex);
                 return false;
             }
         }

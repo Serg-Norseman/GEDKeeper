@@ -66,7 +66,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("AssociationEditController.Accept(): ", ex);
+                Logger.WriteError("AssociationEditController.Accept()", ex);
                 return false;
             }
         }

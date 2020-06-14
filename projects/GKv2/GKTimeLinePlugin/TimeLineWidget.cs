@@ -192,7 +192,7 @@ namespace GKTimeLinePlugin
                     result = (fYearCurrent >= bdy && fYearCurrent <= ddy);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TimeLineWidget.FilterHandler(): ", ex);
+                Logger.WriteError("TimeLineWidget.FilterHandler()", ex);
             }
 
             return result;

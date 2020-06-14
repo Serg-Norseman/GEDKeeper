@@ -67,7 +67,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("PortraitSelectDlgController.Accept(): ", ex);
+                Logger.WriteError("PortraitSelectDlgController.Accept()", ex);
                 return false;
             }
         }

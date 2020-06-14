@@ -89,7 +89,7 @@ namespace GKChroniclePlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.WriteError("GKChroniclePlugin.OnLanguageChange(): ", ex);
+                Logger.WriteError("GKChroniclePlugin.OnLanguageChange()", ex);
             }
         }
 
@@ -99,7 +99,7 @@ namespace GKChroniclePlugin
             try {
                 CloseForm();
             } catch (Exception ex) {
-                Logger.WriteError("GKChroniclePlugin.Shutdown(): ", ex);
+                Logger.WriteError("GKChroniclePlugin.Shutdown()", ex);
                 result = false;
             }
             return result;

@@ -396,7 +396,7 @@ namespace GKCore.Charts
                     CertaintyAssessment = 0.0f;
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartPerson.BuildBy(): ", ex);
+                Logger.WriteError("TreeChartPerson.BuildBy()", ex);
                 throw;
             }
         }
@@ -465,7 +465,7 @@ namespace GKCore.Charts
                     //idx++;
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartPerson.InitInfo(): ", ex);
+                Logger.WriteError("TreeChartPerson.InitInfo()", ex);
             }
         }
 
@@ -517,7 +517,7 @@ namespace GKCore.Charts
                     fWidth += imgW;
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartPerson.CalcBounds(): ", ex);
+                Logger.WriteError("TreeChartPerson.CalcBounds()", ex);
             }
         }
 

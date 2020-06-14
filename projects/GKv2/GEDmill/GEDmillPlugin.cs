@@ -85,7 +85,7 @@ namespace GEDmill
                 if (fForm != null)
                     fForm.SetLang();
             } catch (Exception ex) {
-                Logger.WriteError("GEDmillPlugin.OnLanguageChange(): ", ex);
+                Logger.WriteError("GEDmillPlugin.OnLanguageChange()", ex);
             }
         }
 
@@ -95,7 +95,7 @@ namespace GEDmill
             try {
                 CloseForm();
             } catch (Exception ex) {
-                Logger.WriteError("GEDmillPlugin.Shutdown(): ", ex);
+                Logger.WriteError("GEDmillPlugin.Shutdown()", ex);
                 result = false;
             }
             return result;

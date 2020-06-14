@@ -162,7 +162,7 @@ namespace GKCore.Kinships
                     return fullRel;
                 }
             } catch (Exception ex) {
-                Logger.WriteError("KinshipsGraph.GetRelationship(): ", ex);
+                Logger.WriteError("KinshipsGraph.GetRelationship()", ex);
                 return "";
             }
         }

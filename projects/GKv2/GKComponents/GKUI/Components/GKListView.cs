@@ -591,7 +591,7 @@ namespace GKUI.Components
 
                 if (tempRec != null) SelectItem(tempRec);
             } catch (Exception ex) {
-                Logger.WriteError("GKListView.UpdateContents(): ", ex);
+                Logger.WriteError("GKListView.UpdateContents()", ex);
             }
         }
 
@@ -633,7 +633,7 @@ namespace GKUI.Components
 
                 return result;
             } catch (Exception ex) {
-                Logger.WriteError("GKListView.GetSelectedData(): ", ex);
+                Logger.WriteError("GKListView.GetSelectedData()", ex);
                 return null;
             }
         }
@@ -675,7 +675,7 @@ namespace GKUI.Components
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GKListView.ResizeColumn(): ", ex);
+                Logger.WriteError("GKListView.ResizeColumn()", ex);
             }
         }
 
@@ -757,7 +757,7 @@ namespace GKUI.Components
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GKListView.SelectItem(): ", ex);
+                Logger.WriteError("GKListView.SelectItem()", ex);
             }
         }
 

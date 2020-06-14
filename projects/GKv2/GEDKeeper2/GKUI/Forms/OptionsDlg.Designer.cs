@@ -102,6 +102,44 @@
         private System.Windows.Forms.RadioButton radMaiden;
         private System.Windows.Forms.RadioButton radMarried;
         private System.Windows.Forms.GroupBox grpAdvancedNames;
+        private System.Windows.Forms.CheckBox chkAllowMediaDirectRefs;
+        private System.Windows.Forms.TabPage pageMultimedia;
+        private System.Windows.Forms.CheckBox chkEmbeddedMediaPlayer;
+        private System.Windows.Forms.CheckBox chkLoadRecentFiles;
+        private System.Windows.Forms.CheckBox chkRemovableMediaWarning;
+        private System.Windows.Forms.CheckBox chkDefaultPortraits;
+        private System.Windows.Forms.ComboBox cmbGeocoder;
+        private System.Windows.Forms.Label lblGeocoder;
+        private System.Windows.Forms.CheckBox chkInvertedTree;
+        private System.Windows.Forms.CheckBox chkMarriagesDates;
+        private System.Windows.Forms.CheckBox chkAutoCheckUpdates;
+        private System.Windows.Forms.CheckBox chkShowPlaces;
+        private System.Windows.Forms.CheckBox chkHideUnknownSpouses;
+        private System.Windows.Forms.GroupBox grpSpacings;
+        private System.Windows.Forms.Label lblSpouseDist;
+        private System.Windows.Forms.Label lblGenDist;
+        private System.Windows.Forms.Label lblBranchDist;
+        private System.Windows.Forms.Label lblMargins;
+        private System.Windows.Forms.NumericUpDown numSpouseDist;
+        private System.Windows.Forms.NumericUpDown numGenDist;
+        private System.Windows.Forms.NumericUpDown numBranchDist;
+        private System.Windows.Forms.NumericUpDown numMargins;
+        private System.Windows.Forms.CheckBox chkAutoSortSpouses;
+        private System.Windows.Forms.CheckBox chkAutoSortChildren;
+        private System.Windows.Forms.CheckBox chkCheckTreeSize;
+        private System.Windows.Forms.CheckBox chkCharsetDetection;
+        private System.Windows.Forms.CheckBox chkAllowDeleteMediaFileFromRefs;
+        private System.Windows.Forms.CheckBox chkAllowDeleteMediaFileFromStgArc;
+        private System.Windows.Forms.Label lblMediaStoreDefault;
+        private System.Windows.Forms.CheckBox chkAllowMediaStoreRelativeReferences;
+        private System.Windows.Forms.ComboBox cmbMediaStoreDefault;
+        private System.Windows.Forms.CheckBox chkDeleteMediaFileWithoutConfirm;
+        private System.Windows.Forms.Label lblBackupRevisionsMaxCount;
+        private System.Windows.Forms.NumericUpDown numBackupRevisionsMaxCount;
+        private System.Windows.Forms.CheckBox chkFirstCapitalLetterInNames;
+        private System.Windows.Forms.NumericUpDown numDefaultDepth;
+        private System.Windows.Forms.Label lblDefaultDepth;
+        private System.Windows.Forms.CheckBox chkDialogClosingWarn;
 
         private void InitializeComponent()
         {
@@ -1939,45 +1977,6 @@
             this.grpPedigreeFormat.ResumeLayout(false);
             this.pagePlugins.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
-        private System.Windows.Forms.CheckBox chkAllowMediaDirectRefs;
-        private System.Windows.Forms.TabPage pageMultimedia;
-        private System.Windows.Forms.CheckBox chkEmbeddedMediaPlayer;
-        private System.Windows.Forms.CheckBox chkLoadRecentFiles;
-        private System.Windows.Forms.CheckBox chkRemovableMediaWarning;
-        private System.Windows.Forms.CheckBox chkDefaultPortraits;
-        private System.Windows.Forms.ComboBox cmbGeocoder;
-        private System.Windows.Forms.Label lblGeocoder;
-        private System.Windows.Forms.CheckBox chkInvertedTree;
-        private System.Windows.Forms.CheckBox chkMarriagesDates;
-        private System.Windows.Forms.CheckBox chkAutoCheckUpdates;
-        private System.Windows.Forms.CheckBox chkShowPlaces;
-        private System.Windows.Forms.CheckBox chkHideUnknownSpouses;
-        private System.Windows.Forms.GroupBox grpSpacings;
-        private System.Windows.Forms.Label lblSpouseDist;
-        private System.Windows.Forms.Label lblGenDist;
-        private System.Windows.Forms.Label lblBranchDist;
-        private System.Windows.Forms.Label lblMargins;
-        private System.Windows.Forms.NumericUpDown numSpouseDist;
-        private System.Windows.Forms.NumericUpDown numGenDist;
-        private System.Windows.Forms.NumericUpDown numBranchDist;
-        private System.Windows.Forms.NumericUpDown numMargins;
-        private System.Windows.Forms.CheckBox chkAutoSortSpouses;
-        private System.Windows.Forms.CheckBox chkAutoSortChildren;
-        private System.Windows.Forms.CheckBox chkCheckTreeSize;
-        private System.Windows.Forms.CheckBox chkCharsetDetection;
-        private System.Windows.Forms.CheckBox chkAllowDeleteMediaFileFromRefs;
-        private System.Windows.Forms.CheckBox chkAllowDeleteMediaFileFromStgArc;
-        private System.Windows.Forms.Label lblMediaStoreDefault;
-        private System.Windows.Forms.CheckBox chkAllowMediaStoreRelativeReferences;
-        private System.Windows.Forms.ComboBox cmbMediaStoreDefault;
-        private System.Windows.Forms.CheckBox chkDeleteMediaFileWithoutConfirm;
-        private System.Windows.Forms.Label lblBackupRevisionsMaxCount;
-        private System.Windows.Forms.NumericUpDown numBackupRevisionsMaxCount;
-        private System.Windows.Forms.CheckBox chkFirstCapitalLetterInNames;
-        private System.Windows.Forms.NumericUpDown numDefaultDepth;
-        private System.Windows.Forms.Label lblDefaultDepth;
-        private System.Windows.Forms.CheckBox chkDialogClosingWarn;
     }
 }

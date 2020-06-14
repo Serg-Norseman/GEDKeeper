@@ -58,7 +58,7 @@ namespace GKCore.Lists
                     fSheetList.AddItem(ast, new object[] { ast.Relation, nm });
                 }
             } catch (Exception ex) {
-                Logger.WriteError("AssociationsListModel.UpdateContents(): ", ex);
+                Logger.WriteError("AssociationsListModel.UpdateContents()", ex);
             }
         }
 

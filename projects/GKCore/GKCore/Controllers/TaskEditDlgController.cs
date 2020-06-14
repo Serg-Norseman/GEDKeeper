@@ -86,7 +86,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("TaskEditDlgController.Accept(): ", ex);
+                Logger.WriteError("TaskEditDlgController.Accept()", ex);
                 return false;
             }
         }

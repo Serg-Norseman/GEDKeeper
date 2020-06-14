@@ -100,7 +100,7 @@ namespace GKPedigreeImporterPlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(ILS.LSID_PluginTitle);
             } catch (Exception ex) {
-                Logger.WriteError("GKPedigreeImporterPlugin.OnLanguageChange(): ", ex);
+                Logger.WriteError("GKPedigreeImporterPlugin.OnLanguageChange()", ex);
             }
         }
     }

@@ -84,7 +84,7 @@ namespace GKCore.Lists
                 fSheetList.ResizeColumn(2);
                 fSheetList.ResizeColumn(3);
             } catch (Exception ex) {
-                Logger.WriteError("EventsListModel.UpdateContents(): ", ex);
+                Logger.WriteError("EventsListModel.UpdateContents()", ex);
             }
         }
 
@@ -166,7 +166,7 @@ namespace GKCore.Lists
                         break;
                 }
             } catch (Exception ex) {
-                Logger.WriteError("EventsListModel.Modify(): ", ex);
+                Logger.WriteError("EventsListModel.Modify()", ex);
                 result = false;
             }
 

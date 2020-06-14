@@ -395,7 +395,7 @@ namespace GKUI.Forms
                 fPerson = p.Rec;
                 GenChart();
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartWin.miRebuildTree_Click(): ", ex);
+                Logger.WriteError("TreeChartWin.miRebuildTree_Click()", ex);
             }
         }
 
@@ -444,7 +444,7 @@ namespace GKUI.Forms
                     UpdateControls();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartWin.GenChart(): ", ex);
+                Logger.WriteError("TreeChartWin.GenChart()", ex);
             }
         }
 
@@ -505,7 +505,7 @@ namespace GKUI.Forms
 
                 AppHost.Instance.UpdateControls(false, true);
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartWin.UpdateControls(): ", ex);
+                Logger.WriteError("TreeChartWin.UpdateControls()", ex);
             }
         }
 

@@ -10,7 +10,7 @@ using Eto.Wpf.Forms.Controls;
 [assembly: AssemblyTitle("GEDKeeper3.Wpf")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2009-2019 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion("3.0.0.0")]
 

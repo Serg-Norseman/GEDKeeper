@@ -491,7 +491,7 @@ namespace GKPedigreeImporterPlugin
             }
             catch (Exception ex)
             {
-                Logger.WriteError("Importer.ParsePerson(): ", ex);
+                Logger.WriteError("Importer.ParsePerson()", ex);
                 throw;
             }
         }
@@ -526,7 +526,7 @@ namespace GKPedigreeImporterPlugin
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("Importer.GetProposeSex(): ", ex);
+                Logger.WriteError("Importer.GetProposeSex()", ex);
             }
 
             return result;
@@ -569,7 +569,7 @@ namespace GKPedigreeImporterPlugin
                         }
                     }
                 } catch (Exception ex) {
-                    Logger.WriteError("Importer.CheckSpouses(): ", ex);
+                    Logger.WriteError("Importer.CheckSpouses()", ex);
                 }
             }
         }
@@ -620,7 +620,7 @@ namespace GKPedigreeImporterPlugin
                     CheckBuffer(buffer, curPerson);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("Importer.ParseBuffer(): ", ex);
+                Logger.WriteError("Importer.ParseBuffer()", ex);
                 throw;
             }
 
@@ -707,7 +707,7 @@ namespace GKPedigreeImporterPlugin
                     progress.ProgressDone();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("Importer.AnalyseRaw(): ", ex);
+                Logger.WriteError("Importer.AnalyseRaw()", ex);
                 return false;
             }
         }
@@ -780,7 +780,7 @@ namespace GKPedigreeImporterPlugin
                     buffer.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("Importer.ImportTextContent(): ", ex);
+                Logger.WriteError("Importer.ImportTextContent()", ex);
                 throw;
             }
         }
@@ -918,7 +918,7 @@ namespace GKPedigreeImporterPlugin
             catch (Exception ex)
             {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                Logger.WriteError("Importer.ImportTableContent(): ", ex);
+                Logger.WriteError("Importer.ImportTableContent()", ex);
                 return false;
             }
         }
@@ -961,7 +961,7 @@ namespace GKPedigreeImporterPlugin
             catch (Exception ex)
             {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                Logger.WriteError("Importer.LoadRawText(): ", ex);
+                Logger.WriteError("Importer.LoadRawText()", ex);
                 return false;
             }
         }
@@ -1022,7 +1022,7 @@ namespace GKPedigreeImporterPlugin
             catch (Exception ex)
             {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                Logger.WriteError("Importer.LoadRawWord(): ", ex);
+                Logger.WriteError("Importer.LoadRawWord()", ex);
                 return false;
             }
         }

@@ -165,7 +165,7 @@ namespace GKTextSearchPlugin
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("SearchManager.ReindexBase(): ", ex);
+                Logger.WriteError("SearchManager.ReindexBase()", ex);
             }
         }
 
@@ -188,7 +188,7 @@ namespace GKTextSearchPlugin
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("SearchManager.UpdateRecord(): ", ex);
+                Logger.WriteError("SearchManager.UpdateRecord()", ex);
             }
         }
 
@@ -208,7 +208,7 @@ namespace GKTextSearchPlugin
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("SearchManager.DeleteRecord(): ", ex);
+                Logger.WriteError("SearchManager.DeleteRecord()", ex);
             }
         }
 
@@ -259,7 +259,7 @@ namespace GKTextSearchPlugin
                                             res.Add(entry);
                                         }
                                     } catch (Exception ex) {
-                                        Logger.WriteError("SearchManager.Search(): ", ex);
+                                        Logger.WriteError("SearchManager.Search()", ex);
                                     }
 
                                     m = m.Next();
@@ -269,7 +269,7 @@ namespace GKTextSearchPlugin
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("SearchManager.Search(): ", ex);
+                Logger.WriteError("SearchManager.Search()", ex);
             }
 
             return res;

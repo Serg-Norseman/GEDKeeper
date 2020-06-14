@@ -61,7 +61,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("GroupEditDlgController.Accept(): ", ex);
+                Logger.WriteError("GroupEditDlgController.Accept()", ex);
                 return false;
             }
         }

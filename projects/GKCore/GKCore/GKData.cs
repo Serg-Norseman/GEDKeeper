@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,6 +32,8 @@ namespace GKCore
         // because it including defines the path to the profile of the program.
         public const string APP_TITLE = "GEDKeeper2";
         public const string APP_TITLE_NEW = "GEDKeeper";
+
+        public const string APP_COPYRIGHT = "Copyright © 2009-2020 by Sergey V. Zhdanovskih";
 
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 

@@ -109,7 +109,7 @@ namespace GKCore.Names
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("NamesTable.LoadFromFile(): ", ex);
+                Logger.WriteError("NamesTable.LoadFromFile()", ex);
             }
         }
 
@@ -245,7 +245,7 @@ namespace GKCore.Names
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("NamesTable.ImportName(): ", ex);
+                Logger.WriteError("NamesTable.ImportName()", ex);
             }
         }
     }

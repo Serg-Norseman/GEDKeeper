@@ -65,7 +65,7 @@ namespace GKCore.Lists
 
                 fSheetList.ResizeColumn(1);
             } catch (Exception ex) {
-                Logger.WriteError("SourceCitationsListModel.UpdateContents(): ", ex);
+                Logger.WriteError("SourceCitationsListModel.UpdateContents()", ex);
             }
         }
 

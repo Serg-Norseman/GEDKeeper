@@ -268,7 +268,7 @@ namespace GKCore.Charts
                 var result = AppHost.GfxProvider.LoadResourceImage(name, makeTransp);
                 return result;
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartModel.PrepareImage(): ", ex);
+                Logger.WriteError("TreeChartModel.PrepareImage()", ex);
                 return null;
             }
         }
@@ -292,7 +292,7 @@ namespace GKCore.Charts
                 fPersExpPic = PrepareImage("btn_expand2.gif", true);
                 fInfoPic = PrepareImage("btn_info.gif", true);
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartModel.InitSigns(): ", ex);
+                Logger.WriteError("TreeChartModel.InitSigns()", ex);
             }
         }
 
@@ -386,7 +386,7 @@ namespace GKCore.Charts
             }
             catch (Exception ex)
             {
-                Logger.WriteError("TreeChartModel.AddDescPerson(): ", ex);
+                Logger.WriteError("TreeChartModel.AddDescPerson()", ex);
                 throw;
             }
         }
@@ -503,7 +503,7 @@ namespace GKCore.Charts
             }
             catch (Exception ex)
             {
-                Logger.WriteError("TreeChartModel.DoAncestorsStep(): ", ex);
+                Logger.WriteError("TreeChartModel.DoAncestorsStep()", ex);
                 throw;
             }
         }
@@ -732,7 +732,7 @@ namespace GKCore.Charts
             }
             catch (Exception ex)
             {
-                Logger.WriteError("TreeChartModel.DoDescendantsStep(): ", ex);
+                Logger.WriteError("TreeChartModel.DoDescendantsStep()", ex);
                 throw;
             }
         }
@@ -1502,7 +1502,7 @@ namespace GKCore.Charts
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartModel.DrawPerson(): ", ex);
+                Logger.WriteError("TreeChartModel.DrawPerson()", ex);
             }
         }
 

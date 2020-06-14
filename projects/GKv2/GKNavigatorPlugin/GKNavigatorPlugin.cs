@@ -100,7 +100,7 @@ namespace GKNavigatorPlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.WriteError("GKNavigatorPlugin.OnLanguageChange(): ", ex);
+                Logger.WriteError("GKNavigatorPlugin.OnLanguageChange()", ex);
             }
         }
 
@@ -110,7 +110,7 @@ namespace GKNavigatorPlugin
             try {
                 CloseForm();
             } catch (Exception ex) {
-                Logger.WriteError("GKNavigatorPlugin.Shutdown(): ", ex);
+                Logger.WriteError("GKNavigatorPlugin.Shutdown()", ex);
                 result = false;
             }
             return result;

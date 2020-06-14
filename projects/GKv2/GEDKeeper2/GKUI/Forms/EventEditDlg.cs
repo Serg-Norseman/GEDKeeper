@@ -244,7 +244,7 @@ namespace GKUI.Forms
                     txtBox.Text = dt[0] + "/" + dt[1] + "/" + txt.PadLeft(4, '_');
                 }
             } catch (Exception ex) {
-                Logger.WriteError("EventEditDlg.DragDrop(): ", ex);
+                Logger.WriteError("EventEditDlg.DragDrop()", ex);
             }
         }
 

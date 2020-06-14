@@ -410,7 +410,7 @@ namespace GKTreeVizPlugin
                     DrawPerson(prs);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeVizControl.glDraw(): ", ex);
+                Logger.WriteError("TreeVizControl.glDraw()", ex);
             }
         }
 
@@ -448,7 +448,7 @@ namespace GKTreeVizPlugin
 
                 fSys.Start();
             } catch (Exception ex) {
-                Logger.WriteError("TreeVizControl.CreateArborGraph(): ", ex);
+                Logger.WriteError("TreeVizControl.CreateArborGraph()", ex);
             }
         }
 
@@ -514,7 +514,7 @@ namespace GKTreeVizPlugin
 
                 StartTimer();
             } catch (Exception ex) {
-                Logger.WriteError("TreeVizControl.onArborStop(): ", ex);
+                Logger.WriteError("TreeVizControl.onArborStop()", ex);
             }
         }
 
@@ -576,7 +576,7 @@ namespace GKTreeVizPlugin
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeVizControl.PrepareDescendants(): ", ex);
+                Logger.WriteError("TreeVizControl.PrepareDescendants()", ex);
             }
         }
 
@@ -612,7 +612,7 @@ namespace GKTreeVizPlugin
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeVizControl.recalcDescendants.2(): ", ex);
+                Logger.WriteError("TreeVizControl.recalcDescendants.2()", ex);
             }
         }
 
@@ -626,7 +626,7 @@ namespace GKTreeVizPlugin
                     RecalcDescendants(prs);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeVizControl.recalcDescendants.1(): ", ex);
+                Logger.WriteError("TreeVizControl.recalcDescendants.1()", ex);
             }
         }
 
@@ -653,7 +653,7 @@ namespace GKTreeVizPlugin
                         break;
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeVizControl.ProcessPersonStem(): ", ex);
+                Logger.WriteError("TreeVizControl.ProcessPersonStem()", ex);
             }
         }
 
@@ -695,7 +695,7 @@ namespace GKTreeVizPlugin
 
                 return result;
             } catch (Exception ex) {
-                Logger.WriteError("TreeVizControl.PreparePerson(): ", ex);
+                Logger.WriteError("TreeVizControl.PreparePerson()", ex);
                 return null;
             }
         }
@@ -729,7 +729,7 @@ namespace GKTreeVizPlugin
                     OpenGL.glPopMatrix();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeVizControl.DrawArborSystem(): ", ex);
+                Logger.WriteError("TreeVizControl.DrawArborSystem()", ex);
             }
         }
 
@@ -791,7 +791,7 @@ namespace GKTreeVizPlugin
                     OpenGL.glPopMatrix();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeVizControl.DrawPerson(): ", ex);
+                Logger.WriteError("TreeVizControl.DrawPerson()", ex);
             }
         }
 
@@ -812,7 +812,7 @@ namespace GKTreeVizPlugin
                     RecalcDescendants();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeVizControl.UpdateTV(): ", ex);
+                Logger.WriteError("TreeVizControl.UpdateTV()", ex);
             }
             fBusy = false;
         }

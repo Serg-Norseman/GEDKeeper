@@ -57,7 +57,7 @@ namespace GKCore.MVP
                 RollbackChanges();
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("DialogController.Cancel(): ", ex);
+                Logger.WriteError("DialogController.Cancel()", ex);
                 return false;
             }
         }

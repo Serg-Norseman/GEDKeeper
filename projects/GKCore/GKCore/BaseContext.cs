@@ -534,7 +534,7 @@ namespace GKCore
                     // temp stub, remove try/finally here?
                 }
             } catch (Exception ex) {
-                Logger.WriteError("BaseContext.CollectTips(): ", ex);
+                Logger.WriteError("BaseContext.CollectTips()", ex);
             }
         }
 
@@ -864,7 +864,7 @@ namespace GKCore
                         }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("BaseContext.MediaLoad_fn(): ", ex);
+                Logger.WriteError("BaseContext.MediaLoad_fn()", ex);
                 fileName = "";
             }
 
@@ -1003,7 +1003,7 @@ namespace GKCore
 
                 return result;
             } catch (Exception ex) {
-                Logger.WriteError("BaseContext.MediaDelete(): ", ex);
+                Logger.WriteError("BaseContext.MediaDelete()", ex);
                 return false;
             }
         }
@@ -1061,7 +1061,7 @@ namespace GKCore
                         break;
                 }
             } catch (Exception ex) {
-                Logger.WriteError("BaseContext.VerifyMediaFile(): ", ex);
+                Logger.WriteError("BaseContext.VerifyMediaFile()", ex);
                 fileName = string.Empty;
             }
 
@@ -1126,7 +1126,7 @@ namespace GKCore
             } catch (MediaFileNotFoundException) {
                 throw;
             } catch (Exception ex) {
-                Logger.WriteError("BaseContext.LoadMediaImage(): ", ex);
+                Logger.WriteError("BaseContext.LoadMediaImage()", ex);
                 result = null;
             }
             return result;
@@ -1151,7 +1151,7 @@ namespace GKCore
             } catch (MediaFileNotFoundException) {
                 throw;
             } catch (Exception ex) {
-                Logger.WriteError("BaseContext.LoadMediaImage(): ", ex);
+                Logger.WriteError("BaseContext.LoadMediaImage()", ex);
                 result = null;
             }
             return result;
@@ -1178,7 +1178,7 @@ namespace GKCore
             } catch (MediaFileNotFoundException) {
                 throw;
             } catch (Exception ex) {
-                Logger.WriteError("BaseContext.GetPrimaryBitmap(): ", ex);
+                Logger.WriteError("BaseContext.GetPrimaryBitmap()", ex);
                 result = null;
             }
             return result;
@@ -1193,7 +1193,7 @@ namespace GKCore
                 GDMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
                 result = (mmLink == null) ? null : mmLink.GetUID();
             } catch (Exception ex) {
-                Logger.WriteError("BaseContext.GetPrimaryBitmapUID(): ", ex);
+                Logger.WriteError("BaseContext.GetPrimaryBitmapUID()", ex);
                 result = null;
             }
             return result;
@@ -1284,7 +1284,7 @@ namespace GKCore
 
                 AppHost.ForceGC();
             } catch (Exception ex) {
-                Logger.WriteError("BaseContext.FileLoad(): ", ex);
+                Logger.WriteError("BaseContext.FileLoad()", ex);
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));
             }
 
@@ -1320,7 +1320,7 @@ namespace GKCore
                 AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, ": access denied" }));
             } catch (Exception ex) {
                 AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, "" }));
-                Logger.WriteError("BaseContext.FileSave(): ", ex);
+                Logger.WriteError("BaseContext.FileSave()", ex);
             }
 
             return result;
@@ -1409,7 +1409,7 @@ namespace GKCore
                 var gedcomProvider = new GEDCOMProvider(fTree);
                 gedcomProvider.SaveToFile(rfn, charSet);
             } catch (Exception ex) {
-                Logger.WriteError("BaseContext.CriticalSave(): ", ex);
+                Logger.WriteError("BaseContext.CriticalSave()", ex);
             }
         }
 
@@ -1636,7 +1636,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("BaseContext.SelectFamily(): ", ex);
+                Logger.WriteError("BaseContext.SelectFamily()", ex);
                 result = null;
             }
 
@@ -1659,7 +1659,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("BaseContext.SelectPerson(): ", ex);
+                Logger.WriteError("BaseContext.SelectPerson()", ex);
                 result = null;
             }
 
@@ -1685,7 +1685,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("BaseContext.SelectRecord(): ", ex);
+                Logger.WriteError("BaseContext.SelectRecord()", ex);
                 result = null;
             }
 

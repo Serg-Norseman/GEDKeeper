@@ -198,7 +198,7 @@ namespace GKUI.Components
                     gfx.DrawText(fDrawFont, fBlackBrush, 10, 10, energy);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("ArborViewer.OnPaint(): ", ex);
+                Logger.WriteError("ArborViewer.OnPaint()", ex);
             }
         }
 

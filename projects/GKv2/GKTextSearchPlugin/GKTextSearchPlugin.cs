@@ -92,7 +92,7 @@ namespace GKTextSearchPlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.WriteError("GKTextSearchPlugin.OnLanguageChange(): ", ex);
+                Logger.WriteError("GKTextSearchPlugin.OnLanguageChange()", ex);
             }
         }
 
@@ -104,7 +104,7 @@ namespace GKTextSearchPlugin
                     fSearchMan = new SearchManager(this);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GKTextSearchPlugin.Startup(): ", ex);
+                Logger.WriteError("GKTextSearchPlugin.Startup()", ex);
                 result = false;
             }
             return result;
@@ -116,7 +116,7 @@ namespace GKTextSearchPlugin
             try {
                 //if (this.fSearchMan != null) this.fSearchMan.Dispose();
             } catch (Exception ex) {
-                Logger.WriteError("GKTextSearchPlugin.Shutdown(): ", ex);
+                Logger.WriteError("GKTextSearchPlugin.Shutdown()", ex);
                 result = false;
             }
             return result;

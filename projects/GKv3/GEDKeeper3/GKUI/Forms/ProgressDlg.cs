@@ -109,7 +109,7 @@ namespace GKUI.Forms
                 //DoInit(title, max);
                 Application.Instance.Invoke(delegate { DoInit(title, max); });
             } catch (Exception ex) {
-                Logger.WriteError("ProgressDlg.ProgressInit(): ", ex);
+                Logger.WriteError("ProgressDlg.ProgressInit()", ex);
             }
         }
 
@@ -121,7 +121,7 @@ namespace GKUI.Forms
                     Application.Instance.Invoke(delegate { DoDone(); });
                 }
             } catch (Exception ex) {
-                Logger.WriteError("ProgressDlg.ProgressDone(): ", ex);
+                Logger.WriteError("ProgressDlg.ProgressDone()", ex);
             }
         }
 

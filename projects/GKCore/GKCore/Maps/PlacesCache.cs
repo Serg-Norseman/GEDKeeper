@@ -75,7 +75,7 @@ namespace GKCore.Maps
 
                 pointsList.AddRange(cachedPoints);
             } catch (Exception ex) {
-                Logger.WriteError("PlacesCache.GetPlacePoints(): ", ex);
+                Logger.WriteError("PlacesCache.GetPlacePoints()", ex);
             }
         }
 
@@ -91,7 +91,7 @@ namespace GKCore.Maps
                     fMemoryCache = rawData[0] as Dictionary<string, GeoPoint>;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PlacesCache.Load(): " + ex.Message);
+                Logger.WriteError("PlacesCache.Load()", ex);
             }*/
         }
 
@@ -105,7 +105,7 @@ namespace GKCore.Maps
                     writer.Write(content);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PlacesCache.Load(): " + ex.Message);
+                Logger.WriteError("PlacesCache.Save()", ex);
             }*/
         }
     }

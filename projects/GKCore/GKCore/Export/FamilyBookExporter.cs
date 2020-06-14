@@ -219,7 +219,7 @@ namespace GKCore.Export
 
                 fWriter.EndMulticolumns();
             } catch (Exception ex) {
-                Logger.WriteError("FamilyBookExporter.InternalGenerate(): ", ex);
+                Logger.WriteError("FamilyBookExporter.InternalGenerate()", ex);
                 throw;
             }
         }

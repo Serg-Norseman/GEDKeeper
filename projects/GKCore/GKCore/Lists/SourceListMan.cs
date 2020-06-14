@@ -134,7 +134,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.WriteError("SourceRepositoriesSublistModel.UpdateContents(): ", ex);
+                Logger.WriteError("SourceRepositoriesSublistModel.UpdateContents()", ex);
             }
         }
 

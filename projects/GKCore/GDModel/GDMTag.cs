@@ -182,7 +182,8 @@ namespace GDModel
 
         protected void AssignList<T>(GDMList<T> srcList, GDMList<T> destList) where T : GDMTag
         {
-            foreach (GDMTag sourceTag in srcList) {
+            for (int i = 0, count = srcList.Count; i < count; i++) {
+                GDMTag sourceTag = srcList[i];
                 T copyTag = (T)Activator.CreateInstance(sourceTag.GetType(), new object[] { this });
                 copyTag.Assign(sourceTag);
                 destList.Add(copyTag);
@@ -211,12 +212,12 @@ namespace GDModel
             string su = GEDCOMUtils.InvariantTextInfo.ToUpper(tagName);
 
             int pos = su.IndexOf('\\');
-            string S = ((pos >= 0) ? su.Substring(0, pos) : su);
+            string S = (pos >= 0) ? su.Substring(0, pos) : su;
 
             GDMTag tempTag = this;
 
             while (true) {
-                int index = ((S == su) ? startIndex : 0);
+                int index = (S == su) ? startIndex : 0;
 
                 GDMList<GDMTag> tempSubTags = tempTag.fTags;
                 int tempSubCount = tempSubTags.Count;
@@ -229,7 +230,7 @@ namespace GDModel
                     su = su.Substring(pos + 1);
 
                     pos = su.IndexOf('\\');
-                    S = ((pos >= 0) ? su.Substring(0, pos) : su);
+                    S = (pos >= 0) ? su.Substring(0, pos) : su;
                 } else {
                     su = "";
                 }
@@ -257,7 +258,7 @@ namespace GDModel
 
         public virtual bool IsEmpty()
         {
-            return (string.IsNullOrEmpty(fStringValue) && (fTags.Count == 0));
+            return string.IsNullOrEmpty(fStringValue) && (fTags.Count == 0);
         }
 
         public virtual float IsMatch(GDMTag tag, MatchParams matchParams)

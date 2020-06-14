@@ -146,24 +146,25 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         Cells = { new DefStackLayout(lblMarriedSurname, txtMarriedSurname),
-                                  new DefStackLayout(lblNamePrefix, txtNamePrefix), null }
+                                  new DefStackLayout(lblNamePrefix, txtNamePrefix),
+                                  new DefStackLayout(lblSex, cmbSex) }
                     },
                     new TableRow {
                         Cells = { new DefStackLayout(lblName, txtName),
                                   new DefStackLayout(lblNameSuffix, txtNameSuffix),
-                                  new DefStackLayout(lblSex, cmbSex) }
+                                  chkBookmark }
                     },
                     new TableRow {
                         Cells = { new DefStackLayout(lblPatronymic, cmbPatronymic),
                                   new DefStackLayout(lblNickname, txtNickname),
-                                  TableLayout.Horizontal(10, chkBookmark, chkPatriarch) }
+                                  chkPatriarch }
                     }
                 }
             };
 
             imgPortrait = new GKPortrait();
             imgPortrait.Image = null;
-            imgPortrait.Width = 150;
+            //imgPortrait.Width = 150;
             //imgPortrait.Size = new Size(149, 165);
             imgPortrait.SlidePanelHeight = 36;
             imgPortrait.PixelSpeed = 5;
@@ -187,7 +188,7 @@ namespace GKUI.Forms
             };
 
             GroupBox1 = new GroupBox();
-            GroupBox1.Content = TableLayout.Horizontal(10, new TableCell(personLayout, true), portraitLayout);
+            GroupBox1.Content = TableLayout.Horizontal(10, new TableCell(personLayout, true), new TableCell(portraitLayout));
 
             //
 
@@ -255,34 +256,6 @@ namespace GKUI.Forms
 
             //
 
-            btnAccept = new Button();
-            btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = UIHelper.LongButtonSize;
-            btnAccept.Text = "btnAccept";
-            btnAccept.Click += btnAccept_Click;
-
-            btnCancel = new Button();
-            btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = UIHelper.LongButtonSize;
-            btnCancel.Text = "btnCancel";
-            btnCancel.Click += btnCancel_Click;
-
-            //
-
-            lblRestriction = new Label();
-            lblRestriction.Text = "lblRestriction";
-
-            cmbRestriction = new ComboBox();
-            cmbRestriction.ReadOnly = true;
-            cmbRestriction.Size = new Size(180, 22);
-            cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
-
-            btnNameCopy = new Button();
-            btnNameCopy.Size = UIHelper.ShortButtonSize;
-            btnNameCopy.Click += btnNameCopy_Click;
-
-            //
-
             pageEvents = new TabPage();
             pageEvents.Text = "pageEvents";
 
@@ -324,8 +297,34 @@ namespace GKUI.Forms
             tabsPersonData.Pages.Add(pageSources);
             tabsPersonData.Pages.Add(pageUserRefs);
             tabsPersonData.Pages.Add(pageParents);
-            //tabsPersonData.Size = new Size(600, 300);
-            //tabsPersonData.Height = 200;
+
+            //
+
+            lblRestriction = new Label();
+            lblRestriction.Text = "lblRestriction";
+
+            cmbRestriction = new ComboBox();
+            cmbRestriction.ReadOnly = true;
+            cmbRestriction.Size = new Size(180, 22);
+            cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
+
+            btnNameCopy = new Button();
+            btnNameCopy.Size = UIHelper.ShortButtonSize;
+            btnNameCopy.Click += btnNameCopy_Click;
+
+            btnAccept = new Button();
+            btnAccept.ImagePosition = ButtonImagePosition.Left;
+            btnAccept.Size = UIHelper.LongButtonSize;
+            btnAccept.Text = "btnAccept";
+            btnAccept.Click += btnAccept_Click;
+
+            btnCancel = new Button();
+            btnCancel.ImagePosition = ButtonImagePosition.Left;
+            btnCancel.Size = UIHelper.LongButtonSize;
+            btnCancel.Text = "btnCancel";
+            btnCancel.Click += btnCancel_Click;
+
+            //
 
             Content = new DefTableLayout {
                 Rows = {

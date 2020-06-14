@@ -76,7 +76,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("CommunicationEditDlgController.Accept(): ", ex);
+                Logger.WriteError("CommunicationEditDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -109,7 +109,7 @@ namespace GKCore.Controllers
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("CommunicationEditDlgController.SetCommunication(): ", ex);
+                Logger.WriteError("CommunicationEditDlgController.SetCommunication()", ex);
             }
         }
 

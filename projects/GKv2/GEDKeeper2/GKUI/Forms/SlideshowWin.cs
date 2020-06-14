@@ -107,7 +107,6 @@ namespace GKUI.Forms
                 tbStart.Text = LangMan.LS(LSID.LSID_Start);
                 tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
             }
-
             timer1.Enabled = active;
         }
 

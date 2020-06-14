@@ -139,7 +139,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("PersonEditDlgController.Accept(): ", ex);
+                Logger.WriteError("PersonEditDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -172,7 +172,7 @@ namespace GKCore.Controllers
 
                 UpdateControls(true);
             } catch (Exception ex) {
-                Logger.WriteError("PersonEditDlgController.UpdateView(): ", ex);
+                Logger.WriteError("PersonEditDlgController.UpdateView()", ex);
             }
         }
 
@@ -365,7 +365,7 @@ namespace GKCore.Controllers
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + "): ", ex);
+                Logger.WriteError("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + ")", ex);
             }
         }
 
@@ -493,6 +493,21 @@ namespace GKCore.Controllers
             if (family == null) return;
 
             JumpToRecord(family.Wife.Individual);
+        }
+
+        public void JumpToPersonSpouse(GDMFamilyRecord family)
+        {
+            GDMIndividualRecord spouse = null;
+            switch (fPerson.Sex) {
+                case GDMSex.svMale:
+                    spouse = family.Wife.Individual;
+                    break;
+
+                case GDMSex.svFemale:
+                    spouse = family.Husband.Individual;
+                    break;
+            }
+            JumpToRecord(spouse);
         }
     }
 }

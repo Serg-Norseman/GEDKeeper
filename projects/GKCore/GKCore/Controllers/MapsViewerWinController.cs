@@ -130,7 +130,7 @@ namespace GKCore.Controllers
                     PlacesCache.Instance.Save();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("MapsViewerWin.PlacesLoad(): ", ex);
+                Logger.WriteError("MapsViewerWin.PlacesLoad()", ex);
             }
         }
 
@@ -169,8 +169,16 @@ namespace GKCore.Controllers
 
                 mapPlace.PlaceRefs.Add(new PlaceRef(placeEvent));
             } catch (Exception ex) {
-                Logger.WriteError("MapsViewerWin.AddPlace(): ", ex);
+                Logger.WriteError("MapsViewerWin.AddPlace()", ex);
             }
+        }
+
+        public void SetCenter()
+        {
+            GeoPoint pt = fView.PlacesTree.GetSelectedData() as GeoPoint;
+            if (pt == null) return;
+
+            fView.MapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
         }
 
         public void SelectPlaces()

@@ -52,7 +52,7 @@ namespace GKCore.Lists
                     fSheetList.AddItem(note, new object[] { note.Lines.Text.Trim() });
                 }
             } catch (Exception ex) {
-                Logger.WriteError("NoteLinksListModel.UpdateContents(): ", ex);
+                Logger.WriteError("NoteLinksListModel.UpdateContents()", ex);
             }
         }
 

@@ -197,7 +197,7 @@ namespace GKCore.SingleInstance
                     IpcFake.SendMessage(IpcFake.CmdSendArgs, args);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("SingleInstanceTracker.SendMessageToFirstInstance.2(): ", ex);
+                Logger.WriteError("SingleInstanceTracker.SendMessageToFirstInstance.2()", ex);
             }
 
             #endif

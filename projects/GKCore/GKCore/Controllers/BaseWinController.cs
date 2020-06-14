@@ -308,7 +308,7 @@ namespace GKCore.Controllers
                     GKUtils.GetRecordContent(fContext, record, hyperView.Lines);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("BaseWinSDI.ShowRecordInfo(): ", ex);
+                Logger.WriteError("BaseWinSDI.ShowRecordInfo()", ex);
             }
         }
 
@@ -991,7 +991,7 @@ namespace GKCore.Controllers
                 fView.ReportsItem.Enabled = (fView.ReportsItem.ItemsCount > 0);
                 fView.PluginsItem.Enabled = (fView.PluginsItem.ItemsCount > 0);
             } catch (Exception ex) {
-                Logger.WriteError("BaseWinController.UpdatePluginsItems(): ", ex);
+                Logger.WriteError("BaseWinController.UpdatePluginsItems()", ex);
             }
         }
 

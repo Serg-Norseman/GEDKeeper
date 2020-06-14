@@ -72,7 +72,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("LanguageSelectDlgController.Accept(): ", ex);
+                Logger.WriteError("LanguageSelectDlgController.Accept()", ex);
                 return false;
             }
         }

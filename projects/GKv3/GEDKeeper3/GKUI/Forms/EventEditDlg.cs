@@ -164,6 +164,9 @@ namespace GKUI.Forms
             SetToolTip(btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
             SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
 
+            SetToolTip(txtEventDate1, txtEventDate1.RegionalDatePattern);
+            SetToolTip(txtEventDate2, txtEventDate2.RegionalDatePattern);
+
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);
 
@@ -240,7 +243,7 @@ namespace GKUI.Forms
                     ((MaskedTextBox)sender).Text = dt[0] + '.' + dt[1] + '.' + txt;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("EventEditDlg.DragDrop(): " + ex.Message);
+                Logger.WriteError("EventEditDlg.DragDrop()", ex);
             }
         }*/
 

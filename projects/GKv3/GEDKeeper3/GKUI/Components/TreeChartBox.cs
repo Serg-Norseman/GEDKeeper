@@ -242,7 +242,7 @@ namespace GKUI.Components
                 NavAdd(iRec);
                 DoRootChanged(fModel.Root);
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartBox.GenChart(): ", ex);
+                Logger.WriteError("TreeChartBox.GenChart()", ex);
             }
         }
 
@@ -257,7 +257,7 @@ namespace GKUI.Components
                 GenChart(rootRec, fModel.Kind, false);
                 RestoreSelection();
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartBox.RefreshTree(): ", ex);
+                Logger.WriteError("TreeChartBox.RefreshTree()", ex);
             }
         }
 
@@ -279,7 +279,7 @@ namespace GKUI.Components
                 fModel.KinRoot = fSelected;
                 RecalcChart(noRedraw);
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartBox.RebuildKinships(): ", ex);
+                Logger.WriteError("TreeChartBox.RebuildKinships()", ex);
             }
         }
 
@@ -400,7 +400,7 @@ namespace GKUI.Components
                     deepModel.Draw(ChartDrawMode.dmStatic);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartBox.DrawDeep(): ", ex);
+                Logger.WriteError("TreeChartBox.DrawDeep()", ex);
             }
         }
 
@@ -461,7 +461,7 @@ namespace GKUI.Components
                     RestoreSelection();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartBox.ToggleCollapse(): ", ex);
+                Logger.WriteError("TreeChartBox.ToggleCollapse()", ex);
             }
         }
 

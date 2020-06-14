@@ -88,7 +88,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("FamilyEditDlgController.Accept(): ", ex);
+                Logger.WriteError("FamilyEditDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -114,7 +114,7 @@ namespace GKCore.Controllers
 
                 UpdateControls();
             } catch (Exception ex) {
-                Logger.WriteError("FamilyEditDlgController.SetFamily(): ", ex);
+                Logger.WriteError("FamilyEditDlgController.SetFamily()", ex);
             }
         }
 

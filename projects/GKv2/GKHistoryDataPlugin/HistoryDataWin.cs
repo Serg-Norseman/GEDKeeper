@@ -100,7 +100,7 @@ namespace GKHistoryDataPlugin
                     cbDataFiles.Items.Add(Path.GetFileName(cf));
                 }
             } catch (Exception ex) {
-                Logger.WriteError("HistoryDataWin.LoadFiles(): ", ex);
+                Logger.WriteError("HistoryDataWin.LoadFiles()", ex);
             }
         }
 
@@ -168,7 +168,7 @@ namespace GKHistoryDataPlugin
                 worker.IsBackground = true;
                 worker.Start();
             } catch (Exception ex) {
-                Logger.WriteError("HistoryDataWin.btnCheck_Click(): ", ex);
+                Logger.WriteError("HistoryDataWin.btnCheck_Click()", ex);
             }
         }
 
@@ -231,7 +231,7 @@ namespace GKHistoryDataPlugin
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("HistoryDataWin.WorkerMethod(): ", ex);
+                Logger.WriteError("HistoryDataWin.WorkerMethod()", ex);
             }
         }
     }

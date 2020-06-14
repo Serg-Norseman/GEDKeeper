@@ -55,7 +55,7 @@ namespace GKUI.Forms
 
                 SetViewControl(txtBox);
             } catch (Exception ex) {
-                Logger.WriteError("MediaViewerWin.SetViewText(): ", ex);
+                Logger.WriteError("MediaViewerWin.SetViewText()", ex);
             }
         }
 
@@ -68,7 +68,7 @@ namespace GKUI.Forms
 
                 SetViewControl(rtfBox);
             } catch (Exception ex) {
-                Logger.WriteError("MediaViewerWin.SetViewRTF(): ", ex);
+                Logger.WriteError("MediaViewerWin.SetViewRTF()", ex);
             }
         }
 
@@ -80,7 +80,7 @@ namespace GKUI.Forms
 
                 SetViewControl(browser);
             } catch (Exception ex) {
-                Logger.WriteError("MediaViewerWin.SetViewHTML(): ", ex);
+                Logger.WriteError("MediaViewerWin.SetViewHTML()", ex);
             }
         }
 

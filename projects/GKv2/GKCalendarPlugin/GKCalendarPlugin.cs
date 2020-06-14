@@ -104,7 +104,7 @@ namespace GKCalendarPlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.WriteError("GKCalendarPlugin.OnLanguageChange(): ", ex);
+                Logger.WriteError("GKCalendarPlugin.OnLanguageChange()", ex);
             }
         }
 
@@ -118,7 +118,7 @@ namespace GKCalendarPlugin
                     fIcon = new ImageHandler(bmp);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GKCalendarPlugin.Startup(): ", ex);
+                Logger.WriteError("GKCalendarPlugin.Startup()", ex);
                 result = false;
             }
             return result;

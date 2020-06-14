@@ -79,7 +79,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("Holidays.Load(): ", ex);
+                Logger.WriteError("Holidays.Load()", ex);
             }
         }
 
@@ -123,7 +123,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("Holidays.CollectTips(): ", ex);
+                Logger.WriteError("Holidays.CollectTips()", ex);
             }
         }
     }

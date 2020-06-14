@@ -65,16 +65,14 @@ namespace GKUI.Forms
 
         private void DoStep(int value)
         {
-            if (fVal == value)
-                return;
+            if (fVal == value) return;
 
             fVal = value;
             ProgressBar1.Value = fVal;
 
             double max = ProgressBar1.Maximum;
             double pos = fVal;
-            if (pos == 0.0d)
-                pos = 1;
+            if (pos == 0.0d) pos = 1;
 
             TimeSpan passTime = DateTime.Now - fStartTime;
             TimeSpan restTime = new TimeSpan((long)Math.Truncate((passTime.Ticks / pos) * (max - pos)));

@@ -72,7 +72,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("LocationEditDlgController.Accept(): ", ex);
+                Logger.WriteError("LocationEditDlgController.Accept()", ex);
                 return false;
             }
         }

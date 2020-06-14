@@ -195,7 +195,7 @@ namespace GKNavigatorPlugin
                     treeView1.EndUpdate();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GKNavigatorPlugin.UpdateControls(): ", ex);
+                Logger.WriteError("GKNavigatorPlugin.UpdateControls()", ex);
             }
         }
 

@@ -80,9 +80,9 @@ namespace GKCore.Export
 
         public enum PedigreeKind
         {
-            pkAscend,
-            pkDescend_dAboville,
-            pkDescend_Konovalov
+            Ascend,
+            Descend_dAboville,
+            Descend_Konovalov
         }
 
         private PedigreeFormat fFormat;
@@ -128,10 +128,9 @@ namespace GKCore.Export
             PedigreePerson res = null;
 
             int num = fPersonList.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 PedigreePerson item = fPersonList[i];
-                
+
                 if (item.IRec == iRec) {
                     res = item;
                     break;
@@ -147,8 +146,7 @@ namespace GKCore.Export
             fWriter.AddParagraphChunkAnchor(GetIdStr(person) + ". " + GKUtils.GetNameString(person.IRec, true, false), fPersonFont, person.Id);
             fWriter.AddParagraphChunk(GKUtils.GetPedigreeLifeStr(person.IRec, fOptions.PedigreeOptions.Format), fTextFont);
 
-            if (fOptions.PedigreeOptions.IncludeSources && person.Sources.Count > 0)
-            {
+            if (fOptions.PedigreeOptions.IncludeSources && person.Sources.Count > 0) {
                 fWriter.AddParagraphChunk(" ", fTextFont);
 
                 int num = person.Sources.Count;
@@ -186,13 +184,11 @@ namespace GKCore.Export
         {
             string result = person.Id;
 
-            if (fKind == PedigreeKind.pkDescend_Konovalov && person.Parent != null)
-            {
+            if (fKind == PedigreeKind.Descend_Konovalov && person.Parent != null) {
                 GDMFamilyRecord family = person.IRec.ChildToFamilyLinks[0].Family;
                 string spStr = "";
                 int idx = person.Parent.IRec.IndexOfSpouse(family);
-                if (person.Parent.IRec.SpouseToFamilyLinks.Count > 1)
-                {
+                if (person.Parent.IRec.SpouseToFamilyLinks.Count > 1) {
                     spStr = "/" + (idx + 1).ToString();
                 }
                 result += spStr;
@@ -223,19 +219,15 @@ namespace GKCore.Export
             }
 
             ExtList<PedigreeEvent> evList = new ExtList<PedigreeEvent>(true);
-            try
-            {
+            try {
                 int i;
-                if (person.IRec.Events.Count > 0)
-                {
+                if (person.IRec.Events.Count > 0) {
                     fWriter.AddParagraph(LangMan.LS(LSID.LSID_Events) + ":", fTextFont);
 
                     int num = person.IRec.Events.Count;
-                    for (i = 0; i < num; i++)
-                    {
+                    for (i = 0; i < num; i++) {
                         GDMCustomEvent evt = person.IRec.Events[i];
-                        if (!(evt is GDMIndividualAttribute) || fOptions.PedigreeOptions.IncludeAttributes)
-                        {
+                        if (!(evt is GDMIndividualAttribute) || fOptions.PedigreeOptions.IncludeAttributes) {
                             evList.Add(new PedigreeEvent(person.IRec, evt));
                         }
                     }
@@ -243,8 +235,7 @@ namespace GKCore.Export
                 }
 
                 int num2 = person.IRec.SpouseToFamilyLinks.Count;
-                for (i = 0; i < num2; i++)
-                {
+                for (i = 0; i < num2; i++) {
                     GDMFamilyRecord family = person.IRec.SpouseToFamilyLinks[i].Family;
                     if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
@@ -277,36 +268,30 @@ namespace GKCore.Export
                     }
                     WriteEventList(person, evList);
                 }
-            }
-            finally
-            {
+            } finally {
                 evList.Dispose();
             }
 
-            if (fOptions.PedigreeOptions.IncludeNotes && person.IRec.Notes.Count != 0)
-            {
+            if (fOptions.PedigreeOptions.IncludeNotes && person.IRec.Notes.Count != 0) {
                 fWriter.AddParagraph(LangMan.LS(LSID.LSID_RPNotes) + ":", fTextFont);
 
                 fWriter.BeginList();
 
                 int notesCount = person.IRec.Notes.Count;
-                for (int i = 0; i < notesCount; i++)
-                {
+                for (int i = 0; i < notesCount; i++) {
                     GDMNotes note = person.IRec.Notes[i];
                     fWriter.AddListItem(" " + GKUtils.MergeStrings(note.Lines), fTextFont);
                 }
-                
+
                 fWriter.EndList();
             }
         }
 
         private void WriteCompactFmt(PedigreePerson person)
         {
-            if (fOptions.PedigreeOptions.IncludeNotes && person.IRec.Notes.Count != 0)
-            {
+            if (fOptions.PedigreeOptions.IncludeNotes && person.IRec.Notes.Count != 0) {
                 int num = person.IRec.Notes.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     GDMNotes note = person.IRec.Notes[i];
                     fWriter.AddParagraph(GKUtils.MergeStrings(note.Lines), fTextFont);
                 }
@@ -315,11 +300,9 @@ namespace GKCore.Export
             bool spIndex = person.IRec.SpouseToFamilyLinks.Count > 1;
 
             int num2 = person.IRec.SpouseToFamilyLinks.Count;
-            for (int i = 0; i < num2; i++)
-            {
+            for (int i = 0; i < num2; i++) {
                 GDMFamilyRecord family = person.IRec.SpouseToFamilyLinks[i].Family;
-                if (fBase.Context.IsRecordAccess(family.Restriction))
-                {
+                if (fBase.Context.IsRecordAccess(family.Restriction)) {
                     GDMIndividualRecord spRec;
                     string st;
                     string unk;
@@ -431,21 +414,23 @@ namespace GKCore.Export
                     GDMSourceRecord sourceRec = iRec.SourceCitations[i].Value as GDMSourceRecord;
                     if (sourceRec == null) continue;
 
-                    string srcName = GKUtils.MergeStrings(sourceRec.Title.Lines);
-                    if (srcName == "") {
-                        srcName = sourceRec.ShortTitle;
+                    int srcIndex = fSourceList.IndexOfObject(sourceRec);
+                    if (srcIndex < 0) {
+                        string srcName = sourceRec.ShortTitle;
+                        string srcTitle = GKUtils.MergeStrings(sourceRec.Title.Lines);
+                        if (!string.IsNullOrEmpty(srcName) && !string.IsNullOrEmpty(srcTitle)) {
+                            srcName += "\n";
+                        }
+                        srcName += srcTitle;
+
+                        srcIndex = fSourceList.AddObject(srcName, sourceRec);
                     }
 
-                    int j = fSourceList.IndexOf(srcName);
-                    if (j < 0) {
-                        j = fSourceList.Add(srcName);
-                    }
-
-                    res.Sources.Add((j + 1).ToString());
+                    res.Sources.Add((srcIndex + 1).ToString());
                 }
             }
 
-            if (fKind == PedigreeKind.pkAscend) {
+            if (fKind == PedigreeKind.Ascend) {
                 if (iRec.ChildToFamilyLinks.Count > 0) {
                     GDMFamilyRecord family = iRec.ChildToFamilyLinks[0].Family;
                     if (fBase.Context.IsRecordAccess(family.Restriction)) {
@@ -485,13 +470,11 @@ namespace GKCore.Export
             fPersonList.QuickSort(PersonsCompare);
 
             int num3 = fPersonList.Count;
-            for (int i = 0; i < num3; i++)
-            {
+            for (int i = 0; i < num3; i++) {
                 PedigreePerson obj = fPersonList[i];
 
-                switch (fKind)
-                {
-                    case PedigreeKind.pkDescend_dAboville:
+                switch (fKind) {
+                    case PedigreeKind.Descend_dAboville:
                         if (obj.Parent == null) {
                             obj.Id = "1";
                         } else {
@@ -500,11 +483,10 @@ namespace GKCore.Export
                         }
                         break;
 
-                    case PedigreeKind.pkAscend:
-                    case PedigreeKind.pkDescend_Konovalov:
+                    case PedigreeKind.Ascend:
+                    case PedigreeKind.Descend_Konovalov:
                         obj.Id = (i + 1).ToString();
-                        if (obj.Parent != null)
-                        {
+                        if (obj.Parent != null) {
                             string pid = obj.Parent.Id;
 
                             int p = pid.IndexOf("-");
@@ -542,19 +524,16 @@ namespace GKCore.Export
 
             fPersonList = new ExtList<PedigreePerson>(true);
             fSourceList = new StringList();
-            try
-            {
+            try {
                 GenStep(null, fRoot, 1, 1);
                 ReIndex();
 
                 int curLevel = 0;
                 int num = fPersonList.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     PedigreePerson person = fPersonList[i];
 
-                    if (includeGens && curLevel != person.Level)
-                    {
+                    if (includeGens && curLevel != person.Level) {
                         curLevel = person.Level;
                         string genTitle = LangMan.LS(LSID.LSID_Generation) + " " + ConvertHelper.GetRome(curLevel);
 
@@ -566,15 +545,13 @@ namespace GKCore.Export
                     WritePerson(person);
                 }
 
-                if (fSourceList.Count > 0)
-                {
+                if (fSourceList.Count > 0) {
                     fWriter.BeginParagraph(TextAlignment.taCenter, 12f, 6f);
                     fWriter.AddParagraphChunk(LangMan.LS(LSID.LSID_RPSources), fChapFont);
                     fWriter.EndParagraph();
 
                     int num2 = fSourceList.Count;
-                    for (int j = 0; j < num2; j++)
-                    {
+                    for (int j = 0; j < num2; j++) {
                         string sn = (j + 1).ToString();
                         string sst = sn + ". " + fSourceList[j];
                         string sanc = "src_" + sn;
@@ -582,9 +559,7 @@ namespace GKCore.Export
                         fWriter.AddParagraphAnchor(sst, fTextFont, sanc);
                     }
                 }
-            }
-            finally
-            {
+            } finally {
                 fSourceList.Dispose();
                 fPersonList.Dispose();
             }

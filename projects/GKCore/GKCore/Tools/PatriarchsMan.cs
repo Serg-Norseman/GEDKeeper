@@ -228,7 +228,7 @@ namespace GKCore.Tools
 				aList.Pack();*/
                 }
             } catch (Exception ex) {
-                Logger.WriteError("PatriarchsMan.GetPatriarchsGraph(): ", ex);
+                Logger.WriteError("PatriarchsMan.GetPatriarchsGraph()", ex);
             }
 
             return graph;

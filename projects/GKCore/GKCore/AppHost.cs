@@ -103,7 +103,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("AppHost.AutosaveTimer_Tick(): ", ex);
+                Logger.WriteError("AppHost.AutosaveTimer_Tick()", ex);
             }
         }
 
@@ -139,7 +139,7 @@ namespace GKCore
                     UpdateMan.CheckUpdate();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("AppHost.StartupWork(): ", ex);
+                Logger.WriteError("AppHost.StartupWork()", ex);
             }
         }
 
@@ -509,7 +509,7 @@ namespace GKCore
                     EndLoading();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("AppHost.CreateBase(): ", ex);
+                Logger.WriteError("AppHost.CreateBase()", ex);
             }
 
             return null;
@@ -544,7 +544,7 @@ namespace GKCore
                     EndLoading();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("AppHost.LoadBase(): ", ex);
+                Logger.WriteError("AppHost.LoadBase()", ex);
             }
         }
 
@@ -577,7 +577,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("AppHost.CriticalSave(): ", ex);
+                Logger.WriteError("AppHost.CriticalSave()", ex);
             }
         }
 
@@ -643,7 +643,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.WriteError("AppHost.ProcessHolidays(): ", ex);
+                Logger.WriteError("AppHost.ProcessHolidays()", ex);
             }
         }
 
@@ -686,7 +686,7 @@ namespace GKCore
 
                 UpdateLang();
             } catch (Exception ex) {
-                Logger.WriteError("AppHost.LoadLanguage(): ", ex);
+                Logger.WriteError("AppHost.LoadLanguage()", ex);
             }
         }
 
@@ -746,7 +746,7 @@ namespace GKCore
                     pointsList.Add(pt);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("AppHost.RequestGeoCoords(): ", ex);
+                Logger.WriteError("AppHost.RequestGeoCoords()", ex);
             }
         }
 
@@ -832,7 +832,7 @@ namespace GKCore
                         }
                     }
                 } catch (Exception ex) {
-                    Logger.WriteError("AppHost.OnMessageReceived(): ", ex);
+                    Logger.WriteError("AppHost.OnMessageReceived()", ex);
                 }
             };
 

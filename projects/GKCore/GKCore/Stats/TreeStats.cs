@@ -477,7 +477,7 @@ namespace GKCore.Stats
             }
             catch (Exception ex)
             {
-                Logger.WriteError("TreeStats.WriteStatsReport(): ", ex);
+                Logger.WriteError("TreeStats.WriteStatsReport()", ex);
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
             }
 #endif

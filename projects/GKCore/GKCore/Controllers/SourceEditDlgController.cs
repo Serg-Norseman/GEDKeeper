@@ -55,7 +55,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("SourceEditDlgController.Accept(): ", ex);
+                Logger.WriteError("SourceEditDlgController.Accept()", ex);
                 return false;
             }
         }

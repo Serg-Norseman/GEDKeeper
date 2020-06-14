@@ -493,7 +493,7 @@ namespace GKCore.Options
                 string[] langFiles = Directory.GetFiles(path, "*.lng", SearchOption.TopDirectoryOnly);
                 for (int i = 0; i < langFiles.Length; i++) LngPrepareProc(langFiles[i]);
             } catch (Exception ex) {
-                Logger.WriteError("GlobalOptions.FindLanguages(): ", ex);
+                Logger.WriteError("GlobalOptions.FindLanguages()", ex);
             }
         }
 
@@ -743,7 +743,7 @@ namespace GKCore.Options
                     ini.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GlobalOptions.LoadFromFile(): ", ex);
+                Logger.WriteError("GlobalOptions.LoadFromFile()", ex);
             }
         }
 
@@ -881,7 +881,7 @@ namespace GKCore.Options
                     ini.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GlobalOptions.SaveToFile(): ", ex);
+                Logger.WriteError("GlobalOptions.SaveToFile()", ex);
             }
         }
     }

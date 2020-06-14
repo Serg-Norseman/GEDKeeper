@@ -404,18 +404,7 @@ namespace GKUI.Forms
         {
             GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
             if (eArgs.Action == RecordAction.raJump && family != null) {
-                GDMIndividualRecord spouse = null;
-                switch (fController.Person.Sex) {
-                    case GDMSex.svMale:
-                        spouse = family.Wife.Individual;
-                        break;
-
-                    case GDMSex.svFemale:
-                        spouse = family.Husband.Individual;
-                        break;
-                }
-
-                fController.JumpToRecord(spouse);
+                fController.JumpToPersonSpouse(family);
             }
         }
 

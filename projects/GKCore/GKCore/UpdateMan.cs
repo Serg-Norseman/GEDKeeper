@@ -54,7 +54,7 @@ namespace GKCore
                     #endif
                 } catch (Exception ex) {
                     // crash on WinXP, TLS 1.2 not supported
-                    Logger.WriteError("UpdateMan.GetLastVersion.SP(): ", ex);
+                    Logger.WriteError("UpdateMan.GetLastVersion.SP()", ex);
                 }
 
                 HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(UPDATE_URL);
@@ -90,7 +90,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("UpdateMan.GetLastVersion(): ", ex);
+                Logger.WriteError("UpdateMan.GetLastVersion()", ex);
             } finally {
                 if (reader != null)
                     reader.Close();
@@ -117,7 +117,7 @@ namespace GKCore
                     #endif
                 }
             } catch (Exception ex) {
-                Logger.WriteError("UpdateMan.WorkerMethod(): ", ex);
+                Logger.WriteError("UpdateMan.WorkerMethod()", ex);
             }
         }
 
@@ -140,7 +140,7 @@ namespace GKCore
                 worker.IsBackground = true;
                 worker.Start();
             } catch (Exception ex) {
-                Logger.WriteError("UpdateMan.CheckUpdate(): ", ex);
+                Logger.WriteError("UpdateMan.CheckUpdate()", ex);
             }
         }
     }

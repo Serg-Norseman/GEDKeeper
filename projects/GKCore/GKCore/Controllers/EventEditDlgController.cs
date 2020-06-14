@@ -172,7 +172,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("EventEditController.Accept(): ", ex);
+                Logger.WriteError("EventEditController.Accept()", ex);
                 return false;
             }
         }
