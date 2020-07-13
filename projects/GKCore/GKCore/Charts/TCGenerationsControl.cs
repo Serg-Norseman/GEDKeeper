@@ -70,7 +70,7 @@ namespace GKCore.Charts
 
         public override void UpdateState()
         {
-            fThumbPos = (fChart.DepthLimit >= -1) ? fChart.DepthLimit - 1 : 9;
+            fThumbPos= (fChart.DepthLimitAncestors >= -1) ? fChart.DepthLimitAncestors - 1 : 9;
         }
 
         private static float GetChordLength(float radius, float radianAngle)
@@ -139,8 +139,8 @@ namespace GKCore.Charts
                     if (i != fThumbPos) {
                         fThumbPos = i;
 
-                        int depthLimit = (fThumbPos < 9) ? fThumbPos + 1 : -1;
-                        fChart.DepthLimit = depthLimit;
+                        int depthLimit = (fThumbPos< 9) ? fThumbPos+ 1 : -1;
+                        fChart.DepthLimitAncestors = depthLimit;
                         fChart.GenChart(fChart.Model.Root.Rec, fChart.Kind, true);
                     }
                     break;

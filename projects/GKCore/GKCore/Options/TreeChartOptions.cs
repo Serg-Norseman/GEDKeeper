@@ -45,7 +45,8 @@ namespace GKCore.Options
         public static readonly int UN_HUSBAND_COLOR = -2631681; // FFD7D7FF
         public static readonly int UN_WIFE_COLOR = -10281; // FFFFD7D7
 
-        private int fDepthLimit;
+        private int fDepthLimitAncestors;
+        private int fDepthLimitDescendants;
 
         public bool ChildlessExclude;
         public bool Decorative;
@@ -88,10 +89,16 @@ namespace GKCore.Options
         public int Margins;
         public int SpouseDistance;
 
-        public int DepthLimit
+        public int DepthLimitAncestors
         {
-            get { return fDepthLimit; }
-            set { fDepthLimit = value; }
+            get { return fDepthLimitAncestors; }
+            set { fDepthLimitAncestors = value; }
+        }
+
+        public int DepthLimitDescendants
+        {
+            get { return fDepthLimitDescendants; }
+            set { fDepthLimitDescendants = value; }
         }
 
         public TreeChartOptions()
@@ -226,7 +233,8 @@ namespace GKCore.Options
             Margins = iniFile.ReadInteger("Chart", "Margins", TreeChartModel.DEF_MARGINS);
             SpouseDistance = iniFile.ReadInteger("Chart", "SpouseDistance", TreeChartModel.DEF_SPOUSE_DISTANCE);
 
-            fDepthLimit = iniFile.ReadInteger("Chart", "DepthLimit", -1);
+            fDepthLimitAncestors = iniFile.ReadInteger("Chart", "DepthLimit", -1);
+            fDepthLimitDescendants = iniFile.ReadInteger("Chart", "DepthLimitDescendants", -1);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -274,7 +282,8 @@ namespace GKCore.Options
             iniFile.WriteInteger("Chart", "Margins", Margins);
             iniFile.WriteInteger("Chart", "SpouseDistance", SpouseDistance);
 
-            iniFile.WriteInteger("Chart", "DepthLimit", fDepthLimit);
+            iniFile.WriteInteger("Chart", "DepthLimit", fDepthLimitAncestors);
+            iniFile.WriteInteger("Chart", "DepthLimitDescendants", fDepthLimitDescendants);
         }
     }
 }

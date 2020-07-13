@@ -53,7 +53,8 @@ namespace GKCore.Charts
 
     public interface ITreeChart : IChart
     {
-        int DepthLimit { get; set; }
+        int DepthLimitAncestors { get; set; }
+        int DepthLimitDescendants { get; set; }
         int Height { get; set; }
         TreeChartKind Kind { get; set; }
         TreeChartModel Model { get; }
