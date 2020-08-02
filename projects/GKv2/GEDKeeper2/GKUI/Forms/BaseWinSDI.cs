@@ -347,7 +347,7 @@ namespace GKUI.Forms
             fController.ApplyFilter(recType);
         }
 
-        public void SetExternalFilter(ExternalFilterHandler filterHandler, 
+        public void SetExternalFilter(ExternalFilterHandler filterHandler,
                                       GDMRecordType recType = GDMRecordType.rtNone)
         {
             fController.SetExternalFilter(filterHandler, recType);

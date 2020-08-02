@@ -180,9 +180,8 @@ namespace GKUI.Forms
                 //fThread.SetApartmentState(ApartmentState.STA);
                 //fThread.Start();
 
-                while (!fFormLoaded)
-                {
-                    Thread.Sleep(100);
+                while (!fFormLoaded) {
+                    Thread.Sleep(50);
                 }
                 //fMRE.WaitOne();
             }
