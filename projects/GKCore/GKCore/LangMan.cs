@@ -873,8 +873,9 @@ namespace GKCore
         /* 813 */ LSID_DefaultDepth,
         /* 814 */ LSID_WarningOfDialogUnsavedChanges,
         /* 815 */ LSID_WarnForClosingDialog,
+        /* 816 */ LSID_DottedLinesOfAdoptedChildren,
 
-        /* 000 */ LSID_Last = LSID_WarnForClosingDialog
+        /* 000 */ LSID_Last = LSID_DottedLinesOfAdoptedChildren
     }
 
 
@@ -1703,6 +1704,7 @@ namespace GKCore
             /* 813 */ "Default depth",
             /* 814 */ "The dialog contains unsaved changes. Continue and save?",
             /* 815 */ "Warn for closing dialog with unsaved changes",
+            /* 816 */ "Dotted lines of adopted children",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

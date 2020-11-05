@@ -100,6 +100,7 @@ namespace GKCore.Charts
         public bool IsCollapsed;
         public bool IsVisible;
         public IColor UserColor;
+        public bool Adopted;
 
 
         public IImage Portrait

@@ -136,7 +136,7 @@ namespace GKCore.Charts
         public abstract void DrawPath(IPen pen, IGfxPath path);
         public abstract void DrawPath(IPen pen, IBrush brush, IGfxPath path);
 
-        public virtual IPen CreatePen(IColor color, float width)
+        public virtual IPen CreatePen(IColor color, float width, float[] dashPattern = null)
         {
             return AppHost.GfxProvider.CreatePen(color, width);
         }

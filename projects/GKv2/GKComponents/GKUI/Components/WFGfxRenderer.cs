@@ -241,12 +241,17 @@ namespace GKUI.Components
             return Color.FromArgb(alpha, color);
         }
 
-        public override IPen CreatePen(IColor color, float width)
+        public override IPen CreatePen(IColor color, float width, float[] dashPattern = null)
         {
             Color sdColor = ((ColorHandler)color).Handle;
             sdColor = PrepareColor(sdColor);
 
-            return new PenHandler(new Pen(sdColor, width));
+            var wfPen = new Pen(sdColor, width);
+            if (dashPattern != null) {
+                wfPen.DashPattern = dashPattern;
+            }
+
+            return new PenHandler(wfPen);
         }
 
         public override IBrush CreateSolidBrush(IColor color)

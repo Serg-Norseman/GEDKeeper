@@ -162,6 +162,7 @@ namespace GKUI.Forms
             chkShowPlaces.Checked = fOptions.TreeChartOptions.ShowPlaces;
             chkHideUnknownSpouses.Checked = fOptions.TreeChartOptions.HideUnknownSpouses;
             chkCheckTreeSize.Checked = fOptions.CheckTreeSize;
+            chkDottedLinesOfAdoptedChildren.Checked = fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren;
 
             lblMaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.MaleColor);
             lblFemaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.FemaleColor);
@@ -437,6 +438,7 @@ namespace GKUI.Forms
             fOptions.TreeChartOptions.ShowPlaces = chkShowPlaces.Checked;
             fOptions.TreeChartOptions.HideUnknownSpouses = chkHideUnknownSpouses.Checked;
             fOptions.CheckTreeSize = chkCheckTreeSize.Checked;
+            fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren = chkDottedLinesOfAdoptedChildren.Checked;
 
             fOptions.TreeChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackColor);
             fOptions.TreeChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackColor);
@@ -686,6 +688,7 @@ namespace GKUI.Forms
             chkShowDatesSigns.Text = LangMan.LS(LSID.LSID_ShowDatesSigns);
             chkShowPlaces.Text = LangMan.LS(LSID.LSID_ShowPlaces);
             chkHideUnknownSpouses.Text = LangMan.LS(LSID.LSID_HideUnknownSpouses);
+            chkDottedLinesOfAdoptedChildren.Text = LangMan.LS(LSID.LSID_DottedLinesOfAdoptedChildren);
 
             grpFileBackup.Text = LangMan.LS(LSID.LSID_FileBackup);
             radFBNone.Text = LangMan.LS(LSID.LSID_Not);
