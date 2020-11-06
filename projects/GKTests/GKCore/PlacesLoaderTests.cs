@@ -85,9 +85,8 @@ namespace GKCore
         [Test]
         public void Test_Geocoding_Yandex()
         {
-            // FIXME
-            //var geocoder = IGeocoder.Create("Yandex");
-            //var geoPoints = geocoder.Geocode("New York", 1);
+            var geocoder = IGeocoder.Create("Yandex");
+            var geoPoints = geocoder.Geocode("New York", 1);
             //Assert.IsTrue(geoPoints.Count > 0);
         }
 

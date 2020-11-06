@@ -46,7 +46,8 @@ namespace GKCore
 
         public const int NOTE_NAME_MAX_LENGTH = 64;
 
-        public const string GAPI_KEY = "AIzaSyCebJC5BpniJtRaJCSEl3tXdFy3KhbV5hk";
+        public const string GAPI_KEY = "AIzaSyCyPx_u1PhHaN2d3ld4J8hsgASF5lOdpGY";
+        public const string YAPI_KEY = "a5653896-1335-477f-aac7-10a2ba9e52c5";
 
         public static readonly int HighlightUnparentedColor = 0xFFCACA;
         public static readonly int HighlightUnmarriedColor = 0xFFFFA1;

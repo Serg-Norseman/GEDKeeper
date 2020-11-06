@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,14 +24,13 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Xml;
-
 using BSLib;
 
 namespace GKCore.Maps
 {
     public sealed class OSMGeocoder : IGeocoder
     {
-        private const string REQUEST_URL = "http://nominatim.openstreetmap.org/search.php?q={0}&format=xml&accept-language={1}";
+        private const string REQUEST_URL = "https://nominatim.openstreetmap.org/search.php?q={0}&format=xml&accept-language={1}";
 
         public OSMGeocoder()
         {
@@ -69,11 +68,17 @@ namespace GKCore.Maps
                         for (int i = 0; i < num; i++) {
                             XmlNode xNode = node.ChildNodes[i];
                             if (xNode.Name == "place") {
-                                string ptHint = xNode.Attributes["display_name"].InnerText;
+                                string placeClass = xNode.Attributes["class"].InnerText;
+                                string placeType = xNode.Attributes["type"].InnerText;
+
+                                bool valid = (placeClass == "place" || (placeClass == "boundary" && placeType == "administrative"));
+                                if (!valid) continue;
+
                                 double ptLongitude = ConvertHelper.ParseFloat(xNode.Attributes["lon"].InnerText, -1.0);
                                 double ptLatitude = ConvertHelper.ParseFloat(xNode.Attributes["lat"].InnerText, -1.0);
 
-                                if (xNode.Attributes["class"].InnerText == "place" && ptLatitude != -1.0 && ptLongitude != -1.0) {
+                                if (ptLatitude != -1.0 && ptLongitude != -1.0) {
+                                    string ptHint = xNode.Attributes["display_name"].InnerText;
                                     GeoPoint gpt = new GeoPoint(ptLatitude, ptLongitude, ptHint);
                                     geoObjects.Add(gpt);
                                 }

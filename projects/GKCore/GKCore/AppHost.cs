@@ -722,7 +722,6 @@ namespace GKCore
             }
 
             IGeocoder geocoder = IGeocoder.Create(fOptions.Geocoder);
-            geocoder.SetKey(GKData.GAPI_KEY);
             geocoder.SetProxy(proxy);
 
             return geocoder;
@@ -736,13 +735,11 @@ namespace GKCore
             if (pointsList == null)
                 throw new ArgumentNullException(@"pointsList");
 
-            try
-            {
+            try {
                 IGeocoder geocoder = CreateGeocoder();
 
                 IEnumerable<GeoPoint> geoPoints = geocoder.Geocode(searchValue, 1);
-                foreach (GeoPoint pt in geoPoints)
-                {
+                foreach (GeoPoint pt in geoPoints) {
                     pointsList.Add(pt);
                 }
             } catch (Exception ex) {
