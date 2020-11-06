@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Windows.Forms;
@@ -28,6 +29,7 @@ using System.Windows.Forms;
 using BSLib;
 using GKCore.Maps;
 using GKCore.MVP.Controls;
+using GKCore.Options;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
@@ -227,24 +229,21 @@ namespace GKUI.Components
             Controls.Add(fMapControl);
 
             if (!GMapControl.IsDesignerHosted) {
-                // set your proxy here if need
-                //GMapProvider.IsSocksProxy = true;
-                //GMapProvider.WebProxy = new WebProxy("127.0.0.1", 1080);
-                //GMapProvider.WebProxy.Credentials = new NetworkCredential("user", "password");
-                // or
-                //GMapProvider.WebProxy = WebRequest.DefaultWebProxy;
+                var proxy = GlobalOptions.Instance.Proxy;
+                if (proxy.UseProxy) {
+                    GMapProvider.IsSocksProxy = true;
+                    GMapProvider.WebProxy = new WebProxy(proxy.Server, int.Parse(proxy.Port));
+                    GMapProvider.WebProxy.Credentials = new NetworkCredential(proxy.Login, proxy.Password);
+                } else {
+                    GMapProvider.WebProxy = WebRequest.DefaultWebProxy;
+                }
 
                 // set cache mode only if no internet avaible
-                if (!PingNetwork("pingtest.com")) {
-                    fMapControl.Manager.Mode = AccessMode.CacheOnly;
-                    //MessageBox.Show("No internet connection available, going to CacheOnly mode.", "GMap.NET - Demo.WindowsForms", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                } else {
-                    fMapControl.Manager.Mode = AccessMode.ServerAndCache;
-                }
+                fMapControl.Manager.Mode = (!PingNetwork("pingtest.com")) ? AccessMode.CacheOnly : AccessMode.ServerAndCache;
 
                 // config map         
                 fMapControl.CanDragMap = true;
-                fMapControl.MapProvider = GMapProviders.OpenStreetMap;
+                fMapControl.MapProvider = GMapProviders.GoogleMap;
                 fMapControl.MinZoom = 0;
                 fMapControl.MaxZoom = 24;
                 fMapControl.ShowTileGridLines = false;
@@ -293,19 +292,6 @@ namespace GKUI.Components
                     fMapControl.ZoomAndCenterMarkers(null);
                 }
             }
-
-            /*
-#if !MONO   // mono doesn't handle it, so we 'lost' provider list ;]
-            cmbMapType.ValueMember = "Name";
-            cmbMapType.DataSource = GMapProviders.List;
-            cmbMapType.SelectedItem = fMapControl.MapProvider;
-#endif
-
-            trkZoom.Minimum = fMapControl.MinZoom * 100;
-            trkZoom.Maximum = fMapControl.MaxZoom * 100;
-            trkZoom.TickFrequency = 100;
-            trkZoom.Value = (int)fMapControl.Zoom * 100;
-            */
         }
 
         private void ZoomAndCenterMarkers()
@@ -396,11 +382,6 @@ namespace GKUI.Components
 
         #region Event handlers
 
-        /*private void cmbMapType_DropDownClosed(object sender, EventArgs e)
-        {
-            fMapControl.MapProvider = cmbMapType.SelectedItem as GMapProvider;
-        }*/
-
         private void MainMap_OnMarkerLeave(GMapMarker item)
         {
             // dummy
@@ -433,9 +414,6 @@ namespace GKUI.Components
 
         private void MainMap_OnMapTypeChanged(GMapProvider type)
         {
-            /*cmbMapType.SelectedItem = type;
-            trkZoom.Minimum = fMapControl.MinZoom * 100;
-            trkZoom.Maximum = fMapControl.MaxZoom * 100;*/
             fMapControl.ZoomAndCenterMarkers("objects");
         }
 
@@ -474,7 +452,6 @@ namespace GKUI.Components
 
         private void MainMap_OnMapZoomChanged()
         {
-            //trkZoom.Value = (int)(fMapControl.Zoom * 100.0);
         }
 
         private void MainMap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
@@ -492,21 +469,6 @@ namespace GKUI.Components
         private void MainMap_OnPositionChanged(PointLatLng point)
         {
             // dummy
-        }
-
-        private void trkZoom_ValueChanged(object sender, EventArgs e)
-        {
-            //fMapControl.Zoom = trkZoom.Value / 100.0;
-        }
-
-        private void btnZoomUp_Click(object sender, EventArgs e)
-        {
-            fMapControl.Zoom = ((int)fMapControl.Zoom) + 1;
-        }
-
-        private void btnZoomDown_Click(object sender, EventArgs e)
-        {
-            fMapControl.Zoom = ((int)(fMapControl.Zoom + 0.99)) - 1;
         }
 
         private void MainForm_KeyUp(object sender, KeyEventArgs e)
