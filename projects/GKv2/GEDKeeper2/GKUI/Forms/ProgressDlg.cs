@@ -32,7 +32,7 @@ namespace GKUI.Forms
     public sealed partial class ProgressDlg : Form
     {
         //private readonly ManualResetEvent initEvent = new ManualResetEvent(false);
-        //private readonly ManualResetEvent abortEvent = new ManualResetEvent(false);
+        private readonly ManualResetEvent fCancelEvent = new ManualResetEvent(false);
         private bool fRequiresClose;
         private DateTime fStartTime;
         private int fVal;
@@ -44,11 +44,17 @@ namespace GKUI.Forms
             lblTimePassed.Text = LangMan.LS(LSID.LSID_TimePassed);
             lblTimeRemain.Text = LangMan.LS(LSID.LSID_TimeRemain);
             lblTimeTotal.Text = LangMan.LS(LSID.LSID_TimeTotal);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            fCancelEvent.Set();
         }
 
         #region Private methods
 
-        private void DoInit(string title, int max)
+        private void DoInit(string title, int max, bool cancelable = false)
         {
             lblTitle.Text = title;
             ProgressBar1.Maximum = max;
@@ -56,6 +62,7 @@ namespace GKUI.Forms
             ProgressBar1.Value = 0;
             fStartTime = DateTime.Now;
             fVal = 0;
+            btnCancel.Enabled = cancelable;
         }
 
         private void DoDone()
@@ -119,11 +126,11 @@ namespace GKUI.Forms
             base.OnClosing(e);
         }
 
-        internal void ProgressInit(string title, int max)
+        internal void ProgressInit(string title, int max, bool cancelable = false)
         {
             //initEvent.WaitOne();
             InvokeEx((MethodInvoker)delegate {
-                DoInit(title, max);
+                DoInit(title, max, cancelable);
             });
         }
 
@@ -150,18 +157,19 @@ namespace GKUI.Forms
             });
         }
 
-        /*public bool IsAborting
+        public bool IsCanceled
         {
             get {
-                return abortEvent.WaitOne(0, false);
+                return fCancelEvent.WaitOne(0, false);
             }
-        }*/
+        }
 
         #endregion
     }
 
     public sealed class ProgressController : IProgressController
     {
+        private bool fCancelable;
         private volatile bool fFormLoaded;
         private int fMax;
         //private ManualResetEvent fMRE = new ManualResetEvent(false);
@@ -171,14 +179,15 @@ namespace GKUI.Forms
         private string fTitle;
         private int fVal;
 
-        public void ProgressInit(string title, int max)
+        public void ProgressInit(string title, int max, bool cancelable = false)
         {
             if (fProgressForm != null) {
-                fProgressForm.ProgressInit(title, max);
+                fProgressForm.ProgressInit(title, max, cancelable);
             } else {
                 fFormLoaded = false;
                 fTitle = title;
                 fMax = max;
+                fCancelable = cancelable;
                 fParentHandle = AppHost.Instance.GetTopWindowHandle();
 
                 fThread = new Thread(ShowProgressForm);
@@ -222,7 +231,7 @@ namespace GKUI.Forms
         private void ShowProgressForm()
         {
             fProgressForm = new ProgressDlg();
-            fProgressForm.ProgressInit(fTitle, fMax);
+            fProgressForm.ProgressInit(fTitle, fMax, fCancelable);
             fProgressForm.Load += ProgressForm_Load;
 
             if (fParentHandle != IntPtr.Zero) {
@@ -237,6 +246,13 @@ namespace GKUI.Forms
         {
             //fMRE.Set();
             fFormLoaded = true;
+        }
+
+        public bool IsCanceled
+        {
+            get {
+                return (fProgressForm != null) && fProgressForm.IsCanceled;
+            }
         }
     }
 }

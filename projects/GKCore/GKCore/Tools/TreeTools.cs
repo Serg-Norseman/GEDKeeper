@@ -1027,25 +1027,21 @@ namespace GKCore.Tools
             Dictionary<string, List<GDMIndividualRecord>> families = new Dictionary<string, List<GDMIndividualRecord>>();
 
             IProgressController progress = AppHost.Progress;
-            progress.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "1", tree.RecordsCount);
+            progress.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "1", tree.RecordsCount, true);
 
             // make a table of surnames and persons, related to these surnames
             int num = tree.RecordsCount;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMRecord rec = tree[i];
 
-                if (rec.RecordType == GDMRecordType.rtIndividual)
-                {
+                if (rec.RecordType == GDMRecordType.rtIndividual) {
                     GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
 
                     string[] fams = baseWin.Context.Culture.GetSurnames(iRec);
 
-                    for (int k = 0; k < fams.Length; k++)
-                    {
+                    for (int k = 0; k < fams.Length; k++) {
                         string f = fams[k];
-                        if (f.Length > 1)
-                        {
+                        if (f.Length > 1) {
                             List<GDMIndividualRecord> ps;
                             if (!families.TryGetValue(f, out ps)) {
                                 ps = new List<GDMIndividualRecord>();
@@ -1056,28 +1052,26 @@ namespace GKCore.Tools
                     }
                 }
 
+                if (progress.IsCanceled) break;
                 progress.ProgressStep();
             }
 
-            progress.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "2", families.Count);
+            progress.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "2", families.Count, true);
 
             // find all persons of one surname, not related by ties of kinship
-            foreach (KeyValuePair<string, List<GDMIndividualRecord>> entry in families)
-            {
+            foreach (KeyValuePair<string, List<GDMIndividualRecord>> entry in families) {
                 string fam = entry.Key;
                 List<GDMIndividualRecord> ps = entry.Value;
 
                 int i = 0;
-                while (i < ps.Count)
-                {
+                while (i < ps.Count) {
                     GDMIndividualRecord iRec = ps[i];
 
                     List<GDMRecord> lst = new List<GDMRecord>();
                     WalkTree(iRec, TreeWalkMode.twmAll, lst);
 
                     int num3 = lst.Count;
-                    for (int k = 0; k < num3; k++)
-                    {
+                    for (int k = 0; k < num3; k++) {
                         GDMIndividualRecord item = lst[k] as GDMIndividualRecord;
 
                         int idx = ps.IndexOf(item);
@@ -1095,6 +1089,7 @@ namespace GKCore.Tools
                     result.Add(indiv);
                 }
 
+                if (progress.IsCanceled) break;
                 progress.ProgressStep();
             }
 
@@ -1129,32 +1124,29 @@ namespace GKCore.Tools
             mParams.YearsInaccuracy = 3;
             mParams.CheckEventPlaces = false;
 
-            pc.ProgressInit(LangMan.LS(LSID.LSID_DuplicatesSearch), treeA.RecordsCount);
-            try
-            {
+            pc.ProgressInit(LangMan.LS(LSID.LSID_DuplicatesSearch), treeA.RecordsCount, true);
+            try {
                 for (int i = 0; i < treeA.RecordsCount; i++) {
                     GDMRecord recA = treeA[i];
                     if (recA.RecordType == GDMRecordType.rtIndividual) {
                         for (int k = 0; k < treeB.RecordsCount; k++) {
                             GDMRecord recB = treeB[k];
                             if (recB.RecordType == GDMRecordType.rtIndividual) {
-                                GDMIndividualRecord indivA = (GDMIndividualRecord) recA;
-                                GDMIndividualRecord indivB = (GDMIndividualRecord) recB;
+                                GDMIndividualRecord indivA = (GDMIndividualRecord)recA;
+                                GDMIndividualRecord indivB = (GDMIndividualRecord)recB;
 
-                                if (indivA != indivB && indivA.IsMatch(indivB, mParams) >= matchThreshold)
-                                {
+                                if (indivA != indivB && indivA.IsMatch(indivB, mParams) >= matchThreshold) {
                                     foundFunc(indivA, indivB);
                                 }
                             }
                         }
                     }
 
+                    if (pc.IsCanceled) break;
                     pc.ProgressStep();
                     Thread.Sleep(1);
                 }
-            }
-            finally
-            {
+            } finally {
                 pc.ProgressDone();
             }
         }
