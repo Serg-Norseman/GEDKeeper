@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -64,8 +64,8 @@ namespace GKCore.Controllers
         {
             try {
                 fTask.Priority = (GDMResearchPriority)fView.Priority.SelectedIndex;
-                fTask.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.Text, true));
-                fTask.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.Text, true));
+                fTask.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.NormalizeDate, true));
+                fTask.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.NormalizeDate, true));
 
                 GDMGoalType gt = (GDMGoalType)fView.GoalType.SelectedIndex;
                 switch (gt) {
@@ -86,7 +86,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("TaskEditDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("TaskEditDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -101,8 +101,8 @@ namespace GKCore.Controllers
                 fView.Goal.Text = "";
             } else {
                 fView.Priority.SelectedIndex = (sbyte)fTask.Priority;
-                fView.StartDate.Text = fTask.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.StopDate.Text = fTask.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.StartDate.NormalizeDate = fTask.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.StopDate.NormalizeDate = fTask.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
                 var goal = fTask.GetTaskGoal();
                 fTempRec = goal.GoalRec;

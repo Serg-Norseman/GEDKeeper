@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -127,7 +127,7 @@ namespace GKChroniclePlugin
                     EventRecord eventRec = fEvents[i];
                     GDMCustomEvent evt = eventRec.Event;
 
-                    lvEvents.AddItem(eventRec, new object[] { new GEDCOMDateItem(evt.Date.Value),
+                    lvEvents.AddItem(eventRec, new object[] { new GDMDateItem(evt.Date.Value),
                                          GKUtils.GetEventName(evt),
                                          GKUtils.GetRecordName(eventRec.Record, false),
                                          evt.Place.StringValue,

@@ -20,6 +20,7 @@
 
 using System;
 using System.Windows.Forms;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -70,34 +71,34 @@ namespace GKUI.Forms
         }
 
 
-        ITextBoxHandler IResearchEditDlg.Name
+        ITextBox IResearchEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        IComboBoxHandler IResearchEditDlg.Priority
+        IComboBox IResearchEditDlg.Priority
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbPriority); }
+            get { return GetControlHandler<IComboBox>(cmbPriority); }
         }
 
-        IComboBoxHandler IResearchEditDlg.Status
+        IComboBox IResearchEditDlg.Status
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbStatus); }
+            get { return GetControlHandler<IComboBox>(cmbStatus); }
         }
 
-        ITextBoxHandler IResearchEditDlg.StartDate
+        IDateBox IResearchEditDlg.StartDate
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtStartDate); }
+            get { return GetControlHandler<IDateBox>(txtStartDate); }
         }
 
-        ITextBoxHandler IResearchEditDlg.StopDate
+        IDateBox IResearchEditDlg.StopDate
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtStopDate); }
+            get { return GetControlHandler<IDateBox>(txtStopDate); }
         }
 
-        INumericBoxHandler IResearchEditDlg.Percent
+        INumericBox IResearchEditDlg.Percent
         {
-            get { return GetControlHandler<INumericBoxHandler>(nudPercent); }
+            get { return GetControlHandler<INumericBox>(nudPercent); }
         }
 
         #endregion
@@ -179,11 +180,13 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("ResearchEditDlg.btnCancel_Click(): " + ex.Message);
-            }
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

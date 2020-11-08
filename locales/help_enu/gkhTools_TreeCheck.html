@@ -1,40 +1,48 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="styles.css" type="text/css" />
-<title>Tools: Check database</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Tools: Check database</title>
 </head>
 <body>
-<h1>Tools: Check database</h1>
-<p>This tool checks information correctness in the database. It checks two
-types of records: family and person. Unlike typical database integrity
-checking, which is run every time you open a database and which checks
-the database structure, this tool handles logical errors and data
-inaccuracy.</p>
-<p>To pass the check, a family record must have assigned husband, wife,
-children, and events. When an empty family is found, the tool proposes
-to remove it. It is normal in practice to create a family from
-people, which might later be discovered, are from different
-families and were added erroneously. In these cases, GEDKeeper can
-move people from one family to another. After such actions a family record
-may lose all relations. This is a likely situation when you actively
-process large amounts of information.</p>
-<!-- TODO: Turn the following long sentence into an unordered list -->
-<p>A person record is checked in the following way: the tool checks the
-death event, taking the maximal, scientifically confirmed age into
-account, checks and notifies about people without an explicitly defined
-sex, notifies about incorrect lifetime dates (for example, death date
-is before birth date), notifies about persons that were married before
-or after reasonable limits, or that have children who were born out of
-reasonable limits.
-When a person has no sex, the tool marks the record as being
-changed and opens the sex editor dialog. When a person&#39;s age exceeds
-the maximum one, the tool adds a death event without a specified date to the
-person record.</p>
-<p>GEDKeeper fixes the lack of a death event, lack of a sex declaration, and may
-remove empty family records. All other issues are shown only for your
-information.</p>
+    <h1>Tools: Check database</h1>
+    <p>
+        This tool checks information correctness in the database. It checks two
+        types of records: family and person. Unlike typical database integrity
+        checking, which is run every time you open a database and which checks
+        the database structure, this tool handles logical errors and data
+        inaccuracy.
+    </p>
+    <p>
+        To pass the check, a family record must have assigned husband, wife,
+        children, and events. When an empty family is found, the tool proposes
+        to remove it. It is normal in practice to create a family from
+        people, which might later be discovered, are from different
+        families and were added erroneously. In these cases, GEDKeeper can
+        move people from one family to another. After such actions a family record
+        may lose all relations. This is a likely situation when you actively
+        process large amounts of information.
+    </p>
+    <!-- TODO: Turn the following long sentence into an unordered list -->
+    <p>
+        A person record is checked in the following way: the tool checks the
+        death event, taking the maximal, scientifically confirmed age into
+        account, checks and notifies about people without an explicitly defined
+        sex, notifies about incorrect lifetime dates (for example, death date
+        is before birth date), notifies about persons that were married before
+        or after reasonable limits, or that have children who were born out of
+        reasonable limits.
+        When a person has no sex, the tool marks the record as being
+        changed and opens the sex editor dialog. When a person&#39;s age exceeds
+        the maximum one, the tool adds a death event without a specified date to the
+        person record.
+    </p>
+    <p>
+        GEDKeeper fixes the lack of a death event, lack of a sex declaration, and may
+        remove empty family records. All other issues are shown only for your
+        information.
+    </p>
 </body>
 </html>

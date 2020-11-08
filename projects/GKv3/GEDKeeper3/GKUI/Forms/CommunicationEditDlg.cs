@@ -19,6 +19,8 @@
  */
 
 using System;
+using System.ComponentModel;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
 using GKCore;
@@ -56,51 +58,32 @@ namespace GKUI.Forms
             get { return fMediaList; }
         }
 
-        ITextBoxHandler ICommunicationEditDlg.Corresponder
+        ITextBox ICommunicationEditDlg.Corresponder
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtCorresponder); }
+            get { return GetControlHandler<ITextBox>(txtCorresponder); }
         }
 
-        IComboBoxHandler ICommunicationEditDlg.CorrType
+        IComboBox ICommunicationEditDlg.CorrType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbCorrType); }
+            get { return GetControlHandler<IComboBox>(cmbCorrType); }
         }
 
-        ITextBoxHandler ICommunicationEditDlg.Date
+        IDateBox ICommunicationEditDlg.Date
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtDate); }
+            get { return GetControlHandler<IDateBox>(txtDate); }
         }
 
-        IComboBoxHandler ICommunicationEditDlg.Dir
+        IComboBox ICommunicationEditDlg.Dir
         {
-            get { return GetControlHandler<IComboBoxHandler>(txtDir); }
+            get { return GetControlHandler<IComboBox>(txtDir); }
         }
 
-        ITextBoxHandler ICommunicationEditDlg.Name
+        ITextBox ICommunicationEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
         #endregion
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("CommunicationEditDlg.btnCancel_Click(): " + ex.Message);
-            }
-        }
-
-        private void btnPersonAdd_Click(object sender, EventArgs e)
-        {
-            fController.SetPerson();
-        }
 
         public CommunicationEditDlg(IBaseWindow baseWin)
         {
@@ -131,6 +114,27 @@ namespace GKUI.Forms
 
             fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
             fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }
+
+        private void btnPersonAdd_Click(object sender, EventArgs e)
+        {
+            fController.SetPerson();
         }
     }
 }

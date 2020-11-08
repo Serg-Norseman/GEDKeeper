@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,21 +21,24 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.MVP.Controls;
+using GKCore.Names;
 using GKCore.Plugins;
 using GKCore.Types;
-using GKUI.Providers;
 
 namespace GKTests.Stubs
 {
     internal class WorkWindowStub : BaseObject, IWorkWindow
     {
-        public string Caption { get; set; }
+        public string Title { get; set; }
         public bool Enabled { get; set; }
 
         public void Activate() {}
@@ -59,10 +62,11 @@ namespace GKTests.Stubs
 
     internal class ProgressStub : IProgressController
     {
-        public void ProgressInit(string title, int max) {}
+        public void ProgressInit(string title, int max, bool cancelable = false) {}
         public void ProgressDone() {}
         public void ProgressStep() {}
         public void ProgressStep(int value) {}
+        public bool IsCanceled { get { return false; } }
     }
 
     internal class BaseWindowStub : WorkWindowStub, IBaseWindow
@@ -175,7 +179,7 @@ namespace GKTests.Stubs
         public override void EnablePageNumbers() { }
         public override void NewPage() { }
         public override void NewLine(float spacingBefore = 0.0f, float spacingAfter = 0.0f) { }
-        public override void AddParagraph(string text, IFont font, TextAlignment alignment) { }
+        public override void AddParagraph(string text, IFont font, GKCore.Export.TextAlignment alignment) { }
         public override void AddParagraph(string text, IFont font) { }
         public override void AddParagraphAnchor(string text, IFont font, string anchor) { }
         public override void AddParagraphLink(string text, IFont font, string link) { }
@@ -185,7 +189,7 @@ namespace GKTests.Stubs
         public override void EndList() { }
         public override void AddListItem(string text, IFont font) { }
         public override void AddListItemLink(string text, IFont font, string link, IFont linkFont) { }
-        public override void BeginParagraph(TextAlignment alignment,
+        public override void BeginParagraph(GKCore.Export.TextAlignment alignment,
                                             float spacingBefore, float spacingAfter,
                                             float indent = 0.0f, bool keepTogether = false) { }
         public override void EndParagraph() { }
@@ -255,7 +259,7 @@ namespace GKTests.Stubs
         }
     }
 
-    public sealed class TextBoxStub : BaseControlHandler<System.Windows.Forms.TextBox, TextBoxStub>, ITextBoxHandler
+    public sealed class TextBoxStub : BaseControlHandler<System.Windows.Forms.TextBox, TextBoxStub>, ITextBox
     {
         private StringList fStrings;
 

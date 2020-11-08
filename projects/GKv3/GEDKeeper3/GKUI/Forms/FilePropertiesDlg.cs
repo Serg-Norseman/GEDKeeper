@@ -19,12 +19,12 @@
  */
 
 using System;
+using System.ComponentModel;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
-
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -34,6 +34,11 @@ namespace GKUI.Forms
     {
         private readonly FilePropertiesDlgController fController;
 
+        public IBaseWindow Base
+        {
+            get { return fController.Base; }
+        }
+
         #region View Interface
 
         IListView IFilePropertiesDlg.RecordStats
@@ -41,24 +46,24 @@ namespace GKUI.Forms
             get { return lvRecordStats; }
         }
 
-        ITextBoxHandler IFilePropertiesDlg.Language
+        ITextBox IFilePropertiesDlg.Language
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtLanguage); }
+            get { return GetControlHandler<ITextBox>(txtLanguage); }
         }
 
-        ITextBoxHandler IFilePropertiesDlg.Name
+        ITextBox IFilePropertiesDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        ITextBoxHandler IFilePropertiesDlg.Address
+        ITextBox IFilePropertiesDlg.Address
         {
-            get { return  GetControlHandler<ITextBoxHandler>(txtAddress); }
+            get { return  GetControlHandler<ITextBox>(txtAddress); }
         }
 
-        ITextBoxHandler IFilePropertiesDlg.Tel
+        ITextBox IFilePropertiesDlg.Tel
         {
-            get { return  GetControlHandler<ITextBoxHandler>(txtTel); }
+            get { return  GetControlHandler<ITextBox>(txtTel); }
         }
 
         #endregion
@@ -91,6 +96,17 @@ namespace GKUI.Forms
         private void btnAccept_Click(object sender, EventArgs e)
         {
             DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnLangEdit_Click(object sender, EventArgs e)

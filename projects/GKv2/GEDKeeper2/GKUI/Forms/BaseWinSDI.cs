@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,6 +25,8 @@ using System.Drawing;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design.Handlers;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
@@ -202,20 +204,15 @@ namespace GKUI.Forms
 
         private void Form_Load(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 ((IWorkWindow)this).UpdateSettings();
 
                 fController.UpdatePluginsItems();
                 UpdateMRU();
                 UpdateControls(false);
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.Form_Load(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.Form_Load()", ex);
             }
-        }
-
-        private void Form_Show(object sender, EventArgs e)
-        {
         }
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
@@ -231,7 +228,6 @@ namespace GKUI.Forms
         private void Form_Closed(object sender, FormClosedEventArgs e)
         {
             AppHost.Instance.CloseWindow(this);
-            // Attention: Does not receive control when executing in Mono
         }
 
         private void Form_KeyDown(object sender, KeyEventArgs e)
@@ -291,7 +287,7 @@ namespace GKUI.Forms
         private void List_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (sender != null) {
-                fController.ChangeListItem((IListView)sender);
+                fController.ChangeListItem((IListViewEx)sender);
                 AppHost.Instance.SelectedIndexChanged(this);
             }
         }
@@ -316,7 +312,7 @@ namespace GKUI.Forms
             return fController.GetSelectedRecordType();
         }
 
-        public IListView GetRecordsViewByType(GDMRecordType recType)
+        public IListViewEx GetRecordsViewByType(GDMRecordType recType)
         {
             return fController.GetRecordsViewByType(recType);
         }
@@ -351,7 +347,7 @@ namespace GKUI.Forms
             fController.ApplyFilter(recType);
         }
 
-        public void SetExternalFilter(ExternalFilterHandler filterHandler, 
+        public void SetExternalFilter(ExternalFilterHandler filterHandler,
                                       GDMRecordType recType = GDMRecordType.rtNone)
         {
             fController.SetExternalFilter(filterHandler, recType);
@@ -465,7 +461,7 @@ namespace GKUI.Forms
                     }
                 } catch (Exception ex) {
                     if (mediaViewer != null) mediaViewer.Dispose();
-                    Logger.LogWrite("BaseWinSDI.ShowMedia(): " + ex.Message);
+                    Logger.WriteError("BaseWinSDI.ShowMedia()", ex);
                 }
             }
         }
@@ -597,7 +593,7 @@ namespace GKUI.Forms
         {
             string statusLine = "";
             GDMRecordType recType = GetSelectedRecordType();
-            IListView rView = GetRecordsViewByType(recType);
+            IListViewEx rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 var listMan = rView.ListMan;
                 statusLine = LangMan.LS(LSID.LSID_SBRecords) + ": " + listMan.TotalCount.ToString();
@@ -752,7 +748,7 @@ namespace GKUI.Forms
                     AppHost.Instance.EndLoading();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.Form_DragDrop(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.Form_DragDrop()", ex);
             }
         }
 
@@ -803,27 +799,25 @@ namespace GKUI.Forms
                     MenuMRU.Items.Add(tsmi);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.UpdateMRU(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.UpdateMRU()", ex);
             }
         }
 
         public void UpdateNavControls()
         {
-            try
-            {
+            try {
                 IWorkWindow workWin = this as IWorkWindow;
 
                 tbPrev.Enabled = (workWin != null && workWin.NavCanBackward());
                 tbNext.Enabled = (workWin != null && workWin.NavCanForward());
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.UpdateNavControls(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.UpdateNavControls()", ex);
             }
         }
 
         public void UpdateControls(bool forceDeactivate, bool blockDependent = false)
         {
-            try
-            {
+            try {
                 IWorkWindow workWin = AppHost.Instance.GetWorkWindow();
                 IBaseWindow curBase = ((forceDeactivate) ? null : AppHost.Instance.GetCurrentFile());
                 IChartWindow curChart = ((workWin is IChartWindow) ? ((IChartWindow) workWin) : null);
@@ -881,7 +875,7 @@ namespace GKUI.Forms
                     workWin.UpdateControls();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.UpdateControls(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.UpdateControls()", ex);
             }
         }
 
@@ -1047,17 +1041,17 @@ namespace GKUI.Forms
 
         private void miPedigreeAscend_Click(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.pkAscend);
+            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Ascend);
         }
 
         private void miPedigree_dAbovilleClick(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_dAboville);
+            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Descend_dAboville);
         }
 
         private void miPedigree_KonovalovClick(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_Konovalov);
+            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Descend_Konovalov);
         }
 
         private void miTreeAncestors_Click(object sender, EventArgs e)

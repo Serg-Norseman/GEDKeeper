@@ -20,11 +20,11 @@
 
 using System;
 using System.Windows.Forms;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -42,22 +42,17 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler IUserRefEditDlg.Ref
+        IComboBox IUserRefEditDlg.Ref
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRef); }
+            get { return GetControlHandler<IComboBox>(cmbRef); }
         }
 
-        IComboBoxHandler IUserRefEditDlg.RefType
+        IComboBox IUserRefEditDlg.RefType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRefType); }
+            get { return GetControlHandler<IComboBox>(cmbRefType); }
         }
 
         #endregion
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
 
         public UserRefEditDlg(IBaseWindow baseWin)
         {
@@ -75,6 +70,22 @@ namespace GKUI.Forms
 
             fController = new UserRefEditDlgController(this);
             fController.Init(baseWin);
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

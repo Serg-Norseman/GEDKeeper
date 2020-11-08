@@ -1,5 +1,5 @@
 ﻿/* 
- * Copyright 2019 Serg V. Zhdanovskih
+ * Copyright 2019-2020 Serg V. Zhdanovskih
  * This file is part of GEDmill - A family history website creator
  * 
  * GEDmill is free software: you can redistribute it and/or modify
@@ -264,7 +264,7 @@ namespace GEDmill
                     result = Math.Abs(dt2 - dt1);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKUtils.GetEventsYearsDiff(): " + ex.Message);
+                Logger.WriteError("GKUtils.GetEventsYearsDiff()", ex);
             }
 
             return result;

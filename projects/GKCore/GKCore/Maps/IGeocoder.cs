@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -35,7 +35,7 @@ namespace GKCore.Maps
         }
 
         /// <summary>
-        /// Yandex/Google Maps API-key (not necessarily for Yandex)
+        /// Yandex/Google Maps API-key
         /// </summary>
         public void SetKey(string apiKey)
         {
@@ -60,6 +60,9 @@ namespace GKCore.Maps
 
         public IList<GeoPoint> Geocode(string location, short results)
         {
+            //ServicePointManager.SecurityProtocol = (SecurityProtocolType)(SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls);
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)((ushort)3072 | (ushort)768 | (ushort)SecurityProtocolType.Tls);
+
             return Geocode(location, results, fLang);
         }
 
@@ -76,19 +79,24 @@ namespace GKCore.Maps
 
         public static IGeocoder Create(string type)
         {
+            IGeocoder result;
             switch (type) {
-                case "Google":
-                    return new GoogleGeocoder();
-
                 case "Yandex":
-                    return new YandexGeocoder();
+                    result = new YandexGeocoder();
+                    result.SetKey(GKData.YAPI_KEY);
+                    break;
 
                 case "OSM":
-                    return new OSMGeocoder();
+                    result = new OSMGeocoder();
+                    break;
 
+                case "Google":
                 default:
-                    return new GoogleGeocoder();
+                    result = new GoogleGeocoder();
+                    result.SetKey(GKData.GAPI_KEY);
+                    break;
             }
+            return result;
         }
     }
 }

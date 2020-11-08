@@ -19,9 +19,10 @@
  */
 
 using System;
+using BSLib.Design.MVP;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
-using GKCore.MVP;
 using GKCore.Operations;
 using GKCore.Types;
 
@@ -142,7 +143,7 @@ namespace GKCore.Lists
             fUndoman = undoman;
         }
 
-        public override void UpdateColumns(IListView listView)
+        public override void UpdateColumns(IListViewEx listView)
         {
             if (listView == null) return;
 

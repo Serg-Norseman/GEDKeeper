@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2011, 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2011-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,15 +21,16 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.BBText;
 using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
-    using sdFontStyle = Eto.Drawing.FontStyle;
+    using EDFontStyle = Eto.Drawing.FontStyle;
 
     public delegate void LinkEventHandler(object sender, string linkName);
 
@@ -163,7 +164,7 @@ namespace GKUI.Components
                             int prevY = yPos;
 
                             if (!string.IsNullOrEmpty(chunk.Text)) {
-                                using (var font = new Font(defFont.FamilyName, chunk.Size, (sdFontStyle)chunk.Style)) {
+                                using (var font = new Font(defFont.FamilyName, chunk.Size, (EDFontStyle)chunk.Style)) {
                                     SizeF strSize = font.MeasureString(chunk.Text);
                                     chunk.Width = (int)strSize.Width;
 
@@ -187,7 +188,7 @@ namespace GKUI.Components
                     SetImageSize(fTextSize);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("HyperView.ArrangeText(): " + ex.Message);
+                Logger.WriteError("HyperView.ArrangeText()", ex);
             }
         }
 
@@ -228,7 +229,7 @@ namespace GKUI.Components
                             IColor clr = chunk.Color;
                             var chunkColor = (clr == null) ? TextColor : ((ColorHandler)chunk.Color).Handle;
                             brush.Color = chunkColor;
-                            font = ProcessFont(font, chunk.Size, (sdFontStyle)chunk.Style);
+                            font = ProcessFont(font, chunk.Size, (EDFontStyle)chunk.Style);
                             gfx.DrawText(font, brush, xOffset, yOffset, ct);
 
                             xOffset += chunk.Width;
@@ -240,7 +241,7 @@ namespace GKUI.Components
                     if (font != null) font.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("HyperView.DoPaint(): " + ex.Message);
+                Logger.WriteError("HyperView.DoPaint()", ex);
             }
         }
 

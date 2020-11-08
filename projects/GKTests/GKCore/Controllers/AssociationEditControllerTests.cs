@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,7 @@ using System;
 using GDModel;
 using GKCore.Interfaces;
 using GKTests.Stubs;
-using GKUI.Providers;
+using GKUI;
 //using NSubstitute;
 using NUnit.Framework;
 

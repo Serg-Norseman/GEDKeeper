@@ -51,11 +51,11 @@ namespace GDModel
         {
             string result;
             if (!fDateAfter.IsEmpty() && !fDateBefore.IsEmpty()) {
-                result = string.Concat(GEDCOMDateRangeArray[2], " ", fDateAfter.StringValue, " ", GEDCOMDateRangeArray[3], " ", fDateBefore.StringValue);
+                result = string.Concat(GEDCOMConsts.GEDCOMDateRangeArray[2], " ", fDateAfter.StringValue, " ", GEDCOMConsts.GEDCOMDateRangeArray[3], " ", fDateBefore.StringValue);
             } else if (!fDateAfter.IsEmpty()) {
-                result = GEDCOMDateRangeArray[0] + " " + fDateAfter.StringValue;
+                result = GEDCOMConsts.GEDCOMDateRangeArray[0] + " " + fDateAfter.StringValue;
             } else if (!fDateBefore.IsEmpty()) {
-                result = GEDCOMDateRangeArray[1] + " " + fDateBefore.StringValue;
+                result = GEDCOMConsts.GEDCOMDateRangeArray[1] + " " + fDateBefore.StringValue;
             } else {
                 result = "";
             }

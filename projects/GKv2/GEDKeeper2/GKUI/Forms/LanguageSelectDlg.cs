@@ -40,7 +40,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IListView ILanguageSelectDlg.LanguagesList
+        IListViewEx ILanguageSelectDlg.LanguagesList
         {
             get { return lstLanguages; }
         }

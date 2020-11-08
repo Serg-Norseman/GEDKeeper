@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -56,7 +56,7 @@ namespace GKCore.Controllers
             for (var lid = GDMLanguageID.Unknown; lid < GDMLanguageID.Yiddish; lid++) {
                 fView.Language.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
             }
-            fView.Language.SortItems();
+            fView.Language.Sort();
         }
 
         public override bool Accept()
@@ -77,7 +77,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("PersonalNameEditDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("PersonalNameEditDlgController.Accept()", ex);
                 return false;
             }
         }

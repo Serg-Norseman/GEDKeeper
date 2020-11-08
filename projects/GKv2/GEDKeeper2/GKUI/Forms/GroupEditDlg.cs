@@ -20,12 +20,12 @@
 
 using System;
 using System.Windows.Forms;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
@@ -63,9 +63,9 @@ namespace GKUI.Forms
             get { return fMembersList; }
         }
 
-        ITextBoxHandler IGroupEditDlg.Name
+        ITextBox IGroupEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(edName); }
+            get { return GetControlHandler<ITextBox>(edName); }
         }
 
         #endregion
@@ -115,11 +115,13 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("GroupEditDlg.btnCancel_Click(): " + ex.Message);
-            }
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

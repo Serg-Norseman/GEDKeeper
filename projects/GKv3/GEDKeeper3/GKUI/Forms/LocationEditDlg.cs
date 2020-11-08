@@ -19,6 +19,8 @@
  */
 
 using System;
+using System.ComponentModel;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
 using GKCore;
@@ -67,19 +69,19 @@ namespace GKUI.Forms
             get { return ListGeoCoords; }
         }
 
-        ITextBoxHandler ILocationEditDlg.Name
+        ITextBox ILocationEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        ITextBoxHandler ILocationEditDlg.Latitude
+        ITextBox ILocationEditDlg.Latitude
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtLatitude); }
+            get { return GetControlHandler<ITextBox>(txtLatitude); }
         }
 
-        ITextBoxHandler ILocationEditDlg.Longitude
+        ITextBox ILocationEditDlg.Longitude
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtLongitude); }
+            get { return GetControlHandler<ITextBox>(txtLongitude); }
         }
 
         #endregion
@@ -141,12 +143,13 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try {
-                fController.Cancel();
-                CancelClickHandler(sender, e);
-            } catch (Exception ex) {
-                Logger.LogWrite("LocationEditDlg.btnCancel_Click(): " + ex.Message);
-            }
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)

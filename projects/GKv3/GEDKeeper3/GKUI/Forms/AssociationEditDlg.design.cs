@@ -42,7 +42,6 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         Cells = { lblPerson, TableLayout.Horizontal(10, new TableCell(txtPerson, true), btnPersonAdd) }
-                        //Cells = { lblPerson, UIHelper.CreateRCS(new StackLayoutItem(txtPerson, true), btnPersonAdd) }
                     },
                     null
                 }
@@ -58,7 +57,7 @@ namespace GKUI.Forms
             btnCancel.ImagePosition = ButtonImagePosition.Left;
             btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
-            btnCancel.Click += CancelClickHandler;
+            btnCancel.Click += btnCancel_Click;
 
             Content = new DefTableLayout {
                 Rows = {

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -49,8 +49,7 @@ namespace GKCore.Lists
             var person = fDataOwner as GDMIndividualRecord;
             if (fSheetList == null || person == null) return;
 
-            try
-            {
+            try {
                 fSheetList.ClearItems();
 
                 foreach (GDMAssociation ast in person.Associations) {
@@ -58,10 +57,8 @@ namespace GKCore.Lists
 
                     fSheetList.AddItem(ast, new object[] { ast.Relation, nm });
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("AssociationsListModel.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("AssociationsListModel.UpdateContents()", ex);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -40,7 +40,7 @@ namespace GKImageViewerPlugin
 
         #region View Interface
 
-        public string Caption
+        public string Title
         {
             get { return base.Text; }
             set { base.Text = value; }
@@ -66,8 +66,7 @@ namespace GKImageViewerPlugin
 
         private void ImageViewerWin_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
-            {
+            if (e.KeyCode == Keys.Escape) {
                 Close();
             }
         }
@@ -76,8 +75,7 @@ namespace GKImageViewerPlugin
         {
             if (sender == tbFileLoad) {
                 string fileName = AppHost.StdDialogs.GetOpenFile("", "", fPlugin.LangMan.LS(PLS.LSID_FilesFilter), 1, "");
-                if (!string.IsNullOrEmpty(fileName))
-                {
+                if (!string.IsNullOrEmpty(fileName)) {
                     SetFileRef(fileName);
                 }
             }
@@ -91,10 +89,8 @@ namespace GKImageViewerPlugin
 
             GDMMultimediaFormat fmt = GDMFileReference.RecognizeFormat(fileName);
 
-            try
-            {
-                switch (fmt)
-                {
+            try {
+                switch (fmt) {
                     case GDMMultimediaFormat.mfBMP:
                     case GDMMultimediaFormat.mfGIF:
                     case GDMMultimediaFormat.mfJPG:
@@ -106,12 +102,11 @@ namespace GKImageViewerPlugin
                             fImageCtl = new ImageView();
 
                             try {
-                                using (Stream fs = new FileStream(fileName, FileMode.Open))
-                                {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open)) {
                                     fImageCtl.OpenImage(new Bitmap(fs));
                                 }
                             } catch (Exception ex) {
-                                Logger.LogWrite("ImageViewerWin.SetFileRef.0(): " + ex.Message);
+                                Logger.WriteError("ImageViewerWin.SetFileRef.0()", ex);
                             }
 
                             ctl = fImageCtl;
@@ -131,15 +126,13 @@ namespace GKImageViewerPlugin
                             txtBox.ScrollBars = ScrollBars.Both;
 
                             try {
-                                using (Stream fs = new FileStream(fileName, FileMode.Open))
-                                {
-                                    using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251)))
-                                    {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open)) {
+                                    using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251))) {
                                         txtBox.Text = strd.ReadToEnd();
                                     }
                                 }
                             } catch (Exception ex) {
-                                Logger.LogWrite("ImageViewerWin.SetFileRef.1(): " + ex.Message);
+                                Logger.WriteError("ImageViewerWin.SetFileRef.1()", ex);
                             }
 
                             ctl = txtBox;
@@ -152,15 +145,13 @@ namespace GKImageViewerPlugin
                             rtfBox.ReadOnly = true;
 
                             try {
-                                using (Stream fs = new FileStream(fileName, FileMode.Open))
-                                {
-                                    using (StreamReader strd = new StreamReader(fs))
-                                    {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open)) {
+                                    using (StreamReader strd = new StreamReader(fs)) {
                                         rtfBox.Text = strd.ReadToEnd();
                                     }
                                 }
                             } catch (Exception ex) {
-                                Logger.LogWrite("ImageViewerWin.SetFileRef.2(): " + ex.Message);
+                                Logger.WriteError("ImageViewerWin.SetFileRef.2()", ex);
                             }
 
                             ctl = rtfBox;
@@ -171,12 +162,11 @@ namespace GKImageViewerPlugin
                         {
                             var browser = new WebBrowser();
                             try {
-                                using (Stream fs = new FileStream(fileName, FileMode.Open))
-                                {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open)) {
                                     browser.DocumentStream = fs;
                                 }
                             } catch (Exception ex) {
-                                Logger.LogWrite("ImageViewerWin.SetFileRef.2(): " + ex.Message);
+                                Logger.WriteError("ImageViewerWin.SetFileRef.2()", ex);
                             }
                             ctl = browser;
                         }
@@ -195,12 +185,10 @@ namespace GKImageViewerPlugin
                     ResumeLayout(false);
                     PerformLayout();
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 if (ctl != null) ctl.Dispose();
 
-                Logger.LogWrite("ImageViewerWin.SetFileRef()" + ex.Message);
+                Logger.WriteError("ImageViewerWin.SetFileRef()", ex);
             }
         }
 

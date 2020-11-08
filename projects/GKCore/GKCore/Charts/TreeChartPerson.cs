@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,11 +20,14 @@
 
 using System;
 using BSLib;
-using BSLib.SmartGraph;
+using BSLib.DataViz.SmartGraph;
+using BSLib.Design.Graphics;
 using GDModel;
-using GKCore.Interfaces;
+using GKCore.Import;
 using GKCore.Options;
 using GKCore.Types;
+
+using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Charts
 {
@@ -97,6 +100,7 @@ namespace GKCore.Charts
         public bool IsCollapsed;
         public bool IsVisible;
         public IColor UserColor;
+        public bool Adopted;
 
 
         public IImage Portrait
@@ -393,7 +397,7 @@ namespace GKCore.Charts
                     CertaintyAssessment = 0.0f;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartPerson.BuildBy(): " + ex.Message);
+                Logger.WriteError("TreeChartPerson.BuildBy()", ex);
                 throw;
             }
         }
@@ -462,7 +466,7 @@ namespace GKCore.Charts
                     //idx++;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartPerson.InitInfo(): " + ex.Message);
+                Logger.WriteError("TreeChartPerson.InitInfo()", ex);
             }
         }
 
@@ -514,7 +518,7 @@ namespace GKCore.Charts
                     fWidth += imgW;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartPerson.CalcBounds(): " + ex.Message);
+                Logger.WriteError("TreeChartPerson.CalcBounds()", ex);
             }
         }
 
@@ -524,15 +528,15 @@ namespace GKCore.Charts
 
             switch (fSex) {
                 case GDMSex.svMale:
-                    result = ChartRenderer.Blue;
+                    result = BSDColors.Blue;
                     break;
 
                 case GDMSex.svFemale:
-                    result = ChartRenderer.Red;
+                    result = BSDColors.Red;
                     break;
 
                 default:
-                    result = ChartRenderer.Black;
+                    result = BSDColors.Black;
                     break;
             }
 
@@ -542,15 +546,15 @@ namespace GKCore.Charts
         public IColor GetFillColor(bool dead)
         {
             if (fFlags.Contains(PersonFlag.pfSpecialMark)) {
-                return ChartRenderer.GetColor(ChartRenderer.Khaki);
+                return ChartRenderer.GetColor(BSDColors.Khaki);
             }
 
             if (dead) {
-                return ChartRenderer.GetColor(ChartRenderer.Black);
+                return ChartRenderer.GetColor(BSDColors.Black);
             }
 
             if (IsDup) {
-                return ChartRenderer.GetColor(ChartRenderer.Silver);
+                return ChartRenderer.GetColor(BSDColors.Silver);
             }
 
             if (UserColor != null) {

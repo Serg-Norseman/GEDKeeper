@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design.Graphics;
 using GKCore;
 using GKCore.Interfaces;
 using GKTests;

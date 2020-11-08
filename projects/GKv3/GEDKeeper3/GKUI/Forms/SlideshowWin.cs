@@ -19,10 +19,9 @@
  */
 
 using System;
-using System.Collections.Generic;
+using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
-
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -104,9 +103,9 @@ namespace GKUI.Forms
             fImageCtl.ZoomToFit();
         }
 
-        private void tsbStart_Click(object sender, EventArgs e)
+        private void SetTimer(bool active)
         {
-            if (tbStart.Text == LangMan.LS(LSID.LSID_Start)) {
+            if (active) {
                 tbStart.Text = LangMan.LS(LSID.LSID_Stop);
                 tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_stop.gif");
                 fTimer.Start();
@@ -114,6 +113,15 @@ namespace GKUI.Forms
                 tbStart.Text = LangMan.LS(LSID.LSID_Start);
                 tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
                 fTimer.Stop();
+            }
+        }
+
+        private void tsbStart_Click(object sender, EventArgs e)
+        {
+            if (tbStart.Text == LangMan.LS(LSID.LSID_Start)) {
+                SetTimer(true);
+            } else {
+                SetTimer(false);
             }
         }
 

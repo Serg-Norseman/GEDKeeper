@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
-using BSLib.SmartGraph;
+using BSLib.DataViz.SmartGraph;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -101,8 +101,7 @@ namespace GKCore.Kinships
             Vertex target = fGraph.FindVertex(targetRec.XRef);
             if (target == null) return "???";
 
-            try
-            {
+            try {
                 IEnumerable<Edge> edgesPath = fGraph.GetPath(target);
 
                 string tmp = "";
@@ -113,8 +112,7 @@ namespace GKCore.Kinships
                 GDMIndividualRecord src = null, tgt = null, prev_tgt = null;
                 string part, fullRel = "";
 
-                foreach (Edge edge in edgesPath)
-                {
+                foreach (Edge edge in edgesPath) {
                     GDMIndividualRecord xFrom = (GDMIndividualRecord)edge.Source.Value;
                     GDMIndividualRecord xTo = (GDMIndividualRecord)edge.Target.Value;
                     RelationKind curRel = FixLink(xFrom, xTo, (RelationKind)((int)edge.Value));
@@ -163,10 +161,8 @@ namespace GKCore.Kinships
 
                     return fullRel;
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("KinshipsGraph.GetRelationship(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("KinshipsGraph.GetRelationship()", ex);
                 return "";
             }
         }

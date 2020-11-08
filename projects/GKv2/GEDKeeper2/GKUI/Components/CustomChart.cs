@@ -23,10 +23,11 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
-using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -59,7 +60,7 @@ namespace GKUI.Components
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                if (fNavman != null) fNavman.Dispose();
+                //if (fNavman != null) fNavman.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -312,7 +313,7 @@ namespace GKUI.Components
 
         public bool NavAdd(object obj)
         {
-            if (obj != null && !fNavman.Busy) {
+            if (obj != null) {
                 fNavman.Current = (GDMRecord)obj;
                 return true;
             }
@@ -333,15 +334,10 @@ namespace GKUI.Components
         {
             if (!fNavman.CanForward()) return;
 
-            fNavman.BeginNav();
-            try
-            {
+            try {
                 SetNavObject(fNavman.Next());
                 DoNavRefresh();
-            }
-            finally
-            {
-                fNavman.EndNav();
+            } finally {
             }
         }
 
@@ -349,15 +345,10 @@ namespace GKUI.Components
         {
             if (!fNavman.CanBackward()) return;
 
-            fNavman.BeginNav();
-            try
-            {
+            try {
                 SetNavObject(fNavman.Back());
                 DoNavRefresh();
-            }
-            finally
-            {
-                fNavman.EndNav();
+            } finally {
             }
         }
 

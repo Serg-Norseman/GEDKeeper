@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using BSLib.Design.Graphics;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
@@ -184,7 +185,7 @@ namespace GKUI.Forms
 
                 AppHost.Instance.UpdateControls(false, true);
             } catch (Exception ex) {
-                Logger.LogWrite("CircleChartWin.UpdateControls(): " + ex.Message);
+                Logger.WriteError("CircleChartWin.UpdateControls()", ex);
             }
         }
 

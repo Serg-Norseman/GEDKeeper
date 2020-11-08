@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System;
 using System.Reflection;
+using BSLib.Design.Graphics;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
@@ -111,7 +112,7 @@ namespace GKFlowInputPlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(FLS.LSID_PluginTitle);
             } catch (Exception ex) {
-                Logger.LogWrite("GKFlowInputPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("GKFlowInputPlugin.OnLanguageChange()", ex);
             }
         }
     }

@@ -22,10 +22,9 @@
 
 using System;
 using System.IO;
-
 using BSLib;
+using BSLib.Design.Graphics;
 using GKCore.Charts;
-using GKCore.Interfaces;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using it = iTextSharp.text;

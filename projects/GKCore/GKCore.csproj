@@ -88,11 +88,14 @@
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\libs\BSLib.Design.dll</HintPath>
+    </Reference>
     <Reference Include="BSLib.Linguistics">
       <HintPath>..\libs\BSLib.Linguistics.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.SmartGraph">
-      <HintPath>..\libs\BSLib.SmartGraph.dll</HintPath>
+    <Reference Include="BSLib.DataViz.Model">
+      <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
     <Reference Include="DotNetRtfWriter">
       <HintPath>..\libs\DotNetRtfWriter.dll</HintPath>
@@ -146,6 +149,9 @@
     <Compile Include="GDModel\Providers\FamilyShow\OPCUtility.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\AnselEncoding.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMChecker.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMConsts.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMException.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\GEDCOMFormat.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParser.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMProvider.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMTagsTable.cs" />
@@ -187,16 +193,22 @@
     <Compile Include="GDModel\GDMTree.cs" />
     <Compile Include="GDModel\GDMUserReference.cs" />
     <Compile Include="GDModel\GDMXRefReplacer.cs" />
-    <Compile Include="GKCore\BBTextParser.cs" />
+    <Compile Include="GKCore\BBText\BBTextChunk.cs" />
+    <Compile Include="GKCore\BBText\BBTextParser.cs" />
     <Compile Include="GKCore\Charts\BorderPainter.cs" />
+    <Compile Include="GKCore\Charts\IChart.cs" />
     <Compile Include="GKCore\Charts\ICircleChart.cs" />
+    <Compile Include="GKCore\Charts\ITreeControl.cs" />
     <Compile Include="GKCore\Charts\SvgGraphics.cs" />
     <Compile Include="GKCore\Charts\SVGRenderer.cs" />
     <Compile Include="GKCore\Charts\TCGenerationsControl.cs" />
     <Compile Include="GKCore\Charts\TCPersonControl.cs" />
     <Compile Include="GKCore\Charts\TCScaleControl.cs" />
+    <Compile Include="GKCore\Charts\TreeControlsList.cs" />
+    <Compile Include="GKCore\Charts\Tween.cs" />
     <Compile Include="GKCore\Controllers\AddressEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\AssociationEditDlgController.cs" />
+    <Compile Include="GKCore\Controllers\BaseController.cs" />
     <Compile Include="GKCore\Controllers\BaseWinController.cs" />
     <Compile Include="GKCore\Controllers\CircleChartWinController.cs" />
     <Compile Include="GKCore\Controllers\CommonFilterDlgController.cs" />
@@ -243,9 +255,11 @@
     <Compile Include="GKCore\Controllers\TreeMergeController.cs" />
     <Compile Include="GKCore\Controllers\TreeSplitController.cs" />
     <Compile Include="GKCore\Controllers\UserRefEditDlgController.cs" />
+    <Compile Include="GKCore\Cultures\CulturesPool.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GDModel\Providers\FileProvider.cs" />
-    <Compile Include="GKCore\ImportUtils.cs" />
+    <Compile Include="GKCore\GKException.cs" />
+    <Compile Include="GKCore\Import\ImportUtils.cs" />
     <Compile Include="GKCore\Interfaces\IBaseContext.cs" />
     <Compile Include="GKCore\Interfaces\IBaseEditor.cs" />
     <Compile Include="GKCore\Interfaces\IBaseWindow.cs" />
@@ -255,22 +269,17 @@
     <Compile Include="GKCore\Interfaces\ICustomFilter.cs" />
     <Compile Include="GKCore\Interfaces\IDialogReplacement.cs" />
     <Compile Include="GKCore\Interfaces\IExporter.cs" />
-    <Compile Include="GKCore\Interfaces\IGraphics.cs" />
     <Compile Include="GKCore\Interfaces\IHost.cs" />
     <Compile Include="GKCore\Interfaces\ILangMan.cs" />
     <Compile Include="GKCore\Interfaces\IListFilter.cs" />
-    <Compile Include="GKCore\Interfaces\IListItem.cs" />
     <Compile Include="GKCore\Interfaces\IListManager.cs" />
-    <Compile Include="GKCore\Interfaces\IListView.cs" />
+    <Compile Include="GKCore\Interfaces\IListViewEx.cs" />
     <Compile Include="GKCore\Interfaces\ILocalization.cs" />
-    <Compile Include="GKCore\Interfaces\ILogger.cs" />
-    <Compile Include="GKCore\Interfaces\INamesTable.cs" />
     <Compile Include="GKCore\Interfaces\IOptions.cs" />
     <Compile Include="GKCore\Interfaces\IOptionsControl.cs" />
     <Compile Include="GKCore\Interfaces\IGraphicsProvider.cs" />
     <Compile Include="GKCore\Interfaces\IOptionsSection.cs" />
     <Compile Include="GKCore\Interfaces\IPlugin.cs" />
-    <Compile Include="GKCore\Interfaces\IPrintable.cs" />
     <Compile Include="GKCore\Interfaces\IProgressController.cs" />
     <Compile Include="GKCore\Interfaces\ISearchStrategy.cs" />
     <Compile Include="GKCore\Interfaces\ISubscriber.cs" />
@@ -278,7 +287,6 @@
     <Compile Include="GKCore\Interfaces\IUndoManager.cs" />
     <Compile Include="GKCore\Interfaces\IWidget.cs" />
     <Compile Include="GKCore\Interfaces\IWorkWindow.cs" />
-    <Compile Include="GKCore\IocContainer.cs" />
     <Compile Include="GKCore\Logger.cs" />
     <Compile Include="GKCore\Maps\GeoPoint.cs" />
     <Compile Include="GKCore\Maps\GoogleGeocoder.cs" />
@@ -286,17 +294,21 @@
     <Compile Include="GKCore\Maps\OSMGeocoder.cs" />
     <Compile Include="GKCore\Maps\PlacesCache.cs" />
     <Compile Include="GKCore\Maps\YandexGeocoder.cs" />
-    <Compile Include="GKCore\MVP\Controller.cs" />
     <Compile Include="GKCore\MVP\DialogController.cs" />
     <Compile Include="GKCore\MVP\EditorController.cs" />
-    <Compile Include="GKCore\MVP\IController.cs" />
     <Compile Include="GKCore\MVP\Views\IStatusForm.cs" />
     <Compile Include="GKCore\MVP\Views\IStdDialogs.cs" />
+    <Compile Include="GKCore\Names\INamesTable.cs" />
+    <Compile Include="GKCore\Names\NameEntry.cs" />
+    <Compile Include="GKCore\Names\NamesTable.cs" />
     <Compile Include="GKCore\Options\ListOptions.cs" />
     <Compile Include="GKCore\Plugins\OrdinaryPlugin.cs" />
     <Compile Include="GKCore\Plugins\WidgetPlugin.cs" />
+    <Compile Include="GKCore\Search\SearchResult.cs" />
+    <Compile Include="GKCore\Search\SearchStrategy.cs" />
     <Compile Include="GKCore\SingleInstance\MapiMailMessage.cs" />
     <Compile Include="GKCore\SysUtils.cs" />
+    <Compile Include="GKCore\Tools\PatriarchsMan.cs" />
     <Compile Include="GKCore\Types\CharsetResult.cs" />
     <Compile Include="GKCore\Types\DateFormat.cs" />
     <Compile Include="GKCore\Types\FileBackup.cs" />
@@ -307,8 +319,8 @@
     <Compile Include="GKCore\Types\MediaStoreStatus.cs" />
     <Compile Include="GKCore\Types\MediaStoreType.cs" />
     <Compile Include="GKCore\Types\MultimediaKind.cs" />
-    <Compile Include="GKCore\Types\NameEntry.cs" />
     <Compile Include="GKCore\Types\NameFormat.cs" />
+    <Compile Include="GKCore\Types\NamePartsRet.cs" />
     <Compile Include="GKCore\Types\PatriarchObj.cs" />
     <Compile Include="GKCore\Types\PedigreeFormat.cs" />
     <Compile Include="GKCore\Types\PersonEventKind.cs" />
@@ -323,9 +335,7 @@
     <Compile Include="GKCore\Types\WomanSurnameFormat.cs" />
     <Compile Include="GKCore\AppHost.cs" />
     <Compile Include="GKCore\BaseContext.cs" />
-    <Compile Include="GKCore\BaseController.cs" />
     <Compile Include="GKCore\Cultures\ChineseCulture.cs" />
-    <Compile Include="GKCore\SearchStrategy.cs" />
     <Compile Include="GKCore\Charts\ChartModel.cs" />
     <Compile Include="GKCore\Charts\CircleChartModel.cs" />
     <Compile Include="GKCore\Cultures\AncientCulture.cs" />
@@ -361,7 +371,7 @@
     <Compile Include="GKCore\Lists\AssociationsListModel.cs" />
     <Compile Include="GKCore\Lists\CommunicationListMan.cs" />
     <Compile Include="GKCore\Lists\FamilyListMan.cs" />
-    <Compile Include="GKCore\Lists\GEDCOMDateItem.cs" />
+    <Compile Include="GKCore\Lists\GDMDateItem.cs" />
     <Compile Include="GKCore\Lists\ChildrenListModel.cs" />
     <Compile Include="GKCore\Lists\EventsListModel.cs" />
     <Compile Include="GKCore\Lists\ListModel.cs" />
@@ -382,8 +392,6 @@
     <Compile Include="GKCore\Lists\SourceListMan.cs" />
     <Compile Include="GKCore\Lists\TaskListMan.cs" />
     <Compile Include="GKCore\Maps\PlacesLoader.cs" />
-    <Compile Include="GKCore\NamesTable.cs" />
-    <Compile Include="GKCore\NavigationStack.cs" />
     <Compile Include="GKCore\Operations\ChangeTracker.cs" />
     <Compile Include="GKCore\Operations\CustomOperation.cs" />
     <Compile Include="GKCore\Operations\IndividualNameChange.cs" />
@@ -397,7 +405,6 @@
     <Compile Include="GKCore\Options\ProxyOptions.cs" />
     <Compile Include="GKCore\Options\TreeChartOptions.cs" />
     <Compile Include="GKCore\PathReplacer.cs" />
-    <Compile Include="GKCore\PatriarchsMan.cs" />
     <Compile Include="GKCore\Plugins\PluginInfo.cs" />
     <Compile Include="GKCore\Plugins\PluginsMan.cs" />
     <Compile Include="GKCore\PortraitsCache.cs" />
@@ -414,22 +421,17 @@
     <Compile Include="GKCore\Stats\TreeStats.cs" />
     <Compile Include="GKCore\Tools\PlaceObj.cs" />
     <Compile Include="GKCore\Tools\TreeTools.cs" />
-    <Compile Include="GKCore\Tween.cs" />
     <Compile Include="GKCore\MVP\Controls\ControlHandlers.cs" />
     <Compile Include="GKCore\UpdateMan.cs" />
     <Compile Include="GKCore\Charts\ChartFilter.cs" />
-    <Compile Include="GKCore\Charts\ITreeChartBox.cs" />
+    <Compile Include="GKCore\Charts\ITreeChart.cs" />
     <Compile Include="GKCore\Charts\TreeChartModel.cs" />
     <Compile Include="GKCore\Charts\TreeChartPerson.cs" />
     <Compile Include="GKCore\Charts\ChartRenderer.cs" />
     <Compile Include="GKCore\MVP\Views\UIContracts.cs" />
     <Compile Include="GKCore\ValuesCollection.cs" />
     <Compile Include="GKCore\YamlHelper.cs" />
-    <Compile Include="GKCore\MVP\ControlHandler.cs" />
-    <Compile Include="GKCore\MVP\ControlsManager.cs" />
     <Compile Include="GKCore\MVP\FormController.cs" />
-    <Compile Include="GKCore\MVP\IView.cs" />
-    <Compile Include="GKCore\MVP\IControl.cs" />
     <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>

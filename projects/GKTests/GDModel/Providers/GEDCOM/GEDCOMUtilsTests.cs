@@ -332,6 +332,13 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
+        // Line format: <level>_<@xref@>_<tag>_<value> (for test's purpose)
+        private static int ParseTag(string str, out int tagLevel, out string tagXRef, out string tagName, out string tagValue)
+        {
+            var strTok = new GEDCOMParser(str, false);
+            return GEDCOMUtils.ParseTag(strTok, out tagLevel, out tagXRef, out tagName, out tagValue);
+        }
+
         [Test]
         public void Test_ParseTag()
         {
@@ -340,7 +347,7 @@ namespace GDModel.Providers.GEDCOM
             string tagXRef2, tagName2, tagValue2;
 
             str = "0 HEAD";
-            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            res2 = ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(0, tagLevel2);
             Assert.AreEqual("", tagXRef2);
             Assert.AreEqual("HEAD", tagName2);
@@ -348,7 +355,7 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual(2, res2);
 
             str = "0 @SUB1@ SUBM";
-            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            res2 = ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(0, tagLevel2);
             Assert.AreEqual("SUB1", tagXRef2);
             Assert.AreEqual("SUBM", tagName2);
@@ -356,7 +363,7 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual(3, res2);
 
             str = "0 @SUB1@ SUBM testVal";
-            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            res2 = ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(0, tagLevel2);
             Assert.AreEqual("SUB1", tagXRef2);
             Assert.AreEqual("SUBM", tagName2);
@@ -364,7 +371,7 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual(4, res2);
 
             str = "1 SUBM @SUB1@";
-            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            res2 = ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(1, tagLevel2);
             Assert.AreEqual("", tagXRef2);
             Assert.AreEqual("SUBM", tagName2);
@@ -372,7 +379,7 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual(3, res2);
 
             str = "    1 SUBM @SUB1@";
-            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            res2 = ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(1, tagLevel2);
             Assert.AreEqual("", tagXRef2);
             Assert.AreEqual("SUBM", tagName2);
@@ -380,7 +387,7 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual(3, res2);
 
             str = "2 DATE FROM 20 JAN 1979 TO 15 MAY 2012";
-            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            res2 = ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(2, tagLevel2);
             Assert.AreEqual("", tagXRef2);
             Assert.AreEqual(GEDCOMTagName.DATE, tagName2);
@@ -389,12 +396,12 @@ namespace GDModel.Providers.GEDCOM
 
 
             str = "    test test test (FTB line with error)";
-            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            res2 = ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual("    test test test (FTB line with error)", tagValue2);
             Assert.AreEqual(-1, res2);
 
             str = "        ";
-            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            res2 = ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(0, tagLevel2);
             Assert.AreEqual("", tagXRef2);
             Assert.AreEqual("", tagName2);
@@ -402,7 +409,7 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual(-2, res2);
 
             str = "";
-            res2 = GEDCOMUtils.ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            res2 = ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(-2, res2);
         }
 
@@ -430,7 +437,7 @@ namespace GDModel.Providers.GEDCOM
         [Test]
         public void Test_GetGeoCoord()
         {
-            Assert.AreEqual(0.0, GEDCOMUtils.GetGeoCoord(null, GeoCoord.Lati));
+            Assert.AreEqual(0.0, GEDCOMUtils.GetGeoCoord(null, GEDCOMGeoCoord.Lati));
         }
     }
 }

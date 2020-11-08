@@ -19,11 +19,10 @@
  */
 
 using System;
-
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -35,14 +34,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler ITreeCompareDlg.ExternalBase
+        ITextBox ITreeCompareDlg.ExternalBase
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtCompareFile); }
+            get { return GetControlHandler<ITextBox>(txtCompareFile); }
         }
 
-        ITextBoxHandler ITreeCompareDlg.CompareOutput
+        ITextBox ITreeCompareDlg.CompareOutput
         {
-            get { return GetControlHandler<ITextBoxHandler>(ListCompare); }
+            get { return GetControlHandler<ITextBox>(ListCompare); }
         }
 
         #endregion

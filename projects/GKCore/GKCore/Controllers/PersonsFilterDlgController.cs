@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -117,7 +117,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("PersonsFilterDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("PersonsFilterDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -169,9 +169,9 @@ namespace GKCore.Controllers
                 }
             }
             values.Sort();
-            fView.GroupCombo.AddItem(LangMan.LS(LSID.LSID_SrcAll), null);
-            fView.GroupCombo.AddItem(LangMan.LS(LSID.LSID_SrcNot), null);
-            fView.GroupCombo.AddItem(LangMan.LS(LSID.LSID_SrcAny), null);
+            fView.GroupCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAll), null);
+            fView.GroupCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcNot), null);
+            fView.GroupCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAny), null);
             fView.GroupCombo.AddStrings(values);
             if (iFilter.FilterGroupMode != FilterGroupMode.Selected) {
                 fView.GroupCombo.SelectedIndex = (int)iFilter.FilterGroupMode;
@@ -189,9 +189,9 @@ namespace GKCore.Controllers
                 }
             }
             values.Sort();
-            fView.SourceCombo.AddItem(LangMan.LS(LSID.LSID_SrcAll), null);
-            fView.SourceCombo.AddItem(LangMan.LS(LSID.LSID_SrcNot), null);
-            fView.SourceCombo.AddItem(LangMan.LS(LSID.LSID_SrcAny), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAll), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcNot), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAny), null);
             fView.SourceCombo.AddStrings(values);
             if (iFilter.SourceMode != FilterGroupMode.Selected) {
                 fView.SourceCombo.SelectedIndex = (int)iFilter.SourceMode;

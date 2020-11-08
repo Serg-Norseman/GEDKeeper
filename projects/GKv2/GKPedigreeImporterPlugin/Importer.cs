@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,6 +34,7 @@ using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
+using GKCore.Import;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -235,11 +236,11 @@ namespace GKPedigreeImporterPlugin
 
             public PersonNameRet(string name, string patr, string surname, string bd, string dd)
             {
-                this.Name = name;
-                this.Patr = patr;
-                this.Surname = surname;
-                this.BirthDate = bd;
-                this.DeathDate = dd;
+                Name = name;
+                Patr = patr;
+                Surname = surname;
+                BirthDate = bd;
+                DeathDate = dd;
             }
         }
 
@@ -405,10 +406,10 @@ namespace GKPedigreeImporterPlugin
                 if (toks.Length != 1) {
                     if (toks.Length != 2) {
                         if (toks.Length == 3) {
-                            tmp = val[0].ToString() + " " + GDMCustomDate.GEDCOMMonthArray[val[1] - 1] + " " + val[2].ToString();
+                            tmp = val[0].ToString() + " " + GEDCOMConsts.GEDCOMMonthArray[val[1] - 1] + " " + val[2].ToString();
                         }
                     } else {
-                        tmp = GDMCustomDate.GEDCOMMonthArray[val[0] - 1] + " " + val[1].ToString();
+                        tmp = GEDCOMConsts.GEDCOMMonthArray[val[0] - 1] + " " + val[1].ToString();
                     }
                 } else {
                     tmp = val[0].ToString();
@@ -490,7 +491,7 @@ namespace GKPedigreeImporterPlugin
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("Importer.ParsePerson(): " + ex.Message);
+                Logger.WriteError("Importer.ParsePerson()", ex);
                 throw;
             }
         }
@@ -500,11 +501,9 @@ namespace GKPedigreeImporterPlugin
             GDMSex result = GDMSex.svUnknown;
             if (buffer == null) return result;
 
-            try
-            {
+            try {
                 int num = buffer.Count;
-                for (int i = 0; i < num; i++)
-                {
+                for (int i = 0; i < num; i++) {
                     string line = buffer[i];
                     if (line.Length <= 2) continue;
 
@@ -526,10 +525,8 @@ namespace GKPedigreeImporterPlugin
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("Importer.GetProposeSex(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("Importer.GetProposeSex()", ex);
             }
 
             return result;
@@ -538,16 +535,13 @@ namespace GKPedigreeImporterPlugin
         private void CheckSpouses(StringList buffer, GDMIndividualRecord curPerson)
         {
             int num2 = buffer.Count;
-            for (int i = 0; i < num2; i++)
-            {
+            for (int i = 0; i < num2; i++) {
                 string line = buffer[i];
                 if (string.IsNullOrEmpty(line)) continue;
 
-                try
-                {
+                try {
                     var slRet = ImportUtils.ParseSpouseLine(line);
-                    if (slRet != null)
-                    {
+                    if (slRet != null) {
                         // define sex
                         string spSex = slRet.Spouse;
                         GDMSex sx = (spSex[0] == 'М') ? GDMSex.svMale : GDMSex.svFemale;
@@ -574,10 +568,8 @@ namespace GKPedigreeImporterPlugin
                             }
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogWrite("Importer.CheckSpouses(): " + ex.Message);
+                } catch (Exception ex) {
+                    Logger.WriteError("Importer.CheckSpouses()", ex);
                 }
             }
         }
@@ -586,8 +578,7 @@ namespace GKPedigreeImporterPlugin
         {
             if (buffer.IsEmpty()) return;
 
-            if (curPerson != null)
-            {
+            if (curPerson != null) {
                 CheckSpouses(buffer, curPerson);
             }
 
@@ -602,29 +593,25 @@ namespace GKPedigreeImporterPlugin
         /// 
         /// </summary>
         /// <param name="buffer"></param>
-        /// <param name="prevId"></param>
         /// <returns>prevId, identifier of person</returns>
         private int ParseBuffer(StringList buffer)
         {
             int prevId = 0;
 
-            try
-            {
+            try {
                 if (buffer.IsEmpty()) {
                     return prevId;
                 }
 
                 string s = buffer[0];
                 string personId = IsPersonLine(s);
-                if (!string.IsNullOrEmpty(personId))
-                {
+                if (!string.IsNullOrEmpty(personId)) {
                     fLog.Add("> " + fLangMan.LS(ILS.LSID_PersonParsed) + " \"" + personId + "\"");
 
                     int selfId = 0;
                     GDMIndividualRecord curPerson = ParsePerson(buffer, s, ref selfId);
 
-                    if (NumbersType == PersonNumbersType.pnKonovalov && selfId - prevId > 1)
-                    {
+                    if (NumbersType == PersonNumbersType.pnKonovalov && selfId - prevId > 1) {
                         fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_LineSeq));
                     }
 
@@ -632,10 +619,8 @@ namespace GKPedigreeImporterPlugin
 
                     CheckBuffer(buffer, curPerson);
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("Importer.ParseBuffer(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("Importer.ParseBuffer()", ex);
                 throw;
             }
 
@@ -673,12 +658,10 @@ namespace GKPedigreeImporterPlugin
                 return false;
             }
 
-            try
-            {
+            try {
                 IProgressController progress = AppHost.Progress;
 
-                try
-                {
+                try {
                     int[] numberStats = new int[3];
 
                     int num = fRawContents.Count;
@@ -694,14 +677,11 @@ namespace GKPedigreeImporterPlugin
                             } else {
                                 PersonNumbersType numbType = PersonNumbersType.pnUndefined;
 
-                                if (!string.IsNullOrEmpty(ImportUtils.IsPersonLine_DAboville(txt)))
-                                {
+                                if (!string.IsNullOrEmpty(ImportUtils.IsPersonLine_DAboville(txt))) {
                                     rawLine.Type = RawLineType.rltPerson;
                                     numbType = PersonNumbersType.pnDAboville;
                                     numberStats[1]++;
-                                }
-                                else if (!string.IsNullOrEmpty(ImportUtils.IsPersonLine_Konovalov(txt)))
-                                {
+                                } else if (!string.IsNullOrEmpty(ImportUtils.IsPersonLine_Konovalov(txt))) {
                                     rawLine.Type = RawLineType.rltPerson;
                                     numbType = PersonNumbersType.pnKonovalov;
                                     numberStats[2]++;
@@ -723,15 +703,11 @@ namespace GKPedigreeImporterPlugin
                     }
 
                     return true;
-                }
-                finally
-                {
+                } finally {
                     progress.ProgressDone();
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("Importer.AnalyseRaw(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("Importer.AnalyseRaw()", ex);
                 return false;
             }
         }
@@ -759,18 +735,15 @@ namespace GKPedigreeImporterPlugin
 
         private bool ImportTextContent()
         {
-            try
-            {
+            try {
                 fLog.Clear();
 
                 StringList buffer = new StringList();
-                try
-                {
+                try {
                     int prev_id = 0;
 
                     int num = fRawContents.Count;
-                    for (int i = 0; i < num; i++)
-                    {
+                    for (int i = 0; i < num; i++) {
                         string line = PrepareLine(fRawContents[i]);
                         RawLine rawLine = (RawLine)fRawContents.GetObject(i);
 
@@ -803,15 +776,11 @@ namespace GKPedigreeImporterPlugin
                     }
 
                     return true;
-                }
-                finally
-                {
+                } finally {
                     buffer.Dispose();
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("Importer.ImportTextContent(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("Importer.ImportTextContent()", ex);
                 throw;
             }
         }
@@ -949,7 +918,7 @@ namespace GKPedigreeImporterPlugin
             catch (Exception ex)
             {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                Logger.LogWrite("Importer.ImportTableContent(): " + ex.Message);
+                Logger.WriteError("Importer.ImportTableContent()", ex);
                 return false;
             }
         }
@@ -992,7 +961,7 @@ namespace GKPedigreeImporterPlugin
             catch (Exception ex)
             {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                Logger.LogWrite("Importer.LoadRawText(): " + ex.Message);
+                Logger.WriteError("Importer.LoadRawText()", ex);
                 return false;
             }
         }
@@ -1053,7 +1022,7 @@ namespace GKPedigreeImporterPlugin
             catch (Exception ex)
             {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                Logger.LogWrite("Importer.LoadRawWord(): " + ex.Message);
+                Logger.WriteError("Importer.LoadRawWord()", ex);
                 return false;
             }
         }

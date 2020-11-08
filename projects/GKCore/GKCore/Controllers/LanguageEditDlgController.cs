@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -57,7 +57,7 @@ namespace GKCore.Controllers
                 fLanguageID = fView.LanguageCombo.GetSelectedTag<GDMLanguageID>();
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("LanguageEditDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("LanguageEditDlgController.Accept()", ex);
                 return false;
             }
         }

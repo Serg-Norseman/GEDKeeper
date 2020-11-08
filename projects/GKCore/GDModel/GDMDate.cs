@@ -27,13 +27,6 @@ using GKCore.Types;
 
 namespace GDModel
 {
-    public class GDMDateException : GDMException
-    {
-        public GDMDateException(string message) : base(message)
-        {
-        }
-    }
-
     /// <summary>
     /// Class to hold simple standard GEDCOM dates.
     /// Note: Year cannot be used externally with negative values even for "BC",
@@ -233,24 +226,24 @@ namespace GDModel
                 case GDMCalendar.dcGregorian:
                 case GDMCalendar.dcJulian:
                 case GDMCalendar.dcRoman:
-                    monthes = GEDCOMMonthArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthArray;
                     break;
 
                 case GDMCalendar.dcHebrew:
-                    monthes = GEDCOMMonthHebrewArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthHebrewArray;
                     break;
 
                 case GDMCalendar.dcFrench:
-                    monthes = GEDCOMMonthFrenchArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthFrenchArray;
                     break;
 
                 case GDMCalendar.dcIslamic:
-                    monthes = GEDCOMMonthIslamicArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthIslamicArray;
                     break;
 
                 case GDMCalendar.dcUnknown:
                 default:
-                    monthes = GEDCOMMonthArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthArray;
                     break;
             }
             return monthes;
@@ -269,22 +262,22 @@ namespace GDModel
                 }
             }
 
-            throw new GDMDateException(string.Format("The string {0} is not a valid {1} month identifier", str, calendar.ToString()));
+            throw new GDMDateException("The string {0} is not a valid {1} month identifier", str, calendar.ToString());
         }
 
         private static string IntToGEDCOMMonth(int m)
         {
-            return (m == 0) ? string.Empty : GEDCOMMonthArray[m - 1];
+            return (m == 0) ? string.Empty : GEDCOMConsts.GEDCOMMonthArray[m - 1];
         }
 
         private static string IntToGEDCOMMonthFrench(int m)
         {
-            return (m == 0) ? string.Empty : GEDCOMMonthFrenchArray[m - 1];
+            return (m == 0) ? string.Empty : GEDCOMConsts.GEDCOMMonthFrenchArray[m - 1];
         }
 
         private static string IntToGEDCOMMonthHebrew(int m)
         {
-            return (m == 0) ? string.Empty : GEDCOMMonthHebrewArray[m - 1];
+            return (m == 0) ? string.Empty : GEDCOMConsts.GEDCOMMonthHebrewArray[m - 1];
         }
 
         #endregion
@@ -293,12 +286,12 @@ namespace GDModel
         {
             string prefix = string.Empty;
             if (fApproximated != GDMApproximated.daExact) {
-                prefix = GEDCOMDateApproximatedArray[(int)fApproximated] + " ";
+                prefix = GEDCOMConsts.GEDCOMDateApproximatedArray[(int)fApproximated] + " ";
             }
 
             string escapeStr = string.Empty;
             if (fCalendar != GDMCalendar.dcGregorian) {
-                escapeStr = GEDCOMDateEscapeArray[(int)fCalendar] + " ";
+                escapeStr = GEDCOMConsts.GEDCOMDateEscapeArray[(int)fCalendar] + " ";
             }
 
             string dayStr = string.Empty;
@@ -323,7 +316,7 @@ namespace GDModel
                     yearStr = yearStr + "/" + fYearModifier;
                 }
                 if (fYearBC) {
-                    yearStr += GEDCOMProvider.GEDCOM_YEAR_BC;
+                    yearStr += GEDCOMConsts.YearBC;
                 }
             }
 
@@ -338,15 +331,15 @@ namespace GDModel
             int month;
             switch (calendar) {
                 case GDMCalendar.dcHebrew:
-                    month = Algorithms.IndexOf(GEDCOMMonthHebrewArray, su);
+                    month = Algorithms.IndexOf(GEDCOMConsts.GEDCOMMonthHebrewArray, su);
                     break;
 
                 case GDMCalendar.dcFrench:
-                    month = Algorithms.IndexOf(GEDCOMMonthFrenchArray, su);
+                    month = Algorithms.IndexOf(GEDCOMConsts.GEDCOMMonthFrenchArray, su);
                     break;
 
                 default:
-                    month = Algorithms.IndexOf(GEDCOMMonthArray, su);
+                    month = Algorithms.IndexOf(GEDCOMConsts.GEDCOMMonthArray, su);
                     break;
             }
 
@@ -529,7 +522,7 @@ namespace GDModel
             string[] dtParts = dateStr.Split('.');
             if (dtParts.Length < 3) {
                 if (aException) {
-                    throw new GDMDateException(string.Format("GEDCOMDate.CreateByFormattedStr(): date format is invalid {0}", dateStr));
+                    throw new GDMDateException("Invalid date format '{0}'", dateStr);
                 }
 
                 return null;

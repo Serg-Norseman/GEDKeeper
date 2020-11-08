@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,9 @@
 
 using System;
 using BSLib;
+using BSLib.Design.Graphics;
 using GKCore;
 using GKCore.Charts;
-using GKCore.Interfaces;
 
 namespace GKCore.Charts
 {
@@ -62,7 +62,7 @@ namespace GKCore.Charts
             get { return fDestRect.Width; }
         }
 
-        public TCGenerationsControl(ITreeChartBox chart) : base(chart)
+        public TCGenerationsControl(ITreeChart chart) : base(chart)
         {
             fBlankColor = AppHost.GfxProvider.CreateColor(191, 191, 191);
             fSelectColor = AppHost.GfxProvider.CreateColor(128, 128, 128);

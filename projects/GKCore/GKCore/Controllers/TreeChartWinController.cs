@@ -56,7 +56,7 @@ namespace GKCore.Controllers
                     break;
             }
 
-            fView.Caption = string.Format("{0} \"{1}\"", kindName, Path.GetFileName(fBase.Context.FileName));
+            fView.Title = string.Format("{0} \"{1}\"", kindName, Path.GetFileName(fBase.Context.FileName));
         }
 
         public void UpdateChart()

@@ -20,11 +20,12 @@
 
 using System;
 using System.Windows.Forms;
+using BSLib.Design;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -42,17 +43,12 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler INoteEdit.Note
+        ITextBox INoteEdit.Note
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNote); }
+            get { return GetControlHandler<ITextBox>(txtNote); }
         }
 
         #endregion
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
 
         public NoteEditDlgEx(IBaseWindow baseWin)
         {
@@ -79,11 +75,27 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }
+
         private void FillSizes()
         {
-            cmbSizes.Items.Add(new GKComboItem("", 0));
+            cmbSizes.Items.Add(new ComboItem<int>("", 0));
             for (int i = 1; i <= 7; i++) {
-                cmbSizes.Items.Add(new GKComboItem(i.ToString(), i));
+                cmbSizes.Items.Add(new ComboItem<int>(i.ToString(), i));
             }
             cmbSizes.SelectedIndex = 0;
         }
@@ -137,8 +149,8 @@ namespace GKUI.Forms
 
         private void cmbSizes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var item = cmbSizes.SelectedItem as GKComboItem;
-            if (item == null || item.Caption == "") return;
+            var item = cmbSizes.SelectedItem as ComboItem<int>;
+            if (item == null || item.Text == "") return;
 
             string value = item.Tag.ToString();
             fController.SetSize(value);

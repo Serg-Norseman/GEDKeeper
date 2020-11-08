@@ -36,7 +36,7 @@ namespace GDModel
 
 
     /// <summary>
-    /// 
+    /// The main container for the Genealogy Data Model (GDM).
     /// </summary>
     public sealed class GDMTree : GDMObject
     {

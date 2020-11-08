@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,13 +20,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using BSLib;
 using BSLib.Calendar;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
+
+using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Lists
 {
@@ -86,7 +90,7 @@ namespace GKCore.Lists
             fListColumns = defaultListColumns;
         }
 
-        protected void AddColumn(IListView list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
+        protected void AddColumn(IListViewEx list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
         {
             if (list == null)
                 throw new ArgumentNullException("list");
@@ -100,7 +104,7 @@ namespace GKCore.Lists
             fColumnsMap.Clear();
         }
 
-        public abstract void UpdateColumns(IListView listView);
+        public abstract void UpdateColumns(IListViewEx listView);
 
         public abstract void UpdateContents();
     }
@@ -130,6 +134,10 @@ namespace GKCore.Lists
         private int fXSortFactor;
         private int fTotalCount;
         private string fQuickFilter = "*";
+
+        private string fMask;
+        private Regex fRegexMask;
+        private string fSimpleMask;
 
 
         public List<ValItem> ContentList
@@ -192,15 +200,76 @@ namespace GKCore.Lists
             fFilter = new ListFilter();
         }
 
-        protected static bool IsMatchesMask(string str, string mask)
+        protected bool IsMatchesMask(string str, string mask)
         {
-            bool result = false;
-            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(mask)) return result;
+            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(mask)) {
+                return false;
+            }
 
-            // regex supports '|' (or) expression
-            result = GKUtils.MatchesMask(str, mask);
+            if (mask == "*") {
+                return true;
+            }
 
-            return result;
+            if (fMask != mask) {
+                fMask = mask;
+                fSimpleMask = GetSimpleMask(fMask);
+                if (fSimpleMask == null) {
+                    fRegexMask = new Regex(GKUtils.PrepareMask(fMask), GKUtils.RegexOpts);
+                }
+            }
+
+            if (fSimpleMask != null) {
+                return str.IndexOf(fSimpleMask, StringComparison.OrdinalIgnoreCase) >= 0;
+            } else {
+                return fRegexMask.IsMatch(str, 0);
+            }
+        }
+
+        protected bool IsMatchesMask(StringList strList, string mask)
+        {
+            if (strList == null || strList.IsEmpty() || string.IsNullOrEmpty(mask)) {
+                return false;
+            }
+
+            if (mask == "*") {
+                return true;
+            }
+
+            if (fMask != mask) {
+                fMask = mask;
+                fSimpleMask = GetSimpleMask(fMask);
+                if (fSimpleMask == null) {
+                    fRegexMask = new Regex(GKUtils.PrepareMask(fMask), GKUtils.RegexOpts);
+                }
+            }
+
+            for (int i = 0; i < strList.Count; i++) {
+                string str = strList[i];
+
+                bool res;
+                if (fSimpleMask != null) {
+                    res = str.IndexOf(fSimpleMask, StringComparison.OrdinalIgnoreCase) >= 0;
+                } else {
+                    res = fRegexMask.IsMatch(str, 0);
+                }
+
+                if (res) return true;
+            }
+
+            return false;
+        }
+
+        private readonly static char[] SpecialChars = new char[] { '*', '?', '|' };
+
+        private static string GetSimpleMask(string mask)
+        {
+            int len = mask.Length;
+            if (len > 2 && mask[0] == '*' && mask[len - 1] == '*') {
+                string subStr = mask.Substring(1, len - 2);
+                return (subStr.IndexOfAny(SpecialChars) >= 0) ? null : subStr;
+            } else {
+                return null;
+            }
         }
 
         public virtual bool CheckFilter()
@@ -303,11 +372,11 @@ namespace GKCore.Lists
             }
 
             if (GlobalOptions.Instance.ReadabilityHighlightRows && MathHelper.IsOdd(itemIndex)) {
-                item.SetBackColor(ChartRenderer.GetColor(ChartRenderer.LightGray));
+                item.SetBackColor(ChartRenderer.GetColor(BSDColors.LightGray));
             }
         }
 
-        public override void UpdateColumns(IListView listView)
+        public override void UpdateColumns(IListViewEx listView)
         {
             if (listView == null) return;
 
@@ -403,8 +472,7 @@ namespace GKCore.Lists
         {
             bool res = true;
 
-            try
-            {
+            try {
                 object dataval = GetColumnValueEx(fcond.ColumnIndex, -1, false);
                 if (dataval == null) return true;
 
@@ -446,10 +514,8 @@ namespace GKCore.Lists
                         res = !GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
                         break;
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("ListManager.CheckCondition(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("ListManager.CheckCondition()", ex);
                 res = true;
             }
 
@@ -467,7 +533,7 @@ namespace GKCore.Lists
                     res = res && CheckCondition(fcond);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("ListManager.CheckCommonFilter(): " + ex.Message);
+                Logger.WriteError("ListManager.CheckCommonFilter()", ex);
                 res = true;
             }
 
@@ -561,7 +627,7 @@ namespace GKCore.Lists
                 fXSortFactor = (sortAscending ? 1 : -1);
                 ListTimSort<ValItem>.Sort(fContentList, CompareItems);
             } catch (Exception ex) {
-                Logger.LogWrite("ListManager.SortContents(): " + ex.Message);
+                Logger.WriteError("ListManager.SortContents()", ex);
             }
         }
 

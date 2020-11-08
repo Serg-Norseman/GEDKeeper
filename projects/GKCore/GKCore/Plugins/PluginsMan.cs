@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -73,7 +73,7 @@ namespace GKCore.Plugins
         public void Load(IHost host, string path)
         {
             if (!Directory.Exists(path)) return;
-            Logger.LogWrite("Plugins load path: " + path);
+            Logger.WriteInfo("Plugins load path: " + path);
 
             try {
                 #if !NETSTANDARD
@@ -95,29 +95,31 @@ namespace GKCore.Plugins
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PluginsMan.Load(" + path + "): " + ex.Message);
+                Logger.WriteError("PluginsMan.Load(" + path + ")", ex);
             }
         }
 
         public void Unload()
         {
             try {
-                foreach (IPlugin plugin in fPlugins) {
+                for (int i = 0, count = fPlugins.Count; i < count; i++) {
+                    IPlugin plugin = fPlugins[i];
                     plugin.Shutdown();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PluginsMan.Unload(): " + ex.Message);
+                Logger.WriteError("PluginsMan.Unload()", ex);
             }
         }
 
         public void OnLanguageChange()
         {
             try {
-                foreach (IPlugin plugin in fPlugins) {
+                for (int i = 0, count = fPlugins.Count; i < count; i++) {
+                    IPlugin plugin = fPlugins[i];
                     plugin.OnLanguageChange();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PluginsMan.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("PluginsMan.OnLanguageChange()", ex);
             }
         }
 
@@ -125,14 +127,14 @@ namespace GKCore.Plugins
         {
             if (baseWin == null || record == null) return;
 
-            foreach (IPlugin plugin in fPlugins) {
-                ISubscriber subscriber = (plugin as ISubscriber);
-                if (subscriber == null) continue;
-
+            for (int i = 0, count = fPlugins.Count; i < count; i++) {
                 try {
-                    subscriber.NotifyRecord(baseWin, record, action);
+                    ISubscriber subscriber = (fPlugins[i] as ISubscriber);
+                    if (subscriber != null) {
+                        subscriber.NotifyRecord(baseWin, record, action);
+                    }
                 } catch (Exception ex) {
-                    Logger.LogWrite("PluginsMan.NotifyRecord(): " + ex.Message);
+                    Logger.WriteError("PluginsMan.NotifyRecord()", ex);
                 }
             }
         }

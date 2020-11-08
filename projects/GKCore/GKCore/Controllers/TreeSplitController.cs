@@ -65,7 +65,7 @@ namespace GKCore.Controllers
                         }
                     }
                 }
-                fView.Caption = fSplitList.Count.ToString() + @" / " + cnt.ToString();
+                fView.Title = fSplitList.Count.ToString() + @" / " + cnt.ToString();
             } finally {
                 fView.SelectedList.EndUpdate();
                 fView.SkippedList.EndUpdate();

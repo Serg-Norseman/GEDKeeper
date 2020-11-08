@@ -21,8 +21,8 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using BSLib.Design.MVP;
 using GKCore.Interfaces;
-using GKCore.MVP;
 
 namespace GKUI.Forms
 {
@@ -38,7 +38,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        public string Caption
+        public string Title
         {
             get { return base.Text; }
             set { base.Text = value; }
@@ -75,7 +75,7 @@ namespace GKUI.Forms
             }
         }
 
-        protected T GetControlHandler<T>(object control) where T : IControl
+        protected T GetControlHandler<T>(object control) where T : class, IControl
         {
             return fControlsManager.GetControlHandler<T>(control);
         }
@@ -85,7 +85,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public abstract class CommonWindow : CommonForm, IWindow
+    public class CommonWindow : CommonForm, IWindow
     {
         public virtual void Show(bool showInTaskbar)
         {

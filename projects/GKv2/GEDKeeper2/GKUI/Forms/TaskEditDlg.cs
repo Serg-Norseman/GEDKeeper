@@ -20,6 +20,7 @@
 
 using System;
 using System.Windows.Forms;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -50,61 +51,37 @@ namespace GKUI.Forms
             get { return fNotesList; }
         }
 
-        IComboBoxHandler ITaskEditDlg.Priority
+        IComboBox ITaskEditDlg.Priority
         {
-            get { return GetControlHandler<IComboBoxHandler>(txtPriority); }
+            get { return GetControlHandler<IComboBox>(txtPriority); }
         }
 
-        ITextBoxHandler ITaskEditDlg.StartDate
+        IDateBox ITaskEditDlg.StartDate
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtStartDate); }
+            get { return GetControlHandler<IDateBox>(txtStartDate); }
         }
 
-        ITextBoxHandler ITaskEditDlg.StopDate
+        IDateBox ITaskEditDlg.StopDate
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtStopDate); }
+            get { return GetControlHandler<IDateBox>(txtStopDate); }
         }
 
-        IComboBoxHandler ITaskEditDlg.GoalType
+        IComboBox ITaskEditDlg.GoalType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbGoalType); }
+            get { return GetControlHandler<IComboBox>(cmbGoalType); }
         }
 
-        ITextBoxHandler ITaskEditDlg.Goal
+        ITextBox ITaskEditDlg.Goal
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtGoal); }
+            get { return GetControlHandler<ITextBox>(txtGoal); }
         }
 
-        IButtonHandler ITaskEditDlg.GoalSelect
+        IButton ITaskEditDlg.GoalSelect
         {
-            get { return GetControlHandler<IButtonHandler>(btnGoalSelect); }
+            get { return GetControlHandler<IButton>(btnGoalSelect); }
         }
 
         #endregion
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("TaskEditDlg.btnCancel_Click(): " + ex.Message);
-            }
-        }
-
-        private void btnGoalSelect_Click(object sender, EventArgs e)
-        {
-            fController.SelectGoal();
-        }
-
-        private void cmbGoalType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            fController.ChangeGoalType();
-        }
 
         public TaskEditDlg(IBaseWindow baseWin)
         {
@@ -132,6 +109,32 @@ namespace GKUI.Forms
             fController.Init(baseWin);
 
             fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }
+
+        private void btnGoalSelect_Click(object sender, EventArgs e)
+        {
+            fController.SelectGoal();
+        }
+
+        private void cmbGoalType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fController.ChangeGoalType();
         }
     }
 }

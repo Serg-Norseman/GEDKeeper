@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,8 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using BSLib.Design.Graphics;
 using GDModel;
-using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
@@ -55,7 +55,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Caption = fFileRef.Title;
+            fView.Title = fFileRef.Title;
 
             MultimediaKind mmKind = GKUtils.GetMultimediaKind(fFileRef.MultimediaFormat);
 
@@ -109,7 +109,7 @@ namespace GKCore.Controllers
                 }
             } catch (Exception ex) {
                 fView.DisposeViewControl();
-                Logger.LogWrite("MediaViewerController.UpdateView(): " + ex.Message);
+                Logger.WriteError("MediaViewerController.UpdateView()", ex);
             }
         }
 

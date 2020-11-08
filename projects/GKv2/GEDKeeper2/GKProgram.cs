@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,7 +25,6 @@ using System.Threading;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.SingleInstance;
-using GKUI.Providers;
 
 [assembly: AssemblyTitle("GEDKeeper")]
 [assembly: AssemblyDescription("")]
@@ -48,14 +47,14 @@ namespace GKUI
         {
             try {
                 #if __MonoCS__
-                Logger.LogWrite("Mono Version: " + SysUtils.GetMonoVersion());
-                Logger.LogWrite("Desktop Type: " + SysUtils.GetDesktopType().ToString());
+                Logger.WriteInfo("Mono Version: " + SysUtils.GetMonoVersion());
+                Logger.WriteInfo("Desktop Type: " + SysUtils.GetDesktopType().ToString());
                 #endif
 
                 // There should be no links to the application infrastructure
                 Assembly execAssembly = Assembly.GetExecutingAssembly();
-                Logger.LogWrite("CLR Version: " + execAssembly.ImageRuntimeVersion);
-                Logger.LogWrite("GK Version: " + execAssembly.GetName().Version.ToString());
+                Logger.WriteInfo("CLR Version: " + execAssembly.ImageRuntimeVersion);
+                Logger.WriteInfo("GK Version: " + execAssembly.GetName().Version.ToString());
             } catch {
                 // dummy
             }
@@ -67,7 +66,7 @@ namespace GKUI
         {
             WFAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
-            Logger.LogInit(WFAppHost.GetLogFilename());
+            Logger.Init(WFAppHost.GetLogFilename());
             LogSysInfo();
 
             Application.ThreadException += ExExceptionHandler;
@@ -77,12 +76,10 @@ namespace GKUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            using (SingleInstanceTracker tracker = new SingleInstanceTracker(GKData.APP_TITLE, GetSingleInstanceEnforcer))
-            {
+            using (SingleInstanceTracker tracker = new SingleInstanceTracker(GKData.APP_TITLE, GetSingleInstanceEnforcer)) {
                 if (tracker.IsFirstInstance) {
                     AppHost.InitSettings();
-                    try
-                    {
+                    try {
                         var appHost = (WFAppHost)AppHost.Instance;
                         appHost.Init(args, false);
 
@@ -103,18 +100,14 @@ namespace GKUI
 
         private static void ExExceptionHandler(object sender, ThreadExceptionEventArgs args)
         {
-            Logger.LogWrite("GK.ExExceptionHandler(): " + args.Exception.Message);
-            Logger.LogWrite("GK.ExExceptionHandler(): " + args.Exception.StackTrace);
+            Logger.WriteError("GK.ExExceptionHandler()", args.Exception);
         }
 
         private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args)
         {
             // Saving the copy for restoration
             AppHost.Instance.CriticalSave();
-
-            Exception e = (Exception) args.ExceptionObject;
-            Logger.LogWrite("GK.UnhandledExceptionsHandler(): " + e.Message);
-            Logger.LogWrite("GK.ExExceptionHandler(): " + e.StackTrace);
+            Logger.WriteError("GK.UnhandledExceptionsHandler()", (Exception)args.ExceptionObject);
         }
     }
 }

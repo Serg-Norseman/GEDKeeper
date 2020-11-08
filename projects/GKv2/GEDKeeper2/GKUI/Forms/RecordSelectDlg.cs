@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System;
 using System.Windows.Forms;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -32,6 +33,8 @@ namespace GKUI.Forms
 {
     public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
     {
+        public delegate void UpdateDelegate();
+
         private readonly RecordSelectDlgController fController;
 
         private GKListView fListRecords;
@@ -43,29 +46,16 @@ namespace GKUI.Forms
             set { txtFastFilter.Text = value; }
         }
 
-        public GDMSex NeedSex
-        {
-            get { return fController.Target.NeedSex; }
-            set { fController.Target.NeedSex = value; }
-        }
-
         public GDMRecord ResultRecord { get; set; }
-
-        public GDMIndividualRecord TargetIndividual
-        {
-            get { return fController.Target.TargetIndividual; }
-            set { fController.Target.TargetIndividual = value; }
-        }
-
-        public TargetMode TargetMode
-        {
-            get { return fController.Target.TargetMode; }
-            set { fController.Target.TargetMode = value; }
-        }
 
         #region View Interface
 
-        IListView IRecordSelectDialog.RecordsList
+        ITextBox IRecordSelectDialog.FilterBox
+        {
+            get { return GetControlHandler<ITextBox>(txtFastFilter); }
+        }
+
+        IListViewEx IRecordSelectDialog.RecordsList
         {
             get { return fListRecords; }
         }
@@ -89,6 +79,7 @@ namespace GKUI.Forms
             fController = new RecordSelectDlgController(this);
             fController.Init(baseWin);
             fController.RecType = recType;
+
             UpdateRecordsView();
             FastFilter = "*";
         }
@@ -97,6 +88,11 @@ namespace GKUI.Forms
         {
             if (disposing) {
                 // dummy
+                if (fChangeTimer != null) {
+                    fChangeTimer.Stop();
+                    fChangeTimer.Dispose();
+                    fChangeTimer = null;
+                }
             }
             base.Dispose(disposing);
         }
@@ -118,7 +114,7 @@ namespace GKUI.Forms
                 ResultRecord = fListRecords.GetSelectedData() as GDMRecord;
                 DialogResult = DialogResult.OK;
             } catch (Exception ex) {
-                Logger.LogWrite("RecordSelectDlg.btnSelect_Click(): " + ex.Message);
+                Logger.WriteError("RecordSelectDlg.btnSelect_Click()", ex);
                 ResultRecord = null;
                 DialogResult = DialogResult.None;
             }
@@ -133,15 +129,29 @@ namespace GKUI.Forms
                     DialogResult = DialogResult.OK;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("RecordSelectDlg.btnCreate_Click(): " + ex.Message);
+                Logger.WriteError("RecordSelectDlg.btnCreate_Click()", ex);
                 ResultRecord = null;
                 DialogResult = DialogResult.None;
             }
         }
 
+        private System.Timers.Timer fChangeTimer;
+
         private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
-            fController.Filter = txtFastFilter.Text;
+            if (fChangeTimer == null) {
+                fChangeTimer = new System.Timers.Timer(500);
+                fChangeTimer.AutoReset = false;
+                fChangeTimer.Elapsed += (sdr, args) => { BeginInvoke(new UpdateDelegate(fController.UpdateView)); };
+            } else {
+                fChangeTimer.Stop();
+            }
+            fChangeTimer.Start();
+        }
+
+        public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex)
+        {
+            fController.SetTarget(mode, target, needSex);
         }
     }
 }

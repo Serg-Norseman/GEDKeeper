@@ -20,11 +20,11 @@
 
 using System;
 using System.Windows.Forms;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -42,14 +42,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBoxHandler IAssociationEditDlg.Relation
+        IComboBox IAssociationEditDlg.Relation
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRelation); }
+            get { return GetControlHandler<IComboBox>(cmbRelation); }
         }
 
-        ITextBoxHandler IAssociationEditDlg.Person
+        ITextBox IAssociationEditDlg.Person
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtPerson); }
+            get { return GetControlHandler<ITextBox>(txtPerson); }
         }
 
         #endregion
@@ -78,6 +78,17 @@ namespace GKUI.Forms
         private void btnAccept_Click(object sender, EventArgs e)
         {
             DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnPersonAdd_Click(object sender, EventArgs e)

@@ -20,12 +20,12 @@
 
 using System;
 using System.Windows.Forms;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
@@ -63,29 +63,29 @@ namespace GKUI.Forms
             get { return fRepositoriesList; }
         }
 
-        ITextBoxHandler ISourceEditDlg.ShortTitle
+        ITextBox ISourceEditDlg.ShortTitle
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtShortTitle); }
+            get { return GetControlHandler<ITextBox>(txtShortTitle); }
         }
 
-        ITextBoxHandler ISourceEditDlg.Author
+        ITextBox ISourceEditDlg.Author
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtAuthor); }
+            get { return GetControlHandler<ITextBox>(txtAuthor); }
         }
 
-        ITextBoxHandler ISourceEditDlg.Title
+        ITextBox ISourceEditDlg.Title
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtTitle); }
+            get { return GetControlHandler<ITextBox>(txtTitle); }
         }
 
-        ITextBoxHandler ISourceEditDlg.Publication
+        ITextBox ISourceEditDlg.Publication
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtPublication); }
+            get { return GetControlHandler<ITextBox>(txtPublication); }
         }
 
-        ITextBoxHandler ISourceEditDlg.Text
+        ITextBox ISourceEditDlg.Text
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtText); }
+            get { return GetControlHandler<ITextBox>(txtText); }
         }
 
         #endregion
@@ -141,11 +141,13 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("SourceEditDlg.btnCancel_Click(): " + ex.Message);
-            }
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void EditShortTitle_TextChanged(object sender, EventArgs e)

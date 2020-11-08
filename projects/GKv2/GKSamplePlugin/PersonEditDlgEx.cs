@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,9 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -125,79 +128,79 @@ namespace GKSamplePlugin
             get { return imgPortrait; }
         }
 
-        ITextBoxHandler IPersonEditDlg.Father
+        ITextBox IPersonEditDlg.Father
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtFather); }
+            get { return GetControlHandler<ITextBox>(txtFather); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Mother
+        ITextBox IPersonEditDlg.Mother
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtMother); }
+            get { return GetControlHandler<ITextBox>(txtMother); }
         }
 
-        ILabelHandler IPersonEditDlg.SurnameLabel
+        ILabel IPersonEditDlg.SurnameLabel
         {
-            get { return GetControlHandler<ILabelHandler>(lblSurname); }
+            get { return GetControlHandler<ILabel>(lblSurname); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Surname
+        ITextBox IPersonEditDlg.Surname
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtSurname); }
+            get { return GetControlHandler<ITextBox>(txtSurname); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Name
+        ITextBox IPersonEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        IComboBoxHandler IPersonEditDlg.Patronymic
+        IComboBox IPersonEditDlg.Patronymic
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbPatronymic); }
+            get { return GetControlHandler<IComboBox>(cmbPatronymic); }
         }
 
-        ITextBoxHandler IPersonEditDlg.NamePrefix
+        ITextBox IPersonEditDlg.NamePrefix
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNamePrefix); }
+            get { return GetControlHandler<ITextBox>(txtNamePrefix); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Nickname
+        ITextBox IPersonEditDlg.Nickname
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNickname); }
+            get { return GetControlHandler<ITextBox>(txtNickname); }
         }
 
-        ITextBoxHandler IPersonEditDlg.SurnamePrefix
+        ITextBox IPersonEditDlg.SurnamePrefix
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtSurnamePrefix); }
+            get { return GetControlHandler<ITextBox>(txtSurnamePrefix); }
         }
 
-        ITextBoxHandler IPersonEditDlg.NameSuffix
+        ITextBox IPersonEditDlg.NameSuffix
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNameSuffix); }
+            get { return GetControlHandler<ITextBox>(txtNameSuffix); }
         }
 
-        ITextBoxHandler IPersonEditDlg.MarriedSurname
+        ITextBox IPersonEditDlg.MarriedSurname
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtMarriedSurname); }
+            get { return GetControlHandler<ITextBox>(txtMarriedSurname); }
         }
 
-        IComboBoxHandler IPersonEditDlg.RestrictionCombo
+        IComboBox IPersonEditDlg.RestrictionCombo
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRestriction); }
+            get { return GetControlHandler<IComboBox>(cmbRestriction); }
         }
 
-        IComboBoxHandler IPersonEditDlg.SexCombo
+        IComboBox IPersonEditDlg.SexCombo
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbSex); }
+            get { return GetControlHandler<IComboBox>(cmbSex); }
         }
 
-        ICheckBoxHandler IPersonEditDlg.Patriarch
+        ICheckBox IPersonEditDlg.Patriarch
         {
-            get { return GetControlHandler<ICheckBoxHandler>(chkPatriarch); }
+            get { return GetControlHandler<ICheckBox>(chkPatriarch); }
         }
 
-        ICheckBoxHandler IPersonEditDlg.Bookmark
+        ICheckBox IPersonEditDlg.Bookmark
         {
-            get { return GetControlHandler<ICheckBoxHandler>(chkBookmark); }
+            get { return GetControlHandler<ICheckBox>(chkBookmark); }
         }
 
         #endregion
@@ -255,7 +258,7 @@ namespace GKSamplePlugin
             try {
                 fController.Cancel();
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlg.btnCancel_Click(): " + ex.Message);
+                Logger.WriteError("PersonEditDlg.btnCancel_Click()", ex);
             }
         }
 

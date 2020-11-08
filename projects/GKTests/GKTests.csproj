@@ -68,17 +68,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="ArborGVT">
-      <HintPath>..\libs\ArborGVT.dll</HintPath>
-    </Reference>
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\libs\BSLib.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.Design.WFHandlers">
+      <HintPath>..\libs\BSLib.Design.WFHandlers.dll</HintPath>
     </Reference>
     <Reference Include="BSLib.Linguistics">
       <HintPath>..\libs\BSLib.Linguistics.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.SmartGraph">
-      <HintPath>..\libs\BSLib.SmartGraph.dll</HintPath>
+    <Reference Include="BSLib.DataViz.Model">
+      <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>libs\nunit.framework.dll</HintPath>
@@ -153,7 +156,6 @@
     <Compile Include="GKCore\GKUtilsTests.cs" />
     <Compile Include="GKCore\HolidaysTests.cs" />
     <Compile Include="GKCore\ImportUtilsTests.cs" />
-    <Compile Include="GKCore\IocContainerTests.cs" />
     <Compile Include="GKCore\KinshipsTests.cs" />
     <Compile Include="GKCore\ListsTests.cs" />
     <Compile Include="GKCore\NamesTests.cs" />
@@ -280,6 +282,7 @@
     <EmbeddedResource Include="Resources\test_native.ged" />
     <EmbeddedResource Include="Resources\test_windsor.familyx" />
     <EmbeddedResource Include="Resources\test_mergerec.ged" />
+    <EmbeddedResource Include="Resources\test_names_03.ged" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

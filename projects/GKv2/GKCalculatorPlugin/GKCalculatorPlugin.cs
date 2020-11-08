@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,8 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
@@ -81,7 +83,7 @@ namespace GKCalculatorPlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogWrite("GKCalculatorPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("GKCalculatorPlugin.OnLanguageChange()", ex);
             }
         }
 
@@ -95,7 +97,7 @@ namespace GKCalculatorPlugin
                     fIcon = new ImageHandler(bmp);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKCalculatorPlugin.Startup(): " + ex.Message);
+                Logger.WriteError("GKCalculatorPlugin.Startup()", ex);
                 result = false;
             }
             return result;

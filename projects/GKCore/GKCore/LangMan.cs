@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -868,8 +868,14 @@ namespace GKCore
         /* 809 */ LSID_Religion_TheOldBelievers,
 
         /* 810 */ LSID_STRel,
+        /* 811 */ LSID_BackupRevisionsMaxCount,
+        /* 812 */ LSID_FirstCapitalLetterInNames,
+        /* 813 */ LSID_DefaultDepth,
+        /* 814 */ LSID_WarningOfDialogUnsavedChanges,
+        /* 815 */ LSID_WarnForClosingDialog,
+        /* 816 */ LSID_DottedLinesOfAdoptedChildren,
 
-        /* 000 */ LSID_Last = LSID_STRel
+        /* 000 */ LSID_Last = LSID_DottedLinesOfAdoptedChildren
     }
 
 
@@ -1693,6 +1699,12 @@ namespace GKCore
             /* 809 */ "Religion:The Old Believers",
 
             /* 810 */ "Relative link to file",
+            /* 811 */ "Maximum number of backup revisions",
+            /* 812 */ "First capital letter in names",
+            /* 813 */ "Default depth",
+            /* 814 */ "The dialog contains unsaved changes. Continue and save?",
+            /* 815 */ "Warn for closing dialog with unsaved changes",
+            /* 816 */ "Dotted lines of adopted children",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
@@ -1768,7 +1780,7 @@ namespace GKCore
                         st = st.Remove(0, 1);
                         string[] lngParams = st.Split(',');
                         if (lngParams.Length < 3)
-                            throw new Exception("Header is incorrect");
+                            throw new GKException("Header is incorrect");
 
                         xt = (lngParams.Length == 4 && lngParams[3] == "xt");
                     }

@@ -20,8 +20,11 @@
 
 using System;
 using BSLib;
+using BSLib.Design.Graphics;
 using GKCore.Charts;
 using GKCore.Interfaces;
+
+using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Options
 {
@@ -33,18 +36,18 @@ namespace GKCore.Options
         public const int MAX_BRUSHES = 12;
 
         private static int[] DefBrushColor = new int[] {
-            /* 00 */ ChartRenderer.Coral,
-            /* 01 */ ChartRenderer.CadetBlue,
-            /* 02 */ ChartRenderer.DarkGray,
-            /* 03 */ ChartRenderer.Khaki,
-            /* 04 */ ChartRenderer.LawnGreen,
-            /* 05 */ ChartRenderer.Khaki,
-            /* 06 */ ChartRenderer.HotPink,
-            /* 07 */ ChartRenderer.Ivory,
-            /* 08 */ ChartRenderer.Black, // text
-            /* 09 */ ChartRenderer.Moccasin, // background and central
-            /* 10 */ ChartRenderer.Black, // lines
-            /* 11 */ ChartRenderer.PaleGreen // lines?
+            /* 00 */ BSDColors.Coral,
+            /* 01 */ BSDColors.CadetBlue,
+            /* 02 */ BSDColors.DarkGray,
+            /* 03 */ BSDColors.Khaki,
+            /* 04 */ BSDColors.LawnGreen,
+            /* 05 */ BSDColors.Khaki,
+            /* 06 */ BSDColors.HotPink,
+            /* 07 */ BSDColors.Ivory,
+            /* 08 */ BSDColors.Black, // text
+            /* 09 */ BSDColors.Moccasin, // background and central
+            /* 10 */ BSDColors.Black, // lines
+            /* 11 */ BSDColors.PaleGreen // lines?
         };
 
         public bool ArcText;

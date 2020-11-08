@@ -53,6 +53,9 @@
     <Reference Include="BSLib.DataViz.WFControls">
       <HintPath>..\..\libs\BSLib.DataViz.WFControls.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\..\libs\BSLib.Design.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />

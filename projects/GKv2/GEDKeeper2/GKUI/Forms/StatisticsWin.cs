@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -59,9 +60,9 @@ namespace GKUI.Forms
             get { return lvSummary; }
         }
 
-        IComboBoxHandler IStatisticsWin.StatsType
+        IComboBox IStatisticsWin.StatsType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cbType); }
+            get { return GetControlHandler<IComboBox>(cbType); }
         }
 
         #endregion
@@ -112,7 +113,7 @@ namespace GKUI.Forms
             fController.CalcStats(fCurrentMode);
 
             fListStats.SortColumn = -1;
-            fListStats.Sorting = SortOrder.None;
+            fListStats.Sorting = System.Windows.Forms.SortOrder.None;
         }
 
         private void StatisticsWin_Load(object sender, EventArgs e)

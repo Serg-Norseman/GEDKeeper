@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,10 +21,12 @@
 #define SEX_SYMBOLS
 
 using System;
+using BSLib.Design.Graphics;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
+using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
@@ -84,14 +86,15 @@ namespace GKCore.Controllers
                         break;
                 }
                 #endif
-                fView.SexCombo.AddItem(name, null, image);
+                fView.SexCombo.AddItem(name, sx, image);
             }
         }
 
         private bool IsExtendedWomanSurname()
         {
+            var selectedSex = fView.SexCombo.GetSelectedTag<GDMSex>();
             bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
-                (fView.SexCombo.SelectedIndex == (sbyte)GDMSex.svFemale);
+                (selectedSex == GDMSex.svFemale);
             return result;
         }
 
@@ -136,7 +139,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("PersonEditDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -169,7 +172,7 @@ namespace GKCore.Controllers
 
                 UpdateControls(true);
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlgController.UpdateView(): " + ex.Message);
+                Logger.WriteError("PersonEditDlgController.UpdateView()", ex);
             }
         }
 
@@ -354,13 +357,15 @@ namespace GKCore.Controllers
                             }
                             break;
 
-                        case TargetMode.tmWife:
-                            SetMarriedSurname(parts.Surname);
+                        case TargetMode.tmSpouse:
+                            if (sx == GDMSex.svFemale) {
+                                SetMarriedSurname(parts.Surname);
+                            }
                             break;
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + "): " + ex.Message);
+                Logger.WriteError("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + ")", ex);
             }
         }
 
@@ -488,6 +493,21 @@ namespace GKCore.Controllers
             if (family == null) return;
 
             JumpToRecord(family.Wife.Individual);
+        }
+
+        public void JumpToPersonSpouse(GDMFamilyRecord family)
+        {
+            GDMIndividualRecord spouse = null;
+            switch (fPerson.Sex) {
+                case GDMSex.svMale:
+                    spouse = family.Wife.Individual;
+                    break;
+
+                case GDMSex.svFemale:
+                    spouse = family.Husband.Individual;
+                    break;
+            }
+            JumpToRecord(spouse);
         }
     }
 }

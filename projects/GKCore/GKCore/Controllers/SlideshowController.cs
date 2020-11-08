@@ -19,8 +19,8 @@
  */
 
 using System.Collections.Generic;
+using BSLib.Design.Graphics;
 using GDModel;
-using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;

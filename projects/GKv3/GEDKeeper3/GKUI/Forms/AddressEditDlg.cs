@@ -19,13 +19,14 @@
  */
 
 using System;
+using System.ComponentModel;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
@@ -64,51 +65,32 @@ namespace GKUI.Forms
         }
 
 
-        ITextBoxHandler IAddressEditDlg.Country
+        ITextBox IAddressEditDlg.Country
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtCountry); }
+            get { return GetControlHandler<ITextBox>(txtCountry); }
         }
 
-        ITextBoxHandler IAddressEditDlg.State
+        ITextBox IAddressEditDlg.State
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtState); }
+            get { return GetControlHandler<ITextBox>(txtState); }
         }
 
-        ITextBoxHandler IAddressEditDlg.City
+        ITextBox IAddressEditDlg.City
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtCity); }
+            get { return GetControlHandler<ITextBox>(txtCity); }
         }
 
-        ITextBoxHandler IAddressEditDlg.PostalCode
+        ITextBox IAddressEditDlg.PostalCode
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtPostalCode); }
+            get { return GetControlHandler<ITextBox>(txtPostalCode); }
         }
 
-        ITextBoxHandler IAddressEditDlg.AddressLine
+        ITextBox IAddressEditDlg.AddressLine
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtAddress); }
+            get { return GetControlHandler<ITextBox>(txtAddress); }
         }
 
         #endregion
-
-        private void ListModify(object sender, ModifyEventArgs eArgs)
-        {
-            GDMTag itemTag = eArgs.ItemData as GDMTag;
-            if ((eArgs.Action == RecordAction.raEdit || eArgs.Action == RecordAction.raDelete) && (itemTag == null)) return;
-
-            if (sender == fPhonesList) {
-                fController.DoPhonesAction(eArgs.Action, itemTag);
-            } else if (sender == fMailsList) {
-                fController.DoMailsAction(eArgs.Action, itemTag);
-            } else if (sender == fWebsList) {
-                fController.DoWebsAction(eArgs.Action, itemTag);
-            }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
 
         public AddressEditDlg(IBaseWindow baseWin)
         {
@@ -145,6 +127,36 @@ namespace GKUI.Forms
 
             fController = new AddressEditDlgController(this);
             fController.Init(baseWin);
+        }
+
+        private void ListModify(object sender, ModifyEventArgs eArgs)
+        {
+            GDMTag itemTag = eArgs.ItemData as GDMTag;
+            if ((eArgs.Action == RecordAction.raEdit || eArgs.Action == RecordAction.raDelete) && (itemTag == null)) return;
+
+            if (sender == fPhonesList) {
+                fController.DoPhonesAction(eArgs.Action, itemTag);
+            } else if (sender == fMailsList) {
+                fController.DoMailsAction(eArgs.Action, itemTag);
+            } else if (sender == fWebsList) {
+                fController.DoWebsAction(eArgs.Action, itemTag);
+            }
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

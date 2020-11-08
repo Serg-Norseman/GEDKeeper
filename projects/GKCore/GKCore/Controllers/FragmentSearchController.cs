@@ -19,10 +19,10 @@
  */
 
 using System.Collections.Generic;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Tools;
 

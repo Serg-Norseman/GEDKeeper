@@ -179,11 +179,11 @@ namespace GKUI.Components
                 var comp = new ArborViewer();
                 comp.Dock = DockStyle.Fill;
 
-                comp.Sys.addNode("A");
-                comp.Sys.addNode("B");
-                comp.Sys.addNode("C");
-                comp.Sys.addEdge("A", "B");
-                comp.Sys.addEdge("B", "C");
+                comp.Sys.AddNode("A");
+                comp.Sys.AddNode("B");
+                comp.Sys.AddNode("C");
+                comp.Sys.AddEdge("A", "B");
+                comp.Sys.AddEdge("B", "C");
                 comp.start();
 
                 comp.EnergyDebug = true;

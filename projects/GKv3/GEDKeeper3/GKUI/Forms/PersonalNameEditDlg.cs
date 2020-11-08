@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,12 +19,13 @@
  */
 
 using System;
+using System.ComponentModel;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -42,74 +43,62 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ILabelHandler IPersonalNameEditDlg.SurnameLabel
+        ILabel IPersonalNameEditDlg.SurnameLabel
         {
-            get { return GetControlHandler<ILabelHandler>(lblSurname); }
+            get { return GetControlHandler<ILabel>(lblSurname); }
         }
 
-        ITextBoxHandler IPersonalNameEditDlg.Surname
+        ITextBox IPersonalNameEditDlg.Surname
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtSurname); }
+            get { return GetControlHandler<ITextBox>(txtSurname); }
         }
 
-        ITextBoxHandler IPersonalNameEditDlg.Name
+        ITextBox IPersonalNameEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        ITextBoxHandler IPersonalNameEditDlg.Patronymic
+        ITextBox IPersonalNameEditDlg.Patronymic
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtPatronymic); }
+            get { return GetControlHandler<ITextBox>(txtPatronymic); }
         }
 
-        IComboBoxHandler IPersonalNameEditDlg.NameType
+        IComboBox IPersonalNameEditDlg.NameType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbNameType); }
+            get { return GetControlHandler<IComboBox>(cmbNameType); }
         }
 
-        ITextBoxHandler IPersonalNameEditDlg.NamePrefix
+        ITextBox IPersonalNameEditDlg.NamePrefix
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNamePrefix); }
+            get { return GetControlHandler<ITextBox>(txtNamePrefix); }
         }
 
-        ITextBoxHandler IPersonalNameEditDlg.Nickname
+        ITextBox IPersonalNameEditDlg.Nickname
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNickname); }
+            get { return GetControlHandler<ITextBox>(txtNickname); }
         }
 
-        ITextBoxHandler IPersonalNameEditDlg.SurnamePrefix
+        ITextBox IPersonalNameEditDlg.SurnamePrefix
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtSurnamePrefix); }
+            get { return GetControlHandler<ITextBox>(txtSurnamePrefix); }
         }
 
-        ITextBoxHandler IPersonalNameEditDlg.NameSuffix
+        ITextBox IPersonalNameEditDlg.NameSuffix
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNameSuffix); }
+            get { return GetControlHandler<ITextBox>(txtNameSuffix); }
         }
 
-        ITextBoxHandler IPersonalNameEditDlg.MarriedSurname
+        ITextBox IPersonalNameEditDlg.MarriedSurname
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtMarriedSurname); }
+            get { return GetControlHandler<ITextBox>(txtMarriedSurname); }
         }
 
-        IComboBoxHandler IPersonalNameEditDlg.Language
+        IComboBox IPersonalNameEditDlg.Language
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbLanguage); }
+            get { return GetControlHandler<IComboBox>(cmbLanguage); }
         }
 
         #endregion
-
-        private void edName_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyChar == '/') {
-                e.Handled = true;
-            }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
 
         public PersonalNameEditDlg(IBaseWindow baseWin)
         {
@@ -139,6 +128,36 @@ namespace GKUI.Forms
             lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
             lblType.Text = LangMan.LS(LSID.LSID_Type);
             lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
+        }
+
+        private void edName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Keys.Down && e.Control) {
+                UIHelper.ProcessName(sender);
+            } else if (e.KeyChar == '/') {
+                e.Handled = true;
+            }
+        }
+
+        private void txtXName_Leave(object sender, EventArgs e)
+        {
+            UIHelper.ProcessName(sender);
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

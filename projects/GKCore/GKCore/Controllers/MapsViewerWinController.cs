@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,12 +21,12 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.MVP;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 
 namespace GKCore.Controllers
@@ -100,7 +100,7 @@ namespace GKCore.Controllers
                             int num2 = ind.Events.Count;
                             for (int j = 0; j < num2; j++) {
                                 GDMCustomEvent ev = ind.Events[j];
-                                if (ev.Place.StringValue != "") {
+                                if (!string.IsNullOrEmpty(ev.Place.StringValue)) {
                                     AddPlace(ev.Place, ev);
                                     pCnt++;
                                 }
@@ -118,7 +118,7 @@ namespace GKCore.Controllers
 
                     personValues.Sort();
                     fView.PersonsCombo.Clear();
-                    fView.PersonsCombo.AddItem(LangMan.LS(LSID.LSID_NotSelected), null);
+                    fView.PersonsCombo.AddItem<GDMIndividualRecord>(LangMan.LS(LSID.LSID_NotSelected), null);
                     fView.PersonsCombo.AddStrings(personValues);
 
                     fView.SelectPlacesBtn.Enabled = true;
@@ -130,7 +130,7 @@ namespace GKCore.Controllers
                     PlacesCache.Instance.Save();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("MapsViewerWin.PlacesLoad(): " + ex.Message);
+                Logger.WriteError("MapsViewerWin.PlacesLoad()", ex);
             }
         }
 
@@ -169,8 +169,16 @@ namespace GKCore.Controllers
 
                 mapPlace.PlaceRefs.Add(new PlaceRef(placeEvent));
             } catch (Exception ex) {
-                Logger.LogWrite("MapsViewerWin.AddPlace(): " + ex.Message);
+                Logger.WriteError("MapsViewerWin.AddPlace()", ex);
             }
+        }
+
+        public void SetCenter()
+        {
+            GeoPoint pt = fView.PlacesTree.GetSelectedData() as GeoPoint;
+            if (pt == null) return;
+
+            fView.MapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
         }
 
         public void SelectPlaces()

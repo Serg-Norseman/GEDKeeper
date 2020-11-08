@@ -19,11 +19,10 @@
  */
 
 using System;
-
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -37,14 +36,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        INumericBoxHandler IPatriarchsSearchDlg.MinGensNum
+        INumericBox IPatriarchsSearchDlg.MinGensNum
         {
-            get { return GetControlHandler<INumericBoxHandler>(edMinGens); }
+            get { return GetControlHandler<INumericBox>(edMinGens); }
         }
 
-        ICheckBoxHandler IPatriarchsSearchDlg.WithoutDatesCheck
+        ICheckBox IPatriarchsSearchDlg.WithoutDatesCheck
         {
-            get { return GetControlHandler<ICheckBoxHandler>(chkWithoutDates); }
+            get { return GetControlHandler<ICheckBox>(chkWithoutDates); }
         }
 
         IListView IPatriarchsSearchDlg.PatriarchsList

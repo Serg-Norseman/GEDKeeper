@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -59,13 +60,13 @@ namespace GKCore.Lists
 
                     fSheetList.AddItem(child, new object[] {
                         idx, GKUtils.GetNameString(child, true, false),
-                        new GEDCOMDateItem(GKUtils.GetBirthDate(child))
+                        new GDMDateItem(GKUtils.GetBirthDate(child))
                     });
                 }
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.LogWrite("ChildrenListModel.UpdateContents(): " + ex.Message);
+                Logger.WriteError("ChildrenListModel.UpdateContents()", ex);
             }
         }
 

@@ -18,64 +18,46 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Collections.Generic;
-using Eto.Forms;
-using GKCore.Interfaces;
+using BSLib.Design;
+using BSLib.Design.Graphics;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public class GKComboItem : Eto.Forms.IListItem
+    public class GKComboItem<T> : Eto.Forms.IListItem, IComboItem
     {
-        public readonly string Caption;
-        public readonly object Tag;
-        public readonly IImage Image;
-
-        public string Text
-        {
-            get { return Caption; }
-            set { }
-        }
+        public string Text { get; set; }
+        public T Tag { get; private set; }
+        public IImage Image { get; private set; }
 
         public string Key
         {
-            get { return Caption; }
+            get { return Text; }
         }
 
-        public GKComboItem(string caption)
+        public GKComboItem(string text)
         {
-            Caption = caption;
+            Text = text;
         }
 
-        public GKComboItem(string caption, object tag)
+        public GKComboItem(string text, T tag)
         {
-            Caption = caption;
+            Text = text;
             Tag = tag;
         }
 
-        public GKComboItem(string caption, object tag, IImage image)
+        public GKComboItem(string text, T tag, IImage image)
         {
-            Caption = caption;
+            Text = text;
             Tag = tag;
             Image = image;
         }
 
         public override string ToString()
         {
-            return Caption;
-        }
-
-        public static IEnumerable<GKComboItem> Convert(IEnumerable<string> items)
-        {
-            var result = new List<GKComboItem>();
-
-            foreach (var item in items) {
-                result.Add(new GKComboItem(item));
-            }
-
-            return result;
+            return Text;
         }
     }
 }

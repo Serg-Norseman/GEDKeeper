@@ -32,7 +32,7 @@ namespace GKUI.Forms
 
             grpSex = new GroupBox();
             grpSex.Text = "grpSex";
-            grpSex.Content = new HDefStackLayout {
+            grpSex.Content = new DefStackLayout(Orientation.Horizontal) {
                 Items = { rbNone, rbMale, rbFemale }
             };
 

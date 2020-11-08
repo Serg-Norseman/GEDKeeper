@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -33,6 +33,8 @@ namespace GKCore
         public const string APP_TITLE = "GEDKeeper2";
         public const string APP_TITLE_NEW = "GEDKeeper";
 
+        public const string APP_COPYRIGHT = "Copyright © 2009-2020 by Sergey V. Zhdanovskih";
+
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 
         public const int APP_FORMAT_DEFVER = 39; // don't change it!
@@ -44,7 +46,8 @@ namespace GKCore
 
         public const int NOTE_NAME_MAX_LENGTH = 64;
 
-        public const string GAPI_KEY = "AIzaSyCebJC5BpniJtRaJCSEl3tXdFy3KhbV5hk";
+        public const string GAPI_KEY = "AIzaSyCyPx_u1PhHaN2d3ld4J8hsgASF5lOdpGY";
+        public const string YAPI_KEY = "a5653896-1335-477f-aac7-10a2ba9e52c5";
 
         public static readonly int HighlightUnparentedColor = 0xFFCACA;
         public static readonly int HighlightUnmarriedColor = 0xFFFFA1;

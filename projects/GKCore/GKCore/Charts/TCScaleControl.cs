@@ -20,9 +20,9 @@
 
 using System;
 using BSLib;
+using BSLib.Design.Graphics;
 using GKCore;
 using GKCore.Charts;
-using GKCore.Interfaces;
 
 namespace GKCore.Charts
 {
@@ -89,7 +89,7 @@ namespace GKCore.Charts
 
         #endregion
 
-        public TCScaleControl(ITreeChartBox chart) : base(chart)
+        public TCScaleControl(ITreeChart chart) : base(chart)
         {
             fControlsImage = AppHost.GfxProvider.LoadResourceImage("chart_controls.png", false);
         }

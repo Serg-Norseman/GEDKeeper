@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,7 @@
  */
 
 using System;
-using ArborGVT;
+using BSLib.DataViz.ArborGVT;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
@@ -55,7 +55,7 @@ namespace GKUI.Components
         protected override void StartTimer()
         {
             fTimer = new UITimer();
-            fTimer.Interval = ParamTimeout / 1000;
+            fTimer.Interval = TimerInterval / 1000;
             fTimer.Elapsed += TimerElapsed;
             fTimer.Start();
         }
@@ -121,7 +121,7 @@ namespace GKUI.Components
 
             // repulsion - отталкивание, stiffness - тугоподвижность, friction - сила трения
             fSys = new ArborSystemEx(10000, 500/*1000*/, 0.1, this);
-            fSys.setScreenSize(Width, Height);
+            fSys.SetViewSize(Width, Height);
             fSys.AutoStop = false;
 
             fEnergyDebug = false;
@@ -154,7 +154,7 @@ namespace GKUI.Components
         {
             base.OnSizeChanged(e);
 
-            fSys.setScreenSize(Width, Height);
+            fSys.SetViewSize(Width, Height);
             Invalidate();
         }
 
@@ -162,12 +162,10 @@ namespace GKUI.Components
         {
             Graphics gfx = e.Graphics;
 
-            try
-            {
+            try {
                 gfx.AntiAlias = true;
 
-                foreach (ArborNode node in fSys.Nodes)
-                {
+                foreach (ArborNode node in fSys.Nodes) {
                     var xnode = node as ArborNodeEx;
 
                     xnode.Box = getNodeRect(gfx, node);
@@ -175,38 +173,32 @@ namespace GKUI.Components
                     gfx.DrawText(fDrawFont, fWhiteBrush, xnode.Box.Left, xnode.Box.Top, node.Sign);
                 }
 
-                using (Pen grayPen = new Pen(Colors.Gray, 1))
-                {
+                using (Pen grayPen = new Pen(Colors.Gray, 1)) {
                     //grayPen.StartCap = PenLineCap.NoAnchor;
                     //grayPen.EndCap = PenLineCap.ArrowAnchor;
 
-                    foreach (ArborEdge edge in fSys.Edges)
-                    {
+                    foreach (ArborEdge edge in fSys.Edges) {
                         var srcNode = edge.Source as ArborNodeEx;
                         var tgtNode = edge.Target as ArborNodeEx;
 
-                        ArborPoint pt1 = fSys.toScreen(srcNode.Pt);
-                        ArborPoint pt2 = fSys.toScreen(tgtNode.Pt);
+                        ArborPoint pt1 = fSys.GetViewCoords(srcNode.Pt);
+                        ArborPoint pt2 = fSys.GetViewCoords(tgtNode.Pt);
 
                         ArborPoint tail = intersect_line_box(pt1, pt2, srcNode.Box);
-                        ArborPoint head = (tail.isNull()) ? ArborPoint.Null : intersect_line_box(tail, pt2, tgtNode.Box);
+                        ArborPoint head = (tail.IsNull()) ? ArborPoint.Null : intersect_line_box(tail, pt2, tgtNode.Box);
 
-                        if (!head.isNull() && !tail.isNull())
-                        {
+                        if (!head.IsNull() && !tail.IsNull()) {
                             gfx.DrawLine(grayPen, (int)tail.X, (int)tail.Y, (int)head.X, (int)head.Y);
                         }
                     }
                 }
 
-                if (fEnergyDebug)
-                {
+                if (fEnergyDebug) {
                     string energy = "max=" + fSys.EnergyMax.ToString("0.00000") + ", mean=" + fSys.EnergyMean.ToString("0.00000");
                     gfx.DrawText(fDrawFont, fBlackBrush, 10, 10, energy);
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("ArborViewer.OnPaint(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("ArborViewer.OnPaint()", ex);
             }
         }
 
@@ -238,23 +230,23 @@ namespace GKUI.Components
             ArborPoint pt;
 
             pt = intersect_line_line(p1, p2, tl, tr);
-            if (!pt.isNull()) return pt;
+            if (!pt.IsNull()) return pt;
 
             pt = intersect_line_line(p1, p2, tr, br);
-            if (!pt.isNull()) return pt;
+            if (!pt.IsNull()) return pt;
 
             pt = intersect_line_line(p1, p2, br, bl);
-            if (!pt.isNull()) return pt;
+            if (!pt.IsNull()) return pt;
 
             pt = intersect_line_line(p1, p2, bl, tl);
-            if (!pt.isNull()) return pt;
+            if (!pt.IsNull()) return pt;
 
             return ArborPoint.Null;
         }
 
         public void start()
         {
-            fSys.start();
+            fSys.Start();
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -264,7 +256,7 @@ namespace GKUI.Components
             Point mpt = new Point(e.Location);
             if (fNodesDragging)
             {
-                fDragged = fSys.nearest(mpt.X, mpt.Y);
+                fDragged = fSys.GetNearestNode(mpt.X, mpt.Y);
 
                 if (fDragged != null)
                 {
@@ -294,7 +286,7 @@ namespace GKUI.Components
             Point mpt = new Point(e.Location);
             if (fNodesDragging && fDragged != null)
             {
-                fDragged.Pt = fSys.fromScreen(mpt.X, mpt.Y);
+                fDragged.Pt = fSys.GetModelCoords(mpt.X, mpt.Y);
             }
 
             e.Handled = true;
@@ -306,7 +298,7 @@ namespace GKUI.Components
             SizeF tsz = gfx.MeasureString(fDrawFont, node.Sign);
             float w = tsz.Width + 10;
             float h = tsz.Height + 4;
-            ArborPoint pt = fSys.toScreen(node.Pt);
+            ArborPoint pt = fSys.GetViewCoords(node.Pt);
             pt.X = Math.Floor(pt.X);
             pt.Y = Math.Floor(pt.Y);
 
@@ -315,7 +307,7 @@ namespace GKUI.Components
 
         public ArborNode getNodeByCoord(int x, int y)
         {
-            return fSys.nearest(x, y);
+            return fSys.GetNearestNode(x, y);
 
             /*foreach (ArborNode node in fSys.Nodes)
             {

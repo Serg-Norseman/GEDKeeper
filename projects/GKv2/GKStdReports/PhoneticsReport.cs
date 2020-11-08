@@ -20,6 +20,7 @@
 
 using System;
 using BSLib;
+using BSLib.Design.Graphics;
 using BSLib.Linguistics.Grammar;
 using GDModel;
 using GKCore;

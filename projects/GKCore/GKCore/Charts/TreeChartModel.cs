@@ -22,12 +22,16 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using BSLib;
+using BSLib.Design.Graphics;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Options;
+using GKCore.Search;
 using GKCore.Types;
+
+using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Charts
 {
@@ -77,6 +81,8 @@ namespace GKCore.Charts
         private int fBranchDistance;
         private bool fCertaintyIndex;
         private IPen fDecorativeLinePen;
+        private IPen fDottedLinePen;
+        private IPen fDottedDecorativeLinePen;
         private int fDepthLimit;
         private IFont fDrawFont;
         private int[] fEdges;
@@ -264,7 +270,7 @@ namespace GKCore.Charts
                 var result = AppHost.GfxProvider.LoadResourceImage(name, makeTransp);
                 return result;
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartModel.PrepareImage(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.PrepareImage()", ex);
                 return null;
             }
         }
@@ -288,7 +294,7 @@ namespace GKCore.Charts
                 fPersExpPic = PrepareImage("btn_expand2.gif", true);
                 fInfoPic = PrepareImage("btn_info.gif", true);
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartModel.InitSigns(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.InitSigns()", ex);
             }
         }
 
@@ -304,6 +310,8 @@ namespace GKCore.Charts
             fBranchDistance = sourceModel.fBranchDistance;
             fCertaintyIndex = sourceModel.fCertaintyIndex;
             fDecorativeLinePen = sourceModel.fDecorativeLinePen;
+            fDottedLinePen = sourceModel.fDottedLinePen;
+            fDottedDecorativeLinePen = sourceModel.fDottedDecorativeLinePen;
             fDepthLimit = sourceModel.fDepthLimit;
             fDrawFont = sourceModel.fDrawFont;
             fExpPic = sourceModel.fExpPic;
@@ -382,7 +390,7 @@ namespace GKCore.Charts
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeChartModel.AddDescPerson(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.AddDescPerson()", ex);
                 throw;
             }
         }
@@ -423,7 +431,9 @@ namespace GKCore.Charts
 
                     if ((fDepthLimit <= -1 || generation != fDepthLimit) && aPerson.ChildToFamilyLinks.Count > 0 && !dupFlag)
                     {
-                        GDMFamilyRecord family = aPerson.ChildToFamilyLinks[0].Family;
+                        GDMChildToFamilyLink childLink = aPerson.ChildToFamilyLinks[0];
+                        result.Adopted = (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted);
+                        GDMFamilyRecord family = childLink.Family;
 
                         bool isDup = (fPreparedFamilies.IndexOf(family.XRef) >= 0);
                         if (!isDup) fPreparedFamilies.Add(family.XRef);
@@ -499,7 +509,7 @@ namespace GKCore.Charts
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeChartModel.DoAncestorsStep(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.DoAncestorsStep()", ex);
                 throw;
             }
         }
@@ -572,7 +582,7 @@ namespace GKCore.Charts
 
                         // protection against invalid third-party files
                         if (family == null) {
-                            Logger.LogWrite("TreeChartModel.DoDescendantsStep(): null pointer to family");
+                            Logger.WriteError("TreeChartModel.DoDescendantsStep(): null pointer to family");
                             continue;
                         }
 
@@ -643,7 +653,7 @@ namespace GKCore.Charts
 
                             default:
                                 invalidSpouse = true;
-                                Logger.LogWrite("TreeChartModel.DoDescendantsStep(): sex of spouse is undetermined");
+                                Logger.WriteError("TreeChartModel.DoDescendantsStep(): sex of spouse is undetermined");
                                 break;
                         }
 
@@ -689,7 +699,7 @@ namespace GKCore.Charts
 
                                 // protection against invalid third-party files
                                 if (childRec == null) {
-                                    Logger.LogWrite("TreeChartModel.DoDescendantsStep(): null pointer to child");
+                                    Logger.WriteError("TreeChartModel.DoDescendantsStep(): null pointer to child");
                                     continue;
                                 }
 
@@ -701,6 +711,11 @@ namespace GKCore.Charts
                                 child.Father = ft;
                                 child.Mother = mt;
                                 child.SetFlag(descFlag);
+
+                                GDMChildToFamilyLink childLink = childRec.FindChildToFamilyLink(family);
+                                if (childLink != null) {
+                                    child.Adopted = (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted);
+                                }
 
                                 if (fOptions.Kinship) {
                                     if (ft != null) {
@@ -728,7 +743,7 @@ namespace GKCore.Charts
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeChartModel.DoDescendantsStep(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.DoDescendantsStep()", ex);
                 throw;
             }
         }
@@ -1321,9 +1336,11 @@ namespace GKCore.Charts
         {
             DoneGraphics();
 
-            fLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Black), 1f);
-            fDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Silver), 1f);
-            fSolidBlack = fRenderer.CreateSolidBrush(ChartRenderer.GetColor(ChartRenderer.Black));
+            fLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 1f);
+            fDottedLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 1f, new float[] {4.0F, 2.0F});
+            fDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Silver), 1f);
+            fDottedDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Silver), 1f, new float[] {4.0F, 2.0F});
+            fSolidBlack = fRenderer.CreateSolidBrush(ChartRenderer.GetColor(BSDColors.Black));
         }
 
         private void DoneGraphics()
@@ -1383,19 +1400,24 @@ namespace GKCore.Charts
 
         private void DrawLine(int x1, int y1, int x2, int y2)
         {
+            DrawLine(x1, y1, x2, y2, fLinePen, fDecorativeLinePen);
+        }
+
+        private void DrawLine(int x1, int y1, int x2, int y2, IPen linePen, IPen decorativeLinePen)
+        {
             if (!IsLineVisible(x1, y1, x2, y2)) return;
 
             int sX = fOffsetX + x1;
             int sX2 = fOffsetX + x2;
             int sY = fOffsetY + y1;
             int sY2 = fOffsetY + y2;
-            fRenderer.DrawLine(fLinePen, sX, sY, sX2, sY2);
+            fRenderer.DrawLine(linePen, sX, sY, sX2, sY2);
 
             if (fOptions.Decorative) {
                 if (sX == sX2) {
-                    fRenderer.DrawLine(fDecorativeLinePen, sX + 1, sY + 1, sX2 + 1, sY2 - 1);
+                    fRenderer.DrawLine(decorativeLinePen, sX + 1, sY + 1, sX2 + 1, sY2 - 1);
                 } else if (sY == sY2) {
-                    fRenderer.DrawLine(fDecorativeLinePen, sX + 1, sY + 1, sX2 + 0, sY2 + 1);
+                    fRenderer.DrawLine(decorativeLinePen, sX + 1, sY + 1, sX2 + 0, sY2 + 1);
                 }
             }
         }
@@ -1434,7 +1456,7 @@ namespace GKCore.Charts
                         IColor penColor = person.GetSelectedColor();
                         xpen = fRenderer.CreatePen(penColor, 2.0f);
                     } else {
-                        xpen = fRenderer.CreatePen(ChartRenderer.GetColor(ChartRenderer.Black), 1.0f);
+                        xpen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 1.0f);
                     }
 
                     DrawBorder(xpen, prt, false, person);
@@ -1498,8 +1520,13 @@ namespace GKCore.Charts
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartModel.DrawPerson(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.DrawPerson()", ex);
             }
+        }
+
+        private bool IsDottedLines(TreeChartPerson person)
+        {
+            return (person != null && person.Adopted && fOptions.DottedLinesOfAdoptedChildren);
         }
 
         private void DrawAncestors(TreeChartPerson person, ChartDrawMode drawMode)
@@ -1520,13 +1547,17 @@ namespace GKCore.Charts
                 parY = (person.Father != null) ? person.Father.PtY : person.Mother.PtY;
             }
 
-            DrawLine(person.PtX, crY, person.PtX, person.PtY); // v
+            bool dotted = IsDottedLines(person);
+            var linePen = (!dotted) ? fLinePen : fDottedLinePen;
+            var decorativeLinePen = (!dotted) ? fDecorativeLinePen : fDottedDecorativeLinePen;
+
+            DrawLine(person.PtX, crY, person.PtX, person.PtY, linePen, decorativeLinePen); // v
 
             string marrDate = null;
 
             if (person.Father != null) {
-                DrawLine(person.Father.PtX, crY, person.PtX, crY); // h
-                DrawLine(person.Father.PtX, parY, person.Father.PtX, crY); // v
+                DrawLine(person.Father.PtX, crY, person.PtX, crY, linePen, decorativeLinePen); // h
+                DrawLine(person.Father.PtX, parY, person.Father.PtX, crY, linePen, decorativeLinePen); // v
 
                 if (!string.IsNullOrEmpty(person.Father.MarriageDate) && marrDate == null) {
                     marrDate = person.Father.MarriageDate;
@@ -1534,8 +1565,8 @@ namespace GKCore.Charts
             }
 
             if (person.Mother != null) {
-                DrawLine(person.PtX, crY, person.Mother.PtX, crY); // h
-                DrawLine(person.Mother.PtX, parY, person.Mother.PtX, crY); // v
+                DrawLine(person.PtX, crY, person.Mother.PtX, crY, linePen, decorativeLinePen); // h
+                DrawLine(person.Mother.PtX, parY, person.Mother.PtX, crY, linePen, decorativeLinePen); // v
 
                 if (!string.IsNullOrEmpty(person.Mother.MarriageDate) && marrDate == null) {
                     marrDate = person.Mother.MarriageDate;
@@ -1661,7 +1692,11 @@ namespace GKCore.Charts
 
                 for (int i = 0; i < childrenCount; i++) {
                     TreeChartPerson child = person.GetChild(i);
-                    DrawLine(child.PtX, crY, child.PtX, chY); // v
+
+                    bool dotted = IsDottedLines(child);
+                    var linePen = (!dotted) ? fLinePen : fDottedLinePen;
+                    var decorativeLinePen = (!dotted) ? fDecorativeLinePen : fDottedDecorativeLinePen;
+                    DrawLine(child.PtX, crY, child.PtX, chY, linePen, decorativeLinePen); // v
                 }
             }
         }

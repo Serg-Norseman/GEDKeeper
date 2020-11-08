@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,7 +29,7 @@ namespace GKCore.Maps
 {
     public sealed class YandexGeocoder : IGeocoder
     {
-        private const string REQUEST_URL = "http://geocode-maps.yandex.ru/1.x/?geocode={0}&format=xml&results={1}&lang={2}";
+        private const string REQUEST_URL = "https://geocode-maps.yandex.ru/1.x/?geocode={0}&format=xml&lang={1}";
 
         public YandexGeocoder()
         {
@@ -39,7 +39,9 @@ namespace GKCore.Maps
 
         public override IList<GeoPoint> Geocode(string location, short results, string lang)
         {
-            string requestUrl = string.Format(REQUEST_URL, MakeValidString(location), results, lang);
+            string requestUrl = 
+                string.Format(REQUEST_URL, MakeValidString(location), lang) +
+                (string.IsNullOrEmpty(fKey) ? string.Empty : "&apikey=" + fKey);
 
             return ParseXml(requestUrl);
         }
@@ -68,6 +70,9 @@ namespace GKCore.Maps
                     foreach (XmlNode node in nodes) {
                         var pointNode = node.SelectSingleNode("opengis:Point/opengis:pos", ns);
                         var metaNode = node.SelectSingleNode("opengis:metaDataProperty/geocoder:GeocoderMetaData", ns);
+
+                        var kindNode = metaNode["kind"];
+                        if (kindNode.InnerText != "locality") continue;
 
                         string[] splitted = pointNode.InnerText.Split(new char[] { ' ' }, 2);
                         double lng = double.Parse(splitted[0], CultureInfo.InvariantCulture);

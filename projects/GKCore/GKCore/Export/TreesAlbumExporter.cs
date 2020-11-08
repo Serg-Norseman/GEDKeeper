@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.Graphics;
 using GDModel;
 using GKCore.Charts;
 using GKCore.Interfaces;
@@ -82,7 +83,7 @@ namespace GKCore.Export
                 chartOptions.Kinship = false;
                 chartOptions.ShowPlaces = false;
 
-                var treeBox = AppHost.Container.Resolve<ITreeChartBox>();
+                var treeBox = AppHost.Container.Resolve<ITreeChart>();
                 treeBox.SetRenderer(fRenderer);
                 treeBox.Base = fBase;
                 treeBox.Options = chartOptions;
@@ -107,7 +108,7 @@ namespace GKCore.Export
                 }
                 #endif
             } catch (Exception ex) {
-                Logger.LogWrite("TreesAlbumExporter.InternalGenerate(): " + ex.Message);
+                Logger.WriteError("TreesAlbumExporter.InternalGenerate()", ex);
                 throw;
             }
         }
@@ -132,7 +133,7 @@ namespace GKCore.Export
             Break
         }
 
-        private void TryRenderTreeSlice(ITreeChartBox treeBox, int index, GDMIndividualRecord currentPatriarch)
+        private void TryRenderTreeSlice(ITreeChart treeBox, int index, GDMIndividualRecord currentPatriarch)
         {
             IndiObj indi = fIndiQueue[index];
             fProcessed.Add(indi.IRec.XRef);

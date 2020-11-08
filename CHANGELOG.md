@@ -1,4 +1,23 @@
 
+## ??.??.2020 [v2.17.0]
+- Added the feature to interrupt some long-running functions.
+- Temporary fix for maps output (OSM replaced with GoogleMaps).
+- Fixed work of geocoders.
+- Added option for dotted lines of adopted children in the diagrams.
+- Editing dates in dialogs adapted to regional formats.
+- Added optional warnings for closing editing dialogs with unsaved changes.
+- Added configurable DepthLimit for complete tree [Milan Kosina].
+- Optimized regex searching in "Selecting record" form.
+- Fixed bug of second first names displayed in a readonly 'Patronymic' field.
+- Added option to automatically correct the first capital letter in the names.
+- Fixed bug when adding spouse to existing person.
+- Improved import from Geni (tag _MARNM).
+- Fixed bug during importing data from "MyHeritage Family Tree Builder" [Milan Kosina].
+- Fix inconsistent error message when loading GedML file [Walter Rawley].
+- Added display of marriage dates of parents in tree diagrams.
+- Added call quick information about the person in the tree diagrams.
+- Implements maximum number of backups for each revision backup [Milan Kosina].
+
 ## 18.09.2019 [v2.16.2]
 - Implemented moving notes up and down [Milan Kosina].
 - Implemented line wrapping in the HyperView of information panel.

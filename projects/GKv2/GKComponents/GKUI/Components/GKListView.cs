@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,9 +26,15 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
-
+using BSLib.Design;
+using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
+using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Interfaces;
+
+using MVPSortOrder = BSLib.Design.BSDTypes.SortOrder;
+using WFSortOrder = System.Windows.Forms.SortOrder;
 
 namespace GKUI.Components
 {
@@ -94,6 +100,14 @@ namespace GKUI.Components
             var colorHandler = color as ColorHandler;
             if (colorHandler != null) {
                 BackColor = colorHandler.Handle;
+            }
+        }
+
+        public void SetForeColor(IColor color)
+        {
+            var colorHandler = color as ColorHandler;
+            if (colorHandler != null) {
+                ForeColor = colorHandler.Handle;
             }
         }
     }
@@ -171,7 +185,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class GKListView : ListView, IListView
+    public class GKListView : ListView, IListViewEx
     {
         private class LVColumnSorter : IComparer
         {
@@ -187,9 +201,9 @@ namespace GKUI.Components
                 int result = 0;
 
                 int sortColumn = fOwner.fSortColumn;
-                SortOrder sortOrder = fOwner.fSortOrder;
+                MVPSortOrder sortOrder = fOwner.fSortOrder;
 
-                if (sortOrder != SortOrder.None && sortColumn >= 0) {
+                if (sortOrder != MVPSortOrder.None && sortColumn >= 0) {
                     ListViewItem item1 = (ListViewItem)x;
                     ListViewItem item2 = (ListViewItem)y;
 
@@ -214,7 +228,7 @@ namespace GKUI.Components
                         }
                     }
 
-                    if (sortOrder == SortOrder.Descending) {
+                    if (sortOrder == MVPSortOrder.Descending) {
                         result = -result;
                     }
                 }
@@ -227,7 +241,7 @@ namespace GKUI.Components
         private readonly GKListViewItems fItemsAccessor;
 
         protected int fSortColumn;
-        protected SortOrder fSortOrder;
+        protected MVPSortOrder fSortOrder;
         protected int fUpdateCount;
 
         // Virtual fields
@@ -242,7 +256,7 @@ namespace GKUI.Components
             set { fSortColumn = value; }
         }
 
-        public SortOrder Order
+        public MVPSortOrder Order
         {
             get { return fSortOrder; }
             set { fSortOrder = value; }
@@ -267,7 +281,7 @@ namespace GKUI.Components
                     if (fListMan != null) {
                         VirtualMode = true;
                         fSortColumn = 0;
-                        fSortOrder = SortOrder.Ascending;
+                        fSortOrder = MVPSortOrder.Ascending;
                     } else {
                         VirtualMode = false;
                     }
@@ -292,7 +306,7 @@ namespace GKUI.Components
             View = View.Details;
 
             fSortColumn = 0;
-            fSortOrder = SortOrder.None;
+            fSortOrder = MVPSortOrder.None;
             fColumnSorter = new LVColumnSorter(this);
             fItemsAccessor = new GKListViewItems(this);
 
@@ -344,21 +358,27 @@ namespace GKUI.Components
             }
         }
 
-        protected SortOrder GetColumnSortOrder(int columnIndex)
+        protected MVPSortOrder GetColumnSortOrder(int columnIndex)
         {
-            return (fSortColumn == columnIndex) ? fSortOrder : SortOrder.None;
+            return (fSortColumn == columnIndex) ? fSortOrder : MVPSortOrder.None;
         }
 
         public void SetSortColumn(int sortColumn, bool checkOrder = true)
         {
             int prevColumn = fSortColumn;
             if (prevColumn == sortColumn && checkOrder) {
-                SortOrder prevOrder = GetColumnSortOrder(sortColumn);
-                fSortOrder = (prevOrder == SortOrder.Ascending) ? SortOrder.Descending : SortOrder.Ascending;
+                MVPSortOrder prevOrder = GetColumnSortOrder(sortColumn);
+                fSortOrder = (prevOrder == MVPSortOrder.Ascending) ? MVPSortOrder.Descending : MVPSortOrder.Ascending;
             }
 
             fSortColumn = sortColumn;
             SortContents(true);
+        }
+
+        public void Sort(int sortColumn, MVPSortOrder sortOrder)
+        {
+            fSortOrder = sortOrder;
+            SetSortColumn(sortColumn, false);
         }
 
         protected override void OnColumnClick(ColumnClickEventArgs e)
@@ -427,10 +447,10 @@ namespace GKUI.Components
 
                 string arrow = "";
                 switch (GetColumnSortOrder(e.ColumnIndex)) {
-                    case SortOrder.Ascending:
+                    case MVPSortOrder.Ascending:
                         arrow = "▲";
                         break;
-                    case SortOrder.Descending:
+                    case MVPSortOrder.Descending:
                         arrow = "▼";
                         break;
                 }
@@ -467,7 +487,7 @@ namespace GKUI.Components
             if (fListMan != null) {
                 object rec = (restoreSelected) ? GetSelectedData() : null;
 
-                fListMan.SortContents(fSortColumn, fSortOrder == SortOrder.Ascending);
+                fListMan.SortContents(fSortColumn, fSortOrder == MVPSortOrder.Ascending);
                 ResetCache();
 
                 if (restoreSelected) SelectItem(rec);
@@ -540,8 +560,7 @@ namespace GKUI.Components
         {
             if (fListMan == null) return;
 
-            try
-            {
+            try {
                 if (fListMan.ColumnsHaveBeenChanged != columnsChanged && columnsChanged) {
                     fListMan.ColumnsHaveBeenChanged = columnsChanged;
                 }
@@ -549,8 +568,7 @@ namespace GKUI.Components
                 object tempRec = GetSelectedData();
 
                 BeginUpdate();
-                try
-                {
+                try {
                     if (columnsChanged || Columns.Count == 0 || fListMan.ColumnsHaveBeenChanged) {
                         Columns.Clear();
                         fListMan.UpdateColumns(this);
@@ -567,17 +585,13 @@ namespace GKUI.Components
                     #endif
 
                     ResizeColumns();
-                }
-                finally
-                {
+                } finally {
                     EndUpdate();
                 }
 
                 if (tempRec != null) SelectItem(tempRec);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKListView.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKListView.UpdateContents()", ex);
             }
         }
 
@@ -619,7 +633,7 @@ namespace GKUI.Components
 
                 return result;
             } catch (Exception ex) {
-                Logger.LogWrite("GKListView.GetSelectedData(): " + ex.Message);
+                Logger.WriteError("GKListView.GetSelectedData()", ex);
                 return null;
             }
         }
@@ -639,6 +653,12 @@ namespace GKUI.Components
             Columns.Add(caption, width, HorizontalAlignment.Left);
         }
 
+        public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)
+        {
+            if (autoSize) width = -1;
+            Columns.Add(caption, width, (HorizontalAlignment)textAlign);
+        }
+
         public void SetColumnCaption(int index, string caption)
         {
             Columns[index].Text = caption;
@@ -647,17 +667,15 @@ namespace GKUI.Components
         public void ResizeColumn(int columnIndex)
         {
             try {
-                if (columnIndex >= 0 && Items.Count > 0)
-                {
+                if (columnIndex >= 0 && Items.Count > 0) {
                     AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.ColumnContent);
 
-                    if (Columns[columnIndex].Width < 20)
-                    {
+                    if (Columns[columnIndex].Width < 20) {
                         AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.HeaderSize);
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKListView.ResizeColumn(): " + ex.Message);
+                Logger.WriteError("GKListView.ResizeColumn()", ex);
             }
         }
 
@@ -739,7 +757,7 @@ namespace GKUI.Components
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKListView.SelectItem(): " + ex.Message);
+                Logger.WriteError("GKListView.SelectItem()", ex);
             }
         }
 

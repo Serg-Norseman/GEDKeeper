@@ -19,8 +19,8 @@
  */
 
 using BSLib;
+using BSLib.Design.Graphics;
 using GKCore.Charts;
-using GKCore.Interfaces;
 
 namespace GKCore.Export
 {

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,10 +27,9 @@ using System.Windows.Forms;
 using BSLib;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.IoC;
+using BSLib.Design.IoC;
 using GKCore.Options;
 using GKUI.Components;
-using GKUI.Providers;
 
 [assembly: AssemblyTitle("GKTray")]
 [assembly: AssemblyDescription("")]
@@ -64,7 +63,7 @@ namespace GKTray
         public GKTray()
         {
             // for GlobalOptions initialization
-            AppHost.Container.Register<IGraphicsProvider, WFGfxProvider>(LifeCycle.Singleton);
+            AppHost.Container.Register<IGraphicsProviderEx, WFGfxProvider>(LifeCycle.Singleton);
 
             fMRUFiles = new List<MRUFile>();
 
@@ -121,7 +120,7 @@ namespace GKTray
                     ini.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKTray.LoadSettings(): " + ex.Message);
+                Logger.WriteError("GKTray.LoadSettings()", ex);
             }
 
             fRecentFiles.MenuItems.Clear();
@@ -160,7 +159,7 @@ namespace GKTray
                         }
                     }
                 } catch (Exception ex) {
-                    Logger.LogWrite("GKTray.LoadEvents(" + gedFileName + "): " + ex.Message);
+                    Logger.WriteError("GKTray.LoadEvents(" + gedFileName + ")", ex);
                 }
             }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System;
 using System.Reflection;
+using BSLib.Design.Graphics;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
@@ -89,7 +90,7 @@ namespace GKWordsCloudPlugin
                 if (fForm != null)
                     fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogWrite("GKWordsCloudPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("GKWordsCloudPlugin.OnLanguageChange()", ex);
             }
         }
 
@@ -99,7 +100,7 @@ namespace GKWordsCloudPlugin
             try {
                 CloseForm();
             } catch (Exception ex) {
-                Logger.LogWrite("GKWordsCloudPlugin.Shutdown(): " + ex.Message);
+                Logger.WriteError("GKWordsCloudPlugin.Shutdown()", ex);
                 result = false;
             }
             return result;

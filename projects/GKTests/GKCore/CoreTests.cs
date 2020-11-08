@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,16 +22,22 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using BSLib;
+using BSLib.Design;
+using BSLib.Design.Handlers;
+using BSLib.Design.IoC;
 using GDModel;
+using GKCore.Charts;
 using GKCore.Interfaces;
-using GKCore.IoC;
 using GKCore.Lists;
+using GKCore.Names;
+using GKCore.Search;
 using GKCore.Stats;
 using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
+using GKUI;
 using GKUI.Components;
-using GKUI.Providers;
 using NUnit.Framework;
 
 namespace GKCore
@@ -237,18 +243,12 @@ namespace GKCore
         [Test]
         public void Test_NavStack()
         {
-            using (var navStack = new NavigationStack<object>())
+            var navStack = new NavigationStack<object>();
             {
                 Assert.IsNotNull(navStack);
-                Assert.AreEqual(false, navStack.Busy);
                 Assert.AreEqual(null, navStack.Current);
                 navStack.Clear();
                 Assert.AreEqual(null, navStack.Current);
-
-                navStack.BeginNav();
-                Assert.AreEqual(true, navStack.Busy);
-                navStack.EndNav();
-                Assert.AreEqual(false, navStack.Busy);
 
                 Assert.AreEqual(false, navStack.CanBackward());
                 Assert.AreEqual(false, navStack.CanForward());
@@ -331,7 +331,7 @@ namespace GKCore
         [Test]
         public void Test_UIControls()
         {
-            GKComboItem comboItem = new GKComboItem("Test", null);
+            ComboItem<object> comboItem = new ComboItem<object>("Test", null);
             Assert.IsNotNull(comboItem);
             Assert.AreEqual("Test", comboItem.ToString());
 
@@ -345,7 +345,7 @@ namespace GKCore
             MenuItemEx tsMenuItem = new MenuItemEx("Test", null);
             Assert.IsNotNull(tsMenuItem);
 
-            GKTreeNode treeNode = new GKTreeNode("Test", null);
+            TreeNodeEx treeNode = new TreeNodeEx("Test", null);
             Assert.IsNotNull(treeNode);
 
             ModifyEventArgs args = new ModifyEventArgs(RecordAction.raAdd, null);

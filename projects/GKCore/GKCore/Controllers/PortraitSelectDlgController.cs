@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,8 +20,8 @@
 
 using System;
 using BSLib;
+using BSLib.Design.Graphics;
 using GDModel;
-using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 
@@ -67,7 +67,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("PortraitSelectDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("PortraitSelectDlgController.Accept()", ex);
                 return false;
             }
         }

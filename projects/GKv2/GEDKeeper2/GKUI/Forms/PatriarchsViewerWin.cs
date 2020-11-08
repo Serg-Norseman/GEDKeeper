@@ -20,12 +20,13 @@
 
 using System.Drawing;
 using System.Windows.Forms;
-using ArborGVT;
-using BSLib.SmartGraph;
+using BSLib.DataViz.ArborGVT;
+using BSLib.DataViz.SmartGraph;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
+using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Components;
 
@@ -49,7 +50,7 @@ namespace GKUI.Forms
                 ArborSystem sys = arborViewer1.Sys;
 
                 foreach (Vertex vtx in graph.Vertices) {
-                    var arbNode = sys.addNode(vtx.Sign) as ArborNodeEx;
+                    var arbNode = sys.AddNode(vtx.Sign) as ArborNodeEx;
                     PGNode pgNode = (PGNode)vtx.Value;
 
                     arbNode.Color = (pgNode.Type == PGNodeType.Intersection) ? Color.BlueViolet : Color.Navy;
@@ -57,7 +58,7 @@ namespace GKUI.Forms
                 }
 
                 foreach (Edge edge in graph.Edges) {
-                    sys.addEdge(edge.Source.Sign, edge.Target.Sign);
+                    sys.AddEdge(edge.Source.Sign, edge.Target.Sign);
                 }
             }
 

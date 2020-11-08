@@ -19,13 +19,14 @@
  */
 
 using System;
+using System.ComponentModel;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
@@ -75,24 +76,24 @@ namespace GKUI.Forms
             get { return fEventsList; }
         }
 
-        IComboBoxHandler IFamilyEditDlg.MarriageStatus
+        IComboBox IFamilyEditDlg.MarriageStatus
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbMarriageStatus); }
+            get { return GetControlHandler<IComboBox>(cmbMarriageStatus); }
         }
 
-        IComboBoxHandler IFamilyEditDlg.Restriction
+        IComboBox IFamilyEditDlg.Restriction
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRestriction); }
+            get { return GetControlHandler<IComboBox>(cmbRestriction); }
         }
 
-        ITextBoxHandler IFamilyEditDlg.Husband
+        ITextBox IFamilyEditDlg.Husband
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtHusband); }
+            get { return GetControlHandler<ITextBox>(txtHusband); }
         }
 
-        ITextBoxHandler IFamilyEditDlg.Wife
+        ITextBox IFamilyEditDlg.Wife
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtWife); }
+            get { return GetControlHandler<ITextBox>(txtWife); }
         }
 
         #endregion
@@ -209,12 +210,13 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try {
-                fController.Cancel();
-                CancelClickHandler(sender, e);
-            } catch (Exception ex) {
-                Logger.LogWrite("FamilyEditDlg.btnCancel_Click(): " + ex.Message);
-            }
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
 
         public void SetTarget(TargetMode targetType, GDMIndividualRecord target)

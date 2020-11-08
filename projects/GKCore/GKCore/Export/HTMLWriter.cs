@@ -21,9 +21,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
 using BSLib;
-using GKCore.Interfaces;
+using BSLib.Design.Graphics;
 
 namespace GKCore.Export
 {

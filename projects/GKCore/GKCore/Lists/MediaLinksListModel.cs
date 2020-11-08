@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -45,12 +46,10 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGEDCOMStructWithLists;
             if (fSheetList == null || dataOwner == null) return;
 
-            try
-            {
+            try {
                 fSheetList.ClearItems();
 
-                foreach (GDMMultimediaLink mmLink in dataOwner.MultimediaLinks)
-                {
+                foreach (GDMMultimediaLink mmLink in dataOwner.MultimediaLinks) {
                     GDMMultimediaRecord mmRec = mmLink.Value as GDMMultimediaRecord;
                     if (mmRec == null) continue;
 
@@ -61,10 +60,8 @@ namespace GKCore.Lists
                     fSheetList.AddItem(mmLink, new object[] { fileRef.Title,
                                            LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]) });
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("MediaLinksListModel.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("MediaLinksListModel.UpdateContents()", ex);
             }
         }
 

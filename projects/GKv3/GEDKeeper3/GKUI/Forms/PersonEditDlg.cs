@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,10 @@
  */
 
 using System;
+using System.ComponentModel;
 using BSLib;
+using BSLib.Design.Graphics;
+using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
 using GDModel;
@@ -125,274 +128,82 @@ namespace GKUI.Forms
             get { return imgPortrait; }
         }
 
-        ITextBoxHandler IPersonEditDlg.Father
+        ITextBox IPersonEditDlg.Father
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtFather); }
+            get { return GetControlHandler<ITextBox>(txtFather); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Mother
+        ITextBox IPersonEditDlg.Mother
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtMother); }
+            get { return GetControlHandler<ITextBox>(txtMother); }
         }
 
-        ILabelHandler IPersonEditDlg.SurnameLabel
+        ILabel IPersonEditDlg.SurnameLabel
         {
-            get { return GetControlHandler<ILabelHandler>(lblSurname); }
+            get { return GetControlHandler<ILabel>(lblSurname); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Surname
+        ITextBox IPersonEditDlg.Surname
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtSurname); }
+            get { return GetControlHandler<ITextBox>(txtSurname); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Name
+        ITextBox IPersonEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        IComboBoxHandler IPersonEditDlg.Patronymic
+        IComboBox IPersonEditDlg.Patronymic
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbPatronymic); }
+            get { return GetControlHandler<IComboBox>(cmbPatronymic); }
         }
 
-        ITextBoxHandler IPersonEditDlg.NamePrefix
+        ITextBox IPersonEditDlg.NamePrefix
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNamePrefix); }
+            get { return GetControlHandler<ITextBox>(txtNamePrefix); }
         }
 
-        ITextBoxHandler IPersonEditDlg.Nickname
+        ITextBox IPersonEditDlg.Nickname
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNickname); }
+            get { return GetControlHandler<ITextBox>(txtNickname); }
         }
 
-        ITextBoxHandler IPersonEditDlg.SurnamePrefix
+        ITextBox IPersonEditDlg.SurnamePrefix
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtSurnamePrefix); }
+            get { return GetControlHandler<ITextBox>(txtSurnamePrefix); }
         }
 
-        ITextBoxHandler IPersonEditDlg.NameSuffix
+        ITextBox IPersonEditDlg.NameSuffix
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtNameSuffix); }
+            get { return GetControlHandler<ITextBox>(txtNameSuffix); }
         }
 
-        ITextBoxHandler IPersonEditDlg.MarriedSurname
+        ITextBox IPersonEditDlg.MarriedSurname
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtMarriedSurname); }
+            get { return GetControlHandler<ITextBox>(txtMarriedSurname); }
         }
 
-        IComboBoxHandler IPersonEditDlg.RestrictionCombo
+        IComboBox IPersonEditDlg.RestrictionCombo
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbRestriction); }
+            get { return GetControlHandler<IComboBox>(cmbRestriction); }
         }
 
-        IComboBoxHandler IPersonEditDlg.SexCombo
+        IComboBox IPersonEditDlg.SexCombo
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbSex); }
+            get { return GetControlHandler<IComboBox>(cmbSex); }
         }
 
-        ICheckBoxHandler IPersonEditDlg.Patriarch
+        ICheckBox IPersonEditDlg.Patriarch
         {
-            get { return GetControlHandler<ICheckBoxHandler>(chkPatriarch); }
+            get { return GetControlHandler<ICheckBox>(chkPatriarch); }
         }
 
-        ICheckBoxHandler IPersonEditDlg.Bookmark
+        ICheckBox IPersonEditDlg.Bookmark
         {
-            get { return GetControlHandler<ICheckBoxHandler>(chkBookmark); }
+            get { return GetControlHandler<ICheckBox>(chkBookmark); }
         }
 
         #endregion
-
-        private void cbSex_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            fController.ChangeSex();
-        }
-
-        public void SetParentsAvl(bool avail, bool locked)
-        {
-            btnParentsAdd.Enabled = !avail && !locked;
-            btnParentsEdit.Enabled = avail && !locked;
-            btnParentsDelete.Enabled = avail && !locked;
-        }
-
-        public void SetFatherAvl(bool avail, bool locked)
-        {
-            btnFatherAdd.Enabled = !avail && !locked;
-            btnFatherDelete.Enabled = avail && !locked;
-            btnFatherSel.Enabled = avail && !locked;
-        }
-
-        public void SetMotherAvl(bool avail, bool locked)
-        {
-            btnMotherAdd.Enabled = !avail && !locked;
-            btnMotherDelete.Enabled = avail && !locked;
-            btnMotherSel.Enabled = avail && !locked;
-        }
-
-        public void SetPortrait(IImage portrait)
-        {
-            Image img = (portrait == null) ? null : ((ImageHandler)portrait).Handle;
-            imgPortrait.Image = img;
-        }
-
-        public void SetPortraitAvl(bool avail, bool locked)
-        {
-            btnPortraitAdd.Enabled = !avail && !locked;
-            btnPortraitDelete.Enabled = avail && !locked;
-        }
-
-        private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            fController.UpdateControls();
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            try {
-                fController.Cancel();
-                CancelClickHandler(sender, e);
-            } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlg.btnCancel_Click(): " + ex.Message);
-            }
-        }
-
-        private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown) {
-                fController.UpdateNameControls(fController.Person.PersonalNames[0]);
-            }
-        }
-
-        private void ModifyAssociationsSheet(object sender, ModifyEventArgs eArgs)
-        {
-            GDMAssociation ast = eArgs.ItemData as GDMAssociation;
-            if (eArgs.Action == RecordAction.raJump && ast != null) {
-                fController.JumpToRecord(ast.Individual);
-            }
-        }
-
-        private void BeforeChangeSpousesSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raEdit) {
-                fController.AcceptTempData();
-            }
-        }
-
-        private void ModifySpousesSheet(object sender, ModifyEventArgs eArgs)
-        {
-            GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
-            if (eArgs.Action == RecordAction.raJump && family != null) {
-                GDMIndividualRecord spouse = null;
-                switch (fController.Person.Sex) {
-                    case GDMSex.svMale:
-                        spouse = family.Wife.Individual;
-                        break;
-
-                    case GDMSex.svFemale:
-                        spouse = family.Husband.Individual;
-                        break;
-                }
-
-                fController.JumpToRecord(spouse);
-            }
-        }
-
-        private void ModifyParentsSheet(object sender, ModifyEventArgs eArgs)
-        {
-            fController.UpdateParents();
-        }
-
-        private void ModifyGroupsSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMGroupRecord);
-            }
-        }
-
-        private void Names_TextChanged(object sender, EventArgs e)
-        {
-            Title = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), txtSurname.Text, txtName.Text,
-                                  cmbPatronymic.Text, fController.Person.GetXRefNum());
-        }
-
-        private void btnFatherAdd_Click(object sender, EventArgs e)
-        {
-            fController.AddFather();
-        }
-
-        private void btnFatherDelete_Click(object sender, EventArgs e)
-        {
-            fController.DeleteFather();
-        }
-
-        private void btnFatherSel_Click(object sender, EventArgs e)
-        {
-            fController.JumpToFather();
-        }
-
-        private void btnMotherAdd_Click(object sender, EventArgs e)
-        {
-            fController.AddMother();
-        }
-
-        private void btnMotherDelete_Click(object sender, EventArgs e)
-        {
-            fController.DeleteMother();
-        }
-
-        private void btnMotherSel_Click(object sender, EventArgs e)
-        {
-            fController.JumpToMother();
-        }
-
-        private void btnParentsAdd_Click(object sender, EventArgs e)
-        {
-            fController.AddParents();
-        }
-
-        private void btnParentsEdit_Click(object sender, EventArgs e)
-        {
-            fController.EditParents();
-        }
-
-        private void btnParentsDelete_Click(object sender, EventArgs e)
-        {
-            fController.DeleteParents();
-        }
-
-        private void btnNameCopy_Click(object sender, EventArgs e)
-        {
-            UIHelper.SetClipboardText(GKUtils.GetNameString(fController.Person, true, false));
-        }
-
-        private void btnPortraitAdd_Click(object sender, EventArgs e)
-        {
-            fController.AddPortrait();
-        }
-
-        private void btnPortraitDelete_Click(object sender, EventArgs e)
-        {
-            fController.DeletePortrait();
-        }
-
-        private void edNameX_KeyDown(object sender, KeyEventArgs e)
-        {
-            TextBox tb = (sender as TextBox);
-            if (tb != null && e.Key == Keys.Down && e.Control) {
-                tb.Text = ConvertHelper.UniformName(tb.Text);
-            } else if (e.KeyChar == '/') {
-                e.Handled = true;
-            }
-        }
-
-        public void SetNeedSex(GDMSex needSex)
-        {
-            cmbSex.SelectedIndex = (int)needSex;
-        }
 
         public PersonEditDlg(IBaseWindow baseWin)
         {
@@ -506,6 +317,192 @@ namespace GKUI.Forms
             SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
             SetToolTip(btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
             SetToolTip(btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
+        }
+
+        private void cbSex_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fController.ChangeSex();
+        }
+
+        public void SetParentsAvl(bool avail, bool locked)
+        {
+            btnParentsAdd.Enabled = !avail && !locked;
+            btnParentsEdit.Enabled = avail && !locked;
+            btnParentsDelete.Enabled = avail && !locked;
+        }
+
+        public void SetFatherAvl(bool avail, bool locked)
+        {
+            btnFatherAdd.Enabled = !avail && !locked;
+            btnFatherDelete.Enabled = avail && !locked;
+            btnFatherSel.Enabled = avail && !locked;
+        }
+
+        public void SetMotherAvl(bool avail, bool locked)
+        {
+            btnMotherAdd.Enabled = !avail && !locked;
+            btnMotherDelete.Enabled = avail && !locked;
+            btnMotherSel.Enabled = avail && !locked;
+        }
+
+        public void SetPortrait(IImage portrait)
+        {
+            Image img = (portrait == null) ? null : ((ImageHandler)portrait).Handle;
+            imgPortrait.Image = img;
+        }
+
+        public void SetPortraitAvl(bool avail, bool locked)
+        {
+            btnPortraitAdd.Enabled = !avail && !locked;
+            btnPortraitDelete.Enabled = avail && !locked;
+        }
+
+        private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fController.UpdateControls();
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }
+
+        private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown) {
+                fController.UpdateNameControls(fController.Person.PersonalNames[0]);
+            }
+        }
+
+        private void ModifyAssociationsSheet(object sender, ModifyEventArgs eArgs)
+        {
+            GDMAssociation ast = eArgs.ItemData as GDMAssociation;
+            if (eArgs.Action == RecordAction.raJump && ast != null) {
+                fController.JumpToRecord(ast.Individual);
+            }
+        }
+
+        private void BeforeChangeSpousesSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raEdit) {
+                fController.AcceptTempData();
+            }
+        }
+
+        private void ModifySpousesSheet(object sender, ModifyEventArgs eArgs)
+        {
+            GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
+            if (eArgs.Action == RecordAction.raJump && family != null) {
+                fController.JumpToPersonSpouse(family);
+            }
+        }
+
+        private void ModifyParentsSheet(object sender, ModifyEventArgs eArgs)
+        {
+            fController.UpdateParents();
+        }
+
+        private void ModifyGroupsSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raJump) {
+                fController.JumpToRecord(eArgs.ItemData as GDMGroupRecord);
+            }
+        }
+
+        private void Names_TextChanged(object sender, EventArgs e)
+        {
+            Title = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), txtSurname.Text, txtName.Text,
+                                  cmbPatronymic.Text, fController.Person.GetXRefNum());
+        }
+
+        private void btnFatherAdd_Click(object sender, EventArgs e)
+        {
+            fController.AddFather();
+        }
+
+        private void btnFatherDelete_Click(object sender, EventArgs e)
+        {
+            fController.DeleteFather();
+        }
+
+        private void btnFatherSel_Click(object sender, EventArgs e)
+        {
+            fController.JumpToFather();
+        }
+
+        private void btnMotherAdd_Click(object sender, EventArgs e)
+        {
+            fController.AddMother();
+        }
+
+        private void btnMotherDelete_Click(object sender, EventArgs e)
+        {
+            fController.DeleteMother();
+        }
+
+        private void btnMotherSel_Click(object sender, EventArgs e)
+        {
+            fController.JumpToMother();
+        }
+
+        private void btnParentsAdd_Click(object sender, EventArgs e)
+        {
+            fController.AddParents();
+        }
+
+        private void btnParentsEdit_Click(object sender, EventArgs e)
+        {
+            fController.EditParents();
+        }
+
+        private void btnParentsDelete_Click(object sender, EventArgs e)
+        {
+            fController.DeleteParents();
+        }
+
+        private void btnNameCopy_Click(object sender, EventArgs e)
+        {
+            UIHelper.SetClipboardText(GKUtils.GetNameString(fController.Person, true, false));
+        }
+
+        private void btnPortraitAdd_Click(object sender, EventArgs e)
+        {
+            fController.AddPortrait();
+        }
+
+        private void btnPortraitDelete_Click(object sender, EventArgs e)
+        {
+            fController.DeletePortrait();
+        }
+
+        private void txtXName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Keys.Down && e.Control) {
+                UIHelper.ProcessName(sender);
+            } else if (e.KeyChar == '/') {
+                e.Handled = true;
+            }
+        }
+
+        private void txtXName_Leave(object sender, EventArgs e)
+        {
+            UIHelper.ProcessName(sender);
+        }
+
+        public void SetNeedSex(GDMSex needSex)
+        {
+            cmbSex.SelectedIndex = (int)needSex;
         }
     }
 }

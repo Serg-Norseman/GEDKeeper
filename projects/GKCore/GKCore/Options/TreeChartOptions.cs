@@ -20,8 +20,12 @@
 
 using System;
 using BSLib;
+using BSLib.Design;
+using BSLib.Design.Graphics;
 using GKCore.Charts;
 using GKCore.Interfaces;
+
+using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Options
 {
@@ -40,6 +44,8 @@ namespace GKCore.Options
         public static readonly int UNK_SEX_COLOR = -14593; // FFFFC6FF
         public static readonly int UN_HUSBAND_COLOR = -2631681; // FFD7D7FF
         public static readonly int UN_WIFE_COLOR = -10281; // FFFFD7D7
+
+        private int fDepthLimit;
 
         public bool ChildlessExclude;
         public bool Decorative;
@@ -61,6 +67,7 @@ namespace GKCore.Options
         public bool MarriagesDates;
         public bool ShowPlaces;
         public bool HideUnknownSpouses;
+        public bool DottedLinesOfAdoptedChildren;
 
         public bool AutoAlign; // debug option, for future purposes
         public GfxBorderStyle BorderStyle;
@@ -75,12 +82,18 @@ namespace GKCore.Options
         public string DefFontName;
         public int DefFontSize;
         public IColor DefFontColor;
-        public ExtFontStyle DefFontStyle;
+        public BSDTypes.FontStyle DefFontStyle;
 
         public int BranchDistance;
         public int LevelDistance;
         public int Margins;
         public int SpouseDistance;
+
+        public int DepthLimit
+        {
+            get { return fDepthLimit; }
+            set { fDepthLimit = value; }
+        }
 
         public TreeChartOptions()
         {
@@ -106,6 +119,7 @@ namespace GKCore.Options
             MarriagesDates = false;
             ShowPlaces = false;
             HideUnknownSpouses = false;
+            DottedLinesOfAdoptedChildren = false;
 
             AutoAlign = true;
             BorderStyle = GfxBorderStyle.None;
@@ -119,8 +133,8 @@ namespace GKCore.Options
 
             DefFontName = AppHost.GfxProvider.GetDefaultFontName();
             DefFontSize = 8;
-            DefFontColor = ChartRenderer.GetColor(ChartRenderer.Black);
-            DefFontStyle = ExtFontStyle.None;
+            DefFontColor = ChartRenderer.GetColor(BSDColors.Black);
+            DefFontStyle = BSDTypes.FontStyle.None;
 
             BranchDistance = TreeChartModel.DEF_BRANCH_DISTANCE;
             LevelDistance = TreeChartModel.DEF_LEVEL_DISTANCE;
@@ -162,6 +176,7 @@ namespace GKCore.Options
             MarriagesDates = srcOptions.MarriagesDates;
             ShowPlaces = srcOptions.ShowPlaces;
             HideUnknownSpouses = srcOptions.HideUnknownSpouses;
+            DottedLinesOfAdoptedChildren = srcOptions.DottedLinesOfAdoptedChildren;
 
             BranchDistance = srcOptions.BranchDistance;
             LevelDistance = srcOptions.LevelDistance;
@@ -197,6 +212,7 @@ namespace GKCore.Options
             MarriagesDates = iniFile.ReadBool("Chart", "MarriagesDates", false);
             ShowPlaces = iniFile.ReadBool("Chart", "ShowPlaces", false);
             HideUnknownSpouses = iniFile.ReadBool("Chart", "HideUnknownSpouses", false);
+            DottedLinesOfAdoptedChildren = iniFile.ReadBool("Chart", "DottedLinesOfAdoptedChildren", false);
 
             MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
             FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", FEMALE_COLOR));
@@ -206,13 +222,15 @@ namespace GKCore.Options
 
             DefFontName = iniFile.ReadString("Chart", "FontName", AppHost.GfxProvider.GetDefaultFontName());
             DefFontSize = iniFile.ReadInteger("Chart", "FontSize", 8);
-            DefFontColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FontColor", ChartRenderer.Black));
-            DefFontStyle = (ExtFontStyle)iniFile.ReadInteger("Chart", "FontStyle", 0);
+            DefFontColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FontColor", BSDColors.Black));
+            DefFontStyle = (BSDTypes.FontStyle)iniFile.ReadInteger("Chart", "FontStyle", 0);
 
             BranchDistance = iniFile.ReadInteger("Chart", "BranchDistance", TreeChartModel.DEF_BRANCH_DISTANCE);
             LevelDistance = iniFile.ReadInteger("Chart", "LevelDistance", TreeChartModel.DEF_LEVEL_DISTANCE);
             Margins = iniFile.ReadInteger("Chart", "Margins", TreeChartModel.DEF_MARGINS);
             SpouseDistance = iniFile.ReadInteger("Chart", "SpouseDistance", TreeChartModel.DEF_SPOUSE_DISTANCE);
+
+            fDepthLimit = iniFile.ReadInteger("Chart", "DepthLimit", -1);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -243,6 +261,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "MarriagesDates", MarriagesDates);
             iniFile.WriteBool("Chart", "ShowPlaces", ShowPlaces);
             iniFile.WriteBool("Chart", "HideUnknownSpouses", HideUnknownSpouses);
+            iniFile.WriteBool("Chart", "DottedLinesOfAdoptedChildren", DottedLinesOfAdoptedChildren);
 
             iniFile.WriteInteger("Chart", "MaleColor", MaleColor.ToArgb());
             iniFile.WriteInteger("Chart", "FemaleColor", FemaleColor.ToArgb());
@@ -259,6 +278,8 @@ namespace GKCore.Options
             iniFile.WriteInteger("Chart", "LevelDistance", LevelDistance);
             iniFile.WriteInteger("Chart", "Margins", Margins);
             iniFile.WriteInteger("Chart", "SpouseDistance", SpouseDistance);
+
+            iniFile.WriteInteger("Chart", "DepthLimit", fDepthLimit);
         }
     }
 }

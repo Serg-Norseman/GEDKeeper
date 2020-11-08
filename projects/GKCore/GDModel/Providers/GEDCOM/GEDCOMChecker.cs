@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -463,7 +463,7 @@ namespace GDModel.Providers.GEDCOM
                     pc.ProgressDone();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GEDCOMChecker.CheckGEDCOMFormat(): " + ex.Message);
+                Logger.WriteError("GEDCOMChecker.CheckGEDCOMFormat()", ex);
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
             }
 

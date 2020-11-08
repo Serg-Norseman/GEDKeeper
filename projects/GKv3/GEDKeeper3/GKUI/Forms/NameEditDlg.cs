@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,13 +19,13 @@
  */
 
 using System;
+using System.ComponentModel;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
-
 using GKCore;
 using GKCore.Controllers;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKCore.Types;
+using GKCore.Names;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -42,39 +42,27 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBoxHandler INameEditDlg.Name
+        ITextBox INameEditDlg.Name
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtName); }
+            get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        ITextBoxHandler INameEditDlg.FPatr
+        ITextBox INameEditDlg.FPatr
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtFPatr); }
+            get { return GetControlHandler<ITextBox>(txtFPatr); }
         }
 
-        ITextBoxHandler INameEditDlg.MPatr
+        ITextBox INameEditDlg.MPatr
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtMPatr); }
+            get { return GetControlHandler<ITextBox>(txtMPatr); }
         }
 
-        IComboBoxHandler INameEditDlg.SexCombo
+        IComboBox INameEditDlg.SexCombo
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbSex); }
+            get { return GetControlHandler<IComboBox>(cmbSex); }
         }
 
         #endregion
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void edName_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyChar == '/') {
-                e.Handled = true;
-            }
-        }
 
         public NameEditDlg()
         {
@@ -94,6 +82,29 @@ namespace GKUI.Forms
             lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
 
             fController = new NameEditDlgController(this);
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }
+
+        private void edName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyChar == '/') {
+                e.Handled = true;
+            }
         }
     }
 }

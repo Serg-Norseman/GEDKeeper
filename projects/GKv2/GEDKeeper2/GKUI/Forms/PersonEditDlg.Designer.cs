@@ -325,8 +325,9 @@
             this.txtMarriedSurname.Name = "txtMarriedSurname";
             this.txtMarriedSurname.Size = new System.Drawing.Size(182, 21);
             this.txtMarriedSurname.TabIndex = 3;
-            this.txtMarriedSurname.KeyDown += new System.Windows.Forms.KeyEventHandler(this.edSurname_KeyDown);
+            this.txtMarriedSurname.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtXName_KeyDown);
             this.txtMarriedSurname.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edSurname_KeyPress);
+            this.txtMarriedSurname.Leave += new System.EventHandler(this.txtXName_Leave);
             // 
             // txtSurname
             // 
@@ -335,8 +336,9 @@
             this.txtSurname.Name = "txtSurname";
             this.txtSurname.Size = new System.Drawing.Size(182, 21);
             this.txtSurname.TabIndex = 1;
-            this.txtSurname.KeyDown += new System.Windows.Forms.KeyEventHandler(this.edSurname_KeyDown);
+            this.txtSurname.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtXName_KeyDown);
             this.txtSurname.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edSurname_KeyPress);
+            this.txtSurname.Leave += new System.EventHandler(this.txtXName_Leave);
             // 
             // txtName
             // 
@@ -345,8 +347,9 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(182, 21);
             this.txtName.TabIndex = 5;
-            this.txtName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.edSurname_KeyDown);
+            this.txtName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtXName_KeyDown);
             this.txtName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edSurname_KeyPress);
+            this.txtName.Leave += new System.EventHandler(this.txtXName_Leave);
             // 
             // cmbPatronymic
             // 
@@ -355,8 +358,9 @@
             this.cmbPatronymic.Name = "cmbPatronymic";
             this.cmbPatronymic.Size = new System.Drawing.Size(182, 21);
             this.cmbPatronymic.TabIndex = 7;
-            this.cmbPatronymic.KeyDown += new System.Windows.Forms.KeyEventHandler(this.edSurname_KeyDown);
+            this.cmbPatronymic.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtXName_KeyDown);
             this.cmbPatronymic.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edSurname_KeyPress);
+            this.cmbPatronymic.Leave += new System.EventHandler(this.txtXName_Leave);
             // 
             // cmbSex
             // 
@@ -680,7 +684,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.Caption = "PersonEditDlg";
+            this.Title = "PersonEditDlg";
             this.ClientSize = new System.Drawing.Size(699, 563);
             this.Controls.Add(this.tabsPersonData);
             this.Controls.Add(this.lblRestriction);

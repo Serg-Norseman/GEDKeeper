@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -63,69 +64,69 @@ namespace GKUI.Forms
             get { return fSourcesList; }
         }
 
-        IComboBoxHandler IEventEditDlg.EventType
+        IComboBox IEventEditDlg.EventType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbEventType); }
+            get { return GetControlHandler<IComboBox>(cmbEventType); }
         }
 
-        IComboBoxHandler IEventEditDlg.EventDateType
+        IComboBox IEventEditDlg.EventDateType
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbEventDateType); }
+            get { return GetControlHandler<IComboBox>(cmbEventDateType); }
         }
 
-        ICheckBoxHandler IEventEditDlg.Date1BC
+        ICheckBox IEventEditDlg.Date1BC
         {
-            get { return GetControlHandler<ICheckBoxHandler>(btnBC1); }
+            get { return GetControlHandler<ICheckBox>(btnBC1); }
         }
 
-        ICheckBoxHandler IEventEditDlg.Date2BC
+        ICheckBox IEventEditDlg.Date2BC
         {
-            get { return GetControlHandler<ICheckBoxHandler>(btnBC2); }
+            get { return GetControlHandler<ICheckBox>(btnBC2); }
         }
 
-        IComboBoxHandler IEventEditDlg.Date1Calendar
+        IComboBox IEventEditDlg.Date1Calendar
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbDate1Calendar); }
+            get { return GetControlHandler<IComboBox>(cmbDate1Calendar); }
         }
 
-        IComboBoxHandler IEventEditDlg.Date2Calendar
+        IComboBox IEventEditDlg.Date2Calendar
         {
-            get { return GetControlHandler<IComboBoxHandler>(cmbDate2Calendar); }
+            get { return GetControlHandler<IComboBox>(cmbDate2Calendar); }
         }
 
-        IDateBoxHandler IEventEditDlg.Date1
+        IDateBox IEventEditDlg.Date1
         {
-            get { return GetControlHandler<IDateBoxHandler>(txtEventDate1); }
+            get { return GetControlHandler<IDateBox>(txtEventDate1); }
         }
 
-        IDateBoxHandler IEventEditDlg.Date2
+        IDateBox IEventEditDlg.Date2
         {
-            get { return GetControlHandler<IDateBoxHandler>(txtEventDate2); }
+            get { return GetControlHandler<IDateBox>(txtEventDate2); }
         }
 
-        IComboBoxHandler IEventEditDlg.Attribute
+        IComboBox IEventEditDlg.Attribute
         {
-            get { return GetControlHandler<IComboBoxHandler>(txtAttribute); }
+            get { return GetControlHandler<IComboBox>(txtAttribute); }
         }
 
-        ITextBoxHandler IEventEditDlg.Place
+        ITextBox IEventEditDlg.Place
         {
-            get { return GetControlHandler<ITextBoxHandler>(txtEventPlace); }
+            get { return GetControlHandler<ITextBox>(txtEventPlace); }
         }
 
-        ITextBoxHandler IEventEditDlg.EventName
+        ITextBox IEventEditDlg.EventName
         {
-            get { return  GetControlHandler<ITextBoxHandler>(txtEventName); }
+            get { return  GetControlHandler<ITextBox>(txtEventName); }
         }
 
-        ITextBoxHandler IEventEditDlg.Cause
+        ITextBox IEventEditDlg.Cause
         {
-            get { return  GetControlHandler<ITextBoxHandler>(txtEventCause); }
+            get { return  GetControlHandler<ITextBox>(txtEventCause); }
         }
 
-        ITextBoxHandler IEventEditDlg.Agency
+        ITextBox IEventEditDlg.Agency
         {
-            get { return  GetControlHandler<ITextBoxHandler>(txtEventOrg); }
+            get { return  GetControlHandler<ITextBox>(txtEventOrg); }
         }
 
         #endregion
@@ -195,11 +196,13 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("EventEditDlg.btnCancel_Click(): " + ex.Message);
-            }
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnAddress_Click(object sender, EventArgs e)
@@ -241,7 +244,7 @@ namespace GKUI.Forms
                     txtBox.Text = dt[0] + "/" + dt[1] + "/" + txt.PadLeft(4, '_');
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("EventEditDlg.DragDrop(): " + ex.Message);
+                Logger.WriteError("EventEditDlg.DragDrop()", ex);
             }
         }
 

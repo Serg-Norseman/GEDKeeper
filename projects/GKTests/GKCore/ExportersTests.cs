@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,7 +26,7 @@ using GKCore.Options;
 using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Providers;
+using GKUI;
 using NUnit.Framework;
 
 namespace GKCore
@@ -73,8 +73,8 @@ namespace GKCore
                 exporter.Options.PedigreeOptions.IncludeSources = true;
                 exporter.Options.PedigreeOptions.IncludeGenerations = true;
 
-                exporter.Kind = PedigreeExporter.PedigreeKind.pkDescend_Konovalov;
-                Assert.AreEqual(PedigreeExporter.PedigreeKind.pkDescend_Konovalov, exporter.Kind);
+                exporter.Kind = PedigreeExporter.PedigreeKind.Descend_Konovalov;
+                Assert.AreEqual(PedigreeExporter.PedigreeKind.Descend_Konovalov, exporter.Kind);
 
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
                 Assert.IsTrue(exporter.Generate(new WriterStub()));
@@ -83,12 +83,12 @@ namespace GKCore
                 Assert.IsTrue(exporter.Generate(new WriterStub()));
 
 
-                exporter.Kind = PedigreeExporter.PedigreeKind.pkDescend_dAboville;
+                exporter.Kind = PedigreeExporter.PedigreeKind.Descend_dAboville;
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
                 Assert.IsTrue(exporter.Generate(new WriterStub()));
 
 
-                exporter.Kind = PedigreeExporter.PedigreeKind.pkAscend;
+                exporter.Kind = PedigreeExporter.PedigreeKind.Ascend;
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
                 Assert.IsTrue(exporter.Generate(new WriterStub()));
             }

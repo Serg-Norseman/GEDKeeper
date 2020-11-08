@@ -78,7 +78,7 @@ namespace GKDataQualityPlugin
 
         private void UpdateTreeMap()
         {
-            fDataMap.Model.Clear();
+            fDataMap.Model.Items.Clear();
             if (fBase == null) {
                 fDataMap.Invalidate();
                 return;

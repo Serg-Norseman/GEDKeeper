@@ -250,6 +250,17 @@ namespace GDModel
             }
         }
 
+        public GDMChildToFamilyLink FindChildToFamilyLink(GDMFamilyRecord familyRec)
+        {
+            for (int i = 0, num = fChildToFamilyLinks.Count; i < num; i++) {
+                var childLink = fChildToFamilyLinks[i];
+                if (childLink.Family == familyRec) {
+                    return childLink;
+                }
+            }
+            return null;
+        }
+
         public void ExchangeSpouses(int index1, int index2)
         {
             fSpouseToFamilyLinks.Exchange(index1, index2);

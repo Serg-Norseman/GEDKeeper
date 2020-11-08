@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -477,7 +477,7 @@ namespace GKCore.Stats
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeStats.WriteStatsReport(): " + ex.Message);
+                Logger.WriteError("TreeStats.WriteStatsReport()", ex);
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
             }
 #endif

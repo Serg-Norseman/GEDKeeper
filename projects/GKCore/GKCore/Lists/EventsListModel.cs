@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -56,18 +56,16 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as GDMRecordWithEvents;
             if (fSheetList == null || dataOwner == null) return;
 
-            try
-            {
+            try {
                 fSheetList.ClearItems();
 
-                for (int i = 0; i < dataOwner.Events.Count; i++)
-                {
+                for (int i = 0; i < dataOwner.Events.Count; i++) {
                     GDMCustomEvent evt = dataOwner.Events[i];
 
                     object[] itemsData = new object[5];
                     itemsData[0] = (i + 1);
                     itemsData[1] = GKUtils.GetEventName(evt);
-                    itemsData[2] = new GEDCOMDateItem(evt.Date.Value);
+                    itemsData[2] = new GDMDateItem(evt.Date.Value);
                     if (fPersonsMode) {
                         string st = evt.Place.StringValue;
                         if (evt.StringValue != "") {
@@ -85,10 +83,8 @@ namespace GKCore.Lists
                 fSheetList.ResizeColumn(1);
                 fSheetList.ResizeColumn(2);
                 fSheetList.ResizeColumn(3);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("EventsListModel.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("EventsListModel.UpdateContents()", ex);
             }
         }
 
@@ -170,7 +166,7 @@ namespace GKCore.Lists
                         break;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("EventsListModel.Modify(): " + ex.Message);
+                Logger.WriteError("EventsListModel.Modify()", ex);
                 result = false;
             }
 
