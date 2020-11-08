@@ -275,7 +275,6 @@
     <Compile Include="GKCore\Interfaces\IListManager.cs" />
     <Compile Include="GKCore\Interfaces\IListViewEx.cs" />
     <Compile Include="GKCore\Interfaces\ILocalization.cs" />
-    <Compile Include="GKCore\Interfaces\ILogger.cs" />
     <Compile Include="GKCore\Interfaces\IOptions.cs" />
     <Compile Include="GKCore\Interfaces\IOptionsControl.cs" />
     <Compile Include="GKCore\Interfaces\IGraphicsProvider.cs" />

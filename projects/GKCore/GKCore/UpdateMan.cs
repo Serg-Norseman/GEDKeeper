@@ -130,7 +130,7 @@ namespace GKCore
                     // In Ubuntu 1604 LTS (Unity desktop), this method leads to a
                     // complete crash of the program at the level of X11,
                     // but in the same version of Ubuntu and Xfce, everything is fine
-                    Logger.LogWrite("UpdateMan.CheckUpdate(): is not supported for Unity");
+                    Logger.WriteInfo("UpdateMan.CheckUpdate(): is not supported for Unity");
                     return;
                 }
                 #endif
