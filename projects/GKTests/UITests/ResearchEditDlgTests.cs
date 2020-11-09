@@ -100,7 +100,7 @@ namespace GKUI.Forms
 
             EnterText("txtName", fDialog, "sample text");
             EnterMaskedText("txtStartDate", fDialog, "01.01.2000");
-            EnterMaskedText("txtStopDate", fDialog, "20.02.2000");
+            EnterMaskedText("txtStopDate", fDialog, "02.02.2000");
 
             // The links to other records can be added or edited only in MainWinTests
             // (where there is a complete infrastructure of the calls to BaseWin.ModifyX)
@@ -109,7 +109,7 @@ namespace GKUI.Forms
 
             Assert.AreEqual("sample text", fResearchRecord.ResearchName);
             Assert.AreEqual("01 JAN 2000", fResearchRecord.StartDate.StringValue);
-            Assert.AreEqual("20 FEB 2000", fResearchRecord.StopDate.StringValue);
+            Assert.AreEqual("02 FEB 2000", fResearchRecord.StopDate.StringValue);
         }
 
         #region Handlers for external tests

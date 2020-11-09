@@ -89,11 +89,11 @@ namespace GKUI.Forms
             Assert.AreEqual(fCommunicationRecord, fDialog.Communication);
 
             EnterText("txtName", fDialog, "sample text");
-            EnterMaskedText("txtDate", fDialog, "20.02.2000");
+            EnterMaskedText("txtDate", fDialog, "02.02.2000");
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fCommunicationRecord.CommName);
-            Assert.AreEqual("20 FEB 2000", fCommunicationRecord.Date.StringValue);
+            Assert.AreEqual("02 FEB 2000", fCommunicationRecord.Date.StringValue);
         }
 
         #region Handlers for external tests
