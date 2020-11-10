@@ -1,3 +1,5 @@
+image: Visual Studio 2015
+
 version: 2.16.2.{build}
 configuration: Debug
 platform: x86
@@ -17,18 +19,13 @@ install:
   - git submodule -q update --init
   - nuget install NUnit.Runners -OutputDirectory packages
   - nuget install OpenCover -OutputDirectory packages
+  - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+  - pip install codecov
 
 build:
   project: projects/GEDKeeper2.mswin.sln
   verbosity: minimal
 
 test_script:
-#  - cmd: nunit-console-x86.exe C:\projects\gedkeeper\projects\GKTests\bin\Debug\GKTests.dll
-#- cmd: nunit-console-x86.exe ./x.exe /framework:net-4.5
-
-after_test:
-#  - .\projects\packages\OpenCover\OpenCover.Console.exe -register:user -target:"nunit-console-x86.exe" -targetdir:"C:\projects\gedkeeper\projects\GKTests\bin\Debug" -targetargs:"\"C:\projects\gedkeeper\projects\GKTests\bin\Debug\GKTests.dll\" /noxml" -output:".\coverage.xml" -filter:"+[*]* "
-  - .\packages\OpenCover.4.7.922\tools\OpenCover.Console.exe -register:user -target:"packages\NUnit.ConsoleRunner.3.11.1\tools\nunit3-console.exe" -targetdir:"C:\projects\gedkeeper\projects\GKTests\bin\Debug" -targetargs:"\"C:\projects\gedkeeper\projects\GKTests\bin\Debug\GKTests.dll\"" -output:".\coverage.xml" -filter:"+[*]* "
-  - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
-  - pip install codecov
+  - .\packages\OpenCover.4.7.922\tools\OpenCover.Console.exe -register:user -target:"packages\NUnit.ConsoleRunner.3.11.1\tools\nunit3-console.exe" -targetdir:"C:\projects\gedkeeper\projects\GKTests\bin\Debug" -targetargs:"\"C:\projects\gedkeeper\projects\GKTests\bin\Debug\GKTests.dll\" /framework:net-4.5" -output:".\coverage.xml" -filter:"+[*]* "
   - codecov -f "coverage.xml" -X gcov
