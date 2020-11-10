@@ -15,8 +15,8 @@ environment:
 
 install:
   - git submodule -q update --init
-  - nuget install NUnit.Runners -OutputDirectory tools
-  - nuget install OpenCover -OutputDirectory tools
+  - nuget install NUnit.Runners
+  - nuget install OpenCover
 
 build:
   project: projects/GEDKeeper2.mswin.sln
@@ -28,7 +28,7 @@ test_script:
 
 after_test:
   - .\projects\packages\OpenCover\OpenCover.Console.exe -register:user -target:"nunit-console-x86.exe" -targetdir:"C:\projects\gedkeeper\projects\GKTests\bin\Debug" -targetargs:"\"C:\projects\gedkeeper\projects\GKTests\bin\Debug\GKTests.dll\" /noxml" -output:".\coverage.xml" -filter:"+[*]* "
-  - .\tools\OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetdir:"C:\projects\gedkeeper\projects\GKTests\bin\Debug" -targetargs:"\"C:\projects\gedkeeper\projects\GKTests\bin\Debug\GKTests.dll\" /noxml" -output:".\coverage.xml" -filter:"+[*]* "
+  - OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetdir:"C:\projects\gedkeeper\projects\GKTests\bin\Debug" -targetargs:"\"C:\projects\gedkeeper\projects\GKTests\bin\Debug\GKTests.dll\" /noxml" -output:".\coverage.xml" -filter:"+[*]* "
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
   - pip install codecov
   - codecov -f "coverage.xml" -X gcov
