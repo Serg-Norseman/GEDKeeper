@@ -16,11 +16,21 @@ environment:
   CIMode: true
 
 install:
-  - git submodule -q update --init
   - nuget install NUnit.Runners -OutputDirectory packages
   - nuget install OpenCover -OutputDirectory packages
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
   - pip install codecov
+
+skip_commits:
+  files:
+    - deploy/*
+    - locales/*
+    - samples/*
+    - scripts/*
+    - '**/*.md'
+
+before_build:
+  - git submodule -q update --init
 
 build:
   project: projects/GEDKeeper2.mswin.sln
