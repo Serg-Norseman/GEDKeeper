@@ -5,12 +5,9 @@
 [![Website](https://img.shields.io/badge/www-gedkeeper.github.io-0099BC.svg?maxAge=3600)](https://gedkeeper.github.io/)
 [![wiki](https://img.shields.io/badge/browse-the%20wiki-orange.svg)](https://github.com/Serg-Norseman/GEDKeeper/wiki)
 [![forums](https://img.shields.io/badge/join-the%20forums-yellowgreen.svg)](http://groups.google.com/group/gedkeeper-en)
-[![Join the chat at https://gitter.im/Serg-Norseman/GEDKeeper](https://badges.gitter.im/Serg-Norseman/GEDKeeper.svg)](https://gitter.im/Serg-Norseman/GEDKeeper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![tickets](https://img.shields.io/badge/view-tickets-blackgray.svg)](https://sourceforge.net/p/gedkeeper/tickets/)
+[![chat](https://badges.gitter.im/Serg-Norseman/GEDKeeper.svg)](https://gitter.im/Serg-Norseman/GEDKeeper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![donate](https://img.shields.io/badge/make%20a-donation-greenblue.svg)](https://sourceforge.net/p/gedkeeper/donate/)
 
-[![Semver](https://img.shields.io/badge/semver-2.0.0-blue)](http://semver.org/spec/v2.0.0.html)
-[![License: GPL v3](https://img.shields.io/github/license/Serg-Norseman/GEDKeeper.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![GitHub release](https://img.shields.io/github/release/Serg-Norseman/GEDKeeper.svg?label=Latest&maxAge=60)](https://github.com/Serg-Norseman/GEDKeeper/releases/latest)
 [![Download GEDKeeper](https://img.shields.io/sourceforge/dm/gedkeeper.svg)](https://sourceforge.net/projects/gedkeeper/files/latest/download)
 
@@ -18,7 +15,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/h0u8iwr3kvy6o9x1?svg=true)](https://ci.appveyor.com/project/Serg-Norseman/gedkeeper)
 [![codecov.io](https://codecov.io/github/Serg-Norseman/GEDKeeper/coverage.svg?branch=master)](https://codecov.io/github/Serg-Norseman/GEDKeeper?branch=master)
 [![Coverity Status](https://scan.coverity.com/projects/10037/badge.svg)](https://scan.coverity.com/projects/serg-norseman-gedkeeper)
-[![Technical debt ratio](https://sonarcloud.io/api/badges/measure?key=gedkeeper&metric=sqale_debt_ratio)](https://sonarcloud.io/dashboard?id=gedkeeper)
+[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=gedkeeper&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=gedkeeper)
 [![BCH compliance](https://bettercodehub.com/edge/badge/Serg-Norseman/GEDKeeper?branch=master)](https://bettercodehub.com/)
 [![CodeFactor](https://www.codefactor.io/repository/github/serg-norseman/gedkeeper/badge)](https://www.codefactor.io/repository/github/serg-norseman/gedkeeper)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/gedkeeper/localized.svg)](https://crowdin.com/project/gedkeeper)
