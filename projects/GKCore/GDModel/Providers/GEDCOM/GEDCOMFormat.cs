@@ -49,7 +49,8 @@ namespace GDModel.Providers.GEDCOM
         gf_PAF,
         gf_Reunion,
         gf_RootsMagic,
+        gf_WikiTree,
 
-        gf_Last = gf_RootsMagic
+        gf_Last = gf_WikiTree
     }
 }

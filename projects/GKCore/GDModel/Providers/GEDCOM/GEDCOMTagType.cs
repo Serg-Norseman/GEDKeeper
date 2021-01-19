@@ -191,6 +191,7 @@ namespace GDModel.Providers.GEDCOM
         _MDCL, // Medical condition [???]
         _MDNA, // [MyFamilyTree]
         _MEMBER, // [GK]
+        _MIDN, // Middle Name [WikiTree]
         _MILI, // [GK]
         _MILI_DIS, // [GK]
         _MILI_IND, // [GK]
@@ -385,6 +386,7 @@ namespace GDModel.Providers.GEDCOM
 
         // import only
         public const string _MARNM = "_MARNM"; // Married Surname [AQ3, PAF5, Geni]
+        public const string _MIDN = "_MIDN"; // Middle Name [WikiTree]
 
         // non-standard extended tags (GEDKeeper)
         public const string _BOOKMARK = "_BOOKMARK";

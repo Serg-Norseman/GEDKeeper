@@ -202,7 +202,7 @@ namespace GDModel.Providers.GEDCOM
         #region Buffered read without excessive allocating memory
 
         private const int SB_SIZE = 32 * 1024;
-        private const int LB_SIZE = 1024;
+        private const int LB_SIZE = 32 * 1024; // Fix for files from WikiTree, with lines above 3000 chars!
 
         private char[] fStreamBuffer, fLineBuffer;
         private int fStmBufLen, fStmBufPos, fLineBufPos;
@@ -291,7 +291,7 @@ namespace GDModel.Providers.GEDCOM
 
                         // line with text but not in standard tag format
                         if (lineRes == -1) {
-                            if (fTree.Format == GEDCOMFormat.gf_FTB) {
+                            if (fTree.Format == GEDCOMFormat.gf_FTB || fTree.Format == GEDCOMFormat.gf_WikiTree) {
                                 FixFTBLine(curRecord, curTag, lineNum, tagValue);
                                 continue;
                             } else {
@@ -2296,7 +2296,7 @@ namespace GDModel.Providers.GEDCOM
                 persNamePieces.Surname = tagValue;
             } else if (tagType == GEDCOMTagType.NSFX) {
                 persNamePieces.Suffix = tagValue;
-            } else if (tagType == GEDCOMTagType._PATN) {
+            } else if (tagType == GEDCOMTagType._PATN || tagType == GEDCOMTagType._MIDN) {
                 persNamePieces.PatronymicName = tagValue;
             } else if (tagType == GEDCOMTagType._MARN || tagType == GEDCOMTagType._MARNM) {
                 persNamePieces.MarriedName = tagValue;
@@ -2450,6 +2450,7 @@ namespace GDModel.Providers.GEDCOM
                 new GEDCOMAppFormat(GEDCOMFormat.gf_PAF, "PAF", "Personal Ancestral File", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.gf_Reunion, "Reunion", "Reunion", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.gf_RootsMagic, "RootsMagic", "RootsMagic", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_WikiTree, "WikiTree.com", "WikiTree", -1),
             };
 
 
@@ -2620,6 +2621,7 @@ namespace GDModel.Providers.GEDCOM
 
             // import only
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MARNM, GEDCOMTagName._MARNM);
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MIDN, GEDCOMTagName._MIDN);
 
             // non-standard extended tags (GEDKeeper)
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._BOOKMARK, GEDCOMTagName._BOOKMARK);
