@@ -1,5 +1,7 @@
 
-## ??.??.2020 [v2.17.0]
+## ??.01.2021 [v2.17.0]
+- Improved import from WikiTree.
+- Updated Czech translation [Jerry Verner].
 - Added the feature to interrupt some long-running functions.
 - Temporary fix for maps output (OSM replaced with GoogleMaps).
 - Fixed work of geocoders.
