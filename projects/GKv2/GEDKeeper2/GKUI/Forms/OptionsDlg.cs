@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -175,6 +175,7 @@ namespace GKUI.Forms
             numGenDist.Value = fOptions.TreeChartOptions.LevelDistance;
             numSpouseDist.Value = fOptions.TreeChartOptions.SpouseDistance;
 
+            numDefaultDepth.Minimum = -1;
             numDefaultDepth.Value = fOptions.TreeChartOptions.DepthLimit;
 
             UpdateTreeChartFont();

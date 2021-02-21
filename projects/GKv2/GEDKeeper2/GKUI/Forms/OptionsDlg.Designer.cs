@@ -855,7 +855,7 @@
             // 
             // numDefaultDepth
             // 
-            this.numDefaultDepth.Location = new System.Drawing.Point(639, 448);
+            this.numDefaultDepth.Location = new System.Drawing.Point(639, 464);
             this.numDefaultDepth.Margin = new System.Windows.Forms.Padding(4);
             this.numDefaultDepth.Maximum = new decimal(new int[] {
             9,
@@ -879,7 +879,7 @@
             // lblDefaultDepth
             // 
             this.lblDefaultDepth.AutoSize = true;
-            this.lblDefaultDepth.Location = new System.Drawing.Point(434, 450);
+            this.lblDefaultDepth.Location = new System.Drawing.Point(434, 466);
             this.lblDefaultDepth.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.lblDefaultDepth.Name = "lblDefaultDepth";
             this.lblDefaultDepth.Size = new System.Drawing.Size(101, 17);
@@ -896,7 +896,7 @@
             this.grpSpacings.Controls.Add(this.lblGenDist);
             this.grpSpacings.Controls.Add(this.lblBranchDist);
             this.grpSpacings.Controls.Add(this.lblMargins);
-            this.grpSpacings.Location = new System.Drawing.Point(414, 271);
+            this.grpSpacings.Location = new System.Drawing.Point(414, 287);
             this.grpSpacings.Margin = new System.Windows.Forms.Padding(2);
             this.grpSpacings.Name = "grpSpacings";
             this.grpSpacings.Padding = new System.Windows.Forms.Padding(10);
@@ -1251,18 +1251,18 @@
             this.grpTreeDecor.Location = new System.Drawing.Point(414, 12);
             this.grpTreeDecor.Margin = new System.Windows.Forms.Padding(2);
             this.grpTreeDecor.Name = "grpTreeDecor";
-            this.grpTreeDecor.Padding = new System.Windows.Forms.Padding(2);
-            this.grpTreeDecor.Size = new System.Drawing.Size(245, 254);
+            this.grpTreeDecor.Padding = new System.Windows.Forms.Padding(10);
+            this.grpTreeDecor.Size = new System.Drawing.Size(245, 260);
             this.grpTreeDecor.TabIndex = 1;
             this.grpTreeDecor.TabStop = false;
             this.grpTreeDecor.Text = "grpTreeDecor";
             // 
             // lblFont
             // 
-            this.lblFont.Location = new System.Drawing.Point(15, 192);
-            this.lblFont.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblFont.Location = new System.Drawing.Point(12, 187);
+            this.lblFont.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.lblFont.Name = "lblFont";
-            this.lblFont.Size = new System.Drawing.Size(70, 16);
+            this.lblFont.Size = new System.Drawing.Size(70, 20);
             this.lblFont.TabIndex = 0;
             this.lblFont.Text = "lblFont";
             // 
@@ -1273,7 +1273,7 @@
             this.panMaleColor.Controls.Add(this.lblMaleColor);
             this.panMaleColor.Cursor = System.Windows.Forms.Cursors.Hand;
             this.panMaleColor.Location = new System.Drawing.Point(12, 30);
-            this.panMaleColor.Margin = new System.Windows.Forms.Padding(10, 10, 5, 10);
+            this.panMaleColor.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.panMaleColor.Name = "panMaleColor";
             this.panMaleColor.Size = new System.Drawing.Size(103, 32);
             this.panMaleColor.TabIndex = 0;
@@ -1296,7 +1296,7 @@
             this.panFemaleColor.Controls.Add(this.lblFemaleColor);
             this.panFemaleColor.Cursor = System.Windows.Forms.Cursors.Hand;
             this.panFemaleColor.Location = new System.Drawing.Point(126, 30);
-            this.panFemaleColor.Margin = new System.Windows.Forms.Padding(5, 10, 10, 10);
+            this.panFemaleColor.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.panFemaleColor.Name = "panFemaleColor";
             this.panFemaleColor.Size = new System.Drawing.Size(103, 32);
             this.panFemaleColor.TabIndex = 1;
@@ -1319,7 +1319,7 @@
             this.panUnkSexColor.Controls.Add(this.lblUnkSexColor);
             this.panUnkSexColor.Cursor = System.Windows.Forms.Cursors.Hand;
             this.panUnkSexColor.Location = new System.Drawing.Point(12, 71);
-            this.panUnkSexColor.Margin = new System.Windows.Forms.Padding(10, 0, 10, 10);
+            this.panUnkSexColor.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.panUnkSexColor.Name = "panUnkSexColor";
             this.panUnkSexColor.Size = new System.Drawing.Size(215, 32);
             this.panUnkSexColor.TabIndex = 2;
@@ -1332,7 +1332,7 @@
             this.lblUnkSexColor.Name = "lblUnkSexColor";
             this.lblUnkSexColor.Size = new System.Drawing.Size(211, 28);
             this.lblUnkSexColor.TabIndex = 1;
-            this.lblUnkSexColor.Text = "label7";
+            this.lblUnkSexColor.Text = "lblUnkSexColor";
             this.lblUnkSexColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblUnkSexColor.Click += new System.EventHandler(this.PanColor_Click);
             // 
@@ -1342,7 +1342,7 @@
             this.panUnHusbandColor.Controls.Add(this.lblUnHusbandColor);
             this.panUnHusbandColor.Cursor = System.Windows.Forms.Cursors.Hand;
             this.panUnHusbandColor.Location = new System.Drawing.Point(12, 112);
-            this.panUnHusbandColor.Margin = new System.Windows.Forms.Padding(10, 0, 10, 10);
+            this.panUnHusbandColor.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.panUnHusbandColor.Name = "panUnHusbandColor";
             this.panUnHusbandColor.Size = new System.Drawing.Size(215, 32);
             this.panUnHusbandColor.TabIndex = 3;
@@ -1365,7 +1365,7 @@
             this.panUnWifeColor.Controls.Add(this.lblUnWifeColor);
             this.panUnWifeColor.Cursor = System.Windows.Forms.Cursors.Hand;
             this.panUnWifeColor.Location = new System.Drawing.Point(12, 152);
-            this.panUnWifeColor.Margin = new System.Windows.Forms.Padding(10, 0, 10, 10);
+            this.panUnWifeColor.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.panUnWifeColor.Name = "panUnWifeColor";
             this.panUnWifeColor.Size = new System.Drawing.Size(215, 30);
             this.panUnWifeColor.TabIndex = 4;
@@ -1387,8 +1387,8 @@
             this.panDefFont.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panDefFont.Controls.Add(this.lblChartFont);
             this.panDefFont.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.panDefFont.Location = new System.Drawing.Point(12, 209);
-            this.panDefFont.Margin = new System.Windows.Forms.Padding(10, 0, 10, 10);
+            this.panDefFont.Location = new System.Drawing.Point(12, 212);
+            this.panDefFont.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.panDefFont.Name = "panDefFont";
             this.panDefFont.Size = new System.Drawing.Size(215, 32);
             this.panDefFont.TabIndex = 5;
