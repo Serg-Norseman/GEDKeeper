@@ -18,6 +18,10 @@
   * Improvement of UI features
   * Design solutions (MediaPlayer and portraits)
 
+* **[Alexey Dokuchaev](https://github.com/danfe)**
+
+  * FreeBSD port developed (https://www.freshports.org/misc/gedkeeper/)
+
 * **[Kevin D. Sandal](https://github.com/Dreamer451)**
 
   * Proofreading of the English manual
