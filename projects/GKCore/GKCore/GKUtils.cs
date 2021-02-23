@@ -359,6 +359,14 @@ namespace GKCore
             return result;
         }
 
+        public static StreamReader GetDetectedStreamReader(Stream stream)
+        {
+            // TODO: total search and fix references to Encoding.GetEncoding(1251)
+            // TODO: implement detection of encoding
+            StreamReader reader = new StreamReader(stream, Encoding.GetEncoding(1251));
+            return reader;
+        }
+
         #endregion
 
         #region Match functions

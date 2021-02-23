@@ -35,7 +35,6 @@ using GKCore.Plugins;
 using GKCore.SingleInstance;
 using GKCore.Types;
 
-// TODO: total search and fix references to Encoding.GetEncoding(1251)!
 namespace GKCore
 {
     internal delegate void OnMessageReceivedInvoker(MessageEventArgs e);

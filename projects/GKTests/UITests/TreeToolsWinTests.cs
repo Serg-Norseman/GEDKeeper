@@ -99,10 +99,10 @@ namespace GKUI.Forms
             var radPersons = new RadioButtonTester("radPersons", form);
             radPersons.Properties.Checked = true;
 
-            RecordSelectDlgTests.SetSelectItemHandler(fFormTest, 0);
+            RecordSelectDlgTests.SetSelectItemHandler(0);
             ClickButton("MergeControl.btnRec1Select", form);
 
-            RecordSelectDlgTests.SetSelectItemHandler(fFormTest, 1);
+            RecordSelectDlgTests.SetSelectItemHandler(1);
             ClickButton("MergeControl.btnRec2Select", form);
 
             ClickButton("btnAutoSearch", form);

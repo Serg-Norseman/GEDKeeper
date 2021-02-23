@@ -86,10 +86,10 @@ namespace GKUI.Forms
             ClickButton("btnSelect", form);
         }
 
-        public static void SetSelectItemHandler(NUnitFormTest formTest, int itemIndex)
+        public static void SetSelectItemHandler(int itemIndex)
         {
             RSD_ItemIndex = itemIndex;
-            SetModalFormHandler(formTest, RSD_SelectItem_Handler);
+            SetModalFormHandler(fFormTest, RSD_SelectItem_Handler);
         }
 
         private static ModalFormHandler RSD_SubHandler;

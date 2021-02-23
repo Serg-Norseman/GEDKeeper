@@ -127,7 +127,7 @@ namespace GKImageViewerPlugin
 
                             try {
                                 using (Stream fs = new FileStream(fileName, FileMode.Open)) {
-                                    using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251))) {
+                                    using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
                                         txtBox.Text = strd.ReadToEnd();
                                     }
                                 }

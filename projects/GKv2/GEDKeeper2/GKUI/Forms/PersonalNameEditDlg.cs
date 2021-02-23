@@ -20,14 +20,12 @@
 
 using System;
 using System.Windows.Forms;
-using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKCore.Options;
 using GKUI.Components;
 
 namespace GKUI.Forms

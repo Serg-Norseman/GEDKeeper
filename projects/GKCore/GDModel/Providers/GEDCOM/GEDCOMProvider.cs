@@ -884,8 +884,6 @@ namespace GDModel.Providers.GEDCOM
         private static StackTuple AddNoteRecordTag(GDMObject owner, int tagLevel, int tagId, string tagValue)
         {
             GDMNoteRecord noteRec = (GDMNoteRecord)owner;
-            GDMTag curTag = null;
-            AddTagHandler addHandler = null;
 
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
             if (IsTextTag(tagType)) {
@@ -893,8 +891,6 @@ namespace GDModel.Providers.GEDCOM
             } else {
                 return AddRecordTag(owner, tagLevel, tagId, tagValue);
             }
-
-            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
         private static void WriteNoteRecord(StreamWriter stream, int level, GDMTag tag)

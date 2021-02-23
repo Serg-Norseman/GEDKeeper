@@ -21,7 +21,6 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using BSLib.Design.MVP.Controls;
@@ -32,7 +31,6 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
 

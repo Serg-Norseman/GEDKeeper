@@ -497,12 +497,12 @@ namespace GKUI.Forms
 
         private void StructsDlg_Handler(GDMRecordWithEvents record, Form dlg, TabControlTester tabs, int[] tabIndexes)
         {
-            GKSheetListTester sheetTester;
+            WFAppHost.TEST_MODE = true; // FIXME: dirty hack
 
             // notes
             Assert.AreEqual(0, record.Notes.Count);
             tabs.SelectTab(tabIndexes[0]);
-            RecordSelectDlgTests.SetSelectItemHandler(this, 0);
+            RecordSelectDlgTests.SetSelectItemHandler(0);
             ClickToolStripButton("fNotesList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, record.Notes.Count);
 
@@ -518,7 +518,7 @@ namespace GKUI.Forms
             // media
             Assert.AreEqual(0, record.MultimediaLinks.Count);
             tabs.SelectTab(tabIndexes[1]);
-            RecordSelectDlgTests.SetSelectItemHandler(this, 0);
+            RecordSelectDlgTests.SetSelectItemHandler(0);
             ClickToolStripButton("fMediaList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, record.MultimediaLinks.Count);
 
@@ -552,7 +552,6 @@ namespace GKUI.Forms
         {
             GDMFamilyRecord familyRecord = dlg.Family;
             var tabs = new TabControlTester("tabsFamilyData", dlg);
-            GKSheetListTester sheetTester;
 
             // father
             PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svMale);
@@ -612,7 +611,6 @@ namespace GKUI.Forms
             SelectCombo("cmbSex", dlg, 1); // male
 
             var tabs = new TabControlTester("tabsPersonData", dlg);
-            GKSheetListTester sheetTester;
 
             var cmbRestriction = new ComboBoxTester("cmbRestriction", dlg);
             cmbRestriction.Select(3);

@@ -109,13 +109,6 @@ namespace GKCore.Export
             Stream fontStream = GetType().Assembly.GetManifestResourceStream("Resources.fonts.FreeSans.ttf");
             var fontBytes = FileHelper.ReadByteArray(fontStream);
             fBaseFont = BaseFont.CreateFont("FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, BaseFont.CACHED, fontBytes, null);
-
-            /*if !__MonoCS__
-            fBaseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            else
-            //BaseFont.TIMES_ROMAN, "Cp1251"
-            this.fBaseFont = BaseFont.CreateFont("/usr/share/fonts/truetype/abyssinica/AbyssinicaSIL-R.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            endif*/
         }
 
         protected override void Dispose(bool disposing)

@@ -139,18 +139,20 @@ namespace GKUI.Forms
 
         private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
-            #if !CI_MODE
-            if (fChangeTimer == null) {
-                fChangeTimer = new System.Timers.Timer(500);
-                fChangeTimer.AutoReset = false;
-                fChangeTimer.Elapsed += (sdr, args) => { BeginInvoke(new UpdateDelegate(fController.UpdateView)); };
+            if (!WFAppHost.TEST_MODE) {
+                if (fChangeTimer == null) {
+                    fChangeTimer = new System.Timers.Timer(500);
+                    fChangeTimer.AutoReset = false;
+                    fChangeTimer.Elapsed += (sdr, args) => {
+                        BeginInvoke(new UpdateDelegate(fController.UpdateView));
+                    };
+                } else {
+                    fChangeTimer.Stop();
+                }
+                fChangeTimer.Start();
             } else {
-                fChangeTimer.Stop();
+                fController.UpdateView();
             }
-            fChangeTimer.Start();
-            #else
-            fController.UpdateView();
-            #endif
         }
 
         public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex)

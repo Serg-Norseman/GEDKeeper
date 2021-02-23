@@ -44,7 +44,7 @@ namespace GKCore
                         log.Close();
                     }
                 }
-            } catch (Exception ex) {
+            } catch (Exception) {
                 // If embed logging into the system, then consider cross-platform
             }
         }

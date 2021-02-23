@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,6 +23,7 @@
 using System;
 using System.Windows.Forms;
 using GDModel;
+using GKCore;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -70,14 +71,19 @@ namespace GKUI.Forms
             IBaseContext baseContext = dlg.Base.Context;
 
             Assert.IsTrue(baseContext.Tree.RecordsCount > 1);
+
             GDMIndividualRecord iRec1 = baseContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec1);
+            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetRecordName(iRec1, false));
             GDMIndividualRecord iRec2 = baseContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
             Assert.IsNotNull(iRec2);
+            Assert.AreEqual("Ivanova Maria Petrovna", GKUtils.GetRecordName(iRec2, false));
 
-            RecordSelectDlgTests.SetSelectItemHandler(fFormTest, 0);
+            WFAppHost.TEST_MODE = true; // FIXME: dirty hack
+
+            RecordSelectDlgTests.SetSelectItemHandler(0);
             ClickButton("btnRec1Select", form);
-            RecordSelectDlgTests.SetSelectItemHandler(fFormTest, 1);
+            RecordSelectDlgTests.SetSelectItemHandler(1);
             ClickButton("btnRec2Select", form);
 
             var txtResult = new TextBoxTester("txtResult", form);

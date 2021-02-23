@@ -928,13 +928,11 @@ namespace GKPedigreeImporterPlugin
         {
             SourceType = SourceType.stText;
 
-            try
-            {
-                using (StreamReader strd = new StreamReader(fFileName, Encoding.GetEncoding(1251)))
-                {
+            try {
+                using (Stream fs = new FileStream(fFileName, FileMode.Open))
+                using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
                     IProgressController progress = AppHost.Progress;
-                    try
-                    {
+                    try {
                         progress.ProgressInit(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);
 
                         int lineNum = 0;
@@ -949,17 +947,13 @@ namespace GKPedigreeImporterPlugin
                             lineNum++;
                         }
                         fRawContents.AddObject("", new RawLine(lineNum));
-                    }
-                    finally
-                    {
+                    } finally {
                         progress.ProgressDone();
                     }
                 }
 
                 return AnalyseRaw();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
                 Logger.WriteError("Importer.LoadRawText()", ex);
                 return false;
