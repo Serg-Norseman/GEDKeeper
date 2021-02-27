@@ -132,6 +132,7 @@
     <Compile Include="GDModel\GDMCustomEvent.cs" />
     <Compile Include="GDModel\GDMCutoutPosition.cs" />
     <Compile Include="GDModel\GDMIndividualLink.cs" />
+    <Compile Include="GDModel\GDMLines.cs" />
     <Compile Include="GDModel\GDMSourceData.cs" />
     <Compile Include="GDModel\GDMDate.cs" />
     <Compile Include="GDModel\GDMDateInterpreted.cs" />

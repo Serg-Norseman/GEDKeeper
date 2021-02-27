@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,7 +29,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -442,7 +441,7 @@ namespace GKPedigreeImporterPlugin
             return result;
         }
 
-        private GDMIndividualRecord ParsePerson(StringList buffer, string str, ref int selfId)
+        private GDMIndividualRecord ParsePerson(GDMLines buffer, string str, ref int selfId)
         {
             try
             {
@@ -496,7 +495,7 @@ namespace GKPedigreeImporterPlugin
             }
         }
 
-        private GDMSex GetProposeSex(StringList buffer)
+        private GDMSex GetProposeSex(GDMLines buffer)
         {
             GDMSex result = GDMSex.svUnknown;
             if (buffer == null) return result;
@@ -532,7 +531,7 @@ namespace GKPedigreeImporterPlugin
             return result;
         }
 
-        private void CheckSpouses(StringList buffer, GDMIndividualRecord curPerson)
+        private void CheckSpouses(GDMLines buffer, GDMIndividualRecord curPerson)
         {
             int num2 = buffer.Count;
             for (int i = 0; i < num2; i++) {
@@ -574,7 +573,7 @@ namespace GKPedigreeImporterPlugin
             }
         }
 
-        private void CheckBuffer(StringList buffer, GDMIndividualRecord curPerson)
+        private void CheckBuffer(GDMLines buffer, GDMIndividualRecord curPerson)
         {
             if (buffer.IsEmpty()) return;
 
@@ -594,7 +593,7 @@ namespace GKPedigreeImporterPlugin
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns>prevId, identifier of person</returns>
-        private int ParseBuffer(StringList buffer)
+        private int ParseBuffer(GDMLines buffer)
         {
             int prevId = 0;
 
@@ -738,7 +737,7 @@ namespace GKPedigreeImporterPlugin
             try {
                 fLog.Clear();
 
-                StringList buffer = new StringList();
+                GDMLines buffer = new GDMLines();
                 try {
                     int prev_id = 0;
 
@@ -777,7 +776,6 @@ namespace GKPedigreeImporterPlugin
 
                     return true;
                 } finally {
-                    buffer.Dispose();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("Importer.ImportTextContent()", ex);
@@ -816,7 +814,7 @@ namespace GKPedigreeImporterPlugin
                 //sheet.Activate();
 
                 IProgressController progress = AppHost.Progress;
-                StringList buffer = new StringList();
+                GDMLines buffer = new GDMLines();
                 try
                 {
                     int rowsCount = sheet.UsedRange.Rows.Count;
@@ -909,7 +907,8 @@ namespace GKPedigreeImporterPlugin
                 {
                     progress.ProgressDone();
 
-                    buffer.Dispose();
+                    buffer.Clear();
+                    buffer = null;
 
                     excel.Quit();
                     excel = null;

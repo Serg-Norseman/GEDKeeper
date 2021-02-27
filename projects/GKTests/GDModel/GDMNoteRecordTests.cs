@@ -203,7 +203,7 @@ namespace GDModel
             
             StringList value = new StringList(lines);
             GDMNoteRecord instance = new GDMNoteRecord(null);
-            instance.Lines.AddStrings(lines);
+            instance.Lines.AddRange(lines);
             Assert.AreEqual(value.Text, instance.Lines.Text);
         }
 

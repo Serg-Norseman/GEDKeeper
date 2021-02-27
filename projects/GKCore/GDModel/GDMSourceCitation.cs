@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -27,7 +26,7 @@ namespace GDModel
     public sealed class GDMSourceCitation : GDMPointer, IGDMTextObject
     {
         private int fCertaintyAssessment;
-        private StringList fDescription;
+        private GDMLines fDescription;
         private string fPage;
 
 
@@ -37,10 +36,10 @@ namespace GDModel
             set { fCertaintyAssessment = value; }
         }
 
-        public StringList Description
+        public GDMLines Description
         {
             get {
-                StringList description;
+                GDMLines description;
 
                 if (!IsPointer) {
                     description = fDescription;
@@ -49,7 +48,7 @@ namespace GDModel
                     if (sourceRecord != null) {
                         description = sourceRecord.Title.Lines;
                     } else {
-                        description = new StringList();
+                        description = new GDMLines();
                     }
                 }
 
@@ -63,7 +62,7 @@ namespace GDModel
             set { fPage = value; }
         }
 
-        StringList IGDMTextObject.Lines
+        GDMLines IGDMTextObject.Lines
         {
             get { return fDescription; }
         }
@@ -74,7 +73,7 @@ namespace GDModel
             SetName(GEDCOMTagType.SOUR);
 
             fCertaintyAssessment = -1;
-            fDescription = new StringList();
+            fDescription = new GDMLines();
             fPage = string.Empty;
         }
 

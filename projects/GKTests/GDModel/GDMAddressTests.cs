@@ -161,9 +161,9 @@ namespace GDModel
                 "Address Line 1",
                 "Address Line 2"
             };
-            StringList value = new StringList(vals);
+            GDMLines value = new GDMLines(vals);
             GDMAddress instance = new GDMAddress(null);
-            instance.Lines.AddStrings(value);
+            instance.Lines.AddRange(value);
             Assert.AreEqual(value.Text, instance.Lines.Text);
         }
 

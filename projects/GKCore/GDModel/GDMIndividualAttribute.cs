@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,15 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
     public class GDMIndividualAttribute : GDMCustomEvent
     {
-        // TODO: eliminate this functionality
-        public StringList PhysicalDescription
+        public GDMLines PhysicalDescription
         {
             get { return GEDCOMUtils.GetTagStrings(this); }
             set { GEDCOMUtils.SetTagStrings(this, value); }

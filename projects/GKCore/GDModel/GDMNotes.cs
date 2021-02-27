@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,16 +19,15 @@
  */
 
 using System;
-using BSLib;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
     public sealed class GDMTextTag : GDMTag, IGDMTextObject
     {
-        private StringList fLines;
+        private GDMLines fLines;
 
-        public StringList Lines
+        public GDMLines Lines
         {
             get { return fLines; }
         }
@@ -36,7 +35,7 @@ namespace GDModel
 
         public GDMTextTag(GDMObject owner) : base(owner)
         {
-            fLines = new StringList();
+            fLines = new GDMLines();
         }
 
         public GDMTextTag(GDMObject owner, int tagId) : this(owner)
@@ -82,17 +81,17 @@ namespace GDModel
 
     public sealed class GDMNotes : GDMPointer, IGDMTextObject
     {
-        private StringList fLines;
+        private GDMLines fLines;
 
-        public StringList Lines
+        public GDMLines Lines
         {
             get {
-                StringList lines;
+                GDMLines lines;
                 if (!IsPointer) {
                     lines = fLines;
                 } else {
                     GDMNoteRecord notesRecord = Value as GDMNoteRecord;
-                    lines = (notesRecord != null) ? notesRecord.Lines : new StringList();
+                    lines = (notesRecord != null) ? notesRecord.Lines : new GDMLines();
                 }
                 return lines;
             }
@@ -103,7 +102,7 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.NOTE);
 
-            fLines = new StringList();
+            fLines = new GDMLines();
         }
 
         public override bool IsEmpty()

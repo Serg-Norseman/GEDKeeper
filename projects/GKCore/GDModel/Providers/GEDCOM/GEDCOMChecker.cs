@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,8 +20,6 @@
 
 using System;
 using BSLib;
-using GDModel;
-using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -73,7 +71,7 @@ namespace GDModel.Providers.GEDCOM
         {
             GDMSourceRecord sourRec = tree.CreateSource();
 
-            StringList description = sourCit.Description;
+            GDMLines description = sourCit.Description;
             string page = sourCit.Page;
             int certaintyAssessment = sourCit.CertaintyAssessment;
 

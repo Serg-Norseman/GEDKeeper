@@ -76,7 +76,7 @@ namespace GDModel
                 Assert.AreEqual(GDMRestriction.rnLocked, customEvent.Restriction);
 
 
-                StringList strs = new StringList("test");
+                GDMLines strs = new GDMLines("test");
                 customEvent.PhysicalDescription = strs;
                 Assert.AreEqual(strs.Text, customEvent.PhysicalDescription.Text);
 

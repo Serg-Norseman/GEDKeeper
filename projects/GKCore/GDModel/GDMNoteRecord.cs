@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
@@ -27,9 +26,9 @@ namespace GDModel
 {
     public sealed class GDMNoteRecord : GDMRecord, IGDMTextObject
     {
-        private StringList fLines;
+        private GDMLines fLines;
 
-        public StringList Lines
+        public GDMLines Lines
         {
             get { return fLines; }
         }
@@ -39,7 +38,7 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.NOTE);
 
-            fLines = new StringList();
+            fLines = new GDMLines();
         }
 
         public override void Assign(GDMTag source)
@@ -111,7 +110,7 @@ namespace GDModel
         public void SetNotesArray(params string[] value)
         {
             fLines.Clear();
-            fLines.AddStrings(value);
+            fLines.AddRange(value);
         }
 
         public void AddNoteText(string text)

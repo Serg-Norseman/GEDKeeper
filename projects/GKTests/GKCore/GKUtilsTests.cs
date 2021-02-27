@@ -480,7 +480,7 @@ namespace GKCore
         [Test]
         public void Test_TruncateStrings()
         {
-            string test = GKUtils.TruncateStrings(new StringList("sample text for truncate"), 10);
+            string test = GKUtils.TruncateStrings(new GDMLines("sample text for truncate"), 10);
             Assert.AreEqual("sample tex...", test);
         }
 

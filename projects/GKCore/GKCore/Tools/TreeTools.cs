@@ -37,6 +37,9 @@ namespace GKCore.Tools
     /// </summary>
     public static class TreeTools
     {
+        private const string CRLF = "\r\n";
+
+
         #region Patriarchs Search
 
         public static bool PL_SearchAnc(GDMIndividualRecord descendant, GDMIndividualRecord searchRec, bool onlyMaleLine)
@@ -404,7 +407,7 @@ namespace GKCore.Tools
 
             if (logBox != null) {
                 logBox.Clear();
-                logBox.AppendText(string.Format(LangMan.LS(LSID.LSID_MainBaseSize), mainTree.RecordsCount.ToString()) + "\r\n");
+                logBox.AppendText(string.Format(LangMan.LS(LSID.LSID_MainBaseSize), mainTree.RecordsCount.ToString()) + CRLF);
             }
 
             List<int> fragments = new List<int>();
@@ -437,7 +440,7 @@ namespace GKCore.Tools
                 }
 
                 if (logBox != null) {
-                    logBox.AppendText(string.Format(LangMan.LS(LSID.LSID_MainBaseSize), mainTree.RecordsCount.ToString()) + "\r\n");
+                    logBox.AppendText(string.Format(LangMan.LS(LSID.LSID_MainBaseSize), mainTree.RecordsCount.ToString()) + CRLF);
                 }
             }
 
@@ -457,7 +460,7 @@ namespace GKCore.Tools
         private static void ThrowError(ITextBox logBox, string message)
         {
             if (logBox != null) {
-                logBox.AppendText(message + "\r\n");
+                logBox.AppendText(message + CRLF);
             } else {
                 throw new GKException(message);
             }
@@ -1184,7 +1187,7 @@ namespace GKCore.Tools
             StringList names = new StringList();
 
             try {
-                logBox.AppendText(LangMan.LS(LSID.LSID_SearchMatches) + "\r\n");
+                logBox.AppendText(LangMan.LS(LSID.LSID_SearchMatches) + CRLF);
 
                 int mainCount = mainTree.RecordsCount;
                 for (int i = 0; i < mainCount; i++) {
@@ -1237,23 +1240,23 @@ namespace GKCore.Tools
 
                 int famsCount = fams.Count;
                 if (famsCount != 0) {
-                    logBox.AppendText(LangMan.LS(LSID.LSID_SimilarSurnames) + "\r\n");
+                    logBox.AppendText(LangMan.LS(LSID.LSID_SimilarSurnames) + CRLF);
                     for (int i = 0; i < famsCount; i++) {
-                        logBox.AppendText("    " + fams[i] + "\r\n");
+                        logBox.AppendText("    " + fams[i] + CRLF);
                     }
                 }
 
                 int namesCount = names.Count;
                 if (namesCount != 0) {
-                    logBox.AppendText(LangMan.LS(LSID.LSID_SimilarNames) + "\r\n");
+                    logBox.AppendText(LangMan.LS(LSID.LSID_SimilarNames) + CRLF);
                     for (int i = 0; i < namesCount; i++) {
-                        logBox.AppendText("    " + names[i] + "\r\n");
+                        logBox.AppendText("    " + names[i] + CRLF);
                         ExtList<GDMIndividualRecord> lst = (ExtList<GDMIndividualRecord>)names.GetObject(i);
 
                         int num5 = lst.Count;
                         for (int j = 0; j < num5; j++) {
                             GDMIndividualRecord iRec = lst[j];
-                            logBox.AppendText("      * " + GKUtils.GetNameString(iRec, true, false) + " " + GKUtils.GetLifeStr(iRec) + "\r\n");
+                            logBox.AppendText("      * " + GKUtils.GetNameString(iRec, true, false) + " " + GKUtils.GetLifeStr(iRec) + CRLF);
                         }
                     }
                 }

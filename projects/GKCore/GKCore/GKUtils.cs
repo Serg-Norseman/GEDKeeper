@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -97,7 +97,7 @@ namespace GKCore
             return result;
         }
 
-        public static string MergeStrings(StringList strings)
+        public static string MergeStrings(GDMLines strings)
         {
             if (strings == null)
                 throw new ArgumentNullException("strings");
@@ -105,8 +105,7 @@ namespace GKCore
             StringBuilder result = new StringBuilder();
 
             int num = strings.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 if (result.Length != 0) result.Append(" ");
                 result.Append(strings[i].Trim());
             }
@@ -114,7 +113,7 @@ namespace GKCore
             return result.ToString();
         }
 
-        public static string TruncateStrings(StringList value, int size)
+        public static string TruncateStrings(GDMLines value, int size)
         {
             string s = string.Empty;
 
@@ -134,22 +133,16 @@ namespace GKCore
             var linksList = new StringList();
 
             int num = tree.RecordsCount;
-            for (int i = 0; i < num; i++)
-            {
-                GDMRecord rec = tree[i];
+            for (int i = 0; i < num; i++) {
+                GDMRecordWithEvents evsRec = tree[i] as GDMRecordWithEvents;
 
-                if (rec is GDMRecordWithEvents)
-                {
-                    GDMRecordWithEvents evsRec = rec as GDMRecordWithEvents;
-
+                if (evsRec != null) {
                     int num2 = evsRec.Events.Count;
-                    for (int j = 0; j < num2; j++)
-                    {
+                    for (int j = 0; j < num2; j++) {
                         GDMCustomEvent evt = evsRec.Events[j];
 
-                        if (evt.Place.Location.Value == locRec)
-                        {
-                            linksList.AddObject(GetRecordName(rec, true) + ", " + GetEventName(evt).ToLower(), rec);
+                        if (evt.Place.Location.Value == locRec) {
+                            linksList.AddObject(GetRecordName(evsRec, true) + ", " + GetEventName(evt).ToLower(), evsRec);
                         }
                     }
                 }
@@ -2055,7 +2048,7 @@ namespace GKCore
                     summary.Clear();
                     if (noteRec != null) {
                         summary.Add("");
-                        summary.AddStrings(noteRec.Lines);
+                        summary.AddStrings(noteRec.Lines.ToArray());
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
 

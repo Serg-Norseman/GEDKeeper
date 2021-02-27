@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,6 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using BSLib;
-using GDModel;
 
 namespace GDModel.Providers.GEDCOM
 {
@@ -1744,9 +1743,9 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static StringList GetTagStrings(GDMTag strTag)
+        public static GDMLines GetTagStrings(GDMTag strTag)
         {
-            StringList strings = new StringList();
+            var strings = new GDMLines();
 
             if (strTag != null) {
                 if (strTag.StringValue != "") {
@@ -1776,7 +1775,7 @@ namespace GDModel.Providers.GEDCOM
             return strings;
         }
 
-        public static void SetTagStrings(GDMTag tag, StringList strings)
+        public static void SetTagStrings(GDMTag tag, GDMLines strings)
         {
             if (tag == null) return;
 

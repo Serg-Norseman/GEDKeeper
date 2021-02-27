@@ -113,6 +113,7 @@
     <Compile Include="GDModel\GDMGroupRecordTests.cs" />
     <Compile Include="GDModel\GDMHeaderTests.cs" />
     <Compile Include="GDModel\GDMIndividualRecordTests.cs" />
+    <Compile Include="GDModel\GDMLinesTests.cs" />
     <Compile Include="GDModel\GDMListTests.cs" />
     <Compile Include="GDModel\GDMLocationRecordTests.cs" />
     <Compile Include="GDModel\GDMMultimediaLinkTests.cs" />

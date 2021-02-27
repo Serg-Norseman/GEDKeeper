@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,14 +19,13 @@
  */
 
 using System;
-using BSLib;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
     public sealed class GDMAddress : GDMTag
     {
-        private StringList fLines;
+        private GDMLines fLines;
         private string fAddressLine1;
         private string fAddressLine2;
         private string fAddressLine3;
@@ -40,7 +39,7 @@ namespace GDModel
         private GDMList<GDMTag> fWWWList;
 
 
-        public StringList Lines
+        public GDMLines Lines
         {
             get { return fLines; }
         }
@@ -112,7 +111,7 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.ADDR);
 
-            fLines = new StringList();
+            fLines = new GDMLines();
             fAddressLine1 = string.Empty;
             fAddressLine2 = string.Empty;
             fAddressLine3 = string.Empty;
@@ -238,7 +237,7 @@ namespace GDModel
         public void SetAddressArray(string[] value)
         {
             fLines.Clear();
-            fLines.AddStrings(value);
+            fLines.AddRange(value);
         }
     }
 }

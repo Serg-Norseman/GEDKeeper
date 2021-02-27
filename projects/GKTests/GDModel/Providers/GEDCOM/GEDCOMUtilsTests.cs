@@ -414,13 +414,30 @@ namespace GDModel.Providers.GEDCOM
         }
 
         [Test]
+        public void Test_ParseXRefPointer()
+        {
+            string xref;
+            string rest = GEDCOMUtils.ParseXRefPointer(" @I001@", out xref);
+            Assert.AreEqual("", rest);
+            Assert.AreEqual("I001", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer(" ptr text", out xref);
+            Assert.AreEqual("ptr text", rest);
+            Assert.AreEqual("", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer(" ", out xref);
+            Assert.AreEqual("", rest);
+            Assert.AreEqual("", xref);
+        }
+
+        [Test]
         public void Test_SetTagStringsL()
         {
             var tag = new GDMTag(null, GEDCOMTagsTable.Lookup("TEST"), "");
             Assert.IsNotNull(tag);
 
             // very long string, 248"A" and " BBB BBBB"
-            var strings = new StringList( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA BBB BBBB" );
+            var strings = new GDMLines( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA BBB BBBB" );
 
             GEDCOMUtils.SetTagStrings(null, strings);
 

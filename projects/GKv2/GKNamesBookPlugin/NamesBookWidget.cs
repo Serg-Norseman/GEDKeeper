@@ -36,6 +36,9 @@ namespace GKNamesBookPlugin
     /// </summary>
     public partial class NamesBookWidget : Form, ILocalization
     {
+        private const string CRLF = "\r\n";
+
+
         private class NameRecord
         {
             public string Name;
@@ -107,13 +110,13 @@ namespace GKNamesBookPlugin
             NameRecord rec = (NameRecord)item.Data;
 
             mmDesc.Text = "";
-            mmDesc.AppendText(rec.Name + "\r\n");
-            mmDesc.AppendText(rec.Desc + "\r\n");
+            mmDesc.AppendText(rec.Name + CRLF);
+            mmDesc.AppendText(rec.Desc + CRLF);
 
             if (rec.ChIndex < 0) return;
 
-            mmDesc.AppendText("\r\n");
-            mmDesc.AppendText(fPlugin.LangMan.LS(NLS.LSID_Calendar) + ":\r\n");
+            mmDesc.AppendText(CRLF);
+            mmDesc.AppendText(fPlugin.LangMan.LS(NLS.LSID_Calendar) + ":" + CRLF);
 
             StringList lst;
             switch (rec.Sex)
@@ -137,7 +140,7 @@ namespace GKNamesBookPlugin
                     break;
                 }
                 st = st.Remove(0, 1);
-                mmDesc.AppendText(st + "\r\n");
+                mmDesc.AppendText(st + CRLF);
             }
         }
 

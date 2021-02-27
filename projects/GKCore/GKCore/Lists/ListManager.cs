@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -225,7 +225,7 @@ namespace GKCore.Lists
             }
         }
 
-        protected bool IsMatchesMask(StringList strList, string mask)
+        protected bool IsMatchesMask(GDMLines strList, string mask)
         {
             if (strList == null || strList.IsEmpty() || string.IsNullOrEmpty(mask)) {
                 return false;
