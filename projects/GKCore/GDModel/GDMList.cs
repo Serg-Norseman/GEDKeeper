@@ -78,20 +78,23 @@ namespace GDModel
         #endregion
 
 
-        private List<T> fDataList; // lazy implementation
+        /// <summary>
+        /// Lazy initialization. Without this, the memory consumption when loading the tree increases to 145%.
+        /// </summary>
+        private List<T> fDataList;
 
 
         public int Count
         {
             get {
-                return ((fDataList == null) ? 0 : fDataList.Count);
+                return (fDataList == null) ? 0 : fDataList.Count;
             }
         }
 
         public T this[int index]
         {
             get {
-                return ((fDataList == null) ? default(T) : fDataList[index]);
+                return (fDataList == null) ? default(T) : fDataList[index];
             }
         }
         

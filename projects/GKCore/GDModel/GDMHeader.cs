@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -33,7 +33,7 @@ namespace GDModel
     }
 
 
-    public sealed class GDMHeaderSource : GDMTag
+    public sealed class GDMHeaderSource : GDMValueTag
     {
         public string Version { get; set; }
         public string ProductName { get; set; }
@@ -87,10 +87,12 @@ namespace GDModel
 
     public sealed class GDMHeaderCharSet : GDMTag
     {
+        private GEDCOMCharacterSet fValue;
+
         public GEDCOMCharacterSet Value
         {
-            get { return GEDCOMUtils.GetCharacterSetVal(StringValue); }
-            set { StringValue = GEDCOMUtils.GetCharacterSetStr(value); }
+            get { return fValue; }
+            set { fValue = value; }
         }
 
         public string Version { get; set; }
@@ -112,10 +114,21 @@ namespace GDModel
         {
             return base.IsEmpty() && string.IsNullOrEmpty(Version);
         }
+
+        protected override string GetStringValue()
+        {
+            return GEDCOMUtils.GetCharacterSetStr(fValue);
+        }
+
+        public override string ParseString(string strValue)
+        {
+            fValue = GEDCOMUtils.GetCharacterSetVal(strValue);
+            return string.Empty;
+        }
     }
 
 
-    public sealed class GDMHeaderFile : GDMTag
+    public sealed class GDMHeaderFile : GDMValueTag
     {
         public int Revision { get; set; }
 

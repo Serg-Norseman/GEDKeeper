@@ -33,6 +33,17 @@ namespace GDModel
     }
 
 
+    public interface IGDMLines
+    {
+        string this[int index] { get; set; }
+        int Count { get; }
+        string Text { get; set; }
+
+        void Clear();
+        bool IsEmpty();
+    }
+
+
     public interface IGDMTextObject : IGDMTag
     {
         GDMLines Lines { get; }

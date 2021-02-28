@@ -48,9 +48,9 @@ namespace GDModel
             var tag = new GDMTag(null, GEDCOMTagsTable.Lookup("TEST"), "");
             Assert.IsNotNull(tag);
 
-            tag.AddTag(new GDMTag(tag, (int)GEDCOMTagType._FOLDER, "Private"));
-            tag.AddTag(new GDMTag(tag, (int)GEDCOMTagType._FOLDER, "Friends"));
-            tag.AddTag(new GDMTag(tag, (int)GEDCOMTagType._FOLDER, "Research"));
+            tag.AddTag(GDMTag.Create(tag, (int)GEDCOMTagType._FOLDER, "Private"));
+            tag.AddTag(GDMTag.Create(tag, (int)GEDCOMTagType._FOLDER, "Friends"));
+            tag.AddTag(GDMTag.Create(tag, (int)GEDCOMTagType._FOLDER, "Research"));
 
             var subTags = tag.FindTags(GEDCOMTagName._FOLDER);
             Assert.AreEqual(3, subTags.Count);
@@ -64,7 +64,7 @@ namespace GDModel
         [Test]
         public void Test_IndexOf()
         {
-            using (GDMTag tag = GDMTag.Create(null, GEDCOMTagsTable.Lookup(""), "")) {
+            using (GDMTag tag = new GDMTag(null, GEDCOMTagsTable.Lookup(""), "")) {
                 Assert.AreEqual(-1, tag.SubTags.IndexOf(null));
             }
         }

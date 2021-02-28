@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -1738,9 +1738,6 @@ namespace GDModel.Providers.GEDCOM
             AddTagHandler addHandler = null;
 
             curTag = GEDCOMProvider.CreateTag(ownerTag, tagId, tagValue);
-            if (curTag == null) {
-                curTag = new GDMTag(ownerTag, tagId, tagValue);
-            }
             curTag = ownerTag.AddTag(curTag);
 
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
@@ -2644,12 +2641,18 @@ namespace GDModel.Providers.GEDCOM
 
         public static GDMTag CreateTag(GDMObject owner, int tagId, string tagValue)
         {
+            TagConstructor ctor = null;
+
             GEDCOMTagProps tagInfo = GEDCOMTagsTable.GetTagProps(tagId);
             if (tagInfo != null) {
-                TagConstructor ctor = tagInfo.Constructor;
-                return (ctor == null) ? new GDMTag(owner, tagId, tagValue) : ctor(owner, tagId, tagValue);
+                ctor = tagInfo.Constructor;
             }
-            return null;
+
+            if (ctor == null) {
+                ctor = GDMTag.Create;
+            }
+
+            return ctor(owner, tagId, tagValue);
         }
 
         public static AddTagHandler GetAddHandler(int tagId)

@@ -26,7 +26,7 @@ namespace GDModel
     /// <summary>
     /// Container for a list of strings with some additional features.
     /// </summary>
-    public sealed class GDMLines : List<string>
+    public sealed class GDMLines : List<string>, IGDMLines
     {
         private const string LINE_BREAK = "\r\n";
 

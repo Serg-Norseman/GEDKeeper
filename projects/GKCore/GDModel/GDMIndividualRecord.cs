@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -67,7 +67,7 @@ namespace GDModel
             set {
                 if (value) {
                     if (FindTag(GEDCOMTagName._BOOKMARK, 0) == null) {
-                        AddTag(new GDMTag(this, (int)GEDCOMTagType._BOOKMARK, ""));
+                        AddTag(GDMTag.Create(this, (int)GEDCOMTagType._BOOKMARK, ""));
                     }
                 } else {
                     DeleteTag(GEDCOMTagName._BOOKMARK);
@@ -93,7 +93,7 @@ namespace GDModel
             set {
                 if (value) {
                     if (FindTag(GEDCOMTagName._PATRIARCH, 0) == null) {
-                        AddTag(new GDMTag(this, (int)GEDCOMTagType._PATRIARCH, ""));
+                        AddTag(GDMTag.Create(this, (int)GEDCOMTagType._PATRIARCH, ""));
                     }
                 } else {
                     DeleteTag(GEDCOMTagName._PATRIARCH);

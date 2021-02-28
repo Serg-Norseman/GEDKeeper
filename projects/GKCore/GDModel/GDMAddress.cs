@@ -23,7 +23,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMAddress : GDMTag
+    public sealed class GDMAddress : GDMValueTag
     {
         private GDMLines fLines;
         private string fAddressLine1;
@@ -211,22 +211,22 @@ namespace GDModel
 
         public GDMTag AddEmailAddress(string value)
         {
-            return fEmailList.Add(new GDMTag(this, (int)GEDCOMTagType.EMAIL, value));
+            return fEmailList.Add(GDMTag.Create(this, (int)GEDCOMTagType.EMAIL, value));
         }
 
         public GDMTag AddFaxNumber(string value)
         {
-            return fFaxList.Add(new GDMTag(this, (int)GEDCOMTagType.FAX, value));
+            return fFaxList.Add(GDMTag.Create(this, (int)GEDCOMTagType.FAX, value));
         }
 
         public GDMTag AddPhoneNumber(string value)
         {
-            return fPhoneList.Add(new GDMTag(this, (int)GEDCOMTagType.PHON, value));
+            return fPhoneList.Add(GDMTag.Create(this, (int)GEDCOMTagType.PHON, value));
         }
 
         public GDMTag AddWebPage(string value)
         {
-            return fWWWList.Add(new GDMTag(this, (int)GEDCOMTagType.WWW, value));
+            return fWWWList.Add(GDMTag.Create(this, (int)GEDCOMTagType.WWW, value));
         }
 
         public void SetAddressText(string value)

@@ -433,7 +433,7 @@ namespace GDModel.Providers.GEDCOM
         [Test]
         public void Test_SetTagStringsL()
         {
-            var tag = new GDMTag(null, GEDCOMTagsTable.Lookup("TEST"), "");
+            var tag = GDMTag.Create(null, GEDCOMTagsTable.Lookup("TEST"), "");
             Assert.IsNotNull(tag);
 
             // very long string, 248"A" and " BBB BBBB"

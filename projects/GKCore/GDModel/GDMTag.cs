@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -38,7 +38,6 @@ namespace GDModel
 
         private int fId;
         private GDMObject fOwner;
-        protected string fStringValue;
         private GDMList<GDMTag> fTags;
 
         #endregion
@@ -75,7 +74,7 @@ namespace GDModel
 
         public static GDMTag Create(GDMObject owner, int tagId, string tagValue)
         {
-            return new GDMTag(owner, tagId, tagValue);
+            return new GDMValueTag(owner, tagId, tagValue);
         }
 
         public GDMTag(GDMObject owner)
@@ -83,7 +82,6 @@ namespace GDModel
             fId = 0; // Unknown
             fOwner = owner;
             fTags = new GDMList<GDMTag>(this);
-            fStringValue = string.Empty;
         }
 
         public GDMTag(GDMObject owner, int tagId, string tagValue) : this(owner)
@@ -193,7 +191,6 @@ namespace GDModel
         public virtual void Clear()
         {
             fTags.Clear();
-            fStringValue = string.Empty;
         }
 
         public void DeleteTag(string tagName)
@@ -258,7 +255,7 @@ namespace GDModel
 
         public virtual bool IsEmpty()
         {
-            return string.IsNullOrEmpty(fStringValue) && (fTags.Count == 0);
+            return (fTags.Count == 0);
         }
 
         public virtual float IsMatch(GDMTag tag, MatchParams matchParams)
@@ -286,15 +283,57 @@ namespace GDModel
 
         protected virtual string GetStringValue()
         {
-            return fStringValue;
+            return string.Empty;
         }
 
         public virtual string ParseString(string strValue)
         {
-            fStringValue = strValue;
             return string.Empty;
         }
 
         #endregion
+    }
+
+
+    public class GDMValueTag : GDMTag
+    {
+        protected string fStringValue;
+
+        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
+        {
+            return new GDMValueTag(owner, tagId, tagValue);
+        }
+
+        public GDMValueTag(GDMObject owner) : base(owner)
+        {
+            fStringValue = string.Empty;
+        }
+
+        public GDMValueTag(GDMObject owner, int tagId, string tagValue) : this(owner)
+        {
+            SetNameValue(tagId, tagValue);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+            fStringValue = string.Empty;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && string.IsNullOrEmpty(fStringValue);
+        }
+
+        protected override string GetStringValue()
+        {
+            return fStringValue;
+        }
+
+        public override string ParseString(string strValue)
+        {
+            fStringValue = strValue;
+            return string.Empty;
+        }
     }
 }
