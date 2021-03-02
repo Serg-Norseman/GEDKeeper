@@ -206,7 +206,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // Performance improvement: x3.5
-        public static int GetXRefNumber(string str)
+        public static long GetXRefNumber(string str)
         {
             if (string.IsNullOrEmpty(str)) {
                 return -1;
@@ -215,7 +215,7 @@ namespace GDModel.Providers.GEDCOM
             char[] strChars = str.ToCharArray();
             int strLen = strChars.Length;
 
-            int result = 0;
+            long result = 0;
             for (int i = 0; i < strLen; i++) {
                 char ch = strChars[i];
                 if (ch >= '0' && ch <= '9') {

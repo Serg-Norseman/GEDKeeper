@@ -114,10 +114,17 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                GDMPersonalName np = fPerson.PersonalNames[0];
-                GKUtils.SetNameParts(np, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
+                GDMPersonalName persName;
+                if (fPerson.PersonalNames.Count > 0) {
+                    persName = fPerson.PersonalNames[0];
+                } else {
+                    persName = new GDMPersonalName(fPerson);
+                    fPerson.PersonalNames.Add(persName);
+                }
 
-                GDMPersonalNamePieces pieces = np.Pieces;
+                GKUtils.SetNameParts(persName, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
+
+                GDMPersonalNamePieces pieces = persName.Pieces;
                 pieces.Nickname = fView.Nickname.Text;
                 pieces.Prefix = fView.NamePrefix.Text;
                 pieces.SurnamePrefix = fView.SurnamePrefix.Text;

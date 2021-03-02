@@ -283,7 +283,7 @@ namespace GDModel
             return xref;
         }
 
-        public int GetId()
+        public long GetId()
         {
             return GEDCOMUtils.GetXRefNumber(XRef);
         }

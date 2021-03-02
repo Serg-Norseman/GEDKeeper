@@ -30,6 +30,7 @@ namespace GDModel.Providers.GEDCOM
 
         gf_Ahnenblatt,
         gf_AncestQuest,
+        gf_Ancestry,
         gf_AGES,
         gf_ALTREE,
         gf_EasyTree,

@@ -176,16 +176,16 @@ namespace GKCore.Lists
             return result.ToString();
         }
 
-        private bool HasPlace()
+        private bool IsMatchesPlace(string fltResidence)
         {
+            if (fltResidence == "*") return true;
+
             bool result = false;
 
-            string fltResidence = ((IndividualListFilter)fFilter).Residence;
             bool hasAddr = GlobalOptions.Instance.PlacesWithAddress;
 
             int num = fRec.Events.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 string place = GKUtils.GetPlaceStr(fRec.Events[i], hasAddr);
                 result = IsMatchesMask(place, fltResidence);
                 if (result) break;
@@ -194,15 +194,14 @@ namespace GKCore.Lists
             return result;
         }
 
-        private bool HasEventVal()
+        private bool IsMatchesEventVal(string fltEventVal)
         {
+            if (fltEventVal == "*") return true;
+
             bool result = false;
 
-            string fltEventVal = ((IndividualListFilter)fFilter).EventVal;
-
             int num = fRec.Events.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 result = IsMatchesMask(fRec.Events[i].StringValue, fltEventVal);
                 if (result) break;
             }
@@ -218,8 +217,8 @@ namespace GKCore.Lists
 
             if ((iFilter.Sex == GDMSex.svUnknown || fRec.Sex == iFilter.Sex)
                 && (IsMatchesMask(buf_fullname, iFilter.Name))
-                && (iFilter.Residence == "*" || HasPlace())
-                && (iFilter.EventVal == "*" || HasEventVal())
+                && (IsMatchesPlace(iFilter.Residence))
+                && (IsMatchesEventVal(iFilter.EventVal))
                 && (!iFilter.PatriarchOnly || fRec.Patriarch))
             {
                 bool isLive = (buf_dd == null);

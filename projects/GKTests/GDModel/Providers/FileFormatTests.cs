@@ -237,7 +237,7 @@ namespace GDModel.Providers
 
                 GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
-                Assert.AreEqual("Test1\r\ntest2\r\ntest3 badline badline badline badline", noteRec1.Lines.Text);
+                Assert.AreEqual("Test1\r\ntest2\r\ntest3\r\nbadline badline badline badline", noteRec1.Lines.Text);
             }
         }
 

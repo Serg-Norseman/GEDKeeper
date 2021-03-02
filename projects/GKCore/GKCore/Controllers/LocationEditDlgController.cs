@@ -85,6 +85,8 @@ namespace GKCore.Controllers
 
             fView.NotesList.ListModel.DataOwner = fLocationRecord;
             fView.MediaList.ListModel.DataOwner = fLocationRecord;
+
+            ShowOnMap();
         }
 
         public GeoPoint GetSelectedGeoPoint()

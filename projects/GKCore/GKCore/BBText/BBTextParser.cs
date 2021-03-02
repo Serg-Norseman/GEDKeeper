@@ -199,6 +199,7 @@ namespace GKCore.BBText
                         lastChunk = SetChunkText(tok.Line, lastChunk, temp + tok.Value);
                     } else {
                         string tag = tok.Value;
+                        bool isTagToken = true;
                         //bool skipTag = false;
 
                         if (tag == "color") {
@@ -291,9 +292,10 @@ namespace GKCore.BBText
                         else {
                             // not tag
                             lastChunk = SetChunkText(tok.Line, lastChunk, temp + tok.Value);
+                            isTagToken = false;
                         }
 
-                        if (tok.Kind != TokenKind.Symbol || tok.Value != "]") {
+                        if (isTagToken && (tok.Kind != TokenKind.Symbol || tok.Value != "]")) {
                             // Possible syntax error?
                             strTok.Next();
                         }

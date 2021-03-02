@@ -50,7 +50,41 @@ namespace GKCore
 
             parser.ParseText(chunksList, sample);
 
+            Assert.AreEqual(13, chunksList.Count);
+            Assert.AreEqual("bold text", chunksList[0].Text);
+            Assert.AreEqual(" ", chunksList[1].Text);
+            Assert.AreEqual("italic", chunksList[2].Text);
+            Assert.AreEqual(" and underline", chunksList[3].Text);
+            Assert.AreEqual(" qq", chunksList[4].Text);
+            Assert.AreEqual(" ", chunksList[5].Text);
+            Assert.AreEqual("strikeout", chunksList[6].Text);
+            Assert.AreEqual(" ", chunksList[7].Text);
+            Assert.AreEqual(" ", chunksList[8].Text); // ???
+            Assert.AreEqual(" ", chunksList[9].Text);
+            Assert.AreEqual("url text", chunksList[10].Text);
+            Assert.AreEqual("", chunksList[11].Text); // ???
+            Assert.AreEqual(" ", chunksList[12].Text); // ???
+
             Assert.IsFalse(chunksList[0].HasCoord(5, 5));
+        }
+
+        [Test]
+        public void Test_DirtySample()
+        {
+            string sample = "[u][b][size=+1]Ingvar [the Mighty][/size][/u][/b]";
+
+            var parser = new BBTextParser(AppHost.GfxProvider, 12.0f,
+                                          new ColorHandler(Color.Blue),
+                                          new ColorHandler(Color.Black));
+
+            List<BBTextChunk> chunksList = new List<BBTextChunk>();
+
+            parser.ParseText(chunksList, sample);
+
+            Assert.AreEqual(3, chunksList.Count);
+            Assert.AreEqual("Ingvar [the Mighty]", chunksList[0].Text);
+            Assert.AreEqual("", chunksList[1].Text); // ???
+            Assert.AreEqual(" ", chunksList[2].Text); // ???
         }
     }
 }

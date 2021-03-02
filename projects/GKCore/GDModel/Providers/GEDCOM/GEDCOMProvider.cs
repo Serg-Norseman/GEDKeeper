@@ -291,7 +291,10 @@ namespace GDModel.Providers.GEDCOM
 
                         // line with text but not in standard tag format
                         if (lineRes == -1) {
-                            if (fTree.Format == GEDCOMFormat.gf_FTB || fTree.Format == GEDCOMFormat.gf_WikiTree) {
+                            if (fTree.Format == GEDCOMFormat.gf_FTB || 
+                                fTree.Format == GEDCOMFormat.gf_WikiTree ||
+                                fTree.Format == GEDCOMFormat.gf_Geni ||
+                                fTree.Format == GEDCOMFormat.gf_Ancestry) {
                                 FixFTBLine(curRecord, curTag, lineNum, tagValue);
                                 continue;
                             } else {
@@ -384,6 +387,10 @@ namespace GDModel.Providers.GEDCOM
                     stack.Push(tuple);
                     curTag = tuple.Tag;
                 }
+            }
+
+            if (curTag == null) {
+                curTag = parentTag;
             }
 
             return curTag;
@@ -2357,20 +2364,20 @@ namespace GDModel.Providers.GEDCOM
         {
             try {
                 if (curTag != null) {
-                    var tagType = curTag.GetTagType();
-
                     if (curTag is IGDMTextObject) {
-                        str = " " + str;
-                        AddTextTag(curTag, 0, (int)GEDCOMTagType.CONC, str);
-                    } else if (tagType == GEDCOMTagType.CONT || tagType == GEDCOMTagType.CONC) {
-                        curTag.StringValue += str;
+                        AddTextTag(curTag, 0, (int)GEDCOMTagType.CONT, str);
                     } else {
-                        AddBaseTag(curTag, 0, (int)GEDCOMTagType.NOTE, str);
+                        var tagType = curTag.GetTagType();
+
+                        if (tagType == GEDCOMTagType.CONT || tagType == GEDCOMTagType.CONC) {
+                            curTag.StringValue += str;
+                        } else {
+                            AddBaseTag(curTag, 0, (int)GEDCOMTagType.NOTE, str);
+                        }
                     }
                 } else if (curRecord != null) {
                     if (curRecord is IGDMTextObject) {
-                        str = " " + str;
-                        AddTextTag(curRecord, 0, (int)GEDCOMTagType.CONC, str);
+                        AddTextTag(curRecord, 0, (int)GEDCOMTagType.CONT, str);
                     } else {
                         AddRecordTag(curRecord, 0, (int)GEDCOMTagType.NOTE, str);
                     }
@@ -2425,6 +2432,7 @@ namespace GDModel.Providers.GEDCOM
                 new GEDCOMAppFormat(GEDCOMFormat.gf_ALTREE, "ALTREE", "Agelong Tree", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.gf_Ahnenblatt, "AHN", "Ahnenblatt", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.gf_AncestQuest, "AncestQuest", "Ancestral Quest", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_Ancestry, "Ancestry.com Family Trees", "WikiTree", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.gf_EasyTree, "EasyTree", "EasyTree", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.gf_FamilyHistorian, "FAMILY_HISTORIAN", "Family Historian", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.gf_FamilyTreeMaker, "FTM", "Family Tree Maker", -1),
