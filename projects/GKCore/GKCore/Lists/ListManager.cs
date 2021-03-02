@@ -203,7 +203,7 @@ namespace GKCore.Lists
         protected bool IsMatchesMask(string str, string mask)
         {
             if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(mask)) {
-                return false;
+                return true;
             }
 
             if (mask == "*") {
@@ -651,6 +651,8 @@ namespace GKCore.Lists
                     Fetch(rec);
                     if (CheckFilter()) {
                         fContentList.Add(new ValItem(rec));
+                    } else {
+                        // filter's debug
                     }
                 }
             }
