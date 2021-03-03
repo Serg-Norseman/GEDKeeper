@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -642,14 +642,14 @@ namespace GKCore
             return Path.GetDirectoryName(treeName) + Path.DirectorySeparatorChar;
         }
 
-        private string GetArcFileName()
+        public string GetArcFileName()
         {
             string treeName = fFileName;
             string result = GetTreePath(treeName) + Path.GetFileNameWithoutExtension(treeName) + ".zip";
             return result;
         }
 
-        private string GetStgFolder(bool create)
+        public string GetStgFolder(bool create)
         {
             string treeName = fFileName;
             string result = GetTreePath(treeName) + Path.GetFileNameWithoutExtension(treeName) + Path.DirectorySeparatorChar;

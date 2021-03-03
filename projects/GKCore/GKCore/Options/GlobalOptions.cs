@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -80,7 +80,7 @@ namespace GKCore.Options
         private bool fEmbeddedMediaPlayer;
         private bool fAllowMediaStoreReferences;
         private bool fAllowMediaStoreRelativeReferences;
-        private int  fMediaStoreDefault;
+        private MediaStoreType fMediaStoreDefault;
         private bool fAllowDeleteMediaFileFromStgArc;
         private bool fAllowDeleteMediaFileFromRefs;
         private bool fDeleteMediaFileWithoutConfirm;
@@ -294,7 +294,7 @@ namespace GKCore.Options
             set { fLoadRecentFiles = value; }
         }
 
-        public int MediaStoreDefault
+        public MediaStoreType MediaStoreDefault
         {
             get { return fMediaStoreDefault; }
             set { fMediaStoreDefault = value; }
@@ -652,7 +652,7 @@ namespace GKCore.Options
             fEmbeddedMediaPlayer = ini.ReadBool("Common", "EmbeddedMediaPlayer", true);
             fAllowMediaStoreReferences = ini.ReadBool("Common", "AllowMediaStoreReferences", false);
             fAllowMediaStoreRelativeReferences = ini.ReadBool("Common", "AllowMediaStoreRelativeReferences", true); // only when AllowMediaStoreReferences is true
-            fMediaStoreDefault = (ushort)ini.ReadInteger("Common", "MediaStoreDefault", 0); // (int)MediaStoreType.mstReference
+            fMediaStoreDefault = (MediaStoreType)ini.ReadInteger("Common", "MediaStoreDefault", 0); // (int)MediaStoreType.mstReference
             fAllowDeleteMediaFileFromStgArc = ini.ReadBool("Common", "AllowDeleteMediaFileFromStgArc", true);
             fAllowDeleteMediaFileFromRefs = ini.ReadBool("Common", "AllowDeleteMediaFileFromRefs", false);
             fDeleteMediaFileWithoutConfirm = ini.ReadBool("Common", "DeleteMediaFileWithoutConfirm", false);
@@ -770,7 +770,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "EmbeddedMediaPlayer", fEmbeddedMediaPlayer);
             ini.WriteBool("Common", "AllowMediaStoreReferences", fAllowMediaStoreReferences);
             ini.WriteBool("Common", "AllowMediaStoreRelativeReferences", fAllowMediaStoreRelativeReferences);
-            ini.WriteInteger("Common", "MediaStoreDefault", fMediaStoreDefault);
+            ini.WriteInteger("Common", "MediaStoreDefault", (int)fMediaStoreDefault);
             ini.WriteBool("Common", "AllowDeleteMediaFileFromStgArc", fAllowDeleteMediaFileFromStgArc);
             ini.WriteBool("Common", "AllowDeleteMediaFileFromRefs", fAllowDeleteMediaFileFromRefs);
             ini.WriteBool("Common", "DeleteMediaFileWithoutConfirm", fDeleteMediaFileWithoutConfirm);

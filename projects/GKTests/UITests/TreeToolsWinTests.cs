@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -83,8 +83,12 @@ namespace GKUI.Forms
             SetModalFormHandler(fFormTest, SaveFile_Cancel_Handler);
             ClickButton("btnSave", form);
 
-            SetModalFormHandler(fFormTest, SaveFileGED_Handler);
-            ClickButton("btnSave", form);
+            try {
+                SetModalFormHandler(fFormTest, SaveFileGED_Handler);
+                ClickButton("btnSave", form);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.ged"));
+            }
 
             form.Close();
         }

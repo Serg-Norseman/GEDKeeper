@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -608,7 +608,9 @@ namespace GKCore.Controllers
         public IList<ISearchResult> FindAll(string searchPattern)
         {
             GDMRecordType rt = GetSelectedRecordType();
-            IList<ISearchResult> result = fContext.FindAll(rt, searchPattern);
+            IListManager listMan = GetRecordsListManByType(rt);
+            IList<ISearchResult> result = listMan.FindAll(searchPattern);
+            //IList<ISearchResult> result = fContext.FindAll(rt, searchPattern);
             return result;
         }
 

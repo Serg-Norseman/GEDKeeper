@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -338,6 +338,21 @@ namespace GDModel.Providers
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_geni.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Geni, ctx.Tree.Format);
+            }
+        }
+
+        [Test]
+        public void Test_Geni_Badlines()
+        {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_geni_badlines.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_Geni, ctx.Tree.Format);
+
+                var iRec1 = ctx.Tree.XRefIndex_Find("I500000006275123389") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+
+                Assert.AreEqual(1, iRec1.Notes.Count);
+                var note = iRec1.Notes[0];
+                Assert.AreEqual("{geni:about_me} '''Jane Doe'''\r\nBirth at 1955, Raccoon City; \r\n\r\n\r\nbadline 1\r\nbadline 2\r\nbadline 3", note.Lines.Text);
             }
         }
 

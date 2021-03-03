@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -146,7 +146,11 @@ namespace Externals
                     gvw.WriteEdge(edg.Source.Sign, edg.Target.Sign);
                 }
 
-                gvw.SaveFile(fileName);
+                try {
+                    gvw.SaveFile(fileName);
+                } finally {
+                    TestUtils.RemoveTestFile(fileName);
+                }
             }
         }
     }

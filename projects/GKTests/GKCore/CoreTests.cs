@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -323,8 +323,12 @@ namespace GKCore
                 Assert.AreEqual(GDMSex.svFemale, sex);
 
                 string namesFile = TestUtils.GetTempFilePath("names.txt");
-                namesTable.SaveToFile(namesFile);
-                namesTable.LoadFromFile(namesFile);
+                try {
+                    namesTable.SaveToFile(namesFile);
+                    namesTable.LoadFromFile(namesFile);
+                } finally {
+                    TestUtils.RemoveTestFile(namesFile);
+                }
             }
         }
 

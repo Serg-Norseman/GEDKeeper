@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -246,11 +246,18 @@ namespace GKCore
         {
             string sourFile = TestUtils.PrepareTestFile("test1.ged");
             string destFile = TestUtils.GetTempFilePath("test11.ged");
+            string restoreFile = Path.ChangeExtension(destFile, ".restore");
 
-            using (BaseContext ctx = new BaseContext(null)) {
-                ctx.FileLoad(sourFile);
-                ctx.FileSave(destFile);
-                ctx.CriticalSave();
+            try {
+                using (BaseContext ctx = new BaseContext(null)) {
+                    ctx.FileLoad(sourFile);
+                    ctx.FileSave(destFile);
+                    ctx.CriticalSave();
+                }
+            } finally {
+                TestUtils.RemoveTestFile(sourFile);
+                TestUtils.RemoveTestFile(destFile);
+                TestUtils.RemoveTestFile(restoreFile);
             }
         }
 
@@ -258,44 +265,53 @@ namespace GKCore
         public void Test_MediaLoadSave()
         {
             string sourFile = TestUtils.PrepareTestFile("shaytan_plant.jpg");
-
             string gedFile = TestUtils.GetTempFilePath("test_mm.ged");
+            string stgDirectory = string.Empty, arcFileName = string.Empty;
 
-            using (BaseContext ctx = new BaseContext(null)) {
-                Assert.IsTrue(ctx.IsUnknown());
+            try {
+                using (BaseContext ctx = new BaseContext(null)) {
+                    Assert.IsTrue(ctx.IsUnknown());
 
-                Assert.AreEqual(false, ctx.MediaSave(null, "", MediaStoreType.mstReference));
-                Assert.AreEqual(null, ctx.LoadMediaImage(null, false));
-                Assert.AreEqual(null, ctx.LoadMediaImage(null, 0, 0, ExtRect.Empty, false));
-                Assert.AreEqual(null, ctx.GetPrimaryBitmap(null, 0, 0, false));
-                Assert.AreEqual(null, ctx.GetPrimaryBitmapUID(null));
+                    Assert.AreEqual(false, ctx.MediaSave(null, "", MediaStoreType.mstReference));
+                    Assert.AreEqual(null, ctx.LoadMediaImage(null, false));
+                    Assert.AreEqual(null, ctx.LoadMediaImage(null, 0, 0, ExtRect.Empty, false));
+                    Assert.AreEqual(null, ctx.GetPrimaryBitmap(null, 0, 0, false));
+                    Assert.AreEqual(null, ctx.GetPrimaryBitmapUID(null));
 
-                ctx.FileSave(gedFile);
-                Assert.AreEqual(true, ctx.CheckBasePath()); // need path for archive and storage
+                    ctx.FileSave(gedFile);
+                    Assert.AreEqual(true, ctx.CheckBasePath()); // need path for archive and storage
 
-                var mmRecR = new GDMMultimediaRecord(ctx.Tree);
-                mmRecR.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecR));
-                Assert.AreEqual(true, ctx.MediaSave(mmRecR.FileReferences[0], sourFile, MediaStoreType.mstReference));
-                Assert.IsNotNull(ctx.LoadMediaImage(mmRecR.FileReferences[0], false));
-                Assert.IsNotNull(ctx.MediaLoad(mmRecR.FileReferences[0]));
+                    var mmRecR = new GDMMultimediaRecord(ctx.Tree);
+                    mmRecR.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecR));
+                    Assert.AreEqual(true, ctx.MediaSave(mmRecR.FileReferences[0], sourFile, MediaStoreType.mstReference));
+                    Assert.IsNotNull(ctx.LoadMediaImage(mmRecR.FileReferences[0], false));
+                    Assert.IsNotNull(ctx.MediaLoad(mmRecR.FileReferences[0]));
 
-                var mmRecA = new GDMMultimediaRecord(ctx.Tree);
-                mmRecA.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecA));
-                Assert.AreEqual(true, ctx.MediaSave(mmRecA.FileReferences[0], sourFile, MediaStoreType.mstArchive));
-                Assert.IsNotNull(ctx.LoadMediaImage(mmRecA.FileReferences[0], false));
-                Assert.IsNotNull(ctx.MediaLoad(mmRecA.FileReferences[0]));
+                    var mmRecA = new GDMMultimediaRecord(ctx.Tree);
+                    mmRecA.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecA));
+                    Assert.AreEqual(true, ctx.MediaSave(mmRecA.FileReferences[0], sourFile, MediaStoreType.mstArchive));
+                    Assert.IsNotNull(ctx.LoadMediaImage(mmRecA.FileReferences[0], false));
+                    Assert.IsNotNull(ctx.MediaLoad(mmRecA.FileReferences[0]));
+                    arcFileName = ctx.GetArcFileName();
 
-                var mmRecS = new GDMMultimediaRecord(ctx.Tree);
-                mmRecS.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecS));
-                Assert.AreEqual(true, ctx.MediaSave(mmRecS.FileReferences[0], sourFile, MediaStoreType.mstStorage));
-                Assert.IsNotNull(ctx.LoadMediaImage(mmRecS.FileReferences[0], false));
-                Assert.IsNotNull(ctx.MediaLoad(mmRecS.FileReferences[0]));
+                    var mmRecS = new GDMMultimediaRecord(ctx.Tree);
+                    mmRecS.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecS));
+                    Assert.AreEqual(true, ctx.MediaSave(mmRecS.FileReferences[0], sourFile, MediaStoreType.mstStorage));
+                    Assert.IsNotNull(ctx.LoadMediaImage(mmRecS.FileReferences[0], false));
+                    Assert.IsNotNull(ctx.MediaLoad(mmRecS.FileReferences[0]));
+                    stgDirectory = ctx.GetStgFolder(false);
 
-                var mmRecRl = new GDMMultimediaRecord(ctx.Tree);
-                mmRecRl.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecRl));
-                Assert.AreEqual(true, ctx.MediaSave(mmRecRl.FileReferences[0], sourFile, MediaStoreType.mstRelativeReference));
-                Assert.IsNotNull(ctx.LoadMediaImage(mmRecRl.FileReferences[0], false));
-                Assert.IsNotNull(ctx.MediaLoad(mmRecRl.FileReferences[0]));
+                    var mmRecRl = new GDMMultimediaRecord(ctx.Tree);
+                    mmRecRl.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecRl));
+                    Assert.AreEqual(true, ctx.MediaSave(mmRecRl.FileReferences[0], sourFile, MediaStoreType.mstRelativeReference));
+                    Assert.IsNotNull(ctx.LoadMediaImage(mmRecRl.FileReferences[0], false));
+                    Assert.IsNotNull(ctx.MediaLoad(mmRecRl.FileReferences[0]));
+                }
+            } finally {
+                TestUtils.RemoveTestFile(sourFile);
+                TestUtils.RemoveTestFile(gedFile);
+                TestUtils.RemoveTestFile(arcFileName);
+                TestUtils.RemoveTestDirectory(stgDirectory);
             }
         }
 
@@ -309,10 +325,15 @@ namespace GKCore
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
 
                     string tempFileName = TestUtils.GetTempFilePath("test.geds");
-                    ctx.SaveToSecFile(tempFileName, GEDCOMCharacterSet.csASCII, "test");
 
-                    using (var ctx2 = new BaseContext(null)) {
-                        ctx2.LoadFromSecFile(tempFileName, "test");
+                    try {
+                        ctx.SaveToSecFile(tempFileName, GEDCOMCharacterSet.csASCII, "test");
+
+                        using (var ctx2 = new BaseContext(null)) {
+                            ctx2.LoadFromSecFile(tempFileName, "test");
+                        }
+                    } finally {
+                        TestUtils.RemoveTestFile(tempFileName);
                     }
                 }
             }

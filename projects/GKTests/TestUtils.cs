@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -229,6 +229,22 @@ namespace GKTests
             }
 
             return fileName;
+        }
+
+        public static void RemoveTestFile(string fileName)
+        {
+            try {
+                File.Delete(fileName);
+            } catch (Exception) {
+            }
+        }
+
+        public static void RemoveTestDirectory(string dirName)
+        {
+            try {
+                Directory.Delete(dirName, true);
+            } catch (Exception) {
+            }
         }
 
         public static IBaseContext LoadResourceGEDCOMFile(string resName)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -110,7 +110,9 @@ namespace GKCore.Controllers
             fView.File.Text = fileRef.StringValue;
 
             if (fIsNew) {
-                RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, true, GlobalOptions.Instance.AllowMediaStoreRelativeReferences, (MediaStoreType)GlobalOptions.Instance.MediaStoreDefault);
+                RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, true,
+                                  GlobalOptions.Instance.AllowMediaStoreRelativeReferences,
+                                  GlobalOptions.Instance.MediaStoreDefault);
             } else {
                 MediaStore mediaStore = fBase.Context.GetStoreType(fileRef);
                 RefreshStoreTypes((mediaStore.StoreType == MediaStoreType.mstReference),
@@ -164,7 +166,9 @@ namespace GKCore.Controllers
 
             fView.File.Text = fileName;
             bool canArc = GKUtils.FileCanBeArchived(fileName);
-            RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, canArc, GlobalOptions.Instance.AllowMediaStoreRelativeReferences, MediaStoreType.mstReference);
+            RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, canArc,
+                              GlobalOptions.Instance.AllowMediaStoreRelativeReferences,
+                              GlobalOptions.Instance.MediaStoreDefault);
             fView.StoreType.Enabled = true;
         }
 

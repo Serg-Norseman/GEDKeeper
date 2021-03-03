@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -144,15 +144,23 @@ namespace GKUI.Forms
             //ClickToolStripMenuItem("miFillImage", tcWin);
             //ClickToolStripMenuItem("miRebuildTree", tcWin);
 
-            formTest.ModalFormHandler = SaveFileJPG_Handler;
-            ClickToolStripButton("tbImageSave", tcWin);
+            try {
+                formTest.ModalFormHandler = SaveFileJPG_Handler;
+                ClickToolStripButton("tbImageSave", tcWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.jpg"));
+            }
 
             // FIXME exception!
             //ModalFormHandler = SaveSnapshotEMF_Handler;
             //ClickToolStripButton("tbImageSave", tcWin);
 
-            formTest.ModalFormHandler = SaveFileSVG_Handler;
-            ClickToolStripButton("tbImageSave", tcWin);
+            try {
+                formTest.ModalFormHandler = SaveFileSVG_Handler;
+                ClickToolStripButton("tbImageSave", tcWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.svg"));
+            }
 
             //ModalFormHandler = PrintPreviewDialog_Handler;
             //ClickToolStripButton("tbDocPrint", fMainWin);

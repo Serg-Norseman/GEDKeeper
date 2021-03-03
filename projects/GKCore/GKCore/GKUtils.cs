@@ -242,6 +242,17 @@ namespace GKCore
             return result;
         }
 
+        public static Tuple<string, string> GenRecordLinkTuple(GDMRecord record, bool signed)
+        {
+            if (record != null) {
+                string recName = GetRecordName(record, signed);
+                string recLink = HyperLink(record.XRef, recName, 0);
+                return new Tuple<string, string>(recName, recLink);
+            } else {
+                return new Tuple<string, string>(string.Empty, string.Empty);
+            }
+        }
+
         public static string GetCorresponderStr(GDMTree tree, GDMCommunicationRecord commRec, bool aLink)
         {
             if (tree == null)
@@ -2253,8 +2264,8 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_RPSources) + ":");
 
+                        var sortedSources = new List<Tuple<string, string>>();
                         GDMTree tree = repositoryRec.GetTree();
-
                         int num = tree.RecordsCount;
                         for (int i = 0; i < num; i++) {
                             GDMRecord rec = tree[i];
@@ -2265,10 +2276,14 @@ namespace GKCore
                                 int num2 = srcRec.RepositoryCitations.Count;
                                 for (int j = 0; j < num2; j++) {
                                     if (srcRec.RepositoryCitations[j].Value == repositoryRec) {
-                                        summary.Add("    " + GenRecordLink(srcRec, false));
+                                        sortedSources.Add(GenRecordLinkTuple(srcRec, false));
                                     }
                                 }
                             }
+                        }
+                        sortedSources.Sort();
+                        foreach (var tpl in sortedSources) {
+                            summary.Add("    " + tpl.Item2);
                         }
 
                         RecListNotesRefresh(repositoryRec, summary);

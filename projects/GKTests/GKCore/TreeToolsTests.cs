@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -250,7 +250,11 @@ namespace GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GenPatriarchsGraphviz(null, "", 0, false); });
 
             string filename = TestUtils.GetTempFilePath("test.gvf");
-            TreeTools.GenPatriarchsGraphviz(fBaseWin, filename, 0, false);
+            try {
+                TreeTools.GenPatriarchsGraphviz(fBaseWin, filename, 0, false);
+            } finally {
+                TestUtils.RemoveTestFile(filename);
+            }
         }
 
         [Test]

@@ -634,6 +634,7 @@
             // miSearch
             // 
             this.miSearch.Name = "miSearch";
+            this.miSearch.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             this.miSearch.Size = new System.Drawing.Size(235, 24);
             this.miSearch.Text = "miSearch";
             this.miSearch.Click += new System.EventHandler(this.miSearch_Click);

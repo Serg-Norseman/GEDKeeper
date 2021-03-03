@@ -38,6 +38,7 @@ namespace GKUI
     /// The main implementation of the platform-specific application's host for
     /// WinForms.
     /// </summary>
+    [Serializable]
     public sealed class WFAppHost : AppHost
     {
         #if CI_MODE

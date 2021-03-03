@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,7 +28,6 @@ using System.Windows.Forms;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using GDModel;
-using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKTests;
@@ -153,35 +152,35 @@ namespace GKUI.Forms
         [Test]
         public void Test_Video()
         {
-            string targetName = TestUtils.GetTempFilePath("test_video.3gp");
+            string targetName = TestUtils.PrepareTestFile("test_video.3gp");
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            Stream vidstm = assembly.GetManifestResourceStream("GKTests.Resources.test_video.3gp");
+            try {
+                Assert.IsTrue(File.Exists(targetName));
 
-            GKUtils.CopyFile(vidstm, new FileInfo(targetName), null);
-            Assert.IsTrue(File.Exists(targetName));
+                GDMMultimediaRecord mmRecV = fBase.Context.Tree.CreateMultimedia();
+                mmRecV.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecV));
+                var fileRefV = mmRecV.FileReferences[0];
 
-            GDMMultimediaRecord mmRecV = fBase.Context.Tree.CreateMultimedia();
-            mmRecV.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecV));
-            var fileRefV = mmRecV.FileReferences[0];
+                fileRefV.Title = "File Title 2";
+                fileRefV.LinkFile(targetName);
+                fileRefV.MediaType = GDMMediaType.mtVideo;
+                fileRefV.MultimediaFormat = GDMMultimediaFormat.mfMKV;
 
-            fileRefV.Title = "File Title 2";
-            fileRefV.LinkFile(targetName);
-            fileRefV.MediaType = GDMMediaType.mtVideo;
-            fileRefV.MultimediaFormat = GDMMultimediaFormat.mfMKV;
+                fDialog.FileRef = fileRefV;
+                Assert.AreEqual(fileRefV, fDialog.FileRef);
 
-            fDialog.FileRef = fileRefV;
-            Assert.AreEqual(fileRefV, fDialog.FileRef);
+                fDialog.SetViewMedia(targetName);
+                fDialog.Refresh();
 
-            fDialog.SetViewMedia(targetName);
-            fDialog.Refresh();
+                ClickButton("btnPlay", fDialog);
+                ClickButton("btnPause", fDialog);
+                ClickButton("btnMute", fDialog);
+                ClickButton("btnStop", fDialog);
 
-            ClickButton("btnPlay", fDialog);
-            ClickButton("btnPause", fDialog);
-            ClickButton("btnMute", fDialog);
-            ClickButton("btnStop", fDialog);
-
-            KeyDownForm(fDialog.Name, Keys.Escape);
+                KeyDownForm(fDialog.Name, Keys.Escape);
+            } finally {
+                TestUtils.RemoveTestFile(targetName);
+            }
         }
         #endif
     }

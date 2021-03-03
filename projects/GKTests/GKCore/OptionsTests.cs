@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -170,8 +170,12 @@ namespace GKCore
                 Assert.Throws(typeof(ArgumentNullException), () => { globalOptions.LoadFromFile(iniFN); });
 
                 iniFN = TestUtils.GetTempFilePath("options.ini");
-                globalOptions.SaveToFile(iniFN);
-                globalOptions.LoadFromFile(iniFN);
+                try {
+                    globalOptions.SaveToFile(iniFN);
+                    globalOptions.LoadFromFile(iniFN);
+                } finally {
+                    TestUtils.RemoveTestFile(iniFN);
+                }
 
 
                 MRUFile mruFile = new MRUFile();

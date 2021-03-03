@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -751,6 +751,7 @@ namespace GKUI.Components
 
                         if (ctl != null) {
                             fMode = ChartControlMode.ControlsVisible;
+                            ctl.UpdateState();
                             ctl.Visible = true;
                             ctl.MouseMove(e.X, e.Y);
                             fActiveControl = ctl;

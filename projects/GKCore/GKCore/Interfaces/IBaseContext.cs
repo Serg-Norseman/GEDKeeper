@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -64,6 +64,8 @@ namespace GKCore.Interfaces
         IList<ISearchResult> FindAll(GDMRecordType recordType, string searchPattern);
 
         // Multimedia support
+        string GetArcFileName();
+        string GetStgFolder(bool create);
         bool CheckBasePath();
         MediaStore GetStoreType(GDMFileReference fileReference);
         Stream MediaLoad(GDMFileReference fileReference, bool throwException);

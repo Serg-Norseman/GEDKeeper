@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -212,11 +212,19 @@ namespace GKUI.Forms
             // Stage 22-24: call to exports
             Exporter.TEST_MODE = true;
 
-            ModalFormHandler = SaveFilePDF_Handler;
-            ClickToolStripMenuItem("miExportToFamilyBook", fMainWin);
+            try {
+                ModalFormHandler = SaveFilePDF_Handler;
+                ClickToolStripMenuItem("miExportToFamilyBook", fMainWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.pdf"));
+            }
 
-            ModalFormHandler = SaveFileXLS_Handler;
-            ClickToolStripMenuItem("miExportToExcelFile", fMainWin);
+            try {
+                ModalFormHandler = SaveFileXLS_Handler;
+                ClickToolStripMenuItem("miExportToExcelFile", fMainWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.xls"));
+            }
 
             GeneratePedigree_Tests("Stage 24");
 
@@ -421,15 +429,27 @@ namespace GKUI.Forms
 
         private void GeneratePedigree(string stage, string menuItem)
         {
-            ModalFormHandler = SaveFileHTML_Handler;
-            ClickToolStripMenuItem(menuItem, fMainWin);
+            try {
+                ModalFormHandler = SaveFileHTML_Handler;
+                ClickToolStripMenuItem(menuItem, fMainWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.html"));
+            }
 
-            ModalFormHandler = SaveFileRTF_Handler;
-            ClickToolStripMenuItem(menuItem, fMainWin);
+            try {
+                ModalFormHandler = SaveFileRTF_Handler;
+                ClickToolStripMenuItem(menuItem, fMainWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.rtf"));
+            }
 
             #if !__MonoCS__
-            ModalFormHandler = SaveFilePDF_Handler;
-            ClickToolStripMenuItem(menuItem, fMainWin);
+            try {
+                ModalFormHandler = SaveFilePDF_Handler;
+                ClickToolStripMenuItem(menuItem, fMainWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.pdf"));
+            }
             #endif
         }
 

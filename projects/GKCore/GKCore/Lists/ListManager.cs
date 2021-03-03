@@ -28,6 +28,7 @@ using GDModel;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKCore.Search;
 using GKCore.Types;
 
 using BSDColors = BSLib.Design.BSDConsts.Colors;
@@ -814,6 +815,25 @@ namespace GKCore.Lists
             }
 
             return idx;
+        }
+
+        public IList<ISearchResult> FindAll(string searchPattern)
+        {
+            List<ISearchResult> result = new List<ISearchResult>();
+
+            Regex regex = GKUtils.InitMaskRegex(searchPattern);
+
+            int num = fContentList.Count;
+            for (int i = 0; i < num; i++) {
+                GDMRecord rec = fContentList[i].Record;
+
+                string recName = GKUtils.GetRecordName(rec, false);
+                if (GKUtils.MatchesRegex(recName, regex)) {
+                    result.Add(new SearchResult(rec));
+                }
+            }
+
+            return result;
         }
     }
 }
