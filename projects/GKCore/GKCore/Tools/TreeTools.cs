@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -883,80 +883,113 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRelations_CheckRecord(List<GDMRecord> splitList, GDMRecord rec)
+        private static void CheckRelations_CheckNotes(List<GDMRecord> splitList, IGDMStructWithNotes tag)
         {
-            for (int i = 0, num = rec.MultimediaLinks.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, rec.MultimediaLinks[i].Value);
-            }
+            if (tag == null) return;
 
-            for (int i = 0, num = rec.Notes.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, rec.Notes[i].Value);
-            }
-
-            for (int i = 0, num = rec.SourceCitations.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, rec.SourceCitations[i].Value);
+            for (int i = 0, num = tag.Notes.Count; i < num; i++) {
+                CheckRelations_CheckRecord(splitList, tag.Notes[i].Value);
             }
         }
 
-        private static void CheckRelations_CheckTag(List<GDMRecord> splitList, GDMTagWithLists tag)
+        private static void CheckRelations_CheckSourceCit(List<GDMRecord> splitList, IGDMStructWithSourceCitations tag)
         {
-            for (int i = 0, num = tag.MultimediaLinks.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, tag.MultimediaLinks[i].Value);
-            }
-
-            for (int i = 0, num = tag.Notes.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, tag.Notes[i].Value);
-            }
+            if (tag == null) return;
 
             for (int i = 0, num = tag.SourceCitations.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, tag.SourceCitations[i].Value);
+                CheckRelations_CheckRecord(splitList, tag.SourceCitations[i].Value);
             }
+        }
+
+        private static void CheckRelations_CheckMediaLink(List<GDMRecord> splitList, IGDMStructWithMultimediaLinks tag)
+        {
+            if (tag == null) return;
+
+            for (int i = 0, num = tag.MultimediaLinks.Count; i < num; i++) {
+                CheckRelations_CheckRecord(splitList, tag.MultimediaLinks[i].Value);
+            }
+        }
+
+        private static void CheckRelations_CheckSWL(List<GDMRecord> splitList, IGDMStructWithLists tag)
+        {
+            if (tag == null) return;
+
+            CheckRelations_CheckNotes(splitList, tag);
+            CheckRelations_CheckSourceCit(splitList, tag);
+            CheckRelations_CheckMediaLink(splitList, tag);
+        }
+
+        private static void CheckRelations_CheckRecord(List<GDMRecord> splitList, GDMRecord rec)
+        {
+            if (rec == null) return;
+
+            CheckRelations_CheckSWL(splitList, rec);
         }
 
         private static void CheckRelations_CheckIndividual(List<GDMRecord> splitList, GDMIndividualRecord iRec)
         {
+            if (iRec == null) return;
+
             CheckRelations_CheckRecord(splitList, iRec);
 
             for (int i = 0, num = iRec.ChildToFamilyLinks.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, iRec.ChildToFamilyLinks[i].Family);
+                var cfl = iRec.ChildToFamilyLinks[i];
+                CheckRelations_CheckNotes(splitList, cfl);
+                CheckRelations_CheckFamily(splitList, cfl.Family);
             }
 
             for (int i = 0, num = iRec.SpouseToFamilyLinks.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, iRec.SpouseToFamilyLinks[i].Family);
+                var sfl = iRec.SpouseToFamilyLinks[i];
+                CheckRelations_CheckNotes(splitList, sfl);
+                CheckRelations_CheckFamily(splitList, sfl.Family);
             }
 
             for (int i = 0, num = iRec.Events.Count; i < num; i++) {
-                CheckRelations_CheckTag(splitList, iRec.Events[i]);
+                CheckRelations_CheckSWL(splitList, iRec.Events[i]);
             }
 
             for (int i = 0, num = iRec.Associations.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, iRec.Associations[i].Value);
+                var asso = iRec.Associations[i];
+                CheckRelations_CheckNotes(splitList, asso);
+                CheckRelations_CheckSourceCit(splitList, asso);
+                CheckRelations_CheckIndividual(splitList, asso.Individual);
             }
 
             for (int i = 0, num = iRec.Aliases.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, iRec.Aliases[i].Value);
+                CheckRelations_CheckRecord(splitList, iRec.Aliases[i].Value);
             }
 
             for (int i = 0, num = iRec.Groups.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, iRec.Groups[i].Value);
+                CheckRelations_CheckRecord(splitList, iRec.Groups[i].Value);
             }
         }
 
         private static void CheckRelations_CheckFamily(List<GDMRecord> splitList, GDMFamilyRecord fRec)
         {
+            if (fRec == null) return;
+
             CheckRelations_CheckRecord(splitList, fRec);
 
+            CheckRelations_CheckRecord(splitList, fRec.Husband.Value);
+            CheckRelations_CheckRecord(splitList, fRec.Wife.Value);
+
+            for (int i = 0, num = fRec.Children.Count; i < num; i++) {
+                CheckRelations_CheckRecord(splitList, fRec.Children[i].Value);
+            }
+
             for (int i = 0, num = fRec.Events.Count; i < num; i++) {
-                CheckRelations_CheckTag(splitList, fRec.Events[i]);
+                CheckRelations_CheckSWL(splitList, fRec.Events[i]);
             }
         }
 
         private static void CheckRelations_CheckSource(List<GDMRecord> splitList, GDMSourceRecord sRec)
         {
+            if (sRec == null) return;
+
             CheckRelations_CheckRecord(splitList, sRec);
 
             for (int i = 0, num = sRec.RepositoryCitations.Count; i < num; i++) {
-                CheckRelations_AddRel(splitList, sRec.RepositoryCitations[i].Value);
+                CheckRelations_CheckRecord(splitList, sRec.RepositoryCitations[i].Value);
             }
         }
 

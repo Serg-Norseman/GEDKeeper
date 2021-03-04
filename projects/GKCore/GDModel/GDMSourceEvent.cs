@@ -22,7 +22,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMSourceEvent : GDMTag
+    public sealed class GDMSourceEvent : GDMValueTag
     {
         private GDMDatePeriod fDate;
         private GDMPlace fPlace;

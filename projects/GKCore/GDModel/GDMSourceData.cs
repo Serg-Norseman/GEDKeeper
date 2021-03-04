@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,10 +22,11 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMSourceData : GDMTagWithLists
+    public sealed class GDMSourceData : GDMTag, IGDMStructWithNotes
     {
         private string fAgency;
         private GDMList<GDMSourceEvent> fEvents;
+        private GDMList<GDMNotes> fNotes;
 
 
         public string Agency
@@ -39,6 +40,11 @@ namespace GDModel
             get { return fEvents; }
         }
 
+        public GDMList<GDMNotes> Notes
+        {
+            get { return fNotes; }
+        }
+
 
         public GDMSourceData(GDMObject owner) : base(owner)
         {
@@ -46,12 +52,14 @@ namespace GDModel
 
             fAgency = string.Empty;
             fEvents = new GDMList<GDMSourceEvent>(this);
+            fNotes = new GDMList<GDMNotes>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
                 fEvents.Dispose();
+                fNotes.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -61,17 +69,32 @@ namespace GDModel
             base.Clear();
             fAgency = string.Empty;
             fEvents.Clear();
+            fNotes.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fEvents.Count == 0) && string.IsNullOrEmpty(fAgency);
+            return base.IsEmpty() && (fEvents.Count == 0) && string.IsNullOrEmpty(fAgency) && (fNotes.Count == 0);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
             fEvents.ReplaceXRefs(map);
+            fNotes.ReplaceXRefs(map);
+        }
+
+        public GDMNotes AddNote(GDMNoteRecord noteRec)
+        {
+            GDMNotes note = null;
+            
+            if (noteRec != null) {
+                note = new GDMNotes(this);
+                note.Value = noteRec;
+                fNotes.Add(note);
+            }
+            
+            return note;
         }
     }
 }

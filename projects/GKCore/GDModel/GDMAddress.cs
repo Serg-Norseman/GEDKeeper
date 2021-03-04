@@ -23,7 +23,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMAddress : GDMValueTag
+    public sealed class GDMAddress : GDMTag
     {
         private GDMLines fLines;
         private string fAddressLine1;

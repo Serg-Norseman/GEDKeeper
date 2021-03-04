@@ -69,7 +69,7 @@ namespace GEDmill
             }
             GDMPersonalName pns = record.PersonalNames[n];
             NameAndSource nas = new NameAndSource(pns.StringValue);
-            nas.Sources.AddRange(pns.Pieces.SourceCitations);
+            nas.Sources.AddRange(pns.SourceCitations);
             return nas;
         }
 
@@ -174,7 +174,7 @@ namespace GEDmill
 
             // Restrict sources connected with name
             foreach (GDMPersonalName pns in iRec.PersonalNames) {
-                foreach (GDMSourceCitation sc in pns.Pieces.SourceCitations) {
+                foreach (GDMSourceCitation sc in pns.SourceCitations) {
                     RestrictSource(sc, true);
                 }
             }

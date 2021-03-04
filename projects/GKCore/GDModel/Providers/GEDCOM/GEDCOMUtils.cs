@@ -784,9 +784,17 @@ namespace GDModel.Providers.GEDCOM
 
         public static string ParseName(string strValue, GDMPersonalName persName)
         {
-            string firstPart = string.Empty;
-            string surname = string.Empty;
-            string lastPart = string.Empty;
+            string firstPart, surname, lastPart;
+            string result = ParseName(strValue, out firstPart, out surname, out lastPart);
+            persName.SetNameParts(firstPart, surname, lastPart);
+            return result;
+        }
+
+        public static string ParseName(string strValue, out string firstPart, out string surname, out string lastPart)
+        {
+            firstPart = string.Empty;
+            surname = string.Empty;
+            lastPart = string.Empty;
 
             if (strValue == null) {
                 return string.Empty;
@@ -826,9 +834,34 @@ namespace GDModel.Providers.GEDCOM
                 lastPart = new string(strChars, ss, strLen - ss);
             }
 
-            persName.SetNameParts(firstPart, surname, lastPart);
-
             return string.Empty;
+        }
+
+        public static string GetFullName(string firstPart, string surname, string lastPart)
+        {
+            string result = firstPart;
+            if (!string.IsNullOrEmpty(surname)) {
+                result += " " + surname;
+
+                if (!string.IsNullOrEmpty(lastPart)) {
+                    result += " " + lastPart;
+                }
+            }
+            return result;
+        }
+
+        // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
+        public static string GetNameTagValue(string firstPart, string surname, string lastPart)
+        {
+            string result = firstPart;
+            if (!string.IsNullOrEmpty(surname)) {
+                result += " /" + surname + "/";
+
+                if (!string.IsNullOrEmpty(lastPart)) {
+                    result += " " + lastPart;
+                }
+            }
+            return result;
         }
 
         /// <summary>

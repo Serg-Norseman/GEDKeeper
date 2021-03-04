@@ -131,13 +131,12 @@ namespace GDModel
 
         protected override string GetStringValue()
         {
-            string result = IsPointer ? base.GetStringValue() : fStringValue;
+            string result = IsPointer ? base.GetStringValue() : string.Empty;
             return result;
         }
 
         public override string ParseString(string strValue)
         {
-            fStringValue = string.Empty;
             return base.ParseString(strValue);
         }
 

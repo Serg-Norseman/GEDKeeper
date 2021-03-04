@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -98,6 +98,18 @@ namespace GDModel
                 customEvent.Address.AddressLine1 = "adr1";
                 customEvent.Restriction = GDMRestriction.rnConfidential;
 
+                var note = new GDMNotes(customEvent);
+                note.Lines.Text = "event notes";
+                customEvent.Notes.Add(note);
+
+                var sourCit = new GDMSourceCitation(customEvent);
+                sourCit.Description.Text = "event sour desc";
+                customEvent.SourceCitations.Add(sourCit);
+
+                var mmLink = new GDMMultimediaLink(customEvent);
+                mmLink.Title = "event media title";
+                customEvent.MultimediaLinks.Add(mmLink);
+
                 using (GDMIndividualEvent copyEvent = new GDMIndividualEvent(null)) {
                     Assert.IsNotNull(copyEvent);
                     copyEvent.Assign(customEvent);
@@ -112,7 +124,11 @@ namespace GDModel
                                     "1 CAUS Cause\r\n" +
                                     "1 AGNC Agency\r\n" +
                                     "1 RELI rel_aff\r\n" +
-                                    "1 RESN confidential\r\n", buf1);
+                                    "1 RESN confidential\r\n" +
+                                    "1 NOTE event notes\r\n"+
+                                    "1 SOUR event sour desc\r\n"+
+                                    "1 OBJE\r\n"+
+                                    "2 TITL event media title\r\n", buf1);
                 }
 
                 customEvent.Address.AddEmailAddress("email");

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,31 +20,27 @@
 
 using System;
 using GDModel;
+using GKTests;
 using NUnit.Framework;
 
 namespace GDModel
 {
     [TestFixture]
-    public class GDMTagWithListsTests
+    public class GDMPlaceTests
     {
         [Test]
-        public void Test_GEDCOMTagWithLists()
+        public void Test_Common()
         {
-            // GDMTagWithLists protected class, derived - GDMPlace
-            using (GDMPlace tag = new GDMPlace(null)) {
-                Assert.IsNotNull(tag);
+            using (GDMPlace place = new GDMPlace(null)) {
+                Assert.IsNotNull(place);
 
-                Assert.IsNotNull(tag.Notes);
-                Assert.IsNotNull(tag.SourceCitations);
-                Assert.IsNotNull(tag.MultimediaLinks);
+                var note = new GDMNotes(place);
+                note.Lines.Text = "place notes";
+                place.Notes.Add(note);
 
-                Assert.IsNull(tag.AddNote(null));
-                Assert.IsNull(tag.AddSource(null, "page", 1));
-                Assert.IsNull(tag.AddMultimedia(null));
-
-                Assert.IsNotNull(tag.AddNote(new GDMNoteRecord(null)));
-                Assert.IsNotNull(tag.AddSource(new GDMSourceRecord(null), "page", 1));
-                Assert.IsNotNull(tag.AddMultimedia(new GDMMultimediaRecord(null)));
+                string buf1 = TestUtils.GetTagStreamText(place, 0);
+                Assert.AreEqual("0 PLAC\r\n" +
+                                "1 NOTE place notes\r\n", buf1);
             }
         }
     }

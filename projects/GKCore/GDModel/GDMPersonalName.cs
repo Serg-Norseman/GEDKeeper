@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -37,7 +37,7 @@ namespace GDModel
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GDMPersonalName : GDMTag
+    public sealed class GDMPersonalName : GDMTag, IGDMStructWithNotes, IGDMStructWithSourceCitations
     {
         private string fFirstPart;
         private string fSurname;
@@ -46,19 +46,14 @@ namespace GDModel
         private GDMLanguageID fLanguage;
         private GDMNameType fNameType;
         private GDMPersonalNamePieces fPieces;
+        private GDMList<GDMNotes> fNotes;
+        private GDMList<GDMSourceCitation> fSourceCitations;
 
 
         public string FullName
         {
             get {
-                string result = fFirstPart;
-                if (!string.IsNullOrEmpty(fSurname)) {
-                    result += " " + fSurname;
-                    if (!string.IsNullOrEmpty(fLastPart)) {
-                        result += " " + fLastPart;
-                    }
-                }
-                return result;
+                return GEDCOMUtils.GetFullName(fFirstPart, fSurname, fLastPart);
             }
         }
 
@@ -97,21 +92,36 @@ namespace GDModel
             get { return fPieces; }
         }
 
+        public GDMList<GDMNotes> Notes
+        {
+            get { return fNotes; }
+        }
+
+        public GDMList<GDMSourceCitation> SourceCitations
+        {
+            get { return fSourceCitations; }
+        }
+
 
         public GDMPersonalName(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.NAME);
 
-            fPieces = new GDMPersonalNamePieces(this);
             fFirstPart = string.Empty;
             fSurname = string.Empty;
             fLastPart = string.Empty;
+
+            fPieces = new GDMPersonalNamePieces(this);
+            fNotes = new GDMList<GDMNotes>(this);
+            fSourceCitations = new GDMList<GDMSourceCitation>(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
                 fPieces.Dispose();
+                fNotes.Dispose();
+                fSourceCitations.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -132,6 +142,8 @@ namespace GDModel
             fNameType = otherName.fNameType;
 
             fPieces.Assign(otherName.Pieces);
+            AssignList(otherName.Notes, fNotes);
+            AssignList(otherName.SourceCitations, fSourceCitations);
         }
 
         public override void Clear()
@@ -146,32 +158,30 @@ namespace GDModel
             fNameType = GDMNameType.ntNone;
 
             fPieces.Clear();
+            fNotes.Clear();
+            fSourceCitations.Clear();
         }
 
         public override bool IsEmpty()
         {
             return base.IsEmpty()
                 && string.IsNullOrEmpty(fFirstPart) && string.IsNullOrEmpty(fSurname) && string.IsNullOrEmpty(fLastPart)
-                && fPieces.IsEmpty() && (fLanguage == GDMLanguageID.Unknown) && (fNameType == GDMNameType.ntNone);
+                && fPieces.IsEmpty() && (fLanguage == GDMLanguageID.Unknown) && (fNameType == GDMNameType.ntNone)
+                && (fNotes.Count == 0) && (fSourceCitations.Count == 0);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
+
             fPieces.ReplaceXRefs(map);
+            fNotes.ReplaceXRefs(map);
+            fSourceCitations.ReplaceXRefs(map);
         }
 
-        // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
         protected override string GetStringValue()
         {
-            string result = fFirstPart;
-            if (!string.IsNullOrEmpty(fSurname)) {
-                result += " /" + fSurname + "/";
-                if (!string.IsNullOrEmpty(fLastPart)) {
-                    result += " " + fLastPart;
-                }
-            }
-            return result;
+            return GEDCOMUtils.GetNameTagValue(fFirstPart, fSurname, fLastPart);
         }
 
         public override string ParseString(string strValue)

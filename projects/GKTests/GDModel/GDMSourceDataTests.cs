@@ -20,6 +20,7 @@
 
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKTests;
 using NUnit.Framework;
 
 namespace GDModel
@@ -41,6 +42,18 @@ namespace GDModel
 
                 GDMSourceEvent evt = data.Events[0];
                 Assert.AreEqual(evenTag, evt);
+
+                evt.StringValue = "BIRT";
+
+                var note = new GDMNotes(data);
+                note.Lines.Text = "test sourcedata notes";
+                data.Notes.Add(note);
+
+                string buf = TestUtils.GetTagStreamText(data, 0);
+                Assert.AreEqual("1 DATA\r\n" +
+                                "2 NOTE test sourcedata notes\r\n" +
+                                "2 AGNC test agency\r\n" +
+                                "2 EVEN BIRT\r\n", buf);
 
                 data.ReplaceXRefs(new GDMXRefReplacer());
 

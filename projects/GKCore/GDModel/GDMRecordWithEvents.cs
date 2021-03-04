@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -35,7 +35,7 @@ namespace GDModel
     }
 
 
-    public abstract class GDMRecordWithEvents : GDMRecord, IGEDCOMRecordWithEvents
+    public abstract class GDMRecordWithEvents : GDMRecord, IGDMRecordWithEvents
     {
         private GDMList<GDMCustomEvent> fEvents;
         private GDMRestriction fRestriction;

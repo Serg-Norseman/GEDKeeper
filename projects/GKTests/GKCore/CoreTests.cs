@@ -184,7 +184,7 @@ namespace GKCore
             Assert.AreEqual("test2", statsItem.ToString());
 
             List<GDMRecord> selectedRecords = new List<GDMRecord>();
-            IGEDCOMTreeEnumerator iEnum = fContext.Tree.GetEnumerator(GDMRecordType.rtIndividual);
+            IGDMTreeEnumerator iEnum = fContext.Tree.GetEnumerator(GDMRecordType.rtIndividual);
             GDMRecord current;
             while (iEnum.MoveNext(out current)) {
                 selectedRecords.Add(current);

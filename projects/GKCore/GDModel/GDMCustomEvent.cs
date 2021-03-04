@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,7 +25,7 @@ using GKCore.Types;
 
 namespace GDModel
 {
-    public abstract class GDMCustomEvent : GDMTagWithLists
+    public abstract class GDMCustomEvent : GDMValueTag, IGDMStructWithLists
     {
         private GDMAddress fAddress;
         private string fAgency;
@@ -35,6 +35,9 @@ namespace GDModel
         private GDMPlace fPlace;
         private string fReligiousAffilation;
         private GDMRestriction fRestriction;
+        private GDMList<GDMNotes> fNotes;
+        private GDMList<GDMSourceCitation> fSourceCitations;
+        private GDMList<GDMMultimediaLink> fMultimediaLinks;
 
 
         public GDMAddress Address
@@ -82,12 +85,40 @@ namespace GDModel
             set { fRestriction = value; }
         }
 
+        public GDMList<GDMNotes> Notes
+        {
+            get { return fNotes; }
+        }
+
+        public GDMList<GDMSourceCitation> SourceCitations
+        {
+            get { return fSourceCitations; }
+        }
+
+        public GDMList<GDMMultimediaLink> MultimediaLinks
+        {
+            get { return fMultimediaLinks; }
+        }
+
 
         protected GDMCustomEvent(GDMObject owner) : base(owner)
         {
             fAddress = new GDMAddress(this);
             fDate = new GDMDateValue(this);
             fPlace = new GDMPlace(this);
+            fNotes = new GDMList<GDMNotes>(this);
+            fSourceCitations = new GDMList<GDMSourceCitation>(this);
+            fMultimediaLinks = new GDMList<GDMMultimediaLink>(this);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                fNotes.Dispose();
+                fSourceCitations.Dispose();
+                fMultimediaLinks.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         public override void Assign(GDMTag source)
@@ -106,6 +137,9 @@ namespace GDModel
             fPlace.Assign(sourceObj.fPlace);
             fReligiousAffilation = sourceObj.fReligiousAffilation;
             fRestriction = sourceObj.fRestriction;
+            AssignList(sourceObj.Notes, fNotes);
+            AssignList(sourceObj.SourceCitations, fSourceCitations);
+            AssignList(sourceObj.MultimediaLinks, fMultimediaLinks);
         }
 
         public override void Clear()
@@ -120,13 +154,17 @@ namespace GDModel
             fPlace.Clear();
             fReligiousAffilation = string.Empty;
             fRestriction = GDMRestriction.rnNone;
+            fNotes.Clear();
+            fSourceCitations.Clear();
+            fMultimediaLinks.Clear();
         }
 
         public override bool IsEmpty()
         {
             return base.IsEmpty() && fAddress.IsEmpty() && string.IsNullOrEmpty(fAgency) && string.IsNullOrEmpty(fCause)
                 && string.IsNullOrEmpty(fClassification) && fDate.IsEmpty() && fPlace.IsEmpty()
-                && string.IsNullOrEmpty(fReligiousAffilation) && fRestriction == GDMRestriction.rnNone;
+                && string.IsNullOrEmpty(fReligiousAffilation) && (fRestriction == GDMRestriction.rnNone)
+                && (fNotes.Count == 0) && (fSourceCitations.Count == 0) && (fMultimediaLinks.Count == 0);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
@@ -136,6 +174,9 @@ namespace GDModel
             fAddress.ReplaceXRefs(map);
             fDate.ReplaceXRefs(map);
             fPlace.ReplaceXRefs(map);
+            fNotes.ReplaceXRefs(map);
+            fSourceCitations.ReplaceXRefs(map);
+            fMultimediaLinks.ReplaceXRefs(map);
         }
 
         public override float IsMatch(GDMTag tag, MatchParams matchParams)

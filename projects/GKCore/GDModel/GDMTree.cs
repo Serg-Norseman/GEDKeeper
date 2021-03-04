@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,7 +42,7 @@ namespace GDModel
     {
         #region Tree Enumerator
 
-        private struct TreeEnumerator : IGEDCOMTreeEnumerator
+        private struct TreeEnumerator : IGDMTreeEnumerator
         {
             private readonly GDMTree fTree;
             private readonly GDMRecordType fRecType;
@@ -260,7 +260,7 @@ namespace GDModel
             return result;
         }
 
-        public IGEDCOMTreeEnumerator GetEnumerator(GDMRecordType recType)
+        public IGDMTreeEnumerator GetEnumerator(GDMRecordType recType)
         {
             return new TreeEnumerator(this, recType);
         }

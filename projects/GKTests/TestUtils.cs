@@ -182,6 +182,8 @@ namespace GKTests
                             GEDCOMProvider.WriteMultimediaLink(fs, 1, tag);
                         } else if (tag is GDMSourceCitation) {
                             GEDCOMProvider.WriteSourceCitation(fs, 1, tag);
+                        } else if (tag is GDMSourceData) {
+                            GEDCOMProvider.WriteSourceData(fs, 1, tag);
                         } else {
                             GEDCOMProvider.WriteTagEx(fs, level, tag);
                         }

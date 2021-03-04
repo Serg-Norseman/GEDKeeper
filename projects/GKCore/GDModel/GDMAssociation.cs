@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMAssociation : GDMPointerWithNotes
+    public sealed class GDMAssociation : GDMPointerWithNotes, IGDMStructWithSourceCitations
     {
         private string fRelation;
         private GDMList<GDMSourceCitation> fSourceCitations;

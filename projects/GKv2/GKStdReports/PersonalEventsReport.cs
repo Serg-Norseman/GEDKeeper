@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -73,7 +73,7 @@ namespace GKStdReports
             fPerson = selectedPerson;
         }
 
-        private void ExtractEvents(EventType type, List<PersonalEvent> list, IGEDCOMRecordWithEvents record)
+        private void ExtractEvents(EventType type, List<PersonalEvent> list, IGDMRecordWithEvents record)
         {
             int num = record.Events.Count;
             for (int i = 0; i < num; i++) {

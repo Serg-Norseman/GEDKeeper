@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -43,7 +43,7 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            var dataOwner = fDataOwner as IGDMStructWithMultimediaLinks;
             if (fSheetList == null || dataOwner == null) return;
 
             try {
@@ -67,7 +67,7 @@ namespace GKCore.Lists
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            var dataOwner = fDataOwner as IGDMStructWithMultimediaLinks;
             if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
             GDMMultimediaLink mmLink = eArgs.ItemData as GDMMultimediaLink;

@@ -128,7 +128,7 @@
     <Compile Include="GDModel\GDMSubmissionRecordTests.cs" />
     <Compile Include="GDModel\GDMSubmitterRecordTests.cs" />
     <Compile Include="GDModel\GDMTagTests.cs" />
-    <Compile Include="GDModel\GDMTagWithListsTests.cs" />
+    <Compile Include="GDModel\GDMPlaceTests.cs" />
     <Compile Include="GDModel\GDMTaskRecordTests.cs" />
     <Compile Include="GDModel\GDMTimeTests.cs" />
     <Compile Include="GDModel\GDMTreeTests.cs" />

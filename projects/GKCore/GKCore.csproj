@@ -131,6 +131,7 @@
     <Compile Include="GDModel\GDMCustomDate.cs" />
     <Compile Include="GDModel\GDMCustomEvent.cs" />
     <Compile Include="GDModel\GDMCutoutPosition.cs" />
+    <Compile Include="GDModel\GDMExtensions.cs" />
     <Compile Include="GDModel\GDMIndividualLink.cs" />
     <Compile Include="GDModel\GDMLines.cs" />
     <Compile Include="GDModel\GDMSourceData.cs" />
@@ -188,7 +189,6 @@
     <Compile Include="GDModel\GDMSubmissionRecord.cs" />
     <Compile Include="GDModel\GDMSubmitterRecord.cs" />
     <Compile Include="GDModel\GDMTag.cs" />
-    <Compile Include="GDModel\GDMTagWithLists.cs" />
     <Compile Include="GDModel\GDMTaskRecord.cs" />
     <Compile Include="GDModel\GDMTime.cs" />
     <Compile Include="GDModel\GDMTree.cs" />

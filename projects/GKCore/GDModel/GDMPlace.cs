@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,11 +23,12 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMPlace : GDMTagWithLists
+    public sealed class GDMPlace : GDMValueTag, IGDMStructWithNotes
     {
         private string fForm;
         private GDMPointer fLocation;
         private GDMMap fMap;
+        private GDMList<GDMNotes> fNotes;
 
 
         public string Form
@@ -46,6 +47,11 @@ namespace GDModel
             get { return fMap; }
         }
 
+        public GDMList<GDMNotes> Notes
+        {
+            get { return fNotes; }
+        }
+
 
         public GDMPlace(GDMObject owner) : base(owner)
         {
@@ -54,6 +60,7 @@ namespace GDModel
             fForm = string.Empty;
             fLocation = new GDMPointer(this, (int)GEDCOMTagType._LOC, string.Empty);
             fMap = new GDMMap(this);
+            fNotes = new GDMList<GDMNotes>(this);
         }
 
         public GDMPlace(GDMObject owner, int tagId, string tagValue) : this(owner)
@@ -64,6 +71,14 @@ namespace GDModel
         public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
         {
             return new GDMPlace(owner, tagId, tagValue);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                fNotes.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         public override void Assign(GDMTag source)
@@ -77,6 +92,7 @@ namespace GDModel
             fForm = otherPlace.fForm;
             fLocation.Assign(otherPlace.fLocation);
             fMap.Assign(otherPlace.fMap);
+            AssignList(otherPlace.Notes, fNotes);
         }
 
         public override void Clear()
@@ -86,11 +102,12 @@ namespace GDModel
             fForm = string.Empty;
             fLocation.Clear();
             fMap.Clear();
+            fNotes.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fLocation.IsEmpty() && fMap.IsEmpty() && string.IsNullOrEmpty(fForm);
+            return base.IsEmpty() && fLocation.IsEmpty() && fMap.IsEmpty() && string.IsNullOrEmpty(fForm) && (fNotes.Count == 0);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
@@ -98,6 +115,7 @@ namespace GDModel
             base.ReplaceXRefs(map);
             fLocation.ReplaceXRefs(map);
             fMap.ReplaceXRefs(map);
+            fNotes.ReplaceXRefs(map);
         }
     }
 }

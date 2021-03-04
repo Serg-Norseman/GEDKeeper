@@ -148,6 +148,26 @@ namespace GDModel
         }
 
         [Test]
+        public void Test_GDMSourceCitation2()
+        {
+            string text = "0 @I1@ INDI\n1 SOUR Textual source citation\n2 CONT continue tag...";
+            GDMIndividualRecord iRec = TestUtils.ParseIndiRec(text);
+            Assert.AreEqual(1, iRec.SourceCitations.Count);
+            var sourCit = iRec.SourceCitations[0];
+            Assert.AreEqual("Textual source citation\r\ncontinue tag...", sourCit.Description.Text);
+        }
+
+        [Test]
+        public void Test_GDMSourceCitation3()
+        {
+            string text = "0 @I1@ INDI\n1 SOUR @S1@";
+            GDMIndividualRecord iRec = TestUtils.ParseIndiRec(text);
+            Assert.AreEqual(1, iRec.SourceCitations.Count);
+            var sourCit = iRec.SourceCitations[0];
+            Assert.AreEqual("S1", sourCit.XRef);
+        }
+
+        [Test]
         public void Test_Common2()
         {
             GDMSourceRecord sourRec = fContext.Tree.CreateSource();

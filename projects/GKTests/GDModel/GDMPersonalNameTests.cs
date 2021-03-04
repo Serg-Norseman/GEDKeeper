@@ -145,10 +145,22 @@ namespace GDModel
 
             //
 
+            var note = new GDMNotes(persName);
+            note.Lines.Text = "persname notes";
+            persName.Notes.Add(note);
+
+            var sourCit = new GDMSourceCitation(persName);
+            sourCit.Description.Text = "persname sour desc";
+            persName.SourceCitations.Add(sourCit);
+
+            //
+
             string buf = TestUtils.GetTagStreamText(persName, 1);
             Assert.AreEqual("1 NAME Petr /Test/ Fedoroff\r\n"+
                             "2 LANG Polish\r\n"+ // extension
                             "2 TYPE birth\r\n"+
+                            "2 NOTE persname notes\r\n"+
+                            "2 SOUR persname sour desc\r\n"+
                             "2 SURN Surname\r\n"+
                             "2 GIVN Given\r\n"+
                             "2 _PATN PatronymicName\r\n"+
@@ -171,6 +183,8 @@ namespace GDModel
                 string buf2 = TestUtils.GetTagStreamText(nameCopy, 1);
                 Assert.AreEqual("1 NAME Petr /Test/ Fedoroff\r\n"+
                                 "2 TYPE birth\r\n"+
+                                "2 NOTE persname notes\r\n"+
+                                "2 SOUR persname sour desc\r\n"+
                                 "2 SURN Surname\r\n"+
                                 "2 GIVN Given\r\n"+
                                 "2 _PATN PatronymicName\r\n"+

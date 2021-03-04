@@ -131,8 +131,6 @@ namespace GDModel
                     fLines.Add(result);
                 }
                 result = string.Empty;
-            } else {
-                fStringValue = string.Empty;
             }
             return result;
         }

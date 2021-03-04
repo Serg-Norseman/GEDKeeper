@@ -65,7 +65,12 @@ namespace GDModel
         /// </summary>
         public GDMList<GDMTag> SubTags
         {
-            get { return fTags; }
+            get {
+                if (fTags == null) {
+                    fTags = new GDMList<GDMTag>(this);
+                }
+                return fTags;
+            }
         }
 
         #endregion
@@ -81,7 +86,7 @@ namespace GDModel
         {
             fId = 0; // Unknown
             fOwner = owner;
-            fTags = new GDMList<GDMTag>(this);
+            //fTags = new GDMList<GDMTag>(this);
         }
 
         public GDMTag(GDMObject owner, int tagId, string tagValue) : this(owner)
@@ -107,7 +112,9 @@ namespace GDModel
 
         public virtual void ReplaceXRefs(GDMXRefReplacer map)
         {
-            fTags.ReplaceXRefs(map);
+            if (fTags != null) {
+                fTags.ReplaceXRefs(map);
+            }
         }
 
         public void SetNameValue(int tagId, string tagValue)
@@ -160,6 +167,9 @@ namespace GDModel
 
         public GDMTag AddTag(GDMTag tag)
         {
+            if (fTags == null) {
+                fTags = new GDMList<GDMTag>(this);
+            }
             fTags.Add(tag);
             return tag;
         }
@@ -175,7 +185,12 @@ namespace GDModel
             SetName(source.fId);
             ParseString(source.StringValue);
 
-            AssignList(source.fTags, this.fTags);
+            if (source.fTags != null && source.fTags.Count > 0) {
+                if (fTags == null) {
+                    fTags = new GDMList<GDMTag>(this);
+                }
+                AssignList(source.fTags, this.fTags);
+            }
         }
 
         protected void AssignList<T>(GDMList<T> srcList, GDMList<T> destList) where T : GDMTag
@@ -190,11 +205,15 @@ namespace GDModel
 
         public virtual void Clear()
         {
+            if (fTags == null) return;
+
             fTags.Clear();
         }
 
         public void DeleteTag(string tagName)
         {
+            if (fTags == null) return;
+
             GDMTag tag = FindTag(tagName, 0);
             while (tag != null) {
                 int idx = fTags.IndexOf(tag);
@@ -206,6 +225,8 @@ namespace GDModel
 
         public GDMTag FindTag(string tagName, int startIndex)
         {
+            if (fTags == null) return null;
+
             string su = GEDCOMUtils.InvariantTextInfo.ToUpper(tagName);
 
             int pos = su.IndexOf('\\');
@@ -240,6 +261,8 @@ namespace GDModel
 
         public IList<GDMTag> FindTags(string tagName)
         {
+            if (fTags == null) return null;
+
             IList<GDMTag> result = new List<GDMTag>();
 
             GDMTag tag = FindTag(tagName, 0);
@@ -255,7 +278,7 @@ namespace GDModel
 
         public virtual bool IsEmpty()
         {
-            return (fTags.Count == 0);
+            return (fTags == null || fTags.Count == 0);
         }
 
         public virtual float IsMatch(GDMTag tag, MatchParams matchParams)

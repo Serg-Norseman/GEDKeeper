@@ -50,31 +50,48 @@ namespace GDModel
     }
 
 
-    public interface IGEDCOMListEnumerator<T> : IEnumerator<T>
+    public interface IGDMListEnumerator<T> : IEnumerator<T>
     {
     }
 
 
-    public interface IGEDCOMTreeEnumerator
+    public interface IGDMTreeEnumerator
     {
         bool MoveNext(out GDMRecord current);
         void Reset();
     }
 
 
-    public interface IGEDCOMStructWithLists : IGDMObject
+    public interface IGDMStructWithNotes : IGDMObject
     {
         GDMList<GDMNotes> Notes { get; }
-        GDMList<GDMSourceCitation> SourceCitations { get; }
-        GDMList<GDMMultimediaLink> MultimediaLinks { get; }
 
-        GDMNotes AddNote(GDMNoteRecord noteRec);
-        GDMSourceCitation AddSource(GDMSourceRecord sourceRec, string page, int quality);
-        GDMMultimediaLink AddMultimedia(GDMMultimediaRecord mediaRec);
+        //GDMNotes AddNote(GDMNoteRecord noteRec);
     }
 
 
-    public interface IGEDCOMRecordWithEvents : IGDMObject
+    public interface IGDMStructWithSourceCitations : IGDMObject
+    {
+        GDMList<GDMSourceCitation> SourceCitations { get; }
+
+        //GDMSourceCitation AddSource(GDMSourceRecord sourceRec, string page, int quality);
+    }
+
+
+    public interface IGDMStructWithMultimediaLinks : IGDMObject
+    {
+        GDMList<GDMMultimediaLink> MultimediaLinks { get; }
+
+        //GDMMultimediaLink AddMultimedia(GDMMultimediaRecord mediaRec);
+    }
+
+
+    public interface IGDMStructWithLists : IGDMObject, IGDMStructWithNotes, IGDMStructWithSourceCitations, IGDMStructWithMultimediaLinks
+    {
+    }
+
+
+    public interface IGDMRecordWithEvents : IGDMObject
     {
         GDMList<GDMCustomEvent> Events { get; }
         
