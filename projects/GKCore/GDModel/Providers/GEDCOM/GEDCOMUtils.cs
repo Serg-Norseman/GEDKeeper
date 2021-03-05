@@ -329,7 +329,7 @@ namespace GDModel.Providers.GEDCOM
         public static string ParseXRefPointer(string str, out string xref)
         {
             xref = string.Empty;
-            if (str == null) {
+            if (string.IsNullOrEmpty(str)) {
                 return string.Empty;
             }
 
@@ -442,12 +442,6 @@ namespace GDModel.Providers.GEDCOM
 
             var strTok = new GEDCOMParser(str, false);
             return ParseDateValue(owner, dateValue, strTok);
-        }
-
-        // DateValue format: INT/FROM/TO/etc..._<date>
-        public static string ParseDateValue(GDMTree owner, GDMTag dateValue, GEDCOMParser strTok)
-        {
-            return ParseDateValue(owner, (GDMDateValue)dateValue, strTok);
         }
 
         // DateValue format: INT/FROM/TO/etc..._<date>
@@ -602,11 +596,6 @@ namespace GDModel.Providers.GEDCOM
         {
             var strTok = new GEDCOMParser(strValue, false);
             return ParseDate(owner, date, strTok);
-        }
-
-        public static string ParseDate(GDMTree owner, GDMTag date, GEDCOMParser strTok)
-        {
-            return ParseDate(owner, (GDMDate)date, strTok);
         }
 
         public static string ParseDate(GDMTree owner, GDMDate date, GEDCOMParser strTok)
@@ -796,7 +785,7 @@ namespace GDModel.Providers.GEDCOM
             surname = string.Empty;
             lastPart = string.Empty;
 
-            if (strValue == null) {
+            if (string.IsNullOrEmpty(strValue)) {
                 return string.Empty;
             }
 

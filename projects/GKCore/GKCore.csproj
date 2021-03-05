@@ -333,6 +333,7 @@
     <Compile Include="GKCore\Types\SpecialUserRef.cs" />
     <Compile Include="GKCore\Types\Target.cs" />
     <Compile Include="GKCore\Types\TargetMode.cs" />
+    <Compile Include="GKCore\Types\WidgetInfo.cs" />
     <Compile Include="GKCore\Types\WomanSurnameFormat.cs" />
     <Compile Include="GKCore\AppHost.cs" />
     <Compile Include="GKCore\BaseContext.cs" />

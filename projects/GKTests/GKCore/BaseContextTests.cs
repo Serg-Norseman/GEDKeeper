@@ -535,5 +535,90 @@ namespace GKCore
             fContext.Undoman.Rollback();
             Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetNameString(iRec, true, false));
         }
+
+        [Test]
+        public void Test_Modified()
+        {
+            Assert.IsTrue(fContext.Modified);
+        }
+
+        [Test]
+        public void Test_DeleteMediaRecord()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { fContext.DeleteMediaRecord(null); });
+        }
+
+        [Test]
+        public void Test_FindAll()
+        {
+            var result = fContext.FindAll(GDMRecordType.rtIndividual, "ZZZ");
+            Assert.AreEqual(0, result.Count);
+        }
+
+        [Test]
+        public void Test_CollectTips()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { fContext.CollectTips(null); });
+        }
+
+        [Test]
+        public void Test_CheckPersonSex()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { fContext.CheckPersonSex(null); });
+        }
+
+        [Test]
+        public void Test_MediaDelete()
+        {
+            var result = fContext.MediaDelete(null);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void Test_VerifyMediaFile()
+        {
+            string fileName;
+            Assert.Throws(typeof(ArgumentNullException), () => { fContext.VerifyMediaFile(null, out fileName); });
+        }
+
+        [Test]
+        public void Test_MediaExists()
+        {
+            var result = fContext.MediaExists(null);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void Test_IsAvailableRecord()
+        {
+            var result = fContext.IsAvailableRecord(null);
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void Test_GetChildFamily()
+        {
+            var result = fContext.GetChildFamily(null, false, null);
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void Test_AddFamilyForSpouse()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { fContext.AddFamilyForSpouse(null); });
+        }
+
+        [Test]
+        public void Test_AddChildForParent()
+        {
+            var result = fContext.AddChildForParent(null, GDMSex.svMale);
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void Test_SelectSpouseFor()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { fContext.SelectSpouseFor(null); });
+        }
     }
 }

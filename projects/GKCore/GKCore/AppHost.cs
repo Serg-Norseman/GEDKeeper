@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,7 +25,6 @@ using System.Net;
 using System.Reflection;
 using BSLib;
 using BSLib.Design.IoC;
-using BSLib.Design.MVP.Controls;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.MVP.Views;
@@ -38,12 +37,6 @@ using GKCore.Types;
 namespace GKCore
 {
     internal delegate void OnMessageReceivedInvoker(MessageEventArgs e);
-
-    public class WidgetInfo
-    {
-        public IWidget Widget;
-        public IMenuItem MenuItem;
-    }
 
     /// <summary>
     /// Global controller of UI for the isolation
@@ -756,7 +749,7 @@ namespace GKCore
 
                 if (dlgPlugin != null && dlgPlugin.Category == PluginCategory.DialogReplacement) {
                     var dlgType = dlgPlugin.GetDialogType();
-                    if (GKUtils.ImplementsInterface(dlgType, resolveType) && dlgPlugin.Enabled) {
+                    if (SysUtils.ImplementsInterface(dlgType, resolveType) && dlgPlugin.Enabled) {
                         return (TTypeToResolve)dlgPlugin.CreateDialog(parameters);
                     }
                 }

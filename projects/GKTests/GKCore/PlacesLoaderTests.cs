@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -47,10 +47,11 @@ namespace GKCore
         [Test]
         public void Test_MapPlace()
         {
-            var mapPlace = new MapPlace();
-            Assert.IsNotNull(mapPlace);
-            Assert.IsNotNull(mapPlace.Points);
-            Assert.IsNotNull(mapPlace.PlaceRefs);
+            using (var mapPlace = new MapPlace()) {
+                Assert.IsNotNull(mapPlace);
+                Assert.IsNotNull(mapPlace.Points);
+                Assert.IsNotNull(mapPlace.PlaceRefs);
+            }
         }
 
         [Test]

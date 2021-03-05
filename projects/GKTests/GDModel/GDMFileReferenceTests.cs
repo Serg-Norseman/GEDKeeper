@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -58,7 +58,16 @@ namespace GDModel
         }
 
         [Test]
-        public void Test_Assign()
+        public void Test_Assign1()
+        {
+            var instance = new GDMFileReference(null);
+            Assert.Throws(typeof(ArgumentException), () => {
+                instance.Assign(null);
+            });
+        }
+
+        [Test]
+        public void Test_Assign2()
         {
             var instance = new GDMFileReferenceWithTitle(null);
             Assert.Throws(typeof(ArgumentException), () => {

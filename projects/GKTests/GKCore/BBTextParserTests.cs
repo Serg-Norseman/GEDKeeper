@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,6 +34,19 @@ namespace GKCore
         public void SetUp()
         {
             WFAppHost.ConfigureBootstrap(false);
+        }
+
+        [Test]
+        public void Test_BBTextChunk()
+        {
+            var instance = new BBTextChunk(1, 10.0f, BSLib.Design.BSDTypes.FontStyle.Bold, null);
+            Assert.IsNotNull(instance);
+            instance.Text = "Test chunk";
+
+            var copy = instance.Clone();
+            Assert.IsNotNull(copy);
+
+            Assert.AreEqual("[BBTextChunk Line=0, Text=Test chunk, Size=10]", copy.ToString());
         }
 
         [Test]

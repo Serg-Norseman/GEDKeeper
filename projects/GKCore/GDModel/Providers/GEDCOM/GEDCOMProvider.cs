@@ -59,13 +59,6 @@ namespace GDModel.Providers.GEDCOM
         public GDMTag Tag;
         public AddTagHandler AddHandler;
 
-        public StackTuple(int level, GDMTag tag)
-        {
-            Level = level;
-            Tag = tag;
-            AddHandler = null;
-        }
-
         public StackTuple(int level, GDMTag tag, AddTagHandler addHandler)
         {
             Level = level;

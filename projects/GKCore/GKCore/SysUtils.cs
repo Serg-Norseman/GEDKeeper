@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -96,7 +96,18 @@ namespace GKCore
 
         #endregion
 
-        #region Assembly helpers
+        #region Runtime helpers
+
+        public static bool ImplementsInterface(Type type, Type ifaceType)
+        {
+            Type[] intf = type.GetInterfaces();
+            for (int i = 0; i < intf.Length; i++) {
+                if (intf[i] == ifaceType) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public static T GetAssemblyAttribute<T>(Assembly assembly) where T : Attribute
         {

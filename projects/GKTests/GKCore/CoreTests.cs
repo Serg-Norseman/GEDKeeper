@@ -120,20 +120,32 @@ namespace GKCore
             Assert.IsTrue(string.IsNullOrEmpty(SysUtils.GetMonoVersion()));
             Assert.AreEqual(DesktopType.Windows, SysUtils.GetDesktopType());
             #endif
+        }
 
-            //
-
+        [Test]
+        public void Test_SysUtils_IsUnicodeEncoding()
+        {
             Assert.IsTrue(SysUtils.IsUnicodeEncoding(Encoding.UTF8));
             Assert.IsFalse(SysUtils.IsUnicodeEncoding(Encoding.ASCII));
+        }
 
-            //
-
+        [Test]
+        public void Test_SysUtils_GetAssemblyAttribute()
+        {
             Assembly asm = this.GetType().Assembly;
             var attr1 = SysUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(asm);
             Assert.IsNotNull(attr1);
             Assert.AreEqual("GKTests", attr1.Title);
 
             Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(null); });
+        }
+
+        [Test]
+        public void Test_SysUtils_ImplementsInterface()
+        {
+            Assert.IsTrue(SysUtils.ImplementsInterface(typeof(LangManager), typeof(ILangMan)));
+
+            Assert.IsFalse(SysUtils.ImplementsInterface(typeof(LangManager), typeof(INamesTable)));
         }
 
         [Test]
@@ -156,7 +168,7 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_Stats()
+        public void Test_CompositeItem()
         {
             CompositeItem compositeItem = new CompositeItem();
             Assert.IsNotNull(compositeItem);
@@ -174,15 +186,30 @@ namespace GKCore
             Assert.AreEqual(1, compositeItem.CommonVal);
             Assert.AreEqual(1, compositeItem.MaleVal);
             Assert.AreEqual(1, compositeItem.FemaleVal);
+        }
 
+        [Test]
+        public void Test_StatsItem()
+        {
             StatsItem statsItem = new StatsItem("test", false);
             Assert.IsNotNull(statsItem);
             Assert.AreEqual("test", statsItem.ToString());
+            Assert.AreEqual("0", statsItem.GetDisplayString());
 
             statsItem = new StatsItem("test2", 0);
             Assert.IsNotNull(statsItem);
             Assert.AreEqual("test2", statsItem.ToString());
 
+            statsItem = new StatsItem("test2", true);
+            Assert.IsNotNull(statsItem);
+            statsItem.ValF = 10;
+            statsItem.ValM = 11;
+            Assert.AreEqual("10 | 11", statsItem.GetDisplayString());
+        }
+
+        [Test]
+        public void Test_Stats()
+        {
             List<GDMRecord> selectedRecords = new List<GDMRecord>();
             IGDMTreeEnumerator iEnum = fContext.Tree.GetEnumerator(GDMRecordType.rtIndividual);
             GDMRecord current;

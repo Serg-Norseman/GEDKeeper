@@ -66,6 +66,11 @@ namespace GDModel
                 Assert.AreEqual(0, list.IndexOf(obj1));
                 Assert.AreEqual(1, list.IndexOf(obj2));
 
+                using (GDMList<GDMTag> list2 = new GDMList<GDMTag>(null)) {
+                    list2.AddRange(list);
+                    Assert.AreEqual(2, list2.Count);
+                }
+
                 list.Delete(obj1);
                 Assert.AreEqual(-1, list.IndexOf(obj1));
                 Assert.AreEqual(0, list.IndexOf(obj2));

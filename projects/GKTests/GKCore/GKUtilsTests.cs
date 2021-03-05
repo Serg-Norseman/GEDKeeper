@@ -601,5 +601,11 @@ namespace GKCore
             Assert.AreEqual("01/30/1980", GKUtils.GetRegionalDate("30.01.1980", "mm/dd/yyyy"));
             Assert.AreEqual("1980/01/30", GKUtils.GetRegionalDate("30.01.1980", "yyyy/mm/dd"));
         }
+
+        [Test]
+        public void Test_GetRecordContent()
+        {
+            GKUtils.GetRecordContent(null, null, null);
+        }
     }
 }

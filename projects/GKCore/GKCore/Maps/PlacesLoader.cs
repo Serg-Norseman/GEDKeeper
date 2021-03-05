@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -71,12 +71,8 @@ namespace GKCore.Maps
     /// <summary>
     /// 
     /// </summary>
-    public class PlacesLoader
+    public static class PlacesLoader
     {
-        public PlacesLoader()
-        {
-        }
-
         public static void AddPoint(ExtList<GeoPoint> mapPoints, GeoPoint gmPt, PlaceRef placeRef)
         {
             GeoPoint pt;

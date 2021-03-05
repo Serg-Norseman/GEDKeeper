@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -307,6 +307,23 @@ namespace GDModel
             GDMDate instance = GDMDate.CreateByFormattedStr("20/01/1980", false);
             instance.Clear();
             Assert.AreEqual("", instance.StringValue);
+        }
+
+        [Test]
+        public void Test_Equals()
+        {
+            GDMDate instance = GDMDate.CreateByFormattedStr("20/01/1980", false);
+            GDMDate instance2 = GDMDate.CreateByFormattedStr("21/01/1980", false);
+
+            Assert.IsFalse(instance.Equals(instance2));
+            Assert.IsFalse(instance.Equals((object)instance2)); // other method
+
+            instance2.Assign(instance);
+
+            Assert.IsTrue(instance.Equals(instance2));
+            Assert.IsTrue(instance.Equals((object)instance2)); // other method
+
+            Assert.IsFalse(instance.Equals((object)null));
         }
 
         [Test]
@@ -704,6 +721,8 @@ namespace GDModel
                 Assert.AreEqual("INT 20 JAN 2013 (yesterday)", dtx1.StringValue);
 
                 Assert.Throws(typeof(GEDCOMIntDateException), () => { dtx1.ParseString("10 JAN 2013 (today)"); });
+
+                Assert.AreEqual(string.Empty, dtx1.ParseString(null));
             }
         }
 

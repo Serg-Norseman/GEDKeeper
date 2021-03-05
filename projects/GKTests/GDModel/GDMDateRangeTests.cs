@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -70,6 +70,8 @@ namespace GDModel
                 Assert.Throws(typeof(GEDCOMRangeDateException), () => {
                     dtx1.ParseString("BET 04 JAN 2013 X 25 JAN 2013");
                 });
+
+                Assert.AreEqual(string.Empty, dtx1.ParseString(null));
             }
         }
     }

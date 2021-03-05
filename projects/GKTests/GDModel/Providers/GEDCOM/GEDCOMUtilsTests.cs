@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -428,6 +428,10 @@ namespace GDModel.Providers.GEDCOM
             rest = GEDCOMUtils.ParseXRefPointer(" ", out xref);
             Assert.AreEqual("", rest);
             Assert.AreEqual("", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer("", out xref);
+            Assert.AreEqual("", rest);
+            Assert.AreEqual("", xref);
         }
 
         [Test]
@@ -455,6 +459,11 @@ namespace GDModel.Providers.GEDCOM
         public void Test_GetGeoCoord()
         {
             Assert.AreEqual(0.0, GEDCOMUtils.GetGeoCoord(null, GEDCOMGeoCoord.Lati));
+
+            Assert.AreEqual(+0.005, GEDCOMUtils.GetGeoCoord("N0.005", GEDCOMGeoCoord.Lati));
+            Assert.AreEqual(+0.005, GEDCOMUtils.GetGeoCoord("E0.005", GEDCOMGeoCoord.Lati));
+            Assert.AreEqual(-0.005, GEDCOMUtils.GetGeoCoord("S0.005", GEDCOMGeoCoord.Lati));
+            Assert.AreEqual(-0.005, GEDCOMUtils.GetGeoCoord("W0.005", GEDCOMGeoCoord.Lati));
         }
     }
 }

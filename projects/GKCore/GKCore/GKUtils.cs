@@ -44,17 +44,6 @@ namespace GKCore
     {
         #region Aux functions
 
-        public static bool ImplementsInterface(Type type, Type ifaceType)
-        {
-            Type[] intf = type.GetInterfaces();
-            for (int i = 0; i < intf.Length; i++) {
-                if (intf[i] == ifaceType) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public static void LoadExtFile(string fileName, string args = "")
         {
             #if !CI_MODE

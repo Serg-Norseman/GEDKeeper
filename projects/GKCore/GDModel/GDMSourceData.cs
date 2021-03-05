@@ -83,18 +83,5 @@ namespace GDModel
             fEvents.ReplaceXRefs(map);
             fNotes.ReplaceXRefs(map);
         }
-
-        public GDMNotes AddNote(GDMNoteRecord noteRec)
-        {
-            GDMNotes note = null;
-            
-            if (noteRec != null) {
-                note = new GDMNotes(this);
-                note.Value = noteRec;
-                fNotes.Add(note);
-            }
-            
-            return note;
-        }
     }
 }

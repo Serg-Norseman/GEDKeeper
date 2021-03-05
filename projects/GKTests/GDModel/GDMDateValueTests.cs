@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -49,6 +49,8 @@ namespace GDModel
 
                 dtx1.ParseString("20 JAN 2013");
                 Assert.AreEqual("2013.01.20 [G]", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
+
+                Assert.AreEqual(string.Empty, dtx1.ParseString(null));
             }
 
             using (GDMDateValue dtx1 = new GDMDateValue(null)) {

@@ -973,18 +973,12 @@ namespace GKCore.Controllers
                         continue;
                     }
 
-                    IMenuItem mi;
-                    if (plugin.Category == PluginCategory.Report) {
-                        mi = fView.ReportsItem.AddItem(plugin.DisplayName, plugin, plugin.Icon, Plugin_Click);
-                    } else {
-                        mi = fView.PluginsItem.AddItem(plugin.DisplayName, plugin, plugin.Icon, Plugin_Click);
-                    }
+                    IMenuItem ownerItem = (plugin.Category == PluginCategory.Report) ? fView.ReportsItem : fView.PluginsItem;
+                    IMenuItem mi = ownerItem.AddItem(plugin.DisplayName, plugin, plugin.Icon, Plugin_Click);
 
                     var widget = plugin as IWidget;
                     if (widget != null) {
-                        WidgetInfo widInfo = new WidgetInfo();
-                        widInfo.Widget = widget;
-                        widInfo.MenuItem = mi;
+                        var widInfo = new WidgetInfo(widget, mi);
                         AppHost.Instance.ActiveWidgets.Add(widInfo);
                         widget.WidgetInit(AppHost.Instance);
                     }

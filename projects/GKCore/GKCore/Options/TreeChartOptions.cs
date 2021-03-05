@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -45,8 +45,6 @@ namespace GKCore.Options
         public static readonly int UN_HUSBAND_COLOR = -2631681; // FFD7D7FF
         public static readonly int UN_WIFE_COLOR = -10281; // FFFFD7D7
 
-        private int fDepthLimit;
-
         public bool ChildlessExclude;
         public bool Decorative;
         public bool FamilyVisible;
@@ -89,11 +87,7 @@ namespace GKCore.Options
         public int Margins;
         public int SpouseDistance;
 
-        public int DepthLimit
-        {
-            get { return fDepthLimit; }
-            set { fDepthLimit = value; }
-        }
+        public int DepthLimit { get; set; }
 
         public TreeChartOptions()
         {
@@ -230,7 +224,7 @@ namespace GKCore.Options
             Margins = iniFile.ReadInteger("Chart", "Margins", TreeChartModel.DEF_MARGINS);
             SpouseDistance = iniFile.ReadInteger("Chart", "SpouseDistance", TreeChartModel.DEF_SPOUSE_DISTANCE);
 
-            fDepthLimit = iniFile.ReadInteger("Chart", "DepthLimit", -1);
+            DepthLimit = iniFile.ReadInteger("Chart", "DepthLimit", -1);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -279,7 +273,7 @@ namespace GKCore.Options
             iniFile.WriteInteger("Chart", "Margins", Margins);
             iniFile.WriteInteger("Chart", "SpouseDistance", SpouseDistance);
 
-            iniFile.WriteInteger("Chart", "DepthLimit", fDepthLimit);
+            iniFile.WriteInteger("Chart", "DepthLimit", DepthLimit);
         }
     }
 }

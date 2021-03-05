@@ -98,7 +98,9 @@ namespace GDModel
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            XRef = map.FindNewXRef(XRef);
+            if (map != null) {
+                XRef = map.FindNewXRef(XRef);
+            }
         }
     }
 }

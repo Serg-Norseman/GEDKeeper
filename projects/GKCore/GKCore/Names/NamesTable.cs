@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -128,8 +128,7 @@ namespace GKCore.Names
 
         public NameEntry AddName(string name)
         {
-            NameEntry result = new NameEntry();
-            result.Name = name;
+            var result = new NameEntry(name);
             fNames.Add(name, result);
             return result;
         }

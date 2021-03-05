@@ -160,6 +160,20 @@ namespace GDModel
         }
 
         [Test]
+        public void Test_IsEmpty()
+        {
+            var instance = new GDMIndividualEvent(null);
+            Assert.IsTrue(instance.IsEmpty());
+        }
+
+        [Test]
+        public void Test_ReplaceXRefs()
+        {
+            var instance = new GDMIndividualEvent(null);
+            instance.ReplaceXRefs(null);
+        }
+
+        [Test]
         public void Test_GDMIndividualEvent()
         {
             using (GDMIndividualEvent iEvent = new GDMIndividualEvent(null)) {

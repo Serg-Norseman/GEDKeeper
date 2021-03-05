@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -73,6 +73,10 @@ namespace GDModel
 
                 Assert.Throws(typeof(ArgumentException), () => {
                     noteRec.MoveTo(null, false);
+                });
+
+                Assert.Throws(typeof(ArgumentException), () => {
+                    noteRec.Assign(null);
                 });
 
                 using (GDMNoteRecord noteRec3 = new GDMNoteRecord(null)) {

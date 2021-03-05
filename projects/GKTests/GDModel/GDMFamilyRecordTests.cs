@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -123,6 +123,11 @@ namespace GDModel
 
             //
             famRec.AddSpouse(indiv);
+
+            famRec.AddChild(tree.CreateIndividual());
+            famRec.AddChild(tree.CreateIndividual());
+            famRec.AddChild(tree.CreateIndividual());
+            Assert.AreEqual(3, famRec.Children.Count);
 
             Assert.IsFalse(famRec.IsEmpty());
             famRec.Clear();

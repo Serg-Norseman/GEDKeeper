@@ -18,27 +18,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel;
+using BSLib.Design.MVP.Controls;
+using GKCore.Interfaces;
 
-namespace GKCore.Names
+namespace GKCore.Types
 {
     /// <summary>
-    /// Entry of auto-updated book of names.
+    /// 
     /// </summary>
-    public class NameEntry
+    public sealed class WidgetInfo
     {
-        public string Name;
-        public string F_Patronymic;
-        public string M_Patronymic;
-        public GDMSex Sex;
+        public IWidget Widget;
+        public IMenuItem MenuItem;
 
-        public NameEntry()
+        public WidgetInfo(IWidget widget, IMenuItem menuItem)
         {
-        }
-
-        public NameEntry(string name) : this()
-        {
-            Name = name;
+            Widget = widget;
+            MenuItem = menuItem;
         }
     }
 }
