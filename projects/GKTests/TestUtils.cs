@@ -33,9 +33,22 @@ namespace GKTests
 {
     public static class TestUtils
     {
-        public static BaseContext CreateContext(/*IBaseWindow baseWin = null*/)
+        public static void InitGEDCOMProviderTest()
         {
-            BaseContext context = new BaseContext(/*baseWin*/null);
+            // forced call of GEDCOMProvider static constructor
+            // this is important for a number of tests that require initialization of the GEDCOM tag table
+            // System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(GEDCOMProvider).TypeHandle);
+            var formats = GEDCOMProvider.GEDCOMFormats;
+            Assert.IsNotNull(formats);
+
+            var tagProps = GEDCOMTagsTable.GetTagProps("BIRT");
+            Assert.IsNotNull(tagProps);
+            Assert.AreEqual((int)GEDCOMTagType.BIRT, tagProps.TagId);
+        }
+
+        public static BaseContext CreateContext(IBaseWindow baseWin = null)
+        {
+            BaseContext context = new BaseContext(baseWin);
             Assert.IsNotNull(context);
             Assert.IsNotNull(context.Tree);
             return context;

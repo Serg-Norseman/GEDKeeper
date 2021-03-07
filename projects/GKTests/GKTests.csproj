@@ -206,12 +206,14 @@
     <Compile Include="UITests\NoteEditDlgTests.cs" />
     <Compile Include="UITests\OptionsDlgTests.cs" />
     <Compile Include="UITests\OrganizerWinTests.cs" />
+    <Compile Include="UITests\ParentsEditDlgTests.cs" />
     <Compile Include="UITests\PersonalNameEditDlgTests.cs" />
     <Compile Include="UITests\PersonEditDlgTests.cs" />
     <Compile Include="UITests\PersonsFilterDlgTests.cs" />
     <Compile Include="UITests\PortraitSelectDlgTests.cs" />
     <Compile Include="UITests\ProgressDlgTests.cs" />
     <Compile Include="UITests\QuickSearchDlgTests.cs" />
+    <Compile Include="UITests\RecordInfoDlgTests.cs" />
     <Compile Include="UITests\RecordSelectDlgTests.cs" />
     <Compile Include="UITests\RelationshipCalculatorDlgTests.cs" />
     <Compile Include="UITests\RepositoryEditDlgTests.cs" />

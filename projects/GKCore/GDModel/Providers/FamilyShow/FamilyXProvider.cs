@@ -70,10 +70,7 @@ namespace GDModel.Providers.FamilyShow
                     OPCUtility.CopyStream(documentPart.GetStream(), memStream);
                     memStream.Position = 0;
 
-                    XmlReaderSettings settings = new XmlReaderSettings();
-                    settings.DtdProcessing = DtdProcessing.Ignore;
-                    using (XmlReader xr = XmlReader.Create(memStream, settings)) {
-                    }
+                    LoadFromReader(memStream, null, null);
                 }
             }
 #endif
@@ -81,11 +78,75 @@ namespace GDModel.Providers.FamilyShow
 
         protected override void LoadFromReader(Stream fileStream, StreamReader reader, string streamCharset = null)
         {
-            /*fTree.State = GDMTreeState.osLoading;
+            fTree.State = GDMTreeState.osLoading;
             try {
+                ProgressEventHandler progressHandler = fTree.OnProgress;
+
+                long fileSize = fileStream.Length;
+                int progress = 0;
+
+                GDMIndividualRecord lastIndividual = null;
+                GDMTag lastTag = null;
+                GEDCOMTagType lastTagType = GEDCOMTagType.Unknown;
+
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.DtdProcessing = DtdProcessing.Ignore;
+                using (XmlReader xr = XmlReader.Create(fileStream, settings)) {
+                    while (xr.Read()) {
+                        if (xr.NodeType == XmlNodeType.Element && !xr.IsEmptyElement) {
+                            if (xr.Name == "Person") {
+                                lastIndividual = fTree.CreateIndividual();
+                                var persName = new GDMPersonalName(lastIndividual);
+                                lastIndividual.AddPersonalName(persName);
+
+                                lastIndividual.UID = xr.GetAttribute("Id");
+                            } else if (xr.Name == "Gender") {
+                                lastTagType = GEDCOMTagType.SEX;
+                                lastTag = null;
+                            } else if (xr.Name == "FirstName") {
+                                lastTagType = GEDCOMTagType.GIVN;
+                                lastTag = null;
+                            } else if (xr.Name == "LastName") {
+                                lastTagType = GEDCOMTagType.SURN;
+                                lastTag = null;
+                            }
+                        } else if (xr.NodeType == XmlNodeType.Text) {
+                            string nodeValue = xr.Value;
+
+                            if (lastTag != null) {
+                                lastTag = null;
+                            } else {
+                                switch (lastTagType) {
+                                    case GEDCOMTagType.SEX:
+                                        if (nodeValue == "Male") {
+                                            lastIndividual.Sex = GDMSex.svMale;
+                                        } else if (nodeValue == "Female") {
+                                            lastIndividual.Sex = GDMSex.svFemale;
+                                        }
+                                        break;
+                                    case GEDCOMTagType.GIVN:
+                                        lastIndividual.PersonalNames[0].FirstPart = nodeValue;
+                                        break;
+                                    case GEDCOMTagType.SURN:
+                                        lastIndividual.PersonalNames[0].Surname = nodeValue;
+                                        break;
+                                }
+                                lastTagType = GEDCOMTagType.Unknown;
+                            }
+                        }
+
+                        if (progressHandler != null) {
+                            int newProgress = (int)Math.Min(100, (fileStream.Position * 100.0f) / fileSize);
+                            if (progress != newProgress) {
+                                progress = newProgress;
+                                progressHandler(fTree, progress);
+                            }
+                        }
+                    }
+                }
             } finally {
                 fTree.State = GDMTreeState.osReady;
-            }*/
+            }
         }
     }
 }

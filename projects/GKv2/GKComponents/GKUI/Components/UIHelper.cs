@@ -230,11 +230,6 @@ namespace GKUI.Components
             return new Bitmap(GKUtils.LoadResourceStream(resName));
         }
 
-        public static Bitmap LoadResourceImage(Type baseType, string resName)
-        {
-            return new Bitmap(GKUtils.LoadResourceStream(baseType, resName));
-        }
-
         public static void SetControlEnabled(Control ctl, bool enabled)
         {
             if (ctl != null) {

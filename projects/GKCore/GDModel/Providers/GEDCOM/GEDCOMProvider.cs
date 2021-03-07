@@ -1693,19 +1693,16 @@ namespace GDModel.Providers.GEDCOM
 
         public static bool WriteTagEx(StreamWriter stream, int level, GDMTag tag)
         {
-            bool result;
+            SaveTagHandler saveHandler = null;
             GEDCOMTagProps tagInfo = GEDCOMTagsTable.GetTagProps(tag.Id);
-            if (tagInfo == null) {
-                result = WriteBaseTag(stream, level, tag);
-            } else {
-                SaveTagHandler saveHandler = tagInfo.SaveHandler;
-                if (saveHandler == null) {
-                    result = WriteBaseTag(stream, level, tag);
-                } else {
-                    result = saveHandler(stream, level, tag);
-                }
+            if (tagInfo != null) {
+                saveHandler = tagInfo.SaveHandler;
             }
-            return result;
+            if (saveHandler == null) {
+                saveHandler = WriteBaseTag;
+            }
+
+            return saveHandler(stream, level, tag);
         }
 
         internal static StackTuple AddBaseTag(GDMObject owner, int tagLevel, int tagId, string tagValue)

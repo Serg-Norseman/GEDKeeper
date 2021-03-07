@@ -36,11 +36,12 @@ namespace GKUI.Forms
     /// 
     /// </summary>
     [TestFixture]
-    public class SourceCitEditDlgTests : CustomWindowTest
+    public class ParentsEditDlgTests : CustomWindowTest
     {
-        private GDMSourceCitation fSourceCitation;
+        private GDMIndividualRecord fIndividual;
+        private GDMChildToFamilyLink fChildLink;
         private IBaseWindow fBase;
-        private SourceCitEditDlg fDialog;
+        private ParentsEditDlg fDialog;
 
         public override void Setup()
         {
@@ -48,17 +49,20 @@ namespace GKUI.Forms
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fSourceCitation = new GDMSourceCitation(null);
+            fIndividual = new GDMIndividualRecord(null);
+            fChildLink = new GDMChildToFamilyLink(null);
 
-            fDialog = new SourceCitEditDlg(fBase);
-            fDialog.SourceCitation = fSourceCitation;
+            fDialog = new ParentsEditDlg(fBase);
+            fDialog.Person = fIndividual;
+            fDialog.Link = fChildLink;
             fDialog.Show();
         }
 
         public override void TearDown()
         {
             fDialog.Dispose();
-            fSourceCitation.Dispose();
+            fIndividual.Dispose();
+            fChildLink.Dispose();
         }
 
         [Test]
@@ -70,26 +74,20 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fSourceCitation, fDialog.SourceCitation);
-
-            // The links to other records can be added or edited only in MainWinTests
-            // (where there is a complete infrastructure of the calls to BaseWin.ModifyX/SelectRecord)
+            Assert.AreEqual(fIndividual, fDialog.Person);
 
             ModalFormHandler = Dialog_Cancel_Handler;
-            ClickButton("btnSourceAdd", fDialog);
+            ClickButton("btnFatherAdd", fDialog);
+            //ClickButton("btnFatherDelete", fDialog);
 
-            //ClickButton("btnAccept", fDialog); // bug?!
+            ModalFormHandler = Dialog_Cancel_Handler;
+            ClickButton("btnMotherAdd", fDialog);
+            //ClickButton("btnMotherDelete", fDialog);
+
+            ClickButton("btnParentsEdit", fDialog);
+
+            ClickButton("btnAccept", fDialog);
         }
-
-        #region Handlers for external tests
-
-        public static void AcceptModalHandler(string name, IntPtr ptr, Form form)
-        {
-            SelectCombo("cmbSource", form, 0);
-            ClickButton("btnAccept", form);
-        }
-
-        #endregion
     }
 }
 

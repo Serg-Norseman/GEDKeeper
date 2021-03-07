@@ -19,6 +19,7 @@
  */
 
 #define GEDML_SUPPORT
+//#define FAMX_SUPPORT
 
 using System;
 using System.Collections.Generic;
@@ -130,8 +131,13 @@ namespace GKCore.Controllers
             string homePath = AppHost.Instance.GetUserFilesPath("");
 
             string filters = LangMan.LS(LSID.LSID_GEDCOMFilter);
+
             #if GEDML_SUPPORT
             filters += "|" + LangMan.LS(LSID.LSID_GedMLFilter);
+            #endif
+
+            #if FAMX_SUPPORT
+            filters += "|" + "Family.Show files (*.familyx)|*.familyx";
             #endif
 
             string fileName = AppHost.StdDialogs.GetOpenFile("", homePath, filters, 1, GKData.GEDCOM_EXT);

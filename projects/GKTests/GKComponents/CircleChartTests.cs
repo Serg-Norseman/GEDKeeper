@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -39,9 +39,9 @@ namespace GKUI.Components
         private Form fForm;
         private CircleChart fCircleChart;
 
-        [TestFixtureSetUp]
-        public void Init()
+        public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
@@ -60,8 +60,7 @@ namespace GKUI.Components
             fForm.PerformLayout();
         }
 
-        [TestFixtureTearDown]
-        public void Done()
+        public override void TearDown()
         {
             fForm.Dispose();
         }

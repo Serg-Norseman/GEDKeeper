@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -45,7 +45,8 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
             fIndividualRecord = fBase.Context.CreatePersonEx("Ivan", "", "Smith", GDMSex.svMale, true);
@@ -75,6 +76,10 @@ namespace GKUI.Forms
             Assert.AreEqual(TargetMode.tmNone, fDialog.TargetMode);
 
             //EnterText("txtSurname", "sample text");
+
+            // empty individual parents, no effects
+            ClickButton("btnFatherSel", fDialog);
+            ClickButton("btnMotherSel", fDialog);
 
             ClickButton("btnAccept", fDialog);
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -41,7 +41,8 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
             fRepositoryRecord = new GDMRepositoryRecord(fBase.Context.Tree);
@@ -67,6 +68,9 @@ namespace GKUI.Forms
         public void Test_EnterDataAndApply()
         {
             Assert.AreEqual(fRepositoryRecord, fDialog.Repository);
+
+            ModalFormHandler = Dialog_Cancel_Handler;
+            ClickButton("btnAddress", fDialog);
 
             ClickButton("btnAccept", fDialog);
         }

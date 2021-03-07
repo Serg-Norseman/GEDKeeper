@@ -68,6 +68,9 @@ namespace GKUI.Components
             var chk_res = AppHost.GfxProvider.CreateColor(50, 50, 50);
             Assert.AreEqual(((ColorHandler)chk_res).Handle, ((ColorHandler)color.Darker(0.5f)).Handle);
 
+            color = AppHost.GfxProvider.CreateColor(255, 75, 75, 75);
+            Assert.AreEqual("ff4b4b4b", color.GetName());
+
             color = AppHost.GfxProvider.CreateColor(50, 50, 50);
             chk_res = AppHost.GfxProvider.CreateColor(75, 75, 75);
             Assert.AreEqual(((ColorHandler)chk_res).Handle, ((ColorHandler)color.Lighter(0.5f)).Handle);

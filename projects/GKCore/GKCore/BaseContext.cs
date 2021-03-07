@@ -30,6 +30,7 @@ using BSLib;
 using BSLib.Design.Graphics;
 using GDModel;
 using GDModel.Providers;
+using GDModel.Providers.FamilyShow;
 using GDModel.Providers.GEDCOM;
 using GDModel.Providers.GedML;
 using GKCore.Controllers;
@@ -1253,6 +1254,8 @@ namespace GKCore
                     }
                 } else if (ext == ".xml") {
                     fileProvider = new GedMLProvider(fTree);
+                } else if (ext == ".familyx") {
+                    fileProvider = new FamilyXProvider(fTree);
                 } else {
                     // TODO: message?
                     return false;
