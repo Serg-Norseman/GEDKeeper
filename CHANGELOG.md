@@ -1,5 +1,5 @@
 
-## ??.03.2021 [v2.17.0]
+## 14.03.2021 [v2.17.0]
 - Fixed a logical error in the default records filtering method.
 - Optimized data model to save memory when loading large files (over 100 MB).
 - Updated German translation [Patrik Studer].

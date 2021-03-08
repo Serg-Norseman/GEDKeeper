@@ -22,10 +22,11 @@ echo "..\GKComponents.dll" >> %lstfile%
 echo "..\GKCore.dll" >> %lstfile%
 echo "..\GKTray.exe" >> %lstfile%
 
-echo "..\ArborGVT.dll" >> %lstfile%
 echo "..\BSLib.dll" >> %lstfile%
+echo "..\BSLib.DataViz.Model.dll" >> %lstfile%
+echo "..\BSLib.Design.dll" >> %lstfile%
+echo "..\BSLib.Design.WFHandlers.dll" >> %lstfile%
 echo "..\BSLib.Linguistics.dll" >> %lstfile%
-echo "..\BSLib.SmartGraph.dll" >> %lstfile%
 echo "..\DotNetRtfWriter.dll" >> %lstfile%
 echo "..\ExcelLibrary.dll" >> %lstfile%
 echo "..\GMap.NET.Core.dll" >> %lstfile%

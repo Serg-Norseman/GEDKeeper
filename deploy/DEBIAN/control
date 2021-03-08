@@ -5,7 +5,7 @@ Depends: mono-complete (>=5.12)
 Maintainer: Sergey V. Zhdanovskih (aka Norseman) <gedkeeper@yandex.ru>
 Homepage: https://gedkeeper.github.io/
 Origin: https://github.com/serg-norseman/gedkeeper
-Installed-Size: 31540
+Installed-Size: 32400
 Section: misc
 Priority: optional
 Description: GEDKeeper

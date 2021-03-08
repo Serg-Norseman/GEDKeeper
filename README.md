@@ -118,6 +118,12 @@ Google Maps (© Google).
 - Future mobile (NET Standard & Xamarin based), codenamed "GEDKeeperX", initial experience
 
 
+## Supported languages
+
+
+cze, deu, enu, fra, ita, pol, rus, ukr, zho
+
+
 ## Docs & Help
 
 - [Contributing guide](/CONTRIBUTING.md)
