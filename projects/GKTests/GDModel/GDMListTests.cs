@@ -21,7 +21,6 @@
 using GDModel;
 using GKCore;
 using GKTests;
-using GKUI;
 using NUnit.Framework;
 
 namespace GDModel
@@ -34,17 +33,8 @@ namespace GDModel
         [TestFixtureSetUp]
         public void SetUp()
         {
-            WFAppHost.ConfigureBootstrap(false);
-
-            LangMan.DefInit();
-
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
-        }
-
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
         }
 
         [Test]
@@ -53,7 +43,7 @@ namespace GDModel
             GDMTag obj1 = new GDMTag(null);
             GDMTag obj2 = new GDMTag(null);
 
-            using (GDMList<GDMTag> list = new GDMList<GDMTag>(null)) {
+            using (var list = new GDMList<GDMTag>(null)) {
                 // internal list is null (all routines instant returned)
                 list.Delete(null);
                 list.Exchange(0, 1);
@@ -66,7 +56,7 @@ namespace GDModel
                 Assert.AreEqual(0, list.IndexOf(obj1));
                 Assert.AreEqual(1, list.IndexOf(obj2));
 
-                using (GDMList<GDMTag> list2 = new GDMList<GDMTag>(null)) {
+                using (var list2 = new GDMList<GDMTag>(null)) {
                     list2.AddRange(list);
                     Assert.AreEqual(2, list2.Count);
                 }
@@ -85,39 +75,27 @@ namespace GDModel
                 Assert.AreEqual(null, list.Extract(null));
                 list.Add(obj1);
                 Assert.AreEqual(obj1, list.Extract(obj1));
-
-                foreach (GDMObject obj in list) {
-                }
             }
         }
 
         [Test]
-        public void Test_PerfCommon()
+        public void Test_ForeachEnum()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            var iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
-            for (int k = 0; k < REP_COUNT; k++) {
-                GEDCOMListTest11(iRec);
-                GEDCOMListTest12(iRec);
-                GEDCOMListTest21(iRec);
-                GEDCOMListTest22(iRec);
-                GEDCOMListTest23(iRec);
-            }
-        }
-
-        private const int REP_COUNT = 1000; // 1000000; // for profile tests
-
-        private static void GEDCOMListTest11(GDMIndividualRecord iRec)
-        {
             int hash;
             foreach (GDMCustomEvent evt1 in iRec.Events) {
                 hash = evt1.GetHashCode();
             }
         }
 
-        private static void GEDCOMListTest12(GDMIndividualRecord iRec)
+        [Test]
+        public void Test_WhileEnum()
         {
+            var iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            Assert.IsNotNull(iRec);
+
             int hash;
             IGDMListEnumerator<GDMCustomEvent> enumer = iRec.Events.GetEnumerator();
             enumer.Reset();
@@ -127,30 +105,15 @@ namespace GDModel
             }
         }
 
-        private static void GEDCOMListTest21(GDMIndividualRecord iRec)
+        [Test]
+        public void Test_For()
         {
+            var iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            Assert.IsNotNull(iRec);
+
             int hash;
             for (int i = 0; i < iRec.Events.Count; i++) {
                 GDMCustomEvent evt1 = iRec.Events[i];
-                hash = evt1.GetHashCode();
-            }
-        }
-
-        private static void GEDCOMListTest22(GDMIndividualRecord iRec)
-        {
-            int hash;
-            for (int i = 0, num = iRec.Events.Count; i < num; i++) {
-                GDMCustomEvent evt1 = iRec.Events[i];
-                hash = evt1.GetHashCode();
-            }
-        }
-
-        private static void GEDCOMListTest23(GDMIndividualRecord iRec)
-        {
-            int hash;
-            GDMList<GDMCustomEvent> events = iRec.Events;
-            for (int i = 0, num = events.Count; i < num; i++) {
-                GDMCustomEvent evt1 = events[i];
                 hash = evt1.GetHashCode();
             }
         }

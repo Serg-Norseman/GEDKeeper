@@ -27,7 +27,6 @@ using BSLib.Design;
 using BSLib.Design.Handlers;
 using BSLib.Design.IoC;
 using GDModel;
-using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Names;
@@ -38,6 +37,7 @@ using GKTests;
 using GKTests.Stubs;
 using GKUI;
 using GKUI.Components;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GKCore
@@ -101,8 +101,8 @@ namespace GKCore
         public void Test_Tween()
         {
             #if !__MonoCS__
-            TweenLibrary tween = new TweenLibrary();
-            tween.StartTween(TweenHandler, 0, 0, 10, 10, TweenAnimation.EaseInOutQuad, 20);
+            var tween = new GKCore.Charts.TweenLibrary();
+            tween.StartTween(TweenHandler, 0, 0, 10, 10, GKCore.Charts.TweenAnimation.EaseInOutQuad, 20);
             #endif
         }
 
@@ -156,7 +156,8 @@ namespace GKCore
 
             Assert.Throws(typeof(ArgumentNullException), () => { new SearchStrategy(null, null); });
 
-            SearchStrategy strat = new SearchStrategy(new WorkWindowStub(), "");
+            var workWindow = Substitute.For<IWorkWindow>();
+            SearchStrategy strat = new SearchStrategy(workWindow, "");
             Assert.IsNotNull(strat);
 
             IList<ISearchResult> res = strat.FindAll();

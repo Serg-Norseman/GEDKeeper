@@ -22,14 +22,9 @@ using System;
 using System.Collections.Generic;
 using BSLib;
 using BSLib.Design.Graphics;
-using BSLib.Design.Handlers;
-using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
-using GKCore.Export;
 using GKCore.Interfaces;
-using GKCore.Maps;
-using GKCore.MVP.Controls;
 using GKCore.Names;
 using GKCore.Plugins;
 using GKCore.Types;
@@ -171,57 +166,6 @@ namespace GKTests.Stubs
         public void SetLang() {}
     }
 
-    public class WriterStub : CustomWriter
-    {
-        public WriterStub() { }
-        public override void BeginWrite() { }
-        public override void EndWrite() { }
-        public override void EnablePageNumbers() { }
-        public override void NewPage() { }
-        public override void NewLine(float spacingBefore = 0.0f, float spacingAfter = 0.0f) { }
-        public override void AddParagraph(string text, IFont font, GKCore.Export.TextAlignment alignment) { }
-        public override void AddParagraph(string text, IFont font) { }
-        public override void AddParagraphAnchor(string text, IFont font, string anchor) { }
-        public override void AddParagraphLink(string text, IFont font, string link) { }
-        public override void AddParagraphLink(string text, IFont font, string link, IFont linkFont) { }
-        public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color) { return null; }
-        public override void BeginList() { }
-        public override void EndList() { }
-        public override void AddListItem(string text, IFont font) { }
-        public override void AddListItemLink(string text, IFont font, string link, IFont linkFont) { }
-        public override void BeginParagraph(GKCore.Export.TextAlignment alignment,
-                                            float spacingBefore, float spacingAfter,
-                                            float indent = 0.0f, bool keepTogether = false) { }
-        public override void EndParagraph() { }
-        public override void AddParagraphChunk(string text, IFont font) { }
-        public override void AddParagraphChunkAnchor(string text, IFont font, string anchor) { }
-        public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup = false) { }
-        public override void AddNote(string text, IFont font) { }
-        public override void BeginMulticolumns(int columnCount, float columnSpacing) { }
-        public override void EndMulticolumns() { }
-        public override void AddImage(IImage image) { }
-    }
-
-    public class MapBrowserStub : IMapBrowser
-    {
-        public bool ShowPoints { get; set; }
-        public bool ShowLines { get; set; }
-        public ExtList<GeoPoint> MapPoints { get { return null; } }
-        public bool Enabled { get { return true; } set { } }
-
-        public int AddPoint(double latitude, double longitude, string hint) { return -1; }
-        public void ClearPoints() { }
-        public void DeletePoint(int index) { }
-        public void BeginUpdate() { }
-        public void EndUpdate() { }
-        public void Activate() {}
-        public void InitMap() { }
-        public void RefreshPoints() { }
-        public void SaveSnapshot(string fileName) { }
-        public void SetCenter(double latitude, double longitude, int scale) { }
-        public void ZoomToBounds() { }
-    }
-
     public class TestLangMan : ILangMan
     {
         public string LS(Enum lsid)
@@ -255,61 +199,6 @@ namespace GKTests.Stubs
         }
 
         public override void Execute()
-        {
-        }
-    }
-
-    public sealed class TextBoxStub : BaseControlHandler<System.Windows.Forms.TextBox, TextBoxStub>, ITextBox
-    {
-        private StringList fStrings;
-
-        public TextBoxStub(System.Windows.Forms.TextBox control) : base(control)
-        {
-            fStrings = new StringList();
-        }
-
-        public string[] Lines
-        {
-            get { return fStrings.ToArray(); }
-            set {
-                fStrings.Clear();
-                fStrings.AddStrings(value);
-            }
-        }
-
-        public bool ReadOnly
-        {
-            get { return false; }
-            set {  }
-        }
-
-        public string SelectedText
-        {
-            get { return string.Empty; }
-            set {  }
-        }
-
-        public string Text
-        {
-            get { return string.Empty; }
-            set {  }
-        }
-
-        public void AppendText(string text)
-        {
-            fStrings.Add(text);
-        }
-
-        public void Clear()
-        {
-            fStrings.Clear();
-        }
-
-        public void Copy()
-        {
-        }
-
-        public void SelectAll()
         {
         }
     }

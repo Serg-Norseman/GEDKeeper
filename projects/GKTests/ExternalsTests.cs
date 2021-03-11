@@ -19,15 +19,56 @@
  */
 
 using System;
+using BSLib;
 using BSLib.DataViz.SmartGraph;
-using GKTests;
+using BSLib.Linguistics.Grammar;
 using NUnit.Framework;
 
-namespace Externals
+namespace GKTests
 {
     [TestFixture]
-    public class SmartGraphTests
+    public class ExternalsTests
     {
+        [Test]
+        public void Test_ConvertHelper_UniformName()
+        {
+            string st = "ivan";
+            st = ConvertHelper.UniformName(st);
+            Assert.AreEqual("Ivan", st);
+
+            st = ConvertHelper.UniformName(null);
+            Assert.AreEqual(null, st);
+        }
+
+        [Test]
+        public void Test_BaseMorpher_Transliterate()
+        {
+            Assert.AreEqual("Zhdanovskikh", BaseMorpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "Ждановских"));
+            Assert.AreEqual("ZHDANOVSKIKH", BaseMorpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "ЖДАНОВСКИХ"));
+
+            Assert.AreEqual("Ждановских", BaseMorpher.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "Zhdanovskikh"));
+            Assert.AreEqual("ЖДАНОВСКИХ", BaseMorpher.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "ZHDANOVSKIKH"));
+
+            Assert.AreEqual("ЖдАноВскИх", BaseMorpher.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "ZhdAnoVskIkh"));
+            Assert.AreEqual("ZHDANOVSKIKH", BaseMorpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "ZHDANOVSKIKH"));
+        }
+
+        [Test]
+        public void Test_BaseMorpher_SpellNumber()
+        {
+            Assert.AreEqual("сто двадцать три", BaseMorpher.SpellNumber(123));
+        }
+
+        [Test]
+        public void Test_Morpher_GetDeclension()
+        {
+            Assert.AreEqual("Иванова Ивана Ивановича", Morpher.GetDeclension("Иванов Иван Иванович", DeclensionCase.Genitive));
+
+            Assert.AreEqual("Иванова-Петрова Ивана Ивановича", Morpher.GetDeclension("Иванов-Петров Иван Иванович", DeclensionCase.Genitive));
+
+            //Assert.AreEqual("атому", RusDeclension.GetDeclension("атом", DeclensionCase.Dative));
+            //Assert.AreEqual("лугу", RusDeclension.GetDeclension("луг", DeclensionCase.Dative));
+        }
         [Test]
         public void Test_Graph()
         {
@@ -60,13 +101,12 @@ namespace Externals
             Vertex vert2 = edge.Target;
             Assert.AreEqual(vertex2, vert2);
             
-            using (Graph graph = new Graph())
-            {
+            using (var graph = new Graph()) {
                 Assert.IsNotNull(graph);
-                
+
                 /*vert1 = graph.AddVertex(null);
-				Assert.IsNotNull(vert1);
-				graph.DeleteVertex(vert1);*/
+                Assert.IsNotNull(vert1);
+                graph.DeleteVertex(vert1);*/
                 
                 vert1 = graph.AddVertex("test", null);
                 Assert.IsNotNull(vert1);
@@ -113,8 +153,7 @@ namespace Externals
         [Test]
         public void Test_GraphvizWriter()
         {
-            using (Graph graph = new Graph())
-            {
+            using (var graph = new Graph()) {
                 Vertex vert1 = graph.AddVertex("test", null);
                 Assert.IsNotNull(vert1);
                 
@@ -131,7 +170,6 @@ namespace Externals
                 
                 bool res = graph.AddUndirectedEdge(vert1, vert2, 1, null, null);
                 Assert.AreEqual(true, res);
-
 
 
                 string fileName = TestUtils.GetTempFilePath("test.gvf");

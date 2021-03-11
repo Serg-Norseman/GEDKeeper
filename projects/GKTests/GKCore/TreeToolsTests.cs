@@ -24,6 +24,7 @@ using System.IO;
 using System.Reflection;
 using BSLib;
 using BSLib.Design.IoC;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
@@ -32,6 +33,7 @@ using GKCore.Tools;
 using GKTests;
 using GKTests.Stubs;
 using GKUI;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GKCore
@@ -45,11 +47,8 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
-            // for static initialization
-            GEDCOMProvider.SkipEmptyTag((int)GEDCOMTagType._AWARD);
-
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
-
             LangMan.DefInit();
 
             fBaseWin = new BaseWindowStub();
@@ -57,12 +56,6 @@ namespace GKCore
             AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
             fProgress = new ProgressStub();
         }
-
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
-        }
-
 
         [Test]
         public void Test_MergeTree()
@@ -327,7 +320,7 @@ namespace GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CompareTree(null, extTree, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CompareTree(fBaseWin.Context, extTree, null); });
 
-            var logStub = new TextBoxStub(null);
+            var logBox = Substitute.For<ITextBox>();
 
             Assembly assembly = typeof(CoreTests).Assembly;
             using (var ctx1 = new BaseContext(null)) {
@@ -343,7 +336,7 @@ namespace GKCore
                         var gedcomProvider = new GEDCOMProvider(ctx2.Tree);
                         gedcomProvider.LoadFromStreamExt(stmGed2, stmGed2);
 
-                        TreeTools.CompareTree(ctx1, ctx2.Tree, logStub);
+                        TreeTools.CompareTree(ctx1, ctx2.Tree, logBox);
                     }
                 }
             }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,8 +19,6 @@
  */
 
 using System;
-using BSLib.Design;
-using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
@@ -30,6 +28,7 @@ using GKCore.Types;
 using GKTests;
 using GKUI;
 using GKUI.Components;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GKCore
@@ -42,47 +41,42 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
-
             LangMan.DefInit();
 
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
         }
 
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
-        }
-
         [Test]
-        public void Test_DateItems_IConvertible()
+        public void Test_GDMDateItemAsIConvertible()
         {
             var dtx1 = new GDMDateValue(null);
             dtx1.ParseString("05 JAN 2013");
-            var dtItem1 = new GDMDateItem(dtx1);
+            IConvertible dtItem1 = new GDMDateItem(dtx1);
 
-            Assert.AreEqual(TypeCode.Object, ((IConvertible)dtItem1).GetTypeCode());
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToBoolean(null); });
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToChar(null); });
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToSByte(null); });
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToByte(null); });
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToInt16(null); });
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToUInt16(null); });
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToInt32(null); });
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToUInt32(null); });
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToInt64(null); });
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToUInt64(null); });
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToSingle(null); });
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToDouble(null); });
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToDecimal(null); });
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToDateTime(null); });
-            Assert.AreEqual("05.01.2013", ((IConvertible)dtItem1).ToString(null));
-            Assert.Throws(typeof(NotImplementedException), () => { ((IConvertible)dtItem1).ToType(typeof(Int32), null); });
+            Assert.AreEqual(TypeCode.Object, dtItem1.GetTypeCode());
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToBoolean(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToChar(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToSByte(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToByte(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToInt16(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToUInt16(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToInt32(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToUInt32(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToInt64(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToUInt64(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToSingle(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToDouble(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToDecimal(null); });
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToDateTime(null); });
+            Assert.AreEqual("05.01.2013", dtItem1.ToString(null));
+            Assert.Throws(typeof(NotImplementedException), () => { dtItem1.ToType(typeof(Int32), null); });
         }
 
         [Test]
-        public void Test_DateItems()
+        public void Test_GDMDateItem_Common()
         {
             var dtx1 = new GDMDateValue(null);
             dtx1.ParseString("05 JAN 2013");
@@ -112,79 +106,30 @@ namespace GKCore
             Assert.AreEqual(0, dtItem1.CompareTo(dtItem2));
         }
 
-        private class ListViewMock : IListViewEx
-        {
-            IListViewItems IListView.Items
-            {
-                get { return null; }
-            }
-
-            public IListManager ListMan
-            {
-                get { return null; }
-                set {  }
-            }
-
-            public bool Enabled
-            {
-                get { return true; }
-                set {  }
-            }
-
-            public int SortColumn
-            {
-                get { return 0; }
-                set {  }
-            }
-
-            public void AddColumn(string caption, int width, bool autoSize) {}
-            public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign) {}
-            public IListItem AddItem(object rowData, params object[] columnValues) { return null; }
-            public void BeginUpdate() {}
-            public void Clear() {}
-            public void ClearColumns() {}
-            public void ClearItems() {}
-            public void DeleteRecord(object data) {}
-            public void EndUpdate() {}
-            public object GetSelectedData() { return null; }
-            public void SelectItem(object rowData) {}
-            public void SetColumnCaption(int index, string caption) {}
-            public void UpdateContents(bool columnsChanged = false) {}
-            public void Activate() {}
-            public void SetSortColumn(int sortColumn, bool checkOrder = true) {}
-            public void Sort(int sortColumn, BSDTypes.SortOrder sortOrder) {}
-        }
-
-        private bool ExtFilterHandler(GDMRecord record)
-        {
-            return true;
-        }
-
         [Test]
         public void Test_Lists()
         {
-            ListColumn colStatic = new ListColumn(0, 0, DataType.dtString, 0, true);
+            var colStatic = new ListColumn(0, 0, DataType.dtString, 0, true);
             Assert.IsNotNull(colStatic);
             Assert.AreEqual(0, colStatic.Order);
             Assert.AreEqual(false, colStatic.CurActive);
             Assert.AreEqual(0, colStatic.CurWidth);
 
             //
-            ListFilter listFilter = new ListFilter();
+            var listFilter = new ListFilter();
             Assert.IsNotNull(listFilter);
             Assert.AreEqual(0, listFilter.Conditions.Count);
             listFilter.Clear();
             Assert.AreEqual(0, listFilter.Conditions.Count);
+        }
 
-            ListManager listManager;
-            ListViewMock lvMock = new ListViewMock();
-            GKListItem listItem;
-
-            //
-            listManager = new GroupListMan(fContext);
+        [Test]
+        public void Test_LMGroup()
+        {
+            var listManager = new GroupListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GDMGroupRecord grpRec = fContext.Tree.XRefIndex_Find("G1") as GDMGroupRecord;
+            var grpRec = fContext.Tree.XRefIndex_Find("G1") as GDMGroupRecord;
             listManager.Fetch(grpRec);
 
             listManager.QuickFilter = "*";
@@ -194,8 +139,9 @@ namespace GKCore
             listManager.QuickFilter = "*alpha*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            listManager.UpdateColumns(lvMock);
-            listItem = new GKListItem("", null);
+            var listView = Substitute.For<IListViewEx>();
+            listManager.UpdateColumns(listView);
+            var listItem = new GKListItem("", null);
             listManager.UpdateItem(0, listItem, grpRec);
 
             //
@@ -221,12 +167,6 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_LM()
-        {
-            
-        }
-
-        [Test]
         public void Test_LMCommunication()
         {
             var listManager = new CommunicationListMan(fContext);
@@ -237,8 +177,8 @@ namespace GKCore
             listManager.ExternalFilter = null;
             Assert.IsNull(listManager.ExternalFilter);
 
-            GDMCommunicationRecord commRec = fContext.Tree.XRefIndex_Find("CM1") as GDMCommunicationRecord;
-            listManager.Fetch(commRec);
+            var communicationRec = fContext.Tree.XRefIndex_Find("CM1") as GDMCommunicationRecord;
+            listManager.Fetch(communicationRec);
 
             listManager.QuickFilter = "*";
             Assert.IsTrue(listManager.CheckFilter());
@@ -247,10 +187,10 @@ namespace GKCore
             listManager.QuickFilter = "*alpha*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock);
+            var listView = Substitute.For<IListViewEx>();
+            listManager.UpdateColumns(listView);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, commRec);
+            listManager.UpdateItem(0, listItem, communicationRec);
         }
 
         [Test]
@@ -259,8 +199,8 @@ namespace GKCore
             var listManager = new FamilyListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GDMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
-            listManager.Fetch(famRec);
+            var familyRec = fContext.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
+            listManager.Fetch(familyRec);
 
             listManager.QuickFilter = "*";
             Assert.IsTrue(listManager.CheckFilter());
@@ -269,10 +209,15 @@ namespace GKCore
             listManager.QuickFilter = "*alpha*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock);
+            var listView = Substitute.For<IListViewEx>();
+            listManager.UpdateColumns(listView);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, famRec);
+            listManager.UpdateItem(0, listItem, familyRec);
+        }
+
+        private bool ExtFilterHandler(GDMRecord record)
+        {
+            return true;
         }
 
         [Test]
@@ -281,8 +226,8 @@ namespace GKCore
             var listManager = new IndividualListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GDMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
-            listManager.Fetch(indRec);
+            var individualRec = fContext.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
+            listManager.Fetch(individualRec);
 
             listManager.QuickFilter = "*";
             Assert.IsTrue(listManager.CheckFilter());
@@ -296,22 +241,22 @@ namespace GKCore
             listManager.PrepareFilter();
             listManager.ExternalFilter = ExtFilterHandler;
 
-            var lvMock = new ListViewMock();
+            var listView = Substitute.For<IListViewEx>();
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfFNP;
-            listManager.UpdateColumns(lvMock);
+            listManager.UpdateColumns(listView);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, indRec);
+            listManager.UpdateItem(0, listItem, individualRec);
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfF_NP;
-            listManager.UpdateColumns(lvMock);
+            listManager.UpdateColumns(listView);
             listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, indRec);
+            listManager.UpdateItem(0, listItem, individualRec);
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfF_N_P;
-            listManager.UpdateColumns(lvMock);
+            listManager.UpdateColumns(listView);
             listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, indRec);
+            listManager.UpdateItem(0, listItem, individualRec);
         }
 
         [Test]
@@ -320,8 +265,8 @@ namespace GKCore
             var listManager = new LocationListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GDMLocationRecord locRec = fContext.Tree.XRefIndex_Find("L1") as GDMLocationRecord;
-            listManager.Fetch(locRec);
+            var locationRec = fContext.Tree.XRefIndex_Find("L1") as GDMLocationRecord;
+            listManager.Fetch(locationRec);
 
             listManager.QuickFilter = "*";
             Assert.IsTrue(listManager.CheckFilter());
@@ -330,10 +275,10 @@ namespace GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock);
+            var listView = Substitute.For<IListViewEx>();
+            listManager.UpdateColumns(listView);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, locRec);
+            listManager.UpdateItem(0, listItem, locationRec);
         }
 
         [Test]
@@ -342,7 +287,7 @@ namespace GKCore
             var listManager = new MultimediaListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GDMMultimediaRecord mediaRec = fContext.Tree.XRefIndex_Find("O1") as GDMMultimediaRecord;
+            var mediaRec = fContext.Tree.XRefIndex_Find("O1") as GDMMultimediaRecord;
             listManager.Fetch(mediaRec);
 
             listManager.QuickFilter = "*";
@@ -352,8 +297,8 @@ namespace GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock);
+            var listView = Substitute.For<IListViewEx>();
+            listManager.UpdateColumns(listView);
             var listItem = new GKListItem("", null);
             listManager.UpdateItem(0, listItem, mediaRec);
         }
@@ -364,7 +309,7 @@ namespace GKCore
             var listManager = new NoteListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GDMNoteRecord noteRec = new GDMNoteRecord(null);
+            var noteRec = new GDMNoteRecord(null);
             noteRec.AddNoteText("Test text");
             listManager.Fetch(noteRec);
 
@@ -375,8 +320,8 @@ namespace GKCore
             listManager.QuickFilter = "*xxxxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock);
+            var listView = Substitute.For<IListViewEx>();
+            listManager.UpdateColumns(listView);
             var listItem = new GKListItem("", null);
             listManager.UpdateItem(0, listItem, noteRec);
             noteRec.Clear();
@@ -389,8 +334,8 @@ namespace GKCore
             var listManager = new RepositoryListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GDMRepositoryRecord repoRec = fContext.Tree.XRefIndex_Find("R1") as GDMRepositoryRecord;
-            listManager.Fetch(repoRec);
+            var repositoryRec = fContext.Tree.XRefIndex_Find("R1") as GDMRepositoryRecord;
+            listManager.Fetch(repositoryRec);
 
             listManager.QuickFilter = "*";
             Assert.IsTrue(listManager.CheckFilter());
@@ -399,10 +344,10 @@ namespace GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock);
+            var listView = Substitute.For<IListViewEx>();
+            listManager.UpdateColumns(listView);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, repoRec);
+            listManager.UpdateItem(0, listItem, repositoryRec);
         }
 
         [Test]
@@ -411,8 +356,8 @@ namespace GKCore
             var listManager = new ResearchListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GDMResearchRecord resRec = fContext.Tree.XRefIndex_Find("RS1") as GDMResearchRecord;
-            listManager.Fetch(resRec);
+            var researchRec = fContext.Tree.XRefIndex_Find("RS1") as GDMResearchRecord;
+            listManager.Fetch(researchRec);
 
             listManager.QuickFilter = "*";
             Assert.IsTrue(listManager.CheckFilter());
@@ -421,10 +366,10 @@ namespace GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock);
+            var listView = Substitute.For<IListViewEx>();
+            listManager.UpdateColumns(listView);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, resRec);
+            listManager.UpdateItem(0, listItem, researchRec);
         }
 
         [Test]
@@ -433,8 +378,8 @@ namespace GKCore
             var listManager = new SourceListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GDMSourceRecord srcRec = fContext.Tree.XRefIndex_Find("S1") as GDMSourceRecord;
-            listManager.Fetch(srcRec);
+            var sourceRec = fContext.Tree.XRefIndex_Find("S1") as GDMSourceRecord;
+            listManager.Fetch(sourceRec);
 
             listManager.QuickFilter = "*";
             Assert.IsTrue(listManager.CheckFilter());
@@ -443,10 +388,10 @@ namespace GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock);
+            var listView = Substitute.For<IListViewEx>();
+            listManager.UpdateColumns(listView);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, srcRec);
+            listManager.UpdateItem(0, listItem, sourceRec);
         }
 
         [Test]
@@ -455,8 +400,8 @@ namespace GKCore
             var listManager = new TaskListMan(fContext);
             Assert.IsNotNull(listManager);
 
-            GDMTaskRecord tskRec = fContext.Tree.XRefIndex_Find("TK1") as GDMTaskRecord;
-            listManager.Fetch(tskRec);
+            var taskRec = fContext.Tree.XRefIndex_Find("TK1") as GDMTaskRecord;
+            listManager.Fetch(taskRec);
 
             listManager.QuickFilter = "*";
             Assert.IsTrue(listManager.CheckFilter());
@@ -465,10 +410,10 @@ namespace GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var lvMock = new ListViewMock();
-            listManager.UpdateColumns(lvMock);
+            var listView = Substitute.For<IListViewEx>();
+            listManager.UpdateColumns(listView);
             var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, tskRec);
+            listManager.UpdateItem(0, listItem, taskRec);
         }
     }
 }

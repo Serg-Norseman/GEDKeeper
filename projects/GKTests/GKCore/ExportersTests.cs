@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,6 +27,7 @@ using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
 using GKUI;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GKCore
@@ -76,21 +77,23 @@ namespace GKCore
                 exporter.Kind = PedigreeExporter.PedigreeKind.Descend_Konovalov;
                 Assert.AreEqual(PedigreeExporter.PedigreeKind.Descend_Konovalov, exporter.Kind);
 
+                var writer = Substitute.For<CustomWriter>();
+
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
-                Assert.IsTrue(exporter.Generate(new WriterStub()));
+                Assert.IsTrue(exporter.Generate(writer));
 
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Compact;
-                Assert.IsTrue(exporter.Generate(new WriterStub()));
+                Assert.IsTrue(exporter.Generate(writer));
 
 
                 exporter.Kind = PedigreeExporter.PedigreeKind.Descend_dAboville;
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
-                Assert.IsTrue(exporter.Generate(new WriterStub()));
+                Assert.IsTrue(exporter.Generate(writer));
 
 
                 exporter.Kind = PedigreeExporter.PedigreeKind.Ascend;
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
-                Assert.IsTrue(exporter.Generate(new WriterStub()));
+                Assert.IsTrue(exporter.Generate(writer));
             }
         }
 

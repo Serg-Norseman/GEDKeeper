@@ -83,6 +83,9 @@
     <Reference Include="BSLib.DataViz.Model">
       <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>libs\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>libs\nunit.framework.dll</HintPath>
     </Reference>
@@ -97,7 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Externals\ExternalsTests.cs" />
+    <Compile Include="ExternalsTests.cs" />
     <Compile Include="GDModel\GDMAddressTests.cs" />
     <Compile Include="GDModel\GDMAssociationTests.cs" />
     <Compile Include="GDModel\GDMChangeDateTests.cs" />
@@ -139,7 +142,6 @@
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParserTests.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMProviderTests.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMUtilsTests.cs" />
-    <Compile Include="Externals\SmartGraphTests.cs" />
     <Compile Include="GKComponents\CircleChartTests.cs" />
     <Compile Include="GKComponents\GKListItemTests.cs" />
     <Compile Include="GKComponents\HyperViewTests.cs" />
