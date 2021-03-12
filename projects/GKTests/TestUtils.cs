@@ -23,10 +23,12 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using BSLib.Design.IoC;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKTests.Stubs;
 using NUnit.Framework;
 
 namespace GKTests
@@ -44,6 +46,11 @@ namespace GKTests
             var tagProps = GEDCOMTagsTable.GetTagProps("BIRT");
             Assert.IsNotNull(tagProps);
             Assert.AreEqual((int)GEDCOMTagType.BIRT, tagProps.TagId);
+        }
+
+        public static void InitProgressStub()
+        {
+            AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
         }
 
         public static BaseContext CreateContext(IBaseWindow baseWin = null)

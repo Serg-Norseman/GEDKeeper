@@ -43,8 +43,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();

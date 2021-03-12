@@ -40,8 +40,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             WFAppHost.ConfigureBootstrap(false);
 
             fDialog = new AboutDlg();

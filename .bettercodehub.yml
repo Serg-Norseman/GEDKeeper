@@ -7,3 +7,4 @@ exclude:
   - /projects/GKTests/.*
   - /projects/GKv3/.*
   - /projects/GKCommunicator/.*
+  - /projects/GKv2/GEDmill/.*

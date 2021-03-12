@@ -22,16 +22,13 @@ using System;
 using System.IO;
 using System.Reflection;
 using BSLib;
-using BSLib.Design.IoC;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Cultures;
-using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
 using GKTests;
-using GKTests.Stubs;
 using GKUI;
 using NUnit.Framework;
 
@@ -45,23 +42,14 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
-            // for static initialization
-            GEDCOMProvider.SkipEmptyTag((int)GEDCOMTagType._AWARD);
-
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
-            AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
-
+            TestUtils.InitProgressStub();
             LangMan.DefInit();
 
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
         }
-
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
-        }
-
 
         [Test]
         public void Test_Common()
@@ -172,7 +160,7 @@ namespace GKCore
         [Test]
         public void Test_GetSourcesList()
         {
-            StringList sources = new StringList();
+            var sources = new StringList();
             fContext.GetSourcesList(sources);
             Assert.AreEqual(1, sources.Count);
         }
@@ -420,7 +408,7 @@ namespace GKCore
         [Test]
         public void Test_UndoManager()
         {
-            using (UndoManager undoman = new UndoManager()) {
+            using (var undoman = new UndoManager()) {
                 Assert.IsNotNull(undoman);
 
                 Assert.IsFalse(undoman.CanUndo());
@@ -446,7 +434,6 @@ namespace GKCore
             fContext.DoRedo();
             fContext.DoCommit();
             fContext.DoRollback();
-
 
             Assert.AreEqual(fContext.Tree, fContext.Undoman.Tree);
 

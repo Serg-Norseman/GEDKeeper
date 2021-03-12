@@ -28,6 +28,7 @@ using GKCore.Interfaces;
 using GKCore.Names;
 using GKCore.Plugins;
 using GKCore.Types;
+using NSubstitute;
 
 namespace GKTests.Stubs
 {
@@ -66,7 +67,7 @@ namespace GKTests.Stubs
 
     internal class BaseWindowStub : WorkWindowStub, IBaseWindow
     {
-        private static IHost fHost = new HostStub();
+        private static IHost fHost = Substitute.For<IHost>();
 
         private readonly IBaseContext fContext;
         private readonly GDMTree fTree;
@@ -126,59 +127,6 @@ namespace GKTests.Stubs
         public GDMRecord GetSelectedRecordEx() { return null; }
     }
 
-    public class HostStub : IHost
-    {
-        public INamesTable NamesTable { get { return null; } }
-
-        public IBaseWindow GetCurrentFile(bool extMode = false) { return null; }
-        public IWorkWindow GetWorkWindow() { return null; }
-
-        public string GetUserFilesPath(string filePath) { return string.Empty; }
-        public IBaseWindow CreateBase(string fileName) { return null; }
-        public void LoadBase(IBaseWindow baseWin, string fileName) { }
-        public IBaseWindow FindBase(string fileName) { return null; }
-        public void BaseChanged(IBaseWindow baseWin) {}
-        public void BaseClosed(IBaseWindow baseWin) {}
-        public void BaseRenamed(IBaseWindow baseWin, string oldName, string newName) {}
-        public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action) {}
-        public void SelectedIndexChanged(IBaseWindow baseWin) {}
-        public void TabChanged(IBaseWindow baseWin) {}
-
-        public void ApplyOptions() { }
-        public string GetAppDataPath() { return string.Empty; }
-
-        public bool IsWidgetActive(IWidget widget) { return false; }
-        public void WidgetShow(IWidget widget) {}
-        public void WidgetClose(IWidget widget) {}
-
-        public void ShowWindow(IWindow window) {}
-
-        public ILangMan CreateLangMan(object sender) { return null; }
-        public void LoadLanguage(int langCode) {}
-        public void UpdateNavControls() {}
-        public void UpdateControls(bool forceDeactivate, bool blockDependent = false) {}
-        public void ShowHelpTopic(string topic) {}
-        public void EnableWindow(IWidgetForm form, bool value) {}
-        public void Restore() {}
-
-        public bool ShowModalX(ICommonDialog form, bool keepModeless = false) { return false; }
-
-        public void SetLang() {}
-    }
-
-    public class TestLangMan : ILangMan
-    {
-        public string LS(Enum lsid)
-        {
-            return "test";
-        }
-
-        public bool LoadFromFile(string fileName, int offset = 0)
-        {
-            return true;
-        }
-    }
-
     public class TestPlugin : OrdinaryPlugin, IPlugin
     {
         private ILangMan fLangMan;
@@ -195,7 +143,7 @@ namespace GKTests.Stubs
 
         public TestPlugin(ILangMan langMan)
         {
-            fLangMan = (langMan != null) ? langMan : new TestLangMan();
+            fLangMan = (langMan != null) ? langMan : Substitute.For<ILangMan>();
         }
 
         public override void Execute()

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -85,65 +85,6 @@ namespace GDModel
 
                 string buf1 = TestUtils.GetTagStreamText(locRec, 0);
                 Assert.AreEqual("0 @L1@ _LOC\r\n", buf1);
-            }
-        }
-
-        [Test]
-        public void Test_GDMPlace()
-        {
-            using (GDMPlace place = new GDMPlace(null)) {
-                place.Form = "abrakadabra";
-                Assert.AreEqual("abrakadabra", place.Form);
-
-                Assert.IsNotNull(place.Map);
-                Assert.IsNotNull(place.Location);
-
-                using (GDMPlace place2 = new GDMPlace(null)) {
-                    Assert.Throws(typeof(ArgumentException), () => {
-                        place2.Assign(null);
-                    });
-
-                    place2.Assign(place);
-
-                    string buf = TestUtils.GetTagStreamText(place2, 1);
-                    Assert.AreEqual("1 PLAC\r\n" +
-                                    "2 FORM abrakadabra\r\n", buf);
-                }
-
-                place.ReplaceXRefs(new GDMXRefReplacer());
-
-                Assert.IsFalse(place.IsEmpty());
-                place.Clear();
-                Assert.IsTrue(place.IsEmpty());
-            }
-        }
-
-        [Test]
-        public void Test_GDMMap()
-        {
-            using (GDMMap map = new GDMMap(null)) {
-                map.Lati = 5.111111;
-                Assert.AreEqual(5.111111, map.Lati);
-
-                map.Long = 7.999999;
-                Assert.AreEqual(7.999999, map.Long);
-
-                using (GDMMap map2 = new GDMMap(null)) {
-                    Assert.Throws(typeof(ArgumentException), () => {
-                        map2.Assign(null);
-                    });
-
-                    map2.Assign(map);
-
-                    string buf = TestUtils.GetTagStreamText(map2, 1);
-                    Assert.AreEqual("1 MAP\r\n" +
-                                    "2 LATI 5.111111\r\n" +
-                                    "2 LONG 7.999999\r\n", buf);
-                }
-
-                Assert.IsFalse(map.IsEmpty());
-                map.Clear();
-                Assert.IsTrue(map.IsEmpty());
             }
         }
     }

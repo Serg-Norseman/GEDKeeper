@@ -37,6 +37,7 @@ namespace GDModel
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
             // TempDirtyHack: some functions are references to GlobalOptions (and GfxInit)
             // TODO: replace to mocks
             WFAppHost.ConfigureBootstrap(false);

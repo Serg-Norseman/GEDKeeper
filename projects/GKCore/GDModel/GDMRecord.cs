@@ -48,7 +48,7 @@ namespace GDModel
     /// <summary>
     /// 
     /// </summary>
-    public class GDMRecord : GDMTag, IGDMStructWithLists
+    public class GDMRecord : GDMTag, IGDMStructWithLists, IGDMStructWithUserReferences
     {
         private string fAutomatedRecordID;
         private GDMChangeDate fChangeDate;
@@ -286,54 +286,6 @@ namespace GDModel
         public long GetId()
         {
             return GEDCOMUtils.GetXRefNumber(XRef);
-        }
-
-        public GDMNotes AddNote(GDMNoteRecord noteRec)
-        {
-            GDMNotes note = null;
-
-            if (noteRec != null) {
-                note = new GDMNotes(this);
-                note.Value = noteRec;
-                fNotes.Add(note);
-            }
-
-            return note;
-        }
-
-        public GDMSourceCitation AddSource(GDMSourceRecord sourceRec, string page, int quality)
-        {
-            GDMSourceCitation cit = null;
-
-            if (sourceRec != null) {
-                cit = new GDMSourceCitation(this);
-                cit.Value = sourceRec;
-                cit.Page = page;
-                cit.CertaintyAssessment = quality;
-                fSourceCitations.Add(cit);
-            }
-
-            return cit;
-        }
-
-        public GDMMultimediaLink AddMultimedia(GDMMultimediaRecord mediaRec)
-        {
-            GDMMultimediaLink mmLink = null;
-
-            if (mediaRec != null) {
-                mmLink = new GDMMultimediaLink(this);
-                mmLink.Value = mediaRec;
-                fMultimediaLinks.Add(mmLink);
-            }
-
-            return mmLink;
-        }
-
-        public void AddUserRef(string reference)
-        {
-            GDMUserReference uRef = new GDMUserReference(this);
-            uRef.StringValue = reference;
-            fUserReferences.Add(uRef);
         }
     }
 }

@@ -43,8 +43,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fBase = new BaseWindowStub();
             fEvent = new GDMIndividualEvent(null);
 

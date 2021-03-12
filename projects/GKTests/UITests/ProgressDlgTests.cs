@@ -36,8 +36,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fDialog = new ProgressDlg();
             fDialog.Show();
         }

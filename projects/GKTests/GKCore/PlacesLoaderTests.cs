@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using BSLib;
 using GKCore.Maps;
 using GKCore.MVP.Controls;
-using GKTests.Stubs;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -33,7 +32,7 @@ namespace GKCore
     public class PlacesLoaderTests
     {
         [TestFixtureSetUp]
-        public void Init()
+        public void SetUp()
         {
         }
 

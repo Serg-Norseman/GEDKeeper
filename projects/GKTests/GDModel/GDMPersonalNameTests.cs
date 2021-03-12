@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,6 +23,7 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKTests;
+using GKUI;
 using NUnit.Framework;
 
 namespace GDModel
@@ -39,6 +40,11 @@ namespace GDModel
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            // TempDirtyHack: some functions are references to GlobalOptions (and GfxInit)
+            // TODO: replace to mocks
+            WFAppHost.ConfigureBootstrap(false);
+
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
         }

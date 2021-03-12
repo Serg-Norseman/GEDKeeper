@@ -38,8 +38,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fDialog = new DayTipsDlg();
             fDialog.Show();
         }

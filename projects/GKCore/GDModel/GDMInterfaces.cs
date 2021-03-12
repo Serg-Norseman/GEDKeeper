@@ -86,6 +86,14 @@ namespace GDModel
     }
 
 
+    public interface IGDMStructWithUserReferences : IGDMObject
+    {
+        GDMList<GDMUserReference> UserReferences { get; }
+
+        //void AddUserRef(string reference);
+    }
+
+
     public interface IGDMStructWithLists : IGDMObject, IGDMStructWithNotes, IGDMStructWithSourceCitations, IGDMStructWithMultimediaLinks
     {
     }

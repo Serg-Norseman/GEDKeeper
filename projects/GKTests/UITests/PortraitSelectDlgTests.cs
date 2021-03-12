@@ -42,8 +42,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fBase = new BaseWindowStub();
             fContext = fBase.Context;
             fMultimediaLink = new GDMMultimediaLink(null);

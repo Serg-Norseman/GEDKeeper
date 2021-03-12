@@ -28,7 +28,7 @@ using GDModel.Providers.GedML;
 using GKCore;
 using GKCore.Interfaces;
 using GKTests;
-using GKTests.Stubs;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GDModel.Providers
@@ -272,8 +272,10 @@ namespace GDModel.Providers
         [Test]
         public void Test_FamilyHistorian()
         {
+            var progress = NSubstitute.Substitute.For<IProgressController>();
+
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_famhist.ged")) {
-                GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
+                GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, progress);
 
                 Assert.AreEqual(GEDCOMFormat.gf_FamilyHistorian, ctx.Tree.Format);
 
@@ -286,11 +288,13 @@ namespace GDModel.Providers
         [Test]
         public void Test_FamilyTreeMaker_2008()
         {
+            var progress = Substitute.For<IProgressController>();
+
             // actually need to find the real signature of version for FTM 2008 (wrong in the file)
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ftm2008.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_FamilyTreeMaker, ctx.Tree.Format);
 
-                GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
+                GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, progress);
 
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);

@@ -119,6 +119,7 @@
     <Compile Include="GDModel\GDMLinesTests.cs" />
     <Compile Include="GDModel\GDMListTests.cs" />
     <Compile Include="GDModel\GDMLocationRecordTests.cs" />
+    <Compile Include="GDModel\GDMMapTests.cs" />
     <Compile Include="GDModel\GDMMultimediaLinkTests.cs" />
     <Compile Include="GDModel\GDMMultimediaRecordTests.cs" />
     <Compile Include="GDModel\GDMNoteRecordTests.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="GKCore\AppHostTests.cs" />
     <Compile Include="GKCore\BaseContextTests.cs" />
     <Compile Include="GKCore\BBTextParserTests.cs" />
+    <Compile Include="GKCore\ChartsTests.cs" />
     <Compile Include="GKCore\Controllers\AssociationEditControllerTests.cs" />
     <Compile Include="GKCore\CoreTests.cs" />
     <Compile Include="GKCore\CulturesTests.cs" />

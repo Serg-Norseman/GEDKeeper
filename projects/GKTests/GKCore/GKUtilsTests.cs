@@ -39,20 +39,12 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
-            // for static initialization
-            GEDCOMProvider.SkipEmptyTag((int)GEDCOMTagType._AWARD);
-
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
-
             LangMan.DefInit();
 
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
-        }
-
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
         }
 
         [Test]

@@ -40,17 +40,12 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
-
             LangMan.DefInit();
 
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
-        }
-
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
         }
 
         [Test]

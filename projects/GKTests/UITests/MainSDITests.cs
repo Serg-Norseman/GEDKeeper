@@ -53,8 +53,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             WFAppHost.ConfigureBootstrap(false);
 
             var appHost = new WFAppHost();

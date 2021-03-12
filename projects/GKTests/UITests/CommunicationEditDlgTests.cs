@@ -46,8 +46,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fBase = new BaseWindowStub();
             fContext = fBase.Context;
             fCommunicationRecord = new GDMCommunicationRecord(fContext.Tree);

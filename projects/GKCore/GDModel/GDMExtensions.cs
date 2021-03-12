@@ -65,5 +65,12 @@ namespace GDModel
 
             return result;
         }
+
+        public static void AddUserRef(this IGDMStructWithUserReferences _struct, string reference)
+        {
+            GDMUserReference uRef = new GDMUserReference((GDMObject)_struct);
+            uRef.StringValue = reference;
+            _struct.UserReferences.Add(uRef);
+        }
     }
 }

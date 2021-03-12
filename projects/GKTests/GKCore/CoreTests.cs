@@ -25,7 +25,6 @@ using System.Text;
 using BSLib;
 using BSLib.Design;
 using BSLib.Design.Handlers;
-using BSLib.Design.IoC;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -34,7 +33,6 @@ using GKCore.Search;
 using GKCore.Stats;
 using GKCore.Types;
 using GKTests;
-using GKTests.Stubs;
 using GKUI;
 using GKUI.Components;
 using NSubstitute;
@@ -50,18 +48,13 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
-            AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
-
+            TestUtils.InitProgressStub();
             LangMan.DefInit();
 
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
-        }
-
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
         }
 
         [Test]

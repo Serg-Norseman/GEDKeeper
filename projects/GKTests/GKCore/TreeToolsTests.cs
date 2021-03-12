@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using BSLib;
-using BSLib.Design.IoC;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -42,7 +41,6 @@ namespace GKCore
     public class TreeToolsTests
     {
         private IBaseWindow fBaseWin;
-        private ProgressStub fProgress;
 
         [TestFixtureSetUp]
         public void SetUp()
@@ -53,8 +51,7 @@ namespace GKCore
 
             fBaseWin = new BaseWindowStub();
 
-            AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
-            fProgress = new ProgressStub();
+            TestUtils.InitProgressStub();
         }
 
         [Test]
@@ -253,10 +250,12 @@ namespace GKCore
         [Test]
         public void Test_CheckGEDCOMFormat()
         {
+            var progress = Substitute.For<IProgressController>();
+
             Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(null, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context.Tree, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context.Tree, fBaseWin.Context, null); });
-            GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context.Tree, fBaseWin.Context, fProgress);
+            GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context.Tree, fBaseWin.Context, progress);
         }
 
         [Test]
@@ -302,11 +301,13 @@ namespace GKCore
         [Test]
         public void Test_FindDuplicates()
         {
+            var progress = Substitute.For<IProgressController>();
+
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(null, null, 0.0f, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(fBaseWin.Context.Tree, null, 0.0f, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(null, fBaseWin.Context.Tree, 0.0f, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(fBaseWin.Context.Tree, fBaseWin.Context.Tree, 0.0f, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(fBaseWin.Context.Tree, fBaseWin.Context.Tree, 0.0f, null, fProgress); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(fBaseWin.Context.Tree, fBaseWin.Context.Tree, 0.0f, null, progress); });
         }
 
         [Test]

@@ -39,7 +39,6 @@ namespace GKUI.Components
     {
         public override void Setup()
         {
-            base.Setup();
         }
 
         [Test]

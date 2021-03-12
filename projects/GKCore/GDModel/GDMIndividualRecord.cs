@@ -554,7 +554,7 @@ namespace GDModel
             }
 
             if (mmLink == null) {
-                mmLink = AddMultimedia(mediaRec);
+                mmLink = this.AddMultimedia(mediaRec);
             }
 
             mmLink.IsPrimary = true;

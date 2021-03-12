@@ -38,11 +38,8 @@ namespace GKUI.Forms
     [TestFixture]
     public class MapsViewerWinTests : CustomWindowTest
     {
-
         public override void Setup()
         {
-            base.Setup();
-
             WFAppHost.ConfigureBootstrap(false);
         }
 

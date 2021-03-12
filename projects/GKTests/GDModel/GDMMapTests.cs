@@ -26,42 +26,34 @@ using NUnit.Framework;
 namespace GDModel
 {
     [TestFixture]
-    public class GDMPlaceTests
+    public class GDMMapTests
     {
         [Test]
         public void Test_Common()
         {
-            using (GDMPlace place = new GDMPlace(null)) {
-                Assert.IsNotNull(place);
+            using (var map = new GDMMap(null)) {
+                map.Lati = 5.111111;
+                Assert.AreEqual(5.111111, map.Lati);
 
-                place.Form = "abrakadabra";
-                Assert.AreEqual("abrakadabra", place.Form);
+                map.Long = 7.999999;
+                Assert.AreEqual(7.999999, map.Long);
 
-                Assert.IsNotNull(place.Map);
-                Assert.IsNotNull(place.Location);
-
-                var note = new GDMNotes(place);
-                note.Lines.Text = "place notes";
-                place.Notes.Add(note);
-
-                using (GDMPlace place2 = new GDMPlace(null)) {
+                using (GDMMap map2 = new GDMMap(null)) {
                     Assert.Throws(typeof(ArgumentException), () => {
-                        place2.Assign(null);
+                        map2.Assign(null);
                     });
 
-                    place2.Assign(place);
+                    map2.Assign(map);
 
-                    string buf = TestUtils.GetTagStreamText(place2, 1);
-                    Assert.AreEqual("1 PLAC\r\n" +
-                                    "2 NOTE place notes\r\n" +
-                                    "2 FORM abrakadabra\r\n", buf);
+                    string buf = TestUtils.GetTagStreamText(map2, 1);
+                    Assert.AreEqual("1 MAP\r\n" +
+                                    "2 LATI 5.111111\r\n" +
+                                    "2 LONG 7.999999\r\n", buf);
                 }
 
-                place.ReplaceXRefs(new GDMXRefReplacer());
-
-                Assert.IsFalse(place.IsEmpty());
-                place.Clear();
-                Assert.IsTrue(place.IsEmpty());
+                Assert.IsFalse(map.IsEmpty());
+                map.Clear();
+                Assert.IsTrue(map.IsEmpty());
             }
         }
     }
