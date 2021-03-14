@@ -482,7 +482,8 @@ SectionGroup /e "$(gkplg)"
         File "..\plugins\GKTreeVizPlugin.enu"
         File "..\plugins\GKTreeVizPlugin.ukr"
         File "..\plugins\GKTreeVizPlugin.pol"
-        File "..\plugins\ArborGVT.dll"
+        File "..\plugins\BSLib.DataViz.Model.dll"
+        File "..\plugins\BSLib.DataViz.WFControls.dll"
     SectionEnd
 
     Section "$(gkp_iv)"
@@ -564,23 +565,22 @@ Section "Uninstall"
     Delete $INSTDIR\GKCore.dll
     Delete $INSTDIR\GKTray.exe
 
-    Delete $INSTDIR\LinqBridge.dll
-    Delete $INSTDIR\NLog.dll
-    Delete $INSTDIR\nVLC.dll
-    Delete $INSTDIR\YamlSerializer.dll
-
     Delete $INSTDIR\BSLib.dll
+    Delete $INSTDIR\BSLib.DataViz.Model.dll
+    Delete $INSTDIR\BSLib.Design.dll
+    Delete $INSTDIR\BSLib.Design.WFHandlers.dll
     Delete $INSTDIR\BSLib.Linguistics.dll
-    Delete $INSTDIR\BSLib.SmartGraph.dll
-    Delete $INSTDIR\GMap.NET.Core.dll
-    Delete $INSTDIR\GMap.NET.WindowsForms.dll
-
-    Delete $INSTDIR\ArborGVT.dll
     Delete $INSTDIR\DotNetRtfWriter.dll
     Delete $INSTDIR\ExcelLibrary.dll
+    Delete $INSTDIR\GMap.NET.Core.dll
+    Delete $INSTDIR\GMap.NET.WindowsForms.dll
     Delete $INSTDIR\itextsharp.dll
     Delete $INSTDIR\lua51.dll
     Delete $INSTDIR\LuaInterface.dll
+    Delete $INSTDIR\NLog.dll
+    Delete $INSTDIR\nVLC.dll
+    Delete $INSTDIR\Ude.dll
+    Delete $INSTDIR\YamlSerializer.dll
     Delete $INSTDIR\ZedGraph.dll
 
     Delete $INSTDIR\uninstall.exe
