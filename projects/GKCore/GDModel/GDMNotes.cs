@@ -43,6 +43,13 @@ namespace GDModel
             SetName(tagId);
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fLines.TrimExcess();
+        }
+
         public override void Assign(GDMTag source)
         {
             GDMTextTag sourceObj = (source as GDMTextTag);
@@ -103,6 +110,13 @@ namespace GDModel
             SetName(GEDCOMTagType.NOTE);
 
             fLines = new GDMLines();
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fLines.TrimExcess();
         }
 
         public override bool IsEmpty()

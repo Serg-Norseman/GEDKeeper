@@ -45,6 +45,13 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fNotes.TrimExcess();
+        }
+
         public override void Assign(GDMTag source)
         {
             GDMPointerWithNotes sourceObj = source as GDMPointerWithNotes;

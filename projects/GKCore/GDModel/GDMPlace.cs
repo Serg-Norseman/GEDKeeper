@@ -81,6 +81,15 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fLocation.TrimExcess();
+            fMap.TrimExcess();
+            fNotes.TrimExcess();
+        }
+
         public override void Assign(GDMTag source)
         {
             GDMPlace otherPlace = (source as GDMPlace);

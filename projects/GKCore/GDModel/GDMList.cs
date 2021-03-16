@@ -242,5 +242,19 @@ namespace GDModel
                 ListTimSort<T>.Sort(fDataList, comparer);
             }
         }
+
+        internal void TrimExcess()
+        {
+            if (fDataList != null) {
+                fDataList.TrimExcess();
+
+                for (int i = 0, num = fDataList.Count; i < num; i++) {
+                    var item = fDataList[i];
+                    if (item != null) {
+                        item.TrimExcess();
+                    }
+                }
+            }
+        }
     }
 }

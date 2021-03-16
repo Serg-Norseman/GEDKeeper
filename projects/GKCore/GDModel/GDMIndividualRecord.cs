@@ -143,6 +143,18 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fAliases.TrimExcess();
+            fAssociations.TrimExcess();
+            fChildToFamilyLinks.TrimExcess();
+            fGroups.TrimExcess();
+            fPersonalNames.TrimExcess();
+            fSpouseToFamilyLinks.TrimExcess();
+        }
+
         public override GDMCustomEvent AddEvent(GDMCustomEvent evt)
         {
             if (evt != null) {

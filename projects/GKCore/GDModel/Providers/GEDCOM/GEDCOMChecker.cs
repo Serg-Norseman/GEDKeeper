@@ -425,6 +425,8 @@ namespace GDModel.Providers.GEDCOM
                         ConvertIdentifiers(tree, pc);
                     }
 
+                    tree.TrimExcess();
+
                     result = true;
                 } finally {
                     pc.ProgressDone();

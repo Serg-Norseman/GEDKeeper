@@ -77,6 +77,13 @@ namespace GDModel
             fPage = string.Empty;
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fDescription.TrimExcess();
+        }
+
         public override void Assign(GDMTag source)
         {
             GDMSourceCitation sourceObj = (source as GDMSourceCitation);

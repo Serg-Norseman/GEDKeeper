@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -177,6 +176,12 @@ namespace GDModel
         internal GDMList<GDMRecord> GetRecords()
         {
             return fRecords;
+        }
+
+        internal void TrimExcess()
+        {
+            fHeader.TrimExcess();
+            fRecords.TrimExcess();
         }
 
         #endregion

@@ -128,6 +128,13 @@ namespace GDModel
             }
         }
 
+        internal virtual void TrimExcess()
+        {
+            if (fTags != null) {
+                fTags.TrimExcess();
+            }
+        }
+
         #endregion
 
         #region Content management

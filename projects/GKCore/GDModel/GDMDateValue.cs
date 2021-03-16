@@ -59,6 +59,15 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            if (fValue != null) {
+                fValue.TrimExcess();
+            }
+        }
+
         protected override string GetStringValue()
         {
             return ((fValue == null) ? "" : fValue.StringValue);

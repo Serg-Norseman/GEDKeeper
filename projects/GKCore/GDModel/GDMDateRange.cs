@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -45,6 +45,14 @@ namespace GDModel
         {
             fDateAfter = new GDMDate(this);
             fDateBefore = new GDMDate(this);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fDateAfter.TrimExcess();
+            fDateBefore.TrimExcess();
         }
 
         protected override string GetStringValue()

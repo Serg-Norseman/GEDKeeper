@@ -250,6 +250,20 @@ namespace GDModel
             fSubmitter = new GDMPointer(this, (int)GEDCOMTagType.SUBM, string.Empty);
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fCharacterSet.TrimExcess();
+            fFile.TrimExcess();
+            fGEDCOM.TrimExcess();
+            fNote.TrimExcess();
+            fPlace.TrimExcess();
+            fSource.TrimExcess();
+            fSubmission.TrimExcess();
+            fSubmitter.TrimExcess();
+        }
+
         public override void Clear()
         {
             base.Clear();

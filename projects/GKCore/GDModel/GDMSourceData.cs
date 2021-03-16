@@ -64,6 +64,14 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fEvents.TrimExcess();
+            fNotes.TrimExcess();
+        }
+
         public override void Clear()
         {
             base.Clear();

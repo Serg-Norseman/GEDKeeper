@@ -147,6 +147,17 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fLines.TrimExcess();
+            fPhoneList.TrimExcess();
+            fEmailList.TrimExcess();
+            fFaxList.TrimExcess();
+            fWWWList.TrimExcess();
+        }
+
         public override void Assign(GDMTag source)
         {
             GDMAddress otherAddr = source as GDMAddress;

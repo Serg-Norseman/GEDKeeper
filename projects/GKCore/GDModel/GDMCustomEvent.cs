@@ -121,6 +121,18 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fAddress.TrimExcess();
+            fDate.TrimExcess();
+            fPlace.TrimExcess();
+            fNotes.TrimExcess();
+            fSourceCitations.TrimExcess();
+            fMultimediaLinks.TrimExcess();
+        }
+
         public override void Assign(GDMTag source)
         {
             GDMCustomEvent sourceObj = (source as GDMCustomEvent);

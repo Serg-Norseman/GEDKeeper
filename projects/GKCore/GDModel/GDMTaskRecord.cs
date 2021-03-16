@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -86,6 +86,14 @@ namespace GDModel
             fPriority = sourceObj.fPriority;
             fStartDate.Assign(sourceObj.fStartDate);
             fStopDate.Assign(sourceObj.fStopDate);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fStartDate.TrimExcess();
+            fStopDate.TrimExcess();
         }
 
         public override void Clear()

@@ -20,12 +20,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Text;
 using BSLib;
-using GDModel;
-using GDModel.Providers;
 using GKCore;
 
 namespace GDModel.Providers.GEDCOM
@@ -304,6 +301,12 @@ namespace GDModel.Providers.GEDCOM
                     }
 
                     if (tagLevel == 0) {
+                        // beginning new record
+                        if (curRecord != null) {
+                            // previous record needs to be trimmed
+                            curRecord.TrimExcess();
+                        }
+
                         if (curRecord == fTree.Header && fEncodingState == EncodingState.esUnchecked) {
                             // beginning recognition of the first is not header record
                             // to check for additional versions of the code page

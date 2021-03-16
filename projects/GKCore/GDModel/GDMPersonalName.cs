@@ -126,6 +126,15 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fPieces.TrimExcess();
+            fNotes.TrimExcess();
+            fSourceCitations.TrimExcess();
+        }
+
         public override void Assign(GDMTag source)
         {
             GDMPersonalName otherName = (source as GDMPersonalName);

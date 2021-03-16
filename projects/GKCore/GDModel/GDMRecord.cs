@@ -152,6 +152,17 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fChangeDate.TrimExcess();
+            fNotes.TrimExcess();
+            fSourceCitations.TrimExcess();
+            fMultimediaLinks.TrimExcess();
+            fUserReferences.TrimExcess();
+        }
+
         public override GDMTree GetTree()
         {
             return (Owner as GDMTree);

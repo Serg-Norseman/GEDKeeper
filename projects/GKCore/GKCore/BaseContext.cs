@@ -1272,9 +1272,11 @@ namespace GKCore
 
                 try {
                     FileLoad(fileProvider, fileName, pw);
+                    AppHost.ForceGC();
 
                     if (checkValidation) {
                         GEDCOMChecker.CheckGEDCOMFormat(fTree, this, progress);
+                        AppHost.ForceGC();
                     }
 
                     result = true;
@@ -1284,8 +1286,6 @@ namespace GKCore
                         progress.ProgressDone();
                     }
                 }
-
-                AppHost.ForceGC();
             } catch (Exception ex) {
                 Logger.WriteError("BaseContext.FileLoad()", ex);
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));

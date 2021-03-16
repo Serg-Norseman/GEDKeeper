@@ -93,6 +93,18 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fData.TrimExcess();
+            fOriginator.TrimExcess();
+            fPublication.TrimExcess();
+            fRepositoryCitations.TrimExcess();
+            fText.TrimExcess();
+            fTitle.TrimExcess();
+        }
+
         public override void Assign(GDMTag source)
         {
             GDMSourceRecord otherSource = (source as GDMSourceRecord);

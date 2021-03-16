@@ -61,6 +61,13 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fSourceCitations.TrimExcess();
+        }
+
         public override void Clear()
         {
             base.Clear();

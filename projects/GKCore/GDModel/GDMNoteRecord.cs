@@ -41,6 +41,13 @@ namespace GDModel
             fLines = new GDMLines();
         }
 
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fLines.TrimExcess();
+        }
+
         public override void Assign(GDMTag source)
         {
             GDMNoteRecord sourceObj = (source as GDMNoteRecord);
