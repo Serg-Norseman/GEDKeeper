@@ -88,7 +88,12 @@ namespace GDModel
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
+                fData.Dispose();
+                fOriginator.Dispose();
+                fPublication.Dispose();
                 fRepositoryCitations.Dispose();
+                fText.Dispose();
+                fTitle.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -125,12 +130,21 @@ namespace GDModel
         public override void Clear()
         {
             base.Clear();
+
+            fData.Clear();
+            fOriginator.Clear();
+            fPublication.Clear();
+            fShortTitle = string.Empty;
             fRepositoryCitations.Clear();
+            fText.Clear();
+            fTitle.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fRepositoryCitations.Count == 0;
+            return base.IsEmpty() && fData.IsEmpty() && fOriginator.IsEmpty() && fPublication.IsEmpty()
+                && string.IsNullOrEmpty(fShortTitle) && fText.IsEmpty() && fTitle.IsEmpty()
+                && (fRepositoryCitations.Count == 0);
         }
 
         public override void MoveTo(GDMRecord targetRecord, bool clearDest)

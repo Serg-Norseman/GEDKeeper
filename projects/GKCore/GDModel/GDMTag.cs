@@ -200,7 +200,7 @@ namespace GDModel
             }
         }
 
-        protected void AssignList<T>(GDMList<T> srcList, GDMList<T> destList) where T : GDMTag
+        protected internal void AssignList<T>(GDMList<T> srcList, GDMList<T> destList) where T : GDMTag
         {
             for (int i = 0, count = srcList.Count; i < count; i++) {
                 GDMTag sourceTag = srcList[i];

@@ -67,7 +67,7 @@ namespace GDModel.Providers.GEDCOM
             mmLink.Value = mmRec;
         }
 
-        private static void TransformSourceCitation(GDMTree tree, GDMSourceCitation sourCit)
+        private static void TransformSourceCitation(GDMTree tree, GEDCOMFormat format, GDMSourceCitation sourCit)
         {
             GDMSourceRecord sourRec = tree.CreateSource();
 
@@ -75,12 +75,19 @@ namespace GDModel.Providers.GEDCOM
             string page = sourCit.Page;
             int certaintyAssessment = sourCit.CertaintyAssessment;
 
-            sourRec.Text.Lines.Assign(description);
+            // TODO: SourceData!
+            sourRec.Title.Lines.Assign(description);
+            sourRec.Text.Lines.Assign(sourCit.Text.Lines);
+            sourRec.AssignList(sourCit.Notes, sourRec.Notes);
+            sourRec.AssignList(sourCit.MultimediaLinks, sourRec.MultimediaLinks);
 
             sourCit.Clear();
             sourCit.Value = sourRec;
             sourCit.Page = page;
             sourCit.CertaintyAssessment = certaintyAssessment;
+
+            CheckTagWithNotes(tree, format, sourRec);
+            CheckTagWithMultimediaLinks(tree, format, sourRec);
         }
 
         private static void CheckTagWithNotes(GDMTree tree, GEDCOMFormat format, IGDMStructWithNotes tag)
@@ -100,7 +107,7 @@ namespace GDModel.Providers.GEDCOM
             for (int i = tag.SourceCitations.Count - 1; i >= 0; i--) {
                 GDMSourceCitation sourCit = tag.SourceCitations[i];
                 if (!sourCit.IsPointer) {
-                    TransformSourceCitation(tree, sourCit);
+                    TransformSourceCitation(tree, format, sourCit);
                 } else {
                     if (sourCit.Value == null) tag.SourceCitations.DeleteAt(i);
                 }

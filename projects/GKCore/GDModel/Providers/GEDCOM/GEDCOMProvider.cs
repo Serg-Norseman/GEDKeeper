@@ -2059,6 +2059,18 @@ namespace GDModel.Providers.GEDCOM
                 sourCit.CertaintyAssessment = GEDCOMUtils.GetIntVal(tagValue);
             } else if (tagType == GEDCOMTagType.PAGE) {
                 sourCit.Page = tagValue;
+            } else if (tagType == GEDCOMTagType.TEXT) {
+                curTag = sourCit.Text;
+                curTag.ParseString(tagValue);
+                addHandler = AddTextTag;
+            } else if (tagType == GEDCOMTagType.NOTE) {
+                curTag = sourCit.Notes.Add(new GDMNotes(sourCit));
+                curTag.ParseString(tagValue);
+                addHandler = AddNoteTag;
+            } else if (tagType == GEDCOMTagType.OBJE) {
+                curTag = sourCit.MultimediaLinks.Add(new GDMMultimediaLink(sourCit));
+                curTag.ParseString(tagValue);
+                addHandler = AddMultimediaLinkTag;
             } else {
                 return AddBaseTag(owner, tagLevel, tagId, tagValue);
             }
@@ -2081,6 +2093,9 @@ namespace GDModel.Providers.GEDCOM
 
             WriteTagLine(stream, level, GEDCOMTagName.PAGE, sourCit.Page, true);
             WriteTagLine(stream, level, GEDCOMTagName.QUAY, GEDCOMUtils.GetIntStr(sourCit.CertaintyAssessment), true);
+            WriteText(stream, level, sourCit.Text);
+            WriteList(stream, level, sourCit.Notes, WriteNote);
+            WriteList(stream, level, sourCit.MultimediaLinks, WriteMultimediaLink);
             return true;
         }
 

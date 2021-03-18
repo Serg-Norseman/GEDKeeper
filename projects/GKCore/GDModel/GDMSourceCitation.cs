@@ -23,11 +23,14 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMSourceCitation : GDMPointer, IGDMTextObject
+    public sealed class GDMSourceCitation : GDMPointer, IGDMTextObject, IGDMStructWithNotes, IGDMStructWithMultimediaLinks
     {
         private int fCertaintyAssessment;
         private GDMLines fDescription;
         private string fPage;
+        private GDMTextTag fText;
+        private GDMList<GDMNotes> fNotes;
+        private GDMList<GDMMultimediaLink> fMultimediaLinks;
 
 
         public int CertaintyAssessment
@@ -67,6 +70,21 @@ namespace GDModel
             get { return fDescription; }
         }
 
+        public GDMTextTag Text
+        {
+            get { return fText; }
+        }
+
+        public GDMList<GDMNotes> Notes
+        {
+            get { return fNotes; }
+        }
+
+        public GDMList<GDMMultimediaLink> MultimediaLinks
+        {
+            get { return fMultimediaLinks; }
+        }
+
 
         public GDMSourceCitation(GDMObject owner) : base(owner)
         {
@@ -75,6 +93,20 @@ namespace GDModel
             fCertaintyAssessment = -1;
             fDescription = new GDMLines();
             fPage = string.Empty;
+
+            fText = new GDMTextTag(this, (int)GEDCOMTagType.TEXT);
+            fNotes = new GDMList<GDMNotes>(this);
+            fMultimediaLinks = new GDMList<GDMMultimediaLink>(this);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                fText.Dispose();
+                fNotes.Dispose();
+                fMultimediaLinks.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         internal override void TrimExcess()
@@ -82,6 +114,9 @@ namespace GDModel
             base.TrimExcess();
 
             fDescription.TrimExcess();
+            fText.TrimExcess();
+            fNotes.TrimExcess();
+            fMultimediaLinks.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -95,6 +130,9 @@ namespace GDModel
             fCertaintyAssessment = sourceObj.fCertaintyAssessment;
             fPage = sourceObj.fPage;
             fDescription.Assign(sourceObj.fDescription);
+            fText.Assign(sourceObj.fText);
+            AssignList(sourceObj.Notes, fNotes);
+            AssignList(sourceObj.MultimediaLinks, fMultimediaLinks);
         }
 
         public override void Clear()
@@ -104,17 +142,33 @@ namespace GDModel
             fCertaintyAssessment = -1;
             fDescription.Clear();
             fPage = string.Empty;
+            fText.Clear();
+            fNotes.Clear();
+            fMultimediaLinks.Clear();
         }
 
         public override bool IsEmpty()
         {
             bool result;
+
+            bool isCommonEmpty = string.IsNullOrEmpty(fPage)
+                && (fNotes.Count == 0) && (fMultimediaLinks.Count == 0);
+
             if (IsPointer) {
-                result = base.IsEmpty();
+                result = base.IsEmpty() && isCommonEmpty;
             } else {
-                result = fDescription.IsEmpty() && (SubTags.Count == 0) && string.IsNullOrEmpty(fPage);
+                result = fDescription.IsEmpty() && (SubTags.Count == 0) && fText.IsEmpty() && isCommonEmpty;
             }
+
             return result;
+        }
+
+        public override void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            base.ReplaceXRefs(map);
+
+            fNotes.ReplaceXRefs(map);
+            fMultimediaLinks.ReplaceXRefs(map);
         }
 
         protected override string GetStringValue()
