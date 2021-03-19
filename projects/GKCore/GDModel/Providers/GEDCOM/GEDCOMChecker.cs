@@ -73,6 +73,8 @@ namespace GDModel.Providers.GEDCOM
 
             sourRec.Title.Lines.Assign(sourCit.Description);
             sourRec.Text.Lines.Assign(sourCit.Text.Lines);
+
+            // transfers notes and multimedia from the citation to the source record
             sourRec.AssignList(sourCit.Notes, sourRec.Notes);
             sourRec.AssignList(sourCit.MultimediaLinks, sourRec.MultimediaLinks);
 

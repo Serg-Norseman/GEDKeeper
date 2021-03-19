@@ -272,7 +272,7 @@ namespace GDModel.Providers
         [Test]
         public void Test_FamilyHistorian()
         {
-            var progress = NSubstitute.Substitute.For<IProgressController>();
+            var progress = Substitute.For<IProgressController>();
 
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_famhist.ged")) {
                 GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, progress);
@@ -357,6 +357,77 @@ namespace GDModel.Providers
                 Assert.AreEqual(1, iRec1.Notes.Count);
                 var note = iRec1.Notes[0];
                 Assert.AreEqual("{geni:about_me} '''Jane Doe'''\r\nBirth at 1955, Raccoon City; \r\n\r\n\r\nbadline 1\r\nbadline 2\r\nbadline 3", note.Lines.Text);
+            }
+        }
+
+        [Test]
+        public void Test_Geni_SourceCitations()
+        {
+            var progress = Substitute.For<IProgressController>();
+
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_geni_srcit.ged")) {
+                GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, progress);
+
+                Assert.AreEqual(GEDCOMFormat.gf_Geni, ctx.Tree.Format);
+
+                var iRec1 = ctx.Tree.XRefIndex_Find("I6000000012345678912") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+
+                Assert.AreEqual(3, iRec1.SourceCitations.Count);
+
+                var srCit = iRec1.SourceCitations[0];
+                Assert.IsTrue(srCit.IsPointer);
+                Assert.AreEqual("21 APR 2020", srCit.Data.Date.StringValue);
+                var sourceRec = srCit.Value as GDMSourceRecord;
+                Assert.AreEqual(1, sourceRec.MultimediaLinks.Count);
+
+                srCit = iRec1.SourceCitations[1];
+                Assert.IsTrue(srCit.IsPointer);
+                Assert.AreEqual("23 APR 2020", srCit.Data.Date.StringValue);
+                sourceRec = srCit.Value as GDMSourceRecord;
+                Assert.AreEqual(1, sourceRec.MultimediaLinks.Count);
+
+                srCit = iRec1.SourceCitations[2];
+                Assert.IsTrue(srCit.IsPointer);
+                Assert.AreEqual("25 APR 2020", srCit.Data.Date.StringValue);
+                sourceRec = srCit.Value as GDMSourceRecord;
+                Assert.AreEqual(1, sourceRec.MultimediaLinks.Count);
+            }
+        }
+
+        [Test]
+        public void Test_Geni_DateYearBC()
+        {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_dates_year.ged")) {
+                var iRec = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec);
+
+                GDMDate dtx;
+                GDMCustomEvent evt;
+
+                evt = iRec.FindEvent("BIRT");
+                dtx = evt.Date.Value as GDMDate;
+                Assert.AreEqual(32, dtx.Year);
+                Assert.AreEqual(true, dtx.YearBC);
+
+                evt = iRec.FindEvent("DEAT");
+                dtx = evt.Date.Value as GDMDate;
+                Assert.AreEqual(32, dtx.Year);
+                Assert.AreEqual(false, dtx.YearBC);
+
+                iRec = ctx.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec);
+
+                // TODO
+                /*evt = iRec.FindEvent("BIRT");
+                dtx = evt.Date.Value as GDMDate;
+                Assert.AreEqual(31, dtx.Year);
+                Assert.AreEqual(true, dtx.YearBC);
+
+                evt = iRec.FindEvent("DEAT");
+                dtx = evt.Date.Value as GDMDate;
+                Assert.AreEqual(31, dtx.Year);
+                Assert.AreEqual(false, dtx.YearBC);*/
             }
         }
 

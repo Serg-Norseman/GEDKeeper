@@ -1,0 +1,43 @@
+﻿0 HEAD
+1 SOUR Geni.com
+2 VERS 1.0
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+1 CHAR UTF-8
+0 @I6000000012345678912@ INDI
+1 NAME Степан Савельевич /Потеряев/
+1 SEX M
+1 BIRT
+2 DATE 1876
+1 DEAT
+2 DATE 1918
+1 NOTE {geni:about_me} * http://basharchive.ru/census/1917/13196/#photo-52
+1 SOUR
+2 DATA
+3 DATE 21 APR 2020
+3 TEXT Date of Birth
+3 TEXT
+2 OBJE
+3 FILE https://photos.geni.com/p13/ed/5c/7d/5f/53444842db38e0e0/0052_original.jpg
+4 FORM jpg
+3 TITL Всероссийская сельскохозяйственная и поземельная перепись 1917 года
+1 SOUR
+2 DATA
+3 DATE 23 APR 2020
+3 TEXT Last Name
+3 TEXT
+2 OBJE
+3 FILE https://photos.geni.com/p13/ed/5c/7d/5f/53444842db38e0e0/0052_original.jpg
+4 FORM jpg
+3 TITL Всероссийская сельскохозяйственная и поземельная перепись 1917 года
+1 SOUR
+2 DATA
+3 DATE 25 APR 2020
+3 TEXT First Name
+3 TEXT
+2 OBJE
+3 FILE https://photos.geni.com/p13/ed/5c/7d/5f/53444842db38e0e0/0052_original.jpg
+4 FORM jpg
+3 TITL Всероссийская сельскохозяйственная и поземельная перепись 1917 года
+0 TRLR

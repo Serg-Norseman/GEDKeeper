@@ -291,6 +291,8 @@
     <EmbeddedResource Include="Resources\test_mergerec.ged" />
     <EmbeddedResource Include="Resources\test_names_03.ged" />
     <EmbeddedResource Include="Resources\test_geni_badlines.ged" />
+    <EmbeddedResource Include="Resources\test_dates_year.ged" />
+    <EmbeddedResource Include="Resources\test_geni_srcit.ged" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
