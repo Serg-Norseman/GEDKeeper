@@ -26,17 +26,23 @@ namespace GDModel
     public sealed class GDMSourceCitation : GDMPointer, IGDMTextObject, IGDMStructWithNotes, IGDMStructWithMultimediaLinks
     {
         private int fCertaintyAssessment;
+        private GDMSourceCitationData fData;
         private GDMLines fDescription;
+        private GDMList<GDMMultimediaLink> fMultimediaLinks;
+        private GDMList<GDMNotes> fNotes;
         private string fPage;
         private GDMTextTag fText;
-        private GDMList<GDMNotes> fNotes;
-        private GDMList<GDMMultimediaLink> fMultimediaLinks;
 
 
         public int CertaintyAssessment
         {
             get { return fCertaintyAssessment; }
             set { fCertaintyAssessment = value; }
+        }
+
+        public GDMSourceCitationData Data
+        {
+            get { return fData; }
         }
 
         public GDMLines Description
@@ -59,20 +65,14 @@ namespace GDModel
             }
         }
 
-        public string Page
-        {
-            get { return fPage; }
-            set { fPage = value; }
-        }
-
         GDMLines IGDMTextObject.Lines
         {
             get { return fDescription; }
         }
 
-        public GDMTextTag Text
+        public GDMList<GDMMultimediaLink> MultimediaLinks
         {
-            get { return fText; }
+            get { return fMultimediaLinks; }
         }
 
         public GDMList<GDMNotes> Notes
@@ -80,9 +80,15 @@ namespace GDModel
             get { return fNotes; }
         }
 
-        public GDMList<GDMMultimediaLink> MultimediaLinks
+        public string Page
         {
-            get { return fMultimediaLinks; }
+            get { return fPage; }
+            set { fPage = value; }
+        }
+
+        public GDMTextTag Text
+        {
+            get { return fText; }
         }
 
 
@@ -94,6 +100,7 @@ namespace GDModel
             fDescription = new GDMLines();
             fPage = string.Empty;
 
+            fData = new GDMSourceCitationData(this);
             fText = new GDMTextTag(this, (int)GEDCOMTagType.TEXT);
             fNotes = new GDMList<GDMNotes>(this);
             fMultimediaLinks = new GDMList<GDMMultimediaLink>(this);
@@ -102,6 +109,7 @@ namespace GDModel
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
+                fData.Dispose();
                 fText.Dispose();
                 fNotes.Dispose();
                 fMultimediaLinks.Dispose();
@@ -113,6 +121,7 @@ namespace GDModel
         {
             base.TrimExcess();
 
+            fData.TrimExcess();
             fDescription.TrimExcess();
             fText.TrimExcess();
             fNotes.TrimExcess();
@@ -129,6 +138,7 @@ namespace GDModel
 
             fCertaintyAssessment = sourceObj.fCertaintyAssessment;
             fPage = sourceObj.fPage;
+            fData.Assign(sourceObj.fData);
             fDescription.Assign(sourceObj.fDescription);
             fText.Assign(sourceObj.fText);
             AssignList(sourceObj.Notes, fNotes);
@@ -140,6 +150,7 @@ namespace GDModel
             base.Clear();
 
             fCertaintyAssessment = -1;
+            fData.Clear();
             fDescription.Clear();
             fPage = string.Empty;
             fText.Clear();
@@ -155,7 +166,7 @@ namespace GDModel
                 && (fNotes.Count == 0) && (fMultimediaLinks.Count == 0);
 
             if (IsPointer) {
-                result = base.IsEmpty() && isCommonEmpty;
+                result = base.IsEmpty() && isCommonEmpty && fData.IsEmpty();
             } else {
                 result = fDescription.IsEmpty() && (SubTags.Count == 0) && fText.IsEmpty() && isCommonEmpty;
             }

@@ -134,6 +134,7 @@
     <Compile Include="GDModel\GDMExtensions.cs" />
     <Compile Include="GDModel\GDMIndividualLink.cs" />
     <Compile Include="GDModel\GDMLines.cs" />
+    <Compile Include="GDModel\GDMSourceCitationData.cs" />
     <Compile Include="GDModel\GDMSourceData.cs" />
     <Compile Include="GDModel\GDMDate.cs" />
     <Compile Include="GDModel\GDMDateInterpreted.cs" />

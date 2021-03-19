@@ -71,20 +71,16 @@ namespace GDModel.Providers.GEDCOM
         {
             GDMSourceRecord sourRec = tree.CreateSource();
 
-            GDMLines description = sourCit.Description;
-            string page = sourCit.Page;
-            int certaintyAssessment = sourCit.CertaintyAssessment;
-
-            // TODO: SourceData!
-            sourRec.Title.Lines.Assign(description);
+            sourRec.Title.Lines.Assign(sourCit.Description);
             sourRec.Text.Lines.Assign(sourCit.Text.Lines);
             sourRec.AssignList(sourCit.Notes, sourRec.Notes);
             sourRec.AssignList(sourCit.MultimediaLinks, sourRec.MultimediaLinks);
 
-            sourCit.Clear();
+            sourCit.Description.Clear();
+            sourCit.Text.Clear();
+            sourCit.Notes.Clear();
+            sourCit.MultimediaLinks.Clear();
             sourCit.Value = sourRec;
-            sourCit.Page = page;
-            sourCit.CertaintyAssessment = certaintyAssessment;
 
             CheckTagWithNotes(tree, format, sourRec);
             CheckTagWithMultimediaLinks(tree, format, sourRec);

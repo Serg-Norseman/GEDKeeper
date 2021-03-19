@@ -1605,7 +1605,7 @@ namespace GDModel.Providers.GEDCOM
                 } else {
                     strings.Add(tagValue);
                 }
-            } else if (tagType == GEDCOMTagType.CONT) {
+            } else if (tagType == GEDCOMTagType.CONT || tagType == GEDCOMTagType.TEXT) {
                 strings.Add(tagValue);
             }
 
@@ -2071,6 +2071,9 @@ namespace GDModel.Providers.GEDCOM
                 curTag = sourCit.MultimediaLinks.Add(new GDMMultimediaLink(sourCit));
                 curTag.ParseString(tagValue);
                 addHandler = AddMultimediaLinkTag;
+            } else if (tagType == GEDCOMTagType.DATA) {
+                curTag = sourCit.Data;
+                addHandler = AddSourceCitationDataTag;
             } else {
                 return AddBaseTag(owner, tagLevel, tagId, tagValue);
             }
@@ -2093,9 +2096,47 @@ namespace GDModel.Providers.GEDCOM
 
             WriteTagLine(stream, level, GEDCOMTagName.PAGE, sourCit.Page, true);
             WriteTagLine(stream, level, GEDCOMTagName.QUAY, GEDCOMUtils.GetIntStr(sourCit.CertaintyAssessment), true);
+            WriteSourceCitationData(stream, level, sourCit.Data);
             WriteText(stream, level, sourCit.Text);
             WriteList(stream, level, sourCit.Notes, WriteNote);
             WriteList(stream, level, sourCit.MultimediaLinks, WriteMultimediaLink);
+            return true;
+        }
+
+
+        private static StackTuple AddSourceCitationDataTag(GDMObject owner, int tagLevel, int tagId, string tagValue)
+        {
+            GDMSourceCitationData srcitData = (GDMSourceCitationData)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            GEDCOMTagType tagType = (GEDCOMTagType)tagId;
+            if (tagType == GEDCOMTagType.DATE) {
+                curTag = srcitData.Date;
+                curTag.ParseString(tagValue);
+            } else if (tagType == GEDCOMTagType.TEXT) {
+                curTag = srcitData.Text;
+                ((GDMTextTag)curTag).Lines.Add(tagValue);
+                // without curTag.ParseString(tagValue) because next TEXT
+                // will be rewrite all previous lines
+                // GK will be without support for a list of text chunks
+                addHandler = AddTextTag;
+            } else {
+                return AddBaseTag(owner, tagLevel, tagId, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static bool WriteSourceCitationData(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMSourceCitationData srcitData = (GDMSourceCitationData)tag;
+
+            if (!WriteBaseTag(stream, level, srcitData)) return false;
+
+            level += 1;
+            WriteBaseTag(stream, level, srcitData.Date);
+            WriteText(stream, level, srcitData.Text);
             return true;
         }
 
