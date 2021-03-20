@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml;
 using GDModel;
@@ -34,6 +35,14 @@ namespace GDModel.Providers.GedML
     /// </summary>
     public class GedMLProvider : FileProvider
     {
+        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
+        static GedMLProvider()
+        {
+            // Static initialization of the GEDCOMProvider is needed, 
+            // otherwise the standard tag identifiers are out of sync
+            var formats = GEDCOMProvider.GEDCOMFormats;
+        }
+
         public GedMLProvider(GDMTree tree) : base(tree)
         {
         }

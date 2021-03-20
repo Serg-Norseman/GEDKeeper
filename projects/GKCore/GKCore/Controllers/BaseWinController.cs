@@ -19,7 +19,7 @@
  */
 
 #define GEDML_SUPPORT
-//#define FAMX_SUPPORT
+#define FAMX_SUPPORT
 
 using System;
 using System.Collections.Generic;
