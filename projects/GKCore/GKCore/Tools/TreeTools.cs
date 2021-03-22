@@ -847,14 +847,14 @@ namespace GKCore.Tools
                 case CheckDiag.cdFatherAsChild:
                     {
                         var fRec = ((GDMFamilyRecord)checkObj.Rec);
-                        fRec.DeleteChild(fRec.Husband.Value);
+                        fRec.DeleteChild(fRec.Husband);
                     }
                     break;
 
                 case CheckDiag.cdMotherAsChild:
                     {
                         var fRec = ((GDMFamilyRecord)checkObj.Rec);
-                        fRec.DeleteChild(fRec.Wife.Value);
+                        fRec.DeleteChild(fRec.Wife);
                     }
                     break;
 
