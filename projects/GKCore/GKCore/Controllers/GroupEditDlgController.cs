@@ -82,5 +82,13 @@ namespace GKCore.Controllers
                 fView.Close();
             }
         }
+
+        public void JumpToRecord(GDMPointer pointer)
+        {
+            if (pointer != null && Accept()) {
+                fBase.SelectRecordByXRef(pointer.XRef);
+                fView.Close();
+            }
+        }
     }
 }

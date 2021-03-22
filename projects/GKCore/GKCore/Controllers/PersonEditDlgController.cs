@@ -486,12 +486,20 @@ namespace GKCore.Controllers
             }
         }
 
+        public void JumpToRecord(GDMPointer pointer)
+        {
+            if (pointer != null && Accept()) {
+                fBase.SelectRecordByXRef(pointer.XRef, true);
+                fView.Close();
+            }
+        }
+
         public void JumpToFather()
         {
             GDMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
             if (family == null) return;
 
-            JumpToRecord(family.Husband.Individual);
+            JumpToRecord(family.Husband);
         }
 
         public void JumpToMother()
@@ -499,7 +507,7 @@ namespace GKCore.Controllers
             GDMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
             if (family == null) return;
 
-            JumpToRecord(family.Wife.Individual);
+            JumpToRecord(family.Wife);
         }
 
         public void JumpToPersonSpouse(GDMFamilyRecord family)
