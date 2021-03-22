@@ -307,7 +307,7 @@ namespace GDModel.Providers.FamilyShow
             GDMRecord record;
             while (famEnum.MoveNext(out record)) {
                 var famRec = record as GDMFamilyRecord;
-                if (famRec.Husband.Value == father && famRec.Wife.Value == mother) {
+                if (famRec.Husband.XRef == father.XRef && famRec.Wife.XRef == mother.XRef) {
                     result = famRec;
                     break;
                 }

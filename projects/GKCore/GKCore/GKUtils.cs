@@ -130,7 +130,7 @@ namespace GKCore
                     for (int j = 0; j < num2; j++) {
                         GDMCustomEvent evt = evsRec.Events[j];
 
-                        if (evt.Place.Location.Value == locRec) {
+                        if (evt.Place.Location.XRef == locRec.XRef) {
                             linksList.AddObject(GetRecordName(evsRec, true) + ", " + GetEventName(evt).ToLower(), evsRec);
                         }
                     }
@@ -1510,22 +1510,21 @@ namespace GKCore
             if (subj is GDMNoteRecord) {
                 int num = evt.Notes.Count;
                 for (int i = 0; i < num; i++) {
-                    if (evt.Notes[i].Value == subj) {
+                    if (evt.Notes[i].XRef == subj.XRef) {
                         ShowLink(subj, aToList, aRec, evt, null);
                     }
                 }
-            } else
-                if (subj is GDMMultimediaRecord) {
+            } else if (subj is GDMMultimediaRecord) {
                 int num2 = evt.MultimediaLinks.Count;
                 for (int i = 0; i < num2; i++) {
-                    if (evt.MultimediaLinks[i].Value == subj) {
+                    if (evt.MultimediaLinks[i].XRef == subj.XRef) {
                         ShowLink(subj, aToList, aRec, evt, null);
                     }
                 }
             } else if (subj is GDMSourceRecord) {
                 int num3 = evt.SourceCitations.Count;
                 for (int i = 0; i < num3; i++) {
-                    if (evt.SourceCitations[i].Value == subj) {
+                    if (evt.SourceCitations[i].XRef == subj.XRef) {
                         ShowLink(subj, aToList, aRec, evt, evt.SourceCitations[i]);
                     }
                 }
@@ -1631,21 +1630,21 @@ namespace GKCore
                 if (subject is GDMNoteRecord) {
                     num = aInRecord.Notes.Count;
                     for (int i = 0; i < num; i++) {
-                        if (aInRecord.Notes[i].Value == subject) {
+                        if (aInRecord.Notes[i].XRef == subject.XRef) {
                             ShowLink(subject, aToList, aInRecord, null, null);
                         }
                     }
                 } else if (subject is GDMMultimediaRecord) {
                     num = aInRecord.MultimediaLinks.Count;
                     for (int i = 0; i < num; i++) {
-                        if (aInRecord.MultimediaLinks[i].Value == subject) {
+                        if (aInRecord.MultimediaLinks[i].XRef == subject.XRef) {
                             ShowLink(subject, aToList, aInRecord, null, null);
                         }
                     }
                 } else if (subject is GDMSourceRecord) {
                     num = aInRecord.SourceCitations.Count;
                     for (int i = 0; i < num; i++) {
-                        if (aInRecord.SourceCitations[i].Value == subject) {
+                        if (aInRecord.SourceCitations[i].XRef == subject.XRef) {
                             ShowLink(subject, aToList, aInRecord, null, aInRecord.SourceCitations[i]);
                         }
                     }
@@ -1674,7 +1673,7 @@ namespace GKCore
                         num = inRecord.Notes.Count;
                         for (int i = 0; i < num; i++) {
                             var notes = inRecord.Notes[i];
-                            if (notes.Value == searchRec) {
+                            if (notes.XRef == searchRec.XRef) {
                                 linksList.Add(notes);
                             }
                         }
@@ -1684,7 +1683,7 @@ namespace GKCore
                         num = inRecord.MultimediaLinks.Count;
                         for (int i = 0; i < num; i++) {
                             var mmLink = inRecord.MultimediaLinks[i];
-                            if (mmLink.Value == searchRec) {
+                            if (mmLink.XRef == searchRec.XRef) {
                                 linksList.Add(mmLink);
                             }
                         }
@@ -1694,7 +1693,7 @@ namespace GKCore
                         num = inRecord.SourceCitations.Count;
                         for (int i = 0; i < num; i++) {
                             var sourCit = inRecord.SourceCitations[i];
-                            if (sourCit.Value == searchRec) {
+                            if (sourCit.XRef == searchRec.XRef) {
                                 linksList.Add(sourCit);
                             }
                         }
@@ -2264,7 +2263,7 @@ namespace GKCore
 
                                 int num2 = srcRec.RepositoryCitations.Count;
                                 for (int j = 0; j < num2; j++) {
-                                    if (srcRec.RepositoryCitations[j].Value == repositoryRec) {
+                                    if (srcRec.RepositoryCitations[j].XRef == repositoryRec.XRef) {
                                         sortedSources.Add(GenRecordLinkTuple(srcRec, false));
                                     }
                                 }
