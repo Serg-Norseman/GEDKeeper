@@ -131,7 +131,17 @@ namespace GDModel
         public void DeleteChild(GDMRecord childRec)
         {
             for (int i = fChildren.Count - 1; i >= 0; i--) {
-                if (fChildren[i].Value == childRec) {
+                if (fChildren[i].XRef == childRec.XRef) {
+                    fChildren.DeleteAt(i);
+                    break;
+                }
+            }
+        }
+
+        public void DeleteChild(GDMPointer childRec)
+        {
+            for (int i = fChildren.Count - 1; i >= 0; i--) {
+                if (fChildren[i].XRef == childRec.XRef) {
                     fChildren.DeleteAt(i);
                     break;
                 }
@@ -143,7 +153,7 @@ namespace GDModel
             int result = -1;
 
             for (int i = fChildren.Count - 1; i >= 0; i--) {
-                if (fChildren[i].Value == childRec) {
+                if (fChildren[i].XRef == childRec.XRef) {
                     result = i;
                     break;
                 }

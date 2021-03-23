@@ -559,7 +559,7 @@ namespace GDModel
             for (int i = 0; i < num; i++) {
                 GDMMultimediaLink lnk = MultimediaLinks[i];
 
-                if (lnk.Value == mediaRec) {
+                if (lnk.XRef == mediaRec.XRef) {
                     mmLink = lnk;
                     break;
                 }

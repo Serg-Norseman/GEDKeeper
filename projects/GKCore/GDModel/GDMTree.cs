@@ -545,7 +545,7 @@ namespace GDModel
             for (int i = 0; i < num; i++) {
                 GDMRecord rec = fRecords[i];
                 for (int j = rec.MultimediaLinks.Count - 1; j >= 0; j--) {
-                    if (rec.MultimediaLinks[j].Value == mRec) {
+                    if (rec.MultimediaLinks[j].XRef == mRec.XRef) {
                         rec.MultimediaLinks.DeleteAt(j);
                     }
                 }
@@ -563,7 +563,7 @@ namespace GDModel
             for (int i = 0; i < num; i++) {
                 GDMRecord rec = fRecords[i];
                 for (int j = rec.Notes.Count - 1; j >= 0; j--) {
-                    if (rec.Notes[j].Value == nRec)
+                    if (rec.Notes[j].XRef == nRec.XRef)
                         rec.Notes.DeleteAt(j);
                 }
             }
@@ -582,7 +582,7 @@ namespace GDModel
                 if (rec.RecordType == GDMRecordType.rtSource) {
                     GDMSourceRecord srcRec = (GDMSourceRecord)rec;
                     for (int j = srcRec.RepositoryCitations.Count - 1; j >= 0; j--) {
-                        if (srcRec.RepositoryCitations[j].Value == repRec) {
+                        if (srcRec.RepositoryCitations[j].XRef == repRec.XRef) {
                             srcRec.RepositoryCitations.DeleteAt(j);
                         }
                     }
@@ -609,7 +609,7 @@ namespace GDModel
             for (int i = 0; i < num; i++) {
                 GDMRecord rec = fRecords[i];
                 for (int j = rec.SourceCitations.Count - 1; j >= 0; j--) {
-                    if (rec.SourceCitations[j].Value == srcRec) {
+                    if (rec.SourceCitations[j].XRef == srcRec.XRef) {
                         rec.SourceCitations.DeleteAt(j);
                     }
                 }
@@ -629,7 +629,7 @@ namespace GDModel
                 if (rec.RecordType == GDMRecordType.rtResearch) {
                     GDMResearchRecord resRec = (GDMResearchRecord)rec;
                     for (int j = resRec.Tasks.Count - 1; j >= 0; j--) {
-                        if (resRec.Tasks[j].Value == taskRec) {
+                        if (resRec.Tasks[j].XRef == taskRec.XRef) {
                             resRec.Tasks.DeleteAt(j);
                         }
                     }
@@ -650,7 +650,7 @@ namespace GDModel
                 if (rec.RecordType == GDMRecordType.rtResearch) {
                     GDMResearchRecord resRec = (GDMResearchRecord)rec;
                     for (int j = resRec.Communications.Count - 1; j >= 0; j--) {
-                        if (resRec.Communications[j].Value == commRec) {
+                        if (resRec.Communications[j].XRef == commRec.XRef) {
                             resRec.Communications.DeleteAt(j);
                         }
                     }
@@ -672,7 +672,7 @@ namespace GDModel
                     for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
                         GDMPointer evLocation = evsRec.Events[j].Place.Location;
 
-                        if (evLocation.Value == locRec) {
+                        if (evLocation.XRef == locRec.XRef) {
                             evLocation.Value = null;
                         }
                     }
@@ -694,7 +694,7 @@ namespace GDModel
                     for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
                         GDMPlace evPlace = evsRec.Events[j].Place;
 
-                        if (evPlace.Location.Value == locRec) {
+                        if (evPlace.Location.XRef == locRec.XRef) {
                             evPlace.StringValue = locRec.LocationName;
                         }
                     }

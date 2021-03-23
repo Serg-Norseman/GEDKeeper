@@ -180,14 +180,22 @@ namespace GKCore.Controllers
             }
         }
 
+        public void JumpToRecord(GDMPointer pointer)
+        {
+            if (pointer != null && Accept()) {
+                fBase.SelectRecordByXRef(pointer.XRef, true);
+                fView.Close();
+            }
+        }
+
         public void JumpToHusband()
         {
-            JumpToRecord(fFamily.Husband.Individual);
+            JumpToRecord(fFamily.Husband);
         }
 
         public void JumpToWife()
         {
-            JumpToRecord(fFamily.Wife.Individual);
+            JumpToRecord(fFamily.Wife);
         }
     }
 }
