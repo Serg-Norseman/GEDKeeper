@@ -30,7 +30,7 @@ namespace GKStdReports
 {
     public sealed class PlacesReport : ReportExporter
     {
-        private IFont fTitleFont, fChapFont, fTextFont, fHeaderFont;
+        private IFont fTitleFont, fTextFont, fHeaderFont;
 
         public PlacesReport(IBaseWindow baseWin)
             : base(baseWin, false)
@@ -44,7 +44,6 @@ namespace GKStdReports
             IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
 
             fTitleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
-            fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
             fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
             fHeaderFont = fWriter.CreateFont("", 12f, true, false, clrBlack);
 

@@ -89,7 +89,7 @@ namespace GKCore.MVP
         {
             base.Init(baseWin);
             if (fBase != null) {
-                fLocalUndoman = new ChangeTracker(fBase.Context.Tree);
+                fLocalUndoman = new ChangeTracker(fBase.Context);
             }
         }
     }

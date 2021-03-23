@@ -502,19 +502,19 @@ namespace GKCore
             GKUtils.ShowFamilyInfo(fContext, famRec, summary);
 
             summary.Clear();
-            GKUtils.ShowGroupInfo(null, null);
+            GKUtils.ShowGroupInfo(null, null, null);
             GDMGroupRecord grpRec = fContext.Tree.XRefIndex_Find("G1") as GDMGroupRecord;
-            GKUtils.ShowGroupInfo(grpRec, summary);
+            GKUtils.ShowGroupInfo(fContext, grpRec, summary);
 
             summary.Clear();
-            GKUtils.ShowMultimediaInfo(null, null);
+            GKUtils.ShowMultimediaInfo(null, null, null);
             GDMMultimediaRecord mmRec = fContext.Tree.XRefIndex_Find("O1") as GDMMultimediaRecord;
-            GKUtils.ShowMultimediaInfo(mmRec, summary);
+            GKUtils.ShowMultimediaInfo(fContext, mmRec, summary);
 
             summary.Clear();
-            GKUtils.ShowNoteInfo(null, null);
+            GKUtils.ShowNoteInfo(null, null, null);
             GDMNoteRecord noteRec = fContext.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
-            GKUtils.ShowNoteInfo(noteRec, summary);
+            GKUtils.ShowNoteInfo(fContext, noteRec, summary);
 
             summary.Clear();
             GKUtils.ShowPersonInfo(fContext, null, null);
@@ -522,34 +522,34 @@ namespace GKCore
             GKUtils.ShowPersonInfo(fContext, indRec, summary);
 
             summary.Clear();
-            GKUtils.ShowSourceInfo(null, null);
+            GKUtils.ShowSourceInfo(null, null, null);
             GDMSourceRecord srcRec = fContext.Tree.XRefIndex_Find("S1") as GDMSourceRecord;
-            GKUtils.ShowSourceInfo(srcRec, summary);
+            GKUtils.ShowSourceInfo(fContext, srcRec, summary);
 
             summary.Clear();
-            GKUtils.ShowRepositoryInfo(null, null);
+            GKUtils.ShowRepositoryInfo(null, null, null);
             GDMRepositoryRecord repRec = fContext.Tree.XRefIndex_Find("R1") as GDMRepositoryRecord;
-            GKUtils.ShowRepositoryInfo(repRec, summary);
+            GKUtils.ShowRepositoryInfo(fContext, repRec, summary);
 
             summary.Clear();
-            GKUtils.ShowResearchInfo(null, null);
+            GKUtils.ShowResearchInfo(null, null, null);
             GDMResearchRecord resRec = fContext.Tree.XRefIndex_Find("RS1") as GDMResearchRecord;
-            GKUtils.ShowResearchInfo(resRec, summary);
+            GKUtils.ShowResearchInfo(fContext, resRec, summary);
 
             summary.Clear();
-            GKUtils.ShowTaskInfo(null, null);
+            GKUtils.ShowTaskInfo(null, null, null);
             GDMTaskRecord taskRec = fContext.Tree.XRefIndex_Find("TK1") as GDMTaskRecord;
-            GKUtils.ShowTaskInfo(taskRec, summary);
+            GKUtils.ShowTaskInfo(fContext, taskRec, summary);
 
             summary.Clear();
-            GKUtils.ShowCommunicationInfo(null, null);
+            GKUtils.ShowCommunicationInfo(null, null, null);
             GDMCommunicationRecord commRec = fContext.Tree.XRefIndex_Find("CM1") as GDMCommunicationRecord;
-            GKUtils.ShowCommunicationInfo(commRec, summary);
+            GKUtils.ShowCommunicationInfo(fContext, commRec, summary);
 
             summary.Clear();
-            GKUtils.ShowLocationInfo(null, null);
+            GKUtils.ShowLocationInfo(null, null, null);
             GDMLocationRecord locRec = fContext.Tree.XRefIndex_Find("L1") as GDMLocationRecord;
-            GKUtils.ShowLocationInfo(locRec, summary);
+            GKUtils.ShowLocationInfo(fContext, locRec, summary);
         }
 
         [Test]

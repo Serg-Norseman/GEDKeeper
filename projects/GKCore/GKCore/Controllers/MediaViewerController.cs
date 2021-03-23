@@ -118,7 +118,7 @@ namespace GKCore.Controllers
             var mmRec = fileRef.Owner as GDMMultimediaRecord;
 
             var linksList = new List<GDMObject>();
-            GKUtils.SearchRecordLinks(linksList, mmRec.GetTree(), mmRec);
+            GKUtils.SearchRecordLinks(linksList, fBase.Context.Tree, mmRec);
 
             bool showRegions = false;
             foreach (var link in linksList) {

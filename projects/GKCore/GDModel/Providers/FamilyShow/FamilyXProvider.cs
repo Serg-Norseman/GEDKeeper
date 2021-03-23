@@ -303,11 +303,14 @@ namespace GDModel.Providers.FamilyShow
         {
             GDMFamilyRecord result = null;
 
+            string fatherXRef = (father == null) ? string.Empty : father.XRef;
+            string motherXRef = (mother == null) ? string.Empty : mother.XRef;
+
             var famEnum = fTree.GetEnumerator(GDMRecordType.rtFamily);
             GDMRecord record;
             while (famEnum.MoveNext(out record)) {
                 var famRec = record as GDMFamilyRecord;
-                if (famRec.Husband.XRef == father.XRef && famRec.Wife.XRef == mother.XRef) {
+                if (famRec.Husband.XRef == fatherXRef && famRec.Wife.XRef == motherXRef) {
                     result = famRec;
                     break;
                 }

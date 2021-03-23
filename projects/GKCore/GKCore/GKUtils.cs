@@ -120,6 +120,7 @@ namespace GKCore
         public static StringList GetLocationLinks(GDMTree tree, GDMLocationRecord locRec)
         {
             var linksList = new StringList();
+            if (locRec == null) return linksList;
 
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {
@@ -1956,7 +1957,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowGroupInfo(GDMGroupRecord groupRec, StringList summary)
+        public static void ShowGroupInfo(IBaseContext baseContext, GDMGroupRecord groupRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -1999,7 +2000,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowMultimediaInfo(GDMMultimediaRecord mediaRec, StringList summary)
+        public static void ShowMultimediaInfo(IBaseContext baseContext, GDMMultimediaRecord mediaRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2020,7 +2021,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
 
-                        GDMTree tree = mediaRec.GetTree();
+                        GDMTree tree = baseContext.Tree;
                         int num = tree.RecordsCount;
                         for (int i = 0; i < num; i++) {
                             ShowSubjectLinks(tree[i], mediaRec, summary);
@@ -2037,7 +2038,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowNoteInfo(GDMNoteRecord noteRec, StringList summary)
+        public static void ShowNoteInfo(IBaseContext baseContext, GDMNoteRecord noteRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2051,7 +2052,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
 
-                        GDMTree tree = noteRec.GetTree();
+                        GDMTree tree = baseContext.Tree;
                         int num = tree.RecordsCount;
                         for (int i = 0; i < num; i++) {
                             ShowSubjectLinks(tree[i], noteRec, summary);
@@ -2074,7 +2075,7 @@ namespace GKCore
                 summary.Clear();
                 try {
                     if (iRec != null) {
-                        GDMTree tree = iRec.GetTree();
+                        GDMTree tree = baseContext.Tree;
 
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + GetNameString(iRec, true, true) + "[/size][/u][/b]");
@@ -2175,7 +2176,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowSourceInfo(GDMSourceRecord sourceRec, StringList summary)
+        public static void ShowSourceInfo(IBaseContext baseContext, GDMSourceRecord sourceRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2208,7 +2209,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
 
-                        GDMTree tree = sourceRec.GetTree();
+                        GDMTree tree = baseContext.Tree;
 
                         int num2 = tree.RecordsCount;
                         for (int j = 0; j < num2; j++) {
@@ -2234,7 +2235,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowRepositoryInfo(GDMRepositoryRecord repositoryRec, StringList summary)
+        public static void ShowRepositoryInfo(IBaseContext baseContext, GDMRepositoryRecord repositoryRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2253,7 +2254,7 @@ namespace GKCore
                         summary.Add(LangMan.LS(LSID.LSID_RPSources) + ":");
 
                         var sortedSources = new List<Tuple<string, string>>();
-                        GDMTree tree = repositoryRec.GetTree();
+                        GDMTree tree = baseContext.Tree;
                         int num = tree.RecordsCount;
                         for (int i = 0; i < num; i++) {
                             GDMRecord rec = tree[i];
@@ -2284,7 +2285,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowResearchInfo(GDMResearchRecord researchRec, StringList summary)
+        public static void ShowResearchInfo(IBaseContext baseContext, GDMResearchRecord researchRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2345,7 +2346,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowTaskInfo(GDMTaskRecord taskRec, StringList summary)
+        public static void ShowTaskInfo(IBaseContext baseContext, GDMTaskRecord taskRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2371,7 +2372,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowCommunicationInfo(GDMCommunicationRecord commRec, StringList summary)
+        public static void ShowCommunicationInfo(IBaseContext baseContext, GDMCommunicationRecord commRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2380,7 +2381,7 @@ namespace GKCore
                 try {
                     summary.Clear();
                     if (commRec != null) {
-                        GDMTree tree = commRec.GetTree();
+                        GDMTree tree = baseContext.Tree;
 
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Theme) + ": [u][b][size=+1]\"" + commRec.CommName.Trim() + "\"[/size][/b][/u]");
@@ -2400,7 +2401,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowLocationInfo(GDMLocationRecord locRec, StringList summary)
+        public static void ShowLocationInfo(IBaseContext baseContext, GDMLocationRecord locRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2416,7 +2417,7 @@ namespace GKCore
                         summary.Add(LangMan.LS(LSID.LSID_Latitude) + ": " + locRec.Map.Lati);
                         summary.Add(LangMan.LS(LSID.LSID_Longitude) + ": " + locRec.Map.Long);
 
-                        GDMTree tree = locRec.GetTree();
+                        GDMTree tree = baseContext.Tree;
 
                         linkList = GetLocationLinks(tree, locRec);
 
@@ -2459,39 +2460,39 @@ namespace GKCore
                             break;
 
                         case GDMRecordType.rtNote:
-                            GKUtils.ShowNoteInfo(record as GDMNoteRecord, ctx);
+                            GKUtils.ShowNoteInfo(baseContext, record as GDMNoteRecord, ctx);
                             break;
 
                         case GDMRecordType.rtMultimedia:
-                            GKUtils.ShowMultimediaInfo(record as GDMMultimediaRecord, ctx);
+                            GKUtils.ShowMultimediaInfo(baseContext, record as GDMMultimediaRecord, ctx);
                             break;
 
                         case GDMRecordType.rtSource:
-                            GKUtils.ShowSourceInfo(record as GDMSourceRecord, ctx);
+                            GKUtils.ShowSourceInfo(baseContext, record as GDMSourceRecord, ctx);
                             break;
 
                         case GDMRecordType.rtRepository:
-                            GKUtils.ShowRepositoryInfo(record as GDMRepositoryRecord, ctx);
+                            GKUtils.ShowRepositoryInfo(baseContext, record as GDMRepositoryRecord, ctx);
                             break;
 
                         case GDMRecordType.rtGroup:
-                            GKUtils.ShowGroupInfo(record as GDMGroupRecord, ctx);
+                            GKUtils.ShowGroupInfo(baseContext, record as GDMGroupRecord, ctx);
                             break;
 
                         case GDMRecordType.rtResearch:
-                            GKUtils.ShowResearchInfo(record as GDMResearchRecord, ctx);
+                            GKUtils.ShowResearchInfo(baseContext, record as GDMResearchRecord, ctx);
                             break;
 
                         case GDMRecordType.rtTask:
-                            GKUtils.ShowTaskInfo(record as GDMTaskRecord, ctx);
+                            GKUtils.ShowTaskInfo(baseContext, record as GDMTaskRecord, ctx);
                             break;
 
                         case GDMRecordType.rtCommunication:
-                            GKUtils.ShowCommunicationInfo(record as GDMCommunicationRecord, ctx);
+                            GKUtils.ShowCommunicationInfo(baseContext, record as GDMCommunicationRecord, ctx);
                             break;
 
                         case GDMRecordType.rtLocation:
-                            GKUtils.ShowLocationInfo(record as GDMLocationRecord, ctx);
+                            GKUtils.ShowLocationInfo(baseContext, record as GDMLocationRecord, ctx);
                             break;
                     }
                 } catch (Exception ex) {
@@ -2845,7 +2846,10 @@ namespace GKCore
 
         public static NamePartsRet GetNameParts(GDMIndividualRecord iRec, GDMPersonalName personalName, bool formatted = true)
         {
-            ICulture culture = DefineCulture(iRec, personalName);
+            if (iRec == null)
+                throw new ArgumentNullException("iRec");
+
+            ICulture culture = DefineCulture(iRec.GetTree(), personalName);
 
             NamePartsRet nameParts = culture.GetNameParts(personalName);
 
@@ -2868,23 +2872,16 @@ namespace GKCore
             }
         }
 
-        public static ICulture DefineCulture(GDMIndividualRecord iRec, GDMPersonalName personalName)
+        public static ICulture DefineCulture(GDMTree tree, GDMPersonalName personalName)
         {
             GDMLanguageID langID;
 
             // first priority - local langID from name
-            if (personalName != null) {
-                langID = personalName.Language;
-            } else {
-                langID = GDMLanguageID.Unknown;
-            }
+            langID = (personalName != null) ? personalName.Language : GDMLanguageID.Unknown;
 
             // second priority - global langID from tree
-            if (langID == GDMLanguageID.Unknown && iRec != null) {
-                GDMTree tree = iRec.GetTree();
-                if (tree != null) {
-                    langID = tree.Header.Language;
-                }
+            if (langID == GDMLanguageID.Unknown && tree != null) {
+                langID = tree.Header.Language;
             }
 
             return CulturesPool.DefineCulture(langID);

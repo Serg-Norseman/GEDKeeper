@@ -31,7 +31,7 @@ namespace GKStdReports
 {
     public sealed class SourcesReport : ReportExporter
     {
-        private IFont fTitleFont, fChapFont, fTextFont, fHeaderFont;
+        private IFont fTitleFont, fTextFont, fHeaderFont;
 
         public SourcesReport(IBaseWindow baseWin)
             : base(baseWin, false)
@@ -45,7 +45,6 @@ namespace GKStdReports
             IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
 
             fTitleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
-            fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
             fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
             fHeaderFont = fWriter.CreateFont("", 12f, true, false, clrBlack);
 
@@ -63,19 +62,24 @@ namespace GKStdReports
 
             SortHelper.QuickSort(sources, ItemsCompare);
 
-            fWriter.BeginTable(2, sources.Count + 1);
+            fWriter.BeginTable(3, sources.Count + 1);
 
             fWriter.BeginTableRow(true);
             fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Name), fHeaderFont, TextAlignment.taLeft);
             fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Title), fHeaderFont, TextAlignment.taLeft);
+            fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Repository), fHeaderFont, TextAlignment.taLeft);
             fWriter.EndTableRow();
 
             for (int i = 0; i < sources.Count; i++) {
                 sourceRec = sources[i];
+                var repoCit = (sourceRec.RepositoryCitations.Count > 0) ? sourceRec.RepositoryCitations[0] : null;
+                var repoRec = (repoCit != null) ? repoCit.Value as GDMRepositoryRecord : null;
+                var repoName = (repoRec != null) ? repoRec.RepositoryName : string.Empty;
 
                 fWriter.BeginTableRow(false);
                 fWriter.AddTableCell(sourceRec.ShortTitle, fTextFont, TextAlignment.taLeft);
                 fWriter.AddTableCell(sourceRec.Title.Lines.Text, fTextFont, TextAlignment.taLeft);
+                fWriter.AddTableCell(repoName, fTextFont, TextAlignment.taLeft);
                 fWriter.EndTableRow();
             }
             fWriter.EndTable();

@@ -435,7 +435,7 @@ namespace GKCore
             fContext.DoCommit();
             fContext.DoRollback();
 
-            Assert.AreEqual(fContext.Tree, fContext.Undoman.Tree);
+            Assert.AreEqual(fContext, fContext.Undoman.Context);
 
             fContext.Undoman.OnTransaction += TransactionEventHandler;
 

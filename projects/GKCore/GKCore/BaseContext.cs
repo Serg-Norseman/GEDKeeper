@@ -162,7 +162,7 @@ namespace GKCore
             fFileName = "";
             fTree = new GDMTree();
             fViewer = viewer;
-            fUndoman = new ChangeTracker(fTree);
+            fUndoman = new ChangeTracker(this);
             fValuesCollection = new ValuesCollection();
             fLockedRecords = new List<GDMRecord>();
             fLangsList = new List<GDMLanguageID>();
