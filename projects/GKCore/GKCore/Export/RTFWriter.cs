@@ -67,6 +67,9 @@ namespace GKCore.Export
 
         private RtfDocument fDocument;
         private RtfParagraph fParagraph;
+        private RtfTable fTable;
+        private int fTableCol;
+        private int fTableRow;
 
         public RTFWriter()
         {
@@ -248,6 +251,41 @@ namespace GKCore.Export
 
         public override void AddImage(IImage image)
         {
+        }
+
+        public override void BeginTable(int columnsCount, int rowsCount)
+        {
+            fTable = fDocument.addTable(rowsCount, columnsCount, 0);
+            fTableRow = 0;
+            fTableCol = 0;
+        }
+
+        public override void EndTable()
+        {
+        }
+
+        public override void BeginTableRow(bool header = false)
+        {
+        }
+
+        public override void EndTableRow()
+        {
+        }
+
+        public override void AddTableCell(string content, IFont font, TextAlignment alignment)
+        {
+            var cell = fTable.cell(fTableRow, fTableCol);
+            if (!string.IsNullOrEmpty(content)) {
+                var par = cell.addParagraph();
+                par.Alignment = iAlignments[(int)alignment];
+                addParagraphChunk(par, content, font);
+            }
+
+            fTableCol += 1;
+            if (fTableCol == fTable.ColCount) {
+                fTableRow += 1;
+                fTableCol = 0;
+            }
         }
     }
 }

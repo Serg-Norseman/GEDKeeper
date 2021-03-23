@@ -55,6 +55,8 @@ namespace GKCore.Export
 
         private StreamWriter fStream;
         private readonly Dictionary<string, string> fStyles;
+        private int fTableCol, fTableColsCount;
+        private int fTableRow, fTableRowsCount;
 
         public HTMLWriter()
         {
@@ -209,11 +211,48 @@ namespace GKCore.Export
 
         public override void AddNote(string text, IFont font)
         {
-            
         }
 
         public override void AddImage(IImage image)
         {
+        }
+
+        public override void BeginTable(int columnsCount, int rowsCount)
+        {
+            fStream.WriteLine("<table>");
+            fTableRowsCount = rowsCount;
+            fTableRow = 0;
+            fTableColsCount = columnsCount;
+            fTableCol = 0;
+        }
+
+        public override void EndTable()
+        {
+            fStream.WriteLine("</table>");
+        }
+
+        public override void BeginTableRow(bool header = false)
+        {
+            fStream.WriteLine("<tr>");
+        }
+
+        public override void EndTableRow()
+        {
+            fStream.WriteLine("</tr>");
+        }
+
+        public override void AddTableCell(string content, IFont font, TextAlignment alignment)
+        {
+            fStream.WriteLine("<td class=\""+((FontHandler)font).Handle+"\">" + content + "</td>");
+
+            fTableCol += 1;
+            if (fTableCol == fTableColsCount) {
+                fTableRow += 1;
+                fTableCol = 0;
+
+                if (fTableRow < fTableRowsCount) {
+                }
+            }
         }
     }
 }

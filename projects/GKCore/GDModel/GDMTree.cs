@@ -86,6 +86,46 @@ namespace GDModel
             }
         }
 
+        private struct TreeEnumerator<T> : IGDMTreeEnumerator<T> where T : GDMRecord
+        {
+            private readonly GDMTree fTree;
+            private readonly int fEndIndex;
+            private int fIndex;
+
+            public TreeEnumerator(GDMTree tree)
+            {
+                fTree = tree;
+                fIndex = -1;
+                fEndIndex = tree.RecordsCount - 1;
+            }
+
+            public bool MoveNext(out T current)
+            {
+                while (fIndex < fEndIndex) {
+                    fIndex++;
+                    T rec = fTree[fIndex] as T;
+                    if (rec != null) {
+                        current = rec;
+                        return true;
+                    }
+                }
+
+                fIndex = fEndIndex + 1;
+                current = null;
+                return false;
+            }
+
+            public bool MoveNext(out GDMRecord current)
+            {
+                return MoveNext(out current);
+            }
+
+            public void Reset()
+            {
+                fIndex = -1;
+            }
+        }
+
         #endregion
 
 
@@ -268,6 +308,11 @@ namespace GDModel
         public IGDMTreeEnumerator GetEnumerator(GDMRecordType recType)
         {
             return new TreeEnumerator(this, recType);
+        }
+
+        public IGDMTreeEnumerator<T> GetEnumerator<T>() where T : GDMRecord
+        {
+            return new TreeEnumerator<T>(this);
         }
 
         public void Clear()

@@ -30,6 +30,8 @@ using iTextSharp.text.pdf;
 using it = iTextSharp.text;
 using itFont = iTextSharp.text.Font;
 using itImage = iTextSharp.text.Image;
+using itTable = iTextSharp.text.pdf.PdfPTable;
+using itCell = iTextSharp.text.pdf.PdfPCell;
 
 namespace GKCore.Export
 {
@@ -101,6 +103,7 @@ namespace GKCore.Export
         private bool fMulticolumns;
         private PdfWriter fPdfWriter;
         private Paragraph p;
+        private itTable fTable;
 
         public PDFWriter()
         {
@@ -376,6 +379,46 @@ namespace GKCore.Export
                     fDocument.Add(img);
                 }
             }
+        }
+
+        public override void BeginTable(int columnsCount, int rowsCount)
+        {
+            fTable = new itTable(columnsCount);
+
+            //table.WidthPercentage = 100f;
+            //table.TableFitsPage = true;
+            //table.Padding = 2f;
+            //table.Spacing = 0f;
+            //table.Cellpadding = 2f;
+            //table.Cellspacing = 0f;
+            //table.SpaceInsideCell = 2f;
+            //table.BorderColor = Color.BLACK;
+            //table.BorderWidth = 1f;
+            //table.DefaultCellBackgroundColor = new Color(System.Drawing.Color.CornflowerBlue);
+            //table.DefaultVerticalAlignment = Element.ALIGN_TOP;
+            //int[] widths = new int[] { 5, 20, 10, 15, 10, 15, 20 };
+            //table.SetWidths(widths);
+        }
+
+        public override void EndTable()
+        {
+            fDocument.Add(fTable);
+        }
+
+        public override void BeginTableRow(bool header = false)
+        {
+        }
+
+        public override void EndTableRow()
+        {
+        }
+
+        public override void AddTableCell(string content, IFont font, TextAlignment alignment)
+        {
+            itCell cell = new itCell(new Phrase(content, ((FontHandler)font).Handle));
+            cell.HorizontalAlignment = iAlignments[(int)alignment];
+            //cell.GrayFill
+            fTable.AddCell(cell);
         }
     }
 

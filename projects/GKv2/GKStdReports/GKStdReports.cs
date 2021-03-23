@@ -28,8 +28,8 @@ using GKCore.Plugins;
 [assembly: AssemblyTitle("GKStdReports")]
 [assembly: AssemblyDescription("GEDKeeper standard reports plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2018 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("0.4.0.0")]
+[assembly: AssemblyCopyright("Copyright © 2018-2021 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyVersion("0.6.0.0")]
 [assembly: AssemblyCulture("")]
 
 namespace GKStdReports
@@ -41,7 +41,13 @@ namespace GKStdReports
         LSID_Names,
         LSID_Surnames,
         LSID_Phonetics_Title,
-        LSID_Contemporaries_Title
+        LSID_Contemporaries_Title,
+        LSID_Sources_Title,
+        LSID_Name,
+        LSID_Title,
+        LSID_Repositories_Title,
+        LSID_Address,
+        LSID_Places_Title,
     }
 
     public static class SRLangMan
@@ -183,6 +189,90 @@ namespace GKStdReports
                 SRLangMan.Instance = Host.CreateLangMan(this);
             } catch (Exception ex) {
                 Logger.WriteError("ContempPlugin.OnLanguageChange()", ex);
+            }
+        }
+    }
+
+
+    public class SourcesPlugin : OrdinaryPlugin, IPlugin
+    {
+        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Sources_Title); } }
+        public override ILangMan LangMan { get { return SRLangMan.Instance; } }
+        public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Report; } }
+
+        public override void Execute()
+        {
+            IBaseWindow curBase = Host.GetCurrentFile();
+            if (curBase == null) return;
+
+            using (var report = new SourcesReport(curBase)) {
+                report.Generate(true);
+            }
+        }
+
+        public override void OnLanguageChange()
+        {
+            try {
+                SRLangMan.Instance = Host.CreateLangMan(this);
+            } catch (Exception ex) {
+                Logger.WriteError("SourcesPlugin.OnLanguageChange()", ex);
+            }
+        }
+    }
+
+
+    public class RepositoriesPlugin : OrdinaryPlugin, IPlugin
+    {
+        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Repositories_Title); } }
+        public override ILangMan LangMan { get { return SRLangMan.Instance; } }
+        public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Report; } }
+
+        public override void Execute()
+        {
+            IBaseWindow curBase = Host.GetCurrentFile();
+            if (curBase == null) return;
+
+            using (var report = new RepositoriesReport(curBase)) {
+                report.Generate(true);
+            }
+        }
+
+        public override void OnLanguageChange()
+        {
+            try {
+                SRLangMan.Instance = Host.CreateLangMan(this);
+            } catch (Exception ex) {
+                Logger.WriteError("RepositoriesPlugin.OnLanguageChange()", ex);
+            }
+        }
+    }
+
+
+    public class PlacesPlugin : OrdinaryPlugin, IPlugin
+    {
+        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Places_Title); } }
+        public override ILangMan LangMan { get { return SRLangMan.Instance; } }
+        public override IImage Icon { get { return null; } }
+        public override PluginCategory Category { get { return PluginCategory.Report; } }
+
+        public override void Execute()
+        {
+            IBaseWindow curBase = Host.GetCurrentFile();
+            if (curBase == null) return;
+
+            using (var report = new PlacesReport(curBase)) {
+                report.Generate(true);
+            }
+        }
+
+        public override void OnLanguageChange()
+        {
+            try {
+                SRLangMan.Instance = Host.CreateLangMan(this);
+            } catch (Exception ex) {
+                Logger.WriteError("PlacesPlugin.OnLanguageChange()", ex);
             }
         }
     }

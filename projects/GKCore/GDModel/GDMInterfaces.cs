@@ -62,6 +62,13 @@ namespace GDModel
     }
 
 
+    public interface IGDMTreeEnumerator<T> : IGDMTreeEnumerator where T : GDMRecord
+    {
+        bool MoveNext(out T current);
+        void Reset();
+    }
+
+
     public interface IGDMStructWithNotes : IGDMObject
     {
         GDMList<GDMNotes> Notes { get; }

@@ -1318,14 +1318,16 @@ namespace GKCore.Tools
             placesList.Clear();
         }
 
-        private static void SearchPlaces_CheckEventPlace(StringList placesList, GDMCustomEvent evt)
+        private static void SearchPlaces_CheckEventPlace(StringList placesList, GDMCustomEvent evt, bool checkLocation)
         {
             string placeStr = evt.Place.StringValue;
             if (string.IsNullOrEmpty(placeStr)) return;
 
-            GDMLocationRecord loc = evt.Place.Location.Value as GDMLocationRecord;
-            if (loc != null) {
-                placeStr = "[*] " + placeStr;
+            if (checkLocation) {
+                GDMLocationRecord loc = evt.Place.Location.Value as GDMLocationRecord;
+                if (loc != null) {
+                    placeStr = "[*] " + placeStr;
+                }
             }
 
             int idx = placesList.IndexOf(placeStr);
@@ -1340,7 +1342,7 @@ namespace GKCore.Tools
             placeObj.Facts.Add(evt);
         }
 
-        public static void SearchPlaces(GDMTree tree, StringList placesList, IProgressController pc)
+        public static void SearchPlaces(GDMTree tree, StringList placesList, IProgressController pc, bool checkLocation = true)
         {
             if (tree == null)
                 throw new ArgumentNullException("tree");
@@ -1367,7 +1369,7 @@ namespace GKCore.Tools
                         for (int j = 0; j < num2; j++) {
                             GDMCustomEvent evt = evsRec.Events[j];
 
-                            SearchPlaces_CheckEventPlace(placesList, evt);
+                            SearchPlaces_CheckEventPlace(placesList, evt, checkLocation);
                         }
                     }
                 }
