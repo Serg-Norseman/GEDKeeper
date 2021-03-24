@@ -45,7 +45,7 @@ namespace GDModel
         {
             GDMSubmissionRecord submRec = fContext.Tree.AddRecord(new GDMSubmissionRecord(fContext.Tree)) as GDMSubmissionRecord;
             GDMRecord sbmrRec = fContext.Tree.AddRecord(new GDMSubmitterRecord(fContext.Tree));
-            sbmrRec.InitNew();
+            fContext.Tree.NewXRef(sbmrRec);
             string submitterXRef = sbmrRec.XRef;
 
             submRec.FamilyFileName = "FamilyFileName";

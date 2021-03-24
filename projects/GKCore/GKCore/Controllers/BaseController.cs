@@ -51,7 +51,7 @@ namespace GKCore.Controllers
                     if (!exists) {
                         mediaRec = new GDMMultimediaRecord(tree);
                         mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle(mediaRec));
-                        mediaRec.InitNew();
+                        tree.NewXRef(mediaRec);
                     }
 
                     try {
@@ -90,7 +90,7 @@ namespace GKCore.Controllers
                 bool exists = noteRec != null;
                 if (!exists) {
                     noteRec = new GDMNoteRecord(tree);
-                    noteRec.InitNew();
+                    tree.NewXRef(noteRec);
                 }
 
                 try {
@@ -138,7 +138,7 @@ namespace GKCore.Controllers
                     bool exists = sourceRec != null;
                     if (!exists) {
                         sourceRec = new GDMSourceRecord(tree);
-                        sourceRec.InitNew();
+                        tree.NewXRef(sourceRec);
                     }
 
                     try {
@@ -211,7 +211,7 @@ namespace GKCore.Controllers
                     bool exists = repRec != null;
                     if (!exists) {
                         repRec = new GDMRepositoryRecord(tree);
-                        repRec.InitNew();
+                        tree.NewXRef(repRec);
                     }
 
                     try {
@@ -251,7 +251,7 @@ namespace GKCore.Controllers
                     bool exists = groupRec != null;
                     if (!exists) {
                         groupRec = new GDMGroupRecord(tree);
-                        groupRec.InitNew();
+                        tree.NewXRef(groupRec);
                     }
 
                     try {
@@ -291,7 +291,7 @@ namespace GKCore.Controllers
                     bool exists = researchRec != null;
                     if (!exists) {
                         researchRec = new GDMResearchRecord(tree);
-                        researchRec.InitNew();
+                        tree.NewXRef(researchRec);
                     }
 
                     try {
@@ -331,7 +331,7 @@ namespace GKCore.Controllers
                     bool exists = taskRec != null;
                     if (!exists) {
                         taskRec = new GDMTaskRecord(tree);
-                        taskRec.InitNew();
+                        tree.NewXRef(taskRec);
                     }
 
                     try {
@@ -371,7 +371,7 @@ namespace GKCore.Controllers
                     bool exists = commRec != null;
                     if (!exists) {
                         commRec = new GDMCommunicationRecord(tree);
-                        commRec.InitNew();
+                        tree.NewXRef(commRec);
                     }
 
                     try {
@@ -411,7 +411,7 @@ namespace GKCore.Controllers
                     bool exists = locRec != null;
                     if (!exists) {
                         locRec = new GDMLocationRecord(tree);
-                        locRec.InitNew();
+                        tree.NewXRef(locRec);
                     }
 
                     try {
@@ -476,7 +476,7 @@ namespace GKCore.Controllers
                     bool exists = (indivRec != null);
                     if (!exists) {
                         indivRec = new GDMIndividualRecord(tree);
-                        indivRec.InitNew();
+                        tree.NewXRef(indivRec);
 
                         indivRec.AddPersonalName(new GDMPersonalName(indivRec));
                         baseWin.Context.CreateEventEx(indivRec, GEDCOMTagName.BIRT, "", "");
@@ -539,7 +539,7 @@ namespace GKCore.Controllers
                     bool exists = (familyRec != null);
                     if (!exists) {
                         familyRec = new GDMFamilyRecord(tree);
-                        familyRec.InitNew();
+                        tree.NewXRef(familyRec);
                     }
 
                     try {

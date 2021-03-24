@@ -37,7 +37,7 @@ namespace GDModel
             using (GDMRepositoryRecord repoRec = new GDMRepositoryRecord(tree)) {
                 Assert.IsNotNull(repoRec);
 
-                repoRec.InitNew();
+                tree.NewXRef(repoRec);
                 repoRec.RepositoryName = "Test Repository";
                 Assert.AreEqual("Test Repository", repoRec.RepositoryName);
 
@@ -45,7 +45,7 @@ namespace GDModel
                 repoRec.Address.AddressLine1 = "AdrLine1";
 
                 using (GDMRepositoryRecord repo2 = new GDMRepositoryRecord(tree)) {
-                    repo2.InitNew();
+                    tree.NewXRef(repo2);
 
                     Assert.Throws(typeof(ArgumentException), () => {
                         repo2.Assign(null);
@@ -61,7 +61,7 @@ namespace GDModel
                 }
 
                 using (GDMRepositoryRecord repo3 = new GDMRepositoryRecord(tree)) {
-                    repo3.InitNew();
+                    tree.NewXRef(repo3);
 
                     var matchParams = new MatchParams();
                     matchParams.NamesIndistinctThreshold = 100.0f;

@@ -119,17 +119,7 @@ namespace GDModel
         public string XRef
         {
             get { return fXRef; }
-            set {
-                string oldXRef = fXRef;
-                fXRef = value;
-
-                var owner = GetTree();
-                if (owner != null) {
-                    owner.SetXRef(oldXRef, this);
-                }
-            }
         }
-
 
         public GDMRecord(GDMObject owner) : base(owner)
         {
@@ -269,19 +259,14 @@ namespace GDModel
                 (fMultimediaLinks.Count == 0) && (fUserReferences.Count == 0);
         }
 
-        public string NewXRef()
+        public void SetXRef(GDMTree tree, string newXRef)
         {
-            var owner = GetTree();
-            if (owner != null) {
-                string newXRef = owner.XRefIndex_NewXRef(this);
-                XRef = newXRef;
-            }
-            return XRef;
-        }
+            string oldXRef = fXRef;
+            fXRef = newXRef;
 
-        public void InitNew()
-        {
-            NewXRef();
+            if (tree != null) {
+                tree.SetXRef(oldXRef, this);
+            }
         }
 
         public string GetXRefNum()
