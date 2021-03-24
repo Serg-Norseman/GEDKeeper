@@ -54,6 +54,8 @@ namespace GKCore.Interfaces
         bool IsRecordAccess(GDMRestriction restriction);
 
         // Individual utils
+        GDMFamilyRecord GetMarriageFamily(GDMIndividualRecord iRec, bool canCreate = false);
+        GDMFamilyRecord GetParentsFamily(GDMIndividualRecord iRec, bool canCreate = false);
         bool IsChildless(GDMIndividualRecord iRec);
         int FindBirthYear(GDMIndividualRecord iRec);
         int FindDeathYear(GDMIndividualRecord iRec);

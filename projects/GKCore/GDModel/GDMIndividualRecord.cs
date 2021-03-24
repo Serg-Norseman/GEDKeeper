@@ -422,34 +422,20 @@ namespace GDModel
         /// <summary>
         /// Attention: returns or creates only the first marriage!
         /// </summary>
-        /// <param name="canCreate">can create if does not exist</param>
         /// <returns></returns>
-        public GDMFamilyRecord GetMarriageFamily(bool canCreate = false)
+        public GDMFamilyRecord GetMarriageFamily()
         {
             GDMFamilyRecord result = (fSpouseToFamilyLinks.Count < 1) ? null : fSpouseToFamilyLinks[0].Family;
-
-            if (result == null && canCreate) {
-                result = GetTree().CreateFamily();
-                result.AddSpouse(this);
-            }
-
             return result;
         }
 
         /// <summary>
         /// Attention: returns or creates only the first parents family!
         /// </summary>
-        /// <param name="canCreate">can create if does not exist</param>
         /// <returns></returns>
-        public GDMFamilyRecord GetParentsFamily(bool canCreate = false)
+        public GDMFamilyRecord GetParentsFamily()
         {
             GDMFamilyRecord result = (fChildToFamilyLinks.Count < 1) ? null : fChildToFamilyLinks[0].Family;
-
-            if (result == null && canCreate) {
-                result = GetTree().CreateFamily();
-                result.AddChild(this);
-            }
-
             return result;
         }
 

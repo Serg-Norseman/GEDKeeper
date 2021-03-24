@@ -269,7 +269,7 @@ namespace GEDmill.MiniTree
         protected MiniTreeGroup CreateDataStructure(GDMIndividualRecord irSubject)
         {
             // Add subject's frParents
-            GDMFamilyRecord frParents = irSubject.GetParentsFamily(false);
+            GDMFamilyRecord frParents = irSubject.GetParentsFamily();
             MiniTreeGroup mtgParents = new MiniTreeGroup();
             MiniTreeIndividual mtiFather = null;
             if (frParents != null) {

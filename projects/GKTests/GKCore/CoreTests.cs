@@ -336,7 +336,7 @@ namespace GKCore
 
                 GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec);
-                namesTable.ImportNames(fContext.Tree, iRec);
+                namesTable.ImportNames(fContext, iRec);
 
                 namesTable.ImportNames(null, null);
 

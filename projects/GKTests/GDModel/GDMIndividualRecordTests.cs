@@ -68,10 +68,10 @@ namespace GDModel
             GDMIndividualRecord ind2 = fContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
             Assert.IsNotNull(ind2.GetMarriageFamily());
 
-            //
+            // TODO: transfer to BaseContext tests
             GDMIndividualRecord indiRec = fContext.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
-            Assert.IsNull(indiRec.GetMarriageFamily());
-            Assert.IsNotNull(indiRec.GetMarriageFamily(true));
+            Assert.IsNull(fContext.GetMarriageFamily(indiRec, false));
+            Assert.IsNotNull(fContext.GetMarriageFamily(indiRec, true));
 
             //
             Assert.Throws(typeof(ArgumentException), () => { indiRec.Assign(null); });
@@ -196,7 +196,9 @@ namespace GDModel
                 Assert.AreEqual("BigHead", GKUtils.GetNickString(indi));
 
                 Assert.IsNull(indi.GetParentsFamily());
-                Assert.IsNotNull(indi.GetParentsFamily(true));
+
+                // TODO: move to BaseContext tests
+                Assert.IsNotNull(fContext.GetParentsFamily(indi, true));
 
                 // MoveTo test
                 GDMIndividualRecord ind = fContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;

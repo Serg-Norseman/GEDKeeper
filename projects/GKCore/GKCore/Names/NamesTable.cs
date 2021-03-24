@@ -24,6 +24,7 @@ using System.IO;
 using System.Text;
 using BSLib;
 using GDModel;
+using GKCore.Interfaces;
 using GKCore.Types;
 
 namespace GKCore.Names
@@ -218,13 +219,13 @@ namespace GKCore.Names
             }
         }
 
-        public void ImportNames(GDMTree tree, GDMIndividualRecord iRec)
+        public void ImportNames(IBaseContext context, GDMIndividualRecord iRec)
         {
-            if (tree == null || iRec == null) return;
+            if (context == null || iRec == null) return;
 
             try {
                 string childName, childPat;
-                var parts = GKUtils.GetNameParts(tree, iRec, false);
+                var parts = GKUtils.GetNameParts(context.Tree, iRec, false);
                 childName = parts.Name;
                 childPat = parts.Patronymic;
 
@@ -236,7 +237,7 @@ namespace GKCore.Names
 
                 if (father != null) {
                     string fatherName;
-                    parts = GKUtils.GetNameParts(tree, father, false);
+                    parts = GKUtils.GetNameParts(context.Tree, father, false);
                     fatherName = parts.Name;
 
                     if (IsComparable(fatherName, childPat)) {

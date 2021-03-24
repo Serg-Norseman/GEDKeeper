@@ -205,7 +205,7 @@ namespace GKCore
         public void ImportNames(GDMIndividualRecord iRec)
         {
             if (Culture is RussianCulture) {
-                AppHost.NamesTable.ImportNames(fTree, iRec);
+                AppHost.NamesTable.ImportNames(this, iRec);
             }
         }
 
@@ -425,6 +425,40 @@ namespace GKCore
         #endregion
 
         #region Individual utils
+
+        /// <summary>
+        /// Attention: returns or creates only the first marriage!
+        /// </summary>
+        /// <param name="canCreate">can create if does not exist</param>
+        /// <returns></returns>
+        public GDMFamilyRecord GetMarriageFamily(GDMIndividualRecord iRec, bool canCreate = false)
+        {
+            GDMFamilyRecord result = iRec.GetMarriageFamily();
+
+            if (result == null && canCreate) {
+                result = fTree.CreateFamily();
+                result.AddSpouse(iRec);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Attention: returns or creates only the first parents family!
+        /// </summary>
+        /// <param name="canCreate">can create if does not exist</param>
+        /// <returns></returns>
+        public GDMFamilyRecord GetParentsFamily(GDMIndividualRecord iRec, bool canCreate = false)
+        {
+            GDMFamilyRecord result = iRec.GetParentsFamily();
+
+            if (result == null && canCreate) {
+                result = fTree.CreateFamily();
+                result.AddChild(iRec);
+            }
+
+            return result;
+        }
 
         public bool IsChildless(GDMIndividualRecord iRec)
         {
