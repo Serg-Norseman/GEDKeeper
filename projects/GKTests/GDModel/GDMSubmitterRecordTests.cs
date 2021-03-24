@@ -71,7 +71,6 @@ namespace GDModel
 
 
                 subrRec.ResetOwner(fContext.Tree);
-                Assert.AreEqual(fContext.Tree, subrRec.Owner);
             }
         }
 

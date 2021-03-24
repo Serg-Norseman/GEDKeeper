@@ -229,7 +229,6 @@ namespace GDModel
             }
 
             persName.ResetOwner(fContext.Tree);
-            Assert.AreEqual(fContext.Tree, persName.Owner);
 
             persName.Clear();
             Assert.IsTrue(persName.IsEmpty());

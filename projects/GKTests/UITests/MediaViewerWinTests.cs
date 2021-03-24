@@ -61,6 +61,7 @@ namespace GKUI.Forms
             fileRef.MediaType = GDMMediaType.mtPhoto;
 
             fDialog = new MediaViewerWin(fBase);
+            fDialog.Multimedia = mmRec;
             fDialog.Show();
         }
 

@@ -50,6 +50,7 @@ namespace GKUI.Forms
             fPersonalName = new GDMPersonalName(fPerson);
 
             fDialog = new PersonalNameEditDlg(fBase);
+            fDialog.Individual = fPerson;
             fDialog.PersonalName = fPersonalName;
             fDialog.Show();
         }

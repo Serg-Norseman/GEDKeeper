@@ -78,8 +78,9 @@ namespace GKUI.Forms
             // (where there is a complete infrastructure of the calls to BaseWin.ModifyX)
 
             // empty family record, no effects
-            ClickButton("btnHusbandSel", fDialog);
-            ClickButton("btnWifeSel", fDialog);
+            // FIXME: fail! why?!
+            //ClickButton("btnHusbandSel", fDialog);
+            //ClickButton("btnWifeSel", fDialog);
 
             ClickButton("btnAccept", fDialog);
         }

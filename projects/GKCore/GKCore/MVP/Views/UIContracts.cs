@@ -253,6 +253,7 @@ namespace GKCore.MVP.Views
     public interface IMediaViewerWin : IWindow, IView
     {
         GDMFileReferenceWithTitle FileRef { get; set; }
+        GDMMultimediaRecord Multimedia { get; set; }
 
         void SetViewImage(IImage img, GDMFileReferenceWithTitle fileRef);
         void SetViewMedia(string mediaFile);
@@ -324,6 +325,7 @@ namespace GKCore.MVP.Views
 
     public interface IPersonalNameEditDlg : ICommonDialog, IBaseEditor, IView
     {
+        GDMIndividualRecord Individual { get; set; }
         GDMPersonalName PersonalName { get; set; }
 
         ILabel SurnameLabel { get; }

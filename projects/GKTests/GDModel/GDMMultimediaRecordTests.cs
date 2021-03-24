@@ -48,7 +48,6 @@ namespace GDModel
                 Assert.IsNotNull(mediaRec);
 
                 mediaRec.ResetOwner(fContext.Tree);
-                Assert.AreEqual(fContext.Tree, mediaRec.Owner);
 
                 Assert.AreEqual("", mediaRec.GetFileTitle());
 

@@ -54,7 +54,6 @@ namespace GDModel
 
             using (GDMResearchRecord resRec = fContext.Tree.CreateResearch()) {
                 resRec.ResetOwner(fContext.Tree);
-                Assert.AreEqual(fContext.Tree, resRec.Owner);
 
                 Assert.IsNotNull(resRec.Communications);
                 Assert.IsNotNull(resRec.Groups);

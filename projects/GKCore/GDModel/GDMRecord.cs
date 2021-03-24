@@ -73,6 +73,7 @@ namespace GDModel
             get { return fChangeDate; }
         }
 
+        // TODO: need to remove from here, replace with other methods
         public object ExtData
         {
             get { return fExtData; }

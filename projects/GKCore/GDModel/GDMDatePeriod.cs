@@ -119,7 +119,7 @@ namespace GDModel
             if (string.IsNullOrEmpty(strValue)) {
                 result = string.Empty;
             } else {
-                result = GEDCOMUtils.ParsePeriodDate(GetTree(), this, strValue);
+                result = GEDCOMUtils.ParsePeriodDate(this, strValue);
             }
             return result;
         }

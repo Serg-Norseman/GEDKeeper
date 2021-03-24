@@ -36,6 +36,7 @@ namespace GKCore.Controllers
     public sealed class MediaViewerController : DialogController<IMediaViewerWin>
     {
         private GDMFileReferenceWithTitle fFileRef;
+        private GDMMultimediaRecord fMultimedia;
 
         public GDMFileReferenceWithTitle FileRef
         {
@@ -46,6 +47,12 @@ namespace GKCore.Controllers
                     UpdateView();
                 }
             }
+        }
+
+        public GDMMultimediaRecord Multimedia
+        {
+            get { return fMultimedia; }
+            set { fMultimedia = value; }
         }
 
         public MediaViewerController(IMediaViewerWin view) : base(view)
@@ -115,10 +122,8 @@ namespace GKCore.Controllers
 
         public void ProcessPortraits(IImageView imageCtl, GDMFileReferenceWithTitle fileRef)
         {
-            var mmRec = fileRef.Owner as GDMMultimediaRecord;
-
             var linksList = new List<GDMObject>();
-            GKUtils.SearchRecordLinks(linksList, fBase.Context.Tree, mmRec);
+            GKUtils.SearchRecordLinks(linksList, fBase.Context.Tree, fMultimedia);
 
             bool showRegions = false;
             foreach (var link in linksList) {

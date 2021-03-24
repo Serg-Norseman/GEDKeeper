@@ -214,7 +214,6 @@ namespace GDModel
                 }
 
                 indi.ResetOwner(fContext.Tree);
-                Assert.AreEqual(fContext.Tree, indi.Owner);
             }
 
             indiRec.ReplaceXRefs(new GDMXRefReplacer());

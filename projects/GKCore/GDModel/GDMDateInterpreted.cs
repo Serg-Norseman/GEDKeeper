@@ -71,7 +71,7 @@ namespace GDModel
                 fDatePhrase = string.Empty;
                 result = string.Empty;
             } else {
-                result = GEDCOMUtils.ParseIntDate(GetTree(), this, strValue);
+                result = GEDCOMUtils.ParseIntDate(this, strValue);
             }
             return result;
         }

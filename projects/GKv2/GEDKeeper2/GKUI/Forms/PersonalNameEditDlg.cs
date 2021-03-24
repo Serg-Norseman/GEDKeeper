@@ -34,6 +34,12 @@ namespace GKUI.Forms
     {
         private readonly PersonalNameEditDlgController fController;
 
+        public GDMIndividualRecord Individual
+        {
+            get { return fController.Individual; }
+            set { fController.Individual = value; }
+        }
+
         public GDMPersonalName PersonalName
         {
             get { return fController.PersonalName; }

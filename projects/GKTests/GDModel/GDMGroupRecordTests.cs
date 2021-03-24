@@ -47,7 +47,6 @@ namespace GDModel
                 Assert.IsNotNull(grpRec);
 
                 grpRec.ResetOwner(fContext.Tree);
-                Assert.AreEqual(fContext.Tree, grpRec.Owner);
             }
 
             using (GDMGroupRecord groupRec = fContext.Tree.CreateGroup()) {

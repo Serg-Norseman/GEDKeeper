@@ -118,7 +118,7 @@ namespace GDModel
             if (string.IsNullOrEmpty(strValue)) {
                 result = string.Empty;
             } else {
-                result = GEDCOMUtils.ParseRangeDate(GetTree(), this, strValue);
+                result = GEDCOMUtils.ParseRangeDate(this, strValue);
             }
             return result;
         }

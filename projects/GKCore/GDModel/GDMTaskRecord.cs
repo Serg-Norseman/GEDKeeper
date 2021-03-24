@@ -133,14 +133,23 @@ namespace GDModel
             GDMRecord goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(Goal));
 
             GDMGoalType goalType;
-            if (goalRec is GDMIndividualRecord) {
-                goalType = GDMGoalType.gtIndividual;
-            } else if (goalRec is GDMFamilyRecord) {
-                goalType = GDMGoalType.gtFamily;
-            } else if (goalRec is GDMSourceRecord) {
-                goalType = GDMGoalType.gtSource;
-            } else {
+            if (goalRec == null) {
                 goalType = GDMGoalType.gtOther;
+            } else {
+                switch (goalRec.RecordType) {
+                    case GDMRecordType.rtIndividual:
+                        goalType = GDMGoalType.gtIndividual;
+                        break;
+                    case GDMRecordType.rtFamily:
+                        goalType = GDMGoalType.gtFamily;
+                        break;
+                    case GDMRecordType.rtSource:
+                        goalType = GDMGoalType.gtSource;
+                        break;
+                    default:
+                        goalType = GDMGoalType.gtOther;
+                        break;
+                }
             }
 
             return new TaskGoalRet(goalType, goalXRef, goalRec);

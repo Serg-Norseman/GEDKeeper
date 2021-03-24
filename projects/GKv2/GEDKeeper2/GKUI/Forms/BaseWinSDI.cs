@@ -449,6 +449,7 @@ namespace GKUI.Forms
                 MediaViewerWin mediaViewer = new MediaViewerWin(this);
                 try {
                     try {
+                        mediaViewer.Multimedia = mediaRec;
                         mediaViewer.FileRef = fileRef;
                         if (modal) {
                             mediaViewer.ShowDialog();

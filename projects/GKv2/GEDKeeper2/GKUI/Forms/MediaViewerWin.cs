@@ -43,6 +43,12 @@ namespace GKUI.Forms
             set { fController.FileRef = value; }
         }
 
+        public GDMMultimediaRecord Multimedia
+        {
+            get { return fController.Multimedia; }
+            set { fController.Multimedia = value; }
+        }
+
         public void SetViewText(string text)
         {
             try {

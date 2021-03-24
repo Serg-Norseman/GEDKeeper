@@ -730,6 +730,7 @@ namespace GKCore.Lists
                             persName = new GDMPersonalName(iRec);
                         }
 
+                        dlg.Individual = iRec;
                         dlg.PersonalName = persName;
                         result = AppHost.Instance.ShowModalX(dlg, false);
 

@@ -194,7 +194,7 @@ namespace GDModel
                 Clear();
                 result = string.Empty;
             } else {
-                result = GEDCOMUtils.ParseDate(GetTree(), this, strValue);
+                result = GEDCOMUtils.ParseDate(this, strValue);
             }
             return result;
         }

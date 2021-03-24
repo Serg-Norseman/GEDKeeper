@@ -486,10 +486,11 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // Format: FROM DATE1 TO DATE2
-        public static string ParsePeriodDate(GDMTree owner, GDMDatePeriod date, string strValue)
+        public static string ParsePeriodDate(GDMDatePeriod date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
-            return ParsePeriodDate(owner, date, strTok);
+            // only standard GEDCOM dates (for owner == null)
+            return ParsePeriodDate(null, date, strTok);
         }
 
         // Format: FROM DATE1 TO DATE2
@@ -513,10 +514,11 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // Format: AFT DATE | BEF DATE | BET AFT_DATE AND BEF_DATE
-        public static string ParseRangeDate(GDMTree owner, GDMDateRange date, string strValue)
+        public static string ParseRangeDate(GDMDateRange date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
-            return ParseRangeDate(owner, date, strTok);
+            // only standard GEDCOM dates (for owner == null)
+            return ParseRangeDate(null, date, strTok);
         }
 
         // Format: AFT DATE | BEF DATE | BET AFT_DATE AND BEF_DATE
@@ -557,10 +559,11 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // Format: INT DATE (phrase)
-        public static string ParseIntDate(GDMTree owner, GDMDateInterpreted date, string strValue)
+        public static string ParseIntDate(GDMDateInterpreted date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
-            return ParseIntDate(owner, date, strTok);
+            // only standard GEDCOM dates (for owner == null)
+            return ParseIntDate(null, date, strTok);
         }
 
         // Format: INT DATE (phrase)
@@ -592,10 +595,11 @@ namespace GDModel.Providers.GEDCOM
             return strTok.GetRest();
         }
 
-        public static string ParseDate(GDMTree owner, GDMDate date, string strValue)
+        public static string ParseDate(GDMDate date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
-            return ParseDate(owner, date, strTok);
+            // only standard GEDCOM dates (for owner == null)
+            return ParseDate(null, date, strTok);
         }
 
         public static string ParseDate(GDMTree owner, GDMDate date, GEDCOMParser strTok)
