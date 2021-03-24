@@ -171,7 +171,7 @@ namespace GKCore.Stats
         private void GetIndiName(StatsMode mode, List<StatsItem> values, GDMIndividualRecord iRec)
         {
             string v = "";
-            var parts = GKUtils.GetNameParts(iRec);
+            var parts = GKUtils.GetNameParts(fTree, iRec);
 
             switch (mode) {
                 case StatsMode.smSurnames:

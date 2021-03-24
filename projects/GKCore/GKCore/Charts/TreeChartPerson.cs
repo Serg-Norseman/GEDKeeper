@@ -303,7 +303,7 @@ namespace GKCore.Charts
                         fModel.PreparedIndividuals.Add(iRec.XRef);
                     }
 
-                    var parts = GKUtils.GetNameParts(iRec);
+                    var parts = GKUtils.GetNameParts(fModel.Base.Context.Tree, iRec);
                     fSurname = parts.Surname;
                     fName = parts.Name;
                     fPatronymic = parts.Patronymic;

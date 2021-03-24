@@ -139,7 +139,7 @@ namespace GDModel
 
         #region Content management
 
-        public virtual GDMTree GetTree()
+        internal virtual GDMTree GetTree()
         {
             GDMTree owner = null;
 

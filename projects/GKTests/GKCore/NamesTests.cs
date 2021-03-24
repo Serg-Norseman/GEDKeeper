@@ -45,7 +45,7 @@ namespace GKCore
                 Assert.AreEqual("Александра Анатольевна Лазорева (Иванова)", iRec1.GetPrimaryFullName());
                 // std-surn exists and double, but sub-surn has only second part
                 // sub-givn exists, but sub-patn is not
-                var parts = GKUtils.GetNameParts(iRec1);
+                var parts = GKUtils.GetNameParts(ctx.Tree, iRec1);
                 Assert.AreEqual("Иванова", parts.Surname);
                 Assert.AreEqual("Александра", parts.Name);
                 Assert.AreEqual("Анатольевна", parts.Patronymic);
@@ -55,7 +55,7 @@ namespace GKCore
                 Assert.AreEqual("Петр Константинович Лазорев", iRec2.GetPrimaryFullName());
                 // std-surn exists, but sub-surn is not
                 // sub-givn exists, but sub-patn is not
-                parts = GKUtils.GetNameParts(iRec2);
+                parts = GKUtils.GetNameParts(ctx.Tree, iRec2);
                 Assert.AreEqual("Лазорев", parts.Surname);
                 Assert.AreEqual("Петр", parts.Name);
                 Assert.AreEqual("Константинович", parts.Patronymic);
@@ -71,7 +71,7 @@ namespace GKCore
                 Assert.AreEqual("Анна Сидоровна Иванова (Петрова)", iRec1.GetPrimaryFullName());
                 // std-surn exists and double, and sub-surn same
                 // sub-givn and sub-patn exists
-                var parts = GKUtils.GetNameParts(iRec1);
+                var parts = GKUtils.GetNameParts(ctx.Tree, iRec1);
                 Assert.AreEqual("Иванова (Петрова)", parts.Surname);
                 Assert.AreEqual("Анна", parts.Name);
                 Assert.AreEqual("Сидоровна", parts.Patronymic);
@@ -81,7 +81,7 @@ namespace GKCore
                 Assert.AreEqual("Аглая Федоровна Иванова", iRec2.GetPrimaryFullName());
                 // std-surn exists (maiden), and sub-surn same, and sub-marn exists (married)
                 // sub-givn and sub-patn exists
-                parts = GKUtils.GetNameParts(iRec2);
+                parts = GKUtils.GetNameParts(ctx.Tree, iRec2);
                 Assert.AreEqual("Иванова", parts.Surname);
                 Assert.AreEqual("Лескова", parts.MarriedSurname);
                 Assert.AreEqual("Аглая", parts.Name);
@@ -98,7 +98,7 @@ namespace GKCore
                 Assert.AreEqual("MaleName1 MaleName2 MaleSurname", iRec1.GetPrimaryFullName());
                 // std-surn exists and double, and sub-surn same
                 // sub-givn and sub-patn exists
-                var parts = GKUtils.GetNameParts(iRec1);
+                var parts = GKUtils.GetNameParts(ctx.Tree, iRec1);
                 Assert.AreEqual("MaleSurname", parts.Surname);
                 Assert.AreEqual("MaleName1 MaleName2", parts.Name);
             }

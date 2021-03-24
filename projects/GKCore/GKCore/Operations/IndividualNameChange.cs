@@ -51,7 +51,7 @@ namespace GKCore.Operations
             } else {
                 IBaseContext baseContext = ((ChangeTracker)fManager).Context;
                 GDMPersonalName np = fPerson.PersonalNames[0];
-                var parts = GKUtils.GetNameParts(fPerson, np);
+                var parts = GKUtils.GetNameParts(baseContext.Tree, fPerson, np);
 
                 fOldSurname = parts.Surname;
                 fOldName = parts.Name;

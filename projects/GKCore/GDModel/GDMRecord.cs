@@ -163,7 +163,7 @@ namespace GDModel
             fUserReferences.TrimExcess();
         }
 
-        public override GDMTree GetTree()
+        internal override GDMTree GetTree()
         {
             return (Owner as GDMTree);
         }

@@ -205,7 +205,7 @@ namespace GKCore
         public void ImportNames(GDMIndividualRecord iRec)
         {
             if (Culture is RussianCulture) {
-                AppHost.NamesTable.ImportNames(iRec);
+                AppHost.NamesTable.ImportNames(fTree, iRec);
             }
         }
 
@@ -626,7 +626,7 @@ namespace GKCore
                 BeginUpdate();
 
                 if (iRec.Sex != GDMSex.svMale && iRec.Sex != GDMSex.svFemale) {
-                    var parts = GKUtils.GetNameParts(iRec);
+                    var parts = GKUtils.GetNameParts(fTree, iRec);
                     iRec.Sex = DefineSex(parts.Name, parts.Patronymic);
                 }
             } finally {

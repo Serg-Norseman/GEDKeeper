@@ -95,7 +95,7 @@ namespace GKCore.Controllers
         {
             GDMIndividualRecord iRec = fPersonalName.Owner as GDMIndividualRecord;
 
-            var parts = GKUtils.GetNameParts(iRec, fPersonalName, false);
+            var parts = GKUtils.GetNameParts(fBase.Context.Tree, iRec, fPersonalName, false);
 
             fView.Surname.Text = parts.Surname;
             fView.Name.Text = parts.Name;

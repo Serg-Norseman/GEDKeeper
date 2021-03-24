@@ -168,13 +168,13 @@ namespace GDModel
             using (GDMIndividualRecord indi = new GDMIndividualRecord(fContext.Tree)) {
                 Assert.IsNotNull(indi);
 
-                var parts = GKUtils.GetNameParts(indi); // test with empty PersonalNames
+                var parts = GKUtils.GetNameParts(fContext.Tree, indi); // test with empty PersonalNames
                 Assert.AreEqual("", parts.Surname);
                 Assert.AreEqual("", parts.Name);
                 Assert.AreEqual("", parts.Patronymic);
 
                 indi.AddPersonalName(new GDMPersonalName(indi)); // test with empty Name
-                parts = GKUtils.GetNameParts(indi);
+                parts = GKUtils.GetNameParts(fContext.Tree, indi);
                 Assert.AreEqual("", parts.Surname);
                 Assert.AreEqual("", parts.Name);
                 Assert.AreEqual("", parts.Patronymic);
@@ -212,7 +212,7 @@ namespace GDModel
                 }
 
                 indi.ResetOwner(fContext.Tree);
-                Assert.AreEqual(fContext.Tree, indi.GetTree());
+                Assert.AreEqual(fContext.Tree, indi.Owner);
             }
 
             indiRec.ReplaceXRefs(new GDMXRefReplacer());

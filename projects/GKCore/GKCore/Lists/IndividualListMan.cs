@@ -310,7 +310,7 @@ namespace GKCore.Lists
                         break;
 
                     case NameFormat.nfF_NP:
-                        parts = GKUtils.GetNameParts(fRec);
+                        parts = GKUtils.GetNameParts(fBaseContext.Tree, fRec);
                         switch (colSubtype) {
                             case 0:
                                 result = parts.Surname;
@@ -322,7 +322,7 @@ namespace GKCore.Lists
                         break;
 
                     case NameFormat.nfF_N_P:
-                        parts = GKUtils.GetNameParts(fRec);
+                        parts = GKUtils.GetNameParts(fBaseContext.Tree, fRec);
                         switch (colSubtype) {
                             case 0:
                                 result = parts.Surname;

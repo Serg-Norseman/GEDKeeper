@@ -149,9 +149,9 @@ namespace GKCore
         public void Test_GetNameParts()
         {
             string surname = "", name = "", patronymic = "";
-            Assert.Throws(typeof(ArgumentNullException), () => { var parts = GKUtils.GetNameParts(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { var parts = GKUtils.GetNameParts(null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SetNameParts(null, surname, name, patronymic); });
-            Assert.Throws(typeof(ArgumentNullException), () => { var parts = GKUtils.GetNameParts(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { var parts = GKUtils.GetNameParts(null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNameParts(null, null, true); });
         }
 

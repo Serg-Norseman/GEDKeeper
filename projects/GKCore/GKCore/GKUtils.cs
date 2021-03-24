@@ -2722,18 +2722,15 @@ namespace GKCore
         }
 
         // TODO: what if you want to display only a surname that is missing?
-        private static string GetFmtSurname(GDMIndividualRecord iRec, GDMPersonalName personalName, string defSurname)
+        public static string GetFmtSurname(GDMSex iSex, GDMPersonalName personalName, string defSurname)
         {
-            if (iRec == null)
-                throw new ArgumentNullException("iRec");
-
             if (personalName == null)
                 throw new ArgumentNullException("personalName");
 
             string result;
 
             WomanSurnameFormat wsFmt = GlobalOptions.Instance.WomanSurnameFormat;
-            if (iRec.Sex == GDMSex.svFemale && wsFmt != WomanSurnameFormat.wsfNotExtend) {
+            if (iSex == GDMSex.svFemale && wsFmt != WomanSurnameFormat.wsfNotExtend) {
                 switch (wsFmt) {
                     case WomanSurnameFormat.wsfMaiden_Married:
                         result = defSurname;
@@ -2783,7 +2780,7 @@ namespace GKCore
             string firstPart = np.FirstPart;
             string surname = np.Surname;
 
-            surname = GetFmtSurname(iRec, np, surname);
+            surname = GetFmtSurname(iRec.Sex, np, surname);
 
             if (firstSurname) {
                 result = surname + " " + firstPart;
@@ -2844,29 +2841,29 @@ namespace GKCore
             personalName.Pieces.PatronymicName = patronymic;
         }
 
-        public static NamePartsRet GetNameParts(GDMIndividualRecord iRec, GDMPersonalName personalName, bool formatted = true)
+        public static NamePartsRet GetNameParts(GDMTree tree, GDMIndividualRecord iRec, GDMPersonalName personalName, bool formatted = true)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            ICulture culture = DefineCulture(iRec.GetTree(), personalName);
+            ICulture culture = DefineCulture(tree, personalName);
 
             NamePartsRet nameParts = culture.GetNameParts(personalName);
 
             if (formatted) {
-                nameParts.Surname = GetFmtSurname(iRec, personalName, nameParts.Surname);
+                nameParts.Surname = GetFmtSurname(iRec.Sex, personalName, nameParts.Surname);
             }
 
             return nameParts;
         }
 
-        public static NamePartsRet GetNameParts(GDMIndividualRecord iRec, bool formatted = true)
+        public static NamePartsRet GetNameParts(GDMTree tree, GDMIndividualRecord iRec, bool formatted = true)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
             if (iRec.PersonalNames.Count > 0) {
-                return GetNameParts(iRec, iRec.PersonalNames[0], formatted);
+                return GetNameParts(tree, iRec, iRec.PersonalNames[0], formatted);
             } else {
                 return new NamePartsRet();
             }

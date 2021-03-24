@@ -79,7 +79,7 @@ namespace GKCore.Export
                         GDMIndividualRecord ind = (GDMIndividualRecord)rec;
 
                         if (fSelectedRecords == null || fSelectedRecords.IndexOf(rec) >= 0) {
-                            var parts = GKUtils.GetNameParts(ind);
+                            var parts = GKUtils.GetNameParts(fTree, ind);
 
                             string sx = "" + GKUtils.SexStr(ind.Sex)[0];
                             row++;

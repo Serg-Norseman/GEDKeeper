@@ -64,7 +64,7 @@ namespace GDModel
                 }
 
                 src1.ResetOwner(fContext.Tree);
-                Assert.AreEqual(fContext.Tree, src1.GetTree());
+                Assert.AreEqual(fContext.Tree, src1.Owner);
             }
 
             // check move

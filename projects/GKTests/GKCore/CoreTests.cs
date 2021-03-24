@@ -336,9 +336,9 @@ namespace GKCore
 
                 GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec);
-                namesTable.ImportNames(iRec);
+                namesTable.ImportNames(fContext.Tree, iRec);
 
-                namesTable.ImportNames(null);
+                namesTable.ImportNames(null, null);
 
                 sex = namesTable.GetSexByName("Anna");
                 Assert.AreEqual(GDMSex.svFemale, sex);

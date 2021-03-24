@@ -66,11 +66,10 @@ namespace GKStdReports
             var surnames = new List<NameItem>();
 
             GDMTree tree = fBase.Context.Tree;
-            var enumer = tree.GetEnumerator(GDMRecordType.rtIndividual);
-            GDMRecord record;
-            while (enumer.MoveNext(out record)) {
-                var iRec = record as GDMIndividualRecord;
-                var nameParts = GKUtils.GetNameParts(iRec, false);
+            var enumer = tree.GetEnumerator<GDMIndividualRecord>();
+            GDMIndividualRecord iRec;
+            while (enumer.MoveNext(out iRec)) {
+                var nameParts = GKUtils.GetNameParts(tree, iRec, false);
 
                 var item = names.Find(x => x.Name.Equals(nameParts.Name));
                 if (item != null) {

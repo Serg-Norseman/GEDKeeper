@@ -50,7 +50,7 @@ namespace GKCore.Tools
                     if (rec is GDMIndividualRecord) {
                         GDMIndividualRecord iRec = rec as GDMIndividualRecord;
 
-                        var parts = GKUtils.GetNameParts(iRec);
+                        var parts = GKUtils.GetNameParts(context.Tree, iRec);
 
                         int birthDate = context.FindBirthYear(iRec);
                         int descGens = GKUtils.GetDescGenerations(iRec);

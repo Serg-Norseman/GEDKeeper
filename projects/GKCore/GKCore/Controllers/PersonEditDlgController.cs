@@ -269,7 +269,7 @@ namespace GKCore.Controllers
         public void UpdateNameControls(GDMPersonalName np)
         {
             if (np != null) {
-                var parts = GKUtils.GetNameParts(fPerson, np, false);
+                var parts = GKUtils.GetNameParts(fBase.Context.Tree, fPerson, np, false);
 
                 fView.Surname.Text = parts.Surname;
                 fView.Name.Text = parts.Name;
@@ -334,7 +334,7 @@ namespace GKCore.Controllers
                     ICulture culture = fBase.Context.Culture;
                     INamesTable namesTable = AppHost.NamesTable;
 
-                    var parts = GKUtils.GetNameParts(fTarget);
+                    var parts = GKUtils.GetNameParts(fBase.Context.Tree, fTarget);
                     fView.Surname.Text = parts.Surname;
                     GDMSex sx = (GDMSex)fView.SexCombo.SelectedIndex;
 

@@ -68,7 +68,7 @@ namespace GDModel
 //            Assert.AreEqual(pieces.Name, "name");
 //            Assert.AreEqual(pieces.PatronymicName, "patr");
 
-            var parts = GKUtils.GetNameParts(iRec);
+            var parts = GKUtils.GetNameParts(fContext.Tree, iRec);
             Assert.AreEqual("Ivanov", parts.Surname);
             Assert.AreEqual("Ivan", parts.Name);
             Assert.AreEqual("Ivanovich", parts.Patronymic);
@@ -229,7 +229,7 @@ namespace GDModel
             }
 
             persName.ResetOwner(fContext.Tree);
-            Assert.AreEqual(fContext.Tree, persName.GetTree());
+            Assert.AreEqual(fContext.Tree, persName.Owner);
 
             persName.Clear();
             Assert.IsTrue(persName.IsEmpty());

@@ -339,7 +339,7 @@ namespace GKCore.Charts
                     return;
                 }
             } else {
-                var parts = GKUtils.GetNameParts(iRec);
+                var parts = GKUtils.GetNameParts(fBase.Context.Tree, iRec);
                 surn = parts.Surname;
                 givn = parts.Name;
             }

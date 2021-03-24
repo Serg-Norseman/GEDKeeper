@@ -218,13 +218,13 @@ namespace GKCore.Names
             }
         }
 
-        public void ImportNames(GDMIndividualRecord iRec)
+        public void ImportNames(GDMTree tree, GDMIndividualRecord iRec)
         {
-            if (iRec == null) return;
+            if (tree == null || iRec == null) return;
 
             try {
                 string childName, childPat;
-                var parts = GKUtils.GetNameParts(iRec, false);
+                var parts = GKUtils.GetNameParts(tree, iRec, false);
                 childName = parts.Name;
                 childPat = parts.Patronymic;
 
@@ -236,7 +236,7 @@ namespace GKCore.Names
 
                 if (father != null) {
                     string fatherName;
-                    parts = GKUtils.GetNameParts(father, false);
+                    parts = GKUtils.GetNameParts(tree, father, false);
                     fatherName = parts.Name;
 
                     if (IsComparable(fatherName, childPat)) {

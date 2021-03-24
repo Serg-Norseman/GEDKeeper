@@ -1224,31 +1224,27 @@ namespace GKCore.Tools
 
                 int mainCount = mainTree.RecordsCount;
                 for (int i = 0; i < mainCount; i++) {
-                    GDMRecord rec = mainTree[i];
-                    if (rec.RecordType == GDMRecordType.rtIndividual) {
-                        GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
-
+                    GDMIndividualRecord iRec = mainTree[i] as GDMIndividualRecord;
+                    if (iRec != null) {
                         int idx = names.AddObject(GKUtils.GetNameString(iRec, true, false), new ExtList<GDMIndividualRecord>());
                         ((ExtList<GDMIndividualRecord>)names.GetObject(idx)).Add(iRec);
 
-                        var parts = GKUtils.GetNameParts(iRec);
+                        var parts = GKUtils.GetNameParts(mainTree, iRec);
                         fams.AddObject(context.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GDMSex.svFemale), null);
                     }
                 }
 
                 int tempCount = tempTree.RecordsCount;
                 for (int i = 0; i < tempCount; i++) {
-                    GDMRecord rec = tempTree[i];
-                    if (rec.RecordType == GDMRecordType.rtIndividual) {
-                        GDMIndividualRecord iRec = (GDMIndividualRecord)tempTree[i];
-
+                    GDMIndividualRecord iRec = tempTree[i] as GDMIndividualRecord;
+                    if (iRec != null) {
                         string tm = GKUtils.GetNameString(iRec, true, false);
                         int idx = names.IndexOf(tm);
                         if (idx >= 0) {
                             ((ExtList<GDMIndividualRecord>)names.GetObject(idx)).Add(iRec);
                         }
 
-                        var parts = GKUtils.GetNameParts(iRec);
+                        var parts = GKUtils.GetNameParts(tempTree, iRec);
                         tm = context.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GDMSex.svFemale);
                         idx = fams.IndexOf(tm);
                         if (idx >= 0) {

@@ -194,7 +194,7 @@ namespace GDModel
                 }
 
                 famRec.ResetOwner(tree);
-                Assert.AreEqual(tree, famRec.GetTree());
+                Assert.AreEqual(tree, famRec.Owner);
             }
         }
     }
