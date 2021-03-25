@@ -110,7 +110,7 @@ namespace GDModel.Providers.GedML
 
                                     curRecord = stackTuple.Tag;
                                     if (!string.IsNullOrEmpty(xrefId)) {
-                                        ((GDMRecord)curRecord).XRef = xrefId;
+                                        ((GDMRecord)curRecord).SetXRef(fTree, xrefId);
                                     }
                                 }
                             } else if (tagLevel > 0) {

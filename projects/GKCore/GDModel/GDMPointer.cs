@@ -46,7 +46,7 @@ namespace GDModel
                 string xrf = value.XRef;
                 if (string.IsNullOrEmpty(xrf))
                 {
-                    xrf = value.NewXRef();
+                    xrf = GetTree().NewXRef(value);
                 }
                 XRef = xrf;
             }

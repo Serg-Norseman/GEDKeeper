@@ -259,7 +259,7 @@ namespace GDModel
             fLastIDs = new int[(int)GDMRecordType.rtLast + 1];
         }
 
-        public string XRefIndex_NewXRef(GDMRecord record)
+        private string XRefIndex_NewXRef(GDMRecord record)
         {
             var invNFI = GEDCOMUtils.InvariantNumberFormatInfo;
             string sign = GEDCOMUtils.GetSignByRecord(record);
@@ -387,7 +387,7 @@ namespace GDModel
             GDMSubmitterRecord submitter = fHeader.Submitter.Value as GDMSubmitterRecord;
             if (submitter == null) {
                 submitter = new GDMSubmitterRecord(this);
-                submitter.InitNew();
+                NewXRef(submitter);
                 AddRecord(submitter);
                 fHeader.Submitter.Value = submitter;
             }
@@ -397,7 +397,7 @@ namespace GDModel
         public GDMIndividualRecord CreateIndividual()
         {
             GDMIndividualRecord result = new GDMIndividualRecord(this);
-            result.InitNew();
+            NewXRef(result);
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
             AddRecord(result);
@@ -407,7 +407,7 @@ namespace GDModel
         public GDMFamilyRecord CreateFamily()
         {
             GDMFamilyRecord result = new GDMFamilyRecord(this);
-            result.InitNew();
+            NewXRef(result);
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
             AddRecord(result);
@@ -417,7 +417,7 @@ namespace GDModel
         public GDMNoteRecord CreateNote()
         {
             GDMNoteRecord result = new GDMNoteRecord(this);
-            result.InitNew();
+            NewXRef(result);
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
             AddRecord(result);
@@ -427,7 +427,7 @@ namespace GDModel
         public GDMSourceRecord CreateSource()
         {
             GDMSourceRecord result = new GDMSourceRecord(this);
-            result.InitNew();
+            NewXRef(result);
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
             AddRecord(result);
@@ -437,7 +437,7 @@ namespace GDModel
         public GDMRepositoryRecord CreateRepository()
         {
             GDMRepositoryRecord result = new GDMRepositoryRecord(this);
-            result.InitNew();
+            NewXRef(result);
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
             AddRecord(result);
@@ -447,7 +447,7 @@ namespace GDModel
         public GDMResearchRecord CreateResearch()
         {
             GDMResearchRecord result = new GDMResearchRecord(this);
-            result.InitNew();
+            NewXRef(result);
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
             AddRecord(result);
@@ -457,7 +457,7 @@ namespace GDModel
         public GDMCommunicationRecord CreateCommunication()
         {
             GDMCommunicationRecord result = new GDMCommunicationRecord(this);
-            result.InitNew();
+            NewXRef(result);
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
             AddRecord(result);
@@ -467,7 +467,7 @@ namespace GDModel
         public GDMTaskRecord CreateTask()
         {
             GDMTaskRecord result = new GDMTaskRecord(this);
-            result.InitNew();
+            NewXRef(result);
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
             AddRecord(result);
@@ -477,7 +477,7 @@ namespace GDModel
         public GDMMultimediaRecord CreateMultimedia()
         {
             GDMMultimediaRecord result = new GDMMultimediaRecord(this);
-            result.InitNew();
+            NewXRef(result);
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
             AddRecord(result);
@@ -487,7 +487,7 @@ namespace GDModel
         public GDMLocationRecord CreateLocation()
         {
             GDMLocationRecord result = new GDMLocationRecord(this);
-            result.InitNew();
+            NewXRef(result);
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
             AddRecord(result);
@@ -497,11 +497,18 @@ namespace GDModel
         public GDMGroupRecord CreateGroup()
         {
             GDMGroupRecord result = new GDMGroupRecord(this);
-            result.InitNew();
+            NewXRef(result);
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
             AddRecord(result);
             return result;
+        }
+
+        public string NewXRef(GDMRecord gdmRec)
+        {
+            string newXRef = XRefIndex_NewXRef(gdmRec);
+            gdmRec.SetXRef(this, newXRef);
+            return gdmRec.XRef;
         }
 
         //
@@ -701,10 +708,6 @@ namespace GDModel
                 }
             }
         }
-
-        #region Utilities
-
-        #endregion
 
         #region Updating
 
