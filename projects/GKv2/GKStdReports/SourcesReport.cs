@@ -73,7 +73,7 @@ namespace GKStdReports
             for (int i = 0; i < sources.Count; i++) {
                 sourceRec = sources[i];
                 var repoCit = (sourceRec.RepositoryCitations.Count > 0) ? sourceRec.RepositoryCitations[0] : null;
-                var repoRec = (repoCit != null) ? repoCit.Value as GDMRepositoryRecord : null;
+                var repoRec = tree.GetPtrValue<GDMRepositoryRecord>(repoCit);
                 var repoName = (repoRec != null) ? repoRec.RepositoryName : string.Empty;
 
                 fWriter.BeginTableRow(false);

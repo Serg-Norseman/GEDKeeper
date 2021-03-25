@@ -373,6 +373,25 @@ namespace GDModel
             return gdmRec.XRef;
         }
 
+        public T GetPtrValue<T>(GDMPointer ptr) where T : GDMRecord
+        {
+            return (ptr == null) ? default(T) : XRefIndex_Find(ptr.XRef) as T;
+        }
+
+        public void SetPtrValue(GDMPointer ptr, GDMRecord record)
+        {
+            if (ptr == null) return;
+
+            ptr.XRef = string.Empty;
+            if (record == null) return;
+
+            string xrf = record.XRef;
+            if (string.IsNullOrEmpty(xrf)) {
+                xrf = NewXRef(record);
+            }
+            ptr.XRef = xrf;
+        }
+
         #endregion
 
         public int[] GetRecordStats()
