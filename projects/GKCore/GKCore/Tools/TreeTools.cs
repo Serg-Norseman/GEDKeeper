@@ -428,6 +428,7 @@ namespace GKCore.Tools
                 while (extTree.RecordsCount > 0) {
                     GDMRecord rec = extTree.Extract(0);
                     var oldXRef = rec.XRef;
+                    rec.SetXRef(null, null);
                     var newXRef = mainTree.NewXRef(rec);
                     repMap.AddXRef(rec, oldXRef, newXRef);
                     rec.ResetOwner(mainTree);
