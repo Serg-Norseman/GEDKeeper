@@ -256,13 +256,12 @@ namespace GKCore.Export
 
                     int srcNum2 = evt.SourceCitations.Count;
                     for (int m = 0; m < srcNum2; m++) {
-                        GDMSourceRecord src = evt.SourceCitations[m].Value as GDMSourceRecord;
-                        if (src == null)
-                            continue;
+                        var sourceRec = fTree.GetPtrValue<GDMSourceRecord>(evt.SourceCitations[m]);
+                        if (sourceRec == null) continue;
 
-                        st = src.ShortTitle;
+                        st = sourceRec.ShortTitle;
                         if (string.IsNullOrEmpty(st))
-                            st = src.Title.Lines.Text;
+                            st = sourceRec.Title.Lines.Text;
                         PrepareSpecIndex(sourcesIndex, st, iRec);
                     }
 
@@ -302,13 +301,12 @@ namespace GKCore.Export
 
                 int srcNum = iRec.SourceCitations.Count;
                 for (int k = 0; k < srcNum; k++) {
-                    GDMSourceRecord src = iRec.SourceCitations[k].Value as GDMSourceRecord;
-                    if (src == null)
-                        continue;
+                    var sourceRec = fTree.GetPtrValue<GDMSourceRecord>(iRec.SourceCitations[k]);
+                    if (sourceRec == null) continue;
 
-                    st = src.ShortTitle;
+                    st = sourceRec.ShortTitle;
                     if (string.IsNullOrEmpty(st))
-                        st = src.Title.Lines.Text;
+                        st = sourceRec.Title.Lines.Text;
                     PrepareSpecIndex(sourcesIndex, st, iRec);
                 }
             }

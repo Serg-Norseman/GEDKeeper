@@ -410,12 +410,12 @@ namespace GDModel
 
         public GDMSubmitterRecord GetSubmitter()
         {
-            GDMSubmitterRecord submitter = fHeader.Submitter.Value as GDMSubmitterRecord;
+            GDMSubmitterRecord submitter = GetPtrValue<GDMSubmitterRecord>(fHeader.Submitter);
             if (submitter == null) {
                 submitter = new GDMSubmitterRecord(this);
                 NewXRef(submitter);
                 AddRecord(submitter);
-                fHeader.Submitter.Value = submitter;
+                SetPtrValue(fHeader.Submitter, submitter);
             }
             return submitter;
         }
@@ -697,7 +697,7 @@ namespace GDModel
                         GDMPointer evLocation = evsRec.Events[j].Place.Location;
 
                         if (evLocation.XRef == locRec.XRef) {
-                            evLocation.Value = null;
+                            evLocation.XRef = string.Empty;
                         }
                     }
                 }

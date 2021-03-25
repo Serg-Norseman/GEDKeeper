@@ -93,14 +93,14 @@ namespace GEDmill.HTML
                 f.WriteLine("<h1>{0}</h1>", EscapeHTML(sourName, false));
 
                 // Add repository information
-                foreach (GDMRepositoryCitation src in fSourceRecord.RepositoryCitations) {
-                    GDMRepositoryRecord rr = src.Value as GDMRepositoryRecord;
-                    if (rr != null) {
-                        if (!string.IsNullOrEmpty(rr.RepositoryName)) {
-                            f.WriteLine("<h2>{0}</h2>", EscapeHTML(rr.RepositoryName, false));
+                foreach (GDMRepositoryCitation sourCit in fSourceRecord.RepositoryCitations) {
+                    GDMRepositoryRecord repoRec = fTree.GetPtrValue<GDMRepositoryRecord>(sourCit);
+                    if (repoRec != null) {
+                        if (!string.IsNullOrEmpty(repoRec.RepositoryName)) {
+                            f.WriteLine("<h2>{0}</h2>", EscapeHTML(repoRec.RepositoryName, false));
                         }
 
-                        foreach (GDMNotes ns in rr.Notes) {
+                        foreach (GDMNotes ns in repoRec.Notes) {
                             string noteText;
                             if (CConfig.Instance.ObfuscateEmails) {
                                 noteText = ObfuscateEmail(ns.Lines.Text);
@@ -111,8 +111,8 @@ namespace GEDmill.HTML
                         }
                     }
 
-                    if (src.Notes != null && src.Notes.Count > 0) {
-                        foreach (GDMNotes ns in src.Notes) {
+                    if (sourCit.Notes != null && sourCit.Notes.Count > 0) {
+                        foreach (GDMNotes ns in sourCit.Notes) {
                             string noteText;
                             if (CConfig.Instance.ObfuscateEmails) {
                                 noteText = ObfuscateEmail(ns.Lines.Text);

@@ -223,7 +223,7 @@ namespace GDModel
             
             if (repRec != null) {
                 cit = new GDMRepositoryCitation(this);
-                cit.Value = repRec;
+                cit.XRef = repRec.XRef;
                 fRepositoryCitations.Add(cit);
             }
             
@@ -236,9 +236,7 @@ namespace GDModel
                 throw new ArgumentNullException("repRec");
 
             foreach (GDMRepositoryCitation repCit in fRepositoryCitations) {
-                GDMRepositoryRecord rep = repCit.Value as GDMRepositoryRecord;
-
-                if (rep == repRec) {
+                if (repCit.XRef == repRec.XRef) {
                     fRepositoryCitations.Delete(repCit);
                     break;
                 }

@@ -630,14 +630,14 @@ namespace GKCore
         public object gt_get_family_husband(object recPtr)
         {
             GDMFamilyRecord fam = recPtr as GDMFamilyRecord;
-            recPtr = (fam == null) ? null : fam.Husband.Value;
+            recPtr = (fam == null) ? null : fBase.Context.Tree.GetPtrValue<GDMRecord>(fam.Husband);
             return recPtr;
         }
 
         public object gt_get_family_wife(object recPtr)
         {
             GDMFamilyRecord fam = recPtr as GDMFamilyRecord;
-            recPtr = (fam == null) ? null : fam.Wife.Value;
+            recPtr = (fam == null) ? null : fBase.Context.Tree.GetPtrValue<GDMRecord>(fam.Wife);
             return recPtr;
         }
 
@@ -650,7 +650,7 @@ namespace GKCore
         public object gt_get_family_child(object recPtr, int childIndex)
         {
             GDMFamilyRecord fam = recPtr as GDMFamilyRecord;
-            return (fam == null) ? null : fam.Children[childIndex].Value;
+            return (fam == null) ? null : fBase.Context.Tree.GetPtrValue<GDMRecord>(fam.Children[childIndex]);
         }
 
         public int gt_get_location_usages(object recPtr)
@@ -691,7 +691,7 @@ namespace GKCore
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             if (rec == null) return null;
 
-            GDMGroupRecord grp = rec.Groups[grIdx].Value as GDMGroupRecord;
+            var grp = fBase.Context.Tree.GetPtrValue<GDMGroupRecord>(rec.Groups[grIdx]);
             return grp;
         }
 

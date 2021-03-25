@@ -112,56 +112,12 @@ namespace GDModel
                 fStartDate.IsEmpty() && (fStopDate.IsEmpty());
         }
 
-        public sealed class TaskGoalRet
-        {
-            public readonly GDMGoalType GoalType;
-            public readonly string GoalXRef;
-            public readonly GDMRecord GoalRec;
-
-            public TaskGoalRet(GDMGoalType goalType, string goalXRef, GDMRecord goalRec)
-            {
-                GoalType = goalType;
-                GoalXRef = goalXRef;
-                GoalRec = goalRec;
-            }
-        }
-
-        public TaskGoalRet GetTaskGoal()
-        {
-            GDMTree tree = GetTree();
-            string goalXRef = string.Empty;
-            GDMRecord goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(Goal));
-
-            GDMGoalType goalType;
-            if (goalRec == null) {
-                goalType = GDMGoalType.gtOther;
-            } else {
-                switch (goalRec.RecordType) {
-                    case GDMRecordType.rtIndividual:
-                        goalType = GDMGoalType.gtIndividual;
-                        break;
-                    case GDMRecordType.rtFamily:
-                        goalType = GDMGoalType.gtFamily;
-                        break;
-                    case GDMRecordType.rtSource:
-                        goalType = GDMGoalType.gtSource;
-                        break;
-                    default:
-                        goalType = GDMGoalType.gtOther;
-                        break;
-                }
-            }
-
-            return new TaskGoalRet(goalType, goalXRef, goalRec);
-        }
-
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
 
-            TaskGoalRet goalRet = GetTaskGoal();
-            if (goalRet.GoalType != GDMGoalType.gtOther) {
-                Goal = GEDCOMUtils.EncloseXRef(map.FindNewXRef(GEDCOMUtils.CleanXRef(Goal)));
+            if (GEDCOMUtils.IsXRef(fGoal)) {
+                fGoal = GEDCOMUtils.EncloseXRef(map.FindNewXRef(GEDCOMUtils.CleanXRef(fGoal)));
             }
         }
     }

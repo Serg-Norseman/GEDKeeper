@@ -165,7 +165,7 @@ namespace GKCore.Lists
 
             int count = fRec.Groups.Count;
             for (int idx = 0; idx < count; idx++) {
-                GDMGroupRecord grp = fRec.Groups[idx].Value as GDMGroupRecord;
+                GDMGroupRecord grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(fRec.Groups[idx]);
                 if (grp != null) {
                     if (idx > 0) result.Append("; ");
 
@@ -628,7 +628,7 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMPointer ptr in iRec.Groups) {
-                    GDMGroupRecord grp = ptr.Value as GDMGroupRecord;
+                    var grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(ptr);
                     if (grp != null) {
                         fSheetList.AddItem(grp, new object[] { grp.GroupName });
                     }

@@ -104,7 +104,7 @@ namespace GKCore.Controllers
                 fView.StartDate.NormalizeDate = fTask.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                 fView.StopDate.NormalizeDate = fTask.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
-                var goal = fTask.GetTaskGoal();
+                var goal = GKUtils.GetTaskGoal(fBase.Context.Tree, fTask);
                 fTempRec = goal.GoalRec;
                 fView.GoalType.SelectedIndex = (sbyte)goal.GoalType;
 

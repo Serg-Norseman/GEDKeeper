@@ -205,6 +205,15 @@ namespace GDModel.Providers.GEDCOM
             return xref;
         }
 
+        public static bool IsXRef(string str)
+        {
+            if (string.IsNullOrEmpty(str)) {
+                return false;
+            } else {
+                return ((str[0] == '@') && (str[str.Length - 1] == '@'));
+            }
+        }
+
         // Performance improvement: x3.5
         public static long GetXRefNumber(string str)
         {

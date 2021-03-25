@@ -280,7 +280,7 @@ namespace GKCore.Controllers
             fView.Cause.Text = fEvent.Cause;
             fView.Agency.Text = fEvent.Agency;
 
-            fTempLocation = (fEvent.Place.Location.Value as GDMLocationRecord);
+            fTempLocation = fBase.Context.Tree.GetPtrValue<GDMLocationRecord>(fEvent.Place.Location);
             UpdatePlace();
 
             fView.NotesList.UpdateSheet();

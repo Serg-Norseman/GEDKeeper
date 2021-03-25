@@ -60,7 +60,7 @@ namespace GDModel.Providers.GEDCOM
         {
             Level = level;
             Tag = tag;
-            AddHandler = (addHandler != null) ? addHandler : GEDCOMProvider.GetAddHandler(tag.Id);
+            AddHandler = addHandler;
         }
     }
 
@@ -1697,9 +1697,9 @@ namespace GDModel.Providers.GEDCOM
         public static bool WriteTagEx(StreamWriter stream, int level, GDMTag tag)
         {
             SaveTagHandler saveHandler = null;
-            GEDCOMTagProps tagInfo = GEDCOMTagsTable.GetTagProps(tag.Id);
-            if (tagInfo != null) {
-                saveHandler = tagInfo.SaveHandler;
+            GEDCOMTagProps tagProps = GEDCOMTagsTable.GetTagProps(tag.Id);
+            if (tagProps != null) {
+                saveHandler = tagProps.SaveHandler;
             }
             if (saveHandler == null) {
                 saveHandler = WriteBaseTag;
@@ -1720,6 +1720,21 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
+        private static GDMTag CreateTag(GDMObject owner, int tagId, string tagValue)
+        {
+            TagConstructor ctor = null;
+
+            GEDCOMTagProps tagProps = GEDCOMTagsTable.GetTagProps(tagId);
+            if (tagProps != null) {
+                ctor = tagProps.Constructor;
+            }
+            if (ctor == null) {
+                ctor = GDMTag.Create;
+            }
+
+            return ctor(owner, tagId, tagValue);
+        }
+
         private static bool WriteBaseTag(StreamWriter stream, int level, GDMTag tag)
         {
             if (tag.IsEmpty() && GEDCOMProvider.SkipEmptyTag(tag.Id)) return false;
@@ -1727,6 +1742,12 @@ namespace GDModel.Providers.GEDCOM
             WriteTagValue(stream, level, tag);
             WriteSubTags(stream, ++level, tag);
             return true;
+        }
+
+        private static bool SkipEmptyTag(int tagId)
+        {
+            GEDCOMTagProps tagProps = GEDCOMTagsTable.GetTagProps(tagId);
+            return (tagProps != null && tagProps.SkipEmpty);
         }
 
         private static void WriteList<T>(StreamWriter stream, int level, GDMList<T> list, SaveTagHandler tagHandler) where T : GDMTag
@@ -1764,7 +1785,8 @@ namespace GDModel.Providers.GEDCOM
                 return null;
             } else {
                 if (addHandler == null) {
-                    addHandler = GEDCOMProvider.GetAddHandler(tag.Id);
+                    GEDCOMTagProps tagProps = GEDCOMTagsTable.GetTagProps(tag.Id);
+                    addHandler = (tagProps != null) ? tagProps.AddHandler : GEDCOMProvider.AddBaseTag;
                 }
                 return new StackTuple(level, tag, addHandler);
             }
@@ -2684,34 +2706,6 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._STOPDATE, GEDCOMTagName._STOPDATE);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._STATUS, GEDCOMTagName._STATUS);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._TASK, GEDCOMTagName._TASK);
-        }
-
-        public static GDMTag CreateTag(GDMObject owner, int tagId, string tagValue)
-        {
-            TagConstructor ctor = null;
-
-            GEDCOMTagProps tagInfo = GEDCOMTagsTable.GetTagProps(tagId);
-            if (tagInfo != null) {
-                ctor = tagInfo.Constructor;
-            }
-
-            if (ctor == null) {
-                ctor = GDMTag.Create;
-            }
-
-            return ctor(owner, tagId, tagValue);
-        }
-
-        public static AddTagHandler GetAddHandler(int tagId)
-        {
-            GEDCOMTagProps tagInfo = GEDCOMTagsTable.GetTagProps(tagId);
-            return (tagInfo != null) ? tagInfo.AddHandler : GEDCOMProvider.AddBaseTag;
-        }
-
-        public static bool SkipEmptyTag(int tagId)
-        {
-            GEDCOMTagProps props = GEDCOMTagsTable.GetTagProps(tagId);
-            return (props != null && props.SkipEmpty);
         }
 
         #endregion

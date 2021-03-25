@@ -47,15 +47,6 @@ namespace GDModel.Providers.GEDCOM
         {
             TagConstructor tagConst = TagConstructorTest;
             Assert.AreEqual(null, tagConst.Invoke(null, 0, "x"));
-
-            //
-
-            GDMTag tag = GEDCOMProvider.CreateTag(null, (int)GEDCOMTagType.DATE, "");
-            Assert.IsNotNull(tag);
-
-            tag = GEDCOMProvider.CreateTag(null, GEDCOMTagsTable.Lookup("TEST"), "");
-            Assert.IsNotNull(tag);
-            Assert.AreEqual("TEST", tag.GetTagName());
         }
 
         [Test]

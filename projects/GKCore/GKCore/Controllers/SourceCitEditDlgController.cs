@@ -60,14 +60,14 @@ namespace GKCore.Controllers
         {
             try {
                 int idx = fSourcesList.IndexOf(fView.Source.Text);
-                GDMSourceRecord src = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GDMSourceRecord));
+                GDMSourceRecord sourceRec = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GDMSourceRecord));
 
-                if (src == null) {
+                if (sourceRec == null) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
 
                     return false;
                 } else {
-                    fSourceCitation.Value = src;
+                    fSourceCitation.XRef = sourceRec.XRef;
                     fSourceCitation.Page = fView.Page.Text;
                     fSourceCitation.CertaintyAssessment = fView.Certainty.SelectedIndex;
 
@@ -81,7 +81,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            GDMSourceRecord src = (fSourceCitation.Value as GDMSourceRecord);
+            var src = fBase.Context.Tree.GetPtrValue<GDMSourceRecord>(fSourceCitation);
             if (src != null) fView.Source.Text = src.ShortTitle;
 
             fView.Page.Text = fSourceCitation.Page;

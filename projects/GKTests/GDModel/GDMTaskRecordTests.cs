@@ -66,22 +66,22 @@ namespace GDModel
 
                 taskRec.Goal = "Test Goal";
                 Assert.AreEqual("Test Goal", taskRec.Goal);
-                var goal = taskRec.GetTaskGoal();
+                var goal = GKUtils.GetTaskGoal(fContext.Tree, taskRec);
                 Assert.AreEqual(GDMGoalType.gtOther, goal.GoalType);
                 Assert.AreEqual(null, goal.GoalRec);
 
                 taskRec.Goal = iRec.XRef;
-                goal = taskRec.GetTaskGoal();
+                goal = GKUtils.GetTaskGoal(fContext.Tree, taskRec);
                 Assert.AreEqual(GDMGoalType.gtIndividual, goal.GoalType);
                 Assert.AreEqual(iRec, goal.GoalRec);
 
                 taskRec.Goal = famRec.XRef;
-                goal = taskRec.GetTaskGoal();
+                goal = GKUtils.GetTaskGoal(fContext.Tree, taskRec);
                 Assert.AreEqual(GDMGoalType.gtFamily, goal.GoalType);
                 Assert.AreEqual(famRec, goal.GoalRec);
 
                 taskRec.Goal = srcRec.XRef;
-                goal = taskRec.GetTaskGoal();
+                goal = GKUtils.GetTaskGoal(fContext.Tree, taskRec);
                 Assert.AreEqual(GDMGoalType.gtSource, goal.GoalType);
                 Assert.AreEqual(srcRec, goal.GoalRec);
 

@@ -268,11 +268,11 @@ namespace GDModel
 
             switch (sex) {
                 case GDMSex.svMale:
-                    fHusband.Value = spouse;
+                    fHusband.XRef = spouse.XRef;
                     break;
 
                 case GDMSex.svFemale:
-                    fWife.Value = spouse;
+                    fWife.XRef = spouse.XRef;
                     break;
             }
 
@@ -291,11 +291,11 @@ namespace GDModel
 
             switch (spouse.Sex) {
                 case GDMSex.svMale:
-                    fHusband.Value = null;
+                    fHusband.XRef = string.Empty;
                     break;
 
                 case GDMSex.svFemale:
-                    fWife.Value = null;
+                    fWife.XRef = string.Empty;
                     break;
             }
         }

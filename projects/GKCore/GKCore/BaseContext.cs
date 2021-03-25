@@ -347,7 +347,7 @@ namespace GKCore
 
         public IList<ISearchResult> FindAll(GDMRecordType recordType, string searchPattern)
         {
-            List<ISearchResult> result = new List<ISearchResult>();
+            var result = new List<ISearchResult>();
 
             Regex regex = GKUtils.InitMaskRegex(searchPattern);
 
@@ -356,7 +356,7 @@ namespace GKCore
                 GDMRecord rec = fTree[i];
                 if (rec.RecordType != recordType) continue;
 
-                string recName = GKUtils.GetRecordName(rec, false);
+                string recName = GKUtils.GetRecordName(fTree, rec, false);
                 if (GKUtils.MatchesRegex(recName, regex)) {
                     result.Add(new SearchResult(rec));
                 }
@@ -396,10 +396,10 @@ namespace GKCore
 
             int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++) {
-                GDMRecord rec = fTree[i];
+                var rec = fTree[i] as GDMSourceRecord;
 
-                if (rec.RecordType == GDMRecordType.rtSource && ((GDMSourceRecord)rec).ShortTitle == sourceName) {
-                    result = (rec as GDMSourceRecord);
+                if (rec != null && rec.ShortTitle == sourceName) {
+                    result = rec;
                     break;
                 }
             }
@@ -415,9 +415,9 @@ namespace GKCore
 
             int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++) {
-                GDMRecord rec = fTree[i];
-                if (rec is GDMSourceRecord) {
-                    sources.AddObject((rec as GDMSourceRecord).ShortTitle, rec);
+                var rec = fTree[i] as GDMSourceRecord;
+                if (rec != null) {
+                    sources.AddObject(rec.ShortTitle, rec);
                 }
             }
         }
@@ -1199,15 +1199,11 @@ namespace GKCore
             IImage result = null;
             try {
                 GDMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
-                if (mmLink != null && mmLink.Value != null) {
-                    ExtRect cutoutArea;
-                    if (mmLink.IsPrimaryCutout) {
-                        cutoutArea = mmLink.CutoutPosition.Value;
-                    } else {
-                        cutoutArea = ExtRect.CreateEmpty();
-                    }
+                GDMMultimediaRecord mmRec = fTree.GetPtrValue<GDMMultimediaRecord>(mmLink);
 
-                    GDMMultimediaRecord mmRec = (GDMMultimediaRecord)mmLink.Value;
+                if (mmLink != null && mmRec != null) {
+                    ExtRect cutoutArea;
+                    cutoutArea = mmLink.IsPrimaryCutout ? mmLink.CutoutPosition.Value : ExtRect.CreateEmpty();
                     result = LoadMediaImage(mmRec.FileReferences[0], thumbWidth, thumbHeight, cutoutArea, throwException);
                 }
             } catch (MediaFileNotFoundException) {

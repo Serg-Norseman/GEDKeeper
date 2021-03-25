@@ -415,17 +415,17 @@ namespace GEDmill.MiniTree
         }
 
         // Gets the n'th child in the fr, or returns the default individual if first child requested and no fr.
-        private static GDMIndividualRecord GetChild(GDMFamilyRecord fr, int nChild, GDMIndividualRecord irDefault)
+        private GDMIndividualRecord GetChild(GDMFamilyRecord famRec, int nChild, GDMIndividualRecord irDefault)
         {
             GDMIndividualRecord irChild = null;
-            if (fr != null && nChild < fr.Children.Count) {
+            if (famRec != null && nChild < famRec.Children.Count) {
                 // The ordering of children in the tree can be selected to be the same as it is in the GEDCOM file. This 
                 // is because the file should be ordered as the user chose to order the fr when entering the data in 
                 // their fr history app, regardless of actual birth dates. 
                 if (CConfig.Instance.KeepSiblingOrder) {
-                    irChild = fr.Children[nChild].Value as GDMIndividualRecord;
+                    irChild = fTree.GetPtrValue<GDMIndividualRecord>(famRec.Children[nChild]);
                 } else {
-                    irChild = fr.Children[nChild].Value as GDMIndividualRecord;
+                    irChild = fTree.GetPtrValue<GDMIndividualRecord>(famRec.Children[nChild]);
                 }
             } else {
                 // Return the default individual as first and only child of fr.

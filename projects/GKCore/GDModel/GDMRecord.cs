@@ -154,11 +154,6 @@ namespace GDModel
             fUserReferences.TrimExcess();
         }
 
-        internal override GDMTree GetTree()
-        {
-            return (Owner as GDMTree);
-        }
-
         public int IndexOfSource(GDMSourceRecord sourceRec)
         {
             if (sourceRec != null) {

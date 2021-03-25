@@ -76,7 +76,7 @@ namespace GKCore.Lists
 
                 case RecordAction.raEdit:
                     if (notes != null) {
-                        noteRec = notes.Value as GDMNoteRecord;
+                        noteRec = fBaseContext.Tree.GetPtrValue<GDMNoteRecord>(notes);
                         result = BaseController.ModifyNote(fBaseWin, ref noteRec);
                     }
                     break;

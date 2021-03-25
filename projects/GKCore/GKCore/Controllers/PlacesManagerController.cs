@@ -76,14 +76,14 @@ namespace GKCore.Controllers
             if (pObj.Name.IndexOf("[*]") == 0) {
                 AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_PlaceAlreadyInBook));
             } else {
-                GDMLocationRecord loc = fBase.Context.SelectRecord(GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
-                if (loc == null) return;
+                GDMLocationRecord locRec = fBase.Context.SelectRecord(GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
+                if (locRec == null) return;
 
                 int num = pObj.Facts.Count;
                 for (int i = 0; i < num; i++) {
                     GDMCustomEvent evt = pObj.Facts[i];
-                    evt.Place.StringValue = loc.LocationName;
-                    evt.Place.Location.Value = loc;
+                    evt.Place.StringValue = locRec.LocationName;
+                    evt.Place.Location.XRef = locRec.XRef;
                 }
 
                 CheckPlaces();

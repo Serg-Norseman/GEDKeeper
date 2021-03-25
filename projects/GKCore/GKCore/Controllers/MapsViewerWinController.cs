@@ -137,7 +137,7 @@ namespace GKCore.Controllers
         private void AddPlace(GDMPlace place, GDMCustomEvent placeEvent)
         {
             try {
-                GDMLocationRecord locRec = place.Location.Value as GDMLocationRecord;
+                var locRec = fBase.Context.Tree.GetPtrValue<GDMLocationRecord>(place.Location);
                 string placeName = (locRec != null) ? locRec.LocationName : place.StringValue;
 
                 ITVNode node = fView.FindTreeNode(placeName);

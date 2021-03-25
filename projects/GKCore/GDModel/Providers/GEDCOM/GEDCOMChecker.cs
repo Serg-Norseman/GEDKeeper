@@ -37,7 +37,7 @@ namespace GDModel.Providers.GEDCOM
             noteRec.Lines.Assign(note.Lines);
 
             note.Clear();
-            note.Value = noteRec;
+            note.XRef = noteRec.XRef;
         }
 
         private static void TransformMultimediaLink(GDMTree tree, GDMMultimediaLink mmLink)
@@ -64,7 +64,7 @@ namespace GDModel.Providers.GEDCOM
             }
 
             mmLink.Clear();
-            mmLink.Value = mmRec;
+            mmLink.XRef = mmRec.XRef;
         }
 
         private static void TransformSourceCitation(GDMTree tree, GEDCOMFormat format, GDMSourceCitation sourCit)
@@ -82,7 +82,7 @@ namespace GDModel.Providers.GEDCOM
             sourCit.Text.Clear();
             sourCit.Notes.Clear();
             sourCit.MultimediaLinks.Clear();
-            sourCit.Value = sourRec;
+            sourCit.XRef = sourRec.XRef;
 
             CheckTagWithNotes(tree, format, sourRec);
             CheckTagWithMultimediaLinks(tree, format, sourRec);
@@ -95,7 +95,8 @@ namespace GDModel.Providers.GEDCOM
                 if (!note.IsPointer) {
                     TransformNote(tree, note);
                 } else {
-                    if (note.Value == null) tag.Notes.DeleteAt(i);
+                    var noteRec = tree.GetPtrValue<GDMNoteRecord>(note);
+                    if (noteRec == null) tag.Notes.DeleteAt(i);
                 }
             }
         }
@@ -107,7 +108,8 @@ namespace GDModel.Providers.GEDCOM
                 if (!sourCit.IsPointer) {
                     TransformSourceCitation(tree, format, sourCit);
                 } else {
-                    if (sourCit.Value == null) tag.SourceCitations.DeleteAt(i);
+                    var sourRec = tree.GetPtrValue<GDMSourceRecord>(sourCit);
+                    if (sourRec == null) tag.SourceCitations.DeleteAt(i);
                 }
             }
         }
@@ -119,16 +121,17 @@ namespace GDModel.Providers.GEDCOM
                 if (!mmLink.IsPointer) {
                     TransformMultimediaLink(tree, mmLink);
                 } else {
-                    if (mmLink.Value == null) tag.MultimediaLinks.DeleteAt(i);
+                    var mmRec = tree.GetPtrValue<GDMMultimediaRecord>(mmLink);
+                    if (mmRec == null) tag.MultimediaLinks.DeleteAt(i);
                 }
             }
         }
 
         private static void CheckPointerWithNotes(GDMTree tree, GEDCOMFormat format, GDMPointerWithNotes ptr)
         {
-            GDMRecord val = ptr.Value;
+            GDMRecord val = tree.GetPtrValue<GDMRecord>(ptr);
             if (!string.IsNullOrEmpty(ptr.XRef) && val == null) {
-                ptr.Value = null;
+                ptr.XRef = string.Empty;
             }
 
             CheckTagWithNotes(tree, format, ptr);
@@ -144,13 +147,13 @@ namespace GDModel.Providers.GEDCOM
         private static void CheckEventPlace(GDMTree tree, GEDCOMFormat format, GDMPlace place)
         {
             GDMPointer placeLocation = place.Location;
+            GDMLocationRecord locRec = tree.GetPtrValue<GDMLocationRecord>(placeLocation);
 
-            if (placeLocation.XRef != "" && placeLocation.Value == null) {
+            if (placeLocation.XRef != "" && locRec == null) {
                 placeLocation.XRef = "";
             }
 
             if (place.StringValue != "") {
-                GDMLocationRecord locRec = placeLocation.Value as GDMLocationRecord;
                 if (locRec != null && place.StringValue != locRec.LocationName) {
                     place.StringValue = locRec.LocationName;
                 }
@@ -243,18 +246,19 @@ namespace GDModel.Providers.GEDCOM
             }
 
             for (int i = fam.Children.Count - 1; i >= 0; i--) {
-                if (fam.Children[i].Value == null)
+                var childRec = baseContext.Tree.GetPtrValue<GDMIndividualRecord>(fam.Children[i]);
+                if (childRec == null)
                     fam.Children.DeleteAt(i);
             }
 
-            GDMRecord val = fam.Husband.Value;
+            GDMRecord val = baseContext.Tree.GetPtrValue<GDMIndividualRecord>(fam.Husband);
             if (!string.IsNullOrEmpty(fam.Husband.XRef) && val == null) {
-                fam.Husband.Value = null;
+                fam.Husband.XRef = string.Empty;
             }
 
-            val = fam.Wife.Value;
+            val = baseContext.Tree.GetPtrValue<GDMIndividualRecord>(fam.Wife);
             if (!string.IsNullOrEmpty(fam.Wife.XRef) && val == null) {
-                fam.Wife.Value = null;
+                fam.Wife.XRef = string.Empty;
             }
         }
 
@@ -272,10 +276,10 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        private static void CheckSourceRecord(GDMSourceRecord src)
+        private static void CheckSourceRecord(IBaseContext baseContext, GDMSourceRecord src)
         {
             for (int i = src.RepositoryCitations.Count - 1; i >= 0; i--) {
-                GDMRecord val = src.RepositoryCitations[i].Value;
+                GDMRecord val = baseContext.Tree.GetPtrValue<GDMRecord>(src.RepositoryCitations[i]);
                 if (val == null) {
                     src.RepositoryCitations.DeleteAt(i);
                 }
@@ -325,7 +329,7 @@ namespace GDModel.Providers.GEDCOM
                     break;
 
                 case GDMRecordType.rtSource:
-                    CheckSourceRecord(rec as GDMSourceRecord);
+                    CheckSourceRecord(baseContext, rec as GDMSourceRecord);
                     break;
 
                 case GDMRecordType.rtMultimedia:

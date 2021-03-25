@@ -202,8 +202,8 @@ namespace GEDmill.HTML
 
             // Go through all families this person was a irSubject to
             if (!fConcealed) {
-                foreach (GDMSpouseToFamilyLink sfl in fIndiRec.SpouseToFamilyLinks) {
-                    GDMFamilyRecord fr = (sfl.Value as GDMFamilyRecord);
+                foreach (GDMSpouseToFamilyLink spLink in fIndiRec.SpouseToFamilyLinks) {
+                    GDMFamilyRecord fr = fTree.GetPtrValue<GDMFamilyRecord>(spLink);
                     if (fr != null) {
                         // Find the irSubject's name
                         GDMIndividualRecord spouse = null;
@@ -302,11 +302,11 @@ namespace GEDmill.HTML
             DateTime dtNow = DateTime.Now;
 
             // Go through all families this person was a irSibling in
-            foreach (GDMChildToFamilyLink cfl in fIndiRec.ChildToFamilyLinks) {
-                GDMFamilyRecord fr = (cfl.Value as GDMFamilyRecord);
-                if (fr != null) {
-                    GDMIndividualRecord husband = fr.Husband.Individual;
-                    GDMIndividualRecord wife = fr.Wife.Individual;
+            foreach (GDMChildToFamilyLink childLink in fIndiRec.ChildToFamilyLinks) {
+                var famRec = fTree.GetPtrValue<GDMFamilyRecord>(childLink);
+                if (famRec != null) {
+                    GDMIndividualRecord husband = famRec.Husband.Individual;
+                    GDMIndividualRecord wife = famRec.Wife.Individual;
 
                     if (husband != null || wife != null) {
                         fParents.Add(new HusbandAndWife(husband, wife));
@@ -323,11 +323,11 @@ namespace GEDmill.HTML
                     int previousDifference = -100 * 365; // 100 years should be enough
                     int nextDifference = 100 * 365;
 
-                    foreach (var ch in fr.Children) {
-                        if (ch.XRef == fIndiRec.XRef)
+                    foreach (var childPtr in famRec.Children) {
+                        if (childPtr.XRef == fIndiRec.XRef)
                             continue;
 
-                        GDMIndividualRecord child = ch.Value as GDMIndividualRecord;
+                        var child = fTree.GetPtrValue<GDMIndividualRecord>(childPtr);
                         if (child != null) {
                             if (!child.GetVisibility())
                                 continue;
@@ -490,11 +490,11 @@ namespace GEDmill.HTML
         }
 
         // Adds birth, baptism, death etc of the children in the given fr.
-        private void AddChildrensEvents(GDMFamilyRecord fr)
+        private void AddChildrensEvents(GDMFamilyRecord famRec)
         {
             // Find out all the children.
-            foreach (var ch in fr.Children) {
-                GDMIndividualRecord child = ch.Value as GDMIndividualRecord;
+            foreach (var childPtr in famRec.Children) {
+                var child = fTree.GetPtrValue<GDMIndividualRecord>(childPtr);
 
                 if (child != null) {
                     bool childConcealed = !child.GetVisibility();
@@ -725,18 +725,18 @@ namespace GEDmill.HTML
                 f.WriteLine("          <ul>");
 
                 for (uint i = 0; i < fReferenceList.Count; i++) {
-                    GDMSourceCitation sc = fReferenceList[(int)i];
+                    GDMSourceCitation sourCit = fReferenceList[(int)i];
 
                     string extraInfo = "";
-                    GDMSourceRecord sr = sc.Value as GDMSourceRecord;
+                    var source = fTree.GetPtrValue<GDMSourceRecord>(sourCit);
 
                     // Publication facts
-                    if (sr != null && sr.Publication.Lines.Text != null && sr.Publication.Lines.Text != "") {
+                    if (source != null && source.Publication.Lines.Text != null && source.Publication.Lines.Text != "") {
                         string pubFacts;
                         if (CConfig.Instance.ObfuscateEmails) {
-                            pubFacts = ObfuscateEmail(sr.Publication.Lines.Text);
+                            pubFacts = ObfuscateEmail(source.Publication.Lines.Text);
                         } else {
-                            pubFacts = sr.Publication.Lines.Text;
+                            pubFacts = source.Publication.Lines.Text;
                         }
 
                         if (pubFacts.Length > 7 && pubFacts.ToUpper().Substring(0, 7) == "HTTP://") {
@@ -767,7 +767,7 @@ namespace GEDmill.HTML
                     }
 
                     // Finally write source link and extra info
-                    f.WriteLine("<li>{0}{1}</li>", sc.MakeLinkText(i + 1), extraInfo);
+                    f.WriteLine("<li>{0}{1}</li>", sourCit.MakeLinkText(i + 1), extraInfo);
                 }
                 f.WriteLine("          </ul>");
                 f.WriteLine("        </div> <!-- references -->");
@@ -1646,12 +1646,12 @@ namespace GEDmill.HTML
         private static string AddSources(ref List<GDMSourceCitation> referenceList, GDMList<GDMSourceCitation> sourceCitations)
         {
             string sourceRefs = "";
-            foreach (GDMSourceCitation sc in sourceCitations) {
+            foreach (GDMSourceCitation sourCit in sourceCitations) {
                 int sourceNumber = -1;
 
                 // Is source already in list?
                 for (int i = 0; i < referenceList.Count; ++i) {
-                    if (referenceList[i].Value == sc.Value) {
+                    if (referenceList[i].XRef == sourCit.XRef) {
                         sourceNumber = i;
                         break;
                     }
@@ -1664,10 +1664,10 @@ namespace GEDmill.HTML
 
                 if (sourceNumber == -1) {
                     sourceNumber = referenceList.Count;
-                    referenceList.Add(sc);
+                    referenceList.Add(sourCit);
                 }
 
-                sourceRefs += sc.MakeLinkNumber((uint)(sourceNumber + 1), bComma);
+                sourceRefs += sourCit.MakeLinkNumber((uint)(sourceNumber + 1), bComma);
             }
             return sourceRefs;
         }

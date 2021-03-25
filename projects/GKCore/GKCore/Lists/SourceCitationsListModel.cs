@@ -52,7 +52,7 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMSourceCitation cit in dataOwner.SourceCitations) {
-                    GDMSourceRecord sourceRec = cit.Value as GDMSourceRecord;
+                    var sourceRec = fBaseContext.Tree.GetPtrValue<GDMSourceRecord>(cit);
                     if (sourceRec == null) continue;
 
                     int ca = cit.GetValidCertaintyAssessment();

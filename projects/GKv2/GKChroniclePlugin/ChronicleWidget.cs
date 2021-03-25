@@ -122,16 +122,17 @@ namespace GKChroniclePlugin
                 lvEvents.AddColumn(fPlugin.LangMan.LS(CLS.LSID_Place), 200, false);
                 lvEvents.AddColumn(fPlugin.LangMan.LS(CLS.LSID_Cause), 130, false);
 
-                for (int i = 0; i < fEvents.Count; i++)
-                {
+                for (int i = 0; i < fEvents.Count; i++) {
                     EventRecord eventRec = fEvents[i];
                     GDMCustomEvent evt = eventRec.Event;
 
-                    lvEvents.AddItem(eventRec, new object[] { new GDMDateItem(evt.Date.Value),
-                                         GKUtils.GetEventName(evt),
-                                         GKUtils.GetRecordName(eventRec.Record, false),
-                                         evt.Place.StringValue,
-                                         GKUtils.GetEventCause(evt) });
+                    lvEvents.AddItem(eventRec, new object[] {
+                        new GDMDateItem(evt.Date.Value),
+                        GKUtils.GetEventName(evt),
+                        GKUtils.GetRecordName(fBase.Context.Tree, eventRec.Record, false),
+                        evt.Place.StringValue,
+                        GKUtils.GetEventCause(evt)
+                    });
                 }
 
                 lvEvents.ResizeColumn(0);

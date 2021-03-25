@@ -411,7 +411,7 @@ namespace GKCore.Export
             if (fOptions.PedigreeOptions.IncludeSources) {
                 int num = iRec.SourceCitations.Count;
                 for (int i = 0; i < num; i++) {
-                    GDMSourceRecord sourceRec = iRec.SourceCitations[i].Value as GDMSourceRecord;
+                    var sourceRec = fTree.GetPtrValue<GDMSourceRecord>(iRec.SourceCitations[i]);
                     if (sourceRec == null) continue;
 
                     int srcIndex = fSourceList.IndexOfObject(sourceRec);

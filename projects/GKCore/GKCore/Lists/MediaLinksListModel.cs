@@ -50,7 +50,7 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMMultimediaLink mmLink in dataOwner.MultimediaLinks) {
-                    GDMMultimediaRecord mmRec = mmLink.Value as GDMMultimediaRecord;
+                    GDMMultimediaRecord mmRec = fBaseContext.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink);
                     if (mmRec == null) continue;
 
                     if (mmRec.FileReferences.Count == 0) continue;
@@ -75,8 +75,7 @@ namespace GKCore.Lists
             bool result = false;
 
             GDMMultimediaRecord mmRec;
-            switch (eArgs.Action)
-            {
+            switch (eArgs.Action) {
                 case RecordAction.raAdd:
                     mmRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtMultimedia, new object[0]) as GDMMultimediaRecord;
                     if (mmRec != null) {
@@ -85,16 +84,14 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raEdit:
-                    if (mmLink != null)
-                    {
-                        mmRec = mmLink.Value as GDMMultimediaRecord;
+                    if (mmLink != null) {
+                        mmRec = fBaseContext.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink);
                         result = BaseController.ModifyMedia(fBaseWin, ref mmRec);
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMultimediaQuery)))
-                    {
+                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMultimediaQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaRemove, (GDMObject)dataOwner, mmLink);
                     }
                     break;

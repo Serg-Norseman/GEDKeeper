@@ -707,10 +707,10 @@ namespace GKCore.Tools
 
                 bool hasDup = false;
                 for (int i = 0; i < chNum; i++) {
-                    var child1 = fRec.Children[i].Value;
+                    var child1 = fRec.Children[i];
                     for (int k = i + 1; k < chNum; k++) {
-                        var child2 = fRec.Children[k].Value;
-                        if (child2 == child1) {
+                        var child2 = fRec.Children[k];
+                        if (child2.XRef == child1.XRef) {
                             hasDup = true;
                             break;
                         }
@@ -1314,14 +1314,14 @@ namespace GKCore.Tools
             placesList.Clear();
         }
 
-        private static void SearchPlaces_CheckEventPlace(StringList placesList, GDMCustomEvent evt, bool checkLocation)
+        private static void SearchPlaces_CheckEventPlace(GDMTree tree, StringList placesList, GDMCustomEvent evt, bool checkLocation)
         {
             string placeStr = evt.Place.StringValue;
             if (string.IsNullOrEmpty(placeStr)) return;
 
             if (checkLocation) {
-                GDMLocationRecord loc = evt.Place.Location.Value as GDMLocationRecord;
-                if (loc != null) {
+                var locRec = tree.GetPtrValue<GDMLocationRecord>(evt.Place.Location);
+                if (locRec != null) {
                     placeStr = "[*] " + placeStr;
                 }
             }
@@ -1365,7 +1365,7 @@ namespace GKCore.Tools
                         for (int j = 0; j < num2; j++) {
                             GDMCustomEvent evt = evsRec.Events[j];
 
-                            SearchPlaces_CheckEventPlace(placesList, evt, checkLocation);
+                            SearchPlaces_CheckEventPlace(tree, placesList, evt, checkLocation);
                         }
                     }
                 }

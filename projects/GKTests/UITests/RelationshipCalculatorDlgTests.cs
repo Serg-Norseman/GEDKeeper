@@ -72,10 +72,10 @@ namespace GKUI.Forms
 
             GDMIndividualRecord iRec1 = baseContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec1);
-            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetRecordName(iRec1, false));
+            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetRecordName(baseContext.Tree, iRec1, false));
             GDMIndividualRecord iRec2 = baseContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
             Assert.IsNotNull(iRec2);
-            Assert.AreEqual("Ivanova Maria Petrovna", GKUtils.GetRecordName(iRec2, false));
+            Assert.AreEqual("Ivanova Maria Petrovna", GKUtils.GetRecordName(baseContext.Tree, iRec2, false));
 
             WFAppHost.TEST_MODE = true; // FIXME: dirty hack
 

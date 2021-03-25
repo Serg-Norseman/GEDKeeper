@@ -47,7 +47,7 @@ namespace GEDmill.HTML
             var fileRefs = new List<GDMFileReference>();
             foreach (var mmLink in multimediaLinks) {
                 if (mmLink.IsPointer) {
-                    var mmRec = mmLink.Value as GDMMultimediaRecord;
+                    var mmRec = fTree.GetPtrValue<GDMMultimediaRecord>(mmLink);
                     if (!mmRec.GetVisibility()) {
                         // user chose not to show this picture
                         continue;

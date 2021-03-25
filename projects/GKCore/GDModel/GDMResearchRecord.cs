@@ -204,7 +204,7 @@ namespace GDModel
 
             if (taskRecord != null) {
                 GDMPointer ptr = new GDMPointer(this, (int)GEDCOMTagType._TASK, string.Empty);
-                ptr.Value = taskRecord;
+                ptr.XRef = taskRecord.XRef;
                 fTasks.Add(ptr);
                 result = true;
             }
@@ -242,7 +242,7 @@ namespace GDModel
 
             if (groupRecord != null) {
                 GDMPointer ptr = new GDMPointer(this, (int)GEDCOMTagType._GROUP, string.Empty);
-                ptr.Value = groupRecord;
+                ptr.XRef = groupRecord.XRef;
                 fGroups.Add(ptr);
                 result = true;
             }
@@ -280,7 +280,7 @@ namespace GDModel
 
             if (commRecord != null) {
                 GDMPointer ptr = new GDMPointer(this, (int)GEDCOMTagType._COMM, string.Empty);
-                ptr.Value = commRecord;
+                ptr.XRef = commRecord.XRef;
                 fCommunications.Add(ptr);
                 result = true;
             }

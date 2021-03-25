@@ -126,7 +126,7 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMRepositoryCitation repCit in source.RepositoryCitations) {
-                    GDMRepositoryRecord rep = repCit.Value as GDMRepositoryRecord;
+                    GDMRepositoryRecord rep = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(repCit);
                     if (rep == null) continue;
 
                     fSheetList.AddItem(repCit, new object[] { rep.RepositoryName });
@@ -157,7 +157,8 @@ namespace GKCore.Lists
 
                 case RecordAction.raDelete:
                     if (cit != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery))) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, cit.Value as GDMRepositoryRecord);
+                        var repRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(cit);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, repRec);
                     }
                     break;
             }

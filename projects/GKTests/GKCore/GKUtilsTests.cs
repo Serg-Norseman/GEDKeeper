@@ -159,37 +159,37 @@ namespace GKCore
         public void Test_GetRecordName()
         {
             GDMRecord rec = fContext.Tree.XRefIndex_Find("I1");
-            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("F1");
-            Assert.AreEqual("Ivanov Ivan Ivanovich - Ivanova Maria Petrovna", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Ivanov Ivan Ivanovich - Ivanova Maria Petrovna", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("G1");
-            Assert.AreEqual("GroupTest", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("GroupTest", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("L1");
-            Assert.AreEqual("Test Location", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test Location", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("R1");
-            Assert.AreEqual("Test repository", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test repository", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("RS1");
-            Assert.AreEqual("Test research", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test research", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("S1");
-            Assert.AreEqual("Test source", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test source", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("N1");
-            Assert.AreEqual("Test note", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test note", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("TK1");
-            Assert.AreEqual("Test task", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test task", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("O1");
-            Assert.AreEqual("Test multimedia", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test multimedia", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("CM1");
-            Assert.AreEqual("Test communication", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test communication", GKUtils.GetRecordName(fContext.Tree, rec, false));
         }
 
         [Test]
@@ -264,12 +264,12 @@ namespace GKCore
         [Test]
         public void Test_GetXGoalStr()
         {
-            Assert.AreEqual("", GKUtils.GetTaskGoalStr(null));
+            Assert.AreEqual("", GKUtils.GetTaskGoalStr(null, null));
             Assert.AreEqual("", GKUtils.GetGoalStr(GDMGoalType.gtIndividual, null));
 
             var rec = fContext.Tree.XRefIndex_Find("TK1") as GDMTaskRecord;
             Assert.IsNotNull(rec);
-            Assert.AreEqual("Test task", GKUtils.GetTaskGoalStr(rec));
+            Assert.AreEqual("Test task", GKUtils.GetTaskGoalStr(fContext.Tree, rec));
         }
 
         [Test]

@@ -1,5 +1,5 @@
 ﻿/* 
- * Copyright 2019-2020 Serg V. Zhdanovskih
+ * Copyright (C) 2019-2020 by Sergey V. Zhdanovskih.
  * This file is part of GEDmill - A family history website creator
  * 
  * GEDmill is free software: you can redistribute it and/or modify

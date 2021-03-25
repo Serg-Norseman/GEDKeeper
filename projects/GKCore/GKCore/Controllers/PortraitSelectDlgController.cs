@@ -74,9 +74,8 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            if (fMultimediaLink == null || fMultimediaLink.Value == null) return;
-
-            GDMMultimediaRecord mmRec = (GDMMultimediaRecord)fMultimediaLink.Value;
+            GDMMultimediaRecord mmRec = fBase.Context.Tree.GetPtrValue<GDMMultimediaRecord>(fMultimediaLink);
+            if (fMultimediaLink == null || mmRec == null) return;
 
             IImage img = fBase.Context.LoadMediaImage(mmRec.FileReferences[0], false);
             if (img == null) return;

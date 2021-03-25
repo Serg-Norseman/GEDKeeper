@@ -379,7 +379,7 @@ namespace GDModel.Providers.FamilyShow
             var noteRec = fTree.CreateNote();
             noteRec.Lines.Text = noteText;
             var notes = new GDMNotes(indiRec);
-            notes.Value = noteRec;
+            notes.XRef = noteRec.XRef;
             indiRec.Notes.Add(notes);
         }
 

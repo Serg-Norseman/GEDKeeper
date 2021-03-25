@@ -146,7 +146,7 @@ namespace GDModel
         {
             if (corresponder != null) {
                 CommDirection = direction;
-                fCorresponder.Value = corresponder;
+                fCorresponder.XRef = corresponder.XRef;
             }
         }
 

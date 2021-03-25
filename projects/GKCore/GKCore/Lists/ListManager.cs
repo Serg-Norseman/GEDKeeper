@@ -827,7 +827,7 @@ namespace GKCore.Lists
             for (int i = 0; i < num; i++) {
                 GDMRecord rec = fContentList[i].Record;
 
-                string recName = GKUtils.GetRecordName(rec, false);
+                string recName = GKUtils.GetRecordName(fBaseContext.Tree, rec, false);
                 if (GKUtils.MatchesRegex(recName, regex)) {
                     result.Add(new SearchResult(rec));
                 }

@@ -1627,14 +1627,14 @@ namespace GEDmill
             }
 
             string repositories = "";
-            foreach (GDMRepositoryCitation src in sr.RepositoryCitations) {
-                GDMRepositoryRecord rr = src.Value as GDMRepositoryRecord;
-                if (rr != null) {
-                    if (!string.IsNullOrEmpty(rr.RepositoryName)) {
+            foreach (GDMRepositoryCitation repoCit in sr.RepositoryCitations) {
+                GDMRepositoryRecord repoRec = fBase.Context.Tree.GetPtrValue<GDMRepositoryRecord>(repoCit);
+                if (repoRec != null) {
+                    if (!string.IsNullOrEmpty(repoRec.RepositoryName)) {
                         if (repositories != "") {
                             repositories += ", ";
                         }
-                        repositories += rr.RepositoryName;
+                        repositories += repoRec.RepositoryName;
                     }
                 }
             }

@@ -832,7 +832,8 @@ namespace GKCore.Controllers
                         break;
 
                     case GDMRecordType.rtTask:
-                        msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery), GKUtils.GetTaskGoalStr((GDMTaskRecord)record));
+                        msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery),
+                                            GKUtils.GetTaskGoalStr(baseWin.Context.Tree, (GDMTaskRecord)record));
                         break;
 
                     case GDMRecordType.rtCommunication:
