@@ -352,9 +352,9 @@ namespace GDModel.Providers.GEDCOM
                 for (int i = 0; i < recsCount; i++) {
                     GDMRecord rec = tree[i];
                     if (!CheckRecordXRef(rec)) {
-                        string newXRef = tree.XRefIndex_NewXRef(rec);
-                        repMap.AddXRef(rec, rec.XRef, newXRef);
-                        rec.XRef = newXRef;
+                        string oldXRef = rec.XRef;
+                        string newXRef = tree.NewXRef(rec);
+                        repMap.AddXRef(rec, oldXRef, newXRef);
                     }
                     pc.ProgressStep();
                 }

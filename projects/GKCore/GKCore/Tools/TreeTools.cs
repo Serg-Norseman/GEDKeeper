@@ -427,9 +427,9 @@ namespace GKCore.Tools
                 extTree.Header.Clear();
                 while (extTree.RecordsCount > 0) {
                     GDMRecord rec = extTree.Extract(0);
-                    string newXRef = mainTree.XRefIndex_NewXRef(rec);
-                    repMap.AddXRef(rec, rec.XRef, newXRef);
-                    rec.XRef = newXRef;
+                    var oldXRef = rec.XRef;
+                    var newXRef = mainTree.NewXRef(rec);
+                    repMap.AddXRef(rec, oldXRef, newXRef);
                     rec.ResetOwner(mainTree);
                     mainTree.AddRecord(rec);
                 }

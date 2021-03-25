@@ -100,14 +100,14 @@ namespace GDModel
 
             GDMRecord sbmrRec = tree.AddRecord(new GDMSubmitterRecord(tree));
             Assert.IsNotNull(sbmrRec, "sbmrRec != null");
-            sbmrRec.InitNew();
+            tree.NewXRef(sbmrRec);
             string submXRef = sbmrRec.XRef;
 
             //
 
             GDMSubmissionRecord submRec = tree.AddRecord(new GDMSubmissionRecord(tree)) as GDMSubmissionRecord;
             Assert.IsNotNull(submRec, "rec1 != null");
-            submRec.InitNew();
+            tree.NewXRef(submRec);
 
             //
             GDMGroupRecord groupRec = tree.CreateGroup();
@@ -218,7 +218,7 @@ namespace GDModel
             using (GDMTree tree2 = new GDMTree()) {
                 GDMIndividualRecord iRec2 = tree.AddRecord(new GDMIndividualRecord(tree2)) as GDMIndividualRecord;
                 Assert.IsNotNull(iRec2);
-                iRec2.InitNew();
+                tree2.NewXRef(iRec2);
 
                 tree2.AddRecord(iRec2);
                 int rIdx = tree2.IndexOf(iRec2);
