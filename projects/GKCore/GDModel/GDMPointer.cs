@@ -32,7 +32,6 @@ namespace GDModel
             get { return (!string.IsNullOrEmpty(fXRef)); }
         }
 
-        // TODO: need to do a protection test on the proper records (with XRef)
         public GDMRecord Value
         {
             get {
@@ -44,8 +43,7 @@ namespace GDModel
                 if (value == null) return;
 
                 string xrf = value.XRef;
-                if (string.IsNullOrEmpty(xrf))
-                {
+                if (string.IsNullOrEmpty(xrf)) {
                     xrf = GetTree().NewXRef(value);
                 }
                 XRef = xrf;

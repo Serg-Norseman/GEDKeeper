@@ -353,7 +353,7 @@ namespace GDModel.Providers.GEDCOM
                     GDMRecord rec = tree[i];
                     if (!CheckRecordXRef(rec)) {
                         string oldXRef = rec.XRef;
-                        string newXRef = tree.NewXRef(rec);
+                        string newXRef = tree.NewXRef(rec, true);
                         repMap.AddXRef(rec, oldXRef, newXRef);
                     }
                     pc.ProgressStep();

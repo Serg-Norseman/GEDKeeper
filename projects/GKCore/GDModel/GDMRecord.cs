@@ -259,13 +259,13 @@ namespace GDModel
                 (fMultimediaLinks.Count == 0) && (fUserReferences.Count == 0);
         }
 
-        public void SetXRef(GDMTree tree, string newXRef)
+        public void SetXRef(GDMTree tree, string newXRef, bool removeOldXRef)
         {
             string oldXRef = fXRef;
             fXRef = newXRef;
 
             if (tree != null) {
-                tree.SetXRef(oldXRef, this);
+                tree.SetXRef(oldXRef, this, removeOldXRef);
             }
         }
 

@@ -36,6 +36,11 @@ namespace GDModel
                 OldXRef = oldXRef;
                 NewXRef = newXRef;
             }
+
+            public override string ToString()
+            {
+                return string.Format("{0} -> {1}", OldXRef, NewXRef);
+            }
         }
 
         private readonly List<XRefEntry> fList;

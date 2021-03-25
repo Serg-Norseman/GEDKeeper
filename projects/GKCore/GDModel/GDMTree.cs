@@ -277,9 +277,9 @@ namespace GDModel
             return xref;
         }
 
-        public void SetXRef(string oldXRef, GDMRecord record)
+        public void SetXRef(string oldXRef, GDMRecord record, bool removeOldXRef)
         {
-            if (!string.IsNullOrEmpty(oldXRef)) {
+            if (removeOldXRef && !string.IsNullOrEmpty(oldXRef)) {
                 bool exists = fXRefIndex.ContainsKey(oldXRef);
                 if (exists) fXRefIndex.Remove(oldXRef);
             }
@@ -364,6 +364,13 @@ namespace GDModel
             }
 
             return null;
+        }
+
+        public string NewXRef(GDMRecord gdmRec, bool removeOldXRef = false)
+        {
+            string newXRef = XRefIndex_NewXRef(gdmRec);
+            gdmRec.SetXRef(this, newXRef, removeOldXRef);
+            return gdmRec.XRef;
         }
 
         #endregion
@@ -503,15 +510,6 @@ namespace GDModel
             AddRecord(result);
             return result;
         }
-
-        public string NewXRef(GDMRecord gdmRec)
-        {
-            string newXRef = XRefIndex_NewXRef(gdmRec);
-            gdmRec.SetXRef(this, newXRef);
-            return gdmRec.XRef;
-        }
-
-        //
 
         public bool DeleteIndividualRecord(GDMIndividualRecord iRec)
         {

@@ -322,7 +322,7 @@ namespace GDModel.Providers.GEDCOM
 
                             curRecord = stackTuple.Tag;
                             if (!string.IsNullOrEmpty(tagXRef)) {
-                                ((GDMRecord)curRecord).SetXRef(fTree, tagXRef);
+                                ((GDMRecord)curRecord).SetXRef(fTree, tagXRef, false);
                             }
                             curTag = null;
                         } else {
