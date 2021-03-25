@@ -437,7 +437,7 @@ namespace GDModel.Providers.GEDCOM
         public static string ParseDateValue(GDMTree owner, GDMDateValue dateValue, string str)
         {
             if (str == null) {
-                return null;
+                return string.Empty;
             }
 
             var strTok = new GEDCOMParser(str, false);

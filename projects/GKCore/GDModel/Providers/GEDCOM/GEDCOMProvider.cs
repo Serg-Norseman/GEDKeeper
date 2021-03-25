@@ -1439,7 +1439,7 @@ namespace GDModel.Providers.GEDCOM
                 custEvent.Classification = tagValue;
             } else if (tagType == GEDCOMTagType.DATE) {
                 curTag = custEvent.Date;
-                curTag.ParseString(tagValue);
+                GEDCOMUtils.ParseDateValue(custEvent.GetTree(), custEvent.Date, tagValue);
             } else if (tagType == GEDCOMTagType.PLAC) {
                 curTag = custEvent.Place;
                 curTag.ParseString(tagValue);

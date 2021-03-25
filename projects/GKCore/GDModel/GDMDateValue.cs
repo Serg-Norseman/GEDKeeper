@@ -109,7 +109,7 @@ namespace GDModel
                     fValue = null;
                 }
 
-                return string.IsNullOrEmpty(strValue) ? string.Empty : GEDCOMUtils.ParseDateValue(GetTree(), this, strValue);
+                return string.IsNullOrEmpty(strValue) ? string.Empty : GEDCOMUtils.ParseDateValue(null, this, strValue);
             } catch (Exception ex) {
                 Logger.WriteError("GDMDateValue.ParseString(\"" + strValue + "\")", ex);
                 return strValue;
