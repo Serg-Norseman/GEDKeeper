@@ -48,9 +48,14 @@ namespace GDModel
 
                     uref2.Assign(userRef);
 
-                    string buf = TestUtils.GetTagStreamText(uref2, 1);
-                    Assert.AreEqual("1 REFN ref\r\n"+
-                                    "2 TYPE test\r\n", buf);
+                    // test of output format
+                    var iRec = new GDMIndividualRecord(null);
+                    iRec.UserReferences.Add(uref2);
+                    string buf = TestUtils.GetTagStreamText(iRec, 0);
+                    Assert.AreEqual("0 INDI\r\n"+
+                                    "1 REFN ref\r\n"+
+                                    "2 TYPE test\r\n"+
+                                    "1 SEX U\r\n", buf);
                 }
 
                 Assert.IsFalse(userRef.IsEmpty());

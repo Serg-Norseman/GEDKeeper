@@ -69,11 +69,6 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMTime(owner, tagId, tagValue);
-        }
-
         public GDMTime(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.TIME);

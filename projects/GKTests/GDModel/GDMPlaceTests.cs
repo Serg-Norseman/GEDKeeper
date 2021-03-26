@@ -49,12 +49,20 @@ namespace GDModel
                         place2.Assign(null);
                     });
 
-                    place2.Assign(place);
+                    var iRec = new GDMIndividualRecord(null);
+                    var evt = new GDMIndividualEvent(iRec);
+                    evt.SetName("BIRT");
+                    iRec.Events.Add(evt);
+                    //place2.Assign(place);
+                    evt.Place.Assign(place);
 
-                    string buf = TestUtils.GetTagStreamText(place2, 1);
-                    Assert.AreEqual("1 PLAC\r\n" +
-                                    "2 NOTE place notes\r\n" +
-                                    "2 FORM abrakadabra\r\n", buf);
+                    string buf = TestUtils.GetTagStreamText(iRec, 1);
+                    Assert.AreEqual("0 INDI\r\n" +
+                                    "1 SEX U\r\n" +
+                                    "1 BIRT\r\n" +
+                                    "2 PLAC\r\n" +
+                                    "3 NOTE place notes\r\n" +
+                                    "3 FORM abrakadabra\r\n", buf);
                 }
 
                 place.ReplaceXRefs(new GDMXRefReplacer());

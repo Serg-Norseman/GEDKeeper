@@ -27,22 +27,12 @@ namespace GDModel.Providers.GEDCOM
     {
         public int TagId;
         public string TagName;
-
-        public TagConstructor Constructor;
-        public AddTagHandler AddHandler;
-        public SaveTagHandler SaveHandler;
         public bool SkipEmpty;
 
-        public GEDCOMTagProps(int tagId, string tagName,
-                              TagConstructor constructor = null, AddTagHandler addHandler = null,
-                              SaveTagHandler saveHandler = null, bool skipEmpty = false)
+        public GEDCOMTagProps(int tagId, string tagName, bool skipEmpty = false)
         {
             TagId = tagId;
             TagName = tagName;
-
-            Constructor = constructor;
-            AddHandler = addHandler;
-            SaveHandler = saveHandler;
             SkipEmpty = skipEmpty;
         }
     }
@@ -57,15 +47,13 @@ namespace GDModel.Providers.GEDCOM
         private static readonly Dictionary<int, GEDCOMTagProps> fList;
         private static int fLastId = 0;
 
-        public static GEDCOMTagProps RegisterTag(GEDCOMTagType tag, string tagName,
-                                       TagConstructor constructor = null, AddTagHandler addHandler = null,
-                                       SaveTagHandler saveHandler = null, bool skipEmpty = false)
+        public static GEDCOMTagProps RegisterTag(GEDCOMTagType tag, string tagName, bool skipEmpty = false)
         {
             GEDCOMTagProps tagProps;
 
             if (!fDictionary.TryGetValue(tagName, out tagProps)) {
                 int tagId = (int)tag;
-                tagProps = new GEDCOMTagProps(tagId, tagName, constructor, addHandler, saveHandler, skipEmpty);
+                tagProps = new GEDCOMTagProps(tagId, tagName, skipEmpty);
 
                 fDictionary.Add(tagName, tagProps);
                 fList[tagId] = tagProps;

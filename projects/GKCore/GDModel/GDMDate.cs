@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -100,11 +100,6 @@ namespace GDModel
             set { fYearModifier = value; }
         }
 
-
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMDate(owner, tagId, tagValue);
-        }
 
         public GDMDate(GDMObject owner) : base(owner)
         {

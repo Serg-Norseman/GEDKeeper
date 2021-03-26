@@ -55,9 +55,9 @@ namespace GDModel
             var tag = new GDMTag(null, GEDCOMTagsTable.Lookup("TEST"), "");
             Assert.IsNotNull(tag);
 
-            tag.AddTag(GDMTag.Create(tag, (int)GEDCOMTagType._FOLDER, "Private"));
-            tag.AddTag(GDMTag.Create(tag, (int)GEDCOMTagType._FOLDER, "Friends"));
-            tag.AddTag(GDMTag.Create(tag, (int)GEDCOMTagType._FOLDER, "Research"));
+            tag.AddTag(new GDMValueTag(tag, (int)GEDCOMTagType._FOLDER, "Private"));
+            tag.AddTag(new GDMValueTag(tag, (int)GEDCOMTagType._FOLDER, "Friends"));
+            tag.AddTag(new GDMValueTag(tag, (int)GEDCOMTagType._FOLDER, "Research"));
 
             var subTags = tag.FindTags(GEDCOMTagName._FOLDER);
             Assert.AreEqual(3, subTags.Count);

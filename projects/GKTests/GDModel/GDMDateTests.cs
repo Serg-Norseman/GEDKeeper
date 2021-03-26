@@ -296,7 +296,7 @@ namespace GDModel
         [Test]
         public void Test_Create()
         {
-            GDMTag result = GDMDate.Create(null, GEDCOMTagsTable.Lookup("BLAH"), "");
+            GDMTag result = new GDMDate(null, GEDCOMTagsTable.Lookup("BLAH"), "");
             Assert.IsNotNull(result);
             Assert.AreEqual("BLAH", result.GetTagName());
         }

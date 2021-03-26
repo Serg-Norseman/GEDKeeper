@@ -39,10 +39,5 @@ namespace GDModel
         {
             SetNameValue(tagId, tagValue);
         }
-
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMIndividualAttribute(owner, tagId, tagValue);
-        }
     }
 }

@@ -44,7 +44,7 @@ namespace GDModel.Providers.GEDCOM
         // Other tags
         ABBR,
         ADDR,
-        ADOP,
+        ADOP, // INDI.EVEN
         ADR1,
         ADR2,
         ADR3,
@@ -53,102 +53,102 @@ namespace GDModel.Providers.GEDCOM
         ALIA,
         ANCE,
         ANCI,
-        ANUL,
+        ANUL, // FAM.EVEN
         ASSO,
         AUTH,
         BAPL,
-        BAPM,
-        BARM,
-        BASM,
-        BIRT,
-        BLES,
-        BURI,
-        CAST,
+        BAPM, // INDI.EVEN
+        BARM, // INDI.EVEN
+        BASM, // INDI.EVEN
+        BIRT, // INDI.EVEN
+        BLES, // INDI.EVEN
+        BURI, // INDI.EVEN
+        CAST, // INDI.ATTR
         CAUS,
         CENS,
         CHAN,
         CHAR,
         CHIL,
-        CHR,
-        CHRA,
+        CHR, // INDI.EVEN
+        CHRA, // INDI.EVEN
         CITY,
         CONC,
-        CONF,
+        CONF, // INDI.EVEN
         CONL,
         CONT,
         COPR,
         CORP,
-        CREM,
+        CREM, // INDI.EVEN
         CTRY,
         DATA,
         DATE,
-        DEAT,
+        DEAT, // INDI.EVEN
         DESC,
         DESI,
         DEST,
-        DIV,
-        DIVF,
-        DSCR,
-        EDUC,
+        DIV, // FAM.EVEN
+        DIVF, // FAM.EVEN
+        DSCR, // INDI.ATTR
+        EDUC, // INDI.ATTR
         ENDL,
         EVEN,
         EMAIL,
-        EMIG,
-        ENGA,
-        FACT,
+        EMIG, // INDI.EVEN
+        ENGA, // FAM.EVEN
+        FACT, // INDI.ATTR
         FAMC,
         FAMF,
         FAMS,
         FAX,
-        FCOM,
+        FCOM, // INDI.EVEN
         FILE,
         FONE,
         FORM,
         FROM,
         GEDC,
         GIVN,
-        GRAD,
+        GRAD, // INDI.EVEN
         HEAD,
         HUSB,
-        IDNO,
-        IMMI,
+        IDNO, // INDI.ATTR
+        IMMI, // INDI.EVEN
         INT,
         LANG,
         LATI,
         LONG,
         MAP,
-        MARB,
-        MARC,
-        MARL,
-        MARR,
-        MARS,
+        MARB, // FAM.EVEN
+        MARC, // FAM.EVEN
+        MARL, // FAM.EVEN
+        MARR, // FAM.EVEN
+        MARS, // FAM.EVEN
         MEDI,
         NAME,
-        NATI,
-        NATU,
-        NCHI,
+        NATI, // INDI.ATTR
+        NATU, // INDI.EVEN
+        NCHI, // INDI.ATTR
         NICK,
-        NMR,
+        NMR, // INDI.ATTR
         NPFX,
         NSFX,
-        OCCU,
+        OCCU, // INDI.ATTR
         ORDI,
-        ORDN,
+        ORDN, // INDI.EVEN
         PAGE,
         PEDI,
         PHON,
         PLAC,
         POST,
-        PROB,
-        PROP,
+        PROB, // INDI.EVEN
+        PROP, // INDI.ATTR
         PUBL,
         QUAY,
         REFN,
         RELA,
-        RELI,
+        RELI, // INDI.ATTR
         RESI,
         RESN, // Restriction
-        RETI,
+        RETI, // INDI.EVEN
         RFN, // PermanentRecordFileNumber
         RIN, // AutomatedRecordID
         ROMN,
@@ -156,47 +156,47 @@ namespace GDModel.Providers.GEDCOM
         SLGC,
         SLGS,
         SPFX,
-        SSN,
+        SSN, // INDI.ATTR
         STAE,
         STAT,
         SURN,
         TEMP,
         TEXT,
         TIME,
-        TITL,
+        TITL, // INDI.ATTR
         TO,
         TRLR,
         TYPE,
         VERS,
         WIFE,
-        WILL,
+        WILL, // INDI.EVEN
         WWW,
 
         // non-standard extended tags
-        _AWARD,
-        _BGRO, // [MyFamilyTree]
+        _AWARD, // [???] INDI.ATTR
+        _BGRO, // [MyFamilyTree] INDI.ATTR
         _BOOKMARK, // [GK]
         _CENN, // Census Name [BKW6]
-        _ELEC, // Election [???]
-        _EXCM, // Excommunication [???]
-        _EYES, // [Gen]
+        _ELEC, // Election [???] INDI.ATTR
+        _EXCM, // Excommunication [???] INDI.ATTR
+        _EYES, // [Gen] INDI.ATTR
         _FOLDER, // [GK]
         _GOAL, // [GK]
         _GRP, // Group record [Genney]
-        _HAIR, // [BKW6, PAF]
-        _HOBBY,
+        _HAIR, // [BKW6, PAF] INDI.ATTR
+        _HOBBY, // [???] INDI.ATTR
         _LANG, // [GK], outdated, replaced by LANG
         _MARN, // Married Surname [BKW6]
         _MARNM, // Married Surname [AQ3, PAF5, Geni]
-        _MDCL, // Medical condition [???]
-        _MDNA, // [MyFamilyTree]
+        _MDCL, // Medical condition [???] INDI.ATTR
+        _MDNA, // [MyFamilyTree] INDI.ATTR
         _MEMBER, // [GK]
         _MIDN, // Middle Name [WikiTree]
-        _MILI, // [GK]
-        _MILI_DIS, // [GK]
-        _MILI_IND, // [GK]
-        _MILI_RANK, // [GK]
-        _OBIT, // Obituary [???]
+        _MILI, // [GK] INDI.ATTR
+        _MILI_DIS, // [GK] INDI.ATTR
+        _MILI_IND, // [GK] INDI.ATTR
+        _MILI_RANK, // [GK] INDI.ATTR
+        _OBIT, // Obituary [???] INDI.ATTR
         _PATN, // Patronymic Name
         _PATRIARCH, // [GK]
         _PERCENT, // [GK]
@@ -212,9 +212,9 @@ namespace GDModel.Providers.GEDCOM
         _STAT,
         _STATUS, // [GK]
         _STOPDATE, // [GK]
-        _TRAVEL,
+        _TRAVEL, // [GK] INDI.ATTR
         _UID, // 
-        _YDNA, // [MyFamilyTree]
+        _YDNA, // [MyFamilyTree] INDI.ATTR
     }
 
     public static class GEDCOMTagName

@@ -45,10 +45,14 @@ namespace GDModel
                         childLink2.Assign(null);
                     });
 
+                    var iRec = new GDMIndividualRecord(null);
                     childLink2.Assign(childLink);
+                    iRec.ChildToFamilyLinks.Add(childLink2);
 
-                    string buf = TestUtils.GetTagStreamText(childLink2, 1);
-                    Assert.AreEqual("1 FAMC\r\n" +
+                    string buf = TestUtils.GetTagStreamText(iRec, 0);
+                    Assert.AreEqual("0 INDI\r\n" +
+                                    "1 SEX U\r\n" +
+                                    "1 FAMC\r\n" +
                                     "2 STAT challenged\r\n" +
                                     "2 PEDI foster\r\n", buf);
                 }

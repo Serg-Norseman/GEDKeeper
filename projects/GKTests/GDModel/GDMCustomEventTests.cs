@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib;
 using BSLib.Calendar;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -115,21 +114,25 @@ namespace GDModel
                     Assert.IsNotNull(copyEvent);
                     copyEvent.Assign(customEvent);
 
-                    string buf1 = TestUtils.GetTagStreamText(copyEvent, 0);
-                    Assert.AreEqual("0 BIRT\r\n" +
-                                    "1 TYPE custom\r\n" +
-                                    "1 DATE 20 SEP 1970\r\n" +
-                                    "1 PLAC test place\r\n" +
-                                    "1 ADDR\r\n" +
-                                    "2 ADR1 adr1\r\n" +
-                                    "1 CAUS Cause\r\n" +
-                                    "1 AGNC Agency\r\n" +
-                                    "1 RELI rel_aff\r\n" +
-                                    "1 RESN confidential\r\n" +
-                                    "1 NOTE event notes\r\n"+
-                                    "1 SOUR event sour desc\r\n"+
-                                    "1 OBJE\r\n"+
-                                    "2 TITL event media title\r\n", buf1);
+                    var iRec = new GDMIndividualRecord(null);
+                    iRec.Events.Add(copyEvent);
+                    string buf1 = TestUtils.GetTagStreamText(iRec, 0);
+                    Assert.AreEqual("0 INDI\r\n" +
+                                    "1 SEX U\r\n" +
+                                    "1 BIRT\r\n" +
+                                    "2 TYPE custom\r\n" +
+                                    "2 DATE 20 SEP 1970\r\n" +
+                                    "2 PLAC test place\r\n" +
+                                    "2 ADDR\r\n" +
+                                    "3 ADR1 adr1\r\n" +
+                                    "2 CAUS Cause\r\n" +
+                                    "2 AGNC Agency\r\n" +
+                                    "2 RELI rel_aff\r\n" +
+                                    "2 RESN confidential\r\n" +
+                                    "2 NOTE event notes\r\n"+
+                                    "2 SOUR event sour desc\r\n"+
+                                    "2 OBJE\r\n"+
+                                    "3 TITL event media title\r\n", buf1);
                 }
 
                 customEvent.Address.AddEmailAddress("email");

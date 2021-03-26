@@ -57,11 +57,6 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMPointer(owner, tagId, tagValue);
-        }
-
         public GDMPointer(GDMObject owner) : base(owner)
         {
             fXRef = string.Empty;

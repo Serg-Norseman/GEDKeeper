@@ -77,11 +77,6 @@ namespace GDModel
 
         #region Object management
 
-        public static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMValueTag(owner, tagId, tagValue);
-        }
-
         public GDMTag(GDMObject owner)
         {
             fId = 0; // Unknown
@@ -328,11 +323,6 @@ namespace GDModel
     public class GDMValueTag : GDMTag
     {
         protected string fStringValue;
-
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMValueTag(owner, tagId, tagValue);
-        }
 
         public GDMValueTag(GDMObject owner) : base(owner)
         {

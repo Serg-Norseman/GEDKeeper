@@ -131,11 +131,6 @@ namespace GDModel
             SetNameValue(tagId, tagValue);
         }
 
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMAddress(owner, tagId, tagValue);
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
@@ -222,22 +217,22 @@ namespace GDModel
 
         public GDMTag AddEmailAddress(string value)
         {
-            return fEmailList.Add(GDMTag.Create(this, (int)GEDCOMTagType.EMAIL, value));
+            return fEmailList.Add(new GDMValueTag(this, (int)GEDCOMTagType.EMAIL, value));
         }
 
         public GDMTag AddFaxNumber(string value)
         {
-            return fFaxList.Add(GDMTag.Create(this, (int)GEDCOMTagType.FAX, value));
+            return fFaxList.Add(new GDMValueTag(this, (int)GEDCOMTagType.FAX, value));
         }
 
         public GDMTag AddPhoneNumber(string value)
         {
-            return fPhoneList.Add(GDMTag.Create(this, (int)GEDCOMTagType.PHON, value));
+            return fPhoneList.Add(new GDMValueTag(this, (int)GEDCOMTagType.PHON, value));
         }
 
         public GDMTag AddWebPage(string value)
         {
-            return fWWWList.Add(GDMTag.Create(this, (int)GEDCOMTagType.WWW, value));
+            return fWWWList.Add(new GDMValueTag(this, (int)GEDCOMTagType.WWW, value));
         }
 
         public void SetAddressText(string value)

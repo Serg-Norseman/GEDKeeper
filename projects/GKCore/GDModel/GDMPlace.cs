@@ -68,11 +68,6 @@ namespace GDModel
             SetNameValue(tagId, tagValue);
         }
 
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMPlace(owner, tagId, tagValue);
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing) {

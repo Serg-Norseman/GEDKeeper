@@ -67,7 +67,7 @@ namespace GDModel
             set {
                 if (value) {
                     if (FindTag(GEDCOMTagName._BOOKMARK, 0) == null) {
-                        AddTag(GDMTag.Create(this, (int)GEDCOMTagType._BOOKMARK, ""));
+                        AddTag(new GDMValueTag(this, (int)GEDCOMTagType._BOOKMARK, ""));
                     }
                 } else {
                     DeleteTag(GEDCOMTagName._BOOKMARK);
@@ -93,7 +93,7 @@ namespace GDModel
             set {
                 if (value) {
                     if (FindTag(GEDCOMTagName._PATRIARCH, 0) == null) {
-                        AddTag(GDMTag.Create(this, (int)GEDCOMTagType._PATRIARCH, ""));
+                        AddTag(new GDMValueTag(this, (int)GEDCOMTagType._PATRIARCH, ""));
                     }
                 } else {
                     DeleteTag(GEDCOMTagName._PATRIARCH);

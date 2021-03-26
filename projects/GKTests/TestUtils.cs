@@ -186,9 +186,9 @@ namespace GKTests
             Assert.IsNotNull(commRec, "commRec != null");
         }
 
-        public static string GetTagStreamText(GDMTag tag, int level)
+        public static string GetTagStreamText(GDMTag tag, int level, bool debugWrite = true)
         {
-            GEDCOMProvider.DebugWrite = true;
+            GEDCOMProvider.DebugWrite = debugWrite;
 
             string result;
             using (MemoryStream stm = new MemoryStream()) {
@@ -205,7 +205,7 @@ namespace GKTests
                         } else if (tag is GDMSourceData) {
                             GEDCOMProvider.WriteSourceData(fs, 1, tag);
                         } else {
-                            GEDCOMProvider.WriteTagEx(fs, level, tag);
+                            GEDCOMProvider.WriteBaseTag(fs, level, tag);
                         }
                     }
                     fs.Flush();

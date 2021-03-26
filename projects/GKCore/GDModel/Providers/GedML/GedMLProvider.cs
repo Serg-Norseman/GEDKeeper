@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml;
 using GDModel;
@@ -33,16 +32,8 @@ namespace GDModel.Providers.GedML
     /// <summary>
     /// Processing the GedML format is one part of the Genealogical Data Model (GDM).
     /// </summary>
-    public class GedMLProvider : FileProvider
+    public class GedMLProvider : GEDCOMProvider
     {
-        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
-        static GedMLProvider()
-        {
-            // Static initialization of the GEDCOMProvider is needed, 
-            // otherwise the standard tag identifiers are out of sync
-            var formats = GEDCOMProvider.GEDCOMFormats;
-        }
-
         public GedMLProvider(GDMTree tree) : base(tree)
         {
         }
@@ -59,8 +50,7 @@ namespace GDModel.Providers.GedML
 
         protected override string DetectCharset(Stream inputStream, bool charsetDetection)
         {
-            string streamCharset = null;
-            return streamCharset;
+            return null;
         }
 
         protected override void LoadFromReader(Stream fileStream, StreamReader reader, string streamCharset = null)
@@ -103,7 +93,7 @@ namespace GDModel.Providers.GedML
                             tagValue = string.Empty;
 
                             if (tagLevel == 0) {
-                                StackTuple stackTuple = GEDCOMProvider.AddTreeTag(fTree, tagLevel, tagId, string.Empty);
+                                StackTuple stackTuple = AddTreeTag(fTree, tagLevel, tagId, string.Empty);
                                 if (stackTuple != null) {
                                     stack.Clear();
                                     stack.Push(stackTuple);

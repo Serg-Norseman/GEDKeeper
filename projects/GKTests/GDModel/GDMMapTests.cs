@@ -43,12 +43,21 @@ namespace GDModel
                         map2.Assign(null);
                     });
 
-                    map2.Assign(map);
+                    //map2.Assign(map);
 
-                    string buf = TestUtils.GetTagStreamText(map2, 1);
-                    Assert.AreEqual("1 MAP\r\n" +
-                                    "2 LATI 5.111111\r\n" +
-                                    "2 LONG 7.999999\r\n", buf);
+                    var iRec = new GDMIndividualRecord(null);
+                    var evt = new GDMIndividualEvent(iRec);
+                    evt.SetName("BIRT");
+                    iRec.Events.Add(evt);
+                    evt.Place.Map.Assign(map);
+                    string buf = TestUtils.GetTagStreamText(iRec, 1);
+                    Assert.AreEqual("0 INDI\r\n" +
+                                    "1 SEX U\r\n" +
+                                    "1 BIRT\r\n" +
+                                    "2 PLAC\r\n" +
+                                    "3 MAP\r\n" +
+                                    "4 LATI 5.111111\r\n" +
+                                    "4 LONG 7.999999\r\n", buf);
                 }
 
                 Assert.IsFalse(map.IsEmpty());

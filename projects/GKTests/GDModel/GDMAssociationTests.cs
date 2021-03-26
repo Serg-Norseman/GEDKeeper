@@ -68,10 +68,14 @@ namespace GDModel
                         asso2.Assign(null);
                     });
 
+                    var iRec2 = new GDMIndividualRecord(null);
                     asso2.Assign(association);
+                    iRec2.Associations.Add(asso2);
 
-                    string buf = TestUtils.GetTagStreamText(asso2, 1);
-                    Assert.AreEqual("1 ASSO @I1@\r\n" +
+                    string buf = TestUtils.GetTagStreamText(iRec2, 0);
+                    Assert.AreEqual("0 INDI\r\n" +
+                                    "1 SEX U\r\n" +
+                                    "1 ASSO @I1@\r\n" +
                                     "2 RELA This is test relation\r\n", buf);
                 }
 

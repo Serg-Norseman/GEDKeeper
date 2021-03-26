@@ -53,10 +53,17 @@ namespace GDModel
 
                     chd2.Assign(cd);
 
-                    string buf = TestUtils.GetTagStreamText(chd2, 1);
-                    Assert.AreEqual("1 CHAN\r\n" +
+                    var iRec = new GDMIndividualRecord(null);
+                    iRec.UID = "12345";
+                    iRec.ChangeDate.Assign(chd2);
+
+                    string buf = TestUtils.GetTagStreamText(iRec, 0, false);
+                    Assert.AreEqual("0 INDI\r\n" +
+                                    "1 _UID 12345\r\n" +
+                                    "1 CHAN\r\n" +
                                     "2 DATE 04 JAN 2013\r\n" +
-                                    "3 TIME 11:12:00\r\n", buf);
+                                    "3 TIME 11:12:00\r\n" +
+                                    "1 SEX U\r\n", buf);
                 }
 
                 Assert.IsFalse(cd.IsEmpty());

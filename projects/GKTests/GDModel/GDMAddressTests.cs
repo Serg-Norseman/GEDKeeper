@@ -98,25 +98,34 @@ namespace GDModel
 
                     addr2.Assign(addr);
 
-                    string buf = TestUtils.GetTagStreamText(addr, 0);
-                    Assert.AreEqual("0 ADDR This\r\n" +
-                                    "1 CONT address\r\n" +
-                                    "1 CONT test\r\n" +
-                                    "1 ADR1 test1\r\n" +
-                                    "1 ADR2 test2\r\n" +
-                                    "1 ADR3 test3\r\n" +
-                                    "1 CITY test4\r\n" +
-                                    "1 STAE test5\r\n" +
-                                    "1 CTRY test6\r\n" +
-                                    "1 POST test7\r\n" +
-                                    "0 PHON 8 911 101 99 99\r\n" +
-                                    "0 PHON 8 911 101 33 33\r\n" +
-                                    "0 EMAIL test@mail.com\r\n" +
-                                    "0 EMAIL test@mail.ru\r\n" +
-                                    "0 FAX abrakadabra\r\n" +
-                                    "0 FAX abrakadabra\r\n" +
-                                    "0 WWW http://test.com\r\n" +
-                                    "0 WWW http://test.ru\r\n", buf);
+                    var iRec = new GDMIndividualRecord(null);
+                    var evt = new GDMIndividualEvent(iRec);
+                    evt.SetName("BIRT");
+                    iRec.Events.Add(evt);
+                    evt.Address.Assign(addr);
+
+                    string buf = TestUtils.GetTagStreamText(iRec, 0);
+                    Assert.AreEqual("0 INDI\r\n" +
+                                    "1 SEX U\r\n" +
+                                    "1 BIRT\r\n" +
+                                    "2 ADDR This\r\n" +
+                                    "3 CONT address\r\n" +
+                                    "3 CONT test\r\n" +
+                                    "3 ADR1 test1\r\n" +
+                                    "3 ADR2 test2\r\n" +
+                                    "3 ADR3 test3\r\n" +
+                                    "3 CITY test4\r\n" +
+                                    "3 STAE test5\r\n" +
+                                    "3 CTRY test6\r\n" +
+                                    "3 POST test7\r\n" +
+                                    "2 PHON 8 911 101 99 99\r\n" +
+                                    "2 PHON 8 911 101 33 33\r\n" +
+                                    "2 EMAIL test@mail.com\r\n" +
+                                    "2 EMAIL test@mail.ru\r\n" +
+                                    "2 FAX abrakadabra\r\n" +
+                                    "2 FAX abrakadabra\r\n" +
+                                    "2 WWW http://test.com\r\n" +
+                                    "2 WWW http://test.ru\r\n", buf);
 
                     Assert.AreEqual("This\r\naddress\r\ntest", addr2.Lines.Text.Trim());
                     Assert.AreEqual("8 911 101 99 99", addr2.PhoneNumbers[0].StringValue);
