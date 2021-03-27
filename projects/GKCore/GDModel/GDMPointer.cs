@@ -96,5 +96,28 @@ namespace GDModel
                 XRef = map.FindNewXRef(XRef);
             }
         }
+
+        private GDMTree GetTree()
+        {
+            GDMTree owner = null;
+
+            GDMTag current = this;
+            while (current != null) {
+                GDMObject parent = current.Owner;
+
+                var parentTag = parent as GDMTag;
+                if (parentTag != null) {
+                    current = parentTag;
+                } else {
+                    var parentTree = parent as GDMTree;
+                    if (parentTree != null) {
+                        owner = parentTree;
+                    }
+                    break;
+                }
+            }
+
+            return owner;
+        }
     }
 }
