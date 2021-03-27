@@ -274,43 +274,36 @@ namespace GKCore.Tools
 
         private enum DCFlag { dcfAncWalk, dcfDescWalk }
 
-        private static void SetIndiFlag(GDMIndividualRecord iRec, DCFlag flag)
+        private static void SetIndiFlag(GKVarCache<GDMIndividualRecord, int> indiFlags, GDMIndividualRecord iRec, DCFlag flag)
         {
-            object data = iRec.ExtData;
-            if (data != null) {
-                int flags = (int)data;
-                flags = BitHelper.SetBit(flags, (int)flag);
-                iRec.ExtData = flags;
-            }
+            int flags = indiFlags[iRec];
+            flags = BitHelper.SetBit(flags, (int)flag);
+            indiFlags[iRec] = flags;
         }
 
-        private static bool HasIndiFlag(GDMIndividualRecord iRec, DCFlag flag)
+        private static bool HasIndiFlag(GKVarCache<GDMIndividualRecord, int> indiFlags, GDMIndividualRecord iRec, DCFlag flag)
         {
-            object data = iRec.ExtData;
-            if (data != null) {
-                int flags = (int)data;
-                return BitHelper.IsSetBit(flags, (int)flag);
-            } else {
-                return false;
-            }
+            int flags = indiFlags[iRec];
+            return BitHelper.IsSetBit(flags, (int)flag);
         }
 
-        private static GDMIndividualRecord DetectCycleAncestors(GDMIndividualRecord iRec, Stack<GDMIndividualRecord> stack)
+        private static GDMIndividualRecord DetectCycleAncestors(GDMIndividualRecord iRec, Stack<GDMIndividualRecord> stack, 
+                                                                GKVarCache<GDMIndividualRecord, int> indiFlags)
         {
             if (iRec == null) return null;
 
             if (stack.Contains(iRec)) return iRec;
 
-            SetIndiFlag(iRec, DCFlag.dcfAncWalk);
+            SetIndiFlag(indiFlags, iRec, DCFlag.dcfAncWalk);
 
             stack.Push(iRec);
 
             GDMFamilyRecord family = iRec.GetParentsFamily();
             if (family != null) {
-                var res = DetectCycleAncestors(family.Husband.Individual, stack);
+                var res = DetectCycleAncestors(family.Husband.Individual, stack, indiFlags);
                 if (res != null) return res;
 
-                res = DetectCycleAncestors(family.Wife.Individual, stack);
+                res = DetectCycleAncestors(family.Wife.Individual, stack, indiFlags);
                 if (res != null) return res;
             }
 
@@ -318,13 +311,14 @@ namespace GKCore.Tools
             return null;
         }
 
-        private static GDMIndividualRecord DetectCycleDescendants(GDMIndividualRecord iRec, Stack<GDMIndividualRecord> stack)
+        private static GDMIndividualRecord DetectCycleDescendants(GDMIndividualRecord iRec, Stack<GDMIndividualRecord> stack, 
+                                                                  GKVarCache<GDMIndividualRecord, int> indiFlags)
         {
             if (iRec == null) return null;
 
             if (stack.Contains(iRec)) return iRec;
 
-            SetIndiFlag(iRec, DCFlag.dcfDescWalk);
+            SetIndiFlag(indiFlags, iRec, DCFlag.dcfDescWalk);
 
             stack.Push(iRec);
 
@@ -338,7 +332,7 @@ namespace GKCore.Tools
                     GDMIndividualRecord child = family.Children[j].Individual;
                     if (child == null) continue;
 
-                    var res = DetectCycleDescendants(child, stack);
+                    var res = DetectCycleDescendants(child, stack, indiFlags);
                     if (res != null) return res;
                 }
             }
@@ -350,8 +344,9 @@ namespace GKCore.Tools
         public static string DetectCycle(GDMIndividualRecord iRec)
         {
             var stack = new Stack<GDMIndividualRecord>();
+            var indiDCFlags = new GKVarCache<GDMIndividualRecord, int>();
 
-            var hasCycle = DetectCycleAncestors(iRec, stack);
+            var hasCycle = DetectCycleAncestors(iRec, stack, indiDCFlags);
             if (hasCycle != null) {
                 var lastRec = stack.Pop();
                 return iRec.XRef + " ... " + lastRec.XRef + " -> " + hasCycle.XRef;
@@ -359,7 +354,7 @@ namespace GKCore.Tools
 
             stack.Clear();
 
-            hasCycle = DetectCycleDescendants(iRec, stack);
+            hasCycle = DetectCycleDescendants(iRec, stack, indiDCFlags);
             if (hasCycle != null) {
                 var lastRec = stack.Pop();
                 return iRec.XRef + " ... " + lastRec.XRef + " -> " + hasCycle.XRef;
@@ -372,9 +367,10 @@ namespace GKCore.Tools
         {
             var stack = new Stack<GDMIndividualRecord>();
             GDMIndividualRecord hasCycle = null;
+            var indiDCFlags = new GKVarCache<GDMIndividualRecord, int>();
 
-            if (!HasIndiFlag(iRec, DCFlag.dcfAncWalk)) {
-                hasCycle = DetectCycleAncestors(iRec, stack);
+            if (!HasIndiFlag(indiDCFlags, iRec, DCFlag.dcfAncWalk)) {
+                hasCycle = DetectCycleAncestors(iRec, stack, indiDCFlags);
                 if (hasCycle != null) {
                     var lastRec = stack.Pop();
                     return iRec.XRef + " ... " + lastRec.XRef + " -> " + hasCycle.XRef;
@@ -382,8 +378,8 @@ namespace GKCore.Tools
                 stack.Clear();
             }
 
-            if (!HasIndiFlag(iRec, DCFlag.dcfDescWalk)) {
-                hasCycle = DetectCycleDescendants(iRec, stack);
+            if (!HasIndiFlag(indiDCFlags, iRec, DCFlag.dcfDescWalk)) {
+                hasCycle = DetectCycleDescendants(iRec, stack, indiDCFlags);
                 if (hasCycle != null) {
                     var lastRec = stack.Pop();
                     return iRec.XRef + " ... " + lastRec.XRef + " -> " + hasCycle.XRef;
@@ -791,7 +787,6 @@ namespace GKCore.Tools
                 GDMTree tree = baseWin.Context.Tree;
                 progress.ProgressInit(LangMan.LS(LSID.LSID_ToolOp_7), tree.RecordsCount);
                 checksList.Clear();
-                GKUtils.InitExtCounts(tree, 0);
 
                 for (int i = 0, num = tree.RecordsCount; i < num; i++) {
                     progress.ProgressStep();

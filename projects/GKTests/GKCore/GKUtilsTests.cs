@@ -252,16 +252,6 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_InitExtData()
-        {
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.InitExtData(null); });
-            GKUtils.InitExtData(fContext.Tree);
-
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.InitExtCounts(null, 0); });
-            GKUtils.InitExtCounts(fContext.Tree, 0);
-        }
-
-        [Test]
         public void Test_GetXGoalStr()
         {
             Assert.AreEqual("", GKUtils.GetTaskGoalStr(null, null));
@@ -290,7 +280,6 @@ namespace GKCore
         {
             GDMIndividualRecord iRec5 = fContext.Tree.XRefIndex_Find("I6") as GDMIndividualRecord;
 
-            GKUtils.InitExtCounts(fContext.Tree, -1);
             Assert.AreEqual(0, GKUtils.GetAncestorsCount(null));
             Assert.AreEqual(3, GKUtils.GetAncestorsCount(iRec5) - 1);
         }
@@ -300,7 +289,6 @@ namespace GKCore
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
-            GKUtils.InitExtCounts(fContext.Tree, -1);
             Assert.AreEqual(0, GKUtils.GetDescendantsCount(null));
             Assert.AreEqual(3, GKUtils.GetDescendantsCount(iRec) - 1);
         }

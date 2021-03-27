@@ -18,22 +18,43 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Types
+using System;
+using System.Collections.Generic;
+
+namespace GKCore
 {
     /// <summary>
-    /// PGNode - it's node class for Patriarchs Graph.
+    /// 
     /// </summary>
-    public sealed class PGNode
+    public sealed class GKVarCache<TKey, TValue>
     {
-        public string FamilyXRef;
-        public PGNodeType Type;
-        public int Size;
+        private readonly TValue fDefaultValue;
+        private readonly Dictionary<TKey, TValue> fDictionary;
 
-        public PGNode(string label, PGNodeType type, int size = 1)
+        public TValue this[TKey key]
         {
-            FamilyXRef = label;
-            Type = type;
-            Size = size;
+            get {
+                TValue value;
+                if (fDictionary.TryGetValue(key, out value)) {
+                    return value;
+                } else {
+                    return fDefaultValue;
+                }
+            }
+            set {
+                fDictionary[key] = value;
+            }
+        }
+
+        public GKVarCache(TValue defaultValue = default(TValue))
+        {
+            fDefaultValue = defaultValue;
+            fDictionary = new Dictionary<TKey, TValue>();
+        }
+
+        public void Clear()
+        {
+            fDictionary.Clear();
         }
     }
 }

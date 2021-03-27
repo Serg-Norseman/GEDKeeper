@@ -1070,10 +1070,16 @@ namespace GKCore
 
         public static int GetAncestorsCount(GDMIndividualRecord iRec)
         {
+            var indiCounters = new GKVarCache<GDMIndividualRecord, int>(-1);
+            return GetAncestorsCount(iRec, indiCounters);
+        }
+
+        private static int GetAncestorsCount(GDMIndividualRecord iRec, GKVarCache<GDMIndividualRecord, int> counters)
+        {
             int result = 0;
 
             if (iRec != null) {
-                int val = (int)iRec.ExtData;
+                int val = counters[iRec];
 
                 if (val < 0) {
                     val = 1;
@@ -1083,13 +1089,13 @@ namespace GKCore
                         GDMIndividualRecord anc;
 
                         anc = family.Husband.Individual;
-                        val += GetAncestorsCount(anc);
+                        val += GetAncestorsCount(anc, counters);
 
                         anc = family.Wife.Individual;
-                        val += GetAncestorsCount(anc);
+                        val += GetAncestorsCount(anc, counters);
                     }
 
-                    iRec.ExtData = val;
+                    counters[iRec] = val;
                 }
 
                 result = val;
@@ -1100,10 +1106,16 @@ namespace GKCore
 
         public static int GetDescendantsCount(GDMIndividualRecord iRec)
         {
+            var indiCounters = new GKVarCache<GDMIndividualRecord, int>(-1);
+            return GetDescendantsCount(iRec, indiCounters);
+        }
+
+        private static int GetDescendantsCount(GDMIndividualRecord iRec, GKVarCache<GDMIndividualRecord, int> counters)
+        {
             int result = 0;
 
             if (iRec != null) {
-                int val = (int)iRec.ExtData;
+                int val = counters[iRec];
                 if (val < 0) {
                     val = 1;
 
@@ -1114,10 +1126,10 @@ namespace GKCore
                         int num2 = family.Children.Count;
                         for (int j = 0; j < num2; j++) {
                             GDMIndividualRecord child = family.Children[j].Individual;
-                            val += GetDescendantsCount(child);
+                            val += GetDescendantsCount(child, counters);
                         }
                     }
-                    iRec.ExtData = val;
+                    counters[iRec] = val;
                 }
                 result = val;
             }
@@ -1292,33 +1304,6 @@ namespace GKCore
         #endregion
 
         #region Tree utils
-
-        public static void InitExtData(GDMTree tree)
-        {
-            if (tree == null)
-                throw new ArgumentNullException("tree");
-
-            int num = tree.RecordsCount;
-            for (int i = 0; i < num; i++) {
-                GDMRecord rec = tree[i];
-                rec.ExtData = null;
-            }
-        }
-
-        public static void InitExtCounts(GDMTree tree, int value)
-        {
-            if (tree == null)
-                throw new ArgumentNullException("tree");
-
-            int num = tree.RecordsCount;
-            for (int i = 0; i < num; i++) {
-                GDMRecord rec = tree[i];
-
-                if (rec is GDMIndividualRecord) {
-                    rec.ExtData = value;
-                }
-            }
-        }
 
         public static void PrepareHeader(GDMTree tree, string fileName, GEDCOMCharacterSet charSet, bool zeroRev)
         {

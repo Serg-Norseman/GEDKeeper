@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using BSLib;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
@@ -41,7 +42,6 @@ namespace GKCore.Tools
             IProgressController progress = AppHost.Progress;
             progress.ProgressInit(LangMan.LS(LSID.LSID_PatSearch), context.Tree.RecordsCount);
 
-            GKUtils.InitExtCounts(context.Tree, -1);
             try {
                 int num = context.Tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
@@ -129,11 +129,11 @@ namespace GKCore.Tools
             return patList;
         }
 
-        private static void PL_WalkDescLinks(Graph graph, PGNode prevNode, GDMIndividualRecord ancestor)
+        private static void PL_WalkDescLinks(Graph graph, GKVarCache<GDMFamilyRecord, PGNode> pgNodes, PGNode prevNode, GDMIndividualRecord ancestor)
         {
             for (int i = 0, count = ancestor.SpouseToFamilyLinks.Count; i < count; i++) {
-                GDMFamilyRecord family = ancestor.SpouseToFamilyLinks[i].Family;
-                PGNode node = family.ExtData as PGNode;
+                var family = ancestor.SpouseToFamilyLinks[i].Family;
+                var node = pgNodes[family];
 
                 if (node != null && node.Type != PGNodeType.Default) {
                     Vertex vtx = graph.FindVertex(node.FamilyXRef);
@@ -150,7 +150,7 @@ namespace GKCore.Tools
 
                 for (int k = 0, count2 = family.Children.Count; k < count2; k++) {
                     GDMIndividualRecord child = family.Children[k].Individual;
-                    PL_WalkDescLinks(graph, prevNode, child);
+                    PL_WalkDescLinks(graph, pgNodes, prevNode, child);
                 }
             }
         }
@@ -162,8 +162,7 @@ namespace GKCore.Tools
 
             try {
                 using (ExtList<PatriarchObj> patList = GetPatriarchsList(context, gensMin, datesCheck)) {
-                    // init
-                    GKUtils.InitExtData(context.Tree);
+                    var pgNodes = new GKVarCache<GDMFamilyRecord, PGNode>();
 
                     // prepare
                     int count = patList.Count;
@@ -174,7 +173,7 @@ namespace GKCore.Tools
                         int count2 = iRec.SpouseToFamilyLinks.Count;
                         for (int k = 0; k < count2; k++) {
                             GDMFamilyRecord family = iRec.SpouseToFamilyLinks[k].Family;
-                            family.ExtData = new PGNode(family.XRef, PGNodeType.Patriarch, patNode.DescGenerations);
+                            pgNodes[family] = new PGNode(family.XRef, PGNodeType.Patriarch, patNode.DescGenerations);
                         }
                     }
 
@@ -192,14 +191,14 @@ namespace GKCore.Tools
                                 GDMFamilyRecord cross = TreeTools.PL_SearchIntersection(patr.IRec, patr2.IRec);
 
                                 if (cross != null) {
-                                    PGNode node = (PGNode)cross.ExtData;
+                                    var node = pgNodes[cross];
 
                                     if (node != null && node.Type == PGNodeType.Patriarch) {
                                         // dummy
                                     } else {
                                         int size = GKUtils.GetDescGenerations(cross.Husband.Individual);
                                         if (size == 0) size = 1;
-                                        cross.ExtData = new PGNode(cross.XRef, PGNodeType.Intersection, size);
+                                        pgNodes[cross] = new PGNode(cross.XRef, PGNodeType.Intersection, size);
                                     }
                                 }
                             }
@@ -214,11 +213,8 @@ namespace GKCore.Tools
                     int count3 = patList.Count;
                     for (int i = 0; i < count3; i++) {
                         PatriarchObj patNode = patList[i];
-                        PL_WalkDescLinks(graph, null, patNode.IRec);
+                        PL_WalkDescLinks(graph, pgNodes, null, patNode.IRec);
                     }
-
-                    // clear
-                    GKUtils.InitExtData(context.Tree);
 
                     /*if (gpl_params.aLoneSuppress) {
 				for (int i = aList.Count - 1; i >= 0; i--) {

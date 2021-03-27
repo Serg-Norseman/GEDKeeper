@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -89,6 +89,7 @@ namespace GKCore.Charts
         private IImage fExpPic;
         private IImage fInfoPic;
         private IImage fPersExpPic;
+        private GKVarCache<GDMIndividualRecord, bool> fFilterData;
         private KinshipsGraph fGraph;
         private bool fHasMediaFail;
         private TreeChartPerson fHighlightedPerson;
@@ -236,6 +237,7 @@ namespace GKCore.Charts
             fDepthLimit = -1;
             fEdges = new int[256];
             fFilter = new ChartFilter();
+            fFilterData = new GKVarCache<GDMIndividualRecord, bool>();
             fGraph = null;
             fPersons = new PersonList(true);
             fPreparedFamilies = new List<string>();
@@ -537,7 +539,7 @@ namespace GKCore.Charts
 
                 case FilterGroupMode.Selected:
                     GDMSourceRecord filterSource;
-                    if (fFilter.SourceRef == "") {
+                    if (string.IsNullOrEmpty(fFilter.SourceRef)) {
                         filterSource = null;
                     } else {
                         filterSource = fTree.XRefIndex_Find(fFilter.SourceRef) as GDMSourceRecord;
@@ -548,7 +550,7 @@ namespace GKCore.Charts
                     break;
             }
 
-            if ((fFilter.BranchCut != ChartFilter.BranchCutType.None) && (!(bool)person.ExtData)) {
+            if ((fFilter.BranchCut != ChartFilter.BranchCutType.None) && (!fFilterData[person])) {
                 result = false;
             }
 
@@ -1224,9 +1226,9 @@ namespace GKCore.Charts
 
             if (fFilter.BranchCut == ChartFilter.BranchCutType.None) return;
 
-            GKUtils.InitExtCounts(fTree, 0);
+            fFilterData.Clear();
             DoDescendantsFilter(root);
-            root.ExtData = true;
+            fFilterData[root] = true;
         }
 
         private bool DoDescendantsFilter(GDMIndividualRecord person)
@@ -1258,7 +1260,7 @@ namespace GKCore.Charts
                 }
             }
 
-            person.ExtData = result;
+            fFilterData[person] = result;
             return result;
         }
 
@@ -1743,7 +1745,6 @@ namespace GKCore.Charts
             if (!GlobalOptions.Instance.CheckTreeSize) return result;
 
             if (chartKind == TreeChartKind.ckAncestors || chartKind == TreeChartKind.ckBoth) {
-                GKUtils.InitExtCounts(tree, -1);
                 int ancCount = GKUtils.GetAncestorsCount(iRec);
                 if (ancCount > 2048) {
                     AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_AncestorsNumberIsInvalid), ancCount.ToString()));
@@ -1752,7 +1753,6 @@ namespace GKCore.Charts
             }
 
             if (chartKind >= TreeChartKind.ckDescendants && chartKind <= TreeChartKind.ckBoth) {
-                GKUtils.InitExtCounts(tree, -1);
                 int descCount = GKUtils.GetDescendantsCount(iRec);
                 if (descCount > 2048) {
                     AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_DescendantsNumberIsInvalid), descCount.ToString()));

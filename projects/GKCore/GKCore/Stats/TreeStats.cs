@@ -334,12 +334,8 @@ namespace GKCore.Stats
             if (values == null)
                 throw new ArgumentNullException("values");
 
-            if (mode < StatsMode.smDescGenerations) {
-                GKUtils.InitExtCounts(fTree, -1);
-            }
-
             // special buffers for difficult calculations with averaged ages
-            Dictionary<string, List<int>> xvals = new Dictionary<string, List<int>>();
+            var xvals = new Dictionary<string, List<int>>();
 
             int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++)

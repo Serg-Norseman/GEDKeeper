@@ -52,7 +52,6 @@ namespace GDModel
     {
         private string fAutomatedRecordID;
         private GDMChangeDate fChangeDate;
-        private object fExtData;
         private string fUID;
         private string fXRef;
 
@@ -73,16 +72,9 @@ namespace GDModel
             get { return fChangeDate; }
         }
 
-        // TODO: need to remove from here, replace with other methods
-        public object ExtData
-        {
-            get { return fExtData; }
-            set { fExtData = value; }
-        }
-
         public GDMList<GDMMultimediaLink> MultimediaLinks
         {
-            get	{ return fMultimediaLinks; }
+            get { return fMultimediaLinks; }
         }
 
         public GDMList<GDMNotes> Notes

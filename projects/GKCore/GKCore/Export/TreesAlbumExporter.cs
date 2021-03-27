@@ -92,7 +92,6 @@ namespace GKCore.Export
 
                 fPatList = PatriarchsMan.GetPatriarchsList(fBase.Context, 2, false);
                 fPatList.QuickSort(PatriarchsCompare);
-                GKUtils.InitExtCounts(fBase.Context.Tree, 0);
 
                 int num = fPatList.Count;
                 for (int i = 0; i < num; i++) {
@@ -197,12 +196,14 @@ namespace GKCore.Export
             treeBox.GenChart(indi.IRec, indi.TreeKind, false);
             treeBox.RenderImage(RenderTarget.Printer, true);
 
+            var indiNums = new GKVarCache<GDMIndividualRecord, int>();
+
             for (int i = 0; i < treeBox.Model.Persons.Count; i++) {
                 TreeChartPerson person = treeBox.Model.Persons[i];
                 GDMIndividualRecord indiRec = person.Rec;
                 if (indiRec == null) continue;
 
-                int iNum = (int)indiRec.ExtData;
+                int iNum = indiNums[indiRec];
 
                 var offset = treeBox.Model.GetOffsets();
                 int ix = offset.X + person.Rect.Left;
@@ -211,7 +212,7 @@ namespace GKCore.Export
                 fRenderer.DrawAnchor(iRef, iRef, fTextFont, null, ix, iy);
 
                 iNum += 1;
-                indiRec.ExtData = iNum;
+                indiNums[indiRec] = iNum;
 
                 if (!person.CanExpand) continue;
 

@@ -28,11 +28,9 @@ namespace GDModel
     public class GDMRecordTests
     {
         [Test]
-        public void Test_ExtData()
+        public void Test_GDMRecord()
         {
             GDMRecord obj = new GDMRecord(null);
-            obj.ExtData = this;
-            Assert.AreEqual(this, obj.ExtData);
             obj.Dispose();
         }
     }

@@ -61,8 +61,12 @@ namespace GDModel.Providers
                         byte[] outArray;
                         outArray = outStream.ToArray();
 
+                        string inStr = Encoding.ASCII.GetString(inArray);
+                        // convert to GK GEDCOM
+                        inStr = inStr.Replace("1 ALIA @I11@", "1 ASSO @I11@\r\n2 RELA possible_duplicate");
+
                         string outStr = Encoding.ASCII.GetString(outArray);
-                        Assert.AreEqual(Encoding.ASCII.GetString(inArray), outStr);
+                        Assert.AreEqual(inStr, outStr);
                     }
                 }
             }

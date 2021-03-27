@@ -259,6 +259,7 @@
     <Compile Include="GKCore\Cultures\CulturesPool.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GDModel\Providers\FileProvider.cs" />
+    <Compile Include="GKCore\GKVarCache.cs" />
     <Compile Include="GKCore\GKException.cs" />
     <Compile Include="GKCore\Import\ImportUtils.cs" />
     <Compile Include="GKCore\Interfaces\IBaseContext.cs" />
