@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib.Calendar;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
@@ -569,18 +568,6 @@ namespace GDModel
             }
 
             return result;
-        }
-
-        private static int EventsCompare(GDMPointer cp1, GDMPointer cp2)
-        {
-            UDN udn1 = ((GDMFamilyRecord)cp1.Value).GetUDN(GEDCOMTagName.MARR);
-            UDN udn2 = ((GDMFamilyRecord)cp2.Value).GetUDN(GEDCOMTagName.MARR);
-            return udn1.CompareTo(udn2);
-        }
-
-        public void SortSpouses()
-        {
-            fSpouseToFamilyLinks.Sort(EventsCompare);
         }
     }
 }

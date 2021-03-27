@@ -1855,7 +1855,7 @@ namespace GKCore
             if (famRec == null) return;
 
             if (GlobalOptions.Instance.AutoSortChildren) {
-                famRec.SortChilds();
+                fTree.SortChilds(famRec);
             }
         }
 
@@ -1868,7 +1868,7 @@ namespace GKCore
             }
 
             if (GlobalOptions.Instance.AutoSortSpouses) {
-                indiRec.SortSpouses();
+                fTree.SortSpouses(indiRec);
             }
         }
 

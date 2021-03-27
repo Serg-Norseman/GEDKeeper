@@ -767,7 +767,7 @@ namespace GEDmill.HTML
                     }
 
                     // Finally write source link and extra info
-                    f.WriteLine("<li>{0}{1}</li>", sourCit.MakeLinkText(i + 1), extraInfo);
+                    f.WriteLine("<li>{0}{1}</li>", fTree.MakeLinkText(sourCit, i + 1), extraInfo);
                 }
                 f.WriteLine("          </ul>");
                 f.WriteLine("        </div> <!-- references -->");

@@ -136,7 +136,7 @@ namespace GDModel
                 });
 
                 srcCit.Clear();
-                srcCit.Value = null;
+                srcCit.XRef = string.Empty;
 
                 Assert.IsTrue(srcCit.IsEmpty(), "srcCit.IsEmpty()"); // its pointer
 

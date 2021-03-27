@@ -115,7 +115,7 @@ namespace GKCore.Controllers
             string fileName = AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
-            TreeTools.CheckRelations(fSplitList);
+            TreeTools.CheckRelations(fBase.Context.Tree, fSplitList);
 
             var tree = fBase.Context.Tree;
             GKUtils.PrepareHeader(tree, fileName, GlobalOptions.Instance.DefCharacterSet, true);

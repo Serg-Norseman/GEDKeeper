@@ -284,11 +284,11 @@ namespace GKCore
             GDMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckRelations(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckRelations(null, null); });
 
             List<GDMRecord> splitList = new List<GDMRecord>();
             splitList.Add(iRec);
-            TreeTools.CheckRelations(splitList);
+            TreeTools.CheckRelations(fBaseWin.Context.Tree, splitList);
         }
 
         [Test]

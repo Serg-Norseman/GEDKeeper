@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib.Calendar;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
@@ -233,18 +232,6 @@ namespace GDModel
 
             float match = GetStrMatch(GetFamilyString(), otherFam.GetFamilyString(), matchParams);
             return match;
-        }
-
-        private static int EventsCompare(GDMPointer cp1, GDMPointer cp2)
-        {
-            UDN udn1 = ((GDMIndividualRecord)cp1.Value).GetUDN(GEDCOMTagName.BIRT);
-            UDN udn2 = ((GDMIndividualRecord)cp2.Value).GetUDN(GEDCOMTagName.BIRT);
-            return udn1.CompareTo(udn2);
-        }
-
-        public void SortChilds()
-        {
-            fChildren.Sort(EventsCompare);
         }
 
         public GDMIndividualRecord GetSpouseBy(GDMIndividualRecord spouse)

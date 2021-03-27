@@ -64,7 +64,7 @@ namespace GDModel
             Assert.AreEqual(GDMOrdinanceProcessFlag.opYes, submRec.OrdinanceProcessFlag);
 
             submRec.Submitter.XRef = submitterXRef;
-            GDMSubmitterRecord subr = submRec.Submitter.Value as GDMSubmitterRecord;
+            GDMSubmitterRecord subr = fContext.Tree.GetPtrValue<GDMSubmitterRecord>(submRec.Submitter);
             Assert.IsNotNull(subr);
 
 

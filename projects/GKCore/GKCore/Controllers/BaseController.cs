@@ -861,7 +861,8 @@ namespace GKCore.Controllers
             if (father != null) {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, father);
                 if (family != null) {
-                    if (family.Husband.Value == null) {
+                    var husb = baseWin.Context.Tree.GetPtrValue<GDMIndividualRecord>(family.Husband);
+                    if (husb == null) {
                         // new family
                         result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, father);
                     } else {
@@ -898,7 +899,8 @@ namespace GKCore.Controllers
             if (mother != null) {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, mother);
                 if (family != null) {
-                    if (family.Wife.Value == null) {
+                    var wife = baseWin.Context.Tree.GetPtrValue<GDMIndividualRecord>(family.Wife);
+                    if (wife == null) {
                         // new family
                         result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, mother);
                     } else {

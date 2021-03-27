@@ -915,7 +915,7 @@ namespace GEDmill
                 if (lvi is CListableBool) {
                     GDMSourceRecord sr = (GDMSourceRecord)((CListableBool)lvi).Record;
                     if (sr != null) {
-                        int nHiddenThisTime = sr.SetAllMFRsVisible(false);
+                        int nHiddenThisTime = fBase.Context.Tree.SetAllMFRsVisible(sr, false);
                         nHidden += nHiddenThisTime;
                         if (nHiddenThisTime > 0) {
                             SetSourceSubItems((CListableBool)lvi, sr, true); // Updates list

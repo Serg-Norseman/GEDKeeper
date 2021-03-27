@@ -73,12 +73,12 @@ namespace GEDmill
             return nas;
         }
 
-        public static List<GDMFamilyRecord> GetFamilyList(this GDMIndividualRecord record)
+        public static List<GDMFamilyRecord> GetFamilyList(this GDMTree tree, GDMIndividualRecord record)
         {
             var result = new List<GDMFamilyRecord>();
 
             foreach (var link in record.SpouseToFamilyLinks) {
-                var family = link.Value as GDMFamilyRecord;
+                var family = tree.GetPtrValue<GDMFamilyRecord>(link);
                 if (family != null) {
                     result.Add(family);
                 }
@@ -159,9 +159,9 @@ namespace GEDmill
         }
 
         // Returns a string to use in the list of references at the bottom of the page
-        public static string MakeLinkText(this GDMSourceCitation sourCit, uint uSourceCount)
+        public static string MakeLinkText(this GDMTree tree, GDMSourceCitation sourCit, uint uSourceCount)
         {
-            var sourRec = sourCit.Value as GDMSourceRecord;
+            var sourRec = tree.GetPtrValue<GDMSourceRecord>(sourCit);
             return string.Concat(uSourceCount.ToString(), ". ", /*m_sSourceDescription*/sourRec.ShortTitle);
         }
 
@@ -169,47 +169,47 @@ namespace GEDmill
         {
             // Restrict sources connected with individual directly
             foreach (GDMSourceCitation sc in iRec.SourceCitations) {
-                RestrictSource(sc, true);
+                RestrictSource(tree, sc, true);
             }
 
             // Restrict sources connected with name
             foreach (GDMPersonalName pns in iRec.PersonalNames) {
                 foreach (GDMSourceCitation sc in pns.SourceCitations) {
-                    RestrictSource(sc, true);
+                    RestrictSource(tree, sc, true);
                 }
             }
 
             // Restrict sources connected with events
             foreach (GDMCustomEvent ies in iRec.Events) {
                 foreach (GDMSourceCitation sc in ies.SourceCitations) {
-                    RestrictSource(sc, true);
+                    RestrictSource(tree, sc, true);
                 }
             }
 
             // Restrict sources connected with m_associationStructures
             foreach (GDMAssociation ass in iRec.Associations) {
                 foreach (GDMSourceCitation sc in ass.SourceCitations) {
-                    RestrictSource(sc, true);
+                    RestrictSource(tree, sc, true);
                 }
             }
         }
 
         // Marks the given source citation as (un)restricted
-        public static void RestrictSource(GDMSourceCitation sc, bool visible)
+        public static void RestrictSource(GDMTree tree, GDMSourceCitation sc, bool visible)
         {
-            if (sc != null) {
-                GDMSourceRecord sr = sc.Value as GDMSourceRecord;
+            if (tree != null && sc != null) {
+                var sr = tree.GetPtrValue<GDMSourceRecord>(sc);
                 if (sr != null) {
                     sr.SetVisibility(visible);
                 }
             }
         }
 
-        public static int SetAllMFRsVisible(this GDMRecord record, bool visible)
+        public static int SetAllMFRsVisible(this GDMTree tree, GDMRecord record, bool visible)
         {
             int nChanged = 0;
             foreach (GDMMultimediaLink mfr in record.MultimediaLinks) {
-                var mmRec = mfr.Value as GDMMultimediaRecord;
+                var mmRec = tree.GetPtrValue<GDMMultimediaRecord>(mfr);
                 if (mmRec != null && mmRec.GetVisibility() != visible) {
                     mmRec.SetVisibility(visible);
                     nChanged++;

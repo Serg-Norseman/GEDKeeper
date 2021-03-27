@@ -153,7 +153,7 @@ namespace GDModel
             mmLink = indiRec.SetPrimaryMultimediaLink(mmRec);
             Assert.IsNotNull(mmLink);
             mmLink = indiRec.GetPrimaryMultimediaLink();
-            Assert.AreEqual(mmRec, mmLink.Value);
+            Assert.AreEqual(mmRec, fContext.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink));
 
 
             Assert.AreEqual(-1, indiRec.IndexOfGroup(null));
@@ -216,7 +216,7 @@ namespace GDModel
 
             indiRec.ReplaceXRefs(new GDMXRefReplacer());
 
-            indiRec.SortSpouses();
+            fContext.Tree.SortSpouses(indiRec);
 
             Assert.AreEqual(0, indiRec.GetTotalChildsCount());
         }

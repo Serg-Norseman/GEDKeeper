@@ -251,7 +251,7 @@ namespace GDModel.Providers
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_min_indented.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
 
-                var subm = ctx.Tree.Header.Submitter.Value as GDMSubmitterRecord;
+                var subm = ctx.Tree.GetPtrValue<GDMSubmitterRecord>(ctx.Tree.Header.Submitter);
                 Assert.IsNotNull(subm);
                 Assert.AreEqual("John Doe", subm.Name.FullName);
             }
@@ -382,19 +382,19 @@ namespace GDModel.Providers
                 var srCit = iRec1.SourceCitations[0];
                 Assert.IsTrue(srCit.IsPointer);
                 Assert.AreEqual("21 APR 2020", srCit.Data.Date.StringValue);
-                var sourceRec = srCit.Value as GDMSourceRecord;
+                var sourceRec = ctx.Tree.GetPtrValue<GDMSourceRecord>(srCit);
                 Assert.AreEqual(1, sourceRec.MultimediaLinks.Count);
 
                 srCit = iRec1.SourceCitations[1];
                 Assert.IsTrue(srCit.IsPointer);
                 Assert.AreEqual("23 APR 2020", srCit.Data.Date.StringValue);
-                sourceRec = srCit.Value as GDMSourceRecord;
+                sourceRec = ctx.Tree.GetPtrValue<GDMSourceRecord>(srCit);
                 Assert.AreEqual(1, sourceRec.MultimediaLinks.Count);
 
                 srCit = iRec1.SourceCitations[2];
                 Assert.IsTrue(srCit.IsPointer);
                 Assert.AreEqual("25 APR 2020", srCit.Data.Date.StringValue);
-                sourceRec = srCit.Value as GDMSourceRecord;
+                sourceRec = ctx.Tree.GetPtrValue<GDMSourceRecord>(srCit);
                 Assert.AreEqual(1, sourceRec.MultimediaLinks.Count);
             }
         }

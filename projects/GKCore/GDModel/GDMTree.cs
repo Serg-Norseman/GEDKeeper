@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using BSLib.Calendar;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -375,7 +376,7 @@ namespace GDModel
 
         public T GetPtrValue<T>(GDMPointer ptr) where T : GDMRecord
         {
-            return (ptr == null) ? default(T) : XRefIndex_Find(ptr.XRef) as T;
+            return (ptr == null || !ptr.IsPointer) ? default(T) : XRefIndex_Find(ptr.XRef) as T;
         }
 
         public void SetPtrValue(GDMPointer ptr, GDMRecord record)
@@ -723,6 +724,42 @@ namespace GDModel
                         }
                     }
                 }
+            }
+        }
+
+        private int ChildrenEventsCompare(GDMPointer cp1, GDMPointer cp2)
+        {
+            var child1 = GetPtrValue<GDMIndividualRecord>(cp1);
+            var child2 = GetPtrValue<GDMIndividualRecord>(cp2);
+
+            UDN udn1 = child1.GetUDN(GEDCOMTagName.BIRT);
+            UDN udn2 = child2.GetUDN(GEDCOMTagName.BIRT);
+
+            return udn1.CompareTo(udn2);
+        }
+
+        public void SortChilds(GDMFamilyRecord famRec)
+        {
+            if (famRec != null) {
+                famRec.Children.Sort(ChildrenEventsCompare);
+            }
+        }
+
+        private int SpousesEventsCompare(GDMPointer cp1, GDMPointer cp2)
+        {
+            var spouse1 = GetPtrValue<GDMFamilyRecord>(cp1);
+            var spouse2 = GetPtrValue<GDMFamilyRecord>(cp2);
+
+            UDN udn1 = spouse1.GetUDN(GEDCOMTagName.MARR);
+            UDN udn2 = spouse2.GetUDN(GEDCOMTagName.MARR);
+
+            return udn1.CompareTo(udn2);
+        }
+
+        public void SortSpouses(GDMIndividualRecord indiRec)
+        {
+            if (indiRec != null) {
+                indiRec.SpouseToFamilyLinks.Sort(SpousesEventsCompare);
             }
         }
 

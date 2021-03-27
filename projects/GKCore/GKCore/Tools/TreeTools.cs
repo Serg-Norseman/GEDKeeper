@@ -603,7 +603,7 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckIndividualRecord(GDMIndividualRecord iRec, List<CheckObj> checksList)
+        private static void CheckIndividualRecord(GDMTree tree, GDMIndividualRecord iRec, List<CheckObj> checksList)
         {
             CheckRecordWithEvents(iRec, checksList);
 
@@ -657,12 +657,12 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckFamilyRecord(GDMFamilyRecord fRec, List<CheckObj> checksList)
+        private static void CheckFamilyRecord(GDMTree tree, GDMFamilyRecord fRec, List<CheckObj> checksList)
         {
             CheckRecordWithEvents(fRec, checksList);
 
-            GDMRecord husb = fRec.Husband.Value;
-            GDMRecord wife = fRec.Wife.Value;
+            var husb = tree.GetPtrValue<GDMIndividualRecord>(fRec.Husband);
+            var wife = tree.GetPtrValue<GDMIndividualRecord>(fRec.Wife);
 
             bool empty = (fRec.Notes.Count == 0 && fRec.SourceCitations.Count == 0 && fRec.MultimediaLinks.Count == 0 && fRec.UserReferences.Count == 0);
             empty = empty && (fRec.Events.Count == 0 && fRec.Children.Count == 0);
@@ -794,11 +794,11 @@ namespace GKCore.Tools
                     GDMRecord rec = tree[i];
                     switch (rec.RecordType) {
                         case GDMRecordType.rtIndividual:
-                            CheckIndividualRecord(rec as GDMIndividualRecord, checksList);
+                            CheckIndividualRecord(tree, rec as GDMIndividualRecord, checksList);
                             break;
 
                         case GDMRecordType.rtFamily:
-                            CheckFamilyRecord(rec as GDMFamilyRecord, checksList);
+                            CheckFamilyRecord(tree, rec as GDMFamilyRecord, checksList);
                             break;
 
                         case GDMRecordType.rtMultimedia:
@@ -878,113 +878,113 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckRelations_CheckNotes(List<GDMRecord> splitList, IGDMStructWithNotes tag)
+        private static void CheckRelations_CheckNotes(GDMTree tree, List<GDMRecord> splitList, IGDMStructWithNotes tag)
         {
             if (tag == null) return;
 
             for (int i = 0, num = tag.Notes.Count; i < num; i++) {
-                CheckRelations_CheckRecord(splitList, tag.Notes[i].Value);
+                CheckRelations_CheckRecord(tree, splitList, tree.GetPtrValue<GDMRecord>(tag.Notes[i]));
             }
         }
 
-        private static void CheckRelations_CheckSourceCit(List<GDMRecord> splitList, IGDMStructWithSourceCitations tag)
+        private static void CheckRelations_CheckSourceCit(GDMTree tree, List<GDMRecord> splitList, IGDMStructWithSourceCitations tag)
         {
             if (tag == null) return;
 
             for (int i = 0, num = tag.SourceCitations.Count; i < num; i++) {
-                CheckRelations_CheckRecord(splitList, tag.SourceCitations[i].Value);
+                CheckRelations_CheckRecord(tree, splitList, tree.GetPtrValue<GDMRecord>(tag.SourceCitations[i]));
             }
         }
 
-        private static void CheckRelations_CheckMediaLink(List<GDMRecord> splitList, IGDMStructWithMultimediaLinks tag)
+        private static void CheckRelations_CheckMediaLink(GDMTree tree, List<GDMRecord> splitList, IGDMStructWithMultimediaLinks tag)
         {
             if (tag == null) return;
 
             for (int i = 0, num = tag.MultimediaLinks.Count; i < num; i++) {
-                CheckRelations_CheckRecord(splitList, tag.MultimediaLinks[i].Value);
+                CheckRelations_CheckRecord(tree, splitList, tree.GetPtrValue<GDMRecord>(tag.MultimediaLinks[i]));
             }
         }
 
-        private static void CheckRelations_CheckSWL(List<GDMRecord> splitList, IGDMStructWithLists tag)
+        private static void CheckRelations_CheckSWL(GDMTree tree, List<GDMRecord> splitList, IGDMStructWithLists tag)
         {
             if (tag == null) return;
 
-            CheckRelations_CheckNotes(splitList, tag);
-            CheckRelations_CheckSourceCit(splitList, tag);
-            CheckRelations_CheckMediaLink(splitList, tag);
+            CheckRelations_CheckNotes(tree, splitList, tag);
+            CheckRelations_CheckSourceCit(tree, splitList, tag);
+            CheckRelations_CheckMediaLink(tree, splitList, tag);
         }
 
-        private static void CheckRelations_CheckRecord(List<GDMRecord> splitList, GDMRecord rec)
+        private static void CheckRelations_CheckRecord(GDMTree tree, List<GDMRecord> splitList, GDMRecord rec)
         {
             if (rec == null) return;
 
-            CheckRelations_CheckSWL(splitList, rec);
+            CheckRelations_CheckSWL(tree, splitList, rec);
         }
 
-        private static void CheckRelations_CheckIndividual(List<GDMRecord> splitList, GDMIndividualRecord iRec)
+        private static void CheckRelations_CheckIndividual(GDMTree tree, List<GDMRecord> splitList, GDMIndividualRecord iRec)
         {
             if (iRec == null) return;
 
-            CheckRelations_CheckRecord(splitList, iRec);
+            CheckRelations_CheckRecord(tree, splitList, iRec);
 
             for (int i = 0, num = iRec.ChildToFamilyLinks.Count; i < num; i++) {
                 var cfl = iRec.ChildToFamilyLinks[i];
-                CheckRelations_CheckNotes(splitList, cfl);
-                CheckRelations_CheckFamily(splitList, cfl.Family);
+                CheckRelations_CheckNotes(tree, splitList, cfl);
+                CheckRelations_CheckFamily(tree, splitList, cfl.Family);
             }
 
             for (int i = 0, num = iRec.SpouseToFamilyLinks.Count; i < num; i++) {
                 var sfl = iRec.SpouseToFamilyLinks[i];
-                CheckRelations_CheckNotes(splitList, sfl);
-                CheckRelations_CheckFamily(splitList, sfl.Family);
+                CheckRelations_CheckNotes(tree, splitList, sfl);
+                CheckRelations_CheckFamily(tree, splitList, sfl.Family);
             }
 
             for (int i = 0, num = iRec.Events.Count; i < num; i++) {
-                CheckRelations_CheckSWL(splitList, iRec.Events[i]);
+                CheckRelations_CheckSWL(tree, splitList, iRec.Events[i]);
             }
 
             for (int i = 0, num = iRec.Associations.Count; i < num; i++) {
                 var asso = iRec.Associations[i];
-                CheckRelations_CheckNotes(splitList, asso);
-                CheckRelations_CheckSourceCit(splitList, asso);
-                CheckRelations_CheckIndividual(splitList, asso.Individual);
+                CheckRelations_CheckNotes(tree, splitList, asso);
+                CheckRelations_CheckSourceCit(tree, splitList, asso);
+                CheckRelations_CheckIndividual(tree, splitList, asso.Individual);
             }
 
             for (int i = 0, num = iRec.Groups.Count; i < num; i++) {
-                CheckRelations_CheckRecord(splitList, iRec.Groups[i].Value);
+                CheckRelations_CheckRecord(tree, splitList, tree.GetPtrValue<GDMRecord>(iRec.Groups[i]));
             }
         }
 
-        private static void CheckRelations_CheckFamily(List<GDMRecord> splitList, GDMFamilyRecord fRec)
+        private static void CheckRelations_CheckFamily(GDMTree tree, List<GDMRecord> splitList, GDMFamilyRecord fRec)
         {
             if (fRec == null) return;
 
-            CheckRelations_CheckRecord(splitList, fRec);
+            CheckRelations_CheckRecord(tree, splitList, fRec);
 
-            CheckRelations_CheckRecord(splitList, fRec.Husband.Value);
-            CheckRelations_CheckRecord(splitList, fRec.Wife.Value);
+            CheckRelations_CheckRecord(tree, splitList, tree.GetPtrValue<GDMRecord>(fRec.Husband));
+            CheckRelations_CheckRecord(tree, splitList, tree.GetPtrValue<GDMRecord>(fRec.Wife));
 
             for (int i = 0, num = fRec.Children.Count; i < num; i++) {
-                CheckRelations_CheckRecord(splitList, fRec.Children[i].Value);
+                CheckRelations_CheckRecord(tree, splitList, tree.GetPtrValue<GDMRecord>(fRec.Children[i]));
             }
 
             for (int i = 0, num = fRec.Events.Count; i < num; i++) {
-                CheckRelations_CheckSWL(splitList, fRec.Events[i]);
+                CheckRelations_CheckSWL(tree, splitList, fRec.Events[i]);
             }
         }
 
-        private static void CheckRelations_CheckSource(List<GDMRecord> splitList, GDMSourceRecord sRec)
+        private static void CheckRelations_CheckSource(GDMTree tree, List<GDMRecord> splitList, GDMSourceRecord sRec)
         {
             if (sRec == null) return;
 
-            CheckRelations_CheckRecord(splitList, sRec);
+            CheckRelations_CheckRecord(tree, splitList, sRec);
 
             for (int i = 0, num = sRec.RepositoryCitations.Count; i < num; i++) {
-                CheckRelations_CheckRecord(splitList, sRec.RepositoryCitations[i].Value);
+                CheckRelations_CheckRecord(tree, splitList, tree.GetPtrValue<GDMRecord>(sRec.RepositoryCitations[i]));
             }
         }
 
-        public static void CheckRelations(List<GDMRecord> splitList)
+        public static void CheckRelations(GDMTree tree, List<GDMRecord> splitList)
         {
             if (splitList == null)
                 throw new ArgumentNullException("splitList");
@@ -994,31 +994,31 @@ namespace GKCore.Tools
                 GDMRecord rec = splitList[i];
                 switch (rec.RecordType) {
                     case GDMRecordType.rtIndividual:
-                        CheckRelations_CheckIndividual(splitList, rec as GDMIndividualRecord);
+                        CheckRelations_CheckIndividual(tree, splitList, rec as GDMIndividualRecord);
                         break;
 
                     case GDMRecordType.rtFamily:
-                        CheckRelations_CheckFamily(splitList, rec as GDMFamilyRecord);
+                        CheckRelations_CheckFamily(tree, splitList, rec as GDMFamilyRecord);
                         break;
 
                     case GDMRecordType.rtNote:
-                        CheckRelations_CheckRecord(splitList, rec);
+                        CheckRelations_CheckRecord(tree, splitList, rec);
                         break;
 
                     case GDMRecordType.rtMultimedia:
-                        CheckRelations_CheckRecord(splitList, rec);
+                        CheckRelations_CheckRecord(tree, splitList, rec);
                         break;
 
                     case GDMRecordType.rtSource:
-                        CheckRelations_CheckSource(splitList, rec as GDMSourceRecord);
+                        CheckRelations_CheckSource(tree, splitList, rec as GDMSourceRecord);
                         break;
 
                     case GDMRecordType.rtRepository:
-                        CheckRelations_CheckRecord(splitList, rec);
+                        CheckRelations_CheckRecord(tree, splitList, rec);
                         break;
 
                     case GDMRecordType.rtSubmitter:
-                        CheckRelations_CheckRecord(splitList, rec);
+                        CheckRelations_CheckRecord(tree, splitList, rec);
                         break;
                 }
             }

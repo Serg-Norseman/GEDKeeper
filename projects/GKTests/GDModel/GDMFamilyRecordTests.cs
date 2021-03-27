@@ -49,8 +49,8 @@ namespace GDModel
             famRec.AddChild(indiv);
             Assert.AreEqual(0, famRec.IndexOfChild(indiv));
 
-            famRec.Husband.Value = tree.CreateIndividual();
-            famRec.Wife.Value = tree.CreateIndividual();
+            famRec.Husband.XRef = tree.CreateIndividual().XRef;
+            famRec.Wife.XRef = tree.CreateIndividual().XRef;
 
             using (GDMFamilyRecord fam2 = tree.CreateFamily()) {
                 Assert.Throws(typeof(ArgumentException), () => {
@@ -84,15 +84,15 @@ namespace GDModel
 
             //
 
-            famRec.Husband.Value = indiv;
+            famRec.Husband.XRef = indiv.XRef;
             Assert.AreEqual(indiv, famRec.Husband.Individual);
-            famRec.Husband.Value = null;
+            famRec.Husband.XRef = string.Empty;
 
             //
 
-            famRec.Wife.Value = indiv;
+            famRec.Wife.XRef = indiv.XRef;
             Assert.AreEqual(indiv, famRec.Wife.Individual);
-            famRec.Wife.Value = null;
+            famRec.Wife.XRef = string.Empty;
 
             //
 
@@ -112,7 +112,7 @@ namespace GDModel
 
             //
 
-            famRec.SortChilds();
+            tree.SortChilds(famRec);
 
             //
 

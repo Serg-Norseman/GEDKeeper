@@ -152,15 +152,9 @@ namespace GDModel
         {
             string result = null;
             try {
-                if (Value != null) {
-                    ExtRect cutoutArea;
-                    if (IsPrimaryCutout) {
-                        cutoutArea = CutoutPosition.Value;
-                    } else {
-                        cutoutArea = ExtRect.CreateEmpty();
-                    }
-
-                    GDMMultimediaRecord mmRec = (GDMMultimediaRecord)Value;
+                var mmRec = Value as GDMMultimediaRecord;
+                if (mmRec != null) {
+                    ExtRect cutoutArea = IsPrimaryCutout ? CutoutPosition.Value : ExtRect.CreateEmpty();
                     result = mmRec.UID + "-" + GKUtils.GetRectUID(cutoutArea.Left, cutoutArea.Top, cutoutArea.Right, cutoutArea.Bottom);
                 }
             } catch (Exception ex) {

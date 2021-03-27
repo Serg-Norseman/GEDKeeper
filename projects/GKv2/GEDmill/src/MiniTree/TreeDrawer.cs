@@ -302,7 +302,7 @@ namespace GEDmill.MiniTree
                     bool bAddedSubject = false;
                     int nSpouses = 0;
                     MiniTreeGroup.ECrossbar ecbCrossbar = MiniTreeGroup.ECrossbar.Solid;
-                    var alFamily = irSubject.GetFamilyList();
+                    var alFamily = fTree.GetFamilyList(irSubject);
 
                     foreach (GDMFamilyRecord fr in alFamily) {
                         GDMIndividualRecord irSpouse = fr.GetSpouseBy(irSubject);
