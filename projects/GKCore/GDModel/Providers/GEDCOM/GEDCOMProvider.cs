@@ -608,8 +608,11 @@ namespace GDModel.Providers.GEDCOM
                 curTag.ParseString(tagValue);
                 addHandler = AddAssociationTag;
             } else if (tagType == GEDCOMTagType.ALIA) {
-                curTag = indiRec.Aliases.Add(new GDMAlias(indiRec));
-                curTag.ParseString(tagValue);
+                var asso = new GDMAssociation(indiRec);
+                asso.ParseString(tagValue);
+                asso.Relation = "possible_duplicate";
+                curTag = indiRec.Associations.Add(asso);
+                addHandler = AddAssociationTag;
             } else if (GEDCOMUtils.IsIndiEvent(tagType)) {
                 curTag = indiRec.AddEvent(new GDMIndividualEvent(indiRec, tagId, tagValue));
                 addHandler = AddCustomEventTag;
@@ -641,7 +644,6 @@ namespace GDModel.Providers.GEDCOM
             WriteList(stream, level, indiRec.SpouseToFamilyLinks, WriteBaseTag);
             WriteList(stream, level, indiRec.Events, WriteCustomEvent);
             WriteList(stream, level, indiRec.Associations, WriteAssociation);
-            WriteList(stream, level, indiRec.Aliases, WriteBaseTag);
             WriteList(stream, level, indiRec.Groups, WriteBaseTag);
         }
 

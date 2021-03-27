@@ -90,7 +90,6 @@ namespace GDModel
             Assert.AreEqual("test userref", indiRec.UserReferences[0].StringValue);
 
             //
-            Assert.IsNotNull(indiRec.Aliases);
             Assert.IsNotNull(indiRec.Associations);
             Assert.IsNotNull(indiRec.UserReferences); // for GEDCOMRecord
 
@@ -204,7 +203,6 @@ namespace GDModel
                 GDMIndividualRecord ind = fContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
 
                 indi.AddAssociation("test", ind);
-                indi.Aliases.Add(new GDMAlias(indi));
 
                 using (GDMIndividualRecord indi3 = new GDMIndividualRecord(fContext.Tree)) {
                     indi.MoveTo(indi3, false);
@@ -327,14 +325,6 @@ namespace GDModel
 
             res = ind1.IsMatch(ind2, mParams);
             Assert.AreEqual(100.0f, res);
-        }
-
-        [Test]
-        public void Test_GDMAlias()
-        {
-            using (GDMAlias alias = new GDMAlias(null)) {
-                Assert.IsNotNull(alias, "alias != null");
-            }
         }
     }
 }

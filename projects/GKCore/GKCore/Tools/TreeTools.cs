@@ -955,10 +955,6 @@ namespace GKCore.Tools
                 CheckRelations_CheckIndividual(splitList, asso.Individual);
             }
 
-            for (int i = 0, num = iRec.Aliases.Count; i < num; i++) {
-                CheckRelations_CheckRecord(splitList, iRec.Aliases[i].Value);
-            }
-
             for (int i = 0, num = iRec.Groups.Count; i < num; i++) {
                 CheckRelations_CheckRecord(splitList, iRec.Groups[i].Value);
             }

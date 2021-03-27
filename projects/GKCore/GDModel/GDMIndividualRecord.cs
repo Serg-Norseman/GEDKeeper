@@ -40,7 +40,6 @@ namespace GDModel
 
     public sealed class GDMIndividualRecord : GDMRecordWithEvents
     {
-        private GDMList<GDMAlias> fAliases;
         private GDMList<GDMAssociation> fAssociations;
         private GDMList<GDMChildToFamilyLink> fChildToFamilyLinks;
         private GDMList<GDMPointer> fGroups;
@@ -48,11 +47,6 @@ namespace GDModel
         private GDMList<GDMSpouseToFamilyLink> fSpouseToFamilyLinks;
         private GDMSex fSex;
 
-
-        public GDMList<GDMAlias> Aliases
-        {
-            get { return fAliases; }
-        }
 
         public GDMList<GDMAssociation> Associations
         {
@@ -122,7 +116,6 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.INDI);
 
-            fAliases = new GDMList<GDMAlias>(this);
             fAssociations = new GDMList<GDMAssociation>(this);
             fChildToFamilyLinks = new GDMList<GDMChildToFamilyLink>(this);
             fGroups = new GDMList<GDMPointer>(this);
@@ -133,7 +126,6 @@ namespace GDModel
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fAliases.Dispose();
                 fAssociations.Dispose();
                 fChildToFamilyLinks.Dispose();
                 fGroups.Dispose();
@@ -147,7 +139,6 @@ namespace GDModel
         {
             base.TrimExcess();
 
-            fAliases.TrimExcess();
             fAssociations.TrimExcess();
             fChildToFamilyLinks.TrimExcess();
             fGroups.TrimExcess();
@@ -200,16 +191,15 @@ namespace GDModel
             }
             fGroups.Clear();
 
-            fAliases.Clear();
             fAssociations.Clear();
             fPersonalNames.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fSex == GDMSex.svUnknown) && fPersonalNames.Count == 0
-                && fChildToFamilyLinks.Count == 0 && fSpouseToFamilyLinks.Count == 0
-                && fAssociations.Count == 0 && fAliases.Count == 0 && fGroups.Count == 0;
+            return base.IsEmpty() && (fSex == GDMSex.svUnknown) && (fPersonalNames.Count == 0)
+                && (fChildToFamilyLinks.Count == 0) && (fSpouseToFamilyLinks.Count == 0)
+                && (fAssociations.Count == 0) && (fGroups.Count == 0);
         }
 
         public int IndexOfGroup(GDMGroupRecord groupRec)
@@ -362,12 +352,6 @@ namespace GDModel
                 targetIndi.Associations.Add(obj);
             }
 
-            while (fAliases.Count > 0) {
-                GDMAlias obj = fAliases.Extract(0);
-                obj.ResetOwner(targetIndi);
-                targetIndi.Aliases.Add(obj);
-            }
-
             while (fGroups.Count > 0) {
                 GDMPointer obj = fGroups.Extract(0);
                 obj.ResetOwner(targetIndi);
@@ -379,7 +363,6 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
 
-            fAliases.ReplaceXRefs(map);
             fAssociations.ReplaceXRefs(map);
             fChildToFamilyLinks.ReplaceXRefs(map);
             fGroups.ReplaceXRefs(map);
