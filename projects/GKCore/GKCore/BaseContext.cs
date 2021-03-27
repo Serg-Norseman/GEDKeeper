@@ -433,7 +433,7 @@ namespace GKCore
         /// <returns></returns>
         public GDMFamilyRecord GetMarriageFamily(GDMIndividualRecord iRec, bool canCreate = false)
         {
-            GDMFamilyRecord result = iRec.GetMarriageFamily();
+            GDMFamilyRecord result = fTree.GetMarriageFamily(iRec);
 
             if (result == null && canCreate) {
                 result = fTree.CreateFamily();
@@ -450,7 +450,7 @@ namespace GKCore
         /// <returns></returns>
         public GDMFamilyRecord GetParentsFamily(GDMIndividualRecord iRec, bool canCreate = false)
         {
-            GDMFamilyRecord result = iRec.GetParentsFamily();
+            GDMFamilyRecord result = fTree.GetParentsFamily(iRec);
 
             if (result == null && canCreate) {
                 result = fTree.CreateFamily();

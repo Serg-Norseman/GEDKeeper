@@ -280,8 +280,8 @@ namespace GKCore
         {
             GDMIndividualRecord iRec5 = fContext.Tree.XRefIndex_Find("I6") as GDMIndividualRecord;
 
-            Assert.AreEqual(0, GKUtils.GetAncestorsCount(null));
-            Assert.AreEqual(3, GKUtils.GetAncestorsCount(iRec5) - 1);
+            Assert.AreEqual(0, GKUtils.GetAncestorsCount(fContext.Tree, null));
+            Assert.AreEqual(3, GKUtils.GetAncestorsCount(fContext.Tree, iRec5) - 1);
         }
 
         [Test]

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -188,10 +188,10 @@ namespace GKCore.Controllers
             bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GDMRestriction.rnLocked);
 
             if (fPerson.ChildToFamilyLinks.Count != 0) {
-                GDMFamilyRecord family = fPerson.ChildToFamilyLinks[0].Family;
+                GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(fPerson.ChildToFamilyLinks[0]);
                 fView.SetParentsAvl(true, locked);
 
-                GDMIndividualRecord relPerson = family.Husband.Individual;
+                GDMIndividualRecord relPerson = fBase.Context.Tree.GetPtrValue(family.Husband);
                 if (relPerson != null) {
                     fView.SetFatherAvl(true, locked);
                     fView.Father.Text = GKUtils.GetNameString(relPerson, true, false);
@@ -200,7 +200,7 @@ namespace GKCore.Controllers
                     fView.Father.Text = "";
                 }
 
-                relPerson = family.Wife.Individual;
+                relPerson = fBase.Context.Tree.GetPtrValue(family.Wife);
                 if (relPerson != null) {
                     fView.SetMotherAvl(true, locked);
                     fView.Mother.Text = GKUtils.GetNameString(relPerson, true, false);
@@ -515,11 +515,11 @@ namespace GKCore.Controllers
             GDMIndividualRecord spouse = null;
             switch (fPerson.Sex) {
                 case GDMSex.svMale:
-                    spouse = family.Wife.Individual;
+                    spouse = fBase.Context.Tree.GetPtrValue(family.Wife);
                     break;
 
                 case GDMSex.svFemale:
-                    spouse = family.Husband.Individual;
+                    spouse = fBase.Context.Tree.GetPtrValue(family.Husband);
                     break;
             }
             JumpToRecord(spouse);

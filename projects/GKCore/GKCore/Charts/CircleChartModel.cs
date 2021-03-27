@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -534,7 +534,7 @@ namespace GKCore.Charts
             rootSegment.WedgeAngle = 360.0f;
 
             GDMIndividualRecord father = null, mother = null;
-            GDMFamilyRecord fam = fRootPerson.GetParentsFamily();
+            GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(fRootPerson);
             if (fam != null && fBase.Context.IsRecordAccess(fam.Restriction)) {
                 father = fam.Husband.Individual;
                 mother = fam.Wife.Individual;
@@ -592,7 +592,7 @@ namespace GKCore.Charts
                     segment.ExtRad = extRad - 50;
 
                     GDMIndividualRecord father = null, mother = null;
-                    GDMFamilyRecord fam = iRec.GetParentsFamily();
+                    GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(iRec);
                     if (fam != null && fBase.Context.IsRecordAccess(fam.Restriction)) {
                         father = fam.Husband.Individual;
                         mother = fam.Wife.Individual;

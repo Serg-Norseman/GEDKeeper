@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -334,14 +334,7 @@ namespace GKCore.Export
             fWriter.AddImage(image);
 
             GDMIndividualRecord father, mother;
-            GDMFamilyRecord fam = iRec.GetParentsFamily();
-            if (fam == null) {
-                father = null;
-                mother = null;
-            } else {
-                father = fam.Husband.Individual;
-                mother = fam.Wife.Individual;
-            }
+            fBase.Context.Tree.GetParents(iRec, out father, out mother);
 
             if (father != null) {
                 fWriter.BeginParagraph(TextAlignment.taLeft, 0, 0, 0);

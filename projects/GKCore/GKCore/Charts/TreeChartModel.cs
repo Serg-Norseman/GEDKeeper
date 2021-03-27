@@ -435,15 +435,15 @@ namespace GKCore.Charts
                     {
                         GDMChildToFamilyLink childLink = aPerson.ChildToFamilyLinks[0];
                         result.Adopted = (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted);
-                        GDMFamilyRecord family = childLink.Family;
+                        GDMFamilyRecord family = fTree.GetPtrValue(childLink);
 
                         bool isDup = (fPreparedFamilies.IndexOf(family.XRef) >= 0);
                         if (!isDup) fPreparedFamilies.Add(family.XRef);
 
                         if (fBase.Context.IsRecordAccess(family.Restriction))
                         {
-                            GDMIndividualRecord iFather = family.Husband.Individual;
-                            GDMIndividualRecord iMother = family.Wife.Individual;
+                            GDMIndividualRecord iFather = fTree.GetPtrValue(family.Husband);
+                            GDMIndividualRecord iMother = fTree.GetPtrValue(family.Wife);
 
                             bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
 
@@ -603,7 +603,7 @@ namespace GKCore.Charts
                         switch (person.Sex) {
                             case GDMSex.svFemale:
                                 {
-                                    GDMIndividualRecord sp = family.Husband.Individual;
+                                    GDMIndividualRecord sp = fTree.GetPtrValue(family.Husband);
                                     skipUnk = skipUnkSpouses && (sp == null);
 
                                     if (!skipUnk) {
@@ -629,7 +629,7 @@ namespace GKCore.Charts
 
                             case GDMSex.svMale:
                                 {
-                                    GDMIndividualRecord sp = family.Wife.Individual;
+                                    GDMIndividualRecord sp = fTree.GetPtrValue(family.Wife);
                                     skipUnk = skipUnkSpouses && (sp == null);
 
                                     if (!skipUnk) {
@@ -697,7 +697,7 @@ namespace GKCore.Charts
                             int num2 = family.Children.Count;
                             for (int j = 0; j < num2; j++)
                             {
-                                var childRec = family.Children[j].Individual;
+                                var childRec = fTree.GetPtrValue(family.Children[j]);
 
                                 // protection against invalid third-party files
                                 if (childRec == null) {
@@ -1250,11 +1250,11 @@ namespace GKCore.Charts
 
             int num = person.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
-                GDMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
+                GDMFamilyRecord family = fTree.GetPtrValue(person.SpouseToFamilyLinks[i]);
 
                 int num2 = family.Children.Count;
                 for (int j = 0; j < num2; j++) {
-                    GDMIndividualRecord child = family.Children[j].Individual;
+                    GDMIndividualRecord child = fTree.GetPtrValue(family.Children[j]);
                     bool resChild = DoDescendantsFilter(child);
                     result |= resChild;
                 }
@@ -1745,7 +1745,7 @@ namespace GKCore.Charts
             if (!GlobalOptions.Instance.CheckTreeSize) return result;
 
             if (chartKind == TreeChartKind.ckAncestors || chartKind == TreeChartKind.ckBoth) {
-                int ancCount = GKUtils.GetAncestorsCount(iRec);
+                int ancCount = GKUtils.GetAncestorsCount(tree, iRec);
                 if (ancCount > 2048) {
                     AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_AncestorsNumberIsInvalid), ancCount.ToString()));
                     return false;

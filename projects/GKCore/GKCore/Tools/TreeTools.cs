@@ -182,8 +182,11 @@ namespace GKCore.Tools
 
         public delegate bool WalkProc(GDMIndividualRecord iRec, TreeWalkMode mode, object extData);
 
-        public static void WalkTree(GDMIndividualRecord iRec, TreeWalkMode mode, WalkProc walkProc, object extData)
+        public static void WalkTree(GDMTree tree, GDMIndividualRecord iRec, TreeWalkMode mode, WalkProc walkProc, object extData)
         {
+            if (tree == null)
+                throw new ArgumentNullException("tree");
+
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
@@ -193,18 +196,21 @@ namespace GKCore.Tools
             if (extData == null)
                 throw new ArgumentNullException("extData");
 
-            WalkTreeInt(iRec, mode, walkProc, extData);
+            WalkTreeInt(tree, iRec, mode, walkProc, extData);
         }
 
-        public static void WalkTree(GDMIndividualRecord iRec, TreeWalkMode mode, List<GDMRecord> walkList)
+        public static void WalkTree(GDMTree tree, GDMIndividualRecord iRec, TreeWalkMode mode, List<GDMRecord> walkList)
         {
+            if (tree == null)
+                throw new ArgumentNullException("tree");
+
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
             if (walkList == null)
                 throw new ArgumentNullException("walkList");
 
-            WalkTreeInt(iRec, mode, DefaultWalkProc, walkList);
+            WalkTreeInt(tree, iRec, mode, DefaultWalkProc, walkList);
         }
 
         private static bool DefaultWalkProc(GDMIndividualRecord iRec, TreeWalkMode mode, object extData)
@@ -217,21 +223,21 @@ namespace GKCore.Tools
             return resContinue;
         }
 
-        private static void WalkTreeInt(GDMIndividualRecord iRec, TreeWalkMode mode, WalkProc walkProc, object extData)
+        private static void WalkTreeInt(GDMTree tree, GDMIndividualRecord iRec, TreeWalkMode mode, WalkProc walkProc, object extData)
         {
             if (!walkProc(iRec, mode, extData)) return;
 
             if (mode == TreeWalkMode.twmNone) return;
 
             if (mode == TreeWalkMode.twmAll || mode == TreeWalkMode.twmAncestors) {
-                GDMFamilyRecord family = iRec.GetParentsFamily();
+                GDMFamilyRecord family = tree.GetParentsFamily(iRec);
                 if (family != null) {
                     GDMIndividualRecord father, mother;
-                    father = family.Husband.Individual;
-                    mother = family.Wife.Individual;
+                    father = tree.GetPtrValue(family.Husband);
+                    mother = tree.GetPtrValue(family.Wife);
 
-                    WalkTreeInt(father, mode, walkProc, extData);
-                    WalkTreeInt(mother, mode, walkProc, extData);
+                    WalkTreeInt(tree, father, mode, walkProc, extData);
+                    WalkTreeInt(tree, mother, mode, walkProc, extData);
                 }
             }
 
@@ -239,11 +245,11 @@ namespace GKCore.Tools
             if (mode < TreeWalkMode.twmAncestors || mode == TreeWalkMode.twmDescendants) {
                 int num = iRec.SpouseToFamilyLinks.Count;
                 for (int i = 0; i < num; i++) {
-                    GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
-                    GDMIndividualRecord spouse = ((iRec.Sex == GDMSex.svMale) ? family.Wife.Individual : family.Husband.Individual);
+                    GDMFamilyRecord family = tree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
+                    GDMIndividualRecord spouse = (iRec.Sex == GDMSex.svMale) ? tree.GetPtrValue(family.Wife) : tree.GetPtrValue(family.Husband);
 
                     TreeWalkMode intMode = ((mode == TreeWalkMode.twmAll) ? TreeWalkMode.twmAll : TreeWalkMode.twmNone);
-                    WalkTreeInt(spouse, intMode, walkProc, extData);
+                    WalkTreeInt(tree, spouse, intMode, walkProc, extData);
 
                     switch (mode) {
                         case TreeWalkMode.twmAll:
@@ -262,7 +268,7 @@ namespace GKCore.Tools
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++) {
                         GDMIndividualRecord child = family.Children[j].Individual;
-                        WalkTreeInt(child, intMode, walkProc, extData);
+                        WalkTreeInt(tree, child, intMode, walkProc, extData);
                     }
                 }
             }
@@ -287,7 +293,8 @@ namespace GKCore.Tools
             return BitHelper.IsSetBit(flags, (int)flag);
         }
 
-        private static GDMIndividualRecord DetectCycleAncestors(GDMIndividualRecord iRec, Stack<GDMIndividualRecord> stack, 
+        private static GDMIndividualRecord DetectCycleAncestors(GDMTree tree, GDMIndividualRecord iRec,
+                                                                Stack<GDMIndividualRecord> stack,
                                                                 GKVarCache<GDMIndividualRecord, int> indiFlags)
         {
             if (iRec == null) return null;
@@ -298,12 +305,12 @@ namespace GKCore.Tools
 
             stack.Push(iRec);
 
-            GDMFamilyRecord family = iRec.GetParentsFamily();
+            GDMFamilyRecord family = tree.GetParentsFamily(iRec);
             if (family != null) {
-                var res = DetectCycleAncestors(family.Husband.Individual, stack, indiFlags);
+                var res = DetectCycleAncestors(tree, family.Husband.Individual, stack, indiFlags);
                 if (res != null) return res;
 
-                res = DetectCycleAncestors(family.Wife.Individual, stack, indiFlags);
+                res = DetectCycleAncestors(tree, family.Wife.Individual, stack, indiFlags);
                 if (res != null) return res;
             }
 
@@ -341,12 +348,12 @@ namespace GKCore.Tools
             return null;
         }
 
-        public static string DetectCycle(GDMIndividualRecord iRec)
+        public static string DetectCycle(GDMTree tree, GDMIndividualRecord iRec)
         {
             var stack = new Stack<GDMIndividualRecord>();
             var indiDCFlags = new GKVarCache<GDMIndividualRecord, int>();
 
-            var hasCycle = DetectCycleAncestors(iRec, stack, indiDCFlags);
+            var hasCycle = DetectCycleAncestors(tree, iRec, stack, indiDCFlags);
             if (hasCycle != null) {
                 var lastRec = stack.Pop();
                 return iRec.XRef + " ... " + lastRec.XRef + " -> " + hasCycle.XRef;
@@ -363,14 +370,14 @@ namespace GKCore.Tools
             return string.Empty;
         }
 
-        private static string CheckCycle(GDMIndividualRecord iRec)
+        private static string CheckCycle(GDMTree tree, GDMIndividualRecord iRec)
         {
             var stack = new Stack<GDMIndividualRecord>();
             GDMIndividualRecord hasCycle = null;
             var indiDCFlags = new GKVarCache<GDMIndividualRecord, int>();
 
             if (!HasIndiFlag(indiDCFlags, iRec, DCFlag.dcfAncWalk)) {
-                hasCycle = DetectCycleAncestors(iRec, stack, indiDCFlags);
+                hasCycle = DetectCycleAncestors(tree, iRec, stack, indiDCFlags);
                 if (hasCycle != null) {
                     var lastRec = stack.Pop();
                     return iRec.XRef + " ... " + lastRec.XRef + " -> " + hasCycle.XRef;
@@ -649,7 +656,7 @@ namespace GKCore.Tools
                 checksList.Add(checkObj);
             }
 
-            string cycle = CheckCycle(iRec);
+            string cycle = CheckCycle(tree, iRec);
             if (!string.IsNullOrEmpty(cycle)) {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.csCycle, CheckSolve.csSkip);
                 checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_DetectedDataLoop), cycle);
@@ -947,7 +954,7 @@ namespace GKCore.Tools
                 var asso = iRec.Associations[i];
                 CheckRelations_CheckNotes(tree, splitList, asso);
                 CheckRelations_CheckSourceCit(tree, splitList, asso);
-                CheckRelations_CheckIndividual(tree, splitList, asso.Individual);
+                CheckRelations_CheckIndividual(tree, splitList, tree.GetPtrValue(asso));
             }
 
             for (int i = 0, num = iRec.Groups.Count; i < num; i++) {
@@ -1095,7 +1102,7 @@ namespace GKCore.Tools
                     GDMIndividualRecord iRec = ps[i];
 
                     List<GDMRecord> lst = new List<GDMRecord>();
-                    WalkTree(iRec, TreeWalkMode.twmAll, lst);
+                    WalkTree(tree, iRec, TreeWalkMode.twmAll, lst);
 
                     int num3 = lst.Count;
                     for (int k = 0; k < num3; k++) {
@@ -1385,7 +1392,7 @@ namespace GKCore.Tools
                     if (iRec != null) {
                         if (prepared.IndexOf(iRec) < 0) {
                             var groupRecords = new List<GDMRecord>();
-                            TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, groupRecords);
+                            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, groupRecords);
                             result.Add(groupRecords);
                             prepared.AddRange(groupRecords);
                         }

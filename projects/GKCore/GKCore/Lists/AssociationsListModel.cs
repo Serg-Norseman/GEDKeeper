@@ -53,7 +53,8 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMAssociation ast in person.Associations) {
-                    string nm = ((ast.Individual == null) ? "" : GKUtils.GetNameString(ast.Individual, true, false));
+                    var relIndi = fBaseContext.Tree.GetPtrValue(ast);
+                    string nm = ((relIndi == null) ? string.Empty : GKUtils.GetNameString(relIndi, true, false));
 
                     fSheetList.AddItem(ast, new object[] { ast.Relation, nm });
                 }

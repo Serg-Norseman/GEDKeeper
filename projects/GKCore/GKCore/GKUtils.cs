@@ -1068,13 +1068,13 @@ namespace GKCore
 
         #region Individual functions
 
-        public static int GetAncestorsCount(GDMIndividualRecord iRec)
+        public static int GetAncestorsCount(GDMTree tree, GDMIndividualRecord iRec)
         {
             var indiCounters = new GKVarCache<GDMIndividualRecord, int>(-1);
-            return GetAncestorsCount(iRec, indiCounters);
+            return GetAncestorsCount(tree, iRec, indiCounters);
         }
 
-        private static int GetAncestorsCount(GDMIndividualRecord iRec, GKVarCache<GDMIndividualRecord, int> counters)
+        private static int GetAncestorsCount(GDMTree tree, GDMIndividualRecord iRec, GKVarCache<GDMIndividualRecord, int> counters)
         {
             int result = 0;
 
@@ -1084,15 +1084,15 @@ namespace GKCore
                 if (val < 0) {
                     val = 1;
 
-                    GDMFamilyRecord family = iRec.GetParentsFamily();
+                    GDMFamilyRecord family = tree.GetParentsFamily(iRec);
                     if (family != null) {
                         GDMIndividualRecord anc;
 
-                        anc = family.Husband.Individual;
-                        val += GetAncestorsCount(anc, counters);
+                        anc = tree.GetPtrValue(family.Husband);
+                        val += GetAncestorsCount(tree, anc, counters);
 
-                        anc = family.Wife.Individual;
-                        val += GetAncestorsCount(anc, counters);
+                        anc = tree.GetPtrValue(family.Wife);
+                        val += GetAncestorsCount(tree, anc, counters);
                     }
 
                     counters[iRec] = val;
@@ -1834,7 +1834,7 @@ namespace GKCore
             }
         }
 
-        private static void RecListAssociationsRefresh(GDMIndividualRecord record, StringList summary)
+        private static void RecListAssociationsRefresh(IBaseContext baseContext, GDMIndividualRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -1846,8 +1846,10 @@ namespace GKCore
                     int num = record.Associations.Count;
                     for (int i = 0; i < num; i++) {
                         GDMAssociation ast = record.Associations[i];
-                        string nm = ((ast.Individual == null) ? "" : GetNameString(ast.Individual, true, false));
-                        string xref = ((ast.Individual == null) ? "" : ast.Individual.XRef);
+                        var relIndi = baseContext.Tree.GetPtrValue(ast);
+
+                        string nm = ((relIndi == null) ? string.Empty : GetNameString(relIndi, true, false));
+                        string xref = ((relIndi == null) ? string.Empty : relIndi.XRef);
 
                         summary.Add("    " + ast.Relation + " " + HyperLink(xref, nm, 0));
                     }
@@ -2110,14 +2112,7 @@ namespace GKCore
                         summary.Add(LangMan.LS(LSID.LSID_Sex) + ": " + SexStr(iRec.Sex));
                         try {
                             GDMIndividualRecord father, mother;
-                            GDMFamilyRecord fam = iRec.GetParentsFamily();
-                            if (fam == null) {
-                                father = null;
-                                mother = null;
-                            } else {
-                                father = fam.Husband.Individual;
-                                mother = fam.Wife.Individual;
-                            }
+                            tree.GetParents(iRec, out father, out mother);
 
                             if (father != null || mother != null) {
                                 summary.Add("");
@@ -2190,7 +2185,7 @@ namespace GKCore
                         RecListNotesRefresh(baseContext, iRec, summary);
                         RecListMediaRefresh(baseContext, iRec, summary);
                         RecListSourcesRefresh(baseContext, iRec, summary);
-                        RecListAssociationsRefresh(iRec, summary);
+                        RecListAssociationsRefresh(baseContext, iRec, summary);
                         RecListGroupsRefresh(baseContext, iRec, summary);
 
                         ShowPersonNamesakes(tree, iRec, summary);

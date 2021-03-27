@@ -52,14 +52,14 @@ namespace GDModel
                 association.Relation = "This is test relation";
                 Assert.AreEqual("This is test relation", association.Relation);
 
-                association.Individual = null;
-                Assert.IsNull(association.Individual);
+                association.XRef = string.Empty;
+                Assert.IsNull(fContext.Tree.GetPtrValue(association));
 
                 GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec);
 
-                association.Individual = iRec;
-                Assert.IsNotNull(association.Individual);
+                association.XRef = iRec.XRef;
+                Assert.AreEqual(iRec, fContext.Tree.GetPtrValue(association));
 
                 using (GDMAssociation asso2 = new GDMAssociation(null)) {
                     Assert.IsNotNull(asso2);

@@ -1024,9 +1024,9 @@ namespace GKCore.Controllers
 
         #region Aux
 
-        public static bool DetectCycle(GDMIndividualRecord iRec)
+        public static bool DetectCycle(GDMTree tree, GDMIndividualRecord iRec)
         {
-            string res = TreeTools.DetectCycle(iRec);
+            string res = TreeTools.DetectCycle(tree, iRec);
             if (!string.IsNullOrEmpty(res)) {
                 AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_DetectedDataLoop), res));
                 return true;

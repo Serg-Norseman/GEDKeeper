@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -123,7 +123,7 @@ namespace GKCore.Controllers
 
             bool needParent = false;
 
-            GDMFamilyRecord fam = p.Rec.GetParentsFamily();
+            GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(p.Rec);
             bool familyExist = fam != null;
 
             if (familyExist) {
@@ -232,18 +232,11 @@ namespace GKCore.Controllers
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return false;
 
-            bool familyExist = p.Rec.GetParentsFamily() != null;
+            bool familyExist = fBase.Context.Tree.GetParentsFamily(p.Rec) != null;
             if (!familyExist) return true;
 
-            GDMIndividualRecord mother, father;
-            GDMFamilyRecord fam = p.Rec.GetParentsFamily();
-            if (fam == null) {
-                father = null;
-                mother = null;
-            } else {
-                father = fam.Husband.Individual;
-                mother = fam.Wife.Individual;
-            }
+            GDMIndividualRecord father, mother;
+            fBase.Context.Tree.GetParents(p.Rec, out father, out mother);
 
             bool needParent = (father == null && needSex == GDMSex.svMale) ||
                 (mother == null && needSex == GDMSex.svFemale);

@@ -303,10 +303,10 @@ namespace GEDmill.HTML
 
             // Go through all families this person was a irSibling in
             foreach (GDMChildToFamilyLink childLink in fIndiRec.ChildToFamilyLinks) {
-                var famRec = fTree.GetPtrValue<GDMFamilyRecord>(childLink);
+                var famRec = fTree.GetPtrValue(childLink);
                 if (famRec != null) {
-                    GDMIndividualRecord husband = famRec.Husband.Individual;
-                    GDMIndividualRecord wife = famRec.Wife.Individual;
+                    GDMIndividualRecord husband = fTree.GetPtrValue(famRec.Husband);
+                    GDMIndividualRecord wife = fTree.GetPtrValue(famRec.Wife);
 
                     if (husband != null || wife != null) {
                         fParents.Add(new HusbandAndWife(husband, wife));

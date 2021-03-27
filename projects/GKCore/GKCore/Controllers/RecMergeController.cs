@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -51,10 +51,11 @@ namespace GKCore.Controllers
         {
         }
 
-        private static bool CheckPersonsEx(GDMIndividualRecord rec1, GDMIndividualRecord rec2)
+        private bool CheckPersonsEx(GDMIndividualRecord rec1, GDMIndividualRecord rec2)
         {
-            GDMFamilyRecord fam1 = rec1.GetParentsFamily();
-            GDMFamilyRecord fam2 = rec2.GetParentsFamily();
+            var tree = fBase.Context.Tree;
+            GDMFamilyRecord fam1 = tree.GetParentsFamily(rec1);
+            GDMFamilyRecord fam2 = tree.GetParentsFamily(rec2);
 
             return (!Equals(fam1, fam2));
         }

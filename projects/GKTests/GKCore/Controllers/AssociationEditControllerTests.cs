@@ -49,7 +49,10 @@ namespace GKCore.Controllers
             Assert.IsNotNull(view.Relation);
 
             var baseWin = Substitute.For<IBaseWindow>();
+            //var baseContext = new BaseContext(null);
+            //baseWin.Context.Returns(baseContext);
             var tree = new GDMTree();
+            //var tree = baseContext.Tree;
             var association = new GDMAssociation(tree); // for xref pointers to work
 
             var controller = new AssociationEditDlgController(view);
@@ -78,7 +81,7 @@ namespace GKCore.Controllers
 
             Assert.IsTrue(controller.Accept());
             Assert.AreEqual(relValue, association.Relation);
-            Assert.AreEqual(relPerson, association.Individual);
+            Assert.AreEqual(relPerson, tree.GetPtrValue(association));
         }
 
         [Test]

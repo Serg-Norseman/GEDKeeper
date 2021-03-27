@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -287,12 +287,12 @@ namespace GKCore.Kinships
 
             KinshipsGraph graph = new KinshipsGraph(context);
 
-            SearchKGInt(null, iRec, graph, RelationKind.rkUndefined, RelationKind.rkUndefined);
+            SearchKGInt(context, null, iRec, graph, RelationKind.rkUndefined, RelationKind.rkUndefined);
 
             return graph;
         }
 
-        private static void SearchKGInt(Vertex prevNode, GDMIndividualRecord iRec,
+        private static void SearchKGInt(IBaseContext context, Vertex prevNode, GDMIndividualRecord iRec,
                                         KinshipsGraph graph, RelationKind relation, RelationKind inverseRelation)
         {
             if (iRec == null) return;
@@ -313,14 +313,14 @@ namespace GKCore.Kinships
             }
 
             if (iRec.ChildToFamilyLinks.Count > 0) {
-                GDMFamilyRecord fam = iRec.GetParentsFamily();
+                GDMFamilyRecord fam = context.Tree.GetParentsFamily(iRec);
                 if (fam != null) {
                     GDMIndividualRecord father, mother;
-                    father = fam.Husband.Individual;
-                    mother = fam.Wife.Individual;
+                    father = context.Tree.GetPtrValue(fam.Husband);
+                    mother = context.Tree.GetPtrValue(fam.Wife);
 
-                    SearchKGInt(currNode, father, graph, RelationKind.rkParent, RelationKind.rkChild);
-                    SearchKGInt(currNode, mother, graph, RelationKind.rkParent, RelationKind.rkChild);
+                    SearchKGInt(context, currNode, father, graph, RelationKind.rkParent, RelationKind.rkChild);
+                    SearchKGInt(context, currNode, mother, graph, RelationKind.rkParent, RelationKind.rkChild);
                 }
             }
 
@@ -329,12 +329,12 @@ namespace GKCore.Kinships
                 GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
                 GDMIndividualRecord spouse = ((iRec.Sex == GDMSex.svMale) ? family.Wife.Individual : family.Husband.Individual);
 
-                SearchKGInt(currNode, spouse, graph, RelationKind.rkSpouse, RelationKind.rkSpouse);
+                SearchKGInt(context, currNode, spouse, graph, RelationKind.rkSpouse, RelationKind.rkSpouse);
 
                 int num2 = family.Children.Count;
                 for (int j = 0; j < num2; j++) {
                     GDMIndividualRecord child = family.Children[j].Individual;
-                    SearchKGInt(currNode, child, graph, RelationKind.rkChild, RelationKind.rkParent);
+                    SearchKGInt(context, currNode, child, graph, RelationKind.rkChild, RelationKind.rkParent);
                 }
             }
         }

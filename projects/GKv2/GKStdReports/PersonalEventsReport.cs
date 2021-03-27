@@ -97,30 +97,29 @@ namespace GKStdReports
             fWriter.AddParagraph(GKUtils.GetNameString(fPerson, true, false), fTitleFont, TextAlignment.taLeft);
             fWriter.NewLine();
 
+            IBaseContext baseContext = fBase.Context;
+
             var evList = new List<PersonalEvent>();
 
             GDMIndividualRecord father = null, mother = null;
-            if (fPerson.ChildToFamilyLinks.Count > 0) {
-                GDMFamilyRecord family = fPerson.ChildToFamilyLinks[0].Family;
-                if (fBase.Context.IsRecordAccess(family.Restriction)) {
-                    father = family.Husband.Individual;
-                    mother = family.Wife.Individual;
-                }
+            GDMFamilyRecord parFamily = baseContext.Tree.GetParentsFamily(fPerson);
+            if (parFamily != null && baseContext.IsRecordAccess(parFamily.Restriction)) {
+                baseContext.Tree.GetSpouses(parFamily, out father, out mother);
             }
 
             ExtractEvents(EventType.Personal, evList, fPerson);
 
             int num2 = fPerson.SpouseToFamilyLinks.Count;
             for (int j = 0; j < num2; j++) {
-                GDMFamilyRecord family = fPerson.SpouseToFamilyLinks[j].Family;
-                if (!fBase.Context.IsRecordAccess(family.Restriction))
+                GDMFamilyRecord family = baseContext.Tree.GetPtrValue(fPerson.SpouseToFamilyLinks[j]);
+                if (!baseContext.IsRecordAccess(family.Restriction))
                     continue;
 
                 ExtractEvents(EventType.Spouse, evList, family);
 
                 int num3 = family.Children.Count;
                 for (int i = 0; i < num3; i++) {
-                    GDMIndividualRecord child = family.Children[i].Individual;
+                    GDMIndividualRecord child = baseContext.Tree.GetPtrValue(family.Children[i]);
                     GDMCustomEvent evt = child.FindEvent(GEDCOMTagType.BIRT);
                     if (evt != null && evt.GetChronologicalYear() != 0) {
                         evList.Add(new PersonalEvent(EventType.Child, child, evt));
@@ -181,11 +180,11 @@ namespace GKStdReports
                     GDMIndividualRecord sp;
                     string unk;
                     if (fPerson.Sex == GDMSex.svMale) {
-                        sp = famRec.Wife.Individual;
+                        sp = baseContext.Tree.GetPtrValue(famRec.Wife);
                         st = LangMan.LS(LSID.LSID_Wife) + ": ";
                         unk = LangMan.LS(LSID.LSID_UnkFemale);
                     } else {
-                        sp = famRec.Husband.Individual;
+                        sp = baseContext.Tree.GetPtrValue(famRec.Husband);
                         st = LangMan.LS(LSID.LSID_Husband) + ": ";
                         unk = LangMan.LS(LSID.LSID_UnkMale);
                     }

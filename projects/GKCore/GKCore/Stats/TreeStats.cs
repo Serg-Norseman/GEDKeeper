@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -197,7 +197,7 @@ namespace GKCore.Stats
             switch (mode)
             {
                 case StatsMode.smAncestors:
-                    values.Add(new StatsItem(iName, GKUtils.GetAncestorsCount(iRec) - 1));
+                    values.Add(new StatsItem(iName, GKUtils.GetAncestorsCount(fTree, iRec) - 1));
                     break;
 
                 case StatsMode.smDescendants:

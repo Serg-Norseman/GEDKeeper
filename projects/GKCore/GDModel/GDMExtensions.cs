@@ -72,5 +72,92 @@ namespace GDModel
             uRef.StringValue = reference;
             _struct.UserReferences.Add(uRef);
         }
+
+
+        public static GDMIndividualRecord GetPtrValue(this GDMTree tree, GDMAssociation ptr)
+        {
+            return tree.GetPtrValue<GDMIndividualRecord>(ptr);
+        }
+
+        public static GDMIndividualRecord GetPtrValue(this GDMTree tree, GDMIndividualLink ptr)
+        {
+            return tree.GetPtrValue<GDMIndividualRecord>(ptr);
+        }
+
+        public static GDMMultimediaRecord GetPtrValue(this GDMTree tree, GDMMultimediaLink ptr)
+        {
+            return tree.GetPtrValue<GDMMultimediaRecord>(ptr);
+        }
+
+        public static GDMNoteRecord GetPtrValue(this GDMTree tree, GDMNotes ptr)
+        {
+            return tree.GetPtrValue<GDMNoteRecord>(ptr);
+        }
+
+        public static GDMFamilyRecord GetPtrValue(this GDMTree tree, GDMChildToFamilyLink ptr)
+        {
+            return tree.GetPtrValue<GDMFamilyRecord>(ptr);
+        }
+
+        public static GDMRepositoryRecord GetPtrValue(this GDMTree tree, GDMRepositoryCitation ptr)
+        {
+            return tree.GetPtrValue<GDMRepositoryRecord>(ptr);
+        }
+
+        public static GDMFamilyRecord GetPtrValue(this GDMTree tree, GDMSpouseToFamilyLink ptr)
+        {
+            return tree.GetPtrValue<GDMFamilyRecord>(ptr);
+        }
+
+        public static GDMSourceRecord GetPtrValue(this GDMTree tree, GDMSourceCitation ptr)
+        {
+            return tree.GetPtrValue<GDMSourceRecord>(ptr);
+        }
+
+
+        /// <summary>
+        /// Attention: returns only the first marriage!
+        /// </summary>
+        /// <returns></returns>
+        public static GDMFamilyRecord GetMarriageFamily(this GDMTree tree, GDMIndividualRecord indiRec)
+        {
+            GDMFamilyRecord result = (indiRec.SpouseToFamilyLinks.Count < 1) ? null : tree.GetPtrValue(indiRec.SpouseToFamilyLinks[0]);
+            return result;
+        }
+
+        /// <summary>
+        /// Attention: returns only the first parents family!
+        /// </summary>
+        /// <returns></returns>
+        public static GDMFamilyRecord GetParentsFamily(this GDMTree tree, GDMIndividualRecord indiRec)
+        {
+            GDMFamilyRecord result = (indiRec.ChildToFamilyLinks.Count < 1) ? null : tree.GetPtrValue(indiRec.ChildToFamilyLinks[0]);
+            return result;
+        }
+
+        public static void GetSpouses(this GDMTree tree, GDMFamilyRecord famRec,
+                                      out GDMIndividualRecord husband, out GDMIndividualRecord wife)
+        {
+            if (famRec == null) {
+                husband = null;
+                wife = null;
+            } else {
+                husband = tree.GetPtrValue(famRec.Husband);
+                wife = tree.GetPtrValue(famRec.Wife);
+            }
+        }
+
+        public static void GetParents(this GDMTree tree, GDMIndividualRecord indiRec,
+                                      out GDMIndividualRecord father, out GDMIndividualRecord mother)
+        {
+            if (indiRec == null) {
+                father = null;
+                mother = null;
+                return;
+            }
+
+            GDMFamilyRecord fam = tree.GetParentsFamily(indiRec);
+            tree.GetSpouses(fam, out father, out mother);
+        }
     }
 }

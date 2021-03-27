@@ -63,10 +63,10 @@ namespace GDModel
             Assert.IsFalse(iRec.IsLive());
 
             GDMIndividualRecord ind3 = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
-            Assert.IsNotNull(ind3.GetParentsFamily());
+            Assert.IsNotNull(fContext.Tree.GetParentsFamily(ind3));
 
             GDMIndividualRecord ind2 = fContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
-            Assert.IsNotNull(ind2.GetMarriageFamily());
+            Assert.IsNotNull(fContext.Tree.GetMarriageFamily(ind2));
 
             // TODO: transfer to BaseContext tests
             GDMIndividualRecord indiRec = fContext.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
@@ -98,15 +98,7 @@ namespace GDModel
             });
 
             GDMIndividualRecord father, mother;
-            GDMFamilyRecord fam = indiRec.GetParentsFamily();
-            if (fam == null) {
-                father = null;
-                mother = null;
-            } else {
-                father = fam.Husband.Individual;
-                mother = fam.Wife.Individual;
-            }
-
+            fContext.Tree.GetParents(indiRec, out father, out mother);
             Assert.IsNull(father);
             Assert.IsNull(mother);
 
@@ -194,7 +186,7 @@ namespace GDModel
                 Assert.AreEqual("Ivan Petrov [BigHead]", st);
                 Assert.AreEqual("BigHead", GKUtils.GetNickString(indi));
 
-                Assert.IsNull(indi.GetParentsFamily());
+                Assert.IsNull(fContext.Tree.GetParentsFamily(indi));
 
                 // TODO: move to BaseContext tests
                 Assert.IsNotNull(fContext.GetParentsFamily(indi, true));

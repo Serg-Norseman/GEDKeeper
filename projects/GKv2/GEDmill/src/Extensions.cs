@@ -1,5 +1,5 @@
 ﻿/* 
- * Copyright (C) 2019-2020 by Sergey V. Zhdanovskih.
+ * Copyright (C) 2019-2021 by Sergey V. Zhdanovskih.
  * This file is part of GEDmill - A family history website creator
  * 
  * GEDmill is free software: you can redistribute it and/or modify
@@ -78,7 +78,7 @@ namespace GEDmill
             var result = new List<GDMFamilyRecord>();
 
             foreach (var link in record.SpouseToFamilyLinks) {
-                var family = tree.GetPtrValue<GDMFamilyRecord>(link);
+                var family = tree.GetPtrValue(link);
                 if (family != null) {
                     result.Add(family);
                 }
@@ -121,12 +121,12 @@ namespace GEDmill
 
         public static void PruneAncestors(this GDMTree tree, GDMIndividualRecord iRec, bool visible)
         {
-            TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAncestors, PruneProc, ((object)visible));
+            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAncestors, PruneProc, ((object)visible));
         }
 
         public static void PruneDescendants(this GDMTree tree, GDMIndividualRecord iRec, bool visible)
         {
-            TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmDescendants, PruneProc, ((object)visible));
+            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmDescendants, PruneProc, ((object)visible));
         }
 
         private static bool PruneMarkProc(GDMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
@@ -138,7 +138,7 @@ namespace GEDmill
 
         public static void PruneMarkConnected(this GDMTree tree, GDMIndividualRecord iRec, List<GDMRecord> marks)
         {
-            TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, PruneMarkProc, marks);
+            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, PruneMarkProc, marks);
         }
 
         public static void PruneUnmarked(this GDMTree tree, List<GDMRecord> marks)

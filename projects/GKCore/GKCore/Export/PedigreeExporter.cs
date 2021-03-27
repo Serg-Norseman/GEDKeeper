@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -205,20 +205,18 @@ namespace GKCore.Export
                 fWriter.AddParagraph(LangMan.LS(LSID.LSID_LifeExpectancy) + ": " + st, fTextFont);
             }
 
-            GDMFamilyRecord fam = person.IRec.GetParentsFamily();
-            if (fam != null) {
-                GDMIndividualRecord father = fam.Husband.Individual;
-                if (father != null) {
-                    fWriter.AddParagraphLink(LangMan.LS(LSID.LSID_Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", fTextFont, idLink(father), fLinkFont);
-                }
+            GDMIndividualRecord father, mother;
+            fTree.GetParents(person.IRec, out father, out mother);
 
-                GDMIndividualRecord mother = fam.Wife.Individual;
-                if (mother != null) {
-                    fWriter.AddParagraphLink(LangMan.LS(LSID.LSID_Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", fTextFont, idLink(mother), fLinkFont);
-                }
+            if (father != null) {
+                fWriter.AddParagraphLink(LangMan.LS(LSID.LSID_Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", fTextFont, idLink(father), fLinkFont);
             }
 
-            ExtList<PedigreeEvent> evList = new ExtList<PedigreeEvent>(true);
+            if (mother != null) {
+                fWriter.AddParagraphLink(LangMan.LS(LSID.LSID_Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", fTextFont, idLink(mother), fLinkFont);
+            }
+
+            var evList = new ExtList<PedigreeEvent>(true);
             try {
                 int i;
                 if (person.IRec.Events.Count > 0) {

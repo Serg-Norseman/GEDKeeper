@@ -902,7 +902,7 @@ namespace GKCore.Controllers
                 return;
             }
 
-            if (BaseController.DetectCycle(selPerson)) return;
+            if (BaseController.DetectCycle(fContext.Tree, selPerson)) return;
 
             using (var p = new PedigreeExporter(fView, selPerson)) {
                 p.Options = AppHost.Options;
@@ -916,7 +916,7 @@ namespace GKCore.Controllers
             var selPerson = GetSelectedPerson();
             if (selPerson == null) return;
 
-            if (BaseController.DetectCycle(selPerson)) return;
+            if (BaseController.DetectCycle(fContext.Tree, selPerson)) return;
 
             if (TreeChartModel.CheckTreeChartSize(fContext.Tree, selPerson, chartKind)) {
                 var fmChart = AppHost.Container.Resolve<ITreeChartWin>(fView, selPerson);
@@ -930,7 +930,7 @@ namespace GKCore.Controllers
             var selPerson = GetSelectedPerson();
             if (selPerson == null) return;
 
-            if (BaseController.DetectCycle(selPerson)) return;
+            if (BaseController.DetectCycle(fContext.Tree, selPerson)) return;
 
             var fmChart = AppHost.Container.Resolve<ICircleChartWin>(fView, selPerson, chartKind);
             AppHost.Instance.ShowWindow(fmChart);

@@ -85,13 +85,13 @@ namespace GDModel
             //
 
             famRec.Husband.XRef = indiv.XRef;
-            Assert.AreEqual(indiv, famRec.Husband.Individual);
+            Assert.AreEqual(indiv, tree.GetPtrValue(famRec.Husband));
             famRec.Husband.XRef = string.Empty;
 
             //
 
             famRec.Wife.XRef = indiv.XRef;
-            Assert.AreEqual(indiv, famRec.Wife.Individual);
+            Assert.AreEqual(indiv, tree.GetPtrValue(famRec.Wife));
             famRec.Wife.XRef = string.Empty;
 
             //

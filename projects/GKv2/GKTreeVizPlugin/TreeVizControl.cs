@@ -523,13 +523,14 @@ namespace GKTreeVizPlugin
             if (person == null) return;
 
             try {
+                GDMTree tree = fBase.Context.Tree;
                 int gens = (person.DescGenerations <= 0) ? 1 : person.DescGenerations;
                 person.GenSlice = person.BaseRadius / gens; // ?
 
                 GDMIndividualRecord iRec = person.IRec;
 
                 foreach (GDMSpouseToFamilyLink spLink in iRec.SpouseToFamilyLinks) {
-                    GDMFamilyRecord famRec = spLink.Family;
+                    GDMFamilyRecord famRec = tree.GetPtrValue(spLink);
 
                     bool alreadyPrepared = false;
 
@@ -553,7 +554,7 @@ namespace GKTreeVizPlugin
                     if (!alreadyPrepared) {
                         // processing children of the current family
                         foreach (GDMIndividualLink childPtr in famRec.Children) {
-                            GDMIndividualRecord child = childPtr.Individual;
+                            GDMIndividualRecord child = tree.GetPtrValue(childPtr);
 
                             // exclude childless branches
                             if (EXCLUDE_CHILDLESS && (fBase.Context.IsChildless(child) || child.GetTotalChildsCount() < 1)) continue;

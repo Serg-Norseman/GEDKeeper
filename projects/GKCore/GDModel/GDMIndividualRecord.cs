@@ -401,26 +401,6 @@ namespace GDModel
             return new LifeDatesRet(birthEvent, deathEvent);
         }
 
-        /// <summary>
-        /// Attention: returns or creates only the first marriage!
-        /// </summary>
-        /// <returns></returns>
-        public GDMFamilyRecord GetMarriageFamily()
-        {
-            GDMFamilyRecord result = (fSpouseToFamilyLinks.Count < 1) ? null : fSpouseToFamilyLinks[0].Family;
-            return result;
-        }
-
-        /// <summary>
-        /// Attention: returns or creates only the first parents family!
-        /// </summary>
-        /// <returns></returns>
-        public GDMFamilyRecord GetParentsFamily()
-        {
-            GDMFamilyRecord result = (fChildToFamilyLinks.Count < 1) ? null : fChildToFamilyLinks[0].Family;
-            return result;
-        }
-
         public string GetPrimaryFullName()
         {
             string result = (fPersonalNames.Count <= 0) ? string.Empty : fPersonalNames[0].FullName;

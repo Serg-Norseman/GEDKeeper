@@ -269,7 +269,7 @@ namespace GEDmill.MiniTree
         protected MiniTreeGroup CreateDataStructure(GDMIndividualRecord irSubject)
         {
             // Add subject's frParents
-            GDMFamilyRecord frParents = irSubject.GetParentsFamily();
+            GDMFamilyRecord frParents = fTree.GetParentsFamily(irSubject);
             MiniTreeGroup mtgParents = new MiniTreeGroup();
             MiniTreeIndividual mtiFather = null;
             if (frParents != null) {
@@ -423,9 +423,9 @@ namespace GEDmill.MiniTree
                 // is because the file should be ordered as the user chose to order the fr when entering the data in 
                 // their fr history app, regardless of actual birth dates. 
                 if (CConfig.Instance.KeepSiblingOrder) {
-                    irChild = fTree.GetPtrValue<GDMIndividualRecord>(famRec.Children[nChild]);
+                    irChild = fTree.GetPtrValue(famRec.Children[nChild]);
                 } else {
-                    irChild = fTree.GetPtrValue<GDMIndividualRecord>(famRec.Children[nChild]);
+                    irChild = fTree.GetPtrValue(famRec.Children[nChild]);
                 }
             } else {
                 // Return the default individual as first and only child of fr.

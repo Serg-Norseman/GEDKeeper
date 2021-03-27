@@ -220,18 +220,19 @@ namespace GKCore
             GDMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
 
+            var tree = fBaseWin.Context.Tree;
             List<GDMRecord> walkList = new List<GDMRecord>();
-            TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, walkList);
+            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, walkList);
             Assert.AreEqual(5, walkList.Count, "TreeTools.TreeWalk(twmAll)"); // 3 linked from 4 total
 
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(null, TreeTools.TreeWalkMode.twmAll, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, null, TreeTools.TreeWalkMode.twmAll, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, null); });
 
 
             object extData = null;
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(null, TreeTools.TreeWalkMode.twmAll, WalkProc, extData); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, null, extData); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(iRec, TreeTools.TreeWalkMode.twmAll, WalkProc, extData); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, null, TreeTools.TreeWalkMode.twmAll, WalkProc, extData); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, null, extData); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, WalkProc, extData); });
         }
 
         [Test]
