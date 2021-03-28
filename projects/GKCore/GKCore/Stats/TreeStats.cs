@@ -89,13 +89,13 @@ namespace GKCore.Stats
                 int chCnt = ind.GetTotalChildsCount();
                 stats.childs.TakeVal(chCnt, ind.Sex, true);
 
-                int vFba = GKUtils.GetFirstbornAge(ind, GKUtils.GetFirstborn(ind));
+                int vFba = GKUtils.GetFirstbornAge(ind, GKUtils.GetFirstborn(fTree, ind));
                 stats.fba.TakeVal(vFba, ind.Sex, true);
 
                 int mCnt = GKUtils.GetMarriagesCount(ind);
                 stats.marr.TakeVal(mCnt, ind.Sex, true);
 
-                int vMAge = GKUtils.GetMarriageAge(ind);
+                int vMAge = GKUtils.GetMarriageAge(fTree, ind);
                 stats.mage.TakeVal(vMAge, ind.Sex, true);
 
                 float vCI = ind.GetCertaintyAssessment();
@@ -201,11 +201,11 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smDescendants:
-                    values.Add(new StatsItem(iName, GKUtils.GetDescendantsCount(iRec) - 1));
+                    values.Add(new StatsItem(iName, GKUtils.GetDescendantsCount(fTree, iRec) - 1));
                     break;
 
                 case StatsMode.smDescGenerations:
-                    values.Add(new StatsItem(iName, GKUtils.GetDescGenerations(iRec)));
+                    values.Add(new StatsItem(iName, GKUtils.GetDescGenerations(fTree, iRec)));
                     break;
 
                 case StatsMode.smChildsCount:
@@ -213,7 +213,7 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smFirstbornAge:
-                    values.Add(new StatsItem(iName, GKUtils.GetFirstbornAge(iRec, GKUtils.GetFirstborn(iRec))));
+                    values.Add(new StatsItem(iName, GKUtils.GetFirstbornAge(iRec, GKUtils.GetFirstborn(fTree, iRec))));
                     break;
 
                 case StatsMode.smMarriages:
@@ -221,7 +221,7 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smMarriageAge:
-                    values.Add(new StatsItem(iName, GKUtils.GetMarriageAge(iRec)));
+                    values.Add(new StatsItem(iName, GKUtils.GetMarriageAge(fTree, iRec)));
                     break;
 
                 case StatsMode.smSurnames:
@@ -352,7 +352,7 @@ namespace GKCore.Stats
                     }
                     else
                     {
-                        GDMIndividualRecord iChild = GKUtils.GetFirstborn(iRec);
+                        GDMIndividualRecord iChild = GKUtils.GetFirstborn(fTree, iRec);
                         int fba = GKUtils.GetFirstbornAge(iRec, iChild);
                         if (fba > 0 && iChild != null) {
                             string key;
@@ -397,9 +397,9 @@ namespace GKCore.Stats
                 {
                     GDMFamilyRecord fRec = rec as GDMFamilyRecord;
 
-                    int diff = GKUtils.GetSpousesDiff(fRec);
+                    int diff = GKUtils.GetSpousesDiff(fTree, fRec);
                     if (diff != -1) {
-                        values.Add(new StatsItem(GKUtils.GetFamilyString(fRec), diff));
+                        values.Add(new StatsItem(GKUtils.GetFamilyString(fTree, fRec), diff));
                     }
                 }
             }

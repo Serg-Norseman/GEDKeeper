@@ -180,7 +180,7 @@ namespace GKPedigreeImporterPlugin
                 fam.AddSpouse(parent);
             }
 
-            GDMFamilyRecord family = parent.SpouseToFamilyLinks[marrNum - 1].Family;
+            GDMFamilyRecord family = fTree.GetPtrValue(parent.SpouseToFamilyLinks[marrNum - 1]);
             return family;
         }
 

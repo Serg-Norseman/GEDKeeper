@@ -98,7 +98,7 @@ namespace GKCore.Controllers
                     fView.CorrType.SelectedIndex = (int)fCommunication.CommunicationType;
                     fView.Date.NormalizeDate = fCommunication.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
-                    fTempInd = fCommunication.Corresponder.Individual;
+                    fTempInd = fBase.Context.Tree.GetPtrValue(fCommunication.Corresponder);
 
                     if (fTempInd != null) {
                         fView.Dir.SelectedIndex = (int)fCommunication.CommDirection;

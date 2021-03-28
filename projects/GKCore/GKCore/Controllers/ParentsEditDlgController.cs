@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -90,10 +90,10 @@ namespace GKCore.Controllers
         public void UpdateControls()
         {
             if (fLink != null) {
-                GDMFamilyRecord family = fLink.Family;
+                GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(fLink);
                 fView.SetParentsAvl(true);
 
-                GDMIndividualRecord relPerson = family.Husband.Individual;
+                GDMIndividualRecord relPerson = fBase.Context.Tree.GetPtrValue(family.Husband);
                 if (relPerson != null) {
                     fView.SetFatherAvl(true);
                     fView.Father.Text = GKUtils.GetNameString(relPerson, true, false);
@@ -102,7 +102,7 @@ namespace GKCore.Controllers
                     fView.Father.Text = "";
                 }
 
-                relPerson = family.Wife.Individual;
+                relPerson = fBase.Context.Tree.GetPtrValue(family.Wife);
                 if (relPerson != null) {
                     fView.SetMotherAvl(true);
                     fView.Mother.Text = GKUtils.GetNameString(relPerson, true, false);

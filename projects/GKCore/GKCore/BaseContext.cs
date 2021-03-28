@@ -476,11 +476,11 @@ namespace GKCore
 
                 int num = iRec.SpouseToFamilyLinks.Count;
                 for (int i = 0; i < num; i++) {
-                    GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                    GDMFamilyRecord family = fTree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
 
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++) {
-                        GDMIndividualRecord child = family.Children[j].Individual;
+                        GDMIndividualRecord child = fTree.GetPtrValue(family.Children[j]);
                         birthDate = FindBirthYear(child);
                         if (birthDate != 0) {
                             return birthDate - 20;
@@ -503,11 +503,11 @@ namespace GKCore
                 int maxBirth = 0;
                 int num = iRec.SpouseToFamilyLinks.Count;
                 for (int i = 0; i < num; i++) {
-                    GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                    GDMFamilyRecord family = fTree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
 
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++) {
-                        GDMIndividualRecord child = family.Children[j].Individual;
+                        GDMIndividualRecord child = fTree.GetPtrValue(family.Children[j]);
 
                         int chbDate = FindBirthYear(child);
                         if (chbDate != 0 && maxBirth < chbDate) {
@@ -1739,10 +1739,10 @@ namespace GKCore
 
                 if (rec.RecordType == GDMRecordType.rtFamily) {
                     GDMFamilyRecord fam = (GDMFamilyRecord)rec;
-                    GDMIndividualRecord husb = fam.Husband.Individual;
-                    GDMIndividualRecord wife = fam.Wife.Individual;
+                    GDMIndividualRecord husb = fTree.GetPtrValue(fam.Husband);
+                    GDMIndividualRecord wife = fTree.GetPtrValue(fam.Wife);
                     if (husb == newParent || wife == newParent) {
-                        string msg = string.Format(LangMan.LS(LSID.LSID_ParentsQuery), GKUtils.GetFamilyString(fam));
+                        string msg = string.Format(LangMan.LS(LSID.LSID_ParentsQuery), GKUtils.GetFamilyString(fTree, fam));
                         if (AppHost.StdDialogs.ShowQuestionYN(msg)) {
                             result = fam;
                             break;
@@ -1761,7 +1761,7 @@ namespace GKCore
 
             if (iChild != null) {
                 if (iChild.ChildToFamilyLinks.Count != 0) {
-                    result = iChild.ChildToFamilyLinks[0].Family;
+                    result = fTree.GetPtrValue(iChild.ChildToFamilyLinks[0]);
                 } else {
                     if (canCreate) {
                         GDMFamilyRecord fam = GetFamilyBySpouse(newParent);
@@ -1809,10 +1809,10 @@ namespace GKCore
                             return null;
                         }
                     } else {
-                        family = parent.SpouseToFamilyLinks[0].Family;
+                        family = fTree.GetPtrValue(parent.SpouseToFamilyLinks[0]);
                     }
 
-                    GDMIndividualRecord child = SelectPerson(family.Husband.Individual, TargetMode.tmParent, needSex);
+                    GDMIndividualRecord child = SelectPerson(fTree.GetPtrValue(family.Husband), TargetMode.tmParent, needSex);
 
                     if (child != null && family.AddChild(child)) {
                         // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
@@ -1864,7 +1864,7 @@ namespace GKCore
             if (indiRec == null) return;
 
             if (indiRec.ChildToFamilyLinks.Count > 0) {
-                ProcessFamily(indiRec.ChildToFamilyLinks[0].Family);
+                ProcessFamily(fTree.GetPtrValue(indiRec.ChildToFamilyLinks[0]));
             }
 
             if (GlobalOptions.Instance.AutoSortSpouses) {

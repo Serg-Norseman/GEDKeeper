@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -234,7 +234,7 @@ namespace GKCore.Export
                             CheckQueue(indiRec, TreeChartKind.ckAncestors);
                         }
                     } else {
-                        if (person.HasFlag(PersonFlag.pfHasInvDesc) && TreeTools.PL_SearchAnc(indiRec, currentPatriarch, true)) {
+                        if (person.HasFlag(PersonFlag.pfHasInvDesc) && TreeTools.PL_SearchAnc(fTree, indiRec, currentPatriarch, true)) {
                             CheckQueue(indiRec, TreeChartKind.ckDescendants);
                         }
                     }
@@ -258,7 +258,7 @@ namespace GKCore.Export
             for (int i = 0; i < num; i++) {
                 var patriarch = fPatList[i].IRec;
 
-                if ((patriarch != currentPatriarch) && TreeTools.PL_SearchAnc(iRec, patriarch, true)) {
+                if ((patriarch != currentPatriarch) && TreeTools.PL_SearchAnc(fTree, iRec, patriarch, true)) {
                     result = true;
                     break;
                 }

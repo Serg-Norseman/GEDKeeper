@@ -292,11 +292,11 @@ namespace GDModel
             if (child == null) return false;
 
             GDMIndividualLink ptr = new GDMIndividualLink(this, (int)GEDCOMTagType.CHIL, string.Empty);
-            ptr.Individual = child;
+            ptr.XRef = child.XRef;
             fChildren.Add(ptr);
 
             GDMChildToFamilyLink chLink = new GDMChildToFamilyLink(child);
-            chLink.Family = this;
+            chLink.XRef = this.XRef;
             child.ChildToFamilyLinks.Add(chLink);
 
             return true;

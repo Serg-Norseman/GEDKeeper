@@ -69,7 +69,7 @@ namespace GDModel
 
             // Integrity test
             GDMChildToFamilyLink childLink = indiv.ChildToFamilyLinks[0];
-            Assert.IsNotNull(childLink.Family);
+            Assert.IsNotNull(tree.GetPtrValue(childLink));
 
             famRec.RemoveChild(indiv);
             Assert.AreEqual(-1, famRec.IndexOfChild(indiv));
@@ -165,10 +165,10 @@ namespace GDModel
                 famRec.DeleteChild(child1);
                 Assert.AreEqual(-1, famRec.IndexOfChild(child1));
 
-                string str = GKUtils.GetFamilyString(famRec, null, null);
+                string str = GKUtils.GetFamilyString(tree, famRec, null, null);
                 Assert.AreEqual("? - ?", str);
 
-                str = GKUtils.GetFamilyString(famRec, "x", "x");
+                str = GKUtils.GetFamilyString(tree, famRec, "x", "x");
                 Assert.AreEqual("x - x", str);
 
                 Assert.AreEqual(0.0f, famRec.IsMatch(null, new MatchParams()));

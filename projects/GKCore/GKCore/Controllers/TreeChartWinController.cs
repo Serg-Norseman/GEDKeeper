@@ -127,14 +127,8 @@ namespace GKCore.Controllers
             bool familyExist = fam != null;
 
             if (familyExist) {
-                GDMIndividualRecord mother, father;
-                if (fam == null) {
-                    father = null;
-                    mother = null;
-                } else {
-                    father = fam.Husband.Individual;
-                    mother = fam.Wife.Individual;
-                }
+                GDMIndividualRecord father, mother;
+                fBase.Context.Tree.GetSpouses(fam, out father, out mother);
 
                 needParent = (father == null && needSex == GDMSex.svMale) ||
                     (mother == null && needSex == GDMSex.svFemale);

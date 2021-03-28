@@ -42,7 +42,7 @@ namespace GKCore.Tools
 
         #region Patriarchs Search
 
-        public static bool PL_SearchAnc(GDMIndividualRecord descendant, GDMIndividualRecord searchRec, bool onlyMaleLine)
+        public static bool PL_SearchAnc(GDMTree tree, GDMIndividualRecord descendant, GDMIndividualRecord searchRec, bool onlyMaleLine)
         {
             if (descendant == null) return false;
 
@@ -50,11 +50,11 @@ namespace GKCore.Tools
 
             if (!res && descendant.ChildToFamilyLinks.Count > 0)
             {
-                GDMFamilyRecord family = descendant.ChildToFamilyLinks[0].Family;
+                GDMFamilyRecord family = tree.GetPtrValue(descendant.ChildToFamilyLinks[0]);
 
-                GDMIndividualRecord ancestor = family.Husband.Individual;
+                GDMIndividualRecord ancestor = tree.GetPtrValue(family.Husband);
                 if (ancestor != null) {
-                    res = PL_SearchAnc(ancestor, searchRec, onlyMaleLine);
+                    res = PL_SearchAnc(tree, ancestor, searchRec, onlyMaleLine);
                     if (res) return true;
                 }
 
@@ -76,18 +76,18 @@ namespace GKCore.Tools
         /// <param name="ancestorRec"></param>
         /// <param name="searchRec"></param>
         /// <returns>crossing of two individuals</returns>
-        public static GDMIndividualRecord PL_SearchDesc(GDMIndividualRecord ancestorRec, GDMIndividualRecord searchRec)
+        public static GDMIndividualRecord PL_SearchDesc(GDMTree tree, GDMIndividualRecord ancestorRec, GDMIndividualRecord searchRec)
         {
             GDMIndividualRecord cross = null;
 
             int num = ancestorRec.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
-                GDMFamilyRecord family = ancestorRec.SpouseToFamilyLinks[i].Family;
+                GDMFamilyRecord family = tree.GetPtrValue(ancestorRec.SpouseToFamilyLinks[i]);
                 GDMIndividualRecord spouse = family.GetSpouseBy(ancestorRec);
 
                 bool res;
                 if (spouse != null) {
-                    res = PL_SearchAnc(spouse, searchRec, (ancestorRec.Sex == GDMSex.svFemale));
+                    res = PL_SearchAnc(tree, spouse, searchRec, (ancestorRec.Sex == GDMSex.svFemale));
                     if (res) {
                         cross = ancestorRec;
                         return cross;
@@ -97,8 +97,8 @@ namespace GKCore.Tools
                 if (ancestorRec.Sex == GDMSex.svMale) {
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++) {
-                        GDMIndividualRecord child = family.Children[j].Individual;
-                        cross = PL_SearchDesc(child, searchRec);
+                        GDMIndividualRecord child = tree.GetPtrValue(family.Children[j]);
+                        cross = PL_SearchDesc(tree, child, searchRec);
                         if (cross != null) return cross;
                     }
                 }
@@ -107,24 +107,24 @@ namespace GKCore.Tools
             return null;
         }
 
-        public static GDMFamilyRecord PL_SearchIntersection(GDMIndividualRecord ancestor, GDMIndividualRecord searchRec)
+        public static GDMFamilyRecord PL_SearchIntersection(GDMTree tree, GDMIndividualRecord ancestor, GDMIndividualRecord searchRec)
         {
             int num = ancestor.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
-                GDMFamilyRecord family = ancestor.SpouseToFamilyLinks[i].Family;
+                GDMFamilyRecord family = tree.GetPtrValue(ancestor.SpouseToFamilyLinks[i]);
                 GDMIndividualRecord spouse = family.GetSpouseBy(ancestor);
 
                 if (spouse != null) {
-                    bool res = PL_SearchAnc(spouse, searchRec, (ancestor.Sex == GDMSex.svFemale));
+                    bool res = PL_SearchAnc(tree, spouse, searchRec, (ancestor.Sex == GDMSex.svFemale));
                     if (res) return family;
                 }
 
                 if (ancestor.Sex == GDMSex.svMale) {
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++) {
-                        GDMIndividualRecord child = family.Children[j].Individual;
+                        GDMIndividualRecord child = tree.GetPtrValue(family.Children[j]);
 
-                        GDMFamilyRecord res = PL_SearchIntersection(child, searchRec);
+                        GDMFamilyRecord res = PL_SearchIntersection(tree, child, searchRec);
                         if (res != null) return res;
                     }
                 }
@@ -267,7 +267,7 @@ namespace GKCore.Tools
 
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++) {
-                        GDMIndividualRecord child = family.Children[j].Individual;
+                        GDMIndividualRecord child = tree.GetPtrValue(family.Children[j]);
                         WalkTreeInt(tree, child, intMode, walkProc, extData);
                     }
                 }
@@ -307,10 +307,10 @@ namespace GKCore.Tools
 
             GDMFamilyRecord family = tree.GetParentsFamily(iRec);
             if (family != null) {
-                var res = DetectCycleAncestors(tree, family.Husband.Individual, stack, indiFlags);
+                var res = DetectCycleAncestors(tree, tree.GetPtrValue(family.Husband), stack, indiFlags);
                 if (res != null) return res;
 
-                res = DetectCycleAncestors(tree, family.Wife.Individual, stack, indiFlags);
+                res = DetectCycleAncestors(tree, tree.GetPtrValue(family.Wife), stack, indiFlags);
                 if (res != null) return res;
             }
 
@@ -318,7 +318,8 @@ namespace GKCore.Tools
             return null;
         }
 
-        private static GDMIndividualRecord DetectCycleDescendants(GDMIndividualRecord iRec, Stack<GDMIndividualRecord> stack, 
+        private static GDMIndividualRecord DetectCycleDescendants(GDMTree tree, GDMIndividualRecord iRec,
+                                                                  Stack<GDMIndividualRecord> stack,
                                                                   GKVarCache<GDMIndividualRecord, int> indiFlags)
         {
             if (iRec == null) return null;
@@ -331,15 +332,15 @@ namespace GKCore.Tools
 
             int num = iRec.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
-                GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                GDMFamilyRecord family = tree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
                 if (family == null) continue;
 
                 int num2 = family.Children.Count;
                 for (int j = 0; j < num2; j++) {
-                    GDMIndividualRecord child = family.Children[j].Individual;
+                    GDMIndividualRecord child = tree.GetPtrValue(family.Children[j]);
                     if (child == null) continue;
 
-                    var res = DetectCycleDescendants(child, stack, indiFlags);
+                    var res = DetectCycleDescendants(tree, child, stack, indiFlags);
                     if (res != null) return res;
                 }
             }
@@ -361,7 +362,7 @@ namespace GKCore.Tools
 
             stack.Clear();
 
-            hasCycle = DetectCycleDescendants(iRec, stack, indiDCFlags);
+            hasCycle = DetectCycleDescendants(tree, iRec, stack, indiDCFlags);
             if (hasCycle != null) {
                 var lastRec = stack.Pop();
                 return iRec.XRef + " ... " + lastRec.XRef + " -> " + hasCycle.XRef;
@@ -386,7 +387,7 @@ namespace GKCore.Tools
             }
 
             if (!HasIndiFlag(indiDCFlags, iRec, DCFlag.dcfDescWalk)) {
-                hasCycle = DetectCycleDescendants(iRec, stack, indiDCFlags);
+                hasCycle = DetectCycleDescendants(tree, iRec, stack, indiDCFlags);
                 if (hasCycle != null) {
                     var lastRec = stack.Pop();
                     return iRec.XRef + " ... " + lastRec.XRef + " -> " + hasCycle.XRef;
@@ -565,7 +566,7 @@ namespace GKCore.Tools
                 Solve = solve;
             }
 
-            public string GetRecordName()
+            public string GetRecordName(GDMTree tree)
             {
                 string result = "[" + Rec.XRef + "] ";
 
@@ -575,7 +576,7 @@ namespace GKCore.Tools
                         break;
 
                     case GDMRecordType.rtFamily:
-                        result = result + GKUtils.GetFamilyString((GDMFamilyRecord)Rec);
+                        result = result + GKUtils.GetFamilyString(tree, (GDMFamilyRecord)Rec);
                         break;
                 }
 
@@ -642,14 +643,14 @@ namespace GKCore.Tools
                 }
             }
 
-            int iAge = GKUtils.GetMarriageAge(iRec);
+            int iAge = GKUtils.GetMarriageAge(tree, iRec);
             if (iAge > 0 && (iAge <= 13 || iAge >= 50)) {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdStrangeSpouse, CheckSolve.csSkip);
                 checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_StrangeSpouse), iAge.ToString());
                 checksList.Add(checkObj);
             }
 
-            iAge = GKUtils.GetFirstbornAge(iRec, GKUtils.GetFirstborn(iRec));
+            iAge = GKUtils.GetFirstbornAge(iRec, GKUtils.GetFirstborn(tree, iRec));
             if (iAge > 0 && (iAge <= 13 || iAge >= 50)) {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdStrangeParent, CheckSolve.csSkip);
                 checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_StrangeParent), iAge.ToString());
@@ -937,13 +938,13 @@ namespace GKCore.Tools
             for (int i = 0, num = iRec.ChildToFamilyLinks.Count; i < num; i++) {
                 var cfl = iRec.ChildToFamilyLinks[i];
                 CheckRelations_CheckNotes(tree, splitList, cfl);
-                CheckRelations_CheckFamily(tree, splitList, cfl.Family);
+                CheckRelations_CheckFamily(tree, splitList, tree.GetPtrValue(cfl));
             }
 
             for (int i = 0, num = iRec.SpouseToFamilyLinks.Count; i < num; i++) {
                 var sfl = iRec.SpouseToFamilyLinks[i];
                 CheckRelations_CheckNotes(tree, splitList, sfl);
-                CheckRelations_CheckFamily(tree, splitList, sfl.Family);
+                CheckRelations_CheckFamily(tree, splitList, tree.GetPtrValue(sfl));
             }
 
             for (int i = 0, num = iRec.Events.Count; i < num; i++) {

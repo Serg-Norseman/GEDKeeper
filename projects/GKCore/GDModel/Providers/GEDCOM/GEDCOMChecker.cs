@@ -211,7 +211,7 @@ namespace GDModel.Providers.GEDCOM
 
             for (int i = iRec.ChildToFamilyLinks.Count - 1; i >= 0; i--) {
                 var cfl = iRec.ChildToFamilyLinks[i];
-                if (cfl.Family == null) {
+                if (tree.GetPtrValue(cfl) == null) {
                     iRec.ChildToFamilyLinks.DeleteAt(i);
                 } else {
                     CheckPointerWithNotes(tree, format, cfl);
@@ -220,7 +220,7 @@ namespace GDModel.Providers.GEDCOM
 
             for (int i = iRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--) {
                 var sfl = iRec.SpouseToFamilyLinks[i];
-                if (sfl.Family == null) {
+                if (tree.GetPtrValue(sfl) == null) {
                     iRec.SpouseToFamilyLinks.DeleteAt(i);
                 } else {
                     CheckPointerWithNotes(tree, format, sfl);

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using BSLib;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
@@ -53,7 +52,7 @@ namespace GKCore.Tools
                         var parts = GKUtils.GetNameParts(context.Tree, iRec);
 
                         int birthDate = context.FindBirthYear(iRec);
-                        int descGens = GKUtils.GetDescGenerations(iRec);
+                        int descGens = GKUtils.GetDescGenerations(context.Tree, iRec);
 
                         bool res = (iRec.ChildToFamilyLinks.Count == 0);
                         res = (res && iRec.Sex == GDMSex.svMale);
@@ -68,7 +67,7 @@ namespace GKCore.Tools
                             PatriarchObj pObj = new PatriarchObj();
                             pObj.IRec = iRec;
                             pObj.BirthYear = birthDate;
-                            pObj.DescendantsCount = GKUtils.GetDescendantsCount(iRec) - 1;
+                            pObj.DescendantsCount = GKUtils.GetDescendantsCount(context.Tree, iRec) - 1;
                             pObj.DescGenerations = descGens;
                             patList.Add(pObj);
                         }
@@ -99,7 +98,7 @@ namespace GKCore.Tools
                     for (int j = i + 1; j < num2; j++) {
                         PatriarchObj patr2 = patList[j];
 
-                        GDMIndividualRecord cross = TreeTools.PL_SearchDesc(patr.IRec, patr2.IRec);
+                        GDMIndividualRecord cross = TreeTools.PL_SearchDesc(context.Tree, patr.IRec, patr2.IRec);
                         if (cross != null) {
                             patr.HasLinks = true;
                             patr2.HasLinks = true;
@@ -129,10 +128,10 @@ namespace GKCore.Tools
             return patList;
         }
 
-        private static void PL_WalkDescLinks(Graph graph, GKVarCache<GDMFamilyRecord, PGNode> pgNodes, PGNode prevNode, GDMIndividualRecord ancestor)
+        private static void PL_WalkDescLinks(GDMTree tree, Graph graph, GKVarCache<GDMFamilyRecord, PGNode> pgNodes, PGNode prevNode, GDMIndividualRecord ancestor)
         {
             for (int i = 0, count = ancestor.SpouseToFamilyLinks.Count; i < count; i++) {
-                var family = ancestor.SpouseToFamilyLinks[i].Family;
+                var family = tree.GetPtrValue(ancestor.SpouseToFamilyLinks[i]);
                 var node = pgNodes[family];
 
                 if (node != null && node.Type != PGNodeType.Default) {
@@ -149,8 +148,8 @@ namespace GKCore.Tools
                 }
 
                 for (int k = 0, count2 = family.Children.Count; k < count2; k++) {
-                    GDMIndividualRecord child = family.Children[k].Individual;
-                    PL_WalkDescLinks(graph, pgNodes, prevNode, child);
+                    GDMIndividualRecord child = tree.GetPtrValue(family.Children[k]);
+                    PL_WalkDescLinks(tree, graph, pgNodes, prevNode, child);
                 }
             }
         }
@@ -172,7 +171,7 @@ namespace GKCore.Tools
 
                         int count2 = iRec.SpouseToFamilyLinks.Count;
                         for (int k = 0; k < count2; k++) {
-                            GDMFamilyRecord family = iRec.SpouseToFamilyLinks[k].Family;
+                            GDMFamilyRecord family = context.Tree.GetPtrValue(iRec.SpouseToFamilyLinks[k]);
                             pgNodes[family] = new PGNode(family.XRef, PGNodeType.Patriarch, patNode.DescGenerations);
                         }
                     }
@@ -188,7 +187,7 @@ namespace GKCore.Tools
                             for (int j = i + 1; j < patCount; j++) {
                                 PatriarchObj patr2 = patList[j];
 
-                                GDMFamilyRecord cross = TreeTools.PL_SearchIntersection(patr.IRec, patr2.IRec);
+                                GDMFamilyRecord cross = TreeTools.PL_SearchIntersection(context.Tree, patr.IRec, patr2.IRec);
 
                                 if (cross != null) {
                                     var node = pgNodes[cross];
@@ -196,7 +195,7 @@ namespace GKCore.Tools
                                     if (node != null && node.Type == PGNodeType.Patriarch) {
                                         // dummy
                                     } else {
-                                        int size = GKUtils.GetDescGenerations(cross.Husband.Individual);
+                                        int size = GKUtils.GetDescGenerations(context.Tree, context.Tree.GetPtrValue(cross.Husband));
                                         if (size == 0) size = 1;
                                         pgNodes[cross] = new PGNode(cross.XRef, PGNodeType.Intersection, size);
                                     }
@@ -213,7 +212,7 @@ namespace GKCore.Tools
                     int count3 = patList.Count;
                     for (int i = 0; i < count3; i++) {
                         PatriarchObj patNode = patList[i];
-                        PL_WalkDescLinks(graph, pgNodes, null, patNode.IRec);
+                        PL_WalkDescLinks(context.Tree, graph, pgNodes, null, patNode.IRec);
                     }
 
                     /*if (gpl_params.aLoneSuppress) {

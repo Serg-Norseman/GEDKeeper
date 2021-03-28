@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -53,7 +53,8 @@ namespace GKCore.Controllers
                 fView.ChecksList.ClearItems();
 
                 foreach (TreeTools.CheckObj checkObj in fChecksList) {
-                    fView.ChecksList.AddItem(checkObj, new object[] { checkObj.GetRecordName(),
+                    fView.ChecksList.AddItem(checkObj, new object[] {
+                        checkObj.GetRecordName(fBase.Context.Tree),
                         checkObj.Comment,
                         LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve])
                     });

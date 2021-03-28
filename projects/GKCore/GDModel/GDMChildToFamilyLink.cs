@@ -59,12 +59,6 @@ namespace GDModel
             set { fPedigreeLinkageType = value; }
         }
 
-        public GDMFamilyRecord Family
-        {
-            get { return (GDMFamilyRecord)base.Value; }
-            set { base.Value = value; }
-        }
-
 
         public GDMChildToFamilyLink(GDMObject owner) : base(owner)
         {

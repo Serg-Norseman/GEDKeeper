@@ -326,14 +326,14 @@ namespace GKCore.Kinships
 
             int num = iRec.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
-                GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
-                GDMIndividualRecord spouse = ((iRec.Sex == GDMSex.svMale) ? family.Wife.Individual : family.Husband.Individual);
+                GDMFamilyRecord family = context.Tree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
+                GDMIndividualRecord spouse = (iRec.Sex == GDMSex.svMale) ? context.Tree.GetPtrValue(family.Wife) : context.Tree.GetPtrValue(family.Husband);
 
                 SearchKGInt(context, currNode, spouse, graph, RelationKind.rkSpouse, RelationKind.rkSpouse);
 
                 int num2 = family.Children.Count;
                 for (int j = 0; j < num2; j++) {
-                    GDMIndividualRecord child = family.Children[j].Individual;
+                    GDMIndividualRecord child = context.Tree.GetPtrValue(family.Children[j]);
                     SearchKGInt(context, currNode, child, graph, RelationKind.rkChild, RelationKind.rkParent);
                 }
             }

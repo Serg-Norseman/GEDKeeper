@@ -554,7 +554,7 @@ namespace GDModel
             if (groupRec == null) return false;
 
             for (int i = groupRec.Members.Count - 1; i >= 0; i--) {
-                GDMIndividualRecord member = groupRec.Members[i].Individual;
+                GDMIndividualRecord member = GetPtrValue<GDMIndividualRecord>(groupRec.Members[i]);
                 groupRec.RemoveMember(member);
             }
 

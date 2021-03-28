@@ -623,7 +623,7 @@ namespace GKCore
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             if (rec == null) return null;
 
-            GDMFamilyRecord fam = rec.SpouseToFamilyLinks[spIdx].Family;
+            GDMFamilyRecord fam = fBase.Context.Tree.GetPtrValue(rec.SpouseToFamilyLinks[spIdx]);
             return fam;
         }
 

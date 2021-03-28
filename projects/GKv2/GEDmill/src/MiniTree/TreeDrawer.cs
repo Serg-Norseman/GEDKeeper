@@ -302,12 +302,12 @@ namespace GEDmill.MiniTree
                     bool bAddedSubject = false;
                     int nSpouses = 0;
                     MiniTreeGroup.ECrossbar ecbCrossbar = MiniTreeGroup.ECrossbar.Solid;
-                    var alFamily = fTree.GetFamilyList(irSubject);
+                    var indiFamilies = fTree.GetFamilyList(irSubject);
 
-                    foreach (GDMFamilyRecord fr in alFamily) {
-                        GDMIndividualRecord irSpouse = fr.GetSpouseBy(irSubject);
+                    foreach (GDMFamilyRecord famRec in indiFamilies) {
+                        GDMIndividualRecord irSpouse = famRec.GetSpouseBy(irSubject);
 
-                        if (fr.Husband.Individual != irSubject) {
+                        if (famRec.Husband.Individual != irSubject) {
                             mtiRightmostSibling = AddToGroup(irSpouse, mtgSiblings);
                             // Subject is female so all but last husband have dotted bars
                             ecbCrossbar = MiniTreeGroup.ECrossbar.DottedLeft;
@@ -337,7 +337,7 @@ namespace GEDmill.MiniTree
 
                         // Add children by this spouse                   
                         MiniTreeIndividual mtiChild = null;
-                        while ((irGrandchild = GetChild(fr, nGrandchildren, null)) != null) {
+                        while ((irGrandchild = GetChild(famRec, nGrandchildren, null)) != null) {
                             if (Exists(irGrandchild)) {
                                 CBoxText boxtext = new CBoxText(irGrandchild);
                                 mtiChild = mtgOffspring.AddIndividual(irGrandchild, boxtext.FirstName, boxtext.Surname, boxtext.Date, true, true, false, boxtext.Concealed, false);
@@ -365,7 +365,7 @@ namespace GEDmill.MiniTree
                         }
 
                         // If subject is husband then we need to add their wife now.
-                        if (fr.Husband.Individual == irSubject) {
+                        if (famRec.Husband.Individual == irSubject) {
                             ecbCrossbar = MiniTreeGroup.ECrossbar.DottedRight;
 
                             // Hook up to previous rightmost sibling and set this as new rightmost sibling.

@@ -580,7 +580,7 @@ namespace GKCore.Charts
 
                     for (int i = 0; i < spousesNum; i++)
                     {
-                        GDMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
+                        GDMFamilyRecord family = fTree.GetPtrValue(person.SpouseToFamilyLinks[i]);
 
                         // protection against invalid third-party files
                         if (family == null) {
@@ -1753,7 +1753,7 @@ namespace GKCore.Charts
             }
 
             if (chartKind >= TreeChartKind.ckDescendants && chartKind <= TreeChartKind.ckBoth) {
-                int descCount = GKUtils.GetDescendantsCount(iRec);
+                int descCount = GKUtils.GetDescendantsCount(tree, iRec);
                 if (descCount > 2048) {
                     AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_DescendantsNumberIsInvalid), descCount.ToString()));
                     result = false;

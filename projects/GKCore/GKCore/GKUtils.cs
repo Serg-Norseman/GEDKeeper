@@ -182,7 +182,7 @@ namespace GKCore
                         st = GetNameString(((GDMIndividualRecord)record), true, false);
                         break;
                     case GDMRecordType.rtFamily:
-                        st = GetFamilyString((GDMFamilyRecord)record);
+                        st = GetFamilyString(tree, (GDMFamilyRecord)record);
                         break;
                     case GDMRecordType.rtNote:
                         st = ((GDMNoteRecord)record).Lines[0]; // TODO: bad solution?!
@@ -253,7 +253,7 @@ namespace GKCore
                 throw new ArgumentNullException("commRec");
 
             string result = "";
-            var corr = commRec.Corresponder.Individual;
+            var corr = tree.GetPtrValue(commRec.Corresponder);
 
             if (corr != null) {
                 string nm = GetNameString(corr, true, false);
@@ -320,7 +320,7 @@ namespace GKCore
                 case GDMGoalType.gtIndividual:
                 case GDMGoalType.gtFamily:
                 case GDMGoalType.gtSource:
-                    result = GetGoalStr(goal.GoalType, goal.GoalRec);
+                    result = GetGoalStr(tree, goal.GoalType, goal.GoalRec);
                     break;
 
                 case GDMGoalType.gtOther:
@@ -335,7 +335,7 @@ namespace GKCore
             return result;
         }
 
-        public static string GetGoalStr(GDMGoalType gt, GDMRecord tempRec)
+        public static string GetGoalStr(GDMTree tree, GDMGoalType gt, GDMRecord tempRec)
         {
             if (tempRec == null) return string.Empty;
 
@@ -345,7 +345,7 @@ namespace GKCore
                     return GetNameString(((GDMIndividualRecord)tempRec), true, false);
 
                 case GDMGoalType.gtFamily:
-                    return GetFamilyString(tempRec as GDMFamilyRecord);
+                    return GetFamilyString(tree, tempRec as GDMFamilyRecord);
 
                 case GDMGoalType.gtSource:
                     return ((GDMSourceRecord)tempRec).ShortTitle;
@@ -1104,13 +1104,13 @@ namespace GKCore
             return result;
         }
 
-        public static int GetDescendantsCount(GDMIndividualRecord iRec)
+        public static int GetDescendantsCount(GDMTree tree, GDMIndividualRecord iRec)
         {
             var indiCounters = new GKVarCache<GDMIndividualRecord, int>(-1);
-            return GetDescendantsCount(iRec, indiCounters);
+            return GetDescendantsCount(tree, iRec, indiCounters);
         }
 
-        private static int GetDescendantsCount(GDMIndividualRecord iRec, GKVarCache<GDMIndividualRecord, int> counters)
+        private static int GetDescendantsCount(GDMTree tree, GDMIndividualRecord iRec, GKVarCache<GDMIndividualRecord, int> counters)
         {
             int result = 0;
 
@@ -1121,12 +1121,12 @@ namespace GKCore
 
                     int num = iRec.SpouseToFamilyLinks.Count;
                     for (int i = 0; i < num; i++) {
-                        GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                        GDMFamilyRecord family = tree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
 
                         int num2 = family.Children.Count;
                         for (int j = 0; j < num2; j++) {
-                            GDMIndividualRecord child = family.Children[j].Individual;
-                            val += GetDescendantsCount(child, counters);
+                            GDMIndividualRecord child = tree.GetPtrValue(family.Children[j]);
+                            val += GetDescendantsCount(tree, child, counters);
                         }
                     }
                     counters[iRec] = val;
@@ -1137,7 +1137,7 @@ namespace GKCore
             return result;
         }
 
-        private static int GetDescGens_Recursive(GDMIndividualRecord iRec)
+        private static int GetDescGens_Recursive(GDMTree tree, GDMIndividualRecord iRec)
         {
             int result = 0;
 
@@ -1146,12 +1146,12 @@ namespace GKCore
 
                 int num = iRec.SpouseToFamilyLinks.Count;
                 for (int i = 0; i < num; i++) {
-                    GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                    GDMFamilyRecord family = tree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
 
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++) {
-                        GDMIndividualRecord child = family.Children[j].Individual;
-                        int res = GetDescGens_Recursive(child);
+                        GDMIndividualRecord child = tree.GetPtrValue(family.Children[j]);
+                        int res = GetDescGens_Recursive(tree, child);
                         if (max < res) {
                             max = res;
                         }
@@ -1163,9 +1163,9 @@ namespace GKCore
             return result;
         }
 
-        public static int GetDescGenerations(GDMIndividualRecord iRec)
+        public static int GetDescGenerations(GDMTree tree, GDMIndividualRecord iRec)
         {
-            return GetDescGens_Recursive(iRec) - 1;
+            return GetDescGens_Recursive(tree, iRec) - 1;
         }
 
         public static int GetMarriagesCount(GDMIndividualRecord iRec)
@@ -1174,14 +1174,14 @@ namespace GKCore
             return result;
         }
 
-        public static int GetSpousesDiff(GDMFamilyRecord fRec)
+        public static int GetSpousesDiff(GDMTree tree, GDMFamilyRecord fRec)
         {
             int result = -1;
 
             try {
                 if (fRec != null) {
-                    GDMIndividualRecord husb = fRec.Husband.Individual;
-                    GDMIndividualRecord wife = fRec.Wife.Individual;
+                    GDMIndividualRecord husb = tree.GetPtrValue(fRec.Husband);
+                    GDMIndividualRecord wife = tree.GetPtrValue(fRec.Wife);
 
                     if (husb != null && wife != null) {
                         GDMCustomEvent evH = husb.FindEvent(GEDCOMTagType.BIRT);
@@ -1197,7 +1197,7 @@ namespace GKCore
             return result;
         }
 
-        public static GDMIndividualRecord GetFirstborn(GDMIndividualRecord iRec)
+        public static GDMIndividualRecord GetFirstborn(GDMTree tree, GDMIndividualRecord iRec)
         {
             GDMIndividualRecord iChild = null;
             if (iRec == null) return iChild;
@@ -1207,12 +1207,12 @@ namespace GKCore
 
                 int num = iRec.SpouseToFamilyLinks.Count;
                 for (int i = 0; i < num; i++) {
-                    GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                    GDMFamilyRecord family = tree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
                     if (family == null) continue;
 
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++) {
-                        GDMIndividualRecord child = family.Children[j].Individual;
+                        GDMIndividualRecord child = tree.GetPtrValue(family.Children[j]);
                         if (child == null) continue;
 
                         GDMCustomEvent evt = child.FindEvent(GEDCOMTagType.BIRT);
@@ -1260,7 +1260,7 @@ namespace GKCore
             return result;
         }
 
-        public static int GetMarriageAge(GDMIndividualRecord iRec)
+        public static int GetMarriageAge(GDMTree tree, GDMIndividualRecord iRec)
         {
             int result = 0;
             if (iRec == null) return result;
@@ -1274,7 +1274,7 @@ namespace GKCore
 
                     int num = iRec.SpouseToFamilyLinks.Count;
                     for (int i = 0; i < num; i++) {
-                        GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                        GDMFamilyRecord family = tree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
                         if (family == null) continue;
 
                         GDMCustomEvent marrEvt = family.FindEvent(GEDCOMTagType.MARR);
@@ -1954,11 +1954,11 @@ namespace GKCore
                     if (familyRec != null) {
                         summary.Add("");
 
-                        GDMIndividualRecord spRec = familyRec.Husband.Individual;
+                        GDMIndividualRecord spRec = baseContext.Tree.GetPtrValue(familyRec.Husband);
                         string st = ((spRec == null) ? LangMan.LS(LSID.LSID_UnkMale) : HyperLink(spRec.XRef, GetNameString(spRec, true, false), 0));
                         summary.Add(LangMan.LS(LSID.LSID_Husband) + ": " + st + GetLifeStr(spRec));
 
-                        spRec = familyRec.Wife.Individual;
+                        spRec = baseContext.Tree.GetPtrValue(familyRec.Wife);
                         st = ((spRec == null) ? LangMan.LS(LSID.LSID_UnkFemale) : HyperLink(spRec.XRef, GetNameString(spRec, true, false), 0));
                         summary.Add(LangMan.LS(LSID.LSID_Wife) + ": " + st + GetLifeStr(spRec));
 
@@ -1969,7 +1969,7 @@ namespace GKCore
 
                         int num = familyRec.Children.Count;
                         for (int i = 0; i < num; i++) {
-                            var child = familyRec.Children[i].Individual;
+                            var child = baseContext.Tree.GetPtrValue(familyRec.Children[i]);
                             summary.Add("    " + HyperLink(child.XRef, GetNameString(child, true, false), 0) + GetLifeStr(child));
                         }
                         summary.Add("");
@@ -2133,7 +2133,7 @@ namespace GKCore
                         try {
                             int num = iRec.SpouseToFamilyLinks.Count;
                             for (int i = 0; i < num; i++) {
-                                GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+                                GDMFamilyRecord family = tree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
                                 if (family == null) continue;
                                 if (!baseContext.IsRecordAccess(family.Restriction)) continue;
 
@@ -2141,11 +2141,11 @@ namespace GKCore
                                 GDMIndividualRecord spRec;
                                 string unk;
                                 if (iRec.Sex == GDMSex.svMale) {
-                                    spRec = family.Wife.Individual;
+                                    spRec = tree.GetPtrValue(family.Wife);
                                     st = LangMan.LS(LSID.LSID_Wife) + ": ";
                                     unk = LangMan.LS(LSID.LSID_UnkFemale);
                                 } else {
-                                    spRec = family.Husband.Individual;
+                                    spRec = tree.GetPtrValue(family.Husband);
                                     st = LangMan.LS(LSID.LSID_Husband) + ": ";
                                     unk = LangMan.LS(LSID.LSID_UnkMale);
                                 }
@@ -2170,7 +2170,7 @@ namespace GKCore
                                     summary.Add(LangMan.LS(LSID.LSID_Childs) + ":");
 
                                     for (int k = 0; k < chNum; k++) {
-                                        GDMIndividualRecord child = family.Children[k].Individual;
+                                        GDMIndividualRecord child = tree.GetPtrValue(family.Children[k]);
                                         if (child == null) continue;
 
                                         summary.Add("    " + HyperLink(child.XRef, GetNameString(child, true, false), 0) + GetLifeStr(child));
@@ -2689,22 +2689,25 @@ namespace GKCore
 
         #region Names processing
 
-        public static string GetFamilyString(GDMFamilyRecord family)
+        public static string GetFamilyString(GDMTree tree, GDMFamilyRecord family)
         {
             if (family == null)
                 throw new ArgumentNullException("family");
 
-            return GetFamilyString(family, LangMan.LS(LSID.LSID_UnkMale), LangMan.LS(LSID.LSID_UnkFemale));
+            return GetFamilyString(tree, family, LangMan.LS(LSID.LSID_UnkMale), LangMan.LS(LSID.LSID_UnkFemale));
         }
 
-        public static string GetFamilyString(GDMFamilyRecord family, string unkHusband, string unkWife)
+        public static string GetFamilyString(GDMTree tree, GDMFamilyRecord family, string unkHusband, string unkWife)
         {
+            if (tree == null)
+                throw new ArgumentNullException("tree");
+
             if (family == null)
                 throw new ArgumentNullException("family");
 
             string result = "";
 
-            GDMIndividualRecord spouse = family.Husband.Individual;
+            GDMIndividualRecord spouse = tree.GetPtrValue(family.Husband);
             if (spouse == null) {
                 if (unkHusband == null) unkHusband = "?";
                 result += unkHusband;
@@ -2714,7 +2717,7 @@ namespace GKCore
 
             result += " - ";
 
-            spouse = family.Wife.Individual;
+            spouse = tree.GetPtrValue(family.Wife);
             if (spouse == null) {
                 if (unkWife == null) unkWife = "?";
                 result += unkWife;

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -805,10 +805,12 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMChildToFamilyLink cfLink in iRec.ChildToFamilyLinks) {
-                    GDMFamilyRecord famRec = cfLink.Family;
+                    GDMFamilyRecord famRec = fBaseContext.Tree.GetPtrValue(cfLink);
 
-                    fSheetList.AddItem(cfLink, new object[] { GKUtils.GetFamilyString(famRec),
-                                                          LangMan.LS(GKData.ParentTypes[(int)cfLink.PedigreeLinkageType]) });
+                    fSheetList.AddItem(cfLink, new object[] {
+                        GKUtils.GetFamilyString(fBaseContext.Tree, famRec),
+                        LangMan.LS(GKData.ParentTypes[(int)cfLink.PedigreeLinkageType])
+                    });
                 }
 
                 fSheetList.EndUpdate();
@@ -846,7 +848,8 @@ namespace GKCore.Lists
 
                 case RecordAction.raDelete:
                     if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery))) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, iRec, cfLink.Family);
+                        var famRec = fBaseContext.Tree.GetPtrValue(cfLink);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, iRec, famRec);
                     }
                     break;
 
@@ -904,17 +907,17 @@ namespace GKCore.Lists
                 foreach (GDMSpouseToFamilyLink spLink in iRec.SpouseToFamilyLinks) {
                     idx += 1;
 
-                    GDMFamilyRecord family = spLink.Family;
+                    GDMFamilyRecord family = fBaseContext.Tree.GetPtrValue(spLink);
                     if (family == null) continue;
 
                     GDMIndividualRecord relPerson;
                     string relName;
 
                     if (iRec.Sex == GDMSex.svMale) {
-                        relPerson = family.Wife.Individual;
+                        relPerson = fBaseContext.Tree.GetPtrValue(family.Wife);
                         relName = LangMan.LS(LSID.LSID_UnkFemale);
                     } else {
-                        relPerson = family.Husband.Individual;
+                        relPerson = fBaseContext.Tree.GetPtrValue(family.Husband);
                         relName = LangMan.LS(LSID.LSID_UnkMale);
                     }
 

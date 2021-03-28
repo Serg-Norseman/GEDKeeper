@@ -255,7 +255,7 @@ namespace GKCore
         public void Test_GetXGoalStr()
         {
             Assert.AreEqual("", GKUtils.GetTaskGoalStr(null, null));
-            Assert.AreEqual("", GKUtils.GetGoalStr(GDMGoalType.gtIndividual, null));
+            Assert.AreEqual("", GKUtils.GetGoalStr(fContext.Tree, GDMGoalType.gtIndividual, null));
 
             var rec = fContext.Tree.XRefIndex_Find("TK1") as GDMTaskRecord;
             Assert.IsNotNull(rec);
@@ -289,8 +289,8 @@ namespace GKCore
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
-            Assert.AreEqual(0, GKUtils.GetDescendantsCount(null));
-            Assert.AreEqual(3, GKUtils.GetDescendantsCount(iRec) - 1);
+            Assert.AreEqual(0, GKUtils.GetDescendantsCount(fContext.Tree, null));
+            Assert.AreEqual(3, GKUtils.GetDescendantsCount(fContext.Tree, iRec) - 1);
         }
 
         [Test]
@@ -298,7 +298,7 @@ namespace GKCore
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
-            Assert.AreEqual(2, GKUtils.GetDescGenerations(iRec));
+            Assert.AreEqual(2, GKUtils.GetDescGenerations(fContext.Tree, iRec));
         }
 
         [Test]
@@ -314,7 +314,7 @@ namespace GKCore
         {
             GDMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
 
-            Assert.AreEqual(1, GKUtils.GetSpousesDiff(famRec));
+            Assert.AreEqual(1, GKUtils.GetSpousesDiff(fContext.Tree, famRec));
         }
 
         [Test]
@@ -323,7 +323,7 @@ namespace GKCore
             GDMIndividualRecord iRec1 = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             GDMIndividualRecord iRec3 = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
 
-            Assert.AreEqual(iRec3, GKUtils.GetFirstborn(iRec1));
+            Assert.AreEqual(iRec3, GKUtils.GetFirstborn(fContext.Tree, iRec1));
             Assert.AreEqual(20, GKUtils.GetFirstbornAge(iRec1, iRec3));
         }
 
@@ -333,7 +333,7 @@ namespace GKCore
             GDMIndividualRecord iRec1 = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
             // specially bad date also for CheckBase functions
-            Assert.AreEqual(10, GKUtils.GetMarriageAge(iRec1));
+            Assert.AreEqual(10, GKUtils.GetMarriageAge(fContext.Tree, iRec1));
         }
 
         [Test]
@@ -359,19 +359,14 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_X()
-        {
-        }
-
-        [Test]
         public void Test_CommonX()
         {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventName(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventCause(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventDesc(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetAttributeStr(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null, "", ""); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null, null, "", ""); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNickString(null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNameString(null, false, false); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SetMarriedSurname(null, ""); });

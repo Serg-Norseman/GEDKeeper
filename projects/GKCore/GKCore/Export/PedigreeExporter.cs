@@ -185,7 +185,7 @@ namespace GKCore.Export
             string result = person.Id;
 
             if (fKind == PedigreeKind.Descend_Konovalov && person.Parent != null) {
-                GDMFamilyRecord family = person.IRec.ChildToFamilyLinks[0].Family;
+                GDMFamilyRecord family = fTree.GetPtrValue(person.IRec.ChildToFamilyLinks[0]);
                 string spStr = "";
                 int idx = person.Parent.IRec.IndexOfSpouse(family);
                 if (person.Parent.IRec.SpouseToFamilyLinks.Count > 1) {
@@ -234,17 +234,17 @@ namespace GKCore.Export
 
                 int num2 = person.IRec.SpouseToFamilyLinks.Count;
                 for (i = 0; i < num2; i++) {
-                    GDMFamilyRecord family = person.IRec.SpouseToFamilyLinks[i].Family;
+                    GDMFamilyRecord family = fTree.GetPtrValue(person.IRec.SpouseToFamilyLinks[i]);
                     if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
                     GDMIndividualRecord spRec;
                     string unk;
                     if (person.IRec.Sex == GDMSex.svMale) {
-                        spRec = family.Wife.Individual;
+                        spRec = fTree.GetPtrValue(family.Wife);
                         st = LangMan.LS(LSID.LSID_Wife) + ": ";
                         unk = LangMan.LS(LSID.LSID_UnkFemale);
                     } else {
-                        spRec = family.Husband.Individual;
+                        spRec = fTree.GetPtrValue(family.Husband);
                         st = LangMan.LS(LSID.LSID_Husband) + ": ";
                         unk = LangMan.LS(LSID.LSID_UnkMale);
                     }
@@ -261,7 +261,7 @@ namespace GKCore.Export
                     evList.Clear();
                     int childrenCount = family.Children.Count;
                     for (int j = 0; j < childrenCount; j++) {
-                        GDMIndividualRecord child = family.Children[j].Individual;
+                        GDMIndividualRecord child = fTree.GetPtrValue(family.Children[j]);
                         evList.Add(new PedigreeEvent(child, child.FindEvent(GEDCOMTagType.BIRT)));
                     }
                     WriteEventList(person, evList);
@@ -299,17 +299,17 @@ namespace GKCore.Export
 
             int num2 = person.IRec.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num2; i++) {
-                GDMFamilyRecord family = person.IRec.SpouseToFamilyLinks[i].Family;
+                GDMFamilyRecord family = fTree.GetPtrValue(person.IRec.SpouseToFamilyLinks[i]);
                 if (fBase.Context.IsRecordAccess(family.Restriction)) {
                     GDMIndividualRecord spRec;
                     string st;
                     string unk;
                     if (person.IRec.Sex == GDMSex.svMale) {
-                        spRec = family.Wife.Individual;
+                        spRec = fTree.GetPtrValue(family.Wife);
                         st = LangMan.LS(LSID.LSID_WifeSign);
                         unk = LangMan.LS(LSID.LSID_UnkFemale);
                     } else {
-                        spRec = family.Husband.Individual;
+                        spRec = fTree.GetPtrValue(family.Husband);
                         st = LangMan.LS(LSID.LSID_HusbSign);
                         unk = LangMan.LS(LSID.LSID_UnkMale);
                     }
@@ -430,28 +430,28 @@ namespace GKCore.Export
 
             if (fKind == PedigreeKind.Ascend) {
                 if (iRec.ChildToFamilyLinks.Count > 0) {
-                    GDMFamilyRecord family = iRec.ChildToFamilyLinks[0].Family;
+                    GDMFamilyRecord family = fTree.GetPtrValue(iRec.ChildToFamilyLinks[0]);
                     if (fBase.Context.IsRecordAccess(family.Restriction)) {
                         GDMIndividualRecord prnt;
 
-                        prnt = family.Wife.Individual;
+                        prnt = fTree.GetPtrValue(family.Wife);
                         GenStep(res, prnt, level + 1, 1);
 
-                        prnt = family.Husband.Individual;
+                        prnt = fTree.GetPtrValue(family.Husband);
                         GenStep(res, prnt, level + 1, 1);
                     }
                 }
             } else {
                 int num2 = iRec.SpouseToFamilyLinks.Count;
                 for (int j = 0; j < num2; j++) {
-                    GDMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
+                    GDMFamilyRecord family = fTree.GetPtrValue(iRec.SpouseToFamilyLinks[j]);
                     if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
                     fBase.Context.ProcessFamily(family);
 
                     int num3 = family.Children.Count;
                     for (int i = 0; i < num3; i++) {
-                        GDMIndividualRecord child = family.Children[i].Individual;
+                        GDMIndividualRecord child = fTree.GetPtrValue(family.Children[i]);
                         GenStep(res, child, level + 1, i + 1);
                     }
                 }

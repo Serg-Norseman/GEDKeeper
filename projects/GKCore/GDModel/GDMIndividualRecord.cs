@@ -173,7 +173,7 @@ namespace GDModel
             fSex = GDMSex.svUnknown;
 
             for (int i = fChildToFamilyLinks.Count - 1; i >= 0; i--) {
-                GDMFamilyRecord family = fChildToFamilyLinks[i].Family;
+                GDMFamilyRecord family = fChildToFamilyLinks[i].Value as GDMFamilyRecord;
                 family.DeleteChild(this);
             }
             fChildToFamilyLinks.Clear();
@@ -231,9 +231,11 @@ namespace GDModel
 
         public void DeleteSpouseToFamilyLink(GDMFamilyRecord familyRec)
         {
+            if (familyRec == null) return;
+
             int num = fSpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
-                if (fSpouseToFamilyLinks[i].Family == familyRec) {
+                if (fSpouseToFamilyLinks[i].XRef == familyRec.XRef) {
                     fSpouseToFamilyLinks.DeleteAt(i);
                     break;
                 }
@@ -242,9 +244,11 @@ namespace GDModel
 
         public void DeleteChildToFamilyLink(GDMFamilyRecord familyRec)
         {
+            if (familyRec == null) return;
+
             int num = fChildToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
-                if (fChildToFamilyLinks[i].Family == familyRec) {
+                if (fChildToFamilyLinks[i].XRef == familyRec.XRef) {
                     fChildToFamilyLinks.DeleteAt(i);
                     break;
                 }
@@ -253,12 +257,15 @@ namespace GDModel
 
         public GDMChildToFamilyLink FindChildToFamilyLink(GDMFamilyRecord familyRec)
         {
+            if (familyRec == null) return null;
+
             for (int i = 0, num = fChildToFamilyLinks.Count; i < num; i++) {
                 var childLink = fChildToFamilyLinks[i];
-                if (childLink.Family == familyRec) {
+                if (childLink.XRef == familyRec.XRef) {
                     return childLink;
                 }
             }
+
             return null;
         }
 
@@ -316,7 +323,7 @@ namespace GDModel
 
             while (fChildToFamilyLinks.Count > 0) {
                 GDMChildToFamilyLink ctfLink = fChildToFamilyLinks.Extract(0);
-                GDMFamilyRecord family = ctfLink.Family;
+                GDMFamilyRecord family = ctfLink.Value as GDMFamilyRecord;
 
                 int num = family.Children.Count;
                 for (int i = 0; i < num; i++) {
