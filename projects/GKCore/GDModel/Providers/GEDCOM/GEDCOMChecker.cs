@@ -262,10 +262,10 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        private static void CheckGroupRecord(GDMGroupRecord group)
+        private static void CheckGroupRecord(IBaseContext baseContext, GDMGroupRecord group)
         {
             for (int i = group.Members.Count - 1; i >= 0; i--) {
-                GDMIndividualRecord mbr = group.Members[i].Individual;
+                GDMIndividualRecord mbr = baseContext.Tree.GetPtrValue(group.Members[i]);
                 if (mbr == null) {
                     group.Members.DeleteAt(i);
                 } else {
@@ -325,7 +325,7 @@ namespace GDModel.Providers.GEDCOM
                     break;
 
                 case GDMRecordType.rtGroup:
-                    CheckGroupRecord(rec as GDMGroupRecord);
+                    CheckGroupRecord(baseContext, rec as GDMGroupRecord);
                     break;
 
                 case GDMRecordType.rtSource:

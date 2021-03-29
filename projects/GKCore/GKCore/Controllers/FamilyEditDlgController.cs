@@ -128,8 +128,7 @@ namespace GKCore.Controllers
 
                 fView.LockEditor(true);
             } else {
-                husband = fBase.Context.Tree.GetPtrValue(fFamily.Husband);
-                wife = fBase.Context.Tree.GetPtrValue(fFamily.Wife);
+                fBase.Context.Tree.GetSpouses(fFamily, out husband, out wife);
 
                 fView.LockEditor(fFamily.Restriction == GDMRestriction.rnLocked);
             }

@@ -53,10 +53,11 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
+                var tree = fBaseWin.Context.Tree;
                 int idx = 0;
                 foreach (GDMIndividualLink ptr in family.Children) {
                     idx += 1;
-                    GDMIndividualRecord child = fBaseWin.Context.Tree.GetPtrValue(ptr);
+                    GDMIndividualRecord child = tree.GetPtrValue(ptr);
 
                     fSheetList.AddItem(child, new object[] {
                         idx, GKUtils.GetNameString(child, true, false),

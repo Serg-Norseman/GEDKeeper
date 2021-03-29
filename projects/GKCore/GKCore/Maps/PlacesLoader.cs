@@ -31,9 +31,11 @@ namespace GKCore.Maps
     {
         public readonly DateTime Date;
         public readonly GDMCustomEvent Event;
+        public readonly GDMRecord Owner;
 
-        public PlaceRef(GDMCustomEvent evt)
+        public PlaceRef(GDMRecord owner, GDMCustomEvent evt)
         {
+            Owner = owner;
             Event = evt;
             Date = (evt == null) ? new DateTime(0) : evt.Date.GetDateTime();
         }

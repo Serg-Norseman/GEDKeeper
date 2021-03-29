@@ -65,7 +65,6 @@ namespace GDModel
     public interface IGDMTreeEnumerator<T> : IGDMTreeEnumerator where T : GDMRecord
     {
         bool MoveNext(out T current);
-        void Reset();
     }
 
 

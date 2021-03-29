@@ -39,7 +39,7 @@ namespace GKCore
         [Test]
         public void Test_PlaceRef()
         {
-            var placeRef = new PlaceRef(null);
+            var placeRef = new PlaceRef(null, null);
             Assert.IsNotNull(placeRef);
             Assert.IsNull(placeRef.Event);
             Assert.AreEqual(0, placeRef.Date.ToBinary());
@@ -105,10 +105,10 @@ namespace GKCore
         {
             var gmapPoints = new ExtList<GeoPoint>();
 
-            PlacesLoader.AddPoint(gmapPoints, new GeoPoint(0, 0, "test"), new PlaceRef(null));
+            PlacesLoader.AddPoint(gmapPoints, new GeoPoint(0, 0, "test"), new PlaceRef(null, null));
             Assert.AreEqual(1, gmapPoints.Count);
 
-            PlacesLoader.AddPoint(gmapPoints, new GeoPoint(0, 0, "test"), new PlaceRef(null));
+            PlacesLoader.AddPoint(gmapPoints, new GeoPoint(0, 0, "test"), new PlaceRef(null, null));
             Assert.AreEqual(1, gmapPoints.Count); // duplicate will be excluded
         }
 

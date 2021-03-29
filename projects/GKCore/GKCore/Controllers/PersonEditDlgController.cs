@@ -191,19 +191,20 @@ namespace GKCore.Controllers
                 GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(fPerson.ChildToFamilyLinks[0]);
                 fView.SetParentsAvl(true, locked);
 
-                GDMIndividualRecord relPerson = fBase.Context.Tree.GetPtrValue(family.Husband);
-                if (relPerson != null) {
+                GDMIndividualRecord father = null, mother = null;
+                fBase.Context.Tree.GetSpouses(family, out father, out mother);
+
+                if (father != null) {
                     fView.SetFatherAvl(true, locked);
-                    fView.Father.Text = GKUtils.GetNameString(relPerson, true, false);
+                    fView.Father.Text = GKUtils.GetNameString(father, true, false);
                 } else {
                     fView.SetFatherAvl(false, locked);
                     fView.Father.Text = "";
                 }
 
-                relPerson = fBase.Context.Tree.GetPtrValue(family.Wife);
-                if (relPerson != null) {
+                if (mother != null) {
                     fView.SetMotherAvl(true, locked);
-                    fView.Mother.Text = GKUtils.GetNameString(relPerson, true, false);
+                    fView.Mother.Text = GKUtils.GetNameString(mother, true, false);
                 } else {
                     fView.SetMotherAvl(false, locked);
                     fView.Mother.Text = "";

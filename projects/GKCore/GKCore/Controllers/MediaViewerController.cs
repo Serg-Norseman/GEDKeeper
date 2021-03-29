@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using BSLib;
 using BSLib.Design.Graphics;
 using GDModel;
 using GKCore.MVP;
@@ -122,22 +123,14 @@ namespace GKCore.Controllers
 
         public void ProcessPortraits(IImageView imageCtl, GDMFileReferenceWithTitle fileRef)
         {
-            var linksList = new List<GDMObject>();
-            GKUtils.SearchRecordLinks(linksList, fBase.Context.Tree, fMultimedia);
+            var portraits = GKUtils.SearchPortraits(fBase.Context.Tree, fMultimedia);
 
-            bool showRegions = false;
-            foreach (var link in linksList) {
-                var mmLink = link as GDMMultimediaLink;
-                if (mmLink != null && mmLink.IsPrimary) {
-                    var indiRec = mmLink.Owner as GDMIndividualRecord;
-                    string indiName = GKUtils.GetNameString(indiRec, true, false);
-                    var region = mmLink.CutoutPosition.Value;
-
-                    imageCtl.AddNamedRegion(indiName, region);
-                    showRegions = true;
+            bool showRegions = (portraits.Count > 0);
+            if (showRegions) {
+                for (int i = 0; i < portraits.Count; i++) {
+                    imageCtl.AddNamedRegion(portraits[i], (ExtRect)portraits.GetObject(i));
                 }
             }
-
             imageCtl.ShowNamedRegionTips = showRegions;
         }
     }

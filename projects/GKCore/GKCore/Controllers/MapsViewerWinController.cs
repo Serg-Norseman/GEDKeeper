@@ -101,7 +101,7 @@ namespace GKCore.Controllers
                             for (int j = 0; j < num2; j++) {
                                 GDMCustomEvent ev = ind.Events[j];
                                 if (!string.IsNullOrEmpty(ev.Place.StringValue)) {
-                                    AddPlace(ev.Place, ev);
+                                    AddPlace(ev.Place, ind, ev);
                                     pCnt++;
                                 }
                             }
@@ -134,7 +134,7 @@ namespace GKCore.Controllers
             }
         }
 
-        private void AddPlace(GDMPlace place, GDMCustomEvent placeEvent)
+        private void AddPlace(GDMPlace place, GDMRecord owner, GDMCustomEvent placeEvent)
         {
             try {
                 var locRec = fBase.Context.Tree.GetPtrValue<GDMLocationRecord>(place.Location);
@@ -167,7 +167,7 @@ namespace GKCore.Controllers
                     mapPlace = (node.Tag as MapPlace);
                 }
 
-                mapPlace.PlaceRefs.Add(new PlaceRef(placeEvent));
+                mapPlace.PlaceRefs.Add(new PlaceRef(owner, placeEvent));
             } catch (Exception ex) {
                 Logger.WriteError("MapsViewerWin.AddPlace()", ex);
             }
@@ -207,11 +207,14 @@ namespace GKCore.Controllers
 
                 int num2 = place.PlaceRefs.Count;
                 for (int j = 0; j < num2; j++) {
-                    GDMCustomEvent evt = place.PlaceRefs[j].Event;
+                    var placeRef = place.PlaceRefs[j];
+                    GDMCustomEvent evt = placeRef.Event;
                     var evtType = evt.GetTagType();
+                    bool checkEventType = (condBirth && evtType == GEDCOMTagType.BIRT) || 
+                        (condDeath && evtType == GEDCOMTagType.DEAT) || (condResidence && evtType == GEDCOMTagType.RESI);
 
-                    if ((ind != null && (evt.Owner == ind)) || (condBirth && evtType == GEDCOMTagType.BIRT) || (condDeath && evtType == GEDCOMTagType.DEAT) || (condResidence && evtType == GEDCOMTagType.RESI)) {
-                        PlacesLoader.AddPoint(fMapPoints, place.Points[0], place.PlaceRefs[j]);
+                    if ((ind != null && (placeRef.Owner == ind)) || checkEventType) {
+                        PlacesLoader.AddPoint(fMapPoints, place.Points[0], placeRef);
                     }
                 }
             }

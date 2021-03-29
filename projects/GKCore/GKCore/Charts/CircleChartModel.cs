@@ -536,8 +536,7 @@ namespace GKCore.Charts
             GDMIndividualRecord father = null, mother = null;
             GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(fRootPerson);
             if (fam != null && fBase.Context.IsRecordAccess(fam.Restriction)) {
-                father = fBase.Context.Tree.GetPtrValue(fam.Husband);
-                mother = fBase.Context.Tree.GetPtrValue(fam.Wife);
+                fBase.Context.Tree.GetSpouses(fam, out father, out mother);
             }
 
             if (mother != null) {
@@ -594,8 +593,7 @@ namespace GKCore.Charts
                     GDMIndividualRecord father = null, mother = null;
                     GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(iRec);
                     if (fam != null && fBase.Context.IsRecordAccess(fam.Restriction)) {
-                        father = fBase.Context.Tree.GetPtrValue(fam.Husband);
-                        mother = fBase.Context.Tree.GetPtrValue(fam.Wife);
+                        fBase.Context.Tree.GetSpouses(fam, out father, out mother);
                     }
 
                     int ps = prevSteps + genSize;
@@ -714,16 +712,17 @@ namespace GKCore.Charts
                 fSegments.Add(resultSegment);
 
                 if (gen < fVisibleGenerations) {
+                    var tree = fBase.Context.Tree;
                     int numberOfFamilyLinks = iRec.SpouseToFamilyLinks.Count;
                     for (int j = 0; j < numberOfFamilyLinks; j++) {
-                        GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(iRec.SpouseToFamilyLinks[j]);
+                        GDMFamilyRecord family = tree.GetPtrValue(iRec.SpouseToFamilyLinks[j]);
                         if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
                         fBase.Context.ProcessFamily(family);
 
                         int numberOfChildren = family.Children.Count;
                         for (int i = 0; i < numberOfChildren; i++) {
-                            GDMIndividualRecord child = fBase.Context.Tree.GetPtrValue(family.Children[i]);
+                            GDMIndividualRecord child = tree.GetPtrValue(family.Children[i]);
                             DescPersonSegment childSegment = TraverseDescendants(child, gen + 1);
 
                             int size = Math.Max(1, childSegment.TotalSubSegments);

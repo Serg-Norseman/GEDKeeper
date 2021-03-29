@@ -1751,6 +1751,31 @@ namespace GKCore
             }
         }
 
+        public static StringList SearchPortraits(GDMTree tree, GDMMultimediaRecord mmRec)
+        {
+            var result = new StringList();
+
+            int num = tree.RecordsCount;
+            for (int i = 0; i < num; i++) {
+                var rec = tree[i];
+                if (rec.RecordType == GDMRecordType.rtIndividual) {
+                    var iRec = rec as GDMIndividualRecord;
+
+                    num = iRec.MultimediaLinks.Count;
+                    for (int k = 0; i < num; i++) {
+                        var mmLink = iRec.MultimediaLinks[k];
+                        if (mmLink.XRef == mmRec.XRef && mmLink.IsPrimary) {
+                            string indiName = GKUtils.GetNameString(iRec, true, false);
+                            ExtRect region = mmLink.CutoutPosition.Value;
+                            result.AddObject(indiName, region);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
         private static void RecListMediaRefresh(IBaseContext baseContext, GDMRecord record, StringList summary)
         {
             if (record == null || summary == null) return;

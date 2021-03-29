@@ -273,7 +273,7 @@ namespace GEDmill.MiniTree
             MiniTreeGroup mtgParents = new MiniTreeGroup();
             MiniTreeIndividual mtiFather = null;
             if (frParents != null) {
-                mtiFather = AddToGroup(frParents.Husband.Individual, mtgParents);
+                mtiFather = AddToGroup(fTree.GetPtrValue(frParents.Husband), mtgParents);
             }
 
             // Create a group for the subejct and their siblings.
@@ -307,7 +307,7 @@ namespace GEDmill.MiniTree
                     foreach (GDMFamilyRecord famRec in indiFamilies) {
                         GDMIndividualRecord irSpouse = famRec.GetSpouseBy(irSubject);
 
-                        if (famRec.Husband.Individual != irSubject) {
+                        if (famRec.Husband.XRef != irSubject.XRef) {
                             mtiRightmostSibling = AddToGroup(irSpouse, mtgSiblings);
                             // Subject is female so all but last husband have dotted bars
                             ecbCrossbar = MiniTreeGroup.ECrossbar.DottedLeft;
@@ -365,7 +365,7 @@ namespace GEDmill.MiniTree
                         }
 
                         // If subject is husband then we need to add their wife now.
-                        if (famRec.Husband.Individual == irSubject) {
+                        if (famRec.Husband.XRef == irSubject.XRef) {
                             ecbCrossbar = MiniTreeGroup.ECrossbar.DottedRight;
 
                             // Hook up to previous rightmost sibling and set this as new rightmost sibling.
@@ -406,7 +406,7 @@ namespace GEDmill.MiniTree
 
             // Add subject's mother
             if (frParents != null) {
-                MiniTreeIndividual mtiMother = AddToGroup(frParents.Wife.Individual, mtgParents);
+                MiniTreeIndividual mtiMother = AddToGroup(fTree.GetPtrValue(frParents.Wife), mtgParents);
                 mtgSiblings.RightBox = mtiMother;
             }
 

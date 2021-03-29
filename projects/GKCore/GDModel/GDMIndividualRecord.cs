@@ -500,7 +500,7 @@ namespace GDModel
         {
             GDMAssociation result = new GDMAssociation(this);
             result.Relation = relation;
-            result.Individual = relPerson;
+            result.XRef = (relPerson == null) ? string.Empty : relPerson.XRef;
             Associations.Add(result);
             return result;
         }

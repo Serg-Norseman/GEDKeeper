@@ -153,16 +153,12 @@ namespace GKCore.Controllers
                 } else {
                     GKData.EventStruct eventProps = GKData.PersonEvents[eventType];
                     fEvent.SetName(eventProps.Sign);
-                    if (eventProps.Kind == PersonEventKind.ekFact) {
-                        fEvent.StringValue = fView.Attribute.Text;
-                    } else {
-                        fEvent.StringValue = "";
-                    }
+                    fEvent.StringValue = (eventProps.Kind == PersonEventKind.ekFact) ? fView.Attribute.Text : string.Empty;
                 }
 
                 if (fEvent is GDMIndividualEvent) {
                     if (GKData.PersonEvents[eventType].Kind == PersonEventKind.ekFact) {
-                        GDMIndividualAttribute attr = new GDMIndividualAttribute(fEvent.Owner);
+                        var attr = new GDMIndividualAttribute(fEvent.Owner);
                         attr.Assign(fEvent);
                         fEvent = attr;
                     }
