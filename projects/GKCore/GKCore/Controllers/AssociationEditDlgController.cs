@@ -64,6 +64,7 @@ namespace GKCore.Controllers
 
                 fAssociation.Relation = rel;
                 fAssociation.Individual = fTempPerson;
+                //fBase.Context.Tree.SetPtrValue(fAssociation, fTempPerson);
 
                 return true;
             } catch (Exception ex) {

@@ -137,7 +137,7 @@ namespace GKCore.Controllers
         {
             try {
                 fEvent.Place.StringValue = fView.Place.Text;
-                fEvent.Place.Location.Value = fTempLocation;
+                fBase.Context.Tree.SetPtrValue(fEvent.Place.Location, fTempLocation);
                 fEvent.Classification = fView.EventName.Text;
                 fEvent.Cause = fView.Cause.Text;
                 fEvent.Agency = fView.Agency.Text;
@@ -297,7 +297,7 @@ namespace GKCore.Controllers
 
         public void AddPlace()
         {
-            fTempLocation = (fBase.Context.SelectRecord(GDMRecordType.rtLocation, null) as GDMLocationRecord);
+            fTempLocation = fBase.Context.SelectRecord(GDMRecordType.rtLocation, null) as GDMLocationRecord;
             UpdatePlace();
         }
 

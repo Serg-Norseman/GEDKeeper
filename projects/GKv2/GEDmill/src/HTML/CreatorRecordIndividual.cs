@@ -208,7 +208,7 @@ namespace GEDmill.HTML
                         // Find the irSubject's name
                         GDMIndividualRecord spouse = null;
                         string spouseLink = "";
-                        spouse = fr.GetSpouseBy(fIndiRec);
+                        spouse = fTree.GetSpouseBy(fr, fIndiRec);
                         if (spouse != null && spouse.GetVisibility()) {
                             spouseLink = MakeLink(spouse);
                         }

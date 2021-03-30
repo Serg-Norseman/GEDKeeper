@@ -535,7 +535,7 @@ namespace GKTreeVizPlugin
                     bool alreadyPrepared = false;
 
                     // processing the spouse of the current person
-                    GDMIndividualRecord spouse = famRec.GetSpouseBy(iRec);
+                    GDMIndividualRecord spouse = tree.GetSpouseBy(famRec, iRec);
                     if (spouse != null) {
                         TVPerson sps = PreparePerson(null, spouse, TVPersonType.Spouse);
                         if (sps == null) {

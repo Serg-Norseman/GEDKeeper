@@ -585,14 +585,14 @@ namespace GKCore
             return st + ": " + iAttr.StringValue + place;
         }
 
-        public static string GetEventDesc(GDMCustomEvent evt, bool hyperLink = true)
+        public static string GetEventDesc(GDMTree tree, GDMCustomEvent evt, bool hyperLink = true)
         {
             if (evt == null)
                 throw new ArgumentNullException("evt");
 
             string dt = GEDCOMEventToDateStr(evt, GlobalOptions.Instance.DefDateFormat, false);
             string place = evt.Place.StringValue;
-            GDMLocationRecord location = evt.Place.Location.Value as GDMLocationRecord;
+            GDMLocationRecord location = tree.GetPtrValue<GDMLocationRecord>(evt.Place.Location);
 
             if (place != "" && location != null && hyperLink) {
                 place = HyperLink(location.XRef, place, 0);
@@ -1904,7 +1904,7 @@ namespace GKCore
                         if (evt.StringValue != "") {
                             sv = evt.StringValue + ", ";
                         }
-                        summary.Add("  " + st + ": " + sv + GetEventDesc(evt));
+                        summary.Add("  " + st + ": " + sv + GetEventDesc(baseContext.Tree, evt));
 
                         ShowDetailCause(evt, summary);
                         ShowAddressSummary(evt.Address, summary);
@@ -1932,7 +1932,7 @@ namespace GKCore
                         GDMFamilyEvent evt = (GDMFamilyEvent)record.Events[i];
 
                         string st = GetEventName(evt);
-                        summary.Add("  " + st + ": " + GetEventDesc(evt));
+                        summary.Add("  " + st + ": " + GetEventDesc(baseContext.Tree, evt));
 
                         ShowDetailCause(evt, summary);
                         ShowEventDetailInfo(baseContext, evt, summary);

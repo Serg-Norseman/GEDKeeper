@@ -115,7 +115,9 @@ namespace GDModel
         public void Test_GDMSourceCitation()
         {
             GDMIndividualRecord indiv = new GDMIndividualRecord(fContext.Tree);
+
             GDMSourceRecord sourRec = new GDMSourceRecord(fContext.Tree);
+            fContext.Tree.NewXRef(sourRec);
 
             using (GDMSourceCitation srcCit = indiv.AddSource(sourRec, "p2", 3)) {
                 Assert.IsNotNull(srcCit);

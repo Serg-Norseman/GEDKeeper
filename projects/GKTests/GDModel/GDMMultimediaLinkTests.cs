@@ -83,9 +83,10 @@ namespace GDModel
                 });
 
                 using (var mmRec = new GDMMultimediaRecord(fContext.Tree)) {
+                    fContext.Tree.NewXRef(mmRec);
                     Assert.IsNull(mmLink.GetUID());
 
-                    mmLink.Value = mmRec;
+                    mmLink.XRef = mmRec.XRef;
 
                     Assert.IsNotNull(mmLink.GetUID());
                 }

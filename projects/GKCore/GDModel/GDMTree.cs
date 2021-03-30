@@ -763,6 +763,14 @@ namespace GDModel
             }
         }
 
+        public GDMIndividualRecord GetSpouseBy(GDMFamilyRecord family, GDMIndividualRecord spouse)
+        {
+            GDMIndividualRecord husb = GetPtrValue<GDMIndividualRecord>(family.Husband);
+            GDMIndividualRecord wife = GetPtrValue<GDMIndividualRecord>(family.Wife);
+
+            return (spouse == husb) ? wife : husb;
+        }
+
         #region Updating
 
         public bool IsUpdated()

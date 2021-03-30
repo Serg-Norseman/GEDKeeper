@@ -305,7 +305,7 @@ namespace GEDmill.MiniTree
                     var indiFamilies = fTree.GetFamilyList(irSubject);
 
                     foreach (GDMFamilyRecord famRec in indiFamilies) {
-                        GDMIndividualRecord irSpouse = famRec.GetSpouseBy(irSubject);
+                        GDMIndividualRecord irSpouse = fTree.GetSpouseBy(famRec, irSubject);
 
                         if (famRec.Husband.XRef != irSubject.XRef) {
                             mtiRightmostSibling = AddToGroup(irSpouse, mtgSiblings);

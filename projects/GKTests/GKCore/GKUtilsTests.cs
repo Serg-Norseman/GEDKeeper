@@ -359,17 +359,57 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_CommonX()
+        public void Test_GetEventName()
         {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventName(null); });
+        }
+
+        [Test]
+        public void Test_GetEventCause()
+        {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventCause(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventDesc(null); });
+        }
+
+        [Test]
+        public void Test_GetEventDesc()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventDesc(null, null); });
+        }
+
+        [Test]
+        public void Test_GetAttributeStr()
+        {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetAttributeStr(null); });
+        }
+
+        [Test]
+        public void Test_GetFamilyString()
+        {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null, null, "", ""); });
+        }
+
+        [Test]
+        public void Test_GetNickString()
+        {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNickString(null); });
+        }
+
+        [Test]
+        public void Test_GetNameString()
+        {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNameString(null, false, false); });
+        }
+
+        [Test]
+        public void Test_SetMarriedSurname()
+        {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SetMarriedSurname(null, ""); });
+        }
+
+        [Test]
+        public void Test_GetStoreType()
+        {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetStoreType(null); });
         }
 

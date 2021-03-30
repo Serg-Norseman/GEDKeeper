@@ -234,14 +234,6 @@ namespace GDModel
             return match;
         }
 
-        public GDMIndividualRecord GetSpouseBy(GDMIndividualRecord spouse)
-        {
-            GDMIndividualRecord husb = fHusband.Individual;
-            GDMIndividualRecord wife = fWife.Individual;
-
-            return (spouse == husb) ? wife : husb;
-        }
-
         public bool AddSpouse(GDMIndividualRecord spouse)
         {
             if (spouse == null) {
@@ -264,7 +256,7 @@ namespace GDModel
             }
 
             GDMSpouseToFamilyLink spLink = new GDMSpouseToFamilyLink(spouse);
-            spLink.Family = this;
+            spLink.XRef = this.XRef;
             spouse.SpouseToFamilyLinks.Add(spLink);
 
             return true;

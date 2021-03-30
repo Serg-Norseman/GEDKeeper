@@ -50,6 +50,7 @@ namespace GDModel
             }
         }
 
+        // TODO: how to be sure that the record will have the correct XRef in the required places?
         public string XRef
         {
             get { return fXRef; }

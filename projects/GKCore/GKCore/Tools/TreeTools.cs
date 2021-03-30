@@ -83,7 +83,7 @@ namespace GKCore.Tools
             int num = ancestorRec.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
                 GDMFamilyRecord family = tree.GetPtrValue(ancestorRec.SpouseToFamilyLinks[i]);
-                GDMIndividualRecord spouse = family.GetSpouseBy(ancestorRec);
+                GDMIndividualRecord spouse = tree.GetSpouseBy(family, ancestorRec);
 
                 bool res;
                 if (spouse != null) {
@@ -112,7 +112,7 @@ namespace GKCore.Tools
             int num = ancestor.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
                 GDMFamilyRecord family = tree.GetPtrValue(ancestor.SpouseToFamilyLinks[i]);
-                GDMIndividualRecord spouse = family.GetSpouseBy(ancestor);
+                GDMIndividualRecord spouse = tree.GetSpouseBy(family, ancestor);
 
                 if (spouse != null) {
                     bool res = PL_SearchAnc(tree, spouse, searchRec, (ancestor.Sex == GDMSex.svFemale));

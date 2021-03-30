@@ -220,7 +220,7 @@ namespace GDModel
             if (familyRec != null) {
                 int num = fSpouseToFamilyLinks.Count;
                 for (int i = 0; i < num; i++) {
-                    if (fSpouseToFamilyLinks[i].Family == familyRec) {
+                    if (fSpouseToFamilyLinks[i].XRef == familyRec.XRef) {
                         return i;
                     }
                 }

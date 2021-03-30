@@ -360,7 +360,7 @@ namespace GKCore.Export
                     
                     string evtName = GKUtils.GetEventName(evt);
                     string evtVal = evt.StringValue;
-                    string evtDesc = GKUtils.GetEventDesc(evt, false);
+                    string evtDesc = GKUtils.GetEventDesc(fBase.Context.Tree, evt, false);
 
                     string tmp = evtName + ": " + evtVal;
                     if (evtVal != "")

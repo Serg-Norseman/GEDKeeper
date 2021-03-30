@@ -100,14 +100,14 @@ namespace GDModel
             famRec.AddSpouse(indiv);
             Assert.AreEqual(0, indiv.IndexOfSpouse(famRec));
             Test_GDMSpouseToFamilyLink(indiv.SpouseToFamilyLinks[0]);
-            Assert.IsNull(famRec.GetSpouseBy(indiv));
+            Assert.IsNull(tree.GetSpouseBy(famRec, indiv));
             famRec.RemoveSpouse(indiv);
 
             indiv.Sex = GDMSex.svFemale;
             famRec.AddSpouse(indiv);
             Assert.AreEqual(0, indiv.IndexOfSpouse(famRec));
             Test_GDMSpouseToFamilyLink(indiv.SpouseToFamilyLinks[0]);
-            Assert.IsNull(famRec.GetSpouseBy(indiv));
+            Assert.IsNull(tree.GetSpouseBy(famRec, indiv));
             famRec.RemoveSpouse(indiv);
 
             //

@@ -31,7 +31,7 @@ namespace GDModel
 
             if (noteRec != null) {
                 note = new GDMNotes((GDMObject)_struct);
-                note.Value = noteRec;
+                note.XRef = noteRec.XRef;
                 _struct.Notes.Add(note);
             }
 
@@ -44,7 +44,7 @@ namespace GDModel
 
             if (sourceRec != null) {
                 cit = new GDMSourceCitation((GDMObject)_struct);
-                cit.Value = sourceRec;
+                cit.XRef = sourceRec.XRef;
                 cit.Page = page;
                 cit.CertaintyAssessment = quality;
                 _struct.SourceCitations.Add(cit);
@@ -59,7 +59,7 @@ namespace GDModel
 
             if (mediaRec != null) {
                 result = new GDMMultimediaLink((GDMObject)_struct);
-                result.Value = mediaRec;
+                result.XRef = mediaRec.XRef;
                 _struct.MultimediaLinks.Add(result);
             }
 
