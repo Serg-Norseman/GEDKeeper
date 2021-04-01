@@ -731,7 +731,7 @@ namespace GKUI.Forms
             RecordSelectDlgTests.SetCreateItemHandler(this, GroupEditDlgTests.GroupAdd_Mini_Handler);
             ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, indiRecord.Groups.Count);
-            Assert.AreEqual("sample group", ((GDMGroupRecord)indiRecord.Groups[0].Value).GroupName);
+            Assert.AreEqual("sample group", indiRecord.Groups[0].GetPtrValue<GDMGroupRecord>().GroupName);
 
             ModalFormHandler = MessageBox_YesHandler;
             SelectSheetListItem("fGroupsList", dlg, 0);

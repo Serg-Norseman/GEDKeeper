@@ -24,13 +24,6 @@ namespace GDModel
 {
     public sealed class GDMSpouseToFamilyLink : GDMPointerWithNotes
     {
-        public GDMFamilyRecord Family
-        {
-            get { return (GDMFamilyRecord)base.Value; }
-            set { base.Value = value; }
-        }
-
-
         public GDMSpouseToFamilyLink(GDMObject owner) : base(owner)
         {
             SetName(GEDCOMTagType.FAMS);

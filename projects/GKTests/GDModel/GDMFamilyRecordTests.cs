@@ -136,7 +136,7 @@ namespace GDModel
 
         public static void Test_GDMSpouseToFamilyLink(GDMSpouseToFamilyLink spouseLink)
         {
-            Assert.IsNotNull(spouseLink.Family);
+            Assert.IsNotNull(spouseLink.GetPtrValue<GDMFamilyRecord>());
 
             using (spouseLink = new GDMSpouseToFamilyLink(null)) {
                 Assert.IsNotNull(spouseLink);

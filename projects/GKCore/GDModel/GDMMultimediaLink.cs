@@ -152,7 +152,7 @@ namespace GDModel
         {
             string result = null;
             try {
-                var mmRec = Value as GDMMultimediaRecord;
+                var mmRec = GetPtrValue<GDMMultimediaRecord>();
                 if (mmRec != null) {
                     ExtRect cutoutArea = IsPrimaryCutout ? CutoutPosition.Value : ExtRect.CreateEmpty();
                     result = mmRec.UID + "-" + GKUtils.GetRectUID(cutoutArea.Left, cutoutArea.Top, cutoutArea.Right, cutoutArea.Bottom);

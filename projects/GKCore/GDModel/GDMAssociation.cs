@@ -29,12 +29,6 @@ namespace GDModel
         private GDMList<GDMSourceCitation> fSourceCitations;
 
 
-        public GDMIndividualRecord Individual
-        {
-            get { return (Value as GDMIndividualRecord); }
-            set { Value = value; }
-        }
-
         public string Relation
         {
             get { return fRelation; }
