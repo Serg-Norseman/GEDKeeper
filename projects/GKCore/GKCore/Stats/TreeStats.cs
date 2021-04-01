@@ -86,7 +86,7 @@ namespace GKCore.Stats
                 string vLife = GKUtils.GetLifeExpectancyStr(ind);
                 stats.life.TakeVal(vLife, ind.Sex, true);
 
-                int chCnt = ind.GetTotalChildsCount();
+                int chCnt = fTree.GetTotalChildrenCount(ind);
                 stats.childs.TakeVal(chCnt, ind.Sex, true);
 
                 int vFba = GKUtils.GetFirstbornAge(ind, GKUtils.GetFirstborn(fTree, ind));
@@ -209,7 +209,7 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smChildsCount:
-                    values.Add(new StatsItem(iName, iRec.GetTotalChildsCount()));
+                    values.Add(new StatsItem(iName, fTree.GetTotalChildrenCount(iRec)));
                     break;
 
                 case StatsMode.smFirstbornAge:
@@ -251,7 +251,7 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smChildsDistribution:
-                    CheckVal(values, iRec.GetTotalChildsCount().ToString());
+                    CheckVal(values, fTree.GetTotalChildrenCount(iRec).ToString());
                     break;
 
                 case StatsMode.smResidences:

@@ -543,18 +543,5 @@ namespace GDModel
 
             return result;
         }
-
-        public int GetTotalChildsCount()
-        {
-            int result = 0;
-
-            int num = SpouseToFamilyLinks.Count;
-            for (int i = 0; i < num; i++) {
-                var family = SpouseToFamilyLinks[i].GetPtrValue<GDMFamilyRecord>();
-                result += family.Children.Count;
-            }
-
-            return result;
-        }
     }
 }
