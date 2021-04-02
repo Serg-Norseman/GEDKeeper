@@ -63,7 +63,8 @@ namespace GKCore.Controllers
                     fMultimediaLink.CutoutPosition.Value = ExtRect.CreateEmpty();
                 }
 
-                PortraitsCache.Instance.RemoveObsolete(fMultimediaLink);
+                var uid = fMultimediaLink.GetUID(fBase.Context.Tree);
+                PortraitsCache.Instance.RemoveObsolete(uid);
 
                 return true;
             } catch (Exception ex) {

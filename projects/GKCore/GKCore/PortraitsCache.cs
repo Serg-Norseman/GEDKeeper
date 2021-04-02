@@ -110,12 +110,11 @@ namespace GKCore
             return result;
         }
 
-        public void RemoveObsolete(GDMMultimediaLink mmLink)
+        public void RemoveObsolete(string imageUID)
         {
-            if (mmLink == null) return;
+            if (string.IsNullOrEmpty(imageUID)) return;
 
             try {
-                string imageUID = mmLink.GetUID();
                 string cachedFile = GetCachedFilename(imageUID);
 
                 if (fMemoryCache.ContainsKey(cachedFile)) {

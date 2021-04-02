@@ -148,11 +148,11 @@ namespace GDModel
             return base.ParseString(strValue);
         }
 
-        public string GetUID()
+        public string GetUID(GDMTree tree)
         {
             string result = null;
             try {
-                var mmRec = GetPtrValue<GDMMultimediaRecord>();
+                var mmRec = tree.GetPtrValue<GDMMultimediaRecord>(this);
                 if (mmRec != null) {
                     ExtRect cutoutArea = IsPrimaryCutout ? CutoutPosition.Value : ExtRect.CreateEmpty();
                     result = mmRec.UID + "-" + GKUtils.GetRectUID(cutoutArea.Left, cutoutArea.Top, cutoutArea.Right, cutoutArea.Bottom);

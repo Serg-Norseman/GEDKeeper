@@ -1222,7 +1222,7 @@ namespace GKCore
             string result = null;
             try {
                 GDMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
-                result = (mmLink == null) ? null : mmLink.GetUID();
+                result = (mmLink == null) ? null : mmLink.GetUID(fTree);
             } catch (Exception ex) {
                 Logger.WriteError("BaseContext.GetPrimaryBitmapUID()", ex);
                 result = null;
