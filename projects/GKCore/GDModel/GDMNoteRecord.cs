@@ -88,15 +88,14 @@ namespace GDModel
         /// The MoveTo() merges records and their references, but does not change the text in the target.
         /// </summary>
         /// <param name="targetRecord"></param>
-        /// <param name="clearDest"></param>
-        public override void MoveTo(GDMRecord targetRecord, bool clearDest)
+        public override void MoveTo(GDMRecord targetRecord)
         {
             GDMNoteRecord targetNote = (targetRecord as GDMNoteRecord);
             if (targetNote == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
 
             string targetText = targetNote.Lines.Text;
-            base.MoveTo(targetRecord, clearDest);
+            base.MoveTo(targetRecord);
             targetNote.Lines.Text = targetText;
         }
 

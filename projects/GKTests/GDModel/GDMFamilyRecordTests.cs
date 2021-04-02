@@ -176,7 +176,7 @@ namespace GDModel
 
                 // MoveTo test
                 Assert.Throws(typeof(ArgumentException), () => {
-                    famRec.MoveTo(null, false);
+                    famRec.MoveTo(null);
                 });
 
                 GDMCustomEvent evt = famRec.AddEvent(new GDMFamilyEvent(famRec, (int)GEDCOMTagType.MARR, "01 SEP 1981"));
@@ -187,7 +187,7 @@ namespace GDModel
                     Assert.AreEqual(0, famRec2.Events.Count);
                     Assert.AreEqual(null, famRec2.FindEvent(GEDCOMTagType.MARR));
 
-                    famRec.MoveTo(famRec2, false);
+                    famRec.MoveTo(famRec2);
 
                     Assert.AreEqual(1, famRec2.Events.Count);
                     Assert.AreEqual(evt, famRec2.FindEvent(GEDCOMTagType.MARR));

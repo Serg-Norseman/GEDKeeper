@@ -118,7 +118,7 @@ namespace GDModel
             indiRec.Bookmark = false;
             Assert.AreEqual(false, indiRec.Bookmark);
 
-            Assert.Throws(typeof(ArgumentException), () => { indiRec.MoveTo(null, false); });
+            Assert.Throws(typeof(ArgumentException), () => { indiRec.MoveTo(null); });
 
             using (GDMIndividualRecord copyIndi = new GDMIndividualRecord(null)) {
                 Assert.IsNotNull(copyIndi);
@@ -197,7 +197,7 @@ namespace GDModel
                 indi.AddAssociation("test", ind);
 
                 using (GDMIndividualRecord indi3 = new GDMIndividualRecord(fContext.Tree)) {
-                    indi.MoveTo(indi3, false);
+                    indi.MoveTo(indi3);
 
                     st = GKUtils.GetNameString(indi3, true, true);
                     Assert.AreEqual("Petrov Ivan [BigHead]", st);

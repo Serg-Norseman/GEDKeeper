@@ -69,7 +69,7 @@ namespace GDModel
             // check move
             using (GDMSourceRecord src1 = new GDMSourceRecord(fContext.Tree)) {
                 Assert.Throws(typeof(ArgumentException), () => {
-                    src1.MoveTo(null, false);
+                    src1.MoveTo(null);
                 });
 
                 // fill the record
@@ -97,7 +97,7 @@ namespace GDModel
 
                     Assert.AreEqual(0, src2.RepositoryCitations.Count);
 
-                    src1.MoveTo(src2, false);
+                    src1.MoveTo(src2);
 
                     Assert.AreEqual("test source 2", src2.ShortTitle);
 

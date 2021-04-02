@@ -147,7 +147,7 @@ namespace GDModel
                 && (fRepositoryCitations.Count == 0);
         }
 
-        public override void MoveTo(GDMRecord targetRecord, bool clearDest)
+        public override void MoveTo(GDMRecord targetRecord)
         {
             GDMSourceRecord targetSource = targetRecord as GDMSourceRecord;
             if (targetSource == null)
@@ -163,7 +163,7 @@ namespace GDModel
             publ.Text = (targetSource.Publication.Lines.Text + "\n" + Publication.Lines.Text).Trim();
             text.Text = (targetSource.Text.Lines.Text + "\n" + Text.Lines.Text).Trim();
 
-            base.MoveTo(targetRecord, clearDest);
+            base.MoveTo(targetRecord);
 
             targetSource.Title.Lines.Assign(titl);
             targetSource.Originator.Lines.Assign(orig);
