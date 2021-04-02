@@ -557,7 +557,7 @@ namespace GKTreeVizPlugin
                             GDMIndividualRecord child = tree.GetPtrValue(childPtr);
 
                             // exclude childless branches
-                            if (EXCLUDE_CHILDLESS && (fBase.Context.IsChildless(child) || child.GetTotalChildsCount() < 1)) continue;
+                            if (EXCLUDE_CHILDLESS && (fBase.Context.IsChildless(child) || tree.GetTotalChildrenCount(child) < 1)) continue;
 
                             TVPerson chp = PreparePerson(person, child, TVPersonType.Child);
                             if (chp == null) {

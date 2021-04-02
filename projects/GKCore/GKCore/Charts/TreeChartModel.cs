@@ -502,7 +502,7 @@ namespace GKCore.Charts
                         }
                     }
 
-                    if (aPerson.GetTotalChildsCount() > 1 || aPerson.SpouseToFamilyLinks.Count > 1) {
+                    if (fTree.GetTotalChildrenCount(aPerson) > 1 || aPerson.SpouseToFamilyLinks.Count > 1) {
                         result.SetFlag(PersonFlag.pfHasInvDesc);
                     }
                 }

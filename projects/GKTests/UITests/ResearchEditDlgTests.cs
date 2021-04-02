@@ -156,7 +156,7 @@ namespace GKUI.Forms
             RecordSelectDlgTests.SetCreateItemHandler(fFormTest, GroupEditDlgTests.GroupAdd_Mini_Handler);
             ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, resRecord.Groups.Count);
-            Assert.AreEqual("sample group", ((GDMGroupRecord)resRecord.Groups[0].Value).GroupName);
+            Assert.AreEqual("sample group", resRecord.Groups[0].GetPtrValue<GDMGroupRecord>().GroupName);
 
             SelectSheetListItem("fGroupsList", dlg, 0);
             SetModalFormHandler(fFormTest, GroupEditDlgTests.GroupAdd_Mini_Handler);

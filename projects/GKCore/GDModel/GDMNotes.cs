@@ -97,7 +97,7 @@ namespace GDModel
                 if (!IsPointer) {
                     lines = fLines;
                 } else {
-                    GDMNoteRecord notesRecord = Value as GDMNoteRecord;
+                    var notesRecord = GetPtrValue<GDMNoteRecord>();
                     lines = (notesRecord != null) ? notesRecord.Lines : new GDMLines();
                 }
                 return lines;

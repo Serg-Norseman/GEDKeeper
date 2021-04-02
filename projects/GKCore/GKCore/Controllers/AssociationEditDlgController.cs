@@ -41,8 +41,7 @@ namespace GKCore.Controllers
             set {
                 if (fAssociation != value) {
                     fAssociation = value;
-                    //fTempPerson = fBase.Context.Tree.GetPtrValue(fAssociation);
-                    fTempPerson = fAssociation.Individual;
+                    fTempPerson = fBase.Context.Tree.GetPtrValue(fAssociation);
                     UpdateView();
                 }
             }
@@ -63,8 +62,7 @@ namespace GKCore.Controllers
                 }
 
                 fAssociation.Relation = rel;
-                fAssociation.Individual = fTempPerson;
-                //fBase.Context.Tree.SetPtrValue(fAssociation, fTempPerson);
+                fBase.Context.Tree.SetPtrValue(fAssociation, fTempPerson);
 
                 return true;
             } catch (Exception ex) {

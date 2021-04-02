@@ -134,29 +134,6 @@ namespace GDModel
 
         #region Content management
 
-        internal GDMTree GetTree()
-        {
-            GDMTree owner = null;
-
-            GDMTag current = this;
-            while (current != null) {
-                GDMObject parent = current.fOwner;
-
-                var parentTag = parent as GDMTag;
-                if (parentTag != null) {
-                    current = parentTag;
-                } else {
-                    var parentTree = parent as GDMTree;
-                    if (parentTree != null) {
-                        owner = parentTree;
-                    }
-                    break;
-                }
-            }
-
-            return owner;
-        }
-
         public void SetName(int tagId)
         {
             fId = tagId;

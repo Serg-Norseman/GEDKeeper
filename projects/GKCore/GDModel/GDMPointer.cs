@@ -32,22 +32,10 @@ namespace GDModel
             get { return (!string.IsNullOrEmpty(fXRef)); }
         }
 
-        public GDMRecord Value
+        public T GetPtrValue<T>() where T : GDMRecord
         {
-            get {
-                GDMTree tree = GetTree();
-                return (tree == null) ? null : tree.XRefIndex_Find(XRef);
-            }
-            set {
-                fXRef = string.Empty;
-                if (value == null) return;
-
-                string xrf = value.XRef;
-                if (string.IsNullOrEmpty(xrf)) {
-                    xrf = GetTree().NewXRef(value);
-                }
-                XRef = xrf;
-            }
+            GDMTree tree = GetTree();
+            return (tree == null) ? null : tree.XRefIndex_Find(XRef) as T;
         }
 
         // TODO: how to be sure that the record will have the correct XRef in the required places?
@@ -95,6 +83,29 @@ namespace GDModel
             if (map != null) {
                 XRef = map.FindNewXRef(XRef);
             }
+        }
+
+        private GDMTree GetTree()
+        {
+            GDMTree owner = null;
+
+            GDMTag current = this;
+            while (current != null) {
+                GDMObject parent = current.Owner;
+
+                var parentTag = parent as GDMTag;
+                if (parentTag != null) {
+                    current = parentTag;
+                } else {
+                    var parentTree = parent as GDMTree;
+                    if (parentTree != null) {
+                        owner = parentTree;
+                    }
+                    break;
+                }
+            }
+
+            return owner;
         }
     }
 }

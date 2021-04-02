@@ -24,12 +24,6 @@ namespace GDModel
 {
     public sealed class GDMIndividualLink : GDMPointer
     {
-        public GDMIndividualRecord Individual
-        {
-            get { return base.Value as GDMIndividualRecord; }
-            set { base.Value = value; }
-        }
-
         public GDMIndividualLink(GDMObject owner) : base(owner)
         {
         }

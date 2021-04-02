@@ -818,5 +818,18 @@ namespace GDModel
         }
 
         #endregion
+
+        public int GetTotalChildrenCount(GDMIndividualRecord individualRec)
+        {
+            int result = 0;
+
+            int num = individualRec.SpouseToFamilyLinks.Count;
+            for (int i = 0; i < num; i++) {
+                var family = GetPtrValue<GDMFamilyRecord>(individualRec.SpouseToFamilyLinks[i]);
+                result += family.Children.Count;
+            }
+
+            return result;
+        }
     }
 }

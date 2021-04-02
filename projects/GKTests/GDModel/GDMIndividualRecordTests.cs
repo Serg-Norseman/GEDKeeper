@@ -210,7 +210,7 @@ namespace GDModel
 
             fContext.Tree.SortSpouses(indiRec);
 
-            Assert.AreEqual(0, indiRec.GetTotalChildsCount());
+            Assert.AreEqual(0, fContext.Tree.GetTotalChildrenCount(indiRec));
         }
 
         private static void GEDCOMRecordTest(GDMRecord rec)

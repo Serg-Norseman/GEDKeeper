@@ -173,19 +173,19 @@ namespace GDModel
             fSex = GDMSex.svUnknown;
 
             for (int i = fChildToFamilyLinks.Count - 1; i >= 0; i--) {
-                GDMFamilyRecord family = fChildToFamilyLinks[i].Value as GDMFamilyRecord;
+                var family = fChildToFamilyLinks[i].GetPtrValue<GDMFamilyRecord>();
                 family.DeleteChild(this);
             }
             fChildToFamilyLinks.Clear();
 
             for (int i = fSpouseToFamilyLinks.Count - 1; i >= 0; i--) {
-                GDMFamilyRecord family = fSpouseToFamilyLinks[i].Family;
+                var family = fSpouseToFamilyLinks[i].GetPtrValue<GDMFamilyRecord>();
                 family.RemoveSpouse(this);
             }
             fSpouseToFamilyLinks.Clear();
 
             for (int i = fGroups.Count - 1; i >= 0; i--) {
-                GDMGroupRecord group = (GDMGroupRecord)fGroups[i].Value;
+                var group = fGroups[i].GetPtrValue<GDMGroupRecord>();
                 group.RemoveMember(this);
             }
             fGroups.Clear();
@@ -323,7 +323,7 @@ namespace GDModel
 
             while (fChildToFamilyLinks.Count > 0) {
                 GDMChildToFamilyLink ctfLink = fChildToFamilyLinks.Extract(0);
-                GDMFamilyRecord family = ctfLink.Value as GDMFamilyRecord;
+                var family = ctfLink.GetPtrValue<GDMFamilyRecord>();
 
                 int num = family.Children.Count;
                 for (int i = 0; i < num; i++) {
@@ -340,7 +340,7 @@ namespace GDModel
 
             while (fSpouseToFamilyLinks.Count > 0) {
                 GDMSpouseToFamilyLink stfLink = fSpouseToFamilyLinks.Extract(0);
-                GDMFamilyRecord family = stfLink.Family;
+                var family = stfLink.GetPtrValue<GDMFamilyRecord>();
 
                 if (family.Husband.XRef == currentXRef) {
                     family.Husband.XRef = targetXRef;
@@ -539,19 +539,6 @@ namespace GDModel
                     result = mmLink;
                     break;
                 }
-            }
-
-            return result;
-        }
-
-        public int GetTotalChildsCount()
-        {
-            int result = 0;
-
-            int num = SpouseToFamilyLinks.Count;
-            for (int i = 0; i < num; i++) {
-                GDMFamilyRecord family = SpouseToFamilyLinks[i].Family;
-                result += family.Children.Count;
             }
 
             return result;

@@ -53,7 +53,7 @@ namespace GDModel
                 if (!IsPointer) {
                     description = fDescription;
                 } else {
-                    GDMSourceRecord sourceRecord = Value as GDMSourceRecord;
+                    var sourceRecord = GetPtrValue<GDMSourceRecord>();
                     if (sourceRecord != null) {
                         description = sourceRecord.Title.Lines;
                     } else {

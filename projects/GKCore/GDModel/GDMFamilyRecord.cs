@@ -108,12 +108,12 @@ namespace GDModel
         {
             base.Clear();
 
-            RemoveSpouse(fHusband.Individual);
-            RemoveSpouse(fWife.Individual);
+            RemoveSpouse(fHusband.GetPtrValue<GDMIndividualRecord>());
+            RemoveSpouse(fWife.GetPtrValue<GDMIndividualRecord>());
 
             int num = fChildren.Count;
             for (int i = 0; i < num; i++) {
-                GDMIndividualRecord child = fChildren[i].Individual;
+                GDMIndividualRecord child = fChildren[i].GetPtrValue<GDMIndividualRecord>();
                 child.DeleteChildToFamilyLink(this);
             }
             fChildren.Clear();
@@ -188,10 +188,10 @@ namespace GDModel
 
             base.MoveTo(targetRecord, clearDest);
 
-            targetFamily.RemoveSpouse(targetFamily.Husband.Individual);
+            targetFamily.RemoveSpouse(targetFamily.Husband.GetPtrValue<GDMIndividualRecord>());
             targetFamily.Husband.XRef = fHusband.XRef;
 
-            targetFamily.RemoveSpouse(targetFamily.Wife.Individual);
+            targetFamily.RemoveSpouse(targetFamily.Wife.GetPtrValue<GDMIndividualRecord>());
             targetFamily.Wife.XRef = fWife.XRef;
 
             targetFamily.Status = fStatus;
@@ -216,10 +216,10 @@ namespace GDModel
         {
             string result = "";
 
-            GDMIndividualRecord spouse = fHusband.Individual;
+            GDMIndividualRecord spouse = fHusband.GetPtrValue<GDMIndividualRecord>();
             result += (spouse == null) ? "?" : spouse.GetPrimaryFullName();
             result += " - ";
-            spouse = fWife.Individual;
+            spouse = fWife.GetPtrValue<GDMIndividualRecord>();
             result += (spouse == null) ? "?" : spouse.GetPrimaryFullName();
 
             return result;
