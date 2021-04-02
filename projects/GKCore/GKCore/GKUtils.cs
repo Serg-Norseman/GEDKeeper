@@ -1816,12 +1816,10 @@ namespace GKCore
                             summary.Add("");
                         }
 
-                        GDMNotes note = record.Notes[i];
-
-                        int num2 = note.Lines.Count;
+                        GDMLines noteLines = baseContext.Tree.GetNoteLines(record.Notes[i]);
+                        int num2 = noteLines.Count;
                         for (int k = 0; k < num2; k++) {
-                            string st = note.Lines[k];
-                            summary.Add(st);
+                            summary.Add(noteLines[k]);
                         }
                     }
                 }

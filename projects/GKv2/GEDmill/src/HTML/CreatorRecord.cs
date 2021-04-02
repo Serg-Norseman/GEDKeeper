@@ -222,14 +222,15 @@ namespace GEDmill.HTML
         }
 
         // Outputs the HTML for the Notes section of the page
-        protected static void OutputNotes(HTMLFile f, GDMList<GDMNotes> notes)
+        protected void OutputNotes(HTMLFile f, GDMList<GDMNotes> notes)
         {
             if (notes.Count > 0) {
                 // Generate notes list into a local array before adding header title. This is to cope with the case where all notes are nothing but blanks.
                 var note_strings = new List<string>(notes.Count);
 
                 foreach (GDMNotes ns in notes) {
-                    string noteText = CConfig.Instance.ObfuscateEmails ? ObfuscateEmail(ns.Lines.Text) : ns.Lines.Text;
+                    GDMLines noteLines = fTree.GetNoteLines(ns);
+                    string noteText = CConfig.Instance.ObfuscateEmails ? ObfuscateEmail(noteLines.Text) : noteLines.Text;
                     note_strings.Add(string.Concat("<li>", EscapeHTML(noteText, false), "</li>"));
                 }
 

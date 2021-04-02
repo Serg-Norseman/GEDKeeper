@@ -48,20 +48,11 @@ namespace GDModel
         public GDMLines Description
         {
             get {
-                GDMLines description;
-
-                if (!IsPointer) {
-                    description = fDescription;
-                } else {
-                    var sourceRecord = GetPtrValue<GDMSourceRecord>();
-                    if (sourceRecord != null) {
-                        description = sourceRecord.Title.Lines;
-                    } else {
-                        description = new GDMLines();
-                    }
+                if (IsPointer) {
+                    throw new InvalidOperationException("GDMSourceCitation is a pointer, please dereference");
                 }
 
-                return description;
+                return fDescription;
             }
         }
 

@@ -101,24 +101,14 @@ namespace GEDmill.HTML
                         }
 
                         foreach (GDMNotes ns in repoRec.Notes) {
-                            string noteText;
-                            if (CConfig.Instance.ObfuscateEmails) {
-                                noteText = ObfuscateEmail(ns.Lines.Text);
-                            } else {
-                                noteText = ns.Lines.Text;
-                            }
+                            string noteText = GetNoteText(ns);
                             f.WriteLine("<p>{0}</p>", EscapeHTML(noteText, false));
                         }
                     }
 
                     if (sourCit.Notes != null && sourCit.Notes.Count > 0) {
                         foreach (GDMNotes ns in sourCit.Notes) {
-                            string noteText;
-                            if (CConfig.Instance.ObfuscateEmails) {
-                                noteText = ObfuscateEmail(ns.Lines.Text);
-                            } else {
-                                noteText = ns.Lines.Text;
-                            }
+                            string noteText = GetNoteText(ns);
                             f.WriteLine("<p>{0}</p>", EscapeHTML(noteText, false));
                         }
                     }
@@ -205,6 +195,19 @@ namespace GEDmill.HTML
                 }
             }
             return true;
+        }
+
+        private string GetNoteText(GDMNotes ns)
+        {
+            GDMLines noteLines = fTree.GetNoteLines(ns);
+            string result;
+            if (CConfig.Instance.ObfuscateEmails) {
+                result = ObfuscateEmail(noteLines.Text);
+            } else {
+                result = noteLines.Text;
+            }
+
+            return result;
         }
 
         // Writes the HTML for the multimedia files associated with this record. 
