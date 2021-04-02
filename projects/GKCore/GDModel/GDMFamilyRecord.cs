@@ -180,13 +180,13 @@ namespace GDModel
             AssignList(sourceRec.fChildren, fChildren);
         }
 
-        public override void MoveTo(GDMRecord targetRecord, bool clearDest)
+        public override void MoveTo(GDMRecord targetRecord)
         {
             GDMFamilyRecord targetFamily = targetRecord as GDMFamilyRecord;
             if (targetFamily == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
 
-            base.MoveTo(targetRecord, clearDest);
+            base.MoveTo(targetRecord);
 
             targetFamily.RemoveSpouse(targetFamily.Husband.Individual);
             targetFamily.Husband.XRef = fHusband.XRef;

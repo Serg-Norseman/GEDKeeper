@@ -105,13 +105,13 @@ namespace GDModel
             fRestriction = sourceRec.Restriction;
         }
 
-        public override void MoveTo(GDMRecord targetRecord, bool clearDest)
+        public override void MoveTo(GDMRecord targetRecord)
         {
             GDMRecordWithEvents target = targetRecord as GDMRecordWithEvents;
             if (target == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
 
-            base.MoveTo(targetRecord, clearDest);
+            base.MoveTo(targetRecord);
 
             while (fEvents.Count > 0) {
                 GDMCustomEvent obj = fEvents.Extract(0);

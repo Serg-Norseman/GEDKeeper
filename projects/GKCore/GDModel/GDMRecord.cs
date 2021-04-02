@@ -174,16 +174,12 @@ namespace GDModel
             AssignList(sourceRec.fUserReferences, fUserReferences);
         }
 
-        public virtual void MoveTo(GDMRecord targetRecord, bool clearDest)
+        public virtual void MoveTo(GDMRecord targetRecord)
         {
-            if (clearDest) {
-                targetRecord.Clear();
-            }
-
             var subTags = SubTags;
             while (subTags.Count > 0) {
                 GDMTag tag = subTags.Extract(0);
-                if (tag.GetTagType() == GEDCOMTagType.CHAN && !clearDest) {
+                if (tag.GetTagType() == GEDCOMTagType.CHAN) {
                     tag.Dispose();
                 } else {
                     tag.ResetOwner(targetRecord);

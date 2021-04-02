@@ -506,7 +506,7 @@ namespace GKCore.Tools
                     tree[i].ReplaceXRefs(repMap);
                 }
 
-                sourceRec.MoveTo(targetRec, false);
+                sourceRec.MoveTo(targetRec);
                 bool res = baseWin.Context.DeleteRecord(sourceRec);
 
                 if (targetRec.RecordType == GDMRecordType.rtIndividual && bookmark) {

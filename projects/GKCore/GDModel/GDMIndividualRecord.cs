@@ -296,19 +296,14 @@ namespace GDModel
             }
         }
 
-        public override void MoveTo(GDMRecord targetRecord, bool clearDest)
+        public override void MoveTo(GDMRecord targetRecord)
         {
             GDMIndividualRecord targetIndi = targetRecord as GDMIndividualRecord;
             if (targetIndi == null) {
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
             }
 
-            /*if (!clearDest) {
-                DeleteTag(GEDCOMTagType.SEX);
-                DeleteTag(GEDCOMTagType._UID);
-            }*/
-
-            base.MoveTo(targetRecord, clearDest);
+            base.MoveTo(targetRecord);
 
             targetIndi.Sex = fSex;
 

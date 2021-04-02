@@ -73,7 +73,7 @@ namespace GDModel
                 }
 
                 Assert.Throws(typeof(ArgumentException), () => {
-                    noteRec.MoveTo(null, false);
+                    noteRec.MoveTo(null);
                 });
 
                 Assert.Throws(typeof(ArgumentException), () => {
@@ -84,7 +84,7 @@ namespace GDModel
                     noteRec3.SetNoteText("Test text 3");
                     Assert.AreEqual("Test text 3", noteRec3.Lines.Text.Trim());
 
-                    noteRec.MoveTo(noteRec3, false);
+                    noteRec.MoveTo(noteRec3);
 
                     Assert.AreEqual("Test text 3", noteRec3.Lines.Text.Trim());
                 }
@@ -118,13 +118,13 @@ namespace GDModel
                     Assert.AreEqual(0.0f, noteRec.IsMatch(null, new MatchParams()));
                 }
 
-                Assert.Throws(typeof(ArgumentException), () => { noteRec.MoveTo(null, false); });
+                Assert.Throws(typeof(ArgumentException), () => { noteRec.MoveTo(null); });
 
                 using (GDMNoteRecord noteRec3 = new GDMNoteRecord(null)) {
                     noteRec3.SetNoteText("Test text 3");
                     Assert.AreEqual("Test text 3", noteRec3.Lines.Text.Trim());
 
-                    noteRec.MoveTo(noteRec3, false);
+                    noteRec.MoveTo(noteRec3);
 
                     Assert.AreEqual("Test text 3", noteRec3.Lines.Text.Trim());
                 }
@@ -219,7 +219,7 @@ namespace GDModel
             GDMNoteRecord instance = new GDMNoteRecord(null);
 
             Assert.Throws(typeof(ArgumentException), () => {
-                instance.MoveTo(other, false);
+                instance.MoveTo(other);
             });
         }
 
@@ -240,7 +240,7 @@ namespace GDModel
             GDMNoteRecord instance2 = new GDMNoteRecord(null);
             instance2.SetNotesArray(lines);
 
-            instance1.MoveTo(instance2, false);
+            instance1.MoveTo(instance2);
 
             // moveTo preserved existing note text
             StringList value = new StringList(lines);
