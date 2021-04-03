@@ -73,6 +73,8 @@ namespace GKUI.Forms
         [STAThread, Test]
         public void Test_Common()
         {
+            TestUtils.InitGEDCOMProviderTest();
+
             // required for testing, otherwise the engine will require saving
             // the database (requires path of files for the archive and storage)
             GlobalOptions.Instance.AllowMediaStoreReferences = true;
@@ -478,7 +480,7 @@ namespace GKUI.Forms
             }
 
             if (form is ResearchEditDlg) {
-                ResearchEditDlgTests.ResearchEditDlg_Handler((ResearchEditDlg) form);
+                ResearchEditDlg_Handler((ResearchEditDlg) form);
                 return;
             }
 
@@ -731,7 +733,7 @@ namespace GKUI.Forms
             RecordSelectDlgTests.SetCreateItemHandler(this, GroupEditDlgTests.GroupAdd_Mini_Handler);
             ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, indiRecord.Groups.Count);
-            Assert.AreEqual("sample group", indiRecord.Groups[0].GetPtrValue<GDMGroupRecord>().GroupName);
+            Assert.AreEqual("sample group", fCurBase.Context.Tree.GetPtrValue<GDMGroupRecord>(indiRecord.Groups[0]).GroupName);
 
             ModalFormHandler = MessageBox_YesHandler;
             SelectSheetListItem("fGroupsList", dlg, 0);
@@ -759,6 +761,65 @@ namespace GKUI.Forms
         }
 
         #endregion
+
+        public void ResearchEditDlg_Handler(ResearchEditDlg dlg)
+        {
+            GDMResearchRecord resRecord = dlg.Research;
+
+            // tasks
+            SelectTab("tabsData", dlg, 0);
+            Assert.AreEqual(0, resRecord.Tasks.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, TaskEditDlgTests.TaskAdd_Mini_Handler);
+            ClickToolStripButton("fTasksList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, resRecord.Tasks.Count);
+
+            SelectSheetListItem("fTasksList", dlg, 0);
+            SetModalFormHandler(fFormTest, TaskEditDlgTests.TaskAdd_Mini_Handler);
+            ClickToolStripButton("fTasksList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, resRecord.Tasks.Count);
+
+            SelectSheetListItem("fTasksList", dlg, 0);
+            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
+            ClickToolStripButton("fTasksList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, resRecord.Tasks.Count);
+
+            // communications
+            SelectTab("tabsData", dlg, 1);
+            Assert.AreEqual(0, resRecord.Communications.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, CommunicationEditDlgTests.CommunicationAdd_Mini_Handler);
+            ClickToolStripButton("fCommunicationsList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, resRecord.Communications.Count);
+
+            SelectSheetListItem("fCommunicationsList", dlg, 0);
+            SetModalFormHandler(fFormTest, CommunicationEditDlgTests.CommunicationAdd_Mini_Handler);
+            ClickToolStripButton("fCommunicationsList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, resRecord.Communications.Count);
+
+            SelectSheetListItem("fCommunicationsList", dlg, 0);
+            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
+            ClickToolStripButton("fCommunicationsList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, resRecord.Communications.Count);
+
+            // groups
+            SelectTab("tabsData", dlg, 2);
+            Assert.AreEqual(0, resRecord.Groups.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, GroupEditDlgTests.GroupAdd_Mini_Handler);
+            ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, resRecord.Groups.Count);
+            Assert.AreEqual("sample group", fCurBase.Context.Tree.GetPtrValue<GDMGroupRecord>(resRecord.Groups[0]).GroupName);
+
+            SelectSheetListItem("fGroupsList", dlg, 0);
+            SetModalFormHandler(fFormTest, GroupEditDlgTests.GroupAdd_Mini_Handler);
+            ClickToolStripButton("fGroupsList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, resRecord.Groups.Count);
+
+            SelectSheetListItem("fGroupsList", dlg, 0);
+            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
+            ClickToolStripButton("fGroupsList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, resRecord.Groups.Count);
+
+            ClickButton("btnAccept", dlg);
+        }
     }
 }
 

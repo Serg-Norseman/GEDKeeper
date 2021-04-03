@@ -99,14 +99,14 @@ namespace GDModel
             indiv.Sex = GDMSex.svMale;
             famRec.AddSpouse(indiv);
             Assert.AreEqual(0, indiv.IndexOfSpouse(famRec));
-            Test_GDMSpouseToFamilyLink(indiv.SpouseToFamilyLinks[0]);
+            Test_GDMSpouseToFamilyLink(tree, indiv.SpouseToFamilyLinks[0]);
             Assert.IsNull(tree.GetSpouseBy(famRec, indiv));
             famRec.RemoveSpouse(indiv);
 
             indiv.Sex = GDMSex.svFemale;
             famRec.AddSpouse(indiv);
             Assert.AreEqual(0, indiv.IndexOfSpouse(famRec));
-            Test_GDMSpouseToFamilyLink(indiv.SpouseToFamilyLinks[0]);
+            Test_GDMSpouseToFamilyLink(tree, indiv.SpouseToFamilyLinks[0]);
             Assert.IsNull(tree.GetSpouseBy(famRec, indiv));
             famRec.RemoveSpouse(indiv);
 
@@ -134,9 +134,9 @@ namespace GDModel
             Assert.IsTrue(famRec.IsEmpty());
         }
 
-        public static void Test_GDMSpouseToFamilyLink(GDMSpouseToFamilyLink spouseLink)
+        public static void Test_GDMSpouseToFamilyLink(GDMTree tree, GDMSpouseToFamilyLink spouseLink)
         {
-            Assert.IsNotNull(spouseLink.GetPtrValue<GDMFamilyRecord>());
+            Assert.IsNotNull(tree.GetPtrValue<GDMFamilyRecord>(spouseLink));
 
             using (spouseLink = new GDMSpouseToFamilyLink(null)) {
                 Assert.IsNotNull(spouseLink);

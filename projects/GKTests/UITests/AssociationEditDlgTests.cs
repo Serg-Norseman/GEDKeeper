@@ -80,7 +80,7 @@ namespace GKUI.Forms
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fAssociation.Relation);
-            Assert.AreEqual(null, fAssociation.GetPtrValue<GDMIndividualRecord>());
+            Assert.AreEqual(null, fBase.Context.Tree.GetPtrValue<GDMIndividualRecord>(fAssociation));
         }
 
         #region Handlers for external tests
