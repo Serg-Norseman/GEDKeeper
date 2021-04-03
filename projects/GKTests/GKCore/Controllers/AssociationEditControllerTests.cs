@@ -48,11 +48,11 @@ namespace GKCore.Controllers
             Assert.IsNotNull(view.Person);
             Assert.IsNotNull(view.Relation);
 
+            var baseContext = Substitute.For<IBaseContext>();
+            baseContext.Tree.Returns(new GDMTree());
             var baseWin = Substitute.For<IBaseWindow>();
-            //var baseContext = new BaseContext(null);
-            //baseWin.Context.Returns(baseContext);
-            var tree = new GDMTree();
-            //var tree = baseContext.Tree;
+            baseWin.Context.Returns(baseContext);
+            var tree = baseContext.Tree;
             var association = new GDMAssociation(tree); // for xref pointers to work
 
             var controller = new AssociationEditDlgController(view);
