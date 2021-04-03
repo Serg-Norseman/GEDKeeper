@@ -158,7 +158,7 @@ namespace GKCore.Controllers
 
                 if (fEvent is GDMIndividualEvent) {
                     if (GKData.PersonEvents[eventType].Kind == PersonEventKind.ekFact) {
-                        var attr = new GDMIndividualAttribute(fEvent.Owner);
+                        var attr = new GDMIndividualAttribute(null);
                         attr.Assign(fEvent);
                         fEvent = attr;
                     }

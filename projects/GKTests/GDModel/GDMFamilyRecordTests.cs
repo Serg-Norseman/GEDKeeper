@@ -193,7 +193,7 @@ namespace GDModel
                     Assert.AreEqual(evt, famRec2.FindEvent(GEDCOMTagType.MARR));
                 }
 
-                famRec.ResetOwner(tree);
+                famRec.ResetTree(tree);
             }
         }
     }

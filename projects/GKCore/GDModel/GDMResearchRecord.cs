@@ -113,7 +113,7 @@ namespace GDModel
         }
 
 
-        public GDMResearchRecord(GDMObject owner) : base(owner)
+        public GDMResearchRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType._RESEARCH);
 

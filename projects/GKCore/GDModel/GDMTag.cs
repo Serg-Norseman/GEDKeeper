@@ -37,7 +37,6 @@ namespace GDModel
         #region Protected fields
 
         private int fId;
-        private GDMObject fOwner;
         private GDMList<GDMTag> fTags;
 
         #endregion
@@ -47,11 +46,6 @@ namespace GDModel
         public int Id
         {
             get { return fId; }
-        }
-
-        public GDMObject Owner
-        {
-            get { return fOwner; }
         }
 
         public string StringValue
@@ -80,8 +74,6 @@ namespace GDModel
         public GDMTag(GDMObject owner)
         {
             fId = 0; // Unknown
-            fOwner = owner;
-            //fTags = new GDMList<GDMTag>(this);
         }
 
         public GDMTag(GDMObject owner, int tagId, string tagValue) : this(owner)
@@ -98,11 +90,6 @@ namespace GDModel
                 }
             }
             base.Dispose(disposing);
-        }
-
-        public void ResetOwner(GDMObject owner)
-        {
-            fOwner = owner;
         }
 
         public virtual void ReplaceXRefs(GDMXRefReplacer map)

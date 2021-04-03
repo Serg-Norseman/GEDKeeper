@@ -111,7 +111,7 @@ namespace GDModel
         }
 
 
-        public GDMIndividualRecord(GDMObject owner) : base(owner)
+        public GDMIndividualRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType.INDI);
 
@@ -173,19 +173,19 @@ namespace GDModel
             fSex = GDMSex.svUnknown;
 
             for (int i = fChildToFamilyLinks.Count - 1; i >= 0; i--) {
-                var family = fChildToFamilyLinks[i].GetPtrValue<GDMFamilyRecord>();
+                var family = fTree.GetPtrValue<GDMFamilyRecord>(fChildToFamilyLinks[i]);
                 family.DeleteChild(this);
             }
             fChildToFamilyLinks.Clear();
 
             for (int i = fSpouseToFamilyLinks.Count - 1; i >= 0; i--) {
-                var family = fSpouseToFamilyLinks[i].GetPtrValue<GDMFamilyRecord>();
+                var family = fTree.GetPtrValue<GDMFamilyRecord>(fSpouseToFamilyLinks[i]);
                 family.RemoveSpouse(this);
             }
             fSpouseToFamilyLinks.Clear();
 
             for (int i = fGroups.Count - 1; i >= 0; i--) {
-                var group = fGroups[i].GetPtrValue<GDMGroupRecord>();
+                var group = fTree.GetPtrValue<GDMGroupRecord>(fGroups[i]);
                 group.RemoveMember(this);
             }
             fGroups.Clear();
@@ -309,7 +309,6 @@ namespace GDModel
 
             while (fPersonalNames.Count > 0) {
                 GDMPersonalName obj = fPersonalNames.Extract(0);
-                obj.ResetOwner(targetIndi);
                 targetIndi.AddPersonalName(obj);
             }
 
@@ -318,7 +317,7 @@ namespace GDModel
 
             while (fChildToFamilyLinks.Count > 0) {
                 GDMChildToFamilyLink ctfLink = fChildToFamilyLinks.Extract(0);
-                var family = ctfLink.GetPtrValue<GDMFamilyRecord>();
+                var family = fTree.GetPtrValue<GDMFamilyRecord>(ctfLink);
 
                 int num = family.Children.Count;
                 for (int i = 0; i < num; i++) {
@@ -329,13 +328,12 @@ namespace GDModel
                     }
                 }
 
-                ctfLink.ResetOwner(targetIndi);
                 targetIndi.ChildToFamilyLinks.Add(ctfLink);
             }
 
             while (fSpouseToFamilyLinks.Count > 0) {
                 GDMSpouseToFamilyLink stfLink = fSpouseToFamilyLinks.Extract(0);
-                var family = stfLink.GetPtrValue<GDMFamilyRecord>();
+                var family = fTree.GetPtrValue<GDMFamilyRecord>(stfLink);
 
                 if (family.Husband.XRef == currentXRef) {
                     family.Husband.XRef = targetXRef;
@@ -343,19 +341,16 @@ namespace GDModel
                     family.Wife.XRef = targetXRef;
                 }
 
-                stfLink.ResetOwner(targetIndi);
                 targetIndi.SpouseToFamilyLinks.Add(stfLink);
             }
 
             while (fAssociations.Count > 0) {
                 GDMAssociation obj = fAssociations.Extract(0);
-                obj.ResetOwner(targetIndi);
                 targetIndi.Associations.Add(obj);
             }
 
             while (fGroups.Count > 0) {
                 GDMPointer obj = fGroups.Extract(0);
-                obj.ResetOwner(targetIndi);
                 targetIndi.Groups.Add(obj);
             }
         }

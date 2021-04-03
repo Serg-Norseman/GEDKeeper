@@ -228,8 +228,6 @@ namespace GDModel
                 }
             }
 
-            persName.ResetOwner(fContext.Tree);
-
             persName.Clear();
             Assert.IsTrue(persName.IsEmpty());
         }

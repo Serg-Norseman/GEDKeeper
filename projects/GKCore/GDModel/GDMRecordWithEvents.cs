@@ -53,7 +53,7 @@ namespace GDModel
         }
 
 
-        protected GDMRecordWithEvents(GDMObject owner) : base(owner)
+        protected GDMRecordWithEvents(GDMTree tree) : base(tree)
         {
             fEvents = new GDMList<GDMCustomEvent>(this);
         }
@@ -115,7 +115,6 @@ namespace GDModel
 
             while (fEvents.Count > 0) {
                 GDMCustomEvent obj = fEvents.Extract(0);
-                obj.ResetOwner(target);
                 target.AddEvent(obj);
             }
 

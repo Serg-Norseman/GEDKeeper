@@ -53,7 +53,7 @@ namespace GDModel
             Assert.IsNotNull(groupRec);
 
             using (GDMResearchRecord resRec = fContext.Tree.CreateResearch()) {
-                resRec.ResetOwner(fContext.Tree);
+                resRec.ResetTree(fContext.Tree);
 
                 Assert.IsNotNull(resRec.Communications);
                 Assert.IsNotNull(resRec.Groups);

@@ -70,7 +70,7 @@ namespace GDModel
                 Assert.IsTrue(subrRec.IsEmpty());
 
 
-                subrRec.ResetOwner(fContext.Tree);
+                subrRec.ResetTree(fContext.Tree);
             }
         }
 
