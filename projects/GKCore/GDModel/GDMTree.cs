@@ -831,5 +831,18 @@ namespace GDModel
 
             return result;
         }
+
+        public GDMLines GetNoteLines(GDMNotes notes)
+        {
+            GDMLines lines;
+            if (!notes.IsPointer) {
+                lines = notes.Lines;
+            } else {
+                var notesRecord = GetPtrValue<GDMNoteRecord>(notes);
+                lines = (notesRecord != null) ? notesRecord.Lines : new GDMLines();
+            }
+
+            return lines;
+        }
     }
 }

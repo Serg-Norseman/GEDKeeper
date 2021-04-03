@@ -272,11 +272,8 @@ namespace GEDmill.HTML
                     if (marriageNote != "") {
                         marriageNote += "\n";
                     }
-                    if (CConfig.Instance.ObfuscateEmails) {
-                        marriageNote += ObfuscateEmail(ns.Lines.Text);
-                    } else {
-                        marriageNote += ns.Lines.Text;
-                    }
+
+                    marriageNote += GetNoteText(ns);
                 }
 
                 string marriedString = "married ";
@@ -293,6 +290,19 @@ namespace GEDmill.HTML
                     fAttributeList.Insert(0, iEvent);
                 }
             }
+        }
+
+        private string GetNoteText(GDMNotes ns)
+        {
+            GDMLines noteLines = fTree.GetNoteLines(ns);
+            string result;
+            if (CConfig.Instance.ObfuscateEmails) {
+                result = ObfuscateEmail(noteLines.Text);
+            } else {
+                result = noteLines.Text;
+            }
+
+            return result;
         }
 
         // Goes through all families this person was a irSibling in and finds their frParents and siblings.
@@ -437,11 +447,7 @@ namespace GEDmill.HTML
                                     marriageNote += "\n";
                                 }
 
-                                if (CConfig.Instance.ObfuscateEmails) {
-                                    marriageNote += ObfuscateEmail(ns.Lines.Text);
-                                } else {
-                                    marriageNote += ns.Lines.Text;
-                                }
+                                marriageNote += GetNoteText(ns);
                             }
                         }
                         break;
@@ -1604,11 +1610,8 @@ namespace GEDmill.HTML
                 if (eventNote != "") {
                     eventNote += "\n";
                 }
-                if (CConfig.Instance.ObfuscateEmails) {
-                    eventNote += ObfuscateEmail(ns.Lines.Text);
-                } else {
-                    eventNote += ns.Lines.Text;
-                }
+
+                eventNote += GetNoteText(ns);
             }
 
             Event iEvent = null;

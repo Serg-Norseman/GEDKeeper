@@ -93,14 +93,11 @@ namespace GDModel
         public GDMLines Lines
         {
             get {
-                GDMLines lines;
-                if (!IsPointer) {
-                    lines = fLines;
-                } else {
-                    var notesRecord = GetPtrValue<GDMNoteRecord>();
-                    lines = (notesRecord != null) ? notesRecord.Lines : new GDMLines();
+                if (IsPointer) {
+                    throw new InvalidOperationException("GDMNotes is a pointer, please dereference");
                 }
-                return lines;
+
+                return fLines;
             }
         }
 

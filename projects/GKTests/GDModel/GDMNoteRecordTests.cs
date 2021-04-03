@@ -167,9 +167,13 @@ namespace GDModel
         {
             GDMNotes notes = indiv.AddNote(noteRec);
 
-            Assert.AreEqual(notes.Lines.Text, noteRec.Lines.Text);
-
             Assert.IsTrue(notes.IsPointer, "notes.IsPointer");
+
+            Assert.Throws<InvalidOperationException>(() => {
+                var lines = notes.Lines;
+            }, "Notes is a pointer");
+
+            Assert.AreEqual(notes.XRef, noteRec.XRef);
 
             Assert.IsFalse(notes.IsEmpty()); // its pointer
 

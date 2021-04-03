@@ -49,7 +49,8 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMNotes note in dataOwner.Notes) {
-                    fSheetList.AddItem(note, new object[] { note.Lines.Text.Trim() });
+                    GDMLines noteLines = fBaseContext.Tree.GetNoteLines(note);
+                    fSheetList.AddItem(note, new object[] { noteLines.Text.Trim() });
                 }
             } catch (Exception ex) {
                 Logger.WriteError("NoteLinksListModel.UpdateContents()", ex);

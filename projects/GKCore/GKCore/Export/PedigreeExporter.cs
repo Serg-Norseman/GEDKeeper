@@ -277,8 +277,8 @@ namespace GKCore.Export
 
                 int notesCount = person.IRec.Notes.Count;
                 for (int i = 0; i < notesCount; i++) {
-                    GDMNotes note = person.IRec.Notes[i];
-                    fWriter.AddListItem(" " + GKUtils.MergeStrings(note.Lines), fTextFont);
+                    GDMLines noteLines = fTree.GetNoteLines(person.IRec.Notes[i]);
+                    fWriter.AddListItem(" " + GKUtils.MergeStrings(noteLines), fTextFont);
                 }
 
                 fWriter.EndList();
@@ -290,8 +290,8 @@ namespace GKCore.Export
             if (fOptions.PedigreeOptions.IncludeNotes && person.IRec.Notes.Count != 0) {
                 int num = person.IRec.Notes.Count;
                 for (int i = 0; i < num; i++) {
-                    GDMNotes note = person.IRec.Notes[i];
-                    fWriter.AddParagraph(GKUtils.MergeStrings(note.Lines), fTextFont);
+                    GDMLines noteLines = fTree.GetNoteLines(person.IRec.Notes[i]);
+                    fWriter.AddParagraph(GKUtils.MergeStrings(noteLines), fTextFont);
                 }
             }
 
