@@ -33,7 +33,7 @@ namespace GDModel
         }
 
 
-        public GDMMultimediaRecord(GDMObject owner) : base(owner)
+        public GDMMultimediaRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType.OBJE);
 

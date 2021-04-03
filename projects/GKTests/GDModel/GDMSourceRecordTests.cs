@@ -63,7 +63,7 @@ namespace GDModel
                     Assert.AreEqual(100.0f, src1.IsMatch(src2, new MatchParams()));
                 }
 
-                src1.ResetOwner(fContext.Tree);
+                src1.ResetTree(fContext.Tree);
             }
 
             // check move

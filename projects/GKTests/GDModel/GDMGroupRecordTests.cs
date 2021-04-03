@@ -46,7 +46,7 @@ namespace GDModel
             using (GDMGroupRecord grpRec = new GDMGroupRecord(fContext.Tree)) {
                 Assert.IsNotNull(grpRec);
 
-                grpRec.ResetOwner(fContext.Tree);
+                grpRec.ResetTree(fContext.Tree);
             }
 
             using (GDMGroupRecord groupRec = fContext.Tree.CreateGroup()) {

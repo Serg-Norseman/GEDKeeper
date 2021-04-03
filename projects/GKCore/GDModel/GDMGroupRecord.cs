@@ -42,7 +42,7 @@ namespace GDModel
         }
 
 
-        public GDMGroupRecord(GDMObject owner) : base(owner)
+        public GDMGroupRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType._GROUP);
 

@@ -72,7 +72,7 @@ namespace GDModel
         }
 
 
-        public GDMSourceRecord(GDMObject owner) : base(owner)
+        public GDMSourceRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType.SOUR);
 
@@ -172,7 +172,6 @@ namespace GDModel
 
             while (fRepositoryCitations.Count > 0) {
                 GDMRepositoryCitation obj = fRepositoryCitations.Extract(0);
-                obj.ResetOwner(targetSource);
                 targetSource.RepositoryCitations.Add(obj);
             }
         }

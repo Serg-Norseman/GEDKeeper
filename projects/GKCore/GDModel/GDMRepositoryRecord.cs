@@ -42,7 +42,7 @@ namespace GDModel
         }
 
 
-        public GDMRepositoryRecord(GDMObject owner) : base(owner)
+        public GDMRepositoryRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType.REPO);
 

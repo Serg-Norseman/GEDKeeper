@@ -97,7 +97,7 @@ namespace GDModel
         }
 
 
-        public GDMCommunicationRecord(GDMObject owner) : base(owner)
+        public GDMCommunicationRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType._COMM);
 

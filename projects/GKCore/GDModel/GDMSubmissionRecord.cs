@@ -75,7 +75,7 @@ namespace GDModel
         }
 
 
-        public GDMSubmissionRecord(GDMObject owner) : base(owner)
+        public GDMSubmissionRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType.SUBN);
 

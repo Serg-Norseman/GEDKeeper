@@ -66,7 +66,7 @@ namespace GDModel
         }
 
 
-        public GDMTaskRecord(GDMObject owner) : base(owner)
+        public GDMTaskRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType._TASK);
 

@@ -50,6 +50,7 @@ namespace GDModel
     /// </summary>
     public class GDMRecord : GDMTag, IGDMStructWithLists, IGDMStructWithUserReferences
     {
+        protected GDMTree fTree;
         private string fAutomatedRecordID;
         private GDMChangeDate fChangeDate;
         private string fUID;
@@ -113,8 +114,9 @@ namespace GDModel
             get { return fXRef; }
         }
 
-        public GDMRecord(GDMObject owner) : base(owner)
+        public GDMRecord(GDMTree tree) : base(tree)
         {
+            fTree = tree;
             fXRef = string.Empty;
             fAutomatedRecordID = string.Empty;
             fChangeDate = new GDMChangeDate(this);
@@ -133,6 +135,11 @@ namespace GDModel
                 fUserReferences.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public void ResetTree(GDMTree tree)
+        {
+            fTree = tree;
         }
 
         internal override void TrimExcess()
@@ -182,32 +189,27 @@ namespace GDModel
                 if (tag.GetTagType() == GEDCOMTagType.CHAN) {
                     tag.Dispose();
                 } else {
-                    tag.ResetOwner(targetRecord);
                     targetRecord.AddTag(tag);
                 }
             }
 
             while (fNotes.Count > 0) {
                 GDMTag tag = fNotes.Extract(0);
-                tag.ResetOwner(targetRecord);
                 targetRecord.Notes.Add((GDMNotes)tag);
             }
 
             while (fMultimediaLinks.Count > 0) {
                 GDMTag tag = fMultimediaLinks.Extract(0);
-                tag.ResetOwner(targetRecord);
                 targetRecord.MultimediaLinks.Add((GDMMultimediaLink)tag);
             }
 
             while (fSourceCitations.Count > 0) {
                 GDMTag tag = fSourceCitations.Extract(0);
-                tag.ResetOwner(targetRecord);
                 targetRecord.SourceCitations.Add((GDMSourceCitation)tag);
             }
 
             while (fUserReferences.Count > 0) {
                 GDMTag tag = fUserReferences.Extract(0);
-                tag.ResetOwner(targetRecord);
                 targetRecord.UserReferences.Add((GDMUserReference)tag);
             }
         }

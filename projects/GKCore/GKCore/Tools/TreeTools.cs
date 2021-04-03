@@ -434,7 +434,7 @@ namespace GKCore.Tools
                     var oldXRef = rec.XRef;
                     var newXRef = mainTree.NewXRef(rec);
                     repMap.AddXRef(rec, oldXRef, newXRef);
-                    rec.ResetOwner(mainTree);
+                    rec.ResetTree(mainTree);
                     mainTree.AddRecord(rec);
                 }
 

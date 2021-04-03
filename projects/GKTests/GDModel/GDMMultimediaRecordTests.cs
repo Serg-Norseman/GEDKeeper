@@ -47,7 +47,7 @@ namespace GDModel
             using (GDMMultimediaRecord mediaRec = fContext.Tree.CreateMultimedia()) {
                 Assert.IsNotNull(mediaRec);
 
-                mediaRec.ResetOwner(fContext.Tree);
+                mediaRec.ResetTree(fContext.Tree);
 
                 Assert.AreEqual("", mediaRec.GetFileTitle());
 

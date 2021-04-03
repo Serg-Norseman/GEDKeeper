@@ -42,7 +42,7 @@ namespace GDModel
         }
 
 
-        public GDMLocationRecord(GDMObject owner) : base(owner)
+        public GDMLocationRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType._LOC);
 

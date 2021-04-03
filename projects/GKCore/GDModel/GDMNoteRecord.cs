@@ -34,7 +34,7 @@ namespace GDModel
         }
 
 
-        public GDMNoteRecord(GDMObject owner) : base(owner)
+        public GDMNoteRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType.NOTE);
 

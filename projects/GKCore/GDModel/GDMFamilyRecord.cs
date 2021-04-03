@@ -66,7 +66,7 @@ namespace GDModel
         }
 
 
-        public GDMFamilyRecord(GDMObject owner) : base(owner)
+        public GDMFamilyRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType.FAM);
 
@@ -108,12 +108,12 @@ namespace GDModel
         {
             base.Clear();
 
-            RemoveSpouse(fHusband.GetPtrValue<GDMIndividualRecord>());
-            RemoveSpouse(fWife.GetPtrValue<GDMIndividualRecord>());
+            RemoveSpouse(fTree.GetPtrValue<GDMIndividualRecord>(fHusband));
+            RemoveSpouse(fTree.GetPtrValue<GDMIndividualRecord>(fWife));
 
             int num = fChildren.Count;
             for (int i = 0; i < num; i++) {
-                GDMIndividualRecord child = fChildren[i].GetPtrValue<GDMIndividualRecord>();
+                GDMIndividualRecord child = fTree.GetPtrValue<GDMIndividualRecord>(fChildren[i]);
                 child.DeleteChildToFamilyLink(this);
             }
             fChildren.Clear();
@@ -188,17 +188,16 @@ namespace GDModel
 
             base.MoveTo(targetRecord);
 
-            targetFamily.RemoveSpouse(targetFamily.Husband.GetPtrValue<GDMIndividualRecord>());
+            targetFamily.RemoveSpouse(fTree.GetPtrValue<GDMIndividualRecord>(targetFamily.Husband));
             targetFamily.Husband.XRef = fHusband.XRef;
 
-            targetFamily.RemoveSpouse(targetFamily.Wife.GetPtrValue<GDMIndividualRecord>());
+            targetFamily.RemoveSpouse(fTree.GetPtrValue<GDMIndividualRecord>(targetFamily.Wife));
             targetFamily.Wife.XRef = fWife.XRef;
 
             targetFamily.Status = fStatus;
 
             while (fChildren.Count > 0) {
                 GDMIndividualLink obj = fChildren.Extract(0);
-                obj.ResetOwner(targetFamily);
                 targetFamily.Children.Add(obj);
             }
         }
@@ -216,10 +215,10 @@ namespace GDModel
         {
             string result = "";
 
-            GDMIndividualRecord spouse = fHusband.GetPtrValue<GDMIndividualRecord>();
+            GDMIndividualRecord spouse = fTree.GetPtrValue<GDMIndividualRecord>(fHusband);
             result += (spouse == null) ? "?" : spouse.GetPrimaryFullName();
             result += " - ";
-            spouse = fWife.GetPtrValue<GDMIndividualRecord>();
+            spouse = fTree.GetPtrValue<GDMIndividualRecord>(fWife);
             result += (spouse == null) ? "?" : spouse.GetPrimaryFullName();
 
             return result;

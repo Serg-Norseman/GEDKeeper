@@ -203,7 +203,7 @@ namespace GDModel
                     Assert.AreEqual("Petrov Ivan [BigHead]", st);
                 }
 
-                indi.ResetOwner(fContext.Tree);
+                indi.ResetTree(fContext.Tree);
             }
 
             indiRec.ReplaceXRefs(new GDMXRefReplacer());
