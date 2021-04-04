@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -160,12 +160,12 @@ namespace GKUI.Forms
         private string fTitle;
         private int fVal;
 
-        /*public bool IsCanceled
+        public bool IsCanceled
         {
-            get { return fProxy.IsCanceled; }
-        }*/
+            get { return false; }
+        }
 
-        public void ProgressInit(string title, int max)
+        public void ProgressInit(string title, int max, bool cancelable = false)
         {
             if (fProgressForm != null) {
                 fProgressForm.ProgressInit(title, max);

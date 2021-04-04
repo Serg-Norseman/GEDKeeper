@@ -389,7 +389,7 @@ namespace GKUI.Forms
         {
             GDMAssociation ast = eArgs.ItemData as GDMAssociation;
             if (eArgs.Action == RecordAction.raJump && ast != null) {
-                fController.JumpToRecord(ast.Individual);
+                fController.JumpToRecord(ast);
             }
         }
 

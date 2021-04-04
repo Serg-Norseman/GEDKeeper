@@ -418,7 +418,7 @@ namespace GKUI.Forms
             fOptions.EmbeddedMediaPlayer = chkEmbeddedMediaPlayer.Checked.GetValueOrDefault();
             fOptions.AllowMediaStoreReferences = chkAllowMediaDirectRefs.Checked.GetValueOrDefault();
             fOptions.AllowMediaStoreRelativeReferences = chkAllowMediaStoreRelativeReferences.Checked.GetValueOrDefault();
-            fOptions.MediaStoreDefault = (int)UIHelper.GetSelectedTag<MediaStoreType>(cmbMediaStoreDefault);
+            fOptions.MediaStoreDefault = UIHelper.GetSelectedTag<MediaStoreType>(cmbMediaStoreDefault);
             fOptions.AllowDeleteMediaFileFromStgArc = chkAllowDeleteMediaFileFromStgArc.Checked.GetValueOrDefault();
             fOptions.AllowDeleteMediaFileFromRefs = chkAllowDeleteMediaFileFromRefs.Checked.GetValueOrDefault();
             fOptions.DeleteMediaFileWithoutConfirm = chkDeleteMediaFileWithoutConfirm.Checked.GetValueOrDefault();

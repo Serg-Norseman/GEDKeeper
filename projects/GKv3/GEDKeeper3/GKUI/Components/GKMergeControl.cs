@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -105,7 +105,7 @@ namespace GKUI.Components
                 fView1.Lines.Clear();
             } else {
                 Lab1.Text = fRec1.XRef;
-                Edit1.Text = GKUtils.GetRecordName(fRec1, false);
+                Edit1.Text = GKUtils.GetRecordName(fBase.Context.Tree, fRec1, false);
                 fView1.Lines.Assign(fBase.GetRecordContent(fRec1));
             }
         }
@@ -121,7 +121,7 @@ namespace GKUI.Components
                 fView2.Lines.Clear();
             } else {
                 Lab2.Text = fRec2.XRef;
-                Edit2.Text = GKUtils.GetRecordName(fRec2, false);
+                Edit2.Text = GKUtils.GetRecordName(fBase.Context.Tree, fRec2, false);
                 fView2.Lines.Assign(fBase.GetRecordContent(fRec2));
             }
         }

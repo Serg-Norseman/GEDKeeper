@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -399,6 +399,7 @@ namespace GKUI.Forms
         {
             miFatherAdd.Enabled = fController.ParentIsRequired(GDMSex.svMale);
             miMotherAdd.Enabled = fController.ParentIsRequired(GDMSex.svFemale);
+            miGoToRecord.Enabled = fController.SelectedPersonIsReal();
         }
 
         private void tbDocPreview_Click(object sender, EventArgs e)
@@ -414,6 +415,11 @@ namespace GKUI.Forms
         private void tbOptions_Click(object sender, EventArgs e)
         {
             AppHost.Instance.ShowOptions(OptionsPage.opTreeChart);
+        }
+
+        private void miGoToRecord_Click(object sender, EventArgs e)
+        {
+            fController.GoToRecord();
         }
 
         #endregion
@@ -468,6 +474,7 @@ namespace GKUI.Forms
             miTraceKinships.Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
             miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
             miSelectColor.Text = LangMan.LS(LSID.LSID_SelectColor);
+            miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
 
             SetToolTip(tbModes, LangMan.LS(LSID.LSID_ModesTip));
             SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));

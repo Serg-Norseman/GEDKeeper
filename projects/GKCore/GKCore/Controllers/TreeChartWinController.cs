@@ -237,6 +237,21 @@ namespace GKCore.Controllers
             return needParent;
         }
 
+        public void GoToRecord()
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p == null || p.Rec == null) return;
+
+            fBase.SelectRecordByXRef(p.Rec.XRef, false);
+            fBase.Activate();
+        }
+
+        public bool SelectedPersonIsReal()
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            return (p != null && p.Rec != null);
+        }
+
         // TODO: update localization
         public void SaveSnapshot()
         {
