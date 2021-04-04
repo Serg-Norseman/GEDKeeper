@@ -44,7 +44,7 @@ namespace GKUI.Forms
         public override void Setup()
         {
             fBase = new BaseWindowStub();
-            fEvent = new GDMIndividualEvent(null);
+            fEvent = new GDMIndividualEvent();
 
             fDialog = new EventEditDlg(fBase);
             fDialog.Event = fEvent;

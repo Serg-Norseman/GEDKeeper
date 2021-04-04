@@ -100,7 +100,7 @@ namespace GDModel
         }
 
 
-        public GDMPersonalNamePieces(GDMObject owner) : base(owner)
+        public GDMPersonalNamePieces()
         {
             fPrefix = string.Empty;
             fGiven = string.Empty;

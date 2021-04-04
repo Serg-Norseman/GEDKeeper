@@ -472,20 +472,20 @@ namespace GDModel.Providers.GEDCOM
                 case GEDCOMDateType.AFT:
                 case GEDCOMDateType.BEF:
                 case GEDCOMDateType.BET:
-                    date = new GDMDateRange(dateValue);
+                    date = new GDMDateRange();
                     result = GEDCOMUtils.ParseRangeDate(owner, (GDMDateRange)date, strTok);
                     break;
                 case GEDCOMDateType.INT:
-                    date = new GDMDateInterpreted(dateValue);
+                    date = new GDMDateInterpreted();
                     result = GEDCOMUtils.ParseIntDate(owner, (GDMDateInterpreted)date, strTok);
                     break;
                 case GEDCOMDateType.FROM:
                 case GEDCOMDateType.TO:
-                    date = new GDMDatePeriod(dateValue);
+                    date = new GDMDatePeriod();
                     result = GEDCOMUtils.ParsePeriodDate(owner, (GDMDatePeriod)date, strTok);
                     break;
                 default:
-                    date = new GDMDate(dateValue);
+                    date = new GDMDate();
                     result = GEDCOMUtils.ParseDate(owner, (GDMDate)date, strTok);
                     break;
             }

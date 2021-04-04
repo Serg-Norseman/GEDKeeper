@@ -94,7 +94,7 @@ namespace GDModel
             Assert.IsNotNull(indiRec.UserReferences); // for GEDCOMRecord
 
             Assert.Throws(typeof(ArgumentException), () => {
-                indiRec.AddEvent(new GDMFamilyEvent(null));
+                indiRec.AddEvent(new GDMFamilyEvent());
             });
 
             GDMIndividualRecord father, mother;
@@ -164,7 +164,7 @@ namespace GDModel
                 Assert.AreEqual("", parts.Name);
                 Assert.AreEqual("", parts.Patronymic);
 
-                indi.AddPersonalName(new GDMPersonalName(indi)); // test with empty Name
+                indi.AddPersonalName(new GDMPersonalName()); // test with empty Name
                 parts = GKUtils.GetNameParts(fContext.Tree, indi);
                 Assert.AreEqual("", parts.Surname);
                 Assert.AreEqual("", parts.Name);
@@ -175,7 +175,7 @@ namespace GDModel
                 Assert.AreEqual("", GKUtils.GetNameString(indi, true, false));
                 Assert.AreEqual("", GKUtils.GetNickString(indi));
 
-                GDMPersonalName pName = new GDMPersonalName(indi);
+                GDMPersonalName pName = new GDMPersonalName();
                 indi.AddPersonalName(pName);
                 pName.Pieces.Nickname = "BigHead";
                 pName.SetNameParts("Ivan", "Petrov", "");
@@ -243,19 +243,19 @@ namespace GDModel
 
             ind1 = tree.CreateIndividual();
             ind1.Sex = GDMSex.svMale;
-            GDMPersonalName pn = ind1.AddPersonalName(new GDMPersonalName(ind1));
+            GDMPersonalName pn = ind1.AddPersonalName(new GDMPersonalName());
             pn.SetNameParts("Ivan Ivanov", "Fedoroff", "");
 
             ind2 = tree.CreateIndividual();
             ind2.Sex = GDMSex.svMale;
-            pn = ind2.AddPersonalName(new GDMPersonalName(ind2));
+            pn = ind2.AddPersonalName(new GDMPersonalName());
             pn.SetNameParts("Ivan Ivanovich", "Fedoroff", "");
 
-            ev1 = new GDMIndividualEvent(ind1, (int)GEDCOMTagType.BIRT, "");
+            ev1 = new GDMIndividualEvent((int)GEDCOMTagType.BIRT, "");
             dtVal1 = ev1.Date;
             ind1.AddEvent(ev1);
 
-            ev2 = new GDMIndividualEvent(ind2, (int)GEDCOMTagType.BIRT, "");
+            ev2 = new GDMIndividualEvent((int)GEDCOMTagType.BIRT, "");
             dtVal2 = ev2.Date;
             ind2.AddEvent(ev2);
 

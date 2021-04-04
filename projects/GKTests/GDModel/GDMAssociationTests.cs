@@ -42,7 +42,7 @@ namespace GDModel
         [Test]
         public void Test_GEDCOMAssociation()
         {
-            using (GDMAssociation association = new GDMAssociation(fContext.Tree)) {
+            using (GDMAssociation association = new GDMAssociation()) {
                 Assert.IsNotNull(association);
 
                 Assert.IsNotNull(association.SourceCitations);
@@ -61,7 +61,7 @@ namespace GDModel
                 association.XRef = iRec.XRef;
                 Assert.AreEqual(iRec, fContext.Tree.GetPtrValue(association));
 
-                using (GDMAssociation asso2 = new GDMAssociation(null)) {
+                using (GDMAssociation asso2 = new GDMAssociation()) {
                     Assert.IsNotNull(asso2);
 
                     Assert.Throws(typeof(ArgumentException), () => {
@@ -81,7 +81,7 @@ namespace GDModel
 
                 association.ReplaceXRefs(new GDMXRefReplacer());
 
-                GDMTag tag = association.SourceCitations.Add(new GDMSourceCitation(association));
+                GDMTag tag = association.SourceCitations.Add(new GDMSourceCitation());
                 Assert.IsNotNull(tag);
                 Assert.IsTrue(tag is GDMSourceCitation);
 

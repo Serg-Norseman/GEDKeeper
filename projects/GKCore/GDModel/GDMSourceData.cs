@@ -46,13 +46,13 @@ namespace GDModel
         }
 
 
-        public GDMSourceData(GDMObject owner) : base(owner)
+        public GDMSourceData()
         {
             SetName(GEDCOMTagType.DATA);
 
             fAgency = string.Empty;
-            fEvents = new GDMList<GDMSourceEvent>(this);
-            fNotes = new GDMList<GDMNotes>(this);
+            fEvents = new GDMList<GDMSourceEvent>();
+            fNotes = new GDMList<GDMNotes>();
         }
 
         protected override void Dispose(bool disposing)

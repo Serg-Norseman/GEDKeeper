@@ -44,7 +44,7 @@ namespace GKUI.Forms
         {
             fBase = new BaseWindowStub();
             fContext = fBase.Context;
-            fMultimediaLink = new GDMMultimediaLink(null);
+            fMultimediaLink = new GDMMultimediaLink();
 
             fDialog = new PortraitSelectDlg(fBase);
             fDialog.MultimediaLink = fMultimediaLink;

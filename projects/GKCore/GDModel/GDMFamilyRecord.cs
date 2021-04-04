@@ -70,9 +70,9 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.FAM);
 
-            fHusband = new GDMIndividualLink(this, (int)GEDCOMTagType.HUSB, string.Empty);
-            fWife = new GDMIndividualLink(this, (int)GEDCOMTagType.WIFE, string.Empty);
-            fChildren = new GDMList<GDMIndividualLink>(this);
+            fHusband = new GDMIndividualLink((int)GEDCOMTagType.HUSB, string.Empty);
+            fWife = new GDMIndividualLink((int)GEDCOMTagType.WIFE, string.Empty);
+            fChildren = new GDMList<GDMIndividualLink>();
         }
 
         protected override void Dispose(bool disposing)
@@ -254,7 +254,7 @@ namespace GDModel
                     break;
             }
 
-            GDMSpouseToFamilyLink spLink = new GDMSpouseToFamilyLink(spouse);
+            GDMSpouseToFamilyLink spLink = new GDMSpouseToFamilyLink();
             spLink.XRef = this.XRef;
             spouse.SpouseToFamilyLinks.Add(spLink);
 
@@ -282,11 +282,11 @@ namespace GDModel
         {
             if (child == null) return false;
 
-            GDMIndividualLink ptr = new GDMIndividualLink(this, (int)GEDCOMTagType.CHIL, string.Empty);
+            GDMIndividualLink ptr = new GDMIndividualLink((int)GEDCOMTagType.CHIL, string.Empty);
             ptr.XRef = child.XRef;
             fChildren.Add(ptr);
 
-            GDMChildToFamilyLink chLink = new GDMChildToFamilyLink(child);
+            GDMChildToFamilyLink chLink = new GDMChildToFamilyLink();
             chLink.XRef = this.XRef;
             child.ChildToFamilyLinks.Add(chLink);
 

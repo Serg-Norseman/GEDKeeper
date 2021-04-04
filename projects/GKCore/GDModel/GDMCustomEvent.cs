@@ -101,14 +101,14 @@ namespace GDModel
         }
 
 
-        protected GDMCustomEvent(GDMObject owner) : base(owner)
+        protected GDMCustomEvent()
         {
-            fAddress = new GDMAddress(this);
-            fDate = new GDMDateValue(this);
-            fPlace = new GDMPlace(this);
-            fNotes = new GDMList<GDMNotes>(this);
-            fSourceCitations = new GDMList<GDMSourceCitation>(this);
-            fMultimediaLinks = new GDMList<GDMMultimediaLink>(this);
+            fAddress = new GDMAddress();
+            fDate = new GDMDateValue();
+            fPlace = new GDMPlace();
+            fNotes = new GDMList<GDMNotes>();
+            fSourceCitations = new GDMList<GDMSourceCitation>();
+            fMultimediaLinks = new GDMList<GDMMultimediaLink>();
         }
 
         protected override void Dispose(bool disposing)

@@ -31,7 +31,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMPlace place = new GDMPlace(null)) {
+            using (GDMPlace place = new GDMPlace()) {
                 Assert.IsNotNull(place);
 
                 place.Form = "abrakadabra";
@@ -40,17 +40,17 @@ namespace GDModel
                 Assert.IsNotNull(place.Map);
                 Assert.IsNotNull(place.Location);
 
-                var note = new GDMNotes(place);
+                var note = new GDMNotes();
                 note.Lines.Text = "place notes";
                 place.Notes.Add(note);
 
-                using (GDMPlace place2 = new GDMPlace(null)) {
+                using (GDMPlace place2 = new GDMPlace()) {
                     Assert.Throws(typeof(ArgumentException), () => {
                         place2.Assign(null);
                     });
 
                     var iRec = new GDMIndividualRecord(null);
-                    var evt = new GDMIndividualEvent(iRec);
+                    var evt = new GDMIndividualEvent();
                     evt.SetName("BIRT");
                     iRec.Events.Add(evt);
                     //place2.Assign(place);

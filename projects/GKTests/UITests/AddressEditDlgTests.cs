@@ -50,7 +50,7 @@ namespace GKUI.Forms
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fAddress = new GDMAddress(null);
+            fAddress = new GDMAddress();
 
             fAddress.AddWebPage("test");
             fAddress.AddPhoneNumber("test");

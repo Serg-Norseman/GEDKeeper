@@ -2875,7 +2875,7 @@ namespace GKCore
 
             GDMPersonalName personalName;
             if (iRec.PersonalNames.Count <= 0) {
-                personalName = iRec.AddPersonalName(new GDMPersonalName(iRec));
+                personalName = iRec.AddPersonalName(new GDMPersonalName());
             } else {
                 personalName = iRec.PersonalNames[0];
             }

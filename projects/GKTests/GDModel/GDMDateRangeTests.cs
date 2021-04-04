@@ -34,7 +34,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (var dtx1 = new GDMDateRange(null)) {
+            using (var dtx1 = new GDMDateRange()) {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
                 Assert.AreEqual("", dtx1.StringValue);
                 Assert.AreEqual(new DateTime(0), dtx1.GetDateTime());

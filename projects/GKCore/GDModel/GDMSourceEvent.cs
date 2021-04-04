@@ -39,12 +39,12 @@ namespace GDModel
         }
 
 
-        public GDMSourceEvent(GDMObject owner) : base(owner)
+        public GDMSourceEvent()
         {
             SetName(GEDCOMTagType.EVEN);
 
-            fDate = new GDMDatePeriod(this);
-            fPlace = new GDMPlace(this);
+            fDate = new GDMDatePeriod();
+            fPlace = new GDMPlace();
         }
 
         internal override void TrimExcess()

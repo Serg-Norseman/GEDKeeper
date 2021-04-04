@@ -185,10 +185,10 @@ namespace GEDmill.HTML
 
             GDMDateValue age30;
             if (fInferredBirthday != null) {
-                age30 = new GDMDateValue(null);
+                age30 = new GDMDateValue();
                 age30.Assign(fInferredBirthday.Date);
             } else {
-                age30 = new GDMDateValue(null);
+                age30 = new GDMDateValue();
                 age30.SetDateTime(DateTime.Now);
             }
             try {
@@ -326,7 +326,7 @@ namespace GEDmill.HTML
                     GDMDateValue testBirthday = (fInferredBirthday != null) ? fInferredBirthday.Date : null;
 
                     if (testBirthday == null) {
-                        testBirthday = new GDMDateValue(null);
+                        testBirthday = new GDMDateValue();
                         testBirthday.SetDateTime(dtNow);
                     }
 
@@ -354,7 +354,7 @@ namespace GEDmill.HTML
                             if (childBirthday != null)
                                 childBirthdate = childBirthday.Date;
                             if (childBirthdate == null) {
-                                childBirthdate = new GDMDateValue(null);
+                                childBirthdate = new GDMDateValue();
                                 childBirthdate.SetDateTime(dtNow);
                             }
 

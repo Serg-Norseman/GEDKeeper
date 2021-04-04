@@ -114,16 +114,16 @@ namespace GDModel
             get { return fXRef; }
         }
 
-        public GDMRecord(GDMTree tree) : base(tree)
+        public GDMRecord(GDMTree tree) : base()
         {
             fTree = tree;
             fXRef = string.Empty;
             fAutomatedRecordID = string.Empty;
-            fChangeDate = new GDMChangeDate(this);
-            fNotes = new GDMList<GDMNotes>(this);
-            fSourceCitations = new GDMList<GDMSourceCitation>(this);
-            fMultimediaLinks = new GDMList<GDMMultimediaLink>(this);
-            fUserReferences = new GDMList<GDMUserReference>(this);
+            fChangeDate = new GDMChangeDate();
+            fNotes = new GDMList<GDMNotes>();
+            fSourceCitations = new GDMList<GDMSourceCitation>();
+            fMultimediaLinks = new GDMList<GDMMultimediaLink>();
+            fUserReferences = new GDMList<GDMUserReference>();
         }
 
         protected override void Dispose(bool disposing)

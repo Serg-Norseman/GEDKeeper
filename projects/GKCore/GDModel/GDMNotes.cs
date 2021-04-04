@@ -33,12 +33,12 @@ namespace GDModel
         }
 
 
-        public GDMTextTag(GDMObject owner) : base(owner)
+        public GDMTextTag()
         {
             fLines = new GDMLines();
         }
 
-        public GDMTextTag(GDMObject owner, int tagId) : this(owner)
+        public GDMTextTag(int tagId) : this()
         {
             SetName(tagId);
         }
@@ -102,7 +102,7 @@ namespace GDModel
         }
 
 
-        public GDMNotes(GDMObject owner) : base(owner)
+        public GDMNotes()
         {
             SetName(GEDCOMTagType.NOTE);
 

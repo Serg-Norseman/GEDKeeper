@@ -44,7 +44,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMIndividualAttribute customEvent = new GDMIndividualAttribute(null)) {
+            using (GDMIndividualAttribute customEvent = new GDMIndividualAttribute()) {
                 Assert.IsNotNull(customEvent);
 
                 Assert.IsNotNull(customEvent.Address);
@@ -84,7 +84,7 @@ namespace GDModel
                 Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
             }
 
-            using (GDMIndividualEvent customEvent = new GDMIndividualEvent(null)) {
+            using (GDMIndividualEvent customEvent = new GDMIndividualEvent()) {
                 Assert.IsNotNull(customEvent);
 
                 // stream test
@@ -98,19 +98,19 @@ namespace GDModel
                 customEvent.Address.AddressLine1 = "adr1";
                 customEvent.Restriction = GDMRestriction.rnConfidential;
 
-                var note = new GDMNotes(customEvent);
+                var note = new GDMNotes();
                 note.Lines.Text = "event notes";
                 customEvent.Notes.Add(note);
 
-                var sourCit = new GDMSourceCitation(customEvent);
+                var sourCit = new GDMSourceCitation();
                 sourCit.Description.Text = "event sour desc";
                 customEvent.SourceCitations.Add(sourCit);
 
-                var mmLink = new GDMMultimediaLink(customEvent);
+                var mmLink = new GDMMultimediaLink();
                 mmLink.Title = "event media title";
                 customEvent.MultimediaLinks.Add(mmLink);
 
-                using (GDMIndividualEvent copyEvent = new GDMIndividualEvent(null)) {
+                using (GDMIndividualEvent copyEvent = new GDMIndividualEvent()) {
                     Assert.IsNotNull(copyEvent);
                     copyEvent.Assign(customEvent);
 
@@ -139,7 +139,7 @@ namespace GDModel
                 Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
             }
 
-            using (GDMFamilyEvent customEvent = new GDMFamilyEvent(null)) {
+            using (GDMFamilyEvent customEvent = new GDMFamilyEvent()) {
                 Assert.IsNotNull(customEvent);
 
                 customEvent.Address.AddEmailAddress("email");
@@ -150,7 +150,7 @@ namespace GDModel
         [Test]
         public void Test_Assign()
         {
-            var instance = new GDMIndividualEvent(null);
+            var instance = new GDMIndividualEvent();
             Assert.Throws(typeof(ArgumentException), () => {
                 instance.Assign(null);
             });
@@ -159,28 +159,28 @@ namespace GDModel
         [Test]
         public void Test_Clear()
         {
-            var instance = new GDMIndividualEvent(null);
+            var instance = new GDMIndividualEvent();
             instance.Clear();
         }
 
         [Test]
         public void Test_IsEmpty()
         {
-            var instance = new GDMIndividualEvent(null);
+            var instance = new GDMIndividualEvent();
             Assert.IsTrue(instance.IsEmpty());
         }
 
         [Test]
         public void Test_ReplaceXRefs()
         {
-            var instance = new GDMIndividualEvent(null);
+            var instance = new GDMIndividualEvent();
             instance.ReplaceXRefs(null);
         }
 
         [Test]
         public void Test_GDMIndividualEvent()
         {
-            using (GDMIndividualEvent iEvent = new GDMIndividualEvent(null)) {
+            using (GDMIndividualEvent iEvent = new GDMIndividualEvent()) {
                 Assert.IsNotNull(iEvent);
             }
         }
@@ -200,7 +200,7 @@ namespace GDModel
             testUDN = GDMDate.GetUDNByFormattedStr("28/12/1990", GDMCalendar.dcGregorian);
             Assert.AreEqual("1990/12/28", testUDN.ToString());
 
-            using (GDMDateValue dateVal = new GDMDateValue(null)) {
+            using (GDMDateValue dateVal = new GDMDateValue()) {
                 dateVal.ParseString("28 DEC 1990");
                 testUDN = dateVal.GetUDN();
                 Assert.AreEqual("1990/12/28", testUDN.ToString());

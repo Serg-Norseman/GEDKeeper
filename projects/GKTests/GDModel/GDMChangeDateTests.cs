@@ -31,7 +31,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMChangeDate cd = new GDMChangeDate(null)) {
+            using (GDMChangeDate cd = new GDMChangeDate()) {
                 Assert.IsNotNull(cd);
 
                 DateTime dtNow = DateTime.Now;
@@ -44,7 +44,7 @@ namespace GDModel
                 Assert.AreEqual(dtNow.ToString("yyyy.MM.dd HH:mm:ss"), cd.ToString());
 
                 cd.ChangeDateTime = TestUtils.ParseDTX("04.01.2013 11:12");
-                using (GDMChangeDate chd2 = new GDMChangeDate(null)) {
+                using (GDMChangeDate chd2 = new GDMChangeDate()) {
                     Assert.IsNotNull(chd2);
 
                     Assert.Throws(typeof(ArgumentException), () => {

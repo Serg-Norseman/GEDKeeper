@@ -41,10 +41,10 @@ namespace GDModel
         }
 
 
-        public GDMDatePeriod(GDMObject owner) : base(owner)
+        public GDMDatePeriod()
         {
-            fDateFrom = new GDMDate(this);
-            fDateTo = new GDMDate(this);
+            fDateFrom = new GDMDate();
+            fDateTo = new GDMDate();
         }
 
         internal override void TrimExcess()

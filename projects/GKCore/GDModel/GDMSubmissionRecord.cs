@@ -84,7 +84,7 @@ namespace GDModel
             fGenerationsOfAncestors = -1;
             fGenerationsOfDescendants = -1;
             fOrdinanceProcessFlag = GDMOrdinanceProcessFlag.opNone;
-            fSubmitter = new GDMPointer(this, (int)GEDCOMTagType.SUBM, string.Empty);
+            fSubmitter = new GDMPointer((int)GEDCOMTagType.SUBM, string.Empty);
         }
 
         internal override void TrimExcess()

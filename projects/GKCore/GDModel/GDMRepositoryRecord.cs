@@ -46,7 +46,7 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.REPO);
 
-            fAddress = new GDMAddress(this);
+            fAddress = new GDMAddress();
             fRepositoryName = string.Empty;
         }
 

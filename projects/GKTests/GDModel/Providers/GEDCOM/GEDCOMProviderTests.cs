@@ -37,18 +37,6 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual(GEDCOMFormat.gf_GENBOX, GEDCOMProvider.GetGEDCOMFormat(tree));
         }
 
-        private GDMTag TagConstructorTest(GDMObject owner, int tagId, string tagValue)
-        {
-            return null;
-        }
-
-        [Test]
-        public void Test_GEDCOMFactory()
-        {
-            TagConstructor tagConst = TagConstructorTest;
-            Assert.AreEqual(null, tagConst.Invoke(null, 0, "x"));
-        }
-
         [Test]
         public void Test_GetTagProps()
         {

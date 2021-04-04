@@ -53,7 +53,7 @@ namespace GKCore.Controllers
             var baseWin = Substitute.For<IBaseWindow>();
             baseWin.Context.Returns(baseContext);
             var tree = baseContext.Tree;
-            var association = new GDMAssociation(tree); // for xref pointers to work
+            var association = new GDMAssociation(); // for xref pointers to work
 
             var controller = new AssociationEditDlgController(view);
             Assert.IsNotNull(controller);

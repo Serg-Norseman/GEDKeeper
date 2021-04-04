@@ -31,7 +31,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMUserReference userRef = new GDMUserReference(null)) {
+            using (GDMUserReference userRef = new GDMUserReference()) {
                 Assert.IsNotNull(userRef);
 
                 userRef.StringValue = "ref";
@@ -39,7 +39,7 @@ namespace GDModel
                 userRef.ReferenceType = "test";
                 Assert.AreEqual("test", userRef.ReferenceType);
 
-                using (GDMUserReference uref2 = new GDMUserReference(null)) {
+                using (GDMUserReference uref2 = new GDMUserReference()) {
                     Assert.IsNotNull(uref2);
 
                     Assert.Throws(typeof(ArgumentException), () => {

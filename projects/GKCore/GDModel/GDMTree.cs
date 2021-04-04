@@ -197,8 +197,8 @@ namespace GDModel
         public GDMTree()
         {
             fXRefIndex = new Dictionary<string, GDMRecord>();
-            fRecords = new GDMList<GDMRecord>(this);
-            fHeader = new GDMHeader(this);
+            fRecords = new GDMList<GDMRecord>();
+            fHeader = new GDMHeader();
 
             ResetLastIDs();
         }

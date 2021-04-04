@@ -79,7 +79,7 @@ namespace GKCore.Lists
                     using (var dlg = AppHost.ResolveDialog<IAssociationEditDlg>(fBaseWin)) {
                         bool exists = (ast != null);
                         if (!exists) {
-                            ast = new GDMAssociation(person);
+                            ast = new GDMAssociation();
                         }
 
                         dlg.Association = ast;

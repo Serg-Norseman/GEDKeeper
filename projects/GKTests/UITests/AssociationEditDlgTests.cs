@@ -48,7 +48,7 @@ namespace GKUI.Forms
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fAssociation = new GDMAssociation(null);
+            fAssociation = new GDMAssociation();
 
             fDialog = new AssociationEditDlg(fBase);
             fDialog.Association = fAssociation;

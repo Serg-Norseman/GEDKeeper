@@ -40,12 +40,12 @@ namespace GDModel
         }
 
 
-        public GDMSourceCitationData(GDMObject owner) : base(owner)
+        public GDMSourceCitationData()
         {
             SetName(GEDCOMTagType.DATA);
 
-            fDate = new GDMDateValue(this);
-            fText = new GDMTextTag(this, (int)GEDCOMTagType.TEXT);
+            fDate = new GDMDateValue();
+            fText = new GDMTextTag((int)GEDCOMTagType.TEXT);
         }
 
         protected override void Dispose(bool disposing)

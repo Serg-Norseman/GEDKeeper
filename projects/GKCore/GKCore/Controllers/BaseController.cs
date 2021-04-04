@@ -50,7 +50,7 @@ namespace GKCore.Controllers
                     bool exists = mediaRec != null;
                     if (!exists) {
                         mediaRec = new GDMMultimediaRecord(tree);
-                        mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle(mediaRec));
+                        mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle());
                         tree.NewXRef(mediaRec);
                     }
 
@@ -178,7 +178,7 @@ namespace GKCore.Controllers
                 using (var dlg = AppHost.ResolveDialog<ISourceCitEditDlg>(baseWin)) {
                     bool exists = cit != null;
                     if (!exists) {
-                        cit = new GDMSourceCitation(_struct as GDMObject);
+                        cit = new GDMSourceCitation();
                     }
 
                     dlg.SourceCitation = cit;
@@ -478,7 +478,7 @@ namespace GKCore.Controllers
                         indivRec = new GDMIndividualRecord(tree);
                         tree.NewXRef(indivRec);
 
-                        indivRec.AddPersonalName(new GDMPersonalName(indivRec));
+                        indivRec.AddPersonalName(new GDMPersonalName());
                         baseWin.Context.CreateEventEx(indivRec, GEDCOMTagName.BIRT, "", "");
                     }
 

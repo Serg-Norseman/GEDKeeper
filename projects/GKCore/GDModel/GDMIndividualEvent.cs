@@ -22,11 +22,11 @@ namespace GDModel
 {
     public sealed class GDMIndividualEvent : GDMCustomEvent
     {
-        public GDMIndividualEvent(GDMObject owner) : base(owner)
+        public GDMIndividualEvent()
         {
         }
 
-        public GDMIndividualEvent(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMIndividualEvent(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }

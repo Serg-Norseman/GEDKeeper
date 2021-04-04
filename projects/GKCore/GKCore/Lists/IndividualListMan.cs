@@ -727,7 +727,7 @@ namespace GKCore.Lists
                     using (var dlg = AppHost.ResolveDialog<IPersonalNameEditDlg>(fBaseWin)) {
                         bool exists = (persName != null);
                         if (!exists) {
-                            persName = new GDMPersonalName(iRec);
+                            persName = new GDMPersonalName();
                         }
 
                         dlg.Individual = iRec;
@@ -1041,7 +1041,7 @@ namespace GKCore.Lists
                     using (var dlg = AppHost.ResolveDialog<IUserRefEditDlg>(fBaseWin)) {
                         bool exists = (userRef != null);
                         if (!exists) {
-                            userRef = new GDMUserReference(iRec);
+                            userRef = new GDMUserReference();
                         }
 
                         dlg.UserRef = userRef;

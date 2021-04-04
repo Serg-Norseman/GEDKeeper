@@ -47,7 +47,7 @@ namespace GKUI.Forms
         {
             fBase = new BaseWindowStub();
             fPerson = new GDMIndividualRecord(fBase.Context.Tree);
-            fPersonalName = new GDMPersonalName(fPerson);
+            fPersonalName = new GDMPersonalName();
 
             fDialog = new PersonalNameEditDlg(fBase);
             fDialog.Individual = fPerson;

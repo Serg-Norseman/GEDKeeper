@@ -117,12 +117,12 @@ namespace GDModel
         {
             SetName(GEDCOMTagType._RESEARCH);
 
-            fStartDate = new GDMDate(this, (int)GEDCOMTagType._STARTDATE, string.Empty);
-            fStopDate = new GDMDate(this, (int)GEDCOMTagType._STOPDATE, string.Empty);
+            fStartDate = new GDMDate((int)GEDCOMTagType._STARTDATE, string.Empty);
+            fStopDate = new GDMDate((int)GEDCOMTagType._STOPDATE, string.Empty);
 
-            fTasks = new GDMList<GDMPointer>(this);
-            fCommunications = new GDMList<GDMPointer>(this);
-            fGroups = new GDMList<GDMPointer>(this);
+            fTasks = new GDMList<GDMPointer>();
+            fCommunications = new GDMList<GDMPointer>();
+            fGroups = new GDMList<GDMPointer>();
         }
 
         protected override void Dispose(bool disposing)
@@ -203,7 +203,7 @@ namespace GDModel
             bool result = false;
 
             if (taskRecord != null) {
-                GDMPointer ptr = new GDMPointer(this, (int)GEDCOMTagType._TASK, string.Empty);
+                GDMPointer ptr = new GDMPointer((int)GEDCOMTagType._TASK, string.Empty);
                 ptr.XRef = taskRecord.XRef;
                 fTasks.Add(ptr);
                 result = true;
@@ -241,7 +241,7 @@ namespace GDModel
             bool result = false;
 
             if (groupRecord != null) {
-                GDMPointer ptr = new GDMPointer(this, (int)GEDCOMTagType._GROUP, string.Empty);
+                GDMPointer ptr = new GDMPointer((int)GEDCOMTagType._GROUP, string.Empty);
                 ptr.XRef = groupRecord.XRef;
                 fGroups.Add(ptr);
                 result = true;
@@ -279,7 +279,7 @@ namespace GDModel
             bool result = false;
 
             if (commRecord != null) {
-                GDMPointer ptr = new GDMPointer(this, (int)GEDCOMTagType._COMM, string.Empty);
+                GDMPointer ptr = new GDMPointer((int)GEDCOMTagType._COMM, string.Empty);
                 ptr.XRef = commRecord.XRef;
                 fCommunications.Add(ptr);
                 result = true;

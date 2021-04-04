@@ -48,7 +48,7 @@ namespace GKUI.Forms
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fSourceCitation = new GDMSourceCitation(null);
+            fSourceCitation = new GDMSourceCitation();
 
             fDialog = new SourceCitEditDlg(fBase);
             fDialog.SourceCitation = fSourceCitation;

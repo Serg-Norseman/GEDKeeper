@@ -222,12 +222,12 @@ namespace GKCore
 
             if (aRec is GDMIndividualRecord) {
                 if (GKUtils.GetPersonEventKindBySign(evSign) == PersonEventKind.ekEvent) {
-                    result = new GDMIndividualEvent(aRec);
+                    result = new GDMIndividualEvent();
                 } else {
-                    result = new GDMIndividualAttribute(aRec);
+                    result = new GDMIndividualAttribute();
                 }
             } else if (aRec is GDMFamilyRecord) {
-                result = new GDMFamilyEvent(aRec);
+                result = new GDMFamilyEvent();
             } else {
                 return null;
             }
@@ -252,7 +252,7 @@ namespace GKCore
             GDMIndividualRecord iRec = fTree.CreateIndividual();
             iRec.Sex = iSex;
 
-            GDMPersonalName pName = iRec.AddPersonalName(new GDMPersonalName(iRec));
+            GDMPersonalName pName = iRec.AddPersonalName(new GDMPersonalName());
             GKUtils.SetNameParts(pName, iSurname, iName, iPatronymic);
 
             if (birthEvent) CreateEventEx(iRec, GEDCOMTagName.BIRT, "", "");

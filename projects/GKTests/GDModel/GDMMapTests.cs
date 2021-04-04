@@ -31,14 +31,14 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (var map = new GDMMap(null)) {
+            using (var map = new GDMMap()) {
                 map.Lati = 5.111111;
                 Assert.AreEqual(5.111111, map.Lati);
 
                 map.Long = 7.999999;
                 Assert.AreEqual(7.999999, map.Long);
 
-                using (GDMMap map2 = new GDMMap(null)) {
+                using (GDMMap map2 = new GDMMap()) {
                     Assert.Throws(typeof(ArgumentException), () => {
                         map2.Assign(null);
                     });
@@ -46,7 +46,7 @@ namespace GDModel
                     //map2.Assign(map);
 
                     var iRec = new GDMIndividualRecord(null);
-                    var evt = new GDMIndividualEvent(iRec);
+                    var evt = new GDMIndividualEvent();
                     evt.SetName("BIRT");
                     iRec.Events.Add(evt);
                     evt.Place.Map.Assign(map);

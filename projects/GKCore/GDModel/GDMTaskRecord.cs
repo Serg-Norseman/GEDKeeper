@@ -70,8 +70,8 @@ namespace GDModel
         {
             SetName(GEDCOMTagType._TASK);
 
-            fStartDate = new GDMDate(this, (int)GEDCOMTagType._STARTDATE, string.Empty);
-            fStopDate = new GDMDate(this, (int)GEDCOMTagType._STOPDATE, string.Empty);
+            fStartDate = new GDMDate((int)GEDCOMTagType._STARTDATE, string.Empty);
+            fStopDate = new GDMDate((int)GEDCOMTagType._STOPDATE, string.Empty);
         }
 
         public override void Assign(GDMTag source)

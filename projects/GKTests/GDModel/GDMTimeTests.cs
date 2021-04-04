@@ -33,7 +33,7 @@ namespace GDModel
         {
             var tms = new TimeSpan(20, 20, 20);
 
-            using (GDMTime time = new GDMTime(null)) {
+            using (GDMTime time = new GDMTime()) {
                 Assert.IsNotNull(time, "time != null");
                 Assert.AreEqual(GEDCOMTagType.TIME, time.GetTagType());
 

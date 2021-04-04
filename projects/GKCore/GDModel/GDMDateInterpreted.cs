@@ -53,7 +53,7 @@ namespace GDModel
         }
 
 
-        public GDMDateInterpreted(GDMObject owner) : base(owner)
+        public GDMDateInterpreted()
         {
             fDatePhrase = string.Empty;
         }

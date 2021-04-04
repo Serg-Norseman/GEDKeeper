@@ -107,7 +107,7 @@ namespace GDModel
         }
 
 
-        public GDMAddress(GDMObject owner) : base(owner)
+        public GDMAddress()
         {
             SetName(GEDCOMTagType.ADDR);
 
@@ -120,13 +120,13 @@ namespace GDModel
             fAddressPostalCode = string.Empty;
             fAddressCountry = string.Empty;
 
-            fPhoneList = new GDMList<GDMTag>(this);
-            fEmailList = new GDMList<GDMTag>(this);
-            fFaxList = new GDMList<GDMTag>(this);
-            fWWWList = new GDMList<GDMTag>(this);
+            fPhoneList = new GDMList<GDMTag>();
+            fEmailList = new GDMList<GDMTag>();
+            fFaxList = new GDMList<GDMTag>();
+            fWWWList = new GDMList<GDMTag>();
         }
 
-        public GDMAddress(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMAddress(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }
@@ -217,22 +217,22 @@ namespace GDModel
 
         public GDMTag AddEmailAddress(string value)
         {
-            return fEmailList.Add(new GDMValueTag(this, (int)GEDCOMTagType.EMAIL, value));
+            return fEmailList.Add(new GDMValueTag((int)GEDCOMTagType.EMAIL, value));
         }
 
         public GDMTag AddFaxNumber(string value)
         {
-            return fFaxList.Add(new GDMValueTag(this, (int)GEDCOMTagType.FAX, value));
+            return fFaxList.Add(new GDMValueTag((int)GEDCOMTagType.FAX, value));
         }
 
         public GDMTag AddPhoneNumber(string value)
         {
-            return fPhoneList.Add(new GDMValueTag(this, (int)GEDCOMTagType.PHON, value));
+            return fPhoneList.Add(new GDMValueTag((int)GEDCOMTagType.PHON, value));
         }
 
         public GDMTag AddWebPage(string value)
         {
-            return fWWWList.Add(new GDMValueTag(this, (int)GEDCOMTagType.WWW, value));
+            return fWWWList.Add(new GDMValueTag((int)GEDCOMTagType.WWW, value));
         }
 
         public void SetAddressText(string value)

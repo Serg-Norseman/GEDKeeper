@@ -32,7 +32,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMAddress addr = new GDMAddress(null)) {
+            using (GDMAddress addr = new GDMAddress()) {
                 Assert.IsNotNull(addr, "addr != null");
 
                 addr.SetAddressText("test");
@@ -91,7 +91,7 @@ namespace GDModel
                 addr.AddressPostalCode = "test7";
                 Assert.AreEqual("test7", addr.AddressPostalCode);
 
-                using (GDMAddress addr2 = new GDMAddress(null)) {
+                using (GDMAddress addr2 = new GDMAddress()) {
                     Assert.Throws(typeof(ArgumentException), () => {
                         addr2.Assign(null);
                     });
@@ -99,7 +99,7 @@ namespace GDModel
                     addr2.Assign(addr);
 
                     var iRec = new GDMIndividualRecord(null);
-                    var evt = new GDMIndividualEvent(iRec);
+                    var evt = new GDMIndividualEvent();
                     evt.SetName("BIRT");
                     iRec.Events.Add(evt);
                     evt.Address.Assign(addr);
@@ -159,7 +159,7 @@ namespace GDModel
         [Test]
         public void Test_Create()
         {
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             Assert.IsNotNull(instance);
         }
 
@@ -171,7 +171,7 @@ namespace GDModel
                 "Address Line 2"
             };
             GDMLines value = new GDMLines(vals);
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.Lines.AddRange(value);
             Assert.AreEqual(value.Text, instance.Lines.Text);
         }
@@ -180,7 +180,7 @@ namespace GDModel
         public void Test_SetAddressLine1()
         {
             string value = "1234 Main St";
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.AddressLine1 = value;
             Assert.AreEqual(value, instance.AddressLine1);
         }
@@ -189,7 +189,7 @@ namespace GDModel
         public void Test_SetAddressLine2()
         {
             string value = "Novozavodskaya ul., 10";
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.AddressLine2 = value;
             Assert.AreEqual(value, instance.AddressLine2);
         }
@@ -198,7 +198,7 @@ namespace GDModel
         public void Test_SetAddressLine3()
         {
             string value = "ALEKSCEVSKTY r-n";
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.AddressLine3 = value;
             Assert.AreEqual(value, instance.AddressLine3);
         }
@@ -207,7 +207,7 @@ namespace GDModel
         public void Test_SetAddressCity()
         {
             string value = "Moskva";
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.AddressCity = value;
             Assert.AreEqual(value, instance.AddressCity);
         }
@@ -216,7 +216,7 @@ namespace GDModel
         public void Test_SetAddressState()
         {
             string value = "VORONEJSKAYA obl";
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.AddressState = value;
             Assert.AreEqual(value, instance.AddressState);
         }
@@ -225,7 +225,7 @@ namespace GDModel
         public void Test_SetAddressPostalCode()
         {
             string value = "1234A567";
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.AddressPostalCode = value;
             Assert.AreEqual(value, instance.AddressPostalCode);
         }
@@ -234,7 +234,7 @@ namespace GDModel
         public void Test_SetAddressCountry()
         {
             string value = "Moosylvania";
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.AddressCountry = value;
             Assert.AreEqual(value, instance.AddressCountry);
         }
@@ -243,7 +243,7 @@ namespace GDModel
         public void Test_AddEmailAddress()
         {
             string value = "serg.zhdanovskih@yandex.ru";
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.AddEmailAddress(value);
             GDMList<GDMTag> pl = instance.EmailAddresses;
             Assert.AreEqual(1, pl.Count);
@@ -254,7 +254,7 @@ namespace GDModel
         public void Test_AddFaxNumber()
         {
             string value = "(214) 748-3647";
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.AddFaxNumber(value);
             GDMList<GDMTag> pl = instance.FaxNumbers;
             Assert.AreEqual(1, pl.Count);
@@ -265,7 +265,7 @@ namespace GDModel
         public void Test_AddPhoneNumber()
         {
             string value = "(214) 748-3647";
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.AddPhoneNumber(value);
             GDMList<GDMTag> pl = instance.PhoneNumbers;
             Assert.AreEqual(1, pl.Count);
@@ -277,7 +277,7 @@ namespace GDModel
         {
             string value1 = "(214) 748-3647";
             string value2 = "(999) 748-3647";
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.AddPhoneNumber(value1);
             instance.AddPhoneNumber(value2);
             GDMList<GDMTag> pl = instance.PhoneNumbers;
@@ -292,7 +292,7 @@ namespace GDModel
         public void Test_AddWebPage1()
         {
             string value = "http://www.bitboost.com/ref/international-address-formats/russia/";
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.AddWebPage(value);
             GDMList<GDMTag> wp = instance.WebPages;
             Assert.AreEqual(1, wp.Count);
@@ -305,7 +305,7 @@ namespace GDModel
         {
             string value1 = "http://www.bitboost.com/ref/international-address-formats/russia/";
             string value2 = "http://google.com/search";
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.AddWebPage(value1);
             instance.AddWebPage(value2);
             GDMList<GDMTag> wp = instance.WebPages;
@@ -320,20 +320,20 @@ namespace GDModel
         public void Test_Assign()
         {
             GDMTag source = null;
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
 
             Assert.Throws(typeof(ArgumentException), () => {
                 instance.Assign(source);
             });
 
-            source = new GDMAddress(null);
+            source = new GDMAddress();
             instance.Assign(source);
         }
 
         [Test]
         public void Test_Clear()
         {
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.SetAddressText("blah");
             instance.Clear();
             Assert.IsTrue(instance.IsEmpty());
@@ -342,14 +342,14 @@ namespace GDModel
         [Test]
         public void Test_IsEmptyT()
         {
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             Assert.AreEqual(true, instance.IsEmpty());
         }
 
         [Test]
         public void Test_IsEmptyF()
         {
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.SetAddressText("blah");
             Assert.AreEqual(false, instance.IsEmpty());
         }
@@ -358,7 +358,7 @@ namespace GDModel
         public void Test_SetAddressText()
         {
             string value = "this is a test";
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.SetAddressText(value);
             StringList val2 = new StringList(value);
             Assert.AreEqual(val2.Text, instance.Lines.Text);
@@ -376,7 +376,7 @@ namespace GDModel
                 "247112",
                 "RUSSIAN FEDERATION"
             };
-            GDMAddress instance = new GDMAddress(null);
+            GDMAddress instance = new GDMAddress();
             instance.SetAddressArray(value);
             Assert.AreEqual(new StringList(value).Text, instance.Lines.Text);
         }

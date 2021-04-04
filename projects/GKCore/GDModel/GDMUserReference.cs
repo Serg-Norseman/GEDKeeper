@@ -34,7 +34,7 @@ namespace GDModel
         }
 
 
-        public GDMUserReference(GDMObject owner) : base(owner)
+        public GDMUserReference()
         {
             SetName(GEDCOMTagType.REFN);
         }

@@ -32,9 +32,9 @@ namespace GDModel
         }
 
 
-        public GDMPointerWithNotes(GDMObject owner) : base(owner)
+        public GDMPointerWithNotes()
         {
-            fNotes = new GDMList<GDMNotes>(this);
+            fNotes = new GDMList<GDMNotes>();
         }
 
         protected override void Dispose(bool disposing)

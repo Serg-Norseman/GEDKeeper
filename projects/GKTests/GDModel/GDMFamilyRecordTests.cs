@@ -77,7 +77,7 @@ namespace GDModel
             //
 
             Assert.Throws(typeof(ArgumentException), () => {
-                famRec.AddEvent(new GDMIndividualEvent(null));
+                famRec.AddEvent(new GDMIndividualEvent());
             });
 
             famRec.ReplaceXRefs(new GDMXRefReplacer());
@@ -138,7 +138,7 @@ namespace GDModel
         {
             Assert.IsNotNull(tree.GetPtrValue<GDMFamilyRecord>(spouseLink));
 
-            using (spouseLink = new GDMSpouseToFamilyLink(null)) {
+            using (spouseLink = new GDMSpouseToFamilyLink()) {
                 Assert.IsNotNull(spouseLink);
             }
         }
@@ -179,7 +179,7 @@ namespace GDModel
                     famRec.MoveTo(null);
                 });
 
-                GDMCustomEvent evt = famRec.AddEvent(new GDMFamilyEvent(famRec, (int)GEDCOMTagType.MARR, "01 SEP 1981"));
+                GDMCustomEvent evt = famRec.AddEvent(new GDMFamilyEvent((int)GEDCOMTagType.MARR, "01 SEP 1981"));
                 Assert.AreEqual(1, famRec.Events.Count);
                 Assert.AreEqual(evt, famRec.FindEvent(GEDCOMTagType.MARR));
 

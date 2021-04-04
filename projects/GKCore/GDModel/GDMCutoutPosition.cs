@@ -68,12 +68,12 @@ namespace GDModel
         }
 
 
-        public GDMCutoutPosition(GDMObject owner) : base(owner)
+        public GDMCutoutPosition()
         {
             SetName(GEDCOMTagType._POSITION);
         }
 
-        public GDMCutoutPosition(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMCutoutPosition(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }

@@ -46,7 +46,7 @@ namespace GKUI.Forms
         public override void Setup()
         {
             fBase = new BaseWindowStub();
-            fUserRef = new GDMUserReference(null);
+            fUserRef = new GDMUserReference();
 
             fDialog = new UserRefEditDlg(fBase);
             fDialog.UserRef = fUserRef;

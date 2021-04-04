@@ -52,7 +52,7 @@ namespace GKCore
         [Test]
         public void Test_GDMDateItemAsIConvertible()
         {
-            var dtx1 = new GDMDateValue(null);
+            var dtx1 = new GDMDateValue();
             dtx1.ParseString("05 JAN 2013");
             IConvertible dtItem1 = new GDMDateItem(dtx1);
 
@@ -78,12 +78,12 @@ namespace GKCore
         [Test]
         public void Test_GDMDateItem_Common()
         {
-            var dtx1 = new GDMDateValue(null);
+            var dtx1 = new GDMDateValue();
             dtx1.ParseString("05 JAN 2013");
             var dtItem1 = new GDMDateItem(dtx1);
             Assert.AreEqual("05.01.2013", dtItem1.ToString());
 
-            var dtx2 = new GDMDateValue(null);
+            var dtx2 = new GDMDateValue();
             dtx2.ParseString("17 FEB 2013");
             var dtItem2 = new GDMDateItem(dtx2);
             Assert.AreEqual("17.02.2013", dtItem2.ToString());
