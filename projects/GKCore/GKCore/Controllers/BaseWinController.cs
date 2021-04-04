@@ -336,7 +336,7 @@ namespace GKCore.Controllers
 
             if (linkName.StartsWith("view_")) {
                 string xref = linkName.Remove(0, 5);
-                GDMMultimediaRecord mmRec = fContext.Tree.XRefIndex_Find(xref) as GDMMultimediaRecord;
+                var mmRec = fContext.Tree.FindXRef<GDMMultimediaRecord>(xref);
                 if (mmRec != null) {
                     fView.ShowMedia(mmRec, false);
                 }

@@ -875,8 +875,9 @@ namespace GKCore
         /* 815 */ LSID_WarnForClosingDialog,
         /* 816 */ LSID_DottedLinesOfAdoptedChildren,
         /* 817 */ LSID_GoToPersonRecord,
+        /* 818 */ LSID_STWeb,
 
-        /* 000 */ LSID_Last = LSID_GoToPersonRecord
+        /* 000 */ LSID_Last = LSID_STWeb
     }
 
 
@@ -1707,6 +1708,7 @@ namespace GKCore
             /* 815 */ "Warn for closing dialog with unsaved changes",
             /* 816 */ "Dotted lines of adopted children",
             /* 817 */ "Go to person record",
+            /* 818 */ "Web address",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

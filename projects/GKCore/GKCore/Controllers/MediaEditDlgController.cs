@@ -109,23 +109,36 @@ namespace GKCore.Controllers
             fView.MediaType.SelectedIndex = (int)fileRef.MediaType;
             fView.File.Text = fileRef.StringValue;
 
+            MediaStoreType storeType;
+
             if (fIsNew) {
+                storeType = GlobalOptions.Instance.MediaStoreDefault;
                 RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, true,
                                   GlobalOptions.Instance.AllowMediaStoreRelativeReferences,
-                                  GlobalOptions.Instance.MediaStoreDefault);
+                                  storeType);
             } else {
-                MediaStore mediaStore = fBase.Context.GetStoreType(fileRef);
-                RefreshStoreTypes((mediaStore.StoreType == MediaStoreType.mstReference),
-                                  (mediaStore.StoreType == MediaStoreType.mstArchive),
-                                  (mediaStore.StoreType == MediaStoreType.mstRelativeReference),
-                                  mediaStore.StoreType);
+                var mediaStore = fBase.Context.GetStoreType(fileRef);
+                storeType = mediaStore.StoreType;
+                RefreshStoreTypes((storeType == MediaStoreType.mstReference),
+                                  (storeType == MediaStoreType.mstArchive),
+                                  (storeType == MediaStoreType.mstRelativeReference),
+                                  storeType);
             }
 
-            fView.FileSelectButton.Enabled = fIsNew;
-            fView.StoreType.Enabled = fIsNew;
+            UpdateFileStore(fIsNew, storeType);
 
             fView.NotesList.UpdateSheet();
             fView.SourcesList.UpdateSheet();
+        }
+
+        private void UpdateFileStore(bool isNew, MediaStoreType storeType)
+        {
+            fView.FileSelectButton.Enabled = isNew && (storeType != MediaStoreType.mstURL);
+
+            fView.File.Enabled = isNew && (storeType == MediaStoreType.mstURL);
+            fView.File.ReadOnly = !fView.File.Enabled;
+
+            fView.StoreType.Enabled = isNew;
         }
 
         private void RefreshStoreTypes(bool allowRef, bool allowArc, bool allowRel, MediaStoreType selectType)
@@ -150,6 +163,9 @@ namespace GKCore.Controllers
                     MediaStoreType.mstRelativeReference);
             }
 
+            fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstURL].Name),
+                MediaStoreType.mstURL);
+
             fView.StoreType.SetSelectedTag<MediaStoreType>(selectType);
         }
 
@@ -170,6 +186,12 @@ namespace GKCore.Controllers
                               GlobalOptions.Instance.AllowMediaStoreRelativeReferences,
                               GlobalOptions.Instance.MediaStoreDefault);
             fView.StoreType.Enabled = true;
+        }
+
+        public void ChangeStoreType()
+        {
+            MediaStoreType storeType = fView.StoreType.GetSelectedTag<MediaStoreType>();
+            UpdateFileStore(true, storeType);
         }
 
         public void View()

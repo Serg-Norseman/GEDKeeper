@@ -848,6 +848,10 @@ namespace GKCore
                 case MediaStoreType.mstReference:
                     stream = new FileStream(targetFn, FileMode.Open);
                     break;
+
+                case MediaStoreType.mstURL:
+                    stream = GKUtils.GetWebStream(targetFn);
+                    break;
             }
 
             return stream;
@@ -937,10 +941,17 @@ namespace GKCore
                     targetFile = storePath + storeFile;
                     refPath = GKData.GKStoreTypes[(int)storeType].Sign + targetFile;
                     break;
+
+                case MediaStoreType.mstURL:
+                    refPath = fileName;
+                    break;
+            }
+
+            if (storeType != MediaStoreType.mstURL) {
+                refPath = FileHelper.NormalizeFilename(refPath);
             }
 
             // verify existence
-            refPath = FileHelper.NormalizeFilename(refPath);
             bool alreadyExists = MediaExists(refPath);
             if (alreadyExists) {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExists));

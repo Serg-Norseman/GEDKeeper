@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -142,6 +142,11 @@ namespace GKUI.Forms
         private void edName_TextChanged(object sender, EventArgs e)
         {
             Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_RPMultimedia), txtName.Text);
+        }
+
+        private void cmbStoreType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fController.ChangeStoreType();
         }
     }
 }

@@ -393,6 +393,11 @@ namespace GDModel
             ptr.XRef = xrf;
         }
 
+        public T FindXRef<T>(string xref) where T : GDMRecord
+        {
+            return XRefIndex_Find(xref) as T;
+        }
+
         #endregion
 
         public int[] GetRecordStats()

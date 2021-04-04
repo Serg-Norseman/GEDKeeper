@@ -385,7 +385,7 @@ namespace GKCore
                 LSID.LSID_MT_12,
                 LSID.LSID_MT_13,
                 LSID.LSID_MT_14
-                    //LSID.LSID_MT_15 <Unknown removed to first position>
+                //LSID.LSID_MT_15 <Unknown removed to first position>
             };
 
 
@@ -394,7 +394,8 @@ namespace GKCore
                 new StoreTypeRec(LSID.LSID_STRef, ""),
                 new StoreTypeRec(LSID.LSID_STStg, "stg:"),
                 new StoreTypeRec(LSID.LSID_STArc, "arc:"),
-                new StoreTypeRec(LSID.LSID_STRel, "rel:")
+                new StoreTypeRec(LSID.LSID_STRel, "rel:"),
+                new StoreTypeRec(LSID.LSID_STWeb, "http")
             };
 
 

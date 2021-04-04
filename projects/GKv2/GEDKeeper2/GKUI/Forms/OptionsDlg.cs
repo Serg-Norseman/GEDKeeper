@@ -735,7 +735,7 @@ namespace GKUI.Forms
             chkDeleteMediaFileWithoutConfirm.Text = LangMan.LS(LSID.LSID_DeleteMediaFileWithoutConfirm);
 
             cmbMediaStoreDefault.Items.Clear();
-            for (MediaStoreType mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstRelativeReference; mst++) {
+            for (MediaStoreType mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstURL; mst++) {
                 cmbMediaStoreDefault.Items.Add(new ComboItem<MediaStoreType>(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst));
             }
 

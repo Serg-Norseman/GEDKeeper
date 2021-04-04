@@ -43,6 +43,11 @@ namespace GKCore.Types
         /// <summary>
         /// File reference relative to the database file.
         /// </summary>
-        mstRelativeReference
+        mstRelativeReference,
+
+        /// <summary>
+        /// File reference relative to the web address of file.
+        /// </summary>
+        mstURL
     }
 }

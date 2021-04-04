@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -2630,17 +2631,15 @@ namespace GKCore
                 throw new ArgumentNullException("fileReference");
 
             string fileRef = fileReference.StringValue;
+            MediaStoreType result = MediaStoreType.mstReference;
 
-            MediaStoreType result;
-            if (fileRef.IndexOf(GKData.GKStoreTypes[2].Sign) == 0) {
-                result = MediaStoreType.mstArchive;
-            } else if (fileRef.IndexOf(GKData.GKStoreTypes[1].Sign) == 0) {
-                result = MediaStoreType.mstStorage;
-            } else if (fileRef.IndexOf(GKData.GKStoreTypes[3].Sign) == 0) {
-                result = MediaStoreType.mstRelativeReference;
-            } else {
-                result = MediaStoreType.mstReference;
+            for (int i = 1; i <= 4; i++) {
+                if (fileRef.StartsWith(GKData.GKStoreTypes[i].Sign, StringComparison.Ordinal)) {
+                    result = (MediaStoreType)i;
+                    break;
+                }
             }
+
             return result;
         }
 
@@ -2652,7 +2651,7 @@ namespace GKCore
             string fileName = fileReference.StringValue;
             MediaStoreType storeType = GetStoreTypeEx(fileReference);
 
-            if (storeType != MediaStoreType.mstReference) {
+            if (storeType != MediaStoreType.mstReference && storeType != MediaStoreType.mstURL) {
                 fileName = fileName.Remove(0, 4);
             }
 
@@ -2679,6 +2678,16 @@ namespace GKCore
                 case MultimediaKind.mkNone:
                 default:
                     return false;
+            }
+        }
+
+        public static Stream GetWebStream(string uri)
+        {
+            using (var webClient = new WebClient()) {
+                byte[] dataBytes = webClient.DownloadData(uri);
+                var ms = new MemoryStream();
+                ms.Write(dataBytes, 0, dataBytes.Length);
+                return ms;
             }
         }
 
