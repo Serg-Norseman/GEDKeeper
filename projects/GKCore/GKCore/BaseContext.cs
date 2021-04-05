@@ -1316,7 +1316,7 @@ namespace GKCore
                     AppHost.ForceGC();
 
                     if (checkValidation) {
-                        GEDCOMChecker.CheckGEDCOMFormat(fTree, this, progress);
+                        GEDCOMChecker.CheckGEDCOMFormat(this, progress);
                         AppHost.ForceGC();
                     }
 

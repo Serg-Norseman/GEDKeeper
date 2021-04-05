@@ -253,10 +253,10 @@ namespace GKCore
         {
             var progress = Substitute.For<IProgressController>();
 
-            Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(null, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context.Tree, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context.Tree, fBaseWin.Context, null); });
-            GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context.Tree, fBaseWin.Context, progress);
+            Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context, null); });
+            GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context, progress);
         }
 
         [Test]

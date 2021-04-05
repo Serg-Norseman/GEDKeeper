@@ -279,7 +279,7 @@ namespace GDModel.Providers
             var progress = Substitute.For<IProgressController>();
 
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_famhist.ged")) {
-                GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, progress);
+                GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
 
                 Assert.AreEqual(GEDCOMFormat.gf_FamilyHistorian, ctx.Tree.Format);
 
@@ -298,7 +298,7 @@ namespace GDModel.Providers
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ftm2008.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_FamilyTreeMaker, ctx.Tree.Format);
 
-                GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, progress);
+                GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
 
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
@@ -370,7 +370,7 @@ namespace GDModel.Providers
             var progress = Substitute.For<IProgressController>();
 
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_geni_srcit.ged")) {
-                GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, progress);
+                GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
 
                 Assert.AreEqual(GEDCOMFormat.gf_Geni, ctx.Tree.Format);
 
