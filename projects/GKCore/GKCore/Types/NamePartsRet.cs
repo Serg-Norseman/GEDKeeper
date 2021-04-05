@@ -19,6 +19,8 @@
  */
 
 using System;
+using GKCore.Cultures;
+using GKCore.Interfaces;
 
 namespace GKCore.Types
 {
@@ -29,6 +31,7 @@ namespace GKCore.Types
 
         public string Name;
         public string Patronymic;
+        public ICulture Culture;
 
         public string MarriedSurname;
 
@@ -59,12 +62,13 @@ namespace GKCore.Types
             MarriedSurname = string.Empty;
         }
 
-        public NamePartsRet(string maidenSurname, string marriedSurname, string name, string patronymic)
+        public NamePartsRet(string maidenSurname, string marriedSurname, string name, string patronymic, ICulture culture)
         {
             Surname = maidenSurname;
             MarriedSurname = marriedSurname;
             Name = name;
             Patronymic = patronymic;
+            Culture = culture;
         }
     }
 }
