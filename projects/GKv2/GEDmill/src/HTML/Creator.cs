@@ -73,7 +73,7 @@ namespace GEDmill.HTML
         {
             fLogger.WriteInfo(string.Format("EscapeHTML({0})", original));
 
-            uint tabSpaces = CConfig.Instance.TabSpaces;
+            int tabSpaces = CConfig.Instance.TabSpaces;
 
             if (original == null) {
                 return "&lt;null&gt;";
@@ -422,7 +422,7 @@ namespace GEDmill.HTML
         // sArea is changed to reflect new image size
         // sArea can be {0,0,0,0} meaning use whole image
         // stats can be null if we don't care about keeping count of the multimedia files.
-        public static string CopyMultimedia(string fullFilename, string newFilename, uint maxWidth, uint maxHeight,
+        public static string CopyMultimedia(string fullFilename, string newFilename, int maxWidth, int maxHeight,
                                             ref Rectangle rectArea, Stats stats)
         {
             fLogger.WriteInfo(string.Format("CopyMultimedia( {0}, {1}, {2} )", fullFilename, maxWidth, maxHeight));
@@ -562,7 +562,7 @@ namespace GEDmill.HTML
             } else if (!ir.GetVisibility() && !CConfig.Instance.UseWithheldNames) {
                 name = CConfig.Instance.ConcealedName;
             } else {
-                name = CConfig.Instance.CapitaliseName(name, ref dummy, ref dummy);
+                name = GMHelper.CapitaliseName(name, ref dummy, ref dummy);
             }
             return MakeLink(ir, name);
         }
@@ -600,7 +600,7 @@ namespace GEDmill.HTML
         // Crops the specified image file to the given size. Also converts non-standard formats to standard ones.
         // Returns sFilename in case extension has changed.
         // sArea is changed to reflect new image size
-        private static string ConvertAndCropImage(string folder, string fileName, ref Rectangle rectArea, uint maxWidth, uint maxHeight)
+        private static string ConvertAndCropImage(string folder, string fileName, ref Rectangle rectArea, int maxWidth, int maxHeight)
         {
             fLogger.WriteInfo(string.Format("ConvertAndCropImage( {0}, {1} )", folder != null ? folder : "null", fileName != null ? fileName : "null"));
 
@@ -622,8 +622,8 @@ namespace GEDmill.HTML
             if (rectArea.Width <= 0 || rectArea.Height <= 0) {
                 SizeF s = image.PhysicalDimension;
                 if (s.Width <= maxWidth && s.Height <= maxHeight) {
-                    maxWidth = (uint)s.Width;
-                    maxHeight = (uint)s.Height;
+                    maxWidth = (int)s.Width;
+                    maxHeight = (int)s.Height;
                     // Nothing needs to be done, bitmap already correct size.
                     // Carry on with conversion.
                 }

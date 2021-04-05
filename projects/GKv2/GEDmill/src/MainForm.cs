@@ -108,7 +108,7 @@ namespace GEDmill
             fConfigButtonSize = new Point(92, 23);
 
             // Read back any previously stored settings.
-            CConfig.Instance.RecoverSettings();
+            CConfig.Instance.Load();
 
             // Creates the entire GUI
             InitializeComponent();
@@ -222,7 +222,7 @@ namespace GEDmill
                 if (fCurrentPanel < 9) // Allow for extra ftp panels
                     ++fCurrentPanel;
                 else {
-                    CConfig.Instance.StoreSettings();
+                    CConfig.Instance.Save();
 
                     if (CConfig.Instance.OpenWebsiteOnExit) {
                         GMHelper.OpenURL(CConfig.Instance.FrontPageURL);
@@ -273,7 +273,7 @@ namespace GEDmill
                     }
                 }
 
-                CConfig.Instance.StoreSettings();
+                CConfig.Instance.Save();
                 Close();
             }
         }
@@ -1540,7 +1540,7 @@ namespace GEDmill
                 string sSurname = "";
                 string sFirstName = "";
                 var persName = (ir.PersonalNames.Count > 0) ? ir.PersonalNames[0].StringValue : "";
-                CConfig.Instance.CapitaliseName(persName, ref sFirstName, ref sSurname);
+                GMHelper.CapitaliseName(persName, ref sFirstName, ref sSurname);
                 /*if (ir.NameSuffix != null && ir.NameSuffix != "") {
                     sFirstName += ", " + ir.NameSuffix;
                 }*/
@@ -1978,7 +1978,7 @@ namespace GEDmill
 
             try {
                 // Sanity check value
-                uint maxImageWidth = System.UInt32.Parse(m_textboxConfigIndiImageWidth.Text);
+                int maxImageWidth = int.Parse(m_textboxConfigIndiImageWidth.Text);
                 if (maxImageWidth > 0 && maxImageWidth <= 300) {
                     CConfig.Instance.MaxImageWidth = maxImageWidth;
                 } else if (CConfig.Instance.MaxImageWidth != maxImageWidth && maxImageWidth > 300) {
@@ -1995,7 +1995,7 @@ namespace GEDmill
 
             try {
                 // Sanity check value
-                uint maxImageHeight = System.UInt32.Parse(m_textboxConfigIndiImageHeight.Text);
+                int maxImageHeight = int.Parse(m_textboxConfigIndiImageHeight.Text);
                 if (maxImageHeight > 0 && maxImageHeight <= 800) {
                     CConfig.Instance.MaxImageHeight = maxImageHeight;
                 } else if (CConfig.Instance.MaxImageHeight != maxImageHeight && maxImageHeight > 800) {
@@ -2012,7 +2012,7 @@ namespace GEDmill
 
             try {
                 // Sanity check value
-                uint maxSourceImageWidth = System.UInt32.Parse(m_textboxConfigSourceImageWidth.Text);
+                int maxSourceImageWidth = int.Parse(m_textboxConfigSourceImageWidth.Text);
                 if (maxSourceImageWidth > 0 && maxSourceImageWidth <= 800) {
                     CConfig.Instance.MaxSourceImageWidth = maxSourceImageWidth;
                 } else if (CConfig.Instance.MaxSourceImageWidth != maxSourceImageWidth && maxSourceImageWidth > 800) {
@@ -2029,7 +2029,7 @@ namespace GEDmill
 
             try {
                 // Sanity check value
-                uint maxSourceImageHeight = System.UInt32.Parse(m_textboxConfigSourceImageHeight.Text);
+                int maxSourceImageHeight = int.Parse(m_textboxConfigSourceImageHeight.Text);
                 if (maxSourceImageHeight > 0 && maxSourceImageHeight <= 800) {
                     CConfig.Instance.MaxSourceImageHeight = maxSourceImageHeight;
                 } else if (CConfig.Instance.MaxSourceImageHeight != maxSourceImageHeight && maxSourceImageHeight > 800) {
@@ -2046,7 +2046,7 @@ namespace GEDmill
 
             try {
                 // Sanity check value
-                uint maxThumbnailImageWidth = System.UInt32.Parse(m_textboxConfigThumbnailImageWidth.Text);
+                int maxThumbnailImageWidth = int.Parse(m_textboxConfigThumbnailImageWidth.Text);
                 if (maxThumbnailImageWidth > 0 && maxThumbnailImageWidth < 80) {
                     CConfig.Instance.MaxThumbnailImageWidth = maxThumbnailImageWidth;
                 } else if (CConfig.Instance.MaxThumbnailImageWidth != maxThumbnailImageWidth && maxThumbnailImageWidth > 80) {
@@ -2063,7 +2063,7 @@ namespace GEDmill
 
             try {
                 // Sanity check value
-                uint maxThumbnailImageHeight = System.UInt32.Parse(m_textboxConfigThumbnailImageHeight.Text);
+                int maxThumbnailImageHeight = int.Parse(m_textboxConfigThumbnailImageHeight.Text);
                 if (maxThumbnailImageHeight > 0 && maxThumbnailImageHeight < 80) {
                     CConfig.Instance.MaxThumbnailImageHeight = maxThumbnailImageHeight;
                 } else if (CConfig.Instance.MaxThumbnailImageHeight != maxThumbnailImageHeight && maxThumbnailImageHeight > 80) {
@@ -2096,7 +2096,7 @@ namespace GEDmill
 
             try {
                 // Sanity check value
-                uint tabSpaces = System.UInt32.Parse(m_textboxConfigTabSpaces.Text);
+                int tabSpaces = int.Parse(m_textboxConfigTabSpaces.Text);
                 if (tabSpaces > 0 && tabSpaces < 64) {
                     CConfig.Instance.TabSpaces = tabSpaces;
                 }
@@ -2155,7 +2155,7 @@ namespace GEDmill
 
             try {
                 // Sanity check value
-                uint uIndex = System.UInt32.Parse(m_textboxConfigMultiPageIndexNumber.Text);
+                int uIndex = int.Parse(m_textboxConfigMultiPageIndexNumber.Text);
                 if (uIndex > 0) {
                     CConfig.Instance.IndividualsPerIndexPage = uIndex;
                 }
@@ -2209,7 +2209,7 @@ namespace GEDmill
                     if (irKey != null && irKey.GetVisibility()) {
                         sFirstName = "";
                         sSurname = "";
-                        sFullName = CConfig.Instance.CapitaliseName(irKey.GetPrimaryFullName(), ref sFirstName, ref sSurname);
+                        sFullName = GMHelper.CapitaliseName(irKey.GetPrimaryFullName(), ref sFirstName, ref sSurname);
                         if (sFullName == "") {
                             sFullName = CConfig.Instance.UnknownName;
                         }

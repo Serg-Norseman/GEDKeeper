@@ -414,7 +414,7 @@ namespace GEDmill.HTML
                     for (int i = 1; (other_name = fIndiRec.GetName(i)) != ""; i++) {
                         string other_firstName = "";
                         string other_surname = "";
-                        other_name = CConfig.Instance.CapitaliseName(other_name, ref other_firstName, ref other_surname); // Also splits name into first name and surname
+                        other_name = GMHelper.CapitaliseName(other_name, ref other_firstName, ref other_surname); // Also splits name into first name and surname
                         fIndiIndexCreator.AddIndividualToIndex(other_firstName, other_surname, fUnknownName, alterEgo, lifeDates, fConcealed, relativeFilename, sUserRef);
                     }
                 }
@@ -608,7 +608,7 @@ namespace GEDmill.HTML
                 fFirstName = "";
                 fSurname = fName = CConfig.Instance.ConcealedName;
             } else {
-                fName = CConfig.Instance.CapitaliseName(fName, ref fFirstName, ref fSurname); // Also splits name into first name and surname
+                fName = GMHelper.CapitaliseName(fName, ref fFirstName, ref fSurname); // Also splits name into first name and surname
             }
             if (fName == "") {
                 fFirstName = "";
@@ -622,7 +622,7 @@ namespace GEDmill.HTML
                 for (int i = 1; (nasOther = fIndiRec.GetNameAndSource(i)) != null; i++) {
                     string sFirstNameOther = "";
                     string sSurnameOther = "";
-                    nasOther.Name = CConfig.Instance.CapitaliseName(nasOther.Name, ref sFirstNameOther, ref sSurnameOther); // Also splits name into first name and surname
+                    nasOther.Name = GMHelper.CapitaliseName(nasOther.Name, ref sFirstNameOther, ref sSurnameOther); // Also splits name into first name and surname
                     nasOther.SourceHtml = AddSources(ref fReferenceList, nasOther.Sources);
                     fOtherNames.Add(nasOther);
                 }
@@ -633,7 +633,7 @@ namespace GEDmill.HTML
             } else {
                 fFullName = fIndiRec.GetPrimaryFullName();
                 string sDummy = "";
-                fFullName = CConfig.Instance.CapitaliseName(fFullName, ref sDummy, ref sDummy); // Also splits name into first name and surname
+                fFullName = GMHelper.CapitaliseName(fFullName, ref sDummy, ref sDummy); // Also splits name into first name and surname
             }
             if (fFullName == "") {
                 fFullName = CConfig.Instance.UnknownName;

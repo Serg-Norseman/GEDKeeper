@@ -18,11 +18,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.IsolatedStorage;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using GKCore.Logging;
+using BSLib;
+using GKCore;
+using GKCL = GKCore.Logging;
 
 namespace GEDmill
 {
@@ -44,10 +42,10 @@ namespace GEDmill
         // Filename for the online help (as in "on the same system", as opposed to offline e.g. printed manual)
         public static string HelpFilename = "GEDmill Help.chm";
 
-        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CConfig).Name);
+        private static readonly GKCL.ILogger fLogger = GKCL.LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CConfig).Name);
 
-        // Filename used to store users config in isolated storage.
-        public string ConfigFilename;
+        // Filename used to store users config
+        public const string ConfigFilename = "GEDmillPlugin.ini";
 
         // Name to use where no other name is available
         public string UnknownName;
@@ -62,25 +60,25 @@ namespace GEDmill
         public string BackgroundImage;
 
         // Maximum allowed width of individual image
-        public uint MaxImageWidth;
+        public int MaxImageWidth;
 
         // Maximum allowed height of individual image
-        public uint MaxImageHeight;
+        public int MaxImageHeight;
 
         // Age at which defining occupation is chosen
         public int AgeForOccupation;
 
         // Maximum allowed width of source image
-        public uint MaxSourceImageWidth;
+        public int MaxSourceImageWidth;
 
         // Maximum allowed height of source image
-        public uint MaxSourceImageHeight;
+        public int MaxSourceImageHeight;
 
         // Maximum allowed width of thumbnail image
-        public uint MaxThumbnailImageWidth;
+        public int MaxThumbnailImageWidth;
 
         // Maximum allowed height of thumbnail image
-        public uint MaxThumbnailImageHeight;
+        public int MaxThumbnailImageHeight;
 
         // Filename of image if any to use on front webpage.
         public string FrontPageImageFilename;
@@ -89,7 +87,7 @@ namespace GEDmill
         public string FrontPageFilename;
 
         // Number of spaces between each tab stop, when converting \t characters to html.
-        public uint TabSpaces;
+        public int TabSpaces;
 
         // True if event descriptions to start with capital letter, e.g. "Born" as opposed to "born".
         public bool CapitaliseEventDescriptions;
@@ -226,6 +224,9 @@ namespace GEDmill
         // Path to folder containing this application.
         public string ApplicationPath;
 
+        // Path to application's data
+        public string AppDataPath;
+
         // Address of remote FTP server in which to put the files
         public string FtpServer;
 
@@ -251,7 +252,7 @@ namespace GEDmill
         public bool MultiPageIndexes;
 
         // Number of individuals to aim to list per index page.
-        public uint IndividualsPerIndexPage;
+        public int IndividualsPerIndexPage;
 
         // If true, website pages are opened in web browser once app exits with Finish button.
         public bool OpenWebsiteOnExit;
@@ -342,7 +343,8 @@ namespace GEDmill
         // Constructor, sets default values for the config
         private CConfig()
         {
-            ConfigFilename = "GEDmill Config";
+            AppDataPath = AppHost.GetAppDataPathStatic();
+
             RestrictConfidential = false;
             RestrictPrivacy = false;
             OutputFolder = "";
@@ -386,69 +388,7 @@ namespace GEDmill
             FtpUploadFolder = "/";
 
             // Reset those settings that can be modified by the user on the config screen.
-            ResetUserSettings();
-        }
-
-        // Capitalises an individual's name according to config setting
-        public string CapitaliseName(string name, ref string firstName, ref string surname)
-        {
-            if (name == null) {
-                if (surname != null) {
-                    surname = UnknownName;
-                }
-                return UnknownName;
-            }
-
-            string newName = "";
-            switch (NameCapitalisation) {
-                case 1:
-                case 0:
-                    // capitalise surname (the bit in //s)
-                    bool bSeenSlash = false;
-                    bool bFirstName = true;
-                    char oldc = '\0';
-                    foreach (char c in name) {
-                        if (c == '/') {
-                            bSeenSlash = !bSeenSlash;
-                            if (bFirstName && oldc != ' ' && newName.Length > 0) {
-                                // Ensure there is a space between first and last names (e.g. from "Fred/Bloggs/")
-                                newName += ' ';
-                                oldc = ' '; // To make oldc set to space too.
-                            } else {
-                                oldc = c;
-                            }
-                            bFirstName = false;
-                        } else if (bSeenSlash) {
-                            char cc = c;
-                            if (NameCapitalisation == 1) {
-                                cc = char.ToUpper(cc);
-                            }
-                            newName += cc;
-                            if (surname != null) {
-                                surname += cc;
-                            }
-                            oldc = c;
-                        } else {
-                            newName += c;
-
-                            // Collapse multiple spaces into one
-                            if (oldc != ' ' || c != ' ') {
-                                if (bFirstName && firstName != null) {
-                                    firstName += c;
-                                } else if (!bFirstName && surname != null) {
-                                    surname += c;
-                                }
-                            }
-                            oldc = c;
-                        }
-                    }
-                    break;
-                default:
-                    newName = name;
-                    break;
-            }
-
-            return newName;
+            Reset();
         }
 
         // Construct the HTTP URL for the created site's landing page
@@ -468,271 +408,241 @@ namespace GEDmill
         }
 
         // Serialise all the config settings into isolated storage.
-        public void StoreSettings()
+        public void Save()
         {
-            // Open the stream from the IsolatedStorage.
-            IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);
-            Stream stream = new IsolatedStorageFileStream(ConfigFilename, FileMode.Create, isoStore);
-
-            if (stream == null) {
-                return;
-            }
             try {
-                // Serialize the configuration into the IsolatedStorage.
-                IFormatter formatter = new BinaryFormatter();
+                using (var ini = new IniFile(AppDataPath + ConfigFilename)) {
+                    ini.WriteString("Common", "Version", Version);
+                    ini.WriteBool("Common", "RestrictConfidential", RestrictConfidential);
+                    ini.WriteBool("Common", "RestrictPrivacy", RestrictPrivacy);
+                    ini.WriteString("Common", "OutputFolder", OutputFolder);
+                    ini.WriteString("Common", "UnknownName", UnknownName);
+                    ini.WriteInteger("Common", "NameCapitalisation", NameCapitalisation);
+                    ini.WriteString("Common", "HtmlExtension", HtmlExtension);
+                    ini.WriteBool("Common", "CopyMultimedia", CopyMultimedia);
+                    ini.WriteString("Common", "ImageFolder", ImageFolder);
+                    ini.WriteBool("Common", "RelativiseMultimedia", RelativiseMultimedia);
+                    ini.WriteString("Common", "BackgroundImage", BackgroundImage);
+                    ini.WriteInteger("Common", "MaxImageWidth", MaxImageWidth);
+                    ini.WriteInteger("Common", "MaxImageHeight", MaxImageHeight);
+                    ini.WriteInteger("Common", "MaxNumberMultimediaFiles", MaxNumberMultimediaFiles);
+                    ini.WriteInteger("Common", "AgeForOccupation", AgeForOccupation);
+                    ini.WriteString("Common", "OwnersName", OwnersName);
+                    ini.WriteString("Common", "NoSurname", NoSurname);
+                    ini.WriteString("Common", "IndexTitle", IndexTitle);
+                    ini.WriteInteger("Common", "MaxSourceImageWidth", MaxSourceImageWidth);
+                    ini.WriteInteger("Common", "MaxSourceImageHeight", MaxSourceImageHeight);
+                    ini.WriteString("Common", "FirstRecordXRef", FirstRecordXRef);
+                    ini.WriteString("Common", "SiteTitle", SiteTitle);
+                    ini.WriteString("Common", "InputFilename", InputFilename);
+                    ini.WriteString("Common", "ApplicationPath", ApplicationPath);
+                    ini.WriteString("Common", "FrontPageImageFilename", FrontPageImageFilename);
+                    ini.WriteInteger("Common", "TabSpaces", TabSpaces);
+                    ini.WriteString("Common", "PlaceWord", PlaceWord);
+                    ini.WriteBool("Common", "CapitaliseEventDescriptions", CapitaliseEventDescriptions);
+                    ini.WriteBool("Common", "RestrictAssociatedSources", RestrictAssociatedSources);
+                    ini.WriteBool("Common", "RenameMultimedia", RenameMultimedia);
+                    ini.WriteBool("Common", "IndexLetterPerPage", IndexLetterPerPage);
+                    ini.WriteString("Common", "MiniTreeColourBranch", MiniTreeColourBranch);
+                    ini.WriteString("Common", "MiniTreeColourIndiBorder", MiniTreeColourIndiBorder);
+                    ini.WriteString("Common", "MiniTreeColourIndiBackground", MiniTreeColourIndiBackground);
+                    ini.WriteString("Common", "MiniTreeColourIndiHighlight", MiniTreeColourIndiHighlight);
+                    ini.WriteString("Common", "MiniTreeColourIndiShade", MiniTreeColourIndiShade);
+                    ini.WriteBool("Common", "ShowFrontPageStats", ShowFrontPageStats);
+                    ini.WriteString("Common", "CommentaryText", CommentaryText);
+                    ini.WriteString("Common", "FtpServer", FtpServer);
+                    ini.WriteString("Common", "FtpUsername", FtpUsername);
+                    ini.WriteString("Common", "FtpPassword", FtpPassword);
+                    ini.WriteString("Common", "FtpUploadFolder", FtpUploadFolder);
+                    ini.WriteString("Common", "TreeFontName", TreeFontName);
+                    ini.WriteFloat("Common", "TreeFontSize", TreeFontSize);
+                    ini.WriteInteger("Common", "TargetTreeWidth", TargetTreeWidth);
+                    ini.WriteString("Common", "MiniTreeImageFormat", MiniTreeImageFormat);
+                    ini.WriteString("Common", "MiniTreeColourIndiText", MiniTreeColourIndiText);
+                    ini.WriteString("Common", "MiniTreeColourIndiLink", MiniTreeColourIndiLink);
+                    ini.WriteString("Common", "MiniTreeColourBackground", MiniTreeColourBackground);
+                    ini.WriteBool("Common", "ShowMiniTrees", ShowMiniTrees);
+                    ini.WriteString("Common", "UserEmailAddress", UserEmailAddress);
+                    ini.WriteBool("Common", "FakeMiniTreeTransparency", FakeMiniTreeTransparency);
 
-                formatter.Serialize(stream, Version);
-                formatter.Serialize(stream, RestrictConfidential);
-                formatter.Serialize(stream, RestrictPrivacy);
-                formatter.Serialize(stream, OutputFolder);
-                formatter.Serialize(stream, UnknownName);
-                formatter.Serialize(stream, NameCapitalisation);
-                formatter.Serialize(stream, HtmlExtension);
-                formatter.Serialize(stream, CopyMultimedia);
-                formatter.Serialize(stream, ImageFolder);
-                formatter.Serialize(stream, RelativiseMultimedia);
-                formatter.Serialize(stream, BackgroundImage);
-                formatter.Serialize(stream, MaxImageWidth);
-                formatter.Serialize(stream, MaxImageHeight);
-                formatter.Serialize(stream, MaxNumberMultimediaFiles);
-                formatter.Serialize(stream, AgeForOccupation);
-                formatter.Serialize(stream, OwnersName);
-                formatter.Serialize(stream, NoSurname);
-                formatter.Serialize(stream, IndexTitle);
-                formatter.Serialize(stream, MaxSourceImageWidth);
-                formatter.Serialize(stream, MaxSourceImageHeight);
-                formatter.Serialize(stream, FirstRecordXRef);
-                formatter.Serialize(stream, SiteTitle);
-                formatter.Serialize(stream, InputFilename);
-                formatter.Serialize(stream, ApplicationPath);
-                formatter.Serialize(stream, FrontPageImageFilename);
-                formatter.Serialize(stream, TabSpaces);
-                formatter.Serialize(stream, PlaceWord);
-                formatter.Serialize(stream, CapitaliseEventDescriptions);
-                formatter.Serialize(stream, RestrictAssociatedSources);
-                formatter.Serialize(stream, RenameMultimedia);
-                formatter.Serialize(stream, IndexLetterPerPage);
-                formatter.Serialize(stream, MiniTreeColourBranch);
-                formatter.Serialize(stream, MiniTreeColourIndiBorder);
-                formatter.Serialize(stream, MiniTreeColourIndiBackground);
-                formatter.Serialize(stream, MiniTreeColourIndiHighlight);
-                formatter.Serialize(stream, MiniTreeColourIndiShade);
-                formatter.Serialize(stream, ShowFrontPageStats);
-                formatter.Serialize(stream, CommentaryText);
-                formatter.Serialize(stream, FtpServer);
-                formatter.Serialize(stream, FtpUsername);
-                formatter.Serialize(stream, FtpPassword);
-                formatter.Serialize(stream, FtpUploadFolder);
-                formatter.Serialize(stream, TreeFontName);
-                formatter.Serialize(stream, TreeFontSize);
-                formatter.Serialize(stream, TargetTreeWidth);
-                formatter.Serialize(stream, MiniTreeImageFormat);
-                formatter.Serialize(stream, MiniTreeColourIndiText);
-                formatter.Serialize(stream, MiniTreeColourIndiLink);
-                formatter.Serialize(stream, MiniTreeColourBackground);
-                formatter.Serialize(stream, ShowMiniTrees);
-                formatter.Serialize(stream, UserEmailAddress);
-                formatter.Serialize(stream, FakeMiniTreeTransparency);
-                int nKeyIndividuals = 0;
-                if (KeyIndividuals != null) {
-                    nKeyIndividuals = KeyIndividuals.Count;
-                }
-                formatter.Serialize(stream, nKeyIndividuals);
-                if (KeyIndividuals != null) {
-                    foreach (string keyXref in KeyIndividuals) {
-                        formatter.Serialize(stream, keyXref);
+                    int nKeyIndividuals = 0;
+                    if (KeyIndividuals != null) {
+                        nKeyIndividuals = KeyIndividuals.Count;
+                        ini.WriteInteger("Individuals", "Count", nKeyIndividuals);
+                        for (int i = 0; i < nKeyIndividuals; i++) {
+                            string keyXref = KeyIndividuals[i];
+                            ini.WriteString("Individuals", "I_" + i, keyXref);
+                        }
                     }
+
+                    ini.WriteBool("Common", "MultiPageIndexes", MultiPageIndexes);
+                    ini.WriteInteger("Common", "IndividualsPerIndexPage", IndividualsPerIndexPage);
+                    ini.WriteBool("Common", "OpenWebsiteOnExit", OpenWebsiteOnExit);
+                    ini.WriteString("Common", "FrontPageFilename", FrontPageFilename);
+                    ini.WriteBool("Common", "CreateCDROMFiles", CreateCDROMFiles);
+                    ini.WriteBool("Common", "AllowMultipleImages", AllowMultipleImages);
+                    ini.WriteBool("Common", "AllowNonPictures", AllowNonPictures);
+                    ini.WriteInteger("Common", "MaxThumbnailImageWidth", MaxThumbnailImageWidth);
+                    ini.WriteInteger("Common", "MaxThumbnailImageHeight", MaxThumbnailImageHeight);
+                    ini.WriteString("Common", "MainWebsiteLink", MainWebsiteLink);
+                    ini.WriteBool("Common", "PreserveFrontPage", PreserveFrontPage);
+                    ini.WriteBool("Common", "PreserveStylesheet", PreserveStylesheet);
+                    ini.WriteString("Common", "StylesheetFilename", StylesheetFilename);
+                    ini.WriteString("Common", "MiniTreeColourIndiBgConcealed", MiniTreeColourIndiBgConcealed);
+                    ini.WriteBool("Common", "OnlyConceal", OnlyConceal);
+                    ini.WriteString("Common", "ConcealedName", ConcealedName);
+                    ini.WriteString("Common", "MiniTreeColourIndiFgConcealed", MiniTreeColourIndiFgConcealed);
+                    ini.WriteBool("Common", "LinkOriginalPicture", LinkOriginalPicture);
+                    ini.WriteBool("Common", "RenameOriginalPicture", RenameOriginalPicture);
+                    ini.WriteString("Common", "ExcludeFileDir", ExcludeFileDir);
+                    ini.WriteString("Common", "ExcludeFileName", ExcludeFileName);
+                    ini.WriteString("Common", "LastPictureAddedDir", LastPictureAddedDir);
+                    ini.WriteBool("Common", "ObfuscateEmails", ObfuscateEmails);
+                    ini.WriteBool("Common", "AddHomePageCreateTime", AddHomePageCreateTime);
+                    ini.WriteBool("Common", "IncludeValiditySticker", IncludeValiditySticker);
+                    ini.WriteBool("Common", "IncludeNickNamesInIndex", IncludeNickNamesInIndex);
+                    ini.WriteString("Common", "CustomFooter", CustomFooter);
+                    ini.WriteBool("Common", "IncludeUserRefInIndex", IncludeUserRefInIndex);
+                    ini.WriteBool("Common", "OccupationHeadline", OccupationHeadline);
+                    ini.WriteBool("Common", "CommentaryIsHtml", CommentaryIsHtml);
+                    ini.WriteBool("Common", "FooterIsHtml", FooterIsHtml);
+                    ini.WriteBool("Common", "UserRecFilename", UserRecFilename);
+                    ini.WriteBool("Common", "IncludeNavbar", IncludeNavbar);
+                    ini.WriteBool("Common", "UseWithheldNames", UseWithheldNames);
+                    ini.WriteBool("Common", "ConserveTreeWidth", ConserveTreeWidth);
+                    ini.WriteBool("Common", "AllowMultimedia", AllowMultimedia);
+                    ini.WriteBool("Common", "SupressBackreferences", SupressBackreferences);
+                    ini.WriteBool("Common", "KeepSiblingOrder", KeepSiblingOrder);
+                    ini.WriteBool("Common", "IncludeHelpPage", IncludeHelpPage);
+
+                    int uVersionMajor = 1, uVersionMinor = 11, uVersionBuild = 0;
+                    ini.WriteInteger("Common", "VersionMajor", uVersionMajor);
+                    ini.WriteInteger("Common", "VersionMinor", uVersionMinor);
+                    ini.WriteInteger("Common", "VersionBuild", uVersionBuild);
                 }
-                formatter.Serialize(stream, MultiPageIndexes);
-                formatter.Serialize(stream, IndividualsPerIndexPage);
-                formatter.Serialize(stream, OpenWebsiteOnExit);
-                formatter.Serialize(stream, FrontPageFilename);
-                formatter.Serialize(stream, CreateCDROMFiles);
-                formatter.Serialize(stream, MaxNumberMultimediaFiles);
-                formatter.Serialize(stream, AllowMultipleImages);
-                formatter.Serialize(stream, AllowNonPictures);
-                formatter.Serialize(stream, MaxThumbnailImageWidth);
-                formatter.Serialize(stream, MaxThumbnailImageHeight);
-                formatter.Serialize(stream, MainWebsiteLink);
-                formatter.Serialize(stream, PreserveFrontPage);
-                formatter.Serialize(stream, PreserveStylesheet);
-                formatter.Serialize(stream, StylesheetFilename);
-                formatter.Serialize(stream, MiniTreeColourIndiBgConcealed);
-                formatter.Serialize(stream, OnlyConceal);
-                formatter.Serialize(stream, ConcealedName);
-                formatter.Serialize(stream, MiniTreeColourIndiFgConcealed);
-                formatter.Serialize(stream, LinkOriginalPicture);
-                formatter.Serialize(stream, RenameOriginalPicture);
-                formatter.Serialize(stream, ExcludeFileDir);
-                formatter.Serialize(stream, ExcludeFileName);
-                formatter.Serialize(stream, LastPictureAddedDir);
-                formatter.Serialize(stream, ObfuscateEmails);
-                formatter.Serialize(stream, AddHomePageCreateTime);
-                formatter.Serialize(stream, IncludeValiditySticker);
-                formatter.Serialize(stream, IncludeNickNamesInIndex);
-                formatter.Serialize(stream, CustomFooter);
-                formatter.Serialize(stream, IncludeUserRefInIndex);
-                formatter.Serialize(stream, OccupationHeadline);
-                formatter.Serialize(stream, CommentaryIsHtml);
-                formatter.Serialize(stream, FooterIsHtml);
-                formatter.Serialize(stream, UserRecFilename);
-                formatter.Serialize(stream, IncludeNavbar);
-                formatter.Serialize(stream, UseWithheldNames);
-                uint uVersionMajor = 1, uVersionMinor = 11, uVersionBuild = 0; // 1.9.2, 1.10.0, 1.10.1, 1.10.2, 1.10.3, 1.10.4, 1.11.0
-                formatter.Serialize(stream, uVersionMajor);
-                formatter.Serialize(stream, uVersionMinor);
-                formatter.Serialize(stream, uVersionBuild);
-                formatter.Serialize(stream, ConserveTreeWidth);
-                formatter.Serialize(stream, AllowMultimedia);
-                formatter.Serialize(stream, SupressBackreferences);
-                formatter.Serialize(stream, KeepSiblingOrder);
-                formatter.Serialize(stream, IncludeHelpPage);
-            } catch (Exception e) {
-                fLogger.WriteError("Exception caught while writing MainForm.s_config : ", e);
-            } finally {
-                stream.Close();
+            } catch (Exception ex) {
+                fLogger.WriteError("CConfig.StoreSettings()", ex);
             }
         }
 
         // Deserialise all the settings from isolated storage.
-        public void RecoverSettings()
+        public void Load()
         {
-            uint uVersionMajor = 0, uVersionMinor = 0, uVersionBuild = 0;
-
-            IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);
-            if (isoStore.GetFileNames(ConfigFilename).Length == 0) {
-                // File doesn't exist. Leave defaults in place.
-                return;
-            }
-            // Read the stream from Isolated Storage.
-            Stream stream = new IsolatedStorageFileStream(ConfigFilename, FileMode.OpenOrCreate, isoStore);
-            if (stream == null) {
-                return;
-            }
+            int uVersionMajor = 0, uVersionMinor = 0, uVersionBuild = 0;
 
             try {
-                // DeSerialize the Hashtable from stream.
-                IFormatter formatter = new BinaryFormatter();
+                using (var ini = new IniFile(AppDataPath + ConfigFilename)) {
+                    Version = ini.ReadString("Common", "Version", "");
+                    RestrictConfidential = ini.ReadBool("Common", "RestrictConfidential", false);
+                    RestrictPrivacy = ini.ReadBool("Common", "RestrictPrivacy", false);
+                    OutputFolder = ini.ReadString("Common", "OutputFolder", "");
+                    UnknownName = ini.ReadString("Common", "UnknownName", "");
+                    NameCapitalisation = ini.ReadInteger("Common", "NameCapitalisation", 1);
+                    HtmlExtension = ini.ReadString("Common", "HtmlExtension", "");
+                    CopyMultimedia = ini.ReadBool("Common", "CopyMultimedia", true);
+                    ImageFolder = ini.ReadString("Common", "ImageFolder", "");
+                    RelativiseMultimedia = ini.ReadBool("Common", "RelativiseMultimedia", false);
+                    BackgroundImage = ini.ReadString("Common", "BackgroundImage", "");
+                    MaxImageWidth = ini.ReadInteger("Common", "MaxImageWidth", 160);
+                    MaxImageHeight = ini.ReadInteger("Common", "MaxImageHeight", 160);
+                    MaxNumberMultimediaFiles = ini.ReadInteger("Common", "MaxNumberMultimediaFiles", 32);
+                    AgeForOccupation = ini.ReadInteger("Common", "AgeForOccupation", 50);
+                    OwnersName = ini.ReadString("Common", "OwnersName", "");
+                    NoSurname = ini.ReadString("Common", "NoSurname", "");
+                    IndexTitle = ini.ReadString("Common", "IndexTitle", "");
+                    MaxSourceImageWidth = ini.ReadInteger("Common", "MaxSourceImageWidth", 800);
+                    MaxSourceImageHeight = ini.ReadInteger("Common", "MaxSourceImageHeight", 800);
+                    FirstRecordXRef = ini.ReadString("Common", "FirstRecordXRef", "");
+                    SiteTitle = ini.ReadString("Common", "SiteTitle", "");
+                    InputFilename = ini.ReadString("Common", "InputFilename", "");
+                    ApplicationPath = ini.ReadString("Common", "ApplicationPath", "");
+                    FrontPageImageFilename = ini.ReadString("Common", "FrontPageImageFilename", "");
+                    TabSpaces = ini.ReadInteger("Common", "TabSpaces", 8);
+                    PlaceWord = ini.ReadString("Common", "PlaceWord", "");
+                    CapitaliseEventDescriptions = ini.ReadBool("Common", "CapitaliseEventDescriptions", true);
+                    RestrictAssociatedSources = ini.ReadBool("Common", "RestrictAssociatedSources", true);
+                    RenameMultimedia = ini.ReadBool("Common", "RenameMultimedia", true);
+                    IndexLetterPerPage = ini.ReadBool("Common", "IndexLetterPerPage", false);
+                    MiniTreeColourBranch = ini.ReadString("Common", "MiniTreeColourBranch", "");
+                    MiniTreeColourIndiBorder = ini.ReadString("Common", "MiniTreeColourIndiBorder", "");
+                    MiniTreeColourIndiBackground = ini.ReadString("Common", "MiniTreeColourIndiBackground", "");
+                    MiniTreeColourIndiHighlight = ini.ReadString("Common", "MiniTreeColourIndiHighlight", "");
+                    MiniTreeColourIndiShade = ini.ReadString("Common", "MiniTreeColourIndiShade", "");
+                    ShowFrontPageStats = ini.ReadBool("Common", "ShowFrontPageStats", true);
+                    CommentaryText = ini.ReadString("Common", "CommentaryText", "");
+                    FtpServer = ini.ReadString("Common", "FtpServer", "");
+                    FtpUsername = ini.ReadString("Common", "FtpUsername", "");
+                    FtpPassword = ini.ReadString("Common", "FtpPassword", "");
+                    FtpUploadFolder = ini.ReadString("Common", "FtpUploadFolder", "");
+                    TreeFontName = ini.ReadString("Common", "TreeFontName", "");
+                    TreeFontSize = (float)ini.ReadFloat("Common", "TreeFontSize", 7.2f);
+                    TargetTreeWidth = ini.ReadInteger("Common", "TargetTreeWidth", 800);
+                    MiniTreeImageFormat = ini.ReadString("Common", "MiniTreeImageFormat", "");
+                    MiniTreeColourIndiText = ini.ReadString("Common", "MiniTreeColourIndiText", "");
+                    MiniTreeColourIndiLink = ini.ReadString("Common", "MiniTreeColourIndiLink", "");
+                    MiniTreeColourBackground = ini.ReadString("Common", "MiniTreeColourBackground", "");
+                    ShowMiniTrees = ini.ReadBool("Common", "ShowMiniTrees", true);
+                    UserEmailAddress = ini.ReadString("Common", "UserEmailAddress", "");
+                    FakeMiniTreeTransparency = ini.ReadBool("Common", "FakeMiniTreeTransparency", false);
 
-                Version = (string)formatter.Deserialize(stream);
-                RestrictConfidential = (bool)formatter.Deserialize(stream);
-                RestrictPrivacy = (bool)formatter.Deserialize(stream);
-                OutputFolder = (string)formatter.Deserialize(stream);
-                UnknownName = (string)formatter.Deserialize(stream);
-                NameCapitalisation = (int)formatter.Deserialize(stream);
-                HtmlExtension = (string)formatter.Deserialize(stream);
-                CopyMultimedia = (bool)formatter.Deserialize(stream);
-                ImageFolder = (string)formatter.Deserialize(stream);
-                RelativiseMultimedia = (bool)formatter.Deserialize(stream);
-                BackgroundImage = (string)formatter.Deserialize(stream);
-                MaxImageWidth = (uint)formatter.Deserialize(stream);
-                MaxImageHeight = (uint)formatter.Deserialize(stream);
-                int deprecated_m_nMaxNumberMultimediaFiles = (int)formatter.Deserialize(stream);
-                AgeForOccupation = (int)formatter.Deserialize(stream);
-                OwnersName = (string)formatter.Deserialize(stream);
-                NoSurname = (string)formatter.Deserialize(stream);
-                IndexTitle = (string)formatter.Deserialize(stream);
-                MaxSourceImageWidth = (uint)formatter.Deserialize(stream);
-                MaxSourceImageHeight = (uint)formatter.Deserialize(stream);
-                FirstRecordXRef = (string)formatter.Deserialize(stream);
-                SiteTitle = (string)formatter.Deserialize(stream);
-                InputFilename = (string)formatter.Deserialize(stream);
-                ApplicationPath = (string)formatter.Deserialize(stream);
-                FrontPageImageFilename = (string)formatter.Deserialize(stream);
-                TabSpaces = (uint)formatter.Deserialize(stream);
-                PlaceWord = (string)formatter.Deserialize(stream);
-                CapitaliseEventDescriptions = (bool)formatter.Deserialize(stream);
-                RestrictAssociatedSources = (bool)formatter.Deserialize(stream);
-                RenameMultimedia = (bool)formatter.Deserialize(stream);
-                IndexLetterPerPage = (bool)formatter.Deserialize(stream);
-                MiniTreeColourBranch = (string)formatter.Deserialize(stream);
-                MiniTreeColourIndiBorder = (string)formatter.Deserialize(stream);
-                MiniTreeColourIndiBackground = (string)formatter.Deserialize(stream);
-                MiniTreeColourIndiHighlight = (string)formatter.Deserialize(stream);
-                MiniTreeColourIndiShade = (string)formatter.Deserialize(stream);
-                ShowFrontPageStats = (bool)formatter.Deserialize(stream);
-                CommentaryText = (string)formatter.Deserialize(stream);
-                FtpServer = (string)formatter.Deserialize(stream);
-                FtpUsername = (string)formatter.Deserialize(stream);
-                FtpPassword = (string)formatter.Deserialize(stream);
-                FtpUploadFolder = (string)formatter.Deserialize(stream);
-                TreeFontName = (string)formatter.Deserialize(stream);
-                TreeFontSize = (float)formatter.Deserialize(stream);
-                TargetTreeWidth = (int)formatter.Deserialize(stream);
-                MiniTreeImageFormat = (string)formatter.Deserialize(stream);
-                MiniTreeColourIndiText = (string)formatter.Deserialize(stream);
-                MiniTreeColourIndiLink = (string)formatter.Deserialize(stream);
-                MiniTreeColourBackground = (string)formatter.Deserialize(stream);
-                ShowMiniTrees = (bool)formatter.Deserialize(stream);
-                UserEmailAddress = (string)formatter.Deserialize(stream);
-                FakeMiniTreeTransparency = (bool)formatter.Deserialize(stream);
-                int nKeyIndividuals = (int)formatter.Deserialize(stream);
-                KeyIndividuals = new List<string>();
-                while (nKeyIndividuals-- > 0) {
-                    string keyXref = (string)formatter.Deserialize(stream);
-                    KeyIndividuals.Add(keyXref);
-                }
-                MultiPageIndexes = (bool)formatter.Deserialize(stream);
-                IndividualsPerIndexPage = (uint)formatter.Deserialize(stream);
-                OpenWebsiteOnExit = (bool)formatter.Deserialize(stream);
-                FrontPageFilename = (string)formatter.Deserialize(stream);
-                CreateCDROMFiles = (bool)formatter.Deserialize(stream);
-                MaxNumberMultimediaFiles = (int)formatter.Deserialize(stream);
-                AllowMultipleImages = (bool)formatter.Deserialize(stream);
-                AllowNonPictures = (bool)formatter.Deserialize(stream);
-                MaxThumbnailImageWidth = (uint)formatter.Deserialize(stream);
-                MaxThumbnailImageHeight = (uint)formatter.Deserialize(stream);
-                MainWebsiteLink = (string)formatter.Deserialize(stream);
-                PreserveFrontPage = (bool)formatter.Deserialize(stream);
-                PreserveStylesheet = (bool)formatter.Deserialize(stream);
-                StylesheetFilename = (string)formatter.Deserialize(stream);
-                MiniTreeColourIndiBgConcealed = (string)formatter.Deserialize(stream);
-                OnlyConceal = (bool)formatter.Deserialize(stream);
-                ConcealedName = (string)formatter.Deserialize(stream);
-                MiniTreeColourIndiFgConcealed = (string)formatter.Deserialize(stream);
-                LinkOriginalPicture = (bool)formatter.Deserialize(stream);
-                RenameOriginalPicture = (bool)formatter.Deserialize(stream);
-                ExcludeFileDir = (string)formatter.Deserialize(stream);
-                ExcludeFileName = (string)formatter.Deserialize(stream);
-                LastPictureAddedDir = (string)formatter.Deserialize(stream);
-                ObfuscateEmails = (bool)formatter.Deserialize(stream);
-                AddHomePageCreateTime = (bool)formatter.Deserialize(stream);
-                IncludeValiditySticker = (bool)formatter.Deserialize(stream);
-                IncludeNickNamesInIndex = (bool)formatter.Deserialize(stream);
-                CustomFooter = (string)formatter.Deserialize(stream);
-                IncludeUserRefInIndex = (bool)formatter.Deserialize(stream);
-                OccupationHeadline = (bool)formatter.Deserialize(stream);
-                CommentaryIsHtml = (bool)formatter.Deserialize(stream);
-                FooterIsHtml = (bool)formatter.Deserialize(stream);
-                UserRecFilename = (bool)formatter.Deserialize(stream);
-                IncludeNavbar = (bool)formatter.Deserialize(stream);
-                UseWithheldNames = (bool)formatter.Deserialize(stream);
-                uVersionMajor = (uint)formatter.Deserialize(stream);
-                uVersionMinor = (uint)formatter.Deserialize(stream);
-                uVersionBuild = (uint)formatter.Deserialize(stream);
-                ConserveTreeWidth = (bool)formatter.Deserialize(stream);
-                AllowMultimedia = (bool)formatter.Deserialize(stream);
-                SupressBackreferences = (bool)formatter.Deserialize(stream);
-                KeepSiblingOrder = (bool)formatter.Deserialize(stream);
-                IncludeHelpPage = (bool)formatter.Deserialize(stream);
-            } catch (Exception e) {
-                fLogger.WriteError("Exception caught while reading MainForm.s_config : ", e);
-            } finally {
-                // We are done with it.
-                stream.Close();
-            }
+                    int nKeyIndividuals = ini.ReadInteger("Individuals", "Count", 0);
+                    KeyIndividuals = new List<string>();
+                    for (int i = 0; i < nKeyIndividuals; i++) {
+                        string keyXref = ini.ReadString("Individuals", "I_" + i, "");
+                        KeyIndividuals.Add(keyXref);
+                    }
 
-            if (!(uVersionMajor > 1 || uVersionMinor > 9 || (uVersionMinor == 9 && uVersionBuild > 0))) {
-                // This config came from a version less than 1.9.1
-                // Need to mangle m_mainWebsiteLink, because it now must include the http:// prefix.
-                if (MainWebsiteLink.Length > 0) {
-                    MainWebsiteLink = "http://" + MainWebsiteLink;
+                    MultiPageIndexes = ini.ReadBool("Common", "MultiPageIndexes", true);
+                    IndividualsPerIndexPage = ini.ReadInteger("Common", "IndividualsPerIndexPage", 1000);
+                    OpenWebsiteOnExit = ini.ReadBool("Common", "OpenWebsiteOnExit", true);
+                    FrontPageFilename = ini.ReadString("Common", "FrontPageFilename", "");
+                    CreateCDROMFiles = ini.ReadBool("Common", "CreateCDROMFiles", false);
+                    AllowMultipleImages = ini.ReadBool("Common", "AllowMultipleImages", false);
+                    AllowNonPictures = ini.ReadBool("Common", "AllowNonPictures", true);
+                    MaxThumbnailImageWidth = ini.ReadInteger("Common", "MaxThumbnailImageWidth", 45);
+                    MaxThumbnailImageHeight = ini.ReadInteger("Common", "MaxThumbnailImageHeight", 45);
+                    MainWebsiteLink = ini.ReadString("Common", "MainWebsiteLink", "");
+                    PreserveFrontPage = ini.ReadBool("Common", "PreserveFrontPage", false);
+                    PreserveStylesheet = ini.ReadBool("Common", "PreserveStylesheet", false);
+                    StylesheetFilename = ini.ReadString("Common", "StylesheetFilename", "");
+                    MiniTreeColourIndiBgConcealed = ini.ReadString("Common", "MiniTreeColourIndiBgConcealed", "");
+                    OnlyConceal = ini.ReadBool("Common", "OnlyConceal", false);
+                    ConcealedName = ini.ReadString("Common", "ConcealedName", "");
+                    MiniTreeColourIndiFgConcealed = ini.ReadString("Common", "MiniTreeColourIndiFgConcealed", "");
+                    LinkOriginalPicture = ini.ReadBool("Common", "LinkOriginalPicture", false);
+                    RenameOriginalPicture = ini.ReadBool("Common", "RenameOriginalPicture", false);
+                    ExcludeFileDir = ini.ReadString("Common", "ExcludeFileDir", "");
+                    ExcludeFileName = ini.ReadString("Common", "ExcludeFileName", "");
+                    LastPictureAddedDir = ini.ReadString("Common", "LastPictureAddedDir", "");
+                    ObfuscateEmails = ini.ReadBool("Common", "ObfuscateEmails", false);
+                    AddHomePageCreateTime = ini.ReadBool("Common", "AddHomePageCreateTime", true);
+                    IncludeValiditySticker = ini.ReadBool("Common", "IncludeValiditySticker", false);
+                    IncludeNickNamesInIndex = ini.ReadBool("Common", "IncludeNickNamesInIndex", true);
+                    CustomFooter = ini.ReadString("Common", "CustomFooter", "");
+                    IncludeUserRefInIndex = ini.ReadBool("Common", "IncludeUserRefInIndex", false);
+                    OccupationHeadline = ini.ReadBool("Common", "OccupationHeadline", true);
+                    CommentaryIsHtml = ini.ReadBool("Common", "CommentaryIsHtml", false);
+                    FooterIsHtml = ini.ReadBool("Common", "FooterIsHtml", false);
+                    UserRecFilename = ini.ReadBool("Common", "UserRecFilename", false);
+                    IncludeNavbar = ini.ReadBool("Common", "IncludeNavbar", true);
+                    UseWithheldNames = ini.ReadBool("Common", "UseWithheldNames", false);
+                    ConserveTreeWidth = ini.ReadBool("Common", "ConserveTreeWidth", false);
+                    AllowMultimedia = ini.ReadBool("Common", "AllowMultimedia", true);
+                    SupressBackreferences = ini.ReadBool("Common", "SupressBackreferences", false);
+                    KeepSiblingOrder = ini.ReadBool("Common", "KeepSiblingOrder", false);
+                    IncludeHelpPage = ini.ReadBool("Common", "IncludeHelpPage", true);
+
+                    uVersionMajor = ini.ReadInteger("Common", "VersionMajor", 0);
+                    uVersionMinor = ini.ReadInteger("Common", "VersionMinor", 0);
+                    uVersionBuild = ini.ReadInteger("Common", "VersionBuild", 0);
                 }
+            } catch (Exception ex) {
+                fLogger.WriteError("CConfig.Load()", ex);
             }
         }
 
         // Reset those settings that can be modified by the user on the config screen.
-        public void ResetUserSettings()
+        public void Reset()
         {
             TreeFontName = "Arial";
             TreeFontSize = 7.2f;

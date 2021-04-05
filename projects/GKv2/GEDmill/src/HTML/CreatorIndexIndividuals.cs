@@ -113,24 +113,24 @@ namespace GEDmill.HTML
         private static List<IndexPage> CreateIndexPages(List<IndexLetter> letters)
         {
             var pages = new List<IndexPage>();
-            uint uLetters = (uint)letters.Count;
-            uint uIndisPerPage;
+            int uLetters = letters.Count;
+            int uIndisPerPage;
             if (CConfig.Instance.MultiPageIndexes == false) {
                 // Set to 0 for all names in one page.
                 uIndisPerPage = 0;
             } else {
                 uIndisPerPage = CConfig.Instance.IndividualsPerIndexPage;
             }
-            uint uIndiAccumulator = 0;
-            uint uCurrentPage = 0;
+            int uIndiAccumulator = 0;
+            int uCurrentPage = 0;
             string currentPageName = string.Format("individuals{0}.{1}", ++uCurrentPage, CConfig.Instance.HtmlExtension);
             IndexPage indexpageCurrent = new IndexPage(currentPageName);
             uint uLetter = 0;
             while (uLetter < uLetters) {
-                uint uCurrentIndis = (uint)(letters[(int)uLetter].Items.Count);
+                int uCurrentIndis = letters[(int)uLetter].Items.Count;
                 if (uIndisPerPage != 0 && uIndiAccumulator + uCurrentIndis > uIndisPerPage) {
-                    uint uWith = (uint)(uIndiAccumulator + uCurrentIndis - uIndisPerPage);
-                    uint uWithout = uIndisPerPage - uIndiAccumulator;
+                    int uWith = (uIndiAccumulator + uCurrentIndis - uIndisPerPage);
+                    int uWithout = uIndisPerPage - uIndiAccumulator;
                     if (uWith < uWithout || uIndiAccumulator == 0) {
                         // Better to include it.
                         indexpageCurrent.TotalIndis += letters[(int)uLetter].Items.Count;

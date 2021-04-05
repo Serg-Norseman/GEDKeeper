@@ -79,7 +79,7 @@ namespace GEDmill.MiniTree
                 } else {
                     var irName = ir.GetPrimaryFullName();
                     if (irName != "") {
-                        Name = CConfig.Instance.CapitaliseName(irName, ref FirstName, ref Surname);
+                        Name = GMHelper.CapitaliseName(irName, ref FirstName, ref Surname);
                     } else {
                         FirstName = "";
                         Surname = Name = CConfig.Instance.UnknownName;

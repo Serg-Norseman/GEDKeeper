@@ -35,7 +35,7 @@ namespace GEDmill
 
 
         // Modifies rectNew to fit within the limits given, keeping its aspect ratio
-        public static void ScaleAreaToFit(ref Rectangle rectNew, uint uMaxWidth, uint uMaxHeight)
+        public static void ScaleAreaToFit(ref Rectangle rectNew, int uMaxWidth, int uMaxHeight)
         {
             if (rectNew.Height > uMaxHeight) {
                 // Image won't fit horizontally, so scale in both directions til it will
@@ -169,6 +169,68 @@ namespace GEDmill
             } else {
                 s = "";
             }
+        }
+
+        // Capitalises an individual's name according to config setting
+        public static string CapitaliseName(string name, ref string firstName, ref string surname)
+        {
+            if (name == null) {
+                if (surname != null) {
+                    surname = CConfig.Instance.UnknownName;
+                }
+                return CConfig.Instance.UnknownName;
+            }
+
+            string newName = "";
+            switch (CConfig.Instance.NameCapitalisation) {
+                case 1:
+                case 0:
+                    // capitalise surname (the bit in //s)
+                    bool bSeenSlash = false;
+                    bool bFirstName = true;
+                    char oldc = '\0';
+                    foreach (char c in name) {
+                        if (c == '/') {
+                            bSeenSlash = !bSeenSlash;
+                            if (bFirstName && oldc != ' ' && newName.Length > 0) {
+                                // Ensure there is a space between first and last names (e.g. from "Fred/Bloggs/")
+                                newName += ' ';
+                                oldc = ' '; // To make oldc set to space too.
+                            } else {
+                                oldc = c;
+                            }
+                            bFirstName = false;
+                        } else if (bSeenSlash) {
+                            char cc = c;
+                            if (CConfig.Instance.NameCapitalisation == 1) {
+                                cc = char.ToUpper(cc);
+                            }
+                            newName += cc;
+                            if (surname != null) {
+                                surname += cc;
+                            }
+                            oldc = c;
+                        } else {
+                            newName += c;
+
+                            // Collapse multiple spaces into one
+                            if (oldc != ' ' || c != ' ') {
+                                if (bFirstName && firstName != null) {
+                                    firstName += c;
+                                } else if (!bFirstName && surname != null) {
+                                    surname += c;
+                                }
+                            }
+                            oldc = c;
+                        }
+                    }
+                    break;
+                default:
+                    newName = name;
+                    break;
+            }
+
+            return newName;
         }
 
         // Returns the name of the alternative picture file to display for non-diaplayable files of the given format

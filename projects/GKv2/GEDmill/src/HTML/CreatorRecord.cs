@@ -41,7 +41,7 @@ namespace GEDmill.HTML
 
         // Adds the given multimedia links to the given multimedia list.
         protected void AddMultimedia(GDMList<GDMMultimediaLink> multimediaLinks, string mmPrefix,
-                                     string mmLargePrefix, uint maxWidth, uint maxHeight, Stats stats)
+                                     string mmLargePrefix, int maxWidth, int maxHeight, Stats stats)
         {
             // TODO: ml.GetFileReferences();
             var fileRefs = new List<GDMFileReference>();
@@ -119,7 +119,7 @@ namespace GEDmill.HTML
 
         // Adds the given list of file references to the multimedia list.
         private void AddMultimediaFileReferences(List<GDMFileReference> fileRefs, string mmPrefix,
-                                                 string mmLargePrefix, uint maxWidth, uint maxHeight, Stats stats)
+                                                 string mmLargePrefix, int maxWidth, int maxHeight, Stats stats)
         {
             if (fileRefs == null) {
                 return;
