@@ -2850,7 +2850,7 @@ namespace GKCore
                 if (!string.IsNullOrEmpty(nick)) result = result + " [" + nick + "]";
             }
 
-            return result;
+            return result.Trim();
         }
 
         public static string GetNameString(GDMIndividualRecord iRec, bool firstSurname, bool includePieces)
