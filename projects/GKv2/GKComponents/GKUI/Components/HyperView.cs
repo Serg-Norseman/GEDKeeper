@@ -201,7 +201,18 @@ namespace GKUI.Components
                                             int spPos = chunkStr.LastIndexOf(' ', lastIndex);
                                             if (spPos <= 0) {
                                                 // the beginning of the chunk is reached and there are no more words to carry
-                                                chunk.Text = chunkStr.Substring(0, lastIndex + 1);
+                                                if (xPos > 0) {
+                                                    // chunk is not at the beginning of the line, we can try with a new line
+                                                    // transfer the current chunk to the next line
+                                                    // and recount it again at the next iteration
+                                                    ShiftChunks(k, chunksCount);
+                                                    recalcChunk = true;
+                                                } else {
+                                                    // the chunk is at the beginning of the line, there is nothing to cut, 
+                                                    // we need to leave the line as it is (a horizontal scroll will appear)
+                                                }
+
+                                                /*chunk.Text = chunkStr.Substring(0, lastIndex + 1);
                                                 strSize = gfx.MeasureString(chunkStr, font, zerosz, fStrFormat);
                                                 // the current chunk still does not fit into the area
                                                 if (wBound + strSize.Width > csz.Width) {
@@ -212,7 +223,7 @@ namespace GKUI.Components
                                                         ShiftChunks(k, chunksCount);
                                                         recalcChunk = true;
                                                     }
-                                                }
+                                                }*/
                                                 break;
                                             }
 
