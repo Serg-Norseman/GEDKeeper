@@ -876,8 +876,9 @@ namespace GKCore
         /* 816 */ LSID_DottedLinesOfAdoptedChildren,
         /* 817 */ LSID_GoToPersonRecord,
         /* 818 */ LSID_STWeb,
+        /* 819 */ LSID_SeparateDatesAndPlacesLines,
 
-        /* 000 */ LSID_Last = LSID_STWeb
+        /* 000 */ LSID_Last = LSID_SeparateDatesAndPlacesLines
     }
 
 
@@ -1709,6 +1710,7 @@ namespace GKCore
             /* 816 */ "Dotted lines of adopted children",
             /* 817 */ "Go to person record",
             /* 818 */ "Web address",
+            /* 819 */ "Separate dates and places lines",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -61,7 +61,9 @@ namespace GKCore.Charts
         private readonly TreeChartModel fModel;
 
         private string fBirthDate;
+        private string fBirthPlace;
         private string fDeathDate;
+        private string fDeathPlace;
         private EnumSet<PersonFlag> fFlags;
         private string fName;
         private string fNick;
@@ -321,20 +323,20 @@ namespace GKCore.Charts
 
                     if (!options.OnlyYears) {
                         if (options.ShowPlaces) {
-                            string birthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false);
-                            if (!string.IsNullOrEmpty(birthPlace)) {
+                            fBirthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false);
+                            if (!string.IsNullOrEmpty(fBirthPlace) && !options.SeparateDatesAndPlacesLines) {
                                 if (!string.IsNullOrEmpty(fBirthDate)) {
                                     fBirthDate += ", ";
                                 }
-                                fBirthDate += birthPlace;
+                                fBirthDate += fBirthPlace;
                             }
 
-                            string deathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false);
-                            if (!string.IsNullOrEmpty(deathPlace)) {
+                            fDeathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false);
+                            if (!string.IsNullOrEmpty(fDeathPlace) && !options.SeparateDatesAndPlacesLines) {
                                 if (!string.IsNullOrEmpty(fDeathDate)) {
                                     fDeathDate += ", ";
                                 }
-                                fDeathDate += deathPlace;
+                                fDeathDate += fDeathPlace;
                             }
                         }
 
@@ -389,7 +391,9 @@ namespace GKCore.Charts
                     fPatronymic = "";
                     fNick = "";
                     fBirthDate = "";
+                    fBirthPlace = "";
                     fDeathDate = "";
+                    fDeathPlace = "";
                     IsDead = false;
                     fSex = GDMSex.svUnknown;
                     fSigns = EnumSet<SpecialUserRef>.Create();
@@ -438,11 +442,21 @@ namespace GKCore.Charts
                     if (options.BirthDateVisible) {
                         Lines[idx] = fBirthDate;
                         idx++;
+
+                        if (options.SeparateDatesAndPlacesLines) {
+                            Lines[idx] = fBirthPlace;
+                            idx++;
+                        }
                     }
 
                     if (options.DeathDateVisible) {
                         Lines[idx] = fDeathDate;
                         idx++;
+
+                        if (options.SeparateDatesAndPlacesLines) {
+                            Lines[idx] = fDeathPlace;
+                            idx++;
+                        }
                     }
                 } else {
                     string lifeYears = "[ ";

@@ -163,6 +163,7 @@ namespace GKUI.Forms
             chkHideUnknownSpouses.Checked = fOptions.TreeChartOptions.HideUnknownSpouses;
             chkCheckTreeSize.Checked = fOptions.CheckTreeSize;
             chkDottedLinesOfAdoptedChildren.Checked = fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren;
+            chkSeparateDAPLines.Checked = fOptions.TreeChartOptions.SeparateDatesAndPlacesLines;
 
             lblMaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.MaleColor);
             lblFemaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.FemaleColor);
@@ -440,6 +441,7 @@ namespace GKUI.Forms
             fOptions.TreeChartOptions.HideUnknownSpouses = chkHideUnknownSpouses.Checked;
             fOptions.CheckTreeSize = chkCheckTreeSize.Checked;
             fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren = chkDottedLinesOfAdoptedChildren.Checked;
+            fOptions.TreeChartOptions.SeparateDatesAndPlacesLines = chkSeparateDAPLines.Checked;
 
             fOptions.TreeChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackColor);
             fOptions.TreeChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackColor);
@@ -690,6 +692,7 @@ namespace GKUI.Forms
             chkShowPlaces.Text = LangMan.LS(LSID.LSID_ShowPlaces);
             chkHideUnknownSpouses.Text = LangMan.LS(LSID.LSID_HideUnknownSpouses);
             chkDottedLinesOfAdoptedChildren.Text = LangMan.LS(LSID.LSID_DottedLinesOfAdoptedChildren);
+            chkSeparateDAPLines.Text = LangMan.LS(LSID.LSID_SeparateDatesAndPlacesLines);
 
             grpFileBackup.Text = LangMan.LS(LSID.LSID_FileBackup);
             radFBNone.Text = LangMan.LS(LSID.LSID_Not);
@@ -743,6 +746,12 @@ namespace GKUI.Forms
             chkFirstCapitalLetterInNames.Text = LangMan.LS(LSID.LSID_FirstCapitalLetterInNames);
             lblDefaultDepth.Text = LangMan.LS(LSID.LSID_DefaultDepth);
             chkDialogClosingWarn.Text = LangMan.LS(LSID.LSID_WarnForClosingDialog);
+        }
+
+        private void chkTreeChartOption_CheckedChanged(object sender, EventArgs e)
+        {
+            chkShowPlaces.Enabled = !chkOnlyYears.Checked;
+            chkSeparateDAPLines.Enabled = chkShowPlaces.Checked && !chkOnlyYears.Checked;
         }
     }
 }

@@ -810,9 +810,15 @@ namespace GKCore.Charts
             if (!fOptions.OnlyYears) {
                 if (fOptions.BirthDateVisible) {
                     lines++;
+                    if (fOptions.SeparateDatesAndPlacesLines) {
+                        lines++;
+                    }
                 }
                 if (fOptions.DeathDateVisible) {
                     lines++;
+                    if (fOptions.SeparateDatesAndPlacesLines) {
+                        lines++;
+                    }
                 }
             } else {
                 lines++;
