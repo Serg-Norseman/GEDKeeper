@@ -130,7 +130,7 @@ namespace GKCore.Cultures
             name = !string.IsNullOrEmpty(name) ? name : stdName;
             patronymic = !string.IsNullOrEmpty(patronymic) ? patronymic : stdPatronymic;
 
-            return new NamePartsRet(surname, marriedSurname, name, patronymic);
+            return new NamePartsRet(surname, marriedSurname, name, patronymic, this);
         }
 
         public NamePartsRet GetNamePartsEx(GDMIndividualRecord iRec, bool formatted = true)
@@ -141,7 +141,7 @@ namespace GKCore.Cultures
             if (iRec.PersonalNames.Count > 0) {
                 GDMPersonalName personalName = iRec.PersonalNames[0];
 
-                NamePartsRet nameParts = this.GetNameParts(personalName);
+                NamePartsRet nameParts = GetNameParts(personalName);
 
                 if (formatted) {
                     nameParts.Surname = GKUtils.GetFmtSurname(iRec.Sex, personalName, nameParts.Surname);

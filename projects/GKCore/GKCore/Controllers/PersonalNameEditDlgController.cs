@@ -21,6 +21,7 @@
 using System;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -120,12 +121,33 @@ namespace GKCore.Controllers
                 fView.MarriedSurname.Enabled = true;
             }
 
-            ICulture culture = fBase.Context.Culture;
+            ICulture culture = parts.Culture;
             fView.Surname.Enabled = fView.Surname.Enabled && culture.HasSurname();
             fView.Patronymic.Enabled = fView.Patronymic.Enabled && culture.HasPatronymic();
 
             GDMLanguageID langID = fPersonalName.Language;
             fView.Language.Text = GEDCOMUtils.GetLanguageStr(langID);
+        }
+
+        public void UpdateLanguage()
+        {
+            var selectedLanguageId = GetSelectedLanguageID();
+            var culture = CulturesPool.DefineCulture(selectedLanguageId);
+            fView.Surname.Enabled = culture.HasSurname();
+            fView.Patronymic.Enabled = culture.HasPatronymic();
+        }
+
+        private GDMLanguageID GetSelectedLanguageID()
+        {
+            var result = fView.Language.GetSelectedTag<GDMLanguageID>();
+            if (result == GDMLanguageID.Unknown) {
+                var tree = fBase.Context.Tree;
+                if (tree != null) {
+                    result = tree.Header.Language;
+                }
+            }
+
+            return result;
         }
     }
 }

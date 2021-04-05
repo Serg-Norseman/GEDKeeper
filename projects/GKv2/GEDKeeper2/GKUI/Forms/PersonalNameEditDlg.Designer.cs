@@ -266,6 +266,7 @@
             this.cmbLanguage.Size = new System.Drawing.Size(226, 25);
             this.cmbLanguage.Sorted = true;
             this.cmbLanguage.TabIndex = 21;
+            this.cmbLanguage.SelectedIndexChanged += new System.EventHandler(this.cmbLanguage_SelectedIndexChanged);
             // 
             // lblLanguage
             // 
