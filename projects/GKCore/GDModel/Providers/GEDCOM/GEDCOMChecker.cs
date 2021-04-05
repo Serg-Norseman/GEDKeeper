@@ -48,7 +48,7 @@ namespace GDModel.Providers.GEDCOM
             int num = mmLink.FileReferences.Count;
             for (int i = 0; i < num; i++) {
                 GDMFileReference srcFileRef = mmLink.FileReferences[i];
-                GDMFileReferenceWithTitle tgtFileRef = new GDMFileReferenceWithTitle(mmRec);
+                GDMFileReferenceWithTitle tgtFileRef = new GDMFileReferenceWithTitle();
 
                 tgtFileRef.LinkFile(srcFileRef.StringValue);
 

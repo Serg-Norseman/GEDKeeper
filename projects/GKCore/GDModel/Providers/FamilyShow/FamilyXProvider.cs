@@ -131,7 +131,7 @@ namespace GDModel.Providers.FamilyShow
                             string nodeType = xr.Name;
                             if (nodeType == "Person") {
                                 lastIndividual = fTree.CreateIndividual();
-                                var persName = new GDMPersonalName(lastIndividual);
+                                var persName = new GDMPersonalName();
                                 lastIndividual.AddPersonalName(persName);
 
                                 // add an empty birth event
@@ -368,7 +368,7 @@ namespace GDModel.Providers.FamilyShow
 
         private GDMCustomEvent AddEvent(GDMRecordWithEvents indiRec, string eventName)
         {
-            GDMCustomEvent result = new GDMIndividualEvent(indiRec);
+            GDMCustomEvent result = new GDMIndividualEvent();
             result.SetName(eventName);
             indiRec.AddEvent(result);
             return result;
@@ -378,7 +378,7 @@ namespace GDModel.Providers.FamilyShow
         {
             var noteRec = fTree.CreateNote();
             noteRec.Lines.Text = noteText;
-            var notes = new GDMNotes(indiRec);
+            var notes = new GDMNotes();
             notes.XRef = noteRec.XRef;
             indiRec.Notes.Add(notes);
         }

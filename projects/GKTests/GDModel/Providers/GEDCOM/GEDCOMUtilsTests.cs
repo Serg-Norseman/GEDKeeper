@@ -284,7 +284,7 @@ namespace GDModel.Providers.GEDCOM
         [Test]
         public void Test_ParseGEDCOMPointer()
         {
-            using (var ptr = new GDMPointer(null)) {
+            using (var ptr = new GDMPointer()) {
                 string remainder = ptr.ParseString("  @I1111@ test");
                 Assert.AreEqual("I1111", ptr.XRef);
                 Assert.AreEqual(" test", remainder);
@@ -310,7 +310,7 @@ namespace GDModel.Providers.GEDCOM
         [Test]
         public void Test_ParseGEDCOMTime()
         {
-            using (GDMTime time = new GDMTime(null)) {
+            using (GDMTime time = new GDMTime()) {
                 Assert.IsNotNull(time, "time != null");
                 time.ParseString("20:20:20.100");
 
@@ -436,7 +436,7 @@ namespace GDModel.Providers.GEDCOM
         [Test]
         public void Test_SetTagStringsL()
         {
-            var tag = new GDMValueTag(null, GEDCOMTagsTable.Lookup("TEST"), "");
+            var tag = new GDMValueTag(GEDCOMTagsTable.Lookup("TEST"), "");
             Assert.IsNotNull(tag);
 
             // very long string, 248"A" and " BBB BBBB"

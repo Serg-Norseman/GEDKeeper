@@ -53,17 +53,17 @@ namespace GDModel
         }
 
 
-        public GDMPlace(GDMObject owner) : base(owner)
+        public GDMPlace()
         {
             SetName(GEDCOMTagType.PLAC);
 
             fForm = string.Empty;
-            fLocation = new GDMPointer(this, (int)GEDCOMTagType._LOC, string.Empty);
-            fMap = new GDMMap(this);
-            fNotes = new GDMList<GDMNotes>(this);
+            fLocation = new GDMPointer((int)GEDCOMTagType._LOC, string.Empty);
+            fMap = new GDMMap();
+            fNotes = new GDMList<GDMNotes>();
         }
 
-        public GDMPlace(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMPlace(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }

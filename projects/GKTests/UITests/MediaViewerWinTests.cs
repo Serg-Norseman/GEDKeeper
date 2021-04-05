@@ -53,7 +53,7 @@ namespace GKUI.Forms
             fBase = new BaseWindowStub();
 
             GDMMultimediaRecord mmRec = fBase.Context.Tree.CreateMultimedia();
-            mmRec.FileReferences.Add(new GDMFileReferenceWithTitle(mmRec));
+            mmRec.FileReferences.Add(new GDMFileReferenceWithTitle());
             fileRef = mmRec.FileReferences[0];
 
             fileRef.Title = "File Title 2";
@@ -157,7 +157,7 @@ namespace GKUI.Forms
                 Assert.IsTrue(File.Exists(targetName));
 
                 GDMMultimediaRecord mmRecV = fBase.Context.Tree.CreateMultimedia();
-                mmRecV.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecV));
+                mmRecV.FileReferences.Add(new GDMFileReferenceWithTitle());
                 var fileRefV = mmRecV.FileReferences[0];
 
                 fileRefV.Title = "File Title 2";

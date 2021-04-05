@@ -44,7 +44,7 @@ namespace GKUI.Forms
         public override void Setup()
         {
             fBase = new BaseWindowStub();
-            fAddress = new GDMAddress(fBase.Context.Tree);
+            fAddress = new GDMAddress();
 
             fAddress.AddWebPage("test");
             fAddress.AddPhoneNumber("test");

@@ -37,7 +37,7 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.OBJE);
 
-            fFileReferences = new GDMList<GDMFileReferenceWithTitle>(this);
+            fFileReferences = new GDMList<GDMFileReferenceWithTitle>();
         }
 
         protected override void Dispose(bool disposing)

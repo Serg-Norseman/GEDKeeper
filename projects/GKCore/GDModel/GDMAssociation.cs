@@ -41,10 +41,10 @@ namespace GDModel
         }
 
 
-        public GDMAssociation(GDMObject owner) : base(owner)
+        public GDMAssociation()
         {
             SetName(GEDCOMTagType.ASSO);
-            fSourceCitations = new GDMList<GDMSourceCitation>(this);
+            fSourceCitations = new GDMList<GDMSourceCitation>();
         }
 
         protected override void Dispose(bool disposing)

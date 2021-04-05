@@ -56,9 +56,9 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.SUBM);
 
-            fAddress = new GDMAddress(this);
-            fLanguages = new GDMList<GDMLanguage>(this);
-            fName = new GDMPersonalName(this);
+            fAddress = new GDMAddress();
+            fLanguages = new GDMList<GDMLanguage>();
+            fName = new GDMPersonalName();
             fRegisteredReference = string.Empty;
         }
 
@@ -115,7 +115,7 @@ namespace GDModel
             if (index < 0) return;
 
             while (index >= fLanguages.Count) {
-                fLanguages.Add(new GDMLanguage(this, (int)GEDCOMTagType.LANG, ""));
+                fLanguages.Add(new GDMLanguage((int)GEDCOMTagType.LANG, ""));
             }
             fLanguages[index].StringValue = value;
         }

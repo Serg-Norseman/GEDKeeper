@@ -109,9 +109,9 @@ namespace GKCore.Lists
                                 newEvent = evt;
                             } else {
                                 if (record is GDMIndividualRecord) {
-                                    newEvent = new GDMIndividualEvent(record);
+                                    newEvent = new GDMIndividualEvent();
                                 } else {
-                                    newEvent = new GDMFamilyEvent(record);
+                                    newEvent = new GDMFamilyEvent();
                                 }
                             }
 

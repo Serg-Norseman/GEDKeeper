@@ -44,7 +44,7 @@ namespace GDModel
         public void Test_GEDCOMMultimediaLink()
         {
             var iRec = new GDMIndividualRecord(fContext.Tree);
-            using (GDMMultimediaLink mmLink = new GDMMultimediaLink(iRec)) {
+            using (GDMMultimediaLink mmLink = new GDMMultimediaLink()) {
                 Assert.IsNotNull(mmLink);
                 Assert.IsTrue(mmLink.IsEmpty());
 

@@ -101,7 +101,7 @@ namespace GDModel
         }
 
 
-        public GDMDate(GDMObject owner) : base(owner)
+        public GDMDate()
         {
             fApproximated = GDMApproximated.daExact;
             fCalendar = GDMCalendar.dcGregorian;
@@ -112,7 +112,7 @@ namespace GDModel
             fDay = 0;
         }
 
-        public GDMDate(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMDate(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }
@@ -531,7 +531,7 @@ namespace GDModel
             int month = (pm == "") ? 0 : ConvertHelper.ParseInt(pm, 0);
             int year = (py == "") ? UNKNOWN_YEAR : ConvertHelper.ParseInt(py, UNKNOWN_YEAR);
 
-            var date = new GDMDate(null);
+            var date = new GDMDate();
             date.SetDate(calendar, day, month, year);
             return date;
         }

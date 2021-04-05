@@ -30,7 +30,7 @@ namespace GDModel
             GDMNotes note = null;
 
             if (noteRec != null) {
-                note = new GDMNotes((GDMObject)_struct);
+                note = new GDMNotes();
                 note.XRef = noteRec.XRef;
                 _struct.Notes.Add(note);
             }
@@ -43,7 +43,7 @@ namespace GDModel
             GDMSourceCitation cit = null;
 
             if (sourceRec != null) {
-                cit = new GDMSourceCitation((GDMObject)_struct);
+                cit = new GDMSourceCitation();
                 cit.XRef = sourceRec.XRef;
                 cit.Page = page;
                 cit.CertaintyAssessment = quality;
@@ -58,7 +58,7 @@ namespace GDModel
             GDMMultimediaLink result = null;
 
             if (mediaRec != null) {
-                result = new GDMMultimediaLink((GDMObject)_struct);
+                result = new GDMMultimediaLink();
                 result.XRef = mediaRec.XRef;
                 _struct.MultimediaLinks.Add(result);
             }
@@ -68,7 +68,7 @@ namespace GDModel
 
         public static void AddUserRef(this IGDMStructWithUserReferences _struct, string reference)
         {
-            GDMUserReference uRef = new GDMUserReference((GDMObject)_struct);
+            GDMUserReference uRef = new GDMUserReference();
             uRef.StringValue = reference;
             _struct.UserReferences.Add(uRef);
         }

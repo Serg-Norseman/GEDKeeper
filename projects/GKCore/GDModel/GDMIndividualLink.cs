@@ -24,11 +24,11 @@ namespace GDModel
 {
     public sealed class GDMIndividualLink : GDMPointer
     {
-        public GDMIndividualLink(GDMObject owner) : base(owner)
+        public GDMIndividualLink()
         {
         }
 
-        public GDMIndividualLink(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMIndividualLink(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }

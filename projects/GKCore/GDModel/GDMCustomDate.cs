@@ -57,7 +57,7 @@ namespace GDModel
         }
 
 
-        protected GDMCustomDate(GDMObject owner) : base(owner)
+        protected GDMCustomDate()
         {
             SetName(GEDCOMTagType.DATE);
         }
@@ -137,25 +137,25 @@ namespace GDModel
             return abs1.Equals(abs2);
         }
 
-        public static GDMDate CreateApproximated(GDMObject owner, GDMDate date, GDMApproximated approximated)
+        public static GDMDate CreateApproximated(GDMDate date, GDMApproximated approximated)
         {
-            GDMDate result = new GDMDate(owner);
+            GDMDate result = new GDMDate();
             result.Assign(date);
             result.Approximated = approximated;
             return result;
         }
 
-        public static GDMDatePeriod CreatePeriod(GDMObject owner, GDMDate dateFrom, GDMDate dateTo)
+        public static GDMDatePeriod CreatePeriod(GDMDate dateFrom, GDMDate dateTo)
         {
-            GDMDatePeriod result = new GDMDatePeriod(owner);
+            GDMDatePeriod result = new GDMDatePeriod();
             if (dateFrom != null) result.DateFrom.Assign(dateFrom);
             if (dateTo != null) result.DateTo.Assign(dateTo);
             return result;
         }
 
-        public static GDMDateRange CreateRange(GDMObject owner, GDMDate dateAfter, GDMDate dateBefore)
+        public static GDMDateRange CreateRange(GDMDate dateAfter, GDMDate dateBefore)
         {
-            GDMDateRange result = new GDMDateRange(owner);
+            GDMDateRange result = new GDMDateRange();
             if (dateAfter != null) result.After.Assign(dateAfter);
             if (dateBefore != null) result.Before.Assign(dateBefore);
             return result;

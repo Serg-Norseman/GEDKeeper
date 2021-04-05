@@ -60,12 +60,12 @@ namespace GDModel
         }
 
 
-        public GDMChildToFamilyLink(GDMObject owner) : base(owner)
+        public GDMChildToFamilyLink()
         {
             SetName(GEDCOMTagType.FAMC);
         }
 
-        public GDMChildToFamilyLink(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMChildToFamilyLink(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }

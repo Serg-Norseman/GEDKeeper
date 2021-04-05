@@ -47,7 +47,7 @@ namespace GDModel
             SetName(GEDCOMTagType._GROUP);
 
             fGroupName = string.Empty;
-            fMembers = new GDMList<GDMIndividualLink>(this);
+            fMembers = new GDMList<GDMIndividualLink>();
         }
 
         protected override void Dispose(bool disposing)
@@ -126,11 +126,11 @@ namespace GDModel
         {
             if (member == null) return false;
 
-            GDMIndividualLink mbrLink = new GDMIndividualLink(this, (int)GEDCOMTagType._MEMBER, string.Empty);
+            GDMIndividualLink mbrLink = new GDMIndividualLink((int)GEDCOMTagType._MEMBER, string.Empty);
             mbrLink.XRef = member.XRef;
             fMembers.Add(mbrLink);
 
-            var ptr = new GDMPointer(member, (int)GEDCOMTagType._GROUP, string.Empty);
+            var ptr = new GDMPointer((int)GEDCOMTagType._GROUP, string.Empty);
             ptr.XRef = this.XRef;
             member.Groups.Add(ptr);
 

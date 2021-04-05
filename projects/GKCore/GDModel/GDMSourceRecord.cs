@@ -76,13 +76,13 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.SOUR);
 
-            fData = new GDMSourceData(this);
-            fOriginator = new GDMTextTag(this, (int)GEDCOMTagType.AUTH);
-            fPublication = new GDMTextTag(this, (int)GEDCOMTagType.PUBL);
-            fRepositoryCitations = new GDMList<GDMRepositoryCitation>(this);
+            fData = new GDMSourceData();
+            fOriginator = new GDMTextTag((int)GEDCOMTagType.AUTH);
+            fPublication = new GDMTextTag((int)GEDCOMTagType.PUBL);
+            fRepositoryCitations = new GDMList<GDMRepositoryCitation>();
             fShortTitle = string.Empty;
-            fText = new GDMTextTag(this, (int)GEDCOMTagType.TEXT);
-            fTitle = new GDMTextTag(this, (int)GEDCOMTagType.TITL);
+            fText = new GDMTextTag((int)GEDCOMTagType.TEXT);
+            fTitle = new GDMTextTag((int)GEDCOMTagType.TITL);
         }
 
         protected override void Dispose(bool disposing)
@@ -221,7 +221,7 @@ namespace GDModel
             GDMRepositoryCitation cit = null;
             
             if (repRec != null) {
-                cit = new GDMRepositoryCitation(this);
+                cit = new GDMRepositoryCitation();
                 cit.XRef = repRec.XRef;
                 fRepositoryCitations.Add(cit);
             }

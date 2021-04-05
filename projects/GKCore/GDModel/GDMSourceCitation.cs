@@ -83,7 +83,7 @@ namespace GDModel
         }
 
 
-        public GDMSourceCitation(GDMObject owner) : base(owner)
+        public GDMSourceCitation()
         {
             SetName(GEDCOMTagType.SOUR);
 
@@ -91,10 +91,10 @@ namespace GDModel
             fDescription = new GDMLines();
             fPage = string.Empty;
 
-            fData = new GDMSourceCitationData(this);
-            fText = new GDMTextTag(this, (int)GEDCOMTagType.TEXT);
-            fNotes = new GDMList<GDMNotes>(this);
-            fMultimediaLinks = new GDMList<GDMMultimediaLink>(this);
+            fData = new GDMSourceCitationData();
+            fText = new GDMTextTag((int)GEDCOMTagType.TEXT);
+            fNotes = new GDMList<GDMNotes>();
+            fMultimediaLinks = new GDMList<GDMMultimediaLink>();
         }
 
         protected override void Dispose(bool disposing)

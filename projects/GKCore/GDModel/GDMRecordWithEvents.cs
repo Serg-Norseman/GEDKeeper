@@ -55,7 +55,7 @@ namespace GDModel
 
         protected GDMRecordWithEvents(GDMTree tree) : base(tree)
         {
-            fEvents = new GDMList<GDMCustomEvent>(this);
+            fEvents = new GDMList<GDMCustomEvent>();
         }
 
         protected override void Dispose(bool disposing)

@@ -101,8 +101,8 @@ namespace GDModel
         {
             SetName(GEDCOMTagType._COMM);
 
-            fDate = new GDMDate(this);
-            fCorresponder = new GDMIndividualLink(this);
+            fDate = new GDMDate();
+            fCorresponder = new GDMIndividualLink();
         }
 
         internal override void TrimExcess()

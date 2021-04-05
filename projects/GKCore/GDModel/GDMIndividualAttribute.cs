@@ -31,11 +31,11 @@ namespace GDModel
         }
 
 
-        public GDMIndividualAttribute(GDMObject owner) : base(owner)
+        public GDMIndividualAttribute()
         {
         }
 
-        public GDMIndividualAttribute(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMIndividualAttribute(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }

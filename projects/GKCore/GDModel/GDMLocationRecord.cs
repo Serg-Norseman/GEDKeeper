@@ -46,7 +46,7 @@ namespace GDModel
         {
             SetName(GEDCOMTagType._LOC);
 
-            fMap = new GDMMap(this);
+            fMap = new GDMMap();
         }
 
         internal override void TrimExcess()

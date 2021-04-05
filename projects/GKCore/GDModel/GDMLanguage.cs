@@ -174,12 +174,12 @@ namespace GDModel
             return GEDCOMUtils.GetLanguageStr(fValue);
         }
 
-        public GDMLanguage(GDMObject owner) : base(owner)
+        public GDMLanguage()
         {
             SetName(GEDCOMTagType.LANG);
         }
 
-        public GDMLanguage(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMLanguage(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }

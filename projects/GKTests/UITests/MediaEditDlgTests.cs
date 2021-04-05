@@ -49,7 +49,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
             fMultimediaRecord = new GDMMultimediaRecord(fBase.Context.Tree);
-            fMultimediaRecord.FileReferences.Add(new GDMFileReferenceWithTitle(fMultimediaRecord));
+            fMultimediaRecord.FileReferences.Add(new GDMFileReferenceWithTitle());
 
             fDialog = new MediaEditDlg(fBase);
             fDialog.MediaRec = fMultimediaRecord;

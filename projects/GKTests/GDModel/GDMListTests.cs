@@ -41,10 +41,10 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            GDMTag obj1 = new GDMTag(null);
-            GDMTag obj2 = new GDMTag(null);
+            GDMTag obj1 = new GDMTag();
+            GDMTag obj2 = new GDMTag();
 
-            using (var list = new GDMList<GDMTag>(null)) {
+            using (var list = new GDMList<GDMTag>()) {
                 // internal list is null (all routines instant returned)
                 list.Delete(null);
                 list.Exchange(0, 1);
@@ -57,7 +57,7 @@ namespace GDModel
                 Assert.AreEqual(0, list.IndexOf(obj1));
                 Assert.AreEqual(1, list.IndexOf(obj2));
 
-                using (var list2 = new GDMList<GDMTag>(null)) {
+                using (var list2 = new GDMList<GDMTag>()) {
                     list2.AddRange(list);
                     Assert.AreEqual(2, list2.Count);
                 }

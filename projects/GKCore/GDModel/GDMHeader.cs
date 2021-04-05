@@ -39,7 +39,7 @@ namespace GDModel
         public string ProductName { get; set; }
 
 
-        public GDMHeaderSource(GDMObject owner) : base(owner)
+        public GDMHeaderSource()
         {
             SetName(GEDCOMTagType.SOUR);
         }
@@ -65,7 +65,7 @@ namespace GDModel
         public string Form { get; set; }
 
 
-        public GDMHeaderGEDCOM(GDMObject owner) : base(owner)
+        public GDMHeaderGEDCOM()
         {
             SetName(GEDCOMTagType.GEDC);
         }
@@ -98,7 +98,7 @@ namespace GDModel
         public string Version { get; set; }
 
 
-        public GDMHeaderCharSet(GDMObject owner) : base(owner)
+        public GDMHeaderCharSet()
         {
             SetName(GEDCOMTagType.CHAR);
         }
@@ -133,7 +133,7 @@ namespace GDModel
         public int Revision { get; set; }
 
 
-        public GDMHeaderFile(GDMObject owner) : base(owner)
+        public GDMHeaderFile()
         {
             SetName(GEDCOMTagType.FILE);
         }
@@ -236,18 +236,18 @@ namespace GDModel
         }
 
 
-        public GDMHeader(GDMObject owner) : base(owner)
+        public GDMHeader()
         {
             SetName(GEDCOMTagType.HEAD);
 
-            fCharacterSet = new GDMHeaderCharSet(this);
-            fFile = new GDMHeaderFile(this);
-            fGEDCOM = new GDMHeaderGEDCOM(this);
-            fNote = new GDMTextTag(this, (int)GEDCOMTagType.NOTE);
-            fPlace = new GDMPlace(this);
-            fSource = new GDMHeaderSource(this);
-            fSubmission = new GDMPointer(this, (int)GEDCOMTagType.SUBN, string.Empty);
-            fSubmitter = new GDMPointer(this, (int)GEDCOMTagType.SUBM, string.Empty);
+            fCharacterSet = new GDMHeaderCharSet();
+            fFile = new GDMHeaderFile();
+            fGEDCOM = new GDMHeaderGEDCOM();
+            fNote = new GDMTextTag((int)GEDCOMTagType.NOTE);
+            fPlace = new GDMPlace();
+            fSource = new GDMHeaderSource();
+            fSubmission = new GDMPointer((int)GEDCOMTagType.SUBN, string.Empty);
+            fSubmitter = new GDMPointer((int)GEDCOMTagType.SUBM, string.Empty);
         }
 
         internal override void TrimExcess()

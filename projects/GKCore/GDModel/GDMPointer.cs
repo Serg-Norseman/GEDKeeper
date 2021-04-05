@@ -40,12 +40,12 @@ namespace GDModel
         }
 
 
-        public GDMPointer(GDMObject owner) : base(owner)
+        public GDMPointer()
         {
             fXRef = string.Empty;
         }
 
-        public GDMPointer(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMPointer(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }

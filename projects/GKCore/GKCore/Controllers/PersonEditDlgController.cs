@@ -118,7 +118,7 @@ namespace GKCore.Controllers
                 if (fPerson.PersonalNames.Count > 0) {
                     persName = fPerson.PersonalNames[0];
                 } else {
-                    persName = new GDMPersonalName(fPerson);
+                    persName = new GDMPersonalName();
                     fPerson.PersonalNames.Add(persName);
                 }
 

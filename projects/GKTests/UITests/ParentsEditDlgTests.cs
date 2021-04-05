@@ -50,7 +50,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
             fIndividual = new GDMIndividualRecord(null);
-            fChildLink = new GDMChildToFamilyLink(null);
+            fChildLink = new GDMChildToFamilyLink();
 
             fDialog = new ParentsEditDlg(fBase);
             fDialog.Person = fIndividual;

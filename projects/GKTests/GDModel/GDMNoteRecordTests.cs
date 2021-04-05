@@ -183,7 +183,7 @@ namespace GDModel
         [Test]
         public void Test_GEDCOMNotes()
         {
-            using (GDMNotes notes = new GDMNotes(null)) {
+            using (GDMNotes notes = new GDMNotes()) {
                 Assert.IsTrue(notes.IsEmpty());
                 notes.Lines.Text = "Test note";
                 Assert.IsFalse(notes.IsEmpty());
@@ -255,7 +255,7 @@ namespace GDModel
         public void Test_IsMatch()
         {
             var matchParams = new MatchParams();
-            GDMTag other = new GDMAddress(null);
+            GDMTag other = new GDMAddress();
             GDMNoteRecord instance = new GDMNoteRecord(null);
             float result = instance.IsMatch(other, matchParams); // TODO matchParams is not used
             Assert.AreEqual(0.0F, result, 0.0);

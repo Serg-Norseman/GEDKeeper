@@ -61,7 +61,7 @@ namespace GDModel
         {
             get {
                 if (fTags == null) {
-                    fTags = new GDMList<GDMTag>(this);
+                    fTags = new GDMList<GDMTag>();
                 }
                 return fTags;
             }
@@ -71,12 +71,12 @@ namespace GDModel
 
         #region Object management
 
-        public GDMTag(GDMObject owner)
+        public GDMTag()
         {
             fId = 0; // Unknown
         }
 
-        public GDMTag(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMTag(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }
@@ -134,7 +134,7 @@ namespace GDModel
         public GDMTag AddTag(GDMTag tag)
         {
             if (fTags == null) {
-                fTags = new GDMList<GDMTag>(this);
+                fTags = new GDMList<GDMTag>();
             }
             fTags.Add(tag);
             return tag;
@@ -153,7 +153,7 @@ namespace GDModel
 
             if (source.fTags != null && source.fTags.Count > 0) {
                 if (fTags == null) {
-                    fTags = new GDMList<GDMTag>(this);
+                    fTags = new GDMList<GDMTag>();
                 }
                 AssignList(source.fTags, this.fTags);
             }
@@ -288,12 +288,12 @@ namespace GDModel
     {
         protected string fStringValue;
 
-        public GDMValueTag(GDMObject owner) : base(owner)
+        public GDMValueTag()
         {
             fStringValue = string.Empty;
         }
 
-        public GDMValueTag(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMValueTag(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }

@@ -99,7 +99,7 @@ namespace GDModel
         }
         
 
-        public GDMList(GDMObject owner)
+        public GDMList()
         {
             fDataList = null;
         }

@@ -172,7 +172,7 @@ namespace GKTests
 
             // media for tests
             GDMMultimediaRecord mediaRec = context.Tree.CreateMultimedia();
-            mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle(mediaRec));
+            mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle());
             GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
 
             fileRef.Title = "Test multimedia";

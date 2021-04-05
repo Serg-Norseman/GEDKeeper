@@ -30,13 +30,13 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMSourceData data = new GDMSourceData(null)) {
+            using (GDMSourceData data = new GDMSourceData()) {
                 Assert.IsNotNull(data);
 
                 data.Agency = "test agency";
                 Assert.AreEqual("test agency", data.Agency);
 
-                GDMTag evenTag = data.Events.Add(new GDMSourceEvent(data));
+                GDMTag evenTag = data.Events.Add(new GDMSourceEvent());
                 Assert.IsNotNull(evenTag);
 
                 GDMSourceEvent evt = data.Events[0];
@@ -44,7 +44,7 @@ namespace GDModel
 
                 evt.StringValue = "BIRT";
 
-                var note = new GDMNotes(data);
+                var note = new GDMNotes();
                 note.Lines.Text = "test sourcedata notes";
                 data.Notes.Add(note);
 
@@ -65,7 +65,7 @@ namespace GDModel
         [Test]
         public void Test_SourceEvent()
         {
-            using (GDMSourceEvent evt = new GDMSourceEvent(null)) {
+            using (GDMSourceEvent evt = new GDMSourceEvent()) {
                 Assert.IsNotNull(evt);
 
                 Assert.IsNotNull(evt.Date);

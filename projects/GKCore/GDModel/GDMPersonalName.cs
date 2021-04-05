@@ -103,7 +103,7 @@ namespace GDModel
         }
 
 
-        public GDMPersonalName(GDMObject owner) : base(owner)
+        public GDMPersonalName()
         {
             SetName(GEDCOMTagType.NAME);
 
@@ -111,9 +111,9 @@ namespace GDModel
             fSurname = string.Empty;
             fLastPart = string.Empty;
 
-            fPieces = new GDMPersonalNamePieces(this);
-            fNotes = new GDMList<GDMNotes>(this);
-            fSourceCitations = new GDMList<GDMSourceCitation>(this);
+            fPieces = new GDMPersonalNamePieces();
+            fNotes = new GDMList<GDMNotes>();
+            fSourceCitations = new GDMList<GDMSourceCitation>();
         }
 
         protected override void Dispose(bool disposing)

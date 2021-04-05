@@ -42,12 +42,12 @@ namespace GDModel
         }
 
 
-        public GDMMap(GDMObject owner) : base(owner)
+        public GDMMap()
         {
             SetName(GEDCOMTagType.MAP);
         }
 
-        public GDMMap(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMMap(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }

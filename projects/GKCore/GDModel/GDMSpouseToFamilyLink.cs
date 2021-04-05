@@ -24,7 +24,7 @@ namespace GDModel
 {
     public sealed class GDMSpouseToFamilyLink : GDMPointerWithNotes
     {
-        public GDMSpouseToFamilyLink(GDMObject owner) : base(owner)
+        public GDMSpouseToFamilyLink()
         {
             SetName(GEDCOMTagType.FAMS);
         }

@@ -30,7 +30,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMFileReference fileRef = new GDMFileReference(null)) {
+            using (GDMFileReference fileRef = new GDMFileReference()) {
                 fileRef.MediaType = GDMMediaType.mtAudio;
                 Assert.AreEqual(GDMMediaType.mtAudio, fileRef.MediaType);
             }
@@ -60,7 +60,7 @@ namespace GDModel
         [Test]
         public void Test_Assign1()
         {
-            var instance = new GDMFileReference(null);
+            var instance = new GDMFileReference();
             Assert.Throws(typeof(ArgumentException), () => {
                 instance.Assign(null);
             });
@@ -69,7 +69,7 @@ namespace GDModel
         [Test]
         public void Test_Assign2()
         {
-            var instance = new GDMFileReferenceWithTitle(null);
+            var instance = new GDMFileReferenceWithTitle();
             Assert.Throws(typeof(ArgumentException), () => {
                 instance.Assign(null);
             });
@@ -78,7 +78,7 @@ namespace GDModel
         [Test]
         public void Test_Clear()
         {
-            var instance = new GDMFileReferenceWithTitle(null);
+            var instance = new GDMFileReferenceWithTitle();
             instance.Clear();
         }
     }

@@ -36,12 +36,12 @@ namespace GDModel
         }
 
 
-        public GDMDateValue(GDMObject owner) : base(owner)
+        public GDMDateValue()
         {
             fValue = null;
         }
 
-        public GDMDateValue(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMDateValue(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }
@@ -79,7 +79,7 @@ namespace GDModel
             if (fValue != null) {
                 fValue.SetDateTime(value);
             } else {
-                fValue = new GDMDate(this);
+                fValue = new GDMDate();
                 fValue.Date = value;
             }
         }

@@ -94,39 +94,39 @@ namespace GKCore.Controllers
                     break;
 
                 case 1: // BEF gcd2
-                    result = GDMCustomDate.CreateRange(null, null, gcd2);
+                    result = GDMCustomDate.CreateRange(null, gcd2);
                     break;
 
                 case 2: // AFT gcd1
-                    result = GDMCustomDate.CreateRange(null, gcd1, null);
+                    result = GDMCustomDate.CreateRange(gcd1, null);
                     break;
 
                 case 3: // "BET " + gcd1 + " AND " + gcd2
-                    result = GDMCustomDate.CreateRange(null, gcd1, gcd2);
+                    result = GDMCustomDate.CreateRange(gcd1, gcd2);
                     break;
 
                 case 4: // FROM gcd1
-                    result = GDMCustomDate.CreatePeriod(null, gcd1, null);
+                    result = GDMCustomDate.CreatePeriod(gcd1, null);
                     break;
 
                 case 5: // TO gcd2
-                    result = GDMCustomDate.CreatePeriod(null, null, gcd2);
+                    result = GDMCustomDate.CreatePeriod(null, gcd2);
                     break;
 
                 case 6: // FROM gcd1 TO gcd2
-                    result = GDMCustomDate.CreatePeriod(null, gcd1, gcd2);
+                    result = GDMCustomDate.CreatePeriod(gcd1, gcd2);
                     break;
 
                 case 7: // ABT gcd1
-                    result = GDMCustomDate.CreateApproximated(null, gcd1, GDMApproximated.daAbout);
+                    result = GDMCustomDate.CreateApproximated(gcd1, GDMApproximated.daAbout);
                     break;
 
                 case 8: // CAL gcd1
-                    result = GDMCustomDate.CreateApproximated(null, gcd1, GDMApproximated.daCalculated);
+                    result = GDMCustomDate.CreateApproximated(gcd1, GDMApproximated.daCalculated);
                     break;
 
                 case 9: // EST gcd1
-                    result = GDMCustomDate.CreateApproximated(null, gcd1, GDMApproximated.daEstimated);
+                    result = GDMCustomDate.CreateApproximated(gcd1, GDMApproximated.daEstimated);
                     break;
             }
 
@@ -158,7 +158,7 @@ namespace GKCore.Controllers
 
                 if (fEvent is GDMIndividualEvent) {
                     if (GKData.PersonEvents[eventType].Kind == PersonEventKind.ekFact) {
-                        var attr = new GDMIndividualAttribute(null);
+                        var attr = new GDMIndividualAttribute();
                         attr.Assign(fEvent);
                         fEvent = attr;
                     }

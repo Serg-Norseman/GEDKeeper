@@ -73,12 +73,12 @@ namespace GDModel
         }
 
 
-        public GDMMultimediaLink(GDMObject owner) : base(owner)
+        public GDMMultimediaLink()
         {
             SetName(GEDCOMTagType.OBJE);
 
-            fCutoutPosition = new GDMCutoutPosition(this);
-            fFileReferences = new GDMList<GDMFileReference>(this);
+            fCutoutPosition = new GDMCutoutPosition();
+            fFileReferences = new GDMList<GDMFileReference>();
             fIsPrimary = false;
             fIsPrimaryCutout = false;
             fTitle = string.Empty;

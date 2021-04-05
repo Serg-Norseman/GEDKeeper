@@ -24,7 +24,7 @@ namespace GDModel
 {
     public sealed class GDMRepositoryCitation : GDMPointerWithNotes
     {
-        public GDMRepositoryCitation(GDMObject owner) : base(owner)
+        public GDMRepositoryCitation()
         {
             SetName(GEDCOMTagType.REPO);
         }

@@ -60,7 +60,7 @@ namespace GDModel
             set {
                 if (value) {
                     if (FindTag(GEDCOMTagName._BOOKMARK, 0) == null) {
-                        AddTag(new GDMValueTag(this, (int)GEDCOMTagType._BOOKMARK, ""));
+                        AddTag(new GDMValueTag((int)GEDCOMTagType._BOOKMARK, ""));
                     }
                 } else {
                     DeleteTag(GEDCOMTagName._BOOKMARK);
@@ -86,7 +86,7 @@ namespace GDModel
             set {
                 if (value) {
                     if (FindTag(GEDCOMTagName._PATRIARCH, 0) == null) {
-                        AddTag(new GDMValueTag(this, (int)GEDCOMTagType._PATRIARCH, ""));
+                        AddTag(new GDMValueTag((int)GEDCOMTagType._PATRIARCH, ""));
                     }
                 } else {
                     DeleteTag(GEDCOMTagName._PATRIARCH);
@@ -115,11 +115,11 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.INDI);
 
-            fAssociations = new GDMList<GDMAssociation>(this);
-            fChildToFamilyLinks = new GDMList<GDMChildToFamilyLink>(this);
-            fGroups = new GDMList<GDMPointer>(this);
-            fPersonalNames = new GDMList<GDMPersonalName>(this);
-            fSpouseToFamilyLinks = new GDMList<GDMSpouseToFamilyLink>(this);
+            fAssociations = new GDMList<GDMAssociation>();
+            fChildToFamilyLinks = new GDMList<GDMChildToFamilyLink>();
+            fGroups = new GDMList<GDMPointer>();
+            fPersonalNames = new GDMList<GDMPersonalName>();
+            fSpouseToFamilyLinks = new GDMList<GDMSpouseToFamilyLink>();
         }
 
         protected override void Dispose(bool disposing)
@@ -290,7 +290,7 @@ namespace GDModel
             fSex = sourceRec.fSex;
 
             foreach (GDMPersonalName srcName in sourceRec.fPersonalNames) {
-                GDMPersonalName copyName = new GDMPersonalName(this);
+                GDMPersonalName copyName = new GDMPersonalName();
                 copyName.Assign(srcName);
                 AddPersonalName(copyName);
             }
@@ -488,7 +488,7 @@ namespace GDModel
 
         public GDMAssociation AddAssociation(string relation, GDMIndividualRecord relPerson)
         {
-            GDMAssociation result = new GDMAssociation(this);
+            GDMAssociation result = new GDMAssociation();
             result.Relation = relation;
             result.XRef = (relPerson == null) ? string.Empty : relPerson.XRef;
             Associations.Add(result);

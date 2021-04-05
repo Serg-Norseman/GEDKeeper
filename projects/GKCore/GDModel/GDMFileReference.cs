@@ -103,7 +103,7 @@ namespace GDModel
         }
 
 
-        public GDMFileReference(GDMObject owner) : base(owner)
+        public GDMFileReference()
         {
             SetName(GEDCOMTagType.FILE);
 

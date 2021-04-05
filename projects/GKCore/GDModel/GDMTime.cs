@@ -69,12 +69,12 @@ namespace GDModel
         }
 
 
-        public GDMTime(GDMObject owner) : base(owner)
+        public GDMTime()
         {
             SetName(GEDCOMTagType.TIME);
         }
 
-        public GDMTime(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMTime(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }

@@ -185,7 +185,7 @@ namespace GKCore
         {
             Assert.Throws(typeof(ArgumentNullException), () => { fContext.GetStoreType(null); });
 
-            var fileRef = new GDMFileReference(null);
+            var fileRef = new GDMFileReference();
             fileRef.ParseString("file.txt");
             var mediaStore = fContext.GetStoreType(fileRef);
             Assert.AreEqual(MediaStoreType.mstReference, mediaStore.StoreType);
@@ -223,7 +223,7 @@ namespace GKCore
             Assert.AreEqual(0, fContext.ValuesCollection.Count);
 
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
-            var evt = new GDMIndividualAttribute(iRec, (int)GEDCOMTagType._AWARD, "Congressional Gold Medal");
+            var evt = new GDMIndividualAttribute((int)GEDCOMTagType._AWARD, "Congressional Gold Medal");
 
             fContext.CollectEventValues(evt);
             Assert.AreEqual(1, fContext.ValuesCollection.Count);
@@ -270,27 +270,27 @@ namespace GKCore
                     Assert.AreEqual(true, ctx.CheckBasePath()); // need path for archive and storage
 
                     var mmRecR = new GDMMultimediaRecord(ctx.Tree);
-                    mmRecR.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecR));
+                    mmRecR.FileReferences.Add(new GDMFileReferenceWithTitle());
                     Assert.AreEqual(true, ctx.MediaSave(mmRecR.FileReferences[0], sourFile, MediaStoreType.mstReference));
                     Assert.IsNotNull(ctx.LoadMediaImage(mmRecR.FileReferences[0], false));
                     Assert.IsNotNull(ctx.MediaLoad(mmRecR.FileReferences[0]));
 
                     var mmRecA = new GDMMultimediaRecord(ctx.Tree);
-                    mmRecA.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecA));
+                    mmRecA.FileReferences.Add(new GDMFileReferenceWithTitle());
                     Assert.AreEqual(true, ctx.MediaSave(mmRecA.FileReferences[0], sourFile, MediaStoreType.mstArchive));
                     Assert.IsNotNull(ctx.LoadMediaImage(mmRecA.FileReferences[0], false));
                     Assert.IsNotNull(ctx.MediaLoad(mmRecA.FileReferences[0]));
                     arcFileName = ctx.GetArcFileName();
 
                     var mmRecS = new GDMMultimediaRecord(ctx.Tree);
-                    mmRecS.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecS));
+                    mmRecS.FileReferences.Add(new GDMFileReferenceWithTitle());
                     Assert.AreEqual(true, ctx.MediaSave(mmRecS.FileReferences[0], sourFile, MediaStoreType.mstStorage));
                     Assert.IsNotNull(ctx.LoadMediaImage(mmRecS.FileReferences[0], false));
                     Assert.IsNotNull(ctx.MediaLoad(mmRecS.FileReferences[0]));
                     stgDirectory = ctx.GetStgFolder(false);
 
                     var mmRecRl = new GDMMultimediaRecord(ctx.Tree);
-                    mmRecRl.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecRl));
+                    mmRecRl.FileReferences.Add(new GDMFileReferenceWithTitle());
                     Assert.AreEqual(true, ctx.MediaSave(mmRecRl.FileReferences[0], sourFile, MediaStoreType.mstRelativeReference));
                     Assert.IsNotNull(ctx.LoadMediaImage(mmRecRl.FileReferences[0], false));
                     Assert.IsNotNull(ctx.MediaLoad(mmRecRl.FileReferences[0]));
