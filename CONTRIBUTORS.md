@@ -41,6 +41,11 @@
 
   * Author of GEDmill (Family History Website Generator), now it is external plugin
 
+* **[Alexander Zaytsev](https://github.com/hazzik)**
+
+  * Improving the architecture and efficiency of the core
+  * Testing and bug fixes
+
 
 ## External components
 
