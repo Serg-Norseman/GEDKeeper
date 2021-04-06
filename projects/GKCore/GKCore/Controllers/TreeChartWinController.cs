@@ -121,7 +121,7 @@ namespace GKCore.Controllers
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            bool needParent = false;
+            bool needParent;
 
             GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(p.Rec);
             bool familyExist = fam != null;
@@ -131,17 +131,20 @@ namespace GKCore.Controllers
                 fBase.Context.Tree.GetSpouses(fam, out father, out mother);
 
                 needParent = (father == null && needSex == GDMSex.svMale) ||
-                    (mother == null && needSex == GDMSex.svFemale);
+                             (mother == null && needSex == GDMSex.svFemale);
+            } else {
+                needParent = true;
             }
 
-            if (!familyExist || needParent) {
-                GDMIndividualRecord child = p.Rec;
-                fam = (familyExist) ? fBase.Context.GetParentsFamily(p.Rec) : fBase.Context.Tree.CreateFamily();
-                GDMIndividualRecord parent = fBase.Context.SelectPerson(null, TargetMode.tmParent, needSex);
+            if (needParent) {
+                GDMIndividualRecord parent = fBase.Context.SelectPerson(p.Rec, TargetMode.tmChild, needSex);
                 if (parent != null) {
+                    if (!familyExist) {
+                        fam = fBase.Context.Tree.CreateFamily();
+                        fam.AddChild(p.Rec);
+                    }
+
                     fam.AddSpouse(parent);
-                    if (!familyExist)
-                        fam.AddChild(child);
                     
                     UpdateChart();
                 }
