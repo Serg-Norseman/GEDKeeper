@@ -340,16 +340,13 @@ namespace GKCore.Controllers
                 if (fTarget != null) {
                     INamesTable namesTable = AppHost.NamesTable;
 
-                    var parts = GKUtils.GetNameParts(fBase.Context.Tree, fTarget);
+                    var parts = GKUtils.GetNameParts(fBase.Context.Tree, fTarget, false);
                     ICulture culture = parts.Culture;
-                    fView.Surname.Text = parts.Surname;
                     GDMSex sx = (GDMSex)fView.SexCombo.SelectedIndex;
 
                     switch (fTargetMode) {
                         case TargetMode.tmParent:
-                            if (sx == GDMSex.svFemale) {
-                                SetMarriedSurname(culture, parts.Surname);
-                            }
+                            fView.Surname.Text = parts.Surname;
                             if (culture.HasPatronymic()) {
                                 AddPatronymic(namesTable.GetPatronymicByName(parts.Name, GDMSex.svMale));
                                 AddPatronymic(namesTable.GetPatronymicByName(parts.Name, GDMSex.svFemale));
@@ -360,6 +357,7 @@ namespace GKCore.Controllers
                         case TargetMode.tmChild:
                             switch (sx) {
                                 case GDMSex.svMale:
+                                    fView.Surname.Text = parts.Surname;
                                     if (culture.HasPatronymic()) {
                                         fView.Name.Text = namesTable.GetNameByPatronymic(parts.Patronymic);
                                     }
