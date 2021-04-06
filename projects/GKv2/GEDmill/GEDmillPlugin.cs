@@ -32,11 +32,15 @@ namespace GEDmill
     public enum PLS
     {
         LSID_Title,
-        LSID_1,
-        LSID_2,
-        LSID_3,
-        LSID_4,
-        LSID_5
+        LSID_Quit,
+        LSID_Finish,
+        LSID_Version,
+        LSID_Back,
+        LSID_Next,
+        LSID_Help,
+        LSID_Settings,
+        LSID_Ok,
+        LSID_Cancel,
     }
 
     public sealed class Plugin : WidgetPlugin

@@ -34,7 +34,7 @@ namespace GEDmill.HTML
         protected List<Multimedia> fMultimediaList;
 
 
-        protected CreatorRecord(GDMTree tree, IProgressCallback progress, string w3cfile) : base(tree, progress, w3cfile)
+        protected CreatorRecord(GDMTree tree, IProgressCallback progress, string w3cFile) : base(tree, progress, w3cFile)
         {
             fMultimediaList = new List<Multimedia>();
         }

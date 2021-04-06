@@ -23,7 +23,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using GDModel;
-using GEDmill.Exceptions;
 using GEDmill.Model;
 using GKCore.Logging;
 
@@ -52,11 +51,11 @@ namespace GEDmill.HTML
         private string fW3CFile;
 
 
-        protected Creator(GDMTree tree, IProgressCallback progress, string sW3cfile)
+        protected Creator(GDMTree tree, IProgressCallback progress, string w3cFile)
         {
             fTree = tree;
             fProgressWindow = progress;
-            fW3CFile = sW3cfile;
+            fW3CFile = w3cFile;
         }
 
         // This clears the static list of all multimedia files copied to the output directory (and possibly renamed).
@@ -79,7 +78,7 @@ namespace GEDmill.HTML
                 return "&lt;null&gt;";
             }
 
-            StringBuilder sb = new StringBuilder(original.Length);
+            var sb = new StringBuilder(original.Length);
             uint uTabPos = 0;
             bool bDoneCRLF = false;
             bool bDoneSpace = false;

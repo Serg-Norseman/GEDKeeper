@@ -227,18 +227,6 @@ namespace GEDmill
         // Path to application's data
         public string AppDataPath;
 
-        // Address of remote FTP server in which to put the files
-        public string FtpServer;
-
-        // Username on remote server
-        public string FtpUsername;
-
-        // Password for remote server
-        public string FtpPassword;
-
-        // Folder on remote server in which to put the files
-        public string FtpUploadFolder;
-
         // String indicating image format to use to store mini tree file
         public string MiniTreeImageFormat;
 
@@ -271,9 +259,6 @@ namespace GEDmill
 
         // Name of file in which list of excluded individuals is stored
         public string ExcludeFileName;
-
-        // Directory in which pictures were added from for an individual
-        public string LastPictureAddedDir;
 
         // If true, email addresses won't appear in web pages in harvestable form.
         public bool ObfuscateEmails;
@@ -382,10 +367,6 @@ namespace GEDmill
             IndexLetterPerPage = false;
             ShowFrontPageStats = true;
             CommentaryText = "";
-            FtpServer = "";
-            FtpUsername = "";
-            FtpPassword = "";
-            FtpUploadFolder = "/";
 
             // Reset those settings that can be modified by the user on the config screen.
             Reset();
@@ -407,7 +388,7 @@ namespace GEDmill
             }
         }
 
-        // Serialise all the config settings into isolated storage.
+        // Serialise all the config settings
         public void Save()
         {
             try {
@@ -450,10 +431,6 @@ namespace GEDmill
                     ini.WriteString("Common", "MiniTreeColourIndiShade", MiniTreeColourIndiShade);
                     ini.WriteBool("Common", "ShowFrontPageStats", ShowFrontPageStats);
                     ini.WriteString("Common", "CommentaryText", CommentaryText);
-                    ini.WriteString("Common", "FtpServer", FtpServer);
-                    ini.WriteString("Common", "FtpUsername", FtpUsername);
-                    ini.WriteString("Common", "FtpPassword", FtpPassword);
-                    ini.WriteString("Common", "FtpUploadFolder", FtpUploadFolder);
                     ini.WriteString("Common", "TreeFontName", TreeFontName);
                     ini.WriteFloat("Common", "TreeFontSize", TreeFontSize);
                     ini.WriteInteger("Common", "TargetTreeWidth", TargetTreeWidth);
@@ -496,7 +473,6 @@ namespace GEDmill
                     ini.WriteBool("Common", "RenameOriginalPicture", RenameOriginalPicture);
                     ini.WriteString("Common", "ExcludeFileDir", ExcludeFileDir);
                     ini.WriteString("Common", "ExcludeFileName", ExcludeFileName);
-                    ini.WriteString("Common", "LastPictureAddedDir", LastPictureAddedDir);
                     ini.WriteBool("Common", "ObfuscateEmails", ObfuscateEmails);
                     ini.WriteBool("Common", "AddHomePageCreateTime", AddHomePageCreateTime);
                     ini.WriteBool("Common", "IncludeValiditySticker", IncludeValiditySticker);
@@ -525,7 +501,7 @@ namespace GEDmill
             }
         }
 
-        // Deserialise all the settings from isolated storage.
+        // Deserialise all the settings
         public void Load()
         {
             int uVersionMajor = 0, uVersionMinor = 0, uVersionBuild = 0;
@@ -536,11 +512,11 @@ namespace GEDmill
                     RestrictConfidential = ini.ReadBool("Common", "RestrictConfidential", false);
                     RestrictPrivacy = ini.ReadBool("Common", "RestrictPrivacy", false);
                     OutputFolder = ini.ReadString("Common", "OutputFolder", "");
-                    UnknownName = ini.ReadString("Common", "UnknownName", "");
+                    UnknownName = ini.ReadString("Common", "UnknownName", "<unknown>");
                     NameCapitalisation = ini.ReadInteger("Common", "NameCapitalisation", 1);
-                    HtmlExtension = ini.ReadString("Common", "HtmlExtension", "");
+                    HtmlExtension = ini.ReadString("Common", "HtmlExtension", "html");
                     CopyMultimedia = ini.ReadBool("Common", "CopyMultimedia", true);
-                    ImageFolder = ini.ReadString("Common", "ImageFolder", "");
+                    ImageFolder = ini.ReadString("Common", "ImageFolder", "multimedia");
                     RelativiseMultimedia = ini.ReadBool("Common", "RelativiseMultimedia", false);
                     BackgroundImage = ini.ReadString("Common", "BackgroundImage", "");
                     MaxImageWidth = ini.ReadInteger("Common", "MaxImageWidth", 160);
@@ -548,39 +524,35 @@ namespace GEDmill
                     MaxNumberMultimediaFiles = ini.ReadInteger("Common", "MaxNumberMultimediaFiles", 32);
                     AgeForOccupation = ini.ReadInteger("Common", "AgeForOccupation", 50);
                     OwnersName = ini.ReadString("Common", "OwnersName", "");
-                    NoSurname = ini.ReadString("Common", "NoSurname", "");
-                    IndexTitle = ini.ReadString("Common", "IndexTitle", "");
+                    NoSurname = ini.ReadString("Common", "NoSurname", "No Surname");
+                    IndexTitle = ini.ReadString("Common", "IndexTitle", "Index Of Names");
                     MaxSourceImageWidth = ini.ReadInteger("Common", "MaxSourceImageWidth", 800);
                     MaxSourceImageHeight = ini.ReadInteger("Common", "MaxSourceImageHeight", 800);
                     FirstRecordXRef = ini.ReadString("Common", "FirstRecordXRef", "");
-                    SiteTitle = ini.ReadString("Common", "SiteTitle", "");
+                    SiteTitle = ini.ReadString("Common", "SiteTitle", "Family history");
                     InputFilename = ini.ReadString("Common", "InputFilename", "");
                     ApplicationPath = ini.ReadString("Common", "ApplicationPath", "");
                     FrontPageImageFilename = ini.ReadString("Common", "FrontPageImageFilename", "");
                     TabSpaces = ini.ReadInteger("Common", "TabSpaces", 8);
-                    PlaceWord = ini.ReadString("Common", "PlaceWord", "");
+                    PlaceWord = ini.ReadString("Common", "PlaceWord", "in");
                     CapitaliseEventDescriptions = ini.ReadBool("Common", "CapitaliseEventDescriptions", true);
                     RestrictAssociatedSources = ini.ReadBool("Common", "RestrictAssociatedSources", true);
                     RenameMultimedia = ini.ReadBool("Common", "RenameMultimedia", true);
                     IndexLetterPerPage = ini.ReadBool("Common", "IndexLetterPerPage", false);
-                    MiniTreeColourBranch = ini.ReadString("Common", "MiniTreeColourBranch", "");
-                    MiniTreeColourIndiBorder = ini.ReadString("Common", "MiniTreeColourIndiBorder", "");
-                    MiniTreeColourIndiBackground = ini.ReadString("Common", "MiniTreeColourIndiBackground", "");
-                    MiniTreeColourIndiHighlight = ini.ReadString("Common", "MiniTreeColourIndiHighlight", "");
-                    MiniTreeColourIndiShade = ini.ReadString("Common", "MiniTreeColourIndiShade", "");
+                    MiniTreeColourBranch = ini.ReadString("Common", "MiniTreeColourBranch", "#000000");
+                    MiniTreeColourIndiBorder = ini.ReadString("Common", "MiniTreeColourIndiBorder", "#000000");
+                    MiniTreeColourIndiBackground = ini.ReadString("Common", "MiniTreeColourIndiBackground", "#ffffd2");
+                    MiniTreeColourIndiHighlight = ini.ReadString("Common", "MiniTreeColourIndiHighlight", "#ffffff");
+                    MiniTreeColourIndiShade = ini.ReadString("Common", "MiniTreeColourIndiShade", "#ffffd2");
                     ShowFrontPageStats = ini.ReadBool("Common", "ShowFrontPageStats", true);
                     CommentaryText = ini.ReadString("Common", "CommentaryText", "");
-                    FtpServer = ini.ReadString("Common", "FtpServer", "");
-                    FtpUsername = ini.ReadString("Common", "FtpUsername", "");
-                    FtpPassword = ini.ReadString("Common", "FtpPassword", "");
-                    FtpUploadFolder = ini.ReadString("Common", "FtpUploadFolder", "");
-                    TreeFontName = ini.ReadString("Common", "TreeFontName", "");
+                    TreeFontName = ini.ReadString("Common", "TreeFontName", "Arial");
                     TreeFontSize = (float)ini.ReadFloat("Common", "TreeFontSize", 7.2f);
                     TargetTreeWidth = ini.ReadInteger("Common", "TargetTreeWidth", 800);
-                    MiniTreeImageFormat = ini.ReadString("Common", "MiniTreeImageFormat", "");
-                    MiniTreeColourIndiText = ini.ReadString("Common", "MiniTreeColourIndiText", "");
-                    MiniTreeColourIndiLink = ini.ReadString("Common", "MiniTreeColourIndiLink", "");
-                    MiniTreeColourBackground = ini.ReadString("Common", "MiniTreeColourBackground", "");
+                    MiniTreeImageFormat = ini.ReadString("Common", "MiniTreeImageFormat", "gif");
+                    MiniTreeColourIndiText = ini.ReadString("Common", "MiniTreeColourIndiText", "#000000");
+                    MiniTreeColourIndiLink = ini.ReadString("Common", "MiniTreeColourIndiLink", "#3333ff");
+                    MiniTreeColourBackground = ini.ReadString("Common", "MiniTreeColourBackground", "#aaaaaa");
                     ShowMiniTrees = ini.ReadBool("Common", "ShowMiniTrees", true);
                     UserEmailAddress = ini.ReadString("Common", "UserEmailAddress", "");
                     FakeMiniTreeTransparency = ini.ReadBool("Common", "FakeMiniTreeTransparency", false);
@@ -595,7 +567,7 @@ namespace GEDmill
                     MultiPageIndexes = ini.ReadBool("Common", "MultiPageIndexes", true);
                     IndividualsPerIndexPage = ini.ReadInteger("Common", "IndividualsPerIndexPage", 1000);
                     OpenWebsiteOnExit = ini.ReadBool("Common", "OpenWebsiteOnExit", true);
-                    FrontPageFilename = ini.ReadString("Common", "FrontPageFilename", "");
+                    FrontPageFilename = ini.ReadString("Common", "FrontPageFilename", "home");
                     CreateCDROMFiles = ini.ReadBool("Common", "CreateCDROMFiles", false);
                     AllowMultipleImages = ini.ReadBool("Common", "AllowMultipleImages", false);
                     AllowNonPictures = ini.ReadBool("Common", "AllowNonPictures", true);
@@ -604,16 +576,15 @@ namespace GEDmill
                     MainWebsiteLink = ini.ReadString("Common", "MainWebsiteLink", "");
                     PreserveFrontPage = ini.ReadBool("Common", "PreserveFrontPage", false);
                     PreserveStylesheet = ini.ReadBool("Common", "PreserveStylesheet", false);
-                    StylesheetFilename = ini.ReadString("Common", "StylesheetFilename", "");
-                    MiniTreeColourIndiBgConcealed = ini.ReadString("Common", "MiniTreeColourIndiBgConcealed", "");
+                    StylesheetFilename = ini.ReadString("Common", "StylesheetFilename", "gedmill-style");
+                    MiniTreeColourIndiBgConcealed = ini.ReadString("Common", "MiniTreeColourIndiBgConcealed", "#cccccc");
                     OnlyConceal = ini.ReadBool("Common", "OnlyConceal", false);
-                    ConcealedName = ini.ReadString("Common", "ConcealedName", "");
-                    MiniTreeColourIndiFgConcealed = ini.ReadString("Common", "MiniTreeColourIndiFgConcealed", "");
+                    ConcealedName = ini.ReadString("Common", "ConcealedName", "Private Record");
+                    MiniTreeColourIndiFgConcealed = ini.ReadString("Common", "MiniTreeColourIndiFgConcealed", "#000000");
                     LinkOriginalPicture = ini.ReadBool("Common", "LinkOriginalPicture", false);
                     RenameOriginalPicture = ini.ReadBool("Common", "RenameOriginalPicture", false);
                     ExcludeFileDir = ini.ReadString("Common", "ExcludeFileDir", "");
                     ExcludeFileName = ini.ReadString("Common", "ExcludeFileName", "");
-                    LastPictureAddedDir = ini.ReadString("Common", "LastPictureAddedDir", "");
                     ObfuscateEmails = ini.ReadBool("Common", "ObfuscateEmails", false);
                     AddHomePageCreateTime = ini.ReadBool("Common", "AddHomePageCreateTime", true);
                     IncludeValiditySticker = ini.ReadBool("Common", "IncludeValiditySticker", false);
@@ -679,7 +650,6 @@ namespace GEDmill
             RenameOriginalPicture = false;
             ExcludeFileDir = "";
             ExcludeFileName = "";
-            LastPictureAddedDir = "";
             ObfuscateEmails = false;
             AddHomePageCreateTime = true;
             IncludeValiditySticker = false;

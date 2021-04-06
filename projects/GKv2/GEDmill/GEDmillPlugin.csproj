@@ -85,15 +85,12 @@
     </Compile>
     <Compile Include="src\Extensions.cs" />
     <Compile Include="src\GMHelper.cs" />
+    <Compile Include="src\HTML\HTMLException.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\ListView\CListableMFR.cs" />
     <Compile Include="src\ListView\CListableNumber.cs" />
-    <Compile Include="src\Exceptions\BlobException.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="src\CConfig.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\Exceptions\HTMLException.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\ListView\CListableBool.cs">

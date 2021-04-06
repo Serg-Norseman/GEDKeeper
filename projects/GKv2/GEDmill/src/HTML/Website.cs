@@ -20,7 +20,6 @@ using System;
 using System.Drawing;
 using System.IO;
 using GDModel;
-using GEDmill.Exceptions;
 using GEDmill.MiniTree;
 using GEDmill.Model;
 using GKCore.Logging;
@@ -111,7 +110,7 @@ namespace GEDmill.HTML
                 fProgressWindow.StepTo(++nProgress);
 
                 // Create the index creator for use by the individuals records creator.
-                CreatorIndexIndividuals indiIndexCreator = new CreatorIndexIndividuals(fTree, fProgressWindow, sW3CFilename);
+                var indiIndexCreator = new CreatorIndexIndividuals(fTree, fProgressWindow, sW3CFilename);
 
                 // Copy the image for the background of the webpages.
                 fProgressWindow.SetText("Copying background image");
@@ -125,7 +124,7 @@ namespace GEDmill.HTML
                 fProgressWindow.SetText("Creating style sheet");
                 string cssFilename = string.Concat(CConfig.Instance.OutputFolder, "\\", CConfig.Instance.StylesheetFilename, ".css");
                 if (CConfig.Instance.StylesheetFilename.Length > 0 && (!CConfig.Instance.PreserveStylesheet || !File.Exists(cssFilename))) {
-                    CreatorStylesheet csc = new CreatorStylesheet(fTree, fProgressWindow, sW3CFilename, cssFilename, backgroundImageFilename);
+                    var csc = new CreatorStylesheet(fTree, fProgressWindow, sW3CFilename, cssFilename, backgroundImageFilename);
                     csc.Create();
                 }
 
@@ -139,7 +138,7 @@ namespace GEDmill.HTML
                 fProgressWindow.SetText("Creating individual pages");
                 var indiList = fTree.GetRecords<GDMIndividualRecord>();
                 foreach (GDMIndividualRecord ir in indiList) {
-                    CreatorRecordIndividual ipc = new CreatorRecordIndividual(fTree, fProgressWindow, sW3CFilename, ir, indiIndexCreator, paintbox);
+                    var ipc = new CreatorRecordIndividual(fTree, fProgressWindow, sW3CFilename, ir, indiIndexCreator, paintbox);
                     if (ipc.Create(stats)) {
                         stats.Individuals++;
                     }
@@ -167,7 +166,7 @@ namespace GEDmill.HTML
                 fProgressWindow.SetText("Creating source pages");
                 var sourList = fTree.GetRecords<GDMSourceRecord>();
                 foreach (GDMSourceRecord sr in sourList) {
-                    CreatorRecordSource spc = new CreatorRecordSource(fTree, fProgressWindow, sW3CFilename, sr);
+                    var spc = new CreatorRecordSource(fTree, fProgressWindow, sW3CFilename, sr);
                     if (spc.Create(stats)) {
                         stats.Sources++;
                     }
@@ -194,7 +193,6 @@ namespace GEDmill.HTML
                 if (fProgressWindow.IsAborting) {
                     return;
                 }
-
 
                 // Create the help page
                 fProgressWindow.SetText("Creating help page");

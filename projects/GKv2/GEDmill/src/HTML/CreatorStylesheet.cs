@@ -39,10 +39,10 @@ namespace GEDmill.HTML
         private string fBackgroundImageFilename;
 
 
-        public CreatorStylesheet(GDMTree tree, IProgressCallback progress, string sW3cfile, string sCssFilename, string sBackgroundImageFilename) : base(tree, progress, sW3cfile)
+        public CreatorStylesheet(GDMTree tree, IProgressCallback progress, string w3cFile, string cssFilename, string backgroundImageFilename) : base(tree, progress, w3cFile)
         {
-            fCssFilename = sCssFilename;
-            fBackgroundImageFilename = sBackgroundImageFilename;
+            fCssFilename = cssFilename;
+            fBackgroundImageFilename = backgroundImageFilename;
         }
 
         public void Create()

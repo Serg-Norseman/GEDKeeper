@@ -18,14 +18,14 @@
 
 using System;
 
-namespace GEDmill.Exceptions
+namespace GEDmill.HTML
 {
     /// <summary>
-    /// Exception that gets thrown if inline binary file in GEDCOM can't be decoded.
+    /// An exception that can be thrown during HTML page creation.
     /// </summary>
-    public class BlobException : Exception
+    public class HTMLException : Exception
     {
-        public BlobException()
+        public HTMLException(string message) : base(message)
         {
         }
     }

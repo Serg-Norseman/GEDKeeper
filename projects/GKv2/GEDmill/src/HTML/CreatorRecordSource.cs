@@ -37,7 +37,7 @@ namespace GEDmill.HTML
         private GDMSourceRecord fSourceRecord;
 
 
-        public CreatorRecordSource(GDMTree tree, IProgressCallback progress, string w3cfile, GDMSourceRecord sr) : base(tree, progress, w3cfile)
+        public CreatorRecordSource(GDMTree tree, IProgressCallback progress, string w3cFile, GDMSourceRecord sr) : base(tree, progress, w3cFile)
         {
             fSourceRecord = sr;
         }
