@@ -791,18 +791,8 @@ namespace GEDmill.HTML
                 for (int i = 0; i < fAttributeList.Count; i++) {
                     Event iEvent = fAttributeList[i];
 
-                    string importance;
-                    if (iEvent.Important) {
-                        importance = " class=\"important\"";
-                    } else {
-                        importance = "";
-                    }
-
-                    string attrNote = "";
-                    string noteString = iEvent.Note;
-                    if (noteString != null) {
-                        attrNote = string.Concat("<p class=\"eventNote\">", EscapeHTML(noteString, false), "</p>");
-                    }
+                    string importance = iEvent.Important ? " class=\"important\"" : "";
+                    string attrNote = MakeNote(iEvent.Note);
 
                     f.WriteLine("            <tr>");
                     f.WriteLine("              <td class=\"date\"><p>&nbsp;</p></td>");
@@ -825,22 +815,10 @@ namespace GEDmill.HTML
                 for (int i = 0; i < fEventList.Count; i++) {
                     Event iEvent = fEventList[i];
 
-                    string importance;
-                    if (iEvent.Important) {
-                        importance = " class=\"important\"";
-                    } else {
-                        importance = "";
-                    }
+                    string importance = iEvent.Important ? " class=\"important\"" : "";
+                    string eventNote = MakeNote(iEvent.Overview);
+                    eventNote += MakeNote(iEvent.Note);
 
-                    string eventNote = "";
-                    string overviewString = iEvent.Overview;
-                    if (!string.IsNullOrEmpty(overviewString)) {
-                        eventNote = string.Concat("<p class=\"eventNote\">", EscapeHTML(overviewString, false), "</p>");
-                    }
-                    string noteString = iEvent.Note;
-                    if (!string.IsNullOrEmpty(noteString)) {
-                        eventNote += string.Concat("<p class=\"eventNote\">", EscapeHTML(noteString, false), "</p>");
-                    }
                     string preference = "";
                     if (iEvent.Preference == EventPreference.First) {
                         preference = " (most likely)";

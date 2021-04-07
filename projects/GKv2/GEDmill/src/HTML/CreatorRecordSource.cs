@@ -77,9 +77,9 @@ namespace GEDmill.HTML
                     sourName = "Source ";
                     bool gotSourceName = false;
                     // Try user reference number
-                    foreach (GDMUserReference urn in fSourceRecord.UserReferences) {
-                        if (urn.StringValue != "") {
-                            sourName += urn.StringValue;
+                    foreach (var userRef in fSourceRecord.UserReferences) {
+                        if (userRef.StringValue != "") {
+                            sourName += userRef.StringValue;
                             gotSourceName = true;
                             break;
                         }
@@ -93,7 +93,7 @@ namespace GEDmill.HTML
                 f.WriteLine("<h1>{0}</h1>", EscapeHTML(sourName, false));
 
                 // Add repository information
-                foreach (GDMRepositoryCitation sourCit in fSourceRecord.RepositoryCitations) {
+                foreach (var sourCit in fSourceRecord.RepositoryCitations) {
                     GDMRepositoryRecord repoRec = fTree.GetPtrValue<GDMRepositoryRecord>(sourCit);
                     if (repoRec != null) {
                         if (!string.IsNullOrEmpty(repoRec.RepositoryName)) {
@@ -101,16 +101,12 @@ namespace GEDmill.HTML
                         }
 
                         foreach (GDMNotes ns in repoRec.Notes) {
-                            string noteText = GetNoteText(ns);
-                            f.WriteLine("<p>{0}</p>", EscapeHTML(noteText, false));
+                            WriteNotes(f, ns);
                         }
                     }
 
-                    if (sourCit.Notes != null && sourCit.Notes.Count > 0) {
-                        foreach (GDMNotes ns in sourCit.Notes) {
-                            string noteText = GetNoteText(ns);
-                            f.WriteLine("<p>{0}</p>", EscapeHTML(noteText, false));
-                        }
+                    foreach (GDMNotes ns in sourCit.Notes) {
+                        WriteNotes(f, ns);
                     }
                 }
 
@@ -195,19 +191,6 @@ namespace GEDmill.HTML
                 }
             }
             return true;
-        }
-
-        private string GetNoteText(GDMNotes ns)
-        {
-            GDMLines noteLines = fTree.GetNoteLines(ns);
-            string result;
-            if (CConfig.Instance.ObfuscateEmails) {
-                result = ObfuscateEmail(noteLines.Text);
-            } else {
-                result = noteLines.Text;
-            }
-
-            return result;
         }
 
         // Writes the HTML for the multimedia files associated with this record. 

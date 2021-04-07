@@ -212,15 +212,8 @@ namespace GKCore.Controllers
 
         public void RequestInfo(TreeChartPerson person)
         {
-            if (person == null) return;
-
-            if (person.Rec != null) {
-                GDMIndividualRecord iRec = person.Rec;
-
-                using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(fBase)) {
-                    dlg.Record = iRec;
-                    AppHost.Instance.ShowModalX(dlg, false);
-                }
+            if (person != null) {
+                BaseController.ViewRecordInfo(fBase, person.Rec);
             }
         }
 

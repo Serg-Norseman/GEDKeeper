@@ -36,6 +36,16 @@ namespace GKCore.Controllers
     /// </summary>
     public static class BaseController
     {
+        public static void ViewRecordInfo(IBaseWindow baseWin, GDMRecord record)
+        {
+            if (record != null) {
+                using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(baseWin)) {
+                    dlg.Record = record;
+                    AppHost.Instance.ShowModalX(dlg, false);
+                }
+            }
+        }
+
         #region Modify routines
 
         public static bool ModifyMedia(IBaseWindow baseWin, ref GDMMultimediaRecord mediaRec)

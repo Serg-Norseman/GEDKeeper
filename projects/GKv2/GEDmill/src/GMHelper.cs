@@ -272,6 +272,11 @@ namespace GEDmill
             int nGreen = 0;
             int nBlue = 0;
 
+            // FIXME: temp hack, IniFile cuts values with leading #
+            if (s[0] != '#') {
+                s = '#' + s;
+            }
+
             switch (s.Length) {
                 case 4:
                     s = s.Substring(1);
@@ -298,7 +303,7 @@ namespace GEDmill
         // Used when storing colours in the config.
         public static string ConvertColour(Color c)
         {
-            string s = string.Format("#{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
+            string s = string.Format("{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
             return s;
         }
     }

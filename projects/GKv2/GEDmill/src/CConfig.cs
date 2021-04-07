@@ -328,7 +328,10 @@ namespace GEDmill
         // Constructor, sets default values for the config
         private CConfig()
         {
+            ApplicationPath = GMHelper.GetAppPath();
             AppDataPath = AppHost.GetAppDataPathStatic();
+            BackgroundImage = ApplicationPath + "\\bg-gedmill.jpg";
+            FrontPageImageFilename = ApplicationPath + "\\gedmill.jpg";
 
             RestrictConfidential = false;
             RestrictPrivacy = false;
@@ -340,13 +343,10 @@ namespace GEDmill
             CopyMultimedia = true;
             ImageFolder = "multimedia";
             RelativiseMultimedia = false;
-            ApplicationPath = GMHelper.GetAppPath();
-            BackgroundImage = ApplicationPath + "\\bg-gedmill.jpg";
             MaxImageWidth = 160;
             MaxImageHeight = 160;
             MaxNumberMultimediaFiles = 32;
             AgeForOccupation = 50;
-            OwnersName = Environment.UserName;
             NoSurname = "No Surname";
             IndexTitle = "Index Of Names";
             MaxSourceImageWidth = 800;
@@ -354,11 +354,7 @@ namespace GEDmill
             MaxThumbnailImageWidth = 45;
             MaxThumbnailImageHeight = 45;
             FirstRecordXRef = "";
-            SiteTitle = "Family history";
-            if (OwnersName != null && OwnersName != "")
-                SiteTitle += " of " + OwnersName;
             InputFilename = "";
-            FrontPageImageFilename = ApplicationPath + "\\gedmill.jpg";
             TabSpaces = 8;
             PlaceWord = "in";
             CapitaliseEventDescriptions = true;
@@ -367,6 +363,12 @@ namespace GEDmill
             IndexLetterPerPage = false;
             ShowFrontPageStats = true;
             CommentaryText = "";
+
+            OwnersName = Environment.UserName;
+
+            SiteTitle = "Family history";
+            if (!string.IsNullOrEmpty(OwnersName))
+                SiteTitle += " of " + OwnersName;
 
             // Reset those settings that can be modified by the user on the config screen.
             Reset();

@@ -566,6 +566,14 @@ namespace GEDmill.HTML
             return MakeLink(ir, name);
         }
 
+        protected static string MakeNote(string noteStr)
+        {
+            if (!string.IsNullOrEmpty(noteStr)) {
+                return string.Concat("<p class=\"eventNote\">", EscapeHTML(noteStr, false), "</p>");
+            }
+            return string.Empty;
+        }
+
         // Creates link HTML for the individual e.g. <a href="indiI1.html">Next Child</a>. Uses name provided by caller.
         protected static string MakeLink(GDMIndividualRecord ir, string name)
         {

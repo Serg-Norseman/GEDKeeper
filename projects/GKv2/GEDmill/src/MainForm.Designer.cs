@@ -1,295 +1,322 @@
-﻿using System.Windows.Forms;
-using GKUI.Components;
-
-namespace GEDmill
+﻿namespace GEDmill
 {
     public partial class MainForm
     {
         private System.ComponentModel.Container components = null;
-        private Button btnNext;
-        private Button btnBack;
-        private Button btnCancel;
-        private Button btnSettings;
-        private Button btnSettingsCancel;
-        private Button btnHelp;
-        private Panel panelWelcome;
-        private Panel panelChooseGedcom;
-        private Panel panelChooseOutput;
-        private Panel panelPruneRecords;
-        private Panel panelSelectKey;
-        private Panel panelAllDone;
-        private TabControl tabcontrolConfigPanel;
-        private Label lblConfigFrontImageEdit;
-        private TextBox txtConfigFrontImageEdit;
-        private Button btnConfigFrontImageBrowse;
-        private TextBox txtConfigBackImageEdit;
-        private Label lblConfigBackImageEdit;
-        private Button btnConfigBackImageBrowse;
-        private Label lblConfigIndiImageSize;
-        private Label lblConfigIndiImageWidth;
-        private TextBox txtConfigIndiImageWidth;
-        private Label lblConfigIndiImageHeight;
-        private TextBox txtConfigIndiImageHeight;
-        private Label lblConfigSourceImageSize;
-        private Label lblConfigSourceImageWidth;
-        private TextBox txtConfigSourceImageWidth;
-        private Label lblConfigSourceImageHeight;
-        private TextBox txtConfigSourceImageHeight;
-        private Label lblConfigThumbnailImageSize;
-        private Label lblConfigThumbnailImageWidth;
-        private TextBox txtConfigThumbnailImageWidth;
-        private Label lblConfigThumbnailImageHeight;
-        private TextBox txtConfigThumbnailImageHeight;
-        private Label lblConfigHtmlExtn;
-        private ComboBox cmbConfigHtmlExtn;
-        private CheckBox chkConfigW3C;
-        private CheckBox chkConfigUserRecFilename;
-        private Label lblConfigCustomFooter;
-        private TextBox txtConfigCustomFooter;
-        private Label lblConfigFooterIsHtml;
-        private CheckBox chkConfigFooterIsHtml;
-        private CheckBox chkConfigConserveTreeWidth;
-        private CheckBox chkConfigKeepSiblingOrder;
-        private GroupBox gbMiniTreeColours;
-        private Button btnConfigMiniTreeColourIndiBackground;
-        private Button btnConfigMiniTreeColourIndiHighlight;
-        private Button btnConfigMiniTreeColourIndiBgConcealed;
-        private Button btnConfigMiniTreeColourIndiShade;
-        private Button btnConfigMiniTreeColourIndiText;
-        private Button btnConfigMiniTreeColourIndiLink;
-        private Button btnConfigMiniTreeColourBranch;
-        private Button btnConfigMiniTreeColourIndiBorder;
-        private Button btnConfigMiniTreeColourIndiFgConcealed;
-        private CheckBox chkConfigAllowMultimedia;
-        private Label lblConfigNoName;
-        private TextBox txtConfigNoName;
-        private GroupBox gbConfigWithheldName;
-        private RadioButton radConfigWithheldNameLabel;
-        private RadioButton radConfigWithheldNameName;
-        private TextBox txtConfigWithheldName;
-        private CheckBox chkConfigCapNames;
-        private CheckBox chkConfigCapEvents;
-        private CheckBox chkConfigHideEmails;
-        private CheckBox chkConfigOccupationHeadline;
-        private CheckBox chkConfigShowWithheldRecords;
-        private Label lblConfigTabSpaces;
-        private TextBox txtConfigTabSpaces;
-        private Label lblConfigCommentaryIsHtml;
-        private CheckBox chkConfigCommentaryIsHtml;
-        private Label lblConfigCommentary;
-        private TextBox txtConfigCommentary;
-        private Label lblConfigUserLink;
-        private TextBox txtConfigUserLink;
-        private Label lblConfigEmail;
-        private TextBox txtConfigEmail;
-        private TextBox txtConfigIndexName;
-        private Label lblConfigIndexName;
-        private Label lblConfigIndexNameExtn;
-        private CheckBox chkConfigPreserveFrontPage;
-        private TextBox txtConfigStylesheetName;
-        private Label lblConfigStylesheetName;
-        private Label lblConfigStylesheetNameExtn;
-        private CheckBox chkConfigPreserveStylesheet;
-        private CheckBox chkConfigIncludeHelppage;
-        private CheckBox chkConfigStats;
-        private CheckBox chkConfigCdrom;
-        private CheckBox chkConfigIndiImages;
-        private CheckBox chkConfigNonPictures;
-        private CheckBox chkConfigKeepOriginals;
-        private CheckBox chkConfigRenameOriginals;
-        private CheckBox chkConfigMultiPageIndex;
-        private CheckBox chkConfigUserRefInIndex;
-        private Label lblConfigMultiPageIndexNumber;
-        private TextBox txtConfigMultiPageIndexNumber;
-        private CheckBox chkConfigTreeDiagrams;
-        private CheckBox chkConfigTreeDiagramsFakeBg;
-        private Label lblConfigTreeDiagramsFormat;
-        private ComboBox cmbConfigTreeDiagramsFormat;
-        private CheckBox chkConfigSupressBackreferences;
-        private Label lblWelcomeVersion;
-        private Label lblWelcomeSubtitle;
-        private PictureBox pictureBox;
-        private TextBox txtChooseOutput;
-        private Label lblChooseOutputInstructions;
-        private Label lblChooseOutput;
-        private Label lblChooseOutputContinue;
-        private Button btnChooseOutputBrowse;
-        private Label lblPruneRecordsContinue;
-        private GKListView lvPruneIndividuals;
-        private GKListView lvPruneSources;
-        private Label lblPruneRecordsInstructions;
-        private Label lblPruneRecordsButtons;
-        private Label lblSelectKey;
-        private TextBox txtSelectKey;
-        private Label lblSelectKeyIndividuals;
-        private ListBox lstSelectKey;
-        private Button btnSelectKeyAdd;
-        private Button btnSelectKeyDelete;
-        private Label lblSelectKeyInstructions;
-        private Label lblAllDoneThankYou;
-        private Label lblAllDoneDirectory;
-        private Label lblAllDoneStartFile;
-        private CheckBox chkAllDoneShowSite;
-        private LinkLabel lblAllDone;
-        private PictureBox pictureBoxWelcome;
-        private ContextMenu menuPruneRecordsIndis;
-        private ContextMenu menuPruneRecordsSources;
-        private MenuItem miPruneRecordsIndisUnconnected;
-        private MenuItem miPruneRecordsIndisDescendantsExc;
-        private MenuItem miPruneRecordsIndisDescendantsInc;
-        private MenuItem miPruneRecordsIndisAncestorsInc;
-        private MenuItem miPruneRecordsIndisAncestorsExc;
-        private MenuItem miPruneRecordsIndisDetails;
-        private MenuItem miPruneRecordsSourcesRemovePics;
-        private MenuItem miPruneRecordsSourcesDetails;
-        private HelpProvider helpProvider;
-        private TabControl tabcontrolPruneRecords;
-        private TabPage pagePruneRecordsIndis;
-        private TabPage pagePruneRecordsSources;
-        private TabPage pageSettingsWebpages;
-        private TabPage pageSettingsImages;
-        private TabPage pageSettingsGedcom;
-        private TabPage pageSettingsTreeDiagrams;
-        private TabPage pageSettingsAdvanced;
+        private System.Windows.Forms.Button btnNext;
+        private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnSettings;
+        private System.Windows.Forms.Button btnSettingsCancel;
+        private System.Windows.Forms.Button btnHelp;
+        private System.Windows.Forms.Panel panelWelcome;
+        private System.Windows.Forms.Panel panelChooseGedcom;
+        private System.Windows.Forms.Panel panelChooseOutput;
+        private System.Windows.Forms.Panel panelPruneRecords;
+        private System.Windows.Forms.Panel panelSelectKey;
+        private System.Windows.Forms.Panel panelAllDone;
+        private System.Windows.Forms.TabControl tabcontrolConfigPanel;
+        private System.Windows.Forms.Label lblConfigFrontImageEdit;
+        private System.Windows.Forms.TextBox txtConfigFrontImageEdit;
+        private System.Windows.Forms.Button btnConfigFrontImageBrowse;
+        private System.Windows.Forms.TextBox txtConfigBackImageEdit;
+        private System.Windows.Forms.Label lblConfigBackImageEdit;
+        private System.Windows.Forms.Button btnConfigBackImageBrowse;
+        private System.Windows.Forms.Label lblConfigIndiImageSize;
+        private System.Windows.Forms.Label lblConfigIndiImageWidth;
+        private System.Windows.Forms.TextBox txtConfigIndiImageWidth;
+        private System.Windows.Forms.Label lblConfigIndiImageHeight;
+        private System.Windows.Forms.TextBox txtConfigIndiImageHeight;
+        private System.Windows.Forms.Label lblConfigSourceImageSize;
+        private System.Windows.Forms.Label lblConfigSourceImageWidth;
+        private System.Windows.Forms.TextBox txtConfigSourceImageWidth;
+        private System.Windows.Forms.Label lblConfigSourceImageHeight;
+        private System.Windows.Forms.TextBox txtConfigSourceImageHeight;
+        private System.Windows.Forms.Label lblConfigThumbnailImageSize;
+        private System.Windows.Forms.Label lblConfigThumbnailImageWidth;
+        private System.Windows.Forms.TextBox txtConfigThumbnailImageWidth;
+        private System.Windows.Forms.Label lblConfigThumbnailImageHeight;
+        private System.Windows.Forms.TextBox txtConfigThumbnailImageHeight;
+        private System.Windows.Forms.Label lblConfigHtmlExtn;
+        private System.Windows.Forms.ComboBox cmbConfigHtmlExtn;
+        private System.Windows.Forms.CheckBox chkConfigW3C;
+        private System.Windows.Forms.CheckBox chkConfigUserRecFilename;
+        private System.Windows.Forms.Label lblConfigCustomFooter;
+        private System.Windows.Forms.TextBox txtConfigCustomFooter;
+        private System.Windows.Forms.Label lblConfigFooterIsHtml;
+        private System.Windows.Forms.CheckBox chkConfigFooterIsHtml;
+        private System.Windows.Forms.CheckBox chkConfigConserveTreeWidth;
+        private System.Windows.Forms.CheckBox chkConfigKeepSiblingOrder;
+        private System.Windows.Forms.GroupBox gbMiniTreeColours;
+        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiBackground;
+        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiHighlight;
+        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiBgConcealed;
+        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiShade;
+        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiText;
+        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiLink;
+        private System.Windows.Forms.Button btnConfigMiniTreeColourBranch;
+        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiBorder;
+        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiFgConcealed;
+        private System.Windows.Forms.CheckBox chkConfigAllowMultimedia;
+        private System.Windows.Forms.Label lblConfigNoName;
+        private System.Windows.Forms.TextBox txtConfigNoName;
+        private System.Windows.Forms.GroupBox gbConfigWithheldName;
+        private System.Windows.Forms.RadioButton radConfigWithheldNameLabel;
+        private System.Windows.Forms.RadioButton radConfigWithheldNameName;
+        private System.Windows.Forms.TextBox txtConfigWithheldName;
+        private System.Windows.Forms.CheckBox chkConfigCapNames;
+        private System.Windows.Forms.CheckBox chkConfigCapEvents;
+        private System.Windows.Forms.CheckBox chkConfigHideEmails;
+        private System.Windows.Forms.CheckBox chkConfigOccupationHeadline;
+        private System.Windows.Forms.CheckBox chkConfigShowWithheldRecords;
+        private System.Windows.Forms.Label lblConfigTabSpaces;
+        private System.Windows.Forms.TextBox txtConfigTabSpaces;
+        private System.Windows.Forms.Label lblConfigCommentaryIsHtml;
+        private System.Windows.Forms.CheckBox chkConfigCommentaryIsHtml;
+        private System.Windows.Forms.Label lblConfigCommentary;
+        private System.Windows.Forms.TextBox txtConfigCommentary;
+        private System.Windows.Forms.Label lblConfigUserLink;
+        private System.Windows.Forms.TextBox txtConfigUserLink;
+        private System.Windows.Forms.Label lblConfigEmail;
+        private System.Windows.Forms.TextBox txtConfigEmail;
+        private System.Windows.Forms.TextBox txtConfigIndexName;
+        private System.Windows.Forms.Label lblConfigIndexName;
+        private System.Windows.Forms.Label lblConfigIndexNameExtn;
+        private System.Windows.Forms.CheckBox chkConfigPreserveFrontPage;
+        private System.Windows.Forms.TextBox txtConfigStylesheetName;
+        private System.Windows.Forms.Label lblConfigStylesheetName;
+        private System.Windows.Forms.Label lblConfigStylesheetNameExtn;
+        private System.Windows.Forms.CheckBox chkConfigPreserveStylesheet;
+        private System.Windows.Forms.CheckBox chkConfigIncludeHelppage;
+        private System.Windows.Forms.CheckBox chkConfigStats;
+        private System.Windows.Forms.CheckBox chkConfigCdrom;
+        private System.Windows.Forms.CheckBox chkConfigIndiImages;
+        private System.Windows.Forms.CheckBox chkConfigNonPictures;
+        private System.Windows.Forms.CheckBox chkConfigKeepOriginals;
+        private System.Windows.Forms.CheckBox chkConfigRenameOriginals;
+        private System.Windows.Forms.CheckBox chkConfigMultiPageIndex;
+        private System.Windows.Forms.CheckBox chkConfigUserRefInIndex;
+        private System.Windows.Forms.Label lblConfigMultiPageIndexNumber;
+        private System.Windows.Forms.TextBox txtConfigMultiPageIndexNumber;
+        private System.Windows.Forms.CheckBox chkConfigTreeDiagrams;
+        private System.Windows.Forms.CheckBox chkConfigTreeDiagramsFakeBg;
+        private System.Windows.Forms.Label lblConfigTreeDiagramsFormat;
+        private System.Windows.Forms.ComboBox cmbConfigTreeDiagramsFormat;
+        private System.Windows.Forms.CheckBox chkConfigSupressBackreferences;
+        private System.Windows.Forms.Label lblWelcomeVersion;
+        private System.Windows.Forms.Label lblWelcomeSubtitle;
+        private System.Windows.Forms.PictureBox pictureBox;
+        private System.Windows.Forms.TextBox txtChooseOutput;
+        private System.Windows.Forms.Label lblChooseOutputInstructions;
+        private System.Windows.Forms.Label lblChooseOutput;
+        private System.Windows.Forms.Label lblChooseOutputContinue;
+        private System.Windows.Forms.Button btnChooseOutputBrowse;
+        private System.Windows.Forms.Label lblPruneRecordsContinue;
+        private GKUI.Components.GKListView lvPruneIndividuals;
+        private GKUI.Components.GKListView lvPruneSources;
+        private System.Windows.Forms.Label lblPruneRecordsInstructions;
+        private System.Windows.Forms.Label lblPruneRecordsButtons;
+        private System.Windows.Forms.Label lblSelectKey;
+        private System.Windows.Forms.TextBox txtSelectKey;
+        private System.Windows.Forms.Label lblSelectKeyIndividuals;
+        private System.Windows.Forms.ListBox lstSelectKey;
+        private System.Windows.Forms.Button btnSelectKeyAdd;
+        private System.Windows.Forms.Button btnSelectKeyDelete;
+        private System.Windows.Forms.Label lblSelectKeyInstructions;
+        private System.Windows.Forms.Label lblAllDoneThankYou;
+        private System.Windows.Forms.Label lblAllDoneDirectory;
+        private System.Windows.Forms.Label lblAllDoneStartFile;
+        private System.Windows.Forms.CheckBox chkAllDoneShowSite;
+        private System.Windows.Forms.LinkLabel lblAllDone;
+        private System.Windows.Forms.PictureBox pictureBoxWelcome;
+        private System.Windows.Forms.ContextMenu menuPruneRecordsIndis;
+        private System.Windows.Forms.ContextMenu menuPruneRecordsSources;
+        private System.Windows.Forms.MenuItem miPruneRecordsIndisUnconnected;
+        private System.Windows.Forms.MenuItem miPruneRecordsIndisDescendantsExc;
+        private System.Windows.Forms.MenuItem miPruneRecordsIndisDescendantsInc;
+        private System.Windows.Forms.MenuItem miPruneRecordsIndisAncestorsInc;
+        private System.Windows.Forms.MenuItem miPruneRecordsIndisAncestorsExc;
+        private System.Windows.Forms.MenuItem miPruneRecordsIndisDetails;
+        private System.Windows.Forms.MenuItem miPruneRecordsSourcesRemovePics;
+        private System.Windows.Forms.MenuItem miPruneRecordsSourcesDetails;
+        private System.Windows.Forms.HelpProvider helpProvider;
+        private System.Windows.Forms.TabControl tabcontrolPruneRecords;
+        private System.Windows.Forms.TabPage pagePruneRecordsIndis;
+        private System.Windows.Forms.TabPage pagePruneRecordsSources;
+        private System.Windows.Forms.TabPage pageSettingsWebpages;
+        private System.Windows.Forms.TabPage pageSettingsImages;
+        private System.Windows.Forms.TabPage pageSettingsGedcom;
+        private System.Windows.Forms.TabPage pageSettingsTreeDiagrams;
+        private System.Windows.Forms.TabPage pageSettingsAdvanced;
+        private System.Windows.Forms.MenuItem N1;
+        private System.Windows.Forms.MenuItem N2;
+        private System.Windows.Forms.MenuItem N3;
+        private System.Windows.Forms.MenuItem N4;
+        private System.Windows.Forms.MenuItem N5;
+        private System.Windows.Forms.MenuItem pruneIndividualsContextMenuInclude;
+        private System.Windows.Forms.MenuItem pruneIndividualsContextMenuExclude;
+        private System.Windows.Forms.MenuItem pruneIndividualsContextMenuAlive;
+        private System.Windows.Forms.MenuItem pruneSourcesContextMenuInclude;
+        private System.Windows.Forms.MenuItem pruneSourcesContextMenuExclude;
 
         private void InitializeComponent()
         {
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
-            btnNext = new Button();
-            btnBack = new Button();
-            btnCancel = new Button();
-            btnHelp = new Button();
-            btnSettings = new Button();
-            btnSettingsCancel = new Button();
-            lblConfigFrontImageEdit = new Label();
-            txtConfigFrontImageEdit = new TextBox();
-            btnConfigFrontImageBrowse = new Button();
-            txtConfigBackImageEdit = new TextBox();
-            lblConfigBackImageEdit = new Label();
-            btnConfigBackImageBrowse = new Button();
-            lblConfigIndiImageSize = new Label();
-            lblConfigIndiImageWidth = new Label();
-            txtConfigIndiImageWidth = new TextBox();
-            lblConfigIndiImageHeight = new Label();
-            txtConfigIndiImageHeight = new TextBox();
-            lblConfigSourceImageSize = new Label();
-            lblConfigSourceImageWidth = new Label();
-            txtConfigSourceImageWidth = new TextBox();
-            lblConfigSourceImageHeight = new Label();
-            txtConfigSourceImageHeight = new TextBox();
-            lblConfigThumbnailImageSize = new Label();
-            lblConfigThumbnailImageWidth = new Label();
-            txtConfigThumbnailImageWidth = new TextBox();
-            lblConfigThumbnailImageHeight = new Label();
-            txtConfigThumbnailImageHeight = new TextBox();
-            lblConfigHtmlExtn = new Label();
-            cmbConfigHtmlExtn = new ComboBox();
-            chkConfigW3C = new CheckBox();
-            chkConfigUserRecFilename = new CheckBox();
-            lblConfigCustomFooter = new Label();
-            txtConfigCustomFooter = new TextBox();
-            lblConfigFooterIsHtml = new Label();
-            chkConfigFooterIsHtml = new CheckBox();
-            chkConfigConserveTreeWidth = new CheckBox();
-            chkConfigKeepSiblingOrder = new CheckBox();
-            gbMiniTreeColours = new GroupBox();
-            btnConfigMiniTreeColourIndiBackground = new Button();
-            btnConfigMiniTreeColourIndiHighlight = new Button();
-            btnConfigMiniTreeColourIndiBgConcealed = new Button();
-            btnConfigMiniTreeColourIndiShade = new Button();
-            btnConfigMiniTreeColourIndiText = new Button();
-            btnConfigMiniTreeColourIndiLink = new Button();
-            btnConfigMiniTreeColourBranch = new Button();
-            btnConfigMiniTreeColourIndiBorder = new Button();
-            btnConfigMiniTreeColourIndiFgConcealed = new Button();
-            chkConfigAllowMultimedia = new CheckBox();
-            chkConfigSupressBackreferences = new CheckBox();
-            lblConfigNoName = new Label();
-            txtConfigNoName = new TextBox();
-            gbConfigWithheldName = new GroupBox();
-            radConfigWithheldNameLabel = new RadioButton();
-            radConfigWithheldNameName = new RadioButton();
-            txtConfigWithheldName = new TextBox();
-            chkConfigCapNames = new CheckBox();
-            chkConfigCapEvents = new CheckBox();
-            chkConfigHideEmails = new CheckBox();
-            chkConfigOccupationHeadline = new CheckBox();
-            chkConfigShowWithheldRecords = new CheckBox(); ;
-            lblConfigTabSpaces = new Label();
-            txtConfigTabSpaces = new TextBox();
-            lblConfigCommentary = new Label();
-            lblConfigCommentaryIsHtml = new Label();
-            chkConfigCommentaryIsHtml = new CheckBox();
-            txtConfigCommentary = new TextBox();
-            lblConfigEmail = new Label();
-            txtConfigEmail = new TextBox();
-            lblConfigUserLink = new Label();
-            txtConfigUserLink = new TextBox();
-            txtConfigIndexName = new TextBox();
-            lblConfigIndexName = new Label();
-            lblConfigIndexNameExtn = new Label();
-            chkConfigPreserveFrontPage = new CheckBox();
-            txtConfigStylesheetName = new TextBox();
-            lblConfigStylesheetName = new Label();
-            lblConfigStylesheetNameExtn = new Label();
-            chkConfigPreserveStylesheet = new CheckBox();
-            chkConfigIncludeHelppage = new CheckBox();
-            chkConfigStats = new CheckBox();
-            chkConfigTreeDiagrams = new CheckBox();
-            chkConfigTreeDiagramsFakeBg = new CheckBox();
-            lblConfigTreeDiagramsFormat = new Label();
-            cmbConfigTreeDiagramsFormat = new ComboBox();
-            chkConfigMultiPageIndex = new CheckBox();
-            chkConfigUserRefInIndex = new CheckBox();
-            lblConfigMultiPageIndexNumber = new Label();
-            txtConfigMultiPageIndexNumber = new TextBox();
-            chkConfigIndiImages = new CheckBox();
-            chkConfigNonPictures = new CheckBox();
-            chkConfigCdrom = new CheckBox();
-            chkConfigRenameOriginals = new CheckBox();
-            chkConfigKeepOriginals = new CheckBox();
-            panelWelcome = new Panel();
-            pictureBoxWelcome = new PictureBox();
-            lblWelcomeVersion = new Label();
-            lblWelcomeSubtitle = new Label();
-            pictureBox = new PictureBox();
-            panelChooseGedcom = new Panel();
-            panelChooseOutput = new Panel();
-            txtChooseOutput = new TextBox();
-            lblChooseOutputInstructions = new Label();
-            lblChooseOutput = new Label();
-            btnChooseOutputBrowse = new Button();
-            lblChooseOutputContinue = new Label();
-            panelPruneRecords = new Panel();
-            lblPruneRecordsContinue = new Label();
-            lvPruneIndividuals = new GKListView();
-            lvPruneSources = new GKListView();
-            lblPruneRecordsInstructions = new Label();
-            lblPruneRecordsButtons = new Label();
-            panelSelectKey = new Panel();
-            tabcontrolConfigPanel = new TabControl();
-            tabcontrolPruneRecords = new TabControl();
-            lblSelectKey = new Label();
-            txtSelectKey = new TextBox();
-            lblSelectKeyInstructions = new Label();
-            lblSelectKeyIndividuals = new Label();
-            lstSelectKey = new ListBox();
-            btnSelectKeyAdd = new Button();
-            btnSelectKeyDelete = new Button();
-            panelAllDone = new Panel();
-            chkAllDoneShowSite = new CheckBox();
-            lblAllDone = new LinkLabel();
-            lblAllDoneThankYou = new Label();
-            lblAllDoneDirectory = new Label();
-            lblAllDoneStartFile = new Label();
-            menuPruneRecordsIndis = new ContextMenu();
-            menuPruneRecordsSources = new ContextMenu();
-            helpProvider = new HelpProvider();
-            pageSettingsWebpages = new TabPage();
-            pageSettingsImages = new TabPage();
-            pageSettingsGedcom = new TabPage();
-            pageSettingsTreeDiagrams = new TabPage();
-            pageSettingsAdvanced = new TabPage();
+            btnNext = new System.Windows.Forms.Button();
+            btnBack = new System.Windows.Forms.Button();
+            btnCancel = new System.Windows.Forms.Button();
+            btnHelp = new System.Windows.Forms.Button();
+            btnSettings = new System.Windows.Forms.Button();
+            btnSettingsCancel = new System.Windows.Forms.Button();
+            lblConfigFrontImageEdit = new System.Windows.Forms.Label();
+            txtConfigFrontImageEdit = new System.Windows.Forms.TextBox();
+            btnConfigFrontImageBrowse = new System.Windows.Forms.Button();
+            txtConfigBackImageEdit = new System.Windows.Forms.TextBox();
+            lblConfigBackImageEdit = new System.Windows.Forms.Label();
+            btnConfigBackImageBrowse = new System.Windows.Forms.Button();
+            lblConfigIndiImageSize = new System.Windows.Forms.Label();
+            lblConfigIndiImageWidth = new System.Windows.Forms.Label();
+            txtConfigIndiImageWidth = new System.Windows.Forms.TextBox();
+            lblConfigIndiImageHeight = new System.Windows.Forms.Label();
+            txtConfigIndiImageHeight = new System.Windows.Forms.TextBox();
+            lblConfigSourceImageSize = new System.Windows.Forms.Label();
+            lblConfigSourceImageWidth = new System.Windows.Forms.Label();
+            txtConfigSourceImageWidth = new System.Windows.Forms.TextBox();
+            lblConfigSourceImageHeight = new System.Windows.Forms.Label();
+            txtConfigSourceImageHeight = new System.Windows.Forms.TextBox();
+            lblConfigThumbnailImageSize = new System.Windows.Forms.Label();
+            lblConfigThumbnailImageWidth = new System.Windows.Forms.Label();
+            txtConfigThumbnailImageWidth = new System.Windows.Forms.TextBox();
+            lblConfigThumbnailImageHeight = new System.Windows.Forms.Label();
+            txtConfigThumbnailImageHeight = new System.Windows.Forms.TextBox();
+            lblConfigHtmlExtn = new System.Windows.Forms.Label();
+            cmbConfigHtmlExtn = new System.Windows.Forms.ComboBox();
+            chkConfigW3C = new System.Windows.Forms.CheckBox();
+            chkConfigUserRecFilename = new System.Windows.Forms.CheckBox();
+            lblConfigCustomFooter = new System.Windows.Forms.Label();
+            txtConfigCustomFooter = new System.Windows.Forms.TextBox();
+            lblConfigFooterIsHtml = new System.Windows.Forms.Label();
+            chkConfigFooterIsHtml = new System.Windows.Forms.CheckBox();
+            chkConfigConserveTreeWidth = new System.Windows.Forms.CheckBox();
+            chkConfigKeepSiblingOrder = new System.Windows.Forms.CheckBox();
+            gbMiniTreeColours = new System.Windows.Forms.GroupBox();
+            btnConfigMiniTreeColourIndiBackground = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColourIndiHighlight = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColourIndiBgConcealed = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColourIndiShade = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColourIndiText = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColourIndiLink = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColourBranch = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColourIndiBorder = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColourIndiFgConcealed = new System.Windows.Forms.Button();
+            chkConfigAllowMultimedia = new System.Windows.Forms.CheckBox();
+            chkConfigSupressBackreferences = new System.Windows.Forms.CheckBox();
+            lblConfigNoName = new System.Windows.Forms.Label();
+            txtConfigNoName = new System.Windows.Forms.TextBox();
+            gbConfigWithheldName = new System.Windows.Forms.GroupBox();
+            radConfigWithheldNameLabel = new System.Windows.Forms.RadioButton();
+            radConfigWithheldNameName = new System.Windows.Forms.RadioButton();
+            txtConfigWithheldName = new System.Windows.Forms.TextBox();
+            chkConfigCapNames = new System.Windows.Forms.CheckBox();
+            chkConfigCapEvents = new System.Windows.Forms.CheckBox();
+            chkConfigHideEmails = new System.Windows.Forms.CheckBox();
+            chkConfigOccupationHeadline = new System.Windows.Forms.CheckBox();
+            chkConfigShowWithheldRecords = new System.Windows.Forms.CheckBox(); ;
+            lblConfigTabSpaces = new System.Windows.Forms.Label();
+            txtConfigTabSpaces = new System.Windows.Forms.TextBox();
+            lblConfigCommentary = new System.Windows.Forms.Label();
+            lblConfigCommentaryIsHtml = new System.Windows.Forms.Label();
+            chkConfigCommentaryIsHtml = new System.Windows.Forms.CheckBox();
+            txtConfigCommentary = new System.Windows.Forms.TextBox();
+            lblConfigEmail = new System.Windows.Forms.Label();
+            txtConfigEmail = new System.Windows.Forms.TextBox();
+            lblConfigUserLink = new System.Windows.Forms.Label();
+            txtConfigUserLink = new System.Windows.Forms.TextBox();
+            txtConfigIndexName = new System.Windows.Forms.TextBox();
+            lblConfigIndexName = new System.Windows.Forms.Label();
+            lblConfigIndexNameExtn = new System.Windows.Forms.Label();
+            chkConfigPreserveFrontPage = new System.Windows.Forms.CheckBox();
+            txtConfigStylesheetName = new System.Windows.Forms.TextBox();
+            lblConfigStylesheetName = new System.Windows.Forms.Label();
+            lblConfigStylesheetNameExtn = new System.Windows.Forms.Label();
+            chkConfigPreserveStylesheet = new System.Windows.Forms.CheckBox();
+            chkConfigIncludeHelppage = new System.Windows.Forms.CheckBox();
+            chkConfigStats = new System.Windows.Forms.CheckBox();
+            chkConfigTreeDiagrams = new System.Windows.Forms.CheckBox();
+            chkConfigTreeDiagramsFakeBg = new System.Windows.Forms.CheckBox();
+            lblConfigTreeDiagramsFormat = new System.Windows.Forms.Label();
+            cmbConfigTreeDiagramsFormat = new System.Windows.Forms.ComboBox();
+            chkConfigMultiPageIndex = new System.Windows.Forms.CheckBox();
+            chkConfigUserRefInIndex = new System.Windows.Forms.CheckBox();
+            lblConfigMultiPageIndexNumber = new System.Windows.Forms.Label();
+            txtConfigMultiPageIndexNumber = new System.Windows.Forms.TextBox();
+            chkConfigIndiImages = new System.Windows.Forms.CheckBox();
+            chkConfigNonPictures = new System.Windows.Forms.CheckBox();
+            chkConfigCdrom = new System.Windows.Forms.CheckBox();
+            chkConfigRenameOriginals = new System.Windows.Forms.CheckBox();
+            chkConfigKeepOriginals = new System.Windows.Forms.CheckBox();
+            panelWelcome = new System.Windows.Forms.Panel();
+            pictureBoxWelcome = new System.Windows.Forms.PictureBox();
+            lblWelcomeVersion = new System.Windows.Forms.Label();
+            lblWelcomeSubtitle = new System.Windows.Forms.Label();
+            pictureBox = new System.Windows.Forms.PictureBox();
+            panelChooseGedcom = new System.Windows.Forms.Panel();
+            panelChooseOutput = new System.Windows.Forms.Panel();
+            txtChooseOutput = new System.Windows.Forms.TextBox();
+            lblChooseOutputInstructions = new System.Windows.Forms.Label();
+            lblChooseOutput = new System.Windows.Forms.Label();
+            btnChooseOutputBrowse = new System.Windows.Forms.Button();
+            lblChooseOutputContinue = new System.Windows.Forms.Label();
+            panelPruneRecords = new System.Windows.Forms.Panel();
+            lblPruneRecordsContinue = new System.Windows.Forms.Label();
+            lvPruneIndividuals = new GKUI.Components.GKListView();
+            lvPruneSources = new GKUI.Components.GKListView();
+            lblPruneRecordsInstructions = new System.Windows.Forms.Label();
+            lblPruneRecordsButtons = new System.Windows.Forms.Label();
+            panelSelectKey = new System.Windows.Forms.Panel();
+            tabcontrolConfigPanel = new System.Windows.Forms.TabControl();
+            tabcontrolPruneRecords = new System.Windows.Forms.TabControl();
+            lblSelectKey = new System.Windows.Forms.Label();
+            txtSelectKey = new System.Windows.Forms.TextBox();
+            lblSelectKeyInstructions = new System.Windows.Forms.Label();
+            lblSelectKeyIndividuals = new System.Windows.Forms.Label();
+            lstSelectKey = new System.Windows.Forms.ListBox();
+            btnSelectKeyAdd = new System.Windows.Forms.Button();
+            btnSelectKeyDelete = new System.Windows.Forms.Button();
+            panelAllDone = new System.Windows.Forms.Panel();
+            chkAllDoneShowSite = new System.Windows.Forms.CheckBox();
+            lblAllDone = new System.Windows.Forms.LinkLabel();
+            lblAllDoneThankYou = new System.Windows.Forms.Label();
+            lblAllDoneDirectory = new System.Windows.Forms.Label();
+            lblAllDoneStartFile = new System.Windows.Forms.Label();
+            menuPruneRecordsIndis = new System.Windows.Forms.ContextMenu();
+            menuPruneRecordsSources = new System.Windows.Forms.ContextMenu();
+            helpProvider = new System.Windows.Forms.HelpProvider();
+            pageSettingsWebpages = new System.Windows.Forms.TabPage();
+            pageSettingsImages = new System.Windows.Forms.TabPage();
+            pageSettingsGedcom = new System.Windows.Forms.TabPage();
+            pageSettingsTreeDiagrams = new System.Windows.Forms.TabPage();
+            pageSettingsAdvanced = new System.Windows.Forms.TabPage();
+            miPruneRecordsIndisDescendantsExc = new System.Windows.Forms.MenuItem();
+            miPruneRecordsIndisAncestorsExc = new System.Windows.Forms.MenuItem();
+            miPruneRecordsIndisDescendantsInc = new System.Windows.Forms.MenuItem();
+            miPruneRecordsIndisAncestorsInc = new System.Windows.Forms.MenuItem();
+            miPruneRecordsIndisUnconnected = new System.Windows.Forms.MenuItem();
+            miPruneRecordsIndisDetails = new System.Windows.Forms.MenuItem();
+            pagePruneRecordsIndis = new System.Windows.Forms.TabPage();
+            pagePruneRecordsSources = new System.Windows.Forms.TabPage();
+            miPruneRecordsSourcesDetails = new System.Windows.Forms.MenuItem();
+            miPruneRecordsSourcesRemovePics = new System.Windows.Forms.MenuItem();
+            N1 = new System.Windows.Forms.MenuItem();
+            N2 = new System.Windows.Forms.MenuItem();
+            N3 = new System.Windows.Forms.MenuItem();
+            N4 = new System.Windows.Forms.MenuItem();
+            N5 = new System.Windows.Forms.MenuItem();
+            pruneIndividualsContextMenuInclude = new System.Windows.Forms.MenuItem();
+            pruneIndividualsContextMenuExclude = new System.Windows.Forms.MenuItem();
+            pruneIndividualsContextMenuAlive = new System.Windows.Forms.MenuItem();
+            pruneSourcesContextMenuInclude = new System.Windows.Forms.MenuItem();
+            pruneSourcesContextMenuExclude = new System.Windows.Forms.MenuItem();
             panelWelcome.SuspendLayout();
             panelChooseGedcom.SuspendLayout();
             panelChooseOutput.SuspendLayout();
@@ -330,9 +357,6 @@ namespace GEDmill
             btnHelp.TabIndex = 11;
             btnHelp.Text = "&Help";
             btnHelp.Click += new System.EventHandler(btnHelp_click);
-            helpProvider.SetHelpKeyword(btnHelp, "HelpButtonHelpKeyword");
-            helpProvider.SetHelpNavigator(btnHelp, HelpNavigator.TableOfContents);
-            helpProvider.SetShowHelp(btnHelp, true);
             // 
             // btnSettings
             // 
@@ -425,42 +449,84 @@ namespace GEDmill
             lblPruneRecordsContinue.TabIndex = 5;
             lblPruneRecordsContinue.Text = "When you have finished selecting, click Next.";
             //
-            // m_pruneIndividualsContextMenu
+            // miPruneRecordsIndisDescendantsExc
             //
-            miPruneRecordsIndisDescendantsExc = new MenuItem("E&xclude all descendants of this person", new System.EventHandler(pruneIndividualsContextMenuDescendantsExc_Click));
-            miPruneRecordsIndisAncestorsExc = new MenuItem("Exclude all &ancestors of this person", new System.EventHandler(pruneIndividualsContextMenuAncestorsExc_Click));
-            miPruneRecordsIndisDescendantsInc = new MenuItem("In&clude all descendants of this person", new System.EventHandler(pruneIndividualsContextMenuDescendantsInc_Click));
-            miPruneRecordsIndisAncestorsInc = new MenuItem("Include all a&ncestors of this person", new System.EventHandler(pruneIndividualsContextMenuAncestorsInc_Click));
-            miPruneRecordsIndisUnconnected = new MenuItem("E&xclude individuals unless navigable from this person", new System.EventHandler(pruneIndividualsContextMenuUnconnected_Click));
-            miPruneRecordsIndisDetails = new MenuItem("&Details and pictures...", new System.EventHandler(pruneIndividualsContextMenuDetails_Click));
-
+            miPruneRecordsIndisDescendantsExc.Text = "E&xclude all descendants of this person";
+            miPruneRecordsIndisDescendantsExc.Click += new System.EventHandler(miPruneRecordsIndisDescendantsExc_Click);
+            //
+            // miPruneRecordsIndisDescendantsExc
+            //
+            miPruneRecordsIndisDescendantsExc.Text = "Exclude all &ancestors of this person";
+            miPruneRecordsIndisDescendantsExc.Click += new System.EventHandler(miPruneRecordsIndisAncestorsExc_Click);
+            //
+            // miPruneRecordsIndisDescendantsExc
+            //
+            miPruneRecordsIndisDescendantsExc.Text = "In&clude all descendants of this person";
+            miPruneRecordsIndisDescendantsExc.Click += new System.EventHandler(miPruneRecordsIndisDescendantsInc_Click);
+            //
+            // miPruneRecordsIndisDescendantsExc
+            //
+            miPruneRecordsIndisDescendantsExc.Text = "Include all a&ncestors of this person";
+            miPruneRecordsIndisDescendantsExc.Click += new System.EventHandler(miPruneRecordsIndisAncestorsInc_Click);
+            //
+            // miPruneRecordsIndisDescendantsExc
+            //
+            miPruneRecordsIndisDescendantsExc.Text = "E&xclude individuals unless navigable from this person";
+            miPruneRecordsIndisDescendantsExc.Click += new System.EventHandler(miPruneRecordsIndisUnconnected_Click);
+            //
+            // miPruneRecordsIndisDescendantsExc
+            //
+            miPruneRecordsIndisDescendantsExc.Text = "&Details and pictures...";
+            miPruneRecordsIndisDescendantsExc.Click += new System.EventHandler(miPruneRecordsIndisDetails_Click);
             //
             // menuPruneRecordsIndis
             //
+            pruneIndividualsContextMenuInclude.Text = "&Include everyone";
+            pruneIndividualsContextMenuInclude.Click += new System.EventHandler(pruneIndividualsContextMenuInclude_Click);
+
+            pruneIndividualsContextMenuExclude.Text = "&Exclude everyone";
+            pruneIndividualsContextMenuExclude.Click += new System.EventHandler(pruneIndividualsContextMenuExclude_Click);
+
+            pruneIndividualsContextMenuAlive.Text = "Exclude everyone still a&live (and those born in last 100 years)";
+            pruneIndividualsContextMenuAlive.Click += new System.EventHandler(pruneIndividualsContextMenuAlive_Click);
+
             menuPruneRecordsIndis.MenuItems.Add(miPruneRecordsIndisDetails);
-            menuPruneRecordsIndis.MenuItems.Add(new MenuItem("-"));
+            menuPruneRecordsIndis.MenuItems.Add(N3);
             menuPruneRecordsIndis.MenuItems.Add(miPruneRecordsIndisDescendantsExc);
             menuPruneRecordsIndis.MenuItems.Add(miPruneRecordsIndisDescendantsInc);
             menuPruneRecordsIndis.MenuItems.Add(miPruneRecordsIndisAncestorsExc);
             menuPruneRecordsIndis.MenuItems.Add(miPruneRecordsIndisAncestorsInc);
-            menuPruneRecordsIndis.MenuItems.Add(new MenuItem("-"));
-            menuPruneRecordsIndis.MenuItems.Add(new MenuItem("&Include everyone", new System.EventHandler(pruneIndividualsContextMenuInclude_Click)));
-            menuPruneRecordsIndis.MenuItems.Add(new MenuItem("&Exclude everyone", new System.EventHandler(pruneIndividualsContextMenuExclude_Click)));
-            menuPruneRecordsIndis.MenuItems.Add(new MenuItem("Exclude everyone still a&live (and those born in last 100 years)", new System.EventHandler(pruneIndividualsContextMenuAlive_Click)));
-            menuPruneRecordsIndis.MenuItems.Add(new MenuItem("-"));
+            menuPruneRecordsIndis.MenuItems.Add(N4);
+            menuPruneRecordsIndis.MenuItems.Add(pruneIndividualsContextMenuInclude);
+            menuPruneRecordsIndis.MenuItems.Add(pruneIndividualsContextMenuExclude);
+            menuPruneRecordsIndis.MenuItems.Add(pruneIndividualsContextMenuAlive);
+            menuPruneRecordsIndis.MenuItems.Add(N5);
             menuPruneRecordsIndis.MenuItems.Add(miPruneRecordsIndisUnconnected);
             menuPruneRecordsIndis.Popup += new System.EventHandler(menuPruneRecordsIndis_Popup);
+
+            miPruneRecordsSourcesDetails.Text = "&Details and pictures...";
+            miPruneRecordsSourcesDetails.Click += new System.EventHandler(pruneSourcesContextMenuDetails_Click);
+
+            miPruneRecordsSourcesRemovePics.Text = "&Remove pictures from selected sources";
+            miPruneRecordsSourcesRemovePics.Click += new System.EventHandler(pruneSourcesContextMenuRemovePics_Click);
+
+            N1.Text = "-";
+            N2.Text = "-";
+
+            pruneSourcesContextMenuInclude.Text = "&Include all sources";
+            pruneSourcesContextMenuInclude.Click += new System.EventHandler(pruneSourcesContextMenuInclude_Click);
+
+            pruneSourcesContextMenuExclude.Text = "&Exclude all sources";
+            pruneSourcesContextMenuExclude.Click += new System.EventHandler(pruneSourcesContextMenuExclude_Click);
 
             //
             // m_pruneSourcesContextMenu
             //
-            miPruneRecordsSourcesDetails = new MenuItem("&Details and pictures...", new System.EventHandler(pruneSourcesContextMenuDetails_Click));
             menuPruneRecordsSources.MenuItems.Add(miPruneRecordsSourcesDetails);
-            menuPruneRecordsSources.MenuItems.Add(new MenuItem("-"));
-            menuPruneRecordsSources.MenuItems.Add(new MenuItem("&Include all sources", new System.EventHandler(pruneSourcesContextMenuInclude_Click)));
-            menuPruneRecordsSources.MenuItems.Add(new MenuItem("&Exclude all sources", new System.EventHandler(pruneSourcesContextMenuExclude_Click)));
-            menuPruneRecordsSources.MenuItems.Add(new MenuItem("-"));
-            miPruneRecordsSourcesRemovePics = new MenuItem("&Remove pictures from selected sources", new System.EventHandler(pruneSourcesContextMenuRemovePics_Click));
+            menuPruneRecordsSources.MenuItems.Add(N1);
+            menuPruneRecordsSources.MenuItems.Add(pruneSourcesContextMenuInclude);
+            menuPruneRecordsSources.MenuItems.Add(pruneSourcesContextMenuExclude);
+            menuPruneRecordsSources.MenuItems.Add(N2);
             menuPruneRecordsSources.MenuItems.Add(miPruneRecordsSourcesRemovePics);
             menuPruneRecordsSources.Popup += new System.EventHandler(pruneSourcesContextMenu_popup);
 
@@ -471,9 +537,7 @@ namespace GEDmill
             tabcontrolPruneRecords.Name = "tabcontrolPruneRecords";
             tabcontrolPruneRecords.Size = new System.Drawing.Size(388, 207);
             tabcontrolPruneRecords.TabIndex = 4;
-            pagePruneRecordsIndis = new TabPage("Individuals");
             tabcontrolPruneRecords.TabPages.Add(pagePruneRecordsIndis);
-            pagePruneRecordsSources = new TabPage("Sources");
             tabcontrolPruneRecords.TabPages.Add(pagePruneRecordsSources);
 
             // 
@@ -484,12 +548,17 @@ namespace GEDmill
             lvPruneIndividuals.Name = "m_listviewPruneRecordsIndis";
             lvPruneIndividuals.Size = new System.Drawing.Size(381, 181);
             lvPruneIndividuals.TabIndex = 4;
-            lvPruneIndividuals.View = View.Details;
-            lvPruneIndividuals.ItemCheck += new ItemCheckEventHandler(lvPruneIndividuals_ItemCheck);
+            lvPruneIndividuals.View = System.Windows.Forms.View.Details;
+            lvPruneIndividuals.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(lvPruneIndividuals_ItemCheck);
             lvPruneIndividuals.ContextMenu = menuPruneRecordsIndis;
             lvPruneIndividuals.FullRowSelect = true;
             lvPruneIndividuals.GridLines = true;
             lvPruneIndividuals.AllowColumnReorder = true;
+
+            // 
+            // pagePruneRecordsIndis
+            // 
+            pagePruneRecordsIndis.Text = "Individuals";
             pagePruneRecordsIndis.Controls.Add(lvPruneIndividuals);
 
             // 
@@ -500,12 +569,17 @@ namespace GEDmill
             lvPruneSources.Name = "m_listviewPruneRecordsSources";
             lvPruneSources.Size = new System.Drawing.Size(381, 181);
             lvPruneSources.TabIndex = 4;
-            lvPruneSources.View = View.Details;
-            lvPruneSources.ItemCheck += new ItemCheckEventHandler(lvPruneSources_ItemCheck);
+            lvPruneSources.View = System.Windows.Forms.View.Details;
+            lvPruneSources.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(lvPruneSources_ItemCheck);
             lvPruneSources.ContextMenu = menuPruneRecordsSources;
             lvPruneSources.FullRowSelect = true;
             lvPruneSources.GridLines = true;
             lvPruneSources.AllowColumnReorder = true;
+
+            // 
+            // pagePruneRecordsSources
+            // 
+            pagePruneRecordsSources.Text = "Sources";
             pagePruneRecordsSources.Controls.Add(lvPruneSources);
 
             // 
@@ -528,7 +602,7 @@ namespace GEDmill
             lblPruneRecordsButtons.Text = "Right-click on the list for more options, including adding pictures...";
 
             // 
-            // Key Indidivuals panel
+            // panelSelectKey
             // 
             panelSelectKey.Controls.Add(lblSelectKey);
             panelSelectKey.Controls.Add(txtSelectKey);
@@ -538,66 +612,60 @@ namespace GEDmill
             panelSelectKey.Controls.Add(btnSelectKeyDelete);
             panelSelectKey.Controls.Add(lblSelectKeyInstructions);
             panelSelectKey.Location = new System.Drawing.Point(216, 0);
-            panelSelectKey.Name = "m_panelSelectKey";
+            panelSelectKey.Name = "panelSelectKey";
             panelSelectKey.Size = new System.Drawing.Size(280, 272);
             panelSelectKey.TabIndex = 12;
-
             // 
-            // Key Indidivuals EditLabel1
+            // lblSelectKey
             // 
             lblSelectKey.Location = new System.Drawing.Point(0, 120);
-            lblSelectKey.Name = "panel4EditLabel1";
+            lblSelectKey.Name = "lblSelectKey";
             lblSelectKey.Size = new System.Drawing.Size(184, 24);
             lblSelectKey.TabIndex = 2;
             lblSelectKey.Text = "&Website Title:";
             lblSelectKey.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             // 
-            // Key Indidivuals EditBox1
+            // txtSelectKey
             // 
             txtSelectKey.Location = new System.Drawing.Point(0, 144);
-            txtSelectKey.Name = "panel4EditBox1";
+            txtSelectKey.Name = "txtSelectKey";
             txtSelectKey.Size = new System.Drawing.Size(274, 20);
             txtSelectKey.TabIndex = 1;
             txtSelectKey.Text = "";
-
             // 
-            // Key Indidivuals Label
+            // lblSelectKeyIndividuals
             // 
             lblSelectKeyIndividuals.Location = new System.Drawing.Point(0, 182);
-            lblSelectKeyIndividuals.Name = "panel4KeyIndividualsLabel";
+            lblSelectKeyIndividuals.Name = "lblSelectKeyIndividuals";
             lblSelectKeyIndividuals.Size = new System.Drawing.Size(184, 24);
             lblSelectKeyIndividuals.TabIndex = 3;
             lblSelectKeyIndividuals.Text = "&Key Individuals:";
             lblSelectKeyIndividuals.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             // 
-            // Key Indidivuals ListBox
+            // lstSelectKey
             // 
             lstSelectKey.Location = new System.Drawing.Point(0, 206);
-            lstSelectKey.Name = "panel4KeyIndividualsListBox";
+            lstSelectKey.Name = "lstSelectKey";
             lstSelectKey.Size = new System.Drawing.Size(192, 68);
             lstSelectKey.TabIndex = 4;
             lstSelectKey.Text = "";
-            lstSelectKey.SelectedValueChanged += new System.EventHandler(listboxSelectKey_selectedValueChanged);
-
+            lstSelectKey.SelectedValueChanged += new System.EventHandler(lstSelectKey_SelectedValueChanged);
             // 
-            // Key Indidivuals Add Button
+            // btnSelectKeyAdd
             // 
             btnSelectKeyAdd.Location = new System.Drawing.Point(200, 206);
-            btnSelectKeyAdd.Name = "panel4KeyIndividualsAddButton";
+            btnSelectKeyAdd.Name = "btnSelectKeyAdd";
             btnSelectKeyAdd.TabIndex = 6;
             btnSelectKeyAdd.Text = "&Add...";
-            btnSelectKeyAdd.Click += new System.EventHandler(buttonSelectKeyAdd_click);
-
+            btnSelectKeyAdd.Click += new System.EventHandler(btnSelectKeyAdd_Click);
             // 
-            // Key Indidivuals Delete Button
+            // btnSelectKeyDelete
             // 
             btnSelectKeyDelete.Location = new System.Drawing.Point(200, 236);
-            btnSelectKeyDelete.Name = "panel4KeyIndividualsDeleteButton";
+            btnSelectKeyDelete.Name = "btnSelectKeyDelete";
             btnSelectKeyDelete.TabIndex = 7;
             btnSelectKeyDelete.Text = "&Remove";
-            btnSelectKeyDelete.Click += new System.EventHandler(buttonSelectKeyDelete_click);
+            btnSelectKeyDelete.Click += new System.EventHandler(btnSelectKeyDelete_Click);
 
             // 
             // Key Indidivuals Instruction Label
@@ -615,7 +683,7 @@ namespace GEDmill
             // 
             lblConfigCommentary.Location = new System.Drawing.Point(9, 0);
             lblConfigCommentary.Name = "m_labelConfigCommentary";
-            lblConfigCommentary.RightToLeft = RightToLeft.No;
+            lblConfigCommentary.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigCommentary.Size = new System.Drawing.Size(200, 24);
             lblConfigCommentary.TabIndex = 1;
             lblConfigCommentary.Text = "Commentary for &title page:";
@@ -636,7 +704,7 @@ namespace GEDmill
             // 
             lblConfigCommentaryIsHtml.Location = new System.Drawing.Point(9, 91);
             lblConfigCommentaryIsHtml.Name = "m_labelConfigCommentaryIsHtml";
-            lblConfigCommentaryIsHtml.RightToLeft = RightToLeft.No;
+            lblConfigCommentaryIsHtml.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigCommentaryIsHtml.Size = new System.Drawing.Size(8, 24);
             lblConfigCommentaryIsHtml.TabIndex = 3;
             lblConfigCommentaryIsHtml.Text = "(";
@@ -656,7 +724,7 @@ namespace GEDmill
             // 
             lblConfigUserLink.Location = new System.Drawing.Point(9, 121);
             lblConfigUserLink.Name = "m_labelConfigUserLink";
-            lblConfigUserLink.RightToLeft = RightToLeft.No;
+            lblConfigUserLink.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigUserLink.Size = new System.Drawing.Size(260, 24);
             lblConfigUserLink.TabIndex = 5;
             lblConfigUserLink.Text = "&Link to your website: (with http:// prefix)";
@@ -677,7 +745,7 @@ namespace GEDmill
             // 
             lblConfigCustomFooter.Location = new System.Drawing.Point(9, 172);
             lblConfigCustomFooter.Name = "m_labelConfigCustomFooter";
-            lblConfigCustomFooter.RightToLeft = RightToLeft.No;
+            lblConfigCustomFooter.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigCustomFooter.Size = new System.Drawing.Size(224, 24);
             lblConfigCustomFooter.TabIndex = 8;
             lblConfigCustomFooter.Text = "Te&xt for page footer:";
@@ -697,7 +765,7 @@ namespace GEDmill
             // 
             lblConfigFooterIsHtml.Location = new System.Drawing.Point(9, 213);
             lblConfigFooterIsHtml.Name = "m_labelConfigFooterIsHtml";
-            lblConfigFooterIsHtml.RightToLeft = RightToLeft.No;
+            lblConfigFooterIsHtml.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigFooterIsHtml.Size = new System.Drawing.Size(8, 24);
             lblConfigFooterIsHtml.TabIndex = 10;
             lblConfigFooterIsHtml.Text = "(";
@@ -754,7 +822,7 @@ namespace GEDmill
             // 
             lblConfigMultiPageIndexNumber.Location = new System.Drawing.Point(266, 96);
             lblConfigMultiPageIndexNumber.Name = "m_labelConfigMultiPageIndexNumber";
-            lblConfigMultiPageIndexNumber.RightToLeft = RightToLeft.No;
+            lblConfigMultiPageIndexNumber.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigMultiPageIndexNumber.Size = new System.Drawing.Size(170, 24);
             lblConfigMultiPageIndexNumber.TabIndex = 16;
             lblConfigMultiPageIndexNumber.Text = "&Individuals per index page:";
@@ -774,7 +842,7 @@ namespace GEDmill
             // 
             lblConfigIndexName.Location = new System.Drawing.Point(266, 126);
             lblConfigIndexName.Name = "m_labelConfigIndexName";
-            lblConfigIndexName.RightToLeft = RightToLeft.No;
+            lblConfigIndexName.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigIndexName.Size = new System.Drawing.Size(224, 20);
             lblConfigIndexName.TabIndex = 18;
             lblConfigIndexName.Text = "Name of &front page file:";
@@ -795,7 +863,7 @@ namespace GEDmill
             // 
             lblConfigIndexNameExtn.Location = new System.Drawing.Point(440, 141);
             lblConfigIndexNameExtn.Name = "m_labelConfigIndexNameExtn";
-            lblConfigIndexNameExtn.RightToLeft = RightToLeft.No;
+            lblConfigIndexNameExtn.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigIndexNameExtn.Size = new System.Drawing.Size(60, 24);
             lblConfigIndexNameExtn.TabIndex = 20;
             lblConfigIndexNameExtn.Text = ""; //Filled programatically
@@ -815,7 +883,7 @@ namespace GEDmill
             // 
             lblConfigEmail.Location = new System.Drawing.Point(266, 190);
             lblConfigEmail.Name = "m_labelConfigEmail";
-            lblConfigEmail.RightToLeft = RightToLeft.No;
+            lblConfigEmail.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigEmail.Size = new System.Drawing.Size(220, 24);
             lblConfigEmail.TabIndex = 22;
             lblConfigEmail.Text = "&Email address to put on front page:";
@@ -1094,7 +1162,7 @@ namespace GEDmill
             // 
             lblConfigTabSpaces.Location = new System.Drawing.Point(6, 0);
             lblConfigTabSpaces.Name = "m_labelConfigTabSpaces";
-            lblConfigTabSpaces.RightToLeft = RightToLeft.No;
+            lblConfigTabSpaces.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigTabSpaces.Size = new System.Drawing.Size(188, 24);
             lblConfigTabSpaces.TabIndex = 1;
             lblConfigTabSpaces.Text = "&Num spaces to replace tabs:";
@@ -1114,7 +1182,7 @@ namespace GEDmill
             // 
             lblConfigNoName.Location = new System.Drawing.Point(6, 24);
             lblConfigNoName.Name = "m_labelConfigNoName";
-            lblConfigNoName.RightToLeft = RightToLeft.No;
+            lblConfigNoName.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigNoName.Size = new System.Drawing.Size(200, 24);
             lblConfigNoName.TabIndex = 3;
             lblConfigNoName.Text = "Show &missing names as:";
@@ -1147,14 +1215,14 @@ namespace GEDmill
             gbConfigWithheldName.Size = new System.Drawing.Size(228, 104);
             gbConfigWithheldName.TabIndex = 6;
             gbConfigWithheldName.Text = "Label w&ithheld records with:";
-            gbConfigWithheldName.FlatStyle = FlatStyle.System;
+            gbConfigWithheldName.FlatStyle = System.Windows.Forms.FlatStyle.System;
 
             // 
             // configPanel_WithheldName_Label (GEDCOM)
             // 
             radConfigWithheldNameLabel.Location = new System.Drawing.Point(10, 18);
             radConfigWithheldNameLabel.Name = "m_radiobuttonConfigWithheldNameLabel";
-            radConfigWithheldNameLabel.RightToLeft = RightToLeft.No;
+            radConfigWithheldNameLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
             radConfigWithheldNameLabel.Size = new System.Drawing.Size(180, 20);
             radConfigWithheldNameLabel.TabIndex = 7;
             radConfigWithheldNameLabel.Text = "this &text:";
@@ -1174,7 +1242,7 @@ namespace GEDmill
             // 
             radConfigWithheldNameName.Location = new System.Drawing.Point(10, 72);
             radConfigWithheldNameName.Name = "m_radiobuttonConfigWithheldNameName";
-            radConfigWithheldNameName.RightToLeft = RightToLeft.No;
+            radConfigWithheldNameName.RightToLeft = System.Windows.Forms.RightToLeft.No;
             radConfigWithheldNameName.Size = new System.Drawing.Size(180, 20);
             radConfigWithheldNameName.TabIndex = 9;
             radConfigWithheldNameName.Text = "the individual's n&ame";
@@ -1231,7 +1299,7 @@ namespace GEDmill
             // 
             lblConfigTreeDiagramsFormat.Location = new System.Drawing.Point(22, 25);
             lblConfigTreeDiagramsFormat.Name = "m_labelConfigTreeDiagramsFormat";
-            lblConfigTreeDiagramsFormat.RightToLeft = RightToLeft.No;
+            lblConfigTreeDiagramsFormat.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigTreeDiagramsFormat.Size = new System.Drawing.Size(134, 24);
             lblConfigTreeDiagramsFormat.TabIndex = 3;
             lblConfigTreeDiagramsFormat.Text = "&File format:";
@@ -1245,7 +1313,7 @@ namespace GEDmill
             cmbConfigTreeDiagramsFormat.Size = new System.Drawing.Size(85, 20);
             cmbConfigTreeDiagramsFormat.TabIndex = 4;
             cmbConfigTreeDiagramsFormat.DropDownWidth = 40;
-            cmbConfigTreeDiagramsFormat.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbConfigTreeDiagramsFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             //
             // configPanel_TreeDiagramsFakeBG_CheckBox (Tree Diagrams)
             // 
@@ -1278,7 +1346,7 @@ namespace GEDmill
             gbMiniTreeColours.Size = new System.Drawing.Size(230, 224);
             gbMiniTreeColours.TabIndex = 8;
             gbMiniTreeColours.Text = "Colours";
-            gbMiniTreeColours.FlatStyle = FlatStyle.System;
+            gbMiniTreeColours.FlatStyle = System.Windows.Forms.FlatStyle.System;
             //
             // configPanel_MiniTreeColourIndiHighlight_Button (Tree Diagrams)
             // 
@@ -1366,7 +1434,7 @@ namespace GEDmill
             // 
             lblConfigHtmlExtn.Location = new System.Drawing.Point(9, 54);
             lblConfigHtmlExtn.Name = "m_labelConfigHtmlExtn";
-            lblConfigHtmlExtn.RightToLeft = RightToLeft.No;
+            lblConfigHtmlExtn.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigHtmlExtn.Size = new System.Drawing.Size(140, 24);
             lblConfigHtmlExtn.TabIndex = 4;
             lblConfigHtmlExtn.Text = "H&TML file extension:";
@@ -1379,7 +1447,7 @@ namespace GEDmill
             cmbConfigHtmlExtn.Size = new System.Drawing.Size(85, 20);
             cmbConfigHtmlExtn.TabIndex = 5;
             cmbConfigHtmlExtn.DropDownWidth = 40;
-            cmbConfigHtmlExtn.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbConfigHtmlExtn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             //
             // configPanel_W3C_CheckBox (Advanced)
             // 
@@ -1409,7 +1477,7 @@ namespace GEDmill
             // 
             lblConfigStylesheetName.Location = new System.Drawing.Point(266, 0);
             lblConfigStylesheetName.Name = "m_labelConfigStylesheetName";
-            lblConfigStylesheetName.RightToLeft = RightToLeft.No;
+            lblConfigStylesheetName.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigStylesheetName.Size = new System.Drawing.Size(224, 24);
             lblConfigStylesheetName.TabIndex = 9;
             lblConfigStylesheetName.Text = "Name of st&ylesheet:";
@@ -1428,7 +1496,7 @@ namespace GEDmill
             // 
             lblConfigStylesheetNameExtn.Location = new System.Drawing.Point(440, 27);
             lblConfigStylesheetNameExtn.Name = "m_labelConfigStylesheetNameExtn";
-            lblConfigStylesheetNameExtn.RightToLeft = RightToLeft.No;
+            lblConfigStylesheetNameExtn.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigStylesheetNameExtn.Size = new System.Drawing.Size(60, 24);
             lblConfigStylesheetNameExtn.TabIndex = 11;
             lblConfigStylesheetNameExtn.Text = ".css";
@@ -1475,7 +1543,7 @@ namespace GEDmill
             // 
             lblChooseOutput.Location = new System.Drawing.Point(0, 96);
             lblChooseOutput.Name = "m_labelChooseOutput";
-            lblChooseOutput.RightToLeft = RightToLeft.No;
+            lblChooseOutput.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblChooseOutput.Size = new System.Drawing.Size(152, 24);
             lblChooseOutput.TabIndex = 5;
             lblChooseOutput.Text = "&Folder:";
@@ -1535,7 +1603,7 @@ namespace GEDmill
             lblAllDone.TabStop = true;
             lblAllDone.Text = "<path>";
             lblAllDone.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            lblAllDone.LinkClicked += new LinkLabelLinkClickedEventHandler(linklabelAllDone_click);
+            lblAllDone.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(linklabelAllDone_click);
             // 
             // m_labelAllDoneThankYou
             // 
@@ -1622,12 +1690,15 @@ namespace GEDmill
             // 
             // tabPageSettingsGedcom
             // 
-            pageSettingsGedcom.Text = "GEDCOM";
-            pageSettingsGedcom.Controls.Add(lblConfigNoName);
-            pageSettingsGedcom.Controls.Add(txtConfigNoName);
             gbConfigWithheldName.Controls.Add(radConfigWithheldNameLabel);
             gbConfigWithheldName.Controls.Add(txtConfigWithheldName);
             gbConfigWithheldName.Controls.Add(radConfigWithheldNameName);
+            // 
+            // tabPageSettingsGedcom
+            // 
+            pageSettingsGedcom.Text = "GEDCOM";
+            pageSettingsGedcom.Controls.Add(lblConfigNoName);
+            pageSettingsGedcom.Controls.Add(txtConfigNoName);
             pageSettingsGedcom.Controls.Add(gbConfigWithheldName);
             pageSettingsGedcom.Controls.Add(chkConfigCapNames);
             pageSettingsGedcom.Controls.Add(chkConfigCapEvents);
@@ -1639,13 +1710,6 @@ namespace GEDmill
             // 
             // tabPageSettingsTreeDiagrams
             // 
-            pageSettingsTreeDiagrams.Text = "Tree Diagrams";
-            pageSettingsTreeDiagrams.Controls.Add(chkConfigTreeDiagrams);
-            pageSettingsTreeDiagrams.Controls.Add(chkConfigTreeDiagramsFakeBg);
-            pageSettingsTreeDiagrams.Controls.Add(lblConfigTreeDiagramsFormat);
-            pageSettingsTreeDiagrams.Controls.Add(cmbConfigTreeDiagramsFormat);
-            pageSettingsTreeDiagrams.Controls.Add(chkConfigConserveTreeWidth);
-            pageSettingsTreeDiagrams.Controls.Add(chkConfigKeepSiblingOrder);
             gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiBackground);
             gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiHighlight);
             gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiBgConcealed);
@@ -1655,9 +1719,19 @@ namespace GEDmill
             gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourBranch);
             gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiBorder);
             gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiFgConcealed);
+            // 
+            // pageSettingsTreeDiagrams
+            // 
+            pageSettingsTreeDiagrams.Text = "Tree Diagrams";
+            pageSettingsTreeDiagrams.Controls.Add(chkConfigTreeDiagrams);
+            pageSettingsTreeDiagrams.Controls.Add(chkConfigTreeDiagramsFakeBg);
+            pageSettingsTreeDiagrams.Controls.Add(lblConfigTreeDiagramsFormat);
+            pageSettingsTreeDiagrams.Controls.Add(cmbConfigTreeDiagramsFormat);
+            pageSettingsTreeDiagrams.Controls.Add(chkConfigConserveTreeWidth);
+            pageSettingsTreeDiagrams.Controls.Add(chkConfigKeepSiblingOrder);
             pageSettingsTreeDiagrams.Controls.Add(gbMiniTreeColours);
             // 
-            // tabPageSettingsAdvanced
+            // pageSettingsAdvanced
             // 
             pageSettingsAdvanced.Text = "Advanced";
             pageSettingsAdvanced.Controls.Add(lblConfigHtmlExtn);
@@ -1671,7 +1745,7 @@ namespace GEDmill
             pageSettingsAdvanced.Controls.Add(chkConfigSupressBackreferences);
             pageSettingsAdvanced.Controls.Add(chkConfigIncludeHelppage);
             // 
-            // m_tabcontrolConfigPanel
+            // tabcontrolConfigPanel
             // 
             tabcontrolConfigPanel.TabPages.Add(pageSettingsWebpages);
             tabcontrolConfigPanel.TabPages.Add(pageSettingsImages);
@@ -1679,13 +1753,13 @@ namespace GEDmill
             tabcontrolConfigPanel.TabPages.Add(pageSettingsTreeDiagrams);
             tabcontrolConfigPanel.TabPages.Add(pageSettingsAdvanced);
             tabcontrolConfigPanel.Location = new System.Drawing.Point(0, 0);
-            tabcontrolConfigPanel.Name = "configTabs";
+            tabcontrolConfigPanel.Name = "tabcontrolConfigPanel";
             tabcontrolConfigPanel.Size = new System.Drawing.Size(507, 272);
             tabcontrolConfigPanel.TabIndex = 12;
             // 
             // MainForm
             // 
-            AutoScaleMode = AutoScaleMode.None;
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             ClientSize = new System.Drawing.Size(506, 320);
             Controls.Add(panelWelcome);
@@ -1702,17 +1776,17 @@ namespace GEDmill
             Controls.Add(btnBack);
             Controls.Add(btnNext);
             Controls.Add(pictureBox);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             Icon = ((System.Drawing.Icon)(resources.GetObject("$Icon")));
             MaximizeBox = false;
             MaximumSize = new System.Drawing.Size(512, 355);
             MinimizeBox = false;
             MinimumSize = new System.Drawing.Size(512, 355);
             Name = "MainForm";
-            StartPosition = FormStartPosition.CenterParent;
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             Text = "GEDmill";
-            this.Closed += new System.EventHandler(this.Widget_Closed);
-            this.Load += new System.EventHandler(this.Widget_Load);
+            this.Closed += new System.EventHandler(this.MainForm_Closed);
+            this.Load += new System.EventHandler(this.MainForm_Load);
 
             panelWelcome.ResumeLayout(false);
             panelChooseGedcom.ResumeLayout(false);

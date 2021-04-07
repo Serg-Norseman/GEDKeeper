@@ -51,7 +51,7 @@ namespace GEDmill.HTML
         // The heart of GEDmill is here.
         public void Create()
         {
-            fLogger.WriteInfo("CWebsite::Create()");
+            fLogger.WriteInfo("Website::Create()");
 
             // 1 means the process was aborted, for signalling back to calling thread. 2 means file nError.      
             ThreadError threaderror = new ThreadError(1, "No error");
@@ -198,7 +198,7 @@ namespace GEDmill.HTML
                 fProgressWindow.SetText("Creating help page");
                 string help_page_filename = string.Concat(CConfig.Instance.OutputFolder, "\\", "help.", CConfig.Instance.HtmlExtension);
                 if (CConfig.Instance.IncludeHelpPage) {
-                    CreatorHelpPage hpc = new CreatorHelpPage(fTree, fProgressWindow, sW3CFilename);
+                    var hpc = new CreatorHelpPage(fTree, fProgressWindow, sW3CFilename);
                     hpc.Create();
                 }
                 fProgressWindow.StepTo(++nProgress);
@@ -230,7 +230,7 @@ namespace GEDmill.HTML
                 fProgressWindow.StepTo(++nProgress);
 
                 // Done
-                fLogger.WriteInfo("Finished");
+                fLogger.WriteInfo("Website::CreateFinished");
                 fProgressWindow.SetText("Done");
                 threaderror.Error = 0;
                 threaderror.Message = "";

@@ -29,8 +29,10 @@ using GEDmill.ListView;
 using GEDmill.MiniTree;
 using GEDmill.Model;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Logging;
+using GKCore.Types;
 using GKUI.Components;
 
 namespace GEDmill
@@ -88,6 +90,8 @@ namespace GEDmill
         // Constructor. Initialise and create GUI.
         public MainForm()
         {
+            InitializeComponent();
+
             fLogger.WriteInfo(CConfig.SoftwareName + " started at " + DateTime.Now.ToString());
 
             // Set some values that scale the size of the GUI
@@ -97,8 +101,9 @@ namespace GEDmill
             // Read back any previously stored settings.
             CConfig.Instance.Load();
 
-            // Creates the entire GUI
-            InitializeComponent();
+            helpProvider.SetHelpKeyword(btnHelp, "HelpButtonHelpKeyword");
+            helpProvider.SetHelpNavigator(btnHelp, HelpNavigator.TableOfContents);
+            helpProvider.SetShowHelp(btnHelp, true);
 
             fColorDialogConfigMiniTree = new ColorDialog();
             fColorDialogConfigMiniTree.FullOpen = true;
@@ -136,13 +141,13 @@ namespace GEDmill
             base.Dispose(disposing);
         }
 
-        private void Widget_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
             fPlugin.Host.WidgetShow(fPlugin);
             BaseChanged(fPlugin.Host.GetCurrentFile());
         }
 
-        private void Widget_Closed(object sender, EventArgs e)
+        private void MainForm_Closed(object sender, EventArgs e)
         {
             BaseChanged(null);
             fPlugin.Host.WidgetClose(fPlugin);
@@ -362,53 +367,32 @@ namespace GEDmill
             EnableNextButton();
         }
 
-        private void listboxSelectKey_selectedValueChanged(object sender, EventArgs e)
+        private void lstSelectKey_SelectedValueChanged(object sender, EventArgs e)
         {
             EnableKeyIndividualsDeleteButton();
         }
 
-        private void buttonSelectKeyAdd_click(object sender, EventArgs e)
+        private void btnSelectKeyAdd_Click(object sender, EventArgs e)
         {
-            /*// Use a dialog box to let them choose an individual
-            IndividualBrowserDialog individualBrowserDialog = new IndividualBrowserDialog(this, false);
-
-            FillIndividualsList(individualBrowserDialog.m_sortableListView, false, null, false);
-            DialogResult dialogResult = individualBrowserDialog.ShowDialog(this);
-            if (dialogResult != DialogResult.OK) {
-                return;
-            }
-
-            GDMIndividualRecord ir = individualBrowserDialog.FirstSelectedIndividual;
+            // Use a dialog box to let them choose an individual
+            GDMIndividualRecord indiRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
+            if (indiRec == null) return;
 
             // Ensure they are only added once
-            bool bAlreadyAdded = false;
-            foreach (string keyXref in s_config.m_alKeyIndividuals) {
-                if (keyXref == ir.XRef) {
-                    bAlreadyAdded = true;
-                    break;
-                }
+            bool alreadyAdded = CConfig.Instance.KeyIndividuals.Contains(indiRec.XRef);
+            if (!alreadyAdded) {
+                CConfig.Instance.KeyIndividuals.Add(indiRec.XRef);
+                FillKeyIndividualsList();
             }
-            if (!bAlreadyAdded) {
-                s_config.m_alKeyIndividuals.Add(ir.XRef);
-            }
-
-            FillKeyIndividualsList();*/
         }
 
-        private void buttonSelectKeyDelete_click(object sender, EventArgs e)
+        private void btnSelectKeyDelete_Click(object sender, EventArgs e)
         {
-            NameXRefPair xrefPairName = (NameXRefPair)lstSelectKey.SelectedItem;
+            NameXRefPair xrefPairName = lstSelectKey.SelectedItem as NameXRefPair;
             if (xrefPairName != null) {
                 string xref = xrefPairName.XRef;
-                if (xref != null) {
-                    int nIndex;
-                    int nKeys = CConfig.Instance.KeyIndividuals.Count;
-                    for (nIndex = 0; nIndex < nKeys; nIndex++) {
-                        if (xref == CConfig.Instance.KeyIndividuals[nIndex]) {
-                            CConfig.Instance.KeyIndividuals.RemoveAt(nIndex);
-                            break;
-                        }
-                    }
+                if (!string.IsNullOrEmpty(xref)) {
+                    CConfig.Instance.KeyIndividuals.Remove(xref);
                 }
                 FillKeyIndividualsList();
             }
@@ -675,33 +659,25 @@ namespace GEDmill
             EnableWithheldConfig();
         }
 
-        private void pruneIndividualsContextMenuDetails_Click(Object sender, EventArgs e)
+        private void miPruneRecordsIndisDetails_Click(Object sender, EventArgs e)
         {
-            GDMIndividualRecord ir = null;
-            CListableBool lb = null;
-
             if (lvPruneIndividuals.SelectedItems.Count == 1) {
-                lb = (CListableBool)lvPruneIndividuals.SelectedItems[0];
-                ir = (GDMIndividualRecord)lb.Record;
+                var lb = (CListableBool)lvPruneIndividuals.SelectedItems[0];
+                var ir = lb.Record as GDMIndividualRecord;
+                BaseController.ViewRecordInfo(fBase, ir);
             }
-
-            ShowIndividualDetailsDialog(this, lb, ir, true, true);
         }
 
         private void pruneSourcesContextMenuDetails_Click(Object sender, EventArgs e)
         {
-            GDMSourceRecord sr = null;
-            ListViewItem lvi = null;
-
             if (lvPruneSources.SelectedItems.Count == 1) {
-                lvi = lvPruneSources.SelectedItems[0];
-                sr = (GDMSourceRecord)((CListableBool)lvi).Record;
+                var lvi = (CListableBool)lvPruneSources.SelectedItems[0];
+                var sr = lvi.Record as GDMSourceRecord;
+                BaseController.ViewRecordInfo(fBase, sr);
             }
-
-            ShowSourceDetailsDialog(this, ((CListableBool)lvi), sr, true, true);
         }
 
-        private void pruneIndividualsContextMenuUnconnected_Click(Object sender, EventArgs e)
+        private void miPruneRecordsIndisUnconnected_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
@@ -737,7 +713,7 @@ namespace GEDmill
             ShowPruneResult(PruneExcluded, PruneIncluded, "individual");
         }
 
-        private void pruneIndividualsContextMenuDescendantsExc_Click(Object sender, EventArgs e)
+        private void miPruneRecordsIndisDescendantsExc_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
@@ -769,7 +745,7 @@ namespace GEDmill
             ShowPruneResult(PruneExcluded, PruneIncluded, "individual");
         }
 
-        private void pruneIndividualsContextMenuDescendantsInc_Click(Object sender, EventArgs e)
+        private void miPruneRecordsIndisDescendantsInc_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
@@ -801,7 +777,7 @@ namespace GEDmill
             ShowPruneResult(PruneExcluded, PruneIncluded, "individual");
         }
 
-        private void pruneIndividualsContextMenuAncestorsExc_Click(Object sender, EventArgs e)
+        private void miPruneRecordsIndisAncestorsExc_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
@@ -833,7 +809,7 @@ namespace GEDmill
             ShowPruneResult(PruneExcluded, PruneIncluded, "individual");
         }
 
-        private void pruneIndividualsContextMenuAncestorsInc_Click(Object sender, EventArgs e)
+        private void miPruneRecordsIndisAncestorsInc_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
@@ -1109,11 +1085,6 @@ namespace GEDmill
         }
 
         #endregion
-
-        // Brings up a CRecordDetailsForm for the given individual
-        public void ShowIndividualDetailsDialog(Form formParent, CListableBool lbItem, GDMIndividualRecord ir, bool bCanEditPictures, bool bCheckBoxes)
-        {
-        }
 
         // Shows the settings panel
         private void SwitchConfigPanelOn()
@@ -1763,11 +1734,6 @@ namespace GEDmill
             pictureBox.Enabled = enable;
         }
 
-        // Displays useful information about a source record in a dialog box
-        private void ShowSourceDetailsDialog(Form formParent, CListableBool lbItem, GDMSourceRecord sr, bool bCanEditPictures, bool bFirstColumnIsCheckbox)
-        {
-        }
-
         // Reports any exception thrown during the prune operation
         private void ReportPruneError(Exception e)
         {
@@ -2161,40 +2127,30 @@ namespace GEDmill
         // Populates the list box of individuals to link from the front page
         private void FillKeyIndividualsList()
         {
-            if (CConfig.Instance.KeyIndividuals == null) {
-                return;
-            }
-
+            if (CConfig.Instance.KeyIndividuals == null) return;
             fLogger.WriteInfo("FillKeyIndividualsList() : " + CConfig.Instance.KeyIndividuals.Count.ToString());
-
-            string sSurname;
-            string sFirstName;
-            string sFullName;
 
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
-
-            lstSelectKey.Items.Clear();
-
-            if (CConfig.Instance.KeyIndividuals != null) {
+            try {
+                lstSelectKey.Items.Clear();
                 foreach (string xref in CConfig.Instance.KeyIndividuals) {
-                    GDMIndividualRecord irKey = fBase.Context.Tree.XRefIndex_Find(xref) as GDMIndividualRecord;
-                    if (irKey != null && irKey.GetVisibility()) {
-                        sFirstName = "";
-                        sSurname = "";
-                        sFullName = GMHelper.CapitaliseName(irKey.GetPrimaryFullName(), ref sFirstName, ref sSurname);
-                        if (sFullName == "") {
-                            sFullName = CConfig.Instance.UnknownName;
+                    GDMIndividualRecord indiRec = fBase.Context.Tree.FindXRef<GDMIndividualRecord>(xref);
+                    if (indiRec != null && indiRec.GetVisibility()) {
+                        string firstName = "";
+                        string surname = "";
+                        string fullName = GMHelper.CapitaliseName(indiRec.GetPrimaryFullName(), ref firstName, ref surname);
+                        if (string.IsNullOrEmpty(fullName)) {
+                            fullName = CConfig.Instance.UnknownName;
                         }
-                        lstSelectKey.Items.Add(new NameXRefPair(sFullName, xref));
+                        lstSelectKey.Items.Add(new NameXRefPair(fullName, xref));
                     }
                 }
+            } finally {
+                EnableKeyIndividualsDeleteButton();
+                Cursor.Current = Cursors.Default;
+                Cursor.Hide();
             }
-
-            EnableKeyIndividualsDeleteButton();
-
-            Cursor.Current = Cursors.Default;
-            Cursor.Hide();
         }
 
         // Creates output directory, deleting old ones if required, leaving them place if required.

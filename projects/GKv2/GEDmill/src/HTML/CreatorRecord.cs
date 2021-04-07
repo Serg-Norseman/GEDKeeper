@@ -248,5 +248,26 @@ namespace GEDmill.HTML
                 }
             }
         }
+
+        protected string GetNoteText(GDMNotes ns)
+        {
+            GDMLines noteLines = fTree.GetNoteLines(ns);
+            string result;
+            if (CConfig.Instance.ObfuscateEmails) {
+                result = ObfuscateEmail(noteLines.Text);
+            } else {
+                result = noteLines.Text;
+            }
+
+            return result;
+        }
+
+        public void WriteNotes(HTMLFile f, GDMNotes ns)
+        {
+            if (ns != null) {
+                string noteText = GetNoteText(ns);
+                f.WriteLine("<p>{0}</p>", EscapeHTML(noteText, false));
+            }
+        }
     }
 }

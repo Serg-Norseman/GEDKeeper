@@ -19,10 +19,14 @@
  */
 
 using System;
+using System.Drawing;
+using System.Reflection;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
+using SDIcon = System.Drawing.Icon;
 
 namespace GEDmill
 {
@@ -47,10 +51,11 @@ namespace GEDmill
     {
         private string fDisplayName = "Website Generator (GEDmill)";
         private ILangMan fLangMan;
+        private IImage fIcon;
 
         public override string DisplayName { get { return fDisplayName; } }
         public override ILangMan LangMan { get { return fLangMan; } }
-        public override IImage Icon { get { return null; } }
+        public override IImage Icon { get { return fIcon; } }
         public override PluginCategory Category { get { return PluginCategory.Report; } }
 
         private MainForm fForm;
@@ -91,6 +96,22 @@ namespace GEDmill
             } catch (Exception ex) {
                 Logger.WriteError("GEDmillPlugin.OnLanguageChange()", ex);
             }
+        }
+
+        public override bool Startup(IHost host)
+        {
+            bool result = base.Startup(host);
+            try {
+                Assembly assembly = typeof(Plugin).Assembly;
+                using (var appIcon = SDIcon.ExtractAssociatedIcon(assembly.Location)) {
+                    Image bmp = appIcon.ToBitmap();
+                    fIcon = new ImageHandler(bmp);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GEDmillPlugin.Startup()", ex);
+                result = false;
+            }
+            return result;
         }
 
         public override bool Shutdown()
