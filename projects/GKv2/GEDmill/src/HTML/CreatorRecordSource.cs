@@ -154,16 +154,16 @@ namespace GEDmill.HTML
                 // Add notes
                 OutputNotes(f, fSourceRecord.Notes);
 
-                if (CConfig.Instance.SupressBackreferences == false) {
+                if (!CConfig.Instance.SupressBackreferences) {
                     f.WriteLine("        <div id=\"citations\">");
                     f.WriteLine("          <h1>Citations</h1>");
                     f.WriteLine("          <ul>");
 
-                    var htBackrefs = fSourceRecord.MakeBackReferences();
+                    var htBackrefs = GMHelper.MakeBackReferences(fSourceRecord);
                     IDictionaryEnumerator enumerator = htBackrefs.GetEnumerator();
                     while (enumerator.MoveNext()) {
                         GDMIndividualRecord ir = (GDMIndividualRecord)(enumerator.Value);
-                        if (ir != null && ir.GetVisibility()) {
+                        if (ir != null && GMHelper.GetVisibility(ir)) {
                             string link = MakeLink(ir);
                             if (link != "") {
                                 f.WriteLine("<li>{0}</li>", link);

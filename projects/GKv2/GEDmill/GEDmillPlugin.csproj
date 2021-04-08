@@ -86,7 +86,6 @@
     <Compile Include="src\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Extensions.cs" />
     <Compile Include="src\GMHelper.cs" />
     <Compile Include="src\HTML\HTMLException.cs">
       <SubType>Code</SubType>

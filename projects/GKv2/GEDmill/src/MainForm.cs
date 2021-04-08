@@ -694,12 +694,12 @@ namespace GEDmill
                         if (ir != null) {
                             // First mark as visited all possible relations of irSubject, not following restricted people
                             // Adds to visited list
-                            fBase.Context.Tree.PruneMarkConnected(ir, marks);
+                            GMHelper.MarkConnected(fBase.Context.Tree, ir, marks);
                         }
                     }
                 }
                 // Then exclude all unmarked individuals (i.e. not in visited list)
-                fBase.Context.Tree.PruneUnmarked(marks);
+                GMHelper.RestrictUnmarked(fBase.Context.Tree, marks);
             } catch (Exception ex) {
                 ReportPruneError(ex);
             }
@@ -728,7 +728,7 @@ namespace GEDmill
                     if (lvi is CListableBool) {
                         GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
-                            fBase.Context.Tree.PruneDescendants(ir, false);
+                            GMHelper.RestrictDescendants(fBase.Context.Tree, ir, false);
                         }
                     }
                 }
@@ -760,7 +760,7 @@ namespace GEDmill
                     if (lvi is CListableBool) {
                         GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
-                            fBase.Context.Tree.PruneDescendants(ir, true);
+                            GMHelper.RestrictDescendants(fBase.Context.Tree, ir, true);
                         }
                     }
                 }
@@ -792,7 +792,7 @@ namespace GEDmill
                     if (lvi is CListableBool) {
                         GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
-                            fBase.Context.Tree.PruneAncestors(ir, false);
+                            GMHelper.RestrictAncestors(fBase.Context.Tree, ir, false);
                         }
                     }
                 }
@@ -824,7 +824,7 @@ namespace GEDmill
                     if (lvi is CListableBool) {
                         GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
                         if (ir != null) {
-                            fBase.Context.Tree.PruneAncestors(ir, true);
+                            GMHelper.RestrictAncestors(fBase.Context.Tree, ir, true);
                         }
                     }
                 }
@@ -851,9 +851,9 @@ namespace GEDmill
             foreach (ListViewItem lvi in lvPruneIndividuals.Items) {
                 if (lvi is CListableBool) {
                     GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
-                    if (!ir.GetVisibility()) {
+                    if (!GMHelper.GetVisibility(ir)) {
                         ++PruneIncluded;
-                        ir.SetVisibility(true);
+                        GMHelper.SetVisibility(ir, true);
                     }
                 }
             }
@@ -878,7 +878,7 @@ namespace GEDmill
                 if (lvi is CListableBool) {
                     GDMSourceRecord sr = (GDMSourceRecord)((CListableBool)lvi).Record;
                     if (sr != null) {
-                        int nHiddenThisTime = fBase.Context.Tree.SetAllMFRsVisible(sr, false);
+                        int nHiddenThisTime = GMHelper.SetAllMFRsVisible(fBase.Context.Tree, sr, false);
                         nHidden += nHiddenThisTime;
                         if (nHiddenThisTime > 0) {
                             SetSourceSubItems((CListableBool)lvi, sr, true); // Updates list
@@ -912,9 +912,9 @@ namespace GEDmill
             foreach (ListViewItem lvi in lvPruneIndividuals.Items) {
                 if (lvi is CListableBool) {
                     GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
-                    if (ir.GetVisibility()) {
+                    if (GMHelper.GetVisibility(ir)) {
                         PruneExcluded++;
-                        ir.SetVisibility(false);
+                        GMHelper.SetVisibility(ir, false);
                     }
                 }
             }
@@ -939,9 +939,9 @@ namespace GEDmill
             foreach (ListViewItem lvi in lvPruneSources.Items) {
                 if (lvi is CListableBool) {
                     GDMSourceRecord sr = (GDMSourceRecord)((CListableBool)lvi).Record;
-                    if (!sr.GetVisibility()) {
+                    if (!GMHelper.GetVisibility(sr)) {
                         PruneIncluded++;
-                        sr.SetVisibility(true);
+                        GMHelper.SetVisibility(sr, true);
                     }
                 }
             }
@@ -966,9 +966,9 @@ namespace GEDmill
             foreach (ListViewItem lvi in lvPruneSources.Items) {
                 if (lvi is CListableBool) {
                     GDMSourceRecord sr = (GDMSourceRecord)((CListableBool)lvi).Record;
-                    if (sr.GetVisibility()) {
+                    if (GMHelper.GetVisibility(sr)) {
                         PruneExcluded++;
-                        sr.SetVisibility(false);
+                        GMHelper.SetVisibility(sr, false);
                     }
                 }
             }
@@ -995,9 +995,9 @@ namespace GEDmill
                 foreach (ListViewItem lvi in lvPruneIndividuals.Items) {
                     if (lvi is CListableBool) {
                         GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
-                        if (ir != null && ir.IsLive() && ir.GetVisibility()) {
+                        if (ir != null && ir.IsLive() && GMHelper.GetVisibility(ir)) {
                             PruneExcluded++;
-                            ir.SetVisibility(false);
+                            GMHelper.SetVisibility(ir, false);
                         }
                     }
                 }
@@ -1049,15 +1049,15 @@ namespace GEDmill
                 CListableBool lb = (CListableBool)lvPruneIndividuals.Items[e.Index];
                 // For some reason if user presses control while clicking any row of the list, it causes a check event. We don't want any checking to happen in that case.
                 if ((Control.ModifierKeys & Keys.Control) == 0) {
-                    if ((e.NewValue == CheckState.Checked && !lb.Record.GetVisibility())
-                        || (e.NewValue == CheckState.Unchecked && lb.Record.GetVisibility())) {
+                    if ((e.NewValue == CheckState.Checked && !GMHelper.GetVisibility(lb.Record))
+                        || (e.NewValue == CheckState.Unchecked && GMHelper.GetVisibility(lb.Record))) {
                         lb.SetRestricted(e.NewValue == CheckState.Unchecked);
                         PrunepanelDataChanged = true;
                         EnablePrunePanelButtons();
                     }
                 } else {
                     if (lb.Record != null) {
-                        e.NewValue = !lb.Record.GetVisibility() ? CheckState.Unchecked : CheckState.Checked;
+                        e.NewValue = !GMHelper.GetVisibility(lb.Record) ? CheckState.Unchecked : CheckState.Checked;
                     }
                 }
             }
@@ -1070,15 +1070,15 @@ namespace GEDmill
 
                 // For some reason if user presses control while clicking any row of the list, it causes a check event. We don't want any checking to happen in that case.
                 if ((Control.ModifierKeys & Keys.Control) == 0) {
-                    if ((e.NewValue == CheckState.Checked && !lb.Record.GetVisibility())
-                        || (e.NewValue == CheckState.Unchecked && lb.Record.GetVisibility())) {
+                    if ((e.NewValue == CheckState.Checked && !GMHelper.GetVisibility(lb.Record))
+                        || (e.NewValue == CheckState.Unchecked && GMHelper.GetVisibility(lb.Record))) {
                         lb.SetRestricted(e.NewValue == CheckState.Unchecked);
                         PrunepanelDataChanged = true;
                         EnablePrunePanelButtons();
                     }
                 } else {
                     if (lb.Record != null) {
-                        e.NewValue = !lb.Record.GetVisibility() ? CheckState.Unchecked : CheckState.Checked;
+                        e.NewValue = !GMHelper.GetVisibility(lb.Record) ? CheckState.Unchecked : CheckState.Checked;
                     }
                 }
             }
@@ -1345,7 +1345,7 @@ namespace GEDmill
                             }
                             // Already done on click event: ((CListableBool)li).SetRestricted( !bChecked );
                             if (!isChecked) {
-                                fBase.Context.Tree.RestrictAssociatedSources((GDMIndividualRecord)((CListableBool)li).Record);
+                                GMHelper.RestrictAssociatedSources(fBase.Context.Tree, (GDMIndividualRecord)((CListableBool)li).Record);
                             }
                         }
 
@@ -1455,7 +1455,7 @@ namespace GEDmill
                 CListableBool lbItem = new CListableBool(ir, true);
                 SetIndividualSubItems(lbItem, ir, true);
 
-                lbItem.Checked = ir.GetVisibility();
+                lbItem.Checked = GMHelper.GetVisibility(ir);
                 temporaryItemsList[nItem++] = lbItem;
             }
 
@@ -1502,8 +1502,8 @@ namespace GEDmill
             string uref = (ir.UserReferences.Count > 0) ? ir.UserReferences[0].StringValue : "";
             lbItem.SubItems.Add(new CListableString(uref));
 
-            int nVisiblePics = ir.CountVisibleMFRs();
-            int nTotalPics = ir.CountAllMFRs();
+            int nVisiblePics, nTotalPics;
+            GMHelper.CountMFRs(ir, out nTotalPics, out nVisiblePics);
             if (nVisiblePics != nTotalPics) {
                 lbItem.SubItems.Add(new CListableNumber(nVisiblePics, string.Format("{0}/{1}", nVisiblePics, nTotalPics)));
             } else {
@@ -1542,7 +1542,7 @@ namespace GEDmill
             foreach (GDMSourceRecord sr in sources) {
                 CListableBool item = new CListableBool(sr, true);
                 SetSourceSubItems(item, sr, true);
-                item.Checked = sr.GetVisibility();
+                item.Checked = GMHelper.GetVisibility(sr);
                 temporaryItemsList[nItem++] = item;
             }
 
@@ -1593,7 +1593,7 @@ namespace GEDmill
             int nOther = 0;
             int nCitations = 0;
 
-            var backReferences = sr.GetBackReferences();
+            var backReferences = GMHelper.GetBackReferences(fBase.Context.Tree, sr);
             if (backReferences.Count > 0) {
                 foreach (BackReference br in backReferences) {
                     switch (br.EventType) {
@@ -1638,8 +1638,8 @@ namespace GEDmill
             lbItem.SubItems.Add(new CListableNumber(nDeaths));
             lbItem.SubItems.Add(new CListableString(sr.XRef));
 
-            int nVisiblePics = sr.CountVisibleMFRs();
-            int nTotalPics = sr.CountAllMFRs();
+            int nVisiblePics, nTotalPics;
+            GMHelper.CountMFRs(sr, out nTotalPics, out nVisiblePics);
 
             if (nVisiblePics != nTotalPics) {
                 lbItem.SubItems.Add(new CListableNumber(nVisiblePics, string.Format("{0}/{1}", nVisiblePics, nTotalPics)));
@@ -1842,16 +1842,16 @@ namespace GEDmill
             chkConfigKeepSiblingOrder.Checked = CConfig.Instance.KeepSiblingOrder;
             chkConfigAllowMultimedia.Checked = CConfig.Instance.AllowMultimedia;
 
-            m_colorConfigMiniTreeBranch = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourBranch);
-            m_colorConfigMiniTreeIndiBorder = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiBorder);
-            m_colorConfigMiniTreeIndiBackground = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiBackground);
-            m_colorConfigMiniTreeIndiHighlight = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiHighlight);
-            m_colorConfigMiniTreeIndiBgConcealed = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiBgConcealed);
-            m_colorConfigMiniTreeIndiFgConcealed = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiFgConcealed);
-            m_colorConfigMiniTreeIndiShade = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiShade);
-            m_colorConfigMiniTreeIndiText = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiText);
-            m_colorConfigMiniTreeIndiLink = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourIndiLink);
-            m_colorConfigMiniTreeBackground = GMHelper.ConvertColour(CConfig.Instance.MiniTreeColourBackground);
+            m_colorConfigMiniTreeBranch = CConfig.Instance.MiniTreeColourBranch;
+            m_colorConfigMiniTreeIndiBorder = CConfig.Instance.MiniTreeColourIndiBorder;
+            m_colorConfigMiniTreeIndiBackground = CConfig.Instance.MiniTreeColourIndiBackground;
+            m_colorConfigMiniTreeIndiHighlight = CConfig.Instance.MiniTreeColourIndiHighlight;
+            m_colorConfigMiniTreeIndiBgConcealed = CConfig.Instance.MiniTreeColourIndiBgConcealed;
+            m_colorConfigMiniTreeIndiFgConcealed = CConfig.Instance.MiniTreeColourIndiFgConcealed;
+            m_colorConfigMiniTreeIndiShade = CConfig.Instance.MiniTreeColourIndiShade;
+            m_colorConfigMiniTreeIndiText = CConfig.Instance.MiniTreeColourIndiText;
+            m_colorConfigMiniTreeIndiLink = CConfig.Instance.MiniTreeColourIndiLink;
+            m_colorConfigMiniTreeBackground = CConfig.Instance.MiniTreeColourBackground;
 
             chkConfigSupressBackreferences.Checked = !CConfig.Instance.SupressBackreferences;
 
@@ -2110,16 +2110,16 @@ namespace GEDmill
             CConfig.Instance.KeepSiblingOrder = chkConfigKeepSiblingOrder.Checked;
             CConfig.Instance.AllowMultimedia = chkConfigAllowMultimedia.Checked;
 
-            CConfig.Instance.MiniTreeColourBranch = GMHelper.ConvertColour(m_colorConfigMiniTreeBranch);
-            CConfig.Instance.MiniTreeColourIndiBorder = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiBorder);
-            CConfig.Instance.MiniTreeColourIndiBackground = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiBackground);
-            CConfig.Instance.MiniTreeColourIndiHighlight = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiHighlight);
-            CConfig.Instance.MiniTreeColourIndiBgConcealed = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiBgConcealed);
-            CConfig.Instance.MiniTreeColourIndiFgConcealed = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiFgConcealed);
-            CConfig.Instance.MiniTreeColourIndiShade = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiShade);
-            CConfig.Instance.MiniTreeColourIndiText = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiText);
-            CConfig.Instance.MiniTreeColourIndiLink = GMHelper.ConvertColour(m_colorConfigMiniTreeIndiLink);
-            CConfig.Instance.MiniTreeColourBackground = GMHelper.ConvertColour(m_colorConfigMiniTreeBackground);
+            CConfig.Instance.MiniTreeColourBranch = m_colorConfigMiniTreeBranch;
+            CConfig.Instance.MiniTreeColourIndiBorder = m_colorConfigMiniTreeIndiBorder;
+            CConfig.Instance.MiniTreeColourIndiBackground = m_colorConfigMiniTreeIndiBackground;
+            CConfig.Instance.MiniTreeColourIndiHighlight = m_colorConfigMiniTreeIndiHighlight;
+            CConfig.Instance.MiniTreeColourIndiBgConcealed = m_colorConfigMiniTreeIndiBgConcealed;
+            CConfig.Instance.MiniTreeColourIndiFgConcealed = m_colorConfigMiniTreeIndiFgConcealed;
+            CConfig.Instance.MiniTreeColourIndiShade = m_colorConfigMiniTreeIndiShade;
+            CConfig.Instance.MiniTreeColourIndiText = m_colorConfigMiniTreeIndiText;
+            CConfig.Instance.MiniTreeColourIndiLink = m_colorConfigMiniTreeIndiLink;
+            CConfig.Instance.MiniTreeColourBackground = m_colorConfigMiniTreeBackground;
 
             CConfig.Instance.SupressBackreferences = !chkConfigSupressBackreferences.Checked;
         }
@@ -2136,7 +2136,7 @@ namespace GEDmill
                 lstSelectKey.Items.Clear();
                 foreach (string xref in CConfig.Instance.KeyIndividuals) {
                     GDMIndividualRecord indiRec = fBase.Context.Tree.FindXRef<GDMIndividualRecord>(xref);
-                    if (indiRec != null && indiRec.GetVisibility()) {
+                    if (indiRec != null && GMHelper.GetVisibility(indiRec)) {
                         string firstName = "";
                         string surname = "";
                         string fullName = GMHelper.CapitaliseName(indiRec.GetPrimaryFullName(), ref firstName, ref surname);

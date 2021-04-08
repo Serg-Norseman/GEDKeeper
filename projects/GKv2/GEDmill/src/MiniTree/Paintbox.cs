@@ -46,46 +46,28 @@ namespace GEDmill.MiniTree
         public ColorPalette Palette;
         public TextureBrush BrushFakeTransparency;
         public SolidBrush BrushBgGif;
-        public Color ColourOutline;
-        public Color ColourBox;
-        public Color ColourHighlight;
-        public Color ColourBgConcealed;
-        public Color ColourShade;
-        public Color ColourText;
-        public Color ColourLink;
-        public Color ColourFgConcealed;
-        public Color ColourConnector;
         public Color ColourGifTransparent;
-        public Color ColourBg;
 
 
         // Construct the paintbox, reading values for the colours etc from the config.
         public Paintbox(CConfig config)
         {
-            ColourBg = GMHelper.ConvertColour(config.MiniTreeColourBackground);
-            ColourOutline = GMHelper.ConvertColour(config.MiniTreeColourIndiBorder);
-            ColourBox = GMHelper.ConvertColour(config.MiniTreeColourIndiBackground);
-            ColourHighlight = GMHelper.ConvertColour(config.MiniTreeColourIndiHighlight);
-            ColourBgConcealed = GMHelper.ConvertColour(config.MiniTreeColourIndiBgConcealed);
-            ColourShade = GMHelper.ConvertColour(config.MiniTreeColourIndiShade);
-            ColourText = GMHelper.ConvertColour(config.MiniTreeColourIndiText);
-            ColourLink = GMHelper.ConvertColour(config.MiniTreeColourIndiLink);
-            ColourFgConcealed = GMHelper.ConvertColour(config.MiniTreeColourIndiFgConcealed);
-            ColourConnector = GMHelper.ConvertColour(config.MiniTreeColourBranch);
             ColourGifTransparent = Color.Magenta;
             BrushBgGif = new SolidBrush(ColourGifTransparent);
-            BrushBg = new SolidBrush(ColourBg);
-            BrushBox = new SolidBrush(ColourBox);
-            BrushBoxHighlight = new SolidBrush(ColourHighlight);
-            BrushBoxConcealed = new SolidBrush(ColourBgConcealed);
-            BrushBoxShade = new SolidBrush(ColourShade);
-            BrushText = new SolidBrush(ColourText);
-            BrushTextLink = new SolidBrush(ColourLink);
-            BrushTextConcealed = new SolidBrush(ColourFgConcealed);
-            PenConnector = new Pen(ColourConnector, 1.0f);
-            PenConnectorDotted = new Pen(ColourConnector, 1.0f);
+
+            BrushBg = new SolidBrush(config.MiniTreeColourBackground);
+            BrushBox = new SolidBrush(config.MiniTreeColourIndiBackground);
+            BrushBoxHighlight = new SolidBrush(config.MiniTreeColourIndiHighlight);
+            BrushBoxConcealed = new SolidBrush(config.MiniTreeColourIndiBgConcealed);
+            BrushBoxShade = new SolidBrush(config.MiniTreeColourIndiShade);
+            BrushText = new SolidBrush(config.MiniTreeColourIndiText);
+            BrushTextLink = new SolidBrush(config.MiniTreeColourIndiLink);
+            BrushTextConcealed = new SolidBrush(config.MiniTreeColourIndiFgConcealed);
+
+            PenConnector = new Pen(config.MiniTreeColourBranch, 1.0f);
+            PenConnectorDotted = new Pen(config.MiniTreeColourBranch, 1.0f);
             PenConnectorDotted.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-            PenBox = new Pen(ColourOutline, 1.0f);
+            PenBox = new Pen(config.MiniTreeColourIndiBorder, 1.0f);
             Font = new Font("Microsoft Sans Serif", 10f);
             BrushFakeTransparency = null;
             Font = new Font(config.TreeFontName, config.TreeFontSize);
@@ -125,7 +107,7 @@ namespace GEDmill.MiniTree
                     BrushFakeTransparency = new TextureBrush(bgImage);
                 } catch (Exception e) {
                     // e.g. System.IO.FileNotFoundException
-                    fLogger.WriteInfo(string.Format("SetBackgroundImage() Caught exception {0}", e.ToString()));
+                    fLogger.WriteError("SetBackgroundImage()", e);
                     BrushFakeTransparency = null;
                 }
             }

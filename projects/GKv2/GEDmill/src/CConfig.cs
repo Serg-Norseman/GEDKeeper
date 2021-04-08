@@ -18,6 +18,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
 using BSLib;
 using GKCore;
 using GKCL = GKCore.Logging;
@@ -153,34 +155,34 @@ namespace GEDmill
         public bool IndexLetterPerPage;
 
         // HTML string representing colour to draw connecting lines in mini trees
-        public string MiniTreeColourBranch;
+        public Color MiniTreeColourBranch;
 
         // HTML string representing colour to draw outline of individual boxes in mini trees
-        public string MiniTreeColourIndiBorder;
+        public Color MiniTreeColourIndiBorder;
 
         // HTML string representing colour to fill normal individual boxes in mini trees
-        public string MiniTreeColourIndiBackground;
+        public Color MiniTreeColourIndiBackground;
 
         // HTML string representing colour to fill selected individual boxes in mini trees
-        public string MiniTreeColourIndiHighlight;
+        public Color MiniTreeColourIndiHighlight;
 
         // HTML string representing colour to fill boxes for individuals marked as concealed in mini trees.
-        public string MiniTreeColourIndiBgConcealed;
+        public Color MiniTreeColourIndiBgConcealed;
 
         // HTML string representing colour to write text for individuals marked as concealed in mini trees.
-        public string MiniTreeColourIndiFgConcealed;
+        public Color MiniTreeColourIndiFgConcealed;
 
         // HTML string representing colour to fill shaded individual boxes in mini trees
-        public string MiniTreeColourIndiShade;
+        public Color MiniTreeColourIndiShade;
 
         // HTML string representing colour to draw text in individual boxes in mini trees
-        public string MiniTreeColourIndiText;
+        public Color MiniTreeColourIndiText;
 
         // HTML string representing colour to draw linkable text in individual boxes in mini trees
-        public string MiniTreeColourIndiLink;
+        public Color MiniTreeColourIndiLink;
 
         // HTML string representing colour to fill entire background of mini tree diagrams
-        public string MiniTreeColourBackground;
+        public Color MiniTreeColourBackground;
 
         // Whether to restrict records with RESN set to confidential
         public bool RestrictConfidential;
@@ -426,20 +428,20 @@ namespace GEDmill
                     ini.WriteBool("Common", "RestrictAssociatedSources", RestrictAssociatedSources);
                     ini.WriteBool("Common", "RenameMultimedia", RenameMultimedia);
                     ini.WriteBool("Common", "IndexLetterPerPage", IndexLetterPerPage);
-                    ini.WriteString("Common", "MiniTreeColourBranch", MiniTreeColourBranch);
-                    ini.WriteString("Common", "MiniTreeColourIndiBorder", MiniTreeColourIndiBorder);
-                    ini.WriteString("Common", "MiniTreeColourIndiBackground", MiniTreeColourIndiBackground);
-                    ini.WriteString("Common", "MiniTreeColourIndiHighlight", MiniTreeColourIndiHighlight);
-                    ini.WriteString("Common", "MiniTreeColourIndiShade", MiniTreeColourIndiShade);
+                    ini.WriteString("Common", "MiniTreeColourBranch", ConvertColour(MiniTreeColourBranch));
+                    ini.WriteString("Common", "MiniTreeColourIndiBorder", ConvertColour(MiniTreeColourIndiBorder));
+                    ini.WriteString("Common", "MiniTreeColourIndiBackground", ConvertColour(MiniTreeColourIndiBackground));
+                    ini.WriteString("Common", "MiniTreeColourIndiHighlight", ConvertColour(MiniTreeColourIndiHighlight));
+                    ini.WriteString("Common", "MiniTreeColourIndiShade", ConvertColour(MiniTreeColourIndiShade));
                     ini.WriteBool("Common", "ShowFrontPageStats", ShowFrontPageStats);
                     ini.WriteString("Common", "CommentaryText", CommentaryText);
                     ini.WriteString("Common", "TreeFontName", TreeFontName);
                     ini.WriteFloat("Common", "TreeFontSize", TreeFontSize);
                     ini.WriteInteger("Common", "TargetTreeWidth", TargetTreeWidth);
                     ini.WriteString("Common", "MiniTreeImageFormat", MiniTreeImageFormat);
-                    ini.WriteString("Common", "MiniTreeColourIndiText", MiniTreeColourIndiText);
-                    ini.WriteString("Common", "MiniTreeColourIndiLink", MiniTreeColourIndiLink);
-                    ini.WriteString("Common", "MiniTreeColourBackground", MiniTreeColourBackground);
+                    ini.WriteString("Common", "MiniTreeColourIndiText", ConvertColour(MiniTreeColourIndiText));
+                    ini.WriteString("Common", "MiniTreeColourIndiLink", ConvertColour(MiniTreeColourIndiLink));
+                    ini.WriteString("Common", "MiniTreeColourBackground", ConvertColour(MiniTreeColourBackground));
                     ini.WriteBool("Common", "ShowMiniTrees", ShowMiniTrees);
                     ini.WriteString("Common", "UserEmailAddress", UserEmailAddress);
                     ini.WriteBool("Common", "FakeMiniTreeTransparency", FakeMiniTreeTransparency);
@@ -467,10 +469,10 @@ namespace GEDmill
                     ini.WriteBool("Common", "PreserveFrontPage", PreserveFrontPage);
                     ini.WriteBool("Common", "PreserveStylesheet", PreserveStylesheet);
                     ini.WriteString("Common", "StylesheetFilename", StylesheetFilename);
-                    ini.WriteString("Common", "MiniTreeColourIndiBgConcealed", MiniTreeColourIndiBgConcealed);
+                    ini.WriteString("Common", "MiniTreeColourIndiBgConcealed", ConvertColour(MiniTreeColourIndiBgConcealed));
                     ini.WriteBool("Common", "OnlyConceal", OnlyConceal);
                     ini.WriteString("Common", "ConcealedName", ConcealedName);
-                    ini.WriteString("Common", "MiniTreeColourIndiFgConcealed", MiniTreeColourIndiFgConcealed);
+                    ini.WriteString("Common", "MiniTreeColourIndiFgConcealed", ConvertColour(MiniTreeColourIndiFgConcealed));
                     ini.WriteBool("Common", "LinkOriginalPicture", LinkOriginalPicture);
                     ini.WriteBool("Common", "RenameOriginalPicture", RenameOriginalPicture);
                     ini.WriteString("Common", "ExcludeFileDir", ExcludeFileDir);
@@ -541,20 +543,20 @@ namespace GEDmill
                     RestrictAssociatedSources = ini.ReadBool("Common", "RestrictAssociatedSources", true);
                     RenameMultimedia = ini.ReadBool("Common", "RenameMultimedia", true);
                     IndexLetterPerPage = ini.ReadBool("Common", "IndexLetterPerPage", false);
-                    MiniTreeColourBranch = ini.ReadString("Common", "MiniTreeColourBranch", "#000000");
-                    MiniTreeColourIndiBorder = ini.ReadString("Common", "MiniTreeColourIndiBorder", "#000000");
-                    MiniTreeColourIndiBackground = ini.ReadString("Common", "MiniTreeColourIndiBackground", "#ffffd2");
-                    MiniTreeColourIndiHighlight = ini.ReadString("Common", "MiniTreeColourIndiHighlight", "#ffffff");
-                    MiniTreeColourIndiShade = ini.ReadString("Common", "MiniTreeColourIndiShade", "#ffffd2");
+                    MiniTreeColourBranch = ConvertColour(ini.ReadString("Common", "MiniTreeColourBranch", "#000000"));
+                    MiniTreeColourIndiBorder = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiBorder", "#000000"));
+                    MiniTreeColourIndiBackground = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiBackground", "#ffffd2"));
+                    MiniTreeColourIndiHighlight = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiHighlight", "#ffffff"));
+                    MiniTreeColourIndiShade = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiShade", "#ffffd2"));
                     ShowFrontPageStats = ini.ReadBool("Common", "ShowFrontPageStats", true);
                     CommentaryText = ini.ReadString("Common", "CommentaryText", "");
                     TreeFontName = ini.ReadString("Common", "TreeFontName", "Arial");
                     TreeFontSize = (float)ini.ReadFloat("Common", "TreeFontSize", 7.2f);
                     TargetTreeWidth = ini.ReadInteger("Common", "TargetTreeWidth", 800);
                     MiniTreeImageFormat = ini.ReadString("Common", "MiniTreeImageFormat", "gif");
-                    MiniTreeColourIndiText = ini.ReadString("Common", "MiniTreeColourIndiText", "#000000");
-                    MiniTreeColourIndiLink = ini.ReadString("Common", "MiniTreeColourIndiLink", "#3333ff");
-                    MiniTreeColourBackground = ini.ReadString("Common", "MiniTreeColourBackground", "#aaaaaa");
+                    MiniTreeColourIndiText = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiText", "#000000"));
+                    MiniTreeColourIndiLink = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiLink", "#3333ff"));
+                    MiniTreeColourBackground = ConvertColour(ini.ReadString("Common", "MiniTreeColourBackground", "#aaaaaa"));
                     ShowMiniTrees = ini.ReadBool("Common", "ShowMiniTrees", true);
                     UserEmailAddress = ini.ReadString("Common", "UserEmailAddress", "");
                     FakeMiniTreeTransparency = ini.ReadBool("Common", "FakeMiniTreeTransparency", false);
@@ -579,10 +581,10 @@ namespace GEDmill
                     PreserveFrontPage = ini.ReadBool("Common", "PreserveFrontPage", false);
                     PreserveStylesheet = ini.ReadBool("Common", "PreserveStylesheet", false);
                     StylesheetFilename = ini.ReadString("Common", "StylesheetFilename", "gedmill-style");
-                    MiniTreeColourIndiBgConcealed = ini.ReadString("Common", "MiniTreeColourIndiBgConcealed", "#cccccc");
+                    MiniTreeColourIndiBgConcealed = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiBgConcealed", "#cccccc"));
                     OnlyConceal = ini.ReadBool("Common", "OnlyConceal", false);
                     ConcealedName = ini.ReadString("Common", "ConcealedName", "Private Record");
-                    MiniTreeColourIndiFgConcealed = ini.ReadString("Common", "MiniTreeColourIndiFgConcealed", "#000000");
+                    MiniTreeColourIndiFgConcealed = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiFgConcealed", "#000000"));
                     LinkOriginalPicture = ini.ReadBool("Common", "LinkOriginalPicture", false);
                     RenameOriginalPicture = ini.ReadBool("Common", "RenameOriginalPicture", false);
                     ExcludeFileDir = ini.ReadString("Common", "ExcludeFileDir", "");
@@ -621,16 +623,16 @@ namespace GEDmill
             TreeFontSize = 7.2f;
             TargetTreeWidth = 800;
             MiniTreeImageFormat = "gif";
-            MiniTreeColourBranch = "#000000";
-            MiniTreeColourIndiBorder = "#000000";
-            MiniTreeColourIndiBackground = "#ffffd2";
-            MiniTreeColourIndiHighlight = "#ffffff";
-            MiniTreeColourIndiBgConcealed = "#cccccc";
-            MiniTreeColourIndiFgConcealed = "#000000";
-            MiniTreeColourIndiShade = "#ffffd2";
-            MiniTreeColourIndiText = "#000000";
-            MiniTreeColourIndiLink = "#3333ff";
-            MiniTreeColourBackground = "#aaaaaa";
+            MiniTreeColourBranch = ConvertColour("#000000");
+            MiniTreeColourIndiBorder = ConvertColour("#000000");
+            MiniTreeColourIndiBackground = ConvertColour("#ffffd2");
+            MiniTreeColourIndiHighlight = ConvertColour("#ffffff");
+            MiniTreeColourIndiBgConcealed = ConvertColour("#cccccc");
+            MiniTreeColourIndiFgConcealed = ConvertColour("#000000");
+            MiniTreeColourIndiShade = ConvertColour("#ffffd2");
+            MiniTreeColourIndiText = ConvertColour("#000000");
+            MiniTreeColourIndiLink = ConvertColour("#3333ff");
+            MiniTreeColourBackground = ConvertColour("#aaaaaa");
             FakeMiniTreeTransparency = false;
             ShowMiniTrees = true;
             UserEmailAddress = "";
@@ -669,6 +671,53 @@ namespace GEDmill
             AllowMultimedia = true;
             SupressBackreferences = false;
             IncludeHelpPage = true;
+        }
+
+        // Converts a string of the form #RRGGBB to a Color instance.
+        // Used when retrieving colours from the config.
+        private static Color ConvertColour(string s)
+        {
+            if (string.IsNullOrEmpty(s)) {
+                return Color.Black;
+            }
+
+            int nRed = 0;
+            int nGreen = 0;
+            int nBlue = 0;
+
+            // FIXME: temp hack, IniFile cuts values with leading #
+            if (s[0] != '#') {
+                s = '#' + s;
+            }
+
+            switch (s.Length) {
+                case 4:
+                    s = s.Substring(1);
+                    goto case 3;
+                case 3:
+                    nRed = int.Parse(s.Substring(0, 1), NumberStyles.HexNumber);
+                    nGreen = int.Parse(s.Substring(1, 1), NumberStyles.HexNumber);
+                    nBlue = int.Parse(s.Substring(2, 1), NumberStyles.HexNumber);
+                    break;
+                case 7:
+                    s = s.Substring(1);
+                    goto case 6;
+                case 6:
+                    nRed = int.Parse(s.Substring(0, 2), NumberStyles.HexNumber);
+                    nGreen = int.Parse(s.Substring(2, 2), NumberStyles.HexNumber);
+                    nBlue = int.Parse(s.Substring(4, 2), NumberStyles.HexNumber);
+                    break;
+            }
+
+            return Color.FromArgb(nRed, nGreen, nBlue);
+        }
+
+        // Converts a Color instance to a string of the form #RRGGBB.
+        // Used when storing colours in the config.
+        private static string ConvertColour(Color c)
+        {
+            string s = string.Format("{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
+            return s;
         }
     }
 }

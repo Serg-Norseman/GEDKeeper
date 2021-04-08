@@ -43,12 +43,5 @@ namespace GEDmill.Model
             XRef = xref;
             EventType = eventType;
         }
-
-        public BackReference(BackReference other)
-        {
-            RecordType = other.RecordType;
-            XRef = other.XRef;
-            EventType = other.EventType;
-        }
     }
 }

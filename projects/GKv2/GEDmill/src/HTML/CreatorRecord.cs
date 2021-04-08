@@ -48,7 +48,7 @@ namespace GEDmill.HTML
             foreach (var mmLink in multimediaLinks) {
                 if (mmLink.IsPointer) {
                     var mmRec = fTree.GetPtrValue(mmLink);
-                    if (!mmRec.GetVisibility()) {
+                    if (!GMHelper.GetVisibility(mmRec)) {
                         // user chose not to show this picture
                         continue;
                     }
@@ -168,7 +168,7 @@ namespace GEDmill.HTML
                 }
                 string originalFilename = Path.GetFileName(mmFilename);
 
-                bool pictureFormat = mfr.IsPictureFormat();
+                bool pictureFormat = GMHelper.IsPictureFormat(mfr);
                 if (pictureFormat || CConfig.Instance.AllowNonPictures) {
                     if (!pictureFormat && CConfig.Instance.AllowNonPictures) {
                         stats.NonPicturesIncluded = true;

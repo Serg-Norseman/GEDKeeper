@@ -558,7 +558,7 @@ namespace GEDmill.HTML
             string dummy = "";
             if (name == "") {
                 name = CConfig.Instance.UnknownName;
-            } else if (!ir.GetVisibility() && !CConfig.Instance.UseWithheldNames) {
+            } else if (!GMHelper.GetVisibility(ir) && !CConfig.Instance.UseWithheldNames) {
                 name = CConfig.Instance.ConcealedName;
             } else {
                 name = GMHelper.CapitaliseName(name, ref dummy, ref dummy);
@@ -578,7 +578,7 @@ namespace GEDmill.HTML
         protected static string MakeLink(GDMIndividualRecord ir, string name)
         {
             string link;
-            if (!ir.GetVisibility()) {
+            if (!GMHelper.GetVisibility(ir)) {
                 // TODO: Why are we linking to invisible people?
                 link = EscapeHTML(name, true);
             } else {
@@ -658,7 +658,7 @@ namespace GEDmill.HTML
             string sExtn = Path.GetExtension(fileName);
             string sFilepart = Path.GetDirectoryName(fileName);
             sFilepart += "\\" + Path.GetFileNameWithoutExtension(fileName);
-            System.Drawing.Imaging.ImageFormat imageFormat;
+            ImageFormat imageFormat;
             switch (sExtn.ToLower()) {
                 case ".jpg":
                 case ".jpeg":

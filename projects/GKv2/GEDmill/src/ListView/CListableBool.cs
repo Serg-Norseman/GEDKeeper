@@ -58,8 +58,8 @@ namespace GEDmill.ListView
             if (other.fRecord == null) {
                 return -1;
             }
-            bool tr = fRecord.GetVisibility();
-            bool or = other.fRecord.GetVisibility();
+            bool tr = GMHelper.GetVisibility(fRecord);
+            bool or = GMHelper.GetVisibility(other.fRecord);
             if (tr == or) {
                 return 0;
             }
@@ -72,7 +72,7 @@ namespace GEDmill.ListView
         // Used to exclude the record from the generated web site
         public void SetRestricted(bool value)
         {
-            fRecord.SetVisibility(!value);
+            GMHelper.SetVisibility(fRecord, !value);
         }
 
         public GDMRecord Record

@@ -72,7 +72,7 @@ namespace GEDmill.MiniTree
             {
                 FirstName = "";
                 Surname = "";
-                Concealed = (!ir.GetVisibility());
+                Concealed = (!GMHelper.GetVisibility(ir));
                 if (Concealed && !CConfig.Instance.UseWithheldNames) {
                     FirstName = "";
                     Surname = Name = CConfig.Instance.ConcealedName;
@@ -86,11 +86,7 @@ namespace GEDmill.MiniTree
                     }
                 }
 
-                if (Concealed) {
-                    Date = "";
-                } else {
-                    Date = ir.GetLifeDatesStr();
-                }
+                Date = Concealed ? string.Empty : GMHelper.GetLifeDatesStr(ir);
             }
         }
 
@@ -302,7 +298,7 @@ namespace GEDmill.MiniTree
                     bool bAddedSubject = false;
                     int nSpouses = 0;
                     MiniTreeGroup.ECrossbar ecbCrossbar = MiniTreeGroup.ECrossbar.Solid;
-                    var indiFamilies = fTree.GetFamilyList(irSubject);
+                    var indiFamilies = GMHelper.GetFamilyList(fTree, irSubject);
 
                     foreach (GDMFamilyRecord famRec in indiFamilies) {
                         GDMIndividualRecord irSpouse = fTree.GetSpouseBy(famRec, irSubject);
@@ -452,7 +448,7 @@ namespace GEDmill.MiniTree
         // Returns true if the supplied record is valid for inclusion in the tree
         private static bool Exists(GDMIndividualRecord ir)
         {
-            return (ir != null && ir.GetVisibility());
+            return (ir != null && GMHelper.GetVisibility(ir));
         }
     }
 }

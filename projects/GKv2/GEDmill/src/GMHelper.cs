@@ -19,10 +19,15 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
+using GDModel;
+using GDModel.Providers.GEDCOM;
+using GEDmill.Model;
+using GKCore;
 using GKCore.Logging;
+using GKCore.Tools;
+using GKCore.Types;
 
 namespace GEDmill
 {
@@ -33,6 +38,33 @@ namespace GEDmill
     {
         private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(GMHelper).Name);
 
+
+        private static readonly Dictionary<string, CISRecordChanges> recX = new Dictionary<string, CISRecordChanges>();
+
+        public static void SetVisibility(GDMRecord record, bool value)
+        {
+            if (record == null) return;
+
+            CISRecordChanges changes;
+            if (!recX.TryGetValue(record.XRef, out changes)) {
+                changes = new CISRecordChanges(true);
+                recX.Add(record.XRef, changes);
+            }
+
+            changes.Visibility = value;
+        }
+
+        public static bool GetVisibility(GDMRecord record)
+        {
+            if (record == null) return true;
+
+            CISRecordChanges changes;
+            if (!recX.TryGetValue(record.XRef, out changes)) {
+                return true;
+            }
+
+            return changes.Visibility;
+        }
 
         // Modifies rectNew to fit within the limits given, keeping its aspect ratio
         public static void ScaleAreaToFit(ref Rectangle rectNew, int uMaxWidth, int uMaxHeight)
@@ -260,51 +292,244 @@ namespace GEDmill
             return filename;
         }
 
-        // Converts a string of the form #RRGGBB to a Color instance.
-        // Used when retrieving colours from the config.
-        public static Color ConvertColour(string s)
+        public static int GetChronologicalYear(GDMDateValue dateVal)
         {
-            if (string.IsNullOrEmpty(s)) {
-                return Color.Black;
-            }
-
-            int nRed = 0;
-            int nGreen = 0;
-            int nBlue = 0;
-
-            // FIXME: temp hack, IniFile cuts values with leading #
-            if (s[0] != '#') {
-                s = '#' + s;
-            }
-
-            switch (s.Length) {
-                case 4:
-                    s = s.Substring(1);
-                    goto case 3;
-                case 3:
-                    nRed = int.Parse(s.Substring(0, 1), NumberStyles.HexNumber);
-                    nGreen = int.Parse(s.Substring(1, 1), NumberStyles.HexNumber);
-                    nBlue = int.Parse(s.Substring(2, 1), NumberStyles.HexNumber);
-                    break;
-                case 7:
-                    s = s.Substring(1);
-                    goto case 6;
-                case 6:
-                    nRed = int.Parse(s.Substring(0, 2), NumberStyles.HexNumber);
-                    nGreen = int.Parse(s.Substring(2, 2), NumberStyles.HexNumber);
-                    nBlue = int.Parse(s.Substring(4, 2), NumberStyles.HexNumber);
-                    break;
-            }
-
-            return Color.FromArgb(nRed, nGreen, nBlue);
+            return (dateVal == null) ? 0 : dateVal.GetChronologicalYear();
         }
 
-        // Converts a Color instance to a string of the form #RRGGBB.
-        // Used when storing colours in the config.
-        public static string ConvertColour(Color c)
+        public static int GetEventsYearsDiff(GDMDateValue ev1, GDMDateValue ev2, bool currentEnd = true)
         {
-            string s = string.Format("{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
-            return s;
+            int result = -1;
+
+            try {
+                int dt1 = GetChronologicalYear(ev1);
+                int dt2 = GetChronologicalYear(ev2);
+
+                if (currentEnd && dt2 == 0) {
+                    dt2 = DateTime.Now.Year;
+                }
+
+                if (dt1 != 0 && dt2 != 0) {
+                    result = Math.Abs(dt2 - dt1);
+                }
+            } catch (Exception ex) {
+                fLogger.WriteError("GKUtils.GetEventsYearsDiff()", ex);
+            }
+
+            return result;
+        }
+
+        public static string GetName(GDMIndividualRecord iRec, int i)
+        {
+            return (i >= 0 && i < iRec.PersonalNames.Count) ? iRec.PersonalNames[i].StringValue : "";
+        }
+
+        // Returns the n'th name and associated sources
+        public static NameAndSource GetNameAndSource(GDMIndividualRecord record, int n)
+        {
+            if (record.PersonalNames.Count <= n || n < 0) {
+                return null;
+            }
+            GDMPersonalName pns = record.PersonalNames[n];
+            NameAndSource nas = new NameAndSource(pns.StringValue);
+            nas.Sources.AddRange(pns.SourceCitations);
+            return nas;
+        }
+
+        public static List<GDMFamilyRecord> GetFamilyList(GDMTree tree, GDMIndividualRecord record)
+        {
+            var result = new List<GDMFamilyRecord>();
+
+            foreach (var link in record.SpouseToFamilyLinks) {
+                var family = tree.GetPtrValue(link);
+                if (family != null) {
+                    result.Add(family);
+                }
+            }
+
+            return result;
+        }
+
+        public static string GetLifeDatesStr(GDMIndividualRecord record)
+        {
+            var lifeDates = record.GetLifeDates();
+            //TODO
+            //TreeChartOptions options = GlobalOptions.Instance.ChartOptions;
+            //DateFormat dateFormat = (options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
+            DateFormat dateFormat = DateFormat.dfYYYY;
+
+            string birthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, false);
+            string deathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, false);
+            return birthDate + " - " + deathDate;
+        }
+
+        public static bool IsPictureFormat(GDMFileReferenceWithTitle fileRef)
+        {
+            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
+            return (mmKind == MultimediaKind.mkImage);
+        }
+
+        public static string MakeLinkNumber(GDMSourceCitation sourCit, int sourceCount, bool bComma)
+        {
+            string sComma = bComma ? "," : "";
+            return string.Concat("<span class=\"reference\">", sComma, sourceCount.ToString(), "</span>");
+        }
+
+        // Returns a string to use in the list of references at the bottom of the page
+        public static string MakeLinkText(GDMTree tree, GDMSourceCitation sourCit, int sourceCount)
+        {
+            var sourRec = tree.GetPtrValue<GDMSourceRecord>(sourCit);
+            return string.Concat(sourceCount.ToString(), ". ", /*m_sSourceDescription*/sourRec.ShortTitle);
+        }
+
+        public static void RestrictAssociatedSources(GDMTree tree, GDMIndividualRecord iRec)
+        {
+            // Restrict sources connected with individual directly
+            foreach (GDMSourceCitation sc in iRec.SourceCitations) {
+                RestrictSource(tree, sc, true);
+            }
+
+            // Restrict sources connected with name
+            foreach (GDMPersonalName pns in iRec.PersonalNames) {
+                foreach (GDMSourceCitation sc in pns.SourceCitations) {
+                    RestrictSource(tree, sc, true);
+                }
+            }
+
+            // Restrict sources connected with events
+            foreach (GDMCustomEvent ies in iRec.Events) {
+                foreach (GDMSourceCitation sc in ies.SourceCitations) {
+                    RestrictSource(tree, sc, true);
+                }
+            }
+
+            // Restrict sources connected with m_associationStructures
+            foreach (GDMAssociation ass in iRec.Associations) {
+                foreach (GDMSourceCitation sc in ass.SourceCitations) {
+                    RestrictSource(tree, sc, true);
+                }
+            }
+        }
+
+        // Marks the given source citation as (un)restricted
+        public static void RestrictSource(GDMTree tree, GDMSourceCitation sc, bool visible)
+        {
+            if (tree != null && sc != null) {
+                var sourceRec = tree.GetPtrValue<GDMSourceRecord>(sc);
+                if (sourceRec != null) {
+                    GMHelper.SetVisibility(sourceRec, visible);
+                }
+            }
+        }
+
+        private static bool RestrictProc(GDMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
+        {
+            bool visible = (bool)extData;
+            GMHelper.SetVisibility(iRec, visible);
+            return true;
+        }
+
+        public static void RestrictAncestors(GDMTree tree, GDMIndividualRecord iRec, bool visible)
+        {
+            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAncestors, RestrictProc, ((object)visible));
+        }
+
+        public static void RestrictDescendants(GDMTree tree, GDMIndividualRecord iRec, bool visible)
+        {
+            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmDescendants, RestrictProc, ((object)visible));
+        }
+
+        private static bool MarkProc(GDMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
+        {
+            var marks = (List<GDMRecord>)extData;
+            marks.Add(iRec);
+            return true;
+        }
+
+        public static void MarkConnected(GDMTree tree, GDMIndividualRecord iRec, List<GDMRecord> marks)
+        {
+            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, MarkProc, marks);
+        }
+
+        public static void RestrictUnmarked(GDMTree tree, List<GDMRecord> marks)
+        {
+            var treeEnum = tree.GetEnumerator(GDMRecordType.rtIndividual);
+            GDMRecord record;
+            while (treeEnum.MoveNext(out record)) {
+                if (!marks.Contains(record)) {
+                    GMHelper.SetVisibility(record, false);
+                }
+            }
+        }
+
+        public static int SetAllMFRsVisible(GDMTree tree, GDMRecord record, bool visible)
+        {
+            int nChanged = 0;
+            foreach (GDMMultimediaLink mfr in record.MultimediaLinks) {
+                var mmRec = tree.GetPtrValue<GDMMultimediaRecord>(mfr);
+                if (mmRec != null && GMHelper.GetVisibility(mmRec) != visible) {
+                    GMHelper.SetVisibility(mmRec, visible);
+                    nChanged++;
+                }
+            }
+            return nChanged;
+        }
+
+        private static void GetBackReferences(GDMRecord inRecord, GDMRecord subject, List<BackReference> list)
+        {
+            try {
+                if (subject is GDMSourceRecord) {
+                    int num = inRecord.SourceCitations.Count;
+                    for (int i = 0; i < num; i++) {
+                        if (inRecord.SourceCitations[i].XRef == subject.XRef) {
+                            list.Add(new BackReference(inRecord.RecordType, inRecord.XRef, ""));
+                        }
+                    }
+
+                    var recordWithEvents = inRecord as GDMRecordWithEvents;
+                    if (recordWithEvents != null) {
+                        GDMRecordWithEvents evsRec = recordWithEvents;
+
+                        num = evsRec.Events.Count;
+                        for (int i = 0; i < num; i++) {
+                            var evt = evsRec.Events[i];
+
+                            int num2 = evt.SourceCitations.Count;
+                            for (int k = 0; k < num2; k++) {
+                                if (evt.SourceCitations[k].XRef == subject.XRef) {
+                                    list.Add(new BackReference(inRecord.RecordType, inRecord.XRef, evt.GetTagName()));
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GMHelper.GetBackReferences()", ex);
+            }
+        }
+
+        public static List<BackReference> GetBackReferences(GDMTree tree, GDMSourceRecord sourceRec)
+        {
+            var result = new List<BackReference>();
+
+            int num2 = tree.RecordsCount;
+            for (int j = 0; j < num2; j++) {
+                GetBackReferences(tree[j], sourceRec, result);
+            }
+
+            return result;
+        }
+
+        public static Dictionary<object, GDMIndividualRecord> MakeBackReferences(GDMRecord record)
+        {
+            var result = new Dictionary<object, GDMIndividualRecord>();
+            return result;
+        }
+
+        public static void CountMFRs(GDMRecord record, out int total, out int visible)
+        {
+            total = 0;
+            visible = 0;
         }
     }
 }
