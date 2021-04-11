@@ -62,6 +62,11 @@ namespace GKCore.Controllers
             }
         }
 
+        public override bool Cancel()
+        {
+            return true;
+        }
+
         public override void UpdateView()
         {
             fView.LanguageCombo.Text = GEDCOMUtils.GetLanguageStr(fLanguageID);
