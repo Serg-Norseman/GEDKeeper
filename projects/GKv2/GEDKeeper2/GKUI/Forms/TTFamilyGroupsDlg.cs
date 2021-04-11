@@ -66,7 +66,7 @@ namespace GKUI.Forms
             Text = LangMan.LS(LSID.LSID_ToolOp_6);
             pageFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnAnalyseGroups.Text = LangMan.LS(LSID.LSID_Analysis);
+            btnAnalyseGroups.Text = LangMan.LS(LSID.LSID_Analyze);
         }
 
         private void btnAnalyseGroups_Click(object sender, EventArgs e)

@@ -592,7 +592,7 @@ namespace GKCore
         }
 
         /// <summary>
-        /// Reload at startup recent opened files.
+        /// Reload recently opened files at startup.
         /// </summary>
         public int ReloadRecentBases()
         {
