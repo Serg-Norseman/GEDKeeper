@@ -1693,9 +1693,38 @@ namespace GKCore.Charts
                 int chY = (!fOptions.InvertedTree) ? child0.PtY : child0.PtY + child0.Height;
 
                 if (childrenCount > 1) {
-                    int bpx = person.GetChild(0).PtX;
-                    int epx = person.GetChild(childrenCount - 1).PtX;
-                    DrawLine(bpx, crY, epx, crY); // h
+                    if (!fOptions.DottedLinesOfAdoptedChildren) {
+                        int bpx = person.GetChild(0).PtX;
+                        int epx = person.GetChild(childrenCount - 1).PtX;
+                        DrawLine(bpx, crY, epx, crY); // h
+                    } else {
+                        bool dotted = true;
+
+                        for (int i = 0; i < childrenCount / 2; i++) {
+                            TreeChartPerson child = person.GetChild(i);
+
+                            dotted &= IsDottedLines(child);
+                            var linePen = (!dotted) ? fLinePen : fDottedLinePen;
+                            var decorativeLinePen = (!dotted) ? fDecorativeLinePen : fDottedDecorativeLinePen;
+
+                            var jX = Math.Min(cx, person.GetChild(i + 1).PtX);
+
+                            DrawLine(child.PtX, crY, jX, crY, linePen, decorativeLinePen); // h
+                        }
+
+                        dotted = true;
+                        for (int i = childrenCount - 1; i >= childrenCount / 2; i--) {
+                            TreeChartPerson child = person.GetChild(i);
+
+                            dotted &= IsDottedLines(child);
+                            var linePen = (!dotted) ? fLinePen : fDottedLinePen;
+                            var decorativeLinePen = (!dotted) ? fDecorativeLinePen : fDottedDecorativeLinePen;
+
+                            var jX = Math.Max(cx, person.GetChild(i - 1).PtX);
+
+                            DrawLine(child.PtX, crY, jX, crY, linePen, decorativeLinePen); // h
+                        }
+                    }
                 }
 
                 for (int i = 0; i < childrenCount; i++) {
